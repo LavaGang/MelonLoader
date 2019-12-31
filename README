@@ -11,8 +11,15 @@ INSTALLATION:
 LAUNCH OPTIONS:
 
 "--no-mods"  =  Launch game without loading Mods
-"--melonloader.debug"  =  Debug Console
 "--melonloader.console"  =  Normal Console
+"--melonloader.debug"  =  Debug Console
+
+---
+
+CONSOLE DIFFERENCES:
+
+Normal Console is for the Logger class used by MelonLoader.ModHandler and Mods for debugging and developing Mods.
+Debug Console is for the debugging of MelonLoader internals.
 
 ---
 

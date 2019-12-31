@@ -51,6 +51,7 @@
     <Compile Include="MelonMod.cs" />
     <Compile Include="MelonModInfoAttribute.cs" />
     <Compile Include="ModPrefs.cs" />
+    <Compile Include="NET_SDK\Harmony.cs" />
     <Compile Include="NET_SDK\IL2CPP_Assembly.cs" />
     <Compile Include="NET_SDK\IL2CPP_Base.cs" />
     <Compile Include="NET_SDK\IL2CPP_BindingFlags.cs" />
