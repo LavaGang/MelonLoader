@@ -1,10 +1,12 @@
 v0.0.2 Closed-Beta:
 
 1)  Added NET_SDK to be built into MelonLoader.ModHandler as the designated IL2CPP Wrapper.
-2)  Temp-Fixed issue with Mods and Logs folders not being in the correct place next to the game's exe.
+2)  Fixed issue with Mods and Logs folders not being in the correct place next to the game's exe.
 3)  Fixed issue with the ModPrefs not calling the OnModSettingsApplied method of Mods.
 4)  Replaced old ModPrefs debug log message left in from my VRChat mod.
-3)  Fixed Compile Version conflict with the 2 Consoles.
+5)  Fixed issue with Audica crashing when trying to use MelonLoader.
+6)  Added Unity 2018.4.6f1 Dependencies.
+7)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
@@ -14,8 +16,9 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 Known Issues:
 
-1)  Game.DontDestroyOnLoad causes crash.
-2)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
+1)  Launch Options are currently bugged.
+2)  Game.DontDestroyOnLoad causes crash.
+3)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
 
 ---
 

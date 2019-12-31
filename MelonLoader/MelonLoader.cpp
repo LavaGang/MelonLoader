@@ -6,6 +6,7 @@
 #include "Mono.h"
 #include "IL2CPP.h"
 #include "Hooks/Hooks.h"
+#include <iostream>
 
 bool MelonLoader::IsGameIL2CPP = false;
 HMODULE MelonLoader::MonoDLL = NULL;
@@ -60,6 +61,7 @@ void MelonLoader::ModHandler()
 					MonoMethod* method = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
 					if (method != NULL)
 					{
+						SetDllDirectory(GamePath);
 						Mono::mono_runtime_invoke(method, NULL, NULL, NULL);
 						ModHandlerImage = image;
 					}
