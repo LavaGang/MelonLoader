@@ -19,3 +19,4 @@ Work-in-Progress / To-Do List:
 4)  An assembly generator for game specific Assembly DLL files.
 5)  A Dependency Download system to automate installation of MelonLoader.
 6)  A component based system for Mod loading and running.
+7)  Support for games that use Mono instead of IL2CPP.
