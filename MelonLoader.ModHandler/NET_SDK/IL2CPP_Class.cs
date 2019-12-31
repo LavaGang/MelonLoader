@@ -92,6 +92,37 @@ namespace NET_SDK.Reflection
             }
             return returnval;
         }
+        /// <summary>
+        /// Gets the first method matching name and flags with the specified number of parameters
+        /// </summary>
+        /// <param name="name">The name to search for</param>
+        /// <param name="flags">The <see cref="IL2CPP_BindingFlags"/> to match</param>
+        /// <param name="argCount">The parameter count to match</param>
+        /// <returns>The first matching <see cref="IL2CPP_Method"/></returns>
+        public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags, int argCount)
+        {
+            foreach (var method in GetMethods())
+            {
+                if (method.Name.Equals(name) && method.HasFlag(flags) && method.GetParameterCount() == argCount)
+                    return method;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Gets the first method matching name with the specified number of parameters
+        /// </summary>
+        /// <param name="name">The name to search for</param>
+        /// <param name="argCount">The parameter count to match</param>
+        /// <returns>The first matching <see cref="IL2CPP_Method"/></returns>
+        public IL2CPP_Method GetMethod(string name, int argCount)
+        {
+            foreach (var method in GetMethods())
+            {
+                if (method.Name.Equals(name) && method.GetParameterCount() == argCount)
+                    return method;
+            }
+            return null;
+        }
 
         // Fields
         public IL2CPP_Field[] GetFields() => FieldList.ToArray();
