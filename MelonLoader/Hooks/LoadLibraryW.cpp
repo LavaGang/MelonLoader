@@ -38,7 +38,6 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		if (GetModuleFileName(lib, path, sizeof(path)) != NULL)
 		{
 			std::string pathstr = path;
-			MelonLoader::GamePath = pathstr.substr(0, pathstr.find_last_of("\\/")).c_str();
 			std::string filepath = pathstr.substr(0, (pathstr.find_last_of("\\/") + 1));
 			std::string datapath = filepath;
 			datapath += "*_Data";
@@ -54,6 +53,7 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 				MelonLoader::IsGameIL2CPP = true;
 				MelonLoader::LoadMono();
 
+				MelonLoader::GamePath = filepath.substr(0, filepath.find_last_of("\\/")).c_str();
 				std::string assembly_path = filepath + "MelonLoader\\Managed";
 				std::string config_path = filepath + std::string(nPtr) + "\\il2cpp_data\\etc";
 				Mono::CreateDomain(assembly_path.c_str(), config_path.c_str());

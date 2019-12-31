@@ -16,12 +16,13 @@ namespace MelonLoader
 
     public static class Main
     {
-        public static string CommandLine = Imports.melonloader_getcommandline();
-        public static string GamePath = Imports.melonloader_getgamepath();
+        //public static string CommandLine = Imports.melonloader_getcommandline();
+        //public static string GamePath = Imports.melonloader_getgamepath();
+        //public static string CommandLine = null;
         public static List<MelonMod> Mods = new List<MelonMod>();
         private static List<MelonModController> ModControllers = new List<MelonModController>();
 
-        internal static void Initialize()
+        public static void Initialize()
         {
 #if DEBUG
             if (Imports.melonloader_is_debug_mode())
@@ -32,9 +33,9 @@ namespace MelonLoader
                 DebugConsole.Create();
             }
 #else
-            if (Imports.melonloader_is_debug_mode() || CommandLine.Contains("--melonloader.debug"))
+            if (Imports.melonloader_is_debug_mode() || Environment.CommandLine.Contains("--melonloader.debug"))
                 Logger.consoleEnabled = true;
-            else if (CommandLine.Contains("--melonloader.console"))
+            else if (Environment.CommandLine.Contains("--melonloader.console"))
             {
                 Logger.consoleEnabled = true;
                 DebugConsole.Create();
@@ -50,7 +51,7 @@ namespace MelonLoader
 
             NET_SDK.SDK.Initialize();
 
-            string modDirectory = Path.Combine(GamePath, "Mods");
+            string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");
             if (!Directory.Exists(modDirectory))
                 Directory.CreateDirectory(modDirectory);
             else

@@ -11,11 +11,11 @@ void Console::Create()
 	{
 		if (!AllocConsole())
 		{
-			MessageBox(NULL, "Failed to Create Console!", NULL, MB_OK | MB_ICONEXCLAMATION);
+			MessageBox(NULL, "Failed to Create Debug Console!", NULL, MB_OK | MB_ICONEXCLAMATION);
 			return;
 		}
 		freopen_s(reinterpret_cast<FILE * *>(stdout), "CONOUT$", "w", stdout);
-		SetConsoleTitle("MelonLoader Console");
+		SetConsoleTitle("MelonLoader Debug Console");
 	}
 }
 

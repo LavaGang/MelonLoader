@@ -15,7 +15,7 @@ namespace MelonLoader
         {
             if (log == null)
             {
-                string logFilePath = Path.Combine(Main.GamePath, ("Logs/" + fileprefix + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff") + ".log"));
+                string logFilePath = Path.Combine(Environment.CurrentDirectory, ("Logs/" + fileprefix + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff") + ".log"));
                 FileInfo logFileInfo = new FileInfo(logFilePath);
                 DirectoryInfo logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
 
@@ -64,7 +64,7 @@ namespace MelonLoader
         {
             var timestamp = GetTimestamp();
             var formatted = string.Format(s, args);
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + s, args);
+            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + formatted);
             if (log != null) log.WriteLine("[" + timestamp + "] " + formatted);
         }
 
