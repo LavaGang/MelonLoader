@@ -16,6 +16,13 @@ LAUNCH OPTIONS:
 
 ---
 
+CONSOLE DIFFERENCES:
+
+Normal Console is for the Logger class used by MelonLoader.ModHandler and Mods for debugging and developing Mods.
+Debug Console is for the debugging of MelonLoader internals.
+
+---
+
 All Mods get placed in the created Mods folder in the game's install folder.
 All Logs are made in the created Logs folder in the game's install folder.
 
