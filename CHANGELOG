@@ -31,3 +31,4 @@ Work-in-Progress / To-Do List:
 4)  A Dependency Download system to automate installation of MelonLoader.
 5)  A component based system for Mod loading and running.
 6)  Support for games that use Mono instead of IL2CPP.
+7)  Support for Oculus Quest, Linux, and Mac.
