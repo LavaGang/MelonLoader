@@ -8,6 +8,14 @@ INSTALLATION:
 
 ---
 
+LAUNCH OPTIONS:
+
+"--no-mods"  =  Launch game without loading Mods
+"--melonloader.debug"  =  Debug Console
+"--melonloader.console"  =  Normal Console
+
+---
+
 All Mods get placed in the created Mods folder in the game's install folder.
 All Logs are made in the created Logs folder in the game's install folder.
 
@@ -16,8 +24,3 @@ MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Launch Options
-
-Launch Options:
-"--no-mods"  =  Launch game without loading Mods
-"--melonloader.debug"  =  Debug Console
-"--melonloader.console"  =  Normal Console
