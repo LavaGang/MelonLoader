@@ -121,8 +121,8 @@ namespace MelonLoader
                     ModPrefsController.SetString(prefsInSection.Key, pref.Key, pref.Value.Value);
                 }
             }
-            //Main.OnModSettingsApplied();
-            Logger.Log("[VRChat_Enhancer] Config Saved!");
+            Main.OnModSettingsApplied();
+            Logger.Log("Config Saved!");
         }
 
         public static string GetString(string section, string name)

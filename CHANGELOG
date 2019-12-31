@@ -2,6 +2,8 @@ v0.0.2 Closed-Beta:
 
 1)  Added NET_SDK to be built into MelonLoader.ModHandler as the designated IL2CPP Wrapper.
 2)  Temp-Fixed issue with Mods and Logs folders not being in the correct place next to the game's exe.
+3)  Fixed issue with the ModPrefs not calling the OnModSettingsApplied method of Mods.
+4)  Replaced old ModPrefs debug log message left in from my VRChat mod.
 3)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
