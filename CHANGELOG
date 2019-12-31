@@ -11,10 +11,11 @@ Known Issues:
 
 ---
 
-Work in Progress:
+Work-in-Progress / To-Do List:
 
 1)  Fixing the above crashing issues.
 2)  0Harmony integration and support.
 3)  A modified IL2CPP Wrapper to be included with MelonLoader.
 4)  An assembly generator for game specific Assembly DLL files.
 5)  A Dependency Download system to automate installation of MelonLoader.
+6)  A component based system for Mod loading and running.
