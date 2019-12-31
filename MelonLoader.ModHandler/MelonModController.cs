@@ -25,8 +25,8 @@ namespace MelonLoader
             }
         }
 
-        internal virtual void OnApplicationStart() { if (mod != null) onApplicationStartMethod?.Invoke(mod, new object[] { }); }
-        internal virtual void OnApplicationQuit() { if (mod != null) onApplicationQuitMethod?.Invoke(mod, new object[] { }); }
-        internal virtual void OnModSettingsApplied() { if (mod != null) onModSettingsApplied?.Invoke(mod, new object[] { }); }
+        internal virtual void OnApplicationStart() { if (mod != null) onApplicationStartMethod?.Invoke(mod, new object[0]); }
+        internal virtual void OnApplicationQuit() { if (mod != null) onApplicationQuitMethod?.Invoke(mod, new object[0]); }
+        internal virtual void OnModSettingsApplied() { if (mod != null) onModSettingsApplied?.Invoke(mod, new object[0]); }
     }
 }
