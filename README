@@ -13,4 +13,9 @@ All Logs are made in the created Logs folder in the game's install folder.
 
 Use the launch option "--melonloader.debug" for the debug console.
 Use the launch option "--melonloader.console" for the normal console.
-When compiled in Debug the debug console will automatically enable.
+
+Specific combinations of Compile Versions will open a specific Console by Default:
+MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
+MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
+MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
+MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Launch Options

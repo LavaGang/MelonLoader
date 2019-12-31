@@ -51,6 +51,17 @@
     <Compile Include="MelonMod.cs" />
     <Compile Include="MelonModInfoAttribute.cs" />
     <Compile Include="ModPrefs.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Assembly.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Base.cs" />
+    <Compile Include="NET_SDK\IL2CPP_BindingFlags.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Class.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Event.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Field.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Method.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Object.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Property.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Type.cs" />
+    <Compile Include="NET_SDK\NET_SDK.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

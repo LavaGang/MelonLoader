@@ -15,7 +15,7 @@ namespace MelonLoader
             {
                 if (_instance == null)
                 {
-                    string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
+                    string userDataDir = Path.Combine(Main.GamePath, "UserData");
                     if (!Directory.Exists(userDataDir)) Directory.CreateDirectory(userDataDir);
                     _instance = new IniFile(Path.Combine(userDataDir, filename));
                 }

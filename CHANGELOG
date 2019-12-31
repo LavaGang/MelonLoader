@@ -1,13 +1,19 @@
-v0.0.1 Closed-Beta:
+v0.0.2 Closed-Beta:
 
-1)  Initial Commit
+1)  Added NET_SDK to be built into MelonLoader.ModHandler as the designated IL2CPP Wrapper.
+2)  Temp-Fixed issue with Mods and Logs folders not being in the correct place next to the game's exe.
+3)  Fixed Compile Version conflict with the 2 Consoles.
+MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
+MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
+MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
+MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Launch Options
 
 ---
 
 Known Issues:
 
-1)  Game.DontDestroyOnLoad causes crash
-2)  Certain methods that use System.Type cause crash (example: GameObject.AddComponent)
+1)  Game.DontDestroyOnLoad causes crash.
+2)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
 
 ---
 
@@ -15,8 +21,7 @@ Work-in-Progress / To-Do List:
 
 1)  Fixing the above crashing issues.
 2)  0Harmony integration and support.
-3)  A modified IL2CPP Wrapper to be included with MelonLoader.
-4)  An assembly generator for game specific Assembly DLL files.
-5)  A Dependency Download system to automate installation of MelonLoader.
-6)  A component based system for Mod loading and running.
-7)  Support for games that use Mono instead of IL2CPP.
+3)  An assembly generator for game specific Assembly DLL files.
+4)  A Dependency Download system to automate installation of MelonLoader.
+5)  A component based system for Mod loading and running.
+6)  Support for games that use Mono instead of IL2CPP.

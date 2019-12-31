@@ -38,6 +38,7 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		if (GetModuleFileName(lib, path, sizeof(path)) != NULL)
 		{
 			std::string pathstr = path;
+			MelonLoader::GamePath = pathstr.substr(0, pathstr.find_last_of("\\/")).c_str();
 			std::string filepath = pathstr.substr(0, (pathstr.find_last_of("\\/") + 1));
 			std::string datapath = filepath;
 			datapath += "*_Data";

@@ -12,13 +12,20 @@ HMODULE MelonLoader::MonoDLL = NULL;
 HMODULE MelonLoader::GameAssemblyDLL = NULL;
 HINSTANCE MelonLoader::thisdll = NULL;
 MonoImage* MelonLoader::ModHandlerImage = NULL;
+bool MelonLoader::DebugMode = false;
+const char* MelonLoader::GamePath = NULL;
 
 void MelonLoader::Main()
 {
 #ifndef _DEBUG
 	if (strstr(GetCommandLine(), "--melonloader.debug") != NULL)
+	{
 #endif
 		Console::Create();
+		DebugMode = true;
+#ifndef _DEBUG
+	}
+#endif
 
 	Hook_LoadLibraryW::Hook();
 }

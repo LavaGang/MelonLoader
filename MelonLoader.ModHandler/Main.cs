@@ -11,21 +11,28 @@ namespace MelonLoader
         internal const string Name = "MelonLoader";
         internal const string Author = "Herp Derpinstine";
         internal const string Company = "NanoNuke @ nanonuke.net";
-        internal const string Version = "0.0.1";
+        internal const string Version = "0.0.2";
     }
 
     public static class Main
     {
         public static string CommandLine = Imports.melonloader_getcommandline();
+        public static string GamePath = Imports.melonloader_getgamepath();
         public static List<MelonMod> Mods = new List<MelonMod>();
         private static List<MelonModController> ModControllers = new List<MelonModController>();
 
         internal static void Initialize()
         {
 #if DEBUG
-            Logger.consoleEnabled = true;
+            if (Imports.melonloader_is_debug_mode())
+                Logger.consoleEnabled = true;
+            else
+            {
+                Logger.consoleEnabled = true;
+                DebugConsole.Create();
+            }
 #else
-            if (CommandLine.Contains("--melonloader.debug"))
+            if (Imports.melonloader_is_debug_mode() || CommandLine.Contains("--melonloader.debug"))
                 Logger.consoleEnabled = true;
             else if (CommandLine.Contains("--melonloader.console"))
             {
@@ -41,7 +48,9 @@ namespace MelonLoader
             Logger.Log("Using v" + BuildInfo.Version + " Closed-Beta");
             Logger.Log("-----------------------------");
 
-            string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");
+            NET_SDK.SDK.Initialize();
+
+            string modDirectory = Path.Combine(GamePath, "Mods");
             if (!Directory.Exists(modDirectory))
                 Directory.CreateDirectory(modDirectory);
             else
