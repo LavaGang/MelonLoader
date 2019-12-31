@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="Mono.cpp" />
+    <ClCompile Include="Exports.cpp" />
+    <ClCompile Include="IL2CPP.cpp" />
+    <ClCompile Include="Hooks\il2cpp_init.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks\LoadLibraryW.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks\il2cpp_add_internal_call.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternSearch.cpp" />
+    <ClCompile Include="Hooks\MetadataLoader_LoadMetadataFile.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Hooks\MetadataCache_GetTypeInfoFromTypeDefinitionIndex.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="MelonLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="detours\detours.h">
+      <Filter>detours</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\detver.h">
+      <Filter>detours</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\syelog.h">
+      <Filter>detours</Filter>
+    </ClInclude>
+    <ClInclude Include="Mono.h" />
+    <ClInclude Include="Exports.h" />
+    <ClInclude Include="IL2CPP.h" />
+    <ClInclude Include="Hooks\Hooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternSearch.h" />
+    <ClInclude Include="MelonLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="detours">
+      <UniqueIdentifier>{68e65883-5782-470e-a345-89a1e78b2f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hooks">
+      <UniqueIdentifier>{63990325-d2ff-4939-b952-9d59b3e51bdc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="detours\detours.lib">
+      <Filter>detours</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

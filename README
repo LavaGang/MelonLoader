@@ -1,0 +1,16 @@
+INSTALLATION:
+
+1)  Place winmm.dll next to the game's exe.
+2)  Copy the MelonLoader folder from BaseLibs to the game's install folder next to the exe and winmm.dll.
+3)  Place MelonLoader.dll and MelonLoader.ModHandler.dll in the MelonLoader folder in the game's install folder.
+4)  Find the game's Unity version in Unity Dependencies in BaseLibs.
+5)  Extract the zip to the MelonLoader/Managed folder in the game's install folder.
+
+---
+
+All Mods get placed in the created Mods folder in the game's install folder.
+All Logs are made in the created Logs folder in the game's install folder.
+
+Use the launch option "--melonloader.debug" for the debug console.
+Use the launch option "--melonloader.console" for the normal console.
+When compiled in Debug the debug console will automatically enable.
