@@ -11,8 +11,8 @@ INSTALLATION:
 LAUNCH OPTIONS:
 
 "--no-mods"  =  Launch game without loading Mods
-"--melonloader.debug"  =  Debug Console
 "--melonloader.console"  =  Normal Console
+"--melonloader.debug"  =  Debug Console
 
 ---
 
