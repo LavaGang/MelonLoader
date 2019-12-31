@@ -1,0 +1,18 @@
+v0.0.1 Closed-Beta:
+
+1)  Initial Commit
+
+---
+
+Known Issues:
+
+1)  Game.DontDestroyOnLoad causes crash
+2)  Certain methods that use System.Type cause crash (example: GameObject.AddComponent)
+
+---
+
+Work in Progress:
+
+1)  0Harmony integration and support.
+2)  A modified IL2CPP Wrapper to be included with MelonLoader.
+3)  An assembly generator for game specific Assembly DLL files.
