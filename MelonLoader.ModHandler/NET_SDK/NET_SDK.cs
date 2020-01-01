@@ -131,14 +131,35 @@ namespace NET_SDK
         }
         unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10); 
         public static IntPtr StringToIntPtr(string str) => il2cpp_string_new(str);
-
+        /// <summary>
+        /// Converts an array of value types and <see cref="IL2CPP_Object"/> to and array of <see cref="IntPtr"/>
+        /// Returns null if the input array was null
+        /// <para>Throws an <see cref="InvalidCastException"/> if the arguments are not value types or <see cref="IL2CPP_Object"/></para>
+        /// </summary>
+        /// <param name="objtbl">The object array to convert</param>
+        /// <returns>The resulting <see cref="IntPtr"/> array</returns>
+        /// <exception cref="InvalidCastException"></exception>
         public static IntPtr[] ObjectArrayToIntPtrArray(object[] objtbl)
         {
             if (objtbl == null)
                 return null;
             IntPtr[] returntbl = new IntPtr[objtbl.Length];
+            IntPtr temp;
             for (int i = 0; i < objtbl.Length; i++)
-                returntbl[i] = ObjectToIntPtr(objtbl[i]);
+            {
+                var o = objtbl[i];
+                var t = o.GetType();
+                if (t.IsPrimitive || t.IsValueType || t.IsEnum)
+                    // Box this object
+                    temp = ObjectToIntPtr(o);
+                else if (o is IL2CPP_Object)
+                    temp = (o as IL2CPP_Object).Ptr;
+                else
+                    // We don't know how to handle objects that aren't value types or IL2CPP_Objects!
+                    // Throw an exception here until this is resolved
+                    throw new InvalidCastException($"SDK: ObjectArrayToIntPtrArray: Cannot convert type: {t.FullName}. Please use ONLY value types and IL2CPP_Objects!");
+                returntbl[i] = temp;
+            }
             return returntbl;
         }
         unsafe public static IntPtr ObjectToIntPtr(object obj)
@@ -194,7 +215,21 @@ namespace NET_SDK
                 if (exp.ToInt32() != 0)
                 {
                     // There was an exception! Handle it somehow here
-                    return IntPtr.Zero;
+                    string message = "";
+                    var ptr = Marshal.AllocHGlobal(4097);
+                    try
+                    {
+                        // 4096 is the largest length of an exception. If not, this can be changed.
+                        // TODO: Make this a constant/predefine instead of a magic number
+                        il2cpp_format_exception(exp, ptr, 4096);
+                        message = Marshal.PtrToStringAnsi(ptr);
+                        throw new InvalidOperationException($"Invoke failed with exception: {message}");
+                    }
+                    finally
+                    {
+                        Marshal.FreeHGlobal(ptr);
+                    }
+                    throw new InvalidOperationException($"Invoke failed! Could not get exception from invoke failure!");
                 }
             }
             finally

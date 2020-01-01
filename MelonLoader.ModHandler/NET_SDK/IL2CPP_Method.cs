@@ -40,12 +40,37 @@ namespace NET_SDK.Reflection
         public IL2CPP_Object Invoke(params IL2CPP_Object[] paramtbl) => Invoke(IntPtr.Zero, IL2CPP.IL2CPPObjectArrayToIntPtrArray(paramtbl));
         public IL2CPP_Object Invoke(IntPtr obj, params IL2CPP_Object[] paramtbl) => Invoke(obj, IL2CPP.IL2CPPObjectArrayToIntPtrArray(paramtbl));
         public IL2CPP_Object Invoke(IL2CPP_Object obj, params IntPtr[] paramtbl) => Invoke(obj.Ptr, paramtbl);
+        /// <summary>
+        /// Invokes the method with the provided 'this' reference and parameters.
+        /// <para>An <see cref="InvalidOperationException"/> is thrown if the Invoke fails</para>
+        /// </summary>
+        /// <param name="obj">The 'this' reference to call the method on.
+        /// If this <see cref="IL2CPP_Method"/> is of a static method, provide a null for this parameter</param>
+        /// <param name="paramtbl">Parameters to supply to this method. Includes the generic parameters (if there are any)</param>
+        /// <returns>The resultant object from the Invoke</returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public IL2CPP_Object Invoke(IntPtr obj, params IntPtr[] paramtbl)
         {
             IntPtr returnval = IL2CPP.InvokeMethod(Ptr, obj, paramtbl);
             if (returnval == IntPtr.Zero)
                 return null;
             return new IL2CPP_Object(returnval, GetReturnType());
+        }
+        /// <summary>
+        /// Invokes the method with the provided 'this' reference and parameters.
+        /// Parameters can be an array of value types and <see cref="IL2CPP_Object"/>
+        /// <para>An <see cref="InvalidCastException"/> is thrown if the parameters are not all value types or <see cref="IL2CPP_Object"/></para>
+        /// <para>An <see cref="InvalidOperationException"/> is thrown if the Invoke fails</para>
+        /// </summary>
+        /// <param name="obj">The 'this' reference to call the method on.
+        /// If this <see cref="IL2CPP_Method"/> is of a static method, provide a null for this parameter</param>
+        /// <param name="paramtbl">Parameters to supply to this method. Includes the generic parameters (if there is any)</param>
+        /// <returns>The resultant object from the Invoke</returns>
+        /// <exception cref="InvalidCastException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public IL2CPP_Object Invoke(IL2CPP_Object obj, params object[] paramtbl)
+        {
+            return Invoke(obj, IL2CPP.ObjectArrayToIntPtrArray(paramtbl));
         }
     }
 
