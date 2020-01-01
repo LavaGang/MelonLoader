@@ -21,6 +21,8 @@ namespace MelonLoader
 
         public static void Initialize()
         {
+            Environment.CurrentDirectory = Imports.melonloader_get_game_directory();
+
 #if DEBUG
             if (Imports.melonloader_is_debug_mode())
                 Logger.consoleEnabled = true;

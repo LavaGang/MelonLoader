@@ -15,7 +15,6 @@ void Console::Create()
 			return;
 		}
 		freopen_s(reinterpret_cast<FILE * *>(stdout), "CONOUT$", "w", stdout);
-		freopen_s(reinterpret_cast<FILE * *>(stderr), "CONERR$", "w", stderr);
 		SetConsoleTitle("MelonLoader Debug Console");
 	}
 }
@@ -25,7 +24,6 @@ void Console::Destroy()
 	if (IsInitialized())
 	{
 		fclose(reinterpret_cast<FILE*>(stdout));
-		fclose(reinterpret_cast<FILE*>(stderr));
 		FreeConsole();
 	}
 }

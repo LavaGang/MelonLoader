@@ -8,7 +8,8 @@ v0.0.2 Closed-Beta:
 6)  Added Unity 2018.4.6f1 Dependencies.
 7)  Fixed bug with Launch Options.
 8)  Fixed Pathing issue that caused games like Boneworks to crash.
-9)  Fixed Compile Version conflict with the 2 Consoles.
+9)  Fixed issue where Environment.CurrentDirectory wasn't being set properly.
+10)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
