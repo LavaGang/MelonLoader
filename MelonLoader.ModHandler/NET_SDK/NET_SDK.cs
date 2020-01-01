@@ -132,9 +132,9 @@ namespace NET_SDK
         unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10); 
         public static IntPtr StringToIntPtr(string str) => il2cpp_string_new(str);
         /// <summary>
-        /// Converts an array of value types and <see cref="IL2CPP_Object"/> to and array of <see cref="IntPtr"/>
-        /// Returns null if the input array was null
-        /// <para>Throws an <see cref="InvalidCastException"/> if the arguments are not value types or <see cref="IL2CPP_Object"/></para>
+        /// Converts an array of value types, <see cref="string"/>, and <see cref="IL2CPP_Object"/> to an array of <see cref="IntPtr"/>
+        /// Returns null if the input array is null
+        /// <para>Throws an <see cref="InvalidCastException"/> if any of the arguments are not a valid type</para>
         /// </summary>
         /// <param name="objtbl">The object array to convert</param>
         /// <returns>The resulting <see cref="IntPtr"/> array</returns>
@@ -154,6 +154,8 @@ namespace NET_SDK
                     temp = ObjectToIntPtr(o);
                 else if (o is IL2CPP_Object)
                     temp = (o as IL2CPP_Object).Ptr;
+                else if (o is string)
+                    temp = StringToIntPtr(o as string);
                 else
                     // We don't know how to handle objects that aren't value types or IL2CPP_Objects!
                     // Throw an exception here until this is resolved

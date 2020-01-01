@@ -58,8 +58,8 @@ namespace NET_SDK.Reflection
         }
         /// <summary>
         /// Invokes the method with the provided 'this' reference and parameters.
-        /// Parameters can be an array of value types and <see cref="IL2CPP_Object"/>
-        /// <para>An <see cref="InvalidCastException"/> is thrown if the parameters are not all value types or <see cref="IL2CPP_Object"/></para>
+        /// Parameters can be an array of value types, <see cref="string"/>, and <see cref="IL2CPP_Object"/>
+        /// <para>An <see cref="InvalidCastException"/> is thrown if any of the parameters are not valid types</para>
         /// <para>An <see cref="InvalidOperationException"/> is thrown if the Invoke fails</para>
         /// </summary>
         /// <param name="obj">The 'this' reference to call the method on.
