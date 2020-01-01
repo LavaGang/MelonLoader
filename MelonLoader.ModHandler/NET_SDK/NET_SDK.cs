@@ -176,9 +176,7 @@ namespace NET_SDK
         {
             IntPtr[] arr = new IntPtr[objtbl.Length];
             for (uint i = 0; i < objtbl.Length; i++)
-            {
                 arr[i] = objtbl[i].Ptr;
-            };
             return arr;
         }
         unsafe public static IL2CPP_Object ObjectToIL2CPPObject(IntPtr obj, IntPtr klass)
