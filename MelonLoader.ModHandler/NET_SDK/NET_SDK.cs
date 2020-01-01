@@ -560,7 +560,7 @@ namespace NET_SDK
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         public extern static IntPtr il2cpp_type_get_class_or_element_class(IntPtr type);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static IntPtr il2cpp_type_get_name(IntPtr type);
+        public extern static string il2cpp_type_get_name(IntPtr type);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         public extern static bool il2cpp_type_is_byref(IntPtr type);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
