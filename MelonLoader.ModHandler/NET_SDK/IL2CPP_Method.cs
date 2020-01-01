@@ -31,19 +31,13 @@ namespace NET_SDK.Reflection
         public IL2CPP_Type GetReturnType() => ReturnType;
 
         public IL2CPP_Method_Parameter[] GetParameters() => Parameters.ToArray();
-        public int GetParameterCount() => GetParameters().Count();
+        public int GetParameterCount() => Parameters.Count();
 
         public IL2CPP_Object Invoke() => Invoke(IntPtr.Zero, new IntPtr[] { IntPtr.Zero });
         public IL2CPP_Object Invoke(IntPtr obj) => Invoke(obj, new IntPtr[] { IntPtr.Zero });
-        public IL2CPP_Object Invoke(params IntPtr[] paramtbl)
-        {
-            return Invoke(IntPtr.Zero, paramtbl);
-        }
+        public IL2CPP_Object Invoke(params IntPtr[] paramtbl) => Invoke(IntPtr.Zero, paramtbl);
         public IL2CPP_Object Invoke(IL2CPP_Object obj) => Invoke(obj.Ptr, new IntPtr[] { IntPtr.Zero });
-        public IL2CPP_Object Invoke(params IL2CPP_Object[] paramtbl)
-        {
-            return Invoke(IntPtr.Zero, IL2CPP.IL2CPPObjectArrayToIntPtrArray(paramtbl));
-        }
+        public IL2CPP_Object Invoke(params IL2CPP_Object[] paramtbl) => Invoke(IntPtr.Zero, IL2CPP.IL2CPPObjectArrayToIntPtrArray(paramtbl));
         public IL2CPP_Object Invoke(IntPtr obj, params IL2CPP_Object[] paramtbl) => Invoke(obj, IL2CPP.IL2CPPObjectArrayToIntPtrArray(paramtbl));
         public IL2CPP_Object Invoke(IL2CPP_Object obj, params IntPtr[] paramtbl) => Invoke(obj.Ptr, paramtbl);
         public IL2CPP_Object Invoke(IntPtr obj, params IntPtr[] paramtbl)
