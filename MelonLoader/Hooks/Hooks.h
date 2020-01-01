@@ -34,16 +34,6 @@ public:
 	static void Hooked_il2cpp_add_internal_call(const char* name, void* method);
 };
 
-class Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex
-{
-public:
-	static MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t Original_MetadataCache_GetTypeInfoFromTypeDefinitionIndex;
-
-	static void Hook();
-	static void Unhook();
-	static void* Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(int index);
-};
-
 class Hook_MetadataLoader_LoadMetadataFile
 {
 public:

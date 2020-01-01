@@ -90,7 +90,6 @@
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
-    <ClCompile Include="Hooks\MetadataCache_GetTypeInfoFromTypeDefinitionIndex.cpp" />
     <ClCompile Include="Hooks\MetadataLoader_LoadMetadataFile.cpp" />
     <ClCompile Include="PatternSearch.cpp" />
     <ClCompile Include="Hooks\il2cpp_add_internal_call.cpp" />

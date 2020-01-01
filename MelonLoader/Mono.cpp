@@ -5,9 +5,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#pragma warning( disable : 4996 )
 
-const char* Mono::AssemblyPath = NULL;
-const char* Mono::ConfigPath = NULL;
+char* Mono::AssemblyPath = NULL;
+char* Mono::ConfigPath = NULL;
 MonoDomain* Mono::Domain = NULL;
 mono_set_assemblies_path_t Mono::mono_set_assemblies_path = NULL;
 mono_set_config_dir_t Mono::mono_set_config_dir = NULL;
@@ -29,6 +30,7 @@ mono_type_get_class_t Mono::mono_type_get_class = NULL;
 mono_assembly_setrootdir_t Mono::mono_assembly_setrootdir = NULL;
 mono_get_corlib_t Mono::mono_get_corlib = NULL;
 mono_image_get_assembly_t Mono::mono_image_get_assembly = NULL;
+mono_runtime_set_main_args_t Mono::mono_runtime_set_main_args = NULL;
 
 void Mono::Setup()
 {
@@ -52,46 +54,28 @@ void Mono::Setup()
 	mono_type_get_class = (mono_type_get_class_t)GetProcAddress(MelonLoader::MonoDLL, "mono_type_get_class");
 	mono_get_corlib = (mono_get_corlib_t)GetProcAddress(MelonLoader::MonoDLL, "mono_get_corlib");
 	mono_image_get_assembly = (mono_image_get_assembly_t)GetProcAddress(MelonLoader::MonoDLL, "mono_image_get_assembly");
+	mono_runtime_set_main_args = (mono_runtime_set_main_args_t)GetProcAddress(MelonLoader::MonoDLL, "mono_runtime_set_main_args");
 }
 
-void Mono::CreateDomain(const char* assembly_path, const char* config_path)
+void Mono::CreateDomain()
 {
 	if (Domain == NULL)
 	{
-		AssemblyPath = assembly_path;
-		ConfigPath = config_path;
-		
-		mono_set_assemblies_path(assembly_path);
-		mono_assembly_setrootdir(assembly_path);
-		mono_set_config_dir(config_path);
+		mono_set_assemblies_path(AssemblyPath);
+		mono_assembly_setrootdir(AssemblyPath);
+		mono_set_config_dir(ConfigPath);
+
+		int argc = 0;
+		char* argv[64];
+		char* p2 = strtok(GetCommandLine(), " ");
+		while (p2 && argc < 63)
+		{
+			argv[argc++] = p2;
+			p2 = strtok(0, " ");
+		}
+		argv[argc] = 0;
+		mono_runtime_set_main_args(argc, argv);
+
 		Domain = mono_jit_init("MelonLoader");
 	}
-}
-
-MonoAssembly* Mono::GetDependency(const char* name)
-{
-	std::vector<std::string> names;
-	std::string search_path = std::string(AssemblyPath) + "\\*.dll";
-	WIN32_FIND_DATA fd;
-	HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
-	if (hFind != INVALID_HANDLE_VALUE) {
-		do {
-			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-				names.push_back(fd.cFileName);
-			}
-		} while (::FindNextFile(hFind, &fd));
-		::FindClose(hFind);
-	}
-
-	void* returnval = NULL;
-	for (int i = 0; i < names.size(); i++)
-	{
-		if (names[i]._Equal(std::string(name) + ".dll"))
-		{
-			std::string filepath = std::string(AssemblyPath) + "\\" + names[i] + ".dll";
-			returnval = (void*)mono_domain_assembly_open(Domain, filepath.c_str());
-			break;
-		}
-	}
-	return (MonoAssembly*)returnval;
 }

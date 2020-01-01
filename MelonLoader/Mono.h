@@ -27,11 +27,12 @@ typedef const char* (*mono_class_get_name_t) (void* klass);
 typedef void* (*mono_type_get_class_t) (void* type);
 typedef void* (*mono_get_corlib_t) ();
 typedef void* (*mono_image_get_assembly_t) (void* image);
+typedef int (*mono_runtime_set_main_args_t) (int argc, char* argv[]);
 class Mono
 {
 public:
-	static const char* AssemblyPath;
-	static const char* ConfigPath;
+	static char* AssemblyPath;
+	static char* ConfigPath;
 	static MonoDomain* Domain;
 	static mono_set_assemblies_path_t mono_set_assemblies_path;
 	static mono_set_config_dir_t mono_set_config_dir;
@@ -53,8 +54,8 @@ public:
 	static mono_type_get_class_t mono_type_get_class;
 	static mono_get_corlib_t mono_get_corlib;
 	static mono_image_get_assembly_t mono_image_get_assembly;
+	static mono_runtime_set_main_args_t mono_runtime_set_main_args;
 
 	static void Setup();
-	static void CreateDomain(const char* assembly_path, const char* config_path);
-	static MonoAssembly* GetDependency(const char* name);
+	static void CreateDomain();
 };

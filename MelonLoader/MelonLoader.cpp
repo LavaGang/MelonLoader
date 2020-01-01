@@ -14,7 +14,7 @@ HMODULE MelonLoader::GameAssemblyDLL = NULL;
 HINSTANCE MelonLoader::thisdll = NULL;
 MonoImage* MelonLoader::ModHandlerImage = NULL;
 bool MelonLoader::DebugMode = false;
-const char* MelonLoader::GamePath = NULL;
+char* MelonLoader::GamePath = NULL;
 
 void MelonLoader::Main()
 {
@@ -27,6 +27,37 @@ void MelonLoader::Main()
 #ifndef _DEBUG
 	}
 #endif
+
+	LPSTR filepath = new CHAR[MAX_PATH];
+	GetModuleFileName(thisdll, filepath, MAX_PATH);
+	std::string filepathstr = filepath;
+	filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/"));
+	filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/"));
+
+	GamePath = new char[filepathstr.size() + 1];
+	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);
+	GamePath[filepathstr.size()] = '\0';
+
+	std::string managedpath = filepathstr + "\\MelonLoader\\Managed";
+	Mono::AssemblyPath = new char[managedpath.size() + 1];
+	std::copy(managedpath.begin(), managedpath.end(), Mono::AssemblyPath);
+	Mono::AssemblyPath[managedpath.size()] = '\0';
+
+	std::string datapath = filepathstr + "\\*_Data";
+	WIN32_FIND_DATA data;
+	HANDLE h = FindFirstFile(datapath.c_str(), &data);
+	if (h != INVALID_HANDLE_VALUE)
+	{
+		char* nPtr = new char[lstrlen(data.cFileName) + 1];
+		for (int i = 0; i < lstrlen(data.cFileName); i++)
+			nPtr[i] = char(data.cFileName[i]);
+		nPtr[lstrlen(data.cFileName)] = '\0';
+
+		std::string configpath = filepathstr + "\\" + std::string(nPtr) + "\\il2cpp_data\\etc";
+		Mono::ConfigPath = new char[configpath.size() + 1];
+		std::copy(configpath.begin(), configpath.end(), Mono::ConfigPath);
+		Mono::ConfigPath[configpath.size()] = '\0';
+	}
 
 	Hook_LoadLibraryW::Hook();
 }
@@ -49,7 +80,7 @@ void MelonLoader::ModHandler()
 {
 	if (Mono::Domain != NULL)
 	{
-		MonoAssembly* assembly = Mono::mono_domain_assembly_open(Mono::Domain, "MelonLoader\\MelonLoader.ModHandler.dll");
+		MonoAssembly* assembly = Mono::mono_domain_assembly_open(Mono::Domain, (std::string(GamePath) + "\\MelonLoader\\MelonLoader.ModHandler.dll").c_str());
 		if (assembly != NULL)
 		{
 			MonoImage* image = Mono::mono_assembly_get_image(assembly);
@@ -81,10 +112,10 @@ void MelonLoader::ModHandler()
 
 bool MelonLoader::LoadMono()
 {
-	MonoDLL = LoadLibrary("MelonLoader\\Mono\\mono-2.0-bdwgc.dll");
+	MonoDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\mono-2.0-bdwgc.dll").c_str());
 	if (MonoDLL)
 	{
-		HMODULE MonoPosixDLL = LoadLibrary("MelonLoader\\Mono\\MonoPosixHelper.dll");
+		HMODULE MonoPosixDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoPosixHelper.dll").c_str());
 		if (MonoPosixDLL)
 		{
 			Mono::Setup();
