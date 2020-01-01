@@ -93,7 +93,7 @@ namespace NET_SDK
         /// </summary>
         /// <param name="nameSpace">The namespace the class is in</param>
         /// <param name="qualifiedName">The qualified name the class has (private classes should be separated by /)</param>
-        /// <exception cref="InvalidOperationException">Thrown when Class could not be found</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the class could not be found</exception>
         /// <example>GetClass("UnityEngine.VRModule", "InputTracking")</example>
         /// <returns>The <see cref="IL2CPP_Class"/> found</returns>
         public static IL2CPP_Class GetClass(string nameSpace, string qualifiedName)
@@ -111,15 +111,54 @@ namespace NET_SDK
 
     public static class IL2CPP
     {
-        public static T[] IntPtrToStructureArray<T>(IntPtr ptr, uint len) { IntPtr iter = ptr; T[] arr = new T[len]; for (uint i = 0; i < len; i++) { arr[i] = (T)Marshal.PtrToStructure(iter, typeof(T)); iter += Marshal.SizeOf(typeof(T)); } return arr; }
-        unsafe public static IntPtr[] IntPtrToArray(IntPtr ptr) { long length = *((long*)ptr + 3); IntPtr[] result = new IntPtr[length]; for (int i = 0; i < length; i++) result[i] = *(IntPtr*)((IntPtr)((long*)ptr + 4) + i * IntPtr.Size); return result; }
+        public static T[] IntPtrToStructureArray<T>(IntPtr ptr, uint len)
+        {
+            IntPtr iter = ptr;
+            T[] arr = new T[len];
+            for (uint i = 0; i < len; i++)
+            {
+                arr[i] = (T)Marshal.PtrToStructure(iter, typeof(T));
+                iter += Marshal.SizeOf(typeof(T));
+            }
+            return arr;
+        }
+        unsafe public static IntPtr[] IntPtrToArray(IntPtr ptr)
+        {
+            long length = *((long*)ptr + 3);
+            IntPtr[] result = new IntPtr[length];
+            for (int i = 0; i < length; i++)
+                result[i] = *(IntPtr*)((IntPtr)((long*)ptr + 4) + i * IntPtr.Size);
+            return result;
+        }
         unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10); 
         public static IntPtr StringToIntPtr(string str) => il2cpp_string_new(str);
 
-        public static IntPtr[] ObjectArrayToIntPtrArray(object[] objtbl) { if (objtbl == null) return null; IntPtr[] returntbl = new IntPtr[objtbl.Length]; for (int i = 0; i < objtbl.Length; i++) returntbl[i] = ObjectToIntPtr(objtbl[i]); return returntbl; }
-        unsafe public static IntPtr ObjectToIntPtr(object obj) { if (obj == null) return IntPtr.Zero; TypedReference reference = __makeref(obj); TypedReference* pRef = &reference; return (IntPtr)pRef; }
+        public static IntPtr[] ObjectArrayToIntPtrArray(object[] objtbl)
+        {
+            if (objtbl == null)
+                return null;
+            IntPtr[] returntbl = new IntPtr[objtbl.Length];
+            for (int i = 0; i < objtbl.Length; i++)
+                returntbl[i] = ObjectToIntPtr(objtbl[i]);
+            return returntbl;
+        }
+        unsafe public static IntPtr ObjectToIntPtr(object obj)
+        {
+            if (obj == null) return IntPtr.Zero;
+            TypedReference reference = __makeref(obj);
+            TypedReference* pRef = &reference;
+            return (IntPtr)pRef;
+        }
 
-        public static IntPtr[] IL2CPPObjectArrayToIntPtrArray(IL2CPP_Object[] objtbl) { IntPtr[] arr = new IntPtr[objtbl.Length]; for (uint i = 0; i < objtbl.Length; i++) { arr[i] = objtbl[i].Ptr; }; return arr; }
+        public static IntPtr[] IL2CPPObjectArrayToIntPtrArray(IL2CPP_Object[] objtbl)
+        {
+            IntPtr[] arr = new IntPtr[objtbl.Length];
+            for (uint i = 0; i < objtbl.Length; i++)
+            {
+                arr[i] = objtbl[i].Ptr;
+            };
+            return arr;
+        }
         unsafe public static IL2CPP_Object ObjectToIL2CPPObject(IntPtr obj, IntPtr klass)
         {
             if (klass != IntPtr.Zero)
@@ -442,7 +481,7 @@ namespace NET_SDK
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         public extern static IntPtr il2cpp_object_new(IntPtr klass);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        unsafe public extern static void* il2cpp_object_unbox(IntPtr obj);
+        public extern static IntPtr il2cpp_object_unbox(IntPtr obj);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         public extern static IntPtr il2cpp_value_box(IntPtr klass, IntPtr data);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
