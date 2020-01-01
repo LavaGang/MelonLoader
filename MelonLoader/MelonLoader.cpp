@@ -92,7 +92,6 @@ void MelonLoader::ModHandler()
 					MonoMethod* method = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
 					if (method != NULL)
 					{
-						SetDllDirectory(GamePath);
 						Mono::mono_runtime_invoke(method, NULL, NULL, NULL);
 						ModHandlerImage = image;
 					}
