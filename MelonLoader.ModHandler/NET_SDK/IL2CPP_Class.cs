@@ -22,8 +22,7 @@ namespace NET_SDK.Reflection
             Ptr = ptr;
             Name = Marshal.PtrToStringAnsi(IL2CPP.il2cpp_class_get_name(Ptr));
             Namespace = Marshal.PtrToStringAnsi(IL2CPP.il2cpp_class_get_namespace(Ptr));
-            uint flags = 0;
-            Flags = (IL2CPP_BindingFlags)IL2CPP.il2cpp_class_get_flags(Ptr, ref flags);
+            Flags = (IL2CPP_BindingFlags)IL2CPP.il2cpp_class_get_flags(Ptr);
 
             // Map out Methods
             IntPtr method_iter = IntPtr.Zero;
