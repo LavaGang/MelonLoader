@@ -16,9 +16,6 @@ namespace MelonLoader
 
     public static class Main
     {
-        //public static string CommandLine = Imports.melonloader_getcommandline();
-        //public static string GamePath = Imports.melonloader_getgamepath();
-        //public static string CommandLine = null;
         public static List<MelonMod> Mods = new List<MelonMod>();
         private static List<MelonModController> ModControllers = new List<MelonModController>();
 
