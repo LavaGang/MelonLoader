@@ -31,7 +31,7 @@ namespace NET_SDK.Reflection
         public IL2CPP_Type GetReturnType() => ReturnType;
 
         public IL2CPP_Method_Parameter[] GetParameters() => Parameters.ToArray();
-        public int GetParameterCount() => Parameters.Count();
+        public int GetParameterCount() => Parameters.Count;
 
         public IL2CPP_Object Invoke() => Invoke(IntPtr.Zero, new IntPtr[] { IntPtr.Zero });
         public IL2CPP_Object Invoke(IntPtr obj) => Invoke(obj, new IntPtr[] { IntPtr.Zero });

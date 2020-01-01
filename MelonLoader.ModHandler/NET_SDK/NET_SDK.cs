@@ -94,7 +94,6 @@ namespace NET_SDK
         /// <param name="nameSpace">The namespace the class is in</param>
         /// <param name="qualifiedName">The qualified name the class has (private classes should be separated by /)</param>
         /// <exception cref="InvalidOperationException">Thrown when the class could not be found</exception>
-        /// <example>GetClass("UnityEngine.VRModule", "InputTracking")</example>
         /// <returns>The <see cref="IL2CPP_Class"/> found</returns>
         public static IL2CPP_Class GetClass(string nameSpace, string qualifiedName)
         {
