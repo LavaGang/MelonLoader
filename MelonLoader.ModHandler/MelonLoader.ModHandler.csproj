@@ -60,7 +60,10 @@
     <Compile Include="NET_SDK\IL2CPP_Field.cs" />
     <Compile Include="NET_SDK\IL2CPP_Method.cs" />
     <Compile Include="NET_SDK\IL2CPP_Object.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Profile.cs" />
     <Compile Include="NET_SDK\IL2CPP_Property.cs" />
+    <Compile Include="NET_SDK\IL2CPP_RuntimeUnhandledExceptionPolicy.cs" />
+    <Compile Include="NET_SDK\IL2CPP_Stat.cs" />
     <Compile Include="NET_SDK\IL2CPP_Type.cs" />
     <Compile Include="NET_SDK\NET_SDK.cs" />
   </ItemGroup>
