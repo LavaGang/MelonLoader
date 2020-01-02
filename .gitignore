@@ -35,6 +35,9 @@ MelonLoader\.vs
 MelonLoader.ModHandler\bin
 MelonLoader.ModHandler\obj
 MelonLoader.ModHandler\.vs
+TestMod\bin
+TestMod\obj
+TestMod\.vs
 winmm64\bin
 winmm64\obj
 winmm64\.vs

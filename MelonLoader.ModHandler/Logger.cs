@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace MelonLoader
 {
@@ -53,34 +55,63 @@ namespace MelonLoader
 
         internal static string GetTimestamp() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
 
+        internal static string GetNameSection()
+        {
+            StackTrace st = new StackTrace(2, true);
+            StackFrame sf = st.GetFrame(0);
+            if (sf != null)
+            {
+                MethodBase method = sf.GetMethod();
+                if (method != null)
+                {
+                    Type methodClassType = method.DeclaringType;
+                    if ((methodClassType != null) && (methodClassType.BaseType != null) && (methodClassType.BaseType == typeof(MelonMod)))
+                    {
+                        object[] attrArray = methodClassType.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
+                        if ((attrArray.Count() > 0) && (attrArray[0] != null))
+                        {
+                            MelonModInfoAttribute attr = attrArray[0] as MelonModInfoAttribute;
+                            if (!string.IsNullOrEmpty(attr.Name))
+                                return "[" + attr.Name + "] ";
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+
         public static void Log(string s)
         {
+            string namesection = GetNameSection();
             var timestamp = GetTimestamp();
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + s);
-            if (log != null) log.WriteLine("[" + timestamp + "] " + s);
+            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + s);
+            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + s);
         }
 
         public static void Log(string s, params object[] args)
         {
+            string namesection = GetNameSection();
             var timestamp = GetTimestamp();
             var formatted = string.Format(s, args);
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + formatted);
-            if (log != null) log.WriteLine("[" + timestamp + "] " + formatted);
+            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + formatted);
+            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + formatted);
         }
 
         public static void LogError(string s)
         {
+            string namesection = GetNameSection();
             var timestamp = GetTimestamp();
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] [Error] " + s);
-            if (log != null) log.WriteLine("[" + timestamp + "] [Error] " + s);
+            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + s);
+            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + s);
         }
 
         public static void LogError(string s, params object[] args)
         {
+            string namesection = GetNameSection();
             var timestamp = GetTimestamp();
             var formatted = string.Format(s, args);
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] [Error] " + formatted);
-            if (log != null) log.WriteLine("[" + timestamp + "] [Error] " + formatted);
+            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + formatted);
+            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + formatted);
         }
     }
 }

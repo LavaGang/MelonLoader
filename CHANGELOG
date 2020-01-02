@@ -9,9 +9,11 @@ v0.0.2 Closed-Beta:
 7)  Fixed bug with Launch Options.
 8)  Fixed Pathing issue that caused games like Boneworks to crash.
 9)  Fixed issue where Environment.CurrentDirectory wasn't being set properly.
-10)  Clean-up and Additions made to NET_SDK. (Thanks to Sc4ad :D)
+10)  Clean-up and Additions made to NET_SDK.  (Thanks Sc4ad :D)
 11)  Added SteamVR and OculusVR Dependency DLLs to MelonLoader/Managed.
-12)  Fixed Compile Version conflict with the 2 Consoles.
+12)  Added TestMod to Project Files.
+13)  Added Attribute StackTrace system to Logger.  (As requested by Camobiwon :3)
+14)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
