@@ -72,7 +72,7 @@ namespace MelonLoader
                         {
                             MelonModInfoAttribute attr = attrArray[0] as MelonModInfoAttribute;
                             if (!string.IsNullOrEmpty(attr.Name))
-                                return "[" + attr.Name + "] ";
+                                return "[" + attr.Name.Replace(" ", "_") + "] ";
                         }
                     }
                 }
