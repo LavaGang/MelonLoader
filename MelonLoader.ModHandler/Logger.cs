@@ -37,9 +37,9 @@ namespace MelonLoader
             }
         }
 
-        public static void Stop() { if (log != null) log.Close(); }
+        internal static void Stop() { if (log != null) log.Close(); }
 
-        internal static void CleanOld(DirectoryInfo logDirInfo)
+        private static void CleanOld(DirectoryInfo logDirInfo)
         {
             FileInfo[] filetbl = logDirInfo.GetFiles(fileprefix + "*");
             if (filetbl.Length > 0)
@@ -53,9 +53,9 @@ namespace MelonLoader
             }
         }
 
-        internal static string GetTimestamp() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
+        private static string GetTimestamp() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
 
-        internal static string GetNameSection()
+        private static string GetNameSection()
         {
             StackTrace st = new StackTrace(2, true);
             StackFrame sf = st.GetFrame(0);

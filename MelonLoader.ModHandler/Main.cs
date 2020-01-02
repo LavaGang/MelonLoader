@@ -16,10 +16,10 @@ namespace MelonLoader
 
     public static class Main
     {
-        public static List<MelonMod> Mods = new List<MelonMod>();
+        private static List<MelonMod> Mods = new List<MelonMod>();
         private static List<MelonModController> ModControllers = new List<MelonModController>();
 
-        public static void Initialize()
+        private static void Initialize()
         {
             Environment.CurrentDirectory = Imports.melonloader_get_game_directory();
 
@@ -124,7 +124,7 @@ namespace MelonLoader
             }
         }
 
-        public static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
+        private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
         {
             if (assembly == null) throw new ArgumentNullException(nameof(assembly));
             try
@@ -138,7 +138,7 @@ namespace MelonLoader
             }
         }
 
-        internal static void OnApplicationStart()
+        private static void OnApplicationStart()
         {
             if (ModControllers.Count() > 0)
                 foreach (MelonModController mod in ModControllers)
@@ -147,10 +147,10 @@ namespace MelonLoader
 
         internal static void OnApplicationQuit()
         {
-            Logger.Log("OnApplicationQuit");
             if (ModControllers.Count() > 0)
                 foreach (MelonModController mod in ModControllers)
                     mod.OnApplicationQuit();
+            Logger.Stop();
         }
 
         public static void OnModSettingsApplied()

@@ -71,7 +71,10 @@ void MelonLoader::ApplicationQuit()
 		{
 			MonoMethod* method = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
 			if (method != NULL)
+			{
 				Mono::mono_runtime_invoke(method, NULL, NULL, NULL);
+				ModHandlerImage = NULL;
+			}
 		}
 	}
 }

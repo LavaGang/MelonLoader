@@ -25,8 +25,9 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 Known Issues:
 
 1)  Logs from the Normal Console are sometimes bugged and don't output to the Debug Console.
-2)  Game.DontDestroyOnLoad causes crash.
-3)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
+2)  OnApplicationQuit doesn't get called. 
+3)  Game.DontDestroyOnLoad causes crash.
+4)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
 
 ---
 
