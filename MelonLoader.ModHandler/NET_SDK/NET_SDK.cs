@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using MelonLoader.ModHandler.NET_SDK;
 using NET_SDK.Reflection;
 #pragma warning disable 0649
 

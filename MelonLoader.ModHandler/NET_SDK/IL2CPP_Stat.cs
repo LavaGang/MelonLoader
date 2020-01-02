@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MelonLoader.ModHandler.NET_SDK
+namespace NET_SDK.Reflection
 {
     public enum IL2CPP_Stat
     {
