@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace MelonLoader
 {
@@ -85,9 +86,16 @@ namespace MelonLoader
                     foreach (var mod in Mods)
                         Logger.Log(mod.Name + " (" + mod.Version + ") by " + mod.Author + (mod.DownloadLink != null ? " (" + mod.DownloadLink + ")" : ""));
                     Logger.Log("-----------------------------");
-                    OnApplicationStart();
+                    InitialSetup();
                 }
             }
+        }
+
+        private static void InitialSetup()
+        {
+            NET_SDK.Harmony.Instance harmonyInstance = NET_SDK.Harmony.Manager.CreateMainInstance();
+            HookDelegate.OriginalStart = harmonyInstance.Patch(NET_SDK.SDK.GetClass("UnityEngine.EventSystems.UIBehaviour").GetMethod("Start"), typeof(HookDelegate).GetMethod("Start", BindingFlags.Instance | BindingFlags.NonPublic));
+            HookDelegate.OriginalUpdate = harmonyInstance.Patch(NET_SDK.SDK.GetClass("UnityEngine.EventSystems.EventSystem").GetMethod("Update"), typeof(HookDelegate).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic));
         }
 
         private static void LoadModsFromAssembly(Assembly assembly)
@@ -139,11 +147,18 @@ namespace MelonLoader
             }
         }
 
-        private static void OnApplicationStart()
+        internal static void OnApplicationStart()
         {
             if (ModControllers.Count() > 0)
                 foreach (MelonModController mod in ModControllers)
                     mod.OnApplicationStart();
+        }
+
+        internal static void OnUpdate()
+        {
+            if (ModControllers.Count() > 0)
+                foreach (MelonModController mod in ModControllers)
+                    mod.OnUpdate();
         }
 
         internal static void OnApplicationQuit()
@@ -151,14 +166,35 @@ namespace MelonLoader
             if (ModControllers.Count() > 0)
                 foreach (MelonModController mod in ModControllers)
                     mod.OnApplicationQuit();
+            ModPrefs.SaveConfig();
+            NET_SDK.Harmony.Manager.UnpatchAll();
+            NET_SDK.Harmony.Manager.UnpatchMain();
             Logger.Stop();
         }
 
-        public static void OnModSettingsApplied()
+        internal static void OnModSettingsApplied()
         {
             if (ModControllers.Count() > 0)
                 foreach (MelonModController mod in ModControllers)
                     mod.OnModSettingsApplied();
+        }
+    }
+
+    internal class HookDelegate
+    {
+        internal static NET_SDK.Harmony.Patch OriginalStart = null;
+        private void Start()
+        {
+            OriginalStart.InvokeOriginal(NET_SDK.IL2CPP.ObjectToIntPtr(this));
+            OriginalStart.UninstallPatch();
+            Main.OnApplicationStart();
+        }
+
+        internal static NET_SDK.Harmony.Patch OriginalUpdate = null;
+        private void Update()
+        {
+            OriginalUpdate.InvokeOriginal(NET_SDK.IL2CPP.ObjectToIntPtr(this));
+            Main.OnUpdate();
         }
     }
 }

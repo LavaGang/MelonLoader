@@ -5,27 +5,33 @@ namespace TestMod
     public static class FileInfo
     {
         public const string Name = "TestMod";
-        public const string Author = "Herp Derpinstine";
-        public const string Company = "NanoNuke @ nanonuke.net";
+        public const string Author = "AUTHOR";
+        public const string Company = "COMPANY";
         public const string Version = "1.0.0";
+        public const string DownloadLink = "";
     }
-    [MelonModInfo(FileInfo.Name, FileInfo.Version, FileInfo.Author)]
 
+    [MelonModInfo(FileInfo.Name, FileInfo.Version, FileInfo.Author, FileInfo.DownloadLink)]
     public class TestMod : MelonMod
     {
         void OnApplicationStart()
         {
-            Logger.Log("OnApplicationStart");
+
+        }
+
+        void OnUpdate()
+        {
+            
         }
 
         void OnApplicationQuit()
         {
-            Logger.Log("OnApplicationQuit");
+            
         }
 
         void OnModSettingsApplied()
         {
-            Logger.Log("OnModSettingsApplied");
+            
         }
     }
 }

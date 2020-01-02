@@ -6,6 +6,7 @@ namespace MelonLoader
     internal class MelonModController
     {
         private MethodInfo onApplicationStartMethod;
+        private MethodInfo onUpdateMethod;
         private MethodInfo onApplicationQuitMethod;
         private MethodInfo onModSettingsApplied;
         internal MelonMod mod;
@@ -18,6 +19,8 @@ namespace MelonLoader
             {
                 if (method.Name.Equals("OnApplicationStart") && (method.GetParameters().Length == 0))
                     onApplicationStartMethod = method;
+                else if (method.Name.Equals("OnUpdate") && (method.GetParameters().Length == 0))
+                    onUpdateMethod = method;
                 else if (method.Name.Equals("OnApplicationQuit") && (method.GetParameters().Length == 0))
                     onApplicationQuitMethod = method;
                 else if (method.Name.Equals("OnModSettingsApplied") && (method.GetParameters().Length == 0))
@@ -26,6 +29,7 @@ namespace MelonLoader
         }
 
         internal virtual void OnApplicationStart() { if (mod != null) onApplicationStartMethod?.Invoke(mod, new object[0]); }
+        internal virtual void OnUpdate() { if (mod != null) onUpdateMethod?.Invoke(mod, new object[0]); }
         internal virtual void OnApplicationQuit() { if (mod != null) onApplicationQuitMethod?.Invoke(mod, new object[0]); }
         internal virtual void OnModSettingsApplied() { if (mod != null) onModSettingsApplied?.Invoke(mod, new object[0]); }
     }

@@ -196,6 +196,13 @@ namespace NET_SDK
             return null;
         }
 
+        public static IL2CPP_Class SystemTypeToIL2CPPClass(Type type)
+        {
+            if (type != null)
+                return SDK.GetClass(type.Namespace + "." + type.Name);
+            return null;
+        }
+
         unsafe public static IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] paramtbl)
         {
             if (method == IntPtr.Zero)
