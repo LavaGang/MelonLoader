@@ -16,8 +16,7 @@ v0.0.2 Closed-Beta:
 14)  Replaced Spaces in Names for the Attribute StackTrace System with Underscores.
 15)  Fixed the bug that caused the Logger from MelonLoader.ModHandler to not properly output when using the Debug Console.
 16)  Added SystemTypeToIL2CPPClass method to NET_SDK.IL2CPP.
-17)  Fixed Execution Timing of OnApplicationStart for Mods.
-18)  Fixed Compile Version conflict with the 2 Consoles.
+17)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console

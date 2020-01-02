@@ -86,15 +86,9 @@ namespace MelonLoader
                     foreach (var mod in Mods)
                         Logger.Log(mod.Name + " (" + mod.Version + ") by " + mod.Author + (!string.IsNullOrEmpty(mod.DownloadLink) ? " (" + mod.DownloadLink + ")" : ""));
                     Logger.Log("-----------------------------");
-                    InitialSetup();
+                    OnApplicationStart();
                 }
             }
-        }
-
-        private static void InitialSetup()
-        {
-            NET_SDK.Harmony.Instance harmonyInstance = NET_SDK.Harmony.Manager.CreateMainInstance();
-            HookDelegate.OriginalStart = harmonyInstance.Patch(NET_SDK.SDK.GetClass("UnityEngine.EventSystems.UIBehaviour").GetMethod("Start"), typeof(HookDelegate).GetMethod("Start", BindingFlags.Instance | BindingFlags.NonPublic));
         }
 
         private static void LoadModsFromAssembly(Assembly assembly)
@@ -176,17 +170,6 @@ namespace MelonLoader
             if (ModControllers.Count() > 0)
                 foreach (MelonModController mod in ModControllers)
                     mod.OnModSettingsApplied();
-        }
-    }
-
-    internal class HookDelegate
-    {
-        internal static NET_SDK.Harmony.Patch OriginalStart = null;
-        private void Start()
-        {
-            OriginalStart.InvokeOriginal(NET_SDK.IL2CPP.ObjectToIntPtr(this));
-            OriginalStart.UninstallPatch();
-            Main.OnApplicationStart();
         }
     }
 }
