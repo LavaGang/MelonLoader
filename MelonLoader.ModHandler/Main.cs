@@ -17,8 +17,6 @@ namespace MelonLoader
 
     public static class Main
     {
-        private static bool ShouldRunOnUpdate = true;
-        private static Thread OnUpdateThread = null;
         private static List<MelonMod> Mods = new List<MelonMod>();
         private static List<MelonModController> ModControllers = new List<MelonModController>();
 
