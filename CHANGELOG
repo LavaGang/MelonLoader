@@ -13,7 +13,8 @@ v0.0.2 Closed-Beta:
 11)  Added SteamVR and OculusVR Dependency DLLs to MelonLoader/Managed.
 12)  Added TestMod to Project Files.
 13)  Added Attribute StackTrace system to Logger.  (As requested by Camobiwon :3)
-14)  Fixed Compile Version conflict with the 2 Consoles.
+14)  Replaced Spaces in Names for the Attribute StackTrace System.
+15)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
