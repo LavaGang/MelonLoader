@@ -14,7 +14,8 @@ v0.0.2 Closed-Beta:
 12)  Added TestMod to Project Files.
 13)  Added Attribute StackTrace system to Logger.  (As requested by Camobiwon :3)
 14)  Replaced Spaces in Names for the Attribute StackTrace System.
-15)  Fixed Compile Version conflict with the 2 Consoles.
+15)  Fixed the bug that caused the Logger from MelonLoader.ModHandler to not properly output when using the Debug Console.
+16)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
@@ -24,16 +25,15 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 Known Issues:
 
-1)  Logs from the Normal Console are sometimes bugged and don't output to the Debug Console.
-2)  OnApplicationQuit doesn't get called. 
-3)  Game.DontDestroyOnLoad causes crash.
-4)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
+1)  OnApplicationQuit doesn't get called. 
+2)  Game.DontDestroyOnLoad causes crash.
+3)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
 
 ---
 
 Work-in-Progress / To-Do List:
 
-1)  Fixing the above crashing issues.
+1)  Fix the above issues.
 2)  0Harmony integration and support.
 3)  An assembly generator for game specific Assembly DLL files.
 4)  A Dependency Download system to automate installation of MelonLoader.

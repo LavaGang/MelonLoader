@@ -84,7 +84,13 @@ namespace MelonLoader
         {
             string namesection = GetNameSection();
             var timestamp = GetTimestamp();
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + s);
+            if (consoleEnabled)
+            {
+                if (Imports.melonloader_is_debug_mode())
+                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + s);
+                else
+                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + s);
+            }
             if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + s);
         }
 
@@ -93,7 +99,13 @@ namespace MelonLoader
             string namesection = GetNameSection();
             var timestamp = GetTimestamp();
             var formatted = string.Format(s, args);
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + formatted);
+            if (consoleEnabled)
+            {
+                if (Imports.melonloader_is_debug_mode())
+                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + formatted);
+                else
+                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + formatted);
+            }
             if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + formatted);
         }
 
@@ -101,7 +113,13 @@ namespace MelonLoader
         {
             string namesection = GetNameSection();
             var timestamp = GetTimestamp();
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + s);
+            if (consoleEnabled)
+            {
+                if (Imports.melonloader_is_debug_mode())
+                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + s);
+                else
+                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + s);
+            }
             if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + s);
         }
 
@@ -110,7 +128,13 @@ namespace MelonLoader
             string namesection = GetNameSection();
             var timestamp = GetTimestamp();
             var formatted = string.Format(s, args);
-            if (consoleEnabled) Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + formatted);
+            if (consoleEnabled)
+            {
+                if (Imports.melonloader_is_debug_mode())
+                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + formatted);
+                else
+                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + formatted);
+            }
             if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + formatted);
         }
     }

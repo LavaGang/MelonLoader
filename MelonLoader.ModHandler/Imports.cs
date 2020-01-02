@@ -14,5 +14,7 @@ namespace MelonLoader
         [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string melonloader_get_game_directory();
+        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+        public extern static void melonloader_console_writeline(string txt);
     }
 }

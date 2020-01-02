@@ -32,7 +32,7 @@ namespace MelonLoader
                 DebugConsole.Create();
             }
 #else
-            if (Imports.melonloader_is_debug_mode() || Environment.CommandLine.Contains("--melonloader.debug"))
+            if (Imports.melonloader_is_debug_mode())
                 Logger.consoleEnabled = true;
             else if (Environment.CommandLine.Contains("--melonloader.console"))
             {
@@ -48,7 +48,8 @@ namespace MelonLoader
             Logger.Log("Using v" + BuildInfo.Version + " Closed-Beta");
             Logger.Log("-----------------------------");
 
-            NET_SDK.SDK.Initialize();
+            if (Imports.melonloader_is_il2cpp_game())
+                NET_SDK.SDK.Initialize();
 
             string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");
             if (!Directory.Exists(modDirectory))
