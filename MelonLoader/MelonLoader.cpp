@@ -12,7 +12,7 @@ bool MelonLoader::IsGameIL2CPP = false;
 HMODULE MelonLoader::MonoDLL = NULL;
 HMODULE MelonLoader::GameAssemblyDLL = NULL;
 HINSTANCE MelonLoader::thisdll = NULL;
-MonoImage* MelonLoader::ModHandlerImage = NULL;
+MonoImage* MelonLoader::ModHandlerAssembly = NULL;
 bool MelonLoader::DebugMode = false;
 char* MelonLoader::GamePath = NULL;
 
@@ -64,16 +64,20 @@ void MelonLoader::Main()
 
 void MelonLoader::ApplicationQuit()
 {
-	if (ModHandlerImage != NULL)
+	if (ModHandlerAssembly != NULL)
 	{
-		MonoClass* klass = Mono::mono_class_from_name(ModHandlerImage, "MelonLoader", "Main");
-		if (klass != NULL)
+		MonoImage* image = Mono::mono_assembly_get_image(ModHandlerAssembly);
+		if (image != NULL)
 		{
-			MonoMethod* method = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
-			if (method != NULL)
+			MonoClass* klass = Mono::mono_class_from_name(image, "MelonLoader", "Main");
+			if (klass != NULL)
 			{
-				Mono::mono_runtime_invoke(method, NULL, NULL, NULL);
-				ModHandlerImage = NULL;
+				MonoMethod* method = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
+				if (method != NULL)
+				{
+					Mono::mono_runtime_invoke(method, NULL, NULL, NULL);
+					ModHandlerAssembly = NULL;
+				}
 			}
 		}
 	}
@@ -96,7 +100,7 @@ void MelonLoader::ModHandler()
 					if (method != NULL)
 					{
 						Mono::mono_runtime_invoke(method, NULL, NULL, NULL);
-						ModHandlerImage = image;
+						ModHandlerAssembly = assembly;
 					}
 					else
 						MessageBox(NULL, "Main", "MelonLoader", MB_ICONERROR | MB_OK);

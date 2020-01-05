@@ -12,7 +12,7 @@ public:
 	static HMODULE MonoDLL;
 	static HMODULE GameAssemblyDLL;
 	static HINSTANCE thisdll;
-	static MonoImage* ModHandlerImage;
+	static MonoAssembly* ModHandlerAssembly;
 
 	static void Main();
 	static void ApplicationQuit();
