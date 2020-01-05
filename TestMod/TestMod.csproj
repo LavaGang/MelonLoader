@@ -29,14 +29,16 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="MelonLoader.ModHandler">
-      <HintPath>..\Output\Release\MelonLoader\MelonLoader.ModHandler.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">
+      <Project>{3c4056ab-1d07-43fc-a93d-0aa72446da03}</Project>
+      <Name>MelonLoader.ModHandler</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
