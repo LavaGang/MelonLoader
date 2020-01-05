@@ -12,7 +12,7 @@ bool MelonLoader::IsGameIL2CPP = false;
 HMODULE MelonLoader::MonoDLL = NULL;
 HMODULE MelonLoader::GameAssemblyDLL = NULL;
 HINSTANCE MelonLoader::thisdll = NULL;
-MonoImage* MelonLoader::ModHandlerAssembly = NULL;
+MonoAssembly* MelonLoader::ModHandlerAssembly = NULL;
 bool MelonLoader::DebugMode = false;
 char* MelonLoader::GamePath = NULL;
 
