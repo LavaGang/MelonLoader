@@ -25,8 +25,6 @@ typedef IL2CPPClass* (*il2cpp_type_get_class_or_element_class_t) (IL2CPPType* ty
 typedef IL2CPPAssembly** (*il2cpp_domain_get_assemblies_t) (IL2CPPDomain* domain, size_t* size);
 typedef IL2CPPImage* (*il2cpp_assembly_get_image_t) (IL2CPPAssembly* assembly);
 typedef void* (*MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t) (int index);
-typedef void* (*MetadataCache_FromTypeDefinition_t) (int index);
-typedef void* (*Assembly_Load_t) (const char* assemblyName);
 
 typedef struct Il2CppTypeDefinition
 {
@@ -152,8 +150,6 @@ public:
 	static il2cpp_assembly_get_image_t il2cpp_assembly_get_image;
 	static MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t MetadataCache_GetTypeInfoFromTypeDefinitionIndex;
 	static MetadataLoader_LoadMetadataFile_t MetadataLoader_LoadMetadataFile;
-	static MetadataCache_FromTypeDefinition_t MetadataCache_FromTypeDefinition;
-	static Assembly_Load_t Assembly_Load;
 	static Il2CppGlobalMetadataHeader* s_GlobalMetadataHeader;
 
 	static void Setup();

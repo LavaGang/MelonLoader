@@ -32,6 +32,5 @@ void Hook_MetadataLoader_LoadMetadataFile::Unhook()
 Il2CppGlobalMetadataHeader* Hook_MetadataLoader_LoadMetadataFile::Hooked_MetadataLoader_LoadMetadataFile(const char* fileName)
 {
 	IL2CPP::s_GlobalMetadataHeader = Original_MetadataLoader_LoadMetadataFile(fileName);
-	Unhook();
 	return IL2CPP::s_GlobalMetadataHeader;
 }

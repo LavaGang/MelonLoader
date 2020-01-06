@@ -22,8 +22,6 @@ il2cpp_domain_get_assemblies_t IL2CPP::il2cpp_domain_get_assemblies = NULL;
 il2cpp_assembly_get_image_t IL2CPP::il2cpp_assembly_get_image = NULL;
 MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t IL2CPP::MetadataCache_GetTypeInfoFromTypeDefinitionIndex = NULL;
 MetadataLoader_LoadMetadataFile_t IL2CPP::MetadataLoader_LoadMetadataFile = NULL;
-MetadataCache_FromTypeDefinition_t IL2CPP::MetadataCache_FromTypeDefinition = NULL;
-Assembly_Load_t IL2CPP::Assembly_Load = NULL;
 Il2CppGlobalMetadataHeader* IL2CPP::s_GlobalMetadataHeader = NULL;
 
 void IL2CPP::Setup()
@@ -44,8 +42,22 @@ void IL2CPP::Setup()
 	il2cpp_type_get_class_or_element_class = (il2cpp_type_get_class_or_element_class_t)GetProcAddress(MelonLoader::GameAssemblyDLL, "il2cpp_type_get_class_or_element_class");
 	il2cpp_domain_get_assemblies = (il2cpp_domain_get_assemblies_t)GetProcAddress(MelonLoader::GameAssemblyDLL, "il2cpp_domain_get_assemblies");
 	il2cpp_assembly_get_image = (il2cpp_assembly_get_image_t)GetProcAddress(MelonLoader::GameAssemblyDLL, "il2cpp_assembly_get_image");
+	
+	// VRChat | Pistol Whip | Boneworks
 	MetadataCache_GetTypeInfoFromTypeDefinitionIndex = (MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 57 48 83 EC 30 48 C7 44 24 ? ? ? ? ? 48 89 5C 24 ? 48 89 74 24 ? 48 63 F9 83");
+	// Audica
+	if (MetadataCache_GetTypeInfoFromTypeDefinitionIndex == NULL)
+		MetadataCache_GetTypeInfoFromTypeDefinitionIndex = (MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 57 48 83 EC 30 48 C7 44 24 ? ? ? ? ? 48 89 5C 24 ? 48 63 F9 83 FF FF 75 04 33");
+
+	// VRChat
 	MetadataLoader_LoadMetadataFile = (MetadataLoader_LoadMetadataFile_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 C7 45 ? ? ? ? ? 48 89 9C 24 ? ? ? ? 4C 8B F1 33");
-	MetadataCache_FromTypeDefinition = (MetadataCache_FromTypeDefinition_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 53 41 54 41 56 48 83 EC 40 48 8B 05 ? ? ? ? 48 89 74 24 ? 48 89 7C 24");
-	Assembly_Load = (Assembly_Load_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 48 C7 C6 ? ? ? ? 48 8B F9");
+	// Boneworks
+	if (MetadataLoader_LoadMetadataFile == NULL)
+		MetadataLoader_LoadMetadataFile = (MetadataLoader_LoadMetadataFile_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "48 8B C4 55 48 8D 68 A1 48 81 EC ? ? ? ? 48 C7 45 ? ? ? ? ? 48 89 58 08 48 89 78 18");
+	// Audica
+	if (MetadataLoader_LoadMetadataFile == NULL)
+		MetadataLoader_LoadMetadataFile = (MetadataLoader_LoadMetadataFile_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 57 41 54 41 55 41 56 41 57 48 83 EC 30 48 C7 44 24 ? ? ? ? ? 48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 49 8B E8 4C");
+	// Pistol Whip
+	if (MetadataLoader_LoadMetadataFile == NULL)
+		MetadataLoader_LoadMetadataFile = (MetadataLoader_LoadMetadataFile_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 C7 45 ? ? ? ? ? 48 89 9C 24 ? ? ? ? 4C 8B F1 45 33 FF 44 89 7D 77 48 8D 4D FF E8");
 }
