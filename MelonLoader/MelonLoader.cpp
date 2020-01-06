@@ -118,25 +118,19 @@ void MelonLoader::ModHandler()
 
 bool MelonLoader::LoadMono()
 {
-	MonoDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\mono-2.0-bdwgc.dll").c_str());
+	MonoDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\mono.dll").c_str());
 	if (MonoDLL)
 	{
-		HMODULE MonoSGenDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\mono-2.0-sgen.dll").c_str());
-		if (MonoSGenDLL)
+		HMODULE MonoPosixDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoPosixHelper.dll").c_str());
+		if (MonoPosixDLL)
 		{
-			HMODULE MonoPosixDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoPosixHelper.dll").c_str());
-			if (MonoPosixDLL)
-			{
-				Mono::Setup();
-				return true;
-			}
-			else
-				MessageBox(NULL, "Failed to Load MonoPosixHelper.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
+			Mono::Setup();
+			return true;
 		}
 		else
-			MessageBox(NULL, "Failed to Load mono-2.0-sgen.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
+			MessageBox(NULL, "Failed to Load MonoPosixHelper.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
 	}
 	else
-		MessageBox(NULL, "Failed to Load mono-2.0-bdwgc.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
+		MessageBox(NULL, "Failed to Load mono.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
 	return false;
 }
