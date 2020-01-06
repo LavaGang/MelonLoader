@@ -44,6 +44,7 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		Hook_il2cpp_init::Hook();
 		Hook_il2cpp_add_internal_call::Hook();
 		Hook_MetadataLoader_LoadMetadataFile::Hook();
+		Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex::Hook();
 	}
 	else if (wcsstr(lpLibFileName, L"dxgi.dll") != NULL)
 	{

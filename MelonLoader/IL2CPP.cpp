@@ -21,6 +21,7 @@ il2cpp_type_get_class_or_element_class_t IL2CPP::il2cpp_type_get_class_or_elemen
 il2cpp_domain_get_assemblies_t IL2CPP::il2cpp_domain_get_assemblies = NULL;
 il2cpp_assembly_get_image_t IL2CPP::il2cpp_assembly_get_image = NULL;
 MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t IL2CPP::MetadataCache_GetTypeInfoFromTypeDefinitionIndex = NULL;
+MetadataCache_FromTypeDefinition_t IL2CPP::MetadataCache_FromTypeDefinition = NULL;
 MetadataLoader_LoadMetadataFile_t IL2CPP::MetadataLoader_LoadMetadataFile = NULL;
 Il2CppGlobalMetadataHeader* IL2CPP::s_GlobalMetadataHeader = NULL;
 
@@ -48,6 +49,12 @@ void IL2CPP::Setup()
 	// Audica
 	if (MetadataCache_GetTypeInfoFromTypeDefinitionIndex == NULL)
 		MetadataCache_GetTypeInfoFromTypeDefinitionIndex = (MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 57 48 83 EC 30 48 C7 44 24 ? ? ? ? ? 48 89 5C 24 ? 48 63 F9 83 FF FF 75 04 33");
+
+	// VRChat | Boneworks
+	MetadataCache_FromTypeDefinition = (MetadataCache_FromTypeDefinition_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 53 41 54 41 56 48 83 EC 40 48 8B 05 ? ? ? ? 48 89 74 24 ? 48 89 7C 24 ? 48 63 F9 B9");
+	// Audica | Pistol Whip
+	if (MetadataCache_FromTypeDefinition == NULL)
+		MetadataCache_FromTypeDefinition = (MetadataCache_FromTypeDefinition_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC 20 48 8B 05 ? ? ? ? 48 63 F1 B9");
 
 	// VRChat
 	MetadataLoader_LoadMetadataFile = (MetadataLoader_LoadMetadataFile_t)PatternSearch::FindPattern(MelonLoader::GameAssemblyDLL, "40 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 C7 45 ? ? ? ? ? 48 89 9C 24 ? ? ? ? 4C 8B F1 33");

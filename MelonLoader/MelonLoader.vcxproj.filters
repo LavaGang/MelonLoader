@@ -20,6 +20,9 @@
       <Filter>Hooks</Filter>
     </ClCompile>
     <ClCompile Include="MelonLoader.cpp" />
+    <ClCompile Include="Hooks\MetadataCache_GetTypeInfoFromTypeDefinitionIndex.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
