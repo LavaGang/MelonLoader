@@ -64,6 +64,7 @@ void MelonLoader::Main()
 
 void MelonLoader::ApplicationQuit()
 {
+	/*
 	if (ModHandlerAssembly != NULL)
 	{
 		MonoImage* image = Mono::mono_assembly_get_image(ModHandlerAssembly);
@@ -81,6 +82,7 @@ void MelonLoader::ApplicationQuit()
 			}
 		}
 	}
+	*/
 }
 
 void MelonLoader::ModHandler()
