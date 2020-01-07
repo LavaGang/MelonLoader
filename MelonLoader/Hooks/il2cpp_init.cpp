@@ -8,7 +8,7 @@ void Hook_il2cpp_init::Hook()
 {
 	if (Original_il2cpp_init == NULL)
 	{
-		Original_il2cpp_init = IL2CPP::il2cpp_init;
+		Original_il2cpp_init = Il2Cpp::il2cpp_init;
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(LPVOID&)Original_il2cpp_init, Hooked_il2cpp_init);
@@ -28,9 +28,9 @@ void Hook_il2cpp_init::Unhook()
 	}
 }
 
-IL2CPPDomain* Hook_il2cpp_init::Hooked_il2cpp_init(const char* name)
+Il2CppDomain* Hook_il2cpp_init::Hooked_il2cpp_init(const char* name)
 {
-	IL2CPP::Domain = Original_il2cpp_init(name);
+	Il2Cpp::Domain = Original_il2cpp_init(name);
 	Unhook();
-	return IL2CPP::Domain;
+	return Il2Cpp::Domain;
 }

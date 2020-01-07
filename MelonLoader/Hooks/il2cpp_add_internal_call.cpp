@@ -9,7 +9,7 @@ void Hook_il2cpp_add_internal_call::Hook()
 {
 	if (Original_il2cpp_add_internal_call == NULL)
 	{
-		Original_il2cpp_add_internal_call = IL2CPP::il2cpp_add_internal_call;
+		Original_il2cpp_add_internal_call = Il2Cpp::il2cpp_add_internal_call;
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(LPVOID&)Original_il2cpp_add_internal_call, Hooked_il2cpp_add_internal_call);

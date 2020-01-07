@@ -4,11 +4,11 @@
 #include "MelonLoader.h"
 #include "Console.h"
 #include "Mono.h"
-#include "IL2CPP.h"
+#include "Il2Cpp.h"
 #include "Hooks/Hooks.h"
 #include <iostream>
 
-bool MelonLoader::IsGameIL2CPP = false;
+bool MelonLoader::IsGameIl2Cpp = false;
 HMODULE MelonLoader::MonoDLL = NULL;
 HMODULE MelonLoader::GameAssemblyDLL = NULL;
 HINSTANCE MelonLoader::thisdll = NULL;

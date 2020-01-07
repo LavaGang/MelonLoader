@@ -9,7 +9,7 @@ void Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex::Hook()
 {
 	if (Original_MetadataCache_GetTypeInfoFromTypeDefinitionIndex == NULL)
 	{
-		Original_MetadataCache_GetTypeInfoFromTypeDefinitionIndex = IL2CPP::MetadataCache_GetTypeInfoFromTypeDefinitionIndex;
+		Original_MetadataCache_GetTypeInfoFromTypeDefinitionIndex = Il2Cpp::MetadataCache_GetTypeInfoFromTypeDefinitionIndex;
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(LPVOID&)Original_MetadataCache_GetTypeInfoFromTypeDefinitionIndex, Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex);
@@ -29,20 +29,17 @@ void Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex::Unhook()
 	}
 }
 
-void* Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex::Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(int index)
+Il2CppClass* Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex::Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(int index)
 {
-	if ((index < 0) || (static_cast<uint32_t>(index) >= (IL2CPP::s_GlobalMetadataHeader->typeDefinitionsCount / sizeof(Il2CppTypeDefinition))))
+	if ((index < 0) || (static_cast<uint32_t>(index) >= (Il2Cpp::s_GlobalMetadataHeader->typeDefinitionsCount / sizeof(Il2CppTypeDefinition))))
 		return NULL;
 
-	/*
-	if (!s_TypeInfoDefinitionTable[index])
-    {
-        il2cpp::os::FastAutoLock lock(&g_MetadataLock);
-        if (!s_TypeInfoDefinitionTable[index])
-            s_TypeInfoDefinitionTable[index] = FromTypeDefinition(index);
-    }
-    return s_TypeInfoDefinitionTable[index];
-	*/
+	Il2CppClass* ReturnClass = (*(Il2CppClass***)(Il2Cpp::s_TypeInfoDefinitionTable))[index];
+	if (ReturnClass == NULL)
+	{
+		ReturnClass = Il2Cpp::MetadataCache_FromTypeDefinition(index);
+		(*(Il2CppClass***)(Il2Cpp::s_TypeInfoDefinitionTable))[index] = ReturnClass;
+	}
 
-	return Original_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(index);
+	return ReturnClass;
 }

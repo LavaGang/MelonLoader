@@ -43,6 +43,7 @@
     </ClInclude>
     <ClInclude Include="PatternSearch.h" />
     <ClInclude Include="MelonLoader.h" />
+    <ClInclude Include="il2cpp-internals.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="detours">

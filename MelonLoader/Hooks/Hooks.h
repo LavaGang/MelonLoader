@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "../Mono.h"
-#include "../IL2CPP.h"
+#include "../Il2Cpp.h"
 
 typedef HMODULE (__stdcall* LoadLibraryW_t) (LPCWSTR lpLibFileName);
 class Hook_LoadLibraryW
@@ -21,7 +21,7 @@ public:
 
 	static void Hook();
 	static void Unhook();
-	static IL2CPPDomain* Hooked_il2cpp_init(const char* name);
+	static Il2CppDomain* Hooked_il2cpp_init(const char* name);
 };
 
 class Hook_il2cpp_add_internal_call
@@ -51,5 +51,5 @@ public:
 
 	static void Hook();
 	static void Unhook();
-	static void* Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(int index);
+	static Il2CppClass* Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(int index);
 };

@@ -1,62 +1,25 @@
 #pragma once
 #include <stdint.h>
+#include "il2cpp-internals.h"
 
-struct IL2CPPDomain;
-struct IL2CPPAssembly;
-struct IL2CPPImage;
-struct IL2CPPType;
-struct IL2CPPClass;
-struct IL2CPPMethod;
-
-typedef IL2CPPDomain* (*il2cpp_init_t) (const char* name);
+typedef Il2CppDomain* (*il2cpp_init_t) (const char* name);
 typedef void (*il2cpp_add_internal_call_t) (const char* name, void* method);
 typedef void (*il2cpp_custom_attrs_free_t) (void* attrptr);
 typedef void* (*il2cpp_resolve_icall_t) (const char* name);
-typedef IL2CPPType* (*il2cpp_class_enum_basetype_t) (IL2CPPClass* klass);
-typedef IL2CPPClass* (*il2cpp_class_from_system_type_t) (void* type);
-typedef const char* (*il2cpp_type_get_name_t) (IL2CPPType* type);
-typedef const char* (*il2cpp_class_get_name_t) (IL2CPPClass* klass);
-typedef const char* (*il2cpp_class_get_namespace_t) (IL2CPPClass* klass);
-typedef const char* (*il2cpp_class_get_assemblyname_t) (IL2CPPClass* klass);
-typedef IL2CPPClass* (*il2cpp_class_from_name_t) (IL2CPPImage* image, const char* name_space, const char* name);
-typedef IL2CPPMethod* (*il2cpp_class_get_method_from_name_t) (IL2CPPClass* klass, const char* name, int argsCount);
-typedef IL2CPPClass* (*il2cpp_image_get_class_t) (IL2CPPImage* image, int index);
-typedef IL2CPPClass* (*il2cpp_type_get_class_or_element_class_t) (IL2CPPType* type);
-typedef IL2CPPAssembly** (*il2cpp_domain_get_assemblies_t) (IL2CPPDomain* domain, size_t* size);
-typedef IL2CPPImage* (*il2cpp_assembly_get_image_t) (IL2CPPAssembly* assembly);
-typedef void* (*MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t) (int index);
-typedef void* (*MetadataCache_FromTypeDefinition_t) (int index);
-
-typedef struct Il2CppTypeDefinition
-{
-	int32_t nameIndex;
-	int32_t namespaceIndex;
-	int32_t byvalTypeIndex;
-	int32_t byrefTypeIndex;
-	int32_t declaringTypeIndex;
-	int32_t parentIndex;
-	int32_t elementTypeIndex;
-	int32_t genericContainerIndex;
-	uint32_t flags;
-	int32_t fieldStart;
-	int32_t methodStart;
-	int32_t eventStart;
-	int32_t propertyStart;
-	int32_t nestedTypesStart;
-	int32_t interfacesStart;
-	int32_t vtableStart;
-	int32_t interfaceOffsetsStart;
-	uint16_t method_count;
-	uint16_t property_count;
-	uint16_t field_count;
-	uint16_t event_count;
-	uint16_t nested_type_count;
-	uint16_t vtable_count;
-	uint16_t interfaces_count;
-	uint16_t interface_offsets_count;
-	uint32_t bitfield;
-	uint32_t token;
-} Il2CppTypeDefinition;
+typedef Il2CppType* (*il2cpp_class_enum_basetype_t) (Il2CppClass* klass);
+typedef Il2CppClass* (*il2cpp_class_from_system_type_t) (void* type);
+typedef const char* (*il2cpp_type_get_name_t) (Il2CppType* type);
+typedef const char* (*il2cpp_class_get_name_t) (Il2CppClass* klass);
+typedef const char* (*il2cpp_class_get_namespace_t) (Il2CppClass* klass);
+typedef const char* (*il2cpp_class_get_assemblyname_t) (Il2CppClass* klass);
+typedef Il2CppClass* (*il2cpp_class_from_name_t) (Il2CppImage* image, const char* name_space, const char* name);
+typedef Il2CppMethod* (*il2cpp_class_get_method_from_name_t) (Il2CppClass* klass, const char* name, int argsCount);
+typedef Il2CppClass* (*il2cpp_image_get_class_t) (Il2CppImage* image, int index);
+typedef Il2CppClass* (*il2cpp_type_get_class_or_element_class_t) (Il2CppType* type);
+typedef Il2CppAssembly** (*il2cpp_domain_get_assemblies_t) (Il2CppDomain* domain, size_t* size);
+typedef Il2CppImage* (*il2cpp_assembly_get_image_t) (Il2CppAssembly* assembly);
+typedef Il2CppClass* (*MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t) (int index);
+typedef Il2CppClass* (*MetadataCache_FromTypeDefinition_t) (int index);
 
 typedef struct Il2CppGlobalMetadataHeader
 {
@@ -129,10 +92,10 @@ typedef struct Il2CppGlobalMetadataHeader
 } Il2CppGlobalMetadataHeader;
 typedef Il2CppGlobalMetadataHeader* (*MetadataLoader_LoadMetadataFile_t) (const char* fileName);
 
-class IL2CPP
+class Il2Cpp
 {
 public:
-	static IL2CPPDomain* Domain;
+	static Il2CppDomain* Domain;
 	static il2cpp_init_t il2cpp_init;
 	static il2cpp_add_internal_call_t il2cpp_add_internal_call;
 	static il2cpp_custom_attrs_free_t il2cpp_custom_attrs_free;
@@ -153,6 +116,7 @@ public:
 	static MetadataCache_FromTypeDefinition_t MetadataCache_FromTypeDefinition;
 	static MetadataLoader_LoadMetadataFile_t MetadataLoader_LoadMetadataFile;
 	static Il2CppGlobalMetadataHeader* s_GlobalMetadataHeader;
+	static uintptr_t s_TypeInfoDefinitionTable;
 
 	static void Setup();
 };

@@ -34,12 +34,12 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 	HMODULE lib = Original_LoadLibraryW(lpLibFileName);
 	if (wcsstr(lpLibFileName, L"GameAssembly.dll"))
 	{
-		MelonLoader::IsGameIL2CPP = true;
+		MelonLoader::IsGameIl2Cpp = true;
 		MelonLoader::LoadMono();
 		Mono::CreateDomain();
 
 		MelonLoader::GameAssemblyDLL = lib;
-		IL2CPP::Setup();
+		Il2Cpp::Setup();
 
 		Hook_il2cpp_init::Hook();
 		Hook_il2cpp_add_internal_call::Hook();

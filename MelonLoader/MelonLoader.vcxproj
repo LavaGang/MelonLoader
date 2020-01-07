@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
+    <ClInclude Include="il2cpp-internals.h" />
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="detours\detours.h" />
     <ClInclude Include="detours\detver.h" />

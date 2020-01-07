@@ -6,7 +6,7 @@
 class MelonLoader
 {
 public:
-	static bool IsGameIL2CPP;
+	static bool IsGameIl2Cpp;
 	static bool DebugMode;
 	static char* GamePath;
 	static HMODULE MonoDLL;
