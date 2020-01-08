@@ -2,7 +2,7 @@
 #include "MelonLoader.h"
 #include "Console.h"
 
-Il2CppDomain* melonloader_get_il2cpp_domain() { return Il2Cpp::Domain; }
+Il2CppDomain* melonloader_get_il2cpp_domain() { return IL2CPP::Domain; }
 bool melonloader_is_il2cpp_game() { return MelonLoader::IsGameIl2Cpp; }
 bool melonloader_is_debug_mode() { return MelonLoader::DebugMode; }
 const char* melonloader_get_game_directory() { return MelonLoader::GamePath; }

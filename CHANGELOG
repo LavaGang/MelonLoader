@@ -17,6 +17,7 @@ v0.0.2 Closed-Beta:
 15)  Fixed the bug that caused the Logger from MelonLoader.ModHandler to not properly output when using the Debug Console.
 16)  Added SystemTypeToIL2CPPClass method to NET_SDK.IL2CPP.
 17)  Fixed Compile Version conflict with the 2 Consoles.
+18)  Crash Issue with Game.DontDestroyOnLoad has been fixed and it now works.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
@@ -26,9 +27,8 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 Known Issues:
 
-1)  OnApplicationQuit for Mods doesn't get called. 
-2)  Game.DontDestroyOnLoad causes crash.
-3)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
+1)  OnApplicationQuit for Mods is broken.
+2)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
 
 ---
 

@@ -92,7 +92,7 @@
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="Hooks\MetadataLoader_LoadMetadataFile.cpp" />
-    <ClCompile Include="PatternSearch.cpp" />
+    <ClCompile Include="PointerUtils.cpp" />
     <ClCompile Include="Hooks\il2cpp_add_internal_call.cpp" />
     <ClCompile Include="Hooks\il2cpp_init.cpp" />
     <ClCompile Include="Hooks\LoadLibraryW.cpp" />
@@ -107,7 +107,7 @@
     <ClInclude Include="detours\detver.h" />
     <ClInclude Include="detours\syelog.h" />
     <ClInclude Include="Exports.h" />
-    <ClInclude Include="PatternSearch.h" />
+    <ClInclude Include="PointerUtils.h" />
     <ClInclude Include="Hooks\Hooks.h" />
     <ClInclude Include="IL2CPP.h" />
     <ClInclude Include="Mono.h" />

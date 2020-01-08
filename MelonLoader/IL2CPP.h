@@ -92,7 +92,7 @@ typedef struct Il2CppGlobalMetadataHeader
 } Il2CppGlobalMetadataHeader;
 typedef Il2CppGlobalMetadataHeader* (*MetadataLoader_LoadMetadataFile_t) (const char* fileName);
 
-class Il2Cpp
+class IL2CPP
 {
 public:
 	static Il2CppDomain* Domain;
@@ -112,6 +112,7 @@ public:
 	static il2cpp_type_get_class_or_element_class_t il2cpp_type_get_class_or_element_class;
 	static il2cpp_domain_get_assemblies_t il2cpp_domain_get_assemblies;
 	static il2cpp_assembly_get_image_t il2cpp_assembly_get_image;
+
 	static MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t MetadataCache_GetTypeInfoFromTypeDefinitionIndex;
 	static MetadataCache_FromTypeDefinition_t MetadataCache_FromTypeDefinition;
 	static MetadataLoader_LoadMetadataFile_t MetadataLoader_LoadMetadataFile;

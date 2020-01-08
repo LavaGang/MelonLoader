@@ -39,7 +39,7 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		Mono::CreateDomain();
 
 		MelonLoader::GameAssemblyDLL = lib;
-		Il2Cpp::Setup();
+		IL2CPP::Setup();
 
 		Hook_il2cpp_init::Hook();
 		Hook_il2cpp_add_internal_call::Hook();

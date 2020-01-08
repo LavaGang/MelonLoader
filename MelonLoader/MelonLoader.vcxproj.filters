@@ -15,7 +15,6 @@
     <ClCompile Include="Hooks\il2cpp_add_internal_call.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="PatternSearch.cpp" />
     <ClCompile Include="Hooks\MetadataLoader_LoadMetadataFile.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
@@ -23,6 +22,7 @@
     <ClCompile Include="Hooks\MetadataCache_GetTypeInfoFromTypeDefinitionIndex.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="PointerUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
@@ -41,9 +41,9 @@
     <ClInclude Include="Hooks\Hooks.h">
       <Filter>Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="PatternSearch.h" />
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="il2cpp-internals.h" />
+    <ClInclude Include="PointerUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="detours">

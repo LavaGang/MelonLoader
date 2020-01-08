@@ -9,7 +9,7 @@ void Hook_MetadataLoader_LoadMetadataFile::Hook()
 {
 	if (Original_MetadataLoader_LoadMetadataFile == NULL)
 	{
-		Original_MetadataLoader_LoadMetadataFile = Il2Cpp::MetadataLoader_LoadMetadataFile;
+		Original_MetadataLoader_LoadMetadataFile = IL2CPP::MetadataLoader_LoadMetadataFile;
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		DetourAttach(&(LPVOID&)Original_MetadataLoader_LoadMetadataFile, Hooked_MetadataLoader_LoadMetadataFile);
@@ -31,6 +31,6 @@ void Hook_MetadataLoader_LoadMetadataFile::Unhook()
 
 Il2CppGlobalMetadataHeader* Hook_MetadataLoader_LoadMetadataFile::Hooked_MetadataLoader_LoadMetadataFile(const char* fileName)
 {
-	Il2Cpp::s_GlobalMetadataHeader = Original_MetadataLoader_LoadMetadataFile(fileName);
-	return Il2Cpp::s_GlobalMetadataHeader;
+	IL2CPP::s_GlobalMetadataHeader = Original_MetadataLoader_LoadMetadataFile(fileName);
+	return IL2CPP::s_GlobalMetadataHeader;
 }

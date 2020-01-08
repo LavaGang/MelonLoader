@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 
+debugstream Console::scout;
 bool Console::IsInitialized() { return (GetConsoleWindow() != NULL); }
 
 void Console::Create()
@@ -15,7 +16,7 @@ void Console::Create()
 			return;
 		}
 		freopen_s(reinterpret_cast<FILE * *>(stdout), "CONOUT$", "w", stdout);
-		SetConsoleTitle("MelonLoader Debug Console");
+		//scout.coss = std::ofstream("debug.log");
 	}
 }
 
@@ -30,10 +31,11 @@ void Console::Destroy()
 
 void Console::Write(const char* txt)
 {
-	std::cout << txt;
+	scout << txt;
 }
 
 void Console::WriteLine(const char* txt)
 {
-	std::cout << txt << std::endl;
+	scout << txt;
+	scout << std::endl;
 }
