@@ -32,7 +32,7 @@ void Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex::Unhook()
 
 Il2CppClass* Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex::Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(int index)
 {
-	if ((*(Il2CppClass * **)(IL2CPP::s_TypeInfoDefinitionTable)) == NULL)
+	if ((*(Il2CppClass***)(IL2CPP::s_TypeInfoDefinitionTable)) == NULL)
 		return NULL;
 	if ((index < 0) || (static_cast<uint32_t>(index) >= (IL2CPP::s_GlobalMetadataHeader->typeDefinitionsCount / sizeof(Il2CppTypeDefinition))))
 		index = 0;
