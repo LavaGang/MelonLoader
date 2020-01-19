@@ -31,6 +31,7 @@ mono_assembly_setrootdir_t Mono::mono_assembly_setrootdir = NULL;
 mono_get_corlib_t Mono::mono_get_corlib = NULL;
 mono_image_get_assembly_t Mono::mono_image_get_assembly = NULL;
 mono_runtime_set_main_args_t Mono::mono_runtime_set_main_args = NULL;
+mono_domain_set_config_t Mono::mono_domain_set_config = NULL;
 
 void Mono::Setup()
 {
@@ -55,6 +56,7 @@ void Mono::Setup()
 	mono_get_corlib = (mono_get_corlib_t)GetProcAddress(MelonLoader::MonoDLL, "mono_get_corlib");
 	mono_image_get_assembly = (mono_image_get_assembly_t)GetProcAddress(MelonLoader::MonoDLL, "mono_image_get_assembly");
 	mono_runtime_set_main_args = (mono_runtime_set_main_args_t)GetProcAddress(MelonLoader::MonoDLL, "mono_runtime_set_main_args");
+	mono_domain_set_config = (mono_domain_set_config_t)GetProcAddress(MelonLoader::MonoDLL, "mono_domain_set_config");
 }
 
 void Mono::CreateDomain()
@@ -77,5 +79,6 @@ void Mono::CreateDomain()
 		mono_runtime_set_main_args(argc, argv);
 
 		Domain = mono_jit_init("MelonLoader");
+		mono_domain_set_config(Domain, ConfigPath, "MelonLoader");
 	}
 }
