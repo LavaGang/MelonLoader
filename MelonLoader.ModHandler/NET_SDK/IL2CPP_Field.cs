@@ -43,7 +43,7 @@ namespace NET_SDK.Reflection
             if (HasFlag(IL2CPP_BindingFlags.FIELD_STATIC))
                 IL2CPP.il2cpp_field_static_set_value(Ptr, value);
             else
-                IL2CPP.il2cpp_field_set_value_object(obj, Ptr, value);
+                IL2CPP.il2cpp_field_set_value(obj, Ptr, value);
         }
     }
 }
