@@ -2,6 +2,7 @@
 #include <string>
 #include <Windows.h>
 #include "Mono.h"
+#include "IL2CPP.h"
 
 class MelonLoader
 {
@@ -18,4 +19,5 @@ public:
 	static void ApplicationQuit();
 	static void ModHandler();
 	static bool LoadMono();
+	static void Detour(Il2CppMethod* target, void* detour);
 };

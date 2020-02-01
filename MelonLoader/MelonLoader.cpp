@@ -7,6 +7,7 @@
 #include "Il2Cpp.h"
 #include "Hooks/Hooks.h"
 #include <iostream>
+#include "detours/detours.h"
 
 bool MelonLoader::IsGameIl2Cpp = false;
 HMODULE MelonLoader::MonoDLL = NULL;
@@ -136,3 +137,11 @@ bool MelonLoader::LoadMono()
 		MessageBox(NULL, "Failed to Load mono.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
 	return false;
 }
+
+void MelonLoader::Detour(Il2CppMethod* target, void* detour) {
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	DetourAttach(&(LPVOID&)target->targetMethod, detour);
+	DetourTransactionCommit();
+}
+
