@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using MelonLoader;
 using NET_SDK.Reflection;
 
 namespace NET_SDK.Harmony
@@ -94,13 +95,22 @@ namespace NET_SDK.Harmony
         public IL2CPP_Object InvokeOriginal(IL2CPP_Object obj, params IntPtr[] paramtbl) => InvokeOriginal(obj.Ptr, paramtbl);
         public IL2CPP_Object InvokeOriginal(IntPtr obj, params IntPtr[] paramtbl)
         {
-            UninstallPatch();
-            IL2CPP_Object returnval = TargetMethod.Invoke(obj, paramtbl);
-            InstallPatch();
-            return returnval;
+            if (TargetMethod.GetParameterCount() == 0)
+            {
+                UninstallPatch();
+                IL2CPP_Object returnval = TargetMethod.Invoke(obj, paramtbl);
+                InstallPatch();
+                return returnval;
+            }
+            else return TargetMethod.Invoke(obj, paramtbl);
         }
 
-        unsafe internal void InstallPatch() => *(IntPtr*)TargetMethod.Ptr.ToPointer() = NewMethod;
+        unsafe internal void InstallPatch() {
+            if (TargetMethod.GetParameterCount() == 0)
+                *(IntPtr*) TargetMethod.Ptr.ToPointer() = NewMethod;
+            else Imports.melonloader_detour(TargetMethod.Ptr, NewMethod);
+        }
+
         unsafe internal void UninstallPatch() => *(IntPtr*)TargetMethod.Ptr.ToPointer() = OriginalMethod;
     }
 }
