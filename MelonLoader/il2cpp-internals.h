@@ -5,7 +5,9 @@
 struct Il2CppDomain;
 struct Il2CppAssembly;
 struct Il2CppImage;
-struct Il2CppMethod;
+struct Il2CppMethod {
+	void* targetMethod;
+};
 
 typedef struct Il2CppTypeDefinition
 {
