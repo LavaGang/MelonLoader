@@ -85,7 +85,7 @@ namespace MelonLoader
             if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection))
             {
                 if (prefsInSection.TryGetValue(name, out PrefDesc pref))
-                    Logger.LogError("Trying to registered Pref " + section + ":" + name + " more than one time");
+                    MelonModLogger.LogError("Trying to registered Pref " + section + ":" + name + " more than one time");
                 else
                 {
                     string toStoreValue = defaultValue;
@@ -122,14 +122,14 @@ namespace MelonLoader
                 }
             }
             Main.OnModSettingsApplied();
-            Logger.Log("Config Saved!");
+            MelonModLogger.Log("Config Saved!");
         }
 
         public static string GetString(string section, string name)
         {
             if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
                 return pref.Value;
-            Logger.LogError("Trying to get unregistered Pref " + section + ":" + name);
+            MelonModLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
             return "";
         }
 
@@ -141,14 +141,14 @@ namespace MelonLoader
                 ModPrefsController.SetString(section, name, value);
             }
             else
-                Logger.LogError("Trying to save unknown pref " + section + ":" + name);
+                MelonModLogger.LogError("Trying to save unknown pref " + section + ":" + name);
         }
 
         public static bool GetBool(string section, string name)
         {
             if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
                 return pref.Value.Equals("true");
-            Logger.LogError("Trying to get unregistered Pref " + section + ":" + name);
+            MelonModLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
             return false;
         }
         public static void SetBool(string section, string name, bool value) { SetString(section, name, value ? "true" : "false"); }
@@ -158,7 +158,7 @@ namespace MelonLoader
             if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
                 if (int.TryParse(pref.Value, out int valueI))
                     return valueI;
-            Logger.LogError("Trying to get unregistered Pref " + section + ":" + name);
+            MelonModLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
             return 0;
         }
         public static void SetInt(string section, string name, int value) { SetString(section, name, value.ToString()); }
@@ -168,7 +168,7 @@ namespace MelonLoader
             if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
                 if (float.TryParse(pref.Value, out float valueF))
                     return valueF;
-            Logger.LogError("Trying to get unregistered Pref " + section + ":" + name);
+            MelonModLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
             return 0.0f;
         }
         public static void SetFloat(string section, string name, float value) { SetString(section, name, value.ToString()); }

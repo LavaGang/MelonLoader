@@ -1,10 +1,18 @@
-INSTALLATION:
+IL2CPP GAME INSTALLATION:
 
 1)  Place winmm.dll next to the game's exe.
 2)  Copy the MelonLoader folder from BaseLibs to the game's install folder next to the exe and winmm.dll.
 3)  Place MelonLoader.dll and MelonLoader.ModHandler.dll in the MelonLoader folder in the game's install folder.
 4)  Find the game's Unity version in Unity Dependencies in BaseLibs.
-5)  Extract the zip to the MelonLoader/Managed folder in the game's install folder.
+5)  Extract the zip to the MelonLoader folder in the game's install folder.
+
+---
+
+MONO GAME INSTALLATION:
+
+1)  Place winmm.dll next to the game's exe.
+2)  Create a new folder named MelonLoader in the game's install folder.
+3)  Place MelonLoader.dll and MelonLoader.ModHandler.dll in the MelonLoader folder in the game's install folder.
 
 ---
 
@@ -13,6 +21,7 @@ LAUNCH OPTIONS:
 "--no-mods"  =  Launch game without loading Mods
 "--melonloader.console"  =  Normal Console
 "--melonloader.debug"  =  Debug Console
+"--melonloader.mupot"  =  Experimental MUPOT Mode for IL2CPP Games
 
 ---
 

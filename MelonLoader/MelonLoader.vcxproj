@@ -87,11 +87,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
-    <ClCompile Include="Hooks\MetadataCache_GetTypeInfoFromTypeDefinitionIndex.cpp" />
+    <ClCompile Include="Hooks\mono_jit_init_version.cpp" />
+    <ClCompile Include="Hooks\PlayerLoadFirstScene.cpp" />
+    <ClCompile Include="Hooks\SingleAppInstance_FindOtherInstance.cpp" />
+    <ClCompile Include="IL2CPPUnityPlayer.cpp" />
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
-    <ClCompile Include="Hooks\MetadataLoader_LoadMetadataFile.cpp" />
+    <ClCompile Include="MonoUnityPlayer.cpp" />
     <ClCompile Include="PointerUtils.cpp" />
     <ClCompile Include="Hooks\il2cpp_add_internal_call.cpp" />
     <ClCompile Include="Hooks\il2cpp_init.cpp" />
@@ -102,11 +105,14 @@
   <ItemGroup>
     <ClInclude Include="Console.h" />
     <ClInclude Include="il2cpp-internals.h" />
+    <ClInclude Include="IL2CPPUnityPlayer.h" />
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="detours\detours.h" />
     <ClInclude Include="detours\detver.h" />
     <ClInclude Include="detours\syelog.h" />
     <ClInclude Include="Exports.h" />
+    <ClInclude Include="mono-internals.h" />
+    <ClInclude Include="MonoUnityPlayer.h" />
     <ClInclude Include="PointerUtils.h" />
     <ClInclude Include="Hooks\Hooks.h" />
     <ClInclude Include="IL2CPP.h" />

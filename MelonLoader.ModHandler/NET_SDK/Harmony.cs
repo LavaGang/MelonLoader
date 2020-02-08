@@ -105,12 +105,20 @@ namespace NET_SDK.Harmony
             else return TargetMethod.Invoke(obj, paramtbl);
         }
 
-        unsafe internal void InstallPatch() {
+        unsafe internal void InstallPatch()
+        {
             if (TargetMethod.GetParameterCount() == 0)
-                *(IntPtr*) TargetMethod.Ptr.ToPointer() = NewMethod;
-            else Imports.melonloader_detour(TargetMethod.Ptr, NewMethod);
+                *(IntPtr*)TargetMethod.Ptr.ToPointer() = NewMethod;
+            else
+                Imports.melonloader_detour(TargetMethod.Ptr, NewMethod);
         }
 
-        unsafe internal void UninstallPatch() => *(IntPtr*)TargetMethod.Ptr.ToPointer() = OriginalMethod;
+        unsafe internal void UninstallPatch()
+        {
+            if (TargetMethod.GetParameterCount() == 0)
+                *(IntPtr*)TargetMethod.Ptr.ToPointer() = OriginalMethod;
+            else
+                Imports.melonloader_undetour(TargetMethod.Ptr, OriginalMethod);
+        }
     }
 }

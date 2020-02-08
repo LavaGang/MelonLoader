@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Console.h"
 #pragma warning( disable : 4996 )
 
 char* Mono::AssemblyPath = NULL;
@@ -31,9 +32,16 @@ mono_assembly_setrootdir_t Mono::mono_assembly_setrootdir = NULL;
 mono_get_corlib_t Mono::mono_get_corlib = NULL;
 mono_image_get_assembly_t Mono::mono_image_get_assembly = NULL;
 mono_runtime_set_main_args_t Mono::mono_runtime_set_main_args = NULL;
+mono_class_init_t Mono::mono_class_init = NULL;
+mono_reflection_type_get_type_t Mono::mono_reflection_type_get_type = NULL;
+mono_class_from_mono_type_t Mono::mono_class_from_mono_type = NULL;
+mono_assembly_get_name_t Mono::mono_assembly_get_name = NULL;
 mono_domain_set_config_t Mono::mono_domain_set_config = NULL;
+mono_get_root_domain_t Mono::mono_get_root_domain = NULL;
+mono_class_get_method_count_t Mono::mono_class_get_method_count = NULL;
+mono_method_get_name_t Mono::mono_method_get_name = NULL;
 
-void Mono::Setup()
+bool Mono::Setup()
 {
 	mono_assembly_setrootdir = (mono_assembly_setrootdir_t)GetProcAddress(MelonLoader::MonoDLL, "mono_assembly_setrootdir");
 	mono_set_assemblies_path = (mono_set_assemblies_path_t)GetProcAddress(MelonLoader::MonoDLL, "mono_set_assemblies_path");
@@ -56,7 +64,16 @@ void Mono::Setup()
 	mono_get_corlib = (mono_get_corlib_t)GetProcAddress(MelonLoader::MonoDLL, "mono_get_corlib");
 	mono_image_get_assembly = (mono_image_get_assembly_t)GetProcAddress(MelonLoader::MonoDLL, "mono_image_get_assembly");
 	mono_runtime_set_main_args = (mono_runtime_set_main_args_t)GetProcAddress(MelonLoader::MonoDLL, "mono_runtime_set_main_args");
+	mono_class_init = (mono_class_init_t)GetProcAddress(MelonLoader::MonoDLL, "mono_class_init");
+	mono_reflection_type_get_type = (mono_reflection_type_get_type_t)GetProcAddress(MelonLoader::MonoDLL, "mono_reflection_type_get_type");
+	mono_class_from_mono_type = (mono_class_from_mono_type_t)GetProcAddress(MelonLoader::MonoDLL, "mono_class_from_mono_type");
+	mono_assembly_get_name = (mono_assembly_get_name_t)GetProcAddress(MelonLoader::MonoDLL, "mono_assembly_get_name");
 	mono_domain_set_config = (mono_domain_set_config_t)GetProcAddress(MelonLoader::MonoDLL, "mono_domain_set_config");
+	mono_get_root_domain = (mono_get_root_domain_t)GetProcAddress(MelonLoader::MonoDLL, "mono_get_root_domain");
+	mono_class_get_method_count = (mono_class_get_method_count_t)GetProcAddress(MelonLoader::MonoDLL, "mono_class_get_method_count");
+	mono_method_get_name = (mono_method_get_name_t)GetProcAddress(MelonLoader::MonoDLL, "mono_method_get_name");
+
+	return true;
 }
 
 void Mono::CreateDomain()
@@ -79,6 +96,6 @@ void Mono::CreateDomain()
 		mono_runtime_set_main_args(argc, argv);
 
 		Domain = mono_jit_init("MelonLoader");
-		mono_domain_set_config(Domain, ConfigPath, "MelonLoader");
+		mono_domain_set_config(Domain, MelonLoader::GamePath, "MelonLoader");
 	}
 }

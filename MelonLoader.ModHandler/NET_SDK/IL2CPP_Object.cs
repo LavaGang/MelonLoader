@@ -14,7 +14,8 @@ namespace NET_SDK.Reflection
 
         public IL2CPP_Type GetReturnType() => ReturnType;
 
-        unsafe public void* Unbox() => IL2CPP.il2cpp_object_unbox(Ptr).ToPointer();
+        public IntPtr UnboxIntPtr() => IL2CPP.il2cpp_object_unbox(Ptr);
+        unsafe public void* Unbox() => UnboxIntPtr().ToPointer(); 
         public string UnboxString() => IL2CPP.IntPtrToString(Ptr);
     }
 }

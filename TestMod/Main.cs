@@ -2,7 +2,7 @@
 
 namespace TestMod
 {
-    public static class FileInfo
+    public static class BuildInfo
     {
         public const string Name = "TestMod";
         public const string Author = "AUTHOR";
@@ -11,27 +11,50 @@ namespace TestMod
         public const string DownloadLink = "";
     }
 
-    [MelonModInfo(FileInfo.Name, FileInfo.Version, FileInfo.Author, FileInfo.DownloadLink)]
     public class TestMod : MelonMod
     {
         void OnApplicationStart()
         {
+            MelonModLogger.Log("OnApplicationStart");
+        }
 
+        void OnLevelWasLoaded(int level)
+        {
+            MelonModLogger.Log("OnLevelWasLoaded");
+        }
+
+        void OnLevelWasInitialized(int level)
+        {
+            MelonModLogger.Log("OnLevelWasInitialized");
         }
 
         void OnUpdate()
         {
-            
+            MelonModLogger.Log("OnUpdate");
+        }
+        void OnFixedUpdate()
+        {
+            MelonModLogger.Log("OnFixedUpdate");
+        }
+
+        void OnLateUpdate()
+        {
+            MelonModLogger.Log("OnLateUpdate");
+        }
+        
+        void OnGUI()
+        {
+            MelonModLogger.Log("OnGUI");
         }
 
         void OnApplicationQuit()
         {
-            
+            MelonModLogger.Log("OnApplicationQuit");
         }
 
         void OnModSettingsApplied()
         {
-            
+            MelonModLogger.Log("OnModSettingsApplied");
         }
     }
 }

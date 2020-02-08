@@ -1,3 +1,47 @@
+Known Issues:
+
+(EMPTY)
+
+---
+
+Work-in-Progress / To-Do List:
+
+1)  Fix the above issues.
+2)  Redesign the Log system to combine both Debug and Release Logs in one unified system.
+3)  Create Method for ModPrefs to Register Categories and Prefs in a single call.
+4)  An Assembly Generator for Game Specific Assembly DLLs.
+5)  A Dependency Download system to automate installation of MelonLoader.
+6)  Redirect Mono Pathing to be correctly under the MelonLoader folder in MUPOT Mode.
+7)  Add Assertion System.
+8)  Add Android Support.
+9)  Add Linux Support.
+10)  Add Mac OS Support.
+
+---
+
+v0.0.3 Closed-Beta:
+
+1)  General Stability and Optimization Improvements.
+2)  Added Support for Mono based Games.
+3)  Added MUPOT Mode which forces IL2CPP games to run under Mono. This Mode is still extremely Experimental.
+4)  Logger has been renamed to MelonModLogger to prevent conflict with UnityEngine.Logger.
+5)  Fixed Crash issue when using System.Type in MUPOT Mode.
+7)  MelonModInfo Attribute has been changed to an Assembly Attribute.
+8)  Fixed issue with MelonModLogger not getting the Mod Name when used outside of the main class.
+9)  FileInfo in the TestMod has been renamed to BuildInfo so it won't conflict with the System.IO.FileInfo class.
+10)  Added 0Harmony Integration and Support.
+11)  Modified MelonLoader.ModHandler to use a Component based system in MUPOT Mode and Mono based games.
+12)  Fixed issue preventing OnUpdate from being called in MUPOT Mode and Mono based games.
+13)  Fixed issue preventing OnApplicationQuit from being called in MUPOT Mode and Mono based games.
+14)  Fixed Conflict issue triggering Unity's Single Instance function in MUPOT Mode.
+15)  Added OnLevelWasLoaded, OnLevelWasInitialized, OnUpdate, OnFixedUpdate, OnLateUpdate, and OnGUI for Mods in MUPOT Mode and Mono based games.
+16)  Bug that prevented Debug Compilation is now fixed.
+17)  Fixed issue that caused Unity Crash Handler to initialize MelonLoader twice.
+18)  Fixed Runtime Initialization issue with Audica that caused crashes.
+19)  Fixed Execution Order of MelonLoader.ModHandler.
+
+---
+
 v0.0.2 Closed-Beta:
 
 1)  Added NET_SDK to be built into MelonLoader.ModHandler as the designated IL2CPP Wrapper.
@@ -12,12 +56,13 @@ v0.0.2 Closed-Beta:
 10)  Clean-up and Additions made to NET_SDK.  (Thanks Sc4ad :D)
 11)  Added SteamVR and OculusVR Dependency DLLs to MelonLoader/Managed.
 12)  Added TestMod to Project Files.
-13)  Added Attribute StackTrace system to Logger.  (As requested by Camobiwon :3)
+13)  Added Attribute StackTrace System to Logger.  (As requested by Camobiwon :3)
 14)  Replaced Spaces in Names for the Attribute StackTrace System with Underscores.
 15)  Fixed the bug that caused the Logger from MelonLoader.ModHandler to not properly output when using the Debug Console.
 16)  Added SystemTypeToIL2CPPClass method to NET_SDK.IL2CPP.
-17)  Fixed Compile Version conflict with the 2 Consoles.
-18)  Crash Issue with Game.DontDestroyOnLoad has been fixed and it now works.
+17)  Crash Issue with Game.DontDestroyOnLoad has been fixed and it now works.
+18)  Fixed IL2CPP_Field where SetValue does not function on a instance object.  (Thanks DubyaDude ^.^)
+19)  Fixed Compile Version conflict with the 2 Consoles.
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console
 MelonLoader [DEBUG] & MelonLoader.ModHandler [DEBUG]  =  Debug Console
@@ -25,19 +70,6 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 ---
 
-Known Issues:
+v0.0.1 Closed-Beta:
 
-1)  OnApplicationQuit for Mods is broken.
-2)  Certain methods that use System.Type cause crash. (example: GameObject.AddComponent)
-
----
-
-Work-in-Progress / To-Do List:
-
-1)  Fix the above issues.
-2)  0Harmony integration and support.
-3)  An assembly generator for game specific Assembly DLL files.
-4)  A Dependency Download system to automate installation of MelonLoader.
-5)  A component based system for Mod loading and running.
-6)  Support for games that use Mono instead of IL2CPP.
-7)  Support for Oculus Quest, Linux, and Mac.
+1) Initial Commit and Rewrite.

@@ -28,10 +28,15 @@ public:
 class Console
 {
 public:
+	static debugstream scout;
+
 	static bool IsInitialized();
 	static void Create();
 	static void Destroy();
+
 	static void Write(const char* txt);
+	static void Write(std::string txt);
+
 	static void WriteLine(const char* txt);
-	static debugstream scout;
+	static void WriteLine(std::string txt);
 };

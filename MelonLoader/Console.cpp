@@ -1,4 +1,5 @@
 #include "Console.h"
+#include "MelonLoader.h"
 #include <Windows.h>
 #include <stdio.h>
 #include <iostream>
@@ -15,8 +16,9 @@ void Console::Create()
 			MessageBox(NULL, "Failed to Create Debug Console!", NULL, MB_OK | MB_ICONEXCLAMATION);
 			return;
 		}
-		freopen_s(reinterpret_cast<FILE * *>(stdout), "CONOUT$", "w", stdout);
-		//scout.coss = std::ofstream("debug.log");
+		SetConsoleTitle("MelonLoader Debug Console");
+		freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
+		scout.coss = std::ofstream((std::string(MelonLoader::GamePath) + "\\melonloader_debug.log"));
 	}
 }
 
@@ -29,13 +31,8 @@ void Console::Destroy()
 	}
 }
 
-void Console::Write(const char* txt)
-{
-	scout << txt;
-}
+void Console::Write(const char* txt) { scout << txt; }
+void Console::Write(std::string txt) { Write(txt.c_str()); }
 
-void Console::WriteLine(const char* txt)
-{
-	scout << txt;
-	scout << std::endl;
-}
+void Console::WriteLine(const char* txt) { scout << txt << std::endl; }
+void Console::WriteLine(std::string txt) { WriteLine(txt.c_str()); }

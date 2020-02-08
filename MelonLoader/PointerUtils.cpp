@@ -35,7 +35,7 @@ uintptr_t PointerUtils::FindPattern(const uintptr_t& start_address, const uintpt
 
 uintptr_t PointerUtils::FindPattern(HMODULE mod, const char* target_pattern)
 {
-	MODULEINFO module_info = { 0 };
+	MODULEINFO module_info = { NULL };
 	if (!GetModuleInformation(GetCurrentProcess(), mod, &module_info, sizeof(MODULEINFO)))
 		return NULL;
 	const uintptr_t start_address = uintptr_t(module_info.lpBaseOfDll);
@@ -43,19 +43,75 @@ uintptr_t PointerUtils::FindPattern(HMODULE mod, const char* target_pattern)
 	return FindPattern(start_address, end_address, target_pattern);
 }
 
+uintptr_t PointerUtils::FindPattern(HMODULE mod, const char* start_address_pattern, const char* target_pattern)
+{
+	MODULEINFO module_info = { NULL };
+	if (!GetModuleInformation(GetCurrentProcess(), mod, &module_info, sizeof(MODULEINFO)))
+		return NULL;
+	const uintptr_t start_address = uintptr_t(module_info.lpBaseOfDll);
+	const uintptr_t end_address = (start_address + module_info.SizeOfImage);
+	return FindPattern(FindPattern(start_address, end_address, start_address_pattern), end_address, target_pattern);
+}
+
+std::vector<uintptr_t> PointerUtils::FindAllPattern(uintptr_t start_address, uintptr_t end_address, const char* target_pattern)
+{
+	std::vector<uintptr_t> returnvec;
+	uint64_t size = (end_address - start_address);
+	uintptr_t start_address_b = start_address;
+	uintptr_t end_address_b = end_address;
+	uintptr_t addr = 0;
+	while ((addr = FindPattern(start_address, end_address, target_pattern)) != NULL)
+	{
+		returnvec.push_back(addr);
+		start_address_b = (addr + 5);
+		end_address_b = (start_address_b + size);
+	}
+	return returnvec;
+}
+
+std::vector<uintptr_t> PointerUtils::FindAllPattern(HMODULE mod, const char* target_pattern)
+{
+	std::vector<uintptr_t> returnvec;
+	MODULEINFO module_info = { NULL };
+	if (!GetModuleInformation(GetCurrentProcess(), mod, &module_info, sizeof(MODULEINFO)))
+		return returnvec;
+	uintptr_t start_address = uintptr_t(module_info.lpBaseOfDll);
+	uintptr_t end_address = (start_address + module_info.SizeOfImage);
+	return FindAllPattern(start_address, end_address, target_pattern);
+}
+
 uint64_t PointerUtils::ResolvePtrOffset(uint64_t offset32Ptr, uint64_t nextInstructionPtr)
 {
-	uint32_t jmpOffset = *(uint32_t*)offset32Ptr;
+	if ((offset32Ptr == NULL) || (nextInstructionPtr == NULL))
+		return NULL;
+	uint32_t instOffset = *(uint32_t*)offset32Ptr;
 	uint32_t valueUInt = *(uint32_t*)nextInstructionPtr;
 	uint64_t delta = (nextInstructionPtr - valueUInt);
-	uint32_t newPtrInt = (valueUInt + jmpOffset);
+	uint32_t newPtrInt = (valueUInt + instOffset);
 	return delta + newPtrInt;
 }
 
-uint64_t PointerUtils::ResolveRelativeInstruction(uint64_t instruction)
+uint64_t PointerUtils::ResolvePtrOffsetFromInstruction(uint64_t instruction, uint64_t start, uint64_t end)
 {
-	byte opcode = *(byte*)instruction;
-	if ((opcode != 0xE8) && (opcode != 0xE9))
+	if (instruction == NULL)
 		return NULL;
-	return ResolvePtrOffset((instruction + 1), (instruction + 5));
+	uint64_t offset32Ptr = (instruction + start);
+	uint64_t nextInstructionPtr = (instruction + end);
+	return ResolvePtrOffset(offset32Ptr, nextInstructionPtr);
+}
+
+uint64_t PointerUtils::ResolvePtrOffsetFromInstructionPattern(HMODULE mod, const char* pattern, uint64_t start, uint64_t end)
+{
+	return ResolvePtrOffsetFromInstruction(FindPattern(mod, pattern), start, end);
+}
+
+HMODULE PointerUtils::GetModuleHandlePtr(const char* mod)
+{
+	HMODULE modhandle = NULL;
+	do
+	{
+		modhandle = GetModuleHandle(mod);
+		Sleep(1);
+	} while (modhandle == NULL);
+	return modhandle;
 }

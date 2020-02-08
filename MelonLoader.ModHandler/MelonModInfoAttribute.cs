@@ -2,7 +2,7 @@
 
 namespace MelonLoader
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
     public class MelonModInfoAttribute : Attribute
     {
         /// <summary>

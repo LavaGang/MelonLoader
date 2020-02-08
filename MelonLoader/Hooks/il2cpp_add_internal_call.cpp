@@ -1,7 +1,8 @@
 #include "Hooks.h"
 #include "../MelonLoader.h"
 #include "../detours/detours.h"
-#include <iostream>
+#include "../Console.h"
+#include "../PointerUtils.h"
 
 il2cpp_add_internal_call_t Hook_il2cpp_add_internal_call::Original_il2cpp_add_internal_call = NULL;
 
@@ -31,6 +32,9 @@ void Hook_il2cpp_add_internal_call::Unhook()
 
 void Hook_il2cpp_add_internal_call::Hooked_il2cpp_add_internal_call(const char* name, void* method)
 {
-	Original_il2cpp_add_internal_call(name, method);
-	Mono::mono_add_internal_call(name, method);
+	if (!MelonLoader::MupotMode)
+	{
+		Mono::mono_add_internal_call(name, method);
+		Original_il2cpp_add_internal_call(name, method);
+	}
 }

@@ -128,6 +128,7 @@ namespace NET_SDK
                 result[i] = *(IntPtr*)((IntPtr)((long*)ptr + 4) + i * IntPtr.Size);
             return result;
         }
+        public static T IntPtrToStructure<T>(IntPtr ptr) => (T)Marshal.PtrToStructure(ptr, typeof(T));
         unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10); 
         public static IntPtr StringToIntPtr(string str) => il2cpp_string_new(str);
         /// <summary>

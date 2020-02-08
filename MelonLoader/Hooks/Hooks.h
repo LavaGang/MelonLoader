@@ -2,6 +2,9 @@
 #include <Windows.h>
 #include "../Mono.h"
 #include "../Il2Cpp.h"
+#include "../MonoUnityPlayer.h"
+#include <vector>
+#include <string>
 
 typedef HMODULE (__stdcall* LoadLibraryW_t) (LPCWSTR lpLibFileName);
 class Hook_LoadLibraryW
@@ -24,6 +27,16 @@ public:
 	static Il2CppDomain* Hooked_il2cpp_init(const char* name);
 };
 
+class Hook_mono_jit_init_version
+{
+public:
+	static mono_jit_init_version_t Original_mono_jit_init_version;
+
+	static void Hook();
+	static void Unhook();
+	static MonoDomain* Hooked_mono_jit_init_version(const char* name, const char* version);
+};
+
 class Hook_il2cpp_add_internal_call
 {
 public:
@@ -34,22 +47,23 @@ public:
 	static void Hooked_il2cpp_add_internal_call(const char* name, void* method);
 };
 
-class Hook_MetadataLoader_LoadMetadataFile
+class Hook_SingleAppInstance_FindOtherInstance
 {
 public:
-	static MetadataLoader_LoadMetadataFile_t Original_MetadataLoader_LoadMetadataFile;
+	static SingleAppInstance_FindOtherInstance_t Original_SingleAppInstance_FindOtherInstance;
 
 	static void Hook();
 	static void Unhook();
-	static Il2CppGlobalMetadataHeader* Hooked_MetadataLoader_LoadMetadataFile(const char* fileName);
+	static bool Hooked_SingleAppInstance_FindOtherInstance(LPARAM lParam);
 };
 
-class Hook_MetadataCache_GetTypeInfoFromTypeDefinitionIndex
+typedef void* (*PlayerLoadFirstScene_t) (bool unknown);
+class Hook_PlayerLoadFirstScene
 {
 public:
-	static MetadataCache_GetTypeInfoFromTypeDefinitionIndex_t Original_MetadataCache_GetTypeInfoFromTypeDefinitionIndex;
+	static PlayerLoadFirstScene_t Original_PlayerLoadFirstScene;
 
 	static void Hook();
 	static void Unhook();
-	static Il2CppClass* Hooked_MetadataCache_GetTypeInfoFromTypeDefinitionIndex(int index);
+	static void* Hooked_PlayerLoadFirstScene(bool unknown);
 };

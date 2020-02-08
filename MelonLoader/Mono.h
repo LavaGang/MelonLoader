@@ -1,11 +1,5 @@
 #pragma once
-struct MonoDomain;
-struct MonoAssembly;
-struct MonoImage;
-struct MonoMethod;
-struct MonoClass;
-struct MonoObject;
-struct MonoThread;
+#include "mono-internals.h"
 
 typedef void (*mono_set_assemblies_path_t) (const char* path);
 typedef void (*mono_set_config_dir_t) (const char* path);
@@ -22,13 +16,21 @@ typedef MonoThread* (*mono_thread_current_t)();
 typedef void (*mono_thread_set_main_t)(MonoThread* thread);
 typedef void (*mono_add_internal_call_t) (const char* name, void* method);
 typedef void* (*mono_resolve_icall_t) (const char* name);
-typedef void* (*mono_class_enum_basetype_t) (void* klass);
-typedef const char* (*mono_class_get_name_t) (void* klass);
-typedef void* (*mono_type_get_class_t) (void* type);
+typedef void* (*mono_class_enum_basetype_t) (MonoClass* klass);
+typedef const char* (*mono_class_get_name_t) (MonoClass* klass);
+typedef MonoClass* (*mono_type_get_class_t) (MonoType* type);
 typedef void* (*mono_get_corlib_t) ();
-typedef void* (*mono_image_get_assembly_t) (void* image);
+typedef MonoAssembly* (*mono_image_get_assembly_t) (MonoImage* image);
 typedef int (*mono_runtime_set_main_args_t) (int argc, char* argv[]);
+typedef bool (*mono_class_init_t) (MonoClass* klass);
+typedef MonoType* (*mono_reflection_type_get_type_t) (MonoReflectionType* reftype);
+typedef MonoClass* (*mono_class_from_mono_type_t) (MonoType* type);
+typedef const char* (*mono_assembly_get_name_t) (MonoAssembly* assem);
 typedef void (*mono_domain_set_config_t)(MonoDomain* domain, const char* configpath, const char* filename);
+typedef MonoDomain* (*mono_get_root_domain_t)();
+typedef int (*mono_class_get_method_count_t)(MonoClass* klass);
+typedef const char* (*mono_method_get_name_t)(MonoMethod* method);
+
 class Mono
 {
 public:
@@ -56,8 +58,15 @@ public:
 	static mono_get_corlib_t mono_get_corlib;
 	static mono_image_get_assembly_t mono_image_get_assembly;
 	static mono_runtime_set_main_args_t mono_runtime_set_main_args;
+	static mono_class_init_t mono_class_init;
+	static mono_reflection_type_get_type_t mono_reflection_type_get_type;
+	static mono_class_from_mono_type_t mono_class_from_mono_type;
+	static mono_assembly_get_name_t mono_assembly_get_name;
 	static mono_domain_set_config_t mono_domain_set_config;
+	static mono_get_root_domain_t mono_get_root_domain;
+	static mono_class_get_method_count_t mono_class_get_method_count;
+	static mono_method_get_name_t mono_method_get_name;
 
-	static void Setup();
+	static bool Setup();
 	static void CreateDomain();
 };

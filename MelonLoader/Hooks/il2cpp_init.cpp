@@ -31,6 +31,8 @@ void Hook_il2cpp_init::Unhook()
 Il2CppDomain* Hook_il2cpp_init::Hooked_il2cpp_init(const char* name)
 {
 	IL2CPP::Domain = Original_il2cpp_init(name);
+	if (MelonLoader::MupotMode)
+		MonoUnityPlayer::UnityMain();
 	Unhook();
 	return IL2CPP::Domain;
 }
