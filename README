@@ -1,3 +1,7 @@
+Compile winmm64, MelonLoader, and MelonLoader.ModHandler then follow the installation instructions below.
+
+---
+
 IL2CPP GAME INSTALLATION:
 
 1)  Place winmm.dll next to the game's exe.
