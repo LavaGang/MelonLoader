@@ -7,8 +7,8 @@ Compile winmm64, MelonLoader, and MelonLoader.ModHandler then follow the install
 1.  Place `winmm.dll` next to the game's exe.
 2.  Copy the `MelonLoader\` folder from `<REPO>\BaseLibs\` to the game's install folder next to the exe and `winmm.dll`.
 3.  Place `MelonLoader.dll` and `MelonLoader.ModHandler.dll` in the `MelonLoader\` folder in the game's install folder.
-4.  [Find the game's Unity version](#GET-UNITY-VERSION) in Unity Dependencies in BaseLibs
-    - If it does not exist you need to [generate it yourself](#UNITY-DEPENDENCY-GENERATION)
+4.  [Find the game's Unity version](#get-unity-version) in Unity Dependencies in BaseLibs
+    - If it does not exist you need to [generate it yourself](#unity-dependency-generation)
 5.  Extract the zip to the `MelonLoader\` folder in the game's install folder.
 
 ## MONO GAME INSTALLATION:
@@ -40,7 +40,7 @@ Compile winmm64, MelonLoader, and MelonLoader.ModHandler then follow the install
 
 ### UNITY DEPENDENCY GENERATION:
 
-1. Download the correct unity version found [here](#GET-UNITY-VERSION)
+1. Download the correct unity version found [here](#get-unity-version)
    - Release: `https://unity3d.com/unity/whats-new/<VERSION>`
    - Beta: `https://unity3d.com/unity/beta/<VERSION>`
 2. Install it (you don't need anything other than the core files [no need to select il2cpp or mono])
