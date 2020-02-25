@@ -34,7 +34,7 @@ void Hook_il2cpp_add_internal_call::Hooked_il2cpp_add_internal_call(const char* 
 {
 	if (!MelonLoader::MupotMode)
 	{
-		Mono::mono_add_internal_call(name, method);
 		Original_il2cpp_add_internal_call(name, method);
+		Mono::mono_add_internal_call(name, method);
 	}
 }

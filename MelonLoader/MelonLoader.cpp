@@ -81,6 +81,7 @@ void MelonLoader::Main()
 			{
 				if (MupotMode && MelonLoader::LoadMonoUnityPlayer() && MonoUnityPlayer::Setup())
 				{
+					Hook_mono_add_internal_call::Hook();
 					Hook_mono_jit_init_version::Hook();
 					Hook_SingleAppInstance_FindOtherInstance::Hook();
 				}
@@ -89,6 +90,13 @@ void MelonLoader::Main()
 
 		Hook_LoadLibraryW::Hook();
 	}
+}
+
+bool MelonLoader::Is64bit()
+{
+	//BOOL b64 = FALSE;
+	//return IsWow64Process(GetCurrentProcess(), &b64) && b64;
+	return true;
 }
 
 void MelonLoader::ModHandler()
@@ -142,11 +150,22 @@ bool MelonLoader::LoadMono()
 
 bool MelonLoader::LoadMonoUnityPlayer()
 {
-	MonoUnityPlayerDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoUnityPlayer.dll").c_str());
-	if (MonoUnityPlayerDLL)
-		return true;
+	if (Is64bit())
+	{
+		MonoUnityPlayerDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoUnityPlayer_x64.dll").c_str());
+		if (MonoUnityPlayerDLL)
+			return true;
+		else
+			MessageBox(NULL, "Failed to Load MonoUnityPlayer_x64.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
+	}
 	else
-		MessageBox(NULL, "Failed to Load MonoUnityPlayer.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
+	{
+		MonoUnityPlayerDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoUnityPlayer_x86.dll").c_str());
+		if (MonoUnityPlayerDLL)
+			return true;
+		else
+			MessageBox(NULL, "Failed to Load MonoUnityPlayer_x86.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
+	}
 	return false;
 }
 

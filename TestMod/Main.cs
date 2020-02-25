@@ -1,4 +1,6 @@
 ﻿using MelonLoader;
+using NET_SDK;
+using NET_SDK.Reflection;
 
 namespace TestMod
 {
@@ -13,42 +15,50 @@ namespace TestMod
 
     public class TestMod : MelonMod
     {
-        void OnApplicationStart()
+        unsafe void OnApplicationStart()
         {
             MelonModLogger.Log("OnApplicationStart");
         }
 
         void OnLevelWasLoaded(int level)
         {
+            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnLevelWasLoaded");
         }
 
         void OnLevelWasInitialized(int level)
         {
+            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnLevelWasInitialized");
         }
 
         void OnUpdate()
         {
+            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnUpdate");
         }
+
         void OnFixedUpdate()
         {
+            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnFixedUpdate");
         }
 
         void OnLateUpdate()
         {
+            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnLateUpdate");
         }
         
         void OnGUI()
         {
+            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnGUI");
         }
 
         void OnApplicationQuit()
         {
+            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnApplicationQuit");
         }
 

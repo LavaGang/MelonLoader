@@ -141,5 +141,19 @@ namespace MelonLoader
             }
             if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + formatted);
         }
+
+        public static void LogModError(string msg, string modname)
+        {
+            string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
+            var timestamp = GetTimestamp();
+            if (consoleEnabled)
+            {
+                if (Imports.melonloader_is_debug_mode())
+                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + msg);
+                else
+                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + msg);
+            }
+            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + msg);
+        }
     }
 }

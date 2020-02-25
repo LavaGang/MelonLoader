@@ -20,6 +20,7 @@ public:
 	static MonoAssembly* ModHandlerAssembly;
 
 	static void Main();
+	static bool Is64bit();
 	static void ModHandler();
 	static bool LoadMono();
 	static bool LoadMonoUnityPlayer();

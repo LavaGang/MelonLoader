@@ -41,8 +41,8 @@ namespace MelonLoader
 #endif
 
             MelonModLogger.Initialize();
+            MelonModLogger.Log("Unity " + UnityEngine.Application.unityVersion);
             MelonModLogger.Log("-----------------------------");
-            //MelonModLogger.Log("Using v" + BuildInfo.Version);
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Closed-Beta");
             MelonModLogger.Log("-----------------------------");
 
@@ -54,6 +54,7 @@ namespace MelonLoader
                 Directory.CreateDirectory(modDirectory);
             else
             {
+                ModLoaderBackwardsCompatibility.AddAssemblyResolveHandler();
                 string[] files = Directory.GetFiles(modDirectory, "*.dll");
                 foreach (string s in files)
                 {
@@ -95,7 +96,7 @@ namespace MelonLoader
             {
                 foreach (Type t in GetLoadableTypes(assembly))
                 {
-                    if (t.IsSubclassOf(typeof(MelonMod)))
+                    if (t.IsSubclassOf(typeof(MelonMod))) // MelonLoader
                     {
                         try
                         {
@@ -115,6 +116,8 @@ namespace MelonLoader
                             MelonModLogger.LogError("Could not load mod " + t.FullName + " in " + assembly.GetName() + "! " + e);
                         }
                     }
+                    else if (t.IsSubclassOf(typeof(VRCModLoader.VRCMod))) // VRCModLoader
+                        ModLoaderBackwardsCompatibility.VRCModLoader(t, assembly);
                 }
             }
             catch (Exception e)
@@ -140,8 +143,13 @@ namespace MelonLoader
         internal static void OnApplicationStart()
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnApplicationStart();
+                {
+                    try { mod.OnApplicationStart(); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
         }
 
         static int level_loaded_index = -1;
@@ -149,8 +157,13 @@ namespace MelonLoader
         internal static void OnLevelWasLoaded(int level)
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnLevelWasLoaded(level);
+                {
+                    try { mod.OnLevelWasLoaded(level); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
             was_level_loaded = true;
             level_loaded_index = level;
         }
@@ -158,8 +171,13 @@ namespace MelonLoader
         internal static void OnLevelWasInitialized(int level)
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnLevelWasInitialized(level);
+                {
+                    try { mod.OnLevelWasInitialized(level); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
         }
 
         internal static void OnUpdate()
@@ -171,36 +189,61 @@ namespace MelonLoader
                 level_loaded_index = -1;
             }
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnUpdate();
+                {
+                    try { mod.OnUpdate(); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
         }
 
         internal static void OnFixedUpdate()
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnFixedUpdate();
+                {
+                    try { mod.OnFixedUpdate(); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
         }
 
         internal static void OnLateUpdate()
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnLateUpdate();
+                {
+                    try { mod.OnLateUpdate(); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
         }
 
         internal static void OnGUI()
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnGUI();
+                {
+                    try { mod.OnGUI(); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
         }
 
         internal static void OnApplicationQuit()
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnApplicationQuit();
+                {
+                    try { mod.OnApplicationQuit(); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
             ModPrefs.SaveConfig();
             NET_SDK.Harmony.Manager.UnpatchAll();
             NET_SDK.Harmony.Manager.UnpatchMain();
@@ -210,8 +253,13 @@ namespace MelonLoader
         internal static void OnModSettingsApplied()
         {
             if (ModControllers.Count() > 0)
+            {
                 foreach (MelonModController mod in ModControllers)
-                    mod.OnModSettingsApplied();
+                {
+                    try { mod.OnModSettingsApplied(); }
+                    catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.Name); }
+                }
+            }
         }
     }
 }

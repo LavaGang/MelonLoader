@@ -7,7 +7,7 @@
     <ProjectGuid>{3C4056AB-1D07-43FC-A93D-0AA72446DA03}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MelonLoader.ModHandler</RootNamespace>
+    <RootNamespace>MelonLoader</RootNamespace>
     <AssemblyName>MelonLoader.ModHandler</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,6 +55,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="MelonMod.cs" />
     <Compile Include="MelonModInfoAttribute.cs" />
+    <Compile Include="ModLoaderBackwardsCompatibility.cs" />
     <Compile Include="ModPrefs.cs" />
     <Compile Include="NET_SDK\Harmony.cs" />
     <Compile Include="NET_SDK\IL2CPP_Assembly.cs" />

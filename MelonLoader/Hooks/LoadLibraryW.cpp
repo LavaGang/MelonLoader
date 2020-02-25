@@ -36,7 +36,7 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 	HMODULE lib = NULL;
 	if (MelonLoader::IsGameIl2Cpp)
 	{
-		if (wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll"))
+		if (wcsstr(lpLibFileName, L"mono.dll") || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll"))
 		{
 			lib = MelonLoader::MonoDLL;
 			Unhook();
@@ -65,7 +65,7 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 	else
 	{
 		lib = Original_LoadLibraryW(lpLibFileName);
-		if (wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll"))
+		if (wcsstr(lpLibFileName, L"mono.dll") || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll"))
 		{
 			MelonLoader::MonoUnityPlayerDLL = PointerUtils::GetModuleHandlePtr("UnityPlayer");
 			MelonLoader::MonoDLL = lib;

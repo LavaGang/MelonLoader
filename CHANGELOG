@@ -1,6 +1,10 @@
 Known Issues:
 
-(EMPTY)
+1)  OnLevelWasLoaded, OnLevelWasInitialized, OnUpdate, OnFixedUpdate, OnLateUpdate, OnGUI, and OnApplicationQuit only work in MUPOT Mode.
+2)  MUPOT Mode does not work without Assembly generated.
+3)  MUPOT Mode is not directing the Managed folder to the proper location.
+4)  Mono Game Support is currently bugged for Unity 2017.4.28f1.  (Signature for PlayerLoadFirstScene in IL2CPPUnityPlayer.cpp and MonoUnityPlayer.cpp is returning NULL.)
+5)  The Check for 64bit needs to be redone.
 
 ---
 
@@ -11,7 +15,7 @@ Work-in-Progress / To-Do List:
 3)  Create Method for ModPrefs to Register Categories and Prefs in a single call.
 4)  An Assembly Generator for Game Specific Assembly DLLs.
 5)  A Dependency Download system to automate installation of MelonLoader.
-6)  Redirect Mono Pathing to be correctly under the MelonLoader folder in MUPOT Mode.
+6)  A Unity Dependency Extractor for Unity Editor installations to streamline the process of getting Unity Dependencies.
 7)  Add Assertion System.
 8)  Add Android Support.
 9)  Add Linux Support.
@@ -39,6 +43,17 @@ v0.0.3 Closed-Beta:
 17)  Fixed issue that caused Unity Crash Handler to initialize MelonLoader twice.
 18)  Fixed Runtime Initialization issue with Audica that caused crashes.
 19)  Fixed Execution Order of MelonLoader.ModHandler.
+20)  Fixed issue with Mono Game Support due to Mono DLL naming.
+21)  Fixed issue with Internal Calls through MUPOT Mode.
+22)  Added better Mod Exception Handling and Logging.
+23)  Added Backwards Compatibility System to MelonLoader.ModHandler to handle support of Mods that were made for other Mod Loaders.  ( Work In Progress )
+24)  Added Dependencies for Unity 2019.1.0b1.
+25)  Added Dependencies for Unity 2017.4.28f1.
+26)  Added Dependencies for Unity 2018.4.13f1.
+27)  Added Dependencies for Unity 2018.1.6f1.
+28)  Added Dependencies for Unity 2019.2.0f1.
+29)  Fixed Incompatibility issue with Unity Dependencies between x86 and x64.
+30)  Added Log in MelonLoader.ModHandler for Unity Version.
 
 ---
 

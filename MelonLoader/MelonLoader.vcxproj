@@ -87,6 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Hooks\mono_add_internal_call.cpp" />
     <ClCompile Include="Hooks\mono_jit_init_version.cpp" />
     <ClCompile Include="Hooks\PlayerLoadFirstScene.cpp" />
     <ClCompile Include="Hooks\SingleAppInstance_FindOtherInstance.cpp" />

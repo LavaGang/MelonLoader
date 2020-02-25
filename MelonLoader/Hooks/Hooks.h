@@ -47,6 +47,16 @@ public:
 	static void Hooked_il2cpp_add_internal_call(const char* name, void* method);
 };
 
+class Hook_mono_add_internal_call
+{
+public:
+	static mono_add_internal_call_t Original_mono_add_internal_call;
+
+	static void Hook();
+	static void Unhook();
+	static void Hooked_mono_add_internal_call(const char* name, void* method);
+};
+
 class Hook_SingleAppInstance_FindOtherInstance
 {
 public:

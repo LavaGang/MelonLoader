@@ -28,6 +28,9 @@
       <Filter>Hooks</Filter>
     </ClCompile>
     <ClCompile Include="IL2CPPUnityPlayer.cpp" />
+    <ClCompile Include="Hooks\mono_add_internal_call.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
