@@ -46,18 +46,17 @@ v0.0.3 Closed-Beta:
 20)  Fixed issue with Mono Game Support due to Mono DLL naming.
 21)  Fixed issue with Internal Calls through MUPOT Mode.
 22)  Added better Mod Exception Handling and Logging.
-23)  Added Backwards Compatibility System to MelonLoader.ModHandler to handle support of Mods that were made for other Mod Loaders.  ( Work In Progress )
-24)  Added Dependencies for Unity 2019.1.0b1.
-25)  Added Dependencies for Unity 2017.4.28f1.
-26)  Added Dependencies for Unity 2018.4.13f1.
-27)  Added Dependencies for Unity 2018.1.6f1.
-28)  Added Dependencies for Unity 2019.2.0f1.
-29)  Fixed Incompatibility issue with Unity Dependencies between x86 and x64.
-30)  Added Log in MelonLoader.ModHandler for Unity Version.
-31)  General Code Cleanup.
-32)  Fixed OnApplicationQuit not working without MUPOT Mode.
-33)  Fixed Mono Game Support for games that don't use Mono Bleeding Edge.  (MelonLoader.ModHandler and Mods must be compiled with .NET 3.5 Framework)
-34)  Fixed Execution Order when using MUPOT Mode.
+23)  Added Dependencies for Unity 2019.1.0b1.
+24)  Added Dependencies for Unity 2017.4.28f1.
+25)  Added Dependencies for Unity 2018.4.13f1.
+26)  Added Dependencies for Unity 2018.1.6f1.
+27)  Added Dependencies for Unity 2019.2.0f1.
+28)  Fixed Incompatibility issue with Unity Dependencies between x86 and x64.
+29)  Added Log in MelonLoader.ModHandler for Unity Version.
+30)  General Code Cleanup.
+31)  Fixed OnApplicationQuit not working without MUPOT Mode.
+32)  Fixed Mono Game Support for games that don't use MonoBleedingEdge.  (MelonLoader.ModHandler and Mods must be compiled with .NET 3.5 Framework)
+33)  Fixed Execution Order when using MUPOT Mode.
 
 ---
 
