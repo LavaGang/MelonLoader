@@ -15,7 +15,7 @@ namespace TestMod
 
     public class TestMod : MelonMod
     {
-        unsafe void OnApplicationStart()
+        void OnApplicationStart()
         {
             MelonModLogger.Log("OnApplicationStart");
         }
@@ -32,6 +32,7 @@ namespace TestMod
             MelonModLogger.Log("OnLevelWasInitialized");
         }
 
+        private bool is_pressed = false;
         void OnUpdate()
         {
             // Currently only works in MUPOT Mode
@@ -58,7 +59,6 @@ namespace TestMod
 
         void OnApplicationQuit()
         {
-            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnApplicationQuit");
         }
 

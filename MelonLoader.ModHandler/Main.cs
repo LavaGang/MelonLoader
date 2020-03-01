@@ -20,7 +20,8 @@ namespace MelonLoader
 
         private static void Initialize()
         {
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            if (Imports.melonloader_is_il2cpp_game())
+                Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 
 #if DEBUG
             if (Imports.melonloader_is_debug_mode())
@@ -46,7 +47,7 @@ namespace MelonLoader
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Closed-Beta");
             MelonModLogger.Log("-----------------------------");
 
-            if (Imports.melonloader_is_il2cpp_game())
+            if (Imports.melonloader_is_il2cpp_game() && !Imports.melonloader_is_mupot_mode())
                 NET_SDK.SDK.Initialize();
 
             string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");
@@ -54,7 +55,6 @@ namespace MelonLoader
                 Directory.CreateDirectory(modDirectory);
             else
             {
-                ModLoaderBackwardsCompatibility.AddAssemblyResolveHandler();
                 string[] files = Directory.GetFiles(modDirectory, "*.dll");
                 foreach (string s in files)
                 {
@@ -116,8 +116,6 @@ namespace MelonLoader
                             MelonModLogger.LogError("Could not load mod " + t.FullName + " in " + assembly.GetName() + "! " + e);
                         }
                     }
-                    else if (t.IsSubclassOf(typeof(VRCModLoader.VRCMod))) // VRCModLoader
-                        ModLoaderBackwardsCompatibility.VRCModLoader(t, assembly);
                 }
             }
             catch (Exception e)

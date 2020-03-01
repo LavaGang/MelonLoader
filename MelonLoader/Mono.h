@@ -1,5 +1,6 @@
 #pragma once
 #include "mono-internals.h"
+#include <Windows.h>
 
 typedef void (*mono_set_assemblies_path_t) (const char* path);
 typedef void (*mono_set_config_dir_t) (const char* path);
@@ -36,6 +37,7 @@ class Mono
 public:
 	static char* AssemblyPath;
 	static char* ConfigPath;
+	static HMODULE Module;
 	static MonoDomain* Domain;
 	static mono_set_assemblies_path_t mono_set_assemblies_path;
 	static mono_set_config_dir_t mono_set_config_dir;
@@ -67,6 +69,7 @@ public:
 	static mono_class_get_method_count_t mono_class_get_method_count;
 	static mono_method_get_name_t mono_method_get_name;
 
+	static bool Load();
 	static bool Setup();
 	static void CreateDomain();
 };

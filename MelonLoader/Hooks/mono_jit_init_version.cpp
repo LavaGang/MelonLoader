@@ -1,7 +1,4 @@
 #include "Hooks.h"
-#include "../MelonLoader.h"
-#include "../detours/detours.h"
-#include "../Console.h"
 
 mono_jit_init_version_t Hook_mono_jit_init_version::Original_mono_jit_init_version = NULL;
 

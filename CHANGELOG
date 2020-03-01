@@ -1,10 +1,10 @@
 Known Issues:
 
-1)  OnLevelWasLoaded, OnLevelWasInitialized, OnUpdate, OnFixedUpdate, OnLateUpdate, OnGUI, and OnApplicationQuit only work in MUPOT Mode.
+1)  OnLevelWasLoaded, OnLevelWasInitialized, OnUpdate, OnFixedUpdate, OnLateUpdate, and OnGUI only work in MUPOT Mode.
 2)  MUPOT Mode does not work without Assembly generated.
 3)  MUPOT Mode is not directing the Managed folder to the proper location.
-4)  Mono Game Support is currently bugged for Unity 2017.4.28f1.  (Signature for PlayerLoadFirstScene in IL2CPPUnityPlayer.cpp and MonoUnityPlayer.cpp is returning NULL.)
-5)  The Check for 64bit needs to be redone.
+4)  The Check for 64bit needs to be redone.
+5)  Mono Game Support for games that don't use MonoBleedingEdge must have MelonLoader.ModHandler and Mods compiled with .NET 3.5 Framework.
 
 ---
 
@@ -54,6 +54,10 @@ v0.0.3 Closed-Beta:
 28)  Added Dependencies for Unity 2019.2.0f1.
 29)  Fixed Incompatibility issue with Unity Dependencies between x86 and x64.
 30)  Added Log in MelonLoader.ModHandler for Unity Version.
+31)  General Code Cleanup.
+32)  Fixed OnApplicationQuit not working without MUPOT Mode.
+33)  Fixed Mono Game Support for games that don't use Mono Bleeding Edge.  (MelonLoader.ModHandler and Mods must be compiled with .NET 3.5 Framework)
+34)  Fixed Execution Order when using MUPOT Mode.
 
 ---
 

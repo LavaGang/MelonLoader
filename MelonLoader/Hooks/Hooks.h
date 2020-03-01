@@ -1,10 +1,12 @@
 #pragma once
 #include <Windows.h>
+#include <vector>
+#include <string>
+#include "../detours/detours.h"
 #include "../Mono.h"
 #include "../Il2Cpp.h"
 #include "../MonoUnityPlayer.h"
-#include <vector>
-#include <string>
+#include "../IL2CPPUnityPlayer.h"
 
 typedef HMODULE (__stdcall* LoadLibraryW_t) (LPCWSTR lpLibFileName);
 class Hook_LoadLibraryW
@@ -51,6 +53,7 @@ class Hook_mono_add_internal_call
 {
 public:
 	static mono_add_internal_call_t Original_mono_add_internal_call;
+	static std::vector<std::string> internalcalls;
 
 	static void Hook();
 	static void Unhook();
@@ -76,4 +79,14 @@ public:
 	static void Hook();
 	static void Unhook();
 	static void* Hooked_PlayerLoadFirstScene(bool unknown);
+};
+
+class Hook_PlayerCleanup
+{
+public:
+	static PlayerCleanup_t Original_PlayerCleanup;
+
+	static void Hook();
+	static void Unhook();
+	static bool Hooked_PlayerCleanup(bool dopostquitmsg);
 };

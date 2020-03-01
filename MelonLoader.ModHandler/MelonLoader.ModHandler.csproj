@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,7 +56,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="MelonMod.cs" />
     <Compile Include="MelonModInfoAttribute.cs" />
-    <Compile Include="ModLoaderBackwardsCompatibility.cs" />
     <Compile Include="ModPrefs.cs" />
     <Compile Include="NET_SDK\Harmony.cs" />
     <Compile Include="NET_SDK\IL2CPP_Assembly.cs" />

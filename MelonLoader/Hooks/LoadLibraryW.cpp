@@ -1,9 +1,7 @@
 #include "Hooks.h"
 #include "../MelonLoader.h"
 #include "../detours/detours.h"
-#include "../MonoUnityPlayer.h"
-#include "../PointerUtils.h"
-#include "../IL2CPPUnityPlayer.h"
+#include "../Console.h"
 
 LoadLibraryW_t Hook_LoadLibraryW::Original_LoadLibraryW = NULL;
 
@@ -38,7 +36,7 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 	{
 		if (wcsstr(lpLibFileName, L"mono.dll") || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll"))
 		{
-			lib = MelonLoader::MonoDLL;
+			lib = Mono::Module;
 			Unhook();
 		}
 		else
@@ -46,16 +44,18 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 			lib = Original_LoadLibraryW(lpLibFileName);
 			if (wcsstr(lpLibFileName, L"GameAssembly.dll"))
 			{
-				MelonLoader::IL2CPPUnityPlayerDLL = PointerUtils::GetModuleHandlePtr("UnityPlayer");
-				MelonLoader::GameAssemblyDLL = lib;
+				IL2CPPUnityPlayer::Module = PointerUtils::GetModuleHandlePtr("UnityPlayer");
+				IL2CPP::Module = lib;
 				if (IL2CPP::Setup() && IL2CPPUnityPlayer::Setup())
 				{
 					if (!MelonLoader::MupotMode)
+					{
 						Mono::CreateDomain();
-
+						Hook_PlayerLoadFirstScene::Hook();
+						Hook_PlayerCleanup::Hook();
+					}
 					Hook_il2cpp_init::Hook();
 					Hook_il2cpp_add_internal_call::Hook();
-					Hook_PlayerLoadFirstScene::Hook();
 				}
 				else
 					Unhook();
@@ -67,8 +67,8 @@ HMODULE __stdcall Hook_LoadLibraryW::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		lib = Original_LoadLibraryW(lpLibFileName);
 		if (wcsstr(lpLibFileName, L"mono.dll") || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll"))
 		{
-			MelonLoader::MonoUnityPlayerDLL = PointerUtils::GetModuleHandlePtr("UnityPlayer");
-			MelonLoader::MonoDLL = lib;
+			MonoUnityPlayer::Module = PointerUtils::GetModuleHandlePtr("UnityPlayer");
+			Mono::Module = lib;
 			if (Mono::Setup() && MonoUnityPlayer::Setup())
 			{
 				Hook_mono_jit_init_version::Hook();

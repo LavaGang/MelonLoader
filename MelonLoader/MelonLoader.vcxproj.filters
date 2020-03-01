@@ -31,6 +31,10 @@
     <ClCompile Include="Hooks\mono_add_internal_call.cpp">
       <Filter>Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="ModHandler.cpp" />
+    <ClCompile Include="Hooks\PlayerCleanup.cpp">
+      <Filter>Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
@@ -55,6 +59,7 @@
     <ClInclude Include="mono-internals.h" />
     <ClInclude Include="MonoUnityPlayer.h" />
     <ClInclude Include="IL2CPPUnityPlayer.h" />
+    <ClInclude Include="ModHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="detours">

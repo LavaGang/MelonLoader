@@ -1,7 +1,8 @@
 #include "Hooks.h"
 #include "../MelonLoader.h"
 #include "../detours/detours.h"
-#include "../IL2CPPUnityPlayer.h"
+#include "../ModHandler.h"
+#include "../Console.h"
 
 PlayerLoadFirstScene_t Hook_PlayerLoadFirstScene::Original_PlayerLoadFirstScene = NULL;
 
@@ -34,6 +35,8 @@ void Hook_PlayerLoadFirstScene::Unhook()
 
 void* Hook_PlayerLoadFirstScene::Hooked_PlayerLoadFirstScene(bool unknown)
 {
-	MelonLoader::ModHandler();
+	if (MelonLoader::MupotMode)
+		MelonLoader::AddGameSpecificInternalCalls();
+	ModHandler::Initialize();
 	return Original_PlayerLoadFirstScene(unknown);
 }

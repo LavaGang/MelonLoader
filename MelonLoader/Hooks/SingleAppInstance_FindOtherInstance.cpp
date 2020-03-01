@@ -1,8 +1,4 @@
 #include "Hooks.h"
-#include "../MelonLoader.h"
-#include "../detours/detours.h"
-#include "../MonoUnityPlayer.h"
-#include "../PointerUtils.h"
 
 SingleAppInstance_FindOtherInstance_t Hook_SingleAppInstance_FindOtherInstance::Original_SingleAppInstance_FindOtherInstance = NULL;
 

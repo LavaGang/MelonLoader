@@ -10,12 +10,7 @@
 #include "detours/detours.h"
 
 bool MelonLoader::IsGameIl2Cpp = false;
-HMODULE MelonLoader::MonoUnityPlayerDLL = NULL;
-HMODULE MelonLoader::MonoDLL = NULL;
-HMODULE MelonLoader::IL2CPPUnityPlayerDLL = NULL;
-HMODULE MelonLoader::GameAssemblyDLL = NULL;
 HINSTANCE MelonLoader::thisdll = NULL;
-MonoAssembly* MelonLoader::ModHandlerAssembly = NULL;
 bool MelonLoader::DebugMode = false;
 bool MelonLoader::MupotMode = false;
 char* MelonLoader::GamePath = NULL;
@@ -77,96 +72,17 @@ void MelonLoader::Main()
 			std::copy(assemblypath.begin(), assemblypath.end(), Mono::AssemblyPath);
 			Mono::AssemblyPath[assemblypath.size()] = '\0';
 
-			if (MelonLoader::LoadMono() && Mono::Setup())
+			if (Mono::Load() && Mono::Setup())
 			{
-				if (MupotMode && MelonLoader::LoadMonoUnityPlayer() && MonoUnityPlayer::Setup())
+				if (MupotMode)
 				{
 					Hook_mono_add_internal_call::Hook();
 					Hook_mono_jit_init_version::Hook();
-					Hook_SingleAppInstance_FindOtherInstance::Hook();
 				}
 			}
 		}
-
 		Hook_LoadLibraryW::Hook();
 	}
-}
-
-bool MelonLoader::Is64bit()
-{
-	//BOOL b64 = FALSE;
-	//return IsWow64Process(GetCurrentProcess(), &b64) && b64;
-	return true;
-}
-
-void MelonLoader::ModHandler()
-{
-	if (Mono::Domain != NULL)
-	{
-		MonoAssembly* assembly = Mono::mono_domain_assembly_open(Mono::Domain, (std::string(GamePath) + "\\MelonLoader\\MelonLoader.ModHandler.dll").c_str());
-		if (assembly != NULL)
-		{
-			MonoImage* image = Mono::mono_assembly_get_image(assembly);
-			if (image != NULL)
-			{
-				MonoClass* klass = Mono::mono_class_from_name(image, "MelonLoader", "Main");
-				if (klass != NULL)
-				{
-					MonoMethod* method = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
-					if (method != NULL)
-					{
-						Mono::mono_runtime_invoke(method, NULL, NULL, NULL);
-						ModHandlerAssembly = assembly;
-					}
-					else
-						MessageBox(NULL, "Main", "MelonLoader", MB_ICONERROR | MB_OK);
-				}
-				else
-					MessageBox(NULL, "Bootloader", "MelonLoader", MB_ICONERROR | MB_OK);
-			}
-			else
-				MessageBox(NULL, "MelonLoader.ModHandler Image", "MelonLoader", MB_ICONERROR | MB_OK);
-		}
-		else
-			MessageBox(NULL, "MelonLoader.ModHandler", "MelonLoader", MB_ICONERROR | MB_OK);
-	}
-}
-
-bool MelonLoader::LoadMono()
-{
-	MonoDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\mono-2.0-bdwgc.dll").c_str());
-	if (MonoDLL)
-	{
-		HMODULE MonoPosixDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoPosixHelper.dll").c_str());
-		if (MonoPosixDLL)
-			return true;
-		else
-			MessageBox(NULL, "Failed to Load MonoPosixHelper.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
-	}
-	else
-		MessageBox(NULL, "Failed to Load mono-2.0-bdwgc.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
-	return false;
-}
-
-bool MelonLoader::LoadMonoUnityPlayer()
-{
-	if (Is64bit())
-	{
-		MonoUnityPlayerDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoUnityPlayer_x64.dll").c_str());
-		if (MonoUnityPlayerDLL)
-			return true;
-		else
-			MessageBox(NULL, "Failed to Load MonoUnityPlayer_x64.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
-	}
-	else
-	{
-		MonoUnityPlayerDLL = LoadLibrary((std::string(GamePath) + "\\MelonLoader\\Mono\\MonoUnityPlayer_x86.dll").c_str());
-		if (MonoUnityPlayerDLL)
-			return true;
-		else
-			MessageBox(NULL, "Failed to Load MonoUnityPlayer_x86.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
-	}
-	return false;
 }
 
 void MelonLoader::Detour(Il2CppMethod* target, void* detour)
@@ -183,4 +99,74 @@ void MelonLoader::UnDetour(Il2CppMethod* target, void* detour)
 	DetourUpdateThread(GetCurrentThread());
 	DetourDetach(&(LPVOID&)target->targetMethod, detour);
 	DetourTransactionCommit();
+}
+
+void MelonLoader::AddGameSpecificInternalCalls()
+{
+	if ((Mono::Domain != NULL) && (IL2CPP::Domain))
+	{
+		size_t asm_count;
+		Il2CppAssembly** asm_tbl = IL2CPP::il2cpp_domain_get_assemblies(IL2CPP::Domain, &asm_count);
+		if (asm_count > 0)
+		{
+			for (size_t i = 0; i < asm_count; i++)
+			{
+				Il2CppAssembly* asm_ptr = asm_tbl[i];
+				if (asm_ptr)
+				{
+					Il2CppImage* image = IL2CPP::il2cpp_assembly_get_image(asm_ptr);
+					if (image)
+					{
+						std::string image_name = IL2CPP::il2cpp_image_get_name(image);
+						if (!image_name._Starts_with("UnityEngine")
+							&& !image_name._Starts_with("System")
+							&& !image_name._Starts_with("Mono")
+							&& !image_name._Starts_with("Unity")
+							&& !image_name._Starts_with("ICSharpCode")
+							&& !image_name._Starts_with("IBM")
+							&& !image_name._Starts_with("I18N")
+							&& !image_name._Starts_with("cscompmgd")
+							&& !image_name._Starts_with("Commons")
+							&& !image_name._Starts_with("Boo")
+							&& !image_name._Starts_with("CustomMarshalers")
+							&& !image_name._Starts_with("Microsoft")
+							&& !image_name._Starts_with("mscorlib")
+							&& !image_name._Starts_with("Newtonsoft")
+							&& !image_name._Starts_with("Novell")
+							&& !image_name._Starts_with("Oculus")
+							&& !image_name._Starts_with("Steam")
+							&& !image_name._Starts_with("SMDiagnostics")
+							&& !image_name._Starts_with("Windows")
+							&& !image_name._Starts_with("Facepunch"))
+						{
+							int klass_count = IL2CPP::il2cpp_image_get_class_count(image);
+							if (klass_count > 0)
+							{
+								for (int t = 0; t < klass_count; t++)
+								{
+									Il2CppClass* klass = IL2CPP::il2cpp_image_get_class(image, t);
+									if (klass)
+									{
+										std::string klass_name = IL2CPP::il2cpp_class_get_name(klass);
+										std::string klass_namespace = IL2CPP::il2cpp_class_get_namespace(klass);
+										std::string klass_id = ((klass_namespace.empty() ? "" : (klass_namespace + ".")) + klass_name);
+
+										void* method_iter = NULL;
+										Il2CppMethod* method = NULL;
+										while ((method = IL2CPP::il2cpp_class_get_methods(klass, &method_iter)) != NULL)
+										{
+											std::string method_name = IL2CPP::il2cpp_method_get_name(method);
+											std::string method_id = (klass_id + "::" + method_name);
+
+											Mono::mono_add_internal_call(method_id.c_str(), method->targetMethod);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

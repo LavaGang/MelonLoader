@@ -1,8 +1,5 @@
 #include "Hooks.h"
 #include "../MelonLoader.h"
-#include "../detours/detours.h"
-#include "../Console.h"
-#include "../PointerUtils.h"
 
 il2cpp_add_internal_call_t Hook_il2cpp_add_internal_call::Original_il2cpp_add_internal_call = NULL;
 

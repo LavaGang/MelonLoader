@@ -1,4 +1,4 @@
-LIBRARY winmm64.dll
+LIBRARY winmm.dll
 EXPORTS
 	CloseDriver=CloseDriver_wrapper @4
 	DefDriverProc=DefDriverProc_wrapper @5

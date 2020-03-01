@@ -87,6 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Hooks\PlayerCleanup.cpp" />
     <ClCompile Include="Hooks\mono_add_internal_call.cpp" />
     <ClCompile Include="Hooks\mono_jit_init_version.cpp" />
     <ClCompile Include="Hooks\PlayerLoadFirstScene.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
+    <ClCompile Include="ModHandler.cpp" />
     <ClCompile Include="MonoUnityPlayer.cpp" />
     <ClCompile Include="PointerUtils.cpp" />
     <ClCompile Include="Hooks\il2cpp_add_internal_call.cpp" />
@@ -112,6 +114,7 @@
     <ClInclude Include="detours\detver.h" />
     <ClInclude Include="detours\syelog.h" />
     <ClInclude Include="Exports.h" />
+    <ClInclude Include="ModHandler.h" />
     <ClInclude Include="mono-internals.h" />
     <ClInclude Include="MonoUnityPlayer.h" />
     <ClInclude Include="PointerUtils.h" />

@@ -109,6 +109,8 @@ namespace NET_SDK
 
     public static class IL2CPP
     {
+        private struct Void { };
+        unsafe public static IntPtr IntPtrAdd(IntPtr pointer, Int32 offset) => (IntPtr)((Void*)pointer + offset);
         public static T[] IntPtrToStructureArray<T>(IntPtr ptr, uint len)
         {
             IntPtr iter = ptr;
@@ -116,7 +118,7 @@ namespace NET_SDK
             for (uint i = 0; i < len; i++)
             {
                 arr[i] = (T)Marshal.PtrToStructure(iter, typeof(T));
-                iter += Marshal.SizeOf(typeof(T));
+                iter = IntPtrAdd(iter, Marshal.SizeOf(typeof(T)));
             }
             return arr;
         }
@@ -125,7 +127,7 @@ namespace NET_SDK
             long length = *((long*)ptr + 3);
             IntPtr[] result = new IntPtr[length];
             for (int i = 0; i < length; i++)
-                result[i] = *(IntPtr*)((IntPtr)((long*)ptr + 4) + i * IntPtr.Size);
+                result[i] = *(IntPtr*)(IntPtrAdd((IntPtr)((long*)ptr + 4), (i * IntPtr.Size)));
             return result;
         }
         public static T IntPtrToStructure<T>(IntPtr ptr) => (T)Marshal.PtrToStructure(ptr, typeof(T));
