@@ -5,9 +5,9 @@ namespace NET_SDK.Reflection
 {
     public class IL2CPP_Field : IL2CPP_Base
     {
-        public string Name;
-        private IL2CPP_BindingFlags Flags;
-        private IL2CPP_Type ReturnType;
+        public readonly string Name;
+        public readonly IL2CPP_BindingFlags Flags;
+        public readonly IL2CPP_Type ReturnType;
 
         internal IL2CPP_Field(IntPtr ptr) : base(ptr)
         {
@@ -28,7 +28,7 @@ namespace NET_SDK.Reflection
             IntPtr returnval;
             if (HasFlag(IL2CPP_BindingFlags.FIELD_STATIC))
                 returnval = IL2CPP.il2cpp_field_get_value_object(Ptr, IntPtr.Zero);
-                // IL2CPP.il2cpp_field_static_get_value(Ptr, ref returnval);
+            // IL2CPP.il2cpp_field_static_get_value(Ptr, ref returnval);
             else
                 // IL2CPP.il2cpp_field_get_value(obj, Ptr, ref returnval);
                 returnval = IL2CPP.il2cpp_field_get_value_object(Ptr, obj);

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace MelonLoader
 {
-    public class Imports
+    public static class Imports
     {
         [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         public extern static IntPtr melonloader_get_il2cpp_domain();

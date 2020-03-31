@@ -7,21 +7,25 @@ using NET_SDK.Reflection;
 
 namespace NET_SDK
 {
-    public class SDK
+    public static class SDK
     {
         private static IntPtr Domain;
-        private static List<IL2CPP_Assembly> AssemblyList = new List<IL2CPP_Assembly>();
+        private static IL2CPP_Assembly[] AssemblyList;
 
         internal static void Initialize()
         {
             Domain = MelonLoader.Imports.melonloader_get_il2cpp_domain();
-
             uint assembly_count = 0;
             IntPtr assemblies = IL2CPP.il2cpp_domain_get_assemblies(Domain, ref assembly_count);
             IntPtr[] assembliesarr = IL2CPP.IntPtrToStructureArray<IntPtr>(assemblies, assembly_count);
-            foreach (IntPtr assembly in assembliesarr)
+            List<IL2CPP_Assembly> assemblyList = new List<IL2CPP_Assembly>();
+            for (int i = 0; i < assembliesarr.Length; i++) 
+            {
+                IntPtr assembly = assembliesarr[i];
                 if (assembly != IntPtr.Zero)
-                    AssemblyList.Add(new IL2CPP_Assembly(IL2CPP.il2cpp_assembly_get_image(assembly)));
+                    assemblyList.Add(new IL2CPP_Assembly(IL2CPP.il2cpp_assembly_get_image(assembly)));
+            }
+            AssemblyList = assemblyList.ToArray();
         }
 
         private static IL2CPP_Class UnityAction = null;
@@ -40,14 +44,16 @@ namespace NET_SDK
             return obj;
         }
 
-        public static IL2CPP_Assembly[] GetAssemblies() => AssemblyList.ToArray();
+        public static IL2CPP_Assembly[] GetAssemblies() => AssemblyList;
         public static IL2CPP_Assembly GetAssembly(string name)
         {
             if (string.IsNullOrEmpty(name))
                 return null;
             IL2CPP_Assembly returnval = null;
-            foreach (IL2CPP_Assembly asm in GetAssemblies())
+            var assemblies = GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
             {
+                var asm = assemblies[i];
                 if (asm.Name.Equals(name))
                 {
                     returnval = asm;
@@ -62,8 +68,10 @@ namespace NET_SDK
             if (ptr == IntPtr.Zero)
                 return null;
             IL2CPP_Class klass = null;
-            foreach (IL2CPP_Assembly asm in GetAssemblies())
+            var assemblies = GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
             {
+                var asm = assemblies[i];
                 klass = asm.GetClass(ptr);
                 if (klass != null)
                     return klass;
@@ -97,8 +105,10 @@ namespace NET_SDK
         public static IL2CPP_Class GetClass(string nameSpace, string qualifiedName)
         {
             IL2CPP_Class ret;
-            foreach (IL2CPP_Assembly asm in GetAssemblies())
+            var assemblies = GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
             {
+                var asm = assemblies[i];
                 ret = asm.GetClass(qualifiedName, nameSpace);
                 if (ret != null)
                     return ret;
@@ -212,7 +222,7 @@ namespace NET_SDK
                 return IntPtr.Zero;
             IntPtr[] intPtrArray;
             IntPtr returnval = IntPtr.Zero;
-            intPtrArray = ((paramtbl != null) ? paramtbl : new IntPtr[0]);
+            intPtrArray = paramtbl ?? (new IntPtr[0]);
             IntPtr intPtr = Marshal.AllocHGlobal(intPtrArray.Length * sizeof(void*));
             try
             {

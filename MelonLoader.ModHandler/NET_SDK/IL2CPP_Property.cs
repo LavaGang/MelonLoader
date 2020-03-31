@@ -5,10 +5,10 @@ namespace NET_SDK.Reflection
 {
     public class IL2CPP_Property : IL2CPP_Base
     {
-        public string Name;
-        private IL2CPP_BindingFlags Flags;
-        private IL2CPP_Method getMethod;
-        private IL2CPP_Method setMethod;
+        public readonly string Name;
+        public readonly IL2CPP_BindingFlags Flags;
+        private readonly IL2CPP_Method getMethod;
+        private readonly IL2CPP_Method setMethod;
 
         internal IL2CPP_Property(IntPtr ptr) : base(ptr)
         {

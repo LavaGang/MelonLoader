@@ -8,8 +8,8 @@ namespace NET_SDK.Reflection
 {
     public class IL2CPP_Assembly : IL2CPP_Base
     {
-        public string Name;
-        private List<IL2CPP_Class> ClassList = new List<IL2CPP_Class>();
+        public readonly string Name;
+        private readonly IL2CPP_Class[] ClassList;
 
         internal IL2CPP_Assembly(IntPtr ptr) : base(ptr)
         {
@@ -19,20 +19,23 @@ namespace NET_SDK.Reflection
 
             // Map out Classes
             uint class_count = IL2CPP.il2cpp_image_get_class_count(Ptr);
-                for (uint i = 0; i < class_count; i++)
-                    if (Ptr != IntPtr.Zero)
-                        ClassList.Add(new IL2CPP_Class(IL2CPP.il2cpp_image_get_class(Ptr, i)));
+            List<IL2CPP_Class> classList = new List<IL2CPP_Class>((int)class_count);
+            for (uint i = 0; i < class_count; i++)
+                if (Ptr != IntPtr.Zero)
+                    classList.Add(new IL2CPP_Class(IL2CPP.il2cpp_image_get_class(Ptr, i)));
+            ClassList = classList.ToArray();
         }
 
-        public IL2CPP_Class[] GetClasses() => ClassList.ToArray();
+        public IL2CPP_Class[] GetClasses() => ClassList;
         public IL2CPP_Class[] GetClasses(IL2CPP_BindingFlags flags) => GetClasses().Where(x => x.HasFlag(flags)).ToArray();
         public IL2CPP_Class GetClass(string name) => GetClass(name, null);
         public IL2CPP_Class GetClass(string name, IL2CPP_BindingFlags flags) => GetClass(name, null, flags);
         public IL2CPP_Class GetClass(string name, string name_space)
         {
             IL2CPP_Class returnval = null;
-            foreach (IL2CPP_Class type in GetClasses())
+            for (int i = 0; i < ClassList.Length; i++)
             {
+                IL2CPP_Class type = ClassList[i];
                 if (type.Name.Equals(name) && (string.IsNullOrEmpty(type.Namespace) || type.Namespace.Equals(name_space)))
                 {
                     returnval = type;
@@ -40,11 +43,13 @@ namespace NET_SDK.Reflection
                 }
                 else
                 {
-                    foreach (IL2CPP_Class nestedtype in type.GetNestedTypes())
+                    var nestedTypes = type.GetNestedTypes();
+                    for (int l = 0; l < nestedTypes.Length; l++)
                     {
-                        if (nestedtype.Name.Equals(name) && (string.IsNullOrEmpty(nestedtype.Namespace) || nestedtype.Namespace.Equals(name_space)))
+                        var nestedType = nestedTypes[l];
+                        if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
                         {
-                            returnval = nestedtype;
+                            returnval = nestedType;
                             break;
                         }
                     }
@@ -57,8 +62,9 @@ namespace NET_SDK.Reflection
         public IL2CPP_Class GetClass(string name, string name_space, IL2CPP_BindingFlags flags)
         {
             IL2CPP_Class returnval = null;
-            foreach (IL2CPP_Class type in GetClasses())
+            for (int i = 0; i < ClassList.Length; i++)
             {
+                IL2CPP_Class type = ClassList[i];
                 if (type.Name.Equals(name) && (string.IsNullOrEmpty(type.Namespace) || type.Namespace.Equals(name_space)) && type.HasFlag(flags))
                 {
                     returnval = type;
@@ -66,11 +72,13 @@ namespace NET_SDK.Reflection
                 }
                 else
                 {
-                    foreach (IL2CPP_Class nestedtype in type.GetNestedTypes())
+                    var nestedTypes = type.GetNestedTypes();
+                    for (int l = 0; l < nestedTypes.Length; l++)
                     {
-                        if (nestedtype.Name.Equals(name) && (string.IsNullOrEmpty(nestedtype.Namespace) || nestedtype.Namespace.Equals(name_space)) && nestedtype.HasFlag(flags))
+                        var nestedType = nestedTypes[l];
+                        if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)) && nestedType.HasFlag(flags))
                         {
-                            returnval = nestedtype;
+                            returnval = nestedType;
                             break;
                         }
                     }
@@ -83,8 +91,9 @@ namespace NET_SDK.Reflection
         public IL2CPP_Class GetClass(IntPtr ptr)
         {
             IL2CPP_Class returnval = null;
-            foreach (IL2CPP_Class type in GetClasses())
+            for (int i = 0; i < ClassList.Length; i++)
             {
+                IL2CPP_Class type = ClassList[i];
                 if (type.Ptr == ptr)
                 {
                     returnval = type;
@@ -92,11 +101,13 @@ namespace NET_SDK.Reflection
                 }
                 else
                 {
-                    foreach (IL2CPP_Class nestedtype in type.GetNestedTypes())
+                    var nestedTypes = type.GetNestedTypes();
+                    for (int l = 0; l < nestedTypes.Length; l++)
                     {
-                        if (nestedtype.Ptr == ptr)
+                        var nestedType = nestedTypes[l];
+                        if (nestedType.Ptr == ptr)
                         {
-                            returnval = nestedtype;
+                            returnval = nestedType;
                             break;
                         }
                     }
