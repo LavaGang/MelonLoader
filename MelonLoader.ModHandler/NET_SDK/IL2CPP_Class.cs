@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace NET_SDK.Reflection
 {
@@ -15,7 +16,6 @@ namespace NET_SDK.Reflection
         private readonly IL2CPP_Event[] EventList;
         private readonly IL2CPP_Class[] NestedTypeList;
         private readonly IL2CPP_Property[] PropertyList;
-
         internal IL2CPP_Class(IntPtr ptr) : base(ptr)
         {
             // Setup Information
@@ -60,10 +60,25 @@ namespace NET_SDK.Reflection
                 propertyList.Add(new IL2CPP_Property(property));
             PropertyList = propertyList.ToArray();
         }
-
+        public static IntPtr CreateInstance(IL2CPP_Class il2CppClass, IL2CPP_Method constructor = null, IntPtr[] contructorParams = null)
+        {
+            int paramCount = contructorParams?.Length ?? 0;
+            if (constructor == null && paramCount > 0)
+                return IntPtr.Zero;
+            IntPtr instance = IL2CPP.il2cpp_object_new(il2CppClass.Ptr);
+            if (constructor == null)
+            {
+                IL2CPP.il2cpp_runtime_object_init(instance);
+                return instance;
+            }
+            else
+            {
+                constructor.Invoke(instance, contructorParams);
+            }
+            return instance;
+        }
         public IL2CPP_BindingFlags GetFlags() => Flags;
         public bool HasFlag(IL2CPP_BindingFlags flag) => ((GetFlags() & flag) != 0);
-
         // Methods
         public IL2CPP_Method[] GetMethods() => MethodList;
         public IL2CPP_Method[] GetMethods(IL2CPP_BindingFlags flags) => GetMethods(flags, null);
@@ -71,8 +86,26 @@ namespace NET_SDK.Reflection
         public IL2CPP_Method[] GetMethods(IL2CPP_BindingFlags flags, Func<IL2CPP_Method, bool> func) => GetMethods().Where(x => (((x.GetFlags() & flags) != 0) && func(x))).ToArray();
         public IL2CPP_Method GetMethod(string name) => GetMethod(name, null);
         public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags) => GetMethod(name, flags, null);
-        public IL2CPP_Method GetMethod(string name, Func<IL2CPP_Method, bool> func) => GetMethods().FirstOrDefault(m => m.Name.Equals(name) && (func == null || func(m)));
-        public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags, Func<IL2CPP_Method, bool> func) => GetMethods().FirstOrDefault(m => m.Name.Equals(name) && m.HasFlag(flags) && (func == null || func(m)));
+        public IL2CPP_Method GetMethod(string name, Func<IL2CPP_Method, bool> func)
+        {
+            for (int i = 0; i < MethodList.Length; i++)
+            {
+                var method = MethodList[i];
+                if (method.Name.Equals(name) && (func == null || func(method)))
+                    return method;
+            }
+            return null;
+        }
+        public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags, Func<IL2CPP_Method, bool> func)
+        {
+            for (int i = 0; i < MethodList.Length; i++)
+            {
+                var method = MethodList[i];
+                if (method.Name.Equals(name) && method.HasFlag(flags) && (func == null || func(method)))
+                    return method;
+            }
+            return null;
+        }
         /// <summary>
         /// Gets the first method matching name and flags with the specified number of parameters
         /// </summary>
@@ -80,14 +113,32 @@ namespace NET_SDK.Reflection
         /// <param name="flags">The <see cref="IL2CPP_BindingFlags"/> to match</param>
         /// <param name="argCount">The parameter count to match</param>
         /// <returns>The first matching <see cref="IL2CPP_Method"/></returns>
-        public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags, int argCount) => GetMethods().FirstOrDefault(m => m.Name.Equals(name) && m.HasFlag(flags) && m.GetParameterCount() == argCount);
+        public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags, int argCount)
+        {
+            for (int i = 0; i < MethodList.Length; i++)
+            {
+                var method = MethodList[i];
+                if (method.Name.Equals(name) && method.HasFlag(flags) && method.GetParameterCount() == argCount)
+                    return method;
+            }
+            return null;
+        }
         /// <summary>
         /// Gets the first method matching name with the specified number of parameters
         /// </summary>
         /// <param name="name">The name to search for</param>
         /// <param name="argCount">The parameter count to match</param>
         /// <returns>The first matching <see cref="IL2CPP_Method"/></returns>
-        public IL2CPP_Method GetMethod(string name, int argCount) => GetMethods().FirstOrDefault(m => m.Name.Equals(name) && m.GetParameterCount() == argCount);
+        public IL2CPP_Method GetMethod(string name, int argCount)
+        {
+            for (int i = 0; i < MethodList.Length; i++)
+            {
+                var method = MethodList[i];
+                if (method.Name.Equals(name) && method.GetParameterCount() == argCount)
+                    return method;
+            }
+            return null;
+        }
 
         // Fields
         public IL2CPP_Field[] GetFields() => FieldList;
@@ -96,8 +147,26 @@ namespace NET_SDK.Reflection
         public IL2CPP_Field[] GetFields(IL2CPP_BindingFlags flags, Func<IL2CPP_Field, bool> func) => GetFields().Where(x => (((x.GetFlags() & flags) != 0) && func(x))).ToArray();
         public IL2CPP_Field GetField(string name) => GetField(name, null);
         public IL2CPP_Field GetField(string name, IL2CPP_BindingFlags flags) => GetField(name, flags, null);
-        public IL2CPP_Field GetField(string name, Func<IL2CPP_Field, bool> func) => GetFields().FirstOrDefault(f => f.Name.Equals(name) && (func == null || func(f)));
-        public IL2CPP_Field GetField(string name, IL2CPP_BindingFlags flags, Func<IL2CPP_Field, bool> func) => GetFields().FirstOrDefault(f => f.Name.Equals(name) && f.HasFlag(flags) && (func == null || func(f)));
+        public IL2CPP_Field GetField(string name, Func<IL2CPP_Field, bool> func)
+        {
+            for (int i = 0; i < FieldList.Length; i++)
+            {
+                var field = FieldList[i];
+                if (field.Name.Equals(name) && (func == null || func(field)))
+                    return field;
+            }
+            return null;
+        }
+        public IL2CPP_Field GetField(string name, IL2CPP_BindingFlags flags, Func<IL2CPP_Field, bool> func)
+        {
+            for (int i = 0; i < FieldList.Length; i++)
+            {
+                var field = FieldList[i];
+                if (field.Name.Equals(name) && field.HasFlag(flags) && (func == null || func(field)))
+                    return field;
+            }
+            return null;
+        }
 
         // Events
         public IL2CPP_Event[] GetEvents() => EventList;
@@ -105,15 +174,51 @@ namespace NET_SDK.Reflection
         // Properties
         public IL2CPP_Property[] GetProperties() => PropertyList;
         public IL2CPP_Property[] GetProperties(IL2CPP_BindingFlags flags) => GetProperties().Where(x => ((x.GetFlags() & flags) != 0)).ToArray();
-        public IL2CPP_Property GetProperty(string name) => GetProperties().FirstOrDefault(p => p.Name.Equals(name));
-        public IL2CPP_Property GetProperty(string name, IL2CPP_BindingFlags flags) => GetProperties().FirstOrDefault(p => p.Name.Equals(name) && p.HasFlag(flags));
+        public IL2CPP_Property GetProperty(string name)
+        {
+            for (int i = 0; i < PropertyList.Length; i++)
+            {
+                var property = PropertyList[i];
+                if (property.Name.Equals(name))
+                    return property;
+            }
+            return null;
+        }
+        public IL2CPP_Property GetProperty(string name, IL2CPP_BindingFlags flags)
+        {
+            for (int i = 0; i < PropertyList.Length; i++)
+            {
+                var property = PropertyList[i];
+                if (property.Name.Equals(name) && property.HasFlag(flags))
+                    return property;
+            }
+            return null;
+        }
 
         // Nested Types
         public IL2CPP_Class[] GetNestedTypes() => NestedTypeList;
         public IL2CPP_Class[] GetNestedTypes(IL2CPP_BindingFlags flags) => GetNestedTypes().Where(x => ((x.GetFlags() & flags) != 0)).ToArray();
         public IL2CPP_Class GetNestedType(string name) => GetNestedType(name, null);
         public IL2CPP_Class GetNestedType(string name, IL2CPP_BindingFlags flags) => GetNestedType(name, null, flags);
-        public IL2CPP_Class GetNestedType(string name, string name_space) => GetNestedTypes().FirstOrDefault(n => n.Name.Equals(name) && (string.IsNullOrEmpty(n.Namespace) || n.Namespace.Equals(name_space)));
-        public IL2CPP_Class GetNestedType(string name, string name_space, IL2CPP_BindingFlags flags) => GetNestedTypes().FirstOrDefault(n => n.Name.Equals(name) && n.HasFlag(flags) && (string.IsNullOrEmpty(n.Namespace) || n.Namespace.Equals(name_space)));
+        public IL2CPP_Class GetNestedType(string name, string name_space)
+        {
+            for (int i = 0; i < NestedTypeList.Length; i++)
+            {
+                var nestedType = NestedTypeList[i];
+                if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
+                    return nestedType;
+            }
+            return null; 
+        }
+        public IL2CPP_Class GetNestedType(string name, string name_space, IL2CPP_BindingFlags flags)
+        {
+            for (int i = 0; i < NestedTypeList.Length; i++)
+            {
+                var nestedType = NestedTypeList[i];
+                if (nestedType.Name.Equals(name) && nestedType.HasFlag(flags) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
+                    return nestedType;
+            }
+            return null;
+        }
     }
 }
