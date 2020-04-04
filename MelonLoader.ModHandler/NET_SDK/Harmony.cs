@@ -102,7 +102,8 @@ namespace NET_SDK.Harmony
                 InstallPatch();
                 return returnval;
             }
-            else return TargetMethod.Invoke(obj, paramtbl);
+            else 
+                return TargetMethod.Invoke(obj, paramtbl);
         }
 
         unsafe internal void InstallPatch()
