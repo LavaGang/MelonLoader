@@ -54,32 +54,6 @@ namespace NET_SDK.Harmony
             }
         }
     }
-
-    public class Patch
-    {
-        internal IL2CPP_Method TargetMethod;
-        internal IntPtr NewMethod;
-
-        unsafe internal Patch(IL2CPP_Method targetMethod, IntPtr newMethod)
-        {
-            TargetMethod = targetMethod;
-            NewMethod = newMethod;
-            InstallPatch();
-        }
-
-        public IL2CPP_Object InvokeOriginal() => InvokeOriginal(IntPtr.Zero, new IntPtr[] { IntPtr.Zero });
-        public IL2CPP_Object InvokeOriginal(IntPtr obj) => InvokeOriginal(obj, new IntPtr[] { IntPtr.Zero });
-        public IL2CPP_Object InvokeOriginal(IL2CPP_Object obj) => InvokeOriginal(obj.Ptr, new IntPtr[] { IntPtr.Zero });
-        public IL2CPP_Object InvokeOriginal(params IntPtr[] paramtbl) => InvokeOriginal(IntPtr.Zero, paramtbl);
-        public IL2CPP_Object InvokeOriginal(params IL2CPP_Object[] paramtbl) => InvokeOriginal(IntPtr.Zero, IL2CPP.IL2CPPObjectArrayToIntPtrArray(paramtbl));
-        public IL2CPP_Object InvokeOriginal(IntPtr obj, params IL2CPP_Object[] paramtbl) => InvokeOriginal(obj, IL2CPP.IL2CPPObjectArrayToIntPtrArray(paramtbl));
-        public IL2CPP_Object InvokeOriginal(IL2CPP_Object obj, params IntPtr[] paramtbl) => InvokeOriginal(obj.Ptr, paramtbl);
-        public IL2CPP_Object InvokeOriginal(IntPtr obj, params IntPtr[] paramtbl) => TargetMethod.Invoke(obj, paramtbl);
-        internal void InstallPatch() => Imports.Hook(TargetMethod.Ptr, NewMethod);
-        internal void UninstallPatch() => Imports.Unhook(TargetMethod.Ptr, NewMethod);
-    }
-
-    /*
     public class Patch
     {
         internal IL2CPP_Method TargetMethod;
@@ -130,6 +104,5 @@ namespace NET_SDK.Harmony
                 Imports.Unhook(TargetMethod.Ptr, OriginalMethod);
         }
     }
-    */
 }
  
