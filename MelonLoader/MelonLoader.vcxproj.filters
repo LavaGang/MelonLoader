@@ -6,35 +6,14 @@
     <ClCompile Include="Mono.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="IL2CPP.cpp" />
-    <ClCompile Include="Hooks\il2cpp_init.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hooks\LoadLibraryW.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hooks\il2cpp_add_internal_call.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="PointerUtils.cpp" />
     <ClCompile Include="MonoUnityPlayer.cpp" />
-    <ClCompile Include="Hooks\mono_jit_init_version.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hooks\SingleAppInstance_FindOtherInstance.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="Hooks\PlayerLoadFirstScene.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="IL2CPPUnityPlayer.cpp" />
-    <ClCompile Include="Hooks\mono_add_internal_call.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="ModHandler.cpp" />
-    <ClCompile Include="Hooks\PlayerCleanup.cpp">
-      <Filter>Hooks</Filter>
-    </ClCompile>
+    <ClCompile Include="HookManager.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="AssertionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
@@ -50,9 +29,6 @@
     <ClInclude Include="Mono.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="IL2CPP.h" />
-    <ClInclude Include="Hooks\Hooks.h">
-      <Filter>Hooks</Filter>
-    </ClInclude>
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="il2cpp-internals.h" />
     <ClInclude Include="PointerUtils.h" />
@@ -60,13 +36,13 @@
     <ClInclude Include="MonoUnityPlayer.h" />
     <ClInclude Include="IL2CPPUnityPlayer.h" />
     <ClInclude Include="ModHandler.h" />
+    <ClInclude Include="HookManager.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="AssertionManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="detours">
       <UniqueIdentifier>{68e65883-5782-470e-a345-89a1e78b2f8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Hooks">
-      <UniqueIdentifier>{63990325-d2ff-4939-b952-9d59b3e51bdc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

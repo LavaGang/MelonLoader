@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
@@ -10,48 +8,8 @@ namespace MelonLoader
     public class MelonModLogger
     {
         internal static bool consoleEnabled = false;
-        private static StreamWriter log;
-        private static string fileprefix = "MelonLoader_";
-
-        internal static void Initialize()
-        {
-            if (log == null)
-            {
-                string logFilePath = Path.Combine(Environment.CurrentDirectory, ("Logs/" + fileprefix + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-fff") + ".log"));
-                FileInfo logFileInfo = new FileInfo(logFilePath);
-                DirectoryInfo logDirInfo = new DirectoryInfo(logFileInfo.DirectoryName);
-
-                if (!logDirInfo.Exists)
-                    logDirInfo.Create();
-                else
-                    CleanOld(logDirInfo);
-
-                FileStream fileStream = null;
-                if (!logFileInfo.Exists)
-                    fileStream = logFileInfo.Create();
-                else
-                    fileStream = new FileStream(logFilePath, FileMode.Open, FileAccess.Write, FileShare.Read);
-
-                log = new StreamWriter(fileStream);
-                log.AutoFlush = true;
-            }
-        }
-
-        internal static void Stop() { if (log != null) log.Close(); }
-
-        private static void CleanOld(DirectoryInfo logDirInfo)
-        {
-            FileInfo[] filetbl = logDirInfo.GetFiles(fileprefix + "*");
-            if (filetbl.Length > 0)
-            {
-                List<FileInfo> filelist = filetbl.ToList().OrderBy(x => x.LastWriteTime).ToList();
-                for (int i = (filelist.Count - 10); i > -1; i--)
-                {
-                    FileInfo file = filelist[i];
-                    file.Delete();
-                }
-            }
-        }
+        private static ConsoleColor rainbow = ConsoleColor.DarkBlue;
+        private static readonly Random rainbowrand = new Random();
 
         private static string GetTimestamp() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
 
@@ -87,73 +45,177 @@ namespace MelonLoader
         public static void Log(string s)
         {
             string namesection = GetNameSection();
-            var timestamp = GetTimestamp();
-            if (consoleEnabled)
+            Imports.Logger_Log(namesection + s);
+            if (!Imports.IsDebugMode() && consoleEnabled)
             {
-                if (Imports.melonloader_is_debug_mode())
-                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + s);
-                else
-                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + s);
+                bool rainbow_check = RainbowCheck();
+                System.Console.Write("[");
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Green;
+                System.Console.Write(GetTimestamp());
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Gray;
+                System.Console.Write("] [");
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Magenta;
+                System.Console.Write("MelonLoader");
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Gray;
+                System.Console.WriteLine("] " + namesection + s);
+                if (rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Gray;
             }
-            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + s);
+        }
+
+        public static void Log(ConsoleColor color, string s)
+        {
+            string namesection = GetNameSection();
+            Imports.Logger_LogColor((namesection + s), color);
+            if (!Imports.IsDebugMode() && consoleEnabled)
+            {
+                System.Console.ForegroundColor = color;
+                RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + s);
+                System.Console.ForegroundColor = ConsoleColor.Gray;
+            }
         }
 
         public static void Log(string s, params object[] args)
         {
             string namesection = GetNameSection();
-            var timestamp = GetTimestamp();
             var formatted = string.Format(s, args);
-            if (consoleEnabled)
+            Imports.Logger_Log(namesection + formatted);
+            if (!Imports.IsDebugMode() && consoleEnabled)
             {
-                if (Imports.melonloader_is_debug_mode())
-                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + formatted);
-                else
-                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + formatted);
+                bool rainbow_check = RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + formatted);
+                if (rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Gray;
             }
-            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + formatted);
+        }
+
+        public static void Log(ConsoleColor color, string s, params object[] args)
+        {
+            string namesection = GetNameSection();
+            var formatted = string.Format(s, args);
+            Imports.Logger_LogColor((namesection + formatted), color);
+            if (!Imports.IsDebugMode() && consoleEnabled)
+            {
+                System.Console.ForegroundColor = color;
+                RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + formatted);
+                System.Console.ForegroundColor = ConsoleColor.Gray;
+            }
         }
 
         public static void LogError(string s)
         {
             string namesection = GetNameSection();
-            var timestamp = GetTimestamp();
-            if (consoleEnabled)
+            Imports.Logger_LogError(namesection, s);
+            if (!Imports.IsDebugMode() && consoleEnabled)
             {
-                if (Imports.melonloader_is_debug_mode())
-                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + s);
-                else
-                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + s);
+                System.Console.ForegroundColor = ConsoleColor.Red;
+                RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + s);
+                System.Console.ForegroundColor = ConsoleColor.Gray;
             }
-            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + s);
         }
 
         public static void LogError(string s, params object[] args)
         {
             string namesection = GetNameSection();
-            var timestamp = GetTimestamp();
             var formatted = string.Format(s, args);
-            if (consoleEnabled)
+            Imports.Logger_LogError(namesection, formatted);
+            if (!Imports.IsDebugMode() && consoleEnabled)
             {
-                if (Imports.melonloader_is_debug_mode())
-                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + formatted);
-                else
-                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + formatted);
+                System.Console.ForegroundColor = ConsoleColor.Red;
+                RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + formatted);
+                System.Console.ForegroundColor = ConsoleColor.Gray;
             }
-            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + formatted);
         }
 
-        public static void LogModError(string msg, string modname)
+        internal static void LogModError(string msg, string modname)
         {
             string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
-            var timestamp = GetTimestamp();
-            if (consoleEnabled)
+            Imports.Logger_LogModError(namesection, msg);
+            if (!Imports.IsDebugMode() && consoleEnabled)
             {
-                if (Imports.melonloader_is_debug_mode())
-                    Imports.melonloader_console_writeline("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + msg);
-                else
-                    Console.WriteLine("[" + timestamp + "] [MelonLoader] " + namesection + "[Error] " + msg);
+                System.Console.ForegroundColor = ConsoleColor.Yellow;
+                RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + msg);
+                System.Console.ForegroundColor = ConsoleColor.Gray;
             }
-            if (log != null) log.WriteLine("[" + timestamp + "] " + namesection + "[Error] " + msg);
+        }
+
+        internal static void LogModStatus(int type)
+        {
+            Imports.Logger_LogModStatus(type);
+            if (!Imports.IsDebugMode() && consoleEnabled)
+            {
+                bool rainbow_check = RainbowCheck();
+                System.Console.Write("[");
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Green;
+                System.Console.Write(GetTimestamp());
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Gray;
+                System.Console.Write("] [");
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Magenta;
+                System.Console.Write("MelonLoader");
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Gray;
+                System.Console.Write("] ");
+                if (!rainbow_check)
+                    System.Console.ForegroundColor = ConsoleColor.Blue;
+                System.Console.Write("Status: ");
+                if (type == 0)
+                {
+                    if (!rainbow_check)
+                        System.Console.ForegroundColor = ConsoleColor.Cyan;
+                    System.Console.WriteLine("Universal");
+                }
+                else if (type == 1)
+                {
+                    if (!rainbow_check)
+                        System.Console.ForegroundColor = ConsoleColor.Green;
+                    System.Console.WriteLine("Compatible");
+                }
+                else if (type == 2)
+                {
+                    if (!rainbow_check)
+                        System.Console.ForegroundColor = ConsoleColor.Yellow;
+                    System.Console.WriteLine("No MelonModGameAttribute!");
+                }
+                else
+                {
+                    if (!rainbow_check)
+                        System.Console.ForegroundColor = ConsoleColor.Red;
+                    System.Console.WriteLine("INCOMPATIBLE!");
+                }
+                System.Console.ForegroundColor = ConsoleColor.Gray;
+            }
+        }
+
+        private static bool RainbowCheck()
+        {
+            if (Imports.IsRainbowMode() || Imports.IsRandomRainbowMode())
+            {
+                if (Imports.IsRandomRainbowMode())
+                    System.Console.ForegroundColor = (ConsoleColor)rainbowrand.Next(1, (int)ConsoleColor.White);
+                else
+                {
+                    System.Console.ForegroundColor = rainbow;
+                    rainbow++;
+                    if (rainbow > ConsoleColor.White)
+                        rainbow = ConsoleColor.DarkBlue;
+                    else if (rainbow == ConsoleColor.Gray)
+                        rainbow++;
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

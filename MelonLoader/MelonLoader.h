@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 #include <Windows.h>
-#include "Mono.h"
-#include "il2cpp-internals.h"
 
 class MelonLoader
 {
@@ -11,11 +9,14 @@ public:
 	static bool IsGameIl2Cpp;
 	static bool DebugMode;
 	static bool MupotMode;
+	static bool RainbowMode;
+	static bool RandomRainbowMode;
 	static char* GamePath;
 	static char* DataPath;
 
 	static void Main();
-	static void Detour(Il2CppMethod* target, void* detour);
-	static void UnDetour(Il2CppMethod* target, void* detour);
-	static void AddGameSpecificInternalCalls();
+	static void UNLOAD();
+	static bool Is64bit();
+	static int CountSubstring(std::string pat, std::string txt);
+	static bool DirectoryExists(const char* path);
 };

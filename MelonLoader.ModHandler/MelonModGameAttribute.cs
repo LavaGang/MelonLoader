@@ -16,26 +16,21 @@ namespace MelonLoader
         public string GameName { get; }
 
         /// <summary>
-        /// Gets whether this mod can target any game
+        /// Gets whether this Mod can target any Game.
         /// </summary>
-        public bool Universal
-        {
-            get => Developer == null && GameName == null;
-        }
+        public bool Universal { get => string.IsNullOrEmpty(Developer) || string.IsNullOrEmpty(GameName); }
 
         /// <summary>
-        /// Mark this game as compatible with any game
+        /// Mark this Mod as Universal or Compatible with specific Games.
         /// </summary>
-        public MelonModGameAttribute()
+        public MelonModGameAttribute(string developer = null, string gameName = null)
         {
-            Developer = null;
-            GameName = null;
+            Developer = developer;
+            GameName = gameName;
         }
 
-        public MelonModGameAttribute(string developer, string gameName)
-        {
-            Developer = developer ?? throw new ArgumentNullException(nameof(developer));
-            GameName = gameName ?? throw new ArgumentNullException(nameof(gameName));
-        }
+        public bool IsGame(string developer, string gameName) => (Universal || ((developer != null) && (gameName != null) && Developer.Equals(developer) && GameName.Equals(gameName)));
+        public bool IsCompatible(MelonModGameAttribute att) => ((att == null) || IsCompatibleBecauseUniversal(att) || (att.Developer.Equals(Developer) && att.GameName.Equals(GameName)));
+        public bool IsCompatibleBecauseUniversal(MelonModGameAttribute att) => ((att == null) || Universal || att.Universal);
     }
 }

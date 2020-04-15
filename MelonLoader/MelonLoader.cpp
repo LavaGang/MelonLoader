@@ -1,18 +1,18 @@
-#include <Windows.h>
-#include <string>
 #include <filesystem>
 #include "MelonLoader.h"
 #include "Console.h"
 #include "Mono.h"
-#include "Il2Cpp.h"
-#include "Hooks/Hooks.h"
-#include "PointerUtils.h"
-#include "detours/detours.h"
+#include "HookManager.h"
+#include "Logger.h"
+#include "ModHandler.h"
+#include "MonoUnityPlayer.h"
 
 bool MelonLoader::IsGameIl2Cpp = false;
 HINSTANCE MelonLoader::thisdll = NULL;
 bool MelonLoader::DebugMode = false;
 bool MelonLoader::MupotMode = false;
+bool MelonLoader::RainbowMode = false;
+bool MelonLoader::RandomRainbowMode = false;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 
@@ -29,12 +29,18 @@ void MelonLoader::Main()
 
 	if (strstr(GetCommandLine(), "--melonloader.mupot") != NULL)
 		MupotMode = true;
+	if (strstr(GetCommandLine(), "--melonloader.rainbow") != NULL)
+		RainbowMode = true;
+	if (strstr(GetCommandLine(), "--melonloader.randomrainbow") != NULL)
+		RandomRainbowMode = true;
 
 	std::string gameassemblypath = filepathstr + "\\GameAssembly.dll";
 	WIN32_FIND_DATA data;
 	HANDLE h = FindFirstFile(gameassemblypath.c_str(), &data);
 	if (h != INVALID_HANDLE_VALUE)
 		IsGameIl2Cpp = true;
+
+	Logger::Initialize(filepathstr);
 
 #ifndef _DEBUG
 	if (strstr(GetCommandLine(), "--melonloader.debug") != NULL)
@@ -74,99 +80,70 @@ void MelonLoader::Main()
 
 			if (Mono::Load() && Mono::Setup())
 			{
+				HookManager::LoadLibraryW_Hook();
+				HookManager::Hook(&(LPVOID&)Mono::mono_lookup_internal_call_full, HookManager::Hooked_mono_lookup_internal_call_full);
 				if (MupotMode)
-				{
-					Hook_mono_add_internal_call::Hook();
-					Hook_mono_jit_init_version::Hook();
-				}
+					HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, HookManager::Hooked_mono_jit_init_version);
 			}
 		}
-		Hook_LoadLibraryW::Hook();
+		else
+			HookManager::LoadLibraryW_Hook();
 	}
 }
 
-void MelonLoader::Detour(Il2CppMethod* target, void* detour)
+void MelonLoader::UNLOAD()
 {
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-	DetourAttach(&(LPVOID&)target->targetMethod, detour);
-	DetourTransactionCommit();
-}
-
-void MelonLoader::UnDetour(Il2CppMethod* target, void* detour)
-{
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-	DetourDetach(&(LPVOID&)target->targetMethod, detour);
-	DetourTransactionCommit();
-}
-
-void MelonLoader::AddGameSpecificInternalCalls()
-{
-	if ((Mono::Domain != NULL) && (IL2CPP::Domain))
+	ModHandler::OnApplicationQuit();
+	HookManager::UnhookAll();
+	if (IsGameIl2Cpp)
 	{
-		size_t asm_count;
-		Il2CppAssembly** asm_tbl = IL2CPP::il2cpp_domain_get_assemblies(IL2CPP::Domain, &asm_count);
-		if (asm_count > 0)
+		if (Mono::Module != NULL)
 		{
-			for (size_t i = 0; i < asm_count; i++)
-			{
-				Il2CppAssembly* asm_ptr = asm_tbl[i];
-				if (asm_ptr)
-				{
-					Il2CppImage* image = IL2CPP::il2cpp_assembly_get_image(asm_ptr);
-					if (image)
-					{
-						std::string image_name = IL2CPP::il2cpp_image_get_name(image);
-						if (!image_name._Starts_with("UnityEngine")
-							&& !image_name._Starts_with("System")
-							&& !image_name._Starts_with("Mono")
-							&& !image_name._Starts_with("Unity")
-							&& !image_name._Starts_with("ICSharpCode")
-							&& !image_name._Starts_with("IBM")
-							&& !image_name._Starts_with("I18N")
-							&& !image_name._Starts_with("cscompmgd")
-							&& !image_name._Starts_with("Commons")
-							&& !image_name._Starts_with("Boo")
-							&& !image_name._Starts_with("CustomMarshalers")
-							&& !image_name._Starts_with("Microsoft")
-							&& !image_name._Starts_with("mscorlib")
-							&& !image_name._Starts_with("Newtonsoft")
-							&& !image_name._Starts_with("Novell")
-							&& !image_name._Starts_with("Oculus")
-							&& !image_name._Starts_with("Steam")
-							&& !image_name._Starts_with("SMDiagnostics")
-							&& !image_name._Starts_with("Windows")
-							&& !image_name._Starts_with("Facepunch"))
-						{
-							int klass_count = IL2CPP::il2cpp_image_get_class_count(image);
-							if (klass_count > 0)
-							{
-								for (int t = 0; t < klass_count; t++)
-								{
-									Il2CppClass* klass = IL2CPP::il2cpp_image_get_class(image, t);
-									if (klass)
-									{
-										std::string klass_name = IL2CPP::il2cpp_class_get_name(klass);
-										std::string klass_namespace = IL2CPP::il2cpp_class_get_namespace(klass);
-										std::string klass_id = ((klass_namespace.empty() ? "" : (klass_namespace + ".")) + klass_name);
-
-										void* method_iter = NULL;
-										Il2CppMethod* method = NULL;
-										while ((method = IL2CPP::il2cpp_class_get_methods(klass, &method_iter)) != NULL)
-										{
-											std::string method_name = IL2CPP::il2cpp_method_get_name(method);
-											std::string method_id = (klass_id + "::" + method_name);
-
-											Mono::mono_add_internal_call(method_id.c_str(), method->targetMethod);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			FreeLibrary(Mono::Module);
+			Mono::Module = NULL;
+		}
+		if (MupotMode && (MonoUnityPlayer::Module != NULL))
+		{
+			FreeLibrary(MonoUnityPlayer::Module);
+			MonoUnityPlayer::Module = NULL;
 		}
 	}
+	Logger::Log("UNLOADED!");
+	Logger::Stop();
+}
+
+bool MelonLoader::Is64bit()
+{
+	// To-Do
+	return true;
+}
+
+int MelonLoader::CountSubstring(std::string pat, std::string txt)
+{
+	size_t M = pat.length();
+	size_t N = txt.length();
+	int res = 0;
+	for (int i = 0; i <= N - M; i++)
+	{
+		int j;
+		for (j = 0; j < M; j++)
+			if (txt[(int)(i + j)] != pat[j])
+				break;
+		if (j == M)
+		{
+			res++;
+			j = 0;
+		}
+	}
+	return res;
+}
+
+bool MelonLoader::DirectoryExists(const char* path)
+{
+	struct stat info;
+	if (stat(path, &info) != NULL)
+		return false;
+	if (info.st_mode & S_IFDIR)
+		return true;
+	return false;
 }

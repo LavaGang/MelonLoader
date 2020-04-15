@@ -1,6 +1,5 @@
 #pragma once
 #include "PointerUtils.h"
-#include <Windows.h>
 
 typedef bool (*SingleAppInstance_FindOtherInstance_t) (LPARAM lParam);
 typedef void* (*MonoPlayerLoadFirstScene_t) (bool unknown);

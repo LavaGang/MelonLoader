@@ -7,9 +7,9 @@ namespace MelonLoader
     {
         internal static void Create()
         {
-            if (Imports.melonloader_is_il2cpp_game())
+            if (Imports.IsIl2CppGame())
             {
-                if (Imports.melonloader_is_mupot_mode())
+                if (Imports.IsMUPOTMode())
                     CreateComponent();
                 else
                     Main.OnApplicationStart();
@@ -22,9 +22,10 @@ namespace MelonLoader
         {
             GameObject obj = new GameObject("MelonLoader");
             GameObject.DontDestroyOnLoad(obj);
-            obj.AddComponent<MelonModComponent>();
+            Instance = obj.AddComponent<MelonModComponent>();
         }
 
+        internal static MelonModComponent Instance = null;
         static bool has_started = false;
         void Start() { if (!has_started) { Main.OnApplicationStart(); has_started = true; } }
         void OnLevelWasLoaded(int level) { transform.SetAsLastSibling(); Main.OnLevelWasLoaded(level); }
@@ -33,6 +34,5 @@ namespace MelonLoader
         void LateUpdate() => Main.OnLateUpdate();
         void OnGUI() => Main.OnGUI();
         void OnDestroy() => CreateComponent();
-        void OnApplicationQuit() => Main.OnApplicationQuit();
     }
 }

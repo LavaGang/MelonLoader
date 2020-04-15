@@ -12,8 +12,14 @@ using MelonLoader;
 [assembly: AssemblyTrademark(TestMod.BuildInfo.Company)]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: Guid("3a25f309-f002-4b35-a6f0-6b31f9a9c362")]
+//[assembly: Guid("")]
 [assembly: AssemblyVersion(TestMod.BuildInfo.Version)]
 [assembly: AssemblyFileVersion(TestMod.BuildInfo.Version)]
 [assembly: NeutralResourcesLanguage("en")]
 [assembly: MelonModInfo(TestMod.BuildInfo.Name, TestMod.BuildInfo.Version, TestMod.BuildInfo.Author, TestMod.BuildInfo.DownloadLink)]
+
+
+// Create and Setup a MelonModGameAttribute to mark a Mod as Universal or Compatible with specific Games.
+// If no MelonModGameAttribute is found or any of the Values for any MelonModGameAttribute on the Mod is null or empty it will be assumed the Mod is Universal.
+// Values for MelonModGameAttribute can be found in the Game's app.info file or printed at the top of every log directly beneath the Unity version.
+[assembly: MelonModGameAttribute(null, null)]

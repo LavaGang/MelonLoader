@@ -326,3 +326,17 @@ struct MonoClass {
 
 	void* unity_user_data;
 };
+
+struct MonoMethodSignature {
+	MonoType* ret;
+	unsigned int  param_count;
+	int           sentinelpos;
+	unsigned int  generic_param_count : 16;
+	unsigned int  call_convention : 6;
+	unsigned int  hasthis : 1;
+	unsigned int  explicit_this : 1;
+	unsigned int  pinvoke : 1;
+	unsigned int  is_inflated : 1;
+	unsigned int  has_type_parameters : 1;
+	MonoType* params[1];
+};

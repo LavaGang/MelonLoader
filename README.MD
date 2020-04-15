@@ -10,8 +10,6 @@ Compile winmm64, MelonLoader, and MelonLoader.ModHandler then follow the install
 4.  [Find the game's Unity version](#get-unity-version) in Unity Dependencies in BaseLibs
     - If it does not exist you need to [generate it yourself](#unity-dependency-generation)
 5.  Extract the zip to the `MelonLoader\` folder in the game's install folder
-6.  Create a `Mods\` folder in your game folder
-7.  Compile the `TestMod.dll` and drop it in into the `Mods\` folder
 
 ## MONO GAME INSTALLATION:
 

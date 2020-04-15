@@ -1,14 +1,17 @@
 #pragma once
-#include "Il2Cpp.h"
+#include "Console.h"
 
 extern "C"
 {
-	__declspec(dllexport) Il2CppDomain* __stdcall melonloader_get_il2cpp_domain();
-	__declspec(dllexport) bool __stdcall melonloader_is_il2cpp_game();
-	__declspec(dllexport) bool __stdcall melonloader_is_debug_mode();
-	__declspec(dllexport) bool __stdcall melonloader_is_mupot_mode();
-	__declspec(dllexport) const char* __stdcall melonloader_game_directory();
-	__declspec(dllexport) void __stdcall melonloader_console_writeline(const char* txt);
-	__declspec(dllexport) void __stdcall melonloader_detour(Il2CppMethod* target, void* detour);
-	__declspec(dllexport) void __stdcall melonloader_undetour(Il2CppMethod* target, void* detour);
+	__declspec(dllexport) void __stdcall Logger_Log(const char* txt);
+	__declspec(dllexport) void __stdcall Logger_LogColor(const char* txt, ConsoleColor color);
+	__declspec(dllexport) void __stdcall Logger_LogError(const char* namesection, const char* txt);
+	__declspec(dllexport) void __stdcall Logger_LogModError(const char* namesection, const char* msg);
 }
+
+
+class Exports
+{
+public:
+	static void AddInternalCalls();
+};

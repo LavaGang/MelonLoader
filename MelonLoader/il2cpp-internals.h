@@ -233,7 +233,7 @@ typedef struct Il2CppObject
 typedef struct Il2CppReflectionType
 {
 	Il2CppObject object;
-	const Il2CppType* type;
+	Il2CppType* type;
 } Il2CppReflectionType;
 
 typedef struct Il2CppMethodDefinition

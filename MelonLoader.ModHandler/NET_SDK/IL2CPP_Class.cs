@@ -208,7 +208,7 @@ namespace NET_SDK.Reflection
                 if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
                     return nestedType;
             }
-            return null; 
+            return null;
         }
         public IL2CPP_Class GetNestedType(string name, string name_space, IL2CPP_BindingFlags flags)
         {

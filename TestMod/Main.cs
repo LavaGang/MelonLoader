@@ -1,16 +1,14 @@
 ﻿using MelonLoader;
-using NET_SDK;
-using NET_SDK.Reflection;
 
 namespace TestMod
 {
     public static class BuildInfo
     {
-        public const string Name = "TestMod";
-        public const string Author = "AUTHOR";
-        public const string Company = "COMPANY";
-        public const string Version = "1.0.0";
-        public const string DownloadLink = "";
+        public const string Name = "TestMod"; // Name of the Mod.  (MUST BE SET)
+        public const string Author = null; // Author of the Mod.  (Set as null if none)
+        public const string Company = null; // Company that made the Mod.  (Set as null if none)
+        public const string Version = "1.0.0"; // Version of the Mod.  (MUST BE SET)
+        public const string DownloadLink = null; // Download Link for the Mod.  (Set as null if none)
     }
 
     public class TestMod : MelonMod
@@ -22,38 +20,31 @@ namespace TestMod
 
         void OnLevelWasLoaded(int level)
         {
-            // Currently only works in MUPOT Mode
-            MelonModLogger.Log("OnLevelWasLoaded");
+            MelonModLogger.Log("OnLevelWasLoaded: " + level.ToString());
         }
 
         void OnLevelWasInitialized(int level)
         {
-            // Currently only works in MUPOT Mode
-            MelonModLogger.Log("OnLevelWasInitialized");
+            MelonModLogger.Log("OnLevelWasInitialized: " + level.ToString());
         }
 
-        private bool is_pressed = false;
         void OnUpdate()
         {
-            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnUpdate");
         }
 
         void OnFixedUpdate()
         {
-            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnFixedUpdate");
         }
 
         void OnLateUpdate()
         {
-            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnLateUpdate");
         }
-        
+
         void OnGUI()
         {
-            // Currently only works in MUPOT Mode
             MelonModLogger.Log("OnGUI");
         }
 
@@ -65,6 +56,11 @@ namespace TestMod
         void OnModSettingsApplied()
         {
             MelonModLogger.Log("OnModSettingsApplied");
+        }
+
+        void VRChat_OnUiManagerInit() // Only works in VRChat
+        {
+            MelonModLogger.Log("VRChat_OnUiManagerInit");
         }
     }
 }

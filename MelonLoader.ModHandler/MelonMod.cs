@@ -3,23 +3,18 @@
     public abstract class MelonMod
     {
         /// <summary>
-        /// Gets the Name of the Mod.
+        /// Gets if the Mod is Universal or not.
         /// </summary>
-        public string Name { get; internal set; }
+        public bool IsUniversal { get; internal set; }
 
         /// <summary>
-        /// Gets the Version of the Mod.
+        /// Gets the Info Attribute of the Mod.
         /// </summary>
-        public string Version { get; internal set; }
+        public MelonModInfoAttribute InfoAttribute { get; internal set; }
 
         /// <summary>
-        /// Gets the Author of the Mod.
+        /// Gets the Game Attributes of the Mod.
         /// </summary>
-        public string Author { get; internal set; }
-
-        /// <summary>
-        /// Gets the Download Link of the Mod.
-        /// </summary>
-        public string DownloadLink { get; internal set; }
+        public MelonModGameAttribute[] GameAttributes { get; internal set; }
     }
 }

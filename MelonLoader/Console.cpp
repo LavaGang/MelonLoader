@@ -1,38 +1,59 @@
+#include <fstream>
 #include "Console.h"
-#include "MelonLoader.h"
-#include <Windows.h>
-#include <stdio.h>
-#include <iostream>
 
-debugstream Console::scout;
-bool Console::IsInitialized() { return (GetConsoleWindow() != NULL); }
+HANDLE Console::hConsole = NULL;
+int Console::rainbow = 1;
 
 void Console::Create()
 {
 	if (!IsInitialized())
 	{
-		if (!AllocConsole())
+		if (AllocConsole())
 		{
-			MessageBox(NULL, "Failed to Create Debug Console!", NULL, MB_OK | MB_ICONEXCLAMATION);
-			return;
+			SetConsoleTitle("MelonLoader Debug Console");
+			SetForegroundWindow(GetConsoleWindow());
+			freopen_s(reinterpret_cast<FILE * *>(stdout), "CONOUT$", "w", stdout);
 		}
-		SetConsoleTitle("MelonLoader Debug Console");
-		freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
-		scout.coss = std::ofstream((std::string(MelonLoader::GamePath) + "\\melonloader_debug.log"));
+		else
+			MessageBox(NULL, "Failed to Create Debug Console!", NULL, MB_OK | MB_ICONEXCLAMATION);
 	}
 }
 
-void Console::Destroy()
+void Console::RainbowCheck()
+{
+	if (IsInitialized() && (MelonLoader::RainbowMode || MelonLoader::RandomRainbowMode))
+	{
+		if (MelonLoader::RandomRainbowMode)
+			SetColor((ConsoleColor)(1 + (rand() * (int)(15 - 1) / RAND_MAX)));
+		else
+		{
+			SetColor((ConsoleColor)rainbow);
+			rainbow++;
+			if (rainbow > 15)
+				rainbow = 1;
+			else if (rainbow == 7)
+				rainbow++;
+		}
+	}
+}
+
+void Console::Write(const char* txt)
 {
 	if (IsInitialized())
 	{
-		fclose(reinterpret_cast<FILE*>(stdout));
-		FreeConsole();
+		RainbowCheck();
+		std::cout << txt;
+		if (MelonLoader::RainbowMode || MelonLoader::RandomRainbowMode)
+			ResetColor();
+	}
+};
+
+void Console::Write(const char* txt, ConsoleColor color)
+{
+	if (IsInitialized())
+	{
+		SetColor(color);
+		Write(txt);
+		ResetColor();
 	}
 }
-
-void Console::Write(const char* txt) { scout << txt; }
-void Console::Write(std::string txt) { Write(txt.c_str()); }
-
-void Console::WriteLine(const char* txt) { scout << txt << std::endl; }
-void Console::WriteLine(std::string txt) { WriteLine(txt.c_str()); }

@@ -28,9 +28,7 @@ namespace NET_SDK.Reflection
             IntPtr returnval;
             if (HasFlag(IL2CPP_BindingFlags.FIELD_STATIC))
                 returnval = IL2CPP.il2cpp_field_get_value_object(Ptr, IntPtr.Zero);
-            // IL2CPP.il2cpp_field_static_get_value(Ptr, ref returnval);
             else
-                // IL2CPP.il2cpp_field_get_value(obj, Ptr, ref returnval);
                 returnval = IL2CPP.il2cpp_field_get_value_object(Ptr, obj);
             if (returnval != IntPtr.Zero)
                 return new IL2CPP_Object(returnval, GetReturnType());

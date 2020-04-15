@@ -1,6 +1,5 @@
 #pragma once
 #include "mono-internals.h"
-#include <Windows.h>
 
 typedef void (*mono_set_assemblies_path_t) (const char* path);
 typedef void (*mono_set_config_dir_t) (const char* path);
@@ -16,7 +15,6 @@ typedef MonoObject* (*mono_runtime_invoke_t) (MonoMethod* method, void* obj, voi
 typedef MonoThread* (*mono_thread_current_t)();
 typedef void (*mono_thread_set_main_t)(MonoThread* thread);
 typedef void (*mono_add_internal_call_t) (const char* name, void* method);
-typedef void* (*mono_resolve_icall_t) (const char* name);
 typedef void* (*mono_class_enum_basetype_t) (MonoClass* klass);
 typedef const char* (*mono_class_get_name_t) (MonoClass* klass);
 typedef MonoClass* (*mono_type_get_class_t) (MonoType* type);
@@ -29,8 +27,16 @@ typedef MonoClass* (*mono_class_from_mono_type_t) (MonoType* type);
 typedef const char* (*mono_assembly_get_name_t) (MonoAssembly* assem);
 typedef void (*mono_domain_set_config_t)(MonoDomain* domain, const char* configpath, const char* filename);
 typedef MonoDomain* (*mono_get_root_domain_t)();
-typedef int (*mono_class_get_method_count_t)(MonoClass* klass);
 typedef const char* (*mono_method_get_name_t)(MonoMethod* method);
+typedef void* (*mono_object_unbox_t)(MonoObject* obj);
+typedef const char* (*mono_method_get_reflection_name_t) (MonoMethod* method);
+typedef MonoClass* (*mono_method_get_class_t) (MonoMethod* method);
+typedef MonoImage* (*mono_class_get_image_t) (MonoClass* klass);
+typedef const char* (*mono_image_get_name_t) (MonoImage* image);
+typedef MonoMethodSignature* (*mono_method_get_signature_t) (MonoMethod* method, MonoImage* image, unsigned int token);
+typedef unsigned int (*mono_method_get_token_t) (MonoMethod* method);
+typedef MonoClass* (*mono_class_get_parent_t) (MonoClass* klass);
+typedef void* (*mono_lookup_internal_call_full_t) (MonoMethod* method, int* uses_handles);
 
 class Mono
 {
@@ -53,7 +59,7 @@ public:
 	static mono_thread_current_t mono_thread_current;
 	static mono_thread_set_main_t mono_thread_set_main;
 	static mono_add_internal_call_t mono_add_internal_call;
-	static mono_resolve_icall_t mono_resolve_icall;
+	static mono_lookup_internal_call_full_t mono_lookup_internal_call_full;
 	static mono_class_enum_basetype_t mono_class_enum_basetype;
 	static mono_class_get_name_t mono_class_get_name;
 	static mono_type_get_class_t mono_type_get_class;
@@ -66,8 +72,15 @@ public:
 	static mono_assembly_get_name_t mono_assembly_get_name;
 	static mono_domain_set_config_t mono_domain_set_config;
 	static mono_get_root_domain_t mono_get_root_domain;
-	static mono_class_get_method_count_t mono_class_get_method_count;
 	static mono_method_get_name_t mono_method_get_name;
+	static mono_object_unbox_t mono_object_unbox;
+	static mono_method_get_reflection_name_t mono_method_get_reflection_name;
+	static mono_method_get_class_t mono_method_get_class;
+	static mono_class_get_image_t mono_class_get_image;
+	static mono_image_get_name_t mono_image_get_name;
+	static mono_method_get_signature_t mono_method_get_signature;
+	static mono_method_get_token_t mono_method_get_token;
+	static mono_class_get_parent_t mono_class_get_parent;
 
 	static bool Load();
 	static bool Setup();

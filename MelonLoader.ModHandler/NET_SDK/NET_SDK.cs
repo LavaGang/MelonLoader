@@ -14,12 +14,12 @@ namespace NET_SDK
 
         internal static void Initialize()
         {
-            Domain = MelonLoader.Imports.melonloader_get_il2cpp_domain();
+            Domain = MelonLoader.Imports.GetIl2CppDomain();
             uint assembly_count = 0;
             IntPtr assemblies = IL2CPP.il2cpp_domain_get_assemblies(Domain, ref assembly_count);
             IntPtr[] assembliesarr = IL2CPP.IntPtrToStructureArray<IntPtr>(assemblies, assembly_count);
             List<IL2CPP_Assembly> assemblyList = new List<IL2CPP_Assembly>();
-            for (int i = 0; i < assembliesarr.Length; i++) 
+            for (int i = 0; i < assembliesarr.Length; i++)
             {
                 IntPtr assembly = assembliesarr[i];
                 if (assembly != IntPtr.Zero)
@@ -156,32 +156,9 @@ namespace NET_SDK
             if (objtbl == null)
                 return null;
             IntPtr[] returntbl = new IntPtr[objtbl.Length];
-            IntPtr temp;
             for (int i = 0; i < objtbl.Length; i++)
-            {
-                var o = objtbl[i];
-                var t = o.GetType();
-                if (t.IsPrimitive || t.IsValueType || t.IsEnum)
-                    // Box this object
-                    temp = ObjectToIntPtr(o);
-                else if (o is IL2CPP_Object)
-                    temp = (o as IL2CPP_Object).Ptr;
-                else if (o is string)
-                    temp = StringToIntPtr(o as string);
-                else
-                    // We don't know how to handle objects that aren't value types or IL2CPP_Objects!
-                    // Throw an exception here until this is resolved
-                    throw new InvalidCastException($"SDK: ObjectArrayToIntPtrArray: Cannot convert type: {t.FullName}. Please use ONLY value types and IL2CPP_Objects!");
-                returntbl[i] = temp;
-            }
+                returntbl[i] = ObjectToIntPtr(objtbl[i]);
             return returntbl;
-        }
-        unsafe public static IntPtr ObjectToIntPtr(object obj)
-        {
-            if (obj == null) return IntPtr.Zero;
-            TypedReference reference = __makeref(obj);
-            TypedReference* pRef = &reference;
-            return (IntPtr)pRef;
         }
 
         public static IntPtr[] IL2CPPObjectArrayToIntPtrArray(IL2CPP_Object[] objtbl)
@@ -191,7 +168,36 @@ namespace NET_SDK
                 arr[i] = objtbl[i].Ptr;
             return arr;
         }
-        unsafe public static IL2CPP_Object ObjectToIL2CPPObject(IntPtr obj, IntPtr klass)
+
+        unsafe public static IntPtr ObjectToTypedReferenceIntPtr(object obj)
+        {
+            if (obj == null) return IntPtr.Zero;
+            TypedReference reference = __makeref(obj);
+            TypedReference* pRef = &reference;
+            return (IntPtr)pRef;
+        }
+
+        public static IntPtr ObjectToIntPtr(object obj)
+        {
+            if (obj != null)
+            {
+                var t = obj.GetType();
+                if (t.IsPrimitive || t.IsValueType || t.IsEnum)
+                    return ObjectToTypedReferenceIntPtr(obj);
+                else if (obj is IL2CPP_Object)
+                    return (obj as IL2CPP_Object).Ptr;
+                else if (obj is string)
+                    return StringToIntPtr(obj as string);
+                else
+                {
+                    // To-Do
+                    return ObjectToTypedReferenceIntPtr(obj);
+                }
+            }
+            return IntPtr.Zero;
+        }
+
+        unsafe public static IL2CPP_Object ObjectIntPtrToIL2CPPObject(IntPtr obj, IntPtr klass)
         {
             if (klass != IntPtr.Zero)
             {
@@ -201,19 +207,45 @@ namespace NET_SDK
             }
             return null;
         }
-        unsafe public static IL2CPP_Object ObjectToIL2CPPObject(IntPtr obj, string klass)
+        unsafe public static IL2CPP_Object ObjectIntPtrToIL2CPPObject(IntPtr obj, string klass)
         {
             IL2CPP_Class klassobj = SDK.GetClass(klass);
             if (klassobj != null)
-                return ObjectToIL2CPPObject(obj, klassobj.Ptr);
+                return ObjectIntPtrToIL2CPPObject(obj, klassobj.Ptr);
             return null;
         }
 
         public static IL2CPP_Class SystemTypeToIL2CPPClass(Type type)
         {
             if (type != null)
-                return SDK.GetClass(type.Namespace + "." + type.Name);
+                return SDK.GetClass(type.Namespace, type.Name);
             return null;
+        }
+
+        unsafe public static T[] IntPtrArrayToUnboxedValueTypeArray<T>(IntPtr arr) where T : unmanaged
+        {
+            IntPtr[] arr_2 = IntPtrToArray(arr);
+            T[] return_arr = new T[arr_2.Length];
+            for (uint i = 0; i < arr_2.Length; i++)
+                return_arr[i] = *(T*)il2cpp_object_unbox(arr_2[i]).ToPointer();
+            return return_arr;
+        }
+
+        public static T[] IL2CPPObjectArrayToUnboxedValueTypeArray<T>(IL2CPP_Object[] arr) where T : unmanaged
+        {
+            T[] return_arr = new T[arr.Length];
+            for (uint i = 0; i < arr.Length; i++)
+                return_arr[i] = arr[i].UnboxValue<T>();
+            return return_arr;
+        }
+
+        unsafe public static T[] IL2CPPObjectToUnboxedValueTypeArray<T>(IL2CPP_Object arr) where T : unmanaged
+        {
+            IntPtr[] arr_2 = IntPtrToArray(arr.Ptr);
+            T[] return_arr = new T[arr_2.Length];
+            for (uint i = 0; i < arr_2.Length; i++)
+                return_arr[i] = *(T*)il2cpp_object_unbox(arr_2[i]).ToPointer();
+            return return_arr;
         }
 
         unsafe public static IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] paramtbl)
@@ -222,7 +254,7 @@ namespace NET_SDK
                 return IntPtr.Zero;
             IntPtr[] intPtrArray;
             IntPtr returnval = IntPtr.Zero;
-            intPtrArray = paramtbl ?? (new IntPtr[0]);
+            intPtrArray = ((paramtbl != null) ? paramtbl : new IntPtr[0]);
             IntPtr intPtr = Marshal.AllocHGlobal(intPtrArray.Length * sizeof(void*));
             try
             {
@@ -230,7 +262,7 @@ namespace NET_SDK
                 for (int i = 0; i < intPtrArray.Length; i++)
                     pointerArray[i] = intPtrArray[i].ToPointer();
                 IntPtr exp = IntPtr.Zero;
-                returnval = IL2CPP.il2cpp_runtime_invoke(method, obj, pointerArray, ref exp);
+                returnval = il2cpp_runtime_invoke(method, obj, pointerArray, ref exp);
                 if (exp.ToInt32() != 0)
                 {
                     // There was an exception! Handle it somehow here

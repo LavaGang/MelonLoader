@@ -59,8 +59,8 @@ namespace MelonLoader
         internal static bool GetBool(string section, string name, bool defaultValue = false, bool autoSave = false)
         {
             string sVal = GetString(section, name, null);
-            if ("true".Equals(sVal) || "false".Equals(sVal))
-                return "true".Equals(sVal);
+            if ("true".Equals(sVal) || "1".Equals(sVal) || "0".Equals(sVal) || "false".Equals(sVal))
+                return ("true".Equals(sVal) || "1".Equals(sVal));
             else if (autoSave)
                 SetBool(section, name, defaultValue);
             return defaultValue;
@@ -147,7 +147,7 @@ namespace MelonLoader
         public static bool GetBool(string section, string name)
         {
             if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
-                return pref.Value.Equals("true");
+                return (pref.Value.Equals("true") || pref.Value.Equals("1"));
             MelonModLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
             return false;
         }

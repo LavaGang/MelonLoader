@@ -57,14 +57,12 @@ std::vector<uintptr_t> PointerUtils::FindAllPattern(uintptr_t start_address, uin
 {
 	std::vector<uintptr_t> returnvec;
 	uint64_t size = (end_address - start_address);
-	uintptr_t start_address_b = start_address;
-	uintptr_t end_address_b = end_address;
+	uintptr_t inter = start_address;
 	uintptr_t addr = 0;
-	while ((addr = FindPattern(start_address, end_address, target_pattern)) != NULL)
+	while ((addr = FindPattern(inter, end_address, target_pattern)) != NULL)
 	{
 		returnvec.push_back(addr);
-		start_address_b = (addr + 5);
-		end_address_b = (start_address_b + size);
+		inter = (addr + 1);
 	}
 	return returnvec;
 }
@@ -103,15 +101,4 @@ uint64_t PointerUtils::ResolvePtrOffsetFromInstruction(uint64_t instruction, uin
 uint64_t PointerUtils::ResolvePtrOffsetFromInstructionPattern(HMODULE mod, const char* pattern, uint64_t start, uint64_t end)
 {
 	return ResolvePtrOffsetFromInstruction(FindPattern(mod, pattern), start, end);
-}
-
-HMODULE PointerUtils::GetModuleHandlePtr(const char* mod)
-{
-	HMODULE modhandle = NULL;
-	do
-	{
-		modhandle = GetModuleHandle(mod);
-		Sleep(1);
-	} while (modhandle == NULL);
-	return modhandle;
 }

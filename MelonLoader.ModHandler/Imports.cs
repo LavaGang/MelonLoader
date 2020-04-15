@@ -1,26 +1,42 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
     public static class Imports
     {
         [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static IntPtr melonloader_get_il2cpp_domain();
+        internal extern static void Logger_Log(string txt);
         [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static bool melonloader_is_il2cpp_game();
+        internal extern static void Logger_LogColor(string txt, ConsoleColor color);
         [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static bool melonloader_is_debug_mode();
+        internal extern static void Logger_LogError(string namesection, string txt);
         [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static bool melonloader_is_mupot_mode();
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+        internal extern static void Logger_LogModError(string namesection, string msg);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void UNLOAD_MELONLOADER();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Logger_LogModStatus(int type);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static IntPtr GetIl2CppDomain();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool IsIl2CppGame();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool IsDebugMode();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool IsMUPOTMode();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsRainbowMode();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsRandomRainbowMode();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string melonloader_game_directory();
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static void melonloader_console_writeline(string txt);
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static void melonloader_detour(IntPtr target, IntPtr detour);
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static void melonloader_undetour(IntPtr target, IntPtr detour);
+        public extern static string GetGameDirectory();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Hook(IntPtr target, IntPtr detour);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Unhook(IntPtr target, IntPtr detour);
     }
 }
