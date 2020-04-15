@@ -54,6 +54,7 @@ namespace NET_SDK.Harmony
             }
         }
     }
+
     public class Patch
     {
         internal IL2CPP_Method TargetMethod;
