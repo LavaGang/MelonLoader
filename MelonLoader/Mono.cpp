@@ -2,7 +2,6 @@
 #include "Mono.h"
 #include "MelonLoader.h"
 #include "AssertionManager.h"
-#include "PointerUtils.h"
 #pragma warning( disable : 4996 )
 
 char* Mono::AssemblyPath = NULL;

@@ -1,5 +1,6 @@
 #pragma once
 #include "mono-internals.h"
+#include <Windows.h>
 
 typedef void (*mono_set_assemblies_path_t) (const char* path);
 typedef void (*mono_set_config_dir_t) (const char* path);
