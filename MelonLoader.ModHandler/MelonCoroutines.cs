@@ -58,7 +58,7 @@ namespace MelonLoader
                 else
                 {
                     if (StartCoroutineMethod == null)
-                        StartCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(Coroutine))));
+                        StartCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(IEnumerator))));
                     if (StartCoroutineMethod != null)
                         StartCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { routine });
                 }
