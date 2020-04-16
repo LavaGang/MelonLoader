@@ -244,22 +244,26 @@ namespace MelonLoader
                     if (IsVRChat)
                         VRChat_CheckUiManager();
                     if (!Imports.IsMUPOTMode())
-                    {
                         CheckForSceneChange();
-                        MelonCoroutines.Process();
-                    }
                 }
                 if (ModControllers.Count() > 0)
                     foreach (MelonModController mod in ModControllers)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                    MelonCoroutines.ProcessUpdate();
             }
         }
 
         internal static void OnFixedUpdate()
         {
-            if (IsInitialized && (ModControllers.Count() > 0))
-                foreach (MelonModController mod in ModControllers)
-                    try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+            if (IsInitialized)
+            {
+                if (ModControllers.Count() > 0)
+                    foreach (MelonModController mod in ModControllers)
+                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                    MelonCoroutines.ProcessFixedUpdate();
+            }
         }
 
         internal static void OnLateUpdate()
@@ -271,9 +275,14 @@ namespace MelonLoader
 
         internal static void OnGUI()
         {
-            if (IsInitialized && (ModControllers.Count() > 0))
-                foreach (MelonModController mod in ModControllers)
-                    try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+            if (IsInitialized)
+            {
+                if (ModControllers.Count() > 0)
+                    foreach (MelonModController mod in ModControllers)
+                        try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                    MelonCoroutines.ProcessOnGUI();
+            }
         }
 
         internal static void OnApplicationQuit()

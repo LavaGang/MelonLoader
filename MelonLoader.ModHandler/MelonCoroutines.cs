@@ -10,10 +10,16 @@ namespace MelonLoader
     {
         private class CoroD
         {
-            internal System.Type CoroutineType;
-            internal object Coroutine;
+            private System.Type CoroutineType;
+            private object Coroutine;
             private MethodInfo MoveNextMethod;
             private PropertyInfo CurrentProp;
+
+            internal CoroD(System.Type coroutineType, object coroutine)
+            {
+                CoroutineType = coroutineType;
+                Coroutine = coroutine;
+            }
 
             internal object GetCurrent()
             {
@@ -42,18 +48,20 @@ namespace MelonLoader
         private static List<CoroTuple> ourCoroutinesStore = new List<CoroTuple>();
         private static List<CoroD> ourNextFrameCoroutines = new List<CoroD>();
 
+        private static MethodInfo StartCoroutineMethod = null;
         public static void Start<T>(T routine)
         {
             if (routine != null)
             {
-                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
-                {
-                    System.Type coroutineType = typeof(T);
-                    string asm_name = coroutineType?.Assembly?.GetName()?.Name;
-                    ProcessNextOfCoroutine(new CoroD() { CoroutineType = coroutineType, Coroutine = routine });
-                }
+                if (Imports.IsIl2CppGame())
+                    ProcessNextOfCoroutine(new CoroD(typeof(T), routine));
                 else
-                    MelonModComponent.Instance?.StartCoroutine((IEnumerator)routine);
+                {
+                    if (StartCoroutineMethod == null)
+                        StartCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(Coroutine))));
+                    if (StartCoroutineMethod != null)
+                        StartCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { routine });
+                }
             }
         }
 
@@ -61,7 +69,7 @@ namespace MelonLoader
         private static bool WaitConditionIsIl2Cpp = true;
         private static FieldInfo field_m_Seconds = null;
         private static PropertyInfo prop_m_Seconds = null;
-        internal static void Process()
+        internal static void ProcessUpdate()
         {
             if (HasCheckWaitCondition == false)
             {
@@ -82,7 +90,6 @@ namespace MelonLoader
                         break;
                     case WaitForSeconds waitForSeconds:
                         float m_Seconds = 0;
-
                         if (WaitConditionIsIl2Cpp)
                         {
                             if (prop_m_Seconds == null)
@@ -108,6 +115,48 @@ namespace MelonLoader
                             ourCoroutinesStore.RemoveAt(i);
                             ProcessNextOfCoroutine(tuple.Coroutine);
                         }
+                        break;
+                }
+            }
+            if (ourNextFrameCoroutines.Count == 0)
+                return;
+            var oldCoros = ourNextFrameCoroutines.ToArray();
+            ourNextFrameCoroutines.Clear();
+            foreach (var nextFrameCoroutine in oldCoros)
+                ProcessNextOfCoroutine(nextFrameCoroutine);
+        }
+
+        internal static void ProcessFixedUpdate()
+        {
+            for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
+            {
+                var tuple = ourCoroutinesStore[i];
+                switch (tuple.WaitCondition)
+                {
+                    case WaitForFixedUpdate waitForFixedUpdate:
+                        ourCoroutinesStore.RemoveAt(i);
+                        ProcessNextOfCoroutine(tuple.Coroutine);
+                        break;
+                }
+            }
+            if (ourNextFrameCoroutines.Count == 0)
+                return;
+            var oldCoros = ourNextFrameCoroutines.ToArray();
+            ourNextFrameCoroutines.Clear();
+            foreach (var nextFrameCoroutine in oldCoros)
+                ProcessNextOfCoroutine(nextFrameCoroutine);
+        }
+
+        internal static void ProcessOnGUI()
+        {
+            for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
+            {
+                var tuple = ourCoroutinesStore[i];
+                switch (tuple.WaitCondition)
+                {
+                    case WaitForEndOfFrame waitForEndOfFrame:
+                        ourCoroutinesStore.RemoveAt(i);
+                        ProcessNextOfCoroutine(tuple.Coroutine);
                         break;
                 }
             }
