@@ -53,7 +53,7 @@ namespace MelonLoader
         {
             if (routine != null)
             {
-                if (Imports.IsIl2CppGame())
+                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
                     ProcessNextOfCoroutine(new CoroD(typeof(T), routine));
                 else
                 {

@@ -72,7 +72,7 @@ v0.0.4 Closed-Beta:
 46)  Fixed issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
 47)  Fixed Execution Order of OnApplicationStart to run before any of the other Mod Methods.
 48)  Fixed issue with MelonCoroutines throwing a Cast Exception for knah's Generator.
-49)  Added Support for WaitForFixedUpdate, and WaitForEndOfFrame to MelonCoroutines.
+49)  Added Support for WaitForFixedUpdate and WaitForEndOfFrame to MelonCoroutines.
 50)  Fixed issue with MelonCoroutines throwing a Missing Method Exception for knah's Generator.
 
 ---
