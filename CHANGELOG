@@ -6,7 +6,6 @@ Known Issues:
 4)  Mono Game Support for games that don't use MonoBleedingEdge must have MelonLoader.ModHandler and Mods compiled with .NET 3.5 Framework.
 5)  IL2CPP Game Support must have it's Mods using between .NET Framework v4 - v4.7.2.
 6)  StackTraces refuse to show line numbers.
-7)  MelonCoroutines throws a cast exception for knah's Generator.
 
 ---
 
@@ -72,6 +71,7 @@ v0.0.4 Closed-Beta:
 45)  Fixed issue with Logger removing Old Logs when it shouldn't.
 46)  Fixed issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
 47)  Fixed Execution Order of OnApplicationStart to run before any of the other Mod Methods.
+48)  Fixed issue with MelonCoroutines throwing a cast exception for knah's Generator.
 
 ---
 
