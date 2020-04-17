@@ -16,6 +16,7 @@ namespace NET_SDK.Reflection
         private readonly IL2CPP_Event[] EventList;
         private readonly IL2CPP_Class[] NestedTypeList;
         private readonly IL2CPP_Property[] PropertyList;
+
         internal IL2CPP_Class(IntPtr ptr) : base(ptr)
         {
             // Setup Information
@@ -31,6 +32,7 @@ namespace NET_SDK.Reflection
             while ((method = IL2CPP.il2cpp_class_get_methods(Ptr, ref method_iter)) != IntPtr.Zero)
                 methodsList.Add(new IL2CPP_Method(method));
             MethodList = methodsList.ToArray();
+
             // Map out Fields
             IntPtr field_iter = IntPtr.Zero;
             IntPtr field;
@@ -38,6 +40,7 @@ namespace NET_SDK.Reflection
             while ((field = IL2CPP.il2cpp_class_get_fields(Ptr, ref field_iter)) != IntPtr.Zero)
                 fieldList.Add(new IL2CPP_Field(field));
             FieldList = fieldList.ToArray();
+
             // Map out Events
             IntPtr evt_iter = IntPtr.Zero;
             IntPtr evt;
@@ -45,13 +48,15 @@ namespace NET_SDK.Reflection
             while ((evt = IL2CPP.il2cpp_class_get_events(Ptr, ref evt_iter)) != IntPtr.Zero)
                 eventList.Add(new IL2CPP_Event(evt));
             EventList = eventList.ToArray();
+
             // Map out Nested Types
-            IntPtr nestedtype_iter = IntPtr.Zero;
-            IntPtr nestedtype;
-            List<IL2CPP_Class> nestedTypeList = new List<IL2CPP_Class>();
-            while ((nestedtype = IL2CPP.il2cpp_class_get_nested_types(Ptr, ref nestedtype_iter)) != IntPtr.Zero)
-                nestedTypeList.Add(new IL2CPP_Class(nestedtype));
-            NestedTypeList = nestedTypeList.ToArray();
+            //IntPtr nestedtype_iter = IntPtr.Zero;
+            //IntPtr nestedtype;
+            //List<IL2CPP_Class> nestedTypeList = new List<IL2CPP_Class>();
+            //while ((nestedtype = IL2CPP.il2cpp_class_get_nested_types(Ptr, ref nestedtype_iter)) != IntPtr.Zero)
+            //    nestedTypeList.Add(new IL2CPP_Class(nestedtype));
+            //NestedTypeList = nestedTypeList.ToArray();
+
             // Map out Properties
             IntPtr property_iter = IntPtr.Zero;
             IntPtr property;
@@ -60,6 +65,7 @@ namespace NET_SDK.Reflection
                 propertyList.Add(new IL2CPP_Property(property));
             PropertyList = propertyList.ToArray();
         }
+
         public static IntPtr CreateInstance(IL2CPP_Class il2CppClass, IL2CPP_Method constructor = null, IntPtr[] contructorParams = null)
         {
             int paramCount = contructorParams?.Length ?? 0;
@@ -77,8 +83,10 @@ namespace NET_SDK.Reflection
             }
             return instance;
         }
+
         public IL2CPP_BindingFlags GetFlags() => Flags;
         public bool HasFlag(IL2CPP_BindingFlags flag) => ((GetFlags() & flag) != 0);
+
         // Methods
         public IL2CPP_Method[] GetMethods() => MethodList;
         public IL2CPP_Method[] GetMethods(IL2CPP_BindingFlags flags) => GetMethods(flags, null);
@@ -106,6 +114,7 @@ namespace NET_SDK.Reflection
             }
             return null;
         }
+
         /// <summary>
         /// Gets the first method matching name and flags with the specified number of parameters
         /// </summary>

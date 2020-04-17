@@ -116,7 +116,6 @@ namespace MelonLoader
                             ProcessNextOfCoroutine(tuple.Coroutine);
                         }
                         break;
-
                 }
             }
             if (ourNextFrameCoroutines.Count == 0)
@@ -140,12 +139,6 @@ namespace MelonLoader
                         break;
                 }
             }
-            if (ourNextFrameCoroutines.Count == 0)
-                return;
-            var oldCoros = ourNextFrameCoroutines.ToArray();
-            ourNextFrameCoroutines.Clear();
-            foreach (var nextFrameCoroutine in oldCoros)
-                ProcessNextOfCoroutine(nextFrameCoroutine);
         }
 
         private static void ProcessWaitForEndOfFrame()
@@ -161,12 +154,6 @@ namespace MelonLoader
                         break;
                 }
             }
-            if (ourNextFrameCoroutines.Count == 0)
-                return;
-            var oldCoros = ourNextFrameCoroutines.ToArray();
-            ourNextFrameCoroutines.Clear();
-            foreach (var nextFrameCoroutine in oldCoros)
-                ProcessNextOfCoroutine(nextFrameCoroutine);
         }
 
         private static void ProcessNextOfCoroutine(CoroD enumerator)

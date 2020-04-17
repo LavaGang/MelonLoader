@@ -43,18 +43,23 @@ namespace NET_SDK.Reflection
                 }
                 else
                 {
+                    /*
                     var nestedTypes = type.GetNestedTypes();
-                    for (int l = 0; l < nestedTypes.Length; l++)
+                    if (nestedTypes.Length > 0)
                     {
-                        var nestedType = nestedTypes[l];
-                        if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
+                        for (int l = 0; l < nestedTypes.Length; l++)
                         {
-                            returnval = nestedType;
-                            break;
+                            var nestedType = nestedTypes[l];
+                            if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
+                            {
+                                returnval = nestedType;
+                                break;
+                            }
                         }
+                        if (returnval != null)
+                            break;
                     }
-                    if (returnval != null)
-                        break;
+                    */
                 }
             }
             return returnval;
@@ -72,18 +77,23 @@ namespace NET_SDK.Reflection
                 }
                 else
                 {
+                    /*
                     var nestedTypes = type.GetNestedTypes();
-                    for (int l = 0; l < nestedTypes.Length; l++)
+                    if (nestedTypes.Length > 0)
                     {
-                        var nestedType = nestedTypes[l];
-                        if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)) && nestedType.HasFlag(flags))
+                        for (int l = 0; l < nestedTypes.Length; l++)
                         {
-                            returnval = nestedType;
-                            break;
+                            var nestedType = nestedTypes[l];
+                            if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)) && nestedType.HasFlag(flags))
+                            {
+                                returnval = nestedType;
+                                break;
+                            }
                         }
+                        if (returnval != null)
+                            break;
                     }
-                    if (returnval != null)
-                        break;
+                    */
                 }
             }
             return returnval;
@@ -101,18 +111,23 @@ namespace NET_SDK.Reflection
                 }
                 else
                 {
+                    /*
                     var nestedTypes = type.GetNestedTypes();
-                    for (int l = 0; l < nestedTypes.Length; l++)
+                    if (nestedTypes.Length > 0)
                     {
-                        var nestedType = nestedTypes[l];
-                        if (nestedType.Ptr == ptr)
+                        for (int l = 0; l < nestedTypes.Length; l++)
                         {
-                            returnval = nestedType;
-                            break;
+                            var nestedType = nestedTypes[l];
+                            if (nestedType.Ptr == ptr)
+                            {
+                                returnval = nestedType;
+                                break;
+                            }
                         }
+                        if (returnval != null)
+                            break;
                     }
-                    if (returnval != null)
-                        break;
+                    */
                 }
             }
             return returnval;

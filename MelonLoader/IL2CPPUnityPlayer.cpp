@@ -51,8 +51,8 @@ bool IL2CPPUnityPlayer::Setup()
 
 	if (GUIManager_DoGUIEvent == NULL)
 		GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 4C 63 72 2C 4C 8D 25 ? ? ? ? 4C 8B FA 44 89 74 24 ? 48");
-	if (GUIManager_DoGUIEvent == NULL)
-		GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 63 5A 34 48 8D 05 ? ? ? ? 48 8B F2 89 5C 24 58 4C 8B");
+	if (GUIManager_DoGUIEvent == NULL) // 2019.2.0f1 & 2019.3.6f1
+		GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 63 5A ? ? 8D ? ? ? ? ? 48 8B F2 89 5C 24 58 4C 8B");
 	AssertionManager::Decide(GUIManager_DoGUIEvent, "GUIManager_DoGUIEvent");
 
 	if (EndOfFrameCallbacks_DequeAll == NULL)

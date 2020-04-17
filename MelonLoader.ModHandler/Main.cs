@@ -116,7 +116,6 @@ namespace MelonLoader
 
         private static void LoadModsFromAssembly(Assembly assembly)
         {
-            bool mod_class_found = false;
             IEnumerable<Type> typetbl = GetLoadableTypes(assembly);
             if (typetbl.Count() > 0)
             {
@@ -124,7 +123,6 @@ namespace MelonLoader
                 {
                     if (t.IsSubclassOf(typeof(MelonMod)))
                     {
-                        mod_class_found = true;
                         MelonModInfoAttribute[] modInfoAttributes = assembly.GetCustomAttributes(typeof(MelonModInfoAttribute), true) as MelonModInfoAttribute[];
                         if (modInfoAttributes.Length > 0)
                         {
@@ -188,7 +186,6 @@ namespace MelonLoader
                     }
                 }
             }
-            if (!mod_class_found) MelonModLogger.LogError(assembly.GetName() + " is not a Mod!");
         }
 
         private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
