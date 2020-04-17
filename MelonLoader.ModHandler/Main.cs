@@ -117,7 +117,7 @@ namespace MelonLoader
         private static void LoadModsFromAssembly(Assembly assembly)
         {
             MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttribute(typeof(MelonModInfoAttribute)) as MelonModInfoAttribute;
-            if ((modInfoAttribute != null) && (modInfoAttribute.ModType != null))
+            if ((modInfoAttribute != null) && (modInfoAttribute.ModType != null) && modInfoAttribute.ModType.IsSubclassOf(typeof(MelonMod)))
             {
                 MelonModLogger.Log(modInfoAttribute.Name + (!string.IsNullOrEmpty(modInfoAttribute.Version) ? (" v" + modInfoAttribute.Version) : "") + (!string.IsNullOrEmpty(modInfoAttribute.Author) ? (" by " + modInfoAttribute.Author) : "") + (!string.IsNullOrEmpty(modInfoAttribute.DownloadLink) ? (" (" + modInfoAttribute.DownloadLink + ")") : ""));
 
