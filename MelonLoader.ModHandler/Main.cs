@@ -31,7 +31,7 @@ namespace MelonLoader
 
         private static void Initialize()
         {
-            CurrentGameAttribute = new MelonModGameAttribute(UnityEngine.Application.companyName, UnityEngine.Application.productName);
+            CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
 
             if (Imports.IsIl2CppGame())
             {
@@ -40,22 +40,19 @@ namespace MelonLoader
                 IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
             }
 
-#if DEBUG
-            if (!Imports.IsDebugMode())
-            {
-                MelonModLogger.consoleEnabled = true;
-                Console.Create();
-            }
-#else
-            if (!Imports.IsDebugMode() && Environment.CommandLine.Contains("--melonloader.console"))
-            {
-                MelonModLogger.consoleEnabled = true;
-                Console.Create();
-            }
+            if (!Imports.IsDebugMode()
+#if !DEBUG
+            && Environment.CommandLine.Contains("--melonloader.console")
 #endif
+            )
+            {
+                MelonModLogger.consoleEnabled = true;
+                Console.Create();
+            }
+
 
             MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Unity " + UnityEngine.Application.unityVersion);
+            MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
             MelonModLogger.Log("GameName: " + CurrentGameAttribute.GameName);
             MelonModLogger.Log("------------------------------");

@@ -22,6 +22,15 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static IntPtr GetIl2CppDomain();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetCompanyName();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetProductName();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetUnityVersion();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsIl2CppGame();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsDebugMode();

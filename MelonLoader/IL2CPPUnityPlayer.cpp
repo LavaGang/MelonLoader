@@ -30,6 +30,8 @@ bool IL2CPPUnityPlayer::Setup()
 	if ((BaseBehaviourManager_Update == NULL) || (BaseBehaviourManager_FixedUpdate == NULL) || (BaseBehaviourManager_LateUpdate == NULL))
 	{
 		std::vector<uintptr_t> BaseBehaviourManager_CommonUpdate = PointerUtils::FindAllPattern(Module, "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 81 EC ? ? ? ? 48 8B F9 B2 01 48 8D 4D C0 E8 ? ? ? ? 48 8B CF E8 ? ? ? ? 48 8B 47 08 48");
+		if (BaseBehaviourManager_CommonUpdate.size() < 1) // 2019.3.6f1
+			BaseBehaviourManager_CommonUpdate = PointerUtils::FindAllPattern(Module, "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 83 EC 60 48 8B F9 B2 01 48 8D 4D C0 E8 ? ? ? ? 48 8B CF E8 ? ? ? ? 48 8B 47 08 48");
 		if (BaseBehaviourManager_CommonUpdate.size() > 0)
 		{
 			if ((BaseBehaviourManager_Update == NULL) && (BaseBehaviourManager_CommonUpdate[0] != NULL))
@@ -39,6 +41,8 @@ bool IL2CPPUnityPlayer::Setup()
 			if ((BaseBehaviourManager_LateUpdate == NULL) && (BaseBehaviourManager_CommonUpdate[2] != NULL))
 				BaseBehaviourManager_LateUpdate = (BaseBehaviourManager_CommonUpdate_t)BaseBehaviourManager_CommonUpdate[2];
 		}
+		else
+			AssertionManager::ThrowError("Failed to FindAllPattern ( BaseBehaviourManager_CommonUpdate )");
 	}
 	AssertionManager::Decide(BaseBehaviourManager_Update, "BaseBehaviourManager_Update");
 	AssertionManager::Decide(BaseBehaviourManager_FixedUpdate, "BaseBehaviourManager_FixedUpdate");
@@ -46,6 +50,8 @@ bool IL2CPPUnityPlayer::Setup()
 
 	if (GUIManager_DoGUIEvent == NULL)
 		GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 4C 63 72 2C 4C 8D 25 ? ? ? ? 4C 8B FA 44 89 74 24 ? 48");
+	if (GUIManager_DoGUIEvent == NULL)
+		GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 63 5A 34 48 8D 05 ? ? ? ? 48 8B F2 89 5C 24 58 4C 8B");
 	AssertionManager::Decide(GUIManager_DoGUIEvent, "GUIManager_DoGUIEvent");
 
 	return !AssertionManager::Result;

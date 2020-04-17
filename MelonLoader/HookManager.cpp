@@ -7,6 +7,7 @@
 #include "Console.h"
 #include "detours/detours.h"
 #include "AssertionManager.h"
+#include "Logger.h"
 
 #pragma region Core
 std::vector<HookManager_Hook*>HookManager::HookTbl;
@@ -138,10 +139,10 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
 				}
-				HookManager::Hook(&(LPVOID&)IL2CPP::MetadataLoader_LoadMetadataFile, Hooked_MetadataLoader_LoadMetadataFile);
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_add_internal_call, Hooked_il2cpp_add_internal_call);
-				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_class_from_system_type, Hooked_il2cpp_class_from_system_type);
+				//HookManager::Hook(&(LPVOID&)IL2CPP::MetadataLoader_LoadMetadataFile, Hooked_MetadataLoader_LoadMetadataFile);
+				//HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_class_from_system_type, Hooked_il2cpp_class_from_system_type);
 			}
 			LoadLibraryW_Unhook();
 		}
@@ -201,6 +202,12 @@ void HookManager::Hooked_il2cpp_add_internal_call(const char* name, void* method
 	{
 		IL2CPP::il2cpp_add_internal_call(name, method);
 		Mono::mono_add_internal_call(name, method);
+		if (strstr(name, "UnityEngine.Application::get_companyName"))
+			Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", method);
+		else if (strstr(name, "UnityEngine.Application::get_productName"))
+			Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", method);
+		else if (strstr(name, "UnityEngine.Application::get_unityVersion"))
+			Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityVersion", method);
 	}
 }
 #pragma endregion
@@ -287,6 +294,7 @@ void* HookManager::Hooked_mono_lookup_internal_call_full(MonoMethod* method, int
 #pragma endregion
 
 
+/*
 #pragma region il2cpp_class_from_system_type
 Il2CppClass* HookManager::Hooked_il2cpp_class_from_system_type(Il2CppReflectionType* type)
 {
@@ -358,6 +366,7 @@ Il2CppGlobalMetadataHeader* HookManager::Hooked_MetadataLoader_LoadMetadataFile(
 	return IL2CPP::s_GlobalMetadataHeader;
 }
 #pragma endregion
+*/
 
 
 #pragma region SingleAppInstance_FindOtherInstance

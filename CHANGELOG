@@ -6,6 +6,7 @@ Known Issues:
 4)  Mono Game Support for games that don't use MonoBleedingEdge must have MelonLoader.ModHandler and Mods compiled with .NET 3.5 Framework.
 5)  IL2CPP Game Support must have it's Mods using between .NET Framework v4 - v4.7.2.
 6)  StackTraces refuse to show line numbers.
+7)  Console Logs do not Color properly when using Mono Game Support.
 
 ---
 
@@ -71,9 +72,12 @@ v0.0.4 Closed-Beta:
 45)  Fixed issue with Logger removing Old Logs when it shouldn't.
 46)  Fixed issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
 47)  Fixed Execution Order of OnApplicationStart to run before any of the other Mod Methods.
-48)  Fixed issue with MelonCoroutines throwing a Cast Exception for knah's Generator.
-49)  Added Support for WaitForFixedUpdate and WaitForEndOfFrame to MelonCoroutines.
-50)  Fixed issue with MelonCoroutines throwing a Missing Method Exception for knah's Generator.
+48)  Added Assertion Manager to handle MelonLoader Internals.
+49)  Fixed issue with MelonCoroutines throwing a Cast Exception for knah's Generator.
+50)  Added Support for WaitForFixedUpdate and WaitForEndOfFrame to MelonCoroutines.
+51)  Fixed issue with MelonCoroutines throwing a Missing Method Exception for knah's Generator.
+52)  Added 2019.3.6f1 Unity Dependencies.
+53)  Fixed Internal Failure issues with RotMG Exalt and Unity 2019.3.6f1.
 
 ---
 

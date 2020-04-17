@@ -13,109 +13,85 @@ void AssertionManager::Start(const char* filename, const char* position)
 	Position = position;
 }
 
-void AssertionManager::Decide(void* thing, const char* name)
+void AssertionManager::ThrowError(std::string msg, const char* filepath)
 {
 	if (!Result)
 	{
-		if (thing == NULL)
-		{
-			Result = true;
-			Logger::LogError((std::string(name) + " is NULL for [ " + FileName + " | " + Position + " ]"));
-
-			if (MelonLoader::DebugMode)
-				MessageBox(NULL, (std::string(name) + " is NULL for [ " + FileName + " | " + Position + " ]").c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
-			else
-				MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-
-			MelonLoader::UNLOAD();
-		}
+		Result = true;
+		msg += ("for [ " + std::string(FileName) + " | " + Position + " ]");
+		if (filepath != NULL)
+			msg += " in { " + std::string(filepath) + "}";
+		Logger::LogError(msg);
+		if (MelonLoader::DebugMode)
+			MessageBox(NULL, msg.c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
+		else
+			MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
+		MelonLoader::UNLOAD();
 	}
+}
+
+void AssertionManager::Decide(void* thing, const char* name)
+{
+	if (!Result && (thing == NULL))
+		ThrowError((std::string(name) + " is NULL for [ " + FileName + " | " + Position + " ]"));
 }
 
 HMODULE AssertionManager::LoadLib(const char* name, const char* filepath)
 {
+	HMODULE returnval = NULL;
 	if (!Result)
 	{
-		HMODULE returnval = LoadLibrary(filepath);
+		returnval = LoadLibrary(filepath);
 		if (returnval == NULL)
-		{
-			Result = true;
-			Logger::LogError((std::string("Failed to LoadLib ( ") + name + " ) for [ " + FileName + " | " + Position + " ] in { " + filepath + "}"));
-
-			if (MelonLoader::DebugMode)
-				MessageBox(NULL, (std::string("Failed to LoadLib ( ") + name + " ) for [ " + FileName + " | " + Position + " ] in { " + filepath + "}").c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
-			else
-				MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-
-			MelonLoader::UNLOAD();
-		}
-		return returnval;
+			ThrowError((std::string("Failed to LoadLib ( ") + name + " )"));
 	}
-	return NULL;
+	return returnval;
 }
 
 HMODULE AssertionManager::GetModuleHandlePtr(const char* name)
 {
+	HMODULE returnval = NULL;
 	if (!Result)
 	{
-		HMODULE returnval = GetModuleHandle(name);
+		returnval = GetModuleHandle(name);
 		if (returnval == NULL)
-		{
-			Result = true;
-			Logger::LogError((std::string("Failed to LoadLib ( ") + name + " ) for [ " + FileName + " | " + Position + " ]"));
-
-			if (MelonLoader::DebugMode)
-				MessageBox(NULL, (std::string("Failed to LoadLib ( ") + name + " ) for [ " + FileName + " | " + Position + " ]").c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
-			else
-				MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-
-			MelonLoader::UNLOAD();
-		}
-		return returnval;
+			ThrowError((std::string("Failed to GetModuleHandlePtr ( ") + name + " )"));
 	}
-	return NULL;
+	return returnval;
 }
 
 FARPROC AssertionManager::GetExport(HMODULE mod, const char* export_name)
 {
+	FARPROC returnval = NULL;
 	if (!Result)
 	{
-		FARPROC returnval = GetProcAddress(mod, export_name);
+		returnval = GetProcAddress(mod, export_name);
 		if (returnval == NULL)
-		{
-			Result = true;
-			Logger::LogError((std::string("Failed to GetExport ( ") + export_name + " ) for [ " + FileName + " | " + Position + " ]"));
-
-			if (MelonLoader::DebugMode)
-				MessageBox(NULL, (std::string("Failed to GetExport ( ") + export_name + " ) for [ " + FileName + " | " + Position + " ]").c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
-			else
-				MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-
-			MelonLoader::UNLOAD();
-		}
-		return returnval;
+			ThrowError((std::string("Failed to GetExport ( ") + export_name + " )"));
 	}
-	return NULL;
+	return returnval;
 }
 
 uintptr_t AssertionManager::FindPattern(HMODULE mod, const char* name, const char* target_pattern)
 {
+	uintptr_t returnval = NULL;
 	if (!Result)
 	{
-		uintptr_t returnval = PointerUtils::FindPattern(mod, target_pattern);
+		returnval = PointerUtils::FindPattern(mod, target_pattern);
 		if (returnval == NULL)
-		{
-			Result = true;
-			Logger::LogError((std::string("Failed to FindPattern ( ") + name + " ) for [ " + FileName + " | " + Position + " ]"));
-
-			if (MelonLoader::DebugMode)
-				MessageBox(NULL, (std::string("Failed to FindPattern ( ") + name + " ) for [ " + FileName + " | " + Position + " ]").c_str(), "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-			else
-				MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-
-			MelonLoader::UNLOAD();
-		}
-		return returnval;
+			ThrowError((std::string("Failed to FindPattern ( ") + name + " )"));
 	}
-	return NULL;
+	return returnval;
+}
+
+std::vector<uintptr_t> AssertionManager::FindAllPattern(HMODULE mod, const char* name, const char* target_pattern)
+{
+	std::vector<uintptr_t> returnval;
+	if (!Result)
+	{
+		returnval = PointerUtils::FindAllPattern(mod, target_pattern);
+		if (returnval.size() < 1)
+			ThrowError((std::string("Failed to FindAllPattern ( ") + name + " )"));
+	}
+	return returnval;
 }
