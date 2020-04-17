@@ -6,6 +6,11 @@ namespace MelonLoader
     public class MelonModInfoAttribute : Attribute
     {
         /// <summary>
+        /// Gets the System.Type of the Mod.
+        /// </summary>
+        public Type ModType { get; }
+
+        /// <summary>
         /// Gets the Name of the Mod.
         /// </summary>
         public string Name { get; }
@@ -25,8 +30,9 @@ namespace MelonLoader
         /// </summary>
         public string DownloadLink { get; }
 
-        public MelonModInfoAttribute(string name, string version, string author, string downloadLink = null, string modid = null)
+        public MelonModInfoAttribute(Type type, string name, string version, string author, string downloadLink = null)
         {
+            ModType = type;
             Name = name;
             Version = version;
             Author = author;

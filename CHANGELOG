@@ -83,6 +83,7 @@ v0.0.4 Closed-Beta:
 56)  Fixed issue with MelonCoroutines processing a yield of null as the same as WaitForFixedUpdate.
 57)  Made MelonMod use directly invokable virtuals and overrides for faster invoking.  (As requested by knah :3)
 58)  Removed MelonModController from MelonLoader.ModHandler.
+59)  Made MelonLoader.ModHandler look for the MelonMod subclass in the Mod's MelonModInfoAttribute instead of searching the entire Assembly.  (As requested by knah :3)
 
 ---
 

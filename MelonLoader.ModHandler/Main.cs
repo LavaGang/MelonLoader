@@ -116,75 +116,56 @@ namespace MelonLoader
 
         private static void LoadModsFromAssembly(Assembly assembly)
         {
-            IEnumerable<Type> typetbl = GetLoadableTypes(assembly);
-            if (typetbl.Count() > 0)
+            MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttribute(typeof(MelonModInfoAttribute)) as MelonModInfoAttribute;
+            if ((modInfoAttribute != null) && (modInfoAttribute.ModType != null))
             {
-                foreach (Type t in typetbl)
-                {
-                    if (t.IsSubclassOf(typeof(MelonMod)))
-                    {
-                        MelonModInfoAttribute[] modInfoAttributes = assembly.GetCustomAttributes(typeof(MelonModInfoAttribute), true) as MelonModInfoAttribute[];
-                        if (modInfoAttributes.Length > 0)
-                        {
-                            MelonModInfoAttribute modInfoAttribute = modInfoAttributes[0];
-                            if (modInfoAttribute != null)
-                            {
-                                MelonModLogger.Log(modInfoAttribute.Name + (!string.IsNullOrEmpty(modInfoAttribute.Version) ? (" v" + modInfoAttribute.Version) : "") + (!string.IsNullOrEmpty(modInfoAttribute.Author) ? (" by " + modInfoAttribute.Author) : "") + (!string.IsNullOrEmpty(modInfoAttribute.DownloadLink) ? (" (" + modInfoAttribute.DownloadLink + ")") : ""));
+                MelonModLogger.Log(modInfoAttribute.Name + (!string.IsNullOrEmpty(modInfoAttribute.Version) ? (" v" + modInfoAttribute.Version) : "") + (!string.IsNullOrEmpty(modInfoAttribute.Author) ? (" by " + modInfoAttribute.Author) : "") + (!string.IsNullOrEmpty(modInfoAttribute.DownloadLink) ? (" (" + modInfoAttribute.DownloadLink + ")") : ""));
 
-                                bool should_continue = false;
-                                bool isUniversal = false;
-                                MelonModGameAttribute[] modGameAttributes = assembly.GetCustomAttributes(typeof(MelonModGameAttribute), true) as MelonModGameAttribute[];
-                                int modGameAttributes_Count = modGameAttributes.Length;
-                                if (modGameAttributes_Count > 0)
-                                {
-                                    for (int i = 0; i < modGameAttributes_Count; i++)
-                                    {
-                                        MelonModGameAttribute modGameAttribute = modGameAttributes[i];
-                                        if (CurrentGameAttribute.IsCompatible(modGameAttribute))
-                                        {
-                                            isUniversal = CurrentGameAttribute.IsCompatibleBecauseUniversal(modGameAttribute);
-                                            should_continue = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    isUniversal = true;
-                                    should_continue = true;
-                                }
-                                if (should_continue)
-                                {
-                                    try
-                                    {
-                                        MelonMod modInstance = Activator.CreateInstance(t) as MelonMod;
-                                        if (modInstance != null)
-                                        {
-                                            modInstance.IsUniversal = isUniversal;
-                                            modInstance.InfoAttribute = modInfoAttribute;
-                                            if (modGameAttributes_Count > 0)
-                                                modInstance.GameAttributes = modGameAttributes;
-                                            else
-                                                modInstance.GameAttributes = null;
-                                            Mods.Add(modInstance);
-                                            MelonModLogger.LogModStatus((modGameAttributes_Count > 0) ? (isUniversal ? 0 : 1) : 2);
-                                        }
-                                        else
-                                            MelonModLogger.LogError("Unable to load Mod in " + assembly.GetName() + "! Failed to Create Instance!");
-                                    }
-                                    catch (Exception e) { MelonModLogger.LogError("Unable to load Mod in " + assembly.GetName() + "! " + e.ToString()); }
-                                }
-                                else
-                                    MelonModLogger.LogModStatus(3);
-                            }
-                            else
-                                MelonModLogger.LogError("No Mod Info Configuration Found in " + assembly.GetName() + "!");
+                bool should_continue = false;
+                bool isUniversal = false;
+                MelonModGameAttribute[] modGameAttributes = assembly.GetCustomAttributes(typeof(MelonModGameAttribute), true) as MelonModGameAttribute[];
+                int modGameAttributes_Count = modGameAttributes.Length;
+                if (modGameAttributes_Count > 0)
+                {
+                    for (int i = 0; i < modGameAttributes_Count; i++)
+                    {
+                        MelonModGameAttribute modGameAttribute = modGameAttributes[i];
+                        if (CurrentGameAttribute.IsCompatible(modGameAttribute))
+                        {
+                            isUniversal = CurrentGameAttribute.IsCompatibleBecauseUniversal(modGameAttribute);
+                            should_continue = true;
+                            break;
                         }
-                        else
-                            MelonModLogger.LogError("No Mod Info Configuration Found in " + assembly.GetName() + "!");
-                        break;
                     }
                 }
+                else
+                {
+                    isUniversal = true;
+                    should_continue = true;
+                }
+                if (should_continue)
+                {
+                    try
+                    {
+                        MelonMod modInstance = Activator.CreateInstance(modInfoAttribute.ModType) as MelonMod;
+                        if (modInstance != null)
+                        {
+                            modInstance.IsUniversal = isUniversal;
+                            modInstance.InfoAttribute = modInfoAttribute;
+                            if (modGameAttributes_Count > 0)
+                                modInstance.GameAttributes = modGameAttributes;
+                            else
+                                modInstance.GameAttributes = null;
+                            Mods.Add(modInstance);
+                            MelonModLogger.LogModStatus((modGameAttributes_Count > 0) ? (isUniversal ? 0 : 1) : 2);
+                        }
+                        else
+                            MelonModLogger.LogError("Unable to load Mod in " + assembly.GetName() + "! Failed to Create Instance!");
+                    }
+                    catch (Exception e) { MelonModLogger.LogError("Unable to load Mod in " + assembly.GetName() + "! " + e.ToString()); }
+                }
+                else
+                    MelonModLogger.LogModStatus(3);
             }
         }
 
