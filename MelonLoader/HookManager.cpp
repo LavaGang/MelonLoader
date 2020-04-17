@@ -138,6 +138,7 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_FixedUpdate, Hooked_BaseBehaviourManager_FixedUpdate);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
+					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
 				}
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_add_internal_call, Hooked_il2cpp_add_internal_call);
@@ -429,5 +430,13 @@ void HookManager::Hooked_GUIManager_DoGUIEvent(void* __0, void* __1, bool __2)
 {
 	ModHandler::OnGUI();
 	IL2CPPUnityPlayer::GUIManager_DoGUIEvent(__0, __1, __2);
+}
+#pragma endregion
+
+#pragma region EndOfFrameCallbacks_DequeAll
+void HookManager::Hooked_EndOfFrameCallbacks_DequeAll()
+{
+	ModHandler::MelonCoroutines_ProcessWaitForEndOfFrame();
+	IL2CPPUnityPlayer::EndOfFrameCallbacks_DequeAll();
 }
 #pragma endregion

@@ -148,7 +148,7 @@ namespace MelonLoader
                 ProcessNextOfCoroutine(nextFrameCoroutine);
         }
 
-        internal static void ProcessWaitForEndOfFrame()
+        private static void ProcessWaitForEndOfFrame()
         {
             for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
             {

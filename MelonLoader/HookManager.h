@@ -41,6 +41,7 @@ public:
 	static __int64 Hooked_BaseBehaviourManager_FixedUpdate(void* behaviour_manager);
 	static __int64 Hooked_BaseBehaviourManager_LateUpdate(void* behaviour_manager);
 	static void Hooked_GUIManager_DoGUIEvent(void* __0, void* __1, bool __2);
+	static void Hooked_EndOfFrameCallbacks_DequeAll();
 };
 
 class HookManager_Hook

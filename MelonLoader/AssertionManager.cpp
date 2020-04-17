@@ -18,7 +18,7 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 	if (!Result)
 	{
 		Result = true;
-		msg += ("for [ " + std::string(FileName) + " | " + Position + " ]");
+		msg += (" for [ " + std::string(FileName) + " | " + Position + " ]");
 		if (filepath != NULL)
 			msg += " in { " + std::string(filepath) + "}";
 		Logger::LogError(msg);
@@ -33,7 +33,7 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 void AssertionManager::Decide(void* thing, const char* name)
 {
 	if (!Result && (thing == NULL))
-		ThrowError((std::string(name) + " is NULL for [ " + FileName + " | " + Position + " ]"));
+		ThrowError((std::string(name) + " is NULL"));
 }
 
 HMODULE AssertionManager::LoadLib(const char* name, const char* filepath)

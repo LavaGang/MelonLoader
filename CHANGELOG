@@ -78,6 +78,7 @@ v0.0.4 Closed-Beta:
 51)  Fixed issue with MelonCoroutines throwing a Missing Method Exception for knah's Generator.
 52)  Added 2019.3.6f1 Unity Dependencies.
 53)  Fixed Internal Failure issues with RotMG Exalt and Unity 2019.3.6f1.
+54)  Fixed Internal Failure issues with Pistol Whip and Unity 2019.2.0f1.
 
 ---
 
