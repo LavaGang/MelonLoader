@@ -259,7 +259,7 @@ namespace MelonLoader
                     foreach (MelonModController mod in ModControllers)
                         try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
                 if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
-                    MelonCoroutines.WaitForFixedUpdate();
+                    MelonCoroutines.ProcessWaitForFixedUpdate();
             }
         }
 
