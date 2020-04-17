@@ -6,17 +6,16 @@ namespace MelonLoader
 {
     public static class Imports
     {
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        internal extern static void Logger_Log(string txt);
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        internal extern static void Logger_LogColor(string txt, ConsoleColor color);
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        internal extern static void Logger_LogError(string namesection, string txt);
-        [DllImport("MelonLoader\\MelonLoader", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        internal extern static void Logger_LogModError(string namesection, string msg);
-
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void UNLOAD_MELONLOADER();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Logger_Log(string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Logger_LogColor(string txt, ConsoleColor color);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Logger_LogError(string namesection, string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Logger_LogModError(string namesection, string msg);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_LogModStatus(int type);
         [MethodImpl(MethodImplOptions.InternalCall)]

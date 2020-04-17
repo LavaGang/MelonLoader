@@ -340,3 +340,5 @@ struct MonoMethodSignature {
 	unsigned int  has_type_parameters : 1;
 	MonoType* params[1];
 };
+
+struct MonoString;

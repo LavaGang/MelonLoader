@@ -37,6 +37,9 @@ typedef const char* (*mono_image_get_name_t) (MonoImage* image);
 typedef MonoMethodSignature* (*mono_method_get_signature_t) (MonoMethod* method, MonoImage* image, unsigned int token);
 typedef unsigned int (*mono_method_get_token_t) (MonoMethod* method);
 typedef MonoClass* (*mono_class_get_parent_t) (MonoClass* klass);
+typedef void (*mono_jit_cleanup_t) (MonoDomain* domain);
+typedef const char* (*mono_string_to_utf8_t) (MonoString* str);
+
 typedef void* (*mono_lookup_internal_call_full_t) (MonoMethod* method, int* uses_handles);
 
 class Mono
@@ -60,7 +63,6 @@ public:
 	static mono_thread_current_t mono_thread_current;
 	static mono_thread_set_main_t mono_thread_set_main;
 	static mono_add_internal_call_t mono_add_internal_call;
-	static mono_lookup_internal_call_full_t mono_lookup_internal_call_full;
 	static mono_class_enum_basetype_t mono_class_enum_basetype;
 	static mono_class_get_name_t mono_class_get_name;
 	static mono_type_get_class_t mono_type_get_class;
@@ -82,8 +84,13 @@ public:
 	static mono_method_get_signature_t mono_method_get_signature;
 	static mono_method_get_token_t mono_method_get_token;
 	static mono_class_get_parent_t mono_class_get_parent;
+	static mono_jit_cleanup_t mono_jit_cleanup;
+	static mono_string_to_utf8_t mono_string_to_utf8;
+
+	static mono_lookup_internal_call_full_t mono_lookup_internal_call_full;
 
 	static bool Load();
+	static void Unload();
 	static bool Setup();
 	static void CreateDomain();
 };

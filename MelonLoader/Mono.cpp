@@ -43,6 +43,9 @@ mono_image_get_name_t Mono::mono_image_get_name = NULL;
 mono_method_get_signature_t Mono::mono_method_get_signature = NULL;
 mono_method_get_token_t Mono::mono_method_get_token = NULL;
 mono_class_get_parent_t Mono::mono_class_get_parent = NULL;
+mono_jit_cleanup_t Mono::mono_jit_cleanup = NULL;
+mono_string_to_utf8_t Mono::mono_string_to_utf8 = NULL;
+
 mono_lookup_internal_call_full_t Mono::mono_lookup_internal_call_full = NULL;
 
 bool Mono::Load()
@@ -52,6 +55,20 @@ bool Mono::Load()
 	if (Module)
 		HMODULE MonoPosixDLL = AssertionManager::LoadLib("MonoPosixDLL", (std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\MonoPosixHelper.dll").c_str());
 	return !AssertionManager::Result;
+}
+
+void Mono::Unload()
+{
+	if (Module != NULL)
+	{
+		if (Domain != NULL)
+		{
+			mono_jit_cleanup(Domain);
+			Domain = NULL;
+		}
+		FreeLibrary(Mono::Module);
+		Mono::Module = NULL;
+	}
 }
 
 bool Mono::Setup()
@@ -93,6 +110,8 @@ bool Mono::Setup()
 	mono_method_get_signature = (mono_method_get_signature_t)AssertionManager::GetExport(Module, "mono_method_get_signature");
 	mono_method_get_token = (mono_method_get_token_t)AssertionManager::GetExport(Module, "mono_method_get_token");
 	mono_class_get_parent = (mono_class_get_parent_t)AssertionManager::GetExport(Module, "mono_class_get_parent");
+	mono_jit_cleanup = (mono_jit_cleanup_t)AssertionManager::GetExport(Module, "mono_jit_cleanup");
+	mono_string_to_utf8 = (mono_string_to_utf8_t)AssertionManager::GetExport(Module, "mono_string_to_utf8");
 
 	mono_lookup_internal_call_full = (mono_lookup_internal_call_full_t)AssertionManager::FindPattern(Module, "mono_lookup_internal_call_full", "41 54 41 55 41 56 41 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 84 24 ? ? ? ? 4C 8B F2 4C 8B F9 48 85 C9 75 20 4C 8D 0D ? ? ? ? 41 B8 ? ? ? ? 48 8D 15 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 41 F7 47 ? ? ? ? ? 74 04 4D 8B 7F 38");
 

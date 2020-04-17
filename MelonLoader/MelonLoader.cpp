@@ -97,11 +97,7 @@ void MelonLoader::UNLOAD()
 	HookManager::UnhookAll();
 	if (IsGameIl2Cpp)
 	{
-		if (Mono::Module != NULL)
-		{
-			FreeLibrary(Mono::Module);
-			Mono::Module = NULL;
-		}
+		Mono::Unload();
 		if (MupotMode && (MonoUnityPlayer::Module != NULL))
 		{
 			FreeLibrary(MonoUnityPlayer::Module);
@@ -127,7 +123,7 @@ int MelonLoader::CountSubstring(std::string pat, std::string txt)
 	{
 		int j;
 		for (j = 0; j < M; j++)
-			if (txt[(int)(i + j)] != pat[j])
+			if (txt[(int)(i) + j] != pat[j])
 				break;
 		if (j == M)
 		{
