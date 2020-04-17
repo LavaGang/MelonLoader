@@ -16,5 +16,16 @@
         /// Gets the Game Attributes of the Mod.
         /// </summary>
         public MelonModGameAttribute[] GameAttributes { get; internal set; }
+
+        public virtual void OnApplicationStart() {}
+        public virtual void OnLevelWasLoaded(int level) {}
+        public virtual void OnLevelWasInitialized(int level) {}
+        public virtual void OnUpdate() {}
+        public virtual void OnFixedUpdate() {}
+        public virtual void OnLateUpdate() {}
+        public virtual void OnGUI() {}
+        public virtual void OnApplicationQuit() {}
+        public virtual void OnModSettingsApplied() {}
+        public virtual void VRChat_OnUiManagerInit() {}
     }
 }

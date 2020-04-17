@@ -13,52 +13,52 @@ namespace TestMod
 
     public class TestMod : MelonMod
     {
-        void OnApplicationStart()
+        public override void OnApplicationStart()
         {
             MelonModLogger.Log("OnApplicationStart");
         }
 
-        void OnLevelWasLoaded(int level)
+        public override void OnLevelWasLoaded(int level)
         {
             MelonModLogger.Log("OnLevelWasLoaded: " + level.ToString());
         }
 
-        void OnLevelWasInitialized(int level)
+        public override void OnLevelWasInitialized(int level)
         {
             MelonModLogger.Log("OnLevelWasInitialized: " + level.ToString());
         }
 
-        void OnUpdate()
+        public override void OnUpdate()
         {
             MelonModLogger.Log("OnUpdate");
         }
 
-        void OnFixedUpdate()
+        public override void OnFixedUpdate()
         {
             MelonModLogger.Log("OnFixedUpdate");
         }
 
-        void OnLateUpdate()
+        public override void OnLateUpdate()
         {
             MelonModLogger.Log("OnLateUpdate");
         }
 
-        void OnGUI()
+        public override void OnGUI()
         {
             MelonModLogger.Log("OnGUI");
         }
 
-        void OnApplicationQuit()
+        public override void OnApplicationQuit()
         {
             MelonModLogger.Log("OnApplicationQuit");
         }
 
-        void OnModSettingsApplied()
+        public override void OnModSettingsApplied()
         {
             MelonModLogger.Log("OnModSettingsApplied");
         }
 
-        void VRChat_OnUiManagerInit() // Only works in VRChat
+        public override void VRChat_OnUiManagerInit() // Only works in VRChat
         {
             MelonModLogger.Log("VRChat_OnUiManagerInit");
         }

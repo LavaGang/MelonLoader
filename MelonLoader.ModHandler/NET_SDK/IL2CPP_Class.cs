@@ -14,7 +14,7 @@ namespace NET_SDK.Reflection
         private readonly IL2CPP_Method[] MethodList;
         private readonly IL2CPP_Field[] FieldList;
         private readonly IL2CPP_Event[] EventList;
-        private readonly IL2CPP_Class[] NestedTypeList;
+        //private readonly IL2CPP_Class[] NestedTypeList;
         private readonly IL2CPP_Property[] PropertyList;
 
         internal IL2CPP_Class(IntPtr ptr) : base(ptr)
@@ -205,6 +205,7 @@ namespace NET_SDK.Reflection
         }
 
         // Nested Types
+        /*
         public IL2CPP_Class[] GetNestedTypes() => NestedTypeList;
         public IL2CPP_Class[] GetNestedTypes(IL2CPP_BindingFlags flags) => GetNestedTypes().Where(x => ((x.GetFlags() & flags) != 0)).ToArray();
         public IL2CPP_Class GetNestedType(string name) => GetNestedType(name, null);
@@ -229,5 +230,6 @@ namespace NET_SDK.Reflection
             }
             return null;
         }
+        */
     }
 }

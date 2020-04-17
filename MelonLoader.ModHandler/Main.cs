@@ -16,7 +16,7 @@ namespace MelonLoader
 
     public static class Main
     {
-        internal static List<MelonModController> ModControllers = new List<MelonModController>();
+        internal static List<MelonMod> Mods = new List<MelonMod>();
         internal static MelonModGameAttribute CurrentGameAttribute = null;
         internal static bool IsVRChat = false;
         internal static bool IsBoneworks = false;
@@ -99,7 +99,7 @@ namespace MelonLoader
                         catch (Exception e) { MelonModLogger.LogError("Unable to load " + s + ":\n" + e.ToString()); }
                         MelonModLogger.Log("------------------------------");
                     }
-                    if (ModControllers.Count() <= 0)
+                    if (Mods.Count() <= 0)
                         no_mods = true;
                 }
                 else
@@ -166,7 +166,7 @@ namespace MelonLoader
                                                 modInstance.GameAttributes = modGameAttributes;
                                             else
                                                 modInstance.GameAttributes = null;
-                                            ModControllers.Add(new MelonModController(modInstance, t, assembly));
+                                            Mods.Add(modInstance);
                                             MelonModLogger.LogModStatus((modGameAttributes_Count > 0) ? (isUniversal ? 0 : 1) : 2);
                                         }
                                         else
@@ -196,9 +196,9 @@ namespace MelonLoader
 
         internal static void OnApplicationStart()
         {
-            if (ModControllers.Count() > 0)
-                foreach (MelonModController mod in ModControllers)
-                    try { mod.OnApplicationStart(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+            if (Mods.Count() > 0)
+                foreach (MelonMod mod in Mods)
+                    try { mod.OnApplicationStart(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
             IsInitialized = true;
         }
 
@@ -208,9 +208,9 @@ namespace MelonLoader
         {
             if (IsInitialized)
             {
-                if (ModControllers.Count() > 0)
-                    foreach (MelonModController mod in ModControllers)
-                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                if (Mods.Count() > 0)
+                    foreach (MelonMod mod in Mods)
+                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 was_level_loaded = true;
                 level_loaded_index = level;
             }
@@ -218,9 +218,9 @@ namespace MelonLoader
 
         internal static void OnLevelWasInitialized(int level)
         {
-            if (IsInitialized && (ModControllers.Count() > 0))
-                foreach (MelonModController mod in ModControllers)
-                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+            if (IsInitialized && (Mods.Count() > 0))
+                foreach (MelonMod mod in Mods)
+                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
         }
 
         internal static void OnUpdate()
@@ -240,9 +240,9 @@ namespace MelonLoader
                     if (!Imports.IsMUPOTMode())
                         CheckForSceneChange();
                 }
-                if (ModControllers.Count() > 0)
-                    foreach (MelonModController mod in ModControllers)
-                        try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                if (Mods.Count() > 0)
+                    foreach (MelonMod mod in Mods)
+                        try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
                     MelonCoroutines.Process();
             }
@@ -252,9 +252,9 @@ namespace MelonLoader
         {
             if (IsInitialized)
             {
-                if (ModControllers.Count() > 0)
-                    foreach (MelonModController mod in ModControllers)
-                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                if (Mods.Count() > 0)
+                    foreach (MelonMod mod in Mods)
+                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
                     MelonCoroutines.ProcessWaitForFixedUpdate();
             }
@@ -262,35 +262,35 @@ namespace MelonLoader
 
         internal static void OnLateUpdate()
         {
-            if (IsInitialized && (ModControllers.Count() > 0))
-                foreach (MelonModController mod in ModControllers)
-                    try { mod.OnLateUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+            if (IsInitialized && (Mods.Count() > 0))
+                foreach (MelonMod mod in Mods)
+                    try { mod.OnLateUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
         }
 
         internal static void OnGUI()
         {
             if (IsInitialized)
             {
-                if (ModControllers.Count() > 0)
-                    foreach (MelonModController mod in ModControllers)
-                        try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                if (Mods.Count() > 0)
+                    foreach (MelonMod mod in Mods)
+                        try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
             }
         }
 
         internal static void OnApplicationQuit()
         {
-            if (IsInitialized && (ModControllers.Count() > 0))
-                foreach (MelonModController mod in ModControllers)
-                    try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+            if (IsInitialized && (Mods.Count() > 0))
+                foreach (MelonMod mod in Mods)
+                    try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
             ModPrefs.SaveConfig();
             NET_SDK.Harmony.Manager.UnpatchAll();
         }
 
         internal static void OnModSettingsApplied()
         {
-            if (IsInitialized && (ModControllers.Count() > 0))
-                foreach (MelonModController mod in ModControllers)
-                    try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+            if (IsInitialized && (Mods.Count() > 0))
+                foreach (MelonMod mod in Mods)
+                    try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
         }
 
         public static int GetActiveSceneIndex()
@@ -363,9 +363,9 @@ namespace MelonLoader
                         if (returnval != null)
                         {
                             ShouldCheckForUiManager = false;
-                            if (ModControllers.Count() > 0)
-                                foreach (MelonModController mod in ModControllers)
-                                    try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
+                            if (Mods.Count() > 0)
+                                foreach (MelonMod mod in Mods)
+                                    try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                         }
                     }
                 }

@@ -81,6 +81,8 @@ v0.0.4 Closed-Beta:
 54)  Fixed Internal Failure issues with Pistol Whip and Unity 2019.2.0f1.
 55)  Fixed issue with MelonLoader.ModHandler complaining about Mod Libraries.
 56)  Fixed issue with MelonCoroutines processing a yield of null as the same as WaitForFixedUpdate.
+57)  Made MelonMod use directly invokable virtuals and overrides for faster invoking.  (As requested by knah :3)
+58)  Removed MelonModController from MelonLoader.ModHandler.
 
 ---
 

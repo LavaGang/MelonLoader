@@ -55,7 +55,6 @@
     <Compile Include="MelonCoroutines.cs" />
     <Compile Include="MelonModComponent.cs" />
     <Compile Include="MelonModLogger.cs" />
-    <Compile Include="MelonModController.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MelonMod.cs" />
     <Compile Include="MelonModGameAttribute.cs" />
