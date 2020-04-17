@@ -247,7 +247,7 @@ namespace MelonLoader
                     foreach (MelonModController mod in ModControllers)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
                 if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
-                    MelonCoroutines.ProcessUpdate();
+                    MelonCoroutines.Process();
             }
         }
 
@@ -259,7 +259,7 @@ namespace MelonLoader
                     foreach (MelonModController mod in ModControllers)
                         try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
                 if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
-                    MelonCoroutines.ProcessFixedUpdate();
+                    MelonCoroutines.WaitForFixedUpdate();
             }
         }
 
@@ -277,8 +277,6 @@ namespace MelonLoader
                 if (ModControllers.Count() > 0)
                     foreach (MelonModController mod in ModControllers)
                         try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.modInstance.InfoAttribute.Name); }
-                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
-                    MelonCoroutines.ProcessOnGUI();
             }
         }
 

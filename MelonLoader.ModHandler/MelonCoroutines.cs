@@ -69,7 +69,7 @@ namespace MelonLoader
         private static bool WaitConditionIsIl2Cpp = true;
         private static FieldInfo field_m_Seconds = null;
         private static PropertyInfo prop_m_Seconds = null;
-        internal static void ProcessUpdate()
+        internal static void Process()
         {
             if (HasCheckWaitCondition == false)
             {
@@ -116,6 +116,7 @@ namespace MelonLoader
                             ProcessNextOfCoroutine(tuple.Coroutine);
                         }
                         break;
+
                 }
             }
             if (ourNextFrameCoroutines.Count == 0)
@@ -126,7 +127,7 @@ namespace MelonLoader
                 ProcessNextOfCoroutine(nextFrameCoroutine);
         }
 
-        internal static void ProcessFixedUpdate()
+        internal static void ProcessWaitForFixedUpdate()
         {
             for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
             {
@@ -147,7 +148,7 @@ namespace MelonLoader
                 ProcessNextOfCoroutine(nextFrameCoroutine);
         }
 
-        internal static void ProcessOnGUI()
+        internal static void ProcessWaitForEndOfFrame()
         {
             for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
             {
