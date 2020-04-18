@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="Mono.cpp" />
+    <ClCompile Include="Exports.cpp" />
+    <ClCompile Include="IL2CPP.cpp" />
+    <ClCompile Include="MelonLoader.cpp" />
+    <ClCompile Include="PointerUtils.cpp" />
+    <ClCompile Include="MonoUnityPlayer.cpp" />
+    <ClCompile Include="IL2CPPUnityPlayer.cpp" />
+    <ClCompile Include="ModHandler.cpp" />
+    <ClCompile Include="HookManager.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="AssertionManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Console.h" />
+    <ClInclude Include="detours\detours.h">
+      <Filter>detours</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\detver.h">
+      <Filter>detours</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\syelog.h">
+      <Filter>detours</Filter>
+    </ClInclude>
+    <ClInclude Include="Mono.h" />
+    <ClInclude Include="Exports.h" />
+    <ClInclude Include="IL2CPP.h" />
+    <ClInclude Include="MelonLoader.h" />
+    <ClInclude Include="il2cpp-internals.h" />
+    <ClInclude Include="PointerUtils.h" />
+    <ClInclude Include="mono-internals.h" />
+    <ClInclude Include="MonoUnityPlayer.h" />
+    <ClInclude Include="IL2CPPUnityPlayer.h" />
+    <ClInclude Include="ModHandler.h" />
+    <ClInclude Include="HookManager.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="AssertionManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="detours">
+      <UniqueIdentifier>{68e65883-5782-470e-a345-89a1e78b2f8a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="detours\detours.lib">
+      <Filter>detours</Filter>
+    </Library>
+  </ItemGroup>
+</Project>
