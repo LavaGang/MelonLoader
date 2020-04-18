@@ -11,7 +11,7 @@ namespace MelonLoader
         internal const string Name = "MelonLoader";
         internal const string Author = "Lava Gang";
         internal const string Company = "discord.gg/2Wn3N2P";
-        internal const string Version = "0.0.4";
+        internal const string Version = "0.1.0";
     }
 
     public static class Main
@@ -56,7 +56,7 @@ namespace MelonLoader
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
             MelonModLogger.Log("GameName: " + CurrentGameAttribute.GameName);
             MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Using v" + BuildInfo.Version + " Release Candidate");
+            MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
 
             if (Imports.IsIl2CppGame())
