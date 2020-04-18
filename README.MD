@@ -1,4 +1,4 @@
-Compile winmm64, MelonLoader, and MelonLoader.ModHandler then follow the installation instructions below.
+Download MelonLoader.zip from Releases then follow the installation instructions below.
 
 ---
 
