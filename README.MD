@@ -5,17 +5,17 @@ Download MelonLoader.zip from Releases then follow the installation instructions
 ## IL2CPP GAME INSTALLATION:
 
 1.  Place `winmm.dll` next to the game's EXE
-2.  Copy the `MelonLoader\` folder from `<REPO>\BaseLibs\` to the game's install folder next to the exe and `winmm.dll`
-3.  Place `MelonLoader.dll` and `MelonLoader.ModHandler.dll` in the `MelonLoader\` folder in the game's install folder
+2.  Copy the `MelonLoader` folder from `<REPO>\BaseLibs` to the game's install folder next to the exe and `winmm.dll`
+3.  Place `MelonLoader.dll` and `MelonLoader.ModHandler.dll` in the `MelonLoader` folder in the game's install folder
 4.  [Find the game's Unity version](#get-unity-version) in Unity Dependencies in BaseLibs
     - If it does not exist you need to [generate it yourself](#unity-dependency-generation)
-5.  Extract the zip to the `MelonLoader\` folder in the game's install folder
+5.  Extract the zip to the `MelonLoader` folder in the game's install folder
 
 ## MONO GAME INSTALLATION:
 
 1.  Place `winmm.dll` next to the game's exe.
-2.  Create a new folder named `MelonLoader\` in the game's install folder.
-3.  Place `MelonLoader.dll` and `MelonLoader.ModHandler.dll` in the `MelonLoader\` folder in the game's install folder.
+2.  Create a new folder named `MelonLoader` in the game's install folder.
+3.  Place `MelonLoader.dll` and `MelonLoader.ModHandler.dll` in the `MelonLoader` folder in the game's install folder.
 
 ---
 
