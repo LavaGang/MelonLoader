@@ -78,3 +78,7 @@ Compile winmm64, MelonLoader, and MelonLoader.ModHandler then follow the install
 | RELEASE     | DEBUG      | Normal Console                |
 | DEBUG       | DEBUG      | Debug Console                 |
 | RELEASE     | RELEASE    | Left up to the Launch Options |
+
+### LICENSING
+
+MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://gitlab.com/HerpDerpinstine/MelonLoader/-/blob/master/LICENSE)for the full license text.
