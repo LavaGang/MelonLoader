@@ -11,7 +11,7 @@ namespace MelonLoader
         private class CoroD
         {
             private System.Type CoroutineType;
-            private object Coroutine;
+            public object Coroutine;
             private MethodInfo MoveNextMethod;
             private PropertyInfo CurrentProp;
 
@@ -160,8 +160,8 @@ namespace MelonLoader
         {
             if (!enumerator.MoveNext())
             {
-                var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator).Select(it => it.idx).ToList();
-                for (var i = indices.Count - 1; i >= 0; i--)
+                var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator.Coroutine).Select(it => it.idx).ToList();
+                for (var i = indices.Count() - 1; i >= 0; i--)
                 {
                     var index = indices[i];
                     ourNextFrameCoroutines.Add(ourCoroutinesStore[index].Coroutine);
@@ -174,8 +174,8 @@ namespace MelonLoader
                 ourNextFrameCoroutines.Add(enumerator);
             else
             {
-                if (next is CoroD nextCoro)
-                    ProcessNextOfCoroutine(nextCoro);
+                if (next is IEnumerator)
+                    ProcessNextOfCoroutine(new CoroD(typeof(IEnumerator), next));
                 ourCoroutinesStore.Add(new CoroTuple() { WaitCondition = next, Coroutine = enumerator });
             }
         }

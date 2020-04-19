@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NET_SDK.Reflection;
 #pragma warning disable 0649
@@ -292,7 +293,8 @@ namespace NET_SDK
 
         // IL2CPP Functions
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
-        public extern static void il2cpp_init(IntPtr domain_name);
+        //[MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void il2cpp_init(IntPtr/*string*/ domain_name);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         public extern static void il2cpp_init_utf16(IntPtr domain_name);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
@@ -584,6 +586,7 @@ namespace NET_SDK
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         public extern static bool il2cpp_monitor_try_wait(IntPtr obj, uint timeout);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
+        //[MethodImpl(MethodImplOptions.InternalCall)]
         unsafe public extern static IntPtr il2cpp_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Ansi)]
         // param can be of Il2CppObject*
