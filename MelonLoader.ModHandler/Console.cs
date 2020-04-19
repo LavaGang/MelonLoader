@@ -23,7 +23,7 @@ namespace MelonLoader
             System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()) { AutoFlush = true });
             System.Console.SetIn(new StreamReader(System.Console.OpenStandardInput()));
             System.Console.Clear();
-            System.Console.Title = (BuildInfo.Name + " v" + BuildInfo.Version + " Closed-Beta");
+            System.Console.Title = (BuildInfo.Name + " v" + BuildInfo.Version + " Open-Beta");
             SetForegroundWindow(GetConsoleWindow());
         }
     }
