@@ -30,12 +30,12 @@
 
 ### Version List:
 
-[v0.1.1 Open-Beta](#v0.1.1-open-beta)  
-[v0.1.0 Open-Beta](#v0.1.0-open-beta)  
-[v0.0.4 Release Candidate](#v0.0.4-release-candidate)  
-[v0.0.3 Closed-Beta](#v0.0.3-closed-beta)  
-[v0.0.2 Closed-Beta](#v0.0.2-closed-beta)  
-[v0.0.1 Closed-Beta](#v0.0.1-closed-beta)  
+[v0.1.1 Open-Beta](#v011-open-beta)  
+[v0.1.0 Open-Beta](#v010-open-beta)  
+[v0.0.4 Release Candidate](#v004-release-candidate)  
+[v0.0.3 Closed-Beta](#v003-closed-beta)  
+[v0.0.2 Closed-Beta](#v002-closed-beta)  
+[v0.0.1 Closed-Beta](#v001-closed-beta)  
 
 ---
 
@@ -46,7 +46,7 @@
 3)  Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
 4)  Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
 5)  Added 2018.4.11f1 Unity Dependencies.
-6)  Removed BaseLibs from Release Build.  (No Longer Needed)
+6)  Removed Unity Dependencies from Release Build.  (No Longer Needed)
 7)  Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
 8)  Revised README.MD.
 9)  Temporarily disabled OnGUI for Mods.
