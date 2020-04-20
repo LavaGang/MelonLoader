@@ -1,4 +1,4 @@
-Known Issues:
+### Known Issues:
 
 1)  MUPOT Mode does not work without Assembly generated.
 2)  MUPOT Mode is not directing the Managed folder to the proper location.
@@ -11,7 +11,7 @@ Known Issues:
 
 ---
 
-Work-in-Progress / To-Do List:
+### Work-in-Progress / To-Do List:
 
 1)  Fix the above issues.
 2)  Add Debugger Support to Mono Domain.
@@ -28,7 +28,7 @@ Work-in-Progress / To-Do List:
 
 ---
 
-v0.1.1 Open-Beta:
+### v0.1.1 Open-Beta:
 
 1)  Added SharpYml as a Mono Dependency.
 2)  Fixed issue with the Console still showing as Closed-Beta.
@@ -37,20 +37,21 @@ v0.1.1 Open-Beta:
 5)  Added 2018.4.11f1 Unity Dependencies.
 6)  Removed BaseLibs from Release Build.  (No Longer Needed)
 7)  Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
-8)  Revised the README.MD.
+8)  Revised README.MD.
 9)  Temporarily disabled OnGUI for Mods.
 10)  Added Constructors and Methods to NET_SDK.Harmony to allow the use of IntPtr for Hooking Methods.
 11)  Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
+12)  Revised CHANGELOG.MD.
 
 ---
 
-v0.1.0 Open-Beta:
+### v0.1.0 Open-Beta:
 
 1)  Initial Open-Beta Release.
 
 ---
 
-v0.0.4 Release Candidate:
+### v0.0.4 Release Candidate:
 
 1)  Moved Exports in MelonLoader.ModHandler to Mono Internal Calls.
 2)  Cleaned up Hooking for MelonLoader Internals.
@@ -115,7 +116,7 @@ v0.0.4 Release Candidate:
 
 ---
 
-v0.0.3 Closed-Beta:
+### v0.0.3 Closed-Beta:
 
 1)  General Stability and Optimization Improvements.
 2)  Added Support for Mono based Games.
@@ -152,7 +153,7 @@ v0.0.3 Closed-Beta:
 
 ---
 
-v0.0.2 Closed-Beta:
+### v0.0.2 Closed-Beta:
 
 1)  Added NET_SDK to be built into MelonLoader.ModHandler as the designated IL2CPP Wrapper.
 2)  Fixed issue with Mods and Logs folders not being in the correct place next to the game's exe.
@@ -180,6 +181,6 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 ---
 
-v0.0.1 Closed-Beta:
+### v0.0.1 Closed-Beta:
 
 1) Initial Commit and Rewrite.
