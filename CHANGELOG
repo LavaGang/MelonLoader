@@ -17,13 +17,35 @@ Work-in-Progress / To-Do List:
 3)  Set default Uncaught Exception Handler for all Mono Threads.
 4)  Create Method for ModPrefs to Register Categories and Preferences in a single call.
 5)  Make IL2CPP Metadata accept custom classes and custom Components.
-6)  Add Android Support.
-7)  Add Linux Support.
-8)  Add Mac OS Support.
+6)  Make IL2CPP Imports in NET_SDK use Internal Calls instead of P/Invoke.
+7)  Add Reflection to detect and add the Logger to the LogHandler in knah's UnHollower. 
+8)  Add Auto-Generator for Assembly Generation with knah's UnHollower.
+9)  Add Android Support.
+10)  Add Linux Support.
+11)  Add Mac OS Support.
 
 ---
 
-v0.0.4 Closed-Beta:
+v0.1.1 Open-Beta:
+
+1)  Added SharpYml as a Mono Dependency.
+2)  Added 2018.3.11f1 Unity Dependencies.
+3)  Fixed issue with the Console still showing as Closed-Beta.
+4)  Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
+5)  Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
+6)  Added 2018.4.11f1 Unity Dependencies.
+7)  Removed BaseLibs from Release Build.  (No Longer Needed)
+8)  Fixed issue with MelonCoroutines not allowing a yield of IEnumerator within a Coroutine.  (Credits to Slaynash :3)
+
+---
+
+v0.1.0 Open-Beta:
+
+1)  Initial Release.
+
+---
+
+v0.0.4 Release Candidate:
 
 1)  Moved Exports in MelonLoader.ModHandler to Mono Internal Calls.
 2)  Cleaned up Hooking for MelonLoader Internals.
@@ -73,9 +95,9 @@ v0.0.4 Closed-Beta:
 46)  Fixed issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
 47)  Fixed Execution Order of OnApplicationStart to run before any of the other Mod Methods.
 48)  Added Assertion Manager to handle MelonLoader Internals.
-49)  Fixed issue with MelonCoroutines throwing a Cast Exception for knah's Generator.
+49)  Fixed issue with MelonCoroutines throwing a Cast Exception for knah's UnHollower.
 50)  Added Support for WaitForFixedUpdate and WaitForEndOfFrame to MelonCoroutines.
-51)  Fixed issue with MelonCoroutines throwing a Missing Method Exception for knah's Generator.
+51)  Fixed issue with MelonCoroutines throwing a Missing Method Exception for knah's UnHollower.
 52)  Added 2019.3.6f1 Unity Dependencies.
 53)  Fixed Internal Failure issues with RotMG Exalt and Unity 2019.3.6f1.
 54)  Fixed Internal Failure issues with Pistol Whip and Unity 2019.2.0f1.
