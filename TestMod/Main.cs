@@ -43,10 +43,12 @@ namespace TestMod
             MelonModLogger.Log("OnLateUpdate");
         }
 
+        /*
         public override void OnGUI()
         {
             MelonModLogger.Log("OnGUI");
         }
+        */
 
         public override void OnApplicationQuit()
         {
