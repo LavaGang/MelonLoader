@@ -22,9 +22,10 @@
 7. Add Reflection to detect and add the Logger to the LogHandler in knah's UnHollower. 
 8. Add Auto-Generator for Assembly Generation with knah's UnHollower.
 9. Setup the Wiki.
-10. Add Android Support.
-11. Add Linux Support.
-12. Add Mac OS Support.
+10. Setup Discord WebHook for GitHub.
+11. Add Android Support.
+12. Add Linux Support.
+13. Add Mac OS Support.
 
 ---
 
@@ -44,10 +45,10 @@
 1. Added SharpYml as a Mono Dependency.
 2. Fixed issue with the Console still showing as Closed-Beta.
 3. Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
-4. Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps. (Credits to Hector ^.^)
-5. Added 2018.4.11f1 Unity Dependencies.
-6. Removed Unity Dependencies from Release Build. (No Longer Needed)
-7. Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine. (Credits to Slaynash :3)
+4. Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
+5. Added 2018.4.11f1 Unity Dependencies.  (Credits to Hector ^.^)
+6. Removed Unity Dependencies from Release Build.  (No Longer Needed)
+7. Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
 8. Revised README.MD.
 9. Temporarily disabled OnGUI for Mods.
 10. Added Constructors and Methods to NET_SDK.Harmony to allow the use of IntPtr for Hooking Methods.
@@ -70,12 +71,12 @@
 4. Added 2018.4.19f1 Unity Dependencies.
 5. Added additional check for MelonLoader.ModHandler needing to be built with .NET 3.5.
 6. Added 2018.4.20f1 Unity Dependencies.
-7. Changed lists to arrays for caching classes, fields, methods, events, and etc. (Credits to Kronik ^.^)
-8. Changed foreach to statements to for statements for faster iteration. (Credits to Kronik ^.^)
-9. Made certain fields "readonly" (Name, Flags, etc) as it won't be reassigned. (Credits to Kronik ^.^)
-10. Made SDK and Imports class static. (Credits to Kronik ^.^)
-11. Cleaned up MelonLoader.ModHandler to use less Linq when possible for improved performance. (Credits to Kronik ^.^)
-12. Added CreateInstance method to IL2CPP_Class in NET_SDK.Reflection. (Credits to Kronik ^.^)
+7. Changed lists to arrays for caching classes, fields, methods, events, and etc.  (Credits to Kronik ^.^)
+8. Changed foreach to statements to for statements for faster iteration.  (Credits to Kronik ^.^)
+9. Made certain fields "readonly" (Name, Flags, etc) as it won't be reassigned.  (Credits to Kronik ^.^)
+10. Made SDK and Imports class static.  (Credits to Kronik ^.^)
+11. Cleaned up MelonLoader.ModHandler to use less Linq when possible for improved performance.  (Credits to Kronik ^.^)
+12. Added CreateInstance method to IL2CPP_Class in NET_SDK.Reflection.  (Credits to Kronik ^.^)
 13. Fixed SystemTypeToIL2CPPClass in NET_SDK.IL2CPP.
 14. Cleaned up TestMod.
 15. Added VRChat_OnUiManagerInit for VRChat Mods.
@@ -94,20 +95,20 @@
 28. Cleaned up the Mod Loading functionality of MelonLoader.ModHandler.
 29. Fixed issue with the Compatibility Check when using multiple MelonModGameAttribute.
 30. Fixed issue with OnLevelWasLoaded and OnLevelWasInitialized getting the wrong Scene Index and only running once then never again.
-31. Upgraded MelonLoader.ModHandler and TestMod to .NET v4.7.2. (As requested by Emilia :D)
-32. Made MelonModController use directly invokable delegates for faster invoking. (Credits to Kronik ^.^)
+31. Upgraded MelonLoader.ModHandler and TestMod to .NET v4.7.2.  (As requested by Emilia :D)
+32. Made MelonModController use directly invokable delegates for faster invoking.  (Credits to Kronik ^.^)
 33. Removed Unneeded Caching of MethodInfo in MelonModController.
 34. Added mono-2.0-boehm.dll to Mono Check.
-35. Added --melonloader.rainbow and --melonloader.randomrainbow as Launch Options. (As requested by Hordini :3)
+35. Added --melonloader.rainbow and --melonloader.randomrainbow as Launch Options.  (As requested by Hordini :3)
 36. Redesigned the Logging system to be unified between MelonLoader and MelonLoader.ModHandler.
 37. Colorized Errors in both Consoles.
 38. Added the ability for Mods to set a Color when Logging.
 39. Fixed issue with --melonloader.rainbow and --melonloader.randomrainbow not working when using --melonloader.console.
-40. Added Unload Functionality. Entirely unloads MelonLoader. (MelonLoader::UNLOAD() or MelonLoader.Imports.UNLOAD_MELONLOADER())
+40. Added Unload Functionality. Entirely unloads MelonLoader.  (MelonLoader::UNLOAD() or MelonLoader.Imports.UNLOAD_MELONLOADER())
 41. Fixed issue with using 1 or 0 for a boolean in ModPrefs.
 42. Fixed issue with OnUpdate, OnFixedUpdate, and OnLateUpdate invoking too early.
 43. Fixed issue with Unload Functionality not closing either Consoles.
-44. Added MelonCoroutines to handle Coroutine functionality for Mods on both IL2CPP and Mono. (Credits to knah :D)
+44. Added MelonCoroutines to handle Coroutine functionality for Mods on both IL2CPP and Mono.  (Credits to knah :D)
 45. Fixed issue with Logger removing Old Logs when it shouldn't.
 46. Fixed issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
 47. Fixed Execution Order of OnApplicationStart to run before any of the other Mod Methods.
@@ -120,9 +121,9 @@
 54. Fixed Internal Failure issues with Pistol Whip and Unity 2019.2.0f1.
 55. Fixed issue with MelonLoader.ModHandler complaining about Mod Libraries.
 56. Fixed issue with MelonCoroutines processing a yield of null as the same as WaitForFixedUpdate.
-57. Made MelonMod use directly invokable virtuals and overrides for faster invoking. (As requested by knah :3)
+57. Made MelonMod use directly invokable virtuals and overrides for faster invoking.  (As requested by knah :3)
 58. Removed MelonModController from MelonLoader.ModHandler.
-59. Made MelonLoader.ModHandler look for the MelonMod subclass in the Mod's MelonModInfoAttribute instead of searching the entire Assembly. (As requested by knah :3)
+59. Made MelonLoader.ModHandler look for the MelonMod subclass in the Mod's MelonModInfoAttribute instead of searching the entire Assembly.  (As requested by knah :3)
 60. Fixed issue with Logger Imports in MelonLoader.ModHandler being passed garbage strings.
 
 ---
@@ -159,7 +160,7 @@
 28. Added Log in MelonLoader.ModHandler for Unity Version.
 29. General Code Cleanup.
 30. Fixed OnApplicationQuit not working without MUPOT Mode.
-31. Fixed Mono Game Support for games that don't use MonoBleedingEdge. (MelonLoader.ModHandler and Mods must be compiled with .NET 3.5 Framework)
+31. Fixed Mono Game Support for games that don't use MonoBleedingEdge.  (MelonLoader.ModHandler and Mods must be compiled with .NET 3.5 Framework)
 32. Fixed Execution Order when using MUPOT Mode.
 
 ---
@@ -175,15 +176,15 @@
 7. Fixed bug with Launch Options.
 8. Fixed Pathing issue that caused games like Boneworks to crash.
 9. Fixed issue where Environment.CurrentDirectory wasn't being set properly.
-10. Clean-up and Additions made to NET_SDK. (Thanks Sc4ad :D)
+10. Clean-up and Additions made to NET_SDK.  (Thanks Sc4ad :D)
 11. Added SteamVR and OculusVR Dependency DLLs to MelonLoader/Managed.
 12. Added TestMod to Project Files.
-13. Added Attribute StackTrace System to Logger. (As requested by Camobiwon :3)
+13. Added Attribute StackTrace System to Logger.  (As requested by Camobiwon :3)
 14. Replaced Spaces in Names for the Attribute StackTrace System with Underscores.
 15. Fixed the bug that caused the Logger from MelonLoader.ModHandler to not properly output when using the Debug Console.
 16. Added SystemTypeToIL2CPPClass method to NET_SDK.IL2CPP.
 17. Crash Issue with Game.DontDestroyOnLoad has been fixed and it now works.
-18. Fixed IL2CPP_Field where SetValue does not function on a instance object. (Thanks DubyaDude ^.^)
+18. Fixed IL2CPP_Field where SetValue does not function on a instance object.  (Thanks DubyaDude ^.^)
 19. Fixed Compile Version conflict with the 2 Consoles.  
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console  
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console  
