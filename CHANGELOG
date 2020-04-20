@@ -29,19 +29,21 @@ Work-in-Progress / To-Do List:
 v0.1.1 Open-Beta:
 
 1)  Added SharpYml as a Mono Dependency.
-2)  Added 2018.3.11f1 Unity Dependencies.
-3)  Fixed issue with the Console still showing as Closed-Beta.
-4)  Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
-5)  Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
-6)  Added 2018.4.11f1 Unity Dependencies.
-7)  Removed BaseLibs from Release Build.  (No Longer Needed)
-8)  Fixed issue with MelonCoroutines not allowing a yield of IEnumerator within a Coroutine.  (Credits to Slaynash :3)
+2)  Fixed issue with the Console still showing as Closed-Beta.
+3)  Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
+4)  Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
+5)  Added 2018.4.11f1 Unity Dependencies.
+6)  Removed BaseLibs from Release Build.  (No Longer Needed)
+7)  Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
+8)  Revised the README.MD.
+9)  Temporarily disabled OnGUI for Mods.
+10)  Added Constructors and Methods to NET_SDK.Harmony to allow the use of IntPtr for Hooking Methods.
 
 ---
 
 v0.1.0 Open-Beta:
 
-1)  Initial Release.
+1)  Initial Open-Beta Release.
 
 ---
 
