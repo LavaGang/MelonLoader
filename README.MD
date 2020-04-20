@@ -1,8 +1,6 @@
----
+### MANUAL INSTALLATION:
 
-## MANUAL INSTALLATION:
-
-1.  Download both MelonLoader.zip and MonoDependencies.zip from the latest version at https://github.com/HerpDerpinstine/MelonLoader/releases
+1.  Download both MelonLoader.zip and MonoDependencies.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 2.  Extract MelonLoader.zip to the Game's Installation Folder.
 3.  Extract MonoDependencies.zip to the Game's Installation Folder.
 
@@ -44,4 +42,4 @@
 
 ### LICENSING
 
-MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://gitlab.com/HerpDerpinstine/MelonLoader/-/blob/master/LICENSE) for the full license text.
+MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full license text.
