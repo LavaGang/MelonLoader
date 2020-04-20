@@ -9,7 +9,7 @@ bool ModHandler::Is35 = false;
 MonoMethod* ModHandler::onUpdate = NULL;
 MonoMethod* ModHandler::onFixedUpdate = NULL;
 MonoMethod* ModHandler::onLateUpdate = NULL;
-MonoMethod* ModHandler::onGUI = NULL;
+//MonoMethod* ModHandler::onGUI = NULL;
 MonoMethod* ModHandler::onApplicationQuit = NULL;
 MonoMethod* ModHandler::melonCoroutines_ProcessWaitForEndOfFrame = NULL;
 
@@ -85,11 +85,13 @@ void ModHandler::OnLateUpdate()
 		Mono::mono_runtime_invoke(onLateUpdate, NULL, NULL, NULL);
 }
 
+/*
 void ModHandler::OnGUI()
 {
 	if (onGUI != NULL)
 		Mono::mono_runtime_invoke(onGUI, NULL, NULL, NULL);
 }
+*/
 
 void ModHandler::OnApplicationQuit()
 {

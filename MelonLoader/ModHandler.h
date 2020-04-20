@@ -8,7 +8,7 @@ public:
 	static MonoMethod* onUpdate;
 	static MonoMethod* onFixedUpdate;
 	static MonoMethod* onLateUpdate;
-	static MonoMethod* onGUI;
+	//static MonoMethod* onGUI;
 	static MonoMethod* onApplicationQuit;
 	static MonoMethod* melonCoroutines_ProcessWaitForEndOfFrame;
 	
@@ -16,7 +16,7 @@ public:
 	static void OnUpdate();
 	static void OnFixedUpdate();
 	static void OnLateUpdate();
-	static void OnGUI();
+	//static void OnGUI();
 	static void OnApplicationQuit();
 	static void MelonCoroutines_ProcessWaitForEndOfFrame();
 };

@@ -137,7 +137,7 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_Update, Hooked_BaseBehaviourManager_Update);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_FixedUpdate, Hooked_BaseBehaviourManager_FixedUpdate);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
-					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
+					//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
 					//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::MonoBehaviour_DoGUI, Hooked_MonoBehaviour_DoGUI);
 					//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::MonoBehaviourDoGUI, Hooked_MonoBehaviourDoGUI);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
@@ -430,7 +430,7 @@ __int64 HookManager::Hooked_BaseBehaviourManager_LateUpdate(void* behaviour_mana
 #pragma region GUIManager_DoGUIEvent
 void HookManager::Hooked_GUIManager_DoGUIEvent(void* __0, void* __1, bool __2)
 {
-	ModHandler::OnGUI();
+	//ModHandler::OnGUI();
 	IL2CPPUnityPlayer::GUIManager_DoGUIEvent(__0, __1, __2);
 }
 #pragma endregion
@@ -440,10 +440,10 @@ int instance = 0;
 
 bool __fastcall HookManager::Hooked_MonoBehaviour_DoGUI(int a1, __int64 a2, uint32_t a3, uint32_t a4, __int64 a5, uint32_t a6)
 {
-	if (instance == 0)
+	/*if (instance == 0)
 		instance = a1;
 	if (instance == a1)
-		ModHandler::OnGUI();
+		ModHandler::OnGUI();*/
 	return IL2CPPUnityPlayer::MonoBehaviour_DoGUI(a1, a2, a3, a4, a5, a6);
 }
 #pragma endregion
@@ -454,10 +454,10 @@ __int64 instance2 = NULL;
 char __fastcall HookManager::Hooked_MonoBehaviourDoGUI(__int64 pthis, uint32_t a1, __int64 a2, uint32_t a3)
 {
 	char ret = IL2CPPUnityPlayer::MonoBehaviourDoGUI(pthis, a1, a2, a3);
-	if (instance2 == NULL)
+	/*if (instance2 == NULL)
 		instance2 = pthis;
 	if (instance2 == pthis)
-		ModHandler::OnGUI();
+		ModHandler::OnGUI();*/
 	return ret;
 }
 #pragma endregion
