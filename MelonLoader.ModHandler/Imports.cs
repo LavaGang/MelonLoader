@@ -43,8 +43,8 @@ namespace MelonLoader
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetGameDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Hook(IntPtr target, IntPtr detour);
+        public extern static void Hook(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Unhook(IntPtr target, IntPtr detour);
+        public extern static void Unhook(IntPtr target, IntPtr detour);
     }
 }
