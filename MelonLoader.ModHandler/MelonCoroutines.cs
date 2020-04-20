@@ -176,6 +176,8 @@ namespace MelonLoader
             {
                 if (next is IEnumerator)
                     ProcessNextOfCoroutine(new CoroD(typeof(IEnumerator), next));
+                if (next is CoroD nextCoro)
+                    ProcessNextOfCoroutine(nextCoro);
                 ourCoroutinesStore.Add(new CoroTuple() { WaitCondition = next, Coroutine = enumerator });
             }
         }

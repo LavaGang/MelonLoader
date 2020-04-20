@@ -35,7 +35,8 @@ namespace NET_SDK.Harmony
 
         internal Instance(string name) => Name = name;
 
-        public Patch Patch(IL2CPP_Method targetMethod, MethodInfo newMethod)
+        public Patch Patch(IL2CPP_Method targetMethod, MethodInfo newMethod) => Patch(targetMethod.Ptr, newMethod);
+        public Patch Patch(IntPtr targetMethod, MethodInfo newMethod)
         {
             if ((targetMethod == null) || (newMethod == null))
                 return null;
@@ -57,15 +58,23 @@ namespace NET_SDK.Harmony
 
     public class Patch
     {
-        internal IL2CPP_Method TargetMethod;
+        internal IntPtr TargetMethod;
         internal IntPtr NewMethod;
         internal IntPtr OriginalMethod;
 
-        unsafe internal Patch(IL2CPP_Method targetMethod, IntPtr newMethod)
+        unsafe internal Patch(IntPtr targetMethod, IntPtr newMethod)
         {
             TargetMethod = targetMethod;
             NewMethod = newMethod;
-            OriginalMethod = *(IntPtr*)TargetMethod.Ptr.ToPointer();
+            OriginalMethod = *(IntPtr*)TargetMethod.ToPointer();
+            InstallPatch();
+        }
+
+        unsafe internal Patch(IL2CPP_Method targetMethod, IntPtr newMethod)
+        {
+            TargetMethod = targetMethod.Ptr;
+            NewMethod = newMethod;
+            OriginalMethod = *(IntPtr*)TargetMethod.ToPointer();
             InstallPatch();
         }
 
@@ -78,31 +87,34 @@ namespace NET_SDK.Harmony
         public IL2CPP_Object InvokeOriginal(IL2CPP_Object obj, params IntPtr[] paramtbl) => InvokeOriginal(obj.Ptr, paramtbl);
         public IL2CPP_Object InvokeOriginal(IntPtr obj, params IntPtr[] paramtbl)
         {
-            if (TargetMethod.GetParameterCount() == 0)
-            {
+            IL2CPP_Object returnval = null;
+            uint param_count = IL2CPP.il2cpp_method_get_param_count(TargetMethod);
+            if (param_count == 0)
                 UninstallPatch();
-                IL2CPP_Object returnval = TargetMethod.Invoke(obj, paramtbl);
+            IntPtr returnvalptr = IL2CPP.InvokeMethod(TargetMethod, obj, paramtbl);
+            if (returnvalptr != IntPtr.Zero)
+                returnval = new IL2CPP_Object(returnvalptr, new IL2CPP_Type(IL2CPP.il2cpp_method_get_return_type(TargetMethod)));
+            if (param_count == 0)
                 InstallPatch();
-                return returnval;
-            }
-            else
-                return TargetMethod.Invoke(obj, paramtbl);
+            return returnval;
         }
 
         unsafe internal void InstallPatch()
         {
-            if (TargetMethod.GetParameterCount() == 0)
-                *(IntPtr*)TargetMethod.Ptr.ToPointer() = NewMethod;
+            uint param_count = IL2CPP.il2cpp_method_get_param_count(TargetMethod);
+            if (param_count == 0)
+                *(IntPtr*)TargetMethod.ToPointer() = NewMethod;
             else
-                Imports.Hook(TargetMethod.Ptr, NewMethod);
+                Imports.Hook(TargetMethod, NewMethod);
         }
 
         unsafe internal void UninstallPatch()
         {
-            if (TargetMethod.GetParameterCount() == 0)
-                *(IntPtr*)TargetMethod.Ptr.ToPointer() = OriginalMethod;
+            uint param_count = IL2CPP.il2cpp_method_get_param_count(TargetMethod);
+            if (param_count == 0)
+                *(IntPtr*)TargetMethod.ToPointer() = OriginalMethod;
             else
-                Imports.Unhook(TargetMethod.Ptr, OriginalMethod);
+                Imports.Unhook(TargetMethod, OriginalMethod);
         }
     }
 }

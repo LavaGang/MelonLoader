@@ -43,8 +43,8 @@ void ModHandler::Initialize()
 					onLateUpdate = Mono::mono_class_get_method_from_name(klass, "OnLateUpdate", NULL);
 					AssertionManager::Decide(onLateUpdate, "OnLateUpdate");
 
-					onGUI = Mono::mono_class_get_method_from_name(klass, "OnGUI", NULL);
-					AssertionManager::Decide(onGUI, "OnGUI");
+					//onGUI = Mono::mono_class_get_method_from_name(klass, "OnGUI", NULL);
+					//AssertionManager::Decide(onGUI, "OnGUI");
 
 					onApplicationQuit = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
 					AssertionManager::Decide(onApplicationQuit, "OnApplicationQuit");
