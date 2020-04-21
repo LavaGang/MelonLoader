@@ -79,6 +79,14 @@ Download MelonLoader.zip from Releases then follow the installation instructions
 | DEBUG       | DEBUG      | Debug Console                 |
 | RELEASE     | RELEASE    | Left up to the Launch Options |
 
+---
+
+### CREDITS
+
+- [AtiLion](https://github.com/AtiLion) for most of winmm proxy | Licensed under [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/AtiLion_LICENSE)
+
+---
+
 ### LICENSING
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://gitlab.com/HerpDerpinstine/MelonLoader/-/blob/master/LICENSE) for the full license text.
