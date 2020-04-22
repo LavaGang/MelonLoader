@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +50,13 @@ namespace MelonLoader
 
         private static MethodInfo StartCoroutineMethod = null;
         private static MethodInfo StopCoroutineMethod = null;
+
+        /// <summary>
+        /// Start a new coroutine.<br />
+        /// Coroutines are called at the end of the game Update loops.
+        /// </summary>
+        /// <param name="routine">The target routine. Usually an IEnumerator</param>
+        /// <returns></returns>
         public static CoroD Start<T>(T routine)
         {
             if (routine != null)
@@ -76,6 +82,10 @@ namespace MelonLoader
             return null;
         }
 
+        /// <summary>
+        /// Stop a currently running coroutine
+        /// </summary>
+        /// <param name="corod">The coroutine to stop</param>
         public static void Stop(CoroD corod)
         {
             if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
@@ -198,11 +208,11 @@ namespace MelonLoader
             }
         }
 
-        private static void ProcessNextOfCoroutine(CoroD enumerator) // breaks if a coroutine doesn't yield
+        private static void ProcessNextOfCoroutine(CoroD enumerator)
         {
             try
             {
-                if (!enumerator.MoveNext())
+                if (!enumerator.MoveNext()) // Run the next step of the coroutine. If it's done, restore the parent routine
                 {
                     var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator).Select(it => it.idx).ToList();
                     for (var i = indices.Count() - 1; i >= 0; i--)
@@ -214,10 +224,10 @@ namespace MelonLoader
                     return;
                 }
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 MelonModLogger.LogError(e.ToString());
-                StopIl2CppCoroD(FindOriginalCoroD(enumerator));
+                StopIl2CppCoroD(FindOriginalCoroD(enumerator)); // We want the entire coroutine hierachy to stop when an error happen
             }
 
             var next = enumerator.GetCurrent();
@@ -226,7 +236,7 @@ namespace MelonLoader
             else
             {
                 if (next is IEnumerator)
-                    next = new CoroD(typeof(IEnumerator), next);
+                    next = new CoroD(typeof(IEnumerator), next); // Convert IEnumerators to CoroD, so we only have CoroDs ran, and no IEnumerators
 
                 ourCoroutinesStore.Add(new CoroTuple() { WaitCondition = next, Coroutine = enumerator });
 
