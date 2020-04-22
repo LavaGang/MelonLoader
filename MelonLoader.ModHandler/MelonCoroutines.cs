@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,10 +9,10 @@ namespace MelonLoader
 {
     public class MelonCoroutines
     {
-        private class CoroD
+        public class CoroD
         {
             private System.Type CoroutineType;
-            public object Coroutine;
+            internal object Coroutine;
             private MethodInfo MoveNextMethod;
             private PropertyInfo CurrentProp;
 
@@ -49,18 +50,59 @@ namespace MelonLoader
         private static List<CoroD> ourNextFrameCoroutines = new List<CoroD>();
 
         private static MethodInfo StartCoroutineMethod = null;
-        public static void Start<T>(T routine)
+        private static MethodInfo StopCoroutineMethod = null;
+        public static CoroD Start<T>(T routine)
         {
             if (routine != null)
             {
                 if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
-                    ProcessNextOfCoroutine(new CoroD(typeof(T), routine));
+                {
+                    CoroD corod = new CoroD(typeof(T), routine);
+                    ProcessNextOfCoroutine(corod);
+                    return corod;
+                }
                 else
                 {
                     if (StartCoroutineMethod == null)
                         StartCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(IEnumerator))));
                     if (StartCoroutineMethod != null)
-                        StartCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { routine });
+                    {
+                        object coroutine = StartCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { routine }) as Coroutine;
+                        CoroD corod = new CoroD(coroutine.GetType(), coroutine);
+                        return corod;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static void Stop(CoroD corod)
+        {
+            if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                StopIl2CppCoroD(corod);
+            else
+            {
+                if (StopCoroutineMethod == null)
+                    StopCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StopCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(Coroutine))));
+                if (StopCoroutineMethod != null)
+                    StopCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { corod.Coroutine });
+            }
+        }
+
+        private static void StopIl2CppCoroD(CoroD corod)
+        {
+            if (ourNextFrameCoroutines.Contains(corod)) // the coroutine is running itself
+                ourNextFrameCoroutines.Remove(corod);
+            else
+            {
+                int coroTupleIndex = ourCoroutinesStore.FindIndex(c => c.Coroutine == corod);
+                if (coroTupleIndex != -1) // the coroutine is waiting for a subroutine
+                {
+                    object waitCondition = ourCoroutinesStore[coroTupleIndex].WaitCondition;
+                    if (waitCondition is CoroD)
+                        StopIl2CppCoroD(waitCondition as CoroD);
+
+                    ourCoroutinesStore.RemoveAt(coroTupleIndex);
                 }
             }
         }
@@ -156,30 +198,49 @@ namespace MelonLoader
             }
         }
 
-        private static void ProcessNextOfCoroutine(CoroD enumerator)
+        private static void ProcessNextOfCoroutine(CoroD enumerator) // breaks if a coroutine doesn't yield
         {
-            if (!enumerator.MoveNext())
+            try
             {
-                var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator.Coroutine).Select(it => it.idx).ToList();
-                for (var i = indices.Count() - 1; i >= 0; i--)
+                if (!enumerator.MoveNext())
                 {
-                    var index = indices[i];
-                    ourNextFrameCoroutines.Add(ourCoroutinesStore[index].Coroutine);
-                    ourCoroutinesStore.RemoveAt(index);
+                    var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator).Select(it => it.idx).ToList();
+                    for (var i = indices.Count() - 1; i >= 0; i--)
+                    {
+                        var index = indices[i];
+                        ourNextFrameCoroutines.Add(ourCoroutinesStore[index].Coroutine);
+                        ourCoroutinesStore.RemoveAt(index);
+                    }
+                    return;
                 }
-                return;
             }
+            catch (Exception e)
+            {
+                MelonModLogger.LogError(e.ToString());
+                StopIl2CppCoroD(FindOriginalCoroD(enumerator));
+            }
+
             var next = enumerator.GetCurrent();
             if (next == null)
                 ourNextFrameCoroutines.Add(enumerator);
             else
             {
                 if (next is IEnumerator)
-                    ProcessNextOfCoroutine(new CoroD(typeof(IEnumerator), next));
+                    next = new CoroD(typeof(IEnumerator), next);
+
+                ourCoroutinesStore.Add(new CoroTuple() { WaitCondition = next, Coroutine = enumerator });
+
                 if (next is CoroD nextCoro)
                     ProcessNextOfCoroutine(nextCoro);
-                ourCoroutinesStore.Add(new CoroTuple() { WaitCondition = next, Coroutine = enumerator });
             }
+        }
+
+        private static CoroD FindOriginalCoroD(CoroD enumerator)
+        {
+            int index = ourCoroutinesStore.FindIndex(ct => ct.WaitCondition == enumerator);
+            if (index == -1)
+                return enumerator;
+            return FindOriginalCoroD(ourCoroutinesStore[index].Coroutine);
         }
     }
 }
