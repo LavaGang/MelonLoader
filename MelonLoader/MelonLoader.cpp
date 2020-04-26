@@ -81,7 +81,6 @@ void MelonLoader::Main()
 			if (Mono::Load() && Mono::Setup())
 			{
 				HookManager::LoadLibraryW_Hook();
-				//HookManager::Hook(&(LPVOID&)Mono::mono_lookup_internal_call_full, HookManager::Hooked_mono_lookup_internal_call_full);
 				if (MupotMode)
 					HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, HookManager::Hooked_mono_jit_init_version);
 			}

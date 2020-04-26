@@ -2,7 +2,6 @@
 #include <string>
 #include "ModHandler.h"
 #include "MelonLoader.h"
-#include "Exports.h"
 #include "AssertionManager.h"
 
 bool ModHandler::Is35 = false;
@@ -15,8 +14,6 @@ MonoMethod* ModHandler::melonCoroutines_ProcessWaitForEndOfFrame = NULL;
 
 void ModHandler::Initialize()
 {
-	Exports::AddInternalCalls();
-
 	AssertionManager::Start("ModHandler.cpp", "ModHandler::Initialize");
 
 	if (Mono::Domain != NULL)

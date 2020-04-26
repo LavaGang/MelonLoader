@@ -30,6 +30,9 @@ namespace MelonLoader
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetUnityVersion();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetGameVersion();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsIl2CppGame();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsDebugMode();

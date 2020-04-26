@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BuildInfo.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="Imports.cs" />
     <Compile Include="IniFile.cs" />

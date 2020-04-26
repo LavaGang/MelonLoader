@@ -6,14 +6,6 @@ using System.Reflection;
 
 namespace MelonLoader
 {
-    internal static class BuildInfo
-    {
-        internal const string Name = "MelonLoader";
-        internal const string Author = "Lava Gang";
-        internal const string Company = "discord.gg/2Wn3N2P";
-        internal const string Version = "0.1.1";
-    }
-
     public static class Main
     {
         internal static List<MelonMod> Mods = new List<MelonMod>();
@@ -55,6 +47,7 @@ namespace MelonLoader
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
             MelonModLogger.Log("GameName: " + CurrentGameAttribute.GameName);
+            MelonModLogger.Log("Version: " + Imports.GetGameVersion());
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");

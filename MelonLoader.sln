@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMod", "TestMod\TestMod.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winmm", "winmm\winmm.vcxproj", "{4A01315C-109C-469A-97DD-F9BD8A6DDED9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.AssemblyGenerator", "MelonLoader.AssemblyGenerator\MelonLoader.AssemblyGenerator.csproj", "{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,14 @@ Global
 		{4A01315C-109C-469A-97DD-F9BD8A6DDED9}.Release|Any CPU.ActiveCfg = Release|x64
 		{4A01315C-109C-469A-97DD-F9BD8A6DDED9}.Release|x64.ActiveCfg = Release|x64
 		{4A01315C-109C-469A-97DD-F9BD8A6DDED9}.Release|x64.Build.0 = Release|x64
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Debug|x64.Build.0 = Debug|Any CPU
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Release|x64.ActiveCfg = Release|Any CPU
+		{F9D9DD32-AED4-4787-9E16-B1404BBEB9B4}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

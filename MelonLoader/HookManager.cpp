@@ -8,6 +8,8 @@
 #include "detours/detours.h"
 #include "AssertionManager.h"
 #include "Logger.h"
+#include "AssemblyGenerator.h"
+#include "Exports.h"
 
 #pragma region Core
 std::vector<HookManager_Hook*>HookManager::HookTbl;
@@ -138,14 +140,10 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_FixedUpdate, Hooked_BaseBehaviourManager_FixedUpdate);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
 					//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
-					//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::MonoBehaviour_DoGUI, Hooked_MonoBehaviour_DoGUI);
-					//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::MonoBehaviourDoGUI, Hooked_MonoBehaviourDoGUI);
 					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
 				}
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_add_internal_call, Hooked_il2cpp_add_internal_call);
-				//HookManager::Hook(&(LPVOID&)IL2CPP::MetadataLoader_LoadMetadataFile, Hooked_MetadataLoader_LoadMetadataFile);
-				//HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_class_from_system_type, Hooked_il2cpp_class_from_system_type);
 			}
 			LoadLibraryW_Unhook();
 		}
@@ -211,166 +209,11 @@ void HookManager::Hooked_il2cpp_add_internal_call(const char* name, void* method
 			Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", method);
 		else if (strstr(name, "UnityEngine.Application::get_unityVersion"))
 			Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityVersion", method);
+		else if (strstr(name, "UnityEngine.Application::get_version"))
+			Mono::mono_add_internal_call("MelonLoader.Imports::GetGameVersion", method);
 	}
 }
 #pragma endregion
-
-
-#pragma region mono_lookup_internal_call_full
-void* HookManager::Hooked_mono_lookup_internal_call_full(MonoMethod* method, int* uses_handles)
-{
-	void* returnmethod = Mono::mono_lookup_internal_call_full(method, uses_handles);
-	if (returnmethod == NULL)
-	{
-		if ((IL2CPP::Domain != NULL) && (Mono::Domain != NULL))
-		{
-			MonoClass* mono_klass = Mono::mono_method_get_class(method);
-			if (mono_klass != NULL)
-			{
-				MonoImage* mono_image = Mono::mono_class_get_image(mono_klass);
-				if (mono_image != NULL)
-				{
-					const char* mono_image_name = Mono::mono_image_get_name(mono_image);
-					if ((Mono::Domain != NULL) && (IL2CPP::Domain != NULL))
-					{
-						Il2CppAssembly* target_asm = IL2CPP::il2cpp_domain_assembly_open(IL2CPP::Domain, mono_image_name);
-						if (target_asm != NULL)
-						{
-							Il2CppImage* target_image = IL2CPP::il2cpp_assembly_get_image(target_asm);
-							if (target_image != NULL)
-							{
-								const char* reflection_name = Mono::mono_method_get_reflection_name(method);
-								Il2CppClass* parent_klass = NULL;
-								Il2CppClass* klass = IL2CPP::il2cpp_class_from_name(target_image, mono_klass->name_space, mono_klass->name);
-								if (klass == NULL)
-								{
-									MonoClass* parent_mono_klass = Mono::mono_class_get_parent(mono_klass);
-									if (parent_mono_klass != NULL)
-									{
-										parent_klass = IL2CPP::il2cpp_class_from_name(target_image, parent_mono_klass->name_space, parent_mono_klass->name);
-										if (parent_klass == NULL)
-										{
-											void* nestedtype_iter = NULL;
-											Il2CppClass* nestedtype = NULL;
-											while ((klass == NULL) && ((nestedtype = IL2CPP::il2cpp_class_get_nested_types(parent_klass, &nestedtype_iter)) != NULL))
-											{
-												const char* nestedtype_name = IL2CPP::il2cpp_class_get_name(nestedtype);
-												if (strstr(nestedtype_name, mono_klass->name))
-												{
-													klass = nestedtype;
-													break;
-												}
-											}
-										}
-									}
-								}
-								if (klass != NULL)
-								{
-									unsigned int method_param_count = MelonLoader::CountSubstring(",", reflection_name);
-									if (method_param_count >= 1)
-										method_param_count += 1;
-									const char* method_name = Mono::mono_method_get_name(method);
-									Il2CppMethod* il2cpp_method = IL2CPP::il2cpp_class_get_method_from_name(klass, method_name, method_param_count);
-									if (il2cpp_method != NULL)
-									{
-										std::string method_name_str = method_name;
-										std::string completed_str = "";
-										if (parent_klass != NULL)
-											completed_str += std::string(parent_klass->name_space) + "." + std::string(parent_klass->name) + "." + std::string(klass->name);
-										else
-											completed_str += std::string(klass->name_space) + "." + std::string(klass->name);
-										completed_str += "::" + std::string(method_name);
-
-										Mono::mono_add_internal_call(completed_str.c_str(), il2cpp_method->targetMethod);
-										returnmethod = Mono::mono_lookup_internal_call_full(method, uses_handles);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	return returnmethod;
-}
-#pragma endregion
-
-
-/*
-#pragma region il2cpp_class_from_system_type
-Il2CppClass* HookManager::Hooked_il2cpp_class_from_system_type(Il2CppReflectionType* type)
-{
-	if ((Mono::Domain != NULL) && (IL2CPP::Domain != NULL) && (IL2CPP::s_GlobalMetadataHeader != NULL) && (type != NULL) && (type->type != NULL))
-	{
-		int32_t index = type->type->data.klassIndex;
-		if (index < 0)
-			return NULL;
-		if ((static_cast<uint32_t>(index) >= (IL2CPP::s_GlobalMetadataHeader->typeDefinitionsCount / sizeof(Il2CppTypeDefinition))))
-		{
-			MonoType* mono_type = (MonoType*)type->type;
-			if (mono_type != NULL)
-			{
-				MonoClass* mono_klass = mono_type->data.klass;
-				if (mono_klass != NULL)
-				{
-					MonoImage* mono_image = Mono::mono_class_get_image(mono_klass);
-					if (mono_image != NULL)
-					{
-						const char* mono_image_name = Mono::mono_image_get_name(mono_image);
-						Il2CppAssembly* target_asm = IL2CPP::il2cpp_domain_assembly_open(IL2CPP::Domain, mono_image_name);
-						if (target_asm != NULL)
-						{
-							Il2CppImage* target_image = IL2CPP::il2cpp_assembly_get_image(target_asm);
-							if (target_image != NULL)
-							{
-								Il2CppClass* klass = IL2CPP::il2cpp_class_from_name(target_image, mono_klass->name_space, mono_klass->name);
-								if (klass == NULL)
-								{
-									MonoClass* parent_mono_klass = Mono::mono_class_get_parent(mono_klass);
-									if (parent_mono_klass != NULL)
-									{
-										Il2CppClass* parent_klass = IL2CPP::il2cpp_class_from_name(target_image, parent_mono_klass->name_space, parent_mono_klass->name);
-										if (parent_klass == NULL)
-										{
-											void* nestedtype_iter = NULL;
-											Il2CppClass* nestedtype = NULL;
-											while ((klass == NULL) && ((nestedtype = IL2CPP::il2cpp_class_get_nested_types(parent_klass, &nestedtype_iter)) != NULL))
-											{
-												const char* nestedtype_name = IL2CPP::il2cpp_class_get_name(nestedtype);
-												if (strstr(nestedtype_name, mono_klass->name))
-												{
-													klass = nestedtype;
-													break;
-												}
-											}
-										}
-									}
-								}
-								if (klass != NULL)
-									return klass;
-							}
-						}
-					}
-				}
-			}
-			return NULL;
-		}
-	}
-	return IL2CPP::il2cpp_class_from_system_type(type);
-}
-#pragma endregion
-
-
-#pragma region MetadataLoader_LoadMetadataFile
-Il2CppGlobalMetadataHeader* HookManager::Hooked_MetadataLoader_LoadMetadataFile(const char* fileName)
-{
-	IL2CPP::s_GlobalMetadataHeader = IL2CPP::MetadataLoader_LoadMetadataFile(fileName);
-	return IL2CPP::s_GlobalMetadataHeader;
-}
-#pragma endregion
-*/
-
 
 #pragma region SingleAppInstance_FindOtherInstance
 bool __stdcall HookManager::Hooked_SingleAppInstance_FindOtherInstance(LPARAM lParam) { return false; }
@@ -389,7 +232,9 @@ bool HookManager::Hooked_PlayerCleanup(bool dopostquitmsg)
 #pragma region PlayerLoadFirstScene
 void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
 {
-	ModHandler::Initialize();
+	Exports::AddInternalCalls();
+	if (!MelonLoader::IsGameIl2Cpp || MelonLoader::MupotMode || AssemblyGenerator::Initialize())
+		ModHandler::Initialize();
 	if (MelonLoader::IsGameIl2Cpp && !MelonLoader::MupotMode)
 		return IL2CPPUnityPlayer::PlayerLoadFirstScene(unknown);
 	return MonoUnityPlayer::PlayerLoadFirstScene(unknown);
@@ -426,41 +271,15 @@ __int64 HookManager::Hooked_BaseBehaviourManager_LateUpdate(void* behaviour_mana
 }
 #pragma endregion
 
-
+/*
 #pragma region GUIManager_DoGUIEvent
 void HookManager::Hooked_GUIManager_DoGUIEvent(void* __0, void* __1, bool __2)
 {
-	//ModHandler::OnGUI();
+	ModHandler::OnGUI();
 	IL2CPPUnityPlayer::GUIManager_DoGUIEvent(__0, __1, __2);
 }
 #pragma endregion
-
-#pragma region MonoBehaviour_DoGUI
-int instance = 0;
-
-bool __fastcall HookManager::Hooked_MonoBehaviour_DoGUI(int a1, __int64 a2, uint32_t a3, uint32_t a4, __int64 a5, uint32_t a6)
-{
-	/*if (instance == 0)
-		instance = a1;
-	if (instance == a1)
-		ModHandler::OnGUI();*/
-	return IL2CPPUnityPlayer::MonoBehaviour_DoGUI(a1, a2, a3, a4, a5, a6);
-}
-#pragma endregion
-
-#pragma region MonoBehaviourDoGUI
-__int64 instance2 = NULL;
-
-char __fastcall HookManager::Hooked_MonoBehaviourDoGUI(__int64 pthis, uint32_t a1, __int64 a2, uint32_t a3)
-{
-	char ret = IL2CPPUnityPlayer::MonoBehaviourDoGUI(pthis, a1, a2, a3);
-	/*if (instance2 == NULL)
-		instance2 = pthis;
-	if (instance2 == pthis)
-		ModHandler::OnGUI();*/
-	return ret;
-}
-#pragma endregion
+*/
 
 #pragma region EndOfFrameCallbacks_DequeAll
 void HookManager::Hooked_EndOfFrameCallbacks_DequeAll()
