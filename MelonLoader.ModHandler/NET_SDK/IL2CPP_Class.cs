@@ -21,15 +21,15 @@ namespace NET_SDK.Reflection
         {
             // Setup Information
             Ptr = ptr;
-            Name = Marshal.PtrToStringAnsi(IL2CPP.il2cpp_class_get_name(Ptr));
-            Namespace = Marshal.PtrToStringAnsi(IL2CPP.il2cpp_class_get_namespace(Ptr));
-            Flags = (IL2CPP_BindingFlags)IL2CPP.il2cpp_class_get_flags(Ptr);
+            Name = Marshal.PtrToStringAnsi(MelonLoader.Il2CppImports.il2cpp_class_get_name(Ptr));
+            Namespace = Marshal.PtrToStringAnsi(MelonLoader.Il2CppImports.il2cpp_class_get_namespace(Ptr));
+            Flags = (IL2CPP_BindingFlags)MelonLoader.Il2CppImports.il2cpp_class_get_flags(Ptr);
 
             // Map out Methods
             IntPtr method_iter = IntPtr.Zero;
             IntPtr method;
             List<IL2CPP_Method> methodsList = new List<IL2CPP_Method>();
-            while ((method = IL2CPP.il2cpp_class_get_methods(Ptr, ref method_iter)) != IntPtr.Zero)
+            while ((method = MelonLoader.Il2CppImports.il2cpp_class_get_methods(Ptr, ref method_iter)) != IntPtr.Zero)
                 methodsList.Add(new IL2CPP_Method(method));
             MethodList = methodsList.ToArray();
 
@@ -37,7 +37,7 @@ namespace NET_SDK.Reflection
             IntPtr field_iter = IntPtr.Zero;
             IntPtr field;
             List<IL2CPP_Field> fieldList = new List<IL2CPP_Field>();
-            while ((field = IL2CPP.il2cpp_class_get_fields(Ptr, ref field_iter)) != IntPtr.Zero)
+            while ((field = MelonLoader.Il2CppImports.il2cpp_class_get_fields(Ptr, ref field_iter)) != IntPtr.Zero)
                 fieldList.Add(new IL2CPP_Field(field));
             FieldList = fieldList.ToArray();
 
@@ -45,7 +45,7 @@ namespace NET_SDK.Reflection
             IntPtr evt_iter = IntPtr.Zero;
             IntPtr evt;
             List<IL2CPP_Event> eventList = new List<IL2CPP_Event>();
-            while ((evt = IL2CPP.il2cpp_class_get_events(Ptr, ref evt_iter)) != IntPtr.Zero)
+            while ((evt = MelonLoader.Il2CppImports.il2cpp_class_get_events(Ptr, ref evt_iter)) != IntPtr.Zero)
                 eventList.Add(new IL2CPP_Event(evt));
             EventList = eventList.ToArray();
 
@@ -61,7 +61,7 @@ namespace NET_SDK.Reflection
             IntPtr property_iter = IntPtr.Zero;
             IntPtr property;
             List<IL2CPP_Property> propertyList = new List<IL2CPP_Property>();
-            while ((property = IL2CPP.il2cpp_class_get_properties(Ptr, ref property_iter)) != IntPtr.Zero)
+            while ((property = MelonLoader.Il2CppImports.il2cpp_class_get_properties(Ptr, ref property_iter)) != IntPtr.Zero)
                 propertyList.Add(new IL2CPP_Property(property));
             PropertyList = propertyList.ToArray();
         }
@@ -71,10 +71,10 @@ namespace NET_SDK.Reflection
             int paramCount = contructorParams?.Length ?? 0;
             if (constructor == null && paramCount > 0)
                 return IntPtr.Zero;
-            IntPtr instance = IL2CPP.il2cpp_object_new(il2CppClass.Ptr);
+            IntPtr instance = MelonLoader.Il2CppImports.il2cpp_object_new(il2CppClass.Ptr);
             if (constructor == null)
             {
-                IL2CPP.il2cpp_runtime_object_init(instance);
+                MelonLoader.Il2CppImports.il2cpp_runtime_object_init(instance);
                 return instance;
             }
             else

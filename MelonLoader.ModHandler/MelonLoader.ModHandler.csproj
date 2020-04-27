@@ -51,6 +51,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuildInfo.cs" />
     <Compile Include="Console.cs" />
+    <Compile Include="Il2CppImports.cs" />
     <Compile Include="Imports.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="MelonCoroutines.cs" />

@@ -13,7 +13,7 @@ namespace NET_SDK.Reflection
 
         public IL2CPP_Type GetReturnType() => ReturnType;
 
-        public IntPtr UnboxIntPtr() => IL2CPP.il2cpp_object_unbox(Ptr);
+        public IntPtr UnboxIntPtr() => MelonLoader.Il2CppImports.il2cpp_object_unbox(Ptr);
         public unsafe void* Unbox() => UnboxIntPtr().ToPointer();
         public unsafe T UnboxValue<T>() where T : unmanaged
             => *(T*)Unbox();

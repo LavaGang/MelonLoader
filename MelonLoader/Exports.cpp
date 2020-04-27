@@ -42,6 +42,5 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::Hook", Hook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Unhook", Unhook);
 
-	//Mono::mono_add_internal_call("NET_SDK.NET_SDK::il2cpp_init", il2cpp_init);
-	//Mono::mono_add_internal_call("NET_SDK.NET_SDK::il2cpp_runtime_invoke", il2cpp_runtime_invoke);
+	IL2CPP::AddInternalCalls();
 }

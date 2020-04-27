@@ -19,7 +19,6 @@ typedef Il2CppAssembly* (*il2cpp_domain_assembly_open_t) (Il2CppDomain* domain, 
 typedef Il2CppObject* (*il2cpp_runtime_invoke_t) (Il2CppMethod* method, void* obj, Il2CppObject** params, int** exc);
 typedef Il2CppClass* (*il2cpp_class_get_nested_types_t) (Il2CppClass* klass, void** iter);
 typedef Il2CppType* (*il2cpp_class_get_type_t) (Il2CppClass* klass);
-//typedef Il2CppGlobalMetadataHeader* (*MetadataLoader_LoadMetadataFile_t) (const char* fileName);
 
 class IL2CPP
 {
@@ -44,8 +43,6 @@ public:
 	static il2cpp_class_get_nested_types_t il2cpp_class_get_nested_types;
 	static il2cpp_class_get_type_t il2cpp_class_get_type;
 
-	//static MetadataLoader_LoadMetadataFile_t MetadataLoader_LoadMetadataFile;
-	//static Il2CppGlobalMetadataHeader* s_GlobalMetadataHeader;
-
 	static bool Setup();
+	static void AddInternalCalls();
 };

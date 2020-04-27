@@ -63,6 +63,8 @@
 22. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
 23. Fixed Incompatibility Issue between 0Harmony in MelonLoader.ModHandler and Mono Game Support.
 24. Added Event Fix for knah's Unhollower Logging.
+25. Moved IL2CPP Imports from NET_SDK.IL2CPP to MelonLoader.Il2CppImports.
+26. Made all IL2CPP Imports Internal Calls for Faster Invoking.
 
 ---
 

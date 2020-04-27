@@ -9,7 +9,7 @@ namespace NET_SDK.Reflection
         internal IL2CPP_Type(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;
-            Name = IL2CPP.il2cpp_type_get_name(Ptr);
+            Name = MelonLoader.Il2CppImports.il2cpp_type_get_name(Ptr);
         }
     }
 }
