@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using UnhollowerBaseLib;
 
 namespace Harmony
 {
@@ -40,7 +41,7 @@ namespace Harmony
 			}
 		 * 
 		 */
-		public static DynamicMethod CreateDynamicMethod(MethodBase original, string suffix)
+		public static DynamicMethod CreateDynamicMethod(MethodBase original, string suffix, bool isIl2Cpp)
 		{
 			if (original == null) throw new ArgumentNullException("original cannot be null");
 			var patchName = original.Name + suffix;
@@ -49,7 +50,7 @@ namespace Harmony
 			var parameters = original.GetParameters();
 			var result = parameters.Types().ToList();
 			if (original.IsStatic == false)
-				result.Insert(0, typeof(object));
+				result.Insert(0, isIl2Cpp ? original.DeclaringType : typeof(object));
 			var paramTypes = result.ToArray();
 			var returnType = AccessTools.GetReturnedType(original);
 

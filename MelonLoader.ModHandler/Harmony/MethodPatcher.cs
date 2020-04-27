@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using UnhollowerBaseLib;
 
 namespace Harmony
 {
@@ -37,8 +38,12 @@ namespace Harmony
 			{
 				if (HarmonyInstance.DEBUG) FileLog.LogBuffered("### Patch " + original.DeclaringType + ", " + original);
 
+				bool isIl2Cpp = original.DeclaringType.IsSubclassOf(typeof(Il2CppObjectBase));
+				if (isIl2Cpp && transpilers.Count > 0)
+					throw new NotSupportedException("IL2CPP patches cannot use transpilers (got " + transpilers.Count + ")");
+
 				var idx = prefixes.Count() + postfixes.Count();
-				var patch = DynamicTools.CreateDynamicMethod(original, "_Patch" + idx);
+				var patch = DynamicTools.CreateDynamicMethod(original, "_Patch" + idx, isIl2Cpp);
 				if (patch == null)
 					return null;
 
@@ -72,7 +77,7 @@ namespace Harmony
 				});
 
 				var skipOriginalLabel = il.DefineLabel();
-				var canHaveJump = AddPrefixes(il, original, prefixes, privateVars, skipOriginalLabel);
+				var canHaveJump = AddPrefixes(il, original, prefixes, privateVars, skipOriginalLabel, isIl2Cpp);
 
 				var copier = new MethodCopier(original, il, originalVariables);
 				foreach (var transpiler in transpilers)
@@ -91,12 +96,12 @@ namespace Harmony
 				if (canHaveJump)
 					Emitter.MarkLabel(il, skipOriginalLabel);
 
-				AddPostfixes(il, original, postfixes, privateVars, false);
+				AddPostfixes(il, original, postfixes, privateVars, false, isIl2Cpp);
 
 				if (resultVariable != null)
 					Emitter.Emit(il, OpCodes.Ldloc, resultVariable);
 
-				AddPostfixes(il, original, postfixes, privateVars, true);
+				AddPostfixes(il, original, postfixes, privateVars, true, isIl2Cpp);
 
 				Emitter.Emit(il, OpCodes.Ret);
 
@@ -227,7 +232,7 @@ namespace Harmony
 
 		static MethodInfo getMethodMethod = typeof(MethodBase).GetMethod("GetMethodFromHandle", new[] { typeof(RuntimeMethodHandle) });
 
-		static void EmitCallParameter(ILGenerator il, MethodBase original, MethodInfo patch, Dictionary<string, LocalBuilder> variables, bool allowFirsParamPassthrough)
+		static void EmitCallParameter(ILGenerator il, MethodBase original, MethodInfo patch, Dictionary<string, LocalBuilder> variables, bool allowFirsParamPassthrough, bool isIl2Cpp)
 		{
 			var isInstance = original.IsStatic == false;
 			var originalParameters = original.GetParameters();
@@ -274,38 +279,55 @@ namespace Harmony
 				if (patchParam.Name.StartsWith(INSTANCE_FIELD_PREFIX))
 				{
 					var fieldName = patchParam.Name.Substring(INSTANCE_FIELD_PREFIX.Length);
-					FieldInfo fieldInfo;
-					if (fieldName.All(char.IsDigit))
+					if (isIl2Cpp)
 					{
-						fieldInfo = AccessTools.Field(original.DeclaringType, int.Parse(fieldName));
-						if (fieldInfo == null)
-							throw new ArgumentException("No field found at given index in class " + original.DeclaringType.FullName, fieldName);
-					}
-					else
-					{
-						fieldInfo = AccessTools.Field(original.DeclaringType, fieldName);
-						if (fieldInfo == null)
-							throw new ArgumentException("No such field defined in class " + original.DeclaringType.FullName, fieldName);
-					}
+						if (patchParam.ParameterType.IsByRef)
+							throw new NotSupportedException("Ref parameters to fields are not supported in IL2CPP patches");
 
-					if (fieldInfo.IsStatic)
-					{
-						if (patchParam.ParameterType.IsByRef)
-							Emitter.Emit(il, OpCodes.Ldsflda, fieldInfo);
-						else
-							Emitter.Emit(il, OpCodes.Ldsfld, fieldInfo);
+						var getterMethod = AccessTools.Property(original.DeclaringType, fieldName)?.GetMethod;
+						if (getterMethod == null)
+							throw new ArgumentException("No such field defined in class " + original.DeclaringType.FullName, fieldName);
+
+						if (!getterMethod.IsStatic)
+							Emitter.Emit(il, OpCodes.Ldarg_0);
+						var opcode = getterMethod.IsVirtual ? OpCodes.Callvirt : OpCodes.Call;
+						Emitter.Emit(il, opcode, getterMethod);
 					}
 					else
 					{
-						if (patchParam.ParameterType.IsByRef)
+						FieldInfo fieldInfo;
+						if (fieldName.All(char.IsDigit))
 						{
-							Emitter.Emit(il, OpCodes.Ldarg_0);
-							Emitter.Emit(il, OpCodes.Ldflda, fieldInfo);
+							fieldInfo = AccessTools.Field(original.DeclaringType, int.Parse(fieldName));
+							if (fieldInfo == null)
+								throw new ArgumentException("No field found at given index in class " + original.DeclaringType.FullName, fieldName);
 						}
 						else
 						{
-							Emitter.Emit(il, OpCodes.Ldarg_0);
-							Emitter.Emit(il, OpCodes.Ldfld, fieldInfo);
+							fieldInfo = AccessTools.Field(original.DeclaringType, fieldName);
+							if (fieldInfo == null)
+								throw new ArgumentException("No such field defined in class " + original.DeclaringType.FullName, fieldName);
+						}
+
+						if (fieldInfo.IsStatic)
+						{
+							if (patchParam.ParameterType.IsByRef)
+								Emitter.Emit(il, OpCodes.Ldsflda, fieldInfo);
+							else
+								Emitter.Emit(il, OpCodes.Ldsfld, fieldInfo);
+						}
+						else
+						{
+							if (patchParam.ParameterType.IsByRef)
+							{
+								Emitter.Emit(il, OpCodes.Ldarg_0);
+								Emitter.Emit(il, OpCodes.Ldflda, fieldInfo);
+							}
+							else
+							{
+								Emitter.Emit(il, OpCodes.Ldarg_0);
+								Emitter.Emit(il, OpCodes.Ldfld, fieldInfo);
+							}
 						}
 					}
 					continue;
@@ -373,12 +395,12 @@ namespace Harmony
 			}
 		}
 
-		static bool AddPrefixes(ILGenerator il, MethodBase original, List<MethodInfo> prefixes, Dictionary<string, LocalBuilder> variables, Label label)
+		static bool AddPrefixes(ILGenerator il, MethodBase original, List<MethodInfo> prefixes, Dictionary<string, LocalBuilder> variables, Label label, bool isIl2Cpp)
 		{
 			var canHaveJump = false;
 			prefixes.ForEach(fix =>
 			{
-				EmitCallParameter(il, original, fix, variables, false);
+				EmitCallParameter(il, original, fix, variables, false, isIl2Cpp);
 				Emitter.Emit(il, OpCodes.Call, fix);
 
 				if (fix.ReturnType != typeof(void))
@@ -392,13 +414,13 @@ namespace Harmony
 			return canHaveJump;
 		}
 
-		static void AddPostfixes(ILGenerator il, MethodBase original, List<MethodInfo> postfixes, Dictionary<string, LocalBuilder> variables, bool passthroughPatches)
+		static void AddPostfixes(ILGenerator il, MethodBase original, List<MethodInfo> postfixes, Dictionary<string, LocalBuilder> variables, bool passthroughPatches, bool isIl2Cpp)
 		{
 			postfixes
 				.Where(fix => passthroughPatches == (fix.ReturnType != typeof(void)))
 				.Do(fix =>
 				{
-					EmitCallParameter(il, original, fix, variables, true);
+					EmitCallParameter(il, original, fix, variables, true, isIl2Cpp);
 					Emitter.Emit(il, OpCodes.Call, fix);
 
 					if (fix.ReturnType != typeof(void))

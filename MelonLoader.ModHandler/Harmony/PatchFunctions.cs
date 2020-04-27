@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using UnhollowerBaseLib;
+using MelonLoader;
 
 namespace Harmony
 {
@@ -91,9 +93,80 @@ namespace Harmony
 			if (errorString != null)
 				throw new FormatException("Method " + original.FullDescription() + " cannot be patched. Reason: " + errorString);
 
-			PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
+			if (IsIl2CppType(original.DeclaringType))
+			{
+				var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
+				Imports.Hook(NET_SDK.SDK.GetClass(original.DeclaringType.FullName).GetMethod(original.Name).Ptr, il2CppShim.MethodHandle.GetFunctionPointer());
+
+				PatchTools.RememberObject(original, new Tuple<MethodBase, MethodBase>(replacement, il2CppShim));
+			}
+			else
+			{
+				PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
+			}
 
 			return replacement;
 		}
+
+		private static DynamicMethod CreateIl2CppShim(DynamicMethod original, Type owner)
+		{
+			var patchName = original.Name + "_il2cpp";
+
+			var parameters = original.GetParameters();
+			var result = parameters.Types().ToList();
+			var origParamTypes = result.ToArray();
+			var paramTypes = new Type[origParamTypes.Length];
+			for (int i = 0; i < paramTypes.Length; ++i)
+			{
+				paramTypes[i] = IsIl2CppType(origParamTypes[i]) ? typeof(IntPtr) : origParamTypes[i];
+			}
+
+			var origReturnType = AccessTools.GetReturnedType(original);
+			var returnType = IsIl2CppType(origReturnType) ? typeof(IntPtr) : origReturnType;
+
+			DynamicMethod method;
+			method = new DynamicMethod(
+					patchName,
+					MethodAttributes.Public | MethodAttributes.Static,
+					CallingConventions.Standard,
+					returnType,
+					paramTypes,
+					owner,
+					true
+			);
+
+			for (var i = 0; i < parameters.Length; i++)
+				method.DefineParameter(i + 1, parameters[i].Attributes, parameters[i].Name);
+
+			var il = method.GetILGenerator();
+
+			// Load arguments, invoking the IntPrt -> Il2CppObject constructor for IL2CPP types
+			for (int i = 0; i < origParamTypes.Length; ++i)
+			{
+				Emitter.Emit(il, OpCodes.Ldarg, i);
+				if (IsIl2CppType(origParamTypes[i]))
+				{
+					Emitter.Emit(il, OpCodes.Newobj, Il2CppConstuctor(origParamTypes[i]));
+				}
+			}
+
+			// Call the original patch with the now-correct types
+			Emitter.Emit(il, OpCodes.Call, original);
+
+			// If needed, unwrap the return value; then return
+			if (IsIl2CppType(origReturnType))
+			{
+				var pointerGetter = AccessTools.DeclaredProperty(typeof(Il2CppObjectBase), "Pointer").GetMethod;
+				Emitter.Emit(il, OpCodes.Call, pointerGetter);
+			}
+
+			Emitter.Emit(il, OpCodes.Ret);
+
+			DynamicTools.PrepareDynamicMethod(method);
+			return method;
+		}
+
+		private static bool IsIl2CppType(Type type) => type.IsSubclassOf(typeof(Il2CppObjectBase));
+		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
 	}
 }
