@@ -51,7 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analytics.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuildInfo.cs" />
     <Compile Include="Console.cs" />
