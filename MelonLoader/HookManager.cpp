@@ -224,9 +224,10 @@ bool __stdcall HookManager::Hooked_SingleAppInstance_FindOtherInstance(LPARAM lP
 bool HookManager::Hooked_PlayerCleanup(bool dopostquitmsg)
 {
 	MelonLoader::UNLOAD();
-	if (MelonLoader::QuitFix)
+	bool returnval = IL2CPPUnityPlayer::PlayerCleanup(dopostquitmsg);
+	//if (MelonLoader::QuitFix)
 		MelonLoader::KillProcess();
-	return IL2CPPUnityPlayer::PlayerCleanup(dopostquitmsg);
+	return returnval;
 }
 #pragma endregion
 

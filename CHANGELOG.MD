@@ -52,7 +52,7 @@
 11. Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
 12. Revised CHANGELOG.MD.
 13. Added MelonLoader.AssemblyGenerator to handle automation of Assembly Generation.
-14. Added Built-In QuitFix under the Launch Option --melonloader.quitfix  (For Games like VRChat where the Process Hangs after telling it to Exit)
+14. Added Built-In QuitFix.  (For Games like VRChat where the Process Hangs after telling it to Exit)
 15. Updated Newtonsoft.Json in the Mono Dependencies.
 16. Added Stop Methods to MelonCoroutines.  (Credits to Slaynash :3)
 17. Fixed Error Handling in MelonCoroutines.  (Credits to Slaynash :3)
