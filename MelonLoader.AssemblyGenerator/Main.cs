@@ -242,7 +242,7 @@ namespace MelonLoader.AssemblyGenerator
                                         version_file.IniWriteValue("AssemblyGenerator", "Engine", unity_version);
                                         version_file.IniWriteValue("AssemblyGenerator", "Game", game_version);
                                         version_file.IniWriteValue("AssemblyGenerator", "GameAssembly", game_assembly_hash);
-                                        MelonModLogger.Log("Success!");
+                                        MelonModLogger.Log("SUCCESS!");
                                     }
                                     else
                                         was_successful = false;
