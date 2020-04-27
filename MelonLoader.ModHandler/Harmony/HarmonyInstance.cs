@@ -44,8 +44,8 @@ namespace Harmony
 		readonly string id;
 		public string Id => id;
 		public static bool DEBUG = false;
-
 		private static bool selfPatchingDone = false;
+        private static List<HarmonyInstance> instancelist = new List<HarmonyInstance>();
 
 		HarmonyInstance(string id)
 		{
@@ -71,7 +71,9 @@ namespace Harmony
 				selfPatchingDone = true;
 				SelfPatching.PatchOldHarmonyMethods();
 			}
-		}
+
+            instancelist.Add(this);
+        }
 
 		public static HarmonyInstance Create(string id)
 		{
@@ -133,6 +135,16 @@ namespace Harmony
 				info.Transpilers.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.patch));
 			}
 		}
+
+        public static void UnpatchAllInstances()
+        {
+            if (instancelist.Count > 0)
+            {
+                for (int i = 0; i < instancelist.Count; i++)
+                    instancelist[i].UnpatchAll();
+                instancelist.Clear();
+            }
+        }
 
 		public void Unpatch(MethodBase original, HarmonyPatchType type, string harmonyID = null)
 		{

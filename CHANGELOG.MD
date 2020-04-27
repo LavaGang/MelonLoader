@@ -60,6 +60,7 @@
 19. Added Support for Method Unstripping through Il2CppAssemblyUnhollower to MelonLoader.AssemblyGenerator.
 20. Replaced the Doorstop winmm.dll with version.dll.
 21. Fixed Compatibility with IL2CPP Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
+22. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
 
 ---
 

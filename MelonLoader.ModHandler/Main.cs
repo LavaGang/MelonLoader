@@ -257,7 +257,9 @@ namespace MelonLoader
                 foreach (MelonMod mod in Mods)
                     try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
             ModPrefs.SaveConfig();
-            NET_SDK.Harmony.Manager.UnpatchAll();
+            if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                NET_SDK.Harmony.Manager.UnpatchAll();
+            Harmony.HarmonyInstance.UnpatchAllInstances();
         }
 
         internal static void OnModSettingsApplied()

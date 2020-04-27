@@ -11,7 +11,7 @@ namespace MelonLoader
     {
         internal static void DisableUnityAnalytics()
         {
-            
+
         }
     }
 }
