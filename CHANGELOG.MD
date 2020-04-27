@@ -8,6 +8,7 @@
 6. StackTraces refuse to show line numbers.
 7. Console Logs randomly do not Color properly.
 8. Mono Module currently has an Issue with https/ssl.
+9. OnGUI is currently broken for IL2CPP Games.
 
 ---
 
@@ -19,10 +20,9 @@
 4. Create Method for ModPrefs to Register Categories and Preferences in a single call.
 5. Make IL2CPP Metadata accept custom classes and custom Components.
 6. Make IL2CPP Imports in NET_SDK use Internal Calls instead of P/Invoke.
-7. Add Reflection to detect and add the Logger to the LogHandler in knah's UnHollower. 
-8. Add Android Support.
-9. Add Linux Support.
-10. Add Mac OS Support.
+7. Add Android Support.
+8. Add Linux Support.
+9. Add Mac OS Support.
 
 ---
 
@@ -61,7 +61,8 @@
 20. Replaced the Doorstop winmm.dll with version.dll.
 21. Fixed Compatibility with IL2CPP Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
 22. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
-23. Fixed Incompatibility Issue between zeobviouslyfakeacc's 0Harmony Fix and Mono Game Support.
+23. Fixed Incompatibility Issue between 0Harmony in MelonLoader.ModHandler and Mono Game Support.
+24. Added Event Fix for knah's Unhollower Logging.
 
 ---
 
