@@ -6,7 +6,7 @@
 4. Mono Game Support for games that don't use MonoBleedingEdge must have MelonLoader.ModHandler and Mods compiled with .NET 3.5 Framework.
 5. IL2CPP Game Support must have it's Mods using between .NET Framework v4 - v4.7.2.
 6. StackTraces refuse to show line numbers.
-7. Console Logs do not Color properly when using Mono Game Support.
+7. Console Logs randomly do not Color properly.
 8. Mono Module currently has an issue with https/ssl.
 
 ---
@@ -20,12 +20,9 @@
 5. Make IL2CPP Metadata accept custom classes and custom Components.
 6. Make IL2CPP Imports in NET_SDK use Internal Calls instead of P/Invoke.
 7. Add Reflection to detect and add the Logger to the LogHandler in knah's UnHollower. 
-8. Add Auto-Generator for Assembly Generation with knah's UnHollower.
-9. Setup the Wiki.
-10. Setup Discord WebHook for GitHub.
-11. Add Android Support.
-12. Add Linux Support.
-13. Add Mac OS Support.
+8. Add Android Support.
+9. Add Linux Support.
+10. Add Mac OS Support.
 
 ---
 
@@ -54,6 +51,12 @@
 10. Added Constructors and Methods to NET_SDK.Harmony to allow the use of IntPtr for Hooking Methods.
 11. Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
 12. Revised CHANGELOG.MD.
+13. Added MelonLoader.AssemblyGenerator to handle automation of Assembly Generation.
+14. Added Built-In QuitFix under the Launch Option --melonloader.quitfix  (For Games like VRChat where the Process Hangs after telling it to Exit)
+15. Updated Newtonsoft.Json in the Mono Dependencies.
+16. Added Stop Methods to MelonCoroutines.  (Credits to Slaynash :3)
+17. Fixed Error Handling in MelonCoroutines.  (Credits to Slaynash :3)
+18. Fixed Issue with MelonCoroutines when using Non-Yielding Coroutines.  (Credits to Slaynash :3)
 
 ---
 
