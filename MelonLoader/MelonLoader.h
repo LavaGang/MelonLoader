@@ -11,7 +11,7 @@ public:
 	static bool MupotMode;
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
-	//static bool QuitFix;
+	static bool QuitFix;
 	static char* GamePath;
 	static char* DataPath;
 

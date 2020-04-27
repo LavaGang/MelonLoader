@@ -13,7 +13,7 @@ bool MelonLoader::DebugMode = false;
 bool MelonLoader::MupotMode = false;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
-//bool MelonLoader::QuitFix = false;
+bool MelonLoader::QuitFix = false;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 
@@ -34,8 +34,8 @@ void MelonLoader::Main()
 		RainbowMode = true;
 	if (strstr(GetCommandLine(), "--melonloader.randomrainbow") != NULL)
 		RandomRainbowMode = true;
-	//if (strstr(GetCommandLine(), "--melonloader.quitfix") != NULL)
-	//	QuitFix = true;
+	if (strstr(GetCommandLine(), "--melonloader.quitfix") != NULL)
+		QuitFix = true;
 
 	std::string gameassemblypath = filepathstr + "\\GameAssembly.dll";
 	WIN32_FIND_DATA data;
