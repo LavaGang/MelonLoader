@@ -7,7 +7,7 @@
 5. IL2CPP Game Support must have it's Mods using between .NET Framework v4 - v4.7.2.
 6. StackTraces refuse to show line numbers.
 7. Console Logs randomly do not Color properly.
-8. Mono Module currently has an issue with https/ssl.
+8. Mono Module currently has an Issue with https/ssl.
 
 ---
 

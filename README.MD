@@ -13,6 +13,7 @@
 | --no-mods             | Launch game without loading Mods         |
 | --melonloader.console | Normal Console                           |
 | --melonloader.debug   | Debug Console                            |
+| --melonloader.quitfix   | Fixes the Hanging Process Issue with some Games |
 | --melonloader.mupot   | Experimental MUPOT Mode for IL2CPP Games |
 | --melonloader.rainbow | Rainbow Console Color                |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
