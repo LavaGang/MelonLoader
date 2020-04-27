@@ -181,8 +181,6 @@ namespace MelonLoader.AssemblyGenerator
                                 // Download Il2CppAssemblyUnhollower Unity BaseLibs
 
                                 // Extract Il2CppAssemblyUnhollower Unity BaseLibs to the Il2CppAssemblyUnhollower Unity BaseLibs Folder
-
-                                was_successful = false;
                             }
 
                             if (!was_successful)
