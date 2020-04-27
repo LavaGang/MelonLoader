@@ -38,6 +38,8 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDirectory", GetGameDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Hook", Hook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Unhook", Unhook);
-
+	Mono::mono_add_internal_call("MelonLoader.Console::AllocConsole", AllocConsole);
+	Mono::mono_add_internal_call("MelonLoader.Console::SetForegroundWindow", SetForegroundWindow);
+	Mono::mono_add_internal_call("MelonLoader.Console::GetConsoleWindow", GetConsoleWindow);
 	IL2CPP::AddInternalCalls();
 }

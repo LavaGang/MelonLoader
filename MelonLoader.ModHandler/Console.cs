@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using System.IO;
 
 namespace MelonLoader
 {
     internal class Console
     {
-        [DllImport("kernel32.dll")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern int AllocConsole();
 
-        [DllImport("user32.dll")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(2)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        [DllImport("kernel32.dll")]
+        [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern IntPtr GetConsoleWindow();
 
         internal static void Create()
