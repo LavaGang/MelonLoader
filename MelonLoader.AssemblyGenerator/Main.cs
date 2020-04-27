@@ -172,42 +172,62 @@ namespace MelonLoader.AssemblyGenerator
                             MelonModLogger.LogError("Unable to Download Il2CppAssemblyUnhollower!");
                         else
                         {
-                            // Check Il2CppAssemblyUnhollower Output Folder
-                            string unhollower_output_folder = Path.Combine(unhollower_folder, "Output");
-                            if (!Directory.Exists(unhollower_output_folder))
-                                Directory.CreateDirectory(unhollower_output_folder);
-                            else
+                            // Check Il2CppAssemblyUnhollower Unity BaseLibs Folder
+                            string unhollower_baselibs_folder = Path.Combine(unhollower_folder, "BaseLibs");
+                            if (!Directory.Exists(unhollower_baselibs_folder))
                             {
-                                // Delete Old Files
-                                string[] files = Directory.GetFiles(unhollower_output_folder, "*.dll");
-                                if (files.Length > 0)
-                                {
-                                    foreach (string s in files)
-                                    {
-                                        if (!File.Exists(s) || !s.EndsWith(".dll", true, null))
-                                            break;
-                                        File.Delete(s);
-                                    }
-                                }
-                                Directory.Delete(unhollower_output_folder);
-                                Directory.CreateDirectory(unhollower_output_folder);
+                                Directory.CreateDirectory(unhollower_baselibs_folder);
+
+                                // Download Il2CppAssemblyUnhollower Unity BaseLibs
+
+                                // Extract Il2CppAssemblyUnhollower Unity BaseLibs to the Il2CppAssemblyUnhollower Unity BaseLibs Folder
+
+                                was_successful = false;
                             }
 
-                            // Load and Execute Il2CppAssemblyUnhollower
-                            try
+                            if (!was_successful)
+                                MelonModLogger.LogError("Unable to Download Il2CppAssemblyUnhollower Unity BaseLibs!");
+                            else
                             {
-                                Assembly a = Assembly.LoadFrom(unhollower_exe);
-                                if (a != null)
+                                // Check Il2CppAssemblyUnhollower Output Folder
+                                string unhollower_output_folder = Path.Combine(unhollower_folder, "Output");
+                                if (!Directory.Exists(unhollower_output_folder))
+                                    Directory.CreateDirectory(unhollower_output_folder);
+                                else
                                 {
-                                    Type b = a.GetType("AssemblyUnhollower.Program");
-                                    if (b != null)
+                                    // Delete Old Files
+                                    string[] files = Directory.GetFiles(unhollower_output_folder, "*.dll");
+                                    if (files.Length > 0)
                                     {
-                                        MethodInfo c = b.GetMethods(BindingFlags.Public | BindingFlags.Static).First(x => ((x.GetParameters().Count() == 1) && (x.GetParameters()[0].ParameterType == typeof(string[]))));
-                                        if (c != null)
+                                        foreach (string s in files)
                                         {
-                                            Directory.SetCurrentDirectory(unhollower_folder);
-                                            MelonModLogger.Log("Running Il2CppAssemblyUnhollower...");
-                                            c.Invoke(null, new object[] { new string[] { ("--input=" + dumper_output_folder), ("--output=" + unhollower_output_folder), ("--mscorlib=" + Path.Combine(managed_folder, "mscorlib.dll")), "--blacklist-assembly=SharpYml", "--blacklist-assembly=Mono.Security", "--blacklist-assembly=Newtonsoft.Json", "--blacklist-assembly=Valve.Newtonsoft.Json" } });
+                                            if (!File.Exists(s) || !s.EndsWith(".dll", true, null))
+                                                break;
+                                            File.Delete(s);
+                                        }
+                                    }
+                                    Directory.Delete(unhollower_output_folder);
+                                    Directory.CreateDirectory(unhollower_output_folder);
+                                }
+
+                                // Load and Execute Il2CppAssemblyUnhollower
+                                try
+                                {
+                                    Assembly a = Assembly.LoadFrom(unhollower_exe);
+                                    if (a != null)
+                                    {
+                                        Type b = a.GetType("AssemblyUnhollower.Program");
+                                        if (b != null)
+                                        {
+                                            MethodInfo c = b.GetMethods(BindingFlags.Public | BindingFlags.Static).First(x => ((x.GetParameters().Count() == 1) && (x.GetParameters()[0].ParameterType == typeof(string[]))));
+                                            if (c != null)
+                                            {
+                                                Directory.SetCurrentDirectory(unhollower_folder);
+                                                MelonModLogger.Log("Running Il2CppAssemblyUnhollower...");
+                                                c.Invoke(null, new object[] { new string[] { ("--input=" + dumper_output_folder), ("--output=" + unhollower_output_folder), ("--mscorlib=" + Path.Combine(managed_folder, "mscorlib.dll")), ("--unity=" + unhollower_baselibs_folder), "--blacklist-assembly=SharpYml", "--blacklist-assembly=Mono.Security", "--blacklist-assembly=Newtonsoft.Json", "--blacklist-assembly=Valve.Newtonsoft.Json" } });
+                                            }
+                                            else
+                                                was_successful = false;
                                         }
                                         else
                                             was_successful = false;
@@ -215,68 +235,66 @@ namespace MelonLoader.AssemblyGenerator
                                     else
                                         was_successful = false;
                                 }
+                                catch (Exception e) { MelonModLogger.LogError(e.ToString()); }
+
+                                if (!was_successful)
+                                    MelonModLogger.LogError("Unable to Load Il2CppAssemblyUnhollower!");
                                 else
-                                    was_successful = false;
-                            }
-                            catch (Exception e) { MelonModLogger.LogError(e.ToString()); }
-
-                            if (!was_successful)
-                                MelonModLogger.LogError("Unable to Load Il2CppAssemblyUnhollower!");
-                            else
-                            {
-                                // Delete Unused Files
-                                if (File.Exists(Path.Combine(dumper_folder, "dump.cs")))
-                                    File.Delete(Path.Combine(dumper_folder, "dump.cs"));
-                                if (File.Exists(Path.Combine(dumper_folder, "il2cpp.h")))
-                                    File.Delete(Path.Combine(dumper_folder, "il2cpp.h"));
-                                if (File.Exists(Path.Combine(dumper_folder, "script.json")))
-                                    File.Delete(Path.Combine(dumper_folder, "script.json"));
-
-                                // Get Files in Il2CppDumper Output Folder
-                                string[] files = Directory.GetFiles(dumper_output_folder);
-                                if (files.Length > 0)
                                 {
-                                    // Get Files in Il2CppAssemblyUnhollower Output Folder
-                                    string[] files2 = Directory.GetFiles(unhollower_output_folder);
-                                    if (files2.Length > 0)
+                                    // Delete Unused Files
+                                    if (File.Exists(Path.Combine(dumper_folder, "dump.cs")))
+                                        File.Delete(Path.Combine(dumper_folder, "dump.cs"));
+                                    if (File.Exists(Path.Combine(dumper_folder, "il2cpp.h")))
+                                        File.Delete(Path.Combine(dumper_folder, "il2cpp.h"));
+                                    if (File.Exists(Path.Combine(dumper_folder, "script.json")))
+                                        File.Delete(Path.Combine(dumper_folder, "script.json"));
+
+                                    // Get Files in Il2CppDumper Output Folder
+                                    string[] files = Directory.GetFiles(dumper_output_folder);
+                                    if (files.Length > 0)
                                     {
-                                        // Delete Unneeded Files
-                                        if (File.Exists(Path.Combine(unhollower_output_folder, "Mono.Security.dll")))
-                                            File.Delete(Path.Combine(unhollower_output_folder, "Mono.Security.dll"));
-                                        if (File.Exists(Path.Combine(unhollower_output_folder, "SharpYml.dll")))
-                                            File.Delete(Path.Combine(unhollower_output_folder, "SharpYml.dll"));
-                                        if (File.Exists(Path.Combine(unhollower_output_folder, "Newtonsoft.Json.dll")))
-                                            File.Delete(Path.Combine(unhollower_output_folder, "Newtonsoft.Json.dll"));
-                                        if (File.Exists(Path.Combine(unhollower_output_folder, "Valve.Newtonsoft.Json.dll")))
-                                            File.Delete(Path.Combine(unhollower_output_folder, "Valve.Newtonsoft.Json.dll"));
-
-                                        // Move Files from Il2CppAssemblyUnhollower Output Folder to Managed Folder
-                                        List<string> filenames = new List<string>();
-                                        foreach (string s in files2)
+                                        // Get Files in Il2CppAssemblyUnhollower Output Folder
+                                        string[] files2 = Directory.GetFiles(unhollower_output_folder);
+                                        if (files2.Length > 0)
                                         {
-                                            if (!File.Exists(s) || !s.EndsWith(".dll", true, null))
-                                                break;
-                                            string file_name = Path.GetFileName(s);
-                                            filenames.Add(file_name);
-                                            string new_file_path = Path.Combine(managed_folder, file_name);
-                                            if (File.Exists(new_file_path))
-                                                File.Delete(new_file_path);
-                                            File.Move(s, new_file_path);
-                                        }
+                                            // Delete Unneeded Files
+                                            if (File.Exists(Path.Combine(unhollower_output_folder, "Mono.Security.dll")))
+                                                File.Delete(Path.Combine(unhollower_output_folder, "Mono.Security.dll"));
+                                            if (File.Exists(Path.Combine(unhollower_output_folder, "SharpYml.dll")))
+                                                File.Delete(Path.Combine(unhollower_output_folder, "SharpYml.dll"));
+                                            if (File.Exists(Path.Combine(unhollower_output_folder, "Newtonsoft.Json.dll")))
+                                                File.Delete(Path.Combine(unhollower_output_folder, "Newtonsoft.Json.dll"));
+                                            if (File.Exists(Path.Combine(unhollower_output_folder, "Valve.Newtonsoft.Json.dll")))
+                                                File.Delete(Path.Combine(unhollower_output_folder, "Valve.Newtonsoft.Json.dll"));
 
-                                        // Clean Up and Save Info
-                                        Directory.Delete(unhollower_output_folder);
-                                        File.WriteAllText(file_list_json, JsonConvert.SerializeObject(filenames, Formatting.Indented));
-                                        version_file.IniWriteValue("AssemblyGenerator", "Engine", unity_version);
-                                        version_file.IniWriteValue("AssemblyGenerator", "Game", game_version);
-                                        version_file.IniWriteValue("AssemblyGenerator", "GameAssembly", game_assembly_hash);
-                                        MelonModLogger.Log("SUCCESS!");
+                                            // Move Files from Il2CppAssemblyUnhollower Output Folder to Managed Folder
+                                            List<string> filenames = new List<string>();
+                                            foreach (string s in files2)
+                                            {
+                                                if (!File.Exists(s) || !s.EndsWith(".dll", true, null))
+                                                    break;
+                                                string file_name = Path.GetFileName(s);
+                                                filenames.Add(file_name);
+                                                string new_file_path = Path.Combine(managed_folder, file_name);
+                                                if (File.Exists(new_file_path))
+                                                    File.Delete(new_file_path);
+                                                File.Move(s, new_file_path);
+                                            }
+
+                                            // Clean Up and Save Info
+                                            Directory.Delete(unhollower_output_folder);
+                                            File.WriteAllText(file_list_json, JsonConvert.SerializeObject(filenames, Formatting.Indented));
+                                            version_file.IniWriteValue("AssemblyGenerator", "Engine", unity_version);
+                                            version_file.IniWriteValue("AssemblyGenerator", "Game", game_version);
+                                            version_file.IniWriteValue("AssemblyGenerator", "GameAssembly", game_assembly_hash);
+                                            MelonModLogger.Log("SUCCESS!");
+                                        }
+                                        else
+                                            was_successful = false;
                                     }
                                     else
                                         was_successful = false;
                                 }
-                                else
-                                    was_successful = false;
                             }
                         }
                     }
