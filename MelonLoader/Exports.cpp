@@ -21,9 +21,6 @@ const char* GetGameDirectory() { return MelonLoader::GamePath; }
 void Hook(Il2CppMethod* target, void* detour) { HookManager::Hook(target, detour); }
 void Unhook(Il2CppMethod* target, void* detour) { HookManager::Unhook(target, detour); }
 
-Il2CppDomain* il2cpp_init(MonoString* domain_name) { return IL2CPP::il2cpp_init(Mono::mono_string_to_utf8(domain_name)); };
-Il2CppObject* il2cpp_runtime_invoke(Il2CppMethod* method, void* obj, Il2CppObject** params, int** exc) { return IL2CPP::il2cpp_runtime_invoke(method, obj, params, exc); };
-
 void Exports::AddInternalCalls()
 {
 	Mono::mono_add_internal_call("MelonLoader.Imports::UNLOAD_MELONLOADER", UNLOAD_MELONLOADER);
