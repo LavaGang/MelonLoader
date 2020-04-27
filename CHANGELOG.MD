@@ -57,7 +57,8 @@
 16. Added Stop Methods to MelonCoroutines.  (Credits to Slaynash :3)
 17. Fixed Error Handling in MelonCoroutines.  (Credits to Slaynash :3)
 18. Fixed Issue with MelonCoroutines when using Non-Yielding Coroutines.  (Credits to Slaynash :3)
-19. Added Support for Method Unstripping to MelonLoader.AssemblyGenerator.
+19. Added Support for Method Unstripping through Il2CppAssemblyUnhollower to MelonLoader.AssemblyGenerator.
+20. Replaced the Doorstop winmm.dll with version.dll.
 
 ---
 
