@@ -12,6 +12,7 @@ namespace MelonLoader
         internal static MelonModGameAttribute CurrentGameAttribute = null;
         internal static bool IsVRChat = false;
         internal static bool IsBoneworks = false;
+        internal static Type Il2CppObjectBaseType = null;
         private static int LastSceneIndex = -9;
         private static NET_SDK.Reflection.IL2CPP_Field BoneworksSceneManager_currentSceneIndex = null;
         private static NET_SDK.Reflection.IL2CPP_Method SceneManager_GetActiveScene = null;
@@ -30,6 +31,10 @@ namespace MelonLoader
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
                 IsVRChat = CurrentGameAttribute.IsGame("VRChat", "VRChat");
                 IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
+
+                Assembly UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
+                if (UnhollowerBaseLib != null)
+                    Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
             }
 
             if (!Imports.IsDebugMode()
@@ -41,7 +46,6 @@ namespace MelonLoader
                 MelonModLogger.consoleEnabled = true;
                 Console.Create();
             }
-
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnhollowerBaseLib;
 
 namespace Harmony
 {
@@ -38,7 +37,7 @@ namespace Harmony
 			{
 				if (HarmonyInstance.DEBUG) FileLog.LogBuffered("### Patch " + original.DeclaringType + ", " + original);
 
-				bool isIl2Cpp = original.DeclaringType.IsSubclassOf(typeof(Il2CppObjectBase));
+				bool isIl2Cpp = PatchFunctions.IsIl2CppType(original.DeclaringType);
 				if (isIl2Cpp && transpilers.Count > 0)
 					throw new NotSupportedException("IL2CPP patches cannot use transpilers (got " + transpilers.Count + ")");
 

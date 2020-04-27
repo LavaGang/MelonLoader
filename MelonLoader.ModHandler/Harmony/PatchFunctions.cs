@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnhollowerBaseLib;
 using MelonLoader;
 
 namespace Harmony
@@ -156,7 +155,7 @@ namespace Harmony
 			// If needed, unwrap the return value; then return
 			if (IsIl2CppType(origReturnType))
 			{
-				var pointerGetter = AccessTools.DeclaredProperty(typeof(Il2CppObjectBase), "Pointer").GetMethod;
+				var pointerGetter = AccessTools.DeclaredProperty(Main.Il2CppObjectBaseType, "Pointer").GetMethod;
 				Emitter.Emit(il, OpCodes.Call, pointerGetter);
 			}
 
@@ -166,7 +165,7 @@ namespace Harmony
 			return method;
 		}
 
-		private static bool IsIl2CppType(Type type) => type.IsSubclassOf(typeof(Il2CppObjectBase));
+		internal static bool IsIl2CppType(Type type) => ((Main.Il2CppObjectBaseType != null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
 		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
 	}
 }
