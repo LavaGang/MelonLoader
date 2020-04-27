@@ -13,6 +13,7 @@ namespace NET_SDK
         private static IntPtr Domain;
         private static IL2CPP_Assembly[] AssemblyList;
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         internal static void Initialize()
         {
             Domain = MelonLoader.Imports.GetIl2CppDomain();
@@ -30,6 +31,7 @@ namespace NET_SDK
         }
 
         private static IL2CPP_Class UnityAction = null;
+        [ObsoleteAttribute("This method will be removed soon. Please use Generated Assembly instead.")]
         unsafe public static IntPtr Create_UnityAction(IntPtr function)
         {
             if (UnityAction == null)
@@ -45,7 +47,9 @@ namespace NET_SDK
             return obj;
         }
 
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection instead.")]
         public static IL2CPP_Assembly[] GetAssemblies() => AssemblyList;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection instead.")]
         public static IL2CPP_Assembly GetAssembly(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -64,6 +68,7 @@ namespace NET_SDK
             return returnval;
         }
 
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection instead.")]
         public static IL2CPP_Class GetClass(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
@@ -80,6 +85,7 @@ namespace NET_SDK
             return klass;
         }
 
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection instead.")]
         public static IL2CPP_Class GetClass(string fullname)
         {
             if (string.IsNullOrEmpty(fullname))
@@ -103,6 +109,7 @@ namespace NET_SDK
         /// <param name="qualifiedName">The qualified name the class has (private classes should be separated by /)</param>
         /// <exception cref="InvalidOperationException">Thrown when the class could not be found</exception>
         /// <returns>The <see cref="IL2CPP_Class"/> found</returns>
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection instead.")]
         public static IL2CPP_Class GetClass(string nameSpace, string qualifiedName)
         {
             IL2CPP_Class ret;
@@ -121,7 +128,9 @@ namespace NET_SDK
     public static class IL2CPP
     {
         private struct Void { };
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static IntPtr IntPtrAdd(IntPtr pointer, Int32 offset) => (IntPtr)((Void*)pointer + offset);
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static T[] IntPtrToStructureArray<T>(IntPtr ptr, uint len)
         {
             IntPtr iter = ptr;
@@ -133,6 +142,7 @@ namespace NET_SDK
             }
             return arr;
         }
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static IntPtr[] IntPtrToArray(IntPtr ptr)
         {
             long length = *((long*)ptr + 3);
@@ -141,8 +151,11 @@ namespace NET_SDK
                 result[i] = *(IntPtr*)(IntPtrAdd((IntPtr)((long*)ptr + 4), (i * IntPtr.Size)));
             return result;
         }
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static T IntPtrToStructure<T>(IntPtr ptr) => (T)Marshal.PtrToStructure(ptr, typeof(T));
-        unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10); 
+        [ObsoleteAttribute("This method will be removed soon.")]
+        unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10);
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static IntPtr StringToIntPtr(string str) => MelonLoader.Il2CppImports.il2cpp_string_new(str);
         /// <summary>
         /// Converts an array of value types, <see cref="string"/>, and <see cref="IL2CPP_Object"/> to an array of <see cref="IntPtr"/>
@@ -152,6 +165,7 @@ namespace NET_SDK
         /// <param name="objtbl">The object array to convert</param>
         /// <returns>The resulting <see cref="IntPtr"/> array</returns>
         /// <exception cref="InvalidCastException"></exception>
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static IntPtr[] ObjectArrayToIntPtrArray(object[] objtbl)
         {
             if (objtbl == null)
@@ -162,6 +176,7 @@ namespace NET_SDK
             return returntbl;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static IntPtr[] IL2CPPObjectArrayToIntPtrArray(IL2CPP_Object[] objtbl)
         {
             IntPtr[] arr = new IntPtr[objtbl.Length];
@@ -170,6 +185,7 @@ namespace NET_SDK
             return arr;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static IntPtr ObjectToTypedReferenceIntPtr(object obj)
         {
             if (obj == null) return IntPtr.Zero;
@@ -178,6 +194,7 @@ namespace NET_SDK
             return (IntPtr)pRef;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static IntPtr ObjectToIntPtr(object obj)
         {
             if (obj != null)
@@ -198,6 +215,7 @@ namespace NET_SDK
             return IntPtr.Zero;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static IL2CPP_Object ObjectIntPtrToIL2CPPObject(IntPtr obj, IntPtr klass)
         {
             if (klass != IntPtr.Zero)
@@ -208,6 +226,7 @@ namespace NET_SDK
             }
             return null;
         }
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static IL2CPP_Object ObjectIntPtrToIL2CPPObject(IntPtr obj, string klass)
         {
             IL2CPP_Class klassobj = SDK.GetClass(klass);
@@ -216,6 +235,7 @@ namespace NET_SDK
             return null;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static IL2CPP_Class SystemTypeToIL2CPPClass(Type type)
         {
             if (type != null)
@@ -223,6 +243,7 @@ namespace NET_SDK
             return null;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static T[] IntPtrArrayToUnboxedValueTypeArray<T>(IntPtr arr) where T : unmanaged
         {
             IntPtr[] arr_2 = IntPtrToArray(arr);
@@ -232,6 +253,7 @@ namespace NET_SDK
             return return_arr;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         public static T[] IL2CPPObjectArrayToUnboxedValueTypeArray<T>(IL2CPP_Object[] arr) where T : unmanaged
         {
             T[] return_arr = new T[arr.Length];
@@ -240,6 +262,7 @@ namespace NET_SDK
             return return_arr;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static T[] IL2CPPObjectToUnboxedValueTypeArray<T>(IL2CPP_Object arr) where T : unmanaged
         {
             IntPtr[] arr_2 = IntPtrToArray(arr.Ptr);
@@ -249,6 +272,7 @@ namespace NET_SDK
             return return_arr;
         }
 
+        [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] paramtbl)
         {
             if (method == IntPtr.Zero)

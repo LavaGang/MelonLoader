@@ -5,6 +5,7 @@ namespace NET_SDK.Reflection
     public class IL2CPP_Base
     {
         public IntPtr Ptr { get; internal set; }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Base(IntPtr ptr)
             => Ptr = ptr;
     }

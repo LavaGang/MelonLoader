@@ -10,7 +10,7 @@ namespace NET_SDK.Reflection
     {
         public readonly string Name;
         private readonly IL2CPP_Class[] ClassList;
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Assembly(IntPtr ptr) : base(ptr)
         {
             // Setup Information
@@ -25,11 +25,15 @@ namespace NET_SDK.Reflection
                     classList.Add(new IL2CPP_Class(MelonLoader.Il2CppImports.il2cpp_image_get_class(Ptr, i)));
             ClassList = classList.ToArray();
         }
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class[] GetClasses() => ClassList;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class[] GetClasses(IL2CPP_BindingFlags flags) => GetClasses().Where(x => x.HasFlag(flags)).ToArray();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name) => GetClass(name, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name, IL2CPP_BindingFlags flags) => GetClass(name, null, flags);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name, string name_space)
         {
             IL2CPP_Class returnval = null;
@@ -64,6 +68,7 @@ namespace NET_SDK.Reflection
             }
             return returnval;
         }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name, string name_space, IL2CPP_BindingFlags flags)
         {
             IL2CPP_Class returnval = null;
@@ -98,6 +103,7 @@ namespace NET_SDK.Reflection
             }
             return returnval;
         }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(IntPtr ptr)
         {
             IL2CPP_Class returnval = null;

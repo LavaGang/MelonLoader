@@ -16,7 +16,7 @@ namespace NET_SDK.Reflection
         private readonly IL2CPP_Event[] EventList;
         //private readonly IL2CPP_Class[] NestedTypeList;
         private readonly IL2CPP_Property[] PropertyList;
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Class(IntPtr ptr) : base(ptr)
         {
             // Setup Information
@@ -65,7 +65,7 @@ namespace NET_SDK.Reflection
                 propertyList.Add(new IL2CPP_Property(property));
             PropertyList = propertyList.ToArray();
         }
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public static IntPtr CreateInstance(IL2CPP_Class il2CppClass, IL2CPP_Method constructor = null, IntPtr[] contructorParams = null)
         {
             int paramCount = contructorParams?.Length ?? 0;
@@ -83,17 +83,25 @@ namespace NET_SDK.Reflection
             }
             return instance;
         }
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_BindingFlags GetFlags() => Flags;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public bool HasFlag(IL2CPP_BindingFlags flag) => ((GetFlags() & flag) != 0);
 
         // Methods
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method[] GetMethods() => MethodList;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method[] GetMethods(IL2CPP_BindingFlags flags) => GetMethods(flags, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method[] GetMethods(Func<IL2CPP_Method, bool> func) => GetMethods().Where(x => func(x)).ToArray();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method[] GetMethods(IL2CPP_BindingFlags flags, Func<IL2CPP_Method, bool> func) => GetMethods().Where(x => (((x.GetFlags() & flags) != 0) && func(x))).ToArray();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetMethod(string name) => GetMethod(name, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags) => GetMethod(name, flags, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetMethod(string name, Func<IL2CPP_Method, bool> func)
         {
             for (int i = 0; i < MethodList.Length; i++)
@@ -104,6 +112,7 @@ namespace NET_SDK.Reflection
             }
             return null;
         }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags, Func<IL2CPP_Method, bool> func)
         {
             for (int i = 0; i < MethodList.Length; i++)
@@ -122,6 +131,7 @@ namespace NET_SDK.Reflection
         /// <param name="flags">The <see cref="IL2CPP_BindingFlags"/> to match</param>
         /// <param name="argCount">The parameter count to match</param>
         /// <returns>The first matching <see cref="IL2CPP_Method"/></returns>
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetMethod(string name, IL2CPP_BindingFlags flags, int argCount)
         {
             for (int i = 0; i < MethodList.Length; i++)
@@ -138,6 +148,7 @@ namespace NET_SDK.Reflection
         /// <param name="name">The name to search for</param>
         /// <param name="argCount">The parameter count to match</param>
         /// <returns>The first matching <see cref="IL2CPP_Method"/></returns>
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetMethod(string name, int argCount)
         {
             for (int i = 0; i < MethodList.Length; i++)
@@ -150,12 +161,19 @@ namespace NET_SDK.Reflection
         }
 
         // Fields
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field[] GetFields() => FieldList;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field[] GetFields(IL2CPP_BindingFlags flags) => GetFields(flags, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field[] GetFields(Func<IL2CPP_Field, bool> func) => GetFields().Where(x => func(x)).ToArray();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field[] GetFields(IL2CPP_BindingFlags flags, Func<IL2CPP_Field, bool> func) => GetFields().Where(x => (((x.GetFlags() & flags) != 0) && func(x))).ToArray();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field GetField(string name) => GetField(name, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field GetField(string name, IL2CPP_BindingFlags flags) => GetField(name, flags, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field GetField(string name, Func<IL2CPP_Field, bool> func)
         {
             for (int i = 0; i < FieldList.Length; i++)
@@ -166,6 +184,7 @@ namespace NET_SDK.Reflection
             }
             return null;
         }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Field GetField(string name, IL2CPP_BindingFlags flags, Func<IL2CPP_Field, bool> func)
         {
             for (int i = 0; i < FieldList.Length; i++)
@@ -178,11 +197,15 @@ namespace NET_SDK.Reflection
         }
 
         // Events
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Event[] GetEvents() => EventList;
 
         // Properties
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Property[] GetProperties() => PropertyList;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Property[] GetProperties(IL2CPP_BindingFlags flags) => GetProperties().Where(x => ((x.GetFlags() & flags) != 0)).ToArray();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Property GetProperty(string name)
         {
             for (int i = 0; i < PropertyList.Length; i++)
@@ -193,6 +216,7 @@ namespace NET_SDK.Reflection
             }
             return null;
         }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Property GetProperty(string name, IL2CPP_BindingFlags flags)
         {
             for (int i = 0; i < PropertyList.Length; i++)

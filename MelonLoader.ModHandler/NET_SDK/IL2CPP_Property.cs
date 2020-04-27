@@ -9,7 +9,7 @@ namespace NET_SDK.Reflection
         public readonly IL2CPP_BindingFlags Flags;
         private readonly IL2CPP_Method getMethod;
         private readonly IL2CPP_Method setMethod;
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Property(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;
@@ -24,11 +24,13 @@ namespace NET_SDK.Reflection
             if (setMethodPtr != IntPtr.Zero)
                 setMethod = new IL2CPP_Method(setMethodPtr);
         }
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_BindingFlags GetFlags() => Flags;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public bool HasFlag(IL2CPP_BindingFlags flag) => ((GetFlags() & flag) != 0);
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetGetMethod() => getMethod;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Method GetSetMethod() => setMethod;
     }
 }

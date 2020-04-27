@@ -9,6 +9,7 @@ namespace NET_SDK.Reflection
         public readonly IL2CPP_BindingFlags Flags;
         public readonly IL2CPP_Type ReturnType;
 
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Field(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;
@@ -16,13 +17,15 @@ namespace NET_SDK.Reflection
             Flags = (IL2CPP_BindingFlags)MelonLoader.Il2CppImports.il2cpp_field_get_flags(Ptr);
             ReturnType = new IL2CPP_Type(MelonLoader.Il2CppImports.il2cpp_field_get_type(Ptr));
         }
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_BindingFlags GetFlags() => Flags;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public bool HasFlag(IL2CPP_BindingFlags flag) => ((GetFlags() & flag) != 0);
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Type GetReturnType() => ReturnType;
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         unsafe public IL2CPP_Object GetValue() => GetValue(IntPtr.Zero);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         unsafe public IL2CPP_Object GetValue(IntPtr obj)
         {
             IntPtr returnval;
@@ -34,8 +37,9 @@ namespace NET_SDK.Reflection
                 return new IL2CPP_Object(returnval, GetReturnType());
             return null;
         }
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         unsafe public void SetValue(IntPtr value) => SetValue(IntPtr.Zero, value);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         unsafe public void SetValue(IntPtr obj, IntPtr value)
         {
             if (HasFlag(IL2CPP_BindingFlags.FIELD_STATIC))

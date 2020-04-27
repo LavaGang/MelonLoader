@@ -99,9 +99,7 @@ namespace Harmony
                 PatchTools.RememberObject(original, new Tuple<MethodBase, MethodBase>(replacement, il2CppShim));
             }
 			else
-			{
 				PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
-			}
 			return replacement;
 		}
 
