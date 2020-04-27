@@ -65,6 +65,7 @@
 24. Added Event Fix for knah's Unhollower Logging.
 25. Moved IL2CPP Imports from NET_SDK.IL2CPP to MelonLoader.Il2CppImports.
 26. Made all IL2CPP Imports Internal Calls for Faster Invoking.
+27. Fixed Null Reference Exception Error when using MethodInfo of Generated Assembly Methods for 0Harmony.
 
 ---
 

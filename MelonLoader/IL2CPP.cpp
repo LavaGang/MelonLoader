@@ -18,7 +18,7 @@ bool IL2CPP::Setup()
 
 	return !AssertionManager::Result;
 }
-
+	
 void IL2CPP::AddInternalCalls()
 {
 	Mono::mono_add_internal_call("MelonLoader.Il2CppImports::il2cpp_init", il2cpp_init);

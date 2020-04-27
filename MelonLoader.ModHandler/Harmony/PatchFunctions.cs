@@ -81,29 +81,27 @@ namespace Harmony
 
 		public static DynamicMethod UpdateWrapper(MethodBase original, PatchInfo patchInfo, string instanceID)
 		{
-			var sortedPrefixes = GetSortedPatchMethods(original, patchInfo.prefixes);
+            var sortedPrefixes = GetSortedPatchMethods(original, patchInfo.prefixes);
 			var sortedPostfixes = GetSortedPatchMethods(original, patchInfo.postfixes);
 			var sortedTranspilers = GetSortedPatchMethods(original, patchInfo.transpilers);
 
-			var replacement = MethodPatcher.CreatePatchedMethod(original, instanceID, sortedPrefixes, sortedPostfixes, sortedTranspilers);
+            var replacement = MethodPatcher.CreatePatchedMethod(original, instanceID, sortedPrefixes, sortedPostfixes, sortedTranspilers);
 			if (replacement == null) throw new MissingMethodException("Cannot create dynamic replacement for " + original.FullDescription());
 
-			var errorString = Memory.DetourMethod(original, replacement);
+            var errorString = Memory.DetourMethod(original, replacement);
 			if (errorString != null)
 				throw new FormatException("Method " + original.FullDescription() + " cannot be patched. Reason: " + errorString);
 
-			if (IsIl2CppType(original.DeclaringType))
+            if (IsIl2CppType(original.DeclaringType))
 			{
-				var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
-				Imports.Hook(NET_SDK.SDK.GetClass(original.DeclaringType.FullName).GetMethod(original.Name).Ptr, il2CppShim.MethodHandle.GetFunctionPointer());
-
-				PatchTools.RememberObject(original, new Tuple<MethodBase, MethodBase>(replacement, il2CppShim));
-			}
+                var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
+                Imports.Hook(Il2CppTypeMethodInfoToIntPtr(original.DeclaringType, original.Name), il2CppShim.MethodHandle.GetFunctionPointer());
+                PatchTools.RememberObject(original, new Tuple<MethodBase, MethodBase>(replacement, il2CppShim));
+            }
 			else
 			{
 				PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
 			}
-
 			return replacement;
 		}
 
@@ -166,6 +164,7 @@ namespace Harmony
 		}
 
 		internal static bool IsIl2CppType(Type type) => ((Main.Il2CppObjectBaseType != null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
+        private static IntPtr Il2CppTypeMethodInfoToIntPtr(Type type, string method_name) { FieldInfo methodptr = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method_name))); if (methodptr != null) return (IntPtr)methodptr.GetValue(null); return IntPtr.Zero; }
 		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
 	}
 }
