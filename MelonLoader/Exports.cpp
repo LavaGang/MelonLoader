@@ -23,6 +23,9 @@ void Unhook(Il2CppMethod* target, void* detour) { HookManager::Unhook(target, de
 
 void Exports::AddInternalCalls()
 {
+	Mono::mono_add_internal_call("MelonLoader.Console::AllocConsole", AllocConsole);
+	Mono::mono_add_internal_call("MelonLoader.Console::SetForegroundWindow", SetForegroundWindow);
+	Mono::mono_add_internal_call("MelonLoader.Console::GetConsoleWindow", GetConsoleWindow);
 	Mono::mono_add_internal_call("MelonLoader.Imports::UNLOAD_MELONLOADER", UNLOAD_MELONLOADER);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_Log", Logger_Log);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogColor", Logger_LogColor);
@@ -38,8 +41,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDirectory", GetGameDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Hook", Hook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Unhook", Unhook);
-	Mono::mono_add_internal_call("MelonLoader.Console::AllocConsole", AllocConsole);
-	Mono::mono_add_internal_call("MelonLoader.Console::SetForegroundWindow", SetForegroundWindow);
-	Mono::mono_add_internal_call("MelonLoader.Console::GetConsoleWindow", GetConsoleWindow);
-	IL2CPP::AddInternalCalls();
+
+	if (MelonLoader::IsGameIl2Cpp)
+		IL2CPP::AddInternalCalls();
 }

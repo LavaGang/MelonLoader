@@ -92,10 +92,10 @@ namespace Harmony
 			if (errorString != null)
 				throw new FormatException("Method " + original.FullDescription() + " cannot be patched. Reason: " + errorString);
 
-            if (IsIl2CppType(original.DeclaringType))
+            if (UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType))
 			{
                 var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
-                Imports.Hook(Il2CppTypeMethodInfoToIntPtr(original.DeclaringType, original.Name), il2CppShim.MethodHandle.GetFunctionPointer());
+                Imports.Hook(UnhollowerSupport.MethodBaseToIntPtr(original), il2CppShim.MethodHandle.GetFunctionPointer());
                 PatchTools.RememberObject(original, new Tuple<MethodBase, MethodBase>(replacement, il2CppShim));
             }
 			else
@@ -112,12 +112,10 @@ namespace Harmony
 			var origParamTypes = result.ToArray();
 			var paramTypes = new Type[origParamTypes.Length];
 			for (int i = 0; i < paramTypes.Length; ++i)
-			{
-				paramTypes[i] = IsIl2CppType(origParamTypes[i]) ? typeof(IntPtr) : origParamTypes[i];
-			}
+				paramTypes[i] = UnhollowerSupport.IsGeneratedAssemblyType(origParamTypes[i]) ? typeof(IntPtr) : origParamTypes[i];
 
 			var origReturnType = AccessTools.GetReturnedType(original);
-			var returnType = IsIl2CppType(origReturnType) ? typeof(IntPtr) : origReturnType;
+			var returnType = UnhollowerSupport.IsGeneratedAssemblyType(origReturnType) ? typeof(IntPtr) : origReturnType;
 
 			DynamicMethod method;
 			method = new DynamicMethod(
@@ -139,17 +137,15 @@ namespace Harmony
 			for (int i = 0; i < origParamTypes.Length; ++i)
 			{
 				Emitter.Emit(il, OpCodes.Ldarg, i);
-				if (IsIl2CppType(origParamTypes[i]))
-				{
+				if (UnhollowerSupport.IsGeneratedAssemblyType(origParamTypes[i]))
 					Emitter.Emit(il, OpCodes.Newobj, Il2CppConstuctor(origParamTypes[i]));
-				}
 			}
 
 			// Call the original patch with the now-correct types
 			Emitter.Emit(il, OpCodes.Call, original);
 
 			// If needed, unwrap the return value; then return
-			if (IsIl2CppType(origReturnType))
+			if (UnhollowerSupport.IsGeneratedAssemblyType(origReturnType))
 			{
 				var pointerGetter = AccessTools.DeclaredProperty(Main.Il2CppObjectBaseType, "Pointer").GetMethod;
 				Emitter.Emit(il, OpCodes.Call, pointerGetter);
@@ -161,8 +157,6 @@ namespace Harmony
 			return method;
 		}
 
-		internal static bool IsIl2CppType(Type type) => ((Main.Il2CppObjectBaseType != null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
-        private static IntPtr Il2CppTypeMethodInfoToIntPtr(Type type, string method_name) { FieldInfo methodptr = type.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method_name))); if (methodptr != null) return (IntPtr)methodptr.GetValue(null); return IntPtr.Zero; }
-		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
+        private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
 	}
 }

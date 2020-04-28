@@ -37,7 +37,7 @@ namespace Harmony
 			{
 				if (HarmonyInstance.DEBUG) FileLog.LogBuffered("### Patch " + original.DeclaringType + ", " + original);
 
-				bool isIl2Cpp = PatchFunctions.IsIl2CppType(original.DeclaringType);
+				bool isIl2Cpp = MelonLoader.UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType);
 				if (isIl2Cpp && transpilers.Count > 0)
 					throw new NotSupportedException("IL2CPP patches cannot use transpilers (got " + transpilers.Count + ")");
 

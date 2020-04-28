@@ -108,7 +108,7 @@
     <Compile Include="Harmony\Tools\SymbolExtensions.cs" />
     <Compile Include="Harmony\Tools\Traverse.cs" />
     <Compile Include="Harmony\Transpilers.cs" />
-    <Compile Include="UnhollowerLogging.cs" />
+    <Compile Include="UnhollowerSupport.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

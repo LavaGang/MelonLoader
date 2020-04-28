@@ -5,8 +5,34 @@ using System.Reflection;
 
 namespace MelonLoader
 {
-    internal class UnhollowerLogging
+    internal class UnhollowerSupport
     {
+        internal static bool IsGeneratedAssemblyType(Type type) => ((Main.Il2CppObjectBaseType != null) && (type != null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
+        internal static IntPtr MethodBaseToIntPtr(MethodBase method)
+        {
+            if (IsGeneratedAssemblyType(method.DeclaringType))
+            {
+                FieldInfo methodptr = method.DeclaringType.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method.Name)));
+                if (methodptr != null)
+                    return (IntPtr)methodptr.GetValue(null);
+            }
+            else
+                return method.MethodHandle.GetFunctionPointer();
+            return IntPtr.Zero;
+        }
+        internal static IntPtr MethodInfoToIntPtr(MethodInfo method)
+        {
+            if (IsGeneratedAssemblyType(method.DeclaringType))
+            {
+                FieldInfo methodptr = method.DeclaringType.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method.Name)));
+                if (methodptr != null)
+                    return (IntPtr)methodptr.GetValue(null);
+            }
+            else
+                return method.MethodHandle.GetFunctionPointer();
+            return IntPtr.Zero;
+        }
+
         internal static void FixEvents()
         {
             Type LogSupportType = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.LogSupport");
