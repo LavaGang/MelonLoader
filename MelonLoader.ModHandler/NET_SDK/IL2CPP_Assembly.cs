@@ -6,30 +6,34 @@ using System.Linq;
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Assembly : IL2CPP_Base
     {
         public readonly string Name;
         private readonly IL2CPP_Class[] ClassList;
-
         internal IL2CPP_Assembly(IntPtr ptr) : base(ptr)
         {
             // Setup Information
             Ptr = ptr;
-            Name = Path.GetFileNameWithoutExtension(Marshal.PtrToStringAnsi(IL2CPP.il2cpp_image_get_name(Ptr)));
+            Name = Path.GetFileNameWithoutExtension(Marshal.PtrToStringAnsi(MelonLoader.Il2Cpp.il2cpp_image_get_name(Ptr)));
 
             // Map out Classes
-            uint class_count = IL2CPP.il2cpp_image_get_class_count(Ptr);
+            uint class_count = MelonLoader.Il2Cpp.il2cpp_image_get_class_count(Ptr);
             List<IL2CPP_Class> classList = new List<IL2CPP_Class>((int)class_count);
             for (uint i = 0; i < class_count; i++)
                 if (Ptr != IntPtr.Zero)
-                    classList.Add(new IL2CPP_Class(IL2CPP.il2cpp_image_get_class(Ptr, i)));
+                    classList.Add(new IL2CPP_Class(MelonLoader.Il2Cpp.il2cpp_image_get_class(Ptr, i)));
             ClassList = classList.ToArray();
         }
-
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class[] GetClasses() => ClassList;
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class[] GetClasses(IL2CPP_BindingFlags flags) => GetClasses().Where(x => x.HasFlag(flags)).ToArray();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name) => GetClass(name, null);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name, IL2CPP_BindingFlags flags) => GetClass(name, null, flags);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name, string name_space)
         {
             IL2CPP_Class returnval = null;
@@ -64,6 +68,7 @@ namespace NET_SDK.Reflection
             }
             return returnval;
         }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(string name, string name_space, IL2CPP_BindingFlags flags)
         {
             IL2CPP_Class returnval = null;
@@ -98,6 +103,7 @@ namespace NET_SDK.Reflection
             }
             return returnval;
         }
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Class GetClass(IntPtr ptr)
         {
             IL2CPP_Class returnval = null;

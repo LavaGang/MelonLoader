@@ -5,6 +5,7 @@ using System.Text;
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public enum IL2CPP_Stat
     {
         NEW_OBJECT_COUNT,

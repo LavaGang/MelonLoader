@@ -3,31 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+#pragma warning disable 0618
 
 namespace MelonLoader
 {
-    internal static class BuildInfo
-    {
-        internal const string Name = "MelonLoader";
-        internal const string Author = "Lava Gang";
-        internal const string Company = "discord.gg/2Wn3N2P";
-        internal const string Version = "0.1.1";
-    }
-
     public static class Main
     {
+        internal static bool IsInitialized = false;
         internal static List<MelonMod> Mods = new List<MelonMod>();
         internal static MelonModGameAttribute CurrentGameAttribute = null;
         internal static bool IsVRChat = false;
         internal static bool IsBoneworks = false;
-        private static int LastSceneIndex = -9;
-        private static NET_SDK.Reflection.IL2CPP_Field BoneworksSceneManager_currentSceneIndex = null;
-        private static NET_SDK.Reflection.IL2CPP_Method SceneManager_GetActiveScene = null;
-        private static NET_SDK.Reflection.IL2CPP_Method Scene_buildIndex_get = null;
+        internal static Type Il2CppObjectBaseType = null;
+        internal static Assembly UnhollowerBaseLib = null;
+        internal static Assembly UnityEngine_CoreModule = null;
+        private static bool ShouldCheckForUiManager = true;
         private static NET_SDK.Reflection.IL2CPP_Class VRCUiManager = null;
         private static NET_SDK.Reflection.IL2CPP_Method VRCUiManager_GetInstance = null;
-        private static bool ShouldCheckForUiManager = true;
-        internal static bool IsInitialized = false;
 
         private static void Initialize()
         {
@@ -38,7 +30,16 @@ namespace MelonLoader
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
                 IsVRChat = CurrentGameAttribute.IsGame("VRChat", "VRChat");
                 IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
+
+                UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
+                if (UnhollowerBaseLib != null)
+                {
+                    Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
+                    UnhollowerSupport.FixLoggerEvents();
+                }
             }
+
+            UnityEngine_CoreModule = Assembly.Load("UnityEngine.CoreModule");
 
             if (!Imports.IsDebugMode()
 #if !DEBUG
@@ -50,21 +51,23 @@ namespace MelonLoader
                 Console.Create();
             }
 
-
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
             MelonModLogger.Log("GameName: " + CurrentGameAttribute.GameName);
+            MelonModLogger.Log("Version: " + Imports.GetGameVersion());
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
 
+            /*
             if (Imports.IsIl2CppGame())
             {
                 MelonModLogger.Log("Initializing NET_SDK...");
                 NET_SDK.SDK.Initialize();
                 MelonModLogger.Log("------------------------------");
             }
+            */
 
             bool no_mods = false;
             string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");
@@ -183,8 +186,16 @@ namespace MelonLoader
             IsInitialized = true;
         }
 
-        static int level_loaded_index = -1;
-        static bool was_level_loaded = false;
+        internal static void OnLevelIsLoading()
+        {
+            if (IsInitialized)
+            {
+                if (Mods.Count() > 0)
+                    foreach (MelonMod mod in Mods)
+                        try { mod.OnLevelIsLoading(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
+            }
+        }
+
         internal static void OnLevelWasLoaded(int level)
         {
             if (IsInitialized)
@@ -192,8 +203,6 @@ namespace MelonLoader
                 if (Mods.Count() > 0)
                     foreach (MelonMod mod in Mods)
                         try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
-                was_level_loaded = true;
-                level_loaded_index = level;
             }
         }
 
@@ -208,19 +217,9 @@ namespace MelonLoader
         {
             if (IsInitialized)
             {
-                if (was_level_loaded)
-                {
-                    OnLevelWasInitialized(level_loaded_index);
-                    was_level_loaded = false;
-                    level_loaded_index = -1;
-                }
-                if (Imports.IsIl2CppGame())
-                {
-                    if (IsVRChat)
-                        VRChat_CheckUiManager();
-                    if (!Imports.IsMUPOTMode())
-                        CheckForSceneChange();
-                }
+                SceneManager.CheckForSceneChange();
+                //if (Imports.IsIl2CppGame() && IsVRChat)
+                //    VRChat_CheckUiManager();
                 if (Mods.Count() > 0)
                     foreach (MelonMod mod in Mods)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
@@ -264,7 +263,9 @@ namespace MelonLoader
                 foreach (MelonMod mod in Mods)
                     try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
             ModPrefs.SaveConfig();
-            NET_SDK.Harmony.Manager.UnpatchAll();
+            if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                NET_SDK.Harmony.Manager.UnpatchAll();
+            Harmony.HarmonyInstance.UnpatchAllInstances();
         }
 
         internal static void OnModSettingsApplied()
@@ -272,46 +273,6 @@ namespace MelonLoader
             if (IsInitialized && (Mods.Count() > 0))
                 foreach (MelonMod mod in Mods)
                     try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
-        }
-
-        public static int GetActiveSceneIndex()
-        {
-            if (IsBoneworks)
-            {
-                if (BoneworksSceneManager_currentSceneIndex == null)
-                    BoneworksSceneManager_currentSceneIndex = NET_SDK.SDK.GetClass("StressLevelZero.Utilities.BoneworksSceneManager")?.GetField("currentSceneIndex");
-                if (BoneworksSceneManager_currentSceneIndex == null)
-                    return -9;
-                return BoneworksSceneManager_currentSceneIndex.GetValue().UnboxValue<int>();
-            }
-            else
-            {
-                if (SceneManager_GetActiveScene == null)
-                    SceneManager_GetActiveScene = NET_SDK.SDK.GetClass("UnityEngine.SceneManagement.SceneManager")?.GetMethod("GetActiveScene");
-                if (SceneManager_GetActiveScene == null)
-                    return -9;
-                if (Scene_buildIndex_get == null)
-                    Scene_buildIndex_get = NET_SDK.SDK.GetClass("UnityEngine.SceneManagement.Scene")?.GetProperty("buildIndex")?.GetGetMethod();
-                if (Scene_buildIndex_get == null)
-                    return -9;
-                NET_SDK.Reflection.IL2CPP_Object scene = SceneManager_GetActiveScene.Invoke();
-                if (scene == null)
-                    return -9;
-                NET_SDK.Reflection.IL2CPP_Object buildIndex = Scene_buildIndex_get.Invoke(scene);
-                if (buildIndex == null)
-                    return -9;
-                return buildIndex.UnboxValue<int>();
-            }
-        }
-
-        private static void CheckForSceneChange()
-        {
-            int currentscene = GetActiveSceneIndex();
-            if (LastSceneIndex != currentscene)
-            {
-                LastSceneIndex = currentscene;
-                OnLevelWasLoaded(currentscene);
-            }
         }
 
         private static void VRChat_CheckUiManager()

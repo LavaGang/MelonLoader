@@ -2,6 +2,7 @@
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Object : IL2CPP_Base
     {
         private readonly IL2CPP_Type ReturnType;
@@ -11,12 +12,17 @@ namespace NET_SDK.Reflection
             ReturnType = returntype;
         }
 
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Type GetReturnType() => ReturnType;
 
-        public IntPtr UnboxIntPtr() => IL2CPP.il2cpp_object_unbox(Ptr);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
+        public IntPtr UnboxIntPtr() => MelonLoader.Il2Cpp.il2cpp_object_unbox(Ptr);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public unsafe void* Unbox() => UnboxIntPtr().ToPointer();
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public unsafe T UnboxValue<T>() where T : unmanaged
             => *(T*)Unbox();
-        public string UnboxString() => IL2CPP.IntPtrToString(Ptr);
+        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
+        unsafe public string UnboxString() => new string((char*)Ptr.ToPointer() + 10);
     }
 }

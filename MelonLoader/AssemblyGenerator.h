@@ -1,6 +1,6 @@
 #pragma once
 
-class Wrapper
+class AssemblyGenerator
 {
 public:
 	static bool Initialize();

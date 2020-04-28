@@ -86,6 +86,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssemblyGenerator.cpp" />
     <ClCompile Include="AssertionManager.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="HookManager.cpp" />
@@ -101,6 +102,7 @@
     <ClCompile Include="Mono.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssemblyGenerator.h" />
     <ClInclude Include="AssertionManager.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="HookManager.h" />

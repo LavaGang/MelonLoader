@@ -1,5 +1,8 @@
-﻿namespace NET_SDK.Reflection
+﻿using System;
+
+namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public enum IL2CPP_BindingFlags
     {
         VISIBILITY_MASK = 0x00000007,

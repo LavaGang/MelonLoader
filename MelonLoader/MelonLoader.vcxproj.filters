@@ -14,6 +14,7 @@
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="AssertionManager.cpp" />
+    <ClCompile Include="AssemblyGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
@@ -39,6 +40,7 @@
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="AssertionManager.h" />
+    <ClInclude Include="AssemblyGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="detours">

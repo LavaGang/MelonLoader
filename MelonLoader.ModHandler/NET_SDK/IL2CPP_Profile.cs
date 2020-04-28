@@ -5,7 +5,9 @@ using System.Text;
 
 namespace NET_SDK.Reflection
 {
-    public enum IL2CPP_ProfileFlags {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
+    public enum IL2CPP_ProfileFlags
+    {
         NONE = 0,
         APPDOMAIN_EVENTS = 1 << 0,
         ASSEMBLY_EVENTS = 1 << 1,

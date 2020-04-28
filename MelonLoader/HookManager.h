@@ -31,18 +31,13 @@ public:
 	static Il2CppDomain* Hooked_il2cpp_init(const char* name);
 	static MonoDomain* Hooked_mono_jit_init_version(const char* name, const char* version);
 	static void Hooked_il2cpp_add_internal_call(const char* name, void* method);
-	static void* Hooked_mono_lookup_internal_call_full(MonoMethod* method, int* uses_handles);
-	static Il2CppClass* Hooked_il2cpp_class_from_system_type(Il2CppReflectionType* type);
-	static Il2CppGlobalMetadataHeader* Hooked_MetadataLoader_LoadMetadataFile(const char* fileName);
 	static bool Hooked_SingleAppInstance_FindOtherInstance(LPARAM lParam);
 	static bool Hooked_PlayerCleanup(bool dopostquitmsg);
 	static void* Hooked_PlayerLoadFirstScene(bool unknown);
 	static __int64 Hooked_BaseBehaviourManager_Update(void* behaviour_manager);
 	static __int64 Hooked_BaseBehaviourManager_FixedUpdate(void* behaviour_manager);
 	static __int64 Hooked_BaseBehaviourManager_LateUpdate(void* behaviour_manager);
-	static void Hooked_GUIManager_DoGUIEvent(void* __0, void* __1, bool __2);
-	static bool __fastcall Hooked_MonoBehaviour_DoGUI(int a1, __int64 a2, uint32_t a3, uint32_t a4, __int64 a5, uint32_t a6);
-	static char __fastcall Hooked_MonoBehaviourDoGUI(__int64 pthis, uint32_t a1, __int64 a2, uint32_t a3);
+	//static void Hooked_GUIManager_DoGUIEvent(void* __0, void* __1, bool __2);
 	static void Hooked_EndOfFrameCallbacks_DequeAll();
 };
 

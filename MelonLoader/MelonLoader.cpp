@@ -13,6 +13,7 @@ bool MelonLoader::DebugMode = false;
 bool MelonLoader::MupotMode = false;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
+bool MelonLoader::QuitFix = false;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 
@@ -27,12 +28,14 @@ void MelonLoader::Main()
 	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);
 	GamePath[filepathstr.size()] = '\0';
 
-	if (strstr(GetCommandLine(), "--melonloader.mupot") != NULL)
-		MupotMode = true;
+	//if (strstr(GetCommandLine(), "--melonloader.mupot") != NULL)
+	//	MupotMode = true;
 	if (strstr(GetCommandLine(), "--melonloader.rainbow") != NULL)
 		RainbowMode = true;
 	if (strstr(GetCommandLine(), "--melonloader.randomrainbow") != NULL)
 		RandomRainbowMode = true;
+	if (strstr(GetCommandLine(), "--melonloader.quitfix") != NULL)
+		QuitFix = true;
 
 	std::string gameassemblypath = filepathstr + "\\GameAssembly.dll";
 	WIN32_FIND_DATA data;
@@ -81,7 +84,6 @@ void MelonLoader::Main()
 			if (Mono::Load() && Mono::Setup())
 			{
 				HookManager::LoadLibraryW_Hook();
-				//HookManager::Hook(&(LPVOID&)Mono::mono_lookup_internal_call_full, HookManager::Hooked_mono_lookup_internal_call_full);
 				if (MupotMode)
 					HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, HookManager::Hooked_mono_jit_init_version);
 			}
@@ -106,6 +108,16 @@ void MelonLoader::UNLOAD()
 	}
 	Logger::Log("UNLOADED!");
 	Logger::Stop();
+}
+
+void MelonLoader::KillProcess()
+{
+	HANDLE hProcess = GetCurrentProcess();
+	if (hProcess != NULL)
+	{
+		TerminateProcess(hProcess, NULL);
+		CloseHandle(hProcess);
+	}
 }
 
 bool MelonLoader::Is64bit()

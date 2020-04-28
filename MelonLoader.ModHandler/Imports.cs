@@ -19,7 +19,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_LogModStatus(int type);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static IntPtr GetIl2CppDomain();
+        public extern static IntPtr GetIl2CppDomain();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetCompanyName();
@@ -29,6 +29,9 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetUnityVersion();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetGameVersion();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsIl2CppGame();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -46,5 +49,12 @@ namespace MelonLoader
         public extern static void Hook(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Unhook(IntPtr target, IntPtr detour);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern int AllocConsole();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(2)]
+        internal static extern bool SetForegroundWindow(IntPtr hWnd);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern IntPtr GetConsoleWindow();
     }
 }
