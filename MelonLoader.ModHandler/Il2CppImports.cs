@@ -1,11 +1,77 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 #pragma warning disable 0649
 
 namespace MelonLoader
 {
     public static class Il2CppImports
     {
+        unsafe public static IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] paramtbl)
+        {
+            if (method == IntPtr.Zero)
+                return IntPtr.Zero;
+            IntPtr[] intPtrArray;
+            IntPtr returnval = IntPtr.Zero;
+            intPtrArray = ((paramtbl != null) ? paramtbl : new IntPtr[0]);
+            IntPtr intPtr = Marshal.AllocHGlobal(intPtrArray.Length * sizeof(void*));
+            try
+            {
+                void** pointerArray = (void**)intPtr.ToPointer();
+                for (int i = 0; i < intPtrArray.Length; i++)
+                    pointerArray[i] = intPtrArray[i].ToPointer();
+                IntPtr exp = IntPtr.Zero;
+                returnval = il2cpp_runtime_invoke(method, obj, pointerArray, ref exp);
+                if (exp.ToInt32() != 0)
+                {
+                    // There was an exception! Handle it somehow here
+                    string message = "";
+                    var ptr = Marshal.AllocHGlobal(4097);
+                    try
+                    {
+                        // 4096 is the largest length of an exception. If not, this can be changed.
+                        // TODO: Make this a constant/predefine instead of a magic number
+                        il2cpp_format_exception(exp, ptr, 4096);
+                        message = Marshal.PtrToStringAnsi(ptr);
+                        throw new InvalidOperationException($"Invoke failed with exception: {message}");
+                    }
+                    finally
+                    {
+                        Marshal.FreeHGlobal(ptr);
+                    }
+                    throw new InvalidOperationException($"Invoke failed! Could not get exception from invoke failure!");
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(intPtr);
+            }
+            return returnval;
+        }
+
+        private struct Void { };
+        unsafe private static IntPtr IntPtrAdd(IntPtr pointer, Int32 offset) => (IntPtr)((Void*)pointer + offset);
+        public static T IntPtrToStructure<T>(IntPtr ptr) => (T)Marshal.PtrToStructure(ptr, typeof(T));
+        public static T[] IntPtrToStructureArray<T>(IntPtr ptr, uint len)
+        {
+            IntPtr iter = ptr;
+            T[] arr = new T[len];
+            for (uint i = 0; i < len; i++)
+            {
+                arr[i] = IntPtrToStructure<T>(ptr);
+                iter = IntPtrAdd(iter, Marshal.SizeOf(typeof(T)));
+            }
+            return arr;
+        }
+        unsafe public static IntPtr[] IntPtrToArray(IntPtr ptr)
+        {
+            long length = *((long*)ptr + 3);
+            IntPtr[] result = new IntPtr[length];
+            for (int i = 0; i < length; i++)
+                result[i] = *(IntPtr*)(IntPtrAdd((IntPtr)((long*)ptr + 4), (i * IntPtr.Size)));
+            return result;
+        }
+
         public enum Il2CppStat
         {
             NEW_OBJECT_COUNT,

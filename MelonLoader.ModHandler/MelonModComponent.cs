@@ -27,7 +27,7 @@ namespace MelonLoader
         internal static MelonModComponent Instance = null;
         static bool has_started = false;
         void Start() { if (!has_started) { Main.OnApplicationStart(); has_started = true; } }
-        void OnLevelWasLoaded(int level) { transform.SetAsLastSibling(); Main.OnLevelWasLoaded(level); }
+        //void OnLevelWasLoaded(int level) { transform.SetAsLastSibling(); Main.OnLevelWasLoaded(level); }
         void Update() => Main.OnUpdate();
         void FixedUpdate() => Main.OnFixedUpdate();
         void LateUpdate() => Main.OnLateUpdate();

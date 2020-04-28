@@ -108,6 +108,7 @@
     <Compile Include="Harmony\Tools\SymbolExtensions.cs" />
     <Compile Include="Harmony\Tools\Traverse.cs" />
     <Compile Include="Harmony\Transpilers.cs" />
+    <Compile Include="SceneManager.cs" />
     <Compile Include="UnhollowerSupport.cs" />
   </ItemGroup>
   <ItemGroup />

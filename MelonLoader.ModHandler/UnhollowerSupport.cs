@@ -33,7 +33,7 @@ namespace MelonLoader
             return IntPtr.Zero;
         }
 
-        internal static void FixEvents()
+        internal static void FixLoggerEvents()
         {
             Type LogSupportType = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.LogSupport");
             if (LogSupportType != null)
@@ -63,5 +63,41 @@ namespace MelonLoader
 
         private static ParameterExpression[] GetParameters(EventInfo eventInfo) => eventInfo.EventHandlerType.GetMethod("Invoke").GetParameters().Select(parameter => Expression.Parameter(parameter.ParameterType)).ToArray();
         private static Delegate GetHandler(EventInfo eventInfo, Action action, ParameterExpression[] parameters) => Expression.Lambda(eventInfo.EventHandlerType, Expression.Call(Expression.Constant(action), "Invoke", Type.EmptyTypes), parameters).Compile();
+
+        private static Type UnhollowerBaseLib_IL2CPP = null;
+        private static MethodInfo GetIl2CppClass_Method = null;
+        private static MethodInfo GetIl2CppField_Method = null;
+        internal static IntPtr GetIl2CppClass(string assemblyName, string namespaze, string className)
+        {
+            if (Main.UnhollowerBaseLib != null)
+            {
+                if (GetIl2CppClass_Method == null)
+                { 
+                    if (UnhollowerBaseLib_IL2CPP == null)
+                        UnhollowerBaseLib_IL2CPP = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP");
+                    if (UnhollowerBaseLib_IL2CPP != null)
+                        GetIl2CppClass_Method = UnhollowerBaseLib_IL2CPP.GetMethod("GetIl2CppClass");
+                }
+                if (GetIl2CppClass_Method != null)
+                    return (IntPtr)GetIl2CppClass_Method.Invoke(null, new object[] { assemblyName, namespaze, className });
+            }
+            return IntPtr.Zero;
+        }
+        internal static IntPtr GetIl2CppField(IntPtr clazz, string fieldName)
+        {
+            if (Main.UnhollowerBaseLib != null)
+            {
+                if (GetIl2CppField_Method == null)
+                {
+                    if (UnhollowerBaseLib_IL2CPP == null)
+                        UnhollowerBaseLib_IL2CPP = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP");
+                    if (UnhollowerBaseLib_IL2CPP != null)
+                        GetIl2CppField_Method = UnhollowerBaseLib_IL2CPP.GetMethod("GetIl2CppField");
+                }
+                if (GetIl2CppField_Method != null)
+                    return (IntPtr)GetIl2CppField_Method.Invoke(null, new object[] { clazz, fieldName });
+            }
+            return IntPtr.Zero;
+        }
     }
 }

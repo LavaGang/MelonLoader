@@ -6,6 +6,7 @@ using NET_SDK.Reflection;
 
 namespace NET_SDK.Harmony
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public static class Manager
     {
         private static List<Instance> InstanceList = new List<Instance>();
@@ -16,8 +17,7 @@ namespace NET_SDK.Harmony
             InstanceList.Add(newinst);
             return newinst;
         }
-        [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
-        public static void UnpatchAll()
+        internal static void UnpatchAll()
         {
             if (InstanceList.Count > 0)
             {
@@ -28,11 +28,11 @@ namespace NET_SDK.Harmony
         }
     }
 
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class Instance
     {
         public string Name;
         private List<Patch> PatchList = new List<Patch>();
-        [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
         internal Instance(string name) => Name = name;
         [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
         public Patch Patch(IL2CPP_Method targetMethod, MethodInfo newMethod) => Patch(targetMethod.Ptr, newMethod);
@@ -45,8 +45,7 @@ namespace NET_SDK.Harmony
             PatchList.Add(patch);
             return patch;
         }
-        [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
-        public void UnpatchAll()
+        internal void UnpatchAll()
         {
             if (PatchList.Count > 0)
             {
@@ -57,12 +56,12 @@ namespace NET_SDK.Harmony
         }
     }
 
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class Patch
     {
         internal IntPtr TargetMethod;
         internal IntPtr NewMethod;
         internal IntPtr OriginalMethod;
-        [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
         unsafe internal Patch(IntPtr targetMethod, IntPtr newMethod)
         {
             TargetMethod = targetMethod;
@@ -70,7 +69,6 @@ namespace NET_SDK.Harmony
             OriginalMethod = *(IntPtr*)TargetMethod.ToPointer();
             InstallPatch();
         }
-        [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
         unsafe internal Patch(IL2CPP_Method targetMethod, IntPtr newMethod)
         {
             TargetMethod = targetMethod.Ptr;
@@ -96,29 +94,27 @@ namespace NET_SDK.Harmony
         public IL2CPP_Object InvokeOriginal(IntPtr obj, params IntPtr[] paramtbl)
         {
             IL2CPP_Object returnval = null;
-            uint param_count = MelonLoader.Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
+            uint param_count = Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
             if (param_count == 0)
                 UninstallPatch();
-            IntPtr returnvalptr = IL2CPP.InvokeMethod(TargetMethod, obj, paramtbl);
+            IntPtr returnvalptr = Il2CppImports.InvokeMethod(TargetMethod, obj, paramtbl);
             if (returnvalptr != IntPtr.Zero)
-                returnval = new IL2CPP_Object(returnvalptr, new IL2CPP_Type(MelonLoader.Il2CppImports.il2cpp_method_get_return_type(TargetMethod)));
+                returnval = new IL2CPP_Object(returnvalptr, new IL2CPP_Type(Il2CppImports.il2cpp_method_get_return_type(TargetMethod)));
             if (param_count == 0)
                 InstallPatch();
             return returnval;
         }
-        [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
         unsafe internal void InstallPatch()
         {
-            uint param_count = MelonLoader.Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
+            uint param_count = Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
             if (param_count == 0)
                 *(IntPtr*)TargetMethod.ToPointer() = NewMethod;
             else
                 Imports.Hook(TargetMethod, NewMethod);
         }
-        [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
         unsafe internal void UninstallPatch()
         {
-            uint param_count = MelonLoader.Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
+            uint param_count = Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
             if (param_count == 0)
                 *(IntPtr*)TargetMethod.ToPointer() = OriginalMethod;
             else

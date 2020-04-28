@@ -3,13 +3,13 @@ using System.Runtime.InteropServices;
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Property : IL2CPP_Base
     {
         public readonly string Name;
         public readonly IL2CPP_BindingFlags Flags;
         private readonly IL2CPP_Method getMethod;
         private readonly IL2CPP_Method setMethod;
-        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Property(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;

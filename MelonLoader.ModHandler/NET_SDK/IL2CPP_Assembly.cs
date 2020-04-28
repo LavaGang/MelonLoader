@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Assembly : IL2CPP_Base
     {
         public readonly string Name;
         private readonly IL2CPP_Class[] ClassList;
-        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Assembly(IntPtr ptr) : base(ptr)
         {
             // Setup Information

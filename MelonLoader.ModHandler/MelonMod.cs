@@ -18,6 +18,7 @@
         public MelonModGameAttribute[] GameAttributes { get; internal set; }
 
         public virtual void OnApplicationStart() {}
+        public virtual void OnLevelIsLoading() {}
         public virtual void OnLevelWasLoaded(int level) {}
         public virtual void OnLevelWasInitialized(int level) {}
         public virtual void OnUpdate() {}

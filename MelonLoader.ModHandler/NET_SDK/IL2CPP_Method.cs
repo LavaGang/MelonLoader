@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Method : IL2CPP_Base
     {
         public readonly string Name;
         private readonly IL2CPP_BindingFlags Flags;
         private readonly IL2CPP_Type ReturnType;
         private readonly IL2CPP_Method_Parameter[] Parameters;
-        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Method(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;
@@ -74,17 +74,17 @@ namespace NET_SDK.Reflection
         [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Object Invoke(IntPtr obj, params IntPtr[] paramtbl)
         {
-            IntPtr returnval = IL2CPP.InvokeMethod(Ptr, obj, paramtbl);
+            IntPtr returnval = MelonLoader.Il2CppImports.InvokeMethod(Ptr, obj, paramtbl);
             if (returnval == IntPtr.Zero)
                 return null;
             return new IL2CPP_Object(returnval, GetReturnType());
         }
     }
 
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Method_Parameter : IL2CPP_Base
     {
         public string Name { get; private set; }
-        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Method_Parameter(IntPtr ptr, string name) : base(ptr)
         {
             Ptr = ptr;

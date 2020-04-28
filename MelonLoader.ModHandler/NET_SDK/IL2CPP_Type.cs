@@ -2,10 +2,10 @@
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Type : IL2CPP_Base
     {
         public readonly string Name;
-        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Type(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;

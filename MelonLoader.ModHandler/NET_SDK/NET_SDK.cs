@@ -1,25 +1,24 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NET_SDK.Reflection;
 #pragma warning disable 0649
+#pragma warning disable 0618
 
 namespace NET_SDK
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public static class SDK
     {
         private static IntPtr Domain;
         private static IL2CPP_Assembly[] AssemblyList;
 
-        [ObsoleteAttribute("This method will be removed soon.")]
         internal static void Initialize()
         {
-            Domain = MelonLoader.Imports.GetIl2CppDomain();
+            Domain = MelonLoader.Il2CppImports.il2cpp_domain_get();
             uint assembly_count = 0;
             IntPtr assemblies = MelonLoader.Il2CppImports.il2cpp_domain_get_assemblies(Domain, ref assembly_count);
-            IntPtr[] assembliesarr = IL2CPP.IntPtrToStructureArray<IntPtr>(assemblies, assembly_count);
+            IntPtr[] assembliesarr = MelonLoader.Il2CppImports.IntPtrToStructureArray<IntPtr>(assemblies, assembly_count);
             List<IL2CPP_Assembly> assemblyList = new List<IL2CPP_Assembly>();
             for (int i = 0; i < assembliesarr.Length; i++)
             {
@@ -125,34 +124,9 @@ namespace NET_SDK
         }
     }
 
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public static class IL2CPP
     {
-        private struct Void { };
-        [ObsoleteAttribute("This method will be removed soon.")]
-        unsafe public static IntPtr IntPtrAdd(IntPtr pointer, Int32 offset) => (IntPtr)((Void*)pointer + offset);
-        [ObsoleteAttribute("This method will be removed soon.")]
-        public static T[] IntPtrToStructureArray<T>(IntPtr ptr, uint len)
-        {
-            IntPtr iter = ptr;
-            T[] arr = new T[len];
-            for (uint i = 0; i < len; i++)
-            {
-                arr[i] = (T)Marshal.PtrToStructure(iter, typeof(T));
-                iter = IntPtrAdd(iter, Marshal.SizeOf(typeof(T)));
-            }
-            return arr;
-        }
-        [ObsoleteAttribute("This method will be removed soon.")]
-        unsafe public static IntPtr[] IntPtrToArray(IntPtr ptr)
-        {
-            long length = *((long*)ptr + 3);
-            IntPtr[] result = new IntPtr[length];
-            for (int i = 0; i < length; i++)
-                result[i] = *(IntPtr*)(IntPtrAdd((IntPtr)((long*)ptr + 4), (i * IntPtr.Size)));
-            return result;
-        }
-        [ObsoleteAttribute("This method will be removed soon.")]
-        public static T IntPtrToStructure<T>(IntPtr ptr) => (T)Marshal.PtrToStructure(ptr, typeof(T));
         [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10);
         [ObsoleteAttribute("This method will be removed soon.")]
@@ -246,7 +220,7 @@ namespace NET_SDK
         [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static T[] IntPtrArrayToUnboxedValueTypeArray<T>(IntPtr arr) where T : unmanaged
         {
-            IntPtr[] arr_2 = IntPtrToArray(arr);
+            IntPtr[] arr_2 = MelonLoader.Il2CppImports.IntPtrToArray(arr);
             T[] return_arr = new T[arr_2.Length];
             for (uint i = 0; i < arr_2.Length; i++)
                 return_arr[i] = *(T*)MelonLoader.Il2CppImports.il2cpp_object_unbox(arr_2[i]).ToPointer();
@@ -265,54 +239,11 @@ namespace NET_SDK
         [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static T[] IL2CPPObjectToUnboxedValueTypeArray<T>(IL2CPP_Object arr) where T : unmanaged
         {
-            IntPtr[] arr_2 = IntPtrToArray(arr.Ptr);
+            IntPtr[] arr_2 = MelonLoader.Il2CppImports.IntPtrToArray(arr.Ptr);
             T[] return_arr = new T[arr_2.Length];
             for (uint i = 0; i < arr_2.Length; i++)
                 return_arr[i] = *(T*)MelonLoader.Il2CppImports.il2cpp_object_unbox(arr_2[i]).ToPointer();
             return return_arr;
-        }
-
-        [ObsoleteAttribute("This method will be removed soon.")]
-        unsafe public static IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] paramtbl)
-        {
-            if (method == IntPtr.Zero)
-                return IntPtr.Zero;
-            IntPtr[] intPtrArray;
-            IntPtr returnval = IntPtr.Zero;
-            intPtrArray = ((paramtbl != null) ? paramtbl : new IntPtr[0]);
-            IntPtr intPtr = Marshal.AllocHGlobal(intPtrArray.Length * sizeof(void*));
-            try
-            {
-                void** pointerArray = (void**)intPtr.ToPointer();
-                for (int i = 0; i < intPtrArray.Length; i++)
-                    pointerArray[i] = intPtrArray[i].ToPointer();
-                IntPtr exp = IntPtr.Zero;
-                returnval = MelonLoader.Il2CppImports.il2cpp_runtime_invoke(method, obj, pointerArray, ref exp);
-                if (exp.ToInt32() != 0)
-                {
-                    // There was an exception! Handle it somehow here
-                    string message = "";
-                    var ptr = Marshal.AllocHGlobal(4097);
-                    try
-                    {
-                        // 4096 is the largest length of an exception. If not, this can be changed.
-                        // TODO: Make this a constant/predefine instead of a magic number
-                        MelonLoader.Il2CppImports.il2cpp_format_exception(exp, ptr, 4096);
-                        message = Marshal.PtrToStringAnsi(ptr);
-                        throw new InvalidOperationException($"Invoke failed with exception: {message}");
-                    }
-                    finally
-                    {
-                        Marshal.FreeHGlobal(ptr);
-                    }
-                    throw new InvalidOperationException($"Invoke failed! Could not get exception from invoke failure!");
-                }
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(intPtr);
-            }
-            return returnval;
         }
     }
 }

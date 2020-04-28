@@ -2,10 +2,10 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace NET_SDK.Reflection
 {
+    [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public class IL2CPP_Class : IL2CPP_Base
     {
         public readonly string Name;
@@ -16,7 +16,6 @@ namespace NET_SDK.Reflection
         private readonly IL2CPP_Event[] EventList;
         //private readonly IL2CPP_Class[] NestedTypeList;
         private readonly IL2CPP_Property[] PropertyList;
-        [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         internal IL2CPP_Class(IntPtr ptr) : base(ptr)
         {
             // Setup Information
@@ -227,33 +226,5 @@ namespace NET_SDK.Reflection
             }
             return null;
         }
-
-        // Nested Types
-        /*
-        public IL2CPP_Class[] GetNestedTypes() => NestedTypeList;
-        public IL2CPP_Class[] GetNestedTypes(IL2CPP_BindingFlags flags) => GetNestedTypes().Where(x => ((x.GetFlags() & flags) != 0)).ToArray();
-        public IL2CPP_Class GetNestedType(string name) => GetNestedType(name, null);
-        public IL2CPP_Class GetNestedType(string name, IL2CPP_BindingFlags flags) => GetNestedType(name, null, flags);
-        public IL2CPP_Class GetNestedType(string name, string name_space)
-        {
-            for (int i = 0; i < NestedTypeList.Length; i++)
-            {
-                var nestedType = NestedTypeList[i];
-                if (nestedType.Name.Equals(name) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
-                    return nestedType;
-            }
-            return null;
-        }
-        public IL2CPP_Class GetNestedType(string name, string name_space, IL2CPP_BindingFlags flags)
-        {
-            for (int i = 0; i < NestedTypeList.Length; i++)
-            {
-                var nestedType = NestedTypeList[i];
-                if (nestedType.Name.Equals(name) && nestedType.HasFlag(flags) && (string.IsNullOrEmpty(nestedType.Namespace) || nestedType.Namespace.Equals(name_space)))
-                    return nestedType;
-            }
-            return null;
-        }
-        */
     }
 }
