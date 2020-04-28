@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="TestModCpp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="EXPORTS">
+      <UniqueIdentifier>{3742d94c-62ec-4c9b-a7c3-15e28330f348}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestModCpp.h" />
+    <ClInclude Include="Exports.h">
+      <Filter>EXPORTS</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
