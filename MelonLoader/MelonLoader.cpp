@@ -28,8 +28,8 @@ void MelonLoader::Main()
 	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);
 	GamePath[filepathstr.size()] = '\0';
 
-	if (strstr(GetCommandLine(), "--melonloader.mupot") != NULL)
-		MupotMode = true;
+	//if (strstr(GetCommandLine(), "--melonloader.mupot") != NULL)
+	//	MupotMode = true;
 	if (strstr(GetCommandLine(), "--melonloader.rainbow") != NULL)
 		RainbowMode = true;
 	if (strstr(GetCommandLine(), "--melonloader.randomrainbow") != NULL)

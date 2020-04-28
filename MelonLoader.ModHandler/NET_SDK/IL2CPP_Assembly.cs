@@ -15,14 +15,14 @@ namespace NET_SDK.Reflection
         {
             // Setup Information
             Ptr = ptr;
-            Name = Path.GetFileNameWithoutExtension(Marshal.PtrToStringAnsi(MelonLoader.Il2CppImports.il2cpp_image_get_name(Ptr)));
+            Name = Path.GetFileNameWithoutExtension(Marshal.PtrToStringAnsi(MelonLoader.Il2Cpp.il2cpp_image_get_name(Ptr)));
 
             // Map out Classes
-            uint class_count = MelonLoader.Il2CppImports.il2cpp_image_get_class_count(Ptr);
+            uint class_count = MelonLoader.Il2Cpp.il2cpp_image_get_class_count(Ptr);
             List<IL2CPP_Class> classList = new List<IL2CPP_Class>((int)class_count);
             for (uint i = 0; i < class_count; i++)
                 if (Ptr != IntPtr.Zero)
-                    classList.Add(new IL2CPP_Class(MelonLoader.Il2CppImports.il2cpp_image_get_class(Ptr, i)));
+                    classList.Add(new IL2CPP_Class(MelonLoader.Il2Cpp.il2cpp_image_get_class(Ptr, i)));
             ClassList = classList.ToArray();
         }
         [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]

@@ -15,16 +15,16 @@ namespace NET_SDK
 
         internal static void Initialize()
         {
-            Domain = MelonLoader.Il2CppImports.il2cpp_domain_get();
+            Domain = MelonLoader.Imports.GetIl2CppDomain();
             uint assembly_count = 0;
-            IntPtr assemblies = MelonLoader.Il2CppImports.il2cpp_domain_get_assemblies(Domain, ref assembly_count);
-            IntPtr[] assembliesarr = MelonLoader.Il2CppImports.IntPtrToStructureArray<IntPtr>(assemblies, assembly_count);
+            IntPtr assemblies = MelonLoader.Il2Cpp.il2cpp_domain_get_assemblies(Domain, ref assembly_count);
+            IntPtr[] assembliesarr = MelonLoader.Il2Cpp.IntPtrToStructureArray<IntPtr>(assemblies, assembly_count);
             List<IL2CPP_Assembly> assemblyList = new List<IL2CPP_Assembly>();
             for (int i = 0; i < assembliesarr.Length; i++)
             {
                 IntPtr assembly = assembliesarr[i];
                 if (assembly != IntPtr.Zero)
-                    assemblyList.Add(new IL2CPP_Assembly(MelonLoader.Il2CppImports.il2cpp_assembly_get_image(assembly)));
+                    assemblyList.Add(new IL2CPP_Assembly(MelonLoader.Il2Cpp.il2cpp_assembly_get_image(assembly)));
             }
             AssemblyList = assemblyList.ToArray();
         }
@@ -37,7 +37,7 @@ namespace NET_SDK
                 UnityAction = SDK.GetClass("UnityEngine.Events.UnityAction");
             if (UnityAction == null)
                 return IntPtr.Zero;
-            var obj = MelonLoader.Il2CppImports.il2cpp_object_new(UnityAction.Ptr);
+            var obj = MelonLoader.Il2Cpp.il2cpp_object_new(UnityAction.Ptr);
             var o = Marshal.AllocHGlobal(8);
             *(IntPtr*)o = function;
             *((IntPtr*)obj + 2) = function;
@@ -127,10 +127,6 @@ namespace NET_SDK
     [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
     public static class IL2CPP
     {
-        [ObsoleteAttribute("This method will be removed soon.")]
-        unsafe public static string IntPtrToString(IntPtr ptr) => new string((char*)ptr.ToPointer() + 10);
-        [ObsoleteAttribute("This method will be removed soon.")]
-        public static IntPtr StringToIntPtr(string str) => MelonLoader.Il2CppImports.il2cpp_string_new(str);
         /// <summary>
         /// Converts an array of value types, <see cref="string"/>, and <see cref="IL2CPP_Object"/> to an array of <see cref="IntPtr"/>
         /// Returns null if the input array is null
@@ -179,7 +175,7 @@ namespace NET_SDK
                 else if (obj is IL2CPP_Object)
                     return (obj as IL2CPP_Object).Ptr;
                 else if (obj is string)
-                    return StringToIntPtr(obj as string);
+                    return MelonLoader.Il2Cpp.StringToIntPtr(obj as string);
                 else
                 {
                     // To-Do
@@ -194,9 +190,9 @@ namespace NET_SDK
         {
             if (klass != IntPtr.Zero)
             {
-                IntPtr objptr = MelonLoader.Il2CppImports.il2cpp_value_box(klass, obj);
+                IntPtr objptr = MelonLoader.Il2Cpp.il2cpp_value_box(klass, obj);
                 if (objptr != IntPtr.Zero)
-                    return new IL2CPP_Object(objptr, new IL2CPP_Type(MelonLoader.Il2CppImports.il2cpp_class_get_type(klass)));
+                    return new IL2CPP_Object(objptr, new IL2CPP_Type(MelonLoader.Il2Cpp.il2cpp_class_get_type(klass)));
             }
             return null;
         }
@@ -220,10 +216,10 @@ namespace NET_SDK
         [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static T[] IntPtrArrayToUnboxedValueTypeArray<T>(IntPtr arr) where T : unmanaged
         {
-            IntPtr[] arr_2 = MelonLoader.Il2CppImports.IntPtrToArray(arr);
+            IntPtr[] arr_2 = MelonLoader.Il2Cpp.IntPtrToArray(arr);
             T[] return_arr = new T[arr_2.Length];
             for (uint i = 0; i < arr_2.Length; i++)
-                return_arr[i] = *(T*)MelonLoader.Il2CppImports.il2cpp_object_unbox(arr_2[i]).ToPointer();
+                return_arr[i] = *(T*)MelonLoader.Il2Cpp.il2cpp_object_unbox(arr_2[i]).ToPointer();
             return return_arr;
         }
 
@@ -239,10 +235,10 @@ namespace NET_SDK
         [ObsoleteAttribute("This method will be removed soon.")]
         unsafe public static T[] IL2CPPObjectToUnboxedValueTypeArray<T>(IL2CPP_Object arr) where T : unmanaged
         {
-            IntPtr[] arr_2 = MelonLoader.Il2CppImports.IntPtrToArray(arr.Ptr);
+            IntPtr[] arr_2 = MelonLoader.Il2Cpp.IntPtrToArray(arr.Ptr);
             T[] return_arr = new T[arr_2.Length];
             for (uint i = 0; i < arr_2.Length; i++)
-                return_arr[i] = *(T*)MelonLoader.Il2CppImports.il2cpp_object_unbox(arr_2[i]).ToPointer();
+                return_arr[i] = *(T*)MelonLoader.Il2Cpp.il2cpp_object_unbox(arr_2[i]).ToPointer();
             return return_arr;
         }
     }

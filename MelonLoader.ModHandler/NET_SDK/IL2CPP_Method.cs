@@ -15,14 +15,14 @@ namespace NET_SDK.Reflection
         internal IL2CPP_Method(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;
-            Name = Marshal.PtrToStringAnsi(MelonLoader.Il2CppImports.il2cpp_method_get_name(Ptr));
-            ReturnType = new IL2CPP_Type(MelonLoader.Il2CppImports.il2cpp_method_get_return_type(Ptr));
+            Name = Marshal.PtrToStringAnsi(MelonLoader.Il2Cpp.il2cpp_method_get_name(Ptr));
+            ReturnType = new IL2CPP_Type(MelonLoader.Il2Cpp.il2cpp_method_get_return_type(Ptr));
             uint flags = 0;
-            Flags = (IL2CPP_BindingFlags)MelonLoader.Il2CppImports.il2cpp_method_get_flags(Ptr, ref flags);
-            uint param_count = MelonLoader.Il2CppImports.il2cpp_method_get_param_count(Ptr);
+            Flags = (IL2CPP_BindingFlags)MelonLoader.Il2Cpp.il2cpp_method_get_flags(Ptr, ref flags);
+            uint param_count = MelonLoader.Il2Cpp.il2cpp_method_get_param_count(Ptr);
             Parameters = new IL2CPP_Method_Parameter[param_count];
             for (uint i = 0; i < param_count; i++)
-                Parameters[i] = new IL2CPP_Method_Parameter(MelonLoader.Il2CppImports.il2cpp_method_get_param(Ptr, i), Marshal.PtrToStringAnsi(MelonLoader.Il2CppImports.il2cpp_method_get_param_name(Ptr, i)));
+                Parameters[i] = new IL2CPP_Method_Parameter(MelonLoader.Il2Cpp.il2cpp_method_get_param(Ptr, i), Marshal.PtrToStringAnsi(MelonLoader.Il2Cpp.il2cpp_method_get_param_name(Ptr, i)));
         }
         [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_BindingFlags GetFlags() => Flags;
@@ -74,7 +74,7 @@ namespace NET_SDK.Reflection
         [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_Object Invoke(IntPtr obj, params IntPtr[] paramtbl)
         {
-            IntPtr returnval = MelonLoader.Il2CppImports.InvokeMethod(Ptr, obj, paramtbl);
+            IntPtr returnval = MelonLoader.Il2Cpp.InvokeMethod(Ptr, obj, paramtbl);
             if (returnval == IntPtr.Zero)
                 return null;
             return new IL2CPP_Object(returnval, GetReturnType());

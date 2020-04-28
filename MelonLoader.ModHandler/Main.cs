@@ -57,12 +57,14 @@ namespace MelonLoader
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
 
+            /*
             if (Imports.IsIl2CppGame())
             {
                 MelonModLogger.Log("Initializing NET_SDK...");
                 NET_SDK.SDK.Initialize();
                 MelonModLogger.Log("------------------------------");
             }
+            */
 
             bool no_mods = false;
             string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");

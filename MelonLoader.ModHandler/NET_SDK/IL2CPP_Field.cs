@@ -13,9 +13,9 @@ namespace NET_SDK.Reflection
         internal IL2CPP_Field(IntPtr ptr) : base(ptr)
         {
             Ptr = ptr;
-            Name = Marshal.PtrToStringAnsi(MelonLoader.Il2CppImports.il2cpp_field_get_name(Ptr));
-            Flags = (IL2CPP_BindingFlags)MelonLoader.Il2CppImports.il2cpp_field_get_flags(Ptr);
-            ReturnType = new IL2CPP_Type(MelonLoader.Il2CppImports.il2cpp_field_get_type(Ptr));
+            Name = Marshal.PtrToStringAnsi(MelonLoader.Il2Cpp.il2cpp_field_get_name(Ptr));
+            Flags = (IL2CPP_BindingFlags)MelonLoader.Il2Cpp.il2cpp_field_get_flags(Ptr);
+            ReturnType = new IL2CPP_Type(MelonLoader.Il2Cpp.il2cpp_field_get_type(Ptr));
         }
         [ObsoleteAttribute("This method will be removed soon. Please use normal Reflection.")]
         public IL2CPP_BindingFlags GetFlags() => Flags;
@@ -30,9 +30,9 @@ namespace NET_SDK.Reflection
         {
             IntPtr returnval;
             if (HasFlag(IL2CPP_BindingFlags.FIELD_STATIC))
-                returnval = MelonLoader.Il2CppImports.il2cpp_field_get_value_object(Ptr, IntPtr.Zero);
+                returnval = MelonLoader.Il2Cpp.il2cpp_field_get_value_object(Ptr, IntPtr.Zero);
             else
-                returnval = MelonLoader.Il2CppImports.il2cpp_field_get_value_object(Ptr, obj);
+                returnval = MelonLoader.Il2Cpp.il2cpp_field_get_value_object(Ptr, obj);
             if (returnval != IntPtr.Zero)
                 return new IL2CPP_Object(returnval, GetReturnType());
             return null;
@@ -43,9 +43,9 @@ namespace NET_SDK.Reflection
         unsafe public void SetValue(IntPtr obj, IntPtr value)
         {
             if (HasFlag(IL2CPP_BindingFlags.FIELD_STATIC))
-                MelonLoader.Il2CppImports.il2cpp_field_static_set_value(Ptr, value);
+                MelonLoader.Il2Cpp.il2cpp_field_static_set_value(Ptr, value);
             else
-                MelonLoader.Il2CppImports.il2cpp_field_set_value(obj, Ptr, value);
+                MelonLoader.Il2Cpp.il2cpp_field_set_value(obj, Ptr, value);
         }
     }
 }

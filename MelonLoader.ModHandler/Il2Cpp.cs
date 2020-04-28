@@ -1,12 +1,42 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 #pragma warning disable 0649
 
 namespace MelonLoader
 {
-    public static class Il2CppImports
+    public static class Il2Cpp
     {
+        public static string IntPtrToString(IntPtr ptr) => Marshal.PtrToStringAnsi(ptr);
+        public static IntPtr StringToIntPtr(string str) => il2cpp_string_new(str);
+
+        internal static IntPtr MethodBaseToIntPtr(MethodBase method)
+        {
+            if (UnhollowerSupport.IsGeneratedAssemblyType(method.DeclaringType))
+            {
+                FieldInfo methodptr = method.DeclaringType.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method.Name)));
+                if (methodptr != null)
+                    return (IntPtr)methodptr.GetValue(null);
+            }
+            else
+                return method.MethodHandle.GetFunctionPointer();
+            return IntPtr.Zero;
+        }
+        internal static IntPtr MethodInfoToIntPtr(MethodInfo method)
+        {
+            if (UnhollowerSupport.IsGeneratedAssemblyType(method.DeclaringType))
+            {
+                FieldInfo methodptr = method.DeclaringType.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method.Name)));
+                if (methodptr != null)
+                    return (IntPtr)methodptr.GetValue(null);
+            }
+            else
+                return method.MethodHandle.GetFunctionPointer();
+            return IntPtr.Zero;
+        }
+
         unsafe public static IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] paramtbl)
         {
             if (method == IntPtr.Zero)

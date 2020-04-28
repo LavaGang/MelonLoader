@@ -94,19 +94,19 @@ namespace NET_SDK.Harmony
         public IL2CPP_Object InvokeOriginal(IntPtr obj, params IntPtr[] paramtbl)
         {
             IL2CPP_Object returnval = null;
-            uint param_count = Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
+            uint param_count = Il2Cpp.il2cpp_method_get_param_count(TargetMethod);
             if (param_count == 0)
                 UninstallPatch();
-            IntPtr returnvalptr = Il2CppImports.InvokeMethod(TargetMethod, obj, paramtbl);
+            IntPtr returnvalptr = Il2Cpp.InvokeMethod(TargetMethod, obj, paramtbl);
             if (returnvalptr != IntPtr.Zero)
-                returnval = new IL2CPP_Object(returnvalptr, new IL2CPP_Type(Il2CppImports.il2cpp_method_get_return_type(TargetMethod)));
+                returnval = new IL2CPP_Object(returnvalptr, new IL2CPP_Type(Il2Cpp.il2cpp_method_get_return_type(TargetMethod)));
             if (param_count == 0)
                 InstallPatch();
             return returnval;
         }
         unsafe internal void InstallPatch()
         {
-            uint param_count = Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
+            uint param_count = Il2Cpp.il2cpp_method_get_param_count(TargetMethod);
             if (param_count == 0)
                 *(IntPtr*)TargetMethod.ToPointer() = NewMethod;
             else
@@ -114,7 +114,7 @@ namespace NET_SDK.Harmony
         }
         unsafe internal void UninstallPatch()
         {
-            uint param_count = Il2CppImports.il2cpp_method_get_param_count(TargetMethod);
+            uint param_count = Il2Cpp.il2cpp_method_get_param_count(TargetMethod);
             if (param_count == 0)
                 *(IntPtr*)TargetMethod.ToPointer() = OriginalMethod;
             else
