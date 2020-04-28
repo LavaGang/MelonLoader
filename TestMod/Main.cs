@@ -35,17 +35,17 @@ namespace TestMod
 
         public override void OnUpdate()
         {
-            MelonModLogger.Log("OnUpdate");
+            //lonModLogger.Log("OnUpdate");
         }
 
         public override void OnFixedUpdate()
         {
-            MelonModLogger.Log("OnFixedUpdate");
+            //lonModLogger.Log("OnFixedUpdate");
         }
 
         public override void OnLateUpdate()
         {
-            MelonModLogger.Log("OnLateUpdate");
+            //MelonModLogger.Log("OnLateUpdate");
         }
 
         /*
@@ -57,12 +57,17 @@ namespace TestMod
 
         public override void OnApplicationQuit()
         {
-            MelonModLogger.Log("OnApplicationQuit");
+            //MelonModLogger.Log("OnApplicationQuit");
         }
 
         public override void OnModSettingsApplied()
         {
-            MelonModLogger.Log("OnModSettingsApplied");
+            //MelonModLogger.Log("OnModSettingsApplied");
+        }
+
+        public override void VRChat_OnUiManagerInit() // Only works in VRChat
+        {
+            MelonModLogger.Log("VRChat_OnUiManagerInit");
         }
     }
 }

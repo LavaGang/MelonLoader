@@ -16,6 +16,7 @@ namespace MelonLoader
         internal static bool IsBoneworks = false;
         internal static Type Il2CppObjectBaseType = null;
         internal static Assembly UnhollowerBaseLib = null;
+        internal static Assembly UnityEngine_CoreModule = null;
         private static bool ShouldCheckForUiManager = true;
         private static NET_SDK.Reflection.IL2CPP_Class VRCUiManager = null;
         private static NET_SDK.Reflection.IL2CPP_Method VRCUiManager_GetInstance = null;
@@ -37,6 +38,8 @@ namespace MelonLoader
                     UnhollowerSupport.FixLoggerEvents();
                 }
             }
+
+            UnityEngine_CoreModule = Assembly.Load("UnityEngine.CoreModule");
 
             if (!Imports.IsDebugMode()
 #if !DEBUG
@@ -215,8 +218,8 @@ namespace MelonLoader
             if (IsInitialized)
             {
                 SceneManager.CheckForSceneChange();
-                if (Imports.IsIl2CppGame() && IsVRChat)
-                    VRChat_CheckUiManager();
+                //if (Imports.IsIl2CppGame() && IsVRChat)
+                //    VRChat_CheckUiManager();
                 if (Mods.Count() > 0)
                     foreach (MelonMod mod in Mods)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }

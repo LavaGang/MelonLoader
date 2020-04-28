@@ -24,9 +24,11 @@ namespace MelonLoader
             CheckForSceneLoading();
         }
 
-        unsafe public static int GetActiveSceneIndex()
+        public static UnityEngine.SceneManagement.Scene GetActiveScene() => UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+
+        public static int GetActiveSceneIndex()
         {
-            UnityEngine.SceneManagement.Scene scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            UnityEngine.SceneManagement.Scene scene = GetActiveScene();
             if (scene != null)
                 return scene.buildIndex;
             return -9;
