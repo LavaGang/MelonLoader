@@ -26,6 +26,8 @@ bool IL2CPPUnityPlayer::Setup()
 		PlayerCleanup = (PlayerCleanup_t)PointerUtils::FindPattern(Module, "40 53 48 83 EC 60 0F B6 D9 B9 ? ? ? ? E8 ? ? ? ? 33 C9 E8 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? E8 ? ? ? ? 0F 57 C0 48 C7 44 24 ? ? ? ? ? 0F 29 44");
 	if (PlayerCleanup == NULL)
 		PlayerCleanup = (PlayerCleanup_t)PointerUtils::FindPattern(Module, "40 53 48 83 EC 60 0F B6 D9 33 C9 E8 ? ? ? ? 48 85 C0 0F 84 ? ? ? ? E8 ? ? ? ? 0F 57 C0 48 C7 44 24 ? ? ? ? ? 0F 11 44 24 ? 48");
+	if (PlayerCleanup == NULL) //Unity 2018.4.X Debug
+		PlayerCleanup = (PlayerCleanup_t)PointerUtils::FindPattern(Module, "48 89 5C 24 08 57 48 83 EC 70 0F B6 D9 B9 02 00 00 00 E8 ? ? FF FF 33 C9 E8 ? ? AD FF 33 FF 48 85 C0 0F 84 ? ? 00 00");
 	AssertionManager::Decide(PlayerCleanup, "PlayerCleanup");
 
 	if ((BaseBehaviourManager_Update == NULL) || (BaseBehaviourManager_FixedUpdate == NULL) || (BaseBehaviourManager_LateUpdate == NULL))
