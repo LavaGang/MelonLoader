@@ -284,7 +284,7 @@ namespace MelonLoader
                 if (VRCUiManager != null)
                 {
                     if (VRCUiManager_Instance == null)
-                        VRCUiManager_Instance = VRCUiManager.GetProperty("prop_VRCUiManager_0");
+                        VRCUiManager_Instance = VRCUiManager.GetProperty("field_Protected_VRCUiManager_0");
                     if (VRCUiManager_Instance != null)
                     {
                         object returnval = VRCUiManager_Instance.GetValue(null, new object[0]);
