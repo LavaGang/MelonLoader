@@ -35,7 +35,8 @@ namespace MelonLoader
                 if (UnhollowerBaseLib != null)
                 {
                     Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
-                    UnhollowerSupport.FixLoggerEvents();
+                    if (Imports.IsDebugMode())
+                        UnhollowerSupport.FixLoggerEvents();
                 }
             }
 
