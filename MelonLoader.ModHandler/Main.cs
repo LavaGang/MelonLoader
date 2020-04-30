@@ -16,10 +16,10 @@ namespace MelonLoader
         internal static bool IsBoneworks = false;
         internal static Type Il2CppObjectBaseType = null;
         internal static Assembly UnhollowerBaseLib = null;
-        internal static Assembly UnityEngine_CoreModule = null;
+        internal static Assembly Assembly_CSharp = null;
         private static bool ShouldCheckForUiManager = true;
-        private static NET_SDK.Reflection.IL2CPP_Class VRCUiManager = null;
-        private static NET_SDK.Reflection.IL2CPP_Method VRCUiManager_GetInstance = null;
+        private static Type VRCUiManager = null;
+        private static PropertyInfo VRCUiManager_Instance = null;
 
         private static void Initialize()
         {
@@ -39,7 +39,7 @@ namespace MelonLoader
                 }
             }
 
-            UnityEngine_CoreModule = Assembly.Load("UnityEngine.CoreModule");
+            Assembly_CSharp = Assembly.Load("Assembly-CSharp");
 
             if (!Imports.IsDebugMode()
 #if !DEBUG
@@ -218,8 +218,8 @@ namespace MelonLoader
             if (IsInitialized)
             {
                 SceneManager.CheckForSceneChange();
-                //if (Imports.IsIl2CppGame() && IsVRChat)
-                //    VRChat_CheckUiManager();
+                if (Imports.IsIl2CppGame() && IsVRChat)
+                    VRChat_CheckUiManager();
                 if (Mods.Count() > 0)
                     foreach (MelonMod mod in Mods)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
@@ -280,28 +280,14 @@ namespace MelonLoader
             if (IsInitialized && ShouldCheckForUiManager)
             {
                 if (VRCUiManager == null)
-                    VRCUiManager = NET_SDK.SDK.GetClass("VRCUiManager");
+                    VRCUiManager = Assembly_CSharp.GetType("VRCUiManager");
                 if (VRCUiManager != null)
                 {
-                    if (VRCUiManager_GetInstance == null)
+                    if (VRCUiManager_Instance == null)
+                        VRCUiManager_Instance = VRCUiManager.GetProperty("prop_VRCUiManager_0");
+                    if (VRCUiManager_Instance != null)
                     {
-                        NET_SDK.Reflection.IL2CPP_Method[] methods = VRCUiManager.GetMethods();
-                        foreach (NET_SDK.Reflection.IL2CPP_Method method in methods)
-                        {
-                            NET_SDK.Reflection.IL2CPP_Type returntype = method.GetReturnType();
-                            if ((returntype != null) && !string.IsNullOrEmpty(returntype.Name) && returntype.Name.Equals("VRCUiManager"))
-                            {
-                                if (method.HasFlag(NET_SDK.Reflection.IL2CPP_BindingFlags.METHOD_STATIC))
-                                {
-                                    VRCUiManager_GetInstance = method;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (VRCUiManager_GetInstance != null)
-                    {
-                        NET_SDK.Reflection.IL2CPP_Object returnval = VRCUiManager_GetInstance.Invoke();
+                        object returnval = VRCUiManager_Instance.GetValue(null, new object[0]);
                         if (returnval != null)
                         {
                             ShouldCheckForUiManager = false;
