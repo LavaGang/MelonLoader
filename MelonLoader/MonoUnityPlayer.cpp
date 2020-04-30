@@ -23,7 +23,7 @@ bool MonoUnityPlayer::Setup()
 	AssertionManager::Start("MonoUnityPlayer.cpp", "MonoUnityPlayer::Setup");
 
 	UnityMain = (voidfunc_t)AssertionManager::GetExport(Module, "UnityMain");
-	SingleAppInstance_FindOtherInstance = (SingleAppInstance_FindOtherInstance_t)AssertionManager::FindPattern(Module, "SingleAppInstance_FindOtherInstance", "40 55 57 41 54 41 56 41 57 48 83 EC 60 48 8D 6C 24 ? 83 79 58 00 48 89 5D 68 48 8B D9 48 89 75 70 75 07 32 C0 E9 ? ? ? ? 48 8B 43 18");
+	//SingleAppInstance_FindOtherInstance = (SingleAppInstance_FindOtherInstance_t)AssertionManager::FindPattern(Module, "SingleAppInstance_FindOtherInstance", "40 55 57 41 54 41 56 41 57 48 83 EC 60 48 8D 6C 24 ? 83 79 58 00 48 89 5D 68 48 8B D9 48 89 75 70 75 07 32 C0 E9 ? ? ? ? 48 8B 43 18");
 
 	PlayerLoadFirstScene = (MonoPlayerLoadFirstScene_t)PointerUtils::FindPattern(Module, "40 53 48 83 EC 20 0F B6 D9 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? E8 ? ? ? ? 48 8D 88 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 2E E8");
 	if (PlayerLoadFirstScene == NULL)

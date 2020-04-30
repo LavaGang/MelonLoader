@@ -10,7 +10,6 @@
 bool MelonLoader::IsGameIl2Cpp = false;
 HINSTANCE MelonLoader::thisdll = NULL;
 bool MelonLoader::DebugMode = false;
-bool MelonLoader::MupotMode = false;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
@@ -28,8 +27,6 @@ void MelonLoader::Main()
 	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);
 	GamePath[filepathstr.size()] = '\0';
 
-	//if (strstr(GetCommandLine(), "--melonloader.mupot") != NULL)
-	//	MupotMode = true;
 	if (strstr(GetCommandLine(), "--melonloader.rainbow") != NULL)
 		RainbowMode = true;
 	if (strstr(GetCommandLine(), "--melonloader.randomrainbow") != NULL)
@@ -82,11 +79,7 @@ void MelonLoader::Main()
 			Mono::AssemblyPath[assemblypath.size()] = '\0';
 
 			if (Mono::Load() && Mono::Setup())
-			{
 				HookManager::LoadLibraryW_Hook();
-				if (MupotMode)
-					HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, HookManager::Hooked_mono_jit_init_version);
-			}
 		}
 		else
 			HookManager::LoadLibraryW_Hook();
@@ -98,14 +91,7 @@ void MelonLoader::UNLOAD()
 	ModHandler::OnApplicationQuit();
 	HookManager::UnhookAll();
 	if (IsGameIl2Cpp)
-	{
 		Mono::Unload();
-		if (MupotMode && (MonoUnityPlayer::Module != NULL))
-		{
-			FreeLibrary(MonoUnityPlayer::Module);
-			MonoUnityPlayer::Module = NULL;
-		}
-	}
 	Logger::Log("UNLOADED!");
 	Logger::Stop();
 }
@@ -135,7 +121,7 @@ int MelonLoader::CountSubstring(std::string pat, std::string txt)
 	{
 		int j;
 		for (j = 0; j < M; j++)
-			if (txt[(int)(i) + j] != pat[j])
+			if (txt[(long)(i) + j] != pat[j])
 				break;
 		if (j == M)
 		{

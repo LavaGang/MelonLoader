@@ -7,12 +7,7 @@ namespace MelonLoader
         internal static void Create()
         {
             if (Imports.IsIl2CppGame())
-            {
-                if (Imports.IsMUPOTMode())
-                    CreateComponent();
-                else
-                    Main.OnApplicationStart();
-            }
+                Main.OnApplicationStart();
             else
                 CreateComponent();
         }

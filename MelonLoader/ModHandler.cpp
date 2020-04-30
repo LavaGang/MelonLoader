@@ -18,9 +18,10 @@ void ModHandler::Initialize()
 
 	if (Mono::Domain != NULL)
 	{
-		std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler" + (Is35 ? "_3.5" : "") + ".dll";
+		//std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler" + (Is35 ? ".3.5" : "") + ".dll";
+		std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler.dll";
 		MonoAssembly* assembly = Mono::mono_domain_assembly_open(Mono::Domain, modhandlerpath.c_str());
-		AssertionManager::Decide(assembly, (std::string("MelonLoader.ModHandler") + (Is35 ? "_3.5" : "") + ".dll").c_str());
+		AssertionManager::Decide(assembly, (std::string("MelonLoader.ModHandler") + (Is35 ? ".3.5" : "") + ".dll").c_str());
 		if (assembly != NULL)
 		{
 			MonoImage* image = Mono::mono_assembly_get_image(assembly);
@@ -48,7 +49,7 @@ void ModHandler::Initialize()
 
 					MonoMethod* initialize = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
 					AssertionManager::Decide(initialize, "Initialize");
-					if (initialize != NULL)
+					if ((initialize != NULL) && !Is35)
 						Mono::mono_runtime_invoke(initialize, NULL, NULL, NULL);
 
 					klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonCoroutines");

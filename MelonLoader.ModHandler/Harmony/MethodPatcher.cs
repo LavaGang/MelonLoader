@@ -283,7 +283,7 @@ namespace Harmony
 						if (patchParam.ParameterType.IsByRef)
 							throw new NotSupportedException("Ref parameters to fields are not supported in IL2CPP patches");
 
-						var getterMethod = AccessTools.Property(original.DeclaringType, fieldName)?.GetMethod;
+						var getterMethod = AccessTools.Property(original.DeclaringType, fieldName)?.GetGetMethod();
 						if (getterMethod == null)
 							throw new ArgumentException("No such field defined in class " + original.DeclaringType.FullName, fieldName);
 

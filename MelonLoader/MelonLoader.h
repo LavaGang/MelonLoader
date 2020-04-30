@@ -8,7 +8,6 @@ public:
 	static HINSTANCE thisdll;
 	static bool IsGameIl2Cpp;
 	static bool DebugMode;
-	static bool MupotMode;
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
 	static bool QuitFix;

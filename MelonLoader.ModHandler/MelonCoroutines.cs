@@ -61,7 +61,7 @@ namespace MelonLoader
         {
             if (routine != null)
             {
-                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                if (Imports.IsIl2CppGame())
                 {
                     CoroD corod = new CoroD(typeof(T), routine);
                     ProcessNextOfCoroutine(corod);
@@ -88,7 +88,7 @@ namespace MelonLoader
         /// <param name="corod">The coroutine to stop</param>
         public static void Stop(CoroD corod)
         {
-            if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+            if (Imports.IsIl2CppGame())
                 StopIl2CppCoroD(corod);
             else
             {
@@ -148,8 +148,8 @@ namespace MelonLoader
                                 prop_m_Seconds = typeof(WaitForSeconds).GetProperty("m_Seconds");
                             if (prop_m_Seconds != null)
                             {
-                                m_Seconds = (float)prop_m_Seconds.GetValue(waitForSeconds);
-                                prop_m_Seconds.SetValue(waitForSeconds, (m_Seconds - Time.deltaTime));
+                                m_Seconds = (float)prop_m_Seconds.GetGetMethod().Invoke(waitForSeconds, new object[0]);
+                                prop_m_Seconds.GetSetMethod().Invoke(waitForSeconds, new object[] { (m_Seconds - Time.deltaTime) });
                             }
                         }
                         else
@@ -214,6 +214,7 @@ namespace MelonLoader
             {
                 if (!enumerator.MoveNext()) // Run the next step of the coroutine. If it's done, restore the parent routine
                 {
+#if !NET35
                     var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator).Select(it => it.idx).ToList();
                     for (var i = indices.Count() - 1; i >= 0; i--)
                     {
@@ -222,6 +223,7 @@ namespace MelonLoader
                         ourCoroutinesStore.RemoveAt(index);
                     }
                     return;
+#endif
                 }
             }
             catch (System.Exception e)

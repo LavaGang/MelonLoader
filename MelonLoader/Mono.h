@@ -87,8 +87,6 @@ public:
 	static mono_jit_cleanup_t mono_jit_cleanup;
 	static mono_string_to_utf8_t mono_string_to_utf8;
 
-	static mono_lookup_internal_call_full_t mono_lookup_internal_call_full;
-
 	static bool Load();
 	static void Unload();
 	static bool Setup();

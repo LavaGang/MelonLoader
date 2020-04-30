@@ -96,7 +96,9 @@ namespace Harmony
 			{
                 var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
                 Imports.Hook(UnhollowerSupport.MethodBaseToIntPtr(original), il2CppShim.MethodHandle.GetFunctionPointer());
+#if !NET35
                 PatchTools.RememberObject(original, new Tuple<MethodBase, MethodBase>(replacement, il2CppShim));
+#endif
             }
 			else
 				PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
@@ -147,7 +149,7 @@ namespace Harmony
 			// If needed, unwrap the return value; then return
 			if (UnhollowerSupport.IsGeneratedAssemblyType(origReturnType))
 			{
-				var pointerGetter = AccessTools.DeclaredProperty(Main.Il2CppObjectBaseType, "Pointer").GetMethod;
+				var pointerGetter = AccessTools.DeclaredProperty(Main.Il2CppObjectBaseType, "Pointer").GetGetMethod();
 				Emitter.Emit(il, OpCodes.Call, pointerGetter);
 			}
 

@@ -24,7 +24,6 @@ namespace MelonLoader
         private static void Initialize()
         {
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
-
             if (Imports.IsIl2CppGame())
             {
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
@@ -51,7 +50,6 @@ namespace MelonLoader
                 MelonModLogger.consoleEnabled = true;
                 Console.Create();
             }
-
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
@@ -120,7 +118,7 @@ namespace MelonLoader
 
         private static void LoadModsFromAssembly(Assembly assembly)
         {
-            MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttribute(typeof(MelonModInfoAttribute)) as MelonModInfoAttribute;
+            MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttributes(false).First(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
             if ((modInfoAttribute != null) && (modInfoAttribute.ModType != null) && modInfoAttribute.ModType.IsSubclassOf(typeof(MelonMod)))
             {
                 MelonModLogger.Log(modInfoAttribute.Name + (!string.IsNullOrEmpty(modInfoAttribute.Version) ? (" v" + modInfoAttribute.Version) : "") + (!string.IsNullOrEmpty(modInfoAttribute.Author) ? (" by " + modInfoAttribute.Author) : "") + (!string.IsNullOrEmpty(modInfoAttribute.DownloadLink) ? (" (" + modInfoAttribute.DownloadLink + ")") : ""));
@@ -224,7 +222,7 @@ namespace MelonLoader
                 if (Mods.Count() > 0)
                     foreach (MelonMod mod in Mods)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
-                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                if (Imports.IsIl2CppGame())
                     MelonCoroutines.Process();
             }
         }
@@ -236,7 +234,7 @@ namespace MelonLoader
                 if (Mods.Count() > 0)
                     foreach (MelonMod mod in Mods)
                         try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
-                if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+                if (Imports.IsIl2CppGame())
                     MelonCoroutines.ProcessWaitForFixedUpdate();
             }
         }
@@ -264,7 +262,7 @@ namespace MelonLoader
                 foreach (MelonMod mod in Mods)
                     try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
             ModPrefs.SaveConfig();
-            if (Imports.IsIl2CppGame() && !Imports.IsMUPOTMode())
+            if (Imports.IsIl2CppGame())
                 NET_SDK.Harmony.Manager.UnpatchAll();
             Harmony.HarmonyInstance.UnpatchAllInstances();
         }

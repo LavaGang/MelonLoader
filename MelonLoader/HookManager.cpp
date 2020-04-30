@@ -131,17 +131,14 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 			IL2CPP::Module = lib;
 			if (IL2CPP::Setup() && IL2CPPUnityPlayer::Setup())
 			{
-				if (!MelonLoader::MupotMode)
-				{
-					Mono::CreateDomain();
-					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
-					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
-					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_Update, Hooked_BaseBehaviourManager_Update);
-					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_FixedUpdate, Hooked_BaseBehaviourManager_FixedUpdate);
-					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
-					//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
-					HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
-				}
+				Mono::CreateDomain();
+				HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
+				HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
+				HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_Update, Hooked_BaseBehaviourManager_Update);
+				HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_FixedUpdate, Hooked_BaseBehaviourManager_FixedUpdate);
+				HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
+				//HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
+				HookManager::Hook(&(LPVOID&)IL2CPPUnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
 				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_add_internal_call, Hooked_il2cpp_add_internal_call);
 			}
@@ -174,12 +171,6 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 {
 	IL2CPP::Domain = IL2CPP::il2cpp_init(name);
-	if (MelonLoader::MupotMode && MonoUnityPlayer::Load() && MonoUnityPlayer::Setup())
-	{
-		HookManager::Hook(&(LPVOID&)MonoUnityPlayer::PlayerLoadFirstScene, HookManager::Hooked_PlayerLoadFirstScene);
-		HookManager::Hook(&(LPVOID&)MonoUnityPlayer::SingleAppInstance_FindOtherInstance, HookManager::Hooked_SingleAppInstance_FindOtherInstance);
-		MonoUnityPlayer::UnityMain();
-	}
 	HookManager::Unhook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
 	return IL2CPP::Domain;
 }
@@ -199,24 +190,17 @@ MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const ch
 #pragma region il2cpp_add_internal_call
 void HookManager::Hooked_il2cpp_add_internal_call(const char* name, void* method)
 {
-	if (!MelonLoader::MupotMode)
-	{
-		IL2CPP::il2cpp_add_internal_call(name, method);
-		Mono::mono_add_internal_call(name, method);
-		if (strstr(name, "UnityEngine.Application::get_companyName"))
-			Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", method);
-		else if (strstr(name, "UnityEngine.Application::get_productName"))
-			Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", method);
-		else if (strstr(name, "UnityEngine.Application::get_unityVersion"))
-			Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityVersion", method);
-		else if (strstr(name, "UnityEngine.Application::get_version"))
-			Mono::mono_add_internal_call("MelonLoader.Imports::GetGameVersion", method);
-	}
+	IL2CPP::il2cpp_add_internal_call(name, method);
+	Mono::mono_add_internal_call(name, method);
+	if (strstr(name, "UnityEngine.Application::get_companyName"))
+		Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", method);
+	else if (strstr(name, "UnityEngine.Application::get_productName"))
+		Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", method);
+	else if (strstr(name, "UnityEngine.Application::get_unityVersion"))
+		Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityVersion", method);
+	else if (strstr(name, "UnityEngine.Application::get_version"))
+		Mono::mono_add_internal_call("MelonLoader.Imports::GetGameVersion", method);
 }
-#pragma endregion
-
-#pragma region SingleAppInstance_FindOtherInstance
-bool __stdcall HookManager::Hooked_SingleAppInstance_FindOtherInstance(LPARAM lParam) { return false; }
 #pragma endregion
 
 
@@ -235,9 +219,9 @@ bool HookManager::Hooked_PlayerCleanup(bool dopostquitmsg)
 void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
 {
 	Exports::AddInternalCalls();
-	if (!MelonLoader::IsGameIl2Cpp || MelonLoader::MupotMode || AssemblyGenerator::Initialize())
+	if (!MelonLoader::IsGameIl2Cpp || AssemblyGenerator::Initialize())
 		ModHandler::Initialize();
-	if (MelonLoader::IsGameIl2Cpp && !MelonLoader::MupotMode)
+	if (MelonLoader::IsGameIl2Cpp)
 		return IL2CPPUnityPlayer::PlayerLoadFirstScene(unknown);
 	return MonoUnityPlayer::PlayerLoadFirstScene(unknown);
 }

@@ -14,7 +14,6 @@ void Logger_LogModStatus(int type) { Logger::LogModStatus(type); }
 Il2CppDomain* GetIl2CppDomain() { return IL2CPP::Domain; }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }
-bool IsMUPOTMode() { return MelonLoader::MupotMode; }
 bool IsRainbowMode() { return MelonLoader::RainbowMode; }
 bool IsRandomRainbowMode() { return MelonLoader::RandomRainbowMode; }
 const char* GetGameDirectory() { return MelonLoader::GamePath; }
@@ -32,7 +31,6 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetIl2CppDomain", GetIl2CppDomain);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsIl2CppGame", IsIl2CppGame);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsDebugMode", IsDebugMode);
-	Mono::mono_add_internal_call("MelonLoader.Imports::IsMUPOTMode", IsMUPOTMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRainbowMode", IsRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRandomRainbowMode", IsRandomRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDirectory", GetGameDirectory);
