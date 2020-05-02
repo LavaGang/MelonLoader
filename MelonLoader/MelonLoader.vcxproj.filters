@@ -8,13 +8,12 @@
     <ClCompile Include="IL2CPP.cpp" />
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="PointerUtils.cpp" />
-    <ClCompile Include="MonoUnityPlayer.cpp" />
-    <ClCompile Include="IL2CPPUnityPlayer.cpp" />
     <ClCompile Include="ModHandler.cpp" />
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="AssertionManager.cpp" />
     <ClCompile Include="AssemblyGenerator.cpp" />
+    <ClCompile Include="UnityPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
@@ -34,13 +33,12 @@
     <ClInclude Include="il2cpp-internals.h" />
     <ClInclude Include="PointerUtils.h" />
     <ClInclude Include="mono-internals.h" />
-    <ClInclude Include="MonoUnityPlayer.h" />
-    <ClInclude Include="IL2CPPUnityPlayer.h" />
     <ClInclude Include="ModHandler.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="AssertionManager.h" />
     <ClInclude Include="AssemblyGenerator.h" />
+    <ClInclude Include="UnityPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="detours">

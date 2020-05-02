@@ -40,8 +40,6 @@ typedef MonoClass* (*mono_class_get_parent_t) (MonoClass* klass);
 typedef void (*mono_jit_cleanup_t) (MonoDomain* domain);
 typedef const char* (*mono_string_to_utf8_t) (MonoString* str);
 
-typedef void* (*mono_lookup_internal_call_full_t) (MonoMethod* method, int* uses_handles);
-
 class Mono
 {
 public:

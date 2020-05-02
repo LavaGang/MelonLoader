@@ -1,25 +1,34 @@
-#include "IL2CPPUnityPlayer.h"
+#include "UnityPlayer.h"
 #include "AssertionManager.h"
 
-HMODULE IL2CPPUnityPlayer::Module = NULL;
-IL2CPPPlayerLoadFirstScene_t IL2CPPUnityPlayer::PlayerLoadFirstScene = NULL;
-PlayerCleanup_t IL2CPPUnityPlayer::PlayerCleanup = NULL;
-BaseBehaviourManager_CommonUpdate_t IL2CPPUnityPlayer::BaseBehaviourManager_Update = NULL;
-BaseBehaviourManager_CommonUpdate_t IL2CPPUnityPlayer::BaseBehaviourManager_FixedUpdate = NULL;
-BaseBehaviourManager_CommonUpdate_t IL2CPPUnityPlayer::BaseBehaviourManager_LateUpdate = NULL;
-//GUIManager_DoGUIEvent_t IL2CPPUnityPlayer::GUIManager_DoGUIEvent = NULL;
-EndOfFrameCallbacks_DequeAll_t IL2CPPUnityPlayer::EndOfFrameCallbacks_DequeAll = NULL;
+HMODULE UnityPlayer::Module = NULL;
+PlayerLoadFirstScene_t UnityPlayer::PlayerLoadFirstScene = NULL;
+PlayerCleanup_t UnityPlayer::PlayerCleanup = NULL;
+BaseBehaviourManager_CommonUpdate_t UnityPlayer::BaseBehaviourManager_Update = NULL;
+BaseBehaviourManager_CommonUpdate_t UnityPlayer::BaseBehaviourManager_FixedUpdate = NULL;
+BaseBehaviourManager_CommonUpdate_t UnityPlayer::BaseBehaviourManager_LateUpdate = NULL;
+//GUIManager_DoGUIEvent_t UnityPlayer::GUIManager_DoGUIEvent = NULL;
+EndOfFrameCallbacks_DequeAll_t UnityPlayer::EndOfFrameCallbacks_DequeAll = NULL;
 
-bool IL2CPPUnityPlayer::Setup()
+bool UnityPlayer::Load()
 {
-	AssertionManager::Start("IL2CPPUnityPlayer.cpp", "IL2CPPUnityPlayer::Setup");
+	AssertionManager::Start("UnityPlayer.cpp", "UnityPlayer::Load");
+
+	Module = AssertionManager::GetModuleHandlePtr("UnityPlayer");
+
+	return !AssertionManager::Result;
+}
+
+bool UnityPlayer::Setup()
+{
+	AssertionManager::Start("UnityPlayer.cpp", "UnityPlayer::Setup");
 
 	if (PlayerLoadFirstScene == NULL)
-		PlayerLoadFirstScene = (IL2CPPPlayerLoadFirstScene_t)PointerUtils::FindPattern(Module, "40 53 48 83 EC 20 0F B6 D9 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? E8 ? ? ? ? 48 8D 88 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 2E E8");
+		PlayerLoadFirstScene = (PlayerLoadFirstScene_t)PointerUtils::FindPattern(Module, "40 53 48 83 EC 20 0F B6 D9 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? E8 ? ? ? ? 48 8D 88 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 85 C0 74 2E E8");
 	if (PlayerLoadFirstScene == NULL)
-		PlayerLoadFirstScene = (IL2CPPPlayerLoadFirstScene_t)PointerUtils::FindPattern(Module, "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 0F B6 F1 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? E8 ? ? ? ? 33 DB 39 98 ? ? ? ? 48 8D B8 ? ? ? ? 76 30 66 66 66 0F 1F 84 00 ? ? ? ? 48 8D");
+		PlayerLoadFirstScene = (PlayerLoadFirstScene_t)PointerUtils::FindPattern(Module, "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 0F B6 F1 E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? E8 ? ? ? ? 33 DB 39 98 ? ? ? ? 48 8D B8 ? ? ? ? 76 30 66 66 66 0F 1F 84 00 ? ? ? ? 48 8D");
 	if (PlayerLoadFirstScene == NULL)
-		PlayerLoadFirstScene = (IL2CPPPlayerLoadFirstScene_t)PointerUtils::FindPattern(Module, "48 89 5C 24 ? 57 48 83 EC 20 0F B6 F9 33 DB 8B D3 48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 48 8B 05 ? ? ? ? 48 85 C0 75 13 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 89 05 ? ? ? ? 48 8B C8 E8");
+		PlayerLoadFirstScene = (PlayerLoadFirstScene_t)PointerUtils::FindPattern(Module, "48 89 5C 24 ? 57 48 83 EC 20 0F B6 F9 33 DB 8B D3 48 8D 0D ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 8B C8 E8 ? ? ? ? 48 8B 05 ? ? ? ? 48 85 C0 75 13 48 8D 0D ? ? ? ? E8 ? ? ? ? 48 89 05 ? ? ? ? 48 8B C8 E8");
 	AssertionManager::Decide(PlayerLoadFirstScene, "PlayerLoadFirstScene");
 
 	if (PlayerCleanup == NULL)
@@ -64,6 +73,6 @@ bool IL2CPPUnityPlayer::Setup()
 	if (EndOfFrameCallbacks_DequeAll == NULL)
 		EndOfFrameCallbacks_DequeAll = (EndOfFrameCallbacks_DequeAll_t)PointerUtils::FindPattern(Module, "40 57 48 83 EC 20 48 8B 0D ? ? ? ? 48 63 01 48 8B 7C C1 ? 48 8B CF E8 ? ? ? ? 85 C0 75 ? 48 89 5C 24 ? 48 8B CF E8 ? ? ? ? 48 8B D8 48 8B");
 	AssertionManager::Decide(EndOfFrameCallbacks_DequeAll, "EndOfFrameCallbacks_DequeAll");
-
+	
 	return !AssertionManager::Result;
 }

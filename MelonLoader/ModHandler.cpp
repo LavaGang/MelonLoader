@@ -47,9 +47,10 @@ void ModHandler::Initialize()
 					onApplicationQuit = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
 					AssertionManager::Decide(onApplicationQuit, "OnApplicationQuit");
 
+					// Crashes Here
 					MonoMethod* initialize = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
 					AssertionManager::Decide(initialize, "Initialize");
-					if ((initialize != NULL) && !Is35)
+					if (initialize != NULL)
 						Mono::mono_runtime_invoke(initialize, NULL, NULL, NULL);
 
 					klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonCoroutines");
