@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -70,6 +71,7 @@ namespace MelonLoader
             else
             {
                 string[] files = Directory.GetFiles(modDirectory, "*.dll");
+                string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip");
                 if (files.Length > 0)
                 {
                     foreach (string s in files)
@@ -81,23 +83,65 @@ namespace MelonLoader
                             byte[] data = File.ReadAllBytes(s);
                             if (data.Length > 0)
                             {
-                                Assembly a = Assembly.Load(data);
-                                if (NET35Fix.Assembly_op_Inequality(a, null))
-                                    LoadModsFromAssembly(a);
-                                else
-                                    MelonModLogger.LogError("Unable to load " + s);
+                                LoadAssembly(data);
                             }
                             else
                                 MelonModLogger.LogError("Unable to load " + s);
                         }
-                        catch (Exception e) { MelonModLogger.LogError("Unable to load " + s + ":\n" + e.ToString()); }
+                        catch (Exception e)
+                        {
+                            MelonModLogger.LogError("Unable to load " + s + ":\n" + e.ToString());
+                        }
                         MelonModLogger.Log("------------------------------");
                     }
                     if (Mods.Count() <= 0)
                         no_mods = true;
                 }
-                else
-                    no_mods = true;
+                if (zippedFiles.Length > 0)
+                {
+                    foreach (string file in zippedFiles)
+                    {
+                        if (!File.Exists(file) || !file.EndsWith(".zip", true, null))
+                            return;
+                        try
+                        {
+                            using (var fileStream = File.OpenRead(file))
+                            {
+                                using (var zipInputStream = new ZipInputStream(fileStream))
+                                {
+                                    ZipEntry entry;
+                                    while ((entry = zipInputStream.GetNextEntry()) != null)
+                                    {
+                                        if (Path.GetFileName(entry.Name).Length <= 0 || !Path.GetFileName(entry.Name).EndsWith(".dll"))
+                                            continue;
+
+                                        using (var unzippedFileStream = new MemoryStream())
+                                        {
+                                            int size = 0;
+                                            byte[] buffer = new byte[4096];
+                                            while (true)
+                                            {
+                                                size = zipInputStream.Read(buffer, 0, buffer.Length);
+                                                if (size > 0)
+                                                    unzippedFileStream.Write(buffer, 0, size);
+                                                else
+                                                    break;
+                                            }
+                                            LoadAssembly(unzippedFileStream.ToArray());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                        }
+                        MelonModLogger.Log("------------------------------");
+                    }
+                    if (Mods.Count() <= 0)
+                        no_mods = true;
+                }
             }
             if (no_mods)
             {
@@ -161,6 +205,15 @@ namespace MelonLoader
                 else
                     MelonModLogger.LogModStatus(3);
             }
+        }
+
+        private static void LoadAssembly(byte[] data)
+        {
+            Assembly asm = Assembly.Load(data);
+            if (NET35Fix.Assembly_op_Inequality(asm, null))
+                LoadModsFromAssembly(asm);
+            else
+                MelonModLogger.LogError("Unable to load " + asm);
         }
 
         private static IEnumerable<Type> GetLoadableTypes(Assembly assembly)

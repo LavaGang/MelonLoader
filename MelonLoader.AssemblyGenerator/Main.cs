@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
@@ -12,6 +13,8 @@ namespace MelonLoader.AssemblyGenerator
     {
         private static bool Initialize()
         {
+            //ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
+
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             bool was_successful = true;
             string game_folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader");

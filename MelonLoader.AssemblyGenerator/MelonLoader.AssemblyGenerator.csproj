@@ -52,6 +52,7 @@
     <Compile Include="..\MelonLoader.ModHandler\BuildInfo.cs" />
     <Compile Include="..\MelonLoader.ModHandler\IniFile.cs" />
     <Compile Include="..\MelonLoader.ModHandler\Imports.cs" />
+    <Compile Include="..\MelonLoader.ModHandler\NET35Fix.cs" />
     <Compile Include="..\MelonLoader.ModHandler\MelonModLogger.cs" />
     <Compile Include="..\MelonLoader.ModHandler\MelonModInfoAttribute.cs" />
     <Compile Include="Main.cs" />
