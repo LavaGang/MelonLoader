@@ -120,7 +120,7 @@ int MelonLoader::CountSubstring(std::string pat, std::string txt)
 	{
 		int j;
 		for (j = 0; j < M; j++)
-			if (txt[i + j] != pat[j])
+			if (txt[(int)i + j] != pat[j])
 				break;
 		if (j == M)
 		{

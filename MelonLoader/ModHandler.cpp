@@ -3,6 +3,7 @@
 #include "ModHandler.h"
 #include "MelonLoader.h"
 #include "AssertionManager.h"
+#include "Logger.h"
 
 bool ModHandler::Is35 = false;
 MonoMethod* ModHandler::onUpdate = NULL;
@@ -47,11 +48,15 @@ void ModHandler::Initialize()
 					onApplicationQuit = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
 					AssertionManager::Decide(onApplicationQuit, "OnApplicationQuit");
 
-					// Crashes Here
 					MonoMethod* initialize = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
 					AssertionManager::Decide(initialize, "Initialize");
 					if (initialize != NULL)
-						Mono::mono_runtime_invoke(initialize, NULL, NULL, NULL);
+					{
+						MonoObject* exceptionObject = NULL;
+						Mono::mono_runtime_invoke(initialize, NULL, NULL, &exceptionObject);
+						if (exceptionObject)
+							Mono::LogExceptionMessage(exceptionObject, true);
+					}
 
 					klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonCoroutines");
 					AssertionManager::Decide(assembly, "MelonLoader.MelonCoroutines");
@@ -69,37 +74,67 @@ void ModHandler::Initialize()
 void ModHandler::OnUpdate()
 {
 	if (onUpdate != NULL)
-		Mono::mono_runtime_invoke(onUpdate, NULL, NULL, NULL);
+	{
+		MonoObject* exceptionObject = NULL;
+		Mono::mono_runtime_invoke(onUpdate, NULL, NULL, &exceptionObject);
+		if (exceptionObject)
+			Mono::LogExceptionMessage(exceptionObject);
+	}
 }
 
 void ModHandler::OnFixedUpdate()
 {
 	if (onFixedUpdate != NULL)
-		Mono::mono_runtime_invoke(onFixedUpdate, NULL, NULL, NULL);
+	{
+		MonoObject* exceptionObject = NULL;
+		Mono::mono_runtime_invoke(onFixedUpdate, NULL, NULL, &exceptionObject);
+		if (exceptionObject)
+			Mono::LogExceptionMessage(exceptionObject);
+	}
 }
 
 void ModHandler::OnLateUpdate()
 {
 	if (onLateUpdate != NULL)
-		Mono::mono_runtime_invoke(onLateUpdate, NULL, NULL, NULL);
+	{
+		MonoObject* exceptionObject = NULL;
+		Mono::mono_runtime_invoke(onLateUpdate, NULL, NULL, &exceptionObject);
+		if (exceptionObject)
+			Mono::LogExceptionMessage(exceptionObject);
+	}
 }
 
 /*
 void ModHandler::OnGUI()
 {
 	if (onGUI != NULL)
-		Mono::mono_runtime_invoke(onGUI, NULL, NULL, NULL);
+	{
+		MonoObject* exceptionObject = NULL;
+		Mono::mono_runtime_invoke(onGUI, NULL, NULL, &exceptionObject);
+		if (exceptionObject)
+			Mono::LogExceptionMessage(exceptionObject);
+	}
 }
 */
 
 void ModHandler::OnApplicationQuit()
 {
 	if (onApplicationQuit != NULL)
-		Mono::mono_runtime_invoke(onApplicationQuit, NULL, NULL, NULL);
+	{
+		MonoObject* exceptionObject = NULL;
+		Mono::mono_runtime_invoke(onApplicationQuit, NULL, NULL, &exceptionObject);
+		if (exceptionObject)
+			Mono::LogExceptionMessage(exceptionObject);
+	}
 }
 
 void ModHandler::MelonCoroutines_ProcessWaitForEndOfFrame()
 {
 	if (melonCoroutines_ProcessWaitForEndOfFrame != NULL)
-		Mono::mono_runtime_invoke(melonCoroutines_ProcessWaitForEndOfFrame, NULL, NULL, NULL);
+	{
+		MonoObject* exceptionObject = NULL;
+		Mono::mono_runtime_invoke(melonCoroutines_ProcessWaitForEndOfFrame, NULL, NULL, &exceptionObject);
+		if (exceptionObject)
+			Mono::LogExceptionMessage(exceptionObject);
+	}
 }

@@ -6,6 +6,7 @@ struct MonoAssembly;
 struct MonoMethod;
 struct MonoThread;
 struct MonoImage;
+struct MonoProperty;
 
 typedef enum {
 	MONO_TYPE_END = 0x00,       /* End of List */

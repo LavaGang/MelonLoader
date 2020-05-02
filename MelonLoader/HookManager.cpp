@@ -130,15 +130,17 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 			if (IL2CPP::Setup() && UnityPlayer::Load()&& UnityPlayer::Setup())
 			{
 				Mono::CreateDomain();
+				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
+				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_add_internal_call, Hooked_add_internal_call);
+
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::BaseBehaviourManager_Update, Hooked_BaseBehaviourManager_Update);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::BaseBehaviourManager_FixedUpdate, Hooked_BaseBehaviourManager_FixedUpdate);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
-				//HookManager::Hook(&(LPVOID&)UnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
-				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
-				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_add_internal_call, Hooked_add_internal_call);
+
+				//HookManager::Hook(&(LPVOID&)UnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
 			}
 			LoadLibraryW_Unhook();
 		}
@@ -154,11 +156,6 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 				HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::BaseBehaviourManager_Update, Hooked_BaseBehaviourManager_Update);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::BaseBehaviourManager_FixedUpdate, Hooked_BaseBehaviourManager_FixedUpdate);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::BaseBehaviourManager_LateUpdate, Hooked_BaseBehaviourManager_LateUpdate);
-				//HookManager::Hook(&(LPVOID&)UnityPlayer::GUIManager_DoGUIEvent, Hooked_GUIManager_DoGUIEvent);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
 			}
 			LoadLibraryW_Unhook();
 		}
@@ -206,6 +203,18 @@ void HookManager::Hooked_add_internal_call(const char* name, void* method)
 #pragma endregion
 
 
+#pragma region PlayerLoadFirstScene
+void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
+{
+	Exports::AddInternalCalls();
+	if (!MelonLoader::IsGameIl2Cpp || AssemblyGenerator::Initialize())
+		ModHandler::Initialize();
+	ModHandler::Initialize();
+	return UnityPlayer::PlayerLoadFirstScene(unknown);
+}
+#pragma endregion
+
+
 #pragma region PlayerCleanup
 bool HookManager::Hooked_PlayerCleanup(bool dopostquitmsg)
 {
@@ -213,17 +222,6 @@ bool HookManager::Hooked_PlayerCleanup(bool dopostquitmsg)
 	if (MelonLoader::QuitFix)
 		MelonLoader::KillProcess();
 	return UnityPlayer::PlayerCleanup(dopostquitmsg);
-}
-#pragma endregion
-
-
-#pragma region PlayerLoadFirstScene
-void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
-{
-	Exports::AddInternalCalls();
-	if (!MelonLoader::IsGameIl2Cpp || AssemblyGenerator::Initialize())
-		ModHandler::Initialize();
-	return UnityPlayer::PlayerLoadFirstScene(unknown);
 }
 #pragma endregion
 

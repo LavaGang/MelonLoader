@@ -39,6 +39,11 @@ typedef unsigned int (*mono_method_get_token_t) (MonoMethod* method);
 typedef MonoClass* (*mono_class_get_parent_t) (MonoClass* klass);
 typedef void (*mono_jit_cleanup_t) (MonoDomain* domain);
 typedef const char* (*mono_string_to_utf8_t) (MonoString* str);
+typedef MonoProperty* (*mono_class_get_property_from_name_t) (MonoClass* klass, const char* name);
+typedef MonoMethod* (*mono_property_get_get_method_t) (MonoProperty* prop);
+typedef MonoClass* (*mono_object_get_class_t) (MonoObject* obj);
+typedef MonoType* (*mono_class_get_type_t) (MonoClass* klass);
+typedef const char* (*mono_type_get_name_t) (MonoType* type);
 
 class Mono
 {
@@ -84,9 +89,16 @@ public:
 	static mono_class_get_parent_t mono_class_get_parent;
 	static mono_jit_cleanup_t mono_jit_cleanup;
 	static mono_string_to_utf8_t mono_string_to_utf8;
+	static mono_class_get_property_from_name_t mono_class_get_property_from_name;
+	static mono_property_get_get_method_t mono_property_get_get_method;
+	static mono_object_get_class_t mono_object_get_class;
+	static mono_class_get_type_t mono_class_get_type;
+	static mono_type_get_name_t mono_type_get_name;
 
 	static bool Load();
 	static void Unload();
 	static bool Setup();
 	static void CreateDomain();
+	static const char* GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject);
+	static void LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow = false);
 };
