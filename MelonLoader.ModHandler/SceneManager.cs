@@ -17,6 +17,11 @@ namespace MelonLoader
         private static bool Boneworks_HasGotLoadingSceneIndex = false;
         private static int Boneworks_LoadingSceneIndex = -9;
 
+        internal static void Initialize()
+        {
+
+        }
+
         internal static void CheckForSceneChange()
         {
             CheckForSceneInitialized();

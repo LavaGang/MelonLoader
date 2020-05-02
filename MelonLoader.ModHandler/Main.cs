@@ -24,22 +24,23 @@ namespace MelonLoader
         private static void Initialize()
         {
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
+
             if (Imports.IsIl2CppGame())
             {
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
                 IsVRChat = CurrentGameAttribute.IsGame("VRChat", "VRChat");
                 IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
 
+                Assembly_CSharp = Assembly.Load("Assembly-CSharp");
+
                 UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
-                if (UnhollowerBaseLib != null)
+                if (NET35Fix.Assembly_op_Inequality(UnhollowerBaseLib, null))
                 {
                     Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
                     if (Imports.IsDebugMode())
                         UnhollowerSupport.FixLoggerEvents();
                 }
             }
-
-            Assembly_CSharp = Assembly.Load("Assembly-CSharp");
 
             if (!Imports.IsDebugMode()
 #if !DEBUG
@@ -58,15 +59,6 @@ namespace MelonLoader
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
-
-            /*
-            if (Imports.IsIl2CppGame())
-            {
-                MelonModLogger.Log("Initializing NET_SDK...");
-                NET_SDK.SDK.Initialize();
-                MelonModLogger.Log("------------------------------");
-            }
-            */
 
             bool no_mods = false;
             string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");
@@ -90,7 +82,7 @@ namespace MelonLoader
                             if (data.Length > 0)
                             {
                                 Assembly a = Assembly.Load(data);
-                                if (a != null)
+                                if (NET35Fix.Assembly_op_Inequality(a, null))
                                     LoadModsFromAssembly(a);
                                 else
                                     MelonModLogger.LogError("Unable to load " + s);

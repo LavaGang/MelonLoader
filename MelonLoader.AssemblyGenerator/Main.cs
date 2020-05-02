@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 
 namespace MelonLoader.AssemblyGenerator
 {
-
     internal static class Main
     {
         private static bool Initialize()

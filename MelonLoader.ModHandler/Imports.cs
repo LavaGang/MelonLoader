@@ -54,5 +54,7 @@ namespace MelonLoader
         internal static extern bool SetForegroundWindow(IntPtr hWnd);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern IntPtr GetConsoleWindow();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Console_SetColor(ConsoleColor color);
     }
 }

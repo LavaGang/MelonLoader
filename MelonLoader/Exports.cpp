@@ -19,6 +19,7 @@ bool IsRandomRainbowMode() { return MelonLoader::RandomRainbowMode; }
 const char* GetGameDirectory() { return MelonLoader::GamePath; }
 void Hook(Il2CppMethod* target, void* detour) { HookManager::Hook(target, detour); }
 void Unhook(Il2CppMethod* target, void* detour) { HookManager::Unhook(target, detour); }
+void Console_SetColor(ConsoleColor color) { Console::SetColor(color); }
 
 void Exports::AddInternalCalls()
 {
@@ -39,6 +40,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::AllocConsole", AllocConsole);
 	Mono::mono_add_internal_call("MelonLoader.Imports::SetForegroundWindow", SetForegroundWindow);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetConsoleWindow", GetConsoleWindow);
+	Mono::mono_add_internal_call("MelonLoader.Imports::Console_SetColor", Console_SetColor);
 
 	if (MelonLoader::IsGameIl2Cpp)
 		IL2CPP::AddInternalCalls();

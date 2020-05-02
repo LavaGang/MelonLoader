@@ -154,6 +154,8 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 			if (Mono::Setup() && UnityPlayer::Load() && UnityPlayer::Setup())
 			{
 				HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
+				HookManager::Hook(&(LPVOID&)Mono::mono_add_internal_call, Hooked_add_internal_call);
+				
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
 			}
@@ -209,7 +211,6 @@ void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
 	Exports::AddInternalCalls();
 	if (!MelonLoader::IsGameIl2Cpp || AssemblyGenerator::Initialize())
 		ModHandler::Initialize();
-	ModHandler::Initialize();
 	return UnityPlayer::PlayerLoadFirstScene(unknown);
 }
 #pragma endregion
