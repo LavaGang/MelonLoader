@@ -15,7 +15,7 @@ public:
 	static char* DataPath;
 
 	static void Main();
-	static void UNLOAD(bool no_mods = false);
+	static void UNLOAD(bool alt = false);
 	static bool Is64bit();
 	static int CountSubstring(std::string pat, std::string txt);
 	static bool DirectoryExists(const char* path);

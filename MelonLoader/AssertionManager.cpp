@@ -26,7 +26,7 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 			MessageBox(NULL, msg.c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		else
 			MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-		MelonLoader::UNLOAD();
+		MelonLoader::UNLOAD(true);
 	}
 }
 

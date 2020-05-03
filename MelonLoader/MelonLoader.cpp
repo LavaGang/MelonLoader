@@ -85,14 +85,14 @@ void MelonLoader::Main()
 	}
 }
 
-void MelonLoader::UNLOAD(bool no_mods)
+void MelonLoader::UNLOAD(bool alt)
 {
-	if (!no_mods)
+	if (!alt)
 		ModHandler::OnApplicationQuit();
 	HookManager::UnhookAll();
 	if (IsGameIl2Cpp)
 		Mono::Unload();
-	if (!no_mods)
+	if (!alt)
 		Logger::Log("UNLOADED!");
 	Logger::Stop();
 }
