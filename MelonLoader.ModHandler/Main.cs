@@ -55,9 +55,11 @@ namespace MelonLoader
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
+            MelonModLogger.Log("------------------------------");
+            MelonModLogger.Log("Name: " + CurrentGameAttribute.GameName);
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
-            MelonModLogger.Log("GameName: " + CurrentGameAttribute.GameName);
             MelonModLogger.Log("Version: " + Imports.GetGameVersion());
+            MelonModLogger.Log("Type: " + (Imports.IsIl2CppGame() ? "Il2Cpp" : (Imports.IsOldMono() ? "Mono" : "MonoBleedingEdge")));
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
