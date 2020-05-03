@@ -42,7 +42,7 @@ namespace Harmony
 		 */
 		public static DynamicMethod CreateDynamicMethod(MethodBase original, string suffix, bool isIl2Cpp)
 		{
-			if (original == null) throw new ArgumentNullException("original cannot be null");
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(original, null)) throw new ArgumentNullException("original cannot be null");
 			var patchName = original.Name + suffix;
 			patchName = patchName.Replace("<>", "");
 
@@ -89,7 +89,7 @@ namespace Harmony
 			var moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name, assemblyName.Name + ".dll");
 			typeBuilder = moduleBuilder.DefineType("Debug" + original.DeclaringType.Name, TypeAttributes.Public);
 
-			if (original == null) throw new ArgumentNullException("original cannot be null");
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(original, null)) throw new ArgumentNullException("original cannot be null");
 			var patchName = original.Name + suffix;
 			patchName = patchName.Replace("<>", "");
 
@@ -176,7 +176,7 @@ namespace Harmony
 			// on mono, just call 'CreateDynMethod'
 			//
 			var m_CreateDynMethod = typeof(DynamicMethod).GetMethod("CreateDynMethod", nonPublicInstance);
-			if (m_CreateDynMethod != null)
+			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(m_CreateDynMethod, null))
 			{
 				m_CreateDynMethod.Invoke(method, new object[0]);
 				return;
@@ -192,7 +192,7 @@ namespace Harmony
 			// 1) RuntimeHelpers._CompileMethod(handle.GetMethodInfo())
 			//
 			var m_GetMethodInfo = typeof(RuntimeMethodHandle).GetMethod("GetMethodInfo", nonPublicInstance);
-			if (m_GetMethodInfo != null)
+			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(m_GetMethodInfo, null))
 			{
 				var runtimeMethodInfo = m_GetMethodInfo.Invoke(handle, new object[0]);
 				try

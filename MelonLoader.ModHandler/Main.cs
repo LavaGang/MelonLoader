@@ -25,23 +25,8 @@ namespace MelonLoader
         private static void Initialize()
         {
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
-
             if (Imports.IsIl2CppGame())
-            {
                 Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-                IsVRChat = CurrentGameAttribute.IsGame("VRChat", "VRChat");
-                IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
-
-                Assembly_CSharp = Assembly.Load("Assembly-CSharp");
-
-                UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
-                if (NET35Fix.Assembly_op_Inequality(UnhollowerBaseLib, null))
-                {
-                    Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
-                    if (Imports.IsDebugMode())
-                        UnhollowerSupport.FixLoggerEvents();
-                }
-            }
 
             if (!Imports.IsDebugMode()
 #if !DEBUG
@@ -52,6 +37,22 @@ namespace MelonLoader
                 MelonModLogger.consoleEnabled = true;
                 Console.Create();
             }
+
+            if (Imports.IsIl2CppGame())
+            {
+                IsVRChat = CurrentGameAttribute.IsGame("VRChat", "VRChat");
+                IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
+
+                Assembly_CSharp = Assembly.Load("Assembly-CSharp");
+
+                UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
+                if (NETFrameworkFix.Assembly_op_Inequality(UnhollowerBaseLib, null))
+                {
+                    Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
+                    UnhollowerSupport.FixLoggerEvents();
+                }
+            }
+
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
@@ -61,17 +62,14 @@ namespace MelonLoader
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
 
-            bool no_mods = false;
+            bool no_mods = true;
             string modDirectory = Path.Combine(Environment.CurrentDirectory, "Mods");
             if (!Directory.Exists(modDirectory))
-            {
                 Directory.CreateDirectory(modDirectory);
-                no_mods = true;
-            }
             else
             {
+                // DLL
                 string[] files = Directory.GetFiles(modDirectory, "*.dll");
-                string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip");
                 if (files.Length > 0)
                 {
                     foreach (string s in files)
@@ -94,53 +92,59 @@ namespace MelonLoader
                         }
                         MelonModLogger.Log("------------------------------");
                     }
-                    if (Mods.Count() <= 0)
-                        no_mods = true;
+                    if (Mods.Count() > 0)
+                        no_mods = false;
                 }
-                if (zippedFiles.Length > 0)
-                {
-                    foreach (string file in zippedFiles)
-                    {
-                        if (!File.Exists(file) || !file.EndsWith(".zip", true, null))
-                            return;
-                        try
-                        {
-                            using (var fileStream = File.OpenRead(file))
-                            {
-                                using (var zipInputStream = new ZipInputStream(fileStream))
-                                {
-                                    ZipEntry entry;
-                                    while ((entry = zipInputStream.GetNextEntry()) != null)
-                                    {
-                                        if (Path.GetFileName(entry.Name).Length <= 0 || !Path.GetFileName(entry.Name).EndsWith(".dll"))
-                                            continue;
 
-                                        using (var unzippedFileStream = new MemoryStream())
+                // ZIP
+                if (Imports.IsIl2CppGame() || !Imports.IsOldMono())
+                {
+                    string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip");
+                    if (zippedFiles.Length > 0)
+                    {
+                        foreach (string file in zippedFiles)
+                        {
+                            if (!File.Exists(file) || !file.EndsWith(".zip", true, null))
+                                return;
+                            try
+                            {
+                                using (var fileStream = File.OpenRead(file))
+                                {
+                                    using (var zipInputStream = new ZipInputStream(fileStream))
+                                    {
+                                        ZipEntry entry;
+                                        while ((entry = zipInputStream.GetNextEntry()) != null)
                                         {
-                                            int size = 0;
-                                            byte[] buffer = new byte[4096];
-                                            while (true)
+                                            if (Path.GetFileName(entry.Name).Length <= 0 || !Path.GetFileName(entry.Name).EndsWith(".dll"))
+                                                continue;
+
+                                            using (var unzippedFileStream = new MemoryStream())
                                             {
-                                                size = zipInputStream.Read(buffer, 0, buffer.Length);
-                                                if (size > 0)
-                                                    unzippedFileStream.Write(buffer, 0, size);
-                                                else
-                                                    break;
+                                                int size = 0;
+                                                byte[] buffer = new byte[4096];
+                                                while (true)
+                                                {
+                                                    size = zipInputStream.Read(buffer, 0, buffer.Length);
+                                                    if (size > 0)
+                                                        unzippedFileStream.Write(buffer, 0, size);
+                                                    else
+                                                        break;
+                                                }
+                                                LoadAssembly(unzippedFileStream.ToArray());
                                             }
-                                            LoadAssembly(unzippedFileStream.ToArray());
                                         }
                                     }
                                 }
                             }
+                            catch (Exception e)
+                            {
+                                MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                            }
+                            MelonModLogger.Log("------------------------------");
                         }
-                        catch (Exception e)
-                        {
-                            MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
-                        }
-                        MelonModLogger.Log("------------------------------");
+                        if (Mods.Count() > 0)
+                            no_mods = false;
                     }
-                    if (Mods.Count() <= 0)
-                        no_mods = true;
                 }
             }
             if (no_mods)
@@ -210,7 +214,7 @@ namespace MelonLoader
         private static void LoadAssembly(byte[] data)
         {
             Assembly asm = Assembly.Load(data);
-            if (NET35Fix.Assembly_op_Inequality(asm, null))
+            if (NETFrameworkFix.Assembly_op_Inequality(asm, null))
                 LoadModsFromAssembly(asm);
             else
                 MelonModLogger.LogError("Unable to load " + asm);

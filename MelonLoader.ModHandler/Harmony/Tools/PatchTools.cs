@@ -18,7 +18,7 @@ namespace Harmony
 		{
 			var method = patchType.GetMethods(AccessTools.all)
 				.FirstOrDefault(m => m.GetCustomAttributes(typeof(T), true).Any());
-			if (method == null)
+			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(method, null))
 				method = AccessTools.Method(patchType, name, parameters);
 			return method;
 		}

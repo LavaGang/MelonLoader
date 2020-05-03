@@ -194,7 +194,7 @@ namespace Harmony
 					var type = listTypes[0];
 					return type.FullName == typeof(CodeInstruction).FullName ? type : null;
 				})
-				.Where(type => type != null)
+				.Where(type => MelonLoader.NETFrameworkFix.Type_op_Inequality(type, null))
 				.First();
 
 			var newInstructions = instructions.Cast<object>().ToList();

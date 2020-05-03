@@ -48,6 +48,7 @@ typedef const char* (*mono_type_get_name_t) (MonoType* type);
 class Mono
 {
 public:
+	static bool IsOldMono;
 	static char* AssemblyPath;
 	static char* ConfigPath;
 	static HMODULE Module;

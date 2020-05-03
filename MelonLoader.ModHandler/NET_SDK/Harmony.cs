@@ -39,7 +39,7 @@ namespace NET_SDK.Harmony
         [ObsoleteAttribute("This method will be removed soon. Please use 0Harmony.")]
         public Patch Patch(IntPtr targetMethod, MethodInfo newMethod)
         {
-            if ((targetMethod == null) || (newMethod == null))
+            if ((targetMethod == IntPtr.Zero) || NETFrameworkFix.MethodInfo_op_Equality(newMethod, null))
                 return null;
             Patch patch = new Patch(targetMethod, newMethod.MethodHandle.GetFunctionPointer());
             PatchList.Add(patch);

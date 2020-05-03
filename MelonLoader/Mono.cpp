@@ -4,8 +4,10 @@
 #include "AssertionManager.h"
 #include "ModHandler.h"
 #include "Logger.h"
+#include "PointerUtils.h"
 #pragma warning( disable : 4996 )
 
+bool Mono::IsOldMono = false;
 char* Mono::AssemblyPath = NULL;
 char* Mono::ConfigPath = NULL;
 HMODULE Mono::Module = NULL;
@@ -56,9 +58,13 @@ mono_type_get_name_t Mono::mono_type_get_name = NULL;
 bool Mono::Load()
 {
 	AssertionManager::Start("Mono.cpp", "Mono::Load");
-	Module = AssertionManager::LoadLib("Module", (std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\mono-2.0-bdwgc.dll").c_str());
+	Module = LoadLibrary((std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\mono-2.0-bdwgc.dll").c_str());
+	if (Module == NULL)
+		Module = LoadLibrary((std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\mono-2.0-sgen.dll").c_str());
 	if (Module)
 		HMODULE MonoPosixDLL = AssertionManager::LoadLib("MonoPosixDLL", (std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\MonoPosixHelper.dll").c_str());
+	else
+		AssertionManager::ThrowError("Failed to load Mono Module!");
 	return !AssertionManager::Result;
 }
 
@@ -118,7 +124,7 @@ bool Mono::Setup()
 	mono_class_get_type = (mono_class_get_type_t)AssertionManager::GetExport(Module, "mono_class_get_type");
 	mono_type_get_name = (mono_type_get_name_t)AssertionManager::GetExport(Module, "mono_type_get_name");
 
-	if (!ModHandler::Is35)
+	if (!IsOldMono)
 	{
 		mono_runtime_set_main_args = (mono_runtime_set_main_args_t)AssertionManager::GetExport(Module, "mono_runtime_set_main_args");
 		mono_reflection_type_get_type = (mono_reflection_type_get_type_t)AssertionManager::GetExport(Module, "mono_reflection_type_get_type");

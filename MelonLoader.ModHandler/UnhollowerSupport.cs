@@ -7,7 +7,7 @@ namespace MelonLoader
 {
     internal class UnhollowerSupport
     {
-        internal static bool IsGeneratedAssemblyType(Type type) => ((Main.Il2CppObjectBaseType != null) && (type != null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
+        internal static bool IsGeneratedAssemblyType(Type type) => (NETFrameworkFix.Type_op_Equality(Main.Il2CppObjectBaseType, null) && NETFrameworkFix.Type_op_Equality(type, null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
         internal static IntPtr MethodBaseToIntPtr(MethodBase method)
         {
             if (IsGeneratedAssemblyType(method.DeclaringType))
@@ -36,7 +36,7 @@ namespace MelonLoader
         internal static void FixLoggerEvents()
         {
             Type LogSupportType = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.LogSupport");
-            if (LogSupportType != null)
+            if (NETFrameworkFix.Type_op_Equality(LogSupportType, null))
             {
                 EventInfo InfoHandlerEvent = LogSupportType.GetEvent("InfoHandler");
                 if (InfoHandlerEvent != null)

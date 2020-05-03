@@ -4,7 +4,6 @@
 class ModHandler
 {
 public:
-	static bool Is35;
 	static MonoMethod* onUpdate;
 	static MonoMethod* onFixedUpdate;
 	static MonoMethod* onLateUpdate;

@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="NET35Fix.cs" />
+    <Compile Include="NETFrameworkFix.cs" />
     <Compile Include="BuildInfo.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="Il2Cpp.cs" />

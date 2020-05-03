@@ -147,8 +147,8 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 	}
 	else
 	{
-		ModHandler::Is35 = wcsstr(lpLibFileName, L"mono.dll");
-		if (ModHandler::Is35 || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll") || wcsstr(lpLibFileName, L"mono-2.0-boehm.dll"))
+		Mono::IsOldMono = wcsstr(lpLibFileName, L"mono.dll");
+		if (Mono::IsOldMono || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll") || wcsstr(lpLibFileName, L"mono-2.0-boehm.dll"))
 		{
 			Mono::Module = lib;
 			if (Mono::Setup() && UnityPlayer::Load() && UnityPlayer::Setup())

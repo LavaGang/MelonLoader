@@ -135,9 +135,9 @@ namespace Harmony
 
 		public void RemovePatch(MethodInfo patch)
 		{
-			prefixes = prefixes.Where(p => p.patch != patch).ToArray();
-			postfixes = postfixes.Where(p => p.patch != patch).ToArray();
-			transpilers = transpilers.Where(p => p.patch != patch).ToArray();
+			prefixes = prefixes.Where(p => MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(p.patch, patch)).ToArray();
+			postfixes = postfixes.Where(p => MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(p.patch, patch)).ToArray();
+			transpilers = transpilers.Where(p => MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(p.patch, patch)).ToArray();
 		}
 	}
 
@@ -166,11 +166,11 @@ namespace Harmony
 
 		public MethodInfo GetMethod(MethodBase original)
 		{
-			if (patch.ReturnType != typeof(DynamicMethod)) return patch;
+			if (MelonLoader.NETFrameworkFix.Type_op_Equality(patch.ReturnType, typeof(DynamicMethod))) return patch;
 			if (patch.IsStatic == false) return patch;
 			var parameters = patch.GetParameters();
 			if (parameters.Count() != 1) return patch;
-			if (parameters[0].ParameterType != typeof(MethodBase)) return patch;
+			if (MelonLoader.NETFrameworkFix.Type_op_Equality(parameters[0].ParameterType, typeof(MethodBase))) return patch;
 
 			// we have a DynamicMethod factory, let's use it
 			return patch.Invoke(null, new object[] { original }) as DynamicMethod;
@@ -178,7 +178,7 @@ namespace Harmony
 
 		public override bool Equals(object obj)
 		{
-			return ((obj != null) && (obj is Patch) && (patch == ((Patch)obj).patch));
+			return ((obj != null) && (obj is Patch) && MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(patch, ((Patch)obj).patch));
 		}
 
 		public int CompareTo(object obj)

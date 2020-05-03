@@ -52,7 +52,7 @@ namespace Harmony
 				throw new ArgumentException("Invalid Expression. Expression should consist of a Method call only.");
 
 			var method = outermostExpression.Method;
-			if (method == null)
+			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(method, null))
 				throw new Exception("Cannot find method for expression " + expression);
 
 			return method;

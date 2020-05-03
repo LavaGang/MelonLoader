@@ -12,7 +12,7 @@ namespace Harmony
 	{
 		public static void AddPrefix(PatchInfo patchInfo, string owner, HarmonyMethod info)
 		{
-			if (info == null || info.method == null) return;
+			if (info == null || NETFrameworkFix.MethodInfo_op_Equality(info.method, null)) return;
 
 			var priority = info.prioritiy == -1 ? Priority.Normal : info.prioritiy;
 			var before = info.before ?? new string[0];
@@ -28,7 +28,7 @@ namespace Harmony
 
 		public static void AddPostfix(PatchInfo patchInfo, string owner, HarmonyMethod info)
 		{
-			if (info == null || info.method == null) return;
+			if (info == null || NETFrameworkFix.MethodInfo_op_Equality(info.method, null)) return;
 
 			var priority = info.prioritiy == -1 ? Priority.Normal : info.prioritiy;
 			var before = info.before ?? new string[0];
@@ -44,7 +44,7 @@ namespace Harmony
 
 		public static void AddTranspiler(PatchInfo patchInfo, string owner, HarmonyMethod info)
 		{
-			if (info == null || info.method == null) return;
+			if (info == null || NETFrameworkFix.MethodInfo_op_Equality(info.method, null)) return;
 
 			var priority = info.prioritiy == -1 ? Priority.Normal : info.prioritiy;
 			var before = info.before ?? new string[0];
@@ -73,7 +73,7 @@ namespace Harmony
 		public static List<MethodInfo> GetSortedPatchMethods(MethodBase original, Patch[] patches)
 		{
 			return patches
-				.Where(p => p.patch != null)
+				.Where(p => MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(p.patch, null))
 				.OrderBy(p => p)
 				.Select(p => p.GetMethod(original))
 				.ToList();
@@ -86,7 +86,7 @@ namespace Harmony
 			var sortedTranspilers = GetSortedPatchMethods(original, patchInfo.transpilers);
 
             var replacement = MethodPatcher.CreatePatchedMethod(original, instanceID, sortedPrefixes, sortedPostfixes, sortedTranspilers);
-			if (replacement == null) throw new MissingMethodException("Cannot create dynamic replacement for " + original.FullDescription());
+			if (NETFrameworkFix.MethodInfo_op_Equality(replacement, null)) throw new MissingMethodException("Cannot create dynamic replacement for " + original.FullDescription());
 
             var errorString = Memory.DetourMethod(original, replacement);
 			if (errorString != null)

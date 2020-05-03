@@ -32,9 +32,9 @@ namespace MelonLoader
 
             internal bool MoveNext()
             {
-                if (MoveNextMethod == null)
+                if (NETFrameworkFix.MethodInfo_op_Equality(MoveNextMethod, null))
                     MoveNextMethod = CoroutineType.GetMethod("MoveNext", BindingFlags.Instance | BindingFlags.Public);
-                if (MoveNextMethod != null)
+                if (NETFrameworkFix.MethodInfo_op_Inequality(MoveNextMethod, null))
                     return (bool)MoveNextMethod.Invoke(Coroutine, new object[] { });
                 return true;
             }
@@ -69,9 +69,9 @@ namespace MelonLoader
                 }
                 else
                 {
-                    if (StartCoroutineMethod == null)
+                    if (NETFrameworkFix.MethodInfo_op_Equality(StartCoroutineMethod, null))
                         StartCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(IEnumerator))));
-                    if (StartCoroutineMethod != null)
+                    if (NETFrameworkFix.MethodInfo_op_Inequality(StartCoroutineMethod, null))
                     {
                         object coroutine = StartCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { routine }) as Coroutine;
                         CoroD corod = new CoroD(coroutine.GetType(), coroutine);
@@ -92,9 +92,9 @@ namespace MelonLoader
                 StopIl2CppCoroD(corod);
             else
             {
-                if (StopCoroutineMethod == null)
+                if (NETFrameworkFix.MethodInfo_op_Equality(StopCoroutineMethod, null))
                     StopCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StopCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(Coroutine))));
-                if (StopCoroutineMethod != null)
+                if (NETFrameworkFix.MethodInfo_op_Inequality(StopCoroutineMethod, null))
                     StopCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { corod.Coroutine });
             }
         }

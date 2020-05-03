@@ -103,7 +103,7 @@ namespace Harmony.ILCopying
 				// we should call GetMethodDescriptor to force it to be created
 				//
 				var m_GetMethodDescriptor = typeof(DynamicMethod).GetMethod("GetMethodDescriptor", nonPublicInstance);
-				if (m_GetMethodDescriptor != null)
+				if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(m_GetMethodDescriptor, null))
 					return (RuntimeMethodHandle)m_GetMethodDescriptor.Invoke(method, new object[0]);
 
 				// .Net Core

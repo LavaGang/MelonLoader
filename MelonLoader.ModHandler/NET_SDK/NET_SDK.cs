@@ -208,7 +208,7 @@ namespace NET_SDK
         [ObsoleteAttribute("This method will be removed soon.")]
         public static IL2CPP_Class SystemTypeToIL2CPPClass(Type type)
         {
-            if (type != null)
+            if (MelonLoader.NETFrameworkFix.Type_op_Equality(type, null))
                 return SDK.GetClass(type.Namespace, type.Name);
             return null;
         }

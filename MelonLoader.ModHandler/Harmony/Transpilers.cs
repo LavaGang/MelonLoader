@@ -9,16 +9,16 @@ namespace Harmony
 	{
 		public static IEnumerable<CodeInstruction> MethodReplacer(this IEnumerable<CodeInstruction> instructions, MethodBase from, MethodBase to)
 		{
-			if (from == null)
-				throw new ArgumentException("Unexpected null argument", nameof(from));
-			if (to == null)
-				throw new ArgumentException("Unexpected null argument", nameof(to));
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(from, null))
+                throw new ArgumentException("Unexpected null argument", nameof(from));
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(to, null))
+                throw new ArgumentException("Unexpected null argument", nameof(to));
 
 			foreach (var instruction in instructions)
 			{
 				var method = instruction.operand as MethodBase;
-				if (method == from)
-				{
+                if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(method, from))
+                {
 					instruction.opcode = to.IsConstructor ? OpCodes.Newobj : OpCodes.Call;
 					instruction.operand = to;
 				}

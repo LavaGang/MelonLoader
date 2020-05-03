@@ -84,8 +84,8 @@ namespace Harmony
 			MethodBase method = null;
 			var argumentsHash = CombinedHashCode(arguments);
 			methodsByArguments.TryGetValue(argumentsHash, out method);
-			if (method == null)
-			{
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(method, null))
+            {
 				method = AccessTools.Method(type, name, arguments);
 				methodsByArguments.Add(argumentsHash, method);
 			}

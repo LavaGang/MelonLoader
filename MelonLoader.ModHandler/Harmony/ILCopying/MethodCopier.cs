@@ -15,7 +15,7 @@ namespace Harmony.ILCopying
 
 		public MethodCopier(MethodBase fromMethod, ILGenerator toILGenerator, LocalBuilder[] existingVariables = null)
 		{
-			if (fromMethod == null) throw new ArgumentNullException("Method cannot be null");
+			if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(fromMethod, null)) throw new ArgumentNullException("Method cannot be null");
 			reader = new MethodBodyReader(fromMethod, toILGenerator);
 			reader.DeclareVariables(existingVariables);
 			reader.ReadInstructions();
@@ -63,7 +63,7 @@ namespace Harmony.ILCopying
 		//
 		public static List<ILInstruction> GetInstructions(ILGenerator generator, MethodBase method)
 		{
-			if (method == null) throw new ArgumentNullException("Method cannot be null");
+			if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(method, null)) throw new ArgumentNullException("Method cannot be null");
 			var reader = new MethodBodyReader(method, generator);
 			reader.DeclareVariables(null);
 			reader.ReadInstructions();
@@ -368,7 +368,7 @@ namespace Harmony.ILCopying
 						default:
 							if (operand == null) throw new Exception("Wrong null argument: " + codeInstruction);
 							var emitMethod = EmitMethodForType(operand.GetType());
-							if (emitMethod == null) throw new Exception("Unknown Emit argument type " + operand.GetType() + " in " + codeInstruction);
+							if (MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(emitMethod, null)) throw new Exception("Unknown Emit argument type " + operand.GetType() + " in " + codeInstruction);
 							if (HarmonyInstance.DEBUG) FileLog.LogBuffered(Emitter.CodePos(generator) + code + " " + Emitter.FormatArgument(operand));
 							emitMethod.Invoke(generator, new object[] { code, operand });
 							break;
@@ -709,7 +709,7 @@ namespace Harmony.ILCopying
 					var pinfos = method.GetParameters();
 					if (pinfos.Length != 2) return;
 					var types = pinfos.Select(p => p.ParameterType).ToArray();
-					if (types[0] != typeof(OpCode)) return;
+					if (MelonLoader.NETFrameworkFix.Type_op_Equality(types[0], typeof(OpCode))) return;
 					emitMethods[types[1]] = method;
 				});
 		}

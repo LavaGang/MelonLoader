@@ -100,9 +100,9 @@ namespace Harmony
 				return ((FieldInfo)_info).GetValue(_root);
 			if (_info is PropertyInfo)
 				return ((PropertyInfo)_info).GetValue(_root, AccessTools.all, null, _params, CultureInfo.CurrentCulture);
-			if (_method != null)
+			if (MelonLoader.NETFrameworkFix.MethodBase_op_Inequality(_method, null))
 				return _method.Invoke(_root, _params);
-			if (_root == null && _type != null) return _type;
+			if (_root == null && MelonLoader.NETFrameworkFix.Type_op_Equality(_type, null)) return _type;
 			return _root;
 		}
 
@@ -115,15 +115,15 @@ namespace Harmony
 
 		public object GetValue(params object[] arguments)
 		{
-			if (_method == null)
-				throw new Exception("cannot get method value without method");
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(_method, null))
+                throw new Exception("cannot get method value without method");
 			return _method.Invoke(_root, arguments);
 		}
 
 		public T GetValue<T>(params object[] arguments)
 		{
-			if (_method == null)
-				throw new Exception("cannot get method value without method");
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(_method, null))
+                throw new Exception("cannot get method value without method");
 			return (T)_method.Invoke(_root, arguments);
 		}
 
@@ -133,8 +133,8 @@ namespace Harmony
 				((FieldInfo)_info).SetValue(_root, value, AccessTools.all, null, CultureInfo.CurrentCulture);
 			if (_info is PropertyInfo)
 				((PropertyInfo)_info).SetValue(_root, value, AccessTools.all, null, _params, CultureInfo.CurrentCulture);
-			if (_method != null)
-				throw new Exception("cannot set value of method " + _method.FullDescription());
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Inequality(_method, null))
+                throw new Exception("cannot set value of method " + _method.FullDescription());
 			return this;
 		}
 
@@ -149,7 +149,7 @@ namespace Harmony
 
 		Traverse Resolve()
 		{
-			if (_root == null && _type != null) return this;
+			if (_root == null && MelonLoader.NETFrameworkFix.Type_op_Equality(_type, null)) return this;
 			return new Traverse(GetValue());
 		}
 
@@ -212,7 +212,7 @@ namespace Harmony
 			if (resolved._type == null) return new Traverse();
 			var types = AccessTools.GetTypes(arguments);
 			var method = Cache.GetMethodInfo(resolved._type, name, types);
-			if (method == null) return new Traverse();
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(method, null)) return new Traverse();
 			return new Traverse(resolved._root, (MethodInfo)method, arguments);
 		}
 
@@ -222,7 +222,7 @@ namespace Harmony
 			var resolved = Resolve();
 			if (resolved._type == null) return new Traverse();
 			var method = Cache.GetMethodInfo(resolved._type, name, paramTypes);
-			if (method == null) return new Traverse();
+            if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(method, null)) return new Traverse();
 			return new Traverse(resolved._root, (MethodInfo)method, arguments);
 		}
 
@@ -239,12 +239,12 @@ namespace Harmony
 
 		public bool MethodExists()
 		{
-			return _method != null;
-		}
+            return MelonLoader.NETFrameworkFix.MethodBase_op_Inequality(_method, null);
+        }
 
 		public bool TypeExists()
 		{
-			return _type != null;
+			return MelonLoader.NETFrameworkFix.Type_op_Equality(_type, null);
 		}
 
 		public static void IterateFields(object source, Action<Traverse> action)

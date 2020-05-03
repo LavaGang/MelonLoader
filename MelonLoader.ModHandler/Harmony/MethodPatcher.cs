@@ -43,7 +43,7 @@ namespace Harmony
 
 				var idx = prefixes.Count() + postfixes.Count();
 				var patch = DynamicTools.CreateDynamicMethod(original, "_Patch" + idx, isIl2Cpp);
-				if (patch == null)
+				if (MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(patch, null))
 					return null;
 
 				var il = patch.GetILGenerator();
@@ -239,7 +239,7 @@ namespace Harmony
 
 			// check for passthrough using first parameter (which must have same type as return type)
 			var parameters = patch.GetParameters().ToList();
-			if (allowFirsParamPassthrough && patch.ReturnType != typeof(void) && parameters.Count > 0 && parameters[0].ParameterType == patch.ReturnType)
+			if (allowFirsParamPassthrough && MelonLoader.NETFrameworkFix.Type_op_Equality(patch.ReturnType, typeof(void)) && parameters.Count > 0 && parameters[0].ParameterType == patch.ReturnType)
 				parameters.RemoveRange(0, 1);
 
 			foreach (var patchParam in parameters)
@@ -254,7 +254,7 @@ namespace Harmony
 						continue;
 					}
 					var methodInfo = original as MethodInfo;
-					if (methodInfo != null)
+					if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(methodInfo, null))
 					{
 						Emitter.Emit(il, OpCodes.Ldtoken, methodInfo);
 						Emitter.Emit(il, OpCodes.Call, getMethodMethod);
@@ -284,7 +284,7 @@ namespace Harmony
 							throw new NotSupportedException("Ref parameters to fields are not supported in IL2CPP patches");
 
 						var getterMethod = AccessTools.Property(original.DeclaringType, fieldName)?.GetGetMethod();
-						if (getterMethod == null)
+						if (MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(getterMethod, null))
 							throw new ArgumentException("No such field defined in class " + original.DeclaringType.FullName, fieldName);
 
 						if (!getterMethod.IsStatic)
@@ -402,9 +402,9 @@ namespace Harmony
 				EmitCallParameter(il, original, fix, variables, false, isIl2Cpp);
 				Emitter.Emit(il, OpCodes.Call, fix);
 
-				if (fix.ReturnType != typeof(void))
+				if (MelonLoader.NETFrameworkFix.Type_op_Equality(fix.ReturnType, typeof(void)))
 				{
-					if (fix.ReturnType != typeof(bool))
+					if (MelonLoader.NETFrameworkFix.Type_op_Equality(fix.ReturnType, typeof(bool)))
 						throw new Exception("Prefix patch " + fix + " has not \"bool\" or \"void\" return type: " + fix.ReturnType);
 					Emitter.Emit(il, OpCodes.Brfalse, label);
 					canHaveJump = true;
@@ -416,13 +416,13 @@ namespace Harmony
 		static void AddPostfixes(ILGenerator il, MethodBase original, List<MethodInfo> postfixes, Dictionary<string, LocalBuilder> variables, bool passthroughPatches, bool isIl2Cpp)
 		{
 			postfixes
-				.Where(fix => passthroughPatches == (fix.ReturnType != typeof(void)))
+				.Where(fix => passthroughPatches == MelonLoader.NETFrameworkFix.Type_op_Equality(fix.ReturnType, typeof(void)))
 				.Do(fix =>
 				{
 					EmitCallParameter(il, original, fix, variables, true, isIl2Cpp);
 					Emitter.Emit(il, OpCodes.Call, fix);
 
-					if (fix.ReturnType != typeof(void))
+					if (MelonLoader.NETFrameworkFix.Type_op_Equality(fix.ReturnType, typeof(void)))
 					{
 						var firstFixParam = fix.GetParameters().FirstOrDefault();
 						var hasPassThroughResultParam = firstFixParam != null && fix.ReturnType == firstFixParam.ParameterType;

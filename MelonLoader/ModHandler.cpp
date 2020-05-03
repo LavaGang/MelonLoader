@@ -5,7 +5,6 @@
 #include "AssertionManager.h"
 #include "Logger.h"
 
-bool ModHandler::Is35 = false;
 MonoMethod* ModHandler::onUpdate = NULL;
 MonoMethod* ModHandler::onFixedUpdate = NULL;
 MonoMethod* ModHandler::onLateUpdate = NULL;
@@ -19,10 +18,9 @@ void ModHandler::Initialize()
 
 	if (Mono::Domain != NULL)
 	{
-		//std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler" + (Is35 ? ".3.5" : "") + ".dll";
 		std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler.dll";
 		MonoAssembly* assembly = Mono::mono_domain_assembly_open(Mono::Domain, modhandlerpath.c_str());
-		AssertionManager::Decide(assembly, (std::string("MelonLoader.ModHandler") + (Is35 ? ".3.5" : "") + ".dll").c_str());
+		AssertionManager::Decide(assembly, "MelonLoader.ModHandler.dll");
 		if (assembly != NULL)
 		{
 			MonoImage* image = Mono::mono_assembly_get_image(assembly);
