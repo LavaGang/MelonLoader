@@ -7,7 +7,10 @@ namespace MelonLoader
 {
     internal class UnhollowerSupport
     {
-        internal static bool IsGeneratedAssemblyType(Type type) => (NETFrameworkFix.Type_op_Equality(Main.Il2CppObjectBaseType, null) && NETFrameworkFix.Type_op_Equality(type, null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
+        private static MethodInfo ConvertDelegateMethod = null;
+
+        internal static bool IsGeneratedAssemblyType(Type type) => (NETFrameworkFix.Type_op_Inequality(Main.Il2CppObjectBaseType, null) && NETFrameworkFix.Type_op_Inequality(type, null) && type.IsSubclassOf(Main.Il2CppObjectBaseType));
+
         internal static IntPtr MethodBaseToIntPtr(MethodBase method)
         {
             if (IsGeneratedAssemblyType(method.DeclaringType))
@@ -20,6 +23,7 @@ namespace MelonLoader
                 return method.MethodHandle.GetFunctionPointer();
             return IntPtr.Zero;
         }
+
         internal static IntPtr MethodInfoToIntPtr(MethodInfo method)
         {
             if (IsGeneratedAssemblyType(method.DeclaringType))
@@ -33,10 +37,22 @@ namespace MelonLoader
             return IntPtr.Zero;
         }
 
+        internal static object ConvertDelegate(object action)
+        {
+            if (NETFrameworkFix.Assembly_op_Inequality(Main.UnhollowerRuntimeLib, null))
+            {
+                if (NETFrameworkFix.MethodBase_op_Equality(ConvertDelegateMethod, null))
+                    ConvertDelegateMethod = Main.UnhollowerRuntimeLib.GetType("UnhollowerRuntimeLib.DelegateSupport").GetMethod("ConvertDelegate");
+                if (NETFrameworkFix.MethodInfo_op_Inequality(ConvertDelegateMethod, null))
+                    return ConvertDelegateMethod.Invoke(null, new object[] { action });
+            }
+            return null;
+        }
+
         internal static void FixLoggerEvents()
         {
             Type LogSupportType = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.LogSupport");
-            if (NETFrameworkFix.Type_op_Equality(LogSupportType, null))
+            if (NETFrameworkFix.Type_op_Inequality(LogSupportType, null))
             {
                 if (Console.Enabled || Imports.IsDebugMode())
                 {

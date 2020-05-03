@@ -53,7 +53,7 @@ void ModHandler::Initialize()
 						MonoObject* exceptionObject = NULL;
 						Mono::mono_runtime_invoke(initialize, NULL, NULL, &exceptionObject);
 						if (exceptionObject)
-							Mono::LogExceptionMessage(exceptionObject, true);
+							Mono::LogExceptionMessage(exceptionObject);
 					}
 
 					klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonCoroutines");

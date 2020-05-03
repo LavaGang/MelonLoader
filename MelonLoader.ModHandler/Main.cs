@@ -16,8 +16,9 @@ namespace MelonLoader
         internal static bool IsVRChat = false;
         internal static bool IsBoneworks = false;
         internal static Type Il2CppObjectBaseType = null;
-        internal static Assembly UnhollowerBaseLib = null;
         internal static Assembly Assembly_CSharp = null;
+        internal static Assembly UnhollowerRuntimeLib = null;
+        internal static Assembly UnhollowerBaseLib = null;
         private static bool ShouldCheckForUiManager = true;
         private static Type VRCUiManager = null;
         private static PropertyInfo VRCUiManager_Instance = null;
@@ -45,6 +46,7 @@ namespace MelonLoader
 
                 Assembly_CSharp = Assembly.Load("Assembly-CSharp");
 
+                UnhollowerRuntimeLib = Assembly.Load("UnhollowerRuntimeLib");
                 UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
                 if (NETFrameworkFix.Assembly_op_Inequality(UnhollowerBaseLib, null))
                 {

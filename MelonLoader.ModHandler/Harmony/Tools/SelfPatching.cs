@@ -33,7 +33,7 @@ namespace Harmony.Tools
 		{
 			try
 			{
-				return assembly.ReflectionOnly == false && MelonLoader.NETFrameworkFix.Type_op_Equality(assembly.GetType(typeof(HarmonyInstance).FullName), null);
+				return assembly.ReflectionOnly == false && assembly.GetType(typeof(HarmonyInstance).FullName) != null;
 			}
 			catch (Exception)
 			{
@@ -49,7 +49,7 @@ namespace Harmony.Tools
 				.Concat(types.SelectMany(type => type.GetConstructors(AccessTools.all)).Cast<MethodBase>())
 				.Concat(types.SelectMany(type => type.GetProperties(AccessTools.all)).Select(prop => prop.GetGetMethod()).Cast<MethodBase>())
 				.Concat(types.SelectMany(type => type.GetProperties(AccessTools.all)).Select(prop => prop.GetSetMethod()).Cast<MethodBase>())
-				.Where(method => MelonLoader.NETFrameworkFix.MethodBase_op_Inequality(method, null) && method.DeclaringType.Assembly == assembly)
+				.Where(method => method != null && method.DeclaringType.Assembly == assembly)
 				.OrderBy(method => method.FullDescription())
 				.ToList();
 		}
@@ -86,7 +86,7 @@ namespace Harmony.Tools
 
 			var potentialMethodsToUpgrade = new Dictionary<string, MethodBase>();
 			GetAllMethods(ourAssembly)
-				.Where(method => MelonLoader.NETFrameworkFix.MethodBase_op_Inequality(method, null) && method.GetCustomAttributes(false).Any(attr => attr is UpgradeToLatestVersion))
+				.Where(method => method != null && method.GetCustomAttributes(false).Any(attr => attr is UpgradeToLatestVersion))
 				.Do(method => potentialMethodsToUpgrade.Add(MethodKey(method), method));
 
 			var otherHarmonyAssemblies = AppDomain.CurrentDomain.GetAssemblies()

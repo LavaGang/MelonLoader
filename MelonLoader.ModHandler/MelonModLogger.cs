@@ -23,7 +23,7 @@ namespace MelonLoader
                 if (NETFrameworkFix.MethodBase_op_Inequality(method, null))
                 {
                     Type methodClassType = method.DeclaringType;
-                    if (NETFrameworkFix.Type_op_Equality(methodClassType, null))
+                    if (NETFrameworkFix.Type_op_Inequality(methodClassType, null))
                     {
                         Assembly asm = methodClassType.Assembly;
                         if (NETFrameworkFix.Assembly_op_Inequality(asm, null))

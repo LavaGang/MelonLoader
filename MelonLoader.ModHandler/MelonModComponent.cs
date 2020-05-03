@@ -6,6 +6,7 @@ namespace MelonLoader
     {
         internal static void Create()
         {
+            SceneManager.Initialize();
             if (Imports.IsIl2CppGame())
                 Main.OnApplicationStart();
             else

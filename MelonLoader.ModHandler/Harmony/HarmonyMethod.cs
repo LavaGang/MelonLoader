@@ -25,7 +25,7 @@ namespace Harmony
 		void ImportMethod(MethodInfo theMethod)
 		{
 			method = theMethod;
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(method, null))
+			if (method != null)
 			{
 				var infos = method.GetHarmonyMethods();
 				if (infos != null)

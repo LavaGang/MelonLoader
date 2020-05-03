@@ -91,7 +91,7 @@ namespace Harmony
 			else
 				result = type.GetMethod(name, all, null, parameters, modifiers);
 
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(result, null)) return null;
+			if (result == null) return null;
 			if (generics != null) result = result.MakeGenericMethod(generics);
 			return result;
 		}
@@ -116,7 +116,7 @@ namespace Harmony
 			{
 				result = FindIncludingBaseTypes(type, t => t.GetMethod(name, all, null, parameters, modifiers));
 			}
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Equality(result, null)) return null;
+			if (result == null) return null;
 			if (generics != null) result = result.MakeGenericMethod(generics);
 			return result;
 		}
@@ -321,7 +321,7 @@ namespace Harmony
 			if (type.IsGenericType && resultType.IsGenericType)
 			{
 				var addOperation = FirstMethod(resultType, m => m.Name == "Add" && m.GetParameters().Count() == 1);
-				if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(addOperation, null))
+				if (addOperation != null)
 				{
 					var addableResult = Activator.CreateInstance(resultType);
 					var addInvoker = MethodInvoker.GetHandler(addOperation);

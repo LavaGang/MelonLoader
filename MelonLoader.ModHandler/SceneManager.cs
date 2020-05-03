@@ -22,6 +22,11 @@ namespace MelonLoader
 
         }
 
+        private static void SceneLoadEvent(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            MelonModLogger.Log("SceneLoadEvent: " + scene.name + " ( " + scene.buildIndex.ToString() + " )");
+        }
+
         internal static void CheckForSceneChange()
         {
             CheckForSceneInitialized();

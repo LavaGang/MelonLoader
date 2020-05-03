@@ -65,7 +65,7 @@ namespace Harmony
 				var dynamicMethods = new List<DynamicMethod>();
 				foreach (var original in originals)
 				{
-					if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(original, null))
+					if (original == null)
 						throw new NullReferenceException("original");
 
 					var individualPrepareResult = RunMethod<HarmonyPrepare, bool>(true, original);
@@ -157,11 +157,11 @@ namespace Harmony
 				{
 					var original = RunMethod<HarmonyTargetMethod, MethodBase>(null);
 
-					if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(original,null))
+					if (original == null)
 						original = GetOriginalMethod();
 
-                    if (MelonLoader.NETFrameworkFix.MethodBase_op_Equality(original, null))
-                    {
+					if (original == null)
+					{
 						var info = "(";
 						info += "declaringType=" + containerAttributes.declaringType + ", ";
 						info += "methodName =" + containerAttributes.methodName + ", ";
@@ -177,7 +177,7 @@ namespace Harmony
 
 			PatchTools.GetPatches(container, out prefix.method, out postfix.method, out transpiler.method);
 
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(prefix.method, null))
+			if (prefix.method != null)
 			{
 				if (prefix.method.IsStatic == false)
 					throw new ArgumentException("Patch method " + prefix.method.FullDescription() + " must be static");
@@ -186,7 +186,7 @@ namespace Harmony
 				containerAttributes.Merge(HarmonyMethod.Merge(prefixAttributes)).CopyTo(prefix);
 			}
 
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(postfix.method, null))
+			if (postfix.method != null)
 			{
 				if (postfix.method.IsStatic == false)
 					throw new ArgumentException("Patch method " + postfix.method.FullDescription() + " must be static");
@@ -195,7 +195,7 @@ namespace Harmony
 				containerAttributes.Merge(HarmonyMethod.Merge(postfixAttributes)).CopyTo(postfix);
 			}
 
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(transpiler.method, null))
+			if (transpiler.method != null)
 			{
 				if (transpiler.method.IsStatic == false)
 					throw new ArgumentException("Patch method " + transpiler.method.FullDescription() + " must be static");
@@ -250,15 +250,15 @@ namespace Harmony
 			paramList.AddRange(parameters);
 			var paramTypes = AccessTools.GetTypes(paramList.ToArray());
 			var method = PatchTools.GetPatchMethod<S>(container, methodName, paramTypes);
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(method, null) && typeof(T).IsAssignableFrom(method.ReturnType))
+			if (method != null && typeof(T).IsAssignableFrom(method.ReturnType))
 				return (T)method.Invoke(null, paramList.ToArray());
 
 			method = PatchTools.GetPatchMethod<S>(container, methodName, new Type[] { typeof(HarmonyInstance) });
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(method, null) && typeof(T).IsAssignableFrom(method.ReturnType))
+			if (method != null && typeof(T).IsAssignableFrom(method.ReturnType))
 				return (T)method.Invoke(null, new object[] { instance });
 
 			method = PatchTools.GetPatchMethod<S>(container, methodName, Type.EmptyTypes);
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(method, null))
+			if (method != null)
 			{
 				if (typeof(T).IsAssignableFrom(method.ReturnType))
 					return (T)method.Invoke(null, Type.EmptyTypes);
@@ -281,21 +281,21 @@ namespace Harmony
 			paramList.AddRange(parameters);
 			var paramTypes = AccessTools.GetTypes(paramList.ToArray());
 			var method = PatchTools.GetPatchMethod<S>(container, methodName, paramTypes);
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(method, null))
+			if (method != null)
 			{
 				method.Invoke(null, paramList.ToArray());
 				return;
 			}
 
 			method = PatchTools.GetPatchMethod<S>(container, methodName, new Type[] { typeof(HarmonyInstance) });
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(method, null))
+			if (method != null)
 			{
 				method.Invoke(null, new object[] { instance });
 				return;
 			}
 
 			method = PatchTools.GetPatchMethod<S>(container, methodName, Type.EmptyTypes);
-			if (MelonLoader.NETFrameworkFix.MethodInfo_op_Inequality(method, null))
+			if (method != null)
 			{
 				method.Invoke(null, Type.EmptyTypes);
 				return;
