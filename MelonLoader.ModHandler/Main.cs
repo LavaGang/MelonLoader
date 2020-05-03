@@ -34,7 +34,7 @@ namespace MelonLoader
 #endif
             )
             {
-                MelonModLogger.consoleEnabled = true;
+                Console.Enabled = true;
                 Console.Create();
             }
 

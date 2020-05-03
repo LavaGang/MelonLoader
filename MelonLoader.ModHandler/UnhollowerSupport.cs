@@ -38,11 +38,14 @@ namespace MelonLoader
             Type LogSupportType = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.LogSupport");
             if (NETFrameworkFix.Type_op_Equality(LogSupportType, null))
             {
-                EventInfo InfoHandlerEvent = LogSupportType.GetEvent("InfoHandler");
-                if (InfoHandlerEvent != null)
+                if (Console.Enabled || Imports.IsDebugMode())
                 {
-                    InfoHandlerEvent.RemoveEventHandler(null, GetHandler(InfoHandlerEvent, System.Console.WriteLine, GetParameters(InfoHandlerEvent)));
-                    InfoHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(InfoHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.Log).Method));
+                    EventInfo InfoHandlerEvent = LogSupportType.GetEvent("InfoHandler");
+                    if (InfoHandlerEvent != null)
+                    {
+                        InfoHandlerEvent.RemoveEventHandler(null, GetHandler(InfoHandlerEvent, System.Console.WriteLine, GetParameters(InfoHandlerEvent)));
+                        InfoHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(InfoHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.Log).Method));
+                    }
                 }
 
                 EventInfo WarningHandlerEvent = LogSupportType.GetEvent("WarningHandler");
@@ -57,6 +60,13 @@ namespace MelonLoader
                 {
                     ErrorHandlerEvent.RemoveEventHandler(null, GetHandler(ErrorHandlerEvent, System.Console.WriteLine, GetParameters(ErrorHandlerEvent)));
                     ErrorHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(ErrorHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.LogError).Method));
+                }
+
+                if (Imports.IsDebugMode())
+                {
+                    EventInfo TraceHandlerEvent = LogSupportType.GetEvent("TraceHandler");
+                    if (TraceHandlerEvent != null)
+                        TraceHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(TraceHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.Log).Method));
                 }
             }
         }

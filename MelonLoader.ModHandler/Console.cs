@@ -7,6 +7,8 @@ namespace MelonLoader
 {
     internal class Console
     {
+        internal static bool Enabled = false;
+
         internal static void Create()
         {
             Imports.AllocConsole();

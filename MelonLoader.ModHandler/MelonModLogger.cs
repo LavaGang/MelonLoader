@@ -46,7 +46,7 @@ namespace MelonLoader
         {
             string namesection = GetNameSection();
             Imports.Logger_Log(namesection + s);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 bool rainbow_check = RainbowCheck();
                 System.Console.Write("[");
@@ -71,7 +71,7 @@ namespace MelonLoader
         {
             string namesection = GetNameSection();
             Imports.Logger_LogColor((namesection + s), color);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 Imports.Console_SetColor(color);
                 RainbowCheck();
@@ -85,7 +85,7 @@ namespace MelonLoader
             string namesection = GetNameSection();
             var formatted = string.Format(s, args);
             Imports.Logger_Log(namesection + formatted);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 bool rainbow_check = RainbowCheck();
                 System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + formatted);
@@ -99,7 +99,7 @@ namespace MelonLoader
             string namesection = GetNameSection();
             var formatted = string.Format(s, args);
             Imports.Logger_LogColor((namesection + formatted), color);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 Imports.Console_SetColor(color);
                 RainbowCheck();
@@ -112,7 +112,7 @@ namespace MelonLoader
         {
             string namesection = GetNameSection();
             Imports.Logger_LogError(namesection, s);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 Imports.Console_SetColor(ConsoleColor.Red);
                 RainbowCheck();
@@ -126,7 +126,7 @@ namespace MelonLoader
             string namesection = GetNameSection();
             var formatted = string.Format(s, args);
             Imports.Logger_LogError(namesection, formatted);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 Imports.Console_SetColor(ConsoleColor.Red);
                 RainbowCheck();
@@ -139,7 +139,7 @@ namespace MelonLoader
         {
             string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
             Imports.Logger_LogModError(namesection, msg);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 Imports.Console_SetColor(ConsoleColor.Yellow);
                 RainbowCheck();
@@ -151,7 +151,7 @@ namespace MelonLoader
         internal static void LogModStatus(int type)
         {
             Imports.Logger_LogModStatus(type);
-            if (!Imports.IsDebugMode() && consoleEnabled)
+            if (!Imports.IsDebugMode() && Console.Enabled)
             {
                 bool rainbow_check = RainbowCheck();
                 System.Console.Write("[");
