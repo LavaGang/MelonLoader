@@ -5,7 +5,7 @@
 #include "HookManager.h"
 #include "Logger.h"
 
-void UNLOAD_MELONLOADER() { MelonLoader::UNLOAD(); }
+void UNLOAD_MELONLOADER(bool no_mods) { MelonLoader::UNLOAD(no_mods); }
 void Logger_Log(MonoString* txt) { Logger::Log(Mono::mono_string_to_utf8(txt)); }
 void Logger_LogColor(MonoString* txt, ConsoleColor color) { Logger::Log(Mono::mono_string_to_utf8(txt), color); }
 void Logger_LogWarning(MonoString* namesection, MonoString* txt) { Logger::LogWarning(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
