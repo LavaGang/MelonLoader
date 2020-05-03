@@ -38,6 +38,10 @@ public:
 	static void Log(std::string txt) { Log(txt.c_str()); };
 	static void Log(std::string txt, ConsoleColor color) { Log(txt.c_str(), color); }
 
+	static void LogWarning(const char* txt);
+	static void LogWarning(const char* namesection, const char* txt);
+	static void LogWarning(std::string txt) { LogError(txt.c_str()); }
+
 	static void LogError(const char* txt);
 	static void LogError(const char* namesection, const char* txt);
 	static void LogError(std::string txt) { LogError(txt.c_str()); }

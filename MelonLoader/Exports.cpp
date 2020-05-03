@@ -8,6 +8,7 @@
 void UNLOAD_MELONLOADER() { MelonLoader::UNLOAD(); }
 void Logger_Log(MonoString* txt) { Logger::Log(Mono::mono_string_to_utf8(txt)); }
 void Logger_LogColor(MonoString* txt, ConsoleColor color) { Logger::Log(Mono::mono_string_to_utf8(txt), color); }
+void Logger_LogWarning(MonoString* namesection, MonoString* txt) { Logger::LogWarning(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void Logger_LogError(MonoString* namesection, MonoString* txt) { Logger::LogError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void Logger_LogModError(MonoString* namesection, MonoString* msg) { Logger::LogModError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(msg)); }
 void Logger_LogModStatus(int type) { Logger::LogModStatus(type); }
@@ -27,6 +28,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::UNLOAD_MELONLOADER", UNLOAD_MELONLOADER);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_Log", Logger_Log);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogColor", Logger_LogColor);
+	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogWarning", Logger_LogWarning);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogError", Logger_LogError);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogModError", Logger_LogModError);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogModStatus", Logger_LogModStatus);

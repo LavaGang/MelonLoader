@@ -52,7 +52,7 @@ namespace MelonLoader
                 if (WarningHandlerEvent != null)
                 {
                     WarningHandlerEvent.RemoveEventHandler(null, GetHandler(WarningHandlerEvent, System.Console.WriteLine, GetParameters(WarningHandlerEvent)));
-                    WarningHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(WarningHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.Log).Method));
+                    WarningHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(WarningHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.LogWarning).Method));
                 }
 
                 EventInfo ErrorHandlerEvent = LogSupportType.GetEvent("ErrorHandler");
@@ -66,7 +66,7 @@ namespace MelonLoader
                 {
                     EventInfo TraceHandlerEvent = LogSupportType.GetEvent("TraceHandler");
                     if (TraceHandlerEvent != null)
-                        TraceHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(TraceHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.Log).Method));
+                        TraceHandlerEvent.AddEventHandler(null, Delegate.CreateDelegate(TraceHandlerEvent.EventHandlerType, null, new Action<string>(MelonModLogger.LogWarning).Method));
                 }
             }
         }

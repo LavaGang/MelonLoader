@@ -108,6 +108,33 @@ namespace MelonLoader
             }
         }
 
+        public static void LogWarning(string s)
+        {
+            string namesection = GetNameSection();
+            Imports.Logger_LogWarning(namesection, s);
+            if (!Imports.IsDebugMode() && Console.Enabled)
+            {
+                Imports.Console_SetColor(ConsoleColor.Yellow);
+                RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Warning] " + s);
+                Imports.Console_SetColor(ConsoleColor.Gray);
+            }
+        }
+
+        public static void LogWarning(string s, params object[] args)
+        {
+            string namesection = GetNameSection();
+            var formatted = string.Format(s, args);
+            Imports.Logger_LogWarning(namesection, formatted);
+            if (!Imports.IsDebugMode() && Console.Enabled)
+            {
+                Imports.Console_SetColor(ConsoleColor.Yellow);
+                RainbowCheck();
+                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Warning] " + formatted);
+                Imports.Console_SetColor(ConsoleColor.Gray);
+            }
+        }
+
         public static void LogError(string s)
         {
             string namesection = GetNameSection();

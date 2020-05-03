@@ -13,6 +13,8 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_LogColor(string txt, ConsoleColor color);
         [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Logger_LogWarning(string namesection, string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_LogError(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_LogModError(string namesection, string msg);

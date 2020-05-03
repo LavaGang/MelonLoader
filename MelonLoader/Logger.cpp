@@ -84,6 +84,28 @@ void Logger::Log(const char* txt, ConsoleColor color)
 	}
 }
 
+void Logger::LogWarning(const char* txt)
+{
+	LogTimestamp(ConsoleColor_Yellow);
+	logFile << "[Warning] " << txt << std::endl;
+	if (MelonLoader::DebugMode)
+	{
+		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+		Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+	}
+}
+
+void Logger::LogWarning(const char* namesection, const char* txt)
+{
+	LogTimestamp(ConsoleColor_Yellow);
+	logFile << namesection << "[Warning] " << txt << std::endl;
+	if (MelonLoader::DebugMode)
+	{
+		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+		Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+	}
+}
+
 void Logger::LogError(const char* txt)
 {
 	LogTimestamp(ConsoleColor_Red);
