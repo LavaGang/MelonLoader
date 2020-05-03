@@ -153,6 +153,7 @@ namespace MelonLoader
             {
                 MelonModLogger.Log("No Mods Loaded!");
                 MelonModLogger.Log("------------------------------");
+                Imports.UNLOAD_MELONLOADER();
             }
             else
                 MelonModComponent.Create();
