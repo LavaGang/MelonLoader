@@ -37,18 +37,6 @@ namespace MelonLoader
             return IntPtr.Zero;
         }
 
-        internal static object ConvertDelegate(object action)
-        {
-            if (NETFrameworkFix.Assembly_op_Inequality(Main.UnhollowerRuntimeLib, null))
-            {
-                if (NETFrameworkFix.MethodBase_op_Equality(ConvertDelegateMethod, null))
-                    ConvertDelegateMethod = Main.UnhollowerRuntimeLib.GetType("UnhollowerRuntimeLib.DelegateSupport").GetMethod("ConvertDelegate");
-                if (NETFrameworkFix.MethodInfo_op_Inequality(ConvertDelegateMethod, null))
-                    return ConvertDelegateMethod.Invoke(null, new object[] { action });
-            }
-            return null;
-        }
-
         internal static void FixLoggerEvents()
         {
             Type LogSupportType = Main.UnhollowerBaseLib.GetType("UnhollowerBaseLib.LogSupport");

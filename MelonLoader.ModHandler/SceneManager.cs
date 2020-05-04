@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-
 namespace MelonLoader
 {
     public static class SceneManager
@@ -19,7 +18,6 @@ namespace MelonLoader
 
         internal static void Initialize()
         {
-
         }
 
         private static void SceneLoadEvent(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)

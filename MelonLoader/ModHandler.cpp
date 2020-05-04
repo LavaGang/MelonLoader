@@ -52,16 +52,19 @@ void ModHandler::Initialize()
 					{
 						MonoObject* exceptionObject = NULL;
 						Mono::mono_runtime_invoke(initialize, NULL, NULL, &exceptionObject);
-						if (exceptionObject)
+						if (exceptionObject && MelonLoader::DebugMode)
 							Mono::LogExceptionMessage(exceptionObject);
 					}
 
-					klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonCoroutines");
-					AssertionManager::Decide(assembly, "MelonLoader.MelonCoroutines");
-					if (klass != NULL)
+					if (MelonLoader::IsGameIl2Cpp)
 					{
-						melonCoroutines_ProcessWaitForEndOfFrame = Mono::mono_class_get_method_from_name(klass, "ProcessWaitForEndOfFrame", NULL);
-						AssertionManager::Decide(melonCoroutines_ProcessWaitForEndOfFrame, "ProcessWaitForEndOfFrame");
+						klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonCoroutines");
+						AssertionManager::Decide(assembly, "MelonLoader.MelonCoroutines");
+						if (klass != NULL)
+						{
+							melonCoroutines_ProcessWaitForEndOfFrame = Mono::mono_class_get_method_from_name(klass, "ProcessWaitForEndOfFrame", NULL);
+							AssertionManager::Decide(melonCoroutines_ProcessWaitForEndOfFrame, "ProcessWaitForEndOfFrame");
+						}
 					}
 				}
 			}
@@ -75,7 +78,7 @@ void ModHandler::OnUpdate()
 	{
 		MonoObject* exceptionObject = NULL;
 		Mono::mono_runtime_invoke(onUpdate, NULL, NULL, &exceptionObject);
-		if (exceptionObject)
+		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
@@ -86,7 +89,7 @@ void ModHandler::OnFixedUpdate()
 	{
 		MonoObject* exceptionObject = NULL;
 		Mono::mono_runtime_invoke(onFixedUpdate, NULL, NULL, &exceptionObject);
-		if (exceptionObject)
+		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
@@ -97,7 +100,7 @@ void ModHandler::OnLateUpdate()
 	{
 		MonoObject* exceptionObject = NULL;
 		Mono::mono_runtime_invoke(onLateUpdate, NULL, NULL, &exceptionObject);
-		if (exceptionObject)
+		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
@@ -109,7 +112,7 @@ void ModHandler::OnGUI()
 	{
 		MonoObject* exceptionObject = NULL;
 		Mono::mono_runtime_invoke(onGUI, NULL, NULL, &exceptionObject);
-		if (exceptionObject)
+		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
@@ -121,7 +124,7 @@ void ModHandler::OnApplicationQuit()
 	{
 		MonoObject* exceptionObject = NULL;
 		Mono::mono_runtime_invoke(onApplicationQuit, NULL, NULL, &exceptionObject);
-		if (exceptionObject)
+		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
@@ -132,7 +135,7 @@ void ModHandler::MelonCoroutines_ProcessWaitForEndOfFrame()
 	{
 		MonoObject* exceptionObject = NULL;
 		Mono::mono_runtime_invoke(melonCoroutines_ProcessWaitForEndOfFrame, NULL, NULL, &exceptionObject);
-		if (exceptionObject)
+		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
