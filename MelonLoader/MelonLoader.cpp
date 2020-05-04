@@ -90,8 +90,8 @@ void MelonLoader::UNLOAD(bool alt)
 	if (!alt)
 		ModHandler::OnApplicationQuit();
 	HookManager::UnhookAll();
-	if (IsGameIl2Cpp)
-		Mono::Unload();
+	//if (IsGameIl2Cpp)
+	//	Mono::Unload();
 	if (!alt)
 		Logger::Log("UNLOADED!");
 	Logger::Stop();
