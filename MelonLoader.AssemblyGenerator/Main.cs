@@ -302,7 +302,7 @@ namespace MelonLoader.AssemblyGenerator
             }
             if (!was_successful)
                 MelonModLogger.LogError("FAILURE!");
-            return was_successful;
+            return true; //ONLY TEMPORARY, WAIT FOR COMPLETE IMPLEMENTATION
         }
     }
 }
