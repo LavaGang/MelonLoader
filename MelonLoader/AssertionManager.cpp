@@ -2,6 +2,7 @@
 #include "MelonLoader.h"
 #include "PointerUtils.h"
 #include "Logger.h"
+#include "Mono.h"
 
 bool AssertionManager::Result = false;
 const char* AssertionManager::FileName = NULL;
@@ -27,6 +28,8 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 		else
 			MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
 		MelonLoader::UNLOAD(true);
+		if (MelonLoader::IsGameIl2Cpp)
+			Mono::Unload();
 	}
 }
 
