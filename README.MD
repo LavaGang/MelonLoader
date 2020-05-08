@@ -39,8 +39,9 @@ MelonManager Coming Soon...
 
 ---
 
-- All Mods get placed in the created Mods folder in the game's install folder.
-- All Logs are made in the created Logs folder in the game's install folder.
+- All Mods get placed in the created Mods folder inside the Game's Install Folder.
+- All Preload Mods get placed in the created Mods/PRELOAD folder inside the Game's Install Folder.
+- All Logs are made in the created Logs folder inside the Game's Install Folder.
 
 #### Specific combinations of Compile Versions will open a specific Console by Default:
 
@@ -58,11 +59,12 @@ MelonManager Coming Soon...
 | User | Source | License |
 | ----------- | ---------- | ---------- |
 | [Microsoft](https://github.com/microsoft) | Research Detours Package | [MIT](https://github.com/microsoft/Detours/blob/master/LICENSE.md) |
+| [Unity Technologies](https://github.com/Unity-Technologies) | UnityCsReference | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
 | [pardeike](https://github.com/pardeike) | Harmony | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) |
 | [Perfare](https://github.com/Perfare) | Il2CppDumper | [MIT](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) |
 | [knah](https://github.com/knah) | Il2CppAssemblyUnhollower | [GNUv3](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) |
 
-See the [WIKI](https://melonwiki.xyz/#/credits) for the full Credits.
+See [WIKI](https://melonwiki.xyz/#/credits) for the full Credits.
 
 ---
 
@@ -71,6 +73,8 @@ See the [WIKI](https://melonwiki.xyz/#/credits) for the full Credits.
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full License.
 
 Research Detours Package is licensed under the MIT License. See [LICENSE](https://github.com/microsoft/Detours/blob/master/LICENSE.md) for the full License.
+
+UnityCsReference is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
 
 Harmony is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
 
