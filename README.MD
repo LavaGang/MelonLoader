@@ -57,6 +57,7 @@ MelonManager Coming Soon...
 
 | User | Source | License |
 | ----------- | ---------- | ---------- |
+| [Microsoft](https://github.com/microsoft) | Research Detours Package | [MIT](https://github.com/microsoft/Detours/blob/master/LICENSE.md) |
 | [pardeike](https://github.com/pardeike) | Harmony | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) |
 | [Perfare](https://github.com/Perfare) | Il2CppDumper | [MIT](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) |
 | [knah](https://github.com/knah) | Il2CppAssemblyUnhollower | [GNUv3](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) |
@@ -66,6 +67,8 @@ MelonManager Coming Soon...
 ### LICENSING:
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full license text.
+
+Research Detours Package is licensed under the MIT License. See [LICENSE](https://github.com/microsoft/Detours/blob/master/LICENSE.md) for the full license text.
 
 Harmony is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full license text.
 
