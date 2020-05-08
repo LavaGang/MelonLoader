@@ -12,7 +12,7 @@ MelonManager Coming Soon...
 
 ### MANUAL INSTALLATION FOR IL2CPP GAMES:
 
-1.  Download both MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+1.  Download MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 2.  Extract MelonLoader.zip to the Game's Installation Folder.
 3.  Download MonoDependencies.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 4.  Extract MonoDependencies.zip to the Game's Installation Folder.
