@@ -62,16 +62,18 @@ MelonManager Coming Soon...
 | [Perfare](https://github.com/Perfare) | Il2CppDumper | [MIT](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) |
 | [knah](https://github.com/knah) | Il2CppAssemblyUnhollower | [GNUv3](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) |
 
+See the [WIKI](https://melonwiki.xyz/#/credits) for the full Credits.
+
 ---
 
 ### LICENSING:
 
-MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full license text.
+MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full License.
 
-Research Detours Package is licensed under the MIT License. See [LICENSE](https://github.com/microsoft/Detours/blob/master/LICENSE.md) for the full license text.
+Research Detours Package is licensed under the MIT License. See [LICENSE](https://github.com/microsoft/Detours/blob/master/LICENSE.md) for the full License.
 
-Harmony is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full license text.
+Harmony is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
 
-Il2CppDumper is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full license text.
+Il2CppDumper is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License text.
 
-Il2CppAssemblyUnhollower is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full license text.
+Il2CppAssemblyUnhollower is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
