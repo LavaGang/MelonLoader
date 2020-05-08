@@ -83,9 +83,9 @@ Download MelonLoader.zip from Releases then follow the installation instructions
 
 ### CREDITS
 
--[AtiLion](https://github.com/AtiLion) for most of winmm proxy | Licensed under [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/AtiLion_LICENSE)
+- [AtiLion](https://github.com/AtiLion) for most of winmm proxy | Licensed under [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/AtiLion_LICENSE)
 
--[pardeike](https://github.com/pardeike) for Harmony | Licensed under [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE)
+- [pardeike](https://github.com/pardeike) for Harmony | Licensed under [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE)
 
 ---
 
