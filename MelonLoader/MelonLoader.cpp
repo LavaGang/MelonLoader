@@ -1,4 +1,7 @@
 #include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include "MelonLoader.h"
 #include "Console.h"
 #include "Mono.h"
@@ -14,6 +17,8 @@ bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
+char* MelonLoader::CompanyName = NULL;
+char* MelonLoader::ProductName = NULL;
 
 void MelonLoader::Main()
 {
@@ -65,23 +70,54 @@ void MelonLoader::Main()
 		std::copy(ndatapath.begin(), ndatapath.end(), DataPath);
 		DataPath[ndatapath.size()] = '\0';
 
+		std::string assemblypath = std::string();
 		if (IsGameIl2Cpp)
 		{
+			assemblypath = filepathstr + "\\MelonLoader\\Managed";
 			std::string configpath = ndatapath + "\\il2cpp_data\\etc";
 			Mono::ConfigPath = new char[configpath.size() + 1];
 			std::copy(configpath.begin(), configpath.end(), Mono::ConfigPath);
 			Mono::ConfigPath[configpath.size()] = '\0';
+		}
+		else
+			assemblypath = ndatapath + "\\Managed";
+		Mono::AssemblyPath = new char[assemblypath.size() + 1];
+		std::copy(assemblypath.begin(), assemblypath.end(), Mono::AssemblyPath);
+		Mono::AssemblyPath[assemblypath.size()] = '\0';
 
-			std::string assemblypath = filepathstr + "\\MelonLoader\\Managed";
-			Mono::AssemblyPath = new char[assemblypath.size() + 1];
-			std::copy(assemblypath.begin(), assemblypath.end(), Mono::AssemblyPath);
-			Mono::AssemblyPath[assemblypath.size()] = '\0';
+		ReadAppInfo();
 
+		if (IsGameIl2Cpp)
+		{
 			if (Mono::Load() && Mono::Setup())
 				HookManager::LoadLibraryW_Hook();
 		}
 		else
 			HookManager::LoadLibraryW_Hook();
+	}
+}
+
+void MelonLoader::ReadAppInfo()
+{
+	std::ifstream appinfofile((std::string(DataPath) + "\\app.info"));
+	std::stringstream filebuffer;
+	filebuffer << appinfofile.rdbuf();
+	appinfofile.close();
+	std::string line;
+	while (std::getline(filebuffer, line, '\n'))
+	{
+		if (CompanyName == NULL)
+		{
+			CompanyName = new char[line.size() + 1];
+			std::copy(line.begin(), line.end(), CompanyName);
+			CompanyName[line.size()] = '\0';
+		}
+		else
+		{
+			ProductName = new char[line.size() + 1];
+			std::copy(line.begin(), line.end(), ProductName);
+			ProductName[line.size()] = '\0';
+		}
 	}
 }
 

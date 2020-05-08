@@ -5,10 +5,6 @@
 HMODULE UnityPlayer::Module = NULL;
 PlayerLoadFirstScene_t UnityPlayer::PlayerLoadFirstScene = NULL;
 PlayerCleanup_t UnityPlayer::PlayerCleanup = NULL;
-BaseBehaviourManager_CommonUpdate_t UnityPlayer::BaseBehaviourManager_Update = NULL;
-BaseBehaviourManager_CommonUpdate_t UnityPlayer::BaseBehaviourManager_FixedUpdate = NULL;
-BaseBehaviourManager_CommonUpdate_t UnityPlayer::BaseBehaviourManager_LateUpdate = NULL;
-//GUIManager_DoGUIEvent_t UnityPlayer::GUIManager_DoGUIEvent = NULL;
 EndOfFrameCallbacks_DequeAll_t UnityPlayer::EndOfFrameCallbacks_DequeAll = NULL;
 
 bool UnityPlayer::Load()
@@ -42,37 +38,6 @@ bool UnityPlayer::Setup()
 
 	if (MelonLoader::IsGameIl2Cpp)
 	{
-		if ((BaseBehaviourManager_Update == NULL) || (BaseBehaviourManager_FixedUpdate == NULL) || (BaseBehaviourManager_LateUpdate == NULL))
-		{
-			std::vector<uintptr_t> BaseBehaviourManager_CommonUpdate = PointerUtils::FindAllPattern(Module, "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 81 EC ? ? ? ? 48 8B F9 B2 01 48 8D 4D C0 E8 ? ? ? ? 48 8B CF E8 ? ? ? ? 48 8B 47 08 48");
-			if (BaseBehaviourManager_CommonUpdate.size() < 1) // 2019.3.6f1
-				BaseBehaviourManager_CommonUpdate = PointerUtils::FindAllPattern(Module, "48 89 5C 24 ? 48 89 7C 24 ? 55 48 8B EC 48 83 EC 60 48 8B F9 B2 01 48 8D 4D C0 E8 ? ? ? ? 48 8B CF E8 ? ? ? ? 48 8B 47 08 48");
-			if (BaseBehaviourManager_CommonUpdate.size() > 0)
-			{
-				if ((BaseBehaviourManager_Update == NULL) && (BaseBehaviourManager_CommonUpdate[0] != NULL))
-					BaseBehaviourManager_Update = (BaseBehaviourManager_CommonUpdate_t)BaseBehaviourManager_CommonUpdate[0];
-				if ((BaseBehaviourManager_FixedUpdate == NULL) && (BaseBehaviourManager_CommonUpdate[1] != NULL))
-					BaseBehaviourManager_FixedUpdate = (BaseBehaviourManager_CommonUpdate_t)BaseBehaviourManager_CommonUpdate[1];
-				if ((BaseBehaviourManager_LateUpdate == NULL) && (BaseBehaviourManager_CommonUpdate[2] != NULL))
-					BaseBehaviourManager_LateUpdate = (BaseBehaviourManager_CommonUpdate_t)BaseBehaviourManager_CommonUpdate[2];
-			}
-			else
-				AssertionManager::ThrowError("Failed to FindAllPattern ( BaseBehaviourManager_CommonUpdate )");
-		}
-		AssertionManager::Decide(BaseBehaviourManager_Update, "BaseBehaviourManager_Update");
-		AssertionManager::Decide(BaseBehaviourManager_FixedUpdate, "BaseBehaviourManager_FixedUpdate");
-		AssertionManager::Decide(BaseBehaviourManager_LateUpdate, "BaseBehaviourManager_LateUpdate");
-
-		/*
-		if (GUIManager_DoGUIEvent == NULL)
-			GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 4C 63 72 2C 4C 8D 25 ? ? ? ? 4C 8B FA 44 89 74 24 ? 48");
-		if (GUIManager_DoGUIEvent == NULL) // OatWotW
-			GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "48 8B C4 44 88 40 18 48 89 50 10 48 89 48 08 55 41 55 41 56 48 8D 68 B8 48 81 EC 30 01 00 00 80 3D FA C1 1A 01 00 4C 8B F2 4C 8B E9");
-		if (GUIManager_DoGUIEvent == NULL) // 2019.2.0f1 & 2019.3.6f1
-			GUIManager_DoGUIEvent = (GUIManager_DoGUIEvent_t)PointerUtils::FindPattern(Module, "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 63 5A ? ? 8D ? ? ? ? ? 48 8B F2 89 5C 24 58 4C 8B");
-		AssertionManager::Decide(GUIManager_DoGUIEvent, "GUIManager_DoGUIEvent");
-		*/
-
 		if (EndOfFrameCallbacks_DequeAll == NULL)
 			EndOfFrameCallbacks_DequeAll = (EndOfFrameCallbacks_DequeAll_t)PointerUtils::FindPattern(Module, "40 57 48 83 EC 20 48 8B 0D ? ? ? ? 48 63 01 48 8B 7C C1 ? 48 8B CF E8 ? ? ? ? 85 C0 75 ? 48 89 5C 24 ? 48 8B CF E8 ? ? ? ? 48 8B D8 48 8B");
 		AssertionManager::Decide(EndOfFrameCallbacks_DequeAll, "EndOfFrameCallbacks_DequeAll");

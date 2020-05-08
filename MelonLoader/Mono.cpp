@@ -54,6 +54,7 @@ mono_property_get_get_method_t Mono::mono_property_get_get_method = NULL;
 mono_object_get_class_t Mono::mono_object_get_class = NULL;
 mono_class_get_type_t Mono::mono_class_get_type = NULL;
 mono_type_get_name_t Mono::mono_type_get_name = NULL;
+mono_string_new_t Mono::mono_string_new = NULL;
 
 bool Mono::Load()
 {
@@ -123,6 +124,7 @@ bool Mono::Setup()
 	mono_object_get_class = (mono_object_get_class_t)AssertionManager::GetExport(Module, "mono_object_get_class");
 	mono_class_get_type = (mono_class_get_type_t)AssertionManager::GetExport(Module, "mono_class_get_type");
 	mono_type_get_name = (mono_type_get_name_t)AssertionManager::GetExport(Module, "mono_type_get_name");
+	mono_string_new = (mono_string_new_t)AssertionManager::GetExport(Module, "mono_string_new");
 
 	if (!IsOldMono)
 	{

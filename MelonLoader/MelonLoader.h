@@ -13,8 +13,11 @@ public:
 	static bool QuitFix;
 	static char* GamePath;
 	static char* DataPath;
+	static char* CompanyName;
+	static char* ProductName;
 
 	static void Main();
+	static void ReadAppInfo();
 	static void UNLOAD(bool alt = false);
 	static bool Is64bit();
 	static int CountSubstring(std::string pat, std::string txt);

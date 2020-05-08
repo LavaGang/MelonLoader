@@ -1,10 +1,10 @@
-﻿namespace MelonLoader
+﻿namespace MelonLoader.ModHandler
 {
     public static class BuildInfo
     {
-        internal const string Name = "MelonLoader";
-        internal const string Author = "Lava Gang";
-        internal const string Company = "discord.gg/2Wn3N2P";
-        internal const string Version = "0.1.1";
+        public const string Name = "MelonLoader";
+        public const string Author = "Lava Gang";
+        public const string Company = "discord.gg/2Wn3N2P";
+        public const string Version = "0.1.1";
     }
 }

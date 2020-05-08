@@ -13,6 +13,11 @@ namespace TestMod
 
     public class TestMod : MelonMod
     {
+        public override void OnPreInitialization() // Runs before Game Initialization. Only runs if the Mod is in the PRELOAD folder.
+        {
+            MelonModLogger.Log("OnPreInitialization");
+        }
+
         public override void OnApplicationStart()
         {
             MelonModLogger.Log("OnApplicationStart");
@@ -48,12 +53,10 @@ namespace TestMod
             MelonModLogger.Log("OnLateUpdate");
         }
 
-        /*
         public override void OnGUI()
         {
             MelonModLogger.Log("OnGUI");
         }
-        */
 
         public override void OnApplicationQuit()
         {

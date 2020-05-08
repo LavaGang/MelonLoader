@@ -8,6 +8,11 @@
         public bool IsUniversal { get; internal set; }
 
         /// <summary>
+        /// Gets if the Mod is in the PRELOAD folder or not.
+        /// </summary>
+        public bool IsPreload { get; internal set; }
+
+        /// <summary>
         /// Gets the Info Attribute of the Mod.
         /// </summary>
         public MelonModInfoAttribute InfoAttribute { get; internal set; }
@@ -17,6 +22,7 @@
         /// </summary>
         public MelonModGameAttribute[] GameAttributes { get; internal set; }
 
+        public virtual void OnPreInitialization() {}
         public virtual void OnApplicationStart() {}
         public virtual void OnLevelIsLoading() {}
         public virtual void OnLevelWasLoaded(int level) {}

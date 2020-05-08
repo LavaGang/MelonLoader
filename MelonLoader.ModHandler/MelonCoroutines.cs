@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
 
 namespace MelonLoader
 {
@@ -32,9 +31,9 @@ namespace MelonLoader
 
             internal bool MoveNext()
             {
-                if (NETFrameworkFix.MethodInfo_op_Equality(MoveNextMethod, null))
+                if (MoveNextMethod.Equals(null))
                     MoveNextMethod = CoroutineType.GetMethod("MoveNext", BindingFlags.Instance | BindingFlags.Public);
-                if (NETFrameworkFix.MethodInfo_op_Inequality(MoveNextMethod, null))
+                if (!MoveNextMethod.Equals(null))
                     return (bool)MoveNextMethod.Invoke(Coroutine, new object[] { });
                 return true;
             }
@@ -69,12 +68,12 @@ namespace MelonLoader
                 }
                 else
                 {
-                    if (NETFrameworkFix.MethodInfo_op_Equality(StartCoroutineMethod, null))
-                        StartCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(IEnumerator))));
-                    if (NETFrameworkFix.MethodInfo_op_Inequality(StartCoroutineMethod, null))
+                    if (StartCoroutineMethod.Equals(null))
+                        StartCoroutineMethod = SupportModule.GetMonoBehaviourType().GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(IEnumerator))));
+                    if (!StartCoroutineMethod.Equals(null))
                     {
-                        object coroutine = StartCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { routine }) as Coroutine;
-                        CoroD corod = new CoroD(coroutine.GetType(), coroutine);
+                        object coroutine = StartCoroutineMethod.Invoke(SupportModule.GetComponent(), new object[] { routine });
+                        CoroD corod = new CoroD(SupportModule.GetCoroutineType(), coroutine);
                         return corod;
                     }
                 }
@@ -92,10 +91,10 @@ namespace MelonLoader
                 StopIl2CppCoroD(corod);
             else
             {
-                if (NETFrameworkFix.MethodInfo_op_Equality(StopCoroutineMethod, null))
-                    StopCoroutineMethod = typeof(MonoBehaviour).GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StopCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(Coroutine))));
-                if (NETFrameworkFix.MethodInfo_op_Inequality(StopCoroutineMethod, null))
-                    StopCoroutineMethod.Invoke(MelonModComponent.Instance, new object[] { corod.Coroutine });
+                if (StopCoroutineMethod.Equals(null))
+                    StopCoroutineMethod = SupportModule.GetMonoBehaviourType().GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StopCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == SupportModule.GetCoroutineType())));
+                if (!StopCoroutineMethod.Equals(null))
+                    StopCoroutineMethod.Invoke(SupportModule.GetComponent(), new object[] { corod.Coroutine });
             }
         }
 
@@ -121,53 +120,70 @@ namespace MelonLoader
         private static bool WaitConditionIsIl2Cpp = true;
         private static FieldInfo field_m_Seconds = null;
         private static PropertyInfo prop_m_Seconds = null;
+        private static FieldInfo field_keepWaiting = null;
+        private static PropertyInfo prop_keepWaiting = null;
         internal static void Process()
         {
             if (HasCheckWaitCondition == false)
             {
-                WaitConditionIsIl2Cpp = (typeof(WaitForSeconds).GetProperty("m_Seconds", BindingFlags.Instance | BindingFlags.Public) != null);
+                WaitConditionIsIl2Cpp = (SupportModule.GetWaitForSecondsType().GetProperty("m_Seconds", BindingFlags.Instance | BindingFlags.Public) != null);
                 HasCheckWaitCondition = true;
             }
             for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
             {
                 var tuple = ourCoroutinesStore[i];
-                switch (tuple.WaitCondition)
+                System.Type waitConditionType = tuple.WaitCondition.GetType();
+                if (waitConditionType == SupportModule.GetCustomYieldInstructionType())
                 {
-                    case CustomYieldInstruction customYield:
-                        if (!customYield.keepWaiting)
+                    bool keepWaiting = false;
+                    if (WaitConditionIsIl2Cpp)
+                    {
+                        if (prop_keepWaiting == null)
+                            prop_keepWaiting = SupportModule.GetCustomYieldInstructionType().GetProperty("keepWaiting");
+                        if (prop_keepWaiting != null)
+                            keepWaiting = (bool)prop_keepWaiting.GetGetMethod().Invoke(tuple.WaitCondition, new object[0]);
+                    }
+                    else
+                    {
+                        if (field_keepWaiting == null)
+                            field_keepWaiting = SupportModule.GetCustomYieldInstructionType().GetField("keepWaiting", BindingFlags.Instance | BindingFlags.Public);
+                        if (field_keepWaiting != null)
+                            keepWaiting = (bool)field_keepWaiting.GetValue(tuple.WaitCondition);
+                    }
+                    if (!keepWaiting)
+                    {
+                        ourCoroutinesStore.RemoveAt(i);
+                        ProcessNextOfCoroutine(tuple.Coroutine);
+                    }
+                }
+                else if (waitConditionType == SupportModule.GetWaitForSecondsType())
+                {
+                    float m_Seconds = 0;
+                    if (WaitConditionIsIl2Cpp)
+                    {
+                        if (prop_m_Seconds == null)
+                            prop_m_Seconds = SupportModule.GetWaitForSecondsType().GetProperty("m_Seconds");
+                        if (prop_m_Seconds != null)
                         {
-                            ourCoroutinesStore.RemoveAt(i);
-                            ProcessNextOfCoroutine(tuple.Coroutine);
+                            m_Seconds = (float)prop_m_Seconds.GetGetMethod().Invoke(tuple.WaitCondition, new object[0]);
+                            prop_m_Seconds.GetSetMethod().Invoke(tuple.WaitCondition, new object[] { (m_Seconds - SupportModule.GetUnityDeltaTime()) });
                         }
-                        break;
-                    case WaitForSeconds waitForSeconds:
-                        float m_Seconds = 0;
-                        if (WaitConditionIsIl2Cpp)
+                    }
+                    else
+                    {
+                        if (field_m_Seconds == null)
+                            field_m_Seconds = SupportModule.GetWaitForSecondsType().GetField("m_Seconds", BindingFlags.Instance | BindingFlags.NonPublic);
+                        if (field_m_Seconds != null)
                         {
-                            if (prop_m_Seconds == null)
-                                prop_m_Seconds = typeof(WaitForSeconds).GetProperty("m_Seconds");
-                            if (prop_m_Seconds != null)
-                            {
-                                m_Seconds = (float)prop_m_Seconds.GetGetMethod().Invoke(waitForSeconds, new object[0]);
-                                prop_m_Seconds.GetSetMethod().Invoke(waitForSeconds, new object[] { (m_Seconds - Time.deltaTime) });
-                            }
+                            m_Seconds = (float)field_m_Seconds.GetValue(tuple.WaitCondition);
+                            field_m_Seconds.SetValue(tuple.WaitCondition, (m_Seconds - SupportModule.GetUnityDeltaTime()));
                         }
-                        else
-                        {
-                            if (field_m_Seconds == null)
-                                field_m_Seconds = typeof(WaitForSeconds).GetField("m_Seconds", BindingFlags.Instance | BindingFlags.NonPublic);
-                            if (field_m_Seconds != null)
-                            {
-                               m_Seconds = (float)field_m_Seconds.GetValue(waitForSeconds);
-                               field_m_Seconds.SetValue(waitForSeconds, (m_Seconds - Time.deltaTime));
-                            }
-                        }
-                        if (m_Seconds <= 0)
-                        {
-                            ourCoroutinesStore.RemoveAt(i);
-                            ProcessNextOfCoroutine(tuple.Coroutine);
-                        }
-                        break;
+                    }
+                    if (m_Seconds <= 0)
+                    {
+                        ourCoroutinesStore.RemoveAt(i);
+                        ProcessNextOfCoroutine(tuple.Coroutine);
+                    }
                 }
             }
             if (ourNextFrameCoroutines.Count == 0)
@@ -183,12 +199,11 @@ namespace MelonLoader
             for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
             {
                 var tuple = ourCoroutinesStore[i];
-                switch (tuple.WaitCondition)
+                System.Type waitConditionType = tuple.WaitCondition.GetType();
+                if (waitConditionType == SupportModule.GetWaitForFixedUpdateType())
                 {
-                    case WaitForFixedUpdate waitForFixedUpdate:
-                        ourCoroutinesStore.RemoveAt(i);
-                        ProcessNextOfCoroutine(tuple.Coroutine);
-                        break;
+                    ourCoroutinesStore.RemoveAt(i);
+                    ProcessNextOfCoroutine(tuple.Coroutine);
                 }
             }
         }
@@ -198,12 +213,11 @@ namespace MelonLoader
             for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
             {
                 var tuple = ourCoroutinesStore[i];
-                switch (tuple.WaitCondition)
+                System.Type waitConditionType = tuple.WaitCondition.GetType();
+                if (waitConditionType == SupportModule.GetWaitForEndOfFrameType())
                 {
-                    case WaitForEndOfFrame waitForEndOfFrame:
-                        ourCoroutinesStore.RemoveAt(i);
-                        ProcessNextOfCoroutine(tuple.Coroutine);
-                        break;
+                    ourCoroutinesStore.RemoveAt(i);
+                    ProcessNextOfCoroutine(tuple.Coroutine);
                 }
             }
         }

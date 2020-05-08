@@ -44,6 +44,7 @@ typedef MonoMethod* (*mono_property_get_get_method_t) (MonoProperty* prop);
 typedef MonoClass* (*mono_object_get_class_t) (MonoObject* obj);
 typedef MonoType* (*mono_class_get_type_t) (MonoClass* klass);
 typedef const char* (*mono_type_get_name_t) (MonoType* type);
+typedef MonoString* (*mono_string_new_t) (MonoDomain* domain, const char* str);
 
 class Mono
 {
@@ -95,6 +96,7 @@ public:
 	static mono_object_get_class_t mono_object_get_class;
 	static mono_class_get_type_t mono_class_get_type;
 	static mono_type_get_name_t mono_type_get_name;
+	static mono_string_new_t mono_string_new;
 
 	static bool Load();
 	static void Unload();

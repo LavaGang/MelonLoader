@@ -20,13 +20,13 @@ namespace MelonLoader
             if (sf != null)
             {
                 MethodBase method = sf.GetMethod();
-                if (NETFrameworkFix.MethodBase_op_Inequality(method, null))
+                if (!method.Equals(null))
                 {
                     Type methodClassType = method.DeclaringType;
-                    if (NETFrameworkFix.Type_op_Inequality(methodClassType, null))
+                    if (!methodClassType.Equals(null))
                     {
                         Assembly asm = methodClassType.Assembly;
-                        if (NETFrameworkFix.Assembly_op_Inequality(asm, null))
+                        if (!asm.Equals(null))
                         {
                             object[] attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
                             if ((attrArray.Count() > 0) && (attrArray[0] != null))

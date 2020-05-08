@@ -12,16 +12,17 @@ void Logger_LogWarning(MonoString* namesection, MonoString* txt) { Logger::LogWa
 void Logger_LogError(MonoString* namesection, MonoString* txt) { Logger::LogError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void Logger_LogModError(MonoString* namesection, MonoString* msg) { Logger::LogModError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(msg)); }
 void Logger_LogModStatus(int type) { Logger::LogModStatus(type); }
-Il2CppDomain* GetIl2CppDomain() { return IL2CPP::Domain; }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }
 bool IsRainbowMode() { return MelonLoader::RainbowMode; }
 bool IsRandomRainbowMode() { return MelonLoader::RandomRainbowMode; }
-const char* GetGameDirectory() { return MelonLoader::GamePath; }
+MonoString* GetGameDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::GamePath); }
 void Hook(Il2CppMethod* target, void* detour) { HookManager::Hook(target, detour); }
 void Unhook(Il2CppMethod* target, void* detour) { HookManager::Unhook(target, detour); }
 void Console_SetColor(ConsoleColor color) { Console::SetColor(color); }
 bool IsOldMono() { return Mono::IsOldMono; }
+MonoString* GetCompanyName() { return ((MelonLoader::CompanyName == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::CompanyName)); }
+MonoString* GetProductName() { return ((MelonLoader::ProductName == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::ProductName)); }
 
 void Exports::AddInternalCalls()
 {
@@ -32,7 +33,6 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogError", Logger_LogError);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogModError", Logger_LogModError);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogModStatus", Logger_LogModStatus);
-	Mono::mono_add_internal_call("MelonLoader.Imports::GetIl2CppDomain", GetIl2CppDomain);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsIl2CppGame", IsIl2CppGame);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsDebugMode", IsDebugMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRainbowMode", IsRainbowMode);
@@ -45,7 +45,6 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetConsoleWindow", GetConsoleWindow);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Console_SetColor", Console_SetColor);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsOldMono", IsOldMono);
-
-	if (MelonLoader::IsGameIl2Cpp)
-		IL2CPP::AddInternalCalls();
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", GetCompanyName);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", GetProductName);
 }

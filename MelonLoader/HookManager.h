@@ -5,6 +5,7 @@
 #include <vector>
 
 typedef HMODULE(__stdcall* LoadLibraryW_t) (LPCWSTR lpLibFileName);
+typedef MonoString* (*infovoidcall_t) ();
 
 class HookManager_Hook
 {
@@ -37,12 +38,7 @@ public:
 	static Il2CppDomain* Hooked_il2cpp_init(const char* name);
 	static MonoDomain* Hooked_mono_jit_init_version(const char* name, const char* version);
 	static void Hooked_add_internal_call(const char* name, void* method);
-	static bool Hooked_PlayerCleanup(bool dopostquitmsg);
 	static void* Hooked_PlayerLoadFirstScene(bool unknown);
-	static __int64 Hooked_BaseBehaviourManager_Update(void* behaviour_manager);
-	static __int64 Hooked_BaseBehaviourManager_FixedUpdate(void* behaviour_manager);
-	static __int64 Hooked_BaseBehaviourManager_LateUpdate(void* behaviour_manager);
+	static bool Hooked_PlayerCleanup(bool dopostquitmsg);
 	static void Hooked_EndOfFrameCallbacks_DequeAll();
-
-	//static void Hooked_GUIManager_DoGUIEvent(void* __0, void* __1, bool __2);
 };

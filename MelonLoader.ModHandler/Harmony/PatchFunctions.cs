@@ -149,7 +149,7 @@ namespace Harmony
 			// If needed, unwrap the return value; then return
 			if (UnhollowerSupport.IsGeneratedAssemblyType(origReturnType))
 			{
-				var pointerGetter = AccessTools.DeclaredProperty(Main.Il2CppObjectBaseType, "Pointer").GetGetMethod();
+				var pointerGetter = AccessTools.DeclaredProperty(UnhollowerSupport.Il2CppObjectBaseType, "Pointer").GetGetMethod();
 				Emitter.Emit(il, OpCodes.Call, pointerGetter);
 			}
 

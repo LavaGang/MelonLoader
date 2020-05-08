@@ -21,8 +21,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_LogModStatus(int type);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static IntPtr GetIl2CppDomain();
-        [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetCompanyName();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -42,9 +40,6 @@ namespace MelonLoader
         internal extern static bool IsRainbowMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsRandomRainbowMode();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetGameDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Hook(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]

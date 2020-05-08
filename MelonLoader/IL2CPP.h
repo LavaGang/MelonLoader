@@ -14,5 +14,4 @@ public:
 	static il2cpp_add_internal_call_t il2cpp_add_internal_call;
 
 	static bool Setup();
-	static void AddInternalCalls();
 };

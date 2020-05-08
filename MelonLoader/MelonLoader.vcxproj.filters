@@ -12,7 +12,6 @@
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="AssertionManager.cpp" />
-    <ClCompile Include="AssemblyGenerator.cpp" />
     <ClCompile Include="UnityPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -37,7 +36,6 @@
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="AssertionManager.h" />
-    <ClInclude Include="AssemblyGenerator.h" />
     <ClInclude Include="UnityPlayer.h" />
   </ItemGroup>
   <ItemGroup>
