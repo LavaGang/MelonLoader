@@ -23,11 +23,6 @@ MelonManager Coming Soon...
 
 1. Remove the version.dll file from the Game's Installation Folder.
 2. Remove the MelonLoader folder from the Game's Installation Folder.
-
----
-
-### MANUAL UNINSTALL (OPTIONAL STEPS):
-
 3. Remove the Mods folder from the Game's Installation Folder.
 4. Remove the Logs folder from the Game's Installation Folder.
 
