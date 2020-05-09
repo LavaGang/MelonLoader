@@ -67,13 +67,13 @@ MelonManager Coming Soon...
 
 | Source | Author | License |
 | ----------- | ---------- | ---------- |
-| [Research Detours Package](https://github.com/microsoft/Detours) | [Microsoft](https://github.com/microsoft) | [MIT](https://github.com/microsoft/Detours/blob/master/LICENSE.md) |
+| [Research Detours Package](https://github.com/microsoft/Detours) | [Microsoft](https://github.com/microsoft) | [MIT]((https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/detours/LICENSE.md) |
 | [UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference) | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
 | UnityPlayer | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
 | Il2Cpp | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
 | [Mono](https://github.com/mono/mono) | [Mono Project](https://github.com/mono) | [MIT](https://github.com/mono/mono/blob/master/LICENSE) |
-| [Harmony]() | [pardeike](https://github.com/pardeike) | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) |
-| [Il2CppDumper]() | [Perfare](https://github.com/Perfare) | [MIT](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) |
+| [Harmony](https://github.com/pardeike/Harmony) | [pardeike](https://github.com/pardeike) | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) |
+| [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) | [Perfare](https://github.com/Perfare) | [MIT](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) |
 | [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) | [knah](https://github.com/knah) | [GNUv3](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) |
 
 See [WIKI](https://melonwiki.xyz/#/credits) for the full Credits.
@@ -84,18 +84,18 @@ See [WIKI](https://melonwiki.xyz/#/credits) for the full Credits.
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full License.
 
-Research Detours Package is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/detours/LICENSE.md) for the full License.
+[Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/detours/LICENSE.md) for the full License.
 
-UnityCsReference is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
+[UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference) is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
 
 UnityPlayer is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
 
 Il2Cpp is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
 
-Mono is licensed under the MIT License. See [LICENSE](https://github.com/mono/mono/blob/master/LICENSE) for the full License text.
+[Mono](https://github.com/mono/mono) is licensed under the MIT License. See [LICENSE](https://github.com/mono/mono/blob/master/LICENSE) for the full License.
 
-Harmony is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
+[Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
 
-Il2CppDumper is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License text.
+[Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 
-Il2CppAssemblyUnhollower is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
+[Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
