@@ -1,21 +1,30 @@
-Download MelonLoader.zip from Releases then follow the installation instructions below.
+### AUTOMATED INSTALL / UNINSTALL:
+MelonManager Coming Soon...
+
+---
+	
+### MANUAL INSTALLATION FOR MONO GAMES:
+
+1.  Download both MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2.  Extract MelonLoader.zip to the Game's Installation Folder.
 
 ---
 
-## IL2CPP GAME INSTALLATION:
+### MANUAL INSTALLATION FOR IL2CPP GAMES:
 
-1.  Place `winmm.dll` next to the game's EXE
-2.  Copy the `MelonLoader` folder from `<REPO>\BaseLibs` to the game's install folder next to the exe and `winmm.dll`
-3.  Place `MelonLoader.dll` and `MelonLoader.ModHandler.dll` in the `MelonLoader` folder in the game's install folder
-4.  [Find the game's Unity version](#get-unity-version) in Unity Dependencies in BaseLibs
-    - If it does not exist you need to [generate it yourself](#unity-dependency-generation)
-5.  Extract the zip to the `MelonLoader` folder in the game's install folder
+1.  Download MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2.  Extract MelonLoader.zip to the Game's Installation Folder.
+3.  Download MonoDependencies.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+4.  Extract MonoDependencies.zip to the Game's Installation Folder.
 
-## MONO GAME INSTALLATION:
+---
 
-1.  Place `winmm.dll` next to the game's exe.
-2.  Create a new folder named `MelonLoader` in the game's install folder.
-3.  Place `MelonLoader.dll` and `MelonLoader.ModHandler.dll` in the `MelonLoader` folder in the game's install folder.
+### MANUAL UNINSTALL:
+
+1. Remove the winmm.dll file from the Game's Installation Folder.
+2. Remove the MelonLoader folder from the Game's Installation Folder.
+3. Remove the Mods folder from the Game's Installation Folder.
+4. Remove the Logs folder from the Game's Installation Folder.
 
 ---
 
@@ -26,37 +35,9 @@ Download MelonLoader.zip from Releases then follow the installation instructions
 | --no-mods             | Launch game without loading Mods         |
 | --melonloader.console | Normal Console                           |
 | --melonloader.debug   | Debug Console                            |
-| --melonloader.mupot   | Experimental MUPOT Mode for IL2CPP Games |
-
----
-
-### GET UNITY VERSION
-
-1. Open the file `\<GAME_PATH>\<GAME_NAME>_Data\Resources\unity default resources` with a text editor like [Notepad++](https://notepad-plus-plus.org/)
-   - If you don't see it you can try guessing the Unity version by checking the file version of the main game EXE
-2. In the first line you should see something like `­ 9ëd   2019.1.0b1` where `2019.1.0b1` would be the unity version
-
----
-
-### UNITY DEPENDENCY GENERATION:
-
-1. Download the correct unity version found [here](#get-unity-version)
-   - Release: `https://unity3d.com/unity/whats-new/<VERSION>`
-   - Beta: `https://unity3d.com/unity/beta/<VERSION>`
-2. Install it (you don't need anything other than the core files [no need to select il2cpp or mono])
-3. Start it and create a new project
-4. Make sure that you scene is completely empty
-5. Make sure your "Scripting Backend" is set to Mono
-   - "Edit" -> "Project Settings..." -> "Player" -> "Configuration"
-6. Compile your project ("File" -> "Build and run...")
-7. Create a new folder that looks like [this](https://gist.github.com/Bluscream/120d634988a4b37cf1f97b01ecf47214#file-struct-txt) somewhere
-8. Open `<UNITY_PROJECT_PATH>\<UNIT_PROJECT_NAME>_Data\Managed\`
-9. Move all files that do **not** already exist in [`<REPO>\BaseLibs\MelonLoader\Managed\`](https://gitlab.com/HerpDerpinstine/MelonLoader/-/tree/master/BaseLibs/MelonLoader/Managed) into `<FOLDER_YOU_CREATED_IN_STEP_7\Managed\`
-   - For comparison you can use a tool like [WinMerge](https://winmerge.org/)
-   - Example Diff: https://gist.github.com/Bluscream/120d634988a4b37cf1f97b01ecf47214#file-melonloader_unity_diff-csv
-   - Files not starting with Unity... and XML files should not end up in `<FOLDER_YOU_CREATED_IN_STEP_7\Managed\`!
-10. Move the `UnityPlayer.dll` from `<UNITY_PROJECT_PATH>\` to `<FOLDER_YOU_CREATED_IN_STEP_7\Mono\` and rename it to `MonoUnityPlayer.dll`
-11. ZIP up the `Managed\` and `Mono\` folder in a `<UNITY_VERSION>.zip` and either [pull request it into the repo directly](https://gitlab.com/HerpDerpinstine/MelonLoader/-/tree/master/BaseLibs/Unity%20Dependencies#modal-upload-blob) or drop it on the discord and mention one of the repo maintainers.
+| --melonloader.quitfix   | Fixes the Hanging Process Issue with some Games |
+| --melonloader.rainbow | Rainbow Console Color                |
+| --melonloader.randomrainbow | Random Rainbow Console Color |
 
 ---
 
@@ -67,8 +48,8 @@ Download MelonLoader.zip from Releases then follow the installation instructions
 
 ---
 
-- All Mods get placed in the created Mods folder in the game's install folder.
-- All Logs are made in the created Logs folder in the game's install folder.
+- All Mods get placed in the created Mods folder inside the Game's Install Folder.
+- All Logs are made in the created Logs folder inside the Game's Install Folder.
 
 #### Specific combinations of Compile Versions will open a specific Console by Default:
 
@@ -81,14 +62,42 @@ Download MelonLoader.zip from Releases then follow the installation instructions
 
 ---
 
-### CREDITS
+### CREDITS:
 
-- [AtiLion](https://github.com/AtiLion) for most of winmm proxy | Licensed under [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/AtiLion_LICENSE)
+| Source | Author | License |
+| ----------- | ---------- | ---------- |
+| [Research Detours Package](https://github.com/microsoft/Detours) | [Microsoft](https://github.com/microsoft) | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/detours/LICENSE.md) |
+| [UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference) | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
+| UnityPlayer | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
+| Il2Cpp | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
+| [Mono](https://github.com/mono/mono) | [Mono Project](https://github.com/mono) | [MIT](https://github.com/mono/mono/blob/master/LICENSE) |
+| [Harmony](https://github.com/pardeike/Harmony) | [pardeike](https://github.com/pardeike) | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) |
+| [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) | [Perfare](https://github.com/Perfare) | [MIT](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) |
+| [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) | [knah](https://github.com/knah) | [GNUv3](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) |
+| winmm.dll Proxy | [AtiLion](https://github.com/AtiLion) | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/AtiLion_LICENSE) |
 
-- [pardeike](https://github.com/pardeike) for Harmony | Licensed under [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE)
+See [WIKI](https://melonwiki.xyz/#/credits) for the full Credits.
 
 ---
 
-### LICENSING
+### LICENSING:
 
-MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://gitlab.com/HerpDerpinstine/MelonLoader/-/blob/master/LICENSE) for the full license text.
+MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full License.
+
+[Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/detours/LICENSE.md) for the full License.
+
+[UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference) is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
+
+UnityPlayer is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
+
+Il2Cpp is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
+
+[Mono](https://github.com/mono/mono) is licensed under the MIT License. See [LICENSE](https://github.com/mono/mono/blob/master/LICENSE) for the full License.
+
+[Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
+
+[Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
+
+[Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
+
+winmm.dll Proxy is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/AtiLion_LICENSE) for the full License.
