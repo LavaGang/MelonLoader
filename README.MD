@@ -35,7 +35,6 @@ MelonManager Coming Soon...
 | --no-mods             | Launch game without loading Mods         |
 | --melonloader.console | Normal Console                           |
 | --melonloader.debug   | Debug Console                            |
-| --melonloader.quitfix   | Fixes the Hanging Process Issue with some Games |
 | --melonloader.rainbow | Rainbow Console Color                |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
 
