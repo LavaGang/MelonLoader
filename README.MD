@@ -5,7 +5,7 @@ MelonManager Coming Soon...
 	
 ### MANUAL INSTALLATION FOR MONO GAMES:
 
-1.  Download both MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+1.  Download MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 2.  Extract MelonLoader.zip to the Game's Installation Folder.
 
 ---
