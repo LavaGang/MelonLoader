@@ -1,6 +1,6 @@
 ### AUTOMATED INSTALL / UNINSTALL:
 
-MelonManager Coming Soon...
+- MelonManager Coming Soon...
 
 ---
 	
