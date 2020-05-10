@@ -1,272 +1,35 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace MelonLoader
 {
     public class MelonCoroutines
     {
-        public class CoroD
-        {
-            private System.Type CoroutineType;
-            internal object Coroutine;
-            private MethodInfo MoveNextMethod;
-            private PropertyInfo CurrentProp;
-
-            internal CoroD(System.Type coroutineType, object coroutine)
-            {
-                CoroutineType = coroutineType;
-                Coroutine = coroutine;
-            }
-
-            internal object GetCurrent()
-            {
-                if (CurrentProp == null)
-                    CurrentProp = CoroutineType.GetProperty("Current", BindingFlags.Instance | BindingFlags.Public);
-                if (CurrentProp != null)
-                    return CurrentProp.GetGetMethod().Invoke(Coroutine, new object[] { });
-                return null;
-            }
-
-            internal bool MoveNext()
-            {
-                if (MoveNextMethod.Equals(null))
-                    MoveNextMethod = CoroutineType.GetMethod("MoveNext", BindingFlags.Instance | BindingFlags.Public);
-                if (!MoveNextMethod.Equals(null))
-                    return (bool)MoveNextMethod.Invoke(Coroutine, new object[] { });
-                return true;
-            }
-        }
-
-        private struct CoroTuple
-        {
-            public object WaitCondition;
-            public CoroD Coroutine;
-        }
-        private static List<CoroTuple> ourCoroutinesStore = new List<CoroTuple>();
-        private static List<CoroD> ourNextFrameCoroutines = new List<CoroD>();
-
-        private static MethodInfo StartCoroutineMethod = null;
-        private static MethodInfo StopCoroutineMethod = null;
-
         /// <summary>
         /// Start a new coroutine.<br />
         /// Coroutines are called at the end of the game Update loops.
         /// </summary>
-        /// <param name="routine">The target routine. Usually an IEnumerator</param>
-        /// <returns></returns>
-        public static CoroD Start<T>(T routine)
+        /// <param name="routine">The target routine</param>
+        /// <returns>An object that can be passed to Stop to stop this coroutine</returns>
+        public static object Start(IEnumerator routine)
         {
-            if (routine != null)
-            {
-                if (Imports.IsIl2CppGame())
-                {
-                    CoroD corod = new CoroD(typeof(T), routine);
-                    ProcessNextOfCoroutine(corod);
-                    return corod;
-                }
-                else
-                {
-                    if (StartCoroutineMethod.Equals(null))
-                        StartCoroutineMethod = SupportModule.GetMonoBehaviourType().GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StartCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == typeof(IEnumerator))));
-                    if (!StartCoroutineMethod.Equals(null))
-                    {
-                        object coroutine = StartCoroutineMethod.Invoke(SupportModule.GetComponent(), new object[] { routine });
-                        CoroD corod = new CoroD(SupportModule.GetCoroutineType(), coroutine);
-                        return corod;
-                    }
-                }
-            }
-            return null;
+            if (SupportModule.supportModule == null)
+                throw new NotSupportedException("Support module must be initialized before starting coroutines");
+            return SupportModule.supportModule.StartCoroutine(routine);
         }
 
         /// <summary>
         /// Stop a currently running coroutine
         /// </summary>
-        /// <param name="corod">The coroutine to stop</param>
-        public static void Stop(CoroD corod)
+        /// <param name="coroutineToken">The coroutine to stop</param>
+        public static void Stop(object coroutineToken)
         {
-            if (Imports.IsIl2CppGame())
-                StopIl2CppCoroD(corod);
-            else
-            {
-                if (StopCoroutineMethod.Equals(null))
-                    StopCoroutineMethod = SupportModule.GetMonoBehaviourType().GetMethods(BindingFlags.Instance | BindingFlags.Public).First(x => (x.Name.Equals("StopCoroutine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].GetType() == SupportModule.GetCoroutineType())));
-                if (!StopCoroutineMethod.Equals(null))
-                    StopCoroutineMethod.Invoke(SupportModule.GetComponent(), new object[] { corod.Coroutine });
-            }
+            SupportModule.supportModule?.StopCoroutine(coroutineToken);
         }
-
-        private static void StopIl2CppCoroD(CoroD corod)
-        {
-            if (ourNextFrameCoroutines.Contains(corod)) // the coroutine is running itself
-                ourNextFrameCoroutines.Remove(corod);
-            else
-            {
-                int coroTupleIndex = ourCoroutinesStore.FindIndex(c => c.Coroutine == corod);
-                if (coroTupleIndex != -1) // the coroutine is waiting for a subroutine
-                {
-                    object waitCondition = ourCoroutinesStore[coroTupleIndex].WaitCondition;
-                    if (waitCondition is CoroD)
-                        StopIl2CppCoroD(waitCondition as CoroD);
-
-                    ourCoroutinesStore.RemoveAt(coroTupleIndex);
-                }
-            }
-        }
-
-        private static bool HasCheckWaitCondition = false;
-        private static bool WaitConditionIsIl2Cpp = true;
-        private static FieldInfo field_m_Seconds = null;
-        private static PropertyInfo prop_m_Seconds = null;
-        private static FieldInfo field_keepWaiting = null;
-        private static PropertyInfo prop_keepWaiting = null;
-        internal static void Process()
-        {
-            if (HasCheckWaitCondition == false)
-            {
-                WaitConditionIsIl2Cpp = (SupportModule.GetWaitForSecondsType().GetProperty("m_Seconds", BindingFlags.Instance | BindingFlags.Public) != null);
-                HasCheckWaitCondition = true;
-            }
-            for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
-            {
-                var tuple = ourCoroutinesStore[i];
-                System.Type waitConditionType = tuple.WaitCondition.GetType();
-                if (waitConditionType == SupportModule.GetCustomYieldInstructionType())
-                {
-                    bool keepWaiting = false;
-                    if (WaitConditionIsIl2Cpp)
-                    {
-                        if (prop_keepWaiting == null)
-                            prop_keepWaiting = SupportModule.GetCustomYieldInstructionType().GetProperty("keepWaiting");
-                        if (prop_keepWaiting != null)
-                            keepWaiting = (bool)prop_keepWaiting.GetGetMethod().Invoke(tuple.WaitCondition, new object[0]);
-                    }
-                    else
-                    {
-                        if (field_keepWaiting == null)
-                            field_keepWaiting = SupportModule.GetCustomYieldInstructionType().GetField("keepWaiting", BindingFlags.Instance | BindingFlags.Public);
-                        if (field_keepWaiting != null)
-                            keepWaiting = (bool)field_keepWaiting.GetValue(tuple.WaitCondition);
-                    }
-                    if (!keepWaiting)
-                    {
-                        ourCoroutinesStore.RemoveAt(i);
-                        ProcessNextOfCoroutine(tuple.Coroutine);
-                    }
-                }
-                else if (waitConditionType == SupportModule.GetWaitForSecondsType())
-                {
-                    float m_Seconds = 0;
-                    if (WaitConditionIsIl2Cpp)
-                    {
-                        if (prop_m_Seconds == null)
-                            prop_m_Seconds = SupportModule.GetWaitForSecondsType().GetProperty("m_Seconds");
-                        if (prop_m_Seconds != null)
-                        {
-                            m_Seconds = (float)prop_m_Seconds.GetGetMethod().Invoke(tuple.WaitCondition, new object[0]);
-                            prop_m_Seconds.GetSetMethod().Invoke(tuple.WaitCondition, new object[] { (m_Seconds - SupportModule.GetUnityDeltaTime()) });
-                        }
-                    }
-                    else
-                    {
-                        if (field_m_Seconds == null)
-                            field_m_Seconds = SupportModule.GetWaitForSecondsType().GetField("m_Seconds", BindingFlags.Instance | BindingFlags.NonPublic);
-                        if (field_m_Seconds != null)
-                        {
-                            m_Seconds = (float)field_m_Seconds.GetValue(tuple.WaitCondition);
-                            field_m_Seconds.SetValue(tuple.WaitCondition, (m_Seconds - SupportModule.GetUnityDeltaTime()));
-                        }
-                    }
-                    if (m_Seconds <= 0)
-                    {
-                        ourCoroutinesStore.RemoveAt(i);
-                        ProcessNextOfCoroutine(tuple.Coroutine);
-                    }
-                }
-            }
-            if (ourNextFrameCoroutines.Count == 0)
-                return;
-            var oldCoros = ourNextFrameCoroutines.ToArray();
-            ourNextFrameCoroutines.Clear();
-            foreach (var nextFrameCoroutine in oldCoros)
-                ProcessNextOfCoroutine(nextFrameCoroutine);
-        }
-
-        internal static void ProcessWaitForFixedUpdate()
-        {
-            for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
-            {
-                var tuple = ourCoroutinesStore[i];
-                System.Type waitConditionType = tuple.WaitCondition.GetType();
-                if (waitConditionType == SupportModule.GetWaitForFixedUpdateType())
-                {
-                    ourCoroutinesStore.RemoveAt(i);
-                    ProcessNextOfCoroutine(tuple.Coroutine);
-                }
-            }
-        }
-
+        
         private static void ProcessWaitForEndOfFrame()
         {
-            for (var i = ourCoroutinesStore.Count - 1; i >= 0; i--)
-            {
-                var tuple = ourCoroutinesStore[i];
-                System.Type waitConditionType = tuple.WaitCondition.GetType();
-                if (waitConditionType == SupportModule.GetWaitForEndOfFrameType())
-                {
-                    ourCoroutinesStore.RemoveAt(i);
-                    ProcessNextOfCoroutine(tuple.Coroutine);
-                }
-            }
-        }
-
-        private static void ProcessNextOfCoroutine(CoroD enumerator)
-        {
-            try
-            {
-                if (!enumerator.MoveNext()) // Run the next step of the coroutine. If it's done, restore the parent routine
-                {
-#if !NET35
-                    var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator).Select(it => it.idx).ToList();
-                    for (var i = indices.Count() - 1; i >= 0; i--)
-                    {
-                        var index = indices[i];
-                        ourNextFrameCoroutines.Add(ourCoroutinesStore[index].Coroutine);
-                        ourCoroutinesStore.RemoveAt(index);
-                    }
-                    return;
-#endif
-                }
-            }
-            catch (System.Exception e)
-            {
-                MelonModLogger.LogError(e.ToString());
-                StopIl2CppCoroD(FindOriginalCoroD(enumerator)); // We want the entire coroutine hierachy to stop when an error happen
-            }
-
-            var next = enumerator.GetCurrent();
-            if (next == null)
-                ourNextFrameCoroutines.Add(enumerator);
-            else
-            {
-                if (next is IEnumerator)
-                    next = new CoroD(typeof(IEnumerator), next); // Convert IEnumerators to CoroD, so we only have CoroDs ran, and no IEnumerators
-
-                ourCoroutinesStore.Add(new CoroTuple() { WaitCondition = next, Coroutine = enumerator });
-
-                if (next is CoroD nextCoro)
-                    ProcessNextOfCoroutine(nextCoro);
-            }
-        }
-
-        private static CoroD FindOriginalCoroD(CoroD enumerator)
-        {
-            int index = ourCoroutinesStore.FindIndex(ct => ct.WaitCondition == enumerator);
-            if (index == -1)
-                return enumerator;
-            return FindOriginalCoroD(ourCoroutinesStore[index].Coroutine);
+            SupportModule.supportModule?.ProcessWaitForEndOfFrame();
         }
     }
 }

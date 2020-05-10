@@ -93,6 +93,7 @@
     <Compile Include="Harmony\Transpilers.cs" />
     <Compile Include="Imports.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="ISupportModule.cs" />
     <Compile Include="MelonCoroutines.cs" />
     <Compile Include="MelonModLogger.cs" />
     <Compile Include="Main.cs" />

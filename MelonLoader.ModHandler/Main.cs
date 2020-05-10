@@ -148,8 +148,6 @@ namespace MelonLoader
                     if (mod != null)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
-            if (Imports.IsIl2CppGame())
-                MelonCoroutines.Process();
         }
 
         public static void OnFixedUpdate()
@@ -161,8 +159,6 @@ namespace MelonLoader
                     if (mod != null)
                         try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
-            if (Imports.IsIl2CppGame())
-                MelonCoroutines.ProcessWaitForFixedUpdate();
         }
 
         public static void OnLateUpdate()

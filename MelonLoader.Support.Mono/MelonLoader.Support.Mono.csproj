@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="MonoSupportModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">
