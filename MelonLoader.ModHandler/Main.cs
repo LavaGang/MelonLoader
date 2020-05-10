@@ -298,9 +298,9 @@ namespace MelonLoader
 
                 // ZIP
 #if (NET20 || NET35)
-                    string[] zippedFiles = Directory.GetFiles(modDirectory, "*.dll");
+                string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip");
 #else
-                string[] zippedFiles = Directory.EnumerateFiles(modDirectory, "*.dll", SearchOption.TopDirectoryOnly).ToArray();
+                string[] zippedFiles = Directory.EnumerateFiles(modDirectory, "*.zip", SearchOption.TopDirectoryOnly).ToArray();
 #endif
                 if (zippedFiles.Length > 0)
                 {
