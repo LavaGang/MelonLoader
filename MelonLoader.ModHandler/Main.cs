@@ -91,7 +91,7 @@ namespace MelonLoader
                             );
                         if (Imports.IsDebugMode())
                             MelonModLogger.Log("Preload: " + mod.IsPreload.ToString());
-                        MelonModLogger.LogModStatus((mod.GameAttributes.Count() > 0) ? (mod.IsUniversal ? 0 : 1) : 2);
+                        MelonModLogger.LogModStatus((mod.GameAttributes.Any()) ? (mod.IsUniversal ? 0 : 1) : 2);
                         MelonModLogger.Log("------------------------------");
                     }
                 }
@@ -254,13 +254,21 @@ namespace MelonLoader
 
         private static void LoadMods(bool preload = false)
         {
+#if (NET20 || NET35)
+            string modDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Mods", (preload ? "PRELOAD" : "")));
+#else
             string modDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", (preload ? "PRELOAD" : ""));
+#endif
             if (!Directory.Exists(modDirectory))
                 Directory.CreateDirectory(modDirectory);
             else
             {
                 // DLL
+#if (NET20 || NET35)
                 string[] files = Directory.GetFiles(modDirectory, "*.dll");
+#else
+                string[] files = Directory.EnumerateFiles(modDirectory, "*.dll", SearchOption.TopDirectoryOnly).ToArray();
+#endif
                 if (files.Length > 0)
                 {
                     for (int i = 0; i < files.Count(); i++)
@@ -289,51 +297,52 @@ namespace MelonLoader
                 }
 
                 // ZIP
-                if (Imports.IsIl2CppGame() || !Imports.IsOldMono())
+#if (NET20 || NET35)
+                    string[] zippedFiles = Directory.GetFiles(modDirectory, "*.dll");
+#else
+                string[] zippedFiles = Directory.EnumerateFiles(modDirectory, "*.dll", SearchOption.TopDirectoryOnly).ToArray();
+#endif
+                if (zippedFiles.Length > 0)
                 {
-                    string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip");
-                    if (zippedFiles.Length > 0)
+                    for (int i = 0; i < zippedFiles.Count(); i++)
                     {
-                        for (int i = 0; i < zippedFiles.Count(); i++)
+                        string file = zippedFiles[i];
+                        if (!string.IsNullOrEmpty(file))
                         {
-                            string file = zippedFiles[i];
-                            if (!string.IsNullOrEmpty(file))
+                            try
                             {
-                                try
+                                using (var fileStream = File.OpenRead(file))
                                 {
-                                    using (var fileStream = File.OpenRead(file))
+                                    using (var zipInputStream = new ZipInputStream(fileStream))
                                     {
-                                        using (var zipInputStream = new ZipInputStream(fileStream))
+                                        ZipEntry entry;
+                                        while ((entry = zipInputStream.GetNextEntry()) != null)
                                         {
-                                            ZipEntry entry;
-                                            while ((entry = zipInputStream.GetNextEntry()) != null)
-                                            {
-                                                if (Path.GetFileName(entry.Name).Length <= 0 || !Path.GetFileName(entry.Name).EndsWith(".dll"))
-                                                    continue;
+                                            if (Path.GetFileName(entry.Name).Length <= 0 || !Path.GetFileName(entry.Name).EndsWith(".dll"))
+                                                continue;
 
-                                                using (var unzippedFileStream = new MemoryStream())
+                                            using (var unzippedFileStream = new MemoryStream())
+                                            {
+                                                int size = 0;
+                                                byte[] buffer = new byte[4096];
+                                                while (true)
                                                 {
-                                                    int size = 0;
-                                                    byte[] buffer = new byte[4096];
-                                                    while (true)
-                                                    {
-                                                        size = zipInputStream.Read(buffer, 0, buffer.Length);
-                                                        if (size > 0)
-                                                            unzippedFileStream.Write(buffer, 0, size);
-                                                        else
-                                                            break;
-                                                    }
-                                                    LoadAssembly(unzippedFileStream.ToArray(), preload);
+                                                    size = zipInputStream.Read(buffer, 0, buffer.Length);
+                                                    if (size > 0)
+                                                        unzippedFileStream.Write(buffer, 0, size);
+                                                    else
+                                                        break;
                                                 }
+                                                LoadAssembly(unzippedFileStream.ToArray(), preload);
                                             }
                                         }
                                     }
                                 }
-                                catch (Exception e)
-                                {
-                                    MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
-                                    MelonModLogger.Log("------------------------------");
-                                }
+                            }
+                            catch (Exception e)
+                            {
+                                MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                                MelonModLogger.Log("------------------------------");
                             }
                         }
                     }

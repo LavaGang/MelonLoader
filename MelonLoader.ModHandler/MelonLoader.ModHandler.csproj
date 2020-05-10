@@ -35,6 +35,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="  '$(TargetFrameworkVersion)' == 'v2.0' ">
+    <DefineConstants>NET20</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="  '$(TargetFrameworkVersion)' == 'v3.5' ">
+    <DefineConstants>NET35</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\BaseLibs\MelonLoader\Managed\ICSharpCode.SharpZipLib.dll</HintPath>

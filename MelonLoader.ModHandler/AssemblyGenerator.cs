@@ -128,7 +128,8 @@ namespace MelonLoader
                                 {
                                     Directory.SetCurrentDirectory(dumper_folder);
                                     MelonModLogger.Log("Running Il2CppDumper...");
-                                    c.Invoke(null, new object[] { new string[] { game_assembly_dll, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Directory.GetDirectories(AppDomain.CurrentDomain.BaseDirectory).First(f => f.EndsWith("_Data")), "il2cpp_data", "Metadata", "global-metadata.dat") } });
+                                    string[] combine = { AppDomain.CurrentDomain.BaseDirectory, Directory.GetDirectories(AppDomain.CurrentDomain.BaseDirectory).First(f => f.EndsWith("_Data")), "il2cpp_data", "Metadata", "global-metadata.dat" };
+                                    c.Invoke(null, new object[] { game_assembly_dll, combine.Aggregate(Path.Combine) });
                                 }
                                 else
                                     was_successful = false;
