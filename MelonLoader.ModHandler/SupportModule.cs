@@ -23,7 +23,7 @@ namespace MelonLoader
         {
             try
             {
-                string filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader", (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" : "MelonLoader.Support.Mono.dll"));
+                string filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader", ("MelonLoader.Support." + (Imports.IsIl2CppGame() ? "Il2Cpp" : "Mono") + ".dll"));
                 if (File.Exists(filepath))
                 {
                     byte[] data = File.ReadAllBytes(filepath);
