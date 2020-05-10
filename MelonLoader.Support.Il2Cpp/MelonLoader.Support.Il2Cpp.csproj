@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Il2Cppmscorlib">
+      <Private>false</Private>
       <HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -45,13 +46,16 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnhollowerBaseLib">
+      <Private>false</Private>
       <HintPath>Libs\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UnhollowerRuntimeLib">
+      <Private>false</Private>
       <HintPath>Libs\UnhollowerRuntimeLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <Private>false</Private>
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
