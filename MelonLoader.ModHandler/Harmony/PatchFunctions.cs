@@ -96,13 +96,17 @@ namespace Harmony
 			{
                 var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
                 Imports.Hook(UnhollowerSupport.MethodBaseToIntPtr(original), il2CppShim.MethodHandle.GetFunctionPointer());
-#if !NET35
-                PatchTools.RememberObject(original, new Tuple<MethodBase, MethodBase>(replacement, il2CppShim));
-#endif
-            }
+                PatchTools.RememberObject(original, new PotatoTuple { First = replacement, Second = il2CppShim});
+			}
 			else
 				PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
 			return replacement;
+		}
+
+		private class PotatoTuple
+		{
+			public MethodBase First;
+			public MethodBase Second;
 		}
 
 		private static DynamicMethod CreateIl2CppShim(DynamicMethod original, Type owner)

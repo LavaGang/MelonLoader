@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ICSharpCode.SharpZipLib.Zip;
+
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -30,7 +30,7 @@ namespace MelonLoader
 
             if (!Imports.IsDebugMode()
 #if !DEBUG
-            && Environment.CommandLine.Contains("--melonloader.console")
+                && Environment.CommandLine.Contains("--melonloader.console")
 #endif
             )
             {
@@ -250,21 +250,13 @@ namespace MelonLoader
 
         private static void LoadMods(bool preload = false)
         {
-#if (NET20 || NET35)
             string modDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Mods", (preload ? "PRELOAD" : "")));
-#else
-            string modDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", (preload ? "PRELOAD" : ""));
-#endif
             if (!Directory.Exists(modDirectory))
                 Directory.CreateDirectory(modDirectory);
             else
             {
                 // DLL
-#if (NET20 || NET35)
-                string[] files = Directory.GetFiles(modDirectory, "*.dll");
-#else
-                string[] files = Directory.EnumerateFiles(modDirectory, "*.dll", SearchOption.TopDirectoryOnly).ToArray();
-#endif
+                string[] files = Directory.GetFiles(modDirectory, "*.dll", SearchOption.TopDirectoryOnly);
                 if (files.Length > 0)
                 {
                     for (int i = 0; i < files.Count(); i++)
@@ -293,62 +285,33 @@ namespace MelonLoader
                 }
 
                 // ZIP
-#if (NET20 || NET35)
-                string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip");
-#else
-                string[] zippedFiles = Directory.EnumerateFiles(modDirectory, "*.zip", SearchOption.TopDirectoryOnly).ToArray();
-#endif
-                if (zippedFiles.Length > 0)
+                // todo: if Mono472 gets more functions, move loading it to a separate class
+                var mono472ModuleFilepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "MelonLoader.Support.Mono472.dll");
+                if (!File.Exists(mono472ModuleFilepath))
                 {
-                    for (int i = 0; i < zippedFiles.Count(); i++)
-                    {
-                        string file = zippedFiles[i];
-                        if (!string.IsNullOrEmpty(file))
-                        {
-                            try
-                            {
-                                using (var fileStream = File.OpenRead(file))
-                                {
-                                    using (var zipInputStream = new ZipInputStream(fileStream))
-                                    {
-                                        ZipEntry entry;
-                                        while ((entry = zipInputStream.GetNextEntry()) != null)
-                                        {
-                                            if (Path.GetFileName(entry.Name).Length <= 0 || !Path.GetFileName(entry.Name).EndsWith(".dll"))
-                                                continue;
+                    MelonModLogger.LogWarning("Missing support module for ZIP mods, no zipped mods will be loaded");
+                    return;
+                }
 
-                                            using (var unzippedFileStream = new MemoryStream())
-                                            {
-                                                int size = 0;
-                                                byte[] buffer = new byte[4096];
-                                                while (true)
-                                                {
-                                                    size = zipInputStream.Read(buffer, 0, buffer.Length);
-                                                    if (size > 0)
-                                                        unzippedFileStream.Write(buffer, 0, size);
-                                                    else
-                                                        break;
-                                                }
-                                                LoadAssembly(unzippedFileStream.ToArray(), preload);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
-                                MelonModLogger.Log("------------------------------");
-                            }
-                        }
-                    }
+                try
+                {
+                    var mono472Assembly = Assembly.LoadFrom(mono472ModuleFilepath);
+                    var monoType = mono472Assembly.GetType("MelonLoader.Support.Mono472.Mono472Support");
+                    var loadZipsMethod =
+                        monoType.GetMethod("LoadZippedMods", BindingFlags.Public | BindingFlags.Static);
+                    loadZipsMethod.Invoke(null,
+                        new object[] {modDirectory, preload, new Action<byte[], bool>(LoadAssembly)});
+                }
+                catch (Exception ex)
+                {
+                    MelonModLogger.LogError("Error while loading mono472 support module: " + ex.ToString());
                 }
             }
         }
 
         private static void LoadModFromAssembly(Assembly assembly, bool preload = false)
         {
-            MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttributes(false).First(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
+            MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
             if ((modInfoAttribute != null) && (modInfoAttribute.ModType != null) && modInfoAttribute.ModType.IsSubclassOf(typeof(MelonMod)))
             {
                 bool should_continue = false;
