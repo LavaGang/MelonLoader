@@ -51,6 +51,7 @@ class Mono
 public:
 	static bool IsOldMono;
 	static char* AssemblyPath;
+	static char* BasePath;
 	static char* ConfigPath;
 	static HMODULE Module;
 	static MonoDomain* Domain;

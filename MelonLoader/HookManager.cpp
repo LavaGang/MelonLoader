@@ -99,7 +99,6 @@ void HookManager::INTERNAL_Unhook(void** target, void* detour)
 }
 #pragma endregion
 
-
 #pragma region LoadLibraryW
 LoadLibraryW_t HookManager::Original_LoadLibraryW = NULL;
 void HookManager::LoadLibraryW_Hook()
@@ -125,12 +124,10 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 	{
 		if (wcsstr(lpLibFileName, L"GameAssembly.dll"))
 		{
-			IL2CPP::Module = lib;
-			if (IL2CPP::Setup() && UnityPlayer::Load() && UnityPlayer::Setup())
+			if (Il2Cpp::Setup(lib) && UnityPlayer::Load() && UnityPlayer::Setup())
 			{
 				Mono::CreateDomain();
-				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
-				HookManager::Hook(&(LPVOID&)IL2CPP::il2cpp_add_internal_call, Hooked_add_internal_call);
+				HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
@@ -144,20 +141,9 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		if (Mono::IsOldMono || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll") || wcsstr(lpLibFileName, L"mono-2.0-boehm.dll"))
 		{
 			Mono::Module = lib;
-
-			LPSTR filepath = new CHAR[MAX_PATH];
-			GetModuleFileName(Mono::Module, filepath, MAX_PATH);
-			std::string filepathstr = filepath;
-			filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/")).substr(0, filepathstr.find_last_of("\\/"));
-			std::string configpath = filepathstr + "\\etc";
-			Mono::ConfigPath = new char[configpath.size() + 1];
-			std::copy(configpath.begin(), configpath.end(), Mono::ConfigPath);
-			Mono::ConfigPath[configpath.size()] = '\0';
-
 			if (Mono::Setup() && UnityPlayer::Load() && UnityPlayer::Setup())
 			{
 				HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
-				HookManager::Hook(&(LPVOID&)Mono::mono_add_internal_call, Hooked_add_internal_call);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
 				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
 			}
@@ -168,18 +154,16 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 }
 #pragma endregion
 
-
 #pragma region il2cpp_init
 Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 {
 	Exports::AddInternalCalls();
 	ModHandler::Initialize();
-	IL2CPP::Domain = IL2CPP::il2cpp_init(name);
-	HookManager::Unhook(&(LPVOID&)IL2CPP::il2cpp_init, Hooked_il2cpp_init);
-	return IL2CPP::Domain;
+	Il2Cpp::Domain = Il2Cpp::il2cpp_init(name);
+	HookManager::Unhook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
+	return Il2Cpp::Domain;
 }
 #pragma endregion
-
 
 #pragma region mono_jit_init_version
 MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const char* version)
@@ -192,21 +176,6 @@ MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const ch
 }
 #pragma endregion
 
-
-#pragma region add_internal_call
-void HookManager::Hooked_add_internal_call(const char* name, void* method)
-{
-	if (MelonLoader::IsGameIl2Cpp)
-		IL2CPP::il2cpp_add_internal_call(name, method);
-	Mono::mono_add_internal_call(name, method);
-	if (strstr(name, "UnityEngine.Application::get_unityVersion"))
-		Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityVersion", method);
-	else if (strstr(name, "UnityEngine.Application::get_version"))
-		Mono::mono_add_internal_call("MelonLoader.Imports::GetGameVersion", method);
-}
-#pragma endregion
-
-
 #pragma region PlayerLoadFirstScene
 void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
 {
@@ -214,7 +183,6 @@ void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
 	return UnityPlayer::PlayerLoadFirstScene(unknown);
 }
 #pragma endregion
-
 
 #pragma region PlayerCleanup
 bool HookManager::Hooked_PlayerCleanup(bool dopostquitmsg)

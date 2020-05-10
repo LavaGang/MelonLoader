@@ -1,20 +1,17 @@
-#include "IL2CPP.h"
+#include "Il2Cpp.h"
 #include "AssertionManager.h"
 #include "Mono.h"
 #include "Logger.h"
 #include "PointerUtils.h"
 
-HMODULE IL2CPP::Module = NULL;
-Il2CppDomain* IL2CPP::Domain = NULL;
-il2cpp_init_t IL2CPP::il2cpp_init = NULL;
-il2cpp_add_internal_call_t IL2CPP::il2cpp_add_internal_call = NULL;
+Il2CppDomain* Il2Cpp::Domain = NULL;
+il2cpp_init_t Il2Cpp::il2cpp_init = NULL;
 
-bool IL2CPP::Setup()
+bool Il2Cpp::Setup(HMODULE mod)
 {
-	AssertionManager::Start("IL2CPP.cpp", "IL2CPP::Setup");
+	AssertionManager::Start("Il2Cpp.cpp", "Il2Cpp::Setup");
 
-	il2cpp_init = (il2cpp_init_t)AssertionManager::GetExport(Module, "il2cpp_init");
-	il2cpp_add_internal_call = (il2cpp_add_internal_call_t)AssertionManager::GetExport(Module, "il2cpp_add_internal_call");
+	il2cpp_init = (il2cpp_init_t)AssertionManager::GetExport(mod, "il2cpp_init");
 
 	return !AssertionManager::Result;
 }

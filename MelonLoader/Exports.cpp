@@ -1,6 +1,6 @@
 #include "Exports.h"
 #include "MelonLoader.h"
-#include "IL2CPP.h"
+#include "Il2Cpp.h"
 #include "Mono.h"
 #include "HookManager.h"
 #include "Logger.h"
@@ -23,6 +23,8 @@ void Console_SetColor(ConsoleColor color) { Console::SetColor(color); }
 bool IsOldMono() { return Mono::IsOldMono; }
 MonoString* GetCompanyName() { return ((MelonLoader::CompanyName == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::CompanyName)); }
 MonoString* GetProductName() { return ((MelonLoader::ProductName == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::ProductName)); }
+MonoString* GetUnityVersion() { return ((MelonLoader::UnityVersion == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::UnityVersion)); }
+MonoString* GetGameVersion() { return ((MelonLoader::GameVersion == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::GameVersion)); }
 
 void Exports::AddInternalCalls()
 {
@@ -47,4 +49,6 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsOldMono", IsOldMono);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", GetCompanyName);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", GetProductName);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityVersion", GetUnityVersion);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameVersion", GetGameVersion);
 }

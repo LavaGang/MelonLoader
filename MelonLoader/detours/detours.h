@@ -885,7 +885,7 @@ PDETOUR_SYM_INFO DetourLoadImageHlp(VOID);
 #define _CRT_STDIO_ARBITRARY_WIDE_SPECIFIERS 1
 
 #ifndef DETOUR_TRACE
-#if DETOUR_DEBUG
+#if DETOURDEBUG
 #define DETOUR_TRACE(x) printf x
 #define DETOUR_BREAK()  __debugbreak()
 #include <stdio.h>

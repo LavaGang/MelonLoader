@@ -19,6 +19,8 @@ char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 char* MelonLoader::CompanyName = NULL;
 char* MelonLoader::ProductName = NULL;
+char* MelonLoader::UnityVersion = NULL;
+char* MelonLoader::GameVersion = NULL;
 
 void MelonLoader::Main()
 {
@@ -46,13 +48,13 @@ void MelonLoader::Main()
 
 	Logger::Initialize(filepathstr);
 
-#ifndef _DEBUG
+#ifndef DEBUG
 	if (strstr(GetCommandLine(), "--melonloader.debug") != NULL)
 	{
 #endif
 		Console::Create();
 		DebugMode = true;
-#ifndef _DEBUG
+#ifndef DEBUG
 	}
 #endif
 
@@ -71,19 +73,58 @@ void MelonLoader::Main()
 		DataPath[ndatapath.size()] = '\0';
 
 		std::string assemblypath = std::string();
+		std::string basepath = std::string();
+		std::string configpath = std::string();
 		if (IsGameIl2Cpp)
 		{
 			assemblypath = filepathstr + "\\MelonLoader\\Managed";
-			std::string configpath = ndatapath + "\\il2cpp_data\\etc";
+			basepath = filepathstr + "\\MelonLoader\\Mono";
+			configpath = ndatapath + "\\il2cpp_data\\etc";
+		}
+		else
+		{
+			assemblypath = ndatapath + "\\Managed";
+			std::string newbasepath = filepathstr + "\\Mono";
+			h = FindFirstFile(newbasepath.c_str(), &data);
+			if (h == INVALID_HANDLE_VALUE)
+			{
+				newbasepath = ndatapath + "\\Mono";
+				h = FindFirstFile(newbasepath.c_str(), &data);
+			}
+			if (h == INVALID_HANDLE_VALUE)
+			{
+				newbasepath = filepathstr + "\\MonoBleedingEdge";
+				h = FindFirstFile(newbasepath.c_str(), &data);
+			}
+			if (h == INVALID_HANDLE_VALUE)
+			{
+				newbasepath = ndatapath + "\\MonoBleedingEdge";
+				h = FindFirstFile(newbasepath.c_str(), &data);
+			}
+			if (h != INVALID_HANDLE_VALUE)
+			{
+				basepath = newbasepath + "\\EmbedRuntime";
+				configpath = newbasepath + "\\etc";
+			}
+		}
+		if (!assemblypath.empty())
+		{
+			Mono::AssemblyPath = new char[assemblypath.size() + 1];
+			std::copy(assemblypath.begin(), assemblypath.end(), Mono::AssemblyPath);
+			Mono::AssemblyPath[assemblypath.size()] = '\0';
+		}
+		if (!basepath.empty())
+		{
+			Mono::BasePath = new char[basepath.size() + 1];
+			std::copy(basepath.begin(), basepath.end(), Mono::BasePath);
+			Mono::BasePath[basepath.size()] = '\0';
+		}
+		if (!configpath.empty())
+		{
 			Mono::ConfigPath = new char[configpath.size() + 1];
 			std::copy(configpath.begin(), configpath.end(), Mono::ConfigPath);
 			Mono::ConfigPath[configpath.size()] = '\0';
 		}
-		else
-			assemblypath = ndatapath + "\\Managed";
-		Mono::AssemblyPath = new char[assemblypath.size() + 1];
-		std::copy(assemblypath.begin(), assemblypath.end(), Mono::AssemblyPath);
-		Mono::AssemblyPath[assemblypath.size()] = '\0';
 
 		ReadAppInfo();
 
@@ -100,11 +141,8 @@ void MelonLoader::Main()
 void MelonLoader::ReadAppInfo()
 {
 	std::ifstream appinfofile((std::string(DataPath) + "\\app.info"));
-	std::stringstream filebuffer;
-	filebuffer << appinfofile.rdbuf();
-	appinfofile.close();
 	std::string line;
-	while (std::getline(filebuffer, line, '\n'))
+	while (std::getline(appinfofile, line, '\n'))
 	{
 		if (CompanyName == NULL)
 		{
@@ -119,6 +157,7 @@ void MelonLoader::ReadAppInfo()
 			ProductName[line.size()] = '\0';
 		}
 	}
+	appinfofile.close();
 }
 
 void MelonLoader::UNLOAD(bool alt)

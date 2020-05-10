@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "Mono.h"
-#include "IL2CPP.h"
+#include "Il2Cpp.h"
 #include <vector>
 
 typedef HMODULE(__stdcall* LoadLibraryW_t) (LPCWSTR lpLibFileName);

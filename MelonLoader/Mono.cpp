@@ -9,6 +9,7 @@
 
 bool Mono::IsOldMono = false;
 char* Mono::AssemblyPath = NULL;
+char* Mono::BasePath = NULL;
 char* Mono::ConfigPath = NULL;
 HMODULE Mono::Module = NULL;
 MonoDomain* Mono::Domain = NULL;
@@ -59,11 +60,17 @@ mono_string_new_t Mono::mono_string_new = NULL;
 bool Mono::Load()
 {
 	AssertionManager::Start("Mono.cpp", "Mono::Load");
-	Module = LoadLibrary((std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\mono-2.0-bdwgc.dll").c_str());
+	Module = LoadLibrary((std::string(BasePath) + "\\mono.dll").c_str());
+	if (Module != NULL)
+		IsOldMono = true;
 	if (Module == NULL)
-		Module = LoadLibrary((std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\mono-2.0-sgen.dll").c_str());
+		Module = LoadLibrary((std::string(BasePath) + "\\mono-2.0-bdwgc.dll").c_str());
+	if (Module == NULL)
+		Module = LoadLibrary((std::string(BasePath) + "\\mono-2.0-sgen.dll").c_str());
+	if (Module == NULL)
+		Module = LoadLibrary((std::string(BasePath) + "\\mono-2.0-boehm.dll").c_str());
 	if (Module)
-		HMODULE MonoPosixDLL = AssertionManager::LoadLib("MonoPosixDLL", (std::string(MelonLoader::GamePath) + "\\MelonLoader\\Mono\\MonoPosixHelper.dll").c_str());
+		HMODULE MonoPosixDLL = AssertionManager::LoadLib("MonoPosixDLL", (std::string(BasePath) + "\\MonoPosixHelper.dll").c_str());
 	else
 		AssertionManager::ThrowError("Failed to load Mono Module!");
 	return !AssertionManager::Result;

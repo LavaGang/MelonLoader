@@ -4,7 +4,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C4056AB-1D07-43FC-A93D-0AA72446DA03}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader</RootNamespace>
     <AssemblyName>MelonLoader.ModHandler</AssemblyName>
@@ -18,7 +17,8 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

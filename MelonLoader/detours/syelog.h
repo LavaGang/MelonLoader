@@ -72,7 +72,7 @@ typedef struct _SYELOG_MESSAGE
 #define SYELOG_SEVERITY_INFORMATION     0x60            // Informational
 #define SYELOG_SEVERITY_AUDIT_FAIL      0x66            // Audit Failed
 #define SYELOG_SEVERITY_AUDIT_PASS      0x67            // Audit Succeeeded
-#define SYELOG_SEVERITY_DEBUG           0x70            // Debugging
+#define SYELOG_SEVERITYDEBUG           0x70            // Debugging
 
 // Logging Functions.
 //

@@ -4,7 +4,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader.SupportModule</RootNamespace>
     <AssemblyName>MelonLoader.Support.Mono</AssemblyName>
@@ -12,12 +11,14 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <ProjectGuid>{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

@@ -7,7 +7,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 	MelonLoader::thisdll = hinstDLL;
 	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
-#ifndef _DEBUG
+#ifndef DEBUG
 		DisableThreadLibraryCalls(MelonLoader::thisdll);
 #endif
 		MelonLoader::Main();
