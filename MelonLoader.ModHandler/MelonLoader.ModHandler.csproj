@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader</RootNamespace>
     <AssemblyName>MelonLoader.ModHandler</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile>
@@ -35,17 +35,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="  '$(TargetFrameworkVersion)' == 'v2.0' ">
-    <DefineConstants>NET20</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="  '$(TargetFrameworkVersion)' == 'v3.5' ">
-    <DefineConstants>NET35</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\BaseLibs\MelonLoader\Managed\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
+      <Private>false</Private>
       <HintPath>..\BaseLibs\MelonLoader\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -93,6 +85,7 @@
     <Compile Include="Harmony\Transpilers.cs" />
     <Compile Include="Imports.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="ISupportModule.cs" />
     <Compile Include="MelonCoroutines.cs" />
     <Compile Include="MelonModLogger.cs" />
     <Compile Include="Main.cs" />

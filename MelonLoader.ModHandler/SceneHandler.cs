@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-namespace MelonLoader
+﻿namespace MelonLoader
 {
     public static class SceneHandler
     {
@@ -16,7 +9,6 @@ namespace MelonLoader
         private static bool Boneworks_HasGotLoadingSceneIndex = false;
         private static int Boneworks_LoadingSceneIndex = -9;
 
-        public static object GetActiveScene() => SupportModule.GetActiveScene();
         public static int GetActiveSceneIndex() => SupportModule.GetActiveSceneIndex();
 
         internal static void CheckForSceneChange()

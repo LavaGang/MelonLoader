@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader.SupportModule</RootNamespace>
     <AssemblyName>MelonLoader.Support.Mono</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -42,12 +42,14 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine.CoreModule">
+      <Private>false</Private>
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="MonoSupportModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">
