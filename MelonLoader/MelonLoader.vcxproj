@@ -102,12 +102,11 @@
   <ItemGroup>
     <ClInclude Include="AssertionManager.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Detours\detours.h" />
+    <ClInclude Include="Detours\detver.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MelonLoader.h" />
-    <ClInclude Include="detours\detours.h" />
-    <ClInclude Include="detours\detver.h" />
-    <ClInclude Include="detours\syelog.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="ModHandler.h" />
     <ClInclude Include="mono-internals.h" />
@@ -117,7 +116,7 @@
     <ClInclude Include="UnityPlayer.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="detours\detours.lib" />
+    <Library Include="Detours\detours.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

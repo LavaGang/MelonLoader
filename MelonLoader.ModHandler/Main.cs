@@ -292,15 +292,12 @@ namespace MelonLoader
                     MelonModLogger.LogWarning("Missing support module for ZIP mods, no zipped mods will be loaded");
                     return;
                 }
-
                 try
                 {
                     var mono472Assembly = Assembly.LoadFrom(mono472ModuleFilepath);
                     var monoType = mono472Assembly.GetType("MelonLoader.Support.Mono472.Mono472Support");
-                    var loadZipsMethod =
-                        monoType.GetMethod("LoadZippedMods", BindingFlags.Public | BindingFlags.Static);
-                    loadZipsMethod.Invoke(null,
-                        new object[] {modDirectory, preload, new Action<byte[], bool>(LoadAssembly)});
+                    var loadZipsMethod = monoType.GetMethod("LoadZippedMods", BindingFlags.Public | BindingFlags.Static);
+                    loadZipsMethod.Invoke(null, new object[] { modDirectory, preload, new Action<byte[], bool>(LoadAssembly) });
                 }
                 catch (Exception ex)
                 {

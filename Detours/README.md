@@ -21,7 +21,7 @@ The [`Detours`](https://github.com/microsoft/detours) repository is where develo
 Here are some ways you can participate in the project:
 
 * [Answer questions](https://github.com/microsoft/detours/issues) about using Detours.
-* [Improve the Wiki](https://github.com/microsoft/detours/wiki).
+* [Improve the Wiki](https://github.com/microsoft/detours/Wiki).
 * [Submit bugs](https://github.com/microsoft/detours/issues) and help us verify fixes and changes as they are checked in.
 * Review [source code changes](https://github.com/microsoft/detours/pulls).
 
@@ -31,18 +31,8 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 * Open an issue on [GitHub Issues](https://github.com/Microsoft/detours/issues).
 
-## Mailing list for announcements
-
-The detours-announce mailing list is a low-traffic email list for important announcements 
-about the project, such as the availability of new versions of Detours.  To join it, send 
-an email to listserv@lists.research.microsoft.com with a 
-message body containing only the text SUBSCRIBE DETOURS-ANNOUNCE.
-To leave it, send an email to listserv@lists.research.microsoft.com with a 
-message body containing only the text UNSUBSCRIBE DETOURS-ANNOUNCE.
-
-
 ## License
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
-Licensed under the [MIT](LICENSE.md) License.
+Licensed under the [MIT](LICENSE.txt) License.

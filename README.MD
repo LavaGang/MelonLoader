@@ -70,7 +70,7 @@
 
 | Source | Author | License |
 | ----------- | ---------- | ---------- |
-| [Research Detours Package](https://github.com/microsoft/Detours) | [Microsoft](https://github.com/microsoft) | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/detours/LICENSE.md) |
+| [Research Detours Package](https://github.com/microsoft/Detours) | [Microsoft](https://github.com/microsoft) | [MIT](https://github.com/HerpDerpinstine/MelonLoader/blob/master/Detours/LICENSE.md) |
 | [UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference) | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
 | UnityPlayer | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
 | Il2Cpp | [Unity Technologies](https://github.com/Unity-Technologies) | [Unity Reference-Only](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
@@ -85,7 +85,7 @@
 ### LICENSING:
 
 - MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE) for the full License.
-- [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/detours/LICENSE.md) for the full License.
+- [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/Detours/LICENSE.md) for the full License.
 - [UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference) is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
 - UnityPlayer is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.
 - Il2Cpp is licensed under the Unity Reference-Only License. See [LICENSE](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) for the full License.

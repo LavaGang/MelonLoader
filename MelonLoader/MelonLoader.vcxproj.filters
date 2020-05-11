@@ -16,15 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
-    <ClInclude Include="detours\detours.h">
-      <Filter>detours</Filter>
-    </ClInclude>
-    <ClInclude Include="detours\detver.h">
-      <Filter>detours</Filter>
-    </ClInclude>
-    <ClInclude Include="detours\syelog.h">
-      <Filter>detours</Filter>
-    </ClInclude>
     <ClInclude Include="Mono.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="MelonLoader.h" />
@@ -36,15 +27,21 @@
     <ClInclude Include="AssertionManager.h" />
     <ClInclude Include="UnityPlayer.h" />
     <ClInclude Include="Il2Cpp.h" />
+    <ClInclude Include="Detours\detours.h">
+      <Filter>Detours</Filter>
+    </ClInclude>
+    <ClInclude Include="Detours\detver.h">
+      <Filter>Detours</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="detours">
-      <UniqueIdentifier>{68e65883-5782-470e-a345-89a1e78b2f8a}</UniqueIdentifier>
+    <Filter Include="Detours">
+      <UniqueIdentifier>{12badb91-d589-4ab6-81d9-ca075a98fb81}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="detours\detours.lib">
-      <Filter>detours</Filter>
+    <Library Include="Detours\detours.lib">
+      <Filter>Detours</Filter>
     </Library>
   </ItemGroup>
 </Project>

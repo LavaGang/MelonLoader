@@ -4,7 +4,7 @@
 #include "UnityPlayer.h"
 #include "MelonLoader.h"
 #include "Console.h"
-#include "detours/detours.h"
+#include "Detours/detours.h"
 #include "AssertionManager.h"
 #include "Logger.h"
 #include "Exports.h"
