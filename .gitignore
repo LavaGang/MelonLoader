@@ -38,9 +38,9 @@ MelonLoader.ModHandler\.vs
 TestMod\bin
 TestMod\obj
 TestMod\.vs
-winmm64\bin
-winmm64\obj
-winmm64\.vs
+winmm\bin
+winmm\obj
+winmm\.vs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
