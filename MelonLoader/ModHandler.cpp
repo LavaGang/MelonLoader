@@ -12,7 +12,6 @@ MonoMethod* ModHandler::melonCoroutines_ProcessWaitForEndOfFrame = NULL;
 void ModHandler::Initialize()
 {
 	AssertionManager::Start("ModHandler.cpp", "ModHandler::Initialize");
-
 	if (Mono::Domain != NULL)
 	{
 		std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler.dll";

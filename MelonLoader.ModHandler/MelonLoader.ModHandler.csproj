@@ -12,6 +12,7 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
+    <ProjectGuid>{3C4056AB-1D07-43FC-A93D-0AA72446DA03}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -85,7 +86,6 @@
     <Compile Include="Harmony\Transpilers.cs" />
     <Compile Include="Imports.cs" />
     <Compile Include="IniFile.cs" />
-    <Compile Include="ISupportModule.cs" />
     <Compile Include="MelonCoroutines.cs" />
     <Compile Include="MelonModLogger.cs" />
     <Compile Include="Main.cs" />
@@ -93,7 +93,6 @@
     <Compile Include="MelonModGameAttribute.cs" />
     <Compile Include="MelonModInfoAttribute.cs" />
     <Compile Include="ModPrefs.cs" />
-    <Compile Include="NETFrameworkFix.cs" />
     <Compile Include="SceneHandler.cs" />
     <Compile Include="SupportModule.cs" />
     <Compile Include="UnhollowerSupport.cs" />

@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace MelonLoader.Support.Mono472
+namespace MelonLoader.Support
 {
-    public static class Mono472Support
+    public static class Mono472
     {
         public static void LoadZippedMods(string modDirectory, bool preload, Action<byte[], bool> LoadAssembly)
         {

@@ -5,9 +5,9 @@ using System.Linq;
 using UnhollowerBaseLib;
 using UnityEngine;
 
-namespace MelonLoader.SupportModule
+namespace MelonLoader.Support
 {
-    public static class MelonCoroutinesIl2Cpp
+    public static class MelonCoroutines
     {
         private struct CoroTuple
         {

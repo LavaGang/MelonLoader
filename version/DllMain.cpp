@@ -61,6 +61,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 					else
 						MessageBox(NULL, "Failed to Load MelonLoader.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
 				}
+				else
+					return TRUE;
 			}
 			else
 				MessageBox(NULL, "Failed to Load version.dll!", "MelonLoader", MB_ICONERROR | MB_OK);

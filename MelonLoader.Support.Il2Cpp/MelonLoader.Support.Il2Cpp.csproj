@@ -62,9 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Il2CppSupportModule.cs" />
+    <Compile Include="SupportModule.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="MelonCoroutinesIl2Cpp.cs" />
+    <Compile Include="MelonCoroutines.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">

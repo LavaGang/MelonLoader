@@ -1,4 +1,4 @@
-﻿namespace MelonLoader.ModHandler
+﻿namespace MelonLoader
 {
     public static class BuildInfo
     {

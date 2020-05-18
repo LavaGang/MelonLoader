@@ -38,10 +38,12 @@ namespace MelonLoader
                 Console.Create();
             }
 
-            if (Imports.IsIl2CppGame() && !AssemblyGenerator.Initialize())
-                Imports.UNLOAD_MELONLOADER(true);
-            else
-            {
+            //if (Imports.IsIl2CppGame() && !AssemblyGenerator.Initialize())
+            //    Imports.UNLOAD_MELONLOADER(true);
+            //else
+            //{
+                if (Imports.IsIl2CppGame())
+                    UnhollowerSupport.Initialize();
                 LoadMods(true);
                 if (Mods.Count > 0)
                     for (int i = 0; i < Mods.Count; i++)
@@ -50,16 +52,13 @@ namespace MelonLoader
                         if (mod != null)
                             try { mod.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                     }
-            }
+            //}
         }
 
         private static void OnApplicationStart()
         {
             if (Imports.IsIl2CppGame())
-            {
                 Assembly_CSharp = Assembly.Load("Assembly-CSharp");
-                UnhollowerSupport.Initialize();
-            }
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
@@ -69,7 +68,7 @@ namespace MelonLoader
             MelonModLogger.Log("Version: " + Imports.GetGameVersion());
             MelonModLogger.Log("Type: " + (Imports.IsIl2CppGame() ? "Il2Cpp" : (Imports.IsOldMono() ? "Mono" : "MonoBleedingEdge")));
             MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Using v" + ModHandler.BuildInfo.Version + " Open-Beta");
+            MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
 
             LoadMods();
@@ -285,23 +284,25 @@ namespace MelonLoader
                 }
 
                 // ZIP
-                // todo: if Mono472 gets more functions, move loading it to a separate class
-                var mono472ModuleFilepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "MelonLoader.Support.Mono472.dll");
-                if (!File.Exists(mono472ModuleFilepath))
+                if (!Imports.IsOldMono())
                 {
-                    MelonModLogger.LogWarning("Missing support module for ZIP mods, no zipped mods will be loaded");
-                    return;
-                }
-                try
-                {
-                    var mono472Assembly = Assembly.LoadFrom(mono472ModuleFilepath);
-                    var monoType = mono472Assembly.GetType("MelonLoader.Support.Mono472.Mono472Support");
-                    var loadZipsMethod = monoType.GetMethod("LoadZippedMods", BindingFlags.Public | BindingFlags.Static);
-                    loadZipsMethod.Invoke(null, new object[] { modDirectory, preload, new Action<byte[], bool>(LoadAssembly) });
-                }
-                catch (Exception ex)
-                {
-                    MelonModLogger.LogError("Error while loading mono472 support module: " + ex.ToString());
+                    var mono472ModuleFilepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "MelonLoader.Support.Mono472.dll");
+                    if (!File.Exists(mono472ModuleFilepath))
+                    {
+                        MelonModLogger.LogWarning("Missing support module for ZIP mods, no zipped mods will be loaded");
+                        return;
+                    }
+                    try
+                    {
+                        var mono472Assembly = Assembly.LoadFrom(mono472ModuleFilepath);
+                        var monoType = mono472Assembly.GetType("MelonLoader.Support.Mono472");
+                        var loadZipsMethod = monoType.GetMethod("LoadZippedMods", BindingFlags.Public | BindingFlags.Static);
+                        loadZipsMethod.Invoke(null, new object[] { modDirectory, preload, new Action<byte[], bool>(LoadAssembly) });
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonModLogger.LogError("Error while loading Mono472 Support Module: " + ex.ToString());
+                    }
                 }
             }
         }

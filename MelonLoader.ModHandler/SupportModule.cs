@@ -1,20 +1,31 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 
 namespace MelonLoader
 {
+    public interface ISupportModule
+    {
+        void LoadZippedMods();
+        float GetUnityDeltaTime();
+        int GetActiveSceneIndex();
+        object StartCoroutine(IEnumerator coroutine);
+        void StopCoroutine(object coroutineToken);
+        void ProcessWaitForEndOfFrame();
+    }
+
     internal static class SupportModule
     {
         private static Assembly assembly = null;
         private static Type type = null;
-        internal static ISupportModule supportModule = null; 
+        internal static ISupportModule supportModule = null;
 
         internal static void Initialize()
         {
             try
             {
-                string filepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" : "MelonLoader.Support.Mono.dll");
+                string filepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" : "MelonLoader.Support.Mono.dll"));
                 if (File.Exists(filepath))
                 {
                     byte[] data = File.ReadAllBytes(filepath);
@@ -23,7 +34,7 @@ namespace MelonLoader
                         assembly = Assembly.Load(data);
                         if (!assembly.Equals(null))
                         {
-                            type = assembly.GetType("MelonLoader.SupportModule.Main");
+                            type = assembly.GetType("MelonLoader.Support.Main");
                             if (!type.Equals(null))
                             {
                                 MethodInfo method = type.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
@@ -47,7 +58,6 @@ namespace MelonLoader
         }
 
         internal static float GetUnityDeltaTime() => supportModule?.GetUnityDeltaTime() ?? 0f;
-
         internal static int GetActiveSceneIndex() => supportModule?.GetActiveSceneIndex() ?? -9;
     }
 }

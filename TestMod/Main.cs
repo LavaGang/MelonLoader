@@ -18,7 +18,7 @@ namespace TestMod
             MelonModLogger.Log("OnPreInitialization");
         }
 
-        public override void OnApplicationStart() // Runs upon Game Initialization.
+        public override void OnApplicationStart() // Runs after Game Initialization.
         {
             MelonModLogger.Log("OnApplicationStart");
         }

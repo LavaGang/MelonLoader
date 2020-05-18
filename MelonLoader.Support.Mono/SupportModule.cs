@@ -2,10 +2,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace MelonLoader.SupportModule
+namespace MelonLoader.Support
 {
-    public class MonoSupportModule : ISupportModule
+    public class Module : ISupportModule
     {
+        public void LoadZippedMods() { }
         public float GetUnityDeltaTime() => Time.deltaTime;
         public int GetActiveSceneIndex() => SceneManager.GetActiveScene().buildIndex;
         public object StartCoroutine(IEnumerator coroutine) => Main.comp.StartCoroutine(coroutine);

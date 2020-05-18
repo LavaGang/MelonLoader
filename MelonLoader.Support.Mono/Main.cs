@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace MelonLoader.SupportModule
+namespace MelonLoader.Support
 {
     internal static class Main
     {
@@ -10,10 +10,8 @@ namespace MelonLoader.SupportModule
         {
             MelonLoaderComponent.CreateComponent();
             SceneManager.sceneLoaded += OnSceneLoad;
-            
-            return new MonoSupportModule();
+            return new Module();
         }
-        
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (!scene.Equals(null)) SceneHandler.OnSceneLoad(scene.buildIndex); }
     }
     public class MelonLoaderComponent : MonoBehaviour

@@ -5,11 +5,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-namespace MelonLoader.SupportModule
+namespace MelonLoader.Support
 {
     internal static class Main
     {
         internal static MelonLoaderComponent comp = null;
+
         private static ISupportModule Initialize()
         {
             if (Console.Enabled || Imports.IsDebugMode())
@@ -30,11 +31,12 @@ namespace MelonLoader.SupportModule
             ClassInjector.RegisterTypeInIl2Cpp<MelonLoaderComponent>();
             MelonLoaderComponent.CreateComponent();
             SceneManager.add_sceneLoaded(DelegateSupport.ConvertDelegate<UnityAction<Scene, LoadSceneMode>>(new Action<Scene, LoadSceneMode>(OnSceneLoad)));
-            
-            return new Il2CppSupportModule();
+            return new Module();
         }
+
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (!scene.Equals(null)) SceneHandler.OnSceneLoad(scene.buildIndex); }
     }
+
     public class MelonLoaderComponent : MonoBehaviour
     {
         internal static void CreateComponent()
@@ -46,19 +48,17 @@ namespace MelonLoader.SupportModule
         }
         public MelonLoaderComponent(IntPtr intPtr) : base(intPtr) { }
         void Start() => transform.SetAsLastSibling();
-
         void Update()
         {
             transform.SetAsLastSibling(); 
             MelonLoader.Main.OnUpdate();
-            MelonCoroutinesIl2Cpp.Process();
+            MelonCoroutines.Process();
         }
         void FixedUpdate()
         {
             MelonLoader.Main.OnFixedUpdate();
-            MelonCoroutinesIl2Cpp.ProcessWaitForFixedUpdate();
+            MelonCoroutines.ProcessWaitForFixedUpdate();
         }
-
         void LateUpdate() => MelonLoader.Main.OnLateUpdate();
         void OnGUI() => MelonLoader.Main.OnGUI();
         void OnDestroy() => CreateComponent();
