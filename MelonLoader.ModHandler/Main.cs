@@ -42,8 +42,6 @@ namespace MelonLoader
             //    Imports.UNLOAD_MELONLOADER(true);
             //else
             //{
-                if (Imports.IsIl2CppGame())
-                    UnhollowerSupport.Initialize();
                 LoadMods(true);
                 if (Mods.Count > 0)
                     for (int i = 0; i < Mods.Count; i++)
@@ -58,7 +56,10 @@ namespace MelonLoader
         private static void OnApplicationStart()
         {
             if (Imports.IsIl2CppGame())
+            {
                 Assembly_CSharp = Assembly.Load("Assembly-CSharp");
+                UnhollowerSupport.Initialize();
+            }
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
