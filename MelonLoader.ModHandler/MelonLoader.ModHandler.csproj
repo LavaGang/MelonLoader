@@ -41,6 +41,10 @@
       <Private>false</Private>
       <HintPath>..\BaseLibs\MelonLoader\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
+	<Reference Include="ICSharpCode.SharpZipLib">
+      <Private>false</Private>
+      <HintPath>..\BaseLibs\MelonLoader\Managed\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-
+using ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -285,24 +285,52 @@ namespace MelonLoader
                 }
 
                 // ZIP
-                if (!Imports.IsOldMono())
+                string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip", SearchOption.TopDirectoryOnly);
+                if (zippedFiles.Length > 0)
                 {
-                    var mono472ModuleFilepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "MelonLoader.Support.Mono472.dll");
-                    if (!File.Exists(mono472ModuleFilepath))
+                    for (int i = 0; i < zippedFiles.Count(); i++)
                     {
-                        MelonModLogger.LogWarning("Missing support module for ZIP mods, no zipped mods will be loaded");
-                        return;
-                    }
-                    try
-                    {
-                        var mono472Assembly = Assembly.LoadFrom(mono472ModuleFilepath);
-                        var monoType = mono472Assembly.GetType("MelonLoader.Support.Mono472");
-                        var loadZipsMethod = monoType.GetMethod("LoadZippedMods", BindingFlags.Public | BindingFlags.Static);
-                        loadZipsMethod.Invoke(null, new object[] { modDirectory, preload, new Action<byte[], bool>(LoadAssembly) });
-                    }
-                    catch (Exception ex)
-                    {
-                        MelonModLogger.LogError("Error while loading Mono472 Support Module: " + ex.ToString());
+                        string file = zippedFiles[i];
+                        if (!string.IsNullOrEmpty(file))
+                        {
+                            try
+                            {
+                                using (var fileStream = File.OpenRead(file))
+                                {
+                                    using (var zipInputStream = new ZipInputStream(fileStream))
+                                    {
+                                        ZipEntry entry;
+                                        while ((entry = zipInputStream.GetNextEntry()) != null)
+                                        {
+                                            if (Path.GetFileName(entry.Name).Length <= 0 ||
+                                                !Path.GetFileName(entry.Name).EndsWith(".dll"))
+                                                continue;
+
+                                            using (var unzippedFileStream = new MemoryStream())
+                                            {
+                                                int size = 0;
+                                                byte[] buffer = new byte[4096];
+                                                while (true)
+                                                {
+                                                    size = zipInputStream.Read(buffer, 0, buffer.Length);
+                                                    if (size > 0)
+                                                        unzippedFileStream.Write(buffer, 0, size);
+                                                    else
+                                                        break;
+                                                }
+
+                                                LoadAssembly(unzippedFileStream.ToArray(), preload);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                                MelonModLogger.Log("------------------------------");
+                            }
+                        }
                     }
                 }
             }
