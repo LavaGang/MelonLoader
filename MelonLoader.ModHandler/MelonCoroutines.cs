@@ -28,16 +28,7 @@ namespace MelonLoader
         }
         
         [Obsolete("Use version with IEnumerator parameter", true)]
-        public static CoroD Start<T>(T routine) => new CoroD { Value = Start((IEnumerator) routine)};
-
-        [Obsolete("Use version with object parameter", true)]
-        public static void Stop(CoroD coroD) => Stop(coroD.Value);
-        
-        [Obsolete("Don't use", true)]
-        public class CoroD
-        {
-            public Object Value;
-        }
+        public static void Start<T>(T routine) => Start((IEnumerator) routine);
 
         private static void ProcessWaitForEndOfFrame()
         {
