@@ -302,8 +302,7 @@ namespace MelonLoader
                                         ZipEntry entry;
                                         while ((entry = zipInputStream.GetNextEntry()) != null)
                                         {
-                                            if (Path.GetFileName(entry.Name).Length <= 0 ||
-                                                !Path.GetFileName(entry.Name).EndsWith(".dll"))
+                                            if ((Path.GetFileName(entry.Name).Length <= 0) || !Path.GetFileName(entry.Name).EndsWith(".dll"))
                                                 continue;
 
                                             using (var unzippedFileStream = new MemoryStream())
@@ -318,7 +317,6 @@ namespace MelonLoader
                                                     else
                                                         break;
                                                 }
-
                                                 LoadAssembly(unzippedFileStream.ToArray(), preload);
                                             }
                                         }

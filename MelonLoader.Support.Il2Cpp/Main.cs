@@ -30,8 +30,15 @@ namespace MelonLoader.Support
             ClassInjector.DoHook += Imports.Hook;
             ClassInjector.RegisterTypeInIl2Cpp<MelonLoaderComponent>();
             MelonLoaderComponent.CreateComponent();
-            //SceneManager.sceneLoaded.CombineImpl(DelegateSupport.ConvertDelegate<UnityAction<Scene, LoadSceneMode>>(new Action<Scene, LoadSceneMode>(OnSceneLoad)));
+            add_sceneLoaded_potato(new Action<Scene, LoadSceneMode>(OnSceneLoad));
             return new Module();
+        }
+
+        private static void add_sceneLoaded_potato(Action<Scene, LoadSceneMode> action)
+        {
+            var original = SceneManager.sceneLoaded;
+            SceneManager.sceneLoaded = original == null ? action : Il2CppSystem.Delegate.Combine(original, (UnityAction<Scene, LoadSceneMode>)action)
+                    .Cast<UnityAction<Scene, LoadSceneMode>>();
         }
 
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (!scene.Equals(null)) SceneHandler.OnSceneLoad(scene.buildIndex); }
