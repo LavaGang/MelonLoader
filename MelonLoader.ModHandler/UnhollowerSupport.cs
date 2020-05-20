@@ -25,10 +25,9 @@ namespace MelonLoader
                 FieldInfo methodptr = method.DeclaringType.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method.Name)));
                 if (methodptr != null)
                     return (IntPtr)methodptr.GetValue(null);
+                return IntPtr.Zero;
             }
-            else
-                return method.MethodHandle.GetFunctionPointer();
-            return IntPtr.Zero;
+            return method.MethodHandle.GetFunctionPointer();
         }
 
         internal static IntPtr MethodInfoToIntPtr(MethodInfo method)
@@ -38,10 +37,9 @@ namespace MelonLoader
                 FieldInfo methodptr = method.DeclaringType.GetFields(BindingFlags.Static | BindingFlags.NonPublic).First(x => x.Name.StartsWith(("NativeMethodInfoPtr_" + method.Name)));
                 if (methodptr != null)
                     return (IntPtr)methodptr.GetValue(null);
+                return IntPtr.Zero;
             }
-            else
-                return method.MethodHandle.GetFunctionPointer();
-            return IntPtr.Zero;
+            return method.MethodHandle.GetFunctionPointer();
         }
 
         private static ParameterExpression[] GetParameters(EventInfo eventInfo) => eventInfo.EventHandlerType.GetMethod("Invoke").GetParameters().Select(parameter => Expression.Parameter(parameter.ParameterType, parameter.Name)).ToArray();
