@@ -3,12 +3,9 @@
 1. MUPOT Mode does not work without Assembly generated.
 2. MUPOT Mode is not directing the Managed folder to the proper location.
 3. The Check for 64bit needs to be redone.
-4. Mono Game Support for games that don't use MonoBleedingEdge must have MelonLoader.ModHandler and Mods compiled with .NET 3.5 Framework.
-5. IL2CPP Game Support must have it's Mods using between .NET Framework v4 - v4.7.2.
-6. StackTraces refuse to show line numbers.
-7. Console Logs randomly do not Color properly.
-8. Mono Module currently has an Issue with https/ssl.
-9. OnGUI is currently broken for IL2CPP Games.
+4. StackTraces refuse to show line numbers.
+5. Console Logs randomly do not Color properly.
+6. Mono Module currently has an Issue with https/ssl.
 
 ---
 
@@ -18,11 +15,9 @@
 2. Add Debugger Support to Mono Domain.
 3. Set default Uncaught Exception Handler for all Mono Threads.
 4. Create Method for ModPrefs to Register Categories and Preferences in a single call.
-5. Make IL2CPP Metadata accept custom classes and custom Components.
-6. Make IL2CPP Imports in NET_SDK use Internal Calls instead of P/Invoke.
-7. Add Android Support.
-8. Add Linux Support.
-9. Add Mac OS Support.
+5. Add Android Support.
+6. Add Linux Support.
+7. Add Mac OS Support.
 
 ---
 
@@ -66,6 +61,20 @@
 25. Moved IL2CPP Imports from NET_SDK.IL2CPP to MelonLoader.Il2CppImports.
 26. Made all IL2CPP Imports Internal Calls for Faster Invoking.
 27. Fixed Null Reference Exception Error when using MethodInfo of Generated Assembly Methods for 0Harmony.
+28. Removed all IL2CPP Imports.
+29. Removed NET_SDK.
+30. Added Custom Component System for the ModHandler.
+31. Removed MelonLoader.AssemblyGenerator and moved Assembly Generation Integration to MelonLoader.ModHandler.
+32. Added Preload Support for Mods to Load before the Game Initializes.
+33. Added OnPreInitialization for Mods that Preload.
+34. Split support for Mono and Il2Cpp into their own Support Modules.  (Credits to knah :D)
+35. Fixed Issue with OnSceneLoad in Il2Cpp Support Module.  (Credits to knah :D)
+36. Split MelonCoroutines to integrate Support Module support.  (Credits to knah :D)
+37. Fixed issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
+38. Fixed issue with OnGUI and re-enabled the Mod Method.
+39. Temporarily disabled Assembly Generator Integration.
+40. Fixed Compatibility issues with SCP Unity.
+41. Fixed issue with version.dll causing UnityCrashHandler to crash.
 
 ---
 
