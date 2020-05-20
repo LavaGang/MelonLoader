@@ -170,6 +170,7 @@ MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const ch
 {
 	HookManager::Unhook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
 	Mono::Domain = Mono::mono_jit_init_version(name, version);
+	Mono::FixDomainBaseDir();
 	Exports::AddInternalCalls();
 	ModHandler::Initialize();
 	return Mono::Domain;

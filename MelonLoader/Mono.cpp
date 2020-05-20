@@ -165,9 +165,14 @@ void Mono::CreateDomain()
 		mono_runtime_set_main_args(argc, argv);
 
 		Domain = mono_jit_init("MelonLoader");
-		mono_thread_set_main(mono_thread_current());
-		mono_domain_set_config(Domain, MelonLoader::GamePath, "MelonLoader");
+		Mono::FixDomainBaseDir();
 	}
+}
+
+void Mono::FixDomainBaseDir()
+{
+	mono_thread_set_main(mono_thread_current());
+	mono_domain_set_config(Domain, MelonLoader::GamePath, "MelonLoader");
 }
 
 const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject) { return mono_string_to_utf8((MonoString*)mono_runtime_invoke(mono_property_get_get_method(mono_class_get_property_from_name(classType, propertyName)), classObject, NULL, NULL)); }

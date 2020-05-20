@@ -103,6 +103,7 @@ public:
 	static void Unload();
 	static bool Setup();
 	static void CreateDomain();
+	static void FixDomainBaseDir();
 	static const char* GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject);
 	static void LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow = false);
 };
