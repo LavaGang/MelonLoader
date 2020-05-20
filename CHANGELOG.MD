@@ -73,7 +73,7 @@
 37. Fixed issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
 38. Fixed issue with OnGUI and re-enabled the Mod Method.
 39. Temporarily disabled Assembly Generator Integration.
-40. Fixed Compatibility issues with SCP Unity.
+40. Fixed Compatibility Issues with SCP Unity.
 41. Fixed issue with version.dll causing UnityCrashHandler to crash.
 
 ---
