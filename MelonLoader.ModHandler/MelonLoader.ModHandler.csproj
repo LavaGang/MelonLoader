@@ -12,7 +12,6 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <ProjectGuid>{3C4056AB-1D07-43FC-A93D-0AA72446DA03}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

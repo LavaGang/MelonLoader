@@ -11,7 +11,6 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
-    <ProjectGuid>{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">
-      <Project>{3c4056ab-1d07-43fc-a93d-0aa72446da03}</Project>
       <Name>MelonLoader.ModHandler</Name>
     </ProjectReference>
   </ItemGroup>

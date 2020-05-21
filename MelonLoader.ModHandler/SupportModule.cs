@@ -40,7 +40,7 @@ namespace MelonLoader
                             {
                                 MethodInfo method = type.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
                                 if (!method.Equals(null))
-                                    supportModule = (ISupportModule) method.Invoke(null, new object[0]);
+                                    supportModule = (ISupportModule)method.Invoke(null, new object[0]);
                             }
                         }
                     }
