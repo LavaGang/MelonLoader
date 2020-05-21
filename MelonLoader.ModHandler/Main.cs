@@ -18,14 +18,19 @@ namespace MelonLoader
 
         private static void Initialize()
         {
+            if (string.IsNullOrEmpty(AppDomain.CurrentDomain.BaseDirectory))
+            {
+                AppDomainSetup setup = (AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0]);
+                setup.ApplicationBase = Imports.GetGameDirectory();
+            }
+
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
 
             if (Imports.IsIl2CppGame())
             {
                 IsVRChat = CurrentGameAttribute.IsGame("VRChat", "VRChat");
                 IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
-
-                Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             }
 
             if (!Imports.IsDebugMode()

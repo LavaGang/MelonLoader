@@ -8,6 +8,7 @@
 #include "HookManager.h"
 #include "Logger.h"
 #include "ModHandler.h"
+#include "UnityPlayer.h"
 
 bool MelonLoader::IsGameIl2Cpp = false;
 HINSTANCE MelonLoader::thisdll = NULL;
@@ -25,10 +26,15 @@ char* MelonLoader::GameVersion = NULL;
 void MelonLoader::Main()
 {
 	LPSTR filepath = new CHAR[MAX_PATH];
-	GetModuleFileName(GetModuleHandle(NULL), filepath, MAX_PATH);
+	HMODULE exe_module = GetModuleHandle(NULL);
+	GetModuleFileName(exe_module, filepath, MAX_PATH);
+
+	long exe_size = GetFileSize(filepath);
+	if ((exe_size / 0.000001) > 10)
+		UnityPlayer::Module = exe_module;
+
 	std::string filepathstr = filepath;
 	filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/"));
-
 	GamePath = new char[filepathstr.size() + 1];
 	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);
 	GamePath[filepathstr.size()] = '\0';
@@ -47,6 +53,7 @@ void MelonLoader::Main()
 		IsGameIl2Cpp = true;
 
 	Logger::Initialize(filepathstr);
+	Logger::Log("GamePath = " + std::string(GamePath));
 
 #ifndef DEBUG
 	if (strstr(GetCommandLine(), "--melonloader.debug") != NULL)
@@ -214,4 +221,10 @@ bool MelonLoader::DirectoryExists(const char* path)
 	if (info.st_mode & S_IFDIR)
 		return true;
 	return false;
+}
+
+long MelonLoader::GetFileSize(std::string filename)
+{
+	struct stat stat_buf;
+	return ((stat(filename.c_str(), &stat_buf) == 0) ? stat_buf.st_size : -1);
 }

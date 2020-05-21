@@ -75,6 +75,7 @@
 39. Temporarily disabled Assembly Generator Integration.
 40. Fixed Compatibility Issues with SCP Unity.
 41. Fixed issue with version.dll causing UnityCrashHandler to crash.
+42. Fixed Compatibility Issues with Hot Dogs, Horseshoes & Hand Grenades.
 
 ---
 
