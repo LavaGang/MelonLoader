@@ -18,7 +18,10 @@ namespace MelonLoader
 
         private static void Initialize()
         {
-            FixBaseDirectory();
+            if (string.IsNullOrEmpty(AppDomain.CurrentDomain.BaseDirectory))
+                ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = Imports.GetGameDirectory();
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
 
             if (Imports.IsIl2CppGame())
@@ -54,7 +57,6 @@ namespace MelonLoader
 
         private static void OnApplicationStart()
         {
-            FixBaseDirectory();
             if (Imports.IsIl2CppGame())
             {
                 Assembly_CSharp = Assembly.Load("Assembly-CSharp");
@@ -392,13 +394,6 @@ namespace MelonLoader
                 LoadModFromAssembly(asm, preload);
             else
                 MelonModLogger.LogError("Unable to load " + asm);
-        }
-
-        private static void FixBaseDirectory()
-        {
-            if (string.IsNullOrEmpty(AppDomain.CurrentDomain.BaseDirectory))
-                ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = Imports.GetGameDirectory();
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 }
