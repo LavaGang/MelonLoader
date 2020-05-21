@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Il2Cpp"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono", "MelonLoader.Support.Mono\MelonLoader.Support.Mono.csproj", "{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono.Pre2017", "MelonLoader.Support.Mono.Pre2017\MelonLoader.Support.Mono.Pre2017.csproj", "{1522ED55-C1BF-4057-86ED-BD482462A498}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,18 @@ Global
 		{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}.Release|x64.Build.0 = Release|Any CPU
 		{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}.Release|x86.ActiveCfg = Release|Any CPU
 		{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}.Release|x86.Build.0 = Release|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Debug|x64.Build.0 = Debug|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Debug|x86.Build.0 = Debug|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Release|x64.ActiveCfg = Release|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Release|x64.Build.0 = Release|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Release|x86.ActiveCfg = Release|Any CPU
+		{1522ED55-C1BF-4057-86ED-BD482462A498}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

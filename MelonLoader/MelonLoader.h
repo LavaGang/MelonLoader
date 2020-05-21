@@ -15,8 +15,7 @@ public:
 	static char* DataPath;
 	static char* CompanyName;
 	static char* ProductName;
-	static char* UnityVersion;
-	static char* GameVersion;
+	static char* UnityFileVersion;
 
 	static void Main();
 	static void ReadAppInfo();
@@ -26,4 +25,5 @@ public:
 	static int CountSubstring(std::string pat, std::string txt);
 	static bool DirectoryExists(const char* path);
 	static long GetFileSize(std::string filename);
+	static std::string GetFileVersion(LPCSTR filepath);
 };

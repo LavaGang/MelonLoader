@@ -21,10 +21,10 @@ void Hook(Il2CppMethod* target, void* detour) { HookManager::Hook(target, detour
 void Unhook(Il2CppMethod* target, void* detour) { HookManager::Unhook(target, detour); }
 void Console_SetColor(ConsoleColor color) { Console::SetColor(color); }
 bool IsOldMono() { return Mono::IsOldMono; }
-MonoString* GetCompanyName() { return ((MelonLoader::CompanyName == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::CompanyName)); }
-MonoString* GetProductName() { return ((MelonLoader::ProductName == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::ProductName)); }
-MonoString* GetUnityVersion() { return ((MelonLoader::UnityVersion == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::UnityVersion)); }
-MonoString* GetGameVersion() { return ((MelonLoader::GameVersion == NULL) ? Mono::mono_string_new(Mono::Domain, "UNKNOWN") : Mono::mono_string_new(Mono::Domain, MelonLoader::GameVersion)); }
+MonoString* GetCompanyName() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::CompanyName == NULL) ? "UNKNOWN" : MelonLoader::CompanyName)); }
+MonoString* GetProductName() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::ProductName == NULL) ? "UNKNOWN" : MelonLoader::ProductName)); }
+MonoString* GetUnityFileVersion() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::UnityFileVersion == NULL) ? "UNKNOWN" : MelonLoader::UnityFileVersion)); }
+MonoString* GetAssemblyDirectory() { return Mono::mono_string_new(Mono::Domain, Mono::AssemblyPath); }
 
 void Exports::AddInternalCalls()
 {
@@ -40,6 +40,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRainbowMode", IsRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRandomRainbowMode", IsRandomRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDirectory", GetGameDirectory);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetAssemblyDirectory", GetAssemblyDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Hook", Hook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Unhook", Unhook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AllocConsole", AllocConsole);
@@ -49,6 +50,5 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsOldMono", IsOldMono);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", GetCompanyName);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", GetProductName);
-	Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityVersion", GetUnityVersion);
-	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameVersion", GetGameVersion);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityFileVersion", GetUnityFileVersion);
 }

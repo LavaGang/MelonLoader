@@ -4,6 +4,7 @@
 typedef void* (*PlayerLoadFirstScene_t) (bool unknown);
 typedef bool (*PlayerCleanup_t)(bool dopostquitmsg);
 typedef void (*EndOfFrameCallbacks_DequeAll_t)();
+typedef void* (*Application_Get_Custom_PropUnityVersion_t)();
 
 class UnityPlayer
 {

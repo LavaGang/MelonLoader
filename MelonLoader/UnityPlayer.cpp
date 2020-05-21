@@ -45,6 +45,6 @@ bool UnityPlayer::Setup()
 			EndOfFrameCallbacks_DequeAll = (EndOfFrameCallbacks_DequeAll_t)PointerUtils::FindPattern(Module, "40 57 48 83 EC 20 48 8B 0D ? ? ? ? 48 63 01 48 8B 7C C1 ? 48 8B CF E8 ? ? ? ? 85 C0 75 ? 48 89 5C 24 ? 48 8B CF E8 ? ? ? ? 48 8B D8 48 8B");
 		AssertionManager::Decide(EndOfFrameCallbacks_DequeAll, "EndOfFrameCallbacks_DequeAll");
 	}
-	
+
 	return !AssertionManager::Result;
 }

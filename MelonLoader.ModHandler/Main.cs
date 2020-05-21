@@ -18,13 +18,7 @@ namespace MelonLoader
 
         private static void Initialize()
         {
-            if (string.IsNullOrEmpty(AppDomain.CurrentDomain.BaseDirectory))
-            {
-                AppDomainSetup setup = (AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0]);
-                setup.ApplicationBase = Imports.GetGameDirectory();
-            }
-
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            FixBaseDirectory();
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
 
             if (Imports.IsIl2CppGame())
@@ -60,18 +54,19 @@ namespace MelonLoader
 
         private static void OnApplicationStart()
         {
+            FixBaseDirectory();
             if (Imports.IsIl2CppGame())
             {
                 Assembly_CSharp = Assembly.Load("Assembly-CSharp");
                 UnhollowerSupport.Initialize();
             }
+            SupportModule.Initialize();
 
             MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Unity " + Imports.GetUnityVersion());
+            MelonModLogger.Log("Unity " + SupportModule.GetUnityVersion());
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Name: " + CurrentGameAttribute.GameName);
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
-            MelonModLogger.Log("Version: " + Imports.GetGameVersion());
             MelonModLogger.Log("Type: " + (Imports.IsIl2CppGame() ? "Il2Cpp" : (Imports.IsOldMono() ? "Mono" : "MonoBleedingEdge")));
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
@@ -100,8 +95,6 @@ namespace MelonLoader
                         MelonModLogger.Log("------------------------------");
                     }
                 }
-
-                SupportModule.Initialize();
 
                 for (int i = 0; i < Mods.Count; i++)
                 {
@@ -399,6 +392,13 @@ namespace MelonLoader
                 LoadModFromAssembly(asm, preload);
             else
                 MelonModLogger.LogError("Unable to load " + asm);
+        }
+
+        private static void FixBaseDirectory()
+        {
+            if (string.IsNullOrEmpty(AppDomain.CurrentDomain.BaseDirectory))
+                ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = Imports.GetGameDirectory();
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 }

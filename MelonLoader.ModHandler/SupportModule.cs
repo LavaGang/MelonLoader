@@ -7,7 +7,7 @@ namespace MelonLoader
 {
     public interface ISupportModule
     {
-        void LoadZippedMods();
+        string GetUnityVersion();
         float GetUnityDeltaTime();
         int GetActiveSceneIndex();
         object StartCoroutine(IEnumerator coroutine);
@@ -25,7 +25,8 @@ namespace MelonLoader
         {
             try
             {
-                string filepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" : "MelonLoader.Support.Mono.dll"));
+                string filepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" 
+                    : (File.Exists(Path.Combine(Imports.GetAssemblyDirectory(), "UnityEngine.CoreModule.dll")) ? "MelonLoader.Support.Mono.dll" : "MelonLoader.Support.Mono.Pre2017.dll")));
                 if (File.Exists(filepath))
                 {
                     byte[] data = File.ReadAllBytes(filepath);
@@ -57,6 +58,7 @@ namespace MelonLoader
             }
         }
 
+        internal static string GetUnityVersion() => supportModule?.GetUnityVersion();
         internal static float GetUnityDeltaTime() => supportModule?.GetUnityDeltaTime() ?? 0f;
         internal static int GetActiveSceneIndex() => supportModule?.GetActiveSceneIndex() ?? -9;
     }
