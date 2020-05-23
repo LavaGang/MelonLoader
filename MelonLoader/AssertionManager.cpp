@@ -87,6 +87,18 @@ uintptr_t AssertionManager::FindPattern(HMODULE mod, const char* name, const cha
 	return returnval;
 }
 
+uintptr_t AssertionManager::FindBestPossiblePattern(HMODULE mod, const char* name, std::vector<const char*> target_patterns)
+{
+	uintptr_t returnval = NULL;
+	if (!Result)
+	{
+		returnval = PointerUtils::FindBestPossiblePattern(mod, target_patterns);
+		if (returnval == NULL)
+			ThrowError((std::string("Failed to FindBestPossiblePattern ( ") + name + " )"));
+	}
+	return returnval;
+}
+
 std::vector<uintptr_t> AssertionManager::FindAllPattern(HMODULE mod, const char* name, const char* target_pattern)
 {
 	std::vector<uintptr_t> returnval;
