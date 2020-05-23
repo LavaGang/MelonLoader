@@ -51,6 +51,7 @@ namespace MelonLoader.Support
             GameObject obj = new GameObject("MelonLoader");
             GameObject.DontDestroyOnLoad(obj);
             Main.comp = obj.AddComponent<MelonLoaderComponent>();
+            obj.transform.SetAsLastSibling();
             Main.comp.transform.SetAsLastSibling();
         }
         public MelonLoaderComponent(IntPtr intPtr) : base(intPtr) { }

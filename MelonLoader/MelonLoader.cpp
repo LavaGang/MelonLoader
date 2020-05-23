@@ -30,7 +30,7 @@ void MelonLoader::Main()
 	GetModuleFileName(exe_module, filepath, MAX_PATH);
 
 	long exe_size = GetFileSize(filepath);
-	if ((exe_size / 0.000001) > 10)
+	if ((exe_size * 0.000001) > 10)
 		UnityPlayer::Module = exe_module;
 
 	std::string file_version = GetFileVersion(filepath);

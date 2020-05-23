@@ -1,6 +1,7 @@
 #include "UnityPlayer.h"
 #include "AssertionManager.h"
 #include "MelonLoader.h"
+#include "Logger.h"
 
 HMODULE UnityPlayer::Module = NULL;
 PlayerLoadFirstScene_t UnityPlayer::PlayerLoadFirstScene = NULL;
