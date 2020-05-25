@@ -5,7 +5,6 @@
 #include "ModHandler.h"
 #include "Logger.h"
 #include "PointerUtils.h"
-#pragma warning( disable : 4996 )
 
 bool Mono::IsOldMono = false;
 char* Mono::AssemblyPath = NULL;
@@ -113,11 +112,12 @@ void Mono::CreateDomain()
 
 		int argc = 0;
 		char* argv[64];
-		char* p2 = strtok(GetCommandLine(), " ");
-		while (p2 && argc < 63)
+		char* next = NULL;
+		char* curchar = strtok_s(GetCommandLine(), " ", &next);
+		while (curchar && (argc < 63))
 		{
-			argv[argc++] = p2;
-			p2 = strtok(0, " ");
+			argv[argc++] = curchar;
+			curchar = strtok_s(0, " ", &next);
 		}
 		argv[argc] = 0;
 		mono_runtime_set_main_args(argc, argv);
@@ -135,5 +135,4 @@ void Mono::FixDomainBaseDir()
 }
 
 const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject) { return mono_string_to_utf8((MonoString*)mono_runtime_invoke(mono_property_get_get_method(mono_class_get_property_from_name(classType, propertyName)), classObject, NULL, NULL)); }
-
 void Mono::LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow) { if (shouldThrow) AssertionManager::ThrowError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject)); else Logger::LogError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject)); }

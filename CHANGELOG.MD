@@ -42,44 +42,37 @@
 6. Removed Unity Dependencies from Release Build.  (No Longer Needed)
 7. Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
 8. Revised README.MD.
-9. Temporarily disabled OnGUI for Mods.
-10. Added Constructors and Methods to NET_SDK.Harmony to allow the use of IntPtr for Hooking Methods.
-11. Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
-12. Revised CHANGELOG.MD.
-13. Added MelonLoader.AssemblyGenerator to handle automation of Assembly Generation.
-14. Added Built-In QuitFix under the Launch Option --melonloader.quitfix  (For Games like VRChat where the Process Hangs after telling it to Exit)
-15. Updated Newtonsoft.Json in the Mono Dependencies.
-16. Added Stop Methods to MelonCoroutines.  (Credits to Slaynash :3)
-17. Fixed Error Handling in MelonCoroutines.  (Credits to Slaynash :3)
-18. Fixed Issue with MelonCoroutines when using Non-Yielding Coroutines.  (Credits to Slaynash :3)
-19. Added Support for Method Unstripping through Il2CppAssemblyUnhollower to MelonLoader.AssemblyGenerator.
-20. Replaced the Doorstop winmm.dll with version.dll.
-21. Fixed Compatibility with IL2CPP Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
-22. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
-23. Fixed Incompatibility Issue between 0Harmony in MelonLoader.ModHandler and Mono Game Support.
-24. Added Event Fix for knah's Unhollower Logging.
-25. Moved IL2CPP Imports from NET_SDK.IL2CPP to MelonLoader.Il2CppImports.
-26. Made all IL2CPP Imports Internal Calls for Faster Invoking.
-27. Fixed Null Reference Exception Error when using MethodInfo of Generated Assembly Methods for 0Harmony.
-28. Removed all IL2CPP Imports.
-29. Removed NET_SDK.
-30. Added Custom Component System for the ModHandler.
-31. Removed MelonLoader.AssemblyGenerator and moved Assembly Generation Integration to MelonLoader.ModHandler.
-32. Added Preload Support for Mods to Load before the Game Initializes.
-33. Added OnPreInitialization for Mods that Preload.
-34. Split support for Mono and Il2Cpp into their own Support Modules.  (Credits to knah :D)
-35. Fixed Issue with OnSceneLoad in Il2Cpp Support Module.  (Credits to knah :D)
-36. Split MelonCoroutines to integrate Support Module support.  (Credits to knah :D)
-37. Fixed issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
-38. Fixed issue with OnGUI and re-enabled the Mod Method.
-39. Temporarily disabled Assembly Generator Integration.
-40. Fixed Compatibility Issues with SCP Unity.
-41. Fixed issue with version.dll causing UnityCrashHandler to crash.
-42. Fixed Compatibility Issues with Hot Dogs, Horseshoes & Hand Grenades.
-43. Added Pre 2017 Mono Support Module.
-44. Made Normal Console Open by Default.
-45. Removed Launch Option "--melonloader.console".
-46. Added Launch Option "--melonloader.hideconsole" to Hide the Normal Console.
+9. Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
+10. Revised CHANGELOG.MD.
+11. Added Built-In QuitFix under the Launch Option --melonloader.quitfix  (For Games like VRChat where the Process Hangs after telling it to Exit)
+12. Added Stop Methods to MelonCoroutines.  (Credits to Slaynash :3)
+13. Fixed Error Handling in MelonCoroutines.  (Credits to Slaynash :3)
+14. Fixed Issue with MelonCoroutines when using Non-Yielding Coroutines.  (Credits to Slaynash :3)
+15. Added Support for Method Unstripping through Il2CppAssemblyUnhollower to MelonLoader.AssemblyGenerator.
+16. Replaced the Doorstop winmm.dll with version.dll.
+17. Fixed Compatibility with IL2CPP Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
+18. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
+19. Fixed Incompatibility Issue between 0Harmony in MelonLoader.ModHandler and Mono Game Support.
+20. Added Event Fix for knah's Unhollower Logging.
+21. Fixed Null Reference Exception Error when using MethodInfo of Generated Assembly Methods for 0Harmony.
+22. Removed NET_SDK.
+23. Added Custom Component System for the ModHandler.
+24. Added Preload Support for Mods to Load before the Game Initializes.
+25. Added OnPreInitialization for Mods that Preload.
+26. Split support for Mono and Il2Cpp into their own Support Modules.  (Credits to knah :D)
+27. Fixed Issue with OnSceneLoad in Il2Cpp Support Module.  (Credits to knah :D)
+28. Split MelonCoroutines to integrate Support Module support.  (Credits to knah :D)
+29. Fixed issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
+30. Fixed issue with OnGUI.
+31. Fixed Compatibility Issues with SCP Unity.
+32. Fixed issue with version.dll causing UnityCrashHandler to crash.
+33. Fixed Compatibility Issues with Hot Dogs, Horseshoes & Hand Grenades.
+34. Added Pre 2017 Mono Support Module.
+35. Made Normal Console Open by Default.
+36. Removed Launch Option "--melonloader.console".
+37. Added Launch Option "--melonloader.hideconsole" to Hide the Normal Console.
+38. Cleaned up Il2Cpp Imports.
+39. Cleaned up Mono Imports.
 
 ---
 
