@@ -77,6 +77,9 @@
 41. Fixed issue with version.dll causing UnityCrashHandler to crash.
 42. Fixed Compatibility Issues with Hot Dogs, Horseshoes & Hand Grenades.
 43. Added Pre 2017 Mono Support Module.
+44. Made Normal Console Open by Default.
+45. Removed Launch Option "--melonloader.console".
+46. Added Launch Option "--melonloader.hideconsole" to Hide the Normal Console.
 
 ---
 

@@ -2,11 +2,6 @@
 #include <Windows.h>
 
 struct Il2CppDomain;
-struct Il2CppAssembly;
-struct Il2CppType;
-struct Il2CppClass;
-struct Il2CppField;
-struct Il2CppProperty;
 struct Il2CppMethod
 {
 	void* targetMethod;

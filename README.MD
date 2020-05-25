@@ -42,7 +42,7 @@
 | Argument              | Description                              |
 | --------------------- | ---------------------------------------- |
 | --no-mods             | Launch game without loading Mods         |
-| --melonloader.console | Normal Console                           |
+| --melonloader.hideconsole | Hides the Normal Console                           |
 | --melonloader.debug   | Debug Console                            |
 | --melonloader.quitfix   | Fixes the Hanging Process Issue with some Games |
 | --melonloader.rainbow | Rainbow Console Color                |

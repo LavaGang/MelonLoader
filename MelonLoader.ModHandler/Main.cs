@@ -32,7 +32,7 @@ namespace MelonLoader
 
             if (!Imports.IsDebugMode()
 #if !DEBUG
-                && Environment.CommandLine.Contains("--melonloader.console")
+                && !Environment.CommandLine.Contains("--melonloader.hideconsole")
 #endif
             )
             {
