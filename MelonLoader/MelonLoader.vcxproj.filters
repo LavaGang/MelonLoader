@@ -20,7 +20,6 @@
     <ClInclude Include="Exports.h" />
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="PointerUtils.h" />
-    <ClInclude Include="mono-internals.h" />
     <ClInclude Include="ModHandler.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Logger.h" />

@@ -109,7 +109,6 @@
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="ModHandler.h" />
-    <ClInclude Include="mono-internals.h" />
     <ClInclude Include="PointerUtils.h" />
     <ClInclude Include="Il2Cpp.h" />
     <ClInclude Include="Mono.h" />
