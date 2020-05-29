@@ -220,12 +220,6 @@ void MelonLoader::KillProcess()
 	}
 }
 
-bool MelonLoader::Is64bit()
-{
-	// To-Do
-	return true;
-}
-
 int MelonLoader::CountSubstring(std::string pat, std::string txt)
 {
 	size_t M = pat.length();

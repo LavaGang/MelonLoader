@@ -1,10 +1,8 @@
 ### Known Issues:
 
-1. The Check for 64bit needs to be redone.
-2. StackTraces refuse to show line numbers.
-3. Console Logs randomly do not Color properly.
-4. Mono Module currently has an Issue with https/ssl.
-5. Unity 2019 Il2Cpp Support is currently bugged until Il2CppAssemblyUnhollower is fixed to work with it.
+1. StackTraces refuse to show line numbers.
+2. Console Logs randomly do not Color properly.
+3. Mono Module currently has an Issue with https/ssl.
 
 ---
 
