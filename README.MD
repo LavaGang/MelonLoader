@@ -45,7 +45,7 @@
 | --melonloader.hideconsole | Hides the Normal Console                           |
 | --melonloader.debug   | Debug Console                            |
 | --melonloader.quitfix   | Fixes the Hanging Process Issue with some Games |
-| --melonloader.maxlogs   | Max Log Files [ Default: 10 ] [ Disable: 0 ] |
+| --melonloader.maxlogs   | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |
 | --melonloader.rainbow | Rainbow Console Color                |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
 

@@ -61,9 +61,12 @@
             if (should_run)
             {
                 LastSceneIndex = current_scene;
-                Main.OnLevelIsLoading();
                 if (!ShouldWait)
                     IsLoading = true;
+                if (Main.IsBoneworks)
+                    Main.OnLevelIsLoading();
+                else
+                    CheckForSceneFinishedLoading();
             }
         }
 

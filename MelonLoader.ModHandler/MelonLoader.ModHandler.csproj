@@ -12,6 +12,7 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
+    <ProjectGuid>{3C4056AB-1D07-43FC-A93D-0AA72446DA03}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,11 +37,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <Private>false</Private>
-      <HintPath>..\BaseLibs\MelonLoader\Managed\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-	<Reference Include="ICSharpCode.SharpZipLib">
+    <Reference Include="ICSharpCode.SharpZipLib">
       <Private>false</Private>
       <HintPath>..\BaseLibs\MelonLoader\Managed\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>

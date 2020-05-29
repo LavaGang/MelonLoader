@@ -23,7 +23,7 @@ namespace TestMod
             MelonModLogger.Log("OnApplicationStart");
         }
 
-        public override void OnLevelIsLoading() // Runs when a Scene is Loading
+        public override void OnLevelIsLoading() // Runs when a Scene is Loading. Currently only runs if the Mod is used in BONEWORKS.
         {
             MelonModLogger.Log("OnLevelIsLoading");
         }

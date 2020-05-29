@@ -22,7 +22,7 @@
 
 ### Version List:
 
-[v0.1.1 Open-Beta](#v011-open-beta)  
+[v0.2.0 Open-Beta](#v020-open-beta)  
 [v0.1.0 Open-Beta](#v010-open-beta)  
 [v0.0.4 Release Candidate](#v004-release-candidate)  
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
@@ -31,7 +31,7 @@
 
 ---
 
-### v0.1.1 Open-Beta:
+### v0.2.0 Open-Beta:
 
 1. Fixed issue with the Console still showing as Closed-Beta.
 2. Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
