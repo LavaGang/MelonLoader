@@ -54,6 +54,7 @@
       <HintPath>Libs\UnhollowerRuntimeLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
+      <Private>false</Private>
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
