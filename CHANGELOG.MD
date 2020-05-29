@@ -1,11 +1,10 @@
 ### Known Issues:
 
-1. MUPOT Mode does not work without Assembly generated.
-2. MUPOT Mode is not directing the Managed folder to the proper location.
-3. The Check for 64bit needs to be redone.
-4. StackTraces refuse to show line numbers.
-5. Console Logs randomly do not Color properly.
-6. Mono Module currently has an Issue with https/ssl.
+1. The Check for 64bit needs to be redone.
+2. StackTraces refuse to show line numbers.
+3. Console Logs randomly do not Color properly.
+4. Mono Module currently has an Issue with https/ssl.
+5. Unity 2019 Il2Cpp Support is currently bugged until Il2CppAssemblyUnhollower is fixed to work with it.
 
 ---
 
@@ -34,45 +33,47 @@
 
 ### v0.1.1 Open-Beta:
 
-1. Added SharpYml as a Mono Dependency.
-2. Fixed issue with the Console still showing as Closed-Beta.
-3. Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
-4. Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
-5. Added 2018.4.11f1 Unity Dependencies.  (Credits to Hector ^.^)
-6. Removed Unity Dependencies from Release Build.  (No Longer Needed)
-7. Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
-8. Revised README.MD.
-9. Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
-10. Revised CHANGELOG.MD.
-11. Added Built-In QuitFix under the Launch Option --melonloader.quitfix  (For Games like VRChat where the Process Hangs after telling it to Exit)
-12. Added Stop Methods to MelonCoroutines.  (Credits to Slaynash :3)
-13. Fixed Error Handling in MelonCoroutines.  (Credits to Slaynash :3)
-14. Fixed Issue with MelonCoroutines when using Non-Yielding Coroutines.  (Credits to Slaynash :3)
-15. Added Support for Method Unstripping through Il2CppAssemblyUnhollower to MelonLoader.AssemblyGenerator.
-16. Replaced the Doorstop winmm.dll with version.dll.
-17. Fixed Compatibility with IL2CPP Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
-18. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
-19. Fixed Incompatibility Issue between 0Harmony in MelonLoader.ModHandler and Mono Game Support.
-20. Added Event Fix for knah's Unhollower Logging.
-21. Fixed Null Reference Exception Error when using MethodInfo of Generated Assembly Methods for 0Harmony.
-22. Removed NET_SDK.
-23. Added Custom Component System for the ModHandler.
-24. Added Preload Support for Mods to Load before the Game Initializes.
-25. Added OnPreInitialization for Mods that Preload.
-26. Split support for Mono and Il2Cpp into their own Support Modules.  (Credits to knah :D)
-27. Fixed Issue with OnSceneLoad in Il2Cpp Support Module.  (Credits to knah :D)
-28. Split MelonCoroutines to integrate Support Module support.  (Credits to knah :D)
-29. Fixed issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
-30. Fixed issue with OnGUI.
-31. Fixed Compatibility Issues with SCP Unity.
-32. Fixed issue with version.dll causing UnityCrashHandler to crash.
-33. Fixed Compatibility Issues with Hot Dogs, Horseshoes & Hand Grenades.
-34. Added Pre 2017 Mono Support Module.
-35. Made Normal Console Open by Default.
-36. Removed Launch Option "--melonloader.console".
-37. Added Launch Option "--melonloader.hideconsole" to Hide the Normal Console.
-38. Cleaned up Il2Cpp Imports.
-39. Cleaned up Mono Imports.
+1. Fixed issue with the Console still showing as Closed-Beta.
+2. Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
+3. Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
+4. Added 2018.4.11f1 Unity Dependencies.  (Credits to Hector ^.^)
+5. Removed Unity Dependencies from Release Build.  (No Longer Needed)
+6. Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
+7. Revised README.MD.
+8. Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
+9. Revised CHANGELOG.MD.
+10. Added Built-In QuitFix under the Launch Option --melonloader.quitfix  (For Games like VRChat where the Process Hangs after telling it to Exit)
+11. Added Stop Methods to MelonCoroutines.  (Credits to Slaynash :3)
+12. Fixed Error Handling in MelonCoroutines.  (Credits to Slaynash :3)
+13. Fixed Issue with MelonCoroutines when using Non-Yielding Coroutines.  (Credits to Slaynash :3)
+14. Added Support for Method Unstripping through Il2CppAssemblyUnhollower to MelonLoader.AssemblyGenerator.
+15. Replaced the Doorstop winmm.dll with version.dll.
+16. Fixed Compatibility with IL2CPP Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
+17. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
+18. Fixed Incompatibility Issue between 0Harmony in MelonLoader.ModHandler and Mono Game Support.
+19. Added Event Fix for knah's Unhollower Logging.
+20. Fixed Null Reference Exception Error when using MethodInfo of Generated Assembly Methods for 0Harmony.
+21. Removed NET_SDK.
+22. Added Custom Component System for the ModHandler.
+23. Added Preload Support for Mods to Load before the Game Initializes.
+24. Added OnPreInitialization for Mods that Preload.
+25. Split support for Mono and Il2Cpp into their own Support Modules.  (Credits to knah :D)
+26. Fixed Issue with OnSceneLoad in Il2Cpp Support Module.  (Credits to knah :D)
+27. Split MelonCoroutines to integrate Support Module support.  (Credits to knah :D)
+28. Fixed issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
+29. Fixed issue with OnGUI.
+30. Fixed Compatibility Issues with SCP Unity.
+31. Fixed issue with version.dll causing UnityCrashHandler to crash.
+32. Fixed Compatibility Issues with Hot Dogs, Horseshoes & Hand Grenades.
+33. Added Pre 2017 Mono Support Module.
+34. Made Normal Console Open by Default.
+35. Removed Launch Option "--melonloader.console".
+36. Added Launch Option "--melonloader.hideconsole" to Hide the Normal Console.
+37. Cleaned up Il2Cpp Imports.
+38. Cleaned up Mono Imports.
+39. Revised Command Line Parsing.
+40. Fixed issue with the Log Cleaner deleting Logs that were not made by MelonLoader.
+41. Added Launch Option --melonloader.maxlogs. Sets the Max Logs for the Log Cleaner. Set as 0 to Disable the Log Cleaner.
 
 ---
 

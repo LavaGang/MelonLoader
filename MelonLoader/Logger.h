@@ -27,10 +27,13 @@ public:
 class Logger
 {
 public:
-	static LogStream logFile;
+	static LogStream LogFile;
+	static int MaxLogs;
+	static const char* FilePrefix;
+	static const char* FileExtention;
 
 	static void Initialize(std::string filepathstr);
-	static void Stop() { logFile.coss.close(); }
+	static void Stop() { LogFile.coss.close(); }
 	static void CleanOldLogs(std::string logFolderPath);
 
 	static void Log(const char* txt);

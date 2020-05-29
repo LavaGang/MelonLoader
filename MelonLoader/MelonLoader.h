@@ -6,6 +6,8 @@ class MelonLoader
 {
 public:
 	static HINSTANCE thisdll;
+	static int CommandLineC;
+	static char* CommandLineV[64];
 	static bool IsGameIl2Cpp;
 	static bool DebugMode;
 	static bool RainbowMode;
@@ -18,6 +20,7 @@ public:
 	static char* UnityFileVersion;
 
 	static void Main();
+	static void ParseCommandLine();
 	static void ReadAppInfo();
 	static void UNLOAD(bool alt = false);
 	static void KillProcess();
@@ -26,4 +29,5 @@ public:
 	static bool DirectoryExists(const char* path);
 	static long GetFileSize(std::string filename);
 	static std::string GetFileVersion(LPCSTR filepath);
+	static int GetIntFromConstChar(const char* str, int defaultval = 0);
 };

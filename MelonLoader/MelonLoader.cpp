@@ -11,8 +11,10 @@
 #include "ModHandler.h"
 #include "UnityPlayer.h"
 
-bool MelonLoader::IsGameIl2Cpp = false;
 HINSTANCE MelonLoader::thisdll = NULL;
+int MelonLoader::CommandLineC = NULL;
+char* MelonLoader::CommandLineV[64];
+bool MelonLoader::IsGameIl2Cpp = false;
 bool MelonLoader::DebugMode = false;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
@@ -25,6 +27,13 @@ char* MelonLoader::UnityFileVersion = NULL;
 
 void MelonLoader::Main()
 {
+	ParseCommandLine();
+
+#ifdef DEBUG
+	Console::Create();
+	DebugMode = true;
+#endif
+
 	LPSTR filepath = new CHAR[MAX_PATH];
 	HMODULE exe_module = GetModuleHandle(NULL);
 	GetModuleFileName(exe_module, filepath, MAX_PATH);
@@ -44,13 +53,6 @@ void MelonLoader::Main()
 	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);
 	GamePath[filepathstr.size()] = '\0';
 
-	if (strstr(GetCommandLine(), "--melonloader.rainbow") != NULL)
-		RainbowMode = true;
-	if (strstr(GetCommandLine(), "--melonloader.randomrainbow") != NULL)
-		RandomRainbowMode = true;
-	if (strstr(GetCommandLine(), "--melonloader.quitfix") != NULL)
-		QuitFix = true;
-
 	std::string gameassemblypath = filepathstr + "\\GameAssembly.dll";
 	WIN32_FIND_DATA data;
 	HANDLE h = FindFirstFile(gameassemblypath.c_str(), &data);
@@ -58,16 +60,6 @@ void MelonLoader::Main()
 		IsGameIl2Cpp = true;
 
 	Logger::Initialize(filepathstr);
-
-#ifndef DEBUG
-	if (strstr(GetCommandLine(), "--melonloader.debug") != NULL)
-	{
-#endif
-		Console::Create();
-		DebugMode = true;
-#ifndef DEBUG
-	}
-#endif
 
 	std::string pdatapath = filepathstr + "\\*_Data";
 	h = FindFirstFile(pdatapath.c_str(), &data);
@@ -146,6 +138,43 @@ void MelonLoader::Main()
 		}
 		else
 			HookManager::LoadLibraryW_Hook();
+	}
+}
+
+void MelonLoader::ParseCommandLine()
+{
+	char* next = NULL;
+	char* curchar = strtok_s(GetCommandLine(), " ", &next);
+	while (curchar && (CommandLineC < 63))
+	{
+		CommandLineV[CommandLineC++] = curchar;
+		curchar = strtok_s(0, " ", &next);
+	}
+	CommandLineV[CommandLineC] = 0;
+	if (CommandLineC > 0)
+	{
+		for (int i = 0; i < CommandLineC; i++)
+		{
+			const char* command = CommandLineV[i];
+			if (command != NULL)
+			{
+				if (strstr(command, "--melonloader.rainbow") != NULL)
+					RainbowMode = true;
+				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
+					RandomRainbowMode = true;
+				else if (strstr(command, "--melonloader.quitfix") != NULL)
+					QuitFix = true;
+				else if (strstr(command, "--melonloader.maxlogs") != NULL)
+					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
+#ifndef DEBUG
+				else if (strstr(command, "--melonloader.debug") != NULL)
+				{
+					Console::Create();
+					DebugMode = true;
+				}
+#endif
+			}
+		}
 	}
 }
 
@@ -253,4 +282,29 @@ std::string MelonLoader::GetFileVersion(LPCSTR filepath)
 				);
 	}
 	return "UNKNOWN";
+}
+
+int MelonLoader::GetIntFromConstChar(const char* str, int defaultval)
+{
+	if (str == NULL || *str == '\0')
+		return defaultval;
+    bool negate = (str[0] == '-');
+    if ( *str == '+' || *str == '-' )
+        ++str;
+
+	if (*str == '\0')
+		return defaultval;
+
+    int result = 0;
+    while(*str)
+    {
+		if (*str >= '0' && *str <= '9')
+		{
+			result = result * 10 - (*str - '0');  //assume negative number
+		}
+		else
+			return defaultval;
+        ++str;
+    }
+    return negate ? result : -result; //-result is positive!
 }

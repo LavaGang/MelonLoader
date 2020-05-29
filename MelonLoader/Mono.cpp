@@ -109,19 +109,7 @@ void Mono::CreateDomain()
 		mono_set_assemblies_path(AssemblyPath);
 		mono_assembly_setrootdir(AssemblyPath);
 		mono_set_config_dir(ConfigPath);
-
-		int argc = 0;
-		char* argv[64];
-		char* next = NULL;
-		char* curchar = strtok_s(GetCommandLine(), " ", &next);
-		while (curchar && (argc < 63))
-		{
-			argv[argc++] = curchar;
-			curchar = strtok_s(0, " ", &next);
-		}
-		argv[argc] = 0;
-		mono_runtime_set_main_args(argc, argv);
-
+		mono_runtime_set_main_args(MelonLoader::CommandLineC, MelonLoader::CommandLineV);
 		Domain = mono_jit_init("MelonLoader");
 		Mono::FixDomainBaseDir();
 	}

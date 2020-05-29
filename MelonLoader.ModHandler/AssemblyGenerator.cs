@@ -6,15 +6,14 @@ using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-#pragma warning disable 0649
 
 namespace MelonLoader.AssemblyGenerator
 {
     internal static class Main
     {
-        private static Package_BaseLibs BaseLibs = new Package_BaseLibs();
-        private static Package_Il2CppDumper Il2CppDumper = new Package_Il2CppDumper();
-        private static Package_Il2CppAssemblyUnhollower Il2CppAssemblyUnhollower = new Package_Il2CppAssemblyUnhollower();
+        private static Package BaseLibs = new Package();
+        private static Package Il2CppDumper = new Package();
+        private static Package Il2CppAssemblyUnhollower = new Package();
 
         internal static bool Initialize()
         {
@@ -22,13 +21,7 @@ namespace MelonLoader.AssemblyGenerator
 
             SetupDirectories();
 
-            if (DownloadCheck() &&
-                (
-                    (Il2CppDumper.ShouldDownload && !Il2CppDumper.Download()) 
-                    || (Il2CppAssemblyUnhollower.ShouldDownload && !Il2CppAssemblyUnhollower.Download()) 
-                    || (BaseLibs.ShouldDownload && !BaseLibs.Download())
-                    )
-                )
+            if (DownloadCheck() && !Download())
                 return false;
 
             return true;
@@ -41,48 +34,66 @@ namespace MelonLoader.AssemblyGenerator
             if (!Directory.Exists(base_folder))
                 Directory.CreateDirectory(base_folder);
 
-            Il2CppDumper.SetupDirectory(base_folder);
-            Il2CppAssemblyUnhollower.SetupDirectory(base_folder);
-            BaseLibs.SetupDirectory(base_folder);
+            Il2CppDumper.SetupDirectory(Path.Combine(base_folder, "Il2CppDumper"));
+            Il2CppAssemblyUnhollower.SetupDirectory(Path.Combine(base_folder, "Il2CppAssemblyUnhollower"));
+            BaseLibs.SetupDirectory(Path.Combine(Path.Combine(base_folder, "Il2CppAssemblyUnhollower"), "BaseLibs"));
         }
 
-        private static bool DownloadCheck() => (Il2CppDumper.DownloadCheck() && Il2CppAssemblyUnhollower.DownloadCheck() && BaseLibs.DownloadCheck());
+        private static bool Download()
+        {
+            if (Il2CppDumper.ShouldDownload)
+            {
+                MelonModLogger.Log("Downloading Il2CppDumper ");
+                if (!Il2CppDumper.Download())
+                {
+                    MelonModLogger.LogError("Failed to Download Il2CppDumper!");
+                    return false;
+                }
+            }
+
+            if (Il2CppAssemblyUnhollower.ShouldDownload)
+            {
+                MelonModLogger.Log("Downloading Il2CppAssemblyUnhollower ");
+                if (!Il2CppAssemblyUnhollower.Download())
+                {
+                    MelonModLogger.LogError("Failed to Download Il2CppAssemblyUnhollower!");
+                    return false;
+                }
+            }
+
+            if (BaseLibs.ShouldDownload)
+            {
+                MelonModLogger.Log("Downloading Unity BaseLibs for " + Imports.GetUnityFileVersion());
+                if (!BaseLibs.Download())
+                {
+                    MelonModLogger.LogError("Failed to Download Unity BaseLibs!");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool DownloadCheck() => (Il2CppDumper.DownloadCheck() || Il2CppAssemblyUnhollower.DownloadCheck() || BaseLibs.DownloadCheck());
     }
 
     internal class Package
     {
         internal string DirPath = null;
         internal bool ShouldDownload = false;
-        internal virtual void SetupDirectory(string base_folder) { DirPath = base_folder; DirectoryCheck(); }
-        internal void DirectoryCheck() { if (!Directory.Exists(DirPath)) Directory.CreateDirectory(DirPath); }
-        internal virtual bool DownloadCheck() => false;
-        internal virtual bool Download() => true;
-    }
 
-    internal class Package_BaseLibs : Package
-    {
-        internal override void SetupDirectory(string base_folder)
+        internal void SetupDirectory(string base_folder) { DirPath = base_folder; if (!Directory.Exists(DirPath)) Directory.CreateDirectory(DirPath); }
+
+        internal bool DownloadCheck()
         {
-            DirPath = Path.Combine(Path.Combine(base_folder, "Il2CppAssemblyUnhollower"), "BaseLibs");
-            DirectoryCheck();
+
+            return false;
         }
-    }
 
-    internal class Package_Il2CppDumper : Package
-    {
-        internal override void SetupDirectory(string base_folder)
+        internal bool Download()
         {
-            DirPath = Path.Combine(base_folder, "Il2CppDumper");
-            DirectoryCheck();
-        }
-    }
 
-    internal class Package_Il2CppAssemblyUnhollower : Package
-    {
-        internal override void SetupDirectory(string base_folder)
-        {
-            DirPath = Path.Combine(base_folder, "Il2CppAssemblyUnhollower");
-            DirectoryCheck();
+            return true;
         }
     }
 }

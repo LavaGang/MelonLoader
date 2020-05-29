@@ -31,19 +31,17 @@ namespace MelonLoader
             }
 
             if (!Imports.IsDebugMode()
-#if !DEBUG
                 && !Environment.CommandLine.Contains("--melonloader.hideconsole")
-#endif
-            )
+                )
             {
                 Console.Enabled = true;
                 Console.Create();
             }
 
-            //if (Imports.IsIl2CppGame() && !AssemblyGenerator.Main.Initialize())
-            //    Imports.UNLOAD_MELONLOADER(true);
-            //else
-            //{
+            if (Imports.IsIl2CppGame() && !AssemblyGenerator.Main.Initialize())
+                Imports.UNLOAD_MELONLOADER(true);
+            else
+            {
                 LoadMods(true);
                 if (Mods.Count > 0)
                     for (int i = 0; i < Mods.Count; i++)
@@ -52,7 +50,7 @@ namespace MelonLoader
                         if (mod != null)
                             try { mod.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                     }
-            //}
+            }
         }
 
         private static void OnApplicationStart()
