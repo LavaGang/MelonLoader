@@ -34,7 +34,13 @@ namespace MelonLoader
         public extern static string GetGameDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetGameDataDirectory();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetAssemblyDirectory();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetMonoConfigDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsIl2CppGame();
         [MethodImpl(MethodImplOptions.InternalCall)]

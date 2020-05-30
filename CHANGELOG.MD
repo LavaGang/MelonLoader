@@ -10,8 +10,8 @@
 
 1. Fix the above issues.
 2. Add Debugger Support to Mono Domain.
-3. Set default Uncaught Exception Handler for all Mono Threads.
-4. Create Method for ModPrefs to Register Categories and Preferences in a single call.
+3. Create Method for ModPrefs to Register Categories and Preferences in a single call.
+4. OnLevelIsLoading needs fixing for other games than just BONEWORKS.
 5. Add Android Support.
 6. Add Linux Support.
 7. Add Mac OS Support.
@@ -72,6 +72,7 @@
 39. Revised Command Line Parsing.
 40. Fixed issue with the Log Cleaner deleting Logs that were not made by MelonLoader.
 41. Added Launch Option --melonloader.maxlogs. Sets the Max Logs for the Log Cleaner. Set as 0 to Disable the Log Cleaner.
+42. Added Global Exception Handler to the Mono Domain.
 
 ---
 

@@ -17,6 +17,7 @@ bool IsDebugMode() { return MelonLoader::DebugMode; }
 bool IsRainbowMode() { return MelonLoader::RainbowMode; }
 bool IsRandomRainbowMode() { return MelonLoader::RandomRainbowMode; }
 MonoString* GetGameDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::GamePath); }
+MonoString* GetGameDataDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::DataPath); }
 void Hook(Il2CppMethod* target, void* detour) { HookManager::Hook(target, detour); }
 void Unhook(Il2CppMethod* target, void* detour) { HookManager::Unhook(target, detour); }
 void Console_SetColor(ConsoleColor color) { Console::SetColor(color); }
@@ -25,6 +26,7 @@ MonoString* GetCompanyName() { return Mono::mono_string_new(Mono::Domain, ((Melo
 MonoString* GetProductName() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::ProductName == NULL) ? "UNKNOWN" : MelonLoader::ProductName)); }
 MonoString* GetUnityFileVersion() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::UnityFileVersion == NULL) ? "UNKNOWN" : MelonLoader::UnityFileVersion)); }
 MonoString* GetAssemblyDirectory() { return Mono::mono_string_new(Mono::Domain, Mono::AssemblyPath); }
+MonoString* GetMonoConfigDirectory() { return Mono::mono_string_new(Mono::Domain, Mono::ConfigPath); }
 
 void Exports::AddInternalCalls()
 {
@@ -40,7 +42,9 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRainbowMode", IsRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRandomRainbowMode", IsRandomRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDirectory", GetGameDirectory);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDataDirectory", GetGameDataDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetAssemblyDirectory", GetAssemblyDirectory);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetMonoConfigDirectory", GetMonoConfigDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Hook", Hook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Unhook", Unhook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AllocConsole", AllocConsole);

@@ -21,6 +21,7 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(AppDomain.CurrentDomain.BaseDirectory))
                 ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = Imports.GetGameDirectory();
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            AppDomain.CurrentDomain.UnhandledException += ExceptionHandler;
 
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
 
@@ -38,10 +39,10 @@ namespace MelonLoader
                 Console.Create();
             }
 
-            //if (Imports.IsIl2CppGame() && !AssemblyGenerator.Main.Initialize())
-            //    Imports.UNLOAD_MELONLOADER(true);
-            //else
-            //{
+            if (Imports.IsIl2CppGame() && !AssemblyGenerator.Main.Initialize())
+                Imports.UNLOAD_MELONLOADER(true);
+            else
+            {
                 LoadMods(true);
                 if (Mods.Count > 0)
                     for (int i = 0; i < Mods.Count; i++)
@@ -50,7 +51,7 @@ namespace MelonLoader
                         if (mod != null)
                             try { mod.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                     }
-            //}
+            }
         }
 
         private static void OnApplicationStart()
@@ -392,5 +393,7 @@ namespace MelonLoader
             else
                 MelonModLogger.LogError("Unable to load " + asm);
         }
+
+        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonModLogger.LogError((e.ExceptionObject as Exception).ToString());
     }
 }
