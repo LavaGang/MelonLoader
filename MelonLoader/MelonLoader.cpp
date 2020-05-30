@@ -258,6 +258,7 @@ long MelonLoader::GetFileSize(std::string filename)
 
 std::string MelonLoader::GetFileVersion(LPCSTR filepath)
 {
+	/*
 	DWORD infosize = GetFileVersionInfoSize(filepath, NULL);
 	if (infosize != NULL)
 	{
@@ -275,7 +276,8 @@ std::string MelonLoader::GetFileVersion(LPCSTR filepath)
 				+ std::to_string((fileinfo->dwFileVersionLS >> 0) & 0xff)
 				);
 	}
-	return "UNKNOWN";
+	*/
+	return "";
 }
 
 int MelonLoader::GetIntFromConstChar(const char* str, int defaultval)
