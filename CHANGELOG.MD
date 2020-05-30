@@ -22,7 +22,6 @@
 
 [v0.2.0 Open-Beta](#v020-open-beta)  
 [v0.1.0 Open-Beta](#v010-open-beta)  
-[v0.0.4 Release Candidate](#v004-release-candidate)  
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
@@ -78,12 +77,6 @@
 ---
 
 ### v0.1.0 Open-Beta:
-
-1. Initial Open-Beta Release.
-
----
-
-### v0.0.4 Release Candidate:
 
 1. Moved Exports in MelonLoader.ModHandler to Mono Internal Calls.
 2. Cleaned up Hooking for MelonLoader Internals.
