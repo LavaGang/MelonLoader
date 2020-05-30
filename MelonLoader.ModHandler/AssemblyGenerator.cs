@@ -38,6 +38,8 @@ namespace MelonLoader.AssemblyGenerator
             if (AssemblyGenerateCheck())
             {
                 MelonModLogger.Log("Assembly Generation Needed!");
+
+                /*
                 if (UnityDependencies.ShouldExtract)
                 {
                     Directory.Delete(UnityDependencies.BaseFolder, true);
@@ -49,6 +51,8 @@ namespace MelonLoader.AssemblyGenerator
                         return false;
                     }
                 }
+                */
+
                 Cleanup();
                 if (!AssemblyGenerate())
                     return false;
@@ -75,17 +79,31 @@ namespace MelonLoader.AssemblyGenerator
             BaseFolder = SetupDirectory(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "AssemblyGenerator"));
 
             Il2CppDumper.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppDumper"));
+            Il2CppDumper.TempFolder = TempFolder;
             Il2CppDumper.OutputDirectory = SetupDirectory(Path.Combine(Il2CppDumper.BaseFolder, "DummyDll"));
-            Il2CppDumper.AssemblyName = "Il2CppDumper.exe";
+            Il2CppDumper.ZipName = "Il2CppDumper.zip";
+            Il2CppDumper.FileName = "Il2CppDumper.exe";
             Il2CppDumper.TypeName = "Il2CppDumper.Program";
+            Il2CppDumper.UseGitHubRepo = true;
+            Il2CppDumper.GitHubRepo_User = "Prefare";
+            Il2CppDumper.GithubRepo_Project = "Il2CppDumper";
 
             Il2CppAssemblyUnhollower.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppAssemblyUnhollower"));
+            Il2CppAssemblyUnhollower.TempFolder = TempFolder;
             Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
-            Il2CppAssemblyUnhollower.AssemblyName = "Il2CppAssemblyUnhollower.exe";
+            Il2CppAssemblyUnhollower.ZipName = "Il2CppAssemblyUnhollower.zip";
+            Il2CppAssemblyUnhollower.FileName = "Il2CppAssemblyUnhollower.exe";
             Il2CppAssemblyUnhollower.TypeName = "AssemblyUnhollower.Program";
             Il2CppAssemblyUnhollower.isIl2CppAssemblyUnhollower = true;
+            Il2CppAssemblyUnhollower.UseGitHubRepo = true;
+            Il2CppAssemblyUnhollower.GitHubRepo_User = "knah";
+            Il2CppAssemblyUnhollower.GithubRepo_Project = "Il2CppAssemblyUnhollower";
 
             UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "UnityDependencies"));
+            UnityDependencies.TempFolder = TempFolder_UnityDependencies;
+            UnityDependencies.Version = Imports.GetUnityFileVersion();
+            UnityDependencies.ZipName = (UnityDependencies.Version + ".zip");
+            UnityDependencies.URL = "";
 
             localConfigPath = Path.Combine(BaseFolder, "config.json");
             if (File.Exists(localConfigPath))
@@ -96,9 +114,19 @@ namespace MelonLoader.AssemblyGenerator
                 tempConfig = Decoder.Decode(File.ReadAllText(tempConfigPath)).Make<TempConfig>();
         }
 
-        private static bool DownloadCheck() => (Il2CppDumper.DownloadCheck() || Il2CppAssemblyUnhollower.DownloadCheck() || UnityDependencies.DownloadCheck());
+        private static bool DownloadCheck()
+        {
+            if (string.IsNullOrEmpty(tempConfig.Version_Il2CppDumper) || Il2CppDumper.DownloadCheck())
+                Il2CppDumper.ShouldDownload = true;
+            if (string.IsNullOrEmpty(tempConfig.Version_Il2CppAssemblyUnhollower) || Il2CppAssemblyUnhollower.DownloadCheck())
+                Il2CppAssemblyUnhollower.ShouldDownload = true;
+            if (!tempConfig.UnityDependencies.Contains(UnityDependencies.Version))
+                UnityDependencies.ShouldDownload = true;
+            return (Il2CppDumper.ShouldDownload || Il2CppAssemblyUnhollower.ShouldDownload || UnityDependencies.ShouldDownload);
+        }
         private static bool Download()
         {
+            /*
             if (Il2CppDumper.ShouldDownload)
             {
                 MelonModLogger.Log("Downloading Il2CppDumper...");
@@ -107,7 +135,10 @@ namespace MelonLoader.AssemblyGenerator
                     MelonModLogger.LogError("Failed to Download Il2CppDumper!");
                     return false;
                 }
+                tempConfig.Version_Il2CppDumper = Il2CppDumper.Version;
             }
+            */
+
             if (Il2CppAssemblyUnhollower.ShouldDownload)
             {
                 MelonModLogger.Log("Downloading Il2CppAssemblyUnhollower...");
@@ -116,7 +147,10 @@ namespace MelonLoader.AssemblyGenerator
                     MelonModLogger.LogError("Failed to Download Il2CppAssemblyUnhollower!");
                     return false;
                 }
+                tempConfig.Version_Il2CppAssemblyUnhollower = Il2CppAssemblyUnhollower.Version;
             }
+
+            /*
             if (UnityDependencies.ShouldDownload)
             {
                 MelonModLogger.Log("Downloading Unity Dependencies for " + Imports.GetUnityFileVersion() + "...");
@@ -125,29 +159,28 @@ namespace MelonLoader.AssemblyGenerator
                     MelonModLogger.LogError("Failed to Download Unity Dependencies!");
                     return false;
                 }
+                tempConfig.UnityDependencies.Add(UnityDependencies.Version);
             }
+            */
+
             return true;
         }
 
         private static bool ExtractCheck()
         {
-            bool returnval = false;
-            if (string.IsNullOrEmpty(localConfig.Version_Il2CppDumper) || string.IsNullOrEmpty(tempConfig.Version_Il2CppDumper) || (localConfig.Version_Il2CppDumper != tempConfig.Version_Il2CppDumper))
-            {
+            if (string.IsNullOrEmpty(localConfig.Version_Il2CppDumper) || string.IsNullOrEmpty(tempConfig.Version_Il2CppDumper) || (localConfig.Version_Il2CppDumper != tempConfig.Version_Il2CppDumper) || Il2CppDumper.ExtractCheck())
                 Il2CppDumper.ShouldExtract = true;
-                returnval = true;
-            }
-            if (string.IsNullOrEmpty(localConfig.Version_Il2CppAssemblyUnhollower) || string.IsNullOrEmpty(tempConfig.Version_Il2CppAssemblyUnhollower) || (localConfig.Version_Il2CppAssemblyUnhollower != tempConfig.Version_Il2CppAssemblyUnhollower))
+            if (string.IsNullOrEmpty(localConfig.Version_Il2CppAssemblyUnhollower) || string.IsNullOrEmpty(tempConfig.Version_Il2CppAssemblyUnhollower) || (localConfig.Version_Il2CppAssemblyUnhollower != tempConfig.Version_Il2CppAssemblyUnhollower) || Il2CppAssemblyUnhollower.ExtractCheck())
             {
                 UnityDependencies.ShouldExtract = true;
                 Il2CppAssemblyUnhollower.ShouldExtract = true;
-                returnval = true;
             }
-            return returnval;
+            return (Il2CppDumper.ShouldExtract || Il2CppAssemblyUnhollower.ShouldExtract || UnityDependencies.ShouldExtract);
         }
 
         private static bool Extract()
         {
+            /*
             if (Il2CppDumper.ShouldExtract)
             {
                 MelonModLogger.Log("Extracting Il2CppDumper...");
@@ -157,6 +190,8 @@ namespace MelonLoader.AssemblyGenerator
                     return false;
                 }
             }
+            */
+
             if (Il2CppAssemblyUnhollower.ShouldExtract)
             {
                 MelonModLogger.Log("Extracting Il2CppAssemblyUnhollower...");
@@ -166,16 +201,17 @@ namespace MelonLoader.AssemblyGenerator
                     return false;
                 }
             }
+
             return true;
         }
 
         private static bool AssemblyGenerateCheck()
         {
-            if (string.IsNullOrEmpty(localConfig.UnityVersion) || (localConfig.UnityVersion != Imports.GetUnityFileVersion()))
-            {
-                UnityDependencies.ShouldExtract = true;
-                return true;
-            }
+            //if (string.IsNullOrEmpty(localConfig.UnityVersion) || (localConfig.UnityVersion != Imports.GetUnityFileVersion()))
+            //{
+            //    UnityDependencies.ShouldExtract = true;
+            //    return true;
+            //}
             string game_assembly_hash = null;
             using (var md5 = MD5.Create())
             {
@@ -301,25 +337,55 @@ namespace MelonLoader.AssemblyGenerator
 
     internal class Package
     {
+        internal string Version = null;
         internal string BaseFolder = null;
+        internal string TempFolder = null;
+        internal string ZipName = null;
+        internal string FileName = null;
+        internal string URL = null;
+        internal string GitHubRepo_User = null;
+        internal string GithubRepo_Project = null;
+        internal bool UseGitHubRepo = false;
         internal bool ShouldDownload = false;
         internal bool ShouldExtract = false;
 
         internal bool DownloadCheck()
         {
-
+            string filepath = Path.Combine(TempFolder, ZipName);
+            if (!File.Exists(filepath))
+                return true;
             return false;
         }
 
         internal bool Download()
         {
+            if (UseGitHubRepo)
+            {
+                // "http://api.github.com/repos/<GitHubRepo_User>/<GithubRepo_Project>/releases/latest"
+                // "http://github.com/<GitHubRepo_User>/<GithubRepo_Project>/releases/download/" + githubVersion + ZipName
 
+                WebRequest request = WebRequest.Create("http://api.github.com/repos/" + GitHubRepo_User + "/" + GithubRepo_Project + "/releases/latest");
+                request.Credentials = CredentialCache.DefaultCredentials;
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        MelonModLogger.Log(response.GetResponseStream().ToString());
+                    }
+                }
+            }
+            else
+            {
+
+            }
             return true;
         }
 
         internal bool ExtractCheck()
         {
-
+            string filepath = Path.Combine(BaseFolder, FileName);
+            if (!File.Exists(filepath))
+                return true;
             return false;
         }
 
@@ -333,13 +399,12 @@ namespace MelonLoader.AssemblyGenerator
     internal class Executable_Package : Package
     {
         internal string OutputDirectory = null;
-        internal string AssemblyName = null;
         internal string TypeName = null;
         internal bool isIl2CppAssemblyUnhollower = false;
 
         internal bool Execute(string[] argv)
         {
-            string assembly_path = Path.Combine(BaseFolder, AssemblyName);
+            string assembly_path = Path.Combine(BaseFolder, FileName);
             if (File.Exists(assembly_path))
             {
                 try
