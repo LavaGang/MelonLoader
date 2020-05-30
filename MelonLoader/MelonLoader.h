@@ -13,6 +13,7 @@ public:
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
 	static bool QuitFix;
+	static char* ExePath;
 	static char* GamePath;
 	static char* DataPath;
 	static char* CompanyName;

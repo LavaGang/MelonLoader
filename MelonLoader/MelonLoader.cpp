@@ -19,6 +19,7 @@ bool MelonLoader::DebugMode = false;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
+char* MelonLoader::ExePath = NULL;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 char* MelonLoader::CompanyName = NULL;
@@ -42,6 +43,10 @@ void MelonLoader::Main()
 		UnityPlayer::Module = exe_module;
 
 	std::string filepathstr = filepath;
+	ExePath = new char[filepathstr.size() + 1];
+	std::copy(filepathstr.begin(), filepathstr.end(), ExePath);
+	ExePath[filepathstr.size()] = '\0';
+
 	filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/"));
 	GamePath = new char[filepathstr.size() + 1];
 	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);

@@ -39,6 +39,9 @@ namespace MelonLoader
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetMonoConfigDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetExePath();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsIl2CppGame();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsDebugMode();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0618
@@ -399,6 +398,10 @@ namespace MelonLoader
         }
 
         private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonModLogger.LogError((e.ExceptionObject as Exception).ToString());
-        private static string GetUnityFileVersion() { string file_version = FileVersionInfo.GetVersionInfo(Environment.GetCommandLineArgs()[0]).FileVersion; return file_version.Substring(0, file_version.LastIndexOf('.')); }
+        private static string GetUnityFileVersion()
+        {
+            string file_version = FileVersionInfo.GetVersionInfo(Imports.GetExePath()).FileVersion;
+            return file_version.Substring(0, file_version.LastIndexOf('.'));
+        }
     }
 }
