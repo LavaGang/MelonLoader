@@ -24,7 +24,6 @@ void Console_SetColor(ConsoleColor color) { Console::SetColor(color); }
 bool IsOldMono() { return Mono::IsOldMono; }
 MonoString* GetCompanyName() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::CompanyName == NULL) ? "UNKNOWN" : MelonLoader::CompanyName)); }
 MonoString* GetProductName() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::ProductName == NULL) ? "UNKNOWN" : MelonLoader::ProductName)); }
-MonoString* GetUnityFileVersion() { return Mono::mono_string_new(Mono::Domain, ((MelonLoader::UnityFileVersion == NULL) ? "UNKNOWN" : MelonLoader::UnityFileVersion)); }
 MonoString* GetAssemblyDirectory() { return Mono::mono_string_new(Mono::Domain, Mono::AssemblyPath); }
 MonoString* GetMonoConfigDirectory() { return Mono::mono_string_new(Mono::Domain, Mono::ConfigPath); }
 
@@ -54,5 +53,4 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsOldMono", IsOldMono);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", GetCompanyName);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", GetProductName);
-	Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityFileVersion", GetUnityFileVersion);
 }

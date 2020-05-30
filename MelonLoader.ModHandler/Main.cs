@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0618
@@ -15,6 +17,7 @@ namespace MelonLoader
         public static bool IsVRChat = false;
         public static bool IsBoneworks = false;
         internal static Assembly Assembly_CSharp = null;
+        public static string UnityVersion = null;
 
         private static void Initialize()
         {
@@ -24,6 +27,7 @@ namespace MelonLoader
             AppDomain.CurrentDomain.UnhandledException += ExceptionHandler;
 
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
+            UnityVersion = GetUnityFileVersion();
 
             if (Imports.IsIl2CppGame())
             {
@@ -64,7 +68,7 @@ namespace MelonLoader
             SupportModule.Initialize();
 
             MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Unity " + SupportModule.GetUnityVersion());
+            MelonModLogger.Log("Unity " + UnityVersion);
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Name: " + CurrentGameAttribute.GameName);
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
@@ -395,5 +399,6 @@ namespace MelonLoader
         }
 
         private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonModLogger.LogError((e.ExceptionObject as Exception).ToString());
+        private static string GetUnityFileVersion() { string file_version = FileVersionInfo.GetVersionInfo(Environment.GetCommandLineArgs()[0]).FileVersion; return file_version.Substring(0, file_version.LastIndexOf('.')); }
     }
 }

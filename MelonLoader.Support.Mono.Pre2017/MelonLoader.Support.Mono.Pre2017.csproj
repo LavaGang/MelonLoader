@@ -53,6 +53,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">
       <Name>MelonLoader.ModHandler</Name>
+	  <Private>false</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

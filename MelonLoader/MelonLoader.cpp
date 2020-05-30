@@ -23,7 +23,6 @@ char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 char* MelonLoader::CompanyName = NULL;
 char* MelonLoader::ProductName = NULL;
-char* MelonLoader::UnityFileVersion = NULL;
 
 void MelonLoader::Main()
 {
@@ -41,11 +40,6 @@ void MelonLoader::Main()
 	long exe_size = GetFileSize(filepath);
 	if ((exe_size * 0.000001) > 10)
 		UnityPlayer::Module = exe_module;
-
-	std::string file_version = GetFileVersion(filepath);
-	UnityFileVersion = new char[file_version.size() + 1];
-	std::copy(file_version.begin(), file_version.end(), UnityFileVersion);
-	UnityFileVersion[file_version.size()] = '\0';
 
 	std::string filepathstr = filepath;
 	filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/"));
@@ -254,30 +248,6 @@ long MelonLoader::GetFileSize(std::string filename)
 {
 	struct stat stat_buf;
 	return ((stat(filename.c_str(), &stat_buf) == 0) ? stat_buf.st_size : -1);
-}
-
-std::string MelonLoader::GetFileVersion(LPCSTR filepath)
-{
-	/*
-	DWORD infosize = GetFileVersionInfoSize(filepath, NULL);
-	if (infosize != NULL)
-	{
-		UINT len = NULL;
-		VS_FIXEDFILEINFO* fileinfo = NULL;
-		LPSTR data = new char[infosize];
-		if (GetFileVersionInfo(filepath, NULL, infosize, data) && VerQueryValue(data, TEXT("\\"), (LPVOID*)&fileinfo, &len))
-			return (
-				std::to_string((fileinfo->dwProductVersionMS >> 16) & 0xff)
-				+ "."
-				+ std::to_string((fileinfo->dwProductVersionMS >> 0) & 0xff)
-				+ "."
-				+ std::to_string((fileinfo->dwFileVersionLS >> 16) & 0xff)
-				+ "."
-				+ std::to_string((fileinfo->dwFileVersionLS >> 0) & 0xff)
-				);
-	}
-	*/
-	return "";
 }
 
 int MelonLoader::GetIntFromConstChar(const char* str, int defaultval)
