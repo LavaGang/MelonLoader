@@ -13,45 +13,20 @@ namespace MelonLoader.AssemblyGenerator
         private static string GameAssembly_Path = null;
         private static string MSCORLIB_Path = null;
         internal static string BaseFolder = null;
-        internal static string TempFolder = null;
-        internal static string TempFolder_UnityDependencies = null;
         internal static string AssemblyFolder = null;
         private static Package UnityDependencies = new Package();
         private static Executable_Package Il2CppDumper = new Executable_Package();
         private static Executable_Package Il2CppAssemblyUnhollower = new Executable_Package();
         private static string localConfigPath = null;
         private static LocalConfig localConfig = new LocalConfig();
-        //private static string tempConfigPath = null;
-        //private static TempConfig tempConfig = new TempConfig();
         private static Il2CppConfig il2cppConfig = new Il2CppConfig();
 
         internal static bool Initialize()
         {
             Setup();
-            //if (DownloadCheck() && !Download())
-            //    return false;
-            //WriteTempConfig();
-            //if (ExtractCheck() && !Extract())
-            //    return false;
-            //WriteLocalConfigVersions();
             if (AssemblyGenerateCheck())
             {
                 MelonModLogger.Log("Assembly Generation Needed!");
-
-                /*
-                if (UnityDependencies.ShouldExtract)
-                {
-                    Directory.Delete(UnityDependencies.BaseFolder, true);
-                    UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "UnityDependencies"));
-                    MelonModLogger.Log("Extracting Unity Dependencies for " + MelonLoader.Main.UnityVersion + "...");
-                    if (!UnityDependencies.Download())
-                    {
-                        MelonModLogger.LogError("Failed to Extract Unity Dependencies!");
-                        return false;
-                    }
-                }
-                */
-
                 if (!AssemblyGenerate())
                     return false;
                 Cleanup();
@@ -67,145 +42,32 @@ namespace MelonLoader.AssemblyGenerator
 
             MSCORLIB_Path = Path.Combine(Imports.GetAssemblyDirectory(), "mscorlib.dll");
 
-            TempFolder = SetupDirectory(Path.Combine(Path.GetTempPath(), "MelonLoader"));
-            TempFolder_UnityDependencies = SetupDirectory(Path.Combine(TempFolder, "UnityDependencies"));
-
             AssemblyFolder = Imports.GetAssemblyDirectory();
 
             BaseFolder = SetupDirectory(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "AssemblyGenerator"));
 
             Il2CppDumper.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppDumper"));
-            Il2CppDumper.TempFolder = TempFolder;
             Il2CppDumper.OutputDirectory = SetupDirectory(Path.Combine(Il2CppDumper.BaseFolder, "DummyDll"));
-            Il2CppDumper.ZipName = "Il2CppDumper.zip";
             Il2CppDumper.FileName = "Il2CppDumper.exe";
             Il2CppDumper.TypeName = "Il2CppDumper.Program";
-            Il2CppDumper.UseGitHubRepo = true;
-            Il2CppDumper.GitHubRepo_User = "Prefare";
-            Il2CppDumper.GithubRepo_Project = "Il2CppDumper";
 
             Il2CppAssemblyUnhollower.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppAssemblyUnhollower"));
-            Il2CppAssemblyUnhollower.TempFolder = TempFolder;
             Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
-            Il2CppAssemblyUnhollower.ZipName = "Il2CppAssemblyUnhollower.zip";
             Il2CppAssemblyUnhollower.FileName = "AssemblyUnhollower.exe";
             Il2CppAssemblyUnhollower.TypeName = "AssemblyUnhollower.Program";
             Il2CppAssemblyUnhollower.isIl2CppAssemblyUnhollower = true;
-            Il2CppAssemblyUnhollower.UseGitHubRepo = true;
-            Il2CppAssemblyUnhollower.GitHubRepo_User = "knah";
-            Il2CppAssemblyUnhollower.GithubRepo_Project = "Il2CppAssemblyUnhollower";
 
             UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "UnityDependencies"));
-            UnityDependencies.TempFolder = TempFolder_UnityDependencies;
-            UnityDependencies.Version = MelonLoader.Main.UnityVersion;
-            UnityDependencies.ZipName = (UnityDependencies.Version + ".zip");
-            UnityDependencies.URL = "http://github.com/HerpDerpinstine/MelonLoader/BaseLibs/UnityDependencies";
 
             localConfigPath = Path.Combine(BaseFolder, "config.json");
             if (File.Exists(localConfigPath))
                 localConfig = Decoder.Decode(File.ReadAllText(localConfigPath)).Make<LocalConfig>();
-
-            //tempConfigPath = Path.Combine(TempFolder, "config.json");
-            //if (File.Exists(tempConfigPath))
-            //    tempConfig = Decoder.Decode(File.ReadAllText(tempConfigPath)).Make<TempConfig>();
         }
-
-        /*
-        private static bool DownloadCheck()
-        {
-            Il2CppDumper.Version = tempConfig.Version_Il2CppDumper;
-            if (Il2CppDumper.DownloadCheck())
-                Il2CppDumper.ShouldDownload = true;
-            Il2CppAssemblyUnhollower.Version = tempConfig.Version_Il2CppAssemblyUnhollower;
-            if (Il2CppAssemblyUnhollower.DownloadCheck())
-                Il2CppAssemblyUnhollower.ShouldDownload = true;
-            if (!tempConfig.UnityDependencies.Contains(UnityDependencies.Version))
-                UnityDependencies.ShouldDownload = true;
-            return (Il2CppDumper.ShouldDownload || Il2CppAssemblyUnhollower.ShouldDownload || UnityDependencies.ShouldDownload);
-        }
-        private static bool Download()
-        {
-            if (Il2CppDumper.ShouldDownload)
-            {
-                MelonModLogger.Log("Downloading Il2CppDumper...");
-                if (!Il2CppDumper.Download())
-                {
-                    MelonModLogger.LogError("Failed to Download Il2CppDumper!");
-                    return false;
-                }
-                tempConfig.Version_Il2CppDumper = Il2CppDumper.Version;
-            }
-
-            if (Il2CppAssemblyUnhollower.ShouldDownload)
-            {
-                MelonModLogger.Log("Downloading Il2CppAssemblyUnhollower...");
-                if (!Il2CppAssemblyUnhollower.Download())
-                {
-                    MelonModLogger.LogError("Failed to Download Il2CppAssemblyUnhollower!");
-                    return false;
-                }
-                tempConfig.Version_Il2CppAssemblyUnhollower = Il2CppAssemblyUnhollower.Version;
-            }
-
-            if (UnityDependencies.ShouldDownload)
-            {
-                MelonModLogger.Log("Downloading Unity Dependencies for " + MelonLoader.Main.UnityVersion + "...");
-                if (!UnityDependencies.Download())
-                {
-                    MelonModLogger.LogError("Failed to Download Unity Dependencies!");
-                    return false;
-                }
-                tempConfig.UnityDependencies.Add(UnityDependencies.Version);
-            }
-
-            return true;
-        }
-
-        private static bool ExtractCheck()
-        {
-            if (string.IsNullOrEmpty(localConfig.Version_Il2CppDumper) || string.IsNullOrEmpty(tempConfig.Version_Il2CppDumper) || (localConfig.Version_Il2CppDumper != tempConfig.Version_Il2CppDumper) || Il2CppDumper.ExtractCheck())
-                Il2CppDumper.ShouldExtract = true;
-            if (string.IsNullOrEmpty(localConfig.Version_Il2CppAssemblyUnhollower) || string.IsNullOrEmpty(tempConfig.Version_Il2CppAssemblyUnhollower) || (localConfig.Version_Il2CppAssemblyUnhollower != tempConfig.Version_Il2CppAssemblyUnhollower) || Il2CppAssemblyUnhollower.ExtractCheck())
-            {
-                UnityDependencies.ShouldExtract = true;
-                Il2CppAssemblyUnhollower.ShouldExtract = true;
-            }
-            return (Il2CppDumper.ShouldExtract || Il2CppAssemblyUnhollower.ShouldExtract || UnityDependencies.ShouldExtract);
-        }
-
-        private static bool Extract()
-        {
-            if (Il2CppDumper.ShouldExtract)
-            {
-                MelonModLogger.Log("Extracting Il2CppDumper...");
-                if (!Il2CppDumper.Extract())
-                {
-                    MelonModLogger.LogError("Failed to Extract Il2CppDumper!");
-                    return false;
-                }
-            }
-
-            if (Il2CppAssemblyUnhollower.ShouldExtract)
-            {
-                MelonModLogger.Log("Extracting Il2CppAssemblyUnhollower...");
-                if (!Il2CppAssemblyUnhollower.Extract())
-                {
-                    MelonModLogger.LogError("Failed to Extract Il2CppAssemblyUnhollower!");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        */
 
         private static bool AssemblyGenerateCheck()
         {
             if (string.IsNullOrEmpty(localConfig.UnityVersion) || (localConfig.UnityVersion != MelonLoader.Main.UnityVersion))
-            {
-                UnityDependencies.ShouldExtract = true;
                 return true;
-            }
             string game_assembly_hash = null;
             using (var md5 = MD5.Create())
             {
@@ -216,10 +78,7 @@ namespace MelonLoader.AssemblyGenerator
                 }
             }
             if (string.IsNullOrEmpty(localConfig.GameAssemblyHash) || (game_assembly_hash != localConfig.GameAssemblyHash))
-            {
-                UnityDependencies.ShouldExtract = true;
                 return true;
-            }
             return false;
         }
 
@@ -273,7 +132,6 @@ namespace MelonLoader.AssemblyGenerator
                 }
                 localConfig.OldFiles.Clear();
             }
-
             string[] files = Directory.GetFiles(Il2CppAssemblyUnhollower.OutputDirectory, "*.dll", SearchOption.TopDirectoryOnly);
             if (files.Length > 0)
             {
@@ -288,20 +146,14 @@ namespace MelonLoader.AssemblyGenerator
                     }
                 }
             }
-
-            //Directory.Delete(Il2CppDumper.OutputDirectory, true);
-            //Il2CppDumper.OutputDirectory = SetupDirectory(Path.Combine(Il2CppDumper.BaseFolder, "DummyDll"));
-
             Directory.Delete(Il2CppAssemblyUnhollower.OutputDirectory, true);
             Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
         }
 
         private static string SetupDirectory(string path) { if (!Directory.Exists(path)) Directory.CreateDirectory(path); return path; }
         private static void FixIl2CppDumperConfig() => File.WriteAllText(Path.Combine(Il2CppDumper.BaseFolder, "config.json"), Encoder.Encode(il2cppConfig, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
-        //private static void WriteTempConfig() => File.WriteAllText(tempConfigPath, Encoder.Encode(tempConfig, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
         private static void WriteLocalConfig()
         {
-            WriteLocalConfigVersions();
             localConfig.UnityVersion = MelonLoader.Main.UnityVersion;
             using (var md5 = MD5.Create())
             {
@@ -313,70 +165,13 @@ namespace MelonLoader.AssemblyGenerator
             }
             File.WriteAllText(localConfigPath, Encoder.Encode(localConfig, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
         }
-        private static void WriteLocalConfigVersions()
-        {
-            //localConfig.Version_Il2CppDumper = tempConfig.Version_Il2CppDumper;
-            //localConfig.Version_Il2CppAssemblyUnhollower = tempConfig.Version_Il2CppAssemblyUnhollower;
-            //File.WriteAllText(localConfigPath, Encoder.Encode(localConfig, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
-        }
     }
 
     internal class Package
     {
         internal string Version = null;
         internal string BaseFolder = null;
-        internal string TempFolder = null;
-        internal string ZipName = null;
         internal string FileName = null;
-        internal string URL = null;
-        internal string GitHubRepo_User = null;
-        internal string GithubRepo_Project = null;
-        internal bool UseGitHubRepo = false;
-        internal bool ShouldDownload = false;
-        internal bool ShouldExtract = false;
-        /*
-        internal bool DownloadCheck()
-        {
-            if (string.IsNullOrEmpty(Version))
-                 return true;
-            string filepath = Path.Combine(TempFolder, ZipName);
-            if (!File.Exists(filepath))
-                return true;
-            if (UseGitHubRepo)
-            {
-               // string url = "https://api.github.com/repos/" + GitHubRepo_User + "/" + GithubRepo_Project + "/releases/latest";
-                
-            }
-            return false;
-        }
-
-        internal bool Download()
-        {
-            if (UseGitHubRepo)
-            {
-                // string url = "http://github.com/" + GitHubRepo_User + "/" + GithubRepo_Project + "/releases/download/" + Version + "/" + ZipName;
-            }
-            else
-            {
-
-            }
-            return true;
-        }
-
-        internal bool ExtractCheck()
-        {
-            string filepath = Path.Combine(BaseFolder, FileName);
-            if (!File.Exists(filepath))
-                return true;
-            return false;
-        }
-
-        internal bool Extract()
-        {
-
-            return true;
-        }
-        */
     }
 
     internal class Executable_Package : Package
@@ -443,17 +238,6 @@ namespace MelonLoader.AssemblyGenerator
     {
         public string UnityVersion = null;
         public string GameAssemblyHash = null;
-        public string Version_Il2CppDumper = null;
-        public string Version_Il2CppAssemblyUnhollower = null;
         public List<string> OldFiles = new List<string>();
     }
-
-    /*
-    internal class TempConfig
-    {
-        public string Version_Il2CppDumper = null;
-        public string Version_Il2CppAssemblyUnhollower = null;
-        public List<string> UnityDependencies = new List<string>();
-    }
-    */
 }
