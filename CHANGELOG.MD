@@ -73,6 +73,7 @@
 40. Fixed issue with the Log Cleaner deleting Logs that were not made by MelonLoader.
 41. Added Launch Option --melonloader.maxlogs. Sets the Max Logs for the Log Cleaner. Set as 0 to Disable the Log Cleaner.
 42. Added Global Exception Handler to the Mono Domain.
+43. Added Assembly Generation Integration.
 
 ---
 
