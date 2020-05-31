@@ -142,7 +142,7 @@ namespace MelonLoader.AssemblyGenerator
                     {
                         string filename = Path.GetFileName(file);
                         localConfig.OldFiles.Add(filename);
-                        File.Copy(file, Path.Combine(AssemblyFolder, filename));
+                        File.Copy(file, Path.Combine(AssemblyFolder, filename), true);
                     }
                 }
             }
