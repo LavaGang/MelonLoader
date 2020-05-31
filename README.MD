@@ -15,8 +15,8 @@
 
 1.  Download MelonLoader_Il2Cpp.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 2.  Extract MelonLoader_Il2Cpp.zip to the Game's Installation Folder.
-3.  Download the Unity Dependencies for the Game's Engine Version from [BaseLibs/UnityDependencies](https://github.com/HerpDerpinstine/MelonLoader/BaseLibs/UnityDependencies).
-4.  Extract the Unity Dependencies to MelonLoader/AssemblyGenerator/Il2CppAssemblyUnhollower/UnityDependencies in the Game's Installation Folder.
+3.  Download the Unity Dependencies ZIP for the Game's Engine Version from [BaseLibs/UnityDependencies](https://github.com/HerpDerpinstine/MelonLoader/BaseLibs/UnityDependencies).
+4.  Extract the ZIP to MelonLoader/AssemblyGenerator/Il2CppAssemblyUnhollower/UnityDependencies in the Game's Installation Folder.
 
 ---
 
