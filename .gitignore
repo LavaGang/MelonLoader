@@ -49,6 +49,12 @@ TestMod\.vs
 TestModCpp\bin
 TestModCpp\obj
 TestModCpp\.vs
+MelonLoader.GeneratorProcess\bin
+MelonLoader.GeneratorProcess\obj
+MelonLoader.GeneratorProcess\.vs
+MelonLoader.Installer\bin
+MelonLoader.Installer\obj
+MelonLoader.Installer\.vs
 version\bin
 version\obj
 version\.vs

@@ -8,7 +8,7 @@ namespace MelonLoader.GeneratorProcess
         {
             if (args.Length != 3)
             {
-                MelonModLogger.LogError("Bad arguments for generator process; expected 2 arguments: <unityVersion> <gameRoot> <gameData>");
+                Logger.LogError("Bad arguments for generator process; expected 2 arguments: <unityVersion> <gameRoot> <gameData>");
                 return -1;
             }
 
@@ -18,8 +18,8 @@ namespace MelonLoader.GeneratorProcess
             }
             catch (Exception ex)
             {
-                MelonModLogger.LogError("Failed to generate assemblies;");
-                MelonModLogger.LogError(ex.ToString());
+                Logger.LogError("Failed to generate assemblies;");
+                Logger.LogError(ex.ToString());
                 
                 return -3;
             }

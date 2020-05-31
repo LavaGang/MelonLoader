@@ -2,7 +2,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 
-namespace MelonLoader.GeneratorProcess
+namespace MelonLoader.Installer
 {
     public static class DownloaderAndUnpacker
     {
@@ -11,11 +11,10 @@ namespace MelonLoader.GeneratorProcess
             var downloadVersionMark = Path.Combine(destinationFolder, ".v-" + targetVersion);
             if (File.Exists(downloadVersionMark))
             {
-                Logger.Log($"{destinationFolder} already contains required version, skipping download");
+                //Logger.Log($"{destinationFolder} already contains required version, skipping download");
                 return;
             }
-            
-            Logger.Log($"Cleaning {destinationFolder}");
+            //Logger.Log($"Cleaning {destinationFolder}");
             foreach (var entry in Directory.EnumerateFileSystemEntries(destinationFolder))
             {
                 if (Directory.Exists(entry))
@@ -23,23 +22,19 @@ namespace MelonLoader.GeneratorProcess
                 else
                     File.Delete(entry);
             }
-
             var tempFile = Path.GetTempFileName();
-            Logger.Log($"Downloading {url} to {tempFile}");
+            //Logger.Log($"Downloading {url} to {tempFile}");
             new WebClient().DownloadFile(url, tempFile);
-            Logger.Log($"Extracting {tempFile} to {destinationFolder}");
-            
-            using var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read);
-            using var zip = new ZipArchive(stream);
-            
+            //Logger.Log($"Extracting {tempFile} to {destinationFolder}");
+            var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read);
+            var zip = new ZipArchive(stream);
             foreach (var zipArchiveEntry in zip.Entries)
             {
-                Logger.Log($"Extracting {zipArchiveEntry.FullName}");
-                using var entryStream = zipArchiveEntry.Open();
-                using var targetStream = new FileStream(Path.Combine(destinationFolder, zipArchiveEntry.FullName), FileMode.OpenOrCreate, FileAccess.Write);
+                //Logger.Log($"Extracting {zipArchiveEntry.FullName}");
+                var entryStream = zipArchiveEntry.Open();
+                var targetStream = new FileStream(Path.Combine(destinationFolder, zipArchiveEntry.FullName), FileMode.OpenOrCreate, FileAccess.Write);
                 entryStream.CopyTo(targetStream);
             }
-            
             File.WriteAllBytes(downloadVersionMark, new byte[0]);
         }
     }

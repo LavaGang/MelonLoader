@@ -27,11 +27,11 @@ namespace MelonLoader.AssemblyGenerator
             PreSetup(gameRoot);
             if (AssemblyGenerateCheck(unityVersion))
             {
-                MelonModLogger.Log("Assembly Generation Needed!");
+                Logger.Log("Assembly Generation Needed!");
                 if (!AssemblyGenerate(gameRoot, unityVersion, gameDataDir))
                     return false;
                 Cleanup();
-                MelonModLogger.Log("Assembly Generation was Successful!");
+                Logger.Log("Assembly Generation was Successful!");
             }
             WriteLocalConfig(unityVersion);
             return true;
@@ -85,19 +85,19 @@ namespace MelonLoader.AssemblyGenerator
 
         private static void DownloadDependencies(string unityVersion)
         {
-            MelonModLogger.Log("Downloading Il2CppDumper");
-            DownloaderAndUnpacker.DownloadAndUnpack(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, Il2CppDumper.BaseFolder);
-            MelonModLogger.Log("Downloading Il2CppAssemblyUnhollower");
-            DownloaderAndUnpacker.DownloadAndUnpack(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, Il2CppAssemblyUnhollower.BaseFolder);
-            MelonModLogger.Log("Downloading unity dependencies");
+            Logger.Log("Downloading Il2CppDumper");
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, Il2CppDumper.BaseFolder);
+            Logger.Log("Downloading Il2CppAssemblyUnhollower");
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, Il2CppAssemblyUnhollower.BaseFolder);
+            Logger.Log("Downloading unity dependencies");
             try
             {
-                DownloaderAndUnpacker.DownloadAndUnpack($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, UnityDependencies.BaseFolder);
+                DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, UnityDependencies.BaseFolder);
             }
             catch (Exception ex)
             {
-                MelonModLogger.LogError("Can't download unity dependencies, no unstripping will be done");
-                MelonModLogger.Log(ex.ToString());
+                Logger.LogError("Can't download unity dependencies, no unstripping will be done");
+                Logger.Log(ex.ToString());
             }
         }
 
@@ -109,17 +109,17 @@ namespace MelonLoader.AssemblyGenerator
             
             FixIl2CppDumperConfig();
 
-            MelonModLogger.Log("Executing Il2CppDumper...");
+            Logger.Log("Executing Il2CppDumper...");
             if (!Il2CppDumper.Execute(new string[] {
                 GameAssembly_Path,
                 Path.Combine(gameDataDir, "il2cpp_data", "Metadata", "global-metadata.dat")
             }))
             {
-                MelonModLogger.LogError("Failed to Execute Il2CppDumper!");
+                Logger.LogError("Failed to Execute Il2CppDumper!");
                 return false;
             }
 
-            MelonModLogger.Log("Executing Il2CppAssemblyUnhollower...");
+            Logger.Log("Executing Il2CppAssemblyUnhollower...");
             if (!Il2CppAssemblyUnhollower.Execute(new string[] {
                 ("--input=" + Il2CppDumper.OutputDirectory),
                 ("--output=" + Il2CppAssemblyUnhollower.OutputDirectory),
@@ -130,7 +130,7 @@ namespace MelonLoader.AssemblyGenerator
                 "--blacklist-assembly=Valve.Newtonsoft.Json"
             }))
             {
-                MelonModLogger.LogError("Failed to Execute Il2CppAssemblyUnhollower!");
+                Logger.LogError("Failed to Execute Il2CppAssemblyUnhollower!");
                 return false;
             }
 
@@ -237,7 +237,7 @@ namespace MelonLoader.AssemblyGenerator
                 }
                 catch (Exception e)
                 {
-                    MelonModLogger.LogError(e.ToString());
+                    Logger.LogError(e.ToString());
                     return false;
                 }
                 finally
