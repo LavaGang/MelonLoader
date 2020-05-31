@@ -3,10 +3,14 @@
 #include <direct.h>
 #include <ctime>
 #include <list>
+#include <string>
 #include "Logger.h"
 #include "MelonLoader.h"
 
-LogStream Logger::logFile;
+LogStream Logger::LogFile;
+int Logger::MaxLogs = 10;
+const char* Logger::FilePrefix = "MelonLoader_";
+const char* Logger::FileExtention = "log";
 
 void Logger::Initialize(std::string filepathstr)
 {
@@ -21,20 +25,30 @@ void Logger::Initialize(std::string filepathstr)
 	else
 		CleanOldLogs(logFolderPath);
 	std::stringstream filepath;
-	filepath << logFolderPath << "\\MelonLoader_" << std::put_time(&bt, "%y-%m-%d_%OH-%OM-%OS") << "." << std::setfill('0') << std::setw(3) << ms.count() << ".log";
-	logFile.coss = std::ofstream(filepath.str());
+	filepath << logFolderPath << "\\" << FilePrefix << std::put_time(&bt, "%y-%m-%d_%OH-%OM-%OS") << "." << std::setfill('0') << std::setw(3) << ms.count() << "." << FileExtention;
+	LogFile.coss = std::ofstream(filepath.str());
 }
 
 void Logger::CleanOldLogs(std::string logFolderPath)
 {
-	std::list<std::filesystem::directory_entry>entry_list;
-	for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(logFolderPath))
-		entry_list.push_back(entry);
-	if (entry_list.size() >= 10)
+	if (MaxLogs > 0)
 	{
-		entry_list.sort(Logger::CompareWritetime);
-		for (std::list<std::filesystem::directory_entry>::iterator it = std::next(entry_list.begin(), 9); it != entry_list.end(); ++it)
-			remove((*it).path().u8string().c_str());
+		std::list<std::filesystem::directory_entry>entry_list;
+		for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(logFolderPath))
+		{
+			if (entry.is_regular_file())
+			{
+				std::string entry_file = entry.path().filename().generic_string();
+				if ((entry_file.rfind(FilePrefix, NULL) == NULL) && (entry_file.rfind(FileExtention) == (entry_file.size() - std::string(FileExtention).size())))
+					entry_list.push_back(entry);
+			}
+		}
+		if (entry_list.size() >= MaxLogs)
+		{
+			entry_list.sort(Logger::CompareWritetime);
+			for (std::list<std::filesystem::directory_entry>::iterator it = std::next(entry_list.begin(), (MaxLogs - 1)); it != entry_list.end(); ++it)
+				remove((*it).path().u8string().c_str());
+		}
 	}
 }
 
@@ -48,7 +62,7 @@ void Logger::LogTimestamp(ConsoleColor color)
 
 	std::stringstream output;
 	output << std::put_time(&bt, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
-	logFile << "[" << output.str() << "] ";
+	LogFile << "[" << output.str() << "] ";
 
 	if (MelonLoader::DebugMode)
 	{
@@ -61,7 +75,7 @@ void Logger::LogTimestamp(ConsoleColor color)
 void Logger::Log(const char* txt)
 {
 	LogTimestamp();
-	logFile << txt << std::endl;
+	LogFile << txt << std::endl;
 	if (MelonLoader::DebugMode)
 	{
 		Console::Write("[");
@@ -74,7 +88,7 @@ void Logger::Log(const char* txt)
 void Logger::Log(const char* txt, ConsoleColor color)
 {
 	LogTimestamp(color);
-	logFile << txt << std::endl;
+	LogFile << txt << std::endl;
 	if (MelonLoader::DebugMode)
 	{
 		Console::Write("[");
@@ -84,10 +98,32 @@ void Logger::Log(const char* txt, ConsoleColor color)
 	}
 }
 
+void Logger::LogWarning(const char* txt)
+{
+	LogTimestamp(ConsoleColor_Yellow);
+	LogFile << "[Warning] " << txt << std::endl;
+	if (MelonLoader::DebugMode)
+	{
+		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+		Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+	}
+}
+
+void Logger::LogWarning(const char* namesection, const char* txt)
+{
+	LogTimestamp(ConsoleColor_Yellow);
+	LogFile << namesection << "[Warning] " << txt << std::endl;
+	if (MelonLoader::DebugMode)
+	{
+		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+		Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+	}
+}
+
 void Logger::LogError(const char* txt)
 {
 	LogTimestamp(ConsoleColor_Red);
-	logFile << "[Error] " << txt << std::endl;
+	LogFile << "[Error] " << txt << std::endl;
 	if (MelonLoader::DebugMode)
 	{
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
@@ -98,7 +134,7 @@ void Logger::LogError(const char* txt)
 void Logger::LogError(const char* namesection, const char* txt)
 {
 	LogTimestamp(ConsoleColor_Red);
-	logFile << namesection << "[Error] " << txt << std::endl;
+	LogFile << namesection << "[Error] " << txt << std::endl;
 	if (MelonLoader::DebugMode)
 	{
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
@@ -109,7 +145,7 @@ void Logger::LogError(const char* namesection, const char* txt)
 void Logger::LogModError(const char* namesection, const char* msg)
 {
 	LogTimestamp(ConsoleColor_Yellow);
-	logFile << namesection << "[Error] " << msg << std::endl;
+	LogFile << namesection << "[Error] " << msg << std::endl;
 	if (MelonLoader::DebugMode)
 	{
 		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
@@ -120,7 +156,7 @@ void Logger::LogModError(const char* namesection, const char* msg)
 void Logger::LogModStatus(int type)
 {
 	LogTimestamp();
-	logFile << "Status: " << ((type == 0) ? "Universal" : ((type == 1) ? "Compatible" : ((type == 2) ? "No MelonModGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
+	LogFile << "Status: " << ((type == 0) ? "Universal" : ((type == 1) ? "Compatible" : ((type == 2) ? "No MelonModGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
 	if (MelonLoader::DebugMode)
 	{
 		Console::Write("[");

@@ -90,7 +90,7 @@ namespace Harmony.Tools
 				.Do(method => potentialMethodsToUpgrade.Add(MethodKey(method), method));
 
 			var otherHarmonyAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-					.Where(assembly => IsHarmonyAssembly(assembly) && assembly != ourAssembly)
+					.Where(assembly => IsHarmonyAssembly(assembly) && !assembly.Equals(ourAssembly))
 					.ToList();
 
 			if (HarmonyInstance.DEBUG)

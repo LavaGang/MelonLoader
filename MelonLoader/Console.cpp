@@ -12,7 +12,7 @@ void Console::Create()
 		{
 			SetConsoleTitle("MelonLoader Debug Console");
 			SetForegroundWindow(GetConsoleWindow());
-			freopen_s(reinterpret_cast<FILE * *>(stdout), "CONOUT$", "w", stdout);
+			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
 		else
 			MessageBox(NULL, "Failed to Create Debug Console!", NULL, MB_OK | MB_ICONEXCLAMATION);

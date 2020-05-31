@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=visualstudio,visualstudiocode
 
@@ -35,12 +34,31 @@ MelonLoader\.vs
 MelonLoader.ModHandler\bin
 MelonLoader.ModHandler\obj
 MelonLoader.ModHandler\.vs
+MelonLoader.Support.Il2Cpp\bin
+MelonLoader.Support.Il2Cpp\obj
+MelonLoader.Support.Il2Cpp\.vs
+MelonLoader.Support.Mono\bin
+MelonLoader.Support.Mono\obj
+MelonLoader.Support.Mono\.vs
+MelonLoader.Support.Mono472\bin
+MelonLoader.Support.Mono472\obj
+MelonLoader.Support.Mono472\.vs
 TestMod\bin
 TestMod\obj
 TestMod\.vs
-winmm\bin
-winmm\obj
-winmm\.vs
+TestModCpp\bin
+TestModCpp\obj
+TestModCpp\.vs
+version\bin
+version\obj
+version\.vs
+Detours\samples
+Detours\lib.X86
+Detours\lib.X64
+Detours\bin.X86
+Detours\bin.X64
+Detours\src\obj.X86
+Detours\src\obj.X64
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -381,3 +399,10 @@ healthchecksdb
 MigrationBackup/
 
 # End of https://www.gitignore.io/api/visualstudio,visualstudiocode
+
+# JetBrains Rider
+/.idea
+/Detours/lib.X64
+/Detours/lib.X86
+/MelonLoader_Mono.zip
+/MelonLoader_Il2Cpp.zip

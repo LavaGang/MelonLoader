@@ -2,6 +2,7 @@
 #include "MelonLoader.h"
 #include "PointerUtils.h"
 #include "Logger.h"
+#include "Mono.h"
 
 bool AssertionManager::Result = false;
 const char* AssertionManager::FileName = NULL;
@@ -26,7 +27,9 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 			MessageBox(NULL, msg.c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		else
 			MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-		MelonLoader::UNLOAD();
+		MelonLoader::UNLOAD(true);
+		if (MelonLoader::IsGameIl2Cpp)
+			Mono::Unload();
 	}
 }
 
@@ -80,6 +83,18 @@ uintptr_t AssertionManager::FindPattern(HMODULE mod, const char* name, const cha
 		returnval = PointerUtils::FindPattern(mod, target_pattern);
 		if (returnval == NULL)
 			ThrowError((std::string("Failed to FindPattern ( ") + name + " )"));
+	}
+	return returnval;
+}
+
+uintptr_t AssertionManager::FindBestPossiblePattern(HMODULE mod, const char* name, std::vector<const char*> target_patterns)
+{
+	uintptr_t returnval = NULL;
+	if (!Result)
+	{
+		returnval = PointerUtils::FindBestPossiblePattern(mod, target_patterns);
+		if (returnval == NULL)
+			ThrowError((std::string("Failed to FindBestPossiblePattern ( ") + name + " )"));
 	}
 	return returnval;
 }

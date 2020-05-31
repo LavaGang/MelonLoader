@@ -1,38 +1,56 @@
 #include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <memory>
 #include "MelonLoader.h"
 #include "Console.h"
 #include "Mono.h"
 #include "HookManager.h"
 #include "Logger.h"
 #include "ModHandler.h"
-#include "MonoUnityPlayer.h"
+#include "UnityPlayer.h"
 
-bool MelonLoader::IsGameIl2Cpp = false;
 HINSTANCE MelonLoader::thisdll = NULL;
+int MelonLoader::CommandLineC = NULL;
+char* MelonLoader::CommandLineV[64];
+bool MelonLoader::IsGameIl2Cpp = false;
 bool MelonLoader::DebugMode = false;
-bool MelonLoader::MupotMode = false;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
+bool MelonLoader::QuitFix = false;
+char* MelonLoader::ExePath = NULL;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
+char* MelonLoader::CompanyName = NULL;
+char* MelonLoader::ProductName = NULL;
 
 void MelonLoader::Main()
 {
-	LPSTR filepath = new CHAR[MAX_PATH];
-	GetModuleFileName(GetModuleHandle(NULL), filepath, MAX_PATH);
-	std::string filepathstr = filepath;
-	filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/"));
+	ParseCommandLine();
 
+#ifdef DEBUG
+	Console::Create();
+	DebugMode = true;
+#endif
+
+	LPSTR filepath = new CHAR[MAX_PATH];
+	HMODULE exe_module = GetModuleHandle(NULL);
+	GetModuleFileName(exe_module, filepath, MAX_PATH);
+
+	long exe_size = GetFileSize(filepath);
+	if ((exe_size * 0.000001) > 10)
+		UnityPlayer::Module = exe_module;
+
+	std::string filepathstr = filepath;
+	ExePath = new char[filepathstr.size() + 1];
+	std::copy(filepathstr.begin(), filepathstr.end(), ExePath);
+	ExePath[filepathstr.size()] = '\0';
+
+	filepathstr = filepathstr.substr(0, filepathstr.find_last_of("\\/"));
 	GamePath = new char[filepathstr.size() + 1];
 	std::copy(filepathstr.begin(), filepathstr.end(), GamePath);
 	GamePath[filepathstr.size()] = '\0';
-
-	if (strstr(GetCommandLine(), "--melonloader.mupot") != NULL)
-		MupotMode = true;
-	if (strstr(GetCommandLine(), "--melonloader.rainbow") != NULL)
-		RainbowMode = true;
-	if (strstr(GetCommandLine(), "--melonloader.randomrainbow") != NULL)
-		RandomRainbowMode = true;
 
 	std::string gameassemblypath = filepathstr + "\\GameAssembly.dll";
 	WIN32_FIND_DATA data;
@@ -41,16 +59,6 @@ void MelonLoader::Main()
 		IsGameIl2Cpp = true;
 
 	Logger::Initialize(filepathstr);
-
-#ifndef _DEBUG
-	if (strstr(GetCommandLine(), "--melonloader.debug") != NULL)
-	{
-#endif
-		Console::Create();
-		DebugMode = true;
-#ifndef _DEBUG
-	}
-#endif
 
 	std::string pdatapath = filepathstr + "\\*_Data";
 	h = FindFirstFile(pdatapath.c_str(), &data);
@@ -66,52 +74,149 @@ void MelonLoader::Main()
 		std::copy(ndatapath.begin(), ndatapath.end(), DataPath);
 		DataPath[ndatapath.size()] = '\0';
 
+		std::string assemblypath = std::string();
+		std::string basepath = std::string();
+		std::string configpath = std::string();
 		if (IsGameIl2Cpp)
 		{
-			std::string configpath = ndatapath + "\\il2cpp_data\\etc";
-			Mono::ConfigPath = new char[configpath.size() + 1];
-			std::copy(configpath.begin(), configpath.end(), Mono::ConfigPath);
-			Mono::ConfigPath[configpath.size()] = '\0';
-
-			std::string assemblypath = filepathstr + "\\MelonLoader\\Managed";
+			assemblypath = filepathstr + "\\MelonLoader\\Managed";
+			basepath = filepathstr + "\\MelonLoader\\Mono";
+			configpath = ndatapath + "\\il2cpp_data\\etc";
+		}
+		else
+		{
+			assemblypath = ndatapath + "\\Managed";
+			std::string newbasepath = filepathstr + "\\Mono";
+			h = FindFirstFile(newbasepath.c_str(), &data);
+			if (h == INVALID_HANDLE_VALUE)
+			{
+				newbasepath = ndatapath + "\\Mono";
+				h = FindFirstFile(newbasepath.c_str(), &data);
+			}
+			if (h == INVALID_HANDLE_VALUE)
+			{
+				newbasepath = filepathstr + "\\MonoBleedingEdge";
+				h = FindFirstFile(newbasepath.c_str(), &data);
+			}
+			if (h == INVALID_HANDLE_VALUE)
+			{
+				newbasepath = ndatapath + "\\MonoBleedingEdge";
+				h = FindFirstFile(newbasepath.c_str(), &data);
+			}
+			if (h != INVALID_HANDLE_VALUE)
+			{
+				basepath = newbasepath + "\\EmbedRuntime";
+				configpath = newbasepath + "\\etc";
+			}
+		}
+		if (!assemblypath.empty())
+		{
 			Mono::AssemblyPath = new char[assemblypath.size() + 1];
 			std::copy(assemblypath.begin(), assemblypath.end(), Mono::AssemblyPath);
 			Mono::AssemblyPath[assemblypath.size()] = '\0';
+		}
+		if (!basepath.empty())
+		{
+			Mono::BasePath = new char[basepath.size() + 1];
+			std::copy(basepath.begin(), basepath.end(), Mono::BasePath);
+			Mono::BasePath[basepath.size()] = '\0';
+		}
+		if (!configpath.empty())
+		{
+			Mono::ConfigPath = new char[configpath.size() + 1];
+			std::copy(configpath.begin(), configpath.end(), Mono::ConfigPath);
+			Mono::ConfigPath[configpath.size()] = '\0';
+		}
 
+		ReadAppInfo();
+
+		if (IsGameIl2Cpp)
+		{
 			if (Mono::Load() && Mono::Setup())
-			{
 				HookManager::LoadLibraryW_Hook();
-				//HookManager::Hook(&(LPVOID&)Mono::mono_lookup_internal_call_full, HookManager::Hooked_mono_lookup_internal_call_full);
-				if (MupotMode)
-					HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, HookManager::Hooked_mono_jit_init_version);
-			}
 		}
 		else
 			HookManager::LoadLibraryW_Hook();
 	}
 }
 
-void MelonLoader::UNLOAD()
+void MelonLoader::ParseCommandLine()
 {
-	ModHandler::OnApplicationQuit();
-	HookManager::UnhookAll();
-	if (IsGameIl2Cpp)
+	char* next = NULL;
+	char* curchar = strtok_s(GetCommandLine(), " ", &next);
+	while (curchar && (CommandLineC < 63))
 	{
-		Mono::Unload();
-		if (MupotMode && (MonoUnityPlayer::Module != NULL))
+		CommandLineV[CommandLineC++] = curchar;
+		curchar = strtok_s(0, " ", &next);
+	}
+	CommandLineV[CommandLineC] = 0;
+	if (CommandLineC > 0)
+	{
+		for (int i = 0; i < CommandLineC; i++)
 		{
-			FreeLibrary(MonoUnityPlayer::Module);
-			MonoUnityPlayer::Module = NULL;
+			const char* command = CommandLineV[i];
+			if (command != NULL)
+			{
+				if (strstr(command, "--melonloader.rainbow") != NULL)
+					RainbowMode = true;
+				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
+					RandomRainbowMode = true;
+				else if (strstr(command, "--melonloader.quitfix") != NULL)
+					QuitFix = true;
+				else if (strstr(command, "--melonloader.maxlogs") != NULL)
+					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
+#ifndef DEBUG
+				else if (strstr(command, "--melonloader.debug") != NULL)
+				{
+					Console::Create();
+					DebugMode = true;
+				}
+#endif
+			}
 		}
 	}
-	Logger::Log("UNLOADED!");
+}
+
+void MelonLoader::ReadAppInfo()
+{
+	std::ifstream appinfofile((std::string(DataPath) + "\\app.info"));
+	std::string line;
+	while (std::getline(appinfofile, line, '\n'))
+	{
+		if (CompanyName == NULL)
+		{
+			CompanyName = new char[line.size() + 1];
+			std::copy(line.begin(), line.end(), CompanyName);
+			CompanyName[line.size()] = '\0';
+		}
+		else
+		{
+			ProductName = new char[line.size() + 1];
+			std::copy(line.begin(), line.end(), ProductName);
+			ProductName[line.size()] = '\0';
+		}
+	}
+	appinfofile.close();
+}
+
+void MelonLoader::UNLOAD(bool alt)
+{
+	if (!alt)
+		ModHandler::OnApplicationQuit();
+	HookManager::UnhookAll();
+	if (!alt)
+		Logger::Log("UNLOADED!");
 	Logger::Stop();
 }
 
-bool MelonLoader::Is64bit()
+void MelonLoader::KillProcess()
 {
-	// To-Do
-	return true;
+	HANDLE hProcess = GetCurrentProcess();
+	if (hProcess != NULL)
+	{
+		TerminateProcess(hProcess, NULL);
+		CloseHandle(hProcess);
+	}
 }
 
 int MelonLoader::CountSubstring(std::string pat, std::string txt)
@@ -123,7 +228,7 @@ int MelonLoader::CountSubstring(std::string pat, std::string txt)
 	{
 		int j;
 		for (j = 0; j < M; j++)
-			if (txt[(int)(i) + j] != pat[j])
+			if (txt[(int)i + j] != pat[j])
 				break;
 		if (j == M)
 		{
@@ -142,4 +247,35 @@ bool MelonLoader::DirectoryExists(const char* path)
 	if (info.st_mode & S_IFDIR)
 		return true;
 	return false;
+}
+
+long MelonLoader::GetFileSize(std::string filename)
+{
+	struct stat stat_buf;
+	return ((stat(filename.c_str(), &stat_buf) == 0) ? stat_buf.st_size : -1);
+}
+
+int MelonLoader::GetIntFromConstChar(const char* str, int defaultval)
+{
+	if (str == NULL || *str == '\0')
+		return defaultval;
+    bool negate = (str[0] == '-');
+    if ( *str == '+' || *str == '-' )
+        ++str;
+
+	if (*str == '\0')
+		return defaultval;
+
+    int result = 0;
+    while(*str)
+    {
+		if (*str >= '0' && *str <= '9')
+		{
+			result = result * 10 - (*str - '0');  //assume negative number
+		}
+		else
+			return defaultval;
+        ++str;
+    }
+    return negate ? result : -result; //-result is positive!
 }

@@ -15,11 +15,11 @@ It is also used in unit testing WFP controls and in many other areas.
 
 If you develop in C# and your code is loaded as a module/plugin into a host application, you can use Harmony to alter the functionality of all the available assemblies of that application. Where other patch libraries simply allow you to replace the original method, Harmony goes one step further and gives you:
 
-â€¢ A way to keep the original method intact  
-â€¢ Execute your code before and/or after the original method  
-â€¢ Modify the original with IL code processors  
-â€¢ Multiple Harmony patches co-exist and don't conflict with each other  
-â€¢ Works at runtime and does not touch any files
+• A way to keep the original method intact  
+• Execute your code before and/or after the original method  
+• Modify the original with IL code processors  
+• Multiple Harmony patches co-exist and don't conflict with each other  
+• Works at runtime and does not touch any files
 
 ### Installation
 
@@ -33,9 +33,9 @@ Please check out the [documentation](https://harmony.pardeike.net) and join the 
 
 I put thousands of hours into this project and its support. So every little action helps:
 
-â€¢ Upvote this [stackoverflow answer](https://stackoverflow.com/questions/7299097/dynamically-replace-the-contents-of-a-c-sharp-method/42043003#42043003)  
-â€¢ Spread the word in your developer communities  
-â€¢ Become a [GitHub sponsor](https://github.com/sponsors/pardeike) or a [Patreon](https://www.patreon.com/pardeike)
+• Upvote this [stackoverflow answer](https://stackoverflow.com/questions/7299097/dynamically-replace-the-contents-of-a-c-sharp-method/42043003#42043003)  
+• Spread the word in your developer communities  
+• Become a [GitHub sponsor](https://github.com/sponsors/pardeike) or a [Patreon](https://www.patreon.com/pardeike)
 
 This project uses the great [MonoMod.Common](https://github.com/MonoMod/MonoMod.Common) library by [0x0ade](https://github.com/orgs/MonoMod/people/0x0ade).
 

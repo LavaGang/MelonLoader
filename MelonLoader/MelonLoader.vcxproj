@@ -58,13 +58,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MELONLOADER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -75,52 +75,48 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MELONLOADER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>version.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssertionManager.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="HookManager.cpp" />
-    <ClCompile Include="IL2CPPUnityPlayer.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="ModHandler.cpp" />
-    <ClCompile Include="MonoUnityPlayer.cpp" />
     <ClCompile Include="PointerUtils.cpp" />
-    <ClCompile Include="IL2CPP.cpp" />
+    <ClCompile Include="Il2Cpp.cpp" />
     <ClCompile Include="Mono.cpp" />
+    <ClCompile Include="UnityPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssertionManager.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Detours\detours.h" />
+    <ClInclude Include="Detours\detver.h" />
     <ClInclude Include="HookManager.h" />
-    <ClInclude Include="il2cpp-internals.h" />
-    <ClInclude Include="IL2CPPUnityPlayer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MelonLoader.h" />
-    <ClInclude Include="detours\detours.h" />
-    <ClInclude Include="detours\detver.h" />
-    <ClInclude Include="detours\syelog.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="ModHandler.h" />
-    <ClInclude Include="mono-internals.h" />
-    <ClInclude Include="MonoUnityPlayer.h" />
     <ClInclude Include="PointerUtils.h" />
-    <ClInclude Include="IL2CPP.h" />
+    <ClInclude Include="Il2Cpp.h" />
     <ClInclude Include="Mono.h" />
+    <ClInclude Include="UnityPlayer.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="detours\detours.lib" />
+    <Library Include="Detours\detours.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

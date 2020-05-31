@@ -13,52 +13,62 @@ namespace TestMod
 
     public class TestMod : MelonMod
     {
-        public override void OnApplicationStart()
+        public override void OnPreInitialization() // Runs before Game Initialization. Only runs if the Mod is in the Mods/PRELOAD folder.
+        {
+            MelonModLogger.Log("OnPreInitialization");
+        }
+
+        public override void OnApplicationStart() // Runs after Game Initialization.
         {
             MelonModLogger.Log("OnApplicationStart");
         }
 
-        public override void OnLevelWasLoaded(int level)
+        public override void OnLevelIsLoading() // Runs when a Scene is Loading. Currently only runs if the Mod is used in BONEWORKS.
+        {
+            MelonModLogger.Log("OnLevelIsLoading");
+        }
+
+        public override void OnLevelWasLoaded(int level) // Runs when a Scene has Loaded.
         {
             MelonModLogger.Log("OnLevelWasLoaded: " + level.ToString());
         }
 
-        public override void OnLevelWasInitialized(int level)
+        public override void OnLevelWasInitialized(int level) // Runs when a Scene has Initialized.
         {
             MelonModLogger.Log("OnLevelWasInitialized: " + level.ToString());
         }
 
-        public override void OnUpdate()
+        public override void OnUpdate() // Runs once per frame.
         {
             MelonModLogger.Log("OnUpdate");
         }
 
-        public override void OnFixedUpdate()
+        public override void OnFixedUpdate() // Can run multiple times per frame. Mostly used for Physics.
         {
             MelonModLogger.Log("OnFixedUpdate");
         }
 
-        public override void OnLateUpdate()
+        public override void OnLateUpdate() // Runs once per frame after OnUpdate and OnFixedUpdate have finished.
         {
             MelonModLogger.Log("OnLateUpdate");
         }
 
-        public override void OnGUI()
+        public override void OnGUI() // Can run multiple times per frame. Mostly used for Unity's IMGUI.
         {
             MelonModLogger.Log("OnGUI");
         }
 
-        public override void OnApplicationQuit()
+        public override void OnApplicationQuit() // Runs when the Game is told to Close.
         {
             MelonModLogger.Log("OnApplicationQuit");
         }
 
-        public override void OnModSettingsApplied()
+        public override void OnModSettingsApplied() // Runs when Mod Preferences get saved to UserData/modprefs.ini.
         {
             MelonModLogger.Log("OnModSettingsApplied");
         }
 
-        public override void VRChat_OnUiManagerInit() // Only works in VRChat
+        public override void VRChat_OnUiManagerInit() // Runs upon VRChat's UiManager Initialization. Only runs if the Mod is used in VRChat.
         {
             MelonModLogger.Log("VRChat_OnUiManagerInit");
         }

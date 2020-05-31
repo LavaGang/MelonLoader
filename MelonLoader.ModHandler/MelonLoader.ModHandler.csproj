@@ -4,21 +4,22 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C4056AB-1D07-43FC-A93D-0AA72446DA03}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MelonLoader</RootNamespace>
     <AssemblyName>MelonLoader.ModHandler</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <ProjectGuid>{3C4056AB-1D07-43FC-A93D-0AA72446DA03}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -37,44 +38,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyGenerator.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BuildInfo.cs" />
     <Compile Include="Console.cs" />
-    <Compile Include="Imports.cs" />
-    <Compile Include="IniFile.cs" />
-    <Compile Include="MelonCoroutines.cs" />
-    <Compile Include="MelonModComponent.cs" />
-    <Compile Include="MelonModLogger.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="MelonMod.cs" />
-    <Compile Include="MelonModGameAttribute.cs" />
-    <Compile Include="MelonModInfoAttribute.cs" />
-    <Compile Include="ModPrefs.cs" />
-    <Compile Include="NET_SDK\Harmony.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Assembly.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Base.cs" />
-    <Compile Include="NET_SDK\IL2CPP_BindingFlags.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Class.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Event.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Field.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Method.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Object.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Profile.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Property.cs" />
-    <Compile Include="NET_SDK\IL2CPP_RuntimeUnhandledExceptionPolicy.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Stat.cs" />
-    <Compile Include="NET_SDK\IL2CPP_Type.cs" />
-    <Compile Include="NET_SDK\NET_SDK.cs" />
     <Compile Include="Harmony\Attributes.cs" />
     <Compile Include="Harmony\CodeInstruction.cs" />
     <Compile Include="Harmony\CodeTranspiler.cs" />
@@ -106,7 +75,29 @@
     <Compile Include="Harmony\Tools\SymbolExtensions.cs" />
     <Compile Include="Harmony\Tools\Traverse.cs" />
     <Compile Include="Harmony\Transpilers.cs" />
+    <Compile Include="Imports.cs" />
+    <Compile Include="IniFile.cs" />
+    <Compile Include="MelonCoroutines.cs" />
+    <Compile Include="MelonModLogger.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="MelonMod.cs" />
+    <Compile Include="MelonModGameAttribute.cs" />
+    <Compile Include="MelonModInfoAttribute.cs" />
+    <Compile Include="ModPrefs.cs" />
+    <Compile Include="SceneHandler.cs" />
+    <Compile Include="SupportModule.cs" />
+    <Compile Include="TinyJSON\Decoder.cs" />
+    <Compile Include="TinyJSON\EncodeOptions.cs" />
+    <Compile Include="TinyJSON\Encoder.cs" />
+    <Compile Include="TinyJSON\Extensions.cs" />
+    <Compile Include="TinyJSON\JSON.cs" />
+    <Compile Include="TinyJSON\Types\ProxyArray.cs" />
+    <Compile Include="TinyJSON\Types\ProxyBoolean.cs" />
+    <Compile Include="TinyJSON\Types\ProxyNumber.cs" />
+    <Compile Include="TinyJSON\Types\ProxyObject.cs" />
+    <Compile Include="TinyJSON\Types\ProxyString.cs" />
+    <Compile Include="TinyJSON\Types\Variant.cs" />
+    <Compile Include="UnhollowerSupport.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

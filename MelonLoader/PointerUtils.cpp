@@ -53,6 +53,24 @@ uintptr_t PointerUtils::FindPattern(HMODULE mod, const char* start_address_patte
 	return FindPattern(FindPattern(start_address, end_address, start_address_pattern), end_address, target_pattern);
 }
 
+uintptr_t PointerUtils::FindBestPossiblePattern(HMODULE mod, std::vector<const char*> target_patterns)
+{
+	uintptr_t returnval = NULL;
+	if (target_patterns.size() > 0)
+	{
+		for (int i = 0; i < target_patterns.size(); i++)
+		{
+			uintptr_t possibleval = FindPattern(mod, target_patterns[i]);
+			if (possibleval != NULL)
+			{
+				returnval = possibleval;
+				break;
+			}
+		}
+	}
+	return returnval;
+}
+
 std::vector<uintptr_t> PointerUtils::FindAllPattern(uintptr_t start_address, uintptr_t end_address, const char* target_pattern)
 {
 	std::vector<uintptr_t> returnvec;
