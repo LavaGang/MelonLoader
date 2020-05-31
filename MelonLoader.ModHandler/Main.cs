@@ -89,9 +89,9 @@ namespace MelonLoader
                             ? (" v" + mod.InfoAttribute.Version) : "")
                             + (!string.IsNullOrEmpty(mod.InfoAttribute.Author)
                             ? (" by " + mod.InfoAttribute.Author) : "")
-                            //+ (!string.IsNullOrEmpty(mod.InfoAttribute.DownloadLink)
-                            //? (" (" + mod.InfoAttribute.DownloadLink + ")")
-                            //: "")
+                            + (!string.IsNullOrEmpty(mod.InfoAttribute.DownloadLink)
+                            ? (" (" + mod.InfoAttribute.DownloadLink + ")")
+                            : "")
                             );
                         if (Imports.IsDebugMode())
                             MelonModLogger.Log("Preload: " + mod.IsPreload.ToString());
