@@ -50,6 +50,10 @@ namespace MelonLoader.AssemblyGenerator
             Il2CppDumper.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppDumper"));
             Il2CppAssemblyUnhollower.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppAssemblyUnhollower"));
             UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "UnityDependencies"));
+
+            localConfigPath = Path.Combine(BaseFolder, "config.json");
+            if (File.Exists(localConfigPath))
+                localConfig = Decoder.Decode(File.ReadAllText(localConfigPath)).Make<LocalConfig>();
         }
 
         private static void Setup(string gameRoot)
@@ -59,10 +63,6 @@ namespace MelonLoader.AssemblyGenerator
 
             Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
             Il2CppAssemblyUnhollower.FileName = "AssemblyUnhollower.exe";
-
-            localConfigPath = Path.Combine(BaseFolder, "config.json");
-            if (File.Exists(localConfigPath))
-                localConfig = Decoder.Decode(File.ReadAllText(localConfigPath)).Make<LocalConfig>();
         }
 
         private static bool AssemblyGenerateCheck(string unityVersion)

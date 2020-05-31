@@ -8,29 +8,35 @@ namespace MelonLoader.AssemblyGenerator
     {
         internal static bool Initialize()
         {
-            var generatorProcessInfo = new ProcessStartInfo(Path.Combine(Path.Combine(Imports.GetGameDirectory(), "MelonLoader"), "MelonLoader.GeneratorProcess.exe"));
-            generatorProcessInfo.Arguments = $"\"{MelonLoader.Main.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\"";
-            generatorProcessInfo.UseShellExecute = false;
-            generatorProcessInfo.RedirectStandardOutput = true;
-            generatorProcessInfo.CreateNoWindow = true;
-            var process = Process.Start(generatorProcessInfo);
-            if (process == null)
+            string GeneratorProcessPath = Path.Combine(Path.Combine(Imports.GetGameDirectory(), "MelonLoader"), "MelonLoader.GeneratorProcess.exe");
+            if (File.Exists(GeneratorProcessPath))
             {
-                MelonModLogger.LogError("Unable to start generator process");
-                return false;
+                var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath);
+                generatorProcessInfo.Arguments = $"\"{MelonLoader.Main.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\"";
+                generatorProcessInfo.UseShellExecute = false;
+                generatorProcessInfo.RedirectStandardOutput = true;
+                generatorProcessInfo.CreateNoWindow = true;
+                var process = Process.Start(generatorProcessInfo);
+                if (process == null)
+                    MelonModLogger.LogError("Unable to Start Generator Process!");
+                else
+                {
+                    var stdout = process.StandardOutput;
+                    while (!process.HasExited && !stdout.EndOfStream)
+                    {
+                        var line = stdout.ReadLine();
+                        MelonModLogger.Log(line);
+                    }
+                    while (!process.HasExited)
+                        Thread.Sleep(100);
+                    if (Imports.IsDebugMode())
+                        MelonModLogger.Log($"Generator Process exited with code {process.ExitCode}");
+                    return (process.ExitCode == 0);
+                }
             }
-            var stdout = process.StandardOutput;
-            while (!process.HasExited && !stdout.EndOfStream)
-            {
-                var line = stdout.ReadLine();
-                MelonModLogger.Log(line);
-            }
-
-            while (!process.HasExited)
-                Thread.Sleep(100);
-            
-            MelonModLogger.Log($"Generator process exited with code {process.ExitCode}");
-            return process.ExitCode == 0;
+            else
+                MelonModLogger.LogError("MelonLoader.GeneratorProcess.exe does not Exist!");
+            return false;
         }
     }
 }
