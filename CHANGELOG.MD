@@ -20,6 +20,7 @@
 
 ### Version List:
 
+[v0.2.1 Open-Beta](#v021-open-beta)  
 [v0.2.0 Open-Beta](#v020-open-beta)  
 [v0.1.0 Open-Beta](#v010-open-beta)  
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
@@ -27,6 +28,10 @@
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
 
 ---
+
+### v0.2.1 Open-Beta:
+
+1. Implemented auto-download of required tools for IL2CPP games.
 
 ### v0.2.0 Open-Beta:
 

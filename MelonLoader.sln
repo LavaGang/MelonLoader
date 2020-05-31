@@ -21,6 +21,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono.Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.GeneratorProcess", "MelonLoader.GeneratorProcess\MelonLoader.GeneratorProcess.csproj", "{84B12E10-41B3-479C-87A6-8CE5D8C82C2F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{49B47EEB-1061-49AF-83F3-B32377B08F3E}"
+ProjectSection(SolutionItems) = preProject
+	CHANGELOG.MD = CHANGELOG.MD
+	README.MD = README.MD
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
