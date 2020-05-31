@@ -75,6 +75,7 @@
 43. Added Assembly Generation Integration.
 44. Fixed Illegal Characters in Path Error.
 45. Temporarily Disabled Zipped Mod Support.
+46. Added Log Error Limiter.
 
 ---
 
