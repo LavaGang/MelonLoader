@@ -76,6 +76,8 @@
 44. Fixed Illegal Characters in Path Error.
 45. Temporarily Disabled Zipped Mod Support.
 46. Added Log Error Limiter.
+47. Re-Enabled Download Links in Mod Logs.
+48. Fixed issue with TestMod not loading on Mono Games.
 
 ---
 
