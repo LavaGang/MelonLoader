@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ICSharpCode.SharpZipLib.Zip;
+//using ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -286,6 +286,7 @@ namespace MelonLoader
                 }
 
                 // ZIP
+                /*
                 string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip", SearchOption.TopDirectoryOnly);
                 if (zippedFiles.Length > 0)
                 {
@@ -332,6 +333,7 @@ namespace MelonLoader
                         }
                     }
                 }
+                */
             }
         }
 

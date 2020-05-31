@@ -10,6 +10,8 @@ namespace MelonLoader
         internal static bool consoleEnabled = false;
         private static ConsoleColor rainbow = ConsoleColor.DarkBlue;
         private static readonly Random rainbowrand = new Random();
+        private static int ErrorCount = 0;
+        private static int MaxErrorCount = 100;
 
         private static string GetTimestamp() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
 
@@ -137,41 +139,53 @@ namespace MelonLoader
 
         public static void LogError(string s)
         {
-            string namesection = GetNameSection();
-            Imports.Logger_LogError(namesection, s);
-            if (!Imports.IsDebugMode() && Console.Enabled)
+            if (ErrorCount < MaxErrorCount)
             {
-                Imports.Console_SetColor(ConsoleColor.Red);
-                RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + s);
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                string namesection = GetNameSection();
+                Imports.Logger_LogError(namesection, s);
+                if (!Imports.IsDebugMode() && Console.Enabled)
+                {
+                    Imports.Console_SetColor(ConsoleColor.Red);
+                    RainbowCheck();
+                    System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + s);
+                    Imports.Console_SetColor(ConsoleColor.Gray);
+                }
+                ErrorCount++;
             }
         }
 
         public static void LogError(string s, params object[] args)
         {
-            string namesection = GetNameSection();
-            var formatted = string.Format(s, args);
-            Imports.Logger_LogError(namesection, formatted);
-            if (!Imports.IsDebugMode() && Console.Enabled)
+            if (ErrorCount < MaxErrorCount)
             {
-                Imports.Console_SetColor(ConsoleColor.Red);
-                RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + formatted);
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                string namesection = GetNameSection();
+                var formatted = string.Format(s, args);
+                Imports.Logger_LogError(namesection, formatted);
+                if (!Imports.IsDebugMode() && Console.Enabled)
+                {
+                    Imports.Console_SetColor(ConsoleColor.Red);
+                    RainbowCheck();
+                    System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + formatted);
+                    Imports.Console_SetColor(ConsoleColor.Gray);
+                }
+                ErrorCount++;
             }
         }
 
         internal static void LogModError(string msg, string modname)
         {
-            string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
-            Imports.Logger_LogModError(namesection, msg);
-            if (!Imports.IsDebugMode() && Console.Enabled)
+            if (ErrorCount < MaxErrorCount)
             {
-                Imports.Console_SetColor(ConsoleColor.Yellow);
-                RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + msg);
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
+                Imports.Logger_LogModError(namesection, msg);
+                if (!Imports.IsDebugMode() && Console.Enabled)
+                {
+                    Imports.Console_SetColor(ConsoleColor.Yellow);
+                    RainbowCheck();
+                    System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + msg);
+                    Imports.Console_SetColor(ConsoleColor.Gray);
+                }
+                ErrorCount++;
             }
         }
 

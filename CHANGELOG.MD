@@ -74,6 +74,7 @@
 42. Added Global Exception Handler to the Mono Domain.
 43. Added Assembly Generation Integration.
 44. Fixed Illegal Characters in Path Error.
+45. Temporarily Disabled Zipped Mod Support.
 
 ---
 
