@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMod", "TestMod\TestMod.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "version", "version\version.vcxproj", "{D4E23F47-15F3-4FD5-B7E2-A8D40E94CAF8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestModCpp", "TestModCpp\TestModCpp.vcxproj", "{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Il2Cpp", "MelonLoader.Support.Il2Cpp\MelonLoader.Support.Il2Cpp.csproj", "{4487DF38-2921-418A-A015-7DDA1C2BC5E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono", "MelonLoader.Support.Mono\MelonLoader.Support.Mono.csproj", "{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}"
@@ -27,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.MD = README.MD
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Installer", "MelonLoader.Installer\MelonLoader.Installer.csproj", "{17AFE406-2361-4849-9B15-CB03AEF5E9F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.Installer", "MelonLoader.Installer\MelonLoader.Installer.csproj", "{17AFE406-2361-4849-9B15-CB03AEF5E9F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,16 +77,6 @@ Global
 		{D4E23F47-15F3-4FD5-B7E2-A8D40E94CAF8}.Release|x64.ActiveCfg = Release|x64
 		{D4E23F47-15F3-4FD5-B7E2-A8D40E94CAF8}.Release|x64.Build.0 = Release|x64
 		{D4E23F47-15F3-4FD5-B7E2-A8D40E94CAF8}.Release|x86.ActiveCfg = Release|x64
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Debug|x64.ActiveCfg = Debug|x64
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Debug|x64.Build.0 = Debug|x64
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Debug|x86.ActiveCfg = Debug|Win32
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Debug|x86.Build.0 = Debug|Win32
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Release|Any CPU.ActiveCfg = Release|Win32
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Release|x64.ActiveCfg = Release|x64
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Release|x64.Build.0 = Release|x64
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Release|x86.ActiveCfg = Release|Win32
-		{753516D0-DA31-470F-A1FF-CE31A4D5A4E0}.Release|x86.Build.0 = Release|Win32
 		{4487DF38-2921-418A-A015-7DDA1C2BC5E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4487DF38-2921-418A-A015-7DDA1C2BC5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4487DF38-2921-418A-A015-7DDA1C2BC5E4}.Debug|x64.ActiveCfg = Debug|Any CPU

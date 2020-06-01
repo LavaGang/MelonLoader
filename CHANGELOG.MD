@@ -35,6 +35,8 @@
 2. Implemented auto-download of required tools for IL2CPP games.  (Credits to knah :D)
 3. Fixed Config Issue causing Assembly to always need to Regenerate.
 4. Added an Installer.
+5. Fixed Console Display Issue.
+6. Temporarily removed --melonloader.hideconsole.
 
 ### v0.2.0 Open-Beta:
 
