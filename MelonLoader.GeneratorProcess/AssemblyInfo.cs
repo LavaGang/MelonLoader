@@ -2,11 +2,11 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle(MelonLoader.BuildInfo.Name + ".Support.Mono.Pre2017")]
+[assembly: AssemblyTitle(MelonLoader.BuildInfo.Name + ".GeneratorProcess")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(MelonLoader.BuildInfo.Company)]
-[assembly: AssemblyProduct(MelonLoader.BuildInfo.Name + ".Support.Mono.Pre2017")]
+[assembly: AssemblyProduct(MelonLoader.BuildInfo.Name + ".GeneratorProcess")]
 [assembly: AssemblyCopyright("Created by " + MelonLoader.BuildInfo.Author)]
 [assembly: AssemblyTrademark(MelonLoader.BuildInfo.Company)]
 [assembly: AssemblyCulture("")]

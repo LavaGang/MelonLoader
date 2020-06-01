@@ -1,24 +1,21 @@
-### AUTOMATED INSTALL / UNINSTALL:
+### AUTOMATED INSTALL:
 
-- Coming Soon...
+1. Download MelonLoader.Installer.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2. Run MelonLoader.Installer.exe and Follow the Instructions.
 
 ---
 	
 ### MANUAL INSTALLATION FOR MONO GAMES:
 
-1.  Download MelonLoader_Mono.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
-2.  Extract MelonLoader_Mono.zip to the Game's Installation Folder.
+1. Download MelonLoader.Mono.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2. Extract MelonLoader.Mono.zip to the Game's Installation Folder.
 
 ---
 
 ### MANUAL INSTALLATION FOR IL2CPP GAMES:
 
-1.  Download MelonLoader_Il2Cpp.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
-2.  Extract MelonLoader_Il2Cpp.zip to the Game's Installation Folder.
-3.  Download the latest version of Il2CppDumper from [HERE](https://github.com/Perfare/Il2CppDumper/releases) and extract it to MelonLoader/AssemblyGenerator/Il2CppDumper
-4.  Download the latest version of Il2CppAssemblyUnhollower from [HERE](https://github.com/knah/Il2CppAssemblyUnhollower/releases) and extract it to MelonLoader/AssemblyGenerator/Il2CppAssemblyUnhollower
-5.  Download the Unity Dependencies ZIP for the Game's Engine Version from [BaseLibs/UnityDependencies](https://github.com/HerpDerpinstine/MelonLoader/tree/master/BaseLibs/UnityDependencies).
-6.  Extract the ZIP to MelonLoader/AssemblyGenerator/Il2CppAssemblyUnhollower/UnityDependencies in the Game's Installation Folder.
+1. Download MelonLoader.Il2Cpp.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2. Extract MelonLoader.Il2Cpp.zip to the Game's Installation Folder.
 
 ---
 
@@ -44,7 +41,6 @@
 | Argument              | Description                              |
 | --------------------- | ---------------------------------------- |
 | --no-mods             | Launch game without loading Mods         |
-| --melonloader.hideconsole | Hides the Normal Console                           |
 | --melonloader.debug   | Debug Console                            |
 | --melonloader.quitfix   | Fixes the Hanging Process Issue with some Games |
 | --melonloader.maxlogs   | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |

@@ -49,6 +49,12 @@ TestMod\.vs
 TestModCpp\bin
 TestModCpp\obj
 TestModCpp\.vs
+MelonLoader.GeneratorProcess\bin
+MelonLoader.GeneratorProcess\obj
+MelonLoader.GeneratorProcess\.vs
+MelonLoader.Installer\bin
+MelonLoader.Installer\obj
+MelonLoader.Installer\.vs
 version\bin
 version\obj
 version\.vs
@@ -404,5 +410,6 @@ MigrationBackup/
 /.idea
 /Detours/lib.X64
 /Detours/lib.X86
-/MelonLoader_Mono.zip
-/MelonLoader_Il2Cpp.zip
+/MelonLoader.Mono.zip
+/MelonLoader.Il2Cpp.zip
+/MelonLoader.Installer.zip

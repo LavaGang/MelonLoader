@@ -20,6 +20,7 @@
 
 ### Version List:
 
+[v0.2.1 Open-Beta](#v021-open-beta)  
 [v0.2.0 Open-Beta](#v020-open-beta)  
 [v0.1.0 Open-Beta](#v010-open-beta)  
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
@@ -27,6 +28,15 @@
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
 
 ---
+
+### v0.2.1 Open-Beta:
+
+1. Overwrite files when copying freshly generated assemblies.  (Credits to knah :D)
+2. Implemented auto-download of required tools for IL2CPP games.  (Credits to knah :D)
+3. Fixed Config Issue causing Assembly to always need to Regenerate.
+4. Added an Installer.
+5. Fixed Console Display Issue.
+6. Temporarily removed --melonloader.hideconsole.
 
 ### v0.2.0 Open-Beta:
 

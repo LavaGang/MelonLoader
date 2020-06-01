@@ -27,7 +27,7 @@ namespace MelonLoader.Support
             if (Imports.IsDebugMode())
             {
                 LogSupport.TraceHandler -= System.Console.WriteLine;
-                LogSupport.TraceHandler += MelonModLogger.LogWarning;
+                LogSupport.TraceHandler += MelonModLogger.Log;
             }
             ClassInjector.DoHook += Imports.Hook;
             GetUnityVersionNumbers(out var major, out var minor, out var patch);
