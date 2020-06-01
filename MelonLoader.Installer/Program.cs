@@ -34,7 +34,7 @@ namespace MelonLoader.Installer
                 string dirpath = Path.GetDirectoryName(filePath);
                 mainForm.label1.Text = "Downloading...";
                 var tempFile = Path.GetTempFileName();
-                using var zipdata = new WebClient().OpenRead(("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v" + VersionToDownload + "/" + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "MelonLoader_Il2Cpp.zip" : "MelonLoader_Mono.zip")));
+                using var zipdata = new WebClient().OpenRead(("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v" + VersionToDownload + "/" + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "MelonLoader.Il2Cpp.zip" : "MelonLoader.Mono.zip")));
 
                 Program.mainForm.label1.Text = "Extracting...";
                 if (File.Exists(Path.Combine(dirpath, "version.dll")))
