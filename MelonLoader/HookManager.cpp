@@ -180,9 +180,7 @@ MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const ch
 #pragma region PlayerLoadFirstScene
 void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
 {
-	Logger::Log("PlayerLoadFirstScene - A");
 	ModHandler::OnApplicationStart();
-	Logger::Log("PlayerLoadFirstScene - B");
 	return UnityPlayer::PlayerLoadFirstScene(unknown);
 }
 #pragma endregion
