@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.IO;
+using System.IO.Packaging;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MelonLoader.Installer
@@ -15,7 +14,6 @@ namespace MelonLoader.Installer
             InitializeComponent();
             Text = Program.Title;
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Closing += (object sender, CancelEventArgs e) => Application.Exit();
         }
     }
 }

@@ -61,6 +61,6 @@
 
         #endregion
 
-        public System.Windows.Forms.Label label1;
+        internal System.Windows.Forms.Label label1;
     }
 }

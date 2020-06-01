@@ -1,21 +1,25 @@
 using System;
 using System.IO;
-using System.IO.Packaging;
-using System.Linq;
+using System.IO.Compression;
 using System.Threading;
 using System.Windows.Forms;
+using System.Net;
 
 namespace MelonLoader.Installer
 {
     static class Program
     {
         internal static string Title = (BuildInfo.Name + " Installer for v" + BuildInfo.Version + " Open-Beta");
+        internal static string VersionToDownload = "0.2.1";
         internal static MainForm mainForm = new MainForm();
 
         [STAThread]
         static void Main()
         {
-            new Thread(() => { mainForm.ShowDialog(); }).Start();
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            new Thread(() => mainForm.ShowDialog()).Start();
             Thread.Sleep(1000);
             string filePath = null;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -28,7 +32,29 @@ namespace MelonLoader.Installer
             if (!string.IsNullOrEmpty(filePath))
             {
                 string dirpath = Path.GetDirectoryName(filePath);
-                PackageManager.Run(dirpath, File.Exists(Path.Combine(dirpath, "GameAssembly.dll")));
+                mainForm.label1.Text = "Downloading...";
+                var tempFile = Path.GetTempFileName();
+                using var zipdata = new WebClient().OpenRead(("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v" + VersionToDownload + "/" + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "MelonLoader_Il2Cpp.zip" : "MelonLoader_Mono.zip")));
+
+                Program.mainForm.label1.Text = "Extracting...";
+                if (File.Exists(Path.Combine(dirpath, "version.dll")))
+                    File.Delete(Path.Combine(dirpath, "version.dll"));
+                if (File.Exists(Path.Combine(dirpath, "winmm.dll")))
+                    File.Delete(Path.Combine(dirpath, "winmm.dll"));
+                if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
+                    Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
+                if (Directory.Exists(Path.Combine(dirpath, "Logs")))
+                    Directory.Delete(Path.Combine(dirpath, "Logs"), true);
+
+                using var zip = new ZipArchive(zipdata);
+                foreach (var zipArchiveEntry in zip.Entries)
+                {
+                    string filepath = Path.Combine(dirpath, zipArchiveEntry.FullName);
+                    if (File.Exists(filepath))
+                        File.Delete(filepath);
+                }
+                zip.ExtractToDirectory(dirpath);
+
                 mainForm.Close();
                 DialogResult dlg = MessageBox.Show("Installation Successful!", Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
