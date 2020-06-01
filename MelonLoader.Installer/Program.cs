@@ -31,32 +31,44 @@ namespace MelonLoader.Installer
             }
             if (!string.IsNullOrEmpty(filePath))
             {
-                string dirpath = Path.GetDirectoryName(filePath);
-                mainForm.label1.Text = "Downloading...";
-                var tempFile = Path.GetTempFileName();
-                using var zipdata = new WebClient().OpenRead(("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v" + VersionToDownload + "/" + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "MelonLoader.Il2Cpp.zip" : "MelonLoader.Mono.zip")));
-
-                mainForm.label1.Text = "Extracting...";
-                if (File.Exists(Path.Combine(dirpath, "version.dll")))
-                    File.Delete(Path.Combine(dirpath, "version.dll"));
-                if (File.Exists(Path.Combine(dirpath, "winmm.dll")))
-                    File.Delete(Path.Combine(dirpath, "winmm.dll"));
-                if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
-                    Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
-                if (Directory.Exists(Path.Combine(dirpath, "Logs")))
-                    Directory.Delete(Path.Combine(dirpath, "Logs"), true);
-
-                using var zip = new ZipArchive(zipdata);
-                foreach (var zipArchiveEntry in zip.Entries)
+                try
                 {
-                    string filepath = Path.Combine(dirpath, zipArchiveEntry.FullName);
-                    if (File.Exists(filepath))
-                        File.Delete(filepath);
-                }
-                zip.ExtractToDirectory(dirpath);
+                    string dirpath = Path.GetDirectoryName(filePath);
+                    mainForm.label1.Text = "Downloading...";
+                    var tempFile = Path.GetTempFileName();
+                    using var zipdata = new WebClient().OpenRead(
+                        ("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v" + VersionToDownload +
+                         "/" + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll"))
+                             ? "MelonLoader.Il2Cpp.zip"
+                             : "MelonLoader.Mono.zip")));
 
-                mainForm.Close();
-                DialogResult dlg = MessageBox.Show("Installation Successful!", Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    mainForm.label1.Text = "Extracting...";
+                    if (File.Exists(Path.Combine(dirpath, "version.dll")))
+                        File.Delete(Path.Combine(dirpath, "version.dll"));
+                    if (File.Exists(Path.Combine(dirpath, "winmm.dll")))
+                        File.Delete(Path.Combine(dirpath, "winmm.dll"));
+                    if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
+                        Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
+                    if (Directory.Exists(Path.Combine(dirpath, "Logs")))
+                        Directory.Delete(Path.Combine(dirpath, "Logs"), true);
+
+                    using var zip = new ZipArchive(zipdata);
+                    foreach (var zipArchiveEntry in zip.Entries)
+                    {
+                        string filepath = Path.Combine(dirpath, zipArchiveEntry.FullName);
+                        if (File.Exists(filepath))
+                            File.Delete(filepath);
+                    }
+
+                    zip.ExtractToDirectory(dirpath);
+
+                    mainForm.Close();
+                    DialogResult dlg = MessageBox.Show("Installation Successful!", Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Installation failed; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Title);
+                }
             }
             Application.Exit();
         }
