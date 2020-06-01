@@ -34,6 +34,7 @@
 1. Overwrite files when copying freshly generated assemblies.  (Credits to knah :D)
 2. Implemented auto-download of required tools for IL2CPP games.  (Credits to knah :D)
 3. Fixed Config Issue causing Assembly to always need to Regenerate.
+4. Added an Installer.
 
 ### v0.2.0 Open-Beta:
 

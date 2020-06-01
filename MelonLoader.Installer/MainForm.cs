@@ -15,6 +15,7 @@ namespace MelonLoader.Installer
             InitializeComponent();
             Text = Program.Title;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Closing += (object sender, CancelEventArgs e) => Application.Exit();
         }
     }
 }

@@ -1,20 +1,21 @@
-### AUTOMATED INSTALL / UNINSTALL:
+### AUTOMATED INSTALL:
 
-- Coming Soon...
+1. Download MelonLoader.Installer.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2.  Run MelonLoader.Installer.exe and Follow the Instructions.
 
 ---
 	
 ### MANUAL INSTALLATION FOR MONO GAMES:
 
-1.  Download MelonLoader.Mono.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
-2.  Extract MelonLoader.Mono.zip to the Game's Installation Folder.
+1. Download MelonLoader.Mono.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2. Extract MelonLoader.Mono.zip to the Game's Installation Folder.
 
 ---
 
 ### MANUAL INSTALLATION FOR IL2CPP GAMES:
 
-1.  Download MelonLoader.Il2Cpp.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
-2.  Extract MelonLoader.Il2Cpp.zip to the Game's Installation Folder.
+1. Download MelonLoader.Il2Cpp.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2. Extract MelonLoader.Il2Cpp.zip to the Game's Installation Folder.
 
 ---
 
