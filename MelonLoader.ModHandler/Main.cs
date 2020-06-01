@@ -34,9 +34,7 @@ namespace MelonLoader
                 IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
             }
 
-            if (!Imports.IsDebugMode()
-                && !Environment.CommandLine.Contains("--melonloader.hideconsole")
-                )
+            if (!Imports.IsDebugMode() && !Environment.CommandLine.Contains("--melonloader.hideconsole"))
             {
                 Console.Enabled = true;
                 Console.Create();
