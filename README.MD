@@ -3,6 +3,8 @@
 1. Download MelonLoader.Installer.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 2. Run MelonLoader.Installer.exe and Follow the Instructions.
 
+!> If the Installer complains about needing .NET Core installed, please download [.NET Core 3.1 Runtime](https://dotnet.microsoft.com/download/dotnet-core/3.1).
+
 ---
 	
 ### MANUAL INSTALLATION FOR MONO GAMES:
