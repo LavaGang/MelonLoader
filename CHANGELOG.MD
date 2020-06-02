@@ -43,6 +43,7 @@
 7. Fixed Build Information for Installer.
 8. Moved Preload Mods to its own separate PreloadMods folder.
 9. Installer now creates a PreloadMods folder if none exists.
+10. Installer now properly installs the Latest Version instead of a Predetermined Version.
 
 ---
 

@@ -53,7 +53,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.Text = "MelonLoader Installer for v0.0.0 Open-Beta";
+            this.Text = "MelonLoader Installer";
             this.ResumeLayout(false);
 
         }

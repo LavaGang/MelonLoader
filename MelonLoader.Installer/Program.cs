@@ -9,8 +9,7 @@ namespace MelonLoader.Installer
 {
     static class Program
     {
-        internal static string VersionToDownload = "0.2.1";
-        internal static string Title = ("MelonLoader Installer for v" + VersionToDownload + " Open-Beta");
+        internal static string Title = "MelonLoader Installer";
 
         [STAThread]
         static void Main()
@@ -39,7 +38,7 @@ namespace MelonLoader.Installer
                         mainForm.Invoke(new Action(() => { mainForm.label1.Text = "Downloading..."; }));
                         var tempFile = Path.GetTempFileName();
                         using var zipdata = new WebClient().OpenRead(
-                            ("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v" + VersionToDownload +
+                            ("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/" +
                              "/" + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll"))
                                  ? "MelonLoader.Il2Cpp.zip"
                                  : "MelonLoader.Mono.zip")));
