@@ -45,6 +45,8 @@ namespace MelonLoader.Installer
                                  : "MelonLoader.Mono.zip")));
 
                         mainForm.Invoke(new Action(() => { mainForm.label1.Text = "Extracting..."; }));
+                        if (File.Exists(Path.Combine(dirpath, "Mono.Cecil.dll")))
+                            File.Delete(Path.Combine(dirpath, "Mono.Cecil.dll"));
                         if (File.Exists(Path.Combine(dirpath, "version.dll")))
                             File.Delete(Path.Combine(dirpath, "version.dll"));
                         if (File.Exists(Path.Combine(dirpath, "winmm.dll")))
@@ -55,6 +57,8 @@ namespace MelonLoader.Installer
                             Directory.Delete(Path.Combine(dirpath, "Logs"), true);
                         if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
                             Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
+                        if (!Directory.Exists(Path.Combine(dirpath, "PreloadMods")))
+                            Directory.CreateDirectory(Path.Combine(dirpath, "PreloadMods"));
 
                         using var zip = new ZipArchive(zipdata);
                         foreach (var zipArchiveEntry in zip.Entries)

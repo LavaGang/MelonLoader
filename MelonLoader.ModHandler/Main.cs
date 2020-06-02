@@ -249,7 +249,7 @@ namespace MelonLoader
 
         private static void LoadMods(bool preload = false)
         {
-            string modDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Mods", (preload ? "PRELOAD" : "")));
+            string modDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (preload ? "PreloadMods" : "Mods"));
             if (!Directory.Exists(modDirectory))
                 Directory.CreateDirectory(modDirectory);
             else
