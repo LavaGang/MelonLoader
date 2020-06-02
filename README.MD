@@ -1,6 +1,6 @@
 ### AUTOMATED INSTALL:
 
-1. Download MelonLoader.Installer.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+1. Download MelonLoader.Installer.exe from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 2. Run MelonLoader.Installer.exe and Follow the Instructions.
 
 ---

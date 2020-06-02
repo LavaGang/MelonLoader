@@ -20,12 +20,25 @@
 
 ### Version List:
 
+[v0.2.2 Open-Beta](#v022-open-beta)  
 [v0.2.1 Open-Beta](#v021-open-beta)  
 [v0.2.0 Open-Beta](#v020-open-beta)  
 [v0.1.0 Open-Beta](#v010-open-beta)  
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.2.2 Open-Beta:
+
+1. Downgraded Installer to .NET Framework 4.7.2.  (Credits to knah :D)
+2. Added Error Messages to Installer.  (Credits to knah :D)
+3. Added Proper Threading to Installer.  (Credits to knah :D)
+4. Installer now creates a Mods folder if none exists.
+5. Fixed Installer Form Size.
+6. Fixed Issue with Label in Installer Form not Auto-Centering.
+7. Fixed Build Information for Installer.
 
 ---
 
@@ -37,6 +50,8 @@
 4. Added an Installer.
 5. Fixed Console Display Issue.
 6. Temporarily removed --melonloader.hideconsole.
+
+---
 
 ### v0.2.0 Open-Beta:
 
