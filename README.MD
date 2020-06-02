@@ -41,6 +41,7 @@
 | Argument              | Description                              |
 | --------------------- | ---------------------------------------- |
 | --no-mods             | Launch game without loading Mods         |
+| --melonloader.hideconsole   | Hides the Normal Console                            |
 | --melonloader.debug   | Debug Console                            |
 | --melonloader.quitfix   | Fixes the Hanging Process Issue with some Games |
 | --melonloader.maxlogs   | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |

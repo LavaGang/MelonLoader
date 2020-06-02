@@ -45,6 +45,7 @@
 8. Moved Preload Mods to its own separate PreloadMods folder.
 9. Installer now creates a PreloadMods folder if none exists.
 10. Installer now properly installs the Latest Version instead of a Predetermined Version.
+11. Fixed and Re-Enabled --melonloader.hideconsole.
 
 ---
 
@@ -55,7 +56,7 @@
 3. Fixed Config Issue causing Assembly to always need to Regenerate.
 4. Added an Installer.
 5. Fixed Console Display Issue.
-6. Temporarily removed --melonloader.hideconsole.
+6. Temporarily disabled --melonloader.hideconsole.
 
 ---
 
