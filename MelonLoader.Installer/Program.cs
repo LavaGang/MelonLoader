@@ -18,6 +18,7 @@ namespace MelonLoader.Installer
             MainForm mainForm = new MainForm();
             Application.EnableVisualStyles();
             mainForm.Show();
+
             string filePath = null;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
