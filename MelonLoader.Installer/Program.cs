@@ -9,8 +9,8 @@ namespace MelonLoader.Installer
 {
     static class Program
     {
-        internal static string Title = (BuildInfo.Name + " Installer for v" + BuildInfo.Version + " Open-Beta");
         internal static string VersionToDownload = "0.2.1";
+        internal static string Title = ("MelonLoader Installer for v" + VersionToDownload + " Open-Beta");
 
         [STAThread]
         static void Main()
