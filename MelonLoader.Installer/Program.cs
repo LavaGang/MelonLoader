@@ -55,10 +55,6 @@ namespace MelonLoader.Installer
                             Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
                         if (Directory.Exists(Path.Combine(dirpath, "Logs")))
                             Directory.Delete(Path.Combine(dirpath, "Logs"), true);
-                        if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
-                            Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
-                        if (!Directory.Exists(Path.Combine(dirpath, "PreloadMods")))
-                            Directory.CreateDirectory(Path.Combine(dirpath, "PreloadMods"));
 
                         using var zip = new ZipArchive(zipdata);
                         foreach (var zipArchiveEntry in zip.Entries)
@@ -69,7 +65,12 @@ namespace MelonLoader.Installer
                         }
 
                         zip.ExtractToDirectory(dirpath);
-                        
+
+                        if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
+                            Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
+                        if (!Directory.Exists(Path.Combine(dirpath, "PreloadMods")))
+                            Directory.CreateDirectory(Path.Combine(dirpath, "PreloadMods"));
+
                         mainForm.Invoke(new Action(() =>
                         {
                             mainForm.Close();

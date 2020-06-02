@@ -16,6 +16,7 @@ int MelonLoader::CommandLineC = NULL;
 char* MelonLoader::CommandLineV[64];
 bool MelonLoader::IsGameIl2Cpp = false;
 bool MelonLoader::DebugMode = false;
+bool MelonLoader::ConsoleEnabled = true;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
@@ -165,6 +166,8 @@ void MelonLoader::ParseCommandLine()
 					QuitFix = true;
 				else if (strstr(command, "--melonloader.maxlogs") != NULL)
 					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
+				else if (strstr(command, "--melonloader.hideconsole") != NULL)
+					ConsoleEnabled = false;
 #ifndef DEBUG
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{

@@ -46,6 +46,8 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsDebugMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool IsConsoleEnabled();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsRainbowMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsRandomRainbowMode();

@@ -2,7 +2,7 @@
 
 1. StackTraces refuse to show line numbers.
 2. Console Logs randomly do not Color properly.
-3. Mono Module currently has an Issue with https/ssl.
+3. Mono Module has an Issue with https/ssl.
 4. Harmony Patching sometimes has an issue Patching Methods that have already been patched elsewhere.
 5. Harmony Patching sometimes causes an Error or Crash for some Methods.
 
@@ -14,9 +14,10 @@
 2. Add Debugger Support to Mono Domain.
 3. Create Method for ModPrefs to Register Categories and Preferences in a single call.
 4. OnLevelIsLoading needs fixing for other games than just BONEWORKS.
-5. Add Android Support.
-6. Add Linux Support.
-7. Add Mac OS Support.
+5. Add Version Selector to Installer.
+6. Add Android Support.
+7. Add Linux Support.
+8. Add Mac OS Support.
 
 ---
 

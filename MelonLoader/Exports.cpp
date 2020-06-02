@@ -14,6 +14,7 @@ void Logger_LogModError(MonoString* namesection, MonoString* msg) { Logger::LogM
 void Logger_LogModStatus(int type) { Logger::LogModStatus(type); }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }
+bool IsConsoleEnabled() { return MelonLoader::ConsoleEnabled; }
 bool IsRainbowMode() { return MelonLoader::RainbowMode; }
 bool IsRandomRainbowMode() { return MelonLoader::RandomRainbowMode; }
 MonoString* GetGameDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::GamePath); }
@@ -39,6 +40,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogModStatus", Logger_LogModStatus);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsIl2CppGame", IsIl2CppGame);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsDebugMode", IsDebugMode);
+	Mono::mono_add_internal_call("MelonLoader.Imports::IsConsoleEnabled", IsConsoleEnabled);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRainbowMode", IsRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsRandomRainbowMode", IsRandomRainbowMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDirectory", GetGameDirectory);

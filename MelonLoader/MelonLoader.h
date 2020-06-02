@@ -10,6 +10,7 @@ public:
 	static char* CommandLineV[64];
 	static bool IsGameIl2Cpp;
 	static bool DebugMode;
+	static bool ConsoleEnabled;
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
 	static bool QuitFix;

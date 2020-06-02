@@ -67,7 +67,7 @@ namespace MelonLoader.AssemblyGenerator
 
         private static bool AssemblyGenerateCheck(string unityVersion)
         {
-            if (localConfig.UnityVersion != unityVersion || localConfig.DumperVersion != ExternalToolVersions.Il2CppDumperVersion || localConfig.UnhollowerVersion != ExternalToolVersions.Il2CppAssemblyUnhollowerVersion)
+            if ((localConfig.UnityVersion != unityVersion) || (localConfig.DumperVersion != ExternalToolVersions.Il2CppDumperVersion) || (localConfig.UnhollowerVersion != ExternalToolVersions.Il2CppAssemblyUnhollowerVersion))
                 return true;
             string game_assembly_hash = null;
             using (var md5 = MD5.Create())
@@ -89,14 +89,14 @@ namespace MelonLoader.AssemblyGenerator
             DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, Il2CppDumper.BaseFolder);
             Logger.Log("Downloading Il2CppAssemblyUnhollower");
             DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, Il2CppAssemblyUnhollower.BaseFolder);
-            Logger.Log("Downloading unity dependencies");
+            Logger.Log("Downloading Unity Dependencies");
             try
             {
                 DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, UnityDependencies.BaseFolder);
             }
             catch (Exception ex)
             {
-                Logger.LogError("Can't download unity dependencies, no unstripping will be done");
+                Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
                 Logger.Log(ex.ToString());
             }
         }
@@ -168,7 +168,6 @@ namespace MelonLoader.AssemblyGenerator
                 }
             }
             Directory.Delete(Il2CppAssemblyUnhollower.OutputDirectory, true);
-            Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
         }
 
         private static string SetupDirectory(string path) { if (!Directory.Exists(path)) Directory.CreateDirectory(path); return path; }
