@@ -34,7 +34,7 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Font = new System.Drawing.Font("Segoe UI", 18F);
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
@@ -55,7 +55,6 @@
             this.Name = "MainForm";
             this.Text = "MelonLoader Installer for v0.0.0 Open-Beta";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
