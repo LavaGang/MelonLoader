@@ -15,7 +15,6 @@ namespace MelonLoader.Installer
         [STAThread]
         static void Main()
         {
-            // Application.SetHighDpiMode(HighDpiMode.SystemAware); // not supported in net472
             Application.SetCompatibleTextRenderingDefault(false);
             MainForm mainForm = new MainForm();
             Application.EnableVisualStyles();
@@ -54,6 +53,8 @@ namespace MelonLoader.Installer
                             Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
                         if (Directory.Exists(Path.Combine(dirpath, "Logs")))
                             Directory.Delete(Path.Combine(dirpath, "Logs"), true);
+                        if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
+                            Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
 
                         using var zip = new ZipArchive(zipdata);
                         foreach (var zipArchiveEntry in zip.Entries)
