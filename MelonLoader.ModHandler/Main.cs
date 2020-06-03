@@ -63,7 +63,7 @@ namespace MelonLoader
                 UnhollowerSupport.Initialize();
             }
             SupportModule.Initialize();
-            AddDebugLog();
+            AddUnityDebugLog();
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + UnityVersion);
@@ -405,7 +405,7 @@ namespace MelonLoader
             return file_version.Substring(0, file_version.LastIndexOf('.'));
         }
 
-        private static void AddDebugLog()
+        private static void AddUnityDebugLog()
         {
             SupportModule.UnityDebugLog(" ");
             SupportModule.UnityDebugLog("This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!");
