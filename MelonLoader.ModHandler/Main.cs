@@ -408,7 +408,7 @@ namespace MelonLoader
         private static void AddDebugLog()
         {
             SupportModule.UnityDebugLog(" ");
-            SupportModule.UnityDebugLog("This Game has been MODIFIED by MelonLoader. DO NOT report any issues to the Developers!");
+            SupportModule.UnityDebugLog("This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!");
             SupportModule.UnityDebugLog(" ");
         }
     }
