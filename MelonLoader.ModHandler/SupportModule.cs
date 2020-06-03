@@ -13,6 +13,7 @@ namespace MelonLoader
         object StartCoroutine(IEnumerator coroutine);
         void StopCoroutine(object coroutineToken);
         void ProcessWaitForEndOfFrame();
+        void UnityDebugLog(string msg);
     }
 
     internal static class SupportModule
@@ -41,6 +42,7 @@ namespace MelonLoader
                                 MethodInfo method = type.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
                                 if (!method.Equals(null))
                                     supportModule = (ISupportModule)method.Invoke(null, new object[0]);
+                                
                             }
                         }
                     }
@@ -61,5 +63,6 @@ namespace MelonLoader
         internal static string GetUnityVersion() => supportModule?.GetUnityVersion();
         internal static float GetUnityDeltaTime() => supportModule?.GetUnityDeltaTime() ?? 0f;
         internal static int GetActiveSceneIndex() => supportModule?.GetActiveSceneIndex() ?? -9;
+        internal static void UnityDebugLog(string msg) => supportModule?.UnityDebugLog(msg);
     }
 }

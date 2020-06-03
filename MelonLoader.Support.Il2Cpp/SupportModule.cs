@@ -12,5 +12,6 @@ namespace MelonLoader.Support
         public object StartCoroutine(IEnumerator coroutine) => MelonCoroutines.Start(coroutine);
         public void StopCoroutine(object coroutineToken) => MelonCoroutines.Stop(coroutineToken);
         public void ProcessWaitForEndOfFrame() => MelonCoroutines.ProcessWaitForEndOfFrame();
+        public void UnityDebugLog(string msg) { Debug.Log(msg); }
     }
 }
