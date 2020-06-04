@@ -46,6 +46,7 @@
 11. Fixed and Re-Enabled --melonloader.hideconsole.
 12. Added Log to Unity Debug to Signify to Developers that a Game has been Modded.
 13. Fixed SSL/TLS issue with the GeneratorProcess.  (Credits to zeobviouslyfakeacc :3)
+14. Fixed Crash Issue with Harmony when Patching Methods Multiple Times or when a Method happens to be null.  (Credits to zeobviouslyfakeacc :3)
 
 ---
 
