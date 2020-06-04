@@ -47,6 +47,7 @@
 10. Installer now properly installs the Latest Version instead of a Predetermined Version.
 11. Fixed and Re-Enabled --melonloader.hideconsole.
 12. Added Log to Unity Debug to Signify to Developers that a Game has been Modded.
+13. Fixed SSL/TLS issue with the GeneratorProcess.  (Credits to zeobviouslyfakeacc :3)
 
 ---
 
