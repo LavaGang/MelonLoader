@@ -1,6 +1,6 @@
 ### AUTOMATED INSTALL:
 
-- Down due to Microsoft Windows Defender breaking it.
+- Down due to Microsoft Windows Defender breaking it with a False Positive.
 - Will be back soon.
 - Until then refer to another installer or try Manual Installation below.
 
