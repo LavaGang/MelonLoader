@@ -74,12 +74,14 @@ namespace Harmony
 		public Patch[] prefixes;
 		public Patch[] postfixes;
 		public Patch[] transpilers;
+		public IntPtr methodDetourPointer;
 
 		public PatchInfo()
 		{
 			prefixes = new Patch[0];
 			postfixes = new Patch[0];
 			transpilers = new Patch[0];
+			methodDetourPointer = IntPtr.Zero;
 		}
 
 		public void AddPrefix(MethodInfo patch, string owner, int priority, string[] before, string[] after)

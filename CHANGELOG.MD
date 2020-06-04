@@ -3,8 +3,6 @@
 1. StackTraces refuse to show line numbers.
 2. Console Logs randomly do not Color properly.
 3. Mono Module has an Issue with https/ssl.
-4. Harmony Patching sometimes has an issue Patching Methods that have already been patched elsewhere.
-5. Harmony Patching sometimes causes an Error or Crash for some Methods.
 
 ---
 

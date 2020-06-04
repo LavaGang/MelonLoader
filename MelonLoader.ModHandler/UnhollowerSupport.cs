@@ -9,11 +9,13 @@ namespace MelonLoader
     {
         private static Assembly UnhollowerBaseLib = null;
         internal static Type Il2CppObjectBaseType = null;
+        internal static MethodInfo Il2CppObjectBaseToPtrMethod = null;
 
         internal static void Initialize()
         {
             UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
             Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
+            Il2CppObjectBaseToPtrMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP").GetMethod("Il2CppObjectBaseToPtr");
         }
 
         internal static bool IsGeneratedAssemblyType(Type type) => (Imports.IsIl2CppGame() && !Il2CppObjectBaseType.Equals(null) && !type.Equals(null) && type.IsSubclassOf(Il2CppObjectBaseType));

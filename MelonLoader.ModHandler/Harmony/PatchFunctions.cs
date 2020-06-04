@@ -81,22 +81,30 @@ namespace Harmony
 
 		public static DynamicMethod UpdateWrapper(MethodBase original, PatchInfo patchInfo, string instanceID)
 		{
-            var sortedPrefixes = GetSortedPatchMethods(original, patchInfo.prefixes);
+			var sortedPrefixes = GetSortedPatchMethods(original, patchInfo.prefixes);
 			var sortedPostfixes = GetSortedPatchMethods(original, patchInfo.postfixes);
 			var sortedTranspilers = GetSortedPatchMethods(original, patchInfo.transpilers);
 
-            var replacement = MethodPatcher.CreatePatchedMethod(original, instanceID, sortedPrefixes, sortedPostfixes, sortedTranspilers);
+			var replacement = MethodPatcher.CreatePatchedMethod(original, instanceID, sortedPrefixes, sortedPostfixes, sortedTranspilers);
 			if (replacement == null) throw new MissingMethodException("Cannot create dynamic replacement for " + original.FullDescription());
 
-            var errorString = Memory.DetourMethod(original, replacement);
+			var errorString = Memory.DetourMethod(original, replacement);
 			if (errorString != null)
 				throw new FormatException("Method " + original.FullDescription() + " cannot be patched. Reason: " + errorString);
 
-            if (UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType))
+			if (UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType))
 			{
-                var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
-                Imports.Hook(UnhollowerSupport.MethodBaseToIntPtr(original), il2CppShim.MethodHandle.GetFunctionPointer());
-                PatchTools.RememberObject(original, new PotatoTuple { First = replacement, Second = il2CppShim});
+				var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
+				var origMethodPtr = UnhollowerSupport.MethodBaseToIntPtr(original);
+				var oldDetourPtr = patchInfo.methodDetourPointer;
+				var newDetourPtr = il2CppShim.MethodHandle.GetFunctionPointer();
+
+				if (oldDetourPtr != IntPtr.Zero)
+					Imports.Unhook(origMethodPtr, oldDetourPtr);
+				Imports.Hook(origMethodPtr, newDetourPtr);
+				patchInfo.methodDetourPointer = newDetourPtr;
+
+				PatchTools.RememberObject(original, new PotatoTuple { First = replacement, Second = il2CppShim});
 			}
 			else
 				PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
@@ -153,8 +161,7 @@ namespace Harmony
 			// If needed, unwrap the return value; then return
 			if (UnhollowerSupport.IsGeneratedAssemblyType(origReturnType))
 			{
-				var pointerGetter = AccessTools.DeclaredProperty(UnhollowerSupport.Il2CppObjectBaseType, "Pointer").GetGetMethod();
-				Emitter.Emit(il, OpCodes.Call, pointerGetter);
+				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
 			}
 
 			Emitter.Emit(il, OpCodes.Ret);
@@ -163,6 +170,6 @@ namespace Harmony
 			return method;
 		}
 
-        private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
+		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
 	}
 }
