@@ -11,7 +11,7 @@ namespace MelonLoader
 {
     public static class Main
     {
-        internal static List<MelonMod> Mods = new List<MelonMod>();
+        public static List<MelonMod> Mods = new List<MelonMod>();
         internal static MelonModGameAttribute CurrentGameAttribute = null;
         public static bool IsVRChat = false;
         public static bool IsBoneworks = false;
