@@ -51,6 +51,7 @@
 16. Fix ModPrefs.SaveConfig() overriding previous SetString/Bool/etc calls.  (Credits to knah :D)
 17. Fixed TLS/SSL Issue with the Installer.
 18. Fixed issue with Games that don't have Assembly-CSharp.
+19. Added a check and a warning for if the OS is older than Windows 7.
 
 ---
 
