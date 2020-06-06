@@ -40,11 +40,7 @@ namespace MelonLoader.Installer
 
                         mainForm.Invoke(new Action(() => { mainForm.label1.Text = "Downloading..."; }));
                         var tempFile = Path.GetTempFileName();
-                        using var zipdata = new WebClient().OpenRead(
-                            ("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/" +
-                             "/" + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll"))
-                                 ? "MelonLoader.Il2Cpp.zip"
-                                 : "MelonLoader.Mono.zip")));
+                        using Stream zipdata = new WebClient().OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.zip");
 
                         mainForm.Invoke(new Action(() => { mainForm.label1.Text = "Extracting..."; }));
                         if (File.Exists(Path.Combine(dirpath, "Mono.Cecil.dll")))
@@ -68,6 +64,7 @@ namespace MelonLoader.Installer
 
                         zip.ExtractToDirectory(dirpath);
 
+                        Directory.CreateDirectory(Path.Combine(dirpath, "Logs"));
                         if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
                             Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
                         if (!Directory.Exists(Path.Combine(dirpath, "PreloadMods")))
