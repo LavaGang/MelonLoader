@@ -10,6 +10,7 @@
 #include "Logger.h"
 #include "ModHandler.h"
 #include "UnityPlayer.h"
+#pragma warning(disable:4996)
 
 HINSTANCE MelonLoader::thisdll = NULL;
 int MelonLoader::CommandLineC = NULL;
