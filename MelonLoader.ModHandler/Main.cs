@@ -59,7 +59,8 @@ namespace MelonLoader
         {
             if (Imports.IsIl2CppGame())
             {
-                Assembly_CSharp = Assembly.Load("Assembly-CSharp");
+                if (IsVRChat)
+                    Assembly_CSharp = Assembly.Load("Assembly-CSharp");
                 UnhollowerSupport.Initialize();
             }
             SupportModule.Initialize();

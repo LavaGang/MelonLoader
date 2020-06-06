@@ -160,9 +160,7 @@ namespace Harmony
 
 			// If needed, unwrap the return value; then return
 			if (UnhollowerSupport.IsGeneratedAssemblyType(origReturnType))
-			{
 				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
-			}
 
 			Emitter.Emit(il, OpCodes.Ret);
 

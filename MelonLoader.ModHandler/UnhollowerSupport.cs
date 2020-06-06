@@ -8,7 +8,7 @@ namespace MelonLoader
     internal class UnhollowerSupport
     {
         private static Assembly UnhollowerBaseLib = null;
-        internal static Type Il2CppObjectBaseType = null;
+        private static Type Il2CppObjectBaseType = null;
         internal static MethodInfo Il2CppObjectBaseToPtrMethod = null;
 
         internal static void Initialize()
@@ -27,8 +27,5 @@ namespace MelonLoader
                 return (IntPtr)methodptr.GetValue(null);
             return IntPtr.Zero;
         }
-
-        private static ParameterExpression[] GetParameters(EventInfo eventInfo) => eventInfo.EventHandlerType.GetMethod("Invoke").GetParameters().Select(parameter => Expression.Parameter(parameter.ParameterType, parameter.Name)).ToArray();
-        private static Delegate GetHandler(EventInfo eventInfo, Action action, ParameterExpression[] parameters) => Expression.Lambda(eventInfo.EventHandlerType, Expression.Call(Expression.Constant(action), "Invoke", Type.EmptyTypes), parameters).Compile();
     }
 }

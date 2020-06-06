@@ -50,6 +50,7 @@
 15. Made the Loaded Mods List public.
 16. Fix ModPrefs.SaveConfig() overriding previous SetString/Bool/etc calls.  (Credits to knah :D)
 17. Fixed TLS/SSL Issue with the Installer.
+18. Fixed issue with Games that don't have Assembly-CSharp.
 
 ---
 
