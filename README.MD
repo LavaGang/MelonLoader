@@ -1,8 +1,6 @@
 ### AUTOMATED INSTALL:
 
-- Down due to Microsoft Windows Defender and NortonLifeLock Symantec breaking it with a False Positive.
-- The Installer will be back soon after we get this resolved.
-- Until then refer to another installer or try Manual Installation below.
+- Coming Soon...
 
 ---
 	
