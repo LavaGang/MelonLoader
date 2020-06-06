@@ -49,10 +49,33 @@ namespace MelonLoader.Installer
                             File.Delete(Path.Combine(dirpath, "version.dll"));
                         if (File.Exists(Path.Combine(dirpath, "winmm.dll")))
                             File.Delete(Path.Combine(dirpath, "winmm.dll"));
-                        if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
-                            Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
                         if (Directory.Exists(Path.Combine(dirpath, "Logs")))
                             Directory.Delete(Path.Combine(dirpath, "Logs"), true);
+
+                        /*
+                        string MelonLoaderFolderPath = Path.Combine(dirpath, "MelonLoader");
+                        if (Directory.Exists(MelonLoaderFolderPath))
+                        {
+                            if (Directory.Exists(Path.Combine(MelonLoaderFolderPath, "Documentation")))
+                                Directory.Delete(Path.Combine(MelonLoaderFolderPath, "Documentation"), true);
+                            if (Directory.Exists(Path.Combine(MelonLoaderFolderPath, "Mono")))
+                                Directory.Delete(Path.Combine(MelonLoaderFolderPath, "Mono"), true);
+                            if (File.Exists(Path.Combine(MelonLoaderFolderPath, "MelonLoader.dll")))
+                                File.Delete(Path.Combine(MelonLoaderFolderPath, "MelonLoader.dll"));
+                            if (File.Exists(Path.Combine(MelonLoaderFolderPath, "MelonLoader.ModHandler.dll")))
+                                File.Delete(Path.Combine(MelonLoaderFolderPath, "MelonLoader.ModHandler.dll"));
+                            if (File.Exists(Path.Combine(MelonLoaderFolderPath, "MelonLoader.Support.Il2Cpp.dll")))
+                                File.Delete(Path.Combine(MelonLoaderFolderPath, "MelonLoader.Support.Il2Cpp.dll"));
+                            if (File.Exists(Path.Combine(MelonLoaderFolderPath, "MelonLoader.GeneratorProcess.exe")))
+                                File.Delete(Path.Combine(MelonLoaderFolderPath, "MelonLoader.GeneratorProcess.exe"));
+                            if (File.Exists(Path.Combine(MelonLoaderFolderPath, "MelonLoader.Support.Mono.dll")))
+                                File.Delete(Path.Combine(MelonLoaderFolderPath, "MelonLoader.Support.Mono.dll"));
+                            if (File.Exists(Path.Combine(MelonLoaderFolderPath, "MelonLoader.Support.Mono.Pre2017.dll")))
+                                File.Delete(Path.Combine(MelonLoaderFolderPath, "MelonLoader.Support.Mono.Pre2017.dll"));
+                        }
+                        */
+                        if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
+                            Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
 
                         using var zip = new ZipArchive(zipdata);
                         foreach (var zipArchiveEntry in zip.Entries)
