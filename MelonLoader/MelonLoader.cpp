@@ -231,7 +231,7 @@ int MelonLoader::CountSubstring(std::string pat, std::string txt)
 	{
 		int j;
 		for (j = 0; j < M; j++)
-			if (txt[(int)i + j] != pat[j])
+			if (txt[i + j] != pat[j])
 				break;
 		if (j == M)
 		{
@@ -265,20 +265,16 @@ int MelonLoader::GetIntFromConstChar(const char* str, int defaultval)
     bool negate = (str[0] == '-');
     if ( *str == '+' || *str == '-' )
         ++str;
-
 	if (*str == '\0')
 		return defaultval;
-
     int result = 0;
     while(*str)
     {
 		if (*str >= '0' && *str <= '9')
-		{
-			result = result * 10 - (*str - '0');  //assume negative number
-		}
+			result = result * 10 - (*str - '0');
 		else
 			return defaultval;
         ++str;
     }
-    return negate ? result : -result; //-result is positive!
+    return negate ? result : -result;
 }

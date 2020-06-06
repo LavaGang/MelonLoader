@@ -14,6 +14,8 @@ namespace MelonLoader.Installer
         [STAThread]
         static void Main()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
             Application.SetCompatibleTextRenderingDefault(false);
             MainForm mainForm = new MainForm();
             Application.EnableVisualStyles();

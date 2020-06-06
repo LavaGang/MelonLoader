@@ -48,6 +48,8 @@
 13. Fixed SSL/TLS issue with the GeneratorProcess.  (Credits to zeobviouslyfakeacc :3)
 14. Fixed Crash Issue with Harmony when Patching Methods Multiple Times or when a Method happens to be null.  (Credits to zeobviouslyfakeacc :3)
 15. Made the Loaded Mods List public.
+16. Fix ModPrefs.SaveConfig() overriding previous SetString/Bool/etc calls.  (Credits to knah :D)
+17. Fixed TLS/SSL Issue with the Installer.
 
 ---
 
