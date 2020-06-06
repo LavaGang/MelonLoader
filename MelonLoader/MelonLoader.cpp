@@ -212,7 +212,7 @@ bool MelonLoader::CheckOSVersion()
 	ZeroMemory(&info, sizeof(OSVERSIONINFO));
 	info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	GetVersionEx(&info);
-	if ((info.dwMajorVersion < 6) || (info.dwMinorVersion < 1))
+	if ((info.dwMajorVersion < 6) || ((info.dwMajorVersion == 6) && (info.dwMinorVersion < 1)))
 	{
 		int result = MessageBox(NULL, "You are running on an Unsupported OS.\nWe can not offer support if there are any issues.\nContinue with MelonLoader?", "MelonLoader", MB_ICONWARNING | MB_YESNO);
 		if (result == IDYES)
