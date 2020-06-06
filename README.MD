@@ -1,21 +1,15 @@
-### AUTOMATED INSTALL:
+### AUTOMATED INSTALLATION:
 
 1. Download MelonLoader.Installer.exe from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
 2. Run MelonLoader.Installer.exe and Follow the Instructions.
 
 ---
 	
-### MANUAL INSTALLATION FOR MONO GAMES:
+### MANUAL INSTALLATION:
 
-1. Download MelonLoader.Mono.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
-2. Extract MelonLoader.Mono.zip to the Game's Installation Folder.
-
----
-
-### MANUAL INSTALLATION FOR IL2CPP GAMES:
-
-1. Download MelonLoader.Il2Cpp.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
-2. Extract MelonLoader.Il2Cpp.zip to the Game's Installation Folder.
+1. Download MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+2. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
+3. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
 
 ---
 
@@ -76,7 +70,7 @@ Third-party libraries used as source code or bundled in binary form:
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
 - Unity Runtime libraries (found in [Unity Dependencies](BaseLibs/Unity%20Dependencies)) are part of Unity Software. Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
-- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/TinyJSON/LICENSE.md) for the full License.
+- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.GeneratorProcess/TinyJSON/LICENSE.md) for the full License.
 
 External tools downloaded and used at runtime:
 - [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
