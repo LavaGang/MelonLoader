@@ -7,7 +7,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <LangVersion>latest</LangVersion>
-    <Version>0.2.1</Version>
+    <Version>0.2.2</Version>
     <Authors>Lava Gang</Authors>
     <Company>discord.gg/2Wn3N2P</Company>
     <Copyright>Lava Gang</Copyright>
