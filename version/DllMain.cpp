@@ -60,13 +60,10 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 		if ((strstr(filepath, "UnityCrashHandler") == NULL) && (strstr(GetCommandLine(), "--no-mods") == NULL))
 		{
 			HINSTANCE melonloaderdll = LoadLibrary("MelonLoader\\MelonLoader.dll");
-			if (melonloaderdll != NULL)
-				return TRUE;
-			else
+			if (melonloaderdll == NULL)
 				MessageBox(NULL, "Failed to Load MelonLoader.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
 		}
-		else
-			return TRUE;
+		return TRUE;
 	}
 	else
 		MessageBox(NULL, "Failed to Load version.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
