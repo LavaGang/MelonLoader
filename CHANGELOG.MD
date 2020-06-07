@@ -52,9 +52,10 @@
 17. Fixed TLS/SSL Issue with the Installer.
 18. Fixed issue with Games that don't have Assembly-CSharp.
 19. Added a check and a warning for if the OS is older than Windows 7.
-20. Cleaned up version.dll.
-21. version.dll Proxy will now look for version_original.dll next to the EXE before loading from System32.
-22. Small change to version.dll to Prevent Crashing when MelonLoader.dll fails to load.
+20. Updated Il2CppAssemblyUnhollower download to v0.4.4.  (Credits to knah :D)
+21. Cleaned up version.dll.
+22. version.dll Proxy will now look for version_original.dll next to the EXE before loading from System32.
+23. Small change to version.dll to Prevent Crashing when MelonLoader.dll fails to load.
 
 ---
 
