@@ -25,8 +25,22 @@ namespace MelonLoader
         {
             try
             {
-                string filepath = Path.Combine(Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "Dependencies"), "SupportModules"), (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" 
-                    : (File.Exists(Path.Combine(Imports.GetAssemblyDirectory(), "UnityEngine.CoreModule.dll")) ? "MelonLoader.Support.Mono.dll" : "MelonLoader.Support.Mono.Pre2017.dll")));
+                string basedir = Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+                string filepath = null;
+                if (Imports.IsIl2CppGame())
+                    filepath = Path.Combine(basedir, "MelonLoader.Support.Il2Cpp.dll");
+                else
+                {
+                    if (File.Exists(Path.Combine(Imports.GetAssemblyDirectory(), "UnityEngine.CoreModule.dll")))
+                        filepath = Path.Combine(basedir, "MelonLoader.Support.Mono.dll");
+                    else
+                    {
+                        if (IsOldUnity())
+                            filepath = Path.Combine(basedir, "MelonLoader.Support.Mono.Pre2017.2.dll");
+                        else
+                            filepath = Path.Combine(basedir, "MelonLoader.Support.Mono.Pre2017.dll");
+                    }
+                }
                 if (File.Exists(filepath))
                 {
                     byte[] data = File.ReadAllBytes(filepath);
@@ -41,7 +55,6 @@ namespace MelonLoader
                                 MethodInfo method = type.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
                                 if (!method.Equals(null))
                                     supportModule = (ISupportModule)method.Invoke(null, new object[0]);
-                                
                             }
                         }
                     }
@@ -57,6 +70,18 @@ namespace MelonLoader
                 MelonModLogger.LogError("Unable to load Support Module!\n" + e.ToString());
                 MelonModLogger.Log("------------------------------");
             }
+        }
+
+        internal static bool IsOldUnity()
+        {
+            string unityVersion = Main.UnityVersion.Substring(0, Main.UnityVersion.LastIndexOf('.'));
+            int unityVersion_major = 0;
+            int unityVersion_minor = 0;
+            return (int.TryParse(unityVersion.Substring(0, unityVersion.LastIndexOf('.')), out unityVersion_major)
+                && (unityVersion_major <= 5)
+                && int.TryParse(unityVersion.Substring(unityVersion.LastIndexOf('.') + 1), out unityVersion_minor)
+                && (unityVersion_minor < 3)
+                );
         }
 
         internal static string GetUnityVersion() => supportModule?.GetUnityVersion();
