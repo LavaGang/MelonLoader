@@ -12,7 +12,6 @@ namespace MelonLoader
         int GetActiveSceneIndex();
         object StartCoroutine(IEnumerator coroutine);
         void StopCoroutine(object coroutineToken);
-        void ProcessWaitForEndOfFrame();
         void UnityDebugLog(string msg);
     }
 

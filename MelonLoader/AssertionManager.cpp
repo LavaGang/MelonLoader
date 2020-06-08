@@ -1,6 +1,5 @@
 #include "AssertionManager.h"
 #include "MelonLoader.h"
-#include "PointerUtils.h"
 #include "Logger.h"
 #include "Mono.h"
 
@@ -27,9 +26,7 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 			MessageBox(NULL, msg.c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		else
 			MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-		MelonLoader::UNLOAD(true);
-		if (MelonLoader::IsGameIl2Cpp)
-			Mono::Unload();
+		MelonLoader::UNLOAD();
 	}
 }
 
@@ -71,42 +68,6 @@ FARPROC AssertionManager::GetExport(HMODULE mod, const char* export_name)
 		returnval = GetProcAddress(mod, export_name);
 		if (returnval == NULL)
 			ThrowError((std::string("Failed to GetExport ( ") + export_name + " )"));
-	}
-	return returnval;
-}
-
-uintptr_t AssertionManager::FindPattern(HMODULE mod, const char* name, const char* target_pattern)
-{
-	uintptr_t returnval = NULL;
-	if (!Result)
-	{
-		returnval = PointerUtils::FindPattern(mod, target_pattern);
-		if (returnval == NULL)
-			ThrowError((std::string("Failed to FindPattern ( ") + name + " )"));
-	}
-	return returnval;
-}
-
-uintptr_t AssertionManager::FindBestPossiblePattern(HMODULE mod, const char* name, std::vector<const char*> target_patterns)
-{
-	uintptr_t returnval = NULL;
-	if (!Result)
-	{
-		returnval = PointerUtils::FindBestPossiblePattern(mod, target_patterns);
-		if (returnval == NULL)
-			ThrowError((std::string("Failed to FindBestPossiblePattern ( ") + name + " )"));
-	}
-	return returnval;
-}
-
-std::vector<uintptr_t> AssertionManager::FindAllPattern(HMODULE mod, const char* name, const char* target_pattern)
-{
-	std::vector<uintptr_t> returnval;
-	if (!Result)
-	{
-		returnval = PointerUtils::FindAllPattern(mod, target_pattern);
-		if (returnval.size() < 1)
-			ThrowError((std::string("Failed to FindAllPattern ( ") + name + " )"));
 	}
 	return returnval;
 }

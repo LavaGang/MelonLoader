@@ -1,4 +1,5 @@
 ﻿using MelonLoader;
+using System.Collections;
 
 namespace TestMod
 {
@@ -13,7 +14,7 @@ namespace TestMod
 
     public class TestMod : MelonMod
     {
-        public override void OnPreInitialization() // Runs before Game Initialization. Only runs if the Mod is in the Mods/PRELOAD folder.
+        public override void OnPreInitialization() // Runs before Game Initialization. Only runs if the Mod is in the PreloadMods folder.
         {
             MelonModLogger.Log("OnPreInitialization");
         }

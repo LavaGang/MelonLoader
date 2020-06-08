@@ -30,5 +30,6 @@ namespace MelonLoader.Support
         void LateUpdate() => MelonLoader.Main.OnLateUpdate();
         void OnGUI() => MelonLoader.Main.OnGUI();
         void OnDestroy() => CreateComponent();
+        void OnApplicationQuit() => MelonLoader.Main.OnApplicationQuit();
     }
 }

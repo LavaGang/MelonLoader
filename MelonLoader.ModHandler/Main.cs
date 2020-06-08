@@ -15,8 +15,8 @@ namespace MelonLoader
         internal static MelonModGameAttribute CurrentGameAttribute = null;
         public static bool IsVRChat = false;
         public static bool IsBoneworks = false;
-        internal static Assembly Assembly_CSharp = null;
         public static string UnityVersion = null;
+        private static Assembly Assembly_CSharp = null;
 
         private static void Initialize()
         {
@@ -41,7 +41,7 @@ namespace MelonLoader
             }
 
             if (Imports.IsIl2CppGame() && !AssemblyGenerator.Main.Initialize())
-                Imports.UNLOAD_MELONLOADER(true);
+                Imports.UNLOAD_MELONLOADER();
             else
             {
                 LoadMods(true);
@@ -113,7 +113,7 @@ namespace MelonLoader
             }
         }
 
-        private static void OnApplicationQuit()
+        public static void OnApplicationQuit()
         {
             if (Mods.Count() > 0)
                 for (int i = 0; i < Mods.Count; i++)
@@ -124,9 +124,11 @@ namespace MelonLoader
                 }
             ModPrefs.SaveConfig();
             Harmony.HarmonyInstance.UnpatchAllInstances();
+            Imports.UNLOAD_MELONLOADER();
+            if (Imports.IsQuitFix()) Process.GetCurrentProcess().Kill();
         }
 
-        internal static void OnModSettingsApplied()
+        public static void OnModSettingsApplied()
         {
             if (Mods.Count() > 0)
                 for (int i = 0; i < Mods.Count; i++)

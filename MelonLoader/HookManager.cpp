@@ -1,7 +1,6 @@
 #include <string>
 #include "HookManager.h"
 #include "ModHandler.h"
-#include "UnityPlayer.h"
 #include "MelonLoader.h"
 #include "Console.h"
 #include "Detours/detours.h"
@@ -124,13 +123,10 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 	{
 		if (wcsstr(lpLibFileName, L"GameAssembly.dll"))
 		{
-			if (Il2Cpp::Setup(lib) && UnityPlayer::Load() && UnityPlayer::Setup())
+			if (Il2Cpp::Setup(lib))
 			{
 				Mono::CreateDomain();
 				HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::EndOfFrameCallbacks_DequeAll, Hooked_EndOfFrameCallbacks_DequeAll);
 			}
 			LoadLibraryW_Unhook();
 		}
@@ -141,12 +137,8 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		if (Mono::IsOldMono || wcsstr(lpLibFileName, L"mono-2.0-bdwgc.dll") || wcsstr(lpLibFileName, L"mono-2.0-sgen.dll") || wcsstr(lpLibFileName, L"mono-2.0-boehm.dll"))
 		{
 			Mono::Module = lib;
-			if (Mono::Setup() && UnityPlayer::Load() && UnityPlayer::Setup())
-			{
+			if (Mono::Setup())
 				HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerLoadFirstScene, Hooked_PlayerLoadFirstScene);
-				HookManager::Hook(&(LPVOID&)UnityPlayer::PlayerCleanup, Hooked_PlayerCleanup);
-			}
 			LoadLibraryW_Unhook();
 		}
 	}
@@ -177,28 +169,24 @@ MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const ch
 }
 #pragma endregion
 
-#pragma region PlayerLoadFirstScene
-void* HookManager::Hooked_PlayerLoadFirstScene(bool unknown)
+#pragma region runtime_invoke
+void* HookManager::Hooked_runtime_invoke(const void* method, void* obj, void** params, void** exc)
 {
-	ModHandler::OnApplicationStart();
-	return UnityPlayer::PlayerLoadFirstScene(unknown);
-}
-#pragma endregion
-
-#pragma region PlayerCleanup
-bool HookManager::Hooked_PlayerCleanup(bool dopostquitmsg)
-{
-	MelonLoader::UNLOAD();
-	if (MelonLoader::QuitFix)
-		MelonLoader::KillProcess();
-	return UnityPlayer::PlayerCleanup(dopostquitmsg);
-}
-#pragma endregion
-
-#pragma region EndOfFrameCallbacks_DequeAll
-void HookManager::Hooked_EndOfFrameCallbacks_DequeAll()
-{
-	ModHandler::MelonCoroutines_ProcessWaitForEndOfFrame();
-	UnityPlayer::EndOfFrameCallbacks_DequeAll();
+	const char* method_name = NULL;
+	if (MelonLoader::IsGameIl2Cpp)
+		method_name = Il2Cpp::il2cpp_method_get_name((Il2CppMethod*)method);
+	else
+		method_name = Mono::mono_method_get_name((MonoMethod*)method);
+	if (strstr(method_name, "Internal_ActiveSceneChanged") != NULL)
+	{
+		ModHandler::OnApplicationStart();
+		if (MelonLoader::IsGameIl2Cpp)
+			Unhook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, Hooked_runtime_invoke);
+		else
+			Unhook(&(LPVOID&)Mono::mono_runtime_invoke, Hooked_runtime_invoke);
+	}
+	if (MelonLoader::IsGameIl2Cpp)
+		return Il2Cpp::il2cpp_runtime_invoke((Il2CppMethod*)method, obj, params, (Il2CppObject**)exc);
+	return Mono::mono_runtime_invoke((MonoMethod*)method, obj, params, (MonoObject**)exc);
 }
 #pragma endregion

@@ -7,7 +7,7 @@ namespace MelonLoader
     public static class Imports
     {
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void UNLOAD_MELONLOADER(bool alt = false);
+        internal extern static void UNLOAD_MELONLOADER();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_Log(string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -66,5 +66,7 @@ namespace MelonLoader
         internal extern static void Console_SetColor(ConsoleColor color);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsOldMono();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsQuitFix();
     }
 }

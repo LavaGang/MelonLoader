@@ -9,7 +9,7 @@
 #include "HookManager.h"
 #include "Logger.h"
 #include "ModHandler.h"
-#include "UnityPlayer.h"
+#include <signal.h>
 #pragma warning(disable:4996)
 
 HINSTANCE MelonLoader::thisdll = NULL;
@@ -37,9 +37,9 @@ void MelonLoader::Main()
 		HMODULE exe_module = GetModuleHandle(NULL);
 		GetModuleFileName(exe_module, filepath, MAX_PATH);
 
-		long exe_size = GetFileSize(filepath);
-		if ((exe_size * 0.000001) > 10)
-			UnityPlayer::Module = exe_module;
+		//long exe_size = GetFileSize(filepath);
+		//if ((exe_size * 0.000001) > 10)
+		//	UnityPlayer::Module = exe_module;
 
 		std::string filepathstr = filepath;
 		ExePath = new char[filepathstr.size() + 1];
@@ -222,14 +222,12 @@ bool MelonLoader::CheckOSVersion()
 	return true;
 }
 
-void MelonLoader::UNLOAD(bool alt)
+void MelonLoader::UNLOAD()
 {
-	if (!alt)
-		ModHandler::OnApplicationQuit();
 	HookManager::UnhookAll();
-	if (!alt)
-		Logger::Log("UNLOADED!");
 	Logger::Stop();
+	if (MelonLoader::QuitFix)
+		MelonLoader::KillProcess();
 }
 
 void MelonLoader::KillProcess()

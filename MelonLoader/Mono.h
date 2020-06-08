@@ -23,6 +23,7 @@ typedef MonoImage* (*mono_assembly_get_image_t) (MonoAssembly* assembly);
 typedef MonoClass* (*mono_class_from_name_t) (MonoImage* image, const char* name_space, const char* name);
 typedef MonoMethod* (*mono_class_get_method_from_name_t) (MonoClass* klass, const char* name, int param_count);
 typedef MonoObject* (*mono_runtime_invoke_t) (MonoMethod* method, void* obj, void** params, MonoObject** exec);
+typedef const char* (*mono_method_get_name_t) (MonoMethod* method);
 typedef void (*mono_add_internal_call_t) (const char* name, void* method);
 typedef MonoThread* (*mono_thread_current_t)();
 typedef void (*mono_thread_set_main_t)(MonoThread* thread);
@@ -55,6 +56,7 @@ public:
 	static mono_class_from_name_t mono_class_from_name;
 	static mono_class_get_method_from_name_t mono_class_get_method_from_name;
 	static mono_runtime_invoke_t mono_runtime_invoke;
+	static mono_method_get_name_t mono_method_get_name;
 	static mono_add_internal_call_t mono_add_internal_call;
 	static mono_thread_current_t mono_thread_current;
 	static mono_thread_set_main_t mono_thread_set_main;
@@ -67,7 +69,6 @@ public:
 	static mono_domain_set_config_t mono_domain_set_config;
 
 	static bool Load();
-	static void Unload();
 	static bool Setup();
 	static void CreateDomain();
 	static void FixDomainBaseDir();

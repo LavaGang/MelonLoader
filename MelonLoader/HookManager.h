@@ -37,7 +37,5 @@ public:
 	static HMODULE __stdcall Hooked_LoadLibraryW(LPCWSTR lpLibFileName);
 	static Il2CppDomain* Hooked_il2cpp_init(const char* name);
 	static MonoDomain* Hooked_mono_jit_init_version(const char* name, const char* version);
-	static void* Hooked_PlayerLoadFirstScene(bool unknown);
-	static bool Hooked_PlayerCleanup(bool dopostquitmsg);
-	static void Hooked_EndOfFrameCallbacks_DequeAll();
+	static void* Hooked_runtime_invoke(const void* method, void* obj, void** params, void** exc);
 };

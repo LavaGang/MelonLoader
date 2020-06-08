@@ -24,7 +24,7 @@ public:
 	static void ParseCommandLine();
 	static void ReadAppInfo();
 	static bool CheckOSVersion();
-	static void UNLOAD(bool alt = false);
+	static void UNLOAD();
 	static void KillProcess();
 	static int CountSubstring(std::string pat, std::string txt);
 	static bool DirectoryExists(const char* path);

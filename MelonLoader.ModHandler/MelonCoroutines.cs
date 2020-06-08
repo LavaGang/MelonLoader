@@ -24,15 +24,12 @@ namespace MelonLoader
         /// <param name="coroutineToken">The coroutine to stop</param>
         public static void Stop(object coroutineToken)
         {
-            SupportModule.supportModule?.StopCoroutine(coroutineToken);
+            if (SupportModule.supportModule == null)
+                throw new NotSupportedException("Support module must be initialized before starting coroutines");
+            SupportModule.supportModule.StopCoroutine(coroutineToken);
         }
         
         [Obsolete("Use version with IEnumerator parameter", true)]
         public static void Start<T>(T routine) => Start((IEnumerator) routine);
-
-        private static void ProcessWaitForEndOfFrame()
-        {
-            SupportModule.supportModule?.ProcessWaitForEndOfFrame();
-        }
     }
 }
