@@ -56,6 +56,7 @@
 21. Cleaned up version.dll.
 22. version.dll Proxy will now look for version_original.dll next to the EXE before loading from System32.
 23. Small change to version.dll to Prevent Crashing when MelonLoader.dll fails to load.
+24. Revised Loading System to work without needing Signatures.
 
 ---
 
