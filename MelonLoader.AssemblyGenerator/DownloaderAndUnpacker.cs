@@ -6,10 +6,9 @@ namespace MelonLoader.GeneratorProcess
 {
     public static class DownloaderAndUnpacker
     {
-        public static void Run(string url, string targetVersion, string destinationFolder)
+        public static void Run(string url, string targetVersion, string currentVersion, string destinationFolder)
         {
-            var downloadVersionMark = Path.Combine(destinationFolder, ".v-" + targetVersion);
-            if (File.Exists(downloadVersionMark))
+            if (targetVersion == currentVersion)
             {
                 Logger.Log($"{destinationFolder} already contains required version, skipping download");
                 return;
@@ -40,7 +39,7 @@ namespace MelonLoader.GeneratorProcess
                 entryStream.CopyTo(targetStream);
             }
             
-            File.WriteAllBytes(downloadVersionMark, new byte[0]);
+            //File.WriteAllBytes(downloadVersionMark, new byte[0]);
         }
     }
 }

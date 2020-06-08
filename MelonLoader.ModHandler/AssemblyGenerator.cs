@@ -8,7 +8,7 @@ namespace MelonLoader.AssemblyGenerator
     {
         internal static bool Initialize()
         {
-            string GeneratorProcessPath = Path.Combine(Path.Combine(Imports.GetGameDirectory(), "MelonLoader"), "MelonLoader.GeneratorProcess.exe");
+            string GeneratorProcessPath = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Imports.GetGameDirectory(), "MelonLoader"), "Dependencies"), "AssemblyGenerator"), "MelonLoader.AssemblyGenerator.exe");
             if (File.Exists(GeneratorProcessPath))
             {
                 var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath);
@@ -18,7 +18,7 @@ namespace MelonLoader.AssemblyGenerator
                 generatorProcessInfo.CreateNoWindow = true;
                 var process = Process.Start(generatorProcessInfo);
                 if (process == null)
-                    MelonModLogger.LogError("Unable to Start Generator Process!");
+                    MelonModLogger.LogError("Unable to Start Assembly Generator!");
                 else
                 {
                     var stdout = process.StandardOutput;
@@ -30,12 +30,12 @@ namespace MelonLoader.AssemblyGenerator
                     while (!process.HasExited)
                         Thread.Sleep(100);
                     if (Imports.IsDebugMode())
-                        MelonModLogger.Log($"Generator Process exited with code {process.ExitCode}");
+                        MelonModLogger.Log($"Assembly Generator exited with code {process.ExitCode}");
                     return (process.ExitCode == 0);
                 }
             }
             else
-                MelonModLogger.LogError("MelonLoader.GeneratorProcess.exe does not Exist!");
+                MelonModLogger.LogError("MelonLoader.AssemblyGenerator.exe does not Exist!");
             return false;
         }
     }

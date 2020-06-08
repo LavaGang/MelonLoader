@@ -33,7 +33,6 @@ namespace MelonLoader.AssemblyGenerator
                 Cleanup();
                 Logger.Log("Assembly Generation was Successful!");
             }
-            WriteLocalConfig(unityVersion);
             return true;
         }
 
@@ -48,7 +47,7 @@ namespace MelonLoader.AssemblyGenerator
 
             MSCORLIB_Path = Path.Combine(AssemblyFolder, "mscorlib.dll");
             
-            BaseFolder = SetupDirectory(Path.Combine(Path.Combine(gameRoot, "MelonLoader"), "AssemblyGenerator"));
+            BaseFolder = SetupDirectory(Path.Combine(Path.Combine(Path.Combine(gameRoot, "MelonLoader"), "Dependencies"), "AssemblyGenerator"));
             
             Il2CppDumper.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppDumper"));
             Il2CppAssemblyUnhollower.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppAssemblyUnhollower"));
@@ -89,13 +88,21 @@ namespace MelonLoader.AssemblyGenerator
         private static void DownloadDependencies(string unityVersion)
         {
             Logger.Log("Downloading Il2CppDumper");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, Il2CppDumper.BaseFolder);
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, localConfig.DumperVersion, Il2CppDumper.BaseFolder);
+            localConfig.DumperVersion = ExternalToolVersions.Il2CppDumperVersion;
+            localConfig.Save(localConfigPath);
+
             Logger.Log("Downloading Il2CppAssemblyUnhollower");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, Il2CppAssemblyUnhollower.BaseFolder);
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder);
+            localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
+            localConfig.Save(localConfigPath);
+
             Logger.Log("Downloading Unity Dependencies");
             try
             {
-                DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, UnityDependencies.BaseFolder);
+                DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, localConfig.UnityVersion, UnityDependencies.BaseFolder);
+                localConfig.UnityVersion = unityVersion;
+                localConfig.Save(localConfigPath);
             }
             catch (Exception ex)
             {
@@ -137,6 +144,16 @@ namespace MelonLoader.AssemblyGenerator
                 return false;
             }
 
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(GameAssembly_Path))
+                {
+                    var hash = md5.ComputeHash(stream);
+                    localConfig.GameAssemblyHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                }
+            }
+            localConfig.Save(localConfigPath);
+
             return true;
         }
 
@@ -171,25 +188,11 @@ namespace MelonLoader.AssemblyGenerator
                 }
             }
             Directory.Delete(Il2CppAssemblyUnhollower.OutputDirectory, true);
+            localConfig.Save(localConfigPath);
         }
 
         private static string SetupDirectory(string path) { if (!Directory.Exists(path)) Directory.CreateDirectory(path); return path; }
         private static void FixIl2CppDumperConfig() => File.WriteAllText(Path.Combine(Il2CppDumper.BaseFolder, "config.json"), Encoder.Encode(il2cppConfig, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
-        private static void WriteLocalConfig(string unityVersion)
-        {
-            localConfig.UnityVersion = unityVersion;
-            localConfig.DumperVersion = ExternalToolVersions.Il2CppDumperVersion;
-            localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
-            using (var md5 = MD5.Create())
-            {
-                using (var stream = File.OpenRead(GameAssembly_Path))
-                {
-                    var hash = md5.ComputeHash(stream);
-                    localConfig.GameAssemblyHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-                }
-            }
-            File.WriteAllText(localConfigPath, Encoder.Encode(localConfig, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
-        }
     }
 
     internal class Package
@@ -227,10 +230,7 @@ namespace MelonLoader.AssemblyGenerator
                     {
                         MethodInfo c = a.EntryPoint;
                         if (c != null)
-                        {
-                            Directory.SetCurrentDirectory(BaseFolder);
                             c.Invoke(null, new object[] {argv});
-                        }
                         else
                             return false;
                     }
@@ -274,5 +274,6 @@ namespace MelonLoader.AssemblyGenerator
         public string DumperVersion = null;
         public string UnhollowerVersion = null;
         public List<string> OldFiles = new List<string>();
+        public void Save(string path) => File.WriteAllText(path, Encoder.Encode(this, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
     }
 }

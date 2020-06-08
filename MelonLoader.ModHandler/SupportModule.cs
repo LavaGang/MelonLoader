@@ -25,7 +25,7 @@ namespace MelonLoader
         {
             try
             {
-                string filepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" 
+                string filepath = Path.Combine(Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "Dependencies"), "SupportModules"), (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" 
                     : (File.Exists(Path.Combine(Imports.GetAssemblyDirectory(), "UnityEngine.CoreModule.dll")) ? "MelonLoader.Support.Mono.dll" : "MelonLoader.Support.Mono.Pre2017.dll")));
                 if (File.Exists(filepath))
                 {

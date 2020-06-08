@@ -7,11 +7,11 @@
     <ProjectGuid>{84B12E10-41B3-479C-87A6-8CE5D8C82C2F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MelonLoader.GeneratorProcess</RootNamespace>
-    <AssemblyName>MelonLoader.GeneratorProcess</AssemblyName>
+    <RootNamespace>MelonLoader.AssemblyGenerator</RootNamespace>
+    <AssemblyName>MelonLoader.AssemblyGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
