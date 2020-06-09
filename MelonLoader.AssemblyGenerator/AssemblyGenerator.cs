@@ -271,7 +271,7 @@ namespace MelonLoader.AssemblyGenerator
                     return (process.ExitCode == 0);
                 }
             }
-            return true;
+            return false;
         }
     }
 
