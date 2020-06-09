@@ -84,7 +84,7 @@ void MelonLoader::Main()
 			if (IsGameIl2Cpp)
 			{
 				assemblypath = filepathstr + "\\MelonLoader\\Managed";
-				basepath = filepathstr + "\\MelonLoader\\Mono";
+				basepath = filepathstr + "\\MelonLoader\\Dependencies";
 				configpath = ndatapath + "\\il2cpp_data\\etc";
 			}
 			else
