@@ -47,7 +47,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DownloaderAndUnpacker.cs" />
     <Compile Include="ExternalToolVersions.cs" />
-    <Compile Include="GeneratorProcessProgram.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="TinyJSON\Decoder.cs" />
     <Compile Include="TinyJSON\EncodeOptions.cs" />

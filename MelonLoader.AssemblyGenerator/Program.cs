@@ -1,8 +1,8 @@
 using System;
 
-namespace MelonLoader.GeneratorProcess
+namespace MelonLoader.AssemblyGenerator
 {
-    public static class GeneratorProcessProgram
+    public static class Program
     {
         public static int Main(string[] args)
         {

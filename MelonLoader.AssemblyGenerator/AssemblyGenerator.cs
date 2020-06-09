@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using MelonLoader.GeneratorProcess;
 using TinyJSON;
 
 namespace MelonLoader.AssemblyGenerator
@@ -216,11 +217,12 @@ namespace MelonLoader.AssemblyGenerator
         internal bool Execute(string[] argv)
         {
             string assembly_path = Path.Combine(BaseFolder, FileName);
-            foreach (var enumerateFile in Directory.EnumerateFiles(BaseFolder, "*.dll"))
-                Assembly.LoadFrom(enumerateFile);
+            //foreach (var enumerateFile in Directory.EnumerateFiles(BaseFolder, "*.dll"))
+            //    Assembly.LoadFrom(enumerateFile);
             
             if (File.Exists(assembly_path))
             {
+                /*
                 var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
                 try
                 {
@@ -245,6 +247,28 @@ namespace MelonLoader.AssemblyGenerator
                 finally
                 {
                     OverrideAppDomainBase(originalCwd);
+                }
+                */
+
+                var generatorProcessInfo = new ProcessStartInfo(assembly_path);
+                generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)));
+                generatorProcessInfo.UseShellExecute = false;
+                generatorProcessInfo.RedirectStandardOutput = true;
+                generatorProcessInfo.CreateNoWindow = true;
+                var process = Process.Start(generatorProcessInfo);
+                if (process == null)
+                    Logger.LogError("Unable to Start " + FileName + "!");
+                else
+                {
+                    var stdout = process.StandardOutput;
+                    while (!process.HasExited && !stdout.EndOfStream)
+                    {
+                        var line = stdout.ReadLine();
+                        Logger.Log(line);
+                    }
+                    while (!process.HasExited)
+                        Thread.Sleep(100);
+                    return (process.ExitCode == 0);
                 }
             }
             return true;

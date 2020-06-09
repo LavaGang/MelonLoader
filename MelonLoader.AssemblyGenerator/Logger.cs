@@ -1,6 +1,6 @@
 using System;
 
-namespace MelonLoader.GeneratorProcess
+namespace MelonLoader.AssemblyGenerator
 {
     public class Logger
     {

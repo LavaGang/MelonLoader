@@ -1,4 +1,4 @@
-namespace MelonLoader.GeneratorProcess
+namespace MelonLoader.AssemblyGenerator
 {
     public static class ExternalToolVersions
     {

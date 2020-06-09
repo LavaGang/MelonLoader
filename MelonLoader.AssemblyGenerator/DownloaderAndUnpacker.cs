@@ -2,7 +2,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 
-namespace MelonLoader.GeneratorProcess
+namespace MelonLoader.AssemblyGenerator
 {
     public static class DownloaderAndUnpacker
     {
@@ -38,8 +38,6 @@ namespace MelonLoader.GeneratorProcess
                 using var targetStream = new FileStream(Path.Combine(destinationFolder, zipArchiveEntry.FullName), FileMode.OpenOrCreate, FileAccess.Write);
                 entryStream.CopyTo(targetStream);
             }
-            
-            //File.WriteAllBytes(downloadVersionMark, new byte[0]);
         }
     }
 }

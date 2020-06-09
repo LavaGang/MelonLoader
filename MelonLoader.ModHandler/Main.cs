@@ -17,6 +17,7 @@ namespace MelonLoader
         public static bool IsBoneworks = false;
         public static string UnityVersion = null;
         private static Assembly Assembly_CSharp = null;
+        private static bool HasGeneratedAssembly = false;
 
         private static void Initialize()
         {
@@ -40,9 +41,12 @@ namespace MelonLoader
                 Console.Create();
             }
 
-            if (Imports.IsIl2CppGame() && !AssemblyGenerator.Main.Initialize())
-                Imports.UNLOAD_MELONLOADER();
+            if (!Imports.IsIl2CppGame() || AssemblyGenerator.Main.Initialize())
+                HasGeneratedAssembly = true;
             else
+                Imports.UNLOAD_MELONLOADER();
+            
+            if (HasGeneratedAssembly)
             {
                 LoadMods(true);
                 if (Mods.Count > 0)
@@ -57,6 +61,9 @@ namespace MelonLoader
 
         private static void OnApplicationStart()
         {
+            if (!HasGeneratedAssembly)
+                return;
+
             if (Imports.IsIl2CppGame())
             {
                 if (IsVRChat)
