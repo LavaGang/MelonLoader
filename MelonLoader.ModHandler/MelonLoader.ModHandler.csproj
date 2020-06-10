@@ -84,6 +84,7 @@
     <Compile Include="MelonModGameAttribute.cs" />
     <Compile Include="MelonModInfoAttribute.cs" />
     <Compile Include="ModPrefs.cs" />
+    <Compile Include="ModSettingsMenu.cs" />
     <Compile Include="SceneHandler.cs" />
     <Compile Include="SupportModule.cs" />
     <Compile Include="UnhollowerSupport.cs" />

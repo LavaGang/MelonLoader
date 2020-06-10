@@ -71,6 +71,7 @@ namespace MelonLoader
                 UnhollowerSupport.Initialize();
             }
             SupportModule.Initialize();
+            ModSettingsMenu.Setup();
             AddUnityDebugLog();
 
             MelonModLogger.Log("------------------------------");
@@ -185,12 +186,15 @@ namespace MelonLoader
         public static void OnGUI()
         {
             if (Mods.Count() > 0)
+            {
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
                         try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
+                ModSettingsMenu.Render();
+            }
         }
 
         internal static void OnLevelIsLoading()

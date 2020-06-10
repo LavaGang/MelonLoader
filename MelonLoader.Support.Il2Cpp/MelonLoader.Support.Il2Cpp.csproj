@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MelonLoader.SupportModule</RootNamespace>
+    <RootNamespace>MelonLoader.Support</RootNamespace>
     <AssemblyName>MelonLoader.Support.Il2Cpp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="RenderHelper.cs" />
     <Compile Include="SupportModule.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MelonCoroutines.cs" />
@@ -68,7 +69,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">
       <Name>MelonLoader.ModHandler</Name>
-	  <Private>false</Private>
+      <Private>false</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
