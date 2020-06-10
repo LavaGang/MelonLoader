@@ -21,6 +21,7 @@ bool MelonLoader::ConsoleEnabled = true;
 bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
+bool MelonLoader::DevModsOnly = false;
 char* MelonLoader::ExePath = NULL;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
@@ -172,6 +173,8 @@ void MelonLoader::ParseCommandLine()
 					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
 				else if (strstr(command, "--melonloader.hideconsole") != NULL)
 					ConsoleEnabled = false;
+				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
+					DevModsOnly = false;
 #ifndef DEBUG
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{

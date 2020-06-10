@@ -68,5 +68,7 @@ namespace MelonLoader
         internal extern static bool IsOldMono();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsQuitFix();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsDevModsOnly();
     }
 }

@@ -14,6 +14,7 @@ public:
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
 	static bool QuitFix;
+	static bool DevModsOnly;
 	static char* ExePath;
 	static char* GamePath;
 	static char* DataPath;

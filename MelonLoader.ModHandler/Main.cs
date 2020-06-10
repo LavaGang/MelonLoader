@@ -266,7 +266,7 @@ namespace MelonLoader
             else
             {
                 // DLL
-                string[] files = Directory.GetFiles(modDirectory, "*.dll", SearchOption.TopDirectoryOnly);
+                string[] files = Directory.GetFiles(modDirectory, (Imports.IsDevModsOnly() ? "*-dev.dll" : "*.dll"), SearchOption.TopDirectoryOnly);
                 if (files.Length > 0)
                 {
                     for (int i = 0; i < files.Count(); i++)
@@ -296,7 +296,7 @@ namespace MelonLoader
 
                 // ZIP
                 /*
-                string[] zippedFiles = Directory.GetFiles(modDirectory, "*.zip", SearchOption.TopDirectoryOnly);
+                string[] zippedFiles = Directory.GetFiles(modDirectory, (Imports.IsDevModsOnly() ? "*-dev.zip" : "*.zip"), SearchOption.TopDirectoryOnly);
                 if (zippedFiles.Length > 0)
                 {
                     for (int i = 0; i < zippedFiles.Count(); i++)

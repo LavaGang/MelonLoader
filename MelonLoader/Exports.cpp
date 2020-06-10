@@ -27,6 +27,7 @@ MonoString* GetAssemblyDirectory() { return Mono::mono_string_new(Mono::Domain, 
 MonoString* GetMonoConfigDirectory() { return Mono::mono_string_new(Mono::Domain, Mono::ConfigPath); }
 MonoString* GetExePath() { return Mono::mono_string_new(Mono::Domain, MelonLoader::ExePath); }
 bool IsQuitFix() { return MelonLoader::QuitFix; }
+bool IsDevModsOnly() { return MelonLoader::DevModsOnly; }
 
 void Exports::AddInternalCalls()
 {
@@ -57,4 +58,5 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", GetProductName);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetExePath", GetExePath);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsQuitFix", IsQuitFix);
+	Mono::mono_add_internal_call("MelonLoader.Imports::IsDevModsOnly", IsDevModsOnly);
 }
