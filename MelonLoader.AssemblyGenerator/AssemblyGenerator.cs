@@ -223,7 +223,7 @@ namespace MelonLoader.AssemblyGenerator
             if (File.Exists(assembly_path))
             {
                 /*
-                var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
+                
                 try
                 {
                     OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
@@ -250,6 +250,8 @@ namespace MelonLoader.AssemblyGenerator
                 }
                 */
 
+                var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
+                OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
                 var generatorProcessInfo = new ProcessStartInfo(assembly_path);
                 generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)));
                 generatorProcessInfo.UseShellExecute = false;
@@ -257,7 +259,10 @@ namespace MelonLoader.AssemblyGenerator
                 generatorProcessInfo.CreateNoWindow = true;
                 var process = Process.Start(generatorProcessInfo);
                 if (process == null)
+                {
                     Logger.LogError("Unable to Start " + FileName + "!");
+                    OverrideAppDomainBase(originalCwd);
+                }
                 else
                 {
                     var stdout = process.StandardOutput;
@@ -268,6 +273,7 @@ namespace MelonLoader.AssemblyGenerator
                     }
                     while (!process.HasExited)
                         Thread.Sleep(100);
+                    OverrideAppDomainBase(originalCwd);
                     return (process.ExitCode == 0);
                 }
             }
