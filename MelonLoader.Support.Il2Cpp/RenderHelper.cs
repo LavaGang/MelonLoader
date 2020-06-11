@@ -17,7 +17,8 @@ namespace MelonLoader.Support
         public bool GUI_Button(object position, string text) => GUI.Button((Rect)position, text);
         public object GUI_BeginScrollView(object position, object scrollPosition, object viewRect) => GUI.BeginScrollView((Rect)position, (Vector2)scrollPosition, (Rect)viewRect, false, false, GUI.skin.horizontalScrollbar, GUI.skin.verticalScrollbar, GUI.skin.window);
         public void GUI_EndScrollView(bool handleScrollWheel = false) => GUI.EndScrollView(handleScrollWheel);
-
+        public void GUILayout_Label(string text) => GUILayout.Label(text, null);
+        public bool GUILayout_Toggle(bool value, string text) => GUILayout.Toggle(value, text, null);
     }
 
     class RenderHelper_GUIFix

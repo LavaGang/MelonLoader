@@ -20,7 +20,9 @@ namespace MelonLoader.Installer
             MainForm mainForm = new MainForm();
             Application.EnableVisualStyles();
             mainForm.Show();
-
+            Application.Run(mainForm);
+            return;
+            
             string filePath = null;
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -38,11 +40,15 @@ namespace MelonLoader.Installer
                     {
                         string dirpath = Path.GetDirectoryName(filePath);
 
-                        mainForm.Invoke(new Action(() => { mainForm.label1.Text = "Downloading..."; }));
+                        mainForm.Invoke(new Action(() => {
+                           // mainForm.label1.Text = "Downloading..."; 
+                        }));
                         var tempFile = Path.GetTempFileName();
                         using Stream zipdata = new WebClient().OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.zip");
 
-                        mainForm.Invoke(new Action(() => { mainForm.label1.Text = "Extracting..."; }));
+                        mainForm.Invoke(new Action(() => {
+                         //   mainForm.label1.Text = "Extracting...";
+                        }));
                         if (File.Exists(Path.Combine(dirpath, "Mono.Cecil.dll")))
                             File.Delete(Path.Combine(dirpath, "Mono.Cecil.dll"));
                         if (File.Exists(Path.Combine(dirpath, "version.dll")))

@@ -17,6 +17,8 @@ namespace MelonLoader.ModSettingsMenu
         bool GUI_Button(object position, string text);
         object GUI_BeginScrollView(object position, object scrollPosition, object viewRect);
         void GUI_EndScrollView(bool handleScrollWheel = false);
+        void GUILayout_Label(string text);
+        bool GUILayout_Toggle(bool value, string text);
     }
 
     class Main
@@ -92,11 +94,38 @@ namespace MelonLoader.ModSettingsMenu
 
         private static void Render_Settings()
         {
-            ScrollViewVector = renderHelper.GUI_BeginScrollView(ScrollViewRect, ScrollViewVector, ScrollViewViewRect);
+            Dictionary<string, Dictionary<string, ModPrefs.PrefDesc>> prefs = ModPrefs.GetPrefs();
+            if (prefs.Count > 0)
+            {
+                ScrollViewVector = renderHelper.GUI_BeginScrollView(ScrollViewRect, ScrollViewVector, ScrollViewViewRect);
 
-            // Render Settings
+                /*
+                for (int i = 0; i < prefs.Count; i++)
+                {
+                    string key = prefs.Keys.ElementAt(i);
+                    string category_name = ModPrefs.GetCategoryDisplayName(key);
+                    renderHelper.GUILayout_Label(category_name);
 
-            renderHelper.GUI_EndScrollView(true);
+                    Dictionary<string, ModPrefs.PrefDesc> category = prefs.Values.ElementAt(i);
+                    if (category.Count > 0)
+                    {
+                        for (int k = 0; k < category.Count; k++)
+                        {
+                            string prefkey = category.Keys.ElementAt(k);
+                            ModPrefs.PrefDesc pref = category.Values.ElementAt(k);
+                            string pref_name = pref.DisplayText;
+                            if (pref.Type == ModPrefs.PrefType.BOOL)
+                            {
+                                if (bool.TryParse(pref.Value, out bool value))
+                                    ModPrefs.SetBool(key, prefkey, renderHelper.GUILayout_Toggle(value, pref.DisplayText));
+                            }
+                        }
+                    }
+                }
+                */
+
+                renderHelper.GUI_EndScrollView(true);
+            }
         }
 
         private static bool IsInputPressed = false;
