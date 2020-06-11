@@ -125,13 +125,15 @@ namespace MelonLoader
         public static void OnApplicationQuit()
         {
             if (Mods.Count() > 0)
+            {
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if ((mod != null) && !mod.IsPreload)
+                    if (mod != null)
                         try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
-            ModPrefs.SaveConfig();
+                ModPrefs.SaveConfig();
+            }
             Harmony.HarmonyInstance.UnpatchAllInstances();
             Imports.UNLOAD_MELONLOADER();
             if (Imports.IsQuitFix()) Process.GetCurrentProcess().Kill();
@@ -143,7 +145,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if ((mod != null) && !mod.IsPreload)
+                    if (mod != null)
                         try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -157,7 +159,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if ((mod != null) && !mod.IsPreload)
+                    if (mod != null)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -168,7 +170,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if ((mod != null) && !mod.IsPreload)
+                    if (mod != null)
                         try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -179,7 +181,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if ((mod != null) && !mod.IsPreload)
+                    if (mod != null)
                         try { mod.OnLateUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -191,7 +193,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if ((mod != null) && !mod.IsPreload)
+                    if (mod != null)
                         try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             }
