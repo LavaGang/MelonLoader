@@ -72,7 +72,6 @@ namespace MelonLoader
             }
             SupportModule.Initialize();
             ModSettingsMenu.Main.Setup();
-            AddUnityDebugLog();
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + UnityVersion);
@@ -87,6 +86,8 @@ namespace MelonLoader
             LoadMods();
             if (Mods.Count > 0)
             {
+                AddUnityDebugLog();
+
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -110,7 +111,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if (mod != null)
+                    if ((mod != null) && !mod.IsPreload)
                         try { mod.OnApplicationStart(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             }
@@ -127,7 +128,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if (mod != null)
+                    if ((mod != null) && !mod.IsPreload)
                         try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             ModPrefs.SaveConfig();
@@ -142,7 +143,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if (mod != null)
+                    if ((mod != null) && !mod.IsPreload)
                         try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -156,7 +157,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if (mod != null)
+                    if ((mod != null) && !mod.IsPreload)
                         try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -167,7 +168,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if (mod != null)
+                    if ((mod != null) && !mod.IsPreload)
                         try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -178,7 +179,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if (mod != null)
+                    if ((mod != null) && !mod.IsPreload)
                         try { mod.OnLateUpdate(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
         }
@@ -190,7 +191,7 @@ namespace MelonLoader
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if (mod != null)
+                    if ((mod != null) && !mod.IsPreload)
                         try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             }
@@ -423,9 +424,9 @@ namespace MelonLoader
 
         private static void AddUnityDebugLog()
         {
-            SupportModule.UnityDebugLog(" ");
-            SupportModule.UnityDebugLog("This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!");
-            SupportModule.UnityDebugLog(" ");
+            SupportModule.UnityDebugLog("--------------------------------------------------------------------------------------------------");
+            SupportModule.UnityDebugLog("~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!   ~");
+            SupportModule.UnityDebugLog("--------------------------------------------------------------------------------------------------");
         }
     }
 }
