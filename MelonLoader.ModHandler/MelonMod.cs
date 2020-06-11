@@ -22,6 +22,11 @@
         /// </summary>
         public MelonModGameAttribute[] GameAttributes { get; internal set; }
 
+        /// <summary>
+        /// Gets the Assembly of the Mod.
+        /// </summary>
+        public System.Reflection.Assembly ModAssembly { get; internal set; }
+
         public virtual void OnPreInitialization() {}
         public virtual void OnApplicationStart() {}
         public virtual void OnLevelIsLoading() {}

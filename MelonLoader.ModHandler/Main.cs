@@ -391,6 +391,8 @@ namespace MelonLoader
                                 modInstance.GameAttributes = modGameAttributes;
                             else
                                 modInstance.GameAttributes = null;
+                            modInstance.ModAssembly = assembly;
+                            Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
                             Mods.Add(modInstance);
                         }
                         else
