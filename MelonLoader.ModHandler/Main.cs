@@ -108,10 +108,11 @@ namespace MelonLoader
                         MelonModLogger.Log("------------------------------");
                     }
                 }
+
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
-                    if ((mod != null) && !mod.IsPreload)
+                    if (mod != null)
                         try { mod.OnApplicationStart(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             }
