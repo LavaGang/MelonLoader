@@ -5,8 +5,10 @@ using System.Text;
 
 namespace MelonLoader.Support
 {
-    class RenderHelper : ModSettingsMenu_RenderHelper
+    /*
+    class RenderHelper : ModSettingsMenu.RenderHelper
     {
 
     }
+    */
 }

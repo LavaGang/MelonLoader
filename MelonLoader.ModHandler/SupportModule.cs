@@ -13,7 +13,7 @@ namespace MelonLoader
         object StartCoroutine(IEnumerator coroutine);
         void StopCoroutine(object coroutineToken);
         void UnityDebugLog(string msg);
-        ModSettingsMenu_RenderHelper GetModSettingsMenuRenderHelper();
+        ModSettingsMenu.RenderHelper GetModSettingsMenuRenderHelper();
     }
 
     internal static class SupportModule
@@ -89,6 +89,5 @@ namespace MelonLoader
         internal static float GetUnityDeltaTime() => supportModule?.GetUnityDeltaTime() ?? 0f;
         internal static int GetActiveSceneIndex() => supportModule?.GetActiveSceneIndex() ?? -9;
         internal static void UnityDebugLog(string msg) => supportModule?.UnityDebugLog(msg);
-        internal static ModSettingsMenu_RenderHelper GetModSettingsMenuRenderHelper() => supportModule?.GetModSettingsMenuRenderHelper();
     }
 }
