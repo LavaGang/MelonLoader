@@ -122,10 +122,7 @@ namespace MelonLoader.Installer
             }
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            // Check for Installer Updates
-        }
+        private void MainForm_Load(object sender, EventArgs e) => Program.CheckForUpdates();
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 using LightJson;
 
@@ -12,6 +13,7 @@ namespace MelonLoader.Installer
     static class Program
     {
         internal static string Title = "MelonLoader Installer";
+        private static string Version = "1.0.1";
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
         private static List<string> TempFilesList = new List<string>();
@@ -263,6 +265,22 @@ namespace MelonLoader.Installer
                 foreach (string file in TempFilesList)
                     if (File.Exists(file))
                         File.Delete(file);
+        }
+
+        internal static void CheckForUpdates()
+        {
+            new Thread(() =>
+            {
+                try
+                {
+                    string response = webClient.DownloadString("https://github.com/HerpDerpinstine/MelonLoader/raw/master/MelonLoader.Installer/version.txt");
+                    if (string.IsNullOrEmpty(response))
+                        return;
+                    if (!Version.Equals(response))
+                        MessageBox.Show("A New Version of the Installer is Available!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                }
+                catch (Exception e) { }
+            }).Start();
         }
     }
 }
