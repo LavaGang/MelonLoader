@@ -40,6 +40,7 @@ namespace MelonLoader.Installer
                 }
                 if (mainForm.comboBox1.Items.Count <= 0)
                     throw new Exception("Version List is Empty!");
+
                 mainForm.comboBox1.SelectedIndex = 0;
                 mainForm.comboBox1.SelectedItem = mainForm.comboBox1.Items[0];
                 mainForm.Show();
@@ -69,14 +70,14 @@ namespace MelonLoader.Installer
                 Install_Legacy_02(dirpath, selectedVersion);
         }
 
-        private static void SetDisplayText(string text)
+        internal static void SetDisplayText(string text)
         {
             mainForm.Invoke(new Action(() => {
                 mainForm.label2.Text = text; 
             }));
         }
 
-        private static void SetPercentage(int percent)
+        internal static void SetPercentage(int percent)
         {
             mainForm.Invoke(new Action(() => {
                 mainForm.progressBar1.Value = percent;

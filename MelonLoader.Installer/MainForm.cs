@@ -94,21 +94,17 @@ namespace MelonLoader.Installer
 
                     Program.Install(dirpath, selectedVersion, legacy_install);
 
-                    Invoke(new Action(() =>
-                    {
-                        MessageBox.Show("Installation Successful!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                        Close();
-                        Application.Exit();
-                    }));
+                    Program.SetDisplayText("SUCCESS!");
+                    Program.SetPercentage(100);
+                    MessageBox.Show("Installation Successful!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    Close();
+                    Application.Exit();
                 }
                 catch (Exception ex)
                 {
-                    Invoke(new Action(() =>
-                    {
-                        MessageBox.Show("Installation failed; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Program.Title);
-                        Close();
-                        Application.Exit();
-                    }));
+                    MessageBox.Show("Installation failed; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Program.Title);
+                    Close();
+                    Application.Exit();
                 }
             }).Start();
         }
