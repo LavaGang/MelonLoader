@@ -284,14 +284,7 @@ namespace MelonLoader
                         {
                             try
                             {
-                                byte[] data = File.ReadAllBytes(file);
-                                if (data.Length > 0)
-                                    LoadAssembly(data, plugins);
-                                else
-                                {
-                                    MelonModLogger.LogError("Unable to load " + file);
-                                    MelonModLogger.Log("------------------------------");
-                                }
+                                LoadAssembly(file, plugins);
                             }
                             catch (Exception e)
                             {
@@ -409,9 +402,10 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadAssembly(byte[] data, bool isPlugin = false)
+        private static void LoadAssembly(string file, bool isPlugin = false) => LoadModFromAssembly(Assembly.LoadFrom(file), isPlugin);
+        private static void LoadAssembly(byte[] data, bool isPlugin = false) => LoadModFromAssembly(Assembly.Load(data), isPlugin);
+        private static void LoadAssembly(Assembly asm, bool isPlugin = false)
         {
-            Assembly asm = Assembly.Load(data);
             if (!asm.Equals(null))
                 LoadModFromAssembly(asm, isPlugin);
             else
