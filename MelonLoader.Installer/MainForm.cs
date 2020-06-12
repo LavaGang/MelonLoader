@@ -99,6 +99,7 @@ namespace MelonLoader.Installer
                 }
                 catch (Exception ex)
                 {
+                    Program.CleanTempFiles();
                     Program.SetDisplayText("ERROR!");
                     MessageBox.Show("Installation failed; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Program.Title);
                     Close();

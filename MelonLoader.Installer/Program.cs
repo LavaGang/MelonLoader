@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Windows.Forms;
 using System.Net;
 using LightJson;
+using System.Collections.Generic;
 
 namespace MelonLoader.Installer
 {
@@ -13,6 +14,7 @@ namespace MelonLoader.Installer
         internal static string Title = "MelonLoader Installer";
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
+        private static List<string> TempFilesList = new List<string>();
 
         [STAThread]
         static void Main()
@@ -60,6 +62,7 @@ namespace MelonLoader.Installer
                 Install_Normal(dirpath, selectedVersion);
             else
                 Install_Legacy(dirpath, selectedVersion);
+            CleanTempFiles();
         }
 
         private static void Install_Legacy(string dirpath, string selectedVersion)
@@ -140,9 +143,10 @@ namespace MelonLoader.Installer
                 Directory.CreateDirectory(Path.Combine(dirpath, "Plugins"));
         }
 
-        private static void ExtractZip(string dirpath, Stream zipData)
+        private static void ExtractZip(string dirpath, string tempFile)
         {
-            using var zip = new ZipArchive(zipData);
+            using var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read);
+            using var zip = new ZipArchive(stream);
             foreach (var zipArchiveEntry in zip.Entries)
             {
                 string filepath = Path.Combine(dirpath, zipArchiveEntry.FullName);
@@ -155,11 +159,12 @@ namespace MelonLoader.Installer
         private static void Install_Normal(string dirpath, string selectedVersion)
         {
             SetDisplayText("Downloading MelonLoader...");
-            using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip");
+            string tempfilepath = CreateTempFile();
+            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath);
             SetDisplayText("Extracting MelonLoader...");
             SetPercentage(50);
             Cleanup(dirpath, false);
-            ExtractZip(dirpath, zipdata);
+            ExtractZip(dirpath, tempfilepath);
             CreateDirectories(dirpath, false);
         }
 
@@ -167,7 +172,8 @@ namespace MelonLoader.Installer
         {
             SetDisplayText("Downloading MelonLoader...");
             bool is_02 = selectedVersion.Equals("v0.2");
-            using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip");
+            string tempfilepath = CreateTempFile();
+            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
             
             SetDisplayText("Extracting MelonLoader...");
             if (is_02)
@@ -175,7 +181,7 @@ namespace MelonLoader.Installer
             else
                 SetPercentage(50);
             Cleanup(dirpath, true);
-            ExtractZip(dirpath, zipdata);
+            ExtractZip(dirpath, tempfilepath);
 
             if (is_02)
             {
@@ -204,20 +210,22 @@ namespace MelonLoader.Installer
         private static void Install_Legacy_01(string dirpath)
         {
             SetDisplayText("Downloading MelonLoader...");
-            using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip");
+            string tempfilepath = CreateTempFile();
+            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip", tempfilepath);
 
             SetDisplayText("Downloading Dependencies...");
             SetPercentage(25);
-            using Stream zipdata2 = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MonoDependencies.zip");
+            string tempfilepath2 = CreateTempFile();
+            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MonoDependencies.zip", tempfilepath2);
 
             SetDisplayText("Extracting MelonLoader...");
             SetPercentage(50);
             Cleanup(dirpath, true);
-            ExtractZip(dirpath, zipdata);
+            ExtractZip(dirpath, tempfilepath);
 
             SetDisplayText("Extracting Dependencies...");
             SetPercentage(75);
-            ExtractZip(dirpath, zipdata2);
+            ExtractZip(dirpath, tempfilepath2);
 
             CreateDirectories(dirpath, true);
         }
@@ -226,6 +234,21 @@ namespace MelonLoader.Installer
         {
             string file_version = FileVersionInfo.GetVersionInfo(exepath).FileVersion;
             return file_version.Substring(0, file_version.LastIndexOf('.'));
+        }
+
+        internal static string CreateTempFile()
+        {
+            string temppath = Path.GetTempFileName();
+            TempFilesList.Add(temppath);
+            return temppath;
+        }
+
+        internal static void CleanTempFiles()
+        {
+            if (TempFilesList.Count > 0)
+                foreach (string file in TempFilesList)
+                    if (File.Exists(file))
+                        File.Delete(file);
         }
     }
 }
