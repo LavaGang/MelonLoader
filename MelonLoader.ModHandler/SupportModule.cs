@@ -75,14 +75,22 @@ namespace MelonLoader
 
         internal static bool IsOldUnity()
         {
-            string unityVersion = Main.UnityVersion.Substring(0, Main.UnityVersion.LastIndexOf('.'));
-            int unityVersion_major = 0;
-            int unityVersion_minor = 0;
-            return (int.TryParse(unityVersion.Substring(0, unityVersion.LastIndexOf('.')), out unityVersion_major)
-                && (unityVersion_major <= 5)
-                && int.TryParse(unityVersion.Substring(unityVersion.LastIndexOf('.') + 1), out unityVersion_minor)
-                && (unityVersion_minor < 3)
-                );
+            try
+            {
+                Assembly unityengine = Assembly.Load("UnityEngine");
+                if (unityengine != null)
+                {
+                    Type scenemanager = unityengine.GetType("UnityEngine.SceneManagement.SceneManager");
+                    if (scenemanager != null)
+                    {
+                        EventInfo sceneLoaded = scenemanager.GetEvent("sceneLoaded");
+                        if (sceneLoaded != null)
+                            return false;
+                    }
+                }
+            }
+            catch (Exception e) { }
+            return true;
         }
 
         internal static string GetUnityVersion() => supportModule?.GetUnityVersion();
