@@ -5,7 +5,8 @@ using System.IO.Compression;
 using System.Windows.Forms;
 using System.Net;
 using System.Text;
-using TinyJSON;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MelonLoader.Installer
 {
@@ -20,21 +21,31 @@ namespace MelonLoader.Installer
         {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
+            webClient.Headers.Add("User-Agent", "Unity web player");
             Application.SetCompatibleTextRenderingDefault(false);
             mainForm = new MainForm();
             Application.EnableVisualStyles();
 
             try
             {
-                //mainForm.comboBox1.Items.Clear();
-
-                // Get Version List from GitHub
-                // https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases
-
+                mainForm.comboBox1.Items.Clear();
+                JArray data = (JArray)JsonConvert.DeserializeObject(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases"));
+                if (data.Count > 0)
+                {
+                    foreach (var x in data)
+                    {
+                        string version = x["tag_name"].Value<string>();
+                        if (mainForm.comboBox1.Items.Count <= 0)
+                            mainForm.comboBox1.Items.Add("Latest (" + version + ")");
+                        mainForm.comboBox1.Items.Add(version);
+                    }
+                }
                 if (mainForm.comboBox1.Items.Count <= 0)
                     throw new Exception("Version List is Empty!");
-
+                mainForm.comboBox1.SelectedIndex = 0;
+                mainForm.comboBox1.SelectedItem = mainForm.comboBox1.Items[0];
                 mainForm.Show();
+
                 Application.Run(mainForm);
             }
             catch (Exception ex)
@@ -63,14 +74,15 @@ namespace MelonLoader.Installer
         private static void Install_SetDisplayText(string text)
         {
             mainForm.Invoke(new Action(() => {
-                mainForm.button2.Text = text; 
+                mainForm.label2.Text = text; 
             }));
         }
 
-        private static void Install_SetPercentage(float percent)
+        private static void Install_SetPercentage(int percent)
         {
             mainForm.Invoke(new Action(() => {
-
+                mainForm.progressBar1.Value = percent;
+                mainForm.label3.Text = percent.ToString() + "%";
             }));
         }
 
@@ -115,7 +127,7 @@ namespace MelonLoader.Installer
             Install_SetDisplayText("Downloading MelonLoader...");
             using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip");
             Install_SetDisplayText("Extracting MelonLoader...");
-            Install_SetPercentage(50f);
+            Install_SetPercentage(50);
             Install_Cleanup(dirpath);
             ExtractZip(dirpath, zipdata);
             Install_CreateDirectories(dirpath, false);
@@ -124,10 +136,9 @@ namespace MelonLoader.Installer
         private static void Install_Legacy_02(string dirpath, string selectedVersion)
         {
             Install_SetDisplayText("Downloading MelonLoader...");
-            bool is_il2cpp = File.Exists(Path.Combine(dirpath, "GameAssembly.dll"));
-            using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (selectedVersion.Equals("v0.2") ? "_" : ".") + (is_il2cpp ? "Il2Cpp" : "Mono") + ".zip");
+            using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (selectedVersion.Equals("v0.2") ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip");
             Install_SetDisplayText("Extracting MelonLoader...");
-            Install_SetPercentage(50f);
+            Install_SetPercentage(50);
             Install_Cleanup(dirpath);
             ExtractZip(dirpath, zipdata);
             Install_CreateDirectories(dirpath, true);
@@ -138,17 +149,17 @@ namespace MelonLoader.Installer
             Install_SetDisplayText("Downloading MelonLoader...");
             using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip");
 
-            Install_SetDisplayText("Downloading Mono Dependencies...");
-            Install_SetPercentage(25f);
+            Install_SetDisplayText("Downloading Dependencies...");
+            Install_SetPercentage(25);
             using Stream zipdata2 = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MonoDependencies.zip");
 
             Install_SetDisplayText("Extracting MelonLoader...");
-            Install_SetPercentage(50f);
+            Install_SetPercentage(50);
             Install_Cleanup(dirpath);
             ExtractZip(dirpath, zipdata);
 
-            Install_SetDisplayText("Extracting Mono Dependencies...");
-            Install_SetPercentage(75f);
+            Install_SetDisplayText("Extracting Dependencies...");
+            Install_SetPercentage(75);
             ExtractZip(dirpath, zipdata2);
 
             Install_CreateDirectories(dirpath, true);
