@@ -354,7 +354,7 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadModFromAssembly(Assembly assembly, bool preload = false)
+        private static void LoadModFromAssembly(Assembly assembly, bool isPlugin = false)
         {
             MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
             if ((modInfoAttribute != null) && (modInfoAttribute.ModType != null) && modInfoAttribute.ModType.IsSubclassOf(typeof(MelonMod)))
@@ -389,7 +389,7 @@ namespace MelonLoader
                         if (modInstance != null)
                         {
                             modInstance.IsUniversal = isUniversal;
-                            modInstance.IsPreload = preload;
+                            modInstance.IsPlugin = isPlugin;
                             modInstance.InfoAttribute = modInfoAttribute;
                             if (modGameAttributes_Count > 0)
                                 modInstance.GameAttributes = modGameAttributes;
@@ -409,11 +409,11 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadAssembly(byte[] data, bool preload = false)
+        private static void LoadAssembly(byte[] data, bool isPlugin = false)
         {
             Assembly asm = Assembly.Load(data);
             if (!asm.Equals(null))
-                LoadModFromAssembly(asm, preload);
+                LoadModFromAssembly(asm, isPlugin);
             else
                 MelonModLogger.LogError("Unable to load " + asm);
         }
