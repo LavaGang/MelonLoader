@@ -136,8 +136,8 @@ namespace MelonLoader.Installer
             if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
                 Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
 
-            if (!legacy_install && !Directory.Exists(Path.Combine(dirpath, "PreloadMods")))
-                Directory.CreateDirectory(Path.Combine(dirpath, "PreloadMods"));
+            if (!legacy_install && !Directory.Exists(Path.Combine(dirpath, "Plugins")))
+                Directory.CreateDirectory(Path.Combine(dirpath, "Plugins"));
         }
 
         private static void ExtractZip(string dirpath, Stream zipData)

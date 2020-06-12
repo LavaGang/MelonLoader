@@ -8,9 +8,9 @@
         public bool IsUniversal { get; internal set; }
 
         /// <summary>
-        /// Gets if the Mod is in the PRELOAD folder or not.
+        /// Gets if the Mod is in the Plugins folder or not.
         /// </summary>
-        public bool IsPreload { get; internal set; }
+        public bool IsPlugin { get; internal set; }
 
         /// <summary>
         /// Gets the Info Attribute of the Mod.

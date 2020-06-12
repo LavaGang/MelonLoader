@@ -40,8 +40,8 @@
 5. Fixed Installer Form Size.
 6. Fixed Issue with Label in Installer Form not Auto-Centering.
 7. Fixed Build Information for Installer.
-8. Moved Preload Mods to its own separate PreloadMods folder.
-9. Installer now creates a PreloadMods folder if none exists.
+8. Moved Plugins to its own separate Plugins folder.
+9. Installer now creates a Plugins folder if none exists.
 10. Installer now properly installs the Latest Version instead of a Predetermined Version.
 11. Fixed and Re-Enabled --melonloader.hideconsole.
 12. Added Log to Unity Debug to Signify to Developers that a Game has been Modded.

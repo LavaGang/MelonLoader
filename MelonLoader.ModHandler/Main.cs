@@ -266,15 +266,15 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadMods(bool preload = false)
+        private static void LoadMods(bool plugins = false)
         {
-            string modDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (preload ? "PreloadMods" : "Mods"));
-            if (!Directory.Exists(modDirectory))
-                Directory.CreateDirectory(modDirectory);
+            string searchdir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (plugins ? "Plugins" : "Mods"));
+            if (!Directory.Exists(searchdir))
+                Directory.CreateDirectory(searchdir);
             else
             {
                 // DLL
-                string[] files = Directory.GetFiles(modDirectory, (Imports.IsDevModsOnly() ? "*-dev.dll" : "*.dll"), SearchOption.TopDirectoryOnly);
+                string[] files = Directory.GetFiles(searchdir, (Imports.IsDevModsOnly() ? "*-dev.dll" : "*.dll"), SearchOption.TopDirectoryOnly);
                 if (files.Length > 0)
                 {
                     for (int i = 0; i < files.Count(); i++)
@@ -286,7 +286,7 @@ namespace MelonLoader
                             {
                                 byte[] data = File.ReadAllBytes(file);
                                 if (data.Length > 0)
-                                    LoadAssembly(data, preload);
+                                    LoadAssembly(data, plugins);
                                 else
                                 {
                                     MelonModLogger.LogError("Unable to load " + file);
