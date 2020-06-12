@@ -4,13 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
-
-#if ENABLE_IL2CPP
-using UnityEngine.Scripting;
-#endif
-
-
-namespace TinyJSON
+namespace MelonLoader.TinyJSON
 {
 	/// <summary>
 	/// Mark members that should be included.
@@ -93,9 +87,6 @@ namespace TinyJSON
 	}
 
 
-#if ENABLE_IL2CPP
-	[Preserve]
-#endif
 	// ReSharper disable once InconsistentNaming
 	public static class JSON
 	{
@@ -180,10 +171,6 @@ namespace TinyJSON
 			return null;
 		}
 
-
-#if ENABLE_IL2CPP
-		[Preserve]
-#endif
 		static T DecodeType<T>( Variant data )
 		{
 			if (data == null)
@@ -410,10 +397,6 @@ namespace TinyJSON
 			return instance;
 		}
 
-
-#if ENABLE_IL2CPP
-		[Preserve]
-#endif
 		// ReSharper disable once UnusedMethodReturnValue.Local
 		static List<T> DecodeList<T>( Variant data )
 		{
@@ -433,10 +416,6 @@ namespace TinyJSON
 			return list;
 		}
 
-
-#if ENABLE_IL2CPP
-		[Preserve]
-#endif
 		// ReSharper disable once UnusedMethodReturnValue.Local
 		static Dictionary<TKey, TValue> DecodeDictionary<TKey, TValue>( Variant data )
 		{
@@ -459,10 +438,6 @@ namespace TinyJSON
 			return dict;
 		}
 
-
-#if ENABLE_IL2CPP
-		[Preserve]
-#endif
 		// ReSharper disable once UnusedMethodReturnValue.Local
 		static T[] DecodeArray<T>( Variant data )
 		{
@@ -484,10 +459,6 @@ namespace TinyJSON
 			return array;
 		}
 
-
-#if ENABLE_IL2CPP
-		[Preserve]
-#endif
 		// ReSharper disable once UnusedMember.Local
 		static void DecodeMultiRankArray<T>( ProxyArray arrayData, Array array, int arrayRank, int[] indices )
 		{
@@ -515,10 +486,6 @@ namespace TinyJSON
 		static readonly MethodInfo decodeArrayMethod = typeof(JSON).GetMethod( "DecodeArray", staticBindingFlags );
 		static readonly MethodInfo decodeMultiRankArrayMethod = typeof(JSON).GetMethod( "DecodeMultiRankArray", staticBindingFlags );
 
-
-#if ENABLE_IL2CPP
-		[Preserve]
-#endif
 		// ReSharper disable once InconsistentNaming
 		public static void SupportTypeForAOT<T>()
 		{
@@ -538,10 +505,6 @@ namespace TinyJSON
 			DecodeDictionary<String, T>( null );
 		}
 
-
-#if ENABLE_IL2CPP
-		[Preserve]
-#endif
 		// ReSharper disable once InconsistentNaming
 		// ReSharper disable once UnusedMember.Local
 		static void SupportValueTypesForAOT()

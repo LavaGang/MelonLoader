@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace TinyJSON
+namespace MelonLoader.TinyJSON
 {
 	public static class Extensions
 	{

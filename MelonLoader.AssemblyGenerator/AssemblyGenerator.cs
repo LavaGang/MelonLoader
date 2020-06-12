@@ -6,7 +6,7 @@ using System.Threading;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using TinyJSON;
+using MelonLoader.TinyJSON;
 
 namespace MelonLoader.AssemblyGenerator
 {

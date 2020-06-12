@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 
 
-namespace TinyJSON
+namespace MelonLoader.TinyJSON
 {
 	public sealed class ProxyObject : Variant, IEnumerable<KeyValuePair<string, Variant>>
 	{

@@ -3,7 +3,7 @@ using System.Text;
 using System;
 
 
-namespace TinyJSON
+namespace MelonLoader.TinyJSON
 {
 	public sealed class Decoder : IDisposable
 	{

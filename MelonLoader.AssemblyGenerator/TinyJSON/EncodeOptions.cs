@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace TinyJSON
+namespace MelonLoader.TinyJSON
 {
 	[Flags]
 	public enum EncodeOptions
