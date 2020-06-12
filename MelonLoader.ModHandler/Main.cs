@@ -103,7 +103,7 @@ namespace MelonLoader
                             : "")
                             );
                         if (Imports.IsDebugMode())
-                            MelonModLogger.Log("Preload: " + mod.IsPreload.ToString());
+                            MelonModLogger.Log("Plugin: " + mod.IsPlugin.ToString());
                         MelonModLogger.LogModStatus((mod.GameAttributes.Any()) ? (mod.IsUniversal ? 0 : 1) : 2);
                         MelonModLogger.Log("------------------------------");
                     }
