@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Windows.Forms;
 using System.Net;
+using System.Windows.Forms;
 using LightJson;
-using System.Collections.Generic;
 
 namespace MelonLoader.Installer
 {

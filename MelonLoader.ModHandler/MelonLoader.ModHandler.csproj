@@ -87,7 +87,22 @@
     <Compile Include="ModSettingsMenu.cs" />
     <Compile Include="SceneHandler.cs" />
     <Compile Include="SupportModule.cs" />
+    <Compile Include="TinyJSON\Decoder.cs" />
+    <Compile Include="TinyJSON\EncodeOptions.cs" />
+    <Compile Include="TinyJSON\Encoder.cs" />
+    <Compile Include="TinyJSON\Extensions.cs" />
+    <Compile Include="TinyJSON\JSON.cs" />
+    <Compile Include="TinyJSON\Types\ProxyArray.cs" />
+    <Compile Include="TinyJSON\Types\ProxyBoolean.cs" />
+    <Compile Include="TinyJSON\Types\ProxyNumber.cs" />
+    <Compile Include="TinyJSON\Types\ProxyObject.cs" />
+    <Compile Include="TinyJSON\Types\ProxyString.cs" />
+    <Compile Include="TinyJSON\Types\Variant.cs" />
     <Compile Include="UnhollowerSupport.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TinyJSON\LICENSE.md" />
+    <None Include="TinyJSON\README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
