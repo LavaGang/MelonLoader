@@ -5,6 +5,7 @@ namespace MelonLoader.Support
     internal static class Main
     {
         internal static MelonLoaderComponent comp = null;
+        internal static int CurrentScene = -9;
         private static ISupportModule Initialize()
         {
             MelonLoaderComponent.CreateComponent();
@@ -25,9 +26,11 @@ namespace MelonLoader.Support
         void Update()
         {
             transform.SetAsLastSibling();
-
-            // Run Level Check Here
-
+            if (Main.CurrentScene != Application.loadedLevel)
+            {
+                SceneHandler.OnSceneLoad(Application.loadedLevel);
+                Main.CurrentScene = Application.loadedLevel;
+            }
             MelonLoader.Main.OnUpdate();
         }
         void FixedUpdate() => MelonLoader.Main.OnFixedUpdate();

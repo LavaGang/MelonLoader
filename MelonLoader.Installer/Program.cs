@@ -166,11 +166,38 @@ namespace MelonLoader.Installer
         private static void Install_Legacy_02(string dirpath, string selectedVersion)
         {
             SetDisplayText("Downloading MelonLoader...");
-            using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (selectedVersion.Equals("v0.2") ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip");
+            bool is_02 = selectedVersion.Equals("v0.2");
+            using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip");
+            
             SetDisplayText("Extracting MelonLoader...");
-            SetPercentage(50);
+            if (is_02)
+                SetPercentage(12);
+            else
+                SetPercentage(50);
             Cleanup(dirpath, true);
             ExtractZip(dirpath, zipdata);
+
+            if (is_02)
+            {
+                SetDisplayText("Downloading Il2CppDumper...");
+                SetPercentage(25);
+
+                SetDisplayText("Downloading Il2CppUnhollower...");
+                SetPercentage(37);
+
+                SetDisplayText("Downloading Dependencies...");
+                SetPercentage(50);
+
+                SetDisplayText("Extracting Il2CppDumper...");
+                SetPercentage(62);
+
+                SetDisplayText("Extracting Il2CppUnhollower...");
+                SetPercentage(75);
+
+                SetDisplayText("Extracting Dependencies...");
+                SetPercentage(87);
+            }
+
             CreateDirectories(dirpath, true);
         }
 

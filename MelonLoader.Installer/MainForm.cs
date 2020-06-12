@@ -72,9 +72,6 @@ namespace MelonLoader.Installer
 
         private void button2_Click(object sender, System.EventArgs e)
         {
-            // Disable Version Selector, TextBox, and Buttons
-            // Enable Label and ProgressBar
-
             comboBox1.Visible = false;
             textBox1.Visible = false;
             button1.Visible = false;
@@ -102,6 +99,7 @@ namespace MelonLoader.Installer
                 }
                 catch (Exception ex)
                 {
+                    Program.SetDisplayText("ERROR!");
                     MessageBox.Show("Installation failed; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Program.Title);
                     Close();
                     Application.Exit();
