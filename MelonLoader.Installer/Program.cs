@@ -4,9 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Windows.Forms;
 using System.Net;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using LightJson;
 
 namespace MelonLoader.Installer
 {
@@ -29,12 +27,12 @@ namespace MelonLoader.Installer
             try
             {
                 mainForm.comboBox1.Items.Clear();
-                JArray data = (JArray)JsonConvert.DeserializeObject(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases"));
+                JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
                 if (data.Count > 0)
                 {
                     foreach (var x in data)
                     {
-                        string version = x["tag_name"].Value<string>();
+                        string version = x["tag_name"].AsString;
                         if (mainForm.comboBox1.Items.Count <= 0)
                             mainForm.comboBox1.Items.Add("Latest (" + version + ")");
                         mainForm.comboBox1.Items.Add(version);
