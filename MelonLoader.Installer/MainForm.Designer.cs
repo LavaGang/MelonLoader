@@ -45,7 +45,10 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "Latest"});
+            "v0.2.2",
+            "v0.2.1",
+            "v0.2",
+            "v0.1.0"});
             this.comboBox1.Location = new System.Drawing.Point(318, 190);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(95, 21);
@@ -136,6 +139,7 @@
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "MelonLoader Installer";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -151,6 +155,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
+        internal System.Windows.Forms.Button button2;
     }
 }

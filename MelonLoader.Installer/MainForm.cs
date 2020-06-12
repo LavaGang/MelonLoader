@@ -66,49 +66,18 @@ namespace MelonLoader.Installer
 
         private void button2_Click(object sender, System.EventArgs e)
         {
+            // Disable Version Selector, TextBox, and Buttons
+            // Enable Label and ProgressBar
+
             new Thread(() =>
             {
                 try
                 {
                     string dirpath = Path.GetDirectoryName(textBox1.Text);
+                    string selectedVersion = (((comboBox1.SelectedIndex == 0) && (comboBox1.Items.Count > 1)) ? (string)comboBox1.Items[1] : (string)comboBox1.Items[comboBox1.SelectedIndex]);
+                    bool legacy_install = (selectedVersion.Equals("v0.2.1") || selectedVersion.Equals("v0.2") || selectedVersion.Equals("v0.1.0"));
 
-                    Invoke(new Action(() => {
-                        // mainForm.label1.Text = "Downloading..."; 
-                    }));
-
-                    var tempFile = Path.GetTempFileName();
-                    using Stream zipdata = new WebClient().OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.zip");
-
-                    Invoke(new Action(() => {
-                        // mainForm.label1.Text = "Extracting...";
-                    }));
-
-                    if (File.Exists(Path.Combine(dirpath, "Mono.Cecil.dll")))
-                        File.Delete(Path.Combine(dirpath, "Mono.Cecil.dll"));
-                    if (File.Exists(Path.Combine(dirpath, "version.dll")))
-                        File.Delete(Path.Combine(dirpath, "version.dll"));
-                    if (File.Exists(Path.Combine(dirpath, "winmm.dll")))
-                        File.Delete(Path.Combine(dirpath, "winmm.dll"));
-                    if (Directory.Exists(Path.Combine(dirpath, "Logs")))
-                        Directory.Delete(Path.Combine(dirpath, "Logs"), true);
-                    if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
-                        Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
-
-                    using var zip = new ZipArchive(zipdata);
-                    foreach (var zipArchiveEntry in zip.Entries)
-                    {
-                        string filepath = Path.Combine(dirpath, zipArchiveEntry.FullName);
-                        if (File.Exists(filepath))
-                            File.Delete(filepath);
-                    }
-
-                    zip.ExtractToDirectory(dirpath);
-
-                    Directory.CreateDirectory(Path.Combine(dirpath, "Logs"));
-                    if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
-                        Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
-                    if (!Directory.Exists(Path.Combine(dirpath, "PreloadMods")))
-                        Directory.CreateDirectory(Path.Combine(dirpath, "PreloadMods"));
+                    Program.Install(dirpath, selectedVersion, legacy_install);
 
                     Close();
                     MessageBox.Show("Installation Successful!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -133,6 +102,11 @@ namespace MelonLoader.Installer
                 else
                     button2.Text = "INSTALL";
             }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // Check for Installer Updates
         }
     }
 }
