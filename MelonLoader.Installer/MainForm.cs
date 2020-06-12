@@ -12,6 +12,7 @@ namespace MelonLoader.Installer
     public partial class MainForm : Form
     {
         internal string CurrentVersion = null;
+        internal string UnityVersion = null;
 
         public MainForm()
         {
@@ -46,6 +47,9 @@ namespace MelonLoader.Installer
 
                         textBox1.Text = filePath;
                         button2.Enabled = true;
+
+                        UnityVersion = FileVersionInfo.GetVersionInfo(filePath).FileVersion;
+                        UnityVersion = UnityVersion.Substring(0, UnityVersion.LastIndexOf('.'));
 
                         string existingFilePath = Path.Combine(Path.Combine(Path.GetDirectoryName(filePath), "MelonLoader"), "MelonLoader.ModHandler.dll");
                         if (File.Exists(existingFilePath))
@@ -128,7 +132,10 @@ namespace MelonLoader.Installer
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             if ((e.CloseReason == CloseReason.WindowsShutDown) || (e.CloseReason == CloseReason.UserClosing) || (e.CloseReason == CloseReason.TaskManagerClosing))
+            {
+                Program.CleanTempFiles();
                 Process.GetCurrentProcess().Kill();
+            }
         }
     }
 }

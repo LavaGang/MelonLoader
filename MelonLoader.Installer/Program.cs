@@ -185,23 +185,37 @@ namespace MelonLoader.Installer
 
             if (is_02)
             {
+                string AssemblyGenerator_Folder = Path.Combine(Path.Combine(dirpath, "MelonLoader"), "AssemblyGenerator");
+                string Il2CppDumper_Folder = Path.Combine(AssemblyGenerator_Folder, "Il2CppDumper");
+                string Il2CppAssemblyUnhollower_Folder = Path.Combine(AssemblyGenerator_Folder, "Il2CppAssemblyUnhollower");
+                string UnityDependencies_Folder = Path.Combine(Il2CppAssemblyUnhollower_Folder, "UnityDependencies");
+
                 SetDisplayText("Downloading Il2CppDumper...");
                 SetPercentage(25);
+                string tempfilepath2 = CreateTempFile();
+                webClient.DownloadFile("https://github.com/Perfare/Il2CppDumper/releases/download/v6.2.1/Il2CppDumper-v6.2.1.zip", tempfilepath2);
 
                 SetDisplayText("Downloading Il2CppUnhollower...");
                 SetPercentage(37);
+                string tempfilepath3 = CreateTempFile();
+                webClient.DownloadFile("https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v0.4.5.0/Il2CppAssemblyUnhollower.0.4.5.0.zip", tempfilepath3);
 
                 SetDisplayText("Downloading Dependencies...");
                 SetPercentage(50);
+                string tempfilepath4 = CreateTempFile();
+                webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip", tempfilepath4);
 
                 SetDisplayText("Extracting Il2CppDumper...");
                 SetPercentage(62);
+                ExtractZip(Il2CppDumper_Folder, tempfilepath2);
 
                 SetDisplayText("Extracting Il2CppUnhollower...");
                 SetPercentage(75);
+                ExtractZip(Il2CppAssemblyUnhollower_Folder, tempfilepath3);
 
                 SetDisplayText("Extracting Dependencies...");
                 SetPercentage(87);
+                ExtractZip(UnityDependencies_Folder, tempfilepath4);
             }
 
             CreateDirectories(dirpath, true);
