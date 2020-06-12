@@ -71,14 +71,14 @@ namespace MelonLoader.Installer
                 Install_Legacy_02(dirpath, selectedVersion);
         }
 
-        private static void Install_SetDisplayText(string text)
+        private static void SetDisplayText(string text)
         {
             mainForm.Invoke(new Action(() => {
                 mainForm.label2.Text = text; 
             }));
         }
 
-        private static void Install_SetPercentage(int percent)
+        private static void SetPercentage(int percent)
         {
             mainForm.Invoke(new Action(() => {
                 mainForm.progressBar1.Value = percent;
@@ -86,7 +86,7 @@ namespace MelonLoader.Installer
             }));
         }
 
-        private static void Install_Cleanup(string dirpath)
+        private static void Cleanup(string dirpath, bool legacy_install)
         {
             if (File.Exists(Path.Combine(dirpath, "Mono.Cecil.dll")))
                 File.Delete(Path.Combine(dirpath, "Mono.Cecil.dll"));
@@ -96,11 +96,42 @@ namespace MelonLoader.Installer
                 File.Delete(Path.Combine(dirpath, "winmm.dll"));
             if (Directory.Exists(Path.Combine(dirpath, "Logs")))
                 Directory.Delete(Path.Combine(dirpath, "Logs"), true);
-            if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
-                Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
+            string maindir_path = Path.Combine(dirpath, "MelonLoader");
+            if (legacy_install || string.IsNullOrEmpty(mainForm.CurrentVersion) || mainForm.CurrentVersion.Equals("v0.2.1") || mainForm.CurrentVersion.Equals("v0.2") || mainForm.CurrentVersion.Equals("v0.1.0"))
+            {
+                if (Directory.Exists(maindir_path))
+                    Directory.Delete(maindir_path, true);
+            }
+            else
+            {
+                if (File.Exists(Path.Combine(maindir_path, "MelonLoader.dll")))
+                    File.Delete(Path.Combine(maindir_path, "MelonLoader.dll"));
+                if (File.Exists(Path.Combine(maindir_path, "MelonLoader.ModHandler.dll")))
+                    File.Delete(Path.Combine(maindir_path, "MelonLoader.ModHandler.dll"));
+                string depsdir_path = Path.Combine(maindir_path, "Dependencies");
+                string[] files = Directory.GetFiles(depsdir_path, "*.dll", SearchOption.TopDirectoryOnly);
+                if (files.Length > 0)
+                {
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        string file = files[i];
+                        if (!string.IsNullOrEmpty(file))
+                            File.Delete(file);
+                    }
+                }
+                if (Directory.Exists(Path.Combine(depsdir_path, "SupportModules")))
+                    Directory.Delete(Path.Combine(depsdir_path, "SupportModules"), true);
+                string assemblygendir_path = Path.Combine(depsdir_path, "AssemblyGenerator");
+                if (File.Exists(Path.Combine(assemblygendir_path, "MelonLoader.AssemblyGenerator.exe")))
+                    File.Delete(Path.Combine(assemblygendir_path, "MelonLoader.AssemblyGenerator.exe"));
+                if (Directory.Exists(Path.Combine(assemblygendir_path, "Il2CppDumper")))
+                    Directory.Delete(Path.Combine(assemblygendir_path, "Il2CppDumper"), true);
+                if (Directory.Exists(Path.Combine(assemblygendir_path, "Il2CppAssemblyUnhollower")))
+                    Directory.Delete(Path.Combine(assemblygendir_path, "Il2CppAssemblyUnhollower"), true);
+            }
         }
 
-        private static void Install_CreateDirectories(string dirpath, bool legacy_install)
+        private static void CreateDirectories(string dirpath, bool legacy_install)
         {
             Directory.CreateDirectory(Path.Combine(dirpath, "Logs"));
             if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
@@ -124,45 +155,45 @@ namespace MelonLoader.Installer
 
         private static void Install_Normal(string dirpath, string selectedVersion)
         {
-            Install_SetDisplayText("Downloading MelonLoader...");
+            SetDisplayText("Downloading MelonLoader...");
             using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip");
-            Install_SetDisplayText("Extracting MelonLoader...");
-            Install_SetPercentage(50);
-            Install_Cleanup(dirpath);
+            SetDisplayText("Extracting MelonLoader...");
+            SetPercentage(50);
+            Cleanup(dirpath, false);
             ExtractZip(dirpath, zipdata);
-            Install_CreateDirectories(dirpath, false);
+            CreateDirectories(dirpath, false);
         }
 
         private static void Install_Legacy_02(string dirpath, string selectedVersion)
         {
-            Install_SetDisplayText("Downloading MelonLoader...");
+            SetDisplayText("Downloading MelonLoader...");
             using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (selectedVersion.Equals("v0.2") ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip");
-            Install_SetDisplayText("Extracting MelonLoader...");
-            Install_SetPercentage(50);
-            Install_Cleanup(dirpath);
+            SetDisplayText("Extracting MelonLoader...");
+            SetPercentage(50);
+            Cleanup(dirpath, true);
             ExtractZip(dirpath, zipdata);
-            Install_CreateDirectories(dirpath, true);
+            CreateDirectories(dirpath, true);
         }
 
         private static void Install_Legacy_01(string dirpath)
         {
-            Install_SetDisplayText("Downloading MelonLoader...");
+            SetDisplayText("Downloading MelonLoader...");
             using Stream zipdata = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip");
 
-            Install_SetDisplayText("Downloading Dependencies...");
-            Install_SetPercentage(25);
+            SetDisplayText("Downloading Dependencies...");
+            SetPercentage(25);
             using Stream zipdata2 = webClient.OpenRead("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MonoDependencies.zip");
 
-            Install_SetDisplayText("Extracting MelonLoader...");
-            Install_SetPercentage(50);
-            Install_Cleanup(dirpath);
+            SetDisplayText("Extracting MelonLoader...");
+            SetPercentage(50);
+            Cleanup(dirpath, true);
             ExtractZip(dirpath, zipdata);
 
-            Install_SetDisplayText("Extracting Dependencies...");
-            Install_SetPercentage(75);
+            SetDisplayText("Extracting Dependencies...");
+            SetPercentage(75);
             ExtractZip(dirpath, zipdata2);
 
-            Install_CreateDirectories(dirpath, true);
+            CreateDirectories(dirpath, true);
         }
 
         internal static string GetUnityFileVersion(string exepath)

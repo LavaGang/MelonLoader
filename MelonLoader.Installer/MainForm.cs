@@ -11,7 +11,7 @@ namespace MelonLoader.Installer
 {
     public partial class MainForm : Form
     {
-        private string CurrentVersion = null;
+        internal string CurrentVersion = null;
 
         public MainForm()
         {
