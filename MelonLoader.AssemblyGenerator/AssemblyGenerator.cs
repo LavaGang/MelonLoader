@@ -253,7 +253,7 @@ namespace MelonLoader.AssemblyGenerator
                 var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
                 OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
                 var generatorProcessInfo = new ProcessStartInfo(assembly_path);
-                generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)));
+                generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)).Select(it => $"\"{it}\""));
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;
