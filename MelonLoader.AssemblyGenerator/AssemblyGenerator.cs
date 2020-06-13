@@ -266,7 +266,7 @@ namespace MelonLoader.AssemblyGenerator
                 else
                 {
                     var stdout = process.StandardOutput;
-                    while (!process.HasExited && !stdout.EndOfStream)
+                    while (!stdout.EndOfStream)
                     {
                         var line = stdout.ReadLine();
                         Logger.Log(line);
