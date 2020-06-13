@@ -410,6 +410,4 @@ MigrationBackup/
 /.idea
 /Detours/lib.X64
 /Detours/lib.X86
-/MelonLoader.Mono.zip
-/MelonLoader.Il2Cpp.zip
-/MelonLoader.Installer.zip
+/MelonLoader.zip
