@@ -4,13 +4,18 @@ namespace MelonLoader.AssemblyGenerator
 {
     public static class Program
     {
+        public static bool Force_Regenerate = false;
+
         public static int Main(string[] args)
         {
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
-                Logger.LogError("Bad arguments for generator process; expected 2 arguments: <unityVersion> <gameRoot> <gameData>");
+                Logger.LogError("Bad arguments for generator process; expected arguments: <unityVersion> <gameRoot> <gameData> <regenerate>");
                 return -1;
             }
+
+            if (args.Length >= 4)
+                Force_Regenerate = true;
 
             try
             {

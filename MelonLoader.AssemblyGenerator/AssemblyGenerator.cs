@@ -70,7 +70,7 @@ namespace MelonLoader.AssemblyGenerator
 
         private static bool AssemblyGenerateCheck(string unityVersion)
         {
-            if ((localConfig.UnityVersion != unityVersion) || (localConfig.DumperVersion != ExternalToolVersions.Il2CppDumperVersion) || (localConfig.UnhollowerVersion != ExternalToolVersions.Il2CppAssemblyUnhollowerVersion))
+            if (Program.Force_Regenerate || (localConfig.UnityVersion != unityVersion) || (localConfig.DumperVersion != ExternalToolVersions.Il2CppDumperVersion) || (localConfig.UnhollowerVersion != ExternalToolVersions.Il2CppAssemblyUnhollowerVersion))
                 return true;
             string game_assembly_hash = null;
             using (var md5 = MD5.Create())

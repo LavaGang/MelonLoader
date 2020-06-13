@@ -22,7 +22,8 @@ bool MelonLoader::RainbowMode = false;
 bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
 bool MelonLoader::DevModsOnly = false;
-char* MelonLoader::ExePath = NULL;
+bool MelonLoader::AG_Force_Regenerate = false;
+char* MelonLoader::ExePath = NULL;;
 char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 char* MelonLoader::CompanyName = NULL;
@@ -175,6 +176,8 @@ void MelonLoader::ParseCommandLine()
 					ConsoleEnabled = false;
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
 					DevModsOnly = false;
+				else if (strstr(command, "--melonloader.agregenerate") != NULL)
+					AG_Force_Regenerate = true;
 #ifndef DEBUG
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{

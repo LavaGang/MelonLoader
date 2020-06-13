@@ -15,6 +15,7 @@ public:
 	static bool RandomRainbowMode;
 	static bool QuitFix;
 	static bool DevModsOnly;
+	static bool AG_Force_Regenerate;
 	static char* ExePath;
 	static char* GamePath;
 	static char* DataPath;

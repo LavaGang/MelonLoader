@@ -70,5 +70,7 @@ namespace MelonLoader
         internal extern static bool IsQuitFix();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsDevModsOnly();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool AG_Force_Regenerate();
     }
 }
