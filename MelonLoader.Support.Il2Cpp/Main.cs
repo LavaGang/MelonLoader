@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
@@ -31,6 +32,22 @@ namespace MelonLoader.Support
                 LogSupport.TraceHandler -= System.Console.WriteLine;
                 LogSupport.TraceHandler += MelonModLogger.Log;
             }
+
+            try
+            {
+                unsafe {
+                    var tlsHookTarget = typeof(Uri).Assembly.GetType("Mono.Unity.UnityTls").GetMethod("GetUnityTlsInterface", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MethodHandle.GetFunctionPointer();
+                    var unityMethodField = UnhollowerUtils.GetIl2CppMethodInfoPointerFieldForGeneratedMethod(typeof(Il2CppMono.Unity.UnityTls).GetMethod("GetUnityTlsInterface", BindingFlags.Public | BindingFlags.Static));
+                    var unityMethodPtr = (IntPtr) unityMethodField.GetValue(null);
+                    var unityMethod = *(IntPtr*) unityMethodPtr;
+                    Imports.Hook((IntPtr)(&tlsHookTarget), unityMethod);
+                }
+            } catch(Exception ex) {
+                MelonModLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
+            }
+            
+
+
             ClassInjector.DoHook += Imports.Hook;
             GetUnityVersionNumbers(out var major, out var minor, out var patch);
             UnityVersionHandler.Initialize(major, minor, patch);

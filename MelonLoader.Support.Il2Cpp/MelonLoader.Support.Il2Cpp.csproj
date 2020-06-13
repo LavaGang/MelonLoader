@@ -41,6 +41,10 @@
       <Private>false</Private>
       <HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
     </Reference>
+    <Reference Include="Il2CppSystem">
+      <Private>false</Private>
+      <HintPath>Libs\Il2CppSystem.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
