@@ -6,19 +6,6 @@
 
 ---
 
-### Work-in-Progress / To-Do List:
-
-1. Fix the above issues.
-2. Add Debugger Support to Mono Domain.
-3. Create Method for ModPrefs to Register Categories and Preferences in a single call.
-4. OnLevelIsLoading needs fixing for other games than just BONEWORKS.
-5. Add Version Selector to Installer.
-6. Add Android Support.
-7. Add Linux Support.
-8. Add Mac OS Support.
-
----
-
 ### Version List:
 
 [v0.2.2 Open-Beta](#v022-open-beta)  
@@ -52,11 +39,33 @@
 17. Fixed TLS/SSL Issue with the Installer.
 18. Fixed issue with Games that don't have Assembly-CSharp.
 19. Added a check and a warning for if the OS is older than Windows 7.
-20. Updated Il2CppAssemblyUnhollower download to v0.4.4.  (Credits to knah :D)
+20. Updated Il2CppAssemblyUnhollower download to v0.4.5.  (Credits to knah :D)
 21. Cleaned up version.dll.
 22. version.dll Proxy will now look for version_original.dll next to the EXE before loading from System32.
 23. Small change to version.dll to Prevent Crashing when MelonLoader.dll fails to load.
 24. Revised Loading System to work without needing Signatures.
+25. Reorganized Installation Folder Structure.
+26. Fixed Issue with Signatureless System on Pre-2017 Unity Versions.
+27. Fixed Issue with Support Modules not loading on Unity Versions older than 5.3.
+28. Fixed Issue Loading Mono Module.
+29. Fixed issue with OnApplicationStart getting called even when the Assembly Generator fails.
+30. Switched Assembly Generator to Process Based Execution.
+31. Fixed Mistake with Assembly Generator not returning false when Execution fails.
+32. Fixed Directory Issue with Assembly Generator.
+33. Added new Launch Option --melonloader.devmodsonly.
+34. Added Unity 2018.4.16 Dependencies.
+35. Plugins now only call OnPreInitialization, OnApplicationStart, OnApplicationQuit, and OnModSettingsApplied.
+36. Revised Installer Design.
+37. Fixed issue with Plugin Loading.
+38. Fixed OnLevelWasLoaded and OnLevelWasInitialized on Unity Versions lower than 5.3.
+39. Fixed GetActiveSceneIndex for Pre2017.2 Support Module.
+40. Re-added TinyJSON to ModHandler.
+41. Moved TinyJSON to its own Namespace.
+42. Fixed SupportModule Issue with Pre-2017 Unity Games.
+43. ModHandler now loads Mods and Plugins from File instead of Memory.
+44. Added Force-Regeneration to Assembly Generator.
+45. Added Launch Option --melonloader.agregenerate.
+46. Added Support for Mods to Harmony Patch using Harmony Attributes.
 
 ---
 
