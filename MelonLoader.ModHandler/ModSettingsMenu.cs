@@ -94,11 +94,10 @@ namespace MelonLoader.ModSettingsMenu
 
         private static void Render_Settings()
         {
+            ScrollViewVector = renderHelper.GUI_BeginScrollView(ScrollViewRect, ScrollViewVector, ScrollViewViewRect);
             Dictionary<string, Dictionary<string, ModPrefs.PrefDesc>> prefs = ModPrefs.GetPrefs();
             if (prefs.Count > 0)
             {
-                ScrollViewVector = renderHelper.GUI_BeginScrollView(ScrollViewRect, ScrollViewVector, ScrollViewViewRect);
-
                 /*
                 for (int i = 0; i < prefs.Count; i++)
                 {
@@ -123,9 +122,9 @@ namespace MelonLoader.ModSettingsMenu
                     }
                 }
                 */
-
-                renderHelper.GUI_EndScrollView(true);
             }
+            renderHelper.GUI_EndScrollView(true);
+            renderHelper.GUILayout_Label("SETTINGS");
         }
 
         private static bool IsInputPressed = false;

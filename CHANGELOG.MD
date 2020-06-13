@@ -35,7 +35,7 @@
 14. Fixed Crash Issue with Harmony when Patching Methods Multiple Times or when a Method happens to be null.  (Credits to zeobviouslyfakeacc :3)
 15. Made the Loaded Mods List public.
 16. Fix ModPrefs.SaveConfig() overriding previous SetString/Bool/etc calls.  (Credits to knah :D)
-17. Fixed TLS/SSL Issue with the Installer.
+17. Fixed SSL/TLS Issue with the Installer.
 18. Fixed issue with Games that don't have Assembly-CSharp.
 19. Added a check and a warning for if the OS is older than Windows 7.
 20. Updated Il2CppAssemblyUnhollower download to v0.4.5.  (Credits to knah :D)
@@ -44,7 +44,7 @@
 23. Small change to version.dll to Prevent Crashing when MelonLoader.dll fails to load.
 24. Revised Loading System to work without needing Signatures.
 25. Reorganized Installation Folder Structure.
-26. Fixed Issue with Signatureless System on Pre-2017 Unity Versions.
+26. Fixed Issue with Signature-less System on Pre-2017 Unity Versions.
 27. Fixed Issue with Support Modules not loading on Unity Versions older than 5.3.
 28. Fixed Issue Loading Mono Module.
 29. Fixed issue with OnApplicationStart getting called even when the Assembly Generator fails.
@@ -65,7 +65,7 @@
 44. Added Force-Regeneration to Assembly Generator.
 45. Added Launch Option --melonloader.agregenerate.
 46. Added Support for Mods to Harmony Patch using Harmony Attributes.
-47. Fixed SSL/TLS issues in mods for IL2CPP games.  (Credits to knah :D)
+47. Fixed SSL/TLS issues in Mods for IL2CPP games.  (Credits to knah :D)
 48. Fixed generator process losing output lines.  (Credits to knah :D)
 
 ---
