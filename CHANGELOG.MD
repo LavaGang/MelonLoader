@@ -66,6 +66,8 @@
 44. Added Force-Regeneration to Assembly Generator.
 45. Added Launch Option --melonloader.agregenerate.
 46. Added Support for Mods to Harmony Patch using Harmony Attributes.
+47. Fixed SSL/TLS issues in mods for IL2CPP games (Credits to knah :D)
+48. Fixed generator process losing output lines (Credits to knah :D)
 
 ---
 
