@@ -200,7 +200,7 @@ namespace MelonLoader.Installer
                 SetDisplayText("Downloading Il2CppUnhollower...");
                 SetPercentage(37);
                 string tempfilepath3 = CreateTempFile();
-                webClient.DownloadFile("https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v0.4.5.0/Il2CppAssemblyUnhollower.0.4.5.0.zip", tempfilepath3);
+                webClient.DownloadFile("https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v0.4.3.0/Il2CppAssemblyUnhollower.0.4.3.0.zip", tempfilepath3);
 
                 SetDisplayText("Downloading Dependencies...");
                 SetPercentage(50);

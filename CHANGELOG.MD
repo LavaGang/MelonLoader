@@ -2,7 +2,6 @@
 
 1. StackTraces refuse to show line numbers.
 2. Console Logs randomly do not Color properly.
-3. Mono Module has an Issue with https/ssl.
 
 ---
 
@@ -66,8 +65,8 @@
 44. Added Force-Regeneration to Assembly Generator.
 45. Added Launch Option --melonloader.agregenerate.
 46. Added Support for Mods to Harmony Patch using Harmony Attributes.
-47. Fixed SSL/TLS issues in mods for IL2CPP games (Credits to knah :D)
-48. Fixed generator process losing output lines (Credits to knah :D)
+47. Fixed SSL/TLS issues in mods for IL2CPP games.  (Credits to knah :D)
+48. Fixed generator process losing output lines.  (Credits to knah :D)
 
 ---
 
