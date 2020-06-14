@@ -66,6 +66,9 @@
 52. Updated Method Targeting in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
 53. Installer now Downloads and Installs Required VC Redist.
 54. Fixed Invalid Handle Issue with Console Coloring.
+55. Added Embedded SharpZipLib to ModHandler.
+56. Fixed Zipped Mod Support.
+57. Moved SharpZipLib in ModHandler to its own Namespace.
 
 ---
 
