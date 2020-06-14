@@ -176,9 +176,9 @@ void MelonLoader::ParseCommandLine()
 				else if (strstr(command, "--melonloader.hideconsole") != NULL)
 					ConsoleEnabled = false;
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
-					DevModsOnly = false;
+					DevModsOnly = true;
 				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
-					DevPluginsOnly = false;
+					DevPluginsOnly = true;
 				else if (strstr(command, "--melonloader.agregenerate") != NULL)
 					AG_Force_Regenerate = true;
 #ifndef DEBUG
