@@ -94,7 +94,7 @@ namespace Harmony
 
 			if (UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType))
 			{
-				var il2CppShim = CreateIl2CppShim(replacement, original.DeclaringType);
+				var il2CppShim = CreateIl2CppShim(replacement, original);
 				var origMethodPtr = UnhollowerSupport.MethodBaseToIntPtr(original);
 				var oldDetourPtr = patchInfo.methodDetourPointer;
 				var newDetourPtr = il2CppShim.MethodHandle.GetFunctionPointer();
@@ -117,28 +117,27 @@ namespace Harmony
 			public MethodBase Second;
 		}
 
-		private static DynamicMethod CreateIl2CppShim(DynamicMethod original, Type owner)
+		private static DynamicMethod CreateIl2CppShim(DynamicMethod patch, MethodBase original)
 		{
-			var patchName = original.Name + "_il2cpp";
+			var patchName = patch.Name + "_il2cpp";
 
-			var parameters = original.GetParameters();
+			var parameters = patch.GetParameters();
 			var result = parameters.Types().ToList();
 			var origParamTypes = result.ToArray();
 			var paramTypes = new Type[origParamTypes.Length];
 			for (int i = 0; i < paramTypes.Length; ++i)
-				paramTypes[i] = UnhollowerSupport.IsGeneratedAssemblyType(origParamTypes[i]) ? typeof(IntPtr) : origParamTypes[i];
+				paramTypes[i] = Il2CppTypeForPatchType(origParamTypes[i]);
 
-			var origReturnType = AccessTools.GetReturnedType(original);
-			var returnType = UnhollowerSupport.IsGeneratedAssemblyType(origReturnType) ? typeof(IntPtr) : origReturnType;
+			var origReturnType = AccessTools.GetReturnedType(patch);
+			var returnType = Il2CppTypeForPatchType(origReturnType);
 
-			DynamicMethod method;
-			method = new DynamicMethod(
+			DynamicMethod method = new DynamicMethod(
 					patchName,
 					MethodAttributes.Public | MethodAttributes.Static,
 					CallingConventions.Standard,
 					returnType,
 					paramTypes,
-					owner,
+					original.DeclaringType,
 					true
 			);
 
@@ -147,25 +146,149 @@ namespace Harmony
 
 			var il = method.GetILGenerator();
 
+			LocalBuilder[] byRefValues = new LocalBuilder[parameters.Length];
+			LocalBuilder returnLocal = null;
+			if (origReturnType != typeof(void)) {
+				returnLocal = il.DeclareLocal(origReturnType);
+				Emitter.LogLocalVariable(il, returnLocal);
+			}
+			LocalBuilder exceptionLocal = il.DeclareLocal(typeof(Exception));
+			Emitter.LogLocalVariable(il, exceptionLocal);
+
+			// Start a try-block for the call to the original patch
+			Emitter.MarkBlockBefore(il, new ExceptionBlock(ExceptionBlockType.BeginExceptionBlock, null), out _);
+
 			// Load arguments, invoking the IntPrt -> Il2CppObject constructor for IL2CPP types
-			for (int i = 0; i < origParamTypes.Length; ++i)
-			{
+			for (int i = 0; i < origParamTypes.Length; ++i) {
 				Emitter.Emit(il, OpCodes.Ldarg, i);
-				if (UnhollowerSupport.IsGeneratedAssemblyType(origParamTypes[i]))
-					Emitter.Emit(il, OpCodes.Newobj, Il2CppConstuctor(origParamTypes[i]));
+				ConvertArgument(il, origParamTypes[i], ref byRefValues[i]);
+				if (byRefValues[i] != null) {
+					Emitter.LogLocalVariable(il, byRefValues[i]);
+				}
 			}
 
 			// Call the original patch with the now-correct types
-			Emitter.Emit(il, OpCodes.Call, original);
+			Emitter.Emit(il, OpCodes.Call, patch);
 
-			// If needed, unwrap the return value; then return
-			if (UnhollowerSupport.IsGeneratedAssemblyType(origReturnType))
-				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
+			// Store the result, if any
+			if (returnLocal != null) {
+				Emitter.Emit(il, OpCodes.Stloc, returnLocal);
+			}
+
+			// Catch any exceptions that may have been thrown
+			Emitter.MarkBlockBefore(il, new ExceptionBlock(ExceptionBlockType.BeginCatchBlock, typeof(Exception)), out _);
+
+			// MelonModLogger.LogError("Exception in ...\n" + exception.ToString());
+			Emitter.Emit(il, OpCodes.Stloc, exceptionLocal);
+			Emitter.Emit(il, OpCodes.Ldstr, $"Exception in Harmony patch of method {original.FullDescription()}:\n");
+			Emitter.Emit(il, OpCodes.Ldloc, exceptionLocal);
+			Emitter.Emit(il, OpCodes.Call, AccessTools.DeclaredMethod(typeof(Exception), "ToString", new Type[0]));
+			Emitter.Emit(il, OpCodes.Call, AccessTools.DeclaredMethod(typeof(string), "Concat", new Type[] { typeof(string), typeof(string) }));
+			Emitter.Emit(il, OpCodes.Call, AccessTools.DeclaredMethod(typeof(MelonModLogger), "LogError", new Type[] { typeof(string) }));
+
+			// Close the exception block
+			Emitter.MarkBlockAfter(il, new ExceptionBlock(ExceptionBlockType.EndExceptionBlock, null));
+
+			// Write back the pointers of ref arguments
+			for (int i = 0; i < parameters.Length; ++i) {
+				if (byRefValues[i] == null) continue;
+
+				Emitter.Emit(il, OpCodes.Ldarg, i); // -> [intptr*]
+				Emitter.Emit(il, OpCodes.Ldloc, byRefValues[i]); // -> [intptr*, obj]
+				if (origParamTypes[i].GetElementType() == typeof(string)) {
+					Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.ManagedStringToIl2CppMethod); // -> [intptr*, intptr]
+				} else {
+					Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod); // -> [intptr*, intptr]
+				}
+				Emitter.Emit(il, OpCodes.Stind_I); // -> []
+			}
+
+			// Load the return value, if any, and unwrap it if required
+			if (returnLocal != null) {
+				Emitter.Emit(il, OpCodes.Ldloc, returnLocal);
+				ConvertReturnValue(il, origReturnType);
+			}
 
 			Emitter.Emit(il, OpCodes.Ret);
 
 			DynamicTools.PrepareDynamicMethod(method);
 			return method;
+		}
+
+		private static Type Il2CppTypeForPatchType(Type type) {
+			if (type.IsByRef) {
+				Type element = type.GetElementType();
+				if (element == typeof(string) || UnhollowerSupport.IsGeneratedAssemblyType(element)) {
+					return typeof(IntPtr*);
+				} else {
+					return type;
+				}
+			} else if (type == typeof(string) || UnhollowerSupport.IsGeneratedAssemblyType(type)) {
+				return typeof(IntPtr);
+			} else {
+				return type;
+			}
+		}
+
+		private static void ConvertArgument(ILGenerator il, Type paramType, ref LocalBuilder byRefLocal) {
+			if (paramType.IsValueType)
+				return;
+
+			if (paramType.IsByRef) {
+				Type elementType = paramType.GetElementType();
+
+				if (paramType.GetElementType() == typeof(string)) {
+					// byRefLocal = Il2CppStringToManaged(*ptr);
+					// return ref byRefLocal;
+
+					byRefLocal = il.DeclareLocal(elementType);
+					Emitter.Emit(il, OpCodes.Ldind_I);
+					Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
+					Emitter.Emit(il, OpCodes.Stloc, byRefLocal);
+					Emitter.Emit(il, OpCodes.Ldloca, byRefLocal);
+				} else if (UnhollowerSupport.IsGeneratedAssemblyType(elementType)) {
+					// byRefLocal = *ptr == 0 ? null : new SomeType(*ptr);
+					// return ref byRefLocal;
+					Label ptrNonZero = il.DefineLabel();
+					Label done = il.DefineLabel();
+
+					byRefLocal = il.DeclareLocal(elementType);
+					Emitter.Emit(il, OpCodes.Ldind_I);
+					Emitter.Emit(il, OpCodes.Dup);
+					Emitter.Emit(il, OpCodes.Brtrue_S, ptrNonZero);
+					Emitter.Emit(il, OpCodes.Pop);
+					Emitter.Emit(il, OpCodes.Br_S, done);
+					Emitter.MarkLabel(il, ptrNonZero);
+					Emitter.Emit(il, OpCodes.Newobj, Il2CppConstuctor(elementType));
+					Emitter.Emit(il, OpCodes.Stloc, byRefLocal);
+					Emitter.MarkLabel(il, done);
+					Emitter.Emit(il, OpCodes.Ldloca, byRefLocal);
+				}
+			} else if (paramType == typeof(string)) {
+				// return Il2CppStringToManaged(ptr);
+				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
+			} else if (UnhollowerSupport.IsGeneratedAssemblyType(paramType)) {
+				// return ptr == 0 ? null : new SomeType(ptr);
+				Label ptrNonZero = il.DefineLabel();
+				Label done = il.DefineLabel();
+
+				Emitter.Emit(il, OpCodes.Dup);
+				Emitter.Emit(il, OpCodes.Brtrue_S, ptrNonZero);
+				Emitter.Emit(il, OpCodes.Pop);
+				Emitter.Emit(il, OpCodes.Ldnull);
+				Emitter.Emit(il, OpCodes.Br_S, done);
+				Emitter.MarkLabel(il, ptrNonZero);
+				Emitter.Emit(il, OpCodes.Newobj, Il2CppConstuctor(paramType));
+				Emitter.MarkLabel(il, done);
+			}
+		}
+
+		private static void ConvertReturnValue(ILGenerator il, Type returnType) {
+			if (returnType == typeof(string)) {
+				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.ManagedStringToIl2CppMethod);
+			} else if (!returnType.IsValueType && UnhollowerSupport.IsGeneratedAssemblyType(returnType)) {
+				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
+			}
 		}
 
 		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
