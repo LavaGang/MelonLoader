@@ -217,39 +217,8 @@ namespace MelonLoader.AssemblyGenerator
         internal bool Execute(string[] argv)
         {
             string assembly_path = Path.Combine(BaseFolder, FileName);
-            //foreach (var enumerateFile in Directory.EnumerateFiles(BaseFolder, "*.dll"))
-            //    Assembly.LoadFrom(enumerateFile);
-            
             if (File.Exists(assembly_path))
             {
-                /*
-                
-                try
-                {
-                    OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
-                    Assembly a = Assembly.LoadFrom(assembly_path);
-                    if (a != null)
-                    {
-                        MethodInfo c = a.EntryPoint;
-                        if (c != null)
-                            c.Invoke(null, new object[] {argv});
-                        else
-                            return false;
-                    }
-                    else
-                        return false;
-                }
-                catch (Exception e)
-                {
-                    Logger.LogError(e.ToString());
-                    return false;
-                }
-                finally
-                {
-                    OverrideAppDomainBase(originalCwd);
-                }
-                */
-
                 var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
                 OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
                 var generatorProcessInfo = new ProcessStartInfo(assembly_path);
