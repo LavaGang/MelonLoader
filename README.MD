@@ -51,6 +51,7 @@
 | --melonloader.quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.maxlogs | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |
 | --melonloader.devmodsonly | Loads only Mods with the "-dev.dll" extension |
+| --melonloader.devpluginsonly | Loads only Plugins with the "-dev.dll" extension |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
 | --melonloader.rainbow | Rainbow Console Color                |
 | --melonloader.randomrainbow | Random Rainbow Console Color |

@@ -73,6 +73,7 @@
 58. Fixed Zipped Mod Support.
 59. Moved SharpZipLib in ModHandler to its own Namespace.
 60. Fixed Issue with Zipped Mod Support when using --melonloader.devmodsonly.
+61. Added Launch Option --melonloader.devpluginsonly.
 
 ---
 
