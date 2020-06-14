@@ -69,6 +69,7 @@
 55. Added Embedded SharpZipLib to ModHandler.
 56. Fixed Zipped Mod Support.
 57. Moved SharpZipLib in ModHandler to its own Namespace.
+58. Fixed Issue with Zipped Mod Support when using --melonloader.devmodsonly.
 
 ---
 

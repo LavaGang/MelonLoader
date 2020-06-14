@@ -296,7 +296,7 @@ namespace MelonLoader
                 }
 
                 // ZIP
-                string[] zippedFiles = Directory.GetFiles(searchdir, (Imports.IsDevModsOnly() ? "*-dev.zip" : "*.zip"), SearchOption.TopDirectoryOnly);
+                string[] zippedFiles = Directory.GetFiles(searchdir, "*.zip", SearchOption.TopDirectoryOnly);
                 if (zippedFiles.Length > 0)
                 {
                     for (int i = 0; i < zippedFiles.Count(); i++)
@@ -313,7 +313,7 @@ namespace MelonLoader
                                         ZipEntry entry;
                                         while ((entry = zipInputStream.GetNextEntry()) != null)
                                         {
-                                            if ((Path.GetFileName(entry.Name).Length <= 0) || !Path.GetFileName(entry.Name).EndsWith(".dll"))
+                                            if ((Path.GetFileName(entry.Name).Length <= 0) || !Path.GetFileName(entry.Name).EndsWith((Imports.IsDevModsOnly() ? "-dev.dll" : ".dll")))
                                                 continue;
 
                                             using (var unzippedFileStream = new MemoryStream())
