@@ -1,10 +1,3 @@
-### Known Issues:
-
-1. StackTraces refuse to show line numbers.
-2. Console Logs randomly do not Color properly.
-
----
-
 ### Version List:
 
 [v0.2.2 Open-Beta](#v022-open-beta)  
@@ -71,6 +64,8 @@
 50. Added Harmony Support for ref Types in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
 51. Fixed Crash Issue when Exception is thrown from C# Code.  (Credits to zeobviouslyfakeacc :3)
 52. Updated Method Targeting in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
+53. Installer now Downloads and Installs Required VC Redist.
+54. Fixed Invalid Handle Issue with Console Coloring.
 
 ---
 
