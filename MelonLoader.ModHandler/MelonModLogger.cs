@@ -53,19 +53,19 @@ namespace MelonLoader
                 bool rainbow_check = RainbowCheck();
                 System.Console.Write("[");
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Green);
+                    Console.SetColor(ConsoleColor.Green);
                 System.Console.Write(GetTimestamp());
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
                 System.Console.Write("] [");
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Magenta);
+                    Console.SetColor(ConsoleColor.Magenta);
                 System.Console.Write("MelonLoader");
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
                 System.Console.WriteLine("] " + namesection + s);
                 if (rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
             }
         }
 
@@ -75,10 +75,10 @@ namespace MelonLoader
             Imports.Logger_LogColor((namesection + s), color);
             if (!Imports.IsDebugMode() && Console.Enabled)
             {
-                Imports.Console_SetColor(color);
+                Console.SetColor(color);
                 RainbowCheck();
                 System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + s);
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                Console.SetColor(ConsoleColor.Gray);
             }
         }
 
@@ -92,7 +92,7 @@ namespace MelonLoader
                 bool rainbow_check = RainbowCheck();
                 System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + formatted);
                 if (rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
             }
         }
 
@@ -103,10 +103,10 @@ namespace MelonLoader
             Imports.Logger_LogColor((namesection + formatted), color);
             if (!Imports.IsDebugMode() && Console.Enabled)
             {
-                Imports.Console_SetColor(color);
+                Console.SetColor(color);
                 RainbowCheck();
                 System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + formatted);
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                Console.SetColor(ConsoleColor.Gray);
             }
         }
 
@@ -116,10 +116,10 @@ namespace MelonLoader
             Imports.Logger_LogWarning(namesection, s);
             if (!Imports.IsDebugMode() && Console.Enabled)
             {
-                Imports.Console_SetColor(ConsoleColor.Yellow);
+                Console.SetColor(ConsoleColor.Yellow);
                 RainbowCheck();
                 System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Warning] " + s);
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                Console.SetColor(ConsoleColor.Gray);
             }
         }
 
@@ -130,10 +130,10 @@ namespace MelonLoader
             Imports.Logger_LogWarning(namesection, formatted);
             if (!Imports.IsDebugMode() && Console.Enabled)
             {
-                Imports.Console_SetColor(ConsoleColor.Yellow);
+                Console.SetColor(ConsoleColor.Yellow);
                 RainbowCheck();
                 System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Warning] " + formatted);
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                Console.SetColor(ConsoleColor.Gray);
             }
         }
 
@@ -145,10 +145,10 @@ namespace MelonLoader
                 Imports.Logger_LogError(namesection, s);
                 if (!Imports.IsDebugMode() && Console.Enabled)
                 {
-                    Imports.Console_SetColor(ConsoleColor.Red);
+                    Console.SetColor(ConsoleColor.Red);
                     RainbowCheck();
                     System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + s);
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
                 }
                 ErrorCount++;
             }
@@ -163,10 +163,10 @@ namespace MelonLoader
                 Imports.Logger_LogError(namesection, formatted);
                 if (!Imports.IsDebugMode() && Console.Enabled)
                 {
-                    Imports.Console_SetColor(ConsoleColor.Red);
+                    Console.SetColor(ConsoleColor.Red);
                     RainbowCheck();
                     System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + formatted);
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
                 }
                 ErrorCount++;
             }
@@ -180,10 +180,10 @@ namespace MelonLoader
                 Imports.Logger_LogModError(namesection, msg);
                 if (!Imports.IsDebugMode() && Console.Enabled)
                 {
-                    Imports.Console_SetColor(ConsoleColor.Yellow);
+                    Console.SetColor(ConsoleColor.Yellow);
                     RainbowCheck();
                     System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + msg);
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
                 }
                 ErrorCount++;
             }
@@ -197,45 +197,45 @@ namespace MelonLoader
                 bool rainbow_check = RainbowCheck();
                 System.Console.Write("[");
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Green);
+                    Console.SetColor(ConsoleColor.Green);
                 System.Console.Write(GetTimestamp());
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
                 System.Console.Write("] [");
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Magenta);
+                    Console.SetColor(ConsoleColor.Magenta);
                 System.Console.Write("MelonLoader");
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Gray);
+                    Console.SetColor(ConsoleColor.Gray);
                 System.Console.Write("] ");
                 if (!rainbow_check)
-                    Imports.Console_SetColor(ConsoleColor.Blue);
+                    Console.SetColor(ConsoleColor.Blue);
                 System.Console.Write("Status: ");
                 if (type == 0)
                 {
                     if (!rainbow_check)
-                        Imports.Console_SetColor(ConsoleColor.Cyan);
+                        Console.SetColor(ConsoleColor.Cyan);
                     System.Console.WriteLine("Universal");
                 }
                 else if (type == 1)
                 {
                     if (!rainbow_check)
-                        Imports.Console_SetColor(ConsoleColor.Green);
+                        Console.SetColor(ConsoleColor.Green);
                     System.Console.WriteLine("Compatible");
                 }
                 else if (type == 2)
                 {
                     if (!rainbow_check)
-                        Imports.Console_SetColor(ConsoleColor.Yellow);
+                        Console.SetColor(ConsoleColor.Yellow);
                     System.Console.WriteLine("No MelonModGameAttribute!");
                 }
                 else
                 {
                     if (!rainbow_check)
-                        Imports.Console_SetColor(ConsoleColor.Red);
+                        Console.SetColor(ConsoleColor.Red);
                     System.Console.WriteLine("INCOMPATIBLE!");
                 }
-                Imports.Console_SetColor(ConsoleColor.Gray);
+                Console.SetColor(ConsoleColor.Gray);
             }
         }
 
@@ -244,10 +244,10 @@ namespace MelonLoader
             if (Imports.IsRainbowMode() || Imports.IsRandomRainbowMode())
             {
                 if (Imports.IsRandomRainbowMode())
-                    Imports.Console_SetColor((ConsoleColor)rainbowrand.Next(1, (int)ConsoleColor.White));
+                    Console.SetColor((ConsoleColor)rainbowrand.Next(1, (int)ConsoleColor.White));
                 else
                 {
-                    Imports.Console_SetColor(rainbow);
+                    Console.SetColor(rainbow);
                     rainbow++;
                     if (rainbow > ConsoleColor.White)
                         rainbow = ConsoleColor.DarkBlue;

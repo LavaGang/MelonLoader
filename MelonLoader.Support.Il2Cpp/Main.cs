@@ -7,7 +7,6 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.Rendering;
 
 namespace MelonLoader.Support
 {
@@ -45,8 +44,6 @@ namespace MelonLoader.Support
             } catch(Exception ex) {
                 MelonModLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
             }
-            
-
 
             ClassInjector.DoHook += Imports.Hook;
             GetUnityVersionNumbers(out var major, out var minor, out var patch);

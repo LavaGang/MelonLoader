@@ -80,7 +80,7 @@ public:
 	static bool IsInitialized() { return (GetConsoleWindow() != NULL); }
 	static void Create();
 
-	static void SetColor(ConsoleColor color) { if (hwndConsole != NULL) SetConsoleTextAttribute(hwndConsole, color); }
+	static void SetColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color); }
 	static void ResetColor() { SetColor(ConsoleColor_Gray); }
 	static void RainbowCheck();
 
