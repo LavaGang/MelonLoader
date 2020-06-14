@@ -284,7 +284,7 @@ namespace MelonLoader
                         {
                             try
                             {
-                                LoadAssembly(file, plugins);
+                                LoadAssembly(File.ReadAllBytes(file), plugins);
                             }
                             catch (Exception e)
                             {
