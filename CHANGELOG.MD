@@ -31,7 +31,7 @@
 17. Fixed SSL/TLS Issue with the Installer.
 18. Fixed issue with Games that don't have Assembly-CSharp.
 19. Added a check and a warning for if the OS is older than Windows 7.
-20. Updated Il2CppAssemblyUnhollower download to v0.4.5.  (Credits to knah :D)
+20. Updated Il2CppAssemblyUnhollower Download to v0.4.4.  (Credits to knah :D)
 21. Cleaned up version.dll.
 22. version.dll Proxy will now look for version_original.dll next to the EXE before loading from System32.
 23. Small change to version.dll to Prevent Crashing when MelonLoader.dll fails to load.
@@ -44,6 +44,7 @@
 30. Switched Assembly Generator to Process Based Execution.
 31. Fixed Mistake with Assembly Generator not returning false when Execution fails.
 32. Fixed Directory Issue with Assembly Generator.
+33. Updated Il2CppAssemblyUnhollower Download to v0.4.5.
 33. Added new Launch Option --melonloader.devmodsonly.
 34. Added Unity 2018.4.16 Dependencies.
 35. Plugins now only call OnPreInitialization, OnApplicationStart, OnApplicationQuit, and OnModSettingsApplied.
@@ -57,19 +58,21 @@
 43. Added Force-Regeneration to Assembly Generator.
 44. Added Launch Option --melonloader.agregenerate.
 45. Added Support for Mods to Harmony Patch using Harmony Attributes.
-46. Fixed SSL/TLS issues in Mods for Il2Cpp games.  (Credits to knah :D)
-47. Fixed generator process losing output lines.  (Credits to knah :D)
-48. Improved String Support for Harmony in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
-49. Added Harmony Support for null Il2Cpp Argument Values.  (Credits to zeobviouslyfakeacc :3)
-50. Added Harmony Support for ref Types in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
-51. Fixed Crash Issue when Exception is thrown from C# Code.  (Credits to zeobviouslyfakeacc :3)
-52. Updated Method Targeting in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
-53. Installer now Downloads and Installs Required VC Redist.
-54. Fixed Invalid Handle Issue with Console Coloring.
-55. Added Embedded SharpZipLib to ModHandler.
-56. Fixed Zipped Mod Support.
-57. Moved SharpZipLib in ModHandler to its own Namespace.
-58. Fixed Issue with Zipped Mod Support when using --melonloader.devmodsonly.
+46. Fixed Issue with Assembly Generator losing output lines.  (Credits to knah :D)
+47. Fixed Issue with Assembly Generator failing on paths with spaces.  (Credits to knah :D)
+48. Fixed SSL/TLS issues in Mods for Il2Cpp games.  (Credits to knah :D)
+49. Updated Il2CppAssemblyUnhollower Download to v0.4.6.  (Credits to knah :D)
+50. Improved String Support for Harmony in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
+51. Added Harmony Support for null Il2Cpp Argument Values.  (Credits to zeobviouslyfakeacc :3)
+52. Added Harmony Support for ref Types in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
+53. Fixed Crash Issue when Exception is thrown from C# Code.  (Credits to zeobviouslyfakeacc :3)
+54. Updated Method Targeting in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
+55. Installer now Downloads and Installs Required VC Redist.
+56. Fixed Invalid Handle Issue with Console Coloring.
+57. Added Embedded SharpZipLib to ModHandler.
+58. Fixed Zipped Mod Support.
+59. Moved SharpZipLib in ModHandler to its own Namespace.
+60. Fixed Issue with Zipped Mod Support when using --melonloader.devmodsonly.
 
 ---
 
