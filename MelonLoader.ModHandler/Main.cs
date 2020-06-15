@@ -46,6 +46,7 @@ namespace MelonLoader
             else
                 Imports.UNLOAD_MELONLOADER();
             
+            /*
             if (HasGeneratedAssembly)
             {
                 LoadMods(true);
@@ -57,6 +58,7 @@ namespace MelonLoader
                             try { mod.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogModError(ex.ToString(), mod.InfoAttribute.Name); }
                     }
             }
+            */
         }
 
         private static void OnApplicationStart()

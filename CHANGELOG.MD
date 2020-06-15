@@ -76,6 +76,8 @@
 61. Added Launch Option --melonloader.devpluginsonly.
 62. Updated Il2CppAssemblyUnhollower Download to v0.4.7.  (Credits to knah :D)
 63. Launch Option --melonloader.quitfix has been changed to --quitfix.
+64. Temporarily Disabled Plugins.
+65. Temporarily Disabled Launch Option --melonloader.devpluginsonly.
 
 ---
 
