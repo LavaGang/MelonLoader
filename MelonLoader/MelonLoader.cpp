@@ -165,16 +165,16 @@ void MelonLoader::ParseCommandLine()
 			const char* command = CommandLineV[i];
 			if (command != NULL)
 			{
-				if (strstr(command, "--melonloader.rainbow") != NULL)
+				if (strstr(command, "--quitfix") != NULL)
+					QuitFix = true;
+				else if (strstr(command, "--melonloader.hideconsole") != NULL)
+					ConsoleEnabled = false;
+				else if (strstr(command, "--melonloader.rainbow") != NULL)
 					RainbowMode = true;
 				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
 					RandomRainbowMode = true;
-				else if (strstr(command, "--melonloader.quitfix") != NULL)
-					QuitFix = true;
 				else if (strstr(command, "--melonloader.maxlogs") != NULL)
 					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
-				else if (strstr(command, "--melonloader.hideconsole") != NULL)
-					ConsoleEnabled = false;
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
 					DevModsOnly = true;
 				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
