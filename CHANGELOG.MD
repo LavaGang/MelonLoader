@@ -82,6 +82,7 @@
 67. Added Unity 2019.2.17 Dependencies.
 68. Added Unity 2019.2.21 Dependencies.
 69. Regenerated Unity Dependencies Zips.
+70. Fixed Issue with --melonloader.devmodsonly.
 
 ---
 
