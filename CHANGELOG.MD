@@ -74,6 +74,7 @@
 59. Moved SharpZipLib in ModHandler to its own Namespace.
 60. Fixed Issue with Zipped Mod Support when using --melonloader.devmodsonly.
 61. Added Launch Option --melonloader.devpluginsonly.
+62. Updated Il2CppAssemblyUnhollower Download to v0.4.7.  (Credits to knah :D)
 
 ---
 
