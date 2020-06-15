@@ -1,6 +1,5 @@
 using System;
 
-
 namespace MelonLoader.TinyJSON
 {
 	public sealed class ProxyString : Variant

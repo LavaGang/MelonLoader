@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 
-
 namespace MelonLoader.TinyJSON
 {
 	public sealed class ProxyNumber : Variant

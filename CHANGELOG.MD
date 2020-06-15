@@ -78,6 +78,10 @@
 63. Launch Option --melonloader.quitfix has been changed to --quitfix.
 64. Temporarily Disabled Plugins.
 65. Temporarily Disabled Launch Option --melonloader.devpluginsonly.
+66. Added Unity 2018.1.9 Dependencies.
+67. Added Unity 2019.2.17 Dependencies.
+68. Added Unity 2019.2.21 Dependencies.
+69. Regenerated Unity Dependencies Zips.
 
 ---
 

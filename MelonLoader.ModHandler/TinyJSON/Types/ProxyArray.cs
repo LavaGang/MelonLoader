@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
 namespace MelonLoader.TinyJSON
 {
 	public sealed class ProxyArray : Variant, IEnumerable<Variant>

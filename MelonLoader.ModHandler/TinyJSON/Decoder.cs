@@ -2,7 +2,6 @@ using System.IO;
 using System.Text;
 using System;
 
-
 namespace MelonLoader.TinyJSON
 {
 	public sealed class Decoder : IDisposable

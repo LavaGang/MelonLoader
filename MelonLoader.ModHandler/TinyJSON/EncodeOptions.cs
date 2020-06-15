@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace MelonLoader.TinyJSON
 {
 	[Flags]

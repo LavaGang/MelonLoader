@@ -36,7 +36,6 @@
 ### GENERAL INFORMATION:
 
 - All Mods get placed in the created Mods folder inside the Game's Install Folder.
-- All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
 - All Logs are made in the created Logs folder inside the Game's Install Folder.
 
 ---

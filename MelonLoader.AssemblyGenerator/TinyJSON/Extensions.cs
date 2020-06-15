@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace MelonLoader.TinyJSON
 {
 	public static class Extensions

@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
-
 namespace MelonLoader.Installer
 {
     public partial class MainForm : Form
