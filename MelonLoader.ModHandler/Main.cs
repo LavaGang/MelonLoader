@@ -286,17 +286,13 @@ namespace MelonLoader
                         {
                             if (plugins)
                             {
-                                if (Imports.IsDevPluginsOnly() && !file.EndsWith("-dev.dll"))
-                                    return;
-                                if (!Imports.IsDevPluginsOnly() && file.EndsWith("-dev.dll"))
-                                    return;
+                                if ((Imports.IsDevPluginsOnly() && !file.EndsWith("-dev.dll")) || (!Imports.IsDevPluginsOnly() && file.EndsWith("-dev.dll")))
+                                    continue;
                             }
                             else
                             {
-                                if (Imports.IsDevModsOnly() && !file.EndsWith("-dev.dll"))
-                                    return;
-                                if (!Imports.IsDevModsOnly() && file.EndsWith("-dev.dll"))
-                                    return;
+                                if ((Imports.IsDevModsOnly() && !file.EndsWith("-dev.dll")) || (!Imports.IsDevModsOnly() && file.EndsWith("-dev.dll")))
+                                    continue;
                             }
                             try
                             {
@@ -329,8 +325,20 @@ namespace MelonLoader
                                         ZipEntry entry;
                                         while ((entry = zipInputStream.GetNextEntry()) != null)
                                         {
-                                            if ((Path.GetFileName(entry.Name).Length <= 0) || !Path.GetFileName(entry.Name).EndsWith(((plugins ? Imports.IsDevPluginsOnly() : Imports.IsDevModsOnly()) ? "-dev.dll" : ".dll")))
+                                            string filename = Path.GetFileName(entry.Name);
+                                            if (string.IsNullOrEmpty(filename) || !filename.EndsWith(".dll"))
                                                 continue;
+
+                                            if (plugins)
+                                            {
+                                                if ((Imports.IsDevPluginsOnly() && !filename.EndsWith("-dev.dll")) || (!Imports.IsDevPluginsOnly() && filename.EndsWith("-dev.dll")))
+                                                    continue;
+                                            }
+                                            else
+                                            {
+                                                if ((Imports.IsDevModsOnly() && !filename.EndsWith("-dev.dll")) || (!Imports.IsDevModsOnly() && filename.EndsWith("-dev.dll")))
+                                                    continue;
+                                            }
 
                                             using (var unzippedFileStream = new MemoryStream())
                                             {
