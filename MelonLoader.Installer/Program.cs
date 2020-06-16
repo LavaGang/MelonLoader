@@ -13,7 +13,7 @@ namespace MelonLoader.Installer
     static class Program
     {
         internal static string Title = "MelonLoader Installer";
-        private static string Version = "1.0.2";
+        private static string Version = "1.0.3";
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
         private static List<string> TempFilesList = new List<string>();
@@ -109,30 +109,39 @@ namespace MelonLoader.Installer
             }
             else
             {
-                if (File.Exists(Path.Combine(maindir_path, "MelonLoader.dll")))
-                    File.Delete(Path.Combine(maindir_path, "MelonLoader.dll"));
-                if (File.Exists(Path.Combine(maindir_path, "MelonLoader.ModHandler.dll")))
-                    File.Delete(Path.Combine(maindir_path, "MelonLoader.ModHandler.dll"));
-                string depsdir_path = Path.Combine(maindir_path, "Dependencies");
-                string[] files = Directory.GetFiles(depsdir_path, "*.dll", SearchOption.TopDirectoryOnly);
-                if (files.Length > 0)
+                if (Directory.Exists(maindir_path))
                 {
-                    for (int i = 0; i < files.Length; i++)
+                    if (File.Exists(Path.Combine(maindir_path, "MelonLoader.dll")))
+                        File.Delete(Path.Combine(maindir_path, "MelonLoader.dll"));
+                    if (File.Exists(Path.Combine(maindir_path, "MelonLoader.ModHandler.dll")))
+                        File.Delete(Path.Combine(maindir_path, "MelonLoader.ModHandler.dll"));
+                    string depsdir_path = Path.Combine(maindir_path, "Dependencies");
+                    if (Directory.Exists(depsdir_path))
                     {
-                        string file = files[i];
-                        if (!string.IsNullOrEmpty(file))
-                            File.Delete(file);
+                        string[] files = Directory.GetFiles(depsdir_path, "*.dll", SearchOption.TopDirectoryOnly);
+                        if (files.Length > 0)
+                        {
+                            for (int i = 0; i < files.Length; i++)
+                            {
+                                string file = files[i];
+                                if (!string.IsNullOrEmpty(file))
+                                    File.Delete(file);
+                            }
+                        }
+                        if (Directory.Exists(Path.Combine(depsdir_path, "SupportModules")))
+                            Directory.Delete(Path.Combine(depsdir_path, "SupportModules"), true);
+                        string assemblygendir_path = Path.Combine(depsdir_path, "AssemblyGenerator");
+                        if (Directory.Exists(assemblygendir_path))
+                        {
+                            if (File.Exists(Path.Combine(assemblygendir_path, "MelonLoader.AssemblyGenerator.exe")))
+                                File.Delete(Path.Combine(assemblygendir_path, "MelonLoader.AssemblyGenerator.exe"));
+                            if (Directory.Exists(Path.Combine(assemblygendir_path, "Il2CppDumper")))
+                                Directory.Delete(Path.Combine(assemblygendir_path, "Il2CppDumper"), true);
+                            if (Directory.Exists(Path.Combine(assemblygendir_path, "Il2CppAssemblyUnhollower")))
+                                Directory.Delete(Path.Combine(assemblygendir_path, "Il2CppAssemblyUnhollower"), true);
+                        }
                     }
                 }
-                if (Directory.Exists(Path.Combine(depsdir_path, "SupportModules")))
-                    Directory.Delete(Path.Combine(depsdir_path, "SupportModules"), true);
-                string assemblygendir_path = Path.Combine(depsdir_path, "AssemblyGenerator");
-                if (File.Exists(Path.Combine(assemblygendir_path, "MelonLoader.AssemblyGenerator.exe")))
-                    File.Delete(Path.Combine(assemblygendir_path, "MelonLoader.AssemblyGenerator.exe"));
-                if (Directory.Exists(Path.Combine(assemblygendir_path, "Il2CppDumper")))
-                    Directory.Delete(Path.Combine(assemblygendir_path, "Il2CppDumper"), true);
-                if (Directory.Exists(Path.Combine(assemblygendir_path, "Il2CppAssemblyUnhollower")))
-                    Directory.Delete(Path.Combine(assemblygendir_path, "Il2CppAssemblyUnhollower"), true);
             }
         }
 
@@ -321,7 +330,11 @@ namespace MelonLoader.Installer
                     if (string.IsNullOrEmpty(response))
                         return;
                     if (!Version.Equals(response))
-                        MessageBox.Show("A New Version of the Installer is Available!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    {
+                        DialogResult msgresult = MessageBox.Show("A New Version of the Installer is Available!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        if (msgresult == DialogResult.OK)
+                            Process.Start("https://github.com/HerpDerpinstine/MelonLoader/releases/latest");
+                    }
                 }
                 catch (Exception e) { }
             }).Start();
