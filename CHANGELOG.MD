@@ -84,6 +84,7 @@
 69. Regenerated Unity Dependencies Zips.
 70. Fixed Issue with --melonloader.devmodsonly.
 71. Disabled VC Redist Installation in Installer.
+72. Fixed Issue with Installer not running as Administrator.
 
 ---
 
