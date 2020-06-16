@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <LangVersion>latest</LangVersion>
     <Version>1.0.1</Version>
     <Authors>Lava Gang</Authors>
@@ -14,6 +13,7 @@
     <PackageIcon>Logo.png</PackageIcon>
     <RepositoryUrl></RepositoryUrl>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
