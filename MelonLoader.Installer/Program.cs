@@ -13,7 +13,7 @@ namespace MelonLoader.Installer
     static class Program
     {
         internal static string Title = "MelonLoader Installer";
-        private static string Version = "1.0.1";
+        private static string Version = "1.0.2";
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
         private static List<string> TempFilesList = new List<string>();
@@ -161,6 +161,7 @@ namespace MelonLoader.Installer
 
         private static void Install_VCRedist(bool legacy_install, string selectedVersion)
         {
+            /*
             SetDisplayText("Downloading VC Redist...");
             string tempfilepath = CreateTempFile();
             webClient.DownloadFile("https://aka.ms/vs/16/release/vc_redist.x64.exe", tempfilepath);
@@ -187,16 +188,18 @@ namespace MelonLoader.Installer
                 if (process.ExitCode != 0)
                     throw new Exception("Failed to Install VC Redist!");
             }
+            */
         }
 
         private static void Install_Normal(string dirpath, string selectedVersion)
         {
             SetDisplayText("Downloading MelonLoader...");
-            SetPercentage(50);
+            //SetPercentage(50);
             string tempfilepath = CreateTempFile();
             webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath);
             SetDisplayText("Extracting MelonLoader...");
-            SetPercentage(75);
+            //SetPercentage(75);
+            SetPercentage(50);
             Cleanup(dirpath, false);
             ExtractZip(dirpath, tempfilepath);
             CreateDirectories(dirpath, false);
@@ -206,18 +209,22 @@ namespace MelonLoader.Installer
         {
             SetDisplayText("Downloading MelonLoader...");
             bool is_02 = selectedVersion.Equals("v0.2");
-            if (is_02)
-                SetPercentage(20);
-            else
-                SetPercentage(50);
+            //if (is_02)
+            //    SetPercentage(20);
+            //else
+            //    SetPercentage(50);
             string tempfilepath = CreateTempFile();
             webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
             
             SetDisplayText("Extracting MelonLoader...");
+            //if (is_02)
+            //    SetPercentage(30);
+            //else
+            //    SetPercentage(75);
             if (is_02)
-                SetPercentage(30);
+                SetPercentage(20);
             else
-                SetPercentage(75);
+                SetPercentage(50);
             Cleanup(dirpath, true);
             ExtractZip(dirpath, tempfilepath);
 
@@ -262,7 +269,7 @@ namespace MelonLoader.Installer
         private static void Install_Legacy_01(string dirpath)
         {
             SetDisplayText("Downloading MelonLoader...");
-            SetPercentage(32);
+            //SetPercentage(32);
             string tempfilepath = CreateTempFile();
             webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip", tempfilepath);
 

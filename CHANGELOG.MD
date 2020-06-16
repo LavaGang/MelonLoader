@@ -24,7 +24,7 @@
 10. Installer now properly installs the Latest Version instead of a Predetermined Version.
 11. Fixed and Re-Enabled --melonloader.hideconsole.
 12. Added Log to Unity Debug to Signify to Developers that a Game has been Modded.
-13. Fixed SSL/TLS issue with the GeneratorProcess.  (Credits to zeobviouslyfakeacc :3)
+13. Fixed SSL/TLS issue with the Assembly Generator.  (Credits to zeobviouslyfakeacc :3)
 14. Fixed Crash Issue with Harmony when Patching Methods Multiple Times or when a Method happens to be null.  (Credits to zeobviouslyfakeacc :3)
 15. Made the Loaded Mods List public.
 16. Fix ModPrefs.SaveConfig() overriding previous SetString/Bool/etc calls.  (Credits to knah :D)
@@ -83,6 +83,7 @@
 68. Added Unity 2019.2.21 Dependencies.
 69. Regenerated Unity Dependencies Zips.
 70. Fixed Issue with --melonloader.devmodsonly.
+71. Disabled VC Redist Installation in Installer.
 
 ---
 
