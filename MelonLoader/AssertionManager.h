@@ -14,9 +14,6 @@ public:
 	static HMODULE LoadLib(const char* name, const char* filepath);
 	static HMODULE GetModuleHandlePtr(const char* name);
 	static FARPROC GetExport(HMODULE mod, const char* export_name);
-	static uintptr_t FindPattern(HMODULE mod, const char* name, const char* target_pattern);
-	static uintptr_t FindBestPossiblePattern(HMODULE mod, const char* name, std::vector<const char*> target_patterns);
-	static std::vector<uintptr_t> FindAllPattern(HMODULE mod, const char* name, const char* target_pattern);
 
 private:
 	static const char* FileName;

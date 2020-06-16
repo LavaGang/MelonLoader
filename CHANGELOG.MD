@@ -1,25 +1,6 @@
-### Known Issues:
-
-1. StackTraces refuse to show line numbers.
-2. Console Logs randomly do not Color properly.
-3. Mono Module currently has an Issue with https/ssl.
-
----
-
-### Work-in-Progress / To-Do List:
-
-1. Fix the above issues.
-2. Add Debugger Support to Mono Domain.
-3. Create Method for ModPrefs to Register Categories and Preferences in a single call.
-4. OnLevelIsLoading needs fixing for other games than just BONEWORKS.
-5. Add Android Support.
-6. Add Linux Support.
-7. Add Mac OS Support.
-
----
-
 ### Version List:
 
+[v0.2.2 Open-Beta](#v022-open-beta)  
 [v0.2.1 Open-Beta](#v021-open-beta)  
 [v0.2.0 Open-Beta](#v020-open-beta)  
 [v0.1.0 Open-Beta](#v010-open-beta)  
@@ -29,14 +10,92 @@
 
 ---
 
+### v0.2.2 Open-Beta:
+
+1. Downgraded Installer to .NET Framework 4.7.2.  (Credits to knah :D)
+2. Added Error Messages to Installer.  (Credits to knah :D)
+3. Added Proper Threading to Installer.  (Credits to knah :D)
+4. Installer now creates a Mods folder if none exists.
+5. Fixed Installer Form Size.
+6. Fixed Issue with Label in Installer Form not Auto-Centering.
+7. Fixed Build Information for Installer.
+8. Moved Plugins to its own separate Plugins folder.
+9. Installer now creates a Plugins folder if none exists.
+10. Installer now properly installs the Latest Version instead of a Predetermined Version.
+11. Fixed and Re-Enabled --melonloader.hideconsole.
+12. Added Log to Unity Debug to Signify to Developers that a Game has been Modded.
+13. Fixed SSL/TLS issue with the Assembly Generator.  (Credits to zeobviouslyfakeacc :3)
+14. Fixed Crash Issue with Harmony when Patching Methods Multiple Times or when a Method happens to be null.  (Credits to zeobviouslyfakeacc :3)
+15. Made the Loaded Mods List public.
+16. Fix ModPrefs.SaveConfig() overriding previous SetString/Bool/etc calls.  (Credits to knah :D)
+17. Fixed SSL/TLS Issue with the Installer.
+18. Fixed issue with Games that don't have Assembly-CSharp.
+19. Added a check and a warning for if the OS is older than Windows 7.
+20. Updated Il2CppAssemblyUnhollower Download to v0.4.4.  (Credits to knah :D)
+21. Cleaned up version.dll.
+22. version.dll Proxy will now look for version_original.dll next to the EXE before loading from System32.
+23. Small change to version.dll to Prevent Crashing when MelonLoader.dll fails to load.
+24. Revised Loading System to work without needing Signatures.
+25. Reorganized Installation Folder Structure.
+26. Fixed Issue with Signature-less System on Pre-2017 Unity Versions.
+27. Fixed Issue with Support Modules not loading on Unity Versions older than 5.3.
+28. Fixed Issue Loading Mono Module.
+29. Fixed issue with OnApplicationStart getting called even when the Assembly Generator fails.
+30. Switched Assembly Generator to Process Based Execution.
+31. Fixed Mistake with Assembly Generator not returning false when Execution fails.
+32. Fixed Directory Issue with Assembly Generator.
+33. Updated Il2CppAssemblyUnhollower Download to v0.4.5.
+33. Added new Launch Option --melonloader.devmodsonly.
+34. Added Unity 2018.4.16 Dependencies.
+35. Plugins now only call OnPreInitialization, OnApplicationStart, OnApplicationQuit, and OnModSettingsApplied.
+36. Revised Installer Design.
+37. Fixed issue with Plugin Loading.
+38. Fixed OnLevelWasLoaded and OnLevelWasInitialized on Unity Versions lower than 5.3.
+39. Fixed GetActiveSceneIndex for Pre2017.2 Support Module.
+40. Re-added TinyJSON to ModHandler.
+41. Moved TinyJSON to its own Namespace.
+42. Fixed SupportModule Issue with Pre-2017 Unity Games.
+43. Added Force-Regeneration to Assembly Generator.
+44. Added Launch Option --melonloader.agregenerate.
+45. Added Support for Mods to Harmony Patch using Harmony Attributes.
+46. Fixed Issue with Assembly Generator losing output lines.  (Credits to knah :D)
+47. Fixed Issue with Assembly Generator failing on paths with spaces.  (Credits to knah :D)
+48. Fixed SSL/TLS issues in Mods for Il2Cpp games.  (Credits to knah :D)
+49. Updated Il2CppAssemblyUnhollower Download to v0.4.6.  (Credits to knah :D)
+50. Improved String Support for Harmony in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
+51. Added Harmony Support for null Il2Cpp Argument Values.  (Credits to zeobviouslyfakeacc :3)
+52. Added Harmony Support for ref Types in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
+53. Fixed Crash Issue when Exception is thrown from C# Code.  (Credits to zeobviouslyfakeacc :3)
+54. Updated Method Targeting in Il2Cpp Games.  (Credits to zeobviouslyfakeacc :3)
+55. Installer now Downloads and Installs Required VC Redist.
+56. Fixed Invalid Handle Issue with Console Coloring.
+57. Added Embedded SharpZipLib to ModHandler.
+58. Fixed Zipped Mod Support.
+59. Moved SharpZipLib in ModHandler to its own Namespace.
+60. Fixed Issue with Zipped Mod Support when using --melonloader.devmodsonly.
+61. Added Launch Option --melonloader.devpluginsonly.
+62. Updated Il2CppAssemblyUnhollower Download to v0.4.7.  (Credits to knah :D)
+63. Launch Option --melonloader.quitfix has been changed to --quitfix.
+64. Temporarily Disabled Plugins.
+65. Temporarily Disabled Launch Option --melonloader.devpluginsonly.
+66. Added Unity 2018.1.9 Dependencies.
+67. Added Unity 2019.2.17 Dependencies.
+68. Added Unity 2019.2.21 Dependencies.
+69. Regenerated Unity Dependencies Zips.
+70. Fixed Issue with --melonloader.devmodsonly.
+
+---
+
 ### v0.2.1 Open-Beta:
 
 1. Overwrite files when copying freshly generated assemblies.  (Credits to knah :D)
-2. Implemented auto-download of required tools for IL2CPP games.  (Credits to knah :D)
+2. Implemented auto-download of required tools for Il2Cpp games.  (Credits to knah :D)
 3. Fixed Config Issue causing Assembly to always need to Regenerate.
 4. Added an Installer.
 5. Fixed Console Display Issue.
-6. Temporarily removed --melonloader.hideconsole.
+6. Temporarily disabled --melonloader.hideconsole.
+
+---
 
 ### v0.2.0 Open-Beta:
 
@@ -55,7 +114,7 @@
 13. Fixed Issue with MelonCoroutines when using Non-Yielding Coroutines.  (Credits to Slaynash :3)
 14. Added Support for Method Unstripping through Il2CppAssemblyUnhollower to MelonLoader.AssemblyGenerator.
 15. Replaced the Doorstop winmm.dll with version.dll.
-16. Fixed Compatibility with IL2CPP Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
+16. Fixed Compatibility with Il2Cpp Games for 0Harmony in MelonLoader.ModHandler.  (Credits to zeobviouslyfakeacc :D)
 17. Fixed Issue with 0Harmony not Unpatching Methods when Unloading.
 18. Fixed Incompatibility Issue between 0Harmony in MelonLoader.ModHandler and Mono Game Support.
 19. Added Event Fix for knah's Unhollower Logging.
@@ -104,8 +163,8 @@
 9. Made certain fields "readonly" (Name, Flags, etc) as it won't be reassigned.  (Credits to Kronik ^.^)
 10. Made SDK and Imports class static.  (Credits to Kronik ^.^)
 11. Cleaned up MelonLoader.ModHandler to use less Linq when possible for improved performance.  (Credits to Kronik ^.^)
-12. Added CreateInstance method to IL2CPP_Class in NET_SDK.Reflection.  (Credits to Kronik ^.^)
-13. Fixed SystemTypeToIL2CPPClass in NET_SDK.IL2CPP.
+12. Added CreateInstance method to Il2Cpp_Class in NET_SDK.Reflection.  (Credits to Kronik ^.^)
+13. Fixed SystemTypeToIl2CppClass in NET_SDK.Il2Cpp.
 14. Cleaned up TestMod.
 15. Added VRChat_OnUiManagerInit for VRChat Mods.
 16. Made MelonModGameAttribute work as intended and MelonLoader.ModHandler will now only load Mods marked as Compatible or Universal.
@@ -136,7 +195,7 @@
 41. Fixed issue with using 1 or 0 for a boolean in ModPrefs.
 42. Fixed issue with OnUpdate, OnFixedUpdate, and OnLateUpdate invoking too early.
 43. Fixed issue with Unload Functionality not closing either Consoles.
-44. Added MelonCoroutines to handle Coroutine functionality for Mods on both IL2CPP and Mono.  (Credits to knah :D)
+44. Added MelonCoroutines to handle Coroutine functionality for Mods on both Il2Cpp and Mono.  (Credits to knah :D)
 45. Fixed issue with Logger removing Old Logs when it shouldn't.
 46. Fixed issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
 47. Fixed Execution Order of OnApplicationStart to run before any of the other Mod Methods.
@@ -160,7 +219,7 @@
 
 1. General Stability and Optimization Improvements.
 2. Added Support for Mono based Games.
-3. Added MUPOT Mode which forces IL2CPP games to run under Mono. This Mode is still extremely Experimental.
+3. Added MUPOT Mode which forces Il2Cpp games to run under Mono. This Mode is still extremely Experimental.
 4. Logger has been renamed to MelonModLogger to prevent conflict with UnityEngine.Logger.
 5. Fixed Crash issue when using System.Type in MUPOT Mode.
 6. MelonModInfo Attribute has been changed to an Assembly Attribute.
@@ -195,7 +254,7 @@
 
 ### v0.0.2 Closed-Beta:
 
-1. Added NET_SDK to be built into MelonLoader.ModHandler as the designated IL2CPP Wrapper.
+1. Added NET_SDK to be built into MelonLoader.ModHandler as the designated Il2Cpp Wrapper.
 2. Fixed issue with Mods and Logs folders not being in the correct place next to the game's exe.
 3. Fixed issue with the ModPrefs not calling the OnModSettingsApplied method of Mods.
 4. Replaced old ModPrefs debug log message left in from my VRChat mod.
@@ -210,9 +269,9 @@
 13. Added Attribute StackTrace System to Logger.  (As requested by Camobiwon :3)
 14. Replaced Spaces in Names for the Attribute StackTrace System with Underscores.
 15. Fixed the bug that caused the Logger from MelonLoader.ModHandler to not properly output when using the Debug Console.
-16. Added SystemTypeToIL2CPPClass method to NET_SDK.IL2CPP.
+16. Added SystemTypeToIl2CppClass method to NET_SDK.Il2Cpp.
 17. Crash Issue with Game.DontDestroyOnLoad has been fixed and it now works.
-18. Fixed IL2CPP_Field where SetValue does not function on a instance object.  (Thanks DubyaDude ^.^)
+18. Fixed Il2Cpp_Field where SetValue does not function on a instance object.  (Thanks DubyaDude ^.^)
 19. Fixed Compile Version conflict with the 2 Consoles.  
 MelonLoader [DEBUG] & MelonLoader.ModHandler [RELEASE]  =  Debug Console  
 MelonLoader [RELEASE] & MelonLoader.ModHandler [DEBUG]  =  Normal Console  

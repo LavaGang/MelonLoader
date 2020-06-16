@@ -7,7 +7,7 @@ namespace MelonLoader
     public static class Imports
     {
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void UNLOAD_MELONLOADER(bool alt = false);
+        internal extern static void UNLOAD_MELONLOADER();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_Log(string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -46,6 +46,8 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsDebugMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool IsConsoleEnabled();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsRainbowMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsRandomRainbowMode();
@@ -54,15 +56,14 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Unhook(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern int AllocConsole();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(2)]
-        internal static extern bool SetForegroundWindow(IntPtr hWnd);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern IntPtr GetConsoleWindow();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Console_SetColor(ConsoleColor color);
-        [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsOldMono();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsQuitFix();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsDevModsOnly();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsDevPluginsOnly();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool AG_Force_Regenerate();
     }
 }

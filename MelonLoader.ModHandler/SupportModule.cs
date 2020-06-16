@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using System.Reflection;
+#pragma warning disable 0168
 
 namespace MelonLoader
 {
@@ -12,7 +13,7 @@ namespace MelonLoader
         int GetActiveSceneIndex();
         object StartCoroutine(IEnumerator coroutine);
         void StopCoroutine(object coroutineToken);
-        void ProcessWaitForEndOfFrame();
+        void UnityDebugLog(string msg);
     }
 
     internal static class SupportModule
@@ -25,8 +26,22 @@ namespace MelonLoader
         {
             try
             {
-                string filepath = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), (Imports.IsIl2CppGame() ? "MelonLoader.Support.Il2Cpp.dll" 
-                    : (File.Exists(Path.Combine(Imports.GetAssemblyDirectory(), "UnityEngine.CoreModule.dll")) ? "MelonLoader.Support.Mono.dll" : "MelonLoader.Support.Mono.Pre2017.dll")));
+                string basedir = Path.Combine(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+                string filepath = null;
+                if (Imports.IsIl2CppGame())
+                    filepath = Path.Combine(basedir, "MelonLoader.Support.Il2Cpp.dll");
+                else
+                {
+                    if (File.Exists(Path.Combine(Imports.GetAssemblyDirectory(), "UnityEngine.CoreModule.dll")))
+                        filepath = Path.Combine(basedir, "MelonLoader.Support.Mono.dll");
+                    else
+                    {
+                        if (IsOldUnity())
+                            filepath = Path.Combine(basedir, "MelonLoader.Support.Mono.Pre2017.2.dll");
+                        else
+                            filepath = Path.Combine(basedir, "MelonLoader.Support.Mono.Pre2017.dll");
+                    }
+                }
                 if (File.Exists(filepath))
                 {
                     byte[] data = File.ReadAllBytes(filepath);
@@ -58,8 +73,29 @@ namespace MelonLoader
             }
         }
 
+        internal static bool IsOldUnity()
+        {
+            try
+            {
+                Assembly unityengine = Assembly.Load("UnityEngine");
+                if (unityengine != null)
+                {
+                    Type scenemanager = unityengine.GetType("UnityEngine.SceneManagement.SceneManager");
+                    if (scenemanager != null)
+                    {
+                        EventInfo sceneLoaded = scenemanager.GetEvent("sceneLoaded");
+                        if (sceneLoaded != null)
+                            return false;
+                    }
+                }
+            }
+            catch (Exception e) { }
+            return true;
+        }
+
         internal static string GetUnityVersion() => supportModule?.GetUnityVersion();
         internal static float GetUnityDeltaTime() => supportModule?.GetUnityDeltaTime() ?? 0f;
         internal static int GetActiveSceneIndex() => supportModule?.GetActiveSceneIndex() ?? -9;
+        internal static void UnityDebugLog(string msg) => supportModule?.UnityDebugLog(msg);
     }
 }

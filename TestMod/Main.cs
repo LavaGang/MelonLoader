@@ -13,17 +13,12 @@ namespace TestMod
 
     public class TestMod : MelonMod
     {
-        public override void OnPreInitialization() // Runs before Game Initialization. Only runs if the Mod is in the Mods/PRELOAD folder.
-        {
-            MelonModLogger.Log("OnPreInitialization");
-        }
-
         public override void OnApplicationStart() // Runs after Game Initialization.
         {
             MelonModLogger.Log("OnApplicationStart");
         }
 
-        public override void OnLevelIsLoading() // Runs when a Scene is Loading. Currently only runs if the Mod is used in BONEWORKS.
+        public override void OnLevelIsLoading() // Runs when a Scene is Loading or when a Loading Screen is Shown. Currently only runs if the Mod is used in BONEWORKS.
         {
             MelonModLogger.Log("OnLevelIsLoading");
         }

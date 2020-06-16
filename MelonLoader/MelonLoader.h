@@ -10,9 +10,13 @@ public:
 	static char* CommandLineV[64];
 	static bool IsGameIl2Cpp;
 	static bool DebugMode;
+	static bool ConsoleEnabled;
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
 	static bool QuitFix;
+	static bool DevModsOnly;
+	static bool DevPluginsOnly;
+	static bool AG_Force_Regenerate;
 	static char* ExePath;
 	static char* GamePath;
 	static char* DataPath;
@@ -22,7 +26,8 @@ public:
 	static void Main();
 	static void ParseCommandLine();
 	static void ReadAppInfo();
-	static void UNLOAD(bool alt = false);
+	static bool CheckOSVersion();
+	static void UNLOAD();
 	static void KillProcess();
 	static int CountSubstring(std::string pat, std::string txt);
 	static bool DirectoryExists(const char* path);

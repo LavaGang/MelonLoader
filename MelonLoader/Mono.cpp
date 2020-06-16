@@ -4,7 +4,6 @@
 #include "AssertionManager.h"
 #include "ModHandler.h"
 #include "Logger.h"
-#include "PointerUtils.h"
 
 bool Mono::IsOldMono = false;
 char* Mono::AssemblyPath = NULL;
@@ -34,6 +33,7 @@ mono_property_get_get_method_t Mono::mono_property_get_get_method = NULL;
 mono_object_get_class_t Mono::mono_object_get_class = NULL;
 mono_runtime_set_main_args_t Mono::mono_runtime_set_main_args = NULL;
 mono_domain_set_config_t Mono::mono_domain_set_config = NULL;
+mono_method_get_name_t Mono::mono_method_get_name = NULL;
 
 bool Mono::Load()
 {
@@ -54,20 +54,6 @@ bool Mono::Load()
 	return !AssertionManager::Result;
 }
 
-void Mono::Unload()
-{
-	if (Module != NULL)
-	{
-		if (Domain != NULL)
-		{
-			mono_jit_cleanup(Domain);
-			Domain = NULL;
-		}
-		FreeLibrary(Mono::Module);
-		Mono::Module = NULL;
-	}
-}
-
 bool Mono::Setup()
 {
 	AssertionManager::Start("Mono.cpp", "Mono::Setup");
@@ -84,6 +70,7 @@ bool Mono::Setup()
 	mono_class_from_name = (mono_class_from_name_t)AssertionManager::GetExport(Module, "mono_class_from_name");
 	mono_class_get_method_from_name = (mono_class_get_method_from_name_t)AssertionManager::GetExport(Module, "mono_class_get_method_from_name");
 	mono_runtime_invoke = (mono_runtime_invoke_t)AssertionManager::GetExport(Module, "mono_runtime_invoke");
+	mono_method_get_name = (mono_method_get_name_t)AssertionManager::GetExport(Module, "mono_method_get_name");
 	mono_add_internal_call = (mono_add_internal_call_t)AssertionManager::GetExport(Module, "mono_add_internal_call");
 	mono_thread_current = (mono_thread_current_t)AssertionManager::GetExport(Module, "mono_thread_current");
 	mono_thread_set_main = (mono_thread_set_main_t)AssertionManager::GetExport(Module, "mono_thread_set_main");

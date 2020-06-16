@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include "MelonLoader.h"
+#include "ModHandler.h"
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -12,6 +13,9 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 		MelonLoader::Main();
 	}
 	else if (fdwReason == DLL_PROCESS_DETACH)
+	{
+		MelonLoader::UNLOAD();
 		FreeLibrary(MelonLoader::thisdll);
+	}
 	return TRUE;
 }

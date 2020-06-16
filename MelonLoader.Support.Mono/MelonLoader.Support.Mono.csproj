@@ -5,17 +5,18 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>MelonLoader.SupportModule</RootNamespace>
+    <RootNamespace>MelonLoader.Support</RootNamespace>
     <AssemblyName>MelonLoader.Support.Mono</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <ProjectGuid>{E0E877DF-E569-4E3F-8D8B-5B5945E7A5AD}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -24,7 +25,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -53,7 +54,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MelonLoader.ModHandler\MelonLoader.ModHandler.csproj">
       <Name>MelonLoader.ModHandler</Name>
-	  <Private>false</Private>
+      <Private>false</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

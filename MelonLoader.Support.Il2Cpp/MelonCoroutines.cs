@@ -21,18 +21,13 @@ namespace MelonLoader.Support
         
         private static readonly List<IEnumerator> tempList = new List<IEnumerator>();
 
-        public static object Start(IEnumerator routine)
+        internal static object Start(IEnumerator routine)
         {
             if (routine != null) ProcessNextOfCoroutine(routine);
             return routine;
         }
 
-        public static void Stop(object coroutineToken)
-        {
-            StopEnumerator((IEnumerator) coroutineToken);
-        }
-
-        private static void StopEnumerator(IEnumerator enumerator)
+        internal static void Stop(IEnumerator enumerator)
         {
             if (ourNextFrameCoroutines.Contains(enumerator)) // the coroutine is running itself
                 ourNextFrameCoroutines.Remove(enumerator);
@@ -43,7 +38,7 @@ namespace MelonLoader.Support
                 {
                     object waitCondition = ourCoroutinesStore[coroTupleIndex].WaitCondition;
                     if (waitCondition is IEnumerator waitEnumerator)
-                        StopEnumerator(waitEnumerator);
+                        Stop(waitEnumerator);
 
                     ourCoroutinesStore.RemoveAt(coroTupleIndex);
                 }
@@ -103,7 +98,7 @@ namespace MelonLoader.Support
             catch (Exception e)
             {
                 MelonModLogger.LogError(e.ToString());
-                StopEnumerator(FindOriginalCoro(enumerator)); // We want the entire coroutine hierachy to stop when an error happen
+                Stop(FindOriginalCoro(enumerator)); // We want the entire coroutine hierachy to stop when an error happen
             }
 
             var next = enumerator.Current;

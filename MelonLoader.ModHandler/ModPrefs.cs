@@ -137,7 +137,7 @@ namespace MelonLoader
         {
             if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
             {
-                pref.Value = value;
+                pref.Value = pref.ValueEdited = value;
                 ModPrefsController.SetString(section, name, value);
             }
             else

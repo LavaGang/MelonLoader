@@ -74,13 +74,13 @@ enum ConsoleColor
 class Console
 {
 public:
-	static HANDLE hConsole;
+	static HWND hwndConsole;
 	static int rainbow;
 
 	static bool IsInitialized() { return (GetConsoleWindow() != NULL); }
 	static void Create();
 
-	static void SetColor(ConsoleColor color) { if (hConsole == NULL) hConsole = GetStdHandle(STD_OUTPUT_HANDLE); SetConsoleTextAttribute(hConsole, color); }
+	static void SetColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color); }
 	static void ResetColor() { SetColor(ConsoleColor_Gray); }
 	static void RainbowCheck();
 

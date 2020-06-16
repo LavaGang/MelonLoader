@@ -4,10 +4,12 @@
 #include "MelonLoader.h"
 #include "AssertionManager.h"
 #include "Logger.h"
+#include "HookManager.h"
+#include "Il2Cpp.h"
 
+bool ModHandler::HasInitialized = false;
 MonoMethod* ModHandler::onApplicationStart = NULL;
 MonoMethod* ModHandler::onApplicationQuit = NULL;
-MonoMethod* ModHandler::melonCoroutines_ProcessWaitForEndOfFrame = NULL;
 
 void ModHandler::Initialize()
 {
@@ -44,15 +46,11 @@ void ModHandler::Initialize()
 							AssertionManager::Decide(onApplicationQuit, "OnApplicationQuit");
 
 							if (MelonLoader::IsGameIl2Cpp)
-							{
-								klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonCoroutines");
-								AssertionManager::Decide(assembly, "MelonLoader.MelonCoroutines");
-								if (klass != NULL)
-								{
-									melonCoroutines_ProcessWaitForEndOfFrame = Mono::mono_class_get_method_from_name(klass, "ProcessWaitForEndOfFrame", NULL);
-									AssertionManager::Decide(melonCoroutines_ProcessWaitForEndOfFrame, "ProcessWaitForEndOfFrame");
-								}
-							}
+								HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, HookManager::Hooked_runtime_invoke);
+							else
+								HookManager::Hook(&(LPVOID&)Mono::mono_runtime_invoke, HookManager::Hooked_runtime_invoke);
+
+							HasInitialized = true;
 						}
 					}
 				}
@@ -78,17 +76,6 @@ void ModHandler::OnApplicationQuit()
 	{
 		MonoObject* exceptionObject = NULL;
 		Mono::mono_runtime_invoke(onApplicationQuit, NULL, NULL, &exceptionObject);
-		if (exceptionObject && MelonLoader::DebugMode)
-			Mono::LogExceptionMessage(exceptionObject);
-	}
-}
-
-void ModHandler::MelonCoroutines_ProcessWaitForEndOfFrame()
-{
-	if (melonCoroutines_ProcessWaitForEndOfFrame != NULL)
-	{
-		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(melonCoroutines_ProcessWaitForEndOfFrame, NULL, NULL, &exceptionObject);
 		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}

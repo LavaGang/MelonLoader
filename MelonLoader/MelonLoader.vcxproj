@@ -95,10 +95,8 @@
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="ModHandler.cpp" />
-    <ClCompile Include="PointerUtils.cpp" />
     <ClCompile Include="Il2Cpp.cpp" />
     <ClCompile Include="Mono.cpp" />
-    <ClCompile Include="UnityPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssertionManager.h" />
@@ -110,10 +108,8 @@
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="ModHandler.h" />
-    <ClInclude Include="PointerUtils.h" />
     <ClInclude Include="Il2Cpp.h" />
     <ClInclude Include="Mono.h" />
-    <ClInclude Include="UnityPlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Detours\detours.lib" />
