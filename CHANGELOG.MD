@@ -13,7 +13,7 @@
 
 ### v0.2.3 Open-Beta:
 
-
+1. Added Unity 2019.3.4 Dependencies.
 
 ---
 
