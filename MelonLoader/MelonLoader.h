@@ -22,6 +22,7 @@ public:
 	static char* DataPath;
 	static char* CompanyName;
 	static char* ProductName;
+	static char* ForceUnhollowerVersion;
 
 	static void Main();
 	static void ParseCommandLine();

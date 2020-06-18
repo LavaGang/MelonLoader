@@ -53,6 +53,7 @@
 | --melonloader.maxlogs | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |
 | --melonloader.devmodsonly | Loads only Mods with the "-dev.dll" extension |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
+| --melonloader.agfvunhollower | Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 
 ---
 

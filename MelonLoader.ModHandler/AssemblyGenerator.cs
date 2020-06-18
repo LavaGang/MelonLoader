@@ -12,7 +12,7 @@ namespace MelonLoader.AssemblyGenerator
             if (File.Exists(GeneratorProcessPath))
             {
                 var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath);
-                generatorProcessInfo.Arguments = $"\"{MelonLoader.Main.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\" {(Imports.AG_Force_Regenerate() ? "true" : "")}";
+                generatorProcessInfo.Arguments = $"\"{MelonLoader.Main.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\" {(Imports.AG_Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Imports.AG_Force_Version_Unhollower()) ? "" : Imports.AG_Force_Version_Unhollower())}";
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;

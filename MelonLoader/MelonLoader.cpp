@@ -29,6 +29,7 @@ char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 char* MelonLoader::CompanyName = NULL;
 char* MelonLoader::ProductName = NULL;
+char* MelonLoader::ForceUnhollowerVersion = NULL;
 
 void MelonLoader::Main()
 {
@@ -181,6 +182,8 @@ void MelonLoader::ParseCommandLine()
 				//	DevPluginsOnly = true;
 				else if (strstr(command, "--melonloader.agregenerate") != NULL)
 					AG_Force_Regenerate = true;
+				else if (strstr(command, "--melonloader.agfvunhollower"))
+					ForceUnhollowerVersion = CommandLineV[i + 1];
 #ifndef DEBUG
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{

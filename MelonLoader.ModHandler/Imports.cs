@@ -65,5 +65,8 @@ namespace MelonLoader
         internal extern static bool IsDevPluginsOnly();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool AG_Force_Regenerate();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string AG_Force_Version_Unhollower();
     }
 }

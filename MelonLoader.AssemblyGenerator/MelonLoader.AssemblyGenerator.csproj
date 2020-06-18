@@ -47,6 +47,16 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DownloaderAndUnpacker.cs" />
     <Compile Include="ExternalToolVersions.cs" />
+    <Compile Include="LightJson\JsonArray.cs" />
+    <Compile Include="LightJson\JsonObject.cs" />
+    <Compile Include="LightJson\JsonValue.cs" />
+    <Compile Include="LightJson\JsonValueType.cs" />
+    <Compile Include="LightJson\Serialization\JsonParseException.cs" />
+    <Compile Include="LightJson\Serialization\JsonReader.cs" />
+    <Compile Include="LightJson\Serialization\JsonSerializationException.cs" />
+    <Compile Include="LightJson\Serialization\JsonWriter.cs" />
+    <Compile Include="LightJson\Serialization\TextPosition.cs" />
+    <Compile Include="LightJson\Serialization\TextScanner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="TinyJSON\Decoder.cs" />
@@ -65,8 +75,12 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LightJson\README.md" />
     <None Include="TinyJSON\LICENSE.md" />
     <None Include="TinyJSON\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LightJson\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

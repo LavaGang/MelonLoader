@@ -39,9 +39,6 @@ namespace MelonLoader.AssemblyGenerator
 
         private static void PreSetup(string gameRoot)
         {
-            System.Net.ServicePointManager.Expect100Continue = true;
-            System.Net.ServicePointManager.SecurityProtocol |= (System.Net.SecurityProtocolType)3072;
-
             GameAssembly_Path = Path.Combine(gameRoot, "GameAssembly.dll");
 
             AssemblyFolder = Path.Combine(gameRoot, "MelonLoader", "Managed");

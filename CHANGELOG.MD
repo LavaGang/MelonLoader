@@ -14,6 +14,8 @@
 ### v0.2.3 Open-Beta:
 
 1. Added Unity 2019.3.4 Dependencies.
+2. Temporarily Fixed Tls Issue with Certain Il2Cpp Unity Games.
+3. Added Launch Option "--melonloader.agfvunhollower" that Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower.
 
 ---
 

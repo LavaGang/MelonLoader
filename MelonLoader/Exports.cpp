@@ -30,7 +30,7 @@ bool IsQuitFix() { return MelonLoader::QuitFix; }
 bool IsDevModsOnly() { return MelonLoader::DevModsOnly; }
 bool IsDevPluginsOnly() { return MelonLoader::DevPluginsOnly; }
 bool AG_Force_Regenerate() { return MelonLoader::AG_Force_Regenerate; }
-void SetCurrentConsole(HWND hwnd) { Console::hwndConsole = hwnd; }
+MonoString* AG_Force_Version_Unhollower() { if (MelonLoader::ForceUnhollowerVersion != NULL) return Mono::mono_string_new(Mono::Domain, MelonLoader::ForceUnhollowerVersion); return NULL; }
 
 void Exports::AddInternalCalls()
 {
@@ -60,6 +60,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsDevModsOnly", IsDevModsOnly);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsDevPluginsOnly", IsDevPluginsOnly);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Regenerate", AG_Force_Regenerate);
+	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Version_Unhollower", AG_Force_Version_Unhollower);
 
 	Mono::mono_add_internal_call("MelonLoader.Console::Allocate", AllocConsole);
 	Mono::mono_add_internal_call("MelonLoader.Console::SetForegroundWindow", SetForegroundWindow);
