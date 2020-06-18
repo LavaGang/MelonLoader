@@ -296,7 +296,7 @@ namespace MelonLoader
                             }
                             try
                             {
-                                LoadAssembly(File.ReadAllBytes(file), plugins);
+                                LoadAssembly(File.ReadAllBytes(file), plugins, file);
                             }
                             catch (Exception e)
                             {
@@ -352,7 +352,7 @@ namespace MelonLoader
                                                     else
                                                         break;
                                                 }
-                                                LoadAssembly(unzippedFileStream.ToArray(), plugins);
+                                                LoadAssembly(unzippedFileStream.ToArray(), plugins, (file + "/" + filename));
                                             }
                                         }
                                     }
@@ -369,7 +369,7 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadModFromAssembly(Assembly assembly, bool isPlugin = false)
+        private static void LoadModFromAssembly(Assembly assembly, bool isPlugin = false, string filelocation = null)
         {
             MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
             if ((modInfoAttribute != null) && (modInfoAttribute.ModType != null) && modInfoAttribute.ModType.IsSubclassOf(typeof(MelonMod)))
@@ -411,6 +411,7 @@ namespace MelonLoader
                             else
                                 modInstance.GameAttributes = null;
                             modInstance.ModAssembly = assembly;
+                            modInstance.Location = filelocation;
                             Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
                             Mods.Add(modInstance);
                         }
@@ -424,12 +425,12 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadAssembly(string file, bool isPlugin = false) => LoadModFromAssembly(Assembly.LoadFrom(file), isPlugin);
-        private static void LoadAssembly(byte[] data, bool isPlugin = false) => LoadModFromAssembly(Assembly.Load(data), isPlugin);
-        private static void LoadAssembly(Assembly asm, bool isPlugin = false)
+        private static void LoadAssembly(string file, bool isPlugin = false) => LoadModFromAssembly(Assembly.LoadFrom(file), isPlugin, file);
+        private static void LoadAssembly(byte[] data, bool isPlugin = false, string filelocation = null) => LoadModFromAssembly(Assembly.Load(data), isPlugin, filelocation);
+        private static void LoadAssembly(Assembly asm, bool isPlugin = false, string filelocation = null)
         {
             if (!asm.Equals(null))
-                LoadModFromAssembly(asm, isPlugin);
+                LoadModFromAssembly(asm, isPlugin, filelocation);
             else
                 MelonModLogger.LogError("Unable to load " + asm);
         }

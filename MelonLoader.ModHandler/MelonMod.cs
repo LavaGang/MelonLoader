@@ -27,6 +27,11 @@
         /// </summary>
         public System.Reflection.Assembly ModAssembly { get; internal set; }
 
+        /// <summary>
+        /// Gets the File Location of the Mod.
+        /// </summary>
+        public string Location { get; internal set; }
+
         public virtual void OnPreInitialization() {}
         public virtual void OnApplicationStart() {}
         public virtual void OnLevelIsLoading() {}
