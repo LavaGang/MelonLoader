@@ -13,16 +13,6 @@ namespace MelonLoader
         public bool IsUniversal { get; internal set; }
 
         /// <summary>
-        /// Gets the Info Attribute of the Mod or Plugin.
-        /// </summary>
-        public MelonModInfoAttribute InfoAttribute { get; internal set; }
-
-        /// <summary>
-        /// Gets the Game Attributes of the Mod or Plugin.
-        /// </summary>
-        public MelonModGameAttribute[] GameAttributes { get; internal set; }
-
-        /// <summary>
         /// Gets the Assembly of the Mod or Plugin.
         /// </summary>
         public System.Reflection.Assembly ModAssembly { get; internal set; }
