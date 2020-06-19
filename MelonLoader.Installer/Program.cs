@@ -60,7 +60,7 @@ namespace MelonLoader.Installer
 
         internal static void Install(string dirpath, string selectedVersion, bool legacy_install)
         {
-            Install_VCRedist(legacy_install, selectedVersion);
+            //Install_VCRedist(legacy_install, selectedVersion);
             if (!legacy_install)
                 Install_Normal(dirpath, selectedVersion);
             else
@@ -145,14 +145,13 @@ namespace MelonLoader.Installer
             }
         }
 
-        private static void CreateDirectories(string dirpath, bool legacy_install)
+        private static void CreateDirectories(string dirpath, string selectedVersion, bool legacy_install)
         {
             Directory.CreateDirectory(Path.Combine(dirpath, "Logs"));
             if (!Directory.Exists(Path.Combine(dirpath, "Mods")))
                 Directory.CreateDirectory(Path.Combine(dirpath, "Mods"));
-
-            //if (!legacy_install && !Directory.Exists(Path.Combine(dirpath, "Plugins")))
-            //    Directory.CreateDirectory(Path.Combine(dirpath, "Plugins"));
+            if (!legacy_install && !selectedVersion.Equals("v0.2.2") && !Directory.Exists(Path.Combine(dirpath, "Plugins")))
+                Directory.CreateDirectory(Path.Combine(dirpath, "Plugins"));
         }
 
         private static void ExtractZip(string dirpath, string tempFile)
@@ -170,7 +169,6 @@ namespace MelonLoader.Installer
 
         private static void Install_VCRedist(bool legacy_install, string selectedVersion)
         {
-            /*
             SetDisplayText("Downloading VC Redist...");
             string tempfilepath = CreateTempFile();
             webClient.DownloadFile("https://aka.ms/vs/16/release/vc_redist.x64.exe", tempfilepath);
@@ -197,7 +195,6 @@ namespace MelonLoader.Installer
                 if (process.ExitCode != 0)
                     throw new Exception("Failed to Install VC Redist!");
             }
-            */
         }
 
         private static void Install_Normal(string dirpath, string selectedVersion)
@@ -211,7 +208,7 @@ namespace MelonLoader.Installer
             SetPercentage(50);
             Cleanup(dirpath, false);
             ExtractZip(dirpath, tempfilepath);
-            CreateDirectories(dirpath, false);
+            CreateDirectories(dirpath, selectedVersion, false);
         }
 
         private static void Install_Legacy_02(string dirpath, string selectedVersion)
@@ -272,7 +269,7 @@ namespace MelonLoader.Installer
                 ExtractZip(UnityDependencies_Folder, tempfilepath4);
             }
 
-            CreateDirectories(dirpath, true);
+            CreateDirectories(dirpath, selectedVersion, true);
         }
 
         private static void Install_Legacy_01(string dirpath)
@@ -296,7 +293,7 @@ namespace MelonLoader.Installer
             SetPercentage(80);
             ExtractZip(dirpath, tempfilepath2);
 
-            CreateDirectories(dirpath, true);
+            CreateDirectories(dirpath, "v0.1.0", true);
         }
 
         internal static string GetUnityFileVersion(string exepath)
