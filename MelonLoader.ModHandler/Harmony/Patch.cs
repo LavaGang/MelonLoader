@@ -75,6 +75,7 @@ namespace Harmony
 		public Patch[] postfixes;
 		public Patch[] transpilers;
 		public IntPtr methodDetourPointer;
+		public IntPtr copiedMethodInfoPointer;
 
 		public PatchInfo()
 		{
@@ -82,6 +83,7 @@ namespace Harmony
 			postfixes = new Patch[0];
 			transpilers = new Patch[0];
 			methodDetourPointer = IntPtr.Zero;
+			copiedMethodInfoPointer = IntPtr.Zero;
 		}
 
 		public void AddPrefix(MethodInfo patch, string owner, int priority, string[] before, string[] after)
