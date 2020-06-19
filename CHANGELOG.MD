@@ -22,7 +22,8 @@
 7. Installer now creates the Plugins folder.
 8. Revised MelonMod class to use a new MelonBase.
 9. All Commonly used Methods and Properties that both MelonMod and MelonPlugin use have been moved to MelonBase.
-10. 
+10. Plugins now use their own Attributes.
+11. Fixed Issue that let Plugins load as Mods when placed in the Mods folder and vice-versa.
 
 ---
 
