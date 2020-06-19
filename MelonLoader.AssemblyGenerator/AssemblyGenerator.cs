@@ -48,21 +48,18 @@ namespace MelonLoader.AssemblyGenerator
             BaseFolder = SetupDirectory(Path.Combine(Path.Combine(Path.Combine(gameRoot, "MelonLoader"), "Dependencies"), "AssemblyGenerator"));
             
             Il2CppDumper.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppDumper"));
+            Il2CppDumper.OutputDirectory = SetupDirectory(Path.Combine(Il2CppDumper.BaseFolder, "DummyDll"));
+            Il2CppDumper.FileName = "Il2CppDumper.exe";
+
             Il2CppAssemblyUnhollower.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppAssemblyUnhollower"));
+            Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
+            Il2CppAssemblyUnhollower.FileName = "AssemblyUnhollower.exe";
+
             UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "UnityDependencies"));
 
             localConfigPath = Path.Combine(BaseFolder, "config.json");
             if (File.Exists(localConfigPath))
                 localConfig = Decoder.Decode(File.ReadAllText(localConfigPath)).Make<LocalConfig>();
-        }
-
-        private static void Setup(string gameRoot)
-        {
-            Il2CppDumper.OutputDirectory = SetupDirectory(Path.Combine(Il2CppDumper.BaseFolder, "DummyDll"));
-            Il2CppDumper.FileName = "Il2CppDumper.exe";
-
-            Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
-            Il2CppAssemblyUnhollower.FileName = "AssemblyUnhollower.exe";
         }
 
         private static bool AssemblyGenerateCheck(string unityVersion)
@@ -92,6 +89,10 @@ namespace MelonLoader.AssemblyGenerator
 
             Logger.Log("Downloading Il2CppAssemblyUnhollower");
             DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder);
+
+            // check for v0.1.1.0, or 0.1.0.0
+            // DelegateSupport.dll
+
             localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
             localConfig.Save(localConfigPath);
 
@@ -112,8 +113,6 @@ namespace MelonLoader.AssemblyGenerator
         private static bool AssemblyGenerate(string gameRoot, string unityVersion, string gameDataDir)
         {
             DownloadDependencies(unityVersion);
-            
-            Setup(gameRoot);
             
             FixIl2CppDumperConfig();
 
@@ -190,6 +189,10 @@ namespace MelonLoader.AssemblyGenerator
                 }
             }
             Directory.Delete(Il2CppAssemblyUnhollower.OutputDirectory, true);
+
+            // check for v0.1.1.0, or 0.1.0.0
+            // DelegateSupport.dll
+
             localConfig.Save(localConfigPath);
         }
 
