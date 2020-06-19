@@ -19,6 +19,10 @@
 4. Added Location property to the MelonMod class.
 5. Revised Plugin System.
 6. Fixed Issue causing the Assembly Generator to constantly Regenerate every time a Game Launched.
+7. Installer now creates the Plugins folder.
+8. Revised MelonMod class to use a new MelonBase.
+9. All Commonly used Methods and Properties that both MelonMod and MelonPlugin use have been moved to MelonBase.
+10. 
 
 ---
 
