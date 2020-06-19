@@ -156,13 +156,13 @@ void Logger::LogModError(const char* namesection, const char* msg)
 void Logger::LogModStatus(int type)
 {
 	LogTimestamp();
-	LogFile << "Status: " << ((type == 0) ? "Universal" : ((type == 1) ? "Compatible" : ((type == 2) ? "No MelonModGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
+	LogFile << "Game Compatibility: " << ((type == 0) ? "Universal" : ((type == 1) ? "Compatible" : ((type == 2) ? "No MelonModGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
 	if (MelonLoader::DebugMode)
 	{
 		Console::Write("[");
 		Console::Write("MelonLoader", ConsoleColor_Magenta);
 		Console::Write("] ");
-		Console::Write("Status: ", ConsoleColor_Blue);
+		Console::Write("Game Compatibility: ", ConsoleColor_Blue);
 		if (type == 0)
 			Console::WriteLine("Universal", ConsoleColor_Cyan);
 		else if (type == 1)

@@ -210,7 +210,7 @@ namespace MelonLoader
                 System.Console.Write("] ");
                 if (!rainbow_check)
                     Console.SetColor(ConsoleColor.Blue);
-                System.Console.Write("Status: ");
+                System.Console.Write("Game Compatibility: ");
                 if (type == 0)
                 {
                     if (!rainbow_check)

@@ -24,6 +24,8 @@
 9. All Commonly used Methods and Properties that both MelonMod and MelonPlugin use have been moved to MelonBase.
 10. Plugins now use their own Attributes.
 11. Fixed Issue that let Plugins load as Mods when placed in the Mods folder and vice-versa.
+12. Added better Legacy Version handling for "--melonloader.agfvunhollower".
+13. Added Clearer Display Text to State that Mod and Plugin Status is Game Compatibility.
 
 ---
 
