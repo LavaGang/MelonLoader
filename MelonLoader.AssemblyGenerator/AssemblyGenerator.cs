@@ -89,10 +89,6 @@ namespace MelonLoader.AssemblyGenerator
 
             Logger.Log("Downloading Il2CppAssemblyUnhollower");
             DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder);
-
-            // check for v0.1.1.0, or 0.1.0.0
-            // DelegateSupport.dll
-
             localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
             localConfig.Save(localConfigPath);
 
@@ -127,10 +123,6 @@ namespace MelonLoader.AssemblyGenerator
             }
 
             Logger.Log("Executing Il2CppAssemblyUnhollower...");
-
-            // check for v0.2.0.0, v0.1.1.0, or 0.1.0.0
-            // AssemblyUnhollower <path to Il2CppDumper's dummy dll dir> <output directory> <path to target mscorlib>
-
             if (!Il2CppAssemblyUnhollower.Execute(new string[] {
                 ("--input=" + Il2CppDumper.OutputDirectory),
                 ("--output=" + Il2CppAssemblyUnhollower.OutputDirectory),
@@ -189,10 +181,6 @@ namespace MelonLoader.AssemblyGenerator
                 }
             }
             Directory.Delete(Il2CppAssemblyUnhollower.OutputDirectory, true);
-
-            // check for v0.1.1.0, or 0.1.0.0
-            // DelegateSupport.dll
-
             localConfig.Save(localConfigPath);
         }
 
