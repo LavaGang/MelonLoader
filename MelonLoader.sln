@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.AssemblyGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono.Pre2017.2", "MelonLoader.Support.Mono.Pre2017.2\MelonLoader.Support.Mono.Pre2017.2.csproj", "{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{F41EC84C-6465-4449-B2F6-79535171265B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,18 @@ Global
 		{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}.Release|x64.Build.0 = Release|Any CPU
 		{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}.Release|x86.ActiveCfg = Release|Any CPU
 		{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}.Release|x86.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x64.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x64.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x86.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x86.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x64.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x64.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x86.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -178,8 +178,8 @@ void MelonLoader::ParseCommandLine()
 					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
 					DevModsOnly = true;
-				//else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
-				//	DevPluginsOnly = true;
+				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
+					DevPluginsOnly = true;
 				else if (strstr(command, "--melonloader.agregenerate") != NULL)
 					AG_Force_Regenerate = true;
 				else if (strstr(command, "--melonloader.agfvunhollower"))

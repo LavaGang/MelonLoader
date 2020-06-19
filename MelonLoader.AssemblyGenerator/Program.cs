@@ -21,7 +21,7 @@ namespace MelonLoader.AssemblyGenerator
                 return -1;
             }
 
-            if ((args.Length >= 4) && !string.IsNullOrEmpty(args[3]) && args[3].Equals("true"));
+            if ((args.Length >= 4) && !string.IsNullOrEmpty(args[3]) && args[3].Equals("true"))
                 Force_Regenerate = true;
 
             if (args.Length >= 5)

@@ -17,6 +17,8 @@
 2. Temporarily Fixed Tls Issue with Certain Il2Cpp Unity Games.
 3. Added Launch Option "--melonloader.agfvunhollower" that Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower.
 4. Added Location property to the MelonMod class.
+5. Revised Plugin System.
+6. Fixed Issue causing the Assembly Generator to constantly Regenerate every time a Game Launched.
 
 ---
 
