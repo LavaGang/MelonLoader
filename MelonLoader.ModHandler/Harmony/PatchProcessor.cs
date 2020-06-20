@@ -231,9 +231,7 @@ namespace Harmony
 					return AccessTools.DeclaredConstructor(attr.declaringType, attr.argumentTypes);
 
 				case MethodType.StaticConstructor:
-					return AccessTools.GetDeclaredConstructors(attr.declaringType)
-						.Where(c => c.IsStatic)
-						.FirstOrDefault();
+					return AccessTools.StaticConstructor(attr.declaringType);
 			}
 
 			return null;
