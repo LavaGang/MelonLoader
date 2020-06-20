@@ -7,6 +7,7 @@ namespace MelonLoader
     {
         private static Assembly UnhollowerBaseLib = null;
         private static Type Il2CppObjectBaseType = null;
+        internal static Type Il2CppMethodInfoType = null;
         internal static MethodInfo Il2CppObjectBaseToPtrMethod = null;
         internal static MethodInfo Il2CppStringToManagedMethod = null;
         internal static MethodInfo ManagedStringToIl2CppMethod = null;
@@ -16,6 +17,7 @@ namespace MelonLoader
         {
             UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
             Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
+            Il2CppMethodInfoType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Runtime.Il2CppMethodInfo");
             Il2CppObjectBaseToPtrMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP").GetMethod("Il2CppObjectBaseToPtr");
             Il2CppStringToManagedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP").GetMethod("Il2CppStringToManaged");
             ManagedStringToIl2CppMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP").GetMethod("ManagedStringToIl2Cpp");
@@ -26,12 +28,11 @@ namespace MelonLoader
 
         internal static IntPtr MethodBaseToIntPtr(MethodBase method)
         {
-            if (IsGeneratedAssemblyType(method.DeclaringType))
-            {
-                FieldInfo methodptr = (FieldInfo) GetIl2CppMethodInfoPointerFieldForGeneratedMethod.Invoke(null, new object[] { method });
-                return (IntPtr)methodptr.GetValue(null);
+            FieldInfo methodPtr = (FieldInfo) GetIl2CppMethodInfoPointerFieldForGeneratedMethod.Invoke(null, new object[] { method });
+            if (methodPtr == null) {
+                throw new NotSupportedException($"Cannot patch method {method.Name} as there is no corresponding IL2CPP method");
             }
-            return method.MethodHandle.GetFunctionPointer();
+            return (IntPtr) methodPtr.GetValue(null);
         }
     }
 }
