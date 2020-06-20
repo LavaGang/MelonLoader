@@ -26,6 +26,10 @@
 11. Fixed Issue that let Plugins load as Mods when placed in the Mods folder and vice-versa.
 12. Added better Legacy Version handling for "--melonloader.agfvunhollower".
 13. Added Clearer Display Text to State that Mod and Plugin Status is Game Compatibility.
+14. Also call Harmony patches if IL2CPP methods get called using reflection / il2cpp_runtime_invoke.  (Credits to zeobviouslyfakeacc :3)
+15. Fixed Issue with Harmony Patches on Virtual Methods.  (Credits to zeobviouslyfakeacc :3)
+16. Improved the Harmony error message if the unhollowed target method is not backed by an IL2CPP method.  (Credits to zeobviouslyfakeacc :3)
+17. Fixed Issue with Harmony AccessTools not being able to resolve the no-args constructor if a static constructor exists.  (Credits to zeobviouslyfakeacc :3)
 
 ---
 
