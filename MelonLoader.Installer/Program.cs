@@ -14,7 +14,7 @@ namespace MelonLoader.Installer
     static class Program
     {
         internal static string Title = "MelonLoader Installer";
-        private static string Version = "1.0.3";
+        private static string Version = "1.0.4";
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
 
