@@ -28,21 +28,6 @@ public:
 	static void LoadLibraryW_Unhook();
 	static HMODULE __stdcall Hooked_LoadLibraryW(LPCWSTR lpLibFileName);
 
-	static AllocConsole_t Original_AllocConsole;
-	static void AllocConsole_Hook();
-	static void AllocConsole_Unhook();
-	static BOOL __stdcall Hooked_AllocConsole();
-
-	static GetConsoleWindow_t Original_GetConsoleWindow;
-	static void GetConsoleWindow_Hook();
-	static void GetConsoleWindow_Unhook();
-	static HWND __stdcall Hooked_GetConsoleWindow();
-
-	static CloseWindow_t Original_CloseWindow;
-	static void CloseWindow_Hook();
-	static void CloseWindow_Unhook();
-	static BOOL __stdcall Hooked_CloseWindow(HWND hwnd);
-
 	static void Hook(Il2CppMethod* target, void* detour) { INTERNAL_Hook(&(LPVOID&)target->targetMethod, detour); };
 	static void Hook(void** target, void* detour);
 	static void INTERNAL_Hook(void** target, void* detour);
