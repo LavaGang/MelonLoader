@@ -40,6 +40,13 @@
 
 ---
 
+### CONSOLE DIFFERENCES:
+
+- Normal Console is for the Logger class used by MelonLoader.ModHandler and Mods for debugging and developing Mods.
+- Debug Console is for the debugging of MelonLoader internals.
+
+---
+
 ### LAUNCH OPTIONS:
 
 | Argument              | Description                              |
@@ -55,13 +62,6 @@
 | --melonloader.devpluginsonly | Loads only Plugins with the "-dev.dll" extension |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
 | --melonloader.agfvunhollower | Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
-
----
-
-### CONSOLE DIFFERENCES:
-
-- Normal Console is for the Logger class used by MelonLoader.ModHandler and Mods for debugging and developing Mods.
-- Debug Console is for the debugging of MelonLoader internals.
 
 ---
 
