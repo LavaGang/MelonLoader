@@ -22,6 +22,7 @@ namespace TestPlugin
         {
             MelonModLogger.Log("OnApplicationStart");
         }
+
         public override void OnApplicationQuit() // Runs when the Game is told to Close.
         {
             MelonModLogger.Log("OnApplicationQuit");

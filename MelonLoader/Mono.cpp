@@ -34,6 +34,9 @@ mono_object_get_class_t Mono::mono_object_get_class = NULL;
 mono_runtime_set_main_args_t Mono::mono_runtime_set_main_args = NULL;
 mono_domain_set_config_t Mono::mono_domain_set_config = NULL;
 mono_method_get_name_t Mono::mono_method_get_name = NULL;
+mono_debug_init_t Mono::mono_debug_init = NULL;
+mono_debug_domain_create_t Mono::mono_debug_domain_create = NULL;
+mono_jit_parse_options_t Mono::mono_jit_parse_options = NULL;
 
 bool Mono::Load()
 {
@@ -79,6 +82,9 @@ bool Mono::Setup()
 	mono_class_get_property_from_name = (mono_class_get_property_from_name_t)AssertionManager::GetExport(Module, "mono_class_get_property_from_name");
 	mono_property_get_get_method = (mono_property_get_get_method_t)AssertionManager::GetExport(Module, "mono_property_get_get_method");
 	mono_object_get_class = (mono_object_get_class_t)AssertionManager::GetExport(Module, "mono_object_get_class");
+	mono_debug_init = (mono_debug_init_t)AssertionManager::GetExport(Module, "mono_debug_init");
+	mono_debug_domain_create = (mono_debug_domain_create_t)AssertionManager::GetExport(Module, "mono_debug_domain_create");
+	mono_jit_parse_options = (mono_jit_parse_options_t)AssertionManager::GetExport(Module, "mono_jit_parse_options");
 
 	if (!IsOldMono)
 	{
@@ -99,6 +105,10 @@ void Mono::CreateDomain()
 		mono_runtime_set_main_args(MelonLoader::CommandLineC, MelonLoader::CommandLineV);
 		Domain = mono_jit_init("MelonLoader");
 		Mono::FixDomainBaseDir();
+		mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+		mono_debug_domain_create(Domain);
+		const char* options[] = { "--debugger-agent=transport=dt_socket,address=127.0.0.1:10000" };
+		mono_jit_parse_options(1, (char**)options);
 	}
 }
 

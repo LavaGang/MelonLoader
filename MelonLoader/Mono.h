@@ -10,6 +10,12 @@ struct MonoProperty;
 struct MonoString;
 struct MonoObject;
 struct MonoThread;
+enum MonoDebugFormat
+{
+	MONO_DEBUG_FORMAT_NONE,
+	MONO_DEBUG_FORMAT_MONO,
+	MONO_DEBUG_FORMAT_DEBUGGER
+};
 
 typedef MonoDomain* (*mono_init_t) (const char* name);
 typedef MonoDomain* (*mono_jit_init_t) (const char* name);
@@ -34,6 +40,9 @@ typedef MonoMethod* (*mono_property_get_get_method_t) (MonoProperty* prop);
 typedef MonoClass* (*mono_object_get_class_t) (MonoObject* obj);
 typedef int (*mono_runtime_set_main_args_t) (int argc, char* argv[]);
 typedef void (*mono_domain_set_config_t)(MonoDomain* domain, const char* configpath, const char* filename);
+typedef void (*mono_debug_init_t) (MonoDebugFormat format);
+typedef void (*mono_debug_domain_create_t) (MonoDomain* domain);
+typedef void (*mono_jit_parse_options_t)(int argc, char* argv[]);
 
 class Mono
 {
@@ -67,6 +76,9 @@ public:
 	static mono_object_get_class_t mono_object_get_class;
 	static mono_runtime_set_main_args_t mono_runtime_set_main_args;
 	static mono_domain_set_config_t mono_domain_set_config;
+	static mono_debug_init_t mono_debug_init;
+	static mono_debug_domain_create_t mono_debug_domain_create;
+	static mono_jit_parse_options_t mono_jit_parse_options;
 
 	static bool Load();
 	static bool Setup();
