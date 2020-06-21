@@ -7,7 +7,7 @@
 
 ### AUTOMATED INSTALLATION:
 
-1. Download MelonLoader.Installer.exe from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+1. Download [MelonLoader.Installer.exe](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/MelonLoader.Installer.exe).
 2. Run MelonLoader.Installer.exe.
 3. Click the SELECT button.
 4. Select and Open the Game's EXE in your Game's Installation Folder.
@@ -18,7 +18,7 @@
 	
 ### MANUAL INSTALLATION:
 
-1. Download MelonLoader.zip from the latest version in [Releases](https://github.com/HerpDerpinstine/MelonLoader/releases).
+1. Download [MelonLoader.zip](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/MelonLoader.zip).
 2. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
 3. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
 
