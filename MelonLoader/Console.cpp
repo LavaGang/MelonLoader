@@ -1,5 +1,6 @@
 #include <fstream>
 #include "Console.h"
+#include "HookManager.h"
 
 HWND Console::hwndConsole = NULL;
 int Console::rainbow = 1;

@@ -102,11 +102,11 @@ namespace MelonLoader.Installer
             if (Directory.Exists(Path.Combine(dirpath, "Logs")))
                 Directory.Delete(Path.Combine(dirpath, "Logs"), true);
             string maindir_path = Path.Combine(dirpath, "MelonLoader");
-            if (legacy_install || string.IsNullOrEmpty(mainForm.CurrentVersion) || mainForm.CurrentVersion.Equals("v0.2.1") || mainForm.CurrentVersion.Equals("v0.2") || mainForm.CurrentVersion.Equals("v0.1.0"))
-            {
+            //if (legacy_install || string.IsNullOrEmpty(mainForm.CurrentVersion) || mainForm.CurrentVersion.Equals("v0.2.1") || mainForm.CurrentVersion.Equals("v0.2") || mainForm.CurrentVersion.Equals("v0.1.0"))
+            //{
                 if (Directory.Exists(maindir_path))
                     Directory.Delete(maindir_path, true);
-            }
+            /*}
             else
             {
                 if (Directory.Exists(maindir_path))
@@ -143,6 +143,7 @@ namespace MelonLoader.Installer
                     }
                 }
             }
+            */
         }
 
         private static void CreateDirectories(string dirpath, string selectedVersion, bool legacy_install)

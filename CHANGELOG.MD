@@ -31,6 +31,8 @@
 16. Improved the Harmony error message if the unhollowed target method is not backed by an IL2CPP method.  (Credits to zeobviouslyfakeacc :3)
 17. Fixed Issue with Harmony AccessTools not being able to resolve the no-args constructor if a static constructor exists.  (Credits to zeobviouslyfakeacc :3)
 18. Added Support for Mono Debuggers.
+19. Mono JIT Domain on Il2Cpp Games should now parse Command Line arguments properly.
+20. Forced Installer to reinstall the entire MelonLoader folder.
 
 ---
 

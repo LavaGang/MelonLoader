@@ -7,6 +7,7 @@
 #include "AssertionManager.h"
 #include "Logger.h"
 #include "Exports.h"
+#include <list>
 
 #pragma region Core
 std::vector<HookManager_Hook*>HookManager::HookTbl;
@@ -177,7 +178,7 @@ void* HookManager::Hooked_runtime_invoke(const void* method, void* obj, void** p
 		method_name = Il2Cpp::il2cpp_method_get_name((Il2CppMethod*)method);
 	else
 		method_name = Mono::mono_method_get_name((MonoMethod*)method);
-	if ((strstr(method_name, "Internal_ActiveSceneChanged") != NULL) || (Mono::IsOldMono && (strstr(method_name, "UnityEngine.ISerializationCallbackReceiver.OnAfterDeserialize") != NULL)))
+	if ((strstr(method_name, "Internal_ActiveSceneChanged") != NULL) || (!Mono::IsOldMono && (strstr(method_name, "UnityEngine.ISerializationCallbackReceiver.OnAfterDeserialize") != NULL)))
 	{
 		if (MelonLoader::IsGameIl2Cpp)
 			Unhook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, Hooked_runtime_invoke);

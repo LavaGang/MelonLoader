@@ -107,8 +107,7 @@ void Mono::CreateDomain()
 		Mono::FixDomainBaseDir();
 		mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 		mono_debug_domain_create(Domain);
-		const char* options[] = { GetMonoDebuggerOptions() };
-		mono_jit_parse_options(1, (char**)options);
+		mono_jit_parse_options(MelonLoader::CommandLineC, (char**)MelonLoader::CommandLineV);
 	}
 }
 
@@ -117,11 +116,6 @@ void Mono::FixDomainBaseDir()
 	mono_thread_set_main(mono_thread_current());
 	if (!IsOldMono)
 		mono_domain_set_config(Domain, MelonLoader::GamePath, "MelonLoader");
-}
-
-const char* Mono::GetMonoDebuggerOptions()
-{
-	return "--debugger-agent=transport=dt_socket,address=127.0.0.1:10000";
 }
 
 const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject) { return mono_string_to_utf8((MonoString*)mono_runtime_invoke(mono_property_get_get_method(mono_class_get_property_from_name(classType, propertyName)), classObject, NULL, NULL)); }
