@@ -33,7 +33,6 @@ namespace MelonLoader
                                 if (!string.IsNullOrEmpty(attr.Name))
                                     return "[" + attr.Name.Replace(" ", "_") + "] ";
                             }
-
                             attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
                             if ((attrArray.Count() > 0) && (attrArray[0] != null))
                             {

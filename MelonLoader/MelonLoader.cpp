@@ -41,10 +41,6 @@ void MelonLoader::Main()
 		HMODULE exe_module = GetModuleHandle(NULL);
 		GetModuleFileName(exe_module, filepath, MAX_PATH);
 
-		//long exe_size = GetFileSize(filepath);
-		//if ((exe_size * 0.000001) > 10)
-		//	UnityPlayer::Module = exe_module;
-
 		std::string filepathstr = filepath;
 		ExePath = new char[filepathstr.size() + 1];
 		std::copy(filepathstr.begin(), filepathstr.end(), ExePath);
