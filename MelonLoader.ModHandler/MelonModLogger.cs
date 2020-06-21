@@ -26,7 +26,15 @@ namespace MelonLoader
                         Assembly asm = methodClassType.Assembly;
                         if (!asm.Equals(null))
                         {
-                            object[] attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
+                            object[] attrArray = asm.GetCustomAttributes(typeof(MelonPluginInfoAttribute), false);
+                            if ((attrArray.Count() > 0) && (attrArray[0] != null))
+                            {
+                                MelonPluginInfoAttribute attr = attrArray[0] as MelonPluginInfoAttribute;
+                                if (!string.IsNullOrEmpty(attr.Name))
+                                    return "[" + attr.Name.Replace(" ", "_") + "] ";
+                            }
+
+                            attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
                             if ((attrArray.Count() > 0) && (attrArray[0] != null))
                             {
                                 MelonModInfoAttribute attr = attrArray[0] as MelonModInfoAttribute;
