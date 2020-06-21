@@ -59,6 +59,7 @@
     <Compile Include="LightJson\Serialization\TextScanner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="TempFileCache.cs" />
     <Compile Include="TinyJSON\Decoder.cs" />
     <Compile Include="TinyJSON\EncodeOptions.cs" />
     <Compile Include="TinyJSON\Encoder.cs" />

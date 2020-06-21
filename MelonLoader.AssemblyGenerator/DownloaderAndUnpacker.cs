@@ -23,7 +23,7 @@ namespace MelonLoader.AssemblyGenerator
                     File.Delete(entry);
             }
 
-            var tempFile = Path.GetTempFileName();
+            var tempFile = TempFileCache.CreateFile();
             Logger.Log($"Downloading {url} to {tempFile}");
             Program.webClient.DownloadFile(url, tempFile);
             Logger.Log($"Extracting {tempFile} to {destinationFolder}");

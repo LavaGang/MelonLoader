@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.AssemblyGenerator;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -100,7 +101,7 @@ namespace MelonLoader.Installer
                 }
                 catch (Exception ex)
                 {
-                    Program.CleanTempFiles();
+                    TempFileCache.ClearCache();
                     Program.SetDisplayText("ERROR!");
                     MessageBox.Show("Installation failed; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Program.Title);
                     Close();
@@ -127,7 +128,7 @@ namespace MelonLoader.Installer
         {
             if ((e.CloseReason == CloseReason.WindowsShutDown) || (e.CloseReason == CloseReason.UserClosing) || (e.CloseReason == CloseReason.TaskManagerClosing))
             {
-                Program.CleanTempFiles();
+                TempFileCache.ClearCache();
                 Process.GetCurrentProcess().Kill();
             }
         }

@@ -66,10 +66,13 @@ namespace MelonLoader.AssemblyGenerator
 
             try
             {
-                return AssemblyGenerator.Main.Initialize(args[0], args[1], args[2]) ? 0 : -2;
+                int returnval = (AssemblyGenerator.Main.Initialize(args[0], args[1], args[2]) ? 0 : -2);
+                TempFileCache.ClearCache();
+                return returnval;
             }
             catch (Exception ex)
             {
+                TempFileCache.ClearCache();
                 Logger.LogError("Failed to generate assemblies;");
                 Logger.LogError(ex.ToString());
                 
