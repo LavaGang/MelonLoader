@@ -36,6 +36,7 @@
 21. Moved all Console and Log Functionality to Native Exports.
 22. Updated Il2CppDumper to v6.3.0.
 23. Updated Il2CppDumper Config Fix in the Assembly Generator to support Il2CppDumper v6.3.0.
+24. Added Temp File Cache to Assembly Generator.
 
 ---
 
