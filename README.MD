@@ -62,15 +62,6 @@
 - Normal Console is for the Logger class used by MelonLoader.ModHandler and Mods for debugging and developing Mods.
 - Debug Console is for the debugging of MelonLoader internals.
 
-#### Specific combinations of Compile Versions will open a specific Console by Default:
-
-| MelonLoader | ModHandler | Result                        |
-| ----------- | ---------- | ----------------------------- |
-| DEBUG       | RELEASE    | Debug Console                 |
-| RELEASE     | DEBUG      | Normal Console                |
-| DEBUG       | DEBUG      | Debug Console                 |
-| RELEASE     | RELEASE    | Left up to the Launch Options |
-
 ---
 
 ### CREDITS+LICENSING:

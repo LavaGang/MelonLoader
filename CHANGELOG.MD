@@ -33,6 +33,7 @@
 18. Added Support for Mono Debuggers.
 19. Mono JIT Domain on Il2Cpp Games should now parse Command Line arguments properly.
 20. Forced Installer to reinstall the entire MelonLoader folder.
+21. Moved all Console and Log Functionality to Native Exports.
 
 ---
 
