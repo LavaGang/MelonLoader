@@ -39,6 +39,7 @@
 24. Added Temp File Cache to Assembly Generator.
 25. Re-enabled Launch Option "--melonloader.devpluginsonly".
 26. Fixed Issue with Certain Mono Games not having OnApplicationStart called.
+27. Added Unity 2018.4.2 Dependencies.
 
 ---
 
