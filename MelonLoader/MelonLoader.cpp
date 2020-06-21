@@ -68,6 +68,10 @@ void MelonLoader::Main()
 		DebugMode = true;
 #endif
 
+		//HookManager::AllocConsole_Hook();
+		//HookManager::GetConsoleWindow_Hook();
+		//HookManager::CloseWindow_Hook();
+
 		std::string pdatapath = filepathstr + "\\*_Data";
 		h = FindFirstFile(pdatapath.c_str(), &data);
 		if (h != INVALID_HANDLE_VALUE)

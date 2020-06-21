@@ -5,6 +5,9 @@
 #include <vector>
 
 typedef HMODULE(__stdcall* LoadLibraryW_t) (LPCWSTR lpLibFileName);
+typedef BOOL(__stdcall* AllocConsole_t) ();
+typedef HWND(__stdcall* GetConsoleWindow_t) ();
+typedef BOOL(__stdcall* CloseWindow_t)(HWND hwnd);
 
 class HookManager_Hook
 {
@@ -23,6 +26,22 @@ public:
 	static LoadLibraryW_t Original_LoadLibraryW;
 	static void LoadLibraryW_Hook();
 	static void LoadLibraryW_Unhook();
+	static HMODULE __stdcall Hooked_LoadLibraryW(LPCWSTR lpLibFileName);
+
+	static AllocConsole_t Original_AllocConsole;
+	static void AllocConsole_Hook();
+	static void AllocConsole_Unhook();
+	static BOOL __stdcall Hooked_AllocConsole();
+
+	static GetConsoleWindow_t Original_GetConsoleWindow;
+	static void GetConsoleWindow_Hook();
+	static void GetConsoleWindow_Unhook();
+	static HWND __stdcall Hooked_GetConsoleWindow();
+
+	static CloseWindow_t Original_CloseWindow;
+	static void CloseWindow_Hook();
+	static void CloseWindow_Unhook();
+	static BOOL __stdcall Hooked_CloseWindow(HWND hwnd);
 
 	static void Hook(Il2CppMethod* target, void* detour) { INTERNAL_Hook(&(LPVOID&)target->targetMethod, detour); };
 	static void Hook(void** target, void* detour);
@@ -33,7 +52,6 @@ public:
 	static void UnhookAll();
 	static void INTERNAL_Unhook(void** target, void* detour);
 
-	static HMODULE __stdcall Hooked_LoadLibraryW(LPCWSTR lpLibFileName);
 	static Il2CppDomain* Hooked_il2cpp_init(const char* name);
 	static MonoDomain* Hooked_mono_jit_init_version(const char* name, const char* version);
 	static void* Hooked_runtime_invoke(const void* method, void* obj, void** params, void** exc);

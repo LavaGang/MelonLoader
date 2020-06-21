@@ -99,6 +99,82 @@ void HookManager::INTERNAL_Unhook(void** target, void* detour)
 }
 #pragma endregion
 
+#pragma region AllocConsole
+AllocConsole_t HookManager::Original_AllocConsole = NULL;
+void HookManager::AllocConsole_Hook()
+{
+	if (Original_AllocConsole == NULL)
+	{
+		Original_AllocConsole = AllocConsole;
+		HookManager::INTERNAL_Hook(&(LPVOID&)Original_AllocConsole, HookManager::Hooked_AllocConsole);
+	}
+}
+void HookManager::AllocConsole_Unhook()
+{
+	if (Original_AllocConsole != NULL)
+	{
+		HookManager::INTERNAL_Unhook(&(LPVOID&)Original_AllocConsole, HookManager::Hooked_AllocConsole);
+		Original_AllocConsole = NULL;
+	}
+}
+BOOL HookManager::Hooked_AllocConsole()
+{
+	if (MelonLoader::DebugMode || MelonLoader::ConsoleEnabled)
+		return FALSE;
+	return Original_AllocConsole();
+}
+#pragma endregion
+
+#pragma region GetConsoleWindow
+GetConsoleWindow_t HookManager::Original_GetConsoleWindow = NULL;
+void HookManager::GetConsoleWindow_Hook()
+{
+	if (Original_GetConsoleWindow == NULL)
+	{
+		Original_GetConsoleWindow = GetConsoleWindow;
+		HookManager::INTERNAL_Hook(&(LPVOID&)Original_GetConsoleWindow, HookManager::Hooked_GetConsoleWindow);
+	}
+}
+void HookManager::GetConsoleWindow_Unhook()
+{
+	if (Original_GetConsoleWindow != NULL)
+	{
+		HookManager::INTERNAL_Unhook(&(LPVOID&)Original_GetConsoleWindow, HookManager::Hooked_GetConsoleWindow);
+		Original_GetConsoleWindow = NULL;
+	}
+}
+HWND HookManager::Hooked_GetConsoleWindow()
+{
+	return Console::hwndConsole;
+}
+#pragma endregion
+
+#pragma region CloseWindow
+CloseWindow_t HookManager::Original_CloseWindow = NULL;
+void HookManager::CloseWindow_Hook()
+{
+	if (Original_CloseWindow == NULL)
+	{
+		Original_CloseWindow = CloseWindow;
+		HookManager::INTERNAL_Hook(&(LPVOID&)Original_CloseWindow, HookManager::Hooked_CloseWindow);
+	}
+}
+void HookManager::CloseWindow_Unhook()
+{
+	if (Original_CloseWindow != NULL)
+	{
+		HookManager::INTERNAL_Unhook(&(LPVOID&)Original_CloseWindow, HookManager::Hooked_CloseWindow);
+		Original_CloseWindow = NULL;
+	}
+}
+BOOL HookManager::Hooked_CloseWindow(HWND hwnd)
+{
+	if (hwnd == Console::hwndConsole)
+		return FALSE;
+	return Original_CloseWindow(hwnd);
+}
+#pragma endregion
+
 #pragma region LoadLibraryW
 LoadLibraryW_t HookManager::Original_LoadLibraryW = NULL;
 void HookManager::LoadLibraryW_Hook()

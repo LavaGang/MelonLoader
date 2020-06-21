@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace MelonLoader
@@ -14,19 +13,13 @@ namespace MelonLoader
             Allocate();
             System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()) { AutoFlush = true });
             System.Console.SetIn(new StreamReader(System.Console.OpenStandardInput()));
-            System.Console.Clear();
-            System.Console.Title = (BuildInfo.Name + " v" + BuildInfo.Version + " Open-Beta");
-            IntPtr hwnd = GetHWND();
-            SetForegroundWindow(hwnd);
+            SetTitle(BuildInfo.Name + " v" + BuildInfo.Version + " Open-Beta");
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern int Allocate();
+        private static extern void Allocate();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(2)]
-        private static extern bool SetForegroundWindow(IntPtr hWnd);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern IntPtr GetHWND();
+        private static extern void SetTitle(string title);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void SetColor(ConsoleColor color);
     }

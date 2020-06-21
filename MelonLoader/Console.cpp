@@ -1,6 +1,5 @@
 #include <fstream>
 #include "Console.h"
-#include "HookManager.h"
 
 HWND Console::hwndConsole = NULL;
 int Console::rainbow = 1;
@@ -12,7 +11,7 @@ void Console::Create()
 		if (AllocConsole())
 		{
 			hwndConsole = GetConsoleWindow();
-			SetConsoleTitle("MelonLoader Debug Console");
+			SetTitle("MelonLoader Debug Console");
 			SetForegroundWindow(hwndConsole);
 			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}

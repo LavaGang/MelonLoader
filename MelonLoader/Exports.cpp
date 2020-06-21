@@ -31,6 +31,7 @@ bool IsDevModsOnly() { return MelonLoader::DevModsOnly; }
 bool IsDevPluginsOnly() { return MelonLoader::DevPluginsOnly; }
 bool AG_Force_Regenerate() { return MelonLoader::AG_Force_Regenerate; }
 MonoString* AG_Force_Version_Unhollower() { if (MelonLoader::ForceUnhollowerVersion != NULL) return Mono::mono_string_new(Mono::Domain, MelonLoader::ForceUnhollowerVersion); return NULL; }
+void SetTitleForConsole(MonoString* txt) { Console::SetTitle(Mono::mono_string_to_utf8(txt)); }
 
 void Exports::AddInternalCalls()
 {
@@ -62,8 +63,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Regenerate", AG_Force_Regenerate);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Version_Unhollower", AG_Force_Version_Unhollower);
 
-	Mono::mono_add_internal_call("MelonLoader.Console::Allocate", AllocConsole);
-	Mono::mono_add_internal_call("MelonLoader.Console::SetForegroundWindow", SetForegroundWindow);
-	Mono::mono_add_internal_call("MelonLoader.Console::GetHWND", GetConsoleWindow);
+	Mono::mono_add_internal_call("MelonLoader.Console::Allocate", Console::Create);
+	Mono::mono_add_internal_call("MelonLoader.Console::SetTitle", SetTitleForConsole);
 	Mono::mono_add_internal_call("MelonLoader.Console::SetColor", Console::SetColor);
 }
