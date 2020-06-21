@@ -34,6 +34,8 @@
 19. Mono JIT Domain on Il2Cpp Games should now parse Command Line arguments properly.
 20. Forced Installer to reinstall the entire MelonLoader folder.
 21. Moved all Console and Log Functionality to Native Exports.
+22. Updated Il2CppDumper to v6.3.0.
+23. Updated Il2CppDumper Config Fix in the Assembly Generator to support Il2CppDumper v6.3.0.
 
 ---
 

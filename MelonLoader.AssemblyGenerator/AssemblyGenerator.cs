@@ -251,8 +251,8 @@ namespace MelonLoader.AssemblyGenerator
         public bool DumpFieldOffset = false;
         public bool DumpMethodOffset = false;
         public bool DumpTypeDefIndex = false;
-        public bool DummyDll = true;
-        public bool MakeFunction = true;
+        public bool GenerateDummyDll = true;
+        public bool GenerateScript = false;
         public bool RequireAnyKey = false;
         public bool ForceIl2CppVersion = false;
         public float ForceVersion = 24.3f;
