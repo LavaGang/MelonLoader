@@ -44,8 +44,8 @@
 
 ### CONSOLE DIFFERENCES:
 
-- Normal Console is for the Logger class used by MelonLoader.ModHandler and Plugins and Mods for debugging and developing Plugins and Mods.
-- Debug Console is for the debugging of MelonLoader internals.
+- Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
+- Debug Console is for the Debugging of MelonLoader Internals.
 
 ---
 
