@@ -82,9 +82,13 @@ bool Mono::Setup()
 	mono_class_get_property_from_name = (mono_class_get_property_from_name_t)AssertionManager::GetExport(Module, "mono_class_get_property_from_name");
 	mono_property_get_get_method = (mono_property_get_get_method_t)AssertionManager::GetExport(Module, "mono_property_get_get_method");
 	mono_object_get_class = (mono_object_get_class_t)AssertionManager::GetExport(Module, "mono_object_get_class");
-	mono_debug_init = (mono_debug_init_t)AssertionManager::GetExport(Module, "mono_debug_init");
-	mono_debug_domain_create = (mono_debug_domain_create_t)AssertionManager::GetExport(Module, "mono_debug_domain_create");
-	mono_jit_parse_options = (mono_jit_parse_options_t)AssertionManager::GetExport(Module, "mono_jit_parse_options");
+
+	if (MelonLoader::IsGameIl2Cpp)
+	{
+		mono_debug_init = (mono_debug_init_t)AssertionManager::GetExport(Module, "mono_debug_init");
+		mono_debug_domain_create = (mono_debug_domain_create_t)AssertionManager::GetExport(Module, "mono_debug_domain_create");
+		mono_jit_parse_options = (mono_jit_parse_options_t)AssertionManager::GetExport(Module, "mono_jit_parse_options");
+	}
 
 	if (!IsOldMono)
 	{

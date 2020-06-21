@@ -38,6 +38,7 @@
 23. Updated Il2CppDumper Config Fix in the Assembly Generator to support Il2CppDumper v6.3.0.
 24. Added Temp File Cache to Assembly Generator.
 25. Re-enabled Launch Option "--melonloader.devpluginsonly".
+26. Fixed Issue with Certain Mono Games not having OnApplicationStart called.
 
 ---
 
