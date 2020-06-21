@@ -30,6 +30,7 @@
 15. Fixed Issue with Harmony Patches on Virtual Methods.  (Credits to zeobviouslyfakeacc :3)
 16. Improved the Harmony error message if the unhollowed target method is not backed by an IL2CPP method.  (Credits to zeobviouslyfakeacc :3)
 17. Fixed Issue with Harmony AccessTools not being able to resolve the no-args constructor if a static constructor exists.  (Credits to zeobviouslyfakeacc :3)
+18. Added Support for Mono Debuggers.
 
 ---
 
