@@ -569,7 +569,7 @@ namespace MelonLoader
 
         public static string GetUserDataPath()
         {
-            string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
+            string userDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UserData");
             if (!Directory.Exists(userDataDir))
                 Directory.CreateDirectory(userDataDir);
             return userDataDir;
