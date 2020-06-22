@@ -566,5 +566,13 @@ namespace MelonLoader
             SupportModule.UnityDebugLog("~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!   ~");
             SupportModule.UnityDebugLog("--------------------------------------------------------------------------------------------------");
         }
+
+        public static string GetUserDataPath()
+        {
+            string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
+            if (!Directory.Exists(userDataDir))
+                Directory.CreateDirectory(userDataDir);
+            return userDataDir;
+        }
     }
 }
