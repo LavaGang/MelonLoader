@@ -121,6 +121,7 @@ namespace MelonLoader
         public class PrefDesc
         {
             public string Value { get; set; }
+            public string ValueEdited { get; set; }
             public PrefType Type { get; private set; }
             public bool Hidden { get; private set; }
             public String DisplayText { get; private set; }
@@ -128,6 +129,7 @@ namespace MelonLoader
             public PrefDesc(string value, PrefType type, bool hidden, string displayText)
             {
                 Value = value;
+                ValueEdited = value;
                 Type = type;
                 Hidden = hidden;
                 DisplayText = displayText;
