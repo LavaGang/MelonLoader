@@ -265,6 +265,6 @@ namespace MelonLoader.AssemblyGenerator
         public string DumperVersion = null;
         public string UnhollowerVersion = null;
         public List<string> OldFiles = new List<string>();
-        public void Save(string path) => File.WriteAllText(path, Encoder.Encode(this, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
+        public void Save(string path) => File.WriteAllText(path, Encoder.Encode(this, EncodeOptions.NoTypeHints | EncodeOptions.IncludePublicProperties | EncodeOptions.PrettyPrint));
     }
 }
