@@ -14,11 +14,7 @@ namespace MelonLoader
             get
             {
                 if (_instance == null)
-                {
-                    string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
-                    if (!Directory.Exists(userDataDir)) Directory.CreateDirectory(userDataDir);
-                    _instance = new IniFile(Path.Combine(userDataDir, filename));
-                }
+                    _instance = new IniFile(Path.Combine(Main.GetUserDataPath(), filename));
                 return _instance;
             }
         }
