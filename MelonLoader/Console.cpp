@@ -20,7 +20,7 @@ void Console::Create()
 			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
 		else
-			MessageBox(NULL, "Failed to Create Debug Console!", NULL, MB_OK | MB_ICONEXCLAMATION);
+			MessageBox(NULL, ("Failed to Create " + (!Enabled ? std::string("Debug ") : std::string()) + "Console!").c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
 	}
 }
 
