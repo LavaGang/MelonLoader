@@ -22,8 +22,25 @@ namespace MelonLoader
         /// </summary>
         public string Location { get; internal set; }
 
+        /// <summary>
+        /// Enum for DLL Compatibility
+        /// </summary>
+        public enum MelonCompatibility
+        {
+            UNIVERSAL = 0,
+            COMPATIBLE = 1,
+            NOATTRIBUTE = 2,
+            INCOMPATIBLE = 3,
+        }
+
+        /// <summary>
+        /// Gets the Compatibility of the Mod or Plugin.
+        /// </summary>
+        public MelonCompatibility Compatibility { get; internal set; }
+
         public virtual void OnApplicationStart() { }
         public virtual void OnApplicationQuit() { }
         public virtual void OnModSettingsApplied() { }
     }
+
 }

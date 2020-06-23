@@ -55,8 +55,8 @@ namespace MelonLoader
 
         public static void LogError(string s) => Imports.Logger_LogError(GetNameSection(), s);
         public static void LogError(string s, params object[] args) => Imports.Logger_LogError(GetNameSection(), string.Format(s, args));
-        internal static void LogModError(string msg, string modname) => Imports.Logger_LogModError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
+        internal static void LogDLLError(string msg, string modname) => Imports.Logger_LogDLLError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
 
-        internal static void LogModStatus(int type) => Imports.Logger_LogModStatus(type);
+        internal static void LogDLLStatus(MelonBase.MelonCompatibility type) => Imports.Logger_LogDLLStatus(type);
     }
 }

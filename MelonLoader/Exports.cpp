@@ -9,13 +9,13 @@ void Logger_Log(MonoString* txt) { Logger::Log(Mono::mono_string_to_utf8(txt)); 
 void Logger_LogColor(MonoString* txt, ConsoleColor color) { Logger::Log(Mono::mono_string_to_utf8(txt), color); }
 void Logger_LogWarning(MonoString* namesection, MonoString* txt) { Logger::LogWarning(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void Logger_LogError(MonoString* namesection, MonoString* txt) { Logger::LogError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
-void Logger_LogModError(MonoString* namesection, MonoString* msg) { Logger::LogModError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(msg)); }
-void Logger_LogModStatus(int type) { Logger::LogModStatus(type); }
+void Logger_LogDLLError(MonoString* namesection, MonoString* msg) { Logger::LogDLLError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(msg)); }
+void Logger_LogDLLStatus(ModHandler_DLLStatus type) { Logger::LogDLLStatus(type); }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }
-bool IsConsoleEnabled() { return MelonLoader::ConsoleEnabled; }
-bool IsRainbowMode() { return MelonLoader::RainbowMode; }
-bool IsRandomRainbowMode() { return MelonLoader::RandomRainbowMode; }
+bool IsConsoleEnabled() { return Console::Enabled; }
+bool IsRainbowMode() { return Console::RainbowMode; }
+bool IsRandomRainbowMode() { return Console::RandomRainbowMode; }
 MonoString* GetGameDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::GamePath); }
 MonoString* GetGameDataDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::DataPath); }
 void Hook(Il2CppMethod* target, void* detour) { HookManager::Hook(target, detour); }
@@ -40,8 +40,8 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogColor", Logger_LogColor);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogWarning", Logger_LogWarning);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogError", Logger_LogError);
-	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogModError", Logger_LogModError);
-	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogModStatus", Logger_LogModStatus);
+	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogDLLError", Logger_LogDLLError);
+	Mono::mono_add_internal_call("MelonLoader.Imports::Logger_LogDLLStatus", Logger_LogDLLStatus);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsIl2CppGame", IsIl2CppGame);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsDebugMode", IsDebugMode);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsConsoleEnabled", IsConsoleEnabled);

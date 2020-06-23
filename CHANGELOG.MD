@@ -25,7 +25,7 @@
 10. Plugins now use their own Attributes.
 11. Fixed Issue that let Plugins load as Mods when placed in the Mods folder and vice-versa.
 12. Added better Legacy Version handling for "--melonloader.agfvunhollower".
-13. Added Clearer Display Text to State that Mod and Plugin Status is Game Compatibility.
+13. Added Clearer Display Text to State that DLL Status is Game Compatibility.
 14. Also call Harmony patches if IL2CPP methods get called using reflection / il2cpp_runtime_invoke.  (Credits to zeobviouslyfakeacc :3)
 15. Fixed Issue with Harmony Patches on Virtual Methods.  (Credits to zeobviouslyfakeacc :3)
 16. Improved the Harmony error message if the unhollowed target method is not backed by an IL2CPP method.  (Credits to zeobviouslyfakeacc :3)
@@ -49,6 +49,10 @@
 34. Added Launch Option "--melonloader.maxwarnings" for Setting the Max Amount of Warnings for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
 35. Added Launch Option "--melonloader.maxerrors" for Setting the Max Amount of Errors for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
 36. Fixed Memory Leak in Log Spam Shield.
+37. Fixed Issue with Exports.
+38. Moved DLL Status to its own Enum.
+39. Added "Compatibility" property to MelonBase.
+40. Removed "IsUniversal" property from MelonBase.
 
 ---
 

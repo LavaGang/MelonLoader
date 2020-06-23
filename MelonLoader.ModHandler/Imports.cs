@@ -17,9 +17,9 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Logger_LogError(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogModError(string namesection, string msg);
+        internal extern static void Logger_LogDLLError(string namesection, string msg);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogModStatus(int type);
+        internal extern static void Logger_LogDLLStatus(MelonBase.MelonCompatibility type);
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetCompanyName();
