@@ -56,6 +56,8 @@
 41. Fixed Issue with Incompatible Plugins and Mods still being used after Logging.
 42. Added Unity 2018.4.23 Dependencies.
 43. Fixed Issue with Console.h / Console::IsInitialized().
+44. Added Tomlyn to ModHandler for TOML Parsing.
+45. Moved Tomlyn to its own Namespace under MelonLoader.Tomlyn.
 
 ---
 
