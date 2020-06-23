@@ -17,6 +17,7 @@ namespace MelonLoader.Installer
         private static string Version = "1.0.4";
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
+        internal static bool NoGUI = false;
 
         [STAThread]
         static void Main()
@@ -25,36 +26,43 @@ namespace MelonLoader.Installer
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
             webClient.Headers.Add("User-Agent", "Unity web player");
             Application.SetCompatibleTextRenderingDefault(false);
-            mainForm = new MainForm();
             Application.EnableVisualStyles();
 
-            try
+            ParseCommandLine();
+            if (NoGUI)
             {
-                mainForm.comboBox1.Items.Clear();
-                JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
-                if (data.Count > 0)
+                Console.WriteLine("WORK IN PROGRESS!");
+            }
+            else
+            {
+                try
                 {
-                    foreach (var x in data)
+                    mainForm = new MainForm();
+                    mainForm.comboBox1.Items.Clear();
+                    JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
+                    if (data.Count > 0)
                     {
-                        string version = x["tag_name"].AsString;
-                        if (mainForm.comboBox1.Items.Count <= 0)
-                            mainForm.comboBox1.Items.Add("Latest (" + version + ")");
-                        mainForm.comboBox1.Items.Add(version);
+                        foreach (var x in data)
+                        {
+                            string version = x["tag_name"].AsString;
+                            if (mainForm.comboBox1.Items.Count <= 0)
+                                mainForm.comboBox1.Items.Add("Latest (" + version + ")");
+                            mainForm.comboBox1.Items.Add(version);
+                        }
                     }
+                    if (mainForm.comboBox1.Items.Count <= 0)
+                        throw new Exception("Version List is Empty!");
                 }
-                if (mainForm.comboBox1.Items.Count <= 0)
-                    throw new Exception("Version List is Empty!");
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to Get Version List; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Title);
+                    Application.Exit();
+                }
 
                 mainForm.comboBox1.SelectedIndex = 0;
                 mainForm.comboBox1.SelectedItem = mainForm.comboBox1.Items[0];
                 mainForm.Show();
-
                 Application.Run(mainForm);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to Get Version List; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Title);
-                Application.Exit();
             }
         }
 
@@ -238,6 +246,11 @@ namespace MelonLoader.Installer
                 }
                 catch (Exception e) { }
             }).Start();
+        }
+
+        private static void ParseCommandLine()
+        {
+
         }
     }
 }

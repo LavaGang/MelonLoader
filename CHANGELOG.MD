@@ -54,6 +54,7 @@
 39. Added "Compatibility" property to MelonBase.
 40. Removed "IsUniversal" property from MelonBase.
 41. Fixed Issue with Incompatible Plugins and Mods still being used after Logging.
+42. Added Unity 2018.4.23 Dependencies.
 
 ---
 
