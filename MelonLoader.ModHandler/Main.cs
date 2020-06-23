@@ -472,10 +472,13 @@ namespace MelonLoader
                             pluginInstance.GameAttributes = pluginGameAttributes;
                         else
                             pluginInstance.GameAttributes = null;
-                        pluginInstance.ModAssembly = assembly;
                         pluginInstance.Location = filelocation;
                         pluginInstance.Compatibility = (isUniversal ? MelonBase.MelonCompatibility.UNIVERSAL : (isCompatible ? MelonBase.MelonCompatibility.COMPATIBLE : (!hasAttribute ? MelonBase.MelonCompatibility.NOATTRIBUTE : MelonBase.MelonCompatibility.INCOMPATIBLE)));
-                        Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
+                        if (pluginInstance.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)
+                        {
+                            pluginInstance.ModAssembly = assembly;
+                            Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
+                        }
                         Plugins.Add(pluginInstance);
                     }
                     else
@@ -520,10 +523,13 @@ namespace MelonLoader
                             modInstance.GameAttributes = modGameAttributes;
                         else
                             modInstance.GameAttributes = null;
-                        modInstance.ModAssembly = assembly;
                         modInstance.Location = filelocation;
                         modInstance.Compatibility = (isUniversal ? MelonBase.MelonCompatibility.UNIVERSAL : (isCompatible ? MelonBase.MelonCompatibility.COMPATIBLE : (!hasAttribute ? MelonBase.MelonCompatibility.NOATTRIBUTE : MelonBase.MelonCompatibility.INCOMPATIBLE)));
-                        Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
+                        if (modInstance.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)
+                        {
+                            modInstance.ModAssembly = assembly;
+                            Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
+                        }
                         Mods.Add(modInstance);
                     }
                     else
