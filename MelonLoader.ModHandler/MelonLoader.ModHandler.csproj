@@ -77,7 +77,6 @@
     <Compile Include="Harmony\Transpilers.cs" />
     <Compile Include="Imports.cs" />
     <Compile Include="IniFile.cs" />
-    <Compile Include="ModAttributes.cs" />
     <Compile Include="MelonBase.cs" />
     <Compile Include="MelonCoroutines.cs" />
     <Compile Include="MelonModLogger.cs" />
@@ -86,7 +85,6 @@
     <Compile Include="MelonPlugin.cs" />
     <Compile Include="ModPrefs.cs" />
     <Compile Include="ModSettingsMenu.cs" />
-    <Compile Include="PluginAttributes.cs" />
     <Compile Include="SceneHandler.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Constants.cs" />
