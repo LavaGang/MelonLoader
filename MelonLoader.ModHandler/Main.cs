@@ -476,7 +476,7 @@ namespace MelonLoader
                         pluginInstance.Compatibility = (isUniversal ? MelonBase.MelonCompatibility.UNIVERSAL : (isCompatible ? MelonBase.MelonCompatibility.COMPATIBLE : (!hasAttribute ? MelonBase.MelonCompatibility.NOATTRIBUTE : MelonBase.MelonCompatibility.INCOMPATIBLE)));
                         if (pluginInstance.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)
                         {
-                            pluginInstance.ModAssembly = assembly;
+                            pluginInstance.Assembly = assembly;
                             Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
                         }
                         Plugins.Add(pluginInstance);
@@ -527,7 +527,7 @@ namespace MelonLoader
                         modInstance.Compatibility = (isUniversal ? MelonBase.MelonCompatibility.UNIVERSAL : (isCompatible ? MelonBase.MelonCompatibility.COMPATIBLE : (!hasAttribute ? MelonBase.MelonCompatibility.NOATTRIBUTE : MelonBase.MelonCompatibility.INCOMPATIBLE)));
                         if (modInstance.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)
                         {
-                            modInstance.ModAssembly = assembly;
+                            modInstance.Assembly = assembly;
                             Harmony.HarmonyInstance.Create(assembly.FullName).PatchAll(assembly);
                         }
                         Mods.Add(modInstance);

@@ -10,7 +10,7 @@ namespace MelonLoader
         /// <summary>
         /// Gets the Assembly of the Mod or Plugin.
         /// </summary>
-        public System.Reflection.Assembly ModAssembly { get; internal set; }
+        public System.Reflection.Assembly Assembly { get; internal set; }
 
         /// <summary>
         /// Gets the File Location of the Mod or Plugin.
