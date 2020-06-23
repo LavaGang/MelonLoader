@@ -60,7 +60,7 @@
 | --melonloader.debug | Debug Mode/Console |
 | --melonloader.rainbow | Rainbow Console Color |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
-| --melonloader.maxlogs | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |
+| --melonloader.maxlogs | Max Log Files  [ Default: 10 ] [ Disable: 0 ] |
 | --melonloader.maxwarnings | Max Warnings per Log File  [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.maxerrors | Max Errors per Log File  [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.devpluginsonly | Loads only Plugins with the "-dev.dll" extension |
