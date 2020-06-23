@@ -15,7 +15,8 @@ void Console::Create()
 		if (AllocConsole())
 		{
 			hwndConsole = GetConsoleWindow();
-			SetTitle("MelonLoader Debug Console");
+			if (!Enabled)
+				SetTitle("MelonLoader Debug Console");
 			SetForegroundWindow(hwndConsole);
 			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
