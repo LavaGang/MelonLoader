@@ -3,6 +3,10 @@
 
 HWND Console::hwndConsole = NULL;
 int Console::rainbow = 1;
+bool Console::ConsoleEnabled = true;
+bool Console::HideWarnings = false;
+bool Console::RainbowMode = false;
+bool Console::RandomRainbowMode = false;
 
 void Console::Create()
 {
@@ -22,9 +26,9 @@ void Console::Create()
 
 void Console::RainbowCheck()
 {
-	if (IsInitialized() && (MelonLoader::RainbowMode || MelonLoader::RandomRainbowMode))
+	if (IsInitialized() && (RainbowMode || RandomRainbowMode))
 	{
-		if (MelonLoader::RandomRainbowMode)
+		if (RandomRainbowMode)
 			SetColor((ConsoleColor)(1 + (rand() * (int)(15 - 1) / RAND_MAX)));
 		else
 		{
@@ -44,7 +48,7 @@ void Console::Write(const char* txt)
 	{
 		RainbowCheck();
 		std::cout << txt;
-		if (MelonLoader::RainbowMode || MelonLoader::RandomRainbowMode)
+		if (RainbowMode || RandomRainbowMode)
 			ResetColor();
 	}
 };

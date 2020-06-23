@@ -76,6 +76,10 @@ class Console
 public:
 	static HWND hwndConsole;
 	static int rainbow;
+	static bool Enabled;
+	static bool HideWarnings;
+	static bool RainbowMode;
+	static bool RandomRainbowMode;
 
 	static bool IsInitialized() { return (GetConsoleWindow() != NULL); }
 	static void Create();

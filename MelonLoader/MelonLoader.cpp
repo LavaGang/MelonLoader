@@ -17,9 +17,6 @@ int MelonLoader::CommandLineC = NULL;
 char* MelonLoader::CommandLineV[64];
 bool MelonLoader::IsGameIl2Cpp = false;
 bool MelonLoader::DebugMode = false;
-bool MelonLoader::ConsoleEnabled = true;
-bool MelonLoader::RainbowMode = false;
-bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
 bool MelonLoader::DevModsOnly = false;
 bool MelonLoader::DevPluginsOnly = false;
@@ -164,12 +161,10 @@ void MelonLoader::ParseCommandLine()
 			{
 				if (strstr(command, "--quitfix") != NULL)
 					QuitFix = true;
-				else if (strstr(command, "--melonloader.hideconsole") != NULL)
-					ConsoleEnabled = false;
 				else if (strstr(command, "--melonloader.rainbow") != NULL)
-					RainbowMode = true;
+					Console::RainbowMode = true;
 				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
-					RandomRainbowMode = true;
+					Console::RandomRainbowMode = true;
 				else if (strstr(command, "--melonloader.maxlogs") != NULL)
 					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
@@ -181,6 +176,10 @@ void MelonLoader::ParseCommandLine()
 				else if (strstr(command, "--melonloader.agfvunhollower"))
 					ForceUnhollowerVersion = CommandLineV[i + 1];
 #ifndef DEBUG
+				else if (strstr(command, "--melonloader.hideconsole") != NULL)
+					Console::Enabled = false;
+				else if (strstr(command, "--melonloader.hidewarnings") != NULL)
+					Console::HideWarnings = false;
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{
 					Console::Create();

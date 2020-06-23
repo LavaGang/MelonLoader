@@ -40,6 +40,8 @@
 25. Re-enabled Launch Option "--melonloader.devpluginsonly".
 26. Fixed Issue with Certain Mono Games not having OnApplicationStart called.
 27. Added Unity 2018.4.2 Dependencies.
+28. Fixed Debug Compilation Issue with Console.
+29. Added Launch Option "--melonloader.hidewarnings" that will Hide Warnings from Displaying in Normal Console.  (Debug Console ignores this Launch Option.)
 
 ---
 

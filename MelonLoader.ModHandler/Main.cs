@@ -36,7 +36,11 @@ namespace MelonLoader
                 IsBoneworks = CurrentGameAttribute.IsGame("Stress Level Zero", "BONEWORKS");
             }
 
-            if (!Imports.IsDebugMode() && Imports.IsConsoleEnabled())
+            if (!Imports.IsDebugMode()
+#if !DEBUG
+                && Imports.IsConsoleEnabled()
+#endif
+                )
             {
                 Console.Enabled = true;
                 Console.Create();
