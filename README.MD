@@ -45,7 +45,7 @@
 ### CONSOLE DIFFERENCES:
 
 - Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
-- Debug Console is for Debugging MelonLoader Internals.
+- Debug Mode/Console is for Debugging MelonLoader Internals.
 
 ---
 
@@ -56,11 +56,13 @@
 | --no-mods | Launch game without loading Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.hideconsole | Hides the Normal Console |
-| --melonloader.hidewarnings | Hides Warnings from Displaying in Normal Console  (Debug Console ignores this) |
-| --melonloader.debug | Debug Console |
+| --melonloader.hidewarnings | Hides Warnings from Displaying |
+| --melonloader.debug | Debug Mode/Console |
 | --melonloader.rainbow | Rainbow Console Color |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
 | --melonloader.maxlogs | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |
+| --melonloader.maxwarnings | Max Warnings  [ Default: 100 ] [ Disable: 0 ] |
+| --melonloader.maxerrors | Max Errors  [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.devmodsonly | Loads only Mods with the "-dev.dll" extension |
 | --melonloader.devpluginsonly | Loads only Plugins with the "-dev.dll" extension |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |

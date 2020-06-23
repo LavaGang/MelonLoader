@@ -9,6 +9,10 @@
 
 LogStream Logger::LogFile;
 int Logger::MaxLogs = 10;
+int Logger::WarningCount = 0;
+int Logger::MaxWarnings = 100;
+int Logger::ErrorCount = 0;
+int Logger::MaxErrors = 100;
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtention = "log";
 
@@ -27,6 +31,12 @@ void Logger::Initialize(std::string filepathstr)
 	std::stringstream filepath;
 	filepath << logFolderPath << "\\" << FilePrefix << std::put_time(&bt, "%y-%m-%d_%OH-%OM-%OS") << "." << std::setfill('0') << std::setw(3) << ms.count() << "." << FileExtention;
 	LogFile.coss = std::ofstream(filepath.str());
+	if (MelonLoader::DebugMode)
+	{
+		MaxLogs = 0;
+		MaxWarnings = 0;
+		MaxErrors = 0;
+	}
 }
 
 void Logger::CleanOldLogs(std::string logFolderPath)
@@ -91,48 +101,68 @@ void Logger::Log(const char* txt, ConsoleColor color)
 
 void Logger::LogWarning(const char* txt)
 {
-	LogTimestamp(ConsoleColor_Yellow);
-	LogFile << "[Warning] " << txt << std::endl;
-	if (MelonLoader::DebugMode || !Console::HideWarnings)
+	if ((MaxWarnings <= 0) || (WarningCount < MaxWarnings))
 	{
-		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
-		Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		LogTimestamp(ConsoleColor_Yellow);
+		LogFile << "[Warning] " << txt << std::endl;
+		if (MelonLoader::DebugMode || !Console::HideWarnings)
+		{
+			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+			Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		}
+		WarningCount++;
 	}
 }
 
 void Logger::LogWarning(const char* namesection, const char* txt)
 {
-	LogTimestamp(ConsoleColor_Yellow);
-	LogFile << namesection << "[Warning] " << txt << std::endl;
-	if (MelonLoader::DebugMode || !Console::HideWarnings)
+	if ((MaxWarnings <= 0) || (WarningCount < MaxWarnings))
 	{
-		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
-		Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		LogTimestamp(ConsoleColor_Yellow);
+		LogFile << namesection << "[Warning] " << txt << std::endl;
+		if (MelonLoader::DebugMode || !Console::HideWarnings)
+		{
+			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+			Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		}
+		WarningCount++;
 	}
 }
 
 void Logger::LogError(const char* txt)
 {
-	LogTimestamp(ConsoleColor_Red);
-	LogFile << "[Error] " << txt << std::endl;
-	Console::Write("[MelonLoader] ", ConsoleColor_Red);
-	Console::WriteLine(("[Error] " + std::string(txt)), ConsoleColor_Red);
+	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
+	{
+		LogTimestamp(ConsoleColor_Red);
+		LogFile << "[Error] " << txt << std::endl;
+		Console::Write("[MelonLoader] ", ConsoleColor_Red);
+		Console::WriteLine(("[Error] " + std::string(txt)), ConsoleColor_Red);
+		ErrorCount++;
+	}
 }
 
 void Logger::LogError(const char* namesection, const char* txt)
 {
-	LogTimestamp(ConsoleColor_Red);
-	LogFile << namesection << "[Error] " << txt << std::endl;
-	Console::Write("[MelonLoader] ", ConsoleColor_Red);
-	Console::WriteLine((std::string(namesection) + "[Error] " + std::string(txt)), ConsoleColor_Red);
+	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
+	{
+		LogTimestamp(ConsoleColor_Red);
+		LogFile << namesection << "[Error] " << txt << std::endl;
+		Console::Write("[MelonLoader] ", ConsoleColor_Red);
+		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(txt)), ConsoleColor_Red);
+		ErrorCount++;
+	}
 }
 
 void Logger::LogModError(const char* namesection, const char* msg)
 {
-	LogTimestamp(ConsoleColor_Yellow);
-	LogFile << namesection << "[Error] " << msg << std::endl;
-	Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
-	Console::WriteLine((std::string(namesection) + "[Error] " + std::string(msg)), ConsoleColor_Yellow);
+	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
+	{
+		LogTimestamp(ConsoleColor_Yellow);
+		LogFile << namesection << "[Error] " << msg << std::endl;
+		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(msg)), ConsoleColor_Yellow);
+		ErrorCount++;
+	}
 }
 
 void Logger::LogModStatus(int type)

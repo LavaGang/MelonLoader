@@ -57,8 +57,8 @@ void MelonLoader::Main()
 		Logger::Initialize(filepathstr);
 
 #ifdef DEBUG
-		Console::Create();
 		DebugMode = true;
+		Console::Create();
 #endif
 
 		std::string pdatapath = filepathstr + "\\*_Data";
@@ -165,8 +165,6 @@ void MelonLoader::ParseCommandLine()
 					Console::RainbowMode = true;
 				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
 					Console::RandomRainbowMode = true;
-				else if (strstr(command, "--melonloader.maxlogs") != NULL)
-					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
 					DevModsOnly = true;
 				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
@@ -176,14 +174,20 @@ void MelonLoader::ParseCommandLine()
 				else if (strstr(command, "--melonloader.agfvunhollower"))
 					ForceUnhollowerVersion = CommandLineV[i + 1];
 #ifndef DEBUG
+				else if (strstr(command, "--melonloader.maxlogs") != NULL)
+					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
+				else if (strstr(command, "--melonloader.maxwarnings") != NULL)
+					Logger::MaxWarnings = GetIntFromConstChar(CommandLineV[i + 1], 10);
+				else if (strstr(command, "--melonloader.maxerrors") != NULL)
+					Logger::MaxErrors = GetIntFromConstChar(CommandLineV[i + 1], 10);
 				else if (strstr(command, "--melonloader.hideconsole") != NULL)
 					Console::Enabled = false;
 				else if (strstr(command, "--melonloader.hidewarnings") != NULL)
 					Console::HideWarnings = false;
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{
-					Console::Create();
 					DebugMode = true;
+					Console::Create();
 				}
 #endif
 			}

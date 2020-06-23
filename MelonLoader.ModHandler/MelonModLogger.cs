@@ -8,8 +8,6 @@ namespace MelonLoader
     public class MelonModLogger
     {
         internal static bool consoleEnabled = false;
-        private static int ErrorCount = 0;
-        private static int MaxErrorCount = 100;
 
         private static string GetNameSection()
         {
@@ -55,10 +53,9 @@ namespace MelonLoader
         public static void LogWarning(string s) => Imports.Logger_LogWarning(GetNameSection(), s);
         public static void LogWarning(string s, params object[] args) => Imports.Logger_LogWarning(GetNameSection(), string.Format(s, args));
 
-        public static void LogError(string s) { if (ErrorCount < MaxErrorCount) { Imports.Logger_LogError(GetNameSection(), s); ErrorCount++; } }
-        public static void LogError(string s, params object[] args) { if (ErrorCount < MaxErrorCount) { Imports.Logger_LogError(GetNameSection(), string.Format(s, args)); ErrorCount++; } }
-
-        internal static void LogModError(string msg, string modname) { if (ErrorCount < MaxErrorCount) { Imports.Logger_LogModError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg); ErrorCount++; } }
+        public static void LogError(string s) => Imports.Logger_LogError(GetNameSection(), s);
+        public static void LogError(string s, params object[] args) => Imports.Logger_LogError(GetNameSection(), string.Format(s, args));
+        internal static void LogModError(string msg, string modname) => Imports.Logger_LogModError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
 
         internal static void LogModStatus(int type) => Imports.Logger_LogModStatus(type);
     }

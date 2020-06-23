@@ -44,6 +44,10 @@
 29. Added Launch Option "--melonloader.hidewarnings" that will Hide Warnings from Displaying in Normal Console.  (Debug Console ignores this Launch Option.)
 30. Fixed Issue with Support Modules not Unloading their Components properly when OnApplicationQuit is called.
 31. Fixed Mistake with Error Catching Console Creation.
+32. Log Spam Shield will now Disable itself when MelonLoader is using Debug Mode/Console.
+33. Log Spam Shield has now been moved to the Native Logger.
+34. Added Launch Option "--melonloader.maxwarnings" for Setting the Max Amount of Warnings for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
+35. Added Launch Option "--melonloader.maxerrors" for Setting the Max Amount of Errors for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
 
 ---
 

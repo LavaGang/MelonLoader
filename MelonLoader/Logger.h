@@ -29,6 +29,10 @@ class Logger
 public:
 	static LogStream LogFile;
 	static int MaxLogs;
+	static int WarningCount;
+	static int MaxWarnings;
+	static int ErrorCount;
+	static int MaxErrors;
 	static const char* FilePrefix;
 	static const char* FileExtention;
 
@@ -43,7 +47,7 @@ public:
 
 	static void LogWarning(const char* txt);
 	static void LogWarning(const char* namesection, const char* txt);
-	static void LogWarning(std::string txt) { LogError(txt.c_str()); }
+	static void LogWarning(std::string txt) { LogWarning(txt.c_str()); }
 
 	static void LogError(const char* txt);
 	static void LogError(const char* namesection, const char* txt);
