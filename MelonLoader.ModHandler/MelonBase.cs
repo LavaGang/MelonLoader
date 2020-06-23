@@ -8,11 +8,6 @@ namespace MelonLoader
     public abstract class MelonBase
     {
         /// <summary>
-        /// Gets if the Mod or Plugin is Universal or not.
-        /// </summary>
-        public bool IsUniversal { get; internal set; }
-
-        /// <summary>
         /// Gets the Assembly of the Mod or Plugin.
         /// </summary>
         public System.Reflection.Assembly ModAssembly { get; internal set; }
