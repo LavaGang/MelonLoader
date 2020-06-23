@@ -18,6 +18,12 @@ const char* Logger::FileExtention = "log";
 
 void Logger::Initialize(std::string filepathstr)
 {
+	if (MelonLoader::DebugMode)
+	{
+		MaxLogs = 0;
+		MaxWarnings = 0;
+		MaxErrors = 0;
+	}
 	auto now = std::chrono::system_clock::now();
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 	auto timer = std::chrono::system_clock::to_time_t(now);
@@ -31,12 +37,6 @@ void Logger::Initialize(std::string filepathstr)
 	std::stringstream filepath;
 	filepath << logFolderPath << "\\" << FilePrefix << std::put_time(&bt, "%y-%m-%d_%OH-%OM-%OS") << "." << std::setfill('0') << std::setw(3) << ms.count() << "." << FileExtention;
 	LogFile.coss = std::ofstream(filepath.str());
-	if (MelonLoader::DebugMode)
-	{
-		MaxLogs = 0;
-		MaxWarnings = 0;
-		MaxErrors = 0;
-	}
 }
 
 void Logger::CleanOldLogs(std::string logFolderPath)
