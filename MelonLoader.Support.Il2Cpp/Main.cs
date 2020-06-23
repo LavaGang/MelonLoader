@@ -12,6 +12,8 @@ namespace MelonLoader.Support
 {
     internal static class Main
     {
+        internal static bool IsDestroying = false;
+        internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         private static Camera OnPostRenderCam = null;
 
@@ -62,7 +64,7 @@ namespace MelonLoader.Support
             GetUnityVersionNumbers(out var major, out var minor, out var patch);
             UnityVersionHandler.Initialize(major, minor, patch);
             ClassInjector.RegisterTypeInIl2Cpp<MelonLoaderComponent>();
-            MelonLoaderComponent.CreateComponent();
+            MelonLoaderComponent.Create();
             SceneManager.sceneLoaded = (
                 (SceneManager.sceneLoaded == null) 
                 ? new Action<Scene, LoadSceneMode>(OnSceneLoad) 
@@ -92,14 +94,15 @@ namespace MelonLoader.Support
 
     public class MelonLoaderComponent : MonoBehaviour
     {
-        internal static void CreateComponent()
+        internal static void Create()
         {
-            GameObject obj = new GameObject("MelonLoader");
-            GameObject.DontDestroyOnLoad(obj);
-            Main.comp = obj.AddComponent<MelonLoaderComponent>();
-            obj.transform.SetAsLastSibling();
+            Main.obj = new GameObject("MelonLoader");
+            DontDestroyOnLoad(Main.obj);
+            Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
+            Main.obj.transform.SetAsLastSibling();
             Main.comp.transform.SetAsLastSibling();
         }
+        private static void Destroy() { Main.IsDestroying = true; GameObject.Destroy(Main.obj); }
         public MelonLoaderComponent(IntPtr intPtr) : base(intPtr) { }
         void Start() => transform.SetAsLastSibling();
         void Update()
@@ -115,7 +118,7 @@ namespace MelonLoader.Support
         }
         void LateUpdate() => MelonLoader.Main.OnLateUpdate();
         void OnGUI() => MelonLoader.Main.OnGUI();
-        void OnDestroy() => CreateComponent();
-        void OnApplicationQuit() => MelonLoader.Main.OnApplicationQuit();
+        void OnDestroy() { if (!Main.IsDestroying) Create(); }
+        void OnApplicationQuit() { Destroy(); MelonLoader.Main.OnApplicationQuit(); }
     }
 }

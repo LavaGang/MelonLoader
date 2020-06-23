@@ -42,6 +42,7 @@
 27. Added Unity 2018.4.2 Dependencies.
 28. Fixed Debug Compilation Issue with Console.
 29. Added Launch Option "--melonloader.hidewarnings" that will Hide Warnings from Displaying in Normal Console.  (Debug Console ignores this Launch Option.)
+30. Fixed Issue with Support Modules not Unloading their Components properly when OnApplicationQuit is called.
 
 ---
 

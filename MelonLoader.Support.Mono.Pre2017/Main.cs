@@ -5,10 +5,12 @@ namespace MelonLoader.Support
 {
     internal static class Main
     {
+        internal static bool IsDestroying = false;
+        internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         private static ISupportModule Initialize()
         {
-            MelonLoaderComponent.CreateComponent();
+            MelonLoaderComponent.Create();
             SceneManager.sceneLoaded += OnSceneLoad;
             return new Module();
         }
@@ -16,20 +18,21 @@ namespace MelonLoader.Support
     }
     public class MelonLoaderComponent : MonoBehaviour
     {
-        internal static void CreateComponent()
+        internal static void Create()
         {
-            GameObject obj = new GameObject("MelonLoader");
-            DontDestroyOnLoad(obj);
-            Main.comp = obj.AddComponent<MelonLoaderComponent>();
-            obj.transform.SetAsLastSibling();
+            Main.obj = new GameObject("MelonLoader");
+            DontDestroyOnLoad(Main.obj);
+            Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
+            Main.obj.transform.SetAsLastSibling();
             Main.comp.transform.SetAsLastSibling();
         }
+        private static void Destroy() { Main.IsDestroying = true; GameObject.Destroy(Main.obj); }
         void Start() => transform.SetAsLastSibling();
         void Update() { transform.SetAsLastSibling(); MelonLoader.Main.OnUpdate(); }
         void FixedUpdate() => MelonLoader.Main.OnFixedUpdate();
         void LateUpdate() => MelonLoader.Main.OnLateUpdate();
         void OnGUI() => MelonLoader.Main.OnGUI();
-        void OnDestroy() => CreateComponent();
-        void OnApplicationQuit() => MelonLoader.Main.OnApplicationQuit();
+        void OnDestroy() { if (!Main.IsDestroying) Create(); }
+        void OnApplicationQuit() { Destroy(); MelonLoader.Main.OnApplicationQuit(); }
     }
 }
