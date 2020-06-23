@@ -61,8 +61,8 @@
 | --melonloader.rainbow | Rainbow Console Color |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
 | --melonloader.maxlogs | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |
-| --melonloader.maxwarnings | Max Warnings  [ Default: 100 ] [ Disable: 0 ] |
-| --melonloader.maxerrors | Max Errors  [ Default: 100 ] [ Disable: 0 ] |
+| --melonloader.maxwarnings | Max Warnings per Log File  [ Default: 100 ] [ Disable: 0 ] |
+| --melonloader.maxerrors | Max Errors per Log File  [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.devmodsonly | Loads only Mods with the "-dev.dll" extension |
 | --melonloader.devpluginsonly | Loads only Plugins with the "-dev.dll" extension |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
