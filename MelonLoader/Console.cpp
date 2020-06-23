@@ -3,7 +3,7 @@
 
 HWND Console::hwndConsole = NULL;
 int Console::rainbow = 1;
-bool Console::ConsoleEnabled = true;
+bool Console::Enabled = true;
 bool Console::HideWarnings = false;
 bool Console::RainbowMode = false;
 bool Console::RandomRainbowMode = false;
