@@ -110,8 +110,9 @@ namespace MelonLoader
                         MelonModLogger.Log("------------------------------");
                     }
                 }
+                Plugins.RemoveAll((MelonPlugin plugin) => (plugin.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE));
             }
-            else
+            if (Plugins.Count <= 0)
             {
                 MelonModLogger.Log("No Plugins Loaded!");
                 MelonModLogger.Log("------------------------------");
@@ -137,8 +138,9 @@ namespace MelonLoader
                         MelonModLogger.Log("------------------------------");
                     }
                 }
+                Mods.RemoveAll((MelonMod mod) => (mod.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE));
             }
-            else
+            if (Mods.Count <= 0)
             {
                 MelonModLogger.Log("No Mods Loaded!");
                 MelonModLogger.Log("------------------------------");

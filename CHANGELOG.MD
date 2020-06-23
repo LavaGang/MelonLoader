@@ -53,6 +53,7 @@
 38. Moved DLL Status to its own Enum.
 39. Added "Compatibility" property to MelonBase.
 40. Removed "IsUniversal" property from MelonBase.
+41. Fixed Issue with Incompatible Plugins and Mods still being used after Logging.
 
 ---
 
