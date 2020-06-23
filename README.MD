@@ -63,8 +63,8 @@
 | --melonloader.maxlogs | Max Log Files   [ Default: 10 ] [ Disable: 0 ] |
 | --melonloader.maxwarnings | Max Warnings per Log File  [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.maxerrors | Max Errors per Log File  [ Default: 100 ] [ Disable: 0 ] |
-| --melonloader.devmodsonly | Loads only Mods with the "-dev.dll" extension |
 | --melonloader.devpluginsonly | Loads only Plugins with the "-dev.dll" extension |
+| --melonloader.devmodsonly | Loads only Mods with the "-dev.dll" extension |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
 | --melonloader.agfvunhollower | Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 
