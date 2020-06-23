@@ -81,7 +81,7 @@ public:
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
 
-	static bool IsInitialized() { return (GetConsoleWindow() != NULL); }
+	static bool IsInitialized() { return (hwndConsole != NULL); }
 	static void Create();
 
 	static void SetTitle(const char* title) { SetConsoleTitle(title); }
