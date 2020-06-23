@@ -15,13 +15,12 @@ void Console::Create()
 		if (AllocConsole())
 		{
 			hwndConsole = GetConsoleWindow();
-			if (!Enabled)
-				SetTitle("MelonLoader Debug Console");
+			SetTitle(("MelonLoader " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console").c_str());
 			SetForegroundWindow(hwndConsole);
 			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
 		else
-			MessageBox(NULL, ("Failed to Create the " + (Enabled ? std::string("Normal") : std::string("Debug")) + " Console!").c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
+			MessageBox(NULL, ("Failed to Create the " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console!").c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
 	}
 }
 
