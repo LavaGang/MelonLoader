@@ -56,7 +56,7 @@
 | --no-mods | Launch game without loading Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.hideconsole | Hides the Normal Console |
-| --melonloader.hidewarnings | Hides Warnings from Displaying in Normal Console  [Debug Console ignores this] |
+| --melonloader.hidewarnings | Hides Warnings from Displaying in Normal Console  (Debug Console ignores this) |
 | --melonloader.debug | Debug Console |
 | --melonloader.rainbow | Rainbow Console Color |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
