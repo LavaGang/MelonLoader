@@ -110,7 +110,8 @@ void Logger::LogWarning(const char* txt)
 			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
 			Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
 		}
-		WarningCount++;
+		if (MaxWarnings > 0)
+			WarningCount++;
 	}
 }
 
@@ -125,7 +126,8 @@ void Logger::LogWarning(const char* namesection, const char* txt)
 			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
 			Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
 		}
-		WarningCount++;
+		if (MaxWarnings > 0)
+			WarningCount++;
 	}
 }
 
@@ -137,7 +139,8 @@ void Logger::LogError(const char* txt)
 		LogFile << "[Error] " << txt << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
 		Console::WriteLine(("[Error] " + std::string(txt)), ConsoleColor_Red);
-		ErrorCount++;
+		if (MaxErrors > 0)
+			ErrorCount++;
 	}
 }
 
@@ -149,7 +152,8 @@ void Logger::LogError(const char* namesection, const char* txt)
 		LogFile << namesection << "[Error] " << txt << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
 		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(txt)), ConsoleColor_Red);
-		ErrorCount++;
+		if (MaxErrors > 0)
+			ErrorCount++;
 	}
 }
 
@@ -161,7 +165,8 @@ void Logger::LogModError(const char* namesection, const char* msg)
 		LogFile << namesection << "[Error] " << msg << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
 		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(msg)), ConsoleColor_Yellow);
-		ErrorCount++;
+		if (MaxErrors > 0)
+			ErrorCount++;
 	}
 }
 

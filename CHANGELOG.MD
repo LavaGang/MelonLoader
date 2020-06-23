@@ -48,6 +48,7 @@
 33. Log Spam Shield has now been moved to the Native Logger.
 34. Added Launch Option "--melonloader.maxwarnings" for Setting the Max Amount of Warnings for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
 35. Added Launch Option "--melonloader.maxerrors" for Setting the Max Amount of Errors for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
+36. Fixed Memory Leak in Log Spam Shield.
 
 ---
 
