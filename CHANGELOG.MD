@@ -58,6 +58,7 @@
 43. Fixed Issue with Console.h / Console::IsInitialized().
 44. Added Tomlyn to ModHandler for TOML Parsing.
 45. Moved Tomlyn to its own Namespace under MelonLoader.Tomlyn.
+46. Added Unity 2018.3.14 Dependencies.
 
 ---
 
