@@ -20,7 +20,7 @@ namespace MelonLoader.AssemblyGenerator
         private static Executable_Package Il2CppDumper = new Executable_Package();
         private static Executable_Package Il2CppAssemblyUnhollower = new Executable_Package();
         private static string localConfigPath = null;
-        private static LocalConfig localConfig = new LocalConfig();
+        private static LocalConfig localConfig = null;
         private static Il2CppConfig il2cppConfig = new Il2CppConfig();
 
         internal static bool Initialize(string unityVersion, string gameRoot, string gameDataDir)
@@ -58,8 +58,7 @@ namespace MelonLoader.AssemblyGenerator
             UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "UnityDependencies"));
 
             localConfigPath = Path.Combine(BaseFolder, "config.json");
-            if (File.Exists(localConfigPath))
-                localConfig = Decoder.Decode(File.ReadAllText(localConfigPath)).Make<LocalConfig>();
+            localConfig = LocalConfig.Load(localConfigPath);
         }
 
         private static bool AssemblyGenerateCheck(string unityVersion)
@@ -265,6 +264,12 @@ namespace MelonLoader.AssemblyGenerator
         public string DumperVersion = null;
         public string UnhollowerVersion = null;
         public List<string> OldFiles = new List<string>();
+        public static LocalConfig Load(string path)
+        {
+            if (File.Exists(path))
+                return Decoder.Decode(File.ReadAllText(path)).Make<LocalConfig>();
+            return new LocalConfig();
+        }
         public void Save(string path) => File.WriteAllText(path, Encoder.Encode(this, EncodeOptions.NoTypeHints | EncodeOptions.IncludePublicProperties | EncodeOptions.PrettyPrint));
     }
 }
