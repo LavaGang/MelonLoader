@@ -59,6 +59,7 @@
 44. Added Tomlyn to ModHandler for TOML Parsing.
 45. Moved Tomlyn to its own Namespace under MelonLoader.Tomlyn.
 46. Added Unity 2018.3.14 Dependencies.
+47. Added Unity 2019.2.16 Dependencies.
 
 ---
 
