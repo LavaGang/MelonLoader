@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MelonLoader
 {
@@ -38,4 +35,17 @@ namespace MelonLoader
         public virtual void OnModSettingsApplied() { }
     }
 
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
+    public class MelonOptionalDependenciesAttribute : Attribute
+    {
+        /// <summary>
+        /// The (simple) assembly names of the dependencies that should be regarded as optional.
+        /// </summary>
+        public string[] AssemblyNames { get; }
+
+        public MelonOptionalDependenciesAttribute(params string[] assemblyNames)
+        {
+            AssemblyNames = assemblyNames;
+        }
+    }
 }

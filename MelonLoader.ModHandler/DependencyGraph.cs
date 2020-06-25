@@ -33,15 +33,23 @@ namespace MelonLoader {
 			// Add an edge for each dependency between mods
 			IDictionary<string, IList<AssemblyName>> modsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
 			List<AssemblyName> missingDependencies = new List<AssemblyName>();
+			ISet<string> optionalDependencies = new HashSet<string>();
+
 			foreach (Vertex modVertex in vertices) {
 				Assembly modAssembly = modVertex.mod.Assembly;
 				missingDependencies.Clear();
+				optionalDependencies.Clear();
+
+				MelonOptionalDependenciesAttribute optionals = modAssembly.GetCustomAttribute<MelonOptionalDependenciesAttribute>();
+				if (optionals != null && optionals.AssemblyNames != null) {
+					optionalDependencies.UnionWith(optionals.AssemblyNames);
+				}
 
 				foreach (AssemblyName dependency in modAssembly.GetReferencedAssemblies()) {
 					if (nameLookup.TryGetValue(dependency.Name, out Vertex dependencyVertex)) {
 						modVertex.dependencies.Add(dependencyVertex);
 						dependencyVertex.dependents.Add(modVertex);
-					} else if (!TryLoad(dependency)) {
+					} else if (!TryLoad(dependency) && !optionalDependencies.Contains(dependency.Name)) {
 						missingDependencies.Add(dependency);
 					}
 				}
