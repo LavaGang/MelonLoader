@@ -1022,6 +1022,7 @@ namespace MelonLoader.Tomlyn.Parsing
             _token = new SyntaxTokenValue(TokenKind.Comment, start, end);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void NextChar()
         {
             // If we have a character in preview

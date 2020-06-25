@@ -7,6 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using MelonLoader.TinyJSON;
+using MelonLoader.Tomlyn;
+using MelonLoader.Tomlyn.Model;
+using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader.AssemblyGenerator
 {
@@ -57,7 +60,7 @@ namespace MelonLoader.AssemblyGenerator
 
             UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "UnityDependencies"));
 
-            localConfigPath = Path.Combine(BaseFolder, "config.json");
+            localConfigPath = Path.Combine(BaseFolder, "config.cfg");
             localConfig = LocalConfig.Load(localConfigPath);
         }
 
@@ -264,12 +267,63 @@ namespace MelonLoader.AssemblyGenerator
         public string DumperVersion = null;
         public string UnhollowerVersion = null;
         public List<string> OldFiles = new List<string>();
+
         public static LocalConfig Load(string path)
         {
+            LocalConfig returnval = new LocalConfig();
             if (File.Exists(path))
-                return Decoder.Decode(File.ReadAllText(path)).Make<LocalConfig>();
-            return new LocalConfig();
+            {
+                string filestr = File.ReadAllText(path);
+                if (!string.IsNullOrEmpty(filestr))
+                {
+                    var doc = Toml.Parse(filestr);
+                    if (doc != null)
+                    {
+                        var table = doc.ToModel();
+                        TomlTable MainTbl = (TomlTable)table["AssemblyGenerator"];
+                        if (MainTbl != null)
+                        {
+                            returnval.UnityVersion = (string)MainTbl["UnityVersion"];
+                            returnval.GameAssemblyHash = (string)MainTbl["GameAssemblyHash"];
+                            returnval.DumperVersion = (string)MainTbl["DumperVersion"];
+                            returnval.UnhollowerVersion = (string)MainTbl["UnhollowerVersion"];
+                            TomlArray oldfilesarr = (TomlArray)MainTbl["OldFiles"];
+                            if (oldfilesarr.Count > 0)
+                            {
+                                for (int i = 0; i < oldfilesarr.Count; i++)
+                                {
+                                    string file = (string)oldfilesarr.ElementAt(i);
+                                    if (!string.IsNullOrEmpty(file))
+                                        returnval.OldFiles.Add(file);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return returnval;
         }
-        public void Save(string path) => File.WriteAllText(path, Encoder.Encode(this, EncodeOptions.NoTypeHints | EncodeOptions.IncludePublicProperties | EncodeOptions.PrettyPrint));
+
+        public void Save(string path)
+        {
+            var doc = new DocumentSyntax()
+            {
+                Tables =
+                {
+                    new TableSyntax("AssemblyGenerator")
+                    {
+                        Items =
+                        {
+                            {"UnityVersion", (UnityVersion == null) ? "" : UnityVersion},
+                            {"GameAssemblyHash", (GameAssemblyHash == null) ? "" : GameAssemblyHash},
+                            {"DumperVersion", (DumperVersion == null) ? "" : DumperVersion},
+                            {"UnhollowerVersion", (UnhollowerVersion == null) ? "" : UnhollowerVersion},
+                            {"OldFiles", OldFiles.ToArray()}
+                        }
+                    }
+                }
+            };
+            File.WriteAllText(path, doc.ToString());
+        }
     }
 }

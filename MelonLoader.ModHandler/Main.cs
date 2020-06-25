@@ -14,6 +14,7 @@ namespace MelonLoader
     {
         public static List<MelonMod> Mods = new List<MelonMod>();
         public static List<MelonPlugin> Plugins = new List<MelonPlugin>();
+        public static List<MelonPlugin> TempPlugins = null;
         internal static MelonModGameAttribute CurrentGameAttribute = null;
         public static bool IsVRChat = false;
         public static bool IsBoneworks = false;
@@ -56,12 +57,18 @@ namespace MelonLoader
             {
                 LoadDLLs(true);
                 if (Plugins.Count > 0)
-                    for (int i = 0; i < Plugins.Count; i++)
+                {
+                    HashSet<MelonPlugin> failedPlugins = new HashSet<MelonPlugin>();
+                    TempPlugins = Plugins.Where(plugin => (plugin.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)).ToList();
+                    DependencyGraph<MelonPlugin>.TopologicalSort(TempPlugins, plugin => plugin.InfoAttribute.Name);
+                    for (int i = 0; i < TempPlugins.Count; i++)
                     {
-                        MelonPlugin plugin = Plugins[i];
+                        MelonPlugin plugin = TempPlugins[i];
                         if (plugin != null)
-                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); }
+                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); failedPlugins.Add(plugin); }
                     }
+                    TempPlugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
+                }
             }
         }
 
@@ -90,7 +97,6 @@ namespace MelonLoader
             MelonModLogger.Log("------------------------------");
 
             LoadDLLs();
-
             if (Plugins.Count > 0)
             {
                 for (int i = 0; i < Plugins.Count; i++)
@@ -111,7 +117,7 @@ namespace MelonLoader
                         MelonModLogger.Log("------------------------------");
                     }
                 }
-                Plugins.RemoveAll((MelonPlugin plugin) => (plugin.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE));
+                Plugins = TempPlugins;
             }
             if (Plugins.Count <= 0)
             {
@@ -140,6 +146,7 @@ namespace MelonLoader
                     }
                 }
                 Mods.RemoveAll((MelonMod mod) => (mod.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE));
+                DependencyGraph<MelonMod>.TopologicalSort(Mods, mod => mod.InfoAttribute.Name);
             }
             if (Mods.Count <= 0)
             {
@@ -149,9 +156,6 @@ namespace MelonLoader
 
             if ((Plugins.Count > 0) && (Mods.Count > 0))
                 AddUnityDebugLog();
-
-            DependencyGraph<MelonPlugin>.TopologicalSort(Plugins, plugin => plugin.InfoAttribute.Name);
-            DependencyGraph<MelonMod>.TopologicalSort(Mods, mod => mod.InfoAttribute.Name);
 
             if (Plugins.Count > 0)
             {

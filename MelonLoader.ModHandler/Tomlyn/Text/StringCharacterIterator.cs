@@ -16,6 +16,7 @@ namespace MelonLoader.Tomlyn.Text
 
         public int Start => 0;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public char32? TryGetNext(ref int position)
         {
             if (position < _text.Length)

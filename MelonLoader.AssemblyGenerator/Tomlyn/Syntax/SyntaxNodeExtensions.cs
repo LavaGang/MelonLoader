@@ -3,7 +3,6 @@
 // See license.txt file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace MelonLoader.Tomlyn.Syntax
 {
@@ -57,25 +56,15 @@ namespace MelonLoader.Tomlyn.Syntax
 			list.Add(new KeyValueSyntax(name, value));
 		}
 
-        public static KeyValueSyntax AddTrailingComment(this KeyValueSyntax keyValue, string comment)
+        public static KeyValueSyntax AddComment(this KeyValueSyntax keyValue, string comment)
         {
             if (keyValue == null) throw new ArgumentNullException(nameof(keyValue));
             if (keyValue.Value == null) throw new InvalidOperationException("The Value must not be null on the KeyValueSyntax");
-            keyValue.Value.AddTrailingWhitespace().AddTrailingComment(comment);
+            keyValue.Value.AddTrailingWhitespace().AddComment(comment);
             return keyValue;
         }
 
         public static T AddLeadingWhitespace<T>(this T node) where T : SyntaxNode
-        {
-            return AddLeadingTrivia(node, SyntaxFactory.Whitespace());
-        }
-
-        public static T AddTrailingWhitespace<T>(this T node) where T : SyntaxNode
-        {
-            return AddTrailingTrivia(node, SyntaxFactory.Whitespace());
-        }
-
-        public static T AddLeadingTrivia<T>(this T node, SyntaxTrivia trivia) where T : SyntaxNode
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
             var trivias = node.LeadingTrivia;
@@ -84,11 +73,11 @@ namespace MelonLoader.Tomlyn.Syntax
                 trivias = new List<SyntaxTrivia>();
                 node.LeadingTrivia = trivias;
             }
-            trivias.Add(trivia);
+            trivias.Add(SyntaxFactory.Whitespace());
             return node;
         }
 
-        public static T AddTrailingTrivia<T>(this T node, SyntaxTrivia trivia) where T : SyntaxNode
+        public static T AddTrailingWhitespace<T>(this T node) where T : SyntaxNode
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
             var trivias = node.TrailingTrivia;
@@ -97,28 +86,20 @@ namespace MelonLoader.Tomlyn.Syntax
                 trivias = new List<SyntaxTrivia>();
                 node.TrailingTrivia = trivias;
             }
-            trivias.Add(trivia);
+            trivias.Add(SyntaxFactory.Whitespace());
             return node;
         }
 
-        public static T AddLeadingComment<T>(this T node, string comment) where T : SyntaxNode
+        public static T AddComment<T>(this T node, string comment) where T : SyntaxNode
         {
-            return AddLeadingTrivia(node, SyntaxFactory.Comment(comment));
-        }
-        
-        public static T AddTrailingComment<T>(this T node, string comment) where T : SyntaxNode
-        {
-            return AddTrailingTrivia(node, SyntaxFactory.Comment(comment));
-        }
-
-        public static T AddLeadingTriviaNewLine<T>(this T node) where T : SyntaxNode
-        {
-            return AddLeadingTrivia(node, SyntaxFactory.NewLineTrivia());
-        }
-
-        public static T AddTrailingTriviaNewLine<T>(this T node) where T : SyntaxNode
-        {
-            return AddTrailingTrivia(node, SyntaxFactory.NewLineTrivia());
+            var trivias = node.TrailingTrivia;
+            if (trivias == null)
+            {
+                trivias = new List<SyntaxTrivia>();
+                node.TrailingTrivia = trivias;
+            }
+            trivias.Add(SyntaxFactory.Comment(comment));
+            return node;
         }
     }
 }

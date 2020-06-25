@@ -61,6 +61,13 @@
 46. Added Unity 2018.3.14 Dependencies.
 47. Added Unity 2019.2.16 Dependencies.
 48. Added Tomlyn to Assembly Generator for TOML Parsing.
+49. Cleaned up Config Handling in Assembly Generator.
+50. Fixed Issue with Corrupt Tomlyn Lib.
+51. Added Dependency Graph System for Plugins and Mods.  (Credits to zeobviouslyfakeacc :3)
+52. Fixed Issue with Plugins still calling OnPreInitialization even when Incompatible.  (Credits to zeobviouslyfakeacc :3)
+53. Added Better Plugin and Mod Cleanup when OnPreInitialization or OnApplicationStart fails.  (Credits to zeobviouslyfakeacc :3)
+54. Switched Assembly Generator Config from JSON to TOML.
+55. Assembly Generator Config will now be saved to a file named "config.cfg" instead of "config.json".
 
 ---
 
