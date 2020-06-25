@@ -86,7 +86,7 @@ namespace MelonLoader.Support
                 if (!enumerator.MoveNext()) // Run the next step of the coroutine. If it's done, restore the parent routine
                 {
                     var indices = ourCoroutinesStore.Select((it, idx) => (idx, it)).Where(it => it.it.WaitCondition == enumerator).Select(it => it.idx).ToList();
-                    for (var i = indices.Count() - 1; i >= 0; i--)
+                    for (var i = indices.Count - 1; i >= 0; i--)
                     {
                         var index = indices[i];
                         ourNextFrameCoroutines.Add(ourCoroutinesStore[index].Coroutine);
