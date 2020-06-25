@@ -20,7 +20,6 @@ namespace MelonLoader.Tomlyn.Text
 
         public int Start => _start;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public char32? TryGetNext(ref int position)
         {
             return CharHelper.ToUtf8(_text, ref position);

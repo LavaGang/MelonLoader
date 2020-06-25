@@ -218,7 +218,7 @@ namespace MelonLoader.Tomlyn.Syntax
             }
 
             var name = GetStringFromBasic(key.Key);
-            if (string.IsNullOrWhiteSpace(name)) return false;
+            if (string.IsNullOrEmpty(name)) return false;
 
             _currentPath.Add(name);
 
@@ -227,7 +227,7 @@ namespace MelonLoader.Tomlyn.Syntax
             {
                 AddObjectPath(key, kind, true);
                 var dotItem = GetStringFromBasic(items.GetChildren(i).Key);
-                if (string.IsNullOrWhiteSpace(dotItem)) return false;
+                if (string.IsNullOrEmpty(dotItem)) return false;
                 _currentPath.Add(dotItem);
             }
 

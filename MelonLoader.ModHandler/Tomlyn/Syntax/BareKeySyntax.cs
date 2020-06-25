@@ -54,7 +54,7 @@ namespace MelonLoader.Tomlyn.Syntax
         public static bool IsBareKey(string name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
-            if (name.Length == 0 || string.IsNullOrWhiteSpace(name)) return false;
+            if (name.Length == 0 || string.IsNullOrEmpty(name)) return false;
             foreach (var c in name)
             {
                 if (!CharHelper.IsKeyContinue(c))

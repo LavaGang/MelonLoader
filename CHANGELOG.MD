@@ -68,6 +68,7 @@
 53. Added Better Plugin and Mod Cleanup when OnPreInitialization or OnApplicationStart fails.  (Credits to zeobviouslyfakeacc :3)
 54. Switched Assembly Generator Config from JSON to TOML.
 55. Assembly Generator Config will now be saved to a file named "config.cfg" instead of "config.json".
+56. Fixed Issue with Tomlyn in the ModHandler.
 
 ---
 
