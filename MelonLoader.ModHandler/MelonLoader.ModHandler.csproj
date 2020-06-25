@@ -44,6 +44,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuildInfo.cs" />
     <Compile Include="Console.cs" />
+    <Compile Include="DependencyGraph.cs" />
     <Compile Include="Harmony\Attributes.cs" />
     <Compile Include="Harmony\CodeInstruction.cs" />
     <Compile Include="Harmony\CodeTranspiler.cs" />
