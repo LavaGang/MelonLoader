@@ -95,11 +95,7 @@ namespace MelonLoader {
 
 				unloadedDependencies[i] = dependencyCount;
 				if (dependencyCount == 0) {
-					if (!vertex.skipLoading) {
-						loadableMods.Add(vertex.name, vertex);
-					} else {
-						++skippedMods;
-					}
+					loadableMods.Add(vertex.name, vertex);
 				}
 			}
 
@@ -107,20 +103,24 @@ namespace MelonLoader {
 			while (loadableMods.Count > 0) {
 				Vertex mod = loadableMods.Values[0];
 				loadableMods.RemoveAt(0);
-				loadedMods.Add(mod.mod);
+
+				if (!mod.skipLoading) {
+					loadedMods.Add(mod.mod);
+				} else {
+					++skippedMods;
+				}
 
 				foreach (Vertex dependent in mod.dependents) {
 					unloadedDependencies[dependent.index] -= 1;
+					dependent.skipLoading |= mod.skipLoading;
+
 					if (unloadedDependencies[dependent.index] == 0) {
-						if (!dependent.skipLoading) {
-							loadableMods.Add(dependent.name, dependent);
-						} else {
-							++skippedMods;
-						}
+						loadableMods.Add(dependent.name, dependent);
 					}
 				}
 			}
 
+			// Check if all mods were either loaded or skipped. If this is not the case, there is a cycle in the dependency graph
 			if (loadedMods.Count + skippedMods < vertices.Length) {
 				StringBuilder errorMessage = new StringBuilder("Some mods could not be loaded due to a cyclic dependency:\n");
 				for (int i = 0; i < vertices.Length; ++i) {
