@@ -55,14 +55,14 @@ namespace MelonLoader {
 				}
 
 				if (missingDependencies.Count > 0) {
-					modVertex.skipLoading = true;
+					// modVertex.skipLoading = true;
 					modsWithMissingDeps.Add(modNameGetter(modVertex.mod), missingDependencies.ToArray());
 				}
 			}
 
 			if (modsWithMissingDeps.Count > 0) {
 				// Some mods are missing dependencies. Don't load these mods and show an error message
-				MelonModLogger.LogError(BuildMissingDependencyMessage(modsWithMissingDeps));
+				MelonModLogger.LogWarning(BuildMissingDependencyMessage(modsWithMissingDeps));
 			}
 		}
 
@@ -80,7 +80,9 @@ namespace MelonLoader {
 		}
 
 		private static string BuildMissingDependencyMessage(IDictionary<string, IList<AssemblyName>> modsWithMissingDeps) {
-			StringBuilder messageBuilder = new StringBuilder("Some mods could not be loaded due to missing dependencies, which you need to install:\n");
+			StringBuilder messageBuilder = new StringBuilder("Some mods are missing dependencies, which you may have to install.\n" +
+				"If these are optional dependencies, mark them as optional using the MelonOptionalDependencies attribute.\n" +
+				"This warning will turn into an error and mods with missing dependencies will not be loaded in the next version of MelonLoader.\n");
 			foreach (string modName in modsWithMissingDeps.Keys) {
 				messageBuilder.Append($"- '{modName}' is missing the following dependencies:\n");
 				foreach (AssemblyName dependency in modsWithMissingDeps[modName]) {
