@@ -70,6 +70,10 @@
 55. Assembly Generator Config will now be saved to a file named "config.cfg" instead of "config.json".
 56. Fixed Issue with Tomlyn in the ModHandler.
 57. Added Unity 2020.1.0 Dependencies.
+58. Added Temporary Warning for Missing Dependencies.  (Credits to zeobviouslyfakeacc :3)
+59. Added MelonOptionalDependencies Attribute.  (Credits to zeobviouslyfakeacc :3)
+60. Fixed compilation issues on .NET Framework 3.5.  (Credits to zeobviouslyfakeacc :3)
+61. Implemented 'Populate' methods to TinyJSON to deserialize JSON into an existing object.  (Credits to zeobviouslyfakeacc :3)
 
 ---
 
