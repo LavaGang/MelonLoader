@@ -33,28 +33,36 @@ namespace MelonLoader {
 			// Add an edge for each dependency between mods
 			IDictionary<string, IList<AssemblyName>> modsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
 			List<AssemblyName> missingDependencies = new List<AssemblyName>();
+			HashSet<string> optionalDependencies = new HashSet<string>();
+
 			foreach (Vertex modVertex in vertices) {
 				Assembly modAssembly = modVertex.mod.Assembly;
 				missingDependencies.Clear();
+				optionalDependencies.Clear();
+
+				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute) Attribute.GetCustomAttribute(modAssembly, typeof(MelonOptionalDependenciesAttribute));
+				if (optionals != null && optionals.AssemblyNames != null) {
+					optionalDependencies.UnionWith(optionals.AssemblyNames);
+				}
 
 				foreach (AssemblyName dependency in modAssembly.GetReferencedAssemblies()) {
 					if (nameLookup.TryGetValue(dependency.Name, out Vertex dependencyVertex)) {
 						modVertex.dependencies.Add(dependencyVertex);
 						dependencyVertex.dependents.Add(modVertex);
-					} else if (!TryLoad(dependency)) {
+					} else if (!TryLoad(dependency) && !optionalDependencies.Contains(dependency.Name)) {
 						missingDependencies.Add(dependency);
 					}
 				}
 
 				if (missingDependencies.Count > 0) {
-					modVertex.skipLoading = true;
+					// modVertex.skipLoading = true;
 					modsWithMissingDeps.Add(modNameGetter(modVertex.mod), missingDependencies.ToArray());
 				}
 			}
 
 			if (modsWithMissingDeps.Count > 0) {
 				// Some mods are missing dependencies. Don't load these mods and show an error message
-				MelonModLogger.LogError(BuildMissingDependencyMessage(modsWithMissingDeps));
+				MelonModLogger.LogWarning(BuildMissingDependencyMessage(modsWithMissingDeps));
 			}
 		}
 
@@ -72,7 +80,9 @@ namespace MelonLoader {
 		}
 
 		private static string BuildMissingDependencyMessage(IDictionary<string, IList<AssemblyName>> modsWithMissingDeps) {
-			StringBuilder messageBuilder = new StringBuilder("Some mods could not be loaded due to missing dependencies, which you need to install:\n");
+			StringBuilder messageBuilder = new StringBuilder("Some mods are missing dependencies, which you may have to install.\n" +
+				"If these are optional dependencies, mark them as optional using the MelonOptionalDependencies attribute.\n" +
+				"This warning will turn into an error and mods with missing dependencies will not be loaded in the next version of MelonLoader.\n");
 			foreach (string modName in modsWithMissingDeps.Keys) {
 				messageBuilder.Append($"- '{modName}' is missing the following dependencies:\n");
 				foreach (AssemblyName dependency in modsWithMissingDeps[modName]) {
@@ -95,11 +105,7 @@ namespace MelonLoader {
 
 				unloadedDependencies[i] = dependencyCount;
 				if (dependencyCount == 0) {
-					if (!vertex.skipLoading) {
-						loadableMods.Add(vertex.name, vertex);
-					} else {
-						++skippedMods;
-					}
+					loadableMods.Add(vertex.name, vertex);
 				}
 			}
 
@@ -107,20 +113,24 @@ namespace MelonLoader {
 			while (loadableMods.Count > 0) {
 				Vertex mod = loadableMods.Values[0];
 				loadableMods.RemoveAt(0);
-				loadedMods.Add(mod.mod);
+
+				if (!mod.skipLoading) {
+					loadedMods.Add(mod.mod);
+				} else {
+					++skippedMods;
+				}
 
 				foreach (Vertex dependent in mod.dependents) {
 					unloadedDependencies[dependent.index] -= 1;
+					dependent.skipLoading |= mod.skipLoading;
+
 					if (unloadedDependencies[dependent.index] == 0) {
-						if (!dependent.skipLoading) {
-							loadableMods.Add(dependent.name, dependent);
-						} else {
-							++skippedMods;
-						}
+						loadableMods.Add(dependent.name, dependent);
 					}
 				}
 			}
 
+			// Check if all mods were either loaded or skipped. If this is not the case, there is a cycle in the dependency graph
 			if (loadedMods.Count + skippedMods < vertices.Length) {
 				StringBuilder errorMessage = new StringBuilder("Some mods could not be loaded due to a cyclic dependency:\n");
 				for (int i = 0; i < vertices.Length; ++i) {
