@@ -17,7 +17,6 @@ namespace MelonLoader.Installer
         private static string Version = "1.0.4";
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
-        internal static bool NoGUI = false;
 
         [STAThread]
         static void Main()
@@ -28,12 +27,14 @@ namespace MelonLoader.Installer
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
-            ParseCommandLine();
-            if (NoGUI)
-                Install_CommandLine();
-            else
-                Install_GUI();
+            //ParseCommandLine();
+            Install_GUI();
         }
+
+        //private static void ParseCommandLine()
+        //{
+
+        //}
 
         static void Install_GUI()
         {
@@ -65,11 +66,6 @@ namespace MelonLoader.Installer
             mainForm.comboBox1.SelectedItem = mainForm.comboBox1.Items[0];
             mainForm.Show();
             Application.Run(mainForm);
-        }
-
-        static void Install_CommandLine()
-        {
-            Console.WriteLine("WORK IN PROGRESS!");
         }
 
         internal static void Install(string dirpath, string selectedVersion, bool legacy_install)
@@ -252,11 +248,6 @@ namespace MelonLoader.Installer
                 }
                 catch (Exception e) { }
             }).Start();
-        }
-
-        private static void ParseCommandLine()
-        {
-
         }
     }
 }
