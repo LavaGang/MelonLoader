@@ -145,13 +145,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LightJson\README.md" />
-    <None Include="TinyJSON\LICENSE.md" />
-    <None Include="TinyJSON\README.md" />
     <None Include="Tomlyn\Syntax\Syntax.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="LightJson\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

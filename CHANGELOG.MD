@@ -74,6 +74,7 @@
 59. Added MelonOptionalDependencies Attribute.  (Credits to zeobviouslyfakeacc :3)
 60. Fixed compilation issues on .NET Framework 3.5.  (Credits to zeobviouslyfakeacc :3)
 61. Implemented 'Populate' methods to TinyJSON to deserialize JSON into an existing object.  (Credits to zeobviouslyfakeacc :3)
+62. Reimplemented TinyJSON in AssemblyGenerator to be up to date with the one in the ModHandler.
 
 ---
 
