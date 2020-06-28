@@ -292,7 +292,7 @@ namespace MelonLoader
                         try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             }
-            ModSettingsMenu.Main.Render();
+            //ModSettingsMenu.Main.Render();
         }
 
         internal static void OnLevelIsLoading()

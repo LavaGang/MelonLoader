@@ -79,6 +79,7 @@
 64. Updated Il2CppAssemblyUnhollower Download to v0.4.8.  (Credits to knah :D)
 65. Fixed Issue with the RenderHelper of ModSettingsMenu causing Error when SupportModule Unloads their Component.
 66. SupportModules now properly Unloads their Component if no Plugins or Mods are loaded.
+67. Temporarily Disabled ModSettingsMenu.
 
 ---
 
