@@ -69,6 +69,7 @@
 54. Switched Assembly Generator Config from JSON to TOML.
 55. Assembly Generator Config will now be saved to a file named "config.cfg" instead of "config.json".
 56. Fixed Issue with Tomlyn in the ModHandler.
+57. Added Unity 2020.1.0 Dependencies.
 
 ---
 
