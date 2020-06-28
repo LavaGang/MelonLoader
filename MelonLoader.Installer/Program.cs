@@ -27,14 +27,8 @@ namespace MelonLoader.Installer
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
-            //ParseCommandLine();
             Install_GUI();
         }
-
-        //private static void ParseCommandLine()
-        //{
-
-        //}
 
         static void Install_GUI()
         {
