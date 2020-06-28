@@ -54,7 +54,7 @@ namespace MelonLoader.ModSettingsMenu
 
         internal static void Render()
         {
-            if (renderHelper == null)
+            if ((SupportModule.supportModule == null) || (renderHelper == null))
                 return;
 
             InputCheck();

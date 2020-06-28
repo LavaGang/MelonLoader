@@ -75,6 +75,10 @@
 60. Fixed compilation issues on .NET Framework 3.5.  (Credits to zeobviouslyfakeacc :3)
 61. Implemented 'Populate' methods to TinyJSON to deserialize JSON into an existing object.  (Credits to zeobviouslyfakeacc :3)
 62. Reimplemented TinyJSON in AssemblyGenerator to be up to date with the one in the ModHandler.
+63. Static Linked Runtime Library to Reduce User Issues with Microsoft Visual C++ 2015-2019 Re-distributable.  (Credits to knah :D)
+64. Updated Il2CppAssemblyUnhollower Download to v0.4.8.  (Credits to knah :D)
+65. Fixed Issue with the RenderHelper of ModSettingsMenu causing Error when SupportModule Unloads their Component.
+66. SupportModules now properly Unloads their Component if no Plugins or Mods are loaded.
 
 ---
 

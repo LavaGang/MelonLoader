@@ -24,7 +24,7 @@ namespace MelonLoader.Support
             Main.obj.transform.SetAsLastSibling();
             Main.comp.transform.SetAsLastSibling();
         }
-        private static void Destroy() { Main.IsDestroying = true; GameObject.Destroy(Main.obj); }
+        internal static void Destroy() { Main.IsDestroying = true; if (Main.obj != null) GameObject.Destroy(Main.obj); }
         void Start() => transform.SetAsLastSibling();
         void Update()
         {

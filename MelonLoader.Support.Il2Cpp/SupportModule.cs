@@ -13,5 +13,6 @@ namespace MelonLoader.Support
         public void StopCoroutine(object coroutineToken) => MelonCoroutines.Stop((IEnumerator)coroutineToken);
         public void UnityDebugLog(string msg) => Debug.Log(msg);
         public ModSettingsMenu.RenderHelper GetModSettingsMenuRenderHelper() => new RenderHelper();
+        public void Destroy() => MelonLoaderComponent.Destroy();
     }
 }

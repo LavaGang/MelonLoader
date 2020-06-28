@@ -15,6 +15,7 @@ namespace MelonLoader
         void StopCoroutine(object coroutineToken);
         void UnityDebugLog(string msg);
         ModSettingsMenu.RenderHelper GetModSettingsMenuRenderHelper();
+        void Destroy();
     }
 
     internal static class SupportModule
@@ -98,5 +99,6 @@ namespace MelonLoader
         internal static float GetUnityDeltaTime() => supportModule?.GetUnityDeltaTime() ?? 0f;
         internal static int GetActiveSceneIndex() => supportModule?.GetActiveSceneIndex() ?? -9;
         internal static void UnityDebugLog(string msg) => supportModule?.UnityDebugLog(msg);
+        internal static void Destroy() { supportModule?.Destroy(); supportModule = null; }
     }
 }

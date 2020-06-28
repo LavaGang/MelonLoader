@@ -154,7 +154,7 @@ namespace MelonLoader
                 MelonModLogger.Log("------------------------------");
             }
 
-            if ((Plugins.Count > 0) && (Mods.Count > 0))
+            if ((Plugins.Count > 0) || (Mods.Count > 0))
                 AddUnityDebugLog();
 
             if (Plugins.Count > 0)
@@ -180,6 +180,9 @@ namespace MelonLoader
                 }
                 Mods.RemoveAll(mod => failedMods.Contains(mod));
             }
+
+            if ((Plugins.Count <= 0) && (Mods.Count <= 0))
+                SupportModule.Destroy();
         }
 
         private static void InitializeModOrPlugin(MelonBase modOrPlugin) {
