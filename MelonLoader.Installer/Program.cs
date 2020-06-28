@@ -30,40 +30,46 @@ namespace MelonLoader.Installer
 
             ParseCommandLine();
             if (NoGUI)
-            {
-                Console.WriteLine("WORK IN PROGRESS!");
-            }
+                Install_CommandLine();
             else
-            {
-                try
-                {
-                    mainForm = new MainForm();
-                    mainForm.comboBox1.Items.Clear();
-                    JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
-                    if (data.Count > 0)
-                    {
-                        foreach (var x in data)
-                        {
-                            string version = x["tag_name"].AsString;
-                            if (mainForm.comboBox1.Items.Count <= 0)
-                                mainForm.comboBox1.Items.Add("Latest (" + version + ")");
-                            mainForm.comboBox1.Items.Add(version);
-                        }
-                    }
-                    if (mainForm.comboBox1.Items.Count <= 0)
-                        throw new Exception("Version List is Empty!");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Failed to Get Version List; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Title);
-                    Application.Exit();
-                }
+                Install_GUI();
+        }
 
-                mainForm.comboBox1.SelectedIndex = 0;
-                mainForm.comboBox1.SelectedItem = mainForm.comboBox1.Items[0];
-                mainForm.Show();
-                Application.Run(mainForm);
+        static void Install_GUI()
+        {
+            try
+            {
+                mainForm = new MainForm();
+                mainForm.comboBox1.Items.Clear();
+                JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
+                if (data.Count > 0)
+                {
+                    foreach (var x in data)
+                    {
+                        string version = x["tag_name"].AsString;
+                        if (mainForm.comboBox1.Items.Count <= 0)
+                            mainForm.comboBox1.Items.Add("Latest (" + version + ")");
+                        mainForm.comboBox1.Items.Add(version);
+                    }
+                }
+                if (mainForm.comboBox1.Items.Count <= 0)
+                    throw new Exception("Version List is Empty!");
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to Get Version List; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Title);
+                Application.Exit();
+            }
+
+            mainForm.comboBox1.SelectedIndex = 0;
+            mainForm.comboBox1.SelectedItem = mainForm.comboBox1.Items[0];
+            mainForm.Show();
+            Application.Run(mainForm);
+        }
+
+        static void Install_CommandLine()
+        {
+            Console.WriteLine("WORK IN PROGRESS!");
         }
 
         internal static void Install(string dirpath, string selectedVersion, bool legacy_install)
