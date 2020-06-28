@@ -23,6 +23,12 @@ namespace MelonLoader.TinyJSON
 		}
 
 
+		public void Populate<T>( T item ) where T : class
+		{
+			JSON.Populate( this, item );
+		}
+
+
 		// ReSharper disable once InconsistentNaming
 		// ReSharper disable once UnusedMember.Global
 		public string ToJSON()
