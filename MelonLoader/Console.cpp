@@ -65,8 +65,6 @@ void Console::Write(const char* txt, ConsoleColor color)
 	if (IsInitialized())
 	{
 		SetColor(color);
-		ChromiumCheck();
-		RainbowCheck();
 		Write(txt);
 		ResetColor();
 	}

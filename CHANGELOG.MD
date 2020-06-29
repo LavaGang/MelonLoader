@@ -81,6 +81,7 @@
 66. SupportModules now properly Unloads their Component if no Plugins or Mods are loaded.
 67. Temporarily Disabled ModSettingsMenu.
 68. Added Launch Option "--melonloader.chromium" to turn the Console Color Magenta.  (Thanks Chromium lol)
+69. Fixed Issue with Logger methods with Color Parameter being Overridden by RainbowMode or ChromiumMode.
 
 ---
 
