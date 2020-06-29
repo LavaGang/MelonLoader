@@ -28,16 +28,16 @@
 
 1. Remove the version.dll file from the Game's Installation Folder.
 2. Remove the MelonLoader folder from the Game's Installation Folder.
-3. Remove the Mods folder from the Game's Installation Folder.
-4. Remove the Plugins folder from the Game's Installation Folder.
+3. Remove the Plugins folder from the Game's Installation Folder.
+4. Remove the Mods folder from the Game's Installation Folder.
 5. Remove the Logs folder from the Game's Installation Folder.
 
 ---
 
 ### GENERAL INFORMATION:
 
-- All Mods get placed in the created Mods folder inside the Game's Install Folder.
 - All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
+- All Mods get placed in the created Mods folder inside the Game's Install Folder.
 - All Logs are made in the created Logs folder inside the Game's Install Folder.
 
 ---
