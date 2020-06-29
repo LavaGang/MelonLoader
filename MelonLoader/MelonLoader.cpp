@@ -165,6 +165,8 @@ void MelonLoader::ParseCommandLine()
 					Console::RainbowMode = true;
 				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
 					Console::RandomRainbowMode = true;
+				else if (strstr(command, "--melonloader.chromium"))
+					Console::ChromiumMode = true;
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
 					DevModsOnly = true;
 				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)

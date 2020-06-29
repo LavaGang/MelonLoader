@@ -80,6 +80,7 @@ public:
 	static bool HideWarnings;
 	static bool RainbowMode;
 	static bool RandomRainbowMode;
+	static bool ChromiumMode;
 
 	static bool IsInitialized() { return (hwndConsole != NULL); }
 	static void Create();
@@ -88,6 +89,7 @@ public:
 	static void SetColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color); }
 	static void ResetColor() { SetColor(ConsoleColor_Gray); }
 	static void RainbowCheck();
+	static void ChromiumCheck();
 
 	static void Write(const char* txt);
 	static void Write(const char* txt, ConsoleColor color);

@@ -7,6 +7,7 @@ bool Console::Enabled = true;
 bool Console::HideWarnings = false;
 bool Console::RainbowMode = false;
 bool Console::RandomRainbowMode = false;
+bool Console::ChromiumMode = false;
 
 void Console::Create()
 {
@@ -42,14 +43,20 @@ void Console::RainbowCheck()
 	}
 }
 
+void Console::ChromiumCheck()
+{
+	if (IsInitialized() && ChromiumMode)
+		SetColor(ConsoleColor_Magenta);
+}
+
 void Console::Write(const char* txt)
 {
 	if (IsInitialized())
 	{
+		ChromiumCheck();
 		RainbowCheck();
 		std::cout << txt;
-		if (RainbowMode || RandomRainbowMode)
-			ResetColor();
+		ResetColor();
 	}
 };
 
@@ -58,6 +65,8 @@ void Console::Write(const char* txt, ConsoleColor color)
 	if (IsInitialized())
 	{
 		SetColor(color);
+		ChromiumCheck();
+		RainbowCheck();
 		Write(txt);
 		ResetColor();
 	}
