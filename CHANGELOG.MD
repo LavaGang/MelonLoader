@@ -73,7 +73,7 @@
 58. Added Temporary Warning for Missing Dependencies.  (Credits to zeobviouslyfakeacc :3)
 59. Added MelonOptionalDependencies Attribute.  (Credits to zeobviouslyfakeacc :3)
 60. Fixed compilation issues on .NET Framework 3.5.  (Credits to zeobviouslyfakeacc :3)
-61. Implemented 'Populate' methods to TinyJSON to deserialize JSON into an existing object.  (Credits to zeobviouslyfakeacc :3)
+61. Implemented 'Populate' methods to TinyJSON to de-serialize JSON into an existing object.  (Credits to zeobviouslyfakeacc :3)
 62. Reimplemented TinyJSON in AssemblyGenerator to be up to date with the one in the ModHandler.
 63. Static Linked Runtime Library to Reduce User Issues with Microsoft Visual C++ 2015-2019 Re-distributable.  (Credits to knah :D)
 64. Updated Il2CppAssemblyUnhollower Download to v0.4.8.  (Credits to knah :D)
