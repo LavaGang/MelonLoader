@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using LightJson;
 using MelonLoader.AssemblyGenerator;
@@ -134,7 +135,8 @@ namespace MelonLoader.Installer
         {
             SetDisplayText("Downloading MelonLoader...");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath);
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
+            webClient.DownloadFileTaskAsync("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath).Wait();
             SetDisplayText("Extracting MelonLoader...");
             SetPercentage(50);
             Cleanup(dirpath, false);
@@ -147,7 +149,8 @@ namespace MelonLoader.Installer
             SetDisplayText("Downloading MelonLoader...");
             bool is_02 = selectedVersion.Equals("v0.2");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
+            webClient.DownloadFileTaskAsync("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
             
             SetDisplayText("Extracting MelonLoader...");
             if (is_02)
