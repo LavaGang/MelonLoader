@@ -9,18 +9,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void UNLOAD_MELONLOADER();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_Log(string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogColor(string txt, ConsoleColor color);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogWarning(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogError(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogDLLError(string namesection, string msg);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogDLLStatus(MelonBase.MelonCompatibility type);
-        [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetCompanyName();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -47,10 +35,6 @@ namespace MelonLoader
         public extern static bool IsDebugMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsConsoleEnabled();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsRainbowMode();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsRandomRainbowMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Hook(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]

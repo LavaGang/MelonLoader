@@ -5,8 +5,8 @@ HWND Console::hwndConsole = NULL;
 int Console::rainbow = 1;
 bool Console::Enabled = true;
 bool Console::HideWarnings = false;
-bool Console::RainbowMode = false;
-bool Console::RandomRainbowMode = false;
+bool Console::HordiniMode = false;
+bool Console::HordiniMode_Random = false;
 bool Console::ChromiumMode = false;
 
 void Console::Create()
@@ -27,9 +27,9 @@ void Console::Create()
 
 void Console::RainbowCheck()
 {
-	if (IsInitialized() && (RainbowMode || RandomRainbowMode))
+	if (IsInitialized() && (HordiniMode || HordiniMode_Random))
 	{
-		if (RandomRainbowMode)
+		if (HordiniMode_Random)
 			SetColor((ConsoleColor)(1 + (rand() * (int)(15 - 1) / RAND_MAX)));
 		else
 		{

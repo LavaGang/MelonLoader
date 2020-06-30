@@ -7,30 +7,33 @@
 
 ### AUTOMATED INSTALLATION:
 
-1. Download [MelonLoader.Installer.exe](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
-2. Run MelonLoader.Installer.exe.
-3. Click the SELECT button.
-4. Select and Open the Game's EXE in your Game's Installation Folder.
-5. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
-6. Click the INSTALL or RE-INSTALL button.
+1. Make sure the Game you are installing to is Closed and Not Running.
+2. Download [MelonLoader.Installer.exe](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
+3. Run MelonLoader.Installer.exe.
+4. Click the SELECT button.
+5. Select and Open the Game's EXE in your Game's Installation Folder.
+6. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
+7. Click the INSTALL or RE-INSTALL button.
 
 ---
 	
 ### MANUAL INSTALLATION:
 
-1. Download [MelonLoader.zip](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.zip).
-2. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
-3. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
+1. Make sure the Game you are installing MelonLoader to is Closed and Not Running.
+2. Download [MelonLoader.zip](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.zip).
+3. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
+4. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
 
 ---
 
 ### MANUAL UNINSTALL:
 
-1. Remove the version.dll file from the Game's Installation Folder.
-2. Remove the MelonLoader folder from the Game's Installation Folder.
-3. Remove the Plugins folder from the Game's Installation Folder.
-4. Remove the Mods folder from the Game's Installation Folder.
-5. Remove the Logs folder from the Game's Installation Folder.
+1. Make sure the Game you are installing MelonLoader to is Closed and Not Running.
+2. Remove the version.dll file from the Game's Installation Folder.
+3. Remove the MelonLoader folder from the Game's Installation Folder.
+4. Remove the Plugins folder from the Game's Installation Folder.
+5. Remove the Mods folder from the Game's Installation Folder.
+6. Remove the Logs folder from the Game's Installation Folder.
 
 ---
 
@@ -58,9 +61,9 @@
 | --melonloader.hideconsole | Hides the Normal Console |
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode/Console |
+| --melonloader.magenta | Magenta Console Color |
 | --melonloader.rainbow | Rainbow Console Color |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
-| --melonloader.chromium | Magenta Console Color |
 | --melonloader.maxlogs | Max Log Files  [ Default: 10 ] [ Disable: 0 ] |
 | --melonloader.maxwarnings | Max Warnings per Log File  [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.maxerrors | Max Errors per Log File  [ Default: 100 ] [ Disable: 0 ] |

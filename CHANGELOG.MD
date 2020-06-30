@@ -82,6 +82,10 @@
 67. Temporarily Disabled ModSettingsMenu.
 68. Added Launch Option "--melonloader.chromium" to turn the Console Color Magenta.  (Thanks Chromium lol)
 69. Fixed Issue with Logger methods with Color Parameter being Overridden by RainbowMode or ChromiumMode.
+70. Added Unity 2019.3.5 Dependencies.
+71. Added Unity 5.6.7 Dependencies.
+72. Added Unity 5.6.3 Dependencies.
+73. Changed Launch Option "--melonloader.chromium" to "--melonloader.magenta".
 
 ---
 

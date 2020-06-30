@@ -78,8 +78,8 @@ public:
 	static int rainbow;
 	static bool Enabled;
 	static bool HideWarnings;
-	static bool RainbowMode;
-	static bool RandomRainbowMode;
+	static bool HordiniMode;
+	static bool HordiniMode_Random;
 	static bool ChromiumMode;
 
 	static bool IsInitialized() { return (hwndConsole != NULL); }

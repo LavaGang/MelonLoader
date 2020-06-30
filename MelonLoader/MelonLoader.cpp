@@ -161,12 +161,12 @@ void MelonLoader::ParseCommandLine()
 			{
 				if (strstr(command, "--quitfix") != NULL)
 					QuitFix = true;
-				else if (strstr(command, "--melonloader.rainbow") != NULL)
-					Console::RainbowMode = true;
-				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
-					Console::RandomRainbowMode = true;
-				else if (strstr(command, "--melonloader.chromium"))
+				else if (strstr(command, "--melonloader.magenta"))
 					Console::ChromiumMode = true;
+				else if (strstr(command, "--melonloader.rainbow") != NULL)
+					Console::HordiniMode = true;
+				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
+					Console::HordiniMode_Random = true;
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
 					DevModsOnly = true;
 				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
