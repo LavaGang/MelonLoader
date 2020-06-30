@@ -19,10 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono.Pr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{49B47EEB-1061-49AF-83F3-B32377B08F3E}"
 	ProjectSection(SolutionItems) = preProject
-		CHANGELOG.MD = CHANGELOG.MD
+		CHANGELOG.md = CHANGELOG.md
 		LICENSE.md = LICENSE.md
 		NOTICE.txt = NOTICE.txt
-		README.MD = README.MD
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.Installer", "MelonLoader.Installer\MelonLoader.Installer.csproj", "{17AFE406-2361-4849-9B15-CB03AEF5E9F9}"
