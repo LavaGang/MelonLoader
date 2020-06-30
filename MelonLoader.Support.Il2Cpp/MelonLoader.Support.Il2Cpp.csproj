@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="RenderHelper.cs" />
     <Compile Include="SupportModule.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MelonCoroutines.cs" />

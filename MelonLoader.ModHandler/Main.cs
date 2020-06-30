@@ -84,7 +84,6 @@ namespace MelonLoader
                 UnhollowerSupport.Initialize();
             }
             SupportModule.Initialize();
-            ModSettingsMenu.Main.Setup();
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + UnityVersion);
