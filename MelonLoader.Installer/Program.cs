@@ -25,6 +25,7 @@ namespace MelonLoader.Installer
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
             webClient.Headers.Add("User-Agent", "Unity web player");
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
@@ -135,7 +136,6 @@ namespace MelonLoader.Installer
         {
             SetDisplayText("Downloading MelonLoader...");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
             webClient.DownloadFileTaskAsync("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath).Wait();
             SetDisplayText("Extracting MelonLoader...");
             SetPercentage(50);
@@ -149,8 +149,7 @@ namespace MelonLoader.Installer
             SetDisplayText("Downloading MelonLoader...");
             bool is_02 = selectedVersion.Equals("v0.2");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
-            webClient.DownloadFileTaskAsync("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
+            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
             
             SetDisplayText("Extracting MelonLoader...");
             if (is_02)
