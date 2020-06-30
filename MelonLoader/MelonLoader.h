@@ -10,9 +10,6 @@ public:
 	static char* CommandLineV[64];
 	static bool IsGameIl2Cpp;
 	static bool DebugMode;
-	static bool ConsoleEnabled;
-	static bool RainbowMode;
-	static bool RandomRainbowMode;
 	static bool QuitFix;
 	static bool DevModsOnly;
 	static bool DevPluginsOnly;
@@ -22,6 +19,7 @@ public:
 	static char* DataPath;
 	static char* CompanyName;
 	static char* ProductName;
+	static char* ForceUnhollowerVersion;
 
 	static void Main();
 	static void ParseCommandLine();

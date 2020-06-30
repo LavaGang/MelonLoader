@@ -23,9 +23,9 @@ namespace MelonLoader.AssemblyGenerator
                     File.Delete(entry);
             }
 
-            var tempFile = Path.GetTempFileName();
+            var tempFile = TempFileCache.CreateFile();
             Logger.Log($"Downloading {url} to {tempFile}");
-            new WebClient().DownloadFile(url, tempFile);
+            Program.webClient.DownloadFile(url, tempFile);
             Logger.Log($"Extracting {tempFile} to {destinationFolder}");
             
             using var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read);

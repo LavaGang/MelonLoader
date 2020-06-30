@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using MelonLoader;
+using System.Runtime.InteropServices;
 
 namespace Harmony
 {
@@ -84,30 +85,37 @@ namespace Harmony
 			var sortedPrefixes = GetSortedPatchMethods(original, patchInfo.prefixes);
 			var sortedPostfixes = GetSortedPatchMethods(original, patchInfo.postfixes);
 			var sortedTranspilers = GetSortedPatchMethods(original, patchInfo.transpilers);
+			bool isIl2Cpp = UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType);
+
+			if (isIl2Cpp) {
+				if (sortedTranspilers.Count > 0) {
+					throw new NotSupportedException("IL2CPP patches cannot use transpilers (got " + sortedTranspilers.Count + ")");
+				}
+
+				if (patchInfo.copiedMethodInfoPointer == IntPtr.Zero) {
+					IntPtr origMethodPtr = UnhollowerSupport.MethodBaseToIntPtr(original);
+					patchInfo.copiedMethodInfoPointer = CopyMethodInfoStruct(origMethodPtr);
+					HarmonySharedState.UpdatePatchInfo(original, patchInfo);
+				}
+
+				sortedTranspilers.Add(AccessTools.DeclaredMethod(typeof(PatchFunctions), "UnhollowerTranspiler"));
+			}
 
 			var replacement = MethodPatcher.CreatePatchedMethod(original, instanceID, sortedPrefixes, sortedPostfixes, sortedTranspilers);
 			if (replacement == null) throw new MissingMethodException("Cannot create dynamic replacement for " + original.FullDescription());
 
-			var errorString = Memory.DetourMethod(original, replacement);
-			if (errorString != null)
-				throw new FormatException("Method " + original.FullDescription() + " cannot be patched. Reason: " + errorString);
-
-			if (UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType))
-			{
-				var il2CppShim = CreateIl2CppShim(replacement, original);
-				var origMethodPtr = UnhollowerSupport.MethodBaseToIntPtr(original);
-				var oldDetourPtr = patchInfo.methodDetourPointer;
-				var newDetourPtr = il2CppShim.MethodHandle.GetFunctionPointer();
-
-				if (oldDetourPtr != IntPtr.Zero)
-					Imports.Unhook(origMethodPtr, oldDetourPtr);
-				Imports.Hook(origMethodPtr, newDetourPtr);
-				patchInfo.methodDetourPointer = newDetourPtr;
-
+			if (isIl2Cpp) {
+				DynamicMethod il2CppShim = CreateIl2CppShim(replacement, original);
+				InstallIl2CppPatch(patchInfo, il2CppShim);
 				PatchTools.RememberObject(original, new PotatoTuple { First = replacement, Second = il2CppShim});
-			}
-			else
+			} else {
+				var errorString = Memory.DetourMethod(original, replacement);
+				if (errorString != null)
+					throw new FormatException("Method " + original.FullDescription() + " cannot be patched. Reason: " + errorString);
+
 				PatchTools.RememberObject(original, replacement); // no gc for new value + release old value to gc
+			}
+
 			return replacement;
 		}
 
@@ -115,6 +123,79 @@ namespace Harmony
 		{
 			public MethodBase First;
 			public MethodBase Second;
+		}
+
+		private static IEnumerable<CodeInstruction> UnhollowerTranspiler(MethodBase method, IEnumerable<CodeInstruction> instructionsIn) {
+			List<CodeInstruction> instructions = new List<CodeInstruction>(instructionsIn);
+			PatchInfo patchInfo = HarmonySharedState.GetPatchInfo(method);
+			IntPtr copiedMethodInfo = patchInfo.copiedMethodInfoPointer;
+
+			bool found = false;
+			int replaceIdx = 0;
+			int replaceCount = 0;
+
+			for (int i = instructions.Count - 2; i >= 0; --i) {
+				if (instructions[i].opcode != OpCodes.Ldsfld) continue;
+
+				found = true;
+				CodeInstruction next = instructions[i + 1];
+				if (next.opcode == OpCodes.Call && ((MethodInfo) next.operand).Name == "il2cpp_object_get_virtual_method") {
+					// Virtual method: Replace the sequence
+					// - ldarg.0
+					// - call native int[UnhollowerBaseLib] UnhollowerBaseLib.IL2CPP::Il2CppObjectBaseToPtr(class [UnhollowerBaseLib] UnhollowerBaseLib.Il2CppObjectBase)
+					// - ldsfld native int SomeClass::NativeMethodInfoPtr_Etc
+					// - call native int[UnhollowerBaseLib] UnhollowerBaseLib.IL2CPP::il2cpp_object_get_virtual_method(native int, native int)
+
+					replaceIdx = i - 2;
+					replaceCount = 4;
+				} else {
+					// Everything else: Just replace the static load
+					replaceIdx = i;
+					replaceCount = 1;
+				}
+				break;
+			}
+
+			if (!found) {
+				MelonModLogger.LogError("Harmony transpiler could not rewrite Unhollower method. Expect a stack overflow.");
+				return instructions;
+			}
+
+			CodeInstruction[] replacement = {
+				new CodeInstruction(OpCodes.Ldc_I8, copiedMethodInfo.ToInt64()),
+				new CodeInstruction(OpCodes.Conv_I)
+			};
+
+			instructions.RemoveRange(replaceIdx, replaceCount);
+			instructions.InsertRange(replaceIdx, replacement);
+
+			return instructions;
+		}
+
+		private static void InstallIl2CppPatch(PatchInfo patchInfo, DynamicMethod il2CppShim)
+		{
+			IntPtr methodInfoPtr = patchInfo.copiedMethodInfoPointer;
+			IntPtr oldDetourPtr = patchInfo.methodDetourPointer;
+			IntPtr newDetourPtr = il2CppShim.MethodHandle.GetFunctionPointer();
+
+			if (oldDetourPtr != IntPtr.Zero) {
+				Imports.Unhook(methodInfoPtr, oldDetourPtr);
+			}
+
+			Imports.Hook(methodInfoPtr, newDetourPtr);
+			patchInfo.methodDetourPointer = newDetourPtr;
+		}
+
+		private static IntPtr CopyMethodInfoStruct(IntPtr origMethodInfo) {
+			// Il2CppMethodInfo *copiedMethodInfo = malloc(sizeof(Il2CppMethodInfo));
+			int sizeOfMethodInfo = Marshal.SizeOf(UnhollowerSupport.Il2CppMethodInfoType);
+			IntPtr copiedMethodInfo = Marshal.AllocHGlobal(sizeOfMethodInfo);
+
+			// *copiedMethodInfo = *origMethodInfo;
+			object temp = Marshal.PtrToStructure(origMethodInfo, UnhollowerSupport.Il2CppMethodInfoType);
+			Marshal.StructureToPtr(temp, copiedMethodInfo, false);
+
+			return copiedMethodInfo;
 		}
 
 		private static DynamicMethod CreateIl2CppShim(DynamicMethod patch, MethodBase original)

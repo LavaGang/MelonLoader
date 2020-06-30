@@ -144,11 +144,17 @@ namespace Harmony
 			return GetMethodNames(instance.GetType());
 		}
 
+		public static ConstructorInfo StaticConstructor(Type type)
+		{
+			if (type == null) return null;
+			return type.GetConstructor(all & ~BindingFlags.Instance, null, new Type[0], new ParameterModifier[0]);
+		}
+
 		public static ConstructorInfo DeclaredConstructor(Type type, Type[] parameters = null)
 		{
 			if (type == null) return null;
 			if (parameters == null) parameters = new Type[0];
-			return type.GetConstructor(all, null, parameters, new ParameterModifier[] { });
+			return type.GetConstructor(all & ~BindingFlags.Static, null, parameters, new ParameterModifier[0]);
 		}
 
 		public static ConstructorInfo Constructor(Type type, Type[] parameters = null)

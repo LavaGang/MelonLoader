@@ -9,18 +9,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void UNLOAD_MELONLOADER();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_Log(string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogColor(string txt, ConsoleColor color);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogWarning(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogError(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogModError(string namesection, string msg);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Logger_LogModStatus(int type);
-        [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetCompanyName();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -48,10 +36,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsConsoleEnabled();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsRainbowMode();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsRandomRainbowMode();
-        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Hook(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Unhook(IntPtr target, IntPtr detour);
@@ -65,5 +49,8 @@ namespace MelonLoader
         internal extern static bool IsDevPluginsOnly();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool AG_Force_Regenerate();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string AG_Force_Version_Unhollower();
     }
 }

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 
-
 namespace MelonLoader.TinyJSON
 {
 	public sealed class Encoder

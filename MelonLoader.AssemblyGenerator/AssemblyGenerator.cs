@@ -7,6 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using MelonLoader.TinyJSON;
+using MelonLoader.Tomlyn;
+using MelonLoader.Tomlyn.Model;
+using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader.AssemblyGenerator
 {
@@ -20,7 +23,7 @@ namespace MelonLoader.AssemblyGenerator
         private static Executable_Package Il2CppDumper = new Executable_Package();
         private static Executable_Package Il2CppAssemblyUnhollower = new Executable_Package();
         private static string localConfigPath = null;
-        private static LocalConfig localConfig = new LocalConfig();
+        private static LocalConfig localConfig = null;
         private static Il2CppConfig il2cppConfig = new Il2CppConfig();
 
         internal static bool Initialize(string unityVersion, string gameRoot, string gameDataDir)
@@ -39,9 +42,6 @@ namespace MelonLoader.AssemblyGenerator
 
         private static void PreSetup(string gameRoot)
         {
-            System.Net.ServicePointManager.Expect100Continue = true;
-            System.Net.ServicePointManager.SecurityProtocol |= (System.Net.SecurityProtocolType)3072;
-
             GameAssembly_Path = Path.Combine(gameRoot, "GameAssembly.dll");
 
             AssemblyFolder = Path.Combine(gameRoot, "MelonLoader", "Managed");
@@ -51,21 +51,17 @@ namespace MelonLoader.AssemblyGenerator
             BaseFolder = SetupDirectory(Path.Combine(Path.Combine(Path.Combine(gameRoot, "MelonLoader"), "Dependencies"), "AssemblyGenerator"));
             
             Il2CppDumper.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppDumper"));
-            Il2CppAssemblyUnhollower.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppAssemblyUnhollower"));
-            UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "UnityDependencies"));
-
-            localConfigPath = Path.Combine(BaseFolder, "config.json");
-            if (File.Exists(localConfigPath))
-                localConfig = Decoder.Decode(File.ReadAllText(localConfigPath)).Make<LocalConfig>();
-        }
-
-        private static void Setup(string gameRoot)
-        {
             Il2CppDumper.OutputDirectory = SetupDirectory(Path.Combine(Il2CppDumper.BaseFolder, "DummyDll"));
             Il2CppDumper.FileName = "Il2CppDumper.exe";
 
+            Il2CppAssemblyUnhollower.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "Il2CppAssemblyUnhollower"));
             Il2CppAssemblyUnhollower.OutputDirectory = SetupDirectory(Path.Combine(Il2CppAssemblyUnhollower.BaseFolder, "Output"));
             Il2CppAssemblyUnhollower.FileName = "AssemblyUnhollower.exe";
+
+            UnityDependencies.BaseFolder = SetupDirectory(Path.Combine(BaseFolder, "UnityDependencies"));
+
+            localConfigPath = Path.Combine(BaseFolder, "config.cfg");
+            localConfig = LocalConfig.Load(localConfigPath);
         }
 
         private static bool AssemblyGenerateCheck(string unityVersion)
@@ -115,8 +111,6 @@ namespace MelonLoader.AssemblyGenerator
         private static bool AssemblyGenerate(string gameRoot, string unityVersion, string gameDataDir)
         {
             DownloadDependencies(unityVersion);
-            
-            Setup(gameRoot);
             
             FixIl2CppDumperConfig();
 
@@ -259,8 +253,8 @@ namespace MelonLoader.AssemblyGenerator
         public bool DumpFieldOffset = false;
         public bool DumpMethodOffset = false;
         public bool DumpTypeDefIndex = false;
-        public bool DummyDll = true;
-        public bool MakeFunction = true;
+        public bool GenerateDummyDll = true;
+        public bool GenerateScript = false;
         public bool RequireAnyKey = false;
         public bool ForceIl2CppVersion = false;
         public float ForceVersion = 24.3f;
@@ -273,6 +267,63 @@ namespace MelonLoader.AssemblyGenerator
         public string DumperVersion = null;
         public string UnhollowerVersion = null;
         public List<string> OldFiles = new List<string>();
-        public void Save(string path) => File.WriteAllText(path, Encoder.Encode(this, EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));
+
+        public static LocalConfig Load(string path)
+        {
+            LocalConfig returnval = new LocalConfig();
+            if (File.Exists(path))
+            {
+                string filestr = File.ReadAllText(path);
+                if (!string.IsNullOrEmpty(filestr))
+                {
+                    var doc = Toml.Parse(filestr);
+                    if (doc != null)
+                    {
+                        var table = doc.ToModel();
+                        TomlTable MainTbl = (TomlTable)table["AssemblyGenerator"];
+                        if (MainTbl != null)
+                        {
+                            returnval.UnityVersion = (string)MainTbl["UnityVersion"];
+                            returnval.GameAssemblyHash = (string)MainTbl["GameAssemblyHash"];
+                            returnval.DumperVersion = (string)MainTbl["DumperVersion"];
+                            returnval.UnhollowerVersion = (string)MainTbl["UnhollowerVersion"];
+                            TomlArray oldfilesarr = (TomlArray)MainTbl["OldFiles"];
+                            if (oldfilesarr.Count > 0)
+                            {
+                                for (int i = 0; i < oldfilesarr.Count; i++)
+                                {
+                                    string file = (string)oldfilesarr.ElementAt(i);
+                                    if (!string.IsNullOrEmpty(file))
+                                        returnval.OldFiles.Add(file);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return returnval;
+        }
+
+        public void Save(string path)
+        {
+            var doc = new DocumentSyntax()
+            {
+                Tables =
+                {
+                    new TableSyntax("AssemblyGenerator")
+                    {
+                        Items =
+                        {
+                            {"UnityVersion", (UnityVersion == null) ? "" : UnityVersion},
+                            {"GameAssemblyHash", (GameAssemblyHash == null) ? "" : GameAssemblyHash},
+                            {"DumperVersion", (DumperVersion == null) ? "" : DumperVersion},
+                            {"UnhollowerVersion", (UnhollowerVersion == null) ? "" : UnhollowerVersion},
+                            {"OldFiles", OldFiles.ToArray()}
+                        }
+                    }
+                }
+            };
+            File.WriteAllText(path, doc.ToString());
+        }
     }
 }

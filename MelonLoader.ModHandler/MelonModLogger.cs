@@ -2,18 +2,13 @@ using System;
 using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
     public class MelonModLogger
     {
         internal static bool consoleEnabled = false;
-        private static ConsoleColor rainbow = ConsoleColor.DarkBlue;
-        private static readonly Random rainbowrand = new Random();
-        private static int ErrorCount = 0;
-        private static int MaxErrorCount = 100;
-
-        private static string GetTimestamp() { return DateTime.Now.ToString("HH:mm:ss.fff"); }
 
         private static string GetNameSection()
         {
@@ -30,7 +25,14 @@ namespace MelonLoader
                         Assembly asm = methodClassType.Assembly;
                         if (!asm.Equals(null))
                         {
-                            object[] attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
+                            object[] attrArray = asm.GetCustomAttributes(typeof(MelonPluginInfoAttribute), false);
+                            if ((attrArray.Count() > 0) && (attrArray[0] != null))
+                            {
+                                MelonPluginInfoAttribute attr = attrArray[0] as MelonPluginInfoAttribute;
+                                if (!string.IsNullOrEmpty(attr.Name))
+                                    return "[" + attr.Name.Replace(" ", "_") + "] ";
+                            }
+                            attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
                             if ((attrArray.Count() > 0) && (attrArray[0] != null))
                             {
                                 MelonModInfoAttribute attr = attrArray[0] as MelonModInfoAttribute;
@@ -44,219 +46,32 @@ namespace MelonLoader
             return "";
         }
 
-        public static void Log(string s)
-        {
-            string namesection = GetNameSection();
-            Imports.Logger_Log(namesection + s);
-            if (!Imports.IsDebugMode() && Console.Enabled)
-            {
-                bool rainbow_check = RainbowCheck();
-                System.Console.Write("[");
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Green);
-                System.Console.Write(GetTimestamp());
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Gray);
-                System.Console.Write("] [");
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Magenta);
-                System.Console.Write("MelonLoader");
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Gray);
-                System.Console.WriteLine("] " + namesection + s);
-                if (rainbow_check)
-                    Console.SetColor(ConsoleColor.Gray);
-            }
-        }
+        public static void Log(string s) => Native_Log((GetNameSection() + s));
+        public static void Log(ConsoleColor color, string s) => Native_LogColor((GetNameSection() + s), color);
+        public static void Log(string s, params object[] args) => Native_Log((GetNameSection() + string.Format(s, args)));
+        public static void Log(ConsoleColor color, string s, params object[] args) => Native_LogColor((GetNameSection() + string.Format(s, args)), color);
 
-        public static void Log(ConsoleColor color, string s)
-        {
-            string namesection = GetNameSection();
-            Imports.Logger_LogColor((namesection + s), color);
-            if (!Imports.IsDebugMode() && Console.Enabled)
-            {
-                Console.SetColor(color);
-                RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + s);
-                Console.SetColor(ConsoleColor.Gray);
-            }
-        }
+        public static void LogWarning(string s) => Native_LogWarning(GetNameSection(), s);
+        public static void LogWarning(string s, params object[] args) => Native_LogWarning(GetNameSection(), string.Format(s, args));
 
-        public static void Log(string s, params object[] args)
-        {
-            string namesection = GetNameSection();
-            var formatted = string.Format(s, args);
-            Imports.Logger_Log(namesection + formatted);
-            if (!Imports.IsDebugMode() && Console.Enabled)
-            {
-                bool rainbow_check = RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + formatted);
-                if (rainbow_check)
-                    Console.SetColor(ConsoleColor.Gray);
-            }
-        }
+        public static void LogError(string s) => Native_LogError(GetNameSection(), s);
+        public static void LogError(string s, params object[] args) => Native_LogError(GetNameSection(), string.Format(s, args));
+        internal static void LogDLLError(string msg, string modname) => Native_LogDLLError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
 
-        public static void Log(ConsoleColor color, string s, params object[] args)
-        {
-            string namesection = GetNameSection();
-            var formatted = string.Format(s, args);
-            Imports.Logger_LogColor((namesection + formatted), color);
-            if (!Imports.IsDebugMode() && Console.Enabled)
-            {
-                Console.SetColor(color);
-                RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + formatted);
-                Console.SetColor(ConsoleColor.Gray);
-            }
-        }
+        internal static void LogDLLStatus(MelonBase.MelonCompatibility type) => Native_LogDLLStatus(type);
 
-        public static void LogWarning(string s)
-        {
-            string namesection = GetNameSection();
-            Imports.Logger_LogWarning(namesection, s);
-            if (!Imports.IsDebugMode() && Console.Enabled)
-            {
-                Console.SetColor(ConsoleColor.Yellow);
-                RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Warning] " + s);
-                Console.SetColor(ConsoleColor.Gray);
-            }
-        }
 
-        public static void LogWarning(string s, params object[] args)
-        {
-            string namesection = GetNameSection();
-            var formatted = string.Format(s, args);
-            Imports.Logger_LogWarning(namesection, formatted);
-            if (!Imports.IsDebugMode() && Console.Enabled)
-            {
-                Console.SetColor(ConsoleColor.Yellow);
-                RainbowCheck();
-                System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Warning] " + formatted);
-                Console.SetColor(ConsoleColor.Gray);
-            }
-        }
-
-        public static void LogError(string s)
-        {
-            if (ErrorCount < MaxErrorCount)
-            {
-                string namesection = GetNameSection();
-                Imports.Logger_LogError(namesection, s);
-                if (!Imports.IsDebugMode() && Console.Enabled)
-                {
-                    Console.SetColor(ConsoleColor.Red);
-                    RainbowCheck();
-                    System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + s);
-                    Console.SetColor(ConsoleColor.Gray);
-                }
-                ErrorCount++;
-            }
-        }
-
-        public static void LogError(string s, params object[] args)
-        {
-            if (ErrorCount < MaxErrorCount)
-            {
-                string namesection = GetNameSection();
-                var formatted = string.Format(s, args);
-                Imports.Logger_LogError(namesection, formatted);
-                if (!Imports.IsDebugMode() && Console.Enabled)
-                {
-                    Console.SetColor(ConsoleColor.Red);
-                    RainbowCheck();
-                    System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + formatted);
-                    Console.SetColor(ConsoleColor.Gray);
-                }
-                ErrorCount++;
-            }
-        }
-
-        internal static void LogModError(string msg, string modname)
-        {
-            if (ErrorCount < MaxErrorCount)
-            {
-                string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
-                Imports.Logger_LogModError(namesection, msg);
-                if (!Imports.IsDebugMode() && Console.Enabled)
-                {
-                    Console.SetColor(ConsoleColor.Yellow);
-                    RainbowCheck();
-                    System.Console.WriteLine("[" + GetTimestamp() + "] [MelonLoader] " + namesection + "[Error] " + msg);
-                    Console.SetColor(ConsoleColor.Gray);
-                }
-                ErrorCount++;
-            }
-        }
-
-        internal static void LogModStatus(int type)
-        {
-            Imports.Logger_LogModStatus(type);
-            if (!Imports.IsDebugMode() && Console.Enabled)
-            {
-                bool rainbow_check = RainbowCheck();
-                System.Console.Write("[");
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Green);
-                System.Console.Write(GetTimestamp());
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Gray);
-                System.Console.Write("] [");
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Magenta);
-                System.Console.Write("MelonLoader");
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Gray);
-                System.Console.Write("] ");
-                if (!rainbow_check)
-                    Console.SetColor(ConsoleColor.Blue);
-                System.Console.Write("Status: ");
-                if (type == 0)
-                {
-                    if (!rainbow_check)
-                        Console.SetColor(ConsoleColor.Cyan);
-                    System.Console.WriteLine("Universal");
-                }
-                else if (type == 1)
-                {
-                    if (!rainbow_check)
-                        Console.SetColor(ConsoleColor.Green);
-                    System.Console.WriteLine("Compatible");
-                }
-                else if (type == 2)
-                {
-                    if (!rainbow_check)
-                        Console.SetColor(ConsoleColor.Yellow);
-                    System.Console.WriteLine("No MelonModGameAttribute!");
-                }
-                else
-                {
-                    if (!rainbow_check)
-                        Console.SetColor(ConsoleColor.Red);
-                    System.Console.WriteLine("INCOMPATIBLE!");
-                }
-                Console.SetColor(ConsoleColor.Gray);
-            }
-        }
-
-        private static bool RainbowCheck()
-        {
-            if (Imports.IsRainbowMode() || Imports.IsRandomRainbowMode())
-            {
-                if (Imports.IsRandomRainbowMode())
-                    Console.SetColor((ConsoleColor)rainbowrand.Next(1, (int)ConsoleColor.White));
-                else
-                {
-                    Console.SetColor(rainbow);
-                    rainbow++;
-                    if (rainbow > ConsoleColor.White)
-                        rainbow = ConsoleColor.DarkBlue;
-                    else if (rainbow == ConsoleColor.Gray)
-                        rainbow++;
-                }
-                return true;
-            }
-            return false;
-        }
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Native_Log(string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Native_LogColor(string txt, ConsoleColor color);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Native_LogWarning(string namesection, string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Native_LogError(string namesection, string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Native_LogDLLError(string namesection, string msg);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Native_LogDLLStatus(MelonBase.MelonCompatibility type);
     }
 }

@@ -3,6 +3,11 @@
 
 HWND Console::hwndConsole = NULL;
 int Console::rainbow = 1;
+bool Console::Enabled = true;
+bool Console::HideWarnings = false;
+bool Console::HordiniMode = false;
+bool Console::HordiniMode_Random = false;
+bool Console::ChromiumMode = false;
 
 void Console::Create()
 {
@@ -11,20 +16,20 @@ void Console::Create()
 		if (AllocConsole())
 		{
 			hwndConsole = GetConsoleWindow();
-			SetConsoleTitle("MelonLoader Debug Console");
+			SetTitle(("MelonLoader " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console").c_str());
 			SetForegroundWindow(hwndConsole);
 			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
 		else
-			MessageBox(NULL, "Failed to Create Debug Console!", NULL, MB_OK | MB_ICONEXCLAMATION);
+			MessageBox(NULL, ("Failed to Create the " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console!").c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
 	}
 }
 
 void Console::RainbowCheck()
 {
-	if (IsInitialized() && (MelonLoader::RainbowMode || MelonLoader::RandomRainbowMode))
+	if (IsInitialized() && (HordiniMode || HordiniMode_Random))
 	{
-		if (MelonLoader::RandomRainbowMode)
+		if (HordiniMode_Random)
 			SetColor((ConsoleColor)(1 + (rand() * (int)(15 - 1) / RAND_MAX)));
 		else
 		{
@@ -38,14 +43,20 @@ void Console::RainbowCheck()
 	}
 }
 
+void Console::ChromiumCheck()
+{
+	if (IsInitialized() && ChromiumMode)
+		SetColor(ConsoleColor_Magenta);
+}
+
 void Console::Write(const char* txt)
 {
 	if (IsInitialized())
 	{
+		ChromiumCheck();
 		RainbowCheck();
 		std::cout << txt;
-		if (MelonLoader::RainbowMode || MelonLoader::RandomRainbowMode)
-			ResetColor();
+		ResetColor();
 	}
 };
 

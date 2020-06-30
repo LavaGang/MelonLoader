@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "Console.h"
+#include "ModHandler.h"
 
 class LogStream
 {
@@ -29,6 +30,10 @@ class Logger
 public:
 	static LogStream LogFile;
 	static int MaxLogs;
+	static int WarningCount;
+	static int MaxWarnings;
+	static int ErrorCount;
+	static int MaxErrors;
 	static const char* FilePrefix;
 	static const char* FileExtention;
 
@@ -43,7 +48,7 @@ public:
 
 	static void LogWarning(const char* txt);
 	static void LogWarning(const char* namesection, const char* txt);
-	static void LogWarning(std::string txt) { LogError(txt.c_str()); }
+	static void LogWarning(std::string txt) { LogWarning(txt.c_str()); }
 
 	static void LogError(const char* txt);
 	static void LogError(const char* namesection, const char* txt);
@@ -58,9 +63,9 @@ public:
 	static void DebugLogError(const char* namesection, const char* txt) { if (MelonLoader::DebugMode) LogError(namesection, (std::string("[DEBUG] ") + txt).c_str()); }
 	static void DebugLogError(std::string txt) { DebugLogError(txt.c_str()); }
 
-	static void LogModError(const char* namesection, const char* msg);
+	static void LogDLLError(const char* namesection, const char* msg);
 
-	static void LogModStatus(int type);
+	static void LogDLLStatus(ModHandler_DLLStatus type);
 
 private:
 	static void LogTimestamp(ConsoleColor color = ConsoleColor_Black);

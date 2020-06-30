@@ -9,11 +9,21 @@
 
 LogStream Logger::LogFile;
 int Logger::MaxLogs = 10;
+int Logger::WarningCount = 0;
+int Logger::MaxWarnings = 100;
+int Logger::ErrorCount = 0;
+int Logger::MaxErrors = 100;
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtention = "log";
 
 void Logger::Initialize(std::string filepathstr)
 {
+	if (MelonLoader::DebugMode)
+	{
+		MaxLogs = 0;
+		MaxWarnings = 0;
+		MaxErrors = 0;
+	}
 	auto now = std::chrono::system_clock::now();
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 	auto timer = std::chrono::system_clock::to_time_t(now);
@@ -64,112 +74,116 @@ void Logger::LogTimestamp(ConsoleColor color)
 	output << std::put_time(&bt, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
 	LogFile << "[" << output.str() << "] ";
 
-	if (MelonLoader::DebugMode)
-	{
-		Console::Write("[", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
-		Console::Write(output.str(), ((color != ConsoleColor_Black) ? color : ConsoleColor_Green));
-		Console::Write("] ", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
-	}
+	Console::Write("[", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
+	Console::Write(output.str(), ((color != ConsoleColor_Black) ? color : ConsoleColor_Green));
+	Console::Write("] ", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
 }
 
 void Logger::Log(const char* txt)
 {
 	LogTimestamp();
 	LogFile << txt << std::endl;
-	if (MelonLoader::DebugMode)
-	{
-		Console::Write("[");
-		Console::Write("MelonLoader", ConsoleColor_Magenta);
-		Console::Write("] ");
-		Console::WriteLine(txt);
-	}
+	Console::Write("[");
+	Console::Write("MelonLoader", ConsoleColor_Magenta);
+	Console::Write("] ");
+	Console::WriteLine(txt);
 }
 
 void Logger::Log(const char* txt, ConsoleColor color)
 {
 	LogTimestamp(color);
 	LogFile << txt << std::endl;
-	if (MelonLoader::DebugMode)
-	{
-		Console::Write("[");
-		Console::Write("MelonLoader", ConsoleColor_Magenta);
-		Console::Write("] ");
-		Console::WriteLine(txt, color);
-	}
+	Console::Write("[");
+	Console::Write("MelonLoader", ConsoleColor_Magenta);
+	Console::Write("] ");
+	Console::WriteLine(txt, color);
 }
 
 void Logger::LogWarning(const char* txt)
 {
-	LogTimestamp(ConsoleColor_Yellow);
-	LogFile << "[Warning] " << txt << std::endl;
-	if (MelonLoader::DebugMode)
+	if ((MaxWarnings <= 0) || (WarningCount < MaxWarnings))
 	{
-		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
-		Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		LogTimestamp(ConsoleColor_Yellow);
+		LogFile << "[Warning] " << txt << std::endl;
+		if (MelonLoader::DebugMode || !Console::HideWarnings)
+		{
+			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+			Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		}
+		if (MaxWarnings > 0)
+			WarningCount++;
 	}
 }
 
 void Logger::LogWarning(const char* namesection, const char* txt)
 {
-	LogTimestamp(ConsoleColor_Yellow);
-	LogFile << namesection << "[Warning] " << txt << std::endl;
-	if (MelonLoader::DebugMode)
+	if ((MaxWarnings <= 0) || (WarningCount < MaxWarnings))
 	{
-		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
-		Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		LogTimestamp(ConsoleColor_Yellow);
+		LogFile << namesection << "[Warning] " << txt << std::endl;
+		if (MelonLoader::DebugMode || !Console::HideWarnings)
+		{
+			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
+			Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
+		}
+		if (MaxWarnings > 0)
+			WarningCount++;
 	}
 }
 
 void Logger::LogError(const char* txt)
 {
-	LogTimestamp(ConsoleColor_Red);
-	LogFile << "[Error] " << txt << std::endl;
-	if (MelonLoader::DebugMode)
+	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
 	{
+		LogTimestamp(ConsoleColor_Red);
+		LogFile << "[Error] " << txt << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
 		Console::WriteLine(("[Error] " + std::string(txt)), ConsoleColor_Red);
+		if (MaxErrors > 0)
+			ErrorCount++;
 	}
 }
 
 void Logger::LogError(const char* namesection, const char* txt)
 {
-	LogTimestamp(ConsoleColor_Red);
-	LogFile << namesection << "[Error] " << txt << std::endl;
-	if (MelonLoader::DebugMode)
+	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
 	{
+		LogTimestamp(ConsoleColor_Red);
+		LogFile << namesection << "[Error] " << txt << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
 		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(txt)), ConsoleColor_Red);
+		if (MaxErrors > 0)
+			ErrorCount++;
 	}
 }
 
-void Logger::LogModError(const char* namesection, const char* msg)
+void Logger::LogDLLError(const char* namesection, const char* msg)
 {
-	LogTimestamp(ConsoleColor_Yellow);
-	LogFile << namesection << "[Error] " << msg << std::endl;
-	if (MelonLoader::DebugMode)
+	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
 	{
+		LogTimestamp(ConsoleColor_Yellow);
+		LogFile << namesection << "[Error] " << msg << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
 		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(msg)), ConsoleColor_Yellow);
+		if (MaxErrors > 0)
+			ErrorCount++;
 	}
 }
 
-void Logger::LogModStatus(int type)
+void Logger::LogDLLStatus(ModHandler_DLLStatus type)
 {
 	LogTimestamp();
-	LogFile << "Status: " << ((type == 0) ? "Universal" : ((type == 1) ? "Compatible" : ((type == 2) ? "No MelonModGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
-	if (MelonLoader::DebugMode)
-	{
-		Console::Write("[");
-		Console::Write("MelonLoader", ConsoleColor_Magenta);
-		Console::Write("] ");
-		Console::Write("Status: ", ConsoleColor_Blue);
-		if (type == 0)
-			Console::WriteLine("Universal", ConsoleColor_Cyan);
-		else if (type == 1)
-			Console::WriteLine("Compatible", ConsoleColor_Green);
-		else if (type == 2)
-			Console::WriteLine("No MelonModGameAttribute!", ConsoleColor_Yellow);
-		else
-			Console::WriteLine("INCOMPATIBLE!", ConsoleColor_Red);
-	}
+	LogFile << "Game Compatibility: " << ((type == ModHandler_DLLStatus_UNIVERSAL) ? "Universal" : ((type == ModHandler_DLLStatus_COMPATIBLE) ? "Compatible" : ((type == ModHandler_DLLStatus_NOATTRIBUTE) ? "No MelonModGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
+	Console::Write("[");
+	Console::Write("MelonLoader", ConsoleColor_Magenta);
+	Console::Write("] ");
+	Console::Write("Game Compatibility: ", ConsoleColor_Blue);
+	if (type == ModHandler_DLLStatus_UNIVERSAL)
+		Console::WriteLine("Universal", ConsoleColor_Cyan);
+	else if (type == ModHandler_DLLStatus_COMPATIBLE)
+		Console::WriteLine("Compatible", ConsoleColor_Green);
+	else if (type == ModHandler_DLLStatus_NOATTRIBUTE)
+		Console::WriteLine("No MelonModGameAttribute!", ConsoleColor_Yellow);
+	else
+		Console::WriteLine("INCOMPATIBLE!", ConsoleColor_Red);
 }

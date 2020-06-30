@@ -17,9 +17,6 @@ int MelonLoader::CommandLineC = NULL;
 char* MelonLoader::CommandLineV[64];
 bool MelonLoader::IsGameIl2Cpp = false;
 bool MelonLoader::DebugMode = false;
-bool MelonLoader::ConsoleEnabled = true;
-bool MelonLoader::RainbowMode = false;
-bool MelonLoader::RandomRainbowMode = false;
 bool MelonLoader::QuitFix = false;
 bool MelonLoader::DevModsOnly = false;
 bool MelonLoader::DevPluginsOnly = false;
@@ -29,6 +26,7 @@ char* MelonLoader::GamePath = NULL;
 char* MelonLoader::DataPath = NULL;
 char* MelonLoader::CompanyName = NULL;
 char* MelonLoader::ProductName = NULL;
+char* MelonLoader::ForceUnhollowerVersion = NULL;
 
 void MelonLoader::Main()
 {
@@ -39,10 +37,6 @@ void MelonLoader::Main()
 		LPSTR filepath = new CHAR[MAX_PATH];
 		HMODULE exe_module = GetModuleHandle(NULL);
 		GetModuleFileName(exe_module, filepath, MAX_PATH);
-
-		//long exe_size = GetFileSize(filepath);
-		//if ((exe_size * 0.000001) > 10)
-		//	UnityPlayer::Module = exe_module;
 
 		std::string filepathstr = filepath;
 		ExePath = new char[filepathstr.size() + 1];
@@ -63,8 +57,8 @@ void MelonLoader::Main()
 		Logger::Initialize(filepathstr);
 
 #ifdef DEBUG
-		Console::Create();
 		DebugMode = true;
+		Console::Create();
 #endif
 
 		std::string pdatapath = filepathstr + "\\*_Data";
@@ -167,25 +161,35 @@ void MelonLoader::ParseCommandLine()
 			{
 				if (strstr(command, "--quitfix") != NULL)
 					QuitFix = true;
-				else if (strstr(command, "--melonloader.hideconsole") != NULL)
-					ConsoleEnabled = false;
+				else if (strstr(command, "--melonloader.magenta"))
+					Console::ChromiumMode = true;
 				else if (strstr(command, "--melonloader.rainbow") != NULL)
-					RainbowMode = true;
+					Console::HordiniMode = true;
 				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
-					RandomRainbowMode = true;
-				else if (strstr(command, "--melonloader.maxlogs") != NULL)
-					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
+					Console::HordiniMode_Random = true;
 				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
 					DevModsOnly = true;
-				//else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
-				//	DevPluginsOnly = true;
+				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
+					DevPluginsOnly = true;
 				else if (strstr(command, "--melonloader.agregenerate") != NULL)
 					AG_Force_Regenerate = true;
+				else if (strstr(command, "--melonloader.agfvunhollower"))
+					ForceUnhollowerVersion = CommandLineV[i + 1];
 #ifndef DEBUG
+				else if (strstr(command, "--melonloader.maxlogs") != NULL)
+					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
+				else if (strstr(command, "--melonloader.maxwarnings") != NULL)
+					Logger::MaxWarnings = GetIntFromConstChar(CommandLineV[i + 1], 10);
+				else if (strstr(command, "--melonloader.maxerrors") != NULL)
+					Logger::MaxErrors = GetIntFromConstChar(CommandLineV[i + 1], 10);
+				else if (strstr(command, "--melonloader.hideconsole") != NULL)
+					Console::Enabled = false;
+				else if (strstr(command, "--melonloader.hidewarnings") != NULL)
+					Console::HideWarnings = false;
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{
-					Console::Create();
 					DebugMode = true;
+					Console::Create();
 				}
 #endif
 			}

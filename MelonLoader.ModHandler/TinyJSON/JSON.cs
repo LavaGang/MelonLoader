@@ -143,6 +143,16 @@ namespace MelonLoader.TinyJSON
 		}
 
 
+		public static void Populate<T>( Variant data, T item ) where T : class
+		{
+			if (item == null)
+			{
+				throw new ArgumentNullException( nameof(item) );
+			}
+			DecodeObject( data, item );
+		}
+
+
 		static readonly Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
 
 		static Type FindType( string fullName )
@@ -282,9 +292,22 @@ namespace MelonLoader.TinyJSON
 				instance = Activator.CreateInstance<T>();
 			}
 
-
 			// Now decode fields and properties.
-			foreach (var pair in (ProxyObject) data)
+			DecodeObject<T>( data, instance );
+
+			return instance;
+		}
+
+		static void DecodeObject<T>( Variant data, T instance )
+		{
+			var type = typeof(T);
+			var proxyObject = data as ProxyObject;
+			if (proxyObject == null)
+			{
+				throw new InvalidCastException( "ProxyObject expected when decoding into '" + type.FullName + "'." );
+			}
+
+			foreach (var pair in proxyObject)
 			{
 				var field = type.GetField( pair.Key, instanceBindingFlags );
 
@@ -393,8 +416,6 @@ namespace MelonLoader.TinyJSON
 					method.Invoke( instance, method.GetParameters().Length == 0 ? null : new object[] { data } );
 				}
 			}
-
-			return instance;
 		}
 
 		// ReSharper disable once UnusedMethodReturnValue.Local

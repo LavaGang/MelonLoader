@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.2.3 Open-Beta](#v023-open-beta)  
 [v0.2.2 Open-Beta](#v022-open-beta)  
 [v0.2.1 Open-Beta](#v021-open-beta)  
 [v0.2.0 Open-Beta](#v020-open-beta)  
@@ -7,6 +8,84 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.2.3 Open-Beta:
+
+1. Added Unity 2019.3.4 Dependencies.
+2. Temporarily Fixed Issue with TLS Fix on Certain Il2Cpp Unity Games.
+3. Added Launch Option "--melonloader.agfvunhollower" that Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower.
+4. Added Location property to the MelonMod class.
+5. Revised Plugin System.
+6. Fixed Issue causing the Assembly Generator to constantly Regenerate every time a Game Launched.
+7. Installer now creates the Plugins folder.
+8. Revised MelonMod class to use a new MelonBase.
+9. All Commonly used Methods and Properties that both MelonMod and MelonPlugin use have been moved to MelonBase.
+10. Plugins now use their own Attributes.
+11. Fixed Issue that let Plugins load as Mods when placed in the Mods folder and vice-versa.
+12. Added better Legacy Version handling for "--melonloader.agfvunhollower".
+13. Added Clearer Display Text to State that DLL Status is Game Compatibility.
+14. Also call Harmony patches if IL2CPP methods get called using reflection / il2cpp_runtime_invoke.  (Credits to zeobviouslyfakeacc :3)
+15. Fixed Issue with Harmony Patches on Virtual Methods.  (Credits to zeobviouslyfakeacc :3)
+16. Improved the Harmony error message if the unhollowed target method is not backed by an IL2CPP method.  (Credits to zeobviouslyfakeacc :3)
+17. Fixed Issue with Harmony AccessTools not being able to resolve the no-args constructor if a static constructor exists.  (Credits to zeobviouslyfakeacc :3)
+18. Added Support for Mono Debuggers.
+19. Mono JIT Domain on Il2Cpp Games should now parse Command Line arguments properly.
+20. Forced Installer to reinstall the entire MelonLoader folder.
+21. Moved all Console and Log Functionality to Native Exports.
+22. Updated Il2CppDumper to v6.3.0.
+23. Updated Il2CppDumper Config Fix in the Assembly Generator to support Il2CppDumper v6.3.0.
+24. Added Temp File Cache to Assembly Generator.
+25. Re-enabled Launch Option "--melonloader.devpluginsonly".
+26. Fixed Issue with Certain Mono Games not having OnApplicationStart called.
+27. Added Unity 2018.4.2 Dependencies.
+28. Fixed Debug Compilation Issue with Console.
+29. Added Launch Option "--melonloader.hidewarnings" that will Hide Warnings from Displaying in Normal Console.  (Debug Console ignores this Launch Option.)
+30. Fixed Issue with Support Modules not Unloading their Components properly when OnApplicationQuit is called.
+31. Fixed Mistake with Error Catching Console Creation.
+32. Log Spam Shield will now Disable itself when MelonLoader is using Debug Mode/Console.
+33. Log Spam Shield has now been moved to the Native Logger.
+34. Added Launch Option "--melonloader.maxwarnings" for Setting the Max Amount of Warnings for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
+35. Added Launch Option "--melonloader.maxerrors" for Setting the Max Amount of Errors for the Log Spam Shield.  (Debug Console ignores this Launch Option, Default is 100, 0 to Disable.)
+36. Fixed Memory Leak in Log Spam Shield.
+37. Fixed Issue with Exports.
+38. Moved DLL Status to its own Enum.
+39. Added "Compatibility" property to MelonBase.
+40. Removed "IsUniversal" property from MelonBase.
+41. Fixed Issue with Incompatible Plugins and Mods still being used after Logging.
+42. Added Unity 2018.4.23 Dependencies.
+43. Fixed Issue with Console.h / Console::IsInitialized().
+44. Added Tomlyn to ModHandler for TOML Parsing.
+45. Moved Tomlyn to its own Namespace under MelonLoader.Tomlyn.
+46. Added Unity 2018.3.14 Dependencies.
+47. Added Unity 2019.2.16 Dependencies.
+48. Added Tomlyn to Assembly Generator for TOML Parsing.
+49. Cleaned up Config Handling in Assembly Generator.
+50. Fixed Issue with Corrupt Tomlyn Lib.
+51. Added Dependency Graph System for Plugins and Mods.  (Credits to zeobviouslyfakeacc :3)
+52. Fixed Issue with Plugins still calling OnPreInitialization even when Incompatible.  (Credits to zeobviouslyfakeacc :3)
+53. Added Better Plugin and Mod Cleanup when OnPreInitialization or OnApplicationStart fails.  (Credits to zeobviouslyfakeacc :3)
+54. Switched Assembly Generator Config from JSON to TOML.
+55. Assembly Generator Config will now be saved to a file named "config.cfg" instead of "config.json".
+56. Fixed Issue with Tomlyn in the ModHandler.
+57. Added Unity 2020.1.0 Dependencies.
+58. Added Temporary Warning for Missing Dependencies.  (Credits to zeobviouslyfakeacc :3)
+59. Added MelonOptionalDependencies Attribute.  (Credits to zeobviouslyfakeacc :3)
+60. Fixed compilation issues on .NET Framework 3.5.  (Credits to zeobviouslyfakeacc :3)
+61. Implemented 'Populate' methods to TinyJSON to de-serialize JSON into an existing object.  (Credits to zeobviouslyfakeacc :3)
+62. Reimplemented TinyJSON in AssemblyGenerator to be up to date with the one in the ModHandler.
+63. Static Linked Runtime Library to Reduce User Issues with Microsoft Visual C++ 2015-2019 Re-distributable.  (Credits to knah :D)
+64. Updated Il2CppAssemblyUnhollower Download to v0.4.8.  (Credits to knah :D)
+65. Fixed Issue with the RenderHelper of ModSettingsMenu causing Error when SupportModule Unloads their Component.
+66. SupportModules now properly Unloads their Component if no Plugins or Mods are loaded.
+67. Temporarily Disabled ModSettingsMenu.
+68. Added Launch Option "--melonloader.chromium" to turn the Console Color Magenta.  (Thanks Chromium lol)
+69. Fixed Issue with Logger methods with Color Parameter being Overridden by RainbowMode or ChromiumMode.
+70. Added Unity 2019.3.5 Dependencies.
+71. Added Unity 5.6.7 Dependencies.
+72. Added Unity 5.6.3 Dependencies.
+73. Changed Launch Option "--melonloader.chromium" to "--melonloader.magenta".
 
 ---
 

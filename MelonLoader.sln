@@ -19,8 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono.Pr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{49B47EEB-1061-49AF-83F3-B32377B08F3E}"
 	ProjectSection(SolutionItems) = preProject
-		CHANGELOG.MD = CHANGELOG.MD
-		README.MD = README.MD
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE.md = LICENSE.md
+		NOTICE.txt = NOTICE.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.Installer", "MelonLoader.Installer\MelonLoader.Installer.csproj", "{17AFE406-2361-4849-9B15-CB03AEF5E9F9}"
@@ -28,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.AssemblyGenerator", "MelonLoader.AssemblyGenerator\MelonLoader.AssemblyGenerator.csproj", "{84B12E10-41B3-479C-87A6-8CE5D8C82C2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono.Pre2017.2", "MelonLoader.Support.Mono.Pre2017.2\MelonLoader.Support.Mono.Pre2017.2.csproj", "{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{F41EC84C-6465-4449-B2F6-79535171265B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +155,18 @@ Global
 		{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}.Release|x64.Build.0 = Release|Any CPU
 		{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}.Release|x86.ActiveCfg = Release|Any CPU
 		{57CA4F56-8E59-47EE-BEAC-28EC720B2B27}.Release|x86.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x64.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x64.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x86.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Debug|x86.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x64.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x64.Build.0 = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x86.ActiveCfg = Release|Any CPU
+		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

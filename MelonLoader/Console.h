@@ -76,13 +76,20 @@ class Console
 public:
 	static HWND hwndConsole;
 	static int rainbow;
+	static bool Enabled;
+	static bool HideWarnings;
+	static bool HordiniMode;
+	static bool HordiniMode_Random;
+	static bool ChromiumMode;
 
-	static bool IsInitialized() { return (GetConsoleWindow() != NULL); }
+	static bool IsInitialized() { return (hwndConsole != NULL); }
 	static void Create();
 
+	static void SetTitle(const char* title) { SetConsoleTitle(title); }
 	static void SetColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color); }
 	static void ResetColor() { SetColor(ConsoleColor_Gray); }
 	static void RainbowCheck();
+	static void ChromiumCheck();
 
 	static void Write(const char* txt);
 	static void Write(const char* txt, ConsoleColor color);
