@@ -103,7 +103,8 @@ namespace MelonLoader.Installer
                 {
                     TempFileCache.ClearCache();
                     Program.SetDisplayText("ERROR!");
-                    MessageBox.Show("Installation failed; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Program.Title);
+                    MessageBox.Show("Installation failed; upload the created log to #melonloader-support on discord", Program.Title);
+                    File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", ex.ToString());
                     Close();
                     Application.Exit();
                 }
