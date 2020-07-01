@@ -52,7 +52,8 @@ namespace MelonLoader.Installer
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to Get Version List; copy this dialog (press Control+C) to #melonloader-support on discord\n" + ex, Title);
+                MessageBox.Show("Failed to Get Version List; upload the created log to #melonloader-support on discord", Title);
+                File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", ex.ToString());
                 Application.Exit();
             }
 
