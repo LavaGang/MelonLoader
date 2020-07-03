@@ -18,6 +18,9 @@ namespace MelonLoader.Installer
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
 
+        private static readonly string[] filesToCleanUp = new string[] { "Mono.Cecil.dll", "version.dll", "winmm.dll" };
+        private static readonly string[] foldersToCleanUp = new string[] { "Logs", "MelonLoader" };
+
         [STAThread]
         static void Main()
         {
@@ -97,16 +100,30 @@ namespace MelonLoader.Installer
 
         private static void Cleanup(string dirpath, bool legacy_install)
         {
-            if (File.Exists(Path.Combine(dirpath, "Mono.Cecil.dll")))
-                File.Delete(Path.Combine(dirpath, "Mono.Cecil.dll"));
-            if (File.Exists(Path.Combine(dirpath, "version.dll")))
-                File.Delete(Path.Combine(dirpath, "version.dll"));
-            if (File.Exists(Path.Combine(dirpath, "winmm.dll")))
-                File.Delete(Path.Combine(dirpath, "winmm.dll"));
-            if (Directory.Exists(Path.Combine(dirpath, "Logs")))
-                Directory.Delete(Path.Combine(dirpath, "Logs"), true);
-            if (Directory.Exists(Path.Combine(dirpath, "MelonLoader")))
-                Directory.Delete(Path.Combine(dirpath, "MelonLoader"), true);
+            while (true)
+            {
+                try
+                {
+                    foreach (string file in filesToCleanUp)
+                    {
+                        if (File.Exists(Path.Combine(dirpath, file)))
+                            File.Delete(Path.Combine(dirpath, file));
+                    }
+
+                    foreach (string folder in foldersToCleanUp)
+                    {
+                        if (Directory.Exists(Path.Combine(dirpath, folder)))
+                            Directory.Delete(Path.Combine(dirpath, folder), true);
+                    }
+                    break;
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    DialogResult result = MessageBox.Show($"MelonLoader could not remove old files.{Environment.NewLine}Please close the game then click retry to try again.{Environment.NewLine}If issue persists please click cancel to dump logs.", Program.Title, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                    if (result == DialogResult.Cancel)
+                        throw e;
+                }
+            }
         }
 
         private static void CreateDirectories(string dirpath, string selectedVersion, bool legacy_install)
