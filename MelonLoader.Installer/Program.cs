@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using LightJson;
@@ -236,10 +237,54 @@ namespace MelonLoader.Installer
             CreateDirectories(dirpath, "v0.1.0", true);
         }
 
-        internal static string GetUnityFileVersion(string exepath)
+        internal static string GetUnityVersion(string exepath)
         {
-            string file_version = FileVersionInfo.GetVersionInfo(exepath).FileVersion;
-            return file_version.Substring(0, file_version.LastIndexOf('.'));
+            string ggm_path = Path.Combine(Path.GetDirectoryName(exepath), (Path.GetFileNameWithoutExtension(exepath) + "_Data"), "globalgamemanagers");
+            if (!File.Exists(ggm_path))
+            {
+                FileVersionInfo versioninfo = FileVersionInfo.GetVersionInfo(exepath);
+                if ((versioninfo == null) || string.IsNullOrEmpty(versioninfo.FileVersion))
+                    return "UNKNOWN";
+                return versioninfo.FileVersion.Substring(0, versioninfo.FileVersion.LastIndexOf('.'));
+            }
+            else
+            {
+                byte[] ggm_bytes = File.ReadAllBytes(ggm_path);
+                if ((ggm_bytes == null) || (ggm_bytes.Length <= 0))
+                    return "UNKNOWN";
+                int start_position = 0;
+                for (int i = 10; i < ggm_bytes.Length; i++)
+                {
+                    byte pos_byte = ggm_bytes[i];
+                    if ((pos_byte <= 0x39) && (pos_byte >= 0x30))
+                    {
+                        start_position = i;
+                        break;
+                    }
+                }
+                if (start_position == 0)
+                    return "UNKNOWN";
+                int end_position = 0;
+                for (int i = start_position; i < ggm_bytes.Length; i++)
+                {
+                    byte pos_byte = ggm_bytes[i];
+                    if ((pos_byte != 0x2E) && ((pos_byte > 0x39) || (pos_byte < 0x30)))
+                    {
+                        end_position = (i - 1);
+                        break;
+                    }
+                }
+                if (end_position == 0)
+                    return "UNKNOWN";
+                int verstr_byte_pos = 0;
+                byte[] verstr_byte = new byte[((end_position - start_position) + 1)];
+                for (int i = start_position; i <= end_position; i++)
+                {
+                    verstr_byte[verstr_byte_pos] = ggm_bytes[i];
+                    verstr_byte_pos++;
+                }
+                return Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
+            }
         }
 
         internal static void CheckForUpdates()

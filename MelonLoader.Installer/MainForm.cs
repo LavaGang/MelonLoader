@@ -45,9 +45,7 @@ namespace MelonLoader.Installer
 
                         textBox1.Text = filePath;
                         button2.Enabled = true;
-
-                        UnityVersion = FileVersionInfo.GetVersionInfo(filePath).FileVersion;
-                        UnityVersion = UnityVersion.Substring(0, UnityVersion.LastIndexOf('.'));
+                        UnityVersion = Program.GetUnityVersion(filePath);
 
                         string existingFilePath = Path.Combine(Path.Combine(Path.GetDirectoryName(filePath), "MelonLoader"), "MelonLoader.ModHandler.dll");
                         if (File.Exists(existingFilePath))
