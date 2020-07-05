@@ -211,7 +211,7 @@ namespace MelonLoader
                         try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); }
                 }
             }
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
             {
                 for (int i = 0; i < Mods.Count; i++)
                 {
@@ -220,7 +220,7 @@ namespace MelonLoader
                         try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             }
-            if ((Plugins.Count > 0) || (Mods.Count() > 0))
+            if ((Plugins.Count > 0) || (Mods.Count > 0))
                 ModPrefs.SaveConfig();
             Harmony.HarmonyInstance.UnpatchAllInstances();
             Imports.UNLOAD_MELONLOADER();
@@ -236,7 +236,7 @@ namespace MelonLoader
                     if (plugin != null)
                         try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); }
                 }
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -250,7 +250,7 @@ namespace MelonLoader
             SceneHandler.CheckForSceneChange();
             if (Imports.IsIl2CppGame() && IsVRChat)
                 VRChat_CheckUiManager();
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -261,7 +261,7 @@ namespace MelonLoader
 
         public static void OnFixedUpdate()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -272,7 +272,7 @@ namespace MelonLoader
 
         public static void OnLateUpdate()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -283,7 +283,7 @@ namespace MelonLoader
 
         public static void OnGUI()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
             {
                 for (int i = 0; i < Mods.Count; i++)
                 {
@@ -297,7 +297,7 @@ namespace MelonLoader
 
         internal static void OnLevelIsLoading()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -308,7 +308,7 @@ namespace MelonLoader
 
         internal static void OnLevelWasLoaded(int level)
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -319,7 +319,7 @@ namespace MelonLoader
 
         internal static void OnLevelWasInitialized(int level)
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -347,7 +347,7 @@ namespace MelonLoader
                         if (returnval != null)
                         {
                             ShouldCheckForUiManager = false;
-                            if (Mods.Count() > 0)
+                            if (Mods.Count > 0)
                                 for (int i = 0; i < Mods.Count; i++)
                                 {
                                     MelonMod mod = Mods[i];
@@ -371,7 +371,7 @@ namespace MelonLoader
                 string[] files = Directory.GetFiles(searchdir, "*.dll");
                 if (files.Length > 0)
                 {
-                    for (int i = 0; i < files.Count(); i++)
+                    for (int i = 0; i < files.Length; i++)
                     {
                         string file = files[i];
                         if (!string.IsNullOrEmpty(file))
@@ -403,7 +403,7 @@ namespace MelonLoader
                 string[] zippedFiles = Directory.GetFiles(searchdir, "*.zip");
                 if (zippedFiles.Length > 0)
                 {
-                    for (int i = 0; i < zippedFiles.Count(); i++)
+                    for (int i = 0; i < zippedFiles.Length; i++)
                     {
                         string file = zippedFiles[i];
                         if (!string.IsNullOrEmpty(file))

@@ -154,9 +154,9 @@ namespace MelonLoader.AssemblyGenerator
 
         private static void Cleanup()
         {
-            if (localConfig.OldFiles.Count() > 0)
+            if (localConfig.OldFiles.Count > 0)
             {
-                for (int i = 0; i < localConfig.OldFiles.Count(); i++)
+                for (int i = 0; i < localConfig.OldFiles.Count; i++)
                 {
                     string oldFile = localConfig.OldFiles[i];
                     if (!string.IsNullOrEmpty(oldFile))
@@ -171,7 +171,7 @@ namespace MelonLoader.AssemblyGenerator
             string[] files = Directory.GetFiles(Il2CppAssemblyUnhollower.OutputDirectory, "*.dll", SearchOption.TopDirectoryOnly);
             if (files.Length > 0)
             {
-                for (int i = 0; i < files.Count(); i++)
+                for (int i = 0; i < files.Length; i++)
                 {
                     string file = files[i];
                     if (!string.IsNullOrEmpty(file))
@@ -292,7 +292,7 @@ namespace MelonLoader.AssemblyGenerator
                             {
                                 for (int i = 0; i < oldfilesarr.Count; i++)
                                 {
-                                    string file = (string)oldfilesarr.ElementAt(i);
+                                    string file = (string)oldfilesarr[i];
                                     if (!string.IsNullOrEmpty(file))
                                         returnval.OldFiles.Add(file);
                                 }
