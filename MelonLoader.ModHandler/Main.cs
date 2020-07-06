@@ -31,7 +31,7 @@ namespace MelonLoader
             AppDomain.CurrentDomain.UnhandledException += ExceptionHandler;
 
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
-            UnityVersion = GetUnityFileVersion();
+            UnityVersion = GetUnityVersion();
 
             if (Imports.IsIl2CppGame())
             {
@@ -581,18 +581,11 @@ namespace MelonLoader
         }
 
         private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonModLogger.LogError((e.ExceptionObject as Exception).ToString());
-        private static string GetUnityFileVersion()
-        {
-            FileVersionInfo versioninfo = FileVersionInfo.GetVersionInfo(Imports.GetExePath());
-            if ((versioninfo == null) || string.IsNullOrEmpty(versioninfo.FileVersion))
-                return "UNKNOWN";
-            return versioninfo.FileVersion.Substring(0, versioninfo.FileVersion.LastIndexOf('.'));
-        }
-
+        
         internal static string GetUnityVersion()
         {
             string exepath = Imports.GetExePath();
-            string ggm_path = Path.Combine(Path.Combine(Path.GetDirectoryName(exepath), (Path.GetFileNameWithoutExtension(exepath) + "_Data")), "globalgamemanagers");
+            string ggm_path = Path.Combine(Imports.GetGameDataDirectory(), "globalgamemanagers");
             if (!File.Exists(ggm_path))
             {
                 FileVersionInfo versioninfo = FileVersionInfo.GetVersionInfo(exepath);
