@@ -29,172 +29,212 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.picTextLogo = new System.Windows.Forms.PictureBox();
+            this.picImageLogo = new System.Windows.Forms.PictureBox();
+            this.progInstall = new MetroFramework.Controls.MetroProgressBar();
+            this.cbVersions = new MetroFramework.Controls.MetroComboBox();
+            this.tbPath = new MetroFramework.Controls.MetroTextBox();
+            this.tileDivider = new MetroFramework.Controls.MetroTile();
+            this.btnInstall = new MetroFramework.Controls.MetroButton();
+            this.lblProgressInfo = new MetroFramework.Controls.MetroLabel();
+            this.lblProgressPer = new MetroFramework.Controls.MetroLabel();
+            this.btnSelect = new MetroFramework.Controls.MetroButton();
+            ((System.ComponentModel.ISupportInitialize)(this.picTextLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picImageLogo)).BeginInit();
             this.SuspendLayout();
             // 
-            // comboBox1
+            // picTextLogo
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.picTextLogo.Image = global::MelonLoader.Installer.Properties.Resources.MLText;
+            this.picTextLogo.Location = new System.Drawing.Point(23, 134);
+            this.picTextLogo.Name = "picTextLogo";
+            this.picTextLogo.Size = new System.Drawing.Size(437, 63);
+            this.picTextLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picTextLogo.TabIndex = 0;
+            this.picTextLogo.TabStop = false;
+            // 
+            // picImageLogo
+            // 
+            this.picImageLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            this.picImageLogo.Image = global::MelonLoader.Installer.Properties.Resources.Logo;
+            this.picImageLogo.Location = new System.Drawing.Point(184, 20);
+            this.picImageLogo.Name = "picImageLogo";
+            this.picImageLogo.Size = new System.Drawing.Size(120, 109);
+            this.picImageLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picImageLogo.TabIndex = 1;
+            this.picImageLogo.TabStop = false;
+            // 
+            // progInstall
+            // 
+            this.progInstall.Location = new System.Drawing.Point(23, 244);
+            this.progInstall.Name = "progInstall";
+            this.progInstall.Size = new System.Drawing.Size(437, 29);
+            this.progInstall.Step = 1;
+            this.progInstall.Style = MetroFramework.MetroColorStyle.Green;
+            this.progInstall.TabIndex = 10;
+            this.progInstall.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.progInstall.Visible = false;
+            // 
+            // cbVersions
+            // 
+            this.cbVersions.FormattingEnabled = true;
+            this.cbVersions.ItemHeight = 23;
+            this.cbVersions.Items.AddRange(new object[] {
             "v0.2.2",
             "v0.2.1",
             "v0.2",
             "v0.1.0"});
-            this.comboBox1.Location = new System.Drawing.Point(318, 188);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(95, 21);
-            this.comboBox1.TabIndex = 2;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.cbVersions.Location = new System.Drawing.Point(329, 216);
+            this.cbVersions.Name = "cbVersions";
+            this.cbVersions.Size = new System.Drawing.Size(131, 29);
+            this.cbVersions.Style = MetroFramework.MetroColorStyle.Green;
+            this.cbVersions.TabIndex = 13;
+            this.cbVersions.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.cbVersions.UseSelectable = true;
+            this.cbVersions.SelectedIndexChanged += new System.EventHandler(this.cbVersions_SelectedIndexChanged);
             // 
-            // button1
+            // tbPath
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button1.Location = new System.Drawing.Point(12, 187);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(64, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = " SELECT";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(82, 189);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(230, 20);
-            this.textBox1.TabIndex = 4;
-            this.textBox1.Text = "Please Select your Unity Game\'s EXE...";
             // 
-            // label1
+            this.tbPath.CustomButton.Image = null;
+            this.tbPath.CustomButton.Location = new System.Drawing.Point(197, 1);
+            this.tbPath.CustomButton.Name = "";
+            this.tbPath.CustomButton.Size = new System.Drawing.Size(21, 21);
+            this.tbPath.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.tbPath.CustomButton.TabIndex = 1;
+            this.tbPath.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.tbPath.CustomButton.UseSelectable = true;
+            this.tbPath.CustomButton.Visible = false;
+            this.tbPath.Lines = new string[] {
+        "Please Select your Unity Game\'s EXE..."};
+            this.tbPath.Location = new System.Drawing.Point(104, 219);
+            this.tbPath.MaxLength = 32767;
+            this.tbPath.Name = "tbPath";
+            this.tbPath.PasswordChar = '\0';
+            this.tbPath.ReadOnly = true;
+            this.tbPath.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbPath.SelectedText = "";
+            this.tbPath.SelectionLength = 0;
+            this.tbPath.SelectionStart = 0;
+            this.tbPath.ShortcutsEnabled = false;
+            this.tbPath.Size = new System.Drawing.Size(219, 23);
+            this.tbPath.Style = MetroFramework.MetroColorStyle.Green;
+            this.tbPath.TabIndex = 15;
+            this.tbPath.Text = "Please Select your Unity Game\'s EXE...";
+            this.tbPath.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.tbPath.UseSelectable = true;
+            this.tbPath.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.tbPath.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
             // 
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Location = new System.Drawing.Point(12, 173);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(401, 12);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "---------------------------------------------------------------------------------" +
-    "-------------------------------------------------";
+            // tileDivider
             // 
-            // button2
+            this.tileDivider.ActiveControl = null;
+            this.tileDivider.Enabled = false;
+            this.tileDivider.Location = new System.Drawing.Point(23, 203);
+            this.tileDivider.Name = "tileDivider";
+            this.tileDivider.Size = new System.Drawing.Size(437, 4);
+            this.tileDivider.Style = MetroFramework.MetroColorStyle.Black;
+            this.tileDivider.TabIndex = 17;
+            this.tileDivider.Text = "metroTile1";
+            this.tileDivider.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.tileDivider.UseSelectable = true;
             // 
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(11, 219);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(402, 43);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "INSTALL";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // btnInstall
             // 
-            // progressBar1
+            this.btnInstall.Enabled = false;
+            this.btnInstall.Location = new System.Drawing.Point(23, 251);
+            this.btnInstall.Name = "btnInstall";
+            this.btnInstall.Size = new System.Drawing.Size(437, 45);
+            this.btnInstall.Style = MetroFramework.MetroColorStyle.Green;
+            this.btnInstall.TabIndex = 18;
+            this.btnInstall.Text = "INSTALL";
+            this.btnInstall.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.btnInstall.UseSelectable = true;
+            this.btnInstall.Click += new System.EventHandler(this.btnInstall_Click);
             // 
-            this.progressBar1.Location = new System.Drawing.Point(11, 219);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(402, 24);
-            this.progressBar1.TabIndex = 7;
-            this.progressBar1.Visible = false;
+            // lblProgressInfo
             // 
-            // label2
+            this.lblProgressInfo.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblProgressInfo.Location = new System.Drawing.Point(43, 214);
+            this.lblProgressInfo.Name = "lblProgressInfo";
+            this.lblProgressInfo.Size = new System.Drawing.Size(403, 28);
+            this.lblProgressInfo.Style = MetroFramework.MetroColorStyle.Green;
+            this.lblProgressInfo.TabIndex = 19;
+            this.lblProgressInfo.Text = "Downloading...";
+            this.lblProgressInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblProgressInfo.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.lblProgressInfo.Visible = false;
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 184);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(402, 29);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Downloading...";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label2.Visible = false;
+            // lblProgressPer
             // 
-            // label3
+            this.lblProgressPer.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblProgressPer.Location = new System.Drawing.Point(43, 274);
+            this.lblProgressPer.Name = "lblProgressPer";
+            this.lblProgressPer.Size = new System.Drawing.Size(403, 28);
+            this.lblProgressPer.Style = MetroFramework.MetroColorStyle.Green;
+            this.lblProgressPer.TabIndex = 20;
+            this.lblProgressPer.Text = "0%";
+            this.lblProgressPer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblProgressPer.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.lblProgressPer.Visible = false;
             // 
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(11, 244);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(402, 29);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "0%";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label3.Visible = false;
+            // btnSelect
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Image = global::MelonLoader.Installer.Properties.Resources.Logo;
-            this.pictureBox2.Location = new System.Drawing.Point(162, 12);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(100, 91);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::MelonLoader.Installer.Properties.Resources.MLText;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 109);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(401, 56);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.btnSelect.Location = new System.Drawing.Point(23, 216);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(75, 29);
+            this.btnSelect.Style = MetroFramework.MetroColorStyle.Green;
+            this.btnSelect.TabIndex = 21;
+            this.btnSelect.Text = "SELECT";
+            this.btnSelect.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.btnSelect.UseSelectable = true;
+            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click_1);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(425, 275);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label3);
+            this.ClientSize = new System.Drawing.Size(481, 314);
+            this.Controls.Add(this.btnSelect);
+            this.Controls.Add(this.btnInstall);
+            this.Controls.Add(this.tileDivider);
+            this.Controls.Add(this.tbPath);
+            this.Controls.Add(this.cbVersions);
+            this.Controls.Add(this.picImageLogo);
+            this.Controls.Add(this.picTextLogo);
+            this.Controls.Add(this.lblProgressPer);
+            this.Controls.Add(this.lblProgressInfo);
+            this.Controls.Add(this.progInstall);
+            this.DisplayHeader = false;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
+            this.Padding = new System.Windows.Forms.Padding(20, 30, 20, 20);
+            this.Resizable = false;
+            this.Style = MetroFramework.MetroColorStyle.Green;
             this.Text = "MelonLoader Installer";
+            this.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picTextLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picImageLogo)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        internal System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
-        internal System.Windows.Forms.Button button2;
-        internal System.Windows.Forms.ProgressBar progressBar1;
-        internal System.Windows.Forms.Label label2;
-        internal System.Windows.Forms.Label label3;
+        private System.Windows.Forms.PictureBox picTextLogo;
+        private System.Windows.Forms.PictureBox picImageLogo;
+        public MetroFramework.Controls.MetroProgressBar progInstall;
+        public MetroFramework.Controls.MetroComboBox cbVersions;
+        public MetroFramework.Controls.MetroTextBox tbPath;
+        public MetroFramework.Controls.MetroTile tileDivider;
+        public MetroFramework.Controls.MetroButton btnInstall;
+        public MetroFramework.Controls.MetroLabel lblProgressInfo;
+        public MetroFramework.Controls.MetroLabel lblProgressPer;
+        public MetroFramework.Controls.MetroButton btnSelect;
     }
 }

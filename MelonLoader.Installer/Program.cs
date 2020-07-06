@@ -39,19 +39,19 @@ namespace MelonLoader.Installer
             try
             {
                 mainForm = new MainForm();
-                mainForm.comboBox1.Items.Clear();
+                mainForm.cbVersions.Items.Clear();
                 JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
                 if (data.Count > 0)
                 {
                     foreach (var x in data)
                     {
                         string version = x["tag_name"].AsString;
-                        if (mainForm.comboBox1.Items.Count <= 0)
-                            mainForm.comboBox1.Items.Add("Latest (" + version + ")");
-                        mainForm.comboBox1.Items.Add(version);
+                        if (mainForm.cbVersions.Items.Count <= 0)
+                            mainForm.cbVersions.Items.Add("Latest (" + version + ")");
+                        mainForm.cbVersions.Items.Add(version);
                     }
                 }
-                if (mainForm.comboBox1.Items.Count <= 0)
+                if (mainForm.cbVersions.Items.Count <= 0)
                     throw new Exception("Version List is Empty!");
             }
             catch (Exception ex)
@@ -61,8 +61,8 @@ namespace MelonLoader.Installer
                 Application.Exit();
             }
 
-            mainForm.comboBox1.SelectedIndex = 0;
-            mainForm.comboBox1.SelectedItem = mainForm.comboBox1.Items[0];
+            mainForm.cbVersions.SelectedIndex = 0;
+            mainForm.cbVersions.SelectedItem = mainForm.cbVersions.Items[0];
             mainForm.Show();
             Application.Run(mainForm);
         }
@@ -87,15 +87,15 @@ namespace MelonLoader.Installer
         internal static void SetDisplayText(string text)
         {
             mainForm.Invoke(new Action(() => {
-                mainForm.label2.Text = text; 
+                mainForm.lblProgressInfo.Text = text; 
             }));
         }
 
         internal static void SetPercentage(int percent)
         {
             mainForm.Invoke(new Action(() => {
-                mainForm.progressBar1.Value = percent;
-                mainForm.label3.Text = percent.ToString() + "%";
+                mainForm.progInstall.Value = percent;
+                mainForm.lblProgressPer.Text = percent.ToString() + "%";
             }));
         }
 
