@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using LightJson;
 using MelonLoader.AssemblyGenerator;
@@ -24,6 +25,7 @@ namespace MelonLoader.Installer
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
             webClient.Headers.Add("User-Agent", "Unity web player");
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
@@ -134,7 +136,7 @@ namespace MelonLoader.Installer
         {
             SetDisplayText("Downloading MelonLoader...");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath);
+            webClient.DownloadFileTaskAsync("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath).Wait();
             SetDisplayText("Extracting MelonLoader...");
             SetPercentage(50);
             Cleanup(dirpath, false);
