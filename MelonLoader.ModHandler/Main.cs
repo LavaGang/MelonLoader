@@ -155,8 +155,8 @@ namespace MelonLoader
                 MelonModLogger.Log("------------------------------");
             }
 
-            if ((Plugins.Count > 0) || (Mods.Count > 0))
-                AddUnityDebugLog();
+            //if ((Plugins.Count > 0) || (Mods.Count > 0))
+            //    AddUnityDebugLog();
 
             if (Plugins.Count > 0)
             {
