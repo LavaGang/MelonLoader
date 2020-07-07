@@ -10,6 +10,7 @@
 #include "Logger.h"
 #include "ModHandler.h"
 #include <signal.h>
+#include "DisableAnalytics.h"
 #pragma warning(disable:4996)
 
 HINSTANCE MelonLoader::thisdll = NULL;
@@ -130,6 +131,8 @@ void MelonLoader::Main()
 			}
 
 			ReadAppInfo();
+
+			DisableAnalytics::Initialize();
 
 			if (IsGameIl2Cpp)
 			{
