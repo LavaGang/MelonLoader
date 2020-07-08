@@ -12,7 +12,19 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"perf-events.cloud.unity3d.com",
 	"public.cloud.unity3d.com",
 	"cdp.cloud.unity3d.com",
-	"data-optout-service.uca.cloud.unity3d.com"
+	"data-optout-service.uca.cloud.unity3d.com",
+	"oculus.com",
+	"oculuscdn.com",
+	"facebook-hardware.com",
+	"facebook.net",
+	"facebook.com",
+	"graph.facebook.com",
+	"fbcdn.com",
+	"fbsbx.com",
+	"fbcdn.net",
+	"fb.me",
+	"fb.com",
+	"crashlytics.com"
 };
 
 bool DisableAnalytics::Setup()
