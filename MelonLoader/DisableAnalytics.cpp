@@ -18,7 +18,7 @@ getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
 
 bool DisableAnalytics::Setup()
 {
-	AssertionManager::Start("Mono.cpp", "DisableAnalytics::Setup");
+	AssertionManager::Start("DisableAnalytics.cpp", "DisableAnalytics::Setup");
 
 	HMODULE wsock32 = AssertionManager::GetModuleHandlePtr("wsock32.dll");
 	if (wsock32 != NULL)
