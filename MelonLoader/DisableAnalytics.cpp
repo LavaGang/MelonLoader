@@ -21,7 +21,7 @@ bool DisableAnalytics::Setup()
 	HMODULE ws2_32 = AssertionManager::GetModuleHandlePtr("ws2_32");
 	if (ws2_32 != NULL)
 	{
-		original_getaddrinfo = (getaddrinfo_t)AssertionManager::GetExport(AssertionManager::GetModuleHandlePtr("ws2_32"), "getaddrinfo");
+		original_getaddrinfo = (getaddrinfo_t)AssertionManager::GetExport(ws2_32, "getaddrinfo");
 		if (original_getaddrinfo != NULL)
 			HookManager::Hook(&(LPVOID&)original_getaddrinfo, getaddrinfo_hook);
 	}
