@@ -3,7 +3,6 @@
 #include "Logger.h"
 #include "AssertionManager.h"
 
-getaddrinfo_t DisableAnalytics::original_getaddrinfo = NULL;
 std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"api.amplitude.com",
 	"api.uca.cloud.unity3d.com",
@@ -14,16 +13,27 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"data-optout-service.uca.cloud.unity3d.com"
 };
 
+gethostbyname_t DisableAnalytics::Original_gethostbyname = NULL;
+getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
+
 bool DisableAnalytics::Setup()
 {
 	AssertionManager::Start("Mono.cpp", "DisableAnalytics::Setup");
 
+	HMODULE wsock32 = AssertionManager::GetModuleHandlePtr("wsock32.dll");
+	if (wsock32 != NULL)
+	{
+		Original_gethostbyname = (gethostbyname_t)AssertionManager::GetExport(wsock32, "gethostbyname");
+		if (Original_gethostbyname != NULL)
+			HookManager::Hook(&(LPVOID&)Original_gethostbyname, Hooked_gethostbyname);
+	}
+
 	HMODULE ws2_32 = AssertionManager::GetModuleHandlePtr("ws2_32");
 	if (ws2_32 != NULL)
 	{
-		original_getaddrinfo = (getaddrinfo_t)AssertionManager::GetExport(ws2_32, "getaddrinfo");
-		if (original_getaddrinfo != NULL)
-			HookManager::Hook(&(LPVOID&)original_getaddrinfo, getaddrinfo_hook);
+		Original_getaddrinfo = (getaddrinfo_t)AssertionManager::GetExport(ws2_32, "getaddrinfo");
+		if (Original_getaddrinfo != NULL)
+			HookManager::Hook(&(LPVOID&)Original_getaddrinfo, Hooked_getaddrinfo);
 	}
 
 	return !AssertionManager::Result;
