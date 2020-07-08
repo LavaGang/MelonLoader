@@ -132,15 +132,16 @@ void MelonLoader::Main()
 
 			ReadAppInfo();
 
-			DisableAnalytics::Initialize();
-
-			if (IsGameIl2Cpp)
+			if (DisableAnalytics::Setup())
 			{
-				if (Mono::Load() && Mono::Setup())
+				if (IsGameIl2Cpp)
+				{
+					if (Mono::Load() && Mono::Setup())
+						HookManager::LoadLibraryW_Hook();
+				}
+				else
 					HookManager::LoadLibraryW_Hook();
 			}
-			else
-				HookManager::LoadLibraryW_Hook();
 		}
 	}
 }
