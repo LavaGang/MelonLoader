@@ -3,6 +3,8 @@
 #include "Logger.h"
 #include "AssertionManager.h"
 
+gethostbyname_t DisableAnalytics::Original_gethostbyname = NULL;
+getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
 std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"api.amplitude.com",
 	"api.uca.cloud.unity3d.com",
@@ -12,9 +14,6 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"cdp.cloud.unity3d.com",
 	"data-optout-service.uca.cloud.unity3d.com"
 };
-
-gethostbyname_t DisableAnalytics::Original_gethostbyname = NULL;
-getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
 
 bool DisableAnalytics::Setup()
 {
