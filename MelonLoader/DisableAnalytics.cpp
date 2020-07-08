@@ -54,6 +54,6 @@ bool DisableAnalytics::CheckBlacklist(std::string url)
 {
 	bool url_found = (std::find(URL_Blacklist.begin(), URL_Blacklist.end(), url) != URL_Blacklist.end());
 	if (url_found)
-		Logger::DebugLog("Analytics URL Detected and Blocked: " + url);
+		Logger::DebugLog("Analytics URL Blocked: " + url);
 	return url_found;
 }
