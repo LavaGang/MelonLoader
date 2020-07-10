@@ -15,6 +15,6 @@ public:
 
 	static bool Setup();
 	static bool CheckBlacklist(std::string url);
-	static void* Hooked_gethostbyname(const char* name) { return Original_gethostbyname((CheckBlacklist(name) ? "0.0.0.0" : name)); }
-	static int Hooked_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult) { return Original_getaddrinfo((CheckBlacklist(pNodeName) ? "0.0.0.0" : pNodeName), pServiceName, pHints, ppResult); }
+	static void* Hooked_gethostbyname(const char* name) { if (CheckBlacklist(name)) return NULL; return Original_gethostbyname(name); }
+	static int Hooked_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult) { if (CheckBlacklist(pNodeName)) return WSAEHOSTDOWN; return Original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult); }
 };
