@@ -1,6 +1,6 @@
 using System;
 using System.Net;
-using LightJson;
+using MelonLoader.LightJson;
 
 namespace MelonLoader.AssemblyGenerator
 {

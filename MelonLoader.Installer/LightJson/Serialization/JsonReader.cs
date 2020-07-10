@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Globalization;
 
-namespace LightJson.Serialization
+namespace MelonLoader.LightJson.Serialization
 {
 	using ErrorType = JsonParseException.ErrorType;
 

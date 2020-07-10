@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using LightJson.Serialization;
+using MelonLoader.LightJson.Serialization;
 
-namespace LightJson
+namespace MelonLoader.LightJson
 {
 	/// <summary>
 	/// Represents a key-value pair collection of JsonValue objects.

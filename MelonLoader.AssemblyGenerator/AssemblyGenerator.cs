@@ -6,6 +6,7 @@ using System.Threading;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using MelonLoader.LightJson;
 using MelonLoader.TinyJSON;
 using MelonLoader.Tomlyn;
 using MelonLoader.Tomlyn.Model;
@@ -106,30 +107,44 @@ namespace MelonLoader.AssemblyGenerator
             catch (Exception ex)
             {
                 run_fallback = true;
-                Logger.Log(ex.ToString());
-                Logger.LogError("Can't download Unity Dependencies for " + unityVersion + ", downloading Fallback...");
+                Logger.LogError(ex.ToString());
+                Logger.Log("Can't download Unity Dependencies for " + unityVersion + ", downloading Fallback...");
             }
             if (run_fallback)
             {
-                bool found_version = false;
                 string subver = unityVersion.Substring(0, unityVersion.LastIndexOf("."));
-                for (int subver2 = 40; subver2 > 0; subver2--)
+                try
                 {
-                    string newver = subver + "." + subver2.ToString();
-                    try
+                    JsonArray data = (JsonArray)JsonValue.Parse(Program.webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/contents/BaseLibs/UnityDependencies")).AsJsonArray;
+                    if (data.Count > 0)
                     {
-                        DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{newver}.zip", newver, localConfig.UnityVersion, UnityDependencies.BaseFolder, tempfile);
-                        localConfig.UnityVersion = newver;
-                        localConfig.Save(localConfigPath);
-                        found_version = true;
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
+                        List<string> versionlist = new List<string>();
+                        foreach (var x in data)
+                        {
+                            string version = Path.GetFileNameWithoutExtension(x["name"].AsString);
+                            if (version.StartsWith(subver))
+                            {
+                                versionlist.Add(version);
+                                string[] semvertbl = version.Split(new char[] { '.' });
+                            }
+                        }
+                        if (versionlist.Count > 0)
+                        {
+                            versionlist = versionlist.OrderBy(x => int.Parse(x.Split(new char[] { '.' })[2])).ToList();
+                            string latest_version = versionlist.Last();
+                            Logger.Log("Fallback Unity Version: " + latest_version);
+
+                            DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{latest_version}.zip", latest_version, localConfig.UnityVersion, UnityDependencies.BaseFolder, tempfile);
+                            localConfig.UnityVersion = unityVersion;
+                            localConfig.Save(localConfigPath);
+                        }
                     }
                 }
-                if (!found_version)
+                catch (Exception ex)
+                {
                     Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
+                    Logger.LogError(ex.ToString());
+                }
             }
         }
 

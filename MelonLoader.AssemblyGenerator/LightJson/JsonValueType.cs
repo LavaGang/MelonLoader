@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LightJson
+namespace MelonLoader.LightJson
 {
 	/// <summary>
 	/// Enumerates the types of Json values.

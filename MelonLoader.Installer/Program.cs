@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using LightJson;
+using MelonLoader.LightJson;
 using MelonLoader.AssemblyGenerator;
 
 namespace MelonLoader.Installer
@@ -195,24 +196,30 @@ namespace MelonLoader.Installer
 
                 SetDisplayText("Downloading Dependencies...");
                 SetPercentage(60);
-
                 string tempfilepath4 = TempFileCache.CreateFile();
                 bool run_fallback = false;
-                try { webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip", tempfilepath4); }
-                catch (Exception ex) { run_fallback = true; }
+                try { webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip", tempfilepath4); } catch (Exception ex) { run_fallback = true; }
                 if (run_fallback)
                 {
                     string subver = mainForm.UnityVersion.Substring(0, mainForm.UnityVersion.LastIndexOf("."));
-                    for (int subver2 = 40; subver2 > 0; subver2--)
+                    JsonArray data = (JsonArray)JsonValue.Parse(Program.webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/contents/BaseLibs/UnityDependencies")).AsJsonArray;
+                    if (data.Count > 0)
                     {
-                        string newver = subver + "." + subver2.ToString();
-                        try
+                        List<string> versionlist = new List<string>();
+                        foreach (var x in data)
                         {
-                            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + newver + ".zip", tempfilepath4);
-                            break;
+                            string version = Path.GetFileNameWithoutExtension(x["name"].AsString);
+                            if (version.StartsWith(subver))
+                            {
+                                versionlist.Add(version);
+                                string[] semvertbl = version.Split(new char[] { '.' });
+                            }
                         }
-                        catch (Exception ex)
+                        if (versionlist.Count > 0)
                         {
+                            versionlist = versionlist.OrderBy(x => int.Parse(x.Split(new char[] { '.' })[2])).ToList();
+                            string latest_version = versionlist.Last();
+                            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + latest_version + ".zip", tempfilepath4);
                         }
                     }
                 }
