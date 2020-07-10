@@ -85,20 +85,21 @@ namespace MelonLoader.AssemblyGenerator
         private static void DownloadDependencies(string unityVersion)
         {
             Logger.Log("Downloading Il2CppDumper");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, localConfig.DumperVersion, Il2CppDumper.BaseFolder);
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, localConfig.DumperVersion, Il2CppDumper.BaseFolder, TempFileCache.CreateFile());
             localConfig.DumperVersion = ExternalToolVersions.Il2CppDumperVersion;
             localConfig.Save(localConfigPath);
 
             Logger.Log("Downloading Il2CppAssemblyUnhollower");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder);
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder, TempFileCache.CreateFile());
             localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
             localConfig.Save(localConfigPath);
 
             Logger.Log("Downloading Unity Dependencies");
+            string tempfile = TempFileCache.CreateFile();
             bool run_fallback = false;
             try
             {
-                DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, localConfig.UnityVersion, UnityDependencies.BaseFolder);
+                DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, localConfig.UnityVersion, UnityDependencies.BaseFolder, tempfile);
                 localConfig.UnityVersion = unityVersion;
                 localConfig.Save(localConfigPath);
             }
@@ -111,13 +112,13 @@ namespace MelonLoader.AssemblyGenerator
             if (run_fallback)
             {
                 bool found_version = false;
-                string subver = unityVersion.Substring(0, unityVersion.IndexOf("."));
+                string subver = unityVersion.Substring(0, unityVersion.LastIndexOf("."));
                 for (int subver2 = 40; subver2 > 0; subver2--)
                 {
                     string newver = subver + "." + subver2.ToString();
                     try
                     {
-                        DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{newver}.zip", newver, localConfig.UnityVersion, UnityDependencies.BaseFolder);
+                        DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{newver}.zip", newver, localConfig.UnityVersion, UnityDependencies.BaseFolder, tempfile);
                         localConfig.UnityVersion = newver;
                         localConfig.Save(localConfigPath);
                         found_version = true;

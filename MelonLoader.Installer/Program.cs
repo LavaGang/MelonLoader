@@ -202,7 +202,7 @@ namespace MelonLoader.Installer
                 catch (Exception ex) { run_fallback = true; }
                 if (run_fallback)
                 {
-                    string subver = mainForm.UnityVersion.Substring(0, mainForm.UnityVersion.IndexOf("."));
+                    string subver = mainForm.UnityVersion.Substring(0, mainForm.UnityVersion.LastIndexOf("."));
                     for (int subver2 = 40; subver2 > 0; subver2--)
                     {
                         string newver = subver + "." + subver2.ToString();
