@@ -195,8 +195,27 @@ namespace MelonLoader.Installer
 
                 SetDisplayText("Downloading Dependencies...");
                 SetPercentage(60);
+
                 string tempfilepath4 = TempFileCache.CreateFile();
-                webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip", tempfilepath4);
+                bool run_fallback = false;
+                try { webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip", tempfilepath4); }
+                catch (Exception ex) { run_fallback = true; }
+                if (run_fallback)
+                {
+                    string subver = mainForm.UnityVersion.Substring(0, mainForm.UnityVersion.IndexOf("."));
+                    for (int subver2 = 40; subver2 > 0; subver2--)
+                    {
+                        string newver = subver + "." + subver2.ToString();
+                        try
+                        {
+                            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + newver + ".zip", tempfilepath4);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+                }
 
                 SetDisplayText("Extracting Il2CppDumper...");
                 SetPercentage(70);

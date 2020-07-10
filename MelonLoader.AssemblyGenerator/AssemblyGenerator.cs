@@ -95,6 +95,7 @@ namespace MelonLoader.AssemblyGenerator
             localConfig.Save(localConfigPath);
 
             Logger.Log("Downloading Unity Dependencies");
+            bool run_fallback = false;
             try
             {
                 DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, localConfig.UnityVersion, UnityDependencies.BaseFolder);
@@ -103,8 +104,31 @@ namespace MelonLoader.AssemblyGenerator
             }
             catch (Exception ex)
             {
-                Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
+                run_fallback = true;
                 Logger.Log(ex.ToString());
+                Logger.LogError("Can't download Unity Dependencies for " + unityVersion + ", downloading Fallback...");
+            }
+            if (run_fallback)
+            {
+                bool found_version = false;
+                string subver = unityVersion.Substring(0, unityVersion.IndexOf("."));
+                for (int subver2 = 40; subver2 > 0; subver2--)
+                {
+                    string newver = subver + "." + subver2.ToString();
+                    try
+                    {
+                        DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{newver}.zip", newver, localConfig.UnityVersion, UnityDependencies.BaseFolder);
+                        localConfig.UnityVersion = newver;
+                        localConfig.Save(localConfigPath);
+                        found_version = true;
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+                if (!found_version)
+                    Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
             }
         }
 
