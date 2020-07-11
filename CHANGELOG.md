@@ -14,7 +14,20 @@
 
 ### v0.2.4 Open-Beta:
 
-1. 
+1. Added Error Output Log to Installer.  (Credits to trevtv :P)
+2. Use List.Count / Array.Length property instead of Linq's Count() method.  (Credits to zeobviouslyfakeacc :3)
+3. Added mechanism to catch when game is open to display additional information.  (Credits to DubyaDude ^.^)
+4. Harmony: Remove prefixes after postfixes to fix unpatching patches with __state variables.  (Credits to zeobviouslyfakeacc :3)
+5. Fixed Issue with certain Games not having a File Version attached to the EXE.
+6. Fixed Small Issue with Thief Simulator.
+7. Added MetroUI, Fody, and new revised Dark Theme to Installer.  (Credits to DubyaDude ^.^)
+8. UnityCrashHandler now terminates upon running with MelonLoader.
+9. Added Analytics Disabler.
+10. Added Oculus and Facebook Tracking URLs to Analytics Disabler.
+11. Added Fallback System for downloading Unity Dependencies needed for Unstripping.
+12. Moved LightJson under its own Namespace as MelonLoader.LightJson.
+13. Installer now correctly displays Download Percentage.  (Credits to charlesdeepk :D)
+14. Installer now correctly displays Percentage of Zip Extraction.
 
 ---
 
