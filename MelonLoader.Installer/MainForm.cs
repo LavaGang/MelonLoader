@@ -106,7 +106,6 @@ namespace MelonLoader.Installer
                     Program.Install(dirpath, selectedVersion, legacy_install);
 
                     Program.SetDisplayText("SUCCESS!");
-                    Program.SetPercentage(100);
                     MessageBox.Show("Installation Successful!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     Close();
                     Application.Exit();

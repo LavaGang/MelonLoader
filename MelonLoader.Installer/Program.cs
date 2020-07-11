@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using MelonLoader.LightJson;
 using MelonLoader.AssemblyGenerator;
+#pragma warning disable 0168
 
 namespace MelonLoader.Installer
 {
@@ -29,6 +30,7 @@ namespace MelonLoader.Installer
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
             webClient.Headers.Add("User-Agent", "Unity web player");
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
@@ -156,7 +158,6 @@ namespace MelonLoader.Installer
             string tempfilepath = TempFileCache.CreateFile();
             webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath);
             SetDisplayText("Extracting MelonLoader...");
-            SetPercentage(50);
             Cleanup(dirpath, false);
             ExtractZip(dirpath, tempfilepath);
             CreateDirectories(dirpath, selectedVersion, false);
@@ -170,10 +171,6 @@ namespace MelonLoader.Installer
             webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
             
             SetDisplayText("Extracting MelonLoader...");
-            if (is_02)
-                SetPercentage(20);
-            else
-                SetPercentage(50);
             Cleanup(dirpath, true);
             ExtractZip(dirpath, tempfilepath);
 
@@ -185,17 +182,14 @@ namespace MelonLoader.Installer
                 string UnityDependencies_Folder = Path.Combine(Il2CppAssemblyUnhollower_Folder, "UnityDependencies");
 
                 SetDisplayText("Downloading Il2CppDumper...");
-                SetPercentage(40);
                 string tempfilepath2 = TempFileCache.CreateFile();
                 webClient.DownloadFile("https://github.com/Perfare/Il2CppDumper/releases/download/v6.2.1/Il2CppDumper-v6.2.1.zip", tempfilepath2);
 
                 SetDisplayText("Downloading Il2CppUnhollower...");
-                SetPercentage(50);
                 string tempfilepath3 = TempFileCache.CreateFile();
                 webClient.DownloadFile("https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v0.4.3.0/Il2CppAssemblyUnhollower.0.4.3.0.zip", tempfilepath3);
 
                 SetDisplayText("Downloading Dependencies...");
-                SetPercentage(60);
                 string tempfilepath4 = TempFileCache.CreateFile();
                 bool run_fallback = false;
                 try { webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip", tempfilepath4); } catch (Exception ex) { run_fallback = true; }
@@ -225,15 +219,12 @@ namespace MelonLoader.Installer
                 }
 
                 SetDisplayText("Extracting Il2CppDumper...");
-                SetPercentage(70);
                 ExtractZip(Il2CppDumper_Folder, tempfilepath2);
 
                 SetDisplayText("Extracting Il2CppUnhollower...");
-                SetPercentage(80);
                 ExtractZip(Il2CppAssemblyUnhollower_Folder, tempfilepath3);
 
                 SetDisplayText("Extracting Dependencies...");
-                SetPercentage(90);
                 ExtractZip(UnityDependencies_Folder, tempfilepath4);
             }
 
@@ -247,17 +238,14 @@ namespace MelonLoader.Installer
             webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip", tempfilepath);
 
             SetDisplayText("Downloading Dependencies...");
-            SetPercentage(48);
             string tempfilepath2 = TempFileCache.CreateFile();
             webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MonoDependencies.zip", tempfilepath2);
 
             SetDisplayText("Extracting MelonLoader...");
-            SetPercentage(64);
             Cleanup(dirpath, true);
             ExtractZip(dirpath, tempfilepath);
 
             SetDisplayText("Extracting Dependencies...");
-            SetPercentage(80);
             ExtractZip(dirpath, tempfilepath2);
 
             CreateDirectories(dirpath, "v0.1.0", true);
