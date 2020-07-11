@@ -30,7 +30,7 @@ namespace MelonLoader.Installer
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
             webClient.Headers.Add("User-Agent", "Unity web player");
-            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage / 2);
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage);
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
@@ -141,22 +141,50 @@ namespace MelonLoader.Installer
 
         private static void ExtractZip(string dirpath, string tempFile)
         {
+            SetPercentage(0);
             using var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read);
             using var zip = new ZipArchive(stream);
-            foreach (var zipArchiveEntry in zip.Entries)
+            int total_entry_count = zip.Entries.Count;
+            string fullName = Directory.CreateDirectory(dirpath).FullName;
+            for (int i = 0; i < total_entry_count; i++)
             {
-                string filepath = Path.Combine(dirpath, zipArchiveEntry.FullName);
-                if (File.Exists(filepath))
-                    File.Delete(filepath);
+                ZipArchiveEntry entry = zip.Entries[i];
+                string fullPath = Path.GetFullPath(Path.Combine(fullName, entry.FullName));
+                if (!fullPath.StartsWith(fullName))
+                    throw new IOException("Extracting Zip entry would have resulted in a file outside the specified destination directory.");
+                if (Path.GetFileName(fullPath).Length != 0)
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                    entry.ExtractToFile(fullPath, true);
+                }
+                else
+                {
+                    if (entry.Length != 0)
+                        throw new IOException("Zip entry name ends in directory separator character but contains data.");
+                    Directory.CreateDirectory(fullPath);
+                }
+                SetPercentage(((i + 1) / total_entry_count) * 100);
             }
-            zip.ExtractToDirectory(dirpath);
+        }
+
+        private static void CreateNeededDirectoriesForZip(string path)
+        {
+            string[] folders = path.Split('\\');
+            for (int i = 0; i < folders.Length; i++)
+            {
+                if (i > 0)
+                    folders[i] = Path.Combine(folders[i - 1], folders[i]);
+                if (!Directory.Exists(folders[i]))
+                    Directory.CreateDirectory(folders[i]);
+            }
         }
 
         private static void Install_Normal(string dirpath, string selectedVersion)
         {
             SetDisplayText("Downloading MelonLoader...");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip", tempfilepath);
+            webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip"), tempfilepath);
+            while (webClient.IsBusy) { }
             SetDisplayText("Extracting MelonLoader...");
             Cleanup(dirpath, false);
             ExtractZip(dirpath, tempfilepath);
@@ -168,8 +196,9 @@ namespace MelonLoader.Installer
             SetDisplayText("Downloading MelonLoader...");
             bool is_02 = selectedVersion.Equals("v0.2");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip", tempfilepath);
-            
+            webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip"), tempfilepath);
+            while (webClient.IsBusy) { }
+
             SetDisplayText("Extracting MelonLoader...");
             Cleanup(dirpath, true);
             ExtractZip(dirpath, tempfilepath);
@@ -183,16 +212,18 @@ namespace MelonLoader.Installer
 
                 SetDisplayText("Downloading Il2CppDumper...");
                 string tempfilepath2 = TempFileCache.CreateFile();
-                webClient.DownloadFile("https://github.com/Perfare/Il2CppDumper/releases/download/v6.2.1/Il2CppDumper-v6.2.1.zip", tempfilepath2);
+                webClient.DownloadFileAsync(new Uri("https://github.com/Perfare/Il2CppDumper/releases/download/v6.2.1/Il2CppDumper-v6.2.1.zip"), tempfilepath2);
+                while (webClient.IsBusy) { }
 
                 SetDisplayText("Downloading Il2CppUnhollower...");
                 string tempfilepath3 = TempFileCache.CreateFile();
-                webClient.DownloadFile("https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v0.4.3.0/Il2CppAssemblyUnhollower.0.4.3.0.zip", tempfilepath3);
+                webClient.DownloadFileAsync(new Uri("https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v0.4.3.0/Il2CppAssemblyUnhollower.0.4.3.0.zip"), tempfilepath3);
+                while (webClient.IsBusy) { }
 
                 SetDisplayText("Downloading Dependencies...");
                 string tempfilepath4 = TempFileCache.CreateFile();
                 bool run_fallback = false;
-                try { webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip", tempfilepath4); } catch (Exception ex) { run_fallback = true; }
+                try { webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + mainForm.UnityVersion + ".zip"), tempfilepath4); while (webClient.IsBusy) { } } catch (Exception ex) { run_fallback = true; }
                 if (run_fallback)
                 {
                     string subver = mainForm.UnityVersion.Substring(0, mainForm.UnityVersion.LastIndexOf("."));
@@ -213,7 +244,8 @@ namespace MelonLoader.Installer
                         {
                             versionlist = versionlist.OrderBy(x => int.Parse(x.Split(new char[] { '.' })[2])).ToList();
                             string latest_version = versionlist.Last();
-                            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + latest_version + ".zip", tempfilepath4);
+                            webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + latest_version + ".zip"), tempfilepath4);
+                            while (webClient.IsBusy) { }
                         }
                     }
                 }
@@ -235,11 +267,13 @@ namespace MelonLoader.Installer
         {
             SetDisplayText("Downloading MelonLoader...");
             string tempfilepath = TempFileCache.CreateFile();
-            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip", tempfilepath);
+            webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MelonLoader.zip"), tempfilepath);
+            while (webClient.IsBusy) { }
 
             SetDisplayText("Downloading Dependencies...");
             string tempfilepath2 = TempFileCache.CreateFile();
-            webClient.DownloadFile("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MonoDependencies.zip", tempfilepath2);
+            webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/v0.1.0/MonoDependencies.zip"), tempfilepath2);
+            while (webClient.IsBusy) { }
 
             SetDisplayText("Extracting MelonLoader...");
             Cleanup(dirpath, true);
