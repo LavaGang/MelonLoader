@@ -167,18 +167,6 @@ namespace MelonLoader.Installer
             }
         }
 
-        private static void CreateNeededDirectoriesForZip(string path)
-        {
-            string[] folders = path.Split('\\');
-            for (int i = 0; i < folders.Length; i++)
-            {
-                if (i > 0)
-                    folders[i] = Path.Combine(folders[i - 1], folders[i]);
-                if (!Directory.Exists(folders[i]))
-                    Directory.CreateDirectory(folders[i]);
-            }
-        }
-
         private static void Install_Normal(string dirpath, string selectedVersion)
         {
             SetDisplayText("Downloading MelonLoader...");
