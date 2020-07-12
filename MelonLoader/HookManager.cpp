@@ -106,14 +106,14 @@ void HookManager::LoadLibraryW_Hook()
 	if (Original_LoadLibraryW == NULL)
 	{
 		Original_LoadLibraryW = LoadLibraryW;
-		HookManager::INTERNAL_Hook(&(LPVOID&)Original_LoadLibraryW, HookManager::Hooked_LoadLibraryW);
+		Hook(&(LPVOID&)Original_LoadLibraryW, Hooked_LoadLibraryW);
 	}
 }
 void HookManager::LoadLibraryW_Unhook()
 {
 	if (Original_LoadLibraryW != NULL)
 	{
-		HookManager::INTERNAL_Unhook(&(LPVOID&)Original_LoadLibraryW, HookManager::Hooked_LoadLibraryW);
+		Unhook(&(LPVOID&)Original_LoadLibraryW, Hooked_LoadLibraryW);
 		Original_LoadLibraryW = NULL;
 	}
 }
@@ -127,7 +127,7 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 			if (Il2Cpp::Setup(lib))
 			{
 				Mono::CreateDomain();
-				HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
+				Hook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
 			}
 			LoadLibraryW_Unhook();
 		}
@@ -139,7 +139,7 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		{
 			Mono::Module = lib;
 			if (Mono::Setup())
-				HookManager::Hook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
+				Hook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
 			LoadLibraryW_Unhook();
 		}
 	}
@@ -153,7 +153,7 @@ Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 	Exports::AddInternalCalls();
 	ModHandler::Initialize();
 	Il2Cpp::Domain = Il2Cpp::il2cpp_init(name);
-	HookManager::Unhook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
+	Unhook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
 	return Il2Cpp::Domain;
 }
 #pragma endregion
@@ -161,7 +161,7 @@ Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 #pragma region mono_jit_init_version
 MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const char* version)
 {
-	HookManager::Unhook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
+	Unhook(&(LPVOID&)Mono::mono_jit_init_version, Hooked_mono_jit_init_version);
 	Mono::Domain = Mono::mono_jit_init_version(name, version);
 	Mono::FixDomainBaseDir();
 	Exports::AddInternalCalls();

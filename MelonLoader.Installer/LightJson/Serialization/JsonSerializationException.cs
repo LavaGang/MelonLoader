@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LightJson.Serialization
+namespace MelonLoader.LightJson.Serialization
 {
 	/// <summary>
 	/// The exception that is thrown when a JSON value cannot be serialized.

@@ -6,7 +6,7 @@ namespace MelonLoader.AssemblyGenerator
 {
     public static class DownloaderAndUnpacker
     {
-        public static void Run(string url, string targetVersion, string currentVersion, string destinationFolder)
+        public static void Run(string url, string targetVersion, string currentVersion, string destinationFolder, string tempFile)
         {
             if (targetVersion == currentVersion)
             {
@@ -23,7 +23,6 @@ namespace MelonLoader.AssemblyGenerator
                     File.Delete(entry);
             }
 
-            var tempFile = TempFileCache.CreateFile();
             Logger.Log($"Downloading {url} to {tempFile}");
             Program.webClient.DownloadFile(url, tempFile);
             Logger.Log($"Extracting {tempFile} to {destinationFolder}");

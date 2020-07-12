@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -26,14 +25,14 @@ namespace MelonLoader
                         if (!asm.Equals(null))
                         {
                             object[] attrArray = asm.GetCustomAttributes(typeof(MelonPluginInfoAttribute), false);
-                            if ((attrArray.Count() > 0) && (attrArray[0] != null))
+                            if ((attrArray.Length > 0) && (attrArray[0] != null))
                             {
                                 MelonPluginInfoAttribute attr = attrArray[0] as MelonPluginInfoAttribute;
                                 if (!string.IsNullOrEmpty(attr.Name))
                                     return "[" + attr.Name.Replace(" ", "_") + "] ";
                             }
                             attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
-                            if ((attrArray.Count() > 0) && (attrArray[0] != null))
+                            if ((attrArray.Length > 0) && (attrArray[0] != null))
                             {
                                 MelonModInfoAttribute attr = attrArray[0] as MelonModInfoAttribute;
                                 if (!string.IsNullOrEmpty(attr.Name))

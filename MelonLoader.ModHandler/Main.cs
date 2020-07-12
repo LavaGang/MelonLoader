@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Harmony;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0618
@@ -30,7 +31,7 @@ namespace MelonLoader
             AppDomain.CurrentDomain.UnhandledException += ExceptionHandler;
 
             CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
-            UnityVersion = GetUnityFileVersion();
+            UnityVersion = GetUnityVersion();
 
             if (Imports.IsIl2CppGame())
             {
@@ -210,7 +211,7 @@ namespace MelonLoader
                         try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); }
                 }
             }
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
             {
                 for (int i = 0; i < Mods.Count; i++)
                 {
@@ -219,7 +220,7 @@ namespace MelonLoader
                         try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
                 }
             }
-            if ((Plugins.Count > 0) || (Mods.Count() > 0))
+            if ((Plugins.Count > 0) || (Mods.Count > 0))
                 ModPrefs.SaveConfig();
             Harmony.HarmonyInstance.UnpatchAllInstances();
             Imports.UNLOAD_MELONLOADER();
@@ -235,7 +236,7 @@ namespace MelonLoader
                     if (plugin != null)
                         try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); }
                 }
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -249,7 +250,7 @@ namespace MelonLoader
             SceneHandler.CheckForSceneChange();
             if (Imports.IsIl2CppGame() && IsVRChat)
                 VRChat_CheckUiManager();
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -260,7 +261,7 @@ namespace MelonLoader
 
         public static void OnFixedUpdate()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -271,7 +272,7 @@ namespace MelonLoader
 
         public static void OnLateUpdate()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -282,7 +283,7 @@ namespace MelonLoader
 
         public static void OnGUI()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
             {
                 for (int i = 0; i < Mods.Count; i++)
                 {
@@ -295,7 +296,7 @@ namespace MelonLoader
 
         internal static void OnLevelIsLoading()
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -306,7 +307,7 @@ namespace MelonLoader
 
         internal static void OnLevelWasLoaded(int level)
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -317,7 +318,7 @@ namespace MelonLoader
 
         internal static void OnLevelWasInitialized(int level)
         {
-            if (Mods.Count() > 0)
+            if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
@@ -345,7 +346,7 @@ namespace MelonLoader
                         if (returnval != null)
                         {
                             ShouldCheckForUiManager = false;
-                            if (Mods.Count() > 0)
+                            if (Mods.Count > 0)
                                 for (int i = 0; i < Mods.Count; i++)
                                 {
                                     MelonMod mod = Mods[i];
@@ -369,7 +370,7 @@ namespace MelonLoader
                 string[] files = Directory.GetFiles(searchdir, "*.dll");
                 if (files.Length > 0)
                 {
-                    for (int i = 0; i < files.Count(); i++)
+                    for (int i = 0; i < files.Length; i++)
                     {
                         string file = files[i];
                         if (!string.IsNullOrEmpty(file))
@@ -401,7 +402,7 @@ namespace MelonLoader
                 string[] zippedFiles = Directory.GetFiles(searchdir, "*.zip");
                 if (zippedFiles.Length > 0)
                 {
-                    for (int i = 0; i < zippedFiles.Count(); i++)
+                    for (int i = 0; i < zippedFiles.Length; i++)
                     {
                         string file = zippedFiles[i];
                         if (!string.IsNullOrEmpty(file))
@@ -578,10 +579,56 @@ namespace MelonLoader
         }
 
         private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonModLogger.LogError((e.ExceptionObject as Exception).ToString());
-        private static string GetUnityFileVersion()
+        
+        internal static string GetUnityVersion()
         {
-            string file_version = FileVersionInfo.GetVersionInfo(Imports.GetExePath()).FileVersion;
-            return file_version.Substring(0, file_version.LastIndexOf('.'));
+            string exepath = Imports.GetExePath();
+            string ggm_path = Path.Combine(Imports.GetGameDataDirectory(), "globalgamemanagers");
+            if (!File.Exists(ggm_path))
+            {
+                FileVersionInfo versioninfo = FileVersionInfo.GetVersionInfo(exepath);
+                if ((versioninfo == null) || string.IsNullOrEmpty(versioninfo.FileVersion))
+                    return "UNKNOWN";
+                return versioninfo.FileVersion.Substring(0, versioninfo.FileVersion.LastIndexOf('.'));
+            }
+            else
+            {
+                byte[] ggm_bytes = File.ReadAllBytes(ggm_path);
+                if ((ggm_bytes == null) || (ggm_bytes.Length <= 0))
+                    return "UNKNOWN";
+                int start_position = 0;
+                for (int i = 10; i < ggm_bytes.Length; i++)
+                {
+                    byte pos_byte = ggm_bytes[i];
+                    if ((pos_byte <= 0x39) && (pos_byte >= 0x30))
+                    {
+                        start_position = i;
+                        break;
+                    }
+                }
+                if (start_position == 0)
+                    return "UNKNOWN";
+                int end_position = 0;
+                for (int i = start_position; i < ggm_bytes.Length; i++)
+                {
+                    byte pos_byte = ggm_bytes[i];
+                    if ((pos_byte != 0x2E) && ((pos_byte > 0x39) || (pos_byte < 0x30)))
+                    {
+                        end_position = (i - 1);
+                        break;
+                    }
+                }
+                if (end_position == 0)
+                    return "UNKNOWN";
+                int verstr_byte_pos = 0;
+                byte[] verstr_byte = new byte[((end_position - start_position) + 1)];
+                for (int i = start_position; i <= end_position; i++)
+                {
+                    verstr_byte[verstr_byte_pos] = ggm_bytes[i];
+                    verstr_byte_pos++;
+                }
+                return Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
+            }
         }
 
         private static void AddUnityDebugLog()

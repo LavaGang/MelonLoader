@@ -23,8 +23,20 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	if (fdwReason != DLL_PROCESS_ATTACH)
 		return TRUE;
+
 	LPSTR filepath = new CHAR[MAX_PATH];
 	GetModuleFileName(GetModuleHandle(NULL), filepath, MAX_PATH);
+	if (strstr(filepath, "UnityCrashHandler") != NULL)
+	{
+		HANDLE hProcess = GetCurrentProcess();
+		if (hProcess != NULL)
+		{
+			TerminateProcess(hProcess, NULL);
+			CloseHandle(hProcess);
+		}
+		return FALSE;
+	}
+
 	std::string filepathstr = filepath;
 	HINSTANCE originaldll = LoadLibrary((filepathstr.substr(0, filepathstr.find_last_of(".")) + "_original.dll").c_str());
 	if (originaldll == NULL)
@@ -57,7 +69,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 		VerLanguageNameW_Original = GetProcAddress(originaldll, "VerLanguageNameW");
 		VerQueryValueA_Original = GetProcAddress(originaldll, "VerQueryValueA");
 		VerQueryValueW_Original = GetProcAddress(originaldll, "VerQueryValueW");
-		if ((strstr(filepath, "UnityCrashHandler") == NULL) && (strstr(GetCommandLine(), "--no-mods") == NULL))
+		if (strstr(GetCommandLine(), "--no-mods") == NULL)
 		{
 			HINSTANCE melonloaderdll = LoadLibrary("MelonLoader\\MelonLoader.dll");
 			if (melonloaderdll == NULL)

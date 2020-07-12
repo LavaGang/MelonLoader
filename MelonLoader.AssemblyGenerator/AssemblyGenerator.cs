@@ -6,6 +6,7 @@ using System.Threading;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using MelonLoader.LightJson;
 using MelonLoader.TinyJSON;
 using MelonLoader.Tomlyn;
 using MelonLoader.Tomlyn.Model;
@@ -85,26 +86,65 @@ namespace MelonLoader.AssemblyGenerator
         private static void DownloadDependencies(string unityVersion)
         {
             Logger.Log("Downloading Il2CppDumper");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, localConfig.DumperVersion, Il2CppDumper.BaseFolder);
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, localConfig.DumperVersion, Il2CppDumper.BaseFolder, TempFileCache.CreateFile());
             localConfig.DumperVersion = ExternalToolVersions.Il2CppDumperVersion;
             localConfig.Save(localConfigPath);
 
             Logger.Log("Downloading Il2CppAssemblyUnhollower");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder);
+            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder, TempFileCache.CreateFile());
             localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
             localConfig.Save(localConfigPath);
 
             Logger.Log("Downloading Unity Dependencies");
+            string tempfile = TempFileCache.CreateFile();
+            bool run_fallback = false;
             try
             {
-                DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, localConfig.UnityVersion, UnityDependencies.BaseFolder);
+                DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{unityVersion}.zip", unityVersion, localConfig.UnityVersion, UnityDependencies.BaseFolder, tempfile);
                 localConfig.UnityVersion = unityVersion;
                 localConfig.Save(localConfigPath);
             }
             catch (Exception ex)
             {
-                Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
-                Logger.Log(ex.ToString());
+                run_fallback = true;
+                Logger.LogError(ex.ToString());
+                Logger.Log("Can't download Unity Dependencies for " + unityVersion + ", downloading Fallback...");
+            }
+            if (run_fallback)
+            {
+                string subver = unityVersion.Substring(0, unityVersion.LastIndexOf("."));
+                try
+                {
+                    JsonArray data = (JsonArray)JsonValue.Parse(Program.webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/contents/BaseLibs/UnityDependencies")).AsJsonArray;
+                    if (data.Count > 0)
+                    {
+                        List<string> versionlist = new List<string>();
+                        foreach (var x in data)
+                        {
+                            string version = Path.GetFileNameWithoutExtension(x["name"].AsString);
+                            if (version.StartsWith(subver))
+                            {
+                                versionlist.Add(version);
+                                string[] semvertbl = version.Split(new char[] { '.' });
+                            }
+                        }
+                        if (versionlist.Count > 0)
+                        {
+                            versionlist = versionlist.OrderBy(x => int.Parse(x.Split(new char[] { '.' })[2])).ToList();
+                            string latest_version = versionlist.Last();
+                            Logger.Log("Fallback Unity Version: " + latest_version);
+
+                            DownloaderAndUnpacker.Run($"{ExternalToolVersions.UnityDependenciesBaseUrl}{latest_version}.zip", latest_version, localConfig.UnityVersion, UnityDependencies.BaseFolder, tempfile);
+                            localConfig.UnityVersion = unityVersion;
+                            localConfig.Save(localConfigPath);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
+                    Logger.LogError(ex.ToString());
+                }
             }
         }
 
@@ -154,9 +194,9 @@ namespace MelonLoader.AssemblyGenerator
 
         private static void Cleanup()
         {
-            if (localConfig.OldFiles.Count() > 0)
+            if (localConfig.OldFiles.Count > 0)
             {
-                for (int i = 0; i < localConfig.OldFiles.Count(); i++)
+                for (int i = 0; i < localConfig.OldFiles.Count; i++)
                 {
                     string oldFile = localConfig.OldFiles[i];
                     if (!string.IsNullOrEmpty(oldFile))
@@ -171,7 +211,7 @@ namespace MelonLoader.AssemblyGenerator
             string[] files = Directory.GetFiles(Il2CppAssemblyUnhollower.OutputDirectory, "*.dll", SearchOption.TopDirectoryOnly);
             if (files.Length > 0)
             {
-                for (int i = 0; i < files.Count(); i++)
+                for (int i = 0; i < files.Length; i++)
                 {
                     string file = files[i];
                     if (!string.IsNullOrEmpty(file))
@@ -292,7 +332,7 @@ namespace MelonLoader.AssemblyGenerator
                             {
                                 for (int i = 0; i < oldfilesarr.Count; i++)
                                 {
-                                    string file = (string)oldfilesarr.ElementAt(i);
+                                    string file = (string)oldfilesarr[i];
                                     if (!string.IsNullOrEmpty(file))
                                         returnval.OldFiles.Add(file);
                                 }

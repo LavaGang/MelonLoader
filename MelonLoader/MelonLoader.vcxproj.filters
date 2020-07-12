@@ -11,6 +11,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="AssertionManager.cpp" />
     <ClCompile Include="Il2Cpp.cpp" />
+    <ClCompile Include="DisableAnalytics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
@@ -28,6 +29,7 @@
     <ClInclude Include="Detours\detver.h">
       <Filter>Detours</Filter>
     </ClInclude>
+    <ClInclude Include="DisableAnalytics.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Detours">

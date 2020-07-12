@@ -54,13 +54,13 @@ public:
 	static void LogError(const char* namesection, const char* txt);
 	static void LogError(std::string txt) { LogError(txt.c_str()); }
 
-	static void DebugLog(const char* txt) { if (MelonLoader::DebugMode) Log((std::string("[DEBUG] ") + txt)); }
-	static void DebugLog(const char* txt, ConsoleColor color) { if (MelonLoader::DebugMode) Log((std::string("[DEBUG] ") + txt), color); };
+	static void DebugLog(const char* txt) { if (MelonLoader::DebugMode) Log(txt); }
+	static void DebugLog(const char* txt, ConsoleColor color) { if (MelonLoader::DebugMode) Log(txt, color); };
 	static void DebugLog(std::string txt) { DebugLog(txt.c_str()); }
 	static void DebugLog(std::string txt, ConsoleColor color) { DebugLog(txt.c_str(), color); }
 
-	static void DebugLogError(const char* txt) { if (MelonLoader::DebugMode) LogError((std::string("[DEBUG] ") + txt)); }
-	static void DebugLogError(const char* namesection, const char* txt) { if (MelonLoader::DebugMode) LogError(namesection, (std::string("[DEBUG] ") + txt).c_str()); }
+	static void DebugLogError(const char* txt) { if (MelonLoader::DebugMode) LogError(txt); }
+	static void DebugLogError(const char* namesection, const char* txt) { if (MelonLoader::DebugMode) LogError(namesection, txt); }
 	static void DebugLogError(std::string txt) { DebugLogError(txt.c_str()); }
 
 	static void LogDLLError(const char* namesection, const char* msg);
