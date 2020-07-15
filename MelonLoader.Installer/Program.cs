@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using MelonLoader.LightJson;
 #pragma warning disable 0168
 
@@ -90,7 +91,7 @@ namespace MelonLoader.Installer
 
         internal static void Install(string dirpath, string selectedVersion, bool legacy_install)
         {
-            if (selectedVersion.Equals("Manual Zip"))
+            if (File.Exists(ManualZipPath) && selectedVersion.Equals("Manual Zip"))
                 Install_ManualZip(dirpath);
             else if (legacy_install)
                 Install_Legacy(dirpath, selectedVersion);
@@ -101,10 +102,9 @@ namespace MelonLoader.Installer
 
         private static void Install_ManualZip(string dirpath)
         {
-            if (!File.Exists(ManualZipPath))
-                throw new Exception("MelonLoader.zip does not exist!");
+            MessageBox.Show("Manual Zip");
             SetDisplayText("Extracting MelonLoader.zip...");
-            Cleanup(dirpath, false);
+            Cleanup(dirpath);
             ExtractZip(dirpath, ManualZipPath);
             CreateDirectories(dirpath, "Manual Zip", false);
         }
@@ -127,12 +127,12 @@ namespace MelonLoader.Installer
         internal static void SetPercentage(int percent)
         {
             mainForm.Invoke(new Action(() => {
-                mainForm.progInstall.Value = percent;
+                mainForm.progressBar.Value = percent;
                 mainForm.lblProgressPer.Text = percent.ToString() + "%";
             }));
         }
 
-        private static void Cleanup(string dirpath, bool legacy_install)
+        internal static void Cleanup(string dirpath)
         {
             while (true)
             {
@@ -204,7 +204,7 @@ namespace MelonLoader.Installer
             webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip"), tempfilepath);
             while (webClient.IsBusy) { }
             SetDisplayText("Extracting MelonLoader...");
-            Cleanup(dirpath, false);
+            Cleanup(dirpath);
             ExtractZip(dirpath, tempfilepath);
             CreateDirectories(dirpath, selectedVersion, false);
         }
@@ -217,7 +217,7 @@ namespace MelonLoader.Installer
             webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip"), tempfilepath);
             while (webClient.IsBusy) { }
             SetDisplayText("Extracting MelonLoader...");
-            Cleanup(dirpath, true);
+            Cleanup(dirpath);
             ExtractZip(dirpath, tempfilepath);
 
             if (is_02)
@@ -293,7 +293,7 @@ namespace MelonLoader.Installer
             while (webClient.IsBusy) { }
 
             SetDisplayText("Extracting MelonLoader...");
-            Cleanup(dirpath, true);
+            Cleanup(dirpath);
             ExtractZip(dirpath, tempfilepath);
 
             SetDisplayText("Extracting Dependencies...");

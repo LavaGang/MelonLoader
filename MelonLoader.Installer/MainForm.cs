@@ -44,10 +44,18 @@ namespace MelonLoader.Installer
                             if (file_version.IndexOf(".0") >= 0)
                                 file_version = file_version.Substring(0, file_version.IndexOf(".0"));
                             CurrentVersion = "v" + file_version;
+                            System.Drawing.Size btnInstallSize = btnInstall.Size;
+                            btnInstallSize.Width = 215;
+                            btnInstall.Size = btnInstallSize;
+                            btnUninstall.Show();
                             VersionCheck();
                         }
                         else
                         {
+                            System.Drawing.Size btnInstallSize = btnInstall.Size;
+                            btnInstallSize.Width = 437;
+                            btnInstall.Size = btnInstallSize;
+                            btnUninstall.Hide();
                             CurrentVersion = null;
                             btnInstall.Text = "INSTALL";
                         }
@@ -74,11 +82,11 @@ namespace MelonLoader.Installer
 
         private void VersionCheck()
         {
-            string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[0] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
-            if (selectedVersion.Equals("Manual Zip"))
+            string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
+            if (selectedVersion.Equals("Manual Zip") || string.IsNullOrEmpty(CurrentVersion))
                 btnInstall.Text = "INSTALL";
             else if (CurrentVersion.Equals(selectedVersion))
-                btnInstall.Text = "RE-INSTALL";
+                    btnInstall.Text = "RE-INSTALL";
             else
             {
                 int index = cbVersions.FindString(CurrentVersion);
@@ -87,27 +95,26 @@ namespace MelonLoader.Installer
                 else
                     btnInstall.Text = "UPDATE";
             }
-
-            // Do Uninstall Button Check Here
         }
 
         private void btnInstall_Click(object sender, EventArgs e)
         {
-            cbVersions.Visible = false;
-            tbPath.Visible = false;
-            btnSelect.Visible = false;
-            btnInstall.Visible = false;
+            cbVersions.Hide();
+            tbPath.Hide();
+            btnSelect.Hide();
+            btnInstall.Hide();
+            btnUninstall.Hide();
 
-            progInstall.Visible = true;
-            lblProgressInfo.Visible = true;
-            lblProgressPer.Visible = true;
+            progressBar.Show();
+            lblProgressInfo.Show();
+            lblProgressPer.Show();
 
             new Thread(() =>
             {
                 try
                 {
                     string dirpath = Path.GetDirectoryName(tbPath.Text);
-                    string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[0] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
+                    string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
                     bool legacy_install = (selectedVersion.Equals("v0.2.1") || selectedVersion.Equals("v0.2") || selectedVersion.Equals("v0.1.0"));
 
                     Program.Install(dirpath, selectedVersion, legacy_install);
@@ -122,6 +129,44 @@ namespace MelonLoader.Installer
                     TempFileCache.ClearCache();
                     Program.SetDisplayText("ERROR!");
                     MessageBox.Show("Installation failed; upload the created log to #melonloader-support on discord", Program.Title);
+                    File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", ex.ToString());
+                    Close();
+                    Application.Exit();
+                }
+            }).Start();
+        }
+
+        private void btnUninstall_Click_1(object sender, EventArgs e)
+        {
+            cbVersions.Hide();
+            tbPath.Hide();
+            btnSelect.Hide();
+            btnInstall.Hide();
+            btnUninstall.Hide();
+
+            progressBar.Show();
+            lblProgressInfo.Show();
+            lblProgressPer.Show();
+
+            new Thread(() =>
+            {
+                try
+                {
+                    string dirpath = Path.GetDirectoryName(tbPath.Text);
+
+                    Program.Cleanup(dirpath);
+                    
+                    Program.SetDisplayText("SUCCESS!");
+                    Program.SetPercentage(100);
+                    MessageBox.Show("Uninstall Successful!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    Close();
+                    Application.Exit();
+                }
+                catch (Exception ex)
+                {
+                    TempFileCache.ClearCache();
+                    Program.SetDisplayText("ERROR!");
+                    MessageBox.Show("Uninstall failed; upload the created log to #melonloader-support on discord", Program.Title);
                     File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", ex.ToString());
                     Close();
                     Application.Exit();
