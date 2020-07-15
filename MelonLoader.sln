@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Support.Mono.Pr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{F41EC84C-6465-4449-B2F6-79535171265B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEngine.Il2CppAssetBundleManager", "UnityEngine.Il2CppAssetBundleManager\UnityEngine.Il2CppAssetBundleManager.csproj", "{8F48348B-6400-474A-AF47-365E3CF476F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,18 @@ Global
 		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x64.Build.0 = Release|Any CPU
 		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x86.ActiveCfg = Release|Any CPU
 		{F41EC84C-6465-4449-B2F6-79535171265B}.Release|x86.Build.0 = Release|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Debug|x64.Build.0 = Debug|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Debug|x86.Build.0 = Debug|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Release|x64.ActiveCfg = Release|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Release|x64.Build.0 = Release|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F48348B-6400-474A-AF47-365E3CF476F7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

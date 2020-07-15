@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace MelonLoader
 {
-    internal class UnhollowerSupport
+    public class UnhollowerSupport
     {
         private static Assembly UnhollowerBaseLib = null;
         private static Type Il2CppObjectBaseType = null;
@@ -24,15 +24,23 @@ namespace MelonLoader
             GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
         }
 
-        internal static bool IsGeneratedAssemblyType(Type type) => (Imports.IsIl2CppGame() && !Il2CppObjectBaseType.Equals(null) && !type.Equals(null) && type.IsSubclassOf(Il2CppObjectBaseType));
+        public static bool IsGeneratedAssemblyType(Type type) => (Imports.IsIl2CppGame() && !Il2CppObjectBaseType.Equals(null) && !type.Equals(null) && type.IsSubclassOf(Il2CppObjectBaseType));
 
-        internal static IntPtr MethodBaseToIntPtr(MethodBase method)
+        public static IntPtr MethodBaseToIl2CppMethodInfoPointer(MethodBase method)
         {
-            FieldInfo methodPtr = (FieldInfo) GetIl2CppMethodInfoPointerFieldForGeneratedMethod.Invoke(null, new object[] { method });
-            if (methodPtr == null) {
-                throw new NotSupportedException($"Cannot patch method {method.Name} as there is no corresponding IL2CPP method");
-            }
-            return (IntPtr) methodPtr.GetValue(null);
+            FieldInfo methodPtr = (FieldInfo)GetIl2CppMethodInfoPointerFieldForGeneratedMethod.Invoke(null, new object[] { method });
+            if (methodPtr == null)
+                throw new NotSupportedException($"Cannot get IntPtr for {method.Name} as there is no corresponding IL2CPP method");
+            return (IntPtr)methodPtr.GetValue(null);
+        }
+
+        public static T Il2CppObjectPtrToIl2CppObject<T>(IntPtr ptr)
+        {
+            if (ptr == IntPtr.Zero)
+                throw new NullReferenceException("The ptr cannot be IntPtr.Zero.");
+            if (!IsGeneratedAssemblyType(typeof(T)))
+                throw new NullReferenceException("The type must be a Generated Assembly Type.");
+            return (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
         }
     }
 }

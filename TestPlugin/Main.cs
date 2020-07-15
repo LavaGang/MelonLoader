@@ -5,6 +5,7 @@ namespace TestPlugin
     public static class BuildInfo
     {
         public const string Name = "TestPlugin"; // Name of the Plugin.  (MUST BE SET)
+        public const string Description = "Plugin for Testing"; // Description for the Plugin.  (Set as null if none)
         public const string Author = null; // Author of the Plugin.  (Set as null if none)
         public const string Company = null; // Company that made the Plugin.  (Set as null if none)
         public const string Version = "1.0.0"; // Version of the Plugin.  (MUST BE SET)

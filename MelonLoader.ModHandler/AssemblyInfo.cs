@@ -1,10 +1,9 @@
 ﻿using System.Resources;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle(MelonLoader.BuildInfo.Name)]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle(MelonLoader.BuildInfo.Description)]
+[assembly: AssemblyDescription(MelonLoader.BuildInfo.Description)]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(MelonLoader.BuildInfo.Company)]
 [assembly: AssemblyProduct(MelonLoader.BuildInfo.Name)]

@@ -9,14 +9,6 @@
         private static bool Boneworks_HasGotLoadingSceneIndex = false;
         private static int Boneworks_LoadingSceneIndex = -9;
 
-        public static int GetActiveSceneIndex() => SupportModule.GetActiveSceneIndex();
-
-        internal static void CheckForSceneChange()
-        {
-            CheckForSceneInitialized();
-            CheckForSceneFinishedLoading();
-        }
-
         public static void OnSceneLoad(int current_scene)
         {
             bool should_run = true;
@@ -68,6 +60,12 @@
                 else
                     CheckForSceneFinishedLoading();
             }
+        }
+
+        internal static void CheckForSceneChange()
+        {
+            CheckForSceneInitialized();
+            CheckForSceneFinishedLoading();
         }
 
         private static void CheckForSceneFinishedLoading()

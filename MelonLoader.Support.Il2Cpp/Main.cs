@@ -63,8 +63,12 @@ namespace MelonLoader.Support
             ClassInjector.DoHook += Imports.Hook;
             GetUnityVersionNumbers(out var major, out var minor, out var patch);
             UnityVersionHandler.Initialize(major, minor, patch);
+
+            SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
+
             ClassInjector.RegisterTypeInIl2Cpp<MelonLoaderComponent>();
             MelonLoaderComponent.Create();
+
             SceneManager.sceneLoaded = (
                 (SceneManager.sceneLoaded == null) 
                 ? new Action<Scene, LoadSceneMode>(OnSceneLoad) 
@@ -75,12 +79,13 @@ namespace MelonLoader.Support
                 ? new Action<Camera>(OnPostRender)
                 : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
                 );
+
             return new Module();
         }
 
         private static void GetUnityVersionNumbers(out int major, out int minor, out int patch)
         {
-            var unityVersionSplit = Application.unityVersion.Split('.');
+            var unityVersionSplit = MelonLoader.Main.UnityVersion.Split('.');
             major = int.Parse(unityVersionSplit[0]);
             minor = int.Parse(unityVersionSplit[1]);
             var patchString = unityVersionSplit[2];
@@ -90,6 +95,9 @@ namespace MelonLoader.Support
 
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (!scene.Equals(null)) SceneHandler.OnSceneLoad(scene.buildIndex); }
         private static void OnPostRender(Camera cam) { if (OnPostRenderCam == null) OnPostRenderCam = cam; if (OnPostRenderCam == cam) MelonCoroutines.ProcessWaitForEndOfFrame(); }
+
+        internal delegate bool SetAsLastSiblingDelegate(IntPtr u0040this);
+        internal static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
     }
 
     public class MelonLoaderComponent : MonoBehaviour
@@ -99,8 +107,8 @@ namespace MelonLoader.Support
             Main.obj = new GameObject("MelonLoader");
             DontDestroyOnLoad(Main.obj);
             Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
-            Main.obj.transform.SetAsLastSibling();
-            Main.comp.transform.SetAsLastSibling();
+            Main.SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(Main.obj.transform));
+            Main.SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(Main.comp.transform));
         }
         internal static void Destroy() { Main.IsDestroying = true; if (Main.obj != null) GameObject.Destroy(Main.obj); }
         public MelonLoaderComponent(IntPtr intPtr) : base(intPtr) { }

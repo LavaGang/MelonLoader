@@ -5,7 +5,7 @@
     <TargetFramework>net472</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>latest</LangVersion>
-    <Version>1.0.1</Version>
+    <Version>1.0.6</Version>
     <Authors>Lava Gang</Authors>
     <Company>discord.gg/2Wn3N2P</Company>
     <Copyright>Lava Gang</Copyright>
@@ -15,10 +15,16 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <StartupObject>MelonLoader.Installer.Program</StartupObject>
+    <AssemblyVersion>1.0.6.0</AssemblyVersion>
+    <Description>Installer for MelonLoader</Description>
+    <Product>MelonLoader.Installer</Product>
+    <PackageId>MelonLoader.Installer</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\Output\Installer\Release\</OutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
