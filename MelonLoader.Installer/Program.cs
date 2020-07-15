@@ -90,11 +90,23 @@ namespace MelonLoader.Installer
 
         internal static void Install(string dirpath, string selectedVersion, bool legacy_install)
         {
-            if (!legacy_install)
-                Install_Normal(dirpath, selectedVersion);
-            else
+            if (selectedVersion.Equals("Manual Zip"))
+                Install_ManualZip(dirpath);
+            else if (legacy_install)
                 Install_Legacy(dirpath, selectedVersion);
+            else
+                Install_Normal(dirpath, selectedVersion);
             TempFileCache.ClearCache();
+        }
+
+        private static void Install_ManualZip(string dirpath)
+        {
+            if (!File.Exists(ManualZipPath))
+                throw new Exception("MelonLoader.zip does not exist!");
+            SetDisplayText("Extracting MelonLoader.zip...");
+            Cleanup(dirpath, false);
+            ExtractZip(dirpath, ManualZipPath);
+            CreateDirectories(dirpath, "Manual Zip", false);
         }
 
         private static void Install_Legacy(string dirpath, string selectedVersion)
