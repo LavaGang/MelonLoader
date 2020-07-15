@@ -149,7 +149,7 @@ namespace MelonLoader.TinyJSON
 			{
 				throw new ArgumentNullException( nameof(item) );
 			}
-			DecodeObject( data, item );
+			DecodeFields( data, ref item );
 		}
 
 
@@ -293,12 +293,12 @@ namespace MelonLoader.TinyJSON
 			}
 
 			// Now decode fields and properties.
-			DecodeObject<T>( data, instance );
+			DecodeFields( data, ref instance );
 
 			return instance;
 		}
 
-		static void DecodeObject<T>( Variant data, T instance )
+		static void DecodeFields<T>( Variant data, ref T instance )
 		{
 			var type = typeof(T);
 			var proxyObject = data as ProxyObject;
