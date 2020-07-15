@@ -44,7 +44,7 @@ namespace MelonLoader.Installer
                             if (file_version.IndexOf(".0") >= 0)
                                 file_version = file_version.Substring(0, file_version.IndexOf(".0"));
                             CurrentVersion = "v" + file_version;
-                            CheckSelectedVersion();
+                            VersionCheck();
                         }
                         else
                         {
@@ -69,10 +69,10 @@ namespace MelonLoader.Installer
         private void cbVersions_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (btnInstall.Enabled && !string.IsNullOrEmpty(CurrentVersion))
-                CheckSelectedVersion();
+                VersionCheck();
         }
 
-        private void CheckSelectedVersion()
+        private void VersionCheck()
         {
             string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
             if (CurrentVersion.Equals(selectedVersion))
