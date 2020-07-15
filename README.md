@@ -13,7 +13,7 @@
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
 6. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
-7. Click the INSTALL or RE-INSTALL button.
+7. Click the INSTALL or RE-INSTALL or UPDATE button.
 
 ---
 	
