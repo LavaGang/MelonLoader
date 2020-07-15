@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MelonLoader.LightJson;
-using MelonLoader.AssemblyGenerator;
 #pragma warning disable 0168
 
 namespace MelonLoader.Installer

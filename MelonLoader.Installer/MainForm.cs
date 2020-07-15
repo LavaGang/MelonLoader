@@ -1,10 +1,8 @@
-﻿using MelonLoader.AssemblyGenerator;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using MetroFramework;
 
 namespace MelonLoader.Installer
 {
