@@ -186,7 +186,6 @@ namespace MelonLoader.Installer
             string tempfilepath = TempFileCache.CreateFile();
             webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader" + (is_02 ? "_" : ".") + (File.Exists(Path.Combine(dirpath, "GameAssembly.dll")) ? "Il2Cpp" : "Mono") + ".zip"), tempfilepath);
             while (webClient.IsBusy) { }
-
             SetDisplayText("Extracting MelonLoader...");
             Cleanup(dirpath, true);
             ExtractZip(dirpath, tempfilepath);
