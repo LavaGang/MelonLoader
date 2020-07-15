@@ -75,7 +75,9 @@ namespace MelonLoader.Installer
         private void VersionCheck()
         {
             string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
-            if (CurrentVersion.Equals(selectedVersion))
+            if (selectedVersion.Equals("Manual Zip"))
+                btnInstall.Text = "INSTALL";
+            else if (CurrentVersion.Equals(selectedVersion))
                 btnInstall.Text = "RE-INSTALL";
             else
             {
@@ -126,6 +128,5 @@ namespace MelonLoader.Installer
                 }
             }).Start();
         }
-
     }
 }

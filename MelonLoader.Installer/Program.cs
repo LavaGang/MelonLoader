@@ -16,8 +16,8 @@ namespace MelonLoader.Installer
     static class Program
     {
         internal static string Title = "MelonLoader Installer";
-        private static string Version = "1.0.5";
         private static string ExeName = null;
+        private static string ManualZipPath = null;
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
 
@@ -48,6 +48,7 @@ namespace MelonLoader.Installer
                 string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
                 if (File.Exists(tempfilepath))
                     File.Delete(tempfilepath);
+                ManualZipPath = (Directory.GetCurrentDirectory() + "\\MelonLoader.zip");
                 Install_GUI();
             }
         }
@@ -58,6 +59,8 @@ namespace MelonLoader.Installer
             {
                 mainForm = new MainForm();
                 mainForm.cbVersions.Items.Clear();
+                if (File.Exists(ManualZipPath))
+                    mainForm.cbVersions.Items.Add("Manual Zip");
                 JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
                 if (data.Count > 0)
                 {
@@ -343,16 +346,18 @@ namespace MelonLoader.Installer
             {
                 try
                 {
-                    string response = webClient.DownloadString("https://github.com/HerpDerpinstine/MelonLoader/raw/master/MelonLoader.Installer/version.txt");
+                    string response = webClient.DownloadString("https://github.com/HerpDerpinstine/MelonLoader/raw/master/MelonLoader.Installer/MelonLoader.Installer.csproj");
                     if (string.IsNullOrEmpty(response))
                         return;
-                    if (!Version.Equals(response))
+                    string response_p1 = response.Substring(response.IndexOf("<Version>") + 9);
+                    string response_p2 = response_p1.Substring(0, response_p1.IndexOf("</Version>"));
+                    if (!response_p2.Equals(FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName).ProductVersion))
                     {
                         string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
                         if (File.Exists(tempfilepath))
                             File.Delete(tempfilepath);
                         webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe"), tempfilepath);
-                        while (webClient.IsBusy) {}
+                        while (webClient.IsBusy) { }
                         Process.Start(tempfilepath);
                         Application.Exit();
                     }
