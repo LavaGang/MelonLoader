@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Harmony;
 
 namespace MelonLoader.Support
 {
@@ -16,6 +18,8 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         private static Camera OnPostRenderCam = null;
+        private static MethodInfo Il2CppSystem_Console_WriteLine = null;
+        private static HarmonyInstance harmonyInstance = null;
 
         private static ISupportModule Initialize()
         {
@@ -56,8 +60,71 @@ namespace MelonLoader.Support
                 }
                 else
                     throw new Exception("Failed to get Assembly Il2CppSystem!");
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MelonModLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
+            }
+
+            bool ShouldRunFallback = true;
+            if (!Imports.IsDebugMode())
+            {
+                try
+                {
+                    Assembly Il2Cppmscorlib = Assembly.Load("Il2Cppmscorlib");
+                    if (Il2Cppmscorlib != null)
+                    {
+                        Type Il2CppSystem_Console = Il2Cppmscorlib.GetType("Il2CppSystem.Console");
+                        if (Il2CppSystem_Console != null)
+                        {
+                            MethodInfo[] methods = Il2CppSystem_Console.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(x => x.Name.StartsWith("Write")).ToArray();
+                            if (methods.Length > 0)
+                            {
+                                for (int i = 0; i < methods.Length; i++)
+                                {
+                                    var consoleHookTarget = Marshal.GetFunctionPointerForDelegate(new Action(() => { }));
+                                    unsafe { Imports.Hook((IntPtr)(&consoleHookTarget), UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(methods[i])); }
+                                }
+                                ShouldRunFallback = false;
+                            }
+                            else
+                                throw new Exception("Failed to find Write Methods!");
+                        }
+                        else
+                            throw new Exception("Failed to get Type Il2CppSystem.Console!");
+                    }
+                    else
+                        throw new Exception("Failed to get Assembly Il2Cppmscorlib!");
+                }
+                catch (Exception ex)
+                {
+                    MelonModLogger.LogWarning("Exception while setting up Console Cleaner, Running Fallback... | " + ex);
+                }
+            }
+            if (ShouldRunFallback && MelonLoader.Main.IsVRChat)
+            {
+                try
+                {
+                    Assembly Transmtn = Assembly.Load("Transmtn");
+                    if (Transmtn != null)
+                    {
+                        Type Transmtn_HttpConnection = Transmtn.GetType("Transmtn.HttpConnection");
+                        if (Transmtn_HttpConnection != null)
+                        {
+                            Il2CppSystem_Console_WriteLine = typeof(Il2CppSystem.Console).GetMethods(BindingFlags.Public | BindingFlags.Static).First(x => (x.Name.Equals("WriteLine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].ParameterType == typeof(string))));
+                            harmonyInstance = HarmonyInstance.Create("MelonLoader.Support.Il2Cpp");
+                            harmonyInstance.Patch(Transmtn_HttpConnection.GetMethod("get", BindingFlags.Public | BindingFlags.Instance), new HarmonyMethod(typeof(Main).GetMethod("Transmtn_HttpConnection_get_Prefix", BindingFlags.NonPublic | BindingFlags.Static)), new HarmonyMethod(typeof(Main).GetMethod("Transmtn_HttpConnection_get_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
+                        }
+                        else
+                            throw new Exception("Failed to get Type Transmtn.HttpConnection!");
+                    }
+                    else
+                        throw new Exception("Failed to get Assembly Transmtn!");
+                }
+                catch (Exception ex)
+                {
+                    MelonModLogger.LogWarning("Exception while setting up Auth Token Hider, Auth Tokens may show in Console: " + ex);
+                }
             }
 
             ClassInjector.DoHook += Imports.Hook;
@@ -70,8 +137,8 @@ namespace MelonLoader.Support
             MelonLoaderComponent.Create();
 
             SceneManager.sceneLoaded = (
-                (SceneManager.sceneLoaded == null) 
-                ? new Action<Scene, LoadSceneMode>(OnSceneLoad) 
+                (SceneManager.sceneLoaded == null)
+                ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
                 : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
                 );
             Camera.onPostRender = (
@@ -98,6 +165,10 @@ namespace MelonLoader.Support
 
         internal delegate bool SetAsLastSiblingDelegate(IntPtr u0040this);
         internal static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
+
+        private static bool Il2CppSystem_Console_WriteLine_Patch() => false;
+        private static void Transmtn_HttpConnection_get_Prefix() => harmonyInstance.Patch(Il2CppSystem_Console_WriteLine, new Harmony.HarmonyMethod(typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static)));
+        private static void Transmtn_HttpConnection_get_Postfix() => harmonyInstance.Unpatch(Il2CppSystem_Console_WriteLine, typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static));
     }
 
     public class MelonLoaderComponent : MonoBehaviour
