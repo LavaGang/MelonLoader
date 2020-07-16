@@ -80,11 +80,10 @@ namespace MelonLoader.Support
                             MethodInfo[] methods = Il2CppSystem_Console.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(x => x.Name.StartsWith("Write")).ToArray();
                             if (methods.Length > 0)
                             {
+                                if (harmonyInstance == null)
+                                    harmonyInstance = HarmonyInstance.Create("MelonLoader.Support.Il2Cpp");
                                 for (int i = 0; i < methods.Length; i++)
-                                {
-                                    var consoleHookTarget = Marshal.GetFunctionPointerForDelegate(new Action(() => { }));
-                                    unsafe { Imports.Hook((IntPtr)(&consoleHookTarget), UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(methods[i])); }
-                                }
+                                    harmonyInstance.Patch(methods[i], new HarmonyMethod(typeof(Main).GetMethod("NullPrefixPatch", BindingFlags.NonPublic | BindingFlags.Static)));
                                 ShouldRunFallback = false;
                             }
                             else
@@ -112,7 +111,8 @@ namespace MelonLoader.Support
                         if (Transmtn_HttpConnection != null)
                         {
                             Il2CppSystem_Console_WriteLine = typeof(Il2CppSystem.Console).GetMethods(BindingFlags.Public | BindingFlags.Static).First(x => (x.Name.Equals("WriteLine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].ParameterType == typeof(string))));
-                            harmonyInstance = HarmonyInstance.Create("MelonLoader.Support.Il2Cpp");
+                            if (harmonyInstance == null)
+                                harmonyInstance = HarmonyInstance.Create("MelonLoader.Support.Il2Cpp");
                             harmonyInstance.Patch(Transmtn_HttpConnection.GetMethod("get", BindingFlags.Public | BindingFlags.Instance), new HarmonyMethod(typeof(Main).GetMethod("Transmtn_HttpConnection_get_Prefix", BindingFlags.NonPublic | BindingFlags.Static)), new HarmonyMethod(typeof(Main).GetMethod("Transmtn_HttpConnection_get_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
                         }
                         else
