@@ -15,8 +15,6 @@ public:
 	static void OnApplicationStart();
 	static void OnApplicationQuit();
 	static void RunLogCallbacks(const char* msg);
-	static void RunWarningCallbacks(const char* msg);
-	static void RunErrorCallbacks(const char* msg);
 };
 
 enum ModHandler_DLLStatus

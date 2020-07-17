@@ -50,12 +50,10 @@ void ModHandler::Initialize()
 								AssertionManager::Decide(onApplicationStart, "OnApplicationStart");
 								onApplicationQuit = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
 								AssertionManager::Decide(onApplicationQuit, "OnApplicationQuit");
-								runLogCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunLogCallbacks", NULL);
+
+								runLogCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunLogCallbacks", 1);
 								AssertionManager::Decide(runLogCallbacks, "RunLogCallbacks");
-								runWarningCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunWarningCallbacks", NULL);
-								AssertionManager::Decide(runWarningCallbacks, "RunWarningCallbacks");
-								runErrorCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunErrorCallbacks", NULL);
-								AssertionManager::Decide(runErrorCallbacks, "RunErrorCallbacks");
+
 								if (MelonLoader::IsGameIl2Cpp)
 									HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, HookManager::Hooked_runtime_invoke);
 								else
@@ -98,31 +96,7 @@ void ModHandler::RunLogCallbacks(const char* msg)
 	{
 		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
 		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(runLogCallbacks, NULL, NULL, &exceptionObject);
-		if (exceptionObject && MelonLoader::DebugMode)
-			Mono::LogExceptionMessage(exceptionObject);
-	}
-}
-
-void ModHandler::RunWarningCallbacks(const char* msg)
-{
-	if (runWarningCallbacks != NULL)
-	{
-		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
-		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(runWarningCallbacks, NULL, NULL, &exceptionObject);
-		if (exceptionObject && MelonLoader::DebugMode)
-			Mono::LogExceptionMessage(exceptionObject);
-	}
-}
-
-void ModHandler::RunErrorCallbacks(const char* msg)
-{
-	if (runErrorCallbacks != NULL)
-	{
-		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
-		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(runErrorCallbacks, NULL, NULL, &exceptionObject);
+		//Mono::mono_runtime_invoke(runLogCallbacks, NULL, NULL, &exceptionObject);
 		if (exceptionObject && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
