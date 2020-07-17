@@ -23,20 +23,13 @@ namespace MelonLoader.Support
 
         private static ISupportModule Initialize()
         {
+            LogSupport.RemoveAllHandlers();
             if (Console.Enabled || Imports.IsDebugMode())
-            {
-                LogSupport.InfoHandler -= System.Console.WriteLine;
                 LogSupport.InfoHandler += MelonModLogger.Log;
-            }
-            LogSupport.WarningHandler -= System.Console.WriteLine;
             LogSupport.WarningHandler += MelonModLogger.LogWarning;
-            LogSupport.ErrorHandler -= System.Console.WriteLine;
             LogSupport.ErrorHandler += MelonModLogger.LogError;
             if (Imports.IsDebugMode())
-            {
-                LogSupport.TraceHandler -= System.Console.WriteLine;
                 LogSupport.TraceHandler += MelonModLogger.Log;
-            }
 
             try
             {

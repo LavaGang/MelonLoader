@@ -59,7 +59,6 @@ namespace MelonLoader
 
         internal static void LogDLLStatus(MelonBase.MelonCompatibility type) => Native_LogDLLStatus(type);
 
-
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Native_Log(string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]

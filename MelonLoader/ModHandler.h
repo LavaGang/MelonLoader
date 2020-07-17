@@ -7,10 +7,16 @@ public:
 	static bool HasInitialized;
 	static MonoMethod* onApplicationStart;
 	static MonoMethod* onApplicationQuit;
+	static MonoMethod* runLogCallbacks;
+	static MonoMethod* runWarningCallbacks;
+	static MonoMethod* runErrorCallbacks;
 	
 	static void Initialize();
 	static void OnApplicationStart();
 	static void OnApplicationQuit();
+	static void RunLogCallbacks(const char* msg);
+	static void RunWarningCallbacks(const char* msg);
+	static void RunErrorCallbacks(const char* msg);
 };
 
 enum ModHandler_DLLStatus
