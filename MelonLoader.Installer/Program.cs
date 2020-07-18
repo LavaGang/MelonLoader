@@ -354,28 +354,25 @@ namespace MelonLoader.Installer
 
         internal static void CheckForUpdates()
         {
-            new Thread(() =>
+            try
             {
-                try
+                string response = webClient.DownloadString("https://github.com/HerpDerpinstine/MelonLoader/raw/master/MelonLoader.Installer/MelonLoader.Installer.csproj");
+                if (string.IsNullOrEmpty(response))
+                    return;
+                string response_p1 = response.Substring(response.IndexOf("<Version>") + 9);
+                string response_p2 = response_p1.Substring(0, response_p1.IndexOf("</Version>"));
+                if (!response_p2.Equals(FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName).ProductVersion))
                 {
-                    string response = webClient.DownloadString("https://github.com/HerpDerpinstine/MelonLoader/raw/master/MelonLoader.Installer/MelonLoader.Installer.csproj");
-                    if (string.IsNullOrEmpty(response))
-                        return;
-                    string response_p1 = response.Substring(response.IndexOf("<Version>") + 9);
-                    string response_p2 = response_p1.Substring(0, response_p1.IndexOf("</Version>"));
-                    if (!response_p2.Equals(FileVersionInfo.GetVersionInfo(Process.GetCurrentProcess().MainModule.FileName).ProductVersion))
-                    {
-                        string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
-                        if (File.Exists(tempfilepath))
-                            File.Delete(tempfilepath);
-                        webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe"), tempfilepath);
-                        while (webClient.IsBusy) { }
-                        Process.Start(tempfilepath);
-                        Application.Exit();
-                    }
+                    string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
+                    if (File.Exists(tempfilepath))
+                        File.Delete(tempfilepath);
+                    webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe"), tempfilepath);
+                    while (webClient.IsBusy) { }
+                    Process.Start(tempfilepath);
+                    Application.Exit();
                 }
-                catch (Exception e) {}
-            }).Start();
+            }
+            catch (Exception e) {}
         }
     }
 }
