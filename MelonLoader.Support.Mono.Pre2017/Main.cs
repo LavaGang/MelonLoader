@@ -15,38 +15,6 @@ namespace MelonLoader.Support
 
         private static ISupportModule Initialize()
         {
-            if (!Imports.IsDebugMode())
-            {
-                try
-                {
-                    Assembly mscorlib = Assembly.Load("mscorlib");
-                    if (mscorlib != null)
-                    {
-                        Type System_Console = mscorlib.GetType("System.Console");
-                        if (System_Console != null)
-                        {
-                            MethodInfo[] methods = System_Console.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(x => x.Name.StartsWith("Write")).ToArray();
-                            if (methods.Length > 0)
-                            {
-                                HarmonyInstance harmonyInstance = HarmonyInstance.Create("MelonLoader.Support.Mono.Pre2017");
-                                for (int i = 0; i < methods.Length; i++)
-                                    harmonyInstance.Patch(methods[i], new HarmonyMethod(typeof(Main).GetMethod("NullPrefixPatch", BindingFlags.NonPublic | BindingFlags.Static)));
-                            }
-                            else
-                                throw new Exception("Failed to find Write Methods!");
-                        }
-                        else
-                            throw new Exception("Failed to get Type System.Console!");
-                    }
-                    else
-                        throw new Exception("Failed to get Assembly mscorlib!");
-                }
-                catch (Exception ex)
-                {
-                    MelonModLogger.LogWarning("Exception while setting up Console Cleaner, Game Logs may show in Console:  | " + ex);
-                }
-            }
-
             MelonLoaderComponent.Create();
             SceneManager.sceneLoaded += OnSceneLoad;
             return new Module();

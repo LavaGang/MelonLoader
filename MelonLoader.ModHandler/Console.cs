@@ -22,6 +22,8 @@ namespace MelonLoader
         public static extern void SetTitle(string title);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void SetColor(ConsoleColor color);
+        //[MethodImpl(MethodImplOptions.InternalCall)]
+        //public static extern bool ShouldShowGameLogs();
 
         private static void RunLogCallbacks(string msg) => LogCallbackHandler?.Invoke(msg);
         public static event Action<string> LogCallbackHandler;

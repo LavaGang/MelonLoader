@@ -28,6 +28,7 @@ char* MelonLoader::DataPath = NULL;
 char* MelonLoader::CompanyName = NULL;
 char* MelonLoader::ProductName = NULL;
 char* MelonLoader::ForceUnhollowerVersion = NULL;
+char* MelonLoader::ForceUnityVersion = NULL;
 
 void MelonLoader::Main()
 {
@@ -59,6 +60,7 @@ void MelonLoader::Main()
 
 #ifdef DEBUG
 		DebugMode = true;
+		Console::ShouldShowGameLogs = true;
 		Console::Create();
 #endif
 
@@ -179,6 +181,8 @@ void MelonLoader::ParseCommandLine()
 					AG_Force_Regenerate = true;
 				else if (strstr(command, "--melonloader.agfvunhollower"))
 					ForceUnhollowerVersion = CommandLineV[i + 1];
+				//else if (strstr(command, "--melonloader.agfvunity"))
+				//	ForceUnityVersion = CommandLineV[i + 1];
 #ifndef DEBUG
 				else if (strstr(command, "--melonloader.maxlogs") != NULL)
 					Logger::MaxLogs = GetIntFromConstChar(CommandLineV[i + 1], 10);
@@ -190,6 +194,8 @@ void MelonLoader::ParseCommandLine()
 					Console::Enabled = false;
 				else if (strstr(command, "--melonloader.hidewarnings") != NULL)
 					Console::HideWarnings = false;
+				//else if (strstr(command, "--melonloader.showgamelogs") != NULL)
+				//	Console::ShouldShowGameLogs = false;
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{
 					DebugMode = true;

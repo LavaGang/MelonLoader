@@ -81,6 +81,7 @@ public:
 	static bool HordiniMode;
 	static bool HordiniMode_Random;
 	static bool ChromiumMode;
+	static bool ShouldShowGameLogs;
 
 	static bool IsInitialized() { return (hwndConsole != NULL); }
 	static void Create();

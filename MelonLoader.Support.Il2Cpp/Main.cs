@@ -59,41 +59,7 @@ namespace MelonLoader.Support
                 MelonModLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
             }
 
-            bool ShouldRunFallback = true;
-            if (!Imports.IsDebugMode())
-            {
-                try
-                {
-                    Assembly Il2Cppmscorlib = Assembly.Load("Il2Cppmscorlib");
-                    if (Il2Cppmscorlib != null)
-                    {
-                        Type Il2CppSystem_Console = Il2Cppmscorlib.GetType("Il2CppSystem.Console");
-                        if (Il2CppSystem_Console != null)
-                        {
-                            MethodInfo[] methods = Il2CppSystem_Console.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(x => x.Name.StartsWith("Write")).ToArray();
-                            if (methods.Length > 0)
-                            {
-                                if (harmonyInstance == null)
-                                    harmonyInstance = HarmonyInstance.Create("MelonLoader.Support.Il2Cpp");
-                                for (int i = 0; i < methods.Length; i++)
-                                    harmonyInstance.Patch(methods[i], new HarmonyMethod(typeof(Main).GetMethod("NullPrefixPatch", BindingFlags.NonPublic | BindingFlags.Static)));
-                                ShouldRunFallback = false;
-                            }
-                            else
-                                throw new Exception("Failed to find Write Methods!");
-                        }
-                        else
-                            throw new Exception("Failed to get Type Il2CppSystem.Console!");
-                    }
-                    else
-                        throw new Exception("Failed to get Assembly Il2Cppmscorlib!");
-                }
-                catch (Exception ex)
-                {
-                    MelonModLogger.LogWarning("Exception while setting up Console Cleaner, Running Fallback... | " + ex);
-                }
-            }
-            if (ShouldRunFallback && MelonLoader.Main.IsVRChat)
+            if (MelonLoader.Main.IsVRChat)
             {
                 try
                 {

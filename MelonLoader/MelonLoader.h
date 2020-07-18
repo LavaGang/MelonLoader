@@ -20,6 +20,7 @@ public:
 	static char* CompanyName;
 	static char* ProductName;
 	static char* ForceUnhollowerVersion;
+	static char* ForceUnityVersion;
 
 	static void Main();
 	static void ParseCommandLine();
