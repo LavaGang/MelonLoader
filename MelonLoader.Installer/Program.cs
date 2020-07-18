@@ -18,7 +18,7 @@ namespace MelonLoader.Installer
     {
         internal static string Title = "MelonLoader Installer";
         private static string ExeName = null;
-        private static string ManualZipPath = null;
+        internal static string ManualZipPath = null;
         internal static MainForm mainForm = null;
         internal static WebClient webClient = new WebClient();
 
@@ -102,7 +102,6 @@ namespace MelonLoader.Installer
 
         private static void Install_ManualZip(string dirpath)
         {
-            MessageBox.Show("Manual Zip");
             SetDisplayText("Extracting MelonLoader.zip...");
             Cleanup(dirpath);
             ExtractZip(dirpath, ManualZipPath);
@@ -134,29 +133,25 @@ namespace MelonLoader.Installer
 
         internal static void Cleanup(string dirpath)
         {
-            while (true)
+            try
             {
-                try
+                foreach (string file in filesToCleanUp)
                 {
-                    foreach (string file in filesToCleanUp)
-                    {
-                        if (File.Exists(Path.Combine(dirpath, file)))
-                            File.Delete(Path.Combine(dirpath, file));
-                    }
+                    if (File.Exists(Path.Combine(dirpath, file)))
+                        File.Delete(Path.Combine(dirpath, file));
+                }
 
-                    foreach (string folder in foldersToCleanUp)
-                    {
-                        if (Directory.Exists(Path.Combine(dirpath, folder)))
-                            Directory.Delete(Path.Combine(dirpath, folder), true);
-                    }
-                    break;
-                }
-                catch (UnauthorizedAccessException e)
+                foreach (string folder in foldersToCleanUp)
                 {
-                    DialogResult result = MessageBox.Show($"MelonLoader could not remove old files.{Environment.NewLine}Please close the game then click retry to try again.{Environment.NewLine}If issue persists please click cancel to dump logs.", Program.Title, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                    if (result == DialogResult.Cancel)
-                        throw e;
+                    if (Directory.Exists(Path.Combine(dirpath, folder)))
+                        Directory.Delete(Path.Combine(dirpath, folder), true);
                 }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                DialogResult result = MessageBox.Show($"MelonLoader could not remove old files.{Environment.NewLine}Please close the game then click retry to try again.{Environment.NewLine}If issue persists please click cancel to dump logs.", Program.Title, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                if (result == DialogResult.Cancel)
+                    throw e;
             }
         }
 

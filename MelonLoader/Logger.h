@@ -68,7 +68,6 @@ public:
 	static void LogDLLStatus(ModHandler_DLLStatus type);
 
 private:
-	static const char* GetTimestamp();
 	static void LogTimestamp(ConsoleColor color = ConsoleColor_Black);
 	static bool CompareWritetime(const std::filesystem::directory_entry& first, const std::filesystem::directory_entry& second) { return first.last_write_time().time_since_epoch() >= second.last_write_time().time_since_epoch(); }
 };

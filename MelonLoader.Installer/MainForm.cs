@@ -82,7 +82,7 @@ namespace MelonLoader.Installer
 
         private void VersionCheck()
         {
-            string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
+            string selectedVersion = ((((string)cbVersions.Items[cbVersions.SelectedIndex]).StartsWith("Latest")) ? (string)cbVersions.Items[cbVersions.SelectedIndex + 1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
             if (selectedVersion.Equals("Manual Zip") || string.IsNullOrEmpty(CurrentVersion))
                 btnInstall.Text = "INSTALL";
             else if (CurrentVersion.Equals(selectedVersion))
@@ -114,7 +114,7 @@ namespace MelonLoader.Installer
                 try
                 {
                     string dirpath = Path.GetDirectoryName(tbPath.Text);
-                    string selectedVersion = (((cbVersions.SelectedIndex == 0) && (cbVersions.Items.Count > 1)) ? (string)cbVersions.Items[1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
+                    string selectedVersion = ((((string)cbVersions.Items[cbVersions.SelectedIndex]).StartsWith("Latest")) ? (string)cbVersions.Items[cbVersions.SelectedIndex + 1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
                     bool legacy_install = (selectedVersion.Equals("v0.2.1") || selectedVersion.Equals("v0.2") || selectedVersion.Equals("v0.1.0"));
 
                     Program.Install(dirpath, selectedVersion, legacy_install);

@@ -62,7 +62,7 @@ void Logger::CleanOldLogs(std::string logFolderPath)
 	}
 }
 
-const char* Logger::GetTimestamp()
+void Logger::LogTimestamp(ConsoleColor color)
 {
 	auto now = std::chrono::system_clock::now();
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
@@ -71,14 +71,7 @@ const char* Logger::GetTimestamp()
 	localtime_s(&bt, &timer);
 	std::stringstream output;
 	output << std::put_time(&bt, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
-	return output.str().c_str();
-}
-
-void Logger::LogTimestamp(ConsoleColor color)
-{
-	std::stringstream output;
-	output << "[" << GetTimestamp() << "] ";
-	LogFile << output.str();
+	LogFile << "[" << output.str() << "] " << std::endl;
 	Console::Write("[", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
 	Console::Write(output.str(), ((color != ConsoleColor_Black) ? color : ConsoleColor_Green));
 	Console::Write("] ", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
