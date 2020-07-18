@@ -12,13 +12,12 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         internal static int CurrentScene = -9;
+
         private static ISupportModule Initialize()
         {
             MelonLoaderComponent.Create();
             return new Module();
         }
-
-        private static bool NullPrefixPatch() => false;
     }
     public class MelonLoaderComponent : MonoBehaviour
     {

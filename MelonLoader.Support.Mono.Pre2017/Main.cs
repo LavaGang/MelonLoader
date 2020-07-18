@@ -21,7 +21,6 @@ namespace MelonLoader.Support
         }
 
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (!scene.Equals(null)) SceneHandler.OnSceneLoad(scene.buildIndex); }
-        private static bool NullPrefixPatch() => false;
 
     }
     public class MelonLoaderComponent : MonoBehaviour
