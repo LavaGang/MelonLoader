@@ -8,21 +8,19 @@ public:
 	static MonoMethod* onApplicationStart;
 	static MonoMethod* onApplicationQuit;
 	static MonoMethod* runLogCallbacks;
-	static MonoMethod* runLogOverrideCallbacks;
-	static MonoMethod* runWarningCallbacks;
-	static MonoMethod* runWarningOverrideCallbacks;
-	static MonoMethod* runErrorCallbacks;
-	static MonoMethod* runErrorOverrideCallbacks;
+	static MonoMethod* runWarningCallbacks1;
+	static MonoMethod* runWarningCallbacks2;
+	static MonoMethod* runErrorCallbacks1;
+	static MonoMethod* runErrorCallbacks2;
 	
 	static void Initialize();
 	static void OnApplicationStart();
 	static void OnApplicationQuit();
 	static void RunLogCallbacks(const char* msg);
-	static const char* RunLogOverrideCallbacks(const char* msg);
 	static void RunWarningCallbacks(const char* msg);
-	static const char* RunWarningOverrideCallbacks(const char* msg);
+	static void RunWarningCallbacks(const char* namesection, const char* msg);
 	static void RunErrorCallbacks(const char* msg);
-	static const char* RunErrorOverrideCallbacks(const char* msg);
+	static void RunErrorCallbacks(const char* namesection, const char* msg);
 };
 
 enum ModHandler_DLLStatus

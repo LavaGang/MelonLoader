@@ -19,21 +19,19 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern void Allocate();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private static extern void SetTitle(string title);
+        public static extern void SetTitle(string title);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void SetColor(ConsoleColor color);
 
         private static void RunLogCallbacks(string msg) => LogCallbackHandler?.Invoke(msg);
         public static event Action<string> LogCallbackHandler;
-        private static string RunLogOverrideCallbacks(string msg) => LogOverrideCallbackHandler?.Invoke(msg);
-        public static event Func<string, string> LogOverrideCallbackHandler;
-        private static void RunWarningCallbacks(string msg) => WarningCallbackHandler?.Invoke(msg);
-        public static event Action<string> WarningCallbackHandler;
-        private static string RunWarningOverrideCallbacks(string msg) => WarningOverrideCallbackHandler?.Invoke(msg);
-        public static event Func<string, string> WarningOverrideCallbackHandler;
-        private static void RunErrorCallbacks(string msg) => ErrorCallbackHandler?.Invoke(msg);
-        public static event Action<string> ErrorCallbackHandler;
-        private static string RunErrorOverrideCallbacks(string msg) => ErrorOverrideCallbackHandler?.Invoke(msg);
-        public static event Func<string, string> ErrorOverrideCallbackHandler;
+        private static void RunWarningCallbacks(string msg) => WarningCallbackHandler1?.Invoke(msg);
+        private static void RunWarningCallbacks(string namesection, string msg) => WarningCallbackHandler2?.Invoke(namesection, msg);
+        public static event Action<string> WarningCallbackHandler1;
+        public static event Action<string, string> WarningCallbackHandler2;
+        private static void RunErrorCallbacks(string msg) => ErrorCallbackHandler1?.Invoke(msg);
+        private static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler2?.Invoke(namesection, msg);
+        public static event Action<string> ErrorCallbackHandler1;
+        public static event Action<string, string> ErrorCallbackHandler2;
     }
 }

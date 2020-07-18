@@ -11,11 +11,10 @@ bool ModHandler::HasInitialized = false;
 MonoMethod* ModHandler::onApplicationStart = NULL;
 MonoMethod* ModHandler::onApplicationQuit = NULL;
 MonoMethod* ModHandler::runLogCallbacks = NULL;
-MonoMethod* ModHandler::runLogOverrideCallbacks = NULL;
-MonoMethod* ModHandler::runWarningCallbacks = NULL;
-MonoMethod* ModHandler::runWarningOverrideCallbacks = NULL;
-MonoMethod* ModHandler::runErrorCallbacks = NULL;
-MonoMethod* ModHandler::runErrorOverrideCallbacks = NULL;
+MonoMethod* ModHandler::runWarningCallbacks1 = NULL;
+MonoMethod* ModHandler::runWarningCallbacks2 = NULL;
+MonoMethod* ModHandler::runErrorCallbacks1 = NULL;
+MonoMethod* ModHandler::runErrorCallbacks2 = NULL;
 
 void ModHandler::Initialize()
 {
@@ -55,16 +54,14 @@ void ModHandler::Initialize()
 								AssertionManager::Decide(onApplicationQuit, "OnApplicationQuit");
 								runLogCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunLogCallbacks", 1);
 								AssertionManager::Decide(runLogCallbacks, "RunLogCallbacks");
-								runLogOverrideCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunLogOverrideCallbacks", 1);
-								AssertionManager::Decide(runLogOverrideCallbacks, "RunLogOverrideCallbacks");
-								runWarningCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunWarningCallbacks", 1);
-								AssertionManager::Decide(runWarningCallbacks, "RunWarningCallbacks");
-								runWarningOverrideCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunWarningOverrideCallbacks", 1);
-								AssertionManager::Decide(runWarningOverrideCallbacks, "RunWarningOverrideCallbacks");
-								runErrorCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunErrorCallbacks", 1);
-								AssertionManager::Decide(runErrorCallbacks, "RunErrorCallbacks");
-								runErrorOverrideCallbacks = Mono::mono_class_get_method_from_name(klass2, "RunErrorOverrideCallbacks", 1);
-								AssertionManager::Decide(runErrorOverrideCallbacks, "RunErrorOverrideCallbacks");
+								runWarningCallbacks1 = Mono::mono_class_get_method_from_name(klass2, "RunWarningCallbacks", 1);
+								AssertionManager::Decide(runWarningCallbacks1, "RunWarningCallbacks (1)");
+								runWarningCallbacks2 = Mono::mono_class_get_method_from_name(klass2, "RunWarningCallbacks", 2);
+								AssertionManager::Decide(runWarningCallbacks2, "RunWarningCallbacks (2)");
+								runErrorCallbacks1 = Mono::mono_class_get_method_from_name(klass2, "RunErrorCallbacks", 1);
+								AssertionManager::Decide(runErrorCallbacks1, "RunErrorCallbacks (1)");
+								runErrorCallbacks2 = Mono::mono_class_get_method_from_name(klass2, "RunErrorCallbacks", 2);
+								AssertionManager::Decide(runErrorCallbacks2, "RunErrorCallbacks (2)");
 								if (MelonLoader::IsGameIl2Cpp)
 									HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, HookManager::Hooked_runtime_invoke);
 								else
@@ -114,94 +111,56 @@ void ModHandler::RunLogCallbacks(const char* msg)
 	}
 }
 
-const char* ModHandler::RunLogOverrideCallbacks(const char* msg)
-{
-	if (runLogCallbacks != NULL)
-	{
-		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
-		void* args[1] = { msgstr };
-		MonoObject* exceptionObject = NULL;
-		MonoObject* returnobj = Mono::mono_runtime_invoke(runLogCallbacks, NULL, args, &exceptionObject);
-		if (exceptionObject != NULL)
-		{
-			if (MelonLoader::DebugMode)
-				Mono::LogExceptionMessage(exceptionObject);
-		}
-		else
-		{
-			if (returnobj != NULL)
-				return Mono::mono_string_to_utf8((MonoString*)returnobj);
-		}
-		return NULL;
-	}
-}
-
 void ModHandler::RunWarningCallbacks(const char* msg)
 {
-	if (runWarningCallbacks != NULL)
+	if (runWarningCallbacks1 != NULL)
 	{
 		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
 		void* args[1] = { msgstr };
 		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(runWarningCallbacks, NULL, args, &exceptionObject);
+		Mono::mono_runtime_invoke(runWarningCallbacks1, NULL, args, &exceptionObject);
 		if ((exceptionObject != NULL) && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
 
-const char* ModHandler::RunWarningOverrideCallbacks(const char* msg)
+void ModHandler::RunWarningCallbacks(const char* namesection, const char* msg)
 {
-	if (runWarningOverrideCallbacks != NULL)
+	if (runWarningCallbacks2 != NULL)
 	{
 		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
-		void* args[1] = { msgstr };
+		MonoString* namesectionstr = Mono::mono_string_new(Mono::Domain, namesection);
+		void* args[2] = { namesectionstr, msgstr };
 		MonoObject* exceptionObject = NULL;
-		MonoObject* returnobj = Mono::mono_runtime_invoke(runWarningOverrideCallbacks, NULL, args, &exceptionObject);
-		if (exceptionObject != NULL)
-		{
-			if (MelonLoader::DebugMode)
-				Mono::LogExceptionMessage(exceptionObject);
-		}
-		else
-		{
-			if (returnobj != NULL)
-				return Mono::mono_string_to_utf8((MonoString*)returnobj);
-		}
-		return NULL;
+		Mono::mono_runtime_invoke(runWarningCallbacks2, NULL, args, &exceptionObject);
+		if ((exceptionObject != NULL) && MelonLoader::DebugMode)
+			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
 
 void ModHandler::RunErrorCallbacks(const char* msg)
 {
-	if (runErrorCallbacks != NULL)
+	if (runErrorCallbacks1 != NULL)
 	{
 		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
 		void* args[1] = { msgstr };
 		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(runErrorCallbacks, NULL, args, &exceptionObject);
+		Mono::mono_runtime_invoke(runErrorCallbacks1, NULL, args, &exceptionObject);
 		if ((exceptionObject != NULL) && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
 
-const char* ModHandler::RunErrorOverrideCallbacks(const char* msg)
+void ModHandler::RunErrorCallbacks(const char* namesection, const char* msg)
 {
-	if (runErrorOverrideCallbacks != NULL)
+	if (runErrorCallbacks2 != NULL)
 	{
 		MonoString* msgstr = Mono::mono_string_new(Mono::Domain, msg);
-		void* args[1] = { msgstr };
+		MonoString* namesectionstr = Mono::mono_string_new(Mono::Domain, namesection);
+		void* args[2] = { namesectionstr, msgstr };
 		MonoObject* exceptionObject = NULL;
-		MonoObject* returnobj = Mono::mono_runtime_invoke(runErrorOverrideCallbacks, NULL, args, &exceptionObject);
-		if (exceptionObject != NULL)
-		{
-			if (MelonLoader::DebugMode)
-				Mono::LogExceptionMessage(exceptionObject);
-		}
-		else
-		{
-			if (returnobj != NULL)
-				return Mono::mono_string_to_utf8((MonoString*)returnobj);
-		}
-		return NULL;
+		Mono::mono_runtime_invoke(runErrorCallbacks2, NULL, args, &exceptionObject);
+		if ((exceptionObject != NULL) && MelonLoader::DebugMode)
+			Mono::LogExceptionMessage(exceptionObject);
 	}
 }
