@@ -15,7 +15,34 @@
 
 ### v0.2.5 Open-Beta:
 
-1.
+1. Fixed Issue that prevented deserializing structs with TinyJSON.  (Credits to zeobviouslyfakeacc :3)
+2. Simplified External Tool Versions.
+3. Updated Il2CppDumper to 6.3.3.
+4. Added Unity 2019.3.15 Dependencies.
+5. Fixed Issue with some Games causing DisableAnalytics to have an Internal Failure.
+6. Fixed File Descriptions.
+7. Added Icon to AssemblyGenerator.exe.
+8. Temporarily Removed the ModSettingsMenu.
+9. Temporarily Removed RenderHelper from Support Modules.
+10. Fixed Issue with some Games causing DisableAnalytics to have an Internal Failure.
+11. Fixed Issue with using Application.unityVersion on some Unity versions.
+12. Fixed Issue with using SetAsLastSibling on some Unity versions.
+13. Fixed Issue with Release Compilation still saving Debug files to the Output Directory.
+14. Added UnityEngine.Il2CppAssetBundleManager to Managed folder to help with Asset Bundle Manipulation on Il2Cpp Games.
+15. Installer now properly displays UPDATE instead of INSTALL when updating to a newer version.
+16. Added Auto-Update System to Installer.
+17. Installer Version Check now Parses the Project File directly.
+18. Added Installer Check for Manual Zip (MelonLoader.zip) next to the Installer exe.
+19. Added UN-INSTALL button to Installer.
+20. Added Auth Token Hider for VRChat.
+21. Added Console Cleaner for Normal Console
+22. Console Cleaner now uses a Harmony Patch instead of unsafe hooking.
+23. Improved Unhollower Logging Support.
+24. Added Console Log Callbacks to MelonLoader.Console.
+25. Installer now runs Update Check on Main Thread.
+26. Improved Logger System.
+27. Fixed Issue with Installer where installing from Manual Zip would cause it to download Latest Version.
+28. Temporarily Removed Console Cleaner.
 
 ---
 
@@ -135,7 +162,7 @@
 15. Made the Loaded Mods List public.
 16. Fix ModPrefs.SaveConfig() overriding previous SetString/Bool/etc calls.  (Credits to knah :D)
 17. Fixed SSL/TLS Issue with the Installer.
-18. Fixed issue with Games that don't have Assembly-CSharp.
+18. Fixed Issue with Games that don't have Assembly-CSharp.
 19. Added a check and a warning for if the OS is older than Windows 7.
 20. Updated Il2CppAssemblyUnhollower Download to v0.4.4.  (Credits to knah :D)
 21. Cleaned up version.dll.
@@ -146,7 +173,7 @@
 26. Fixed Issue with Signature-less System on Pre-2017 Unity Versions.
 27. Fixed Issue with Support Modules not loading on Unity Versions older than 5.3.
 28. Fixed Issue Loading Mono Module.
-29. Fixed issue with OnApplicationStart getting called even when the Assembly Generator fails.
+29. Fixed Issue with OnApplicationStart getting called even when the Assembly Generator fails.
 30. Switched Assembly Generator to Process Based Execution.
 31. Fixed Mistake with Assembly Generator not returning false when Execution fails.
 32. Fixed Directory Issue with Assembly Generator.
@@ -155,7 +182,7 @@
 34. Added Unity 2018.4.16 Dependencies.
 35. Plugins now only call OnPreInitialization, OnApplicationStart, OnApplicationQuit, and OnModSettingsApplied.
 36. Revised Installer Design.
-37. Fixed issue with Plugin Loading.
+37. Fixed Issue with Plugin Loading.
 38. Fixed OnLevelWasLoaded and OnLevelWasInitialized on Unity Versions lower than 5.3.
 39. Fixed GetActiveSceneIndex for Pre2017.2 Support Module.
 40. Re-added TinyJSON to ModHandler.
@@ -208,12 +235,12 @@
 
 ### v0.2.0 Open-Beta:
 
-1. Fixed issue with the Console still showing as Closed-Beta.
-2. Fixed issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
+1. Fixed Issue with the Console still showing as Closed-Beta.
+2. Fixed Issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
 3. Fixed support for 2018.4.11f1 and Ori and the Will of the Wisps.  (Credits to Hector ^.^)
 4. Added 2018.4.11f1 Unity Dependencies.  (Credits to Hector ^.^)
 5. Removed Unity Dependencies from Release Build.  (No Longer Needed)
-6. Fixed issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
+6. Fixed Issue with MelonCoroutines not allowing a yield of Coroutine within a Coroutine.  (Credits to Slaynash :3)
 7. Revised README.MD.
 8. Changed the Hook and Unhook Internal Calls in MelonLoader.Imports from internal to public to expose them and allow them to be used by Mods.
 9. Revised CHANGELOG.MD.
@@ -235,10 +262,10 @@
 25. Split support for Mono and Il2Cpp into their own Support Modules.  (Credits to knah :D)
 26. Fixed Issue with OnSceneLoad in Il2Cpp Support Module.  (Credits to knah :D)
 27. Split MelonCoroutines to integrate Support Module support.  (Credits to knah :D)
-28. Fixed issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
-29. Fixed issue with OnGUI.
+28. Fixed Issues with needing the ModHandler compiled under a certain .NET Framework.  (Credits to knah :D)
+29. Fixed Issue with OnGUI.
 30. Fixed Compatibility Issues with SCP Unity.
-31. Fixed issue with version.dll causing UnityCrashHandler to crash.
+31. Fixed Issue with version.dll causing UnityCrashHandler to crash.
 32. Fixed Compatibility Issues with Hot Dogs, Horseshoes & Hand Grenades.
 33. Added Pre 2017 Mono Support Module.
 34. Made Normal Console Open by Default.
@@ -247,7 +274,7 @@
 37. Cleaned up Il2Cpp Imports.
 38. Cleaned up Mono Imports.
 39. Revised Command Line Parsing.
-40. Fixed issue with the Log Cleaner deleting Logs that were not made by MelonLoader.
+40. Fixed Issue with the Log Cleaner deleting Logs that were not made by MelonLoader.
 41. Added Launch Option --melonloader.maxlogs. Sets the Max Logs for the Log Cleaner. Set as 0 to Disable the Log Cleaner.
 42. Added Global Exception Handler to the Mono Domain.
 43. Added Assembly Generation Integration.
@@ -255,7 +282,7 @@
 45. Temporarily Disabled Zipped Mod Support.
 46. Added Log Error Limiter.
 47. Re-Enabled Download Links in Mod Logs.
-48. Fixed issue with TestMod not loading on Mono Games.
+48. Fixed Issue with TestMod not loading on Mono Games.
 
 ---
 
@@ -289,8 +316,8 @@
 26. Used regions to further clean up and organize HookManager.cpp.
 27. Added Status Log for when detecting if a Mod is Universal, Compatible, or Incompatible.
 28. Cleaned up the Mod Loading functionality of MelonLoader.ModHandler.
-29. Fixed issue with the Compatibility Check when using multiple MelonModGameAttribute.
-30. Fixed issue with OnLevelWasLoaded and OnLevelWasInitialized getting the wrong Scene Index and only running once then never again.
+29. Fixed Issue with the Compatibility Check when using multiple MelonModGameAttribute.
+30. Fixed Issue with OnLevelWasLoaded and OnLevelWasInitialized getting the wrong Scene Index and only running once then never again.
 31. Upgraded MelonLoader.ModHandler and TestMod to .NET v4.7.2.  (As requested by Emilia :D)
 32. Made MelonModController use directly invokable delegates for faster invoking.  (Credits to Kronik ^.^)
 33. Removed Unneeded Caching of MethodInfo in MelonModController.
@@ -299,28 +326,28 @@
 36. Redesigned the Logging system to be unified between MelonLoader and MelonLoader.ModHandler.
 37. Colorized Errors in both Consoles.
 38. Added the ability for Mods to set a Color when Logging.
-39. Fixed issue with --melonloader.rainbow and --melonloader.randomrainbow not working when using --melonloader.console.
+39. Fixed Issue with --melonloader.rainbow and --melonloader.randomrainbow not working when using --melonloader.console.
 40. Added Unload Functionality. Entirely unloads MelonLoader.  (MelonLoader::UNLOAD() or MelonLoader.Imports.UNLOAD_MELONLOADER())
-41. Fixed issue with using 1 or 0 for a boolean in ModPrefs.
-42. Fixed issue with OnUpdate, OnFixedUpdate, and OnLateUpdate invoking too early.
-43. Fixed issue with Unload Functionality not closing either Consoles.
+41. Fixed Issue with using 1 or 0 for a boolean in ModPrefs.
+42. Fixed Issue with OnUpdate, OnFixedUpdate, and OnLateUpdate invoking too early.
+43. Fixed Issue with Unload Functionality not closing either Consoles.
 44. Added MelonCoroutines to handle Coroutine functionality for Mods on both Il2Cpp and Mono.  (Credits to knah :D)
-45. Fixed issue with Logger removing Old Logs when it shouldn't.
-46. Fixed issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
+45. Fixed Issue with Logger removing Old Logs when it shouldn't.
+46. Fixed Issue with OnLevelWasLoaded, OnLevelWasInitialized, and VRChat_OnUiManagerInit when using knah's UnHollower.
 47. Fixed Execution Order of OnApplicationStart to run before any of the other Mod Methods.
 48. Added Assertion Manager to handle MelonLoader Internals.
-49. Fixed issue with MelonCoroutines throwing a Cast Exception for knah's UnHollower.
+49. Fixed Issue with MelonCoroutines throwing a Cast Exception for knah's UnHollower.
 50. Added Support for WaitForFixedUpdate and WaitForEndOfFrame to MelonCoroutines.
-51. Fixed issue with MelonCoroutines throwing a Missing Method Exception for knah's UnHollower.
+51. Fixed Issue with MelonCoroutines throwing a Missing Method Exception for knah's UnHollower.
 52. Added 2019.3.6f1 Unity Dependencies.
 53. Fixed Internal Failure issues with RotMG Exalt and Unity 2019.3.6f1.
 54. Fixed Internal Failure issues with Pistol Whip and Unity 2019.2.0f1.
-55. Fixed issue with MelonLoader.ModHandler complaining about Mod Libraries.
-56. Fixed issue with MelonCoroutines processing a yield of null as the same as WaitForFixedUpdate.
+55. Fixed Issue with MelonLoader.ModHandler complaining about Mod Libraries.
+56. Fixed Issue with MelonCoroutines processing a yield of null as the same as WaitForFixedUpdate.
 57. Made MelonMod use directly invokable virtuals and overrides for faster invoking.  (As requested by knah :3)
 58. Removed MelonModController from MelonLoader.ModHandler.
 59. Made MelonLoader.ModHandler look for the MelonMod subclass in the Mod's MelonModInfoAttribute instead of searching the entire Assembly.  (As requested by knah :3)
-60. Fixed issue with Logger Imports in MelonLoader.ModHandler being passed garbage strings.
+60. Fixed Issue with Logger Imports in MelonLoader.ModHandler being passed garbage strings.
 
 ---
 
@@ -332,20 +359,20 @@
 4. Logger has been renamed to MelonModLogger to prevent conflict with UnityEngine.Logger.
 5. Fixed Crash issue when using System.Type in MUPOT Mode.
 6. MelonModInfo Attribute has been changed to an Assembly Attribute.
-7. Fixed issue with MelonModLogger not getting the Mod Name when used outside of the main class.
+7. Fixed Issue with MelonModLogger not getting the Mod Name when used outside of the main class.
 8. FileInfo in the TestMod has been renamed to BuildInfo so it won't conflict with the System.IO.FileInfo class.
 9. Added 0Harmony Integration and Support.
 10. Modified MelonLoader.ModHandler to use a Component based system in MUPOT Mode and Mono based games.
-11. Fixed issue preventing OnUpdate from being called in MUPOT Mode and Mono based games.
-12. Fixed issue preventing OnApplicationQuit from being called in MUPOT Mode and Mono based games.
+11. Fixed Issue preventing OnUpdate from being called in MUPOT Mode and Mono based games.
+12. Fixed Issue preventing OnApplicationQuit from being called in MUPOT Mode and Mono based games.
 13. Fixed Conflict issue triggering Unity's Single Instance function in MUPOT Mode.
 14. Added OnLevelWasLoaded, OnLevelWasInitialized, OnUpdate, OnFixedUpdate, OnLateUpdate, and OnGUI for Mods in MUPOT Mode and Mono based games.
 15. Bug that prevented Debug Compilation is now fixed.
-16. Fixed issue that caused Unity Crash Handler to initialize MelonLoader twice.
+16. Fixed Issue that caused Unity Crash Handler to initialize MelonLoader twice.
 17. Fixed Runtime Initialization issue with Audica that caused crashes.
 18. Fixed Execution Order of MelonLoader.ModHandler.
-19. Fixed issue with Mono Game Support due to Mono DLL naming.
-20. Fixed issue with Internal Calls through MUPOT Mode.
+19. Fixed Issue with Mono Game Support due to Mono DLL naming.
+20. Fixed Issue with Internal Calls through MUPOT Mode.
 21. Added better Mod Exception Handling and Logging.
 22. Added Dependencies for Unity 2019.1.0b1.
 23. Added Dependencies for Unity 2017.4.28f1.
@@ -364,14 +391,14 @@
 ### v0.0.2 Closed-Beta:
 
 1. Added NET_SDK to be built into MelonLoader.ModHandler as the designated Il2Cpp Wrapper.
-2. Fixed issue with Mods and Logs folders not being in the correct place next to the game's exe.
-3. Fixed issue with the ModPrefs not calling the OnModSettingsApplied method of Mods.
+2. Fixed Issue with Mods and Logs folders not being in the correct place next to the game's exe.
+3. Fixed Issue with the ModPrefs not calling the OnModSettingsApplied method of Mods.
 4. Replaced old ModPrefs debug log message left in from my VRChat mod.
-5. Fixed issue with Audica crashing when trying to use MelonLoader.
+5. Fixed Issue with Audica crashing when trying to use MelonLoader.
 6. Added Unity 2018.4.6f1 Dependencies.
 7. Fixed bug with Launch Options.
 8. Fixed Pathing issue that caused games like Boneworks to crash.
-9. Fixed issue where Environment.CurrentDirectory wasn't being set properly.
+9. Fixed Issue where Environment.CurrentDirectory wasn't being set properly.
 10. Clean-up and Additions made to NET_SDK.  (Thanks Sc4ad :D)
 11. Added SteamVR and OculusVR Dependency DLLs to MelonLoader/Managed.
 12. Added TestMod to Project Files.
