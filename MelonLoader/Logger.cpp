@@ -71,7 +71,7 @@ void Logger::LogTimestamp(ConsoleColor color)
 	localtime_s(&bt, &timer);
 	std::stringstream output;
 	output << std::put_time(&bt, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
-	LogFile << "[" << output.str() << "] " << std::endl;
+	LogFile << "[" << output.str() << "] ";
 	Console::Write("[", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
 	Console::Write(output.str(), ((color != ConsoleColor_Black) ? color : ConsoleColor_Green));
 	Console::Write("] ", ((color != ConsoleColor_Black) ? color : ConsoleColor_Gray));
