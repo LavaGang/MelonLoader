@@ -1,5 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using Harmony;
 
 namespace MelonLoader.Support
 {
@@ -8,12 +12,14 @@ namespace MelonLoader.Support
         internal static bool IsDestroying = false;
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
+
         private static ISupportModule Initialize()
         {
             MelonLoaderComponent.Create();
             SceneManager.sceneLoaded += OnSceneLoad;
             return new Module();
         }
+
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (!scene.Equals(null)) SceneHandler.OnSceneLoad(scene.buildIndex); }
     }
     public class MelonLoaderComponent : MonoBehaviour

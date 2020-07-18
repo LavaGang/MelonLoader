@@ -8,6 +8,7 @@ bool Console::HideWarnings = false;
 bool Console::HordiniMode = false;
 bool Console::HordiniMode_Random = false;
 bool Console::ChromiumMode = false;
+bool Console::ShouldShowGameLogs = false;
 
 void Console::Create()
 {

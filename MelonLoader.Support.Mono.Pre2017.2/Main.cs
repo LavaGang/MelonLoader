@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
+using Harmony;
 
 namespace MelonLoader.Support
 {
@@ -8,6 +12,7 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         internal static int CurrentScene = -9;
+
         private static ISupportModule Initialize()
         {
             MelonLoaderComponent.Create();

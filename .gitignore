@@ -68,6 +68,9 @@ Detours\bin.X86
 Detours\bin.X64
 Detours\src\obj.X86
 Detours\src\obj.X64
+UnityEngine.Il2CppAssetBundleManager\bin
+UnityEngine.Il2CppAssetBundleManager\obj
+UnityEngine.Il2CppAssetBundleManager\.vs
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

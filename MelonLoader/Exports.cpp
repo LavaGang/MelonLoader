@@ -14,6 +14,7 @@ void LogDLLStatus(ModHandler_DLLStatus type) { Logger::LogDLLStatus(type); }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }
 bool IsConsoleEnabled() { return Console::Enabled; }
+bool ShouldShowGameLogs() { return Console::ShouldShowGameLogs; }
 MonoString* GetGameDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::GamePath); }
 MonoString* GetGameDataDirectory() { return Mono::mono_string_new(Mono::Domain, MelonLoader::DataPath); }
 void Hook(Il2CppMethod* target, void* detour) { HookManager::Hook(target, detour); }
@@ -56,6 +57,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Console::Allocate", Console::Create);
 	Mono::mono_add_internal_call("MelonLoader.Console::SetTitle", SetTitleForConsole);
 	Mono::mono_add_internal_call("MelonLoader.Console::SetColor", Console::SetColor);
+	//Mono::mono_add_internal_call("MelonLoader.Console::ShouldShowGameLogs", ShouldShowGameLogs);
 
 	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_Log", Log);
 	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_LogColor", LogColor);

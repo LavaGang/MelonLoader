@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.picTextLogo = new System.Windows.Forms.PictureBox();
             this.picImageLogo = new System.Windows.Forms.PictureBox();
-            this.progInstall = new MetroFramework.Controls.MetroProgressBar();
+            this.progressBar = new MetroFramework.Controls.MetroProgressBar();
             this.cbVersions = new MetroFramework.Controls.MetroComboBox();
             this.tbPath = new MetroFramework.Controls.MetroTextBox();
             this.tileDivider = new MetroFramework.Controls.MetroTile();
@@ -39,6 +39,7 @@
             this.lblProgressInfo = new MetroFramework.Controls.MetroLabel();
             this.lblProgressPer = new MetroFramework.Controls.MetroLabel();
             this.btnSelect = new MetroFramework.Controls.MetroButton();
+            this.btnUninstall = new MetroFramework.Controls.MetroButton();
             ((System.ComponentModel.ISupportInitialize)(this.picTextLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picImageLogo)).BeginInit();
             this.SuspendLayout();
@@ -64,22 +65,25 @@
             this.picImageLogo.TabIndex = 1;
             this.picImageLogo.TabStop = false;
             // 
-            // progInstall
+            // progressBar
             // 
-            this.progInstall.Location = new System.Drawing.Point(23, 244);
-            this.progInstall.Name = "progInstall";
-            this.progInstall.Size = new System.Drawing.Size(437, 29);
-            this.progInstall.Step = 1;
-            this.progInstall.Style = MetroFramework.MetroColorStyle.Green;
-            this.progInstall.TabIndex = 10;
-            this.progInstall.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.progInstall.Visible = false;
+            this.progressBar.Location = new System.Drawing.Point(23, 248);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(437, 29);
+            this.progressBar.Step = 1;
+            this.progressBar.Style = MetroFramework.MetroColorStyle.Green;
+            this.progressBar.TabIndex = 10;
+            this.progressBar.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.progressBar.Visible = false;
             // 
             // cbVersions
             // 
             this.cbVersions.FormattingEnabled = true;
             this.cbVersions.ItemHeight = 23;
             this.cbVersions.Items.AddRange(new object[] {
+            "v0.2.5",
+            "v0.2.4",
+            "v0.2.3",
             "v0.2.2",
             "v0.2.1",
             "v0.2",
@@ -192,13 +196,27 @@
             this.btnSelect.UseSelectable = true;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click_1);
             // 
+            // btnUninstall
+            // 
+            this.btnUninstall.Location = new System.Drawing.Point(245, 251);
+            this.btnUninstall.Name = "btnUninstall";
+            this.btnUninstall.Size = new System.Drawing.Size(215, 45);
+            this.btnUninstall.Style = MetroFramework.MetroColorStyle.Green;
+            this.btnUninstall.TabIndex = 22;
+            this.btnUninstall.Text = "UN-INSTALL";
+            this.btnUninstall.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.btnUninstall.UseSelectable = true;
+            this.btnUninstall.Visible = false;
+            this.btnUninstall.Click += new System.EventHandler(this.btnUninstall_Click_1);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(481, 314);
-            this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.btnInstall);
+            this.Controls.Add(this.btnUninstall);
+            this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.tileDivider);
             this.Controls.Add(this.tbPath);
             this.Controls.Add(this.cbVersions);
@@ -206,7 +224,7 @@
             this.Controls.Add(this.picTextLogo);
             this.Controls.Add(this.lblProgressPer);
             this.Controls.Add(this.lblProgressInfo);
-            this.Controls.Add(this.progInstall);
+            this.Controls.Add(this.progressBar);
             this.DisplayHeader = false;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -228,7 +246,7 @@
         #endregion
         private System.Windows.Forms.PictureBox picTextLogo;
         private System.Windows.Forms.PictureBox picImageLogo;
-        public MetroFramework.Controls.MetroProgressBar progInstall;
+        public MetroFramework.Controls.MetroProgressBar progressBar;
         public MetroFramework.Controls.MetroComboBox cbVersions;
         public MetroFramework.Controls.MetroTextBox tbPath;
         public MetroFramework.Controls.MetroTile tileDivider;
@@ -236,5 +254,6 @@
         public MetroFramework.Controls.MetroLabel lblProgressInfo;
         public MetroFramework.Controls.MetroLabel lblProgressPer;
         public MetroFramework.Controls.MetroButton btnSelect;
+        public MetroFramework.Controls.MetroButton btnUninstall;
     }
 }

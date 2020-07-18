@@ -3,8 +3,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using MelonLoader;
 
-[assembly: AssemblyTitle(TestPlugin.BuildInfo.Name)]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle(TestPlugin.BuildInfo.Description)]
+[assembly: AssemblyDescription(TestPlugin.BuildInfo.Description)]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany(TestPlugin.BuildInfo.Company)]
 [assembly: AssemblyProduct(TestPlugin.BuildInfo.Name)]

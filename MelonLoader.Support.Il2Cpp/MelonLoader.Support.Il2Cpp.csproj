@@ -15,7 +15,7 @@
     <ProjectGuid>{4487DF38-2921-418A-A015-7DDA1C2BC5E4}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
     <DefineConstants>
@@ -61,10 +61,6 @@
     <Reference Include="UnityEngine.CoreModule">
       <Private>false</Private>
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <Private>false</Private>
-      <HintPath>Libs\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

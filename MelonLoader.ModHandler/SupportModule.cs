@@ -8,8 +8,6 @@ namespace MelonLoader
 {
     public interface ISupportModule
     {
-        string GetUnityVersion();
-        float GetUnityDeltaTime();
         int GetActiveSceneIndex();
         object StartCoroutine(IEnumerator coroutine);
         void StopCoroutine(object coroutineToken);
@@ -94,8 +92,6 @@ namespace MelonLoader
             return true;
         }
 
-        internal static string GetUnityVersion() => supportModule?.GetUnityVersion();
-        internal static float GetUnityDeltaTime() => supportModule?.GetUnityDeltaTime() ?? 0f;
         internal static int GetActiveSceneIndex() => supportModule?.GetActiveSceneIndex() ?? -9;
         internal static void UnityDebugLog(string msg) => supportModule?.UnityDebugLog(msg);
         internal static void Destroy() { supportModule?.Destroy(); supportModule = null; }

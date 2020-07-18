@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace MelonLoader.AssemblyGenerator
+namespace MelonLoader.Installer
 {
     class TempFileCache
     {

@@ -93,7 +93,7 @@ namespace Harmony
 				}
 
 				if (patchInfo.copiedMethodInfoPointer == IntPtr.Zero) {
-					IntPtr origMethodPtr = UnhollowerSupport.MethodBaseToIntPtr(original);
+					IntPtr origMethodPtr = UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(original);
 					patchInfo.copiedMethodInfoPointer = CopyMethodInfoStruct(origMethodPtr);
 					HarmonySharedState.UpdatePatchInfo(original, patchInfo);
 				}

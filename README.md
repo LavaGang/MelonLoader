@@ -13,7 +13,7 @@
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
 6. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
-7. Click the INSTALL or RE-INSTALL button.
+7. Click the INSTALL or RE-INSTALL or UPDATE button.
 
 ---
 	
@@ -23,6 +23,17 @@
 2. Download [MelonLoader.zip](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.zip).
 3. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
 4. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
+
+---
+
+### AUTOMATED UNINSTALL:
+
+1. Make sure the Game you are uninstalling from is Closed and Not Running.
+2. Download [MelonLoader.Installer.exe](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
+3. Run MelonLoader.Installer.exe.
+4. Click the SELECT button.
+5. Select and Open the Game's EXE in your Game's Installation Folder.
+7. Click the UN-INSTALL button.
 
 ---
 
