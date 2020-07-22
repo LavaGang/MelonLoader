@@ -13,8 +13,9 @@ public:
 	static getaddrinfo_t Original_getaddrinfo;
 	static std::list<std::string>URL_Blacklist;
 
-	static bool Setup();
+	static void Setup();
 	static bool CheckBlacklist(std::string url);
+	static void LogWarning(std::string msg) { msg += (" for [ " + std::string(AssertionManager::FileName) + " | " + AssertionManager::Position + " ]"); Logger::DebugLogWarning(msg); }
 	static void* Hooked_gethostbyname(const char* name) { if (CheckBlacklist(name)) return NULL; return Original_gethostbyname(name); }
 	static int Hooked_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult) { if (CheckBlacklist(pNodeName)) return WSAEHOSTDOWN; return Original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult); }
 };

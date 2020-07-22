@@ -27,27 +27,33 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"crashlytics.com"
 };
 
-bool DisableAnalytics::Setup()
+void DisableAnalytics::Setup()
 {
 	AssertionManager::Start("DisableAnalytics.cpp", "DisableAnalytics::Setup");
 
 	HMODULE wsock32 = GetModuleHandle("wsock32.dll");
 	if (wsock32 != NULL)
 	{
-		Original_gethostbyname = (gethostbyname_t)AssertionManager::GetExport(wsock32, "gethostbyname");
+		Original_gethostbyname = (gethostbyname_t)GetProcAddress(wsock32, "gethostbyname");
 		if (Original_gethostbyname != NULL)
 			HookManager::Hook(&(LPVOID&)Original_gethostbyname, Hooked_gethostbyname);
+		else
+			LogWarning("Failed to GetProcAddress ( gethostbyname )");
 	}
+	else
+		LogWarning("Failed to GetModuleHandle ( wsock32.dll )");
 
-	HMODULE ws2_32 = AssertionManager::GetModuleHandlePtr("ws2_32");
+	HMODULE ws2_32 = GetModuleHandle("ws2_32");
 	if (ws2_32 != NULL)
 	{
-		Original_getaddrinfo = (getaddrinfo_t)AssertionManager::GetExport(ws2_32, "getaddrinfo");
+		Original_getaddrinfo = (getaddrinfo_t)GetProcAddress(ws2_32, "getaddrinfo");
 		if (Original_getaddrinfo != NULL)
 			HookManager::Hook(&(LPVOID&)Original_getaddrinfo, Hooked_getaddrinfo);
+		else
+			LogWarning("Failed to GetProcAddress ( getaddrinfo )");
 	}
-
-	return !AssertionManager::Result;
+	else
+		LogWarning("Failed to GetModuleHandle ( ws2_32 )");
 }
 
 bool DisableAnalytics::CheckBlacklist(std::string url)

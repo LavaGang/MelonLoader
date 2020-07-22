@@ -6,6 +6,8 @@
 class AssertionManager
 {
 public:
+	static const char* FileName;
+	static const char* Position;
 	static bool Result;
 
 	static void Start(const char* filename, const char* position);
@@ -14,8 +16,4 @@ public:
 	static HMODULE LoadLib(const char* name, const char* filepath);
 	static HMODULE GetModuleHandlePtr(const char* name);
 	static FARPROC GetExport(HMODULE mod, const char* export_name);
-
-private:
-	static const char* FileName;
-	static const char* Position;
 };
