@@ -63,3 +63,9 @@ bool DisableAnalytics::CheckBlacklist(std::string url)
 		Logger::DebugLog("Analytics URL Blocked: " + url);
 	return url_found;
 }
+
+void DisableAnalytics::LogWarning(std::string msg)
+{
+	msg += (" for [ " + std::string(AssertionManager::FileName) + " | " + AssertionManager::Position + " ]");
+	Logger::DebugLogWarning(msg);
+}
