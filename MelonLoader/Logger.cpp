@@ -178,7 +178,8 @@ void Logger::LogDLLError(const char* namesection, const char* msg)
 void Logger::LogDLLStatus(ModHandler_DLLStatus type)
 {
 	LogTimestamp();
-	LogFile << "Game Compatibility: " << ((type == ModHandler_DLLStatus_UNIVERSAL) ? "Universal" : ((type == ModHandler_DLLStatus_COMPATIBLE) ? "Compatible" : ((type == ModHandler_DLLStatus_NOATTRIBUTE) ? "No MelonModGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
+	LogFile << "Game Compatibility: " << ((type == ModHandler_DLLStatus_UNIVERSAL) ? "Universal" : ((type == ModHandler_DLLStatus_COMPATIBLE) ? "Compatible" : ((type == ModHandler_DLLStatus_NOATTRIBUTE) ? "No 
+		Attribute!" : "INCOMPATIBLE!"))) << std::endl;
 	Console::Write("[");
 	Console::Write("MelonLoader", ConsoleColor_Magenta);
 	Console::Write("] ");
@@ -188,7 +189,7 @@ void Logger::LogDLLStatus(ModHandler_DLLStatus type)
 	else if (type == ModHandler_DLLStatus_COMPATIBLE)
 		Console::WriteLine("Compatible", ConsoleColor_Green);
 	else if (type == ModHandler_DLLStatus_NOATTRIBUTE)
-		Console::WriteLine("No MelonModGameAttribute!", ConsoleColor_Yellow);
+		Console::WriteLine("No MelonGameAttribute!", ConsoleColor_Yellow);
 	else
 		Console::WriteLine("INCOMPATIBLE!", ConsoleColor_Red);
 }

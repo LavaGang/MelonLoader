@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using Harmony;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
-#pragma warning disable 0618
+#pragma warning disable 0612
 
 namespace MelonLoader
 {
@@ -16,7 +16,7 @@ namespace MelonLoader
         public static List<MelonMod> Mods = new List<MelonMod>();
         public static List<MelonPlugin> Plugins = new List<MelonPlugin>();
         public static List<MelonPlugin> TempPlugins = null;
-        internal static MelonModGameAttribute CurrentGameAttribute = null;
+        internal static MelonGameAttribute CurrentGameAttribute = null;
         public static bool IsVRChat = false;
         public static bool IsBoneworks = false;
         public static string UnityVersion = null;
@@ -30,7 +30,7 @@ namespace MelonLoader
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             AppDomain.CurrentDomain.UnhandledException += ExceptionHandler;
 
-            CurrentGameAttribute = new MelonModGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
+            CurrentGameAttribute = new MelonGameAttribute(Imports.GetCompanyName(), Imports.GetProductName());
             UnityVersion = GetUnityVersion();
 
             if (Imports.IsIl2CppGame())
@@ -56,17 +56,17 @@ namespace MelonLoader
 
             if (HasGeneratedAssembly)
             {
-                LoadDLLs(true);
+                LoadMelons(true);
                 if (Plugins.Count > 0)
                 {
                     HashSet<MelonPlugin> failedPlugins = new HashSet<MelonPlugin>();
                     TempPlugins = Plugins.Where(plugin => (plugin.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)).ToList();
-                    DependencyGraph<MelonPlugin>.TopologicalSort(TempPlugins, plugin => plugin.InfoAttribute.Name);
+                    DependencyGraph<MelonPlugin>.TopologicalSort(TempPlugins, plugin => plugin.Info.Name);
                     for (int i = 0; i < TempPlugins.Count; i++)
                     {
                         MelonPlugin plugin = TempPlugins[i];
                         if (plugin != null)
-                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); failedPlugins.Add(plugin); }
+                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
                     }
                     TempPlugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
                 }
@@ -97,7 +97,7 @@ namespace MelonLoader
             MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonModLogger.Log("------------------------------");
 
-            LoadDLLs();
+            LoadMelons();
             if (Plugins.Count > 0)
             {
                 for (int i = 0; i < Plugins.Count; i++)
@@ -105,13 +105,13 @@ namespace MelonLoader
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
                     {
-                        MelonModLogger.Log(plugin.InfoAttribute.Name
-                            + (!string.IsNullOrEmpty(plugin.InfoAttribute.Version)
-                            ? (" v" + plugin.InfoAttribute.Version) : "")
-                            + (!string.IsNullOrEmpty(plugin.InfoAttribute.Author)
-                            ? (" by " + plugin.InfoAttribute.Author) : "")
-                            + (!string.IsNullOrEmpty(plugin.InfoAttribute.DownloadLink)
-                            ? (" (" + plugin.InfoAttribute.DownloadLink + ")")
+                        MelonModLogger.Log(plugin.Info.Name
+                            + (!string.IsNullOrEmpty(plugin.Info.Version)
+                            ? (" v" + plugin.Info.Version) : "")
+                            + (!string.IsNullOrEmpty(plugin.Info.Author)
+                            ? (" by " + plugin.Info.Author) : "")
+                            + (!string.IsNullOrEmpty(plugin.Info.DownloadLink)
+                            ? (" (" + plugin.Info.DownloadLink + ")")
                             : "")
                             );
                         MelonModLogger.LogDLLStatus(plugin.Compatibility);
@@ -133,13 +133,13 @@ namespace MelonLoader
                     MelonMod mod = Mods[i];
                     if (mod != null)
                     {
-                        MelonModLogger.Log(mod.InfoAttribute.Name
-                            + (!string.IsNullOrEmpty(mod.InfoAttribute.Version)
-                            ? (" v" + mod.InfoAttribute.Version) : "")
-                            + (!string.IsNullOrEmpty(mod.InfoAttribute.Author)
-                            ? (" by " + mod.InfoAttribute.Author) : "")
-                            + (!string.IsNullOrEmpty(mod.InfoAttribute.DownloadLink)
-                            ? (" (" + mod.InfoAttribute.DownloadLink + ")")
+                        MelonModLogger.Log(mod.Info.Name
+                            + (!string.IsNullOrEmpty(mod.Info.Version)
+                            ? (" v" + mod.Info.Version) : "")
+                            + (!string.IsNullOrEmpty(mod.Info.Author)
+                            ? (" by " + mod.Info.Author) : "")
+                            + (!string.IsNullOrEmpty(mod.Info.DownloadLink)
+                            ? (" (" + mod.Info.DownloadLink + ")")
                             : "")
                             );
                         MelonModLogger.LogDLLStatus(mod.Compatibility);
@@ -147,7 +147,7 @@ namespace MelonLoader
                     }
                 }
                 Mods.RemoveAll((MelonMod mod) => (mod.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE));
-                DependencyGraph<MelonMod>.TopologicalSort(Mods, mod => mod.InfoAttribute.Name);
+                DependencyGraph<MelonMod>.TopologicalSort(Mods, mod => mod.Info.Name);
             }
             if (Mods.Count <= 0)
             {
@@ -165,7 +165,7 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { InitializeModOrPlugin(plugin); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); failedPlugins.Add(plugin); }
+                        try { InitializeModOrPlugin(plugin); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
                 }
                 Plugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
             }
@@ -177,7 +177,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { InitializeModOrPlugin(mod); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); failedMods.Add(mod); }
+                        try { InitializeModOrPlugin(mod); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); failedMods.Add(mod); }
                 }
                 Mods.RemoveAll(mod => failedMods.Contains(mod));
             }
@@ -209,7 +209,7 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); }
+                        try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
                 }
             }
             if (Mods.Count > 0)
@@ -218,7 +218,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
             }
             if ((Plugins.Count > 0) || (Mods.Count > 0))
@@ -235,14 +235,14 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.InfoAttribute.Name); }
+                        try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
                 }
             if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -256,7 +256,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -267,7 +267,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -278,7 +278,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLateUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnLateUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -290,7 +290,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
             }
         }
@@ -302,7 +302,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelIsLoading(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnLevelIsLoading(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -313,7 +313,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -324,7 +324,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -352,7 +352,7 @@ namespace MelonLoader
                                 {
                                     MelonMod mod = Mods[i];
                                     if (mod != null)
-                                        try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.InfoAttribute.Name); }
+                                        try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                                 }
                         }
                     }
@@ -360,7 +360,7 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadDLLs(bool plugins = false)
+        private static void LoadMelons(bool plugins = false)
         {
             string searchdir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (plugins ? "Plugins" : "Mods"));
             if (!Directory.Exists(searchdir))
@@ -388,7 +388,7 @@ namespace MelonLoader
                             }
                             try
                             {
-                                LoadAssembly(File.ReadAllBytes(file), plugins, file);
+                                LoadMelonFromFile(file, plugins);
                             }
                             catch (Exception e)
                             {
@@ -444,7 +444,7 @@ namespace MelonLoader
                                                     else
                                                         break;
                                                 }
-                                                LoadAssembly(unzippedFileStream.ToArray(), plugins, (file + "/" + filename));
+                                                LoadMelonFromByteArray(unzippedFileStream.ToArray(), plugins, (file + "/" + filename));
                                             }
                                         }
                                     }
@@ -461,122 +461,60 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadDLLFromAssembly(Assembly assembly, bool isPlugin = false, string filelocation = null)
-        {
-            if (isPlugin)
-                LoadPluginFromAssembly(assembly, filelocation);
-            else
-                LoadModFromAssembly(assembly, filelocation);
-        }
-
-        private static void LoadPluginFromAssembly(Assembly assembly, string filelocation = null)
-        {
-            MelonPluginInfoAttribute pluginInfoAttribute = assembly.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonPluginInfoAttribute))) as MelonPluginInfoAttribute;
-            if ((pluginInfoAttribute != null) && (pluginInfoAttribute.SystemType != null) && pluginInfoAttribute.SystemType.IsSubclassOf(typeof(MelonPlugin)))
-            {
-                bool isCompatible = false;
-                bool isUniversal = false;
-                bool hasAttribute = true;
-                MelonPluginGameAttribute[] pluginGameAttributes = assembly.GetCustomAttributes(typeof(MelonPluginGameAttribute), true) as MelonPluginGameAttribute[];
-                int pluginGameAttributes_Count = pluginGameAttributes.Length;
-                if (pluginGameAttributes_Count > 0)
-                {
-                    for (int i = 0; i < pluginGameAttributes_Count; i++)
-                    {
-                        MelonPluginGameAttribute pluginGameAttribute = pluginGameAttributes[i];
-                        if (CurrentGameAttribute.IsCompatible(pluginGameAttribute))
-                        {
-                            isCompatible = true;
-                            isUniversal = CurrentGameAttribute.IsCompatibleBecauseUniversal(pluginGameAttribute);
-                            break;
-                        }
-                    }
-                }
-                else
-                    hasAttribute = false;
-                try
-                {
-                    MelonPlugin pluginInstance = Activator.CreateInstance(pluginInfoAttribute.SystemType) as MelonPlugin;
-                    if (pluginInstance != null)
-                    {
-                        pluginInstance.InfoAttribute = pluginInfoAttribute;
-                        if (pluginGameAttributes_Count > 0)
-                            pluginInstance.GameAttributes = pluginGameAttributes;
-                        else
-                            pluginInstance.GameAttributes = null;
-                        pluginInstance.Location = filelocation;
-                        pluginInstance.Compatibility = (isUniversal ? MelonBase.MelonCompatibility.UNIVERSAL : (isCompatible ? MelonBase.MelonCompatibility.COMPATIBLE : (!hasAttribute ? MelonBase.MelonCompatibility.NOATTRIBUTE : MelonBase.MelonCompatibility.INCOMPATIBLE)));
-                        if (pluginInstance.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)
-                        {
-                            pluginInstance.Assembly = assembly;
-                        }
-                        Plugins.Add(pluginInstance);
-                    }
-                    else
-                        MelonModLogger.LogError("Unable to load Plugin in " + assembly.GetName() + "! Failed to Create Instance!");
-                }
-                catch (Exception e) { MelonModLogger.LogError("Unable to load Plugin in " + assembly.GetName() + "! " + e.ToString()); }
-            }
-        }
-
-        private static void LoadModFromAssembly(Assembly assembly, string filelocation = null)
-        {
-            MelonModInfoAttribute modInfoAttribute = assembly.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
-            if ((modInfoAttribute != null) && (modInfoAttribute.SystemType != null) && modInfoAttribute.SystemType.IsSubclassOf(typeof(MelonMod)))
-            {
-                bool isCompatible = false;
-                bool isUniversal = false;
-                bool hasAttribute = true;
-                MelonModGameAttribute[] modGameAttributes = assembly.GetCustomAttributes(typeof(MelonModGameAttribute), true) as MelonModGameAttribute[];
-                int modGameAttributes_Count = modGameAttributes.Length;
-                if (modGameAttributes_Count > 0)
-                {
-                    for (int i = 0; i < modGameAttributes_Count; i++)
-                    {
-                        MelonModGameAttribute modGameAttribute = modGameAttributes[i];
-                        if (CurrentGameAttribute.IsCompatible(modGameAttribute))
-                        {
-                            isCompatible = true;
-                            isUniversal = CurrentGameAttribute.IsCompatibleBecauseUniversal(modGameAttribute);
-                            break;
-                        }
-                    }
-                }
-                else
-                    hasAttribute = false;
-                try
-                {
-                    MelonMod modInstance = Activator.CreateInstance(modInfoAttribute.SystemType) as MelonMod;
-                    if (modInstance != null)
-                    {
-                        modInstance.InfoAttribute = modInfoAttribute;
-                        if (modGameAttributes_Count > 0)
-                            modInstance.GameAttributes = modGameAttributes;
-                        else
-                            modInstance.GameAttributes = null;
-                        modInstance.Location = filelocation;
-                        modInstance.Compatibility = (isUniversal ? MelonBase.MelonCompatibility.UNIVERSAL : (isCompatible ? MelonBase.MelonCompatibility.COMPATIBLE : (!hasAttribute ? MelonBase.MelonCompatibility.NOATTRIBUTE : MelonBase.MelonCompatibility.INCOMPATIBLE)));
-                        if (modInstance.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)
-                        {
-                            modInstance.Assembly = assembly;
-                        }
-                        Mods.Add(modInstance);
-                    }
-                    else
-                        MelonModLogger.LogError("Unable to load Mod in " + assembly.GetName() + "! Failed to Create Instance!");
-                }
-                catch (Exception e) { MelonModLogger.LogError("Unable to load Mod in " + assembly.GetName() + "! " + e.ToString()); }
-            }
-        }
-
-        private static void LoadAssembly(string file, bool isPlugin = false) => LoadDLLFromAssembly(Assembly.LoadFrom(file), isPlugin, file);
-        private static void LoadAssembly(byte[] data, bool isPlugin = false, string filelocation = null) => LoadDLLFromAssembly(Assembly.Load(data), isPlugin, filelocation);
-        private static void LoadAssembly(Assembly asm, bool isPlugin = false, string filelocation = null)
+        private static void LoadMelonFromFile(string file, bool isPlugin = false) => LoadMelonFromByteArray(File.ReadAllBytes(file), isPlugin, file);
+        private static void LoadMelonFromByteArray(byte[] data, bool isPlugin = false, string filelocation = null) => LoadMelonFromAssembly(Assembly.Load(data), isPlugin, filelocation);
+        private static void LoadMelonFromAssembly(Assembly asm, bool isPlugin = false, string filelocation = null)
         {
             if (!asm.Equals(null))
-                LoadDLLFromAssembly(asm, isPlugin, filelocation);
-            else
-                MelonModLogger.LogError("Unable to load " + asm);
+            {
+                MelonLegacyAttributeSupport.Response_Info response_Info = MelonLegacyAttributeSupport.GetMelonInfoAttribute(asm, isPlugin);
+                MelonInfoAttribute InfoAttribute = response_Info.Default;
+                if ((InfoAttribute != null) && (InfoAttribute.SystemType != null) && InfoAttribute.SystemType.IsSubclassOf((isPlugin ? typeof(MelonPlugin) : typeof(MelonMod))))
+                {
+                    bool isCompatible = false;
+                    bool isUniversal = false;
+                    bool hasAttribute = true;
+                    MelonLegacyAttributeSupport.Response_Game response_Game = MelonLegacyAttributeSupport.GetMelonGameAttributes(asm, isPlugin);
+                    MelonGameAttribute[] GameAttributes = response_Game.Default;
+                    int GameAttributes_Count = GameAttributes.Length;
+                    if (GameAttributes_Count > 0)
+                    {
+                        for (int i = 0; i < GameAttributes_Count; i++)
+                        {
+                            MelonGameAttribute GameAttribute = GameAttributes[i];
+                            if (CurrentGameAttribute.IsCompatible(GameAttribute))
+                            {
+                                isCompatible = true;
+                                isUniversal = CurrentGameAttribute.IsCompatibleBecauseUniversal(GameAttribute);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        hasAttribute = false;
+                    MelonBase baseInstance = Activator.CreateInstance(InfoAttribute.SystemType) as MelonBase;
+                    if (baseInstance != null)
+                    {
+                        response_Info.SetupMelon(baseInstance);
+                        response_Game.SetupMelon(baseInstance);
+                        baseInstance.OptionalDependenciesAttribute = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonOptionalDependenciesAttribute))) as MelonOptionalDependenciesAttribute;
+                        baseInstance.Location = filelocation;
+                        baseInstance.Compatibility = (isUniversal ? MelonBase.MelonCompatibility.UNIVERSAL : 
+                            (isCompatible ? MelonBase.MelonCompatibility.COMPATIBLE : 
+                                (!hasAttribute ? MelonBase.MelonCompatibility.NOATTRIBUTE : MelonBase.MelonCompatibility.INCOMPATIBLE)
+                            )
+                        );
+                        if (baseInstance.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)
+                            baseInstance.Assembly = asm;
+                        if (isPlugin)
+                            Plugins.Add((MelonPlugin)baseInstance);
+                        else
+                            Mods.Add((MelonMod)baseInstance);
+                    }
+                    else
+                        MelonModLogger.LogError("Unable to load Plugin in " + asm.GetName() + "! Failed to Create Instance!");
+                }
+            }
         }
 
         private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonModLogger.LogError((e.ExceptionObject as Exception).ToString());
