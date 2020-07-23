@@ -18,7 +18,7 @@ namespace MelonLoader
         public string Location { get; internal set; }
 
         /// <summary>
-        /// Enum for DLL Compatibility
+        /// Enum for Melon Compatibility
         /// </summary>
         public enum MelonCompatibility
         {

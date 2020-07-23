@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-#pragma warning disable CS0618
 
 namespace MelonLoader
 {
-    internal static class ModPrefsController
+    internal static class MelonPrefsHandler
     {
         private static string filename = "modprefs.ini";
         private static IniFile _instance;
@@ -18,6 +17,8 @@ namespace MelonLoader
                 return _instance;
             }
         }
+
+        internal static bool HasKey(string section, string name) { return Instance.IniReadValue(section, name) != null; }
 
         internal static string GetString(string section, string name, string defaultValue = "", bool autoSave = false)
         {
@@ -62,59 +63,57 @@ namespace MelonLoader
             return defaultValue;
         }
         internal static void SetBool(string section, string name, bool value) { Instance.IniWriteValue(section, name, value ? "true" : "false"); }
-
-        internal static bool HasKey(string section, string name) { return Instance.IniReadValue(section, name) != null; }
     }
 
-    public static class ModPrefs
+    public static class MelonPrefs
     {
-        private static Dictionary<string, Dictionary<string, PrefDesc>> prefs = new Dictionary<string, Dictionary<string, PrefDesc>>();
+        private static Dictionary<string, Dictionary<string, MelonPreference>> prefs = new Dictionary<string, Dictionary<string, MelonPreference>>();
         private static Dictionary<string, string> categoryDisplayNames = new Dictionary<string, string>();
-        public static void RegisterCategory(string name, string displayText) { categoryDisplayNames[name] = displayText; }
-        public static void RegisterPrefString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) { RegisterPref(section, name, defaultValue, displayText, PrefType.STRING, hideFromList); }
-        public static void RegisterPrefBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) { RegisterPref(section, name, defaultValue ? "true" : "false", displayText, PrefType.BOOL, hideFromList); }
-        public static void RegisterPrefInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) { RegisterPref(section, name, "" + defaultValue, displayText, PrefType.INT, hideFromList); }
-        public static void RegisterPrefFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) { RegisterPref(section, name, "" + defaultValue, displayText, PrefType.FLOAT, hideFromList); }
 
-        private static void RegisterPref(string section, string name, string defaultValue, string displayText, PrefType type, bool hideFromList)
+        public static void RegisterCategory(string name, string displayText) { categoryDisplayNames[name] = displayText; }
+        public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) { Register(section, name, defaultValue, displayText, MelonPreferenceType.STRING, hideFromList); }
+        public static void RegisterBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) { Register(section, name, defaultValue ? "true" : "false", displayText, MelonPreferenceType.BOOL, hideFromList); }
+        public static void RegisterInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) { Register(section, name, "" + defaultValue, displayText, MelonPreferenceType.INT, hideFromList); }
+        public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) { Register(section, name, "" + defaultValue, displayText, MelonPreferenceType.FLOAT, hideFromList); }
+        private static void Register(string section, string name, string defaultValue, string displayText, MelonPreferenceType type, bool hideFromList)
         {
-            if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection))
+            if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection))
             {
-                if (prefsInSection.TryGetValue(name, out PrefDesc pref))
+                if (prefsInSection.TryGetValue(name, out MelonPreference pref))
                     MelonLogger.LogError("Trying to registered Pref " + section + ":" + name + " more than one time");
                 else
                 {
                     string toStoreValue = defaultValue;
-                    if (ModPrefsController.HasKey(section, name))
-                        toStoreValue = ModPrefsController.GetString(section, name, defaultValue);
-                    else ModPrefsController.SetString(section, name, defaultValue);
-                    prefsInSection.Add(name, new PrefDesc(toStoreValue, type, hideFromList, (displayText ?? "") == "" ? name : displayText));
+                    if (MelonPrefsHandler.HasKey(section, name))
+                        toStoreValue = MelonPrefsHandler.GetString(section, name, defaultValue);
+                    else MelonPrefsHandler.SetString(section, name, defaultValue);
+                    prefsInSection.Add(name, new MelonPreference(toStoreValue, type, hideFromList, (displayText ?? "") == "" ? name : displayText));
                 }
             }
             else
             {
-                Dictionary<string, PrefDesc> dic = new Dictionary<string, PrefDesc>();
+                Dictionary<string, MelonPreference> dic = new Dictionary<string, MelonPreference>();
                 string toStoreValue = defaultValue;
-                if (ModPrefsController.HasKey(section, name))
-                    toStoreValue = ModPrefsController.GetString(section, name, defaultValue);
-                else ModPrefsController.SetString(section, name, defaultValue);
-                dic.Add(name, new PrefDesc(toStoreValue, type, hideFromList, (displayText ?? "") == "" ? name : displayText));
+                if (MelonPrefsHandler.HasKey(section, name))
+                    toStoreValue = MelonPrefsHandler.GetString(section, name, defaultValue);
+                else MelonPrefsHandler.SetString(section, name, defaultValue);
+                dic.Add(name, new MelonPreference(toStoreValue, type, hideFromList, (displayText ?? "") == "" ? name : displayText));
                 prefs.Add(section, dic);
             }
         }
 
-        public static bool HasKey(string section, string name) { return prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.ContainsKey(name); }
-        public static Dictionary<string, Dictionary<string, PrefDesc>> GetPrefs() { return prefs; }
+        public static bool HasKey(string section, string name) { return prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection) && prefsInSection.ContainsKey(name); }
+        public static Dictionary<string, Dictionary<string, MelonPreference>> GetPreferences() { return prefs; }
         public static string GetCategoryDisplayName(string key) { if (categoryDisplayNames.TryGetValue(key, out string name)) return name; return key; }
 
         public static void SaveConfig()
         {
-            foreach (KeyValuePair<string, Dictionary<string, PrefDesc>> prefsInSection in prefs)
+            foreach (KeyValuePair<string, Dictionary<string, MelonPreference>> prefsInSection in prefs)
             {
-                foreach (KeyValuePair<string, PrefDesc> pref in prefsInSection.Value)
+                foreach (KeyValuePair<string, MelonPreference> pref in prefsInSection.Value)
                 {
                     pref.Value.Value = pref.Value.ValueEdited;
-                    ModPrefsController.SetString(prefsInSection.Key, pref.Key, pref.Value.Value);
+                    MelonPrefsHandler.SetString(prefsInSection.Key, pref.Key, pref.Value.Value);
                 }
             }
             Main.OnModSettingsApplied();
@@ -123,7 +122,7 @@ namespace MelonLoader
 
         public static string GetString(string section, string name)
         {
-            if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
+            if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection) && prefsInSection.TryGetValue(name, out MelonPreference pref))
                 return pref.Value;
             MelonLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
             return "";
@@ -131,10 +130,10 @@ namespace MelonLoader
 
         public static void SetString(string section, string name, string value)
         {
-            if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
+            if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection) && prefsInSection.TryGetValue(name, out MelonPreference pref))
             {
                 pref.Value = pref.ValueEdited = value;
-                ModPrefsController.SetString(section, name, value);
+                MelonPrefsHandler.SetString(section, name, value);
             }
             else
                 MelonLogger.LogError("Trying to save unknown pref " + section + ":" + name);
@@ -142,7 +141,7 @@ namespace MelonLoader
 
         public static bool GetBool(string section, string name)
         {
-            if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
+            if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection) && prefsInSection.TryGetValue(name, out MelonPreference pref))
                 return (pref.Value.Equals("true") || pref.Value.Equals("1"));
             MelonLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
             return false;
@@ -151,7 +150,7 @@ namespace MelonLoader
 
         public static int GetInt(string section, string name)
         {
-            if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
+            if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection) && prefsInSection.TryGetValue(name, out MelonPreference pref))
                 if (int.TryParse(pref.Value, out int valueI))
                     return valueI;
             MelonLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
@@ -161,7 +160,7 @@ namespace MelonLoader
 
         public static float GetFloat(string section, string name)
         {
-            if (prefs.TryGetValue(section, out Dictionary<string, PrefDesc> prefsInSection) && prefsInSection.TryGetValue(name, out PrefDesc pref))
+            if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection) && prefsInSection.TryGetValue(name, out MelonPreference pref))
                 if (float.TryParse(pref.Value, out float valueF))
                     return valueF;
             MelonLogger.LogError("Trying to get unregistered Pref " + section + ":" + name);
@@ -169,7 +168,7 @@ namespace MelonLoader
         }
         public static void SetFloat(string section, string name, float value) { SetString(section, name, value.ToString()); }
 
-        public enum PrefType
+        public enum MelonPreferenceType
         {
             STRING,
             BOOL,
@@ -177,19 +176,29 @@ namespace MelonLoader
             FLOAT
         }
 
-        public class PrefDesc
+        public class MelonPreference
         {
             public string Value { get; set; }
             public string ValueEdited { get; set; }
-            public PrefType Type { get; private set; }
-            public bool Hidden { get; private set; }
-            public String DisplayText { get; private set; }
+            public MelonPreferenceType Type { get; internal set; }
+            public bool Hidden { get; internal set; }
+            public String DisplayText { get; internal set; }
 
-            public PrefDesc(string value, PrefType type, bool hidden, string displayText)
+            public MelonPreference(string value, MelonPreferenceType type, bool hidden, string displayText)
             {
                 Value = value;
                 ValueEdited = value;
                 Type = type;
+                Hidden = hidden;
+                DisplayText = displayText;
+            }
+
+            [Obsolete()]
+            public MelonPreference(string value, ModPrefs.PrefType type, bool hidden, string displayText)
+            {
+                Value = value;
+                ValueEdited = value;
+                Type = (MelonPreferenceType)type;
                 Hidden = hidden;
                 DisplayText = displayText;
             }

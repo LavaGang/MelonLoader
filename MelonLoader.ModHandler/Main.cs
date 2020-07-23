@@ -222,8 +222,8 @@ namespace MelonLoader
                 }
             }
             if ((Plugins.Count > 0) || (Mods.Count > 0))
-                ModPrefs.SaveConfig();
-            Harmony.HarmonyInstance.UnpatchAllInstances();
+                MelonPrefs.SaveConfig();
+            HarmonyInstance.UnpatchAllInstances();
             Imports.UNLOAD_MELONLOADER();
             if (Imports.IsQuitFix()) Process.GetCurrentProcess().Kill();
         }
