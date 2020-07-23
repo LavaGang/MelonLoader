@@ -66,7 +66,7 @@ namespace MelonLoader
                     {
                         MelonPlugin plugin = TempPlugins[i];
                         if (plugin != null)
-                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
+                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
                     }
                     TempPlugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
                 }
@@ -86,16 +86,16 @@ namespace MelonLoader
             }
             SupportModule.Initialize();
 
-            MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Unity " + UnityVersion);
-            MelonModLogger.Log("OS: " + Environment.OSVersion.ToString());
-            MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Name: " + CurrentGameAttribute.GameName);
-            MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
-            MelonModLogger.Log("Type: " + (Imports.IsIl2CppGame() ? "Il2Cpp" : (Imports.IsOldMono() ? "Mono" : "MonoBleedingEdge")));
-            MelonModLogger.Log("------------------------------");
-            MelonModLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
-            MelonModLogger.Log("------------------------------");
+            MelonLogger.Log("------------------------------");
+            MelonLogger.Log("Unity " + UnityVersion);
+            MelonLogger.Log("OS: " + Environment.OSVersion.ToString());
+            MelonLogger.Log("------------------------------");
+            MelonLogger.Log("Name: " + CurrentGameAttribute.GameName);
+            MelonLogger.Log("Developer: " + CurrentGameAttribute.Developer);
+            MelonLogger.Log("Type: " + (Imports.IsIl2CppGame() ? "Il2Cpp" : (Imports.IsOldMono() ? "Mono" : "MonoBleedingEdge")));
+            MelonLogger.Log("------------------------------");
+            MelonLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
+            MelonLogger.Log("------------------------------");
 
             LoadMelons();
             if (Plugins.Count > 0)
@@ -105,7 +105,7 @@ namespace MelonLoader
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
                     {
-                        MelonModLogger.Log(plugin.Info.Name
+                        MelonLogger.Log(plugin.Info.Name
                             + (!string.IsNullOrEmpty(plugin.Info.Version)
                             ? (" v" + plugin.Info.Version) : "")
                             + (!string.IsNullOrEmpty(plugin.Info.Author)
@@ -114,16 +114,16 @@ namespace MelonLoader
                             ? (" (" + plugin.Info.DownloadLink + ")")
                             : "")
                             );
-                        MelonModLogger.LogDLLStatus(plugin.Compatibility);
-                        MelonModLogger.Log("------------------------------");
+                        MelonLogger.LogDLLStatus(plugin.Compatibility);
+                        MelonLogger.Log("------------------------------");
                     }
                 }
                 Plugins = TempPlugins;
             }
             if (Plugins.Count <= 0)
             {
-                MelonModLogger.Log("No Plugins Loaded!");
-                MelonModLogger.Log("------------------------------");
+                MelonLogger.Log("No Plugins Loaded!");
+                MelonLogger.Log("------------------------------");
             }
 
             if (Mods.Count > 0)
@@ -133,7 +133,7 @@ namespace MelonLoader
                     MelonMod mod = Mods[i];
                     if (mod != null)
                     {
-                        MelonModLogger.Log(mod.Info.Name
+                        MelonLogger.Log(mod.Info.Name
                             + (!string.IsNullOrEmpty(mod.Info.Version)
                             ? (" v" + mod.Info.Version) : "")
                             + (!string.IsNullOrEmpty(mod.Info.Author)
@@ -142,8 +142,8 @@ namespace MelonLoader
                             ? (" (" + mod.Info.DownloadLink + ")")
                             : "")
                             );
-                        MelonModLogger.LogDLLStatus(mod.Compatibility);
-                        MelonModLogger.Log("------------------------------");
+                        MelonLogger.LogDLLStatus(mod.Compatibility);
+                        MelonLogger.Log("------------------------------");
                     }
                 }
                 Mods.RemoveAll((MelonMod mod) => (mod.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE));
@@ -151,8 +151,8 @@ namespace MelonLoader
             }
             if (Mods.Count <= 0)
             {
-                MelonModLogger.Log("No Mods Loaded!");
-                MelonModLogger.Log("------------------------------");
+                MelonLogger.Log("No Mods Loaded!");
+                MelonLogger.Log("------------------------------");
             }
 
             if ((Plugins.Count > 0) || (Mods.Count > 0))
@@ -165,7 +165,7 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { InitializeModOrPlugin(plugin); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
+                        try { InitializeModOrPlugin(plugin); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
                 }
                 Plugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
             }
@@ -177,7 +177,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { InitializeModOrPlugin(mod); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); failedMods.Add(mod); }
+                        try { InitializeModOrPlugin(mod); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); failedMods.Add(mod); }
                 }
                 Mods.RemoveAll(mod => failedMods.Contains(mod));
             }
@@ -209,7 +209,7 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
+                        try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
                 }
             }
             if (Mods.Count > 0)
@@ -218,7 +218,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
             }
             if ((Plugins.Count > 0) || (Mods.Count > 0))
@@ -235,14 +235,14 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
+                        try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
                 }
             if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -256,7 +256,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnUpdate(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -267,7 +267,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -278,7 +278,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLateUpdate(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLateUpdate(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -290,7 +290,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnGUI(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnGUI(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
             }
         }
@@ -302,7 +302,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelIsLoading(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLevelIsLoading(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -313,7 +313,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -324,7 +324,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -352,7 +352,7 @@ namespace MelonLoader
                                 {
                                     MelonMod mod = Mods[i];
                                     if (mod != null)
-                                        try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonModLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                                        try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
                                 }
                         }
                     }
@@ -392,8 +392,8 @@ namespace MelonLoader
                             }
                             catch (Exception e)
                             {
-                                MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
-                                MelonModLogger.Log("------------------------------");
+                                MelonLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                                MelonLogger.Log("------------------------------");
                             }
                         }
                     }
@@ -452,8 +452,8 @@ namespace MelonLoader
                             }
                             catch (Exception e)
                             {
-                                MelonModLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
-                                MelonModLogger.Log("------------------------------");
+                                MelonLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                                MelonLogger.Log("------------------------------");
                             }
                         }
                     }
@@ -512,12 +512,12 @@ namespace MelonLoader
                             Mods.Add((MelonMod)baseInstance);
                     }
                     else
-                        MelonModLogger.LogError("Unable to load Plugin in " + asm.GetName() + "! Failed to Create Instance!");
+                        MelonLogger.LogError("Unable to load Plugin in " + asm.GetName() + "! Failed to Create Instance!");
                 }
             }
         }
 
-        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonModLogger.LogError((e.ExceptionObject as Exception).ToString());
+        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonLogger.LogError((e.ExceptionObject as Exception).ToString());
         
         internal static string GetUnityVersion()
         {

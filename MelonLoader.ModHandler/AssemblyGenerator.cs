@@ -18,24 +18,24 @@ namespace MelonLoader.AssemblyGenerator
                 generatorProcessInfo.CreateNoWindow = true;
                 var process = Process.Start(generatorProcessInfo);
                 if (process == null)
-                    MelonModLogger.LogError("Unable to Start Assembly Generator!");
+                    MelonLogger.LogError("Unable to Start Assembly Generator!");
                 else
                 {
                     var stdout = process.StandardOutput;
                     while (!stdout.EndOfStream)
                     {
                         var line = stdout.ReadLine();
-                        MelonModLogger.Log(line);
+                        MelonLogger.Log(line);
                     }
                     while (!process.HasExited)
                         Thread.Sleep(100);
                     if (Imports.IsDebugMode())
-                        MelonModLogger.Log($"Assembly Generator exited with code {process.ExitCode}");
+                        MelonLogger.Log($"Assembly Generator exited with code {process.ExitCode}");
                     return (process.ExitCode == 0);
                 }
             }
             else
-                MelonModLogger.LogError("MelonLoader.AssemblyGenerator.exe does not Exist!");
+                MelonLogger.LogError("MelonLoader.AssemblyGenerator.exe does not Exist!");
             return false;
         }
     }

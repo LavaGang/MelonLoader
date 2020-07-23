@@ -1,16 +1,27 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
-    public class MelonModLogger
+    public class MelonLogger
     {
-        internal static bool consoleEnabled = false;
+        public static void Log(string s) => Native_Log((GetNameSection() + s));
+        public static void Log(ConsoleColor color, string s) => Native_LogColor((GetNameSection() + s), color);
+        public static void Log(string s, params object[] args) => Native_Log((GetNameSection() + string.Format(s, args)));
+        public static void Log(ConsoleColor color, string s, params object[] args) => Native_LogColor((GetNameSection() + string.Format(s, args)), color);
 
-        private static string GetNameSection()
+        public static void LogWarning(string s) => Native_LogWarning(GetNameSection(), s);
+        public static void LogWarning(string s, params object[] args) => Native_LogWarning(GetNameSection(), string.Format(s, args));
+
+        public static void LogError(string s) => Native_LogError(GetNameSection(), s);
+        public static void LogError(string s, params object[] args) => Native_LogError(GetNameSection(), string.Format(s, args));
+
+        internal static void LogDLLError(string msg, string modname) => Native_LogDLLError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
+        internal static void LogDLLStatus(MelonBase.MelonCompatibility type) => Native_LogDLLStatus(type);
+
+        internal static string GetNameSection()
         {
             StackTrace st = new StackTrace(2, true);
             StackFrame sf = st.GetFrame(0);
@@ -46,20 +57,6 @@ namespace MelonLoader
             }
             return "";
         }
-
-        public static void Log(string s) => Native_Log((GetNameSection() + s));
-        public static void Log(ConsoleColor color, string s) => Native_LogColor((GetNameSection() + s), color);
-        public static void Log(string s, params object[] args) => Native_Log((GetNameSection() + string.Format(s, args)));
-        public static void Log(ConsoleColor color, string s, params object[] args) => Native_LogColor((GetNameSection() + string.Format(s, args)), color);
-
-        public static void LogWarning(string s) => Native_LogWarning(GetNameSection(), s);
-        public static void LogWarning(string s, params object[] args) => Native_LogWarning(GetNameSection(), string.Format(s, args));
-
-        public static void LogError(string s) => Native_LogError(GetNameSection(), s);
-        public static void LogError(string s, params object[] args) => Native_LogError(GetNameSection(), string.Format(s, args));
-        internal static void LogDLLError(string msg, string modname) => Native_LogDLLError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
-
-        internal static void LogDLLStatus(MelonBase.MelonCompatibility type) => Native_LogDLLStatus(type);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Native_Log(string txt);

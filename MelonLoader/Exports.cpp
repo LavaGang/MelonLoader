@@ -59,10 +59,10 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Console::SetColor", Console::SetColor);
 	//Mono::mono_add_internal_call("MelonLoader.Console::ShouldShowGameLogs", ShouldShowGameLogs);
 
-	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_Log", Log);
-	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_LogColor", LogColor);
-	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_LogWarning", LogWarning);
-	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_LogError", LogError);
-	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_LogDLLError", LogDLLError);
-	Mono::mono_add_internal_call("MelonLoader.MelonModLogger::Native_LogDLLStatus", LogDLLStatus);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_Log", Log);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogColor", LogColor);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogWarning", LogWarning);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogError", LogError);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogDLLError", LogDLLError);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogDLLStatus", LogDLLStatus);
 }

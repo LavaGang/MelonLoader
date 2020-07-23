@@ -25,11 +25,11 @@ namespace MelonLoader.Support
         {
             LogSupport.RemoveAllHandlers();
             if (Console.Enabled || Imports.IsDebugMode())
-                LogSupport.InfoHandler += MelonModLogger.Log;
-            LogSupport.WarningHandler += MelonModLogger.LogWarning;
-            LogSupport.ErrorHandler += MelonModLogger.LogError;
+                LogSupport.InfoHandler += MelonLogger.Log;
+            LogSupport.WarningHandler += MelonLogger.LogWarning;
+            LogSupport.ErrorHandler += MelonLogger.LogError;
             if (Imports.IsDebugMode())
-                LogSupport.TraceHandler += MelonModLogger.Log;
+                LogSupport.TraceHandler += MelonLogger.Log;
 
             try
             {
@@ -56,7 +56,7 @@ namespace MelonLoader.Support
             }
             catch (Exception ex)
             {
-                MelonModLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
+                MelonLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
             }
 
             if (MelonLoader.Main.IsVRChat)
@@ -82,7 +82,7 @@ namespace MelonLoader.Support
                 }
                 catch (Exception ex)
                 {
-                    MelonModLogger.LogWarning("Exception while setting up Auth Token Hider, Auth Tokens may show in Console: " + ex);
+                    MelonLogger.LogWarning("Exception while setting up Auth Token Hider, Auth Tokens may show in Console: " + ex);
                 }
             }
 

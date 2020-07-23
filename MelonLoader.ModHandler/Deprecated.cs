@@ -68,4 +68,16 @@ namespace MelonLoader
         }
         public MelonInfoAttribute Convert() => new MelonInfoAttribute(SystemType, Name, Version, Author, DownloadLink);
     }
-}
+    [Obsolete("MelonModLogger is obsolete. Please use MelonLogger instead.")]
+    public class MelonModLogger
+    {
+        public static void Log(string s) => MelonLogger.Native_Log((MelonLogger.GetNameSection() + s));
+        public static void Log(ConsoleColor color, string s) => MelonLogger.Native_LogColor((MelonLogger.GetNameSection() + s), color);
+        public static void Log(string s, params object[] args) => MelonLogger.Native_Log((MelonLogger.GetNameSection() + string.Format(s, args)));
+        public static void Log(ConsoleColor color, string s, params object[] args) => MelonLogger.Native_LogColor((MelonLogger.GetNameSection() + string.Format(s, args)), color);
+        public static void LogWarning(string s) => MelonLogger.Native_LogWarning(MelonLogger.GetNameSection(), s);
+        public static void LogWarning(string s, params object[] args) => MelonLogger.Native_LogWarning(MelonLogger.GetNameSection(), string.Format(s, args));
+        public static void LogError(string s) => MelonLogger.Native_LogError(MelonLogger.GetNameSection(), s);
+        public static void LogError(string s, params object[] args) => MelonLogger.Native_LogError(MelonLogger.GetNameSection(), string.Format(s, args));
+    }
+ }

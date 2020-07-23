@@ -62,7 +62,7 @@ namespace MelonLoader {
 
 			if (modsWithMissingDeps.Count > 0) {
 				// Some mods are missing dependencies. Don't load these mods and show an error message
-				MelonModLogger.LogWarning(BuildMissingDependencyMessage(modsWithMissingDeps));
+				MelonLogger.LogWarning(BuildMissingDependencyMessage(modsWithMissingDeps));
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace MelonLoader {
 			} catch (FileNotFoundException) {
 				return false;
 			} catch (Exception ex) {
-				MelonModLogger.LogError("Loading mod dependency failed: " + ex);
+				MelonLogger.LogError("Loading mod dependency failed: " + ex);
 				return false;
 			}
 		}
@@ -138,7 +138,7 @@ namespace MelonLoader {
 						errorMessage.Append($"- '{vertices[i].name}'\n");
 				}
 				errorMessage.Length -= 1; // Remove trailing newline
-				MelonModLogger.LogError(errorMessage.ToString());
+				MelonLogger.LogError(errorMessage.ToString());
 			}
 		}
 
