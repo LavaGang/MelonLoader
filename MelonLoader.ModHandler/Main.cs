@@ -88,6 +88,7 @@ namespace MelonLoader
 
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Unity " + UnityVersion);
+            MelonModLogger.Log("OS: " + Environment.OSVersion.ToString());
             MelonModLogger.Log("------------------------------");
             MelonModLogger.Log("Name: " + CurrentGameAttribute.GameName);
             MelonModLogger.Log("Developer: " + CurrentGameAttribute.Developer);
