@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -24,22 +25,21 @@ namespace MelonLoader
                         Assembly asm = methodClassType.Assembly;
                         if (!asm.Equals(null))
                         {
-                            /*
-                            object[] attrArray = asm.GetCustomAttributes(typeof(MelonPluginInfoAttribute), false);
-                            if ((attrArray.Length > 0) && (attrArray[0] != null))
+                            MelonPlugin plugin = Main.Plugins.Find(x => (x.Assembly == asm));
+                            if (plugin != null)
                             {
-                                MelonPluginInfoAttribute attr = attrArray[0] as MelonPluginInfoAttribute;
-                                if (!string.IsNullOrEmpty(attr.Name))
-                                    return "[" + attr.Name.Replace(" ", "_") + "] ";
+                                if (!string.IsNullOrEmpty(plugin.Info.Name))
+                                    return "[" + plugin.Info.Name.Replace(" ", "_") + "] ";
                             }
-                            attrArray = asm.GetCustomAttributes(typeof(MelonModInfoAttribute), false);
-                            if ((attrArray.Length > 0) && (attrArray[0] != null))
+                            else
                             {
-                                MelonModInfoAttribute attr = attrArray[0] as MelonModInfoAttribute;
-                                if (!string.IsNullOrEmpty(attr.Name))
-                                    return "[" + attr.Name.Replace(" ", "_") + "] ";
+                                MelonMod mod = Main.Mods.Find(x => (x.Assembly == asm));
+                                if (mod != null)
+                                {
+                                    if (!string.IsNullOrEmpty(mod.Info.Name))
+                                        return "[" + mod.Info.Name.Replace(" ", "_") + "] ";
+                                }
                             }
-                            */
                         }
                     }
                 }
