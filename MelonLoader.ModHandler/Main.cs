@@ -165,7 +165,7 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { InitializeModOrPlugin(plugin); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
+                        try { InitializeMelon(plugin); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
                 }
                 Plugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
             }
@@ -177,7 +177,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { InitializeModOrPlugin(mod); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); failedMods.Add(mod); }
+                        try { InitializeMelon(mod); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); failedMods.Add(mod); }
                 }
                 Mods.RemoveAll(mod => failedMods.Contains(mod));
             }
@@ -186,7 +186,8 @@ namespace MelonLoader
                 SupportModule.Destroy();
         }
 
-        private static void InitializeModOrPlugin(MelonBase modOrPlugin) {
+        private static void InitializeMelon(MelonBase modOrPlugin)
+        {
             string harmonyId = modOrPlugin.Assembly.FullName;
             HarmonyInstance harmony = HarmonyInstance.Create(harmonyId);
             try
@@ -196,7 +197,7 @@ namespace MelonLoader
             }
             catch (Exception)
             {
-                harmony.UnpatchAll(harmonyId);
+                harmony.UnpatchAll(modOrPlugin);
                 throw;
             }
         }

@@ -1,4 +1,5 @@
 using Harmony.Tools;
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,8 +94,6 @@ namespace Harmony
 			throw new Exception("Unexpected end of stack trace");
 		}
 
-		//
-
 		public void PatchAll()
 		{
 			var method = new StackTrace().GetFrame(1).GetMethod();
@@ -136,7 +135,20 @@ namespace Harmony
 			}
 		}
 
-        public static void UnpatchAllInstances()
+		public void UnpatchAll(MelonBase melon)
+		{
+			bool IDCheck(Patch patchInfo) => (patchInfo.patch.Module.Assembly == melon.Assembly);
+			var originals = GetPatchedMethods().ToList();
+			foreach (var original in originals)
+			{
+				var info = GetPatchInfo(original);
+				info.Postfixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.patch));
+				info.Prefixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.patch));
+				info.Transpilers.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.patch));
+			}
+		}
+
+		public static void UnpatchAllInstances()
         {
             if (instancelist.Count > 0)
             {
