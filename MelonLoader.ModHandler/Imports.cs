@@ -44,13 +44,20 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool IsQuitFix();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsDevModsOnly();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsDevPluginsOnly();
-        [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static bool AG_Force_Regenerate();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string AG_Force_Version_Unhollower();
+
+        internal enum LoadMode
+        {
+            NORMAL,
+            DEV,
+            BOTH
+        }
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static LoadMode GetLoadMode_Plugins();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static LoadMode GetLoadMode_Mods();
     }
 }

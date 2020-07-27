@@ -161,7 +161,7 @@ void Logger::LogError(const char* namesection, const char* txt)
 	}
 }
 
-void Logger::LogDLLError(const char* namesection, const char* msg)
+void Logger::LogMelonError(const char* namesection, const char* msg)
 {
 	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
 	{
@@ -175,20 +175,31 @@ void Logger::LogDLLError(const char* namesection, const char* msg)
 	}
 }
 
-void Logger::LogDLLStatus(ModHandler_DLLStatus type)
+void Logger::LogMelonCompatibility(ModHandler::MelonCompatibility comp)
 {
 	LogTimestamp();
-	LogFile << "Game Compatibility: " << ((type == ModHandler_DLLStatus_UNIVERSAL) ? "Universal" : ((type == ModHandler_DLLStatus_COMPATIBLE) ? "Compatible" : ((type == ModHandler_DLLStatus_NOATTRIBUTE) ? "No MelonGameAttribute!" : "INCOMPATIBLE!"))) << std::endl;
 	Console::Write("[");
 	Console::Write("MelonLoader", ConsoleColor_Magenta);
 	Console::Write("] ");
+	LogFile << "Game Compatibility: ";
 	Console::Write("Game Compatibility: ", ConsoleColor_Blue);
-	if (type == ModHandler_DLLStatus_UNIVERSAL)
+	switch (comp)
+	{
+	case ModHandler::MelonCompatibility::UNIVERSAL:
+		LogFile << "Universal";
 		Console::WriteLine("Universal", ConsoleColor_Cyan);
-	else if (type == ModHandler_DLLStatus_COMPATIBLE)
+		break;
+	case ModHandler::MelonCompatibility::COMPATIBLE:
+		LogFile << "Compatible";
 		Console::WriteLine("Compatible", ConsoleColor_Green);
-	else if (type == ModHandler_DLLStatus_NOATTRIBUTE)
+		break;
+	case ModHandler::MelonCompatibility::NOATTRIBUTE:
+		LogFile << "No MelonGameAttribute!";
 		Console::WriteLine("No MelonGameAttribute!", ConsoleColor_Yellow);
-	else
+		break;
+	default:
+		LogFile << "INCOMPATIBLE!";
 		Console::WriteLine("INCOMPATIBLE!", ConsoleColor_Red);
+	};
+	LogFile << std::endl;
 }

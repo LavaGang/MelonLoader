@@ -11,8 +11,6 @@ public:
 	static bool IsGameIl2Cpp;
 	static bool DebugMode;
 	static bool QuitFix;
-	static bool DevModsOnly;
-	static bool DevPluginsOnly;
 	static bool AG_Force_Regenerate;
 	static char* ExePath;
 	static char* GamePath;
@@ -21,6 +19,15 @@ public:
 	static char* ProductName;
 	static char* ForceUnhollowerVersion;
 	static char* ForceUnityVersion;
+
+	enum LoadMode
+	{
+		NORMAL,
+		DEV,
+		BOTH
+	};
+	static LoadMode LoadMode_Plugins;
+	static LoadMode LoadMode_Mods;
 
 	static void Main();
 	static void ParseCommandLine();

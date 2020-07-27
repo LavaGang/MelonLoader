@@ -66,7 +66,7 @@ namespace MelonLoader
                     {
                         MelonPlugin plugin = TempPlugins[i];
                         if (plugin != null)
-                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
+                            try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
                     }
                     TempPlugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
                 }
@@ -114,7 +114,7 @@ namespace MelonLoader
                             ? (" (" + plugin.Info.DownloadLink + ")")
                             : "")
                             );
-                        MelonLogger.LogDLLStatus(plugin.Compatibility);
+                        MelonLogger.LogMelonCompatibility(plugin.Compatibility);
                         MelonLogger.Log("------------------------------");
                     }
                 }
@@ -142,7 +142,7 @@ namespace MelonLoader
                             ? (" (" + mod.Info.DownloadLink + ")")
                             : "")
                             );
-                        MelonLogger.LogDLLStatus(mod.Compatibility);
+                        MelonLogger.LogMelonCompatibility(mod.Compatibility);
                         MelonLogger.Log("------------------------------");
                     }
                 }
@@ -165,7 +165,7 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { InitializeMelon(plugin); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
+                        try { InitializeMelon(plugin); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), plugin.Info.Name); failedPlugins.Add(plugin); }
                 }
                 Plugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
             }
@@ -177,7 +177,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { InitializeMelon(mod); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); failedMods.Add(mod); }
+                        try { InitializeMelon(mod); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); failedMods.Add(mod); }
                 }
                 Mods.RemoveAll(mod => failedMods.Contains(mod));
             }
@@ -210,7 +210,7 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
+                        try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), plugin.Info.Name); }
                 }
             }
             if (Mods.Count > 0)
@@ -219,7 +219,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
             }
             if ((Plugins.Count > 0) || (Mods.Count > 0))
@@ -236,14 +236,14 @@ namespace MelonLoader
                 {
                     MelonPlugin plugin = Plugins[i];
                     if (plugin != null)
-                        try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), plugin.Info.Name); }
+                        try { plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), plugin.Info.Name); }
                 }
             if (Mods.Count > 0)
                 for (int i = 0; i < Mods.Count; i++)
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -257,7 +257,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnUpdate(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -268,7 +268,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -279,7 +279,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLateUpdate(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLateUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -291,7 +291,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnGUI(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnGUI(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
             }
         }
@@ -303,7 +303,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelIsLoading(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLevelIsLoading(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -314,7 +314,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLevelWasLoaded(level); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -325,7 +325,7 @@ namespace MelonLoader
                 {
                     MelonMod mod = Mods[i];
                     if (mod != null)
-                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
+                        try { mod.OnLevelWasInitialized(level); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
         }
 
@@ -334,129 +334,113 @@ namespace MelonLoader
         private static PropertyInfo VRCUiManager_Instance = null;
         private static void VRChat_CheckUiManager()
         {
-            if (ShouldCheckForUiManager)
-            {
-                if (VRCUiManager == null)
-                    VRCUiManager = Assembly_CSharp.GetType("VRCUiManager");
-                if (VRCUiManager != null)
+            if (!ShouldCheckForUiManager)
+                return;
+            if (VRCUiManager == null)
+                VRCUiManager = Assembly_CSharp.GetType("VRCUiManager");
+            if (VRCUiManager == null)
+                return;
+            if (VRCUiManager_Instance == null)
+                VRCUiManager_Instance = VRCUiManager.GetProperty("field_Protected_Static_VRCUiManager_0");
+            if (VRCUiManager_Instance == null)
+                return;
+            object returnval = VRCUiManager_Instance.GetValue(null, new object[0]);
+            if (returnval == null)
+                return;
+            ShouldCheckForUiManager = false;
+            if (Mods.Count > 0)
+                for (int i = 0; i < Mods.Count; i++)
                 {
-                    if (VRCUiManager_Instance == null)
-                        VRCUiManager_Instance = VRCUiManager.GetProperty("field_Protected_Static_VRCUiManager_0");
-                    if (VRCUiManager_Instance != null)
-                    {
-                        object returnval = VRCUiManager_Instance.GetValue(null, new object[0]);
-                        if (returnval != null)
-                        {
-                            ShouldCheckForUiManager = false;
-                            if (Mods.Count > 0)
-                                for (int i = 0; i < Mods.Count; i++)
-                                {
-                                    MelonMod mod = Mods[i];
-                                    if (mod != null)
-                                        try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogDLLError(ex.ToString(), mod.Info.Name); }
-                                }
-                        }
-                    }
+                    MelonMod mod = Mods[i];
+                    if (mod != null)
+                        try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), mod.Info.Name); }
                 }
-            }
         }
 
         private static void LoadMelons(bool plugins = false)
         {
             string searchdir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (plugins ? "Plugins" : "Mods"));
             if (!Directory.Exists(searchdir))
-                Directory.CreateDirectory(searchdir);
-            else
             {
-                // DLL
-                string[] files = Directory.GetFiles(searchdir, "*.dll");
-                if (files.Length > 0)
+                Directory.CreateDirectory(searchdir);
+                return;
+            }
+            Imports.LoadMode loadmode = (plugins ? Imports.GetLoadMode_Plugins() : Imports.GetLoadMode_Mods());
+
+            // DLL
+            string[] files = Directory.GetFiles(searchdir, "*.dll");
+            if (files.Length > 0)
+            {
+                for (int i = 0; i < files.Length; i++)
                 {
-                    for (int i = 0; i < files.Length; i++)
+                    string file = files[i];
+                    if (string.IsNullOrEmpty(file))
+                        continue;
+
+                    bool file_extension_check = Path.GetFileNameWithoutExtension(file).EndsWith("-dev");
+                    if ((loadmode != Imports.LoadMode.BOTH) && ((loadmode == Imports.LoadMode.DEV) ? !file_extension_check : file_extension_check))
+                        continue;
+
+                    try
                     {
-                        string file = files[i];
-                        if (!string.IsNullOrEmpty(file))
-                        {
-                            if (plugins)
-                            {
-                                if ((Imports.IsDevPluginsOnly() && !file.EndsWith("-dev.dll")) || (!Imports.IsDevPluginsOnly() && file.EndsWith("-dev.dll")))
-                                    continue;
-                            }
-                            else
-                            {
-                                if ((Imports.IsDevModsOnly() && !file.EndsWith("-dev.dll")) || (!Imports.IsDevModsOnly() && file.EndsWith("-dev.dll")))
-                                    continue;
-                            }
-                            try
-                            {
-                                LoadMelonFromFile(file, plugins);
-                            }
-                            catch (Exception e)
-                            {
-                                MelonLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
-                                MelonLogger.Log("------------------------------");
-                            }
-                        }
+                        LoadMelonFromFile(file, plugins);
+                    }
+                    catch (Exception e)
+                    {
+                        MelonLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                        MelonLogger.Log("------------------------------");
                     }
                 }
+            }
 
-                // ZIP
-                string[] zippedFiles = Directory.GetFiles(searchdir, "*.zip");
-                if (zippedFiles.Length > 0)
+            // ZIP
+            string[] zippedFiles = Directory.GetFiles(searchdir, "*.zip");
+            if (zippedFiles.Length > 0)
+            {
+                for (int i = 0; i < zippedFiles.Length; i++)
                 {
-                    for (int i = 0; i < zippedFiles.Length; i++)
+                    string file = zippedFiles[i];
+                    if (string.IsNullOrEmpty(file))
+                        continue;
+                    try
                     {
-                        string file = zippedFiles[i];
-                        if (!string.IsNullOrEmpty(file))
+                        using (var fileStream = File.OpenRead(file))
                         {
-                            try
+                            using (var zipInputStream = new ZipInputStream(fileStream))
                             {
-                                using (var fileStream = File.OpenRead(file))
+                                ZipEntry entry;
+                                while ((entry = zipInputStream.GetNextEntry()) != null)
                                 {
-                                    using (var zipInputStream = new ZipInputStream(fileStream))
+                                    string filename = Path.GetFileName(entry.Name);
+                                    if (string.IsNullOrEmpty(filename) || !filename.EndsWith(".dll"))
+                                        continue;
+
+                                    bool file_extension_check = Path.GetFileNameWithoutExtension(file).EndsWith("-dev");
+                                    if ((loadmode != Imports.LoadMode.BOTH) && ((loadmode == Imports.LoadMode.DEV) ? !file_extension_check : file_extension_check))
+                                        continue;
+
+                                    using (var unzippedFileStream = new MemoryStream())
                                     {
-                                        ZipEntry entry;
-                                        while ((entry = zipInputStream.GetNextEntry()) != null)
+                                        int size = 0;
+                                        byte[] buffer = new byte[4096];
+                                        while (true)
                                         {
-                                            string filename = Path.GetFileName(entry.Name);
-                                            if (string.IsNullOrEmpty(filename) || !filename.EndsWith(".dll"))
-                                                continue;
-
-                                            if (plugins)
-                                            {
-                                                if ((Imports.IsDevPluginsOnly() && !filename.EndsWith("-dev.dll")) || (!Imports.IsDevPluginsOnly() && filename.EndsWith("-dev.dll")))
-                                                    continue;
-                                            }
+                                            size = zipInputStream.Read(buffer, 0, buffer.Length);
+                                            if (size > 0)
+                                                unzippedFileStream.Write(buffer, 0, size);
                                             else
-                                            {
-                                                if ((Imports.IsDevModsOnly() && !filename.EndsWith("-dev.dll")) || (!Imports.IsDevModsOnly() && filename.EndsWith("-dev.dll")))
-                                                    continue;
-                                            }
-
-                                            using (var unzippedFileStream = new MemoryStream())
-                                            {
-                                                int size = 0;
-                                                byte[] buffer = new byte[4096];
-                                                while (true)
-                                                {
-                                                    size = zipInputStream.Read(buffer, 0, buffer.Length);
-                                                    if (size > 0)
-                                                        unzippedFileStream.Write(buffer, 0, size);
-                                                    else
-                                                        break;
-                                                }
-                                                LoadMelonFromByteArray(unzippedFileStream.ToArray(), plugins, (file + "/" + filename));
-                                            }
+                                                break;
                                         }
+                                        LoadMelonFromByteArray(unzippedFileStream.ToArray(), plugins, (file + "/" + filename));
                                     }
                                 }
                             }
-                            catch (Exception e)
-                            {
-                                MelonLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
-                                MelonLogger.Log("------------------------------");
-                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        MelonLogger.LogError("Unable to load " + file + ":\n" + e.ToString());
+                        MelonLogger.Log("------------------------------");
                     }
                 }
             }

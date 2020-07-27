@@ -1,7 +1,6 @@
 #include "DisableAnalytics.h"
 #include "HookManager.h"
 #include "Logger.h"
-#include "AssertionManager.h"
 
 gethostbyname_t DisableAnalytics::Original_gethostbyname = NULL;
 getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
@@ -29,8 +28,6 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 
 void DisableAnalytics::Setup()
 {
-	AssertionManager::Start("DisableAnalytics.cpp", "DisableAnalytics::Setup");
-
 	HMODULE wsock32 = GetModuleHandle("wsock32.dll");
 	if (wsock32 != NULL)
 	{
@@ -66,6 +63,6 @@ bool DisableAnalytics::CheckBlacklist(std::string url)
 
 void DisableAnalytics::LogWarning(std::string msg)
 {
-	msg += (" for [ " + std::string(AssertionManager::FileName) + " | " + AssertionManager::Position + " ]");
+	msg += (" for [ DisableAnalytics.cpp | DisableAnalytics::Setup ]");
 	Logger::DebugLogWarning(msg);
 }

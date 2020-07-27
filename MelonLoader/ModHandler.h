@@ -4,6 +4,14 @@
 class ModHandler
 {
 public:
+	enum MelonCompatibility
+	{
+		UNIVERSAL,
+		COMPATIBLE,
+		NOATTRIBUTE,
+		INCOMPATIBLE
+	};
+
 	static bool HasInitialized;
 	static MonoMethod* onApplicationStart;
 	static MonoMethod* onApplicationQuit;
@@ -21,12 +29,4 @@ public:
 	static void RunWarningCallbacks(const char* namesection, const char* msg);
 	static void RunErrorCallbacks(const char* msg);
 	static void RunErrorCallbacks(const char* namesection, const char* msg);
-};
-
-enum ModHandler_DLLStatus
-{
-	ModHandler_DLLStatus_UNIVERSAL,
-	ModHandler_DLLStatus_COMPATIBLE,
-	ModHandler_DLLStatus_NOATTRIBUTE,
-	ModHandler_DLLStatus_INCOMPATIBLE
 };

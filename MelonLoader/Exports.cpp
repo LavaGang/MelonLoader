@@ -9,8 +9,8 @@ void Log(MonoString* txt) { Logger::Log(Mono::mono_string_to_utf8(txt)); }
 void LogColor(MonoString* txt, ConsoleColor color) { Logger::Log(Mono::mono_string_to_utf8(txt), color); }
 void LogWarning(MonoString* namesection, MonoString* txt) { Logger::LogWarning(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void LogError(MonoString* namesection, MonoString* txt) { Logger::LogError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
-void LogDLLError(MonoString* namesection, MonoString* msg) { Logger::LogDLLError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(msg)); }
-void LogDLLStatus(ModHandler_DLLStatus type) { Logger::LogDLLStatus(type); }
+void LogMelonError(MonoString* namesection, MonoString* msg) { Logger::LogMelonError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(msg)); }
+void LogMelonCompatibility(ModHandler::MelonCompatibility comp) { Logger::LogMelonCompatibility(comp); }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }
 bool IsConsoleEnabled() { return Console::Enabled; }
@@ -26,8 +26,8 @@ MonoString* GetAssemblyDirectory() { return Mono::mono_string_new(Mono::Domain, 
 MonoString* GetMonoConfigDirectory() { return Mono::mono_string_new(Mono::Domain, Mono::ConfigPath); }
 MonoString* GetExePath() { return Mono::mono_string_new(Mono::Domain, MelonLoader::ExePath); }
 bool IsQuitFix() { return MelonLoader::QuitFix; }
-bool IsDevModsOnly() { return MelonLoader::DevModsOnly; }
-bool IsDevPluginsOnly() { return MelonLoader::DevPluginsOnly; }
+MelonLoader::LoadMode GetLoadMode_Plugins() { return MelonLoader::LoadMode_Plugins; }
+MelonLoader::LoadMode GetLoadMode_Mods() { return MelonLoader::LoadMode_Mods; }
 bool AG_Force_Regenerate() { return MelonLoader::AG_Force_Regenerate; }
 MonoString* AG_Force_Version_Unhollower() { if (MelonLoader::ForceUnhollowerVersion != NULL) return Mono::mono_string_new(Mono::Domain, MelonLoader::ForceUnhollowerVersion); return NULL; }
 void SetTitleForConsole(MonoString* txt) { Console::SetTitle(Mono::mono_string_to_utf8(txt)); }
@@ -49,20 +49,19 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", GetProductName);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetExePath", GetExePath);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsQuitFix", IsQuitFix);
-	Mono::mono_add_internal_call("MelonLoader.Imports::IsDevModsOnly", IsDevModsOnly);
-	Mono::mono_add_internal_call("MelonLoader.Imports::IsDevPluginsOnly", IsDevPluginsOnly);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetLoadMode_Plugins", GetLoadMode_Plugins);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetLoadMode_Mods", GetLoadMode_Mods);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Regenerate", AG_Force_Regenerate);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Version_Unhollower", AG_Force_Version_Unhollower);
 
 	Mono::mono_add_internal_call("MelonLoader.Console::Allocate", Console::Create);
 	Mono::mono_add_internal_call("MelonLoader.Console::SetTitle", SetTitleForConsole);
 	Mono::mono_add_internal_call("MelonLoader.Console::SetColor", Console::SetColor);
-	//Mono::mono_add_internal_call("MelonLoader.Console::ShouldShowGameLogs", ShouldShowGameLogs);
 
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_Log", Log);
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogColor", LogColor);
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogWarning", LogWarning);
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogError", LogError);
-	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogDLLError", LogDLLError);
-	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogDLLStatus", LogDLLStatus);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogMelonError", LogMelonError);
+	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogMelonCompatibility", LogMelonCompatibility);
 }

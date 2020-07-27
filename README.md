@@ -1,3 +1,11 @@
+### GENERAL INFORMATION:
+
+- All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
+- All Mods get placed in the created Mods folder inside the Game's Install Folder.
+- All Logs are made in the created Logs folder inside the Game's Install Folder.
+
+---
+
 ### REQUIREMENTS:
 
 - [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net472)
@@ -48,21 +56,6 @@
 
 ---
 
-### GENERAL INFORMATION:
-
-- All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
-- All Mods get placed in the created Mods folder inside the Game's Install Folder.
-- All Logs are made in the created Logs folder inside the Game's Install Folder.
-
----
-
-### CONSOLE DIFFERENCES:
-
-- Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
-- Debug Mode/Console is for Debugging MelonLoader Internals.
-
----
-
 ### LAUNCH OPTIONS:
 
 | Argument              | Description                              |
@@ -78,17 +71,35 @@
 | --melonloader.maxlogs | Max Log Files  [ Default: 10 ] [ Disable: 0 ] |
 | --melonloader.maxwarnings | Max Warnings per Log File  [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.maxerrors | Max Errors per Log File  [ Default: 100 ] [ Disable: 0 ] |
-| --melonloader.devpluginsonly | Loads only Plugins with the "-dev.dll" extension |
-| --melonloader.devmodsonly | Loads only Mods with the "-dev.dll" extension |
+| --melonloader.loadmodeplugins | Load Mode for Plugins  [ Default: 0 ] |
+| --melonloader.loadmodemods  | Load Mode for Mods  [ Default: 0 ] |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
 | --melonloader.agfvunhollower | Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 
 ---
 
-### CREDITS+LICENSING:
+### CONSOLE DIFFERENCES:
 
-MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE.md) for the full License.  
-[MelonLoader.dll](MelonLoader) was adapted from [AtiRoNya](https://github.com/AtiLion/AtiRoNya) by [AtiLion](https://github.com/AtiLion), licensed under [MIT License](https://github.com/AtiLion/AtiRoNya/blob/e20e4a8fc47b37834c8284f9e6e937f04a84c510/LICENSE)
+- Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
+- Debug Mode/Console is for Debugging MelonLoader Internals.
+
+---
+
+### LOAD MODES:
+
+- The Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
+
+| Argument              | Internal Name              | Action                              |
+| --------------------- | ---------------------------------------- |
+| 0 | NORMAL | Load them only if they don't have the "-dev" Name Extension |
+| 1 | DEV | Load them only if they have the "-dev" Name Extension |
+| 2 | BOTH | Load All |
+
+---
+
+### LICENSING & CREDITS:
+
+MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE.md) for the full License.
 
 Third-party libraries used as source code or bundled in binary form:
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/Detours/LICENSE.md) for the full License.
@@ -98,14 +109,13 @@ Third-party libraries used as source code or bundled in binary form:
 - [LightJson](https://github.com/MarcosLopezC/LightJson) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.Installer/LightJson/LICENSE.txt) for the full License.
 - [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/Tomlyn/license.txt) for the full License.
 - [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader.ModHandler/SharpZipLib/LICENSE.txt) for the full License.
+- [AtiRoNya](https://github.com/AtiLion/AtiRoNya) is licensed under the MIT License. See [LICENSE](https://github.com/AtiLion/AtiRoNya/blob/e20e4a8fc47b37834c8284f9e6e937f04a84c510/LICENSE) for the full License.
 - Unity Runtime libraries (found in [Unity Dependencies](BaseLibs/Unity%20Dependencies)) are part of Unity Software.  
 Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
 
 External tools downloaded and used at runtime:
 - [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 - [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
-
----
 
 See [MelonLoader Wiki](https://melonwiki.xyz/#/credits) for the full Credits.
 

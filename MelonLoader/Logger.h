@@ -53,7 +53,7 @@ public:
 	static void LogError(const char* txt);
 	static void LogError(const char* namesection, const char* txt);
 	static void LogError(std::string txt) { LogError(txt.c_str()); }
-
+	
 	static void DebugLog(const char* txt) { if (MelonLoader::DebugMode) Log(txt); }
 	static void DebugLog(const char* txt, ConsoleColor color) { if (MelonLoader::DebugMode) Log(txt, color); };
 	static void DebugLog(std::string txt) { DebugLog(txt.c_str()); }
@@ -67,9 +67,8 @@ public:
 	static void DebugLogError(const char* namesection, const char* txt) { if (MelonLoader::DebugMode) LogError(namesection, txt); }
 	static void DebugLogError(std::string txt) { DebugLogError(txt.c_str()); }
 
-	static void LogDLLError(const char* namesection, const char* msg);
-
-	static void LogDLLStatus(ModHandler_DLLStatus type);
+	static void LogMelonError(const char* namesection, const char* msg);
+	static void LogMelonCompatibility(ModHandler::MelonCompatibility comp);
 
 private:
 	static void LogTimestamp(ConsoleColor color = ConsoleColor_Black);

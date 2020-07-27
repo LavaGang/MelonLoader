@@ -18,8 +18,8 @@ namespace MelonLoader
         public static void LogError(string s) => Native_LogError(GetNameSection(), s);
         public static void LogError(string s, params object[] args) => Native_LogError(GetNameSection(), string.Format(s, args));
 
-        internal static void LogDLLError(string msg, string modname) => Native_LogDLLError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
-        internal static void LogDLLStatus(MelonBase.MelonCompatibility type) => Native_LogDLLStatus(type);
+        internal static void LogMelonError(string msg, string modname) => Native_LogMelonError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
+        internal static void LogMelonCompatibility(MelonBase.MelonCompatibility comp) => Native_LogMelonCompatibility(comp);
 
         internal static string GetNameSection()
         {
@@ -67,8 +67,8 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Native_LogError(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Native_LogDLLError(string namesection, string msg);
+        internal extern static void Native_LogMelonError(string namesection, string msg);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Native_LogDLLStatus(MelonBase.MelonCompatibility type);
+        internal extern static void Native_LogMelonCompatibility(MelonBase.MelonCompatibility comp);
     }
 }
