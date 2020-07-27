@@ -77,7 +77,6 @@ namespace MelonLoader.Installer
             {
                 string version = null;
                 JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
-
                 if (data.Count > 0)
                     version = data[0]["tag_name"].AsString;
                 try
@@ -103,21 +102,29 @@ namespace MelonLoader.Installer
 
         static void Install_GUI()
         {
+            int selected_index = 0;
+
             try
             {
                 mainForm = new MainForm();
                 mainForm.cbVersions.Items.Clear();
 
-                if (File.Exists(ManualZipPath))
+                bool should_add_manual = File.Exists(ManualZipPath);
+                if (should_add_manual)
                     mainForm.cbVersions.Items.Add("Manual Zip");
                 JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
                 if (data.Count > 0)
                 {
+                    bool has_added_latest = false;
                     foreach (var x in data)
                     {
                         string version = x["tag_name"].AsString;
-                        if (mainForm.cbVersions.Items.Count <= 0)
+                        if (!has_added_latest)
+                        {
+                            has_added_latest = true;
                             mainForm.cbVersions.Items.Add("Latest (" + version + ")");
+                            selected_index = (should_add_manual ? 1 : 0);
+                        }
                         mainForm.cbVersions.Items.Add(version);
                     }
                 }
@@ -131,8 +138,10 @@ namespace MelonLoader.Installer
                 Application.Exit();
             }
 
-            mainForm.cbVersions.SelectedIndex = 0;
-            mainForm.cbVersions.SelectedItem = mainForm.cbVersions.Items[0];
+            if ((selected_index < 0) || (selected_index > (mainForm.cbVersions.Items.Count - 1)))
+                selected_index = 0;
+            mainForm.cbVersions.SelectedIndex = selected_index;
+            mainForm.cbVersions.SelectedItem = mainForm.cbVersions.Items[selected_index];
             mainForm.Show();
             Application.Run(mainForm);
         }
