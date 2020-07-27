@@ -89,11 +89,11 @@
 
 - The Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
 
-| Argument              | Internal Name              | Action                              |
+| Argument              | Action                              |
 | --------------------- | ---------------------------------------- |
-| 0 | NORMAL | Load them only if they don't have the "-dev" Name Extension |
-| 1 | DEV | Load them only if they have the "-dev" Name Extension |
-| 2 | BOTH | Load All |
+| 0 | NORMAL  |  Load them only if they don't have the "-dev" Name Extension |
+| 1 | DEV  |  Load them only if they have the "-dev" Name Extension |
+| 2 | BOTH  |  Load All |
 
 ---
 
