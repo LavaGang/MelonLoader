@@ -1,5 +1,8 @@
 ### GENERAL INFORMATION:
 
+- Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
+- Debug Mode/Console is for Debugging MelonLoader Internals.
+
 - All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
 - All Mods get placed in the created Mods folder inside the Game's Install Folder.
 - All Logs are made in the created Logs folder inside the Game's Install Folder.
@@ -75,13 +78,6 @@
 | --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
 | --melonloader.agfvunhollower | Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
-
----
-
-### CONSOLE DIFFERENCES:
-
-- Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
-- Debug Mode/Console is for Debugging MelonLoader Internals.
 
 ---
 
