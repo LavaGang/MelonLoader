@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.2.6 Open-Beta](#v026-open-beta)  
 [v0.2.5 Open-Beta](#v025-open-beta)  
 [v0.2.4 Open-Beta](#v024-open-beta)  
 [v0.2.3 Open-Beta](#v023-open-beta)  
@@ -10,6 +11,11 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.2.6 Open-Beta:
+
 
 ---
 

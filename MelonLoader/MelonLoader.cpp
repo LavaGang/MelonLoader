@@ -60,7 +60,6 @@ void MelonLoader::Main()
 
 #ifdef DEBUG
 		DebugMode = true;
-		Console::ShouldShowGameLogs = true;
 		Console::Create();
 #endif
 

@@ -44,7 +44,7 @@ void ModHandler::Initialize()
 						{
 							MonoObject* exceptionObject = NULL;
 							Mono::mono_runtime_invoke(initialize, NULL, NULL, &exceptionObject);
-							if (exceptionObject && MelonLoader::DebugMode)
+							if ((exceptionObject != NULL) && MelonLoader::DebugMode)
 								Mono::LogExceptionMessage(exceptionObject);
 							else
 							{

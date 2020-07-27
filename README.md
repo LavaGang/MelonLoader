@@ -76,7 +76,7 @@
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
-| --melonloader.agfvunhollower | Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
+| --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |
 
 ---
 

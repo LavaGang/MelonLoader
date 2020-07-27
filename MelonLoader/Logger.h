@@ -59,7 +59,7 @@ public:
 	static void DebugLog(std::string txt) { DebugLog(txt.c_str()); }
 	static void DebugLog(std::string txt, ConsoleColor color) { DebugLog(txt.c_str(), color); }
 
-	static void DebugLogWarning(const char* txt) { if (MelonLoader::DebugMode) DebugLogWarning(txt); }
+	static void DebugLogWarning(const char* txt) { if (MelonLoader::DebugMode) LogWarning(txt); }
 	static void DebugLogWarning(const char* namesection, const char* txt) { if (MelonLoader::DebugMode) LogWarning(namesection, txt); }
 	static void DebugLogWarning(std::string txt) { DebugLogWarning(txt.c_str()); }
 

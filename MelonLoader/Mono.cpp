@@ -123,4 +123,10 @@ void Mono::FixDomainBaseDir()
 }
 
 const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject) { return mono_string_to_utf8((MonoString*)mono_runtime_invoke(mono_property_get_get_method(mono_class_get_property_from_name(classType, propertyName)), classObject, NULL, NULL)); }
-void Mono::LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow) { if (shouldThrow) AssertionManager::ThrowError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject)); else Logger::LogError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject)); }
+void Mono::LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow)
+{
+	if (shouldThrow)
+		AssertionManager::ThrowError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject));
+	else
+		Logger::LogError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject));
+}
