@@ -2,7 +2,6 @@
 
 - Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
 - Debug Mode/Console is for Debugging MelonLoader Internals.
-
 - All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
 - All Mods get placed in the created Mods folder inside the Game's Install Folder.
 - All Logs are made in the created Logs folder inside the Game's Install Folder.
