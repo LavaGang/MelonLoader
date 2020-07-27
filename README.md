@@ -58,8 +58,8 @@
 
 ### LAUNCH OPTIONS:
 
-| Argument              | Description                              |
-| --------------------- | ---------------------------------------- |
+| Argument | Description |
+| - | - |
 | --no-mods | Launch game without loading Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.hideconsole | Hides the Normal Console |
@@ -68,11 +68,11 @@
 | --melonloader.magenta | Magenta Console Color |
 | --melonloader.rainbow | Rainbow Console Color |
 | --melonloader.randomrainbow | Random Rainbow Console Color |
-| --melonloader.maxlogs | Max Log Files  [ Default: 10 ] [ Disable: 0 ] |
-| --melonloader.maxwarnings | Max Warnings per Log File  [ Default: 100 ] [ Disable: 0 ] |
-| --melonloader.maxerrors | Max Errors per Log File  [ Default: 100 ] [ Disable: 0 ] |
-| --melonloader.loadmodeplugins | Load Mode for Plugins  [ Default: 0 ] |
-| --melonloader.loadmodemods  | Load Mode for Mods  [ Default: 0 ] |
+| --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ Disable: 0 ] |
+| --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ Disable: 0 ] |
+| --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ] |
+| --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
+| --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
 | --melonloader.agfvunhollower | Forces the Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 
@@ -89,11 +89,11 @@
 
 - The Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
 
-| Value              | Action                              |
-| --------------------- | ---------------------------------------- |
-| 0 | NORMAL  -  Load them only if they don't have the "-dev" Name Extension |
-| 1 | DEV  -  Load them only if they have the "-dev" Name Extension |
-| 2 | BOTH  -  Load All |
+| Value | Action |
+| - | - |
+| 0 | NORMAL - Load them only if they don't have the "-dev" Name Extension |
+| 1 | DEV - Load them only if they have the "-dev" Name Extension |
+| 2 | BOTH - Load All |
 
 ---
 
