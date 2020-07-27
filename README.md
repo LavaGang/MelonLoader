@@ -87,7 +87,7 @@
 
 ### LOAD MODES:
 
-- The Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
+- Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
 
 | Value | Action |
 | - | - |
