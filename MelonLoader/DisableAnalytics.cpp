@@ -64,13 +64,13 @@ bool DisableAnalytics::CheckBlacklist(std::string url)
 void* DisableAnalytics::Hooked_gethostbyname(const char* name)
 {
 	if (CheckBlacklist(name))
-		name = NULL;
+		name = "localhost"; // Better to return actual host, just for localhost, in order to prevent unknown exceptions
 	return Original_gethostbyname(name);
 }
 
 int DisableAnalytics::Hooked_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult)
 {
 	if (CheckBlacklist(pNodeName))
-		return WSAEHOSTDOWN;
+		pNodeName = "localhost"; // Better to return actual addr info, just for localhost, in order to prevent unknown exceptions
 	return Original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
 }
