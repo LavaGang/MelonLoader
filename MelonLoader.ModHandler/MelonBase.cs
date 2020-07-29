@@ -59,6 +59,7 @@ namespace MelonLoader
         internal MelonPluginGameAttribute[] LegacyPluginGames { get; set; }
 
         public virtual void OnApplicationStart() { }
+        public virtual void OnUpdate() { }
         public virtual void OnApplicationQuit() { }
         public virtual void OnModSettingsApplied() { }
     }
