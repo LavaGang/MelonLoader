@@ -60,6 +60,8 @@ namespace MelonLoader
 
         public virtual void OnApplicationStart() { }
         public virtual void OnUpdate() { }
+        public virtual void OnLateUpdate() { }
+        public virtual void OnGUI() { }
         public virtual void OnApplicationQuit() { }
         public virtual void OnModSettingsApplied() { }
     }
