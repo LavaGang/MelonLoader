@@ -31,34 +31,6 @@ namespace MelonLoader.Support
             if (Imports.IsDebugMode())
                 LogSupport.TraceHandler += MelonLogger.Log;
 
-            try
-            {
-                Assembly il2cppSystem = Assembly.Load("Il2CppSystem");
-                if (il2cppSystem != null)
-                {
-                    Type unitytls = il2cppSystem.GetType("Il2CppMono.Unity.UnityTls");
-                    if (unitytls != null)
-                    {
-                        unsafe
-                        {
-                            var tlsHookTarget = typeof(Uri).Assembly.GetType("Mono.Unity.UnityTls").GetMethod("GetUnityTlsInterface", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MethodHandle.GetFunctionPointer();
-                            var unityMethodField = UnhollowerUtils.GetIl2CppMethodInfoPointerFieldForGeneratedMethod(unitytls.GetMethod("GetUnityTlsInterface", BindingFlags.Public | BindingFlags.Static));
-                            var unityMethodPtr = (IntPtr)unityMethodField.GetValue(null);
-                            var unityMethod = *(IntPtr*)unityMethodPtr;
-                            Imports.Hook((IntPtr)(&tlsHookTarget), unityMethod);
-                        }
-                    }
-                    else
-                        throw new Exception("Failed to get Type Il2CppMono.Unity.UnityTls!");
-                }
-                else
-                    throw new Exception("Failed to get Assembly Il2CppSystem!");
-            }
-            catch (Exception ex)
-            {
-                MelonLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
-            }
-
             if (MelonLoader.Main.IsVRChat)
             {
                 try

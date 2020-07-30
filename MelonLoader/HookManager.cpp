@@ -126,7 +126,6 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		{
 			if (Il2Cpp::Setup(lib))
 			{
-				Mono::CreateDomain();
 				Hook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
 				Hook(&(LPVOID&)Il2Cpp::il2cpp_unity_install_unitytls_interface, Hooked_il2cpp_unity_install_unitytls_interface);
 			}
@@ -149,18 +148,22 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 #pragma endregion
 
 #pragma region il2cpp_unity_install_unitytls_interface
-void HookManager::Hooked_il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct)
+void HookManager::Hooked_il2cpp_unity_install_unitytls_interface(const void* unitytlsInterfaceStruct)
 {
-	Il2Cpp::unitytlsInterfaceStruct = unitytlsInterfaceStruct;
 	Il2Cpp::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
+	Mono::mono_unity_install_unitytls_interface(unitytlsInterfaceStruct);
 }
 #pragma endregion
 
 #pragma region il2cpp_init
 Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 {
-	Exports::AddInternalCalls();
-	ModHandler::Initialize();
+	if (Mono::Load() && Mono::Setup())
+	{
+		Mono::CreateDomain();
+		Exports::AddInternalCalls();
+		ModHandler::Initialize();
+	}
 	Il2Cpp::Domain = Il2Cpp::il2cpp_init(name);
 	Unhook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
 	return Il2Cpp::Domain;

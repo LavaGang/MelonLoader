@@ -37,6 +37,7 @@ mono_method_get_name_t Mono::mono_method_get_name = NULL;
 mono_debug_init_t Mono::mono_debug_init = NULL;
 mono_debug_domain_create_t Mono::mono_debug_domain_create = NULL;
 mono_jit_parse_options_t Mono::mono_jit_parse_options = NULL;
+mono_unity_install_unitytls_interface_t Mono::mono_unity_install_unitytls_interface = NULL;
 
 bool Mono::Load()
 {
@@ -88,6 +89,7 @@ bool Mono::Setup()
 		mono_debug_init = (mono_debug_init_t)AssertionManager::GetExport(Module, "mono_debug_init");
 		mono_debug_domain_create = (mono_debug_domain_create_t)AssertionManager::GetExport(Module, "mono_debug_domain_create");
 		mono_jit_parse_options = (mono_jit_parse_options_t)AssertionManager::GetExport(Module, "mono_jit_parse_options");
+		mono_unity_install_unitytls_interface = (mono_unity_install_unitytls_interface_t)AssertionManager::GetExport(Module, "mono_unity_install_unitytls_interface");
 	}
 
 	if (!IsOldMono)

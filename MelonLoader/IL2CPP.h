@@ -21,7 +21,6 @@ public:
 	static il2cpp_runtime_invoke_t il2cpp_runtime_invoke;
 	static il2cpp_method_get_name_t il2cpp_method_get_name;
 	static il2cpp_unity_install_unitytls_interface_t il2cpp_unity_install_unitytls_interface;
-	static void* unitytlsInterfaceStruct;
 
 	static bool Setup(HMODULE mod);
 };

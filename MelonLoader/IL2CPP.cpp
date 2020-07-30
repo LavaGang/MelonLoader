@@ -8,7 +8,6 @@ il2cpp_init_t Il2Cpp::il2cpp_init = NULL;
 il2cpp_runtime_invoke_t Il2Cpp::il2cpp_runtime_invoke = NULL;
 il2cpp_method_get_name_t Il2Cpp::il2cpp_method_get_name = NULL;
 il2cpp_unity_install_unitytls_interface_t Il2Cpp::il2cpp_unity_install_unitytls_interface = NULL;
-void* Il2Cpp::unitytlsInterfaceStruct = NULL;
 
 bool Il2Cpp::Setup(HMODULE mod)
 {
