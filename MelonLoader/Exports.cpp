@@ -31,6 +31,7 @@ MelonLoader::LoadMode GetLoadMode_Mods() { return MelonLoader::LoadMode_Mods; }
 bool AG_Force_Regenerate() { return MelonLoader::AG_Force_Regenerate; }
 MonoString* AG_Force_Version_Unhollower() { if (MelonLoader::ForceUnhollowerVersion != NULL) return Mono::mono_string_new(Mono::Domain, MelonLoader::ForceUnhollowerVersion); return NULL; }
 void SetTitleForConsole(MonoString* txt) { Console::SetTitle(Mono::mono_string_to_utf8(txt)); }
+void* GetUnityTlsInterface() { return Il2Cpp::unitytlsInterfaceStruct; }
 
 void Exports::AddInternalCalls()
 {
@@ -53,6 +54,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetLoadMode_Mods", GetLoadMode_Mods);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Regenerate", AG_Force_Regenerate);
 	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Version_Unhollower", AG_Force_Version_Unhollower);
+	Mono::mono_add_internal_call("MelonLoader.Imports::GetUnityTlsInterface", GetUnityTlsInterface);
 
 	Mono::mono_add_internal_call("MelonLoader.Console::Allocate", Console::Create);
 	Mono::mono_add_internal_call("MelonLoader.Console::SetTitle", SetTitleForConsole);

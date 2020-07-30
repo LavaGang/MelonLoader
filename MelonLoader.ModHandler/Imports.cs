@@ -59,5 +59,7 @@ namespace MelonLoader
         internal extern static LoadMode GetLoadMode_Plugins();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static LoadMode GetLoadMode_Mods();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static IntPtr GetUnityTlsInterface();
     }
 }
