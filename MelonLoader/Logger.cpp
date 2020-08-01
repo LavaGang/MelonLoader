@@ -30,7 +30,7 @@ void Logger::Initialize(std::string filepathstr)
 	std::tm bt;
 	localtime_s(&bt, &timer);
 	std::string logFolderPath = filepathstr + "\\Logs";
-	if (!MelonLoader::DirectoryExists(logFolderPath.c_str()))
+	if (!DirectoryExists(logFolderPath.c_str()))
 		int returnval = _mkdir(logFolderPath.c_str());
 	else
 		CleanOldLogs(logFolderPath);

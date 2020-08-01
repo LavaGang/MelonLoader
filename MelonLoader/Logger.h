@@ -73,4 +73,5 @@ public:
 private:
 	static void LogTimestamp(ConsoleColor color = ConsoleColor_Black);
 	static bool CompareWritetime(const std::filesystem::directory_entry& first, const std::filesystem::directory_entry& second) { return first.last_write_time().time_since_epoch() >= second.last_write_time().time_since_epoch(); }
+	static bool DirectoryExists(const char* path) { struct stat info; if (stat(path, &info) != NULL) return false; if (info.st_mode & S_IFDIR) return true; return false; }
 };

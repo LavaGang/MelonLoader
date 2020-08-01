@@ -266,59 +266,23 @@ void MelonLoader::KillProcess()
 	}
 }
 
-int MelonLoader::CountSubstring(std::string pat, std::string txt)
-{
-	size_t M = pat.length();
-	size_t N = txt.length();
-	int res = 0;
-	for (int i = 0; i <= N - M; i++)
-	{
-		int j;
-		for (j = 0; j < M; j++)
-			if (txt[i + j] != pat[j])
-				break;
-		if (j == M)
-		{
-			res++;
-			j = 0;
-		}
-	}
-	return res;
-}
-
-bool MelonLoader::DirectoryExists(const char* path)
-{
-	struct stat info;
-	if (stat(path, &info) != NULL)
-		return false;
-	if (info.st_mode & S_IFDIR)
-		return true;
-	return false;
-}
-
-long MelonLoader::GetFileSize(std::string filename)
-{
-	struct stat stat_buf;
-	return ((stat(filename.c_str(), &stat_buf) == 0) ? stat_buf.st_size : -1);
-}
-
 int MelonLoader::GetIntFromConstChar(const char* str, int defaultval)
 {
-	if (str == NULL || *str == '\0')
+	if ((str == NULL) || (*str == '\0'))
 		return defaultval;
     bool negate = (str[0] == '-');
-    if ( *str == '+' || *str == '-' )
+    if ((*str == '+') || (*str == '-'))
         ++str;
 	if (*str == '\0')
 		return defaultval;
     int result = 0;
     while(*str)
     {
-		if (*str >= '0' && *str <= '9')
-			result = result * 10 - (*str - '0');
+		if ((*str >= '0') && (*str <= '9'))
+			result = ((result * 10) - (*str - '0'));
 		else
 			return defaultval;
         ++str;
     }
-    return negate ? result : -result;
+    return (negate ? result : -result);
 }
