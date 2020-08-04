@@ -25,7 +25,7 @@ namespace MelonLoader.Support
         {
             Main.obj = new GameObject("MelonLoader");
             DontDestroyOnLoad(Main.obj);
-            Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
+            Main.comp = (MelonLoaderComponent)Main.obj.AddComponent(typeof(MelonLoaderComponent));
             Main.obj.transform.SetAsLastSibling();
             Main.comp.transform.SetAsLastSibling();
         }

@@ -106,9 +106,9 @@ namespace MelonLoader.Support
     {
         internal static void Create()
         {
-            Main.obj = new GameObject("MelonLoader");
+            Main.obj = new GameObject();
             DontDestroyOnLoad(Main.obj);
-            Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
+            Main.comp = new MelonLoaderComponent(Main.obj.AddComponent(UnhollowerRuntimeLib.Il2CppType.Of<MelonLoaderComponent>()).Pointer);
             Main.SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(Main.obj.transform));
             Main.SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(Main.comp.transform));
         }

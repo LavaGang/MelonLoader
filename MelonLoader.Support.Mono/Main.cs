@@ -33,9 +33,9 @@ namespace MelonLoader.Support
 
         internal static void Create()
         {
-            Main.obj = new GameObject("MelonLoader");
+            Main.obj = new GameObject();
             DontDestroyOnLoad(Main.obj);
-            Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
+            Main.comp = (MelonLoaderComponent)Main.obj.AddComponent(typeof(MelonLoaderComponent));
             Main.obj.transform.SetAsLastSibling();
             Main.comp.transform.SetAsLastSibling();
         }

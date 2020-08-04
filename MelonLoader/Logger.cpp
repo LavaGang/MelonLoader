@@ -24,9 +24,9 @@ void Logger::Initialize(std::string filepathstr)
 		MaxWarnings = 0;
 		MaxErrors = 0;
 	}
-	auto now = std::chrono::system_clock::now();
-	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-	auto timer = std::chrono::system_clock::to_time_t(now);
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+	time_t timer = std::chrono::system_clock::to_time_t(now);
 	std::tm bt;
 	localtime_s(&bt, &timer);
 	std::string logFolderPath = filepathstr + "\\Logs";
@@ -64,9 +64,9 @@ void Logger::CleanOldLogs(std::string logFolderPath)
 
 void Logger::LogTimestamp(ConsoleColor color)
 {
-	auto now = std::chrono::system_clock::now();
-	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-	auto timer = std::chrono::system_clock::to_time_t(now);
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+	time_t timer = std::chrono::system_clock::to_time_t(now);
 	std::tm bt;
 	localtime_s(&bt, &timer);
 	std::stringstream output;
