@@ -164,6 +164,8 @@ void MelonLoader::ParseCommandLine()
 					Console::HordiniMode = true;
 				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
 					Console::HordiniMode_Random = true;
+				else if (strstr(command, "--melonloader.consoleontop") != NULL)
+					Console::AlwaysOnTop = true;
 				else if (strstr(command, "--melonloader.loadmodeplugins") != NULL)
 				{
 					int loadmode = atoi(CommandLineV[i + 1]);
