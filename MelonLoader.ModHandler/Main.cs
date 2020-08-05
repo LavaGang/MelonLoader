@@ -431,7 +431,7 @@ namespace MelonLoader
                                             else
                                                 break;
                                         }
-                                        LoadMelonFromByteArray(unzippedFileStream.ToArray(), plugins, (file + "/" + filename));
+                                        LoadMelonFromAssembly(Assembly.Load(unzippedFileStream.ToArray()), plugins, (file + "/" + filename));
                                     }
                                 }
                             }
@@ -446,8 +446,7 @@ namespace MelonLoader
             }
         }
 
-        private static void LoadMelonFromFile(string file, bool isPlugin = false) => LoadMelonFromByteArray(File.ReadAllBytes(file), isPlugin, file);
-        private static void LoadMelonFromByteArray(byte[] data, bool isPlugin = false, string filelocation = null) => LoadMelonFromAssembly(Assembly.Load(data), isPlugin, filelocation);
+        private static void LoadMelonFromFile(string filelocation, bool isPlugin = false) => LoadMelonFromAssembly((Imports.IsDebugMode() ? Assembly.LoadFrom(filelocation) : Assembly.Load(File.ReadAllBytes(filelocation))), isPlugin, filelocation);
         private static void LoadMelonFromAssembly(Assembly asm, bool isPlugin = false, string filelocation = null)
         {
             if (!asm.Equals(null))

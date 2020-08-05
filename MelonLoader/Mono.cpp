@@ -111,9 +111,6 @@ void Mono::CreateDomain()
 		mono_runtime_set_main_args(MelonLoader::CommandLineC, MelonLoader::CommandLineV);
 		Domain = mono_jit_init("MelonLoader");
 		Mono::FixDomainBaseDir();
-		mono_debug_init(MONO_DEBUG_FORMAT_MONO);
-		mono_debug_domain_create(Domain);
-		mono_jit_parse_options(MelonLoader::CommandLineC, MelonLoader::CommandLineV);
 	}
 }
 
