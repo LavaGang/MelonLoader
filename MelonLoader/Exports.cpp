@@ -10,7 +10,7 @@ void LogColor(MonoString* namesection, MonoString* txt, ConsoleColor color) { Lo
 void LogWarning(MonoString* namesection, MonoString* txt) { Logger::LogWarning(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void LogError(MonoString* namesection, MonoString* txt) { Logger::LogError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void LogMelonError(MonoString* namesection, MonoString* txt) { Logger::LogMelonError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
-void LogMelonCompatibility(ModHandler::MelonCompatibility comp) { Logger::LogMelonCompatibility(comp); }
+void LogMelonCompatibility(MelonLoader_Base::MelonCompatibility comp) { Logger::LogMelonCompatibility(comp); }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }
 bool IsConsoleEnabled() { return Console::Enabled; }

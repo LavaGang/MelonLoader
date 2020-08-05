@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "Console.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 
 class LogStream
 {
@@ -70,7 +70,7 @@ public:
 	static void DebugLogError(std::string txt) { DebugLogError(txt.c_str()); }
 
 	static void LogMelonError(const char* namesection, const char* txt);
-	static void LogMelonCompatibility(ModHandler::MelonCompatibility comp);
+	static void LogMelonCompatibility(MelonLoader_Base::MelonCompatibility comp);
 	static void LogTimestamp(ConsoleColor color = ConsoleColor_Black);
 
 private:

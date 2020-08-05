@@ -188,7 +188,7 @@ void Logger::LogMelonError(const char* namesection, const char* txt)
 	}
 }
 
-void Logger::LogMelonCompatibility(ModHandler::MelonCompatibility comp)
+void Logger::LogMelonCompatibility(MelonLoader_Base::MelonCompatibility comp)
 {
 	LogTimestamp();
 	Console::Write("[");
@@ -198,15 +198,15 @@ void Logger::LogMelonCompatibility(ModHandler::MelonCompatibility comp)
 	Console::Write("Game Compatibility: ", ConsoleColor_Blue);
 	switch (comp)
 	{
-	case ModHandler::MelonCompatibility::UNIVERSAL:
+	case MelonLoader_Base::MelonCompatibility::UNIVERSAL:
 		LogFile << "Universal";
 		Console::WriteLine("Universal", ConsoleColor_Cyan);
 		break;
-	case ModHandler::MelonCompatibility::COMPATIBLE:
+	case MelonLoader_Base::MelonCompatibility::COMPATIBLE:
 		LogFile << "Compatible";
 		Console::WriteLine("Compatible", ConsoleColor_Green);
 		break;
-	case ModHandler::MelonCompatibility::NOATTRIBUTE:
+	case MelonLoader_Base::MelonCompatibility::NOATTRIBUTE:
 		LogFile << "No MelonGameAttribute!";
 		Console::WriteLine("No MelonGameAttribute!", ConsoleColor_Yellow);
 		break;

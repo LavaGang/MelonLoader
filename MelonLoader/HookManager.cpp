@@ -1,6 +1,6 @@
 #include <string>
 #include "HookManager.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 #include "MelonLoader.h"
 #include "Console.h"
 #include "Detours/detours.h"
@@ -163,7 +163,7 @@ Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 	{
 		Mono::CreateDomain();
 		Exports::AddInternalCalls();
-		ModHandler::Initialize();
+		MelonLoader_Base::Initialize();
 	}
 	Il2Cpp::Domain = Il2Cpp::il2cpp_init(name);
 	Unhook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
@@ -178,7 +178,7 @@ MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const ch
 	Mono::Domain = Mono::mono_jit_init_version(name, version);
 	Mono::FixDomainBaseDir();
 	Exports::AddInternalCalls();
-	ModHandler::Initialize();
+	MelonLoader_Base::Initialize();
 	return Mono::Domain;
 }
 #pragma endregion
@@ -197,7 +197,7 @@ void* HookManager::Hooked_runtime_invoke(const void* method, void* obj, void** p
 			Unhook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, Hooked_runtime_invoke);
 		else
 			Unhook(&(LPVOID&)Mono::mono_runtime_invoke, Hooked_runtime_invoke);
-		ModHandler::OnApplicationStart();
+		MelonLoader_Base::OnApplicationStart();
 	}
 	if (MelonLoader::IsGameIl2Cpp)
 		return Il2Cpp::il2cpp_runtime_invoke((Il2CppMethod*)method, obj, params, (Il2CppObject**)exc);

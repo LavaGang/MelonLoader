@@ -1,7 +1,7 @@
 #pragma once
 #include "Mono.h"
 
-class ModHandler
+class MelonLoader_Base
 {
 public:
 	enum MelonCompatibility

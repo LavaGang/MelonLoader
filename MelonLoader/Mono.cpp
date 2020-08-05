@@ -2,7 +2,7 @@
 #include "Mono.h"
 #include "MelonLoader.h"
 #include "AssertionManager.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 #include "Logger.h"
 
 bool Mono::IsOldMono = false;

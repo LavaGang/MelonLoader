@@ -8,7 +8,7 @@
 #include "Mono.h"
 #include "HookManager.h"
 #include "Logger.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 #include <signal.h>
 #include "DisableAnalytics.h"
 #pragma warning(disable:4996)

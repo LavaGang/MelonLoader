@@ -1,19 +1,19 @@
 #include <Windows.h>
 #include <string>
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 #include "MelonLoader.h"
 #include "AssertionManager.h"
 #include "Logger.h"
 #include "HookManager.h"
 #include "Il2Cpp.h"
 
-bool ModHandler::HasInitialized = false;
-MonoMethod* ModHandler::onApplicationStart = NULL;
-MonoMethod* ModHandler::onApplicationQuit = NULL;
+bool MelonLoader_Base::HasInitialized = false;
+MonoMethod* MelonLoader_Base::onApplicationStart = NULL;
+MonoMethod* MelonLoader_Base::onApplicationQuit = NULL;
 
-void ModHandler::Initialize()
+void MelonLoader_Base::Initialize()
 {
-	AssertionManager::Start("ModHandler.cpp", "ModHandler::Initialize");
+	AssertionManager::Start("ModHandler.cpp", "MelonLoader_Base::Initialize");
 	if (Mono::Domain != NULL)
 	{
 		std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler.dll";
@@ -61,7 +61,7 @@ void ModHandler::Initialize()
 	}
 }
 
-void ModHandler::OnApplicationStart()
+void MelonLoader_Base::OnApplicationStart()
 {
 	if (onApplicationStart != NULL)
 	{
@@ -72,7 +72,7 @@ void ModHandler::OnApplicationStart()
 	}
 }
 
-void ModHandler::OnApplicationQuit()
+void MelonLoader_Base::OnApplicationQuit()
 {
 	if (onApplicationQuit != NULL)
 	{
