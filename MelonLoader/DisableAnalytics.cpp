@@ -7,10 +7,10 @@ getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
 std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"api.amplitude.com",
 	"api.uca.cloud.unity3d.com",
-	//"config.uca.cloud.unity3d.com", // Causes Crash/Freeze for Some Games to Block This
+	"config.uca.cloud.unity3d.com", // Causes Crash/Freeze for Some Games to Block This
 	"perf-events.cloud.unity3d.com",
 	"public.cloud.unity3d.com",
-	//"cdp.cloud.unity3d.com", // Causes Crash/Freeze for Some Games to Block This
+	"cdp.cloud.unity3d.com", // Causes Crash/Freeze for Some Games to Block This
 	"data-optout-service.uca.cloud.unity3d.com",
 	"oculus.com",
 	"oculuscdn.com",
@@ -64,13 +64,13 @@ bool DisableAnalytics::CheckBlacklist(std::string url)
 void* DisableAnalytics::Hooked_gethostbyname(const char* name)
 {
 	if (CheckBlacklist(name))
-		name = "localhost"; // Better to return actual host, just for localhost, in order to prevent unknown exceptions
+		return NULL;
 	return Original_gethostbyname(name);
 }
 
 int DisableAnalytics::Hooked_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult)
 {
 	if (CheckBlacklist(pNodeName))
-		pNodeName = "localhost"; // Better to return actual addr info, just for localhost, in order to prevent unknown exceptions
+		return WSAHOST_NOT_FOUND;
 	return Original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
 }

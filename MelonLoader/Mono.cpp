@@ -113,11 +113,43 @@ void Mono::FixDomainBaseDir()
 		mono_domain_set_config(Domain, MelonLoader::GamePath, "MelonLoader");
 }
 
-const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject) { return mono_string_to_utf8((MonoString*)mono_runtime_invoke(mono_property_get_get_method(mono_class_get_property_from_name(classType, propertyName)), classObject, NULL, NULL)); }
+const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject)
+{
+	if (propertyName == NULL)
+		return NULL;
+	if (classType == NULL)
+		return NULL;
+	if (classObject == NULL)
+		return NULL;
+	MonoProperty* prop = mono_class_get_property_from_name(classType, propertyName);
+	if (prop == NULL)
+		return NULL;
+	MonoMethod* method = mono_property_get_get_method(prop);
+	if (method == NULL)
+		return NULL;
+	MonoString* returnstr = (MonoString*)mono_runtime_invoke(method, classObject, NULL, NULL);
+	if (returnstr == NULL)
+		return NULL;
+	return mono_string_to_utf8(returnstr);
+}
+
 void Mono::LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow)
 {
+	if (exceptionObject == NULL)
+		return;
+	MonoClass* klass = mono_object_get_class(exceptionObject);
+	if (klass == NULL)
+		return;
+	const char* stringprop = GetStringProperty("Message", klass, exceptionObject);
+	if (stringprop == NULL)
+		return;
 	if (shouldThrow)
-		AssertionManager::ThrowError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject));
+		AssertionManager::ThrowError(stringprop);
 	else
-		Logger::LogError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject));
+	{
+		Logger::LogTimestamp(ConsoleColor_Red);
+		Logger::LogFile << "[Error] " << stringprop << std::endl;
+		Console::Write("[MelonLoader] ", ConsoleColor_Red);
+		Console::WriteLine(("[Error] " + std::string(stringprop)), ConsoleColor_Red);
+	}
 }

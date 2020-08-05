@@ -85,7 +85,6 @@ void Logger::Log(const char* txt)
 	Console::Write("MelonLoader", ConsoleColor_Magenta);
 	Console::Write("] ");
 	Console::WriteLine(txt);
-	ModHandler::RunLogCallbacks(txt);
 }
 
 void Logger::Log(const char* txt, ConsoleColor color)
@@ -96,7 +95,6 @@ void Logger::Log(const char* txt, ConsoleColor color)
 	Console::Write("MelonLoader", ConsoleColor_Magenta);
 	Console::Write("] ");
 	Console::WriteLine(txt, color);
-	ModHandler::RunLogCallbacks(txt);
 }
 
 void Logger::LogWarning(const char* txt)
@@ -109,7 +107,6 @@ void Logger::LogWarning(const char* txt)
 		{
 			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
 			Console::WriteLine(("[Warning] " + std::string(txt)), ConsoleColor_Yellow);
-			ModHandler::RunWarningCallbacks(txt);
 		}
 		if (MaxWarnings > 0)
 			WarningCount++;
@@ -126,7 +123,6 @@ void Logger::LogWarning(const char* namesection, const char* txt)
 		{
 			Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
 			Console::WriteLine((std::string(namesection) + "[Warning] " + std::string(txt)), ConsoleColor_Yellow);
-			ModHandler::RunWarningCallbacks(namesection, txt);
 		}
 		if (MaxWarnings > 0)
 			WarningCount++;
@@ -141,7 +137,6 @@ void Logger::LogError(const char* txt)
 		LogFile << "[Error] " << txt << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
 		Console::WriteLine(("[Error] " + std::string(txt)), ConsoleColor_Red);
-		ModHandler::RunErrorCallbacks(txt);
 		if (MaxErrors > 0)
 			ErrorCount++;
 	}
@@ -155,7 +150,6 @@ void Logger::LogError(const char* namesection, const char* txt)
 		LogFile << namesection << "[Error] " << txt << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
 		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(txt)), ConsoleColor_Red);
-		ModHandler::RunErrorCallbacks(namesection, txt);
 		if (MaxErrors > 0)
 			ErrorCount++;
 	}
@@ -169,7 +163,6 @@ void Logger::LogMelonError(const char* namesection, const char* msg)
 		LogFile << namesection << "[Error] " << msg << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
 		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(msg)), ConsoleColor_Yellow);
-		ModHandler::RunErrorCallbacks(namesection, msg);
 		if (MaxErrors > 0)
 			ErrorCount++;
 	}

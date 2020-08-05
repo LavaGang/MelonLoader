@@ -7,6 +7,7 @@
 #include "AssertionManager.h"
 #include "Logger.h"
 #include "Exports.h"
+#include "DisableAnalytics.h"
 #include <list>
 
 #pragma region Core

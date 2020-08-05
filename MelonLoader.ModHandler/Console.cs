@@ -23,6 +23,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void SetColor(ConsoleColor color);
 
+        /*
         private static void RunLogCallbacks(string msg) => LogCallbackHandler?.Invoke(msg);
         public static event Action<string> LogCallbackHandler;
         private static void RunWarningCallbacks(string msg) => WarningCallbackHandler1?.Invoke(msg);
@@ -33,5 +34,6 @@ namespace MelonLoader
         private static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler2?.Invoke(namesection, msg);
         public static event Action<string> ErrorCallbackHandler1;
         public static event Action<string, string> ErrorCallbackHandler2;
+        */
     }
 }

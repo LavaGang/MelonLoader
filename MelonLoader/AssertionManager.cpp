@@ -21,7 +21,10 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 		msg += (" for [ " + std::string(FileName) + " | " + Position + " ]");
 		if (filepath != NULL)
 			msg += " in { " + std::string(filepath) + "}";
-		Logger::LogError(msg);
+		Logger::LogTimestamp(ConsoleColor_Red);
+		Logger::LogFile << "[Error] " << msg << std::endl;
+		Console::Write("[MelonLoader] ", ConsoleColor_Red);
+		Console::WriteLine(("[Error] " + msg), ConsoleColor_Red);
 		if (MelonLoader::DebugMode)
 			MessageBox(NULL, msg.c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		else

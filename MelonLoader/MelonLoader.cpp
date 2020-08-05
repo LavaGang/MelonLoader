@@ -133,7 +133,7 @@ void MelonLoader::Main()
 
 			ReadAppInfo();
 
-			//DisableAnalytics::Setup();
+			DisableAnalytics::Setup();
 			HookManager::LoadLibraryW_Hook();
 		}
 	}
