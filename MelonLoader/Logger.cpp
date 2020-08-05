@@ -97,6 +97,26 @@ void Logger::Log(const char* txt, ConsoleColor color)
 	Console::WriteLine(txt, color);
 }
 
+void Logger::Log(const char* namesection, const char* txt)
+{
+	LogTimestamp();
+	LogFile << namesection << txt << std::endl;
+	Console::Write("[");
+	Console::Write("MelonLoader", ConsoleColor_Magenta);
+	Console::Write("] ");
+	Console::WriteLine(std::string(namesection) + txt);
+}
+
+void Logger::Log(const char* namesection, const char* txt, ConsoleColor color)
+{
+	LogTimestamp(color);
+	LogFile << namesection << txt << std::endl;
+	Console::Write("[");
+	Console::Write("MelonLoader", ConsoleColor_Magenta);
+	Console::Write("] ");
+	Console::WriteLine(std::string(namesection) + txt, color);
+}
+
 void Logger::LogWarning(const char* txt)
 {
 	if ((MaxWarnings <= 0) || (WarningCount < MaxWarnings))
@@ -155,14 +175,14 @@ void Logger::LogError(const char* namesection, const char* txt)
 	}
 }
 
-void Logger::LogMelonError(const char* namesection, const char* msg)
+void Logger::LogMelonError(const char* namesection, const char* txt)
 {
 	if ((MaxErrors <= 0) || (ErrorCount < MaxErrors))
 	{
 		LogTimestamp(ConsoleColor_Yellow);
-		LogFile << namesection << "[Error] " << msg << std::endl;
+		LogFile << namesection << "[Error] " << txt << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Yellow);
-		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(msg)), ConsoleColor_Yellow);
+		Console::WriteLine((std::string(namesection) + "[Error] " + std::string(txt)), ConsoleColor_Yellow);
 		if (MaxErrors > 0)
 			ErrorCount++;
 	}

@@ -65,7 +65,7 @@ namespace MelonLoader
         internal static void SetBool(string section, string name, bool value) { Instance.IniWriteValue(section, name, value ? "true" : "false"); }
     }
 
-    public static class MelonPrefs
+    public class MelonPrefs
     {
         private static Dictionary<string, Dictionary<string, MelonPreference>> prefs = new Dictionary<string, Dictionary<string, MelonPreference>>();
         private static Dictionary<string, string> categoryDisplayNames = new Dictionary<string, string>();

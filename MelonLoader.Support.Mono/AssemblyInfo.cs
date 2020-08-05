@@ -1,5 +1,4 @@
-﻿using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle(MelonLoader.BuildInfo.Description)]
@@ -11,4 +10,3 @@ using System.Runtime.InteropServices;
 [assembly: Guid("981297b8-ef03-41a8-ae14-1e0e4fcdee30")]
 [assembly: AssemblyVersion(MelonLoader.BuildInfo.Version)]
 [assembly: AssemblyFileVersion(MelonLoader.BuildInfo.Version)]
-[assembly: NeutralResourcesLanguage("en")]

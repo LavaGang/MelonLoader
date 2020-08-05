@@ -5,11 +5,11 @@
 #include "HookManager.h"
 #include "Logger.h"
 
-void Log(MonoString* txt) { Logger::Log(Mono::mono_string_to_utf8(txt)); }
-void LogColor(MonoString* txt, ConsoleColor color) { Logger::Log(Mono::mono_string_to_utf8(txt), color); }
+void Log(MonoString* namesection, MonoString* txt) { Logger::Log(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
+void LogColor(MonoString* namesection, MonoString* txt, ConsoleColor color) { Logger::Log(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt), color); }
 void LogWarning(MonoString* namesection, MonoString* txt) { Logger::LogWarning(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void LogError(MonoString* namesection, MonoString* txt) { Logger::LogError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
-void LogMelonError(MonoString* namesection, MonoString* msg) { Logger::LogMelonError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(msg)); }
+void LogMelonError(MonoString* namesection, MonoString* txt) { Logger::LogMelonError(Mono::mono_string_to_utf8(namesection), Mono::mono_string_to_utf8(txt)); }
 void LogMelonCompatibility(ModHandler::MelonCompatibility comp) { Logger::LogMelonCompatibility(comp); }
 bool IsIl2CppGame() { return MelonLoader::IsGameIl2Cpp; }
 bool IsDebugMode() { return MelonLoader::DebugMode; }

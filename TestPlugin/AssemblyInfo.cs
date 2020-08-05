@@ -1,6 +1,4 @@
-﻿using System.Resources;
-using System.Reflection;
-using System.Runtime.InteropServices;
+﻿using System.Reflection;
 using MelonLoader;
 
 [assembly: AssemblyTitle(TestPlugin.BuildInfo.Description)]
@@ -11,7 +9,6 @@ using MelonLoader;
 [assembly: AssemblyTrademark(TestPlugin.BuildInfo.Company)]
 [assembly: AssemblyVersion(TestPlugin.BuildInfo.Version)]
 [assembly: AssemblyFileVersion(TestPlugin.BuildInfo.Version)]
-[assembly: NeutralResourcesLanguage("en")]
 [assembly: MelonInfo(typeof(TestPlugin.TestPlugin), TestPlugin.BuildInfo.Name, TestPlugin.BuildInfo.Version, TestPlugin.BuildInfo.Author, TestPlugin.BuildInfo.DownloadLink)]
 
 

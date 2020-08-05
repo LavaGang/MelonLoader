@@ -23,17 +23,11 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void SetColor(ConsoleColor color);
 
-        /*
-        private static void RunLogCallbacks(string msg) => LogCallbackHandler?.Invoke(msg);
-        public static event Action<string> LogCallbackHandler;
-        private static void RunWarningCallbacks(string msg) => WarningCallbackHandler1?.Invoke(msg);
-        private static void RunWarningCallbacks(string namesection, string msg) => WarningCallbackHandler2?.Invoke(namesection, msg);
-        public static event Action<string> WarningCallbackHandler1;
-        public static event Action<string, string> WarningCallbackHandler2;
-        private static void RunErrorCallbacks(string msg) => ErrorCallbackHandler1?.Invoke(msg);
-        private static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler2?.Invoke(namesection, msg);
-        public static event Action<string> ErrorCallbackHandler1;
-        public static event Action<string, string> ErrorCallbackHandler2;
-        */
+        internal static void RunLogCallbacks(string namesection, string msg) => LogCallbackHandler?.Invoke(namesection, msg);
+        public static event Action<string, string> LogCallbackHandler;
+        internal static void RunWarningCallbacks(string namesection, string msg) => WarningCallbackHandler?.Invoke(namesection, msg);
+        public static event Action<string, string> WarningCallbackHandler;
+        internal static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler?.Invoke(namesection, msg);
+        public static event Action<string, string> ErrorCallbackHandler;
     }
 }

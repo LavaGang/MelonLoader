@@ -15,6 +15,7 @@ namespace MelonLoader.Installer
 {
     static class Program
     {
+        internal static bool ShouldCheckForUpdates = false;
         internal static string Title = "MelonLoader Installer";
         private static string ExeName = null;
         internal static string ManualZipPath = null;
@@ -49,7 +50,7 @@ namespace MelonLoader.Installer
             Application.EnableVisualStyles();
 
             ExeName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
-            if (ExeName.EndsWith(".tmp.exe"))
+            if (ShouldCheckForUpdates && ExeName.EndsWith(".tmp.exe"))
             {
                 string original_exe_path = (Directory.GetCurrentDirectory() + "\\" + ExeName.Substring(0, (ExeName.Length - 8)));
                 File.Delete(original_exe_path);
@@ -59,9 +60,12 @@ namespace MelonLoader.Installer
             }
             else
             {
-                string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
-                if (File.Exists(tempfilepath))
-                    File.Delete(tempfilepath);
+                if (ShouldCheckForUpdates)
+                {
+                    string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
+                    if (File.Exists(tempfilepath))
+                        File.Delete(tempfilepath);
+                }
                 ManualZipPath = (Directory.GetCurrentDirectory() + "\\MelonLoader.zip");
 
                 if (silent)
@@ -421,6 +425,8 @@ namespace MelonLoader.Installer
 
         internal static void CheckForUpdates()
         {
+            if (!ShouldCheckForUpdates)
+                return;
             try
             {
                 string response = webClient.DownloadString("https://github.com/HerpDerpinstine/MelonLoader/raw/master/MelonLoader.Installer/MelonLoader.Installer.csproj");
