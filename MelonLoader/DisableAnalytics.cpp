@@ -7,10 +7,10 @@ getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
 std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"api.amplitude.com",
 	"api.uca.cloud.unity3d.com",
-	"config.uca.cloud.unity3d.com", // Causes Crash/Freeze for Some Games to Block This
+	"config.uca.cloud.unity3d.com",
 	"perf-events.cloud.unity3d.com",
 	"public.cloud.unity3d.com",
-	"cdp.cloud.unity3d.com", // Causes Crash/Freeze for Some Games to Block This
+	"cdp.cloud.unity3d.com",
 	"data-optout-service.uca.cloud.unity3d.com",
 	"oculus.com",
 	"oculuscdn.com",
