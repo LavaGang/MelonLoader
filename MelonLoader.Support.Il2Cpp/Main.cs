@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
@@ -98,7 +97,7 @@ namespace MelonLoader.Support
         internal static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
 
         private static bool Il2CppSystem_Console_WriteLine_Patch() => false;
-        private static void Transmtn_HttpConnection_get_Prefix() => harmonyInstance.Patch(Il2CppSystem_Console_WriteLine, new Harmony.HarmonyMethod(typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static)));
+        private static void Transmtn_HttpConnection_get_Prefix() => harmonyInstance.Patch(Il2CppSystem_Console_WriteLine, new HarmonyMethod(typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static)));
         private static void Transmtn_HttpConnection_get_Postfix() => harmonyInstance.Unpatch(Il2CppSystem_Console_WriteLine, typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static));
     }
 
