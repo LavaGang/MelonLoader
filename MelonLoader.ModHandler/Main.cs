@@ -517,44 +517,41 @@ namespace MelonLoader
                         return "UNKNOWN";
                     return versioninfo.FileVersion.Substring(0, versioninfo.FileVersion.LastIndexOf('.'));
                 }
-                else
+                byte[] ggm_bytes = File.ReadAllBytes(ggm_path);
+                if ((ggm_bytes == null) || (ggm_bytes.Length <= 0))
+                    return "UNKNOWN";
+                int start_position = 0;
+                for (int i = 10; i < ggm_bytes.Length; i++)
                 {
-                    byte[] ggm_bytes = File.ReadAllBytes(ggm_path);
-                    if ((ggm_bytes == null) || (ggm_bytes.Length <= 0))
-                        return "UNKNOWN";
-                    int start_position = 0;
-                    for (int i = 10; i < ggm_bytes.Length; i++)
+                    byte pos_byte = ggm_bytes[i];
+                    if ((pos_byte <= 0x39) && (pos_byte >= 0x30))
                     {
-                        byte pos_byte = ggm_bytes[i];
-                        if ((pos_byte <= 0x39) && (pos_byte >= 0x30))
-                        {
-                            start_position = i;
-                            break;
-                        }
+                        start_position = i;
+                        break;
                     }
-                    if (start_position == 0)
-                        return "UNKNOWN";
-                    int end_position = 0;
-                    for (int i = start_position; i < ggm_bytes.Length; i++)
-                    {
-                        byte pos_byte = ggm_bytes[i];
-                        if ((pos_byte != 0x2E) && ((pos_byte > 0x39) || (pos_byte < 0x30)))
-                        {
-                            end_position = (i - 1);
-                            break;
-                        }
-                    }
-                    if (end_position == 0)
-                        return "UNKNOWN";
-                    int verstr_byte_pos = 0;
-                    byte[] verstr_byte = new byte[((end_position - start_position) + 1)];
-                    for (int i = start_position; i <= end_position; i++)
-                    {
-                        verstr_byte[verstr_byte_pos] = ggm_bytes[i];
-                        verstr_byte_pos++;
-                    }
-                    return _unityVer = Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
                 }
+                if (start_position == 0)
+                    return "UNKNOWN";
+                int end_position = 0;
+                for (int i = start_position; i < ggm_bytes.Length; i++)
+                {
+                    byte pos_byte = ggm_bytes[i];
+                    if ((pos_byte != 0x2E) && ((pos_byte > 0x39) || (pos_byte < 0x30)))
+                    {
+                        end_position = (i - 1);
+                        break;
+                    }
+                }
+                if (end_position == 0)
+                    return "UNKNOWN";
+                int verstr_byte_pos = 0;
+                byte[] verstr_byte = new byte[((end_position - start_position) + 1)];
+                for (int i = start_position; i <= end_position; i++)
+                {
+                    verstr_byte[verstr_byte_pos] = ggm_bytes[i];
+                    verstr_byte_pos++;
+                }
+                return _unityVer = Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
             }
         }
 

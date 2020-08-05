@@ -67,7 +67,13 @@ namespace MelonLoader
             Console.RunErrorCallbacks(namesection, fmt);
         }
 
-        internal static void LogMelonError(string msg, string modname) => Native_LogMelonError((string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] ")), msg);
+        internal static void LogMelonError(string msg, string modname)
+        {
+            string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
+            Native_LogMelonError(namesection, msg);
+            Console.RunErrorCallbacks(namesection, msg);
+        }
+
         internal static void LogMelonCompatibility(MelonBase.MelonCompatibility comp) => Native_LogMelonCompatibility(comp);
 
         internal static string GetNameSection()
