@@ -5,6 +5,7 @@
 - All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
 - All Mods get placed in the created Mods folder inside the Game's Install Folder.
 - All Logs are made in the created Logs folder inside the Game's Install Folder.
+- In order to properly use dnSpy's Debugger run the game with the Debug Mode/Console launch option.
 
 ---
 
