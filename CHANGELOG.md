@@ -16,6 +16,41 @@
 
 ### v0.2.6 Open-Beta:
 
+1. Fixed Issue with Logger Timestamp making New Lines.
+2. Added Silent Launch Option to Installer.  (Credits to trevtv :P)
+3. Fixed Internal Failure caused by DisableAnalytics for certain users.
+4. Added Operating System log to startup info.
+5. Added ValueTupleBridge to Managed Folder.
+6. Added Unified Attributes for both Plugins and Mods.
+7. Added Legacy Attribute Support.
+8. Fixed Logger Issue with new Unified Attributes.
+9. Deprecated MelonModLogger, use MelonLogger instead.
+10. Deprecated ModPrefs, use MelonPrefs instead.
+11. Added HarmonyInstance Method for easier Unpatching of Mods and Plugins.
+12. Create MelonLoaderComponent after first scene load in Mono Games.  (Credits to knah :D)
+13. Removed Launch Option --melonloader.devpluginsonly.
+14. Removed Launch Option --melonloader.devmodsonly.
+15. Added Launch Option --melonloader.loadmodeplugins.
+16. Added Launch Option --melonloader.loadmodemods.
+17. Fixed Issue with Debug Mode causing Crashes for Some Games.
+18. Fixed Issue with Manual Zip overriding Latest Version.
+19. Fixed Issue where Manual Zip would get set as Default Selection.
+20. Unity Analytics now redirected to localhost, rather than throwing null and exceptions.  (Credits to Emilia :3)
+21. Plugins are now able to use OnUpdate.
+22. Plugins are now able to use OnLateUpdate.
+23. Plugins are now able to use OnGUI.
+24. Added GetUnityTlsInterface to Imports.
+25. Implemented Native Sided SSL/TLS/HTTPS Fix.
+26. Temporarily disabled DisableAnalytics.
+27. Fixed Issue with Support Modules not loading due to Missing Method errors.
+28. Fixed Issue with attaching dnSpy on Il2Cpp Games.
+29. Replaced mono-2.0-bdwgc.dll with dnSpy Debug dll.
+30. Debug Mode will now use LoadFrom instead of Load for breakpoint compatibility.
+31. Fixed Crash Issue with DisableAnalytics.
+32. Temporarily Disabled Console Logger Callbacks.
+33. Revised Console Logger Callbacks.
+34. Fixed Issue with LogMelonError not running Callbacks.
+35. 
 
 ---
 
