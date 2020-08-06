@@ -82,6 +82,7 @@ public:
 	static bool HordiniMode_Random;
 	static bool ChromiumMode;
 	static bool ShouldShowGameLogs;
+	static bool AlwaysOnTop;
 
 	static bool IsInitialized() { return (hwndConsole != NULL); }
 	static void Create();
@@ -91,6 +92,7 @@ public:
 	static void ResetColor() { SetColor(ConsoleColor_Gray); }
 	static void RainbowCheck();
 	static void ChromiumCheck();
+	static void AlwaysOnTopCheck();
 
 	static void Write(const char* txt);
 	static void Write(const char* txt, ConsoleColor color);
