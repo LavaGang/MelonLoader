@@ -10,13 +10,13 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         internal static int CurrentScene = -9;
-
         private static ISupportModule Initialize()
         {
             MelonLoaderComponent.Create();
             return new Module();
         }
     }
+
     public class MelonLoaderComponent : MonoBehaviour
     {
         internal static readonly List<IEnumerator> QueuedCoroutines = new List<IEnumerator>();

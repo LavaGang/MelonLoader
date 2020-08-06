@@ -10,24 +10,21 @@ namespace MelonLoader.Support
         internal static bool IsDestroying = false;
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
-
         private static ISupportModule Initialize()
         {
             SceneManager.sceneLoaded += OnSceneLoad;
             return new Module();
         }
-
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode)
         {
             if (obj == null) MelonLoaderComponent.Create();
             if (!scene.Equals(null)) SceneHandler.OnSceneLoad(scene.buildIndex);
         }
-
     }
+
     public class MelonLoaderComponent : MonoBehaviour
     {
         internal static readonly List<IEnumerator> QueuedCoroutines = new List<IEnumerator>();
-
         internal static void Create()
         {
             Main.obj = new GameObject();
