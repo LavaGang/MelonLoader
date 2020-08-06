@@ -33,7 +33,6 @@ namespace MelonLoader.Installer
         {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
-
             webClient.Headers.Add("User-Agent", "Unity web player");
             webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage);
             Application.SetCompatibleTextRenderingDefault(false);
