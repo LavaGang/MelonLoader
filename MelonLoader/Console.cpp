@@ -20,6 +20,7 @@ void Console::Create()
 			hwndConsole = GetConsoleWindow();
 			SetTitle(("MelonLoader " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console").c_str());
 			SetForegroundWindow(hwndConsole);
+			AlwaysOnTopCheck();
 			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
 		else
