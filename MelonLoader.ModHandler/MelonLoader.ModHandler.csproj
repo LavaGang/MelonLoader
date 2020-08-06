@@ -43,7 +43,7 @@
     <Compile Include="AssemblyGenerator.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuildInfo.cs" />
-    <Compile Include="Console.cs" />
+    <Compile Include="MelonConsole.cs" />
     <Compile Include="DependencyGraph.cs" />
     <Compile Include="Deprecated.cs" />
     <Compile Include="Harmony\Attributes.cs" />

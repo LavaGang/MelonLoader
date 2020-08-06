@@ -4,10 +4,8 @@ using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
-    public class Console
+    public class MelonConsole
     {
-        public static bool Enabled = false;
-
         internal static void Check()
         {
             if (!Imports.IsDebugMode()
@@ -15,17 +13,14 @@ namespace MelonLoader
                 && Imports.IsConsoleEnabled()
 #endif
                 )
-            {
-                Enabled = true;
                 Create();
-            }
         }
 
         private static void Create()
         {
             Allocate();
-            System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()) { AutoFlush = true });
-            System.Console.SetIn(new StreamReader(System.Console.OpenStandardInput()));
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
             SetTitle(BuildInfo.Name + " v" + BuildInfo.Version + " Open-Beta");
         }
 
