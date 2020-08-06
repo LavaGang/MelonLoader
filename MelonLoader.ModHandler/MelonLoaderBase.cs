@@ -181,6 +181,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static bool IsQuitFix();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void UNLOAD();
+        internal extern static void UNLOAD(bool doquitfix = true);
     }
 }

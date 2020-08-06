@@ -33,7 +33,7 @@ public:
 	static void ParseCommandLine();
 	static void ReadAppInfo();
 	static bool CheckOSVersion();
-	static void UNLOAD();
+	static void UNLOAD(bool doquitfix = true);
 	static void KillProcess();
 	static int GetIntFromConstChar(const char* str, int defaultval = 0);
 };

@@ -165,9 +165,8 @@ namespace MelonLoader.AssemblyGenerator
                 }
                 catch (Exception ex)
                 {
-                    DownloadedSuccessfully = false;
-                    Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
                     Logger.LogError(ex.ToString());
+                    Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
                 }
             }
         }

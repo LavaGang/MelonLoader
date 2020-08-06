@@ -60,6 +60,8 @@
 42. Fixed Coroutine Queue for Mono Games.
 43. Added Launch Option --melonloader.consoleontop.  (Credits to trevtv :P)
 44. Fixed Issue with Assembly Generator not stopping when failing to Download.
+45. Escalated Assembly Generator failures to Internal Failures.
+46. Fixed Issue where Assembly Generator failures would cause a Crash.
 
 ---
 

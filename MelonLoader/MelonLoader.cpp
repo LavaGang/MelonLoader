@@ -250,11 +250,11 @@ bool MelonLoader::CheckOSVersion()
 	return true;
 }
 
-void MelonLoader::UNLOAD()
+void MelonLoader::UNLOAD(bool doquitfix)
 {
 	HookManager::UnhookAll();
 	Logger::Stop();
-	if (MelonLoader::QuitFix)
+	if (doquitfix && MelonLoader::QuitFix)
 		MelonLoader::KillProcess();
 }
 

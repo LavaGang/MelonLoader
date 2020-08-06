@@ -17,10 +17,19 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 {
 	if (!Result)
 	{
-		Result = true;
 		msg += (" for [ " + std::string(FileName) + " | " + Position + " ]");
 		if (filepath != NULL)
 			msg += " in { " + std::string(filepath) + "}";
+		ThrowInternalError(msg);
+		MelonLoader::UNLOAD(true);
+	}
+}
+
+void AssertionManager::ThrowInternalError(std::string msg)
+{
+	if (!Result)
+	{
+		Result = true;
 		Logger::LogTimestamp(ConsoleColor_Red);
 		Logger::LogFile << "[Error] " << msg << std::endl;
 		Console::Write("[MelonLoader] ", ConsoleColor_Red);
@@ -29,7 +38,6 @@ void AssertionManager::ThrowError(std::string msg, const char* filepath)
 			MessageBox(NULL, msg.c_str(), "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		else
 			MessageBox(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-		MelonLoader::UNLOAD();
 	}
 }
 

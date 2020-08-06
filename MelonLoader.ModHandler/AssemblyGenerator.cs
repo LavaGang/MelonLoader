@@ -15,7 +15,7 @@ namespace MelonLoader
             if (!Imports.IsIl2CppGame() || Initialize())
                 HasGeneratedAssembly = true;
             else
-                MelonLoaderBase.UNLOAD();
+                MelonLoaderBase.UNLOAD(false);
         }
 
         private static bool Initialize()
@@ -41,9 +41,13 @@ namespace MelonLoader
                     }
                     while (!process.HasExited)
                         Thread.Sleep(100);
-                    if (Imports.IsDebugMode())
-                        MelonLogger.Log($"Assembly Generator exited with code {process.ExitCode}");
-                    return (process.ExitCode == 0);
+                    if (process.ExitCode == 0)
+                    {
+                        if (Imports.IsDebugMode())
+                            MelonLogger.Log($"Assembly Generator ran Successfully!");
+                        return true;
+                    }
+                    MelonLogger.Native_ThrowInternalError($"Assembly Generator exited with code {process.ExitCode}");
                 }
             }
             else
