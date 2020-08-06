@@ -37,6 +37,11 @@ namespace MelonLoader.Support
             Main.comp.transform.SetAsLastSibling();
         }
         internal static void Destroy() { Main.IsDestroying = true; if (Main.obj != null) GameObject.Destroy(Main.obj); }
+        void Awake()
+        {
+            foreach (var queuedCoroutine in QueuedCoroutines) StartCoroutine(queuedCoroutine);
+            QueuedCoroutines.Clear();
+        }
         void Start() => transform.SetAsLastSibling();
         void Update() { transform.SetAsLastSibling(); MelonHandler.OnUpdate(); }
         void FixedUpdate() => MelonHandler.OnFixedUpdate();

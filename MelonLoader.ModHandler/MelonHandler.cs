@@ -173,7 +173,8 @@ namespace MelonLoader
             if (_Plugins.Count > 0)
             {
                 for (int i = 0; i < _Plugins.Count; i++)
-                    LogMelonInfo(_Plugins[i]);
+                    if (_Plugins[i] != null)
+                        LogMelonInfo(_Plugins[i]);
                 _Plugins = _TempPlugins;
             }
             if (_Plugins.Count <= 0)
@@ -187,8 +188,9 @@ namespace MelonLoader
             if (_Mods.Count > 0)
             {
                 for (int i = 0; i < _Mods.Count; i++)
-                    LogMelonInfo(_Mods[i]);
-                _Mods.RemoveAll((MelonMod mod) => (mod.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE));
+                    if (_Mods[i] != null)
+                        LogMelonInfo(_Mods[i]);
+                _Mods.RemoveAll((MelonMod mod) => ((mod == null) || (mod.Compatibility >= MelonBase.MelonCompatibility.INCOMPATIBLE)));
                 DependencyGraph<MelonMod>.TopologicalSort(_Mods, mod => mod.Info.Name);
             }
             if (_Mods.Count <= 0)
@@ -223,8 +225,9 @@ namespace MelonLoader
                 _TempPlugins = _Plugins.Where(plugin => (plugin.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)).ToList();
                 DependencyGraph<MelonPlugin>.TopologicalSort(_TempPlugins, plugin => plugin.Info.Name);
                 for (int i = 0; i < _TempPlugins.Count; i++)
-                    try { _TempPlugins[i].OnPreInitialization(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _TempPlugins[i].Info.Name); failedPlugins.Add(_TempPlugins[i]); }
-                _TempPlugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
+                    if (_TempPlugins[i] != null)
+                        try { _TempPlugins[i].OnPreInitialization(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _TempPlugins[i].Info.Name); failedPlugins.Add(_TempPlugins[i]); }
+                _TempPlugins.RemoveAll(plugin => ((plugin == null) || failedPlugins.Contains(plugin)));
                 Main.LegacySupport(_Mods, _TempPlugins, MelonLoaderBase._IsVRChat, MelonLoaderBase._IsBoneworks);
             }
         }
@@ -235,16 +238,18 @@ namespace MelonLoader
             {
                 HashSet<MelonPlugin> failedPlugins = new HashSet<MelonPlugin>();
                 for (int i = 0; i < _Plugins.Count; i++)
-                    try { _Plugins[i].harmonyInstance.PatchAll(_Plugins[i].Assembly); _Plugins[i].OnApplicationStart(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); HarmonyInstance.UnpatchAllMelonInstances(_Plugins[i]); failedPlugins.Add(_Plugins[i]); }
-                _Plugins.RemoveAll(plugin => failedPlugins.Contains(plugin));
+                    if (_Plugins[i] != null)
+                        try { _Plugins[i].harmonyInstance.PatchAll(_Plugins[i].Assembly); _Plugins[i].OnApplicationStart(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); HarmonyInstance.UnpatchAllMelonInstances(_Plugins[i]); failedPlugins.Add(_Plugins[i]); }
+                _Plugins.RemoveAll(plugin => ((plugin == null) || failedPlugins.Contains(plugin)));
                 Main.LegacySupport(_Mods, _Plugins, MelonLoaderBase._IsVRChat, MelonLoaderBase._IsBoneworks);
             }
             if (_Mods.Count > 0)
             {
                 HashSet<MelonMod> failedMods = new HashSet<MelonMod>();
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].harmonyInstance.PatchAll(_Mods[i].Assembly); _Mods[i].OnApplicationStart(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); HarmonyInstance.UnpatchAllMelonInstances(_Mods[i]); failedMods.Add(_Mods[i]); }
-                _Mods.RemoveAll(mod => failedMods.Contains(mod));
+                    if (_Mods[i] != null)
+                        try { _Mods[i].harmonyInstance.PatchAll(_Mods[i].Assembly); _Mods[i].OnApplicationStart(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); HarmonyInstance.UnpatchAllMelonInstances(_Mods[i]); failedMods.Add(_Mods[i]); }
+                _Mods.RemoveAll(mod => ((mod == null) || failedMods.Contains(mod)));
                 Main.LegacySupport(_Mods, _Plugins, MelonLoaderBase._IsVRChat, MelonLoaderBase._IsBoneworks);
             }
         }
@@ -253,10 +258,12 @@ namespace MelonLoader
         {
             if (_Plugins.Count > 0)
                 for (int i = 0; i < _Plugins.Count; i++)
-                    try { _Plugins[i].OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
+                    if (_Plugins[i] != null)
+                        try { _Plugins[i].OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnApplicationQuit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
             MelonLoaderBase.Quit();
         }
 
@@ -267,7 +274,8 @@ namespace MelonLoader
                     try { _Plugins[i].OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         public static void OnUpdate()
@@ -277,58 +285,68 @@ namespace MelonLoader
                 VRChat_CheckUiManager();
             if (_Plugins.Count > 0)
                 for (int i = 0; i < _Plugins.Count; i++)
-                    try { _Plugins[i].OnUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
+                    if (_Plugins[i] != null)
+                        try { _Plugins[i].OnUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         public static void OnFixedUpdate()
         {
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnFixedUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnFixedUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         public static void OnLateUpdate()
         {
             if (_Plugins.Count > 0)
                 for (int i = 0; i < _Plugins.Count; i++)
-                    try { _Plugins[i].OnLateUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
+                    if (_Plugins[i] != null)
+                        try { _Plugins[i].OnLateUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnLateUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnLateUpdate(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         public static void OnGUI()
         {
             if (_Plugins.Count > 0)
                 for (int i = 0; i < _Plugins.Count; i++)
-                    try { _Plugins[i].OnGUI(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
+                    if (_Plugins[i] != null)
+                        try { _Plugins[i].OnGUI(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnGUI(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnGUI(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         internal static void OnLevelIsLoading()
         {
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnLevelIsLoading(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnLevelIsLoading(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         internal static void OnLevelWasLoaded(int level)
         {
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnLevelWasLoaded(level); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnLevelWasLoaded(level); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         internal static void OnLevelWasInitialized(int level)
         {
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].OnLevelWasInitialized(level); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].OnLevelWasInitialized(level); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
         }
 
         private static bool ShouldCheckForUiManager = true;
@@ -352,10 +370,12 @@ namespace MelonLoader
             ShouldCheckForUiManager = false;
             if (_Mods.Count > 0)
                 for (int i = 0; i < _Mods.Count; i++)
-                    try { _Mods[i].VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
+                    if (_Mods[i] != null)
+                        try { _Mods[i].VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); }
             if (_Plugins.Count > 0)
                 for (int i = 0; i < _Plugins.Count; i++)
-                    try { _Plugins[i].VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
+                    if (_Plugins[i] != null)
+                        try { _Plugins[i].VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
         }
     }
 }

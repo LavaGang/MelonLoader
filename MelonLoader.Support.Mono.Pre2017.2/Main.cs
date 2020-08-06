@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace MelonLoader.Support
 {
@@ -17,6 +19,7 @@ namespace MelonLoader.Support
     }
     public class MelonLoaderComponent : MonoBehaviour
     {
+        internal static readonly List<IEnumerator> QueuedCoroutines = new List<IEnumerator>();
         internal static void Create()
         {
             Main.obj = new GameObject("MelonLoader");
@@ -26,6 +29,11 @@ namespace MelonLoader.Support
             Main.comp.transform.SetAsLastSibling();
         }
         internal static void Destroy() { Main.IsDestroying = true; if (Main.obj != null) GameObject.Destroy(Main.obj); }
+        void Awake()
+        {
+            foreach (var queuedCoroutine in QueuedCoroutines) StartCoroutine(queuedCoroutine);
+            QueuedCoroutines.Clear();
+        }
         void Start() => transform.SetAsLastSibling();
         void Update()
         {

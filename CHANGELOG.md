@@ -57,6 +57,7 @@
 39. Fixed Issue with Plugins not getting OnLateUpdate called.
 40. Fixed Issue with Plugins not getting OnGUI called.
 41. Plugins are now able to use VRChat_OnUiManagerInit.
+42. Fixed Coroutine Queue for Mono Games.
 
 ---
 

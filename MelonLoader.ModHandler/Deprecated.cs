@@ -22,7 +22,6 @@ namespace MelonLoader
             IsBoneworks = isBoneworks;
         }
     }
-
     [Obsolete("MelonModGame is obsolete. Please use MelonGame instead.")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class MelonModGameAttribute : Attribute
