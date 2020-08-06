@@ -31,6 +31,14 @@ namespace MelonLoader.Installer
         [STAThread]
         static void Main()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
+
+            webClient.Headers.Add("User-Agent", "Unity web player");
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage);
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
+
             var args = Environment.GetCommandLineArgs();
             foreach (string arg in args)
             {
@@ -41,13 +49,6 @@ namespace MelonLoader.Installer
                     silentPath = Path.GetDirectoryName(arg);
                 }
             }
-
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
-            webClient.Headers.Add("User-Agent", "Unity web player");
-            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage);
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.EnableVisualStyles();
 
             ExeName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
             if (ShouldCheckForUpdates && ExeName.EndsWith(".tmp.exe"))

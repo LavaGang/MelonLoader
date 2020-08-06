@@ -12,7 +12,7 @@ namespace MelonLoader.AssemblyGenerator
         public static int Main(string[] args)
         {
             ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
             webClient.Headers.Add("User-Agent", "Unity web player");
 
             if (args.Length < 4)
