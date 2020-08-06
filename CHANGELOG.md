@@ -41,27 +41,25 @@
 23. Plugins are now able to use OnGUI.
 24. Added GetUnityTlsInterface to Imports.
 25. Implemented Native Sided SSL/TLS/HTTPS Fix.
-26. Temporarily disabled DisableAnalytics.
-27. Fixed Issue with Support Modules not loading due to Missing Method errors.
-28. Fixed Issue with attaching dnSpy on Il2Cpp Games.
-29. Replaced mono-2.0-bdwgc.dll with dnSpy Debug dll.
-30. Debug Mode will now use LoadFrom instead of Load for breakpoint compatibility.
-31. Fixed Crash Issue with DisableAnalytics.
-32. Temporarily Disabled Console Logger Callbacks.
-33. Revised Console Logger Callbacks.
-34. Fixed Issue with LogMelonError not running Callbacks.
-35. Deprecated MelonLoader.Main use MelonLoaderBase or MelonHandler instead.
-36. Revised Base Melon Handling.
-37. Revised IniFile.
-38. Fixed Issue with Plugins not getting OnUpdate called.
-39. Fixed Issue with Plugins not getting OnLateUpdate called.
-40. Fixed Issue with Plugins not getting OnGUI called.
-41. Plugins are now able to use VRChat_OnUiManagerInit.
-42. Fixed Coroutine Queue for Mono Games.
-43. Added Launch Option --melonloader.consoleontop.  (Credits to trevtv :P)
-44. Fixed Issue with Assembly Generator not stopping when failing to Download.
-45. Escalated Assembly Generator failures to Internal Failures.
-46. Fixed Issue where Assembly Generator failures would cause a Crash.
+26. Fixed Issue with Support Modules not loading due to Missing Method errors.
+27. Fixed Issue with attaching dnSpy on Il2Cpp Games.
+28. Replaced mono-2.0-bdwgc.dll with dnSpy Debug dll.
+29. Debug Mode will now use LoadFrom instead of Load for breakpoint compatibility.
+30. Fixed Crash Issue with DisableAnalytics.
+31. Revised Console Logger Callbacks.
+32. Fixed Issue with LogMelonError not running Callbacks.
+33. Deprecated MelonLoader.Main use MelonLoaderBase or MelonHandler instead.
+34. Revised Base Melon Handling.
+35. Revised IniFile.
+36. Fixed Issue with Plugins not getting OnUpdate called.
+37. Fixed Issue with Plugins not getting OnLateUpdate called.
+38. Fixed Issue with Plugins not getting OnGUI called.
+39. Plugins are now able to use VRChat_OnUiManagerInit.
+40. Fixed Coroutine Queue for Mono Games.
+41. Added Launch Option --melonloader.consoleontop.  (Credits to trevtv :P)
+42. Fixed Issue with Assembly Generator not stopping when failing to Download.
+43. Escalated Assembly Generator failures to Internal Failures.
+44. Fixed Issue where Assembly Generator failures would cause a Crash.
 
 ---
 
