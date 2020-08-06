@@ -13,10 +13,8 @@ public:
 	};
 
 	static bool HasInitialized;
-	static MonoMethod* onApplicationStart;
-	static MonoMethod* onApplicationQuit;
+	static MonoMethod* startup;
 	
 	static void Initialize();
-	static void OnApplicationStart();
-	static void OnApplicationQuit();
+	static void Startup();
 };

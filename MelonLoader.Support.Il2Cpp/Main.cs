@@ -30,7 +30,7 @@ namespace MelonLoader.Support
             if (Imports.IsDebugMode())
                 LogSupport.TraceHandler += MelonLogger.Log;
 
-            if (MelonLoader.Main.IsVRChat)
+            if (MelonLoaderBase.IsVRChat)
             {
                 try
                 {
@@ -82,7 +82,7 @@ namespace MelonLoader.Support
 
         private static void GetUnityVersionNumbers(out int major, out int minor, out int patch)
         {
-            var unityVersionSplit = MelonLoader.Main.UnityVersion.Split('.');
+            var unityVersionSplit = MelonLoaderBase.UnityVersion.Split('.');
             major = int.Parse(unityVersionSplit[0]);
             minor = int.Parse(unityVersionSplit[1]);
             var patchString = unityVersionSplit[2];
@@ -117,17 +117,17 @@ namespace MelonLoader.Support
         void Update()
         {
             transform.SetAsLastSibling();
-            MelonLoader.Main.OnUpdate();
+            MelonHandler.OnUpdate();
             MelonCoroutines.Process();
         }
         void FixedUpdate()
         {
-            MelonLoader.Main.OnFixedUpdate();
+            MelonHandler.OnFixedUpdate();
             MelonCoroutines.ProcessWaitForFixedUpdate();
         }
-        void LateUpdate() => MelonLoader.Main.OnLateUpdate();
-        void OnGUI() => MelonLoader.Main.OnGUI();
+        void LateUpdate() => MelonHandler.OnLateUpdate();
+        void OnGUI() => MelonHandler.OnGUI();
         void OnDestroy() { if (!Main.IsDestroying) Create(); }
-        void OnApplicationQuit() { Destroy(); MelonLoader.Main.OnApplicationQuit(); }
+        void OnApplicationQuit() { Destroy(); MelonHandler.OnApplicationQuit(); }
     }
 }

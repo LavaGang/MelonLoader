@@ -148,6 +148,16 @@ namespace Harmony
 			}
 		}
 
+		public static void UnpatchAllMelonInstances(MelonBase melon)
+        {
+			if (instancelist.Count > 0)
+			{
+				for (int i = 0; i < instancelist.Count; i++)
+					instancelist[i].UnpatchAll(melon);
+				instancelist.Clear();
+			}
+		}
+
 		public static void UnpatchAllInstances()
         {
             if (instancelist.Count > 0)

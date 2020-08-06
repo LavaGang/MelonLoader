@@ -8,7 +8,20 @@ namespace MelonLoader
     {
         public static bool Enabled = false;
 
-        internal static void Create()
+        internal static void Check()
+        {
+            if (!Imports.IsDebugMode()
+#if !DEBUG
+                && Imports.IsConsoleEnabled()
+#endif
+                )
+            {
+                Enabled = true;
+                Create();
+            }
+        }
+
+        private static void Create()
         {
             Allocate();
             System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()) { AutoFlush = true });

@@ -5,6 +5,24 @@ using System.Linq;
 
 namespace MelonLoader
 {
+    [Obsolete("Main is obsolete. Please use MelonLoaderBase or MelonHandler instead.")]
+    public static class Main
+    {
+        public static List<MelonMod> Mods = null;
+        public static List<MelonPlugin> Plugins = null;
+        public static bool IsVRChat = false;
+        public static bool IsBoneworks = false;
+        public static string GetUnityVersion() => MelonLoaderBase.UnityVersion;
+        public static string GetUserDataPath() => MelonLoaderBase.UserDataPath;
+        internal static void LegacySupport(List<MelonMod> mods, List<MelonPlugin> plugins, bool isVRChat, bool isBoneworks)
+        {
+            Mods = mods;
+            Plugins = plugins;
+            IsVRChat = isVRChat;
+            IsBoneworks = isBoneworks;
+        }
+    }
+
     [Obsolete("MelonModGame is obsolete. Please use MelonGame instead.")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class MelonModGameAttribute : Attribute

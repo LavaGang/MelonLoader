@@ -53,6 +53,11 @@ namespace MelonLoader
         /// </summary>
         public MelonGameAttribute[] Games { get; internal set; }
 
+        /// <summary>
+        /// Gets the Auto-Created Harmony Instance of the Mod or Plugin.
+        /// </summary>
+        public Harmony.HarmonyInstance harmonyInstance { get; internal set; }
+
         [Obsolete()]
         internal MelonModGameAttribute[] LegacyModGames { get; set; }
         [Obsolete()]
@@ -64,6 +69,7 @@ namespace MelonLoader
         public virtual void OnGUI() { }
         public virtual void OnApplicationQuit() { }
         public virtual void OnModSettingsApplied() { }
+        public virtual void VRChat_OnUiManagerInit() { }
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]

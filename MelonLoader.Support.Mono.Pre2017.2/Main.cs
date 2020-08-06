@@ -35,12 +35,12 @@ namespace MelonLoader.Support
                 SceneHandler.OnSceneLoad(Application.loadedLevel);
                 Main.CurrentScene = Application.loadedLevel;
             }
-            MelonLoader.Main.OnUpdate();
+            MelonHandler.OnUpdate();
         }
-        void FixedUpdate() => MelonLoader.Main.OnFixedUpdate();
-        void LateUpdate() => MelonLoader.Main.OnLateUpdate();
-        void OnGUI() => MelonLoader.Main.OnGUI();
+        void FixedUpdate() => MelonHandler.OnFixedUpdate();
+        void LateUpdate() => MelonHandler.OnLateUpdate();
+        void OnGUI() => MelonHandler.OnGUI();
         void OnDestroy() { if (!Main.IsDestroying) Create(); }
-        void OnApplicationQuit() { Destroy(); MelonLoader.Main.OnApplicationQuit(); }
+        void OnApplicationQuit() { Destroy(); MelonHandler.OnApplicationQuit(); }
     }
 }

@@ -81,8 +81,9 @@
     <Compile Include="IniFile.cs" />
     <Compile Include="MelonBase.cs" />
     <Compile Include="MelonCoroutines.cs" />
+    <Compile Include="MelonHandler.cs" />
     <Compile Include="MelonLogger.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="MelonLoaderBase.cs" />
     <Compile Include="MelonMod.cs" />
     <Compile Include="MelonPlugin.cs" />
     <Compile Include="MelonPrefs.cs" />

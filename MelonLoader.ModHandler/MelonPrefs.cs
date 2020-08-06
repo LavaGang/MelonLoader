@@ -4,71 +4,14 @@ using System.IO;
 
 namespace MelonLoader
 {
-    internal static class MelonPrefsHandler
-    {
-        private static string filename = "modprefs.ini";
-        private static IniFile _instance;
-        private static IniFile Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new IniFile(Path.Combine(Main.GetUserDataPath(), filename));
-                return _instance;
-            }
-        }
-
-        internal static bool HasKey(string section, string name) { return Instance.IniReadValue(section, name) != null; }
-
-        internal static string GetString(string section, string name, string defaultValue = "", bool autoSave = false)
-        {
-            string value = Instance.IniReadValue(section, name);
-            if (!string.IsNullOrEmpty(value))
-                return value;
-            else if (autoSave)
-                SetString(section, name, defaultValue);
-            return defaultValue;
-        }
-        internal static void SetString(string section, string name, string value) { Instance.IniWriteValue(section, name, value.Trim()); }
-
-        internal static int GetInt(string section, string name, int defaultValue = 0, bool autoSave = false)
-        {
-            int value;
-            if (int.TryParse(Instance.IniReadValue(section, name), out value))
-                return value;
-            else if (autoSave)
-                SetInt(section, name, defaultValue);
-            return defaultValue;
-        }
-        internal static void SetInt(string section, string name, int value) { Instance.IniWriteValue(section, name, value.ToString()); }
-
-        internal static float GetFloat(string section, string name, float defaultValue = 0f, bool autoSave = false)
-        {
-            float value;
-            if (float.TryParse(Instance.IniReadValue(section, name), out value))
-                return value;
-            else if (autoSave)
-                SetFloat(section, name, defaultValue);
-            return defaultValue;
-        }
-        internal static void SetFloat(string section, string name, float value) { Instance.IniWriteValue(section, name, value.ToString()); }
-
-        internal static bool GetBool(string section, string name, bool defaultValue = false, bool autoSave = false)
-        {
-            string sVal = GetString(section, name, null);
-            if ("true".Equals(sVal) || "1".Equals(sVal) || "0".Equals(sVal) || "false".Equals(sVal))
-                return ("true".Equals(sVal) || "1".Equals(sVal));
-            else if (autoSave)
-                SetBool(section, name, defaultValue);
-            return defaultValue;
-        }
-        internal static void SetBool(string section, string name, bool value) { Instance.IniWriteValue(section, name, value ? "true" : "false"); }
-    }
-
     public class MelonPrefs
     {
+        private static string ConfigFileName = "modprefs.ini";
+        private static IniFile ConfigFile = null;
         private static Dictionary<string, Dictionary<string, MelonPreference>> prefs = new Dictionary<string, Dictionary<string, MelonPreference>>();
         private static Dictionary<string, string> categoryDisplayNames = new Dictionary<string, string>();
+
+        internal static void Setup() { if (ConfigFile == null) ConfigFile = new IniFile(Path.Combine(MelonLoaderBase.UserDataPath, ConfigFileName)); }
 
         public static void RegisterCategory(string name, string displayText) { categoryDisplayNames[name] = displayText; }
         public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) { Register(section, name, defaultValue, displayText, MelonPreferenceType.STRING, hideFromList); }
@@ -84,9 +27,9 @@ namespace MelonLoader
                 else
                 {
                     string toStoreValue = defaultValue;
-                    if (MelonPrefsHandler.HasKey(section, name))
-                        toStoreValue = MelonPrefsHandler.GetString(section, name, defaultValue);
-                    else MelonPrefsHandler.SetString(section, name, defaultValue);
+                    if (ConfigFile.HasKey(section, name))
+                        toStoreValue = ConfigFile.GetString(section, name, defaultValue);
+                    else ConfigFile.SetString(section, name, defaultValue);
                     prefsInSection.Add(name, new MelonPreference(toStoreValue, type, hideFromList, (displayText ?? "") == "" ? name : displayText));
                 }
             }
@@ -94,9 +37,9 @@ namespace MelonLoader
             {
                 Dictionary<string, MelonPreference> dic = new Dictionary<string, MelonPreference>();
                 string toStoreValue = defaultValue;
-                if (MelonPrefsHandler.HasKey(section, name))
-                    toStoreValue = MelonPrefsHandler.GetString(section, name, defaultValue);
-                else MelonPrefsHandler.SetString(section, name, defaultValue);
+                if (ConfigFile.HasKey(section, name))
+                    toStoreValue = ConfigFile.GetString(section, name, defaultValue);
+                else ConfigFile.SetString(section, name, defaultValue);
                 dic.Add(name, new MelonPreference(toStoreValue, type, hideFromList, (displayText ?? "") == "" ? name : displayText));
                 prefs.Add(section, dic);
             }
@@ -113,10 +56,10 @@ namespace MelonLoader
                 foreach (KeyValuePair<string, MelonPreference> pref in prefsInSection.Value)
                 {
                     pref.Value.Value = pref.Value.ValueEdited;
-                    MelonPrefsHandler.SetString(prefsInSection.Key, pref.Key, pref.Value.Value);
+                    ConfigFile.SetString(prefsInSection.Key, pref.Key, pref.Value.Value);
                 }
             }
-            Main.OnModSettingsApplied();
+            MelonHandler.OnModSettingsApplied();
             MelonLogger.Log("Config Saved!");
         }
 
@@ -133,7 +76,7 @@ namespace MelonLoader
             if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection) && prefsInSection.TryGetValue(name, out MelonPreference pref))
             {
                 pref.Value = pref.ValueEdited = value;
-                MelonPrefsHandler.SetString(section, name, value);
+                ConfigFile.SetString(section, name, value);
             }
             else
                 MelonLogger.LogError("Trying to save unknown pref " + section + ":" + name);

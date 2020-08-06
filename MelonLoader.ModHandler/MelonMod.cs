@@ -14,6 +14,5 @@ namespace MelonLoader
         public virtual void OnLevelWasLoaded(int level) {}
         public virtual void OnLevelWasInitialized(int level) {}
         public virtual void OnFixedUpdate() {}
-        public virtual void VRChat_OnUiManagerInit() {}
     }
 }

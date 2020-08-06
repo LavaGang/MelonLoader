@@ -91,7 +91,7 @@ namespace MelonLoader
                         Assembly asm = methodClassType.Assembly;
                         if (!asm.Equals(null))
                         {
-                            MelonPlugin plugin = Main.Plugins.Find(x => (x.Assembly == asm));
+                            MelonPlugin plugin = MelonHandler._Plugins.Find(x => (x.Assembly == asm));
                             if (plugin != null)
                             {
                                 if (!string.IsNullOrEmpty(plugin.Info.Name))
@@ -99,7 +99,7 @@ namespace MelonLoader
                             }
                             else
                             {
-                                MelonMod mod = Main.Mods.Find(x => (x.Assembly == asm));
+                                MelonMod mod = MelonHandler._Mods.Find(x => (x.Assembly == asm));
                                 if (mod != null)
                                 {
                                     if (!string.IsNullOrEmpty(mod.Info.Name))

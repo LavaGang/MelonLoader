@@ -197,7 +197,7 @@ void* HookManager::Hooked_runtime_invoke(const void* method, void* obj, void** p
 			Unhook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, Hooked_runtime_invoke);
 		else
 			Unhook(&(LPVOID&)Mono::mono_runtime_invoke, Hooked_runtime_invoke);
-		MelonLoader_Base::OnApplicationStart();
+		MelonLoader_Base::Startup();
 	}
 	if (MelonLoader::IsGameIl2Cpp)
 		return Il2Cpp::il2cpp_runtime_invoke((Il2CppMethod*)method, obj, params, (Il2CppObject**)exc);

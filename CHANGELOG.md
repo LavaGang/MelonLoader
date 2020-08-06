@@ -50,7 +50,9 @@
 32. Temporarily Disabled Console Logger Callbacks.
 33. Revised Console Logger Callbacks.
 34. Fixed Issue with LogMelonError not running Callbacks.
-35. 
+35. Deprecated MelonLoader.Main use MelonLoaderBase or MelonHandler instead.
+36. Revised Base Melon Handling.
+37. Revised IniFile.
 
 ---
 

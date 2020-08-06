@@ -2,17 +2,27 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 
-namespace MelonLoader.AssemblyGenerator
+namespace MelonLoader
 {
-    internal static class Main
+    internal static class AssemblyGenerator
     {
-        internal static bool Initialize()
+        internal static bool HasGeneratedAssembly = false;
+
+        internal static void Check()
+        {
+            if (!Imports.IsIl2CppGame() || Initialize())
+                HasGeneratedAssembly = true;
+            else
+                Imports.UNLOAD_MELONLOADER();
+        }
+
+        private static bool Initialize()
         {
             string GeneratorProcessPath = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Imports.GetGameDirectory(), "MelonLoader"), "Dependencies"), "AssemblyGenerator"), "MelonLoader.AssemblyGenerator.exe");
             if (File.Exists(GeneratorProcessPath))
             {
                 var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath);
-                generatorProcessInfo.Arguments = $"\"{MelonLoader.Main.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\" {(Imports.AG_Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Imports.AG_Force_Version_Unhollower()) ? "" : Imports.AG_Force_Version_Unhollower())}";
+                generatorProcessInfo.Arguments = $"\"{MelonLoaderBase.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\" {(Imports.AG_Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Imports.AG_Force_Version_Unhollower()) ? "" : Imports.AG_Force_Version_Unhollower())}";
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;

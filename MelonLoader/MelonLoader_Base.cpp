@@ -8,12 +8,11 @@
 #include "Il2Cpp.h"
 
 bool MelonLoader_Base::HasInitialized = false;
-MonoMethod* MelonLoader_Base::onApplicationStart = NULL;
-MonoMethod* MelonLoader_Base::onApplicationQuit = NULL;
+MonoMethod* MelonLoader_Base::startup = NULL;
 
 void MelonLoader_Base::Initialize()
 {
-	AssertionManager::Start("ModHandler.cpp", "MelonLoader_Base::Initialize");
+	AssertionManager::Start("MelonLoader_Base.cpp", "MelonLoader_Base::Initialize");
 	if (Mono::Domain != NULL)
 	{
 		std::string modhandlerpath = std::string(MelonLoader::GamePath) + "\\MelonLoader\\MelonLoader.ModHandler.dll";
@@ -25,34 +24,27 @@ void MelonLoader_Base::Initialize()
 			AssertionManager::Decide(assembly, "Image");
 			if (image != NULL)
 			{
-				MonoClass* klass = Mono::mono_class_from_name(image, "MelonLoader", "Main");
-				AssertionManager::Decide(assembly, "MelonLoader.Main");
+				MonoClass* klass = Mono::mono_class_from_name(image, "MelonLoader", "MelonLoaderBase");
+				AssertionManager::Decide(assembly, "MelonLoader.MelonLoaderBase");
 				if (klass != NULL)
 				{
-					MonoClass* klass2 = Mono::mono_class_from_name(image, "MelonLoader", "Console");
-					AssertionManager::Decide(assembly, "MelonLoader.Console");
-					if (klass2 != NULL)
+					MonoMethod* initialize = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
+					AssertionManager::Decide(initialize, "Initialize");
+					if (initialize != NULL)
 					{
-						MonoMethod* initialize = Mono::mono_class_get_method_from_name(klass, "Initialize", NULL);
-						AssertionManager::Decide(initialize, "Initialize");
-						if (initialize != NULL)
+						MonoObject* exceptionObject = NULL;
+						Mono::mono_runtime_invoke(initialize, NULL, NULL, &exceptionObject);
+						if ((exceptionObject != NULL) && MelonLoader::DebugMode)
+							Mono::LogExceptionMessage(exceptionObject);
+						else
 						{
-							MonoObject* exceptionObject = NULL;
-							Mono::mono_runtime_invoke(initialize, NULL, NULL, &exceptionObject);
-							if ((exceptionObject != NULL) && MelonLoader::DebugMode)
-								Mono::LogExceptionMessage(exceptionObject);
+							startup = Mono::mono_class_get_method_from_name(klass, "Startup", NULL);
+							AssertionManager::Decide(startup, "Startup");
+							if (MelonLoader::IsGameIl2Cpp)
+								HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, HookManager::Hooked_runtime_invoke);
 							else
-							{
-								onApplicationStart = Mono::mono_class_get_method_from_name(klass, "OnApplicationStart", NULL);
-								AssertionManager::Decide(onApplicationStart, "OnApplicationStart");
-								onApplicationQuit = Mono::mono_class_get_method_from_name(klass, "OnApplicationQuit", NULL);
-								AssertionManager::Decide(onApplicationQuit, "OnApplicationQuit");
-								if (MelonLoader::IsGameIl2Cpp)
-									HookManager::Hook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, HookManager::Hooked_runtime_invoke);
-								else
-									HookManager::Hook(&(LPVOID&)Mono::mono_runtime_invoke, HookManager::Hooked_runtime_invoke);
-								HasInitialized = true;
-							}
+								HookManager::Hook(&(LPVOID&)Mono::mono_runtime_invoke, HookManager::Hooked_runtime_invoke);
+							HasInitialized = true;
 						}
 					}
 				}
@@ -61,23 +53,12 @@ void MelonLoader_Base::Initialize()
 	}
 }
 
-void MelonLoader_Base::OnApplicationStart()
+void MelonLoader_Base::Startup()
 {
-	if (onApplicationStart != NULL)
+	if (startup != NULL)
 	{
 		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(onApplicationStart, NULL, NULL, &exceptionObject);
-		if ((exceptionObject != NULL) && MelonLoader::DebugMode)
-			Mono::LogExceptionMessage(exceptionObject);
-	}
-}
-
-void MelonLoader_Base::OnApplicationQuit()
-{
-	if (onApplicationQuit != NULL)
-	{
-		MonoObject* exceptionObject = NULL;
-		Mono::mono_runtime_invoke(onApplicationQuit, NULL, NULL, &exceptionObject);
+		Mono::mono_runtime_invoke(startup, NULL, NULL, &exceptionObject);
 		if ((exceptionObject != NULL) && MelonLoader::DebugMode)
 			Mono::LogExceptionMessage(exceptionObject);
 	}
