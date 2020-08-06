@@ -53,6 +53,10 @@
 35. Deprecated MelonLoader.Main use MelonLoaderBase or MelonHandler instead.
 36. Revised Base Melon Handling.
 37. Revised IniFile.
+38. Fixed Issue with Plugins not getting OnUpdate called.
+39. Fixed Issue with Plugins not getting OnLateUpdate called.
+40. Fixed Issue with Plugins not getting OnGUI called.
+41. Plugins are now able to use VRChat_OnUiManagerInit.
 
 ---
 
