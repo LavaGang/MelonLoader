@@ -1,6 +1,6 @@
 #include <Windows.h>
 #include "MelonLoader.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {

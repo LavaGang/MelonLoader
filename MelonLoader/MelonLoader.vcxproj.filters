@@ -6,19 +6,18 @@
     <ClCompile Include="Mono.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="MelonLoader.cpp" />
-    <ClCompile Include="ModHandler.cpp" />
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="AssertionManager.cpp" />
     <ClCompile Include="Il2Cpp.cpp" />
     <ClCompile Include="DisableAnalytics.cpp" />
+    <ClCompile Include="MelonLoader_Base.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
     <ClInclude Include="Mono.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="MelonLoader.h" />
-    <ClInclude Include="ModHandler.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="AssertionManager.h" />
@@ -30,6 +29,7 @@
       <Filter>Detours</Filter>
     </ClInclude>
     <ClInclude Include="DisableAnalytics.h" />
+    <ClInclude Include="MelonLoader_Base.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Detours">

@@ -26,6 +26,7 @@ namespace MelonLoader.AssemblyGenerator
         private static string localConfigPath = null;
         private static LocalConfig localConfig = null;
         private static Il2CppConfig il2cppConfig = new Il2CppConfig();
+        private static bool DownloadedSuccessfully = true;
 
         internal static bool Initialize(string unityVersion, string gameRoot, string gameDataDir)
         {
@@ -86,14 +87,36 @@ namespace MelonLoader.AssemblyGenerator
         private static void DownloadDependencies(string unityVersion)
         {
             Logger.Log("Downloading Il2CppDumper");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, localConfig.DumperVersion, Il2CppDumper.BaseFolder, TempFileCache.CreateFile());
-            localConfig.DumperVersion = ExternalToolVersions.Il2CppDumperVersion;
-            localConfig.Save(localConfigPath);
+            try
+            {
+                DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppDumperUrl, ExternalToolVersions.Il2CppDumperVersion, localConfig.DumperVersion, Il2CppDumper.BaseFolder, TempFileCache.CreateFile());
+                localConfig.DumperVersion = ExternalToolVersions.Il2CppDumperVersion;
+                localConfig.Save(localConfigPath);
+            }
+            catch (Exception ex)
+            {
+                DownloadedSuccessfully = false;
+                Logger.LogError(ex.ToString());
+                Logger.Log("Can't download Il2CppDumper!");
+            }
+            if (!DownloadedSuccessfully)
+                return;
 
             Logger.Log("Downloading Il2CppAssemblyUnhollower");
-            DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion,  Il2CppAssemblyUnhollower.BaseFolder, TempFileCache.CreateFile());
-            localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
-            localConfig.Save(localConfigPath);
+            try
+            {
+                DownloaderAndUnpacker.Run(ExternalToolVersions.Il2CppAssemblyUnhollowerUrl, ExternalToolVersions.Il2CppAssemblyUnhollowerVersion, localConfig.UnhollowerVersion, Il2CppAssemblyUnhollower.BaseFolder, TempFileCache.CreateFile());
+                localConfig.UnhollowerVersion = ExternalToolVersions.Il2CppAssemblyUnhollowerVersion;
+                localConfig.Save(localConfigPath);
+            }
+            catch (Exception ex)
+            {
+                DownloadedSuccessfully = false;
+                Logger.LogError(ex.ToString());
+                Logger.Log("Can't download Il2CppAssemblyUnhollower!");
+            }
+            if (!DownloadedSuccessfully)
+                return;
 
             Logger.Log("Downloading Unity Dependencies");
             string tempfile = TempFileCache.CreateFile();
@@ -142,8 +165,8 @@ namespace MelonLoader.AssemblyGenerator
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
                     Logger.LogError(ex.ToString());
+                    Logger.LogError("Can't download Unity Dependencies, Unstripping will NOT be done!");
                 }
             }
         }
@@ -151,7 +174,9 @@ namespace MelonLoader.AssemblyGenerator
         private static bool AssemblyGenerate(string gameRoot, string unityVersion, string gameDataDir)
         {
             DownloadDependencies(unityVersion);
-            
+            if (!DownloadedSuccessfully)
+                return false;
+
             FixIl2CppDumperConfig();
 
             Logger.Log("Executing Il2CppDumper...");

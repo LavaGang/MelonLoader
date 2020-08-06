@@ -1,12 +1,13 @@
 #include <string>
 #include "HookManager.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 #include "MelonLoader.h"
 #include "Console.h"
 #include "Detours/detours.h"
 #include "AssertionManager.h"
 #include "Logger.h"
 #include "Exports.h"
+#include "DisableAnalytics.h"
 #include <list>
 
 #pragma region Core
@@ -126,8 +127,8 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 		{
 			if (Il2Cpp::Setup(lib))
 			{
-				Mono::CreateDomain();
 				Hook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
+				Hook(&(LPVOID&)Il2Cpp::il2cpp_unity_install_unitytls_interface, Hooked_il2cpp_unity_install_unitytls_interface);
 			}
 			LoadLibraryW_Unhook();
 		}
@@ -147,11 +148,23 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 }
 #pragma endregion
 
+#pragma region il2cpp_unity_install_unitytls_interface
+void HookManager::Hooked_il2cpp_unity_install_unitytls_interface(const void* unitytlsInterfaceStruct)
+{
+	Il2Cpp::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
+	Mono::mono_unity_install_unitytls_interface(unitytlsInterfaceStruct);
+}
+#pragma endregion
+
 #pragma region il2cpp_init
 Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 {
-	Exports::AddInternalCalls();
-	ModHandler::Initialize();
+	if (Mono::Load() && Mono::Setup())
+	{
+		Mono::CreateDomain();
+		Exports::AddInternalCalls();
+		MelonLoader_Base::Initialize();
+	}
 	Il2Cpp::Domain = Il2Cpp::il2cpp_init(name);
 	Unhook(&(LPVOID&)Il2Cpp::il2cpp_init, Hooked_il2cpp_init);
 	return Il2Cpp::Domain;
@@ -165,7 +178,7 @@ MonoDomain* HookManager::Hooked_mono_jit_init_version(const char* name, const ch
 	Mono::Domain = Mono::mono_jit_init_version(name, version);
 	Mono::FixDomainBaseDir();
 	Exports::AddInternalCalls();
-	ModHandler::Initialize();
+	MelonLoader_Base::Initialize();
 	return Mono::Domain;
 }
 #pragma endregion
@@ -184,7 +197,7 @@ void* HookManager::Hooked_runtime_invoke(const void* method, void* obj, void** p
 			Unhook(&(LPVOID&)Il2Cpp::il2cpp_runtime_invoke, Hooked_runtime_invoke);
 		else
 			Unhook(&(LPVOID&)Mono::mono_runtime_invoke, Hooked_runtime_invoke);
-		ModHandler::OnApplicationStart();
+		MelonLoader_Base::Startup();
 	}
 	if (MelonLoader::IsGameIl2Cpp)
 		return Il2Cpp::il2cpp_runtime_invoke((Il2CppMethod*)method, obj, params, (Il2CppObject**)exc);

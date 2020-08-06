@@ -117,7 +117,7 @@ namespace MelonLoader.Installer
                     string selectedVersion = ((((string)cbVersions.Items[cbVersions.SelectedIndex]).StartsWith("Latest")) ? (string)cbVersions.Items[cbVersions.SelectedIndex + 1] : (string)cbVersions.Items[cbVersions.SelectedIndex]);
                     bool legacy_install = (selectedVersion.Equals("v0.2.1") || selectedVersion.Equals("v0.2") || selectedVersion.Equals("v0.1.0"));
 
-                    Program.Install(dirpath, selectedVersion, legacy_install);
+                    Program.Install(dirpath, selectedVersion, legacy_install, false);
 
                     Program.SetDisplayText("SUCCESS!");
                     MessageBox.Show("Installation Successful!", Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);

@@ -16,22 +16,22 @@ namespace TestPlugin
     {
         public override void OnPreInitialization() // Runs before Game Initialization.
         {
-            MelonModLogger.Log("OnPreInitialization");
+            MelonLogger.Log("OnPreInitialization");
         }
 
         public override void OnApplicationStart() // Runs after Game Initialization.
         {
-            MelonModLogger.Log("OnApplicationStart");
+            MelonLogger.Log("OnApplicationStart");
         }
 
         public override void OnApplicationQuit() // Runs when the Game is told to Close.
         {
-            MelonModLogger.Log("OnApplicationQuit");
+            MelonLogger.Log("OnApplicationQuit");
         }
 
         public override void OnModSettingsApplied() // Runs when Mod Preferences get saved to UserData/modprefs.ini.
         {
-            MelonModLogger.Log("OnModSettingsApplied");
+            MelonLogger.Log("OnModSettingsApplied");
         }
     }
 }

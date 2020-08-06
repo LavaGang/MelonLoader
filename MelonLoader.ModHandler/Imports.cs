@@ -7,8 +7,6 @@ namespace MelonLoader
     public static class Imports
     {
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void UNLOAD_MELONLOADER();
-        [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetCompanyName();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -34,23 +32,8 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsDebugMode();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsConsoleEnabled();
-        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Hook(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void Unhook(IntPtr target, IntPtr detour);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsOldMono();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsQuitFix();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsDevModsOnly();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool IsDevPluginsOnly();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool AG_Force_Regenerate();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string AG_Force_Version_Unhollower();
     }
 }

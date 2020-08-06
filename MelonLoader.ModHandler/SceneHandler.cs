@@ -14,7 +14,7 @@
             bool should_run = true;
             if (Imports.IsIl2CppGame())
             {
-                if (Main.IsBoneworks)
+                if (MelonLoaderBase._IsBoneworks)
                 {
                     if (!Boneworks_HasGotLoadingSceneIndex)
                     {
@@ -55,8 +55,8 @@
                 LastSceneIndex = current_scene;
                 if (!ShouldWait)
                     IsLoading = true;
-                if (Main.IsBoneworks)
-                    Main.OnLevelIsLoading();
+                if (MelonLoaderBase._IsBoneworks)
+                    MelonHandler.OnLevelIsLoading();
                 else
                     CheckForSceneFinishedLoading();
             }
@@ -72,7 +72,7 @@
         {
             if (IsLoading)
             {
-                Main.OnLevelWasLoaded(LastSceneIndex);
+                MelonHandler.OnLevelWasLoaded(LastSceneIndex);
                 HasFinishedLoading = true;
                 IsLoading = false;
             }
@@ -82,7 +82,7 @@
         {
             if (HasFinishedLoading)
             {
-                Main.OnLevelWasInitialized(LastSceneIndex);
+                MelonHandler.OnLevelWasInitialized(LastSceneIndex);
                 HasFinishedLoading = false;
             }
         }

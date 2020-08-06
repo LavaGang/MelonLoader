@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
@@ -24,42 +23,14 @@ namespace MelonLoader.Support
         private static ISupportModule Initialize()
         {
             LogSupport.RemoveAllHandlers();
-            if (Console.Enabled || Imports.IsDebugMode())
-                LogSupport.InfoHandler += MelonModLogger.Log;
-            LogSupport.WarningHandler += MelonModLogger.LogWarning;
-            LogSupport.ErrorHandler += MelonModLogger.LogError;
+            if (MelonConsole.Enabled || Imports.IsDebugMode())
+                LogSupport.InfoHandler += MelonLogger.Log;
+            LogSupport.WarningHandler += MelonLogger.LogWarning;
+            LogSupport.ErrorHandler += MelonLogger.LogError;
             if (Imports.IsDebugMode())
-                LogSupport.TraceHandler += MelonModLogger.Log;
+                LogSupport.TraceHandler += MelonLogger.Log;
 
-            try
-            {
-                Assembly il2cppSystem = Assembly.Load("Il2CppSystem");
-                if (il2cppSystem != null)
-                {
-                    Type unitytls = il2cppSystem.GetType("Il2CppMono.Unity.UnityTls");
-                    if (unitytls != null)
-                    {
-                        unsafe
-                        {
-                            var tlsHookTarget = typeof(Uri).Assembly.GetType("Mono.Unity.UnityTls").GetMethod("GetUnityTlsInterface", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MethodHandle.GetFunctionPointer();
-                            var unityMethodField = UnhollowerUtils.GetIl2CppMethodInfoPointerFieldForGeneratedMethod(unitytls.GetMethod("GetUnityTlsInterface", BindingFlags.Public | BindingFlags.Static));
-                            var unityMethodPtr = (IntPtr)unityMethodField.GetValue(null);
-                            var unityMethod = *(IntPtr*)unityMethodPtr;
-                            Imports.Hook((IntPtr)(&tlsHookTarget), unityMethod);
-                        }
-                    }
-                    else
-                        throw new Exception("Failed to get Type Il2CppMono.Unity.UnityTls!");
-                }
-                else
-                    throw new Exception("Failed to get Assembly Il2CppSystem!");
-            }
-            catch (Exception ex)
-            {
-                MelonModLogger.LogWarning("Exception while setting up TLS, mods will not be able to use HTTPS: " + ex);
-            }
-
-            if (MelonLoader.Main.IsVRChat)
+            if (MelonLoaderBase.IsVRChat)
             {
                 try
                 {
@@ -82,7 +53,7 @@ namespace MelonLoader.Support
                 }
                 catch (Exception ex)
                 {
-                    MelonModLogger.LogWarning("Exception while setting up Auth Token Hider, Auth Tokens may show in Console: " + ex);
+                    MelonLogger.LogWarning("Exception while setting up Auth Token Hider, Auth Tokens may show in Console: " + ex);
                 }
             }
 
@@ -111,7 +82,7 @@ namespace MelonLoader.Support
 
         private static void GetUnityVersionNumbers(out int major, out int minor, out int patch)
         {
-            var unityVersionSplit = MelonLoader.Main.UnityVersion.Split('.');
+            var unityVersionSplit = MelonLoaderBase.UnityVersion.Split('.');
             major = int.Parse(unityVersionSplit[0]);
             minor = int.Parse(unityVersionSplit[1]);
             var patchString = unityVersionSplit[2];
@@ -126,7 +97,7 @@ namespace MelonLoader.Support
         internal static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
 
         private static bool Il2CppSystem_Console_WriteLine_Patch() => false;
-        private static void Transmtn_HttpConnection_get_Prefix() => harmonyInstance.Patch(Il2CppSystem_Console_WriteLine, new Harmony.HarmonyMethod(typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static)));
+        private static void Transmtn_HttpConnection_get_Prefix() => harmonyInstance.Patch(Il2CppSystem_Console_WriteLine, new HarmonyMethod(typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static)));
         private static void Transmtn_HttpConnection_get_Postfix() => harmonyInstance.Unpatch(Il2CppSystem_Console_WriteLine, typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static));
     }
 
@@ -134,9 +105,9 @@ namespace MelonLoader.Support
     {
         internal static void Create()
         {
-            Main.obj = new GameObject("MelonLoader");
+            Main.obj = new GameObject();
             DontDestroyOnLoad(Main.obj);
-            Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
+            Main.comp = new MelonLoaderComponent(Main.obj.AddComponent(UnhollowerRuntimeLib.Il2CppType.Of<MelonLoaderComponent>()).Pointer);
             Main.SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(Main.obj.transform));
             Main.SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(Main.comp.transform));
         }
@@ -146,17 +117,17 @@ namespace MelonLoader.Support
         void Update()
         {
             transform.SetAsLastSibling();
-            MelonLoader.Main.OnUpdate();
+            MelonHandler.OnUpdate();
             MelonCoroutines.Process();
         }
         void FixedUpdate()
         {
-            MelonLoader.Main.OnFixedUpdate();
+            MelonHandler.OnFixedUpdate();
             MelonCoroutines.ProcessWaitForFixedUpdate();
         }
-        void LateUpdate() => MelonLoader.Main.OnLateUpdate();
-        void OnGUI() => MelonLoader.Main.OnGUI();
+        void LateUpdate() => MelonHandler.OnLateUpdate();
+        void OnGUI() => MelonHandler.OnGUI();
         void OnDestroy() { if (!Main.IsDestroying) Create(); }
-        void OnApplicationQuit() { Destroy(); MelonLoader.Main.OnApplicationQuit(); }
+        void OnApplicationQuit() { Destroy(); MelonHandler.OnApplicationQuit(); }
     }
 }

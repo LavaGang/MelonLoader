@@ -43,8 +43,9 @@
     <Compile Include="AssemblyGenerator.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BuildInfo.cs" />
-    <Compile Include="Console.cs" />
+    <Compile Include="MelonConsole.cs" />
     <Compile Include="DependencyGraph.cs" />
+    <Compile Include="Deprecated.cs" />
     <Compile Include="Harmony\Attributes.cs" />
     <Compile Include="Harmony\CodeInstruction.cs" />
     <Compile Include="Harmony\CodeTranspiler.cs" />
@@ -80,11 +81,12 @@
     <Compile Include="IniFile.cs" />
     <Compile Include="MelonBase.cs" />
     <Compile Include="MelonCoroutines.cs" />
-    <Compile Include="MelonModLogger.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="MelonHandler.cs" />
+    <Compile Include="MelonLogger.cs" />
+    <Compile Include="MelonLoaderBase.cs" />
     <Compile Include="MelonMod.cs" />
     <Compile Include="MelonPlugin.cs" />
-    <Compile Include="ModPrefs.cs" />
+    <Compile Include="MelonPrefs.cs" />
     <Compile Include="SceneHandler.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Constants.cs" />

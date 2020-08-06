@@ -98,7 +98,7 @@
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
-    <ClCompile Include="ModHandler.cpp" />
+    <ClCompile Include="MelonLoader_Base.cpp" />
     <ClCompile Include="Il2Cpp.cpp" />
     <ClCompile Include="Mono.cpp" />
   </ItemGroup>
@@ -112,7 +112,7 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="Exports.h" />
-    <ClInclude Include="ModHandler.h" />
+    <ClInclude Include="MelonLoader_Base.h" />
     <ClInclude Include="Il2Cpp.h" />
     <ClInclude Include="Mono.h" />
   </ItemGroup>

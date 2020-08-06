@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "Console.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 
 class LogStream
 {
@@ -43,6 +43,8 @@ public:
 
 	static void Log(const char* txt);
 	static void Log(const char* txt, ConsoleColor color);
+	static void Log(const char* namesection, const char* txt);
+	static void Log(const char* namesection, const char* txt, ConsoleColor color);
 	static void Log(std::string txt) { Log(txt.c_str()); };
 	static void Log(std::string txt, ConsoleColor color) { Log(txt.c_str(), color); }
 
@@ -53,21 +55,25 @@ public:
 	static void LogError(const char* txt);
 	static void LogError(const char* namesection, const char* txt);
 	static void LogError(std::string txt) { LogError(txt.c_str()); }
-
+	
 	static void DebugLog(const char* txt) { if (MelonLoader::DebugMode) Log(txt); }
 	static void DebugLog(const char* txt, ConsoleColor color) { if (MelonLoader::DebugMode) Log(txt, color); };
 	static void DebugLog(std::string txt) { DebugLog(txt.c_str()); }
 	static void DebugLog(std::string txt, ConsoleColor color) { DebugLog(txt.c_str(), color); }
 
+	static void DebugLogWarning(const char* txt) { if (MelonLoader::DebugMode) LogWarning(txt); }
+	static void DebugLogWarning(const char* namesection, const char* txt) { if (MelonLoader::DebugMode) LogWarning(namesection, txt); }
+	static void DebugLogWarning(std::string txt) { DebugLogWarning(txt.c_str()); }
+
 	static void DebugLogError(const char* txt) { if (MelonLoader::DebugMode) LogError(txt); }
 	static void DebugLogError(const char* namesection, const char* txt) { if (MelonLoader::DebugMode) LogError(namesection, txt); }
 	static void DebugLogError(std::string txt) { DebugLogError(txt.c_str()); }
 
-	static void LogDLLError(const char* namesection, const char* msg);
-
-	static void LogDLLStatus(ModHandler_DLLStatus type);
+	static void LogMelonError(const char* namesection, const char* txt);
+	static void LogMelonCompatibility(MelonLoader_Base::MelonCompatibility comp);
+	static void LogTimestamp(ConsoleColor color = ConsoleColor_Black);
 
 private:
-	static void LogTimestamp(ConsoleColor color = ConsoleColor_Black);
 	static bool CompareWritetime(const std::filesystem::directory_entry& first, const std::filesystem::directory_entry& second) { return first.last_write_time().time_since_epoch() >= second.last_write_time().time_since_epoch(); }
+	static bool DirectoryExists(const char* path) { struct stat info; if (stat(path, &info) != NULL) return false; if (info.st_mode & S_IFDIR) return true; return false; }
 };

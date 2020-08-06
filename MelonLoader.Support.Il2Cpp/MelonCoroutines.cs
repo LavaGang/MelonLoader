@@ -97,7 +97,7 @@ namespace MelonLoader.Support
             }
             catch (Exception e)
             {
-                MelonModLogger.LogError(e.ToString());
+                MelonLogger.LogError(e.ToString());
                 Stop(FindOriginalCoro(enumerator)); // We want the entire coroutine hierachy to stop when an error happen
             }
 
@@ -120,7 +120,7 @@ namespace MelonLoader.Support
                     if (nextAsEnumerator != null) // il2cpp IEnumerator also handles CustomYieldInstruction
                         next = new Il2CppEnumeratorWrapper(nextAsEnumerator);
                     else
-                        MelonModLogger.LogWarning($"Unknown coroutine yield object of type {il2CppObjectBase} for coroutine {enumerator}");
+                        MelonLogger.LogWarning($"Unknown coroutine yield object of type {il2CppObjectBase} for coroutine {enumerator}");
                     break;
             }
 

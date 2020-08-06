@@ -2,7 +2,7 @@
 #include "Mono.h"
 #include "MelonLoader.h"
 #include "AssertionManager.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 #include "Logger.h"
 
 bool Mono::IsOldMono = false;
@@ -34,9 +34,7 @@ mono_object_get_class_t Mono::mono_object_get_class = NULL;
 mono_runtime_set_main_args_t Mono::mono_runtime_set_main_args = NULL;
 mono_domain_set_config_t Mono::mono_domain_set_config = NULL;
 mono_method_get_name_t Mono::mono_method_get_name = NULL;
-mono_debug_init_t Mono::mono_debug_init = NULL;
-mono_debug_domain_create_t Mono::mono_debug_domain_create = NULL;
-mono_jit_parse_options_t Mono::mono_jit_parse_options = NULL;
+mono_unity_install_unitytls_interface_t Mono::mono_unity_install_unitytls_interface = NULL;
 
 bool Mono::Load()
 {
@@ -84,11 +82,7 @@ bool Mono::Setup()
 	mono_object_get_class = (mono_object_get_class_t)AssertionManager::GetExport(Module, "mono_object_get_class");
 
 	if (MelonLoader::IsGameIl2Cpp)
-	{
-		mono_debug_init = (mono_debug_init_t)AssertionManager::GetExport(Module, "mono_debug_init");
-		mono_debug_domain_create = (mono_debug_domain_create_t)AssertionManager::GetExport(Module, "mono_debug_domain_create");
-		mono_jit_parse_options = (mono_jit_parse_options_t)AssertionManager::GetExport(Module, "mono_jit_parse_options");
-	}
+		mono_unity_install_unitytls_interface = (mono_unity_install_unitytls_interface_t)AssertionManager::GetExport(Module, "mono_unity_install_unitytls_interface");
 
 	if (!IsOldMono)
 	{
@@ -109,9 +103,6 @@ void Mono::CreateDomain()
 		mono_runtime_set_main_args(MelonLoader::CommandLineC, MelonLoader::CommandLineV);
 		Domain = mono_jit_init("MelonLoader");
 		Mono::FixDomainBaseDir();
-		mono_debug_init(MONO_DEBUG_FORMAT_MONO);
-		mono_debug_domain_create(Domain);
-		mono_jit_parse_options(MelonLoader::CommandLineC, MelonLoader::CommandLineV);
 	}
 }
 
@@ -122,5 +113,43 @@ void Mono::FixDomainBaseDir()
 		mono_domain_set_config(Domain, MelonLoader::GamePath, "MelonLoader");
 }
 
-const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject) { return mono_string_to_utf8((MonoString*)mono_runtime_invoke(mono_property_get_get_method(mono_class_get_property_from_name(classType, propertyName)), classObject, NULL, NULL)); }
-void Mono::LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow) { if (shouldThrow) AssertionManager::ThrowError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject)); else Logger::LogError(GetStringProperty("Message", mono_object_get_class(exceptionObject), exceptionObject)); }
+const char* Mono::GetStringProperty(const char* propertyName, MonoClass* classType, MonoObject* classObject)
+{
+	if (propertyName == NULL)
+		return NULL;
+	if (classType == NULL)
+		return NULL;
+	if (classObject == NULL)
+		return NULL;
+	MonoProperty* prop = mono_class_get_property_from_name(classType, propertyName);
+	if (prop == NULL)
+		return NULL;
+	MonoMethod* method = mono_property_get_get_method(prop);
+	if (method == NULL)
+		return NULL;
+	MonoString* returnstr = (MonoString*)mono_runtime_invoke(method, classObject, NULL, NULL);
+	if (returnstr == NULL)
+		return NULL;
+	return mono_string_to_utf8(returnstr);
+}
+
+void Mono::LogExceptionMessage(MonoObject* exceptionObject, bool shouldThrow)
+{
+	if (exceptionObject == NULL)
+		return;
+	MonoClass* klass = mono_object_get_class(exceptionObject);
+	if (klass == NULL)
+		return;
+	const char* stringprop = GetStringProperty("Message", klass, exceptionObject);
+	if (stringprop == NULL)
+		return;
+	if (shouldThrow)
+		AssertionManager::ThrowError(stringprop);
+	else
+	{
+		Logger::LogTimestamp(ConsoleColor_Red);
+		Logger::LogFile << "[Error] " << stringprop << std::endl;
+		Console::Write("[MelonLoader] ", ConsoleColor_Red);
+		Console::WriteLine(("[Error] " + std::string(stringprop)), ConsoleColor_Red);
+	}
+}

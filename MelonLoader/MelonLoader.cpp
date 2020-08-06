@@ -8,7 +8,7 @@
 #include "Mono.h"
 #include "HookManager.h"
 #include "Logger.h"
-#include "ModHandler.h"
+#include "MelonLoader_Base.h"
 #include <signal.h>
 #include "DisableAnalytics.h"
 #pragma warning(disable:4996)
@@ -19,8 +19,6 @@ char* MelonLoader::CommandLineV[64];
 bool MelonLoader::IsGameIl2Cpp = false;
 bool MelonLoader::DebugMode = false;
 bool MelonLoader::QuitFix = false;
-bool MelonLoader::DevModsOnly = false;
-bool MelonLoader::DevPluginsOnly = false;
 bool MelonLoader::AG_Force_Regenerate = false;
 char* MelonLoader::ExePath = NULL;;
 char* MelonLoader::GamePath = NULL;
@@ -29,6 +27,8 @@ char* MelonLoader::CompanyName = NULL;
 char* MelonLoader::ProductName = NULL;
 char* MelonLoader::ForceUnhollowerVersion = NULL;
 char* MelonLoader::ForceUnityVersion = NULL;
+MelonLoader::LoadMode MelonLoader::LoadMode_Plugins = MelonLoader::LoadMode::NORMAL;
+MelonLoader::LoadMode MelonLoader::LoadMode_Mods = MelonLoader::LoadMode::NORMAL;
 
 void MelonLoader::Main()
 {
@@ -60,7 +60,6 @@ void MelonLoader::Main()
 
 #ifdef DEBUG
 		DebugMode = true;
-		Console::ShouldShowGameLogs = true;
 		Console::Create();
 #endif
 
@@ -134,16 +133,8 @@ void MelonLoader::Main()
 
 			ReadAppInfo();
 
-			if (DisableAnalytics::Setup())
-			{
-				if (IsGameIl2Cpp)
-				{
-					if (Mono::Load() && Mono::Setup())
-						HookManager::LoadLibraryW_Hook();
-				}
-				else
-					HookManager::LoadLibraryW_Hook();
-			}
+			DisableAnalytics::Setup();
+			HookManager::LoadLibraryW_Hook();
 		}
 	}
 }
@@ -173,10 +164,26 @@ void MelonLoader::ParseCommandLine()
 					Console::HordiniMode = true;
 				else if (strstr(command, "--melonloader.randomrainbow") != NULL)
 					Console::HordiniMode_Random = true;
-				else if (strstr(command, "--melonloader.devmodsonly") != NULL)
-					DevModsOnly = true;
-				else if (strstr(command, "--melonloader.devpluginsonly") != NULL)
-					DevPluginsOnly = true;
+				else if (strstr(command, "--melonloader.consoleontop") != NULL)
+					Console::AlwaysOnTop = true;
+				else if (strstr(command, "--melonloader.loadmodeplugins") != NULL)
+				{
+					int loadmode = atoi(CommandLineV[i + 1]);
+					if (loadmode < 0)
+						loadmode = 0;
+					else if (loadmode > 2)
+						loadmode = 0;
+					LoadMode_Plugins = (LoadMode)loadmode;
+				}
+				else if (strstr(command, "--melonloader.loadmodemods") != NULL)
+				{
+					int loadmode = atoi(CommandLineV[i + 1]);
+					if (loadmode < 0)
+						loadmode = 0;
+					else if (loadmode > 2)
+						loadmode = 0;
+					LoadMode_Mods = (LoadMode)loadmode;
+				}
 				else if (strstr(command, "--melonloader.agregenerate") != NULL)
 					AG_Force_Regenerate = true;
 				else if (strstr(command, "--melonloader.agfvunhollower"))
@@ -194,8 +201,6 @@ void MelonLoader::ParseCommandLine()
 					Console::Enabled = false;
 				else if (strstr(command, "--melonloader.hidewarnings") != NULL)
 					Console::HideWarnings = false;
-				//else if (strstr(command, "--melonloader.showgamelogs") != NULL)
-				//	Console::ShouldShowGameLogs = false;
 				else if (strstr(command, "--melonloader.debug") != NULL)
 				{
 					DebugMode = true;
@@ -245,11 +250,11 @@ bool MelonLoader::CheckOSVersion()
 	return true;
 }
 
-void MelonLoader::UNLOAD()
+void MelonLoader::UNLOAD(bool doquitfix)
 {
 	HookManager::UnhookAll();
 	Logger::Stop();
-	if (MelonLoader::QuitFix)
+	if (doquitfix && MelonLoader::QuitFix)
 		MelonLoader::KillProcess();
 }
 
@@ -263,59 +268,23 @@ void MelonLoader::KillProcess()
 	}
 }
 
-int MelonLoader::CountSubstring(std::string pat, std::string txt)
-{
-	size_t M = pat.length();
-	size_t N = txt.length();
-	int res = 0;
-	for (int i = 0; i <= N - M; i++)
-	{
-		int j;
-		for (j = 0; j < M; j++)
-			if (txt[i + j] != pat[j])
-				break;
-		if (j == M)
-		{
-			res++;
-			j = 0;
-		}
-	}
-	return res;
-}
-
-bool MelonLoader::DirectoryExists(const char* path)
-{
-	struct stat info;
-	if (stat(path, &info) != NULL)
-		return false;
-	if (info.st_mode & S_IFDIR)
-		return true;
-	return false;
-}
-
-long MelonLoader::GetFileSize(std::string filename)
-{
-	struct stat stat_buf;
-	return ((stat(filename.c_str(), &stat_buf) == 0) ? stat_buf.st_size : -1);
-}
-
 int MelonLoader::GetIntFromConstChar(const char* str, int defaultval)
 {
-	if (str == NULL || *str == '\0')
+	if ((str == NULL) || (*str == '\0'))
 		return defaultval;
     bool negate = (str[0] == '-');
-    if ( *str == '+' || *str == '-' )
+    if ((*str == '+') || (*str == '-'))
         ++str;
 	if (*str == '\0')
 		return defaultval;
     int result = 0;
     while(*str)
     {
-		if (*str >= '0' && *str <= '9')
-			result = result * 10 - (*str - '0');
+		if ((*str >= '0') && (*str <= '9'))
+			result = ((result * 10) - (*str - '0'));
 		else
 			return defaultval;
         ++str;
     }
-    return negate ? result : -result;
+    return (negate ? result : -result);
 }

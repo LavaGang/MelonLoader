@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using Harmony;
 
 namespace MelonLoader.Support
 {
@@ -12,24 +10,30 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         internal static int CurrentScene = -9;
-
         private static ISupportModule Initialize()
         {
             MelonLoaderComponent.Create();
             return new Module();
         }
     }
+
     public class MelonLoaderComponent : MonoBehaviour
     {
+        internal static readonly List<IEnumerator> QueuedCoroutines = new List<IEnumerator>();
         internal static void Create()
         {
             Main.obj = new GameObject("MelonLoader");
             DontDestroyOnLoad(Main.obj);
-            Main.comp = Main.obj.AddComponent<MelonLoaderComponent>();
+            Main.comp = (MelonLoaderComponent)Main.obj.AddComponent(typeof(MelonLoaderComponent));
             Main.obj.transform.SetAsLastSibling();
             Main.comp.transform.SetAsLastSibling();
         }
         internal static void Destroy() { Main.IsDestroying = true; if (Main.obj != null) GameObject.Destroy(Main.obj); }
+        void Awake()
+        {
+            foreach (var queuedCoroutine in QueuedCoroutines) StartCoroutine(queuedCoroutine);
+            QueuedCoroutines.Clear();
+        }
         void Start() => transform.SetAsLastSibling();
         void Update()
         {
@@ -39,12 +43,12 @@ namespace MelonLoader.Support
                 SceneHandler.OnSceneLoad(Application.loadedLevel);
                 Main.CurrentScene = Application.loadedLevel;
             }
-            MelonLoader.Main.OnUpdate();
+            MelonHandler.OnUpdate();
         }
-        void FixedUpdate() => MelonLoader.Main.OnFixedUpdate();
-        void LateUpdate() => MelonLoader.Main.OnLateUpdate();
-        void OnGUI() => MelonLoader.Main.OnGUI();
+        void FixedUpdate() => MelonHandler.OnFixedUpdate();
+        void LateUpdate() => MelonHandler.OnLateUpdate();
+        void OnGUI() => MelonHandler.OnGUI();
         void OnDestroy() { if (!Main.IsDestroying) Create(); }
-        void OnApplicationQuit() { Destroy(); MelonLoader.Main.OnApplicationQuit(); }
+        void OnApplicationQuit() { Destroy(); MelonHandler.OnApplicationQuit(); }
     }
 }

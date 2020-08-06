@@ -1,7 +1,6 @@
 #include "DisableAnalytics.h"
 #include "HookManager.h"
 #include "Logger.h"
-#include "AssertionManager.h"
 
 gethostbyname_t DisableAnalytics::Original_gethostbyname = NULL;
 getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
@@ -27,27 +26,31 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"crashlytics.com"
 };
 
-bool DisableAnalytics::Setup()
+void DisableAnalytics::Setup()
 {
-	AssertionManager::Start("DisableAnalytics.cpp", "DisableAnalytics::Setup");
-
 	HMODULE wsock32 = GetModuleHandle("wsock32.dll");
 	if (wsock32 != NULL)
 	{
-		Original_gethostbyname = (gethostbyname_t)AssertionManager::GetExport(wsock32, "gethostbyname");
+		Original_gethostbyname = (gethostbyname_t)GetProcAddress(wsock32, "gethostbyname");
 		if (Original_gethostbyname != NULL)
 			HookManager::Hook(&(LPVOID&)Original_gethostbyname, Hooked_gethostbyname);
+		else
+			Logger::DebugLogWarning("Failed to GetProcAddress ( gethostbyname ) for [ DisableAnalytics.cpp | DisableAnalytics::Setup ]");
 	}
+	else
+		Logger::DebugLogWarning("Failed to GetModuleHandle ( wsock32.dll ) for [ DisableAnalytics.cpp | DisableAnalytics::Setup ]");
 
-	HMODULE ws2_32 = AssertionManager::GetModuleHandlePtr("ws2_32");
+	HMODULE ws2_32 = GetModuleHandle("ws2_32");
 	if (ws2_32 != NULL)
 	{
-		Original_getaddrinfo = (getaddrinfo_t)AssertionManager::GetExport(ws2_32, "getaddrinfo");
+		Original_getaddrinfo = (getaddrinfo_t)GetProcAddress(ws2_32, "getaddrinfo");
 		if (Original_getaddrinfo != NULL)
 			HookManager::Hook(&(LPVOID&)Original_getaddrinfo, Hooked_getaddrinfo);
+		else
+			Logger::DebugLogWarning("Failed to GetProcAddress ( getaddrinfo ) for [ DisableAnalytics.cpp | DisableAnalytics::Setup ]");
 	}
-
-	return !AssertionManager::Result;
+	else
+		Logger::DebugLogWarning("Failed to GetModuleHandle ( ws2_32 ) for [ DisableAnalytics.cpp | DisableAnalytics::Setup ]");
 }
 
 bool DisableAnalytics::CheckBlacklist(std::string url)
@@ -56,4 +59,18 @@ bool DisableAnalytics::CheckBlacklist(std::string url)
 	if (url_found)
 		Logger::DebugLog("Analytics URL Blocked: " + url);
 	return url_found;
+}
+
+void* DisableAnalytics::Hooked_gethostbyname(const char* name)
+{
+	if (CheckBlacklist(name))
+		return NULL;
+	return Original_gethostbyname(name);
+}
+
+int DisableAnalytics::Hooked_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult)
+{
+	if (CheckBlacklist(pNodeName))
+		return WSAHOST_NOT_FOUND;
+	return Original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
 }

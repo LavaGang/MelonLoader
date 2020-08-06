@@ -5,10 +5,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using MelonLoader.LightJson;
 #pragma warning disable 0168
 
@@ -16,6 +15,7 @@ namespace MelonLoader.Installer
 {
     static class Program
     {
+        internal static bool ShouldCheckForUpdates = true;
         internal static string Title = "MelonLoader Installer";
         private static string ExeName = null;
         internal static string ManualZipPath = null;
@@ -25,18 +25,32 @@ namespace MelonLoader.Installer
         private static readonly string[] filesToCleanUp = new string[] { "Mono.Cecil.dll", "version.dll", "winmm.dll" };
         private static readonly string[] foldersToCleanUp = new string[] { "Logs", "MelonLoader" };
 
+        public static bool silent;
+        public static string silentPath;
+
         [STAThread]
         static void Main()
         {
             ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
             webClient.Headers.Add("User-Agent", "Unity web player");
             webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => SetPercentage(info.ProgressPercentage);
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
 
+            var args = Environment.GetCommandLineArgs();
+            foreach (string arg in args)
+            {
+                bool isSelf = Path.GetFullPath(arg) == Assembly.GetExecutingAssembly().Location;
+                if (File.Exists(arg) && arg.EndsWith(".exe") && !isSelf)
+                {
+                    silent = true;
+                    silentPath = Path.GetDirectoryName(arg);
+                }
+            }
+
             ExeName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
-            if (ExeName.EndsWith(".tmp.exe"))
+            if (ShouldCheckForUpdates && ExeName.EndsWith(".tmp.exe"))
             {
                 string original_exe_path = (Directory.GetCurrentDirectory() + "\\" + ExeName.Substring(0, (ExeName.Length - 8)));
                 File.Delete(original_exe_path);
@@ -46,30 +60,75 @@ namespace MelonLoader.Installer
             }
             else
             {
-                string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
-                if (File.Exists(tempfilepath))
-                    File.Delete(tempfilepath);
+                if (ShouldCheckForUpdates)
+                {
+                    string tempfilepath = (Directory.GetCurrentDirectory() + "\\" + ExeName + ".tmp.exe");
+                    if (File.Exists(tempfilepath))
+                        File.Delete(tempfilepath);
+                }
                 ManualZipPath = (Directory.GetCurrentDirectory() + "\\MelonLoader.zip");
-                Install_GUI();
+
+                if (silent)
+                    Install_NoGUI();
+                else
+                    Install_GUI();
+            }
+        }
+
+        static void Install_NoGUI()
+        {
+            try
+            {
+                string version = null;
+                JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
+                if (data.Count > 0)
+                    version = data[0]["tag_name"].AsString;
+                try
+                {
+                    Install(silentPath, version, false, true);
+                    Environment.Exit(0);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Installation failed; upload the created log to #melonloader-support on discord", Title);
+                    File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", ex.ToString());
+                    Environment.Exit(-1);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to Get Version List; upload the created log to #melonloader-support on discord", Title);
+                File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", ex.ToString());
+                Environment.Exit(-1);
             }
         }
 
         static void Install_GUI()
         {
+            int selected_index = 0;
+
             try
             {
                 mainForm = new MainForm();
                 mainForm.cbVersions.Items.Clear();
-                if (File.Exists(ManualZipPath))
+
+                bool should_add_manual = File.Exists(ManualZipPath);
+                if (should_add_manual)
                     mainForm.cbVersions.Items.Add("Manual Zip");
                 JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
                 if (data.Count > 0)
                 {
+                    bool has_added_latest = false;
                     foreach (var x in data)
                     {
                         string version = x["tag_name"].AsString;
-                        if (mainForm.cbVersions.Items.Count <= 0)
+                        if (!has_added_latest)
+                        {
+                            has_added_latest = true;
                             mainForm.cbVersions.Items.Add("Latest (" + version + ")");
+                            selected_index = (should_add_manual ? 1 : 0);
+                        }
                         mainForm.cbVersions.Items.Add(version);
                     }
                 }
@@ -83,18 +142,22 @@ namespace MelonLoader.Installer
                 Application.Exit();
             }
 
-            mainForm.cbVersions.SelectedIndex = 0;
-            mainForm.cbVersions.SelectedItem = mainForm.cbVersions.Items[0];
+            if ((selected_index < 0) || (selected_index > (mainForm.cbVersions.Items.Count - 1)))
+                selected_index = 0;
+            mainForm.cbVersions.SelectedIndex = selected_index;
+            mainForm.cbVersions.SelectedItem = mainForm.cbVersions.Items[selected_index];
             mainForm.Show();
             Application.Run(mainForm);
         }
 
-        internal static void Install(string dirpath, string selectedVersion, bool legacy_install)
+        internal static void Install(string dirpath, string selectedVersion, bool legacy_install, bool silent_install)
         {
             if (File.Exists(ManualZipPath) && selectedVersion.Equals("Manual Zip"))
                 Install_ManualZip(dirpath);
             else if (legacy_install)
                 Install_Legacy(dirpath, selectedVersion);
+            else if (silent_install)
+                Install_Silent(dirpath, selectedVersion);
             else
                 Install_Normal(dirpath, selectedVersion);
             TempFileCache.ClearCache();
@@ -116,6 +179,16 @@ namespace MelonLoader.Installer
                 Install_Legacy_02(dirpath, selectedVersion);
         }
 
+        private static void Install_Silent(string dirpath, string selectedVersion)
+        {
+            string tempfilepath = TempFileCache.CreateFile();
+            webClient.DownloadFileAsync(new Uri("https://github.com/HerpDerpinstine/MelonLoader/releases/download/" + selectedVersion + "/MelonLoader.zip"), tempfilepath);
+            while (webClient.IsBusy) { }
+            Cleanup(dirpath);
+            ExtractZip(dirpath, tempfilepath);
+            CreateDirectories(dirpath, selectedVersion, false);
+        }
+
         internal static void SetDisplayText(string text)
         {
             mainForm.Invoke(new Action(() => {
@@ -125,6 +198,9 @@ namespace MelonLoader.Installer
 
         internal static void SetPercentage(int percent)
         {
+            if (silent)
+                return;
+
             mainForm.Invoke(new Action(() => {
                 mainForm.progressBar.Value = percent;
                 mainForm.lblProgressPer.Text = percent.ToString() + "%";
@@ -349,6 +425,8 @@ namespace MelonLoader.Installer
 
         internal static void CheckForUpdates()
         {
+            if (!ShouldCheckForUpdates)
+                return;
             try
             {
                 string response = webClient.DownloadString("https://github.com/HerpDerpinstine/MelonLoader/raw/master/MelonLoader.Installer/MelonLoader.Installer.csproj");

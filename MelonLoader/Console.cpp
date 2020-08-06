@@ -9,6 +9,7 @@ bool Console::HordiniMode = false;
 bool Console::HordiniMode_Random = false;
 bool Console::ChromiumMode = false;
 bool Console::ShouldShowGameLogs = false;
+bool Console::AlwaysOnTop = false;
 
 void Console::Create()
 {
@@ -19,6 +20,7 @@ void Console::Create()
 			hwndConsole = GetConsoleWindow();
 			SetTitle(("MelonLoader " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console").c_str());
 			SetForegroundWindow(hwndConsole);
+			AlwaysOnTopCheck();
 			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
 		else
@@ -50,12 +52,22 @@ void Console::ChromiumCheck()
 		SetColor(ConsoleColor_Magenta);
 }
 
+void Console::AlwaysOnTopCheck()
+{
+	if (IsInitialized() && AlwaysOnTop)
+	{
+		SetWindowPos(hwndConsole, HWND_TOPMOST, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+		ShowWindow(hwndConsole, SW_NORMAL);
+	}
+}
+
 void Console::Write(const char* txt)
 {
 	if (IsInitialized())
 	{
 		ChromiumCheck();
 		RainbowCheck();
+		AlwaysOnTopCheck();
 		std::cout << txt;
 		ResetColor();
 	}

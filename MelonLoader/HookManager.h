@@ -37,4 +37,5 @@ public:
 	static Il2CppDomain* Hooked_il2cpp_init(const char* name);
 	static MonoDomain* Hooked_mono_jit_init_version(const char* name, const char* version);
 	static void* Hooked_runtime_invoke(const void* method, void* obj, void** params, void** exc);
+	static void Hooked_il2cpp_unity_install_unitytls_interface(const void* unitytlsInterfaceStruct);
 };

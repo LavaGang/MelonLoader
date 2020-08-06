@@ -61,14 +61,14 @@ namespace MelonLoader
                 }
                 else
                 {
-                    MelonModLogger.LogError("Unable to load Support Module! Support Module is Missing!");
-                    MelonModLogger.Log("------------------------------");
+                    MelonLogger.LogError("Unable to load Support Module! Support Module is Missing!");
+                    MelonLogger.Log("------------------------------");
                 }
             }
             catch (Exception e)
             {
-                MelonModLogger.LogError("Unable to load Support Module!\n" + e.ToString());
-                MelonModLogger.Log("------------------------------");
+                MelonLogger.LogError("Unable to load Support Module!\n" + e.ToString());
+                MelonLogger.Log("------------------------------");
             }
         }
 

@@ -157,7 +157,7 @@ namespace Harmony
 			}
 
 			if (!found) {
-				MelonModLogger.LogError("Harmony transpiler could not rewrite Unhollower method. Expect a stack overflow.");
+				MelonLogger.LogError("Harmony transpiler could not rewrite Unhollower method. Expect a stack overflow.");
 				return instructions;
 			}
 
@@ -259,13 +259,13 @@ namespace Harmony
 			// Catch any exceptions that may have been thrown
 			Emitter.MarkBlockBefore(il, new ExceptionBlock(ExceptionBlockType.BeginCatchBlock, typeof(Exception)), out _);
 
-			// MelonModLogger.LogError("Exception in ...\n" + exception.ToString());
+			// MelonLogger.LogError("Exception in ...\n" + exception.ToString());
 			Emitter.Emit(il, OpCodes.Stloc, exceptionLocal);
 			Emitter.Emit(il, OpCodes.Ldstr, $"Exception in Harmony patch of method {original.FullDescription()}:\n");
 			Emitter.Emit(il, OpCodes.Ldloc, exceptionLocal);
 			Emitter.Emit(il, OpCodes.Call, AccessTools.DeclaredMethod(typeof(Exception), "ToString", new Type[0]));
 			Emitter.Emit(il, OpCodes.Call, AccessTools.DeclaredMethod(typeof(string), "Concat", new Type[] { typeof(string), typeof(string) }));
-			Emitter.Emit(il, OpCodes.Call, AccessTools.DeclaredMethod(typeof(MelonModLogger), "LogError", new Type[] { typeof(string) }));
+			Emitter.Emit(il, OpCodes.Call, AccessTools.DeclaredMethod(typeof(MelonLogger), "LogError", new Type[] { typeof(string) }));
 
 			// Close the exception block
 			Emitter.MarkBlockAfter(il, new ExceptionBlock(ExceptionBlockType.EndExceptionBlock, null));
