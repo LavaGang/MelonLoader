@@ -23,7 +23,7 @@ namespace MelonLoader.Support
         private static ISupportModule Initialize()
         {
             LogSupport.RemoveAllHandlers();
-            if (Console.Enabled || Imports.IsDebugMode())
+            if (MelonConsole.Enabled || Imports.IsDebugMode())
                 LogSupport.InfoHandler += MelonLogger.Log;
             LogSupport.WarningHandler += MelonLogger.LogWarning;
             LogSupport.ErrorHandler += MelonLogger.LogError;

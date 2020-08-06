@@ -11,14 +11,14 @@ namespace MelonLoader
         {
             string namesection = GetNameSection();
             Native_Log(namesection, s);
-            Console.RunLogCallbacks(namesection, s);
+            MelonConsole.RunLogCallbacks(namesection, s);
         }
 
         public static void Log(ConsoleColor color, string s)
         {
             string namesection = GetNameSection();
             Native_LogColor(namesection, s, color);
-            Console.RunLogCallbacks(namesection, s);
+            MelonConsole.RunLogCallbacks(namesection, s);
         }
 
         public static void Log(string s, params object[] args)
@@ -26,7 +26,7 @@ namespace MelonLoader
             string namesection = GetNameSection();
             string fmt = string.Format(s, args);
             Native_Log(namesection, fmt);
-            Console.RunLogCallbacks(namesection, fmt);
+            MelonConsole.RunLogCallbacks(namesection, fmt);
         }
 
         public static void Log(ConsoleColor color, string s, params object[] args)
@@ -34,14 +34,14 @@ namespace MelonLoader
             string namesection = GetNameSection();
             string fmt = string.Format(s, args);
             Native_LogColor(namesection, fmt, color);
-            Console.RunLogCallbacks(namesection, fmt);
+            MelonConsole.RunLogCallbacks(namesection, fmt);
         }
 
         public static void LogWarning(string s)
         {
             string namesection = GetNameSection();
             Native_LogWarning(namesection, s);
-            Console.RunWarningCallbacks(namesection, s);
+            MelonConsole.RunWarningCallbacks(namesection, s);
         }
 
         public static void LogWarning(string s, params object[] args)
@@ -49,7 +49,7 @@ namespace MelonLoader
             string namesection = GetNameSection();
             string fmt = string.Format(s, args);
             Native_LogWarning(namesection, fmt);
-            Console.RunWarningCallbacks(namesection, fmt);
+            MelonConsole.RunWarningCallbacks(namesection, fmt);
             Native_LogWarning(GetNameSection(), fmt);
         }
 
@@ -57,21 +57,21 @@ namespace MelonLoader
         {
             string namesection = GetNameSection();
             Native_LogError(namesection, s);
-            Console.RunErrorCallbacks(namesection, s);
+            MelonConsole.RunErrorCallbacks(namesection, s);
         }
         public static void LogError(string s, params object[] args)
         {
             string namesection = GetNameSection();
             string fmt = string.Format(s, args);
             Native_LogError(namesection, fmt);
-            Console.RunErrorCallbacks(namesection, fmt);
+            MelonConsole.RunErrorCallbacks(namesection, fmt);
         }
 
         internal static void LogMelonError(string msg, string modname)
         {
             string namesection = (string.IsNullOrEmpty(modname) ? "" : ("[" + modname.Replace(" ", "_") + "] "));
             Native_LogMelonError(namesection, msg);
-            Console.RunErrorCallbacks(namesection, msg);
+            MelonConsole.RunErrorCallbacks(namesection, msg);
         }
 
         internal static void LogMelonCompatibility(MelonBase.MelonCompatibility comp) => Native_LogMelonCompatibility(comp);
@@ -91,7 +91,7 @@ namespace MelonLoader
                         Assembly asm = methodClassType.Assembly;
                         if (!asm.Equals(null))
                         {
-                            MelonPlugin plugin = MelonHandler._Plugins.Find(x => (x.Assembly == asm));
+                            MelonPlugin plugin = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
                             if (plugin != null)
                             {
                                 if (!string.IsNullOrEmpty(plugin.Info.Name))
@@ -99,7 +99,7 @@ namespace MelonLoader
                             }
                             else
                             {
-                                MelonMod mod = MelonHandler._Mods.Find(x => (x.Assembly == asm));
+                                MelonMod mod = MelonHandler.Mods.Find(x => (x.Assembly == asm));
                                 if (mod != null)
                                 {
                                     if (!string.IsNullOrEmpty(mod.Info.Name))

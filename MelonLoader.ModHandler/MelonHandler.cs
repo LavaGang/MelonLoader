@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using Harmony;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0612
@@ -28,7 +30,7 @@ namespace MelonLoader
                 Directory.CreateDirectory(searchdir);
                 return;
             }
-            Imports.LoadMode loadmode = (plugins ? Imports.GetLoadMode_Plugins() : Imports.GetLoadMode_Mods());
+            LoadMode loadmode = (plugins ? GetLoadMode_Plugins() : GetLoadMode_Mods());
 
             // DLL
             string[] files = Directory.GetFiles(searchdir, "*.dll");
@@ -41,7 +43,7 @@ namespace MelonLoader
                         continue;
 
                     bool file_extension_check = Path.GetFileNameWithoutExtension(file).EndsWith("-dev");
-                    if ((loadmode != Imports.LoadMode.BOTH) && ((loadmode == Imports.LoadMode.DEV) ? !file_extension_check : file_extension_check))
+                    if ((loadmode != LoadMode.BOTH) && ((loadmode == LoadMode.DEV) ? !file_extension_check : file_extension_check))
                         continue;
 
                     try
@@ -79,7 +81,7 @@ namespace MelonLoader
                                         continue;
 
                                     bool file_extension_check = Path.GetFileNameWithoutExtension(file).EndsWith("-dev");
-                                    if ((loadmode != Imports.LoadMode.BOTH) && ((loadmode == Imports.LoadMode.DEV) ? !file_extension_check : file_extension_check))
+                                    if ((loadmode != LoadMode.BOTH) && ((loadmode == LoadMode.DEV) ? !file_extension_check : file_extension_check))
                                         continue;
 
                                     using (var unzippedFileStream = new MemoryStream())
@@ -377,5 +379,16 @@ namespace MelonLoader
                     if (_Plugins[i] != null)
                         try { _Plugins[i].VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); }
         }
+
+        private enum LoadMode
+        {
+            NORMAL,
+            DEV,
+            BOTH
+        }
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static LoadMode GetLoadMode_Plugins();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static LoadMode GetLoadMode_Mods();
     }
 }

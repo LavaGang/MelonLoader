@@ -34,29 +34,29 @@ void SetTitleForConsole(MonoString* txt) { Console::SetTitle(Mono::mono_string_t
 
 void Exports::AddInternalCalls()
 {
-	Mono::mono_add_internal_call("MelonLoader.Imports::UNLOAD_MELONLOADER", MelonLoader::UNLOAD);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsIl2CppGame", IsIl2CppGame);
 	Mono::mono_add_internal_call("MelonLoader.Imports::IsDebugMode", IsDebugMode);
-	Mono::mono_add_internal_call("MelonLoader.Imports::IsConsoleEnabled", IsConsoleEnabled);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDirectory", GetGameDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetGameDataDirectory", GetGameDataDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetAssemblyDirectory", GetAssemblyDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetMonoConfigDirectory", GetMonoConfigDirectory);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Hook", Hook);
 	Mono::mono_add_internal_call("MelonLoader.Imports::Unhook", Unhook);
-	Mono::mono_add_internal_call("MelonLoader.Imports::IsOldMono", IsOldMono);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetCompanyName", GetCompanyName);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetProductName", GetProductName);
 	Mono::mono_add_internal_call("MelonLoader.Imports::GetExePath", GetExePath);
-	Mono::mono_add_internal_call("MelonLoader.Imports::IsQuitFix", IsQuitFix);
-	Mono::mono_add_internal_call("MelonLoader.Imports::GetLoadMode_Plugins", GetLoadMode_Plugins);
-	Mono::mono_add_internal_call("MelonLoader.Imports::GetLoadMode_Mods", GetLoadMode_Mods);
-	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Regenerate", AG_Force_Regenerate);
-	Mono::mono_add_internal_call("MelonLoader.Imports::AG_Force_Version_Unhollower", AG_Force_Version_Unhollower);
 
-	Mono::mono_add_internal_call("MelonLoader.Console::Allocate", Console::Create);
-	Mono::mono_add_internal_call("MelonLoader.Console::SetTitle", SetTitleForConsole);
-	Mono::mono_add_internal_call("MelonLoader.Console::SetColor", Console::SetColor);
+	Mono::mono_add_internal_call("MelonLoader.MelonLoaderBase::IsOldMono", IsOldMono);
+	Mono::mono_add_internal_call("MelonLoader.MelonLoaderBase::IsQuitFix", IsQuitFix);
+	Mono::mono_add_internal_call("MelonLoader.MelonLoaderBase::UNLOAD", MelonLoader::UNLOAD);
+
+	Mono::mono_add_internal_call("MelonLoader.MelonHandler::GetLoadMode_Plugins", GetLoadMode_Plugins);
+	Mono::mono_add_internal_call("MelonLoader.MelonHandler::GetLoadMode_Mods", GetLoadMode_Mods);
+
+	Mono::mono_add_internal_call("MelonLoader.MelonConsole::Allocate", Console::Create);
+	Mono::mono_add_internal_call("MelonLoader.MelonConsole::SetTitle", SetTitleForConsole);
+	Mono::mono_add_internal_call("MelonLoader.MelonConsole::SetColor", Console::SetColor);
+	Mono::mono_add_internal_call("MelonLoader.MelonConsole::IsConsoleEnabled", IsConsoleEnabled);
 
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_Log", Log);
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogColor", LogColor);
@@ -64,4 +64,7 @@ void Exports::AddInternalCalls()
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogError", LogError);
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogMelonError", LogMelonError);
 	Mono::mono_add_internal_call("MelonLoader.MelonLogger::Native_LogMelonCompatibility", LogMelonCompatibility);
+
+	Mono::mono_add_internal_call("MelonLoader.AssemblyGenerator::Force_Regenerate", AG_Force_Regenerate);
+	Mono::mono_add_internal_call("MelonLoader.AssemblyGenerator::Force_Version_Unhollower", AG_Force_Version_Unhollower);
 }

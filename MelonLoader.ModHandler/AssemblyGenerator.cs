@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
@@ -13,7 +15,7 @@ namespace MelonLoader
             if (!Imports.IsIl2CppGame() || Initialize())
                 HasGeneratedAssembly = true;
             else
-                Imports.UNLOAD_MELONLOADER();
+                MelonLoaderBase.UNLOAD();
         }
 
         private static bool Initialize()
@@ -22,7 +24,7 @@ namespace MelonLoader
             if (File.Exists(GeneratorProcessPath))
             {
                 var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath);
-                generatorProcessInfo.Arguments = $"\"{MelonLoaderBase.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\" {(Imports.AG_Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Imports.AG_Force_Version_Unhollower()) ? "" : Imports.AG_Force_Version_Unhollower())}";
+                generatorProcessInfo.Arguments = $"\"{MelonLoaderBase.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\" {(Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Force_Version_Unhollower()) ? "" : Force_Version_Unhollower())}";
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;
@@ -48,5 +50,11 @@ namespace MelonLoader
                 MelonLogger.LogError("MelonLoader.AssemblyGenerator.exe does not Exist!");
             return false;
         }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static bool Force_Regenerate();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string Force_Version_Unhollower();
     }
 }

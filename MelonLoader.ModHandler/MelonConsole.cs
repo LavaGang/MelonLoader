@@ -6,11 +6,13 @@ namespace MelonLoader
 {
     public class MelonConsole
     {
+        public static bool Enabled { get; internal set; }
+
         internal static void Check()
         {
             if (!Imports.IsDebugMode()
 #if !DEBUG
-                && Imports.IsConsoleEnabled()
+                && IsConsoleEnabled()
 #endif
                 )
                 Create();
@@ -18,12 +20,15 @@ namespace MelonLoader
 
         private static void Create()
         {
+            Enabled = true;
             Allocate();
             Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
             Console.SetIn(new StreamReader(Console.OpenStandardInput()));
             SetTitle(BuildInfo.Name + " v" + BuildInfo.Version + " Open-Beta");
         }
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static bool IsConsoleEnabled();
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern void Allocate();
         [MethodImpl(MethodImplOptions.InternalCall)]

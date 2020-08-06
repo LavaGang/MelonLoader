@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Harmony;
 
@@ -18,7 +19,7 @@ namespace MelonLoader
         private static void Initialize()
         {
             Setup();
-            Console.Check();
+            MelonConsole.Check();
             AssemblyGenerator.Check();
             if (!AssemblyGenerator.HasGeneratedAssembly)
                 return;
@@ -50,8 +51,8 @@ namespace MelonLoader
             if (MelonHandler.HasMelons)
                 MelonPrefs.SaveConfig();
             HarmonyInstance.UnpatchAllInstances();
-            Imports.UNLOAD_MELONLOADER();
-            if (Imports.IsQuitFix()) Process.GetCurrentProcess().Kill();
+            UNLOAD();
+            if (IsQuitFix()) Process.GetCurrentProcess().Kill();
         }
 
         private static void Setup()
@@ -85,7 +86,7 @@ namespace MelonLoader
             MelonLogger.Log("------------------------------");
             MelonLogger.Log("Name: " + CurrentGameAttribute.GameName);
             MelonLogger.Log("Developer: " + CurrentGameAttribute.Developer);
-            MelonLogger.Log("Type: " + (Imports.IsIl2CppGame() ? "Il2Cpp" : (Imports.IsOldMono() ? "Mono" : "MonoBleedingEdge")));
+            MelonLogger.Log("Type: " + (Imports.IsIl2CppGame() ? "Il2Cpp" : (IsOldMono() ? "Mono" : "MonoBleedingEdge")));
             MelonLogger.Log("------------------------------");
             MelonLogger.Log("Using v" + BuildInfo.Version + " Open-Beta");
             MelonLogger.Log("------------------------------");
@@ -174,5 +175,12 @@ namespace MelonLoader
                 return _UnityVersion = Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
             }
         }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static bool IsOldMono();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static bool IsQuitFix();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void UNLOAD();
     }
 }
