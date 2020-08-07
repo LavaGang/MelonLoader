@@ -6,6 +6,7 @@ using System.Threading;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using MelonLoader.LightJson;
 using MelonLoader.TinyJSON;
 using MelonLoader.Tomlyn;
@@ -281,7 +282,7 @@ namespace MelonLoader.AssemblyGenerator
                 var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
                 OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
                 var generatorProcessInfo = new ProcessStartInfo(assembly_path);
-                generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)).Select(it => $"\"{it}\""));
+                generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")));
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;

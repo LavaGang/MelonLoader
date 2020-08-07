@@ -60,6 +60,9 @@
 42. Fixed Issue with Assembly Generator not stopping when failing to Download.
 43. Escalated Assembly Generator failures to Internal Failures.
 44. Fixed Issue where Assembly Generator failures would cause a Crash.
+45. Fixed Crash Issue with Unity TLS Fix for some Games.
+46. Fixed Issue with Assembly Generator not working for some Users.
+47. Fixed Crash Issue with DisableAnalytics for some Games.
 
 ---
 

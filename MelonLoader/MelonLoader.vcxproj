@@ -94,13 +94,14 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="DisableAnalytics.cpp" />
     <ClCompile Include="HookManager.cpp" />
+    <ClCompile Include="Il2Cpp.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MelonLoader.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="MelonLoader_Base.cpp" />
-    <ClCompile Include="Il2Cpp.cpp" />
     <ClCompile Include="Mono.cpp" />
+    <ClCompile Include="UnityTLS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssertionManager.h" />
@@ -109,12 +110,13 @@
     <ClInclude Include="Detours\detver.h" />
     <ClInclude Include="DisableAnalytics.h" />
     <ClInclude Include="HookManager.h" />
+    <ClInclude Include="Il2Cpp.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MelonLoader.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="MelonLoader_Base.h" />
-    <ClInclude Include="Il2Cpp.h" />
     <ClInclude Include="Mono.h" />
+    <ClInclude Include="UnityTLS.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Detours\detours.lib" />

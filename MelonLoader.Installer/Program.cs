@@ -15,7 +15,7 @@ namespace MelonLoader.Installer
 {
     static class Program
     {
-        internal static bool ShouldCheckForUpdates = true;
+        internal static bool ShouldCheckForUpdates = false;
         internal static string Title = "MelonLoader Installer";
         private static string ExeName = null;
         internal static string ManualZipPath = null;

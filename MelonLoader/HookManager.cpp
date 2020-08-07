@@ -149,10 +149,10 @@ HMODULE __stdcall HookManager::Hooked_LoadLibraryW(LPCWSTR lpLibFileName)
 #pragma endregion
 
 #pragma region il2cpp_unity_install_unitytls_interface
-void HookManager::Hooked_il2cpp_unity_install_unitytls_interface(const void* unitytlsInterfaceStruct)
+void HookManager::Hooked_il2cpp_unity_install_unitytls_interface(unitytls_interface* unitytlsInterfaceStruct)
 {
 	Il2Cpp::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
-	Mono::mono_unity_install_unitytls_interface(unitytlsInterfaceStruct);
+	UnityTLS::unitytlsinterface = unitytlsInterfaceStruct;
 }
 #pragma endregion
 
@@ -161,6 +161,7 @@ Il2CppDomain* HookManager::Hooked_il2cpp_init(const char* name)
 {
 	if (Mono::Load() && Mono::Setup())
 	{
+		Hook(&(LPVOID&)Mono::mono_unity_get_unitytls_interface, UnityTLS::GetUnityTLSInterface);
 		Mono::CreateDomain();
 		Exports::AddInternalCalls();
 		MelonLoader_Base::Initialize();

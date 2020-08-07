@@ -9,9 +9,10 @@
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="AssertionManager.cpp" />
-    <ClCompile Include="Il2Cpp.cpp" />
     <ClCompile Include="DisableAnalytics.cpp" />
     <ClCompile Include="MelonLoader_Base.cpp" />
+    <ClCompile Include="UnityTLS.cpp" />
+    <ClCompile Include="Il2Cpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h" />
@@ -21,7 +22,6 @@
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="AssertionManager.h" />
-    <ClInclude Include="Il2Cpp.h" />
     <ClInclude Include="Detours\detours.h">
       <Filter>Detours</Filter>
     </ClInclude>
@@ -30,6 +30,8 @@
     </ClInclude>
     <ClInclude Include="DisableAnalytics.h" />
     <ClInclude Include="MelonLoader_Base.h" />
+    <ClInclude Include="UnityTLS.h" />
+    <ClInclude Include="Il2Cpp.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Detours">
