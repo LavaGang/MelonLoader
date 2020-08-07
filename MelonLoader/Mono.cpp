@@ -34,7 +34,7 @@ mono_object_get_class_t Mono::mono_object_get_class = NULL;
 mono_runtime_set_main_args_t Mono::mono_runtime_set_main_args = NULL;
 mono_domain_set_config_t Mono::mono_domain_set_config = NULL;
 mono_method_get_name_t Mono::mono_method_get_name = NULL;
-mono_unity_install_unitytls_interface_t Mono::mono_unity_install_unitytls_interface = NULL;
+mono_unity_get_unitytls_interface_t Mono::mono_unity_get_unitytls_interface = NULL;
 
 bool Mono::Load()
 {
@@ -82,7 +82,7 @@ bool Mono::Setup()
 	mono_object_get_class = (mono_object_get_class_t)AssertionManager::GetExport(Module, "mono_object_get_class");
 
 	if (MelonLoader::IsGameIl2Cpp)
-		mono_unity_install_unitytls_interface = (mono_unity_install_unitytls_interface_t)AssertionManager::GetExport(Module, "mono_unity_install_unitytls_interface");
+		mono_unity_get_unitytls_interface = (mono_unity_get_unitytls_interface_t)AssertionManager::GetExport(Module, "mono_unity_get_unitytls_interface");
 
 	if (!IsOldMono)
 	{

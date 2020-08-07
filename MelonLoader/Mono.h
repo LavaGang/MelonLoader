@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include "UnityTLS.h"
 
 struct MonoDomain;
 struct MonoAssembly;
@@ -43,7 +44,7 @@ typedef void (*mono_domain_set_config_t)(MonoDomain* domain, const char* configp
 typedef void (*mono_debug_init_t) (MonoDebugFormat format);
 typedef void (*mono_debug_domain_create_t) (MonoDomain* domain);
 typedef void (*mono_jit_parse_options_t)(int argc, char* argv[]);
-typedef void (*mono_unity_install_unitytls_interface_t)(const void* unitytlsInterfaceStruct);
+typedef unitytls_interface* (*mono_unity_get_unitytls_interface_t)();
 
 class Mono
 {
@@ -77,7 +78,7 @@ public:
 	static mono_object_get_class_t mono_object_get_class;
 	static mono_runtime_set_main_args_t mono_runtime_set_main_args;
 	static mono_domain_set_config_t mono_domain_set_config;
-	static mono_unity_install_unitytls_interface_t mono_unity_install_unitytls_interface;
+	static mono_unity_get_unitytls_interface_t mono_unity_get_unitytls_interface;
 
 	static bool Load();
 	static bool Setup();
