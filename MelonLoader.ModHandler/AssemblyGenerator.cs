@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace MelonLoader
 {
@@ -24,7 +25,7 @@ namespace MelonLoader
             if (File.Exists(GeneratorProcessPath))
             {
                 var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath);
-                generatorProcessInfo.Arguments = $"\"{MelonLoaderBase.UnityVersion}\" \"{Imports.GetGameDirectory()}\" \"{Imports.GetGameDataDirectory()}\" {(Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Force_Version_Unhollower()) ? "" : Force_Version_Unhollower())}";
+                generatorProcessInfo.Arguments = $"\"{MelonLoaderBase.UnityVersion}\" {"\"" + Regex.Replace(Imports.GetGameDirectory(), @"(\\+)$", @"$1$1") + "\""} {"\"" + Regex.Replace(Imports.GetGameDataDirectory(), @"(\\+)$", @"$1$1") + "\""} {(Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Force_Version_Unhollower()) ? "" : Force_Version_Unhollower())}";
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;
