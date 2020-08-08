@@ -14,25 +14,9 @@ namespace MelonLoader
             MelonConsole.RunLogCallbacks(namesection, s);
         }
 
-        public static void Log(float f)
-        {
-            string namesection = GetNameSection();
-            string s = f.ToString();
-            Native_Log(namesection, s);
-            MelonConsole.RunLogCallbacks(namesection, s);
-        }
-
         public static void Log(ConsoleColor color, string s)
         {
             string namesection = GetNameSection();
-            Native_LogColor(namesection, s, color);
-            MelonConsole.RunLogCallbacks(namesection, s);
-        }
-
-        public static void Log(ConsoleColor color, float f)
-        {
-            string namesection = GetNameSection();
-            string s = f.ToString();
             Native_LogColor(namesection, s, color);
             MelonConsole.RunLogCallbacks(namesection, s);
         }
@@ -51,6 +35,16 @@ namespace MelonLoader
             string fmt = string.Format(s, args);
             Native_LogColor(namesection, fmt, color);
             MelonConsole.RunLogCallbacks(namesection, fmt);
+        }
+
+        public static void Log(object o)
+        {
+            Log(o.ToString());
+        }
+
+        public static void Log(ConsoleColor color, object o)
+        {
+            Log(color, o.ToString());
         }
 
         public static void LogWarning(string s)
