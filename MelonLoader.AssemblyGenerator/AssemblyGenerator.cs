@@ -277,36 +277,27 @@ namespace MelonLoader.AssemblyGenerator
         internal bool Execute(string[] argv)
         {
             string assembly_path = Path.Combine(BaseFolder, FileName);
-            if (File.Exists(assembly_path))
+            if (!File.Exists(assembly_path))
             {
-                var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
-                OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
-                var generatorProcessInfo = new ProcessStartInfo(assembly_path);
-                generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")));
-                generatorProcessInfo.UseShellExecute = false;
-                generatorProcessInfo.RedirectStandardOutput = true;
-                generatorProcessInfo.CreateNoWindow = true;
-                var process = Process.Start(generatorProcessInfo);
-                if (process == null)
-                {
-                    Logger.LogError("Unable to Start " + FileName + "!");
-                    OverrideAppDomainBase(originalCwd);
-                }
-                else
-                {
-                    var stdout = process.StandardOutput;
-                    while (!stdout.EndOfStream)
-                    {
-                        var line = stdout.ReadLine();
-                        Logger.Log(line);
-                    }
-                    while (!process.HasExited)
-                        Thread.Sleep(100);
-                    OverrideAppDomainBase(originalCwd);
-                    return (process.ExitCode == 0);
-                }
+                Logger.LogError(FileName + " does not exist!");
+                return false;
             }
-            return false;
+            var originalCwd = AppDomain.CurrentDomain.BaseDirectory;
+            OverrideAppDomainBase(BaseFolder + Path.DirectorySeparatorChar);
+            var generatorProcessInfo = new ProcessStartInfo(assembly_path);
+            generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")));
+            generatorProcessInfo.UseShellExecute = false;
+            generatorProcessInfo.RedirectStandardOutput = true;
+            generatorProcessInfo.CreateNoWindow = true;
+            Process process = null;
+            try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.LogError(e.ToString()); Logger.LogError("Unable to Start " + FileName + "!"); OverrideAppDomainBase(originalCwd); return false; }
+            var stdout = process.StandardOutput;
+            while (!stdout.EndOfStream)
+                Logger.Log(stdout.ReadLine());
+            while (!process.HasExited)
+                Thread.Sleep(100);
+            OverrideAppDomainBase(originalCwd);
+            return (process.ExitCode == 0);
         }
     }
 

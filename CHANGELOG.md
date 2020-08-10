@@ -64,6 +64,7 @@
 46. Fixed Issue with Assembly Generator not working for some Users.
 47. Fixed Crash Issue with DisableAnalytics for some Games.
 48. Fixed Missing NULL Check in DisableAnalytics.  (Credits to Sinai :D)
+49. Added Try Catch to Assembly Generator Execution.  (Credits to Samboy :D)
 
 ---
 
