@@ -24,8 +24,9 @@ namespace MelonLoader
             if (!AssemblyGenerator.HasGeneratedAssembly)
                 return;
             MelonHandler.LoadAll(true);
-            if (MelonHandler.HasMelons)
-                MelonPrefs.Setup();
+            if (!MelonHandler.HasMelons)
+                return;
+            MelonPrefs.Setup();
             MelonHandler.OnPreInitialization();
         }
 
