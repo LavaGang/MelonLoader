@@ -37,6 +37,16 @@ namespace MelonLoader
             MelonConsole.RunLogCallbacks(namesection, fmt);
         }
 
+        public static void Log(object o)
+        {
+            Log(o.ToString());
+        }
+
+        public static void Log(ConsoleColor color, object o)
+        {
+            Log(color, o.ToString());
+        }
+
         public static void LogWarning(string s)
         {
             string namesection = GetNameSection();
