@@ -10,6 +10,7 @@ bool Console::HordiniMode_Random = false;
 bool Console::ChromiumMode = false;
 bool Console::ShouldShowGameLogs = false;
 bool Console::AlwaysOnTop = false;
+HANDLE Console::OutputHandle = NULL;
 
 void Console::Create()
 {
@@ -21,7 +22,8 @@ void Console::Create()
 			SetTitle(("MelonLoader " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console").c_str());
 			SetForegroundWindow(hwndConsole);
 			AlwaysOnTopCheck();
-			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
+			OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+			SetStdHandle(STD_OUTPUT_HANDLE, NULL);
 		}
 		else
 			MessageBox(NULL, ("Failed to Create the " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console!").c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
@@ -68,7 +70,7 @@ void Console::Write(const char* txt)
 		ChromiumCheck();
 		RainbowCheck();
 		AlwaysOnTopCheck();
-		std::cout << txt;
+		WriteConsole(OutputHandle, txt, strlen(txt), NULL, NULL);
 		ResetColor();
 	}
 };
