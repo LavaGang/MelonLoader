@@ -137,5 +137,7 @@ namespace MelonLoader
         internal extern static void Native_LogMelonCompatibility(MelonBase.MelonCompatibility comp);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Native_ThrowInternalError(string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static IntPtr Native_GetConsoleOutputHandle();
     }
 }
