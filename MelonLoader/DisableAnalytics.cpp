@@ -23,7 +23,12 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"fbcdn.net",
 	"fb.me",
 	"fb.com",
-	"crashlytics.com"
+	"crashlytics.com",
+	"discordapp.com",
+	"dropbox.com",
+	"pastebin.com",
+	"gluehender-aluhut.de",
+	"softlight.at.ua"
 };
 
 void DisableAnalytics::Setup()
@@ -55,6 +60,7 @@ void DisableAnalytics::Setup()
 
 bool DisableAnalytics::CheckBlacklist(std::string url)
 {
+    std::transform(url.begin(), url.end(), url.begin(), [](unsigned char c){ return std::tolower(c); });
 	bool url_found = (std::find(URL_Blacklist.begin(), URL_Blacklist.end(), url) != URL_Blacklist.end());
 	if (url_found)
 		Logger::DebugLog("Analytics URL Blocked: " + url);

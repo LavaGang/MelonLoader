@@ -196,6 +196,7 @@ namespace MelonLoader.AssemblyGenerator
                 ("--output=" + Il2CppAssemblyUnhollower.OutputDirectory),
                 ("--mscorlib=" + MSCORLIB_Path),
                 ("--unity=" + UnityDependencies.BaseFolder),
+                "--gameassembly=" + GameAssembly_Path,
                 "--blacklist-assembly=Mono.Security",
                 "--blacklist-assembly=Newtonsoft.Json",
                 "--blacklist-assembly=Valve.Newtonsoft.Json"
@@ -234,7 +235,7 @@ namespace MelonLoader.AssemblyGenerator
                 }
                 localConfig.OldFiles.Clear();
             }
-            string[] files = Directory.GetFiles(Il2CppAssemblyUnhollower.OutputDirectory, "*.dll", SearchOption.TopDirectoryOnly);
+            string[] files = Directory.GetFiles(Il2CppAssemblyUnhollower.OutputDirectory, "*", SearchOption.TopDirectoryOnly);
             if (files.Length > 0)
             {
                 for (int i = 0; i < files.Length; i++)
