@@ -100,8 +100,8 @@ public:
 	static void Write(std::string txt) { Write(txt.c_str()); }
 	static void Write(std::string txt, ConsoleColor color) { Write(txt.c_str(), color); }
 
-	static void WriteLine(const char* txt) { Write(txt); Write("\n"); }
-	static void WriteLine(const char* txt, ConsoleColor color) { Write(txt, color); Write("\n"); }
+	static void WriteLine(const char* txt) { Write(txt); std::cout << std::endl; }
+	static void WriteLine(const char* txt, ConsoleColor color) { Write(txt, color); std::cout << std::endl; }
 	static void WriteLine(std::string txt) { WriteLine(txt.c_str()); }
 	static void WriteLine(std::string txt, ConsoleColor color) { WriteLine(txt.c_str(), color); }
 };
