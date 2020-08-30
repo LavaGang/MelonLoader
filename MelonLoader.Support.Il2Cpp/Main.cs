@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
@@ -29,6 +30,28 @@ namespace MelonLoader.Support
             ClassInjector.DoHook += Imports.Hook;
             GetUnityVersionNumbers(out var major, out var minor, out var patch);
             UnityVersionHandler.Initialize(major, minor, patch);
+
+            // Il2CppSystem.Console.SetOut(new Il2CppSystem.IO.StreamWriter(Il2CppSystem.IO.Stream.Null));
+            try
+            {
+                var il2CppSystemAssembly = Assembly.Load("Il2Cppmscorlib");
+
+                var consoleType = il2CppSystemAssembly.GetType("Il2CppSystem.Console");
+                var streamWriterType = il2CppSystemAssembly.GetType("Il2CppSystem.IO.StreamWriter");
+                var streamType = il2CppSystemAssembly.GetType("Il2CppSystem.IO.Stream");
+
+                var setOutMethod = consoleType.GetMethod("SetOut", BindingFlags.Static | BindingFlags.Public);
+                var nullStreamField = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public).GetGetMethod();
+                var streamWriterCtor = streamWriterType.GetConstructor(new[] {streamType});
+
+                var nullStream = nullStreamField.Invoke(null, new object[0]);
+                var steamWriter = streamWriterCtor.Invoke(new[] {nullStream});
+                setOutMethod.Invoke(null, new[] {steamWriter});
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.LogError($"Console cleaning failed: {ex}");
+            }
 
             SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
 

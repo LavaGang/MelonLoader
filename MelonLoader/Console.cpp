@@ -21,12 +21,11 @@ void Console::Create()
 			hwndConsole = GetConsoleWindow();
 			SetTitle(("MelonLoader " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console").c_str());
 			SetForegroundWindow(hwndConsole);
-			AlwaysOnTopCheck();
-			OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-			SetStdHandle(STD_OUTPUT_HANDLE, NULL);
+			AlwaysOnTopCheck();			
+			freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 		}
-		else
-			MessageBox(NULL, ("Failed to Create the " + (MelonLoader::DebugMode ? std::string("Debug") : std::string("Normal")) + " Console!").c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
+		// if it returned false, console was already allocated, just grab the handle from it
+		OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	}
 }
 
@@ -70,7 +69,7 @@ void Console::Write(const char* txt)
 		ChromiumCheck();
 		RainbowCheck();
 		AlwaysOnTopCheck();
-		WriteConsole(OutputHandle, txt, strlen(txt), NULL, NULL);
+		std::cout << txt;
 		ResetColor();
 	}
 };
