@@ -25,6 +25,7 @@
 6. Exposed new Console Output Handle and assign it to Managed Console Class Output.    (Credits to knah :D)
 7. Added Unity 2019.4.3 Dependencies.
 8. Bumped Il2CppAssemblyUnhollower Version.
+9. Use a different approach to console cleaning for better interop with other tools.    (Credits to knah :D)
 
 ---
 
