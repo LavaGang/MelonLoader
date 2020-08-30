@@ -27,7 +27,7 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"discordapp.com",
 	"dropbox.com",
 	"pastebin.com",
-	"gluehender-aluhut.de",
+	"gluehender-aluhut.de", // Wasn't even Herp's change LEL quit clout chasing
 	"softlight.at.ua"
 };
 
