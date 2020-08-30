@@ -82,7 +82,18 @@ namespace MelonLoader.Installer
                 string version = null;
                 JsonArray data = (JsonArray)JsonValue.Parse(webClient.DownloadString("https://api.github.com/repos/HerpDerpinstine/MelonLoader/releases")).AsJsonArray;
                 if (data.Count > 0)
-                    version = data[0]["tag_name"].AsString;
+                {
+                    foreach (var x in data)
+                    {
+                        string versionstr = x["tag_name"].AsString;
+                        if (!versionstr.StartsWith("v0.2") && !versionstr.StartsWith("v0.1"))
+                            continue;
+                        version = versionstr;
+                        break;
+                    }
+                }
+                if (version == null)
+                    return;
                 try
                 {
                     Install(silentPath, version, false, true);
@@ -123,6 +134,8 @@ namespace MelonLoader.Installer
                     foreach (var x in data)
                     {
                         string version = x["tag_name"].AsString;
+                        if (!version.StartsWith("v0.2") && !version.StartsWith("v0.1"))
+                            continue;
                         if (!has_added_latest)
                         {
                             has_added_latest = true;
@@ -323,10 +336,7 @@ namespace MelonLoader.Installer
                         {
                             string version = Path.GetFileNameWithoutExtension(x["name"].AsString);
                             if (version.StartsWith(subver))
-                            {
                                 versionlist.Add(version);
-                                string[] semvertbl = version.Split(new char[] { '.' });
-                            }
                         }
                         if (versionlist.Count > 0)
                         {

@@ -83,12 +83,13 @@ public:
 	static bool ChromiumMode;
 	static bool ShouldShowGameLogs;
 	static bool AlwaysOnTop;
+	static HANDLE OutputHandle;
 
 	static bool IsInitialized() { return (hwndConsole != NULL); }
 	static void Create();
 
 	static void SetTitle(const char* title) { SetConsoleTitle(title); }
-	static void SetColor(ConsoleColor color) { SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color); }
+	static void SetColor(ConsoleColor color) { SetConsoleTextAttribute(OutputHandle, color); }
 	static void ResetColor() { SetColor(ConsoleColor_Gray); }
 	static void RainbowCheck();
 	static void ChromiumCheck();
@@ -99,8 +100,8 @@ public:
 	static void Write(std::string txt) { Write(txt.c_str()); }
 	static void Write(std::string txt, ConsoleColor color) { Write(txt.c_str(), color); }
 
-	static void WriteLine(const char* txt) { Write(txt); std::cout << std::endl; }
-	static void WriteLine(const char* txt, ConsoleColor color) { Write(txt, color); std::cout << std::endl; }
+	static void WriteLine(const char* txt) { Write(txt); Write("\n"); }
+	static void WriteLine(const char* txt, ConsoleColor color) { Write(txt, color); Write("\n"); }
 	static void WriteLine(std::string txt) { WriteLine(txt.c_str()); }
 	static void WriteLine(std::string txt, ConsoleColor color) { WriteLine(txt.c_str(), color); }
 };

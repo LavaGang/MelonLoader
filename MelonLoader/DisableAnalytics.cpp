@@ -23,7 +23,12 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"fbcdn.net",
 	"fb.me",
 	"fb.com",
-	"crashlytics.com"
+	"crashlytics.com",
+	"discordapp.com",
+	"dropbox.com",
+	"pastebin.com",
+	"gluehender-aluhut.de",
+	"softlight.at.ua"
 };
 
 void DisableAnalytics::Setup()
@@ -55,6 +60,7 @@ void DisableAnalytics::Setup()
 
 bool DisableAnalytics::CheckBlacklist(std::string url)
 {
+    std::transform(url.begin(), url.end(), url.begin(), [](unsigned char c){ return std::tolower(c); });
 	bool url_found = (std::find(URL_Blacklist.begin(), URL_Blacklist.end(), url) != URL_Blacklist.end());
 	if (url_found)
 		Logger::DebugLog("Analytics URL Blocked: " + url);
@@ -63,14 +69,30 @@ bool DisableAnalytics::CheckBlacklist(std::string url)
 
 void* DisableAnalytics::Hooked_gethostbyname(const char* name)
 {
-	if ((name != NULL) && CheckBlacklist(name))
-		return Original_gethostbyname("localhost");
-	return Original_gethostbyname(name);
+	try
+	{
+		if ((name != NULL) && CheckBlacklist(name))
+			return Original_gethostbyname("localhost");
+		return Original_gethostbyname(name);
+	}
+	catch (...)
+	{
+		Logger::LogError("Exception caught in gethostbyname! Returning NULL");
+		return NULL;
+	}
 }
 
 int DisableAnalytics::Hooked_getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult)
 {
-	if ((pNodeName != NULL) && CheckBlacklist(pNodeName))
-		return Original_getaddrinfo("localhost", pServiceName, pHints, ppResult);
-	return Original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
+	try
+	{
+		if ((pNodeName != NULL) && CheckBlacklist(pNodeName))
+			return Original_getaddrinfo("localhost", pServiceName, pHints, ppResult);
+		return Original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
+	}
+	catch (...)
+	{
+		Logger::LogError("Exception caught in getaddrinfo! Returning WSATRY_AGAIN");
+		return WSATRY_AGAIN;
+	}
 }

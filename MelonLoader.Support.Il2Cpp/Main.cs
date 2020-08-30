@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using Harmony;
 
 namespace MelonLoader.Support
 {
@@ -17,8 +15,6 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static MelonLoaderComponent comp = null;
         private static Camera OnPostRenderCam = null;
-        private static MethodInfo Il2CppSystem_Console_WriteLine = null;
-        private static HarmonyInstance harmonyInstance = null;
 
         private static ISupportModule Initialize()
         {
@@ -29,33 +25,6 @@ namespace MelonLoader.Support
             LogSupport.ErrorHandler += MelonLogger.LogError;
             if (Imports.IsDebugMode())
                 LogSupport.TraceHandler += MelonLogger.Log;
-
-            if (MelonLoaderBase.IsVRChat)
-            {
-                try
-                {
-                    Assembly Transmtn = Assembly.Load("Transmtn");
-                    if (Transmtn != null)
-                    {
-                        Type Transmtn_HttpConnection = Transmtn.GetType("Transmtn.HttpConnection");
-                        if (Transmtn_HttpConnection != null)
-                        {
-                            Il2CppSystem_Console_WriteLine = typeof(Il2CppSystem.Console).GetMethods(BindingFlags.Public | BindingFlags.Static).First(x => (x.Name.Equals("WriteLine") && (x.GetParameters().Count() == 1) && (x.GetParameters()[0].ParameterType == typeof(string))));
-                            if (harmonyInstance == null)
-                                harmonyInstance = HarmonyInstance.Create("MelonLoader.Support.Il2Cpp");
-                            harmonyInstance.Patch(Transmtn_HttpConnection.GetMethod("get", BindingFlags.Public | BindingFlags.Instance), new HarmonyMethod(typeof(Main).GetMethod("Transmtn_HttpConnection_get_Prefix", BindingFlags.NonPublic | BindingFlags.Static)), new HarmonyMethod(typeof(Main).GetMethod("Transmtn_HttpConnection_get_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
-                        }
-                        else
-                            throw new Exception("Failed to get Type Transmtn.HttpConnection!");
-                    }
-                    else
-                        throw new Exception("Failed to get Assembly Transmtn!");
-                }
-                catch (Exception ex)
-                {
-                    MelonLogger.LogWarning("Exception while setting up Auth Token Hider, Auth Tokens may show in Console: " + ex);
-                }
-            }
 
             ClassInjector.DoHook += Imports.Hook;
             GetUnityVersionNumbers(out var major, out var minor, out var patch);
@@ -95,10 +64,6 @@ namespace MelonLoader.Support
 
         internal delegate bool SetAsLastSiblingDelegate(IntPtr u0040this);
         internal static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
-
-        private static bool Il2CppSystem_Console_WriteLine_Patch() => false;
-        private static void Transmtn_HttpConnection_get_Prefix() => harmonyInstance.Patch(Il2CppSystem_Console_WriteLine, new HarmonyMethod(typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static)));
-        private static void Transmtn_HttpConnection_get_Postfix() => harmonyInstance.Unpatch(Il2CppSystem_Console_WriteLine, typeof(Main).GetMethod("Il2CppSystem_Console_WriteLine_Patch", BindingFlags.NonPublic | BindingFlags.Static));
     }
 
     public class MelonLoaderComponent : MonoBehaviour

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace MelonLoader
 {
@@ -22,7 +23,7 @@ namespace MelonLoader
         {
             Enabled = true;
             Allocate();
-            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+            Console.SetOut(new StreamWriter(new FileStream(new SafeFileHandle(MelonLogger.Native_GetConsoleOutputHandle(), false), FileAccess.Write)) { AutoFlush = true });
             Console.SetIn(new StreamReader(Console.OpenStandardInput()));
             SetTitle(BuildInfo.Name + " v" + BuildInfo.Version + " Open-Beta");
         }

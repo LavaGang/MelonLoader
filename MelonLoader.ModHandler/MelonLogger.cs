@@ -37,6 +37,16 @@ namespace MelonLoader
             MelonConsole.RunLogCallbacks(namesection, fmt);
         }
 
+        public static void Log(object o)
+        {
+            Log(o.ToString());
+        }
+
+        public static void Log(ConsoleColor color, object o)
+        {
+            Log(color, o.ToString());
+        }
+
         public static void LogWarning(string s)
         {
             string namesection = GetNameSection();
@@ -127,5 +137,7 @@ namespace MelonLoader
         internal extern static void Native_LogMelonCompatibility(MelonBase.MelonCompatibility comp);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Native_ThrowInternalError(string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static IntPtr Native_GetConsoleOutputHandle();
     }
 }
