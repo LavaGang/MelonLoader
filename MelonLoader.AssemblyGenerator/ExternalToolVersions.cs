@@ -2,7 +2,7 @@ namespace MelonLoader.AssemblyGenerator
 {
     public static class ExternalToolVersions
     {
-        public static string Cpp2IlVersion = "commit_99f1aedc99a5d543576b24fcbc5da72642fdc258";
+        public static string Cpp2IlVersion = "commit_0857c37da68f5b2c8e2d9366d9765c202ed8076f";
         public static string Cpp2IlUrl = "https://github.com/SamboyCoding/Cpp2Il/releases/download/" + Cpp2IlVersion + "/Cpp2Il-Win.exe";
 
         public static string Il2CppAssemblyUnhollowerVersion = "0.4.9.1";

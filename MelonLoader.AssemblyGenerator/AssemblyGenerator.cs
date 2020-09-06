@@ -289,12 +289,17 @@ namespace MelonLoader.AssemblyGenerator
             generatorProcessInfo.Arguments = String.Join(" ", argv.Where(s => !String.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")));
             generatorProcessInfo.UseShellExecute = false;
             generatorProcessInfo.RedirectStandardOutput = true;
+            generatorProcessInfo.RedirectStandardError = true;
             generatorProcessInfo.CreateNoWindow = true;
             Process process = null;
             try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.LogError(e.ToString()); Logger.LogError("Unable to Start " + FileName + "!"); OverrideAppDomainBase(originalCwd); return false; }
             var stdout = process.StandardOutput;
+            var stderr = process.StandardError;
             while (!stdout.EndOfStream)
                 Logger.Log(stdout.ReadLine());
+            if (process.ExitCode != 0)
+            while (!stderr.EndOfStream)
+                Logger.LogError(stderr.ReadLine());
             while (!process.HasExited)
                 Thread.Sleep(100);
             OverrideAppDomainBase(originalCwd);
