@@ -181,7 +181,8 @@ namespace MelonLoader.AssemblyGenerator
 
             Logger.Log("Executing Cpp2Il...");
             if (!Cpp2Il.Execute(new string[] {
-                ("--game-path " + GameRoot),
+                "--game-path",
+                GameRoot,
                 "--skip-analysis",
                 "--skip-metadata-txts"
             }))
