@@ -25,6 +25,13 @@ namespace MelonLoader.AssemblyGenerator
 
             Logger.Log($"Downloading {url} to {tempFile}");
             Program.webClient.DownloadFile(url, tempFile);
+            string realfilename = Path.GetFileName(url);
+            if (realfilename.EndsWith(".exe"))
+            {
+                File.Move(tempFile, Path.Combine(destinationFolder, realfilename));
+                return;
+            }
+
             Logger.Log($"Extracting {tempFile} to {destinationFolder}");
             
             using var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read);
