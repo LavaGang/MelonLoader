@@ -62,9 +62,16 @@ namespace MelonLoader
 
         private static Assembly AssemblyResolveHandler(object sender, ResolveEventArgs args)
         {
-            if (args.Name.StartsWith("MelonLoader.ModHandler, Version="))
+            if (args.Name.StartsWith("MelonLoader.ModHandler, Version=") || args.Name.StartsWith("MelonLoader, Version="))
                 return typeof(Core).Assembly;
-            MelonLogger.Msg(args.Name);
+            string assembly_name = args.Name.Split(',')[0];
+            string dll_name = (assembly_name + ".dll");
+            string plugins_path = Path.Combine(MelonHandler.PluginsDirectory, dll_name);
+            if (File.Exists(plugins_path))
+                return Assembly.LoadFile(plugins_path);
+            string mods_path = Path.Combine(MelonHandler.ModsDirectory, dll_name);
+            if (File.Exists(mods_path))
+                return Assembly.LoadFile(mods_path);
             return null;
         }
 

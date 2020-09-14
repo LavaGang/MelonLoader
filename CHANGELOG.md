@@ -57,6 +57,7 @@
 37. Re-added Launch Option "--melonloader.agfvunhollower".
 38. Added Launch Option "--melonloader.agfvdumper" to Force the Version of Il2CppDumper to use.
 39. Added Launch Option "--melonloader.agfvunity" to Force the Version of Unity Dependencies to use.
+40. Fixed Assembly Resolve Issue when a Plugin references a Mod.
 
 ---
 
