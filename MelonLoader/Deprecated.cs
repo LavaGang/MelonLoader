@@ -183,6 +183,12 @@ namespace MelonLoader
 
         public static void SaveConfig()
         {
+            SaveConfigToTable();
+            MelonHandler.OnPreferencesApplied();
+        }
+
+        internal static void SaveConfigToTable()
+        {
             foreach (KeyValuePair<string, Dictionary<string, MelonPreference>> prefsInSection in prefs)
             {
                 foreach (KeyValuePair<string, MelonPreference> pref in prefsInSection.Value)
@@ -192,7 +198,6 @@ namespace MelonLoader
                 }
             }
             MelonLogger.Log("Legacy Config Saved!");
-            MelonHandler.OnPreferencesApplied();
         }
 
         public static string GetString(string section, string name)
