@@ -7,7 +7,7 @@ namespace MelonLoader.AssemblyGenerator
         internal UnityDependencies()
         {
             Version = Utils.GetUnityVersion();
-            URL = "https://github.com/HerpDerpinstine/MelonLoader/raw/master/BaseLibs/UnityDependencies/" + Version + ".zip";
+            URL = "https://github.com/LavaGang/Unity-Runtime-Libraries/raw/master/" + Version + ".zip";
             Destination = Path.Combine(Main.BasePath, "UnityDependencies");
         }
 
