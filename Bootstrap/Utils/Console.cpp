@@ -38,7 +38,7 @@ bool Console::Initialize()
 
 void Console::AlwaysOnTopCheck()
 {
-	if (!AlwaysOnTop || !IsInitialized())
+	if (!AlwaysOnTop)
 		return;
 	SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, (SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW));
 	ShowWindow(Window, SW_NORMAL);
@@ -70,5 +70,8 @@ void Console::SetColor(Color color)
 void Console::Write(const char* txt)
 {
 	if (IsInitialized())
+	{
+		AlwaysOnTopCheck();
 		std::cout << txt;
+	}
 };
