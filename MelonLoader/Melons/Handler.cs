@@ -110,7 +110,7 @@ namespace MelonLoader
                         if (((mode == LoadMode.NORMAL) && file_extension_check) || ((mode == LoadMode.DEV) && !file_extension_check))
                             continue;
                     }
-                    LoadFromFile(filename, plugins);
+                    LoadFromFile(filename);
                 }
 
             // ZIPs
@@ -152,7 +152,7 @@ namespace MelonLoader
                                         else
                                             break;
                                     }
-                                    LoadFromAssembly(Assembly.Load(memorystream.ToArray()), plugins, (filename + "/" + filename2));
+                                    LoadFromAssembly(Assembly.Load(memorystream.ToArray()), (filename + "/" + filename2));
                                 }
                             }
                         }
@@ -165,7 +165,7 @@ namespace MelonLoader
                 DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 
-        public static void LoadFromFile(string filename, bool is_plugin = false)
+        public static void LoadFromFile(string filename)
         {
             if (filename == null)
                 return;
@@ -177,12 +177,12 @@ namespace MelonLoader
                     MelonLogger.Error("Failed to Load Assembly for " + filename + "!"); ;
                     return;
                 }
-                LoadFromAssembly(asm, is_plugin, filename);
+                LoadFromAssembly(asm, filename);
             }
             catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
         }
 
-        public static void LoadFromAssembly(Assembly asm, bool is_plugin = false, string filelocation = null)
+        public static void LoadFromAssembly(Assembly asm, string filelocation = null)
         {
             if (asm == null)
                 return;
@@ -198,8 +198,14 @@ namespace MelonLoader
                 }
                 infoAttribute = legacyinfoAttribute.Convert();
             }
-            Type melonType = (is_plugin ? typeof(MelonPlugin) : typeof(MelonMod));
-            if ((infoAttribute.SystemType == null) || !infoAttribute.SystemType.IsSubclassOf(melonType))
+            if (infoAttribute.SystemType == null)
+            {
+                MelonLogger.Error("Invalid Type given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                return;
+            }
+            bool is_plugin = infoAttribute.SystemType.IsSubclassOf(typeof(MelonPlugin));
+            bool is_mod = infoAttribute.SystemType.IsSubclassOf(typeof(MelonMod));
+            if (!is_plugin && !is_mod)
             {
                 MelonLogger.Error("Invalid Type given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
                 return;
@@ -275,7 +281,7 @@ namespace MelonLoader
             baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
             if (is_plugin)
                 _Plugins.Add((MelonPlugin)baseInstance);
-            else
+            else if (is_mod)
                 _Mods.Add((MelonMod)baseInstance);
         }
 
