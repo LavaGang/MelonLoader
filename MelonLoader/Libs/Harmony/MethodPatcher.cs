@@ -37,7 +37,7 @@ namespace Harmony
 			{
 				if (HarmonyInstance.DEBUG) FileLog.LogBuffered("### Patch " + original.DeclaringType + ", " + original);
 
-				bool isIl2Cpp = MelonLoader.Unhollower.IsGeneratedAssemblyType(original.DeclaringType);
+				bool isIl2Cpp = MelonLoader.Unhollower.IsIl2CppObjectType(original.DeclaringType);
 				var idx = prefixes.Count() + postfixes.Count();
 				var patch = DynamicTools.CreateDynamicMethod(original, "_Patch" + idx, isIl2Cpp);
 				if (patch == null)

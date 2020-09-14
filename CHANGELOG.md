@@ -48,7 +48,8 @@
 28. Fixed Type Overwrite Issue with MelonPreferences.
 29. Fixed Loading Issue when a Plugin is in the Mods folder or vice-versa.
 30. Improved Loading of Plugins and Mods.
-31. 
+31. Re-added UnityEngine.Il2CppAssetBundleManager.
+32. Fixed Issue with UnityEngine.Il2CppAssetBundleManager being outdated.
 
 ---
 

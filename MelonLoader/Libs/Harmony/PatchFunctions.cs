@@ -85,7 +85,7 @@ namespace Harmony
 			var sortedPrefixes = GetSortedPatchMethods(original, patchInfo.prefixes);
 			var sortedPostfixes = GetSortedPatchMethods(original, patchInfo.postfixes);
 			var sortedTranspilers = GetSortedPatchMethods(original, patchInfo.transpilers);
-			bool isIl2Cpp = Unhollower.IsGeneratedAssemblyType(original.DeclaringType);
+			bool isIl2Cpp = Unhollower.IsIl2CppObjectType(original.DeclaringType);
 
 			if (isIl2Cpp) {
 				if (sortedTranspilers.Count > 0) {
@@ -299,12 +299,12 @@ namespace Harmony
 		private static Type Il2CppTypeForPatchType(Type type) {
 			if (type.IsByRef) {
 				Type element = type.GetElementType();
-				if (element == typeof(string) || Unhollower.IsGeneratedAssemblyType(element)) {
+				if (element == typeof(string) || Unhollower.IsIl2CppObjectType(element)) {
 					return typeof(IntPtr*);
 				} else {
 					return type;
 				}
-			} else if (type == typeof(string) || Unhollower.IsGeneratedAssemblyType(type)) {
+			} else if (type == typeof(string) || Unhollower.IsIl2CppObjectType(type)) {
 				return typeof(IntPtr);
 			} else {
 				return type;
@@ -327,7 +327,7 @@ namespace Harmony
 					Emitter.Emit(il, OpCodes.Call, Unhollower.Il2CppStringToManagedMethod);
 					Emitter.Emit(il, OpCodes.Stloc, byRefLocal);
 					Emitter.Emit(il, OpCodes.Ldloca, byRefLocal);
-				} else if (Unhollower.IsGeneratedAssemblyType(elementType)) {
+				} else if (Unhollower.IsIl2CppObjectType(elementType)) {
 					// byRefLocal = *ptr == 0 ? null : new SomeType(*ptr);
 					// return ref byRefLocal;
 					Label ptrNonZero = il.DefineLabel();
@@ -348,7 +348,7 @@ namespace Harmony
 			} else if (paramType == typeof(string)) {
 				// return Il2CppStringToManaged(ptr);
 				Emitter.Emit(il, OpCodes.Call, Unhollower.Il2CppStringToManagedMethod);
-			} else if (Unhollower.IsGeneratedAssemblyType(paramType)) {
+			} else if (Unhollower.IsIl2CppObjectType(paramType)) {
 				// return ptr == 0 ? null : new SomeType(ptr);
 				Label ptrNonZero = il.DefineLabel();
 				Label done = il.DefineLabel();
@@ -367,7 +367,7 @@ namespace Harmony
 		private static void ConvertReturnValue(ILGenerator il, Type returnType) {
 			if (returnType == typeof(string)) {
 				Emitter.Emit(il, OpCodes.Call, Unhollower.ManagedStringToIl2CppMethod);
-			} else if (!returnType.IsValueType && Unhollower.IsGeneratedAssemblyType(returnType)) {
+			} else if (!returnType.IsValueType && Unhollower.IsIl2CppObjectType(returnType)) {
 				Emitter.Emit(il, OpCodes.Call, Unhollower.Il2CppObjectBaseToPtrMethod);
 			}
 		}
