@@ -17,7 +17,7 @@
 ### AUTOMATED INSTALLATION:
 
 1. Make sure the Game is Closed and Not Running before installing.
-2. Download [MelonLoader.Installer.exe](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
+2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
 3. Run MelonLoader.Installer.exe.
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
@@ -29,7 +29,7 @@
 ### MANUAL INSTALLATION:
 
 1. Make sure the Game is Closed and Not Running before installing.
-2. Download MelonLoader [[x86](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
+2. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
 3. Extract the MelonLoader folder from the zip to the Game's Installation Folder.
 4. Extract version.dll from the zip to the Game's Installation Folder.
 
@@ -38,7 +38,7 @@
 ### AUTOMATED UNINSTALL:
 
 1. Make sure the Game you are uninstalling from is Closed and Not Running.
-2. Download [MelonLoader.Installer.exe](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
+2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
 3. Run MelonLoader.Installer.exe.
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
@@ -106,22 +106,23 @@
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
-| --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |
 | --melonloader.agfvunity | Forces use a Specified Version of Unity Dependencies |
+| --melonloader.agfvdumper | Forces use a Specified Version of Il2CppDumper |
+| --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |
 
 ---
 
 ### LICENSING & CREDITS:
 
-MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/LICENSE.md) for the full License.
+MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
 
 Third-party libraries used as source code or bundled in binary form:
-- [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/Detours/LICENSE.md) for the full License.
+- [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/Detours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
-- [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/Harmony/LICENSE) for the full License.
-- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/TinyJSON/LICENSE.md) for the full License.
-- [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/Tomlyn/license.txt) for the full License.
-- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/MelonLoader/blob/master/MelonLoader/SharpZipLib/LICENSE.txt) for the full License.
+- [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/Harmony/LICENSE) for the full License.
+- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/TinyJSON/LICENSE.md) for the full License.
+- [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/Tomlyn/license.txt) for the full License.
+- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/SharpZipLib/LICENSE.txt) for the full License.
 - Unity Runtime libraries (found in [Unity Dependencies](BaseLibs/Unity%20Dependencies)) are part of Unity Software.  
 Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
 

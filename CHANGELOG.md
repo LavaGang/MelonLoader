@@ -44,7 +44,7 @@
 24. Re-added --quitfix Launch Option.
 25. Fixed Console On Top Check.
 26. Fixed Legacy Support for OnLevelWasLoaded and OnLevelWasInitialized.
-27. 
+27. Fixed Legacy Support for Preferences and OnModSettingsApplied.
 
 ---
 
