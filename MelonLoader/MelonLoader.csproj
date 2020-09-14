@@ -27,10 +27,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-    <DefineConstants>TRACE;NET35</DefineConstants>
+    <DefineConstants>NET35</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
