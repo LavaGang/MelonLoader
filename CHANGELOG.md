@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.3.0 Open-Beta](#v030-open-beta)  
 [v0.2.7 Open-Beta](#v027-open-beta)  
 [v0.2.6 Open-Beta](#v026-open-beta)  
 [v0.2.5 Open-Beta](#v025-open-beta)  
@@ -15,6 +16,31 @@
 
 ---
 
+### v0.3.0 Open-Beta:
+
+1. Rewrote Proxy from scratch.
+2. Rewrote Bootstrap from scratch.
+3. Rewrote MelonLoader from scratch.
+4. Rewrote AssemblyGenerator from scratch.
+5. Added x86 Support.
+6. Proxy now has the ability to be named version.dll, winmm.dll, or winhttp.dll.
+7. OnModSettingsApplied has been changed to OnPreferencesApplied.
+8. Temporarily Removed OnLevelIsLoading.
+9. Internal Failures are now a lot more informative.
+10. Debug Mode is now a lot more informative.
+11. Logs folder has been moved to MelonLoader/Logs.
+12. Logger now produces a latest.log file in the MelonLoader folder.
+13. Removed LightJson. Not Needed.
+14. Load Mode "-dev" Name Extension has been changed to ".dev" Extension.
+15. Added Launch Option "--melonloader.dab" to Debug Analytics Blocker.
+16. Fixed Assembly Resolve Issue between Plugins and Mods.
+17. MelonHandler now requires Name, Version, and Author to all be properly set in Melons.
+18. Author is now mandatory to be set in MelonInfoAttribute for Melons. It can no longer be set to null.
+19. Fixed issue with Support Module due to Time.deltaTime being stripped.
+20. 
+
+---
+
 ### v0.2.7 Open-Beta:
 
 1. Console no longer has stdout directed to it.    (Credits to knah :D)
@@ -25,7 +51,6 @@
 6. Exposed new Console Output Handle and assign it to Managed Console Class Output.    (Credits to knah :D)
 7. Added Unity 2019.4.3 Dependencies.
 8. Bumped Il2CppAssemblyUnhollower Version.
-9. Use a different approach to console cleaning for better interop with other tools.    (Credits to knah :D)
 
 ---
 

@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Bootstrap.cpp" />
+    <ClCompile Include="Utils\CommandLine.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Core.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Hook.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Console.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Game.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Mono.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Il2Cpp.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Assertion.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\AssemblyGenerator.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Logger.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Debug.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\InternalCalls.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\BaseAssembly.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\AnalyticsBlocker.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\HashCode.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Managers\Exports.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{49d9200e-44b5-44ac-839f-97d39a3f5010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{62683d2d-3bde-4ffd-8474-87a2b2403734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{5689d597-5adb-4646-8a26-57d0d5f522ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\MSDetours">
+      <UniqueIdentifier>{fc78f094-efe0-4d26-a6d9-b1a636c8592a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Utils\CommandLine.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Core.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Hook.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Console.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Game.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Mono.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\Il2Cpp.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Assertion.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\AssemblyGenerator.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Logger.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Debug.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\InternalCalls.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Managers\BaseAssembly.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\AnalyticsBlocker.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\HashCode.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MSDetours\detours_x64.h">
+      <Filter>Base\MSDetours</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MSDetours\detours_x86.h">
+      <Filter>Base\MSDetours</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MSDetours\detver.h">
+      <Filter>Base\MSDetours</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
