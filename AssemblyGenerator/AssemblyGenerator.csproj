@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Output\Debug\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,8 +31,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Output\Release\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
