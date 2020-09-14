@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "AnalyticsBlocker.h"
 #include "../Managers/InternalCalls.h"
+#include "AssemblyGenerator.h"
 
 int CommandLine::argc = NULL;
 char* CommandLine::argv[64];
@@ -57,6 +58,29 @@ void CommandLine::Read()
 				loadmode = 0;
 			InternalCalls::MelonHandler::LoadModeForMods = (InternalCalls::MelonHandler::LoadMode)loadmode;
 		}
+		else if (strstr(command, "--melonloader.agregenerate") != NULL)
+			AssemblyGenerator::ForceRegeneration = true;
+		else if (strstr(command, "--melonloader.agfvunity"))
+		{
+			std::string version = argv[i + 1];
+			AssemblyGenerator::ForceVersion_UnityDependencies = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_UnityDependencies);
+			AssemblyGenerator::ForceVersion_UnityDependencies[version.size()] = '\0';
+		}
+		else if (strstr(command, "--melonloader.agfvdumper"))
+		{
+			std::string version = argv[i + 1];
+			AssemblyGenerator::ForceVersion_Il2CppDumper = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Il2CppDumper);
+			AssemblyGenerator::ForceVersion_Il2CppDumper[version.size()] = '\0';
+		}
+		else if (strstr(command, "--melonloader.agfvunhollower"))
+		{
+			std::string version = argv[i + 1];
+			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower);
+			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower[version.size()] = '\0';
+		}
 #ifndef DEBUG
 		else if (strstr(command, "--melonloader.debug") != NULL)
 			Debug::Enabled = true;
@@ -72,13 +96,6 @@ void CommandLine::Read()
 			Logger::MaxErrors = GetIntFromConstChar(argv[i + 1], 10);
 #endif
 		/*
-		
-		else if (strstr(command, "--melonloader.agregenerate") != NULL)
-			AG_Force_Regenerate = true;
-		else if (strstr(command, "--melonloader.agfvunhollower"))
-			ForceUnhollowerVersion = CommandLineV[i + 1];
-		else if (strstr(command, "--melonloader.agfvunity"))
-			ForceUnityVersion = CommandLineV[i + 1];
 		*/
 	}
 }

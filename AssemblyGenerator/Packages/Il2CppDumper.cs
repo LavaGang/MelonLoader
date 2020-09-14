@@ -7,7 +7,9 @@ namespace MelonLoader.AssemblyGenerator
     {
         internal Il2CppDumper()
         {
-            Version = "6.4.12";
+            Version = Utils.ForceVersion_Il2CppDumper();
+            if (string.IsNullOrEmpty(Version))
+                Version = "6.4.12";
             URL = "https://github.com/Perfare/Il2CppDumper/releases/download/v" + Version + "/Il2CppDumper-v" + Version + ".zip";
             Destination = Path.Combine(Main.BasePath, "Il2CppDumper");
             Output = Path.Combine(Destination, "DummyDll");

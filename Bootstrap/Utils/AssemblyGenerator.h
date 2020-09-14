@@ -6,6 +6,10 @@ class AssemblyGenerator
 {
 public:
     static char* Path;
+    static bool ForceRegeneration;
+    static char* ForceVersion_UnityDependencies;
+    static char* ForceVersion_Il2CppDumper;
+    static char* ForceVersion_Il2CppAssemblyUnhollower;
 	static bool Initialize();
     static void Cleanup();
 
