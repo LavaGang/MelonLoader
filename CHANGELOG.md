@@ -45,6 +45,10 @@
 25. Fixed Console On Top Check.
 26. Fixed Legacy Support for OnLevelWasLoaded and OnLevelWasInitialized.
 27. Fixed Legacy Support for Preferences and OnModSettingsApplied.
+28. Fixed Type Overwrite Issue with MelonPreferences.
+29. Fixed Loading Issue when a Plugin is in the Mods folder or vice-versa.
+30. Improved Loading of Plugins and Mods.
+31. 
 
 ---
 
