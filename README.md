@@ -1,9 +1,9 @@
 ### GENERAL INFORMATION:
 
-- Debug Mode is for Debugging MelonLoader, Plugins, Mods.  
+- Debug Mode is for Debugging MelonLoader, Plugins, Mods.
 - All Logs are made in the created MelonLoader/Logs folder.
 - All Plugins get placed in the created MelonLoader/Plugins folder.
-- All Mods get placed in the created MelonLoader/Mods folder.  
+- All Mods get placed in the created MelonLoader/Mods folder.
 - Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
 
 ---
