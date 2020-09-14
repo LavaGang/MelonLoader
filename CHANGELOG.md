@@ -41,7 +41,7 @@
 21. Fixed Issue with Mono Support Module.
 22. Fixed Issue with Assembly Generator.
 23. Fixed Issue with Queued Coroutines in Mono Pre-5 Games.
-24. Re-added --quitfix Launch Option.
+24. Re-added "--quitfix" Launch Option.
 25. Fixed Console On Top Check.
 26. Fixed Legacy Support for OnLevelWasLoaded and OnLevelWasInitialized.
 27. Fixed Legacy Support for Preferences and OnModSettingsApplied.
@@ -53,6 +53,10 @@
 33. Changed Unity Dependencies URL to LavaGang/Unity-Runtime-Libraries.
 34. Fixed Type Overwrite Issue with MelonPreferences when Loading during Runtime.
 35. Fixed Legacy Support for MelonPluginInfo and MelonPluginGame.
+36. Re-added Launch Option "--melonloader.agregenerate".
+37. Re-added Launch Option "--melonloader.agfvunhollower".
+38. Added Launch Option "--melonloader.agfvdumper" to Force the Version of Il2CppDumper to use.
+39. Added Launch Option "--melonloader.agfvunity" to Force the Version of Unity Dependencies to use.
 
 ---
 

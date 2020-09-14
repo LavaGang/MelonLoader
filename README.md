@@ -5,6 +5,8 @@
 - All Mods get placed in the created MelonLoader/Mods folder.
 - All Logs are made in the created MelonLoader/Logs folder.
 
+- Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
+
 ---
 
 ### REQUIREMENTS:
@@ -25,15 +27,6 @@
 7. Click the INSTALL or RE-INSTALL or UPDATE button.
 
 ---
-	
-### MANUAL INSTALLATION:
-
-1. Make sure the Game is Closed and Not Running before installing.
-2. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
-3. Extract the MelonLoader folder from the zip to the Game's Installation Folder.
-4. Extract version.dll from the zip to the Game's Installation Folder.
-
----
 
 ### AUTOMATED UNINSTALL:
 
@@ -43,16 +36,6 @@
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
 7. Click the UN-INSTALL button.
-
----
-
-### MANUAL UNINSTALL:
-
-1. Make sure the Game you are installing MelonLoader to is Closed and Not Running.
-2. Remove the version.dll file from the Game's Installation Folder.
-3. Remove the MelonLoader folder from the Game's Installation Folder.
-4. Remove the Plugins folder from the Game's Installation Folder.
-5. Remove the Mods folder from the Game's Installation Folder.
 
 ---
 
