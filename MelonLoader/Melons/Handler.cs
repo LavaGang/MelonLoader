@@ -152,32 +152,55 @@ namespace MelonLoader
                                         else
                                             break;
                                     }
-                                    LoadFromAssembly(Assembly.Load(memorystream.ToArray()), (filename + "/" + filename2));
+                                    LoadFromByteArray(memorystream.ToArray(), (filename + "/" + filename2));
                                 }
                             }
                         }
                     }
                     catch(Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
                 }
-            if (plugins)
-                DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
-            else
-                DependencyGraph<MelonMod>.TopologicalSort(_Mods);
+            DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
+            DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 
-        public static void LoadFromFile(string filename)
+        public static void LoadFromFile(string filepath)
         {
-            if (filename == null)
+            if (string.IsNullOrEmpty(filepath))
+                return;
+            if (!MelonDebug.IsEnabled())
+            {
+                LoadFromByteArray(File.ReadAllBytes(filepath), filepath);
+                return;
+            }
+            try
+            {
+                Assembly asm = Assembly.LoadFrom(filepath);
+                if (asm == null)
+                {
+                    MelonLogger.Error("Failed to Load Assembly for " + filepath + "!"); ;
+                    return;
+                }
+                LoadFromAssembly(asm, filepath);
+            }
+            catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+        }
+
+        public static void LoadFromByteArray(byte[] filedata, string filelocation = null)
+        {
+            if ((filedata == null) || (filedata.Length <= 0))
                 return;
             try
             {
-                Assembly asm = (MelonDebug.IsEnabled() ? Assembly.LoadFrom(filename) : Assembly.Load(File.ReadAllBytes(filename)));
+                Assembly asm = Assembly.Load(filedata);
                 if (asm == null)
                 {
-                    MelonLogger.Error("Failed to Load Assembly for " + filename + "!"); ;
+                    if (string.IsNullOrEmpty(filelocation))
+                        MelonLogger.Error("Failed to Load Assembly!");
+                    else
+                        MelonLogger.Error("Failed to Load Assembly for " + filelocation + "!");
                     return;
                 }
-                LoadFromAssembly(asm, filename);
+                LoadFromAssembly(asm, filelocation);
             }
             catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
         }
