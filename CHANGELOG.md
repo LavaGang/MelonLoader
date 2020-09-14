@@ -22,22 +22,29 @@
 2. Rewrote Bootstrap from scratch.
 3. Rewrote MelonLoader from scratch.
 4. Rewrote AssemblyGenerator from scratch.
-5. Added x86 Support.
-6. Proxy now has the ability to be named version.dll, winmm.dll, or winhttp.dll.
-7. OnModSettingsApplied has been changed to OnPreferencesApplied.
-8. Temporarily Removed OnLevelIsLoading.
-9. Internal Failures are now a lot more informative.
-10. Debug Mode is now a lot more informative.
-11. Logs folder has been moved to MelonLoader/Logs.
-12. Logger now produces a latest.log file in the MelonLoader folder.
-13. Removed LightJson. Not Needed.
-14. Load Mode "-dev" Name Extension has been changed to ".dev" Extension.
-15. Added Launch Option "--melonloader.dab" to Debug Analytics Blocker.
-16. Fixed Assembly Resolve Issue between Plugins and Mods.
-17. MelonHandler now requires Name, Version, and Author to all be properly set in Melons.
-18. Author is now mandatory to be set in MelonInfoAttribute for Melons. It can no longer be set to null.
-19. Fixed issue with Support Module due to Time.deltaTime being stripped.
-20. 
+5. Rewrote Support Modules from scratch.
+6. Added x86 Support.
+7. Proxy now has the ability to be named version.dll, winmm.dll, or winhttp.dll.
+8. OnModSettingsApplied has been changed to OnPreferencesApplied.
+9. Temporarily Removed OnLevelIsLoading.
+10. Internal Failures are now a lot more informative.
+11. Debug Mode is now a lot more informative.
+12. Logs folder has been moved to MelonLoader/Logs.
+13. Logger now produces a latest.log file in the MelonLoader folder.
+14. Removed LightJson. Not Needed.
+15. Load Mode "-dev" Name Extension has been changed to ".dev" Extension.
+16. Added Launch Option "--melonloader.dab" to Debug Analytics Blocker.
+17. Fixed Assembly Resolve Issue between Plugins and Mods.
+18. MelonHandler now requires Name, Version, and Author to all be properly set in Melons.
+19. Author is now mandatory to be set in MelonInfoAttribute for Melons. It can no longer be set to null.
+20. Fixed issue with Support Module due to Time.deltaTime being stripped.
+21. Fixed Issue with Mono Support Module.
+22. Fixed Issue with Assembly Generator.
+23. Fixed Issue with Queued Coroutines in Mono Pre-5 Games.
+24. Re-added --quitfix Launch Option.
+25. Fixed Console On Top Check.
+26. Fixed Legacy Support for OnLevelWasLoaded and OnLevelWasInitialized.
+27. 
 
 ---
 
