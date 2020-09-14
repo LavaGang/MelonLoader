@@ -33,6 +33,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
             {
+                entry.Type = MelonPreferences_Entry.TypeEnum.STRING;
                 entry.DisplayName = displayname;
                 entry.DefaultValue_string = value;
                 return entry;
@@ -46,6 +47,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
             {
+                entry.Type = MelonPreferences_Entry.TypeEnum.BOOL;
                 entry.DisplayName = displayname;
                 entry.DefaultValue_bool = value;
                 return entry;
@@ -59,6 +61,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
             {
+                entry.Type = MelonPreferences_Entry.TypeEnum.INT;
                 entry.DisplayName = displayname;
                 entry.DefaultValue_int = value;
                 return entry;
@@ -72,6 +75,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
             {
+                entry.Type = MelonPreferences_Entry.TypeEnum.FLOAT;
                 entry.DisplayName = displayname;
                 entry.DefaultValue_float = value;
                 return entry;
