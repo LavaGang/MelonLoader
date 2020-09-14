@@ -6,6 +6,13 @@ class InternalCalls
 public:
 	static void Initialize();
 
+	class MelonCore
+	{
+	public:
+		static void AddInternalCalls();
+		static bool QuitFix();
+	};
+
 	class MelonLogger
 	{
 	public:

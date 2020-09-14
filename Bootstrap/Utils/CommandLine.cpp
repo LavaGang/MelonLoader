@@ -27,6 +27,8 @@ void CommandLine::Read()
 		const char* command = argv[i];
 		if (command == NULL)
 			continue;
+		else if (strstr(command, "--quitfix") != NULL)
+			Core::QuitFix = true;
 		else if (strstr(command, "--melonloader.consoleontop") != NULL)
 			Console::AlwaysOnTop = true;
 		else if (strstr(command, "--melonloader.magenta") != NULL)
@@ -70,8 +72,7 @@ void CommandLine::Read()
 			Logger::MaxErrors = GetIntFromConstChar(argv[i + 1], 10);
 #endif
 		/*
-		if (strstr(command, "--quitfix") != NULL)
-			QuitFix = true;
+		
 		else if (strstr(command, "--melonloader.agregenerate") != NULL)
 			AG_Force_Regenerate = true;
 		else if (strstr(command, "--melonloader.agfvunhollower"))

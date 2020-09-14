@@ -18,6 +18,7 @@
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::Path = NULL;
 const char* Core::Version = "v0.3.0";
+bool Core::QuitFix = false;
 
 bool Core::Initialize()
 {

@@ -4,15 +4,25 @@
 #include "Game.h"
 #include "Hook.h"
 #include "../Utils/Assertion.h"
+#include "../Base/Core.h"
 
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
+	MelonCore::AddInternalCalls();
 	MelonLogger::AddInternalCalls();
 	MelonUtils::AddInternalCalls();
 	MelonHandler::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
 }
+
+#pragma region MelonCore
+bool InternalCalls::MelonCore::QuitFix() { return Core::QuitFix; }
+void InternalCalls::MelonCore::AddInternalCalls()
+{
+	Mono::AddInternalCall("MelonLoader.Core::QuitFix", QuitFix);
+}
+#pragma endregion
 
 #pragma region MelonLogger
 void InternalCalls::MelonLogger::Internal_Msg(Mono::String* namesection, Mono::String* txt) { Logger::Internal_Msg(((namesection != NULL) ? Mono::Exports::mono_string_to_utf8(namesection) : NULL), Mono::Exports::mono_string_to_utf8(txt)); }

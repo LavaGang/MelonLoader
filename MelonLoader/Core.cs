@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
@@ -46,6 +47,8 @@ namespace MelonLoader
             MelonPreferences.Save();
             MelonPrefs.SaveConfig();
             Harmony.HarmonyInstance.UnpatchAllInstances();
+            if (QuitFix())
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
         private static void AddUnityDebugLog()
@@ -64,5 +67,8 @@ namespace MelonLoader
             MelonLogger.Msg(args.Name);
             return null;
         }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static bool QuitFix();
     }
 }

@@ -8,6 +8,7 @@ public:
 	static HINSTANCE Bootstrap;
 	static char* Path;
 	static const char* Version;
+	static bool QuitFix;
 	static bool Initialize();
 	static bool DirectoryExists(const char* path);
 	static bool FileExists(const char* path);
