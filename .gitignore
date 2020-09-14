@@ -209,10 +209,6 @@ PublishScripts/
 *.nupkg
 # NuGet Symbol Packages
 *.snupkg
-# The packages folder can be ignored because of Package Restore
-**/[Pp]ackages/*
-# except build/, which is used as an MSBuild target.
-!**/[Pp]ackages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/[Pp]ackages/repositories.config
 # NuGet v3's project.json files produces more ignorable files
@@ -374,40 +370,40 @@ MigrationBackup/
 
 # End of https://www.toptal.com/developers/gitignore/api/git,visualstudio
 
-Output\
-Detours\samples\
-Detours\lib.X86\
-Detours\lib.X64\
-Detours\bin.X86\
-Detours\bin.X64\
-Detours\src\obj.X86\
-Detours\src\obj.X64\
-MelonLoader\bin\
-MelonLoader\obj\
-MelonLoader\.vs\
-AssemblyGenerator\bin\
-AssemblyGenerator\obj\
-AssemblyGenerator\.vs\
-Bootstrap\bin\
-Bootstrap\obj\
-Bootstrap\.vs\
-Proxy\bin\
-Proxy\obj\
-Proxy\.vs\
-Proxy\x64\
-Proxy\x86\
-SM_Il2Cpp\bin\
-SM_Il2Cpp\obj\
-SM_Il2Cpp\.vs\
-SM_Mono\bin\
-SM_Mono\obj\
-SM_Mono\.vs\
-SM_Mono.Pre-5\bin\
-SM_Mono.Pre-5\obj\
-SM_Mono.Pre-5\.vs\
-SM_Mono.Pre-2017\bin\
-SM_Mono.Pre-2017\obj\
-SM_Mono.Pre-2017\.vs\
+Output
+Detours\samples
+Detours\lib.X86
+Detours\lib.X64
+Detours\bin.X86
+Detours\bin.X64
+Detours\src\obj.X86
+Detours\src\obj.X64
+MelonLoader\bin
+MelonLoader\obj
+MelonLoader\.vs
+AssemblyGenerator\bin
+AssemblyGenerator\obj
+AssemblyGenerator\.vs
+Bootstrap\bin
+Bootstrap\obj
+Bootstrap\.vs
+Proxy\bin
+Proxy\obj
+Proxy\.vs
+Proxy\x64
+Proxy\x86
+SM_Il2Cpp\bin
+SM_Il2Cpp\obj
+SM_Il2Cpp\.vs
+SM_Mono\bin
+SM_Mono\obj
+SM_Mono\.vs
+SM_Mono.Pre-5\bin
+SM_Mono.Pre-5\obj
+SM_Mono.Pre-5\.vs
+SM_Mono.Pre-2017\bin
+SM_Mono.Pre-2017\obj
+SM_Mono.Pre-2017\.vs
 /MelonLoader.zip
 /MelonLoader.x86.zip
 /MelonLoader.x64.zip
