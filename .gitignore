@@ -1,16 +1,21 @@
-# Created by https://www.gitignore.io/api/visualstudio,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=visualstudio,visualstudiocode
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# Created by https://www.toptal.com/developers/gitignore/api/git,visualstudio
+# Edit at https://www.toptal.com/developers/gitignore?templates=git,visualstudio
 
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
 
 ### VisualStudio ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -24,49 +29,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-.vs
-bin
-obj
-Output
-Detours\samples
-Detours\lib.X86
-Detours\lib.X64
-Detours\bin.X86
-Detours\bin.X64
-Detours\src\obj.X86
-Detours\src\obj.X64
-MelonLoader\bin
-MelonLoader\obj
-MelonLoader\.vs
-AssemblyGenerator\bin
-AssemblyGenerator\obj
-AssemblyGenerator\.vs
-Bootstrap\bin
-Bootstrap\obj
-Bootstrap\.vs
-Bootstrap\x64
-Bootstrap\x86
-Proxy\bin
-Proxy\obj
-Proxy\.vs
-Proxy\x64
-Proxy\x86
-SM_Il2Cpp\bin
-SM_Il2Cpp\obj
-SM_Il2Cpp\.vs
-SM_Mono\bin
-SM_Mono\obj
-SM_Mono\.vs
-SM_Mono.Pre-5\bin
-SM_Mono.Pre-5\obj
-SM_Mono.Pre-5\.vs
-SM_Mono.Pre-2017\bin
-SM_Mono.Pre-2017\obj
-SM_Mono.Pre-2017\.vs
-/MelonLoader.zip
-/MelonLoader.x86.zip
-/MelonLoader.x64.zip
-/MelonLoader.Installer.exe
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -87,6 +49,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+[Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -184,9 +147,6 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# JustCode is a .NET coding add-in
-.JustCode
-
 # TeamCity is a build add-in
 _TeamCity*
 
@@ -196,6 +156,9 @@ _TeamCity*
 # AxoCover is a Code Coverage Tool
 .axoCover/*
 !.axoCover/settings.json
+
+# Coverlet is a free, cross platform Code Coverage Tool
+coverage*[.json, .xml, .info]
 
 # Visual Studio code coverage results
 *.coverage
@@ -406,7 +369,46 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 
-# End of https://www.gitignore.io/api/visualstudio,visualstudiocode
+# Ionide (cross platform F# VS Code tools) working folder
+.ionide/
 
-# JetBrains Rider
-/.idea
+# End of https://www.toptal.com/developers/gitignore/api/git,visualstudio
+
+Output\
+Detours\samples\
+Detours\lib.X86\
+Detours\lib.X64\
+Detours\bin.X86\
+Detours\bin.X64\
+Detours\src\obj.X86\
+Detours\src\obj.X64\
+MelonLoader\bin\
+MelonLoader\obj\
+MelonLoader\.vs\
+AssemblyGenerator\bin\
+AssemblyGenerator\obj\
+AssemblyGenerator\.vs\
+Bootstrap\bin\
+Bootstrap\obj\
+Bootstrap\.vs\
+Proxy\bin\
+Proxy\obj\
+Proxy\.vs\
+Proxy\x64\
+Proxy\x86\
+SM_Il2Cpp\bin\
+SM_Il2Cpp\obj\
+SM_Il2Cpp\.vs\
+SM_Mono\bin\
+SM_Mono\obj\
+SM_Mono\.vs\
+SM_Mono.Pre-5\bin\
+SM_Mono.Pre-5\obj\
+SM_Mono.Pre-5\.vs\
+SM_Mono.Pre-2017\bin\
+SM_Mono.Pre-2017\obj\
+SM_Mono.Pre-2017\.vs\
+/MelonLoader.zip
+/MelonLoader.x86.zip
+/MelonLoader.x64.zip
+/MelonLoader.Installer.exe
