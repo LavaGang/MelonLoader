@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using MelonLoader.Tomlyn;
 using MelonLoader.Tomlyn.Model;
 using MelonLoader.Tomlyn.Syntax;
