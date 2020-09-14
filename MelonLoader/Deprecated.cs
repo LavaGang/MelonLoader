@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#pragma warning disable 0108
 
 namespace MelonLoader
 {
