@@ -32,13 +32,15 @@ namespace MelonLoader
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            entry.DisplayName = displayname;
+            entry.DefaultValue_string = value;
+            if (entry.Type != MelonPreferences_Entry.TypeEnum.STRING)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.STRING;
-                entry.DisplayName = displayname;
-                entry.DefaultValue_string = value;
-                return entry;
+                entry.Value_string = value;
             }
-            return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            return entry;
         }
         public MelonPreferences_Entry CreateEntry(string name, bool value, string displayname = null, bool hidden = false)
         {
@@ -46,13 +48,15 @@ namespace MelonLoader
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            entry.DisplayName = displayname;
+            entry.DefaultValue_bool = value;
+            if (entry.Type != MelonPreferences_Entry.TypeEnum.BOOL)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.BOOL;
-                entry.DisplayName = displayname;
-                entry.DefaultValue_bool = value;
-                return entry;
+                entry.Value_bool = value;
             }
-            return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            return entry;
         }
         public MelonPreferences_Entry CreateEntry(string name, int value, string displayname = null, bool hidden = false)
         {
@@ -60,13 +64,15 @@ namespace MelonLoader
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            entry.DisplayName = displayname;
+            entry.DefaultValue_int = value;
+            if (entry.Type != MelonPreferences_Entry.TypeEnum.INT)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.INT;
-                entry.DisplayName = displayname;
-                entry.DefaultValue_int = value;
-                return entry;
+                entry.Value_int = value;
             }
-            return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            return entry;
         }
         public MelonPreferences_Entry CreateEntry(string name, float value, string displayname = null, bool hidden = false)
         {
@@ -74,44 +80,56 @@ namespace MelonLoader
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry != null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            entry.DisplayName = displayname;
+            entry.DefaultValue_float = value;
+            if (entry.Type != MelonPreferences_Entry.TypeEnum.FLOAT)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.FLOAT;
-                entry.DisplayName = displayname;
-                entry.DefaultValue_float = value;
-                return entry;
+                entry.Value_float = value;
             }
-            return new MelonPreferences_Entry(this, name, value, displayname, hidden);
+            return entry;
         }
 
         internal MelonPreferences_Entry LoadEntry(string name, string value, string displayname = null, bool hidden = false)
         {
             if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = CreateEntry(name, value, displayname, hidden);
+                throw new Exception("Name is null or empty when calling LoadEntry");
+            MelonPreferences_Entry entry = GetEntry(name);
+            if (entry == null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.Value_string = value;
             return entry;
         }
         internal MelonPreferences_Entry LoadEntry(string name, bool value, string displayname = null, bool hidden = false)
         {
             if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = CreateEntry(name, value, displayname, hidden);
+                throw new Exception("Name is null or empty when calling LoadEntry");
+            MelonPreferences_Entry entry = GetEntry(name);
+            if (entry == null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.Value_bool = value;
             return entry;
+            
         }
         internal MelonPreferences_Entry LoadEntry(string name, int value, string displayname = null, bool hidden = false)
         {
             if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = CreateEntry(name, value, displayname, hidden);
+                throw new Exception("Name is null or empty when calling LoadEntry");
+            MelonPreferences_Entry entry = GetEntry(name);
+            if (entry == null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.Value_int = value;
             return entry;
+            
         }
         internal MelonPreferences_Entry LoadEntry(string name, float value, string displayname = null, bool hidden = false)
         {
             if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = CreateEntry(name, value, displayname, hidden);
+                throw new Exception("Name is null or empty when calling LoadEntry");
+            MelonPreferences_Entry entry = GetEntry(name);
+            if (entry == null)
+                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.Value_float = value;
             return entry;
         }
