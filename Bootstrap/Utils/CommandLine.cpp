@@ -95,8 +95,6 @@ void CommandLine::Read()
 		else if (strstr(command, "--melonloader.maxerrors") != NULL)
 			Logger::MaxErrors = GetIntFromConstChar(argv[i + 1], 10);
 #endif
-		/*
-		*/
 	}
 }
 
