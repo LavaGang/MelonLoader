@@ -210,16 +210,22 @@ namespace MelonLoader
             if (asm == null)
                 return;
             MelonInfoAttribute infoAttribute = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonInfoAttribute))) as MelonInfoAttribute;
+            if (infoAttribute == null) // Legacy Support
+            {
+                MelonModInfoAttribute legacyinfoAttribute = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
+                if (legacyinfoAttribute != null)
+                    infoAttribute = legacyinfoAttribute.Convert();
+            }
+            if (infoAttribute == null) // Legacy Support
+            {
+                MelonPluginInfoAttribute legacyinfoAttribute = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonPluginInfoAttribute))) as MelonPluginInfoAttribute;
+                if (legacyinfoAttribute != null)
+                    infoAttribute = legacyinfoAttribute.Convert();
+            }
             if (infoAttribute == null)
             {
-                // Legacy Support
-                MelonModInfoAttribute legacyinfoAttribute = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonModInfoAttribute))) as MelonModInfoAttribute;
-                if (legacyinfoAttribute == null)
-                {
-                    MelonLogger.Error("No MelonInfoAttribute Found in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
-                    return;
-                }
-                infoAttribute = legacyinfoAttribute.Convert();
+                MelonLogger.Error("No MelonInfoAttribute Found in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                return;
             }
             if (infoAttribute.SystemType == null)
             {
@@ -251,12 +257,21 @@ namespace MelonLoader
             MelonGameAttribute[] gameAttributes = asm.GetCustomAttributes(typeof(MelonGameAttribute), true) as MelonGameAttribute[];
             
             // Legacy Support
-            MelonModGameAttribute[] legacygameAttributes = asm.GetCustomAttributes(typeof(MelonModGameAttribute), true) as MelonModGameAttribute[];
-            if (legacygameAttributes.Length > 0)
+            MelonModGameAttribute[] legacymodgameAttributes = asm.GetCustomAttributes(typeof(MelonModGameAttribute), true) as MelonModGameAttribute[];
+            if (legacymodgameAttributes.Length > 0)
             {
                 List<MelonGameAttribute> attributes = new List<MelonGameAttribute>();
                 attributes.AddRange(gameAttributes);
-                foreach (MelonModGameAttribute legacyatt in legacygameAttributes)
+                foreach (MelonModGameAttribute legacyatt in legacymodgameAttributes)
+                    attributes.Add(legacyatt.Convert());
+                gameAttributes = attributes.ToArray();
+            }
+            MelonPluginGameAttribute[] legacyplugingameAttributes = asm.GetCustomAttributes(typeof(MelonPluginGameAttribute), true) as MelonPluginGameAttribute[];
+            if (legacyplugingameAttributes.Length > 0)
+            {
+                List<MelonGameAttribute> attributes = new List<MelonGameAttribute>();
+                attributes.AddRange(gameAttributes);
+                foreach (MelonPluginGameAttribute legacyatt in legacyplugingameAttributes)
                     attributes.Add(legacyatt.Convert());
                 gameAttributes = attributes.ToArray();
             }

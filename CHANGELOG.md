@@ -52,6 +52,7 @@
 32. Fixed Issue with UnityEngine.Il2CppAssetBundleManager being outdated.
 33. Changed Unity Dependencies URL to LavaGang/Unity-Runtime-Libraries.
 34. Fixed Type Overwrite Issue with MelonPreferences when Loading during Runtime.
+35. Fixed Legacy Support for MelonPluginInfo and MelonPluginGame.
 
 ---
 
