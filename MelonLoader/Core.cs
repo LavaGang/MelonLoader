@@ -20,7 +20,6 @@ namespace MelonLoader
             UserDataPath = Path.Combine(MelonUtils.GetGameDirectory(), "UserData");
             if (!Directory.Exists(UserDataPath))
                 Directory.CreateDirectory(UserDataPath);
-            MelonPrefs.Setup();
             MelonPreferences.Load();
         }
 
@@ -45,7 +44,7 @@ namespace MelonLoader
         internal static void Quit()
         {
             MelonHandler.OnApplicationQuit();
-            MelonHandler.SaveConfig();
+            MelonPreferences.Save();
             Harmony.HarmonyInstance.UnpatchAllInstances();
             if (QuitFix())
                 System.Diagnostics.Process.GetCurrentProcess().Kill();

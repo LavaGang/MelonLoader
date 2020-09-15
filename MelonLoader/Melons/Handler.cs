@@ -455,13 +455,6 @@ namespace MelonLoader
                     try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
         }
 
-        internal static void SaveConfig()
-        {
-            MelonPrefs.SaveConfigToTable();
-            MelonPreferences.Save();
-            OnPreferencesApplied();
-        }
-
         internal enum LoadMode
         {
             NORMAL,
