@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -110,7 +111,14 @@ namespace MelonLoader
                         if (((mode == LoadMode.NORMAL) && file_extension_check) || ((mode == LoadMode.DEV) && !file_extension_check))
                             continue;
                     }
-                    LoadFromFile(filename);
+                    FileVersionInfo info = FileVersionInfo.GetVersionInfo(filename);
+                    string melonname = info.ProductName;
+                    if (string.IsNullOrEmpty(melonname))
+                        melonname = info.InternalName;
+                    if (!IsMelonAlreadyLoaded(melonname, plugins))
+                        LoadFromFile(filename);
+                    else
+                        MelonLogger.Warning("Duplicate File: " + filename);
                 }
 
             // ZIPs
