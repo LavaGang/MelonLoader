@@ -1,4 +1,4 @@
-image: mono:latest
+image: alazartech/vs2019
 
 stages:
   - build
