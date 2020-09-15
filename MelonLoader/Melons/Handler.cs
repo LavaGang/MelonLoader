@@ -457,7 +457,7 @@ namespace MelonLoader
 
         internal enum LoadMode
         {
-            NORMAL,
+            NORMAL, 
             DEV,
             BOTH
         }
