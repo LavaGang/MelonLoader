@@ -61,7 +61,7 @@
 41. Fixed Displacement Issue when calling Save for MelonPreferences or Legacy MelonPrefs.
 42. Fixed Issue with Legacy MelonPrefs logging "Legacy Config Saved!" even when nothing happened.
 43. Fixed Issue with DEV Load Mode not working with ZIP Archives.
-44. Added Check to ModHandler to make sure Plugins and Mods only load once from 1 DLL copy.
+44. Added Check to MelonHandler to make sure Plugins and Mods only load once from 1 DLL copy.
 
 ---
 
