@@ -66,6 +66,7 @@
 46. Added MelonUtils.IsOldMono.
 47. Fixed Issue with MelonPreferences creating a new entry when one already exists.
 48. Added Auto-Converter to convert MelonPrefs to MelonPreferences.
+49. Fixed Issue with Auto-Converter deleting modprefs.ini but not saving MelonPreferences.cfg.
 
 ---
 

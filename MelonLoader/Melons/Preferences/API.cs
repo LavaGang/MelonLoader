@@ -21,6 +21,7 @@ namespace MelonLoader
             LegacyFilePath = Path.Combine(Core.UserDataPath, "modprefs.ini");
         }
 
+        internal static bool WasLegacyLoaded = false;
         internal static void LegacyCheck()
         {
             if (!File.Exists(LegacyFilePath))
@@ -55,6 +56,7 @@ namespace MelonLoader
                     category.LoadEntry(parts[0], parts[1].Replace("\r", ""));
             }
             File.Delete(LegacyFilePath);
+            WasLegacyLoaded = true;
         }
 
         public static void Load()

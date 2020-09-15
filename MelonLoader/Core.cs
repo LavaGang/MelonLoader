@@ -22,6 +22,8 @@ namespace MelonLoader
                 Directory.CreateDirectory(UserDataPath);
             MelonPreferences.LegacyCheck();
             MelonPreferences.Load();
+            if (MelonPreferences.WasLegacyLoaded)
+                MelonPreferences.Save();
         }
 
         private static void Initialize()
