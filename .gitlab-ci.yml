@@ -20,6 +20,6 @@ build:
       - BaseLibs/
   script:
   - echo building...
-  - 'msbuild /p:Configuration=Release'
+  - 'msbuild.exe /p:Configuration=Release'
   except:
   - tags
