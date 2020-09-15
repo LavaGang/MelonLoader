@@ -187,6 +187,7 @@ namespace MelonLoader
         {
             if (prefs.Count <= 0)
                 return;
+            bool has_saved = false;
             foreach (KeyValuePair<string, Dictionary<string, MelonPreference>> prefsInSection in prefs)
             {
                 if (prefsInSection.Value.Count <= 0)
@@ -195,9 +196,11 @@ namespace MelonLoader
                 {
                     pref.Value.Value = pref.Value.ValueEdited;
                     ConfigFile.SetString(prefsInSection.Key, pref.Key, pref.Value.Value);
+                    has_saved = true;
                 }
             }
-            MelonLogger.Log("Legacy Config Saved!");
+            if (has_saved)
+                MelonLogger.Log("Legacy Config Saved!");
         }
 
         public static string GetString(string section, string name)
