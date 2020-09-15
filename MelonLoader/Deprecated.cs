@@ -139,10 +139,10 @@ namespace MelonLoader
     public class MelonPrefs
     {
         public static void RegisterCategory(string name, string displayText) => MelonPreferences.CreateCategory(name, displayText);
-        public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(name)?.CreateEntry(name, defaultValue, displayText, hideFromList);
-        public static void RegisterBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(name)?.CreateEntry(name, defaultValue, displayText, hideFromList);
-        public static void RegisterInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(name)?.CreateEntry(name, defaultValue, displayText, hideFromList);
-        public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(name)?.CreateEntry(name, defaultValue, displayText, hideFromList);
+        public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
+        public static void RegisterBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
+        public static void RegisterInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
+        public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
         public static bool HasKey(string section, string name) => (MelonPreferences.GetCategory(section)?.GetEntry(name) != null);
         public static Dictionary<string, Dictionary<string, MelonPreference>> GetPreferences()
         {
