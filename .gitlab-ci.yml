@@ -1,8 +1,5 @@
 image: mono:latest
 
-variables:
-  Solution: MelonLoader.sln
-
 stages:
   - build
 
@@ -13,6 +10,6 @@ build:
       - Output/Debug/MelonLoader/
   script:
   - echo building...
-  - 'msbuild "%Solution%"'
+  - 'msbuild'
   except:
   - tags
