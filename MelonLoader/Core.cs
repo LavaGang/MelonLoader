@@ -20,6 +20,7 @@ namespace MelonLoader
             UserDataPath = Path.Combine(MelonUtils.GetGameDirectory(), "UserData");
             if (!Directory.Exists(UserDataPath))
                 Directory.CreateDirectory(UserDataPath);
+            MelonPreferences.LegacyCheck();
             MelonPreferences.Load();
         }
 

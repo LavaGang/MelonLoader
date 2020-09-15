@@ -64,6 +64,8 @@
 44. Added Check to MelonHandler to make sure Plugins and Mods only load once from 1 DLL copy.
 45. Legacy MelonPrefs now properly redirect to MelonPreferences.
 46. Added MelonUtils.IsOldMono.
+47. Fixed Issue with MelonPreferences creating a new entry when one already exists.
+48. Added Auto-Converter to convert MelonPrefs to MelonPreferences.
 
 ---
 

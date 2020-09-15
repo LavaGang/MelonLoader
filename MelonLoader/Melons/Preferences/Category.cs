@@ -31,9 +31,10 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(name))
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
-            if (entry != null)
+            if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.DisplayName = displayname;
+            entry.Hidden = hidden;
             entry.DefaultValue_string = value;
             if (entry.Type != MelonPreferences_Entry.TypeEnum.STRING)
             {
@@ -47,9 +48,10 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(name))
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
-            if (entry != null)
+            if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.DisplayName = displayname;
+            entry.Hidden = hidden;
             entry.DefaultValue_bool = value;
             if (entry.Type != MelonPreferences_Entry.TypeEnum.BOOL)
             {
@@ -63,9 +65,10 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(name))
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
-            if (entry != null)
+            if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.DisplayName = displayname;
+            entry.Hidden = hidden;
             entry.DefaultValue_int = value;
             if (entry.Type != MelonPreferences_Entry.TypeEnum.INT)
             {
@@ -79,9 +82,10 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(name))
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
-            if (entry != null)
+            if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.DisplayName = displayname;
+            entry.Hidden = hidden;
             entry.DefaultValue_float = value;
             if (entry.Type != MelonPreferences_Entry.TypeEnum.FLOAT)
             {
