@@ -1,0 +1,18 @@
+image: mono:latest
+
+variables:
+  Solution: MelonLoader.sln
+
+stages:
+  - build
+
+build:
+  stage: build
+  artifacts:
+    paths:
+      - Output/Debug/MelonLoader/
+  script:
+  - echo building...
+  - 'msbuild "%Solution%"'
+  except:
+  - tags
