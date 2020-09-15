@@ -7,13 +7,10 @@ build:
   stage: build
   artifacts:
     paths:
-      - Output/Debug/MelonLoader/
-	  - Output/Release/MelonLoader/
-	  - Output/Release/x86
-	  - Output/Release/x64
-	  - BaseLibs
+      - Output/Release/MelonLoader/
+      - BaseLibs/
   script:
   - echo building...
-  - 'msbuild'
+  - 'msbuild /p:Configuration=Release'
   except:
   - tags
