@@ -29,6 +29,7 @@ public:
 	public:
 		static void AddInternalCalls();
 		static bool IsGameIl2Cpp();
+		static bool IsOldMono();
 		static Mono::String* GetApplicationPath();
 		static Mono::String* GetGameName();
 		static Mono::String* GetGameDeveloper();

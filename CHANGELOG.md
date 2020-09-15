@@ -63,7 +63,7 @@
 43. Fixed Issue with DEV Load Mode not working with ZIP Archives.
 44. Added Check to MelonHandler to make sure Plugins and Mods only load once from 1 DLL copy.
 45. Legacy MelonPrefs now properly redirect to MelonPreferences.
-46. 
+46. Added MelonUtils.IsOldMono.
 
 ---
 
