@@ -163,6 +163,13 @@ namespace MelonLoader
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 
+        public static bool IsMelonAlreadyLoaded(string name, bool is_plugin = false)
+        {
+            if (is_plugin)
+                return (_Plugins.Find(x => x.Info.Name.Equals(name)) != null);
+            return (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
+        }
+
         public static void LoadFromFile(string filepath)
         {
             if (string.IsNullOrEmpty(filepath))
