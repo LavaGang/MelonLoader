@@ -45,8 +45,7 @@ namespace MelonLoader
         internal static void Quit()
         {
             MelonHandler.OnApplicationQuit();
-            MelonPrefs.SaveConfigToTable();
-            MelonPreferences.Save();
+            MelonHandler.SaveConfig();
             Harmony.HarmonyInstance.UnpatchAllInstances();
             if (QuitFix())
                 System.Diagnostics.Process.GetCurrentProcess().Kill();

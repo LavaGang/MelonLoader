@@ -181,16 +181,16 @@ namespace MelonLoader
         public static Dictionary<string, Dictionary<string, MelonPreference>> GetPreferences() { return prefs; }
         public static string GetCategoryDisplayName(string key) { if (categoryDisplayNames.TryGetValue(key, out string name)) return name; return key; }
 
-        public static void SaveConfig()
-        {
-            SaveConfigToTable();
-            MelonHandler.OnPreferencesApplied();
-        }
+        public static void SaveConfig() => MelonHandler.SaveConfig();
 
         internal static void SaveConfigToTable()
         {
+            if (prefs.Count <= 0)
+                return;
             foreach (KeyValuePair<string, Dictionary<string, MelonPreference>> prefsInSection in prefs)
             {
+                if (prefsInSection.Value.Count <= 0)
+                    continue;
                 foreach (KeyValuePair<string, MelonPreference> pref in prefsInSection.Value)
                 {
                     pref.Value.Value = pref.Value.ValueEdited;

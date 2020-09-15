@@ -52,7 +52,9 @@ namespace MelonLoader
             }
         }
 
-        public static void Save()
+        public static void Save() => MelonHandler.SaveConfig();
+
+        internal static void SaveConfig()
         {
             if (categorytbl.Count <= 0)
                 return;
@@ -78,7 +80,6 @@ namespace MelonLoader
             }
             File.WriteAllText(FilePath, doc.ToString());
             MelonLogger.Msg("Config Saved!");
-            MelonHandler.OnPreferencesApplied();
         }
 
         public static MelonPreferences_Category GetCategory(string name)

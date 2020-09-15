@@ -58,6 +58,7 @@
 38. Added Launch Option "--melonloader.agfvdumper" to Force the Version of Il2CppDumper to use.
 39. Added Launch Option "--melonloader.agfvunity" to Force the Version of Unity Dependencies to use.
 40. Fixed Assembly Resolve Issue when a Plugin references a Mod.
+41. Fixed Displacement Issue when calling Save for MelonPreferences or Legacy MelonPrefs.
 
 ---
 
