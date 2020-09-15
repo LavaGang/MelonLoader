@@ -8,6 +8,10 @@ build:
   artifacts:
     paths:
       - Output/Debug/MelonLoader/
+	  - Output/Release/MelonLoader/
+	  - Output/Release/x86
+	  - Output/Release/x64
+	  - BaseLibs
   script:
   - echo building...
   - 'msbuild'
