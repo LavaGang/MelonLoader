@@ -136,7 +136,7 @@ namespace MelonLoader
                                     continue;
                                 if (mode != LoadMode.BOTH)
                                 {
-                                    bool file_extension_check = filename.EndsWith(".dev.dll");
+                                    bool file_extension_check = filename2.EndsWith(".dev.dll");
                                     if (((mode == LoadMode.NORMAL) && file_extension_check) || ((mode == LoadMode.DEV) && !file_extension_check))
                                         continue;
                                 }

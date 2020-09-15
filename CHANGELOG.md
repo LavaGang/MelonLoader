@@ -60,6 +60,7 @@
 40. Fixed Assembly Resolve Issue when a Plugin references a Mod.
 41. Fixed Displacement Issue when calling Save for MelonPreferences or Legacy MelonPrefs.
 42. Fixed Issue with Legacy MelonPrefs logging "Legacy Config Saved!" even when nothing happened.
+43. Fixed Issue with DEV Load Mode not working with ZIP Archives.
 
 ---
 
