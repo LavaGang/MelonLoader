@@ -20,6 +20,7 @@ build:
       - BaseLibs/
   script:
   - $Env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
+  - choco install dotnet3.5
   - echo building...
   - 'msbuild.exe /p:Configuration=Release'
   except:
