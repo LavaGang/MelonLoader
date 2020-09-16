@@ -73,5 +73,6 @@ void Console::Write(const char* txt)
 	{
 		AlwaysOnTopCheck();
 		std::cout << txt;
+		std::cout.flush();
 	}
 };

@@ -28,8 +28,8 @@ public:
 		std::ofstream coss;
 		std::ofstream latest;
 		template <class T>
-		FileStream& operator<< (T val) { if (coss.is_open()) coss << val; if (latest.is_open()) latest << val; return *this; }
-		FileStream& operator<< (std::ostream& (*pfun)(std::ostream&)) { if (coss.is_open()) pfun(coss); if (latest.is_open()) pfun(latest); return *this; }
+		FileStream& operator<< (T val) { if (coss.is_open()) { coss << val; coss.flush(); } if (latest.is_open()) { latest << val; latest.flush(); } return *this; }
+		FileStream& operator<< (std::ostream& (*pfun)(std::ostream&)) { if (coss.is_open()) { pfun(coss); coss.flush(); } if (latest.is_open()) { pfun(latest); latest.flush(); } return *this; }
 	};
 	static FileStream LogFile;
 
