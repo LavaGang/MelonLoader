@@ -6,6 +6,8 @@
 #include <string>
 #include "../Base/Core.h"
 #include "../Utils/Logger.h"
+#include "../Managers/Mono.h"
+#include "HashCode.h"
 #pragma comment(lib, "mscoree.lib")
 
 char* AssemblyGenerator::Path = NULL;
@@ -80,4 +82,7 @@ void AssemblyGenerator::Cleanup()
 		metahost->Release();
 		metahost = NULL;
 	}
+	Game::SetupPaths();
+	HashCode::SetupPaths();
+	Mono::SetupPaths();
 }

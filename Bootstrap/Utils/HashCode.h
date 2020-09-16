@@ -9,8 +9,8 @@ public:
 	static char* Hash2;
 	static char* Hash3;
 	static bool Initialize();
+	static bool SetupPaths();
 
 private:
-	static bool SetupPaths();
 	static bool GetHash(const char* path, char** output);
 };

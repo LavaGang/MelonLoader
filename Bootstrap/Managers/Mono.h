@@ -22,6 +22,7 @@ public:
 	static char* ConfigPath;
 	static bool Initialize();
 	static bool Load();
+	static bool SetupPaths();
 	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
@@ -89,5 +90,4 @@ private:
 	static const char* LibNames[];
 	static const char* FolderNames[];
 	static HMODULE PosixHelper;
-	static bool SetupPaths();
 };

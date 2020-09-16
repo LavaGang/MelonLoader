@@ -69,6 +69,7 @@
 49. Fixed Issue with Auto-Converter deleting modprefs.ini but not saving MelonPreferences.cfg.
 50. Fixed Issue with Console Output not Flushing.
 51. Fixed Issue with Log Output not Flushing.
+52. Fixed Crash Issue with Fresh Install Assembly Generation.
 
 ---
 

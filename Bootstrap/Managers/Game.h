@@ -12,9 +12,9 @@ public:
 	static bool IsIl2Cpp;
 
 	static bool Initialize();
+	static bool SetupPaths();
 private:
 
-	static bool SetupPaths();
 	static void ReadAppInfo();
 	static void UnknownUnityVersion();
 	static void ReadUnityVersion();
