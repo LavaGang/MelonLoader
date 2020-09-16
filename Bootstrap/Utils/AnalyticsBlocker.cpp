@@ -34,7 +34,8 @@ std::list<std::string> AnalyticsBlocker::HostNames = {
 	"softlight.at.ua",
 	"engage14664dcjmy.deltadna.net",
 	"audica-prod-api.hmxwebservices.com",
-	"collect14664dcjmy.deltadna.net"
+	"collect14664dcjmy.deltadna.net",
+	"abfdpe30ti.execute-api.us-west-2.amazonaws.com"
 };
 
 bool AnalyticsBlocker::Initialize()
