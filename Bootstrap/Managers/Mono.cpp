@@ -103,13 +103,13 @@ bool Mono::SetupPaths()
 		else
 		{
 			std::string str_base = (std::string(Game::BasePath) + "\\" + FolderNames[i]);
-			std::string str_data = (std::string(Game::DataPath) + "\\" + FolderNames[i]);
 			if (Core::DirectoryExists(str_base.c_str()))
 			{
 				MonoDir = str_base;
 				break;
 			}
-			else if (Core::DirectoryExists(str_data.c_str()))
+			std::string str_data = (std::string(Game::DataPath) + "\\" + FolderNames[i]);
+			if (Core::DirectoryExists(str_data.c_str()))
 			{
 				MonoDir = str_data;
 				break;
@@ -142,6 +142,8 @@ bool Mono::SetupPaths()
 	}
 
 	std::string BasePathStr = (MonoDir + "\\EmbedRuntime");
+	if (!Core::DirectoryExists(BasePathStr.c_str()))
+		BasePathStr = MonoDir;
 	BasePath = new char[BasePathStr.size() + 1];
 	std::copy(BasePathStr.begin(), BasePathStr.end(), BasePath);
 	BasePath[BasePathStr.size()] = '\0';
