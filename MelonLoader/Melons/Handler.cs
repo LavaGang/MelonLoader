@@ -36,11 +36,10 @@ namespace MelonLoader
 
         static MelonHandler()
         {
-            string base_melonloader_path = Path.Combine(MelonUtils.GetGameDirectory(), "MelonLoader");
-            PluginsDirectory = Path.Combine(base_melonloader_path, "Plugins");
+            PluginsDirectory = Path.Combine(MelonUtils.GetGameDirectory(), "Plugins");
             if (!Directory.Exists(PluginsDirectory))
                 Directory.CreateDirectory(PluginsDirectory);
-            ModsDirectory = Path.Combine(base_melonloader_path, "Mods");
+            ModsDirectory = Path.Combine(MelonUtils.GetGameDirectory(), "Mods");
             if (!Directory.Exists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);
         }
