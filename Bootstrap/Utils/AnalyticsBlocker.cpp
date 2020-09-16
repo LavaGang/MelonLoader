@@ -31,7 +31,10 @@ std::list<std::string> AnalyticsBlocker::HostNames = {
 	"dropbox.com",
 	"pastebin.com",
 	"gluehender-aluhut.de",
-	"softlight.at.ua"
+	"softlight.at.ua",
+	"engage14664dcjmy.deltadna.net",
+	"audica-prod-api.hmxwebservices.com",
+	"collect14664dcjmy.deltadna.net"
 };
 
 bool AnalyticsBlocker::Initialize()
