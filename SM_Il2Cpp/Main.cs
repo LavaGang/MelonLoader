@@ -59,7 +59,7 @@ namespace MelonLoader.Support
 
         private static void InitializeUnityVersion()
         {
-            string unityVersion = GetUnityVersion();
+            string unityVersion = MelonUtils.GetUnityVersion();
             if (string.IsNullOrEmpty(unityVersion))
                 return;
             string[] unityVersionSplit = unityVersion.Split('.');
@@ -71,15 +71,7 @@ namespace MelonLoader.Support
             UnityVersionHandler.Initialize(major, minor, patch);
         }
 
-        private static string GetUnityVersion()
-        {
-            string exepath = MelonUtils.GetApplicationPath();
-            FileVersionInfo versioninfo = FileVersionInfo.GetVersionInfo(exepath);
-            if ((versioninfo == null) || string.IsNullOrEmpty(versioninfo.FileVersion))
-                return GetUnityVersionFromGlobalGameManagers();
-            return versioninfo.FileVersion.Substring(0, versioninfo.FileVersion.LastIndexOf('.'));
-        }
-
+        /*
         private static string GetUnityVersionFromGlobalGameManagers()
         {
             string ggm_path = Path.Combine(MelonUtils.GetGameDataDirectory(), "globalgamemanagers");
@@ -121,5 +113,6 @@ namespace MelonLoader.Support
             }
             return Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
         }
+        */
     }
 }

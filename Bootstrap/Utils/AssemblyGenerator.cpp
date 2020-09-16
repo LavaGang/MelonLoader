@@ -82,7 +82,7 @@ void AssemblyGenerator::Cleanup()
 		metahost->Release();
 		metahost = NULL;
 	}
-	Game::SetupPaths();
+	Game::Initialize();
 	HashCode::SetupPaths();
 	Mono::SetupPaths();
 }
