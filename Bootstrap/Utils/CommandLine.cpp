@@ -40,6 +40,8 @@ void CommandLine::Read()
 			Console::Mode = Console::DisplayMode::RANDOMRAINBOW;
 		else if (strstr(command, "--melonloader.dab") != NULL)
 			AnalyticsBlocker::ShouldDAB = true;
+		else if (strstr(command, "--melonloader.allowanalytics") != NULL)
+			AnalyticsBlocker::Enabled = false;
 		else if (strstr(command, "--melonloader.loadmodeplugins") != NULL)
 		{
 			int loadmode = atoi(argv[i + 1]);
