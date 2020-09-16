@@ -30,18 +30,11 @@ bool Console::Initialize()
 	else
 		SetTitle(window_name.c_str());
 	SetForegroundWindow(Window);
-	AlwaysOnTopCheck();
+	if (AlwaysOnTop)
+		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	return true;
-}
-
-void Console::AlwaysOnTopCheck()
-{
-	if (!AlwaysOnTop)
-		return;
-	SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, (SWP_DRAWFRAME | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW));
-	ShowWindow(Window, SW_NORMAL);
 }
 
 Console::Color Console::GetRainbowColor()
@@ -71,7 +64,6 @@ void Console::Write(const char* txt)
 {
 	if (IsInitialized())
 	{
-		AlwaysOnTopCheck();
 		std::cout << txt;
 		std::cout.flush();
 	}

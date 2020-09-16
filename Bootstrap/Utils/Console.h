@@ -44,7 +44,6 @@ public:
 private:
 	static HWND Window;
 	static bool IsInitialized() { return ((Window != NULL) && (OutputHandle != NULL)); }
-	static void AlwaysOnTopCheck();
 	static int rainbow;
 	static Color GetRainbowColor();
 };
