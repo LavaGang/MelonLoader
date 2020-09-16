@@ -77,6 +77,7 @@
 57. Fixed ConsoleOnTop Focusing Issues.
 58. Added More HostNames to Analytics Blocker.
 59. Fixed Issue with Legacy MelonPrefs Support when GetString or SetString was called.
+60. Added "MonoBleedingEdge.x86" and "MonoBleedingEdge.x64" to the Mono Directory Search.
 
 ---
 

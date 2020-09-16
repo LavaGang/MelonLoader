@@ -12,7 +12,7 @@
 #include "../Utils/Logger.h"
 
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
-const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge" };
+const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
 char* Mono::ConfigPath = NULL;
@@ -91,8 +91,6 @@ bool Mono::SetupPaths()
 	std::string MonoDir = std::string();
 	for (int i = 0; i < (sizeof(FolderNames) / sizeof(FolderNames[0])); i++)
 	{
-		std::string str_base = (std::string(Game::BasePath) + "\\" + FolderNames[i]);
-		std::string str_data = (std::string(Game::DataPath) + "\\" + FolderNames[i]);
 		if (Game::IsIl2Cpp)
 		{
 			std::string str_melon = (std::string(Game::BasePath) + "\\MelonLoader\\Dependencies\\" + FolderNames[i]);
@@ -104,6 +102,8 @@ bool Mono::SetupPaths()
 		}
 		else
 		{
+			std::string str_base = (std::string(Game::BasePath) + "\\" + FolderNames[i]);
+			std::string str_data = (std::string(Game::DataPath) + "\\" + FolderNames[i]);
 			if (Core::DirectoryExists(str_base.c_str()))
 			{
 				MonoDir = str_base;
