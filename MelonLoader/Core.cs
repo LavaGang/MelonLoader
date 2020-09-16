@@ -17,6 +17,7 @@ namespace MelonLoader
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
             UserDataPath = Path.Combine(MelonUtils.GetGameDirectory(), "UserData");
             if (!Directory.Exists(UserDataPath))
                 Directory.CreateDirectory(UserDataPath);

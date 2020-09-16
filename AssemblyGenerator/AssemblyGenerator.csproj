@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="Core.cs" />
     <Compile Include="Packages\Base.cs" />
     <Compile Include="Packages\Il2CppAssemblyUnhollower.cs" />
     <Compile Include="Packages\Il2CppDumper.cs" />

@@ -49,7 +49,7 @@ bool AssemblyGenerator::Initialize()
 	}
 	std::string assembly_path = Path;
     DWORD returnval;
-	if (FAILED(rhost->ExecuteInDefaultAppDomain(std::wstring(assembly_path.begin(), assembly_path.end()).c_str(), L"MelonLoader.AssemblyGenerator.Main", L"Run", L"", &returnval)))
+	if (FAILED(rhost->ExecuteInDefaultAppDomain(std::wstring(assembly_path.begin(), assembly_path.end()).c_str(), L"MelonLoader.AssemblyGenerator.Core", L"Run", L"", &returnval)))
 	{
 		Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 		Assertion::ThrowInternalFailure("Failed to Execute Assembly Generator!");

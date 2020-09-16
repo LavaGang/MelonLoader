@@ -17,7 +17,7 @@ namespace MelonLoader.AssemblyGenerator
 
         static Config()
         {
-            FilePath = Path.Combine(Main.BasePath, "Config.cfg");
+            FilePath = Path.Combine(Core.BasePath, "Config.cfg");
             if (!File.Exists(FilePath))
             {
                 Save();

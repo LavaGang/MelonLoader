@@ -18,7 +18,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             string tempfile = Path.GetTempFileName();
             Logger.Msg($"Downloading {URL} to {tempfile}");
-            try { Main.webClient.DownloadFile(URL, tempfile); }
+            try { Core.webClient.DownloadFile(URL, tempfile); }
             catch (Exception ex)
             {
                 Logger.Error(ex.Message.ToString());
@@ -100,20 +100,20 @@ namespace MelonLoader.AssemblyGenerator
             }
             try
             {
-                Main.OverrideAppDomainBase(Destination);
+                Core.OverrideAppDomainBase(Destination);
                 var generatorProcessInfo = new ProcessStartInfo(ExePath);
                 generatorProcessInfo.Arguments = string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")));
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;
                 Process process = null;
-                try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.Error(e.ToString()); Main.OverrideAppDomainBase(Main.BasePath); return false; }
+                try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.Error(e.ToString()); Core.OverrideAppDomainBase(Core.BasePath); return false; }
                 var stdout = process.StandardOutput;
                 while (!stdout.EndOfStream)
                     Logger.Msg(stdout.ReadLine());
                 while (!process.HasExited)
                     Thread.Sleep(100);
-                Main.OverrideAppDomainBase(Main.BasePath);
+                Core.OverrideAppDomainBase(Core.BasePath);
                 return true;
             }
             catch (Exception ex) { Logger.Error(ex.Message.ToString()); }

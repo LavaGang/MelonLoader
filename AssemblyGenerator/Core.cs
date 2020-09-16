@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 namespace MelonLoader.AssemblyGenerator
 {
-    internal static class Main
+    internal static class Core
     {
         internal static string BasePath = null;
         internal static string GameAssemblyPath = null;
@@ -17,7 +17,7 @@ namespace MelonLoader.AssemblyGenerator
         internal static UnityDependencies unitydependencies = null;
         private static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
 
-        static Main()
+        static Core()
         {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;

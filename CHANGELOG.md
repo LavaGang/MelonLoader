@@ -72,6 +72,7 @@
 52. Fixed Crash Issue with Fresh Install Assembly Generation.
 53. Support Module now uses MelonUtils.GetUnityVersion properly.
 54. Fixed Hooking Issue with Harmony Attributes.
+55. Fixed Issue with Reflection based Assembly Resolving.
 
 ---
 

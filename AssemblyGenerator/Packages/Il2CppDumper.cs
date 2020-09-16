@@ -11,7 +11,7 @@ namespace MelonLoader.AssemblyGenerator
             if (string.IsNullOrEmpty(Version))
                 Version = "6.4.12";
             URL = "https://github.com/Perfare/Il2CppDumper/releases/download/v" + Version + "/Il2CppDumper-v" + Version + ".zip";
-            Destination = Path.Combine(Main.BasePath, "Il2CppDumper");
+            Destination = Path.Combine(Core.BasePath, "Il2CppDumper");
             Output = Path.Combine(Destination, "DummyDll");
             ExePath = Path.Combine(Destination, "Il2CppDumper.exe");
         }
@@ -45,7 +45,7 @@ namespace MelonLoader.AssemblyGenerator
             FixConfig();
             Logger.Msg("Executing Il2CppDumper...");
             string metadata_path = Path.Combine(Path.Combine(Path.GetDirectoryName(Utils.GetConfigDirectory()), "Metadata"), "global-metadata.dat");
-            return Execute(new string[] { Main.GameAssemblyPath, metadata_path });
+            return Execute(new string[] { Core.GameAssemblyPath, metadata_path });
         }
 
         private void FixConfig() => File.WriteAllText(Path.Combine(Destination, "config.json"), Encoder.Encode(new Il2CppDumperConfig(), EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));

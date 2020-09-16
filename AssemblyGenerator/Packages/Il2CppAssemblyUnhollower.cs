@@ -10,7 +10,7 @@ namespace MelonLoader.AssemblyGenerator
             if (string.IsNullOrEmpty(Version))
                 Version = "0.4.9.1";
             URL = "https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v" + Version + "/Il2CppAssemblyUnhollower." + Version + ".zip";
-            Destination = Path.Combine(Main.BasePath, "Il2CppAssemblyUnhollower");
+            Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
             Output = Path.Combine(Destination, "Managed");
             ExePath = Path.Combine(Destination, "AssemblyUnhollower.exe");
         }
@@ -42,13 +42,13 @@ namespace MelonLoader.AssemblyGenerator
         internal bool Execute()
         {
             Logger.Msg("Executing Il2CppAssemblyUnhollower...");
-            string mscorlib_path = Path.Combine(Main.ManagedPath, "mscorlib.dll");
+            string mscorlib_path = Path.Combine(Core.ManagedPath, "mscorlib.dll");
             return Execute(new string[] {
-                ("--input=" + Main.il2cppdumper.Output),
+                ("--input=" + Core.il2cppdumper.Output),
                 ("--output=" + Output),
                 ("--mscorlib=" + mscorlib_path),
-                ("--unity=" + Main.unitydependencies.Destination),
-                "--gameassembly=" + Main.GameAssemblyPath,
+                ("--unity=" + Core.unitydependencies.Destination),
+                "--gameassembly=" + Core.GameAssemblyPath,
                 "--blacklist-assembly=Mono.Security",
                 "--blacklist-assembly=Newtonsoft.Json",
                 "--blacklist-assembly=Valve.Newtonsoft.Json"});
