@@ -332,6 +332,7 @@ namespace MelonLoader
             baseInstance.Compatibility = melonCompatibility;
             baseInstance.Assembly = asm;
             baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
+            baseInstance.Harmony.PatchAll(asm);
             if (is_plugin)
                 _Plugins.Add((MelonPlugin)baseInstance);
             else if (is_mod)

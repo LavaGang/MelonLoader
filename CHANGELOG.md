@@ -71,6 +71,7 @@
 51. Fixed Issue with Log Output not Flushing.
 52. Fixed Crash Issue with Fresh Install Assembly Generation.
 53. Support Module now uses MelonUtils.GetUnityVersion properly.
+54. Fixed Hooking Issue with Harmony Attributes.
 
 ---
 
