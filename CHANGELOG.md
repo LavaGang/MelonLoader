@@ -76,6 +76,7 @@
 56. Moved Plugins and Mods folders back to the Game Installation folder.
 57. Fixed ConsoleOnTop Focusing Issues.
 58. Added More HostNames to Analytics Blocker.
+59. Fixed Issue with Legacy MelonPrefs Support when GetString or SetString was called.
 
 ---
 

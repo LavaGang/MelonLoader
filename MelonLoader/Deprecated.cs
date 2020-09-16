@@ -172,8 +172,38 @@ namespace MelonLoader
         }
         public static string GetCategoryDisplayName(string key) => MelonPreferences.GetCategory(key)?.DisplayName;
         public static void SaveConfig() => MelonPreferences.Save();
-        public static string GetString(string section, string name) => MelonPreferences.GetCategory(section)?.GetEntry(name)?.GetString();
-        public static void SetString(string section, string name, string value) => MelonPreferences.GetCategory(section)?.GetEntry(name)?.SetString(value);
+        public static string GetString(string section, string name)
+        {
+            MelonPreferences_Category category = MelonPreferences.GetCategory(section);
+            if (category == null)
+                return null;
+            MelonPreferences_Entry entry = category.GetEntry(name);
+            if (entry == null)
+                return null;
+            return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetBool().ToString()
+                : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetInt().ToString()
+                : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetFloat().ToString()
+                : entry.GetString())));
+        }
+        public static void SetString(string section, string name, string value)
+        {
+            MelonPreferences_Category category = MelonPreferences.GetCategory(section);
+            if (category == null)
+                return;
+            MelonPreferences_Entry entry = category.GetEntry(name);
+            if (entry == null)
+                return;
+            int val_int = 0;
+            float val_float = 0f;
+            if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
+                entry.SetBool(value.ToLower().StartsWith("true"));
+            else if (Int32.TryParse(value, out val_int))
+                entry.SetInt(val_int);
+            else if (float.TryParse(value, out val_float))
+                entry.SetFloat(val_float);
+            else
+                entry.SetString(value);
+        }
         public static bool GetBool(string section, string name) => (bool)MelonPreferences.GetCategory(section)?.GetEntry(name)?.GetBool();
         public static void SetBool(string section, string name, bool value) => MelonPreferences.GetCategory(section)?.GetEntry(name)?.SetBool(value);
         public static int GetInt(string section, string name) => (int)MelonPreferences.GetCategory(section)?.GetEntry(name)?.GetInt();
