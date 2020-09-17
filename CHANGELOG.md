@@ -89,6 +89,7 @@
 69. Fixed Issue with Launch Option "--melonloader.hideconsole" ignoring "--melonloader.debug".
 70. Fixed Console Coloring Issue.
 71. Added MelonDebug.Msg.
+72. Fixed Issue with MelonLoader Unity Debug Log not running when Plugins are loaded.
 
 ---
 
