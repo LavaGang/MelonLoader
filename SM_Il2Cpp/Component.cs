@@ -32,7 +32,8 @@ namespace MelonLoader.Support
         void Update()
         {
             SiblingFix();
-            Main.VRChat_CheckUiManager();
+            if (MelonUtils.IsVRChat())
+                Main.VRChat_CheckUiManager();
             Main.Interface.Update();
             Coroutines.Process();
         }
