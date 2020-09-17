@@ -15,6 +15,7 @@ bool AssemblyGenerator::ForceRegeneration = false;
 char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppDumper = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = NULL;
+int AssemblyGenerator::ProcessId = 0;
 ICLRMetaHost* AssemblyGenerator::metahost = NULL;
 ICLRRuntimeInfo* AssemblyGenerator::rinfo = NULL;
 ICLRRuntimeHost* AssemblyGenerator::rhost = NULL;
@@ -75,6 +76,16 @@ void AssemblyGenerator::Cleanup()
 	if ((rhost == NULL) || (rinfo == NULL) || (metahost == NULL))
 		return;
 	Debug::Msg("Cleaning up Assembly Generator...");
+	if (ProcessId != 0)
+	{
+		HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, ProcessId);
+		if (hProcess != NULL)
+		{
+			BOOL result = TerminateProcess(hProcess, 0);
+			CloseHandle(hProcess);
+		}
+		ProcessId = 0;
+	}
 	if (rhost != NULL)
 	{
 		rhost->Stop();

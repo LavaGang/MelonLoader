@@ -22,5 +22,7 @@ namespace MelonLoader.AssemblyGenerator
         internal extern static string ForceVersion_Il2CppDumper();
         [DllImport(@"MelonLoader\\Dependencies\\Bootstrap.dll", EntryPoint = "ForceVersion_Il2CppAssemblyUnhollower", CallingConvention = CallingConvention.StdCall)]
         internal extern static string ForceVersion_Il2CppAssemblyUnhollower();
+        [DllImport(@"MelonLoader\\Dependencies\\Bootstrap.dll", EntryPoint = "SetProcessId", CallingConvention = CallingConvention.StdCall)]
+        internal extern static void SetProcessId(int id);
     }
 }

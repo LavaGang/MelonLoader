@@ -108,11 +108,13 @@ namespace MelonLoader.AssemblyGenerator
                 generatorProcessInfo.CreateNoWindow = true;
                 Process process = null;
                 try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.Error(e.ToString()); Core.OverrideAppDomainBase(Core.BasePath); return false; }
-                var stdout = process.StandardOutput;
+                StreamReader stdout = process.StandardOutput;
+                Utils.SetProcessId(process.Id);
                 while (!stdout.EndOfStream)
                     Logger.Msg(stdout.ReadLine());
                 while (!process.HasExited)
                     Thread.Sleep(100);
+                Utils.SetProcessId(0);
                 Core.OverrideAppDomainBase(Core.BasePath);
                 return true;
             }

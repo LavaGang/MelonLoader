@@ -10,6 +10,7 @@ public:
     static char* ForceVersion_UnityDependencies;
     static char* ForceVersion_Il2CppDumper;
     static char* ForceVersion_Il2CppAssemblyUnhollower;
+    static int ProcessId;
 	static bool Initialize();
     static void Cleanup();
 
