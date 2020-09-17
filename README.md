@@ -5,7 +5,7 @@
 - All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
 - All Mods get placed in the created Mods folder in your Game's Installation Folder.
 - Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
-- [dnSpy Debugger Usage](#dnspy-debugger)
+- [Il2Cpp dnSpy Debugger Usage](#il2cpp-dnspy-debugger-usage)
 
 ---
 
@@ -19,7 +19,7 @@
 
 ### AUTOMATED INSTALLATION:
 
-1. Make sure the Game is Closed and Not Running before installing.
+1. Make sure the Game is Closed and Not Running before Installing.
 2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
 3. Run MelonLoader.Installer.exe.
 4. Click the SELECT button.
@@ -29,9 +29,9 @@
 
 ---
 
-### AUTOMATED UNINSTALL:
+### AUTOMATED UN-INSTALL:
 
-1. Make sure the Game you are uninstalling from is Closed and Not Running.
+1. Make sure the Game is Closed and Not Running before Uninstalling.
 2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
 3. Run MelonLoader.Installer.exe.
 4. Click the SELECT button.
@@ -64,7 +64,7 @@
 
 ---
 
-### DNSPY DEBUGGER:
+### IL2CPP DNSPY DEBUGGER USAGE:
 
 -
 

@@ -87,6 +87,7 @@
 67. Launch Option "--melonloader.dab" no longer requires "--melonloader.debug".
 68. Fixed Visual C++ Error that occurs when closing certain Games by closing the Console  (for example: Audica).
 69. Fixed Issue with Launch Option "--melonloader.hideconsole" ignoring "--melonloader.debug".
+70. Fixed Console Coloring Issue.
 
 ---
 

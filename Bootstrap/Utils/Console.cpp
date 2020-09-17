@@ -40,6 +40,17 @@ bool Console::Initialize()
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	DWORD mode = 0;
+	if (!GetConsoleMode(OutputHandle, &mode))
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
+		return false;
+	}
+	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
+	{
+		Assertion::ThrowInternalFailure("Failed to Enable Virtual Terminal Processing!");
+		return false;
+	}
 	return true;
 }
 
@@ -91,7 +102,59 @@ void Console::SetColor(Color color)
 		: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
 			? GetRainbowColor()
 			: color));
-	SetConsoleTextAttribute(OutputHandle, color);
+	switch (color)
+	{
+	case Color::Black:
+		Write("\x1b[30m");
+		break;
+	case Color::DarkBlue:
+		Write("\x1b[34m");
+		break;
+	case Color::DarkGreen:
+		Write("\x1b[32m");
+		break;
+	case Color::DarkCyan:
+		Write("\x1b[36m");
+		break;
+	case Color::DarkRed:
+		Write("\x1b[31m");
+		break;
+	case Color::DarkMagenta:
+		Write("\x1b[35m");
+		break;
+	case Color::DarkYellow:
+		Write("\x1b[33m");
+		break;
+	case Color::Gray:
+		Write("\x1b[37m");
+		break;
+	case Color::DarkGray:
+		Write("\x1b[90m");
+		break;
+	case Color::Blue:
+		Write("\x1b[94m");
+		break;
+	case Color::Green:
+		Write("\x1b[92m");
+		break;
+	case Color::Cyan:
+		Write("\x1b[96m");
+		break;
+	case Color::Red:
+		Write("\x1b[91m");
+		break;
+	case Color::Magenta:
+		Write("\x1b[95m");
+		break;
+	case Color::Yellow:
+		Write("\x1b[93m");
+		break;
+	case Color::White:
+		Write("\x1b[97m");
+		break;
+	default:
+		break;
+	}
 }
 
 void Console::Write(const char* txt)
