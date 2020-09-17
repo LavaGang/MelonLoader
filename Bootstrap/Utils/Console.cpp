@@ -148,9 +148,8 @@ void Console::SetColor(Color color)
 		Write("\x1b[93m");
 		break;
 	case Color::White:
-		Write("\x1b[97m");
-		break;
 	default:
+		Write("\x1b[97m");
 		break;
 	}
 }
