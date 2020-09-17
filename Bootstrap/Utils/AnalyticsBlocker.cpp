@@ -72,6 +72,7 @@ bool AnalyticsBlocker::CheckHostNames(const char* name)
 
 #pragma region wsock32
 HMODULE AnalyticsBlocker::wsock32::Module = NULL;
+AnalyticsBlocker::wsock32::Exports::gethostbyname_t AnalyticsBlocker::wsock32::Exports::Gethostbyname = NULL;
 
 bool AnalyticsBlocker::wsock32::Initialize()
 {
@@ -88,8 +89,6 @@ bool AnalyticsBlocker::wsock32::Initialize()
 	}
 	return true;
 }
-
-AnalyticsBlocker::wsock32::Exports::gethostbyname_t AnalyticsBlocker::wsock32::Exports::Gethostbyname = NULL;
 
 bool AnalyticsBlocker::wsock32::Exports::Initialize()
 {
