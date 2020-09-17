@@ -83,6 +83,7 @@
 63. Console will now properly appear for Assembly Generation only on Il2Cpp Games when using Launch Option "--melonloader.hideconsole".
 64. Fixed Issue with Launch Option "--melonloader.hideconsole" causing a Crash.
 65. Fixed Execution Order of Console Initialization when using Launch Option "--melonloader.hideconsole".
+66. Fixed Issue with Il2CppDumper and Il2CppAssemblyUnhollower hanging when Games are closed during Assembly Generation.
 
 ---
 
