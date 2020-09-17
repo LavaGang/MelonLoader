@@ -79,7 +79,6 @@
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |
 | --melonloader.dab | Debug Analytics Blocker |
-| --melonloader.allowanalytics | Disables the Analytics Blocker |
 | --melonloader.magenta | Magenta Console Color |
 | --melonloader.rainbow | Rainbow Console Color |
 | --melonloader.randomrainbow | Random Rainbow Console Color |

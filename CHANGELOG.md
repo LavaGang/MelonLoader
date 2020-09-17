@@ -84,6 +84,7 @@
 64. Fixed Issue with Launch Option "--melonloader.hideconsole" causing a Crash.
 65. Fixed Execution Order of Console Initialization when using Launch Option "--melonloader.hideconsole".
 66. Fixed Issue with Il2CppDumper and Il2CppAssemblyUnhollower hanging when Games are closed during Assembly Generation.
+67. Launch Option "--melonloader.dab" no longer requires "--melonloader.debug".
 
 ---
 
