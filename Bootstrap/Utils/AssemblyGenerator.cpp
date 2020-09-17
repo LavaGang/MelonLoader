@@ -24,7 +24,7 @@ bool AssemblyGenerator::Initialize()
 {
 	Console::GeneratingAssembly = true;
 	Logger::WriteSpacer();
-	if (Console::ShouldHide && !Console::Initialize())
+	if (!Debug::Enabled && Console::ShouldHide && !Console::Initialize())
 	{
 		Assertion::ThrowInternalFailure("Failed to Initialize Console!");
 		return false;
@@ -106,7 +106,7 @@ void AssemblyGenerator::Cleanup()
 	HashCode::SetupPaths();
 	Mono::SetupPaths();
 	Console::GeneratingAssembly = false;
-	if (Console::ShouldHide)
+	if (!Debug::Enabled && Console::ShouldHide)
 		Console::Close();
 	else
 		Console::EnableCloseButton();

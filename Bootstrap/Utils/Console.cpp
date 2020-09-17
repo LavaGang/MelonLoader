@@ -20,7 +20,7 @@ int Console::rainbow = 1;
 
 bool Console::Initialize()
 {
-	if (ShouldHide && !GeneratingAssembly)
+	if (!Debug::Enabled && ShouldHide && !GeneratingAssembly)
 		return true;
 	if (!AllocConsole())
 	{
