@@ -5,18 +5,21 @@
 #include "Debug.h"
 #include <iostream>
 #include <locale.h>
+#include "../Managers/Game.h"
+#include "AssemblyGenerator.h"
 
-bool Console::Enabled = true;
+bool Console::ShouldHide = false;
 bool Console::AlwaysOnTop = false;
 bool Console::HideWarnings = false;
 Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
 HWND Console::Window = NULL;
+HMENU Console::Menu = NULL;
 HANDLE Console::OutputHandle = NULL;
 int Console::rainbow = 1;
 
 bool Console::Initialize()
 {
-	if (!Enabled)
+	if (ShouldHide && !Game::IsIl2Cpp)
 		return true;
 	if (!AllocConsole())
 	{
@@ -24,6 +27,8 @@ bool Console::Initialize()
 		return false;
 	}
 	Window = GetConsoleWindow();
+	Menu = GetSystemMenu(Window, FALSE);
+	SetConsoleCtrlHandler(EventHandler, TRUE);
 	std::string window_name = std::string("MelonLoader ") + Core::Version + " Open-Beta";
 	if (Debug::Enabled)
 		SetTitle((window_name + " - Debug Mode").c_str());
@@ -35,6 +40,28 @@ bool Console::Initialize()
 	freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	return true;
+}
+
+void Console::Close()
+{
+	CloseWindow(Window);
+	Window = NULL;
+	Menu = NULL;
+	OutputHandle = NULL;
+}
+
+void Console::EnableCloseButton() { EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED); }
+void Console::DisableCloseButton() { EnableMenuItem(Menu, SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED)); }
+BOOL WINAPI Console::EventHandler(DWORD evt)
+{
+	switch (evt)
+	{
+	case CTRL_CLOSE_EVENT:
+		if (Game::IsIl2Cpp)
+			AssemblyGenerator::Cleanup();
+	default:
+		return FALSE;
+	}
 }
 
 Console::Color Console::GetRainbowColor()

@@ -5,7 +5,7 @@ class Console
 {
 public:
 	static HANDLE OutputHandle;
-	static bool Enabled;
+	static bool ShouldHide;
 	static bool AlwaysOnTop;
 	static bool HideWarnings;
 	enum DisplayMode
@@ -18,6 +18,7 @@ public:
 	static DisplayMode Mode;
 
 	static bool Initialize();
+	static void Close();
 	static void SetTitle(const char* title) { SetConsoleTitleA(title); }
 	enum Color
 	{
@@ -40,10 +41,14 @@ public:
 	};
 	static void SetColor(Color color);
 	static void Write(const char* txt);
+	static void EnableCloseButton();
+	static void DisableCloseButton();
+	static BOOL WINAPI EventHandler(DWORD evt);
 
 private:
 	static HWND Window;
-	static bool IsInitialized() { return ((Window != NULL) && (OutputHandle != NULL)); }
+	static HMENU Menu;
+	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }
 	static int rainbow;
 	static Color GetRainbowColor();
 };

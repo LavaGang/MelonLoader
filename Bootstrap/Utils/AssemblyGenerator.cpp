@@ -21,6 +21,7 @@ ICLRRuntimeHost* AssemblyGenerator::rhost = NULL;
 
 bool AssemblyGenerator::Initialize()
 {
+	Console::DisableCloseButton();
 	Logger::WriteSpacer();
 	Debug::Msg("Initializing Assembly Generator...");
 	if (FAILED(CLRCreateInstance(CLSID_CLRMetaHost, IID_PPV_ARGS(&metahost))))
@@ -65,6 +66,8 @@ bool AssemblyGenerator::Initialize()
 
 void AssemblyGenerator::Cleanup()
 {
+	if ((rhost == NULL) || (rinfo == NULL) || (metahost == NULL))
+		return;
 	Debug::Msg("Cleaning up Assembly Generator...");
 	if (rhost != NULL)
 	{
@@ -85,4 +88,8 @@ void AssemblyGenerator::Cleanup()
 	Game::Initialize();
 	HashCode::SetupPaths();
 	Mono::SetupPaths();
+	if (Console::ShouldHide)
+		Console::Close();
+	else
+		Console::EnableCloseButton();
 }

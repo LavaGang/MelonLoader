@@ -6,7 +6,6 @@
 class AnalyticsBlocker
 {
 public:
-	static bool Enabled;
 	static bool ShouldDAB;
 	static bool Initialize();
 	static void Hook();

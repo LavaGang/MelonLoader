@@ -79,7 +79,8 @@
 59. Fixed Issue with Legacy MelonPrefs Support when GetString or SetString was called.
 60. Added "MonoBleedingEdge.x86" and "MonoBleedingEdge.x64" to the Mono Directory Search.
 61. Fixed Issue with certain Mono Games causing the Mono Directory Search to fail.
-62. Added Launch Option "--melonloader.allowanalytics" to Disable the Analytics Blocker.
+62. Disabled Close Button on Console during Assembly Generation.
+63. Console will now properly appear for Assembly Generation only on Il2Cpp Games when using Launch Option "--melonloader.hideconsole".
 
 ---
 

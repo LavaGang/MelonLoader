@@ -25,8 +25,8 @@ bool Core::Initialize()
 	if (!OSVersionCheck())
 		return false;
 	CommandLine::Read();
-	if (!Console::Initialize()
-		|| !Game::Initialize()
+	if (!Game::Initialize()
+		|| !Console::Initialize()
 		|| !Logger::Initialize()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())

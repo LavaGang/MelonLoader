@@ -4,7 +4,6 @@
 #include "../Managers/Hook.h"
 #include <algorithm>
 
-bool AnalyticsBlocker::Enabled = true;
 bool AnalyticsBlocker::ShouldDAB = false;
 std::list<std::string> AnalyticsBlocker::HostNames_DAB;
 
@@ -38,8 +37,6 @@ std::list<std::string> AnalyticsBlocker::HostNames = {
 
 bool AnalyticsBlocker::Initialize()
 {
-	if (!Enabled)
-		return true;
 	Debug::Msg("Initializing Analytics Blocker...");
 	return (wsock32::Initialize()
 #ifdef _WIN64
