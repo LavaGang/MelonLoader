@@ -14,6 +14,7 @@ public:
 	static bool FileExists(const char* path);
 	static void GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt);
 	static void WelcomeMessage();
+	static void KillCurrentProcess();
 private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();

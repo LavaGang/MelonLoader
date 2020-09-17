@@ -85,6 +85,7 @@
 65. Fixed Execution Order of Console Initialization when using Launch Option "--melonloader.hideconsole".
 66. Fixed Issue with Il2CppDumper and Il2CppAssemblyUnhollower hanging when Games are closed during Assembly Generation.
 67. Launch Option "--melonloader.dab" no longer requires "--melonloader.debug".
+68. Fixed Visual C++ Error that occurs when closing certain Games by closing the Console  (for example: Audica).
 
 ---
 

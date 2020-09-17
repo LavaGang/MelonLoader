@@ -62,10 +62,14 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	case CTRL_CLOSE_EVENT:
 		if (Game::IsIl2Cpp)
 			AssemblyGenerator::Cleanup();
+		Close();
+		Core::KillCurrentProcess();
 	default:
 		return FALSE;
 	}
 }
+
+
 
 Console::Color Console::GetRainbowColor()
 {
