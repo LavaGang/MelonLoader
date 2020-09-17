@@ -70,7 +70,7 @@ namespace MelonLoader
             RunErrorCallbacks(namesection, objstr);
         }
 
-        private static string GetNameSection()
+        internal static string GetNameSection()
         {
             StackTrace st = new StackTrace(2, true);
             StackFrame sf = st.GetFrame(0);

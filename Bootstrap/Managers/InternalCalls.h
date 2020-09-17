@@ -62,5 +62,6 @@ public:
 	public:
 		static void AddInternalCalls();
 		static bool IsEnabled();
+		static void Internal_Msg(Mono::String* namesection, Mono::String* txt);
 	};
 };
