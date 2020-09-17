@@ -44,7 +44,7 @@ bool Console::Initialize()
 
 void Console::Close()
 {
-	CloseWindow(Window);
+	ShowWindow(Window, 0);
 	Window = NULL;
 	Menu = NULL;
 	OutputHandle = NULL;
