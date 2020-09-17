@@ -90,6 +90,7 @@
 70. Fixed Console Coloring Issue.
 71. Added MelonDebug.Msg.
 72. Fixed Issue with MelonLoader Unity Debug Log not running when Plugins are loaded.
+73. Fixed Issue with VRChat_OnUiManagerInit not getting called.
 
 ---
 

@@ -91,6 +91,7 @@ namespace MelonLoader
         void LateUpdate();
         void OnGUI();
         void Quit();
+        void VRChat_OnUiManagerInit();
     }
 
     internal class SupportModule_From : ISupportModule_From
@@ -102,5 +103,6 @@ namespace MelonLoader
         public void LateUpdate() => MelonHandler.OnLateUpdate();
         public void OnGUI() => MelonHandler.OnGUI();
         public void Quit() => Core.Quit();
+        public void VRChat_OnUiManagerInit() => MelonHandler.VRChat_OnUiManagerInit();
     }
 }

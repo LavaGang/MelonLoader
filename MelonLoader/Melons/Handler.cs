@@ -455,6 +455,16 @@ namespace MelonLoader
                     try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
         }
 
+        internal static void VRChat_OnUiManagerInit()
+        {
+            if (_Plugins.Count > 0)
+                foreach (MelonPlugin plugin in _Plugins)
+                    try { plugin.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+            if (_Mods.Count > 0)
+                foreach (MelonMod mod in _Mods)
+                    try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+        }
+
         internal enum LoadMode
         {
             NORMAL,

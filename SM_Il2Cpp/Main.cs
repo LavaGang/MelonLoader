@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
@@ -18,6 +19,10 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static Component component = null;
         private static Camera OnPostRenderCam = null;
+        private static bool ShouldCheckForUiManager = true;
+        private static Assembly Assembly_CSharp = null;
+        private static Type VRCUiManager = null;
+        private static System.Reflection.PropertyInfo VRCUiManager_Instance = null;
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
@@ -69,6 +74,29 @@ namespace MelonLoader.Support
             char firstBadChar = patchString.FirstOrDefault(it => it < '0' || it > '9');
             int patch = int.Parse(firstBadChar == 0 ? patchString : patchString.Substring(0, patchString.IndexOf(firstBadChar)));
             UnityVersionHandler.Initialize(major, minor, patch);
+        }
+
+        internal static void VRChat_CheckUiManager()
+        {
+            if (!ShouldCheckForUiManager)
+                return;
+            if (Assembly_CSharp == null)
+                Assembly_CSharp = Assembly.Load("Assembly_CSharp");
+            if (Assembly_CSharp == null)
+                return;
+            if (VRCUiManager == null)
+                VRCUiManager = Assembly_CSharp.GetType("VRCUiManager");
+            if (VRCUiManager == null)
+                return;
+            if (VRCUiManager_Instance == null)
+                VRCUiManager_Instance = VRCUiManager.GetProperty("field_Protected_Static_VRCUiManager_0");
+            if (VRCUiManager_Instance == null)
+                return;
+            object returnval = VRCUiManager_Instance.GetValue(null, new object[0]);
+            if (returnval == null)
+                return;
+            ShouldCheckForUiManager = false;
+            Interface.VRChat_OnUiManagerInit();
         }
 
         /*
