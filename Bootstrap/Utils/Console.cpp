@@ -80,8 +80,6 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	}
 }
 
-
-
 Console::Color Console::GetRainbowColor()
 {
 	if (Mode == DisplayMode::RANDOMRAINBOW)
