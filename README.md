@@ -1,10 +1,11 @@
 ### GENERAL INFORMATION:
 
 - Debug Mode is for Debugging MelonLoader, Plugins, Mods.
-- All Logs are made in the created MelonLoader/Logs folder.
-- All Plugins get placed in the created MelonLoader/Plugins folder.
-- All Mods get placed in the created MelonLoader/Mods folder.
+- All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
+- All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
+- All Mods get placed in the created Mods folder in your Game's Installation Folder.
 - Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
+- [dnSpy Debugger Usage](#dnspy-debugger)
 
 ---
 
