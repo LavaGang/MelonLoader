@@ -91,6 +91,7 @@
 71. Added MelonDebug.Msg.
 72. Fixed Issue with MelonLoader Unity Debug Log not running when Plugins are loaded.
 73. Fixed Issue with VRChat_OnUiManagerInit not getting called.
+74. MelonLoader Unity Debug Log is now default even when no Plugins or Mods are loaded.
 
 ---
 

@@ -31,8 +31,6 @@ namespace MelonLoader
         {
             MelonHandler.LoadPlugins();
             Main.LegacySupport();
-            if (MelonHandler._Plugins.Count > 0)
-                AddUnityDebugLog();
             MelonHandler.OnPreInitialization();
         }
 
@@ -40,10 +38,9 @@ namespace MelonLoader
         {
             if (!SupportModule.Initialize())
                 return;
+            AddUnityDebugLog();
             MelonHandler.LoadMods();
             Main.LegacySupport();
-            if ((MelonHandler._Plugins.Count > 0) || (MelonHandler._Mods.Count > 0))
-                AddUnityDebugLog();
             MelonHandler.OnApplicationStart();
         }
 
