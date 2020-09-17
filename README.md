@@ -58,9 +58,9 @@
 
 | Value | Action |
 | - | - |
-| 0 | NORMAL - Load them only if they don't have the ".dev" Extension |
-| 1 | DEV - Load them only if they have the ".dev" Name Extension |
-| 2 | BOTH - Load All |
+| 0 | Load them only if they don't have the ".dev" Extension |
+| 1 | Load them only if they have the ".dev" Name Extension |
+| 2 | Load All |
 
 ---
 

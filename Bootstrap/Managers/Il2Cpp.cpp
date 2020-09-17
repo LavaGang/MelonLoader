@@ -14,7 +14,6 @@ Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
 HMODULE Il2Cpp::Module = NULL;
 void* Il2Cpp::UnityTLSInterfaceStruct = NULL;
-
 Il2Cpp::Exports::il2cpp_init_t Il2Cpp::Exports::il2cpp_init = NULL;
 Il2Cpp::Exports::il2cpp_runtime_invoke_t Il2Cpp::Exports::il2cpp_runtime_invoke = NULL;
 Il2Cpp::Exports::il2cpp_method_get_name_t Il2Cpp::Exports::il2cpp_method_get_name = NULL;
