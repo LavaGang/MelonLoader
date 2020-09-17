@@ -6,6 +6,7 @@ class Console
 public:
 	static HANDLE OutputHandle;
 	static bool ShouldHide;
+	static bool GeneratingAssembly;
 	static bool AlwaysOnTop;
 	static bool HideWarnings;
 	enum DisplayMode

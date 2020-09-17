@@ -9,6 +9,7 @@
 #include "AssemblyGenerator.h"
 
 bool Console::ShouldHide = false;
+bool Console::GeneratingAssembly = false;
 bool Console::AlwaysOnTop = false;
 bool Console::HideWarnings = false;
 Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
@@ -19,7 +20,7 @@ int Console::rainbow = 1;
 
 bool Console::Initialize()
 {
-	if (ShouldHide && !Game::IsIl2Cpp)
+	if (ShouldHide && !GeneratingAssembly)
 		return true;
 	if (!AllocConsole())
 	{
@@ -44,14 +45,16 @@ bool Console::Initialize()
 
 void Console::Close()
 {
+	if (!IsInitialized())
+		return;
 	ShowWindow(Window, 0);
 	Window = NULL;
 	Menu = NULL;
 	OutputHandle = NULL;
 }
 
-void Console::EnableCloseButton() { EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED); }
-void Console::DisableCloseButton() { EnableMenuItem(Menu, SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED)); }
+void Console::EnableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED); }
+void Console::DisableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED)); }
 BOOL WINAPI Console::EventHandler(DWORD evt)
 {
 	switch (evt)
@@ -89,9 +92,8 @@ void Console::SetColor(Color color)
 
 void Console::Write(const char* txt)
 {
-	if (IsInitialized())
-	{
-		std::cout << txt;
-		std::cout.flush();
-	}
+	if (!IsInitialized())
+		return;
+	std::cout << txt;
+	std::cout.flush();
 };
