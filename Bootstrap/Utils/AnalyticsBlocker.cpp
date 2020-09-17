@@ -122,6 +122,7 @@ void* AnalyticsBlocker::wsock32::Hooks::Gethostbyname(const char* name)
 }
 #pragma endregion
 
+#ifdef _WIN64
 #pragma region ws2_32
 HMODULE AnalyticsBlocker::ws2_32::Module = NULL;
 AnalyticsBlocker::ws2_32::Exports::getaddrinfo_t AnalyticsBlocker::ws2_32::Exports::Getaddrinfo = NULL;
@@ -173,3 +174,4 @@ int AnalyticsBlocker::ws2_32::Hooks::Getaddrinfo(PCSTR pNodeName, PCSTR pService
 	return WSATRY_AGAIN;
 }
 #pragma endregion
+#endif

@@ -117,8 +117,5 @@
     <ClInclude Include="Base\MSDetours\detours_x86.h">
       <Filter>Base\MSDetours</Filter>
     </ClInclude>
-    <ClInclude Include="Base\MSDetours\detver.h">
-      <Filter>Base\MSDetours</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

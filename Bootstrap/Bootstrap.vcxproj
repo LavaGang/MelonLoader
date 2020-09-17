@@ -177,7 +177,6 @@
     <ClInclude Include="Base\Core.h" />
     <ClInclude Include="Base\MSDetours\detours_x64.h" />
     <ClInclude Include="Base\MSDetours\detours_x86.h" />
-    <ClInclude Include="Base\MSDetours\detver.h" />
     <ClInclude Include="Managers\BaseAssembly.h" />
     <ClInclude Include="Managers\Game.h" />
     <ClInclude Include="Managers\Hook.h" />

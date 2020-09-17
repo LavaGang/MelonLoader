@@ -33,6 +33,7 @@ public:
 		};
 	};
 
+#ifdef _WIN64
 	class ws2_32
 	{
 	public:
@@ -54,6 +55,7 @@ public:
 			static int Getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult);
 		};
 	};
+#endif
 
 private:
 	static std::list<std::string> HostNames;
