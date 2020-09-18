@@ -142,6 +142,8 @@ const char* Game::ReadUnityVersionFromGlobalGameManagers()
 	if (!Core::FileExists(globalgamemanagerspath.c_str()))
 		return NULL;
 	std::ifstream globalgamemanagersstream(globalgamemanagerspath, std::ios::binary);
+	if (!globalgamemanagersstream.is_open() || !globalgamemanagersstream.good())
+		return NULL;
 	std::vector<char> filedata((std::istreambuf_iterator<char>(globalgamemanagersstream)), (std::istreambuf_iterator<char>()));
 	globalgamemanagersstream.close();
 	std::stringstream output;

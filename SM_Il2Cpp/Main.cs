@@ -98,47 +98,5 @@ namespace MelonLoader.Support
             ShouldCheckForUiManager = false;
             Interface.VRChat_OnUiManagerInit();
         }
-
-        private static string GetUnityVersionFromGlobalGameManagers()
-        {
-            string ggm_path = Path.Combine(MelonUtils.GetGameDataDirectory(), "globalgamemanagers");
-            if (!File.Exists(ggm_path))
-                return null;
-            byte[] ggm_bytes = File.ReadAllBytes(ggm_path);
-            if ((ggm_bytes == null) || (ggm_bytes.Length <= 0))
-                return null;
-            int start_position = 0;
-            for (int i = 10; i < ggm_bytes.Length; i++)
-            {
-                byte pos_byte = ggm_bytes[i];
-                if ((pos_byte <= 0x39) && (pos_byte >= 0x30))
-                {
-                    start_position = i;
-                    break;
-                }
-            }
-            if (start_position == 0)
-                return null;
-            int end_position = 0;
-            for (int i = start_position; i < ggm_bytes.Length; i++)
-            {
-                byte pos_byte = ggm_bytes[i];
-                if ((pos_byte != 0x2E) && ((pos_byte > 0x39) || (pos_byte < 0x30)))
-                {
-                    end_position = (i - 1);
-                    break;
-                }
-            }
-            if (end_position == 0)
-                return null;
-            int verstr_byte_pos = 0;
-            byte[] verstr_byte = new byte[((end_position - start_position) + 1)];
-            for (int i = start_position; i <= end_position; i++)
-            {
-                verstr_byte[verstr_byte_pos] = ggm_bytes[i];
-                verstr_byte_pos++;
-            }
-            return Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
-        }
     }
 }
