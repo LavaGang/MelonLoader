@@ -114,10 +114,12 @@ namespace MelonLoader
                     string melonname = info.ProductName;
                     if (string.IsNullOrEmpty(melonname))
                         melonname = info.InternalName;
-                    if (!IsMelonAlreadyLoaded(melonname, plugins))
-                        LoadFromFile(filename);
-                    else
+                    if (IsMelonAlreadyLoaded(melonname, plugins))
+                    {
                         MelonLogger.Warning("Duplicate File: " + filename);
+                        return;
+                    }
+                    LoadFromFile(filename);
                 }
 
             // ZIPs

@@ -23,8 +23,12 @@ bool Game::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Setup Game Paths!");
 		return false;
 	}
+	if (!ReadUnityVersion())
+	{
+		Assertion::ThrowInternalFailure("Failed to Read Unity Version from File Info or globalgamemanagers!");
+		return false;
+	}
 	ReadAppInfo();
-	ReadUnityVersion();
 	std::string GameAssemblyPath = (std::string(BasePath) + "\\GameAssembly.dll");
 	if (Core::FileExists(GameAssemblyPath.c_str()))
 	{
@@ -94,45 +98,48 @@ void Game::ReadAppInfo()
 	appinfofile.close();
 }
 
-void Game::UnknownUnityVersion()
+bool Game::ReadUnityVersion()
 {
-	Logger::Warning("Defaulting to UNKNOWN for Unity Version");
-	std::string unknown = "UNKNOWN";
-	UnityVersion = new char[unknown.size() + 1];
-	std::copy(unknown.begin(), unknown.end(), UnityVersion);
-	UnityVersion[unknown.size()] = '\0';
+	const char* version = ReadUnityVersionFromFileInfo();
+	if (version == NULL)
+	{
+		Logger::Warning("Failed to Read Unity Version from File Info! Attempting Fallback to globalgamemanagers");
+		version = ReadUnityVersionFromGlobalGameManagers();
+	}
+	if (version == NULL)
+		return false;
+	std::string versionstr = version;
+	UnityVersion = new char[versionstr.size() + 1];
+	std::copy(versionstr.begin(), versionstr.end(), UnityVersion);
+	UnityVersion[versionstr.size()] = '\0';
+	return true;
 }
 
-void Game::ReadUnityVersion()
+const char* Game::ReadUnityVersionFromFileInfo()
 {
 	DWORD handle;
 	DWORD size = GetFileVersionInfoSizeA(ApplicationPath, &handle);
 	if (size == NULL)
-	{
-		UnknownUnityVersion();
-		return;
-	}
+		return ;
 	LPSTR data = new char[size];
 	if (!GetFileVersionInfoA(ApplicationPath, handle, size, data))
-	{
-		UnknownUnityVersion();
-		return;
-	}
+		return NULL;
 	UINT bufsize = 0;
 	LPBYTE buf = NULL;
-	if (!VerQueryValueA(data, "\\", (VOID FAR * FAR*) &buf, &bufsize) || (bufsize == NULL))
-	{
-		UnknownUnityVersion();
-		return;
-	}
+	if (!VerQueryValueA(data, "\\", (VOID FAR * FAR*) & buf, &bufsize) || (bufsize == NULL))
+		return NULL;
 	VS_FIXEDFILEINFO* info = (VS_FIXEDFILEINFO*)buf;
 	if (info->dwSignature != 0xfeef04bd)
-	{
-		UnknownUnityVersion();
-		return;
-	}
-	std::string output_version = std::to_string((info->dwFileVersionMS >> 16) & 0xffff) + "." + std::to_string((info->dwFileVersionMS >> 0) & 0xffff) + "." + std::to_string((info->dwFileVersionLS >> 16) & 0xffff);
-	UnityVersion = new char[output_version.size() + 1];
-	std::copy(output_version.begin(), output_version.end(), UnityVersion);
-	UnityVersion[output_version.size()] = '\0';
+		return NULL;
+	return (std::to_string((info->dwFileVersionMS >> 16) & 0xffff)
+		+ "."
+		+ std::to_string((info->dwFileVersionMS >> 0) & 0xffff)
+		+ "."
+		+ std::to_string((info->dwFileVersionLS >> 16) & 0xffff)).c_str();
+}
+
+const char* Game::ReadUnityVersionFromGlobalGameManagers()
+{
+
+	return NULL;
 }

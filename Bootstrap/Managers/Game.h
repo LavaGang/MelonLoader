@@ -16,6 +16,7 @@ public:
 private:
 
 	static void ReadAppInfo();
-	static void UnknownUnityVersion();
-	static void ReadUnityVersion();
+	static bool ReadUnityVersion();
+	static const char* ReadUnityVersionFromFileInfo();
+	static const char* ReadUnityVersionFromGlobalGameManagers();
 };

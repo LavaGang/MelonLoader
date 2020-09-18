@@ -94,6 +94,7 @@
 74. MelonLoader Unity Debug Log is now default even when no Plugins or Mods are loaded.
 75. Fixed Issue with No Attribute showing as Universal.
 76. Implemented Fallback Game Compatibility for Melons when no app.info is found.
+77. Added Internal Failure when failing to get Unity Version.
 
 ---
 
