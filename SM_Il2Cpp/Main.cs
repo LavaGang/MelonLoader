@@ -99,7 +99,6 @@ namespace MelonLoader.Support
             Interface.VRChat_OnUiManagerInit();
         }
 
-        /*
         private static string GetUnityVersionFromGlobalGameManagers()
         {
             string ggm_path = Path.Combine(MelonUtils.GetGameDataDirectory(), "globalgamemanagers");
@@ -141,6 +140,5 @@ namespace MelonLoader.Support
             }
             return Encoding.UTF8.GetString(verstr_byte, 0, verstr_byte.Length);
         }
-        */
     }
 }

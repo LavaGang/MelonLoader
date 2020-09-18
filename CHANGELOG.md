@@ -95,6 +95,7 @@
 75. Fixed Issue with No Attribute showing as Universal.
 76. Implemented Fallback Game Compatibility for Melons when no app.info is found.
 77. Added Internal Failure when failing to get Unity Version.
+78. Implemented globalgamemanagers as Fallback for Unity Version.
 
 ---
 

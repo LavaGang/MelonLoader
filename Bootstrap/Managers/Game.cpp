@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include "Game.h"
 #include "../Base/Core.h"
 #include "Il2Cpp.h"
@@ -120,16 +121,13 @@ const char* Game::ReadUnityVersionFromFileInfo()
 	DWORD handle;
 	DWORD size = GetFileVersionInfoSizeA(ApplicationPath, &handle);
 	if (size == NULL)
-		return ;
+		return NULL;
 	LPSTR data = new char[size];
 	if (!GetFileVersionInfoA(ApplicationPath, handle, size, data))
 		return NULL;
 	UINT bufsize = 0;
-	LPBYTE buf = NULL;
-	if (!VerQueryValueA(data, "\\", (VOID FAR * FAR*) & buf, &bufsize) || (bufsize == NULL))
-		return NULL;
-	VS_FIXEDFILEINFO* info = (VS_FIXEDFILEINFO*)buf;
-	if (info->dwSignature != 0xfeef04bd)
+	VS_FIXEDFILEINFO* info = NULL;
+	if (!VerQueryValueA(data, "\\", (LPVOID*)&info, &bufsize) || (bufsize == NULL))
 		return NULL;
 	return (std::to_string((info->dwFileVersionMS >> 16) & 0xffff)
 		+ "."
@@ -140,6 +138,21 @@ const char* Game::ReadUnityVersionFromFileInfo()
 
 const char* Game::ReadUnityVersionFromGlobalGameManagers()
 {
-
-	return NULL;
+	std::string globalgamemanagerspath = std::string(DataPath) + "\\globalgamemanagers";
+	if (!Core::FileExists(globalgamemanagerspath.c_str()))
+		return NULL;
+	std::ifstream globalgamemanagersstream(globalgamemanagerspath, std::ios::binary);
+	std::vector<char> filedata((std::istreambuf_iterator<char>(globalgamemanagersstream)), (std::istreambuf_iterator<char>()));
+	globalgamemanagersstream.close();
+	std::stringstream output;
+	int i = 20;
+	while (filedata[i] != NULL)
+	{
+		char bit = filedata[i];
+		if (bit == 0x66)
+			break;
+		output << filedata[i];
+		i++;
+	}
+	return output.str().c_str();
 }
