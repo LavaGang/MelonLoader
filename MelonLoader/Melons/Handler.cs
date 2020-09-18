@@ -311,7 +311,7 @@ namespace MelonLoader
                         melonCompatibility = MelonBase.MelonCompatibility.UNIVERSAL;
                         break;
                     }
-                    if ((melonGameAttribute.Name == MelonUtils.GetGameName()) && (melonGameAttribute.Developer == MelonUtils.GetGameDeveloper()))
+                    if (melonGameAttribute.Name.Equals(GameName) && melonGameAttribute.Developer.Equals(GameDeveloper))
                     {
                         melonCompatibility = MelonBase.MelonCompatibility.COMPATIBLE;
                         break;
