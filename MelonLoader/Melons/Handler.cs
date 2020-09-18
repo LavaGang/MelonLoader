@@ -268,6 +268,10 @@ namespace MelonLoader
                 MelonLogger.Error("Invalid Author given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
                 return;
             }
+
+            string GameName = MelonUtils.GetGameName();
+            string GameDeveloper = MelonUtils.GetGameDeveloper();
+            
             MelonGameAttribute[] gameAttributes = asm.GetCustomAttributes(typeof(MelonGameAttribute), true) as MelonGameAttribute[];
             
             // Legacy Support
@@ -293,8 +297,8 @@ namespace MelonLoader
             MelonBase.MelonCompatibility melonCompatibility = MelonBase.MelonCompatibility.INCOMPATIBLE;
             if (gameAttributes.Length <= 0)
             {
-                MelonLogger.Warning("No MelonGameAttribute Found in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "! Assuming UNIVERSAL...");
-                melonCompatibility = MelonBase.MelonCompatibility.UNIVERSAL;
+                MelonLogger.Warning("No MelonGameAttribute Found in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                melonCompatibility = MelonBase.MelonCompatibility.NOATTRIBUTE;
             }
             else
                 for (int i = 0; i < gameAttributes.Length; i++)
@@ -315,8 +319,13 @@ namespace MelonLoader
                 }
             if (melonCompatibility == MelonBase.MelonCompatibility.INCOMPATIBLE)
             {
-                MelonLogger.Error("Incompatible " + (is_plugin ? "Plugin" : "Mod") + " in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
-                return;
+                if (string.IsNullOrEmpty(GameName) || string.IsNullOrEmpty(GameDeveloper) || GameName.Equals("UNKNOWN") || GameDeveloper.Equals("UNKNOWN"))
+                    melonCompatibility = MelonBase.MelonCompatibility.COMPATIBLE;
+                else
+                {
+                    MelonLogger.Error("Incompatible " + (is_plugin ? "Plugin" : "Mod") + " in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                    return;
+                }
             }
             MelonBase baseInstance = Activator.CreateInstance(infoAttribute.SystemType) as MelonBase;
             if (baseInstance == null)
