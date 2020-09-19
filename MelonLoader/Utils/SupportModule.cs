@@ -29,30 +29,34 @@ namespace MelonLoader
                 MelonLogger.Error("Failed to Find Support Module " + ModuleName + "!");
                 return false;
             }
-            Assembly assembly = Assembly.LoadFrom(ModulePath);
-            if (assembly == null)
+            try
             {
-                MelonLogger.Error("Failed to Load Assembly from " + ModuleName + "!");
-                return false;
+                Assembly assembly = Assembly.LoadFrom(ModulePath);
+                if (assembly == null)
+                {
+                    MelonLogger.Error("Failed to Load Assembly from " + ModuleName + "!");
+                    return false;
+                }
+                Type type = assembly.GetType("MelonLoader.Support.Main");
+                if (type == null)
+                {
+                    MelonLogger.Error("Failed to Get Type MelonLoader.Support.Main!");
+                    return false;
+                }
+                MethodInfo method = type.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
+                if (method == null)
+                {
+                    MelonLogger.Error("Failed to Get Method Initialize!");
+                    return false;
+                }
+                Interface = (ISupportModule_To)method.Invoke(null, new object[] { new SupportModule_From() });
+                if (Interface == null)
+                {
+                    MelonLogger.Error("Failed to Initialize Interface!");
+                    return false;
+                }
             }
-            Type type = assembly.GetType("MelonLoader.Support.Main");
-            if (type == null)
-            {
-                MelonLogger.Error("Failed to Get Type MelonLoader.Support.Main!");
-                return false;
-            }
-            MethodInfo method = type.GetMethod("Initialize", BindingFlags.NonPublic | BindingFlags.Static);
-            if (method == null)
-            {
-                MelonLogger.Error("Failed to Get Method Initialize!");
-                return false;
-            }
-            Interface = (ISupportModule_To)method.Invoke(null, new object[] { new SupportModule_From() });
-            if (Interface == null)
-            {
-                MelonLogger.Error("Failed to Initialize Interface!");
-                return false;
-            }
+            catch(Exception ex) { MelonLogger.Error(ex.Message.ToString()); return false; }
             return true;
         }
 

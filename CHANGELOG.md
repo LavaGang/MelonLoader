@@ -96,6 +96,7 @@
 76. Implemented Fallback Game Compatibility for Melons when no app.info is found.
 77. Added Internal Failure when failing to get Unity Version.
 78. Implemented globalgamemanagers as Fallback for Unity Version.
+79. Added Try Catch to Support Module Loading.
 
 ---
 
