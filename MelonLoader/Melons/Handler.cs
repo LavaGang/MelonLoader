@@ -166,7 +166,7 @@ namespace MelonLoader
                             }
                         }
                     }
-                    catch(Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    catch(Exception ex) { MelonLogger.Error(ex.ToString()); }
                 }
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
@@ -198,7 +198,7 @@ namespace MelonLoader
                 }
                 LoadFromAssembly(asm, filepath);
             }
-            catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         public static void LoadFromByteArray(byte[] filedata, string filelocation = null)
@@ -218,7 +218,7 @@ namespace MelonLoader
                 }
                 LoadFromAssembly(asm, filelocation);
             }
-            catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         public static void LoadFromAssembly(Assembly asm, string filelocation = null)
@@ -355,7 +355,7 @@ namespace MelonLoader
                 return;
             List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
             foreach (MelonPlugin plugin in _Plugins)
-                try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); failedPlugins.Add(plugin); }
+                try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(plugin); }
             _Plugins.RemoveAll(failedPlugins.Contains);
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
         }
@@ -366,7 +366,7 @@ namespace MelonLoader
             {
                 List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); failedPlugins.Add(plugin); }
+                    try { plugin.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(plugin); }
                 _Plugins.RemoveAll(failedPlugins.Contains);
                 DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
             }
@@ -374,7 +374,7 @@ namespace MelonLoader
             {
                 List<MelonMod> failedMods = new List<MelonMod>();
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); failedMods.Add(mod); }
+                    try { mod.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedMods.Add(mod); }
                 _Mods.RemoveAll(failedMods.Contains);
                 DependencyGraph<MelonMod>.TopologicalSort(_Mods);
             }
@@ -388,7 +388,7 @@ namespace MelonLoader
             CurrentSceneBuildIndex = buildIndex;
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnSceneWasLoaded(buildIndex); mod.OnLevelWasLoaded(buildIndex); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnSceneWasLoaded(buildIndex); mod.OnLevelWasLoaded(buildIndex); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         private static bool InitializeScene = false;
@@ -396,7 +396,7 @@ namespace MelonLoader
         {
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnSceneWasInitialized(buildIndex); mod.OnLevelWasInitialized(buildIndex); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnSceneWasInitialized(buildIndex); mod.OnLevelWasInitialized(buildIndex); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnUpdate()
@@ -413,67 +413,67 @@ namespace MelonLoader
             }
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { plugin.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnFixedUpdate()
         {
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnLateUpdate()
         {
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnLateUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { plugin.OnLateUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnLateUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnLateUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnGUI()
         {
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnGUI(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { plugin.OnGUI(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnGUI(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnGUI(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnPreferencesApplied()
         {
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnPreferencesApplied(); plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { plugin.OnPreferencesApplied(); plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnPreferencesApplied(); mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnPreferencesApplied(); mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnApplicationQuit()
         {
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { plugin.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void VRChat_OnUiManagerInit()
         {
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { plugin.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.Message.ToString()); }
+                    try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal enum LoadMode

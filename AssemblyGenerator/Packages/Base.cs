@@ -21,7 +21,7 @@ namespace MelonLoader.AssemblyGenerator
             try { Core.webClient.DownloadFile(URL, tempfile); }
             catch (Exception ex)
             {
-                Logger.Error(ex.Message.ToString());
+                Logger.Error(ex.ToString());
                 if (File.Exists(tempfile))
                     File.Delete(tempfile);
                 return false;
@@ -68,7 +68,7 @@ namespace MelonLoader.AssemblyGenerator
             }
             catch (Exception ex)
             {
-                Logger.Error(ex.Message.ToString());
+                Logger.Error(ex.ToString());
                 if (File.Exists(tempfile))
                     File.Delete(tempfile);
                 return false;
@@ -118,7 +118,7 @@ namespace MelonLoader.AssemblyGenerator
                 Core.OverrideAppDomainBase(Core.BasePath);
                 return true;
             }
-            catch (Exception ex) { Logger.Error(ex.Message.ToString()); }
+            catch (Exception ex) { Logger.Error(ex.ToString()); }
             return false;
         }
     }

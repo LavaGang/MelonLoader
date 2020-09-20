@@ -56,7 +56,7 @@ namespace MelonLoader
                     return false;
                 }
             }
-            catch(Exception ex) { MelonLogger.Error(ex.Message.ToString()); return false; }
+            catch(Exception ex) { MelonLogger.Error(ex.ToString()); return false; }
             return true;
         }
 
