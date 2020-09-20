@@ -102,12 +102,12 @@ void Game::ReadAppInfo()
 bool Game::ReadUnityVersion()
 {
 	const char* version = ReadUnityVersionFromFileInfo();
-	if (version == NULL)
+	if ((version == NULL) || (strstr(version, ".") == NULL))
 	{
 		Logger::Warning("Failed to Read Unity Version from File Info! Attempting Fallback to globalgamemanagers");
 		version = ReadUnityVersionFromGlobalGameManagers();
 	}
-	if (version == NULL)
+	if ((version == NULL) || (strstr(version, ".") == NULL))
 		return false;
 	std::string versionstr = version;
 	UnityVersion = new char[versionstr.size() + 1];

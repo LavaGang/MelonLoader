@@ -97,6 +97,7 @@
 77. Added Internal Failure when failing to get Unity Version.
 78. Implemented globalgamemanagers as Fallback for Unity Version.
 79. Added Try Catch to Support Module Loading.
+80. Fixed Issue with Unity Version Fallback not Triggering.
 
 ---
 
