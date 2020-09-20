@@ -1,7 +1,7 @@
 ### Version List:
 
 [v0.3.0 Open-Beta](#v030-open-beta)  
-[v0.2.7 & v0.2.7.1 Open-Beta](#v027-open-beta)  
+[v0.2.7 & v0.2.7.1 Open-Beta](#v027-v0271-open-beta)  
 [v0.2.6 Open-Beta](#v026-open-beta)  
 [v0.2.5 Open-Beta](#v025-open-beta)  
 [v0.2.4 Open-Beta](#v024-open-beta)  
