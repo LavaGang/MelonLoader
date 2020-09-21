@@ -110,10 +110,9 @@ namespace MelonLoader
                         if (((mode == LoadMode.NORMAL) && file_extension_check) || ((mode == LoadMode.DEV) && !file_extension_check))
                             continue;
                     }
-                    FileVersionInfo info = FileVersionInfo.GetVersionInfo(filename);
-                    string melonname = info.ProductName;
+                    string melonname = MelonUtils.GetFileProductName(filename);
                     if (string.IsNullOrEmpty(melonname))
-                        melonname = info.InternalName;
+                        melonname = Path.GetFileNameWithoutExtension(filename);
                     if (IsMelonAlreadyLoaded(melonname, plugins))
                     {
                         MelonLogger.Warning("Duplicate File: " + filename);

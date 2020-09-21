@@ -51,6 +51,24 @@ Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::E
 Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPath); }
 void InternalCalls::MelonUtils::SCT(Mono::String* title) { if (title == NULL) return; Console::SetTitle(Mono::Exports::mono_string_to_utf8(title)); }
+Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepath)
+{
+	const char* filepathstr = Mono::Exports::mono_string_to_utf8(filepath);
+	if (filepathstr == NULL)
+		return NULL;
+	DWORD handle;
+	DWORD size = GetFileVersionInfoSizeA(filepathstr, &handle);
+	if (size == NULL)
+		return NULL;
+	LPSTR data = new char[size];
+	if (!GetFileVersionInfoA(filepathstr, handle, size, data))
+		return NULL;
+	UINT bufsize = 0;
+	LPCSTR info = NULL;
+	if (!VerQueryValueA(data, "\\StringFileInfo\\040904e4\\ProductName", (LPVOID*)&info, &bufsize) || (bufsize == NULL))
+		return NULL;
+	return Mono::Exports::mono_string_new(Mono::domain, info);
+}
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", IsGameIl2Cpp);
@@ -63,6 +81,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetUnityVersion", GetUnityVersion);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetManagedDirectory", GetManagedDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::SetConsoleTitle", SCT);
+	Mono::AddInternalCall("MelonLoader.MelonUtils::GetFileProductName", GetFileProductName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookAttach", Hook::Attach);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookDetach", Hook::Detach);
 }

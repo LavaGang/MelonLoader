@@ -99,6 +99,7 @@
 79. Added Try Catch to Support Module Loading.
 80. Fixed Issue with Unity Version Fallback not Triggering.
 81. Fixed Issue with Exceptions not including StackTrace.
+82. Fixed Issue with certain Mono Games not having the FileVersionInfo class.
 
 ---
 

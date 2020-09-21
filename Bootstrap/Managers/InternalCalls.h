@@ -38,7 +38,7 @@ public:
 		static Mono::String* GetUnityVersion();
 		static Mono::String* GetManagedDirectory();
 		static void SCT(Mono::String* title);
-
+		static Mono::String* GetFileProductName(Mono::String* filepath);
 	};
 
 	class MelonHandler
