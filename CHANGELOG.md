@@ -102,6 +102,7 @@
 82. Fixed Issue with certain Mono Games not having the FileVersionInfo class.
 83. Added Value Change Callbacks to MelonPreferences Entries.
 84. Cleaned up MelonPreferences Entry Exception Handling.
+85. Added Proper Custom Component Construction to Il2Cpp Support Module.
 
 ---
 
