@@ -132,11 +132,11 @@ const char* Game::ReadUnityVersionFromFileInfo()
 	VS_FIXEDFILEINFO* info = NULL;
 	if (!VerQueryValueA(data, "\\", (LPVOID*)&info, &bufsize) || (bufsize == NULL))
 		return NULL;
-	return (std::to_string((info->dwFileVersionMS >> 16) & 0xffff)
+	return (std::to_string(HIWORD(info->dwFileVersionMS))
 		+ "."
-		+ std::to_string((info->dwFileVersionMS >> 0) & 0xffff)
+		+ std::to_string(LOWORD(info->dwFileVersionMS))
 		+ "."
-		+ std::to_string((info->dwFileVersionLS >> 16) & 0xffff)).c_str();
+		+ std::to_string(HIWORD(info->dwFileVersionLS))).c_str();
 }
 
 const char* Game::ReadUnityVersionFromGlobalGameManagers()
