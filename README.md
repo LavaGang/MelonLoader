@@ -59,8 +59,8 @@
 
 | Value | Action |
 | - | - |
-| 0 | Load them only if they don't have the ".dev" Extension |
-| 1 | Load them only if they have the ".dev" Name Extension |
+| 0 | Load them only if they don't have the ".dev.dll" Extension |
+| 1 | Load them only if they have the ".dev.dll" Extension |
 | 2 | Load All |
 
 ---

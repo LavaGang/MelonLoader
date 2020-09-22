@@ -100,6 +100,7 @@
 80. Fixed Issue with Unity Version Fallback not Triggering.
 81. Fixed Issue with Exceptions not including StackTrace.
 82. Fixed Issue with certain Mono Games not having the FileVersionInfo class.
+83. Added Value Change Callbacks to MelonPreferences Entries.
 
 ---
 
