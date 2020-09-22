@@ -112,7 +112,8 @@ namespace MelonLoader
                 throw new Exception(GetExceptionMessage("Set string in"));
             string oldval = Value_string;
             Value_string = value;
-            InvokeValueChangeCallbacks(oldval, value);
+            if (value != oldval)
+                InvokeValueChangeCallbacks(oldval, value);
         }
         public void SetBool(bool value)
         {
@@ -120,7 +121,8 @@ namespace MelonLoader
                 throw new Exception(GetExceptionMessage("Set bool in"));
             bool oldval = Value_bool;
             Value_bool = value;
-            InvokeValueChangeCallbacks(oldval, value);
+            if (value != oldval)
+                InvokeValueChangeCallbacks(oldval, value);
         }
         public void SetInt(int value)
         {
@@ -128,7 +130,8 @@ namespace MelonLoader
                 throw new Exception(GetExceptionMessage("Set int in"));
             int oldval = Value_int;
             Value_int = value;
-            InvokeValueChangeCallbacks(oldval, value);
+            if (value != oldval)
+                InvokeValueChangeCallbacks(oldval, value);
         }
         public void SetFloat(float value)
         {
@@ -136,7 +139,8 @@ namespace MelonLoader
                 throw new Exception(GetExceptionMessage("Set float in"));
             float oldval = Value_float;
             Value_float = value;
-            InvokeValueChangeCallbacks(oldval, value);
+            if (value != oldval)
+                InvokeValueChangeCallbacks(oldval, value);
         }
         
         public string GetDefaultString()
@@ -232,6 +236,5 @@ namespace MelonLoader
             foreach (Delegate callback in OnValueChanged)
                 callback.DynamicInvoke(old_value, new_value);
         }
-
     }
 }
