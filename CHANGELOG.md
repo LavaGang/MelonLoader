@@ -25,7 +25,7 @@
 5. Rewrote Support Modules from scratch.
 6. Added x86 Support.
 7. Proxy now has the ability to be named version.dll, winmm.dll, or winhttp.dll.
-8. OnModSettingsApplied has been changed to OnPreferencesApplied.
+8. OnModSettingsApplied has been changed to OnPreferencesSaved.
 9. Temporarily Removed OnLevelIsLoading.
 10. Internal Failures are now a lot more informative.
 11. Debug Mode is now a lot more informative.

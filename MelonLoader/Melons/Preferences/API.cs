@@ -121,7 +121,7 @@ namespace MelonLoader
             }
             File.WriteAllText(FilePath, doc.ToString());
             MelonLogger.Msg("Config Saved!");
-            MelonHandler.OnPreferencesApplied();
+            MelonHandler.OnPreferencesSaved();
         }
 
         public static MelonPreferences_Category GetCategory(string name)

@@ -445,14 +445,14 @@ namespace MelonLoader
                     try { mod.OnGUI(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
-        internal static void OnPreferencesApplied()
+        internal static void OnPreferencesSaved()
         {
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnPreferencesApplied(); plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { plugin.OnPreferencesSaved(); plugin.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnPreferencesApplied(); mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { mod.OnPreferencesSaved(); mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnApplicationQuit()
