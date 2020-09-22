@@ -88,24 +88,21 @@ void Core::WelcomeMessage()
 
 bool Core::OSVersionCheck()
 {
-	if (!IsWindows7OrGreater())
-	{
-		int result = MessageBoxA(NULL, "You are running on an Unsupported OS.\nWe can not offer support if there are any issues.\nContinue with MelonLoader?", "MelonLoader", MB_ICONWARNING | MB_YESNO);
-		if (result == IDYES)
-			return true;
-		return false;
-	}
-	return true;
+	if (IsWindows7OrGreater())
+		return true;
+	int result = MessageBoxA(NULL, "You are running on an Unsupported OS.\nWe can not offer support if there are any issues.\nContinue with MelonLoader?", "MelonLoader", MB_ICONWARNING | MB_YESNO);
+	if (result == IDYES)
+		return true;
+	return false;
 }
 
 void Core::KillCurrentProcess()
 {
 	HANDLE current_process = GetCurrentProcess();
-	if (current_process != NULL)
-	{
-		TerminateProcess(current_process, NULL);
-		CloseHandle(current_process);
-	}
+	if (current_process == NULL)
+		return;
+	TerminateProcess(current_process, NULL);
+	CloseHandle(current_process);
 }
 
 const char* Core::GetOSVersion()

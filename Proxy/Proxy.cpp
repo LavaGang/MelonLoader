@@ -26,11 +26,10 @@ void LoadProxy_winhttp(HMODULE originaldll) { for (int i = 0; i < (sizeof(winhtt
 void KillCurrentProcess()
 {
 	HANDLE current_process = GetCurrentProcess();
-	if (current_process != NULL)
-	{
-		TerminateProcess(current_process, NULL);
-		CloseHandle(current_process);
-	}
+	if (current_process == NULL)
+		return;
+	TerminateProcess(current_process, NULL);
+	CloseHandle(current_process);
 }
 
 const char* InvalidProcessNames[] = { "unitycrashhandler", "fallguys", "duskworld", "chilloutvr", "pixelstrike3d" };
