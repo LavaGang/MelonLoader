@@ -24,12 +24,6 @@ bool Game::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Setup Game Paths!");
 		return false;
 	}
-	if (!ReadUnityVersion())
-	{
-		Assertion::ThrowInternalFailure("Failed to Read Unity Version from File Info or globalgamemanagers!");
-		return false;
-	}
-	ReadAppInfo();
 	std::string GameAssemblyPath = (std::string(BasePath) + "\\GameAssembly.dll");
 	if (Core::FileExists(GameAssemblyPath.c_str()))
 	{
@@ -64,6 +58,12 @@ bool Game::SetupPaths()
 	DataPath[DataPathStr.size()] = '\0';
 
 	return true;
+}
+
+bool Game::ReadInfo()
+{
+	ReadAppInfo();
+	return ReadUnityVersion();
 }
 
 void Game::ReadAppInfo()
@@ -108,7 +108,10 @@ bool Game::ReadUnityVersion()
 		version = ReadUnityVersionFromGlobalGameManagers();
 	}
 	if ((version == NULL) || (strstr(version, ".") == NULL))
+	{
+		Assertion::ThrowInternalFailure("Failed to Read Unity Version from File Info or globalgamemanagers!");
 		return false;
+	}
 	std::string versionstr = version;
 	UnityVersion = new char[versionstr.size() + 1];
 	std::copy(versionstr.begin(), versionstr.end(), UnityVersion);

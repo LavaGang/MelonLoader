@@ -28,6 +28,7 @@ bool Core::Initialize()
 	if (!Game::Initialize()
 		|| !Console::Initialize()
 		|| !Logger::Initialize()
+		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
 		return false;

@@ -13,6 +13,7 @@ public:
 
 	static bool Initialize();
 	static bool SetupPaths();
+	static bool ReadInfo();
 private:
 
 	static void ReadAppInfo();

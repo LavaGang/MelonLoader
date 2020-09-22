@@ -32,7 +32,7 @@ void KillCurrentProcess()
 	CloseHandle(current_process);
 }
 
-const char* InvalidProcessNames[] = { "unitycrashhandler", "fallguys", "duskworld", "chilloutvr", "pixelstrike3d" };
+const char* InvalidProcessNames[] = { "unitycrashhandler", "fallguys", "duskworld", "chilloutvr", "pixelstrike3d", "rotmgexalt" };
 void CheckForInvalidProcess()
 {
 	LPSTR filepath = new CHAR[MAX_PATH];
@@ -90,8 +90,6 @@ void LoadBootstrap()
 	if (strstr(GetCommandLineA(), "--no-mods") != NULL)
 		return;
 	HINSTANCE melonloaderdll = LoadLibraryA("MelonLoader\\Dependencies\\Bootstrap.dll");
-	if (melonloaderdll == NULL)
-		MessageBoxA(NULL, "Failed to Load Bootstrap.dll!", "MelonLoader", MB_ICONERROR | MB_OK);
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)

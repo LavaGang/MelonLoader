@@ -103,6 +103,7 @@
 83. Added Value Change Callbacks to MelonPreferences Entries.
 84. Cleaned up MelonPreferences Entry Exception Handling.
 85. Fixed Issue with Launch Option "--melonloader.dab" that caused it to only Log when "--melonloader.debug" was used.
+86. Fixed Issue with Bootstrap Game Warnings not Logging.
 
 ---
 
