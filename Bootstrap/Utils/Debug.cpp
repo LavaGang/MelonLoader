@@ -12,9 +12,14 @@ void Debug::Msg(const char* txt)
 {
 	if (!Enabled || !Assertion::ShouldContinue)
 		return;
-	Console::SetColor(Console::Color::Gray);
+	DirectWrite(txt);
+}
+
+void Debug::DirectWrite(const char* txt)
+{
 	Logger::WriteTimestamp(Console::Color::Black);
 	Logger::LogFile << "[DEBUG] " << txt << std::endl;
+	Console::SetColor(Console::Color::Gray);
 	Console::Write("[");
 	Console::SetColor(Console::Color::Blue);
 	Console::Write("DEBUG");

@@ -102,6 +102,7 @@
 82. Fixed Issue with certain Mono Games not having the FileVersionInfo class.
 83. Added Value Change Callbacks to MelonPreferences Entries.
 84. Cleaned up MelonPreferences Entry Exception Handling.
+85. Fixed Issue with Launch Option "--melonloader.dab" that caused it to only Log when "--melonloader.debug" was used.
 
 ---
 
