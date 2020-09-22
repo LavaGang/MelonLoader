@@ -33,7 +33,9 @@ std::list<std::string> AnalyticsBlocker::HostNames = {
 	"gluehender-aluhut.de",
 	"softlight.at.ua",
 	"abfdpe30ti.execute-api.us-west-2.amazonaws.com",
-	"iceburn.xyz"
+	"iceburn.xyz",
+	"ecommerce.iap.unity3d.com",
+	"pixelstrike3daws.com"
 };
 
 bool AnalyticsBlocker::Initialize()
