@@ -84,32 +84,32 @@ namespace MelonLoader
         public string GetString()
         {
             if (Type != TypeEnum.STRING)
-                throw new Exception("Attempted to Get string from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get string from")); 
             return Value_string;
         }
         public bool GetBool()
         {
             if (Type != TypeEnum.BOOL)
-                throw new Exception("Attempted to Get bool from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get bool from"));
             return Value_bool;
         }
         public int GetInt()
         {
             if (Type != TypeEnum.INT)
-                throw new Exception("Attempted to Get int from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get int from"));
             return Value_int;
         }
         public float GetFloat()
         {
             if (Type != TypeEnum.FLOAT)
-                throw new Exception("Attempted to Get float from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get float from"));
             return Value_float;
         }
 
         public void SetString(string value)
         {
             if (Type != TypeEnum.STRING)
-                throw new Exception("Attempted to Set string in " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Set string in"));
             string oldval = Value_string;
             Value_string = value;
             InvokeValueChangeCallbacks(oldval, value);
@@ -117,7 +117,7 @@ namespace MelonLoader
         public void SetBool(bool value)
         {
             if (Type != TypeEnum.BOOL)
-                throw new Exception("Attempted to Set bool in " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Set bool in"));
             bool oldval = Value_bool;
             Value_bool = value;
             InvokeValueChangeCallbacks(oldval, value);
@@ -125,7 +125,7 @@ namespace MelonLoader
         public void SetInt(int value)
         {
             if (Type != TypeEnum.INT)
-                throw new Exception("Attempted to Set int in " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Set int in"));
             int oldval = Value_int;
             Value_int = value;
             InvokeValueChangeCallbacks(oldval, value);
@@ -133,7 +133,7 @@ namespace MelonLoader
         public void SetFloat(float value)
         {
             if (Type != TypeEnum.FLOAT)
-                throw new Exception("Attempted to Set float in " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Set float in"));
             float oldval = Value_float;
             Value_float = value;
             InvokeValueChangeCallbacks(oldval, value);
@@ -142,25 +142,25 @@ namespace MelonLoader
         public string GetDefaultString()
         {
             if (Type != TypeEnum.STRING)
-                throw new Exception("Attempted to Get Default string from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get Default string from"));
             return DefaultValue_string;
         }
         public bool GetDefaultBool()
         {
             if (Type != TypeEnum.BOOL)
-                throw new Exception("Attempted to Get Default bool from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get Default bool from"));
             return DefaultValue_bool;
         }
         public int GetDefaultInt()
         {
             if (Type != TypeEnum.INT)
-                throw new Exception("Attempted to Get Default int from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get Default int from"));
             return DefaultValue_int;
         }
         public float GetDefaultFloat()
         {
             if (Type != TypeEnum.FLOAT)
-                throw new Exception("Attempted to Get Default float from " + Name + " when it is a " + GetTypeName() + "!");
+                throw new Exception(GetExceptionMessage("Get Default float from"));
             return DefaultValue_float;
         }
 
@@ -180,42 +180,51 @@ namespace MelonLoader
         public void AddValueChangeCallback<T>(Action<T, T> callback)
         {
             Type callback_type = typeof(T);
-            if ((callback_type == typeof(string)) && (Type != TypeEnum.STRING))
-                throw new Exception("Attempted to Add string Value Change Callback to " + Name + " when it is a " + GetTypeName() + "!");
-            else if ((callback_type == typeof(bool)) && (Type != TypeEnum.BOOL))
-                throw new Exception("Attempted to Add bool Value Change Callback to " + Name + " when it is a " + GetTypeName() + "!");
-            else if ((callback_type == typeof(int)) && (Type != TypeEnum.INT))
-                throw new Exception("Attempted to Add int Value Change Callback to " + Name + " when it is a " + GetTypeName() + "!");
-            else if ((callback_type == typeof(float)) && (Type != TypeEnum.FLOAT))
-                throw new Exception("Attempted to Add float Value Change Callback to " + Name + " when it is a " + GetTypeName() + "!");
+            Type string_type = typeof(string);
+            Type bool_type = typeof(bool);
+            Type int_type = typeof(int);
+            Type float_type = typeof(float);
+            if ((callback_type == string_type) && (Type != TypeEnum.STRING))
+                throw new Exception(GetExceptionMessage("Add string Value Change Callback to"));
+            else if ((callback_type == bool_type) && (Type != TypeEnum.BOOL))
+                throw new Exception(GetExceptionMessage("Add bool Value Change Callback to"));
+            else if ((callback_type == int_type) && (Type != TypeEnum.INT))
+                throw new Exception(GetExceptionMessage("Add int Value Change Callback to"));
+            else if ((callback_type == float_type) && (Type != TypeEnum.FLOAT))
+                throw new Exception(GetExceptionMessage("Add float Value Change Callback to"));
+            else if ((callback_type != string_type) && (callback_type != bool_type) && (callback_type != int_type) && (callback_type != float_type))
+                throw new Exception(GetExceptionMessage("Add " + nameof(T) + " Value Change Callback to"));
             if (OnValueChanged == null)
                 OnValueChanged = new List<Delegate>();
             OnValueChanged.Add(callback);
         }
-
         public void RemoveValueChangeCallback<T>(Action<T, T> callback)
         {
             Type callback_type = typeof(T);
-            if ((callback_type == typeof(string)) && (Type != TypeEnum.STRING))
-                throw new Exception("Attempted to Remove string Value Change Callback from " + Name + " when it is a " + GetTypeName() + "!");
-            else if ((callback_type == typeof(bool)) && (Type != TypeEnum.BOOL))
-                throw new Exception("Attempted to Remove bool Value Change Callback from " + Name + " when it is a " + GetTypeName() + "!");
-            else if ((callback_type == typeof(int)) && (Type != TypeEnum.INT))
-                throw new Exception("Attempted to Remove int Value Change Callback from " + Name + " when it is a " + GetTypeName() + "!");
-            else if ((callback_type == typeof(float)) && (Type != TypeEnum.FLOAT))
-                throw new Exception("Attempted to Remove float Value Change Callback from " + Name + " when it is a " + GetTypeName() + "!");
+            Type string_type = typeof(string);
+            Type bool_type = typeof(bool);
+            Type int_type = typeof(int);
+            Type float_type = typeof(float);
+            if ((callback_type == string_type) && (Type != TypeEnum.STRING))
+                throw new Exception(GetExceptionMessage("Remove string Value Change Callback from"));
+            else if ((callback_type == bool_type) && (Type != TypeEnum.BOOL))
+                throw new Exception(GetExceptionMessage("Remove bool Value Change Callback from"));
+            else if ((callback_type == int_type) && (Type != TypeEnum.INT))
+                throw new Exception(GetExceptionMessage("Remove int Value Change Callback from"));
+            else if ((callback_type == float_type) && (Type != TypeEnum.FLOAT))
+                throw new Exception(GetExceptionMessage("Remove float Value Change Callback from"));
+            else if ((callback_type != string_type) && (callback_type != bool_type) && (callback_type != int_type) && (callback_type != float_type))
+                throw new Exception(GetExceptionMessage("Remove " + nameof(T) + " Value Change Callback from"));
             if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
                 return;
             OnValueChanged.Remove(callback);
         }
-
         public void ClearAllValueChangeCallbacks()
         {
             if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
                 return;
             OnValueChanged.Clear();
         }
-
         private void InvokeValueChangeCallbacks<T>(T old_value, T new_value)
         {
             if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
