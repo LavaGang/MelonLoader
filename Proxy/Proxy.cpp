@@ -40,6 +40,7 @@ void CheckForInvalidProcess()
 	GetModuleFileNameA(GetModuleHandleA(NULL), filepath, MAX_PATH);
 	std::string filepathstr = filepath;
 	delete[] filepath;
+	filepathstr.erase(remove(filepathstr.begin(), filepathstr.end(), ' '), filepathstr.end());
 	std::for_each(filepathstr.begin(), filepathstr.end(), [](char& character) { character = ::tolower(character); });
 	for (int i = 0; i < (sizeof(InvalidProcessNames) / sizeof(InvalidProcessNames[0])); i++)
 		if (strstr(filepathstr.c_str(), InvalidProcessNames[i]) != NULL)
