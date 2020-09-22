@@ -63,7 +63,7 @@ bool AnalyticsBlocker::CheckHostNames(const char* name)
 	if (namestr._Equal("localhost"))
 		return false;
 	bool found = (std::find(HostNames.begin(), HostNames.end(), namestr) != HostNames.end());
-	if (!ShouldDAB)
+	if (!Debug::Enabled && !ShouldDAB)
 		return found;
 	if (found)
 		Debug::DirectWrite(("HostName Blocked: " + namestr).c_str());
