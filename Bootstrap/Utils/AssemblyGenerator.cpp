@@ -103,6 +103,7 @@ void AssemblyGenerator::Cleanup()
 		metahost = NULL;
 	}
 	Game::Initialize();
+	Game::ReadInfo();
 	HashCode::SetupPaths();
 	Mono::SetupPaths();
 	Console::GeneratingAssembly = false;

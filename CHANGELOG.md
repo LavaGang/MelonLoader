@@ -104,6 +104,7 @@
 84. Cleaned up MelonPreferences Entry Exception Handling.
 85. Fixed Issue with Launch Option "--melonloader.dab" that caused it to only Log when "--melonloader.debug" was used.
 86. Fixed Issue with Bootstrap Game Warnings not Logging.
+87. Fixed Issue with Il2Cpp Support Module failing to Parse Unity Version.
 
 ---
 
