@@ -78,7 +78,7 @@ namespace MelonLoader.Support
             if (!ShouldCheckForUiManager)
                 return;
             if (Assembly_CSharp == null)
-                Assembly_CSharp = Assembly.Load("Assembly_CSharp");
+                Assembly_CSharp = Assembly.Load("Assembly-CSharp");
             if (Assembly_CSharp == null)
                 return;
             if (VRCUiManager == null)

@@ -173,8 +173,8 @@ void Mono::CreateDomain(const char* name)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
 	domain = Exports::mono_jit_init(name);
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
-	//if (!IsOldMono)
-	//	Exports::mono_domain_set_config(domain, Game::BasePath, name);
+	if (!IsOldMono)
+		Exports::mono_domain_set_config(domain, Game::BasePath, name);
 }
 
 void Mono::AddInternalCall(const char* name, void* method)
