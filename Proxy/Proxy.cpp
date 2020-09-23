@@ -32,7 +32,7 @@ void KillCurrentProcess()
 	CloseHandle(current_process);
 }
 
-const char* InvalidProcessNames[] = { "unitycrashhandler", "fallguys", "duskworld", "chilloutvr", "pixelstrike3d", "rotmgexalt" };
+const char* InvalidProcessNames[] = { "unitycrashhandler", "fallguys", "duskworld", "chilloutvr", "pixelstrike3d", "rotmgexalt", "outward" };
 void CheckForInvalidProcess()
 {
 	LPSTR filepath = new CHAR[MAX_PATH];
