@@ -183,6 +183,7 @@
     <ClInclude Include="Managers\Il2Cpp.h" />
     <ClInclude Include="Managers\InternalCalls.h" />
     <ClInclude Include="Managers\Mono.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Utils\AnalyticsBlocker.h" />
     <ClInclude Include="Utils\AssemblyGenerator.h" />
     <ClInclude Include="Utils\Assertion.h" />
@@ -191,6 +192,9 @@
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\HashCode.h" />
     <ClInclude Include="Utils\Logger.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Bootstrap.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

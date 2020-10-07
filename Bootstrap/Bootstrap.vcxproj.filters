@@ -117,5 +117,9 @@
     <ClInclude Include="Base\MSDetours\detours_x86.h">
       <Filter>Base\MSDetours</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Bootstrap.rc" />
   </ItemGroup>
 </Project>
