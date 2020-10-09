@@ -1,0 +1,133 @@
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Windows.Forms;
+#pragma warning disable 0168
+
+namespace MelonLoader
+{
+    internal static class Program
+    {
+        internal static MainForm mainForm = null;
+        internal static WebClient webClient = null;
+        internal static WebClient webClient_update = null;
+        internal static bool Closing = false;
+        internal static string Repo_API_Installer = "https://api.github.com/repos/LavaGang/MelonLoader.Installer/releases";
+        internal static string Repo_API_MelonLoader = "https://api.github.com/repos/LavaGang/MelonLoader/releases";
+        internal static string Download_MelonLoader = "https://github.com/LavaGang/MelonLoader/releases/download";
+        internal static string Link_Discord = "https://discord.gg/2Wn3N2P";
+        internal static string Link_Twitter = "https://twitter.com/lava_gang";
+        internal static string Link_GitHub = "https://github.com/LavaGang";
+        internal static string Link_Wiki = "https://melonwiki.xyz";
+        internal static string Link_Update = "https://github.com/LavaGang/MelonLoader.Installer/releases/latest";
+
+        static Program()
+        {
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
+            webClient = new WebClient();
+            webClient.Headers.Add("User-Agent", "Unity web player");
+            webClient.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs info) => { SetCurrentPercentage(info.ProgressPercentage); SetTotalPercentage(info.ProgressPercentage / 2); };
+            Config.Load();
+        }
+
+        [STAThread]
+        private static void Main() { FileNameCheck(); mainForm = new MainForm(); Application.Run(mainForm); }
+
+        private static void FileNameCheck()
+        {
+            string exe_fullpath = Process.GetCurrentProcess().MainModule.FileName;
+            string exe_path = Path.GetDirectoryName(exe_fullpath);
+            string exe_name = Path.GetFileNameWithoutExtension(exe_fullpath);
+            if (!exe_name.EndsWith(".tmp"))
+            {
+                string tmp_exe_path = Path.Combine(exe_path, (exe_name + ".tmp.exe"));
+                if (File.Exists(tmp_exe_path))
+                    File.Delete(tmp_exe_path);
+                return;
+            }
+            string new_exe_path = Path.Combine(exe_path, (Path.GetFileNameWithoutExtension(exe_name) + ".exe"));
+            if (File.Exists(new_exe_path))
+                File.Delete(new_exe_path);
+            File.Copy(exe_fullpath, new_exe_path);
+            Process.Start(new_exe_path);
+            Process.GetCurrentProcess().Kill();
+        }
+
+        internal static void SetCurrentOperation(string op)
+        {
+            mainForm.Invoke(new Action(() =>
+            {
+                mainForm.Output_Current_Operation.Text = op;
+                mainForm.Output_Current_Operation.ForeColor = System.Drawing.SystemColors.Highlight;
+                mainForm.Output_Current_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
+                mainForm.Output_Total_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
+                SetCurrentPercentage(0);
+            }));
+        }
+
+        internal static void OperationError()
+        {
+            mainForm.Invoke(new Action(() =>
+            {
+                mainForm.Output_Current_Operation.Text = "ERROR!";
+                mainForm.Output_Current_Operation.ForeColor = System.Drawing.Color.Red;
+                mainForm.Output_Current_Progress_Display.Style = MetroFramework.MetroColorStyle.Red;
+                mainForm.Output_Total_Progress_Display.Style = MetroFramework.MetroColorStyle.Red;
+            }));
+        }
+
+        internal static void OperationSuccess()
+        {
+            mainForm.Invoke(new Action(() =>
+            {
+                mainForm.Output_Current_Operation.Text = "SUCCESS!";
+                mainForm.Output_Current_Operation.ForeColor = System.Drawing.Color.Lime;
+                mainForm.Output_Current_Progress_Display.Value = 100;
+                mainForm.Output_Current_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
+                mainForm.Output_Total_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
+                mainForm.Output_Current_Progress_Text.Text = mainForm.Output_Current_Progress_Display.Value.ToString();
+                mainForm.Output_Total_Progress_Display.Value = mainForm.Output_Current_Progress_Display.Value;
+                mainForm.Output_Total_Progress_Text.Text = mainForm.Output_Current_Progress_Display.Value.ToString();
+            }));
+        }
+
+        internal static void SetCurrentPercentage(int percentage)
+        {
+            mainForm.Invoke(new Action(() =>
+            {
+                mainForm.Output_Current_Progress_Display.Value = percentage;
+                mainForm.Output_Current_Progress_Text.Text = mainForm.Output_Current_Progress_Display.Value.ToString();
+            }));
+        }
+
+        internal static void SetTotalPercentage(int percentage)
+        {
+            mainForm.Invoke(new Action(() =>
+            {
+                mainForm.Output_Total_Progress_Display.Value = percentage;
+                mainForm.Output_Total_Progress_Text.Text = mainForm.Output_Total_Progress_Display.Value.ToString();
+            }));
+        }
+
+        internal static void FinishingMessageBox(string msg, MessageBoxButtons buttons, MessageBoxIcon icon)
+        {
+            mainForm.Invoke(new Action(() =>
+            {
+                MessageBox.Show(msg, "MelonLoader Installer", buttons, icon);
+                if ((icon != MessageBoxIcon.Error) && Config.CloseAfterCompletion)
+                {
+                    Process.GetCurrentProcess().Kill();
+                    return;
+                }
+                mainForm.BackToHome();
+            }));
+        }
+
+        private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MessageBox.Show((e.ExceptionObject as Exception).ToString());
+    }
+}
