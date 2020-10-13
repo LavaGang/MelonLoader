@@ -16,17 +16,18 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		Console::SetColor(Console::Color::Red);
 		Logger::WriteTimestamp(Console::Color::Red);
 		Logger::LogFile << "[INTERNAL FAILURE] " << msg << std::endl;
-		Console::Write("[INTERNAL FAILURE] ");
 		if (should_print_debug_info)
+		{
+			Console::Write("[INTERNAL FAILURE] ");
 			Console::Write(msg);
-		else
-			Console::Write("Please Post your Latest Log File on #internal-failure in the MelonLoader Discord!");
-		Console::Write("\n");
-		Console::SetColor(Console::Color::Gray);
-		if (should_print_debug_info)
+			Console::Write("\n");
 			MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
+		}
 		else
+		{
+			Console::Close();
 			MessageBoxA(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
+		}
 	}
 }
 
