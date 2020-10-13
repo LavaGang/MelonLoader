@@ -54,9 +54,20 @@ namespace MelonLoader.Support
 
         private static void ConsoleCleaner()
         {
-            Il2CppSystem.IO.TextWriter writer = new Il2CppSystem.IO.TextWriter();
-            Il2CppSystem.Console.stdout = writer;
-            Il2CppSystem.Console.stderr = writer;
+            try
+            {
+                Assembly il2CppSystemAssembly = Assembly.Load("Il2Cppmscorlib");
+                Type consoleType = il2CppSystemAssembly.GetType("Il2CppSystem.Console");
+                Type streamWriterType = il2CppSystemAssembly.GetType("Il2CppSystem.IO.StreamWriter");
+                Type streamType = il2CppSystemAssembly.GetType("Il2CppSystem.IO.Stream");
+                MethodInfo setOutMethod = consoleType.GetMethod("SetOut", BindingFlags.Static | BindingFlags.Public);
+                MethodInfo nullStreamField = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public).GetGetMethod();
+                ConstructorInfo streamWriterCtor = streamWriterType.GetConstructor(new[] { streamType });
+                object nullStream = nullStreamField.Invoke(null, new object[0]);
+                object steamWriter = streamWriterCtor.Invoke(new[] { nullStream });
+                setOutMethod.Invoke(null, new[] { steamWriter });
+            }
+            catch (Exception ex) { MelonLogger.Error($"Console cleaning failed: {ex}"); }
         }
 
         private static void InitializeUnityVersion()
