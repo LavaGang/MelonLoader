@@ -26,15 +26,6 @@ namespace MelonLoader
             MelonPreferences.Load();
             if (MelonPreferences.WasLegacyLoaded)
                 MelonPreferences.Save();
-
-            try
-            {
-                throw new NullReferenceException();
-            }
-            catch (Exception ex)
-            {
-                MelonLogger.Error(ex.ToString());
-            }
         }
 
         private static void Initialize()
