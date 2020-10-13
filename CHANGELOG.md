@@ -109,6 +109,7 @@
 89. Added Legacy Style Methods to MelonPreferences.
 90. Fixed Issue with the GetString and SetString methods for ModPrefs and MelonPrefs Legacy Support.
 91. Fixed Logger Flushing.
+92. Fixed Issue with Console Log Coloring.
 
 ---
 
