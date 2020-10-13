@@ -15,6 +15,7 @@ namespace MelonLoader
             ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = MelonUtils.GetGameDirectory();
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
@@ -25,6 +26,15 @@ namespace MelonLoader
             MelonPreferences.Load();
             if (MelonPreferences.WasLegacyLoaded)
                 MelonPreferences.Save();
+
+            try
+            {
+                throw new NullReferenceException();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error(ex.ToString());
+            }
         }
 
         private static void Initialize()
