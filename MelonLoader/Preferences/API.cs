@@ -153,13 +153,13 @@ namespace MelonLoader
         public static void CreateEntry(string category_name, string entry_name, bool defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
         public static void CreateEntry(string category_name, string entry_name, int defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
         public static void CreateEntry(string category_name, string entry_name, float defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
-        public static string GetEntryString(string category_name, string entry_name) => GetCategory(category_name)?.GetEntry(entry_name).GetString();
-        public static void SetEntryString(string category_name, string entry_name, string value) => GetCategory(category_name)?.GetEntry(entry_name).SetString(value);
-        public static bool GetEntryBool(string category_name, string entry_name) => (bool)GetCategory(category_name)?.GetEntry(entry_name).GetBool();
-        public static void SetEntryBool(string category_name, string entry_name, bool value) => GetCategory(category_name)?.GetEntry(entry_name).SetBool(value);
-        public static int GetEntryInt(string category_name, string entry_name) => (int)GetCategory(category_name)?.GetEntry(entry_name).GetInt();
-        public static void SetEntryInt(string category_name, string entry_name, int value) => GetCategory(category_name)?.GetEntry(entry_name).SetInt(value);
-        public static float GetEntryFloat(string category_name, string entry_name) => (float)GetCategory(category_name)?.GetEntry(entry_name).GetFloat();
-        public static void SetEntryFloat(string category_name, string entry_name, float value) => GetCategory(category_name)?.GetEntry(entry_name).SetFloat(value);
+        public static string GetEntryString(string category_name, string entry_name) => GetCategory(category_name)?.GetEntry(entry_name)?.GetString();
+        public static void SetEntryString(string category_name, string entry_name, string value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetString(value);
+        public static bool GetEntryBool(string category_name, string entry_name) => (bool)GetCategory(category_name)?.GetEntry(entry_name)?.GetBool();
+        public static void SetEntryBool(string category_name, string entry_name, bool value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetBool(value);
+        public static int GetEntryInt(string category_name, string entry_name) => (int)GetCategory(category_name)?.GetEntry(entry_name)?.GetInt();
+        public static void SetEntryInt(string category_name, string entry_name, int value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetInt(value);
+        public static float GetEntryFloat(string category_name, string entry_name) => (float)GetCategory(category_name)?.GetEntry(entry_name)?.GetFloat();
+        public static void SetEntryFloat(string category_name, string entry_name, float value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetFloat(value);
     }
 }
