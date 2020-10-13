@@ -30,6 +30,7 @@ void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mon
 void InternalCalls::MelonLogger::Internal_Error(Mono::String* namesection, Mono::String* txt) { Logger::Internal_Error(((namesection != NULL) ? Mono::Exports::mono_string_to_utf8(namesection) : NULL), Mono::Exports::mono_string_to_utf8(txt)); }
 void InternalCalls::MelonLogger::ThrowInternalFailure(Mono::String* msg) { Assertion::ThrowInternalFailure(Mono::Exports::mono_string_to_utf8(msg)); }
 void InternalCalls::MelonLogger::WriteSpacer() { Logger::WriteSpacer(); }
+void InternalCalls::MelonLogger::Flush() { Logger::Flush(); Console::Flush(); }
 void InternalCalls::MelonLogger::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Msg", Internal_Msg);
@@ -37,6 +38,7 @@ void InternalCalls::MelonLogger::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Error", Internal_Error);
 	Mono::AddInternalCall("MelonLoader.MelonLogger::ThrowInternalFailure", ThrowInternalFailure);
 	Mono::AddInternalCall("MelonLoader.MelonLogger::WriteSpacer", WriteSpacer);
+	Mono::AddInternalCall("MelonLoader.MelonLogger::Flush", Flush);
 }
 #pragma endregion
 

@@ -7,6 +7,7 @@
 #include <locale.h>
 #include "../Managers/Game.h"
 #include "AssemblyGenerator.h"
+#include "Logger.h"
 
 bool Console::ShouldHide = false;
 bool Console::GeneratingAssembly = false;
@@ -54,6 +55,13 @@ bool Console::Initialize()
 	return true;
 }
 
+void Console::Flush()
+{
+	if (!IsInitialized())
+		return;
+	std::cout.flush();
+}
+
 void Console::Close()
 {
 	if (!IsInitialized())
@@ -76,6 +84,8 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	case CTRL_SHUTDOWN_EVENT:
 		if (Game::IsIl2Cpp)
 			AssemblyGenerator::Cleanup();
+		Logger::Flush();
+		Flush();
 		Close();
 		Core::KillCurrentProcess();
 	default:
@@ -162,5 +172,4 @@ void Console::Write(const char* txt)
 	if (!IsInitialized())
 		return;
 	std::cout << txt;
-	std::cout.flush();
 };

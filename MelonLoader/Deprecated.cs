@@ -182,9 +182,39 @@ namespace MelonLoader
         [Obsolete("MelonPrefs.SaveConfig is obsolete. Please use MelonPreferences.Save instead.")]
         public static void SaveConfig() => MelonPreferences.Save();
         [Obsolete("MelonPrefs.GetString is obsolete. Please use MelonPreferences.GetEntryString instead.")]
-        public static string GetString(string section, string name) => MelonPreferences.GetEntryString(section, name);
+        public static string GetString(string section, string name)
+        {
+            MelonPreferences_Category category = MelonPreferences.GetCategory(section);
+            if (category == null)
+                return null;
+            MelonPreferences_Entry entry = category.GetEntry(name);
+            if (entry == null)
+                return null;
+            return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetBool().ToString()
+                : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetInt().ToString()
+                : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetFloat().ToString()
+                : entry.GetString())));
+        }
         [Obsolete("MelonPrefs.SetString is obsolete. Please use MelonPreferences.SetEntryString instead.")]
-        public static void SetString(string section, string name, string value) => MelonPreferences.SetEntryString(section, name, value);
+        public static void SetString(string section, string name, string value)
+        {
+            MelonPreferences_Category category = MelonPreferences.GetCategory(section);
+            if (category == null)
+                return;
+            MelonPreferences_Entry entry = category.GetEntry(name);
+            if (entry == null)
+                return;
+            int val_int = 0;
+            float val_float = 0f;
+            if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
+                entry.SetBool(value.ToLower().StartsWith("true"));
+            else if (Int32.TryParse(value, out val_int))
+                entry.SetInt(val_int);
+            else if (float.TryParse(value, out val_float))
+                entry.SetFloat(val_float);
+            else
+                entry.SetString(value);
+        }
         [Obsolete("MelonPrefs.GetBool is obsolete. Please use MelonPreferences.GetEntryBool instead.")]
         public static bool GetBool(string section, string name) => MelonPreferences.GetEntryBool(section, name);
         [Obsolete("MelonPrefs.SetBool is obsolete. Please use MelonPreferences.SetEntryBool instead.")]

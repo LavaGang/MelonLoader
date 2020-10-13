@@ -110,6 +110,8 @@ namespace MelonLoader
         internal extern static void ThrowInternalFailure(string msg);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void WriteSpacer();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Flush();
         [Obsolete("Log is obsolete. Please use Msg instead.")]
         public static void Log(string txt) => Msg(txt);
         [Obsolete("Log is obsolete. Please use Msg instead.")]

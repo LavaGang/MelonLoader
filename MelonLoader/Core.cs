@@ -53,6 +53,7 @@ namespace MelonLoader
             MelonHandler.OnApplicationQuit();
             MelonPreferences.Save();
             Harmony.HarmonyInstance.UnpatchAllInstances();
+            MelonLogger.Flush();
             if (QuitFix())
                 System.Diagnostics.Process.GetCurrentProcess().Kill();
         }

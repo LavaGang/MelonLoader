@@ -19,6 +19,7 @@ public:
 	static DisplayMode Mode;
 
 	static bool Initialize();
+	static void Flush();
 	static void Close();
 	static void SetTitle(const char* title) { SetConsoleTitleA(title); }
 	enum Color

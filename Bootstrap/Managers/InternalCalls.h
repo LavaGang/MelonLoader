@@ -22,6 +22,7 @@ public:
 		static void Internal_Error(Mono::String* namesection, Mono::String* txt);
 		static void ThrowInternalFailure(Mono::String* msg);
 		static void WriteSpacer();
+		static void Flush();
 	};
 
 	class MelonUtils
