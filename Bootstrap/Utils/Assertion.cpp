@@ -26,7 +26,7 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		else
 		{
 			Console::Close();
-			MessageBoxA(NULL, "Please Post your Latest Log File\non #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
+			MessageBoxA(NULL, "Please Post your latest.log File\nto #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
 		}
 	}
 }
