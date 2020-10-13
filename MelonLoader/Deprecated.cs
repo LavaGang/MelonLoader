@@ -137,12 +137,19 @@ namespace MelonLoader
     [Obsolete("MelonPrefs is obsolete. Please use MelonPreferences instead.")]
     public class MelonPrefs
     {
+        [Obsolete("MelonPrefs.RegisterCategory is obsolete. Please use MelonPreferences.CreateCategory instead.")]
         public static void RegisterCategory(string name, string displayText) => MelonPreferences.CreateCategory(name, displayText);
-        public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.RegisterString(section, name, defaultValue, displayText, hideFromList);
-        public static void RegisterBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.RegisterBool(section, name, defaultValue, displayText, hideFromList);
-        public static void RegisterInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.RegisterInt(section, name, defaultValue, displayText, hideFromList);
-        public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.RegisterFloat(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("MelonPrefs.RegisterString is obsolete. Please use MelonPreferences.CreateEntry instead.")]
+        public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("MelonPrefs.RegisterBool is obsolete. Please use MelonPreferences.CreateEntry instead.")]
+        public static void RegisterBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("MelonPrefs.RegisterInt is obsolete. Please use MelonPreferences.CreateEntry instead.")]
+        public static void RegisterInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("MelonPrefs.RegisterFloat is obsolete. Please use MelonPreferences.CreateEntry instead.")]
+        public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("MelonPrefs.HasKey is obsolete. Please use MelonPreferences.HasEntry instead.")]
         public static bool HasKey(string section, string name) => MelonPreferences.HasEntry(section, name);
+        [Obsolete("MelonPrefs.GetPreferences is obsolete. Please use MelonPreferences instead.")]
         public static Dictionary<string, Dictionary<string, MelonPreference>> GetPreferences()
         {
             Dictionary<string, Dictionary<string, MelonPreference>> output = new Dictionary<string, Dictionary<string, MelonPreference>>();
@@ -170,46 +177,27 @@ namespace MelonLoader
             }
             return output;
         }
+        [Obsolete("MelonPrefs.GetCategoryDisplayName is obsolete. Please use MelonPreferences.GetCategoryDisplayName instead.")]
         public static string GetCategoryDisplayName(string key) => MelonPreferences.GetCategory(key)?.DisplayName;
+        [Obsolete("MelonPrefs.SaveConfig is obsolete. Please use MelonPreferences.Save instead.")]
         public static void SaveConfig() => MelonPreferences.Save();
-        public static string GetString(string section, string name)
-        {
-            MelonPreferences_Category category = MelonPreferences.GetCategory(section);
-            if (category == null)
-                return null;
-            MelonPreferences_Entry entry = category.GetEntry(name);
-            if (entry == null)
-                return null;
-            return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetBool().ToString()
-                : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetInt().ToString()
-                : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetFloat().ToString()
-                : entry.GetString())));
-        }
-        public static void SetString(string section, string name, string value)
-        {
-            MelonPreferences_Category category = MelonPreferences.GetCategory(section);
-            if (category == null)
-                return;
-            MelonPreferences_Entry entry = category.GetEntry(name);
-            if (entry == null)
-                return;
-            int val_int = 0;
-            float val_float = 0f;
-            if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
-                entry.SetBool(value.ToLower().StartsWith("true"));
-            else if (Int32.TryParse(value, out val_int))
-                entry.SetInt(val_int);
-            else if (float.TryParse(value, out val_float))
-                entry.SetFloat(val_float);
-            else
-                entry.SetString(value);
-        }
-        public static bool GetBool(string section, string name) => (bool)MelonPreferences.GetCategory(section)?.GetEntry(name)?.GetBool();
-        public static void SetBool(string section, string name, bool value) => MelonPreferences.GetCategory(section)?.GetEntry(name)?.SetBool(value);
-        public static int GetInt(string section, string name) => (int)MelonPreferences.GetCategory(section)?.GetEntry(name)?.GetInt();
-        public static void SetInt(string section, string name, int value) => MelonPreferences.GetCategory(section)?.GetEntry(name)?.SetInt(value);
-        public static float GetFloat(string section, string name) => (float)MelonPreferences.GetCategory(section)?.GetEntry(name)?.GetFloat();
-        public static void SetFloat(string section, string name, float value) => MelonPreferences.GetCategory(section)?.GetEntry(name)?.SetFloat(value);
+        [Obsolete("MelonPrefs.GetString is obsolete. Please use MelonPreferences.GetEntryString instead.")]
+        public static string GetString(string section, string name) => MelonPreferences.GetEntryString(section, name);
+        [Obsolete("MelonPrefs.SetString is obsolete. Please use MelonPreferences.SetEntryString instead.")]
+        public static void SetString(string section, string name, string value) => MelonPreferences.SetEntryString(section, name, value);
+        [Obsolete("MelonPrefs.GetBool is obsolete. Please use MelonPreferences.GetEntryBool instead.")]
+        public static bool GetBool(string section, string name) => MelonPreferences.GetEntryBool(section, name);
+        [Obsolete("MelonPrefs.SetBool is obsolete. Please use MelonPreferences.SetEntryBool instead.")]
+        public static void SetBool(string section, string name, bool value) => MelonPreferences.SetEntryBool(section, name, value);
+        [Obsolete("MelonPrefs.GetInt is obsolete. Please use MelonPreferences.GetEntryInt instead.")]
+        public static int GetInt(string section, string name) => MelonPreferences.GetEntryInt(section, name);
+        [Obsolete("MelonPrefs.SetInt is obsolete. Please use MelonPreferences.SetEntryInt instead.")]
+        public static void SetInt(string section, string name, int value) => MelonPreferences.SetEntryInt(section, name, value);
+        [Obsolete("MelonPrefs.GetFloat is obsolete. Please use MelonPreferences.GetEntryFloat instead.")]
+        public static float GetFloat(string section, string name) => MelonPreferences.GetEntryFloat(section, name);
+        [Obsolete("MelonPrefs.GetEntryFloat is obsolete. Please use MelonPreferences.SetEntryFloat instead.")]
+        public static void SetFloat(string section, string name, float value) => MelonPreferences.SetEntryFloat(section, name, value);
+        [Obsolete("MelonPrefs.MelonPreferenceType is obsolete. Please use MelonPreferences_Entry.TypeEnum instead.")]
         public enum MelonPreferenceType
         {
             STRING,
@@ -217,14 +205,20 @@ namespace MelonLoader
             INT,
             FLOAT
         }
+        [Obsolete("MelonPrefs.MelonPreference is obsolete. Please use MelonPreferences_Entry instead.")]
         public class MelonPreference
         {
+            [Obsolete("MelonPrefs.MelonPreference.Value is obsolete. Please use MelonPreferences_Entry instead.")]
             public string Value { get; set; }
+            [Obsolete("MelonPrefs.MelonPreference.ValueEdited is obsolete. Please use MelonPreferences_Entry instead.")]
             public string ValueEdited { get; set; }
+            [Obsolete("MelonPrefs.MelonPreference.Type is obsolete. Please use MelonPreferences_Entry.Type instead.")]
             public MelonPreferenceType Type { get; internal set; }
+            [Obsolete("MelonPrefs.MelonPreference.Hidden is obsolete. Please use MelonPreferences_Entry.Hidden instead.")]
             public bool Hidden { get; internal set; }
+            [Obsolete("MelonPrefs.MelonPreference.DisplayText is obsolete. Please use MelonPreferences_Entry.DisplayName instead.")]
             public String DisplayText { get; internal set; }
-
+            [Obsolete("MelonPrefs.MelonPreference is obsolete. Please use MelonPreferences_Entry instead.")]
             public MelonPreference(string value, MelonPreferenceType type, bool hidden, string displayText)
             {
                 Value = value;
@@ -238,6 +232,7 @@ namespace MelonLoader
     [Obsolete("ModPrefs is obsolete. Please use MelonPreferences instead.")]
     public class ModPrefs : MelonPrefs
     {
+        [Obsolete("ModPrefs.GetPrefs is obsolete. Please use MelonPreferences instead.")]
         public static Dictionary<string, Dictionary<string, PrefDesc>> GetPrefs()
         {
             Dictionary<string, Dictionary<string, PrefDesc>> output = new Dictionary<string, Dictionary<string, PrefDesc>>();
@@ -257,10 +252,15 @@ namespace MelonLoader
             }
             return output;
         }
+        [Obsolete("ModPrefs.RegisterPrefString is obsolete. Please use MelonPreferences.CreateEntry instead.")]
         public static void RegisterPrefString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => RegisterString(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("ModPrefs.RegisterPrefBool is obsolete. Please use MelonPreferences.CreateEntry instead.")]
         public static void RegisterPrefBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => RegisterBool(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("ModPrefs.RegisterPrefInt is obsolete. Please use MelonPreferences.CreateEntry instead.")]
         public static void RegisterPrefInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => RegisterInt(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("ModPrefs.RegisterPrefFloat is obsolete. Please use MelonPreferences.CreateEntry instead.")]
         public static void RegisterPrefFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => RegisterFloat(section, name, defaultValue, displayText, hideFromList);
+        [Obsolete("ModPrefs.PrefType is obsolete. Please use MelonPreferences_Entry.TypeEnum instead.")]
         public enum PrefType
         {
             STRING,
@@ -268,9 +268,12 @@ namespace MelonLoader
             INT,
             FLOAT
         }
+        [Obsolete("ModPrefs.PrefDesc is obsolete. Please use MelonPreferences_Entry instead.")]
         public class PrefDesc : MelonPreference
         {
+            [Obsolete("ModPrefs.PrefDesc.Type is obsolete. Please use MelonPreferences_Entry.Type instead.")]
             public PrefType Type { get => (PrefType)base.Type; }
+            [Obsolete("ModPrefs.PrefDesc is obsolete. Please use MelonPreferences_Entry instead.")]
             public PrefDesc(string value, PrefType type, bool hidden, string displayText) : base(value, (MelonPreferenceType)type, hidden, displayText)
             {
                 Value = value;
