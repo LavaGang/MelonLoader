@@ -107,6 +107,8 @@
 87. Fixed Issue with Il2Cpp Support Module failing to Parse Unity Version.
 88. Fixed Issue with Il2Cpp Support Module failing to load "Assembly-CSharp.dll" on VRChat.
 89. Added Legacy Style Methods to MelonPreferences.
+90. Fixed Issue with the GetString and SetString methods for ModPrefs and MelonPrefs Legacy Support.
+91. Fixed Logger Flushing.
 
 ---
 
