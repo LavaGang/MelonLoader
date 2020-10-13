@@ -17,11 +17,10 @@ namespace MelonLoader
             string gamedir = MelonUtils.GetGameDirectory();
             ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = gamedir;
             Directory.SetCurrentDirectory(gamedir);
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
+            CurrentCultureFix();
             UserDataPath = Path.Combine(gamedir, "UserData");
             if (!Directory.Exists(UserDataPath))
                 Directory.CreateDirectory(UserDataPath);
@@ -80,6 +79,18 @@ namespace MelonLoader
             if (File.Exists(mods_path))
                 return Assembly.LoadFile(mods_path);
             return null;
+        }
+
+        private static bool GetCurrentCulturePrefix(ref CultureInfo __result) { __result = CultureInfo.InvariantCulture; return false; }
+        private static void CurrentCultureFix()
+        {
+            try
+            {
+                Harmony.HarmonyInstance harmonyInstance = Harmony.HarmonyInstance.Create("CurrentCultureFix");
+                harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static)));
+                harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static)));
+            }
+            catch (Exception ex) { MelonLogger.Error($"Current Culture Fix failed: {ex}"); }
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
