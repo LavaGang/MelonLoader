@@ -106,6 +106,7 @@
 86. Fixed Issue with Bootstrap Game Warnings not Logging.
 87. Fixed Issue with Il2Cpp Support Module failing to Parse Unity Version.
 88. Fixed Issue with Il2Cpp Support Module failing to load "Assembly-CSharp.dll" on VRChat.
+89. Added Legacy Style Methods to MelonPreferences.
 
 ---
 

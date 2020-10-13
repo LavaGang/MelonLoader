@@ -145,5 +145,12 @@ namespace MelonLoader
             }
             return new MelonPreferences_Category(name, displayname);
         }
+
+        public static MelonPreferences_Entry GetEntry(string section, string name) => GetCategory(section)?.GetEntry(name);
+        public static bool HasEntry(string section, string name) => (GetEntry(section, name) != null);
+        public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
+        public static void RegisterBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
+        public static void RegisterInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
+        public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(section)?.CreateEntry(name, defaultValue, displayText, hideFromList);
     }
 }

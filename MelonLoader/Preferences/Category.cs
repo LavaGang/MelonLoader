@@ -25,6 +25,7 @@ namespace MelonLoader
                 return null;
             return prefstbl.Find(x => x.Name.Equals(name));
         }
+        public bool HasEntry(string name) => (GetEntry(name) != null);
 
         public MelonPreferences_Entry CreateEntry(string name, string value, string displayname = null, bool hidden = false)
         {
