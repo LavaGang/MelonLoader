@@ -70,7 +70,10 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 {
 	switch (evt)
 	{
+	case CTRL_C_EVENT:
 	case CTRL_CLOSE_EVENT:
+	case CTRL_LOGOFF_EVENT:
+	case CTRL_SHUTDOWN_EVENT:
 		if (Game::IsIl2Cpp)
 			AssemblyGenerator::Cleanup();
 		Close();
