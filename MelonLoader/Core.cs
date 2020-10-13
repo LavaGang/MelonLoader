@@ -12,14 +12,15 @@ namespace MelonLoader
 
         static Core()
         {
-            ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = MelonUtils.GetGameDirectory();
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            string gamedir = MelonUtils.GetGameDirectory();
+            ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = gamedir;
+            Directory.SetCurrentDirectory(gamedir);
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
             System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
-            UserDataPath = Path.Combine(MelonUtils.GetGameDirectory(), "UserData");
+            UserDataPath = Path.Combine(gamedir, "UserData");
             if (!Directory.Exists(UserDataPath))
                 Directory.CreateDirectory(UserDataPath);
             MelonPreferences.LegacyCheck();
