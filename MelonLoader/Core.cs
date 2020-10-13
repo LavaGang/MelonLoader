@@ -69,7 +69,7 @@ namespace MelonLoader
 
         private static Assembly AssemblyResolveHandler(object sender, ResolveEventArgs args)
         {
-            if (args.Name.StartsWith("MelonLoader.ModHandler, Version=") || args.Name.StartsWith("MelonLoader, Version="))
+            if (args.Name.StartsWith("MelonLoader.ModHandler, Version=") || args.Name.StartsWith("MelonLoader, Version=") || args.Name.StartsWith("0Harmony, Version="))
                 return typeof(Core).Assembly;
             string assembly_name = args.Name.Split(',')[0];
             string dll_name = (assembly_name + ".dll");

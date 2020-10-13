@@ -110,6 +110,7 @@
 90. Fixed Issue with the GetString and SetString methods for ModPrefs and MelonPrefs Legacy Support.
 91. Fixed Logger Flushing.
 92. Fixed Issue with Console Log Coloring.
+93. Redirected 0Harmony.dll References to MelonLoader.dll.
 
 ---
 
