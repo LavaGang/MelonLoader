@@ -103,10 +103,7 @@ bool Game::ReadUnityVersion()
 {
 	const char* version = ReadUnityVersionFromFileInfo();
 	if ((version == NULL) || (strstr(version, ".") == NULL))
-	{
-		Logger::Warning("Failed to Read Unity Version from File Info! Attempting Fallback to globalgamemanagers...");
 		version = ReadUnityVersionFromGlobalGameManagers();
-	}
 	if ((version == NULL) || (strstr(version, ".") == NULL))
 	{
 		Assertion::ThrowInternalFailure("Failed to Read Unity Version from File Info or globalgamemanagers!");
