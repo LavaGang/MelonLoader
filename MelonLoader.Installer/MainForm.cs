@@ -43,6 +43,9 @@ namespace MelonLoader
                 opd.Filter = "Unity Game (*.exe)|*.exe|Shortcut (*.lnk)|*.lnk";
                 opd.RestoreDirectory = true;
                 opd.Multiselect = false;
+
+                // Add Invalid Selection Recursive Popup
+
                 if ((opd.ShowDialog() != DialogResult.OK)
                     || string.IsNullOrEmpty(opd.FileName)
                     || (!Path.GetExtension(opd.FileName).Equals(".exe")
