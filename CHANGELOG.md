@@ -114,6 +114,8 @@
 94. Added Current Culture Fix to ensure Culture is always Invariant.
 95. Fixed Issue with Product Names and Versions not using Translation Query.
 96. Fixed Issue with Debug Compilation.
+97. Added SHA512 Check to Installer Updates.
+98. 
 
 ---
 

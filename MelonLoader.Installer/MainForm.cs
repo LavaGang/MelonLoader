@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
 using MelonLoader.LightJson;
@@ -183,12 +184,15 @@ namespace MelonLoader
             }
             if (Program.Closing)
                 return;
-            
-
-            // Get SHA512 Hash from Downloaded File
-
-            // Compare
-
+            var sha = new SHA512Managed();
+            byte[] checksum = sha.ComputeHash(File.ReadAllBytes(temp_path));
+            string file_hash =  BitConverter.ToString(checksum).Replace("-", string.Empty);
+            if (!file_hash.Equals(repo_hash))
+            {
+                TempFileCache.ClearCache();
+                GetReleases();
+                return;
+            }
             string exe_path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             string tmp_file_path = Path.Combine(exe_path, (Path.GetFileNameWithoutExtension(downloadurl) + ".tmp.exe"));
             if (File.Exists(tmp_file_path))
