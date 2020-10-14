@@ -76,9 +76,15 @@ namespace MelonLoader
                 opd.Filter = "MelonLoader Zip Archive (*.zip)|*.zip";
                 opd.RestoreDirectory = true;
                 opd.Multiselect = false;
+
+                // Add Invalid Selection Recursive Popup
+
                 if ((opd.ShowDialog() != DialogResult.OK)
                     || string.IsNullOrEmpty(opd.FileName))
                     return;
+
+                // Verify Zip Archive
+
                 ManualZip_ZipArchive_Display.Text = opd.FileName;
                 if (!string.IsNullOrEmpty(ManualZip_UnityGame_Display.Text)
                 && !ManualZip_UnityGame_Display.Text.Equals("Please Select your Unity Game..."))
