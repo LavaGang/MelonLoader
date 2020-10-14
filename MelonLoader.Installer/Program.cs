@@ -36,7 +36,15 @@ namespace MelonLoader
         }
 
         [STAThread]
-        private static void Main() { FileNameCheck(); mainForm = new MainForm(); Application.Run(mainForm); }
+        private static void Main()
+        {
+            FileNameCheck();
+
+            // Add Command Line Options
+
+            mainForm = new MainForm();
+            Application.Run(mainForm);
+        }
 
         private static void FileNameCheck()
         {
@@ -130,6 +138,8 @@ namespace MelonLoader
 
         internal static string GetFilePathFromShortcut(string shortcut_path)
         {
+            // Add Steam Shortcut Support
+
             IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
             IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcut_path);
             return shortcut.TargetPath;

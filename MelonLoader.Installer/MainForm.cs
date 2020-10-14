@@ -56,6 +56,9 @@ namespace MelonLoader
                         return;
                     filepath = newfilepath;
                 }
+
+                // Verify Unity Game
+
                 Automated_UnityGame_Display.Text = filepath;
                 ManualZip_UnityGame_Display.Text = filepath;
                 Automated_Install.Enabled = true;
