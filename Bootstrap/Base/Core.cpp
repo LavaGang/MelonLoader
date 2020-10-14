@@ -2,6 +2,7 @@
 #include <VersionHelpers.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sstream>
 #include "Core.h"
 #include "../Utils/CommandLine.h"
 #include "../Utils/Console.h"
@@ -104,6 +105,46 @@ void Core::KillCurrentProcess()
 		return;
 	TerminateProcess(current_process, NULL);
 	CloseHandle(current_process);
+}
+
+const char* Core::GetFileInfoProductName(const char* path)
+{
+	DWORD handle;
+	DWORD size = GetFileVersionInfoSizeA(path, &handle);
+	if (size == NULL)
+		return NULL;
+	LPSTR buffer = new char[size];
+	if (!GetFileVersionInfoA(path, handle, size, buffer))
+		return NULL;
+	UINT size2;
+	WORD* buffer2;
+	if (!VerQueryValueA(buffer, "\\VarFileInfo\\Translation", (LPVOID*)&buffer2, &size2) || (size2 <= 0))
+		return NULL;
+	std::stringstream productverpath;
+	productverpath << "\\StringFileInfo\\" << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[0] << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[1] << "\\ProductName";
+	if (!VerQueryValueA(buffer, productverpath.str().c_str(), (LPVOID*)&buffer2, &size2) || (size2 <= 0))
+		return NULL;
+	return (LPCSTR)buffer2;
+}
+
+const char* Core::GetFileInfoProductVersion(const char* path)
+{
+	DWORD handle;
+	DWORD size = GetFileVersionInfoSizeA(path, &handle);
+	if (size == NULL)
+		return NULL;
+	LPSTR buffer = new char[size];
+	if (!GetFileVersionInfoA(path, handle, size, buffer))
+		return NULL;
+	UINT size2;
+	WORD* buffer2;
+	if (!VerQueryValueA(buffer, "\\VarFileInfo\\Translation", (LPVOID*)&buffer2, &size2) || (size2 <= 0))
+		return NULL;
+	std::stringstream productverpath;
+	productverpath << "\\StringFileInfo\\" << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[0] << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[1] << "\\ProductVersion";
+	if (!VerQueryValueA(buffer, productverpath.str().c_str(), (LPVOID*)&buffer2, &size2) || (size2 <= 0))
+		return NULL;
+	return (LPCSTR)buffer2;
 }
 
 const char* Core::GetOSVersion()

@@ -58,16 +58,8 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 	const char* filepathstr = Mono::Exports::mono_string_to_utf8(filepath);
 	if (filepathstr == NULL)
 		return NULL;
-	DWORD handle;
-	DWORD size = GetFileVersionInfoSizeA(filepathstr, &handle);
-	if (size == NULL)
-		return NULL;
-	LPSTR data = new char[size];
-	if (!GetFileVersionInfoA(filepathstr, handle, size, data))
-		return NULL;
-	UINT bufsize = 0;
-	LPCSTR info = NULL;
-	if (!VerQueryValueA(data, "\\StringFileInfo\\040904e4\\ProductName", (LPVOID*)&info, &bufsize) || (bufsize == NULL))
+	const char* info = Core::GetFileInfoProductName(filepathstr);
+	if (info == NULL)
 		return NULL;
 	return Mono::Exports::mono_string_new(Mono::domain, info);
 }

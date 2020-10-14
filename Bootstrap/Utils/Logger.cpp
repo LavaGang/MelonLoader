@@ -34,7 +34,7 @@ bool Logger::Initialize()
 	}
 	std::chrono::system_clock::time_point now;
 	std::chrono::milliseconds ms;
-	std::tm bt;
+	std::tm bt;	
 	Core::GetLocalTime(&now, &ms, &bt);
 	std::stringstream filepath;
 	filepath << logFolderPath << "\\" << FilePrefix << std::put_time(&bt, "%y-%m-%d_%OH-%OM-%OS") << "." << std::setfill('0') << std::setw(3) << ms.count() << FileExtension;

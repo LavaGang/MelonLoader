@@ -112,6 +112,8 @@
 92. Fixed Issue with Console Log Coloring.
 93. Redirected 0Harmony.dll References to MelonLoader.dll.
 94. Added Current Culture Fix to ensure Culture is always Invariant.
+95. Fixed Issue with Product Names and Versions not using Translation Query.
+96. Fixed Issue with Debug Compilation.
 
 ---
 

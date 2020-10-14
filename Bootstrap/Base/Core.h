@@ -15,6 +15,9 @@ public:
 	static void GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt);
 	static void WelcomeMessage();
 	static void KillCurrentProcess();
+	static const char* GetFileInfoProductName(const char* path);
+	static const char* GetFileInfoProductVersion(const char* path);
+
 private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();

@@ -104,7 +104,7 @@ bool Game::ReadUnityVersion()
 	const char* version = ReadUnityVersionFromFileInfo();
 	if ((version == NULL) || (strstr(version, ".") == NULL))
 	{
-		Logger::Warning("Failed to Read Unity Version from File Info! Attempting Fallback to globalgamemanagers");
+		Logger::Warning("Failed to Read Unity Version from File Info! Attempting Fallback to globalgamemanagers...");
 		version = ReadUnityVersionFromGlobalGameManagers();
 	}
 	if ((version == NULL) || (strstr(version, ".") == NULL))
@@ -121,22 +121,12 @@ bool Game::ReadUnityVersion()
 
 const char* Game::ReadUnityVersionFromFileInfo()
 {
-	DWORD handle;
-	DWORD size = GetFileVersionInfoSizeA(ApplicationPath, &handle);
-	if (size == NULL)
+	const char* output = Core::GetFileInfoProductVersion(ApplicationPath);
+	if (output == NULL)
 		return NULL;
-	LPSTR data = new char[size];
-	if (!GetFileVersionInfoA(ApplicationPath, handle, size, data))
-		return NULL;
-	UINT bufsize = 0;
-	VS_FIXEDFILEINFO* info = NULL;
-	if (!VerQueryValueA(data, "\\", (LPVOID*)&info, &bufsize) || (bufsize == NULL))
-		return NULL;
-	return (std::to_string(HIWORD(info->dwFileVersionMS))
-		+ "."
-		+ std::to_string(LOWORD(info->dwFileVersionMS))
-		+ "."
-		+ std::to_string(HIWORD(info->dwFileVersionLS))).c_str();
+	std::string outputstr = output;
+	outputstr = outputstr.substr(0, outputstr.find_last_of('.'));
+	return outputstr.c_str();
 }
 
 const char* Game::ReadUnityVersionFromGlobalGameManagers()
