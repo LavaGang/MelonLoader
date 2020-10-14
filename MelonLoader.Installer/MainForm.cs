@@ -333,6 +333,8 @@ namespace MelonLoader
                 if (assets.Count <= 0)
                     continue;
                 string version = release["tag_name"].AsString;
+                if (version.Equals("v0.2"))
+                    version = "v0.2.0";
                 Invoke(new Action(() => Automated_Version_Selection.Items.Add(version)));
             }
         }
