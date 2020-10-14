@@ -68,7 +68,11 @@ namespace MelonLoader
             if (Program.Closing)
                 return;
 
-            // SHA512 Check Downloaded File
+            // Get SHA512 Hash from Repo
+
+            // Get SHA512 Hash from Downloaded File
+
+            // Compare
 
             Program.SetCurrentOperation("Extracting MelonLoader...");
             try

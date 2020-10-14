@@ -172,7 +172,11 @@ namespace MelonLoader
             if (Program.Closing)
                 return;
 
-            // SHA512 Check Downloaded File
+            // Get SHA512 Hash from Repo
+
+            // Get SHA512 Hash from Downloaded File
+
+            // Compare
 
             string exe_path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             string tmp_file_path = Path.Combine(exe_path, (Path.GetFileNameWithoutExtension(downloadurl) + ".tmp.exe"));
