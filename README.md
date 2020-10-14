@@ -59,7 +59,8 @@
 2. Remove the version.dll file from the Game's Installation Folder.
 3. Remove the MelonLoader folder from the Game's Installation Folder.
 
-These steps are Optional if you want to do a Full Uninstall.  
+The additional steps below are OPTIONAL if you want to do a Full Uninstall.
+
 4. Remove the Plugins folder from the Game's Installation Folder.
 5. Remove the Mods folder from the Game's Installation Folder.
 
