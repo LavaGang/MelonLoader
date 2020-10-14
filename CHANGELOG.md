@@ -115,7 +115,7 @@
 95. Fixed Issue with Product Names and Versions not using Translation Query.
 96. Fixed Issue with Debug Compilation.
 97. Added SHA512 Check to Installer Updates.
-98. 
+98. Added SHA512 Check to Installer Downloads.
 
 ---
 

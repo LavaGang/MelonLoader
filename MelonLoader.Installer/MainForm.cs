@@ -163,9 +163,9 @@ namespace MelonLoader
                 Tab_PleaseWait.Text = "UPDATE   ";
                 PleaseWait_Text.Text = "Downloading Update...";
             }));
-            string downloadurl = assets[0]["browser_download_url"].AsString;
+            string downloadurl = assets[1]["browser_download_url"].AsString;
             string temp_path = TempFileCache.CreateFile();
-            try { Program.webClient.DownloadFileAsync(new Uri(downloadurl), temp_path); while (Program.webClient.IsBusy) { } }
+            try { Program.webClient_update.DownloadFileAsync(new Uri(downloadurl), temp_path); while (Program.webClient.IsBusy) { } }
             catch (Exception ex)
             {
                 TempFileCache.ClearCache();
@@ -175,7 +175,7 @@ namespace MelonLoader
             if (Program.Closing)
                 return;
             string repo_hash = null;
-            try { repo_hash = Program.webClient_update.DownloadString(assets[1]["browser_download_url"].AsString); } catch (Exception ex) { repo_hash = null; }
+            try { repo_hash = Program.webClient_update.DownloadString(assets[0]["browser_download_url"].AsString); } catch (Exception ex) { repo_hash = null; }
             if (string.IsNullOrEmpty(repo_hash))
             {
                 TempFileCache.ClearCache();
@@ -184,10 +184,16 @@ namespace MelonLoader
             }
             if (Program.Closing)
                 return;
-            var sha = new SHA512Managed();
-            byte[] checksum = sha.ComputeHash(File.ReadAllBytes(temp_path));
-            string file_hash =  BitConverter.ToString(checksum).Replace("-", string.Empty);
-            if (!file_hash.Equals(repo_hash))
+            SHA512Managed sha512 = new SHA512Managed();
+            byte[] checksum = sha512.ComputeHash(File.ReadAllBytes(temp_path));
+            if ((checksum == null) || (checksum.Length <= 0))
+            {
+                TempFileCache.ClearCache();
+                GetReleases();
+                return;
+            }
+            string file_hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
+            if (string.IsNullOrEmpty(file_hash) || !file_hash.Equals(repo_hash))
             {
                 TempFileCache.ClearCache();
                 GetReleases();

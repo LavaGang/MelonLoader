@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Security.Cryptography;
 using System.Windows.Forms;
+#pragma warning disable 0168
 
 namespace MelonLoader
 {
@@ -67,13 +69,42 @@ namespace MelonLoader
             Program.SetTotalPercentage(50);
             if (Program.Closing)
                 return;
-
-            // Get SHA512 Hash from Repo
-
-            // Get SHA512 Hash from Downloaded File
-
-            // Compare
-
+            string repo_hash_url = Program.Download_MelonLoader + "/" + selected_version + "/MelonLoader." + ((!legacy_version && is_x86) ? "x86" : "x64") + ".sha512";
+            string repo_hash = null;
+            try { repo_hash = Program.webClient.DownloadString(repo_hash_url); } catch (Exception ex) { repo_hash = null; }
+            if (string.IsNullOrEmpty(repo_hash))
+            {
+                TempFileCache.ClearCache();
+                Program.OperationError();
+                Program.FinishingMessageBox("Failed to get SHA512 Hash from Repo!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (Program.Closing)
+                return;
+            SHA512Managed sha512 = new SHA512Managed();
+            byte[] checksum = sha512.ComputeHash(File.ReadAllBytes(temp_path));
+            if ((checksum == null) || (checksum.Length <= 0))
+            {
+                TempFileCache.ClearCache();
+                Program.OperationError();
+                Program.FinishingMessageBox("Failed to get SHA512 Hash from Temp File!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            string file_hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
+            if (string.IsNullOrEmpty(file_hash))
+            {
+                TempFileCache.ClearCache();
+                Program.OperationError();
+                Program.FinishingMessageBox("Failed to get SHA512 Hash from Temp File!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (!file_hash.Equals(repo_hash))
+            {
+                TempFileCache.ClearCache();
+                Program.OperationError();
+                Program.FinishingMessageBox("SHA512 Hash from Temp File does not match Repo Hash!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             Program.SetCurrentOperation("Extracting MelonLoader...");
             try
             {
