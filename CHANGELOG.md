@@ -116,6 +116,8 @@
 96. Fixed Issue with Debug Compilation.
 97. Added SHA512 Check to Installer Updates.
 98. Added SHA512 Check to Installer Downloads.
+99. Fixed Issue when using the Installer to install v0.2.
+100. Fixed Issue with Releases Selection in Installer not being properly Sorted.
 
 ---
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -326,7 +327,7 @@ namespace MelonLoader
             JsonArray data = JsonValue.Parse(response).AsJsonArray;
             if (data.Count <= 0)
                 return;
-            Invoke(new Action(() => Automated_Version_Selection.Items.Clear()));
+            List<string> releasesList = new List<string>();
             foreach (JsonValue release in data)
             {
                 JsonArray assets = release["assets"].AsJsonArray;
@@ -335,8 +336,11 @@ namespace MelonLoader
                 string version = release["tag_name"].AsString;
                 if (version.Equals("v0.2"))
                     version = "v0.2.0";
-                Invoke(new Action(() => Automated_Version_Selection.Items.Add(version)));
+                releasesList.Add(version);
             }
+            releasesList.Sort();
+            releasesList.Reverse();
+            Invoke(new Action(() => { Automated_Version_Selection.Items.Clear(); Automated_Version_Selection.Items.AddRange(releasesList.ToArray()); }));
         }
 
         private void Automated_Version_Latest_CheckedChanged(object sender, EventArgs e)
