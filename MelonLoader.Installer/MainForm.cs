@@ -38,18 +38,26 @@ namespace MelonLoader
 
         private void SelectUnityGame()
         {
-            // Add Shortcut Support
-
             using (OpenFileDialog opd = new OpenFileDialog())
             {
-                opd.Filter = "Unity Game (*.exe)|*.exe";
+                opd.Filter = "Unity Game (*.exe)|*.exe|Shortcut (*.lnk)|*.lnk";
                 opd.RestoreDirectory = true;
                 opd.Multiselect = false;
                 if ((opd.ShowDialog() != DialogResult.OK)
-                    || string.IsNullOrEmpty(opd.FileName))
+                    || string.IsNullOrEmpty(opd.FileName)
+                    || (!Path.GetExtension(opd.FileName).Equals(".exe")
+                    && !Path.GetExtension(opd.FileName).Equals(".lnk")))
                     return;
-                Automated_UnityGame_Display.Text = opd.FileName;
-                ManualZip_UnityGame_Display.Text = opd.FileName;
+                string filepath = opd.FileName;
+                if (Path.GetExtension(filepath).Equals(".lnk"))
+                {
+                    string newfilepath = Program.GetFilePathFromShortcut(filepath);
+                    if (string.IsNullOrEmpty(opd.FileName) || !opd.FileName.EndsWith(".exe"))
+                        return;
+                    filepath = newfilepath;
+                }
+                Automated_UnityGame_Display.Text = filepath;
+                ManualZip_UnityGame_Display.Text = filepath;
                 Automated_Install.Enabled = true;
                 CheckUnityGame();
             }

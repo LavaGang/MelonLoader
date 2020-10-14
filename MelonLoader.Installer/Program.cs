@@ -128,6 +128,7 @@ namespace MelonLoader
             }));
         }
 
+        internal static string GetFilePathFromShortcut(string shortcut_path) { IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell(); IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcut_path); return shortcut.TargetPath; }
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MessageBox.Show((e.ExceptionObject as Exception).ToString());
     }
 }
