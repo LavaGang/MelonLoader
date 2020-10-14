@@ -20,24 +20,48 @@
 
 ### AUTOMATED INSTALLATION:
 
-1. Make sure the Game is Closed and Not Running before Installing.
-2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
-3. Run MelonLoader.Installer.exe.
-4. Click the SELECT button.
-5. Select and Open the Game's EXE in your Game's Installation Folder.
-6. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
-7. Click the INSTALL or RE-INSTALL or UPDATE button.
+1. Make sure the Game is Closed and Not Running before attempting to Install.
+2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
+3. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
+4. Run MelonLoader.Installer.exe.
+5. Click the SELECT button.
+6. Select and Open the Game's EXE in your Game's Installation Folder.
+7. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
+8. Click the INSTALL or RE-INSTALL or UPDATE button.
+
+---
+
+### MANUAL INSTALLATION:
+
+1. Make sure the Game is Closed and Not Running before attempting to Install.
+2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
+3. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
+4. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
+5. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
 
 ---
 
 ### AUTOMATED UN-INSTALL:
 
-1. Make sure the Game is Closed and Not Running before Uninstalling.
-2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
-3. Run MelonLoader.Installer.exe.
-4. Click the SELECT button.
-5. Select and Open the Game's EXE in your Game's Installation Folder.
+1. Make sure the Game is Closed and Not Running before attempting to Uninstall.
+2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Uninstall.
+3. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
+4. Run MelonLoader.Installer.exe.
+5. Click the SELECT button.
+6. Select and Open the Game's EXE in your Game's Installation Folder.
 7. Click the UN-INSTALL button.
+
+---
+
+### MANUAL UN-INSTALL:
+
+1. Make sure the Game is Closed and Not Running before attempting to Uninstall.
+2. Remove the version.dll file from the Game's Installation Folder.
+3. Remove the MelonLoader folder from the Game's Installation Folder.
+
+These steps are Optional if you want to do a Full Uninstall.  
+4. Remove the Plugins folder from the Game's Installation Folder.
+5. Remove the Mods folder from the Game's Installation Folder.
 
 ---
 

@@ -130,6 +130,8 @@ namespace MelonLoader
                 GetReleases();
                 return;
             }
+            if (Program.Closing)
+                return;
             JsonArray data = JsonValue.Parse(response).AsJsonArray;
             if (data.Count <= 0)
             {
@@ -171,8 +173,17 @@ namespace MelonLoader
             }
             if (Program.Closing)
                 return;
-
-            // Get SHA512 Hash from Repo
+            string repo_hash = null;
+            try { repo_hash = Program.webClient_update.DownloadString(assets[1]["browser_download_url"].AsString); } catch (Exception ex) { repo_hash = null; }
+            if (string.IsNullOrEmpty(repo_hash))
+            {
+                TempFileCache.ClearCache();
+                GetReleases();
+                return;
+            }
+            if (Program.Closing)
+                return;
+            
 
             // Get SHA512 Hash from Downloaded File
 
