@@ -103,6 +103,7 @@ namespace Harmony
 
 		public void PatchAll(Assembly assembly)
 		{
+			if (assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0) return;
 			assembly.GetTypes().Do(type =>
 			{
 				var parentMethodInfos = type.GetHarmonyMethods();
@@ -117,6 +118,7 @@ namespace Harmony
 
 		public DynamicMethod Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null)
 		{
+			if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0) || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)) return null;
 			var processor = new PatchProcessor(this, new List<MethodBase> { original }, prefix, postfix, transpiler);
 			return processor.Patch().FirstOrDefault();
 		}

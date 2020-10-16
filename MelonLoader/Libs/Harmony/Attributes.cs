@@ -322,4 +322,7 @@ namespace Harmony
 			this.version = version;
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.All)]
+	public class HarmonyShield : Attribute { }
 }

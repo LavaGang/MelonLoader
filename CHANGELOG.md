@@ -119,6 +119,8 @@
 99. Fixed Issue when using the Installer to install v0.2.
 100. Fixed Issue with Releases Selection in Installer not being properly Sorted.
 101. Added Shortcut Support to Installer.
+102. Added HarmonyShield Attribute.
+103. HarmonyShield now protects Methods and Assembly from being patched.
 
 ---
 

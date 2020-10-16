@@ -35,6 +35,7 @@ namespace Harmony
 		{
 			try
 			{
+				if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0) || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)) return null;
 				if (HarmonyInstance.DEBUG) FileLog.LogBuffered("### Patch " + original.DeclaringType + ", " + original);
 
 				bool isIl2Cpp = MelonLoader.Unhollower.IsIl2CppObjectType(original.DeclaringType);
