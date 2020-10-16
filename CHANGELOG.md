@@ -121,6 +121,7 @@
 101. Added Shortcut Support to Installer.
 102. Added HarmonyShield Attribute.
 103. HarmonyShield now protects Methods and Assembly from being patched.
+104. Added HarmonyShield Protection to MelonLoader, SM_Il2Cpp, SM_Mono, SM_Mono.Pre-2017, and SM_Mono.Pre-5.
 
 ---
 
