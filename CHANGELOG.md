@@ -1,6 +1,8 @@
 ### Version List:
 
-[v0.2.7 / v0.2.7.1 / v0.2.7.2 Open-Beta](#v027--v0271--v0272-open-beta)  
+[v0.2.7.2 Open-Beta]#v0271-open-beta)  
+[v0.2.7.1 Open-Beta]#v0271-open-beta)  
+[v0.2.7 Open-Beta]#v027-open-beta)  
 [v0.2.6 Open-Beta](#v026-open-beta)  
 [v0.2.5 Open-Beta](#v025-open-beta)  
 [v0.2.4 Open-Beta](#v024-open-beta)  
@@ -15,7 +17,19 @@
 
 ---
 
-### v0.2.7 / v0.2.7.1 / v0.2.7.2 Open-Beta:
+### v0.2.7.2 Open-Beta:
+
+1. Fixed Small Issue with VRChat_OnUiManagerInit.
+
+---
+
+### v0.2.7.1 Open-Beta:
+
+1. Use a different approach to console cleaning for better interop with other tools.    (Credits to knah :D)
+
+---
+
+### v0.2.7 Open-Beta:
 
 1. Console no longer has stdout directed to it.    (Credits to knah :D)
 2. Removed VRChat Auth Token Hider as it's no longer necessary.    (Credits to knah :D)
@@ -25,8 +39,6 @@
 6. Exposed new Console Output Handle and assign it to Managed Console Class Output.    (Credits to knah :D)
 7. Added Unity 2019.4.3 Dependencies.
 8. Bumped Il2CppAssemblyUnhollower Version.
-9. Use a different approach to console cleaning for better interop with other tools.    (Credits to knah :D)
-10. Fixed Small Issue with VRChat_OnUiManagerInit.
 
 ---
 
