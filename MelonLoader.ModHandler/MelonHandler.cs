@@ -353,7 +353,7 @@ namespace MelonLoader
 
         private static bool ShouldCheckForUiManager = true;
         private static Type VRCUiManager = null;
-        private static PropertyInfo VRCUiManager_Instance = null;
+        private static MethodInfo VRCUiManager_Instance = null;
         private static void VRChat_CheckUiManager()
         {
             if (!ShouldCheckForUiManager)
@@ -361,14 +361,18 @@ namespace MelonLoader
             if (VRCUiManager == null)
                 VRCUiManager = Assembly_CSharp.GetType("VRCUiManager");
             if (VRCUiManager == null)
+            {
+                ShouldCheckForUiManager = false;
                 return;
+            }
             if (VRCUiManager_Instance == null)
-                VRCUiManager_Instance = VRCUiManager.GetProperty("field_Protected_Static_VRCUiManager_0");
+                VRCUiManager_Instance = VRCUiManager.GetMethods().First(x => (x.ReturnType == VRCUiManager));
             if (VRCUiManager_Instance == null)
-                VRCUiManager_Instance = VRCUiManager.GetProperty("prop_VRCUiManager_0");
-            if (VRCUiManager_Instance == null)
+            {
+                ShouldCheckForUiManager = false;
                 return;
-            object returnval = VRCUiManager_Instance.GetValue(null, new object[0]);
+            }
+            object returnval = VRCUiManager_Instance.Invoke(null, new object[0]);
             if (returnval == null)
                 return;
             ShouldCheckForUiManager = false;
