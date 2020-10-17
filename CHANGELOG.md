@@ -1,8 +1,8 @@
 ### Version List:
 
-[v0.2.7.2 Open-Beta]#v0271-open-beta)  
-[v0.2.7.1 Open-Beta]#v0271-open-beta)  
-[v0.2.7 Open-Beta]#v027-open-beta)  
+[v0.2.7.2 Open-Beta](#v0271-open-beta)  
+[v0.2.7.1 Open-Beta](#v0271-open-beta)  
+[v0.2.7 Open-Beta](#v027-open-beta)  
 [v0.2.6 Open-Beta](#v026-open-beta)  
 [v0.2.5 Open-Beta](#v025-open-beta)  
 [v0.2.4 Open-Beta](#v024-open-beta)  
