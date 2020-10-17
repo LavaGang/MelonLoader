@@ -19,7 +19,7 @@ namespace MelonLoader.Support
         private static bool ShouldCheckForUiManager = true;
         private static Assembly Assembly_CSharp = null;
         private static Type VRCUiManager = null;
-        private static System.Reflection.PropertyInfo VRCUiManager_Instance = null;
+        private static MethodInfo VRCUiManager_Instance = null;
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
@@ -97,10 +97,10 @@ namespace MelonLoader.Support
             if (VRCUiManager == null)
                 return;
             if (VRCUiManager_Instance == null)
-                VRCUiManager_Instance = VRCUiManager.GetProperty("field_Protected_Static_VRCUiManager_0");
+                VRCUiManager_Instance = VRCUiManager.GetMethods().First(x => (x.ReturnType == VRCUiManager));
             if (VRCUiManager_Instance == null)
                 return;
-            object returnval = VRCUiManager_Instance.GetValue(null, new object[0]);
+            object returnval = VRCUiManager_Instance.Invoke(null, new object[0]);
             if (returnval == null)
                 return;
             ShouldCheckForUiManager = false;
