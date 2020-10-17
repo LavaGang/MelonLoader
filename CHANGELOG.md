@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.2.7 / v0.2.7.1 / v0.2.7.2 Open-Beta](#v027-open-beta)  
+[v0.2.7 / v0.2.7.1 / v0.2.7.2 Open-Beta](#v027--v0271--v0272-open-beta)  
 [v0.2.6 Open-Beta](#v026-open-beta)  
 [v0.2.5 Open-Beta](#v025-open-beta)  
 [v0.2.4 Open-Beta](#v024-open-beta)  
@@ -26,6 +26,7 @@
 7. Added Unity 2019.4.3 Dependencies.
 8. Bumped Il2CppAssemblyUnhollower Version.
 9. Use a different approach to console cleaning for better interop with other tools.    (Credits to knah :D)
+10. Fixed Small Issue with VRChat_OnUiManagerInit.
 
 ---
 
