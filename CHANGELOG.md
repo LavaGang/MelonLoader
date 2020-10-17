@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.2.7 Open-Beta](#v027-open-beta)  
+[v0.2.7 / v0.2.7.1 / v0.2.7.2 Open-Beta](#v027-open-beta)  
 [v0.2.6 Open-Beta](#v026-open-beta)  
 [v0.2.5 Open-Beta](#v025-open-beta)  
 [v0.2.4 Open-Beta](#v024-open-beta)  
@@ -15,7 +15,7 @@
 
 ---
 
-### v0.2.7 Open-Beta:
+### v0.2.7 / v0.2.7.1 / v0.2.7.2 Open-Beta:
 
 1. Console no longer has stdout directed to it.    (Credits to knah :D)
 2. Removed VRChat Auth Token Hider as it's no longer necessary.    (Credits to knah :D)
