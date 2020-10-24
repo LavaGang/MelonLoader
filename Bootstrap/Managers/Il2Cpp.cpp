@@ -7,6 +7,7 @@
 #include "../Utils/Console.h"
 #include "../Utils/Debug.h"
 #include <string>
+#include "AssemblyVerifier.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
 
@@ -71,6 +72,8 @@ Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj
 	{
 		Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
 		Hook::Detach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
+		// todo: check if it works/is necessary on mono games
+		AssemblyVerifier::InstallHooks();
 		BaseAssembly::Start();
 	}
 	return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
