@@ -25,10 +25,40 @@ void InternalCalls::MelonCore::AddInternalCalls()
 #pragma endregion
 
 #pragma region MelonLogger
-void InternalCalls::MelonLogger::Internal_Msg(Mono::String* namesection, Mono::String* txt) { Logger::Internal_Msg(((namesection != NULL) ? Mono::Exports::mono_string_to_utf8(namesection) : NULL), Mono::Exports::mono_string_to_utf8(txt)); }
-void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mono::String* txt) { Logger::Internal_Warning(((namesection != NULL) ? Mono::Exports::mono_string_to_utf8(namesection) : NULL), Mono::Exports::mono_string_to_utf8(txt)); }
-void InternalCalls::MelonLogger::Internal_Error(Mono::String* namesection, Mono::String* txt) { Logger::Internal_Error(((namesection != NULL) ? Mono::Exports::mono_string_to_utf8(namesection) : NULL), Mono::Exports::mono_string_to_utf8(txt)); }
-void InternalCalls::MelonLogger::ThrowInternalFailure(Mono::String* msg) { Assertion::ThrowInternalFailure(Mono::Exports::mono_string_to_utf8(msg)); }
+void InternalCalls::MelonLogger::Internal_Msg(Mono::String* namesection, Mono::String* txt)
+{
+	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
+	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
+	Logger::Internal_Msg(nsStr, txtStr);
+	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
+	Mono::Exports::mono_free(txtStr);
+}
+
+void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mono::String* txt)
+{
+	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
+	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
+	Logger::Internal_Warning(nsStr, txtStr);
+	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
+	Mono::Exports::mono_free(txtStr);
+}
+
+void InternalCalls::MelonLogger::Internal_Error(Mono::String* namesection, Mono::String* txt)
+{
+	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
+	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
+	Logger::Internal_Error(nsStr, txtStr);
+	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
+	Mono::Exports::mono_free(txtStr);
+}
+
+void InternalCalls::MelonLogger::ThrowInternalFailure(Mono::String* msg)
+{
+	auto str = Mono::Exports::mono_string_to_utf8(msg);
+	Assertion::ThrowInternalFailure(str);
+	Mono::Exports::mono_free(str);
+}
+
 void InternalCalls::MelonLogger::WriteSpacer() { Logger::WriteSpacer(); }
 void InternalCalls::MelonLogger::Flush() { Logger::Flush(); Console::Flush(); }
 void InternalCalls::MelonLogger::AddInternalCalls()
@@ -52,17 +82,27 @@ Mono::String* InternalCalls::MelonUtils::GetGameDirectory() { return Mono::Expor
 Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Game::DataPath); }
 Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPath); }
-void InternalCalls::MelonUtils::SCT(Mono::String* title) { if (title == NULL) return; Console::SetTitle(Mono::Exports::mono_string_to_utf8(title)); }
+
+void InternalCalls::MelonUtils::SCT(Mono::String* title)
+{
+	if (title == NULL) return;
+	auto str = Mono::Exports::mono_string_to_utf8(title);
+	Console::SetTitle(str);
+	Mono::Exports::mono_free(str);
+}
+
 Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepath)
 {
-	const char* filepathstr = Mono::Exports::mono_string_to_utf8(filepath);
+	char* filepathstr = Mono::Exports::mono_string_to_utf8(filepath);
 	if (filepathstr == NULL)
 		return NULL;
 	const char* info = Core::GetFileInfoProductName(filepathstr);
+	Mono::Exports::mono_free(filepathstr);
 	if (info == NULL)
 		return NULL;
 	return Mono::Exports::mono_string_new(Mono::domain, info);
 }
+
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", IsGameIl2Cpp);
@@ -95,7 +135,16 @@ void InternalCalls::MelonHandler::AddInternalCalls()
 
 #pragma region MelonDebug
 bool InternalCalls::MelonDebug::IsEnabled() { return Debug::Enabled; }
-void InternalCalls::MelonDebug::Internal_Msg(Mono::String* namesection, Mono::String* txt) { Debug::Internal_Msg(((namesection != NULL) ? Mono::Exports::mono_string_to_utf8(namesection) : NULL), Mono::Exports::mono_string_to_utf8(txt)); }
+
+void InternalCalls::MelonDebug::Internal_Msg(Mono::String* namesection, Mono::String* txt)
+{
+	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
+	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
+	Debug::Internal_Msg(nsStr, txtStr);
+	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
+	Mono::Exports::mono_free(txtStr);
+}
+
 void InternalCalls::MelonDebug::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonDebug::IsEnabled", IsEnabled);

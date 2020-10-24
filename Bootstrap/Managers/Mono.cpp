@@ -280,6 +280,7 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 	if (returnstrc == NULL)
 		return;
 	Logger::Error(returnstrc);
+	Exports::mono_free(returnstr);
 }
 
 Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* version)
