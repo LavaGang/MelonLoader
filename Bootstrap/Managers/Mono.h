@@ -27,54 +27,168 @@ public:
 	static void AddInternalCall(const char* name, void* method);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 
+	typedef enum
+	{
+		MONO_IMAGE_OK,
+		MONO_IMAGE_ERROR_ERRNO,
+		MONO_IMAGE_MISSING_ASSEMBLYREF,
+		MONO_IMAGE_IMAGE_INVALID
+	} MonoImageOpenStatus;
+
+	typedef enum
+	{
+		MONO_TABLE_MODULE,
+		MONO_TABLE_TYPEREF,
+		MONO_TABLE_TYPEDEF,
+		MONO_TABLE_FIELD_POINTER,
+		MONO_TABLE_FIELD,
+		MONO_TABLE_METHOD_POINTER,
+		MONO_TABLE_METHOD,
+		MONO_TABLE_PARAM_POINTER,
+		MONO_TABLE_PARAM,
+		MONO_TABLE_INTERFACEIMPL,
+		MONO_TABLE_MEMBERREF,
+		/* 0xa */
+		MONO_TABLE_CONSTANT,
+		MONO_TABLE_CUSTOMATTRIBUTE,
+		MONO_TABLE_FIELDMARSHAL,
+		MONO_TABLE_DECLSECURITY,
+		MONO_TABLE_CLASSLAYOUT,
+		MONO_TABLE_FIELDLAYOUT,
+		/* 0x10 */
+		MONO_TABLE_STANDALONESIG,
+		MONO_TABLE_EVENTMAP,
+		MONO_TABLE_EVENT_POINTER,
+		MONO_TABLE_EVENT,
+		MONO_TABLE_PROPERTYMAP,
+		MONO_TABLE_PROPERTY_POINTER,
+		MONO_TABLE_PROPERTY,
+		MONO_TABLE_METHODSEMANTICS,
+		MONO_TABLE_METHODIMPL,
+		MONO_TABLE_MODULEREF,
+		/* 0x1a */
+		MONO_TABLE_TYPESPEC,
+		MONO_TABLE_IMPLMAP,
+		MONO_TABLE_FIELDRVA,
+		MONO_TABLE_UNUSED6,
+		MONO_TABLE_UNUSED7,
+		MONO_TABLE_ASSEMBLY,
+		/* 0x20 */
+		MONO_TABLE_ASSEMBLYPROCESSOR,
+		MONO_TABLE_ASSEMBLYOS,
+		MONO_TABLE_ASSEMBLYREF,
+		MONO_TABLE_ASSEMBLYREFPROCESSOR,
+		MONO_TABLE_ASSEMBLYREFOS,
+		MONO_TABLE_FILE,
+		MONO_TABLE_EXPORTEDTYPE,
+		MONO_TABLE_MANIFESTRESOURCE,
+		MONO_TABLE_NESTEDCLASS,
+		MONO_TABLE_GENERICPARAM,
+		/* 0x2a */
+		MONO_TABLE_METHODSPEC,
+		MONO_TABLE_GENERICPARAMCONSTRAINT,
+		MONO_TABLE_UNUSED8,
+		MONO_TABLE_UNUSED9,
+		MONO_TABLE_UNUSED10,
+		/* Portable PDB tables */
+		MONO_TABLE_DOCUMENT,
+		/* 0x30 */
+		MONO_TABLE_METHODBODY,
+		MONO_TABLE_LOCALSCOPE,
+		MONO_TABLE_LOCALVARIABLE,
+		MONO_TABLE_LOCALCONSTANT,
+		MONO_TABLE_IMPORTSCOPE,
+		MONO_TABLE_STATEMACHINEMETHOD,
+		MONO_TABLE_CUSTOMDEBUGINFORMATION
+
+		#define MONO_TABLE_LAST MONO_TABLE_CUSTOMDEBUGINFORMATION
+		#define MONO_TABLE_NUM (MONO_TABLE_LAST + 1)
+	} MonoMetaTableEnum;
+
+	enum
+	{
+		MONO_FIELD_FLAGS,
+		MONO_FIELD_NAME,
+		MONO_FIELD_SIGNATURE,
+		MONO_FIELD_SIZE
+	};
+
+	enum
+	{
+		MONO_METHOD_RVA,
+		MONO_METHOD_IMPLFLAGS,
+		MONO_METHOD_FLAGS,
+		MONO_METHOD_NAME,
+		MONO_METHOD_SIGNATURE,
+		MONO_METHOD_PARAMLIST,
+		MONO_METHOD_SIZE
+	};
+
+	enum
+	{
+		MONO_TYPEDEF_FLAGS,
+		MONO_TYPEDEF_NAME,
+		MONO_TYPEDEF_NAMESPACE,
+		MONO_TYPEDEF_EXTENDS,
+		MONO_TYPEDEF_FIELD_LIST,
+		MONO_TYPEDEF_METHOD_LIST,
+		MONO_TYPEDEF_SIZE
+	};
+
+	enum
+	{
+		MONO_TYPEREF_SCOPE,
+		MONO_TYPEREF_NAME,
+		MONO_TYPEREF_NAMESPACE,
+		MONO_TYPEREF_SIZE
+	};
+
+
 	class Exports
 	{
 	public:
 		static bool Initialize();
-		typedef Domain* (*mono_jit_init_t) (const char* name);
-		static mono_jit_init_t mono_jit_init;
-		typedef Domain* (*mono_jit_init_version_t) (const char* name, const char* version);
-		static mono_jit_init_version_t mono_jit_init_version;
-		typedef void (*mono_set_assemblies_path_t) (const char* path);
-		static mono_set_assemblies_path_t mono_set_assemblies_path;
-		typedef void (*mono_assembly_setrootdir_t) (const char* path);
-		static mono_assembly_setrootdir_t mono_assembly_setrootdir;
-		typedef void (*mono_set_config_dir_t) (const char* path);
-		static mono_set_config_dir_t mono_set_config_dir;
-		typedef int (*mono_runtime_set_main_args_t) (int argc, char* argv[]);
-		static mono_runtime_set_main_args_t mono_runtime_set_main_args;
-		typedef Thread* (*mono_thread_current_t) ();
-		static mono_thread_current_t mono_thread_current;
-		typedef void (*mono_thread_set_main_t) (Thread* thread);
-		static mono_thread_set_main_t mono_thread_set_main;
-		typedef void (*mono_domain_set_config_t) (Domain* domain, const char* configpath, const char* filename);
-		static mono_domain_set_config_t mono_domain_set_config;
-		typedef void (*mono_add_internal_call_t) (const char* name, void* method);
-		static mono_add_internal_call_t mono_add_internal_call;
-		typedef Object* (*mono_runtime_invoke_t) (Method* method, Object* obj, void** params, Object** exec);
-		static mono_runtime_invoke_t mono_runtime_invoke;
-		typedef const char* (*mono_method_get_name_t) (Method* method);
-		static mono_method_get_name_t mono_method_get_name;
-		typedef void* (*mono_unity_get_unitytls_interface_t) ();
-		static mono_unity_get_unitytls_interface_t mono_unity_get_unitytls_interface;
-		typedef Assembly* (*mono_domain_assembly_open_t) (Domain* domain, const char* path);
-		static mono_domain_assembly_open_t mono_domain_assembly_open;
-		typedef Image* (*mono_assembly_get_image_t) (Assembly* assembly);
-		static mono_assembly_get_image_t mono_assembly_get_image;
-		typedef Class* (*mono_class_from_name_t) (Image* image, const char* name_space, const char* name);
-		static mono_class_from_name_t mono_class_from_name;
-		typedef Method* (*mono_class_get_method_from_name_t) (Class* klass, const char* name, int param_count);
-		static mono_class_get_method_from_name_t mono_class_get_method_from_name;
-		typedef const char* (*mono_string_to_utf8_t) (String* str);
-		static mono_string_to_utf8_t mono_string_to_utf8;
-		typedef String* (*mono_string_new_t) (Domain* domain, const char* str);
-		static mono_string_new_t mono_string_new;
-		typedef Class* (*mono_object_get_class_t) (Object* obj);
-		static mono_object_get_class_t mono_object_get_class;
-		typedef Property* (*mono_class_get_property_from_name_t) (Class* klass, const char* name);
-		static mono_class_get_property_from_name_t mono_class_get_property_from_name;
-		typedef Method* (*mono_property_get_get_method_t) (Property* prop);
-		static mono_property_get_get_method_t mono_property_get_get_method;
+		
+		#define MONODEF(rt, fn, args) typedef rt (* fn##_t) args; static fn##_t fn;
+
+		MONODEF(Domain*, mono_jit_init, (const char* name))
+		MONODEF(Domain*, mono_jit_init_version, (const char* name, const char* version))
+		MONODEF(void, mono_set_assemblies_path, (const char* path))
+		MONODEF(void, mono_assembly_setrootdir, (const char* path))
+		MONODEF(void, mono_set_config_dir, (const char* path))
+		MONODEF(int, mono_runtime_set_main_args, (int argc, char* argv[]))
+		MONODEF(Thread*, mono_thread_current, ())
+		MONODEF(void, mono_thread_set_main, (Thread* thread))
+		MONODEF(void, mono_domain_set_config, (Domain* domain, const char* configpath, const char* filename))
+		MONODEF(void, mono_add_internal_call, (const char* name, void* method))
+		MONODEF(void*, mono_lookup_internal_call, (Method* method))
+		MONODEF(Object*, mono_runtime_invoke, (Method* method, Object* obj, void** params, Object** exec))
+		MONODEF(const char*, mono_method_get_name, (Method* method))
+		MONODEF(void*, mono_unity_get_unitytls_interface, ())
+		MONODEF(Assembly*, mono_domain_assembly_open, (Domain* domain, const char* path))
+		MONODEF(Image*, mono_assembly_get_image, (Assembly* assembly))
+		MONODEF(Class*, mono_class_from_name, (Image* image, const char* name_space, const char* name))
+		MONODEF(Method*, mono_class_get_method_from_name, (Class* klass, const char* name, int param_count))
+		MONODEF(char*, mono_string_to_utf8, (String* str))
+		MONODEF(String*, mono_string_new, (Domain* domain, const char* str))
+		MONODEF(Class*, mono_object_get_class, (Object* obj))
+		MONODEF(Property*, mono_class_get_property_from_name, (Class* klass, const char* name))
+		MONODEF(Method*, mono_property_get_get_method, (Property* prop))
+		MONODEF(void, mono_free, (void* ptr))
+		
+		MONODEF(void, mono_raise_exception, (Object *ex))
+		MONODEF(Object*, mono_get_exception_bad_image_format, (const char *msg))
+        MONODEF(Image*, mono_image_open_full, (const char *path, MonoImageOpenStatus* status, bool refonly))
+        MONODEF(Image*, mono_image_open_from_data_full, (const char *data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
+        MONODEF(void, mono_image_close, (Image* image))
+        MONODEF(int, mono_image_get_table_rows, (Image *image, int table_id))
+		MONODEF(unsigned int, mono_metadata_decode_table_row_col, (Image *image, int table,int idx, unsigned int col))
+		MONODEF(char*, mono_array_addr_with_size, (Object *array, int size, uintptr_t idx))
+		MONODEF(uintptr_t, mono_array_length, (Object *array))
+		MONODEF(const char*, mono_metadata_string_heap, (Image *meta, unsigned int table_index))
+		MONODEF(const char*, mono_class_get_name, (Class *klass))
+		
+		#undef MONODEF
 	};
 
 	class Hooks

@@ -20,28 +20,47 @@ HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
 Mono::Domain* Mono::domain = NULL;
 bool Mono::IsOldMono = false;
-Mono::Exports::mono_jit_init_t Mono::Exports::mono_jit_init = NULL;
-Mono::Exports::mono_jit_init_version_t Mono::Exports::mono_jit_init_version = NULL;
-Mono::Exports::mono_set_assemblies_path_t Mono::Exports::mono_set_assemblies_path = NULL;
-Mono::Exports::mono_assembly_setrootdir_t Mono::Exports::mono_assembly_setrootdir = NULL;
-Mono::Exports::mono_set_config_dir_t Mono::Exports::mono_set_config_dir = NULL;
-Mono::Exports::mono_runtime_set_main_args_t Mono::Exports::mono_runtime_set_main_args = NULL;
-Mono::Exports::mono_thread_set_main_t Mono::Exports::mono_thread_set_main = NULL;
-Mono::Exports::mono_thread_current_t Mono::Exports::mono_thread_current = NULL;
-Mono::Exports::mono_domain_set_config_t Mono::Exports::mono_domain_set_config = NULL;
-Mono::Exports::mono_add_internal_call_t Mono::Exports::mono_add_internal_call = NULL;
-Mono::Exports::mono_runtime_invoke_t Mono::Exports::mono_runtime_invoke = NULL;
-Mono::Exports::mono_method_get_name_t Mono::Exports::mono_method_get_name = NULL;
-Mono::Exports::mono_unity_get_unitytls_interface_t Mono::Exports::mono_unity_get_unitytls_interface = NULL;
-Mono::Exports::mono_domain_assembly_open_t Mono::Exports::mono_domain_assembly_open = NULL;
-Mono::Exports::mono_assembly_get_image_t Mono::Exports::mono_assembly_get_image = NULL;
-Mono::Exports::mono_class_from_name_t Mono::Exports::mono_class_from_name = NULL;
-Mono::Exports::mono_class_get_method_from_name_t Mono::Exports::mono_class_get_method_from_name = NULL;
-Mono::Exports::mono_string_to_utf8_t Mono::Exports::mono_string_to_utf8 = NULL;
-Mono::Exports::mono_string_new_t Mono::Exports::mono_string_new = NULL;
-Mono::Exports::mono_object_get_class_t Mono::Exports::mono_object_get_class = NULL;
-Mono::Exports::mono_class_get_property_from_name_t Mono::Exports::mono_class_get_property_from_name = NULL;
-Mono::Exports::mono_property_get_get_method_t Mono::Exports::mono_property_get_get_method = NULL;
+
+#define MONODEF(fn) Mono::Exports::fn##_t Mono::Exports::fn = NULL;
+
+MONODEF(mono_jit_init)
+MONODEF(mono_jit_init_version)
+MONODEF(mono_set_assemblies_path)
+MONODEF(mono_assembly_setrootdir)
+MONODEF(mono_set_config_dir)
+MONODEF(mono_runtime_set_main_args)
+MONODEF(mono_thread_set_main)
+MONODEF(mono_thread_current)
+MONODEF(mono_domain_set_config)
+MONODEF(mono_add_internal_call)
+MONODEF(mono_lookup_internal_call)
+MONODEF(mono_runtime_invoke)
+MONODEF(mono_method_get_name)
+MONODEF(mono_unity_get_unitytls_interface)
+MONODEF(mono_domain_assembly_open)
+MONODEF(mono_assembly_get_image)
+MONODEF(mono_class_from_name)
+MONODEF(mono_class_get_method_from_name)
+MONODEF(mono_string_to_utf8)
+MONODEF(mono_string_new)
+MONODEF(mono_object_get_class)
+MONODEF(mono_class_get_property_from_name)
+MONODEF(mono_property_get_get_method)
+MONODEF(mono_free)
+
+MONODEF(mono_raise_exception)
+MONODEF(mono_get_exception_bad_image_format)
+MONODEF(mono_image_open_full)
+MONODEF(mono_image_open_from_data_full)
+MONODEF(mono_image_close)
+MONODEF(mono_image_get_table_rows)
+MONODEF(mono_metadata_decode_table_row_col)
+MONODEF(mono_array_addr_with_size)
+MONODEF(mono_array_length)
+MONODEF(mono_metadata_string_heap)
+MONODEF(mono_class_get_name)
+
+#undef MONODEF
 
 bool Mono::Initialize()
 {
@@ -187,38 +206,56 @@ bool Mono::Exports::Initialize()
 {
 	Debug::Msg("Initializing Mono Exports...");
 
-	mono_jit_init = (mono_jit_init_t)Assertion::GetExport(Module, "mono_jit_init");
-	mono_thread_set_main = (mono_thread_set_main_t)Assertion::GetExport(Module, "mono_thread_set_main");
-	mono_thread_current = (mono_thread_current_t)Assertion::GetExport(Module, "mono_thread_current");
-	mono_add_internal_call = (mono_add_internal_call_t)Assertion::GetExport(Module, "mono_add_internal_call");
-	mono_runtime_invoke = (mono_runtime_invoke_t)Assertion::GetExport(Module, "mono_runtime_invoke");
-	mono_method_get_name = (mono_method_get_name_t)Assertion::GetExport(Module, "mono_method_get_name");
-	mono_domain_assembly_open = (mono_domain_assembly_open_t)Assertion::GetExport(Module, "mono_domain_assembly_open");
-	mono_assembly_get_image = (mono_assembly_get_image_t)Assertion::GetExport(Module, "mono_assembly_get_image");
-	mono_class_from_name = (mono_class_from_name_t)Assertion::GetExport(Module, "mono_class_from_name");
-	mono_class_get_method_from_name = (mono_class_get_method_from_name_t)Assertion::GetExport(Module, "mono_class_get_method_from_name");
-	mono_string_to_utf8 = (mono_string_to_utf8_t)Assertion::GetExport(Module, "mono_string_to_utf8");
-	mono_string_new = (mono_string_new_t)Assertion::GetExport(Module, "mono_string_new");
-	mono_object_get_class = (mono_object_get_class_t)Assertion::GetExport(Module, "mono_object_get_class");
-	mono_class_get_property_from_name = (mono_class_get_property_from_name_t)Assertion::GetExport(Module, "mono_class_get_property_from_name");
-	mono_property_get_get_method = (mono_property_get_get_method_t)Assertion::GetExport(Module, "mono_property_get_get_method");
+	#define MONODEF(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn);
+
+	MONODEF(mono_jit_init)
+	MONODEF(mono_thread_set_main)
+	MONODEF(mono_thread_current)
+	MONODEF(mono_add_internal_call)
+	MONODEF(mono_lookup_internal_call)
+	MONODEF(mono_runtime_invoke)
+	MONODEF(mono_method_get_name)
+	MONODEF(mono_domain_assembly_open)
+	MONODEF(mono_assembly_get_image)
+	MONODEF(mono_class_from_name)
+	MONODEF(mono_class_get_method_from_name)
+	MONODEF(mono_string_to_utf8)
+	MONODEF(mono_string_new)
+	MONODEF(mono_object_get_class)
+	MONODEF(mono_class_get_property_from_name)
+	MONODEF(mono_property_get_get_method)
+	MONODEF(mono_free)
 
 	if (!IsOldMono)
 	{
-		mono_domain_set_config = (mono_domain_set_config_t)Assertion::GetExport(Module, "mono_domain_set_config");
-		mono_unity_get_unitytls_interface = (mono_unity_get_unitytls_interface_t)Assertion::GetExport(Module, "mono_unity_get_unitytls_interface");
+		MONODEF(mono_domain_set_config)
+		MONODEF(mono_unity_get_unitytls_interface)
 	}
 
 	if (Game::IsIl2Cpp) 
 	{
-		mono_set_assemblies_path = (mono_set_assemblies_path_t)Assertion::GetExport(Module, "mono_set_assemblies_path");
-		mono_assembly_setrootdir = (mono_assembly_setrootdir_t)Assertion::GetExport(Module, "mono_assembly_setrootdir");
-		mono_set_config_dir = (mono_set_config_dir_t)Assertion::GetExport(Module, "mono_set_config_dir");
+		MONODEF(mono_set_assemblies_path)
+		MONODEF(mono_assembly_setrootdir)
+		MONODEF(mono_set_config_dir)
 		if (!IsOldMono)
-			mono_runtime_set_main_args = (mono_runtime_set_main_args_t)Assertion::GetExport(Module, "mono_runtime_set_main_args");
+			MONODEF(mono_runtime_set_main_args)
+
+		MONODEF(mono_raise_exception)
+		MONODEF(mono_get_exception_bad_image_format)
+		MONODEF(mono_image_open_full)
+		MONODEF(mono_image_open_from_data_full)
+		MONODEF(mono_image_close)
+		MONODEF(mono_image_get_table_rows)
+		MONODEF(mono_metadata_decode_table_row_col)
+		MONODEF(mono_array_addr_with_size)
+		MONODEF(mono_array_length)
+		MONODEF(mono_metadata_string_heap)
+		MONODEF(mono_class_get_name)
 	}
 	else
-		mono_jit_init_version = (mono_jit_init_version_t)Assertion::GetExport(Module, "mono_jit_init_version");
+		MONODEF(mono_jit_init_version)
+
+	#undef MONODEF
 
 	return Assertion::ShouldContinue;
 }
