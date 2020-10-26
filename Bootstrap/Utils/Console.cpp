@@ -16,6 +16,7 @@ bool Console::HideWarnings = false;
 Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
 HWND Console::Window = NULL;
 HMENU Console::Menu = NULL;
+CONSOLE_SCREEN_BUFFER_INFO Console::ConsoleInfo;
 HANDLE Console::OutputHandle = NULL;
 int Console::rainbow = 1;
 
@@ -45,6 +46,11 @@ bool Console::Initialize()
 	if (!GetConsoleMode(OutputHandle, &mode))
 	{
 		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
+		return false;
+	}
+	if (!GetConsoleScreenBufferInfo(OutputHandle, &ConsoleInfo))
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Console Screen Buffer Info!");
 		return false;
 	}
 	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
@@ -173,10 +179,6 @@ void Console::Write(const char* txt)
 {
 	if (!IsInitialized())
 		return;
-	CONSOLE_SCREEN_BUFFER_INFO info;
-	if (!GetConsoleScreenBufferInfo(OutputHandle, &info))
-		return;
-	Color original = (Color)info.wAttributes;
 	std::cout << txt;
-	SetColor(original);
+	SetColor((Color)ConsoleInfo.wAttributes);
 };

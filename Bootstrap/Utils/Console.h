@@ -50,6 +50,7 @@ public:
 private:
 	static HWND Window;
 	static HMENU Menu;
+	static CONSOLE_SCREEN_BUFFER_INFO ConsoleInfo;
 	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }
 	static int rainbow;
 	static Color GetRainbowColor();
