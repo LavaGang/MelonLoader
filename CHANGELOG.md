@@ -111,20 +111,19 @@
 89. Added Legacy Style Methods to MelonPreferences.
 90. Fixed Issue with the GetString and SetString methods for ModPrefs and MelonPrefs Legacy Support.
 91. Fixed Logger Flushing.
-92. Fixed Issue with Console Log Coloring.
-93. Redirected 0Harmony.dll References to MelonLoader.dll.
-94. Added Current Culture Fix to ensure Culture is always Invariant.
-95. Fixed Issue with Product Names and Versions not using Translation Query.
-96. Fixed Issue with Debug Compilation.
-97. Added SHA512 Check to Installer Updates.
-98. Added SHA512 Check to Installer Downloads.
-99. Fixed Issue when using the Installer to install v0.2.
-100. Fixed Issue with Releases Selection in Installer not being properly Sorted.
-101. Added Shortcut Support to Installer.
-102. Added HarmonyShield Attribute.
-103. HarmonyShield now protects Methods and Assembly from being patched.
-104. Added HarmonyShield Protection to MelonLoader, SM_Il2Cpp, SM_Mono, SM_Mono.Pre-2017, and SM_Mono.Pre-5.
-105. Fixed Issue with Unneeded Return in Logger breaking Logs after Plugin Loading.
+92. Redirected 0Harmony.dll References to MelonLoader.dll.
+93. Added Current Culture Fix to ensure Culture is always Invariant.
+94. Fixed Issue with Product Names and Versions not using Translation Query.
+95. Fixed Issue with Debug Compilation.
+96. Added SHA512 Check to Installer Updates.
+97. Added SHA512 Check to Installer Downloads.
+98. Fixed Issue when using the Installer to install v0.2.
+99. Fixed Issue with Releases Selection in Installer not being properly Sorted.
+100. Added Shortcut Support to Installer.
+101. Added HarmonyShield Attribute.
+102. HarmonyShield now protects Methods and Assembly from being patched.
+103. Added HarmonyShield Protection to MelonLoader, SM_Il2Cpp, SM_Mono, SM_Mono.Pre-2017, and SM_Mono.Pre-5.
+104. Fixed Issue with Unneeded Return in Logger breaking Logs after Plugin Loading.
 
 ---
 
