@@ -50,6 +50,9 @@
     <ClCompile Include="Managers\Exports.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Managers\AssemblyVerifier.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -118,6 +121,9 @@
       <Filter>Base\MSDetours</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Managers\AssemblyVerifier.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Bootstrap.rc" />
