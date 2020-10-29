@@ -139,9 +139,6 @@ namespace MelonLoader
         public static event Action<string, string> WarningCallbackHandler;
         internal static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler?.Invoke(namesection, msg);
         public static event Action<string, string> ErrorCallbackHandler;
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_PrintModName(ConsoleColor color, string name, string version);
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static void Internal_Msg(ConsoleColor color, string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -152,6 +149,8 @@ namespace MelonLoader
         internal extern static void ThrowInternalFailure(string msg);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void WriteSpacer();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Internal_PrintModName(ConsoleColor color, string name, string version);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Flush();
         [Obsolete("Log is obsolete. Please use Msg instead.")]

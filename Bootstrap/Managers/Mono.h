@@ -26,6 +26,7 @@ public:
 	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
+	static void Free(void* ptr);
 
 	typedef enum
 	{
@@ -175,6 +176,7 @@ public:
 		MONODEF(Property*, mono_class_get_property_from_name, (Class* klass, const char* name))
 		MONODEF(Method*, mono_property_get_get_method, (Property* prop))
 		MONODEF(void, mono_free, (void* ptr))
+		MONODEF(void, g_free, (void* ptr))
 		
 		MONODEF(void, mono_raise_exception, (Object *ex))
 		MONODEF(Object*, mono_get_exception_bad_image_format, (const char *msg))

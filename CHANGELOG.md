@@ -131,6 +131,7 @@
 109. Added string Parameter to OnSceneWasLoaded and OnSceneWasInitialized that gets passed the Scene's Name.
 110. Plugin and Mods now have their Names Colorized properly when Loading.
 111. Added HarmonyShield Support for Classes and Structs.
+112. Fixed Internal Failure with mono_free on Non-BleedingEdge Mono Games.
 
 ---
 

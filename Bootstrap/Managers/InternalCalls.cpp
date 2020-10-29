@@ -30,8 +30,8 @@ void InternalCalls::MelonLogger::Internal_Msg(Console::Color color, Mono::String
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
 	Logger::Internal_Msg(color, nsStr, txtStr);
-	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
-	Mono::Exports::mono_free(txtStr);
+	if (nsStr != NULL) Mono::Free(nsStr);
+	Mono::Free(txtStr);
 }
 
 void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color color, Mono::String* name, Mono::String* version)
@@ -39,8 +39,8 @@ void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color color, Mon
 	auto nameStr = Mono::Exports::mono_string_to_utf8(name);
 	auto versionStr = Mono::Exports::mono_string_to_utf8(version);
 	Logger::Internal_PrintModName(color, nameStr, versionStr);
-	Mono::Exports::mono_free(nameStr);
-	Mono::Exports::mono_free(versionStr);
+	Mono::Free(nameStr);
+	Mono::Free(versionStr);
 }
 
 void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mono::String* txt)
@@ -48,8 +48,8 @@ void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mon
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
 	Logger::Internal_Warning(nsStr, txtStr);
-	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
-	Mono::Exports::mono_free(txtStr);
+	if (nsStr != NULL) Mono::Free(nsStr);
+	Mono::Free(txtStr);
 }
 
 void InternalCalls::MelonLogger::Internal_Error(Mono::String* namesection, Mono::String* txt)
@@ -57,15 +57,15 @@ void InternalCalls::MelonLogger::Internal_Error(Mono::String* namesection, Mono:
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
 	Logger::Internal_Error(nsStr, txtStr);
-	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
-	Mono::Exports::mono_free(txtStr);
+	if (nsStr != NULL) Mono::Free(nsStr);
+	Mono::Free(txtStr);
 }
 
 void InternalCalls::MelonLogger::ThrowInternalFailure(Mono::String* msg)
 {
 	auto str = Mono::Exports::mono_string_to_utf8(msg);
 	Assertion::ThrowInternalFailure(str);
-	Mono::Exports::mono_free(str);
+	Mono::Free(str);
 }
 
 void InternalCalls::MelonLogger::WriteSpacer() { Logger::WriteSpacer(); }
@@ -98,7 +98,7 @@ void InternalCalls::MelonUtils::SCT(Mono::String* title)
 	if (title == NULL) return;
 	auto str = Mono::Exports::mono_string_to_utf8(title);
 	Console::SetTitle(str);
-	Mono::Exports::mono_free(str);
+	Mono::Free(str);
 }
 
 Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepath)
@@ -107,7 +107,7 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 	if (filepathstr == NULL)
 		return NULL;
 	const char* info = Core::GetFileInfoProductName(filepathstr);
-	Mono::Exports::mono_free(filepathstr);
+	Mono::Free(filepathstr);
 	if (info == NULL)
 		return NULL;
 	return Mono::Exports::mono_string_new(Mono::domain, info);
@@ -151,8 +151,8 @@ void InternalCalls::MelonDebug::Internal_Msg(Mono::String* namesection, Mono::St
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
 	Debug::Internal_Msg(nsStr, txtStr);
-	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
-	Mono::Exports::mono_free(txtStr);
+	if (nsStr != NULL) Mono::Free(nsStr);
+	Mono::Free(txtStr);
 }
 
 void InternalCalls::MelonDebug::AddInternalCalls()

@@ -140,7 +140,7 @@ Mono::Object** AssemblyVerifier::LoadFromPatch(Mono::String** path, int refonly,
 
         auto pathUtf = Mono::Exports::mono_string_to_utf8(*path);
         auto image = Mono::Exports::mono_image_open_full(pathUtf, &status, true);
-        Mono::Exports::mono_free(pathUtf);
+        Mono::Free(pathUtf);
         if (image == NULL)
             Mono::Exports::mono_raise_exception(Mono::Exports::mono_get_exception_bad_image_format("Unable to load image"));
         

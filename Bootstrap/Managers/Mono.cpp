@@ -47,6 +47,7 @@ MONODEF(mono_object_get_class)
 MONODEF(mono_class_get_property_from_name)
 MONODEF(mono_property_get_get_method)
 MONODEF(mono_free)
+MONODEF(g_free)
 
 MONODEF(mono_raise_exception)
 MONODEF(mono_get_exception_bad_image_format)
@@ -202,6 +203,14 @@ void Mono::AddInternalCall(const char* name, void* method)
 	Exports::mono_add_internal_call(name, method);
 }
 
+void Mono::Free(void* ptr)
+{
+	if (IsOldMono)
+		Exports::g_free(ptr);
+	else
+		Exports::mono_free(ptr);
+}
+
 bool Mono::Exports::Initialize()
 {
 	Debug::Msg("Initializing Mono Exports...");
@@ -224,13 +233,15 @@ bool Mono::Exports::Initialize()
 	MONODEF(mono_object_get_class)
 	MONODEF(mono_class_get_property_from_name)
 	MONODEF(mono_property_get_get_method)
-	MONODEF(mono_free)
 
 	if (!IsOldMono)
 	{
 		MONODEF(mono_domain_set_config)
 		MONODEF(mono_unity_get_unitytls_interface)
+		MONODEF(mono_free)
 	}
+	else
+		MONODEF(g_free)
 
 	if (Game::IsIl2Cpp) 
 	{
