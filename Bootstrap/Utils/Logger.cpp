@@ -141,7 +141,7 @@ void Logger::Error(const char* txt)
 		<< "\x1b[37m";
 }
 
-void Logger::Internal_Msg(const char* namesection, const char* txt)
+void Logger::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
 {
 	if (namesection == NULL)
 	{
@@ -159,7 +159,7 @@ void Logger::Internal_Msg(const char* namesection, const char* txt)
 		<< "] "
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "["
-		<< Console::ColorToAnsi(Console::Color::Magenta)
+		<< Console::ColorToAnsi(color)
 		<< namesection
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "] "

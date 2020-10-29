@@ -47,6 +47,11 @@ namespace MelonLoader
         public MelonInfoAttribute Info { get; internal set; }
 
         /// <summary>
+        /// Color Attribute of the Melon.
+        /// </summary>
+        public MelonColorAttribute Color { get; internal set; }
+
+        /// <summary>
         /// Game Attributes of the Melon.
         /// </summary>
         public MelonGameAttribute[] Games { get; internal set; }

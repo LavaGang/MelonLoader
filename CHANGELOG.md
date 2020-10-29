@@ -126,6 +126,7 @@
 104. Fixed Issue with Unneeded Return in Logger breaking Logs after Plugin Loading.
 105. Fixed Issue with Console Buffer.
 106. Fixed Issue with Console Coloring.
+107. Added MelonColor Attribute for Melons to set their Name Color.
 
 ---
 

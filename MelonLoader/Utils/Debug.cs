@@ -9,29 +9,53 @@ namespace MelonLoader
     {
         public static void Msg(string txt)
         {
-            string namesection = MelonLogger.GetNameSection();
-            Internal_Msg(namesection, txt);
-            RunMsgCallbacks(namesection, txt);
+            ConsoleColor color = ConsoleColor.Magenta;
+            string namesection = null;
+            MelonBase melon = MelonLogger.GetMelonFromStackTrace();
+            if (melon != null)
+            {
+                namesection = melon.Info.Name.Replace(" ", "_");
+                if (melon.Color != null)
+                    color = melon.Color.Color;
+            }
+            Internal_Msg(color, namesection, txt);
+            RunMsgCallbacks(color, namesection, txt);
         }
         public static void Msg(string txt, params object[] args)
         {
-            string namesection = MelonLogger.GetNameSection();
+            ConsoleColor color = ConsoleColor.Magenta;
+            string namesection = null;
+            MelonBase melon = MelonLogger.GetMelonFromStackTrace();
+            if (melon != null)
+            {
+                namesection = melon.Info.Name.Replace(" ", "_");
+                if (melon.Color != null)
+                    color = melon.Color.Color;
+            }
             string fmt = string.Format(txt, args);
-            Internal_Msg(namesection, fmt);
-            RunMsgCallbacks(namesection, fmt);
+            Internal_Msg(color, namesection, fmt);
+            RunMsgCallbacks(color, namesection, fmt);
         }
         public static void Msg(object obj)
         {
-            string namesection = MelonLogger.GetNameSection();
+            ConsoleColor color = ConsoleColor.Magenta;
+            string namesection = null;
+            MelonBase melon = MelonLogger.GetMelonFromStackTrace();
+            if (melon != null)
+            {
+                namesection = melon.Info.Name.Replace(" ", "_");
+                if (melon.Color != null)
+                    color = melon.Color.Color;
+            }
             string objstr = obj.ToString();
-            Internal_Msg(namesection, objstr);
-            RunMsgCallbacks(namesection, objstr);
+            Internal_Msg(color, namesection, objstr);
+            RunMsgCallbacks(color, namesection, objstr);
         }
-        internal static void RunMsgCallbacks(string namesection, string msg) => MsgCallbackHandler?.Invoke(namesection, msg);
-        public static event Action<string, string> MsgCallbackHandler;
+        internal static void RunMsgCallbacks(ConsoleColor color, string namesection, string msg) => MsgCallbackHandler?.Invoke(color, namesection, msg);
+        public static event Action<ConsoleColor, string, string> MsgCallbackHandler;
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsEnabled();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Msg(string namesection, string txt);
+        private extern static void Internal_Msg(ConsoleColor color, string namesection, string txt);
     }
 }

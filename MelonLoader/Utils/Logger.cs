@@ -9,41 +9,74 @@ namespace MelonLoader
     {
         public static void Msg(string txt)
         {
-            string namesection = GetNameSection();
-            Internal_Msg(namesection, txt);
-            RunMsgCallbacks(namesection, txt);
+            ConsoleColor color = ConsoleColor.Magenta;
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+            {
+                namesection = melon.Info.Name.Replace(" ", "_");
+                if (melon.Color != null)
+                    color = melon.Color.Color;
+            }
+            Internal_Msg(color, namesection, txt);
+            RunMsgCallbacks(color, namesection, txt);
         }
         public static void Msg(string txt, params object[] args)
         {
-            string namesection = GetNameSection();
+            ConsoleColor color = ConsoleColor.Magenta;
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+            {
+                namesection = melon.Info.Name.Replace(" ", "_");
+                if (melon.Color != null)
+                    color = melon.Color.Color;
+            }
             string fmt = string.Format(txt, args);
-            Internal_Msg(namesection, fmt);
-            RunMsgCallbacks(namesection, fmt);
+            Internal_Msg(color, namesection, fmt);
+            RunMsgCallbacks(color, namesection, fmt);
         }
         public static void Msg(object obj)
         {
-            string namesection = GetNameSection();
+            ConsoleColor color = ConsoleColor.Magenta;
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+            {
+                namesection = melon.Info.Name.Replace(" ", "_");
+                if (melon.Color != null)
+                    color = melon.Color.Color;
+            }
             string objstr = obj.ToString();
-            Internal_Msg(namesection, objstr);
-            RunMsgCallbacks(namesection, objstr);
+            Internal_Msg(color, namesection, objstr);
+            RunMsgCallbacks(color, namesection, objstr);
         }
 
         public static void Warning(string txt)
         {
-            string namesection = GetNameSection();
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+                namesection = melon.Info.Name.Replace(" ", "_");
             Internal_Warning(namesection, txt);
             RunWarningCallbacks(namesection, txt);
         }
         public static void Warning(string txt, params object[] args)
         {
-            string namesection = GetNameSection();
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+                namesection = melon.Info.Name.Replace(" ", "_");
             string fmt = string.Format(txt, args);
             Internal_Warning(namesection, fmt);
             RunWarningCallbacks(namesection, fmt);
         }
         public static void Warning(object obj)
         {
-            string namesection = GetNameSection();
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+                namesection = melon.Info.Name.Replace(" ", "_");
             string objstr = obj.ToString();
             Internal_Warning(namesection, objstr);
             RunWarningCallbacks(namesection, objstr);
@@ -51,26 +84,35 @@ namespace MelonLoader
 
         public static void Error(string txt)
         {
-            string namesection = GetNameSection();
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+                namesection = melon.Info.Name.Replace(" ", "_");
             Internal_Error(namesection, txt);
             RunErrorCallbacks(namesection, txt);
         }
         public static void Error(string txt, params object[] args)
         {
-            string namesection = GetNameSection();
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+                namesection = melon.Info.Name.Replace(" ", "_");
             string fmt = string.Format(txt, args);
             Internal_Error(namesection, fmt);
             RunErrorCallbacks(namesection, fmt);
         }
         public static void Error(object obj)
         {
-            string namesection = GetNameSection();
+            string namesection = null;
+            MelonBase melon = GetMelonFromStackTrace();
+            if (melon != null)
+                namesection = melon.Info.Name.Replace(" ", "_");
             string objstr = obj.ToString();
             Internal_Error(namesection, objstr);
             RunErrorCallbacks(namesection, objstr);
         }
 
-        internal static string GetNameSection()
+        internal static MelonBase GetMelonFromStackTrace()
         {
             StackTrace st = new StackTrace(2, true);
             StackFrame sf = st.GetFrame(0);
@@ -88,20 +130,18 @@ namespace MelonLoader
             MelonBase melon = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
             if (melon == null)
                 melon = MelonHandler.Mods.Find(x => (x.Assembly == asm));
-            if (melon == null)
-                return null;
-            return melon.Info.Name.Replace(" ", "_");
+            return melon;
         }
 
-        internal static void RunMsgCallbacks(string namesection, string msg) => MsgCallbackHandler?.Invoke(namesection, msg);
-        public static event Action<string, string> MsgCallbackHandler;
+        internal static void RunMsgCallbacks(ConsoleColor color, string namesection, string msg) => MsgCallbackHandler?.Invoke(color, namesection, msg);
+        public static event Action<ConsoleColor, string, string> MsgCallbackHandler;
         internal static void RunWarningCallbacks(string namesection, string msg) => WarningCallbackHandler?.Invoke(namesection, msg);
         public static event Action<string, string> WarningCallbackHandler;
         internal static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler?.Invoke(namesection, msg);
         public static event Action<string, string> ErrorCallbackHandler;
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Msg(string namesection, string txt);
+        private extern static void Internal_Msg(ConsoleColor color, string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static void Internal_Warning(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]

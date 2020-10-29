@@ -1,5 +1,6 @@
 #pragma once
 #include "Mono.h"
+#include "../Utils/Console.h"
 
 class InternalCalls
 {
@@ -17,7 +18,7 @@ public:
 	{
 	public:
 		static void AddInternalCalls();
-		static void Internal_Msg(Mono::String* namesection, Mono::String* txt);
+		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
 	    static void Internal_Warning(Mono::String* namesection, Mono::String* txt);
 		static void Internal_Error(Mono::String* namesection, Mono::String* txt);
 		static void ThrowInternalFailure(Mono::String* msg);

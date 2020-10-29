@@ -25,11 +25,11 @@ void InternalCalls::MelonCore::AddInternalCalls()
 #pragma endregion
 
 #pragma region MelonLogger
-void InternalCalls::MelonLogger::Internal_Msg(Mono::String* namesection, Mono::String* txt)
+void InternalCalls::MelonLogger::Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Internal_Msg(nsStr, txtStr);
+	Logger::Internal_Msg(color, nsStr, txtStr);
 	if (nsStr != NULL) Mono::Exports::mono_free(nsStr);
 	Mono::Exports::mono_free(txtStr);
 }

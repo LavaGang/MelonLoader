@@ -19,7 +19,7 @@ public:
 	static void Warning(const char* txt);
 	static void Error(const char* txt);
 
-	static void Internal_Msg(const char* namesection, const char* txt);
+	static void Internal_Msg(Console::Color color, const char* namesection, const char* txt);
 	static void Internal_Warning(const char* namesection, const char* txt);
 	static void Internal_Error(const char* namesection, const char* txt);
 

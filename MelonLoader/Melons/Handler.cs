@@ -336,6 +336,7 @@ namespace MelonLoader
             }
             baseInstance.Info = infoAttribute;
             baseInstance.Games = gameAttributes;
+            baseInstance.Color = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonColorAttribute))) as MelonColorAttribute;
             baseInstance.OptionalDependencies = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonOptionalDependenciesAttribute))) as MelonOptionalDependenciesAttribute;
             baseInstance.Location = filelocation;
             baseInstance.Compatibility = melonCompatibility;
