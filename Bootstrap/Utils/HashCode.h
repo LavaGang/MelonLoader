@@ -5,12 +5,10 @@
 class HashCode
 {
 public:
-	static char* Hash1;
-	static char* Hash2;
-	static char* Hash3;
+	static DWORD Hash;
 	static bool Initialize();
 	static bool SetupPaths();
 
 private:
-	static bool GetHash(const char* path, char** output);
+	static bool AddHash(const char* path);
 };

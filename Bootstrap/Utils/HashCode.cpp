@@ -7,17 +7,16 @@
 #include <string>
 #include <wincrypt.h>
 #include "Assertion.h"
+#include "Logger.h"
 
-char* HashCode::Hash1 = NULL;
-char* HashCode::Hash2 = NULL;
-char* HashCode::Hash3 = NULL;
+DWORD HashCode::Hash = NULL;
 
 bool HashCode::Initialize()
 {
     return (SetupPaths()
-        && GetHash(BaseAssembly::Path, &Hash1)
-        && GetHash(Core::Path, &Hash2)
-        && (!Game::IsIl2Cpp || GetHash(AssemblyGenerator::Path, &Hash3)));
+        && AddHash(BaseAssembly::Path)
+        && AddHash(Core::Path)
+        && (!Game::IsIl2Cpp || AddHash(AssemblyGenerator::Path)));
 }
 
 bool HashCode::SetupPaths()
@@ -50,7 +49,7 @@ bool HashCode::SetupPaths()
 	return true;
 }
 
-bool HashCode::GetHash(const char* path, char** output)
+bool HashCode::AddHash(const char* path)
 {
     HANDLE filehandle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (filehandle == INVALID_HANDLE_VALUE)
@@ -108,9 +107,7 @@ bool HashCode::GetHash(const char* path, char** output)
     }
     for (DWORD i = 0; i < dhash; i++)
         hashout += std::to_string(chartbl[hashbuf[i] >> 4]) + std::to_string(chartbl[hashbuf[i] & 0xf]);
-    *output = new char[hashout.size() + 1];
-    std::copy(hashout.begin(), hashout.end(), *output);
-    (*output)[hashout.size()] = '\0';
+    Hash += strtoul(hashout.c_str(), NULL, 0);
     CryptDestroyHash(crypthash);
     CryptReleaseContext(cryptprov, 0);
     CloseHandle(filehandle);

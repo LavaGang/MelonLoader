@@ -64,9 +64,8 @@ void Core::WelcomeMessage()
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
 	Logger::Msg("------------------------------");
-	Logger::Msg((std::string("Hash Code:\n") + HashCode::Hash1 + "\n" + HashCode::Hash2 + (Game::IsIl2Cpp ? ("\n" + std::string(HashCode::Hash3)) : "")).c_str());
-	Logger::Msg("------------------------------");
 	Logger::Msg(("MelonLoader " + std::string(Version) + " Open-Beta").c_str());
+	Logger::Msg((std::string("Hash Code: ") + std::to_string(HashCode::Hash)).c_str());
 	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
 	Logger::Msg("------------------------------");
 	Logger::Msg(("Name: " + std::string(Game::Name)).c_str());
