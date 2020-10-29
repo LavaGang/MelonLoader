@@ -17,7 +17,6 @@ bool Console::HideWarnings = false;
 Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
 HWND Console::Window = NULL;
 HMENU Console::Menu = NULL;
-CONSOLE_SCREEN_BUFFER_INFO Console::ConsoleInfo;
 HANDLE Console::OutputHandle = NULL;
 int Console::rainbow = 1;
 
@@ -52,12 +51,6 @@ bool Console::Initialize()
 	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
 	{
 		Assertion::ThrowInternalFailure("Failed to Enable Virtual Terminal Processing!");
-		return false;
-	}
-
-	if (!GetConsoleScreenBufferInfo(OutputHandle, &ConsoleInfo))
-	{
-		Assertion::ThrowInternalFailure("Failed to Get Console Screen Buffer Info!");
 		return false;
 	}
 	return true;
