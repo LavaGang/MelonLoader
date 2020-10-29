@@ -70,22 +70,17 @@ namespace MelonLoader
         private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e) { if (!IsSaving) Load(); }
         public static void Load()
         {
-            MelonLogger.Msg("1");
             if (!File.Exists(FilePath))
                 return;
-            MelonLogger.Msg("2");
             string filestr = File.ReadAllText(FilePath);
             if (string.IsNullOrEmpty(filestr))
                 return;
-            MelonLogger.Msg("3");
             DocumentSyntax docsyn = Toml.Parse(filestr);
             if (docsyn == null)
                 return;
-            MelonLogger.Msg("4");
             TomlTable model = docsyn.ToModel();
             if (model.Count <= 0)
                 return;
-            MelonLogger.Msg("5");
             foreach (KeyValuePair<string, object> keypair in model)
             {
                 string category_name = keypair.Key;
@@ -96,15 +91,60 @@ namespace MelonLoader
                 foreach (KeyValuePair<string, object> tblkeypair in tbl)
                 {
                     string name = tblkeypair.Key;
-                    Type type = tblkeypair.Value.GetType();
-                    if (type == typeof(string))
-                        category.LoadEntry(name, (string)tblkeypair.Value);
-                    else if (type == typeof(bool))
-                        category.LoadEntry(name, (bool)tblkeypair.Value);
-                    else if (type == typeof(int))
-                        category.LoadEntry(name, (int)tblkeypair.Value);
-                    else if (type == typeof(float))
-                        category.LoadEntry(name, (float)tblkeypair.Value);
+                    if (string.IsNullOrEmpty(name))
+                        continue;
+                    TomlObject obj = TomlObject.ToTomlObject(tblkeypair.Value);
+                    if (obj == null)
+                        continue;
+                    MelonPreferences_Entry entry = category.GetEntry(name);
+                    if (entry == null)
+                    {
+                        if (obj.Kind == ObjectKind.String)
+                            entry = category.CreateEntry(name, ((TomlString)obj).Value);
+                        else if (obj.Kind == ObjectKind.Boolean)
+                            entry = category.CreateEntry(name, ((TomlBoolean)obj).Value);
+                        else if (obj.Kind == ObjectKind.Integer)
+                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value);
+                        else if (obj.Kind == ObjectKind.Float)
+                            entry = category.CreateEntry(name, (float)((TomlFloat)obj).Value);
+                    }
+                    if ((entry.Type == MelonPreferences_Entry.TypeEnum.STRING) && (obj.Kind != ObjectKind.String))
+                        continue;
+                    else if ((entry.Type == MelonPreferences_Entry.TypeEnum.STRING) && (obj.Kind == ObjectKind.String))
+                        entry.SetString((string)tblkeypair.Value);
+                    if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
+                    {
+                        bool val = false;
+                        if (obj.Kind == ObjectKind.Boolean)
+                            val = ((TomlBoolean)obj).Value;
+                        else if (obj.Kind == ObjectKind.Integer)
+                            val = (((TomlInteger)obj).Value > 0);
+                        else if (obj.Kind == ObjectKind.Float)
+                            val = (((TomlFloat)obj).Value > 0);
+                        entry.SetBool(val);
+                    }
+                    else if(entry.Type == MelonPreferences_Entry.TypeEnum.INT)
+                    {
+                        int val = 0;
+                        if (obj.Kind == ObjectKind.Boolean)
+                            val = (((TomlBoolean)obj).Value ? 1 : 0);
+                        else if (obj.Kind == ObjectKind.Integer)
+                            val = (int)((TomlInteger)obj).Value;
+                        else if (obj.Kind == ObjectKind.Float)
+                            val = (int)((TomlFloat)obj).Value;
+                        entry.SetInt(val);
+                    }
+                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
+                    {
+                        float val = 0;
+                        if (obj.Kind == ObjectKind.Boolean)
+                            val = (((TomlBoolean)obj).Value ? 1f : 0f);
+                        else if (obj.Kind == ObjectKind.Integer)
+                            val = ((TomlInteger)obj).Value;
+                        else if (obj.Kind == ObjectKind.Float)
+                            val = (float)((TomlFloat)obj).Value;
+                        entry.SetFloat(val);
+                    }
                 }
             }
         }

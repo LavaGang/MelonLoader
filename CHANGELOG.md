@@ -135,6 +135,7 @@
 113. Improved HashCode Implementation.
 114. Added HashCodes for Support Modules.
 115. Added File Change Detection for MelonPreferences.
+116. Fixed Issue with MelonPreferences not Updating after Load.
 
 ---
 
