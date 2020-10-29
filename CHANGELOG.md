@@ -133,6 +133,7 @@
 111. Added HarmonyShield Support for Classes and Structs.
 112. Fixed Internal Failure with mono_free on Non-BleedingEdge Mono Games.
 113. Improved HashCode Implementation.
+114. Added HashCodes for Support Modules.
 
 ---
 
