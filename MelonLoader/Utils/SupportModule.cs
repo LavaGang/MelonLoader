@@ -88,8 +88,7 @@ namespace MelonLoader
 
     public interface ISupportModule_From
     {
-        void OnSceneWasLoaded(int buildIndex);
-        void OnSceneWasInitialized(int buildIndex);
+        void OnSceneWasLoaded(int buildIndex, string sceneName);
         void Update();
         void FixedUpdate();
         void LateUpdate();
@@ -100,8 +99,7 @@ namespace MelonLoader
 
     internal class SupportModule_From : ISupportModule_From
     {
-        public void OnSceneWasLoaded(int buildIndex) => MelonHandler.OnSceneWasLoaded(buildIndex);
-        public void OnSceneWasInitialized(int buildIndex) => MelonHandler.OnSceneWasInitialized(buildIndex);
+        public void OnSceneWasLoaded(int buildIndex, string sceneName) => MelonHandler.OnSceneWasLoaded(buildIndex, sceneName);
         public void Update() => MelonHandler.OnUpdate();
         public void FixedUpdate() => MelonHandler.OnFixedUpdate();
         public void LateUpdate() => MelonHandler.OnLateUpdate();

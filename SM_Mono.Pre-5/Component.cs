@@ -11,7 +11,7 @@ namespace MelonLoader.Support
         internal void Destroy() { IsDestroying = true; GameObject.Destroy(gameObject); }
         void Awake() { foreach (var queuedCoroutine in SupportModule_To.QueuedCoroutines) StartCoroutine(queuedCoroutine); SupportModule_To.QueuedCoroutines.Clear(); }
         void Start() => SiblingFix();
-        void Update() { SiblingFix(); int loadedLevel = Application.loadedLevel; if (loadedLevel != CurrentSceneIndex) { Main.Interface.OnSceneWasLoaded(loadedLevel); CurrentSceneIndex = loadedLevel; } Main.Interface.Update(); }
+        void Update() { SiblingFix(); if (Application.loadedLevel != CurrentSceneIndex) { CurrentSceneIndex = Application.loadedLevel; Main.Interface.OnSceneWasLoaded(Application.loadedLevel, Application.loadedLevelName);  } Main.Interface.Update(); }
         void FixedUpdate() => Main.Interface.FixedUpdate();
         void LateUpdate() => Main.Interface.LateUpdate();
         void OnGUI() => Main.Interface.OnGUI();

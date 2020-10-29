@@ -16,6 +16,6 @@ namespace MelonLoader.Support
             return new SupportModule_To();
         }
 
-        private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (obj == null) Component.Create(); if (!scene.Equals(null)) Interface.OnSceneWasInitialized(scene.buildIndex); }
+        private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (obj == null) Component.Create(); if (!scene.Equals(null)) Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
     }
 }

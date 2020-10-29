@@ -382,21 +382,23 @@ namespace MelonLoader
 
         private static bool SceneWasJustLoaded = false;
         private static int CurrentSceneBuildIndex = -1;
-        internal static void OnSceneWasLoaded(int buildIndex)
+        private static string CurrentSceneName = null;
+        internal static void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
             SceneWasJustLoaded = true;
             CurrentSceneBuildIndex = buildIndex;
+            CurrentSceneName = sceneName;
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnSceneWasLoaded(buildIndex); mod.OnLevelWasLoaded(buildIndex); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { mod.OnLevelWasLoaded(CurrentSceneBuildIndex); mod.OnSceneWasLoaded(CurrentSceneBuildIndex); mod.OnSceneWasLoaded(CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         private static bool InitializeScene = false;
-        internal static void OnSceneWasInitialized(int buildIndex)
+        internal static void OnSceneWasInitialized()
         {
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnSceneWasInitialized(buildIndex); mod.OnLevelWasInitialized(buildIndex); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { mod.OnLevelWasInitialized(CurrentSceneBuildIndex); mod.OnSceneWasInitialized(CurrentSceneBuildIndex); mod.OnSceneWasInitialized(CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnUpdate()
@@ -404,7 +406,7 @@ namespace MelonLoader
             if (InitializeScene)
             {
                 InitializeScene = false;
-                OnSceneWasInitialized(CurrentSceneBuildIndex);
+                OnSceneWasInitialized();
             }
             if (SceneWasJustLoaded)
             {

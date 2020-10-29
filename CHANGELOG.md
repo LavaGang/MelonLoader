@@ -127,6 +127,8 @@
 105. Fixed Issue with Console Buffer.
 106. Fixed Issue with Console Coloring.
 107. Added MelonColor Attribute for Melons to set their Name Color.
+108. Fixed Issue with OnSceneWasLoaded not being called.
+109. Added string Parameter Overrides for OnSceneWasLoaded and OnSceneWasInitialized that get passed the Scene's Name.
 
 ---
 

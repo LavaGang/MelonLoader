@@ -49,7 +49,7 @@ namespace MelonLoader.Support
             return new SupportModule_To();
         }
 
-        private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (scene != null) Interface.OnSceneWasLoaded(scene.buildIndex); }
+        private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (scene != null) Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
         private static void OnPostRender(Camera cam) { if (OnPostRenderCam == null) OnPostRenderCam = cam; if (OnPostRenderCam == cam) Coroutines.ProcessWaitForEndOfFrame(); }
 
         private static void ConsoleCleaner()
