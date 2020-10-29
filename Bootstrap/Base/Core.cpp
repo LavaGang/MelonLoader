@@ -65,7 +65,7 @@ void Core::WelcomeMessage()
 		Logger::WriteSpacer();
 	Logger::Msg("------------------------------");
 	Logger::Msg(("MelonLoader " + std::string(Version) + " Open-Beta").c_str());
-	Logger::Msg((std::string("Hash Code: ") + std::to_string(HashCode::Hash)).c_str());
+	Logger::Msg(("Hash Code: " + std::to_string(HashCode::Hash)).c_str());
 	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
 	Logger::Msg("------------------------------");
 	Logger::Msg(("Name: " + std::string(Game::Name)).c_str());
