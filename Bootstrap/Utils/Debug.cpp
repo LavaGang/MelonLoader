@@ -1,6 +1,7 @@
 #include "Debug.h"
 #include "Logger.h"
 #include "Assertion.h"
+#include <iostream>
 
 #ifdef DEBUG
 bool Debug::Enabled = true;
@@ -17,38 +18,54 @@ void Debug::Msg(const char* txt)
 
 void Debug::DirectWrite(const char* txt)
 {
-	Logger::WriteTimestamp(Console::Color::Black);
-	Logger::LogFile << "[DEBUG] " << txt << std::endl;
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("[");
-	Console::SetColor(Console::Color::Blue);
-	Console::Write("DEBUG");
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("] ");
-	Console::SetColor(Console::Color::Gray);
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = Logger::GetTimestamp();
+	Logger::LogFile << "[" << timestamp << "] [DEBUG] " << txt << std::endl;
+	std::cout
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Green)
+		<< timestamp
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Blue)
+		<< "DEBUG"
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }
 
 void Debug::Internal_Msg(const char* namesection, const char* txt)
 {
 	if (!Enabled || !Assertion::ShouldContinue)
 		return;
-	Logger::WriteTimestamp(Console::Color::Black);
-	Logger::LogFile << "[" << namesection << "] [DEBUG] " << txt << std::endl;
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("[");
-	Console::SetColor(Console::Color::Magenta);
-	Console::Write(namesection);
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("] ");
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("[");
-	Console::SetColor(Console::Color::Blue);
-	Console::Write("DEBUG");
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("] ");
-	Console::SetColor(Console::Color::Gray);
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = Logger::GetTimestamp();
+	Logger::LogFile << "[" << timestamp << "] [" << namesection << "] [DEBUG] " << txt << std::endl;
+	std::cout
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Green)
+		<< timestamp
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Magenta)
+		<< namesection
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Blue)
+		<< "DEBUG"
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }

@@ -1,9 +1,10 @@
 #include "Assertion.h"
-#include <string>
 #include "../Base/Core.h"
 #include "Debug.h"
 #include "Logger.h"
 #include "Console.h"
+#include <string>
+#include <iostream>
 
 bool Assertion::ShouldContinue = true;
 
@@ -12,15 +13,19 @@ void Assertion::ThrowInternalFailure(const char* msg)
 	if (ShouldContinue)
 	{
 		ShouldContinue = false;
+		std::string timestamp = Logger::GetTimestamp();
+		Logger::LogFile << "[" << timestamp << "] [INTERNAL FAILURE] " << msg << std::endl;
 		bool should_print_debug_info = (!Logger::LogFile.coss.is_open() || Debug::Enabled);
-		Console::SetColor(Console::Color::Red);
-		Logger::WriteTimestamp(Console::Color::Red);
-		Logger::LogFile << "[INTERNAL FAILURE] " << msg << std::endl;
 		if (should_print_debug_info)
 		{
-			Console::Write("[INTERNAL FAILURE] ");
-			Console::Write(msg);
-			Console::Write("\n");
+			std::cout
+				<< Console::GetColor(Console::Color::Red)
+				<< "["
+				<< timestamp
+				<< "] [INTERNAL FAILURE] "
+				<< msg
+				<< std::endl
+				<< "\x1b[37m";
 			MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		}
 		else

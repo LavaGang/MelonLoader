@@ -8,6 +8,7 @@
 #include "../Managers/Game.h"
 #include "AssemblyGenerator.h"
 #include "Logger.h"
+#include <sstream>
 
 bool Console::ShouldHide = false;
 bool Console::GeneratingAssembly = false;
@@ -48,14 +49,15 @@ bool Console::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
 		return false;
 	}
-	if (!GetConsoleScreenBufferInfo(OutputHandle, &ConsoleInfo))
-	{
-		Assertion::ThrowInternalFailure("Failed to Get Console Screen Buffer Info!");
-		return false;
-	}
 	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
 	{
 		Assertion::ThrowInternalFailure("Failed to Enable Virtual Terminal Processing!");
+		return false;
+	}
+
+	if (!GetConsoleScreenBufferInfo(OutputHandle, &ConsoleInfo))
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Console Screen Buffer Info!");
 		return false;
 	}
 	return true;
@@ -112,10 +114,9 @@ Console::Color Console::GetRainbowColor()
 	return returnval;
 }
 
-void Console::SetColor(Color color)
+std::string Console::GetColor(Color color)
 {
-	if (!IsInitialized())
-		return;
+	std::stringstream output;
 	color = ((Mode == DisplayMode::MAGENTA)
 		? Color::Magenta
 		: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
@@ -124,61 +125,54 @@ void Console::SetColor(Color color)
 	switch (color)
 	{
 	case Color::Black:
-		std::cout << "\x1b[30m";
+		output << "\x1b[30m";
 		break;
 	case Color::DarkBlue:
-		std::cout << "\x1b[34m";
+		output << "\x1b[34m";
 		break;
 	case Color::DarkGreen:
-		std::cout << "\x1b[32m";
+		output << "\x1b[32m";
 		break;
 	case Color::DarkCyan:
-		std::cout << "\x1b[36m";
+		output << "\x1b[36m";
 		break;
 	case Color::DarkRed:
-		std::cout << "\x1b[31m";
+		output << "\x1b[31m";
 		break;
 	case Color::DarkMagenta:
-		std::cout << "\x1b[35m";
+		output << "\x1b[35m";
 		break;
 	case Color::DarkYellow:
-		std::cout << "\x1b[33m";
+		output << "\x1b[33m";
 		break;
 	case Color::Gray:
-		std::cout << "\x1b[37m";
+		output << "\x1b[37m";
 		break;
 	case Color::DarkGray:
-		std::cout << "\x1b[90m";
+		output << "\x1b[90m";
 		break;
 	case Color::Blue:
-		std::cout << "\x1b[94m";
+		output << "\x1b[94m";
 		break;
 	case Color::Green:
-		std::cout << "\x1b[92m";
+		output << "\x1b[92m";
 		break;
 	case Color::Cyan:
-		std::cout << "\x1b[96m";
+		output << "\x1b[96m";
 		break;
 	case Color::Red:
-		std::cout << "\x1b[91m";
+		output << "\x1b[91m";
 		break;
 	case Color::Magenta:
-		std::cout << "\x1b[95m";
+		output << "\x1b[95m";
 		break;
 	case Color::Yellow:
-		std::cout << "\x1b[93m";
+		output << "\x1b[93m";
 		break;
 	case Color::White:
 	default:
-		std::cout << "\x1b[97m";
+		output << "\x1b[97m";
 		break;
 	}
+	return output.str();
 }
-
-void Console::Write(const char* txt)
-{
-	if (!IsInitialized())
-		return;
-	std::cout << txt;
-	SetColor((Color)ConsoleInfo.wAttributes);
-};

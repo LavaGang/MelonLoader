@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <string>
 
 class Console
 {
@@ -41,8 +42,7 @@ public:
 		Yellow = 14,
 		White = 15
 	};
-	static void SetColor(Color color);
-	static void Write(const char* txt);
+	static std::string GetColor(Color color);
 	static void EnableCloseButton();
 	static void DisableCloseButton();
 	static BOOL WINAPI EventHandler(DWORD evt);

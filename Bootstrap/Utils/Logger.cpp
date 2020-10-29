@@ -6,6 +6,7 @@
 #include <direct.h>
 #include <list>
 #include <sstream>
+#include <iostream>
 
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtension = ".log";
@@ -66,44 +67,38 @@ void Logger::CleanOldLogs(const char* path)
 		remove((*it).path().u8string().c_str());
 }
 
-void Logger::WriteTimestamp(Console::Color color)
+std::string Logger::GetTimestamp()
 {
 	std::chrono::system_clock::time_point now;
 	std::chrono::milliseconds ms;
 	std::tm bt;
 	Core::GetLocalTime(&now, &ms, &bt);
-	std::stringstream output;
-	output << std::put_time(&bt, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
-	LogFile << "[" << output.str() << "] ";
-	if (color == Console::Color::Black)
-	{
-		Console::SetColor(Console::Color::Gray);
-		Console::Write("[");
-		Console::SetColor(Console::Color::Green);
-		Console::Write(output.str().c_str());
-		Console::SetColor(Console::Color::Gray);
-		Console::Write("] ");
-		return;
-	}
-	Console::SetColor(color);
-	Console::Write("[");
-	Console::Write(output.str().c_str());
-	Console::Write("] ");
+	std::stringstream timestamp;
+	timestamp << std::put_time(&bt, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
+	return timestamp.str();
 }
 
 void Logger::WriteSpacer()
 {
 	LogFile << std::endl;
-	Console::Write("\n");
+	std::cout << std::endl;
 }
 
 void Logger::Msg(const char* txt)
 {
-	WriteTimestamp(Console::Color::Black);
-	LogFile << txt << std::endl;
-	Console::SetColor(Console::Color::Gray);
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = GetTimestamp();
+	LogFile << "[" << timestamp << "] " << txt << std::endl;
+	std::cout
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Green)
+		<< timestamp
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }
 
 void Logger::Warning(const char* txt)
@@ -114,11 +109,16 @@ void Logger::Warning(const char* txt)
 			return;
 		WarningCount++;
 	}
-	WriteTimestamp(Console::Color::Yellow);
-	LogFile << "[WARNING] " << txt << std::endl;
-	Console::Write("[WARNING] ");
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = GetTimestamp();
+	LogFile << "[" << timestamp << "] [WARNING] " << txt << std::endl;
+	std::cout 
+		<< Console::GetColor(Console::Color::Yellow)
+		<< "["
+		<< timestamp
+		<< "] [WARNING] "
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }
 
 void Logger::Error(const char* txt)
@@ -129,12 +129,16 @@ void Logger::Error(const char* txt)
 			return;
 		ErrorCount++;
 	}
-	WriteTimestamp(Console::Color::Red);
-	Console::SetColor(Console::Color::Red);
-	LogFile << "[ERROR] " << txt << std::endl;
-	Console::Write("[ERROR] ");
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = GetTimestamp();
+	LogFile << "[" << timestamp << "] [ERROR] " << txt << std::endl;
+	std::cout
+		<< Console::GetColor(Console::Color::Red)
+		<< "["
+		<< timestamp
+		<< "] [ERROR] "
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }
 
 void Logger::Internal_Msg(const char* namesection, const char* txt)
@@ -144,17 +148,25 @@ void Logger::Internal_Msg(const char* namesection, const char* txt)
 		Msg(txt);
 		return;
 	}
-	WriteTimestamp(Console::Color::Black);
-	LogFile << "[" << namesection << "] " << txt << std::endl;
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("[");
-	Console::SetColor(Console::Color::Magenta);
-	Console::Write(namesection);
-	Console::SetColor(Console::Color::Gray);
-	Console::Write("] ");
-	Console::SetColor(Console::Color::Gray);
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = GetTimestamp();
+	LogFile << "[" << timestamp << "] [" << namesection << "] " << txt << std::endl;
+	std::cout
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Green)
+		<< timestamp
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< "["
+		<< Console::GetColor(Console::Color::Magenta)
+		<< namesection
+		<< Console::GetColor(Console::Color::Gray)
+		<< "] "
+		<< Console::GetColor(Console::Color::Gray)
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
@@ -170,13 +182,18 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 			return;
 		WarningCount++;
 	}
-	WriteTimestamp(Console::Color::Yellow);
-	LogFile << "[" << namesection << "] [WARNING] " << txt << std::endl;
-	Console::Write("[");
-	Console::Write(namesection);
-	Console::Write("] [WARNING] ");
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = GetTimestamp();
+	LogFile << "[" << timestamp << "] [" << namesection << "] [WARNING] " << txt << std::endl;
+	std::cout
+		<< Console::GetColor(Console::Color::Yellow)
+		<< "["
+		<< timestamp
+		<< "] ["
+		<< namesection
+		<< "] [WARNING] "
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
@@ -192,10 +209,16 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 			return;
 		ErrorCount++;
 	}
-	WriteTimestamp(Console::Color::Red);
-	Console::Write("[");
-	Console::Write(namesection);
-	Console::Write("] [ERROR] ");
-	Console::Write(txt);
-	Console::Write("\n");
+	std::string timestamp = GetTimestamp();
+	LogFile << "[" << timestamp << "] [" << namesection << "] [ERROR] " << txt << std::endl;
+	std::cout
+		<< Console::GetColor(Console::Color::Red)
+		<< "["
+		<< timestamp
+		<< "] ["
+		<< namesection
+		<< "] [ERROR] "
+		<< txt
+		<< std::endl
+		<< "\x1b[37m";
 }

@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <fstream>
 #include <filesystem>
+#include <string>
 #include "Console.h"
 
 class Logger
@@ -11,7 +12,10 @@ public:
 	static int MaxWarnings;
 	static int MaxErrors;
 	static bool Initialize();
-	static void WriteTimestamp(Console::Color color);
+	//static void WriteTimestamp(Console::Color color);
+
+	static std::string GetTimestamp();
+
 	static void WriteSpacer();
 
 	static void Msg(const char* txt);
