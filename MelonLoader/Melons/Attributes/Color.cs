@@ -11,6 +11,6 @@ namespace MelonLoader
         public ConsoleColor Color { get; internal set; }
 
         public MelonColorAttribute() { Color = ConsoleColor.Magenta; }
-        public MelonColorAttribute(ConsoleColor color) { Color = color; }
+        public MelonColorAttribute(ConsoleColor color) { Color = ((color == ConsoleColor.Black) ? ConsoleColor.Magenta : color); }
     }
 }

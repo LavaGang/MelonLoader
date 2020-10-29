@@ -61,7 +61,10 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonPlugin plugin in _Plugins)
             {
-                MelonLogger.Msg(plugin.Info.Name + " v" + plugin.Info.Version);
+                ConsoleColor color = ConsoleColor.Magenta;
+                if (plugin.Color != null)
+                    color = plugin.Color.Color;
+                MelonLogger.Internal_PrintModName(color, plugin.Info.Name, plugin.Info.Version);
                 MelonLogger.Msg("by " + plugin.Info.Author);
                 MelonLogger.Msg("------------------------------");
             }
@@ -85,7 +88,10 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonMod mod in _Mods)
             {
-                MelonLogger.Msg(mod.Info.Name + " v" + mod.Info.Version);
+                ConsoleColor color = ConsoleColor.Magenta;
+                if (mod.Color != null)
+                    color = mod.Color.Color;
+                MelonLogger.Internal_PrintModName(color, mod.Info.Name, mod.Info.Version);
                 MelonLogger.Msg("by " + mod.Info.Author);
                 MelonLogger.Msg("------------------------------");
             }

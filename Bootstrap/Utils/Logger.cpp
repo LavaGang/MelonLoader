@@ -141,6 +141,27 @@ void Logger::Error(const char* txt)
 		<< "\x1b[37m";
 }
 
+void Logger::Internal_PrintModName(Console::Color color, const char* name, const char* version)
+{
+	std::string timestamp = GetTimestamp();
+	LogFile << "[" << timestamp << "] " << name << " v" << version << std::endl;
+	std::cout
+		<< Console::ColorToAnsi(Console::Color::Gray)
+		<< "["
+		<< Console::ColorToAnsi(Console::Color::Green)
+		<< timestamp
+		<< Console::ColorToAnsi(Console::Color::Gray)
+		<< "] "
+		<< Console::ColorToAnsi(color)
+		<< name
+		<< Console::ColorToAnsi(Console::Color::Gray)
+		<< " v"
+		<< Console::ColorToAnsi(Console::Color::Gray)
+		<< version
+		<< std::endl
+		<< "\x1b[37m";
+}
+
 void Logger::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
 {
 	if (namesection == NULL)

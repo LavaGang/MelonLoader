@@ -34,6 +34,15 @@ void InternalCalls::MelonLogger::Internal_Msg(Console::Color color, Mono::String
 	Mono::Exports::mono_free(txtStr);
 }
 
+void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color color, Mono::String* name, Mono::String* version)
+{
+	auto nameStr = Mono::Exports::mono_string_to_utf8(name);
+	auto versionStr = Mono::Exports::mono_string_to_utf8(version);
+	Logger::Internal_PrintModName(color, nameStr, versionStr);
+	Mono::Exports::mono_free(nameStr);
+	Mono::Exports::mono_free(versionStr);
+}
+
 void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
@@ -63,6 +72,7 @@ void InternalCalls::MelonLogger::WriteSpacer() { Logger::WriteSpacer(); }
 void InternalCalls::MelonLogger::Flush() { Logger::Flush(); Console::Flush(); }
 void InternalCalls::MelonLogger::AddInternalCalls()
 {
+	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_PrintModName", Internal_PrintModName);
 	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Msg", Internal_Msg);
 	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Warning", Internal_Warning);
 	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Error", Internal_Error);

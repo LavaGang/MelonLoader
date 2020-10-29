@@ -141,6 +141,8 @@ namespace MelonLoader
         public static event Action<string, string> ErrorCallbackHandler;
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void Internal_PrintModName(ConsoleColor color, string name, string version);
+        [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static void Internal_Msg(ConsoleColor color, string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static void Internal_Warning(string namesection, string txt);
