@@ -134,6 +134,7 @@
 112. Fixed Internal Failure with mono_free on Non-BleedingEdge Mono Games.
 113. Improved HashCode Implementation.
 114. Added HashCodes for Support Modules.
+115. Added File Change Detection for MelonPreferences.
 
 ---
 

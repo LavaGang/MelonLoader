@@ -14,11 +14,19 @@ namespace MelonLoader
         private static string LegacyFilePath = null;
         internal static List<MelonPreferences_Category> categorytbl = new List<MelonPreferences_Category>();
         public static List<MelonPreferences_Category> Categories { get => categorytbl.AsReadOnly().ToList(); }
+        private static FileSystemWatcher FileWatcher = new FileSystemWatcher();
 
         static MelonPreferences()
         {
             FilePath = Path.Combine(Core.UserDataPath, "MelonPreferences.cfg");
             LegacyFilePath = Path.Combine(Core.UserDataPath, "modprefs.ini");
+            FileWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
+            FileWatcher.Path = Core.UserDataPath;
+            FileWatcher.Filter = "MelonPreferences.cfg";
+            FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
+            FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
+            FileWatcher.EnableRaisingEvents = true;
+            FileWatcher.BeginInit();
         }
 
         internal static bool WasLegacyLoaded = false;
@@ -59,19 +67,25 @@ namespace MelonLoader
             WasLegacyLoaded = true;
         }
 
+        private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e) { if (!IsSaving) Load(); }
         public static void Load()
         {
+            MelonLogger.Msg("1");
             if (!File.Exists(FilePath))
                 return;
+            MelonLogger.Msg("2");
             string filestr = File.ReadAllText(FilePath);
             if (string.IsNullOrEmpty(filestr))
                 return;
+            MelonLogger.Msg("3");
             DocumentSyntax docsyn = Toml.Parse(filestr);
             if (docsyn == null)
                 return;
+            MelonLogger.Msg("4");
             TomlTable model = docsyn.ToModel();
             if (model.Count <= 0)
                 return;
+            MelonLogger.Msg("5");
             foreach (KeyValuePair<string, object> keypair in model)
             {
                 string category_name = keypair.Key;
@@ -95,6 +109,7 @@ namespace MelonLoader
             }
         }
 
+        private static bool IsSaving = false;
         public static void Save()
         {
             if (categorytbl.Count <= 0)
@@ -119,7 +134,9 @@ namespace MelonLoader
                 }
                 doc.Tables.Add(tbl);
             }
+            IsSaving = true;
             File.WriteAllText(FilePath, doc.ToString());
+            IsSaving = false;
             MelonLogger.Msg("Config Saved!");
             MelonHandler.OnPreferencesSaved();
         }
