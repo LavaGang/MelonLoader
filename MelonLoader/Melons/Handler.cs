@@ -390,7 +390,7 @@ namespace MelonLoader
             CurrentSceneName = sceneName;
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnLevelWasLoaded(CurrentSceneBuildIndex); mod.OnSceneWasLoaded(CurrentSceneBuildIndex); mod.OnSceneWasLoaded(CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { mod.OnLevelWasLoaded(CurrentSceneBuildIndex); mod.OnSceneWasLoaded(CurrentSceneBuildIndex, CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         private static bool InitializeScene = false;
@@ -398,7 +398,7 @@ namespace MelonLoader
         {
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnLevelWasInitialized(CurrentSceneBuildIndex); mod.OnSceneWasInitialized(CurrentSceneBuildIndex); mod.OnSceneWasInitialized(CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { mod.OnLevelWasInitialized(CurrentSceneBuildIndex); mod.OnSceneWasInitialized(CurrentSceneBuildIndex, CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnUpdate()

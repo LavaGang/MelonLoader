@@ -5,24 +5,14 @@ namespace MelonLoader
     public abstract class MelonMod : MelonBase
     {
         /// <summary>
-        /// Runs when a Scene has Loaded and is passed the Scene's Build Index.
+        /// Runs when a Scene has Loaded and is passed the Scene's Build Index and Name.
         /// </summary>
-        public virtual void OnSceneWasLoaded(int buildIndex) { }
+        public virtual void OnSceneWasLoaded(int buildIndex, string sceneName) { }
 
         /// <summary>
-        /// Runs when a Scene has Loaded and is passed the Scene's Name.
+        /// Runs when a Scene has Initialized and is passed the Scene's Build Index and Name.
         /// </summary>
-        public virtual void OnSceneWasLoaded(string sceneName) { }
-
-        /// <summary>
-        /// Runs when a Scene has Initialized and is passed the Scene's Build Index.
-        /// </summary>
-        public virtual void OnSceneWasInitialized(int buildIndex) { }
-
-        /// <summary>
-        /// Runs when a Scene has Initialized and is passed the Scene's Name.
-        /// </summary>
-        public virtual void OnSceneWasInitialized(string sceneName) { }
+        public virtual void OnSceneWasInitialized(int buildIndex, string sceneName) { }
 
         /// <summary>
         /// Can run multiple times per frame. Mostly used for Physics.
