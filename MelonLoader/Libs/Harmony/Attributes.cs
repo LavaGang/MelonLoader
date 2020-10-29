@@ -323,6 +323,6 @@ namespace Harmony
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct)]
 	public class HarmonyShield : Attribute { }
 }

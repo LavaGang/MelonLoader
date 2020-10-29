@@ -130,7 +130,7 @@
 108. Fixed Issue with OnSceneWasLoaded not being called.
 109. Added string Parameter to OnSceneWasLoaded and OnSceneWasInitialized that gets passed the Scene's Name.
 110. Plugin and Mods now have their Names Colorized properly when Loading.
-111. Added HarmonyShield Support for Classes.
+111. Added HarmonyShield Support for Classes and Structs.
 
 ---
 
