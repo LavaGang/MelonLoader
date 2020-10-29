@@ -118,7 +118,10 @@ namespace Harmony
 
 		public DynamicMethod Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null)
 		{
-			if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0) || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)) return null;
+			if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
+						   || (original.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
+						   || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
+				return null;
 			var processor = new PatchProcessor(this, new List<MethodBase> { original }, prefix, postfix, transpiler);
 			return processor.Patch().FirstOrDefault();
 		}

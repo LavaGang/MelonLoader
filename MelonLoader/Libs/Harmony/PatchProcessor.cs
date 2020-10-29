@@ -68,7 +68,10 @@ namespace Harmony
 					if (original == null)
 						throw new NullReferenceException("original");
 
-					if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0) || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)) continue;
+					if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
+						|| (original.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
+						|| (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
+						continue;
 
 					var individualPrepareResult = RunMethod<HarmonyPrepare, bool>(true, original);
 					if (individualPrepareResult)
