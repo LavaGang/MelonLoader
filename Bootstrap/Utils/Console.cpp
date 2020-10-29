@@ -107,9 +107,8 @@ Console::Color Console::GetRainbowColor()
 	return returnval;
 }
 
-std::string Console::GetColor(Color color)
+std::string Console::ColorToAnsi(Color color)
 {
-	std::stringstream output;
 	color = ((Mode == DisplayMode::MAGENTA)
 		? Color::Magenta
 		: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
@@ -118,54 +117,37 @@ std::string Console::GetColor(Color color)
 	switch (color)
 	{
 	case Color::Black:
-		output << "\x1b[30m";
-		break;
+		return "\x1b[30m";
 	case Color::DarkBlue:
-		output << "\x1b[34m";
-		break;
+		return "\x1b[34m";
 	case Color::DarkGreen:
-		output << "\x1b[32m";
-		break;
+		return "\x1b[32m";
 	case Color::DarkCyan:
-		output << "\x1b[36m";
-		break;
+		return "\x1b[36m";
 	case Color::DarkRed:
-		output << "\x1b[31m";
-		break;
+		return "\x1b[31m";
 	case Color::DarkMagenta:
-		output << "\x1b[35m";
-		break;
+		return "\x1b[35m";
 	case Color::DarkYellow:
-		output << "\x1b[33m";
-		break;
+		return "\x1b[33m";
 	case Color::Gray:
-		output << "\x1b[37m";
-		break;
+		return "\x1b[37m";
 	case Color::DarkGray:
-		output << "\x1b[90m";
-		break;
+		return "\x1b[90m";
 	case Color::Blue:
-		output << "\x1b[94m";
-		break;
+		return "\x1b[94m";
 	case Color::Green:
-		output << "\x1b[92m";
-		break;
+		return "\x1b[92m";
 	case Color::Cyan:
-		output << "\x1b[96m";
-		break;
+		return "\x1b[96m";
 	case Color::Red:
-		output << "\x1b[91m";
-		break;
+		return "\x1b[91m";
 	case Color::Magenta:
-		output << "\x1b[95m";
-		break;
+		return "\x1b[95m";
 	case Color::Yellow:
-		output << "\x1b[93m";
-		break;
+		return "\x1b[93m";
 	case Color::White:
 	default:
-		output << "\x1b[97m";
-		break;
+		return "\x1b[97m";
 	}
-	return output.str();
 }

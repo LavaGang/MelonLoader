@@ -19,7 +19,7 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		if (should_print_debug_info)
 		{
 			std::cout
-				<< Console::GetColor(Console::Color::Red)
+				<< Console::ColorToAnsi(Console::Color::Red)
 				<< "["
 				<< timestamp
 				<< "] [INTERNAL FAILURE] "

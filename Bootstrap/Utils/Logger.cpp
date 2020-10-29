@@ -89,13 +89,13 @@ void Logger::Msg(const char* txt)
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] " << txt << std::endl;
 	std::cout
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "["
-		<< Console::GetColor(Console::Color::Green)
+		<< Console::ColorToAnsi(Console::Color::Green)
 		<< timestamp
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "] "
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< txt
 		<< std::endl
 		<< "\x1b[37m";
@@ -112,7 +112,7 @@ void Logger::Warning(const char* txt)
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [WARNING] " << txt << std::endl;
 	std::cout 
-		<< Console::GetColor(Console::Color::Yellow)
+		<< Console::ColorToAnsi(Console::Color::Yellow)
 		<< "["
 		<< timestamp
 		<< "] [WARNING] "
@@ -132,7 +132,7 @@ void Logger::Error(const char* txt)
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [ERROR] " << txt << std::endl;
 	std::cout
-		<< Console::GetColor(Console::Color::Red)
+		<< Console::ColorToAnsi(Console::Color::Red)
 		<< "["
 		<< timestamp
 		<< "] [ERROR] "
@@ -151,19 +151,19 @@ void Logger::Internal_Msg(const char* namesection, const char* txt)
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [" << namesection << "] " << txt << std::endl;
 	std::cout
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "["
-		<< Console::GetColor(Console::Color::Green)
+		<< Console::ColorToAnsi(Console::Color::Green)
 		<< timestamp
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "] "
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "["
-		<< Console::GetColor(Console::Color::Magenta)
+		<< Console::ColorToAnsi(Console::Color::Magenta)
 		<< namesection
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "] "
-		<< Console::GetColor(Console::Color::Gray)
+		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< txt
 		<< std::endl
 		<< "\x1b[37m";
@@ -185,7 +185,7 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [" << namesection << "] [WARNING] " << txt << std::endl;
 	std::cout
-		<< Console::GetColor(Console::Color::Yellow)
+		<< Console::ColorToAnsi(Console::Color::Yellow)
 		<< "["
 		<< timestamp
 		<< "] ["
@@ -212,7 +212,7 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [" << namesection << "] [ERROR] " << txt << std::endl;
 	std::cout
-		<< Console::GetColor(Console::Color::Red)
+		<< Console::ColorToAnsi(Console::Color::Red)
 		<< "["
 		<< timestamp
 		<< "] ["

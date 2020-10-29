@@ -42,7 +42,7 @@ public:
 		Yellow = 14,
 		White = 15
 	};
-	static std::string GetColor(Color color);
+	static std::string ColorToAnsi(Color color);
 	static void EnableCloseButton();
 	static void DisableCloseButton();
 	static BOOL WINAPI EventHandler(DWORD evt);
