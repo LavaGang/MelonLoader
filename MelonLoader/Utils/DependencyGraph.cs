@@ -50,16 +50,19 @@ namespace MelonLoader {
 					optionalDependencies.UnionWith(optionals.AssemblyNames);
 				}
 
-				MelonIncompatibleAssembliesAttribute incompatibles = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleAssembliesAttribute));
-				if (incompatibles != null && incompatibles.AssemblyNames != null)
+				MelonIncompatibleModsAttribute incompatibles = (MelonIncompatibleModsAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleModsAttribute));
+				if (incompatibles != null && incompatibles.ModNames != null)
                 {
-					Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-                    foreach (string name in incompatibles.AssemblyNames)
+                    foreach (string name in incompatibles.ModNames)
                     {
-                        foreach (Assembly assembly in loadedAssemblies)
+                        foreach (Vertex v in vertices)
                         {
-							if(assembly.GetName().Name == name && TryLoad(assembly.GetName()))
-								incompatibilities.Add(assembly.GetName());
+							AssemblyName assemblyName = v.mod.Assembly.GetName();
+							if (v != modVertex && assemblyName.Name == name)
+                            {
+								incompatibilities.Add(assemblyName);
+								v.skipLoading = true;
+                            }
 						}
                     }
                 }
@@ -125,7 +128,7 @@ namespace MelonLoader {
 		private static string BuildIncompatibleAssembliesMessage(IDictionary<string, IList<AssemblyName>> modsWithIncompatibilities)
 		{
 			StringBuilder messageBuilder = new StringBuilder("Some mods are marked as incompatible with each other.\n" +
-				"These mods will still be loaded, but may not function as intended.\n");
+				"To avoid any errors, these mods will not be loaded.\n");
 			foreach (string modName in modsWithIncompatibilities.Keys)
 			{
 				messageBuilder.Append($"- '{modName}' is incompatible with the following mods:\n");
