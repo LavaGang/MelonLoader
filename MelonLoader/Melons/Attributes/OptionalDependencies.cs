@@ -14,13 +14,13 @@ namespace MelonLoader
     }
 
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class MelonIncompatibleModsAttribute : Attribute
+    public class MelonIncompatibleAssembliesAttribute : Attribute
     {
         /// <summary>
         /// The (simple) assembly names of the mods that are incompatible.
         /// </summary>
-        public string[] ModNames { get; internal set; }
+        public string[] AssemblyNames { get; internal set; }
 
-        public MelonIncompatibleModsAttribute(params string[] assemblyNames) { ModNames = assemblyNames; }
+        public MelonIncompatibleAssembliesAttribute(params string[] assemblyNames) { AssemblyNames = assemblyNames; }
     }
 }

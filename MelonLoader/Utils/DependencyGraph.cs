@@ -50,10 +50,10 @@ namespace MelonLoader {
 					optionalDependencies.UnionWith(optionals.AssemblyNames);
 				}
 
-				MelonIncompatibleModsAttribute incompatibles = (MelonIncompatibleModsAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleModsAttribute));
-				if (incompatibles != null && incompatibles.ModNames != null)
+				MelonIncompatibleAssembliesAttribute incompatibleAssemblies = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleAssembliesAttribute));
+				if (incompatibleAssemblies != null && incompatibleAssemblies.AssemblyNames != null)
                 {
-                    foreach (string name in incompatibles.ModNames)
+                    foreach (string name in incompatibleAssemblies.AssemblyNames)
                     {
                         foreach (Vertex v in vertices)
                         {
