@@ -34,18 +34,38 @@ namespace MelonLoader {
 
 			// Add an edge for each dependency between mods
 			IDictionary<string, IList<AssemblyName>> modsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
+			IDictionary<string, IList<AssemblyName>> modsWithIncompatibilities = new SortedDictionary<string, IList<AssemblyName>>();
 			List<AssemblyName> missingDependencies = new List<AssemblyName>();
+			List<AssemblyName> incompatibilities = new List<AssemblyName>();
 			HashSet<string> optionalDependencies = new HashSet<string>();
 
 			foreach (Vertex modVertex in vertices) {
 				Assembly modAssembly = modVertex.mod.Assembly;
 				missingDependencies.Clear();
 				optionalDependencies.Clear();
+				incompatibilities.Clear();
 
 				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute) Attribute.GetCustomAttribute(modAssembly, typeof(MelonOptionalDependenciesAttribute));
 				if (optionals != null && optionals.AssemblyNames != null) {
 					optionalDependencies.UnionWith(optionals.AssemblyNames);
 				}
+
+				MelonIncompatibleAssembliesAttribute incompatibleAssemblies = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleAssembliesAttribute));
+				if (incompatibleAssemblies != null && incompatibleAssemblies.AssemblyNames != null)
+                {
+                    foreach (string name in incompatibleAssemblies.AssemblyNames)
+                    {
+                        foreach (Vertex v in vertices)
+                        {
+							AssemblyName assemblyName = v.mod.Assembly.GetName();
+							if (v != modVertex && assemblyName.Name == name)
+                            {
+								incompatibilities.Add(assemblyName);
+								v.skipLoading = true;
+                            }
+						}
+                    }
+                }
 
 				foreach (AssemblyName dependency in modAssembly.GetReferencedAssemblies()) {
 					if (nameLookup.TryGetValue(dependency.Name, out Vertex dependencyVertex)) {
@@ -60,12 +80,22 @@ namespace MelonLoader {
 					// modVertex.skipLoading = true;
 					modsWithMissingDeps.Add(modVertex.mod.Info.Name, missingDependencies.ToArray());
 				}
+
+				if (incompatibilities.Count > 0)
+                {
+					modsWithIncompatibilities.Add(modVertex.mod.Info.Name, incompatibilities.ToArray());
+                }
 			}
 
 			if (modsWithMissingDeps.Count > 0) {
 				// Some mods are missing dependencies. Don't load these mods and show an error message
 				MelonLogger.Warning(BuildMissingDependencyMessage(modsWithMissingDeps));
 			}
+
+			if(modsWithIncompatibilities.Count > 0)
+            {
+				MelonLogger.Warning(BuildIncompatibleAssembliesMessage(modsWithIncompatibilities));
+            }
 		}
 
 		// Returns true if 'assembly' was already loaded or could be loaded, false if the required assembly was missing.
@@ -89,6 +119,22 @@ namespace MelonLoader {
 				messageBuilder.Append($"- '{modName}' is missing the following dependencies:\n");
 				foreach (AssemblyName dependency in modsWithMissingDeps[modName]) {
 					messageBuilder.Append($"    - '{dependency.Name}' v{dependency.Version}\n");
+				}
+			}
+			messageBuilder.Length -= 1; // Remove trailing newline
+			return messageBuilder.ToString();
+		}
+
+		private static string BuildIncompatibleAssembliesMessage(IDictionary<string, IList<AssemblyName>> modsWithIncompatibilities)
+		{
+			StringBuilder messageBuilder = new StringBuilder("Some mods are marked as incompatible with each other.\n" +
+				"To avoid any errors, these mods will not be loaded.\n");
+			foreach (string modName in modsWithIncompatibilities.Keys)
+			{
+				messageBuilder.Append($"- '{modName}' is incompatible with the following mods:\n");
+				foreach (AssemblyName dependency in modsWithIncompatibilities[modName])
+				{
+					messageBuilder.Append($"    - '{dependency.Name}'\n");
 				}
 			}
 			messageBuilder.Length -= 1; // Remove trailing newline
