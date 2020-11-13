@@ -181,6 +181,9 @@ namespace MelonLoader.AssemblyGenerator
             FixIl2CppDumperConfig();
 
             Logger.Log("Executing Il2CppDumper...");
+            Logger.Log("\"" + Il2CppDumper.BaseFolder + "\\" + Il2CppDumper.FileName + "\" \" " +
+            GameAssembly_Path + "\" \"" + 
+            gameDataDir + "\\il2cpp_data\\Metadata\\global-metadata.dat\"");
             if (!Il2CppDumper.Execute(new string[] {
                 GameAssembly_Path,
                 Path.Combine(gameDataDir, "il2cpp_data", "Metadata", "global-metadata.dat")
@@ -191,6 +194,15 @@ namespace MelonLoader.AssemblyGenerator
             }
 
             Logger.Log("Executing Il2CppAssemblyUnhollower...");
+            Logger.Log("\"" + Il2CppAssemblyUnhollower.BaseFolder + "\\" + Il2CppAssemblyUnhollower.FileName + "\" " +
+                "--input=\"" + Il2CppDumper.OutputDirectory + "\" " +
+                "--output=\"" + Il2CppAssemblyUnhollower.OutputDirectory + "\" " +
+                "--mscorlib=\"" + MSCORLIB_Path + "\" " +
+                "--unity=\"" + UnityDependencies.BaseFolder + "\" " +
+                "--gameassembly=" + "\"" + GameAssembly_Path + "\" " +
+                "--blacklist-assembly=Mono.Security " +
+                "--blacklist-assembly=Newtonsoft.Json " +
+                "--blacklist-assembly=Valve.Newtonsoft.Json");
             if (!Il2CppAssemblyUnhollower.Execute(new string[] {
                 ("--input=" + Il2CppDumper.OutputDirectory),
                 ("--output=" + Il2CppAssemblyUnhollower.OutputDirectory),
