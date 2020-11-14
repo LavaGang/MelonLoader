@@ -181,9 +181,6 @@ namespace MelonLoader.AssemblyGenerator
             FixIl2CppDumperConfig();
 
             Logger.Log("Executing Il2CppDumper...");
-            Logger.Log("\"" + Il2CppDumper.BaseFolder + "\\" + Il2CppDumper.FileName + "\" \" " +
-            GameAssembly_Path + "\" \"" + 
-            gameDataDir + "\\il2cpp_data\\Metadata\\global-metadata.dat\"");
             if (!Il2CppDumper.Execute(new string[] {
                 GameAssembly_Path,
                 Path.Combine(gameDataDir, "il2cpp_data", "Metadata", "global-metadata.dat")
@@ -194,15 +191,6 @@ namespace MelonLoader.AssemblyGenerator
             }
 
             Logger.Log("Executing Il2CppAssemblyUnhollower...");
-            Logger.Log("\"" + Il2CppAssemblyUnhollower.BaseFolder + "\\" + Il2CppAssemblyUnhollower.FileName + "\" " +
-                "--input=\"" + Il2CppDumper.OutputDirectory + "\" " +
-                "--output=\"" + Il2CppAssemblyUnhollower.OutputDirectory + "\" " +
-                "--mscorlib=\"" + MSCORLIB_Path + "\" " +
-                "--unity=\"" + UnityDependencies.BaseFolder + "\" " +
-                "--gameassembly=" + "\"" + GameAssembly_Path + "\" " +
-                "--blacklist-assembly=Mono.Security " +
-                "--blacklist-assembly=Newtonsoft.Json " +
-                "--blacklist-assembly=Valve.Newtonsoft.Json");
             if (!Il2CppAssemblyUnhollower.Execute(new string[] {
                 ("--input=" + Il2CppDumper.OutputDirectory),
                 ("--output=" + Il2CppAssemblyUnhollower.OutputDirectory),
@@ -303,6 +291,7 @@ namespace MelonLoader.AssemblyGenerator
             generatorProcessInfo.RedirectStandardOutput = true;
             generatorProcessInfo.CreateNoWindow = true;
             Process process = null;
+            Logger.Log(assembly_path + " " + generatorProcessInfo.Arguments);
             try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.LogError(e.ToString()); Logger.LogError("Unable to Start " + FileName + "!"); OverrideAppDomainBase(originalCwd); return false; }
             var stdout = process.StandardOutput;
             while (!stdout.EndOfStream)
