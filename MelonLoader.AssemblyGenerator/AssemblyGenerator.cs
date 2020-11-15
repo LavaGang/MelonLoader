@@ -291,6 +291,7 @@ namespace MelonLoader.AssemblyGenerator
             generatorProcessInfo.RedirectStandardOutput = true;
             generatorProcessInfo.CreateNoWindow = true;
             Process process = null;
+            Logger.Log("\"" + assembly_path + "\" " + generatorProcessInfo.Arguments);
             try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.LogError(e.ToString()); Logger.LogError("Unable to Start " + FileName + "!"); OverrideAppDomainBase(originalCwd); return false; }
             var stdout = process.StandardOutput;
             while (!stdout.EndOfStream)
