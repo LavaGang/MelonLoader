@@ -21,6 +21,7 @@
 ### v0.2.7.3 Open-Beta:
 
 1. Updated Il2CppAssemblyUnhollower to v0.4.10.0.
+2. Il2CppDumper and Il2CppAssemblyUnhollower executables will now display their command lines in the log files.    (Credits to stephenc87 :D)
 
 ---
 
