@@ -1,6 +1,7 @@
 ### Version List:
 
 [v0.3.0 Open-Beta](#v030-open-beta)  
+[v0.2.7.3 Open-Beta](#v0273-open-beta)  
 [v0.2.7.2 Open-Beta](#v0272-open-beta)  
 [v0.2.7.1 Open-Beta](#v0271-open-beta)  
 [v0.2.7 Open-Beta](#v027-open-beta)  
@@ -136,6 +137,12 @@
 114. Added HashCodes for Support Modules.
 115. Added File Change Detection for MelonPreferences.
 116. Fixed Issue with MelonPreferences not Updating after Load.
+
+---
+
+### v0.2.7.3 Open-Beta:
+
+1. Updated Il2CppAssemblyUnhollower to v0.4.10.0.
 
 ---
 
