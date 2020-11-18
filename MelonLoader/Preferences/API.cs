@@ -162,13 +162,25 @@ namespace MelonLoader
                 {
                     KeyValueSyntax key = null;
                     if (entry.Type == MelonPreferences_Entry.TypeEnum.STRING)
+                    {
+                        entry.SetString(entry.GetEditedString());
                         key = new KeyValueSyntax(entry.Name, new StringValueSyntax(entry.GetString()));
+                    }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
+                    {
+                        entry.SetBool(entry.GetEditedBool());
                         key = new KeyValueSyntax(entry.Name, new BooleanValueSyntax(entry.GetBool()));
+                    }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.INT)
+                    {
+                        entry.SetInt(entry.GetEditedInt());
                         key = new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetInt()));
+                    }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
+                    {
+                        entry.SetFloat(entry.GetEditedFloat());
                         key = new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetFloat()));
+                    }
                     if (key != null)
                         tbl.Items.Add(key);
                 }
