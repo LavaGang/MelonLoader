@@ -20,6 +20,11 @@ namespace MelonLoader
         internal int Value_int { get; set; }
         internal float Value_float { get; set; }
 
+        internal string ValueEdited_string { get; set; }
+        internal bool ValueEdited_bool { get; set; }
+        internal int ValueEdited_int { get; set; }
+        internal float ValueEdited_float { get; set; }
+
         public enum TypeEnum
         {
             STRING,
@@ -41,7 +46,7 @@ namespace MelonLoader
             Category = category;
             Type = TypeEnum.STRING;
             Name = name;
-            Value_string = value;
+            ValueEdited_string = Value_string = value;
             DefaultValue_string = Value_string;
             DisplayName = displayname;
             Hidden = hidden;
@@ -52,7 +57,7 @@ namespace MelonLoader
             Category = category;
             Type = TypeEnum.BOOL;
             Name = name;
-            Value_bool = value;
+            ValueEdited_bool = Value_bool = value;
             DefaultValue_bool = Value_bool;
             DisplayName = displayname;
             Hidden = hidden;
@@ -63,7 +68,7 @@ namespace MelonLoader
             Category = category;
             Type = TypeEnum.INT;
             Name = name;
-            Value_int = value;
+            ValueEdited_int = Value_int = value;
             DefaultValue_int = Value_int;
             DisplayName = displayname;
             Hidden = hidden;
@@ -74,7 +79,7 @@ namespace MelonLoader
             Category = category;
             Type = TypeEnum.FLOAT;
             Name = name;
-            Value_float = value;
+            ValueEdited_float = Value_float = value;
             DefaultValue_float = Value_float;
             DisplayName = displayname;
             Hidden = hidden;
@@ -111,7 +116,7 @@ namespace MelonLoader
             if (Type != TypeEnum.STRING)
                 throw new Exception(GetExceptionMessage("Set string in"));
             string oldval = Value_string;
-            Value_string = value;
+            ValueEdited_string = Value_string = value;
             if (value != oldval)
                 InvokeValueChangeCallbacks(oldval, value);
         }
@@ -120,7 +125,7 @@ namespace MelonLoader
             if (Type != TypeEnum.BOOL)
                 throw new Exception(GetExceptionMessage("Set bool in"));
             bool oldval = Value_bool;
-            Value_bool = value;
+            ValueEdited_bool = Value_bool = value;
             if (value != oldval)
                 InvokeValueChangeCallbacks(oldval, value);
         }
@@ -129,7 +134,7 @@ namespace MelonLoader
             if (Type != TypeEnum.INT)
                 throw new Exception(GetExceptionMessage("Set int in"));
             int oldval = Value_int;
-            Value_int = value;
+            ValueEdited_int = Value_int = value;
             if (value != oldval)
                 InvokeValueChangeCallbacks(oldval, value);
         }
@@ -138,11 +143,61 @@ namespace MelonLoader
             if (Type != TypeEnum.FLOAT)
                 throw new Exception(GetExceptionMessage("Set float in"));
             float oldval = Value_float;
-            Value_float = value;
+            ValueEdited_float = Value_float = value;
             if (value != oldval)
                 InvokeValueChangeCallbacks(oldval, value);
         }
-        
+
+        public string GetEditedString()
+        {
+            if (Type != TypeEnum.STRING)
+                throw new Exception(GetExceptionMessage("Get Edited string from"));
+            return ValueEdited_string;
+        }
+        public bool GetEditedBool()
+        {
+            if (Type != TypeEnum.BOOL)
+                throw new Exception(GetExceptionMessage("Get Edited bool from"));
+            return ValueEdited_bool;
+        }
+        public int GetEditedInt()
+        {
+            if (Type != TypeEnum.INT)
+                throw new Exception(GetExceptionMessage("Get Edited int from"));
+            return ValueEdited_int;
+        }
+        public float GetEditedFloat()
+        {
+            if (Type != TypeEnum.FLOAT)
+                throw new Exception(GetExceptionMessage("Get Edited float from"));
+            return ValueEdited_float;
+        }
+
+        public void SetEditedString(string value)
+        {
+            if (Type != TypeEnum.STRING)
+                throw new Exception(GetExceptionMessage("Set Edited string in"));
+            ValueEdited_string = value;
+        }
+        public void SetEditedBool(bool value)
+        {
+            if (Type != TypeEnum.BOOL)
+                throw new Exception(GetExceptionMessage("Set Edited bool in"));
+            ValueEdited_bool = value;
+        }
+        public void SetEditedInt(int value)
+        {
+            if (Type != TypeEnum.INT)
+                throw new Exception(GetExceptionMessage("Set Edited int in"));
+            ValueEdited_int = value;
+        }
+        public void SetEditedFloat(float value)
+        {
+            if (Type != TypeEnum.FLOAT)
+                throw new Exception(GetExceptionMessage("Set Edited float in"));
+            ValueEdited_float = value;
+        }
+
         public string GetDefaultString()
         {
             if (Type != TypeEnum.STRING)

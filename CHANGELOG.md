@@ -137,12 +137,15 @@
 114. Added HashCodes for Support Modules.
 115. Added File Change Detection for MelonPreferences.
 116. Fixed Issue with MelonPreferences not Updating after Load.
+117. Fixed issue with 127.0.0.1 showing as a Unique Host Name.
+118. Fixed Issue with ValueEdited of MelonPreferences.
 
 ---
 
 ### v0.2.7.3 Open-Beta:
 
 1. Updated Il2CppAssemblyUnhollower to v0.4.10.0.
+2. Il2CppDumper and Il2CppAssemblyUnhollower executables will now display their command lines in the log files.    (Credits to stephenc87 :D)
 
 ---
 

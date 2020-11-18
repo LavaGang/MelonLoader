@@ -162,13 +162,13 @@ namespace MelonLoader
                 {
                     MelonPreference newpref = null;
                     if (entry.Type == MelonPreferences_Entry.TypeEnum.STRING)
-                        newpref = new MelonPreference(entry.GetString(), (MelonPreferenceType)entry.Type, entry.Hidden, entry.DisplayName);
+                        newpref = new MelonPreference(entry);
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
-                        newpref = new MelonPreference(entry.GetBool().ToString(), (MelonPreferenceType)entry.Type, entry.Hidden, entry.DisplayName);
+                        newpref = new MelonPreference(entry);
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.INT)
-                        newpref = new MelonPreference(entry.GetInt().ToString(), (MelonPreferenceType)entry.Type, entry.Hidden, entry.DisplayName);
+                        newpref = new MelonPreference(entry);
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
-                        newpref = new MelonPreference(entry.GetFloat().ToString(), (MelonPreferenceType)entry.Type, entry.Hidden, entry.DisplayName);
+                        newpref = new MelonPreference(entry);
                     if (newpref == null)
                         continue;
                     newprefsdict.Add(entry.Name, newpref);
@@ -239,23 +239,50 @@ namespace MelonLoader
         public class MelonPreference
         {
             [Obsolete("MelonPrefs.MelonPreference.Value is obsolete. Please use MelonPreferences_Entry instead.")]
-            public string Value { get; set; }
+            public string Value { get => GetString(Entry.Category.Name, Entry.Name); set => SetString(Entry.Category.Name, Entry.Name, value); }
             [Obsolete("MelonPrefs.MelonPreference.ValueEdited is obsolete. Please use MelonPreferences_Entry instead.")]
-            public string ValueEdited { get; set; }
+            public string ValueEdited { get => GetEditedString(Entry.Category.Name, Entry.Name); set => SetEditedString(Entry.Category.Name, Entry.Name, value); }
             [Obsolete("MelonPrefs.MelonPreference.Type is obsolete. Please use MelonPreferences_Entry.Type instead.")]
-            public MelonPreferenceType Type { get; internal set; }
+            public MelonPreferenceType Type { get => (MelonPreferenceType)Entry.Type; }
             [Obsolete("MelonPrefs.MelonPreference.Hidden is obsolete. Please use MelonPreferences_Entry.Hidden instead.")]
-            public bool Hidden { get; internal set; }
+            public bool Hidden { get => Entry.Hidden; }
             [Obsolete("MelonPrefs.MelonPreference.DisplayText is obsolete. Please use MelonPreferences_Entry.DisplayName instead.")]
-            public String DisplayText { get; internal set; }
-            [Obsolete("MelonPrefs.MelonPreference is obsolete. Please use MelonPreferences_Entry instead.")]
-            public MelonPreference(string value, MelonPreferenceType type, bool hidden, string displayText)
+            public string DisplayText { get => Entry.DisplayName; }
+
+            internal MelonPreference(MelonPreferences_Entry entry) => Entry = entry;
+            internal MelonPreference(MelonPreference pref) => Entry = pref.Entry;
+            private MelonPreferences_Entry Entry = null;
+            private static string GetEditedString(string section, string name)
             {
-                Value = value;
-                ValueEdited = value;
-                Type = type;
-                Hidden = hidden;
-                DisplayText = displayText;
+                MelonPreferences_Category category = MelonPreferences.GetCategory(section);
+                if (category == null)
+                    return null;
+                MelonPreferences_Entry entry = category.GetEntry(name);
+                if (entry == null)
+                    return null;
+                return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetEditedBool().ToString()
+                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetEditedInt().ToString()
+                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetEditedFloat().ToString()
+                    : entry.GetEditedString())));
+            }
+            private static void SetEditedString(string section, string name, string value)
+            {
+                MelonPreferences_Category category = MelonPreferences.GetCategory(section);
+                if (category == null)
+                    return;
+                MelonPreferences_Entry entry = category.GetEntry(name);
+                if (entry == null)
+                    return;
+                int val_int = 0;
+                float val_float = 0f;
+                if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
+                    entry.SetEditedBool(value.ToLower().StartsWith("true"));
+                else if (Int32.TryParse(value, out val_int))
+                    entry.SetEditedInt(val_int);
+                else if (float.TryParse(value, out val_float))
+                    entry.SetEditedFloat(val_float);
+                else
+                    entry.SetEditedString(value);
             }
         }
     }
@@ -274,7 +301,7 @@ namespace MelonLoader
                 for (int j = 0; j < prefsdict.Values.Count; j++)
                 {
                     MelonPreference pref = prefsdict.Values.ElementAt(j);
-                    PrefDesc newpref = new PrefDesc(pref.Value, (PrefType)pref.Type, pref.Hidden, pref.DisplayText);
+                    PrefDesc newpref = new PrefDesc(pref);
                     newpref.ValueEdited = pref.ValueEdited;
                     newprefsdict.Add(prefsdict.Keys.ElementAt(j), newpref);
                 }
@@ -304,14 +331,8 @@ namespace MelonLoader
             [Obsolete("ModPrefs.PrefDesc.Type is obsolete. Please use MelonPreferences_Entry.Type instead.")]
             public PrefType Type { get => (PrefType)base.Type; }
             [Obsolete("ModPrefs.PrefDesc is obsolete. Please use MelonPreferences_Entry instead.")]
-            public PrefDesc(string value, PrefType type, bool hidden, string displayText) : base(value, (MelonPreferenceType)type, hidden, displayText)
-            {
-                Value = value;
-                ValueEdited = value;
-                base.Type = (MelonPreferenceType)type;
-                Hidden = hidden;
-                DisplayText = displayText;
-            }
+            public PrefDesc(MelonPreferences_Entry entry) : base(entry) { }
+            public PrefDesc(MelonPreference pref) : base(pref) { }
         }
     }
 }
