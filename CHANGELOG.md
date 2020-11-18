@@ -137,9 +137,10 @@
 114. Added HashCodes for Support Modules.
 115. Added File Change Detection for MelonPreferences.
 116. Fixed Issue with MelonPreferences not Updating after Load.
-117. Fixed issue with 127.0.0.1 showing as a Unique Host Name.
+117. Fixed Issue with 127.0.0.1 showing as a Unique Host Name.
 118. Fixed Issue with ValueEdited of MelonPreferences.
 119. Fixed Issue with ValueEdited not correctly saving to MelonPreferences when Save is called.
+120. Fixed Issue with ValueEdited not being set when Auto-Converter runs.
 
 ---
 

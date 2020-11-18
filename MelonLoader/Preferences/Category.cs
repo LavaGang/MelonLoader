@@ -40,7 +40,7 @@ namespace MelonLoader
             if (entry.Type != MelonPreferences_Entry.TypeEnum.STRING)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.STRING;
-                entry.Value_string = value;
+                entry.ValueEdited_string = entry.Value_string = value;
             }
             return entry;
         }
@@ -57,7 +57,7 @@ namespace MelonLoader
             if (entry.Type != MelonPreferences_Entry.TypeEnum.BOOL)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.BOOL;
-                entry.Value_bool = value;
+                entry.ValueEdited_bool = entry.Value_bool = value;
             }
             return entry;
         }
@@ -74,7 +74,7 @@ namespace MelonLoader
             if (entry.Type != MelonPreferences_Entry.TypeEnum.INT)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.INT;
-                entry.Value_int = value;
+                entry.ValueEdited_int = entry.Value_int = value;
             }
             return entry;
         }
@@ -91,7 +91,7 @@ namespace MelonLoader
             if (entry.Type != MelonPreferences_Entry.TypeEnum.FLOAT)
             {
                 entry.Type = MelonPreferences_Entry.TypeEnum.FLOAT;
-                entry.Value_float = value;
+                entry.ValueEdited_float = entry.Value_float = value;
             }
             return entry;
         }
@@ -103,7 +103,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.Value_string = value;
+            entry.ValueEdited_string = entry.Value_string = value;
             return entry;
         }
         internal MelonPreferences_Entry LoadEntry(string name, bool value, string displayname = null, bool hidden = false)
@@ -113,7 +113,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.Value_bool = value;
+            entry.ValueEdited_bool = entry.Value_bool = value;
             return entry;
             
         }
@@ -124,7 +124,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.Value_int = value;
+            entry.ValueEdited_int = entry.Value_int = value;
             return entry;
             
         }
@@ -135,7 +135,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry == null)
                 return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.Value_float = value;
+            entry.ValueEdited_float = entry.Value_float = value;
             return entry;
         }
     }
