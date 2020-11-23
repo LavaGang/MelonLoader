@@ -130,17 +130,19 @@
 107. Added MelonColor Attribute for Melons to set their Name Color.
 108. Fixed Issue with OnSceneWasLoaded not being called.
 109. Added string Parameter to OnSceneWasLoaded and OnSceneWasInitialized that gets passed the Scene's Name.
-110. Plugin and Mods now have their Names Colorized properly when Loading.
+110. Plugins and Mods now have their Names Colorized properly when Loading.
 111. Added HarmonyShield Support for Classes and Structs.
 112. Fixed Internal Failure with mono_free on Non-BleedingEdge Mono Games.
 113. Improved HashCode Implementation.
 114. Added HashCodes for Support Modules.
 115. Added File Change Detection for MelonPreferences.
 116. Fixed Issue with MelonPreferences not Updating after Load.
-117. Fixed Issue with 127.0.0.1 showing as a Unique Host Name.
-118. Fixed Issue with ValueEdited of MelonPreferences.
-119. Fixed Issue with ValueEdited not correctly saving to MelonPreferences when Save is called.
-120. Fixed Issue with ValueEdited not being set when Auto-Converter runs.
+117. Added MelonIncompatibleAssembliesAttribute to mark Plugins and Mods as Incompatible with each other.    (Credits to YOWChap :D)
+118. Fixed Issue with 127.0.0.1 showing as a Unique Host Name.
+119. Fixed Issue with ValueEdited of MelonPreferences.
+120. Fixed Issue with ValueEdited not correctly saving to MelonPreferences when Save is called.
+121. Fixed Issue with ValueEdited not being set when Auto-Converter runs.
+122. Added UnityEngine.Il2CppImageConversionManager to Managed folder to help with Image Conversion on Il2Cpp Games.
 
 ---
 
