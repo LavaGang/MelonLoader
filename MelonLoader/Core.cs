@@ -16,15 +16,20 @@ namespace MelonLoader
         static Core()
         {
             GameDir = MelonUtils.GetGameDirectory();
-            ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = GameDir;
+            UserDataPath = Path.Combine(GameDir, "UserData");
+            if (!Directory.Exists(UserDataPath))
+                Directory.CreateDirectory(UserDataPath);
+
+            Harmony.HarmonyInstance harmonyInstance = Harmony.HarmonyInstance.Create("MelonLoader");
+            try { harmonyInstance.Patch(typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetBaseDirectory", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { }
+            try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { }
+            try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { }
+
             Directory.SetCurrentDirectory(GameDir);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
-            CurrentCultureFix();
-            UserDataPath = Path.Combine(GameDir, "UserData");
-            if (!Directory.Exists(UserDataPath))
-                Directory.CreateDirectory(UserDataPath);
+
             try { MelonPreferences.LegacyCheck(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.LegacyCheck Exception: " + ex.ToString()); throw ex; }
             try { MelonPreferences.Load(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Load Exception: " + ex.ToString()); throw ex; }
             if (MelonPreferences.WasLegacyLoaded) try { MelonPreferences.Save(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save Exception: " + ex.ToString()); throw ex; } 
@@ -81,14 +86,8 @@ namespace MelonLoader
             return null;
         }
 
+        private static bool GetBaseDirectory(ref string __result) { __result = GameDir; return false; }
         private static bool GetCurrentCulturePrefix(ref CultureInfo __result) { __result = CultureInfo.InvariantCulture; return false; }
-        private static void CurrentCultureFix()
-        {
-            Harmony.HarmonyInstance harmonyInstance = Harmony.HarmonyInstance.Create("CurrentCultureFix");
-            try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) {}
-            try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) {}
-        }
-
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static bool QuitFix();
     }
