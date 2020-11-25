@@ -61,9 +61,7 @@ namespace MelonLoader
             try { Program.webClient.DownloadFileAsync(new Uri(downloadurl), temp_path); while (Program.webClient.IsBusy) { } }
             catch (Exception ex)
             {
-                TempFileCache.ClearCache();
-                Program.OperationError();
-                Program.FinishingMessageBox(ex.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError(ex.ToString());
                 return;
             }
             Program.SetTotalPercentage(50);
@@ -74,9 +72,7 @@ namespace MelonLoader
             try { repo_hash = Program.webClient.DownloadString(repo_hash_url); } catch (Exception ex) { repo_hash = null; }
             if (string.IsNullOrEmpty(repo_hash))
             {
-                TempFileCache.ClearCache();
-                Program.OperationError();
-                Program.FinishingMessageBox("Failed to get SHA512 Hash from Repo!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError("Failed to get SHA512 Hash from Repo!");
                 return;
             }
             if (Program.Closing)
@@ -85,24 +81,18 @@ namespace MelonLoader
             byte[] checksum = sha512.ComputeHash(File.ReadAllBytes(temp_path));
             if ((checksum == null) || (checksum.Length <= 0))
             {
-                TempFileCache.ClearCache();
-                Program.OperationError();
-                Program.FinishingMessageBox("Failed to get SHA512 Hash from Temp File!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError("Failed to get SHA512 Hash from Temp File!");
                 return;
             }
             string file_hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
             if (string.IsNullOrEmpty(file_hash))
             {
-                TempFileCache.ClearCache();
-                Program.OperationError();
-                Program.FinishingMessageBox("Failed to get SHA512 Hash from Temp File!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError("Failed to get SHA512 Hash from Temp File!");
                 return;
             }
             if (!file_hash.Equals(repo_hash))
             {
-                TempFileCache.ClearCache();
-                Program.OperationError();
-                Program.FinishingMessageBox("SHA512 Hash from Temp File does not match Repo Hash!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError("SHA512 Hash from Temp File does not match Repo Hash!");
                 return;
             }
             Program.SetCurrentOperation("Extracting MelonLoader...");
@@ -156,9 +146,7 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                TempFileCache.ClearCache();
-                Program.OperationError();
-                Program.FinishingMessageBox(ex.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError(ex.ToString());
                 return;
             }
             if (Program.Closing)
@@ -209,8 +197,7 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                Program.OperationError();
-                Program.FinishingMessageBox(ex.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError(ex.ToString());
                 return;
             }
             if (Program.Closing)
@@ -233,8 +220,7 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                Program.OperationError();
-                Program.FinishingMessageBox(ex.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Program.LogError(ex.ToString());
                 return;
             }
             if (Program.Closing)

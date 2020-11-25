@@ -78,6 +78,19 @@ namespace MelonLoader
             }));
         }
 
+        internal static void LogError(string msg)
+        {
+            TempFileCache.ClearCache();
+            OperationError();
+
+            File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", msg);
+#if DEBUG
+            FinishingMessageBox(msg, MessageBoxButtons.OK, MessageBoxIcon.Error);
+#else
+            FinishingMessageBox("INTERNAL FAILURE! Please upload the created log to #melonloader-support on Discord.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
+        }
+
         internal static void OperationError()
         {
             mainForm.Invoke(new Action(() =>
