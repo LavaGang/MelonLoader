@@ -143,6 +143,7 @@
 120. Fixed Issue with ValueEdited not correctly saving to MelonPreferences when Save is called.
 121. Fixed Issue with ValueEdited not being set when Auto-Converter runs.
 122. Added UnityEngine.Il2CppImageConversionManager to Managed folder to help with Image Conversion on Il2Cpp Games.
+123. Added Better Exception Handling for MelonLoader Core Initialization.
 
 ---
 
