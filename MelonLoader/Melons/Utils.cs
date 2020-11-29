@@ -7,6 +7,9 @@ namespace MelonLoader
 {
     public static class MelonUtils
     {
+        public static string GetUserDataDirectory() => Core.UserDataPath;
+        public static bool IsVRChat() => (GetGameName().Equals("VRChat") && GetGameDeveloper().Equals("VRChat"));
+        public static bool IsBoneworks() => (GetGameName().Equals("BONEWORKS") && GetGameDeveloper().Equals("Stress Level Zero"));
         public static string RandomString(int length)
         {
             StringBuilder builder = new StringBuilder();
@@ -15,9 +18,45 @@ namespace MelonLoader
                 builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * rand.NextDouble())) + 65));
             return builder.ToString();
         }
-        public static string GetUserDataDirectory() => Core.UserDataPath;
-        public static bool IsVRChat() => (GetGameName().Equals("VRChat") && GetGameDeveloper().Equals("VRChat"));
-        public static bool IsBoneworks() => (GetGameName().Equals("BONEWORKS") && GetGameDeveloper().Equals("Stress Level Zero"));
+        public static string ColorToANSI(ConsoleColor color)
+        {
+            switch (color)
+            {
+                case ConsoleColor.Black:
+                    return "\x1b[30m";
+                case ConsoleColor.DarkBlue:
+                    return "\x1b[34m";
+                case ConsoleColor.DarkGreen:
+                    return "\x1b[32m";
+                case ConsoleColor.DarkCyan:
+                    return "\x1b[36m";
+                case ConsoleColor.DarkRed:
+                    return "\x1b[31m";
+                case ConsoleColor.DarkMagenta:
+                    return "\x1b[35m";
+                case ConsoleColor.DarkYellow:
+                    return "\x1b[33m";
+                case ConsoleColor.Gray:
+                    return "\x1b[37m";
+                case ConsoleColor.DarkGray:
+                    return "\x1b[90m";
+                case ConsoleColor.Blue:
+                    return "\x1b[94m";
+                case ConsoleColor.Green:
+                    return "\x1b[92m";
+                case ConsoleColor.Cyan:
+                    return "\x1b[96m";
+                case ConsoleColor.Red:
+                    return "\x1b[91m";
+                case ConsoleColor.Magenta:
+                    return "\x1b[95m";
+                case ConsoleColor.Yellow:
+                    return "\x1b[93m";
+                case ConsoleColor.White:
+                default:
+                    return "\x1b[97m";
+            }
+        }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsGameIl2Cpp();
