@@ -82,7 +82,6 @@ namespace MelonLoader
         {
             TempFileCache.ClearCache();
             OperationError();
-
             File.WriteAllText(Directory.GetCurrentDirectory() + $@"\MLInstaller_{DateTime.Now:yy-M-dd_HH-mm-ss.fff}.log", msg);
 #if DEBUG
             FinishingMessageBox(msg, MessageBoxButtons.OK, MessageBoxIcon.Error);

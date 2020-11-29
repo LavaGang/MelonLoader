@@ -145,6 +145,7 @@
 122. Added UnityEngine.Il2CppImageConversionManager to Managed folder to help with Image Conversion on Il2Cpp Games.
 123. Added Better Exception Handling for MelonLoader Core Initialization.
 124. Added Error Log File Output to Installer.
+125. Added MelonPreferences Auto-Downgrade System to Installer.
 
 ---
 

@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using MelonLoader.Tomlyn;
+using MelonLoader.Tomlyn.Model;
+using MelonLoader.Tomlyn.Syntax;
 #pragma warning disable 0168
 
 namespace MelonLoader
@@ -104,7 +109,8 @@ namespace MelonLoader
                 string proxy_path = null;
                 if (GetExistingProxyPath(destination, out proxy_path))
                     File.Delete(proxy_path);
-
+                if (legacy_version && (Program.mainForm.CurrentInstalledVersion.CompareTo("0.3.0") >= 0))
+                    DowngradeMelonPreferences(destination);
                 using FileStream stream = new FileStream(temp_path, FileMode.Open, FileAccess.Read);
                 using ZipArchive zip = new ZipArchive(stream);
                 int total_entry_count = zip.Entries.Count;
@@ -247,6 +253,52 @@ namespace MelonLoader
                 break;
             }
             return !string.IsNullOrEmpty(proxy_path);
+        }
+
+        private static void DowngradeMelonPreferences(string destination)
+        {
+            string userdatapath = Path.Combine(destination, "UserData");
+            string newfilepath = Path.Combine(userdatapath, "modprefs.ini");
+            if (File.Exists(newfilepath))
+                File.Delete(newfilepath);
+            string oldfilepath = Path.Combine(userdatapath, "MelonPreferences.cfg");
+            if (!File.Exists(oldfilepath))
+                return;
+            string filestr = File.ReadAllText(oldfilepath);
+            if (string.IsNullOrEmpty(filestr))
+                return;
+            IniFile iniFile = new IniFile(newfilepath);
+            DocumentSyntax docsyn = Toml.Parse(filestr);
+            if (docsyn == null)
+                return;
+            TomlTable model = docsyn.ToModel();
+            if (model.Count <= 0)
+                return;
+            foreach (KeyValuePair<string, object> keypair in model)
+            {
+                string category_name = keypair.Key;
+                TomlTable tbl = (TomlTable)keypair.Value;
+                if (tbl.Count <= 0)
+                    continue;
+                foreach (KeyValuePair<string, object> tblkeypair in tbl)
+                {
+                    string name = tblkeypair.Key;
+                    if (string.IsNullOrEmpty(name))
+                        continue;
+                    TomlObject obj = TomlObject.ToTomlObject(tblkeypair.Value);
+                    if (obj == null)
+                        continue;
+                    if (obj.Kind == ObjectKind.String)
+                        iniFile.SetString(category_name, name, ((TomlString)obj).Value);
+                    else if (obj.Kind == ObjectKind.Boolean)
+                        iniFile.SetBool(category_name, name, ((TomlBoolean)obj).Value);
+                    else if (obj.Kind == ObjectKind.Integer)
+                        iniFile.SetInt(category_name, name, (int)((TomlInteger)obj).Value);
+                    else if (obj.Kind == ObjectKind.Float)
+                        iniFile.SetFloat(category_name, name, (float)((TomlFloat)obj).Value);
+                }
+            }
+            File.Delete(oldfilepath);
         }
     }
 }

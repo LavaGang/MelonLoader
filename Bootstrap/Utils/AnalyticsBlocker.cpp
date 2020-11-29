@@ -9,6 +9,7 @@ std::list<std::string> AnalyticsBlocker::HostNames_DAB;
 
 std::list<std::string> AnalyticsBlocker::HostNames = {
 	"api.amplitude.com",
+	"api2.amplitude.com",
 	"api.uca.cloud.unity3d.com",
 	"config.uca.cloud.unity3d.com",
 	"perf-events.cloud.unity3d.com",

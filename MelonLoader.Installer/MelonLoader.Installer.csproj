@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\ThrowHelper.cs" />

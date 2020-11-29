@@ -53,6 +53,16 @@
             this.Automated_UnityGame_Display = new System.Windows.Forms.TextBox();
             this.Automated_UnityGame_Text = new MetroFramework.Controls.MetroLabel();
             this.Automated_Divider = new MetroFramework.Controls.MetroLabel();
+            this.Tab_ManualZip = new MetroFramework.Controls.MetroTabPage();
+            this.ManualZip_ZipArchive_Select = new MetroFramework.Controls.MetroButton();
+            this.ManualZip_ZipArchive_Display = new System.Windows.Forms.TextBox();
+            this.ManualZip_ZipArchive_Text = new MetroFramework.Controls.MetroLabel();
+            this.ManualZip_UnityGame_Select = new MetroFramework.Controls.MetroButton();
+            this.ManualZip_UnityGame_Display = new System.Windows.Forms.TextBox();
+            this.ManualZip_UnityGame_Text = new MetroFramework.Controls.MetroLabel();
+            this.ManualZip_Uninstall = new MetroFramework.Controls.MetroButton();
+            this.ManualZip_Install = new MetroFramework.Controls.MetroButton();
+            this.ManualZip_Divider = new MetroFramework.Controls.MetroLabel();
             this.Tab_Output = new MetroFramework.Controls.MetroTabPage();
             this.Output_Current_Operation = new MetroFramework.Controls.MetroLabel();
             this.Output_Divider = new MetroFramework.Controls.MetroLabel();
@@ -64,16 +74,6 @@
             this.Output_Total_Text = new MetroFramework.Controls.MetroLabel();
             this.Output_Total_Progress_Text = new MetroFramework.Controls.MetroLabel();
             this.Output_Current_Progress_Text = new MetroFramework.Controls.MetroLabel();
-            this.Tab_ManualZip = new MetroFramework.Controls.MetroTabPage();
-            this.ManualZip_ZipArchive_Select = new MetroFramework.Controls.MetroButton();
-            this.ManualZip_ZipArchive_Display = new System.Windows.Forms.TextBox();
-            this.ManualZip_ZipArchive_Text = new MetroFramework.Controls.MetroLabel();
-            this.ManualZip_UnityGame_Select = new MetroFramework.Controls.MetroButton();
-            this.ManualZip_UnityGame_Display = new System.Windows.Forms.TextBox();
-            this.ManualZip_UnityGame_Text = new MetroFramework.Controls.MetroLabel();
-            this.ManualZip_Uninstall = new MetroFramework.Controls.MetroButton();
-            this.ManualZip_Install = new MetroFramework.Controls.MetroButton();
-            this.ManualZip_Divider = new MetroFramework.Controls.MetroLabel();
             this.Tab_Settings = new MetroFramework.Controls.MetroTabPage();
             this.Settings_CloseAfterCompletion = new MetroFramework.Controls.MetroCheckBox();
             this.Settings_AutoUpdateInstaller = new MetroFramework.Controls.MetroCheckBox();
@@ -87,6 +87,7 @@
             this.Error_Error = new MetroFramework.Controls.MetroLabel();
             this.Error_Text = new MetroFramework.Controls.MetroLabel();
             this.InstallerUpdateNotice = new MetroFramework.Controls.MetroLabel();
+            this.Settings_ShowAlphaReleases = new MetroFramework.Controls.MetroCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.ThemeManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_Wiki)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_GitHub)).BeginInit();
@@ -96,8 +97,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ML_Logo)).BeginInit();
             this.PageManager.SuspendLayout();
             this.Tab_Automated.SuspendLayout();
-            this.Tab_Output.SuspendLayout();
             this.Tab_ManualZip.SuspendLayout();
+            this.Tab_Output.SuspendLayout();
             this.Tab_Settings.SuspendLayout();
             this.Tab_PleaseWait.SuspendLayout();
             this.Tab_Error.SuspendLayout();
@@ -194,8 +195,8 @@
             // 
             this.PageManager.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.PageManager.Controls.Add(this.Tab_Automated);
-            this.PageManager.Controls.Add(this.Tab_ManualZip);
             this.PageManager.Controls.Add(this.Tab_Output);
+            this.PageManager.Controls.Add(this.Tab_ManualZip);
             this.PageManager.Controls.Add(this.Tab_Settings);
             this.PageManager.Controls.Add(this.Tab_PleaseWait);
             this.PageManager.Controls.Add(this.Tab_Error);
@@ -204,7 +205,7 @@
             this.PageManager.ItemSize = new System.Drawing.Size(141, 34);
             this.PageManager.Location = new System.Drawing.Point(21, 203);
             this.PageManager.Name = "PageManager";
-            this.PageManager.SelectedIndex = 2;
+            this.PageManager.SelectedIndex = 3;
             this.PageManager.Size = new System.Drawing.Size(439, 222);
             this.PageManager.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.PageManager.Style = MetroFramework.MetroColorStyle.Red;
@@ -400,6 +401,126 @@
             this.Automated_Divider.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Automated_Divider.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
+            // Tab_ManualZip
+            // 
+            this.Tab_ManualZip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_ZipArchive_Select);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_ZipArchive_Display);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_ZipArchive_Text);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_UnityGame_Select);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_UnityGame_Display);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_UnityGame_Text);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_Uninstall);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_Install);
+            this.Tab_ManualZip.Controls.Add(this.ManualZip_Divider);
+            this.Tab_ManualZip.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Tab_ManualZip.HorizontalScrollbarBarColor = true;
+            this.Tab_ManualZip.Location = new System.Drawing.Point(4, 38);
+            this.Tab_ManualZip.Name = "Tab_ManualZip";
+            this.Tab_ManualZip.Size = new System.Drawing.Size(431, 180);
+            this.Tab_ManualZip.TabIndex = 1;
+            this.Tab_ManualZip.Text = "Manual Zip  ";
+            this.Tab_ManualZip.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.Tab_ManualZip.VerticalScrollbarBarColor = true;
+            // 
+            // ManualZip_ZipArchive_Select
+            // 
+            this.ManualZip_ZipArchive_Select.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ManualZip_ZipArchive_Select.Location = new System.Drawing.Point(91, 75);
+            this.ManualZip_ZipArchive_Select.Name = "ManualZip_ZipArchive_Select";
+            this.ManualZip_ZipArchive_Select.Size = new System.Drawing.Size(60, 19);
+            this.ManualZip_ZipArchive_Select.TabIndex = 22;
+            this.ManualZip_ZipArchive_Select.Text = "SELECT";
+            this.ManualZip_ZipArchive_Select.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.ManualZip_ZipArchive_Select.Click += new System.EventHandler(this.ManualZip_ZipArchive_Select_Click);
+            // 
+            // ManualZip_ZipArchive_Display
+            // 
+            this.ManualZip_ZipArchive_Display.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ManualZip_ZipArchive_Display.Location = new System.Drawing.Point(159, 74);
+            this.ManualZip_ZipArchive_Display.Name = "ManualZip_ZipArchive_Display";
+            this.ManualZip_ZipArchive_Display.ReadOnly = true;
+            this.ManualZip_ZipArchive_Display.Size = new System.Drawing.Size(260, 20);
+            this.ManualZip_ZipArchive_Display.TabIndex = 21;
+            this.ManualZip_ZipArchive_Display.Text = "Please Select your MelonLoader Zip Archive...";
+            // 
+            // ManualZip_ZipArchive_Text
+            // 
+            this.ManualZip_ZipArchive_Text.AutoSize = true;
+            this.ManualZip_ZipArchive_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.ManualZip_ZipArchive_Text.Location = new System.Drawing.Point(9, 74);
+            this.ManualZip_ZipArchive_Text.Name = "ManualZip_ZipArchive_Text";
+            this.ManualZip_ZipArchive_Text.Size = new System.Drawing.Size(80, 19);
+            this.ManualZip_ZipArchive_Text.TabIndex = 20;
+            this.ManualZip_ZipArchive_Text.Text = "Zip Archive:";
+            this.ManualZip_ZipArchive_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // ManualZip_UnityGame_Select
+            // 
+            this.ManualZip_UnityGame_Select.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ManualZip_UnityGame_Select.Location = new System.Drawing.Point(91, 27);
+            this.ManualZip_UnityGame_Select.Name = "ManualZip_UnityGame_Select";
+            this.ManualZip_UnityGame_Select.Size = new System.Drawing.Size(60, 19);
+            this.ManualZip_UnityGame_Select.TabIndex = 19;
+            this.ManualZip_UnityGame_Select.Text = "SELECT";
+            this.ManualZip_UnityGame_Select.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.ManualZip_UnityGame_Select.Click += new System.EventHandler(this.ManualZip_UnityGame_Select_Click);
+            // 
+            // ManualZip_UnityGame_Display
+            // 
+            this.ManualZip_UnityGame_Display.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ManualZip_UnityGame_Display.Location = new System.Drawing.Point(159, 26);
+            this.ManualZip_UnityGame_Display.Name = "ManualZip_UnityGame_Display";
+            this.ManualZip_UnityGame_Display.ReadOnly = true;
+            this.ManualZip_UnityGame_Display.Size = new System.Drawing.Size(260, 20);
+            this.ManualZip_UnityGame_Display.TabIndex = 18;
+            this.ManualZip_UnityGame_Display.Text = "Please Select your Unity Game...";
+            // 
+            // ManualZip_UnityGame_Text
+            // 
+            this.ManualZip_UnityGame_Text.AutoSize = true;
+            this.ManualZip_UnityGame_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.ManualZip_UnityGame_Text.Location = new System.Drawing.Point(4, 27);
+            this.ManualZip_UnityGame_Text.Name = "ManualZip_UnityGame_Text";
+            this.ManualZip_UnityGame_Text.Size = new System.Drawing.Size(85, 19);
+            this.ManualZip_UnityGame_Text.TabIndex = 17;
+            this.ManualZip_UnityGame_Text.Text = "Unity Game:";
+            this.ManualZip_UnityGame_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // ManualZip_Uninstall
+            // 
+            this.ManualZip_Uninstall.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ManualZip_Uninstall.Location = new System.Drawing.Point(218, 129);
+            this.ManualZip_Uninstall.Name = "ManualZip_Uninstall";
+            this.ManualZip_Uninstall.Size = new System.Drawing.Size(206, 44);
+            this.ManualZip_Uninstall.TabIndex = 16;
+            this.ManualZip_Uninstall.Text = "UN-INSTALL";
+            this.ManualZip_Uninstall.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.ManualZip_Uninstall.Visible = false;
+            this.ManualZip_Uninstall.Click += new System.EventHandler(this.ManualZip_Uninstall_Click);
+            // 
+            // ManualZip_Install
+            // 
+            this.ManualZip_Install.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ManualZip_Install.Enabled = false;
+            this.ManualZip_Install.Location = new System.Drawing.Point(5, 129);
+            this.ManualZip_Install.Name = "ManualZip_Install";
+            this.ManualZip_Install.Size = new System.Drawing.Size(206, 44);
+            this.ManualZip_Install.TabIndex = 15;
+            this.ManualZip_Install.Text = "INSTALL";
+            this.ManualZip_Install.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.ManualZip_Install.Click += new System.EventHandler(this.ManualZip_Install_Click);
+            // 
+            // ManualZip_Divider
+            // 
+            this.ManualZip_Divider.AutoSize = true;
+            this.ManualZip_Divider.Location = new System.Drawing.Point(1, 106);
+            this.ManualZip_Divider.Name = "ManualZip_Divider";
+            this.ManualZip_Divider.Size = new System.Drawing.Size(429, 19);
+            this.ManualZip_Divider.TabIndex = 12;
+            this.ManualZip_Divider.Text = "______________________________________________________________________";
+            this.ManualZip_Divider.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
             // Tab_Output
             // 
             this.Tab_Output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -547,129 +668,10 @@
             this.Output_Current_Progress_Text.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Output_Current_Progress_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // Tab_ManualZip
-            // 
-            this.Tab_ManualZip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_ZipArchive_Select);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_ZipArchive_Display);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_ZipArchive_Text);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_UnityGame_Select);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_UnityGame_Display);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_UnityGame_Text);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_Uninstall);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_Install);
-            this.Tab_ManualZip.Controls.Add(this.ManualZip_Divider);
-            this.Tab_ManualZip.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Tab_ManualZip.HorizontalScrollbarBarColor = true;
-            this.Tab_ManualZip.Location = new System.Drawing.Point(4, 38);
-            this.Tab_ManualZip.Name = "Tab_ManualZip";
-            this.Tab_ManualZip.Size = new System.Drawing.Size(431, 180);
-            this.Tab_ManualZip.TabIndex = 1;
-            this.Tab_ManualZip.Text = "Manual Zip  ";
-            this.Tab_ManualZip.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.Tab_ManualZip.VerticalScrollbarBarColor = true;
-            // 
-            // ManualZip_ZipArchive_Select
-            // 
-            this.ManualZip_ZipArchive_Select.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ManualZip_ZipArchive_Select.Location = new System.Drawing.Point(91, 75);
-            this.ManualZip_ZipArchive_Select.Name = "ManualZip_ZipArchive_Select";
-            this.ManualZip_ZipArchive_Select.Size = new System.Drawing.Size(60, 19);
-            this.ManualZip_ZipArchive_Select.TabIndex = 22;
-            this.ManualZip_ZipArchive_Select.Text = "SELECT";
-            this.ManualZip_ZipArchive_Select.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.ManualZip_ZipArchive_Select.Click += new System.EventHandler(this.ManualZip_ZipArchive_Select_Click);
-            // 
-            // ManualZip_ZipArchive_Display
-            // 
-            this.ManualZip_ZipArchive_Display.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ManualZip_ZipArchive_Display.Location = new System.Drawing.Point(159, 74);
-            this.ManualZip_ZipArchive_Display.Name = "ManualZip_ZipArchive_Display";
-            this.ManualZip_ZipArchive_Display.ReadOnly = true;
-            this.ManualZip_ZipArchive_Display.Size = new System.Drawing.Size(260, 20);
-            this.ManualZip_ZipArchive_Display.TabIndex = 21;
-            this.ManualZip_ZipArchive_Display.Text = "Please Select your MelonLoader Zip Archive...";
-            // 
-            // ManualZip_ZipArchive_Text
-            // 
-            this.ManualZip_ZipArchive_Text.AutoSize = true;
-            this.ManualZip_ZipArchive_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.ManualZip_ZipArchive_Text.Location = new System.Drawing.Point(9, 74);
-            this.ManualZip_ZipArchive_Text.Name = "ManualZip_ZipArchive_Text";
-            this.ManualZip_ZipArchive_Text.Size = new System.Drawing.Size(80, 19);
-            this.ManualZip_ZipArchive_Text.TabIndex = 20;
-            this.ManualZip_ZipArchive_Text.Text = "Zip Archive:";
-            this.ManualZip_ZipArchive_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // ManualZip_UnityGame_Select
-            // 
-            this.ManualZip_UnityGame_Select.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ManualZip_UnityGame_Select.Location = new System.Drawing.Point(91, 27);
-            this.ManualZip_UnityGame_Select.Name = "ManualZip_UnityGame_Select";
-            this.ManualZip_UnityGame_Select.Size = new System.Drawing.Size(60, 19);
-            this.ManualZip_UnityGame_Select.TabIndex = 19;
-            this.ManualZip_UnityGame_Select.Text = "SELECT";
-            this.ManualZip_UnityGame_Select.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.ManualZip_UnityGame_Select.Click += new System.EventHandler(this.ManualZip_UnityGame_Select_Click);
-            // 
-            // ManualZip_UnityGame_Display
-            // 
-            this.ManualZip_UnityGame_Display.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ManualZip_UnityGame_Display.Location = new System.Drawing.Point(159, 26);
-            this.ManualZip_UnityGame_Display.Name = "ManualZip_UnityGame_Display";
-            this.ManualZip_UnityGame_Display.ReadOnly = true;
-            this.ManualZip_UnityGame_Display.Size = new System.Drawing.Size(260, 20);
-            this.ManualZip_UnityGame_Display.TabIndex = 18;
-            this.ManualZip_UnityGame_Display.Text = "Please Select your Unity Game...";
-            // 
-            // ManualZip_UnityGame_Text
-            // 
-            this.ManualZip_UnityGame_Text.AutoSize = true;
-            this.ManualZip_UnityGame_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.ManualZip_UnityGame_Text.Location = new System.Drawing.Point(4, 27);
-            this.ManualZip_UnityGame_Text.Name = "ManualZip_UnityGame_Text";
-            this.ManualZip_UnityGame_Text.Size = new System.Drawing.Size(85, 19);
-            this.ManualZip_UnityGame_Text.TabIndex = 17;
-            this.ManualZip_UnityGame_Text.Text = "Unity Game:";
-            this.ManualZip_UnityGame_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // ManualZip_Uninstall
-            // 
-            this.ManualZip_Uninstall.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ManualZip_Uninstall.Location = new System.Drawing.Point(218, 129);
-            this.ManualZip_Uninstall.Name = "ManualZip_Uninstall";
-            this.ManualZip_Uninstall.Size = new System.Drawing.Size(206, 44);
-            this.ManualZip_Uninstall.TabIndex = 16;
-            this.ManualZip_Uninstall.Text = "UN-INSTALL";
-            this.ManualZip_Uninstall.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.ManualZip_Uninstall.Visible = false;
-            this.ManualZip_Uninstall.Click += new System.EventHandler(this.ManualZip_Uninstall_Click);
-            // 
-            // ManualZip_Install
-            // 
-            this.ManualZip_Install.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ManualZip_Install.Enabled = false;
-            this.ManualZip_Install.Location = new System.Drawing.Point(5, 129);
-            this.ManualZip_Install.Name = "ManualZip_Install";
-            this.ManualZip_Install.Size = new System.Drawing.Size(206, 44);
-            this.ManualZip_Install.TabIndex = 15;
-            this.ManualZip_Install.Text = "INSTALL";
-            this.ManualZip_Install.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.ManualZip_Install.Click += new System.EventHandler(this.ManualZip_Install_Click);
-            // 
-            // ManualZip_Divider
-            // 
-            this.ManualZip_Divider.AutoSize = true;
-            this.ManualZip_Divider.Location = new System.Drawing.Point(1, 106);
-            this.ManualZip_Divider.Name = "ManualZip_Divider";
-            this.ManualZip_Divider.Size = new System.Drawing.Size(429, 19);
-            this.ManualZip_Divider.TabIndex = 12;
-            this.ManualZip_Divider.Text = "______________________________________________________________________";
-            this.ManualZip_Divider.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
             // Tab_Settings
             // 
             this.Tab_Settings.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Tab_Settings.Controls.Add(this.Settings_ShowAlphaReleases);
             this.Tab_Settings.Controls.Add(this.Settings_CloseAfterCompletion);
             this.Tab_Settings.Controls.Add(this.Settings_AutoUpdateInstaller);
             this.Tab_Settings.Controls.Add(this.Settings_Theme_Selection);
@@ -858,6 +860,20 @@
             this.InstallerUpdateNotice.Visible = false;
             this.InstallerUpdateNotice.Click += new System.EventHandler(this.InstallerUpdateNotice_Click);
             // 
+            // Settings_ShowAlphaReleases
+            // 
+            this.Settings_ShowAlphaReleases.AutoSize = true;
+            this.Settings_ShowAlphaReleases.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Settings_ShowAlphaReleases.Location = new System.Drawing.Point(11, 11);
+            this.Settings_ShowAlphaReleases.Name = "Settings_ShowAlphaReleases";
+            this.Settings_ShowAlphaReleases.Size = new System.Drawing.Size(61, 15);
+            this.Settings_ShowAlphaReleases.Style = MetroFramework.MetroColorStyle.Green;
+            this.Settings_ShowAlphaReleases.TabIndex = 6;
+            this.Settings_ShowAlphaReleases.Text = "ALPHA";
+            this.Settings_ShowAlphaReleases.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.Settings_ShowAlphaReleases.UseVisualStyleBackColor = true;
+            this.Settings_ShowAlphaReleases.CheckedChanged += new System.EventHandler(this.Settings_ShowAlphaReleases_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -893,10 +909,10 @@
             this.PageManager.ResumeLayout(false);
             this.Tab_Automated.ResumeLayout(false);
             this.Tab_Automated.PerformLayout();
-            this.Tab_Output.ResumeLayout(false);
-            this.Tab_Output.PerformLayout();
             this.Tab_ManualZip.ResumeLayout(false);
             this.Tab_ManualZip.PerformLayout();
+            this.Tab_Output.ResumeLayout(false);
+            this.Tab_Output.PerformLayout();
             this.Tab_Settings.ResumeLayout(false);
             this.Tab_Settings.PerformLayout();
             this.Tab_PleaseWait.ResumeLayout(false);
@@ -966,5 +982,6 @@
         internal MetroFramework.Controls.MetroLabel Output_Current_Operation;
         internal MetroFramework.Controls.MetroLabel Output_Current_Progress_Text;
         private MetroFramework.Controls.MetroLabel Automated_x64Only;
+        private MetroFramework.Controls.MetroCheckBox Settings_ShowAlphaReleases;
     }
 }
