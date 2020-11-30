@@ -7,12 +7,24 @@
 #include "AnalyticsBlocker.h"
 #include "../Managers/InternalCalls.h"
 #include "AssemblyGenerator.h"
+#include "../Managers/Game.h"
 
 int CommandLine::argc = NULL;
 char* CommandLine::argv[64];
+IniFile* CommandLine::iniFile = NULL;
 
 void CommandLine::Read()
 {
+	if (iniFile == NULL)
+	{
+		std::string BasePathStr = Game::BasePath;
+		char* BasePath = new char[BasePathStr.size() + 1];
+		std::copy(BasePathStr.begin(), BasePathStr.end(), BasePath);
+		BasePath[BasePathStr.size()] = '\0';
+		iniFile = new IniFile((std::string(BasePath) + "\\MelonLoader\\LaunchOptions.ini"));
+	}
+	ReadIniFile();
+
 	char* nextchar = NULL;
 	char* curchar = strtok_s(GetCommandLineA(), " ", &nextchar);
 	while (curchar && (argc < 63))
@@ -87,7 +99,7 @@ void CommandLine::Read()
 		else if (strstr(command, "--melonloader.hideconsole") != NULL)
 			Console::ShouldHide = true;
 		else if (strstr(command, "--melonloader.hidewarnings") != NULL)
-			Console::HideWarnings = false;
+			Console::HideWarnings = true;
 		else if (strstr(command, "--melonloader.maxlogs") != NULL)
 			Logger::MaxLogs = GetIntFromConstChar(argv[i + 1], 10);
 		else if (strstr(command, "--melonloader.maxwarnings") != NULL)
@@ -97,7 +109,6 @@ void CommandLine::Read()
 #endif
 	}
 }
-
 
 int CommandLine::GetIntFromConstChar(const char* str, int defaultval)
 {
@@ -118,4 +129,100 @@ int CommandLine::GetIntFromConstChar(const char* str, int defaultval)
 		++str;
 	}
 	return (negate ? result : -result);
+}
+
+void CommandLine::ReadIniFile()
+{
+#ifndef DEBUG
+	Debug::Enabled = (!iniFile->ReadValue("Core", "Debug").empty() && iniFile->ReadValue("Core", "Debug")._Equal("true"));
+	iniFile->WriteValue("Core", "Debug", (Debug::Enabled ? "true" : "false"));
+#endif
+	Core::QuitFix = (!iniFile->ReadValue("Core", "QuitFix").empty() && iniFile->ReadValue("Core", "QuitFix")._Equal("true"));
+	iniFile->WriteValue("Core", "QuitFix", (Core::QuitFix ? "true" : "false"));
+
+#ifndef DEBUG
+	Console::ShouldHide = (!iniFile->ReadValue("Console", "Enabled").empty() && iniFile->ReadValue("Console", "Enabled")._Equal("false"));
+	iniFile->WriteValue("Console", "Enabled", (Console::ShouldHide ? "false" : "true"));
+#endif
+	Console::Mode = (iniFile->ReadValue("Console", "Mode").empty() ? Console::Mode : (
+		iniFile->ReadValue("Console", "Mode")._Equal("1") ? Console::DisplayMode::MAGENTA : (
+			iniFile->ReadValue("Console", "Mode")._Equal("2") ? Console::DisplayMode::RAINBOW :
+			(iniFile->ReadValue("Console", "Mode")._Equal("3") ? Console::DisplayMode::RANDOMRAINBOW : Console::Mode))));
+	iniFile->WriteValue("Console", "Mode", std::to_string(Console::Mode));
+	Console::AlwaysOnTop = (!iniFile->ReadValue("Console", "AlwaysOnTop").empty() && iniFile->ReadValue("Console", "AlwaysOnTop")._Equal("true"));
+	iniFile->WriteValue("Console", "AlwaysOnTop", (Console::AlwaysOnTop ? "true" : "false"));
+#ifndef DEBUG
+	Console::HideWarnings = (!iniFile->ReadValue("Console", "HideWarnings").empty() && iniFile->ReadValue("Console", "HideWarnings")._Equal("true"));
+	iniFile->WriteValue("Console", "HideWarnings", (Console::AlwaysOnTop ? "true" : "false"));
+
+	Logger::MaxLogs = (!iniFile->ReadValue("Logger", "MaxLogs").empty() ? GetIntFromConstChar(iniFile->ReadValue("Console", "MaxLogs").c_str(), Logger::MaxLogs) : Logger::MaxLogs);
+	iniFile->WriteValue("Logger", "MaxLogs", std::to_string(Logger::MaxLogs));
+	Logger::MaxWarnings = (!iniFile->ReadValue("Logger", "MaxWarnings").empty() ? GetIntFromConstChar(iniFile->ReadValue("Console", "MaxWarnings").c_str(), Logger::MaxWarnings) : Logger::MaxWarnings);
+	iniFile->WriteValue("Logger", "MaxWarnings", std::to_string(Logger::MaxWarnings));
+	Logger::MaxErrors = (!iniFile->ReadValue("Logger", "MaxErrors").empty() ? GetIntFromConstChar(iniFile->ReadValue("Console", "MaxErrors").c_str(), Logger::MaxErrors) : Logger::MaxErrors);
+	iniFile->WriteValue("Logger", "MaxErrors", std::to_string(Logger::MaxErrors));
+#endif
+
+	AnalyticsBlocker::ShouldDAB = (!iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB").empty() && iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB")._Equal("true"));
+	iniFile->WriteValue("AnalyticsBlocker", "ShouldDAB", (AnalyticsBlocker::ShouldDAB ? "true" : "false"));
+
+	InternalCalls::MelonHandler::LoadModeForPlugins = (iniFile->ReadValue("LoadMode", "Plugins").empty() ? InternalCalls::MelonHandler::LoadMode::NORMAL : (
+		iniFile->ReadValue("LoadMode", "Plugins")._Equal("1") ? InternalCalls::MelonHandler::LoadMode::DEV : (
+			iniFile->ReadValue("LoadMode", "Plugins")._Equal("2") ? InternalCalls::MelonHandler::LoadMode::BOTH : InternalCalls::MelonHandler::LoadMode::NORMAL)));
+	iniFile->WriteValue("LoadMode", "Plugins", std::to_string(InternalCalls::MelonHandler::LoadModeForPlugins));
+	InternalCalls::MelonHandler::LoadModeForMods = (iniFile->ReadValue("LoadMode", "Mods").empty() ? InternalCalls::MelonHandler::LoadMode::NORMAL : (
+		iniFile->ReadValue("LoadMode", "Mods")._Equal("1") ? InternalCalls::MelonHandler::LoadMode::DEV : (
+			iniFile->ReadValue("LoadMode", "Mods")._Equal("2") ? InternalCalls::MelonHandler::LoadMode::BOTH : InternalCalls::MelonHandler::LoadMode::NORMAL)));
+	iniFile->WriteValue("LoadMode", "Mods", std::to_string(InternalCalls::MelonHandler::LoadModeForMods));
+
+	AssemblyGenerator::ForceRegeneration = (!iniFile->ReadValue("AssemblyGenerator", "ForceRegeneration").empty() && iniFile->ReadValue("AssemblyGenerator", "ForceRegeneration")._Equal("true"));
+	iniFile->WriteValue("AssemblyGenerator", "ForceRegeneration", "false");
+	if (iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies").empty() || !iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies")._Equal("true"))
+	{
+		iniFile->WriteValue("AssemblyGenerator", "ForceUnityDependencies", "false");
+		iniFile->WriteValue("AssemblyGenerator", "ForceUnityDependencies_Version", "0.0.0.0");
+	}
+	else
+	{
+		std::string version = iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies_Version");
+		if (!version.empty())
+		{
+			AssemblyGenerator::ForceVersion_UnityDependencies = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_UnityDependencies);
+			AssemblyGenerator::ForceVersion_UnityDependencies[version.size()] = '\0';
+		}
+		iniFile->WriteValue("AssemblyGenerator", "ForceUnityDependencies_Version", (std::string(AssemblyGenerator::ForceVersion_UnityDependencies).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_UnityDependencies));
+	}
+	if (iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppDumper").empty() || !iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppDumper")._Equal("true"))
+	{
+		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppDumper", "false");
+		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppDumper_Version", "0.0.0.0");
+	}
+	else
+	{
+		std::string version = iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppDumper_Version");
+		if (!version.empty())
+		{
+			AssemblyGenerator::ForceVersion_Il2CppDumper = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Il2CppDumper);
+			AssemblyGenerator::ForceVersion_Il2CppDumper[version.size()] = '\0';
+		}
+		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppDumper_Version", (std::string(AssemblyGenerator::ForceVersion_Il2CppDumper).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_Il2CppDumper));
+	}
+	if (iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower").empty() || !iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower")._Equal("true"))
+	{
+		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower", "false");
+		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower_Version", "0.0.0.0");
+	}
+	else
+	{
+		std::string version = iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower_Version");
+		if (!version.empty())
+		{
+			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower);
+			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower[version.size()] = '\0';
+		}
+		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower_Version", (std::string(AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower));
+	}
 }

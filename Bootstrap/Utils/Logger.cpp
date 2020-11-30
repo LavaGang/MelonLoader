@@ -111,14 +111,15 @@ void Logger::Warning(const char* txt)
 	}
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [WARNING] " << txt << std::endl;
-	std::cout 
-		<< Console::ColorToAnsi(Console::Color::Yellow)
-		<< "["
-		<< timestamp
-		<< "] [WARNING] "
-		<< txt
-		<< std::endl
-		<< "\x1b[37m";
+	if (!Console::HideWarnings)
+		std::cout 
+			<< Console::ColorToAnsi(Console::Color::Yellow)
+			<< "["
+			<< timestamp
+			<< "] [WARNING] "
+			<< txt
+			<< std::endl
+			<< "\x1b[37m";
 }
 
 void Logger::Error(const char* txt)
@@ -205,16 +206,17 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 	}
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [" << namesection << "] [WARNING] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Yellow)
-		<< "["
-		<< timestamp
-		<< "] ["
-		<< namesection
-		<< "] [WARNING] "
-		<< txt
-		<< std::endl
-		<< "\x1b[37m";
+	if (!Console::HideWarnings)
+		std::cout
+			<< Console::ColorToAnsi(Console::Color::Yellow)
+			<< "["
+			<< timestamp
+			<< "] ["
+			<< namesection
+			<< "] [WARNING] "
+			<< txt
+			<< std::endl
+			<< "\x1b[37m";
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)

@@ -13,8 +13,8 @@ namespace MelonLoader
         private string _path = "";
         public string Path { get { return _path; } internal set { if (!File.Exists(value)) File.WriteAllText(value, "", Encoding.Unicode); _path = value; } }
         public IniFile(string INIPath) { Path = INIPath; }
-        private void IniWriteValue(string Section, string Key, string Value) { WritePrivateProfileString(Section, Key, Value, Path); }
-        private string IniReadValue(string Section, string Key)
+        private void WriteValue(string Section, string Key, string Value) { WritePrivateProfileString(Section, Key, Value, Path); }
+        private string ReadValue(string Section, string Key)
         {
             const int MAX_CHARS = 1023;
             StringBuilder result = new StringBuilder(MAX_CHARS);
@@ -23,40 +23,40 @@ namespace MelonLoader
             return result.ToString();
         }
 
-        public bool HasKey(string section, string name) { return IniReadValue(section, name) != null; }
+        public bool HasKey(string section, string name) { return ReadValue(section, name) != null; }
 
         public string GetString(string section, string name, string defaultValue = "", bool autoSave = false)
         {
-            string value = IniReadValue(section, name);
+            string value = ReadValue(section, name);
             if (!string.IsNullOrEmpty(value))
                 return value;
             else if (autoSave)
                 SetString(section, name, defaultValue);
             return defaultValue;
         }
-        public void SetString(string section, string name, string value) { IniWriteValue(section, name, value.Trim()); }
+        public void SetString(string section, string name, string value) { WriteValue(section, name, value.Trim()); }
 
         public int GetInt(string section, string name, int defaultValue = 0, bool autoSave = false)
         {
             int value;
-            if (int.TryParse(IniReadValue(section, name), out value))
+            if (int.TryParse(ReadValue(section, name), out value))
                 return value;
             else if (autoSave)
                 SetInt(section, name, defaultValue);
             return defaultValue;
         }
-        public void SetInt(string section, string name, int value) { IniWriteValue(section, name, value.ToString()); }
+        public void SetInt(string section, string name, int value) { WriteValue(section, name, value.ToString()); }
 
         public float GetFloat(string section, string name, float defaultValue = 0f, bool autoSave = false)
         {
             float value;
-            if (float.TryParse(IniReadValue(section, name), out value))
+            if (float.TryParse(ReadValue(section, name), out value))
                 return value;
             else if (autoSave)
                 SetFloat(section, name, defaultValue);
             return defaultValue;
         }
-        public void SetFloat(string section, string name, float value) { IniWriteValue(section, name, value.ToString()); }
+        public void SetFloat(string section, string name, float value) { WriteValue(section, name, value.ToString()); }
 
         public bool GetBool(string section, string name, bool defaultValue = false, bool autoSave = false)
         {
@@ -67,6 +67,6 @@ namespace MelonLoader
                 SetBool(section, name, defaultValue);
             return defaultValue;
         }
-        public void SetBool(string section, string name, bool value) { IniWriteValue(section, name, value ? "true" : "false"); }
+        public void SetBool(string section, string name, bool value) { WriteValue(section, name, value ? "true" : "false"); }
     }
 }

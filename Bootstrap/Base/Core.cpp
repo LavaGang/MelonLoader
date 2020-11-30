@@ -23,11 +23,10 @@ bool Core::QuitFix = false;
 
 bool Core::Initialize()
 {
-	if (!OSVersionCheck())
+	if (!OSVersionCheck() || !Game::Initialize())
 		return false;
 	CommandLine::Read();
-	if (!Game::Initialize()
-		|| !Console::Initialize()
+	if (!Console::Initialize()
 		|| !Logger::Initialize()
 		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
