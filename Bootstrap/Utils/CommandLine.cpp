@@ -15,16 +15,7 @@ IniFile* CommandLine::iniFile = NULL;
 
 void CommandLine::Read()
 {
-	if (iniFile == NULL)
-	{
-		std::string BasePathStr = Game::BasePath;
-		char* BasePath = new char[BasePathStr.size() + 1];
-		std::copy(BasePathStr.begin(), BasePathStr.end(), BasePath);
-		BasePath[BasePathStr.size()] = '\0';
-		iniFile = new IniFile((std::string(BasePath) + "\\MelonLoader\\LaunchOptions.ini"));
-	}
 	ReadIniFile();
-
 	char* nextchar = NULL;
 	char* curchar = strtok_s(GetCommandLineA(), " ", &nextchar);
 	while (curchar && (argc < 63))
@@ -133,6 +124,9 @@ int CommandLine::GetIntFromConstChar(const char* str, int defaultval)
 
 void CommandLine::ReadIniFile()
 {
+	if (iniFile == NULL)
+		iniFile = new IniFile((std::string(Game::BasePath) + "\\MelonLoader\\LaunchOptions.ini"));
+
 #ifndef DEBUG
 	Debug::Enabled = (!iniFile->ReadValue("Core", "Debug").empty() && iniFile->ReadValue("Core", "Debug")._Equal("true"));
 	iniFile->WriteValue("Core", "Debug", (Debug::Enabled ? "true" : "false"));
