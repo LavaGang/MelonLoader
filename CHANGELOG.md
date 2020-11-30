@@ -149,6 +149,7 @@
 126. Added MelonUtils.ColorToANSI to convert ConsoleColor to ANSI String.
 127. Fixed Issue with ALPHA Setting in Installer not abiding by Selected Theme.
 128. Fixed Issue with MelonPreferences Auto-Downgrade System in Installer when clean installing.
+129. Fixed Issue with Assembly Generator not Logging Launch Arguments.
 
 ---
 

@@ -106,6 +106,7 @@ namespace MelonLoader.AssemblyGenerator
                 generatorProcessInfo.UseShellExecute = false;
                 generatorProcessInfo.RedirectStandardOutput = true;
                 generatorProcessInfo.CreateNoWindow = true;
+                Logger.Msg("\"" + ExePath + "\" " + generatorProcessInfo.Arguments);
                 Process process = null;
                 try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.Error(e.ToString()); Core.OverrideAppDomainBase(Core.BasePath); return false; }
                 StreamReader stdout = process.StandardOutput;
