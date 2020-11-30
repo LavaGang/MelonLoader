@@ -147,6 +147,8 @@ namespace MelonLoader
                     }
                 }
             }
+            MelonLogger.Msg("Config Loaded!");
+            MelonHandler.OnPreferencesLoaded();
         }
 
         private static bool IsSaving = false;

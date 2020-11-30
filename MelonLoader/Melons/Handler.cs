@@ -366,24 +366,26 @@ namespace MelonLoader
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
         }
 
-        internal static void OnApplicationStart()
+        internal static void OnApplicationStart_Plugins()
         {
-            if (_Plugins.Count > 0)
-            {
-                List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
-                foreach (MelonPlugin plugin in _Plugins)
-                    try { plugin.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(plugin); }
-                _Plugins.RemoveAll(failedPlugins.Contains);
-                DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
-            }
-            if (_Mods.Count > 0)
-            {
-                List<MelonMod> failedMods = new List<MelonMod>();
-                foreach (MelonMod mod in _Mods)
-                    try { mod.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedMods.Add(mod); }
-                _Mods.RemoveAll(failedMods.Contains);
-                DependencyGraph<MelonMod>.TopologicalSort(_Mods);
-            }
+            if (_Plugins.Count <= 0)
+                return;
+            List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
+            foreach (MelonPlugin plugin in _Plugins)
+                try { plugin.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(plugin); }
+            _Plugins.RemoveAll(failedPlugins.Contains);
+            DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
+        }
+
+        internal static void OnApplicationStart_Mods()
+        {
+            if (_Mods.Count <= 0)
+                return;
+            List<MelonMod> failedMods = new List<MelonMod>();
+            foreach (MelonMod mod in _Mods)
+                try { mod.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedMods.Add(mod); }
+            _Mods.RemoveAll(failedMods.Contains);
+            DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 
         private static bool SceneWasJustLoaded = false;
@@ -463,6 +465,17 @@ namespace MelonLoader
                 foreach (MelonMod mod in _Mods)
                     try { mod.OnPreferencesSaved(); mod.OnModSettingsApplied(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
+
+        internal static void OnPreferencesLoaded()
+        {
+            if (_Plugins.Count > 0)
+                foreach (MelonPlugin plugin in _Plugins)
+                    try { plugin.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+            if (_Mods.Count > 0)
+                foreach (MelonMod mod in _Mods)
+                    try { mod.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+        }
+
 
         internal static void OnApplicationQuit()
         {

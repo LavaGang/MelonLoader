@@ -97,6 +97,11 @@ namespace MelonLoader
         public virtual void OnPreferencesSaved() { }
 
         /// <summary>
+        /// Runs when Melon Preferences get saved.
+        /// </summary>
+        public virtual void OnPreferencesLoaded() { }
+
+        /// <summary>
         /// Runs upon VRChat's UiManager Initialization. Only runs if the Melon is used in VRChat.
         /// </summary>
         public virtual void VRChat_OnUiManagerInit() { }

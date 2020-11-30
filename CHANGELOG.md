@@ -152,6 +152,8 @@
 129. Fixed Issue with Assembly Generator not Logging Launch Arguments.
 130. Added LaunchOptions.ini to allow for Configuration of Launch Options without using the Command Line.
 131. Fixed Issue where Launch Option "--melonloader.hidewarnings" would not function correctly.
+132. Added OnPreferencesLoaded Override for Plugins and Mods.
+133. Fixed Issue where Plugins weren't given priority for OnApplicationStart.
 
 ---
 

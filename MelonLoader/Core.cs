@@ -47,9 +47,10 @@ namespace MelonLoader
             if (!SupportModule.Initialize())
                 return;
             AddUnityDebugLog();
+            MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.LoadMods();
             Main.LegacySupport();
-            MelonHandler.OnApplicationStart();
+            MelonHandler.OnApplicationStart_Mods();
         }
 
         internal static void Quit()
