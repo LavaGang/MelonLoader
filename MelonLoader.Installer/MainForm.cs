@@ -336,6 +336,8 @@ namespace MelonLoader
             PleaseWait_PleaseWait.Theme = themeStyle;
             PleaseWait_Text.Theme = themeStyle;
             Automated_x64Only.Theme = themeStyle;
+            Settings_ShowAlphaReleases.Style = (lightmode ? MetroFramework.MetroColorStyle.Red : MetroFramework.MetroColorStyle.Green);
+            Settings_ShowAlphaReleases.Theme = themeStyle;
         }
 
         private void ParseReleasesURL()
