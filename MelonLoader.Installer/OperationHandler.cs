@@ -109,7 +109,7 @@ namespace MelonLoader
                 string proxy_path = null;
                 if (GetExistingProxyPath(destination, out proxy_path))
                     File.Delete(proxy_path);
-                if (legacy_version && (Program.mainForm.CurrentInstalledVersion.CompareTo("0.3.0") >= 0))
+                if (legacy_version)
                     DowngradeMelonPreferences(destination);
                 using FileStream stream = new FileStream(temp_path, FileMode.Open, FileAccess.Read);
                 using ZipArchive zip = new ZipArchive(stream);
