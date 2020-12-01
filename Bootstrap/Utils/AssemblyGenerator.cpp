@@ -11,7 +11,6 @@
 #pragma comment(lib, "mscoree.lib")
 
 char* AssemblyGenerator::Path = NULL;
-bool AssemblyGenerator::ForceRegeneration = false;
 char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppDumper = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = NULL;

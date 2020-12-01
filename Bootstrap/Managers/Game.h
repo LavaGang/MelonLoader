@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class Game
 {
@@ -18,6 +19,6 @@ private:
 
 	static void ReadAppInfo();
 	static bool ReadUnityVersion();
-	static const char* ReadUnityVersionFromFileInfo();
-	static const char* ReadUnityVersionFromGlobalGameManagers();
+	static std::string ReadUnityVersionFromFileInfo();
+	static std::string ReadUnityVersionFromGlobalGameManagers();
 };

@@ -41,7 +41,10 @@ namespace MelonLoader.AssemblyGenerator
         private static int Run(string nullarg)
         {
             Logger.Msg("Checking GameAssembly...");
-            if (!ShouldGenerate())
+            Logger.Msg("Old: " + Config.GameAssemblyHash);
+            Logger.Msg("Current: " + CurrentGameAssemblyHash);
+            if (!string.IsNullOrEmpty(Config.GameAssemblyHash)
+                && Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
             {
                 Logger.Msg("Assembly is up to date. No Generation Needed.");
                 return 0;
@@ -80,8 +83,6 @@ namespace MelonLoader.AssemblyGenerator
             appDomainBase.ApplicationBase = basepath;
             Directory.SetCurrentDirectory(basepath);
         }
-
-        private static bool ShouldGenerate() => (Utils.ForceRegeneration() || string.IsNullOrEmpty(Config.GameAssemblyHash) || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash));
 
         private static void OldFiles_Cleanup()
         {

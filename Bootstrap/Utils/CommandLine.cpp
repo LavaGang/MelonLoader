@@ -61,8 +61,6 @@ void CommandLine::Read()
 				loadmode = 0;
 			InternalCalls::MelonHandler::LoadModeForMods = (InternalCalls::MelonHandler::LoadMode)loadmode;
 		}
-		else if (strstr(command, "--melonloader.agregenerate") != NULL)
-			AssemblyGenerator::ForceRegeneration = true;
 		else if (strstr(command, "--melonloader.agfvunity"))
 		{
 			std::string version = argv[i + 1];
@@ -169,8 +167,6 @@ void CommandLine::ReadIniFile()
 			iniFile->ReadValue("LoadMode", "Mods")._Equal("2") ? InternalCalls::MelonHandler::LoadMode::BOTH : InternalCalls::MelonHandler::LoadMode::NORMAL)));
 	iniFile->WriteValue("LoadMode", "Mods", std::to_string(InternalCalls::MelonHandler::LoadModeForMods));
 
-	AssemblyGenerator::ForceRegeneration = (!iniFile->ReadValue("AssemblyGenerator", "ForceRegeneration").empty() && iniFile->ReadValue("AssemblyGenerator", "ForceRegeneration")._Equal("true"));
-	iniFile->WriteValue("AssemblyGenerator", "ForceRegeneration", "false");
 	if (iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies").empty() || !iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies")._Equal("true"))
 	{
 		iniFile->WriteValue("AssemblyGenerator", "ForceUnityDependencies", "false");

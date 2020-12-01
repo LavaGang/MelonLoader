@@ -101,32 +101,33 @@ void Game::ReadAppInfo()
 
 bool Game::ReadUnityVersion()
 {
-	const char* version = ReadUnityVersionFromFileInfo();
-	if ((version == NULL) || (strstr(version, ".") == NULL))
+	std::string version = ReadUnityVersionFromFileInfo();
+	if (version.empty() || (strstr(version.c_str(), ".") == NULL))
 		version = ReadUnityVersionFromGlobalGameManagers();
-	if ((version == NULL) || (strstr(version, ".") == NULL))
+	if (version.empty() || (strstr(version.c_str(), ".") == NULL))
 	{
 		Assertion::ThrowInternalFailure("Failed to Read Unity Version from File Info or globalgamemanagers!");
 		return false;
 	}
-	std::string versionstr = version;
-	UnityVersion = new char[versionstr.size() + 1];
-	std::copy(versionstr.begin(), versionstr.end(), UnityVersion);
-	UnityVersion[versionstr.size()] = '\0';
+	UnityVersion = new char[version.size() + 1];
+	std::copy(version.begin(), version.end(), UnityVersion);
+	UnityVersion[version.size()] = '\0';
 	return true;
 }
 
-const char* Game::ReadUnityVersionFromFileInfo()
+std::string Game::ReadUnityVersionFromFileInfo()
 {
 	const char* output = Core::GetFileInfoProductVersion(ApplicationPath);
 	if (output == NULL)
 		return NULL;
 	std::string outputstr = output;
+	//Logger::Msg(outputstr.c_str());
 	outputstr = outputstr.substr(0, outputstr.find_last_of('.'));
-	return outputstr.c_str();
+	//Logger::Msg(outputstr.c_str());
+	return outputstr;
 }
 
-const char* Game::ReadUnityVersionFromGlobalGameManagers()
+std::string Game::ReadUnityVersionFromGlobalGameManagers()
 {
 	std::string globalgamemanagerspath = std::string(DataPath) + "\\globalgamemanagers";
 	if (!Core::FileExists(globalgamemanagerspath.c_str()))
@@ -146,5 +147,5 @@ const char* Game::ReadUnityVersionFromGlobalGameManagers()
 		output << filedata[i];
 		i++;
 	}
-	return output.str().c_str();
+	return output.str();
 }

@@ -154,6 +154,9 @@
 131. Fixed Issue where Launch Option "--melonloader.hidewarnings" would not function correctly.
 132. Added OnPreferencesLoaded Override for Plugins and Mods.
 133. Fixed Issue where Plugins weren't given priority for OnApplicationStart.
+134. Fixed Issue where certain Games would be unable to have their Unity Version read.
+135. Temporarily removed the Force-Regenerate Launch Option.
+136. Added GameAssembly Hash Check Logs.
 
 ---
 
