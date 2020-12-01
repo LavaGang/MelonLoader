@@ -157,6 +157,8 @@
 134. Fixed Issue where certain Games would be unable to have their Unity Version read.
 135. Temporarily removed the Force-Regenerate Launch Option.
 136. Added GameAssembly Hash Check Logs.
+137. Added double and long Support to MelonPreferences.
+138. Improved MelonPreferences Type Conversion when Loading.
 
 ---
 

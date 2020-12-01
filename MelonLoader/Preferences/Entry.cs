@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using MelonLoader.Tomlyn;
+using MelonLoader.Tomlyn.Model;
+using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader
 {
@@ -335,6 +339,127 @@ namespace MelonLoader
                 Value_long = ValueEdited_long = DefaultValue_long;
             else if (Type == TypeEnum.DOUBLE)
                 Value_double = ValueEdited_double = DefaultValue_double;
+        }
+
+        internal void ConvertCurrentValueType(TypeEnum requestedType)
+        {
+            if ((Type == requestedType) || (requestedType == TypeEnum.STRING))
+                return;
+            switch (requestedType)
+            {
+                case TypeEnum.BOOL:
+                    bool val_bool = false;
+                    switch (Type)
+                    {
+                        case TypeEnum.INT:
+                            val_bool = (GetInt() != 0);
+                            break;
+                        case TypeEnum.FLOAT:
+                            val_bool = (GetFloat() != 0f);
+                            break;
+                        case TypeEnum.DOUBLE:
+                            val_bool = (GetDouble() != 0);
+                            break;
+                        case TypeEnum.LONG:
+                            val_bool = (GetLong() != 0);
+                            break;
+                        default:
+                            break;
+                    }
+                    Type = requestedType;
+                    SetBool(val_bool);
+                    break;
+                case TypeEnum.INT:
+                    int val_int = 0;
+                    switch (Type)
+                    {
+                        case TypeEnum.BOOL:
+                            val_int = (GetBool() ? 1 : 0);
+                            break;
+                        case TypeEnum.FLOAT:
+                            val_int = (int)GetFloat();
+                            break;
+                        case TypeEnum.LONG:
+                            val_int = (int)GetLong();
+                            break;
+                        case TypeEnum.DOUBLE:
+                            val_int = (int)GetDouble();
+                            break;
+                        default:
+                            break;
+                    }
+                    Type = requestedType;
+                    SetInt(val_int);
+                    break;
+                case TypeEnum.FLOAT:
+                    float val_float = 0f;
+                    switch (Type)
+                    {
+                        case TypeEnum.BOOL:
+                            val_float = (GetBool() ? 1f : 0f);
+                            break;
+                        case TypeEnum.INT:
+                            val_float = GetInt();
+                            break;
+                        case TypeEnum.LONG:
+                            val_float = GetLong();
+                            break;
+                        case TypeEnum.DOUBLE:
+                            val_float = (float)GetDouble();
+                            break;
+                        default:
+                            break;
+                    }
+                    Type = requestedType;
+                    SetFloat(val_float);
+                    break;
+                case TypeEnum.LONG:
+                    long val_long = 0;
+                    switch (Type)
+                    {
+                        case TypeEnum.BOOL:
+                            val_long = (GetBool() ? 1 : 0);
+                            break;
+                        case TypeEnum.INT:
+                            val_long = GetInt();
+                            break;
+                        case TypeEnum.FLOAT:
+                            val_long = (long)GetFloat();
+                            break;
+                        case TypeEnum.DOUBLE:
+                            val_long = (long)GetDouble();
+                            break;
+                        default:
+                            break;
+                    }
+                    Type = requestedType;
+                    SetLong(val_long);
+                    break;
+                case TypeEnum.DOUBLE:
+                    double val_double = 0f;
+                    switch (Type)
+                    {
+                        case TypeEnum.BOOL:
+                            val_double = (GetBool() ? 1f : 0f);
+                            break;
+                        case TypeEnum.INT:
+                            val_double = GetInt();
+                            break;
+                        case TypeEnum.FLOAT:
+                            val_double = (long)GetFloat();
+                            break;
+                        case TypeEnum.LONG:
+                            val_double = GetLong();
+                            break;
+                        default:
+                            break;
+                    }
+                    Type = requestedType;
+                    SetDouble(val_double);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private List<Delegate> OnValueChanged;

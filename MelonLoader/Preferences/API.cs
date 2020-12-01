@@ -55,13 +55,13 @@ namespace MelonLoader
                 int val_int = 0;
                 float val_float = 0f;
                 if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
-                    category.LoadEntry(parts[0], parts[1].ToLower().StartsWith("true"));
+                    category.CreateEntry(parts[0], parts[1].ToLower().StartsWith("true"));
                 else if (Int32.TryParse(parts[1], out val_int))
-                    category.LoadEntry(parts[0], val_int);
+                    category.CreateEntry(parts[0], val_int);
                 else if (float.TryParse(parts[1], out val_float))
-                    category.LoadEntry(parts[0], val_float);
+                    category.CreateEntry(parts[0], val_float);
                 else
-                    category.LoadEntry(parts[0], parts[1].Replace("\r", ""));
+                    category.CreateEntry(parts[0], parts[1].Replace("\r", ""));
             }
             File.Delete(LegacyFilePath);
             WasLegacyLoaded = true;
@@ -105,13 +105,19 @@ namespace MelonLoader
                             entry = category.CreateEntry(name, ((TomlBoolean)obj).Value);
                         else if (obj.Kind == ObjectKind.Integer)
                         {
-                            // Check for Long or Integer
-                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value);
+                            long val_long = 0;
+                            if (long.TryParse((string)tblkeypair.Value, out val_long))
+                                entry = category.CreateEntry(name, val_long);
+                            else
+                                entry = category.CreateEntry(name, ((TomlInteger)obj).Value);
                         }
                         else if (obj.Kind == ObjectKind.Float)
                         {
-                            // Check for Double or Float
-                            entry = category.CreateEntry(name, (float)((TomlFloat)obj).Value);
+                            double val_double = 0f;
+                            if (double.TryParse((string)tblkeypair.Value, out val_double))
+                                entry = category.CreateEntry(name, val_double);
+                            else
+                                entry = category.CreateEntry(name, (float)((TomlFloat)obj).Value);
                         }
                     }
                     if ((entry.Type == MelonPreferences_Entry.TypeEnum.STRING) && (obj.Kind != ObjectKind.String))
@@ -140,6 +146,17 @@ namespace MelonLoader
                             val = (int)((TomlFloat)obj).Value;
                         entry.SetInt(val);
                     }
+                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.LONG)
+                    {
+                        long val = 0;
+                        if (obj.Kind == ObjectKind.Boolean)
+                            val = (((TomlBoolean)obj).Value ? 1 : 0);
+                        else if (obj.Kind == ObjectKind.Integer)
+                            val = ((TomlInteger)obj).Value;
+                        else if (obj.Kind == ObjectKind.Float)
+                            val = (long)((TomlFloat)obj).Value;
+                        entry.SetLong(val);
+                    }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
                     {
                         float val = 0;
@@ -150,6 +167,17 @@ namespace MelonLoader
                         else if (obj.Kind == ObjectKind.Float)
                             val = (float)((TomlFloat)obj).Value;
                         entry.SetFloat(val);
+                    }
+                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.DOUBLE)
+                    {
+                        double val = 0;
+                        if (obj.Kind == ObjectKind.Boolean)
+                            val = (((TomlBoolean)obj).Value ? 1 : 0);
+                        else if (obj.Kind == ObjectKind.Integer)
+                            val = ((TomlInteger)obj).Value;
+                        else if (obj.Kind == ObjectKind.Float)
+                            val = ((TomlFloat)obj).Value;
+                        entry.SetDouble(val);
                     }
                 }
             }
