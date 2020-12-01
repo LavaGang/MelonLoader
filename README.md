@@ -115,7 +115,6 @@ The additional steps below are OPTIONAL if you want to do a Full Uninstall.
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
-| --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
 | --melonloader.agfvunity | Forces use a Specified Version of Unity Dependencies |
 | --melonloader.agfvdumper | Forces use a Specified Version of Il2CppDumper |
 | --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |

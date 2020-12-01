@@ -32,20 +32,6 @@ void KillCurrentProcess()
 	CloseHandle(current_process);
 }
 
-const char* InvalidProcessNames[] = { "unitycrashhandler", "fallguys", "duskworld", "chilloutvr", "pixelstrike3d", "rotmgexalt", "outward", "phasmophobia" };
-void CheckForInvalidProcess()
-{
-	LPSTR filepath = new CHAR[MAX_PATH];
-	GetModuleFileNameA(GetModuleHandleA(NULL), filepath, MAX_PATH);
-	std::string filepathstr = filepath;
-	delete[] filepath;
-	filepathstr.erase(remove(filepathstr.begin(), filepathstr.end(), ' '), filepathstr.end());
-	std::for_each(filepathstr.begin(), filepathstr.end(), [](char& character) { character = ::tolower(character); });
-	for (int i = 0; i < (sizeof(InvalidProcessNames) / sizeof(InvalidProcessNames[0])); i++)
-		if (strstr(filepathstr.c_str(), InvalidProcessNames[i]) != NULL)
-			KillCurrentProcess();
-}
-
 bool LoadProxy(HINSTANCE hinstDLL)
 {
 	LPSTR fullpathstr = new CHAR[MAX_PATH];
@@ -96,7 +82,6 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	if (fdwReason != DLL_PROCESS_ATTACH)
 		return TRUE;
-	CheckForInvalidProcess();
 	if (!LoadProxy(hinstDLL))
 		return FALSE;
 	LoadBootstrap();
