@@ -162,6 +162,7 @@
 139. Improved Lambda Expression Usage in MelonPreferences.
 140. Improved MelonPreferences Type Conversion when Loading string, floats, ints, longs, and doubles.
 141. Improved MelonPreferences Change Callback Invoking.
+142. Fixed Issue where Bootstrap and Proxy would cause Crashes when compiled under Debug Compilation.
 
 ---
 
