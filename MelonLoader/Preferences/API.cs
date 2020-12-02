@@ -104,26 +104,14 @@ namespace MelonLoader
                         else if (obj.Kind == ObjectKind.Boolean)
                             entry = category.CreateEntry(name, ((TomlBoolean)obj).Value);
                         else if (obj.Kind == ObjectKind.Integer)
-                        {
-                            long val_long = 0;
-                            if (long.TryParse((string)tblkeypair.Value, out val_long))
-                                entry = category.CreateEntry(name, val_long);
-                            else
-                                entry = category.CreateEntry(name, ((TomlInteger)obj).Value);
-                        }
+                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value);
                         else if (obj.Kind == ObjectKind.Float)
-                        {
-                            double val_double = 0f;
-                            if (double.TryParse((string)tblkeypair.Value, out val_double))
-                                entry = category.CreateEntry(name, val_double);
-                            else
-                                entry = category.CreateEntry(name, (float)((TomlFloat)obj).Value);
-                        }
+                            entry = category.CreateEntry(name, ((TomlFloat)obj).Value);
                     }
                     if ((entry.Type == MelonPreferences_Entry.TypeEnum.STRING) && (obj.Kind != ObjectKind.String))
                         continue;
                     else if ((entry.Type == MelonPreferences_Entry.TypeEnum.STRING) && (obj.Kind == ObjectKind.String))
-                        entry.SetString((string)tblkeypair.Value);
+                        entry.SetValue((string)tblkeypair.Value);
                     if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
                     {
                         bool val = false;
@@ -133,7 +121,7 @@ namespace MelonLoader
                             val = (((TomlInteger)obj).Value > 0);
                         else if (obj.Kind == ObjectKind.Float)
                             val = (((TomlFloat)obj).Value > 0);
-                        entry.SetBool(val);
+                        entry.SetValue(val);
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.INT)
                     {
@@ -144,7 +132,7 @@ namespace MelonLoader
                             val = (int)((TomlInteger)obj).Value;
                         else if (obj.Kind == ObjectKind.Float)
                             val = (int)((TomlFloat)obj).Value;
-                        entry.SetInt(val);
+                        entry.SetValue(val);
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.LONG)
                     {
@@ -155,7 +143,7 @@ namespace MelonLoader
                             val = ((TomlInteger)obj).Value;
                         else if (obj.Kind == ObjectKind.Float)
                             val = (long)((TomlFloat)obj).Value;
-                        entry.SetLong(val);
+                        entry.SetValue(val);
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
                     {
@@ -166,7 +154,7 @@ namespace MelonLoader
                             val = ((TomlInteger)obj).Value;
                         else if (obj.Kind == ObjectKind.Float)
                             val = (float)((TomlFloat)obj).Value;
-                        entry.SetFloat(val);
+                        entry.SetValue(val);
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.DOUBLE)
                     {
@@ -177,7 +165,7 @@ namespace MelonLoader
                             val = ((TomlInteger)obj).Value;
                         else if (obj.Kind == ObjectKind.Float)
                             val = ((TomlFloat)obj).Value;
-                        entry.SetDouble(val);
+                        entry.SetValue(val);
                     }
                 }
             }
@@ -199,33 +187,33 @@ namespace MelonLoader
                     KeyValueSyntax key = null;
                     if (entry.Type == MelonPreferences_Entry.TypeEnum.STRING)
                     {
-                        entry.SetString(entry.GetEditedString());
-                        key = new KeyValueSyntax(entry.Name, new StringValueSyntax(entry.GetString()));
+                        entry.SetValue(entry.GetEditedValue<string>());
+                        key = new KeyValueSyntax(entry.Name, new StringValueSyntax(entry.GetValue<string>()));
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
                     {
-                        entry.SetBool(entry.GetEditedBool());
-                        key = new KeyValueSyntax(entry.Name, new BooleanValueSyntax(entry.GetBool()));
+                        entry.SetValue(entry.GetEditedValue<bool>());
+                        key = new KeyValueSyntax(entry.Name, new BooleanValueSyntax(entry.GetValue<bool>()));
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.INT)
                     {
-                        entry.SetInt(entry.GetEditedInt());
-                        key = new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetInt()));
+                        entry.SetValue(entry.GetEditedValue<int>());
+                        key = new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetValue<int>()));
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.LONG)
                     {
-                        entry.SetLong(entry.GetEditedLong());
-                        key = new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetLong()));
+                        entry.SetValue(entry.GetEditedValue<long>());
+                        key = new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetValue<long>()));
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
                     {
-                        entry.SetFloat(entry.GetEditedFloat());
-                        key = new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetFloat()));
+                        entry.SetValue(entry.GetEditedValue<float>());
+                        key = new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetValue<float>()));
                     }
                     else if (entry.Type == MelonPreferences_Entry.TypeEnum.DOUBLE)
                     {
-                        entry.SetDouble(entry.GetEditedDouble());
-                        key = new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetDouble()));
+                        entry.SetValue(entry.GetEditedValue<double>());
+                        key = new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetValue<double>()));
                     }
                     if (key != null)
                         tbl.Items.Add(key);
@@ -261,24 +249,47 @@ namespace MelonLoader
             return new MelonPreferences_Category(name, displayname);
         }
 
+        public static MelonPreferences_Entry.TypeEnum TypeToTypeEnum<T>() =>
+            ((typeof(T) == typeof(string)) ? MelonPreferences_Entry.TypeEnum.STRING
+                : (typeof(T) == typeof(bool)) ? MelonPreferences_Entry.TypeEnum.BOOL
+                : ((typeof(T) == typeof(int)) ? MelonPreferences_Entry.TypeEnum.INT
+                : ((typeof(T) == typeof(float)) ? MelonPreferences_Entry.TypeEnum.FLOAT
+                : ((typeof(T) == typeof(long)) ? MelonPreferences_Entry.TypeEnum.LONG
+                : ((typeof(T) == typeof(double)) ? MelonPreferences_Entry.TypeEnum.DOUBLE
+                : MelonPreferences_Entry.TypeEnum.UNKNOWN)))));
+      
+        public static Type TypeEnumToType(MelonPreferences_Entry.TypeEnum type) =>
+            ((type == MelonPreferences_Entry.TypeEnum.STRING) ? typeof(string)
+                : (type == MelonPreferences_Entry.TypeEnum.BOOL) ? typeof(bool)
+                : ((type == MelonPreferences_Entry.TypeEnum.INT) ? typeof(int)
+                : ((type == MelonPreferences_Entry.TypeEnum.FLOAT) ? typeof(float)
+                : ((type == MelonPreferences_Entry.TypeEnum.LONG) ? typeof(long)
+                : ((type == MelonPreferences_Entry.TypeEnum.DOUBLE) ? typeof(double)
+                : null)))));
+
+        public static string TypeEnumToTypeName(MelonPreferences_Entry.TypeEnum type) => 
+            ((type == MelonPreferences_Entry.TypeEnum.STRING) ? "string"
+                : (type == MelonPreferences_Entry.TypeEnum.BOOL) ? "bool"
+                : ((type == MelonPreferences_Entry.TypeEnum.INT) ? "int"
+                : ((type == MelonPreferences_Entry.TypeEnum.FLOAT) ? "float"
+                : ((type == MelonPreferences_Entry.TypeEnum.LONG) ? "long"
+                : ((type == MelonPreferences_Entry.TypeEnum.DOUBLE) ? "double"
+                : null)))));
+
         public static string GetCategoryDisplayName(string category_name) => GetCategory(category_name)?.DisplayName;
         public static MelonPreferences_Entry GetEntry(string category_name, string entry_name) => GetCategory(category_name)?.GetEntry(entry_name);
         public static bool HasEntry(string category_name, string entry_name) => (GetEntry(category_name, entry_name) != null);
-        public static void CreateEntry(string category_name, string entry_name, string defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
-        public static void CreateEntry(string category_name, string entry_name, bool defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
-        public static void CreateEntry(string category_name, string entry_name, int defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
-        public static void CreateEntry(string category_name, string entry_name, float defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
-        public static string GetEntryString(string category_name, string entry_name) => GetCategory(category_name)?.GetEntry(entry_name)?.GetString();
-        public static void SetEntryString(string category_name, string entry_name, string value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetString(value);
-        public static bool GetEntryBool(string category_name, string entry_name) => (bool)GetCategory(category_name)?.GetEntry(entry_name)?.GetBool();
-        public static void SetEntryBool(string category_name, string entry_name, bool value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetBool(value);
-        public static int GetEntryInt(string category_name, string entry_name) => (int)GetCategory(category_name)?.GetEntry(entry_name)?.GetInt();
-        public static void SetEntryInt(string category_name, string entry_name, int value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetInt(value);
-        public static float GetEntryFloat(string category_name, string entry_name) => (float)GetCategory(category_name)?.GetEntry(entry_name)?.GetFloat();
-        public static void SetEntryFloat(string category_name, string entry_name, float value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetFloat(value);
-        public static long GetEntryLong(string category_name, string entry_name) => (long)GetCategory(category_name)?.GetEntry(entry_name)?.GetLong();
-        public static void SetEntryLong(string category_name, string entry_name, long value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetLong(value);
-        public static double GetEntryDouble(string category_name, string entry_name) => (double)GetCategory(category_name)?.GetEntry(entry_name)?.GetDouble();
-        public static void SetEntryDouble(string category_name, string entry_name, double value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetDouble(value);
+        public static MelonPreferences_Entry CreateEntry<T>(string category_name, string entry_name, T defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
+        public static void SetEntryValue<T>(string category_name, string entry_name, T value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetValue(value);
+        public static T GetEntryValue<T>(string category_name, string entry_name)
+        {
+            MelonPreferences_Category cat = GetCategory(category_name);
+            if (cat == null)
+                return default;
+            MelonPreferences_Entry entry = cat.GetEntry(entry_name);
+            if (entry == null)
+                return default;
+            return entry.GetValue<T>();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace MelonLoader
 {
@@ -27,86 +28,47 @@ namespace MelonLoader
         }
         public bool HasEntry(string name) => (GetEntry(name) != null);
 
-        public MelonPreferences_Entry CreateEntry(string name, string value, string displayname = null, bool hidden = false)
+        public MelonPreferences_Entry CreateEntry<T>(string name, T value, string displayname = null, bool hidden = false)
         {
             if (string.IsNullOrEmpty(name))
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry == null)
-                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.DisplayName = displayname;
-            entry.Hidden = hidden;
-            entry.DefaultValue_string = value;
-            if (entry.Type != MelonPreferences_Entry.TypeEnum.STRING)
             {
-                entry.Type = MelonPreferences_Entry.TypeEnum.STRING;
-                entry.ValueEdited_string = entry.Value_string = value;
+                entry = new MelonPreferences_Entry();
+                entry.Setup(this, name, value, displayname, hidden);
+                return entry;
             }
-            return entry;
-        }
-        public MelonPreferences_Entry CreateEntry(string name, bool value, string displayname = null, bool hidden = false)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = GetEntry(name);
-            if (entry == null)
-                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
             entry.DisplayName = displayname;
             entry.Hidden = hidden;
-            entry.DefaultValue_bool = value;
-            entry.ConvertCurrentValueType(MelonPreferences_Entry.TypeEnum.BOOL);
-            return entry;
-        }
-        public MelonPreferences_Entry CreateEntry(string name, int value, string displayname = null, bool hidden = false)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = GetEntry(name);
-            if (entry == null)
-                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.DisplayName = displayname;
-            entry.Hidden = hidden;
-            entry.DefaultValue_int = value;
-            entry.ConvertCurrentValueType(MelonPreferences_Entry.TypeEnum.INT);
-            return entry;
-        }
-        public MelonPreferences_Entry CreateEntry(string name, float value, string displayname = null, bool hidden = false)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = GetEntry(name);
-            if (entry == null)
-                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.DisplayName = displayname;
-            entry.Hidden = hidden;
-            entry.DefaultValue_float = value;
-            entry.ConvertCurrentValueType(MelonPreferences_Entry.TypeEnum.FLOAT);
-            return entry;
-        }
-        public MelonPreferences_Entry CreateEntry(string name, long value, string displayname = null, bool hidden = false)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = GetEntry(name);
-            if (entry == null)
-                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.DisplayName = displayname;
-            entry.Hidden = hidden;
-            entry.DefaultValue_long = value;
-            entry.ConvertCurrentValueType(MelonPreferences_Entry.TypeEnum.LONG);
-            return entry;
-        }
-        public MelonPreferences_Entry CreateEntry(string name, double value, string displayname = null, bool hidden = false)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = GetEntry(name);
-            if (entry == null)
-                return new MelonPreferences_Entry(this, name, value, displayname, hidden);
-            entry.DisplayName = displayname;
-            entry.Hidden = hidden;
-            entry.DefaultValue_double = value;
-            entry.ConvertCurrentValueType(MelonPreferences_Entry.TypeEnum.DOUBLE);
+            MelonPreferences_Entry.TypeEnum requestedType = MelonPreferences.TypeToTypeEnum<T>();
+            if (requestedType != entry.Type)
+            {
+                switch (requestedType)
+                {
+                    case MelonPreferences_Entry.TypeEnum.STRING:
+                        entry.DefaultValue_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), typeof(string))).Compile()();
+                        break;
+                    case MelonPreferences_Entry.TypeEnum.BOOL:
+                        entry.DefaultValue_bool = Expression.Lambda<Func<bool>>(Expression.Convert(Expression.Constant(value), typeof(bool))).Compile()();
+                        break;
+                    case MelonPreferences_Entry.TypeEnum.INT:
+                        entry.DefaultValue_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), typeof(int))).Compile()();
+                        break;
+                    case MelonPreferences_Entry.TypeEnum.FLOAT:
+                        entry.DefaultValue_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), typeof(float))).Compile()();
+                        break;
+                    case MelonPreferences_Entry.TypeEnum.LONG:
+                        entry.DefaultValue_long = Expression.Lambda<Func<long>>(Expression.Convert(Expression.Constant(value), typeof(long))).Compile()();
+                        break;
+                    case MelonPreferences_Entry.TypeEnum.DOUBLE:
+                        entry.DefaultValue_double = Expression.Lambda<Func<double>>(Expression.Convert(Expression.Constant(value), typeof(double))).Compile()();
+                        break;
+                    default:
+                        break;
+                }
+                entry.ConvertCurrentValueType(requestedType);
+            }
             return entry;
         }
     }

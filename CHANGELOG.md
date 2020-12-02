@@ -159,6 +159,9 @@
 136. Added GameAssembly Hash Check Logs.
 137. Added double and long Support to MelonPreferences.
 138. Improved MelonPreferences Type Conversion when Loading.
+139. Improved Lambda Expression Usage in MelonPreferences.
+140. Improved MelonPreferences Type Conversion when Loading string, floats, ints, longs, and doubles.
+141. Improved MelonPreferences Change Callback Invoking.
 
 ---
 

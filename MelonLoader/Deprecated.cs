@@ -190,10 +190,10 @@ namespace MelonLoader
             MelonPreferences_Entry entry = category.GetEntry(name);
             if (entry == null)
                 return null;
-            return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetBool().ToString()
-                : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetInt().ToString()
-                : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetFloat().ToString()
-                : entry.GetString())));
+            return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetValue<bool>().ToString()
+                : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetValue<int>().ToString()
+                : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetValue<float>().ToString()
+                : entry.GetValue<string>())));
         }
         [Obsolete("MelonPrefs.SetString is obsolete. Please use MelonPreferences.SetEntryString instead.")]
         public static void SetString(string section, string name, string value)
@@ -207,26 +207,26 @@ namespace MelonLoader
             int val_int = 0;
             float val_float = 0f;
             if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
-                entry.SetBool(value.ToLower().StartsWith("true"));
+                entry.SetValue(value.ToLower().StartsWith("true"));
             else if (Int32.TryParse(value, out val_int))
-                entry.SetInt(val_int);
+                entry.SetValue(val_int);
             else if (float.TryParse(value, out val_float))
-                entry.SetFloat(val_float);
+                entry.SetValue(val_float);
             else
-                entry.SetString(value);
+                entry.SetValue(value);
         }
         [Obsolete("MelonPrefs.GetBool is obsolete. Please use MelonPreferences.GetEntryBool instead.")]
-        public static bool GetBool(string section, string name) => MelonPreferences.GetEntryBool(section, name);
+        public static bool GetBool(string section, string name) => MelonPreferences.GetEntryValue<bool>(section, name);
         [Obsolete("MelonPrefs.SetBool is obsolete. Please use MelonPreferences.SetEntryBool instead.")]
-        public static void SetBool(string section, string name, bool value) => MelonPreferences.SetEntryBool(section, name, value);
+        public static void SetBool(string section, string name, bool value) => MelonPreferences.SetEntryValue(section, name, value);
         [Obsolete("MelonPrefs.GetInt is obsolete. Please use MelonPreferences.GetEntryInt instead.")]
-        public static int GetInt(string section, string name) => MelonPreferences.GetEntryInt(section, name);
+        public static int GetInt(string section, string name) => MelonPreferences.GetEntryValue<int>(section, name);
         [Obsolete("MelonPrefs.SetInt is obsolete. Please use MelonPreferences.SetEntryInt instead.")]
-        public static void SetInt(string section, string name, int value) => MelonPreferences.SetEntryInt(section, name, value);
+        public static void SetInt(string section, string name, int value) => MelonPreferences.SetEntryValue(section, name, value);
         [Obsolete("MelonPrefs.GetFloat is obsolete. Please use MelonPreferences.GetEntryFloat instead.")]
-        public static float GetFloat(string section, string name) => MelonPreferences.GetEntryFloat(section, name);
+        public static float GetFloat(string section, string name) => MelonPreferences.GetEntryValue<float>(section, name);
         [Obsolete("MelonPrefs.GetEntryFloat is obsolete. Please use MelonPreferences.SetEntryFloat instead.")]
-        public static void SetFloat(string section, string name, float value) => MelonPreferences.SetEntryFloat(section, name, value);
+        public static void SetFloat(string section, string name, float value) => MelonPreferences.SetEntryValue(section, name, value);
         [Obsolete("MelonPrefs.MelonPreferenceType is obsolete. Please use MelonPreferences_Entry.TypeEnum instead.")]
         public enum MelonPreferenceType
         {
@@ -260,10 +260,10 @@ namespace MelonLoader
                 MelonPreferences_Entry entry = category.GetEntry(name);
                 if (entry == null)
                     return null;
-                return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetEditedBool().ToString()
-                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetEditedInt().ToString()
-                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetEditedFloat().ToString()
-                    : entry.GetEditedString())));
+                return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetEditedValue<bool>().ToString()
+                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetEditedValue<int>().ToString()
+                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetEditedValue<float>().ToString()
+                    : entry.GetEditedValue<string>())));
             }
             private static void SetEditedString(string section, string name, string value)
             {
@@ -276,13 +276,13 @@ namespace MelonLoader
                 int val_int = 0;
                 float val_float = 0f;
                 if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
-                    entry.SetEditedBool(value.ToLower().StartsWith("true"));
+                    entry.SetEditedValue(value.ToLower().StartsWith("true"));
                 else if (Int32.TryParse(value, out val_int))
-                    entry.SetEditedInt(val_int);
+                    entry.SetEditedValue(val_int);
                 else if (float.TryParse(value, out val_float))
-                    entry.SetEditedFloat(val_float);
+                    entry.SetEditedValue(val_float);
                 else
-                    entry.SetEditedString(value);
+                    entry.SetEditedValue(value);
             }
         }
     }
