@@ -108,65 +108,7 @@ namespace MelonLoader
                         else if (obj.Kind == ObjectKind.Float)
                             entry = category.CreateEntry(name, ((TomlFloat)obj).Value);
                     }
-                    if ((entry.Type == MelonPreferences_Entry.TypeEnum.STRING) && (obj.Kind != ObjectKind.String))
-                        continue;
-                    else if ((entry.Type == MelonPreferences_Entry.TypeEnum.STRING) && (obj.Kind == ObjectKind.String))
-                        entry.SetValue((string)tblkeypair.Value);
-                    if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
-                    {
-                        bool val = false;
-                        if (obj.Kind == ObjectKind.Boolean)
-                            val = ((TomlBoolean)obj).Value;
-                        else if (obj.Kind == ObjectKind.Integer)
-                            val = (((TomlInteger)obj).Value > 0);
-                        else if (obj.Kind == ObjectKind.Float)
-                            val = (((TomlFloat)obj).Value > 0);
-                        entry.SetValue(val);
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.INT)
-                    {
-                        int val = 0;
-                        if (obj.Kind == ObjectKind.Boolean)
-                            val = (((TomlBoolean)obj).Value ? 1 : 0);
-                        else if (obj.Kind == ObjectKind.Integer)
-                            val = (int)((TomlInteger)obj).Value;
-                        else if (obj.Kind == ObjectKind.Float)
-                            val = (int)((TomlFloat)obj).Value;
-                        entry.SetValue(val);
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.LONG)
-                    {
-                        long val = 0;
-                        if (obj.Kind == ObjectKind.Boolean)
-                            val = (((TomlBoolean)obj).Value ? 1 : 0);
-                        else if (obj.Kind == ObjectKind.Integer)
-                            val = ((TomlInteger)obj).Value;
-                        else if (obj.Kind == ObjectKind.Float)
-                            val = (long)((TomlFloat)obj).Value;
-                        entry.SetValue(val);
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
-                    {
-                        float val = 0;
-                        if (obj.Kind == ObjectKind.Boolean)
-                            val = (((TomlBoolean)obj).Value ? 1f : 0f);
-                        else if (obj.Kind == ObjectKind.Integer)
-                            val = ((TomlInteger)obj).Value;
-                        else if (obj.Kind == ObjectKind.Float)
-                            val = (float)((TomlFloat)obj).Value;
-                        entry.SetValue(val);
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.DOUBLE)
-                    {
-                        double val = 0;
-                        if (obj.Kind == ObjectKind.Boolean)
-                            val = (((TomlBoolean)obj).Value ? 1 : 0);
-                        else if (obj.Kind == ObjectKind.Integer)
-                            val = ((TomlInteger)obj).Value;
-                        else if (obj.Kind == ObjectKind.Float)
-                            val = ((TomlFloat)obj).Value;
-                        entry.SetValue(val);
-                    }
+                    Preferences.TypeManager.Load(entry, obj);
                 }
             }
             MelonLogger.Msg("Config Loaded!");
@@ -184,37 +126,7 @@ namespace MelonLoader
                 TableSyntax tbl = new TableSyntax(category.Name);
                 foreach (MelonPreferences_Entry entry in category.prefstbl)
                 {
-                    KeyValueSyntax key = null;
-                    if (entry.Type == MelonPreferences_Entry.TypeEnum.STRING)
-                    {
-                        entry.SetValue(entry.GetEditedValue<string>());
-                        key = new KeyValueSyntax(entry.Name, new StringValueSyntax(entry.GetValue<string>()));
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
-                    {
-                        entry.SetValue(entry.GetEditedValue<bool>());
-                        key = new KeyValueSyntax(entry.Name, new BooleanValueSyntax(entry.GetValue<bool>()));
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.INT)
-                    {
-                        entry.SetValue(entry.GetEditedValue<int>());
-                        key = new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetValue<int>()));
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.LONG)
-                    {
-                        entry.SetValue(entry.GetEditedValue<long>());
-                        key = new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetValue<long>()));
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
-                    {
-                        entry.SetValue(entry.GetEditedValue<float>());
-                        key = new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetValue<float>()));
-                    }
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.DOUBLE)
-                    {
-                        entry.SetValue(entry.GetEditedValue<double>());
-                        key = new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetValue<double>()));
-                    }
+                    KeyValueSyntax key = Preferences.TypeManager.Save(entry);
                     if (key != null)
                         tbl.Items.Add(key);
                 }
