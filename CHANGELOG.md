@@ -1,6 +1,7 @@
 ### Version List:
 
 [v0.3.0 Open-Beta](#v030-open-beta)  
+[v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
 [v0.2.7.2 Open-Beta](#v0272-open-beta)  
 [v0.2.7.1 Open-Beta](#v0271-open-beta)  
@@ -165,6 +166,11 @@
 142. Fixed Issue where Bootstrap and Proxy would cause Crashes when compiled under Debug Compilation.
 143. Improved Core Initialization.
 144. Fixed Issue with MelonPreferences Caching on Load and not setting the cache as Hidden.
+
+---
+
+### v0.2.7.4 Open-Beta:
+1. Fixed Issue with Amplitude using new Endpoints.
 
 ---
 
