@@ -164,6 +164,7 @@
 141. Improved MelonPreferences Change Callback Invoking.
 142. Fixed Issue where Bootstrap and Proxy would cause Crashes when compiled under Debug Compilation.
 143. Improved Core Initialization.
+144. Fixed Issue with MelonPreferences Caching on Load and not setting the cache as Hidden.
 
 ---
 

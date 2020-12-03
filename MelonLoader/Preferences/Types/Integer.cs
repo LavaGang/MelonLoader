@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using MelonLoader.Tomlyn;
 using MelonLoader.Tomlyn.Model;
@@ -10,11 +11,22 @@ namespace MelonLoader.Preferences.Types
 {
     internal class IntegerParser : TypeParser
     {
+        private static string TypeName = "int";
+        private static Type ReflectedType = typeof(int);
+        private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.INT;
+
         public static void Resolve(object sender, TypeManager.TypeParserArgs args)
         {
-            if (args.TypeEnum == MelonPreferences_Entry.TypeEnum.INT)
+            if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
+                || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))
                 args.TypeParser = new IntegerParser();
         }
+
+        internal override void Construct<T>(MelonPreferences_Entry entry, T value) =>
+           entry.DefaultValue_int = entry.ValueEdited_int = entry.Value_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+
+        internal override void SetDefaultValue<T>(MelonPreferences_Entry entry, T value) =>
+            entry.DefaultValue_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override KeyValueSyntax Save(MelonPreferences_Entry entry)
         {
@@ -39,5 +51,33 @@ namespace MelonLoader.Preferences.Types
                     break;
             }
         }
+
+        internal override void ConvertCurrentValueType(MelonPreferences_Entry entry)
+        {
+            int val_int = 0;
+            switch (entry.Type)
+            {
+                case MelonPreferences_Entry.TypeEnum.BOOL:
+                    val_int = (entry.GetValue<bool>() ? 1 : 0);
+                    break;
+                case MelonPreferences_Entry.TypeEnum.FLOAT:
+                    val_int = (int)entry.GetValue<float>();
+                    break;
+                case MelonPreferences_Entry.TypeEnum.LONG:
+                    val_int = (int)entry.GetValue<long>();
+                    break;
+                case MelonPreferences_Entry.TypeEnum.DOUBLE:
+                    val_int = (int)entry.GetValue<double>();
+                    break;
+                default:
+                    break;
+            }
+            entry.Type = TypeEnum;
+            entry.SetValue(val_int);
+        }
+
+        internal override Type GetReflectedType() => ReflectedType;
+        internal override MelonPreferences_Entry.TypeEnum GetTypeEnum() => TypeEnum;
+        internal override string GetTypeName() => TypeName;
     }
 }

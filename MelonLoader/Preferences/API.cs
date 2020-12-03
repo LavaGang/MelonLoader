@@ -55,13 +55,13 @@ namespace MelonLoader
                 int val_int = 0;
                 float val_float = 0f;
                 if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
-                    category.CreateEntry(parts[0], parts[1].ToLower().StartsWith("true"));
+                    category.CreateEntry(parts[0], parts[1].ToLower().StartsWith("true"), hidden: true);
                 else if (Int32.TryParse(parts[1], out val_int))
-                    category.CreateEntry(parts[0], val_int);
+                    category.CreateEntry(parts[0], val_int, hidden: true);
                 else if (float.TryParse(parts[1], out val_float))
-                    category.CreateEntry(parts[0], val_float);
+                    category.CreateEntry(parts[0], val_float, hidden: true);
                 else
-                    category.CreateEntry(parts[0], parts[1].Replace("\r", ""));
+                    category.CreateEntry(parts[0], parts[1].Replace("\r", ""), hidden: true);
             }
             File.Delete(LegacyFilePath);
             WasLegacyLoaded = true;
@@ -100,13 +100,13 @@ namespace MelonLoader
                     if (entry == null)
                     {
                         if (obj.Kind == ObjectKind.String)
-                            entry = category.CreateEntry(name, ((TomlString)obj).Value);
+                            entry = category.CreateEntry(name, ((TomlString)obj).Value, hidden: true);
                         else if (obj.Kind == ObjectKind.Boolean)
-                            entry = category.CreateEntry(name, ((TomlBoolean)obj).Value);
+                            entry = category.CreateEntry(name, ((TomlBoolean)obj).Value, hidden: true);
                         else if (obj.Kind == ObjectKind.Integer)
-                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value);
+                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value, hidden: true);
                         else if (obj.Kind == ObjectKind.Float)
-                            entry = category.CreateEntry(name, ((TomlFloat)obj).Value);
+                            entry = category.CreateEntry(name, ((TomlFloat)obj).Value, hidden: true);
                     }
                     Preferences.TypeManager.Load(entry, obj);
                 }
@@ -161,33 +161,9 @@ namespace MelonLoader
             return new MelonPreferences_Category(name, displayname);
         }
 
-        public static MelonPreferences_Entry.TypeEnum TypeToTypeEnum<T>() =>
-            ((typeof(T) == typeof(string)) ? MelonPreferences_Entry.TypeEnum.STRING
-                : (typeof(T) == typeof(bool)) ? MelonPreferences_Entry.TypeEnum.BOOL
-                : ((typeof(T) == typeof(int)) ? MelonPreferences_Entry.TypeEnum.INT
-                : ((typeof(T) == typeof(float)) ? MelonPreferences_Entry.TypeEnum.FLOAT
-                : ((typeof(T) == typeof(long)) ? MelonPreferences_Entry.TypeEnum.LONG
-                : ((typeof(T) == typeof(double)) ? MelonPreferences_Entry.TypeEnum.DOUBLE
-                : MelonPreferences_Entry.TypeEnum.UNKNOWN)))));
-      
-        public static Type TypeEnumToType(MelonPreferences_Entry.TypeEnum type) =>
-            ((type == MelonPreferences_Entry.TypeEnum.STRING) ? typeof(string)
-                : (type == MelonPreferences_Entry.TypeEnum.BOOL) ? typeof(bool)
-                : ((type == MelonPreferences_Entry.TypeEnum.INT) ? typeof(int)
-                : ((type == MelonPreferences_Entry.TypeEnum.FLOAT) ? typeof(float)
-                : ((type == MelonPreferences_Entry.TypeEnum.LONG) ? typeof(long)
-                : ((type == MelonPreferences_Entry.TypeEnum.DOUBLE) ? typeof(double)
-                : null)))));
-
-        public static string TypeEnumToTypeName(MelonPreferences_Entry.TypeEnum type) => 
-            ((type == MelonPreferences_Entry.TypeEnum.STRING) ? "string"
-                : (type == MelonPreferences_Entry.TypeEnum.BOOL) ? "bool"
-                : ((type == MelonPreferences_Entry.TypeEnum.INT) ? "int"
-                : ((type == MelonPreferences_Entry.TypeEnum.FLOAT) ? "float"
-                : ((type == MelonPreferences_Entry.TypeEnum.LONG) ? "long"
-                : ((type == MelonPreferences_Entry.TypeEnum.DOUBLE) ? "double"
-                : null)))));
-
+        public static MelonPreferences_Entry.TypeEnum TypeToTypeEnum<T>() => Preferences.TypeManager.TypeToTypeEnum<T>();
+        public static Type TypeEnumToType(MelonPreferences_Entry.TypeEnum type) => Preferences.TypeManager.TypeEnumToType(type);
+        public static string TypeEnumToTypeName(MelonPreferences_Entry.TypeEnum type) => Preferences.TypeManager.TypeEnumToTypeName(type);
         public static string GetCategoryDisplayName(string category_name) => GetCategory(category_name)?.DisplayName;
         public static MelonPreferences_Entry GetEntry(string category_name, string entry_name) => GetCategory(category_name)?.GetEntry(entry_name);
         public static bool HasEntry(string category_name, string entry_name) => (GetEntry(category_name, entry_name) != null);

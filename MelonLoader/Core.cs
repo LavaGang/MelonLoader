@@ -20,15 +20,13 @@ namespace MelonLoader
             if (!Directory.Exists(UserDataPath))
                 Directory.CreateDirectory(UserDataPath);
             Harmony.HarmonyInstance harmonyInstance = Harmony.HarmonyInstance.Create("MelonLoader");
-            try { harmonyInstance.Patch(typeof(AppDomainSetup).GetProperty("ApplicationBase", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetBaseDirectory", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { MelonLogger.Warning("AppDomainSetup.ApplicationBase Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }
-
+            try { ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = GameDir; } catch (Exception ex) { MelonLogger.Warning("AppDomainSetup.ApplicationBase Exception: " + ex.ToString()); }
             Directory.SetCurrentDirectory(GameDir);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
-
             try { MelonPreferences.LegacyCheck(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.LegacyCheck Exception: " + ex.ToString()); throw ex; }
             try { MelonPreferences.Load(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Load Exception: " + ex.ToString()); throw ex; }
             if (MelonPreferences.WasLegacyLoaded) try { MelonPreferences.Save(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save Exception: " + ex.ToString()); throw ex; } 

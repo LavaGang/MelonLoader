@@ -48,52 +48,17 @@ namespace MelonLoader
             UNKNOWN
         }
         public TypeEnum Type { get; internal set; }
-        public string TypeName { get => MelonPreferences.TypeEnumToTypeName(Type); }
+        public string TypeName { get => Preferences.TypeManager.TypeEnumToTypeName(Type); }
         private string GetExceptionMessage(string submsg) => ("Attempted to " + submsg + " " + Name + " when it is a " + TypeName + "!");
         internal MelonPreferences_Entry() { }
-        internal void Setup<T>(MelonPreferences_Category category, string name, T value, string displayname, bool hidden)
-        {
-            TypeEnum requestedType = MelonPreferences.TypeToTypeEnum<T>();
-            if (requestedType == TypeEnum.UNKNOWN)
-                throw new Exception("Tried to Setup MelonPreference with Invalid Type: " + nameof(T));
-            Category = category;
-            Name = name;
-            DisplayName = displayname;
-            Hidden = hidden;
-            Type = requestedType;
-            switch (Type)
-            {
-                case TypeEnum.STRING:
-                    DefaultValue_string = ValueEdited_string = Value_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), typeof(string))).Compile()();
-                    break;
-                case TypeEnum.BOOL:
-                    DefaultValue_bool = ValueEdited_bool = Value_bool = Expression.Lambda<Func<bool>>(Expression.Convert(Expression.Constant(value), typeof(bool))).Compile()();
-                    break;
-                case TypeEnum.INT:
-                    DefaultValue_int = ValueEdited_int = Value_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), typeof(int))).Compile()();
-                    break;
-                case TypeEnum.FLOAT:
-                    DefaultValue_float = ValueEdited_float = Value_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), typeof(float))).Compile()();
-                    break;
-                case TypeEnum.LONG:
-                    DefaultValue_long = ValueEdited_long = Value_long = Expression.Lambda<Func<long>>(Expression.Convert(Expression.Constant(value), typeof(long))).Compile()();
-                    break;
-                case TypeEnum.DOUBLE:
-                    DefaultValue_double = ValueEdited_double = Value_double = Expression.Lambda<Func<double>>(Expression.Convert(Expression.Constant(value), typeof(double))).Compile()();
-                    break;
-                default:
-                    break;
-            }
-            Category.prefstbl.Add(this);
-        }
 
         public T GetValue<T>()
         {
-            TypeEnum requestedType = MelonPreferences.TypeToTypeEnum<T>();
+            TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if (requestedType == TypeEnum.UNKNOWN)
                 throw new Exception(GetExceptionMessage("Get " + nameof(T) + " Value from"));
             else if (requestedType != Type)
-                throw new Exception(GetExceptionMessage("Get " + MelonPreferences.TypeEnumToTypeName(requestedType) + " Value from"));
+                throw new Exception(GetExceptionMessage("Get " + Preferences.TypeManager.TypeEnumToTypeName(requestedType) + " Value from"));
             switch (requestedType)
             {
                 case TypeEnum.STRING:
@@ -115,11 +80,11 @@ namespace MelonLoader
 
         public void SetValue<T>(T value)
         {
-            TypeEnum requestedType = MelonPreferences.TypeToTypeEnum<T>();
+            TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if (requestedType == TypeEnum.UNKNOWN)
                 throw new Exception(GetExceptionMessage("Set " + nameof(T) + " Value in"));
             else if (requestedType != Type)
-                throw new Exception(GetExceptionMessage("Set " + MelonPreferences.TypeEnumToTypeName(requestedType) + " Value in"));
+                throw new Exception(GetExceptionMessage("Set " + Preferences.TypeManager.TypeEnumToTypeName(requestedType) + " Value in"));
             switch (requestedType)
             {
                 case TypeEnum.STRING:
@@ -165,11 +130,11 @@ namespace MelonLoader
 
         public T GetEditedValue<T>()
         {
-            TypeEnum requestedType = MelonPreferences.TypeToTypeEnum<T>();
+            TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if (requestedType == TypeEnum.UNKNOWN)
                 throw new Exception(GetExceptionMessage("Get Edited " + nameof(T) + " Value from"));
             else if (requestedType != Type)
-                throw new Exception(GetExceptionMessage("Get Edited " + MelonPreferences.TypeEnumToTypeName(requestedType) + " Value from"));
+                throw new Exception(GetExceptionMessage("Get Edited " + Preferences.TypeManager.TypeEnumToTypeName(requestedType) + " Value from"));
             switch (requestedType)
             {
                 case TypeEnum.STRING:
@@ -191,11 +156,11 @@ namespace MelonLoader
 
         public void SetEditedValue<T>(T value)
         {
-            TypeEnum requestedType = MelonPreferences.TypeToTypeEnum<T>();
+            TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if (requestedType == TypeEnum.UNKNOWN)
                 throw new Exception(GetExceptionMessage("Set Edited " + nameof(T) + " Value in"));
             else if (requestedType != Type)
-                throw new Exception(GetExceptionMessage("Set Edited " + MelonPreferences.TypeEnumToTypeName(requestedType) + " Value in"));
+                throw new Exception(GetExceptionMessage("Set Edited " + Preferences.TypeManager.TypeEnumToTypeName(requestedType) + " Value in"));
             switch (requestedType)
             {
                 case TypeEnum.STRING:
@@ -223,11 +188,11 @@ namespace MelonLoader
 
         public T GetDefaultValue<T>()
         {
-            TypeEnum requestedType = MelonPreferences.TypeToTypeEnum<T>();
+            TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if (requestedType == TypeEnum.UNKNOWN)
                 throw new Exception(GetExceptionMessage("Get Default " + nameof(T) + " Value from"));
             else if (requestedType != Type)
-                throw new Exception(GetExceptionMessage("Get Default " + MelonPreferences.TypeEnumToTypeName(requestedType) + " Value from"));
+                throw new Exception(GetExceptionMessage("Get Default " + Preferences.TypeManager.TypeEnumToTypeName(requestedType) + " Value from"));
             switch (requestedType)
             {
                 case TypeEnum.STRING:
@@ -277,22 +242,22 @@ namespace MelonLoader
         private List<Delegate> OnValueChanged;
         public void AddValueChangeCallback<T>(Action<T, T> callback)
         {
-            TypeEnum callback_typeenum = MelonPreferences.TypeToTypeEnum<T>();
+            TypeEnum callback_typeenum = Preferences.TypeManager.TypeToTypeEnum<T>();
             if (callback_typeenum == TypeEnum.UNKNOWN)
                 throw new Exception(GetExceptionMessage("Add " + nameof(T) + " Value Change Callback to"));
             else if (callback_typeenum != Type)
-                throw new Exception(GetExceptionMessage("Add " + MelonPreferences.TypeEnumToTypeName(callback_typeenum) + " Value Change Callback to"));
+                throw new Exception(GetExceptionMessage("Add " + Preferences.TypeManager.TypeEnumToTypeName(callback_typeenum) + " Value Change Callback to"));
             if (OnValueChanged == null)
                 OnValueChanged = new List<Delegate>();
             OnValueChanged.Add(callback);
         }
         public void RemoveValueChangeCallback<T>(Action<T, T> callback)
         {
-            TypeEnum callback_typeenum = MelonPreferences.TypeToTypeEnum<T>();
+            TypeEnum callback_typeenum = Preferences.TypeManager.TypeToTypeEnum<T>();
             if (callback_typeenum == TypeEnum.UNKNOWN)
                 throw new Exception(GetExceptionMessage("Remove " + nameof(T) + " Value Change Callback from"));
             else if (callback_typeenum != Type)
-                throw new Exception(GetExceptionMessage("Remove " + MelonPreferences.TypeEnumToTypeName(callback_typeenum) + " Value Change Callback from"));
+                throw new Exception(GetExceptionMessage("Remove " + Preferences.TypeManager.TypeEnumToTypeName(callback_typeenum) + " Value Change Callback from"));
             if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
                 return;
             OnValueChanged.Remove(callback);
@@ -309,152 +274,6 @@ namespace MelonLoader
                 return;
             foreach (Delegate callback in OnValueChanged)
                 callback.DynamicInvoke(old_value, new_value);
-        }
-
-        internal void ConvertCurrentValueType(TypeEnum requestedType)
-        {
-            if (Type == requestedType)
-                return;
-            switch (requestedType)
-            {
-                case TypeEnum.STRING:
-                    string val_string = null;
-                    switch (Type)
-                    {
-                        case TypeEnum.BOOL:
-                            val_string = GetValue<bool>().ToString();
-                            break;
-                        case TypeEnum.INT:
-                            val_string = GetValue<int>().ToString();
-                            break;
-                        case TypeEnum.FLOAT:
-                            val_string = GetValue<float>().ToString();
-                            break;
-                        case TypeEnum.DOUBLE:
-                            val_string = GetValue<double>().ToString();
-                            break;
-                        case TypeEnum.LONG:
-                            val_string = GetValue<long>().ToString();
-                            break;
-                        default:
-                            break;
-                    }
-                    Type = requestedType;
-                    SetValue(val_string);
-                    break;
-                case TypeEnum.BOOL:
-                    bool val_bool = false;
-                    switch (Type)
-                    {
-                        case TypeEnum.INT:
-                            val_bool = (GetValue<int>() != 0);
-                            break;
-                        case TypeEnum.FLOAT:
-                            val_bool = (GetValue<float>() != 0f);
-                            break;
-                        case TypeEnum.DOUBLE:
-                            val_bool = (GetValue<double>() != 0);
-                            break;
-                        case TypeEnum.LONG:
-                            val_bool = (GetValue<long>() != 0);
-                            break;
-                        default:
-                            break;
-                    }
-                    Type = requestedType;
-                    SetValue(val_bool);
-                    break;
-                case TypeEnum.INT:
-                    int val_int = 0;
-                    switch (Type)
-                    {
-                        case TypeEnum.BOOL:
-                            val_int = (GetValue<bool>() ? 1 : 0);
-                            break;
-                        case TypeEnum.FLOAT:
-                            val_int = (int)GetValue<float>();
-                            break;
-                        case TypeEnum.LONG:
-                            val_int = (int)GetValue<long>();
-                            break;
-                        case TypeEnum.DOUBLE:
-                            val_int = (int)GetValue<double>();
-                            break;
-                        default:
-                            break;
-                    }
-                    Type = requestedType;
-                    SetValue(val_int);
-                    break;
-                case TypeEnum.FLOAT:
-                    float val_float = 0f;
-                    switch (Type)
-                    {
-                        case TypeEnum.BOOL:
-                            val_float = (GetValue<bool>() ? 1f : 0f);
-                            break;
-                        case TypeEnum.INT:
-                            val_float = GetValue<int>();
-                            break;
-                        case TypeEnum.LONG:
-                            val_float = GetValue<long>();
-                            break;
-                        case TypeEnum.DOUBLE:
-                            val_float = (float)GetValue<double>();
-                            break;
-                        default:
-                            break;
-                    }
-                    Type = requestedType;
-                    SetValue(val_float);
-                    break;
-                case TypeEnum.LONG:
-                    long val_long = 0;
-                    switch (Type)
-                    {
-                        case TypeEnum.BOOL:
-                            val_long = (GetValue<bool>() ? 1 : 0);
-                            break;
-                        case TypeEnum.INT:
-                            val_long = GetValue<int>();
-                            break;
-                        case TypeEnum.FLOAT:
-                            val_long = (long)GetValue<float>();
-                            break;
-                        case TypeEnum.DOUBLE:
-                            val_long = (long)GetValue<double>();
-                            break;
-                        default:
-                            break;
-                    }
-                    Type = requestedType;
-                    SetValue(val_long);
-                    break;
-                case TypeEnum.DOUBLE:
-                    double val_double = 0f;
-                    switch (Type)
-                    {
-                        case TypeEnum.BOOL:
-                            val_double = (GetValue<bool>() ? 1f : 0f);
-                            break;
-                        case TypeEnum.INT:
-                            val_double = GetValue<int>();
-                            break;
-                        case TypeEnum.FLOAT:
-                            val_double = (long)GetValue<float>();
-                            break;
-                        case TypeEnum.LONG:
-                            val_double = GetValue<long>();
-                            break;
-                        default:
-                            break;
-                    }
-                    Type = requestedType;
-                    SetValue(val_double);
-                    break;
-                default:
-                    break;
-            }
         }
     }
 }
