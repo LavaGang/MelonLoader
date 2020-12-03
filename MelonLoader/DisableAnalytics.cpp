@@ -5,7 +5,7 @@
 gethostbyname_t DisableAnalytics::Original_gethostbyname = NULL;
 getaddrinfo_t DisableAnalytics::Original_getaddrinfo = NULL;
 std::list<std::string> DisableAnalytics::URL_Blacklist = {
-	"api.amplitude.com",
+	"amplitude.com",
 	"api.uca.cloud.unity3d.com",
 	"config.uca.cloud.unity3d.com",
 	"perf-events.cloud.unity3d.com",
@@ -27,7 +27,7 @@ std::list<std::string> DisableAnalytics::URL_Blacklist = {
 	"discordapp.com",
 	"dropbox.com",
 	"pastebin.com",
-	"gluehender-aluhut.de", // Wasn't even Herp's change LEL quit clout chasing
+	"gluehender-aluhut.de",
 	"softlight.at.ua"
 };
 
