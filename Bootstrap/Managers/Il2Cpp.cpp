@@ -54,6 +54,8 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 	{
 		Mono::CreateDomain(name);
 		InternalCalls::Initialize();
+		// todo: check if it works/is necessary on mono games
+		AssemblyVerifier::InstallHooks();
 		if (BaseAssembly::Initialize())
 		{
 			Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
@@ -72,8 +74,6 @@ Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj
 	{
 		Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
 		Hook::Detach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
-		// todo: check if it works/is necessary on mono games
-		AssemblyVerifier::InstallHooks();
 		BaseAssembly::Start();
 	}
 	return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
