@@ -34,7 +34,7 @@ namespace MelonLoader.Preferences
                     var args = new TypeParserArgs { TypeEnum = entry.Type };
                     ResolveEvents?.Invoke(null, args);
                     if (args.TypeParser == null)
-                        throw new NullReferenceException("No Parser for Type " + entry.Type.ToString());
+                        throw new NullReferenceException("No Parser for Type " + MelonPreferences.TypeEnumToTypeName(entry.Type));
                     parser = TypeParserDict_TypeEnum[entry.Type] = args.TypeParser;
                 }
             }
@@ -55,7 +55,7 @@ namespace MelonLoader.Preferences
                     var args = new TypeParserArgs { TypeEnum = entry.Type };
                     ResolveEvents?.Invoke(null, args);
                     if (args.TypeParser == null)
-                        throw new NullReferenceException("No Parser for Type " + entry.Type.ToString());
+                        throw new NullReferenceException("No Parser for Type " + MelonPreferences.TypeEnumToTypeName(entry.Type));
                     parser = TypeParserDict_TypeEnum[entry.Type] = args.TypeParser;
                 }
             }
@@ -98,7 +98,7 @@ namespace MelonLoader.Preferences
                     var args = new TypeParserArgs { TypeEnum = type };
                     ResolveEvents?.Invoke(null, args);
                     if (args.TypeParser == null)
-                        throw new NullReferenceException("No Parser for Type " + type.ToString());
+                        throw new NullReferenceException("No Parser for Type " + MelonPreferences.TypeEnumToTypeName(type));
                     parser = TypeParserDict_TypeEnum[type] = args.TypeParser;
                 }
             }
@@ -119,7 +119,7 @@ namespace MelonLoader.Preferences
                     var args = new TypeParserArgs { TypeEnum = type };
                     ResolveEvents?.Invoke(null, args);
                     if (args.TypeParser == null)
-                        throw new NullReferenceException("No Parser for Type " + type.ToString());
+                        throw new NullReferenceException("No Parser for Type " + MelonPreferences.TypeEnumToTypeName(type));
                     parser = TypeParserDict_TypeEnum[type] = args.TypeParser;
                 }
             }
@@ -181,6 +181,137 @@ namespace MelonLoader.Preferences
             parser.ConvertCurrentValueType(entry);
         }
 
+        internal static void ResetToDefault(MelonPreferences_Entry entry)
+        {
+            TypeParser parser = null;
+            lock (TypeParserDict_TypeEnum)
+            {
+                if (TypeParserDict_TypeEnum.TryGetValue(entry.Type, out TypeParser nparser))
+                    parser = nparser;
+                else
+                {
+                    var args = new TypeParserArgs { TypeEnum = entry.Type };
+                    ResolveEvents?.Invoke(null, args);
+                    if (args.TypeParser == null)
+                        throw new NullReferenceException("No Parser for Type " + MelonPreferences.TypeEnumToTypeName(entry.Type));
+                    parser = TypeParserDict_TypeEnum[entry.Type] = args.TypeParser;
+                }
+            }
+            if (parser == null)
+                return;
+            parser.ResetToDefault(entry);
+        }
+
+        internal static T GetValue<T>(MelonPreferences_Entry entry)
+        {
+            Type requestedType = typeof(T);
+            TypeParser parser = null;
+            lock (TypeParserDict_ReflectedType)
+            {
+                if (TypeParserDict_ReflectedType.TryGetValue(requestedType, out TypeParser nparser))
+                    parser = nparser;
+                else
+                {
+                    var args = new TypeParserArgs { ReflectedType = requestedType };
+                    ResolveEvents?.Invoke(null, args);
+                    if (args.TypeParser == null)
+                        throw new NullReferenceException("No Parser for Type " + nameof(T));
+                    parser = TypeParserDict_ReflectedType[requestedType] = args.TypeParser;
+                }
+            }
+            if (parser == null)
+                return default;
+            return parser.GetValue<T>(entry);
+        }
+
+        internal static void SetValue<T>(MelonPreferences_Entry entry, T value)
+        {
+            Type requestedType = typeof(T);
+            TypeParser parser = null;
+            lock (TypeParserDict_ReflectedType)
+            {
+                if (TypeParserDict_ReflectedType.TryGetValue(requestedType, out TypeParser nparser))
+                    parser = nparser;
+                else
+                {
+                    var args = new TypeParserArgs { ReflectedType = requestedType };
+                    ResolveEvents?.Invoke(null, args);
+                    if (args.TypeParser == null)
+                        throw new NullReferenceException("No Parser for Type " + nameof(T));
+                    parser = TypeParserDict_ReflectedType[requestedType] = args.TypeParser;
+                }
+            }
+            if (parser == null)
+                return;
+            parser.SetValue<T>(entry, value);
+        }
+
+        internal static T GetEditedValue<T>(MelonPreferences_Entry entry)
+        {
+            Type requestedType = typeof(T);
+            TypeParser parser = null;
+            lock (TypeParserDict_ReflectedType)
+            {
+                if (TypeParserDict_ReflectedType.TryGetValue(requestedType, out TypeParser nparser))
+                    parser = nparser;
+                else
+                {
+                    var args = new TypeParserArgs { ReflectedType = requestedType };
+                    ResolveEvents?.Invoke(null, args);
+                    if (args.TypeParser == null)
+                        throw new NullReferenceException("No Parser for Type " + nameof(T));
+                    parser = TypeParserDict_ReflectedType[requestedType] = args.TypeParser;
+                }
+            }
+            if (parser == null)
+                return default;
+            return parser.GetEditedValue<T>(entry);
+        }
+
+        internal static void SetEditedValue<T>(MelonPreferences_Entry entry, T value)
+        {
+            Type requestedType = typeof(T);
+            TypeParser parser = null;
+            lock (TypeParserDict_ReflectedType)
+            {
+                if (TypeParserDict_ReflectedType.TryGetValue(requestedType, out TypeParser nparser))
+                    parser = nparser;
+                else
+                {
+                    var args = new TypeParserArgs { ReflectedType = requestedType };
+                    ResolveEvents?.Invoke(null, args);
+                    if (args.TypeParser == null)
+                        throw new NullReferenceException("No Parser for Type " + nameof(T));
+                    parser = TypeParserDict_ReflectedType[requestedType] = args.TypeParser;
+                }
+            }
+            if (parser == null)
+                return;
+            parser.SetEditedValue<T>(entry, value);
+        }
+
+        internal static T GetDefaultValue<T>(MelonPreferences_Entry entry)
+        {
+            Type requestedType = typeof(T);
+            TypeParser parser = null;
+            lock (TypeParserDict_ReflectedType)
+            {
+                if (TypeParserDict_ReflectedType.TryGetValue(requestedType, out TypeParser nparser))
+                    parser = nparser;
+                else
+                {
+                    var args = new TypeParserArgs { ReflectedType = requestedType };
+                    ResolveEvents?.Invoke(null, args);
+                    if (args.TypeParser == null)
+                        throw new NullReferenceException("No Parser for Type " + nameof(T));
+                    parser = TypeParserDict_ReflectedType[requestedType] = args.TypeParser;
+                }
+            }
+            if (parser == null)
+                return default;
+            return parser.GetDefaultValue<T>(entry);
+        }
+
         internal class TypeParserArgs : EventArgs
         {
             internal Type ReflectedType { get; set; }
@@ -195,9 +326,15 @@ namespace MelonLoader.Preferences
         internal abstract MelonPreferences_Entry.TypeEnum GetTypeEnum();
         internal abstract string GetTypeName();
         internal abstract void Construct<T>(MelonPreferences_Entry entry, T value);
+        internal abstract T GetValue<T>(MelonPreferences_Entry entry);
+        internal abstract void SetValue<T>(MelonPreferences_Entry entry, T value);
+        internal abstract T GetEditedValue<T>(MelonPreferences_Entry entry);
+        internal abstract void SetEditedValue<T>(MelonPreferences_Entry entry, T value);
+        internal abstract T GetDefaultValue<T>(MelonPreferences_Entry entry);
         internal abstract void SetDefaultValue<T>(MelonPreferences_Entry entry, T value);
         internal abstract KeyValueSyntax Save(MelonPreferences_Entry entry);
         internal abstract void Load(MelonPreferences_Entry entry, TomlObject obj);
         internal abstract void ConvertCurrentValueType(MelonPreferences_Entry entry);
+        internal abstract void ResetToDefault(MelonPreferences_Entry entry);
     }
 }

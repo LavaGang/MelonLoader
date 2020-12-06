@@ -25,9 +25,6 @@ namespace MelonLoader.Preferences.Types
         internal override void Construct<T>(MelonPreferences_Entry entry, T value) =>
             entry.DefaultValue_string = entry.ValueEdited_string = entry.Value_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
-        internal override void SetDefaultValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.DefaultValue_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
-
         internal override KeyValueSyntax Save(MelonPreferences_Entry entry)
         {
             entry.SetValue(entry.GetEditedValue<string>());
@@ -67,8 +64,26 @@ namespace MelonLoader.Preferences.Types
             entry.SetValue(val_string);
         }
 
+        internal override void ResetToDefault(MelonPreferences_Entry entry) =>
+            entry.SetValue(entry.DefaultValue_string);
+
+        internal override T GetValue<T>(MelonPreferences_Entry entry) =>
+            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_string), typeof(T))).Compile()();
+        internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
+            entry.Value_string = entry.ValueEdited_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), typeof(string))).Compile()();
+
+        internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
+            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_string), typeof(T))).Compile()();
+        internal override void SetEditedValue<T>(MelonPreferences_Entry entry, T value) =>
+            entry.ValueEdited_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), typeof(string))).Compile()();
+
+        internal override T GetDefaultValue<T>(MelonPreferences_Entry entry) =>
+            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_string), typeof(T))).Compile()();
+        internal override void SetDefaultValue<T>(MelonPreferences_Entry entry, T value) =>
+            entry.DefaultValue_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+
         internal override Type GetReflectedType() => ReflectedType;
         internal override MelonPreferences_Entry.TypeEnum GetTypeEnum() => TypeEnum;
         internal override string GetTypeName() => TypeName;
-    }  
+    }
 }

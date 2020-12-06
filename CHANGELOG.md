@@ -168,6 +168,8 @@
 144. Fixed Issue with MelonPreferences Caching on Load and not setting the cache as Hidden.
 145. Fixed Issue with Older Mono that doesn't need a Posix Helper Native Module.
 146. Fixed Issue with Logger not properly detecting the Calling Melon.
+147. Fixed Issue with Debug Logger not properly coloring Melons.
+148. MelonPreferences Type Handling is now Modular for easier extension.
 
 ---
 

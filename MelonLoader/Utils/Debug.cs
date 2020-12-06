@@ -7,7 +7,7 @@ namespace MelonLoader
     {
         public static void Msg(string txt)
         {
-            ConsoleColor color = ConsoleColor.Magenta;
+            ConsoleColor color = MelonLogger.DefaultMelonColor;
             string namesection = null;
             MelonBase melon = MelonLogger.GetMelonFromStackTrace();
             if (melon != null)
@@ -21,7 +21,7 @@ namespace MelonLoader
         }
         public static void Msg(string txt, params object[] args)
         {
-            ConsoleColor color = ConsoleColor.Magenta;
+            ConsoleColor color = MelonLogger.DefaultMelonColor;
             string namesection = null;
             MelonBase melon = MelonLogger.GetMelonFromStackTrace();
             if (melon != null)
@@ -36,7 +36,7 @@ namespace MelonLoader
         }
         public static void Msg(object obj)
         {
-            ConsoleColor color = ConsoleColor.Magenta;
+            ConsoleColor color = MelonLogger.DefaultMelonColor;
             string namesection = null;
             MelonBase melon = MelonLogger.GetMelonFromStackTrace();
             if (melon != null)
