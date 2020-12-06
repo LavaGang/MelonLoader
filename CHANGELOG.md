@@ -166,6 +166,7 @@
 142. Fixed Issue where Bootstrap and Proxy would cause Crashes when compiled under Debug Compilation.
 143. Improved Core Initialization.
 144. Fixed Issue with MelonPreferences Caching on Load and not setting the cache as Hidden.
+145. Fixed Issue with Older Mono that doesn't need a Posix Helper Native Module.
 
 ---
 

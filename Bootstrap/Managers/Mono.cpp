@@ -98,7 +98,7 @@ bool Mono::Load()
 	}
 
 	PosixHelper = LoadLibraryA((std::string(BasePath) + "\\MonoPosixHelper.dll").c_str());
-	if (PosixHelper == NULL)
+	if ((PosixHelper == NULL) && !IsOldMono)
 	{
 		Assertion::ThrowInternalFailure("Failed to Load Mono Posix Helper!");
 		return false;
