@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using MelonLoader.Tomlyn;
-using MelonLoader.Tomlyn.Model;
-using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader
 {
