@@ -167,6 +167,7 @@
 143. Improved Core Initialization.
 144. Fixed Issue with MelonPreferences Caching on Load and not setting the cache as Hidden.
 145. Fixed Issue with Older Mono that doesn't need a Posix Helper Native Module.
+146. Fixed Issue with Logger not properly detecting the Calling Melon.
 
 ---
 

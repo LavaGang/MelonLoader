@@ -97,7 +97,7 @@ namespace MelonLoader
         public virtual void OnPreferencesSaved() { }
 
         /// <summary>
-        /// Runs when Melon Preferences get saved.
+        /// Runs when Melon Preferences get loaded.
         /// </summary>
         public virtual void OnPreferencesLoaded() { }
 

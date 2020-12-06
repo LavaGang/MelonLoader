@@ -7,9 +7,11 @@ namespace MelonLoader
 {
     public class MelonLogger
     {
+        internal static ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
+
         public static void Msg(string txt)
         {
-            ConsoleColor color = ConsoleColor.Magenta;
+            ConsoleColor color = DefaultMelonColor;
             string namesection = null;
             MelonBase melon = GetMelonFromStackTrace();
             if (melon != null)
@@ -23,7 +25,7 @@ namespace MelonLoader
         }
         public static void Msg(string txt, params object[] args)
         {
-            ConsoleColor color = ConsoleColor.Magenta;
+            ConsoleColor color = DefaultMelonColor;
             string namesection = null;
             MelonBase melon = GetMelonFromStackTrace();
             if (melon != null)
@@ -38,7 +40,7 @@ namespace MelonLoader
         }
         public static void Msg(object obj)
         {
-            ConsoleColor color = ConsoleColor.Magenta;
+            ConsoleColor color = DefaultMelonColor;
             string namesection = null;
             MelonBase melon = GetMelonFromStackTrace();
             if (melon != null)
@@ -115,7 +117,16 @@ namespace MelonLoader
         internal static MelonBase GetMelonFromStackTrace()
         {
             StackTrace st = new StackTrace(2, true);
-            StackFrame sf = st.GetFrame(0);
+            if (st.FrameCount <= 0)
+                return null;
+            MelonBase output = CheckForMelonInFrame(st);
+            if (output == null)
+                output = CheckForMelonInFrame(st, 1);
+            return output;
+        }
+        private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
+        {
+            StackFrame sf = st.GetFrame(frame);
             if (sf == null)
                 return null;
             MethodBase method = sf.GetMethod();

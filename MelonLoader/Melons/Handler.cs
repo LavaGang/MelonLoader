@@ -61,7 +61,7 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonPlugin plugin in _Plugins)
             {
-                ConsoleColor color = ConsoleColor.Magenta;
+                ConsoleColor color = MelonLogger.DefaultMelonColor;
                 if (plugin.Color != null)
                     color = plugin.Color.Color;
                 MelonLogger.Internal_PrintModName(color, plugin.Info.Name, plugin.Info.Version);
@@ -88,7 +88,7 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonMod mod in _Mods)
             {
-                ConsoleColor color = ConsoleColor.Magenta;
+                ConsoleColor color = MelonLogger.DefaultMelonColor;
                 if (mod.Color != null)
                     color = mod.Color.Color;
                 MelonLogger.Internal_PrintModName(color, mod.Info.Name, mod.Info.Version);
