@@ -37,6 +37,8 @@ namespace MelonLoader
             entry.DisplayName = displayname;
             entry.Hidden = hidden;
             Preferences.TypeManager.ConvertCurrentValueType(entry, value);
+            if (MelonPreferences.SaveAfterEntryCreation)
+                MelonPreferences.Save_Internal();
             return entry;
         }
     }
