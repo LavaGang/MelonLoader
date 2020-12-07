@@ -475,7 +475,6 @@ namespace MelonLoader
                     try { mod.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
-
         internal static void OnApplicationQuit()
         {
             if (_Plugins.Count > 0)

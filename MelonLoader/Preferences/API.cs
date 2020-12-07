@@ -67,20 +67,27 @@ namespace MelonLoader
             WasLegacyLoaded = true;
         }
 
-        private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e) { if (!IsSaving) Load(); }
+        private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e) { if (!IsSaving) Load(); else IsSaving = false; }
         public static void Load()
         {
-            if (!File.Exists(FilePath))
+            if (!Load_Internal())
                 return;
+            MelonLogger.Msg("Config Loaded!");
+            MelonHandler.OnPreferencesLoaded();
+        }
+        internal static bool Load_Internal()
+        {
+            if (!File.Exists(FilePath))
+                return false;
             string filestr = File.ReadAllText(FilePath);
             if (string.IsNullOrEmpty(filestr))
-                return;
+                return false;
             DocumentSyntax docsyn = Toml.Parse(filestr);
             if (docsyn == null)
-                return;
+                return false;
             TomlTable model = docsyn.ToModel();
             if (model.Count <= 0)
-                return;
+                return false;
             foreach (KeyValuePair<string, object> keypair in model)
             {
                 string category_name = keypair.Key;
@@ -113,15 +120,21 @@ namespace MelonLoader
                     Preferences.TypeManager.Load(entry, obj);
                 }
             }
-            MelonLogger.Msg("Config Loaded!");
-            MelonHandler.OnPreferencesLoaded();
+            return true;
         }
 
         private static bool IsSaving = false;
         public static void Save()
         {
-            if (categorytbl.Count <= 0)
+            if (!Save_Internal())
                 return;
+            MelonLogger.Msg("Config Saved!");
+            MelonHandler.OnPreferencesSaved();
+        }
+        internal static bool Save_Internal()
+        {
+            if (categorytbl.Count <= 0)
+                return false;
             DocumentSyntax doc = new DocumentSyntax();
             foreach (MelonPreferences_Category category in categorytbl)
             {
@@ -136,9 +149,7 @@ namespace MelonLoader
             }
             IsSaving = true;
             File.WriteAllText(FilePath, doc.ToString());
-            IsSaving = false;
-            MelonLogger.Msg("Config Saved!");
-            MelonHandler.OnPreferencesSaved();
+            return true;
         }
 
         public static MelonPreferences_Category GetCategory(string name)

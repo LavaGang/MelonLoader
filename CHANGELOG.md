@@ -172,6 +172,7 @@
 148. MelonPreferences Type Handling is now Modular for easier extension.
 149. MelonPreferences now supports the Type byte.
 150. Fixed Issue with MelonPreferences Loading when there is an Unhandled Type in the Config File.
+151. Fixed Issue with MelonPreferences where Saving would Trigger the FileWatcher and cause a needless reload.
 
 ---
 
