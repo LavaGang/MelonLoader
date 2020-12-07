@@ -155,6 +155,8 @@ namespace MelonLoader.Preferences
             entry.Type = parser.GetTypeEnum();
             parser.Construct(entry, value);
             category.prefstbl.Add(entry);
+            if (MelonPreferences.SaveAfterEntryCreation)
+                MelonPreferences.Save_Internal();
             return entry;
         }
 

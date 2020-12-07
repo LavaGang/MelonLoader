@@ -29,6 +29,7 @@ namespace MelonLoader
             FileWatcher.BeginInit();
         }
 
+        internal static bool SaveAfterEntryCreation = false;
         internal static bool WasLegacyLoaded = false;
         internal static void LegacyCheck()
         {

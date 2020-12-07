@@ -173,6 +173,7 @@
 149. MelonPreferences now supports the Type byte.
 150. Fixed Issue with MelonPreferences Loading when there is an Unhandled Type in the Config File.
 151. Fixed Issue with MelonPreferences where Saving would Trigger the FileWatcher and cause a needless reload.
+152. Fixed Issue with MelonPreferences where the Config File wasn't creating itself on Initialization.
 
 ---
 

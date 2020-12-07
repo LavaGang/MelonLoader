@@ -29,7 +29,8 @@ namespace MelonLoader
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
             try { MelonPreferences.LegacyCheck(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.LegacyCheck Exception: " + ex.ToString()); throw ex; }
             try { MelonPreferences.Load_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Load_Internal Exception: " + ex.ToString()); throw ex; }
-            if (MelonPreferences.WasLegacyLoaded) try { MelonPreferences.Save_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save_Internal Exception: " + ex.ToString()); throw ex; } 
+            if (MelonPreferences.WasLegacyLoaded) try { MelonPreferences.Save_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save_Internal Exception: " + ex.ToString()); throw ex; }
+            MelonPreferences.SaveAfterEntryCreation = true;
         }
 
         private static void Initialize()
