@@ -5,26 +5,26 @@ using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader.Preferences.Types
 {
-    internal class FloatParser : TypeParser
+    internal class ByteParser : TypeParser
     {
-        private static string TypeName = "float";
-        private static Type ReflectedType = typeof(float);
-        private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.FLOAT;
+        private static string TypeName = "byte";
+        private static Type ReflectedType = typeof(byte);
+        private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.BYTE;
 
         public static void Resolve(object sender, TypeManager.TypeParserArgs args)
         {
             if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
                 || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))
-                args.TypeParser = new FloatParser();
+                args.TypeParser = new ByteParser();
         }
 
         internal override void Construct<T>(MelonPreferences_Entry entry, T value) =>
-            entry.DefaultValue_float = entry.ValueEdited_float = entry.Value_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+            entry.DefaultValue_byte = entry.ValueEdited_byte = entry.Value_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override KeyValueSyntax Save(MelonPreferences_Entry entry)
         {
-            entry.SetValue(entry.GetEditedValue<float>());
-            return new KeyValueSyntax(entry.Name, new FloatValueSyntax(entry.GetValue<float>()));
+            entry.SetValue(entry.GetEditedValue<byte>());
+            return new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetValue<byte>()));
         }
 
         internal override void Load(MelonPreferences_Entry entry, TomlObject obj)
@@ -32,13 +32,13 @@ namespace MelonLoader.Preferences.Types
             switch (obj.Kind)
             {
                 case ObjectKind.Boolean:
-                    entry.SetValue(((TomlBoolean)obj).Value ? 1f : 0f);
+                    entry.SetValue((byte)(((TomlBoolean)obj).Value ? 1 : 0));
                     break;
                 case ObjectKind.Integer:
-                    entry.SetValue<float>(((TomlInteger)obj).Value);
+                    entry.SetValue((byte)((TomlInteger)obj).Value);
                     break;
                 case ObjectKind.Float:
-                    entry.SetValue((float)((TomlFloat)obj).Value);
+                    entry.SetValue((byte)((TomlFloat)obj).Value);
                     break;
                 default:
                     break;
@@ -47,48 +47,48 @@ namespace MelonLoader.Preferences.Types
 
         internal override void ConvertCurrentValueType(MelonPreferences_Entry entry)
         {
-            float val_float = 0f;
+            byte val_byte = 0;
             switch (entry.Type)
             {
                 case MelonPreferences_Entry.TypeEnum.BOOL:
-                    val_float = (entry.GetValue<bool>() ? 1 : 0);
+                    val_byte = (byte)(entry.GetValue<bool>() ? 1 : 0);
                     break;
                 case MelonPreferences_Entry.TypeEnum.INT:
-                    val_float = entry.GetValue<int>();
+                    val_byte = (byte)entry.GetValue<int>();
+                    break;
+                case MelonPreferences_Entry.TypeEnum.FLOAT:
+                    val_byte = (byte)entry.GetValue<float>();
                     break;
                 case MelonPreferences_Entry.TypeEnum.LONG:
-                    val_float = entry.GetValue<long>();
+                    val_byte = (byte)entry.GetValue<long>();
                     break;
                 case MelonPreferences_Entry.TypeEnum.DOUBLE:
-                    val_float = (float)entry.GetValue<double>();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.BYTE:
-                    val_float = entry.GetValue<byte>();
+                    val_byte = (byte)entry.GetValue<double>();
                     break;
                 default:
                     break;
             }
             entry.Type = TypeEnum;
-            entry.SetValue(val_float);
+            entry.SetValue(val_byte);
         }
 
         internal override void ResetToDefault(MelonPreferences_Entry entry) =>
-            entry.SetValue(entry.DefaultValue_float);
+            entry.SetValue(entry.DefaultValue_byte);
 
         internal override T GetValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_float), typeof(T))).Compile()();
+            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_byte), typeof(T))).Compile()();
         internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.Value_float = entry.ValueEdited_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), typeof(float))).Compile()();
+            entry.Value_byte = entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), typeof(byte))).Compile()();
 
         internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_float), typeof(T))).Compile()();
+            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_byte), typeof(T))).Compile()();
         internal override void SetEditedValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.ValueEdited_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), typeof(float))).Compile()();
+            entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), typeof(byte))).Compile()();
 
         internal override T GetDefaultValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_float), typeof(T))).Compile()();
+            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_byte), typeof(T))).Compile()();
         internal override void SetDefaultValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.DefaultValue_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+            entry.DefaultValue_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override Type GetReflectedType() => ReflectedType;
         internal override MelonPreferences_Entry.TypeEnum GetTypeEnum() => TypeEnum;

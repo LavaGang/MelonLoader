@@ -19,6 +19,7 @@ namespace MelonLoader.Preferences
             ResolveEvents += Types.FloatParser.Resolve;
             ResolveEvents += Types.LongParser.Resolve;
             ResolveEvents += Types.DoubleParser.Resolve;
+            ResolveEvents += Types.ByteParser.Resolve;
         }
 
         internal static KeyValueSyntax Save(MelonPreferences_Entry entry)

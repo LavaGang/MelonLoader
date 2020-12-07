@@ -170,6 +170,7 @@
 146. Fixed Issue with Logger not properly detecting the Calling Melon.
 147. Fixed Issue with Debug Logger not properly coloring Melons.
 148. MelonPreferences Type Handling is now Modular for easier extension.
+149. MelonPreferences now supports the Type byte.
 
 ---
 

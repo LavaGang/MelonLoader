@@ -18,6 +18,7 @@ namespace MelonLoader
             FLOAT,
             LONG,
             DOUBLE,
+            BYTE,
             UNKNOWN
         }
         public TypeEnum Type { get; internal set; }
@@ -46,6 +47,10 @@ namespace MelonLoader
         internal double DefaultValue_double { get; set; }
         internal double Value_double { get; set; }
         internal double ValueEdited_double { get; set; }
+
+        internal byte DefaultValue_byte { get; set; }
+        internal byte Value_byte { get; set; }
+        internal byte ValueEdited_byte { get; set; }
 
         public T GetValue<T>()
         {

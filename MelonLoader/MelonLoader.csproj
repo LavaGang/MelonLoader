@@ -45,6 +45,7 @@
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
+    <Compile Include="Preferences\Types\Byte.cs" />
     <Compile Include="Preferences\Category.cs" />
     <Compile Include="Preferences\Entry.cs" />
     <Compile Include="Preferences\TypeManager.cs" />
