@@ -108,6 +108,8 @@ namespace MelonLoader
                         else if (obj.Kind == ObjectKind.Float)
                             entry = category.CreateEntry(name, ((TomlFloat)obj).Value, hidden: true);
                     }
+                    if (entry == null)
+                        continue;
                     Preferences.TypeManager.Load(entry, obj);
                 }
             }
