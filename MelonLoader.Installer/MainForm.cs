@@ -376,7 +376,7 @@ namespace MelonLoader
 
         private void Automated_Version_Selection_SelectedValueChanged(object sender, EventArgs e)
         {
-            bool legacy_version = (Automated_Version_Selection.Text.Equals("v0.2") || Automated_Version_Selection.Text.StartsWith("v0.2.") || Automated_Version_Selection.Text.Equals("v0.1.0"));
+            bool legacy_version = (Automated_Version_Selection.Text.Equals("v0.2") || Automated_Version_Selection.Text.Equals("v0.1"));
             Automated_x64Only.Visible = legacy_version;
             Automated_Arch_Selection.Visible = !legacy_version;
             Automated_Arch_AutoDetect.Visible = !legacy_version;
