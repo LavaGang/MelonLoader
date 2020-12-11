@@ -20,7 +20,7 @@ namespace MelonLoader
         internal static bool CloseAfterCompletion { get { return _closeaftercompletion; } set { _closeaftercompletion = value; Save(); } }
 
         private static bool _showalphareleases = false;
-        internal static bool ShowAlphaReleases { get { return _showalphareleases; } set { _showalphareleases = value; Save(); } }
+        internal static bool ShowAlphaReleases { get { return _showalphareleases; } set { _showalphareleases = false; } } // set { _showalphareleases = value; Save(); } }
 
         internal static void Load()
         {
@@ -44,8 +44,8 @@ namespace MelonLoader
                 Boolean.TryParse(installertbl["AutoUpdateInstaller"].ToString(), out _autoupdateinstaller);
             if (installertbl.ContainsKey("CloseAfterCompletion"))
                 Boolean.TryParse(installertbl["CloseAfterCompletion"].ToString(), out _closeaftercompletion);
-            if (installertbl.ContainsKey("ShowAlphaReleases"))
-                Boolean.TryParse(installertbl["ShowAlphaReleases"].ToString(), out _showalphareleases);
+            //if (installertbl.ContainsKey("ShowAlphaReleases"))
+            //    Boolean.TryParse(installertbl["ShowAlphaReleases"].ToString(), out _showalphareleases);
         }   
 
         internal static void Save()
@@ -55,7 +55,7 @@ namespace MelonLoader
             tbl.Items.Add(new KeyValueSyntax("Theme", new IntegerValueSyntax(_theme)));
             tbl.Items.Add(new KeyValueSyntax("AutoUpdateInstaller", new BooleanValueSyntax(_autoupdateinstaller)));
             tbl.Items.Add(new KeyValueSyntax("CloseAfterCompletion", new BooleanValueSyntax(_closeaftercompletion)));
-            tbl.Items.Add(new KeyValueSyntax("ShowAlphaReleases", new BooleanValueSyntax(_showalphareleases)));
+            //tbl.Items.Add(new KeyValueSyntax("ShowAlphaReleases", new BooleanValueSyntax(_showalphareleases)));
             doc.Tables.Add(tbl);
             File.WriteAllText(FilePath, doc.ToString());
         }
