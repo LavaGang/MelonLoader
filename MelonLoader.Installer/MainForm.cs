@@ -48,8 +48,7 @@ namespace MelonLoader
                 if ((opd.ShowDialog() != DialogResult.OK) || string.IsNullOrEmpty(opd.FileName))
                     return;
 
-                if (!Path.GetExtension(opd.FileName).Equals(".exe")
-                    && !Path.GetExtension(opd.FileName).Equals(".lnk"))
+                if (!Path.GetExtension(opd.FileName).Equals(".exe") && !Path.GetExtension(opd.FileName).Equals(".lnk"))
                 {
                     Program.FinishingMessageBox("Invalid File Selected! Must be .exe or .lnk", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectUnityGame();
@@ -83,9 +82,15 @@ namespace MelonLoader
 
                 // Add Invalid Selection Recursive Popup
 
-                if ((opd.ShowDialog() != DialogResult.OK)
-                    || string.IsNullOrEmpty(opd.FileName))
+                if ((opd.ShowDialog() != DialogResult.OK) || string.IsNullOrEmpty(opd.FileName))
                     return;
+
+                if(!Path.GetExtension(opd.FileName).Equals(".zip"))
+                {
+                    Program.FinishingMessageBox("Invalid File Selected! Must be .zip", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SelectZipArchive();
+                    return;
+                }
 
                 // Verify Zip Archive
 
