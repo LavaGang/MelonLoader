@@ -358,8 +358,6 @@ namespace MelonLoader
                 if (!Config.ShowAlphaReleases && release["prerelease"].AsBoolean)
                     continue;
                 string version = release["tag_name"].AsString;
-                if (version.Equals("v0.2"))
-                    version = "v0.2.0";
                 releasesList.Add(version);
             }
             releasesList.Sort();
@@ -433,10 +431,8 @@ namespace MelonLoader
                     Tab_Output.Text = "RE-INSTALL   ";
                 }
             }
-            bool legacy_version = (Automated_Version_Selection.Text.StartsWith("v0.2.") || Automated_Version_Selection.Text.Equals("v0.1."));
+            bool legacy_version = (Automated_Version_Selection.Text.StartsWith("v0.2") || Automated_Version_Selection.Text.Equals("v0.1"));
             string selected_version = Automated_Version_Selection.Text;
-            if (selected_version.Equals("v0.2.0"))
-                selected_version = "v0.2";
             new Thread(() => { OperationHandler.Automated_Install(Path.GetDirectoryName(Automated_UnityGame_Display.Text), selected_version, (legacy_version ? false : (Automated_Arch_Selection.SelectedIndex == 0)), legacy_version); }).Start();
             Program.SetTotalPercentage(0);
             PageManager.Cursor = Cursors.Default;
