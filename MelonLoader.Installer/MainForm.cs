@@ -59,7 +59,11 @@ namespace MelonLoader
                 {
                     string newfilepath = Program.GetFilePathFromShortcut(filepath);
                     if (string.IsNullOrEmpty(opd.FileName) || !opd.FileName.EndsWith(".exe"))
+                    {
+                        MessageBox.Show("Invalid File Selected! Must be .exe or .lnk", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        SelectUnityGame();
                         return;
+                    }
                     filepath = newfilepath;
                 }
 
