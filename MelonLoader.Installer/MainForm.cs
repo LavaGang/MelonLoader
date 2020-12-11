@@ -49,7 +49,7 @@ namespace MelonLoader
                 string file_extension = Path.GetExtension(filepath);
                 if (string.IsNullOrEmpty(file_extension) || (!file_extension.Equals(".exe") && !file_extension.Equals(".lnk") && !file_extension.Equals(".url")))
                 {
-                    MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid File Selected!", BuildInfo.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectUnityGame();
                     return;
                 }
@@ -58,7 +58,7 @@ namespace MelonLoader
                     string newfilepath = Program.GetFilePathFromShortcut(filepath);
                     if (string.IsNullOrEmpty(newfilepath) || !newfilepath.EndsWith(".exe"))
                     {
-                        MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Invalid File Selected!", BuildInfo.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         SelectUnityGame();
                         return;
                     }
@@ -88,7 +88,7 @@ namespace MelonLoader
                 string file_extension = Path.GetExtension(filepath);
                 if (string.IsNullOrEmpty(file_extension) || !file_extension.Equals(".zip"))
                 {
-                    MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid File Selected!", BuildInfo.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectZipArchive();
                     return;
                 }
@@ -470,7 +470,7 @@ namespace MelonLoader
 
         private void ClickedUninstall()
         {
-            DialogResult result = MessageBox.Show("Are you sure you wish to Uninstall MelonLoader?", "MelonLoader Installer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure you wish to Uninstall MelonLoader?", BuildInfo.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes)
                 return;
             OperationHandler.CurrentOperation = OperationHandler.Operations.UNINSTALL;
@@ -499,7 +499,7 @@ namespace MelonLoader
 
             // Sanatize Operation
 
-            MessageBox.Show((OperationHandler.CurrentOperationName + " was Cancelled!"), "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show((OperationHandler.CurrentOperationName + " was Cancelled!"), BuildInfo.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private int TabBeforeOperation = 0;

@@ -138,7 +138,7 @@ namespace MelonLoader
         {
             mainForm.Invoke(new Action(() =>
             {
-                MessageBox.Show(msg, "MelonLoader Installer", buttons, icon);
+                MessageBox.Show(msg, BuildInfo.Name, buttons, icon);
                 if ((icon != MessageBoxIcon.Error) && Config.CloseAfterCompletion)
                 {
                     Process.GetCurrentProcess().Kill();
