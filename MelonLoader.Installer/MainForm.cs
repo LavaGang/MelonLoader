@@ -152,6 +152,7 @@ namespace MelonLoader
 
         private void CheckForInstallerUpdate()
         {
+            Program.SetInvariantCulture();
             string response = null;
             try { response = Program.webClient_update.DownloadString(Program.Repo_API_Installer); } catch { response = null; }
             if (string.IsNullOrEmpty(response))
@@ -238,6 +239,7 @@ namespace MelonLoader
 
         private void GetReleases()
         {
+            Program.SetInvariantCulture();
             Invoke(new Action(() => {
                 Tab_PleaseWait.Text = Tab_Automated.Text;
                 PleaseWait_Text.Text = "Getting List of Releases from GitHub...";
@@ -440,7 +442,7 @@ namespace MelonLoader
             }
             bool legacy_version = (Automated_Version_Selection.Text.StartsWith("v0.2") || Automated_Version_Selection.Text.StartsWith("v0.1"));
             string selected_version = Automated_Version_Selection.Text;
-            new Thread(() => { OperationHandler.Automated_Install(Path.GetDirectoryName(Automated_UnityGame_Display.Text), selected_version, (legacy_version ? false : (Automated_Arch_Selection.SelectedIndex == 0)), legacy_version); }).Start();
+            new Thread(() => { Program.SetInvariantCulture(); OperationHandler.Automated_Install(Path.GetDirectoryName(Automated_UnityGame_Display.Text), selected_version, (legacy_version ? false : (Automated_Arch_Selection.SelectedIndex == 0)), legacy_version); }).Start();
             Program.SetTotalPercentage(0);
             PageManager.Cursor = Cursors.Default;
             TabBeforeOperation = PageManager.SelectedIndex;
@@ -460,7 +462,7 @@ namespace MelonLoader
                 OperationHandler.CurrentOperation = OperationHandler.Operations.REINSTALL;
                 Tab_Output.Text = "RE-INSTALL   ";
             }
-            new Thread(() => { OperationHandler.ManualZip_Install(ManualZip_ZipArchive_Display.Text, Path.GetDirectoryName(Automated_UnityGame_Display.Text)); }).Start();
+            new Thread(() => { Program.SetInvariantCulture(); OperationHandler.ManualZip_Install(ManualZip_ZipArchive_Display.Text, Path.GetDirectoryName(Automated_UnityGame_Display.Text)); }).Start();
             Program.SetTotalPercentage(0);
             PageManager.Cursor = Cursors.Default;
             TabBeforeOperation = PageManager.SelectedIndex;
@@ -475,7 +477,7 @@ namespace MelonLoader
                 return;
             OperationHandler.CurrentOperation = OperationHandler.Operations.UNINSTALL;
             Tab_Output.Text = "UN-INSTALL   ";
-            new Thread(() => { OperationHandler.Uninstall(Path.GetDirectoryName(Automated_UnityGame_Display.Text)); }).Start();
+            new Thread(() => { Program.SetInvariantCulture(); OperationHandler.Uninstall(Path.GetDirectoryName(Automated_UnityGame_Display.Text)); }).Start();
             Program.SetTotalPercentage(0);
             PageManager.Cursor = Cursors.Default;
             TabBeforeOperation = PageManager.SelectedIndex;

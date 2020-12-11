@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MelonLoader
@@ -25,6 +27,7 @@ namespace MelonLoader
         static Program()
         {
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+            SetInvariantCulture();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ServicePointManager.Expect100Continue = true;
@@ -44,6 +47,12 @@ namespace MelonLoader
 
             mainForm = new MainForm();
             Application.Run(mainForm);
+        }
+
+        internal static void SetInvariantCulture()
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
         }
 
         private static void FileNameCheck()
