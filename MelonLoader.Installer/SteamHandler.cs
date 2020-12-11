@@ -1,9 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace MelonLoader
 {

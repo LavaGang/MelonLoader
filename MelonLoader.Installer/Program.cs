@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Linq;
 using System.Windows.Forms;
-#pragma warning disable 0168
 
 namespace MelonLoader
 {
