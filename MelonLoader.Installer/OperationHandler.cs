@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using MelonLoader.Tomlyn;
 using MelonLoader.Tomlyn.Model;
 using MelonLoader.Tomlyn.Syntax;
-#pragma warning disable 0168
 
 namespace MelonLoader
 {
@@ -74,7 +72,7 @@ namespace MelonLoader
                 return;
             string repo_hash_url = Program.Download_MelonLoader + "/" + selected_version + "/MelonLoader." + ((!legacy_version && is_x86) ? "x86" : "x64") + ".sha512";
             string repo_hash = null;
-            try { repo_hash = Program.webClient.DownloadString(repo_hash_url); } catch (Exception ex) { repo_hash = null; }
+            try { repo_hash = Program.webClient.DownloadString(repo_hash_url); } catch { repo_hash = null; }
             if (string.IsNullOrEmpty(repo_hash))
             {
                 Program.LogError("Failed to get SHA512 Hash from Repo!");
@@ -288,14 +286,23 @@ namespace MelonLoader
                     TomlObject obj = TomlObject.ToTomlObject(tblkeypair.Value);
                     if (obj == null)
                         continue;
-                    if (obj.Kind == ObjectKind.String)
-                        iniFile.SetString(category_name, name, ((TomlString)obj).Value);
-                    else if (obj.Kind == ObjectKind.Boolean)
-                        iniFile.SetBool(category_name, name, ((TomlBoolean)obj).Value);
-                    else if (obj.Kind == ObjectKind.Integer)
-                        iniFile.SetInt(category_name, name, (int)((TomlInteger)obj).Value);
-                    else if (obj.Kind == ObjectKind.Float)
-                        iniFile.SetFloat(category_name, name, (float)((TomlFloat)obj).Value);
+                    switch(obj.Kind)
+                    {
+                        case ObjectKind.String:
+                            iniFile.SetString(category_name, name, ((TomlString)obj).Value);
+                            break;
+                        case ObjectKind.Boolean:
+                            iniFile.SetBool(category_name, name, ((TomlBoolean)obj).Value);
+                            break;
+                        case ObjectKind.Integer:
+                            iniFile.SetInt(category_name, name, (int)((TomlInteger)obj).Value);
+                            break;
+                        case ObjectKind.Float:
+                            iniFile.SetFloat(category_name, name, (float)((TomlFloat)obj).Value);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             File.Delete(oldfilepath);

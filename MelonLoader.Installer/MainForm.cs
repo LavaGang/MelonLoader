@@ -7,7 +7,6 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
 using MelonLoader.LightJson;
-#pragma warning disable 0168
 
 namespace MelonLoader
 {
@@ -46,11 +45,16 @@ namespace MelonLoader
 
                 // Add Invalid Selection Recursive Popup
 
-                if ((opd.ShowDialog() != DialogResult.OK)
-                    || string.IsNullOrEmpty(opd.FileName)
-                    || (!Path.GetExtension(opd.FileName).Equals(".exe")
-                    && !Path.GetExtension(opd.FileName).Equals(".lnk")))
+                if ((opd.ShowDialog() != DialogResult.OK) || string.IsNullOrEmpty(opd.FileName))
                     return;
+
+                if (!Path.GetExtension(opd.FileName).Equals(".exe")
+                    && !Path.GetExtension(opd.FileName).Equals(".lnk"))
+                {
+                    Program.FinishingMessageBox("Invalid File Selected! Must be .exe or .lnk", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SelectUnityGame();
+                    return;
+                }
                 string filepath = opd.FileName;
                 if (Path.GetExtension(filepath).Equals(".lnk"))
                 {
@@ -146,7 +150,7 @@ namespace MelonLoader
         private void CheckForInstallerUpdate()
         {
             string response = null;
-            try { response = Program.webClient_update.DownloadString(Program.Repo_API_Installer); } catch (Exception ex) { response = null; }
+            try { response = Program.webClient_update.DownloadString(Program.Repo_API_Installer); } catch { response = null; }
             if (string.IsNullOrEmpty(response))
             {
                 GetReleases();
@@ -187,7 +191,7 @@ namespace MelonLoader
             string downloadurl = assets[1]["browser_download_url"].AsString;
             string temp_path = TempFileCache.CreateFile();
             try { Program.webClient_update.DownloadFileAsync(new Uri(downloadurl), temp_path); while (Program.webClient.IsBusy) { } }
-            catch (Exception ex)
+            catch
             {
                 TempFileCache.ClearCache();
                 GetReleases();
@@ -196,7 +200,7 @@ namespace MelonLoader
             if (Program.Closing)
                 return;
             string repo_hash = null;
-            try { repo_hash = Program.webClient_update.DownloadString(assets[0]["browser_download_url"].AsString); } catch (Exception ex) { repo_hash = null; }
+            try { repo_hash = Program.webClient_update.DownloadString(assets[0]["browser_download_url"].AsString); } catch { repo_hash = null; }
             if (string.IsNullOrEmpty(repo_hash))
             {
                 TempFileCache.ClearCache();
@@ -343,7 +347,7 @@ namespace MelonLoader
         private void ParseReleasesURL()
         {
             string response = null;
-            try { response = Program.webClient.DownloadString(Program.Repo_API_MelonLoader); } catch (Exception ex) { response = null; }
+            try { response = Program.webClient.DownloadString(Program.Repo_API_MelonLoader); } catch { response = null; }
             if (string.IsNullOrEmpty(response))
                 return;
             JsonArray data = JsonValue.Parse(response).AsJsonArray;
@@ -376,7 +380,7 @@ namespace MelonLoader
 
         private void Automated_Version_Selection_SelectedValueChanged(object sender, EventArgs e)
         {
-            bool legacy_version = (Automated_Version_Selection.Text.Equals("v0.2") || Automated_Version_Selection.Text.Equals("v0.1"));
+            bool legacy_version = (Automated_Version_Selection.Text.StartsWith("v0.2") || Automated_Version_Selection.Text.StartsWith("v0.1"));
             Automated_x64Only.Visible = legacy_version;
             Automated_Arch_Selection.Visible = !legacy_version;
             Automated_Arch_AutoDetect.Visible = !legacy_version;
@@ -431,7 +435,7 @@ namespace MelonLoader
                     Tab_Output.Text = "RE-INSTALL   ";
                 }
             }
-            bool legacy_version = (Automated_Version_Selection.Text.StartsWith("v0.2") || Automated_Version_Selection.Text.Equals("v0.1"));
+            bool legacy_version = (Automated_Version_Selection.Text.StartsWith("v0.2") || Automated_Version_Selection.Text.StartsWith("v0.1"));
             string selected_version = Automated_Version_Selection.Text;
             new Thread(() => { OperationHandler.Automated_Install(Path.GetDirectoryName(Automated_UnityGame_Display.Text), selected_version, (legacy_version ? false : (Automated_Arch_Selection.SelectedIndex == 0)), legacy_version); }).Start();
             Program.SetTotalPercentage(0);
