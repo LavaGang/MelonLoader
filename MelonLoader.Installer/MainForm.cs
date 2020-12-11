@@ -42,20 +42,20 @@ namespace MelonLoader
                 opd.Filter = "Unity Game (*.exe)|*.exe|Shortcut (*.lnk)|*.lnk";
                 opd.RestoreDirectory = true;
                 opd.Multiselect = false;
-
-                // Add Invalid Selection Recursive Popup
-
+                opd.DereferenceLinks = false;
                 if ((opd.ShowDialog() != DialogResult.OK) || string.IsNullOrEmpty(opd.FileName))
                     return;
 
-                if (!Path.GetExtension(opd.FileName).Equals(".exe") && !Path.GetExtension(opd.FileName).Equals(".lnk"))
+                string filepath = opd.FileName;
+                string file_extension = Path.GetExtension(filepath);
+                if (!file_extension.Equals(".exe") && !file_extension.Equals(".lnk"))
                 {
-                    MessageBox.Show("Invalid File Selected! Must be .exe or .lnk", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectUnityGame();
                     return;
                 }
-                string filepath = opd.FileName;
-                if (Path.GetExtension(filepath).Equals(".lnk"))
+                
+                if (file_extension.Equals(".lnk"))
                 {
                     string newfilepath = Program.GetFilePathFromShortcut(filepath);
                     if (string.IsNullOrEmpty(opd.FileName) || !opd.FileName.EndsWith(".exe"))
@@ -83,15 +83,12 @@ namespace MelonLoader
                 opd.Filter = "MelonLoader Zip Archive (*.zip)|*.zip";
                 opd.RestoreDirectory = true;
                 opd.Multiselect = false;
-
-                // Add Invalid Selection Recursive Popup
-
+                opd.DereferenceLinks = false;
                 if ((opd.ShowDialog() != DialogResult.OK) || string.IsNullOrEmpty(opd.FileName))
                     return;
-
                 if(!Path.GetExtension(opd.FileName).Equals(".zip"))
                 {
-                    MessageBox.Show("Invalid File Selected! Must be .zip", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectZipArchive();
                     return;
                 }
