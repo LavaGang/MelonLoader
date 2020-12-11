@@ -175,6 +175,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SteamHandler.cs" />
     <Compile Include="TempFileCache.cs" />
   </ItemGroup>
   <ItemGroup>

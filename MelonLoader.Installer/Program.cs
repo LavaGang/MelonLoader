@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Windows.Forms;
 #pragma warning disable 0168
 
@@ -150,12 +151,30 @@ namespace MelonLoader
 
         internal static string GetFilePathFromShortcut(string shortcut_path)
         {
-            // Add Steam Shortcut Support
-
-            IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
-            IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcut_path);
-            return shortcut.TargetPath;
+            string shortcut_extension = Path.GetExtension(shortcut_path);
+            if (shortcut_extension.Equals(".lnk"))
+                return GetFilePathFromLNK(shortcut_path);
+            else if (shortcut_extension.Equals(".url"))
+                return GetFilePathFromURL(shortcut_path);
+            return null;
         }
+        private static string GetFilePathFromLNK(string shortcut_path) => ((IWshRuntimeLibrary.IWshShortcut)new IWshRuntimeLibrary.WshShell().CreateShortcut(shortcut_path)).TargetPath;
+        private static string GetFilePathFromURL(string shortcut_path)
+        {
+            string[] file_lines = File.ReadAllLines(shortcut_path);
+            if (file_lines.Length <= 0)
+                return null;
+            string urlstring = file_lines.First(x => (!string.IsNullOrEmpty(x) && x.StartsWith("URL=")));
+            if (string.IsNullOrEmpty(urlstring))
+                return null;
+            urlstring = urlstring.Substring(4);
+            if (string.IsNullOrEmpty(urlstring))
+                return null;
+            if (urlstring.StartsWith("steam://rungameid/"))
+                return SteamHandler.GetFilePathFromAppId(urlstring.Substring(18));
+            return null;
+        }
+
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MessageBox.Show((e.ExceptionObject as Exception).ToString());
     }
 }

@@ -45,22 +45,20 @@ namespace MelonLoader
                 opd.DereferenceLinks = false;
                 if ((opd.ShowDialog() != DialogResult.OK) || string.IsNullOrEmpty(opd.FileName))
                     return;
-
                 string filepath = opd.FileName;
                 string file_extension = Path.GetExtension(filepath);
-                if (!file_extension.Equals(".exe") && !file_extension.Equals(".lnk"))
+                if (string.IsNullOrEmpty(file_extension) || (!file_extension.Equals(".exe") && !file_extension.Equals(".lnk") && !file_extension.Equals(".url")))
                 {
                     MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectUnityGame();
                     return;
                 }
-                
-                if (file_extension.Equals(".lnk"))
+                if (file_extension.Equals(".lnk") || file_extension.Equals(".url"))
                 {
                     string newfilepath = Program.GetFilePathFromShortcut(filepath);
-                    if (string.IsNullOrEmpty(opd.FileName) || !opd.FileName.EndsWith(".exe"))
+                    if (string.IsNullOrEmpty(newfilepath) || !newfilepath.EndsWith(".exe"))
                     {
-                        MessageBox.Show("Invalid File Selected! Must be .exe or .lnk", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         SelectUnityGame();
                         return;
                     }
@@ -86,16 +84,15 @@ namespace MelonLoader
                 opd.DereferenceLinks = false;
                 if ((opd.ShowDialog() != DialogResult.OK) || string.IsNullOrEmpty(opd.FileName))
                     return;
-                if(!Path.GetExtension(opd.FileName).Equals(".zip"))
+                string filepath = opd.FileName;
+                string file_extension = Path.GetExtension(filepath);
+                if (string.IsNullOrEmpty(file_extension) || !file_extension.Equals(".zip"))
                 {
                     MessageBox.Show("Invalid File Selected!", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectZipArchive();
                     return;
                 }
-
-                // Verify Zip Archive
-
-                ManualZip_ZipArchive_Display.Text = opd.FileName;
+                ManualZip_ZipArchive_Display.Text = filepath;
                 if (!string.IsNullOrEmpty(ManualZip_UnityGame_Display.Text)
                 && !ManualZip_UnityGame_Display.Text.Equals("Please Select your Unity Game..."))
                     ManualZip_Install.Enabled = true;
