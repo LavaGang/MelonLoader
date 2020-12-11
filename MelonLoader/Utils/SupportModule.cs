@@ -2,7 +2,6 @@
 using System.IO;
 using System.Collections;
 using System.Reflection;
-#pragma warning disable 0168
 
 namespace MelonLoader
 {
@@ -75,7 +74,7 @@ namespace MelonLoader
                     return true;
                 return false;
             }
-            catch (Exception e) { return true; }
+            catch { return true; }
         }
     }
 

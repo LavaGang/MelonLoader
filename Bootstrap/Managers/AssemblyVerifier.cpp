@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <math.h>
 #include "../Utils/Debug.h"
+#pragma warning(disable:4244)
 
 AssemblyVerifier::callOriginalLoadFrom_t AssemblyVerifier::callOriginalLoadFrom;
 AssemblyVerifier::callOriginalLoadRaw_t AssemblyVerifier::callOriginalLoadRaw;
