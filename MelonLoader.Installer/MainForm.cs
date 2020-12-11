@@ -50,7 +50,7 @@ namespace MelonLoader
 
                 if (!Path.GetExtension(opd.FileName).Equals(".exe") && !Path.GetExtension(opd.FileName).Equals(".lnk"))
                 {
-                    Program.FinishingMessageBox("Invalid File Selected! Must be .exe or .lnk", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid File Selected! Must be .exe or .lnk", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectUnityGame();
                     return;
                 }
@@ -87,7 +87,7 @@ namespace MelonLoader
 
                 if(!Path.GetExtension(opd.FileName).Equals(".zip"))
                 {
-                    Program.FinishingMessageBox("Invalid File Selected! Must be .zip", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Invalid File Selected! Must be .zip", "MelonLoader Installer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SelectZipArchive();
                     return;
                 }
