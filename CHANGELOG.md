@@ -176,6 +176,7 @@
 152. Fixed Issue with MelonPreferences where the Config File wasn't creating itself on Initialization.
 153. Fixed Issue with MelonPreferences causing the Config File to ignore certain Preferences during Initialization.
 154. Fixed Issue with Compatibility Layer failing to resolve type for MelonLoader.UnhollowerSupport.
+155. Fixed Issue with Unhollower TraceHandler Logs not having the DEBUG prefix.
 
 ---
 

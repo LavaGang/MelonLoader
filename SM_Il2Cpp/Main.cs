@@ -29,8 +29,7 @@ namespace MelonLoader.Support
                 LogSupport.InfoHandler += MelonLogger.Msg;
             LogSupport.WarningHandler += MelonLogger.Warning;
             LogSupport.ErrorHandler += MelonLogger.Error;
-            if (MelonDebug.IsEnabled())
-                LogSupport.TraceHandler += MelonLogger.Msg;
+            LogSupport.TraceHandler += MelonDebug.Msg;
             ClassInjector.DoHook = MelonUtils.NativeHookAttach;
             InitializeUnityVersion();
             ConsoleCleaner();
