@@ -336,14 +336,4 @@ namespace MelonLoader
             public PrefDesc(MelonPreference pref) : base(pref) { }
         }
     }
-    [Obsolete("MelonLoader.UnhollowerSupport is obsolete. Please use MelonLoader.Unhollower instead.")]
-    public class UnhollowerSupport
-    {
-        [Obsolete("UnhollowerSupport.IsGeneratedAssemblyType is obsolete. Please use Unhollower.IsIl2CppObjectType instead.")]
-        public static bool IsGeneratedAssemblyType(Type type) => Unhollower.IsIl2CppObjectType(type);
-        [Obsolete("UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer is obsolete. Please use Unhollower.MethodToIntPtr instead.")]
-        public static IntPtr MethodBaseToIl2CppMethodInfoPointer(MethodBase method) => Unhollower.MethodToIntPtr(method);
-        [Obsolete("UnhollowerSupport.Il2CppObjectPtrToIl2CppObject is obsolete. Please use Unhollower.Il2CppObjectPtrToIl2CppObject instead.")]
-        public static T Il2CppObjectPtrToIl2CppObject<T>(IntPtr ptr) => Unhollower.Il2CppObjectPtrToIl2CppObject<T>(ptr);
-    }
 }

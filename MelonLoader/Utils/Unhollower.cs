@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace MelonLoader
 {
-    public static class Unhollower
+    public static class UnhollowerSupport
     {
         internal static Type Il2CppObjectBaseType = null;
         internal static Type Il2CppMethodInfoType = null;
@@ -11,7 +11,7 @@ namespace MelonLoader
         internal static MethodInfo Il2CppStringToManagedMethod = null;
         internal static MethodInfo ManagedStringToIl2CppMethod = null;
         internal static MethodInfo GetIl2CppMethodInfoPointerFieldForGeneratedMethod = null;
-        static Unhollower()
+        static UnhollowerSupport()
         {
             if (!MelonUtils.IsGameIl2Cpp())
                 return;
@@ -29,14 +29,12 @@ namespace MelonLoader
             GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
         }
 
-        public static bool IsIl2CppObjectType(Type type) => ((Il2CppObjectBaseType != null) && (type != null) && type.IsSubclassOf(Il2CppObjectBaseType));
+        public static bool IsGeneratedAssemblyType(Type type) => ((Il2CppObjectBaseType != null) && (type != null) && type.IsSubclassOf(Il2CppObjectBaseType));
 
-        public static IntPtr MethodToIntPtr(MethodBase method)
+        public static IntPtr MethodBaseToIl2CppMethodInfoPointer(MethodBase method)
         {
             if (method == null)
                 throw new NullReferenceException("The method cannot be null.");
-            if (!IsIl2CppObjectType(method.DeclaringType))
-                return method.MethodHandle.GetFunctionPointer();
             FieldInfo methodPtr = (FieldInfo)GetIl2CppMethodInfoPointerFieldForGeneratedMethod.Invoke(null, new object[] { method });
             if (methodPtr == null)
                 throw new NotSupportedException($"Cannot get IntPtr for {method.Name} as there is no corresponding IL2CPP method");
@@ -47,7 +45,7 @@ namespace MelonLoader
         {
             if (ptr == IntPtr.Zero)
                 throw new NullReferenceException("The ptr cannot be IntPtr.Zero.");
-            if (!IsIl2CppObjectType(typeof(T)))
+            if (!IsGeneratedAssemblyType(typeof(T)))
                 throw new NullReferenceException("The type must be a Generated Assembly Type.");
             return (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
         }

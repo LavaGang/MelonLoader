@@ -85,7 +85,7 @@ namespace Harmony
 			var sortedPrefixes = GetSortedPatchMethods(original, patchInfo.prefixes);
 			var sortedPostfixes = GetSortedPatchMethods(original, patchInfo.postfixes);
 			var sortedTranspilers = GetSortedPatchMethods(original, patchInfo.transpilers);
-			bool isIl2Cpp = Unhollower.IsIl2CppObjectType(original.DeclaringType);
+			bool isIl2Cpp = UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType);
 
 			if (isIl2Cpp) {
 				if (sortedTranspilers.Count > 0) {
@@ -93,7 +93,7 @@ namespace Harmony
 				}
 
 				if (patchInfo.copiedMethodInfoPointer == IntPtr.Zero) {
-					IntPtr origMethodPtr = Unhollower.MethodToIntPtr(original);
+					IntPtr origMethodPtr = UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(original);
 					patchInfo.copiedMethodInfoPointer = CopyMethodInfoStruct(origMethodPtr);
 					HarmonySharedState.UpdatePatchInfo(original, patchInfo);
 				}
@@ -188,11 +188,11 @@ namespace Harmony
 
 		private static IntPtr CopyMethodInfoStruct(IntPtr origMethodInfo) {
 			// Il2CppMethodInfo *copiedMethodInfo = malloc(sizeof(Il2CppMethodInfo));
-			int sizeOfMethodInfo = Marshal.SizeOf(Unhollower.Il2CppMethodInfoType);
+			int sizeOfMethodInfo = Marshal.SizeOf(UnhollowerSupport.Il2CppMethodInfoType);
 			IntPtr copiedMethodInfo = Marshal.AllocHGlobal(sizeOfMethodInfo);
 
 			// *copiedMethodInfo = *origMethodInfo;
-			object temp = Marshal.PtrToStructure(origMethodInfo, Unhollower.Il2CppMethodInfoType);
+			object temp = Marshal.PtrToStructure(origMethodInfo, UnhollowerSupport.Il2CppMethodInfoType);
 			Marshal.StructureToPtr(temp, copiedMethodInfo, false);
 
 			return copiedMethodInfo;
@@ -277,9 +277,9 @@ namespace Harmony
 				Emitter.Emit(il, OpCodes.Ldarg, i); // -> [intptr*]
 				Emitter.Emit(il, OpCodes.Ldloc, byRefValues[i]); // -> [intptr*, obj]
 				if (origParamTypes[i].GetElementType() == typeof(string)) {
-					Emitter.Emit(il, OpCodes.Call, Unhollower.ManagedStringToIl2CppMethod); // -> [intptr*, intptr]
+					Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.ManagedStringToIl2CppMethod); // -> [intptr*, intptr]
 				} else {
-					Emitter.Emit(il, OpCodes.Call, Unhollower.Il2CppObjectBaseToPtrMethod); // -> [intptr*, intptr]
+					Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod); // -> [intptr*, intptr]
 				}
 				Emitter.Emit(il, OpCodes.Stind_I); // -> []
 			}
@@ -299,12 +299,12 @@ namespace Harmony
 		private static Type Il2CppTypeForPatchType(Type type) {
 			if (type.IsByRef) {
 				Type element = type.GetElementType();
-				if (element == typeof(string) || Unhollower.IsIl2CppObjectType(element)) {
+				if (element == typeof(string) || UnhollowerSupport.IsGeneratedAssemblyType(element)) {
 					return typeof(IntPtr*);
 				} else {
 					return type;
 				}
-			} else if (type == typeof(string) || Unhollower.IsIl2CppObjectType(type)) {
+			} else if (type == typeof(string) || UnhollowerSupport.IsGeneratedAssemblyType(type)) {
 				return typeof(IntPtr);
 			} else {
 				return type;
@@ -324,10 +324,10 @@ namespace Harmony
 
 					byRefLocal = il.DeclareLocal(elementType);
 					Emitter.Emit(il, OpCodes.Ldind_I);
-					Emitter.Emit(il, OpCodes.Call, Unhollower.Il2CppStringToManagedMethod);
+					Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
 					Emitter.Emit(il, OpCodes.Stloc, byRefLocal);
 					Emitter.Emit(il, OpCodes.Ldloca, byRefLocal);
-				} else if (Unhollower.IsIl2CppObjectType(elementType)) {
+				} else if (UnhollowerSupport.IsGeneratedAssemblyType(elementType)) {
 					// byRefLocal = *ptr == 0 ? null : new SomeType(*ptr);
 					// return ref byRefLocal;
 					Label ptrNonZero = il.DefineLabel();
@@ -347,8 +347,8 @@ namespace Harmony
 				}
 			} else if (paramType == typeof(string)) {
 				// return Il2CppStringToManaged(ptr);
-				Emitter.Emit(il, OpCodes.Call, Unhollower.Il2CppStringToManagedMethod);
-			} else if (Unhollower.IsIl2CppObjectType(paramType)) {
+				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
+			} else if (UnhollowerSupport.IsGeneratedAssemblyType(paramType)) {
 				// return ptr == 0 ? null : new SomeType(ptr);
 				Label ptrNonZero = il.DefineLabel();
 				Label done = il.DefineLabel();
@@ -366,9 +366,9 @@ namespace Harmony
 
 		private static void ConvertReturnValue(ILGenerator il, Type returnType) {
 			if (returnType == typeof(string)) {
-				Emitter.Emit(il, OpCodes.Call, Unhollower.ManagedStringToIl2CppMethod);
-			} else if (!returnType.IsValueType && Unhollower.IsIl2CppObjectType(returnType)) {
-				Emitter.Emit(il, OpCodes.Call, Unhollower.Il2CppObjectBaseToPtrMethod);
+				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.ManagedStringToIl2CppMethod);
+			} else if (!returnType.IsValueType && UnhollowerSupport.IsGeneratedAssemblyType(returnType)) {
+				Emitter.Emit(il, OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
 			}
 		}
 
