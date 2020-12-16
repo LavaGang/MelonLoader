@@ -36,6 +36,7 @@ namespace MelonLoader
             Name = name;
             Version = version;
             Author = author;
-            DownloadLink = downloadLink; }
+            DownloadLink = downloadLink;
+        }
     }
 }

@@ -112,7 +112,7 @@ namespace MelonLoader
             Developer = developer;
             GameName = gameName;
         }
-        public MelonGameAttribute Convert() => new MelonGameAttribute(Developer, GameName);
+        internal MelonGameAttribute Convert() => new MelonGameAttribute(Developer, GameName);
     }
     [Obsolete("MelonPluginInfo is obsolete. Please use MelonInfo instead.")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
@@ -131,7 +131,7 @@ namespace MelonLoader
             Author = author;
             DownloadLink = downloadLink;
         }
-        public MelonInfoAttribute Convert() => new MelonInfoAttribute(SystemType, Name, Version, Author, DownloadLink);
+        internal MelonInfoAttribute Convert() => new MelonInfoAttribute(SystemType, Name, Version, Author, DownloadLink);
     }
     [Obsolete("MelonModLogger is obsolete. Please use MelonLogger instead.")]
     public class MelonModLogger : MelonLogger {}
