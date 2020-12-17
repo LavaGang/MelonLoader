@@ -387,39 +387,23 @@ namespace MelonLoader
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 
-        private static bool SceneWasJustLoaded = false;
-        private static int CurrentSceneBuildIndex = -1;
-        private static string CurrentSceneName = null;
         internal static void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
-            SceneWasJustLoaded = true;
-            CurrentSceneBuildIndex = buildIndex;
-            CurrentSceneName = sceneName;
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnLevelWasLoaded(CurrentSceneBuildIndex); mod.OnSceneWasLoaded(CurrentSceneBuildIndex, CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { mod.OnLevelWasLoaded(buildIndex); mod.OnSceneWasLoaded(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
-        private static bool InitializeScene = false;
-        internal static void OnSceneWasInitialized()
+        internal static void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
-                    try { mod.OnLevelWasInitialized(CurrentSceneBuildIndex); mod.OnSceneWasInitialized(CurrentSceneBuildIndex, CurrentSceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                    try { mod.OnLevelWasInitialized(buildIndex); mod.OnSceneWasInitialized(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal static void OnUpdate()
         {
-            if (InitializeScene)
-            {
-                InitializeScene = false;
-                OnSceneWasInitialized();
-            }
-            if (SceneWasJustLoaded)
-            {
-                SceneWasJustLoaded = false;
-                InitializeScene = true;
-            }
+            SceneHandler.CheckForSceneChange();
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
                     try { plugin.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
@@ -493,6 +477,13 @@ namespace MelonLoader
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
                     try { mod.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+        }
+
+        internal static void BONEWORKS_OnLoadingScreen()
+        {
+            if (_Mods.Count > 0)
+                foreach (MelonMod mod in _Mods)
+                    try { mod.BONEWORKS_OnLoadingScreen(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         internal enum LoadMode

@@ -20,6 +20,11 @@ namespace MelonLoader
         /// </summary>
         public virtual void OnFixedUpdate() { }
 
+        /// <summary>
+        /// Runs when BONEWORKS shows the Loading Screen. Only runs if the Melon is used in BONEWORKS.
+        /// </summary>
+        public virtual void BONEWORKS_OnLoadingScreen() { }
+
         [Obsolete("OnLevelWasLoaded is obsolete. Please use OnSceneWasLoaded instead.")]
         public virtual void OnLevelWasLoaded(int level) { }
         [Obsolete("OnLevelWasInitialized is obsolete. Please use OnSceneWasInitialized instead.")]

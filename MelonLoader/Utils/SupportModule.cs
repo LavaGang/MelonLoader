@@ -98,7 +98,7 @@ namespace MelonLoader
 
     internal class SupportModule_From : ISupportModule_From
     {
-        public void OnSceneWasLoaded(int buildIndex, string sceneName) => MelonHandler.OnSceneWasLoaded(buildIndex, sceneName);
+        public void OnSceneWasLoaded(int buildIndex, string sceneName) => SceneHandler.OnSceneLoad(buildIndex, sceneName);
         public void Update() => MelonHandler.OnUpdate();
         public void FixedUpdate() => MelonHandler.OnFixedUpdate();
         public void LateUpdate() => MelonHandler.OnLateUpdate();

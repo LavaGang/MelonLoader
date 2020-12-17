@@ -177,6 +177,9 @@
 153. Fixed Issue with MelonPreferences causing the Config File to ignore certain Preferences during Initialization.
 154. Fixed Issue with Compatibility Layer failing to resolve type for MelonLoader.UnhollowerSupport.
 155. Fixed Issue with Compatibility Layer failing to resolve MelonMod.InfoAttribute, MelonMod.GameAttributes, MelonPlugin.InfoAttribute, and MelonPlugin.GameAttributes.
+156. Fixed Issue with Mods on BONEWORKS having OnSceneWasLoaded and OnSceneWasInitialized called too early.
+157. Fixed Issue with Mods on BONEWORKS having OnSceneWasLoaded and OnSceneWasInitialized called for the Loading Screen.
+158. Added BONEWORKS_OnLoadingScreen Override for Mods and it runs when BONEWORKS shows the Loading Screen.
 
 ---
 
