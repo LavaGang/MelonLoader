@@ -22,8 +22,8 @@ namespace MelonLoader
         public static MelonGameAttribute CurrentGameAttribute { get; internal set; }
         public static string GameDeveloper { get => CurrentGameAttribute.Developer; }
         public static string GameName { get => CurrentGameAttribute.Name; }
-        public static bool IsVRChat { get => (!CurrentGameAttribute.Universal && CurrentGameAttribute.IsCompatible("VRChat", "VRChat")); }
-        public static bool IsBONEWORKS { get => (!CurrentGameAttribute.Universal && CurrentGameAttribute.IsCompatible("Stress Level Zero", "BONEWORKS")); }
+        public static bool IsVRChat { get => CurrentGameAttribute.IsCompatible("VRChat", "VRChat"); }
+        public static bool IsBONEWORKS { get => CurrentGameAttribute.IsCompatible("Stress Level Zero", "BONEWORKS"); }
 
         public static string RandomString(int length)
         {
