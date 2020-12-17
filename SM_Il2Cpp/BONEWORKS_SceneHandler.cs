@@ -51,13 +51,7 @@
             }
         }
 
-        internal static void CheckForSceneChange()
-        {
-            CheckForSceneInitialized();
-            CheckForSceneFinishedLoading();
-        }
-
-        private static void CheckForSceneFinishedLoading()
+        internal static void OnUpdate()
         {
             if (IsLoading)
             {
@@ -66,10 +60,6 @@
                 HasFinishedLoading = true;
                 IsLoading = false;
             }
-        }
-
-        private static void CheckForSceneInitialized()
-        {
             if (HasFinishedLoading)
             {
                 if (LastSceneIndex == LoadingSceneIndex)
