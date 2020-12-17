@@ -309,7 +309,7 @@ namespace MelonLoader
                     MelonGameAttribute melonGameAttribute = gameAttributes[i];
                     if (melonGameAttribute == null)
                         continue;
-                    if (melonGameAttribute.IsUniveral())
+                    if (melonGameAttribute.Universal)
                     {
                         melonCompatibility = MelonBase.MelonCompatibility.UNIVERSAL;
                         break;

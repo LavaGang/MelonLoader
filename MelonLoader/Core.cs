@@ -12,7 +12,7 @@ namespace MelonLoader
     {
         static Core()
         {
-            MelonUtils.Setup();
+            try { MelonUtils.Setup(); } catch (Exception ex) { MelonLogger.Error("MelonUtils.Setup Exception: " + ex.ToString()); throw ex; }
             Harmony.HarmonyInstance harmonyInstance = Harmony.HarmonyInstance.Create("MelonLoader");
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }
