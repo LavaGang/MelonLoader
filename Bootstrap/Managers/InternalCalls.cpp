@@ -145,7 +145,6 @@ void InternalCalls::MelonHandler::AddInternalCalls()
 
 #pragma region MelonDebug
 bool InternalCalls::MelonDebug::IsEnabled() { return Debug::Enabled; }
-
 void InternalCalls::MelonDebug::Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
@@ -154,7 +153,6 @@ void InternalCalls::MelonDebug::Internal_Msg(Console::Color color, Mono::String*
 	if (nsStr != NULL) Mono::Free(nsStr);
 	Mono::Free(txtStr);
 }
-
 void InternalCalls::MelonDebug::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonDebug::IsEnabled", IsEnabled);
