@@ -379,8 +379,18 @@ namespace MelonLoader
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 
+
+        private static bool SceneWasJustLoaded = false;
+        private static int CurrentSceneBuildIndex = -1;
+        private static string CurrentSceneName = null;
         internal static void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
+            if (!MelonUtils.IsBONEWORKS)
+            {
+                SceneWasJustLoaded = true;
+                CurrentSceneBuildIndex = buildIndex;
+                CurrentSceneName = sceneName;
+            }
             if (_Mods.Count > 0)
                 foreach (MelonMod mod in _Mods)
                     try { mod.OnLevelWasLoaded(buildIndex); mod.OnSceneWasLoaded(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
@@ -393,9 +403,19 @@ namespace MelonLoader
                     try { mod.OnLevelWasInitialized(buildIndex); mod.OnSceneWasInitialized(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
+        private static bool InitializeScene = false;
         internal static void OnUpdate()
         {
-            SceneHandler.CheckForSceneChange();
+            if (InitializeScene)
+            {
+                InitializeScene = false;
+                OnSceneWasInitialized(CurrentSceneBuildIndex, CurrentSceneName);
+            }
+            if (SceneWasJustLoaded)
+            {
+                SceneWasJustLoaded = false;
+                InitializeScene = true;
+            }
             if (_Plugins.Count > 0)
                 foreach (MelonPlugin plugin in _Plugins)
                     try { plugin.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }

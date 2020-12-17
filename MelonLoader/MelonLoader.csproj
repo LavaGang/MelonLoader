@@ -93,7 +93,6 @@
     <Compile Include="Utils\DependencyGraph.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="Melons\SceneHandler.cs" />
     <Compile Include="Utils\SupportModule.cs" />
     <Compile Include="Utils\Unhollower.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2.cs" />

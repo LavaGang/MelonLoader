@@ -34,6 +34,8 @@ namespace MelonLoader.Support
             SiblingFix();
             if (MelonUtils.IsVRChat)
                 Main.VRChat_CheckUiManager();
+            if (MelonUtils.IsBONEWORKS)
+                BONEWORKS_SceneHandler.CheckForSceneChange();
             Main.Interface.Update();
             Coroutines.Process();
         }
