@@ -184,6 +184,8 @@
 160. Fixed Issue with MelonDebug.Msg not checking if Debug is Enabled.
 161. Added MelonUtils.GetCurrentGameAttribute that returns the Current Game's MelonGameAttribute.
 162. Added MelonGameAttribute.Universal, MelonGameAttribute.IsCompatible, and MelonGameAttribute.IsCompatibleBecauseUniversal.
+163. Fixed Issue with BONEWORKS_OnLoadingScreen not being called.
+164. Fixed Issue with Certain Melons having the wrong Default Color.
 
 ---
 

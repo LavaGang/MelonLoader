@@ -19,7 +19,11 @@
                 {
                     LoadingSceneIndex = current_scene;
                     HasGotLoadingSceneIndex = true;
+                    LastSceneIndex = current_scene;
+                    LastSceneName = current_scene_name;
+                    IsLoading = true;
                     should_run = false;
+                    ShouldWait = false;
                 }
                 else
                 {
