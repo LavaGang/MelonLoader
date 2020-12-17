@@ -32,12 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ThemeManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.InstallerVersion = new MetroFramework.Controls.MetroLabel();
-            this.Link_Wiki = new System.Windows.Forms.PictureBox();
-            this.Link_GitHub = new System.Windows.Forms.PictureBox();
-            this.Link_Twitter = new System.Windows.Forms.PictureBox();
-            this.Link_Discord = new System.Windows.Forms.PictureBox();
-            this.ML_Text = new System.Windows.Forms.PictureBox();
-            this.ML_Logo = new System.Windows.Forms.PictureBox();
             this.PageManager = new MetroFramework.Controls.MetroTabControl();
             this.Tab_Automated = new MetroFramework.Controls.MetroTabPage();
             this.Automated_x64Only = new MetroFramework.Controls.MetroLabel();
@@ -53,17 +47,6 @@
             this.Automated_UnityGame_Display = new System.Windows.Forms.TextBox();
             this.Automated_UnityGame_Text = new MetroFramework.Controls.MetroLabel();
             this.Automated_Divider = new MetroFramework.Controls.MetroLabel();
-            this.Tab_Output = new MetroFramework.Controls.MetroTabPage();
-            this.Output_Current_Operation = new MetroFramework.Controls.MetroLabel();
-            this.Output_Divider = new MetroFramework.Controls.MetroLabel();
-            this.Output_Total_Progress_Text_Label = new MetroFramework.Controls.MetroLabel();
-            this.Output_Current_Progress_Text_Label = new MetroFramework.Controls.MetroLabel();
-            this.Output_Current_Progress_Display = new MetroFramework.Controls.MetroProgressBar();
-            this.Output_Current_Text = new MetroFramework.Controls.MetroLabel();
-            this.Output_Total_Progress_Display = new MetroFramework.Controls.MetroProgressBar();
-            this.Output_Total_Text = new MetroFramework.Controls.MetroLabel();
-            this.Output_Total_Progress_Text = new MetroFramework.Controls.MetroLabel();
-            this.Output_Current_Progress_Text = new MetroFramework.Controls.MetroLabel();
             this.Tab_ManualZip = new MetroFramework.Controls.MetroTabPage();
             this.ManualZip_ZipArchive_Select = new MetroFramework.Controls.MetroButton();
             this.ManualZip_ZipArchive_Display = new System.Windows.Forms.TextBox();
@@ -80,6 +63,17 @@
             this.Settings_AutoUpdateInstaller = new MetroFramework.Controls.MetroCheckBox();
             this.Settings_Theme_Selection = new MetroFramework.Controls.MetroComboBox();
             this.Settings_Theme_Text = new MetroFramework.Controls.MetroLabel();
+            this.Tab_Output = new MetroFramework.Controls.MetroTabPage();
+            this.Output_Current_Operation = new MetroFramework.Controls.MetroLabel();
+            this.Output_Divider = new MetroFramework.Controls.MetroLabel();
+            this.Output_Total_Progress_Text_Label = new MetroFramework.Controls.MetroLabel();
+            this.Output_Current_Progress_Text_Label = new MetroFramework.Controls.MetroLabel();
+            this.Output_Current_Progress_Display = new MetroFramework.Controls.MetroProgressBar();
+            this.Output_Current_Text = new MetroFramework.Controls.MetroLabel();
+            this.Output_Total_Progress_Display = new MetroFramework.Controls.MetroProgressBar();
+            this.Output_Total_Text = new MetroFramework.Controls.MetroLabel();
+            this.Output_Total_Progress_Text = new MetroFramework.Controls.MetroLabel();
+            this.Output_Current_Progress_Text = new MetroFramework.Controls.MetroLabel();
             this.Tab_PleaseWait = new MetroFramework.Controls.MetroTabPage();
             this.PleaseWait_PleaseWait = new MetroFramework.Controls.MetroLabel();
             this.PleaseWait_Text = new MetroFramework.Controls.MetroLabel();
@@ -88,20 +82,26 @@
             this.Error_Error = new MetroFramework.Controls.MetroLabel();
             this.Error_Text = new MetroFramework.Controls.MetroLabel();
             this.InstallerUpdateNotice = new MetroFramework.Controls.MetroLabel();
+            this.Link_Wiki = new System.Windows.Forms.PictureBox();
+            this.Link_GitHub = new System.Windows.Forms.PictureBox();
+            this.Link_Twitter = new System.Windows.Forms.PictureBox();
+            this.Link_Discord = new System.Windows.Forms.PictureBox();
+            this.ML_Text = new System.Windows.Forms.PictureBox();
+            this.ML_Logo = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.ThemeManager)).BeginInit();
+            this.PageManager.SuspendLayout();
+            this.Tab_Automated.SuspendLayout();
+            this.Tab_ManualZip.SuspendLayout();
+            this.Tab_Settings.SuspendLayout();
+            this.Tab_Output.SuspendLayout();
+            this.Tab_PleaseWait.SuspendLayout();
+            this.Tab_Error.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Link_Wiki)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_GitHub)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_Twitter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_Discord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ML_Text)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ML_Logo)).BeginInit();
-            this.PageManager.SuspendLayout();
-            this.Tab_Automated.SuspendLayout();
-            this.Tab_Output.SuspendLayout();
-            this.Tab_ManualZip.SuspendLayout();
-            this.Tab_Settings.SuspendLayout();
-            this.Tab_PleaseWait.SuspendLayout();
-            this.Tab_Error.SuspendLayout();
             this.SuspendLayout();
             // 
             // ThemeManager
@@ -121,83 +121,13 @@
             this.InstallerVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.InstallerVersion.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // Link_Wiki
-            // 
-            this.Link_Wiki.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Link_Wiki.Image = global::MelonLoader.Properties.Resources.Wiki;
-            this.Link_Wiki.Location = new System.Drawing.Point(97, 14);
-            this.Link_Wiki.Name = "Link_Wiki";
-            this.Link_Wiki.Size = new System.Drawing.Size(25, 25);
-            this.Link_Wiki.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Link_Wiki.TabIndex = 9;
-            this.Link_Wiki.TabStop = false;
-            this.Link_Wiki.Click += new System.EventHandler(this.Link_Wiki_Click);
-            // 
-            // Link_GitHub
-            // 
-            this.Link_GitHub.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Link_GitHub.Image = global::MelonLoader.Properties.Resources.GitHub_Dark;
-            this.Link_GitHub.Location = new System.Drawing.Point(67, 14);
-            this.Link_GitHub.Name = "Link_GitHub";
-            this.Link_GitHub.Size = new System.Drawing.Size(25, 25);
-            this.Link_GitHub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Link_GitHub.TabIndex = 7;
-            this.Link_GitHub.TabStop = false;
-            this.Link_GitHub.Click += new System.EventHandler(this.Link_GitHub_Click);
-            // 
-            // Link_Twitter
-            // 
-            this.Link_Twitter.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Link_Twitter.Image = global::MelonLoader.Properties.Resources.Twitter;
-            this.Link_Twitter.Location = new System.Drawing.Point(37, 14);
-            this.Link_Twitter.Name = "Link_Twitter";
-            this.Link_Twitter.Size = new System.Drawing.Size(25, 25);
-            this.Link_Twitter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Link_Twitter.TabIndex = 6;
-            this.Link_Twitter.TabStop = false;
-            this.Link_Twitter.Click += new System.EventHandler(this.Link_Twitter_Click);
-            // 
-            // Link_Discord
-            // 
-            this.Link_Discord.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Link_Discord.Image = global::MelonLoader.Properties.Resources.Discord;
-            this.Link_Discord.Location = new System.Drawing.Point(3, 11);
-            this.Link_Discord.Name = "Link_Discord";
-            this.Link_Discord.Size = new System.Drawing.Size(32, 32);
-            this.Link_Discord.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Link_Discord.TabIndex = 5;
-            this.Link_Discord.TabStop = false;
-            this.Link_Discord.Click += new System.EventHandler(this.Link_Discord_Click);
-            // 
-            // ML_Text
-            // 
-            this.ML_Text.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            this.ML_Text.Image = global::MelonLoader.Properties.Resources.ML_Text;
-            this.ML_Text.Location = new System.Drawing.Point(23, 134);
-            this.ML_Text.Name = "ML_Text";
-            this.ML_Text.Size = new System.Drawing.Size(437, 63);
-            this.ML_Text.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ML_Text.TabIndex = 1;
-            this.ML_Text.TabStop = false;
-            // 
-            // ML_Logo
-            // 
-            this.ML_Logo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            this.ML_Logo.Image = global::MelonLoader.Properties.Resources.ML_Icon;
-            this.ML_Logo.Location = new System.Drawing.Point(184, 20);
-            this.ML_Logo.Name = "ML_Logo";
-            this.ML_Logo.Size = new System.Drawing.Size(120, 109);
-            this.ML_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ML_Logo.TabIndex = 0;
-            this.ML_Logo.TabStop = false;
-            // 
             // PageManager
             // 
             this.PageManager.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.PageManager.Controls.Add(this.Tab_Automated);
             this.PageManager.Controls.Add(this.Tab_Settings);
-            this.PageManager.Controls.Add(this.Tab_Output);
             this.PageManager.Controls.Add(this.Tab_ManualZip);
+            this.PageManager.Controls.Add(this.Tab_Output);
             this.PageManager.Controls.Add(this.Tab_PleaseWait);
             this.PageManager.Controls.Add(this.Tab_Error);
             this.PageManager.Cursor = System.Windows.Forms.Cursors.Default;
@@ -205,7 +135,7 @@
             this.PageManager.ItemSize = new System.Drawing.Size(141, 34);
             this.PageManager.Location = new System.Drawing.Point(21, 203);
             this.PageManager.Name = "PageManager";
-            this.PageManager.SelectedIndex = 3;
+            this.PageManager.SelectedIndex = 0;
             this.PageManager.Size = new System.Drawing.Size(439, 222);
             this.PageManager.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.PageManager.Style = MetroFramework.MetroColorStyle.Red;
@@ -333,6 +263,8 @@
             this.Automated_Version_Latest.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.Automated_Version_Latest.UseVisualStyleBackColor = true;
             this.Automated_Version_Latest.CheckedChanged += new System.EventHandler(this.Automated_Version_Latest_CheckedChanged);
+            this.Automated_Version_Latest.MouseEnter += new System.EventHandler(this.Automated_Version_Latest_MouseEnter);
+            this.Automated_Version_Latest.MouseLeave += new System.EventHandler(this.Automated_Version_Latest_MouseLeave);
             // 
             // Automated_Version_Selection
             // 
@@ -400,153 +332,6 @@
             this.Automated_Divider.Text = "______________________________________________________________________";
             this.Automated_Divider.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Automated_Divider.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Tab_Output
-            // 
-            this.Tab_Output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Tab_Output.Controls.Add(this.Output_Current_Operation);
-            this.Tab_Output.Controls.Add(this.Output_Divider);
-            this.Tab_Output.Controls.Add(this.Output_Total_Progress_Text_Label);
-            this.Tab_Output.Controls.Add(this.Output_Current_Progress_Text_Label);
-            this.Tab_Output.Controls.Add(this.Output_Current_Progress_Display);
-            this.Tab_Output.Controls.Add(this.Output_Current_Text);
-            this.Tab_Output.Controls.Add(this.Output_Total_Progress_Display);
-            this.Tab_Output.Controls.Add(this.Output_Total_Text);
-            this.Tab_Output.Controls.Add(this.Output_Total_Progress_Text);
-            this.Tab_Output.Controls.Add(this.Output_Current_Progress_Text);
-            this.Tab_Output.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Tab_Output.HorizontalScrollbarBarColor = true;
-            this.Tab_Output.Location = new System.Drawing.Point(4, 38);
-            this.Tab_Output.Name = "Tab_Output";
-            this.Tab_Output.Size = new System.Drawing.Size(431, 180);
-            this.Tab_Output.TabIndex = 4;
-            this.Tab_Output.Text = "Output   ";
-            this.Tab_Output.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.Tab_Output.VerticalScrollbarBarColor = true;
-            // 
-            // Output_Current_Operation
-            // 
-            this.Output_Current_Operation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Output_Current_Operation.CustomForeColor = true;
-            this.Output_Current_Operation.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.Output_Current_Operation.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.Output_Current_Operation.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.Output_Current_Operation.Location = new System.Drawing.Point(5, 5);
-            this.Output_Current_Operation.Name = "Output_Current_Operation";
-            this.Output_Current_Operation.Size = new System.Drawing.Size(419, 74);
-            this.Output_Current_Operation.TabIndex = 13;
-            this.Output_Current_Operation.Text = "Current Operation";
-            this.Output_Current_Operation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Output_Current_Operation.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Output_Divider
-            // 
-            this.Output_Divider.AutoSize = true;
-            this.Output_Divider.Location = new System.Drawing.Point(0, 69);
-            this.Output_Divider.Name = "Output_Divider";
-            this.Output_Divider.Size = new System.Drawing.Size(429, 19);
-            this.Output_Divider.TabIndex = 12;
-            this.Output_Divider.Text = "______________________________________________________________________";
-            this.Output_Divider.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Output_Divider.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Output_Total_Progress_Text_Label
-            // 
-            this.Output_Total_Progress_Text_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Output_Total_Progress_Text_Label.AutoSize = true;
-            this.Output_Total_Progress_Text_Label.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.Output_Total_Progress_Text_Label.Location = new System.Drawing.Point(405, 142);
-            this.Output_Total_Progress_Text_Label.Name = "Output_Total_Progress_Text_Label";
-            this.Output_Total_Progress_Text_Label.Size = new System.Drawing.Size(20, 19);
-            this.Output_Total_Progress_Text_Label.TabIndex = 9;
-            this.Output_Total_Progress_Text_Label.Text = "%";
-            this.Output_Total_Progress_Text_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Output_Total_Progress_Text_Label.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Output_Current_Progress_Text_Label
-            // 
-            this.Output_Current_Progress_Text_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Output_Current_Progress_Text_Label.AutoSize = true;
-            this.Output_Current_Progress_Text_Label.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.Output_Current_Progress_Text_Label.Location = new System.Drawing.Point(405, 105);
-            this.Output_Current_Progress_Text_Label.Name = "Output_Current_Progress_Text_Label";
-            this.Output_Current_Progress_Text_Label.Size = new System.Drawing.Size(20, 19);
-            this.Output_Current_Progress_Text_Label.TabIndex = 6;
-            this.Output_Current_Progress_Text_Label.Text = "%";
-            this.Output_Current_Progress_Text_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Output_Current_Progress_Text_Label.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Output_Current_Progress_Display
-            // 
-            this.Output_Current_Progress_Display.Location = new System.Drawing.Point(64, 103);
-            this.Output_Current_Progress_Display.Name = "Output_Current_Progress_Display";
-            this.Output_Current_Progress_Display.Size = new System.Drawing.Size(312, 23);
-            this.Output_Current_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
-            this.Output_Current_Progress_Display.TabIndex = 5;
-            this.Output_Current_Progress_Display.Value = 100;
-            // 
-            // Output_Current_Text
-            // 
-            this.Output_Current_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.Output_Current_Text.Location = new System.Drawing.Point(3, 105);
-            this.Output_Current_Text.Name = "Output_Current_Text";
-            this.Output_Current_Text.Size = new System.Drawing.Size(61, 23);
-            this.Output_Current_Text.TabIndex = 4;
-            this.Output_Current_Text.Text = "Current:";
-            this.Output_Current_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Output_Total_Progress_Display
-            // 
-            this.Output_Total_Progress_Display.Location = new System.Drawing.Point(64, 140);
-            this.Output_Total_Progress_Display.Name = "Output_Total_Progress_Display";
-            this.Output_Total_Progress_Display.Size = new System.Drawing.Size(312, 23);
-            this.Output_Total_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
-            this.Output_Total_Progress_Display.TabIndex = 2;
-            this.Output_Total_Progress_Display.Value = 100;
-            // 
-            // Output_Total_Text
-            // 
-            this.Output_Total_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.Output_Total_Text.Location = new System.Drawing.Point(20, 142);
-            this.Output_Total_Text.Name = "Output_Total_Text";
-            this.Output_Total_Text.Size = new System.Drawing.Size(50, 20);
-            this.Output_Total_Text.TabIndex = 3;
-            this.Output_Total_Text.Text = "Total:";
-            this.Output_Total_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Output_Total_Progress_Text
-            // 
-            this.Output_Total_Progress_Text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Output_Total_Progress_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.Output_Total_Progress_Text.Location = new System.Drawing.Point(374, 142);
-            this.Output_Total_Progress_Text.Name = "Output_Total_Progress_Text";
-            this.Output_Total_Progress_Text.Size = new System.Drawing.Size(40, 19);
-            this.Output_Total_Progress_Text.TabIndex = 10;
-            this.Output_Total_Progress_Text.Text = "100";
-            this.Output_Total_Progress_Text.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Output_Total_Progress_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
-            // 
-            // Output_Current_Progress_Text
-            // 
-            this.Output_Current_Progress_Text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Output_Current_Progress_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.Output_Current_Progress_Text.Location = new System.Drawing.Point(374, 105);
-            this.Output_Current_Progress_Text.Name = "Output_Current_Progress_Text";
-            this.Output_Current_Progress_Text.Size = new System.Drawing.Size(40, 19);
-            this.Output_Current_Progress_Text.TabIndex = 14;
-            this.Output_Current_Progress_Text.Text = "100";
-            this.Output_Current_Progress_Text.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.Output_Current_Progress_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
             // Tab_ManualZip
             // 
@@ -707,6 +492,8 @@
             this.Settings_CloseAfterCompletion.Checked = true;
             this.Settings_CloseAfterCompletion.CheckState = System.Windows.Forms.CheckState.Checked;
             this.Settings_CloseAfterCompletion.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Settings_CloseAfterCompletion.CustomForeColor = true;
+            this.Settings_CloseAfterCompletion.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.Settings_CloseAfterCompletion.Location = new System.Drawing.Point(154, 102);
             this.Settings_CloseAfterCompletion.Name = "Settings_CloseAfterCompletion";
             this.Settings_CloseAfterCompletion.Size = new System.Drawing.Size(147, 15);
@@ -716,6 +503,8 @@
             this.Settings_CloseAfterCompletion.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.Settings_CloseAfterCompletion.UseVisualStyleBackColor = true;
             this.Settings_CloseAfterCompletion.CheckedChanged += new System.EventHandler(this.Settings_CloseAfterCompletion_CheckedChanged);
+            this.Settings_CloseAfterCompletion.MouseEnter += new System.EventHandler(this.Settings_CloseAfterCompletion_MouseEnter);
+            this.Settings_CloseAfterCompletion.MouseLeave += new System.EventHandler(this.Settings_CloseAfterCompletion_MouseLeave);
             // 
             // Settings_AutoUpdateInstaller
             // 
@@ -723,6 +512,8 @@
             this.Settings_AutoUpdateInstaller.Checked = true;
             this.Settings_AutoUpdateInstaller.CheckState = System.Windows.Forms.CheckState.Checked;
             this.Settings_AutoUpdateInstaller.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Settings_AutoUpdateInstaller.CustomForeColor = true;
+            this.Settings_AutoUpdateInstaller.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.Settings_AutoUpdateInstaller.Location = new System.Drawing.Point(158, 65);
             this.Settings_AutoUpdateInstaller.Name = "Settings_AutoUpdateInstaller";
             this.Settings_AutoUpdateInstaller.Size = new System.Drawing.Size(136, 15);
@@ -732,6 +523,8 @@
             this.Settings_AutoUpdateInstaller.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.Settings_AutoUpdateInstaller.UseVisualStyleBackColor = true;
             this.Settings_AutoUpdateInstaller.CheckedChanged += new System.EventHandler(this.Settings_AutoUpdateInstaller_CheckedChanged);
+            this.Settings_AutoUpdateInstaller.MouseEnter += new System.EventHandler(this.Settings_AutoUpdateInstaller_MouseEnter);
+            this.Settings_AutoUpdateInstaller.MouseLeave += new System.EventHandler(this.Settings_AutoUpdateInstaller_MouseLeave);
             // 
             // Settings_Theme_Selection
             // 
@@ -744,6 +537,7 @@
             this.Settings_Theme_Selection.Location = new System.Drawing.Point(217, 18);
             this.Settings_Theme_Selection.Name = "Settings_Theme_Selection";
             this.Settings_Theme_Selection.Size = new System.Drawing.Size(61, 29);
+            this.Settings_Theme_Selection.Style = MetroFramework.MetroColorStyle.Green;
             this.Settings_Theme_Selection.TabIndex = 3;
             this.Settings_Theme_Selection.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.Settings_Theme_Selection.SelectedIndexChanged += new System.EventHandler(this.ThemeChanged);
@@ -758,6 +552,153 @@
             this.Settings_Theme_Text.TabIndex = 2;
             this.Settings_Theme_Text.Text = "Theme:";
             this.Settings_Theme_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Tab_Output
+            // 
+            this.Tab_Output.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Tab_Output.Controls.Add(this.Output_Current_Operation);
+            this.Tab_Output.Controls.Add(this.Output_Divider);
+            this.Tab_Output.Controls.Add(this.Output_Total_Progress_Text_Label);
+            this.Tab_Output.Controls.Add(this.Output_Current_Progress_Text_Label);
+            this.Tab_Output.Controls.Add(this.Output_Current_Progress_Display);
+            this.Tab_Output.Controls.Add(this.Output_Current_Text);
+            this.Tab_Output.Controls.Add(this.Output_Total_Progress_Display);
+            this.Tab_Output.Controls.Add(this.Output_Total_Text);
+            this.Tab_Output.Controls.Add(this.Output_Total_Progress_Text);
+            this.Tab_Output.Controls.Add(this.Output_Current_Progress_Text);
+            this.Tab_Output.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Tab_Output.HorizontalScrollbarBarColor = true;
+            this.Tab_Output.Location = new System.Drawing.Point(4, 38);
+            this.Tab_Output.Name = "Tab_Output";
+            this.Tab_Output.Size = new System.Drawing.Size(431, 180);
+            this.Tab_Output.TabIndex = 4;
+            this.Tab_Output.Text = "Output   ";
+            this.Tab_Output.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.Tab_Output.VerticalScrollbarBarColor = true;
+            // 
+            // Output_Current_Operation
+            // 
+            this.Output_Current_Operation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Output_Current_Operation.CustomForeColor = true;
+            this.Output_Current_Operation.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.Output_Current_Operation.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.Output_Current_Operation.ForeColor = System.Drawing.SystemColors.Highlight;
+            this.Output_Current_Operation.Location = new System.Drawing.Point(5, 5);
+            this.Output_Current_Operation.Name = "Output_Current_Operation";
+            this.Output_Current_Operation.Size = new System.Drawing.Size(419, 74);
+            this.Output_Current_Operation.TabIndex = 13;
+            this.Output_Current_Operation.Text = "Current Operation";
+            this.Output_Current_Operation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Output_Current_Operation.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Output_Divider
+            // 
+            this.Output_Divider.AutoSize = true;
+            this.Output_Divider.Location = new System.Drawing.Point(0, 69);
+            this.Output_Divider.Name = "Output_Divider";
+            this.Output_Divider.Size = new System.Drawing.Size(429, 19);
+            this.Output_Divider.TabIndex = 12;
+            this.Output_Divider.Text = "______________________________________________________________________";
+            this.Output_Divider.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Output_Divider.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Output_Total_Progress_Text_Label
+            // 
+            this.Output_Total_Progress_Text_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Output_Total_Progress_Text_Label.AutoSize = true;
+            this.Output_Total_Progress_Text_Label.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.Output_Total_Progress_Text_Label.Location = new System.Drawing.Point(405, 142);
+            this.Output_Total_Progress_Text_Label.Name = "Output_Total_Progress_Text_Label";
+            this.Output_Total_Progress_Text_Label.Size = new System.Drawing.Size(20, 19);
+            this.Output_Total_Progress_Text_Label.TabIndex = 9;
+            this.Output_Total_Progress_Text_Label.Text = "%";
+            this.Output_Total_Progress_Text_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Output_Total_Progress_Text_Label.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Output_Current_Progress_Text_Label
+            // 
+            this.Output_Current_Progress_Text_Label.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Output_Current_Progress_Text_Label.AutoSize = true;
+            this.Output_Current_Progress_Text_Label.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.Output_Current_Progress_Text_Label.Location = new System.Drawing.Point(405, 105);
+            this.Output_Current_Progress_Text_Label.Name = "Output_Current_Progress_Text_Label";
+            this.Output_Current_Progress_Text_Label.Size = new System.Drawing.Size(20, 19);
+            this.Output_Current_Progress_Text_Label.TabIndex = 6;
+            this.Output_Current_Progress_Text_Label.Text = "%";
+            this.Output_Current_Progress_Text_Label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Output_Current_Progress_Text_Label.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Output_Current_Progress_Display
+            // 
+            this.Output_Current_Progress_Display.Location = new System.Drawing.Point(64, 103);
+            this.Output_Current_Progress_Display.Name = "Output_Current_Progress_Display";
+            this.Output_Current_Progress_Display.Size = new System.Drawing.Size(312, 23);
+            this.Output_Current_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
+            this.Output_Current_Progress_Display.TabIndex = 5;
+            this.Output_Current_Progress_Display.Value = 100;
+            // 
+            // Output_Current_Text
+            // 
+            this.Output_Current_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.Output_Current_Text.Location = new System.Drawing.Point(3, 105);
+            this.Output_Current_Text.Name = "Output_Current_Text";
+            this.Output_Current_Text.Size = new System.Drawing.Size(61, 23);
+            this.Output_Current_Text.TabIndex = 4;
+            this.Output_Current_Text.Text = "Current:";
+            this.Output_Current_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Output_Total_Progress_Display
+            // 
+            this.Output_Total_Progress_Display.Location = new System.Drawing.Point(64, 140);
+            this.Output_Total_Progress_Display.Name = "Output_Total_Progress_Display";
+            this.Output_Total_Progress_Display.Size = new System.Drawing.Size(312, 23);
+            this.Output_Total_Progress_Display.Style = MetroFramework.MetroColorStyle.Green;
+            this.Output_Total_Progress_Display.TabIndex = 2;
+            this.Output_Total_Progress_Display.Value = 100;
+            // 
+            // Output_Total_Text
+            // 
+            this.Output_Total_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.Output_Total_Text.Location = new System.Drawing.Point(20, 142);
+            this.Output_Total_Text.Name = "Output_Total_Text";
+            this.Output_Total_Text.Size = new System.Drawing.Size(50, 20);
+            this.Output_Total_Text.TabIndex = 3;
+            this.Output_Total_Text.Text = "Total:";
+            this.Output_Total_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Output_Total_Progress_Text
+            // 
+            this.Output_Total_Progress_Text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Output_Total_Progress_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.Output_Total_Progress_Text.Location = new System.Drawing.Point(374, 142);
+            this.Output_Total_Progress_Text.Name = "Output_Total_Progress_Text";
+            this.Output_Total_Progress_Text.Size = new System.Drawing.Size(40, 19);
+            this.Output_Total_Progress_Text.TabIndex = 10;
+            this.Output_Total_Progress_Text.Text = "100";
+            this.Output_Total_Progress_Text.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Output_Total_Progress_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // Output_Current_Progress_Text
+            // 
+            this.Output_Current_Progress_Text.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Output_Current_Progress_Text.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.Output_Current_Progress_Text.Location = new System.Drawing.Point(374, 105);
+            this.Output_Current_Progress_Text.Name = "Output_Current_Progress_Text";
+            this.Output_Current_Progress_Text.Size = new System.Drawing.Size(40, 19);
+            this.Output_Current_Progress_Text.TabIndex = 14;
+            this.Output_Current_Progress_Text.Text = "100";
+            this.Output_Current_Progress_Text.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.Output_Current_Progress_Text.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
             // Tab_PleaseWait
             // 
@@ -875,6 +816,76 @@
             this.InstallerUpdateNotice.Visible = false;
             this.InstallerUpdateNotice.Click += new System.EventHandler(this.InstallerUpdateNotice_Click);
             // 
+            // Link_Wiki
+            // 
+            this.Link_Wiki.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Link_Wiki.Image = global::MelonLoader.Properties.Resources.Wiki;
+            this.Link_Wiki.Location = new System.Drawing.Point(97, 14);
+            this.Link_Wiki.Name = "Link_Wiki";
+            this.Link_Wiki.Size = new System.Drawing.Size(25, 25);
+            this.Link_Wiki.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Link_Wiki.TabIndex = 9;
+            this.Link_Wiki.TabStop = false;
+            this.Link_Wiki.Click += new System.EventHandler(this.Link_Wiki_Click);
+            // 
+            // Link_GitHub
+            // 
+            this.Link_GitHub.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Link_GitHub.Image = global::MelonLoader.Properties.Resources.GitHub_Dark;
+            this.Link_GitHub.Location = new System.Drawing.Point(67, 14);
+            this.Link_GitHub.Name = "Link_GitHub";
+            this.Link_GitHub.Size = new System.Drawing.Size(25, 25);
+            this.Link_GitHub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Link_GitHub.TabIndex = 7;
+            this.Link_GitHub.TabStop = false;
+            this.Link_GitHub.Click += new System.EventHandler(this.Link_GitHub_Click);
+            // 
+            // Link_Twitter
+            // 
+            this.Link_Twitter.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Link_Twitter.Image = global::MelonLoader.Properties.Resources.Twitter;
+            this.Link_Twitter.Location = new System.Drawing.Point(37, 14);
+            this.Link_Twitter.Name = "Link_Twitter";
+            this.Link_Twitter.Size = new System.Drawing.Size(25, 25);
+            this.Link_Twitter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Link_Twitter.TabIndex = 6;
+            this.Link_Twitter.TabStop = false;
+            this.Link_Twitter.Click += new System.EventHandler(this.Link_Twitter_Click);
+            // 
+            // Link_Discord
+            // 
+            this.Link_Discord.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Link_Discord.Image = global::MelonLoader.Properties.Resources.Discord;
+            this.Link_Discord.Location = new System.Drawing.Point(7, 14);
+            this.Link_Discord.Name = "Link_Discord";
+            this.Link_Discord.Size = new System.Drawing.Size(25, 25);
+            this.Link_Discord.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Link_Discord.TabIndex = 5;
+            this.Link_Discord.TabStop = false;
+            this.Link_Discord.Click += new System.EventHandler(this.Link_Discord_Click);
+            // 
+            // ML_Text
+            // 
+            this.ML_Text.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            this.ML_Text.Image = global::MelonLoader.Properties.Resources.ML_Text;
+            this.ML_Text.Location = new System.Drawing.Point(23, 134);
+            this.ML_Text.Name = "ML_Text";
+            this.ML_Text.Size = new System.Drawing.Size(437, 63);
+            this.ML_Text.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.ML_Text.TabIndex = 1;
+            this.ML_Text.TabStop = false;
+            // 
+            // ML_Logo
+            // 
+            this.ML_Logo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            this.ML_Logo.Image = global::MelonLoader.Properties.Resources.ML_Icon;
+            this.ML_Logo.Location = new System.Drawing.Point(184, 20);
+            this.ML_Logo.Name = "ML_Logo";
+            this.ML_Logo.Size = new System.Drawing.Size(120, 109);
+            this.ML_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.ML_Logo.TabIndex = 0;
+            this.ML_Logo.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -901,25 +912,25 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ThemeManager)).EndInit();
+            this.PageManager.ResumeLayout(false);
+            this.Tab_Automated.ResumeLayout(false);
+            this.Tab_Automated.PerformLayout();
+            this.Tab_ManualZip.ResumeLayout(false);
+            this.Tab_ManualZip.PerformLayout();
+            this.Tab_Settings.ResumeLayout(false);
+            this.Tab_Settings.PerformLayout();
+            this.Tab_Output.ResumeLayout(false);
+            this.Tab_Output.PerformLayout();
+            this.Tab_PleaseWait.ResumeLayout(false);
+            this.Tab_PleaseWait.PerformLayout();
+            this.Tab_Error.ResumeLayout(false);
+            this.Tab_Error.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Link_Wiki)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_GitHub)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_Twitter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Link_Discord)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ML_Text)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ML_Logo)).EndInit();
-            this.PageManager.ResumeLayout(false);
-            this.Tab_Automated.ResumeLayout(false);
-            this.Tab_Automated.PerformLayout();
-            this.Tab_Output.ResumeLayout(false);
-            this.Tab_Output.PerformLayout();
-            this.Tab_ManualZip.ResumeLayout(false);
-            this.Tab_ManualZip.PerformLayout();
-            this.Tab_Settings.ResumeLayout(false);
-            this.Tab_Settings.PerformLayout();
-            this.Tab_PleaseWait.ResumeLayout(false);
-            this.Tab_PleaseWait.PerformLayout();
-            this.Tab_Error.ResumeLayout(false);
-            this.Tab_Error.PerformLayout();
             this.ResumeLayout(false);
 
         }
