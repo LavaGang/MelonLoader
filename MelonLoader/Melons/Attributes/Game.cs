@@ -18,19 +18,23 @@ namespace MelonLoader
         public string Name { get; internal set; }
 
         /// <summary>
+        /// </summary>
+        public bool IsUniveral() => ((Developer == null) || Developer.Equals("UNKNOWN") || (Name == null) || Name.Equals("UNKNOWN"));
+
+        /// <summary>
         /// Returns true or false if the Game is compatible with this Assembly.
         /// </summary>
-        public bool IsCompatible(string developer, string gameName) => (((Developer == null) || (Name == null)) || ((developer != null) && (gameName != null) && Developer.Equals(developer) && Name.Equals(gameName)));
+        public bool IsCompatible(string developer, string gameName) => (IsUniveral() || ((developer != null) && (gameName != null) && Developer.Equals(developer) && Name.Equals(gameName)));
         
         /// <summary>
         /// Returns true or false if the Game is compatible with this Assembly.
         /// </summary>
-        public bool IsCompatible(MelonGameAttribute att) => ((att == null) || IsCompatibleBecauseUniversal(att) || (att.Developer.Equals(Developer) && att.Name.Equals(Name)));
+        public bool IsCompatible(MelonGameAttribute att) => (IsCompatibleBecauseUniversal(att) || (att.Developer.Equals(Developer) && att.Name.Equals(Name)));
         
         /// <summary>
         /// Returns true or false if the Game is compatible with this Assembly specifically because of Universal Compatibility.
         /// </summary>
-        public bool IsCompatibleBecauseUniversal(MelonGameAttribute att) => ((att == null) || ((Developer == null) || (Name == null)) || ((att.Developer == null) || (att.Name == null)));
+        public bool IsCompatibleBecauseUniversal(MelonGameAttribute att) => ((att == null) || IsUniveral() || att.IsUniveral());
 
         [Obsolete("IsCompatible(MelonModGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
         public bool IsCompatible(MelonModGameAttribute att) => ((att == null) || IsCompatibleBecauseUniversal(att) || (att.Developer.Equals(Developer) && att.GameName.Equals(Name)));

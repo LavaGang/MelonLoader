@@ -118,8 +118,8 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", IsGameIl2Cpp);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsOldMono", IsOldMono);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetApplicationPath", GetApplicationPath);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetGameName", GetGameName);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetGameDeveloper", GetGameDeveloper);
+	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", GetGameName);
+	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetGameDirectory", GetGameDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetGameDataDirectory", GetGameDataDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetUnityVersion", GetUnityVersion);

@@ -8,8 +8,12 @@ namespace MelonLoader
     public static class MelonUtils
     {
         public static string GetUserDataDirectory() => Core.UserDataPath;
-        public static bool IsVRChat() => (GetGameName().Equals("VRChat") && GetGameDeveloper().Equals("VRChat"));
-        public static bool IsBoneworks() => (GetGameName().Equals("BONEWORKS") && GetGameDeveloper().Equals("Stress Level Zero"));
+        private static MelonGameAttribute _CurrentGameAttribute = null;
+        public static MelonGameAttribute GetCurrentGameAttribute() { if (_CurrentGameAttribute == null) _CurrentGameAttribute = new MelonGameAttribute(Internal_GetGameDeveloper(), Internal_GetGameName()); return _CurrentGameAttribute; }
+        public static string GetGameDeveloper() => GetCurrentGameAttribute().Developer;
+        public static string GetGameName() => GetCurrentGameAttribute().Name;
+        public static bool IsVRChat() => GetCurrentGameAttribute().IsCompatible("VRChat", "VRChat");
+        public static bool IsBoneworks() => GetCurrentGameAttribute().IsCompatible("Stress Level Zero", "BONEWORKS");
         public static string RandomString(int length)
         {
             StringBuilder builder = new StringBuilder();
@@ -67,10 +71,10 @@ namespace MelonLoader
         public extern static string GetApplicationPath();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetGameName();
+        private extern static string Internal_GetGameName();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetGameDeveloper();
+        private extern static string Internal_GetGameDeveloper();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetGameDirectory();

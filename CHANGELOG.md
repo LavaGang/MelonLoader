@@ -182,6 +182,8 @@
 158. Added BONEWORKS_OnLoadingScreen Override for Mods and it runs when BONEWORKS shows the Loading Screen.
 159. Fixed Issue with MelonDebug.Msg causing Crash.
 160. Fixed Issue with MelonDebug.Msg not checking if Debug is Enabled.
+161. Added MelonUtils.GetCurrentGameAttribute that returns the Current Game's MelonGameAttribute.
+162. Added MelonGameAttribute.IsUniversal, MelonGameAttribute.IsCompatible, and MelonGameAttribute.IsCompatibleBecauseUniveral.
 
 ---
 
