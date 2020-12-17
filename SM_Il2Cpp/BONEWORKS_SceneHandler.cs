@@ -53,13 +53,6 @@
 
         internal static void OnUpdate()
         {
-            if (IsLoading)
-            {
-                if (LastSceneIndex != LoadingSceneIndex)
-                    Main.Interface.OnSceneWasLoaded(LastSceneIndex, LastSceneName);
-                HasFinishedLoading = true;
-                IsLoading = false;
-            }
             if (HasFinishedLoading)
             {
                 if (LastSceneIndex == LoadingSceneIndex)
@@ -67,6 +60,13 @@
                 else
                     Main.Interface.OnSceneWasInitialized(LastSceneIndex, LastSceneName);
                 HasFinishedLoading = false;
+            }
+            if (IsLoading)
+            {
+                if (LastSceneIndex != LoadingSceneIndex)
+                    Main.Interface.OnSceneWasLoaded(LastSceneIndex, LastSceneName);
+                HasFinishedLoading = true;
+                IsLoading = false;
             }
         }
     }
