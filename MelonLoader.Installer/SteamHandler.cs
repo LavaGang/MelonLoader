@@ -94,6 +94,18 @@ namespace MelonLoader
                 filepath = newfilepath;
                 return true;
             }
+            newfilepath = Path.Combine(installpath, installdir, (installdir + ".exe"));
+            if (File.Exists(newfilepath))
+            {
+                filepath = newfilepath;
+                return true;
+            }
+            newfilepath = Path.Combine(installpath, installdir, (installdir.Replace(" ", "") + ".exe"));
+            if (File.Exists(newfilepath))
+            {
+                filepath = newfilepath;
+                return true;
+            }
             // Improve Exe Scanning
             return false;
         }
