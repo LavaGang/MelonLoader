@@ -20,12 +20,12 @@ namespace MelonLoader
         /// <summary>
         /// If the Attribute is set as Universal or not.
         /// </summary>
-        public bool Universal { get => ((Developer == null) || Developer.Equals("UNKNOWN") || (Name == null) || Name.Equals("UNKNOWN")); }
+        public bool Universal { get => (string.IsNullOrEmpty(Developer) || Developer.Equals("UNKNOWN") || string.IsNullOrEmpty(Name) || Name.Equals("UNKNOWN")); }
 
         /// <summary>
         /// Returns true or false if the Game is compatible with this Assembly.
         /// </summary>
-        public bool IsCompatible(string developer, string gameName) => (Universal || ((developer != null) && (gameName != null) && Developer.Equals(developer) && Name.Equals(gameName)));
+        public bool IsCompatible(string developer, string gameName) => (Universal || (!string.IsNullOrEmpty(developer) && Developer.Equals(developer) && !string.IsNullOrEmpty(gameName) && Name.Equals(gameName)));
         
         /// <summary>
         /// Returns true or false if the Game is compatible with this Assembly.
@@ -42,8 +42,8 @@ namespace MelonLoader
         [Obsolete("IsCompatible(MelonPluginGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
         public bool IsCompatible(MelonPluginGameAttribute att) => ((att == null) || IsCompatibleBecauseUniversal(att) || (att.Developer.Equals(Developer) && att.GameName.Equals(Name)));
         [Obsolete("IsCompatibleBecauseUniversal(MelonModGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
-        public bool IsCompatibleBecauseUniversal(MelonModGameAttribute att) => ((att == null) || Universal || ((att.Developer == null) || (att.GameName == null)));
+        public bool IsCompatibleBecauseUniversal(MelonModGameAttribute att) => ((att == null) || Universal || (string.IsNullOrEmpty(att.Developer) || string.IsNullOrEmpty(att.GameName)));
         [Obsolete("IsCompatibleBecauseUniversal(MelonPluginGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
-        public bool IsCompatibleBecauseUniversal(MelonPluginGameAttribute att) => ((att == null) || Universal || ((att.Developer == null) || (att.GameName == null)));
+        public bool IsCompatibleBecauseUniversal(MelonPluginGameAttribute att) => ((att == null) || Universal || (string.IsNullOrEmpty(att.Developer) || string.IsNullOrEmpty(att.GameName)));
     }
 }
