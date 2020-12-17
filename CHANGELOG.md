@@ -180,6 +180,8 @@
 156. Fixed Issue with Mods on BONEWORKS having OnSceneWasLoaded and OnSceneWasInitialized called too early.
 157. Fixed Issue with Mods on BONEWORKS having OnSceneWasLoaded and OnSceneWasInitialized called for the Loading Screen.
 158. Added BONEWORKS_OnLoadingScreen Override for Mods and it runs when BONEWORKS shows the Loading Screen.
+159. Fixed Issue with MelonDebug.Msg causing Crash.
+160. Fixed Issue with MelonDebug.Msg not checking if Debug is Enabled.
 
 ---
 

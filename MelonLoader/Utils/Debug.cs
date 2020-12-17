@@ -7,6 +7,8 @@ namespace MelonLoader
     {
         public static void Msg(string txt)
         {
+            if (!IsEnabled())
+                return;
             ConsoleColor color = MelonLogger.DefaultMelonColor;
             string namesection = null;
             MelonBase melon = MelonLogger.GetMelonFromStackTrace();
@@ -21,6 +23,8 @@ namespace MelonLoader
         }
         public static void Msg(string txt, params object[] args)
         {
+            if (!IsEnabled())
+                return;
             ConsoleColor color = MelonLogger.DefaultMelonColor;
             string namesection = null;
             MelonBase melon = MelonLogger.GetMelonFromStackTrace();
@@ -36,6 +40,8 @@ namespace MelonLoader
         }
         public static void Msg(object obj)
         {
+            if (!IsEnabled())
+                return;
             ConsoleColor color = MelonLogger.DefaultMelonColor;
             string namesection = null;
             MelonBase melon = MelonLogger.GetMelonFromStackTrace();

@@ -146,11 +146,11 @@ void InternalCalls::MelonHandler::AddInternalCalls()
 #pragma region MelonDebug
 bool InternalCalls::MelonDebug::IsEnabled() { return Debug::Enabled; }
 
-void InternalCalls::MelonDebug::Internal_Msg(Mono::String* namesection, Mono::String* txt)
+void InternalCalls::MelonDebug::Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Debug::Internal_Msg(nsStr, txtStr);
+	Debug::Internal_Msg(color, nsStr, txtStr);
 	if (nsStr != NULL) Mono::Free(nsStr);
 	Mono::Free(txtStr);
 }

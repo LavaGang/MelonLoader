@@ -39,8 +39,13 @@ void Debug::DirectWrite(const char* txt)
 		<< "\x1b[37m";
 }
 
-void Debug::Internal_Msg(const char* namesection, const char* txt)
+void Debug::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
 {
+	if (namesection == NULL)
+	{
+		Msg(txt);
+		return;
+	}
 	if (!Enabled || !Assertion::ShouldContinue)
 		return;
 	std::string timestamp = Logger::GetTimestamp();
@@ -54,7 +59,7 @@ void Debug::Internal_Msg(const char* namesection, const char* txt)
 		<< "] "
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "["
-		<< Console::ColorToAnsi(Console::Color::Magenta)
+		<< Console::ColorToAnsi(color)
 		<< namesection
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "] "
