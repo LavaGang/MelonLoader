@@ -35,10 +35,10 @@ namespace MelonLoader
 
         static MelonHandler()
         {
-            PluginsDirectory = Path.Combine(MelonUtils.GetGameDirectory(), "Plugins");
+            PluginsDirectory = Path.Combine(MelonUtils.GameDirectory, "Plugins");
             if (!Directory.Exists(PluginsDirectory))
                 Directory.CreateDirectory(PluginsDirectory);
-            ModsDirectory = Path.Combine(MelonUtils.GetGameDirectory(), "Mods");
+            ModsDirectory = Path.Combine(MelonUtils.GameDirectory, "Mods");
             if (!Directory.Exists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);
         }
@@ -275,7 +275,6 @@ namespace MelonLoader
                 return;
             }
 
-            MelonGameAttribute CurrentGameAttribute = MelonUtils.GetCurrentGameAttribute();
             MelonGameAttribute[] gameAttributes = asm.GetCustomAttributes(typeof(MelonGameAttribute), true) as MelonGameAttribute[];
             
             // Legacy Support
@@ -315,7 +314,7 @@ namespace MelonLoader
                         melonCompatibility = MelonBase.MelonCompatibility.UNIVERSAL;
                         break;
                     }
-                    if (CurrentGameAttribute.IsCompatible(melonGameAttribute))
+                    if (MelonUtils.CurrentGameAttribute.IsCompatible(melonGameAttribute))
                     {
                         melonCompatibility = MelonBase.MelonCompatibility.COMPATIBLE;
                         break;

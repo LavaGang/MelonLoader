@@ -10,11 +10,11 @@ namespace MelonLoader
     public static class Imports
     {
         [Obsolete("Imports.GetCompanyName is obsolete. Please use MelonUtils.GetGameDeveloper instead.")]
-        public static string GetCompanyName() => MelonUtils.GetGameDeveloper();
+        public static string GetCompanyName() => MelonUtils.GameDeveloper;
         [Obsolete("Imports.GetProductName is obsolete. Please use MelonUtils.GetGameName instead.")]
-        public static string GetProductName() => MelonUtils.GetGameName();
+        public static string GetProductName() => MelonUtils.GameName;
         [Obsolete("Imports.GetGameDirectory is obsolete. Please use MelonUtils.GetGameDirectory instead.")]
-        public static string GetGameDirectory() => MelonUtils.GetGameDirectory();
+        public static string GetGameDirectory() => MelonUtils.GameDirectory;
         [Obsolete("Imports.GetGameDataDirectory is obsolete. Please use MelonUtils.GetGameDataDirectory instead.")]
         public static string GetGameDataDirectory() => MelonUtils.GetGameDataDirectory();
         [Obsolete("Imports.GetAssemblyDirectory is obsolete. Please use MelonUtils.GetManagedDirectory instead.")]
@@ -32,11 +32,11 @@ namespace MelonLoader
     public static class MelonLoaderBase
     {
         [Obsolete("MelonLoaderBase.IsVRChat is obsolete. Please use MelonUtils.IsVRChat instead.")]
-        public static bool IsVRChat { get => MelonUtils.IsVRChat(); }
-        [Obsolete("MelonLoaderBase.IsBoneworks is obsolete. Please use MelonUtils.IsBoneworks instead.")]
-        public static bool IsBoneworks { get => MelonUtils.IsBoneworks(); }
+        public static bool IsVRChat { get => MelonUtils.IsVRChat; }
+        [Obsolete("MelonLoaderBase.IsBoneworks is obsolete. Please use MelonUtils.IsBONEWORKS instead.")]
+        public static bool IsBoneworks { get => MelonUtils.IsBONEWORKS; }
         [Obsolete("MelonLoaderBase.UserDataPath is obsolete. Please use MelonUtils.GetUserDataDirectory instead.")]
-        public static string UserDataPath { get => MelonUtils.GetUserDataDirectory(); }
+        public static string UserDataPath { get => MelonUtils.UserDataDirectory; }
         [Obsolete("MelonLoaderBase.UnityVersion is obsolete. Please use MelonUtils.GetUnityVersion instead.")]
         public static string UnityVersion { get => MelonUtils.GetUnityVersion(); }
     }
@@ -49,18 +49,18 @@ namespace MelonLoader
         public static List<MelonPlugin> Plugins = null;
         [Obsolete("Main.IsVRChat is obsolete. Please use MelonUtils.IsVRChat instead.")]
         public static bool IsVRChat = false;
-        [Obsolete("Main.IsBoneworks is obsolete. Please use MelonUtils.IsBoneworks instead.")]
+        [Obsolete("Main.IsBoneworks is obsolete. Please use MelonUtils.IsBONEWORKS instead.")]
         public static bool IsBoneworks = false;
         [Obsolete("Main.GetUnityVersion is obsolete. Please use MelonUtils.GetUnityVersion instead.")]
         public static string GetUnityVersion() => MelonUtils.GetUnityVersion();
         [Obsolete("Main.GetUserDataPath is obsolete. Please use MelonUtils.GetUserDataDirectory instead.")]
-        public static string GetUserDataPath() => MelonUtils.GetUserDataDirectory();
+        public static string GetUserDataPath() => MelonUtils.UserDataDirectory;
         internal static void LegacySupport()
         {
             Mods = MelonHandler.Mods;
             Plugins = MelonHandler.Plugins;
-            IsVRChat = MelonUtils.IsVRChat();
-            IsBoneworks = MelonUtils.IsBoneworks();
+            IsVRChat = MelonUtils.IsVRChat;
+            IsBoneworks = MelonUtils.IsBONEWORKS;
         }
     }
     [Obsolete("MelonConsole is obsolete.")]

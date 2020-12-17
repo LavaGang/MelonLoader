@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -7,13 +8,23 @@ namespace MelonLoader
 {
     public static class MelonUtils
     {
-        public static string GetUserDataDirectory() => Core.UserDataPath;
-        private static MelonGameAttribute _CurrentGameAttribute = null;
-        public static MelonGameAttribute GetCurrentGameAttribute() { if (_CurrentGameAttribute == null) _CurrentGameAttribute = new MelonGameAttribute(Internal_GetGameDeveloper(), Internal_GetGameName()); return _CurrentGameAttribute; }
-        public static string GetGameDeveloper() => GetCurrentGameAttribute().Developer;
-        public static string GetGameName() => GetCurrentGameAttribute().Name;
-        public static bool IsVRChat() => GetCurrentGameAttribute().IsCompatible("VRChat", "VRChat");
-        public static bool IsBoneworks() => GetCurrentGameAttribute().IsCompatible("Stress Level Zero", "BONEWORKS");
+        internal static void Setup()
+        {
+            CurrentGameAttribute = new MelonGameAttribute(Internal_GetGameDeveloper(), Internal_GetGameName());
+            GameDirectory = Internal_GetGameDirectory();
+            UserDataDirectory = Path.Combine(GameDirectory, "UserData");
+            if (!Directory.Exists(UserDataDirectory))
+                Directory.CreateDirectory(UserDataDirectory);
+        }
+
+        public static string GameDirectory { get; internal set; }
+        public static string UserDataDirectory { get; internal set; }
+        public static MelonGameAttribute CurrentGameAttribute { get; internal set; }
+        public static string GameDeveloper { get => CurrentGameAttribute.Developer; }
+        public static string GameName { get => CurrentGameAttribute.Name; }
+        public static bool IsVRChat { get => CurrentGameAttribute.IsCompatible("VRChat", "VRChat"); }
+        public static bool IsBONEWORKS { get => CurrentGameAttribute.IsCompatible("Stress Level Zero", "BONEWORKS"); }
+
         public static string RandomString(int length)
         {
             StringBuilder builder = new StringBuilder();
@@ -22,6 +33,7 @@ namespace MelonLoader
                 builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * rand.NextDouble())) + 65));
             return builder.ToString();
         }
+
         public static string ColorToANSI(ConsoleColor color)
         {
             switch (color)
@@ -71,15 +83,6 @@ namespace MelonLoader
         public extern static string GetApplicationPath();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameName();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameDeveloper();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetGameDirectory();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetGameDataDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
@@ -96,5 +99,15 @@ namespace MelonLoader
         public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string Internal_GetGameName();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string Internal_GetGameDeveloper();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string Internal_GetGameDirectory();
     }
 }

@@ -10,20 +10,14 @@ namespace MelonLoader
 {
     internal static class Core
     {
-        internal static string GameDir = null;
-        internal static string UserDataPath = null;
-
         static Core()
         {
-            GameDir = MelonUtils.GetGameDirectory();
-            UserDataPath = Path.Combine(GameDir, "UserData");
-            if (!Directory.Exists(UserDataPath))
-                Directory.CreateDirectory(UserDataPath);
+            MelonUtils.Setup();
             Harmony.HarmonyInstance harmonyInstance = Harmony.HarmonyInstance.Create("MelonLoader");
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static))); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }
-            try { ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = GameDir; } catch (Exception ex) { MelonLogger.Warning("AppDomainSetup.ApplicationBase Exception: " + ex.ToString()); }
-            Directory.SetCurrentDirectory(GameDir);
+            try { ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = MelonUtils.GameDirectory; } catch (Exception ex) { MelonLogger.Warning("AppDomainSetup.ApplicationBase Exception: " + ex.ToString()); }
+            Directory.SetCurrentDirectory(MelonUtils.GameDirectory);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
@@ -85,7 +79,7 @@ namespace MelonLoader
             return null;
         }
 
-        private static bool GetBaseDirectory(ref string __result) { __result = GameDir; return false; }
+        private static bool GetBaseDirectory(ref string __result) { __result = MelonUtils.GameDirectory; return false; }
         private static bool GetCurrentCulturePrefix(ref CultureInfo __result) { __result = CultureInfo.InvariantCulture; return false; }
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static bool QuitFix();

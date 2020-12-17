@@ -13,7 +13,7 @@
         internal static void OnSceneLoad(int current_scene, string current_scene_name)
         {
             bool should_run = true;
-            if (MelonUtils.IsBoneworks())
+            if (MelonUtils.IsBONEWORKS)
             {
                 if (!Boneworks_HasGotLoadingSceneIndex)
                 {
@@ -59,7 +59,7 @@
                 LastSceneName = current_scene_name;
                 if (!ShouldWait)
                     IsLoading = true;
-                if (!MelonUtils.IsBoneworks())
+                if (!MelonUtils.IsBONEWORKS)
                     CheckForSceneFinishedLoading();
             }
         }

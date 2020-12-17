@@ -18,10 +18,10 @@ namespace MelonLoader
 
         static MelonPreferences()
         {
-            FilePath = Path.Combine(Core.UserDataPath, "MelonPreferences.cfg");
-            LegacyFilePath = Path.Combine(Core.UserDataPath, "modprefs.ini");
+            FilePath = Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg");
+            LegacyFilePath = Path.Combine(MelonUtils.UserDataDirectory, "modprefs.ini");
             FileWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
-            FileWatcher.Path = Core.UserDataPath;
+            FileWatcher.Path = MelonUtils.UserDataDirectory;
             FileWatcher.Filter = "MelonPreferences.cfg";
             FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
             FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
