@@ -63,7 +63,7 @@ namespace MelonLoader.AssemblyGenerator
             }
             if (!il2cppassemblyunhollower.Execute())
             {
-                il2cppdumper.Cleanup();
+                //il2cppdumper.Cleanup();
                 il2cppassemblyunhollower.Cleanup();
                 return 1;
             }
