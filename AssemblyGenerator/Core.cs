@@ -69,7 +69,7 @@ namespace MelonLoader.AssemblyGenerator
             }
             OldFiles_Cleanup();
             OldFiles_LAM();
-            il2cppdumper.Cleanup();
+            //il2cppdumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
             Config.Save();
