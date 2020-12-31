@@ -7,7 +7,7 @@
 - All Mods get placed in the created Mods folder in your Game's Installation Folder.
 - Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
 - [Il2Cpp dnSpy Debugger Usage](#il2cpp-dnspy-debugger-usage)
-- GUIDES: [INSTALLER](https://gitlab.com/HerpDerpinstine/MelonLoader#how-to-use-the-installer) | [MANUAL USE](#how-to-use-manually)
+- GUIDES: [INSTALLER](https://gitlab.com/HerpDerpinstine/MelonLoader#how-to-use-the-installer) | [MANUAL USE](#how-to-manually-use-melonloader)
 
 ---
 
