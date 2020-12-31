@@ -1,4 +1,5 @@
-### GENERAL INFORMATION:
+
+## GENERAL INFORMATION:
 
 - Debug Mode is for Debugging MelonLoader, Plugins, Mods.
 - All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
@@ -9,7 +10,7 @@
 
 ---
 
-### REQUIREMENTS:
+## REQUIREMENTS:
 
 - [.NET Framework 3.5 Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=21)
 - [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net472)
@@ -18,20 +19,22 @@
 
 ---
 
-### AUTOMATED INSTALLATION:
+## HOW TO USE THE INSTALLER:
 
-1. Make sure the Game is Closed and Not Running before attempting to Install.
-2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
-3. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
-4. Run MelonLoader.Installer.exe.
-5. Click the SELECT button.
-6. Select and Open the Game's EXE in your Game's Installation Folder.
-7. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
-8. Click the INSTALL or RE-INSTALL or UPDATE button.
+- [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) / [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) / [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader)
+- [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-un-install-melonloader)
 
 ---
 
-### MANUAL INSTALLATION:
+## HOW TO USE MANUALLY:
+
+### UPDATE / RE-INSTALL:
+
+1. Follow the Steps to [UN-INSTALL]()
+2. Follow the Steps to [INSTALL]()
+
+
+### INSTALL:
 
 1. Make sure the Game is Closed and Not Running before attempting to Install.
 2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
@@ -39,36 +42,25 @@
 4. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
 5. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
 
----
 
-### AUTOMATED UN-INSTALL:
+### UN-INSTALL:
 
-1. Make sure the Game is Closed and Not Running before attempting to Uninstall.
-2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Uninstall.
-3. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
-4. Run MelonLoader.Installer.exe.
-5. Click the SELECT button.
-6. Select and Open the Game's EXE in your Game's Installation Folder.
-7. Click the UN-INSTALL button.
-
----
-
-### MANUAL UN-INSTALL:
-
-1. Make sure the Game is Closed and Not Running before attempting to Uninstall.
+1. Make sure the Game is Closed and Not Running before attempting to UN-INSTALL.
 2. Remove the version.dll file from the Game's Installation Folder.
 3. Remove the MelonLoader folder from the Game's Installation Folder.
 
-The additional steps below are OPTIONAL if you want to do a Full Uninstall.
+These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 4. Remove the Plugins folder from the Game's Installation Folder.
 5. Remove the Mods folder from the Game's Installation Folder.
+6. Remove the UserData folder from the Game's Installation Folder.
 
 ---
 
-### PROXIES:
+## PROXIES:
 
-- You are able to rename the Proxy DLL to the list of allowed DLLs below. These are mainly for compatibility reasons.
+- You are able to rename the Proxy DLL to the list of allowed DLLs below.
+- These are mainly for compatibility reasons.
 
 | Name |
 | - |
@@ -78,7 +70,7 @@ The additional steps below are OPTIONAL if you want to do a Full Uninstall.
 
 ---
 
-### LOAD MODES:
+## LOAD MODES:
 
 - Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
 
@@ -90,17 +82,20 @@ The additional steps below are OPTIONAL if you want to do a Full Uninstall.
 
 ---
 
-### IL2CPP DNSPY DEBUGGER USAGE:
+## IL2CPP DNSPY DEBUGGER USAGE:
 
 - COMING SOON
 
 ---
 
-### LAUNCH OPTIONS:
+## LAUNCH OPTIONS:
+
+- These are additional Launch Options that MelonLoader adds to the Game.
+- These can be used to manipulate how MelonLoader works.
 
 | Argument | Description |
 | - | - |
-| --no-mods | Launch game without loading Mods |
+| --no-mods | Launch game without loading any Plugins Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.consoleontop | Forces the Console over all other Applications |
 | --melonloader.hideconsole | Hides the Normal Console |
@@ -121,7 +116,7 @@ The additional steps below are OPTIONAL if you want to do a Full Uninstall.
 
 ---
 
-### LICENSING & CREDITS:
+## LICENSING & CREDITS:
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
 
