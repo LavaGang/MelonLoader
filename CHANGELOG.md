@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.3.0 Open-Beta](#v030-open-beta)  
+[v0.3.0 Open-Alpha](#v030-open-alpha)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
 [v0.2.7.2 Open-Beta](#v0272-open-beta)  
@@ -20,7 +20,7 @@
 
 ---
 
-### v0.3.0 Open-Beta:
+### v0.3.0 Open-Alpha:
 
 1. Rewrote Proxy from scratch.
 2. Rewrote Bootstrap from scratch.
