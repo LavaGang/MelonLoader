@@ -11,7 +11,7 @@ namespace MelonLoader.Preferences.Types
         private static Type ReflectedType = typeof(string);
         private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.STRING;
 
-        internal static void Resolve(object sender, TypeManager.TypeParserArgs args)
+        internal static void Resolve(object sender, TypeParser.Args args)
         {
             if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
                 || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))

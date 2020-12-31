@@ -12,14 +12,15 @@ namespace MelonLoader
         public bool Hidden { get; internal set; }
         public enum TypeEnum
         {
-            STRING,
-            BOOL,
-            INT,
-            FLOAT,
-            LONG,
-            DOUBLE,
-            BYTE,
-            UNKNOWN
+            UNKNOWN = -1,
+            STRING = 0,
+            BOOL = 1,
+            INT = 2,
+            FLOAT = 3,
+            LONG = 4,
+            DOUBLE = 5,
+            BYTE = 6,
+            UNITYENGINE_COLOR = 7,
         }
         public TypeEnum Type { get; internal set; }
         public string TypeName { get => Preferences.TypeManager.TypeEnumToTypeName(Type); }

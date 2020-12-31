@@ -176,7 +176,7 @@ namespace MelonLoader
         }
 
         public static MelonPreferences_Entry.TypeEnum TypeToTypeEnum<T>() => Preferences.TypeManager.TypeToTypeEnum<T>();
-        public static Type TypeEnumToType(MelonPreferences_Entry.TypeEnum type) => Preferences.TypeManager.TypeEnumToType(type);
+        public static Type TypeEnumToReflectedType(MelonPreferences_Entry.TypeEnum type) => Preferences.TypeManager.TypeEnumToReflectedType(type);
         public static string TypeEnumToTypeName(MelonPreferences_Entry.TypeEnum type) => Preferences.TypeManager.TypeEnumToTypeName(type);
         public static string GetCategoryDisplayName(string category_name) => GetCategory(category_name)?.DisplayName;
         public static MelonPreferences_Entry GetEntry(string category_name, string entry_name) => GetCategory(category_name)?.GetEntry(entry_name);

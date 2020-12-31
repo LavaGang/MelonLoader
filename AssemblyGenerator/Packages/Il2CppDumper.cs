@@ -24,6 +24,14 @@ namespace MelonLoader.AssemblyGenerator
 
         private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Il2CppDumperVersion) || !Config.Il2CppDumperVersion.Equals(Version));
 
+        internal override void Cleanup()
+        {
+            //base.Cleanup();
+            string dumpcspath = Path.Combine(Destination, "dump.cs");
+            if (File.Exists(dumpcspath))
+                File.Delete(dumpcspath);
+        }
+
         internal override bool Download()
         {
             if (!ShouldDownload())

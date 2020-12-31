@@ -82,7 +82,7 @@ namespace MelonLoader.AssemblyGenerator
         internal string ExePath = null;
         internal string Output = null;
 
-        internal void Cleanup()
+        internal virtual void Cleanup()
         {
             if (!Directory.Exists(Output))
                 return;
