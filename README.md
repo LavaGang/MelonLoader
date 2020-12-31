@@ -30,8 +30,8 @@
 
 ### UPDATE / RE-INSTALL:
 
-1. Follow the Steps to [UN-INSTALL]()
-2. Follow the Steps to [INSTALL]()
+1. Follow the Steps to [UN-INSTALL](#un-install)
+2. Follow the Steps to [INSTALL](#install)
 
 
 ### INSTALL:
