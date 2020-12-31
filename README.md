@@ -21,8 +21,8 @@
 
 ## HOW TO USE THE INSTALLER:
 
-- [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) / [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) / [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader)
-- [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-un-install-melonloader)
+- [INSTALL](https://github.com/LavaGang/MelonLoader.Installer#how-to-install-re-install-or-update-melonloader) / [UPDATE](https://github.com/LavaGang/MelonLoader.Installer#how-to-install-re-install-or-update-melonloader) / [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer#how-to-install-re-install-or-update-melonloader)
+- [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer#how-to-un-install-melonloader)
 
 ---
 
