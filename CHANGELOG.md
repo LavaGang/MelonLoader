@@ -190,6 +190,7 @@
 ---
 
 ### v0.2.7.4 Open-Beta:
+
 1. Fixed Issue with Amplitude using new Endpoints.
 
 ---
@@ -685,4 +686,4 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 ### v0.0.1 Closed-Beta:
 
-1) Initial Commit and Rewrite.
+1. Initial Commit and Rewrite.
