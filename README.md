@@ -7,6 +7,7 @@
 - All Mods get placed in the created Mods folder in your Game's Installation Folder.
 - Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
 - [Il2Cpp dnSpy Debugger Usage](#il2cpp-dnspy-debugger-usage)
+- GUIDES: [INSTALLER](https://gitlab.com/HerpDerpinstine/MelonLoader#how-to-use-the-installer) | [MANUAL USE](#how-to-use-manually)
 
 ---
 
@@ -21,7 +22,7 @@
 
 ## HOW TO USE THE INSTALLER:
 
-- [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) / [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) / [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader)
+- [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader)
 - [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-un-install-melonloader)
 
 ---
