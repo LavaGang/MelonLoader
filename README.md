@@ -73,12 +73,13 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ## LOAD MODES:
 
-- Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
+- Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
+- These are the Values that those Launch Options accept and what each of them do.
 
 | Value | Action |
 | - | - |
-| 0 | Load them only if they don't have the ".dev.dll" Extension |
-| 1 | Load them only if they have the ".dev.dll" Extension |
+| 0 | Load Only if the File doesn't have the ".dev.dll" Extension |
+| 1 | Load Only if the File has the ".dev.dll" Extension |
 | 2 | Load All |
 
 ---
