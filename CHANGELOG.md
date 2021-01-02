@@ -186,6 +186,12 @@
 162. Added MelonGameAttribute.Universal, MelonGameAttribute.IsCompatible, and MelonGameAttribute.IsCompatibleBecauseUniversal.
 163. Fixed Issue with BONEWORKS_OnLoadingScreen not being called.
 164. Fixed Issue with Certain Melons having the wrong Default Color.
+165. Improved MelonPreferences Error Handling.
+166. Improved MelonPreferences Unsupported Type Handling.
+167. Added string[] and bool[] Support to MelonPreferences.
+168. Added int[] and float[] Support to MelonPreferences.
+169. Fixed Issue with MelonPreferences Value Type Conversion causing Conflicts in File.
+170. Added long[] Support to MelonPreferences.
 
 ---
 

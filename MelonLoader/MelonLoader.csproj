@@ -46,6 +46,7 @@
     <Compile Include="Melons\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Types\Arrays\Boolean_Array.cs" />
+    <Compile Include="Preferences\Types\Arrays\Byte_Array.cs" />
     <Compile Include="Preferences\Types\Arrays\Double_Array.cs" />
     <Compile Include="Preferences\Types\Arrays\Float_Array.cs" />
     <Compile Include="Preferences\Types\Arrays\Integer_Array.cs" />

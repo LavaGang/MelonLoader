@@ -14,19 +14,19 @@ namespace MelonLoader.Preferences
         static TypeManager()
         {
             AddResolveEventCallback(Types.StringParser.Resolve);
-            AddResolveEventCallback(Types.BooleanParser.Resolve);
-            AddResolveEventCallback(Types.IntegerParser.Resolve);
-            AddResolveEventCallback(Types.FloatParser.Resolve);
-            AddResolveEventCallback(Types.LongParser.Resolve);
-            AddResolveEventCallback(Types.DoubleParser.Resolve);
-            AddResolveEventCallback(Types.ByteParser.Resolve);
-
             AddResolveEventCallback(Types.StringArrayParser.Resolve);
+            AddResolveEventCallback(Types.BooleanParser.Resolve);
             AddResolveEventCallback(Types.BooleanArrayParser.Resolve);
+            AddResolveEventCallback(Types.IntegerParser.Resolve);
             AddResolveEventCallback(Types.IntegerArrayParser.Resolve);
+            AddResolveEventCallback(Types.FloatParser.Resolve);
             AddResolveEventCallback(Types.FloatArrayParser.Resolve);
+            AddResolveEventCallback(Types.LongParser.Resolve);
             AddResolveEventCallback(Types.LongArrayParser.Resolve);
+            AddResolveEventCallback(Types.DoubleParser.Resolve);
             AddResolveEventCallback(Types.DoubleArrayParser.Resolve);
+            AddResolveEventCallback(Types.ByteParser.Resolve);
+            AddResolveEventCallback(Types.ByteArrayParser.Resolve);
         }
 
         internal static void AddResolveEventCallback(EventHandler<TypeParser.ResolveEventArgs> callback) => ResolveEvents += callback;
