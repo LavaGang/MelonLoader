@@ -21,7 +21,12 @@ namespace MelonLoader
             DOUBLE = 5,
             BYTE = 6,
             STRING_ARRAY = 7,
-            BOOL_ARRAY = 8
+            BOOL_ARRAY = 8,
+            INT_ARRAY = 9,
+            FLOAT_ARRAY = 10,
+            LONG_ARRAY = 11,
+            DOUBLE_ARRAY = 12,
+            BYTE_ARRAY = 13
         }
         public TypeEnum Type { get; internal set; }
         public string TypeName { get => Preferences.TypeManager.TypeEnumToTypeName(Type); }
@@ -61,6 +66,26 @@ namespace MelonLoader
         internal bool[] DefaultValue_array_bool { get; set; }
         internal bool[] Value_array_bool { get; set; }
         internal bool[] ValueEdited_array_bool { get; set; }
+
+        internal int[] DefaultValue_array_int { get; set; }
+        internal int[] Value_array_int { get; set; }
+        internal int[] ValueEdited_array_int { get; set; }
+
+        internal float[] DefaultValue_array_float { get; set; }
+        internal float[] Value_array_float { get; set; }
+        internal float[] ValueEdited_array_float { get; set; }
+
+        internal long[] DefaultValue_array_long { get; set; }
+        internal long[] Value_array_long { get; set; }
+        internal long[] ValueEdited_array_long { get; set; }
+
+        internal double[] DefaultValue_array_double { get; set; }
+        internal double[] Value_array_double { get; set; }
+        internal double[] ValueEdited_array_double { get; set; }
+
+        internal byte[] DefaultValue_array_byte { get; set; }
+        internal byte[] Value_array_byte { get; set; }
+        internal byte[] ValueEdited_array_byte { get; set; }
 
         public T GetValue<T>()
         {

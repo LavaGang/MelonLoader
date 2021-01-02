@@ -109,7 +109,15 @@ namespace MelonLoader
                     MelonPreferences_Entry entry = category.GetEntry(name);
                     if (entry == null)
                     {
-                        if (obj.Kind == ObjectKind.Array)
+                        if (obj.Kind == ObjectKind.String)
+                            entry = category.CreateEntry(name, ((TomlString)obj).Value, hidden: true);
+                        else if (obj.Kind == ObjectKind.Boolean)
+                            entry = category.CreateEntry(name, ((TomlBoolean)obj).Value, hidden: true);
+                        else if (obj.Kind == ObjectKind.Integer)
+                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value, hidden: true);
+                        else if (obj.Kind == ObjectKind.Float)
+                            entry = category.CreateEntry(name, ((TomlFloat)obj).Value, hidden: true);
+                        else if(obj.Kind == ObjectKind.Array)
                         {
                             TomlArray arr = (TomlArray)obj;
                             if (arr.Count() <= 0)
@@ -119,15 +127,11 @@ namespace MelonLoader
                                 entry = category.CreateEntry(name, arr.ToArray<string>(), hidden: true);
                             else if (arrobj.Kind == ObjectKind.Boolean)
                                 entry = category.CreateEntry(name, arr.ToArray<bool>(), hidden: true);
+                            else if (obj.Kind == ObjectKind.Integer)
+                                entry = category.CreateEntry(name, arr.ToArray<long>(), hidden: true);
+                            else if (obj.Kind == ObjectKind.Float)
+                                entry = category.CreateEntry(name, arr.ToArray<double>(), hidden: true);
                         }
-                        else if (obj.Kind == ObjectKind.String)
-                            entry = category.CreateEntry(name, ((TomlString)obj).Value, hidden: true);
-                        else if (obj.Kind == ObjectKind.Boolean)
-                            entry = category.CreateEntry(name, ((TomlBoolean)obj).Value, hidden: true);
-                        else if (obj.Kind == ObjectKind.Integer)
-                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value, hidden: true);
-                        else if (obj.Kind == ObjectKind.Float)
-                            entry = category.CreateEntry(name, ((TomlFloat)obj).Value, hidden: true);
                     }
                     if (entry == null)
                         continue;

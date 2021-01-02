@@ -22,6 +22,8 @@ namespace MelonLoader.Preferences
             AddResolveEventCallback(Types.ByteParser.Resolve);
             AddResolveEventCallback(Types.StringArrayParser.Resolve);
             AddResolveEventCallback(Types.BooleanArrayParser.Resolve);
+            AddResolveEventCallback(Types.IntegerArrayParser.Resolve);
+            AddResolveEventCallback(Types.FloatArrayParser.Resolve);
         }
 
         internal static void AddResolveEventCallback(EventHandler<TypeParser.ResolveEventArgs> callback) => ResolveEvents += callback;
@@ -119,7 +121,6 @@ namespace MelonLoader.Preferences
             entry.DisplayName = displayname;
             entry.Hidden = hidden;
             entry.Type = parser.GetTypeEnum();
-            MelonLogger.Msg(parser.GetTypeName());
             parser.Construct(entry, value);
             category.prefstbl.Add(entry);
             if (MelonPreferences.SaveAfterEntryCreation)
