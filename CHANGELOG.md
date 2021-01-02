@@ -192,6 +192,7 @@
 168. Added int[] and float[] Support to MelonPreferences.
 169. Fixed Issue with MelonPreferences Value Type Conversion causing Conflicts in File.
 170. Added long[] Support to MelonPreferences.
+171. Added byte[] Support to MelonPreferences.
 
 ---
 
