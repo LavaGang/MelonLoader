@@ -25,7 +25,7 @@ namespace MelonLoader.Preferences
             AddResolveEventCallback(Types.BooleanArrayParser.Resolve);
             AddResolveEventCallback(Types.IntegerArrayParser.Resolve);
             AddResolveEventCallback(Types.FloatArrayParser.Resolve);
-
+            AddResolveEventCallback(Types.LongArrayParser.Resolve);
             AddResolveEventCallback(Types.DoubleArrayParser.Resolve);
         }
 

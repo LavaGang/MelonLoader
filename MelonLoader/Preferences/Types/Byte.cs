@@ -49,9 +49,6 @@ namespace MelonLoader.Preferences.Types
             byte val_byte = GetDefaultValue<byte>(entry);
             switch (entry.Type)
             {
-                case MelonPreferences_Entry.TypeEnum.INT:
-                    val_byte = (byte)entry.GetValue<int>();
-                    break;
                 case MelonPreferences_Entry.TypeEnum.LONG:
                     val_byte = (byte)entry.GetValue<long>();
                     break;

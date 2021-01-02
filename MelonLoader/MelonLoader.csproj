@@ -49,6 +49,7 @@
     <Compile Include="Preferences\Types\Arrays\Double_Array.cs" />
     <Compile Include="Preferences\Types\Arrays\Float_Array.cs" />
     <Compile Include="Preferences\Types\Arrays\Integer_Array.cs" />
+    <Compile Include="Preferences\Types\Arrays\Long_Array.cs" />
     <Compile Include="Preferences\Types\Arrays\String_Array.cs" />
     <Compile Include="Preferences\Types\Byte.cs" />
     <Compile Include="Preferences\Category.cs" />
