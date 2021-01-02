@@ -11,7 +11,7 @@ namespace MelonLoader.Preferences.Types
         private static Type ReflectedType = typeof(float);
         private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.FLOAT;
 
-        internal static void Resolve(object sender, TypeParser.Args args)
+        internal static void Resolve(object sender, ResolveEventArgs args)
         {
             if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
                 || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))
@@ -78,12 +78,12 @@ namespace MelonLoader.Preferences.Types
         internal override T GetValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_float), typeof(T))).Compile()();
         internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.Value_float = entry.ValueEdited_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), typeof(float))).Compile()();
+            entry.Value_float = entry.ValueEdited_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_float), typeof(T))).Compile()();
         internal override void SetEditedValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.ValueEdited_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), typeof(float))).Compile()();
+            entry.ValueEdited_float = Expression.Lambda<Func<float>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override T GetDefaultValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_float), typeof(T))).Compile()();

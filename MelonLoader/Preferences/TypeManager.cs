@@ -7,7 +7,7 @@ namespace MelonLoader.Preferences
 {
     internal static class TypeManager
     {
-        private static event EventHandler<TypeParser.Args> ResolveEvents;
+        private static event EventHandler<TypeParser.ResolveEventArgs> ResolveEvents;
         private static Dictionary<MelonPreferences_Entry.TypeEnum, TypeParser> TypeParserDict_TypeEnum = new Dictionary<MelonPreferences_Entry.TypeEnum, TypeParser>();
         private static Dictionary<Type, TypeParser> TypeParserDict_ReflectedType = new Dictionary<Type, TypeParser>();
 
@@ -20,9 +20,11 @@ namespace MelonLoader.Preferences
             AddResolveEventCallback(Types.LongParser.Resolve);
             AddResolveEventCallback(Types.DoubleParser.Resolve);
             AddResolveEventCallback(Types.ByteParser.Resolve);
+            AddResolveEventCallback(Types.StringArrayParser.Resolve);
+            AddResolveEventCallback(Types.BooleanArrayParser.Resolve);
         }
 
-        internal static void AddResolveEventCallback(EventHandler<TypeParser.Args> callback) => ResolveEvents += callback;
+        internal static void AddResolveEventCallback(EventHandler<TypeParser.ResolveEventArgs> callback) => ResolveEvents += callback;
 
         private static TypeParser GetParser(Type type)
         {
@@ -33,11 +35,12 @@ namespace MelonLoader.Preferences
                     parser = nparser;
                 else
                 {
-                    var args = new TypeParser.Args { ReflectedType = type };
+                    var args = new TypeParser.ResolveEventArgs { ReflectedType = type };
                     ResolveEvents?.Invoke(null, args);
-                    if (args.TypeParser == null)
-                        throw new NullReferenceException("No Parser for Type " + type.Name);
-                    parser = TypeParserDict_ReflectedType[type] = args.TypeParser;
+                    //if (args.TypeParser == null)
+                    //    throw new NullReferenceException("No Parser for Type " + type.Name);
+                    if ((args.TypeParser != null) && (args.TypeParser.GetReflectedType() == type))
+                        parser = TypeParserDict_ReflectedType[type] = args.TypeParser;
                 }
             }
             return parser;
@@ -46,17 +49,20 @@ namespace MelonLoader.Preferences
         private static TypeParser GetParser(MelonPreferences_Entry.TypeEnum type)
         {
             TypeParser parser = null;
+            if (type == MelonPreferences_Entry.TypeEnum.UNKNOWN)
+                return parser;
             lock (TypeParserDict_TypeEnum)
             {
                 if (TypeParserDict_TypeEnum.TryGetValue(type, out TypeParser nparser))
                     parser = nparser;
                 else
                 {
-                    var args = new TypeParser.Args { TypeEnum = type };
+                    var args = new TypeParser.ResolveEventArgs { TypeEnum = type };
                     ResolveEvents?.Invoke(null, args);
-                    if (args.TypeParser == null)
-                        throw new NullReferenceException("No Parser for Type " + MelonPreferences.TypeEnumToTypeName(type));
-                    parser = TypeParserDict_TypeEnum[type] = args.TypeParser;
+                    //if (args.TypeParser == null)
+                    //    throw new NullReferenceException("No Parser for Type " + MelonPreferences.TypeEnumToTypeName(type));
+                    if ((args.TypeParser != null) && (args.TypeParser.GetTypeEnum() == type))
+                        parser = TypeParserDict_TypeEnum[type] = args.TypeParser;
                 }
             }
             return parser;
@@ -113,6 +119,7 @@ namespace MelonLoader.Preferences
             entry.DisplayName = displayname;
             entry.Hidden = hidden;
             entry.Type = parser.GetTypeEnum();
+            MelonLogger.Msg(parser.GetTypeName());
             parser.Construct(entry, value);
             category.prefstbl.Add(entry);
             if (MelonPreferences.SaveAfterEntryCreation)
@@ -180,7 +187,7 @@ namespace MelonLoader.Preferences
 
     internal abstract class TypeParser
     {
-        internal class Args : EventArgs
+        internal class ResolveEventArgs : EventArgs
         {
             internal Type ReflectedType { get; set; }
             internal MelonPreferences_Entry.TypeEnum TypeEnum { get; set; }

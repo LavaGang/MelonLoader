@@ -11,7 +11,7 @@ namespace MelonLoader.Preferences.Types
         private static Type ReflectedType = typeof(int);
         private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.INT;
 
-        internal static void Resolve(object sender, TypeParser.Args args)
+        internal static void Resolve(object sender, ResolveEventArgs args)
         {
             if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
                 || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))
@@ -78,12 +78,12 @@ namespace MelonLoader.Preferences.Types
         internal override T GetValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_int), typeof(T))).Compile()();
         internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.Value_int = entry.ValueEdited_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), typeof(int))).Compile()();
+            entry.Value_int = entry.ValueEdited_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_int), typeof(T))).Compile()();
         internal override void SetEditedValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.ValueEdited_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), typeof(int))).Compile()();
+            entry.ValueEdited_int = Expression.Lambda<Func<int>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override T GetDefaultValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_int), typeof(T))).Compile()();

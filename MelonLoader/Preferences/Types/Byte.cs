@@ -10,7 +10,7 @@ namespace MelonLoader.Preferences.Types
         private static string TypeName = "byte";
         private static Type ReflectedType = typeof(byte);
         private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.BYTE;
-        internal static void Resolve(object sender, TypeParser.Args args)
+        internal static void Resolve(object sender, ResolveEventArgs args)
         {
             if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
                 || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))
@@ -77,12 +77,12 @@ namespace MelonLoader.Preferences.Types
         internal override T GetValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_byte), typeof(T))).Compile()();
         internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.Value_byte = entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), typeof(byte))).Compile()();
+            entry.Value_byte = entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_byte), typeof(T))).Compile()();
         internal override void SetEditedValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), typeof(byte))).Compile()();
+            entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override T GetDefaultValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_byte), typeof(T))).Compile()();

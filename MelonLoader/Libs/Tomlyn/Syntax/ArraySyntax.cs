@@ -53,7 +53,112 @@ namespace MelonLoader.Tomlyn.Syntax
             CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket);
             for (int i = 0; i < values.Length; i++)
             {
-                var item = new ArrayItemSyntax { Value = new StringValueSyntax(values[i]) };
+                var item = new ArrayItemSyntax { Value = new StringValueSyntax((string.IsNullOrEmpty(values[i]) ? "" : values[i])) };
+                if (i + 1 < values.Length)
+                {
+                    item.Comma = SyntaxFactory.Token(TokenKind.Comma);
+                    item.Comma.AddTrailingWhitespace();
+                }
+                Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of an <see cref="ArraySyntax"/>
+        /// </summary>
+        /// <param name="values">An array of bool values</param>
+        public ArraySyntax(bool[] values) : this()
+        {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+            OpenBracket = SyntaxFactory.Token(TokenKind.OpenBracket);
+            CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket);
+            for (int i = 0; i < values.Length; i++)
+            {
+                var item = new ArrayItemSyntax { Value = new BooleanValueSyntax(values[i]) };
+                if (i + 1 < values.Length)
+                {
+                    item.Comma = SyntaxFactory.Token(TokenKind.Comma);
+                    item.Comma.AddTrailingWhitespace();
+                }
+                Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of an <see cref="ArraySyntax"/>
+        /// </summary>
+        /// <param name="values">An array of float values</param>
+        public ArraySyntax(float[] values) : this()
+        {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+            OpenBracket = SyntaxFactory.Token(TokenKind.OpenBracket);
+            CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket);
+            for (int i = 0; i < values.Length; i++)
+            {
+                var item = new ArrayItemSyntax { Value = new FloatValueSyntax(values[i]) };
+                if (i + 1 < values.Length)
+                {
+                    item.Comma = SyntaxFactory.Token(TokenKind.Comma);
+                    item.Comma.AddTrailingWhitespace();
+                }
+                Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of an <see cref="ArraySyntax"/>
+        /// </summary>
+        /// <param name="values">An array of long values</param>
+        public ArraySyntax(long[] values) : this()
+        {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+            OpenBracket = SyntaxFactory.Token(TokenKind.OpenBracket);
+            CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket);
+            for (int i = 0; i < values.Length; i++)
+            {
+                var item = new ArrayItemSyntax { Value = new IntegerValueSyntax(values[i]) };
+                if (i + 1 < values.Length)
+                {
+                    item.Comma = SyntaxFactory.Token(TokenKind.Comma);
+                    item.Comma.AddTrailingWhitespace();
+                }
+                Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of an <see cref="ArraySyntax"/>
+        /// </summary>
+        /// <param name="values">An array of double values</param>
+        public ArraySyntax(double[] values) : this()
+        {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+            OpenBracket = SyntaxFactory.Token(TokenKind.OpenBracket);
+            CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket);
+            for (int i = 0; i < values.Length; i++)
+            {
+                var item = new ArrayItemSyntax { Value = new FloatValueSyntax(values[i]) };
+                if (i + 1 < values.Length)
+                {
+                    item.Comma = SyntaxFactory.Token(TokenKind.Comma);
+                    item.Comma.AddTrailingWhitespace();
+                }
+                Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance of an <see cref="ArraySyntax"/>
+        /// </summary>
+        /// <param name="values">An array of byte values</param>
+        public ArraySyntax(byte[] values) : this()
+        {
+            if (values == null) throw new ArgumentNullException(nameof(values));
+            OpenBracket = SyntaxFactory.Token(TokenKind.OpenBracket);
+            CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket);
+            for (int i = 0; i < values.Length; i++)
+            {
+                var item = new ArrayItemSyntax { Value = new IntegerValueSyntax(values[i]) };
                 if (i + 1 < values.Length)
                 {
                     item.Comma = SyntaxFactory.Token(TokenKind.Comma);

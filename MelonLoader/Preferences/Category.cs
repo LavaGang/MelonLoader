@@ -33,7 +33,9 @@ namespace MelonLoader
                 throw new Exception("Name is null or empty when calling CreateEntry");
             MelonPreferences_Entry entry = GetEntry(name);
             if (entry == null)
-                return Preferences.TypeManager.ConstructEntry(this, name, value, displayname, hidden);
+                entry = Preferences.TypeManager.ConstructEntry(this, name, value, displayname, hidden);
+            if (entry == null)
+                throw new Exception("Failed to Create Entry of Unsupported Type: " + typeof(T).FullName);
             entry.DisplayName = displayname;
             entry.Hidden = hidden;
             Preferences.TypeManager.ConvertCurrentValueType(entry, value);

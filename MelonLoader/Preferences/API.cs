@@ -10,6 +10,8 @@ namespace MelonLoader
 {
     public static class MelonPreferences
     {
+        private static bool _waserror = false;
+        internal static bool WasError { get => _waserror; set { if (value == true) MelonLogger.Warning("Disabling Saving and Loading of MelonPreferences to further avoid File Corruption..."); _waserror = value; } }
         private static string FilePath = null;
         private static string LegacyFilePath = null;
         internal static List<MelonPreferences_Category> categorytbl = new List<MelonPreferences_Category>();
@@ -71,14 +73,14 @@ namespace MelonLoader
         private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e) { if (!IsSaving) Load(); else IsSaving = false; }
         public static void Load()
         {
-            if (!Load_Internal())
+            if (WasError || !Load_Internal())
                 return;
             MelonLogger.Msg("Config Loaded!");
             MelonHandler.OnPreferencesLoaded();
         }
         internal static bool Load_Internal()
         {
-            if (!File.Exists(FilePath))
+            if (WasError || !File.Exists(FilePath))
                 return false;
             string filestr = File.ReadAllText(FilePath);
             if (string.IsNullOrEmpty(filestr))
@@ -107,7 +109,18 @@ namespace MelonLoader
                     MelonPreferences_Entry entry = category.GetEntry(name);
                     if (entry == null)
                     {
-                        if (obj.Kind == ObjectKind.String)
+                        if (obj.Kind == ObjectKind.Array)
+                        {
+                            TomlArray arr = (TomlArray)obj;
+                            if (arr.Count() <= 0)
+                                continue;
+                            TomlObject arrobj = TomlObject.ToTomlObject(arr[0]);
+                            if (arrobj.Kind == ObjectKind.String)
+                                entry = category.CreateEntry(name, arr.ToArray<string>(), hidden: true);
+                            else if (arrobj.Kind == ObjectKind.Boolean)
+                                entry = category.CreateEntry(name, arr.ToArray<bool>(), hidden: true);
+                        }
+                        else if (obj.Kind == ObjectKind.String)
                             entry = category.CreateEntry(name, ((TomlString)obj).Value, hidden: true);
                         else if (obj.Kind == ObjectKind.Boolean)
                             entry = category.CreateEntry(name, ((TomlBoolean)obj).Value, hidden: true);
@@ -127,14 +140,14 @@ namespace MelonLoader
         private static bool IsSaving = false;
         public static void Save()
         {
-            if (!Save_Internal())
+            if (WasError || !Save_Internal())
                 return;
             MelonLogger.Msg("Config Saved!");
             MelonHandler.OnPreferencesSaved();
         }
         internal static bool Save_Internal()
         {
-            if (categorytbl.Count <= 0)
+            if (WasError || (categorytbl.Count <= 0))
                 return false;
             DocumentSyntax doc = new DocumentSyntax();
             foreach (MelonPreferences_Category category in categorytbl)

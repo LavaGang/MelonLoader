@@ -21,9 +21,9 @@ namespace MelonLoader
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
-            try { MelonPreferences.LegacyCheck(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.LegacyCheck Exception: " + ex.ToString()); throw ex; }
-            try { MelonPreferences.Load_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Load_Internal Exception: " + ex.ToString()); throw ex; }
-            if (MelonPreferences.WasLegacyLoaded) try { MelonPreferences.Save_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save_Internal Exception: " + ex.ToString()); throw ex; }
+            try { MelonPreferences.LegacyCheck(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.LegacyCheck Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
+            try { MelonPreferences.Load_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Load_Internal Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
+            if (MelonPreferences.WasLegacyLoaded) try { MelonPreferences.Save_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save_Internal Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
             MelonPreferences.SaveAfterEntryCreation = true;
         }
 
@@ -48,7 +48,7 @@ namespace MelonLoader
         internal static void Quit()
         {
             MelonHandler.OnApplicationQuit();
-            MelonPreferences.Save();
+            try { MelonPreferences.Save(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
             Harmony.HarmonyInstance.UnpatchAllInstances();
             MelonLogger.Flush();
             if (QuitFix())

@@ -20,7 +20,8 @@ namespace MelonLoader
             LONG = 4,
             DOUBLE = 5,
             BYTE = 6,
-            UNITYENGINE_COLOR = 7,
+            STRING_ARRAY = 7,
+            BOOL_ARRAY = 8
         }
         public TypeEnum Type { get; internal set; }
         public string TypeName { get => Preferences.TypeManager.TypeEnumToTypeName(Type); }
@@ -53,18 +54,26 @@ namespace MelonLoader
         internal byte Value_byte { get; set; }
         internal byte ValueEdited_byte { get; set; }
 
+        internal string[] DefaultValue_array_string { get; set; }
+        internal string[] Value_array_string { get; set; }
+        internal string[] ValueEdited_array_string { get; set; }
+
+        internal bool[] DefaultValue_array_bool { get; set; }
+        internal bool[] Value_array_bool { get; set; }
+        internal bool[] ValueEdited_array_bool { get; set; }
+
         public T GetValue<T>()
         {
             TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if ((requestedType == TypeEnum.UNKNOWN) || (requestedType != Type))
-                throw new Exception(GetExceptionMessage("Get " + nameof(T) + " Value from"));
+                throw new Exception(GetExceptionMessage("Get " + typeof(T).FullName + " Value from"));
             return Preferences.TypeManager.GetValue<T>(this);
         }
         public void SetValue<T>(T value)
         {
             TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if ((requestedType == TypeEnum.UNKNOWN) || (requestedType != Type))
-                throw new Exception(GetExceptionMessage("Set " + nameof(T) + " Value in"));
+                throw new Exception(GetExceptionMessage("Set " + typeof(T).FullName + " Value in"));
             T oldval = GetValue<T>();
             Preferences.TypeManager.SetValue(this, value);
             if (!oldval.Equals(value))
@@ -75,14 +84,14 @@ namespace MelonLoader
         {
             TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if ((requestedType == TypeEnum.UNKNOWN) || (requestedType != Type))
-                throw new Exception(GetExceptionMessage("Get Edited " + nameof(T) + " Value from"));
+                throw new Exception(GetExceptionMessage("Get Edited " + typeof(T).FullName + " Value from"));
             return Preferences.TypeManager.GetEditedValue<T>(this);
         }
         public void SetEditedValue<T>(T value)
         {
             TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if ((requestedType == TypeEnum.UNKNOWN) || (requestedType != Type))
-                throw new Exception(GetExceptionMessage("Set Edited " + nameof(T) + " Value in"));
+                throw new Exception(GetExceptionMessage("Set Edited " + typeof(T).FullName + " Value in"));
             Preferences.TypeManager.SetEditedValue(this, value);
         }
 
@@ -90,7 +99,7 @@ namespace MelonLoader
         {
             TypeEnum requestedType = Preferences.TypeManager.TypeToTypeEnum<T>();
             if ((requestedType == TypeEnum.UNKNOWN) || (requestedType != Type))
-                throw new Exception(GetExceptionMessage("Get Default " + nameof(T) + " Value from"));
+                throw new Exception(GetExceptionMessage("Get Default " + typeof(T).FullName + " Value from"));
             return Preferences.TypeManager.GetDefaultValue<T>(this);
         }
 
@@ -101,7 +110,7 @@ namespace MelonLoader
         {
             TypeEnum callback_typeenum = Preferences.TypeManager.TypeToTypeEnum<T>();
             if ((callback_typeenum == TypeEnum.UNKNOWN) || (callback_typeenum != Type))
-                throw new Exception(GetExceptionMessage("Add " + nameof(T) + " Value Change Callback to"));
+                throw new Exception(GetExceptionMessage("Add " + typeof(T).FullName + " Value Change Callback to"));
             if (OnValueChanged == null)
                 OnValueChanged = new List<Delegate>();
             OnValueChanged.Add(callback);
@@ -110,7 +119,7 @@ namespace MelonLoader
         {
             TypeEnum callback_typeenum = Preferences.TypeManager.TypeToTypeEnum<T>();
             if ((callback_typeenum == TypeEnum.UNKNOWN) || (callback_typeenum != Type))
-                throw new Exception(GetExceptionMessage("Remove " + nameof(T) + " Value Change Callback from"));
+                throw new Exception(GetExceptionMessage("Remove " + typeof(T).FullName + " Value Change Callback from"));
             if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
                 return;
             OnValueChanged.Remove(callback);

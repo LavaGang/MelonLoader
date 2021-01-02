@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace MelonLoader.Tomlyn.Model
 {
@@ -92,6 +93,15 @@ namespace MelonLoader.Tomlyn.Model
         {
             get => ToObject(_items[index]);
             set => _items[index] = ToTomlObject(value);
+        }
+
+        public T[] ToArray<T>()
+        {
+            int size = _items.Count;
+            T[] output = new T[size];
+            for (int i = 0; i < size; i++)
+                output[i] = Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(this[i]), typeof(T))).Compile()();
+            return output;
         }
     }
 }
