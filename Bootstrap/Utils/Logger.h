@@ -40,6 +40,7 @@ public:
 private:
 	static const char* FilePrefix;
 	static const char* FileExtension;
+	static const char* LatestLogFileName;
 	static int WarningCount;
 	static int ErrorCount;
 	static void CleanOldLogs(const char* path);

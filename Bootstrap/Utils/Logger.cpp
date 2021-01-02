@@ -10,6 +10,7 @@
 
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtension = ".log";
+const char* Logger::LatestLogFileName = "Latest.log";
 int Logger::MaxLogs = 10;
 int Logger::MaxWarnings = 100;
 int Logger::MaxErrors = 100;
@@ -40,7 +41,7 @@ bool Logger::Initialize()
 	std::stringstream filepath;
 	filepath << logFolderPath << "\\" << FilePrefix << std::put_time(&bt, "%y-%m-%d_%OH-%OM-%OS") << "." << std::setfill('0') << std::setw(3) << ms.count() << FileExtension;
 	LogFile.coss = std::ofstream(filepath.str());
-	std::string latest_path = (std::string(Game::BasePath) + "\\MelonLoader\\latest.log");
+	std::string latest_path = (std::string(Game::BasePath) + "\\MelonLoader\\" + LatestLogFileName);
 	if (Core::FileExists(latest_path.c_str()))
 		std::remove(latest_path.c_str());
 	LogFile.latest = std::ofstream(latest_path.c_str());
