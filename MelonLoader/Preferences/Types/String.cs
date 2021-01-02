@@ -53,6 +53,9 @@ namespace MelonLoader.Preferences.Types
                 case MelonPreferences_Entry.TypeEnum.LONG:
                     val_string = entry.GetValue<long>().ToString();
                     break;
+                case MelonPreferences_Entry.TypeEnum.BYTE:
+                    val_string = entry.GetValue<byte>().ToString();
+                    break;
                 default:
                     break;
             }

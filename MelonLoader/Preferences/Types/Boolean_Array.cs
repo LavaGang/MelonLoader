@@ -41,7 +41,7 @@ namespace MelonLoader.Preferences.Types
         internal override T GetValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_array_bool), typeof(T))).Compile()();
         internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.Value_array_bool = Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+            entry.Value_array_bool = entry.ValueEdited_array_bool = Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
 
         internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
             Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_array_bool), typeof(T))).Compile()();
