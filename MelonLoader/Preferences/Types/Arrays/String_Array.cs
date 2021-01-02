@@ -30,32 +30,7 @@ namespace MelonLoader.Preferences.Types
         internal override void Load(MelonPreferences_Entry entry, TomlObject obj) =>
             entry.SetValue(((TomlArray)obj).ToArray<string>());
 
-        internal override void ConvertCurrentValueType(MelonPreferences_Entry entry)
-        {
-            string[] val_stringarr = null;
-            switch (entry.Type)
-            {
-                case MelonPreferences_Entry.TypeEnum.BOOL_ARRAY:
-                    //val_string = entry.GetValue<bool>().ToString();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.INT_ARRAY:
-                    //val_string = entry.GetValue<int>().ToString();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.FLOAT_ARRAY:
-                    //val_string = entry.GetValue<float>().ToString();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.DOUBLE_ARRAY:
-                    //val_string = entry.GetValue<double>().ToString();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.LONG_ARRAY:
-                    //val_string = entry.GetValue<long>().ToString();
-                    break;
-                default:
-                    break;
-            }
-            entry.Type = TypeEnum;
-            entry.SetValue(val_stringarr);
-        }
+        internal override void ConvertCurrentValueType(MelonPreferences_Entry entry) { entry.Type = TypeEnum; ResetToDefault(entry); }
 
         internal override void ResetToDefault(MelonPreferences_Entry entry) =>
             entry.SetValue(entry.DefaultValue_array_string);

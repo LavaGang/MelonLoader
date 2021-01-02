@@ -20,10 +20,13 @@ namespace MelonLoader.Preferences
             AddResolveEventCallback(Types.LongParser.Resolve);
             AddResolveEventCallback(Types.DoubleParser.Resolve);
             AddResolveEventCallback(Types.ByteParser.Resolve);
+
             AddResolveEventCallback(Types.StringArrayParser.Resolve);
             AddResolveEventCallback(Types.BooleanArrayParser.Resolve);
             AddResolveEventCallback(Types.IntegerArrayParser.Resolve);
             AddResolveEventCallback(Types.FloatArrayParser.Resolve);
+
+            AddResolveEventCallback(Types.DoubleArrayParser.Resolve);
         }
 
         internal static void AddResolveEventCallback(EventHandler<TypeParser.ResolveEventArgs> callback) => ResolveEvents += callback;

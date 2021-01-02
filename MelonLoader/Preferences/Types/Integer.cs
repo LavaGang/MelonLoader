@@ -47,27 +47,9 @@ namespace MelonLoader.Preferences.Types
 
         internal override void ConvertCurrentValueType(MelonPreferences_Entry entry)
         {
-            int val_int = 0;
-            switch (entry.Type)
-            {
-                case MelonPreferences_Entry.TypeEnum.BOOL:
-                    val_int = (entry.GetValue<bool>() ? 1 : 0);
-                    break;
-                case MelonPreferences_Entry.TypeEnum.FLOAT:
-                    val_int = (int)entry.GetValue<float>();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.LONG:
-                    val_int = (int)entry.GetValue<long>();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.DOUBLE:
-                    val_int = (int)entry.GetValue<double>();
-                    break;
-                case MelonPreferences_Entry.TypeEnum.BYTE:
-                    val_int = entry.GetValue<byte>();
-                    break;
-                default:
-                    break;
-            }
+            int val_int = GetDefaultValue<int>(entry);
+            if (entry.Type == MelonPreferences_Entry.TypeEnum.LONG)
+                val_int = (int)entry.GetValue<long>();
             entry.Type = TypeEnum;
             entry.SetValue(val_int);
         }

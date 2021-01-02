@@ -11,7 +11,7 @@ namespace MelonLoader
     public static class MelonPreferences
     {
         private static bool _waserror = false;
-        internal static bool WasError { get => _waserror; set { if (value == true) MelonLogger.Warning("Disabling Saving and Loading of MelonPreferences to further avoid File Corruption..."); _waserror = value; } }
+        internal static bool WasError { get => _waserror; set { if (value == true) MelonLogger.Warning("Disabling Saving and Loading of MelonPreferences to further avoid File Corruption..."); FileWatcher.EndInit(); _waserror = value; } }
         private static string FilePath = null;
         private static string LegacyFilePath = null;
         internal static List<MelonPreferences_Category> categorytbl = new List<MelonPreferences_Category>();
@@ -59,7 +59,7 @@ namespace MelonLoader
                 float val_float = 0f;
                 if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
                     category.CreateEntry(parts[0], parts[1].ToLower().StartsWith("true"), hidden: true);
-                else if (Int32.TryParse(parts[1], out val_int))
+                else if (int.TryParse(parts[1], out val_int))
                     category.CreateEntry(parts[0], val_int, hidden: true);
                 else if (float.TryParse(parts[1], out val_float))
                     category.CreateEntry(parts[0], val_float, hidden: true);

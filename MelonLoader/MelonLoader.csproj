@@ -45,10 +45,11 @@
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
-    <Compile Include="Preferences\Types\Boolean_Array.cs" />
-    <Compile Include="Preferences\Types\Float_Array.cs" />
-    <Compile Include="Preferences\Types\Integer_Array.cs" />
-    <Compile Include="Preferences\Types\String_Array.cs" />
+    <Compile Include="Preferences\Types\Arrays\Boolean_Array.cs" />
+    <Compile Include="Preferences\Types\Arrays\Double_Array.cs" />
+    <Compile Include="Preferences\Types\Arrays\Float_Array.cs" />
+    <Compile Include="Preferences\Types\Arrays\Integer_Array.cs" />
+    <Compile Include="Preferences\Types\Arrays\String_Array.cs" />
     <Compile Include="Preferences\Types\Byte.cs" />
     <Compile Include="Preferences\Category.cs" />
     <Compile Include="Preferences\Entry.cs" />

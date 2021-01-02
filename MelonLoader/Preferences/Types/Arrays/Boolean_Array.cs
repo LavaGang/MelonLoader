@@ -30,10 +30,7 @@ namespace MelonLoader.Preferences.Types
         internal override void Load(MelonPreferences_Entry entry, TomlObject obj) =>
             entry.SetValue(((TomlArray)obj).ToArray<bool>());
 
-        internal override void ConvertCurrentValueType(MelonPreferences_Entry entry)
-        {
-
-        }
+        internal override void ConvertCurrentValueType(MelonPreferences_Entry entry) { entry.Type = TypeEnum; ResetToDefault(entry); }
 
         internal override void ResetToDefault(MelonPreferences_Entry entry) =>
             entry.SetValue(entry.DefaultValue_array_bool);

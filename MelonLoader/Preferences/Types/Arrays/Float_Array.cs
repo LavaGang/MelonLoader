@@ -32,7 +32,17 @@ namespace MelonLoader.Preferences.Types
 
         internal override void ConvertCurrentValueType(MelonPreferences_Entry entry)
         {
-
+            float[] val_floatarr = GetDefaultValue<float[]>(entry);
+            if (entry.Type == MelonPreferences_Entry.TypeEnum.DOUBLE_ARRAY)
+            {
+                double[] entryarr = entry.GetValue<double[]>();
+                int entryarr_size = entryarr.Length;
+                val_floatarr = new float[entryarr_size];
+                for (int i = 0; i < entryarr_size; i++)
+                    val_floatarr[i] = (float)entryarr[i];
+            }
+            entry.Type = TypeEnum;
+            entry.SetValue(val_floatarr);
         }
 
         internal override void ResetToDefault(MelonPreferences_Entry entry) =>
