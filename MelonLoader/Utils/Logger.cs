@@ -60,8 +60,7 @@ namespace MelonLoader
             MelonBase melon = GetMelonFromStackTrace();
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
-            Internal_Warning(namesection, txt);
-            RunWarningCallbacks(namesection, txt);
+            ManualWarning(namesection, txt);
         }
         public static void Warning(string txt, params object[] args)
         {
@@ -70,8 +69,7 @@ namespace MelonLoader
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
             string fmt = string.Format(txt, args);
-            Internal_Warning(namesection, fmt);
-            RunWarningCallbacks(namesection, fmt);
+            ManualWarning(namesection, fmt);
         }
         public static void Warning(object obj)
         {
@@ -80,9 +78,9 @@ namespace MelonLoader
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
             string objstr = obj.ToString();
-            Internal_Warning(namesection, objstr);
-            RunWarningCallbacks(namesection, objstr);
+            ManualWarning(namesection, objstr);
         }
+        internal static void ManualWarning(string namesection, string txt) { Internal_Warning(namesection, txt); RunWarningCallbacks(namesection, txt); }
 
         public static void Error(string txt)
         {
