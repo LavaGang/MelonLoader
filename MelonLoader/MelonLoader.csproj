@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Deprecated.cs" />
+    <Compile Include="Libs\Harmony\UnityMagicMethods.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Coroutines.cs" />

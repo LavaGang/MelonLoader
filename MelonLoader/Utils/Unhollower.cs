@@ -11,6 +11,9 @@ namespace MelonLoader
         internal static MethodInfo Il2CppStringToManagedMethod = null;
         internal static MethodInfo ManagedStringToIl2CppMethod = null;
         internal static MethodInfo GetIl2CppMethodInfoPointerFieldForGeneratedMethod = null;
+        private static Type Il2CppCallerCountAttributeType = null;
+        private static FieldInfo Il2CppCallerCountField = null;
+
         static UnhollowerSupport()
         {
             if (!MelonUtils.IsGameIl2Cpp())
@@ -27,6 +30,8 @@ namespace MelonLoader
             Il2CppStringToManagedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP").GetMethod("Il2CppStringToManaged");
             ManagedStringToIl2CppMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP").GetMethod("ManagedStringToIl2Cpp");
             GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
+            Il2CppCallerCountAttributeType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Attributes.CallerCountAttribute");
+            Il2CppCallerCountField = Il2CppCallerCountAttributeType.GetField("Count", BindingFlags.Public | BindingFlags.Instance);
         }
 
         public static bool IsGeneratedAssemblyType(Type type) => ((Il2CppObjectBaseType != null) && (type != null) && type.IsSubclassOf(Il2CppObjectBaseType));
@@ -48,6 +53,13 @@ namespace MelonLoader
             if (!IsGeneratedAssemblyType(typeof(T)))
                 throw new NullReferenceException("The type must be a Generated Assembly Type.");
             return (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
+        }
+
+        public static int? GetIl2CppMethodCallerCount(MethodBase original) {
+            object[] callerCountAttributes = original.GetCustomAttributes(Il2CppCallerCountAttributeType, false);
+            if (callerCountAttributes.Length != 1)
+                return null;
+            return (int) Il2CppCallerCountField.GetValue(callerCountAttributes[0]);
         }
     }
 }
