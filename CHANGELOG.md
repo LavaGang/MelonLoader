@@ -193,6 +193,7 @@
 169. Fixed Issue with MelonPreferences Value Type Conversion causing Conflicts in File.
 170. Added long[] Support to MelonPreferences.
 171. Added byte[] Support to MelonPreferences.
+172. Added Warning to Debug Mode for when Attempting to Harmony Patch Methods that may possibly be In-lined.    (Credits to zeobviouslyfakeacc :3)
 
 ---
 
