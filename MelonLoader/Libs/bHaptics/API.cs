@@ -7,6 +7,7 @@ namespace MelonLoader
 {
     public static class bHaptics
     {
+        private static int MaxBufferSize = 20;
         private static bool _waserror = false;
         public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Disabling bHaptics API..."); _waserror = value; } }
         internal static void Start() { if (!_waserror) bHaptics_NativeLibrary.Initialise("MelonLoader", MelonUtils.GameName.Replace(" ", "_")); }
@@ -29,19 +30,32 @@ namespace MelonLoader
         public static void TurnOff() { if (!_waserror) bHaptics_NativeLibrary.TurnOff(); }
         public static void TurnOff(string key) { if (!_waserror) bHaptics_NativeLibrary.TurnOffKey(key); }
 
-        public static void Submit(string key, PositionType position, byte[] bytes, int durationMillis) { if (!_waserror) bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, bytes.Length, durationMillis); }
+        public static void Submit(string key, PositionType position, byte[] bytes, int durationMillis)
+        {
+            if (_waserror)
+                return;
+            int bytes_size = bytes.Length;
+            if (bytes_size != MaxBufferSize)
+            {
+                byte[] newbytes = new byte[MaxBufferSize];
+                for (int i = 0; i < bytes_size; i++)
+                    newbytes[i] = bytes[i];
+            }
+            bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, MaxBufferSize, durationMillis);
+        }
         public static void Submit(string key, PositionType position, List<DotPoint> points, int durationMillis)
         {
             if (_waserror)
                 return;
-            int size = points.Count;
-            byte[] bytes = new byte[size];
-            for (var i = 0; i < size; i++)
+            byte[] bytes = new byte[MaxBufferSize];
+            for (var i = 0; i < points.Count; i++)
             {
                 DotPoint point = points[i];
+                if ((point.Index < 0) || (point.Index > MaxBufferSize))
+                    continue;
                 bytes[point.Index] = (byte)point.Intensity;
             }
-            bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, bytes.Length, durationMillis);
+            bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, MaxBufferSize, durationMillis);
         }
         public static void Submit(string key, PositionType position, List<PathPoint> points, int durationMillis)
         {
@@ -104,7 +118,7 @@ namespace MelonLoader
         {
             public DotPoint(int index, int intensity)
             {
-                if (index < 0)
+                if ((index < 0) || (index > MaxBufferSize))
                     throw new Exception("Invalid argument index : " + index);
                 Intensity = MelonUtils.Clamp(intensity, 0, 100);
                 Index = index;
