@@ -68,7 +68,7 @@ namespace MelonLoader
         internal static dSubmitRegisteredWithOption SubmitRegisteredWithOption;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void dSubmitByteArray(string key, bHaptics.PositionType pos, byte[] charPtr, int length, int durationMillis);
+        internal delegate void dSubmitByteArray(string key, bHaptics.PositionType pos, byte[] bytes, int length, int durationMillis);
         internal static dSubmitByteArray SubmitByteArray;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
