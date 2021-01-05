@@ -29,6 +29,7 @@ namespace MelonLoader
         public static void TurnOff() { if (!_waserror) bHaptics_NativeLibrary.TurnOff(); }
         public static void TurnOff(string key) { if (!_waserror) bHaptics_NativeLibrary.TurnOffKey(key); }
 
+        public static void Submit(string key, PositionType position, byte[] bytes, int durationMillis) => bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, bytes.Length, durationMillis);
         public static void Submit(string key, PositionType position, List<DotPoint> points, int durationMillis)
         {
             if (_waserror)
@@ -39,9 +40,8 @@ namespace MelonLoader
                 DotPoint point = points[i];
                 bytes[point.Index] = (byte)point.Intensity;
             }
-            bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, 20, durationMillis);
+            Submit(key, position, bytes, durationMillis);
         }
-
         public static void Submit(string key, PositionType position, List<PathPoint> points, int durationMillis)
         {
             if (_waserror)
