@@ -34,8 +34,9 @@ namespace MelonLoader
         {
             if (_waserror)
                 return;
-            byte[] bytes = new byte[20];
-            for (var i = 0; i < points.Count; i++)
+            int size = points.Count;
+            byte[] bytes = new byte[size];
+            for (var i = 0; i < size; i++)
             {
                 DotPoint point = points[i];
                 bytes[point.Index] = (byte)point.Intensity;
