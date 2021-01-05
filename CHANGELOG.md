@@ -194,6 +194,8 @@
 170. Added long[] Support to MelonPreferences.
 171. Added byte[] Support to MelonPreferences.
 172. Added Warning to Debug Mode for when Attempting to Harmony Patch Methods that may possibly be In-lined.    (Credits to zeobviouslyfakeacc :3)
+173. Added a Built-In bHaptics API.
+174. Fixed Issue with MelonPreferences not setting properly while using Fallback Functionality.
 
 ---
 

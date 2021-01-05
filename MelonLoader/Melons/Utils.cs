@@ -10,7 +10,9 @@ namespace MelonLoader
     {
         internal static void Setup()
         {
-            CurrentGameAttribute = new MelonGameAttribute(Internal_GetGameDeveloper(), Internal_GetGameName());
+            GameDeveloper = Internal_GetGameDeveloper();
+            GameName = Internal_GetGameName();
+            CurrentGameAttribute = new MelonGameAttribute(GameDeveloper, GameName);
             GameDirectory = Internal_GetGameDirectory();
             UserDataDirectory = Path.Combine(GameDirectory, "UserData");
             if (!Directory.Exists(UserDataDirectory))
@@ -20,10 +22,11 @@ namespace MelonLoader
         public static string GameDirectory { get; internal set; }
         public static string UserDataDirectory { get; internal set; }
         public static MelonGameAttribute CurrentGameAttribute { get; internal set; }
-        public static string GameDeveloper { get => CurrentGameAttribute.Developer; }
-        public static string GameName { get => CurrentGameAttribute.Name; }
+        public static string GameDeveloper { get; internal set; }
+        public static string GameName { get; internal set; }
         public static bool IsVRChat { get => CurrentGameAttribute.IsCompatible("VRChat", "VRChat"); }
         public static bool IsBONEWORKS { get => CurrentGameAttribute.IsCompatible("Stress Level Zero", "BONEWORKS"); }
+        public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
 
         public static string RandomString(int length)
         {
@@ -75,6 +78,8 @@ namespace MelonLoader
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool IsGame32Bit();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsGameIl2Cpp();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsOldMono();
@@ -102,7 +107,7 @@ namespace MelonLoader
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameName();
+        internal extern static string Internal_GetGameName();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameDeveloper();

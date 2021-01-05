@@ -31,6 +31,7 @@ public:
 	{
 	public:
 		static void AddInternalCalls();
+		static bool IsGame32Bit();
 		static bool IsGameIl2Cpp();
 		static bool IsOldMono();
 		static Mono::String* GetApplicationPath();

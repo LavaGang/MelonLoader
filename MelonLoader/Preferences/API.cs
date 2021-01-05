@@ -11,7 +11,7 @@ namespace MelonLoader
     public static class MelonPreferences
     {
         private static bool _waserror = false;
-        internal static bool WasError { get => _waserror; set { if (value == true) MelonLogger.Warning("Disabling Saving and Loading of MelonPreferences to further avoid File Corruption..."); FileWatcher.EndInit(); _waserror = value; } }
+        public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Defaulting MelonPreferences to Fallback Functionality to further avoid File Corruption..."); FileWatcher.EndInit(); _waserror = value; } }
         private static string FilePath = null;
         private static string LegacyFilePath = null;
         internal static List<MelonPreferences_Category> categorytbl = new List<MelonPreferences_Category>();
@@ -73,14 +73,14 @@ namespace MelonLoader
         private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e) { if (!IsSaving) Load(); else IsSaving = false; }
         public static void Load()
         {
-            if (WasError || !Load_Internal())
+            if (_waserror || !Load_Internal())
                 return;
             MelonLogger.Msg("Config Loaded!");
             MelonHandler.OnPreferencesLoaded();
         }
         internal static bool Load_Internal()
         {
-            if (WasError || !File.Exists(FilePath))
+            if (_waserror || !File.Exists(FilePath))
                 return false;
             string filestr = File.ReadAllText(FilePath);
             if (string.IsNullOrEmpty(filestr))
@@ -144,14 +144,15 @@ namespace MelonLoader
         private static bool IsSaving = false;
         public static void Save()
         {
-            if (WasError || !Save_Internal())
+            if (!Save_Internal())
                 return;
-            MelonLogger.Msg("Config Saved!");
+            if (!_waserror)
+                MelonLogger.Msg("Config Saved!");
             MelonHandler.OnPreferencesSaved();
         }
         internal static bool Save_Internal()
         {
-            if (WasError || (categorytbl.Count <= 0))
+            if (categorytbl.Count <= 0)
                 return false;
             DocumentSyntax doc = new DocumentSyntax();
             foreach (MelonPreferences_Category category in categorytbl)
@@ -166,7 +167,8 @@ namespace MelonLoader
                 doc.Tables.Add(tbl);
             }
             IsSaving = true;
-            File.WriteAllText(FilePath, doc.ToString());
+            if (!_waserror)
+                File.WriteAllText(FilePath, doc.ToString());
             return true;
         }
 

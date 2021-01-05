@@ -83,6 +83,14 @@ void InternalCalls::MelonLogger::AddInternalCalls()
 #pragma endregion
 
 #pragma region MelonUtils
+bool InternalCalls::MelonUtils::IsGame32Bit()
+{
+#ifdef _WIN64
+	return false;
+#else
+	return true;
+#endif
+}
 bool InternalCalls::MelonUtils::IsGameIl2Cpp() { return Game::IsIl2Cpp; }
 bool InternalCalls::MelonUtils::IsOldMono() { return Mono::IsOldMono; }
 Mono::String* InternalCalls::MelonUtils::GetApplicationPath() { return Mono::Exports::mono_string_new(Mono::domain, Game::ApplicationPath); }
@@ -115,6 +123,7 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
+	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGame32Bit", IsGame32Bit);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", IsGameIl2Cpp);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsOldMono", IsOldMono);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetApplicationPath", GetApplicationPath);
@@ -129,6 +138,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", GetGameName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
+	
 }
 #pragma endregion
 

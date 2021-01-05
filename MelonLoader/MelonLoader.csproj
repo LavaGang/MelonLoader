@@ -40,7 +40,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libs\bHaptics\API.cs" />
     <Compile Include="Deprecated.cs" />
+    <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
     <Compile Include="Libs\Harmony\UnityMagicMethods.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Melons\Attributes\Color.cs" />
