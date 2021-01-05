@@ -24,7 +24,7 @@ namespace MelonLoader
         public static void SubmitRegistered(string key) { if (!_waserror) bHaptics_NativeLibrary.SubmitRegistered(key); }
         public static void SubmitRegistered(string key, int startTimeMillis) => bHaptics_NativeLibrary.SubmitRegisteredStartMillis(key, startTimeMillis);
         public static void SubmitRegistered(string key, string altKey, ScaleOption option) { if (!_waserror) bHaptics_NativeLibrary.SubmitRegisteredWithOption(key, altKey, option.Intensity, option.Duration, 1f, 1f); }
-        public static void SubmitRegistered(string key, string altKey, RotationOption rOption, ScaleOption sOption) { if (!_waserror) bHaptics_NativeLibrary.SubmitRegisteredWithOption(key, altKey, sOption.Intensity, sOption.Duration, rOption.OffsetX, rOption.OffsetY); }
+        public static void SubmitRegistered(string key, string altKey, ScaleOption sOption, RotationOption rOption) { if (!_waserror) bHaptics_NativeLibrary.SubmitRegisteredWithOption(key, altKey, sOption.Intensity, sOption.Duration, rOption.OffsetX, rOption.OffsetY); }
 
         public static void TurnOff() { if (!_waserror) bHaptics_NativeLibrary.TurnOff(); }
         public static void TurnOff(string key) { if (!_waserror) bHaptics_NativeLibrary.TurnOffKey(key); }
