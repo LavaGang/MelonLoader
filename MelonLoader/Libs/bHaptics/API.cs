@@ -83,9 +83,7 @@ namespace MelonLoader
                 OffsetX = offsetX;
                 OffsetY = offsetY;
             }
-            public float OffsetX = default;
-            public float OffsetY = default;
-
+            public float OffsetX, OffsetY;
             public override string ToString() => "RotationOption { OffsetX=" + OffsetX.ToString() +
                        ", OffsetY=" + OffsetY.ToString() + " }";
         }
@@ -97,8 +95,7 @@ namespace MelonLoader
                 Intensity = intensity;
                 Duration = duration;
             }
-            public float Intensity = default;
-            public float Duration = default;
+            public float Intensity, Duration;
             public override string ToString() => "ScaleOption { Intensity=" + Intensity.ToString() +
                        ", Duration=" + Duration.ToString() + " }";
         }
@@ -112,8 +109,7 @@ namespace MelonLoader
                 Intensity = MelonUtils.Clamp(intensity, 0, 100);
                 Index = index;
             }
-            public int Index = default;
-            public int Intensity = default;
+            public int Index, Intensity;
             public override string ToString() => "DotPoint { Index=" + Index.ToString() +
                        ", Intensity=" + Intensity.ToString() + " }";
         }
