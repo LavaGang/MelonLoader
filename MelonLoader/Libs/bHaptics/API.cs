@@ -41,7 +41,7 @@ namespace MelonLoader
                 DotPoint point = points[i];
                 bytes[point.Index] = (byte)point.Intensity;
             }
-            Submit(key, position, bytes, durationMillis);
+            bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, bytes.Length, durationMillis);
         }
         public static void Submit(string key, PositionType position, List<PathPoint> points, int durationMillis)
         {
