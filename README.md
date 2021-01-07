@@ -19,7 +19,7 @@
 ### AUTOMATED INSTALLATION:
 
 1. Make sure the Game you are installing to is Closed and Not Running.
-2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
+2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.exe).
 3. Run MelonLoader.Installer.exe.
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
@@ -31,7 +31,7 @@
 ### MANUAL INSTALLATION:
 
 1. Make sure the Game you are installing MelonLoader to is Closed and Not Running.
-2. Download [MelonLoader.zip](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.zip).
+2. Download [MelonLoader.x64.zip](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip).
 3. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
 4. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
 
