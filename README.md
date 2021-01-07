@@ -23,11 +23,11 @@
 3. Run MelonLoader.Installer.exe.
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
-6. Select which Version of MelonLoader to install using the Drop-Down List.  (Or leave it as-is for the Latest Version.)
+6. Select which Version of MelonLoader to install using the Drop-Down List. (Or leave it as-is for the Latest Version.)
 7. Click the INSTALL or RE-INSTALL or UPDATE button.
 
 ---
-	
+
 ### MANUAL INSTALLATION:
 
 1. Make sure the Game you are installing MelonLoader to is Closed and Not Running.
@@ -44,7 +44,7 @@
 3. Run MelonLoader.Installer.exe.
 4. Click the SELECT button.
 5. Select and Open the Game's EXE in your Game's Installation Folder.
-7. Click the UN-INSTALL button.
+6. Click the UN-INSTALL button.
 
 ---
 
@@ -61,24 +61,24 @@
 
 ### LAUNCH OPTIONS:
 
-| Argument | Description |
-| - | - |
-| --no-mods | Launch game without loading Mods |
-| --quitfix | Fixes the Hanging Process Issue with some Games |
-| --melonloader.hideconsole | Hides the Normal Console |
-| --melonloader.hidewarnings | Hides Warnings from Displaying |
-| --melonloader.debug | Debug Mode/Console |
-| --melonloader.magenta | Magenta Console Color |
-| --melonloader.rainbow | Rainbow Console Color |
-| --melonloader.randomrainbow | Random Rainbow Console Color |
-| --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ Disable: 0 ] |
-| --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ Disable: 0 ] |
-| --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ] |
-| --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
-| --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
-| --melonloader.agregenerate | Forces Assembly to be Regenerated on Il2Cpp Games |
-| --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |
-| --melonloader.consoleontop | Forces the Console over all other Applications |
+| Argument                      | Description                                                |
+| ----------------------------- | ---------------------------------------------------------- |
+| --no-mods                     | Launch game without loading Mods                           |
+| --quitfix                     | Fixes the Hanging Process Issue with some Games            |
+| --melonloader.hideconsole     | Hides the Normal Console                                   |
+| --melonloader.hidewarnings    | Hides Warnings from Displaying                             |
+| --melonloader.debug           | Debug Mode/Console                                         |
+| --melonloader.magenta         | Magenta Console Color                                      |
+| --melonloader.rainbow         | Rainbow Console Color                                      |
+| --melonloader.randomrainbow   | Random Rainbow Console Color                               |
+| --melonloader.maxlogs         | Max Log Files [ Default: 10 ] [ Disable: 0 ]               |
+| --melonloader.maxwarnings     | Max Warnings per Log File [ Default: 100 ] [ Disable: 0 ]  |
+| --melonloader.maxerrors       | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ]    |
+| --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ]                       |
+| --melonloader.loadmodemods    | Load Mode for Mods [ Default: 0 ]                          |
+| --melonloader.agregenerate    | Forces Assembly to be Regenerated on Il2Cpp Games          |
+| --melonloader.agfvunhollower  | Forces use a Specified Version of Il2CppAssemblyUnhollower |
+| --melonloader.consoleontop    | Forces the Console over all other Applications             |
 
 ---
 
@@ -86,11 +86,11 @@
 
 - Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
 
-| Value | Action |
-| - | - |
-| 0 | NORMAL - Load them only if they don't have the "-dev" Name Extension |
-| 1 | DEV - Load them only if they have the "-dev" Name Extension |
-| 2 | BOTH - Load All |
+| Value | Action                                                               |
+| ----- | -------------------------------------------------------------------- |
+| 0     | NORMAL - Load them only if they don't have the "-dev" Name Extension |
+| 1     | DEV - Load them only if they have the "-dev" Name Extension          |
+| 2     | BOTH - Load All                                                      |
 
 ---
 
@@ -99,6 +99,7 @@
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
 
 Third-party libraries used as source code or bundled in binary form:
+
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/Detours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
@@ -108,9 +109,10 @@ Third-party libraries used as source code or bundled in binary form:
 - [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.ModHandler/SharpZipLib/LICENSE.txt) for the full License.
 - [AtiRoNya](https://github.com/AtiLion/AtiRoNya) is licensed under the MIT License. See [LICENSE](https://github.com/AtiLion/AtiRoNya/blob/e20e4a8fc47b37834c8284f9e6e937f04a84c510/LICENSE) for the full License.
 - Unity Runtime libraries (found in [Unity Dependencies](BaseLibs/Unity%20Dependencies)) are part of Unity Software.  
-Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
+  Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
 
 External tools downloaded and used at runtime:
+
 - [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 - [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
 
