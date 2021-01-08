@@ -1,3 +1,4 @@
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,10 @@ namespace Harmony
 						|| (original.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
 						|| (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
 						continue;
+
+					if (MelonDebug.IsEnabled() && UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType)) {
+						WarnIfTargetMethodInlined(original);
+					}
 
 					var individualPrepareResult = RunMethod<HarmonyPrepare, bool>(true, original);
 					if (individualPrepareResult)
@@ -302,6 +307,14 @@ namespace Harmony
 			{
 				method.Invoke(null, Type.EmptyTypes);
 				return;
+			}
+		}
+
+		private void WarnIfTargetMethodInlined(MethodBase target) {
+			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(target) ?? -1;
+			if (callerCount == 0 && !UnityMagicMethods.IsUnityMagicMethod(target)) {
+				MelonLogger.Warning($"Harmony: Method {target.FullDescription()} does not appear to get called directly from anywhere, " +
+						"suggesting it may have been inlined and your patch may not be called.");
 			}
 		}
 	}
