@@ -105,9 +105,6 @@ namespace Harmony
 			if (replacement == null) throw new MissingMethodException("Cannot create dynamic replacement for " + original.FullDescription());
 
 			if (isIl2Cpp) {
-				if (MelonDebug.IsEnabled()) {
-					WarnIfTargetMethodInlined(original);
-				}
 				DynamicMethod il2CppShim = CreateIl2CppShim(replacement, original);
 				InstallIl2CppPatch(patchInfo, il2CppShim);
 				PatchTools.RememberObject(original, new PotatoTuple { First = replacement, Second = il2CppShim});
@@ -126,14 +123,6 @@ namespace Harmony
 		{
 			public MethodBase First;
 			public MethodBase Second;
-		}
-
-		private static void WarnIfTargetMethodInlined(MethodBase target) {
-			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(target) ?? -1;
-			if (callerCount == 0 && !UnityMagicMethods.IsUnityMagicMethod(target)) {
-				MelonLogger.Warning($"Harmony: Method {target.FullDescription()} does not appear to get called directly from anywhere, " +
-					"suggesting it may have been inlined and your patch may not be called.");
-			}
 		}
 
 		private static IEnumerable<CodeInstruction> UnhollowerTranspiler(MethodBase method, IEnumerable<CodeInstruction> instructionsIn) {

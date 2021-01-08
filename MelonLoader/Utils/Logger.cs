@@ -80,7 +80,11 @@ namespace MelonLoader
             string objstr = obj.ToString();
             ManualWarning(namesection, objstr);
         }
-        internal static void ManualWarning(string namesection, string txt) { string new_namesection = namesection.Replace(" ", "_"); Internal_Warning(new_namesection, txt); RunWarningCallbacks(new_namesection, txt); }
+        internal static void ManualWarning(string namesection, string txt) {
+            namesection = namesection?.Replace(" ", "_");
+            Internal_Warning(namesection, txt);
+            RunWarningCallbacks(namesection, txt);
+        }
 
         public static void Error(string txt)
         {

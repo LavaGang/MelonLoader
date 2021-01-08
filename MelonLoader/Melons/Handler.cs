@@ -339,11 +339,19 @@ namespace MelonLoader
             baseInstance.Compatibility = melonCompatibility;
             baseInstance.Assembly = asm;
             baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
-            baseInstance.Harmony.PatchAll(asm);
             if (is_plugin)
                 _Plugins.Add((MelonPlugin)baseInstance);
             else if (is_mod)
                 _Mods.Add((MelonMod)baseInstance);
+            try {
+                baseInstance.Harmony.PatchAll(asm);
+            } catch (Exception) {
+                if (is_plugin)
+                    _Plugins.Remove((MelonPlugin)baseInstance);
+                else if (is_mod)
+                    _Mods.Remove((MelonMod)baseInstance);
+                throw;
+            }
         }
 
         internal static void OnPreInitialization()

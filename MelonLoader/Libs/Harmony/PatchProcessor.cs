@@ -1,3 +1,4 @@
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,10 @@ namespace Harmony
 						|| (original.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
 						|| (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
 						continue;
+
+					if (MelonDebug.IsEnabled() && UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType)) {
+						WarnIfTargetMethodInlined(original);
+					}
 
 					var individualPrepareResult = RunMethod<HarmonyPrepare, bool>(true, original);
 					if (individualPrepareResult)
@@ -303,6 +308,34 @@ namespace Harmony
 				method.Invoke(null, Type.EmptyTypes);
 				return;
 			}
+		}
+
+		private void WarnIfTargetMethodInlined(MethodBase target) {
+			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(target) ?? -1;
+			if (callerCount == 0 && !UnityMagicMethods.IsUnityMagicMethod(target)) {
+				string melonName = FindMelon(melon => melon.Harmony == instance);
+				if (melonName == null) {
+					// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
+					Assembly melonAssembly = container?.Assembly ?? prefix?.declaringType.Assembly ?? postfix?.declaringType.Assembly ?? transpiler?.declaringType.Assembly;
+					if (melonAssembly != null) {
+						melonName = FindMelon(melon => melon.Assembly == melonAssembly);
+					}
+				}
+
+				MelonLogger.ManualWarning(melonName, $"Harmony: Method {target.FullDescription()} does not appear to get called directly from anywhere, " +
+						"suggesting it may have been inlined and your patch may not be called.");
+			}
+		}
+
+		private static string FindMelon(Predicate<MelonBase> criterion) {
+			string melonName = null;
+			foreach (MelonBase plugin in MelonHandler._Plugins) {
+				if (criterion(plugin)) melonName = plugin.Info.Name;
+			}
+			foreach (MelonBase mod in MelonHandler._Mods) {
+				if (criterion(mod)) melonName = mod.Info.Name;
+			}
+			return melonName;
 		}
 	}
 }
