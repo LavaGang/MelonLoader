@@ -193,9 +193,12 @@
 169. Fixed Issue with MelonPreferences Value Type Conversion causing Conflicts in File.
 170. Added long[] Support to MelonPreferences.
 171. Added byte[] Support to MelonPreferences.
-172. Added Warning to Debug Mode for when Attempting to Harmony Patch Methods that may possibly be In-lined.    (Credits to zeobviouslyfakeacc :3)
+172. Added Warning to Debug Mode for when Attempting to Harmony Patch Methods that may possibly be Inlined.    (Credits to zeobviouslyfakeacc :3)
 173. Added a Built-In bHaptics API.
 174. Fixed Issue with MelonPreferences not setting properly while using Fallback Functionality.
+175. Fixed Issue with Melon Name not Showing for Inline Harmony Patch Detection Warning.    (Credits to zeobviouslyfakeacc :3)
+176. Fixed Issue with Null Reference Exception from MelonLogger.ManualWarning.    (Credits to zeobviouslyfakeacc :3)
+177. Fixed Issue with Null Reference Exception from Inline Harmony Patch Detection.
 
 ---
 

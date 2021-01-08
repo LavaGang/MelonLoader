@@ -316,12 +316,10 @@ namespace Harmony
 				string melonName = FindMelon(melon => melon.Harmony == instance);
 				if (melonName == null) {
 					// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
-					Assembly melonAssembly = container?.Assembly ?? prefix?.declaringType.Assembly ?? postfix?.declaringType.Assembly ?? transpiler?.declaringType.Assembly;
-					if (melonAssembly != null) {
+					Assembly melonAssembly = container?.Assembly ?? prefix?.declaringType?.Assembly ?? postfix?.declaringType?.Assembly ?? transpiler?.declaringType?.Assembly;
+					if (melonAssembly != null)
 						melonName = FindMelon(melon => melon.Assembly == melonAssembly);
-					}
 				}
-
 				MelonLogger.ManualWarning(melonName, $"Harmony: Method {target.FullDescription()} does not appear to get called directly from anywhere, " +
 						"suggesting it may have been inlined and your patch may not be called.");
 			}
