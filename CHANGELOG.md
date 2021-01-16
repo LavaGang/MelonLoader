@@ -201,6 +201,7 @@
 177. Fixed Issue with Null Reference Exception from Inline Harmony Patch Detection.
 178. Fixed Issue with MelonUtils.IsVRChat causing Null Reference Exception.
 179. Fixed Issue with MelonUtils.IsBONEWORKS causing Null Reference Exception.
+180. Fixed Issue with Native Unity Logs showing when not in Debug Mode.
 
 ---
 

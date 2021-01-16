@@ -46,6 +46,8 @@ public:
 	static void EnableCloseButton();
 	static void DisableCloseButton();
 	static BOOL WINAPI EventHandler(DWORD evt);
+	static void SetHandles();
+	static void NullHandles();
 
 private:
 	static HWND Window;

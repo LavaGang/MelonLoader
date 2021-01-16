@@ -55,6 +55,8 @@ bool Core::Initialize()
 		Debug::Msg("Attaching Hook to mono_jit_init_version...");
 		Hook::Attach(&(LPVOID&)Mono::Exports::mono_jit_init_version, Mono::Hooks::mono_jit_init_version);
 	}
+	if (!Debug::Enabled)
+		Console::NullHandles();
 	return true;
 }
 

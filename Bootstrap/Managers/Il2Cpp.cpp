@@ -48,6 +48,8 @@ bool Il2Cpp::Exports::Initialize()
 
 Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 {
+	if (!Debug::Enabled)
+		Console::SetHandles();
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	Hook::Detach(&(LPVOID&)Exports::il2cpp_init, il2cpp_init);
 	if (AssemblyGenerator::Initialize())

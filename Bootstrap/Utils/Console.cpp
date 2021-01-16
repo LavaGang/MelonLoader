@@ -42,6 +42,7 @@ bool Console::Initialize()
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetHandles();
 	DWORD mode = 0;
 	if (!GetConsoleMode(OutputHandle, &mode))
 	{
@@ -71,6 +72,18 @@ void Console::Close()
 	Window = NULL;
 	Menu = NULL;
 	OutputHandle = NULL;
+}
+
+void Console::SetHandles()
+{
+	SetStdHandle(STD_OUTPUT_HANDLE, Console::OutputHandle);
+	SetStdHandle(STD_ERROR_HANDLE, Console::OutputHandle);
+}
+
+void Console::NullHandles()
+{
+	SetStdHandle(STD_OUTPUT_HANDLE, NULL);
+	SetStdHandle(STD_ERROR_HANDLE, NULL);
 }
 
 void Console::EnableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED); }
