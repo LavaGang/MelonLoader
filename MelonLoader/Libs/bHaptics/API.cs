@@ -10,7 +10,19 @@ namespace MelonLoader
         private static int MaxBufferSize = 20;
         private static bool _waserror = false;
         public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Disabling bHaptics API..."); _waserror = value; } }
-        internal static void Start() { if (!_waserror) bHaptics_NativeLibrary.Initialise("MelonLoader", MelonUtils.GameName.Replace(" ", "_")); }
+        internal static void Start()
+        {
+            if (_waserror)
+                return;
+            byte[] buf = new byte[500];
+            int size = 0;
+            if (!bHaptics_NativeLibrary.TryGetExePath(buf, ref size))
+            {
+                _waserror = true;
+                return;
+            }
+            bHaptics_NativeLibrary.Initialise("MelonLoader", MelonUtils.GameName.Replace(" ", "_"));
+        }
         internal static void Quit() { if (_waserror) return; bHaptics_NativeLibrary.TurnOff(); bHaptics_NativeLibrary.Destroy(); }
 
         public static bool IsPlaying() => (!_waserror && bHaptics_NativeLibrary.IsPlaying());

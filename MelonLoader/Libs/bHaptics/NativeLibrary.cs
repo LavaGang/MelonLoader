@@ -33,6 +33,7 @@ namespace MelonLoader
             GetDelegateFromProcAddress("TurnOffKey", out TurnOffKey);
             GetDelegateFromProcAddress("IsDevicePlaying", out IsDevicePlaying);
             GetDelegateFromProcAddress("TryGetResponseForPosition", out TryGetResponseForPosition);
+            GetDelegateFromProcAddress("TryGetExePath", out TryGetExePath);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -98,6 +99,10 @@ namespace MelonLoader
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate bool dTryGetResponseForPosition(bHaptics.PositionType pos, out bHaptics.FeedbackStatus status);
         internal static dTryGetResponseForPosition TryGetResponseForPosition;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate bool dTryGetExePath(byte[] buf, ref int size);
+        internal static dTryGetExePath TryGetExePath;
 
         private static void GetDelegateFromProcAddress<T>(string name, out T output) where T : Delegate
         {

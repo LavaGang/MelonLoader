@@ -56,6 +56,7 @@ namespace MelonLoader.Support
         {
             try
             {
+                // Il2CppSystem.Console.SetOut(new Il2CppSystem.IO.StreamWriter(Il2CppSystem.IO.Stream.Null));
                 Assembly il2CppSystemAssembly = Assembly.Load("Il2Cppmscorlib");
                 Type consoleType = il2CppSystemAssembly.GetType("Il2CppSystem.Console");
                 Type streamWriterType = il2CppSystemAssembly.GetType("Il2CppSystem.IO.StreamWriter");
