@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using Harmony;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
-#pragma warning disable 0612
-#pragma warning disable 0618
+#pragma warning disable 0612, 0618
 
 namespace MelonLoader
 {
@@ -17,9 +15,9 @@ namespace MelonLoader
         internal static bool HasMelons = false;
         internal static Assembly Assembly_CSharp = null;
         private static List<MelonPlugin> _TempPlugins = null;
-        internal static List<MelonPlugin> _Plugins = new List<MelonPlugin>();
+        internal static List<MelonPlugin> _Plugins = new();
         public static List<MelonPlugin> Plugins { get => _Plugins; }
-        internal static List<MelonMod> _Mods = new List<MelonMod>();
+        internal static List<MelonMod> _Mods = new();
         public static List<MelonMod> Mods { get => _Mods; }
 
         internal static void LoadAll(bool plugins = false)
@@ -69,37 +67,31 @@ namespace MelonLoader
                         continue;
                     try
                     {
-                        using (var fileStream = File.OpenRead(file))
+                        using var fileStream = File.OpenRead(file);
+                        using var zipInputStream = new ZipInputStream(fileStream);
+                        ZipEntry entry;
+                        while ((entry = zipInputStream.GetNextEntry()) != null)
                         {
-                            using (var zipInputStream = new ZipInputStream(fileStream))
+                            string filename = Path.GetFileName(entry.Name);
+                            if (string.IsNullOrEmpty(filename) || !filename.EndsWith(".dll"))
+                                continue;
+
+                            bool file_extension_check = Path.GetFileNameWithoutExtension(file).EndsWith("-dev");
+                            if ((loadmode != LoadMode.BOTH) && ((loadmode == LoadMode.DEV) ? !file_extension_check : file_extension_check))
+                                continue;
+
+                            using var unzippedFileStream = new MemoryStream();
+                            int size = 0;
+                            byte[] buffer = new byte[4096];
+                            while (true)
                             {
-                                ZipEntry entry;
-                                while ((entry = zipInputStream.GetNextEntry()) != null)
-                                {
-                                    string filename = Path.GetFileName(entry.Name);
-                                    if (string.IsNullOrEmpty(filename) || !filename.EndsWith(".dll"))
-                                        continue;
-
-                                    bool file_extension_check = Path.GetFileNameWithoutExtension(file).EndsWith("-dev");
-                                    if ((loadmode != LoadMode.BOTH) && ((loadmode == LoadMode.DEV) ? !file_extension_check : file_extension_check))
-                                        continue;
-
-                                    using (var unzippedFileStream = new MemoryStream())
-                                    {
-                                        int size = 0;
-                                        byte[] buffer = new byte[4096];
-                                        while (true)
-                                        {
-                                            size = zipInputStream.Read(buffer, 0, buffer.Length);
-                                            if (size > 0)
-                                                unzippedFileStream.Write(buffer, 0, size);
-                                            else
-                                                break;
-                                        }
-                                        LoadFromAssembly(Assembly.Load(unzippedFileStream.ToArray()), plugins, (file + "/" + filename));
-                                    }
-                                }
+                                size = zipInputStream.Read(buffer, 0, buffer.Length);
+                                if (size > 0)
+                                    unzippedFileStream.Write(buffer, 0, size);
+                                else
+                                    break;
                             }
+                            LoadFromAssembly(Assembly.Load(unzippedFileStream.ToArray()), plugins, (file + "/" + filename));
                         }
                     }
                     catch (Exception e)
@@ -142,8 +134,8 @@ namespace MelonLoader
                     }
                     else
                         hasAttribute = false;
-                    MelonBase baseInstance = Activator.CreateInstance(InfoAttribute.SystemType) as MelonBase;
-                    if (baseInstance != null)
+
+                    if (Activator.CreateInstance(InfoAttribute.SystemType) is MelonBase baseInstance)
                     {
                         response_Info.SetupMelon(baseInstance);
                         response_Game.SetupMelon(baseInstance);
@@ -223,7 +215,7 @@ namespace MelonLoader
         {
             if (_Plugins.Count > 0)
             {
-                HashSet<MelonPlugin> failedPlugins = new HashSet<MelonPlugin>();
+                HashSet<MelonPlugin> failedPlugins = new();
                 _TempPlugins = _Plugins.Where(plugin => (plugin.Compatibility < MelonBase.MelonCompatibility.INCOMPATIBLE)).ToList();
                 DependencyGraph<MelonPlugin>.TopologicalSort(_TempPlugins, plugin => plugin.Info.Name);
                 for (int i = 0; i < _TempPlugins.Count; i++)
@@ -238,7 +230,7 @@ namespace MelonLoader
         {
             if (_Plugins.Count > 0)
             {
-                HashSet<MelonPlugin> failedPlugins = new HashSet<MelonPlugin>();
+                HashSet<MelonPlugin> failedPlugins = new();
                 for (int i = 0; i < _Plugins.Count; i++)
                     if (_Plugins[i] != null)
                         try { _Plugins[i].harmonyInstance.PatchAll(_Plugins[i].Assembly); _Plugins[i].OnApplicationStart(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Plugins[i].Info.Name); HarmonyInstance.UnpatchAllMelonInstances(_Plugins[i]); failedPlugins.Add(_Plugins[i]); }
@@ -247,7 +239,7 @@ namespace MelonLoader
             }
             if (_Mods.Count > 0)
             {
-                HashSet<MelonMod> failedMods = new HashSet<MelonMod>();
+                HashSet<MelonMod> failedMods = new();
                 for (int i = 0; i < _Mods.Count; i++)
                     if (_Mods[i] != null)
                         try { _Mods[i].harmonyInstance.PatchAll(_Mods[i].Assembly); _Mods[i].OnApplicationStart(); } catch (Exception ex) { MelonLogger.LogMelonError(ex.ToString(), _Mods[i].Info.Name); HarmonyInstance.UnpatchAllMelonInstances(_Mods[i]); failedMods.Add(_Mods[i]); }

@@ -5,6 +5,8 @@ namespace MelonLoader
 {
     public class MelonCoroutines
     {
+        private static readonly NotSupportedException nse = new("Support module must be initialized before starting coroutines");
+
         /// <summary>
         /// Start a new coroutine.<br />
         /// Coroutines are called at the end of the game Update loops.
@@ -14,7 +16,7 @@ namespace MelonLoader
         public static object Start(IEnumerator routine)
         {
             if (SupportModule.supportModule == null)
-                throw new NotSupportedException("Support module must be initialized before starting coroutines");
+                throw nse;
             return SupportModule.supportModule.StartCoroutine(routine);
         }
 
@@ -25,10 +27,10 @@ namespace MelonLoader
         public static void Stop(object coroutineToken)
         {
             if (SupportModule.supportModule == null)
-                throw new NotSupportedException("Support module must be initialized before starting coroutines");
+                throw nse;
             SupportModule.supportModule.StopCoroutine(coroutineToken);
         }
-        
+
         [Obsolete("Use version with IEnumerator parameter", true)]
         public static void Start<T>(T routine) => Start((IEnumerator) routine);
     }
