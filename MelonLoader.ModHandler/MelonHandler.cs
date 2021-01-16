@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Harmony;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
-#pragma warning disable 0612, 0618
+#pragma warning disable 0612, 0618 // Main & MelonLegacyAttributeSupport are obsolete
 
 namespace MelonLoader
 {

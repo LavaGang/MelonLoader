@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-#pragma warning disable IDE1006
+#pragma warning disable IDE1006 // harmonyInstance Naming Violation
 
 namespace MelonLoader
 {
