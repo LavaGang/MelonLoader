@@ -199,6 +199,8 @@
 175. Fixed Issue with Melon Name not Showing for Inline Harmony Patch Detection Warning.    (Credits to zeobviouslyfakeacc :3)
 176. Fixed Issue with Null Reference Exception from MelonLogger.ManualWarning.    (Credits to zeobviouslyfakeacc :3)
 177. Fixed Issue with Null Reference Exception from Inline Harmony Patch Detection.
+178. Fixed Issue with MelonUtils.IsVRChat causing Null Reference Exception.
+179. Fixed Issue with MelonUtils.IsBONEWORKS causing Null Reference Exception.
 
 ---
 
