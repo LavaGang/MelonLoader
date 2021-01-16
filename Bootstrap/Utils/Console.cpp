@@ -32,7 +32,7 @@ bool Console::Initialize()
 	Window = GetConsoleWindow();
 	Menu = GetSystemMenu(Window, FALSE);
 	SetConsoleCtrlHandler(EventHandler, TRUE);
-	std::string window_name = std::string("MelonLoader ") + Core::Version + " Open-Beta";
+	std::string window_name = std::string("MelonLoader ") + Core::Version + " ALPHA Pre-Release";
 	if (Debug::Enabled)
 		SetTitle((window_name + " - Debug Mode").c_str());
 	else
