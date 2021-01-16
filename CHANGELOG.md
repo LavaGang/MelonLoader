@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.3.0 ALPHA Pre-Release](#v030-open-alpha)  
+[v0.3.0 ALPHA Pre-Release](#v030-alpha-pre-release)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
 [v0.2.7.2 Open-Beta](#v0272-open-beta)  
