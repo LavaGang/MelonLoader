@@ -20,7 +20,7 @@
 
 ---
 
-### v0.3.0 Open-Alpha:
+### v0.3.0 ALPHA Pre-Release:
 
 1. Rewrote Proxy from scratch.
 2. Rewrote Bootstrap from scratch.
