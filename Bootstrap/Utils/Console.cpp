@@ -41,6 +41,7 @@ bool Console::Initialize()
 	if (AlwaysOnTop)
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
+	freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetHandles();
 	DWORD mode = 0;
