@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#pragma warning disable IDE1006 // harmonyInstance Naming Violation
 
 namespace MelonLoader
 {
@@ -52,6 +53,7 @@ namespace MelonLoader
         /// Gets the Game Attributes of the Mod or Plugin.
         /// </summary>
         public MelonGameAttribute[] Games { get; internal set; }
+
 
         /// <summary>
         /// Gets the Auto-Created Harmony Instance of the Mod or Plugin.
@@ -124,9 +126,9 @@ namespace MelonLoader
         }
 
         [Obsolete()]
-        internal MelonModInfoAttribute ConvertLegacy_Mod() => new MelonModInfoAttribute(SystemType, Name, Version, Author, DownloadLink);
+        internal MelonModInfoAttribute ConvertLegacy_Mod() => new(SystemType, Name, Version, Author, DownloadLink);
         [Obsolete()]
-        internal MelonPluginInfoAttribute ConvertLegacy_Plugin() => new MelonPluginInfoAttribute(SystemType, Name, Version, Author, DownloadLink);
+        internal MelonPluginInfoAttribute ConvertLegacy_Plugin() => new(SystemType, Name, Version, Author, DownloadLink);
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
@@ -157,9 +159,9 @@ namespace MelonLoader
         }
 
         [Obsolete()]
-        internal MelonModGameAttribute ConvertLegacy_Mod() => new MelonModGameAttribute(Developer, GameName);
+        internal MelonModGameAttribute ConvertLegacy_Mod() => new(Developer, GameName);
         [Obsolete()]
-        internal MelonPluginGameAttribute ConvertLegacy_Plugin() => new MelonPluginGameAttribute(Developer, GameName);
+        internal MelonPluginGameAttribute ConvertLegacy_Plugin() => new(Developer, GameName);
 
         public bool IsGame(string developer, string gameName) => (Universal || ((developer != null) && (gameName != null) && Developer.Equals(developer) && GameName.Equals(gameName)));
         public bool IsCompatible(MelonGameAttribute att) => ((att == null) || IsCompatibleBecauseUniversal(att) || (att.Developer.Equals(Developer) && att.GameName.Equals(GameName)));
@@ -257,7 +259,7 @@ namespace MelonLoader
                     legacy_plugin = asm.GetCustomAttributes(typeof(MelonPluginGameAttribute), true) as MelonPluginGameAttribute[];
                     if (legacy_plugin.Length > 0)
                     {
-                        List<MelonGameAttribute> deflist = new List<MelonGameAttribute>();
+                        List<MelonGameAttribute> deflist = new();
                         foreach (MelonPluginGameAttribute att in legacy_plugin)
                             deflist.Add(att.Convert());
                         def = deflist.ToArray();
@@ -268,7 +270,7 @@ namespace MelonLoader
                     legacy_mod = asm.GetCustomAttributes(typeof(MelonModGameAttribute), true) as MelonModGameAttribute[];
                     if (legacy_mod.Length > 0)
                     {
-                        List<MelonGameAttribute> deflist = new List<MelonGameAttribute>();
+                        List<MelonGameAttribute> deflist = new();
                         foreach (MelonModGameAttribute att in legacy_mod)
                             deflist.Add(att.Convert());
                         def = deflist.ToArray();
@@ -279,14 +281,14 @@ namespace MelonLoader
             {
                 if (isPlugin)
                 {
-                    List<MelonPluginGameAttribute> legacy_pluginlist = new List<MelonPluginGameAttribute>();
+                    List<MelonPluginGameAttribute> legacy_pluginlist = new();
                     foreach (MelonGameAttribute att in def)
                         legacy_pluginlist.Add(att.ConvertLegacy_Plugin());
                     legacy_plugin = legacy_pluginlist.ToArray();
                 }
                 else
                 {
-                    List<MelonModGameAttribute> legacy_modlist = new List<MelonModGameAttribute>();
+                    List<MelonModGameAttribute> legacy_modlist = new();
                     foreach (MelonGameAttribute att in def)
                         legacy_modlist.Add(att.ConvertLegacy_Mod());
                     legacy_mod = legacy_modlist.ToArray();

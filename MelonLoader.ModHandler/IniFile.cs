@@ -17,7 +17,7 @@ namespace MelonLoader
         private string IniReadValue(string Section, string Key)
         {
             const int MAX_CHARS = 1023;
-            StringBuilder result = new StringBuilder(MAX_CHARS);
+            StringBuilder result = new(MAX_CHARS);
             GetPrivateProfileString(Section, Key, " _", result, MAX_CHARS, Path);
             if (result.ToString().Equals(" _")) return null;
             return result.ToString();
@@ -38,8 +38,7 @@ namespace MelonLoader
 
         public int GetInt(string section, string name, int defaultValue = 0, bool autoSave = false)
         {
-            int value;
-            if (int.TryParse(IniReadValue(section, name), out value))
+            if (int.TryParse(IniReadValue(section, name), out int value))
                 return value;
             else if (autoSave)
                 SetInt(section, name, defaultValue);
@@ -49,8 +48,7 @@ namespace MelonLoader
 
         public float GetFloat(string section, string name, float defaultValue = 0f, bool autoSave = false)
         {
-            float value;
-            if (float.TryParse(IniReadValue(section, name), out value))
+            if (float.TryParse(IniReadValue(section, name), out float value))
                 return value;
             else if (autoSave)
                 SetFloat(section, name, defaultValue);

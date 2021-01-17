@@ -28,12 +28,14 @@ namespace MelonLoader
                 MelonLogger.LogError("MelonLoader.AssemblyGenerator.exe does not Exist!");
                 return false;
             }
-            var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath);
-            generatorProcessInfo.Arguments = $"\"{MelonLoaderBase.UnityVersion}\" {"\"" + Regex.Replace(Imports.GetGameDirectory(), @"(\\+)$", @"$1$1") + "\""} {"\"" + Regex.Replace(Imports.GetGameDataDirectory(), @"(\\+)$", @"$1$1") + "\""} {(Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Force_Version_Unhollower()) ? "" : Force_Version_Unhollower())}";
-            generatorProcessInfo.UseShellExecute = false;
-            generatorProcessInfo.RedirectStandardOutput = true;
-            generatorProcessInfo.CreateNoWindow = true;
-            Process process = null;
+            var generatorProcessInfo = new ProcessStartInfo(GeneratorProcessPath)
+            {
+                Arguments = $"\"{MelonLoaderBase.UnityVersion}\" {"\"" + Regex.Replace(Imports.GetGameDirectory(), @"(\\+)$", @"$1$1") + "\""} {"\"" + Regex.Replace(Imports.GetGameDataDirectory(), @"(\\+)$", @"$1$1") + "\""} {(Force_Regenerate() ? "true" : "false")} {(string.IsNullOrEmpty(Force_Version_Unhollower()) ? "" : Force_Version_Unhollower())}",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+            Process process; // No need to initialize as we return false on error caught
             try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { MelonLogger.LogError(e.ToString()); MelonLogger.LogError("Unable to Start Assembly Generator!"); return false; }
             var stdout = process.StandardOutput;
             while (!stdout.EndOfStream)

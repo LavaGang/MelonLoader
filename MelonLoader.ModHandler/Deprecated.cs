@@ -95,17 +95,19 @@ namespace MelonLoader
     {
         public static Dictionary<string, Dictionary<string, PrefDesc>> GetPrefs()
         {
-            Dictionary<string, Dictionary<string, PrefDesc>> output = new Dictionary<string, Dictionary<string, PrefDesc>>();
+            Dictionary<string, Dictionary<string, PrefDesc>> output = new();
             Dictionary<string, Dictionary<string, MelonPreference>> prefs = GetPreferences();
             for (int i = 0; i < prefs.Values.Count; i++)
             {
                 Dictionary<string, MelonPreference> prefsdict = prefs.Values.ElementAt(i);
-                Dictionary<string, PrefDesc> newprefsdict = new Dictionary<string, PrefDesc>();
+                Dictionary<string, PrefDesc> newprefsdict = new();
                 for (int j = 0; j < prefsdict.Values.Count; j++)
                 {
                     MelonPreference pref = prefsdict.Values.ElementAt(j);
-                    PrefDesc newpref = new PrefDesc(pref.Value, (PrefType)pref.Type, pref.Hidden, pref.DisplayText);
-                    newpref.ValueEdited = pref.ValueEdited;
+                    PrefDesc newpref = new(pref.Value, (PrefType)pref.Type, pref.Hidden, pref.DisplayText)
+                    {
+                        ValueEdited = pref.ValueEdited
+                    };
                     newprefsdict.Add(prefsdict.Keys.ElementAt(j), newpref);
                 }
                 output.Add(prefs.Keys.ElementAt(i), newprefsdict);

@@ -6,10 +6,10 @@ namespace MelonLoader
 {
     public class MelonPrefs
     {
-        private static string ConfigFileName = "modprefs.ini";
+        private static readonly string ConfigFileName = "modprefs.ini";
         private static IniFile ConfigFile = null;
-        private static Dictionary<string, Dictionary<string, MelonPreference>> prefs = new Dictionary<string, Dictionary<string, MelonPreference>>();
-        private static Dictionary<string, string> categoryDisplayNames = new Dictionary<string, string>();
+        private static readonly Dictionary<string, Dictionary<string, MelonPreference>> prefs = new();
+        private static readonly Dictionary<string, string> categoryDisplayNames = new();
 
         internal static void Setup() { if (ConfigFile == null) ConfigFile = new IniFile(Path.Combine(MelonLoaderBase.UserDataPath, ConfigFileName)); }
 
@@ -22,7 +22,7 @@ namespace MelonLoader
         {
             if (prefs.TryGetValue(section, out Dictionary<string, MelonPreference> prefsInSection))
             {
-                if (prefsInSection.TryGetValue(name, out MelonPreference pref))
+                if (prefsInSection.TryGetValue(name, out _))
                     MelonLogger.LogError("Trying to registered Pref " + section + ":" + name + " more than one time");
                 else
                 {
@@ -35,7 +35,7 @@ namespace MelonLoader
             }
             else
             {
-                Dictionary<string, MelonPreference> dic = new Dictionary<string, MelonPreference>();
+                Dictionary<string, MelonPreference> dic = new();
                 string toStoreValue = defaultValue;
                 if (ConfigFile.HasKey(section, name))
                     toStoreValue = ConfigFile.GetString(section, name, defaultValue);
@@ -125,7 +125,7 @@ namespace MelonLoader
             public string ValueEdited { get; set; }
             public MelonPreferenceType Type { get; internal set; }
             public bool Hidden { get; internal set; }
-            public String DisplayText { get; internal set; }
+            public string DisplayText { get; internal set; }
 
             public MelonPreference(string value, MelonPreferenceType type, bool hidden, string displayText)
             {

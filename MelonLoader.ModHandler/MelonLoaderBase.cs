@@ -16,6 +16,7 @@ namespace MelonLoader
         internal static bool _IsBoneworks = false;
         public static bool IsBoneworks { get => _IsBoneworks; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MelonLoader_Base::Initialize requires this to function.")]
         private static void Initialize()
         {
             Setup();
@@ -30,6 +31,7 @@ namespace MelonLoader
             MelonHandler.OnPreInitialization();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "MelonLoader_Base::Initialize requires this to function.")]
         private static void Startup()
         {
             if (!AssemblyGenerator.HasGeneratedAssembly)

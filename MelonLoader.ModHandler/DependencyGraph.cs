@@ -8,7 +8,7 @@ namespace MelonLoader {
 	internal class DependencyGraph<T> where T : MelonBase {
 
 		public static void TopologicalSort(IList<T> modsOrPlugins, Func<T, string> modNameGetter) {
-			DependencyGraph<T> dependencyGraph = new DependencyGraph<T>(modsOrPlugins, modNameGetter);
+			DependencyGraph<T> dependencyGraph = new(modsOrPlugins, modNameGetter);
 			modsOrPlugins.Clear();
 			dependencyGraph.TopologicalSortInto(modsOrPlugins);
 		}
@@ -18,22 +18,22 @@ namespace MelonLoader {
 		private DependencyGraph(IList<T> mods, Func<T, string> modNameGetter) {
 			int size = mods.Count;
 			vertices = new Vertex[size];
-			IDictionary<string, Vertex> nameLookup = new Dictionary<string, Vertex>(size);
+			Dictionary<string, Vertex> nameLookup = new(size);
 
 			// Create a vertex in the dependency graph for each mod to load
 			for (int i = 0; i < size; ++i) {
 				Assembly modAssembly = mods[i].Assembly;
 				string modName = modNameGetter(mods[i]);
 
-				Vertex modVertex = new Vertex(i, mods[i], modName);
+				Vertex modVertex = new(i, mods[i], modName);
 				vertices[i] = modVertex;
 				nameLookup[modAssembly.GetName().Name] = modVertex;
 			}
 
 			// Add an edge for each dependency between mods
-			IDictionary<string, IList<AssemblyName>> modsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
-			List<AssemblyName> missingDependencies = new List<AssemblyName>();
-			HashSet<string> optionalDependencies = new HashSet<string>();
+			SortedDictionary<string, IList<AssemblyName>> modsWithMissingDeps = new();
+			List<AssemblyName> missingDependencies = new();
+			HashSet<string> optionalDependencies = new();
 
 			foreach (Vertex modVertex in vertices) {
 				Assembly modAssembly = modVertex.mod.Assembly;
@@ -80,7 +80,7 @@ namespace MelonLoader {
 		}
 
 		private static string BuildMissingDependencyMessage(IDictionary<string, IList<AssemblyName>> modsWithMissingDeps) {
-			StringBuilder messageBuilder = new StringBuilder("Some mods are missing dependencies, which you may have to install.\n" +
+			StringBuilder messageBuilder = new("Some mods are missing dependencies, which you may have to install.\n" +
 				"If these are optional dependencies, mark them as optional using the MelonOptionalDependencies attribute.\n" +
 				"This warning will turn into an error and mods with missing dependencies will not be loaded in the next version of MelonLoader.\n");
 			foreach (string modName in modsWithMissingDeps.Keys) {
@@ -94,8 +94,8 @@ namespace MelonLoader {
 		}
 
 		private void TopologicalSortInto(IList<T> loadedMods) {
-			int[] unloadedDependencies = new int[vertices.Length];
-			SortedList<string, Vertex> loadableMods = new SortedList<string, Vertex>();
+            int[] unloadedDependencies = new int[vertices.Length];
+			SortedList<string, Vertex> loadableMods = new();
 			int skippedMods = 0;
 
 			// Find all sinks in the dependency graph, i.e. mods without any dependencies on other mods
@@ -132,7 +132,7 @@ namespace MelonLoader {
 
 			// Check if all mods were either loaded or skipped. If this is not the case, there is a cycle in the dependency graph
 			if (loadedMods.Count + skippedMods < vertices.Length) {
-				StringBuilder errorMessage = new StringBuilder("Some mods could not be loaded due to a cyclic dependency:\n");
+				StringBuilder errorMessage = new("Some mods could not be loaded due to a cyclic dependency:\n");
 				for (int i = 0; i < vertices.Length; ++i) {
 					if (unloadedDependencies[i] > 0)
 						errorMessage.Append($"- '{vertices[i].name}'\n");
@@ -148,8 +148,8 @@ namespace MelonLoader {
 			internal readonly T mod;
 			internal readonly string name;
 
-			internal readonly IList<Vertex> dependencies;
-			internal readonly IList<Vertex> dependents;
+			internal readonly List<Vertex> dependencies;
+			internal readonly List<Vertex> dependents;
 			internal bool skipLoading;
 
 			internal Vertex(int index, T mod, string name) {
@@ -157,8 +157,8 @@ namespace MelonLoader {
 				this.mod = mod;
 				this.name = name;
 
-				dependencies = new List<Vertex>();
-				dependents = new List<Vertex>();
+				dependencies = new();
+				dependents = new();
 				skipLoading = false;
 			}
 		}
