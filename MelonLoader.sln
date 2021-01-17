@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM_Mono.Pre-2017", "SM_Mono
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM_Mono.Pre-5", "SM_Mono.Pre-5\SM_Mono.Pre-5.csproj", "{FB8611F1-0C81-4E4A-85D8-DC05CF29B02D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManualAndroidPatcher", "ManualAndroidPatcher\ManualAndroidPatcher.csproj", "{7F2B2F53-35E8-4E79-B3D2-A8979E039597}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -83,6 +85,14 @@ Global
 		{FB8611F1-0C81-4E4A-85D8-DC05CF29B02D}.Release|x64.Build.0 = Release|Any CPU
 		{FB8611F1-0C81-4E4A-85D8-DC05CF29B02D}.Release|x86.ActiveCfg = Release|Any CPU
 		{FB8611F1-0C81-4E4A-85D8-DC05CF29B02D}.Release|x86.Build.0 = Release|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Debug|x64.Build.0 = Debug|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Debug|x86.Build.0 = Debug|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Release|x64.ActiveCfg = Release|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Release|x64.Build.0 = Release|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Release|x86.ActiveCfg = Release|Any CPU
+		{7F2B2F53-35E8-4E79-B3D2-A8979E039597}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
