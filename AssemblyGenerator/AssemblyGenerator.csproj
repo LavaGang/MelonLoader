@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MelonLoader.AssemblyGenerator</RootNamespace>
+    <AssemblyName>AssemblyGenerator</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <ProjectGuid>{A6452A3F-4BD6-497A-97DA-24F7DF97B234}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Packages\Base.cs" />
+    <Compile Include="Packages\Il2CppAssemblyUnhollower.cs" />
+    <Compile Include="Packages\Il2CppDumper.cs" />
+    <Compile Include="Packages\UnityDependencies.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\MelonLoader\Properties\BuildInfo.cs">
+      <Link>Properties\BuildInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Collections\Iterator.cs">
+      <Link>Libs\Tomlyn\Collections\Iterator.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Helpers\DateTimeRFC3339.cs">
+      <Link>Libs\Tomlyn\Helpers\DateTimeRFC3339.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Helpers\ThrowHelper.cs">
+      <Link>Libs\Tomlyn\Helpers\ThrowHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\ObjectKind.cs">
+      <Link>Libs\Tomlyn\Model\ObjectKind.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\SyntaxTransform.cs">
+      <Link>Libs\Tomlyn\Model\SyntaxTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlArray.cs">
+      <Link>Libs\Tomlyn\Model\TomlArray.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlBoolean.cs">
+      <Link>Libs\Tomlyn\Model\TomlBoolean.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlDateTime.cs">
+      <Link>Libs\Tomlyn\Model\TomlDateTime.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlFloat.cs">
+      <Link>Libs\Tomlyn\Model\TomlFloat.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlInteger.cs">
+      <Link>Libs\Tomlyn\Model\TomlInteger.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlObject.cs">
+      <Link>Libs\Tomlyn\Model\TomlObject.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlString.cs">
+      <Link>Libs\Tomlyn\Model\TomlString.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlTable.cs">
+      <Link>Libs\Tomlyn\Model\TomlTable.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlTableArray.cs">
+      <Link>Libs\Tomlyn\Model\TomlTableArray.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Model\TomlValue.cs">
+      <Link>Libs\Tomlyn\Model\TomlValue.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Parsing\ITokenProvider.cs">
+      <Link>Libs\Tomlyn\Parsing\ITokenProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Parsing\Lexer.cs">
+      <Link>Libs\Tomlyn\Parsing\Lexer.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Parsing\LexerState.cs">
+      <Link>Libs\Tomlyn\Parsing\LexerState.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Parsing\Parser.cs">
+      <Link>Libs\Tomlyn\Parsing\Parser.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Parsing\SyntaxTokenValue.cs">
+      <Link>Libs\Tomlyn\Parsing\SyntaxTokenValue.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\ArrayItemSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\ArrayItemSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\ArraySyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\ArraySyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\BareKeyOrStringValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\BareKeyOrStringValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\BareKeySyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\BareKeySyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\BooleanValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\BooleanValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\DateTimeValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\DateTimeValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\DiagnosticMessage.cs">
+      <Link>Libs\Tomlyn\Syntax\DiagnosticMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\DiagnosticMessageKind.cs">
+      <Link>Libs\Tomlyn\Syntax\DiagnosticMessageKind.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\DiagnosticsBag.cs">
+      <Link>Libs\Tomlyn\Syntax\DiagnosticsBag.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\DocumentSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\DocumentSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\DottedKeyItemSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\DottedKeyItemSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\FloatValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\FloatValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\InlineTableItemSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\InlineTableItemSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\InlineTableSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\InlineTableSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\IntegerValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\IntegerValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\InvalidSyntaxToken.cs">
+      <Link>Libs\Tomlyn\Syntax\InvalidSyntaxToken.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\KeySyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\KeySyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\KeyValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\KeyValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SourceSpan.cs">
+      <Link>Libs\Tomlyn\Syntax\SourceSpan.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\StringValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\StringValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxFactory.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxKind.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxKind.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxList.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxList.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxNode.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxNode.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxNodeBase.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxNodeBase.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxNodeExtensions.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxNodeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxToken.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxToken.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxTrivia.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxTrivia.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxValidator.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxValidator.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\SyntaxVisitor.cs">
+      <Link>Libs\Tomlyn\Syntax\SyntaxVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\TableArraySyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\TableArraySyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\TableSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\TableSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\TableSyntaxBase.cs">
+      <Link>Libs\Tomlyn\Syntax\TableSyntaxBase.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\TextPosition.cs">
+      <Link>Libs\Tomlyn\Syntax\TextPosition.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\TokenKind.cs">
+      <Link>Libs\Tomlyn\Syntax\TokenKind.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\TokenKindExtensions.cs">
+      <Link>Libs\Tomlyn\Syntax\TokenKindExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Syntax\ValueSyntax.cs">
+      <Link>Libs\Tomlyn\Syntax\ValueSyntax.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\char32.cs">
+      <Link>Libs\Tomlyn\Text\char32.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\CharacterIterator.cs">
+      <Link>Libs\Tomlyn\Text\CharacterIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\CharHelper.cs">
+      <Link>Libs\Tomlyn\Text\CharHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\CharReaderException.cs">
+      <Link>Libs\Tomlyn\Text\CharReaderException.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\ISourceView.cs">
+      <Link>Libs\Tomlyn\Text\ISourceView.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\IStringView.cs">
+      <Link>Libs\Tomlyn\Text\IStringView.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\StringCharacterIterator.cs">
+      <Link>Libs\Tomlyn\Text\StringCharacterIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\StringCharacterUtf8Iterator.cs">
+      <Link>Libs\Tomlyn\Text\StringCharacterUtf8Iterator.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\StringSourceView.cs">
+      <Link>Libs\Tomlyn\Text\StringSourceView.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Text\StringUtf8SourceView.cs">
+      <Link>Libs\Tomlyn\Text\StringUtf8SourceView.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\Toml.cs">
+      <Link>Libs\Tomlyn\Toml.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\Tomlyn\TomlParserOptions.cs">
+      <Link>Libs\Tomlyn\TomlParserOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Decoder.cs">
+      <Link>Libs\TinyJSON\Decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\EncodeOptions.cs">
+      <Link>Libs\TinyJSON\EncodeOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Encoder.cs">
+      <Link>Libs\TinyJSON\Encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Extensions.cs">
+      <Link>Libs\TinyJSON\Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\JSON.cs">
+      <Link>Libs\TinyJSON\JSON.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Types\ProxyArray.cs">
+      <Link>Libs\TinyJSON\Types\ProxyArray.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Types\ProxyBoolean.cs">
+      <Link>Libs\TinyJSON\Types\ProxyBoolean.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Types\ProxyNumber.cs">
+      <Link>Libs\TinyJSON\Types\ProxyNumber.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Types\ProxyObject.cs">
+      <Link>Libs\TinyJSON\Types\ProxyObject.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Types\ProxyString.cs">
+      <Link>Libs\TinyJSON\Types\ProxyString.cs</Link>
+    </Compile>
+    <Compile Include="..\MelonLoader\Libs\TinyJSON\Types\Variant.cs">
+      <Link>Libs\TinyJSON\Types\Variant.cs</Link>
+    </Compile>
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

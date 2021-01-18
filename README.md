@@ -1,120 +1,144 @@
-### GENERAL INFORMATION:
 
-- Normal Console is for Debugging and Displaying the Output of Plugins and Mods.
-- Debug Mode/Console is for Debugging MelonLoader Internals.
-- All Plugins get placed in the created Plugins folder inside the Game's Install Folder.
-- All Mods get placed in the created Mods folder inside the Game's Install Folder.
-- All Logs are made in the created Logs folder inside the Game's Install Folder.
-- In order to properly use dnSpy's Debugger run the game with the Debug Mode/Console launch option.
+## GENERAL INFORMATION:
 
----
-
-### REQUIREMENTS:
-
-- [.NET Framework 4.8 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)
-- [Microsoft Visual C++ 2015-2019 Re-distributable](https://aka.ms/vs/16/release/vc_redist.x64.exe)
+- Debug Mode is for Debugging MelonLoader, Plugins, Mods.
+- All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
+- All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
+- All Mods get placed in the created Mods folder in your Game's Installation Folder.
+- Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
+- [Il2Cpp dnSpy Debugger Usage](#il2cpp-dnspy-debugger-usage)
+- GUIDES: [INSTALLER](https://gitlab.com/HerpDerpinstine/MelonLoader#how-to-use-the-installer) | [MANUAL USE](#how-to-manually-use-melonloader)
 
 ---
 
-### AUTOMATED INSTALLATION:
+## REQUIREMENTS:
 
-1. Make sure the Game you are installing to is Closed and Not Running.
-2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader.Installer/releases/latest/download/MelonLoader.Installer.exe).
-3. Run MelonLoader.Installer.exe.
-4. Click the SELECT button.
-5. Select and Open the Game's EXE in your Game's Installation Folder.
-6. Select which Version of MelonLoader to install using the Drop-Down List. (Or leave it as-is for the Latest Version.)
-7. Click the INSTALL or RE-INSTALL or UPDATE button.
+- [.NET Framework 3.5 Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=21)
+- [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net472)
+- [.NET Framework 4.8 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net48)
+- Microsoft Visual C++ 2015-2019 Re-distributable [[x86](https://aka.ms/vs/16/release/vc_redist.x86.exe)] [[x64](https://aka.ms/vs/16/release/vc_redist.x64.exe)]
 
 ---
 
-### MANUAL INSTALLATION:
+## HOW TO USE THE INSTALLER:
 
-1. Make sure the Game you are installing MelonLoader to is Closed and Not Running.
-2. Download [MelonLoader.x64.zip](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip).
-3. Extract the MelonLoader folder from MelonLoader.zip to the Game's Installation Folder.
-4. Extract version.dll from MelonLoader.zip to the Game's Installation Folder.
+- [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader)
+- [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-un-install-melonloader)
 
 ---
 
-### AUTOMATED UNINSTALL:
+## HOW TO MANUALLY USE MELONLOADER:
 
-1. Make sure the Game you are uninstalling from is Closed and Not Running.
-2. Download [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
-3. Run MelonLoader.Installer.exe.
-4. Click the SELECT button.
-5. Select and Open the Game's EXE in your Game's Installation Folder.
-6. Click the UN-INSTALL button.
+### UPDATE / RE-INSTALL:
 
----
+1. Follow the Steps to [UN-INSTALL](#un-install)
+2. Follow the Steps to [INSTALL](#install)
 
-### MANUAL UNINSTALL:
 
-1. Make sure the Game you are installing MelonLoader to is Closed and Not Running.
+### INSTALL:
+
+1. Make sure the Game is Closed and Not Running before attempting to Install.
+2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
+3. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
+4. Extract the MelonLoader folder from the MelonLoader Zip Archive to the Game's Installation Folder.
+5. Extract version.dll from the MelonLoader Zip Archive to the Game's Installation Folder.
+
+
+### UN-INSTALL:
+
+1. Make sure the Game is Closed and Not Running before attempting to UN-INSTALL.
 2. Remove the version.dll file from the Game's Installation Folder.
 3. Remove the MelonLoader folder from the Game's Installation Folder.
+
+These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
+
 4. Remove the Plugins folder from the Game's Installation Folder.
 5. Remove the Mods folder from the Game's Installation Folder.
-6. Remove the Logs folder from the Game's Installation Folder.
+6. Remove the UserData folder from the Game's Installation Folder.
 
 ---
 
-### LAUNCH OPTIONS:
+## PROXIES:
 
-| Argument                      | Description                                                |
-| ----------------------------- | ---------------------------------------------------------- |
-| --no-mods                     | Launch game without loading Mods                           |
-| --quitfix                     | Fixes the Hanging Process Issue with some Games            |
-| --melonloader.hideconsole     | Hides the Normal Console                                   |
-| --melonloader.hidewarnings    | Hides Warnings from Displaying                             |
-| --melonloader.debug           | Debug Mode/Console                                         |
-| --melonloader.magenta         | Magenta Console Color                                      |
-| --melonloader.rainbow         | Rainbow Console Color                                      |
-| --melonloader.randomrainbow   | Random Rainbow Console Color                               |
-| --melonloader.maxlogs         | Max Log Files [ Default: 10 ] [ Disable: 0 ]               |
-| --melonloader.maxwarnings     | Max Warnings per Log File [ Default: 100 ] [ Disable: 0 ]  |
-| --melonloader.maxerrors       | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ]    |
-| --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ]                       |
-| --melonloader.loadmodemods    | Load Mode for Mods [ Default: 0 ]                          |
-| --melonloader.agregenerate    | Forces Assembly to be Regenerated on Il2Cpp Games          |
-| --melonloader.agfvunhollower  | Forces use a Specified Version of Il2CppAssemblyUnhollower |
-| --melonloader.consoleontop    | Forces the Console over all other Applications             |
+- You are able to rename the Proxy DLL to the list of allowed DLLs below.
+- These are mainly for compatibility reasons.
+
+| Name |
+| - |
+| version.dll |
+| winmm.dll |
+| winhttp.dll |
 
 ---
 
-### LOAD MODES:
+## LOAD MODES:
 
-- Load Mode launch options are a way to dictate how you want Mods or Plugins to Load.
+- Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
+- These are the Values that those Launch Options accept and what each of them do.
 
-| Value | Action                                                               |
-| ----- | -------------------------------------------------------------------- |
-| 0     | NORMAL - Load them only if they don't have the "-dev" Name Extension |
-| 1     | DEV - Load them only if they have the "-dev" Name Extension          |
-| 2     | BOTH - Load All                                                      |
+| Value | Action |
+| - | - |
+| 0 | Load Only if the File doesn't have the ".dev.dll" Extension |
+| 1 | Load Only if the File has the ".dev.dll" Extension |
+| 2 | Load All |
 
 ---
 
-### LICENSING & CREDITS:
+## IL2CPP DNSPY DEBUGGER USAGE:
+
+- COMING SOON
+
+---
+
+## LAUNCH OPTIONS:
+
+- These are additional Launch Options that MelonLoader adds to the Game.
+- These can be used to manipulate how MelonLoader works.
+
+| Argument | Description |
+| - | - |
+| --no-mods | Launch game without loading any Plugins Mods |
+| --quitfix | Fixes the Hanging Process Issue with some Games |
+| --melonloader.consoleontop | Forces the Console to always stay on-top of all other Applications |
+| --melonloader.hideconsole | Hides the Console |
+| --melonloader.hidewarnings | Hides Warnings from Displaying |
+| --melonloader.debug | Debug Mode |
+| --melonloader.dab | Debug Analytics Blocker |
+| --melonloader.magenta | Magenta Console Color |
+| --melonloader.rainbow | Rainbow Console Color |
+| --melonloader.randomrainbow | Random Rainbow Console Color |
+| --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ Disable: 0 ] |
+| --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ Disable: 0 ] |
+| --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ] |
+| --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
+| --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.agfvunity | Forces use a Specified Version of Unity Dependencies |
+| --melonloader.agfvdumper | Forces use a Specified Version of Il2CppDumper |
+| --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |
+
+---
+
+## LICENSING & CREDITS:
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
 
 Third-party libraries used as source code or bundled in binary form:
-
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/Detours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
-- [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.ModHandler/Harmony/LICENSE) for the full License.
-- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.AssemblyGenerator/TinyJSON/LICENSE.md) for the full License.
-- [LightJson](https://github.com/MarcosLopezC/LightJson) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.Installer/LightJson/LICENSE.txt) for the full License.
-- [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.ModHandler/Tomlyn/license.txt) for the full License.
-- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader.ModHandler/SharpZipLib/LICENSE.txt) for the full License.
-- [AtiRoNya](https://github.com/AtiLion/AtiRoNya) is licensed under the MIT License. See [LICENSE](https://github.com/AtiLion/AtiRoNya/blob/e20e4a8fc47b37834c8284f9e6e937f04a84c510/LICENSE) for the full License.
-- Unity Runtime libraries (found in [Unity Dependencies](BaseLibs/UnityDependencies)) are part of Unity Software.  
-  Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
+- [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/Harmony/LICENSE) for the full License.
+- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/TinyJSON/LICENSE.md) for the full License.
+- [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/Tomlyn/license.txt) for the full License.
+- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/SharpZipLib/LICENSE.txt) for the full License.
+- [UnityEngine.Il2CppAssetBundleManager](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager/blob/master/LICENSE.md) for the full License.
+- [UnityEngine.Il2CppImageConversionManager](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager/blob/master/LICENSE.md) for the full License.
+- [bHaptics Haptic Library](https://github.com/bhaptics/haptic-library) is licensed under All rights reserved Copyright (c) 2016-2021 bHaptics Inc.  
+See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. Express permission from the company.
 
-External tools downloaded and used at runtime:
-
+External libraries and tools downloaded and used at runtime:
 - [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 - [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
+- Unity Runtime Libraries from [Unity-Runtime-Libraries](https://github.com/LavaGang/Unity-Runtime-Libraries) are part of Unity Software.  
+Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
 
 See [MelonLoader Wiki](https://melonwiki.xyz/#/credits) for the full Credits.
 

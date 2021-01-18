@@ -1,0 +1,27 @@
+.shared_windows_runners:
+  tags:
+  - shared-windows
+  - windows
+  - windows-1809
+
+stages:
+  - build
+
+build:
+  stage: build
+  # before_script:
+  #   - powershell -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
+  #   - choco install visualstudio2019buildtools
+  extends:
+    - .shared_windows_runners
+  artifacts:
+    paths:
+      - Output/Release/MelonLoader/
+      - BaseLibs/
+  script:
+  - $Env:Path += ";C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
+  - dism /online /enable-feature /featurename:NetFX3 /All
+  - echo building...
+  - 'msbuild.exe /p:Configuration=Release'
+  except:
+  - tags
