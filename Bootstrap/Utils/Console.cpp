@@ -9,6 +9,7 @@
 #include "AssemblyGenerator.h"
 #include "Logger.h"
 #include <sstream>
+#include <VersionHelpers.h>
 
 bool Console::ShouldHide = false;
 bool Console::GeneratingAssembly = false;
@@ -50,7 +51,7 @@ bool Console::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
 		return false;
 	}
-	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
+	if (IsWindows10OrGreater() && !SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
 	{
 		Assertion::ThrowInternalFailure("Failed to Enable Virtual Terminal Processing!");
 		return false;
@@ -123,6 +124,8 @@ Console::Color Console::GetRainbowColor()
 
 std::string Console::ColorToAnsi(Color color)
 {
+	if (!IsWindows10OrGreater())
+		return std::string();
 	color = ((Mode == DisplayMode::MAGENTA)
 		? Color::Magenta
 		: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
