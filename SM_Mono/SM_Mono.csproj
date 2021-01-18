@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader.Support</RootNamespace>
     <AssemblyName>Mono</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -47,7 +47,7 @@
     <Reference Include="System" />
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
-	  <Private>false</Private>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportModule.cs" />
     <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
-	<Private>false</Private>
+      <Private>false</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
