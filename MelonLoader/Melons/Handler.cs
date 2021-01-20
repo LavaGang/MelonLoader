@@ -32,6 +32,8 @@ namespace MelonLoader
         /// </summary>
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
+        
+        internal static SHA256 sha256 = SHA256.Create()
 
         static MelonHandler()
         {
