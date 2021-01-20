@@ -32,6 +32,8 @@ namespace MelonLoader
         /// </summary>
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
+        
+        internal static SHA256 sha256 = SHA256.Create()
 
         static MelonHandler()
         {
@@ -65,6 +67,7 @@ namespace MelonLoader
                     color = plugin.Color.Color;
                 MelonLogger.Internal_PrintModName(color, plugin.Info.Name, plugin.Info.Version);
                 MelonLogger.Msg("by " + plugin.Info.Author);
+                MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(plugin));
                 MelonLogger.Msg("------------------------------");
             }
         }
@@ -92,10 +95,22 @@ namespace MelonLoader
                     color = mod.Color.Color;
                 MelonLogger.Internal_PrintModName(color, mod.Info.Name, mod.Info.Version);
                 MelonLogger.Msg("by " + mod.Info.Author);
+                MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(mod));
                 MelonLogger.Msg("------------------------------");
             }
         }
+        
+        private static string GetMelonHash(MelonBase melonBase)
+        {
+            byte[] byteHash = sha256.ComputeHash(File.ReadAllBytes(melonBase.Location));
 
+            string finalHash = string.Empty;
+            foreach (byte b in byteHash)
+                finalHash += b.ToString("x2");
+
+            return finalHash;
+        }
+        
         private static void LoadMelons(bool plugins = false)
         {
             LoadMode mode = (plugins ? GetLoadModeForPlugins() : GetLoadModeForMods());
