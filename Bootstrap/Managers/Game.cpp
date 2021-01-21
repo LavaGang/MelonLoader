@@ -64,9 +64,7 @@ bool Game::SetupPaths()
 bool Game::ReadInfo()
 {
 	ReadAppInfo();
-	bool returnval = ReadUnityVersion();
-	FirstRun = false;
-	return returnval;
+	return ReadUnityVersion();
 }
 
 void Game::ReadAppInfo()
@@ -101,6 +99,7 @@ void Game::ReadAppInfo()
 			Name[line.size()] = '\0';
 		}
 	appinfofile.close();
+	FirstRun = false;
 }
 
 bool Game::ReadUnityVersion()
