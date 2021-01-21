@@ -99,7 +99,7 @@ void Logger::Msg(const char* txt)
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< txt
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
 void Logger::Warning(const char* txt)
@@ -120,7 +120,7 @@ void Logger::Warning(const char* txt)
 			<< "] [WARNING] "
 			<< txt
 			<< std::endl
-			<< "\x1b[37m";
+			<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
 void Logger::Error(const char* txt)
@@ -140,7 +140,7 @@ void Logger::Error(const char* txt)
 		<< "] [ERROR] "
 		<< txt
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
 void Logger::Internal_PrintModName(Console::Color color, const char* name, const char* version)
@@ -161,7 +161,7 @@ void Logger::Internal_PrintModName(Console::Color color, const char* name, const
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< version
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
 void Logger::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
@@ -189,7 +189,7 @@ void Logger::Internal_Msg(Console::Color color, const char* namesection, const c
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< txt
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
@@ -217,7 +217,7 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 			<< "] [WARNING] "
 			<< txt
 			<< std::endl
-			<< "\x1b[37m";
+			<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
@@ -244,5 +244,5 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 		<< "] [ERROR] "
 		<< txt
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }

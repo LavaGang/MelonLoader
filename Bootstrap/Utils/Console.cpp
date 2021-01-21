@@ -122,15 +122,19 @@ Console::Color Console::GetRainbowColor()
 	return returnval;
 }
 
-std::string Console::ColorToAnsi(Color color)
+std::string Console::ColorToAnsi(Color color, bool modecheck)
 {
+	if (modecheck)
+		color = ((Mode == DisplayMode::MAGENTA)
+			? Color::Magenta
+			: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
+				? GetRainbowColor()
+				: color));
 	if (!IsWindows10OrGreater())
+	{
+		SetConsoleTextAttribute(OutputHandle, color);
 		return std::string();
-	color = ((Mode == DisplayMode::MAGENTA)
-		? Color::Magenta
-		: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
-			? GetRainbowColor()
-			: color));
+	}
 	switch (color)
 	{
 	case Color::Black:

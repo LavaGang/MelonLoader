@@ -36,7 +36,7 @@ void Debug::DirectWrite(const char* txt)
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< txt
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
 void Debug::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
@@ -72,5 +72,5 @@ void Debug::Internal_Msg(Console::Color color, const char* namesection, const ch
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< txt
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }

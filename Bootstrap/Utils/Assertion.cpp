@@ -25,7 +25,7 @@ void Assertion::ThrowInternalFailure(const char* msg)
 				<< "] [INTERNAL FAILURE] "
 				<< msg
 				<< std::endl
-				<< "\x1b[37m";
+				<< Console::ColorToAnsi(Console::Color::Gray, false);
 			MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		}
 		else

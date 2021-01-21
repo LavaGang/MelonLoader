@@ -217,6 +217,7 @@
 193. Fixed Issue with C# 9 Record Types making Assemblies Unloadable.    (Credits to knah :D)
 194. Added Melon Hashes to Logs.   (Credits to TrevTV :P)
 195. Temporarily Disabled Analytics Blocker for x86 (32bit) to Fix Random Crash Issue.
+196. Fixed Issue with Console Coloring on Operating Systems older than Windows 10.
 
 ---
 
