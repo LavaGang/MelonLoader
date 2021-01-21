@@ -25,19 +25,19 @@ const char* Core::GetVersionStr() { return ("MelonLoader " + std::string("v0.3.0
 bool Core::Initialize()
 {
 	if (!OSVersionCheck() || !Game::Initialize())
-		return false;
+		return true;
 	CommandLine::Read();
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
 		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
-		return false;
+		return true;
 	WelcomeMessage();
 	if (!AnalyticsBlocker::Initialize()
 		|| !Il2Cpp::Initialize()
 		|| !Mono::Load())
-		return false;
+		return true;
 	AnalyticsBlocker::Hook();
 	if (Game::IsIl2Cpp)
 	{

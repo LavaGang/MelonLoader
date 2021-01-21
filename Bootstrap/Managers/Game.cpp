@@ -16,6 +16,7 @@ char* Game::Developer = NULL;
 char* Game::Name = NULL;
 char* Game::UnityVersion = NULL;
 bool Game::IsIl2Cpp = false;
+bool Game::FirstRun = true;
 
 bool Game::Initialize()
 {
@@ -63,7 +64,9 @@ bool Game::SetupPaths()
 bool Game::ReadInfo()
 {
 	ReadAppInfo();
-	return ReadUnityVersion();
+	bool returnval = ReadUnityVersion();
+	FirstRun = false;
+	return returnval;
 }
 
 void Game::ReadAppInfo()
@@ -71,7 +74,8 @@ void Game::ReadAppInfo()
 	std::string appinfopath = std::string(DataPath) + "\\app.info";
 	if (!Core::FileExists(appinfopath.c_str()))
 	{
-		Logger::Warning("app.info DOES NOT EXIST! Defaulting to UNKNOWN for Company and Product Names");
+		if (FirstRun)
+			Logger::Warning("app.info DOES NOT EXIST! Defaulting to UNKNOWN for Company and Product Names");
 		std::string unknown = "UNKNOWN";
 		Developer = new char[unknown.size() + 1];
 		std::copy(unknown.begin(), unknown.end(), Developer);
