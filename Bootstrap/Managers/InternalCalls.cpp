@@ -18,10 +18,7 @@ void InternalCalls::Initialize()
 
 #pragma region MelonCore
 bool InternalCalls::MelonCore::QuitFix() { return Core::QuitFix; }
-void InternalCalls::MelonCore::AddInternalCalls()
-{
-	Mono::AddInternalCall("MelonLoader.Core::QuitFix", QuitFix);
-}
+void InternalCalls::MelonCore::AddInternalCalls() { Mono::AddInternalCall("MelonLoader.Core::QuitFix", QuitFix); }
 #pragma endregion
 
 #pragma region MelonLogger
