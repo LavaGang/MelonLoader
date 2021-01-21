@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 #pragma warning disable 0618
 
@@ -32,8 +33,8 @@ namespace MelonLoader
         /// </summary>
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
-        
-        internal static SHA256 sha256 = SHA256.Create()
+
+        internal static SHA256 sha256 = SHA256.Create();
 
         static MelonHandler()
         {
