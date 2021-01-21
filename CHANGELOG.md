@@ -214,6 +214,8 @@
 190. Added bHaptics.DeviceType Methods.
 191. Fixed Issue with Support Modules throwing a Target Framework Exception.
 192. Fixed Internal Failure with Operating Systems older than Windows 10.
+193. Fixed Issue with C# 9 Record Types making Assemblies Unloadable.    (Credits to knah :D)
+194. Added Melon Hashes to Logs.   (Credits to TrevTV :P)
 
 ---
 
@@ -258,7 +260,7 @@
 ### v0.2.6 Open-Beta:
 
 1. Fixed Issue with Logger Timestamp making New Lines.
-2. Added Silent Launch Option to Installer.  (Credits to trevtv :P)
+2. Added Silent Launch Option to Installer.   (Credits to TrevTV :P)
 3. Fixed Internal Failure caused by DisableAnalytics for certain users.
 4. Added Operating System log to startup info.
 5. Added ValueTupleBridge to Managed Folder.
@@ -297,7 +299,7 @@
 38. Fixed Issue with Plugins not getting OnGUI called.
 39. Plugins are now able to use VRChat_OnUiManagerInit.
 40. Fixed Coroutine Queue for Mono Games.
-41. Added Launch Option --melonloader.consoleontop.  (Credits to trevtv :P)
+41. Added Launch Option --melonloader.consoleontop.  (Credits to TrevTV :P)
 42. Fixed Issue with Assembly Generator not stopping when failing to Download.
 43. Escalated Assembly Generator failures to Internal Failures.
 44. Fixed Issue where Assembly Generator failures would cause a Crash.
@@ -344,7 +346,7 @@
 
 ### v0.2.4 Open-Beta:
 
-1. Added Error Output Log to Installer.  (Credits to trevtv :P)
+1. Added Error Output Log to Installer.  (Credits to TrevTV :P)
 2. Use List.Count / Array.Length property instead of Linq's Count() method.  (Credits to zeobviouslyfakeacc :3)
 3. Added mechanism to catch when game is open to display additional information.  (Credits to DubyaDude ^.^)
 4. Harmony: Remove prefixes after postfixes to fix unpatching patches with __state variables.  (Credits to zeobviouslyfakeacc :3)

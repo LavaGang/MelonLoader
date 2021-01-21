@@ -10,18 +10,20 @@ std::list<std::string> AnalyticsBlocker::HostNames = { new char[15] { 0x73, 0x6f
 
 bool AnalyticsBlocker::Initialize()
 {
+#ifdef _WIN64
 	Debug::Msg("Initializing Analytics Blocker...");
 	return (wsock32::Initialize()
-#ifdef _WIN64
 		&& ws2_32::Initialize()
-#endif
 		);
+#else
+	return true;
+#endif
 }
 
 void AnalyticsBlocker::Hook()
 {
-	wsock32::Hooks::Initialize();
 #ifdef _WIN64
+	wsock32::Hooks::Initialize();
 	ws2_32::Hooks::Initialize();
 #endif
 }

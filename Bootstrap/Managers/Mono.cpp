@@ -298,8 +298,7 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 
 Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* version)
 {
-	if (!Debug::Enabled)
-		Console::SetHandles();
+	Console::SetHandles();
 	Debug::Msg("Detaching Hook from mono_jit_init_version...");
 	Hook::Detach(&(LPVOID&)Exports::mono_jit_init_version, mono_jit_init_version);
 	Debug::Msg("Creating Mono Domain...");
