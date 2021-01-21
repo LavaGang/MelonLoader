@@ -39,7 +39,7 @@ void Debug::DirectWrite(const char* txt)
 		<< Console::ColorToAnsi(Console::Color::Gray, false);
 }
 
-void Debug::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
+void Debug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
 {
 	if (namesection == NULL)
 	{
@@ -59,7 +59,7 @@ void Debug::Internal_Msg(Console::Color color, const char* namesection, const ch
 		<< "] "
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "["
-		<< Console::ColorToAnsi(color)
+		<< Console::ColorToAnsi(meloncolor)
 		<< namesection
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "] "
@@ -69,7 +69,7 @@ void Debug::Internal_Msg(Console::Color color, const char* namesection, const ch
 		<< "DEBUG"
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
+		<< Console::ColorToAnsi(txtcolor)
 		<< txt
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Gray, false);

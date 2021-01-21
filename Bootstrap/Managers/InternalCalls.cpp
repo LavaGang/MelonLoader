@@ -25,20 +25,20 @@ void InternalCalls::MelonCore::AddInternalCalls()
 #pragma endregion
 
 #pragma region MelonLogger
-void InternalCalls::MelonLogger::Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt)
+void InternalCalls::MelonLogger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Internal_Msg(color, nsStr, txtStr);
+	Logger::Internal_Msg(meloncolor, txtcolor, nsStr, txtStr);
 	if (nsStr != NULL) Mono::Free(nsStr);
 	Mono::Free(txtStr);
 }
 
-void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color color, Mono::String* name, Mono::String* version)
+void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color meloncolor, Mono::String* name, Mono::String* version)
 {
 	auto nameStr = Mono::Exports::mono_string_to_utf8(name);
 	auto versionStr = Mono::Exports::mono_string_to_utf8(version);
-	Logger::Internal_PrintModName(color, nameStr, versionStr);
+	Logger::Internal_PrintModName(meloncolor, nameStr, versionStr);
 	Mono::Free(nameStr);
 	Mono::Free(versionStr);
 }
@@ -159,11 +159,11 @@ void InternalCalls::MelonHandler::AddInternalCalls()
 
 #pragma region MelonDebug
 bool InternalCalls::MelonDebug::IsEnabled() { return Debug::Enabled; }
-void InternalCalls::MelonDebug::Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt)
+void InternalCalls::MelonDebug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Debug::Internal_Msg(color, nsStr, txtStr);
+	Debug::Internal_Msg(meloncolor, txtcolor, nsStr, txtStr);
 	if (nsStr != NULL) Mono::Free(nsStr);
 	Mono::Free(txtStr);
 }
