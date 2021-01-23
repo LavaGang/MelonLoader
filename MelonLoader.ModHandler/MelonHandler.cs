@@ -112,7 +112,19 @@ namespace MelonLoader
             Main.LegacySupport(_Mods, _Plugins, MelonLoaderBase._IsVRChat, MelonLoaderBase._IsBoneworks);
         }
 
-        public static void LoadFromFile(string filelocation, bool isPlugin = false) => LoadFromAssembly((Imports.IsDebugMode() ? Assembly.LoadFrom(filelocation) : Assembly.Load(File.ReadAllBytes(filelocation))), isPlugin, filelocation);
+        public static void LoadFromFile(string filelocation, bool isPlugin = false)
+        {
+            var assembly = File.ReadAllBytes(filelocation);
+            byte[] symbols = { 0 };
+
+            if (File.Exists(filelocation + ".mdb"))
+            {
+                symbols = File.ReadAllBytes(filelocation + ".mdb");
+            }
+
+            LoadFromAssembly((Imports.IsDebugMode() ? Assembly.LoadFrom(filelocation) : Assembly.Load(assembly, symbols)), isPlugin, filelocation);
+        }
+
         public static void LoadFromAssembly(Assembly asm, bool isPlugin = false, string filelocation = null)
         {
             if (!asm.Equals(null))
