@@ -17,7 +17,7 @@ namespace MelonLoader.AssemblyGenerator
         [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", CallingConvention = CallingConvention.StdCall)]
         internal extern static string ForceVersion_UnityDependencies();
         [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", CallingConvention = CallingConvention.StdCall)]
-        internal extern static string ForceVersion_Il2CppDumper();
+        internal extern static string ForceVersion_Cpp2IL();
         [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", CallingConvention = CallingConvention.StdCall)]
         internal extern static string ForceVersion_Il2CppAssemblyUnhollower();
         [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll")]

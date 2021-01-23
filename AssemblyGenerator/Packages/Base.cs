@@ -79,6 +79,8 @@ namespace MelonLoader.AssemblyGenerator
 
     internal class ExecutablePackageBase : PackageBase
     {
+        internal static AutoResetEvent ResetEvent_Output;
+        internal static AutoResetEvent ResetEvent_Error;
         internal string ExePath = null;
         internal string Output = null;
 
@@ -89,7 +91,7 @@ namespace MelonLoader.AssemblyGenerator
             Directory.Delete(Output, true);
         }
 
-        internal bool Execute(string[] args)
+        internal bool Execute(string[] args, bool parenthesize_args = true)
         {
             if (!Directory.Exists(Output))
                 Directory.CreateDirectory(Output);
@@ -100,27 +102,49 @@ namespace MelonLoader.AssemblyGenerator
             }
             try
             {
+                ResetEvent_Output = new AutoResetEvent(false);
+                ResetEvent_Error = new AutoResetEvent(false);
                 Core.OverrideAppDomainBase(Destination);
-                var generatorProcessInfo = new ProcessStartInfo(ExePath);
-                generatorProcessInfo.Arguments = string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")));
-                generatorProcessInfo.UseShellExecute = false;
-                generatorProcessInfo.RedirectStandardOutput = true;
-                generatorProcessInfo.CreateNoWindow = true;
-                Logger.Msg("\"" + ExePath + "\" " + generatorProcessInfo.Arguments);
-                Process process = null;
-                try { process = Process.Start(generatorProcessInfo); } catch (Exception e) { Logger.Error(e.ToString()); Core.OverrideAppDomainBase(Core.BasePath); return false; }
-                StreamReader stdout = process.StandardOutput;
+
+                ProcessStartInfo processStartInfo = new ProcessStartInfo(ExePath);
+                processStartInfo.UseShellExecute = false;
+                processStartInfo.RedirectStandardOutput = true;
+                processStartInfo.RedirectStandardError = true;
+                processStartInfo.CreateNoWindow = true;
+
+                processStartInfo.Arguments =
+                    parenthesize_args
+                    ?
+                    string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")))
+                    :
+                    string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => Regex.Replace(it, @"(\\+)$", @"$1$1")));
+
+                Logger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
+
+                Process process = new Process();
+                process.StartInfo = processStartInfo;
+                process.OutputDataReceived += OutputStream;
+                process.ErrorDataReceived += ErrorStream;
+                process.Start();
+
                 Utils.SetProcessId(process.Id);
-                while (!stdout.EndOfStream)
-                    Logger.Msg(stdout.ReadLine());
-                while (!process.HasExited)
-                    Thread.Sleep(100);
+
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                process.WaitForExit();
+                ResetEvent_Output.WaitOne();
+                ResetEvent_Error.WaitOne();
+
                 Utils.SetProcessId(0);
                 Core.OverrideAppDomainBase(Core.BasePath);
-                return true;
+                return (process.ExitCode == 0);
             }
-            catch (Exception ex) { Logger.Error(ex.ToString()); }
+            catch (Exception ex) { Logger.Error(ex.ToString()); Core.OverrideAppDomainBase(Core.BasePath); }
             return false;
         }
+
+        private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else Logger.Msg(e.Data); }
+        private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else Logger.Error(e.Data); }
     }
 }

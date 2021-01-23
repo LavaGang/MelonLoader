@@ -12,7 +12,7 @@
 
 char* AssemblyGenerator::Path = NULL;
 char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
-char* AssemblyGenerator::ForceVersion_Il2CppDumper = NULL;
+char* AssemblyGenerator::ForceVersion_Cpp2IL = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = NULL;
 int AssemblyGenerator::ProcessId = 0;
 ICLRMetaHost* AssemblyGenerator::metahost = NULL;

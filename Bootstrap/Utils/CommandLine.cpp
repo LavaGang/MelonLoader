@@ -71,9 +71,9 @@ void CommandLine::Read()
 		else if (strstr(command, "--melonloader.agfvdumper"))
 		{
 			std::string version = argv[i + 1];
-			AssemblyGenerator::ForceVersion_Il2CppDumper = new char[version.size() + 1];
-			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Il2CppDumper);
-			AssemblyGenerator::ForceVersion_Il2CppDumper[version.size()] = '\0';
+			AssemblyGenerator::ForceVersion_Cpp2IL = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Cpp2IL);
+			AssemblyGenerator::ForceVersion_Cpp2IL[version.size()] = '\0';
 		}
 		else if (strstr(command, "--melonloader.agfvunhollower"))
 		{

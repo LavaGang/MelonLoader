@@ -34,8 +34,7 @@ namespace MelonLoader
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
 
-        internal static SHA256 sha256 = SHA256.Create();
-
+        private static SHA256 sha256 = SHA256.Create();
         static MelonHandler()
         {
             PluginsDirectory = Path.Combine(MelonUtils.GameDirectory, "Plugins");
@@ -227,7 +226,10 @@ namespace MelonLoader
                 return;
             try
             {
-                Assembly asm = Assembly.Load(filedata);
+                byte[] symbols = { 0 };
+                if (File.Exists(filelocation + ".mdb"))
+                    symbols = File.ReadAllBytes(filelocation + ".mdb");
+                Assembly asm = Assembly.Load(filedata, symbols);
                 if (asm == null)
                 {
                     if (string.IsNullOrEmpty(filelocation))

@@ -7,7 +7,7 @@ class AssemblyGenerator
 public:
     static char* Path;
     static char* ForceVersion_UnityDependencies;
-    static char* ForceVersion_Il2CppDumper;
+    static char* ForceVersion_Cpp2IL;
     static char* ForceVersion_Il2CppAssemblyUnhollower;
     static int ProcessId;
 	static bool Initialize();
