@@ -23,13 +23,19 @@ jobs:
       - name: Build Melonloader Core
         shell: cmd
         run: |
-          msbuild /t:Rebuild
           mkdir Output\Debug\x64
           mkdir Output\Debug\x64\MelonLoader
           mkdir Output\Debug\x86
           mkdir Output\Debug\x86\MelonLoader
-          xcopy Output\Debug\MelonLoader\ Output\Debug\x64\MelonLoader\ /E /H /Y >nul
-          xcopy Output\Debug\MelonLoader\ Output\Debug\x86\MelonLoader\ /E /H /Y >nul
+          echo Building x64...
+          msbuild /t:Rebuild /p:Platform=x64
+          echo Copying x64...
+          xcopy Output\Debug\MelonLoader\ Output\Debug\x64\MelonLoader\ /E /H /Y
+          rmdir /S /Q Output\Debug\MelonLoader >nul
+          echo Building x86...
+          msbuild /t:Rebuild /p:Platform=x86
+          echo Copying x86...
+          xcopy Output\Debug\MelonLoader\ Output\Debug\x86\MelonLoader\ /E /H /Y
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build Proxy DLLs For Both Architectures
         shell: cmd
@@ -50,21 +56,21 @@ jobs:
         run: |
           echo Copying Managed Libs to Both Folders...
           mkdir Output\Debug\x86\MelonLoader\Dependencies\Managed\
-          xcopy BaseLibs\Managed\ Output\Debug\x86\MelonLoader\Dependencies\Managed\ /E /H /Y >nul
+          xcopy BaseLibs\Managed\ Output\Debug\x86\MelonLoader\Dependencies\Managed\ /E /H /Y
           mkdir Output\Debug\x64\MelonLoader\Dependencies\Managed\
-          xcopy BaseLibs\Managed\ Output\Debug\x64\MelonLoader\Dependencies\Managed\ /E /H /Y >nul
+          xcopy BaseLibs\Managed\ Output\Debug\x64\MelonLoader\Dependencies\Managed\ /E /H /Y
           echo.
           echo Copying Mono x86...
           mkdir Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
-          xcopy BaseLibs\MonoBleedingEdge.x86\ Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y >nul/
+          xcopy BaseLibs\MonoBleedingEdge.x86\ Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
           echo.
           echo Copying Mono x64...
           mkdir Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
-          xcopy BaseLibs\MonoBleedingEdge.x64\ Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y >nul
+          xcopy BaseLibs\MonoBleedingEdge.x64\ Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
           echo.
           echo Copying bHaptics DLLs...
-          copy BaseLibs\bHaptics.x86.dll Output\Debug\x86\MelonLoader\Dependencies\ >nul
-          copy BaseLibs\bHaptics.x64.dll Output\Debug\x64\MelonLoader\Dependencies\ >nul
+          copy BaseLibs\bHaptics.x86.dll Output\Debug\x86\MelonLoader\Dependencies\
+          copy BaseLibs\bHaptics.x64.dll Output\Debug\x64\MelonLoader\Dependencies\
       - uses: actions/upload-artifact@v2
         name: Uploading x64 Zip...
         with:
