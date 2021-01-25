@@ -1,0 +1,102 @@
+name: Build MelonLoader
+
+# Controls when the action will run. 
+on:
+  push:
+    branches: [ci-test, alpha-development]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: setup-msbuild
+        uses: microsoft/setup-msbuild@v1
+      - name: Build Melonloader Core
+        shell: cmd
+        run: |
+          mkdir Output
+          mkdir Output\Debug
+          mkdir Output\Debug\x64
+          mkdir Output\Debug\x64\MelonLoader
+          mkdir Output\Debug\x86
+          mkdir Output\Debug\x86\MelonLoader
+          echo Building x64...
+          msbuild /t:Rebuild /p:Platform=x64
+          echo Copying x64...
+          xcopy Output\Debug\MelonLoader Output\Debug\x64\MelonLoader\ /E /H /Y
+          rmdir /S /Q Output\Debug\MelonLoader >nul
+          echo Building x86...
+          msbuild /t:Rebuild /p:Platform=x86
+          echo Copying x86...
+          xcopy Output\Debug\MelonLoader Output\Debug\x86\MelonLoader\ /E /H /Y
+          rmdir /S /Q Output\Debug\MelonLoader >nul
+      - name: Build Proxy DLLs For Both Architectures
+        shell: cmd
+        run: |
+          msbuild Proxy\Proxy.vcxproj /p:Platform=x86
+          copy Proxy\Output\Debug\x86\version.dll Output\Debug\x86\version.dll
+          msbuild Proxy\Proxy.vcxproj /p:Platform=x64
+          copy Proxy\Output\Debug\x64\version.dll Output\Debug\x64\version.dll
+      - name: Build Bootstrap Lib for Both Architectures
+        shell: cmd
+        run: |
+          msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x86
+          copy Bootstrap\Output\Debug\x86\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x86\Melonloader\Dependencies\
+          msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x64
+          copy Bootstrap\Output\Debug\x64\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x64\Melonloader\Dependencies\
+      - name: Copy Base Libs and Build Final Zip Structure
+        shell: cmd
+        run: |
+          echo Copying Managed Libs to Both Folders...
+          mkdir Output\Debug\x86\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Debug\x64\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
+          echo.
+          echo Copying Mono x86...
+          mkdir Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
+          xcopy BaseLibs\MonoBleedingEdge.x86 Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
+          echo.
+          echo Copying Mono x64...
+          mkdir Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
+          xcopy BaseLibs\MonoBleedingEdge.x64 Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
+          echo.
+          echo Copying bHaptics DLLs...
+          copy BaseLibs\bHaptics.x86.dll Output\Debug\x86\MelonLoader\Dependencies\
+          copy BaseLibs\bHaptics.x64.dll Output\Debug\x64\MelonLoader\Dependencies\
+          echo.
+          echo Copying NOTICE.txt...
+          copy NOTICE.txt Output\Debug\x86
+          copy NOTICE.txt Output\Debug\x64
+          echo.
+          echo Creating Documentation Folder...
+          mkdir Documentation
+          copy CHANGELOG.md Documentation\
+          copy LICENSE.md Documentation\
+          copy NOTICE.txt Documentation\
+          copy README.md Documentation
+          mkdir Output\Debug\x64\MelonLoader\Documentation
+          mkdir Output\Debug\x86\MelonLoader\Documentation
+          echo.
+          echo Copying Documentation to Final Artifact Folders...
+          xcopy Documentation Output\Debug\x64\MelonLoader\Documentation\ /E /H /Y
+          xcopy Documentation Output\Debug\x86\MelonLoader\Documentation\ /E /H /Y
+      - uses: actions/upload-artifact@v2
+        name: Uploading x64 Zip...
+        with:
+          name: MelonLoader.x64.CI
+          path: ./Output/Debug/x64/*
+      - uses: actions/upload-artifact@v2
+        name: Uploading x86 Zip...
+        with:
+          name: MelonLoader.x86.CI
+          path: ./Output/Debug/x86/*
