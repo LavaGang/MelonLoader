@@ -23,6 +23,8 @@ jobs:
       - name: Build Melonloader Core
         shell: cmd
         run: |
+          mkdir Output
+          mkdir Output\Debug
           mkdir Output\Debug\x64
           mkdir Output\Debug\x64\MelonLoader
           mkdir Output\Debug\x86
