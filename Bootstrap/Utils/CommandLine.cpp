@@ -190,14 +190,14 @@ void CommandLine::ReadIniFile()
 	}
 	else
 	{
-		std::string version = iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppDumper_Version");
+		std::string version = iniFile->ReadValue("AssemblyGenerator", "ForceCpp2IL_Version");
 		if (!version.empty())
 		{
-			AssemblyGenerator::ForceVersion_Il2CppDumper = new char[version.size() + 1];
-			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Il2CppDumper);
-			AssemblyGenerator::ForceVersion_Il2CppDumper[version.size()] = '\0';
+			AssemblyGenerator::ForceVersion_Cpp2IL = new char[version.size() + 1];
+			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Cpp2IL);
+			AssemblyGenerator::ForceVersion_Cpp2IL[version.size()] = '\0';
 		}
-		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppDumper_Version", (std::string(AssemblyGenerator::ForceVersion_Il2CppDumper).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_Il2CppDumper));
+		iniFile->WriteValue("AssemblyGenerator", "ForceCpp2IL_Version", (std::string(AssemblyGenerator::ForceVersion_Cpp2IL).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_Cpp2IL));
 	}
 	if (iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower").empty() || !iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower")._Equal("true"))
 	{
