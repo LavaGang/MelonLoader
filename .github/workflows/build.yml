@@ -43,9 +43,9 @@ jobs:
         shell: cmd
         run: |
           msbuild Proxy\Proxy.vcxproj /p:Platform=x86
-          copy Proxy\Output\Debug\x86\Proxy.dll Output\Debug\x86\version.dll
+          copy Proxy\Output\Debug\x86\version.dll Output\Debug\x86\version.dll
           msbuild Proxy\Proxy.vcxproj /p:Platform=x64
-          copy Proxy\Output\Debug\x64\Proxy.dll Output\Debug\x64\version.dll
+          copy Proxy\Output\Debug\x64\version.dll Output\Debug\x64\version.dll
       - name: Build Bootstrap Lib for Both Architectures
         shell: cmd
         run: |
