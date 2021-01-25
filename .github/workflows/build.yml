@@ -53,14 +53,14 @@ jobs:
           copy Bootstrap\Output\Debug\x86\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x86\Melonloader\Dependencies\
           msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x64
           copy Bootstrap\Output\Debug\x64\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x64\Melonloader\Dependencies\
-      - name: Copy Base Libs
+      - name: Copy Base Libs and Build 
         shell: cmd
         run: |
           echo Copying Managed Libs to Both Folders...
-          mkdir Output\Debug\x86\MelonLoader\Dependencies\Managed\
-          xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Dependencies\Managed\ /E /H /Y
-          mkdir Output\Debug\x64\MelonLoader\Dependencies\Managed\
-          xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Dependencies\Managed\ /E /H /Y
+          mkdir Output\Debug\x86\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Debug\x64\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Mono x86...
           mkdir Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
@@ -73,13 +73,30 @@ jobs:
           echo Copying bHaptics DLLs...
           copy BaseLibs\bHaptics.x86.dll Output\Debug\x86\MelonLoader\Dependencies\
           copy BaseLibs\bHaptics.x64.dll Output\Debug\x64\MelonLoader\Dependencies\
+          echo.
+          echo Copying NOTICE.txt...
+          copy NOTICE.txt Output\Debug\x86
+          copy NOTICE.txt Output\Debug\x64
+          echo.
+          echo Creating Documentation Folder...
+          mkdir Documentation
+          copy CHANGELOG.md Documentation\
+          copy LICENSE.md Documentation\
+          copy NOTICE.txt Documentation\
+          copy README.md Documentation
+          mkdir Output\Debug\x64\MelonLoader\Documentation
+          mkdir Output\Debug\x86\MelonLoader\Documentation
+          echo.
+          echo Copying Documentation to Final Artifact Folders...
+          xcopy Documentation Output\Debug\x64\MelonLoader\Documentation\ /E /H /Y
+          xcopy Documentation Output\Debug\x86\MelonLoader\Documentation\ /E /H /Y
       - uses: actions/upload-artifact@v2
         name: Uploading x64 Zip...
         with:
-          name: Windows x64
+          name: MelonLoader.x64.CI
           path: ./Output/Debug/x64/*
       - uses: actions/upload-artifact@v2
         name: Uploading x86 Zip...
         with:
-          name: Windows x86
+          name: MelonLoader.x86.CI
           path: ./Output/Debug/x64/*
