@@ -50,9 +50,9 @@ jobs:
         shell: cmd
         run: |
           msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x86
-          copy Bootstrap\Output\Debug\x64\MelonLoader\Bootstrap.dll Output\Debug\x64\Melonloader\Dependencies\
+          copy Bootstrap\Output\Debug\x86\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x86\Melonloader\Dependencies\
           msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x64
-          copy Bootstrap\Output\Debug\x86\MelonLoader\Bootstrap.dll Output\Debug\x86\Melonloader\Dependencies\
+          copy Bootstrap\Output\Debug\x64\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x64\Melonloader\Dependencies\
       - name: Copy Base Libs
         shell: cmd
         run: |
