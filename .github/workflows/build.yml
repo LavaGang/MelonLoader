@@ -3,7 +3,7 @@ name: Build MelonLoader
 # Controls when the action will run. 
 on:
   push:
-    branches: [ci-test]
+    branches: [ci-test, alpha-development]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
