@@ -99,4 +99,4 @@ jobs:
         name: Uploading x86 Zip...
         with:
           name: MelonLoader.x86.CI
-          path: ./Output/Debug/x64/*
+          path: ./Output/Debug/x86/*
