@@ -11,7 +11,7 @@ namespace MelonLoader.AssemblyGenerator
         private static string FilePath = null;
         internal static string GameAssemblyHash = null;
         internal static string UnityVersion = null;
-        internal static string Il2CppDumperVersion = null;
+        internal static string DumperVersion = null;
         internal static string Il2CppAssemblyUnhollowerVersion = null;
         internal static List<string> OldFiles = new List<string>();
 
@@ -37,8 +37,8 @@ namespace MelonLoader.AssemblyGenerator
                 return;
             if (tbl.ContainsKey("UnityVersion"))
                 UnityVersion = (string)tbl["UnityVersion"];
-            if (tbl.ContainsKey("Il2CppDumper"))
-                Il2CppDumperVersion = (string)tbl["Il2CppDumper"];
+            if (tbl.ContainsKey("Dumper"))
+                DumperVersion = (string)tbl["Dumper"];
             if (tbl.ContainsKey("Il2CppAssemblyUnhollower"))
                 Il2CppAssemblyUnhollowerVersion = (string)tbl["Il2CppAssemblyUnhollower"];
             if (tbl.ContainsKey("GameAssemblyHash"))
@@ -67,7 +67,7 @@ namespace MelonLoader.AssemblyGenerator
                         Items =
                         {
                             {"UnityVersion", (UnityVersion == null) ? "" : UnityVersion},
-                            {"Il2CppDumper", (Il2CppDumperVersion == null) ? "" : Il2CppDumperVersion},
+                            {"Dumper", (DumperVersion == null) ? "" : DumperVersion},
                             {"Il2CppAssemblyUnhollower", (Il2CppAssemblyUnhollowerVersion == null) ? "" : Il2CppAssemblyUnhollowerVersion},
                             {"GameAssemblyHash", (GameAssemblyHash == null) ? "" : GameAssemblyHash},
                             {"OldFiles", OldFiles.ToArray()}

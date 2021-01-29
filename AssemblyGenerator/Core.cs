@@ -13,9 +13,9 @@ namespace MelonLoader.AssemblyGenerator
         internal static string ManagedPath = null;
         private static string CurrentGameAssemblyHash = null;
         internal static WebClient webClient = null;
-        internal static Il2CppDumper il2cppdumper = null;
-        internal static UnityDependencies unitydependencies = null;
-        private static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
+        internal static Il2CppDumper dumper = new Il2CppDumper();
+        internal static UnityDependencies unitydependencies = new UnityDependencies();
+        private static Il2CppAssemblyUnhollower il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
 
         static Core()
         {
@@ -25,9 +25,6 @@ namespace MelonLoader.AssemblyGenerator
             webClient.Headers.Add("User-Agent", "Unity web player");
             BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
             OverrideAppDomainBase(BasePath);
-            il2cppdumper = new Il2CppDumper();
-            unitydependencies = new UnityDependencies();
-            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
             GameAssemblyPath = Utils.GetGameAssemblyPath();
             ManagedPath = Utils.GetManagedDirectory();
             using (MD5 md5 = MD5.Create())
@@ -51,25 +48,25 @@ namespace MelonLoader.AssemblyGenerator
             }
             Logger.Msg("Assembly Generation Needed!");
             if (!unitydependencies.Download()
-                || !il2cppdumper.Download()
+                || !dumper.Download()
                 || !il2cppassemblyunhollower.Download())
                 return 1;
-            il2cppdumper.Cleanup();
+            dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
-            if (!il2cppdumper.Execute())
+            if (!dumper.Execute())
             {
-                il2cppdumper.Cleanup();
+                dumper.Cleanup();
                 return 1;
             }
             if (!il2cppassemblyunhollower.Execute())
             {
-                il2cppdumper.Cleanup();
+                dumper.Cleanup();
                 il2cppassemblyunhollower.Cleanup();
                 return 1;
             }
             OldFiles_Cleanup();
             OldFiles_LAM();
-            il2cppdumper.Cleanup();
+            dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
             Config.Save();

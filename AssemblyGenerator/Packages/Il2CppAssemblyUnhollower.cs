@@ -44,7 +44,7 @@ namespace MelonLoader.AssemblyGenerator
             Logger.Msg("Executing Il2CppAssemblyUnhollower...");
             string mscorlib_path = Path.Combine(Core.ManagedPath, "mscorlib.dll");
             return Execute(new string[] {
-                ("--input=" + Core.il2cppdumper.Output),
+                ("--input=" + Core.dumper.Output),
                 ("--output=" + Output),
                 ("--mscorlib=" + mscorlib_path),
                 ("--unity=" + Core.unitydependencies.Destination),

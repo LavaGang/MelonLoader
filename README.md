@@ -115,7 +115,7 @@ Command Line holds Priority. If a Launch Option is in your Game's Command Line i
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.agfvunity | Forces use a Specified Version of Unity Dependencies |
-| --melonloader.agfvdumper | Forces use a Specified Version of Il2CppDumper |
+| --melonloader.agfvdumper | Forces use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |
 
 ---
@@ -137,6 +137,7 @@ Third-party libraries used as source code or bundled in binary form:
 See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. Express permission from the company.
 
 External libraries and tools downloaded and used at runtime:
+- [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.
 - [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 - [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
 - Unity Runtime Libraries from [Unity-Runtime-Libraries](https://github.com/LavaGang/Unity-Runtime-Libraries) are part of Unity Software.  
