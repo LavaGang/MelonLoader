@@ -13,8 +13,9 @@ namespace MelonLoader.AssemblyGenerator
         internal static string ManagedPath = null;
         private static string CurrentGameAssemblyHash = null;
         internal static WebClient webClient = null;
-        internal static Il2CppDumper dumper = new Il2CppDumper();
         internal static UnityDependencies unitydependencies = new UnityDependencies();
+        private static DeobfuscationMaps deobfuscationmaps = new DeobfuscationMaps();
+        internal static Il2CppDumper dumper = new Il2CppDumper();
         private static Il2CppAssemblyUnhollower il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
 
         static Core()
@@ -49,7 +50,8 @@ namespace MelonLoader.AssemblyGenerator
             Logger.Msg("Assembly Generation Needed!");
             if (!unitydependencies.Download()
                 || !dumper.Download()
-                || !il2cppassemblyunhollower.Download())
+                || !il2cppassemblyunhollower.Download()
+                || !deobfuscationmaps.Download())
                 return 1;
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
