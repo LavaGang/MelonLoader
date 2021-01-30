@@ -14,7 +14,7 @@ namespace MelonLoader.AssemblyGenerator
         internal static string ManagedPath = null;
         private static string CurrentGameAssemblyHash = null;
         internal static WebClient webClient = null;
-        internal static Cpp2IL dumper = null;
+        internal static Il2CppDumper dumper = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
@@ -39,7 +39,7 @@ namespace MelonLoader.AssemblyGenerator
                     CurrentGameAssemblyHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
             }
             unitydependencies = new UnityDependencies();
-            dumper = new Cpp2IL();
+            dumper = new Il2CppDumper();
             il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
             deobfuscationMap = new DeobfuscationMap();
         }
