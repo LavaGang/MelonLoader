@@ -10,6 +10,7 @@
 #include "HashCode.h"
 #pragma comment(lib, "mscoree.lib")
 
+bool AssemblyGenerator::ForceRegeneration = false;
 char* AssemblyGenerator::Path = NULL;
 char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
 char* AssemblyGenerator::ForceVersion_Cpp2IL = NULL;

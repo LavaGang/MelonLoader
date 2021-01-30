@@ -113,7 +113,8 @@ Command Line holds Priority. If a Launch Option is in your Game's Command Line i
 | --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
-| --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.agfregenerate | Forces Regeneration of Assembly |
 | --melonloader.agfvunity | Forces use a Specified Version of Unity Dependencies |
 | --melonloader.agfvdumper | Forces use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |

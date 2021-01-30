@@ -223,6 +223,8 @@
 199. Fixed Issue with Melon Logging Traceback not finding certain Melons in the Call Stack.
 200. Added MDB Symbol Support.    (Credits to avail :P)
 201. Added Deobfuscation Map Support.
+202. Added "--melonloader.agfregenerate" Launch Option.
+203. Re-factored Assembly Generator.
 
 ---
 

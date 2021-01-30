@@ -18,6 +18,7 @@ namespace MelonLoader.AssemblyGenerator
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
+        internal static bool AssemblyGenerationNeeded = false;
 
         static Core()
         {
@@ -25,7 +26,8 @@ namespace MelonLoader.AssemblyGenerator
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
             webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "Unity web player");
-            GameName = string.Copy(Utils.GetGameName());
+            AssemblyGenerationNeeded = Utils.ForceRegeneration();
+            GameName = Utils.GetGameName();
             BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
             GameAssemblyPath = Utils.GetGameAssemblyPath();
             ManagedPath = Utils.GetManagedDirectory();
@@ -44,21 +46,26 @@ namespace MelonLoader.AssemblyGenerator
 
         private static int Run(string nullarg)
         {
-            Logger.Msg("Checking GameAssembly...");
-            Logger.Msg("Old: " + Config.GameAssemblyHash);
-            Logger.Msg("Current: " + CurrentGameAssemblyHash);
-            if (!string.IsNullOrEmpty(Config.GameAssemblyHash)
-                && Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
-            {
-                Logger.Msg("Assembly is up to date. No Generation Needed.");
-                return 0;
-            }
-            Logger.Msg("Assembly Generation Needed!");
             if (!unitydependencies.Download()
                 || !dumper.Download()
                 || !il2cppassemblyunhollower.Download()
                 || !deobfuscationMap.Download())
                 return 1;
+
+            Logger.Msg("Checking GameAssembly...");
+            Logger.Msg("Old: " + Config.GameAssemblyHash);
+            Logger.Msg("Current: " + CurrentGameAssemblyHash);
+            if (string.IsNullOrEmpty(Config.GameAssemblyHash)
+                || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
+                AssemblyGenerationNeeded = true;
+
+            if (!AssemblyGenerationNeeded)
+            {
+                Logger.Msg("Assembly is up to date. No Generation Needed.");
+                return 0;
+            }
+            Logger.Msg("Assembly Generation Needed!");
+
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
             if (!dumper.Execute())
@@ -74,10 +81,13 @@ namespace MelonLoader.AssemblyGenerator
             }
             OldFiles_Cleanup();
             OldFiles_LAM();
+
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
+
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
             Config.Save();
+
             Logger.Msg("Assembly Generation Successful!");
             return 0;
         }

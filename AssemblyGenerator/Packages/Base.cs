@@ -18,6 +18,7 @@ namespace MelonLoader.AssemblyGenerator
         internal virtual bool Download() => Download(false);
         internal virtual bool Download(bool directory_check)
         {
+            Core.AssemblyGenerationNeeded = true;
             string tempfile = Path.GetTempFileName();
             Logger.Msg($"Downloading {URL} to {tempfile}");
             try { Core.webClient.DownloadFile(URL, tempfile); }

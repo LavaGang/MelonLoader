@@ -61,6 +61,8 @@ void CommandLine::Read()
 				loadmode = 0;
 			InternalCalls::MelonHandler::LoadModeForMods = (InternalCalls::MelonHandler::LoadMode)loadmode;
 		}
+		else if (strstr(command, "--melonloader.agfregenerate"))
+			AssemblyGenerator::ForceRegeneration = true;
 		else if (strstr(command, "--melonloader.agfvunity"))
 		{
 			std::string version = argv[i + 1];
