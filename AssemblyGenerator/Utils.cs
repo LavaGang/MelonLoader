@@ -9,6 +9,8 @@ namespace MelonLoader.AssemblyGenerator
         [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", CallingConvention = CallingConvention.StdCall)]
         internal extern static string GetUnityVersion();
         [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", CallingConvention = CallingConvention.StdCall)]
+        internal extern static string GetGameName();
+        [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", CallingConvention = CallingConvention.StdCall)]
         internal extern static string GetManagedDirectory();
         [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", CallingConvention = CallingConvention.StdCall)]
         internal extern static string GetConfigDirectory();

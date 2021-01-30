@@ -8,15 +8,16 @@ namespace MelonLoader.AssemblyGenerator
 {
     internal static class Core
     {
+        internal static string GameName = null;
         internal static string BasePath = null;
         internal static string GameAssemblyPath = null;
         internal static string ManagedPath = null;
         private static string CurrentGameAssemblyHash = null;
         internal static WebClient webClient = null;
-        internal static UnityDependencies unitydependencies = new UnityDependencies();
-        private static DeobfuscationMaps deobfuscationmaps = new DeobfuscationMaps();
-        internal static Il2CppDumper dumper = new Il2CppDumper();
-        private static Il2CppAssemblyUnhollower il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+        internal static Il2CppDumper dumper = null;
+        internal static UnityDependencies unitydependencies = null;
+        internal static DeobfuscationMap deobfuscationMap = null;
+        internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
 
         static Core()
         {
@@ -24,16 +25,21 @@ namespace MelonLoader.AssemblyGenerator
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
             webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "Unity web player");
+            GameName = string.Copy(Utils.GetGameName());
             BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
-            OverrideAppDomainBase(BasePath);
             GameAssemblyPath = Utils.GetGameAssemblyPath();
             ManagedPath = Utils.GetManagedDirectory();
+            OverrideAppDomainBase(BasePath);
             using (MD5 md5 = MD5.Create())
                 using (var stream = File.OpenRead(GameAssemblyPath))
                 {
                     var hash = md5.ComputeHash(stream);
                     CurrentGameAssemblyHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-                }
+            }
+            unitydependencies = new UnityDependencies();
+            dumper = new Il2CppDumper();
+            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+            deobfuscationMap = new DeobfuscationMap();
         }
 
         private static int Run(string nullarg)
@@ -51,7 +57,7 @@ namespace MelonLoader.AssemblyGenerator
             if (!unitydependencies.Download()
                 || !dumper.Download()
                 || !il2cppassemblyunhollower.Download()
-                || !deobfuscationmaps.Download())
+                || !deobfuscationMap.Download())
                 return 1;
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();

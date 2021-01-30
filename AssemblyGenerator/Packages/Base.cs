@@ -13,8 +13,10 @@ namespace MelonLoader.AssemblyGenerator
         internal string Version = null;
         internal string URL = null;
         internal string Destination = null;
+        internal string NewFileName = null;
 
-        internal virtual bool Download()
+        internal virtual bool Download() => Download(false);
+        internal virtual bool Download(bool directory_check)
         {
             string tempfile = Path.GetTempFileName();
             Logger.Msg($"Downloading {URL} to {tempfile}");
@@ -27,27 +29,30 @@ namespace MelonLoader.AssemblyGenerator
                 return false;
             }
 
-            if (Directory.Exists(Destination))
+            if (!directory_check)
             {
-                Logger.Msg($"Cleaning {Destination}");
-                foreach (var entry in Directory.EnumerateFileSystemEntries(Destination))
+                if (Directory.Exists(Destination))
                 {
-                    if (Directory.Exists(entry))
-                        Directory.Delete(entry, true);
-                    else
-                        File.Delete(entry);
+                    Logger.Msg($"Cleaning {Destination}");
+                    foreach (var entry in Directory.EnumerateFileSystemEntries(Destination))
+                    {
+                        if (Directory.Exists(entry))
+                            Directory.Delete(entry, true);
+                        else
+                            File.Delete(entry);
+                    }
                 }
-            }
-            else
-            {
-                Logger.Msg($"Creating Directory {Destination}");
-                Directory.CreateDirectory(Destination);
+                else
+                {
+                    Logger.Msg($"Creating Directory {Destination}");
+                    Directory.CreateDirectory(Destination);
+                }
             }
 
             string filenamefromurl = Path.GetFileName(URL);
             if (!filenamefromurl.EndsWith(".zip"))
             {
-                string filepath = Path.Combine(Destination, filenamefromurl);
+                string filepath = Path.Combine(Destination, (string.IsNullOrEmpty(NewFileName) ? filenamefromurl : NewFileName));
                 Logger.Msg($"Moving {tempfile} to {filepath}");
                 File.Move(tempfile, filepath);
                 return true;

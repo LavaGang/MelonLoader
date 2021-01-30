@@ -53,7 +53,7 @@
     <Compile Include="Core.cs" />
     <Compile Include="Packages\Base.cs" />
     <Compile Include="Packages\Cpp2IL.cs" />
-    <Compile Include="Packages\DeobfuscationMaps.cs" />
+    <Compile Include="Packages\DeobfuscationMap.cs" />
     <Compile Include="Packages\Il2CppAssemblyUnhollower.cs" />
     <Compile Include="Packages\Il2CppDumper.cs" />
     <Compile Include="Packages\UnityDependencies.cs" />
@@ -301,6 +301,7 @@
     <Compile Include="..\MelonLoader\Libs\TinyJSON\Types\Variant.cs">
       <Link>Libs\TinyJSON\Types\Variant.cs</Link>
     </Compile>
+    <Compile Include="SamboyAPI.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup />

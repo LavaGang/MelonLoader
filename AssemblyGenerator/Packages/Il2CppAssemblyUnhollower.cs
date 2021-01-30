@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace MelonLoader.AssemblyGenerator
 {
@@ -8,7 +9,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             Version = Utils.ForceVersion_Il2CppAssemblyUnhollower();
             if (string.IsNullOrEmpty(Version))
-                Version = "0.4.10.0";
+                Version = "0.4.12.1";
             URL = "https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v" + Version + "/Il2CppAssemblyUnhollower." + Version + ".zip";
             Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
             Output = Path.Combine(Destination, "Managed");
@@ -42,16 +43,20 @@ namespace MelonLoader.AssemblyGenerator
         internal bool Execute()
         {
             Logger.Msg("Executing Il2CppAssemblyUnhollower...");
-            string mscorlib_path = Path.Combine(Core.ManagedPath, "mscorlib.dll");
-            return Execute(new string[] {
-                ("--input=" + Core.dumper.Output),
-                ("--output=" + Output),
-                ("--mscorlib=" + mscorlib_path),
-                ("--unity=" + Core.unitydependencies.Destination),
-                "--gameassembly=" + Core.GameAssemblyPath,
-                "--blacklist-assembly=Mono.Security",
-                "--blacklist-assembly=Newtonsoft.Json",
-                "--blacklist-assembly=Valve.Newtonsoft.Json"});
+            List<string> parameters = new List<string>();
+            parameters.Add($"--input={ Core.dumper.Output }");
+            parameters.Add($"--output={ Output }");
+            parameters.Add($"--mscorlib={ Path.Combine(Core.ManagedPath, "mscorlib.dll") }");
+            parameters.Add($"--unity={ Core.unitydependencies.Destination }");
+            parameters.Add($"--gameassembly={ Core.GameAssemblyPath }");
+            if (!string.IsNullOrEmpty(Core.deobfuscationMap.Version))
+                parameters.Add($"--rename-map={ Path.Combine(Core.deobfuscationMap.Destination, Core.deobfuscationMap.NewFileName) }");
+            parameters.Add("--blacklist-assembly=Mono.Security");
+            parameters.Add("--blacklist-assembly=Newtonsoft.Json");
+            parameters.Add("--blacklist-assembly=Valve.Newtonsoft.Json");
+            if (Core.GameName.Equals("Among Us"))
+                parameters.Add("--obf-regex=[A-Z]{11}");
+            return Execute(parameters.ToArray());
         }
     }
 }

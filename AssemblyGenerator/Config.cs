@@ -10,6 +10,7 @@ namespace MelonLoader.AssemblyGenerator
     {
         private static string FilePath = null;
         internal static string GameAssemblyHash = null;
+        internal static string DeobfuscationMapHash = null;
         internal static string UnityVersion = null;
         internal static string DumperVersion = null;
         internal static string Il2CppAssemblyUnhollowerVersion = null;
@@ -37,6 +38,8 @@ namespace MelonLoader.AssemblyGenerator
                 return;
             if (tbl.ContainsKey("UnityVersion"))
                 UnityVersion = (string)tbl["UnityVersion"];
+            if (tbl.ContainsKey("DeobfuscationMapHash"))
+                DeobfuscationMapHash = (string)tbl["DeobfuscationMapHash"];
             if (tbl.ContainsKey("Dumper"))
                 DumperVersion = (string)tbl["Dumper"];
             if (tbl.ContainsKey("Il2CppAssemblyUnhollower"))
@@ -67,6 +70,7 @@ namespace MelonLoader.AssemblyGenerator
                         Items =
                         {
                             {"UnityVersion", (UnityVersion == null) ? "" : UnityVersion},
+                            {"DeobfuscationMapHash", (DeobfuscationMapHash == null) ? "" : DeobfuscationMapHash},
                             {"Dumper", (DumperVersion == null) ? "" : DumperVersion},
                             {"Il2CppAssemblyUnhollower", (Il2CppAssemblyUnhollowerVersion == null) ? "" : Il2CppAssemblyUnhollowerVersion},
                             {"GameAssemblyHash", (GameAssemblyHash == null) ? "" : GameAssemblyHash},

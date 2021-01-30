@@ -12,6 +12,7 @@ extern "C"
 	__declspec(dllexport) void __stdcall Error(const char* txt) { Logger::Error(txt); }
 	__declspec(dllexport) const char* __stdcall GetGameAssemblyPath() { return Il2Cpp::GameAssemblyPath; }
 	__declspec(dllexport) const char* __stdcall GetUnityVersion() { return Game::UnityVersion; }
+	_declspec(dllexport) const char* __stdcall GetGameName() { return Game::Name; }
 	__declspec(dllexport) const char* __stdcall GetManagedDirectory() { return Mono::ManagedPath; }
 	__declspec(dllexport) const char* __stdcall GetConfigDirectory() { return Mono::ConfigPath; }
 	__declspec(dllexport) const char* __stdcall GetAssemblyGeneratorPath() { return AssemblyGenerator::Path; }

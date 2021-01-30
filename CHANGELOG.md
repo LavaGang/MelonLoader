@@ -222,6 +222,7 @@
 198. Re-Implemented Color Variations of MelonLogger.Msg.
 199. Fixed Issue with Melon Logging Traceback not finding certain Melons in the Call Stack.
 200. Added MDB Symbol Support.    (Credits to avail :P)
+201. Added Deobfuscation Map Support.
 
 ---
 
