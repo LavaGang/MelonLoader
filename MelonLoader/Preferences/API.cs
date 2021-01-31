@@ -67,7 +67,7 @@ namespace MelonLoader
                 throw new Exception("identifier is null or empty when calling CreateCategory");
             MelonPreferences_Category category = GetCategory(identifier);
             if (category != null)
-                throw new Exception("Calling CreateCategory for Category that Already Exists");
+                throw new Exception($"Calling CreateCategory for { identifier } when it Already Exists");
             return new MelonPreferences_Category(identifier, displayname);
         }
 
