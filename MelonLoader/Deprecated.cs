@@ -150,31 +150,29 @@ namespace MelonLoader
         public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
         [Obsolete("MelonPrefs.HasKey is obsolete. Please use MelonPreferences.HasEntry instead.")]
         public static bool HasKey(string section, string name) => MelonPreferences.HasEntry(section, name);
-        [Obsolete("MelonPrefs.GetPreferences is obsolete. Please use MelonPreferences instead.")]
+        [Obsolete("MelonPrefs.GetPreferences is obsolete. Please use MelonPreferences.Categories instead.")]
         public static Dictionary<string, Dictionary<string, MelonPreference>> GetPreferences()
         {
             Dictionary<string, Dictionary<string, MelonPreference>> output = new Dictionary<string, Dictionary<string, MelonPreference>>();
-            if (MelonPreferences.categorytbl.Count <= 0)
+            if (MelonPreferences.Categories.Count <= 0)
                 return output;
-            foreach (MelonPreferences_Category category in MelonPreferences.categorytbl)
+            foreach (MelonPreferences_Category category in MelonPreferences.Categories)
             {
                 Dictionary<string, MelonPreference> newprefsdict = new Dictionary<string, MelonPreference>();
-                foreach (MelonPreferences_Entry entry in category.prefstbl)
+                foreach (MelonPreferences_Entry entry in category.Entries)
                 {
-                    MelonPreference newpref = null;
-                    if (entry.Type == MelonPreferences_Entry.TypeEnum.STRING)
-                        newpref = new MelonPreference(entry);
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.BOOL)
-                        newpref = new MelonPreference(entry);
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.INT)
-                        newpref = new MelonPreference(entry);
-                    else if (entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT)
-                        newpref = new MelonPreference(entry);
-                    if (newpref == null)
+                    Type reflectedType = entry.GetReflectedType();
+                    if ((reflectedType != typeof(string))
+                        && (reflectedType != typeof(bool))
+                        && (reflectedType != typeof(int))
+                        && (reflectedType != typeof(float))
+                        && (reflectedType != typeof(double))
+                        && (reflectedType != typeof(long)))
                         continue;
-                    newprefsdict.Add(entry.Name, newpref);
+                    MelonPreference newpref = new MelonPreference(entry);
+                    newprefsdict.Add(entry.Identifier, newpref);
                 }
-                output.Add(category.Name, newprefsdict);
+                output.Add(category.Identifier, newprefsdict);
             }
             return output;
         }
@@ -191,10 +189,19 @@ namespace MelonLoader
             MelonPreferences_Entry entry = category.GetEntry(name);
             if (entry == null)
                 return null;
-            return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetValue<bool>().ToString()
-                : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetValue<int>().ToString()
-                : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetValue<float>().ToString()
-                : entry.GetValue<string>())));
+            if (entry.GetReflectedType() == typeof(bool))
+                return entry.GetValue<bool>().ToString();
+            else if (entry.GetReflectedType() == typeof(int))
+                return entry.GetValue<int>().ToString();
+            else if (entry.GetReflectedType() == typeof(long))
+                return entry.GetValue<long>().ToString();
+            else if (entry.GetReflectedType() == typeof(float))
+                return entry.GetValue<float>().ToString();
+            else if (entry.GetReflectedType() == typeof(double))
+                return entry.GetValue<double>().ToString();
+            else if (entry.GetReflectedType() == typeof(byte))
+                return entry.GetValue<byte>().ToString();
+            return null;
         }
         [Obsolete("MelonPrefs.SetString is obsolete. Please use MelonPreferences.SetEntryString instead.")]
         public static void SetString(string section, string name, string value)
@@ -239,14 +246,31 @@ namespace MelonLoader
         [Obsolete("MelonPrefs.MelonPreference is obsolete. Please use MelonPreferences_Entry instead.")]
         public class MelonPreference
         {
-            [Obsolete("MelonPrefs.MelonPreference.Value is obsolete. Please use MelonPreferences_Entry instead.")]
-            public string Value { get => GetString(Entry.Category.Name, Entry.Name); set => SetString(Entry.Category.Name, Entry.Name, value); }
-            [Obsolete("MelonPrefs.MelonPreference.ValueEdited is obsolete. Please use MelonPreferences_Entry instead.")]
-            public string ValueEdited { get => GetEditedString(Entry.Category.Name, Entry.Name); set => SetEditedString(Entry.Category.Name, Entry.Name, value); }
-            [Obsolete("MelonPrefs.MelonPreference.Type is obsolete. Please use MelonPreferences_Entry.Type instead.")]
-            public MelonPreferenceType Type { get => (MelonPreferenceType)Entry.Type; }
-            [Obsolete("MelonPrefs.MelonPreference.Hidden is obsolete. Please use MelonPreferences_Entry.Hidden instead.")]
-            public bool Hidden { get => Entry.Hidden; }
+            [Obsolete("MelonPrefs.MelonPreference.Value is obsolete. Please use MelonPreferences_Entry.GetValue instead.")]
+            public string Value { get => GetString(Entry.Category.Identifier, Entry.Identifier); set => SetString(Entry.Category.Identifier, Entry.Identifier, value); }
+            [Obsolete("MelonPrefs.MelonPreference.ValueEdited is obsolete. Please use MelonPreferences_Entry.GetValueEdited instead.")]
+            public string ValueEdited { get => GetEditedString(Entry.Category.Identifier, Entry.Identifier); set => SetEditedString(Entry.Category.Identifier, Entry.Identifier, value); }
+            [Obsolete("MelonPrefs.MelonPreference.Type is obsolete. Please use MelonPreferences_Entry.GetReflectedType instead.")]
+            public MelonPreferenceType Type
+            {
+                get
+                {
+                    if (Entry.GetReflectedType() == typeof(string))
+                        return MelonPreferenceType.STRING;
+                    else if (Entry.GetReflectedType() == typeof(bool))
+                        return MelonPreferenceType.BOOL;
+                    else if ((Entry.GetReflectedType() == typeof(float))
+                        || (Entry.GetReflectedType() == typeof(double)))
+                        return MelonPreferenceType.FLOAT;
+                    else if ((Entry.GetReflectedType() == typeof(int))
+                        || (Entry.GetReflectedType() == typeof(long))
+                        || (Entry.GetReflectedType() == typeof(byte)))
+                        return MelonPreferenceType.INT;
+                    return (MelonPreferenceType)4;
+                }
+            }
+            [Obsolete("MelonPrefs.MelonPreference.Hidden is obsolete. Please use MelonPreferences_Entry.IsHidden instead.")]
+            public bool Hidden { get => Entry.IsHidden; }
             [Obsolete("MelonPrefs.MelonPreference.DisplayText is obsolete. Please use MelonPreferences_Entry.DisplayName instead.")]
             public string DisplayText { get => Entry.DisplayName; }
 
@@ -261,10 +285,19 @@ namespace MelonLoader
                 MelonPreferences_Entry entry = category.GetEntry(name);
                 if (entry == null)
                     return null;
-                return ((entry.Type == MelonPreferences_Entry.TypeEnum.BOOL) ? entry.GetEditedValue<bool>().ToString()
-                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.INT) ? entry.GetEditedValue<int>().ToString()
-                    : ((entry.Type == MelonPreferences_Entry.TypeEnum.FLOAT) ? entry.GetEditedValue<float>().ToString()
-                    : entry.GetEditedValue<string>())));
+                if (entry.GetReflectedType() == typeof(bool))
+                    return entry.GetEditedValue<bool>().ToString();
+                else if (entry.GetReflectedType() == typeof(int))
+                    return entry.GetEditedValue<int>().ToString();
+                else if (entry.GetReflectedType() == typeof(long))
+                    return entry.GetEditedValue<long>().ToString();
+                else if (entry.GetReflectedType() == typeof(float))
+                    return entry.GetEditedValue<float>().ToString();
+                else if (entry.GetReflectedType() == typeof(double))
+                    return entry.GetEditedValue<double>().ToString();
+                else if (entry.GetReflectedType() == typeof(byte))
+                    return entry.GetEditedValue<byte>().ToString();
+                return null;
             }
             private static void SetEditedString(string section, string name, string value)
             {

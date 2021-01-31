@@ -1,60 +1,87 @@
 ﻿using System;
 using System.Linq.Expressions;
 using MelonLoader.Tomlyn.Model;
-using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader.Preferences.Types
 {
-    internal class StringParser : TypeParser
+    internal class String : MelonPreferences_Entry
     {
-        private static string TypeName = "string";
         private static Type ReflectedType = typeof(string);
-        private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.STRING;
+        private string Value;
+        private string EditedValue;
+        private string DefaultValue;
 
         internal static void Resolve(object sender, ResolveEventArgs args)
         {
-            if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
-                || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))
-                args.TypeParser = new StringParser();
+            if ((args.Entry != null)
+                || (args.ReflectedType == null)
+                || (args.ReflectedType != ReflectedType))
+                return;
+            args.Entry = new String();
         }
 
-        internal override void Construct<T>(MelonPreferences_Entry entry, T value) =>
-            entry.DefaultValue_string = entry.ValueEdited_string = entry.Value_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+        public override Type GetReflectedType() => ReflectedType;
 
-        internal override KeyValueSyntax Save(MelonPreferences_Entry entry)
+        public override T GetValue<T>()
         {
-            entry.SetValue(entry.GetEditedValue<string>());
-            return new KeyValueSyntax(entry.Name, new StringValueSyntax(entry.GetValue<string>()));
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Get " + typeof(T).FullName + " Value from"));
+            return Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(Value), typeof(T))).Compile()();
         }
-
-        internal override void Load(MelonPreferences_Entry entry, TomlObject obj)
+        public override void SetValue<T>(T val)
         {
-            if (obj.Kind == ObjectKind.String)
-                entry.SetValue(((TomlString)obj).Value);
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Set " + typeof(T).FullName + " Value in"));
+            string oldval = Value;
+            Value = EditedValue = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+            InvokeValueChangeCallbacks(oldval, Value);
         }
 
-        internal override void ConvertCurrentValueType(MelonPreferences_Entry entry) { entry.Type = TypeEnum; ResetToDefault(entry); }
+        public override T GetEditedValue<T>()
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Get Edited " + typeof(T).FullName + " Value from"));
+            return Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(EditedValue), typeof(T))).Compile()();
+        }
+        public override void SetEditedValue<T>(T val)
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Set Edited " + typeof(T).FullName + " Value in"));
+            EditedValue = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+        }
 
-        internal override void ResetToDefault(MelonPreferences_Entry entry) =>
-            entry.SetValue(entry.DefaultValue_string);
+        public override T GetDefaultValue<T>()
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Get Default " + typeof(T).FullName + " Value from"));
+            return Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(DefaultValue), typeof(T))).Compile()();
+        }
+        public override void SetDefaultValue<T>(T val)
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Set Default " + typeof(T).FullName + " Value in"));
+            DefaultValue = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+        }
+        public override void ResetToDefault()
+        {
+            string oldval = Value;
+            Value = EditedValue = DefaultValue;
+            InvokeValueChangeCallbacks(oldval, Value);
+        }
 
-        internal override T GetValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_string), typeof(T))).Compile()();
-        internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.Value_string = entry.ValueEdited_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+        public override void Load(TomlObject obj)
+        {
+            if (obj.Kind != ObjectKind.String)
+                return;
+            SetValue(((TomlString)obj).Value);
+        }
 
-        internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_string), typeof(T))).Compile()();
-        internal override void SetEditedValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.ValueEdited_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
-
-        internal override T GetDefaultValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_string), typeof(T))).Compile()();
-        internal override void SetDefaultValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.DefaultValue_string = Expression.Lambda<Func<string>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
-
-        internal override Type GetReflectedType() => ReflectedType;
-        internal override MelonPreferences_Entry.TypeEnum GetTypeEnum() => TypeEnum;
-        internal override string GetTypeName() => TypeName;
+        public override TomlObject Save()
+        {
+            string oldval = Value;
+            Value = EditedValue;
+            InvokeValueChangeCallbacks(oldval, Value);
+            return new TomlString(Value);
+        }
     }
 }

@@ -225,6 +225,8 @@
 201. Added Deobfuscation Map Support.
 202. Added "--melonloader.agfregenerate" Launch Option.
 203. Re-factored Assembly Generator.
+204. Re-factored MelonPreferences.
+205. MelonPreferences Entries are now Extendable for Custom Type Support.
 
 ---
 

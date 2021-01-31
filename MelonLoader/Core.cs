@@ -21,10 +21,7 @@ namespace MelonLoader
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
-            try { MelonPreferences.LegacyCheck(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.LegacyCheck Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
-            try { MelonPreferences.Load_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Load_Internal Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
-            if (MelonPreferences.WasLegacyLoaded) try { MelonPreferences.Save_Internal(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save_Internal Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
-            MelonPreferences.SaveAfterEntryCreation = true;
+            MelonPreferences.Load();
             try { bHaptics_NativeLibrary.Load(); } catch (Exception ex) { MelonLogger.Error("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
         }
 
@@ -50,7 +47,8 @@ namespace MelonLoader
         internal static void Quit()
         {
             MelonHandler.OnApplicationQuit();
-            try { MelonPreferences.Save(); } catch (Exception ex) { MelonLogger.Error("MelonPreferences.Save Exception: " + ex.ToString()); MelonPreferences.WasError = true; }
+            Preferences.IO.Watcher.Destroy();
+            MelonPreferences.Save();
             Harmony.HarmonyInstance.UnpatchAllInstances();
             try { bHaptics.Quit(); } catch (Exception ex) { MelonLogger.Error("bHaptics.Quit Exception: " + ex.ToString()); bHaptics.WasError = true; }
             MelonLogger.Flush();
@@ -69,7 +67,9 @@ namespace MelonLoader
 
         private static Assembly AssemblyResolveHandler(object sender, ResolveEventArgs args)
         {
-            if (args.Name.StartsWith("MelonLoader.ModHandler, Version=") || args.Name.StartsWith("MelonLoader, Version=") || args.Name.StartsWith("0Harmony, Version="))
+            if (args.Name.StartsWith("MelonLoader.ModHandler, Version=")
+                || args.Name.StartsWith("MelonLoader, Version=")
+                || args.Name.StartsWith("0Harmony, Version="))
                 return typeof(Core).Assembly;
             string assembly_name = args.Name.Split(',')[0];
             string dll_name = (assembly_name + ".dll");

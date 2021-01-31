@@ -1,78 +1,98 @@
 ﻿using System;
 using System.Linq.Expressions;
 using MelonLoader.Tomlyn.Model;
-using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader.Preferences.Types
 {
-    internal class ByteParser : TypeParser
+    internal class Byte : MelonPreferences_Entry
     {
-        private static string TypeName = "byte";
         private static Type ReflectedType = typeof(byte);
-        private static MelonPreferences_Entry.TypeEnum TypeEnum = MelonPreferences_Entry.TypeEnum.BYTE;
+        private byte Value;
+        private byte EditedValue;
+        private byte DefaultValue;
+
         internal static void Resolve(object sender, ResolveEventArgs args)
         {
-            if (((args.ReflectedType != null) && (args.ReflectedType == ReflectedType))
-                || ((args.TypeEnum != MelonPreferences_Entry.TypeEnum.UNKNOWN) && (args.TypeEnum == TypeEnum)))
-                args.TypeParser = new ByteParser();
+            if ((args.Entry != null)
+                || (args.ReflectedType == null)
+                || (args.ReflectedType != ReflectedType))
+                return;
+            args.Entry = new Byte();
         }
 
-        internal override void Construct<T>(MelonPreferences_Entry entry, T value) =>
-            entry.DefaultValue_byte = entry.ValueEdited_byte = entry.Value_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
+        public override Type GetReflectedType() => ReflectedType;
 
-        internal override KeyValueSyntax Save(MelonPreferences_Entry entry)
+        public override T GetValue<T>()
         {
-            entry.SetValue(entry.GetEditedValue<byte>());
-            return new KeyValueSyntax(entry.Name, new IntegerValueSyntax(entry.GetValue<byte>()));
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Get " + typeof(T).FullName + " Value from"));
+            return Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(Value), typeof(T))).Compile()();
+        }
+        public override void SetValue<T>(T val)
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Set " + typeof(T).FullName + " Value in"));
+            byte oldval = Value;
+            Value = EditedValue = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+            InvokeValueChangeCallbacks(oldval, Value);
         }
 
-        internal override void Load(MelonPreferences_Entry entry, TomlObject obj)
+        public override T GetEditedValue<T>()
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Get Edited " + typeof(T).FullName + " Value from"));
+            return Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(EditedValue), typeof(T))).Compile()();
+        }
+        public override void SetEditedValue<T>(T val)
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Set Edited " + typeof(T).FullName + " Value in"));
+            EditedValue = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+        }
+
+        public override T GetDefaultValue<T>()
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Get Default " + typeof(T).FullName + " Value from"));
+            return Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(DefaultValue), typeof(T))).Compile()();
+        }
+        public override void SetDefaultValue<T>(T val)
+        {
+            if (typeof(T) != ReflectedType)
+                throw new Exception(GetExceptionMessage("Set Default " + typeof(T).FullName + " Value in"));
+            DefaultValue = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+        }
+        public override void ResetToDefault()
+        {
+            byte oldval = Value;
+            Value = EditedValue = DefaultValue;
+            InvokeValueChangeCallbacks(oldval, Value);
+        }
+
+        public override void Load(TomlObject obj)
         {
             switch (obj.Kind)
             {
                 case ObjectKind.Boolean:
-                    entry.SetValue((byte)(((TomlBoolean)obj).Value ? 1 : 0));
-                    break;
+                    SetValue((byte)(((TomlBoolean)obj).Value ? 1 : 0));
+                    goto default;
                 case ObjectKind.Integer:
-                    entry.SetValue((byte)((TomlInteger)obj).Value);
-                    break;
+                    SetValue((byte)((TomlInteger)obj).Value);
+                    goto default;
                 case ObjectKind.Float:
-                    entry.SetValue((byte)((TomlFloat)obj).Value);
-                    break;
+                    SetValue((byte)((TomlFloat)obj).Value);
+                    goto default;
                 default:
                     break;
             }
         }
 
-        internal override void ConvertCurrentValueType(MelonPreferences_Entry entry)
+        public override TomlObject Save()
         {
-            byte val = GetDefaultValue<byte>(entry);
-            if (entry.Type == MelonPreferences_Entry.TypeEnum.LONG)
-                val = (byte)entry.GetValue<long>();
-            entry.Type = TypeEnum;
-            entry.SetValue(val);
+            byte oldval = Value;
+            Value = EditedValue;
+            InvokeValueChangeCallbacks(oldval, Value);
+            return new TomlInteger(Value);
         }
-
-        internal override void ResetToDefault(MelonPreferences_Entry entry) =>
-            entry.SetValue(entry.DefaultValue_byte);
-
-        internal override T GetValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.Value_byte), typeof(T))).Compile()();
-        internal override void SetValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.Value_byte = entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
-
-        internal override T GetEditedValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.ValueEdited_byte), typeof(T))).Compile()();
-        internal override void SetEditedValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.ValueEdited_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
-
-        internal override T GetDefaultValue<T>(MelonPreferences_Entry entry) =>
-            Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(entry.DefaultValue_byte), typeof(T))).Compile()();
-        internal override void SetDefaultValue<T>(MelonPreferences_Entry entry, T value) =>
-            entry.DefaultValue_byte = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(value), ReflectedType)).Compile()();
-
-        internal override Type GetReflectedType() => ReflectedType;
-        internal override MelonPreferences_Entry.TypeEnum GetTypeEnum() => TypeEnum;
-        internal override string GetTypeName() => TypeName;
     }
 }
