@@ -187,6 +187,8 @@ namespace MelonLoader
                     }
                     catch(Exception ex) { MelonLogger.Error(ex.ToString()); }
                 }
+            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
+            _Mods = _Mods.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
@@ -349,12 +351,19 @@ namespace MelonLoader
                 MelonLogger.Error("Failed to Create Instance for" + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
                 return;
             }
+
+            MelonBase.MelonPriority priority = MelonBase.MelonPriority.NORMAL;
+            MelonPriorityAttribute priorityatt = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonPriorityAttribute))) as MelonPriorityAttribute;
+            if (priorityatt != null)
+                priority = priorityatt.Priority;
+
             baseInstance.Info = infoAttribute;
             baseInstance.Games = gameAttributes;
             baseInstance.Color = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonColorAttribute))) as MelonColorAttribute;
             baseInstance.OptionalDependencies = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonOptionalDependenciesAttribute))) as MelonOptionalDependenciesAttribute;
             baseInstance.Location = filelocation;
             baseInstance.Compatibility = melonCompatibility;
+            baseInstance.Priority = priority;
             baseInstance.Assembly = asm;
             baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
             if (is_plugin)
@@ -380,6 +389,7 @@ namespace MelonLoader
             foreach (MelonPlugin plugin in _Plugins)
                 try { plugin.OnPreInitialization(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(plugin); }
             _Plugins.RemoveAll(failedPlugins.Contains);
+            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
         }
 
@@ -391,6 +401,7 @@ namespace MelonLoader
             foreach (MelonPlugin plugin in _Plugins)
                 try { plugin.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(plugin); }
             _Plugins.RemoveAll(failedPlugins.Contains);
+            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
         }
 
@@ -402,6 +413,7 @@ namespace MelonLoader
             foreach (MelonMod mod in _Mods)
                 try { mod.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedMods.Add(mod); }
             _Mods.RemoveAll(failedMods.Contains);
+            _Mods = _Mods.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 

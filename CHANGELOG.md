@@ -232,6 +232,7 @@
 208. Added UnityEngine.Vector3 Support to MelonPreferences.
 209. Added UnityEngine.Vector4 Support to MelonPreferences.
 210. Updated MelonPreferences UnityEngine.Color Support to Conform to 0 - 255 RGBA Values in File.
+211. Added MelonPriority Assembly Attribute.
 
 ---
 
