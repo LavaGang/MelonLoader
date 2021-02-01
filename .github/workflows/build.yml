@@ -42,16 +42,16 @@ jobs:
       - name: Build Proxy DLLs For Both Architectures
         shell: cmd
         run: |
-          msbuild Proxy\Proxy.vcxproj /p:Platform=x86
+          msbuild Proxy\Proxy.vcxproj /p:Platform=x86 /p:Configuration=Release
           copy Proxy\Output\Debug\x86\version.dll Output\Debug\x86\version.dll
-          msbuild Proxy\Proxy.vcxproj /p:Platform=x64
+          msbuild Proxy\Proxy.vcxproj /p:Platform=x64 /p:Configuration=Release
           copy Proxy\Output\Debug\x64\version.dll Output\Debug\x64\version.dll
       - name: Build Bootstrap Lib for Both Architectures
         shell: cmd
         run: |
-          msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x86
+          msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x86 /p:Configuration=Release
           copy Bootstrap\Output\Debug\x86\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x86\Melonloader\Dependencies\
-          msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x64
+          msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x64 /p:Configuration=Release
           copy Bootstrap\Output\Debug\x64\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x64\Melonloader\Dependencies\
       - name: Copy Base Libs and Build Final Zip Structure
         shell: cmd
