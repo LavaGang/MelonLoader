@@ -82,7 +82,7 @@ namespace MelonLoader.Preferences.Types
             float[] farr = arr.ToArray<float>();
             if (farr.Length != 4)
                 return;
-            SetValue(new UnityEngine.Color(farr[0], farr[1], farr[2], farr[3]));
+            SetValue(new UnityEngine.Color(farr[0] / 255f, farr[1] / 255f, farr[2] / 255f, farr[3] / 255f));
         }
 
         public override TomlObject Save()
@@ -91,10 +91,10 @@ namespace MelonLoader.Preferences.Types
             Value = EditedValue;
             InvokeValueChangeCallbacks(oldval, Value);
             TomlArray arr = new TomlArray();
-            arr.Add(Value.r);
-            arr.Add(Value.g);
-            arr.Add(Value.b);
-            arr.Add(Value.a);
+            arr.Add(255f * Value.r);
+            arr.Add(255f * Value.g);
+            arr.Add(255f * Value.b);
+            arr.Add(255f * Value.a);
             return arr;
         }
     }
