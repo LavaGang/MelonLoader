@@ -227,6 +227,10 @@
 203. Re-factored Assembly Generator.
 204. Re-factored MelonPreferences.
 205. MelonPreferences Entries are now Extendable for Custom Type Support.
+206. Added UnityEngine.Color Support to MelonPreferences.
+207. Added UnityEngine.Vector2 Support to MelonPreferences.
+208. Added UnityEngine.Vector3 Support to MelonPreferences.
+209. Added UnityEngine.Vector4 Support to MelonPreferences.
 
 ---
 

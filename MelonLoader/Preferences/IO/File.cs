@@ -159,7 +159,7 @@ namespace MelonLoader.Preferences.IO
         {
             if (arr.Count <= 0)
                 return null;
-            TomlObject obj = TomlObject.ToTomlObject(arr.First());
+            TomlObject obj = arr.GetTomlObject(0);
             switch (obj.Kind)
             {
                 case ObjectKind.Boolean:

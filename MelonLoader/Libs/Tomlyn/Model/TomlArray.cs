@@ -95,6 +95,8 @@ namespace MelonLoader.Tomlyn.Model
             set => _items[index] = ToTomlObject(value);
         }
 
+        public TomlObject GetTomlObject(int index) => _items[index];
+
         public T[] ToArray<T>()
         {
             int size = _items.Count;

@@ -77,7 +77,7 @@ namespace MelonLoader.Preferences.Types
             TomlArray arr = (TomlArray)obj;
             if (arr.Count <= 0)
                 return;
-            TomlObject obj2 = TomlObject.ToTomlObject(arr.First());
+            TomlObject obj2 = arr.GetTomlObject(0);
             if (obj2.Kind != ObjectKind.Integer)
                 return;
             SetValue(arr.ToArray<byte>());

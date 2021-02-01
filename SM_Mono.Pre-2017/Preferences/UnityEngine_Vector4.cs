@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using MelonLoader.Tomlyn.Model;
 
 namespace MelonLoader.Preferences.Types
 {
-    internal class Array_Boolean : MelonPreferences_Entry
+    internal class UnityEngine_Vector4 : MelonPreferences_Entry
     {
-        private static Type ReflectedType = typeof(bool[]);
-        private bool[] Value;
-        private bool[] EditedValue;
-        private bool[] DefaultValue;
+        private static Type ReflectedType = typeof(UnityEngine.Vector4);
+        private UnityEngine.Vector4 Value;
+        private UnityEngine.Vector4 EditedValue;
+        private UnityEngine.Vector4 DefaultValue;
 
         internal static void Resolve(object sender, ResolveEventArgs args)
         {
@@ -18,7 +17,7 @@ namespace MelonLoader.Preferences.Types
                 || (args.ReflectedType == null)
                 || (args.ReflectedType != ReflectedType))
                 return;
-            args.Entry = new Array_Boolean();
+            args.Entry = new UnityEngine_Vector4();
         }
 
         public override Type GetReflectedType() => ReflectedType;
@@ -33,8 +32,8 @@ namespace MelonLoader.Preferences.Types
         {
             if (typeof(T) != ReflectedType)
                 throw new Exception(GetExceptionMessage("Set " + typeof(T).FullName + " Value in"));
-            bool[] oldval = Value;
-            Value = EditedValue = Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+            UnityEngine.Vector4 oldval = Value;
+            Value = EditedValue = Expression.Lambda<Func<UnityEngine.Vector4>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
             InvokeValueChangeCallbacks(oldval, Value);
         }
 
@@ -48,7 +47,7 @@ namespace MelonLoader.Preferences.Types
         {
             if (typeof(T) != ReflectedType)
                 throw new Exception(GetExceptionMessage("Set Edited " + typeof(T).FullName + " Value in"));
-            EditedValue = Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+            EditedValue = Expression.Lambda<Func<UnityEngine.Vector4>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
         }
 
         public override T GetDefaultValue<T>()
@@ -61,11 +60,11 @@ namespace MelonLoader.Preferences.Types
         {
             if (typeof(T) != ReflectedType)
                 throw new Exception(GetExceptionMessage("Set Default " + typeof(T).FullName + " Value in"));
-            DefaultValue = Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
+            DefaultValue = Expression.Lambda<Func<UnityEngine.Vector4>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
         }
         public override void ResetToDefault()
         {
-            bool[] oldval = Value;
+            UnityEngine.Vector4 oldval = Value;
             Value = EditedValue = DefaultValue;
             InvokeValueChangeCallbacks(oldval, Value);
         }
@@ -78,19 +77,24 @@ namespace MelonLoader.Preferences.Types
             if (arr.Count <= 0)
                 return;
             TomlObject obj2 = arr.GetTomlObject(0);
-            if (obj2.Kind != ObjectKind.Boolean)
+            if (obj2.Kind != ObjectKind.Float)
                 return;
-            SetValue(arr.ToArray<bool>());
+            float[] farr = arr.ToArray<float>();
+            if (farr.Length != 4)
+                return;
+            SetValue(new UnityEngine.Vector4(farr[0], farr[1], farr[2], farr[3]));
         }
 
         public override TomlObject Save()
         {
-            bool[] oldval = Value;
+            UnityEngine.Vector4 oldval = Value;
             Value = EditedValue;
             InvokeValueChangeCallbacks(oldval, Value);
             TomlArray arr = new TomlArray();
-            foreach (bool val in Value)
-                arr.Add(val);
+            arr.Add(Value.x);
+            arr.Add(Value.y);
+            arr.Add(Value.z);
+            arr.Add(Value.w);
             return arr;
         }
     }

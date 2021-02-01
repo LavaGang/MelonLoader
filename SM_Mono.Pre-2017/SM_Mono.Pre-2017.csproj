@@ -53,6 +53,10 @@
   <ItemGroup>
     <Compile Include="Component.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Preferences\UnityEngine_Color.cs" />
+    <Compile Include="Preferences\UnityEngine_Vector2.cs" />
+    <Compile Include="Preferences\UnityEngine_Vector3.cs" />
+    <Compile Include="Preferences\UnityEngine_Vector4.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportModule.cs" />
     <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
