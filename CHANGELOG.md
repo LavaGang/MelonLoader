@@ -230,6 +230,14 @@
 206. Added MelonPriority Assembly Attribute.
 207. Fixed String Issue with MelonPreferences.
 208. Re-factored MelonColor Support.
+209. Fixed Issue with Legacy Settings failing to Load and breaking settings system completely.    (Credits to knah :D)
+210. Fixed Issue suppress exceptions from Settings Save/Load.    (Credits to knah :D)
+211. Rewrote settings classes to be much cleaner and easier to extend.    (Credits to knah :D)
+212. Updated Il2CppAssemblyUnhollower to v0.4.13.0.    (Credits to knah :D)
+213. Fixed Issue with Deobfuscation Map not Downloading if File does not Exist.    (Credits to knah :D)
+214. Fixed Issue String Settings not loading from TOML.    (Credits to knah :D)
+215. Fixed Issue Legacy Float Settings with Round Values not loading from INI.    (Credits to knah :D)
+216. Rewrote TOML Array Handling.    (Credits to knah :D)
 
 ---
 
