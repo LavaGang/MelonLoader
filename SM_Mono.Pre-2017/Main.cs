@@ -13,11 +13,6 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
 
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Color.Resolve);
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Vector2.Resolve);
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Vector3.Resolve);
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Vector4.Resolve);
-
             SceneManager.sceneLoaded += OnSceneLoad;
             return new SupportModule_To();
         }

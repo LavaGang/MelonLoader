@@ -201,6 +201,8 @@ namespace MelonLoader
                 return entry.GetValue<double>().ToString();
             else if (entry.GetReflectedType() == typeof(byte))
                 return entry.GetValue<byte>().ToString();
+            else if (entry.GetReflectedType() == typeof(string))
+                return entry.GetValue<string>();
             return null;
         }
         [Obsolete("MelonPrefs.SetString is obsolete. Please use MelonPreferences.SetEntryString instead.")]

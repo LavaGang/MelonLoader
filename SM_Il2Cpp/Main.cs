@@ -25,11 +25,6 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
 
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Color.Resolve);
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Vector2.Resolve);
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Vector3.Resolve);
-            MelonPreferences.AddEntryTypeResolveEvent(Preferences.Types.UnityEngine_Vector4.Resolve);
-
             LogSupport.RemoveAllHandlers();
             if (MelonDebug.IsEnabled())
                 LogSupport.InfoHandler += MelonLogger.Msg;

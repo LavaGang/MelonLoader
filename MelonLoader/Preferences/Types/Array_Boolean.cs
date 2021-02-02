@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using MelonLoader.Tomlyn.Model;
 
@@ -23,6 +22,13 @@ namespace MelonLoader.Preferences.Types
 
         public override Type GetReflectedType() => ReflectedType;
 
+        private void SetAndInvoke(bool[] newval)
+        {
+            bool[] oldval = Value;
+            Value = EditedValue = newval;
+            InvokeValueChangeCallbacks(oldval, newval);
+        }
+
         public override T GetValue<T>()
         {
             if (typeof(T) != ReflectedType)
@@ -33,9 +39,7 @@ namespace MelonLoader.Preferences.Types
         {
             if (typeof(T) != ReflectedType)
                 throw new Exception(GetExceptionMessage("Set " + typeof(T).FullName + " Value in"));
-            bool[] oldval = Value;
-            Value = EditedValue = Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
-            InvokeValueChangeCallbacks(oldval, Value);
+            SetAndInvoke(Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()());
         }
 
         public override T GetEditedValue<T>()
@@ -63,12 +67,7 @@ namespace MelonLoader.Preferences.Types
                 throw new Exception(GetExceptionMessage("Set Default " + typeof(T).FullName + " Value in"));
             DefaultValue = Expression.Lambda<Func<bool[]>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
         }
-        public override void ResetToDefault()
-        {
-            bool[] oldval = Value;
-            Value = EditedValue = DefaultValue;
-            InvokeValueChangeCallbacks(oldval, Value);
-        }
+        public override void ResetToDefault() => SetAndInvoke(DefaultValue);
 
         public override void Load(TomlObject obj)
         {
@@ -80,14 +79,12 @@ namespace MelonLoader.Preferences.Types
             TomlObject obj2 = arr.GetTomlObject(0);
             if (obj2.Kind != ObjectKind.Boolean)
                 return;
-            SetValue(arr.ToArray<bool>());
+            SetAndInvoke(arr.ToArray<bool>());
         }
 
         public override TomlObject Save()
         {
-            bool[] oldval = Value;
-            Value = EditedValue;
-            InvokeValueChangeCallbacks(oldval, Value);
+            SetAndInvoke(EditedValue);
             TomlArray arr = new TomlArray();
             foreach (bool val in Value)
                 arr.Add(val);

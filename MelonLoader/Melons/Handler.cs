@@ -62,10 +62,7 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonPlugin plugin in _Plugins)
             {
-                ConsoleColor color = MelonLogger.DefaultMelonColor;
-                if (plugin.Color != null)
-                    color = plugin.Color.Color;
-                MelonLogger.Internal_PrintModName(color, plugin.Info.Name, plugin.Info.Version);
+                MelonLogger.Internal_PrintModName(plugin.Color, plugin.Info.Name, plugin.Info.Version);
                 MelonLogger.Msg("by " + plugin.Info.Author);
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(plugin));
                 MelonLogger.Msg("------------------------------");
@@ -90,10 +87,7 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonMod mod in _Mods)
             {
-                ConsoleColor color = MelonLogger.DefaultMelonColor;
-                if (mod.Color != null)
-                    color = mod.Color.Color;
-                MelonLogger.Internal_PrintModName(color, mod.Info.Name, mod.Info.Version);
+                MelonLogger.Internal_PrintModName(mod.Color, mod.Info.Name, mod.Info.Version);
                 MelonLogger.Msg("by " + mod.Info.Author);
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(mod));
                 MelonLogger.Msg("------------------------------");
@@ -357,9 +351,14 @@ namespace MelonLoader
             if (priorityatt != null)
                 priority = priorityatt.Priority;
 
+            ConsoleColor color = MelonLogger.DefaultMelonColor;
+            MelonColorAttribute coloratt = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonColorAttribute))) as MelonColorAttribute;
+            if (coloratt != null)
+                color = coloratt.Color;
+
             baseInstance.Info = infoAttribute;
             baseInstance.Games = gameAttributes;
-            baseInstance.Color = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonColorAttribute))) as MelonColorAttribute;
+            baseInstance.Color = color;
             baseInstance.OptionalDependencies = asm.GetCustomAttributes(false).FirstOrDefault(x => (x.GetType() == typeof(MelonOptionalDependenciesAttribute))) as MelonOptionalDependenciesAttribute;
             baseInstance.Location = filelocation;
             baseInstance.Compatibility = melonCompatibility;

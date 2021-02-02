@@ -60,14 +60,14 @@ namespace MelonLoader
         public bool IsCompatible { get { return (Compatibility < MelonCompatibility.INCOMPATIBLE); } }
 
         /// <summary>
+        /// Color of the Melon.
+        /// </summary>
+        public ConsoleColor Color { get; internal set; }
+
+        /// <summary>
         /// Info Attribute of the Melon.
         /// </summary>
         public MelonInfoAttribute Info { get; internal set; }
-
-        /// <summary>
-        /// Color Attribute of the Melon.
-        /// </summary>
-        public MelonColorAttribute Color { get; internal set; }
 
         /// <summary>
         /// Game Attributes of the Melon.

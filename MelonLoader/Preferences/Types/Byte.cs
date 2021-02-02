@@ -22,6 +22,13 @@ namespace MelonLoader.Preferences.Types
 
         public override Type GetReflectedType() => ReflectedType;
 
+        private void SetAndInvoke(byte newval)
+        {
+            byte oldval = Value;
+            Value = EditedValue = newval;
+            InvokeValueChangeCallbacks(oldval, newval);
+        }
+
         public override T GetValue<T>()
         {
             if (typeof(T) != ReflectedType)
@@ -32,9 +39,7 @@ namespace MelonLoader.Preferences.Types
         {
             if (typeof(T) != ReflectedType)
                 throw new Exception(GetExceptionMessage("Set " + typeof(T).FullName + " Value in"));
-            byte oldval = Value;
-            Value = EditedValue = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
-            InvokeValueChangeCallbacks(oldval, Value);
+            SetAndInvoke(Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()());
         }
 
         public override T GetEditedValue<T>()
@@ -62,25 +67,20 @@ namespace MelonLoader.Preferences.Types
                 throw new Exception(GetExceptionMessage("Set Default " + typeof(T).FullName + " Value in"));
             DefaultValue = Expression.Lambda<Func<byte>>(Expression.Convert(Expression.Constant(val), ReflectedType)).Compile()();
         }
-        public override void ResetToDefault()
-        {
-            byte oldval = Value;
-            Value = EditedValue = DefaultValue;
-            InvokeValueChangeCallbacks(oldval, Value);
-        }
+        public override void ResetToDefault() => SetAndInvoke(DefaultValue);
 
         public override void Load(TomlObject obj)
         {
             switch (obj.Kind)
             {
                 case ObjectKind.Boolean:
-                    SetValue((byte)(((TomlBoolean)obj).Value ? 1 : 0));
+                    SetAndInvoke((byte)(((TomlBoolean)obj).Value ? 1 : 0));
                     goto default;
                 case ObjectKind.Integer:
-                    SetValue((byte)((TomlInteger)obj).Value);
+                    SetAndInvoke((byte)((TomlInteger)obj).Value);
                     goto default;
                 case ObjectKind.Float:
-                    SetValue((byte)((TomlFloat)obj).Value);
+                    SetAndInvoke((byte)((TomlFloat)obj).Value);
                     goto default;
                 default:
                     break;
@@ -89,9 +89,7 @@ namespace MelonLoader.Preferences.Types
 
         public override TomlObject Save()
         {
-            byte oldval = Value;
-            Value = EditedValue;
-            InvokeValueChangeCallbacks(oldval, Value);
+            SetAndInvoke(EditedValue);
             return new TomlInteger(Value);
         }
     }

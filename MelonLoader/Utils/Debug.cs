@@ -32,8 +32,7 @@ namespace MelonLoader
             if (melon != null)
             {
                 namesection = melon.Info.Name.Replace(" ", "_");
-                if (melon.Color != null)
-                    msgcolor = melon.Color.Color;
+                msgcolor = melon.Color;
             }
             Internal_Msg(meloncolor, msgcolor, namesection, msg);
             MsgCallbackHandler?.Invoke(meloncolor, msgcolor, namesection, msg);
