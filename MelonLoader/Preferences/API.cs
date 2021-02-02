@@ -89,6 +89,7 @@ namespace MelonLoader
             return Categories.Find(x => x.Identifier.Equals(identifier));
         }
         public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
+        public static MelonPreferences_Entry<T> GetEntry<T>(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
         public static MelonPreferences_Entry CreateEntry<T>(string category_name, string entry_name, T default_value, string display_name = null, bool is_hidden = false) => GetCategory(category_name)?.CreateEntry(entry_name, default_value, display_name, is_hidden);
         public static bool HasEntry(string category_identifier, string entry_identifier) => (GetEntry(category_identifier, entry_identifier) != null);
         public static void SetEntryValue<T>(string category_identifier, string entry_identifier, T value)
