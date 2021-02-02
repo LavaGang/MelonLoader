@@ -20,20 +20,19 @@ namespace MelonLoader
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("Name is null or empty when calling CreateEntry");
-            MelonPreferences_Entry entry = GetEntry(identifier);
+            var entry = GetEntry<T>(identifier);
             if (entry != null)
                 throw new Exception($"Calling CreateEntry for { identifier } when it Already Exists");
-            MelonPreferences_Entry.ResolveEventArgs args = new MelonPreferences_Entry.ResolveEventArgs { ReflectedType = typeof(T) };
-            MelonPreferences.InvokeEntryTypeResolveEvents(args);
-            if (args.Entry == null)
-                throw new Exception($"Calling CreateEntry for { identifier } with Unknown Type");
-            entry = args.Entry;
-            entry.Identifier = identifier;
-            entry.DisplayName = displayname;
-            entry.IsHidden = ishidden;
-            entry.Category = this;
-            entry.SetDefaultValue(value);
-            entry.ResetToDefault();
+
+            entry = new MelonPreferences_Entry<T>
+            {
+                Identifier = identifier,
+                DisplayName = displayname,
+                IsHidden = ishidden,
+                Category = this,
+                DefaultValue = value,
+                Value = value
+            };
             Preferences.IO.File.SetupEntryFromRawValue(entry);
             Entries.Add(entry);
             return entry;
@@ -47,6 +46,11 @@ namespace MelonLoader
                 return null;
             return Entries.Find(x => x.Identifier.Equals(identifier));
         }
-        public bool HasEntry(string identifier) => (GetEntry(identifier) != null);
+
+        public MelonPreferences_Entry<T> GetEntry<T>(string identifier)
+        {
+            return (MelonPreferences_Entry<T>) GetEntry(identifier);
+        }
+        public bool HasEntry(string identifier) => GetEntry(identifier) != null;
     }
 }

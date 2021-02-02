@@ -51,6 +51,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SM_Il2Cpp\Preferences\UnityMappers.cs">
+      <Link>Preferences\UnityMappers.cs</Link>
+    </Compile>
     <Compile Include="Component.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

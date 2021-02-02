@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MelonLoader.Support.Preferences;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace MelonLoader.Support
@@ -12,6 +13,8 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
+            
+            UnityMappers.RegisterMappers();
 
             SceneManager.sceneLoaded += OnSceneLoad;
             return new SupportModule_To();

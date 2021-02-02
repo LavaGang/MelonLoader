@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Support.Preferences;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
@@ -24,6 +25,8 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
+            
+            UnityMappers.RegisterMappers();
 
             LogSupport.RemoveAllHandlers();
             if (MelonDebug.IsEnabled())

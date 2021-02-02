@@ -7,31 +7,15 @@ namespace MelonLoader
     public static class MelonPreferences
     {
         public static readonly List<MelonPreferences_Category> Categories = new List<MelonPreferences_Category>();
-        private static event EventHandler<MelonPreferences_Entry.ResolveEventArgs> EntryTypeResolveEvents;
+
+        public static readonly TomlMapper Mapper = new TomlMapper();
 
         static MelonPreferences()
         {
             string FilePath = Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg");
             string LegacyFilePath = Path.Combine(MelonUtils.UserDataDirectory, "modprefs.ini");
             Preferences.IO.File.Setup(FilePath, LegacyFilePath);
-
-            AddEntryTypeResolveEvent(Preferences.Types.Array_Boolean.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Array_Byte.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Array_Double.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Array_Float.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Array_Integer.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Array_Long.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Array_String.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Boolean.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Byte.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Double.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Float.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Integer.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.Long.Resolve);
-            AddEntryTypeResolveEvent(Preferences.Types.String.Resolve);
         }
-        public static void AddEntryTypeResolveEvent(EventHandler<MelonPreferences_Entry.ResolveEventArgs> evt) => EntryTypeResolveEvents += evt;
-        internal static void InvokeEntryTypeResolveEvents(MelonPreferences_Entry.ResolveEventArgs args) => EntryTypeResolveEvents?.Invoke(null, args);
 
         public static void Load()
         {
@@ -107,16 +91,21 @@ namespace MelonLoader
         public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
         public static MelonPreferences_Entry CreateEntry<T>(string category_name, string entry_name, T defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
         public static bool HasEntry(string category_identifier, string entry_identifier) => (GetEntry(category_identifier, entry_identifier) != null);
-        public static void SetEntryValue<T>(string category_identifier, string entry_identifier, T value) => GetCategory(category_identifier)?.GetEntry(entry_identifier)?.SetValue(value);
+        public static void SetEntryValue<T>(string category_identifier, string entry_identifier, T value)
+        {
+            var entry = GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
+            if (entry != null) entry.Value = value;
+        }
+
         public static T GetEntryValue<T>(string category_identifier, string entry_identifier)
         {
             MelonPreferences_Category cat = GetCategory(category_identifier);
             if (cat == null)
                 return default;
-            MelonPreferences_Entry entry = cat.GetEntry(entry_identifier);
+            var entry = cat.GetEntry<T>(entry_identifier);
             if (entry == null)
                 return default;
-            return entry.GetValue<T>();
+            return entry.Value;
         }
     }
 }

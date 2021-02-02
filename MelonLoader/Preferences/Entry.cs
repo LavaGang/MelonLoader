@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using MelonLoader.Tomlyn.Model;
 
 namespace MelonLoader
 {
-    public class MelonPreferences_Entry
+    public abstract class MelonPreferences_Entry
     {
         public string Identifier { get; internal set; }
         public string DisplayName { get; internal set; }
@@ -13,58 +12,62 @@ namespace MelonLoader
 
         public string GetExceptionMessage(string submsg) => ("Attempted to " + submsg + " " + DisplayName + " when it is a " + GetReflectedType().FullName + "!");
 
-        public virtual Type GetReflectedType() => default;
+        public abstract Type GetReflectedType();
 
-        public virtual T GetValue<T>() => default;
-        public virtual void SetValue<T>(T val) { }
+        public abstract void ResetToDefault();
 
-        public virtual T GetEditedValue<T>() => default;
-        public virtual void SetEditedValue<T>(T val) { }
+        public abstract string GetEditedValueAsString();
+        public abstract string GetValueAsString();
 
-        public virtual T GetDefaultValue<T>() => default;
-        public virtual void SetDefaultValue<T>(T val) { }
-        public virtual void ResetToDefault() { }
+        public abstract void Load(TomlObject obj);
+        public abstract TomlObject Save();
 
-        public virtual void Load(TomlObject obj) { }
-        public virtual TomlObject Save() => default;
+        public event Action OnValueChangedUntyped;
 
-        private List<Delegate> OnValueChanged;
-        public void AddValueChangeCallback<T>(Action<T, T> callback)
+        protected void FireUntypedValueChanged()
         {
-            if (typeof(T) != GetReflectedType())
-                throw new Exception(GetExceptionMessage("Add " + typeof(T).FullName + " Value Change Callback to"));
-            if (OnValueChanged == null)
-                OnValueChanged = new List<Delegate>();
-            OnValueChanged.Add(callback);
+            OnValueChangedUntyped?.Invoke();
         }
-        public void RemoveValueChangeCallback<T>(Action<T, T> callback)
+    }
+
+    public class MelonPreferences_Entry<T> : MelonPreferences_Entry
+    {
+        private T myValue;
+        
+        public T Value
         {
-            if (typeof(T) != GetReflectedType())
-                throw new Exception(GetExceptionMessage("Remove " + typeof(T).FullName + " Value Change Callback from"));
-            if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
-                return;
-            OnValueChanged.Remove(callback);
+            get => myValue;
+            set
+            {
+                var old = myValue;
+                myValue = value;
+                EditedValue = myValue;
+                OnValueChanged?.Invoke(old, value);
+                FireUntypedValueChanged();
+            } 
         }
-        public void ClearAllValueChangeCallbacks()
+        
+        public T EditedValue { get; set; }
+        public T DefaultValue { get; set; }
+
+        public override void ResetToDefault() => Value = DefaultValue;
+
+        public event Action<T, T> OnValueChanged;
+
+        public override Type GetReflectedType() => typeof(T);
+
+        public override string GetEditedValueAsString() => EditedValue?.ToString();
+        public override string GetValueAsString() => Value?.ToString();
+
+        public override void Load(TomlObject obj)
         {
-            if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
-                return;
-            OnValueChanged.Clear();
-        }
-        public void InvokeValueChangeCallbacks<T>(T old_value, T new_value)
-        {
-            if (typeof(T) != GetReflectedType())
-                throw new Exception(GetExceptionMessage("Invoke " + typeof(T).FullName + " Value Change Callback when it the Value is"));
-            if ((OnValueChanged == null) || (OnValueChanged.Count <= 0))
-                return;
-            foreach (Delegate callback in OnValueChanged)
-                callback.DynamicInvoke(old_value, new_value);
+            Value = MelonPreferences.Mapper.FromToml<T>(obj);
         }
 
-        public class ResolveEventArgs : EventArgs
+        public override TomlObject Save()
         {
-            public Type ReflectedType { get; set; }
-            public MelonPreferences_Entry Entry { get; set; }
+            Value = EditedValue;
+            return MelonPreferences.Mapper.ToToml(Value);
         }
     }
 }

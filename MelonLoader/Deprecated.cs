@@ -189,21 +189,7 @@ namespace MelonLoader
             MelonPreferences_Entry entry = category.GetEntry(name);
             if (entry == null)
                 return null;
-            if (entry.GetReflectedType() == typeof(bool))
-                return entry.GetValue<bool>().ToString();
-            else if (entry.GetReflectedType() == typeof(int))
-                return entry.GetValue<int>().ToString();
-            else if (entry.GetReflectedType() == typeof(long))
-                return entry.GetValue<long>().ToString();
-            else if (entry.GetReflectedType() == typeof(float))
-                return entry.GetValue<float>().ToString();
-            else if (entry.GetReflectedType() == typeof(double))
-                return entry.GetValue<double>().ToString();
-            else if (entry.GetReflectedType() == typeof(byte))
-                return entry.GetValue<byte>().ToString();
-            else if (entry.GetReflectedType() == typeof(string))
-                return entry.GetValue<string>();
-            return null;
+            return entry.GetValueAsString();
         }
         [Obsolete("MelonPrefs.SetString is obsolete. Please use MelonPreferences.SetEntryString instead.")]
         public static void SetString(string section, string name, string value)
@@ -214,16 +200,24 @@ namespace MelonLoader
             MelonPreferences_Entry entry = category.GetEntry(name);
             if (entry == null)
                 return;
-            int val_int = 0;
-            float val_float = 0f;
-            if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
-                entry.SetValue(value.ToLower().StartsWith("true"));
-            else if (Int32.TryParse(value, out val_int))
-                entry.SetValue(val_int);
-            else if (float.TryParse(value, out val_float))
-                entry.SetValue(val_float);
-            else
-                entry.SetValue(value);
+            switch (entry)
+            {
+                case MelonPreferences_Entry<string> stringEntry:
+                    stringEntry.Value = value;
+                    break;
+                case MelonPreferences_Entry<int> intEntry:
+                    if (int.TryParse(value, out var parsedInt))
+                        intEntry.Value = parsedInt;
+                    break;
+                case MelonPreferences_Entry<float> floatEntry:
+                    if (float.TryParse(value, out var parsedFloat))
+                        floatEntry.Value = parsedFloat;
+                    break;
+                case MelonPreferences_Entry<bool> boolEntry:
+                    if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
+                        boolEntry.Value = value.ToLower().StartsWith("true");
+                    break;
+            }
         }
         [Obsolete("MelonPrefs.GetBool is obsolete. Please use MelonPreferences.GetEntryBool instead.")]
         public static bool GetBool(string section, string name) => MelonPreferences.GetEntryValue<bool>(section, name);
@@ -287,19 +281,8 @@ namespace MelonLoader
                 MelonPreferences_Entry entry = category.GetEntry(name);
                 if (entry == null)
                     return null;
-                if (entry.GetReflectedType() == typeof(bool))
-                    return entry.GetEditedValue<bool>().ToString();
-                else if (entry.GetReflectedType() == typeof(int))
-                    return entry.GetEditedValue<int>().ToString();
-                else if (entry.GetReflectedType() == typeof(long))
-                    return entry.GetEditedValue<long>().ToString();
-                else if (entry.GetReflectedType() == typeof(float))
-                    return entry.GetEditedValue<float>().ToString();
-                else if (entry.GetReflectedType() == typeof(double))
-                    return entry.GetEditedValue<double>().ToString();
-                else if (entry.GetReflectedType() == typeof(byte))
-                    return entry.GetEditedValue<byte>().ToString();
-                return null;
+
+                return entry.GetEditedValueAsString();
             }
             private static void SetEditedString(string section, string name, string value)
             {
@@ -309,16 +292,24 @@ namespace MelonLoader
                 MelonPreferences_Entry entry = category.GetEntry(name);
                 if (entry == null)
                     return;
-                int val_int = 0;
-                float val_float = 0f;
-                if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
-                    entry.SetEditedValue(value.ToLower().StartsWith("true"));
-                else if (Int32.TryParse(value, out val_int))
-                    entry.SetEditedValue(val_int);
-                else if (float.TryParse(value, out val_float))
-                    entry.SetEditedValue(val_float);
-                else
-                    entry.SetEditedValue(value);
+                switch (entry)
+                {
+                    case MelonPreferences_Entry<string> stringEntry:
+                        stringEntry.EditedValue = value;
+                        break;
+                    case MelonPreferences_Entry<int> intEntry:
+                        if (int.TryParse(value, out var parsedInt))
+                            intEntry.EditedValue = parsedInt;
+                        break;
+                    case MelonPreferences_Entry<float> floatEntry:
+                        if (float.TryParse(value, out var parsedFloat))
+                            floatEntry.EditedValue = parsedFloat;
+                        break;
+                    case MelonPreferences_Entry<bool> boolEntry:
+                        if (value.ToLower().StartsWith("true") || value.ToLower().StartsWith("false"))
+                            boolEntry.EditedValue = value.ToLower().StartsWith("true");
+                        break;
+                }
             }
         }
     }

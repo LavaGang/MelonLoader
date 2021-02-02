@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MelonLoader.Support.Preferences;
+using UnityEngine;
 
 namespace MelonLoader.Support
 {
@@ -10,6 +11,8 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
+            
+            UnityMappers.RegisterMappers();
 
             Component.Create();
             return new SupportModule_To();
