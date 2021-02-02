@@ -9,14 +9,14 @@ namespace MelonLoader
         public string DisplayName { get; internal set; }
         public readonly List<MelonPreferences_Entry> Entries = new List<MelonPreferences_Entry>();
 
-        internal MelonPreferences_Category(string identifier, string displayname)
+        internal MelonPreferences_Category(string identifier, string display_name)
         {
             Identifier = identifier;
-            DisplayName = displayname;
+            DisplayName = display_name;
             MelonPreferences.Categories.Add(this);
         }
 
-        public MelonPreferences_Entry CreateEntry<T>(string identifier, T value, string displayname = null, bool ishidden = false)
+        public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name = null, bool is_hidden = false)
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("Name is null or empty when calling CreateEntry");
@@ -27,11 +27,11 @@ namespace MelonLoader
             entry = new MelonPreferences_Entry<T>
             {
                 Identifier = identifier,
-                DisplayName = displayname,
-                IsHidden = ishidden,
+                DisplayName = display_name,
+                IsHidden = is_hidden,
                 Category = this,
-                DefaultValue = value,
-                Value = value
+                DefaultValue = default_value,
+                Value = default_value
             };
             Preferences.IO.File.SetupEntryFromRawValue(entry);
             Entries.Add(entry);
