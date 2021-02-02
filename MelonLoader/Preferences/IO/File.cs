@@ -144,23 +144,23 @@ namespace MelonLoader.Preferences.IO
 
         private static ArraySyntax CreateArraySyntaxFromTomlArray(TomlArray arr)
         {
-            if (arr.Count <= 0)
-                return null;
-            TomlObject obj = arr.GetTomlObject(0);
-            switch (obj.Kind)
+            var newSyntax = new ArraySyntax
             {
-                case ObjectKind.Boolean:
-                    return new ArraySyntax(arr.ToArray<bool>());
-                case ObjectKind.String:
-                    return new ArraySyntax(arr.ToArray<string>());
-                case ObjectKind.Float:
-                    return new ArraySyntax(arr.ToArray<double>());
-                case ObjectKind.Integer:
-                    return new ArraySyntax(arr.ToArray<long>());
-                default:
-                    break;
+                OpenBracket = SyntaxFactory.Token(TokenKind.OpenBracket),
+                CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket)
+            };
+            for(var i = 0; i < arr.Count; i++)
+            {
+                var item = new ArrayItemSyntax {Value = CreateValueSyntaxFromTomlObject(arr.GetTomlObject(i))};
+                if (i + 1 < arr.Count)
+                {
+                    item.Comma = SyntaxFactory.Token(TokenKind.Comma);
+                    item.Comma.AddTrailingWhitespace();
+                }
+                newSyntax.Items.Add(item);
             }
-            return null;
+
+            return newSyntax;
         }
 
         internal static void SetupRawValue(string category_identifier, string entry_identifier, TomlObject obj)

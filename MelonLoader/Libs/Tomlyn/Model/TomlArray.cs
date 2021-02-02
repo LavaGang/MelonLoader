@@ -96,14 +96,5 @@ namespace MelonLoader.Tomlyn.Model
         }
 
         public TomlObject GetTomlObject(int index) => _items[index];
-
-        public T[] ToArray<T>()
-        {
-            int size = _items.Count;
-            T[] output = new T[size];
-            for (int i = 0; i < size; i++)
-                output[i] = Expression.Lambda<Func<T>>(Expression.Convert(Expression.Constant(this[i]), typeof(T))).Compile()();
-            return output;
-        }
     }
 }
