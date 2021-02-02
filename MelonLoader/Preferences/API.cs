@@ -35,8 +35,25 @@ namespace MelonLoader
 
         public static void Load()
         {
-            try { Preferences.IO.File.LegacyLoad(); } catch { Preferences.IO.File.WasError = true; }
-            try { Preferences.IO.File.Load(); } catch { Preferences.IO.File.WasError = true; }
+            try
+            {
+                Preferences.IO.File.LegacyLoad();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Legacy settings load failed: {ex}");
+                Preferences.IO.File.WasError = true;
+            }
+
+            try
+            {
+                Preferences.IO.File.Load();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Settings load failed: {ex}");
+                Preferences.IO.File.WasError = true;
+            }
             if (!Preferences.IO.File.WasError && (Categories.Count > 0))
             {
                 foreach (MelonPreferences_Category cat in Categories)
@@ -56,7 +73,15 @@ namespace MelonLoader
             foreach (MelonPreferences_Category category in Categories)
                 foreach (MelonPreferences_Entry entry in category.Entries)
                     Preferences.IO.File.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
-            try { Preferences.IO.File.Save(); } catch { Preferences.IO.File.WasError = true; }
+            try
+            {
+                Preferences.IO.File.Save();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while saving settings: {ex}");
+                Preferences.IO.File.WasError = true;
+            }
             MelonLogger.Msg("Preferences Saved!");
             MelonHandler.OnPreferencesSaved();
         }
