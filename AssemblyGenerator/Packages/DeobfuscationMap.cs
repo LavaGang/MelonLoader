@@ -17,7 +17,9 @@ namespace MelonLoader.AssemblyGenerator
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.DeobfuscationMapHash) || !Config.DeobfuscationMapHash.Equals(Version));
+        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.DeobfuscationMapHash) ||
+                                          !Config.DeobfuscationMapHash.Equals(Version) ||
+                                          !File.Exists(Path.Combine(Destination, NewFileName)));
 
         internal override bool Download()
         {
