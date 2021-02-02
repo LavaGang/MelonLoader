@@ -90,21 +90,8 @@ namespace MelonLoader.Preferences.IO
                     if (tblkeypair.Value is TomlObject tomlObj)
                         obj = tomlObj;
                     else
-                    {
-                        Type reflectedType = tblkeypair.Value.GetType();
-                        if (reflectedType == typeof(bool))
-                            obj = new TomlBoolean((bool)tblkeypair.Value);
-                        else if (reflectedType == typeof(double))
-                            obj = new TomlFloat((double)tblkeypair.Value);
-                        else if (reflectedType == typeof(float))
-                            obj = new TomlFloat((float)tblkeypair.Value);
-                        else if (reflectedType == typeof(long))
-                            obj = new TomlInteger((long)tblkeypair.Value);
-                        else if (reflectedType == typeof(int))
-                            obj = new TomlInteger((int)tblkeypair.Value);
-                        else if (reflectedType == typeof(byte))
-                            obj = new TomlInteger((byte)tblkeypair.Value);
-                    }
+                        obj = TomlObject.ToTomlObject(tblkeypair.Value);
+
                     if (obj == null)
                         continue;
                     SetupRawValue(category, identifier, obj);
