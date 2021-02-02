@@ -50,9 +50,9 @@ namespace MelonLoader.Preferences.IO
                 if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
                     SetupRawValue(category, parts[0], TomlObject.ToTomlObject(parts[1].ToLower().StartsWith("true")));
                 else if (int.TryParse(parts[1], out val_int))
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject(val_int));
+                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((long) val_int));
                 else if (float.TryParse(parts[1], out val_float))
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject(val_float));
+                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((double) val_float));
                 else
                     SetupRawValue(category, parts[0], TomlObject.ToTomlObject(parts[1].Replace("\r", "")));
             }
