@@ -7,7 +7,7 @@ namespace MelonLoader
 {
     public class TomlMapper
     {
-        private Dictionary<Type, KeyValuePair<Delegate, Delegate>> myMappers = new Dictionary<Type, KeyValuePair<Delegate, Delegate>>();
+        private readonly Dictionary<Type, KeyValuePair<Delegate, Delegate>> myMappers = new Dictionary<Type, KeyValuePair<Delegate, Delegate>>();
 
         public TomlMapper()
         {
@@ -19,8 +19,8 @@ namespace MelonLoader
             RegisterMapper(o => (byte) ((o as TomlInteger)?.Value ?? default), s => new TomlInteger(s));
             RegisterMapper(o => (short) ((o as TomlInteger)?.Value ?? default), s => new TomlInteger(s));
             
-            RegisterMapper(o => (o as TomlFloat)?.Value ?? default, s => new TomlFloat(s));
-            RegisterMapper(o => (float) ((o as TomlFloat)?.Value ?? default), s => new TomlFloat(s));
+            RegisterMapper(o => (o as TomlFloat)?.Value ?? (o as TomlInteger)?.Value ?? default, s => new TomlFloat(s));
+            RegisterMapper(o => (float) ((o as TomlFloat)?.Value ?? (o as TomlInteger)?.Value ?? default), s => new TomlFloat(s));
         }
 
         public void RegisterMapper<T>(Func<TomlObject, T> read, Func<T, TomlObject> write)
