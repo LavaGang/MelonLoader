@@ -241,6 +241,7 @@
 217. Fixed Issue with Virtual Terminal Processing on some systems.
 218. Fixed Issue with MelonPreferences having Category and Entry Display Names not be set to Identifier when null.
 219. Fixed Issue with MelonPreferences.CreateEntry not creating Category.
+220. Replaced Il2CppDumper with Cpp2IL.
 
 ---
 
