@@ -78,7 +78,7 @@ namespace MelonLoader
                 display_name = identifier;
             MelonPreferences_Category category = GetCategory(identifier);
             if (category != null)
-                throw new Exception($"Calling CreateCategory for { display_name } when it Already Exists");
+                return category;
             return new MelonPreferences_Category(identifier, display_name);
         }
 
