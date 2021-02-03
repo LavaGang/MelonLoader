@@ -238,6 +238,7 @@
 214. Fixed Issue String Settings not loading from TOML.    (Credits to knah :D)
 215. Fixed Issue Legacy Float Settings with Round Values not loading from INI.    (Credits to knah :D)
 216. Rewrote TOML Array Handling.    (Credits to knah :D)
+217. Fixed Issue with Virtual Terminal Processing on some systems.
 
 ---
 

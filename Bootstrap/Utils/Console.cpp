@@ -20,6 +20,7 @@ HWND Console::Window = NULL;
 HMENU Console::Menu = NULL;
 HANDLE Console::OutputHandle = NULL;
 int Console::rainbow = 1;
+bool Console::UseManualColoring = false;
 
 bool Console::Initialize()
 {
@@ -51,11 +52,8 @@ bool Console::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
 		return false;
 	}
-	if (IsWindows10OrGreater() && !SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
-	{
-		Assertion::ThrowInternalFailure("Failed to Enable Virtual Terminal Processing!");
-		return false;
-	}
+	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
+		UseManualColoring = true;
 	return true;
 }
 
@@ -130,7 +128,7 @@ std::string Console::ColorToAnsi(Color color, bool modecheck)
 			: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
 				? GetRainbowColor()
 				: color));
-	if (!IsWindows10OrGreater())
+	if (UseManualColoring)
 	{
 		SetConsoleTextAttribute(OutputHandle, color);
 		return std::string();
