@@ -66,7 +66,7 @@ void LoadBootstrap()
 {
 	if (strstr(GetCommandLineA(), "--no-mods") != NULL)
 		return;
-	HINSTANCE melonloaderdll = LoadLibraryA("MelonLoader\\Dependencies\\Bootstrap.dll");
+	LoadLibraryA("MelonLoader\\Dependencies\\Bootstrap.dll");
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
