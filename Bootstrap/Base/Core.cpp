@@ -22,22 +22,23 @@ bool Core::QuitFix = false;
 
 const char* Core::GetVersionStr() { return ("MelonLoader " + std::string("v0.3.0") + " ALPHA Pre-Release").c_str(); }
 
-bool Core::Initialize()
+void Core::Initialize(HINSTANCE hinstDLL)
 {
+	Bootstrap = hinstDLL;
 	if (!OSVersionCheck() || !Game::Initialize())
-		return true;
+		return;
 	CommandLine::Read();
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
 		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
-		return true;
+		return;
 	WelcomeMessage();
 	if (!AnalyticsBlocker::Initialize()
 		|| !Il2Cpp::Initialize()
 		|| !Mono::Load())
-		return true;
+		return;
 	AnalyticsBlocker::Hook();
 	if (Game::IsIl2Cpp)
 	{
@@ -58,7 +59,6 @@ bool Core::Initialize()
 	}
 	if (!Debug::Enabled)
 		Console::NullHandles();
-	return true;
 }
 
 void Core::WelcomeMessage()

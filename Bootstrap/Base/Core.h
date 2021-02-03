@@ -8,7 +8,7 @@ public:
 	static HINSTANCE Bootstrap;
 	static char* Path;
 	static bool QuitFix;
-	static bool Initialize();
+	static void Initialize(HINSTANCE hinstDLL);
 	static bool DirectoryExists(const char* path);
 	static bool FileExists(const char* path);
 	static void GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt);
