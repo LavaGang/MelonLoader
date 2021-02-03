@@ -70,14 +70,28 @@ namespace MelonLoader
             MelonHandler.OnPreferencesSaved();
         }
 
-        public static MelonPreferences_Category CreateCategory(string identifier, string displayname = null)
+        public static MelonPreferences_Category CreateCategory(string identifier, string display_name = null)
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("identifier is null or empty when calling CreateCategory");
+            if (display_name == null)
+                display_name = identifier;
             MelonPreferences_Category category = GetCategory(identifier);
             if (category != null)
-                throw new Exception($"Calling CreateCategory for { identifier } when it Already Exists");
-            return new MelonPreferences_Category(identifier, displayname);
+                throw new Exception($"Calling CreateCategory for { display_name } when it Already Exists");
+            return new MelonPreferences_Category(identifier, display_name);
+        }
+
+        public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier, T default_value, string display_name = null, bool is_hidden = false)
+        {
+            if (string.IsNullOrEmpty(category_identifier))
+                throw new Exception("category_identifier is null or empty when calling CreateEntry");
+            if (string.IsNullOrEmpty(entry_identifier))
+                throw new Exception("entry_identifier is null or empty when calling CreateEntry");
+            MelonPreferences_Category category = GetCategory(entry_identifier);
+            if (category == null)
+                category = CreateCategory(category_identifier);
+            return category.CreateEntry(entry_identifier, default_value, display_name, is_hidden);
         }
 
         public static MelonPreferences_Category GetCategory(string identifier)
@@ -90,7 +104,6 @@ namespace MelonLoader
         }
         public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
         public static MelonPreferences_Entry<T> GetEntry<T>(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
-        public static MelonPreferences_Entry CreateEntry<T>(string category_name, string entry_name, T default_value, string display_name = null, bool is_hidden = false) => GetCategory(category_name)?.CreateEntry(entry_name, default_value, display_name, is_hidden);
         public static bool HasEntry(string category_identifier, string entry_identifier) => (GetEntry(category_identifier, entry_identifier) != null);
         public static void SetEntryValue<T>(string category_identifier, string entry_identifier, T value)
         {

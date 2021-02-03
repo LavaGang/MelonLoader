@@ -239,6 +239,8 @@
 215. Fixed Issue Legacy Float Settings with Round Values not loading from INI.    (Credits to knah :D)
 216. Rewrote TOML Array Handling.    (Credits to knah :D)
 217. Fixed Issue with Virtual Terminal Processing on some systems.
+218. Fixed Issue with MelonPreferences having Category and Entry Display Names not be set to Identifier when null.
+219. Fixed Issue with MelonPreferences.CreateEntry not creating Category.
 
 ---
 

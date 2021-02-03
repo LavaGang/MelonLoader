@@ -23,15 +23,6 @@ const char* winhttp_ExportNames[] = { "Private1", "SvchostPushServiceGlobals", "
 void LoadProxy_winhttp(HMODULE originaldll) { for (int i = 0; i < (sizeof(winhttp_ExportNames) / sizeof(winhttp_ExportNames[0])); i++) winhttp_OriginalFuncs[i] = GetProcAddress(originaldll, winhttp_ExportNames[i]); }
 #pragma endregion
 
-void KillCurrentProcess()
-{
-	HANDLE current_process = GetCurrentProcess();
-	if (current_process == NULL)
-		return;
-	TerminateProcess(current_process, NULL);
-	CloseHandle(current_process);
-}
-
 bool LoadProxy(HINSTANCE hinstDLL)
 {
 	LPSTR fullpathstr = new CHAR[MAX_PATH];

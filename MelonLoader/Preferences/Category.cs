@@ -19,11 +19,12 @@ namespace MelonLoader
         public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name = null, bool is_hidden = false)
         {
             if (string.IsNullOrEmpty(identifier))
-                throw new Exception("Name is null or empty when calling CreateEntry");
+                throw new Exception("identifier is null or empty when calling CreateEntry");
+            if (display_name == null)
+                display_name = identifier;
             var entry = GetEntry<T>(identifier);
             if (entry != null)
-                throw new Exception($"Calling CreateEntry for { identifier } when it Already Exists");
-
+                throw new Exception($"Calling CreateEntry for { display_name } when it Already Exists");
             entry = new MelonPreferences_Entry<T>
             {
                 Identifier = identifier,
