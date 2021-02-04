@@ -20,8 +20,6 @@ namespace MelonLoader
             Directory.SetCurrentDirectory(MelonUtils.GameDirectory);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AssemblyResolveHandler;
-            AppDomain.CurrentDomain.TypeResolve += AssemblyResolveHandler;
             MelonPreferences.Load();
             try { bHaptics_NativeLibrary.Load(); } catch (Exception ex) { MelonLogger.Error("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
         }
