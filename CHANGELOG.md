@@ -244,6 +244,7 @@
 220. Fixed Issue with MelonPreferences.CreateCategory causing an Exception when it wasn't supposed to.
 221. Fixed Issue with "Collection was modified" Error.
 222. Fixed No Melon Attribute Found Issue.
+223. Fixed Issue with Melon Override Exceptions not showing which Melon it was.
 
 ---
 

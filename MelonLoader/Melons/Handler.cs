@@ -406,7 +406,7 @@ namespace MelonLoader
             List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnPreInitialization(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(PluginEnumerator.Current); }
+                try { PluginEnumerator.Current.OnPreInitialization(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); failedPlugins.Add(PluginEnumerator.Current); }
             _Plugins.RemoveAll(failedPlugins.Contains);
             _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
@@ -419,7 +419,7 @@ namespace MelonLoader
             List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedPlugins.Add(PluginEnumerator.Current); }
+                try { PluginEnumerator.Current.OnApplicationStart(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); failedPlugins.Add(PluginEnumerator.Current); }
             _Plugins.RemoveAll(failedPlugins.Contains);
             _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
@@ -432,7 +432,7 @@ namespace MelonLoader
             List<MelonMod> failedMods = new List<MelonMod>();
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnApplicationStart(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); failedMods.Add(ModEnumerator.Current); }
+                try { ModEnumerator.Current.OnApplicationStart(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); failedMods.Add(ModEnumerator.Current); }
             _Mods.RemoveAll(failedMods.Contains);
             _Mods = _Mods.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
@@ -452,14 +452,14 @@ namespace MelonLoader
             }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnLevelWasLoaded(buildIndex); ModEnumerator.Current.OnSceneWasLoaded(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnLevelWasLoaded(buildIndex); ModEnumerator.Current.OnSceneWasLoaded(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnLevelWasInitialized(buildIndex); ModEnumerator.Current.OnSceneWasInitialized(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnLevelWasInitialized(buildIndex); ModEnumerator.Current.OnSceneWasInitialized(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         private static bool InitializeScene = false;
@@ -477,84 +477,84 @@ namespace MelonLoader
             }
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { PluginEnumerator.Current.OnUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnFixedUpdate()
         {
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnLateUpdate()
         {
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnLateUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { PluginEnumerator.Current.OnLateUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnLateUpdate(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnLateUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnGUI()
         {
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnGUI(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { PluginEnumerator.Current.OnGUI(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnGUI(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnGUI(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnPreferencesSaved()
         {
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnPreferencesSaved(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { PluginEnumerator.Current.OnPreferencesSaved(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnModSettingsApplied(); ModEnumerator.Current.OnPreferencesSaved(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnModSettingsApplied(); ModEnumerator.Current.OnPreferencesSaved(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnPreferencesLoaded()
         {
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { PluginEnumerator.Current.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnApplicationQuit()
         {
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { PluginEnumerator.Current.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void VRChat_OnUiManagerInit()
         {
             PluginEnumerator.Reset();
             while (PluginEnumerator.MoveNext())
-                try { PluginEnumerator.Current.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { PluginEnumerator.Current.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void BONEWORKS_OnLoadingScreen()
         {
             ModEnumerator.Reset();
             while (ModEnumerator.MoveNext())
-                try { ModEnumerator.Current.BONEWORKS_OnLoadingScreen(); } catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+                try { ModEnumerator.Current.BONEWORKS_OnLoadingScreen(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal enum LoadMode

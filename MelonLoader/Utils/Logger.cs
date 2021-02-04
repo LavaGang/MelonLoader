@@ -46,21 +46,22 @@ namespace MelonLoader
                 namesection = melon.Info.Name;
             ManualWarning(namesection, txt);
         }
-        private static void SendError(string txt)
-        {
-            string namesection = null;
-            MelonBase melon = GetMelonFromStackTrace();
-            if (melon != null)
-                namesection = melon.Info.Name.Replace(" ", "_");
-            Internal_Error(namesection, txt);
-            RunErrorCallbacks(namesection, txt);
-        }
+        private static void SendError(string txt) => ManualMelonError(GetMelonFromStackTrace(), txt);
 
         internal static void ManualWarning(string namesection, string txt)
         {
             namesection = namesection?.Replace(" ", "_");
             Internal_Warning(namesection, txt);
             RunWarningCallbacks(namesection, txt);
+        }
+
+        internal static void ManualMelonError(MelonBase melon, string txt)
+        {
+            string namesection = null;
+            if (melon != null)
+                namesection = melon.Info.Name.Replace(" ", "_");
+            Internal_Error(namesection, txt);
+            RunErrorCallbacks(namesection, txt);
         }
 
         internal static MelonBase GetMelonFromStackTrace()
