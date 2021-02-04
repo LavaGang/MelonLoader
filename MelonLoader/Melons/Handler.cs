@@ -64,7 +64,7 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonPlugin plugin in _Plugins)
             {
-                MelonLogger.Internal_PrintModName(plugin.Color, plugin.Info.Name, plugin.Info.Version);
+                MelonLogger.Internal_PrintModName(plugin.ConsoleColor, plugin.Info.Name, plugin.Info.Version);
                 MelonLogger.Msg("by " + plugin.Info.Author);
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(plugin));
                 MelonLogger.Msg("------------------------------");
@@ -89,7 +89,7 @@ namespace MelonLoader
             MelonLogger.Msg("------------------------------");
             foreach (MelonMod mod in _Mods)
             {
-                MelonLogger.Internal_PrintModName(mod.Color, mod.Info.Name, mod.Info.Version);
+                MelonLogger.Internal_PrintModName(mod.ConsoleColor, mod.Info.Name, mod.Info.Version);
                 MelonLogger.Msg("by " + mod.Info.Author);
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(mod));
                 MelonLogger.Msg("------------------------------");
@@ -247,17 +247,9 @@ namespace MelonLoader
                 return;
             MelonInfoAttribute infoAttribute = PullCustomAttributeFromAssembly<MelonInfoAttribute>(asm);
             if (infoAttribute == null) // Legacy Support
-            {
-                MelonModInfoAttribute legacyinfoAttribute = PullCustomAttributeFromAssembly<MelonModInfoAttribute>(asm);
-                if (legacyinfoAttribute != null)
-                    infoAttribute = legacyinfoAttribute.Convert();
-            }
+                infoAttribute = PullCustomAttributeFromAssembly<MelonModInfoAttribute>(asm)?.Convert();
             if (infoAttribute == null) // Legacy Support
-            {
-                MelonPluginInfoAttribute legacyinfoAttribute = PullCustomAttributeFromAssembly<MelonPluginInfoAttribute>(asm);
-                if (legacyinfoAttribute != null)
-                    infoAttribute = legacyinfoAttribute.Convert();
-            }
+                infoAttribute = PullCustomAttributeFromAssembly<MelonPluginInfoAttribute>(asm)?.Convert();
             if (infoAttribute == null)
             {
                 MelonLogger.Error("No MelonInfoAttribute Found in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
@@ -353,7 +345,7 @@ namespace MelonLoader
 
             baseInstance.Info = infoAttribute;
             baseInstance.Games = gameAttributes.ToArray();
-            baseInstance.Color = color;
+            baseInstance.ConsoleColor = color;
             baseInstance.OptionalDependencies = PullCustomAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm);
             baseInstance.Location = filelocation;
             baseInstance.Compatibility = melonCompatibility;
@@ -393,7 +385,15 @@ namespace MelonLoader
             foreach (Attribute att in att_tbl)
             {
                 Type attType = att.GetType();
-                if ((attType == requestedType) || attType.FullName.Equals(requestedType.FullName))
+                string attAssemblyName = attType.Assembly.GetName().Name;
+                string requestedAssemblyName = requestedType.Assembly.GetName().Name;
+                if ((attType == requestedType)
+                    || attType.FullName.Equals(requestedType.FullName)
+                    || ((attAssemblyName.Equals("MelonLoader")
+                        || attAssemblyName.Equals("MelonLoader.ModHandler"))
+                        && (requestedAssemblyName.Equals("MelonLoader")
+                        || requestedAssemblyName.Equals("MelonLoader.ModHandler"))
+                        && attType.Name.Equals(requestedType.Name)))
                     output.Add(att as T);
             }
             return output.ToArray();

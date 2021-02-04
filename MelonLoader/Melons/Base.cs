@@ -60,9 +60,9 @@ namespace MelonLoader
         public bool IsCompatible { get { return (Compatibility < MelonCompatibility.INCOMPATIBLE); } }
 
         /// <summary>
-        /// Color of the Melon.
+        /// Console Color of the Melon.
         /// </summary>
-        public ConsoleColor Color { get; internal set; }
+        public ConsoleColor ConsoleColor { get; internal set; }
 
         /// <summary>
         /// Info Attribute of the Melon.

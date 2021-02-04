@@ -33,7 +33,7 @@ namespace MelonLoader
             if (melon != null)
             {
                 namesection = melon.Info.Name.Replace(" ", "_");
-                meloncolor = melon.Color;
+                meloncolor = melon.ConsoleColor;
             }
             Internal_Msg(meloncolor, txtcolor, namesection, txt);
             RunMsgCallbacks(meloncolor, txtcolor, namesection, txt);
