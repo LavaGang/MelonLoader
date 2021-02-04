@@ -242,6 +242,8 @@
 218. Fixed Issue with MelonPreferences having Category and Entry Display Names not be set to Identifier when null.
 219. Fixed Issue with MelonPreferences.CreateEntry not creating Category.
 220. Fixed Issue with MelonPreferences.CreateCategory causing an Exception when it wasn't supposed to.
+221. Fixed Issue with "Collection was modified" Error.
+222. Fixed No Melon Attribute Found Issue.
 
 ---
 
