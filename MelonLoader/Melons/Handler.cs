@@ -377,7 +377,7 @@ namespace MelonLoader
 
         private static T PullCustomAttributeFromAssembly<T>(Assembly asm) where T : Attribute
         {
-            T[] attributetbl = PullCustomAttributesFromAssembly<T>(asm, fullname);
+            T[] attributetbl = PullCustomAttributesFromAssembly<T>(asm);
             if ((attributetbl == null) || (attributetbl.Count() <= 0))
                 return null;
             return attributetbl.First();
