@@ -94,8 +94,12 @@ namespace MelonLoader.AssemblyGenerator
 
         internal static void OverrideAppDomainBase(string basepath)
         {
-            var appDomainBase = ((AppDomainSetup)typeof(AppDomain).GetProperty("FusionStore", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0]));
-            appDomainBase.ApplicationBase = basepath;
+            var property = typeof(AppDomain).GetProperty("FusionStore", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (property != null)
+            {
+                var appDomainBase = ((AppDomainSetup)property.GetValue(AppDomain.CurrentDomain, new object[0]));
+                appDomainBase.ApplicationBase = basepath;
+            }
             Directory.SetCurrentDirectory(basepath);
         }
 
