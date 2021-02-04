@@ -73,6 +73,14 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	if (fdwReason != DLL_PROCESS_ATTACH)
 		return TRUE;
+	LPSTR a1 = new CHAR[MAX_PATH];
+	GetModuleFileNameA(GetModuleHandleA(NULL), a1, MAX_PATH);
+	if ((strstr("UnityCrashHandler", a1) != NULL) || (strstr("UnityCrashHandler64", a1) != NULL))
+	{
+		HANDLE current_process = GetCurrentProcess();
+		TerminateProcess(current_process, NULL);
+		CloseHandle(current_process);
+	}
 	if (!LoadProxy(hinstDLL))
 		return FALSE;
 	LoadBootstrap();
