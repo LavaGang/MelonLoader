@@ -22,7 +22,6 @@ namespace MelonLoader
         /// </summary>
         public static List<MelonPlugin> Plugins { get => _Plugins.AsReadOnly().ToList(); }
         internal static List<MelonPlugin> _Plugins = new List<MelonPlugin>();
-        internal static MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
 
         /// <summary>
         /// Directory of Mods.
@@ -34,7 +33,6 @@ namespace MelonLoader
         /// </summary>
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
-        internal static MelonModEnumerator ModEnumerator = new MelonModEnumerator();
 
         private static SHA256 sha256 = SHA256.Create();
         static MelonHandler()
@@ -404,7 +402,7 @@ namespace MelonLoader
             if (_Plugins.Count <= 0)
                 return;
             List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnPreInitialization(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); failedPlugins.Add(PluginEnumerator.Current); }
             _Plugins.RemoveAll(failedPlugins.Contains);
@@ -417,7 +415,7 @@ namespace MelonLoader
             if (_Plugins.Count <= 0)
                 return;
             List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnApplicationStart(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); failedPlugins.Add(PluginEnumerator.Current); }
             _Plugins.RemoveAll(failedPlugins.Contains);
@@ -430,7 +428,7 @@ namespace MelonLoader
             if (_Mods.Count <= 0)
                 return;
             List<MelonMod> failedMods = new List<MelonMod>();
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnApplicationStart(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); failedMods.Add(ModEnumerator.Current); }
             _Mods.RemoveAll(failedMods.Contains);
@@ -450,14 +448,14 @@ namespace MelonLoader
                 CurrentSceneBuildIndex = buildIndex;
                 CurrentSceneName = sceneName;
             }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnLevelWasLoaded(buildIndex); ModEnumerator.Current.OnSceneWasLoaded(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnLevelWasInitialized(buildIndex); ModEnumerator.Current.OnSceneWasInitialized(buildIndex, sceneName); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
@@ -475,84 +473,84 @@ namespace MelonLoader
                 SceneWasJustLoaded = false;
                 InitializeScene = true;
             }
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnFixedUpdate()
         {
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnFixedUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnLateUpdate()
         {
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnLateUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnLateUpdate(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnGUI()
         {
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnGUI(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnGUI(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnPreferencesSaved()
         {
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnPreferencesSaved(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnModSettingsApplied(); ModEnumerator.Current.OnPreferencesSaved(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnPreferencesLoaded()
         {
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnPreferencesLoaded(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void OnApplicationQuit()
         {
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnApplicationQuit(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void VRChat_OnUiManagerInit()
         {
-            PluginEnumerator.Reset();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
             while (PluginEnumerator.MoveNext())
                 try { PluginEnumerator.Current.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); }
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.VRChat_OnUiManagerInit(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
 
         internal static void BONEWORKS_OnLoadingScreen()
         {
-            ModEnumerator.Reset();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.BONEWORKS_OnLoadingScreen(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); }
         }
