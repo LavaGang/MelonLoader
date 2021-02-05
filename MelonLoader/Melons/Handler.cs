@@ -130,7 +130,7 @@ namespace MelonLoader
                     if (IsMelonAlreadyLoaded(melonname, plugins))
                     {
                         MelonLogger.Warning("Duplicate File: " + filename);
-                        return;
+                        continue;
                     }
                     LoadFromFile(filename);
                 }
