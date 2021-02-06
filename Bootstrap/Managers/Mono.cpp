@@ -154,7 +154,7 @@ bool Mono::SetupPaths()
 		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
 		ManagedPath[ManagedPathStr.size()] = '\0';
 
-		std::string ConfigPathStr = (std::string(Game::DataPath) + "\\il2cpp_data\\etc");
+		std::string ConfigPathStr = (MonoDir + "\\etc");
 		ConfigPath = new char[ConfigPathStr.size() + 1];
 		std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 		ConfigPath[ConfigPathStr.size()] = '\0';
