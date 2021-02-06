@@ -56,6 +56,9 @@
     <ClCompile Include="Utils\IniFile.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\PointerUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -128,6 +131,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\IniFile.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PointerUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -44,6 +44,8 @@ namespace MelonLoader.AssemblyGenerator
             deobfuscationMap = new DeobfuscationMap();
         }
 
+        private static int Run() => Run(null);
+
         private static int Run(string nullarg)
         {
             if (!unitydependencies.Download()
