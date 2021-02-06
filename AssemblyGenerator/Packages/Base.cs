@@ -55,6 +55,7 @@ namespace MelonLoader.AssemblyGenerator
             {
                 string filepath = Path.Combine(Destination, (string.IsNullOrEmpty(NewFileName) ? filenamefromurl : NewFileName));
                 Logger.Msg($"Moving {tempfile} to {filepath}");
+                if (File.Exists(filepath)) File.Delete(filepath);
                 File.Move(tempfile, filepath);
                 return true;
             }
