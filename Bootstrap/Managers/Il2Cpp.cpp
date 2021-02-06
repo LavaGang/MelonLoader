@@ -116,5 +116,7 @@ Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj
 void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct)
 {
 	Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
-	if (!UnityTLSInterfaceStruct) UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
+	if (!UnityTLSInterfaceStruct && unitytlsInterfaceStruct &&
+		*(long long*)(unitytlsInterfaceStruct) == 2)
+		UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
 }
