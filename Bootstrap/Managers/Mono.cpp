@@ -16,6 +16,7 @@ const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdg
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
 char* Mono::ConfigPath = NULL;
+char* Mono::MonoConfigPath = NULL;
 HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
 Mono::Domain* Mono::domain = NULL;
@@ -154,10 +155,15 @@ bool Mono::SetupPaths()
 		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
 		ManagedPath[ManagedPathStr.size()] = '\0';
 
-		std::string ConfigPathStr = (MonoDir + "\\etc");
+		std::string ConfigPathStr = (std::string(Game::DataPath) + "\\il2cpp_data\\etc");
 		ConfigPath = new char[ConfigPathStr.size() + 1];
 		std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 		ConfigPath[ConfigPathStr.size()] = '\0';
+
+		std::string MonoConfigPathStr = (MonoDir + "\\etc");
+		MonoConfigPath = new char[MonoConfigPathStr.size() + 1];
+		std::copy(MonoConfigPathStr.begin(), MonoConfigPathStr.end(), MonoConfigPath);
+		MonoConfigPath[MonoConfigPathStr.size()] = '\0';
 
 		return true;
 	}
@@ -179,6 +185,8 @@ bool Mono::SetupPaths()
 	std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 	ConfigPath[ConfigPathStr.size()] = '\0';
 
+	MonoConfigPath = ConfigPath;
+
 	return true;
 }
 
@@ -189,7 +197,7 @@ void Mono::CreateDomain(const char* name)
 	Debug::Msg("Creating Mono Domain...");
 	Exports::mono_set_assemblies_path(ManagedPath);
 	Exports::mono_assembly_setrootdir(ManagedPath);
-	Exports::mono_set_config_dir(ConfigPath);
+	Exports::mono_set_config_dir(MonoConfigPath);
 	if (!IsOldMono)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
 	domain = Exports::mono_jit_init(name);
