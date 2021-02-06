@@ -117,6 +117,6 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 {
 	Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
 	if (!UnityTLSInterfaceStruct && unitytlsInterfaceStruct &&
-		*(long long*)(unitytlsInterfaceStruct) == 2)
+		!(*(long long*)(unitytlsInterfaceStruct) & ~0xFF))
 		UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
 }
