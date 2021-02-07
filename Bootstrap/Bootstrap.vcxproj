@@ -172,6 +172,7 @@
     <ClCompile Include="Utils\HashCode.cpp" />
     <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Logger.cpp" />
+    <ClCompile Include="Utils\PointerUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base\Core.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Utils\HashCode.h" />
     <ClInclude Include="Utils\IniFile.h" />
     <ClInclude Include="Utils\Logger.h" />
+    <ClInclude Include="Utils\PointerUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Bootstrap.rc" />

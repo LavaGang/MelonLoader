@@ -8,7 +8,6 @@
 #include "../Utils/Logger.h"
 #include "../Managers/Mono.h"
 #include "HashCode.h"
-#pragma comment(lib, "mscoree.lib")
 
 bool AssemblyGenerator::ForceRegeneration = false;
 char* AssemblyGenerator::Path = NULL;
@@ -16,9 +15,6 @@ char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
 char* AssemblyGenerator::ForceVersion_Cpp2IL = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = NULL;
 int AssemblyGenerator::ProcessId = 0;
-ICLRMetaHost* AssemblyGenerator::metahost = NULL;
-ICLRRuntimeInfo* AssemblyGenerator::rinfo = NULL;
-ICLRRuntimeHost* AssemblyGenerator::rhost = NULL;
 
 bool AssemblyGenerator::Initialize()
 {
@@ -31,39 +27,40 @@ bool AssemblyGenerator::Initialize()
 	}
 	Console::DisableCloseButton();
 	Debug::Msg("Initializing Assembly Generator...");
-	if (FAILED(CLRCreateInstance(CLSID_CLRMetaHost, IID_PPV_ARGS(&metahost))))
+
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, Path);
+	if (assembly == NULL)
 	{
-		Assertion::ThrowInternalFailure("Failed to Create CLR Metahost Instance!");
-		Cleanup();
+		Assertion::ThrowInternalFailure("Failed to Open Assembly Generator!");
 		return false;
 	}
-	if (FAILED(metahost->GetRuntime(L"v4.0.30319", IID_PPV_ARGS(&rinfo))))
+	Mono::Image* image = Mono::Exports::mono_assembly_get_image(assembly);
+	if (image == NULL)
 	{
-		Assertion::ThrowInternalFailure("Failed to Get CLR Runtime v4.0.30319!");
-		Cleanup();
+		Assertion::ThrowInternalFailure("Failed to Get Image from Assembly Generator!");
 		return false;
 	}
-	if (FAILED(rinfo->GetInterface(CLSID_CLRRuntimeHost, IID_PPV_ARGS(&rhost))))
+	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "MelonLoader.AssemblyGenerator", "Core");
+	if (image == NULL)
 	{
-		Assertion::ThrowInternalFailure("Failed to Get CLR Runtime Host Interface!");
-		Cleanup();
+		Assertion::ThrowInternalFailure("Failed to Get Class from Assembly Generator Image!");
 		return false;
 	}
-	if (FAILED(rhost->Start()))
+	Mono::Method* initialize = Mono::Exports::mono_class_get_method_from_name(klass, "Run", NULL);
+	if (initialize == NULL)
 	{
-		Assertion::ThrowInternalFailure("Failed to Start CLR Runtime Host!");
-		Cleanup();
+		Assertion::ThrowInternalFailure("Failed to Get Run Method from MelonLoader.AssemblyGenerator Class!");
 		return false;
 	}
-	std::string assembly_path = Path;
-    DWORD returnval;
-	if (FAILED(rhost->ExecuteInDefaultAppDomain(std::wstring(assembly_path.begin(), assembly_path.end()).c_str(), L"MelonLoader.AssemblyGenerator.Core", L"Run", L"", &returnval)))
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(initialize, NULL, NULL, &exObj);
+	if (exObj)
 	{
-		Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
-		Assertion::ThrowInternalFailure("Failed to Execute Assembly Generator!");
-		Cleanup();
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Assembly Generator failed with exception!");
 		return false;
 	}
+	int returnval = *(int*)((char*)result + 0x8);
 	Cleanup();
 	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
@@ -73,8 +70,6 @@ bool AssemblyGenerator::Initialize()
 
 void AssemblyGenerator::Cleanup()
 {
-	if ((rhost == NULL) || (rinfo == NULL) || (metahost == NULL))
-		return;
 	Debug::Msg("Cleaning up Assembly Generator...");
 	if (ProcessId != 0)
 	{
@@ -85,22 +80,6 @@ void AssemblyGenerator::Cleanup()
 			CloseHandle(hProcess);
 		}
 		ProcessId = 0;
-	}
-	if (rhost != NULL)
-	{
-		rhost->Stop();
-		rhost->Release();
-		rhost = NULL;
-	}
-	if (rinfo != NULL)
-	{
-		rinfo->Release();
-		rinfo = NULL;
-	}
-	if (metahost != NULL)
-	{
-		metahost->Release();
-		metahost = NULL;
 	}
 	Game::Initialize();
 	Game::ReadInfo();

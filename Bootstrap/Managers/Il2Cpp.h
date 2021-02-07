@@ -10,10 +10,12 @@ public:
 	struct Object;
 
 	static char* GameAssemblyPath;
+	static char* UnityPlayerPath;
 	static HMODULE Module;
 	static Domain* domain;
 	static void* UnityTLSInterfaceStruct;
 	static bool Initialize();
+	static void CallInstallUnityTLSInterface();
 
 	class Exports
 	{

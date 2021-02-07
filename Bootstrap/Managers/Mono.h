@@ -20,6 +20,7 @@ public:
 	static bool IsOldMono;
 	static char* ManagedPath;
 	static char* ConfigPath;
+	static char* MonoConfigPath;
 	static bool Initialize();
 	static bool Load();
 	static bool SetupPaths();

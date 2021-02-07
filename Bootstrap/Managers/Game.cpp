@@ -26,6 +26,7 @@ bool Game::Initialize()
 		return false;
 	}
 	std::string GameAssemblyPath = (std::string(BasePath) + "\\GameAssembly.dll");
+	std::string UnityPlayerPath = (std::string(BasePath) + "\\UnityPlayer.dll");
 	if (Core::FileExists(GameAssemblyPath.c_str()))
 	{
 		IsIl2Cpp = true;
@@ -33,6 +34,9 @@ bool Game::Initialize()
 		std::copy(GameAssemblyPath.begin(), GameAssemblyPath.end(), Il2Cpp::GameAssemblyPath);
 		Il2Cpp::GameAssemblyPath[GameAssemblyPath.size()] = '\0';
 	}
+	Il2Cpp::UnityPlayerPath = new char[UnityPlayerPath.size() + 1];
+	std::copy(UnityPlayerPath.begin(), UnityPlayerPath.end(), Il2Cpp::UnityPlayerPath);
+	Il2Cpp::UnityPlayerPath[UnityPlayerPath.size()] = '\0';
 	return true;
 }
 
