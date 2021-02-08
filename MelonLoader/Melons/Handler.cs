@@ -229,9 +229,9 @@ namespace MelonLoader
                 if (asm == null)
                 {
                     if (string.IsNullOrEmpty(filelocation))
-                        MelonLogger.Error("Failed to Load Assembly: Assembly.LoadFrom returned null");
+                        MelonLogger.Error("Failed to Load Assembly: Assembly.Load returned null");
                     else
-                        MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": Assembly.LoadFrom returned null");
+                        MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": Assembly.Load returned null");
                     return;
                 }
                 LoadFromAssembly(asm, filelocation);
