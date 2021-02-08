@@ -208,12 +208,12 @@ namespace MelonLoader
                 Assembly asm = Assembly.LoadFrom(filepath);
                 if (asm == null)
                 {
-                    MelonLogger.Error("Failed to Load Assembly for " + filepath + "!"); ;
+                    MelonLogger.Error("Failed to Load Assembly for " + filepath + ": Assembly.LoadFrom returned null"); ;
                     return;
                 }
                 LoadFromAssembly(asm, filepath);
             }
-            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+            catch (Exception ex) { MelonLogger.Error("Failed to Load Assembly for " + filepath + ": " + ex.ToString()); }
         }
 
         public static void LoadFromByteArray(byte[] filedata, string filelocation = null)
@@ -229,14 +229,20 @@ namespace MelonLoader
                 if (asm == null)
                 {
                     if (string.IsNullOrEmpty(filelocation))
-                        MelonLogger.Error("Failed to Load Assembly!");
+                        MelonLogger.Error("Failed to Load Assembly: Assembly.LoadFrom returned null");
                     else
-                        MelonLogger.Error("Failed to Load Assembly for " + filelocation + "!");
+                        MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": Assembly.LoadFrom returned null");
                     return;
                 }
                 LoadFromAssembly(asm, filelocation);
             }
-            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+            catch (Exception ex)
+            {
+                if (string.IsNullOrEmpty(filelocation))
+                    MelonLogger.Error("Failed to Load Assembly:" + ex.ToString());
+                else
+                    MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": " + ex.ToString());
+            }
         }
 
         public static void LoadFromAssembly(Assembly asm, string filelocation = null)
