@@ -8,6 +8,7 @@ namespace MelonLoader
         public string Identifier { get; internal set; }
         public string DisplayName { get; internal set; }
         public bool IsHidden { get; internal set; }
+        public bool NeverSave { get; internal set; }
         public MelonPreferences_Category Category { get; internal set; }
 
         public string GetExceptionMessage(string submsg) => ("Attempted to " + submsg + " " + DisplayName + " when it is a " + GetReflectedType().FullName + "!");

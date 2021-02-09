@@ -16,7 +16,7 @@ namespace MelonLoader
             MelonPreferences.Categories.Add(this);
         }
 
-        public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name = null, bool is_hidden = false)
+        public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name = null, bool is_hidden = false, bool never_save = false)
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("identifier is null or empty when calling CreateEntry");
@@ -30,6 +30,7 @@ namespace MelonLoader
                 Identifier = identifier,
                 DisplayName = display_name,
                 IsHidden = is_hidden,
+                NeverSave = never_save,
                 Category = this,
                 DefaultValue = default_value,
                 Value = default_value
