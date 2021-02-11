@@ -10,23 +10,25 @@ namespace MelonLoader
     {
         internal static void Setup()
         {
-            GameDeveloper = Internal_GetGameDeveloper();
-            GameName = Internal_GetGameName();
+            GameDeveloper = string.Copy(Internal_GetGameDeveloper());
+            GameName = string.Copy(Internal_GetGameName());
+            HashCode = string.Copy(Internal_GetHashCode());
             CurrentGameAttribute = new MelonGameAttribute(GameDeveloper, GameName);
-            GameDirectory = Internal_GetGameDirectory();
+            GameDirectory = string.Copy(Internal_GetGameDirectory());
             UserDataDirectory = Path.Combine(GameDirectory, "UserData");
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
         }
 
-        public static string GameDirectory { get; internal set; }
-        public static string UserDataDirectory { get; internal set; }
-        public static MelonGameAttribute CurrentGameAttribute { get; internal set; }
-        public static string GameDeveloper { get; internal set; }
-        public static string GameName { get; internal set; }
+        public static string GameDirectory { get; private set; }
+        public static string UserDataDirectory { get; private set; }
+        public static MelonGameAttribute CurrentGameAttribute { get; private set; }
+        public static string GameDeveloper { get; private set; }
+        public static string GameName { get; private set; }
         public static bool IsVRChat { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("VRChat") && !string.IsNullOrEmpty(GameName) && GameName.Equals("VRChat")); }
         public static bool IsBONEWORKS { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("Stress Level Zero") && !string.IsNullOrEmpty(GameName) && GameName.Equals("BONEWORKS")); }
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
+        public static string HashCode { get; private set; }
 
         public static string RandomString(int length)
         {
@@ -107,12 +109,16 @@ namespace MelonLoader
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        internal extern static string Internal_GetGameName();
+        private extern static string Internal_GetGameName();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameDeveloper();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameDirectory();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string Internal_GetHashCode();
     }
 }

@@ -245,6 +245,24 @@
 221. Fixed Issue with "Collection was modified" Error.
 222. Fixed No Melon Attribute Found Issue.
 223. Fixed Issue with Melon Override Exceptions not showing which Melon it was.
+224. Fixed Issue with Protobuf Assemblies being rejected.    (Credits to knah :D)
+225. Fixed Issue with Assembly Generator's OverrideAppDomainBase Method under Mono.    (Credits to MiincK :D)
+226. Changed MelonBase.Color to MelonBase.ConsoleColor.
+227. Fixed Enumerator Issue with Index Loop Locking.
+228. Fixed Issue with Duplicate Melons causing the rest of the Melons to Not Load.
+229. Added MonoBleedingEdge Metadata.
+230. Re-factored Assembly Generator run with Mono instead of CLR.    (Credits to MiincK :D)
+231. Fixed NRE Issue with Audica and similar games.    (Credits to MiincK :D)
+232. Fixed log file name time format.    (Credits to MiincK :D)
+233. Fixed NRE Issue with Newer Games after Audica.    (Credits to MiincK :D)
+234. Changed Mono Configuration Directory on Il2Cpp Games to the Included Metadata.    (Credits to MiincK :D)
+235. Fixed Issue with Assembly Generator getting the Incorrect Configuration Directory.    (Credits to MiincK :D)
+236. Fixed Issue with Assembly Generator when Deobfuscation Map already exists.    (Credits to knah :D)
+237. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
+238. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
+239. Added MelonUtils.HashCode.
+240. Changed MelonBase.Harmony to MelonBase.HarmonyInstance.
+241. Fixed Issue with UnityCrashHandler.
 
 ---
 

@@ -41,6 +41,7 @@ public:
 		static Mono::String* GetGameDataDirectory();
 		static Mono::String* GetUnityVersion();
 		static Mono::String* GetManagedDirectory();
+		static Mono::String* GetHashCode();
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
 	};

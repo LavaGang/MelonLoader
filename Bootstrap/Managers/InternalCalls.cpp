@@ -5,6 +5,7 @@
 #include "Hook.h"
 #include "../Utils/Assertion.h"
 #include "../Base/Core.h"
+#include "../Utils/HashCode.h"
 
 void InternalCalls::Initialize()
 {
@@ -97,6 +98,7 @@ Mono::String* InternalCalls::MelonUtils::GetGameDirectory() { return Mono::Expor
 Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Game::DataPath); }
 Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPath); }
+Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, std::to_string(HashCode::Hash).c_str()); }
 
 void InternalCalls::MelonUtils::SCT(Mono::String* title)
 {
@@ -135,6 +137,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", GetGameName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
+	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
 
 	Mono::AddInternalCall("MelonLoader.Support.Preload::IsGameIl2Cpp", IsGameIl2Cpp);
 	Mono::AddInternalCall("MelonLoader.Support.Preload::IsOldMono", IsOldMono);
