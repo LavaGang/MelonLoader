@@ -37,6 +37,7 @@
 12. Added Secret Lemon.
 13. Added Game Version to Logs.
 14. Fixed Collision Issue with Hash Code Generation.
+15. Improved Hash Code Generation.
 
 ---
 

@@ -6,14 +6,16 @@
 class HashCode
 {
 public:
-	static DWORD Hash;
+	static std::string Hash[7];
 	static char* Path_SM_Il2Cpp;
 	static char* Path_SM_Mono;
 	static char* Path_SM_Mono_Pre2017;
 	static char* Path_SM_Mono_Pre5;
+	static std::string GetHashString();
 	static bool Initialize();
 	static bool SetupPaths();
 
 private:
 	static void AddHash(const char* path);
+	static int HashOffset;
 };

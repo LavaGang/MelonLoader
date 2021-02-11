@@ -9,23 +9,32 @@
 #include "Assertion.h"
 #include "Logger.h"
 
-DWORD HashCode::Hash = NULL;
+std::string HashCode::Hash[7];
+int HashCode::HashOffset = 0;
 char* HashCode::Path_SM_Il2Cpp = NULL;
 char* HashCode::Path_SM_Mono = NULL;
 char* HashCode::Path_SM_Mono_Pre2017 = NULL;
 char* HashCode::Path_SM_Mono_Pre5 = NULL;
 
+std::string HashCode::GetHashString()
+{
+    std::string returnval = std::string();
+    for (int i = 0; i < 7; i++)
+        returnval += Hash[i];
+    return returnval;
+}
+
 bool HashCode::Initialize()
 {
     if (!SetupPaths())
         return false;
-    AddHash(Core::Path);
-    AddHash(BaseAssembly::Path);
-    AddHash(AssemblyGenerator::Path);
-    AddHash(Path_SM_Il2Cpp);
     AddHash(Path_SM_Mono);
+    AddHash(Path_SM_Il2Cpp);
+    AddHash(Core::Path);
     AddHash(Path_SM_Mono_Pre2017);
+    AddHash(BaseAssembly::Path);
     AddHash(Path_SM_Mono_Pre5);
+    AddHash(AssemblyGenerator::Path);
     return true;
 }
 
@@ -130,10 +139,10 @@ void HashCode::AddHash(const char* path)
         CloseHandle(filehandle);
         return;
     }
-    std::string hashout = std::to_string(Hash);
+    Hash[HashOffset] = std::string();
     for (DWORD i = 0; i < dhash; i++)
-        hashout += std::to_string(chartbl[hashbuf[i] >> 4]) + std::to_string(chartbl[hashbuf[i] & 0xf]);
-    Hash = strtoul(hashout.c_str(), NULL, 0);
+        Hash[HashOffset] += std::to_string(chartbl[hashbuf[i] >> 4] + chartbl[hashbuf[i] & 0xf]);
+    HashOffset++;
     CryptDestroyHash(crypthash);
     CryptReleaseContext(cryptprov, 0);
     CloseHandle(filehandle);

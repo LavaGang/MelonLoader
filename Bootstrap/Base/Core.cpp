@@ -89,8 +89,9 @@ void Core::WelcomeMessage()
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
 	Logger::Msg("------------------------------");
+	Logger::Msg(("Hash Code: " + HashCode::GetHashString()).c_str());
+	Logger::Msg("------------------------------");
 	Logger::Msg(GetVersionStr());
-	Logger::Msg(("Hash Code: " + std::to_string(HashCode::Hash)).c_str());
 	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
 	Logger::Msg("------------------------------");
 	Logger::Msg(("Name: " + std::string(Game::Name)).c_str());
