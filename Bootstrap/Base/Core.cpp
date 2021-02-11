@@ -28,7 +28,7 @@ const char* Core::GetVersionStr()
 	return (std::string(Debug::Enabled
 		? "[D] "
 		: "")
-		+ std::string("MelonLoader ")
+		+ CommandLine::GetPrefix()
 		+ Version
 		+ (Is_ALPHA_PreRelease
 			? " ALPHA Pre-Release" 
