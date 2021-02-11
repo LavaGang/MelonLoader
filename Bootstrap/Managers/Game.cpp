@@ -104,6 +104,7 @@ void Game::ReadAppInfo()
 		}
 	appinfofile.close();
 	FirstRun = false;
+	Console::SetTitle(Core::GetVersionStrWithGameName());
 }
 
 bool Game::ReadUnityVersion()

@@ -17,7 +17,8 @@ public:
 		NORMAL,
 		MAGENTA,
 		RAINBOW,
-		RANDOMRAINBOW
+		RANDOMRAINBOW,
+		LEMON
 	};
 	static DisplayMode Mode;
 

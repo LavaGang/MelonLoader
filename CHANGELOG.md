@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.3.0.1 ALPHA Pre-Release](#v0301-alpha-pre-release)  
 [v0.3.0 ALPHA Pre-Release](#v030-alpha-pre-release)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
@@ -17,6 +18,24 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.3.0.1 ALPHA Pre-Release:
+
+1. Added MelonUtils.HashCode.
+2. Fixed Issue with UnityCrashHandler.
+3. Cleaned up Console Title Renaming.
+4. Added Game Name to Console Title.
+5. Added Game Version to Console Title.
+6. Changed Debug Mode Indicator in Console Title to "[D]".
+7. Updated bHaptics Native Library to v1.5.3.
+8. Fixed Issue with Console Always On Top Launch Options causing Warnings to be Hidden.
+9. Fixed Issue with Force Version Launch Options being overwritten.
+10. Fixed Issue with Force Version Launch Options counting "0.0.0.0" as a valid version.
+11. Added "--melonloader.consoledst" Launch Option. When Used it will set the Console Title as the Game Name.
+12. Added Secret Lemon.
+13. Added Game Version to Logs.
 
 ---
 
@@ -260,13 +279,6 @@
 236. Fixed Issue with Assembly Generator when Deobfuscation Map already exists.    (Credits to knah :D)
 237. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
 238. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
-239. Added MelonUtils.HashCode.
-240. Fixed Issue with UnityCrashHandler.
-241. Cleaned up Console Title Renaming.
-242. Added Game Name to Console Title.
-243. Added Game Version to Console Title.
-244. Changed Debug Mode Indicator in Console Title to "[D]".
-245. Updated bHaptics Native Library to v1.5.3.
 
 ---
 

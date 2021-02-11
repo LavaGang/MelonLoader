@@ -18,7 +18,7 @@ extern "C"
 	__declspec(dllexport) const char* __stdcall GetAssemblyGeneratorPath() { return AssemblyGenerator::Path; }
 	__declspec(dllexport) bool __stdcall ForceRegeneration() { return AssemblyGenerator::ForceRegeneration; }
 	__declspec(dllexport) const char* __stdcall ForceVersion_UnityDependencies() { return AssemblyGenerator::ForceVersion_UnityDependencies; }
-	__declspec(dllexport) const char* __stdcall ForceVersion_Dumper() { return AssemblyGenerator::ForceVersion_Cpp2IL; }
+	__declspec(dllexport) const char* __stdcall ForceVersion_Dumper() { return AssemblyGenerator::ForceVersion_Dumper; }
 	__declspec(dllexport) const char* __stdcall ForceVersion_Il2CppAssemblyUnhollower() { return AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower; }
 	__declspec(dllexport) void __stdcall SetProcessId(int id) { AssemblyGenerator::ProcessId = id; }
 }

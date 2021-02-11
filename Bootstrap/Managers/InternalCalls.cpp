@@ -15,6 +15,7 @@ void InternalCalls::Initialize()
 	MelonUtils::AddInternalCalls();
 	MelonHandler::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
+	SM_Preload::AddInternalCalls();
 }
 
 #pragma region MelonCore
@@ -140,10 +141,6 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
-	
-	Mono::AddInternalCall("MelonLoader.Support.Preload::IsGameIl2Cpp", IsGameIl2Cpp);
-	Mono::AddInternalCall("MelonLoader.Support.Preload::IsOldMono", IsOldMono);
-	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
 }
 #pragma endregion
 
@@ -173,5 +170,14 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonDebug::IsEnabled", IsEnabled);
 	Mono::AddInternalCall("MelonLoader.MelonDebug::Internal_Msg", Internal_Msg);
+}
+#pragma endregion
+
+#pragma region SM_Preload
+void InternalCalls::SM_Preload::AddInternalCalls()
+{
+	Mono::AddInternalCall("MelonLoader.Support.Preload::IsGameIl2Cpp", MelonUtils::IsGameIl2Cpp);
+	Mono::AddInternalCall("MelonLoader.Support.Preload::IsOldMono", MelonUtils::IsOldMono);
+	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", MelonUtils::GetManagedDirectory);
 }
 #pragma endregion

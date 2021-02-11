@@ -102,6 +102,7 @@ If a Launch Option is in your Game's Command Line it will ignore its value in th
 | --no-mods | Launch game without loading any Plugins Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.consoleontop | Forces the Console to always stay on-top of all other Applications |
+| --melonloader.consoledst | Keeps the Console Title as Original |
 | --melonloader.hideconsole | Hides the Console |
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |

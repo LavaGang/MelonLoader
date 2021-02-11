@@ -12,7 +12,7 @@
 bool AssemblyGenerator::ForceRegeneration = false;
 char* AssemblyGenerator::Path = NULL;
 char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
-char* AssemblyGenerator::ForceVersion_Cpp2IL = NULL;
+char* AssemblyGenerator::ForceVersion_Dumper = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = NULL;
 int AssemblyGenerator::ProcessId = 0;
 

@@ -57,7 +57,6 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
 		return;
-	Console::SetTitle(Core::GetVersionStrWithGameName());
 	WelcomeMessage();
 	if (!AnalyticsBlocker::Initialize()
 		|| !Il2Cpp::Initialize()

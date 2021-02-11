@@ -124,7 +124,9 @@ std::string Console::ColorToAnsi(Color color, bool modecheck)
 			? Color::Magenta
 			: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
 				? GetRainbowColor()
-				: color));
+				: ((Mode == DisplayMode::LEMON)
+					? Color::Yellow
+					: color)));
 	if (UseManualColoring)
 	{
 		SetConsoleTextAttribute(OutputHandle, color);

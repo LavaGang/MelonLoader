@@ -70,4 +70,10 @@ public:
 		static bool IsEnabled();
 		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
 	};
+
+	class SM_Preload
+	{
+	public:
+		static void AddInternalCalls();
+	};
 };
