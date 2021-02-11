@@ -123,7 +123,6 @@ void HashCode::AddHash(const char* path)
     DWORD dhash = 16;
     BYTE hashbuf[16];
     CHAR chartbl[] = "0123456789abcdef";
-    std::string hashout;
     if (!CryptGetHashParam(crypthash, HP_HASHVAL, hashbuf, &dhash, 0))
     {
         CryptReleaseContext(cryptprov, 0);
@@ -131,10 +130,10 @@ void HashCode::AddHash(const char* path)
         CloseHandle(filehandle);
         return;
     }
+    std::string hashout = std::to_string(Hash);
     for (DWORD i = 0; i < dhash; i++)
         hashout += std::to_string(chartbl[hashbuf[i] >> 4]) + std::to_string(chartbl[hashbuf[i] & 0xf]);
-    for (int i = 0; i < hashout.size(); i++)
-        Hash += strtoul(std::to_string(hashout[i]).c_str(), NULL, 0);
+    Hash = strtoul(hashout.c_str(), NULL, 0);
     CryptDestroyHash(crypthash);
     CryptReleaseContext(cryptprov, 0);
     CloseHandle(filehandle);
