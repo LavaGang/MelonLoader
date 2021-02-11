@@ -23,21 +23,23 @@
 
 ### v0.3.0.1 ALPHA Pre-Release:
 
-1. Added MelonUtils.HashCode.
-2. Fixed Issue with UnityCrashHandler.
-3. Cleaned up Console Title Renaming.
-4. Added Game Name to Console Title.
-5. Added Game Version to Console Title.
-6. Changed Debug Mode Indicator in Console Title to "[D]".
-7. Updated bHaptics Native Library to v1.5.3.
-8. Fixed Issue with Console Always On Top Launch Options causing Warnings to be Hidden.
-9. Fixed Issue with Force Version Launch Options being overwritten.
-10. Fixed Issue with Force Version Launch Options counting "0.0.0.0" as a valid version.
-11. Added "--melonloader.consoledst" Launch Option. When Used it will set the Console Title as the Game Name.
-12. Added Secret Lemon.
-13. Added Game Version to Logs.
-14. Fixed Collision Issue with Hash Code Generation.
-15. Improved Hash Code Generation.
+1. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
+2. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
+3. Added MelonUtils.HashCode.
+4. Fixed Issue with UnityCrashHandler.
+5. Cleaned up Console Title Renaming.
+6. Added Game Name to Console Title.
+7. Added Game Version to Console Title.
+8. Changed Debug Mode Indicator in Console Title to "[D]".
+9. Updated bHaptics Native Library to v1.5.3.
+10. Fixed Issue with Console Always On Top Launch Options causing Warnings to be Hidden.
+11 Fixed Issue with Force Version Launch Options being overwritten.
+12. Fixed Issue with Force Version Launch Options counting "0.0.0.0" as a valid version.
+13. Added "--melonloader.consoledst" Launch Option. When Used it will set the Console Title as the Game Name.
+14. Added Secret Lemon.
+15. Added Game Version to Logs.
+16. Fixed Collision Issue with Hash Code Generation.
+17. Improved Hash Code Generation.
 
 ---
 
@@ -279,8 +281,6 @@
 234. Changed Mono Configuration Directory on Il2Cpp Games to the Included Metadata.    (Credits to MiincK :D)
 235. Fixed Issue with Assembly Generator getting the Incorrect Configuration Directory.    (Credits to MiincK :D)
 236. Fixed Issue with Assembly Generator when Deobfuscation Map already exists.    (Credits to knah :D)
-237. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
-238. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
 
 ---
 
