@@ -99,6 +99,7 @@ Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::E
 Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPath); }
 Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, std::to_string(HashCode::Hash).c_str()); }
+Mono::String* InternalCalls::MelonUtils::GetVersionStrWithGameName(Mono::String* GameVersion) { return Mono::Exports::mono_string_new(Mono::domain, Core::GetVersionStrWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL)); }
 
 void InternalCalls::MelonUtils::SCT(Mono::String* title)
 {
@@ -130,6 +131,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetUnityVersion", GetUnityVersion);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetManagedDirectory", GetManagedDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::SetConsoleTitle", SCT);
+	Mono::AddInternalCall("MelonLoader.MelonUtils::GetVersionStrWithGameName", GetVersionStrWithGameName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetFileProductName", GetFileProductName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookAttach", Hook::Attach);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookDetach", Hook::Detach);
@@ -138,7 +140,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
-
+	
 	Mono::AddInternalCall("MelonLoader.Support.Preload::IsGameIl2Cpp", IsGameIl2Cpp);
 	Mono::AddInternalCall("MelonLoader.Support.Preload::IsOldMono", IsOldMono);
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);

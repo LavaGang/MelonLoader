@@ -261,8 +261,11 @@
 237. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
 238. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
 239. Added MelonUtils.HashCode.
-240. Changed MelonBase.Harmony to MelonBase.HarmonyInstance.
-241. Fixed Issue with UnityCrashHandler.
+240. Fixed Issue with UnityCrashHandler.
+241. Cleaned up Console Title Renaming.
+242. Added Game Name to Console Title.
+243. Added Game Version to Console Title.
+244. Changed Debug Mode Indicator in Console Title to "[D]".
 
 ---
 

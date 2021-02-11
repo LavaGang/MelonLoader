@@ -19,8 +19,31 @@
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::Path = NULL;
 bool Core::QuitFix = false;
+std::string Core::Version = "v0.3.0.1";
+bool Is_ALPHA_PreRelease = true;
 
-const char* Core::GetVersionStr() { return ("MelonLoader " + std::string("v0.3.0") + " ALPHA Pre-Release").c_str(); }
+const char* Core::GetVersionStr()
+{
+	return (std::string(Debug::Enabled
+		? "[D] "
+		: "")
+		+ std::string("MelonLoader ")
+		+ Version
+		+ (Is_ALPHA_PreRelease
+			? " ALPHA Pre-Release" 
+			: " Open-Beta")).c_str();
+}
+
+const char* Core::GetVersionStrWithGameName(const char* GameVersion)
+{
+	return (std::string(GetVersionStr())
+		+ std::string(" - ")
+		+ std::string(Game::Name)
+		+ " "
+		+ ((GameVersion == NULL)
+			? ""
+			: GameVersion)).c_str();
+}
 
 void Core::Initialize(HINSTANCE hinstDLL)
 {
@@ -34,6 +57,7 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
 		return;
+	Console::SetTitle(Core::GetVersionStrWithGameName());
 	WelcomeMessage();
 	if (!AnalyticsBlocker::Initialize()
 		|| !Il2Cpp::Initialize()

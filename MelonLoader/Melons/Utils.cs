@@ -101,6 +101,9 @@ namespace MelonLoader
         public extern static void SetConsoleTitle([MarshalAs(UnmanagedType.LPStr)] string title);
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetVersionStrWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
@@ -116,7 +119,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameDirectory();
-
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetHashCode();

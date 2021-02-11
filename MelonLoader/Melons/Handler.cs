@@ -355,13 +355,13 @@ namespace MelonLoader
             baseInstance.Compatibility = melonCompatibility;
             baseInstance.Priority = priority;
             baseInstance.Assembly = asm;
-            baseInstance.HarmonyInstance = Harmony.HarmonyInstance.Create(asm.FullName);
+            baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
             if (is_plugin)
                 _Plugins.Add((MelonPlugin)baseInstance);
             else if (is_mod)
                 _Mods.Add((MelonMod)baseInstance);
             try {
-                baseInstance.HarmonyInstance.PatchAll(asm);
+                baseInstance.Harmony.PatchAll(asm);
             } catch (Exception) {
                 if (is_plugin)
                     _Plugins.Remove((MelonPlugin)baseInstance);

@@ -10,6 +10,8 @@ class Core
 public:
 	static HINSTANCE Bootstrap;
 	static char* Path;
+	static std::string Version;
+	static bool Is_ALPHA_PreRelease;
 	static bool QuitFix;
 	static void Initialize(HINSTANCE hinstDLL);
 	static bool DirectoryExists(const char* path);
@@ -20,6 +22,7 @@ public:
 	static const char* GetFileInfoProductName(const char* path);
 	static const char* GetFileInfoProductVersion(const char* path);
 	static const char* GetVersionStr();
+	static const char* GetVersionStrWithGameName(const char* GameVersion = NULL);
 
 private:
 	static const char* GetOSVersion();

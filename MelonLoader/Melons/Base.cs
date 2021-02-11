@@ -82,7 +82,7 @@ namespace MelonLoader
         /// <summary>
         /// Auto-Created Harmony Instance of the Melon.
         /// </summary>
-        public Harmony.HarmonyInstance HarmonyInstance { get; internal set; }
+        public Harmony.HarmonyInstance Harmony { get; internal set; }
 
         /// <summary>
         /// Runs after Game Initialization.
@@ -127,6 +127,6 @@ namespace MelonLoader
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
         [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
-        public Harmony.HarmonyInstance harmonyInstance { get => HarmonyInstance; }
+        public Harmony.HarmonyInstance harmonyInstance { get => Harmony; }
     }
 }

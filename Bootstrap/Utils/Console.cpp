@@ -12,6 +12,7 @@
 #include <VersionHelpers.h>
 
 bool Console::ShouldHide = false;
+bool Console::ShouldSetTitle = true;
 bool Console::GeneratingAssembly = false;
 bool Console::AlwaysOnTop = false;
 bool Console::HideWarnings = false;
@@ -34,11 +35,7 @@ bool Console::Initialize()
 	Window = GetConsoleWindow();
 	Menu = GetSystemMenu(Window, FALSE);
 	SetConsoleCtrlHandler(EventHandler, TRUE);
-	std::string window_name = Core::GetVersionStr();
-	if (Debug::Enabled)
-		SetTitle((window_name + " - Debug Mode").c_str());
-	else
-		SetTitle(window_name.c_str());
+	SetTitle(Core::GetVersionStr());
 	SetForegroundWindow(Window);
 	if (AlwaysOnTop)
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);

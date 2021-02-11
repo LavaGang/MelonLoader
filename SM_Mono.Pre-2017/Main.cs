@@ -13,7 +13,7 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
-            
+            MelonUtils.SetConsoleTitle(MelonUtils.GetVersionStrWithGameName(Application.version));
             UnityMappers.RegisterMappers();
 
             SceneManager.sceneLoaded += OnSceneLoad;

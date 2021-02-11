@@ -313,7 +313,7 @@ namespace Harmony
 		private void WarnIfTargetMethodInlined(MethodBase target) {
 			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(target) ?? -1;
 			if (callerCount == 0 && !UnityMagicMethods.IsUnityMagicMethod(target)) {
-				string melonName = FindMelon(melon => melon.HarmonyInstance == instance);
+				string melonName = FindMelon(melon => melon.Harmony == instance);
 				if (melonName == null) {
 					// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
 					Assembly melonAssembly = container?.Assembly ?? prefix?.declaringType?.Assembly ?? postfix?.declaringType?.Assembly ?? transpiler?.declaringType?.Assembly;
