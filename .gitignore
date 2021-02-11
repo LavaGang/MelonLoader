@@ -43,6 +43,8 @@ mono_crash.*
 [Rr]eleases/
 x64/
 x86/
+SrcLibs/bHaptics/build32
+SrcLibs/bHaptics/build64
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/

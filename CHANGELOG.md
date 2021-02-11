@@ -266,6 +266,7 @@
 242. Added Game Name to Console Title.
 243. Added Game Version to Console Title.
 244. Changed Debug Mode Indicator in Console Title to "[D]".
+245. Updated bHaptics Native Library to v1.5.3.
 
 ---
 
