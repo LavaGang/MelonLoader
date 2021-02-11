@@ -4,37 +4,28 @@
 #include "../Base/Core.h"
 #include "AssemblyGenerator.h"
 #include "../Managers/BaseAssembly.h"
-#include <string>
 #include <wincrypt.h>
 #include "Assertion.h"
 #include "Logger.h"
+#include <sstream>
 
-std::string HashCode::Hash[7];
-int HashCode::HashOffset = 0;
+unsigned long long HashCode::Hash = 0;
 char* HashCode::Path_SM_Il2Cpp = NULL;
 char* HashCode::Path_SM_Mono = NULL;
 char* HashCode::Path_SM_Mono_Pre2017 = NULL;
 char* HashCode::Path_SM_Mono_Pre5 = NULL;
 
-std::string HashCode::GetHashString()
-{
-    std::string returnval = std::string();
-    for (int i = 0; i < 7; i++)
-        returnval += Hash[i];
-    return returnval;
-}
-
 bool HashCode::Initialize()
 {
     if (!SetupPaths())
         return false;
-    AddHash(Path_SM_Mono);
-    AddHash(Path_SM_Il2Cpp);
     AddHash(Core::Path);
-    AddHash(Path_SM_Mono_Pre2017);
     AddHash(BaseAssembly::Path);
-    AddHash(Path_SM_Mono_Pre5);
     AddHash(AssemblyGenerator::Path);
+    AddHash(Path_SM_Il2Cpp);
+    AddHash(Path_SM_Mono);
+    AddHash(Path_SM_Mono_Pre2017);
+    AddHash(Path_SM_Mono_Pre5);
     return true;
 }
 
@@ -132,6 +123,7 @@ void HashCode::AddHash(const char* path)
     DWORD dhash = 16;
     BYTE hashbuf[16];
     CHAR chartbl[] = "0123456789abcdef";
+    std::stringstream hashout;
     if (!CryptGetHashParam(crypthash, HP_HASHVAL, hashbuf, &dhash, 0))
     {
         CryptReleaseContext(cryptprov, 0);
@@ -139,10 +131,11 @@ void HashCode::AddHash(const char* path)
         CloseHandle(filehandle);
         return;
     }
-    Hash[HashOffset] = std::string();
     for (DWORD i = 0; i < dhash; i++)
-        Hash[HashOffset] += std::to_string(chartbl[hashbuf[i] >> 4] + chartbl[hashbuf[i] & 0xf]);
-    HashOffset++;
+        hashout << std::to_string(chartbl[hashbuf[i] >> 4]) + std::to_string(chartbl[hashbuf[i] & 0xf]);
+    unsigned long long hashoutval = 0;
+    hashout >> hashoutval;
+    Hash += hashoutval;
     CryptDestroyHash(crypthash);
     CryptReleaseContext(cryptprov, 0);
     CloseHandle(filehandle);
