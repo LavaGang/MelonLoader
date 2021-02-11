@@ -27,4 +27,8 @@ public:
 private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();
+	typedef const char* (*wine_get_version_t) ();
+	static wine_get_version_t wine_get_version;
+	static void SetupWineCheck();
+	static bool IsRunningInWine() { return ((wine_get_version == NULL) ? false : true); }
 };

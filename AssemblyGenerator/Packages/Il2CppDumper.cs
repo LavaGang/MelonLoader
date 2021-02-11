@@ -26,7 +26,6 @@ namespace MelonLoader.AssemblyGenerator
 
         internal override void Cleanup()
         {
-            //base.Cleanup();
             string dumpcspath = Path.Combine(Destination, "dump.cs");
             if (File.Exists(dumpcspath))
                 File.Delete(dumpcspath);

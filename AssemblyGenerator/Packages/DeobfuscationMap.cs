@@ -9,6 +9,8 @@ namespace MelonLoader.AssemblyGenerator
         {
             Destination = Core.il2cppassemblyunhollower.Destination;
             NewFileName = "DeobfuscationMap.csv.gz";
+            URL = SamboyAPI.Response_MappingURL;
+            Version = SamboyAPI.Response_MappingFileSHA512;
         }
 
         private void Save()
@@ -23,15 +25,6 @@ namespace MelonLoader.AssemblyGenerator
 
         internal override bool Download()
         {
-            TinyJSON.Variant apimapping = SamboyAPI.GetResponse();
-            if (apimapping == null)
-                return true;
-            try
-            {
-                Version = apimapping["mappingFileSHA512"];
-                URL = apimapping["mappingUrl"];
-            }
-            catch { return true; }
             if (string.IsNullOrEmpty(Version) || string.IsNullOrEmpty(URL))
                 return true;
             if (!ShouldDownload())

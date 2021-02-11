@@ -9,6 +9,8 @@ namespace MelonLoader.AssemblyGenerator
         {
             Version = Utils.ForceVersion_Il2CppAssemblyUnhollower();
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
+                Version = SamboyAPI.Response_ForceUnhollowerVersion;
+            if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "0.4.13.0";
             URL = "https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v" + Version + "/Il2CppAssemblyUnhollower." + Version + ".zip";
             Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
@@ -54,8 +56,8 @@ namespace MelonLoader.AssemblyGenerator
             parameters.Add("--blacklist-assembly=Mono.Security");
             parameters.Add("--blacklist-assembly=Newtonsoft.Json");
             parameters.Add("--blacklist-assembly=Valve.Newtonsoft.Json");
-            if (Core.GameName.Equals("Among Us"))
-                parameters.Add("--obf-regex=[A-Z]{11}");
+            if (!string.IsNullOrEmpty(SamboyAPI.Response_ObfuscationRegex))
+                parameters.Add("--obf-regex=" + SamboyAPI.Response_ObfuscationRegex);
             return Execute(parameters.ToArray());
         }
     }

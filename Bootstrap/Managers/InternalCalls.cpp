@@ -99,7 +99,7 @@ Mono::String* InternalCalls::MelonUtils::GetGameDirectory() { return Mono::Expor
 Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Game::DataPath); }
 Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPath); }
-Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, std::to_string(HashCode::Hash).c_str()); }
+Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, HashCode::Hash.c_str()); }
 Mono::String* InternalCalls::MelonUtils::GetVersionStrWithGameName(Mono::String* GameVersion) { return Mono::Exports::mono_string_new(Mono::domain, Core::GetVersionStrWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL)); }
 
 void InternalCalls::MelonUtils::SCT(Mono::String* title)

@@ -40,6 +40,9 @@
 15. Added Game Version to Logs.
 16. Fixed Collision Issue with Hash Code Generation.
 17. Improved Hash Code Generation.
+18. Improved Samboy's API Implementation in Assembly Generator.
+19. Added Wine Detection to Operating System Check.
+20. 
 
 ---
 
