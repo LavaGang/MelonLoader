@@ -43,9 +43,8 @@ bool Console::Initialize()
 	freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetHandles();
-
 	DWORD mode = 0;
-	if (!GetConsoleMode(Console::OutputHandle, &mode))
+	if (!GetConsoleMode(OutputHandle, &mode))
 	{
 		mode = 0x3;
 		if (!SetConsoleMode(OutputHandle, mode))
