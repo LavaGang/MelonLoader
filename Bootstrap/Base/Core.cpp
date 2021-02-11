@@ -29,6 +29,7 @@ const char* Core::GetVersionStr()
 		? "[D] "
 		: "")
 		+ CommandLine::GetPrefix()
+		+ " "
 		+ Version
 		+ (Is_ALPHA_PreRelease
 			? " ALPHA Pre-Release" 
