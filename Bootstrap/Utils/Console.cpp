@@ -43,11 +43,16 @@ bool Console::Initialize()
 	freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetHandles();
+
 	DWORD mode = 0;
-	if (!GetConsoleMode(OutputHandle, &mode))
+	if (!GetConsoleMode(Console::OutputHandle, &mode))
 	{
-		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
-		return false;
+		mode = 0x3;
+		if (!SetConsoleMode(OutputHandle, mode))
+		{
+			UseManualColoring = true;
+			return true;
+		}
 	}
 	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
 		UseManualColoring = true;
