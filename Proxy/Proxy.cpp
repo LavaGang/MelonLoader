@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <string>
 #include <algorithm>
+#include <filesystem>
 
 #pragma region version
 extern "C" FARPROC version_OriginalFuncs[17];
@@ -75,7 +76,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 		return TRUE;
 	LPSTR a1 = new CHAR[MAX_PATH];
 	GetModuleFileNameA(GetModuleHandleA(NULL), a1, MAX_PATH);
-	if ((strstr("UnityCrashHandler", a1) != NULL) || (strstr("UnityCrashHandler64", a1) != NULL))
+	std::filesystem::path a2(a1);
+	if ((strstr(a2.stem().string().c_str(), "UnityCrashHandler") != NULL) || (strstr(a2.stem().string().c_str(), "UnityCrashHandler64") != NULL))
 	{
 		HANDLE current_process = GetCurrentProcess();
 		TerminateProcess(current_process, NULL);
