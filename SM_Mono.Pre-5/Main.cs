@@ -14,7 +14,7 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
             string game_version = Application.version;
-            MelonLogger.Msg($"Game Version: {game_version}\n");
+            MelonLogger.Msg($"Game Version: {game_version}");
             MelonUtils.SetConsoleTitle(GetVersionStrWithGameName(game_version));
             UnityMappers.RegisterMappers();
 

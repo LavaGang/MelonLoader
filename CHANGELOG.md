@@ -47,6 +47,8 @@
 22. Fixed Issue where Debug Mode's "[D]" would print to log.
 23. Fixed Issue with SamboyAPI not parsing correctly.
 24. Added Among Us Deobfuscation Mapping.
+25. Fixed Issue with Game Version returning 0.
+26. Fixed Issue with Deobfuscation not abiding by Config's Obfuscation Regex as a fallback.
 
 ---
 

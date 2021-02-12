@@ -45,7 +45,7 @@ namespace MelonLoader.AssemblyGenerator
                 if (!string.IsNullOrEmpty(Response_ObfuscationRegex))
                     Logger.Debug_Msg($"Response_ObfuscationRegex = {Response_ObfuscationRegex}");
             }
-            catch (Exception ex) { Logger.Error(ex.ToString()); }
+            catch { }
         }
     }
 }

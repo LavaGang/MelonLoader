@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace MelonLoader.AssemblyGenerator
 {
@@ -14,6 +13,8 @@ namespace MelonLoader.AssemblyGenerator
             URL = SamboyAPI.Response_MappingURL;
             Version = SamboyAPI.Response_MappingFileSHA512;
             ObfuscationRegex = SamboyAPI.Response_ObfuscationRegex;
+            if (string.IsNullOrEmpty(ObfuscationRegex))
+                ObfuscationRegex = Config.ObfuscationRegex;
         }
 
         private void Save()
