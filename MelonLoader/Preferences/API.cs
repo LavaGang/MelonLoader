@@ -56,7 +56,7 @@ namespace MelonLoader
         {
             foreach (MelonPreferences_Category category in Categories)
                 foreach (MelonPreferences_Entry entry in category.Entries)
-                    if (!entry.NeverSave)
+                    if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
                         Preferences.IO.File.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
             try
             {
@@ -83,7 +83,7 @@ namespace MelonLoader
             return new MelonPreferences_Category(identifier, display_name);
         }
 
-        public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier, T default_value, string display_name = null, bool is_hidden = false, bool never_save = false)
+        public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier, T default_value, string display_name = null, bool is_hidden = false, bool dont_save_default = false)
         {
             if (string.IsNullOrEmpty(category_identifier))
                 throw new Exception("category_identifier is null or empty when calling CreateEntry");
@@ -92,7 +92,7 @@ namespace MelonLoader
             MelonPreferences_Category category = GetCategory(entry_identifier);
             if (category == null)
                 category = CreateCategory(category_identifier);
-            return category.CreateEntry(entry_identifier, default_value, display_name, is_hidden, never_save);
+            return category.CreateEntry(entry_identifier, default_value, display_name, is_hidden, dont_save_default);
         }
 
         public static MelonPreferences_Category GetCategory(string identifier)
