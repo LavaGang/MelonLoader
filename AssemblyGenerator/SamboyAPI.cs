@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using MelonLoader.TinyJSON;
 #pragma warning disable 0649
 
@@ -17,30 +18,34 @@ namespace MelonLoader.AssemblyGenerator
 
         internal static void Setup()
         {
-            string response = null;
+            string ContactURL = $"{API_URL}/{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
+            Logger.Debug_Msg($"ContactURL = {ContactURL}");
             try
             {
-                response = Core.webClient.DownloadString(API_URL 
-                + "/" 
-                + API_VERSION 
-                + "/game/" 
-                + Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled));
-            }
-            catch { return; }
-            if (string.IsNullOrEmpty(response))
-                return;
-            try
-            {
-                Variant responsearr = JSON.Load(response);
+                string Response = Core.webClient.DownloadString(ContactURL);
+                if (string.IsNullOrEmpty(Response))
+                    return;
+                Logger.Debug_Msg($"Response = {Response}");
+                Variant responsearr = JSON.Load(Response);
                 if (responsearr == null)
                     return;
-                Response_MappingURL = responsearr["mappingUrl"];
-                Response_MappingFileSHA512 = responsearr["mappingFileSHA512"];
-                Response_ForceCpp2ILVersion = responsearr["forceCpp2IlVersion"];
-                Response_ForceUnhollowerVersion = responsearr["forceUnhollowerVersion"];
-                Response_ObfuscationRegex = responsearr["obfuscationRegex"];
+                try { Response_MappingURL = responsearr["mappingUrl"]; } catch { Response_MappingURL = null; }
+                try { Response_MappingFileSHA512 = responsearr["mappingFileSHA512"]; } catch { Response_MappingFileSHA512 = null; }
+                try { Response_ForceCpp2ILVersion = responsearr["forceCpp2IlVersion"]; } catch { Response_ForceCpp2ILVersion = null; }
+                try { Response_ForceUnhollowerVersion = responsearr["forceUnhollowerVersion"]; } catch { Response_ForceUnhollowerVersion = null; }
+                try { Response_ObfuscationRegex = responsearr["obfuscationRegex"]; } catch { Response_ObfuscationRegex = null; }
+                if (!string.IsNullOrEmpty(Response_MappingURL))
+                    Logger.Debug_Msg($"Response_MappingURL = {Response_MappingURL}");
+                if (!string.IsNullOrEmpty(Response_MappingFileSHA512))
+                    Logger.Debug_Msg($"Response_MappingFileSHA512 = {Response_MappingFileSHA512}");
+                //if (!string.IsNullOrEmpty(Response_ForceCpp2ILVersion))
+                //    Logger.Debug_Msg($"Response_ForceCpp2ILVersion = {Response_ForceCpp2ILVersion}");
+                if (!string.IsNullOrEmpty(Response_ForceUnhollowerVersion))
+                    Logger.Debug_Msg($"Response_ForceUnhollowerVersion = {Response_ForceUnhollowerVersion}");
+                if (!string.IsNullOrEmpty(Response_ObfuscationRegex))
+                    Logger.Debug_Msg($"Response_ObfuscationRegex = {Response_ObfuscationRegex}");
             }
-            catch { }
+            catch (Exception ex) { Logger.Error(ex.ToString()); }
         }
     }
 }

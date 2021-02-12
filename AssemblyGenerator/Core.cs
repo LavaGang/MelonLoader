@@ -57,7 +57,10 @@ namespace MelonLoader.AssemblyGenerator
             Logger.Msg("Old: " + Config.GameAssemblyHash);
             Logger.Msg("Current: " + CurrentGameAssemblyHash);
             if (string.IsNullOrEmpty(Config.GameAssemblyHash)
-                || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
+                || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash)
+                || (!string.IsNullOrEmpty(Config.ObfuscationRegex) && string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
+                || (string.IsNullOrEmpty(Config.ObfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
+                || (!string.IsNullOrEmpty(Config.ObfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex) && !Config.ObfuscationRegex.Equals(deobfuscationMap.ObfuscationRegex)))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)
@@ -87,6 +90,7 @@ namespace MelonLoader.AssemblyGenerator
             il2cppassemblyunhollower.Cleanup();
 
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
+            Config.ObfuscationRegex = deobfuscationMap.ObfuscationRegex;
             Config.Save();
 
             Logger.Msg("Assembly Generation Successful!");

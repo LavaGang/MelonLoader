@@ -56,8 +56,8 @@ namespace MelonLoader.AssemblyGenerator
             parameters.Add("--blacklist-assembly=Mono.Security");
             parameters.Add("--blacklist-assembly=Newtonsoft.Json");
             parameters.Add("--blacklist-assembly=Valve.Newtonsoft.Json");
-            if (!string.IsNullOrEmpty(SamboyAPI.Response_ObfuscationRegex))
-                parameters.Add("--obf-regex=" + SamboyAPI.Response_ObfuscationRegex);
+            if (!string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex))
+                parameters.Add($"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }");
             return Execute(parameters.ToArray());
         }
     }

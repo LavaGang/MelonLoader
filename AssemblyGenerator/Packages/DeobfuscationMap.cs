@@ -5,12 +5,15 @@ namespace MelonLoader.AssemblyGenerator
 {
     internal class DeobfuscationMap : PackageBase
     {
+        internal string ObfuscationRegex = null;
+
         internal DeobfuscationMap()
         {
             Destination = Core.il2cppassemblyunhollower.Destination;
             NewFileName = "DeobfuscationMap.csv.gz";
             URL = SamboyAPI.Response_MappingURL;
             Version = SamboyAPI.Response_MappingFileSHA512;
+            ObfuscationRegex = SamboyAPI.Response_ObfuscationRegex;
         }
 
         private void Save()

@@ -47,9 +47,6 @@
     <ClCompile Include="Utils\HashCode.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Managers\Exports.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Managers\AssemblyVerifier.cpp">
       <Filter>Utils</Filter>
     </ClCompile>

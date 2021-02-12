@@ -25,10 +25,7 @@ Core::wine_get_version_t Core::wine_get_version = NULL;
 
 const char* Core::GetVersionStr()
 {
-	return (std::string(Debug::Enabled
-		? "[D] "
-		: "")
-		+ CommandLine::GetPrefix()
+	return (std::string(CommandLine::GetPrefix())
 		+ " "
 		+ Version
 		+ (Is_ALPHA_PreRelease
@@ -38,13 +35,16 @@ const char* Core::GetVersionStr()
 
 const char* Core::GetVersionStrWithGameName(const char* GameVersion)
 {
-	return (std::string(GetVersionStr())
+	return ((std::string(Debug::Enabled
+		? "[D] "
+		: "")
+		+ std::string(GetVersionStr())
 		+ std::string(" - ")
 		+ std::string(Game::Name)
 		+ " "
 		+ ((GameVersion == NULL)
 			? ""
-			: GameVersion)).c_str();
+			: GameVersion)).c_str());
 }
 
 void Core::Initialize(HINSTANCE hinstDLL)

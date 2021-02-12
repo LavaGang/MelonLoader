@@ -35,7 +35,9 @@ bool Console::Initialize()
 	Window = GetConsoleWindow();
 	Menu = GetSystemMenu(Window, FALSE);
 	SetConsoleCtrlHandler(EventHandler, TRUE);
-	SetTitle(Core::GetVersionStr());
+	SetTitle((std::string(Debug::Enabled
+		? "[D] "
+		: "") + Core::GetVersionStr()).c_str());
 	SetForegroundWindow(Window);
 	if (AlwaysOnTop)
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);

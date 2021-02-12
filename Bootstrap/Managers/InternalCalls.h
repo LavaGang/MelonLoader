@@ -42,7 +42,6 @@ public:
 		static Mono::String* GetUnityVersion();
 		static Mono::String* GetManagedDirectory();
 		static Mono::String* GetHashCode();
-		static Mono::String* GetVersionStrWithGameName(Mono::String* GameVersion);
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
 	};
@@ -71,9 +70,34 @@ public:
 		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
 	};
 
-	class SM_Preload
+	class SupportModules
 	{
 	public:
 		static void AddInternalCalls();
+		static Mono::String* GetVersionStrWithGameName(Mono::String* GameVersion);
+	};
+
+	class AssemblyGenerator_Logger
+	{
+	public:
+		static void AddInternalCalls();
+		static void Msg(Mono::String* txt);
+		static void Warning(Mono::String* txt);
+		static void Error(Mono::String* txt);
+		static void Debug_Msg(Mono::String* txt);
+	};
+
+	class AssemblyGenerator_Utils
+	{
+	public:
+		static void AddInternalCalls();
+		static Mono::String* GetGameAssemblyPath();
+		static Mono::String* GetConfigDirectory();
+		static Mono::String* GetAssemblyGeneratorPath();
+		static bool ForceRegeneration();
+		static Mono::String* ForceVersion_UnityDependencies();
+		static Mono::String* ForceVersion_Dumper();
+		static Mono::String* ForceVersion_Il2CppAssemblyUnhollower();
+		static void SetProcessId(int id);
 	};
 };

@@ -70,7 +70,6 @@ bool AssemblyGenerator::Initialize()
 
 void AssemblyGenerator::Cleanup()
 {
-	Debug::Msg("Cleaning up Assembly Generator...");
 	if (ProcessId != 0)
 	{
 		HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, ProcessId);
@@ -81,10 +80,6 @@ void AssemblyGenerator::Cleanup()
 		}
 		ProcessId = 0;
 	}
-	Game::Initialize();
-	Game::ReadInfo();
-	HashCode::SetupPaths();
-	Mono::SetupPaths();
 	Console::GeneratingAssembly = false;
 	if (!Debug::Enabled && Console::ShouldHide)
 		Console::Close();

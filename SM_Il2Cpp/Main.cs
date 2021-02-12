@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using MelonLoader.Support.Preferences;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
@@ -26,8 +28,8 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
             string game_version = Application.version;
-            MelonLogger.Msg("Game Version: " + game_version);
-            MelonUtils.SetConsoleTitle(MelonUtils.GetVersionStrWithGameName(game_version)); 
+            MelonLogger.Msg($"Game Version: {game_version}\n");
+            MelonUtils.SetConsoleTitle(GetVersionStrWithGameName(game_version)); 
             UnityMappers.RegisterMappers();
 
             LogSupport.RemoveAllHandlers();
@@ -113,5 +115,9 @@ namespace MelonLoader.Support
             ShouldCheckForUiManager = false;
             Interface.VRChat_OnUiManagerInit();
         }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string GetVersionStrWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
     }
 }

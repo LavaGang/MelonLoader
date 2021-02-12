@@ -40,9 +40,12 @@
 15. Added Game Version to Logs.
 16. Fixed Collision Issue with Hash Code Generation.
 17. Improved Hash Code Generation.
-18. Improved Samboy's API Implementation in Assembly Generator.
+18. Improved SamboyAPI Implementation in Assembly Generator.
 19. Added Wine Detection to Operating System Check.
-20. 
+20. Converted Assembly Generator to using Internal Calls instead of Native Exports.
+21. Removed Native Exports from Bootstrap.
+22. Fixed Issue where Debug Mode's "[D]" would print to log.
+23. Fixed Issue with SamboyAPI not parsing correctly.
 
 ---
 

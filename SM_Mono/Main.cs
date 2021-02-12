@@ -1,4 +1,6 @@
-﻿using MelonLoader.Support.Preferences;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
+using MelonLoader.Support.Preferences;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,8 +16,8 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
             string game_version = Application.version;
-            MelonLogger.Msg("Game Version: " + game_version);
-            MelonUtils.SetConsoleTitle(MelonUtils.GetVersionStrWithGameName(game_version));
+            MelonLogger.Msg($"Game Version: {game_version}\n");
+            MelonUtils.SetConsoleTitle(GetVersionStrWithGameName(game_version));
             UnityMappers.RegisterMappers();
 
             SceneManager.sceneLoaded += OnSceneLoad;
@@ -23,5 +25,9 @@ namespace MelonLoader.Support
         }
 
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (obj == null) Component.Create(); if (!scene.Equals(null)) Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string GetVersionStrWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
     }
 }
