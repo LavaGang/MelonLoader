@@ -46,6 +46,7 @@
 21. Removed Native Exports from Bootstrap.
 22. Fixed Issue where Debug Mode's "[D]" would print to log.
 23. Fixed Issue with SamboyAPI not parsing correctly.
+24. Added Among Us Deobfuscation Mapping.
 
 ---
 
