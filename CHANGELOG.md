@@ -50,6 +50,7 @@
 25. Fixed Issue with Game Version returning 0.
 26. Fixed Issue with Deobfuscation not abiding by Config's Obfuscation Regex as a fallback.
 27. Fixed Issue with bHaptics Library causing "Unable to Connect" to be spammed in Console.
+28. Added Color32 Support to MelonPreferences.
 
 ---
 

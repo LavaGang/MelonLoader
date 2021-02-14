@@ -8,6 +8,7 @@ namespace MelonLoader.Support.Preferences
         public static void RegisterMappers()
         {
             MelonPreferences.Mapper.RegisterMapper(ReadColor, WriteColor);
+            MelonPreferences.Mapper.RegisterMapper(ReadColor32, WriteColor32);
             MelonPreferences.Mapper.RegisterMapper(ReadVector2, WriteVector2);
             MelonPreferences.Mapper.RegisterMapper(ReadVector3, WriteVector3);
             MelonPreferences.Mapper.RegisterMapper(ReadVector4, WriteVector4);
@@ -28,7 +29,21 @@ namespace MelonLoader.Support.Preferences
             var floats = new[] { value.r * 255, value.g * 255, value.b * 255, value.a * 255};
             return MelonPreferences.Mapper.WriteArray(floats);
         }
-        
+
+        public static Color32 ReadColor32(TomlObject value)
+        {
+            var bytes = MelonPreferences.Mapper.ReadArray<byte>(value);
+            if (bytes == null || bytes.Length != 4)
+                return default;
+            return new Color32(bytes[0], bytes[1], bytes[2], bytes[3]);
+        }
+
+        public static TomlObject WriteColor32(Color32 value)
+        {
+            var bytes = new[] { value.r, value.g, value.b, value.a };
+            return MelonPreferences.Mapper.WriteArray(bytes);
+        }
+
         public static Vector2 ReadVector2(TomlObject value)
         {
             var floats = MelonPreferences.Mapper.ReadArray<float>(value);
