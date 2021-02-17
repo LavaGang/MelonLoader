@@ -22,7 +22,7 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Legacy settings load failed: {ex}");
+                MelonLogger.Error($"Error while Loading Legacy Preferences: {ex}");
                 DefaultFile.WasError = true;
             }
 
@@ -32,7 +32,7 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Settings load failed: {ex}");
+                MelonLogger.Error($"Error while Loading Preferences: {ex}");
                 DefaultFile.WasError = true;
             }
             if (!DefaultFile.WasError && (Categories.Count > 0))
@@ -60,7 +60,7 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Error while saving settings: {ex}");
+                MelonLogger.Error($"Error while Saving Preferences: {ex}");
                 DefaultFile.WasError = true;
             }
             MelonLogger.Msg("Preferences Saved!");
