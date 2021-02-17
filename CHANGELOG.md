@@ -53,6 +53,7 @@
 28. Added Color32 Support to MelonPreferences.
 29. Internal Failures now Kill the Process when thrown.
 30. Fixed Issue with Analytics Blocker incorrectly blocking certain hosts.
+31. Added OnApplicationLateStart Melon Override.
 
 ---
 

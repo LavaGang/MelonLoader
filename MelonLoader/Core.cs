@@ -41,6 +41,8 @@ namespace MelonLoader
             MelonHandler.LoadMods();
             Main.LegacySupport();
             MelonHandler.OnApplicationStart_Mods();
+            MelonHandler.OnApplicationLateStart_Plugins();
+            MelonHandler.OnApplicationLateStart_Mods();
         }
 
         internal static void Quit()

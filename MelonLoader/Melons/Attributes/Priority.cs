@@ -8,8 +8,8 @@ namespace MelonLoader
         /// <summary>
         /// Priority of the Melon.
         /// </summary>
-        public MelonBase.MelonPriority Priority;
+        public int Priority;
 
-        public MelonPriorityAttribute(MelonBase.MelonPriority priority = MelonBase.MelonPriority.NORMAL) => Priority = priority;
+        public MelonPriorityAttribute(int priority = 0) => Priority = priority;
     }
 }

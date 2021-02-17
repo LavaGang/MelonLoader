@@ -31,23 +31,10 @@ namespace MelonLoader
         /// </summary>
         public MelonCompatibility Compatibility { get; internal set; }
 
-
-        // <summary>
-        /// Enum for Melon Priority.
-        /// </summary>
-        public enum MelonPriority
-        {
-            HIGHEST,
-            HIGH,
-            NORMAL,
-            LOW,
-            LOWEST
-        }
-
         /// <summary>
         /// Priority of the Melon.
         /// </summary>
-        public MelonPriority Priority { get; internal set; }
+        public int Priority { get; internal set; }
 
         /// <summary>
         /// Gets if the Melon is Universal.
