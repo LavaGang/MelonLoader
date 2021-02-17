@@ -90,6 +90,11 @@ namespace MelonLoader
         public virtual void OnApplicationStart() { }
 
         /// <summary>
+        /// Runs after OnApplicationStart.
+        /// </summary>
+        public virtual void OnApplicationLateStart() { }
+
+        /// <summary>
         /// Runs once per frame.
         /// </summary>
         public virtual void OnUpdate() { }

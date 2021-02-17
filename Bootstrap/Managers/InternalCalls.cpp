@@ -177,8 +177,6 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 Mono::String* InternalCalls::SupportModules::GetVersionStrWithGameName(Mono::String* GameVersion) { return Mono::Exports::mono_string_new(Mono::domain, Core::GetVersionStrWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL)); }
 void InternalCalls::SupportModules::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.Support.Preload::IsGameIl2Cpp", MelonUtils::IsGameIl2Cpp);
-	Mono::AddInternalCall("MelonLoader.Support.Preload::IsOldMono", MelonUtils::IsOldMono);
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", MelonUtils::GetManagedDirectory);
 	Mono::AddInternalCall("MelonLoader.Support.Main::GetVersionStrWithGameName", GetVersionStrWithGameName);
 }

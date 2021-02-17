@@ -34,7 +34,7 @@ namespace MelonLoader
                 DefaultValue = default_value,
                 Value = default_value
             };
-            Preferences.IO.File.SetupEntryFromRawValue(entry);
+            MelonPreferences.DefaultFile.SetupEntryFromRawValue(entry);
             Entries.Add(entry);
             return entry;
         }

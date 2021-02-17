@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MelonLoader.Support.Preferences
 {
-    public static class UnityMappers
+    internal static class UnityMappers
     {
         internal static void RegisterMappers()
         {

@@ -51,6 +51,8 @@
 26. Fixed Issue with Deobfuscation not abiding by Config's Obfuscation Regex as a fallback.
 27. Fixed Issue with bHaptics Library causing "Unable to Connect" to be spammed in Console.
 28. Added Color32 Support to MelonPreferences.
+29. Internal Failures now Kill the Process when thrown.
+30. Fixed Issue with Analytics Blocker incorrectly blocking certain hosts.
 
 ---
 

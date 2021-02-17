@@ -10,6 +10,7 @@ public:
 	static bool Initialize();
 	static void Hook();
 	static bool CheckHostNames(const char* url);
+	static bool IsInBlockedHostNameList(const char* url);
 
 	class wsock32
 	{
@@ -58,6 +59,6 @@ public:
 #endif
 
 private:
-	static std::list<std::string> HostNames;
-	static std::list<std::string> HostNames_DAB;
+	static const char* HostNames[];
+	static std::list<const char*> HostNames_DAB;
 };

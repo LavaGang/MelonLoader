@@ -128,8 +128,6 @@ bool Core::OSVersionCheck()
 void Core::KillCurrentProcess()
 {
 	HANDLE current_process = GetCurrentProcess();
-	if (current_process == NULL)
-		return;
 	TerminateProcess(current_process, NULL);
 	CloseHandle(current_process);
 }
