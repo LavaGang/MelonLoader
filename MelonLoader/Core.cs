@@ -18,6 +18,7 @@ namespace MelonLoader
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }
             OverrideAppDomainBase(MelonUtils.GameDirectory);
+            ExtraCleanupCheck(MelonUtils.GameDirectory);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             MelonPreferences.Load();
@@ -73,6 +74,23 @@ namespace MelonLoader
                 appDomainBase.ApplicationBase = basepath;
             }
             Directory.SetCurrentDirectory(basepath);
+        }
+
+        private static void ExtraCleanupCheck(string destination)
+        {
+            ExtraCleanupCheck2(destination);
+            ExtraCleanupCheck2(Path.Combine(destination, "Mods"));
+            ExtraCleanupCheck2(Path.Combine(destination, "Plugins"));
+            ExtraCleanupCheck2(Path.Combine(destination, "UserData"));
+        }
+        private static void ExtraCleanupCheck2(string destination)
+        {
+            string main_dll = Path.Combine(destination, "MelonLoader.dll");
+            if (File.Exists(main_dll))
+                File.Delete(main_dll);
+            string main2_dll = Path.Combine(destination, "MelonLoader.ModHandler.dll");
+            if (File.Exists(main2_dll))
+                File.Delete(main2_dll);
         }
 
         private static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e) => MelonLogger.Error((e.ExceptionObject as Exception).ToString());

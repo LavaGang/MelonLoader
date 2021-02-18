@@ -54,6 +54,7 @@
 29. Internal Failures now Kill the Process when thrown.
 30. Fixed Issue with Analytics Blocker incorrectly blocking certain hosts.
 31. Added OnApplicationLateStart Melon Override.
+32. Added Missing Attribute Cleanup Fix from Installer.
 
 ---
 
