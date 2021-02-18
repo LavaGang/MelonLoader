@@ -79,9 +79,9 @@ namespace MelonLoader
         private static void ExtraCleanupCheck(string destination)
         {
             ExtraCleanupCheck2(destination);
-            ExtraCleanupCheck2(Path.Combine(destination, "Mods"));
-            ExtraCleanupCheck2(Path.Combine(destination, "Plugins"));
-            ExtraCleanupCheck2(Path.Combine(destination, "UserData"));
+            ExtraCleanupCheck2(MelonHandler.ModsDirectory);
+            ExtraCleanupCheck2(MelonHandler.PluginsDirectory);
+            ExtraCleanupCheck2(MelonUtils.UserDataDirectory);
         }
         private static void ExtraCleanupCheck2(string destination)
         {
