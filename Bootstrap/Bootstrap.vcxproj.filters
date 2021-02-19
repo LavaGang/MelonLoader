@@ -124,6 +124,7 @@
       <Filter>Base\MSDetours</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -131,7 +132,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup> 
     <ResourceCompile Include="Bootstrap.rc" />
   </ItemGroup>
 </Project>

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef __ANDROID_API__
 #include <jni.h>
 #include <errno.h>

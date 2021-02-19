@@ -1,3 +1,4 @@
+#ifdef _WIN64
 #pragma once
 #include <Windows.h>
 #include <chrono>
@@ -22,3 +23,4 @@ private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();
 };
+#endif

@@ -154,10 +154,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bootstrap.cpp" />
-    <ClCompile Include="PlaygroundBootstrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PlaygroundBootstrapper.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
