@@ -1,5 +1,5 @@
 #pragma once
-#ifdef _WIN64
+#ifdef _WIN32
 #include <Windows.h>
 #endif
 #include <chrono>
@@ -7,9 +7,9 @@
 class Core
 {
 public:
-	#ifdef _WIN64
+	#ifdef _WIN32
 	static HINSTANCE Bootstrap;
-	#elif defined(__ANDROID_API__)
+	#elif defined(__ANDROID__)
 	static JavaVM* Bootstrap;
 	#endif
 	

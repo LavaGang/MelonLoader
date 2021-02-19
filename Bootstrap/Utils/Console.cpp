@@ -10,7 +10,7 @@
 #include "Logger.h"
 #include <sstream>
 
-#ifdef _WIN64
+#ifdef _WIN32
 bool Console::ShouldHide = false;
 bool Console::GeneratingAssembly = false;
 bool Console::AlwaysOnTop = false;
@@ -109,7 +109,7 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	}
 }
 
-#elif defined(__ANDROID_API__)
+#elif defined(__ANDROID__)
 
 bool Console::Initialize()
 {

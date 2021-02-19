@@ -1,7 +1,7 @@
 #pragma once
 #include "../Utils/Console.h"
 
-#ifdef _WIN64
+#ifdef _WIN32
 #define __USE_COUT
 #endif
 

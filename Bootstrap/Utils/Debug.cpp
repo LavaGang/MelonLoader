@@ -85,7 +85,7 @@ std::string Debug::BuildMsg(const MessagePrefix prefixes[], const int size, cons
 		<< Console::ColorToAnsi(Console::Color::Reset)
 		<< " ";
 
-#ifdef __ANDROID_API__
+#ifdef __ANDROID__
 	ss << txt;
 #else
 	ss << txt

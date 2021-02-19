@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __ANDROID_API__
+#ifdef __ANDROID__
 extern "C"
 {
 	JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
@@ -11,7 +11,7 @@ extern "C"
 }
 #endif
 
-#ifdef _WIN64
+#ifdef _WIN32
 
 #include <Windows.h>
 #include <string>

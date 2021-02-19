@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef _WIN64
+#ifdef _WIN32
 #include <Windows.h>
 #endif
 
@@ -9,7 +9,7 @@
 class Console
 {
 public:
-#ifdef _WIN64
+#ifdef _WIN32
 	static HANDLE OutputHandle;
 	static bool AlwaysOnTop;
 	static bool ShouldHide;
@@ -47,7 +47,7 @@ public:
 		Reset = -1
 	};
 	static std::string ColorToAnsi(Color color);
-#ifdef _WIN64
+#ifdef _WIN32
 	static void EnableCloseButton();
 	static void DisableCloseButton();
 	static void SetHandles();
@@ -59,7 +59,7 @@ public:
 #endif
 
 private:
-#ifdef _WIN64
+#ifdef _WIN32
 	static HWND Window;
 	static HMENU Menu;
 	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }

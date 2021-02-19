@@ -45,7 +45,7 @@ bool Core::Initialize()
 	return true;
 }
 
-#ifdef _WIN64
+#ifdef _WIN32
 #include <Windows.h>
 #include <VersionHelpers.h>
 #include <sys/types.h>
@@ -92,8 +92,10 @@ void Core::WelcomeMessage()
 	Logger::Msg(
 #ifdef _WIN64
 		"Arch: x64"
-#else
+#elif _WIN32
 		"Arch: x86"
+#else
+		"Unknown"
 #endif
 	);
 	Logger::Msg("------------------------------");
@@ -195,7 +197,7 @@ const char* Core::GetOSVersion()
 bool Core::DirectoryExists(const char* path) { struct stat Stat; return ((stat(path, &Stat) == 0) && (Stat.st_mode & S_IFDIR)); }
 bool Core::FileExists(const char* path) { WIN32_FIND_DATAA data; return (FindFirstFileA(path, &data) != INVALID_HANDLE_VALUE); }
 void Core::GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt) { *now = std::chrono::system_clock::now(); *ms = std::chrono::duration_cast<std::chrono::milliseconds>((*now).time_since_epoch()) % 1000; time_t timer = std::chrono::system_clock::to_time_t(*now); localtime_s(bt, &timer); }
-#elif defined(__ANDROID_API__)
+#elif defined(__ANDROID__)
 JavaVM* Core::Bootstrap = NULL;
 void Core::ApplyHooks()
 {
