@@ -2,6 +2,8 @@
 #include "Logger.h"
 #include "Assertion.h"
 #include <iostream>
+#include <string>
+#include <sstream>
 
 #ifdef DEBUG
 bool Debug::Enabled = true;
@@ -13,30 +15,28 @@ void Debug::Msg(const char* txt)
 {
 	if (!Enabled || !Assertion::ShouldContinue)
 		return;
-	DirectWrite(txt);
+	ForceWrite(txt);
 }
 
-void Debug::DirectWrite(const char* txt)
+void Debug::ForceWrite(const char* txt)
 {
 	std::string timestamp = Logger::GetTimestamp();
+	
 	Logger::LogFile << "[" << timestamp << "] [DEBUG] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Blue)
-		<< "DEBUG"
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< txt
-		<< std::endl
-		<< "\x1b[37m";
+
+	const MessagePrefix prefixes[]{
+		MessagePrefix{
+			Console::Green,
+			timestamp.c_str()
+		},
+		MessagePrefix{
+			Console::Blue,
+			"DEBUG"
+		},
+	};
+
+	const char* response = BuildMsg(prefixes, sizeof prefixes, txt).c_str();
+	DisplayMsg(response);
 }
 
 void Debug::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
@@ -48,29 +48,54 @@ void Debug::Internal_Msg(Console::Color color, const char* namesection, const ch
 	}
 	if (!Enabled || !Assertion::ShouldContinue)
 		return;
+	
 	std::string timestamp = Logger::GetTimestamp();
 	Logger::LogFile << "[" << timestamp << "] [" << namesection << "] [DEBUG] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
+
+	const MessagePrefix prefixes [] {
+		MessagePrefix{
+			Console::Green,
+			timestamp.c_str()
+		},
+		MessagePrefix{
+			color,
+			timestamp.c_str()
+		},
+		MessagePrefix{
+			Console::Blue,
+			"DEBUG"
+		},
+	};
+	
+	const char* response = BuildMsg(prefixes, sizeof prefixes, txt).c_str();
+	DisplayMsg(response);
+}
+
+std::string Debug::BuildMsg(const MessagePrefix prefixes[], const int size, const char* txt)
+{
+	std::stringstream ss;
+
+	for (int i = 0; i < size; i++)
+		ss << Console::ColorToAnsi(Console::Color::Gray)
 		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
+		<< Console::ColorToAnsi(prefixes[i].Color)
+		<< prefixes[i].Message
 		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(color)
-		<< namesection
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Blue)
-		<< "DEBUG"
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< txt
-		<< std::endl
-		<< "\x1b[37m";
+		<< "]"
+		<< Console::ColorToAnsi(Console::Color::Reset)
+		<< " ";
+
+#ifdef __ANDROID_API__
+	ss << txt;
+#else
+	ss << txt
+	<< std::endl
+	<< Console::ColorToAnsi(Console::Color::Reset);
+#endif
+	return ss.str();
+}
+
+void Debug::DisplayMsg(const char* txt)
+{
+	
 }

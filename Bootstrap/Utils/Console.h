@@ -1,14 +1,20 @@
 #pragma once
+
+#ifdef _WIN64
 #include <Windows.h>
+#endif
+
 #include <string>
 
 class Console
 {
 public:
+#ifdef _WIN64
 	static HANDLE OutputHandle;
-	static bool ShouldHide;
-	static bool GeneratingAssembly;
 	static bool AlwaysOnTop;
+	static bool ShouldHide;
+#endif
+	static bool GeneratingAssembly;
 	static bool HideWarnings;
 	enum DisplayMode
 	{
@@ -20,9 +26,6 @@ public:
 	static DisplayMode Mode;
 
 	static bool Initialize();
-	static void Flush();
-	static void Close();
-	static void SetTitle(const char* title) { SetConsoleTitleA(title); }
 	enum Color
 	{
 		Black = 0,
@@ -40,19 +43,27 @@ public:
 		Red = 12,
 		Magenta = 13,
 		Yellow = 14,
-		White = 15
+		White = 15,
+		Reset = -1
 	};
 	static std::string ColorToAnsi(Color color);
+#ifdef _WIN64
 	static void EnableCloseButton();
 	static void DisableCloseButton();
-	static BOOL WINAPI EventHandler(DWORD evt);
 	static void SetHandles();
 	static void NullHandles();
+	static void Flush();
+	static void Close();
+	static void SetTitle(const char* title) { SetConsoleTitleA(title); }
+	static BOOL WINAPI EventHandler(DWORD evt);
+#endif
 
 private:
+#ifdef _WIN64
 	static HWND Window;
 	static HMENU Menu;
 	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }
+#endif
 	static int rainbow;
 	static Color GetRainbowColor();
 };

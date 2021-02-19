@@ -4,12 +4,13 @@
 #include "Assertion.h"
 #include "Debug.h"
 #include <iostream>
-#include <locale.h>
+#include <clocale>
 #include "../Managers/Game.h"
 #include "AssemblyGenerator.h"
 #include "Logger.h"
 #include <sstream>
 
+#ifdef _WIN64
 bool Console::ShouldHide = false;
 bool Console::GeneratingAssembly = false;
 bool Console::AlwaysOnTop = false;
@@ -108,6 +109,15 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	}
 }
 
+#elif defined(__ANDROID_API__)
+
+bool Console::Initialize()
+{
+	
+}
+
+#endif
+
 Console::Color Console::GetRainbowColor()
 {
 	if (Mode == DisplayMode::RANDOMRAINBOW)
@@ -161,6 +171,7 @@ std::string Console::ColorToAnsi(Color color)
 	case Color::Yellow:
 		return "\x1b[93m";
 	case Color::White:
+	case Color::Reset:
 	default:
 		return "\x1b[97m";
 	}

@@ -1,16 +1,23 @@
-#ifdef _WIN64
 #pragma once
+#ifdef _WIN64
 #include <Windows.h>
+#endif
 #include <chrono>
 
 class Core
 {
 public:
+	#ifdef _WIN64
 	static HINSTANCE Bootstrap;
+	#elif defined(__ANDROID_API__)
+	static JavaVM* Bootstrap;
+	#endif
+	
 	static char* Path;
 	static const char* Version;
 	static bool QuitFix;
 	static bool Initialize();
+	static void ApplyHooks();
 	static bool DirectoryExists(const char* path);
 	static bool FileExists(const char* path);
 	static void GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt);
@@ -23,4 +30,3 @@ private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();
 };
-#endif
