@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include <string>
 #include "Mono.h"
 #include "Game.h"
@@ -215,60 +216,60 @@ bool Mono::Exports::Initialize()
 {
 	Debug::Msg("Initializing Mono Exports...");
 
-	#define MONODEF(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn);
+#define MONODEF(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn);
 
 	MONODEF(mono_jit_init)
-	MONODEF(mono_thread_set_main)
-	MONODEF(mono_thread_current)
-	MONODEF(mono_add_internal_call)
-	MONODEF(mono_lookup_internal_call)
-	MONODEF(mono_runtime_invoke)
-	MONODEF(mono_method_get_name)
-	MONODEF(mono_domain_assembly_open)
-	MONODEF(mono_assembly_get_image)
-	MONODEF(mono_class_from_name)
-	MONODEF(mono_class_get_method_from_name)
-	MONODEF(mono_string_to_utf8)
-	MONODEF(mono_string_new)
-	MONODEF(mono_object_get_class)
-	MONODEF(mono_class_get_property_from_name)
-	MONODEF(mono_property_get_get_method)
+		MONODEF(mono_thread_set_main)
+		MONODEF(mono_thread_current)
+		MONODEF(mono_add_internal_call)
+		MONODEF(mono_lookup_internal_call)
+		MONODEF(mono_runtime_invoke)
+		MONODEF(mono_method_get_name)
+		MONODEF(mono_domain_assembly_open)
+		MONODEF(mono_assembly_get_image)
+		MONODEF(mono_class_from_name)
+		MONODEF(mono_class_get_method_from_name)
+		MONODEF(mono_string_to_utf8)
+		MONODEF(mono_string_new)
+		MONODEF(mono_object_get_class)
+		MONODEF(mono_class_get_property_from_name)
+		MONODEF(mono_property_get_get_method)
 
-	if (!IsOldMono)
-	{
-		MONODEF(mono_domain_set_config)
-		MONODEF(mono_unity_get_unitytls_interface)
-		MONODEF(mono_free)
-	}
-	else
-		MONODEF(g_free)
-
-	if (Game::IsIl2Cpp) 
-	{
-		MONODEF(mono_set_assemblies_path)
-		MONODEF(mono_assembly_setrootdir)
-		MONODEF(mono_set_config_dir)
 		if (!IsOldMono)
-			MONODEF(mono_runtime_set_main_args)
+		{
+			MONODEF(mono_domain_set_config)
+				MONODEF(mono_unity_get_unitytls_interface)
+				MONODEF(mono_free)
+		}
+		else
+			MONODEF(g_free)
 
-		MONODEF(mono_raise_exception)
-		MONODEF(mono_get_exception_bad_image_format)
-		MONODEF(mono_image_open_full)
-		MONODEF(mono_image_open_from_data_full)
-		MONODEF(mono_image_close)
-		MONODEF(mono_image_get_table_rows)
-		MONODEF(mono_metadata_decode_table_row_col)
-		MONODEF(mono_array_addr_with_size)
-		MONODEF(mono_array_length)
-		MONODEF(mono_metadata_string_heap)
-		MONODEF(mono_class_get_name)
-	}
-	else
-		MONODEF(mono_jit_init_version)
+			if (Game::IsIl2Cpp)
+			{
+				MONODEF(mono_set_assemblies_path)
+					MONODEF(mono_assembly_setrootdir)
+					MONODEF(mono_set_config_dir)
+					if (!IsOldMono)
+						MONODEF(mono_runtime_set_main_args)
 
-	#undef MONODEF
+						MONODEF(mono_raise_exception)
+						MONODEF(mono_get_exception_bad_image_format)
+						MONODEF(mono_image_open_full)
+						MONODEF(mono_image_open_from_data_full)
+						MONODEF(mono_image_close)
+						MONODEF(mono_image_get_table_rows)
+						MONODEF(mono_metadata_decode_table_row_col)
+						MONODEF(mono_array_addr_with_size)
+						MONODEF(mono_array_length)
+						MONODEF(mono_metadata_string_heap)
+						MONODEF(mono_class_get_name)
+			}
+			else
+				MONODEF(mono_jit_init_version)
 
-	return Assertion::ShouldContinue;
+#undef MONODEF
+
+				return Assertion::ShouldContinue;
 }
 
 void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
@@ -327,3 +328,4 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 }
 
 void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
+#endif

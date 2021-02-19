@@ -1,4 +1,5 @@
 #pragma once
+#ifndef PORT_TODO_DISABLE
 #include <Windows.h>
 
 class Assertion
@@ -8,3 +9,4 @@ public:
 	static void ThrowInternalFailure(const char* msg);
 	static FARPROC GetExport(HMODULE mod, const char* export_name);
 };
+#endif

@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #pragma once
 #include <Windows.h>
 
@@ -102,8 +103,8 @@ public:
 		MONO_TABLE_STATEMACHINEMETHOD,
 		MONO_TABLE_CUSTOMDEBUGINFORMATION
 
-		#define MONO_TABLE_LAST MONO_TABLE_CUSTOMDEBUGINFORMATION
-		#define MONO_TABLE_NUM (MONO_TABLE_LAST + 1)
+#define MONO_TABLE_LAST MONO_TABLE_CUSTOMDEBUGINFORMATION
+#define MONO_TABLE_NUM (MONO_TABLE_LAST + 1)
 	} MonoMetaTableEnum;
 
 	enum
@@ -149,48 +150,48 @@ public:
 	{
 	public:
 		static bool Initialize();
-		
-		#define MONODEF(rt, fn, args) typedef rt (* fn##_t) args; static fn##_t fn;
+
+#define MONODEF(rt, fn, args) typedef rt (* fn##_t) args; static fn##_t fn;
 
 		MONODEF(Domain*, mono_jit_init, (const char* name))
-		MONODEF(Domain*, mono_jit_init_version, (const char* name, const char* version))
-		MONODEF(void, mono_set_assemblies_path, (const char* path))
-		MONODEF(void, mono_assembly_setrootdir, (const char* path))
-		MONODEF(void, mono_set_config_dir, (const char* path))
-		MONODEF(int, mono_runtime_set_main_args, (int argc, char* argv[]))
-		MONODEF(Thread*, mono_thread_current, ())
-		MONODEF(void, mono_thread_set_main, (Thread* thread))
-		MONODEF(void, mono_domain_set_config, (Domain* domain, const char* configpath, const char* filename))
-		MONODEF(void, mono_add_internal_call, (const char* name, void* method))
-		MONODEF(void*, mono_lookup_internal_call, (Method* method))
-		MONODEF(Object*, mono_runtime_invoke, (Method* method, Object* obj, void** params, Object** exec))
-		MONODEF(const char*, mono_method_get_name, (Method* method))
-		MONODEF(void*, mono_unity_get_unitytls_interface, ())
-		MONODEF(Assembly*, mono_domain_assembly_open, (Domain* domain, const char* path))
-		MONODEF(Image*, mono_assembly_get_image, (Assembly* assembly))
-		MONODEF(Class*, mono_class_from_name, (Image* image, const char* name_space, const char* name))
-		MONODEF(Method*, mono_class_get_method_from_name, (Class* klass, const char* name, int param_count))
-		MONODEF(char*, mono_string_to_utf8, (String* str))
-		MONODEF(String*, mono_string_new, (Domain* domain, const char* str))
-		MONODEF(Class*, mono_object_get_class, (Object* obj))
-		MONODEF(Property*, mono_class_get_property_from_name, (Class* klass, const char* name))
-		MONODEF(Method*, mono_property_get_get_method, (Property* prop))
-		MONODEF(void, mono_free, (void* ptr))
-		MONODEF(void, g_free, (void* ptr))
-		
-		MONODEF(void, mono_raise_exception, (Object *ex))
-		MONODEF(Object*, mono_get_exception_bad_image_format, (const char *msg))
-        MONODEF(Image*, mono_image_open_full, (const char *path, MonoImageOpenStatus* status, bool refonly))
-        MONODEF(Image*, mono_image_open_from_data_full, (const char *data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
-        MONODEF(void, mono_image_close, (Image* image))
-        MONODEF(int, mono_image_get_table_rows, (Image *image, int table_id))
-		MONODEF(unsigned int, mono_metadata_decode_table_row_col, (Image *image, int table,int idx, unsigned int col))
-		MONODEF(char*, mono_array_addr_with_size, (Object *array, int size, uintptr_t idx))
-		MONODEF(uintptr_t, mono_array_length, (Object *array))
-		MONODEF(const char*, mono_metadata_string_heap, (Image *meta, unsigned int table_index))
-		MONODEF(const char*, mono_class_get_name, (Class *klass))
-		
-		#undef MONODEF
+			MONODEF(Domain*, mono_jit_init_version, (const char* name, const char* version))
+			MONODEF(void, mono_set_assemblies_path, (const char* path))
+			MONODEF(void, mono_assembly_setrootdir, (const char* path))
+			MONODEF(void, mono_set_config_dir, (const char* path))
+			MONODEF(int, mono_runtime_set_main_args, (int argc, char* argv[]))
+			MONODEF(Thread*, mono_thread_current, ())
+			MONODEF(void, mono_thread_set_main, (Thread* thread))
+			MONODEF(void, mono_domain_set_config, (Domain* domain, const char* configpath, const char* filename))
+			MONODEF(void, mono_add_internal_call, (const char* name, void* method))
+			MONODEF(void*, mono_lookup_internal_call, (Method* method))
+			MONODEF(Object*, mono_runtime_invoke, (Method* method, Object* obj, void** params, Object** exec))
+			MONODEF(const char*, mono_method_get_name, (Method* method))
+			MONODEF(void*, mono_unity_get_unitytls_interface, ())
+			MONODEF(Assembly*, mono_domain_assembly_open, (Domain* domain, const char* path))
+			MONODEF(Image*, mono_assembly_get_image, (Assembly* assembly))
+			MONODEF(Class*, mono_class_from_name, (Image* image, const char* name_space, const char* name))
+			MONODEF(Method*, mono_class_get_method_from_name, (Class* klass, const char* name, int param_count))
+			MONODEF(char*, mono_string_to_utf8, (String* str))
+			MONODEF(String*, mono_string_new, (Domain* domain, const char* str))
+			MONODEF(Class*, mono_object_get_class, (Object* obj))
+			MONODEF(Property*, mono_class_get_property_from_name, (Class* klass, const char* name))
+			MONODEF(Method*, mono_property_get_get_method, (Property* prop))
+			MONODEF(void, mono_free, (void* ptr))
+			MONODEF(void, g_free, (void* ptr))
+
+			MONODEF(void, mono_raise_exception, (Object* ex))
+			MONODEF(Object*, mono_get_exception_bad_image_format, (const char* msg))
+			MONODEF(Image*, mono_image_open_full, (const char* path, MonoImageOpenStatus* status, bool refonly))
+			MONODEF(Image*, mono_image_open_from_data_full, (const char* data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
+			MONODEF(void, mono_image_close, (Image* image))
+			MONODEF(int, mono_image_get_table_rows, (Image* image, int table_id))
+			MONODEF(unsigned int, mono_metadata_decode_table_row_col, (Image* image, int table, int idx, unsigned int col))
+			MONODEF(char*, mono_array_addr_with_size, (Object* array, int size, uintptr_t idx))
+			MONODEF(uintptr_t, mono_array_length, (Object* array))
+			MONODEF(const char*, mono_metadata_string_heap, (Image* meta, unsigned int table_index))
+			MONODEF(const char*, mono_class_get_name, (Class* klass))
+
+#undef MONODEF
 	};
 
 	class Hooks
@@ -207,3 +208,4 @@ private:
 	static const char* FolderNames[];
 	static HMODULE PosixHelper;
 };
+#endif

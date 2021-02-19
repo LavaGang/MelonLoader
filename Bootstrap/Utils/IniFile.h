@@ -1,4 +1,5 @@
 #pragma once
+#ifndef PORT_TODO_DISABLE
 #include <string>
 
 class IniFile
@@ -10,3 +11,4 @@ public:
 private:
 	std::string FilePath;
 };
+#endif

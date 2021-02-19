@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include <Windows.h>
 #include "CommandLine.h"
 #include "Console.h"
@@ -216,3 +217,4 @@ void CommandLine::ReadIniFile()
 		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower_Version", (std::string(AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower));
 	}
 }
+#endif

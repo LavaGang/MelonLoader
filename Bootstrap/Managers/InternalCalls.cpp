@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include "InternalCalls.h"
 #include "../Utils/Debug.h"
 #include "../Utils/Logger.h"
@@ -138,7 +139,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", GetGameName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
-	
+
 }
 #pragma endregion
 
@@ -170,3 +171,4 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonDebug::Internal_Msg", Internal_Msg);
 }
 #pragma endregion
+#endif

@@ -1,6 +1,9 @@
 #pragma once
+
+#ifdef _WIN32
 #include <Windows.h>
 #include <metahost.h>
+#endif
 
 class AssemblyGenerator
 {
@@ -13,8 +16,10 @@ public:
 	static bool Initialize();
     static void Cleanup();
 
+#ifndef PORT_TODO_DISABLE
 private:
-    static ICLRMetaHost* metahost;
-    static ICLRRuntimeInfo* rinfo;
-    static ICLRRuntimeHost* rhost;
+	static ICLRMetaHost* metahost;
+	static ICLRRuntimeInfo* rinfo;
+	static ICLRRuntimeHost* rhost;
+#endif
 };

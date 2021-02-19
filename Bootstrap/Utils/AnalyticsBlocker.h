@@ -1,5 +1,9 @@
 #pragma once
+
+#ifdef _WIN32
 #include <Windows.h>
+#endif
+
 #include <list>
 #include <string>
 
@@ -11,6 +15,8 @@ public:
 	static void Hook();
 	static bool CheckHostNames(const char* url);
 
+#ifndef _WIN64
+#ifdef _WIN32
 	class wsock32
 	{
 	public:
@@ -32,6 +38,8 @@ public:
 			static void* Gethostbyname(const char* name);
 		};
 	};
+#endif
+#endif
 
 #ifdef _WIN64
 	class ws2_32

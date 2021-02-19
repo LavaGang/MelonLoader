@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include <Windows.h>
 #include <string>
 #include <fstream>
@@ -46,7 +47,7 @@ bool Game::SetupPaths()
 	ApplicationPath = new char[filepath.size() + 1];
 	std::copy(filepath.begin(), filepath.end(), ApplicationPath);
 	ApplicationPath[filepath.size()] = '\0';
-	
+
 	std::string BasePathStr = filepath.substr(0, filepath.find_last_of("\\/"));
 	BasePath = new char[BasePathStr.size() + 1];
 	std::copy(BasePathStr.begin(), BasePathStr.end(), BasePath);
@@ -149,3 +150,4 @@ std::string Game::ReadUnityVersionFromGlobalGameManagers()
 	}
 	return output.str();
 }
+#endif

@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include "../Utils/Logger.h"
 #include "Il2Cpp.h"
 #include "Game.h"
@@ -20,3 +21,4 @@ extern "C"
 	__declspec(dllexport) const char* __stdcall ForceVersion_Il2CppAssemblyUnhollower() { return AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower; }
 	__declspec(dllexport) void __stdcall SetProcessId(int id) { AssemblyGenerator::ProcessId = id; }
 }
+#endif

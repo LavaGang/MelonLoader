@@ -10,4 +10,5 @@
 
 #include <android/log.h>
 
+#define PORT_TODO_DISABLE
 #endif

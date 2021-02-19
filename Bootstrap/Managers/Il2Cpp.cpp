@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include "Il2Cpp.h"
 #include "Game.h"
 #include "../Utils/Assertion.h"
@@ -86,3 +87,4 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 	Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
 	UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
 }
+#endif

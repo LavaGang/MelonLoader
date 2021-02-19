@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include <Windows.h>
 #include "Hook.h"
 #ifdef _WIN64
@@ -21,3 +22,4 @@ void Hook::Detach(void** target, void* detour)
 	DetourDetach(target, detour);
 	DetourTransactionCommit();
 }
+#endif

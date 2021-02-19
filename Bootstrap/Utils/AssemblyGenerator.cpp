@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include "AssemblyGenerator.h"
 #include "Assertion.h"
 #include "Console.h"
@@ -55,7 +56,7 @@ bool AssemblyGenerator::Initialize()
 		return false;
 	}
 	std::string assembly_path = Path;
-    DWORD returnval;
+	DWORD returnval;
 	if (FAILED(rhost->ExecuteInDefaultAppDomain(std::wstring(assembly_path.begin(), assembly_path.end()).c_str(), L"MelonLoader.AssemblyGenerator.Core", L"Run", L"", &returnval)))
 	{
 		Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
@@ -111,3 +112,4 @@ void AssemblyGenerator::Cleanup()
 	else
 		Console::EnableCloseButton();
 }
+#endif

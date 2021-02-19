@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #pragma once
 #include <Windows.h>
 
@@ -38,3 +39,4 @@ public:
 		static void il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct);
 	};
 };
+#endif

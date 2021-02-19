@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #pragma once
 #include "Mono.h"
 #include "../Utils/Console.h"
@@ -20,7 +21,7 @@ public:
 		static void AddInternalCalls();
 		static void Internal_PrintModName(Console::Color color, Mono::String* name, Mono::String* version);
 		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
-	    static void Internal_Warning(Mono::String* namesection, Mono::String* txt);
+		static void Internal_Warning(Mono::String* namesection, Mono::String* txt);
 		static void Internal_Error(Mono::String* namesection, Mono::String* txt);
 		static void ThrowInternalFailure(Mono::String* msg);
 		static void WriteSpacer();
@@ -69,3 +70,4 @@ public:
 		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
 	};
 };
+#endif

@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #pragma once
 #include <Windows.h>
 #include <metahost.h>
@@ -17,3 +18,4 @@ public:
 private:
 	static void AddHash(const char* path);
 };
+#endif

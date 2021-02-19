@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include "BaseAssembly.h"
 #include "../Utils/Debug.h"
 #include "../Base/Core.h"
@@ -72,3 +73,4 @@ void BaseAssembly::Start()
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
 }
+#endif

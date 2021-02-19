@@ -20,6 +20,7 @@ bool Core::Initialize()
 	if (!OSVersionCheck() || !Game::Initialize())
 		return false;
 
+#ifndef PORT_TODO_DISABLE
 	CommandLine::Read();
 	
 	if (!Console::Initialize()
@@ -39,9 +40,13 @@ bool Core::Initialize()
 	AnalyticsBlocker::Hook();
 
 	ApplyHooks();
+#endif
 	
+#ifdef _WIN32
 	if (!Debug::Enabled)
 		Console::NullHandles();
+#endif
+	
 	return true;
 }
 

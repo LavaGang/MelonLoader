@@ -1,4 +1,6 @@
 #pragma once
+
+#ifndef PORT_TODO_DISABLE
 #include "IniFile.h"
 
 class CommandLine
@@ -13,3 +15,4 @@ public:
 private:
 	static int GetIntFromConstChar(const char* str, int defaultval);
 };
+#endif

@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #include "Assertion.h"
 #include "../Base/Core.h"
 #include "Debug.h"
@@ -46,3 +47,4 @@ FARPROC Assertion::GetExport(HMODULE mod, const char* export_name)
 		ThrowInternalFailure((std::string("Failed to GetExport ( ") + export_name + " )").c_str());
 	return returnval;
 }
+#endif

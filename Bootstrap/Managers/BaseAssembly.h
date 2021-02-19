@@ -1,3 +1,4 @@
+#ifndef PORT_TODO_DISABLE
 #pragma once
 #include "Mono.h"
 
@@ -11,3 +12,4 @@ public:
 private:
 	static Mono::Method* Mono_Start;
 };
+#endif

@@ -1,12 +1,17 @@
 #pragma once
 
+#include "Base/Core.h"
+
 #ifdef __ANDROID__
 extern "C"
 {
 	JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	{
 		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Loaded MelonLoader");
-		return JNI_VERSION_1_6;
+
+		Core::Bootstrap = vm;
+		
+		return (Core::Initialize() ? JNI_VERSION_1_6 : 0x0);
 	}
 }
 #endif
@@ -16,7 +21,6 @@ extern "C"
 #include <Windows.h>
 #include <string>
 #include <algorithm>
-#include "Base/Core.h"
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
