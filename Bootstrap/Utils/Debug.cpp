@@ -4,7 +4,6 @@
 #include "./Logger.h"
 #include <iostream>
 #include <string>
-#include <sstream>
 
 #ifdef DEBUG
 bool Debug::Enabled = true;
@@ -64,7 +63,7 @@ void Debug::Internal_Msg(Console::Color color, const char* namesection, const ch
 		},
 		Logger::MessagePrefix{
 			color,
-			timestamp.c_str()
+			namesection
 		},
 		Logger::MessagePrefix{
 			Console::Blue,

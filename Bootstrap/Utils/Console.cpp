@@ -4,7 +4,7 @@
 #include "Assertion.h"
 #include "Debug.h"
 #include <iostream>
-#include <clocale>
+//#include <clocale>
 #include "../Managers/Game.h"
 #include "AssemblyGenerator.h"
 #include "Logger.h"
@@ -125,7 +125,7 @@ Console::Color Console::GetRainbowColor()
 	if (Mode == DisplayMode::RANDOMRAINBOW)
 		return (Console::Color)(1 + (rand() * (int)(15 - 1) / RAND_MAX));
 	
-	Console::Color returnval = (Console::Color)rainbow;
+	const Console::Color returnval = (Console::Color)rainbow;
 	
 	rainbow++;
 	if (rainbow > 15)
@@ -174,8 +174,9 @@ std::string Console::ColorToAnsi(Color color)
 		return "\x1b[95m";
 	case Color::Yellow:
 		return "\x1b[93m";
-	case Color::White:
 	case Color::Reset:
+		return "\x1b[0m";
+	case Color::White:
 	default:
 		return "\x1b[97m";
 	}

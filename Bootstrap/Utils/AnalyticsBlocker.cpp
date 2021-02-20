@@ -1,3 +1,4 @@
+#ifdef PORT_DISABLE
 #include "AnalyticsBlocker.h"
 #include "Debug.h"
 #include "Assertion.h"
@@ -150,5 +151,6 @@ int AnalyticsBlocker::ws2_32::Hooks::Getaddrinfo(PCSTR pNodeName, PCSTR pService
 	return WSATRY_AGAIN;
 }
 #pragma endregion
+#endif
 #endif
 #endif

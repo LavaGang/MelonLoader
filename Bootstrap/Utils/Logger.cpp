@@ -268,8 +268,11 @@ void Logger::Internal_DirectWrite(LogLevel level, const MessagePrefix prefixes[]
 	}
 
 #ifdef __ANDROID__
-	msgColor << txt;
-	msgPlain << txt;
+	msgColor << txt
+	<< Console::ColorToAnsi(Console::Color::Reset);
+	
+	msgPlain << txt
+	<< Console::ColorToAnsi(Console::Color::Reset);
 #else
 	msgColor << txt
 		<< std::endl

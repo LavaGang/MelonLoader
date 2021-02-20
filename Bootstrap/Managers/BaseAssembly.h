@@ -1,5 +1,5 @@
-#ifdef PORT_DISABLE
 #pragma once
+#ifdef PORT_DISABLE
 #include "Mono.h"
 
 class BaseAssembly

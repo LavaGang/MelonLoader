@@ -2,14 +2,14 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include <filesystem>
-#endif
 #include <fstream>
+#endif
 #include <string>
 #include "Console.h"
 
 enum LogLevel
 {
-	Verbose,
+	Verbose = 0,
 	Info,
 	Warning,
 	Error
@@ -45,6 +45,7 @@ public:
 	
 	static void Internal_DirectWrite(LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt);
 	
+#ifdef PORT_DISABLE
 	class FileStream
 	{
 	public:
@@ -57,6 +58,7 @@ public:
 	};
 	static FileStream LogFile;
 	static void Flush() { LogFile.Flush(); }
+#endif
 
 private:
 	static const char* FilePrefix;

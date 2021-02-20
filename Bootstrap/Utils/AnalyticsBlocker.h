@@ -1,3 +1,4 @@
+#ifdef PORT_DISABLE
 #pragma once
 
 #ifdef _WIN32
@@ -69,3 +70,4 @@ private:
 	static std::list<std::string> HostNames;
 	static std::list<std::string> HostNames_DAB;
 };
+#endif
