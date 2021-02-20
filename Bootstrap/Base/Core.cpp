@@ -17,10 +17,18 @@ bool Core::QuitFix = false;
 
 bool Core::Initialize()
 {
-	if (!OSVersionCheck() || !Game::Initialize())
+	Logger::Msg("Loading MelonLoader");
+	
+	if (
+		!OSVersionCheck()
+#ifdef PORT_DISABLE
+		|| 
+		!Game::Initialize()
+#endif
+		)
 		return false;
 
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 	CommandLine::Read();
 	
 	if (!Console::Initialize()
@@ -204,9 +212,9 @@ bool Core::FileExists(const char* path) { WIN32_FIND_DATAA data; return (FindFir
 void Core::GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt) { *now = std::chrono::system_clock::now(); *ms = std::chrono::duration_cast<std::chrono::milliseconds>((*now).time_since_epoch()) % 1000; time_t timer = std::chrono::system_clock::to_time_t(*now); localtime_s(bt, &timer); }
 #elif defined(__ANDROID__)
 JavaVM* Core::Bootstrap = NULL;
-void Core::ApplyHooks()
-{
-	throw;
-}
 
+bool Core::OSVersionCheck()
+{
+	return true;
+}
 #endif

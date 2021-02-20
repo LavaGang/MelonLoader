@@ -1,4 +1,4 @@
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 #pragma once
 #include <Windows.h>
 #include <metahost.h>

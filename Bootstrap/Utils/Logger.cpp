@@ -3,7 +3,11 @@
 #include "../Base/Core.h"
 #include "Assertion.h"
 #include "Debug.h"
+
+#ifdef _WIN32
 #include <direct.h>
+#endif
+
 #include <list>
 #include <sstream>
 #include <iostream>
@@ -16,7 +20,10 @@ int Logger::MaxWarnings = 100;
 int Logger::MaxErrors = 100;
 int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
+
+#ifdef PORT_DISABLE
 Logger::FileStream Logger::LogFile;
+#endif
 
 bool Logger::Initialize()
 {
@@ -26,6 +33,8 @@ bool Logger::Initialize()
 		MaxWarnings = 0;
 		MaxErrors = 0;
 	}
+
+#ifdef PORT_DISABLE
 	std::string logFolderPath = std::string(Game::BasePath) + "\\MelonLoader\\Logs";
 	if (Core::DirectoryExists(logFolderPath.c_str()))
 		CleanOldLogs(logFolderPath.c_str());
@@ -36,7 +45,7 @@ bool Logger::Initialize()
 	}
 	std::chrono::system_clock::time_point now;
 	std::chrono::milliseconds ms;
-	std::tm bt;	
+	std::tm bt;
 	Core::GetLocalTime(&now, &ms, &bt);
 	std::stringstream filepath;
 	filepath << logFolderPath << "\\" << FilePrefix << std::put_time(&bt, "%y-%m-%d_%OH-%OM-%OS") << "." << std::setfill('0') << std::setw(3) << ms.count() << FileExtension;
@@ -45,61 +54,43 @@ bool Logger::Initialize()
 	if (Core::FileExists(latest_path.c_str()))
 		std::remove(latest_path.c_str());
 	LogFile.latest = std::ofstream(latest_path.c_str());
+#endif
 	return true;
 }
 
-void Logger::CleanOldLogs(const char* path)
-{
-	if (MaxLogs <= 0)
-		return;
-	std::list<std::filesystem::directory_entry>entry_list;
-	for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path))
-	{
-		if (!entry.is_regular_file())
-			continue;
-		std::string entry_file = entry.path().filename().generic_string();
-		if ((entry_file.rfind(FilePrefix, NULL) == NULL) && (entry_file.rfind(FileExtension) == (entry_file.size() - std::string(FileExtension).size())))
-			entry_list.push_back(entry);
-	}
-	if (entry_list.size() < MaxLogs)
-		return;
-	entry_list.sort(Logger::CompareWritetime);
-	for (std::list<std::filesystem::directory_entry>::iterator it = std::next(entry_list.begin(), (MaxLogs - 1)); it != entry_list.end(); ++it)
-		remove((*it).path().u8string().c_str());
-}
+#ifdef PORT_DISABLE
+#endif
 
 std::string Logger::GetTimestamp()
 {
+#ifdef PORT_DISABLE
 	std::chrono::system_clock::time_point now;
 	std::chrono::milliseconds ms;
 	std::tm bt;
 	Core::GetLocalTime(&now, &ms, &bt);
 	std::stringstream timestamp;
-	timestamp << std::put_time(&bt, "%H:%M:%S") << "." << std::setfill('0') << std::setw(3) << ms.count();
+
+	timestamp << "placeholder time";
+	
 	return timestamp.str();
+#else
+	return "PLACEHOLDER TIME";
+#endif
 }
 
-void Logger::WriteSpacer()
-{
-	LogFile << std::endl;
-	std::cout << std::endl;
-}
+#ifdef PORT_DISABLE
+#endif
 
 void Logger::Msg(const char* txt)
 {
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< txt
-		<< std::endl
-		<< "\x1b[37m";
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			Console::Green,
+			GetTimestamp().c_str()
+		}
+	};
+
+	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Warning(const char* txt)
@@ -110,17 +101,19 @@ void Logger::Warning(const char* txt)
 			return;
 		WarningCount++;
 	}
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [WARNING] " << txt << std::endl;
-	if (!Console::HideWarnings)
-		std::cout 
-			<< Console::ColorToAnsi(Console::Color::Yellow)
-			<< "["
-			<< timestamp
-			<< "] [WARNING] "
-			<< txt
-			<< std::endl
-			<< "\x1b[37m";
+	
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			Console::Yellow,
+			GetTimestamp().c_str()
+		},
+		Logger::MessagePrefix{
+			Console::Yellow,
+			"WARNING"
+		}
+	};
+
+	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Error(const char* txt)
@@ -131,37 +124,39 @@ void Logger::Error(const char* txt)
 			return;
 		ErrorCount++;
 	}
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [ERROR] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Red)
-		<< "["
-		<< timestamp
-		<< "] [ERROR] "
-		<< txt
-		<< std::endl
-		<< "\x1b[37m";
+
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			Console::Red,
+			GetTimestamp().c_str()
+		},
+		Logger::MessagePrefix{
+			Console::Red,
+			"ERROR"
+		}
+	};
+
+	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Internal_PrintModName(Console::Color color, const char* name, const char* version)
 {
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] " << name << " v" << version << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(color)
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			Console::Green,
+			GetTimestamp().c_str()
+		}
+	};
+
+	std::stringstream versionStr;
+	versionStr << Console::ColorToAnsi(color)
 		<< name
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< " v"
 		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< version
-		<< std::endl
-		<< "\x1b[37m";
+		<< version;
+
+	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), versionStr.str().c_str());
 }
 
 void Logger::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
@@ -171,25 +166,19 @@ void Logger::Internal_Msg(Console::Color color, const char* namesection, const c
 		Msg(txt);
 		return;
 	}
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(color)
-		<< namesection
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< txt
-		<< std::endl
-		<< "\x1b[37m";
+
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			Console::Green,
+			GetTimestamp().c_str()
+		},
+		Logger::MessagePrefix{
+			color,
+			namesection
+		}
+	};
+
+	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
@@ -205,19 +194,23 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 			return;
 		WarningCount++;
 	}
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] [WARNING] " << txt << std::endl;
-	if (!Console::HideWarnings)
-		std::cout
-			<< Console::ColorToAnsi(Console::Color::Yellow)
-			<< "["
-			<< timestamp
-			<< "] ["
-			<< namesection
-			<< "] [WARNING] "
-			<< txt
-			<< std::endl
-			<< "\x1b[37m";
+	
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			Console::Yellow,
+			GetTimestamp().c_str()
+		},
+		Logger::MessagePrefix{
+			Console::Yellow,
+			namesection
+		},
+		Logger::MessagePrefix{
+			Console::Yellow,
+			"WARNING"
+		},
+	};
+
+	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
@@ -227,22 +220,71 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 		Error(txt);
 		return;
 	}
+
 	if (MaxErrors > 0)
 	{
 		if (ErrorCount >= MaxErrors)
 			return;
 		ErrorCount++;
 	}
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] [ERROR] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Red)
-		<< "["
-		<< timestamp
-		<< "] ["
-		<< namesection
-		<< "] [ERROR] "
-		<< txt
+
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			Console::Red,
+			GetTimestamp().c_str()
+		},
+		Logger::MessagePrefix{
+			Console::Red,
+			namesection
+		},
+		Logger::MessagePrefix{
+			Console::Red,
+			"ERROR"
+		},
+	};
+	
+	Internal_DirectWrite(LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+}
+
+void Logger::Internal_DirectWrite(LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt)
+{
+	std::stringstream msgColor;
+	std::stringstream msgPlain;
+
+	for (int i = 0; i < size; i++)
+	{
+		msgColor << Console::ColorToAnsi(Console::Color::Gray)
+			<< "["
+			<< Console::ColorToAnsi(prefixes[i].Color)
+			<< prefixes[i].Message
+			<< Console::ColorToAnsi(Console::Color::Gray)
+			<< "]"
+			<< Console::ColorToAnsi(Console::Color::Reset)
+			<< " ";
+		
+		msgPlain << "["
+			<< prefixes[i].Message
+			<< "] ";
+	}
+
+#ifdef __ANDROID__
+	msgColor << txt;
+	msgPlain << txt;
+#else
+	msgColor << txt
 		<< std::endl
-		<< "\x1b[37m";
+		<< Console::ColorToAnsi(Console::Color::Reset);
+	msgPlain << txt
+		<< std::endl
+		<< Console::ColorToAnsi(Console::Color::Reset);
+#endif
+
+#ifdef __ANDROID__
+// todo: write to logfile
+	const char* messageC = msgColor.str().c_str();
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", messageC);
+#elif defined(_WIN32)
+	LogFile << msgPlain.str();
+	std::cout << msgColor.str();
+#endif
 }

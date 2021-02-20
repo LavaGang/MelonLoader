@@ -16,7 +16,7 @@ public:
 	static bool Initialize();
     static void Cleanup();
 
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 private:
 	static ICLRMetaHost* metahost;
 	static ICLRRuntimeInfo* rinfo;

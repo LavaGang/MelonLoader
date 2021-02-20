@@ -1,4 +1,4 @@
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 #include "Il2Cpp.h"
 #include "Game.h"
 #include "../Utils/Assertion.h"

@@ -1,4 +1,4 @@
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 #include "InternalCalls.h"
 #include "../Utils/Debug.h"
 #include "../Utils/Logger.h"

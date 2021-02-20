@@ -1,5 +1,5 @@
 #pragma once
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 #include <Windows.h>
 
 class Assertion

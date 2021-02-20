@@ -9,6 +9,4 @@
 #include <sys/resource.h>
 
 #include <android/log.h>
-
-#define PORT_TODO_DISABLE
 #endif

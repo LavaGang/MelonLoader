@@ -59,11 +59,11 @@ public:
 #endif
 
 private:
+	static int rainbow;
+	static Color GetRainbowColor();
 #ifdef _WIN32
 	static HWND Window;
 	static HMENU Menu;
 	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }
 #endif
-	static int rainbow;
-	static Color GetRainbowColor();
 };

@@ -117,12 +117,6 @@
     <ClInclude Include="Utils\HashCode.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Base\MSDetours\detours_x64.h">
-      <Filter>Base\MSDetours</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\MSDetours\detours_x86.h">
-      <Filter>Base\MSDetours</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h">
@@ -131,8 +125,5 @@
     <ClInclude Include="Utils\IniFile.h">
       <Filter>Utils</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup> 
-    <ResourceCompile Include="Bootstrap.rc" />
   </ItemGroup>
 </Project>

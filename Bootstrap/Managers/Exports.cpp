@@ -1,4 +1,4 @@
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 #include "../Utils/Logger.h"
 #include "Il2Cpp.h"
 #include "Game.h"

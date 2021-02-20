@@ -1,4 +1,4 @@
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 #include "Assertion.h"
 #include "../Base/Core.h"
 #include "Debug.h"

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Base/Core.h"
 
 #ifdef __ANDROID__

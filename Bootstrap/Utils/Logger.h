@@ -1,9 +1,19 @@
 #pragma once
+#ifdef _WIN32
 #include <Windows.h>
-#include <fstream>
 #include <filesystem>
+#endif
+#include <fstream>
 #include <string>
 #include "Console.h"
+
+enum LogLevel
+{
+	Verbose,
+	Info,
+	Warning,
+	Error
+};
 
 class Logger
 {
@@ -13,7 +23,10 @@ public:
 	static int MaxErrors;
 	static bool Initialize();
 	static std::string GetTimestamp();
+
+#ifdef _WIN32
 	static void WriteSpacer();
+#endif
 
 	static void Msg(const char* txt);
 	static void Warning(const char* txt);
@@ -23,7 +36,15 @@ public:
 	static void Internal_Msg(Console::Color color, const char* namesection, const char* txt);
 	static void Internal_Warning(const char* namesection, const char* txt);
 	static void Internal_Error(const char* namesection, const char* txt);
-
+	
+	struct MessagePrefix
+	{
+		Console::Color Color;
+		const char* Message;
+	};
+	
+	static void Internal_DirectWrite(LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt);
+	
 	class FileStream
 	{
 	public:
@@ -44,5 +65,7 @@ private:
 	static int WarningCount;
 	static int ErrorCount;
 	static void CleanOldLogs(const char* path);
+#ifdef PORT_DISABLE
 	static bool CompareWritetime(const std::filesystem::directory_entry& first, const std::filesystem::directory_entry& second) { return first.last_write_time().time_since_epoch() >= second.last_write_time().time_since_epoch(); }
+#endif
 };

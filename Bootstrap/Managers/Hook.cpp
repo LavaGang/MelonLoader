@@ -1,4 +1,4 @@
-#ifndef PORT_TODO_DISABLE
+#ifdef PORT_DISABLE
 #include <Windows.h>
 #include "Hook.h"
 #ifdef _WIN64

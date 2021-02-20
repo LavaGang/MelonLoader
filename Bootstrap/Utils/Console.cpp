@@ -10,16 +10,18 @@
 #include "Logger.h"
 #include <sstream>
 
-#ifdef _WIN32
-bool Console::ShouldHide = false;
 bool Console::GeneratingAssembly = false;
-bool Console::AlwaysOnTop = false;
 bool Console::HideWarnings = false;
 Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
+int Console::rainbow = 1;
+
+#ifdef _WIN32
+bool Console::ShouldHide = false;
+bool Console::AlwaysOnTop = false;
+HANDLE Console::OutputHandle = NULL;
+
 HWND Console::Window = NULL;
 HMENU Console::Menu = NULL;
-HANDLE Console::OutputHandle = NULL;
-int Console::rainbow = 1;
 
 bool Console::Initialize()
 {
@@ -113,7 +115,7 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 
 bool Console::Initialize()
 {
-	
+	return true;
 }
 
 #endif
@@ -122,7 +124,9 @@ Console::Color Console::GetRainbowColor()
 {
 	if (Mode == DisplayMode::RANDOMRAINBOW)
 		return (Console::Color)(1 + (rand() * (int)(15 - 1) / RAND_MAX));
+	
 	Console::Color returnval = (Console::Color)rainbow;
+	
 	rainbow++;
 	if (rainbow > 15)
 		rainbow = 1;
@@ -133,9 +137,9 @@ Console::Color Console::GetRainbowColor()
 
 std::string Console::ColorToAnsi(Color color)
 {
-	color = ((Mode == DisplayMode::MAGENTA)
+	color = ((Mode == Console::DisplayMode::MAGENTA)
 		? Color::Magenta
-		: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
+		: (((Mode == Console::DisplayMode::RAINBOW) || (Mode == Console::DisplayMode::RANDOMRAINBOW))
 			? GetRainbowColor()
 			: color));
 	switch (color)
