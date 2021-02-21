@@ -17,8 +17,9 @@ namespace MelonLoader
             Harmony.HarmonyMethod GetCurrentCulturePrefixHarmonyMethod = new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static));
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }
-            OverrideAppDomainBase(MelonUtils.GameDirectory);
-            ExtraCleanupCheck(MelonUtils.GameDirectory);
+            try { ExtraCleanupCheck(MelonUtils.GameDirectory); } catch { }
+            try { OverrideAppDomainBase(MelonUtils.GameDirectory); } catch { }
+            Directory.SetCurrentDirectory(MelonUtils.GameDirectory);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
             MelonPreferences.Load();
@@ -68,12 +69,10 @@ namespace MelonLoader
         private static void OverrideAppDomainBase(string basepath)
         {
             var property = typeof(AppDomain).GetProperty("FusionStore", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (property != null)
-            {
-                AppDomainSetup appDomainBase = ((AppDomainSetup)property.GetValue(AppDomain.CurrentDomain, new object[0]));
-                appDomainBase.ApplicationBase = basepath;
-            }
-            Directory.SetCurrentDirectory(basepath);
+            if (property == null)
+                return;
+            AppDomainSetup appDomainBase = ((AppDomainSetup)property.GetValue(AppDomain.CurrentDomain, new object[0]));
+            appDomainBase.ApplicationBase = basepath;
         }
 
         private static void ExtraCleanupCheck(string destination)
