@@ -8,6 +8,7 @@ namespace MelonLoader
         public string Identifier { get; internal set; }
         public string DisplayName { get; internal set; }
         public bool IsHidden { get; internal set; }
+        public bool DontSaveDefault { get; internal set; }
         public MelonPreferences_Category Category { get; internal set; }
 
         public string GetExceptionMessage(string submsg) => ("Attempted to " + submsg + " " + DisplayName + " when it is a " + GetReflectedType().FullName + "!");
@@ -17,6 +18,7 @@ namespace MelonLoader
         public abstract void ResetToDefault();
 
         public abstract string GetEditedValueAsString();
+        public abstract string GetDefaultValueAsString();
         public abstract string GetValueAsString();
 
         public abstract void Load(TomlObject obj);
@@ -57,6 +59,7 @@ namespace MelonLoader
         public override Type GetReflectedType() => typeof(T);
 
         public override string GetEditedValueAsString() => EditedValue?.ToString();
+        public override string GetDefaultValueAsString() => DefaultValue?.ToString();
         public override string GetValueAsString() => Value?.ToString();
 
         public override void Load(TomlObject obj)
