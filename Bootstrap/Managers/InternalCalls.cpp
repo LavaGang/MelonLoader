@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "Hook.h"
 #include "../Utils/Assertion.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "../Utils/HashCode.h"
 #include "Il2Cpp.h"
 #include "../Utils/AssemblyGenerator.h"

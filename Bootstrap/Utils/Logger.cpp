@@ -1,6 +1,6 @@
 #include "Logger.h"
 #include "../Managers/Game.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "Assertion.h"
 #include "Debug.h"
 #include <direct.h>

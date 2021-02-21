@@ -1,5 +1,5 @@
 #include "CommandLine.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "Logger.h"
 #include "Debug.h"
 #include "AnalyticsBlocker.h"

@@ -172,7 +172,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ModuleDefinitionFile>Proxy.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Exports\Exports.def</ModuleDefinitionFile>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Link>
     <MASM>
@@ -180,25 +180,30 @@
     </MASM>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Proxy.cpp" />
+    <ClCompile Include="Base\DllMain.cpp" />
+    <ClCompile Include="Exports\Ex_winhttp.cpp" />
+    <ClCompile Include="Exports\Ex_winmm.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Exports\Ex_version.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Proxy.def" />
-    <MASM Include="version.asm">
+    <None Include="Exports\Exports.def" />
+    <MASM Include="Exports\version.asm">
       <FileType>Document</FileType>
     </MASM>
-    <MASM Include="winmm.asm">
+    <MASM Include="Exports\winmm.asm">
       <FileType>Document</FileType>
     </MASM>
-    <MASM Include="winhttp.asm">
+    <MASM Include="Exports\winhttp.asm">
       <FileType>Document</FileType>
     </MASM>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Base\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Proxy.rc" />
+    <ResourceCompile Include="Base\Proxy.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

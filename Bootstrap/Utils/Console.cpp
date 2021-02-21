@@ -1,5 +1,5 @@
 #include "Console.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include <string>
 #include "Assertion.h"
 #include "Debug.h"

@@ -153,8 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Base\Core.cpp" />
-    <ClCompile Include="Bootstrap.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Base\DllMain.cpp" />
     <ClCompile Include="Managers\AssemblyVerifier.cpp" />
     <ClCompile Include="Managers\BaseAssembly.cpp" />
     <ClCompile Include="Managers\Game.cpp" />
@@ -174,7 +174,7 @@
     <ClCompile Include="Utils\PointerUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Base\Core.h" />
+    <ClInclude Include="Core.h" />
     <ClInclude Include="Base\MSDetours\detours_x64.h" />
     <ClInclude Include="Base\MSDetours\detours_x86.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h" />
@@ -184,7 +184,7 @@
     <ClInclude Include="Managers\Il2Cpp.h" />
     <ClInclude Include="Managers\InternalCalls.h" />
     <ClInclude Include="Managers\Mono.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Base\resource.h" />
     <ClInclude Include="Utils\AnalyticsBlocker.h" />
     <ClInclude Include="Utils\AssemblyGenerator.h" />
     <ClInclude Include="Utils\Assertion.h" />
@@ -197,7 +197,7 @@
     <ClInclude Include="Utils\PointerUtils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Bootstrap.rc" />
+    <ResourceCompile Include="Base\Bootstrap.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

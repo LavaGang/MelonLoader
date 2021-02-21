@@ -4,17 +4,17 @@
 #include <sys/stat.h>
 #include <sstream>
 #include "Core.h"
-#include "../Utils/CommandLine.h"
-#include "../Utils/Console.h"
-#include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
-#include "../Managers/Game.h"
-#include "../Managers/Mono.h"
-#include "../Managers/Il2Cpp.h"
-#include "../Managers/Hook.h"
-#include "../Utils/Debug.h"
-#include "../Utils/AnalyticsBlocker.h"
-#include "../Utils/HashCode.h"
+#include "Managers/Game.h"
+#include "Managers/Mono.h"
+#include "Managers/Il2Cpp.h"
+#include "Managers/Hook.h"
+#include "Utils/CommandLine.h"
+#include "Utils/Console.h"
+#include "Utils/Assertion.h"
+#include "Utils/Logger.h"
+#include "Utils/Debug.h"
+#include "Utils/AnalyticsBlocker.h"
+#include "Utils/HashCode.h"
 
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::Path = NULL;
