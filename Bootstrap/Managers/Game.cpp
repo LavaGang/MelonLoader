@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include "Game.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "Il2Cpp.h"
 #include "../Utils/Assertion.h"
 #include "../Utils/Logger.h"
@@ -104,6 +104,7 @@ void Game::ReadAppInfo()
 		}
 	appinfofile.close();
 	FirstRun = false;
+	Console::SetTitle(Core::GetVersionStrWithGameName());
 }
 
 bool Game::ReadUnityVersion()

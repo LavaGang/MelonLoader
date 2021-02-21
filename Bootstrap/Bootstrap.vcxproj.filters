@@ -1,12 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Bootstrap.cpp" />
     <ClCompile Include="Utils\CommandLine.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Base\Core.cpp">
-      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="Managers\Hook.cpp">
       <Filter>Managers</Filter>
@@ -47,9 +43,6 @@
     <ClCompile Include="Utils\HashCode.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Managers\Exports.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Managers\AssemblyVerifier.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -58,6 +51,10 @@
     </ClCompile>
     <ClCompile Include="Utils\PointerUtils.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Base\DllMain.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +74,6 @@
   <ItemGroup>
     <ClInclude Include="Utils\CommandLine.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\Core.h">
-      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="Managers\Hook.h">
       <Filter>Managers</Filter>
@@ -126,7 +120,6 @@
     <ClInclude Include="Base\MSDetours\detours_x86.h">
       <Filter>Base\MSDetours</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -136,8 +129,14 @@
     <ClInclude Include="Utils\PointerUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Base\resource.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Bootstrap.rc" />
+    <ResourceCompile Include="Base\Bootstrap.rc">
+      <Filter>Base</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

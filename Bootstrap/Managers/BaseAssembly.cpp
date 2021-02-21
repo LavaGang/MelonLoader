@@ -1,6 +1,6 @@
 #include "BaseAssembly.h"
 #include "../Utils/Debug.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "Game.h"
 #include <string>
 #include "../Utils/Assertion.h"

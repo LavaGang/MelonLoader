@@ -5,7 +5,7 @@
 #include "..\Utils\Assertion.h"
 #include "..\Utils\CommandLine.h"
 #include "..\Utils\Debug.h"
-#include "..\Base\Core.h"
+#include "..\Core.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
 #include "Il2Cpp.h"

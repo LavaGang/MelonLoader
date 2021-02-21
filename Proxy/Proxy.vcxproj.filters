@@ -1,20 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Include="Proxy.def" />
+    <MASM Include="Exports\version.asm">
+      <Filter>Exports</Filter>
+    </MASM>
+    <MASM Include="Exports\winhttp.asm">
+      <Filter>Exports</Filter>
+    </MASM>
+    <MASM Include="Exports\winmm.asm">
+      <Filter>Exports</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="version.asm" />
-    <MASM Include="winmm.asm" />
-    <MASM Include="winhttp.asm" />
+    <ClCompile Include="Base\DllMain.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Exports\Ex_version.cpp">
+      <Filter>Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="Exports\Ex_winhttp.cpp">
+      <Filter>Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="Exports\Ex_winmm.cpp">
+      <Filter>Exports</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Proxy.cpp" />
+    <Filter Include="Base">
+      <UniqueIdentifier>{c5fdd564-2ef0-47c2-aa6f-26e278ea65ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exports">
+      <UniqueIdentifier>{55065569-1650-4acf-8d0f-823717368cae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Base\resource.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Proxy.rc" />
+    <None Include="Exports\Exports.def">
+      <Filter>Exports</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Base\Proxy.rc">
+      <Filter>Base</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

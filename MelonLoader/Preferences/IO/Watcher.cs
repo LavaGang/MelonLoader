@@ -26,14 +26,14 @@ namespace MelonLoader.Preferences.IO
 
         private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e)
         {
-            if (File.WasError)
+            if (MelonPreferences.DefaultFile.WasError)
                 return;
-            if (!File.IsSaving)
+            if (!MelonPreferences.DefaultFile.IsSaving)
             {
                 MelonPreferences.Load();
                 return;
             }
-            File.IsSaving = false;
+            MelonPreferences.DefaultFile.IsSaving = false;
         }
     }
 }

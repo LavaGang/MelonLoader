@@ -337,7 +337,7 @@ namespace MelonLoader
                 return;
             }
 
-            MelonBase.MelonPriority priority = MelonBase.MelonPriority.NORMAL;
+            int priority = 0;
             MelonPriorityAttribute priorityatt = PullCustomAttributeFromAssembly<MelonPriorityAttribute>(asm);
             if (priorityatt != null)
                 priority = priorityatt.Priority;
@@ -437,6 +437,32 @@ namespace MelonLoader
             MelonModEnumerator ModEnumerator = new MelonModEnumerator();
             while (ModEnumerator.MoveNext())
                 try { ModEnumerator.Current.OnApplicationStart(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); failedMods.Add(ModEnumerator.Current); }
+            _Mods.RemoveAll(failedMods.Contains);
+            _Mods = _Mods.OrderBy(x => x.Priority).ToList();
+            DependencyGraph<MelonMod>.TopologicalSort(_Mods);
+        }
+
+        internal static void OnApplicationLateStart_Plugins()
+        {
+            if (_Plugins.Count <= 0)
+                return;
+            List<MelonPlugin> failedPlugins = new List<MelonPlugin>();
+            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
+            while (PluginEnumerator.MoveNext())
+                try { PluginEnumerator.Current.OnApplicationLateStart(); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); failedPlugins.Add(PluginEnumerator.Current); }
+            _Plugins.RemoveAll(failedPlugins.Contains);
+            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
+            DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
+        }
+
+        internal static void OnApplicationLateStart_Mods()
+        {
+            if (_Mods.Count <= 0)
+                return;
+            List<MelonMod> failedMods = new List<MelonMod>();
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
+            while (ModEnumerator.MoveNext())
+                try { ModEnumerator.Current.OnApplicationLateStart(); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); failedMods.Add(ModEnumerator.Current); }
             _Mods.RemoveAll(failedMods.Contains);
             _Mods = _Mods.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);

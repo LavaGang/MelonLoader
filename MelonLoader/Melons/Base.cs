@@ -31,23 +31,10 @@ namespace MelonLoader
         /// </summary>
         public MelonCompatibility Compatibility { get; internal set; }
 
-
-        // <summary>
-        /// Enum for Melon Priority.
-        /// </summary>
-        public enum MelonPriority
-        {
-            HIGHEST,
-            HIGH,
-            NORMAL,
-            LOW,
-            LOWEST
-        }
-
         /// <summary>
         /// Priority of the Melon.
         /// </summary>
-        public MelonPriority Priority { get; internal set; }
+        public int Priority { get; internal set; }
 
         /// <summary>
         /// Gets if the Melon is Universal.
@@ -90,6 +77,11 @@ namespace MelonLoader
         public virtual void OnApplicationStart() { }
 
         /// <summary>
+        /// Runs after OnApplicationStart.
+        /// </summary>
+        public virtual void OnApplicationLateStart() { }
+
+        /// <summary>
         /// Runs once per frame.
         /// </summary>
         public virtual void OnUpdate() { }
@@ -126,7 +118,7 @@ namespace MelonLoader
 
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
-        [Obsolete("harmonyInstance is obsolete. Please use Harmony instead.")]
+        [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
         public Harmony.HarmonyInstance harmonyInstance { get => Harmony; }
     }
 }

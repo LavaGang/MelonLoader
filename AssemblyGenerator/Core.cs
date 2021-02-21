@@ -38,15 +38,14 @@ namespace MelonLoader.AssemblyGenerator
                     var hash = md5.ComputeHash(stream);
                     CurrentGameAssemblyHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
             }
+            SamboyAPI.Setup();
             unitydependencies = new UnityDependencies();
             dumper = new Il2CppDumper();
             il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
             deobfuscationMap = new DeobfuscationMap();
         }
 
-        private static int Run() => Run(null);
-
-        private static int Run(string nullarg)
+        private static int Run()
         {
             if (!unitydependencies.Download()
                 || !dumper.Download()
@@ -58,7 +57,10 @@ namespace MelonLoader.AssemblyGenerator
             Logger.Msg("Old: " + Config.GameAssemblyHash);
             Logger.Msg("Current: " + CurrentGameAssemblyHash);
             if (string.IsNullOrEmpty(Config.GameAssemblyHash)
-                || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
+                || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash)
+                || (!string.IsNullOrEmpty(Config.ObfuscationRegex) && string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
+                || (string.IsNullOrEmpty(Config.ObfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
+                || (!string.IsNullOrEmpty(Config.ObfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex) && !Config.ObfuscationRegex.Equals(deobfuscationMap.ObfuscationRegex)))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)
@@ -88,6 +90,7 @@ namespace MelonLoader.AssemblyGenerator
             il2cppassemblyunhollower.Cleanup();
 
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
+            Config.ObfuscationRegex = deobfuscationMap.ObfuscationRegex;
             Config.Save();
 
             Logger.Msg("Assembly Generation Successful!");

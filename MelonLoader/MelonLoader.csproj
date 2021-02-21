@@ -118,7 +118,7 @@
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
     <Compile Include="Melons\Attributes\Priority.cs" />
-    <Compile Include="Melons\Coroutines.cs" />
+    <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Category.cs" />
     <Compile Include="Preferences\Entry.cs" />
@@ -158,7 +158,7 @@
     <Compile Include="Libs\Harmony\Tools\SymbolExtensions.cs" />
     <Compile Include="Libs\Harmony\Tools\Traverse.cs" />
     <Compile Include="Libs\Harmony\Transpilers.cs" />
-    <Compile Include="Melons\Utils.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\DependencyGraph.cs" />
     <Compile Include="Utils\Logger.cs" />

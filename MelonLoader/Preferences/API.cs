@@ -7,45 +7,42 @@ namespace MelonLoader
     public static class MelonPreferences
     {
         public static readonly List<MelonPreferences_Category> Categories = new List<MelonPreferences_Category>();
-
         public static readonly TomlMapper Mapper = new TomlMapper();
+        internal static readonly Preferences.IO.File DefaultFile = null;
 
-        static MelonPreferences()
-        {
-            string FilePath = Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg");
-            string LegacyFilePath = Path.Combine(MelonUtils.UserDataDirectory, "modprefs.ini");
-            Preferences.IO.File.Setup(FilePath, LegacyFilePath);
-        }
+        static MelonPreferences() => DefaultFile = new Preferences.IO.File(
+            Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg"), 
+            Path.Combine(MelonUtils.UserDataDirectory, "modprefs.ini"));
 
         public static void Load()
         {
             try
             {
-                Preferences.IO.File.LegacyLoad();
+                DefaultFile.LegacyLoad();
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Legacy settings load failed: {ex}");
-                Preferences.IO.File.WasError = true;
+                MelonLogger.Error($"Error while Loading Legacy Preferences: {ex}");
+                DefaultFile.WasError = true;
             }
 
             try
             {
-                Preferences.IO.File.Load();
+                DefaultFile.Load();
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Settings load failed: {ex}");
-                Preferences.IO.File.WasError = true;
+                MelonLogger.Error($"Error while Loading Preferences: {ex}");
+                DefaultFile.WasError = true;
             }
-            if (!Preferences.IO.File.WasError && (Categories.Count > 0))
+            if (!DefaultFile.WasError && (Categories.Count > 0))
             {
                 foreach (MelonPreferences_Category cat in Categories)
                 {
                     if (cat.Entries.Count < 0)
                         continue;
                     foreach (MelonPreferences_Entry entry in cat.Entries)
-                        Preferences.IO.File.SetupEntryFromRawValue(entry);
+                        DefaultFile.SetupEntryFromRawValue(entry);
                 }
             }
             MelonLogger.Msg("Preferences Loaded!");
@@ -57,15 +54,16 @@ namespace MelonLoader
             foreach (MelonPreferences_Category category in Categories)
                 foreach (MelonPreferences_Entry entry in category.Entries)
                     if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
-                        Preferences.IO.File.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+                        DefaultFile.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+
             try
             {
-                Preferences.IO.File.Save();
+                DefaultFile.Save();
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Error while saving settings: {ex}");
-                Preferences.IO.File.WasError = true;
+                MelonLogger.Error($"Error while Saving Preferences: {ex}");
+                DefaultFile.WasError = true;
             }
             MelonLogger.Msg("Preferences Saved!");
             MelonHandler.OnPreferencesSaved();

@@ -4,27 +4,53 @@
 #include <sys/stat.h>
 #include <sstream>
 #include "Core.h"
-#include "../Utils/CommandLine.h"
-#include "../Utils/Console.h"
-#include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
-#include "../Managers/Game.h"
-#include "../Managers/Mono.h"
-#include "../Managers/Il2Cpp.h"
-#include "../Managers/Hook.h"
-#include "../Utils/Debug.h"
-#include "../Utils/AnalyticsBlocker.h"
-#include "../Utils/HashCode.h"
+#include "Managers/Game.h"
+#include "Managers/Mono.h"
+#include "Managers/Il2Cpp.h"
+#include "Managers/Hook.h"
+#include "Utils/CommandLine.h"
+#include "Utils/Console.h"
+#include "Utils/Assertion.h"
+#include "Utils/Logger.h"
+#include "Utils/Debug.h"
+#include "Utils/AnalyticsBlocker.h"
+#include "Utils/HashCode.h"
 
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::Path = NULL;
 bool Core::QuitFix = false;
+std::string Core::Version = "v0.3.0.1";
+bool Core::Is_ALPHA_PreRelease = true;
+Core::wine_get_version_t Core::wine_get_version = NULL;
 
-const char* Core::GetVersionStr() { return ("MelonLoader " + std::string("v0.3.0") + " ALPHA Pre-Release").c_str(); }
+const char* Core::GetVersionStr()
+{
+	return (std::string(CommandLine::GetPrefix())
+		+ " "
+		+ Version
+		+ (Is_ALPHA_PreRelease
+			? " ALPHA Pre-Release" 
+			: " Open-Beta")).c_str();
+}
+
+const char* Core::GetVersionStrWithGameName(const char* GameVersion)
+{
+	return ((std::string(Debug::Enabled
+		? "[D] "
+		: "")
+		+ std::string(GetVersionStr())
+		+ std::string(" - ")
+		+ std::string(Game::Name)
+		+ " "
+		+ ((GameVersion == NULL)
+			? ""
+			: GameVersion)).c_str());
+}
 
 void Core::Initialize(HINSTANCE hinstDLL)
 {
 	Bootstrap = hinstDLL;
+	SetupWineCheck();
 	if (!OSVersionCheck() || !Game::Initialize())
 		return;
 	CommandLine::Read();
@@ -67,8 +93,8 @@ void Core::WelcomeMessage()
 		Logger::WriteSpacer();
 	Logger::Msg("------------------------------");
 	Logger::Msg(GetVersionStr());
-	Logger::Msg(("Hash Code: " + std::to_string(HashCode::Hash)).c_str());
 	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
+	Logger::Msg(("Hash Code: " + HashCode::Hash).c_str());
 	Logger::Msg("------------------------------");
 	Logger::Msg(("Name: " + std::string(Game::Name)).c_str());
 	Logger::Msg(("Developer: " + std::string(Game::Developer)).c_str());
@@ -91,9 +117,9 @@ void Core::WelcomeMessage()
 
 bool Core::OSVersionCheck()
 {
-	if (IsWindows7OrGreater())
+	if (IsRunningInWine() || IsWindows7OrGreater())
 		return true;
-	int result = MessageBoxA(NULL, "You are running on an Unsupported OS.\nWe can not offer support if there are any issues.\nContinue with MelonLoader?", "MelonLoader", MB_ICONWARNING | MB_YESNO);
+	int result = MessageBoxA(NULL, "You are running on an Older Operating System.\nWe can not offer support if there are any issues.\nContinue?", "MelonLoader", MB_ICONWARNING | MB_YESNO);
 	if (result == IDYES)
 		return true;
 	return false;
@@ -102,8 +128,6 @@ bool Core::OSVersionCheck()
 void Core::KillCurrentProcess()
 {
 	HANDLE current_process = GetCurrentProcess();
-	if (current_process == NULL)
-		return;
 	TerminateProcess(current_process, NULL);
 	CloseHandle(current_process);
 }
@@ -150,7 +174,9 @@ const char* Core::GetFileInfoProductVersion(const char* path)
 
 const char* Core::GetOSVersion()
 {
-	if (IsWindows10OrGreater())
+	if (IsRunningInWine())
+		return (std::string("Wine ") + wine_get_version()).c_str();
+	else if (IsWindows10OrGreater())
 		return "Windows 10";
 	else if (IsWindows8Point1OrGreater())
 		return "Windows 8.1";
@@ -175,6 +201,17 @@ const char* Core::GetOSVersion()
 	else if (IsWindowsXPOrGreater())
 		return "Windows XP";
 	return "UNKNOWN";
+}
+
+void Core::SetupWineCheck()
+{
+	HMODULE ntdll = LoadLibraryA("ntdll.dll");
+	if (ntdll == NULL)
+		return;
+	FARPROC wine_get_version_proc = GetProcAddress(ntdll, "wine_get_version");
+	if (wine_get_version_proc == NULL)
+		return;
+	wine_get_version = (wine_get_version_t)wine_get_version_proc;
 }
 
 bool Core::DirectoryExists(const char* path) { struct stat Stat; return ((stat(path, &Stat) == 0) && (Stat.st_mode & S_IFDIR)); }

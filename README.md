@@ -102,6 +102,7 @@ If a Launch Option is in your Game's Command Line it will ignore its value in th
 | --no-mods | Launch game without loading any Plugins Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.consoleontop | Forces the Console to always stay on-top of all other Applications |
+| --melonloader.consoledst | Keeps the Console Title as Original |
 | --melonloader.hideconsole | Hides the Console |
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |
@@ -125,7 +126,7 @@ If a Launch Option is in your Game's Command Line it will ignore its value in th
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/LICENSE.md) for the full License.
 
-Third-party libraries used as source code or bundled in binary form:
+Third-party libraries used as Source Code and/or bundled in Binary Form:
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/Detours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/Harmony/LICENSE) for the full License.

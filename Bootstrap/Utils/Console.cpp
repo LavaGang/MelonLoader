@@ -1,5 +1,5 @@
 #include "Console.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include <string>
 #include "Assertion.h"
 #include "Debug.h"
@@ -12,6 +12,7 @@
 #include <VersionHelpers.h>
 
 bool Console::ShouldHide = false;
+bool Console::ShouldSetTitle = true;
 bool Console::GeneratingAssembly = false;
 bool Console::AlwaysOnTop = false;
 bool Console::HideWarnings = false;
@@ -34,11 +35,9 @@ bool Console::Initialize()
 	Window = GetConsoleWindow();
 	Menu = GetSystemMenu(Window, FALSE);
 	SetConsoleCtrlHandler(EventHandler, TRUE);
-	std::string window_name = Core::GetVersionStr();
-	if (Debug::Enabled)
-		SetTitle((window_name + " - Debug Mode").c_str());
-	else
-		SetTitle(window_name.c_str());
+	SetTitle((std::string(Debug::Enabled
+		? "[D] "
+		: "") + Core::GetVersionStr()).c_str());
 	SetForegroundWindow(Window);
 	if (AlwaysOnTop)
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
@@ -49,8 +48,12 @@ bool Console::Initialize()
 	DWORD mode = 0;
 	if (!GetConsoleMode(OutputHandle, &mode))
 	{
-		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
-		return false;
+		mode = 0x3;
+		if (!SetConsoleMode(OutputHandle, mode))
+		{
+			UseManualColoring = true;
+			return true;
+		}
 	}
 	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
 		UseManualColoring = true;
@@ -127,7 +130,9 @@ std::string Console::ColorToAnsi(Color color, bool modecheck)
 			? Color::Magenta
 			: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
 				? GetRainbowColor()
-				: color));
+				: ((Mode == DisplayMode::LEMON)
+					? Color::Yellow
+					: color)));
 	if (UseManualColoring)
 	{
 		SetConsoleTextAttribute(OutputHandle, color);

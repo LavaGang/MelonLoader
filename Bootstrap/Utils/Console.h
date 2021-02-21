@@ -7,6 +7,7 @@ class Console
 public:
 	static HANDLE OutputHandle;
 	static bool ShouldHide;
+	static bool ShouldSetTitle;
 	static bool GeneratingAssembly;
 	static bool AlwaysOnTop;
 	static bool HideWarnings;
@@ -16,14 +17,15 @@ public:
 		NORMAL,
 		MAGENTA,
 		RAINBOW,
-		RANDOMRAINBOW
+		RANDOMRAINBOW,
+		LEMON
 	};
 	static DisplayMode Mode;
 
 	static bool Initialize();
 	static void Flush();
 	static void Close();
-	static void SetTitle(const char* title) { SetConsoleTitleA(title); }
+	static void SetTitle(const char* title) { if (ShouldSetTitle) SetConsoleTitleA(title); }
 	enum Color
 	{
 		Black = 0,

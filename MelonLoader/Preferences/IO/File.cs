@@ -7,25 +7,31 @@ using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader.Preferences.IO
 {
-    internal static class File
+    internal class File
     {
-        private static bool _waserror = false;
-        internal static bool WasError { get => _waserror; set { if (value == true) { MelonLogger.Warning("Defaulting MelonPreferences to Fallback Functionality to further avoid File Corruption..."); IsSaving = false; } _waserror = value; } }
-        private static string FilePath = null;
-        private static string LegacyFilePath = null;
-        internal static bool IsSaving = false;
-        internal static Dictionary<string, Dictionary<string, TomlObject>> RawValue = new Dictionary<string, Dictionary<string, TomlObject>>();
+        private bool _waserror = false;
+        internal bool WasError { get => _waserror; set { if (value == true) { MelonLogger.Warning("Defaulting MelonPreferences to Fallback Functionality to further avoid File Corruption..."); IsSaving = false; } _waserror = value; } }
+        private string FilePath = null;
+        private string LegacyFilePath = null;
+        internal bool IsSaving = false;
+        internal Dictionary<string, Dictionary<string, TomlObject>> RawValue = new Dictionary<string, Dictionary<string, TomlObject>>();
 
-        internal static void Setup(string filepath, string legacyfilepath)
+        internal File(string filepath)
+        {
+            FilePath = filepath;
+            Watcher.Setup(FilePath);
+        }
+
+        internal File(string filepath, string legacyfilepath)
         {
             FilePath = filepath;
             LegacyFilePath = legacyfilepath;
             Watcher.Setup(FilePath);
         }
 
-        internal static void LegacyLoad()
+        internal void LegacyLoad()
         {
-            if (!System.IO.File.Exists(LegacyFilePath))
+            if (string.IsNullOrEmpty(LegacyFilePath) || !System.IO.File.Exists(LegacyFilePath))
                 return;
             string filestr = System.IO.File.ReadAllText(LegacyFilePath);
             string[] lines = filestr.Split('\n');
@@ -58,7 +64,7 @@ namespace MelonLoader.Preferences.IO
             }
         }
 
-        internal static void Load()
+        internal void Load()
         {
             if (_waserror)
                 return;
@@ -99,7 +105,7 @@ namespace MelonLoader.Preferences.IO
             }
         }
 
-        internal static void Save()
+        internal void Save()
         {
             if (_waserror)
                 return;
@@ -122,7 +128,7 @@ namespace MelonLoader.Preferences.IO
                 System.IO.File.Delete(LegacyFilePath);
         }
 
-        internal static ValueSyntax CreateValueSyntaxFromTomlObject(TomlObject obj)
+        private static ValueSyntax CreateValueSyntaxFromTomlObject(TomlObject obj)
         {
             switch (obj.Kind)
             {
@@ -163,7 +169,7 @@ namespace MelonLoader.Preferences.IO
             return newSyntax;
         }
 
-        internal static void SetupRawValue(string category_identifier, string entry_identifier, TomlObject obj)
+        internal void SetupRawValue(string category_identifier, string entry_identifier, TomlObject obj)
         {
             lock (RawValue)
             {
@@ -177,7 +183,7 @@ namespace MelonLoader.Preferences.IO
             }
         }
 
-        internal static void SetupEntryFromRawValue(MelonPreferences_Entry entry)
+        internal void SetupEntryFromRawValue(MelonPreferences_Entry entry)
         {
             lock (RawValue)
             {

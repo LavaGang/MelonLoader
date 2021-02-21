@@ -1,14 +1,17 @@
 ﻿using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader.AssemblyGenerator
 {
     internal static class Logger
     {
-        [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", EntryPoint = "Msg", CallingConvention = CallingConvention.StdCall)]
-        internal static extern void Msg(string txt);
-        [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", EntryPoint = "Warning", CallingConvention = CallingConvention.StdCall)]
-        internal static extern void Warning(string txt);
-        [DllImport("MelonLoader\\Dependencies\\Bootstrap.dll", EntryPoint = "Error", CallingConvention = CallingConvention.StdCall)]
-        internal static extern void Error(string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Msg([MarshalAs(UnmanagedType.LPStr)] string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Warning([MarshalAs(UnmanagedType.LPStr)] string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Error([MarshalAs(UnmanagedType.LPStr)] string txt);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Debug_Msg([MarshalAs(UnmanagedType.LPStr)] string txt);
     }
 }

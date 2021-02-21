@@ -1,14 +1,20 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace MelonLoader.AssemblyGenerator
 {
     internal class DeobfuscationMap : PackageBase
     {
+        internal string ObfuscationRegex = null;
+
         internal DeobfuscationMap()
         {
             Destination = Core.il2cppassemblyunhollower.Destination;
             NewFileName = "DeobfuscationMap.csv.gz";
+            URL = SamboyAPI.Response_MappingURL;
+            Version = SamboyAPI.Response_MappingFileSHA512;
+            ObfuscationRegex = SamboyAPI.Response_ObfuscationRegex;
+            if (string.IsNullOrEmpty(ObfuscationRegex))
+                ObfuscationRegex = Config.ObfuscationRegex;
         }
 
         private void Save()
@@ -23,15 +29,6 @@ namespace MelonLoader.AssemblyGenerator
 
         internal override bool Download()
         {
-            TinyJSON.Variant apimapping = SamboyAPI.GetResponse();
-            if (apimapping == null)
-                return true;
-            try
-            {
-                Version = apimapping["mappingFileSHA512"];
-                URL = apimapping["mappingUrl"];
-            }
-            catch { return true; }
             if (string.IsNullOrEmpty(Version) || string.IsNullOrEmpty(URL))
                 return true;
             if (!ShouldDownload())

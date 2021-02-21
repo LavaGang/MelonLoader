@@ -4,7 +4,7 @@
 #include "Debug.h"
 #include "../Managers/Game.h"
 #include <string>
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "../Utils/Logger.h"
 #include "../Managers/Mono.h"
 #include "HashCode.h"
@@ -12,7 +12,7 @@
 bool AssemblyGenerator::ForceRegeneration = false;
 char* AssemblyGenerator::Path = NULL;
 char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
-char* AssemblyGenerator::ForceVersion_Cpp2IL = NULL;
+char* AssemblyGenerator::ForceVersion_Dumper = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = NULL;
 int AssemblyGenerator::ProcessId = 0;
 
@@ -70,7 +70,6 @@ bool AssemblyGenerator::Initialize()
 
 void AssemblyGenerator::Cleanup()
 {
-	Debug::Msg("Cleaning up Assembly Generator...");
 	if (ProcessId != 0)
 	{
 		HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, ProcessId);
@@ -81,10 +80,6 @@ void AssemblyGenerator::Cleanup()
 		}
 		ProcessId = 0;
 	}
-	Game::Initialize();
-	Game::ReadInfo();
-	HashCode::SetupPaths();
-	Mono::SetupPaths();
 	Console::GeneratingAssembly = false;
 	if (!Debug::Enabled && Console::ShouldHide)
 		Console::Close();

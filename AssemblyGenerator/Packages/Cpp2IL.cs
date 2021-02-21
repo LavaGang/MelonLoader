@@ -7,7 +7,9 @@ namespace MelonLoader.AssemblyGenerator
         internal Cpp2IL()
         {
             Version = Utils.ForceVersion_Dumper();
-            if (string.IsNullOrEmpty(Version))
+            if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
+                Version = SamboyAPI.Response_ForceCpp2ILVersion;
+            if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "commit_95ee73e794e90a62cc3087d5b48cd30f220e5138";
             URL = "https://github.com/SamboyCoding/Cpp2IL/releases/download/" + Version + "/Cpp2IL-Win.exe";
             Destination = Path.Combine(Core.BasePath, "Cpp2IL");

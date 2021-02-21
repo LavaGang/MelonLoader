@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.3.0.1 ALPHA Pre-Release](#v0301-alpha-pre-release)  
 [v0.3.0 ALPHA Pre-Release](#v030-alpha-pre-release)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
@@ -17,6 +18,44 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.3.0.1 ALPHA Pre-Release:
+
+1. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
+2. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
+3. Added MelonUtils.HashCode.
+4. Fixed Issue with UnityCrashHandler.
+5. Cleaned up Console Title Renaming.
+6. Added Game Name to Console Title.
+7. Added Game Version to Console Title.
+8. Changed Debug Mode Indicator in Console Title to "[D]".
+9. Updated bHaptics Native Library to v1.5.3.
+10. Fixed Issue with Console Always On Top Launch Options causing Warnings to be Hidden.
+11 Fixed Issue with Force Version Launch Options being overwritten.
+12. Fixed Issue with Force Version Launch Options counting "0.0.0.0" as a valid version.
+13. Added "--melonloader.consoledst" Launch Option. When Used it will set the Console Title as the Game Name.
+14. Added Secret Lemon.
+15. Added Game Version to Logs.
+16. Fixed Collision Issue with Hash Code Generation.
+17. Improved Hash Code Generation.
+18. Improved SamboyAPI Implementation in Assembly Generator.
+19. Added Wine Detection to Operating System Check.
+20. Converted Assembly Generator to using Internal Calls instead of Native Exports.
+21. Removed Native Exports from Bootstrap.
+22. Fixed Issue where Debug Mode's "[D]" would print to log.
+23. Fixed Issue with SamboyAPI not parsing correctly.
+24. Added Among Us Deobfuscation Mapping.
+25. Fixed Issue with Game Version returning 0.
+26. Fixed Issue with Deobfuscation not abiding by Config's Obfuscation Regex as a fallback.
+27. Fixed Issue with bHaptics Library causing "Unable to Connect" to be spammed in Console.
+28. Added Color32 Support to MelonPreferences.
+29. Internal Failures now Kill the Process when thrown.
+30. Fixed Issue with Analytics Blocker incorrectly blocking certain hosts.
+31. Added OnApplicationLateStart Melon Override.
+32. Added Missing Attribute Cleanup Fix from Installer.
+33. Improved Proxy.
 
 ---
 
@@ -245,6 +284,19 @@
 221. Fixed Issue with "Collection was modified" Error.
 222. Fixed No Melon Attribute Found Issue.
 223. Fixed Issue with Melon Override Exceptions not showing which Melon it was.
+224. Fixed Issue with Protobuf Assemblies being rejected.    (Credits to knah :D)
+225. Fixed Issue with Assembly Generator's OverrideAppDomainBase Method under Mono.    (Credits to MiincK :D)
+226. Changed MelonBase.Color to MelonBase.ConsoleColor.
+227. Fixed Enumerator Issue with Index Loop Locking.
+228. Fixed Issue with Duplicate Melons causing the rest of the Melons to Not Load.
+229. Added MonoBleedingEdge Metadata.
+230. Re-factored Assembly Generator run with Mono instead of CLR.    (Credits to MiincK :D)
+231. Fixed NRE Issue with Audica and similar games.    (Credits to MiincK :D)
+232. Fixed log file name time format.    (Credits to MiincK :D)
+233. Fixed NRE Issue with Newer Games after Audica.    (Credits to MiincK :D)
+234. Changed Mono Configuration Directory on Il2Cpp Games to the Included Metadata.    (Credits to MiincK :D)
+235. Fixed Issue with Assembly Generator getting the Incorrect Configuration Directory.    (Credits to MiincK :D)
+236. Fixed Issue with Assembly Generator when Deobfuscation Map already exists.    (Credits to knah :D)
 
 ---
 
