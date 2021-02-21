@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ModuleDefinitionFile>Proxy.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Exports\Exports.def</ModuleDefinitionFile>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Link>
     <MASM>
@@ -132,7 +132,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ModuleDefinitionFile>Proxy.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Exports\Exports.def</ModuleDefinitionFile>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
@@ -152,7 +152,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ModuleDefinitionFile>Proxy.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>Exports\Exports.def</ModuleDefinitionFile>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Link>
     <MASM>
