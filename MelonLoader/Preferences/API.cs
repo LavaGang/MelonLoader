@@ -53,7 +53,9 @@ namespace MelonLoader
         {
             foreach (MelonPreferences_Category category in Categories)
                 foreach (MelonPreferences_Entry entry in category.Entries)
-                    DefaultFile.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+                    if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
+                        Preferences.IO.File.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+            
             try
             {
                 DefaultFile.Save();
