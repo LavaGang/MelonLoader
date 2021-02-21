@@ -70,7 +70,7 @@ namespace MelonLoader
             var property = typeof(AppDomain).GetProperty("FusionStore", BindingFlags.NonPublic | BindingFlags.Instance);
             if (property != null)
             {
-                var appDomainBase = ((AppDomainSetup)property.GetValue(AppDomain.CurrentDomain, new object[0]));
+                AppDomainSetup appDomainBase = ((AppDomainSetup)property.GetValue(AppDomain.CurrentDomain, new object[0]));
                 appDomainBase.ApplicationBase = basepath;
             }
             Directory.SetCurrentDirectory(basepath);
@@ -112,7 +112,6 @@ namespace MelonLoader
             return null;
         }
 
-        private static bool GetBaseDirectory(ref string __result) { __result = MelonUtils.GameDirectory; return false; }
         private static bool GetCurrentCulturePrefix(ref CultureInfo __result) { __result = CultureInfo.InvariantCulture; return false; }
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static bool QuitFix();

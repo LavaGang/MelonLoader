@@ -67,7 +67,10 @@
     <Filter Include="Managers">
       <UniqueIdentifier>{5689d597-5adb-4646-8a26-57d0d5f522ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Base\MSDetours">
+    <Filter Include="Libs">
+      <UniqueIdentifier>{08c63ac4-9c85-4ec7-a220-65067d58fbd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs\MSDetours">
       <UniqueIdentifier>{fc78f094-efe0-4d26-a6d9-b1a636c8592a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -118,10 +121,10 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Base\MSDetours\detours_x64.h">
-      <Filter>Base\MSDetours</Filter>
+      <Filter>Libs\MSDetours</Filter>
     </ClInclude>
     <ClInclude Include="Base\MSDetours\detours_x86.h">
-      <Filter>Base\MSDetours</Filter>
+      <Filter>Libs\MSDetours</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h">
