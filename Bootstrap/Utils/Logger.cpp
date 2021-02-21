@@ -78,8 +78,17 @@ std::string Logger::GetTimestamp()
 #endif
 }
 
-#ifdef PORT_DISABLE
+void Logger::WriteSpacer()
+{
+#ifdef __ANDROID__
+	// todo: write to logfile
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "");
+#elif _WIN32
+	LogFile << std::endl;
+	std::cout << std::endl;
 #endif
+}
+
 
 void Logger::Msg(const char* txt)
 {

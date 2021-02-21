@@ -24,10 +24,7 @@ public:
 	static bool Initialize();
 	static std::string GetTimestamp();
 
-#ifdef _WIN32
 	static void WriteSpacer();
-#endif
-
 	static void Msg(const char* txt);
 	static void Warning(const char* txt);
 	static void Error(const char* txt);

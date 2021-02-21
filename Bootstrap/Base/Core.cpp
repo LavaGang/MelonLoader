@@ -10,15 +10,24 @@
 #include "../Utils/Debug.h"
 #include "../Utils/AnalyticsBlocker.h"
 #include "../Utils/HashCode.h"
+#include "../Liberation.h"
+#include <dlfcn.h>
+#include <sys/system_properties.h>
+#include <android/log.h>
+#include <stdio.h>
+#include <string>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+typedef void (*testFnDef)(void);
 
 char* Core::Path = NULL;
 const char* Core::Version = "v0.3.0";
 bool Core::QuitFix = false;
 
 bool Core::Initialize()
-{
-	Logger::Msg("Loading MelonLoader");
-	
+{	
 	if (
 		!OSVersionCheck()
 #ifdef PORT_DISABLE
@@ -28,6 +37,7 @@ bool Core::Initialize()
 		)
 		return false;
 
+	Logger::Msg(((std::string)"PID: " + std::to_string(getpid())).c_str());
 #ifdef PORT_DISABLE
 	CommandLine::Read();
 	
@@ -37,14 +47,27 @@ bool Core::Initialize()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
 		return false;
+#endif
 	
 	WelcomeMessage();
-	
-	if (!AnalyticsBlocker::Initialize()
-		|| !Il2Cpp::Initialize()
-		|| !Mono::Load())
+
+	if (
+#ifdef PORT_DISABLE
+		!AnalyticsBlocker::Initialize() ||
+#endif
+		!Il2Cpp::Initialize()
+#ifdef PORT_DISABLE
+		|| !Mono::Load()
+#endif
+		)
 		return false;
+
+	Logger::Msg("Initialized Il2Cpp");
+	TestDirectMemAccess();
+
+	// Il2Cpp::Exports::test_fn();
 	
+#ifdef PORT_DISABLE
 	AnalyticsBlocker::Hook();
 
 	ApplyHooks();
@@ -86,37 +109,6 @@ void Core::ApplyHooks()
 		Debug::Msg("Attaching Hook to mono_jit_init_version...");
 		Hook::Attach(&(LPVOID&)Mono::Exports::mono_jit_init_version, Mono::Hooks::mono_jit_init_version);
 	}
-}
-
-
-void Core::WelcomeMessage()
-{
-	if (Debug::Enabled)
-		Logger::WriteSpacer();
-	Logger::Msg("------------------------------");
-	Logger::Msg(("MelonLoader " + std::string(Version) + " Open-Beta").c_str());
-	Logger::Msg(("Hash Code: " + std::to_string(HashCode::Hash)).c_str());
-	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
-	Logger::Msg("------------------------------");
-	Logger::Msg(("Name: " + std::string(Game::Name)).c_str());
-	Logger::Msg(("Developer: " + std::string(Game::Developer)).c_str());
-	Logger::Msg(("Unity Version: " + std::string(Game::UnityVersion)).c_str());
-	Logger::Msg(("Type: " + std::string((Game::IsIl2Cpp ? "Il2Cpp" : (Mono::IsOldMono ? "Mono" : "MonoBleedingEdge")))).c_str());
-	Logger::Msg(
-#ifdef _WIN64
-		"Arch: x64"
-#elif _WIN32
-		"Arch: x86"
-#else
-		"Unknown"
-#endif
-	);
-	Logger::Msg("------------------------------");
-	if (Debug::Enabled)
-		Logger::WriteSpacer();
-	Debug::Msg(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
-	Debug::Msg(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
-	Debug::Msg(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
 }
 
 bool Core::OSVersionCheck()
@@ -213,8 +205,99 @@ void Core::GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono:
 #elif defined(__ANDROID__)
 JavaVM* Core::Bootstrap = NULL;
 
+void Core::WelcomeMessage()
+{
+	if (Debug::Enabled)
+		Logger::WriteSpacer();
+	
+	Logger::Msg("------------------------------");
+	Logger::Msg(("MelonLoader " + std::string(Version) + " Open-Beta").c_str());
+	// Logger::Msg(("Hash Code: " + std::to_string(HashCode::Hash)).c_str());
+	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
+	Logger::Msg("------------------------------");
+	// Logger::Msg(("Name: " + std::string(Game::Name)).c_str());
+	// Logger::Msg(("Developer: " + std::string(Game::Developer)).c_str());
+	// Logger::Msg(("Unity Version: " + std::string(Game::UnityVersion)).c_str());
+	// Logger::Msg(("Type: " + std::string((Game::IsIl2Cpp ? "Il2Cpp" : (Mono::IsOldMono ? "Mono" : "MonoBleedingEdge")))).c_str());
+	Logger::Msg(
+#if defined(_WIN64) | defined(_M_ARM64)
+		"Arch: x64"
+#elif defined(_WIN32)
+		"Arch: x32"
+#else
+		"Arch: Unknown"
+#endif
+	);
+	Logger::Msg("------------------------------");
+	
+	if (Debug::Enabled)
+		Logger::WriteSpacer();
+	
+	// Debug::Msg(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
+	// Debug::Msg(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
+	// Debug::Msg(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
+}
+
+
+const char* Core::GetOSVersion()
+{
+	char osVersion[PROP_VALUE_MAX + 1];
+	int osVersionLength = __system_property_get("ro.build.version.release", osVersion);
+
+	return osVersion;
+}
+
 bool Core::OSVersionCheck()
 {
 	return true;
+}
+
+void Core::TestDirectMemAccess()
+{
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result: %p", Il2Cpp::Exports::test_fn_untyped);
+	// volatile unsigned int& UART0CTL = *((volatile unsigned int*)Il2Cpp::Exports::test_fn_untyped);
+	// Logger::Msg("defined value");
+	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result 2: %p", &UART0);
+	// UART0CTL &= ~1;
+	// Logger::Msg("wrote value");
+
+	
+	 // unsigned long long msg = 0xDEADBEEFDEADBEEFEE;
+	 // memmove(Il2Cpp::Exports::test_fn_untyped, &msg, 16);
+	// memset(Il2Cpp::Exports::test_fn_untyped, 0, 16);
+	
+	 // Logger::Msg("Memory Test written");
+
+	int value;
+	memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "PRE: %p", value);
+
+
+	Patch* testFn = Patch::Setup(Il2Cpp::Exports::test_fn_untyped, "38467047");
+	Logger::Msg("Patch Created");
+
+	testFn->Apply();
+	Logger::Msg("Patch Applied");
+
+	memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ACTIVE: %p", value);
+	
+	// testFn->Reset();
+	// Logger::Msg("Patch Cleared");
+	//
+	// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
+	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "POST: %p", value);
+	
+	// dlclose(Il2Cpp::Handle);
+
+	// PATCH ASSEMBLY
+	// MOV x11, 0x155c
+	// SUB x11, x12, 0x4
+	// MOV x11, 0x5af2
+	// SUB x11, x12, 0x4
+	// MOV x11, 0x0072
+	// SUB x11, x12, 0x4
+	// MOV x11, 0x0000
+	// blr x11
 }
 #endif

@@ -29,4 +29,5 @@ public:
 private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();
+	static void TestDirectMemAccess();
 };

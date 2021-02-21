@@ -1,4 +1,3 @@
-#ifdef PORT_DISABLE
 #include "Il2Cpp.h"
 #include "Game.h"
 #include "../Utils/Assertion.h"
@@ -11,15 +10,24 @@
 #include "AssemblyVerifier.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
+#include "../Utils/Logger.h"
+
+#ifdef __ANDROID__
+#include <dlfcn.h>
+#endif
 
 Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
-HMODULE Il2Cpp::Module = NULL;
 void* Il2Cpp::UnityTLSInterfaceStruct = NULL;
 Il2Cpp::Exports::il2cpp_init_t Il2Cpp::Exports::il2cpp_init = NULL;
 Il2Cpp::Exports::il2cpp_runtime_invoke_t Il2Cpp::Exports::il2cpp_runtime_invoke = NULL;
 Il2Cpp::Exports::il2cpp_method_get_name_t Il2Cpp::Exports::il2cpp_method_get_name = NULL;
 Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface_t Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface = NULL;
+Il2Cpp::Exports::testFnDef Il2Cpp::Exports::test_fn = NULL;
+void* Il2Cpp::Exports::test_fn_untyped = NULL;
+
+#ifdef _WIN32
+HMODULE Il2Cpp::Module = NULL;
 
 bool Il2Cpp::Initialize()
 {
@@ -87,4 +95,78 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 	Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
 	UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
 }
+#elif defined(__ANDROID__)
+void* Il2Cpp::Handle = NULL;
+
+bool Il2Cpp::Initialize()
+{
+	Debug::Msg("Initializing Il2Cpp...");
+	// Handle = dlopen("libil2cpp.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+	Handle = dlopen("libPlaygroundBootstrapper.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+
+	if (Handle == nullptr)
+	{
+		// TODO: ASSERT ERROR
+		Logger::Error(dlerror());
+		return false;
+	}
+
+	Debug::Msg("Loaded Il2Cpp");
+
+	return Exports::Initialize();
+}
+
+bool Il2Cpp::Exports::Initialize()
+{
+	Debug::Msg("Initializing Il2Cpp Exports...");
+	
+	// il2cpp_init = (il2cpp_init_t)GetExport("il2cpp_init");
+	// il2cpp_runtime_invoke = (il2cpp_runtime_invoke_t)GetExport("il2cpp_runtime_invoke");
+	// il2cpp_method_get_name = (il2cpp_method_get_name_t)GetExport("il2cpp_method_get_name");
+	// il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)GetExport("il2cpp_unity_install_unitytls_interface");
+
+	test_fn = (testFnDef)GetExport("TestExternalCall");
+	test_fn_untyped = GetExport("TestExternalCall");
+	
+	if (ImportError)
+	{
+		Logger::Error("One or more symbols failed to load.");
+	}
+
+	return !ImportError;
+}
+
+#pragma region Hooks
+Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
+{
+
+}
+
+Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec)
+{
+
+}
+
+void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct)
+{
+
+}
+#pragma endregion Hooks
+bool Il2Cpp::ImportError = false;
+
+void* Il2Cpp::GetExport(const char* name)
+{
+	void* fnPointer = dlsym(Handle, name);
+
+	if (fnPointer == nullptr)
+	{
+		ImportError = true;
+		Logger::Error(dlerror());
+
+		return nullptr;
+	}
+
+	return fnPointer;
+}
+
 #endif

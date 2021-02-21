@@ -1,7 +1,7 @@
-#ifdef PORT_DISABLE
 #pragma once
+#ifdef _WIN32
 #include <Windows.h>
-
+#endif
 
 class Il2Cpp
 {
@@ -11,9 +11,15 @@ public:
 	struct Object;
 
 	static char* GameAssemblyPath;
-	static HMODULE Module;
 	static Domain* domain;
 	static void* UnityTLSInterfaceStruct;
+
+#ifdef _WIN32
+	static HMODULE Module;
+#elif defined(__ANDROID__)
+	static void* Handle;
+#endif
+	
 	static bool Initialize();
 
 	class Exports
@@ -29,6 +35,10 @@ public:
 		static il2cpp_method_get_name_t il2cpp_method_get_name;
 		typedef void (*il2cpp_unity_install_unitytls_interface_t) (void* unitytlsInterfaceStruct);
 		static il2cpp_unity_install_unitytls_interface_t il2cpp_unity_install_unitytls_interface;
+
+		typedef void (*testFnDef)(void);
+		static testFnDef test_fn;
+		static void* test_fn_untyped;
 	};
 
 	class Hooks
@@ -38,5 +48,9 @@ public:
 		static Object* il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
 		static void il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct);
 	};
-};
+#ifdef __ANDROID__
+private:
+	static bool ImportError;
+	static void* GetExport(const char* name);
 #endif
+};
