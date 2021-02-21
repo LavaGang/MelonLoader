@@ -57,6 +57,8 @@
 32. Added Missing Attribute Cleanup Fix from Installer.
 33. Improved Proxy.
 34. Added dont_save_default Option to MelonPreferences.    (Credits to YOWChap :D)
+35. Added Backwards Compatibility for MelonPreferences.    (Credits to knah :D)
+36. Fixed the return type of the MelonPreferences API.    (Credits to knah :D)
 
 ---
 
