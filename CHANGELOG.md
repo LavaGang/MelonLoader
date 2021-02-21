@@ -56,6 +56,7 @@
 31. Added OnApplicationLateStart Melon Override.
 32. Added Missing Attribute Cleanup Fix from Installer.
 33. Improved Proxy.
+34. Added dont_save_default Option to MelonPreferences.    (Credits to YOWChap :D)
 
 ---
 
