@@ -81,7 +81,12 @@ namespace MelonLoader
             return new MelonPreferences_Category(identifier, display_name);
         }
 
-        public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier, T default_value, string display_name = null, bool is_hidden = false, bool dont_save_default = false)
+        [Obsolete]
+        public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier,
+            T default_value, string display_name, bool is_hidden) => CreateEntry(category_identifier,
+            entry_identifier, default_value, display_name, is_hidden, false);
+        
+        public static MelonPreferences_Entry<T> CreateEntry<T>(string category_identifier, string entry_identifier, T default_value, string display_name = null, bool is_hidden = false, bool dont_save_default = false)
         {
             if (string.IsNullOrEmpty(category_identifier))
                 throw new Exception("category_identifier is null or empty when calling CreateEntry");
