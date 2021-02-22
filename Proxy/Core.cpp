@@ -44,6 +44,7 @@ void Core::Load(HINSTANCE hinstDLL)
 		LoadExports_winhttp(originaldll);
 	else
 	{
+		MessageBoxA(NULL, "Proxy has an Invalid File Name! Preventing Startup...", "MelonLoader", MB_ICONERROR | MB_OK);
 		KillItDead();
 		return;
 	}

@@ -61,6 +61,7 @@
 36. Fixed the return type of the MelonPreferences API.    (Credits to knah :D)
 37. Fixed Issue with HostName Check in Analytics Blocker.
 38. Fixed Issue with HarmonyInstance.Unpatch not doing a proper null check.
+39. Proxy will now have an Error Popup when it has an Invalid File Name.
 
 ---
 
