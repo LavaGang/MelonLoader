@@ -1,0 +1,7 @@
+Name: keystone
+Description: Keystone assembler engine
+Version: 0.9
+libdir=/mnt/c/Users/Akiva/CLionProjects/keystone/build/out/lib
+includedir=/mnt/c/Users/Akiva/CLionProjects/keystone/build/out/include
+Libs: -L${libdir} -lkeystone
+Cflags: -I${includedir}

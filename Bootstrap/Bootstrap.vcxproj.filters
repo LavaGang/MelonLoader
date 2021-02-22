@@ -56,6 +56,9 @@
     <ClCompile Include="Utils\IniFile.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\PatchHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -69,6 +72,18 @@
     </Filter>
     <Filter Include="Base\MSDetours">
       <UniqueIdentifier>{fc78f094-efe0-4d26-a6d9-b1a636c8592a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Keystone">
+      <UniqueIdentifier>{c1ef4677-bf05-4870-9ed4-6722b3e614cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Keystone\include">
+      <UniqueIdentifier>{29208002-f72c-43d9-9a87-132aef8db9fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Keystone\include\keystone">
+      <UniqueIdentifier>{84160874-81b8-4fe7-a52d-4f81608a6e88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Liberation">
+      <UniqueIdentifier>{fdcc7be7-776c-43af-9927-4be430ee644a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +138,42 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\IniFile.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\arm.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\arm64.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\evm.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\hexagon.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\keystone.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\mips.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\ppc.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\sparc.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\systemz.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Keystone\include\keystone\x86.h">
+      <Filter>Base\Keystone\include\keystone</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Liberation\Liberation.h">
+      <Filter>Base\Liberation</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PatchHelper.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -223,7 +223,7 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalDependencies>C:\Users\Akiva\CLionProjects\Liberation-android\source\obj\local\arm64-v8a\liberation.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -239,7 +239,7 @@
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
-      <AdditionalDependencies>C:\Users\Akiva\CLionProjects\Liberation-android\source\obj\local\arm64-v8a\liberation.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -262,8 +262,20 @@
     <ClCompile Include="Utils\HashCode.cpp" />
     <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Logger.cpp" />
+    <ClCompile Include="Utils\PatchHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base\Keystone\include\keystone\arm.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\arm64.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\evm.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\hexagon.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\keystone.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\mips.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\ppc.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\sparc.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
+    <ClInclude Include="Base\Liberation\Liberation.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Base\Core.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h" />
@@ -283,6 +295,7 @@
     <ClInclude Include="Utils\HashCode.h" />
     <ClInclude Include="Utils\IniFile.h" />
     <ClInclude Include="Utils\Logger.h" />
+    <ClInclude Include="Utils\PatchHelper.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />

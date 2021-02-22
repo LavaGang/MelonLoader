@@ -10,7 +10,7 @@
 #include "../Utils/Debug.h"
 #include "../Utils/AnalyticsBlocker.h"
 #include "../Utils/HashCode.h"
-#include "../Liberation.h"
+#include "./Liberation/Liberation.h"
 #include <dlfcn.h>
 #include <sys/system_properties.h>
 #include <android/log.h>
@@ -19,6 +19,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/mman.h>
+
+#include "../Utils/PatchHelper.h"
+#include "./Keystone/include/keystone/keystone.h"
 
 typedef void (*testFnDef)(void);
 
@@ -63,6 +66,7 @@ bool Core::Initialize()
 		return false;
 
 	Logger::Msg("Initialized Il2Cpp");
+	PatchHelper::Init();
 	TestDirectMemAccess();
 
 	// Il2Cpp::Exports::test_fn();
@@ -255,6 +259,7 @@ bool Core::OSVersionCheck()
 void Core::TestDirectMemAccess()
 {
 	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result: %p", Il2Cpp::Exports::test_fn_untyped);
+	PatchHelper::GenerateAsm(Il2Cpp::Exports::test_fn_untyped);
 	// volatile unsigned int& UART0CTL = *((volatile unsigned int*)Il2Cpp::Exports::test_fn_untyped);
 	// Logger::Msg("defined value");
 	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result 2: %p", &UART0);
@@ -268,19 +273,19 @@ void Core::TestDirectMemAccess()
 	
 	 // Logger::Msg("Memory Test written");
 
-	int value;
-	memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "PRE: %p", value);
-
-
-	Patch* testFn = Patch::Setup(Il2Cpp::Exports::test_fn_untyped, "38467047");
-	Logger::Msg("Patch Created");
-
-	testFn->Apply();
-	Logger::Msg("Patch Applied");
-
-	memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ACTIVE: %p", value);
+	// int value;
+	// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
+	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "PRE: %p", value);
+	//
+	//
+	// Patch* testFn = Patch::Setup(Il2Cpp::Exports::test_fn_untyped, "38467047");
+	// Logger::Msg("Patch Created");
+	//
+	// testFn->Apply();
+	// Logger::Msg("Patch Applied");
+	//
+	// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
+	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ACTIVE: %p", value);
 	
 	// testFn->Reset();
 	// Logger::Msg("Patch Cleared");
@@ -288,7 +293,7 @@ void Core::TestDirectMemAccess()
 	// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
 	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "POST: %p", value);
 	
-	// dlclose(Il2Cpp::Handle);
+	dlclose(Il2Cpp::Handle);
 
 	// PATCH ASSEMBLY
 	// MOV x11, 0x155c
