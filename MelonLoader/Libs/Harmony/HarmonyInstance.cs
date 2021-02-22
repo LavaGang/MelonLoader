@@ -176,6 +176,8 @@ namespace Harmony
 		public void Unpatch(MethodBase original, HarmonyPatchType type, string harmonyID = null)
 		{
 			var processor = new PatchProcessor(this, new List<MethodBase> { original });
+			if (harmonyID == null)
+				harmonyID = id;
 			processor.Unpatch(type, harmonyID);
 		}
 
@@ -202,28 +204,6 @@ namespace Harmony
 		public IEnumerable<MethodBase> GetPatchedMethods()
 		{
 			return HarmonySharedState.GetPatchedMethods();
-		}
-
-		public Dictionary<string, Version> VersionInfo(out Version currentVersion)
-		{
-			currentVersion = typeof(HarmonyInstance).Assembly.GetName().Version;
-			var assemblies = new Dictionary<string, Assembly>();
-			GetPatchedMethods().Do(method =>
-			{
-				var info = HarmonySharedState.GetPatchInfo(method);
-				info.prefixes.Do(fix => assemblies[fix.owner] = fix.patch.DeclaringType.Assembly);
-				info.postfixes.Do(fix => assemblies[fix.owner] = fix.patch.DeclaringType.Assembly);
-				info.transpilers.Do(fix => assemblies[fix.owner] = fix.patch.DeclaringType.Assembly);
-			});
-
-			var result = new Dictionary<string, Version>();
-			assemblies.Do(info =>
-			{
-				var assemblyName = info.Value.GetReferencedAssemblies().FirstOrDefault(a => a.FullName.StartsWith("0Harmony, Version"));
-				if (assemblyName != null)
-					result[info.Key] = assemblyName.Version;
-			});
-			return result;
 		}
     }
 }
