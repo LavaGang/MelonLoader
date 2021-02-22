@@ -99,12 +99,12 @@ void Core::WelcomeMessage()
 	Logger::Msg(("Name: " + std::string(Game::Name)).c_str());
 	Logger::Msg(("Developer: " + std::string(Game::Developer)).c_str());
 	Logger::Msg(("Unity Version: " + std::string(Game::UnityVersion)).c_str());
-	Logger::Msg(("Type: " + std::string((Game::IsIl2Cpp ? "Il2Cpp" : (Mono::IsOldMono ? "Mono" : "MonoBleedingEdge")))).c_str());
+	Logger::Msg(("Game Type: " + std::string((Game::IsIl2Cpp ? "Il2Cpp" : (Mono::IsOldMono ? "Mono" : "MonoBleedingEdge")))).c_str());
 	Logger::Msg(
 #ifdef _WIN64
-		"Arch: x64"
+		"Game Arch: x64"
 #else
-		"Arch: x86"
+		"Game Arch: x86"
 #endif
 	);
 	Logger::Msg("------------------------------");
