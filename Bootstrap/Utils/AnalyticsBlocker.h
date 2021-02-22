@@ -11,6 +11,7 @@ public:
 	static void Hook();
 	static bool CheckHostNames(const char* url);
 	static bool IsInBlockedHostNameList(const char* url);
+	static bool IsInDABHostNameList(const char* url);
 
 	class wsock32
 	{
