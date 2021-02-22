@@ -30,4 +30,5 @@ private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();
 	static void TestDirectMemAccess();
+	static void TestRedirectFunction();
 };

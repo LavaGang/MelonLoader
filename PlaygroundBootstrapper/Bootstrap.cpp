@@ -10,7 +10,7 @@ extern "C"
 {
 	JNIEXPORT void TestExternalCall()
 	{
-		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "EXTERNAL CALL");
+		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "CALL DID NOT GET REDIRECTED");
 	}
 	
 	JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
@@ -29,8 +29,8 @@ extern "C"
 		//
 		// memcpy(&value, (const void*)*TestExternalCall, 2);
 		// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%p", value);
-		//
-		// TestExternalCall();
+		
+		TestExternalCall();
 		return JNI_VERSION_1_6;
 	}
 }

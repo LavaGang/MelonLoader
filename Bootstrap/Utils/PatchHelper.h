@@ -5,7 +5,7 @@ class PatchHelper
 {
 public:
 	static bool Init();
-	static const char* GenerateAsm(void*);
+	static bool GenerateAsm(void*, unsigned char**, size_t*);
 private:
 	static ks_engine* ks;
 };
