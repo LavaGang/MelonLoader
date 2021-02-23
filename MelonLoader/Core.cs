@@ -70,7 +70,7 @@ namespace MelonLoader
         {
             var property = typeof(AppDomain).GetProperty("FusionStore", BindingFlags.NonPublic | BindingFlags.Instance);
             if (property == null)
-                return;
+                throw new Exception("AppDomain.FusionStore not Found!");
             AppDomainSetup appDomainBase = ((AppDomainSetup)property.GetValue(AppDomain.CurrentDomain, new object[0]));
             appDomainBase.ApplicationBase = basepath;
         }
