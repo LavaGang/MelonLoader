@@ -53,7 +53,7 @@ bool AnalyticsBlocker::IsInBlockedHostNameList(const char* url)
 	bool found = false;
 	for (int i = 0; i < (sizeof(HostNames) / sizeof(HostNames[0])); i++)
 	{
-		if (strstr(HostNames[i], url) != NULL)
+		if (strstr(url, HostNames[i]) != NULL)
 		{
 			found = true;
 			break;
