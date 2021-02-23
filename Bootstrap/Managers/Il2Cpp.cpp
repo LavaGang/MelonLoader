@@ -19,14 +19,18 @@
 Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
 void* Il2Cpp::UnityTLSInterfaceStruct = NULL;
+
 Il2Cpp::Exports::il2cpp_init_t Il2Cpp::Exports::il2cpp_init = NULL;
 Il2Cpp::Exports::il2cpp_runtime_invoke_t Il2Cpp::Exports::il2cpp_runtime_invoke = NULL;
 Il2Cpp::Exports::il2cpp_method_get_name_t Il2Cpp::Exports::il2cpp_method_get_name = NULL;
 Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface_t Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface = NULL;
-Il2Cpp::Exports::testFnDef Il2Cpp::Exports::test_fn = NULL;
+// Il2Cpp::Exports::testFnDef Il2Cpp::Exports::test_fn = NULL;
 // void* Il2Cpp::Exports::test_fn_untyped = NULL;
 
-Patcher* Il2Cpp::Patches::test_fn = NULL;
+// Patcher* Il2Cpp::Patches::test_fn = NULL;
+Patcher* Il2Cpp::Patches::il2cpp_init = NULL;
+Patcher* Il2Cpp::Patches::il2cpp_runtime_invoke = NULL;
+Patcher* Il2Cpp::Patches::il2cpp_unity_install_unitytls_interface = NULL;
 
 #ifdef _WIN32
 HMODULE Il2Cpp::Module = NULL;
@@ -103,8 +107,8 @@ void* Il2Cpp::Handle = NULL;
 bool Il2Cpp::Initialize()
 {
 	Debug::Msg("Initializing Il2Cpp...");
-	// Handle = dlopen("libil2cpp.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
-	Handle = dlopen("libPlaygroundBootstrapper.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+	Handle = dlopen("libil2cpp.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+	// Handle = dlopen("libPlaygroundBootstrapper.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
 
 	if (Handle == nullptr)
 	{
@@ -122,12 +126,12 @@ bool Il2Cpp::Exports::Initialize()
 {
 	Debug::Msg("Initializing Il2Cpp Exports...");
 	
-	// il2cpp_init = (il2cpp_init_t)GetExport("il2cpp_init");
-	// il2cpp_runtime_invoke = (il2cpp_runtime_invoke_t)GetExport("il2cpp_runtime_invoke");
-	// il2cpp_method_get_name = (il2cpp_method_get_name_t)GetExport("il2cpp_method_get_name");
-	// il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)GetExport("il2cpp_unity_install_unitytls_interface");
+	il2cpp_init = (il2cpp_init_t)GetExport("il2cpp_init");
+	il2cpp_runtime_invoke = (il2cpp_runtime_invoke_t)GetExport("il2cpp_runtime_invoke");
+	il2cpp_method_get_name = (il2cpp_method_get_name_t)GetExport("il2cpp_method_get_name");
+	il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)GetExport("il2cpp_unity_install_unitytls_interface");
 
-	test_fn = (testFnDef)GetExport("TestExternalCall");
+	// test_fn = (testFnDef)GetExport("TestExternalCall");
 	// test_fn_untyped = GetExport("TestExternalCall");
 	
 	if (ImportError)
@@ -135,14 +139,16 @@ bool Il2Cpp::Exports::Initialize()
 		Logger::Error("One or more symbols failed to load.");
 	}
 
-	return !ImportError;
+	return Assertion::ShouldContinue;
 }
 
 bool Il2Cpp::ApplyPatches()
 {
-	Patcher* test_fn_res;
-	Patches::test_fn = new Patcher((void *)Exports::test_fn, (void*)Hooks::test_fn);
-	Patches::test_fn->ApplyPatch();
+	Patches::il2cpp_init = new Patcher((void *)Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
+	Patches::il2cpp_runtime_invoke = new Patcher((void *)Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
+	Patches::il2cpp_unity_install_unitytls_interface = new Patcher((void *)Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
+
+	Patches::il2cpp_init->ApplyPatch();
 
 	return true;
 }
@@ -150,7 +156,27 @@ bool Il2Cpp::ApplyPatches()
 #pragma region Hooks
 Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 {
+	// if (!Debug::Enabled)
+		// Console::SetHandles();
+	Debug::Msg("Detaching Hook from il2cpp_init...");
+	Patches::il2cpp_init->ClearPatch();
 
+	Logger::Msg(name);
+	// if (AssemblyGenerator::Initialize())
+	// {
+	// 	Mono::CreateDomain(name);
+	// 	InternalCalls::Initialize();
+	// 	// todo: check if it works/is necessary on mono games
+	// 	AssemblyVerifier::InstallHooks();
+	// 	if (BaseAssembly::Initialize())
+	// 	{
+	// 		Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
+	// 		Hook::Attach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
+	// 	}
+	// }
+	Debug::Msg("Creating Il2Cpp Domain...");
+	domain = Exports::il2cpp_init(name);
+	return domain;
 }
 
 Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec)
@@ -163,30 +189,28 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 
 }
 
-void Il2Cpp::Hooks::test_fn(int value)
-{
-	Logger::Msg(std::to_string(value).c_str());
-
-	Patches::test_fn->ClearPatch();
-	Exports::test_fn(420);
-	Patches::test_fn->ApplyPatch();
-}
+// void Il2Cpp::Hooks::test_fn(int value)
+// {
+// 	Logger::Msg(std::to_string(value).c_str());
+//
+// 	Patches::test_fn->ClearPatch();
+// 	Exports::test_fn(420);
+// 	Patches::test_fn->ApplyPatch();
+// }
 
 #pragma endregion Hooks
 
-bool Il2Cpp::ImportError = false;
-
 void* Il2Cpp::GetExport(const char* name)
 {
+	if (!Assertion::ShouldContinue)
+		return nullptr;
+	
 	void* fnPointer = dlsym(Handle, name);
 
+	// no need to return since already nullptr
 	if (fnPointer == nullptr)
-	{
-		ImportError = true;
-		Logger::Error(dlerror());
+		Assertion::ThrowInternalFailure(dlerror());
 
-		return nullptr;
-	}
 
 	return fnPointer;
 }

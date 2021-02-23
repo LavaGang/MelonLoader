@@ -38,8 +38,8 @@ public:
 		typedef void (*il2cpp_unity_install_unitytls_interface_t) (void* unitytlsInterfaceStruct);
 		static il2cpp_unity_install_unitytls_interface_t il2cpp_unity_install_unitytls_interface;
 
-		typedef void (*testFnDef)(int);
-		static testFnDef test_fn;
+		// typedef void (*testFnDef)(int);
+		// static testFnDef test_fn;
 	};
 
 	class Hooks
@@ -48,14 +48,17 @@ public:
 		static Domain* il2cpp_init(const char* name);
 		static Object* il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
 		static void il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct);
-		static void test_fn(int value);
+		// static void test_fn(int value);
 	};
 	
 #ifdef __ANDROID__
 	class Patches
 	{
 	public:
-		static Patcher* test_fn;
+		// static Patcher* test_fn;
+		static Patcher* il2cpp_init;
+		static Patcher* il2cpp_runtime_invoke;
+		static Patcher* il2cpp_unity_install_unitytls_interface;
 	};
 private:
 	static bool ImportError;

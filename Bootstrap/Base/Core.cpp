@@ -69,9 +69,8 @@ bool Core::Initialize()
 #ifdef PORT_DISABLE
 	AnalyticsBlocker::Hook();
 #endif
-	
-	if (!Il2Cpp::ApplyPatches())
-		return false;
+
+	ApplyHooks();
 
 	
 #ifdef _WIN32
@@ -241,6 +240,10 @@ void Core::WelcomeMessage()
 	// Debug::Msg(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
 }
 
+void Core::ApplyHooks()
+{
+	Il2Cpp::ApplyPatches();
+}
 
 const char* Core::GetOSVersion()
 {

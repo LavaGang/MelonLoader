@@ -13,11 +13,7 @@ bool Debug::Enabled = false;
 
 void Debug::Msg(const char* txt)
 {
-	if (!Enabled
-#ifdef PORT_DISABLE
-		|| !Assertion::ShouldContinue
-#endif
-		)
+	if (!Enabled || !Assertion::ShouldContinue)
 		return;
 	ForceWrite(txt);
 }
@@ -47,11 +43,7 @@ void Debug::Internal_Msg(Console::Color color, const char* namesection, const ch
 		Msg(txt);
 		return;
 	}
-	if (!Enabled
-#ifdef PORT_DISABLE
-		|| !Assertion::ShouldContinue
-#endif
-		)
+	if (!Enabled || !Assertion::ShouldContinue)
 		return;
 	
 	std::string timestamp = Logger::GetTimestamp();
