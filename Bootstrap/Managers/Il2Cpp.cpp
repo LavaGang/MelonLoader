@@ -24,7 +24,9 @@ Il2Cpp::Exports::il2cpp_runtime_invoke_t Il2Cpp::Exports::il2cpp_runtime_invoke 
 Il2Cpp::Exports::il2cpp_method_get_name_t Il2Cpp::Exports::il2cpp_method_get_name = NULL;
 Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface_t Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface = NULL;
 Il2Cpp::Exports::testFnDef Il2Cpp::Exports::test_fn = NULL;
-void* Il2Cpp::Exports::test_fn_untyped = NULL;
+// void* Il2Cpp::Exports::test_fn_untyped = NULL;
+
+Patcher* Il2Cpp::Patches::test_fn = NULL;
 
 #ifdef _WIN32
 HMODULE Il2Cpp::Module = NULL;
@@ -126,7 +128,7 @@ bool Il2Cpp::Exports::Initialize()
 	// il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)GetExport("il2cpp_unity_install_unitytls_interface");
 
 	test_fn = (testFnDef)GetExport("TestExternalCall");
-	test_fn_untyped = GetExport("TestExternalCall");
+	// test_fn_untyped = GetExport("TestExternalCall");
 	
 	if (ImportError)
 	{
@@ -134,6 +136,15 @@ bool Il2Cpp::Exports::Initialize()
 	}
 
 	return !ImportError;
+}
+
+bool Il2Cpp::ApplyPatches()
+{
+	Patcher* test_fn_res;
+	Patches::test_fn = new Patcher((void *)Exports::test_fn, (void*)Hooks::test_fn);
+	Patches::test_fn->ApplyPatch();
+
+	return true;
 }
 
 #pragma region Hooks
@@ -151,7 +162,18 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 {
 
 }
+
+void Il2Cpp::Hooks::test_fn(int value)
+{
+	Logger::Msg(std::to_string(value).c_str());
+
+	Patches::test_fn->ClearPatch();
+	Exports::test_fn(420);
+	Patches::test_fn->ApplyPatch();
+}
+
 #pragma endregion Hooks
+
 bool Il2Cpp::ImportError = false;
 
 void* Il2Cpp::GetExport(const char* name)

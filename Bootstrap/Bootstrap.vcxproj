@@ -233,6 +233,7 @@
       <!-- <Verbose>false</Verbose> -->
       <CppLanguageStandard>c++1z</CppLanguageStandard>
       <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>Default</CLanguageStandard> -->
     </ClCompile>
@@ -253,6 +254,7 @@
     <ClCompile Include="Managers\Il2Cpp.cpp" />
     <ClCompile Include="Managers\InternalCalls.cpp" />
     <ClCompile Include="Managers\Mono.cpp" />
+    <ClCompile Include="Patcher.cpp" />
     <ClCompile Include="Utils\AnalyticsBlocker.cpp" />
     <ClCompile Include="Utils\AssemblyGenerator.cpp" />
     <ClCompile Include="Utils\Assertion.cpp" />
@@ -276,6 +278,7 @@
     <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
     <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
     <ClInclude Include="Base\Liberation\Liberation.h" />
+    <ClInclude Include="Patcher.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Base\Core.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h" />

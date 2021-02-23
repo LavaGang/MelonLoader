@@ -59,6 +59,9 @@
     <ClCompile Include="Utils\PatchHelper.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Patcher.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -174,6 +177,9 @@
       <Filter>Base\Liberation</Filter>
     </ClInclude>
     <ClInclude Include="Utils\PatchHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Patcher.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

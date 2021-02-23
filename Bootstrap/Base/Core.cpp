@@ -37,10 +37,10 @@ bool Core::Initialize()
 		|| 
 		!Game::Initialize()
 #endif
+		|| !PatchHelper::Init()
 		)
 		return false;
 
-	Logger::Msg(((std::string)"PID: " + std::to_string(getpid())).c_str());
 #ifdef PORT_DISABLE
 	CommandLine::Read();
 	
@@ -65,17 +65,14 @@ bool Core::Initialize()
 		)
 		return false;
 
-	Logger::Msg("Initialized Il2Cpp");
-	PatchHelper::Init();
-	TestDirectMemAccess();
-
-	// Il2Cpp::Exports::test_fn();
 	
 #ifdef PORT_DISABLE
 	AnalyticsBlocker::Hook();
-
-	ApplyHooks();
 #endif
+	
+	if (!Il2Cpp::ApplyPatches())
+		return false;
+
 	
 #ifdef _WIN32
 	if (!Debug::Enabled)
@@ -224,10 +221,12 @@ void Core::WelcomeMessage()
 	// Logger::Msg(("Unity Version: " + std::string(Game::UnityVersion)).c_str());
 	// Logger::Msg(("Type: " + std::string((Game::IsIl2Cpp ? "Il2Cpp" : (Mono::IsOldMono ? "Mono" : "MonoBleedingEdge")))).c_str());
 	Logger::Msg(
-#if defined(_WIN64) | defined(_M_ARM64)
+#if defined(_WIN64)
 		"Arch: x64"
 #elif defined(_WIN32)
 		"Arch: x32"
+#elif defined(_M_ARM64)
+		"Arch: AArch64"
 #else
 		"Arch: Unknown"
 #endif
@@ -258,7 +257,7 @@ bool Core::OSVersionCheck()
 
 void Core::TestDirectMemAccess()
 {
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result: %p", Il2Cpp::Exports::test_fn_untyped);
+	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result: %p", Il2Cpp::Exports::test_fn_untyped);
 	unsigned char* encoded;
 	size_t size;
 	
@@ -273,20 +272,20 @@ void Core::TestDirectMemAccess()
 		// 	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%02x ", encoded[i]);
 		// }
 		
-		int value;
-		memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "PRE: %p", value);
-
-		// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Compiled: %lu bytes, statements: %lu\n", *size, count);
-		
-		Patch* testFn = Patch::Setup(Il2Cpp::Exports::test_fn_untyped, (char *)encoded, size);
-		Logger::Msg("Patch Created");
-		
-		testFn->Apply();
-		Logger::Msg("Patch Applied");
-		
-		memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ACTIVE: %p", value);
+		// int value;
+		// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
+		// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "PRE: %p", value);
+		//
+		// // __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Compiled: %lu bytes, statements: %lu\n", *size, count);
+		//
+		// Patch* testFn = Patch::Setup(Il2Cpp::Exports::test_fn_untyped, (char *)encoded, size);
+		// Logger::Msg("Patch Created");
+		//
+		// testFn->Apply();
+		// Logger::Msg("Patch Applied");
+		//
+		// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
+		// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ACTIVE: %p", value);
 	} else
 	{
 		dlclose(Il2Cpp::Handle);
@@ -337,8 +336,9 @@ void Core::TestDirectMemAccess()
 	// blr x11
 }
 
-void Core::TestRedirectFunction()
+void Core::TestRedirectFunction(int value)
 {
 	Logger::Msg("THIS METHOD HAS BEEN PATCHED :)");
+	Logger::Msg(std::to_string(value).c_str());
 }
 #endif
