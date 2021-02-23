@@ -17,8 +17,8 @@ namespace MelonLoader
             Harmony.HarmonyMethod GetCurrentCulturePrefixHarmonyMethod = new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static));
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }
-            try { ExtraCleanupCheck(MelonUtils.GameDirectory); } catch { }
-            try { OverrideAppDomainBase(MelonUtils.GameDirectory); } catch { }
+            try { ExtraCleanupCheck(MelonUtils.GameDirectory); } catch (Exception ex) { MelonLogger.Warning("Core.ExtraCleanupCheck Exception: " + ex.ToString()); }
+            try { OverrideAppDomainBase(MelonUtils.GameDirectory); } catch (Exception ex) { MelonLogger.Warning("Core.OverrideAppDomainBase Exception: " + ex.ToString()); }
             Directory.SetCurrentDirectory(MelonUtils.GameDirectory);
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
