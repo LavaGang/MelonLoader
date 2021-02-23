@@ -19,7 +19,6 @@ namespace MelonLoader.AssemblyGenerator
         internal static void Setup()
         {
             string ContactURL = $"{API_URL}/{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
-            Logger.Debug_Msg($"ContactURL = {ContactURL}");
             try
             {
                 string Response = Core.webClient.DownloadString(ContactURL);
@@ -38,8 +37,8 @@ namespace MelonLoader.AssemblyGenerator
                     Logger.Debug_Msg($"Response_MappingURL = {Response_MappingURL}");
                 if (!string.IsNullOrEmpty(Response_MappingFileSHA512))
                     Logger.Debug_Msg($"Response_MappingFileSHA512 = {Response_MappingFileSHA512}");
-                //if (!string.IsNullOrEmpty(Response_ForceCpp2ILVersion))
-                //    Logger.Debug_Msg($"Response_ForceCpp2ILVersion = {Response_ForceCpp2ILVersion}");
+                if (!string.IsNullOrEmpty(Response_ForceCpp2ILVersion))
+                    Logger.Debug_Msg($"Response_ForceCpp2ILVersion = {Response_ForceCpp2ILVersion}");
                 if (!string.IsNullOrEmpty(Response_ForceUnhollowerVersion))
                     Logger.Debug_Msg($"Response_ForceUnhollowerVersion = {Response_ForceUnhollowerVersion}");
                 if (!string.IsNullOrEmpty(Response_ObfuscationRegex))
