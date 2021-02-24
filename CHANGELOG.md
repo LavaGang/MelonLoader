@@ -66,6 +66,7 @@
 41. Added Object Oriented File System for MelonPreferences.
 42. Added MelonPreferences_Category.SetFilePath.
 43. Added MelonPreferences_Category.ResetFilePath.
+44. Fixed Issue with Core Initialization.
 
 ---
 
