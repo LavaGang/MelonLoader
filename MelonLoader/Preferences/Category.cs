@@ -8,6 +8,7 @@ namespace MelonLoader
         public string Identifier { get; internal set; }
         public string DisplayName { get; internal set; }
         public readonly List<MelonPreferences_Entry> Entries = new List<MelonPreferences_Entry>();
+        internal Preferences.IO.File File = null;
 
         internal MelonPreferences_Category(string identifier, string display_name)
         {
@@ -39,7 +40,10 @@ namespace MelonLoader
                 DefaultValue = default_value,
                 Value = default_value
             };
-            MelonPreferences.DefaultFile.SetupEntryFromRawValue(entry);
+            Preferences.IO.File currentFile = File;
+            if (currentFile == null)
+                currentFile = MelonPreferences.DefaultFile;
+            currentFile.SetupEntryFromRawValue(entry);
             Entries.Add(entry);
             return entry;
         }
@@ -58,5 +62,37 @@ namespace MelonLoader
             return (MelonPreferences_Entry<T>) GetEntry(identifier);
         }
         public bool HasEntry(string identifier) => GetEntry(identifier) != null;
+
+        public void SetFilePath(string filepath)
+        {
+            if (string.IsNullOrEmpty(filepath))
+                return;
+            if (File != null)
+                ResetFilePath();
+            File = new Preferences.IO.File(filepath);
+            MelonPreferences.PrefFiles.Add(File);
+            try
+            {
+                File.Load();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Loading Preferences from {File.FilePath}: {ex}");
+                File.WasError = true;
+            }
+            if ((Entries.Count < 0) || File.WasError)
+                return;
+            foreach (MelonPreferences_Entry entry in Entries)
+                File.SetupEntryFromRawValue(entry);
+        }
+
+        public void ResetFilePath()
+        {
+            if (File == null)
+                return;
+            File.FileWatcher.Destroy();
+            MelonPreferences.PrefFiles.Remove(File);
+            File = null;
+        }
     }
 }

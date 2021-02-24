@@ -8,7 +8,8 @@ namespace MelonLoader
     {
         public static readonly List<MelonPreferences_Category> Categories = new List<MelonPreferences_Category>();
         public static readonly TomlMapper Mapper = new TomlMapper();
-        internal static readonly Preferences.IO.File DefaultFile = null;
+        internal static List<Preferences.IO.File> PrefFiles = new List<Preferences.IO.File>();
+        internal static Preferences.IO.File DefaultFile = null;
 
         static MelonPreferences() => DefaultFile = new Preferences.IO.File(
             Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg"), 
@@ -22,7 +23,7 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Error while Loading Legacy Preferences: {ex}");
+                MelonLogger.Error($"Error while Loading Legacy Preferences from {DefaultFile.LegacyFilePath}: {ex}");
                 DefaultFile.WasError = true;
             }
 
@@ -32,19 +33,42 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Error while Loading Preferences: {ex}");
+                MelonLogger.Error($"Error while Loading Preferences from {DefaultFile.FilePath}: {ex}");
                 DefaultFile.WasError = true;
             }
-            if (!DefaultFile.WasError && (Categories.Count > 0))
+
+            if (PrefFiles.Count >= 0)
             {
-                foreach (MelonPreferences_Category cat in Categories)
+                foreach (Preferences.IO.File file in PrefFiles)
                 {
-                    if (cat.Entries.Count < 0)
-                        continue;
-                    foreach (MelonPreferences_Entry entry in cat.Entries)
-                        DefaultFile.SetupEntryFromRawValue(entry);
+                    try
+                    {
+                        file.Load();
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Error($"Error while Loading Preferences from {file.FilePath}: {ex}");
+                        file.WasError = true;
+                    }
                 }
             }
+
+            if (Categories.Count > 0)
+            {
+                foreach (MelonPreferences_Category category in Categories)
+                {
+                    if (category.Entries.Count < 0)
+                        continue;
+                    Preferences.IO.File currentFile = category.File;
+                    if (currentFile == null)
+                        currentFile = DefaultFile;
+                    if (currentFile.WasError)
+                        continue;
+                    foreach (MelonPreferences_Entry entry in category.Entries)
+                        currentFile.SetupEntryFromRawValue(entry);
+                }
+            }
+
             MelonLogger.Msg("Preferences Loaded!");
             MelonHandler.OnPreferencesLoaded();
         }
@@ -52,9 +76,14 @@ namespace MelonLoader
         public static void Save()
         {
             foreach (MelonPreferences_Category category in Categories)
+            {
+                Preferences.IO.File currentFile = category.File;
+                if (currentFile == null)
+                    currentFile = DefaultFile;
                 foreach (MelonPreferences_Entry entry in category.Entries)
                     if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
-                        DefaultFile.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+                        currentFile.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+            }
 
             try
             {
@@ -62,9 +91,26 @@ namespace MelonLoader
             }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Error while Saving Preferences: {ex}");
+                MelonLogger.Error($"Error while Saving Preferences to {DefaultFile.FilePath}: {ex}");
                 DefaultFile.WasError = true;
             }
+
+            if (PrefFiles.Count >= 0)
+            {
+                foreach (Preferences.IO.File file in PrefFiles)
+                {
+                    try
+                    {
+                        file.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Error($"Error while Saving Preferences to {file.FilePath}: {ex}");
+                        file.WasError = true;
+                    }
+                }
+            }
+
             MelonLogger.Msg("Preferences Saved!");
             MelonHandler.OnPreferencesSaved();
         }

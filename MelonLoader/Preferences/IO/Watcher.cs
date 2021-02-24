@@ -1,39 +1,48 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace MelonLoader.Preferences.IO
 {
-    internal static class Watcher
+    internal class Watcher
     {
-        private static FileSystemWatcher FileWatcher = null;
+        private FileSystemWatcher FileWatcher = null;
+        private File PrefFile = null;
 
-        internal static void Setup(string filepath)
+        internal Watcher(File preffile)
         {
+            PrefFile = preffile;
             FileWatcher = new FileSystemWatcher();
             FileWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
-            FileWatcher.Path = Path.GetDirectoryName(filepath);
-            FileWatcher.Filter = Path.GetFileName(filepath);
+            FileWatcher.Path = preffile.FilePath;
+            FileWatcher.Filter = Path.GetFileName(preffile.FilePath);
             FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
             FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
             FileWatcher.EnableRaisingEvents = true;
             FileWatcher.BeginInit();
         }
 
-        internal static void Destroy()
+        internal void Destroy()
         {
             FileWatcher.EndInit();
             FileWatcher.Dispose();
         }
 
-        private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e)
+        private void OnFileWatcherTriggered(object source, FileSystemEventArgs e)
         {
-            if (MelonPreferences.DefaultFile.WasError)
-                return;
-            if (!MelonPreferences.DefaultFile.IsSaving)
+            if (PrefFile.IsSaving)
             {
-                MelonPreferences.Load();
+                PrefFile.IsSaving = false;
                 return;
             }
-            MelonPreferences.DefaultFile.IsSaving = false;
+            try
+            {
+                PrefFile.Load();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Loading Preferences from {PrefFile.FilePath}: {ex}");
+                PrefFile.WasError = true;
+            }
         }
     }
 }

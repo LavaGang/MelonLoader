@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MelonLoader.Tomlyn;
 using MelonLoader.Tomlyn.Model;
@@ -10,23 +9,24 @@ namespace MelonLoader.Preferences.IO
     internal class File
     {
         private bool _waserror = false;
-        internal bool WasError { get => _waserror; set { if (value == true) { MelonLogger.Warning("Defaulting MelonPreferences to Fallback Functionality to further avoid File Corruption..."); IsSaving = false; } _waserror = value; } }
-        private string FilePath = null;
-        private string LegacyFilePath = null;
+        internal bool WasError { get => _waserror; set { if (value == true) { MelonLogger.Warning($"Defaulting {FilePath} to Fallback Functionality to further avoid File Corruption..."); IsSaving = false; FileWatcher.Destroy(); } _waserror = value; } }
+        internal string FilePath = null;
+        internal string LegacyFilePath = null;
         internal bool IsSaving = false;
         internal Dictionary<string, Dictionary<string, TomlObject>> RawValue = new Dictionary<string, Dictionary<string, TomlObject>>();
+        internal Watcher FileWatcher = null;
 
         internal File(string filepath)
         {
             FilePath = filepath;
-            Watcher.Setup(FilePath);
+            //FileWatcher = new Watcher(this);
         }
 
         internal File(string filepath, string legacyfilepath)
         {
             FilePath = filepath;
             LegacyFilePath = legacyfilepath;
-            Watcher.Setup(FilePath);
+            //FileWatcher = new Watcher(this);
         }
 
         internal void LegacyLoad()
@@ -124,7 +124,7 @@ namespace MelonLoader.Preferences.IO
             }
             IsSaving = true;
             System.IO.File.WriteAllText(FilePath, doc.ToString());
-            if (System.IO.File.Exists(LegacyFilePath))
+            if ((LegacyFilePath != null) && System.IO.File.Exists(LegacyFilePath))
                 System.IO.File.Delete(LegacyFilePath);
         }
 
