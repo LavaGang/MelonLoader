@@ -94,7 +94,7 @@ namespace MelonLoader
             File = null;
             if (!MelonPreferences.IsFileInUse(oldfile))
             {
-                File.FileWatcher.Destroy();
+                oldfile.FileWatcher.Destroy();
                 MelonPreferences.PrefFiles.Remove(File);
             }
         }
