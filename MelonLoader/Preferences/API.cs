@@ -192,6 +192,8 @@ namespace MelonLoader
                 return false;
             if (file == null)
                 file = DefaultFile;
+            if (file == DefaultFile)
+                return true;
             foreach (MelonPreferences_Category category in Categories)
             {
                 Preferences.IO.File currentFile = category.File;
@@ -227,5 +229,7 @@ namespace MelonLoader
                     currentFile.SetupEntryFromRawValue(entry);
             }
         }
+
+        internal static bool IsFilePathDefault(string filepath) => new FileInfo(filepath).FullName.Equals(new FileInfo(DefaultFile.FilePath).FullName);
     }
 }

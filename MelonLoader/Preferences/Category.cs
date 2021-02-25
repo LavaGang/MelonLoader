@@ -61,29 +61,43 @@ namespace MelonLoader
 
         public void SetFilePath(string filepath)
         {
-            if (string.IsNullOrEmpty(filepath))
-                return;
             if (File != null)
-                ResetFilePath();
-            File = MelonPreferences.GetPrefFileFromFilePath(filepath);
-            if (File == null)
             {
-                File = new Preferences.IO.File(filepath);
-                MelonPreferences.PrefFiles.Add(File);
-                try
+                Preferences.IO.File oldfile = File;
+                File = null;
+                if (!MelonPreferences.IsFileInUse(oldfile))
                 {
-                    File.Load();
-                }
-                catch (Exception ex)
-                {
-                    MelonLogger.Error($"Error while Loading Preferences from {File.FilePath}: {ex}");
-                    File.WasError = true;
+                    oldfile.FileWatcher.Destroy();
+                    MelonPreferences.PrefFiles.Remove(oldfile);
                 }
             }
-            if ((Entries.Count < 0) || File.WasError)
+            if (!string.IsNullOrEmpty(filepath) && !MelonPreferences.IsFilePathDefault(filepath))
+            {
+                File = MelonPreferences.GetPrefFileFromFilePath(filepath);
+                if (File == null)
+                {
+                    File = new Preferences.IO.File(filepath);
+                    MelonPreferences.PrefFiles.Add(File);
+                    try
+                    {
+                        File.Load();
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Error($"Error while Loading Preferences from {File.FilePath}: {ex}");
+                        File.WasError = true;
+                    }
+                }
+            }
+            Preferences.IO.File currentfile = File;
+            if (currentfile == null)
+                currentfile = MelonPreferences.DefaultFile;
+            if ((Entries.Count < 0) || currentfile.WasError)
                 return;
             foreach (MelonPreferences_Entry entry in Entries)
-                File.SetupEntryFromRawValue(entry);
+                currentfile.SetupEntryFromRawValue(entry);
+            MelonLogger.Msg($"MelonPreferences Loaded from {currentfile.FilePath}");
+            MelonHandler.OnPreferencesLoaded();
         }
 
         public void ResetFilePath()
@@ -95,8 +109,14 @@ namespace MelonLoader
             if (!MelonPreferences.IsFileInUse(oldfile))
             {
                 oldfile.FileWatcher.Destroy();
-                MelonPreferences.PrefFiles.Remove(File);
+                MelonPreferences.PrefFiles.Remove(oldfile);
             }
+            if ((Entries.Count < 0) || MelonPreferences.DefaultFile.WasError)
+                return;
+            foreach (MelonPreferences_Entry entry in Entries)
+                MelonPreferences.DefaultFile.SetupEntryFromRawValue(entry);
+            MelonLogger.Msg($"MelonPreferences Loaded from {MelonPreferences.DefaultFile.FilePath}");
+            MelonHandler.OnPreferencesLoaded();
         }
     }
 }

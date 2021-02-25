@@ -37,7 +37,7 @@ namespace MelonLoader.Preferences.IO
                 return;
             }
             MelonPreferences.LoadFileAndRefreshCategories(PrefFile);
-            MelonLogger.Msg($"MelonPreferences Reloaded {PrefFile.FilePath}");
+            MelonLogger.Msg($"MelonPreferences Reloaded from {PrefFile.FilePath}");
             MelonHandler.OnPreferencesLoaded();
         }
     }
