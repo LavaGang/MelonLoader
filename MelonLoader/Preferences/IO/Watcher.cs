@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace MelonLoader.Preferences.IO
 {
@@ -13,7 +12,7 @@ namespace MelonLoader.Preferences.IO
             PrefFile = preffile;
             FileWatcher = new FileSystemWatcher();
             FileWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
-            FileWatcher.Path = preffile.FilePath;
+            FileWatcher.Path = Path.GetDirectoryName(preffile.FilePath);
             FileWatcher.Filter = Path.GetFileName(preffile.FilePath);
             FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
             FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
@@ -23,8 +22,11 @@ namespace MelonLoader.Preferences.IO
 
         internal void Destroy()
         {
+            if (FileWatcher == null)
+                return;
             FileWatcher.EndInit();
             FileWatcher.Dispose();
+            FileWatcher = null;
         }
 
         private void OnFileWatcherTriggered(object source, FileSystemEventArgs e)
@@ -34,15 +36,9 @@ namespace MelonLoader.Preferences.IO
                 PrefFile.IsSaving = false;
                 return;
             }
-            try
-            {
-                PrefFile.Load();
-            }
-            catch (Exception ex)
-            {
-                MelonLogger.Error($"Error while Loading Preferences from {PrefFile.FilePath}: {ex}");
-                PrefFile.WasError = true;
-            }
+            MelonPreferences.LoadFileAndRefreshCategories(PrefFile);
+            MelonLogger.Msg($"MelonPreferences Reloaded {PrefFile.FilePath}");
+            MelonHandler.OnPreferencesLoaded();
         }
     }
 }

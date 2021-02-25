@@ -171,5 +171,61 @@ namespace MelonLoader
                 return default;
             return entry.Value;
         }
+        
+        internal static Preferences.IO.File GetPrefFileFromFilePath(string filepath)
+        {
+            if (PrefFiles.Count <= 0)
+                return null;
+            FileInfo filepathinfo = new FileInfo(filepath);
+            foreach (Preferences.IO.File file in PrefFiles)
+            {
+                FileInfo filepathinfo2 = new FileInfo(file.FilePath);
+                if (filepathinfo.FullName.Equals(filepathinfo2.FullName))
+                    return file;
+            }
+            return null;
+        }
+
+        internal static bool IsFileInUse(Preferences.IO.File file)
+        {
+            if (Categories.Count <= 0)
+                return false;
+            if (file == null)
+                file = DefaultFile;
+            foreach (MelonPreferences_Category category in Categories)
+            {
+                Preferences.IO.File currentFile = category.File;
+                if (currentFile == null)
+                    currentFile = DefaultFile;
+                if (currentFile == file)
+                    return true;
+            }
+            return false;
+        }
+
+        internal static void LoadFileAndRefreshCategories(Preferences.IO.File file)
+        {
+            try
+            {
+                file.Load();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Loading Preferences from {file.FilePath}: {ex}");
+                file.WasError = true;
+            }
+            if (file.WasError || (Categories.Count <= 0))
+                return;
+            foreach (MelonPreferences_Category category in Categories)
+            {
+                Preferences.IO.File currentFile = category.File;
+                if (currentFile == null)
+                    currentFile = DefaultFile;
+                if ((currentFile != file) || (category.Entries.Count <= 0))
+                    continue;
+                foreach (MelonPreferences_Entry entry in category.Entries)
+                    currentFile.SetupEntryFromRawValue(entry);
+            }
+        }
     }
 }

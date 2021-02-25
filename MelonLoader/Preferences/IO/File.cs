@@ -19,14 +19,14 @@ namespace MelonLoader.Preferences.IO
         internal File(string filepath)
         {
             FilePath = filepath;
-            //FileWatcher = new Watcher(this);
+            FileWatcher = new Watcher(this);
         }
 
         internal File(string filepath, string legacyfilepath)
         {
             FilePath = filepath;
             LegacyFilePath = legacyfilepath;
-            //FileWatcher = new Watcher(this);
+            FileWatcher = new Watcher(this);
         }
 
         internal void LegacyLoad()
