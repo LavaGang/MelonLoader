@@ -6,7 +6,7 @@
 #include "../Utils/Assertion.h"
 #include "../Utils/Logger.h"
 
-char* BaseAssembly::Path = NULL;
+char* BaseAssembly::PathMono = NULL;
 char* BaseAssembly::PreloadPath = NULL;
 Mono::Method* BaseAssembly::Mono_Start = NULL;
 
@@ -14,7 +14,7 @@ bool BaseAssembly::Initialize()
 {
 	Preload();
 	Debug::Msg("Initializing Base Assembly...");
-	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, Path);
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PathMono);
 	if (assembly == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");

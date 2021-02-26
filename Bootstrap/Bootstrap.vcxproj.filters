@@ -56,6 +56,9 @@
     <ClCompile Include="Base\DllMain.cpp">
       <Filter>Base</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Encoding.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -132,6 +135,9 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="Base\resource.h">
       <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Encoding.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

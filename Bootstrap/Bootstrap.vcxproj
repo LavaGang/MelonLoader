@@ -168,6 +168,7 @@
     <ClCompile Include="Utils\CommandLine.cpp" />
     <ClCompile Include="Utils\Console.cpp" />
     <ClCompile Include="Utils\Debug.cpp" />
+    <ClCompile Include="Utils\Encoding.cpp" />
     <ClCompile Include="Utils\HashCode.cpp" />
     <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Logger.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Utils\CommandLine.h" />
     <ClInclude Include="Utils\Console.h" />
     <ClInclude Include="Utils\Debug.h" />
+    <ClInclude Include="Utils\Encoding.h" />
     <ClInclude Include="Utils\HashCode.h" />
     <ClInclude Include="Utils\IniFile.h" />
     <ClInclude Include="Utils\Logger.h" />

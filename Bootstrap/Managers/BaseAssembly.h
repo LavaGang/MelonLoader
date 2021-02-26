@@ -4,7 +4,7 @@
 class BaseAssembly
 {
 public:
-	static char* Path;
+	static char* PathMono;
 	static char* PreloadPath;
 	static bool Initialize();
 	static void Preload();

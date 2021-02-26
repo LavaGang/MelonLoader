@@ -14,6 +14,7 @@
 
 Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
+char* Il2Cpp::GameAssemblyPathMono = NULL;
 char* Il2Cpp::UnityPlayerPath = NULL;
 HMODULE Il2Cpp::Module = NULL;
 void* Il2Cpp::UnityTLSInterfaceStruct = NULL;
