@@ -111,7 +111,7 @@ namespace MelonLoader
                 throw new Exception("Unable to Find " + name + " Export!");
             output = Marshal.GetDelegateForFunctionPointer(ptr, typeof(T)) as T;
         }
-        [DllImport("kernel32")]
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
         private static extern IntPtr LoadLibrary(string lpLibFileName);
         [DllImport("kernel32")]
         private static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
