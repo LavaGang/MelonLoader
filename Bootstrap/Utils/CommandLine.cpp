@@ -5,10 +5,12 @@
 #include "AnalyticsBlocker.h"
 #include "../Managers/InternalCalls.h"
 #include "AssemblyGenerator.h"
+#include "Encoding.h"
 #include "../Managers/Game.h"
 
 int CommandLine::argc = NULL;
 char* CommandLine::argv[64];
+char* CommandLine::argvMono[64];
 IniFile* CommandLine::iniFile = NULL;
 
 void CommandLine::Read()
@@ -18,10 +20,12 @@ void CommandLine::Read()
 	char* curchar = strtok_s(GetCommandLineA(), " ", &nextchar);
 	while (curchar && (argc < 63))
 	{
+		argvMono[argc] = Encoding::OsToUtf8(curchar);
 		argv[argc++] = curchar;
 		curchar = strtok_s(0, " ", &nextchar);
 	}
 	argv[argc] = 0;
+	argvMono[argc] = 0;
 	if (argc <= 0)
 		return;
 	for (int i = 0; i < argc; i++)

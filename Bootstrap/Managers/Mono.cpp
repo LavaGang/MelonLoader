@@ -212,13 +212,7 @@ void Mono::CreateDomain(const char* name)
 	Exports::mono_assembly_setrootdir(ManagedPathMono);
 	Exports::mono_set_config_dir(MonoConfigPathMono);
 	if (!IsOldMono) {
-		// FIXME: Here is a temporary way to handle command line. Should be done in `CommandLine::Read`.
-		if (CommandLine::argc == 1) {
-			// FIXME: memory leaking
-			// The first one usually is the path of exe which contains non-ASCII charactors, so we only convert it.
-			CommandLine::argv[0] = Encoding::OsToUtf8(CommandLine::argv[0]);
-		}
-		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
+		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argvMono);
 	}
 	domain = Exports::mono_jit_init(name);
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
