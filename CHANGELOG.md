@@ -72,6 +72,9 @@
 47. Fixed Issue with OnPreferencesLoaded not being called on Creation of a Separated MelonPreferences File.
 48. Moved GetMelonFromStackTrace to MelonUtils.
 49. Made GetMelonFromStackTrace Accessible.
+50. Fixed Encoding Issue with Mono API.    (Credits to constfold :3)
+51. Fixed Issue with LoadLibrary failing when a DLL file path contains Non-ASCII Characters.    (Credits to constfold :3)
+52. Fixed Issue with Unicode Command Line.    (Credits to constfold :3)
 
 ---
 
