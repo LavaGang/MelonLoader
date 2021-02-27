@@ -77,6 +77,7 @@
 52. Fixed Issue with Unicode Command Line.    (Credits to constfold :3)
 53. Removed MelonBase.Compatibility.
 54. Added MelonPlatform Attribute.
+55. Added MelonPlatformDomain Attribute.
 
 ---
 

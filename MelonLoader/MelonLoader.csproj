@@ -118,6 +118,7 @@
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
     <Compile Include="Melons\Attributes\Platform.cs" />
+    <Compile Include="Melons\Attributes\PlatformDomain.cs" />
     <Compile Include="Melons\Attributes\Priority.cs" />
     <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
