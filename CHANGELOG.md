@@ -70,6 +70,8 @@
 45. Fixed Conflict Issue with Multiple MelonPreferences Categories using the same file.
 46. Fixed Issue with File Watcher System and Separated MelonPreferences Files.
 47. Fixed Issue with OnPreferencesLoaded not being called on Creation of a Separated MelonPreferences File.
+48. Moved GetMelonFromStackTrace to MelonUtils.
+49. Made GetMelonFromStackTrace Accessible.
 
 ---
 

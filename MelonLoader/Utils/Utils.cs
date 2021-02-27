@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -37,6 +39,38 @@ namespace MelonLoader
             for (int i = 0; i < length; i++)
                 builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * rand.NextDouble())) + 65));
             return builder.ToString();
+        }
+
+        public static MelonBase GetMelonFromStackTrace()
+        {
+            StackTrace st = new StackTrace(3, true);
+            if (st.FrameCount <= 0)
+                return null;
+            MelonBase output = CheckForMelonInFrame(st);
+            if (output == null)
+                output = CheckForMelonInFrame(st, 1);
+            if (output == null)
+                output = CheckForMelonInFrame(st, 2);
+            return output;
+        }
+        private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
+        {
+            StackFrame sf = st.GetFrame(frame);
+            if (sf == null)
+                return null;
+            MethodBase method = sf.GetMethod();
+            if (method == null)
+                return null;
+            Type methodClassType = method.DeclaringType;
+            if (methodClassType == null)
+                return null;
+            Assembly asm = methodClassType.Assembly;
+            if (asm == null)
+                return null;
+            MelonBase melon = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
+            if (melon == null)
+                melon = MelonHandler.Mods.Find(x => (x.Assembly == asm));
+            return melon;
         }
 
         public static string ColorToANSI(ConsoleColor color)

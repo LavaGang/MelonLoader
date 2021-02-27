@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace MelonLoader
@@ -29,7 +27,7 @@ namespace MelonLoader
         {
             ConsoleColor meloncolor = DefaultMelonColor;
             string namesection = null;
-            MelonBase melon = GetMelonFromStackTrace();
+            MelonBase melon = MelonUtils.GetMelonFromStackTrace();
             if (melon != null)
             {
                 namesection = melon.Info.Name.Replace(" ", "_");
@@ -41,12 +39,12 @@ namespace MelonLoader
         private static void SendWarning(string txt)
         {
             string namesection = null;
-            MelonBase melon = GetMelonFromStackTrace();
+            MelonBase melon = MelonUtils.GetMelonFromStackTrace();
             if (melon != null)
                 namesection = melon.Info.Name;
             ManualWarning(namesection, txt);
         }
-        private static void SendError(string txt) => ManualMelonError(GetMelonFromStackTrace(), txt);
+        private static void SendError(string txt) => ManualMelonError(MelonUtils.GetMelonFromStackTrace(), txt);
 
         internal static void ManualWarning(string namesection, string txt)
         {
@@ -62,38 +60,6 @@ namespace MelonLoader
                 namesection = melon.Info.Name.Replace(" ", "_");
             Internal_Error(namesection, txt);
             RunErrorCallbacks(namesection, txt);
-        }
-
-        internal static MelonBase GetMelonFromStackTrace()
-        {
-            StackTrace st = new StackTrace(3, true);
-            if (st.FrameCount <= 0)
-                return null;
-            MelonBase output = CheckForMelonInFrame(st);
-            if (output == null)
-                output = CheckForMelonInFrame(st, 1);
-            if (output == null)
-                output = CheckForMelonInFrame(st, 2);
-            return output;
-        }
-        private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
-        {
-            StackFrame sf = st.GetFrame(frame);
-            if (sf == null)
-                return null;
-            MethodBase method = sf.GetMethod();
-            if (method == null)
-                return null;
-            Type methodClassType = method.DeclaringType;
-            if (methodClassType == null)
-                return null;
-            Assembly asm = methodClassType.Assembly;
-            if (asm == null)
-                return null;
-            MelonBase melon = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
-            if (melon == null)
-                melon = MelonHandler.Mods.Find(x => (x.Assembly == asm));
-            return melon;
         }
 
         internal static void RunMsgCallbacks(ConsoleColor meloncolor, ConsoleColor txtcolor, string namesection, string msg) => MsgCallbackHandler?.Invoke(meloncolor, txtcolor, namesection, msg);

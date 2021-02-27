@@ -28,7 +28,7 @@ namespace MelonLoader
         {
             ConsoleColor meloncolor = MelonLogger.DefaultMelonColor;
             string namesection = null;
-            MelonBase melon = MelonLogger.GetMelonFromStackTrace();
+            MelonBase melon = MelonUtils.GetMelonFromStackTrace();
             if (melon != null)
             {
                 namesection = melon.Info.Name.Replace(" ", "_");
