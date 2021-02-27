@@ -15,36 +15,10 @@ namespace MelonLoader
         /// </summary>
         public string Location { get; internal set; }
 
-        // <summary>
-        /// Enum for Melon Compatibility.
-        /// </summary>
-        public enum MelonCompatibility
-        {
-            INCOMPATIBLE,
-            COMPATIBLE,
-            NOATTRIBUTE,
-            UNIVERSAL,
-        }
-
-        /// <summary>
-        /// Compatibility of the Melon.
-        /// </summary>
-        public MelonCompatibility Compatibility { get; internal set; }
-
         /// <summary>
         /// Priority of the Melon.
         /// </summary>
         public int Priority { get; internal set; }
-
-        /// <summary>
-        /// Gets if the Melon is Universal.
-        /// </summary>
-        public bool IsUniversal { get { return (Compatibility < MelonCompatibility.COMPATIBLE); } }
-
-        /// <summary>
-        /// Gets if the Melon is Compatible with the Game.
-        /// </summary>
-        public bool IsCompatible { get { return (Compatibility < MelonCompatibility.INCOMPATIBLE); } }
 
         /// <summary>
         /// Console Color of the Melon.
