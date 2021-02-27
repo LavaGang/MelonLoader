@@ -46,17 +46,13 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public TextPosition End;
 
-        public override string ToString()
-        {
-            return $"{FileName}{Start}-{End}";
-        }
+        public override string ToString() =>
+            $"{FileName}{Start}-{End}";
 
         /// <summary>
         /// A string representation of this source span not including the <see cref="End"/> position.
         /// </summary>
-        public string ToStringSimple()
-        {
-            return $"{FileName}{Start}";
-        }
+        public string ToStringSimple() =>
+             $"{FileName}{Start}";
     }
 }

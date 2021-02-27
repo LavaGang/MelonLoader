@@ -38,16 +38,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public SyntaxList<TableSyntaxBase> Tables { get; }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-        
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 2;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return index == 0 ? (SyntaxNode)KeyValues : Tables;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => index == 0 ? (SyntaxNode)KeyValues : Tables;
     }
 }

@@ -20,9 +20,7 @@ namespace MelonLoader.Tomlyn.Text
 
         public int Start => _start;
 
-        public char32? TryGetNext(ref int position)
-        {
-            return CharHelper.ToUtf8(_text, ref position);
-        }
+        public char32? TryGetNext(ref int position) =>
+            CharHelper.ToUtf8(_text, ref position);
     }
 }

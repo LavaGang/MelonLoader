@@ -14,9 +14,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an instance of <see cref="ArrayItemSyntax"/>
         /// </summary>
-        public ArrayItemSyntax() : base(SyntaxKind.ArrayItem)
-        {
-        }
+        public ArrayItemSyntax() : base(SyntaxKind.ArrayItem) { }
 
         /// <summary>
         /// Gets or sets the value of this item.
@@ -36,16 +34,8 @@ namespace MelonLoader.Tomlyn.Syntax
             set => ParentToThis(ref _comma, value, TokenKind.Comma);
         }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 2;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return index == 0 ? (SyntaxNode)Value : Comma;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => index == 0 ? (SyntaxNode)Value : Comma;
     }
 }

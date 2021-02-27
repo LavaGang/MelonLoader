@@ -18,9 +18,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an instance of <see cref="KeyValueSyntax"/>
         /// </summary>
-        public KeyValueSyntax() : base(SyntaxKind.KeyValue)
-        {
-        }
+        public KeyValueSyntax() : base(SyntaxKind.KeyValue) { }
 
         /// <summary>
         /// Creates an instance of <see cref="KeyValueSyntax"/>
@@ -91,11 +89,7 @@ namespace MelonLoader.Tomlyn.Syntax
         }
 
         public override int ChildrenCount => 4;
-
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
 
         protected override SyntaxNode GetChildrenImpl(int index)
         {

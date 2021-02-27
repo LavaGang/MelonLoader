@@ -8,7 +8,5 @@ namespace MelonLoader.Tomlyn.Text
         string SourcePath { get; }
     }
 
-    internal interface ISourceView<out TCharIterator> : ISourceView, IStringView<TCharIterator> where TCharIterator : struct, CharacterIterator
-    {
-    }
+    internal interface ISourceView<out TCharIterator> : ISourceView, IStringView<TCharIterator> where TCharIterator : struct, CharacterIterator { }
 }

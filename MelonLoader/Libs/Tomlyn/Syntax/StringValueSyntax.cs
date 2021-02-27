@@ -16,9 +16,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates a new instance of <see cref="StringValueSyntax"/>
         /// </summary>
-        public StringValueSyntax() : base(SyntaxKind.String)
-        {
-        }
+        public StringValueSyntax() : base(SyntaxKind.String) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="StringValueSyntax"/>
@@ -45,16 +43,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public string Value { get; set; }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 1;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Token;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => Token;
     }
 }

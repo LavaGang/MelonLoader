@@ -15,19 +15,15 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates a new instance of a <see cref="KeySyntax"/>
         /// </summary>
-        public KeySyntax() : base(SyntaxKind.Key)
-        {
+        public KeySyntax() : base(SyntaxKind.Key) =>
             DotKeys = new SyntaxList<DottedKeyItemSyntax>() { Parent = this };
-        }
 
         /// <summary>
         /// Creates a new instance of a <see cref="KeySyntax"/>
         /// </summary>
         /// <param name="key">A simple name of this key</param>
-        public KeySyntax(string key) : this()
-        {
+        public KeySyntax(string key) : this() =>
             Key = BareKeySyntax.IsBareKey(key) ? (BareKeyOrStringValueSyntax)new BareKeySyntax(key) : new StringValueSyntax(key);
-        }
 
         /// <summary>
         /// Creates a new instance of a <see cref="KeySyntax"/>
@@ -56,11 +52,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public SyntaxList<DottedKeyItemSyntax> DotKeys { get; }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 2;
 
         protected override SyntaxNode GetChildrenImpl(int index)

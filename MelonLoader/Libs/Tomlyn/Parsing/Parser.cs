@@ -557,20 +557,12 @@ namespace MelonLoader.Tomlyn.Parsing
             }
         }
 
-        private bool IsEolOrEof()
-        {
-            return _token.Kind == TokenKind.NewLine || _token.Kind == TokenKind.Eof;
-        }
+        private bool IsEolOrEof() =>
+            _token.Kind == TokenKind.NewLine || _token.Kind == TokenKind.Eof;
 
-        private T Open<T>() where T : SyntaxNode, new()
-        {
-            return Open<T>(_token);
-        }
+        private T Open<T>() where T : SyntaxNode, new() => Open<T>(_token);
 
-        private T Open<T>(T syntax) where T : SyntaxNode
-        {
-            return Open(syntax, _token);
-        }
+        private T Open<T>(T syntax) where T : SyntaxNode => Open(syntax, _token);
 
         private T Open<T>(T syntax, SyntaxTokenValue startToken) where T : SyntaxNode
         {
@@ -584,10 +576,7 @@ namespace MelonLoader.Tomlyn.Parsing
             return syntax;
         }
 
-        private T Open<T>(SyntaxTokenValue startToken) where T : SyntaxNode, new()
-        {
-            return Open(new T(), startToken);
-        }
+        private T Open<T>(SyntaxTokenValue startToken) where T : SyntaxNode, new() => Open(new T(), startToken);
 
         private T Close<T>(T syntax) where T : SyntaxNode
         {
@@ -601,20 +590,14 @@ namespace MelonLoader.Tomlyn.Parsing
             return syntax;
         }
 
-        private string ToPrintable(SyntaxTokenValue localToken)
-        {
-            return CharHelper.ToPrintableString(ToText(localToken));
-        }
+        private string ToPrintable(SyntaxTokenValue localToken) =>
+            CharHelper.ToPrintableString(ToText(localToken));
 
-        private string ToText(SyntaxTokenValue localToken)
-        {
-            return localToken.GetText(_lexer.Source);
-        }
+        private string ToText(SyntaxTokenValue localToken) =>
+            localToken.GetText(_lexer.Source);
 
-        private string ToPrintable(SourceSpan span)
-        {
-            return CharHelper.ToPrintableString(_lexer.Source.GetString(span.Offset, span.Length));
-        }
+        private string ToPrintable(SourceSpan span) =>
+            CharHelper.ToPrintableString(_lexer.Source.GetString(span.Offset, span.Length));
 
         private void NextToken()
         {
@@ -623,9 +606,7 @@ namespace MelonLoader.Tomlyn.Parsing
 
             // Skip trivias
             while ((result = _lexer.MoveNext()) && IsHidden(_lexer.Token.Kind))
-            {
                 _currentTrivias.Add(new SyntaxTrivia { Span = new SourceSpan(_lexer.Source.SourcePath, _lexer.Token.Start, _lexer.Token.End), Kind = _lexer.Token.Kind, Text = _lexer.Token.GetText(_lexer.Source) });
-            }
 
             _token = result ? _lexer.Token : new SyntaxTokenValue(TokenKind.Eof, new TextPosition(), new TextPosition());
         }
@@ -635,40 +616,23 @@ namespace MelonLoader.Tomlyn.Parsing
             return tokenKind == TokenKind.Whitespaces || tokenKind == TokenKind.Comment || (tokenKind == TokenKind.NewLine && _hideNewLine);
         }
 
-        private void LogError(string text)
-        {
-            LogError(_token, text);
-        }
-
-        private void LogError(SyntaxTokenValue tokenArg, string text)
-        {
-            LogError(GetSpanForToken(tokenArg), text);
-        }
+        private void LogError(string text) => LogError(_token, text);
+        private void LogError(SyntaxTokenValue tokenArg, string text) => LogError(GetSpanForToken(tokenArg), text);
         
-        //private void LogError<T>(SyntaxValueNode<T> tokenArg, string text)
-        //{
+        //private void LogError<T>(SyntaxValueNode<T> tokenArg, string text) =>
         //    LogError(tokenArg.Token, text);
-        //}
 
-        private SourceSpan GetSpanForToken(SyntaxTokenValue tokenArg)
-        {
-            return new SourceSpan(_lexer.Source.SourcePath, tokenArg.Start, tokenArg.End);
-        }
+        private SourceSpan GetSpanForToken(SyntaxTokenValue tokenArg) =>
+            new SourceSpan(_lexer.Source.SourcePath, tokenArg.Start, tokenArg.End);
 
-        private void LogError(SourceSpan span, string text)
-        {
+        private void LogError(SourceSpan span, string text) =>
             Log(new DiagnosticMessage(DiagnosticMessageKind.Error, span, text));
-        }
 
-        private void LogError(SyntaxNode node, string message)
-        {
+        private void LogError(SyntaxNode node, string message) => 
             LogError(node, node.Span, message);
-        }
 
-        private void LogError(SyntaxNode node, SourceSpan span, string message)
-        {
+        private void LogError(SyntaxNode node, SourceSpan span, string message) =>
             LogError(span, $"Error while parsing {node.GetType().Name}: {message}");
-        }
 
         private void Log(DiagnosticMessage diagnosticMessage)
         {

@@ -102,24 +102,16 @@ namespace MelonLoader.Tomlyn.Helpers
             "HH:mm:ss.fffffff",
         };
 
-        public static bool TryParseOffsetDateTime(string str, out DateTime time)
-        {
-            return DateTime.TryParseExact(str, OffsetDateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
-        }
+        public static bool TryParseOffsetDateTime(string str, out DateTime time) =>
+            DateTime.TryParseExact(str, OffsetDateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
 
-        public static bool TryParseLocalDateTime(string str, out DateTime time)
-        {
-            return DateTime.TryParseExact(str, LocalDateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
-        }
+        public static bool TryParseLocalDateTime(string str, out DateTime time) =>
+            DateTime.TryParseExact(str, LocalDateTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
 
-        public static bool TryParseLocalDate(string str, out DateTime time)
-        {
-            return DateTime.TryParseExact(str, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
-        }
+        public static bool TryParseLocalDate(string str, out DateTime time) =>
+            DateTime.TryParseExact(str, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
 
-        public static bool TryParseLocalTime(string str, out DateTime time)
-        {
-            return DateTime.TryParseExact(str, LocalTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
-        }
+        public static bool TryParseLocalTime(string str, out DateTime time) =>
+            DateTime.TryParseExact(str, LocalTimeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time);
     }
 }

@@ -104,15 +104,9 @@ namespace MelonLoader.Tomlyn.Model
             return ((StringValueSyntax) value).Value;
         }
 
-        public override void Visit(BooleanValueSyntax boolValue)
-        {
-            _currentValue = boolValue.Value;
-        }
+        public override void Visit(BooleanValueSyntax boolValue) => _currentValue = boolValue.Value;
 
-        public override void Visit(StringValueSyntax stringValue)
-        {
-            _currentValue = stringValue.Value;
-        }
+        public override void Visit(StringValueSyntax stringValue) => _currentValue = stringValue.Value;
 
         public override void Visit(DateTimeValueSyntax dateTimeValueSyntax)
         {
@@ -133,15 +127,9 @@ namespace MelonLoader.Tomlyn.Model
             }
         }
 
-        public override void Visit(FloatValueSyntax floatValueSyntax)
-        {
-            _currentValue = floatValueSyntax.Value;
-        }
+        public override void Visit(FloatValueSyntax floatValueSyntax) => _currentValue = floatValueSyntax.Value;
 
-        public override void Visit(IntegerValueSyntax integerValueSyntax)
-        {
-            _currentValue = integerValueSyntax.Value;
-        }
+        public override void Visit(IntegerValueSyntax integerValueSyntax) => _currentValue = integerValueSyntax.Value;
 
         public override void Visit(ArraySyntax array)
         {

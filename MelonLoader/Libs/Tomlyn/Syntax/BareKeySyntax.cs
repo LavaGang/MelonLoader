@@ -16,9 +16,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates a new instance of a <see cref="BareKeySyntax"/>
         /// </summary>
-        public BareKeySyntax() : base(SyntaxKind.BasicKey)
-        {
-        }
+        public BareKeySyntax() : base(SyntaxKind.BasicKey) { }
 
         /// <summary>
         /// Creates a new instance of a <see cref="BareKeySyntax"/>
@@ -41,27 +39,17 @@ namespace MelonLoader.Tomlyn.Syntax
 
         public override int ChildrenCount => 1;
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
 
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Key;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => Key;
         
         public static bool IsBareKey(string name)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (name.Length == 0 || string.IsNullOrEmpty(name)) return false;
             foreach (var c in name)
-            {
                 if (!CharHelper.IsKeyContinue(c))
-                {
                     return false;
-                }
-            }
             return true;
         }
     }

@@ -3,7 +3,6 @@
 // See license.txt file in the project root for full license information.
 using System;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MelonLoader.Tomlyn.Text
@@ -18,45 +17,29 @@ namespace MelonLoader.Tomlyn.Text
         public static readonly Func<char32, int> OctalToDecFunc = OctalToDecimal;
         public static readonly Func<char32, int> BinaryToDecFunc = BinaryToDecimal;
 
-        public static bool IsControlCharacter(char32 c)
-        {
-            return c <= 0x1F || c == 0x7F;
-        }
+        public static bool IsControlCharacter(char32 c) =>
+            c <= 0x1F || c == 0x7F;
 
-        public static bool IsKeyStart(char32 c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '-' || c >= '0' && c <= '9';
-        }
+        public static bool IsKeyStart(char32 c) =>
+            (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '-' || c >= '0' && c <= '9';
 
-        public static bool IsKeyContinue(char32 c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '-' || c >= '0' && c <= '9';
-        }
+        public static bool IsKeyContinue(char32 c) =>
+            (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '-' || c >= '0' && c <= '9';
 
-        public static bool IsIdentifierStart(char32 c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-        }
+        public static bool IsIdentifierStart(char32 c) =>
+            (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 
-        public static bool IsIdentifierContinue(char32 c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-        }
+        public static bool IsIdentifierContinue(char32 c) =>
+            (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 
-        public static bool IsValidUnicodeScalarValue(char32 c)
-        {
-            return c >= 0 && c <= 0xD7FF || c >= 0xE000 && c < 0x10FFFF;
-        }
+        public static bool IsValidUnicodeScalarValue(char32 c) =>
+            c >= 0 && c <= 0xD7FF || c >= 0xE000 && c < 0x10FFFF;
 
-        public static bool IsDigit(char32 c)
-        {
-            return (c >= '0' && c <= '9');
-        }
+        public static bool IsDigit(char32 c) =>
+            (c >= '0' && c <= '9');
 
-        public static bool IsDateTime(char32 c)
-        {
-            return IsDigit(c) || c == ':' || c == '-' || c == 'Z' || c == 'T' || c == 'z' || c == 't' || c == '+' || c == '.';
-        }
+        public static bool IsDateTime(char32 c) =>
+            IsDigit(c) || c == ':' || c == '-' || c == 'Z' || c == 'T' || c == 'z' || c == 't' || c == '+' || c == '.';
 
         /// <summary>
         /// Escape a C# string to a TOML string
@@ -174,19 +157,15 @@ namespace MelonLoader.Tomlyn.Text
                    c == '\t'; // horizontal tab
         }
 
-        public static bool IsWhiteSpaceOrNewLine(char32 c)
-        {
-            return c == ' ' || // space
-                   c == '\t' || // horizontal tab
-                   c == '\r' || // \r
-                   c == '\n'; // \n
-        }
+        public static bool IsWhiteSpaceOrNewLine(char32 c) =>
+            c == ' ' || // space
+            c == '\t' || // horizontal tab
+            c == '\r' || // \r
+            c == '\n'; // \n
 
-        public static bool IsNewLine(char32 c)
-        {
-            return c == '\r' || // \r
-                   c == '\n'; // \n
-        }
+        public static bool IsNewLine(char32 c) =>
+            c == '\r' || // \r
+            c == '\n'; // \n
 
         public static char32? ToUtf8(byte[] buffer, ref int position)
         {
@@ -258,18 +237,12 @@ namespace MelonLoader.Tomlyn.Text
             return c - '0';
         }
 
-        private static bool IsHex(char32 c)
-        {
-            return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-        }
-        private static bool IsOctal(char32 c)
-        {
-            return (c >= '0' && c <= '7');
-        }
-        private static bool IsBinary(char32 c)
-        {
-            return (c == '0' || c == '1');
-        }
+        private static bool IsHex(char32 c) =>
+            (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+        private static bool IsOctal(char32 c) =>
+            (c >= '0' && c <= '7');
+        private static bool IsBinary(char32 c) =>
+            (c == '0' || c == '1');
 
         public static void AppendUtf32(this StringBuilder builder, char32 utf32)
         {

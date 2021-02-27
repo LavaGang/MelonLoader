@@ -18,16 +18,10 @@ namespace MelonLoader.Tomlyn.Text
         public string GetString(int offset, int length)
         {
             if (offset + length <= _text.Length)
-            {
                 return _text.Substring(offset, length);
-            }
             return null;
         }
 
-        public StringCharacterIterator GetIterator()
-        {
-            return new StringCharacterIterator(_text);   
-        }
-
+        public StringCharacterIterator GetIterator() => new StringCharacterIterator(_text);
     }
 }

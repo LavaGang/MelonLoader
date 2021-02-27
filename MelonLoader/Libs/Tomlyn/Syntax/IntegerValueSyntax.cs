@@ -15,9 +15,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an <see cref="IntegerValueSyntax"/>
         /// </summary>
-        public IntegerValueSyntax() : base(SyntaxKind.Integer)
-        {
-        }
+        public IntegerValueSyntax() : base(SyntaxKind.Integer) { }
 
         /// <summary>
         /// Creates an <see cref="IntegerValueSyntax"/> 
@@ -43,15 +41,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public long Value { get; set; }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 1;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Token;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => Token;
     }
 }

@@ -14,44 +14,19 @@ namespace MelonLoader.Tomlyn.Model
     public sealed class TomlArray : TomlObject, IList<object>
     {
         private readonly List<TomlObject> _items;
-
-        public TomlArray() : base(ObjectKind.Array)
-        {
-            _items = new List<TomlObject>();
-        }
-
-        public TomlArray(int capacity) : base(ObjectKind.Array)
-        {
-            _items = new List<TomlObject>(capacity);
-        }
+        public TomlArray() : base(ObjectKind.Array) => _items = new List<TomlObject>();
+        public TomlArray(int capacity) : base(ObjectKind.Array) => _items = new List<TomlObject>(capacity);
 
         public IEnumerator<object> GetEnumerator()
         {
             foreach (var item in _items)
-            {
                 yield return ToObject(item);
-            }
         }
 
-        public IEnumerable<TomlObject> GetTomlEnumerator()
-        {
-            return _items;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Add(object item)
-        {
-            _items.Add(ToTomlObject(item));
-        }
-
-        public void Clear()
-        {
-            _items.Clear();
-        }
+        public IEnumerable<TomlObject> GetTomlEnumerator() => _items;
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public void Add(object item) => _items.Add(ToTomlObject(item));
+        public void Clear() => _items.Clear();
 
         public bool Contains(object item)
         {
@@ -59,10 +34,7 @@ namespace MelonLoader.Tomlyn.Model
             return _items.Contains(toml);
         }
 
-        public void CopyTo(object[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
+        public void CopyTo(object[] array, int arrayIndex) => this[arrayIndex] = array[arrayIndex];
 
         public bool Remove(object item)
         {
@@ -84,10 +56,7 @@ namespace MelonLoader.Tomlyn.Model
             _items.Insert(index, toml);
         }
 
-        public void RemoveAt(int index)
-        {
-            _items.RemoveAt(index);
-        }
+        public void RemoveAt(int index) => _items.RemoveAt(index);
 
         public object this[int index]
         {

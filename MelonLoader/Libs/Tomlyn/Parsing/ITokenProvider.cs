@@ -15,11 +15,8 @@ namespace MelonLoader.Tomlyn.Parsing
         bool HasErrors { get; }
 
         TSourceView Source { get; }
-
         LexerState State { get; set; }
-
         bool MoveNext();
-
         SyntaxTokenValue Token { get; }
 
         /// <summary>

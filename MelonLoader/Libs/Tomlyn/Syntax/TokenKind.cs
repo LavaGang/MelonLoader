@@ -9,13 +9,9 @@ namespace MelonLoader.Tomlyn.Syntax
     public enum TokenKind
     {
         Invalid,
-
         Eof,
-
         Whitespaces,
-
         NewLine,
-
         Comment,
 
         OffsetDateTime,
@@ -24,27 +20,16 @@ namespace MelonLoader.Tomlyn.Syntax
         LocalTime,
 
         Integer,
-
         IntegerHexa,
-
         IntegerOctal,
-
         IntegerBinary,
-
         Float,
-
         String,
-
         StringMulti,
-
         StringLiteral,
-
         StringLiteralMulti,
-
         Comma,
-
         Dot,
-
         Equal,
 
         OpenBracket,

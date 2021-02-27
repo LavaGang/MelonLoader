@@ -6,10 +6,5 @@ namespace MelonLoader.Tomlyn.Syntax
     /// <summary>
     /// Base class for all TOML values.
     /// </summary>
-    public abstract class ValueSyntax : SyntaxNode
-    {
-        internal ValueSyntax(SyntaxKind kind) : base(kind)
-        {
-        }
-    }
+    public abstract class ValueSyntax : SyntaxNode { internal ValueSyntax(SyntaxKind kind) : base(kind) { } }
 }

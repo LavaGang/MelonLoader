@@ -7,9 +7,7 @@ namespace MelonLoader.Tomlyn.Syntax
 {
     public sealed class SyntaxTrivia : SyntaxNodeBase
     {
-        public SyntaxTrivia()
-        {
-        }
+        public SyntaxTrivia() { }
 
         public SyntaxTrivia(TokenKind kind, string text)
         {
@@ -19,12 +17,7 @@ namespace MelonLoader.Tomlyn.Syntax
         }
         
         public TokenKind Kind { get; set; }
-
         public string Text { get; set; }
-
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
     }
 }

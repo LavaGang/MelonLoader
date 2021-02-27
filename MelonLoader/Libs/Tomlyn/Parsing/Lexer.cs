@@ -61,18 +61,12 @@ namespace MelonLoader.Tomlyn.Parsing
         {
             // If we have errors or we are already at the end of the file, we don't continue
             if (_token.Kind == TokenKind.Eof)
-            {
                 return false;
-            }
 
             if (State == LexerState.Key)
-            {
                 NextTokenForKey();
-            }
             else
-            {
                 NextTokenForValue();
-            }
             return true;
         }
 
@@ -1097,9 +1091,7 @@ namespace MelonLoader.Tomlyn.Parsing
         private void AddError(string message, TextPosition start, TextPosition end)
         {
             if (_errors == null)
-            {
                 _errors = new List<DiagnosticMessage>();
-            }
             _errors.Add(new DiagnosticMessage(DiagnosticMessageKind.Error, new SourceSpan(_sourceView.SourcePath, start, end), message));
         }
 

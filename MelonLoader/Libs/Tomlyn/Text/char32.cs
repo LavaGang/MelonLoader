@@ -13,10 +13,7 @@ namespace MelonLoader.Tomlyn.Text
         /// Initializes a new instance of the <see cref="char32"/> UTF-32 character.
         /// </summary>
         /// <param name="code">The UTF-32 code character.</param>
-        public char32(int code)
-        {
-            Code = code;
-        }
+        public char32(int code) => Code = code;
 
         /// <summary>
         /// Gets the UTF-32 code.
@@ -28,24 +25,15 @@ namespace MelonLoader.Tomlyn.Text
         /// </summary>
         /// <param name="c">The c.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator int(char32 c)
-        {
-            return c.Code;
-        }
+        public static implicit operator int(char32 c) => c.Code;
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="System.Int32"/> to <see cref="char32"/>.
         /// </summary>
         /// <param name="c">The c.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator char32(int c)
-        {
-            return new char32(c);
-        }
+        public static implicit operator char32(int c) => new char32(c);
 
-        public override string ToString()
-        {
-            return char.ConvertFromUtf32(Code);
-        }
+        public override string ToString() => char.ConvertFromUtf32(Code);
     }
 }

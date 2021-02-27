@@ -9,10 +9,8 @@ namespace MelonLoader.Tomlyn.Text
     {
         private readonly string _text;
 
-        public StringCharacterIterator(string text)
-        {
-            this._text = text;
-        }
+        public StringCharacterIterator(string text) =>
+            _text = text;
 
         public int Start => 0;
 
