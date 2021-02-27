@@ -4,6 +4,7 @@
 #include "../Core.h"
 #include "AssemblyGenerator.h"
 #include "../Managers/BaseAssembly.h"
+#include "../Utils/Encoding.h"
 #include <wincrypt.h>
 #include "Assertion.h"
 #include "Logger.h"
@@ -31,9 +32,9 @@ bool HashCode::SetupPaths()
         Assertion::ThrowInternalFailure("MelonLoader.dll Does Not Exist!");
         return false;
     }
-    BaseAssembly::Path = new char[BaseAssemblyPath.size() + 1];
-    std::copy(BaseAssemblyPath.begin(), BaseAssemblyPath.end(), BaseAssembly::Path);
-    BaseAssembly::Path[BaseAssemblyPath.size()] = '\0';
+    BaseAssembly::PathMono = new char[BaseAssemblyPath.size() + 1];
+    std::copy(BaseAssemblyPath.begin(), BaseAssemblyPath.end(), BaseAssembly::PathMono);
+    BaseAssembly::PathMono[BaseAssemblyPath.size()] = '\0';
 
     if (!Game::IsIl2Cpp)
         return true;
@@ -43,11 +44,18 @@ bool HashCode::SetupPaths()
         Assertion::ThrowInternalFailure("AssemblyGenerator.dll Does Not Exist!");
         return false;
     }
-    AssemblyGenerator::Path = new char[AssemblyGeneratorPath.size() + 1];
-    std::copy(AssemblyGeneratorPath.begin(), AssemblyGeneratorPath.end(), AssemblyGenerator::Path);
-    AssemblyGenerator::Path[AssemblyGeneratorPath.size()] = '\0';
+    AssemblyGenerator::PathMono = new char[AssemblyGeneratorPath.size() + 1];
+    std::copy(AssemblyGeneratorPath.begin(), AssemblyGeneratorPath.end(), AssemblyGenerator::PathMono);
+    AssemblyGenerator::PathMono[AssemblyGeneratorPath.size()] = '\0';
 
-	return true;
+#define TO_UTF8(s) ((s) = Encoding::OsToUtf8((s)))
+    
+    TO_UTF8(AssemblyGenerator::PathMono);
+    TO_UTF8(BaseAssembly::PathMono);
+
+#undef TO_UTF8
+
+    return true;
 }
 
 bool HashCode::GenerateHash(const char* path)

@@ -4,7 +4,7 @@
 class AssemblyGenerator
 {
 public:
-    static char* Path;
+    static char* PathMono;
     static bool ForceRegeneration;
     static char* ForceVersion_UnityDependencies;
     static char* ForceVersion_Dumper;

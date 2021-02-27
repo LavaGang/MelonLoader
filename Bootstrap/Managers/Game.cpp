@@ -7,11 +7,15 @@
 #include "Il2Cpp.h"
 #include "../Utils/Assertion.h"
 #include "../Utils/Logger.h"
+#include "../Utils/Encoding.h"
 #pragma comment(lib,"version.lib")
 
 char* Game::ApplicationPath = NULL;
 char* Game::BasePath = NULL;
 char* Game::DataPath = NULL;
+char* Game::ApplicationPathMono = NULL;
+char* Game::BasePathMono = NULL;
+char* Game::DataPathMono = NULL;
 char* Game::Developer = NULL;
 char* Game::Name = NULL;
 char* Game::UnityVersion = NULL;
@@ -33,6 +37,8 @@ bool Game::Initialize()
 		Il2Cpp::GameAssemblyPath = new char[GameAssemblyPath.size() + 1];
 		std::copy(GameAssemblyPath.begin(), GameAssemblyPath.end(), Il2Cpp::GameAssemblyPath);
 		Il2Cpp::GameAssemblyPath[GameAssemblyPath.size()] = '\0';
+
+		Il2Cpp::GameAssemblyPathMono = Encoding::OsToUtf8(Il2Cpp::GameAssemblyPath);
 	}
 	Il2Cpp::UnityPlayerPath = new char[UnityPlayerPath.size() + 1];
 	std::copy(UnityPlayerPath.begin(), UnityPlayerPath.end(), Il2Cpp::UnityPlayerPath);
@@ -61,6 +67,12 @@ bool Game::SetupPaths()
 	DataPath = new char[DataPathStr.size() + 1];
 	std::copy(DataPathStr.begin(), DataPathStr.end(), DataPath);
 	DataPath[DataPathStr.size()] = '\0';
+
+#define MONO_STR(s) ((s ## Mono) = Encoding::OsToUtf8((s)))
+	MONO_STR(ApplicationPath);
+	MONO_STR(BasePath);
+	MONO_STR(DataPath);
+#undef MONO_STR
 
 	return true;
 }

@@ -5,6 +5,7 @@
 #include "..\Utils\Assertion.h"
 #include "..\Utils\CommandLine.h"
 #include "..\Utils\Debug.h"
+#include "..\Utils\Encoding.h"
 #include "..\Core.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
@@ -15,8 +16,10 @@ const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mon
 const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
+char* Mono::ManagedPathMono = NULL;
 char* Mono::ConfigPath = NULL;
-char* Mono::MonoConfigPath = NULL;
+char* Mono::ConfigPathMono = NULL;
+char* Mono::MonoConfigPathMono = NULL;
 HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
 Mono::Domain* Mono::domain = NULL;
@@ -143,6 +146,7 @@ bool Mono::SetupPaths()
 		Assertion::ThrowInternalFailure("Failed to Find Mono Directory!");
 		return false;
 	}
+#define MONO_STR(s) ((s ## Mono) = Encoding::OsToUtf8((s)))
 
 	if (Game::IsIl2Cpp)
 	{
@@ -161,9 +165,14 @@ bool Mono::SetupPaths()
 		ConfigPath[ConfigPathStr.size()] = '\0';
 
 		std::string MonoConfigPathStr = (MonoDir + "\\etc");
-		MonoConfigPath = new char[MonoConfigPathStr.size() + 1];
-		std::copy(MonoConfigPathStr.begin(), MonoConfigPathStr.end(), MonoConfigPath);
-		MonoConfigPath[MonoConfigPathStr.size()] = '\0';
+		MonoConfigPathMono = new char[MonoConfigPathStr.size() + 1];
+		std::copy(MonoConfigPathStr.begin(), MonoConfigPathStr.end(), MonoConfigPathMono);
+		MonoConfigPathMono[MonoConfigPathStr.size()] = '\0';
+
+		MonoConfigPathMono = Encoding::OsToUtf8(MonoConfigPathMono);
+
+		MONO_STR(ManagedPath);
+		MONO_STR(ConfigPath);
 
 		return true;
 	}
@@ -185,8 +194,12 @@ bool Mono::SetupPaths()
 	std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 	ConfigPath[ConfigPathStr.size()] = '\0';
 
-	MonoConfigPath = ConfigPath;
+	MonoConfigPathMono = Encoding::OsToUtf8(ConfigPath);
 
+	MONO_STR(ManagedPath);
+	MONO_STR(ConfigPath);
+
+#undef MONO_STR
 	return true;
 }
 
@@ -195,15 +208,19 @@ void Mono::CreateDomain(const char* name)
 	if (domain != NULL)
 		return;
 	Debug::Msg("Creating Mono Domain...");
-	Exports::mono_set_assemblies_path(ManagedPath);
-	Exports::mono_assembly_setrootdir(ManagedPath);
-	Exports::mono_set_config_dir(MonoConfigPath);
-	if (!IsOldMono)
-		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
+	Exports::mono_set_assemblies_path(ManagedPathMono);
+	Exports::mono_assembly_setrootdir(ManagedPathMono);
+	Exports::mono_set_config_dir(MonoConfigPathMono);
+	if (!IsOldMono) {
+		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argvMono);
+	}
 	domain = Exports::mono_jit_init(name);
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
 	if (!IsOldMono)
-		Exports::mono_domain_set_config(domain, Game::BasePath, name);
+	{
+		Debug::Msg("Setting Mono Domain Config...");
+		Exports::mono_domain_set_config(domain, Game::BasePathMono, name);
+	}
 }
 
 void Mono::AddInternalCall(const char* name, void* method)
@@ -253,7 +270,7 @@ bool Mono::Exports::Initialize()
 	else
 		MONODEF(g_free)
 
-	if (Game::IsIl2Cpp) 
+	if (Game::IsIl2Cpp)
 	{
 		MONODEF(mono_set_assemblies_path)
 		MONODEF(mono_assembly_setrootdir)
@@ -313,7 +330,7 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 	domain = Exports::mono_jit_init_version(name, version);
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
 	if (!IsOldMono)
-		Exports::mono_domain_set_config(domain, Game::BasePath, name);
+		Exports::mono_domain_set_config(domain, Game::BasePathMono, name);
 	InternalCalls::Initialize();
 	if (BaseAssembly::Initialize())
 	{

@@ -7,6 +7,9 @@ public:
 	static char* ApplicationPath;
 	static char* BasePath;
 	static char* DataPath;
+	static char* ApplicationPathMono;
+	static char* BasePathMono;
+	static char* DataPathMono;
 	static char* Developer;
 	static char* Name;
 	static char* UnityVersion;

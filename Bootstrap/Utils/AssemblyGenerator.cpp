@@ -10,7 +10,7 @@
 #include "HashCode.h"
 
 bool AssemblyGenerator::ForceRegeneration = false;
-char* AssemblyGenerator::Path = NULL;
+char* AssemblyGenerator::PathMono = NULL;
 char* AssemblyGenerator::ForceVersion_UnityDependencies = NULL;
 char* AssemblyGenerator::ForceVersion_Dumper = NULL;
 char* AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = NULL;
@@ -28,7 +28,7 @@ bool AssemblyGenerator::Initialize()
 	Console::DisableCloseButton();
 	Debug::Msg("Initializing Assembly Generator...");
 
-	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, Path);
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PathMono);
 	if (assembly == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Open Assembly Generator!");
