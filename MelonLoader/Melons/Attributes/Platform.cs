@@ -2,7 +2,7 @@
 
 namespace MelonLoader
 {
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Assembly)]
     public class MelonPlatformAttribute : Attribute
     {
         public MelonPlatformAttribute(CompatiblePlatforms platform = CompatiblePlatforms.UNIVERSAL) => Platform = platform;
