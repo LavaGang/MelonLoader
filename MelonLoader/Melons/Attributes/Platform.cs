@@ -14,7 +14,7 @@ namespace MelonLoader
         {
             UNIVERSAL,
             WINDOWS,
-            // ANDROID_and_QUEST,
+            // ANDROID_and_OCULUS_QUEST,
             // LINUX,
             // MACOS,
         };
