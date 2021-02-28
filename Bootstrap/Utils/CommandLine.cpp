@@ -9,28 +9,22 @@
 #include "../Managers/Game.h"
 
 int CommandLine::argc = NULL;
-char* CommandLine::argv[64];
-char* CommandLine::argvMono[64];
+char** CommandLine::argvMono;
 IniFile* CommandLine::iniFile = NULL;
 
 void CommandLine::Read()
 {
 	ReadIniFile();
-	char* nextchar = NULL;
-	char* curchar = strtok_s(GetCommandLineA(), " ", &nextchar);
-	while (curchar && (argc < 63))
-	{
-		argvMono[argc] = Encoding::OsToUtf8(curchar);
-		argv[argc++] = curchar;
-		curchar = strtok_s(0, " ", &nextchar);
-	}
-	argv[argc] = 0;
-	argvMono[argc] = 0;
+
+	argc = __argc;
+	char** argv = __argv;
 	if (argc <= 0)
 		return;
+	argvMono = (char**)malloc(sizeof(argv[0]) * argc);
 	for (int i = 0; i < argc; i++)
 	{
 		const char* command = argv[i];
+		argvMono[i] = Encoding::OsToUtf8(command);
 		if (command == NULL)
 			continue;
 
