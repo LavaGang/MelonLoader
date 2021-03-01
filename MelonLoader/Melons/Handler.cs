@@ -132,7 +132,7 @@ namespace MelonLoader
                         MelonLogger.Warning("Duplicate File: " + filename);
                         continue;
                     }
-                    LoadFromFile(filename);
+                    LoadFromFile(filename, plugins);
                 }
 
             // ZIPs
@@ -174,7 +174,7 @@ namespace MelonLoader
                                         else
                                             break;
                                     }
-                                    LoadFromByteArray(memorystream.ToArray(), (filename + "/" + filename2));
+                                    LoadFromByteArray(memorystream.ToArray(), (filename + "/" + filename2), plugins);
                                 }
                             }
                         }
@@ -194,7 +194,7 @@ namespace MelonLoader
             return (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
         }
 
-        public static void LoadFromFile(string filepath)
+        public static void LoadFromFile(string filepath, bool is_plugin = false)
         {
             if (string.IsNullOrEmpty(filepath))
                 return;
@@ -211,12 +211,12 @@ namespace MelonLoader
                     MelonLogger.Error("Failed to Load Assembly for " + filepath + ": Assembly.LoadFrom returned null"); ;
                     return;
                 }
-                LoadFromAssembly(asm, filepath);
+                LoadFromAssembly(asm, filepath, is_plugin);
             }
             catch (Exception ex) { MelonLogger.Error("Failed to Load Assembly for " + filepath + ": " + ex.ToString()); }
         }
 
-        public static void LoadFromByteArray(byte[] filedata, string filelocation = null)
+        public static void LoadFromByteArray(byte[] filedata, string filelocation = null, bool is_plugin = false)
         {
             if ((filedata == null) || (filedata.Length <= 0))
                 return;
@@ -234,7 +234,7 @@ namespace MelonLoader
                         MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": Assembly.Load returned null");
                     return;
                 }
-                LoadFromAssembly(asm, filelocation);
+                LoadFromAssembly(asm, filelocation, is_plugin);
             }
             catch (Exception ex)
             {
@@ -245,45 +245,46 @@ namespace MelonLoader
             }
         }
 
-        public static void LoadFromAssembly(Assembly asm, string filelocation = null)
+        public static void LoadFromAssembly(Assembly asm, string filelocation = null, bool is_plugin = false)
         {
             if (asm == null)
                 return;
+            if (string.IsNullOrEmpty(filelocation))
+                filelocation = asm.GetName().Name;
+
             MelonInfoAttribute infoAttribute = PullCustomAttributeFromAssembly<MelonInfoAttribute>(asm);
             if (infoAttribute == null) // Legacy Support
                 infoAttribute = PullCustomAttributeFromAssembly<MelonModInfoAttribute>(asm)?.Convert();
             if (infoAttribute == null) // Legacy Support
                 infoAttribute = PullCustomAttributeFromAssembly<MelonPluginInfoAttribute>(asm)?.Convert();
-            if (infoAttribute == null)
+            if ((infoAttribute == null) || (infoAttribute.SystemType == null))
             {
-                MelonLogger.Error("No MelonInfoAttribute Found in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                MelonLogger.Error($"No {((infoAttribute == null) ? "MelonInfoAttribute Found" : "Type given to MelonInfoAttribute")} in {filelocation}");
                 return;
             }
-            if (infoAttribute.SystemType == null)
+
+            bool is_plugin_subclass = infoAttribute.SystemType.IsSubclassOf(typeof(MelonPlugin));
+            bool is_mod_subclass = infoAttribute.SystemType.IsSubclassOf(typeof(MelonMod));
+            if (!is_plugin_subclass && !is_mod_subclass)
             {
-                MelonLogger.Error("Invalid Type given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                MelonLogger.Error($"Type Specified {infoAttribute.SystemType.AssemblyQualifiedName} is not a Subclass of MelonPlugin or MelonMod in {filelocation}");
                 return;
             }
-            bool is_plugin = infoAttribute.SystemType.IsSubclassOf(typeof(MelonPlugin));
-            bool is_mod = infoAttribute.SystemType.IsSubclassOf(typeof(MelonMod));
-            if (!is_plugin && !is_mod)
+
+            bool plugin_expected_got_mod = (is_plugin && is_mod_subclass);
+            bool mod_expected_got_plugin = (!is_plugin && is_plugin_subclass);
+            if (plugin_expected_got_mod || mod_expected_got_plugin)
             {
-                MelonLogger.Error("Invalid Type given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                MelonLogger.Error($"{(plugin_expected_got_mod ? "Plugin" : "Mod")} Expected, Got {(plugin_expected_got_mod ? "Mod" : "Plugin")} {infoAttribute.SystemType.AssemblyQualifiedName} in {filelocation}");
                 return;
             }
-            if (string.IsNullOrEmpty(infoAttribute.Name))
+
+            bool nullcheck_name = string.IsNullOrEmpty(infoAttribute.Name);
+            bool nullcheck_version = string.IsNullOrEmpty(infoAttribute.Version);
+            bool nullcheck_author = string.IsNullOrEmpty(infoAttribute.Author);
+            if (nullcheck_name || nullcheck_version || nullcheck_author)
             {
-                MelonLogger.Error("Invalid Name given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
-                return;
-            }
-            if (string.IsNullOrEmpty(infoAttribute.Version))
-            {
-                MelonLogger.Error("Invalid Version given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
-                return;
-            }
-            if (string.IsNullOrEmpty(infoAttribute.Author))
-            {
-                MelonLogger.Error("Invalid Author given to MelonInfoAttribute in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : (nullcheck_author ? "Author" : "")))} given to MelonInfoAttribute in {filelocation}");
                 return;
             }
 
@@ -302,9 +303,7 @@ namespace MelonLoader
                 foreach (MelonPluginGameAttribute legacyatt in legacyplugingameAttributes)
                     gameAttributes.Add(legacyatt.Convert());
 
-            if (gameAttributes.Count <= 0)
-                MelonLogger.Warning("No MelonGameAttribute Found in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
-            else
+            if (!MelonUtils.CurrentGameAttribute.Universal && (gameAttributes.Count > 0))
             {
                 bool is_compatible = false;
                 for (int i = 0; i < gameAttributes.Count; i++)
@@ -320,7 +319,43 @@ namespace MelonLoader
                 }
                 if (!is_compatible)
                 {
-                    MelonLogger.Error("Incompatible " + (is_plugin ? "Plugin" : "Mod") + " in " + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                    MelonLogger.Error($"Incompatible Game for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
+                    return;
+                }
+            }
+
+            MelonPlatformAttribute platformAttribute = PullCustomAttributeFromAssembly<MelonPlatformAttribute>(asm);
+            if ((platformAttribute != null)
+                && (platformAttribute.Platforms.Length > 0))
+            {
+                bool is_compatible = false;
+                for (int i = 0; i < platformAttribute.Platforms.Length; i++)
+                {
+                    MelonPlatformAttribute.CompatiblePlatforms platform = platformAttribute.Platforms[i];
+                    if ((platform == MelonPlatformAttribute.CompatiblePlatforms.UNIVERSAL)
+                        || (MelonUtils.IsGame32Bit() && (platform == MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86))
+                        || (!MelonUtils.IsGame32Bit() && (platform == MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)))
+                    {
+                        is_compatible = true;
+                        break;
+                    }
+                }
+                if (!is_compatible)
+                {
+                    MelonLogger.Error($"Incompatible Platform for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
+                    return;
+                }
+            }
+
+            MelonPlatformDomainAttribute platformDomainAttribute = PullCustomAttributeFromAssembly<MelonPlatformDomainAttribute>(asm);
+            if ((platformDomainAttribute != null)
+                && (platformDomainAttribute.Domain != MelonPlatformDomainAttribute.CompatibleDomains.UNIVERSAL))
+            {
+                bool is_il2cpp_expected_mono = (MelonUtils.IsGameIl2Cpp() && (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.MONO));
+                bool is_mono_expected_il2cpp = (!MelonUtils.IsGameIl2Cpp() && (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP));
+                if (is_il2cpp_expected_mono || is_mono_expected_il2cpp)
+                {
+                    MelonLogger.Error($"Incompatible Platform Domain for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
                     return;
                 }
             }
@@ -328,38 +363,34 @@ namespace MelonLoader
             MelonBase baseInstance = Activator.CreateInstance(infoAttribute.SystemType) as MelonBase;
             if (baseInstance == null)
             {
-                MelonLogger.Error("Failed to Create Instance for" + ((filelocation != null) ? filelocation : asm.GetName().Name) + "!");
+                MelonLogger.Error($"Failed to Create Instance for {filelocation}");
                 return;
             }
 
-            int priority = 0;
-            MelonPriorityAttribute priorityatt = PullCustomAttributeFromAssembly<MelonPriorityAttribute>(asm);
-            if (priorityatt != null)
-                priority = priorityatt.Priority;
-
-            ConsoleColor color = MelonLogger.DefaultMelonColor;
-            MelonColorAttribute coloratt = PullCustomAttributeFromAssembly<MelonColorAttribute>(asm);
-            if (coloratt != null)
-                color = coloratt.Color;
-
             baseInstance.Info = infoAttribute;
             baseInstance.Games = gameAttributes.ToArray();
-            baseInstance.ConsoleColor = color;
+
+            MelonColorAttribute coloratt = PullCustomAttributeFromAssembly<MelonColorAttribute>(asm);
+            baseInstance.ConsoleColor = ((coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color);
+
+            MelonPriorityAttribute priorityatt = PullCustomAttributeFromAssembly<MelonPriorityAttribute>(asm);
+            baseInstance.Priority = ((priorityatt == null) ? 0 : priorityatt.Priority);
+
             baseInstance.OptionalDependencies = PullCustomAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm);
             baseInstance.Location = filelocation;
-            baseInstance.Priority = priority;
             baseInstance.Assembly = asm;
             baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
+
             if (is_plugin)
                 _Plugins.Add((MelonPlugin)baseInstance);
-            else if (is_mod)
+            else
                 _Mods.Add((MelonMod)baseInstance);
-            try {
-                baseInstance.Harmony.PatchAll(asm);
-            } catch (Exception) {
+            try { baseInstance.Harmony.PatchAll(asm); }
+            catch (Exception)
+            {
                 if (is_plugin)
                     _Plugins.Remove((MelonPlugin)baseInstance);
-                else if (is_mod)
+                else
                     _Mods.Remove((MelonMod)baseInstance);
                 throw;
             }

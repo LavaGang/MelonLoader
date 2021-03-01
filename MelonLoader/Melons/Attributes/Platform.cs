@@ -5,7 +5,7 @@ namespace MelonLoader
     [AttributeUsage(AttributeTargets.Assembly)]
     public class MelonPlatformAttribute : Attribute
     {
-        public MelonPlatformAttribute(CompatiblePlatforms platform = CompatiblePlatforms.UNIVERSAL) => Platform = platform;
+        public MelonPlatformAttribute(params CompatiblePlatforms[] platforms) => Platforms = platforms;
 
         // <summary>
         /// Enum for Melon Platform Compatibility.
@@ -13,15 +13,13 @@ namespace MelonLoader
         public enum CompatiblePlatforms
         {
             UNIVERSAL,
-            WINDOWS,
-            // ANDROID_and_OCULUS_QUEST,
-            // LINUX,
-            // MACOS,
+            WINDOWS_X86,
+            WINDOWS_X64
         };
 
         /// <summary>
-        /// Platform Compatibility of the Melon.
+        /// Platforms Compatible with the Melon.
         /// </summary>
-        public CompatiblePlatforms Platform { get; internal set; }
+        public CompatiblePlatforms[] Platforms { get; internal set; }
     }
 }

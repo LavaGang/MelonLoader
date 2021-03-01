@@ -62,7 +62,7 @@
 37. Fixed Issue with HostName Check in Analytics Blocker.
 38. Fixed Issue with HarmonyInstance.Unpatch not doing a proper null check.
 39. Proxy will now have an Error Popup when it has an Invalid File Name.
-40. Updated Il2CppDumper to v6.4.22.
+40. Updated Il2CppDumper to v6.5.0.
 41. Added Object Oriented File System for MelonPreferences.
 42. Added MelonPreferences_Category.SetFilePath.
 43. Added MelonPreferences_Category.ResetFilePath.
@@ -78,6 +78,9 @@
 53. Removed MelonBase.Compatibility.
 54. Added MelonPlatform Attribute.
 55. Added MelonPlatformDomain Attribute.
+56. Added Proper Check for if MelonPlugin or MelonMod is Incorrectly Loaded.
+57. Implemented MelonPlatform Attribute Check.
+58. Implemented MelonPlatformDomain Attribute Check.
 
 ---
 

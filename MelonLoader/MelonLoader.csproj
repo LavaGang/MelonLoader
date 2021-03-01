@@ -115,6 +115,7 @@
     <Compile Include="Libs\Tomlyn\Text\StringUtf8SourceView.cs" />
     <Compile Include="Libs\Tomlyn\Toml.cs" />
     <Compile Include="Libs\Tomlyn\TomlParserOptions.cs" />
+    <Compile Include="Melons\Attributes\AdditionalDependencies.cs" />
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
     <Compile Include="Melons\Attributes\Platform.cs" />
