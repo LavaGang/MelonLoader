@@ -97,11 +97,9 @@ namespace MelonLoader
         private static string GetMelonHash(MelonBase melonBase)
         {
             byte[] byteHash = sha256.ComputeHash(File.ReadAllBytes(melonBase.Location));
-
             string finalHash = string.Empty;
             foreach (byte b in byteHash)
                 finalHash += b.ToString("x2");
-
             return finalHash;
         }
         
@@ -253,10 +251,13 @@ namespace MelonLoader
                 filelocation = asm.GetName().Name;
 
             MelonInfoAttribute infoAttribute = PullCustomAttributeFromAssembly<MelonInfoAttribute>(asm);
-            if (infoAttribute == null) // Legacy Support
+
+            // Legacy Support
+            if (infoAttribute == null)
                 infoAttribute = PullCustomAttributeFromAssembly<MelonModInfoAttribute>(asm)?.Convert();
-            if (infoAttribute == null) // Legacy Support
+            if (infoAttribute == null)
                 infoAttribute = PullCustomAttributeFromAssembly<MelonPluginInfoAttribute>(asm)?.Convert();
+
             if ((infoAttribute == null) || (infoAttribute.SystemType == null))
             {
                 MelonLogger.Error($"No {((infoAttribute == null) ? "MelonInfoAttribute Found" : "Type given to MelonInfoAttribute")} in {filelocation}");
@@ -293,11 +294,11 @@ namespace MelonLoader
             if ((gameatt != null) && (gameatt.Length > 0))
                 gameAttributes.AddRange(gameatt);
 
+            // Legacy Support
             MelonModGameAttribute[] legacymodgameAttributes = PullCustomAttributesFromAssembly<MelonModGameAttribute>(asm);
             if ((legacymodgameAttributes != null) && (legacymodgameAttributes.Length > 0))
                 foreach (MelonModGameAttribute legacyatt in legacymodgameAttributes)
                     gameAttributes.Add(legacyatt.Convert());
-
             MelonPluginGameAttribute[] legacyplugingameAttributes = PullCustomAttributesFromAssembly<MelonPluginGameAttribute>(asm);
             if ((legacyplugingameAttributes != null) && (legacyplugingameAttributes.Length > 0))
                 foreach (MelonPluginGameAttribute legacyatt in legacyplugingameAttributes)
