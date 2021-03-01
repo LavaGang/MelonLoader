@@ -4,71 +4,74 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace MelonLoader {
-	internal class DependencyGraph<T> where T : MelonBase {
-
-		public static void TopologicalSort(IList<T> modsOrPlugins) {
-			if (modsOrPlugins.Count <= 0)
+namespace MelonLoader
+{
+	internal class DependencyGraph<T> where T : MelonBase
+	{
+		public static void TopologicalSort(IList<T> melons)
+		{
+			if (melons.Count <= 0)
 				return;
-			DependencyGraph<T> dependencyGraph = new DependencyGraph<T>(modsOrPlugins);
-			modsOrPlugins.Clear();
-			dependencyGraph.TopologicalSortInto(modsOrPlugins);
+			DependencyGraph<T> dependencyGraph = new DependencyGraph<T>(melons);
+			melons.Clear();
+			dependencyGraph.TopologicalSortInto(melons);
 		}
 
 		private readonly Vertex[] vertices;
 
-		private DependencyGraph(IList<T> mods)
+		private DependencyGraph(IList<T> melons)
 		{
-			int size = mods.Count;
+			int size = melons.Count;
 			vertices = new Vertex[size];
 			IDictionary<string, Vertex> nameLookup = new Dictionary<string, Vertex>(size);
 
-			// Create a vertex in the dependency graph for each mod to load
+			// Create a vertex in the dependency graph for each Melon to load
 			for (int i = 0; i < size; ++i)
 			{
-				Assembly modAssembly = mods[i].Assembly;
-				string modName = mods[i].Info.Name;
+				Assembly melonAssembly = melons[i].Assembly;
+				string melonName = melons[i].Info.Name;
 
-				Vertex modVertex = new Vertex(i, mods[i], modName);
-				vertices[i] = modVertex;
-				nameLookup[modAssembly.GetName().Name] = modVertex;
+				Vertex melonVertex = new Vertex(i, melons[i], melonName);
+				vertices[i] = melonVertex;
+				nameLookup[melonAssembly.GetName().Name] = melonVertex;
 			}
 
-			// Add an edge for each dependency between mods
-			IDictionary<string, IList<AssemblyName>> modsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
-			IDictionary<string, IList<AssemblyName>> modsWithIncompatibilities = new SortedDictionary<string, IList<AssemblyName>>();
+			// Add an edge for each dependency between Melons
+			IDictionary<string, IList<AssemblyName>> melonsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
+			IDictionary<string, IList<AssemblyName>> melonsWithIncompatibilities = new SortedDictionary<string, IList<AssemblyName>>();
 			List<AssemblyName> missingDependencies = new List<AssemblyName>();
 			List<AssemblyName> incompatibilities = new List<AssemblyName>();
 			HashSet<string> optionalDependencies = new HashSet<string>();
 			HashSet<string> additionalDependencies = new HashSet<string>();
 
-			foreach (Vertex modVertex in vertices)
+			foreach (Vertex melonVertex in vertices)
 			{
-				Assembly modAssembly = modVertex.mod.Assembly;
+				Assembly melonAssembly = melonVertex.melon.Assembly;
 				missingDependencies.Clear();
 				optionalDependencies.Clear();
 				incompatibilities.Clear();
 				additionalDependencies.Clear();
 
-				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonOptionalDependenciesAttribute));
+				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute)Attribute.GetCustomAttribute(melonAssembly, typeof(MelonOptionalDependenciesAttribute));
 				if ((optionals != null)
 					&& (optionals.AssemblyNames != null))
 					optionalDependencies.UnionWith(optionals.AssemblyNames);
 
-				MelonAdditionalDependenciesAttribute additionals = (MelonAdditionalDependenciesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonAdditionalDependenciesAttribute));
+				MelonAdditionalDependenciesAttribute additionals = (MelonAdditionalDependenciesAttribute)Attribute.GetCustomAttribute(melonAssembly, typeof(MelonAdditionalDependenciesAttribute));
 				if ((additionals != null)
 					&& (additionals.AssemblyNames != null))
 					additionalDependencies.UnionWith(additionals.AssemblyNames);
 
-				MelonIncompatibleAssembliesAttribute incompatibleAssemblies = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleAssembliesAttribute));
+				MelonIncompatibleAssembliesAttribute incompatibleAssemblies = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(melonAssembly, typeof(MelonIncompatibleAssembliesAttribute));
 				if ((incompatibleAssemblies != null)
 					&& (incompatibleAssemblies.AssemblyNames != null))
                 {
                     foreach (string name in incompatibleAssemblies.AssemblyNames)
                         foreach (Vertex v in vertices)
                         {
-							AssemblyName assemblyName = v.mod.Assembly.GetName();
-							if (v != modVertex && assemblyName.Name == name)
+							AssemblyName assemblyName = v.melon.Assembly.GetName();
+							if ((v != melonVertex)
+								&& (assemblyName.Name == name))
                             {
 								incompatibilities.Add(assemblyName);
 								v.skipLoading = true;
@@ -76,12 +79,12 @@ namespace MelonLoader {
 						}
                 }
 
-				foreach (AssemblyName dependency in modAssembly.GetReferencedAssemblies())
+				foreach (AssemblyName dependency in melonAssembly.GetReferencedAssemblies())
 				{
 					if (nameLookup.TryGetValue(dependency.Name, out Vertex dependencyVertex))
 					{
-						modVertex.dependencies.Add(dependencyVertex);
-						dependencyVertex.dependents.Add(modVertex);
+						melonVertex.dependencies.Add(dependencyVertex);
+						dependencyVertex.dependents.Add(melonVertex);
 					}
 					else if (!TryLoad(dependency) && !optionalDependencies.Contains(dependency.Name))
 						missingDependencies.Add(dependency);
@@ -92,8 +95,8 @@ namespace MelonLoader {
 					AssemblyName dependency = new AssemblyName(dependencyName);
 					if (nameLookup.TryGetValue(dependencyName, out Vertex dependencyVertex))
 					{
-						modVertex.dependencies.Add(dependencyVertex);
-						dependencyVertex.dependents.Add(modVertex);
+						melonVertex.dependencies.Add(dependencyVertex);
+						dependencyVertex.dependents.Add(melonVertex);
 					}
 					else if (!TryLoad(dependency))
 						missingDependencies.Add(dependency);
@@ -101,57 +104,60 @@ namespace MelonLoader {
 
 				if (missingDependencies.Count > 0)
 				{
-					// modVertex.skipLoading = true;
-					modsWithMissingDeps.Add(modVertex.mod.Info.Name, missingDependencies.ToArray());
+					// melonVertex.skipLoading = true;
+					melonsWithMissingDeps.Add(melonVertex.melon.Info.Name, missingDependencies.ToArray());
 				}
 
 				if (incompatibilities.Count > 0)
-					modsWithIncompatibilities.Add(modVertex.mod.Info.Name, incompatibilities.ToArray());
+					melonsWithIncompatibilities.Add(melonVertex.melon.Info.Name, incompatibilities.ToArray());
 			}
 
-			// Some mods are missing dependencies. Don't load these mods and show an error message
-			if (modsWithMissingDeps.Count > 0)
-				MelonLogger.Warning(BuildMissingDependencyMessage(modsWithMissingDeps)); 
+			// Some Melons are missing dependencies. Don't load these Melons and show an error message
+			if (melonsWithMissingDeps.Count > 0)
+				MelonLogger.Warning(BuildMissingDependencyMessage(melonsWithMissingDeps)); 
 
-			if(modsWithIncompatibilities.Count > 0)
-				MelonLogger.Warning(BuildIncompatibleAssembliesMessage(modsWithIncompatibilities));
+			if(melonsWithIncompatibilities.Count > 0)
+				MelonLogger.Warning(BuildIncompatibleAssembliesMessage(melonsWithIncompatibilities));
 		}
 
 		// Returns true if 'assembly' was already loaded or could be loaded, false if the required assembly was missing.
-		private static bool TryLoad(AssemblyName assembly) {
-			try {
+		private static bool TryLoad(AssemblyName assembly)
+		{
+			try
+			{
 				Assembly.Load(assembly);
 				return true;
-			} catch (FileNotFoundException) {
-				return false;
-			} catch (Exception ex) {
-				MelonLogger.Error("Loading mod dependency failed: " + ex);
+			}
+			catch (FileNotFoundException) { return false; }
+			catch (Exception ex)
+			{
+				MelonLogger.Error("Loading Melon Dependency Failed: " + ex);
 				return false;
 			}
 		}
 
-		private static string BuildMissingDependencyMessage(IDictionary<string, IList<AssemblyName>> modsWithMissingDeps) {
-			StringBuilder messageBuilder = new StringBuilder("Some mods are missing dependencies, which you may have to install.\n" +
+		private static string BuildMissingDependencyMessage(IDictionary<string, IList<AssemblyName>> melonsWithMissingDeps) {
+			StringBuilder messageBuilder = new StringBuilder("Some Melons are missing dependencies, which you may have to install.\n" +
 				"If these are optional dependencies, mark them as optional using the MelonOptionalDependencies attribute.\n" +
-				"This warning will turn into an error and mods with missing dependencies will not be loaded in the next version of MelonLoader.\n");
-			foreach (string modName in modsWithMissingDeps.Keys) {
-				messageBuilder.Append($"- '{modName}' is missing the following dependencies:\n");
-				foreach (AssemblyName dependency in modsWithMissingDeps[modName]) {
+				"This warning will turn into an error and Melons with missing dependencies will not be loaded in the next version of MelonLoader.\n");
+			foreach (string melonName in melonsWithMissingDeps.Keys)
+			{
+				messageBuilder.Append($"- '{melonName}' is missing the following dependencies:\n");
+				foreach (AssemblyName dependency in melonsWithMissingDeps[melonName])
 					messageBuilder.Append($"    - '{dependency.Name}' v{dependency.Version}\n");
-				}
 			}
 			messageBuilder.Length -= 1; // Remove trailing newline
 			return messageBuilder.ToString();
 		}
 
-		private static string BuildIncompatibleAssembliesMessage(IDictionary<string, IList<AssemblyName>> modsWithIncompatibilities)
+		private static string BuildIncompatibleAssembliesMessage(IDictionary<string, IList<AssemblyName>> melonsWithIncompatibilities)
 		{
-			StringBuilder messageBuilder = new StringBuilder("Some mods are marked as incompatible with each other.\n" +
-				"To avoid any errors, these mods will not be loaded.\n");
-			foreach (string modName in modsWithIncompatibilities.Keys)
+			StringBuilder messageBuilder = new StringBuilder("Some Melons are marked as incompatible with each other.\n" +
+				"To avoid any errors, these Melons will not be loaded.\n");
+			foreach (string melonName in melonsWithIncompatibilities.Keys)
 			{
-				messageBuilder.Append($"- '{modName}' is incompatible with the following mods:\n");
-				foreach (AssemblyName dependency in modsWithIncompatibilities[modName])
+				messageBuilder.Append($"- '{melonName}' is incompatible with the following Melons:\n");
+				foreach (AssemblyName dependency in melonsWithIncompatibilities[melonName])
 				{
 					messageBuilder.Append($"    - '{dependency.Name}'\n");
 				}
@@ -160,68 +166,70 @@ namespace MelonLoader {
 			return messageBuilder.ToString();
 		}
 
-		private void TopologicalSortInto(IList<T> loadedMods) {
+		private void TopologicalSortInto(IList<T> loadedMelons)
+		{
 			int[] unloadedDependencies = new int[vertices.Length];
-			SortedList<string, Vertex> loadableMods = new SortedList<string, Vertex>();
-			int skippedMods = 0;
+			SortedList<string, Vertex> loadableMelons = new SortedList<string, Vertex>();
+			int skippedMelons = 0;
 
-			// Find all sinks in the dependency graph, i.e. mods without any dependencies on other mods
-			for (int i = 0; i < vertices.Length; ++i) {
+			// Find all sinks in the dependency graph, i.e. Melons without any dependencies on other Melons
+			for (int i = 0; i < vertices.Length; ++i)
+			{
 				Vertex vertex = vertices[i];
 				int dependencyCount = vertex.dependencies.Count;
 
 				unloadedDependencies[i] = dependencyCount;
-				if (dependencyCount == 0) {
-					loadableMods.Add(vertex.name, vertex);
-				}
+				if (dependencyCount == 0)
+					loadableMelons.Add(vertex.name, vertex);
 			}
 
 			// Perform the (reverse) topological sorting
-			while (loadableMods.Count > 0) {
-				Vertex mod = loadableMods.Values[0];
-				loadableMods.RemoveAt(0);
+			while (loadableMelons.Count > 0)
+			{
+				Vertex melon = loadableMelons.Values[0];
+				loadableMelons.RemoveAt(0);
 
-				if (!mod.skipLoading) {
-					loadedMods.Add(mod.mod);
-				} else {
-					++skippedMods;
-				}
+				if (!melon.skipLoading)
+					loadedMelons.Add(melon.melon);
+				else
+					++skippedMelons;
 
-				foreach (Vertex dependent in mod.dependents) {
+				foreach (Vertex dependent in melon.dependents)
+				{
 					unloadedDependencies[dependent.index] -= 1;
-					dependent.skipLoading |= mod.skipLoading;
+					dependent.skipLoading |= melon.skipLoading;
 
-					if (unloadedDependencies[dependent.index] == 0) {
-						loadableMods.Add(dependent.name, dependent);
-					}
+					if (unloadedDependencies[dependent.index] == 0)
+						loadableMelons.Add(dependent.name, dependent);
 				}
 			}
 
-			// Check if all mods were either loaded or skipped. If this is not the case, there is a cycle in the dependency graph
-			if (loadedMods.Count + skippedMods < vertices.Length) {
-				StringBuilder errorMessage = new StringBuilder("Some mods could not be loaded due to a cyclic dependency:\n");
-				for (int i = 0; i < vertices.Length; ++i) {
+			// Check if all Melons were either loaded or skipped. If this is not the case, there is a cycle in the dependency graph
+			if (loadedMelons.Count + skippedMelons < vertices.Length)
+			{
+				StringBuilder errorMessage = new StringBuilder("Some Melons could not be loaded due to a cyclic dependency:\n");
+				for (int i = 0; i < vertices.Length; ++i)
 					if (unloadedDependencies[i] > 0)
 						errorMessage.Append($"- '{vertices[i].name}'\n");
-				}
 				errorMessage.Length -= 1; // Remove trailing newline
 				MelonLogger.Error(errorMessage.ToString());
 			}
 		}
 
-		private class Vertex {
-
+		private class Vertex
+		{
 			internal readonly int index;
-			internal readonly T mod;
+			internal readonly T melon;
 			internal readonly string name;
 
 			internal readonly IList<Vertex> dependencies;
 			internal readonly IList<Vertex> dependents;
 			internal bool skipLoading;
 
-			internal Vertex(int index, T mod, string name) {
+			internal Vertex(int index, T melon, string name)
+			{
 				this.index = index;
-				this.mod = mod;
+				this.melon = melon;
 				this.name = name;
 
 				dependencies = new List<Vertex>();

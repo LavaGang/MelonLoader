@@ -192,26 +192,26 @@ namespace MelonLoader
             return (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
         }
 
-        public static void LoadFromFile(string filepath, bool is_plugin = false)
+        public static void LoadFromFile(string filelocation, bool is_plugin = false)
         {
-            if (string.IsNullOrEmpty(filepath))
+            if (string.IsNullOrEmpty(filelocation))
                 return;
             if (!MelonDebug.IsEnabled())
             {
-                LoadFromByteArray(File.ReadAllBytes(filepath), filepath);
+                LoadFromByteArray(File.ReadAllBytes(filelocation), filelocation);
                 return;
             }
             try
             {
-                Assembly asm = Assembly.LoadFrom(filepath);
+                Assembly asm = Assembly.LoadFrom(filelocation);
                 if (asm == null)
                 {
-                    MelonLogger.Error("Failed to Load Assembly for " + filepath + ": Assembly.LoadFrom returned null"); ;
+                    MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": Assembly.LoadFrom returned null"); ;
                     return;
                 }
-                LoadFromAssembly(asm, filepath, is_plugin);
+                LoadFromAssembly(asm, filelocation, is_plugin);
             }
-            catch (Exception ex) { MelonLogger.Error("Failed to Load Assembly for " + filepath + ": " + ex.ToString()); }
+            catch (Exception ex) { MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": " + ex.ToString()); }
         }
 
         public static void LoadFromByteArray(byte[] filedata, string filelocation = null, bool is_plugin = false)
