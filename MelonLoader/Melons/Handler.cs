@@ -327,6 +327,7 @@ namespace MelonLoader
 
             MelonPlatformAttribute platformAttribute = PullCustomAttributeFromAssembly<MelonPlatformAttribute>(asm);
             if ((platformAttribute != null)
+                && (platformAttribute.Platforms != null)
                 && (platformAttribute.Platforms.Length > 0))
             {
                 bool is_compatible = false;
