@@ -65,6 +65,8 @@ namespace MelonLoader.AssemblyGenerator
 
     internal class SamboyAPI_Response
     {
+        public string gameSlug = null;
+        public string gameName = null;
         public string mappingUrl = null;
         public string mappingFileSHA512 = null;
         public string forceCpp2IlVersion = null;
