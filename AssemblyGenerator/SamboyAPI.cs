@@ -31,7 +31,7 @@ namespace MelonLoader.AssemblyGenerator
                         return;
                     }
                 }
-                Logger.Error($"Exception while Contacting API: {ex}");
+                Logger.Error($"Exception while Contacting SamboyAPI: {ex}");
                 throw;
             }
 
