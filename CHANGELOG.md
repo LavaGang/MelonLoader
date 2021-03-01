@@ -81,6 +81,8 @@
 56. Added Proper Check for if MelonPlugin or MelonMod is Incorrectly Loaded.
 57. Implemented MelonPlatform Attribute Check.
 58. Implemented MelonPlatformDomain Attribute Check.
+59. Added MelonAdditionalDependencies Attribute.
+60. Implemented MelonAdditionalDependencies Attribute Check.
 
 ---
 

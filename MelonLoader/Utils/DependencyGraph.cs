@@ -38,6 +38,7 @@ namespace MelonLoader {
 			List<AssemblyName> missingDependencies = new List<AssemblyName>();
 			List<AssemblyName> incompatibilities = new List<AssemblyName>();
 			HashSet<string> optionalDependencies = new HashSet<string>();
+			HashSet<string> additionalDependencies = new HashSet<string>();
 
 			foreach (Vertex modVertex in vertices) {
 				Assembly modAssembly = modVertex.mod.Assembly;
@@ -48,6 +49,12 @@ namespace MelonLoader {
 				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute) Attribute.GetCustomAttribute(modAssembly, typeof(MelonOptionalDependenciesAttribute));
 				if (optionals != null && optionals.AssemblyNames != null) {
 					optionalDependencies.UnionWith(optionals.AssemblyNames);
+				}
+
+				MelonAdditionalDependenciesAttribute additionals = (MelonAdditionalDependenciesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonAdditionalDependenciesAttribute));
+				if (additionals != null && additionals.AssemblyNames != null)
+				{
+					additionalDependencies.UnionWith(optionals.AssemblyNames);
 				}
 
 				MelonIncompatibleAssembliesAttribute incompatibleAssemblies = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleAssembliesAttribute));
@@ -72,6 +79,18 @@ namespace MelonLoader {
 						modVertex.dependencies.Add(dependencyVertex);
 						dependencyVertex.dependents.Add(modVertex);
 					} else if (!TryLoad(dependency) && !optionalDependencies.Contains(dependency.Name)) {
+						missingDependencies.Add(dependency);
+					}
+				}
+
+				foreach (string dependencyName in additionalDependencies)
+				{
+					AssemblyName dependency = new AssemblyName(dependencyName);
+					if (nameLookup.TryGetValue(dependencyName, out Vertex dependencyVertex))
+					{
+						modVertex.dependencies.Add(dependencyVertex);
+						dependencyVertex.dependents.Add(modVertex);
+					} else if (!TryLoad(dependency)) {
 						missingDependencies.Add(dependency);
 					}
 				}
