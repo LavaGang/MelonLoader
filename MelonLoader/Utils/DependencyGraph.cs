@@ -46,15 +46,14 @@ namespace MelonLoader {
 				optionalDependencies.Clear();
 				incompatibilities.Clear();
 
-				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute) Attribute.GetCustomAttribute(modAssembly, typeof(MelonOptionalDependenciesAttribute));
+				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonOptionalDependenciesAttribute));
 				if (optionals != null && optionals.AssemblyNames != null) {
 					optionalDependencies.UnionWith(optionals.AssemblyNames);
 				}
 
 				MelonAdditionalDependenciesAttribute additionals = (MelonAdditionalDependenciesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonAdditionalDependenciesAttribute));
-				if (additionals != null && additionals.AssemblyNames != null)
-				{
-					additionalDependencies.UnionWith(optionals.AssemblyNames);
+				if (additionals != null && additionals.AssemblyNames != null) {
+					additionalDependencies.UnionWith(additionals.AssemblyNames);
 				}
 
 				MelonIncompatibleAssembliesAttribute incompatibleAssemblies = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(modAssembly, typeof(MelonIncompatibleAssembliesAttribute));
