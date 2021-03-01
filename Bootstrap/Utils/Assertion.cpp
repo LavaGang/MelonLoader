@@ -3,6 +3,7 @@
 #include "Debug.h"
 #include "Logger.h"
 #include "Console.h"
+#include "../Managers/Game.h"
 #include <string>
 #include <iostream>
 
@@ -31,7 +32,12 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		else
 		{
 			Console::Close();
-			MessageBoxA(NULL, "Please Post your latest.log File\nto #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
+			MessageBoxA(NULL, ("Please upload the log file \""
+				+ std::string(Game::BasePath)
+				+ "\\MelonLoader\\" 
+				+ Logger::LatestLogFileName 
+				+ Logger::FileExtension 
+				+ "\" when requesting support.").c_str(), "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
 		}
 		Core::KillCurrentProcess();
 	}

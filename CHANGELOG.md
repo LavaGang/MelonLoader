@@ -83,6 +83,7 @@
 58. Implemented MelonPlatformDomain Attribute Check.
 59. Added MelonAdditionalDependencies Attribute.
 60. Implemented MelonAdditionalDependencies Attribute Check.
+61. Implemented File Path Display for Latest.log when Internal Failures occur.
 
 ---
 
