@@ -6,8 +6,7 @@ class CommandLine
 {
 public:
 	static int argc;
-	static char* argv[64];
-	static char* argvMono[64];
+	static char** argvMono;
 	static IniFile* iniFile;
 	static void Read();
 	static void ReadIniFile();
