@@ -13,6 +13,7 @@ namespace MelonLoader.AssemblyGenerator
 
         internal static void Contact()
         {
+            Logger.Msg("Contacting SamboyAPI...");
             string ContactURL = $"{API_URL}/{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
             Logger.Debug_Msg($"ContactURL = {ContactURL}");
 
@@ -34,7 +35,10 @@ namespace MelonLoader.AssemblyGenerator
                 throw;
             }
 
-            Logger.Debug_Msg($"Response = {(string.IsNullOrEmpty(Response) ? "null" : Response)}");
+            if (string.IsNullOrEmpty(Response))
+                throw new ArgumentNullException("Response");
+
+            Logger.Debug_Msg($"Response = {Response}");
 
             Variant responsearr = null;
             try { responsearr = JSON.Load(Response); }
