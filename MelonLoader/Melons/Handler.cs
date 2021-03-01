@@ -116,20 +116,25 @@ namespace MelonLoader
                     string filename = dlltbl[i];
                     if (string.IsNullOrEmpty(filename))
                         continue;
+
                     if (mode != LoadMode.BOTH)
                     {
                         bool file_extension_check = filename.EndsWith(".dev.dll");
                         if (((mode == LoadMode.NORMAL) && file_extension_check) || ((mode == LoadMode.DEV) && !file_extension_check))
                             continue;
                     }
+
                     string melonname = MelonUtils.GetFileProductName(filename);
                     if (string.IsNullOrEmpty(melonname))
                         melonname = Path.GetFileNameWithoutExtension(filename);
-                    if (IsMelonAlreadyLoaded(melonname, plugins))
+
+                    bool isAlreadyLoaded = (plugins ? IsPluginAlreadyLoaded(melonname) : IsModAlreadyLoaded(melonname));
+                    if (isAlreadyLoaded)
                     {
                         MelonLogger.Warning("Duplicate File: " + filename);
                         continue;
                     }
+
                     LoadFromFile(filename, plugins);
                 }
 
@@ -185,12 +190,9 @@ namespace MelonLoader
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
         }
 
-        public static bool IsMelonAlreadyLoaded(string name, bool is_plugin = false)
-        {
-            if (is_plugin)
-                return (_Plugins.Find(x => x.Info.Name.Equals(name)) != null);
-            return (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
-        }
+        public static bool IsMelonAlreadyLoaded(string name) => (IsPluginAlreadyLoaded(name) || IsModAlreadyLoaded(name));
+        public static bool IsPluginAlreadyLoaded(string name) => (_Plugins.Find(x => x.Info.Name.Equals(name)) != null);
+        public static bool IsModAlreadyLoaded(string name) => (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
 
         public static void LoadFromFile(string filelocation, bool is_plugin = false)
         {
@@ -198,7 +200,7 @@ namespace MelonLoader
                 return;
             if (!MelonDebug.IsEnabled())
             {
-                LoadFromByteArray(File.ReadAllBytes(filelocation), filelocation);
+                LoadFromByteArray(File.ReadAllBytes(filelocation), filelocation, is_plugin);
                 return;
             }
             try
