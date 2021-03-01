@@ -48,6 +48,7 @@ MONODEF(mono_class_get_method_from_name)
 MONODEF(mono_string_to_utf8)
 MONODEF(mono_string_new)
 MONODEF(mono_object_get_class)
+MONODEF(mono_object_to_string)
 MONODEF(mono_class_get_property_from_name)
 MONODEF(mono_property_get_get_method)
 MONODEF(mono_free)
@@ -257,6 +258,7 @@ bool Mono::Exports::Initialize()
 	MONODEF(mono_string_to_utf8)
 	MONODEF(mono_string_new)
 	MONODEF(mono_object_get_class)
+	MONODEF(mono_object_to_string)
 	MONODEF(mono_class_get_property_from_name)
 	MONODEF(mono_property_get_get_method)
 	MONODEF(mono_image_get_name)
@@ -302,16 +304,7 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 {
 	if (exceptionObject == NULL)
 		return;
-	Class* klass = Exports::mono_object_get_class(exceptionObject);
-	if (klass == NULL)
-		return;
-	Property* prop = Exports::mono_class_get_property_from_name(klass, "Message");
-	if (prop == NULL)
-		return;
-	Method* method = Exports::mono_property_get_get_method(prop);
-	if (method == NULL)
-		return;
-	String* returnstr = (String*)Exports::mono_runtime_invoke(method, exceptionObject, NULL, NULL);
+	String* returnstr = Exports::mono_object_to_string(exceptionObject, NULL);
 	if (returnstr == NULL)
 		return;
 	const char* returnstrc = Exports::mono_string_to_utf8(returnstr);

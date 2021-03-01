@@ -176,6 +176,7 @@ public:
 		MONODEF(char*, mono_string_to_utf8, (String* str))
 		MONODEF(String*, mono_string_new, (Domain* domain, const char* str))
 		MONODEF(Class*, mono_object_get_class, (Object* obj))
+		MONODEF(String*, mono_object_to_string, (Object* obj, Object** exec))
 		MONODEF(Property*, mono_class_get_property_from_name, (Class* klass, const char* name))
 		MONODEF(Method*, mono_property_get_get_method, (Property* prop))
 		MONODEF(void, mono_free, (void* ptr))
