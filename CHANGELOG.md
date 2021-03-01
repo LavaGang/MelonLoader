@@ -86,6 +86,7 @@
 61. Implemented File Path Display for Latest.log when Internal Failures occur.
 62. Fixed Issue with Missing Plugin Check.
 63. Command Line now uses __argv instead of Manual Parsing.    (Credits to constfold :3)
+64. Fixed Issue with TomlArray trying to act as a List.
 
 ---
 

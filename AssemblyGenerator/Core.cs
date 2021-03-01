@@ -54,8 +54,10 @@ namespace MelonLoader.AssemblyGenerator
                 return 1;
 
             Logger.Msg("Checking GameAssembly...");
-            Logger.Msg("Old: " + Config.GameAssemblyHash);
-            Logger.Msg("Current: " + CurrentGameAssemblyHash);
+
+            Logger.Debug_Msg("Last GameAssembly Hash: " + Config.GameAssemblyHash);
+            Logger.Debug_Msg("Current GameAssembly Hash: " + CurrentGameAssemblyHash);
+
             if (string.IsNullOrEmpty(Config.GameAssemblyHash)
                 || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash)
                 || (!string.IsNullOrEmpty(Config.ObfuscationRegex) && string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))

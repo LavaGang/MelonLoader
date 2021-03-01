@@ -1,21 +1,18 @@
 // Copyright (c) Alexandre Mutel. All rights reserved.
 // Licensed under the BSD-Clause 2 license. 
 // See license.txt file in the project root for full license information.
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace MelonLoader.Tomlyn.Model
 {
     /// <summary>
     /// Runtime representation of a TOML array
     /// </summary>
-    public sealed class TomlArray : TomlObject, IList<object>
+    public sealed class TomlArray : TomlObject, IEnumerable<object>, IEnumerable
     {
-        private readonly List<TomlObject> _items;
-        public TomlArray() : base(ObjectKind.Array) => _items = new List<TomlObject>();
-        public TomlArray(int capacity) : base(ObjectKind.Array) => _items = new List<TomlObject>(capacity);
+        private readonly TomlObject[] _items;
+        public TomlArray(int capacity) : base(ObjectKind.Array) => _items = new TomlObject[capacity];
 
         public IEnumerator<object> GetEnumerator()
         {
@@ -25,38 +22,42 @@ namespace MelonLoader.Tomlyn.Model
 
         public IEnumerable<TomlObject> GetTomlEnumerator() => _items;
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        public void Add(object item) => _items.Add(ToTomlObject(item));
-        public void Clear() => _items.Clear();
 
         public bool Contains(object item)
         {
             var toml = ToTomlObject(item);
-            return _items.Contains(toml);
+            for (int i = 0; i < _items.Length; i++)
+            {
+                TomlObject obj = _items[i];
+                if ((obj != null) && (obj == toml))
+                    return true;
+            }
+            return false;
         }
 
         public void CopyTo(object[] array, int arrayIndex) => this[arrayIndex] = array[arrayIndex];
 
-        public bool Remove(object item)
-        {
-            var toml = ToTomlObject(item);
-            return _items.Remove(toml);
-        }
-
-        public int Count => _items.Count;
+        public int Count => _items.Length;
         public bool IsReadOnly => false;
         public int IndexOf(object item)
         {
             var toml = ToTomlObject(item);
-            return _items.IndexOf(toml);
+            for (int i = 0; i < _items.Length; i++)
+            {
+                TomlObject obj = _items[i];
+                if ((obj != null) && (obj == toml))
+                    return i;
+            }
+            return -1;
         }
 
         public void Insert(int index, object item)
         {
             var toml = ToTomlObject(item);
-            _items.Insert(index, toml);
+            _items[index] = toml;
         }
 
-        public void RemoveAt(int index) => _items.RemoveAt(index);
+        public void RemoveAt(int index) => _items[index] = null;
 
         public object this[int index]
         {

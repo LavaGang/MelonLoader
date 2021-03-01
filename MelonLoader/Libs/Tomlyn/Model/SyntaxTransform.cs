@@ -139,7 +139,7 @@ namespace MelonLoader.Tomlyn.Model
             {
                 var item = items.GetChildren(i);
                 item.Accept(this);
-                tomlArray.Add(_currentValue);
+                tomlArray[i] = _currentValue;
             }
             _currentValue = tomlArray;
         }
