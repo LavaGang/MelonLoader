@@ -6,7 +6,7 @@ namespace MelonLoader
     public class MelonAdditionalDependenciesAttribute : Attribute
     {
         /// <summary>
-        /// Additional (simple) assembly names of the dependencies that should be regarded.
+        /// The (simple) assembly names of Additional Dependencies that aren't directly referenced but should still be regarded.
         /// </summary>
         public string[] AssemblyNames { get; internal set; }
 
