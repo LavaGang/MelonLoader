@@ -97,7 +97,7 @@ namespace MelonLoader.TinyJSON
 
 		public static Variant Load( string json )
 		{
-			if (json == null)
+			if (string.IsNullOrEmpty(json))
 			{
 				throw new ArgumentNullException( "json" );
 			}

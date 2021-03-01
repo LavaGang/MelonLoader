@@ -9,12 +9,7 @@ namespace MelonLoader.AssemblyGenerator
     {
         private static string API_URL = "https://melon.samboy.dev/api";
         private static string API_VERSION = "v1";
-
-        internal static string Response_MappingURL = null;
-        internal static string Response_MappingFileSHA512 = null;
-        internal static string Response_ForceCpp2ILVersion = null;
-        internal static string Response_ForceUnhollowerVersion = null;
-        internal static string Response_ObfuscationRegex = null;
+        internal static SamboyAPI_Response LAST_RESPONSE = new SamboyAPI_Response();
 
         internal static void Setup()
         {
@@ -35,33 +30,41 @@ namespace MelonLoader.AssemblyGenerator
                         return;
                     }
                 }
-                Logger.Warning($"Exception while Contacting API: {ex}");
-                return;
+                Logger.Error($"Exception while Contacting API: {ex}");
+                throw;
             }
 
-            if (string.IsNullOrEmpty(Response))
-            {
-                Logger.Debug_Msg($"Response = null");
-                return;
-            }
-            Logger.Debug_Msg($"Response = {Response}");
+            Logger.Debug_Msg($"Response = {(string.IsNullOrEmpty(Response) ? "null" : Response)}");
 
             Variant responsearr = null;
-            try { responsearr = JSON.Load(Response); } catch (Exception ex) { Logger.Warning($"Exception while Parsing Response to JSON Variant: {ex}"); responsearr = null; }
-            if (responsearr == null)
-                return;
+            try { responsearr = JSON.Load(Response); }
+            catch (Exception ex)
+            {
+                Logger.Error($"Exception while Decoding Response to JSON Variant: {ex}");
+                throw;
+            }
 
-            try { Response_MappingURL = responsearr["mappingUrl"]; } catch (Exception ex) { Logger.Warning($"Exception while reading mappingUrl: {ex}"); Response_MappingURL = null; }
-            try { Response_MappingFileSHA512 = responsearr["mappingFileSHA512"]; } catch (Exception ex) { Logger.Warning($"Exception while reading mappingFileSHA512: {ex}"); Response_MappingFileSHA512 = null; };
-            try { Response_ForceCpp2ILVersion = responsearr["forceCpp2IlVersion"]; } catch (Exception ex) { Logger.Warning($"Exception while reading forceCpp2IlVersion: {ex}"); Response_ForceCpp2ILVersion = null; }
-            try { Response_ForceUnhollowerVersion = responsearr["forceUnhollowerVersion"]; } catch (Exception ex) { Logger.Warning($"Exception while reading forceUnhollowerVersion: {ex}"); Response_ForceUnhollowerVersion = null; }
-            try { Response_ObfuscationRegex = responsearr["obfuscationRegex"]; } catch (Exception ex) { Logger.Warning($"Exception while reading obfuscationRegex: {ex}"); Response_ObfuscationRegex = null; }
+            try { LAST_RESPONSE = responsearr.Make<SamboyAPI_Response>(); }
+            catch (Exception ex)
+            {
+                Logger.Error($"Exception while Converting JSON Variant to SamboyAPI_Response: {ex}");
+                throw;
+            }
 
-            Logger.Debug_Msg($"Response_MappingURL = {(string.IsNullOrEmpty(Response_MappingURL) ? "null" : Response_MappingURL)}");
-            Logger.Debug_Msg($"Response_MappingFileSHA512 = {(string.IsNullOrEmpty(Response_MappingFileSHA512) ? "null" : Response_MappingFileSHA512)}");
-            Logger.Debug_Msg($"Response_ForceCpp2ILVersion = {(string.IsNullOrEmpty(Response_ForceCpp2ILVersion) ? "null" : Response_ForceCpp2ILVersion)}");
-            Logger.Debug_Msg($"Response_ForceUnhollowerVersion = {(string.IsNullOrEmpty(Response_ForceUnhollowerVersion) ? "null" : Response_ForceUnhollowerVersion)}");
-            Logger.Debug_Msg($"Response_ObfuscationRegex = {(string.IsNullOrEmpty(Response_ObfuscationRegex) ? "null" : Response_ObfuscationRegex)}");
+            Logger.Debug_Msg($"mappingUrl = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingUrl) ? "null" : LAST_RESPONSE.mappingUrl)}");
+            Logger.Debug_Msg($"mappingFileSHA512 = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingFileSHA512) ? "null" : LAST_RESPONSE.mappingFileSHA512)}");
+            Logger.Debug_Msg($"forceCpp2IlVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.forceCpp2IlVersion) ? "null" : LAST_RESPONSE.forceCpp2IlVersion)}");
+            Logger.Debug_Msg($"forceUnhollowerVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.forceUnhollowerVersion) ? "null" : LAST_RESPONSE.forceUnhollowerVersion)}");
+            Logger.Debug_Msg($"obfuscationRegex = {(string.IsNullOrEmpty(LAST_RESPONSE.obfuscationRegex) ? "null" : LAST_RESPONSE.obfuscationRegex)}");
         }
+    }
+
+    internal class SamboyAPI_Response
+    {
+        public string mappingUrl = null;
+        public string mappingFileSHA512 = null;
+        public string forceCpp2IlVersion = null;
+        public string forceUnhollowerVersion = null;
+        public string obfuscationRegex = null;
     }
 }

@@ -10,9 +10,9 @@ namespace MelonLoader.AssemblyGenerator
         {
             Destination = Core.il2cppassemblyunhollower.Destination;
             NewFileName = "DeobfuscationMap.csv.gz";
-            URL = SamboyAPI.Response_MappingURL;
-            Version = SamboyAPI.Response_MappingFileSHA512;
-            ObfuscationRegex = SamboyAPI.Response_ObfuscationRegex;
+            URL = SamboyAPI.LAST_RESPONSE.mappingUrl;
+            Version = SamboyAPI.LAST_RESPONSE.mappingFileSHA512;
+            ObfuscationRegex = SamboyAPI.LAST_RESPONSE.obfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
                 ObfuscationRegex = Config.ObfuscationRegex;
         }
