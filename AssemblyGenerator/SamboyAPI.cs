@@ -11,7 +11,7 @@ namespace MelonLoader.AssemblyGenerator
         private static string API_VERSION = "v1";
         internal static SamboyAPI_Response LAST_RESPONSE = new SamboyAPI_Response();
 
-        internal static void Setup()
+        internal static void Contact()
         {
             string ContactURL = $"{API_URL}/{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
             Logger.Debug_Msg($"ContactURL = {ContactURL}");
