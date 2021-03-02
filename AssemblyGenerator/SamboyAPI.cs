@@ -27,7 +27,7 @@ namespace MelonLoader.AssemblyGenerator
                     System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
-                        Logger.Debug_Msg($"Game Not Found on API");
+                        Logger.Debug_Msg($"Game Not Found on SamboyAPI");
                         return;
                     }
                 }
