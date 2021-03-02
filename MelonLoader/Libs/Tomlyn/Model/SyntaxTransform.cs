@@ -133,8 +133,8 @@ namespace MelonLoader.Tomlyn.Model
 
         public override void Visit(ArraySyntax array)
         {
-            var tomlArray = new TomlArray(array.ChildrenCount);
             var items = array.Items;
+            var tomlArray = new TomlArray(items.ChildrenCount);
             for(int i = 0; i < items.ChildrenCount; i++)
             {
                 var item = items.GetChildren(i);

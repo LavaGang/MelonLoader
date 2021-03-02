@@ -87,6 +87,8 @@
 62. Fixed Issue with Missing Plugin Check.
 63. Command Line now uses __argv instead of Manual Parsing.    (Credits to constfold :3)
 64. Fixed Issue with TomlArray trying to act as a List.
+65. Made Initialization Exception Logging more Verbose.    (Credits to constfold :3)
+66. Fixed Issue with TomlArray Transform causing Out of Range Exception.
 
 ---
 
