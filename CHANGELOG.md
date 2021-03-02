@@ -88,6 +88,7 @@
 63. Fixed Issue with TomlArray trying to act as a List.
 64. Made Initialization Exception Logging more Verbose.    (Credits to constfold :3)
 65. Fixed Issue with TomlArray Transform causing Out of Range Exception.
+66. Fixed Issue with FileSystemWatcher throwing an NIE on some MonoBleedingEdge Games.
 
 ---
 

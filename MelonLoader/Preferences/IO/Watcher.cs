@@ -1,16 +1,27 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace MelonLoader.Preferences.IO
 {
     internal class Watcher
     {
+        private static bool ShouldDisableFileWatcherFunctionality = false;
         private FileSystemWatcher FileWatcher = null;
         private File PrefFile = null;
 
         internal Watcher(File preffile)
         {
             PrefFile = preffile;
-            FileWatcher = new FileSystemWatcher();
+            if (ShouldDisableFileWatcherFunctionality)
+                return;
+            try { FileWatcher = new FileSystemWatcher(); }
+            catch (Exception ex)
+            {
+                MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
+                ShouldDisableFileWatcherFunctionality = true;
+                FileWatcher = null;
+                return;
+            }
             FileWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
             FileWatcher.Path = Path.GetDirectoryName(preffile.FilePath);
             FileWatcher.Filter = Path.GetFileName(preffile.FilePath);
