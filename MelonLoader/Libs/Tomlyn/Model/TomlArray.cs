@@ -3,6 +3,7 @@
 // See license.txt file in the project root for full license information.
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MelonLoader.Tomlyn.Model
 {
@@ -51,7 +52,7 @@ namespace MelonLoader.Tomlyn.Model
             return -1;
         }
 
-        public void Insert(int index, object item)
+        public void Replace(int index, object item)
         {
             var toml = ToTomlObject(item);
             _items[index] = toml;
