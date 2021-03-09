@@ -62,7 +62,7 @@ namespace MelonLoader
         {
             if (typeof(T).IsEnum)
             {
-                string enumValue = (Func <TomlObject, string>) myMappers[typeof(string)].Key)(value);
+                string enumValue = ((Func <TomlObject, string>) myMappers[typeof(string)].Key)(value);
                 if (Enum.Parse(typeof(T), enumValue, out var parsedEnum)
                     return (T) parsedEnum;
                 else
