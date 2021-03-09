@@ -28,6 +28,7 @@ public:
 	static bool SetupPaths();
 	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
+	static String* ObjectToString(Object* obj);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 	static void Free(void* ptr);
 
@@ -177,7 +178,6 @@ public:
 		MONODEF(String*, mono_string_new, (Domain* domain, const char* str))
 		MONODEF(Class*, mono_object_get_class, (Object* obj))
 		MONODEF(String*, mono_object_to_string, (Object* obj, Object** exec))
-		MONODEF(Property*, mono_class_get_property_from_name, (Class* klass, const char* name))
 		MONODEF(Method*, mono_property_get_get_method, (Property* prop))
 		MONODEF(void, mono_free, (void* ptr))
 		MONODEF(void, g_free, (void* ptr))

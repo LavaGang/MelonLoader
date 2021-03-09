@@ -228,6 +228,8 @@ namespace MelonLoader
                 foreach (MelonPreferences_Entry entry in category.Entries)
                     currentFile.SetupEntryFromRawValue(entry);
             }
+            MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
+            MelonHandler.OnPreferencesLoaded();
         }
 
         internal static bool IsFilePathDefault(string filepath) => new FileInfo(filepath).FullName.Equals(new FileInfo(DefaultFile.FilePath).FullName);

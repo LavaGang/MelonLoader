@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+#pragma warning disable 0618
 
 namespace MelonLoader
 {

@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.3.0.1 ALPHA Pre-Release](#v0301-alpha-pre-release)  
+[v0.3.1 ALPHA Pre-Release](#v031-alpha-pre-release)  
 [v0.3.0 ALPHA Pre-Release](#v030-alpha-pre-release)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
@@ -21,7 +21,7 @@
 
 ---
 
-### v0.3.0.1 ALPHA Pre-Release:
+### v0.3.1 ALPHA Pre-Release:
 
 1. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
 2. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
@@ -90,6 +90,13 @@
 65. Fixed Issue with TomlArray Transform causing Out of Range Exception.
 66. Fixed Issue with FileSystemWatcher throwing an NIE on some MonoBleedingEdge Games.
 67. Changed TomlArray.Insert to TomlArray.Replace.
+68. Upgraded Harmony Library to HarmonyX.
+69. Ported Il2Cpp Patch Fix to HarmonyX Patcher.
+70. Added Compatibility Layer for Harmony.
+71. Added and Implemented RegisterTypeInIl2Cpp Attribute to further streamline Registering Custom Types in Il2Cpp.
+72. Fixed Internal Failure Issue from Missing Exports with Older Mono.
+73. Added MelonPreferences_Category.SaveToFile Method.
+74. Added MelonPreferences_Category.LoadFromFile Method.
 
 ---
 

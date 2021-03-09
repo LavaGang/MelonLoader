@@ -216,6 +216,8 @@ namespace MelonLoader
             catch (Exception ex) { MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": " + ex.ToString()); }
         }
 
+        [Obsolete("MelonLoader.MelonHandler.LoadFromAssembly(byte[], string) is obsolete. Please use MelonLoader.MelonHandler.LoadFromAssembly(byte[], string, bool) instead.")]
+        public static void LoadFromByteArray(byte[] filedata, string filelocation = null) => LoadFromByteArray(filedata, filelocation, false);
         public static void LoadFromByteArray(byte[] filedata, string filelocation = null, bool is_plugin = false)
         {
             if ((filedata == null) || (filedata.Length <= 0))
@@ -245,6 +247,8 @@ namespace MelonLoader
             }
         }
 
+        [Obsolete("MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string) is obsolete. Please use MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string, bool) instead.")]
+        public static void LoadFromAssembly(Assembly asm, string filelocation = null) => LoadFromAssembly(asm, filelocation, false);
         public static void LoadFromAssembly(Assembly asm, string filelocation = null, bool is_plugin = false)
         {
             if (asm == null)
@@ -385,18 +389,40 @@ namespace MelonLoader
             baseInstance.Assembly = asm;
             baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
 
-            if (is_plugin)
-                _Plugins.Add((MelonPlugin)baseInstance);
-            else
+            RegisterIl2CppInjectAttributes(asm);
+            HarmonyPatchAttributes(baseInstance);
+        }
+
+        internal static void HarmonyPatchAttributes(MelonBase baseInstance)
+        {
+            if (baseInstance is MelonMod)
                 _Mods.Add((MelonMod)baseInstance);
-            try { baseInstance.Harmony.PatchAll(asm); }
+            else
+                _Plugins.Add((MelonPlugin)baseInstance);
+            try { baseInstance.Harmony.PatchAll(baseInstance.Assembly); }
             catch (Exception)
             {
-                if (is_plugin)
-                    _Plugins.Remove((MelonPlugin)baseInstance);
-                else
+                if (baseInstance is MelonMod)
                     _Mods.Remove((MelonMod)baseInstance);
+                else
+                    _Plugins.Remove((MelonPlugin)baseInstance);
                 throw;
+            }
+        }
+
+        internal static void RegisterIl2CppInjectAttributes(Assembly asm)
+        {
+            if (!MelonUtils.IsGameIl2Cpp())
+                return;
+            Type[] typeTbl = asm.GetTypes();
+            if ((typeTbl == null) || (typeTbl.Length <= 0))
+                return;
+            foreach (Type type in typeTbl)
+            {
+                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), false);
+                if ((attTbl == null) || (attTbl.Length <= 0))
+                    continue;
+                UnhollowerSupport.RegisterTypeInIl2CppDomain(type);
             }
         }
 

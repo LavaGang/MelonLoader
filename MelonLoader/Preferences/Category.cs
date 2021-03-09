@@ -78,26 +78,9 @@ namespace MelonLoader
                 {
                     File = new Preferences.IO.File(filepath);
                     MelonPreferences.PrefFiles.Add(File);
-                    try
-                    {
-                        File.Load();
-                    }
-                    catch (Exception ex)
-                    {
-                        MelonLogger.Error($"Error while Loading Preferences from {File.FilePath}: {ex}");
-                        File.WasError = true;
-                    }
                 }
             }
-            Preferences.IO.File currentfile = File;
-            if (currentfile == null)
-                currentfile = MelonPreferences.DefaultFile;
-            if ((Entries.Count < 0) || currentfile.WasError)
-                return;
-            foreach (MelonPreferences_Entry entry in Entries)
-                currentfile.SetupEntryFromRawValue(entry);
-            MelonLogger.Msg($"MelonPreferences Loaded from {currentfile.FilePath}");
-            MelonHandler.OnPreferencesLoaded();
+            MelonPreferences.LoadFileAndRefreshCategories(File);
         }
 
         public void ResetFilePath()
@@ -111,12 +94,36 @@ namespace MelonLoader
                 oldfile.FileWatcher.Destroy();
                 MelonPreferences.PrefFiles.Remove(oldfile);
             }
-            if ((Entries.Count < 0) || MelonPreferences.DefaultFile.WasError)
-                return;
+            MelonPreferences.LoadFileAndRefreshCategories(MelonPreferences.DefaultFile);
+        }
+
+        public void SaveToFile()
+        {
+            Preferences.IO.File currentfile = File;
+            if (currentfile == null)
+                currentfile = MelonPreferences.DefaultFile;
             foreach (MelonPreferences_Entry entry in Entries)
-                MelonPreferences.DefaultFile.SetupEntryFromRawValue(entry);
-            MelonLogger.Msg($"MelonPreferences Loaded from {MelonPreferences.DefaultFile.FilePath}");
-            MelonHandler.OnPreferencesLoaded();
+                if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
+                    currentfile.SetupRawValue(Identifier, entry.Identifier, entry.Save());
+            try
+            {
+                currentfile.Save();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Saving Preferences to {currentfile.FilePath}: {ex}");
+                currentfile.WasError = true;
+            }
+            MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
+            MelonHandler.OnPreferencesSaved();
+        }
+
+        public void LoadFromFile()
+        {
+            Preferences.IO.File currentfile = File;
+            if (currentfile == null)
+                currentfile = MelonPreferences.DefaultFile;
+            MelonPreferences.LoadFileAndRefreshCategories(currentfile);
         }
     }
 }

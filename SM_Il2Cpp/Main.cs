@@ -27,9 +27,11 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
+
             string game_version = Application.version;
             if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
                 game_version = Application.buildGUID;
+
             MelonLogger.Msg($"Game Version: {game_version}");
             MelonUtils.SetConsoleTitle(GetVersionStrWithGameName(game_version)); 
             UnityMappers.RegisterMappers();

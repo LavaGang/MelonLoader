@@ -11,5 +11,7 @@ namespace MelonLoader
         public int Priority;
 
         public MelonPriorityAttribute(int priority = 0) => Priority = priority;
+
+
     }
 }

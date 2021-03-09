@@ -49,7 +49,6 @@ MONODEF(mono_string_to_utf8)
 MONODEF(mono_string_new)
 MONODEF(mono_object_get_class)
 MONODEF(mono_object_to_string)
-MONODEF(mono_class_get_property_from_name)
 MONODEF(mono_property_get_get_method)
 MONODEF(mono_free)
 MONODEF(g_free)
@@ -258,8 +257,6 @@ bool Mono::Exports::Initialize()
 	MONODEF(mono_string_to_utf8)
 	MONODEF(mono_string_new)
 	MONODEF(mono_object_get_class)
-	MONODEF(mono_object_to_string)
-	MONODEF(mono_class_get_property_from_name)
 	MONODEF(mono_property_get_get_method)
 	MONODEF(mono_image_get_name)
 
@@ -268,6 +265,7 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_domain_set_config)
 		MONODEF(mono_unity_get_unitytls_interface)
 		MONODEF(mono_free)
+		MONODEF(mono_object_to_string)
 	}
 	else
 		MONODEF(g_free)
@@ -300,18 +298,31 @@ bool Mono::Exports::Initialize()
 	return Assertion::ShouldContinue;
 }
 
+Mono::String* Mono::ObjectToString(Object* obj)
+{
+	if (!IsOldMono)
+		return Exports::mono_object_to_string(obj, NULL);
+	Class* objClass = Exports::mono_object_get_class(obj);
+	if (objClass == NULL)
+		return NULL;
+	Method* method = Exports::mono_class_get_method_from_name(objClass, "ToString", NULL);
+	if (method == NULL)
+		return NULL;
+	return (String*)Exports::mono_runtime_invoke(method, obj, NULL, NULL);
+}
+
 void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 {
 	if (exceptionObject == NULL)
 		return;
-	String* returnstr = Exports::mono_object_to_string(exceptionObject, NULL);
+	String* returnstr = ObjectToString(exceptionObject);
 	if (returnstr == NULL)
 		return;
 	const char* returnstrc = Exports::mono_string_to_utf8(returnstr);
 	if (returnstrc == NULL)
 		return;
 	Logger::Error(returnstrc);
-	Exports::mono_free(returnstr);
+	Free(returnstr);
 }
 
 Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* version)

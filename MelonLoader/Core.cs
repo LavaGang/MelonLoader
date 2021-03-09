@@ -13,8 +13,8 @@ namespace MelonLoader
         static Core()
         {
             try { MelonUtils.Setup(); } catch (Exception ex) { MelonLogger.Error("MelonUtils.Setup Exception: " + ex.ToString()); throw ex; }
-            Harmony.HarmonyInstance harmonyInstance = Harmony.HarmonyInstance.Create("MelonLoader");
-            Harmony.HarmonyMethod GetCurrentCulturePrefixHarmonyMethod = new Harmony.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static));
+            HarmonyLib.Harmony harmonyInstance = HarmonyLib.Harmony.Create("MelonLoader");
+            HarmonyLib.HarmonyMethod GetCurrentCulturePrefixHarmonyMethod = new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static));
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }
             try { ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(AppDomain.CurrentDomain, new object[0])).ApplicationBase = MelonUtils.GameDirectory; } catch (Exception ex) { MelonLogger.Warning("AppDomainSetup.ApplicationBase Exception: " + ex.ToString()); }
@@ -51,7 +51,7 @@ namespace MelonLoader
         {
             MelonHandler.OnApplicationQuit();
             MelonPreferences.Save();
-            Harmony.HarmonyInstance.UnpatchAllInstances();
+            //Harmony.HarmonyInstance.UnpatchAllInstances();
             try { bHaptics.Quit(); } catch (Exception ex) { MelonLogger.Warning("bHaptics.Quit Exception: " + ex.ToString()); bHaptics.WasError = true; }
             MelonLogger.Flush();
             if (QuitFix())

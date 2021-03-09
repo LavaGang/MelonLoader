@@ -6,7 +6,8 @@
 - All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
 - All Mods get placed in the created Mods folder in your Game's Installation Folder.
 - Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
-- [Il2Cpp dnSpy Debugger Usage](#il2cpp-dnspy-debugger-usage)
+- [dnSpy Debugger Usage](#il2cpp-dnspy-debugger-usage)
+- [Wine / Steam Proton Usage](#)
 - GUIDES: [INSTALLER](#how-to-use-the-installer) | [MANUAL USE](#how-to-manually-use-melonloader)
 
 ---
@@ -84,7 +85,13 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
-## IL2CPP DNSPY DEBUGGER USAGE:
+## WINE / STEAM PROTON USAGE:
+
+- COMING SOON
+
+---
+
+## DNSPY DEBUGGER USAGE:
 
 - COMING SOON
 
@@ -129,7 +136,8 @@ MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](htt
 Third-party libraries used as Source Code and/or bundled in Binary Form:
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/Detours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
-- [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/Harmony/LICENSE) for the full License.
+- [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/HarmonyX/LICENSE) for the full License.
+- [MonoMod](https://github.com/MonoMod/MonoMod) is licensed under the MIT License. See [LICENSE](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) for the full License.
 - [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/TinyJSON/LICENSE.md) for the full License.
 - [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the BSD 2-Clause "Simplified" License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/Tomlyn/license.txt) for the full License.
 - [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/SharpZipLib/LICENSE.txt) for the full License.

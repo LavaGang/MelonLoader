@@ -26,10 +26,7 @@ namespace MelonLoader
 
         public event Action OnValueChangedUntyped;
 
-        protected void FireUntypedValueChanged()
-        {
-            OnValueChangedUntyped?.Invoke();
-        }
+        protected void FireUntypedValueChanged() => OnValueChangedUntyped?.Invoke();
     }
 
     public class MelonPreferences_Entry<T> : MelonPreferences_Entry
