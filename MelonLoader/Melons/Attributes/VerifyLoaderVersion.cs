@@ -32,7 +32,7 @@ namespace MelonLoader
 
         public VerifyLoaderVersionAttribute(int major, int minor, int patch) { Major = major; Minor = minor; Patch = patch; }
         public VerifyLoaderVersionAttribute(int major, int minor, int patch, bool isminimum) { Major = major; Minor = minor; Patch = patch; IsMinimum = isminimum; }
-        public MelonLoaderVersionDependencyAttribute(int major, int minor, int patch, int revision) { Major = major; Minor = minor; Patch = patch; Revision = revision; }
-        public MelonLoaderVersionDependencyAttribute(int major, int minor, int patch, int revision, bool isminimum) { Major = major; Minor = minor; Patch = patch; Revision = revision; IsMinimum = isminimum; }
+        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision) { Major = major; Minor = minor; Patch = patch; Revision = revision; }
+        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision, bool isminimum) { Major = major; Minor = minor; Patch = patch; Revision = revision; IsMinimum = isminimum; }
     }
 }
