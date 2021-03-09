@@ -173,6 +173,8 @@
     <Compile Include="Melons\Attributes\Platform.cs" />
     <Compile Include="Melons\Attributes\PlatformDomain.cs" />
     <Compile Include="Melons\Attributes\Priority.cs" />
+    <Compile Include="Melons\Attributes\VerifyLoaderBuild.cs" />
+    <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
     <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Category.cs" />
