@@ -63,7 +63,7 @@ namespace MelonLoader
             if (typeof(T).IsEnum)
             {
                 string enumValue = ((Func <TomlObject, string>) myMappers[typeof(string)].Key)(value);
-                if (Enum.Parse(typeof(T), enumValue, out var parsedEnum)
+                if (Enum.TryParse(typeof(T), enumValue, out var parsedEnum))
                     return (T) parsedEnum;
                 else
                     throw new ArgumentException($"Attempting to serialize Enum {typeof(T).Name} with invalid value {enumValue}");
