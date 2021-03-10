@@ -10,7 +10,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             Destination = Core.il2cppassemblyunhollower.Destination;
             NewFileName = "DeobfuscationMap.csv.gz";
-            URL = RubyAPI.LAST_RESPONSE.mappingUrl;
+            URL = RubyAPI.LAST_RESPONSE.mappingURL;
             Version = RubyAPI.LAST_RESPONSE.mappingFileSHA512;
             ObfuscationRegex = RubyAPI.LAST_RESPONSE.obfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))

@@ -14,8 +14,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             Logger.Msg("Contacting RubyAPI...");
             string ContactURL = $"{API_URL}/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}.json";
-            //Logger.Debug_Msg($"ContactURL = {ContactURL}");
-            Logger.Msg($"ContactURL = {ContactURL}");
+            Logger.Debug_Msg($"ContactURL = {ContactURL}");
 
             string Response = null;
             try { Response = Core.webClient.DownloadString(ContactURL); }
@@ -27,8 +26,7 @@ namespace MelonLoader.AssemblyGenerator
                     System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
-                        //Logger.Debug_Msg($"Game Not Found on RubyAPI");
-                        Logger.Msg($"Game Not Found on RubyAPI");
+                        Logger.Debug_Msg($"Game Not Found on RubyAPI");
                         return;
                     }
                 }
@@ -39,8 +37,7 @@ namespace MelonLoader.AssemblyGenerator
             if (string.IsNullOrEmpty(Response))
                 throw new ArgumentNullException("Response");
 
-            //Logger.Debug_Msg($"Response = {Response}");
-            Logger.Msg($"Response = {Response}");
+            Logger.Debug_Msg($"Response = {Response}");
 
             Variant responsearr = null;
             try { responsearr = JSON.Load(Response); }
@@ -57,15 +54,11 @@ namespace MelonLoader.AssemblyGenerator
                 return;
             }
 
-            //Logger.Debug_Msg($"forceCpp2IlVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.forceCpp2IlVersion) ? "null" : LAST_RESPONSE.forceCpp2IlVersion)}");
-            //Logger.Debug_Msg($"forceUnhollowerVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.forceUnhollowerVersion) ? "null" : LAST_RESPONSE.forceUnhollowerVersion)}");
-            // Logger.Debug_Msg($"obfuscationRegex = {(string.IsNullOrEmpty(LAST_RESPONSE.obfuscationRegex) ? "null" : LAST_RESPONSE.obfuscationRegex)}");
-            //Logger.Debug_Msg($"mappingUrl = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingUrl) ? "null" : LAST_RESPONSE.mappingUrl)}");
-            //Logger.Debug_Msg($"mappingFileSHA512 = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingFileSHA512) ? "null" : LAST_RESPONSE.mappingFileSHA512)}");
-
-            Logger.Msg($"obfuscationRegex = {(string.IsNullOrEmpty(LAST_RESPONSE.obfuscationRegex) ? "null" : LAST_RESPONSE.obfuscationRegex)}");
-            Logger.Msg($"mappingURL = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingURL) ? "null" : LAST_RESPONSE.mappingURL)}");
-            Logger.Msg($"mappingFileSHA512 = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingFileSHA512) ? "null" : LAST_RESPONSE.mappingFileSHA512)}");
+            Logger.Debug_Msg($"forceCpp2IlVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.forceDumperVersion) ? "null" : LAST_RESPONSE.forceDumperVersion)}");
+            Logger.Debug_Msg($"forceUnhollowerVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.forceUnhollowerVersion) ? "null" : LAST_RESPONSE.forceUnhollowerVersion)}");
+            Logger.Debug_Msg($"obfuscationRegex = {(string.IsNullOrEmpty(LAST_RESPONSE.obfuscationRegex) ? "null" : LAST_RESPONSE.obfuscationRegex)}");
+            Logger.Debug_Msg($"mappingUrl = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingURL) ? "null" : LAST_RESPONSE.mappingURL)}");
+            Logger.Debug_Msg($"mappingFileSHA512 = {(string.IsNullOrEmpty(LAST_RESPONSE.mappingFileSHA512) ? "null" : LAST_RESPONSE.mappingFileSHA512)}");
         }
     }
 
