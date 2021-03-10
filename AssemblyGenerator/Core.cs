@@ -38,7 +38,7 @@ namespace MelonLoader.AssemblyGenerator
                     var hash = md5.ComputeHash(stream);
                     CurrentGameAssemblyHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
             }
-            SamboyAPI.Contact();
+            RubyAPI.Contact();
             unitydependencies = new UnityDependencies();
             dumper = new Il2CppDumper();
             il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();

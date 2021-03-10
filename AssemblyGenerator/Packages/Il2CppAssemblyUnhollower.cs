@@ -9,7 +9,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             Version = Utils.ForceVersion_Il2CppAssemblyUnhollower();
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = SamboyAPI.LAST_RESPONSE.forceUnhollowerVersion;
+                Version = RubyAPI.LAST_RESPONSE.forceUnhollowerVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "0.4.13.0";
             URL = "https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v" + Version + "/Il2CppAssemblyUnhollower." + Version + ".zip";
