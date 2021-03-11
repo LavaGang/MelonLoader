@@ -101,6 +101,8 @@
 76. Added VerifyLoaderBuild Attribute for Melons to Specify MelonLoader Build Dependency.
 77. Implemented Fallback System to Assembly Generator.
 78. Implemented Fallback Obfuscation Regex for Among Us.
+79. Added Enum support in MelonPreferences.    (Credits to loukylor :3)
+80. Fixed Issue with Enum.TryParse in TomlMapper.
 
 ---
 

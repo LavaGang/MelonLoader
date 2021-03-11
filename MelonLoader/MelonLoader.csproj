@@ -95,6 +95,7 @@
     <Compile Include="Libs\HarmonyX\Tools\SymbolExtensions.cs" />
     <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
     <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
+    <Compile Include="Libs\SafeEnumParse.cs" />
     <Compile Include="Libs\UnityMagicMethods.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
