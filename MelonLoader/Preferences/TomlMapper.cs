@@ -53,7 +53,7 @@ namespace MelonLoader
                 return ((Func<string, TomlObject>) myMappers[typeof(string)].Value)(value.ToString());
 
             if (!myMappers.TryGetValue(typeof(T), out var mapper))
-                throw new ArgumentException($"Attempting to serialized unknown type {typeof(T)}");
+                throw new ArgumentException($"Attempting to serialize unknown type {typeof(T)}");
 
             return ((Func<T, TomlObject>) mapper.Value)(value);
         }
@@ -66,11 +66,11 @@ namespace MelonLoader
                 if (TryParseEnum<T>(enumValue, out object parsedEnum))
                     return (T)parsedEnum;
                 else
-                    throw new ArgumentException($"Attempting to serialize Enum {typeof(T).Name} with invalid value {enumValue}");
+                    throw new ArgumentException($"Attempting to deserialize Enum {typeof(T).Name} with invalid value {enumValue}");
             }
                     
             if (!myMappers.TryGetValue(typeof(T), out var mapper))
-                throw new ArgumentException($"Attempting to serialized unknown type {typeof(T)}");
+                throw new ArgumentException($"Attempting to deserialize unknown type {typeof(T)}");
 
             return ((Func<TomlObject, T>) mapper.Key)(value);
         }
