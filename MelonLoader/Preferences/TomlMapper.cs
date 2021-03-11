@@ -49,6 +49,9 @@ namespace MelonLoader
         
         public TomlObject ToToml<T>(T value)
         {
+            if (typeof(T).IsEnum)
+                return ((Func<string, TomlObject>) myMappers[typeof(string)].Value)(value.ToString());
+
             if (!myMappers.TryGetValue(typeof(T), out var mapper))
                 throw new ArgumentException($"Attempting to serialized unknown type {typeof(T)}");
 
@@ -57,6 +60,15 @@ namespace MelonLoader
 
         public T FromToml<T>(TomlObject value)
         {
+            if (typeof(T).IsEnum)
+            {
+                string enumValue = ((Func <TomlObject, string>) myMappers[typeof(string)].Key)(value);
+                if (Enum.TryParse(typeof(T), enumValue, out var parsedEnum))
+                    return (T) parsedEnum;
+                else
+                    throw new ArgumentException($"Attempting to serialize Enum {typeof(T).Name} with invalid value {enumValue}");
+            }
+                    
             if (!myMappers.TryGetValue(typeof(T), out var mapper))
                 throw new ArgumentException($"Attempting to serialized unknown type {typeof(T)}");
 
