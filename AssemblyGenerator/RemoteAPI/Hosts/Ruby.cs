@@ -1,0 +1,73 @@
+﻿using System;
+using System.Text.RegularExpressions;
+using MelonLoader.TinyJSON;
+
+namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
+{
+    internal static class Ruby
+    {
+        private static string API_URL = "https://ruby-core.com/api/ml";
+        internal static RemoteAPI.InfoStruct LAST_RESPONSE = null;
+
+        internal static void Contact()
+        {
+            string ContactURL = $"{API_URL}/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}.json";
+            Logger.Debug_Msg($"ContactURL = {ContactURL}");
+
+            string Response = null;
+            try { Response = Core.webClient.DownloadString(ContactURL); }
+            catch (Exception ex)
+            {
+                if (ex is System.Net.WebException)
+                {
+                    System.Net.WebException we = (System.Net.WebException)ex;
+                    System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        Logger.Debug_Msg($"Game Not Found on RemoteAPI Host [Ruby]");
+                        return;
+                    }
+                }
+                Logger.Error($"Exception while Contacting RemoteAPI Host [Ruby]: {ex}");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(Response))
+                throw new ArgumentNullException("Response");
+
+            Logger.Debug_Msg($"Response = {Response}");
+
+            Variant responsearr = null;
+            try { responsearr = JSON.Load(Response); }
+            catch (Exception ex)
+            {
+                Logger.Error($"Exception while Decoding Response to JSON Variant: {ex}");
+                return;
+            }
+
+            ResponseStruct responseobj = null;
+            try { responseobj = responsearr.Make<ResponseStruct>(); }
+            catch (Exception ex)
+            {
+                Logger.Error($"Exception while Converting JSON Variant to ResponseStruct: {ex}");
+                return;
+            }
+
+            LAST_RESPONSE = new RemoteAPI.InfoStruct();
+            //LAST_RESPONSE.ForceDumperVersion = responseobj.forceDumperVersion;
+            LAST_RESPONSE.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
+            LAST_RESPONSE.ObfuscationRegex = responseobj.obfuscationRegex;
+            LAST_RESPONSE.MappingURL = responseobj.mappingURL;
+            LAST_RESPONSE.MappingFileSHA512 = responseobj.mappingFileSHA512;
+        }
+
+        private class ResponseStruct
+        {
+            public string forceDumperVersion = null;
+            public string forceUnhollowerVersion = null;
+            public string obfuscationRegex = null;
+            public string mappingURL = null;
+            public string mappingFileSHA512 = null;
+        }
+    }
+}

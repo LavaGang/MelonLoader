@@ -8,7 +8,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             Version = Utils.ForceVersion_Dumper();
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = RubyAPI.LAST_RESPONSE.forceDumperVersion;
+                Version = RemoteAPI.LAST_RESPONSE.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "commit_1aba7eee0667903dd465d897d88df15c2fe8b991";
             URL = "https://github.com/SamboyCoding/Cpp2IL/releases/download/" + Version + "/Cpp2IL-Win.exe";

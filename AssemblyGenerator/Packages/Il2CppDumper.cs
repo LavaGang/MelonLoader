@@ -9,7 +9,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             Version = Utils.ForceVersion_Dumper();
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = RubyAPI.LAST_RESPONSE.forceDumperVersion;
+                Version = RemoteAPI.LAST_RESPONSE.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "6.5.0";
             URL = "https://github.com/Perfare/Il2CppDumper/releases/download/v" + Version + "/Il2CppDumper-v" + Version + ".zip";

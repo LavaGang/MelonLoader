@@ -99,6 +99,8 @@
 74. Added MelonPreferences_Category.LoadFromFile Method.
 75. Added VerifyLoaderVersion Attribute for Melons to Specify MelonLoader Version Dependency.
 76. Added VerifyLoaderBuild Attribute for Melons to Specify MelonLoader Build Dependency.
+77. Implemented Fallback System to Assembly Generator.
+78. Implemented Fallback Obfuscation Regex for Among Us.
 
 ---
 

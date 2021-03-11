@@ -10,11 +10,16 @@ namespace MelonLoader.AssemblyGenerator
         {
             Destination = Core.il2cppassemblyunhollower.Destination;
             NewFileName = "DeobfuscationMap.csv.gz";
-            URL = RubyAPI.LAST_RESPONSE.mappingURL;
-            Version = RubyAPI.LAST_RESPONSE.mappingFileSHA512;
-            ObfuscationRegex = RubyAPI.LAST_RESPONSE.obfuscationRegex;
+            URL = RemoteAPI.LAST_RESPONSE.MappingURL;
+            Version = RemoteAPI.LAST_RESPONSE.MappingFileSHA512;
+            ObfuscationRegex = RemoteAPI.LAST_RESPONSE.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
-                ObfuscationRegex = Config.ObfuscationRegex;
+            {
+                if (Core.GameName.Equals("Among Us"))
+                    ObfuscationRegex = "[A-Z]{11}";
+                else
+                    ObfuscationRegex = Config.ObfuscationRegex;
+            }
         }
 
         private void Save()
