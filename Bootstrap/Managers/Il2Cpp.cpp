@@ -58,6 +58,11 @@ void Il2Cpp::CallInstallUnityTLSInterface()
 			"A1 ? ? ? ? 8B 0D ? ? ? ? 85 C0 0F 85 68 01 00 00 A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? B8 ? ? ? ? C7 05"
 #endif
 		);
+	if (installTLSCandidates.size() == 0)
+	{
+		Debug::Msg("InstallUnityTlsInterface was not found!");
+		return;
+	}
 	for (auto i = installTLSCandidates.begin(); i != installTLSCandidates.end(); ++i)
 	{
 		if (!*i || *i & 0xF) continue;
