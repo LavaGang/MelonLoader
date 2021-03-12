@@ -68,9 +68,8 @@ void Il2Cpp::CallInstallUnityTLSInterface()
 		if (!*i || *i & 0xF) continue;
 		Debug::Msg("Calling InstallUnityTlsInterface");
 		((void (*) (void)) * i)();
-		return;
+		break;
 	}
-	Debug::Msg("InstallUnityTlsInterface was not found!");
 }
 
 bool Il2Cpp::Exports::Initialize()
