@@ -174,11 +174,11 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 #pragma endregion
 
 #pragma region SupportModules
-Mono::String* InternalCalls::SupportModules::GetVersionStrWithGameName(Mono::String* GameVersion) { return Mono::Exports::mono_string_new(Mono::domain, Core::GetVersionStrWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL)); }
+void InternalCalls::SupportModules::SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion) { Console::SetDefaultTitleWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL); }
 void InternalCalls::SupportModules::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", MelonUtils::GetManagedDirectory);
-	Mono::AddInternalCall("MelonLoader.Support.Main::GetVersionStrWithGameName", GetVersionStrWithGameName);
+	Mono::AddInternalCall("MelonLoader.Support.Main::SetDefaultConsoleTitleWithGameName", SetDefaultConsoleTitleWithGameName);
 }
 #pragma endregion
 

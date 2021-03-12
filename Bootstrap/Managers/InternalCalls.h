@@ -74,7 +74,7 @@ public:
 	{
 	public:
 		static void AddInternalCalls();
-		static Mono::String* GetVersionStrWithGameName(Mono::String* GameVersion);
+		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion);
 	};
 
 	class AssemblyGenerator_Logger

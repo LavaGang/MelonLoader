@@ -103,6 +103,10 @@
 78. Implemented Fallback Obfuscation Regex for Among Us.
 79. Added Enum support in MelonPreferences.    (Credits to loukylor :3)
 80. Fixed Issue with Enum.TryParse in TomlMapper.
+81. Fixed Issue with Console Title being improperly set on older Unity Versions.
+82. Fixed Issue with Missing System.dll on older Unity Versions.
+83. Fixed MME Issue on older Unity Versions.
+84. Fixed Issue with Mods not running on older Unity Versions.
 
 ---
 

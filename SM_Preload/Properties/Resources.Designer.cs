@@ -63,6 +63,16 @@ namespace MelonLoader.Support.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] System {
+            get {
+                object obj = ResourceManager.GetObject("System", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] System_Core {
             get {
                 object obj = ResourceManager.GetObject("System_Core", resourceCulture);

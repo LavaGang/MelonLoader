@@ -33,7 +33,7 @@ namespace MelonLoader.Support
                 game_version = Application.buildGUID;
 
             MelonLogger.Msg($"Game Version: {game_version}");
-            MelonUtils.SetConsoleTitle(GetVersionStrWithGameName(game_version)); 
+            SetDefaultConsoleTitleWithGameName(game_version); 
             UnityMappers.RegisterMappers();
 
             LogSupport.RemoveAllHandlers();
@@ -122,6 +122,6 @@ namespace MelonLoader.Support
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string GetVersionStrWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
+        private extern static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
     }
 }

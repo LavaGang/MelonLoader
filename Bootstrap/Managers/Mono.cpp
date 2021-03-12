@@ -347,9 +347,13 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void** params, Object** exec)
 {
 	const char* method_name = Exports::mono_method_get_name(method);
+	if (method_name != NULL)
+		Debug::Msg(method_name);
 	if ((strstr(method_name, "Internal_ActiveSceneChanged") != NULL) ||
 		(strstr(method_name, "UnityEngine.ISerializationCallbackReceiver.OnAfterDeserialize") != NULL)
-		|| (IsOldMono && (strstr(method_name, "Awake") != NULL)))
+		|| (IsOldMono && (
+			(strstr(method_name, "Awake") != NULL)
+			|| (strstr(method_name, "DoSendMouseEvents") != NULL))))
 	{
 		Debug::Msg("Detaching Hook from mono_runtime_invoke...");
 		Hook::Detach(&(LPVOID&)Exports::mono_runtime_invoke, mono_runtime_invoke);

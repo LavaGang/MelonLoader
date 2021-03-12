@@ -26,6 +26,8 @@ public:
 	static void Flush();
 	static void Close();
 	static void SetTitle(const char* title) { if (ShouldSetTitle) SetConsoleTitleA(title); }
+	static void SetDefaultTitle();
+	static void SetDefaultTitleWithGameName(const char* GameVersion = NULL);
 	enum Color
 	{
 		Black = 0,

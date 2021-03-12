@@ -35,16 +35,13 @@ const char* Core::GetVersionStr()
 
 const char* Core::GetVersionStrWithGameName(const char* GameVersion)
 {
-	return ((std::string(Debug::Enabled
-		? "[D] "
-		: "")
-		+ std::string(GetVersionStr())
+	return (std::string(GetVersionStr())
 		+ std::string(" - ")
 		+ std::string(Game::Name)
 		+ " "
 		+ ((GameVersion == NULL)
 			? ""
-			: GameVersion)).c_str());
+			: GameVersion)).c_str();
 }
 
 void Core::Initialize(HINSTANCE hinstDLL)

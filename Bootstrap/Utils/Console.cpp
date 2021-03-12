@@ -35,9 +35,7 @@ bool Console::Initialize()
 	Window = GetConsoleWindow();
 	Menu = GetSystemMenu(Window, FALSE);
 	SetConsoleCtrlHandler(EventHandler, TRUE);
-	SetTitle((std::string(Debug::Enabled
-		? "[D] "
-		: "") + Core::GetVersionStr()).c_str());
+	SetDefaultTitle();
 	SetForegroundWindow(Window);
 	if (AlwaysOnTop)
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
@@ -58,6 +56,28 @@ bool Console::Initialize()
 	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
 		UseManualColoring = true;
 	return true;
+}
+
+void Console::SetDefaultTitle()
+{
+	if (Debug::Enabled)
+	{
+		std::string versionstr = Core::GetVersionStr();
+		SetTitle(("[D] " + versionstr).c_str());
+	}
+	else
+		SetTitle(Core::GetVersionStr());
+}
+
+void Console::SetDefaultTitleWithGameName(const char* GameVersion)
+{
+	if (Debug::Enabled)
+	{
+		std::string versionstr = Core::GetVersionStrWithGameName(GameVersion);
+		SetTitle(("[D] " + versionstr).c_str());
+	}
+	else
+		SetTitle(Core::GetVersionStrWithGameName(GameVersion));
 }
 
 void Console::Flush()
