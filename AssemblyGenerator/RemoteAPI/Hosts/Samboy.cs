@@ -28,6 +28,7 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
                         Logger.Debug_Msg($"Game Not Found on RemoteAPI Host [Samboy]");
+                        RemoteAPI.ShouldMakeContact = false;
                         return;
                     }
                 }

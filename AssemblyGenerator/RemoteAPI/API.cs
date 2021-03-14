@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MelonLoader.AssemblyGenerator
 {
     internal static class RemoteAPI
     {
-        //private static int TIMEOUT_MS = 7000;
         internal static InfoStruct LAST_RESPONSE = new InfoStruct();
         internal static bool ShouldMakeContact = true;
         private static event Action HostContacts;

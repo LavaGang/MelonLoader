@@ -108,6 +108,7 @@
 83. Fixed MME Issue on older Unity Versions.
 84. Fixed Issue with Mods not running on older Unity Versions.
 85. Added Load Balancing Hosting for Assembly Generator RemoteAPI.    (Credits to DubyaDude and Samboy :D)
+86. Fixed Small Bug in the RemoteAPI Request System for the Assembly Generator.
 
 ---
 
