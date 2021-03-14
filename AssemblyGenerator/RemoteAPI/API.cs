@@ -10,19 +10,27 @@ namespace MelonLoader.AssemblyGenerator
     {
         //private static int TIMEOUT_MS = 7000;
         internal static InfoStruct LAST_RESPONSE = new InfoStruct();
+        internal static bool ShouldMakeContact = true;
+        private static event Action HostContacts;
+
+        static RemoteAPI()
+        {
+            HostContacts += RemoteAPIHosts.Melon.Contact;
+            HostContacts += RemoteAPIHosts.Melon1.Contact;
+            HostContacts += RemoteAPIHosts.Melon2.Contact;
+            HostContacts += RemoteAPIHosts.Ruby.Contact;
+            HostContacts += RemoteAPIHosts.Samboy.Contact;
+        }
 
         internal static void Contact()
         {
             Logger.Msg("Contacting RemoteAPI...");
-            RemoteAPIHosts.Samboy.Contact();
-            if (RemoteAPIHosts.Samboy.LAST_RESPONSE != null)
-                LAST_RESPONSE = RemoteAPIHosts.Samboy.LAST_RESPONSE;
-            else
-            {
-                RemoteAPIHosts.Ruby.Contact();
-                if (RemoteAPIHosts.Ruby.LAST_RESPONSE != null)
-                    LAST_RESPONSE = RemoteAPIHosts.Ruby.LAST_RESPONSE;
-            }
+            HostContacts();
+            DebugPrintResponse();
+        }
+
+        private static void DebugPrintResponse()
+        {
             Logger.Debug_Msg($"ForceDumperVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.ForceDumperVersion) ? "null" : LAST_RESPONSE.ForceDumperVersion)}");
             Logger.Debug_Msg($"ForceUnhollowerVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.ForceUnhollowerVersion) ? "null" : LAST_RESPONSE.ForceUnhollowerVersion)}");
             Logger.Debug_Msg($"ObfuscationRegex = {(string.IsNullOrEmpty(LAST_RESPONSE.ObfuscationRegex) ? "null" : LAST_RESPONSE.ObfuscationRegex)}");

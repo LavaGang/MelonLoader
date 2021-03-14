@@ -4,18 +4,18 @@ using MelonLoader.TinyJSON;
 
 namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
 {
-    internal static class Ruby
+    internal static class Melon
     {
-        private static string API_URL = "https://ruby-core.com/api/ml/";
-        internal static RemoteAPI.InfoStruct LAST_RESPONSE = null;
+        private static string API_URL = "https://api.melonloader.com/api/";
+        private static string API_VERSION = "v1";
 
         internal static void Contact()
         {
             if (!RemoteAPI.ShouldMakeContact)
                 return;
 
-            string ContactURL = $"{API_URL}{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}.json";
-            Logger.Debug_Msg($"ContactURL = {ContactURL}");
+            string ContactURL = $"{API_URL}{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
+            Logger.Debug_Msg($"[Melon] ContactURL = {ContactURL}");
 
             string Response = null;
             try { Response = Core.webClient.DownloadString(ContactURL); }
@@ -27,16 +27,16 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
                     System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
-                        Logger.Debug_Msg($"Game Not Found on RemoteAPI Host [Ruby]");
+                        Logger.Debug_Msg($"Game Not Found on RemoteAPI Host [Melon]");
                         return;
                     }
                 }
-                Logger.Error($"Exception while Contacting RemoteAPI Host [Ruby]: {ex}");
+                Logger.Error($"Exception while Contacting RemoteAPI Host [Melon]: {ex}");
                 return;
             }
 
             bool is_response_null = string.IsNullOrEmpty(Response);
-            Logger.Debug_Msg($"[Ruby] Response = {(is_response_null ? "null" : Response) }");
+            Logger.Debug_Msg($"[Melon] Response = {(is_response_null ? "null" : Response) }");
             if (is_response_null)
                 return;
 
@@ -44,7 +44,7 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
             try { responsearr = JSON.Load(Response); }
             catch (Exception ex)
             {
-                Logger.Error($"Exception while Decoding RemoteAPI Host [Ruby] Response to JSON Variant: {ex}");
+                Logger.Error($"Exception while Decoding RemoteAPI Host [Melon] Response to JSON Variant: {ex}");
                 return;
             }
 
@@ -52,14 +52,14 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
             try { responseobj = responsearr.Make<ResponseStruct>(); }
             catch (Exception ex)
             {
-                Logger.Error($"Exception while Converting JSON Variant to RemoteAPI Host [Ruby] ResponseStruct: {ex}");
+                Logger.Error($"Exception while Converting JSON Variant to RemoteAPI Host [Melon] ResponseStruct: {ex}");
                 return;
             }
 
-            //RemoteAPI.LAST_RESPONSE.ForceDumperVersion = responseobj.forceDumperVersion;
+            //RemoteAPI.LAST_RESPONSE.ForceDumperVersion = responseobj.forceCpp2IlVersion;
             RemoteAPI.LAST_RESPONSE.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
             RemoteAPI.LAST_RESPONSE.ObfuscationRegex = responseobj.obfuscationRegex;
-            RemoteAPI.LAST_RESPONSE.MappingURL = responseobj.mappingURL;
+            RemoteAPI.LAST_RESPONSE.MappingURL = responseobj.mappingUrl;
             RemoteAPI.LAST_RESPONSE.MappingFileSHA512 = responseobj.mappingFileSHA512;
 
             RemoteAPI.ShouldMakeContact = false;
@@ -67,11 +67,13 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
 
         private class ResponseStruct
         {
-            public string forceDumperVersion = null;
+            public string gameSlug = null;
+            public string gameName = null;
+            public string mappingUrl = null;
+            public string mappingFileSHA512 = null;
+            public string forceCpp2IlVersion = null;
             public string forceUnhollowerVersion = null;
             public string obfuscationRegex = null;
-            public string mappingURL = null;
-            public string mappingFileSHA512 = null;
         }
     }
 }

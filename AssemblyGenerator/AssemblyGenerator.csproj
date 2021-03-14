@@ -302,6 +302,9 @@
       <Link>Libs\TinyJSON\Types\Variant.cs</Link>
     </Compile>
     <Compile Include="RemoteAPI\API.cs" />
+    <Compile Include="RemoteAPI\Hosts\Melon.cs" />
+    <Compile Include="RemoteAPI\Hosts\Melon1.cs" />
+    <Compile Include="RemoteAPI\Hosts\Melon2.cs" />
     <Compile Include="RemoteAPI\Hosts\Ruby.cs" />
     <Compile Include="RemoteAPI\Hosts\Samboy.cs" />
     <Compile Include="Utils.cs" />

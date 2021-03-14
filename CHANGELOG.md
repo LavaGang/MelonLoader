@@ -107,6 +107,7 @@
 82. Fixed Issue with Missing System.dll on older Unity Versions.
 83. Fixed MME Issue on older Unity Versions.
 84. Fixed Issue with Mods not running on older Unity Versions.
+85. Added Load Balancing Hosting for Assembly Generator RemoteAPI.    (Credits to DubyaDude and Samboy :D)
 
 ---
 

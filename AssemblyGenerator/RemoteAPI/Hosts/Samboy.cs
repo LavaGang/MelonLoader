@@ -6,14 +6,16 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
 {
     internal static class Samboy
     {
-        private static string API_URL = "https://melon.samboy.dev/api";
+        private static string API_URL = "https://melon.samboy.dev/api/";
         private static string API_VERSION = "v1";
-        internal static RemoteAPI.InfoStruct LAST_RESPONSE = null;
 
         internal static void Contact()
         {
-            string ContactURL = $"{API_URL}/{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
-            Logger.Debug_Msg($"ContactURL = {ContactURL}");
+            if (!RemoteAPI.ShouldMakeContact)
+                return;
+
+            string ContactURL = $"{API_URL}{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
+            Logger.Debug_Msg($"[Samboy] ContactURL = {ContactURL}");
 
             string Response = null;
             try { Response = Core.webClient.DownloadString(ContactURL); }
@@ -30,36 +32,37 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
                     }
                 }
                 Logger.Error($"Exception while Contacting RemoteAPI Host [Samboy]: {ex}");
-                throw;
+                return;
             }
 
-            if (string.IsNullOrEmpty(Response))
-                throw new ArgumentNullException("Response");
-
-            Logger.Debug_Msg($"Response = {Response}");
+            bool is_response_null = string.IsNullOrEmpty(Response);
+            Logger.Debug_Msg($"[Samboy] Response = {(is_response_null ? "null" : Response) }");
+            if (is_response_null)
+                return;
 
             Variant responsearr = null;
             try { responsearr = JSON.Load(Response); }
             catch (Exception ex)
             {
-                Logger.Error($"Exception while Decoding Response to JSON Variant: {ex}");
-                throw;
+                Logger.Error($"Exception while Decoding RemoteAPI Host [Samboy] Response to JSON Variant: {ex}");
+                return;
             }
 
             ResponseStruct responseobj = null;
             try { responseobj = responsearr.Make<ResponseStruct>(); }
             catch (Exception ex)
             {
-                Logger.Error($"Exception while Converting JSON Variant to ResponseStruct: {ex}");
-                throw;
+                Logger.Error($"Exception while Converting JSON Variant to RemoteAPI Host [Samboy] ResponseStruct: {ex}");
+                return;
             }
 
-            LAST_RESPONSE = new RemoteAPI.InfoStruct();
-            //LAST_RESPONSE.ForceDumperVersion = responseobj.forceCpp2IlVersion;
-            LAST_RESPONSE.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
-            LAST_RESPONSE.ObfuscationRegex = responseobj.obfuscationRegex;
-            LAST_RESPONSE.MappingURL = responseobj.mappingUrl;
-            LAST_RESPONSE.MappingFileSHA512 = responseobj.mappingFileSHA512;
+            //RemoteAPI.LAST_RESPONSE.ForceDumperVersion = responseobj.forceCpp2IlVersion;
+            RemoteAPI.LAST_RESPONSE.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
+            RemoteAPI.LAST_RESPONSE.ObfuscationRegex = responseobj.obfuscationRegex;
+            RemoteAPI.LAST_RESPONSE.MappingURL = responseobj.mappingUrl;
+            RemoteAPI.LAST_RESPONSE.MappingFileSHA512 = responseobj.mappingFileSHA512;
+
+            RemoteAPI.ShouldMakeContact = false;
         }
 
         private class ResponseStruct
