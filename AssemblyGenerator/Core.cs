@@ -88,7 +88,6 @@ namespace MelonLoader.AssemblyGenerator
             il2cppassemblyunhollower.Cleanup();
 
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
-            Config.ObfuscationRegex = deobfuscationMap.ObfuscationRegex;
             Config.Save();
 
             Logger.Msg("Assembly Generation Successful!");

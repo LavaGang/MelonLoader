@@ -16,12 +16,13 @@ namespace MelonLoader.AssemblyGenerator
             if (string.IsNullOrEmpty(ObfuscationRegex))
                 ObfuscationRegex = Config.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex) && Core.GameName.Equals("Among Us"))
-                    ObfuscationRegex = "[A-Z]{11}";
+                ObfuscationRegex = "[A-Z]{11}";
         }
 
         private void Save()
         {
             Config.DeobfuscationMapHash = Version;
+            Config.ObfuscationRegex = ObfuscationRegex;
             Config.Save();
         }
 
