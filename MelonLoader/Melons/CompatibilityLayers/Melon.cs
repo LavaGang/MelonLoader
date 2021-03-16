@@ -12,10 +12,8 @@ namespace MelonLoader.CompatibilityLayers
 			if (args.inter != null)
 				return;
 			foreach (Type type in args.assembly.GetTypes())
-				if (type.IsSubclassOf(typeof(MelonMod))
-					|| type.IsSubclassOf(typeof(MelonPlugin))
-					|| type.IsSubclassOf(typeof(MelonBase)))
-                {
+				if (type.IsSubclassOf(typeof(MelonBase)))
+				{
 					args.inter = new Melon();
 					break;
                 }

@@ -268,7 +268,7 @@ namespace MelonLoader
             if (!resolver.CheckAndCreate(asm, filelocation, is_plugin, ref baseInstance))
                 return;
 
-            if (resolver is CompatibilityLayer.MelonLoader)
+            if (resolver is CompatibilityLayers.Melon)
                 RegisterIl2CppInjectAttributes(asm);
             HarmonyPatchAttributes(baseInstance);
         }

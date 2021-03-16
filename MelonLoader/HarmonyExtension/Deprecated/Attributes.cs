@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Harmony
 {
-    [Obsolete("Harmony.HarmonyShield is obsolete. Please use HarmonyLib.HarmonyShield instead.")]
+    [Obsolete("Harmony.HarmonyShield is obsolete. Please use MelonLoader.HarmonyShield instead.")]
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct)]
     public class HarmonyShield : MelonLoader.HarmonyShield { }
 
