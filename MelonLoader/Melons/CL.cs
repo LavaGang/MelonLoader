@@ -9,7 +9,7 @@ namespace MelonLoader
 
         static MelonCompatibilityLayer()
         {
-            LayerResolveEvents += CompatibilityLayer.MelonLoader.TryResolve;
+            LayerResolveEvents += CompatibilityLayers.Melon.TryResolve;
         }
 
         internal static MelonCompatibilityLayerResolver Resolve(Assembly asm)

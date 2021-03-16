@@ -27,10 +27,6 @@ namespace MelonLoader
 				args.MethodPatcher = new HarmonyIl2CppMethodPatcher(args.Original);
 		}
 
-		static HarmonyIl2CppMethodPatcher()
-        {
-		}
-
 		private HarmonyIl2CppMethodPatcher(MethodBase original) : base(original)
 		{
 			originalMethodInfoPointer = UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(Original);

@@ -3,26 +3,22 @@ using System.Collections.Generic;
 using System.Reflection;
 #pragma warning disable 0618
 
-namespace MelonLoader.CompatibilityLayer
+namespace MelonLoader.CompatibilityLayers
 {
-	internal class MelonLoader : MelonCompatibilityLayerResolver
+	internal class Melon : MelonCompatibilityLayerResolver
 	{
 		internal static void TryResolve(object sender, MelonCompatibilityLayerResolverEventArgs args)
 		{
 			if (args.inter != null)
 				return;
-			bool isMelonLoader = false;
 			foreach (Type type in args.assembly.GetTypes())
 				if (type.IsSubclassOf(typeof(MelonMod))
 					|| type.IsSubclassOf(typeof(MelonPlugin))
 					|| type.IsSubclassOf(typeof(MelonBase)))
                 {
-					isMelonLoader = true;
+					args.inter = new Melon();
 					break;
                 }
-			if (!isMelonLoader)
-				return;
-			args.inter = new MelonLoader();
 		}
 
 		internal override bool CheckAndCreate(Assembly asm, string filelocation, bool is_plugin, ref MelonBase baseInstance)
