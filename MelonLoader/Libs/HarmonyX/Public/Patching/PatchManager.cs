@@ -21,8 +21,6 @@ namespace HarmonyLib.Public.Patching
 
 		static PatchManager()
 		{
-			if (MelonLoader.MelonUtils.IsGameIl2Cpp())
-				ResolvePatcher += MelonLoader.HarmonyIl2CppMethodPatcher.TryResolve;
 			ResolvePatcher += ManagedMethodPatcher.TryResolve;
 			ResolvePatcher += NativeDetourMethodPatcher.TryResolve;
 		}

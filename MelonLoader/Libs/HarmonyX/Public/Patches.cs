@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -24,6 +25,10 @@ namespace HarmonyLib
 		/// 
 		public readonly ReadOnlyCollection<Patch> Finalizers;
 
+		/// <summary>A collection of ILManipulator <see cref="Patch"/></summary>
+		/// 
+		public readonly ReadOnlyCollection<Patch> ILManipulators;
+
 		/// <summary>Gets all owners (Harmony IDs) or all known patches</summary>
 		/// <value>The patch owners</value>
 		///
@@ -36,6 +41,7 @@ namespace HarmonyLib
 				result.UnionWith(Postfixes.Select(p => p.owner));
 				result.UnionWith(Transpilers.Select(p => p.owner));
 				result.UnionWith(Finalizers.Select(p => p.owner));
+				result.UnionWith(ILManipulators.Select(p => p.owner));
 				return result.ToList().AsReadOnly();
 			}
 		}
@@ -45,18 +51,30 @@ namespace HarmonyLib
 		/// <param name="postfixes">An array of postfixes as <see cref="Patch"/></param>
 		/// <param name="transpilers">An array of transpileres as <see cref="Patch"/></param>
 		/// <param name="finalizers">An array of finalizeres as <see cref="Patch"/></param>
+		/// <param name="ilmanipulators">An array of ilmanipulators as <see cref="Patch"/></param>
 		///
-		public Patches(Patch[] prefixes, Patch[] postfixes, Patch[] transpilers, Patch[] finalizers)
+		public Patches(Patch[] prefixes, Patch[] postfixes, Patch[] transpilers, Patch[] finalizers, Patch[] ilmanipulators)
 		{
 			if (prefixes is null) prefixes = new Patch[0];
 			if (postfixes is null) postfixes = new Patch[0];
 			if (transpilers is null) transpilers = new Patch[0];
 			if (finalizers is null) finalizers = new Patch[0];
+			if (ilmanipulators is null) ilmanipulators = new Patch[0];
 
 			Prefixes = prefixes.ToList().AsReadOnly();
 			Postfixes = postfixes.ToList().AsReadOnly();
 			Transpilers = transpilers.ToList().AsReadOnly();
 			Finalizers = finalizers.ToList().AsReadOnly();
+			ILManipulators = ilmanipulators.ToList().AsReadOnly();
 		}
+
+		/// <summary>Creates a group of patches</summary>
+		/// <param name="prefixes">An array of prefixes as <see cref="Patch"/></param>
+		/// <param name="postfixes">An array of postfixes as <see cref="Patch"/></param>
+		/// <param name="transpilers">An array of transpileres as <see cref="Patch"/></param>
+		/// <param name="finalizers">An array of finalizeres as <see cref="Patch"/></param>
+		///
+		[Obsolete("Use newer constructor instead", true)]
+		public Patches(Patch[] prefixes, Patch[] postfixes, Patch[] transpilers, Patch[] finalizers) : this(prefixes, postfixes, transpilers, finalizers, null) { }
 	}
 }

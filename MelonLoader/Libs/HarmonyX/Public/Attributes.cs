@@ -48,7 +48,9 @@ namespace HarmonyLib
 		/// <summary>A finalizer</summary>
 		Finalizer,
 		/// <summary>A reverse patch</summary>
-		ReversePatch
+		ReversePatch,
+		/// <summary>A MonoMod</summary>
+		ILManipulator
 	}
 
 	/// <summary>Specifies the type of reverse patch</summary>
@@ -655,6 +657,13 @@ namespace HarmonyLib
 	{
 	}
 
+	/// <summary>Specifies the ILManipulator function in a patch class</summary>>
+	/// 
+	[AttributeUsage(AttributeTargets.Method)]
+	public class HarmonyILManipulator : Attribute
+	{
+	}
+
 	/// <summary>Specifies the Finalizer function in a patch class</summary>
 	///
 	[AttributeUsage(AttributeTargets.Method)]
@@ -714,7 +723,4 @@ namespace HarmonyLib
 			NewName = name;
 		}
 	}
-
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct)]
-	public class HarmonyShield : Attribute { }
 }

@@ -29,12 +29,6 @@ namespace MelonLoader
 
 		static HarmonyIl2CppMethodPatcher()
         {
-			if (!HarmonyFileLog.Enabled)
-				return;
-			try { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len"); }
-			catch { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length"); }
-			try { localsGetter = AccessTools.FieldRefAccess<ILGenerator, LocalBuilder[]>("locals"); } catch { }
-			try { localCountGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_localCount"); } catch { }
 		}
 
 		private HarmonyIl2CppMethodPatcher(MethodBase original) : base(original)
@@ -275,6 +269,11 @@ namespace MelonLoader
 		private static string CodePos(ILGenerator il)
 		{
 			int offset = 0;
+
+			if (codeLenGetter == null)
+				try { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len"); }
+				catch { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length"); }
+
 			if (codeLenGetter != null)
 				offset = codeLenGetter(il);
 			return string.Format("L_{0:x4}: ", offset);
@@ -284,6 +283,12 @@ namespace MelonLoader
 		{
 			if (!HarmonyFileLog.Enabled)
 				return;
+
+			if (localsGetter == null)
+				try { localsGetter = AccessTools.FieldRefAccess<ILGenerator, LocalBuilder[]>("locals"); } catch { }
+			if (localCountGetter == null)
+				try { localCountGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_localCount"); } catch { }
+
 			var localCount = -1;
 			var localsArray = localsGetter != null ? localsGetter(il) : null;
 			if ((localsArray != null) && (localsArray.Length > 0))

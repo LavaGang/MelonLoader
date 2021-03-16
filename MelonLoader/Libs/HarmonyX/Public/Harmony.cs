@@ -79,12 +79,6 @@ namespace HarmonyLib
 #pragma warning restore 618
 		}
 
-		public static Harmony Create(string id)
-		{
-			if (id == null) throw new Exception("id cannot be null");
-			return new Harmony(id);
-		}
-
 		/// <summary>The unique identifier</summary>
 		///
 		public string Id { get; }
@@ -141,7 +135,6 @@ namespace HarmonyLib
 		///
 		public void PatchAll(Assembly assembly)
 		{
-			if (assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0) return;
 			AccessTools.GetTypesFromAssembly(assembly).Do(type => CreateClassProcessor(type).Patch());
 		}
 
@@ -149,8 +142,28 @@ namespace HarmonyLib
 		/// <param name="type">The type to search</param>
 		///
 		public void PatchAll(Type type)
-		{ 
+		{
 			CreateClassProcessor(type, true).Patch();
+		}
+
+		/// <summary>Creates patches by manually specifying the methods</summary>
+		/// <param name="original">The original method/constructor</param>
+		/// <param name="prefix">An optional prefix method wrapped in a <see cref="HarmonyMethod"/> object</param>
+		/// <param name="postfix">An optional postfix method wrapped in a <see cref="HarmonyMethod"/> object</param>
+		/// <param name="transpiler">An optional transpiler method wrapped in a <see cref="HarmonyMethod"/> object</param>
+		/// <param name="finalizer">An optional finalizer method wrapped in a <see cref="HarmonyMethod"/> object</param>
+		/// <param name="ilmanipulator">An optional ilmanipulator method wrapped in a <see cref="HarmonyMethod"/></param>
+		/// <returns>The replacement method that was created to patch the original method</returns>
+		///
+		public MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null, HarmonyMethod ilmanipulator = null)
+		{
+			var processor = CreateProcessor(original);
+			_ = processor.AddPrefix(prefix);
+			_ = processor.AddPostfix(postfix);
+			_ = processor.AddTranspiler(transpiler);
+			_ = processor.AddFinalizer(finalizer);
+			_ = processor.AddILManipulator(ilmanipulator);
+			return processor.Patch();
 		}
 
 		/// <summary>Creates patches by manually specifying the methods</summary>
@@ -161,18 +174,22 @@ namespace HarmonyLib
 		/// <param name="finalizer">An optional finalizer method wrapped in a <see cref="HarmonyMethod"/> object</param>
 		/// <returns>The replacement method that was created to patch the original method</returns>
 		///
-		public MethodInfo Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null)
+		[Obsolete("Use newer Patch() instead", true)]
+		public MethodInfo Patch(MethodBase original, HarmonyMethod prefix, HarmonyMethod postfix, HarmonyMethod transpiler, HarmonyMethod finalizer)
 		{
-			if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-							  || (original.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-							  || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
-				return null;
-			var processor = CreateProcessor(original);
-			_ = processor.AddPrefix(prefix);
-			_ = processor.AddPostfix(postfix);
-			_ = processor.AddTranspiler(transpiler);
-			_ = processor.AddFinalizer(finalizer);
-			return processor.Patch();
+			return Patch(original, prefix, postfix, transpiler, finalizer, null);
+		}
+
+		/// <summary>Patches a foreign method onto a stub method of yours and optionally applies transpilers during the process</summary>
+		/// <param name="original">The original method/constructor you want to duplicate</param>
+		/// <param name="standin">Your stub method as <see cref="HarmonyMethod"/> that will become the original. Needs to have the correct signature (either original or whatever your transpilers generates)</param>
+		/// <param name="transpiler">An optional transpiler as method that will be applied during the process</param>
+		/// <param name="ilmanipulator">An optional ilmanipulator as method that will be applied during the process</param>
+		/// <returns>The replacement method that was created to patch the stub method</returns>
+		///
+		public static MethodInfo ReversePatch(MethodBase original, HarmonyMethod standin, MethodInfo transpiler = null, MethodInfo ilmanipulator = null)
+		{
+			return PatchFunctions.ReversePatch(standin, original, transpiler, ilmanipulator);
 		}
 
 		/// <summary>Patches a foreign method onto a stub method of yours and optionally applies transpilers during the process</summary>
@@ -181,13 +198,10 @@ namespace HarmonyLib
 		/// <param name="transpiler">An optional transpiler as method that will be applied during the process</param>
 		/// <returns>The replacement method that was created to patch the stub method</returns>
 		///
-		public static MethodInfo ReversePatch(MethodBase original, HarmonyMethod standin, MethodInfo transpiler = null)
+		[Obsolete("Use newer ReversePatch() instead", true)]
+		public static MethodInfo ReversePatch(MethodBase original, HarmonyMethod standin, MethodInfo transpiler)
 		{
-			if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-								 || (original.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-								 || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
-				return null;
-			return PatchFunctions.ReversePatch(standin, original, transpiler);
+			return PatchFunctions.ReversePatch(standin, original, transpiler, null);
 		}
 
 		/// <summary>Unpatches methods by patching them with zero patches. Fully unpatching is not supported. Be careful, unpatching is global</summary>
@@ -215,22 +229,10 @@ namespace HarmonyLib
 					info.Postfixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
 					info.Prefixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
 				}
+				info.ILManipulators.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
 				info.Transpilers.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
 				if (hasBody)
 					info.Finalizers.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
-			}
-		}
-
-		public void UnpatchAll(MelonLoader.MelonBase melon)
-		{
-			bool IDCheck(Patch patchInfo) => (patchInfo.PatchMethod.Module.Assembly == melon.Assembly);
-			var originals = GetPatchedMethods().ToList();
-			foreach (var original in originals)
-			{
-				var info = GetPatchInfo(original);
-				info.Postfixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
-				info.Prefixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
-				info.Transpilers.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
 			}
 		}
 

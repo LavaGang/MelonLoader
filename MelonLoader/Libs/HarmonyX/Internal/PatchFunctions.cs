@@ -54,11 +54,17 @@ namespace HarmonyLib
 				HarmonyManipulator.Manipulate(original, patchInfo, ctx);
 			}
 
-			try { return patcher.DetourTo(dmd?.Generate()) as MethodInfo; }
-			catch (Exception ex) { throw HarmonyException.Create(ex, dmd?.Definition?.Body); }
+			try
+			{
+				return patcher.DetourTo(dmd?.Generate()) as MethodInfo;
+			}
+			catch (Exception ex)
+			{
+				throw HarmonyException.Create(ex, dmd?.Definition?.Body);
+			}
 		}
 
-		internal static MethodInfo ReversePatch(HarmonyMethod standin, MethodBase original, MethodInfo postTranspiler)
+		internal static MethodInfo ReversePatch(HarmonyMethod standin, MethodBase original, MethodInfo postTranspiler, MethodInfo postManipulator)
 		{
 			if (standin is null)
 				throw new ArgumentNullException(nameof(standin));
@@ -66,12 +72,15 @@ namespace HarmonyLib
 				throw new ArgumentNullException($"{nameof(standin)}.{nameof(standin.method)}");
 
 			var transpilers = new List<MethodInfo>();
+			var ilmanipulators = new List<MethodInfo>();
 			if (standin.reversePatchType == HarmonyReversePatchType.Snapshot)
 			{
 				var info = Harmony.GetPatchInfo(original);
 				transpilers.AddRange(GetSortedPatchMethods(original, info.Transpilers.ToArray()));
+				ilmanipulators.AddRange(GetSortedPatchMethods(original, info.ILManipulators.ToArray()));
 			}
 			if (postTranspiler is object) transpilers.Add(postTranspiler);
+			if (postManipulator is object) ilmanipulators.Add(postManipulator);
 
 			MethodBody patchBody = null;
 			var hook = new ILHook(standin.method, ctx =>
@@ -98,6 +107,8 @@ namespace HarmonyLib
 					manipulator.AddTranspiler(methodInfo);
 
 				manipulator.WriteTo(ctx.Body, standin.method);
+
+				HarmonyManipulator.ApplyILManipulators(ctx, original, ilmanipulators, null);
 
 				// Write a ret in case it got removed (wrt. HarmonyManipulator)
 				ctx.IL.Emit(OpCodes.Ret);

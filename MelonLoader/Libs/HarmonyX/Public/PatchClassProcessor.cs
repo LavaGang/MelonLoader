@@ -118,10 +118,6 @@ namespace HarmonyLib
 				if (patchMethod.type == HarmonyPatchType.ReversePatch)
 				{
 					lastOriginal = patchMethod.info.GetOriginalMethod();
-					if ((lastOriginal.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						|| (lastOriginal.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						|| (lastOriginal.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
-						continue;
 					var reversePatcher = instance.CreateReversePatcher(lastOriginal, patchMethod.info);
 					lock (PatchProcessor.locker)
 						_ = reversePatcher.Patch();
@@ -135,10 +131,6 @@ namespace HarmonyLib
 			for (var i = 0; i < originals.Count; i++)
 			{
 				lastOriginal = originals[i];
-				if ((lastOriginal.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						|| (lastOriginal.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						|| (lastOriginal.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
-					continue;
 				var job = jobs.GetJob(lastOriginal);
 				foreach (var patchMethod in patchMethods)
 				{
@@ -173,10 +165,6 @@ namespace HarmonyLib
 				lastOriginal = patchMethod.info.GetOriginalMethod();
 				if (lastOriginal is null)
 					throw new ArgumentException($"Undefined target method for patch method {patchMethod.info.method.FullDescription()}");
-				if ((lastOriginal.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						|| (lastOriginal.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						|| (lastOriginal.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
-					continue;
 
 				var job = jobs.GetJob(lastOriginal);
 				job.AddPatch(patchMethod);
@@ -207,6 +195,7 @@ namespace HarmonyLib
 						patchInfo.AddPostfixes(instance.Id, job.postfixes.ToArray());
 						patchInfo.AddTranspilers(instance.Id, job.transpilers.ToArray());
 						patchInfo.AddFinalizers(instance.Id, job.finalizers.ToArray());
+						patchInfo.AddILManipulators(instance.Id, job.ilmanipulators.ToArray());
 
 						replacement = PatchFunctions.UpdateWrapper(job.original, patchInfo);
 						PatchManager.AddReplacementOriginal(job.original, replacement);

@@ -5,7 +5,7 @@ namespace Harmony
 {
     [Obsolete("Harmony.HarmonyShield is obsolete. Please use HarmonyLib.HarmonyShield instead.")]
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct)]
-    public class HarmonyShield : HarmonyLib.HarmonyShield { }
+    public class HarmonyShield : MelonLoader.HarmonyShield { }
 
 	[Obsolete("Harmony.MethodType is obsolete. Please use HarmonyLib.MethodType instead.")]
 	public enum MethodType

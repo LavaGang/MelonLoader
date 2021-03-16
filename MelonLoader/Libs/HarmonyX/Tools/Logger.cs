@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
 
 namespace HarmonyLib.Tools
 {
@@ -60,23 +58,6 @@ namespace HarmonyLib.Tools
         {
             Writer.WriteLine($"[{e.LogChannel}] {e.Message}");
             Writer.Flush();
-        }
-
-        public static string FormatArgument(object argument)
-        {
-            if (argument == null) return "NULL";
-            var type = argument.GetType();
-
-            if (type == typeof(string))
-                return "\"" + argument + "\"";
-            if (type == typeof(Label))
-                return "Label" + ((Label)argument).GetHashCode();
-            if (type == typeof(Label[]))
-                return "Labels" + string.Join(",", ((Label[])argument).Select(l => l.GetHashCode().ToString()).ToArray());
-            if (type == typeof(LocalBuilder))
-                return ((LocalBuilder)argument).LocalIndex + " (" + ((LocalBuilder)argument).LocalType + ")";
-
-            return argument.ToString().Trim();
         }
     }
 

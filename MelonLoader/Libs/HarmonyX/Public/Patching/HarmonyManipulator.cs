@@ -50,9 +50,10 @@ namespace HarmonyLib.Public.Patching
 			out List<PatchContext> prefixes,
 			out List<PatchContext> postfixes,
 			out List<PatchContext> transpilers,
-			out List<PatchContext> finalizers)
+			out List<PatchContext> finalizers,
+			out List<PatchContext> ilmanipulators)
 		{
-			Patch[] prefixesArr, postfixesArr, transpilersArr, finalizersArr;
+			Patch[] prefixesArr, postfixesArr, transpilersArr, finalizersArr, ilmanipulatorsArr;
 
 			// Lock to ensure no more patches are added while we're sorting
 			lock (patchInfo)
@@ -61,6 +62,7 @@ namespace HarmonyLib.Public.Patching
 				postfixesArr = patchInfo.postfixes.ToArray();
 				transpilersArr = patchInfo.transpilers.ToArray();
 				finalizersArr = patchInfo.finalizers.ToArray();
+				ilmanipulatorsArr = patchInfo.ilmanipulators.ToArray();
 			}
 
 			static List<PatchContext> Sort(MethodBase original, Patch[] patches)
@@ -73,6 +75,7 @@ namespace HarmonyLib.Public.Patching
 			postfixes = Sort(original, postfixesArr);
 			transpilers = Sort(original, transpilersArr);
 			finalizers = Sort(original, finalizersArr);
+			ilmanipulators = Sort(original, ilmanipulatorsArr);
 		}
 
 		/// <summary>
@@ -88,12 +91,8 @@ namespace HarmonyLib.Public.Patching
 		///
 		public static void Manipulate(MethodBase original, PatchInfo patchInfo, ILContext ctx)
 		{
-			if ((original.DeclaringType.Assembly.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						   || (original.DeclaringType.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0)
-						   || (original.GetCustomAttributes(typeof(HarmonyShield), false).Count() > 0))
-				return;
 			SortPatches(original, patchInfo, out var sortedPrefixes, out var sortedPostfixes, out var sortedTranspilers,
-				out var sortedFinalizers);
+				out var sortedFinalizers, out var sortedILManipulators);
 
 			Logger.Log(Logger.LogChannel.Info, () =>
 			{
@@ -115,19 +114,19 @@ namespace HarmonyLib.Public.Patching
 				Print(sortedPostfixes, "postfixes");
 				Print(sortedTranspilers, "transpilers");
 				Print(sortedFinalizers, "finalizers");
+				Print(sortedILManipulators, "ilmanipulators");
 
 				return sb.ToString();
 			});
 
-			MakePatched(original, ctx, sortedPrefixes, sortedPostfixes, sortedTranspilers, sortedFinalizers);
+			MakePatched(original, ctx, sortedPrefixes, sortedPostfixes, sortedTranspilers, sortedFinalizers, sortedILManipulators);
 		}
 
-		private static void WriteTranspiledMethod(ILContext ctx, MethodBase original, List<PatchContext> transpilers, bool isIl2Cpp)
+		private static void WriteTranspiledMethod(ILContext ctx, MethodBase original, List<PatchContext> transpilers)
 		{
 			if (transpilers.Count == 0)
 				return;
-			if (isIl2Cpp)
-				return;
+
 			Logger.Log(Logger.LogChannel.Info, () => $"Transpiling {original.FullDescription()}");
 
 			// Create a high-level manipulator for the method
@@ -169,7 +168,7 @@ namespace HarmonyLib.Public.Patching
 		}
 
 		private static void WritePostfixes(ILEmitter il, MethodBase original, ILEmitter.Label returnLabel,
-			Dictionary<string, VariableDefinition> variables, ICollection<PatchContext> postfixes, bool isIl2Cpp)
+			Dictionary<string, VariableDefinition> variables, ICollection<PatchContext> postfixes)
 		{
 			// Postfix layout:
 			// Make return value (if needed) into a variable
@@ -211,7 +210,7 @@ namespace HarmonyLib.Public.Patching
 				var start = il.DeclareLabel();
 				il.MarkLabel(start);
 
-				EmitCallParameter(il, original, method, variables, true, out var tmpObjectVar, out var tmpBoxVars, isIl2Cpp);
+				EmitCallParameter(il, original, method, variables, true, out var tmpObjectVar, out var tmpBoxVars);
 				il.Emit(OpCodes.Call, method);
 				EmitResultUnbox(il, original, tmpObjectVar, returnValueVar);
 				EmitArgUnbox(il, tmpBoxVars);
@@ -240,7 +239,7 @@ namespace HarmonyLib.Public.Patching
 				if (postfix.wrapTryCatch)
 					il.Emit(OpCodes.Ldloc, returnValueVar);
 
-				EmitCallParameter(il, original, method, variables, true, out var tmpObjectVar, out var tmpBoxVars, isIl2Cpp);
+				EmitCallParameter(il, original, method, variables, true, out var tmpObjectVar, out var tmpBoxVars);
 				il.Emit(OpCodes.Call, method);
 				EmitResultUnbox(il, original, tmpObjectVar, returnValueVar);
 				EmitArgUnbox(il, tmpBoxVars);
@@ -269,7 +268,7 @@ namespace HarmonyLib.Public.Patching
 		}
 
 		private static bool WritePrefixes(ILEmitter il, MethodBase original, ILEmitter.Label returnLabel,
-			Dictionary<string, VariableDefinition> variables, ICollection<PatchContext> prefixes, bool isIl2Cpp)
+			Dictionary<string, VariableDefinition> variables, ICollection<PatchContext> prefixes)
 		{
 			// Prefix layout:
 			// Make return value (if needed) into a variable
@@ -314,7 +313,7 @@ namespace HarmonyLib.Public.Patching
 				var start = il.DeclareLabel();
 				il.MarkLabel(start);
 
-				EmitCallParameter(il, original, method, variables, false, out var tmpObjectVar, out var tmpBoxVars, isIl2Cpp);
+				EmitCallParameter(il, original, method, variables, false, out var tmpObjectVar, out var tmpBoxVars);
 				il.Emit(OpCodes.Call, method);
 				EmitResultUnbox(il, original, tmpObjectVar, returnValueVar);
 				EmitArgUnbox(il, tmpBoxVars);
@@ -359,7 +358,7 @@ namespace HarmonyLib.Public.Patching
 
 		private static bool WriteFinalizers(ILEmitter il, MethodBase original, ILEmitter.Label returnLabel,
 			Dictionary<string, VariableDefinition> variables,
-			ICollection<PatchContext> finalizers, bool isIl2Cpp)
+			ICollection<PatchContext> finalizers)
 		{
 			// Finalizer layout:
 			// Create __exception variable to store exception info and a skip flag
@@ -412,7 +411,7 @@ namespace HarmonyLib.Public.Patching
 					var start = il.DeclareLabel();
 					il.MarkLabel(start);
 
-					EmitCallParameter(il, original, method, variables, false, out var tmpObjectVar, out var tmpBoxVars, isIl2Cpp);
+					EmitCallParameter(il, original, method, variables, false, out var tmpObjectVar, out var tmpBoxVars);
 					il.Emit(OpCodes.Call, method);
 					EmitResultUnbox(il, original, tmpObjectVar, returnValueVar);
 					EmitArgUnbox(il, tmpBoxVars);
@@ -483,25 +482,46 @@ namespace HarmonyLib.Public.Patching
 			return true;
 		}
 
+		internal static void ApplyILManipulators(ILContext ctx, MethodBase original, ICollection<MethodInfo> manipulators, ILEmitter.Label retLabel)
+		{
+			// Define a label to branch to, if not passed a label create one to the last instruction
+			var retILLabel = ctx.DefineLabel(retLabel?.instruction) ?? ctx.DefineLabel(ctx.Body.Instructions.Last());
+
+			foreach (var method in manipulators)
+			{
+				List<object> manipulatorParameters = new List<object>();
+				foreach (var type in method.GetParameters().Select(p => p.ParameterType))
+				{
+					if (type.IsAssignableFrom(typeof(ILContext)))
+						manipulatorParameters.Add(ctx);
+					if (type.IsAssignableFrom(typeof(MethodBase)))
+						manipulatorParameters.Add(original);
+					if (type.IsAssignableFrom(typeof(ILLabel)))
+						manipulatorParameters.Add(retILLabel);
+				}
+
+				method.Invoke(null, manipulatorParameters.ToArray());
+			}
+		}
+
 		private static void MakePatched(MethodBase original, ILContext ctx,
 			List<PatchContext> prefixes,
 			List<PatchContext> postfixes,
 			List<PatchContext> transpilers,
-			List<PatchContext> finalizers)
+			List<PatchContext> finalizers,
+			List<PatchContext> ilmanipulators)
 		{
 			try
 			{
 				if (original == null)
 					throw new ArgumentException(nameof(original));
 
-				bool isIl2Cpp = MelonLoader.UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType);
-
 				Logger.Log(Logger.LogChannel.Info, () => $"Running ILHook manipulator on {original.FullDescription()}");
 
-				WriteTranspiledMethod(ctx, original, transpilers, isIl2Cpp);
+				WriteTranspiledMethod(ctx, original, transpilers);
 
 				// If no need to wrap anything, we're basically done!
-				if (prefixes.Count + postfixes.Count + finalizers.Count == 0)
+				if (prefixes.Count + postfixes.Count + finalizers.Count + ilmanipulators.Count == 0)
 				{
 					Logger.Log(Logger.LogChannel.IL,
 						() => $"Generated patch ({ctx.Method.FullName}):\n{ctx.Body.ToILDasmString()}");
@@ -523,9 +543,9 @@ namespace HarmonyLib.Public.Patching
 								il.DeclareVariable(patchParam.ParameterType.OpenRefType()); // Fix possible reftype
 
 				var modifiesControlFlow = false;
-				modifiesControlFlow |= WritePrefixes(il, original, returnLabel, variables, prefixes, isIl2Cpp);
-				WritePostfixes(il, original, returnLabel, variables, postfixes, isIl2Cpp);
-				modifiesControlFlow |= WriteFinalizers(il, original, returnLabel, variables, finalizers, isIl2Cpp);
+				modifiesControlFlow |= WritePrefixes(il, original, returnLabel, variables, prefixes);
+				WritePostfixes(il, original, returnLabel, variables, postfixes);
+				modifiesControlFlow |= WriteFinalizers(il, original, returnLabel, variables, finalizers);
 
 				// Mark return label in case it hasn't been marked yet and close open labels to return
 				il.MarkLabel(returnLabel);
@@ -534,6 +554,8 @@ namespace HarmonyLib.Public.Patching
 				// If we have finalizers, ensure the return label is `ret` and not `nop`
 				if (modifiesControlFlow)
 					lastInstruction.OpCode = OpCodes.Ret;
+
+				ApplyILManipulators(ctx, original, ilmanipulators.Select(m => m.method).ToList(), returnLabel);
 
 				Logger.Log(Logger.LogChannel.IL,
 					() => $"Generated patch ({ctx.Method.FullName}):\n{ctx.Body.ToILDasmString()}");
@@ -626,7 +648,7 @@ namespace HarmonyLib.Public.Patching
 
 		private static void EmitCallParameter(ILEmitter il, MethodBase original, MethodInfo patch,
 			Dictionary<string, VariableDefinition> variables, bool allowFirsParamPassthrough,
-			out VariableDefinition tmpObjectVar, out List<ArgumentBoxInfo> tmpBoxVars, bool isIl2Cpp)
+			out VariableDefinition tmpObjectVar, out List<ArgumentBoxInfo> tmpBoxVars)
 		{
 			tmpObjectVar = null;
 			tmpBoxVars = new List<ArgumentBoxInfo>();
@@ -675,47 +697,31 @@ namespace HarmonyLib.Public.Patching
 				if (patchParam.Name.StartsWith(INSTANCE_FIELD_PREFIX, StringComparison.Ordinal))
 				{
 					var fieldName = patchParam.Name.Substring(INSTANCE_FIELD_PREFIX.Length);
-					if (isIl2Cpp)
+					FieldInfo fieldInfo;
+					if (fieldName.All(char.IsDigit))
 					{
-						if (patchParam.ParameterType.IsByRef)
-							throw new NotSupportedException("Ref parameters to fields are not supported in IL2CPP patches");
-
-						var getterMethod = AccessTools.Property(original.DeclaringType, fieldName)?.GetGetMethod();
-						if (getterMethod == null)
-							throw new ArgumentException("No such field defined in class " + original.DeclaringType.FullName, fieldName);
-
-						if (!getterMethod.IsStatic)
-							il.Emit(OpCodes.Ldarg_0);
-						var opcode = getterMethod.IsVirtual ? OpCodes.Callvirt : OpCodes.Call;
-						il.Emit(opcode, getterMethod);
+						// field access by index only works for declared fields
+						fieldInfo = AccessTools.DeclaredField(original.DeclaringType, int.Parse(fieldName));
+						if (fieldInfo is null)
+							throw new ArgumentException(
+								$"No field found at given index in class {original.DeclaringType.FullName}", fieldName);
 					}
 					else
-					{					
-						FieldInfo fieldInfo;
-						if (fieldName.All(char.IsDigit))
-						{
-							// field access by index only works for declared fields
-							fieldInfo = AccessTools.DeclaredField(original.DeclaringType, int.Parse(fieldName));
-							if (fieldInfo is null)
-								throw new ArgumentException(
-									$"No field found at given index in class {original.DeclaringType.FullName}", fieldName);
-						}
-						else
-						{
-							fieldInfo = AccessTools.Field(original.DeclaringType, fieldName);
-							if (fieldInfo is null)
-								throw new ArgumentException($"No such field defined in class {original.DeclaringType.FullName}",
-									fieldName);
-						}
-
-						if (fieldInfo.IsStatic)
-							il.Emit(patchParam.ParameterType.IsByRef ? OpCodes.Ldsflda : OpCodes.Ldsfld, fieldInfo);
-						else
-						{
-							il.Emit(OpCodes.Ldarg_0);
-							il.Emit(patchParam.ParameterType.IsByRef ? OpCodes.Ldflda : OpCodes.Ldfld, fieldInfo);
-						}
+					{
+						fieldInfo = AccessTools.Field(original.DeclaringType, fieldName);
+						if (fieldInfo is null)
+							throw new ArgumentException($"No such field defined in class {original.DeclaringType.FullName}",
+								fieldName);
 					}
+
+					if (fieldInfo.IsStatic)
+						il.Emit(patchParam.ParameterType.IsByRef ? OpCodes.Ldsflda : OpCodes.Ldsfld, fieldInfo);
+					else
+					{
+						il.Emit(OpCodes.Ldarg_0);
+						il.Emit(patchParam.ParameterType.IsByRef ? OpCodes.Ldflda : OpCodes.Ldfld, fieldInfo);
+					}
+
 					continue;
 				}
 

@@ -13,7 +13,10 @@ namespace MelonLoader
         static Core()
         {
             try { MelonUtils.Setup(); } catch (Exception ex) { MelonLogger.Error("MelonUtils.Setup Exception: " + ex.ToString()); throw ex; }
-            HarmonyLib.Harmony harmonyInstance = HarmonyLib.Harmony.Create("MelonLoader");
+            if (MelonUtils.IsGameIl2Cpp())
+                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
+            HarmonyShield.Install();
+            HarmonyLib.Harmony harmonyInstance = new HarmonyLib.Harmony("MelonLoader");
             HarmonyLib.HarmonyMethod GetCurrentCulturePrefixHarmonyMethod = new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod("GetCurrentCulturePrefix", BindingFlags.NonPublic | BindingFlags.Static));
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentCulture Exception: " + ex.ToString()); }
             try { harmonyInstance.Patch(typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(), GetCurrentCulturePrefixHarmonyMethod); } catch (Exception ex) { MelonLogger.Warning("Thread.CurrentUICulture Exception: " + ex.ToString()); }

@@ -65,7 +65,7 @@ namespace HarmonyLib
 		{
 		}
 
-		internal void ImportMethod(MethodInfo theMethod)
+		void ImportMethod(MethodInfo theMethod)
 		{
 			method = theMethod;
 			if (method is object)
@@ -80,7 +80,7 @@ namespace HarmonyLib
 		/// <param name="method">The original method</param>
 		///
 		public HarmonyMethod(MethodInfo method)
-		{		
+		{
 			if (method is null)
 				throw new ArgumentNullException(nameof(method));
 			ImportMethod(method);

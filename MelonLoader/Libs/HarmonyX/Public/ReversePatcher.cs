@@ -1,3 +1,4 @@
+using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,8 @@ namespace HarmonyLib
 				throw new NullReferenceException($"Null method for {instance.Id}");
 
 			var transpiler = GetTranspiler(standin.method);
-			return PatchFunctions.ReversePatch(standin, original, transpiler);
+			var manipulator = GetManipulator(standin.method);
+			return PatchFunctions.ReversePatch(standin, original, transpiler, manipulator);
 		}
 
 		internal static MethodInfo GetTranspiler(MethodInfo method)
@@ -47,6 +49,19 @@ namespace HarmonyLib
 			return methods.FirstOrDefault(m =>
 			{
 				if (m.ReturnType != ici) return false;
+				return m.Name.StartsWith($"<{methodName }>");
+			});
+		}
+
+		internal static MethodInfo GetManipulator(MethodInfo method)
+		{
+			var methodName = method.Name;
+			var type = method.DeclaringType;
+			var methods = AccessTools.GetDeclaredMethods(type);
+			var ctxType = typeof(ILContext);
+			return methods.FirstOrDefault(m =>
+			{
+				if (!m.GetParameters().Select(p => p.ParameterType).Contains(ctxType)) return false;
 				return m.Name.StartsWith($"<{methodName }>");
 			});
 		}

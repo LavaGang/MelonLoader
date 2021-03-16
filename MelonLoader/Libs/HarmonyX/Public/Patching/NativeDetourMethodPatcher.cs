@@ -169,8 +169,6 @@ namespace HarmonyLib.Public.Patching
 		///
 		public static void TryResolve(object sender, PatchManager.PatcherResolverEventArgs args)
 		{
-			if (args.MethodPatcher != null)
-				return;
 			if (args.Original.GetMethodBody() == null)
 				args.MethodPatcher = new NativeDetourMethodPatcher(args.Original);
 		}

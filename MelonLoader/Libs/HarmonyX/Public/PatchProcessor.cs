@@ -21,6 +21,7 @@ namespace HarmonyLib
 		HarmonyMethod postfix;
 		HarmonyMethod transpiler;
 		HarmonyMethod finalizer;
+		HarmonyMethod ilmanipulator;
 
 		internal static readonly object locker = new object();
 
@@ -114,6 +115,26 @@ namespace HarmonyLib
 			return this;
 		}
 
+		/// <summary>Adds an ilmanipulator</summary>
+		/// <param name="ilmanipulator">The ilmanipulator as a <see cref="HarmonyMethod"/></param>
+		/// <returns>A <see cref="PatchProcessor"/> for chaining calls</returns>
+		/// 
+		public PatchProcessor AddILManipulator(HarmonyMethod ilmanipulator)
+		{
+			this.ilmanipulator = ilmanipulator;
+			return this;
+		}
+
+		/// <summary>Adds an ilmanipulator</summary>
+		/// <param name="fixMethod">The ilmanipulator method</param>
+		/// <returns>A <see cref="PatchProcessor"/> for chaining calls</returns>
+		///
+		public PatchProcessor AddILManipulator(MethodInfo fixMethod)
+		{
+			ilmanipulator = new HarmonyMethod(fixMethod);
+			return this;
+		}
+
 		/// <summary>Gets all patched original methods in the appdomain</summary>
 		/// <returns>An enumeration of patched method/constructor</returns>
 		///
@@ -141,6 +162,7 @@ namespace HarmonyLib
 				patchInfo.AddPostfixes(instance.Id, postfix);
 				patchInfo.AddTranspilers(instance.Id, transpiler);
 				patchInfo.AddFinalizers(instance.Id, finalizer);
+				patchInfo.AddILManipulators(instance.Id, ilmanipulator);
 
 				var replacement = PatchFunctions.UpdateWrapper(original, patchInfo);
 				PatchManager.AddReplacementOriginal(original, replacement);
@@ -167,6 +189,8 @@ namespace HarmonyLib
 					patchInfo.RemoveTranspiler(harmonyID);
 				if (type == HarmonyPatchType.All || type == HarmonyPatchType.Finalizer)
 					patchInfo.RemoveFinalizer(harmonyID);
+				if (type == HarmonyPatchType.All || type == HarmonyPatchType.ILManipulator)
+					patchInfo.RemoveILManipulator(harmonyID);
 				var replacement = PatchFunctions.UpdateWrapper(original, patchInfo);
 
 				PatchManager.AddReplacementOriginal(original, replacement);
@@ -200,7 +224,7 @@ namespace HarmonyLib
 		{
 			PatchInfo patchInfo = method.GetPatchInfo();
 			if (patchInfo is null) return null;
-			return new Patches(patchInfo.prefixes, patchInfo.postfixes, patchInfo.transpilers, patchInfo.finalizers);
+			return new Patches(patchInfo.prefixes, patchInfo.postfixes, patchInfo.transpilers, patchInfo.finalizers, patchInfo.ilmanipulators);
 		}
 
 		/// <summary>Sort patch methods by their priority rules</summary>
@@ -228,6 +252,7 @@ namespace HarmonyLib
 				info.postfixes.Do(fix => assemblies[fix.owner] = fix.PatchMethod.DeclaringType.Assembly);
 				info.transpilers.Do(fix => assemblies[fix.owner] = fix.PatchMethod.DeclaringType.Assembly);
 				info.finalizers.Do(fix => assemblies[fix.owner] = fix.PatchMethod.DeclaringType.Assembly);
+				info.ilmanipulators.Do(fix => assemblies[fix.owner] = fix.PatchMethod.DeclaringType.Assembly);
 			});
 
 			var result = new Dictionary<string, Version>();

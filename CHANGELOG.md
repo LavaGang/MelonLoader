@@ -111,6 +111,8 @@
 86. Fixed Small Bug in the RemoteAPI Request System for the Assembly Generator.
 87. Added Compatibility Layer Resolver to MelonHandler for Future Changes.
 88. Cleaned Up Inlined Harmony Patch Warning Implementation for Il2Cpp Games.
+89. Isolated All Harmony Modifications to their own Files.
+90. Updated HarmonyX to v2.4.0.
 
 ---
 

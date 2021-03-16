@@ -97,9 +97,13 @@ namespace HarmonyLib
 		///
 		public Patch[] finalizers = new Patch[0];
 
+		/// <summary>ILManipulators as an array of <see cref="Patch"/></summary>
+		/// 
+		public Patch[] ilmanipulators = new Patch[0];
+
 		/// <summary>Returns if any of the patches wants debugging turned on</summary>
 		///
-		public bool Debugging => prefixes.Any(p => p.debug) || postfixes.Any(p => p.debug) || transpilers.Any(p => p.debug) || finalizers.Any(p => p.debug);
+		public bool Debugging => prefixes.Any(p => p.debug) || postfixes.Any(p => p.debug) || transpilers.Any(p => p.debug) || finalizers.Any(p => p.debug) || ilmanipulators.Any(p => p.debug);
 
 		/// <summary>Adds prefixes</summary>
 		/// <param name="owner">An owner (Harmony ID)</param>
@@ -195,6 +199,23 @@ namespace HarmonyLib
 		public void RemoveFinalizer(string owner)
 		{
 			finalizers = Remove(owner, finalizers);
+		}
+
+		/// <summary>Adds ilmanipulators</summary>
+		/// <param name="owner">An owner (Harmony ID)</param>
+		/// <param name="methods">The patch methods</param>
+		///
+		internal void AddILManipulators(string owner, params HarmonyMethod[] methods)
+		{
+			ilmanipulators = Add(owner, methods, ilmanipulators);
+		}
+
+		/// <summary>Removes ilmanipulators</summary>
+		/// <param name="owner">The owner of the ilmanipulators, or <c>*</c> for all</param>
+		///
+		public void RemoveILManipulator(string owner)
+		{
+			ilmanipulators = Remove(owner, ilmanipulators);
 		}
 
 		/// <summary>Removes a patch using its method</summary>

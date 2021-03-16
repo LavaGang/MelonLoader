@@ -45,10 +45,13 @@
     <Compile Include="Libs\bHaptics\API.cs" />
     <Compile Include="Deprecated.cs" />
     <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
-    <Compile Include="Libs\HarmonyX\Deprecated\Attributes.cs" />
-    <Compile Include="Libs\HarmonyX\Deprecated\AccessTools.cs" />
-    <Compile Include="Libs\HarmonyX\Deprecated\HarmonyInstance.cs" />
-    <Compile Include="Libs\HarmonyX\Deprecated\HarmonyMethod.cs" />
+    <Compile Include="Libs\HarmonyExtension\Shield.cs" />
+    <Compile Include="Libs\HarmonyExtension\Deprecated\Attributes.cs" />
+    <Compile Include="Libs\HarmonyExtension\Deprecated\AccessTools.cs" />
+    <Compile Include="Libs\HarmonyExtension\Deprecated\HarmonyInstance.cs" />
+    <Compile Include="Libs\HarmonyExtension\Deprecated\HarmonyMethod.cs" />
+    <Compile Include="Libs\HarmonyExtension\Il2CppMethodPatcher.cs" />
+    <Compile Include="Libs\HarmonyExtension\UnityMagicMethods.cs" />
     <Compile Include="Libs\HarmonyX\Extras\DelegateTypeFactory.cs" />
     <Compile Include="Libs\HarmonyX\Extras\FastAccess.cs" />
     <Compile Include="Libs\HarmonyX\Extras\MethodInvoker.cs" />
@@ -81,7 +84,6 @@
     <Compile Include="Libs\HarmonyX\Public\Patching\MethodPatcher.cs" />
     <Compile Include="Libs\HarmonyX\Public\Patching\NativeDetourMethodPatcher.cs" />
     <Compile Include="Libs\HarmonyX\Public\Patching\PatchManager.cs" />
-    <Compile Include="Libs\HarmonyIl2CppMethodPatcher.cs" />
     <Compile Include="Libs\HarmonyX\Public\PatchProcessor.cs" />
     <Compile Include="Libs\HarmonyX\Public\Priority.cs" />
     <Compile Include="Libs\HarmonyX\Public\ReversePatcher.cs" />
@@ -95,7 +97,6 @@
     <Compile Include="Libs\HarmonyX\Tools\SymbolExtensions.cs" />
     <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
     <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
-    <Compile Include="Libs\UnityMagicMethods.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
