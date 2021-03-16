@@ -142,6 +142,7 @@ Third-party libraries used as Source Code and/or bundled in Binary Form:
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/HarmonyX/LICENSE) for the full License.
 - [MonoMod](https://github.com/MonoMod/MonoMod) is licensed under the MIT License. See [LICENSE](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) for the full License.
+- [Mono.Cecil](https://github.com/jbevain/cecil/tree/release/0.10) is licensed under the MIT License. See [LICENSE](https://github.com/jbevain/cecil/blob/release/0.10/LICENSE.txt) for the full License.
 - [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/TinyJSON/LICENSE.md) for the full License.
 - [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the BSD 2-Clause "Simplified" License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/Tomlyn/license.txt) for the full License.
 - [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/SharpZipLib/LICENSE.txt) for the full License.
