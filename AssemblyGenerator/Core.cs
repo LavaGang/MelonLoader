@@ -26,7 +26,7 @@ namespace MelonLoader.AssemblyGenerator
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
             webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "Unity web player");
-            AssemblyGenerationNeeded = Utils.ForceRegeneration();
+            //AssemblyGenerationNeeded = Utils.ForceRegeneration();
             GameName = Utils.GetGameName();
             BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
             GameAssemblyPath = Utils.GetGameAssemblyPath();
@@ -58,11 +58,7 @@ namespace MelonLoader.AssemblyGenerator
             Logger.Debug_Msg("Last GameAssembly Hash: " + Config.GameAssemblyHash);
             Logger.Debug_Msg("Current GameAssembly Hash: " + CurrentGameAssemblyHash);
 
-            if (string.IsNullOrEmpty(Config.GameAssemblyHash)
-                || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash)
-                || (!string.IsNullOrEmpty(Config.ObfuscationRegex) && string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
-                || (string.IsNullOrEmpty(Config.ObfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
-                || (!string.IsNullOrEmpty(Config.ObfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex) && !Config.ObfuscationRegex.Equals(deobfuscationMap.ObfuscationRegex)))
+            if (string.IsNullOrEmpty(Config.GameAssemblyHash) || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)

@@ -113,6 +113,7 @@
 88. Cleaned Up Inlined Harmony Patch Warning Implementation for Il2Cpp Games.
 89. Isolated All Harmony Modifications to their own Files.
 90. Updated HarmonyX to v2.4.0.
+91. Fixed Issue with Assembly Generator causing Regeneration every Launch.
 
 ---
 
