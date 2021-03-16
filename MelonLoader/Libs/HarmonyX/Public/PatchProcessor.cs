@@ -133,9 +133,6 @@ namespace HarmonyLib
 			if (original.IsDeclaredMember() is false)
 				Logger.Log(Logger.LogChannel.Warn, () => $"{instance.Id}: You should only patch implemented methods/constructors to avoid issues. Patch the declared method {original.GetDeclaredMember().FullDescription()} instead of {original.FullDescription()}.");
 
-			if (MelonLoader.MelonDebug.IsEnabled() && MelonLoader.UnhollowerSupport.IsGeneratedAssemblyType(original.DeclaringType))
-				WarnIfTargetMethodInlined(original);
-
 			lock (locker)
 			{
 				var patchInfo = original.ToPatchInfo();
@@ -149,42 +146,6 @@ namespace HarmonyLib
 				PatchManager.AddReplacementOriginal(original, replacement);
 				return replacement;
 			}
-		}
-
-		private void WarnIfTargetMethodInlined(MethodBase target)
-		{
-			int callerCount = MelonLoader.UnhollowerSupport.GetIl2CppMethodCallerCount(target) ?? -1;
-			if ((callerCount == 0) 
-				&& !MelonLoader.UnityMagicMethods.IsUnityMagicMethod(target))
-			{
-				string melonName = FindMelon(melon => melon.Harmony == instance);
-				if (melonName == null)
-				{
-					// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
-					Assembly melonAssembly = prefix?.declaringType?.Assembly 
-						?? postfix?.declaringType?.Assembly 
-						?? transpiler?.declaringType?.Assembly 
-						?? finalizer?.declaringType?.Assembly;
-					if (melonAssembly != null)
-						melonName = FindMelon(melon => melon.Assembly == melonAssembly);
-				}
-				MelonLoader.MelonLogger.ManualWarning(melonName, $"Harmony: Method {target.FullDescription()} does not appear to get called directly from anywhere, " +
-						"suggesting it may have been inlined and your patch may not be called.");
-			}
-		}
-
-		private static string FindMelon(Predicate<MelonLoader.MelonBase> criterion)
-		{
-			string melonName = null;
-			foreach (MelonLoader.MelonBase plugin in MelonLoader.MelonHandler._Plugins)
-			{
-				if (criterion(plugin)) melonName = plugin.Info.Name;
-			}
-			foreach (MelonLoader.MelonBase mod in MelonLoader.MelonHandler._Mods)
-			{
-				if (criterion(mod)) melonName = mod.Info.Name;
-			}
-			return melonName;
 		}
 
 		/// <summary>Unpatches patches of a given type and/or Harmony ID</summary>

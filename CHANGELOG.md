@@ -110,6 +110,7 @@
 85. Added Load Balancing Hosting for Assembly Generator RemoteAPI.    (Credits to DubyaDude and Samboy :D)
 86. Fixed Small Bug in the RemoteAPI Request System for the Assembly Generator.
 87. Added Compatibility Layer Resolver to MelonHandler for Future Changes.
+88. Cleaned Up Inlined Harmony Patch Warning Implementation for Il2Cpp Games.
 
 ---
 

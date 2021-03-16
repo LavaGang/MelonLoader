@@ -23,8 +23,6 @@ namespace MelonLoader
 
 		internal static void TryResolve(object sender, PatchManager.PatcherResolverEventArgs args)
 		{
-			if (args.MethodPatcher != null)
-				return;
 			if (UnhollowerSupport.IsGeneratedAssemblyType(args.Original.DeclaringType))
 				args.MethodPatcher = new HarmonyIl2CppMethodPatcher(args.Original);
 		}
@@ -47,6 +45,9 @@ namespace MelonLoader
 
 		public override MethodBase DetourTo(MethodBase replacement)
 		{
+			if (MelonDebug.IsEnabled() && UnhollowerSupport.IsGeneratedAssemblyType(Original.DeclaringType))
+				WarnIfOriginalMethodIsInlined();
+
 			DynamicMethodDefinition newreplacementdmd = CopyOriginal();
 			HarmonyManipulator.Manipulate(Original, Original.GetPatchInfo(), new ILContext(newreplacementdmd.Definition));
 			MethodInfo newreplacement = newreplacementdmd.Generate();
@@ -293,6 +294,57 @@ namespace MelonLoader
 				localCount = 0;
 			var str = string.Format("{0}Local var {1}: {2}{3}", CodePos(il), localCount - 1, variable.LocalType.FullName, variable.IsPinned ? "(pinned)" : "");
 			FileLog.LogBuffered(str);
+		}
+
+		private void WarnIfOriginalMethodIsInlined()
+		{
+			PatchInfo patchInfo = Original.GetPatchInfo();
+			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(Original) ?? -1;
+			if ((callerCount == 0)
+				&& !UnityMagicMethods.IsUnityMagicMethod(Original))
+			{
+				Patch basePatch = ((patchInfo.prefixes.Count() > 0) ? patchInfo.prefixes.First()
+					: ((patchInfo.postfixes.Count() > 0) ? patchInfo.postfixes.First()
+					: ((patchInfo.transpilers.Count() > 0) ? patchInfo.transpilers.First()
+					: ((patchInfo.finalizers.Count() > 0) ? patchInfo.finalizers.First() : null))));
+
+				string melonName = FindMelon(melon => ((basePatch != null) && melon.Harmony.Id.Equals(basePatch.owner)));
+				if ((melonName == null) && (basePatch != null))
+				{
+					// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
+					Assembly melonAssembly = basePatch.PatchMethod.DeclaringType?.Assembly;
+					if (melonAssembly != null)
+						melonName = FindMelon(melon => melon.Assembly == melonAssembly);
+				}
+				MelonLogger.ManualWarning(melonName, $"Harmony: Method {Original.FullDescription()} does not appear to get called directly from anywhere, " +
+						"suggesting it may have been inlined and your patch may not be called.");
+			}
+		}
+
+		private static string FindMelon(Predicate<MelonBase> criterion)
+		{
+			string melonName = null;
+
+			MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
+			while (PluginEnumerator.MoveNext())
+				if (criterion(PluginEnumerator.Current))
+				{
+					melonName = PluginEnumerator.Current.Info.Name;
+					break;
+				}
+
+			if (melonName == null)
+			{
+				MelonModEnumerator ModEnumerator = new MelonModEnumerator();
+				while (ModEnumerator.MoveNext())
+					if (criterion(ModEnumerator.Current))
+					{
+						melonName = ModEnumerator.Current.Info.Name;
+						break;
+					}
+			}
+
+			return melonName;
 		}
 
 		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
