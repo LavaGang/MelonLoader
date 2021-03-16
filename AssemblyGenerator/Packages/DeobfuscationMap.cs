@@ -14,12 +14,9 @@ namespace MelonLoader.AssemblyGenerator
             Version = RemoteAPI.LAST_RESPONSE.MappingFileSHA512;
             ObfuscationRegex = RemoteAPI.LAST_RESPONSE.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
-            {
-                if (Core.GameName.Equals("Among Us"))
+                ObfuscationRegex = Config.ObfuscationRegex;
+            if (string.IsNullOrEmpty(ObfuscationRegex) && Core.GameName.Equals("Among Us"))
                     ObfuscationRegex = "[A-Z]{11}";
-                else
-                    ObfuscationRegex = Config.ObfuscationRegex;
-            }
         }
 
         private void Save()
