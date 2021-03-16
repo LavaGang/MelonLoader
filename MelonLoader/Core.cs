@@ -88,7 +88,13 @@ namespace MelonLoader
         {
             if (args.Name.StartsWith("MelonLoader.ModHandler, Version=")
                 || args.Name.StartsWith("MelonLoader, Version=")
-                || args.Name.StartsWith("0Harmony, Version="))
+                || args.Name.StartsWith("0Harmony, Version=")
+                || args.Name.StartsWith("Mono.Cecil, Version=")
+                || args.Name.StartsWith("Mono.Cecil.Mdb, Version=")
+                || args.Name.StartsWith("Mono.Cecil.Pdb, Version=")
+                || args.Name.StartsWith("Mono.Cecil.Rocks, Version=")
+                || args.Name.StartsWith("MonoMod.RuntimeDetour, Version=")
+                || args.Name.StartsWith("MonoMod.Utils, Version="))
                 return typeof(Core).Assembly;
             string assembly_name = args.Name.Split(',')[0];
             string dll_name = (assembly_name + ".dll");

@@ -175,6 +175,8 @@
     <Compile Include="Melons\Attributes\Priority.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderBuild.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
+    <Compile Include="Melons\CompatibilityLayer.cs" />
+    <Compile Include="Melons\CompatibilityLayer\MelonLoader.cs" />
     <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Category.cs" />
@@ -284,5 +286,6 @@
     <PackageReference Include="MonoMod.RuntimeDetour" Version="21.3.1.1" />
     <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.16.1" PrivateAssets="all" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
