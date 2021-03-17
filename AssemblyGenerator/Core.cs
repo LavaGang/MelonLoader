@@ -12,53 +12,63 @@ namespace MelonLoader.AssemblyGenerator
         internal static string BasePath = null;
         internal static string GameAssemblyPath = null;
         internal static string ManagedPath = null;
-        private static string CurrentGameAssemblyHash = null;
+
         internal static WebClient webClient = null;
+
         internal static Il2CppDumper dumper = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
+
         internal static bool AssemblyGenerationNeeded = false;
 
         static Core()
         {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
+
             webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "Unity web player");
+
             //AssemblyGenerationNeeded = Utils.ForceRegeneration();
-            GameName = Utils.GetGameName();
-            BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
+
             GameAssemblyPath = Utils.GetGameAssemblyPath();
             ManagedPath = Utils.GetManagedDirectory();
+            GameName = Utils.GetGameName();
+
+            BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
             OverrideAppDomainBase(BasePath);
-            using (MD5 md5 = MD5.Create())
-                using (var stream = File.OpenRead(GameAssemblyPath))
-                {
-                    var hash = md5.ComputeHash(stream);
-                    CurrentGameAssemblyHash = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            }
-            RemoteAPI.Contact();
-            unitydependencies = new UnityDependencies();
-            dumper = new Il2CppDumper();
-            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
-            deobfuscationMap = new DeobfuscationMap();
         }
 
         private static int Run()
         {
-            if (!unitydependencies.Download()
-                || !dumper.Download()
-                || !il2cppassemblyunhollower.Download()
-                || !deobfuscationMap.Download())
+            RemoteAPI.Contact();
+
+            unitydependencies = new UnityDependencies();
+            if (!unitydependencies.Download())
                 return 1;
 
+            dumper = new Il2CppDumper();
+            if (!dumper.Download())
+                return 1;
+
+            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+            if (!il2cppassemblyunhollower.Download())
+                return 1;
+
+            deobfuscationMap = new DeobfuscationMap();
+            if (!deobfuscationMap.Download())
+                return 1;
+            // Check for Regex Change against Config
+
+            string CurrentGameAssemblyHash;
             Logger.Msg("Checking GameAssembly...");
+            Logger.Debug_Msg($"Last GameAssembly Hash: {Config.GameAssemblyHash}");
+            Logger.Debug_Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = GetGameAssemblyHash()}");
 
-            Logger.Debug_Msg("Last GameAssembly Hash: " + Config.GameAssemblyHash);
-            Logger.Debug_Msg("Current GameAssembly Hash: " + CurrentGameAssemblyHash);
-
-            if (string.IsNullOrEmpty(Config.GameAssemblyHash) || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
+            if (!AssemblyGenerationNeeded
+                && (string.IsNullOrEmpty(Config.GameAssemblyHash)
+                    || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash)))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)
@@ -70,17 +80,20 @@ namespace MelonLoader.AssemblyGenerator
 
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
+
             if (!dumper.Execute())
             {
                 dumper.Cleanup();
                 return 1;
             }
+
             if (!il2cppassemblyunhollower.Execute())
             {
                 dumper.Cleanup();
                 il2cppassemblyunhollower.Cleanup();
                 return 1;
             }
+
             OldFiles_Cleanup();
             OldFiles_LAM();
 
@@ -88,7 +101,7 @@ namespace MelonLoader.AssemblyGenerator
             il2cppassemblyunhollower.Cleanup();
 
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
-            Config.Save();
+            deobfuscationMap.Save();
 
             Logger.Msg("Assembly Generation Successful!");
             return 0;
@@ -103,6 +116,18 @@ namespace MelonLoader.AssemblyGenerator
                 appDomainBase.ApplicationBase = basepath;
             }
             Directory.SetCurrentDirectory(basepath);
+        }
+
+        private static string GetGameAssemblyHash()
+        {
+            string returnval = null;
+            using (MD5 md5 = MD5.Create())
+            using (var stream = File.OpenRead(GameAssemblyPath))
+            {
+                var hash = md5.ComputeHash(stream);
+                returnval = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            }
+            return returnval;
         }
 
         private static void OldFiles_Cleanup()

@@ -25,6 +25,7 @@ namespace MelonLoader
             try { ExtraCleanupCheck(MelonUtils.GameDirectory); } catch (Exception ex) { MelonLogger.Warning("Core.ExtraCleanupCheck Exception: " + ex.ToString()); }
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
+            MelonCompatibilityLayer.AddAssemblyResolvers();
         }
 
         private static void Initialize()

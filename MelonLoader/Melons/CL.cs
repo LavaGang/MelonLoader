@@ -5,18 +5,24 @@ namespace MelonLoader
 {
     internal static class MelonCompatibilityLayer
     {
-        private static event EventHandler<MelonCompatibilityLayerResolverEventArgs> LayerResolveEvents;
+        internal static event EventHandler<MelonCompatibilityLayerResolverEventArgs> LayerResolveEvents;
+        internal static event EventHandler AssemblyResolveEvents;
 
         static MelonCompatibilityLayer()
         {
-            LayerResolveEvents += CompatibilityLayers.Melon.TryResolve;
+            CompatibilityLayers.Melon.Register();
+
+            //if (!MelonUtils.IsGameIl2Cpp())
+            //    CompatibilityLayers.IPA.Register();
         }
+
+        internal static void AddAssemblyResolvers() => AssemblyResolveEvents?.Invoke(null, null);
 
         internal static MelonCompatibilityLayerResolver Resolve(Assembly asm)
         {
             MelonCompatibilityLayerResolverEventArgs args = new MelonCompatibilityLayerResolverEventArgs();
             args.assembly = asm;
-            LayerResolveEvents.Invoke(null, args);
+            LayerResolveEvents?.Invoke(null, args);
             return args.inter;
         }
     }

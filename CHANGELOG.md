@@ -114,6 +114,7 @@
 89. Isolated All Harmony Modifications to their own Files.
 90. Updated HarmonyX to v2.4.0.
 91. Fixed Issue with Assembly Generator causing Regeneration every Launch.
+92. Cleaned Up Melon Method Call Implementation.
 
 ---
 

@@ -7,7 +7,9 @@ namespace MelonLoader.CompatibilityLayers
 {
 	internal class Melon : MelonCompatibilityLayerResolver
 	{
-		internal static void TryResolve(object sender, MelonCompatibilityLayerResolverEventArgs args)
+		internal static void Register() => MelonCompatibilityLayer.LayerResolveEvents += TryResolve;
+
+		private static void TryResolve(object sender, MelonCompatibilityLayerResolverEventArgs args)
 		{
 			if (args.inter != null)
 				return;
@@ -67,6 +69,9 @@ namespace MelonLoader.CompatibilityLayers
 
 		private static bool CheckInfoAttribute(Assembly asm, string filelocation, bool is_plugin, ref MelonInfoAttribute infoAttribute)
 		{
+			if (string.IsNullOrEmpty(filelocation))
+				filelocation = asm.GetName().Name;
+
 			infoAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonInfoAttribute>(asm);
 
 			// Legacy Support
@@ -103,6 +108,13 @@ namespace MelonLoader.CompatibilityLayers
 			if (nullcheck_name || nullcheck_version || nullcheck_author)
 			{
 				MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : (nullcheck_author ? "Author" : "")))} given to MelonInfoAttribute in {filelocation}");
+				return false;
+			}
+
+			bool isAlreadyLoaded = (is_plugin ? MelonHandler.IsPluginAlreadyLoaded(infoAttribute.Name) : MelonHandler.IsModAlreadyLoaded(infoAttribute.Name));
+			if (isAlreadyLoaded)
+			{
+				MelonLogger.Warning("Duplicate File: " + filelocation);
 				return false;
 			}
 

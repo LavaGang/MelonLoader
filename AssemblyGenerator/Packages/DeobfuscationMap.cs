@@ -8,7 +8,7 @@ namespace MelonLoader.AssemblyGenerator
 
         internal DeobfuscationMap()
         {
-            Destination = Core.il2cppassemblyunhollower.Destination;
+            Destination = Core.il2cppassemblyunhollower.Destination; // Change Me
             NewFileName = "DeobfuscationMap.csv.gz";
             URL = RemoteAPI.LAST_RESPONSE.MappingURL;
             Version = RemoteAPI.LAST_RESPONSE.MappingFileSHA512;
@@ -19,7 +19,7 @@ namespace MelonLoader.AssemblyGenerator
                 ObfuscationRegex = "[A-Z]{11}";
         }
 
-        private void Save()
+        internal void Save()
         {
             Config.DeobfuscationMapHash = Version;
             Config.ObfuscationRegex = ObfuscationRegex;
