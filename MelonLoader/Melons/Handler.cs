@@ -98,15 +98,6 @@ namespace MelonLoader
             SetupAttributes_Mods();
         }
         
-        private static string GetMelonHash(MelonBase melonBase)
-        {
-            byte[] byteHash = sha256.ComputeHash(File.ReadAllBytes(melonBase.Location));
-            string finalHash = string.Empty;
-            foreach (byte b in byteHash)
-                finalHash += b.ToString("x2");
-            return finalHash;
-        }
-        
         private static void LoadMelons(bool plugins = false)
         {
             LoadMode mode = (plugins ? GetLoadModeForPlugins() : GetLoadModeForMods());
@@ -188,10 +179,15 @@ namespace MelonLoader
                     }
                     catch(Exception ex) { MelonLogger.Error(ex.ToString()); }
                 }
-            if (plugins)
-                SortPlugins();
-            else
-                SortMods();
+        }
+
+        public static string GetMelonHash(MelonBase melonBase)
+        {
+            byte[] byteHash = sha256.ComputeHash(File.ReadAllBytes(melonBase.Location));
+            string finalHash = string.Empty;
+            foreach (byte b in byteHash)
+                finalHash += b.ToString("x2");
+            return finalHash;
         }
 
         public static bool IsMelonAlreadyLoaded(string name) => (IsPluginAlreadyLoaded(name) || IsModAlreadyLoaded(name));
@@ -275,27 +271,16 @@ namespace MelonLoader
 
             foreach (MelonBase melon in melonTbl)
             {
-                if (is_plugin)
-                    _Mods.Add((MelonMod)melon);
-                else
+                if (melon is MelonPlugin)
                     _Plugins.Add((MelonPlugin)melon);
+                else
+                    _Mods.Add((MelonMod)melon);
             }
-        }
 
-        private static void RegisterIl2CppInjectAttributes(Assembly asm)
-        {
-            if (!MelonUtils.IsGameIl2Cpp())
-                return;
-            Type[] typeTbl = asm.GetTypes();
-            if ((typeTbl == null) || (typeTbl.Length <= 0))
-                return;
-            foreach (Type type in typeTbl)
-            {
-                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), false);
-                if ((attTbl == null) || (attTbl.Length <= 0))
-                    continue;
-                UnhollowerSupport.RegisterTypeInIl2CppDomain(type);
-            }
+            if (is_plugin)
+                SortPlugins();
+            else
+                SortMods();
         }
 
         internal static T PullCustomAttributeFromAssembly<T>(Assembly asm) where T : Attribute
@@ -330,18 +315,34 @@ namespace MelonLoader
             return output.ToArray();
         }
 
-        public static void SortPlugins()
+        private static void SortPlugins()
         {
             _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
             Main.Plugins = _Plugins;
         }
 
-        public static void SortMods()
+        private static void SortMods()
         {
             _Mods = _Mods.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
             Main.Mods = _Mods;
+        }
+
+        private static void RegisterIl2CppInjectAttributes(Assembly asm)
+        {
+            if (!MelonUtils.IsGameIl2Cpp())
+                return;
+            Type[] typeTbl = asm.GetTypes();
+            if ((typeTbl == null) || (typeTbl.Length <= 0))
+                return;
+            foreach (Type type in typeTbl)
+            {
+                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), false);
+                if ((attTbl == null) || (attTbl.Length <= 0))
+                    continue;
+                UnhollowerSupport.RegisterTypeInIl2CppDomain(type);
+            }
         }
 
         private static void SetupAttributes_Plugins()
