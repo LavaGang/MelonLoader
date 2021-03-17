@@ -116,6 +116,7 @@
 91. Fixed Issue with Assembly Generator causing Regeneration every Launch.
 92. Cleaned Up Melon Method Call Implementation.
 93. Added Compatibility Layer Resolver for IPA Plugins to be Loaded as Mods.
+94. MelonInfo Attribute No Longer Requires that an Author be Set.
 
 ---
 

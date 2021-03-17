@@ -30,7 +30,7 @@ namespace MelonLoader
         /// </summary>
         public string DownloadLink { get; internal set; }
 
-        public MelonInfoAttribute(Type type, string name, string version, string author, string downloadLink = null)
+        public MelonInfoAttribute(Type type, string name, string version, string author = null, string downloadLink = null)
         {
             SystemType = type;
             Name = name;
@@ -38,5 +38,15 @@ namespace MelonLoader
             Author = author;
             DownloadLink = downloadLink;
         }
+
+        /*
+        public MelonInfoAttribute(string name, string version, string author = null, string downloadLink = null)
+        {
+            Name = name;
+            Version = version;
+            Author = author;
+            DownloadLink = downloadLink;
+        }
+        */
     }
 }

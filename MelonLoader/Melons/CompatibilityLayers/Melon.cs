@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 #pragma warning disable 0618
 
@@ -13,12 +14,10 @@ namespace MelonLoader.CompatibilityLayers
 		{
 			if (args.inter != null)
 				return;
-			foreach (Type type in args.assembly.GetTypes())
-				if (type.IsSubclassOf(typeof(MelonBase)))
-				{
-					args.inter = new Melon();
-					break;
-                }
+			Type melon_type = args.assembly.GetTypes().FirstOrDefault(x => x.IsSubclassOf(typeof(MelonBase)));
+			if (melon_type == null)
+				return;
+			args.inter = new Melon();
 		}
 
 		internal override bool CheckAndCreate(Assembly asm, string filelocation, bool is_plugin, ref MelonBase baseInstance)
@@ -104,10 +103,9 @@ namespace MelonLoader.CompatibilityLayers
 
 			bool nullcheck_name = string.IsNullOrEmpty(infoAttribute.Name);
 			bool nullcheck_version = string.IsNullOrEmpty(infoAttribute.Version);
-			bool nullcheck_author = string.IsNullOrEmpty(infoAttribute.Author);
-			if (nullcheck_name || nullcheck_version || nullcheck_author)
+			if (nullcheck_name || nullcheck_version)
 			{
-				MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : (nullcheck_author ? "Author" : "")))} given to MelonInfoAttribute in {filelocation}");
+				MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : ""))} given to MelonInfoAttribute in {filelocation}");
 				return false;
 			}
 

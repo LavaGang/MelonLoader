@@ -95,7 +95,7 @@ namespace MelonLoader.CompatibilityLayers
 				plugin_version = "1.0.0.0";
 
 			IPA_MelonModWrapper wrapper = new IPA_MelonModWrapper(pluginInstance);
-			wrapper.Info = new MelonInfoAttribute(typeof(IPA_MelonModWrapper), plugin_name, plugin_version, null);
+			wrapper.Info = new MelonInfoAttribute(typeof(IPA_MelonModWrapper), plugin_name, plugin_version);
 			if (gamestbl != null)
 				wrapper.Games = gamestbl.ToArray();
 			wrapper.ConsoleColor = MelonLogger.DefaultMelonColor;
