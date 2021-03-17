@@ -49,14 +49,10 @@ namespace MelonLoader.CompatibilityLayers
 				filelocation = asm.GetName().Name;
 
 			IPlugin pluginInstance = Activator.CreateInstance(plugin_type) as IPlugin;
-			IEnhancedPlugin enhancedPluginInstance = null;
 
 			string[] filter = null;
 			if (pluginInstance is IEnhancedPlugin)
-			{
-				enhancedPluginInstance = (IEnhancedPlugin)pluginInstance;
-				filter = enhancedPluginInstance.Filter;
-			}
+				filter = ((IEnhancedPlugin)pluginInstance).Filter;
 
 			List<MelonGameAttribute> gamestbl = null;
 			if ((filter != null) && (filter.Count() > 0))
@@ -91,9 +87,7 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version))
 				plugin_version = "0.0.0.0";
 
-			IPA_MelonModWrapper wrapper = new IPA_MelonModWrapper();
-			wrapper.pluginInstance = pluginInstance;
-			wrapper.enhancedPluginInstance = enhancedPluginInstance;
+			IPA_MelonModWrapper wrapper = new IPA_MelonModWrapper(pluginInstance);
 			wrapper.Info = new MelonInfoAttribute(typeof(IPA_MelonModWrapper), plugin_name, plugin_version, "UNKNOWN");
 			wrapper.Games = gamestbl.ToArray();
 			wrapper.ConsoleColor = MelonLogger.DefaultMelonColor;
@@ -109,15 +103,15 @@ namespace MelonLoader.CompatibilityLayers
 	}
 
 	internal class IPA_MelonModWrapper : MelonMod
-    {
-		internal IPlugin pluginInstance;
-		internal IEnhancedPlugin enhancedPluginInstance;
+	{
+		private IPlugin pluginInstance;
+		internal IPA_MelonModWrapper(IPlugin plugin) => pluginInstance = plugin;
 		public override void OnApplicationStart() => pluginInstance.OnApplicationStart();
 		public override void OnApplicationQuit() => pluginInstance.OnApplicationQuit();
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName) => pluginInstance.OnLevelWasLoaded(buildIndex);
 		public override void OnSceneWasInitialized(int buildIndex, string sceneName) => pluginInstance.OnLevelWasInitialized(buildIndex);
 		public override void OnUpdate() => pluginInstance.OnUpdate();
 		public override void OnFixedUpdate() => pluginInstance.OnFixedUpdate();
-		public override void OnLateUpdate() => enhancedPluginInstance?.OnLateUpdate();
+		public override void OnLateUpdate() { if (pluginInstance is IEnhancedPlugin) ((IEnhancedPlugin)pluginInstance).OnLateUpdate(); }
 	}
 }
