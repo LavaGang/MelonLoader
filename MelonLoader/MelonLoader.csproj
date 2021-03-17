@@ -98,10 +98,6 @@
     <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
     <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
     <Compile Include="Melons\CompatibilityLayers\IPA.cs" />
-    <Compile Include="Melons\CompatibilityLayers\IPA\IEnhancedPlugin.cs" />
-    <Compile Include="Melons\CompatibilityLayers\IPA\IPlugin.cs" />
-    <Compile Include="Melons\CompatibilityLayers\IPA\ModPrefs.cs" />
-    <Compile Include="Melons\CompatibilityLayers\IPA\PluginManager.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
