@@ -88,7 +88,9 @@ namespace MelonLoader.CompatibilityLayers
 
 			string plugin_version = pluginInstance.Version;
 			if (string.IsNullOrEmpty(plugin_version))
-				plugin_version = "0.0.0.0";
+				plugin_version = asm.GetName().Version.ToString();
+			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
+				plugin_version = "1.0.0.0";
 
 			IPA_MelonModWrapper wrapper = new IPA_MelonModWrapper(pluginInstance);
 			wrapper.Info = new MelonInfoAttribute(typeof(IPA_MelonModWrapper), plugin_name, plugin_version, "UNKNOWN");
