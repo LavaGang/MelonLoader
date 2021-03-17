@@ -57,6 +57,7 @@ namespace MelonLoader.CompatibilityLayers
 			List<MelonGameAttribute> gamestbl = null;
 			if ((filter != null) && (filter.Count() > 0))
             {
+
 				string exe_name = Path.GetFileNameWithoutExtension(string.Copy(MelonUtils.GetApplicationPath()));
 				gamestbl = new List<MelonGameAttribute>();
 				bool game_found = false;
@@ -93,8 +94,9 @@ namespace MelonLoader.CompatibilityLayers
 				plugin_version = "1.0.0.0";
 
 			IPA_MelonModWrapper wrapper = new IPA_MelonModWrapper(pluginInstance);
-			wrapper.Info = new MelonInfoAttribute(typeof(IPA_MelonModWrapper), plugin_name, plugin_version, "UNKNOWN");
-			wrapper.Games = gamestbl.ToArray();
+			wrapper.Info = new MelonInfoAttribute(typeof(IPA_MelonModWrapper), plugin_name, plugin_version, null);
+			if (gamestbl != null)
+				wrapper.Games = gamestbl.ToArray();
 			wrapper.ConsoleColor = MelonLogger.DefaultMelonColor;
 			wrapper.Priority = 0;
 			wrapper.Location = filelocation;

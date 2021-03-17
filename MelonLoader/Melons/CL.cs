@@ -12,8 +12,8 @@ namespace MelonLoader
         {
             CompatibilityLayers.Melon.Register();
 
-            //if (!MelonUtils.IsGameIl2Cpp())
-            //    CompatibilityLayers.IPA.Register();
+            if (!MelonUtils.IsGameIl2Cpp())
+                CompatibilityLayers.IPA.Register();
         }
 
         internal static void AddAssemblyResolvers() => AssemblyResolveEvents?.Invoke(null, null);

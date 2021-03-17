@@ -63,7 +63,8 @@ namespace MelonLoader
             foreach (MelonPlugin plugin in _Plugins)
             {
                 MelonLogger.Internal_PrintModName(plugin.ConsoleColor, plugin.Info.Name, plugin.Info.Version);
-                MelonLogger.Msg("by " + plugin.Info.Author);
+                if (!string.IsNullOrEmpty(plugin.Info.Author))
+                    MelonLogger.Msg("by " + plugin.Info.Author);
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(plugin));
                 MelonLogger.Msg("------------------------------");
             }
@@ -88,7 +89,8 @@ namespace MelonLoader
             foreach (MelonMod mod in _Mods)
             {
                 MelonLogger.Internal_PrintModName(mod.ConsoleColor, mod.Info.Name, mod.Info.Version);
-                MelonLogger.Msg("by " + mod.Info.Author);
+                if (!string.IsNullOrEmpty(mod.Info.Author))
+                    MelonLogger.Msg("by " + mod.Info.Author);
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(mod));
                 MelonLogger.Msg("------------------------------");
             }

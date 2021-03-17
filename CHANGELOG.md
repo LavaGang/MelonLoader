@@ -115,6 +115,7 @@
 90. Updated HarmonyX to v2.4.0.
 91. Fixed Issue with Assembly Generator causing Regeneration every Launch.
 92. Cleaned Up Melon Method Call Implementation.
+93. Added Compatibility Layer Resolver for IPA Plugins to be Loaded as Mods.
 
 ---
 
