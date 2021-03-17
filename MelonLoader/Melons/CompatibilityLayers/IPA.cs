@@ -59,17 +59,20 @@ namespace MelonLoader.CompatibilityLayers
             {
 				string exe_name = Path.GetFileNameWithoutExtension(string.Copy(MelonUtils.GetApplicationPath()));
 				gamestbl = new List<MelonGameAttribute>();
+				bool game_found = false;
 				foreach (string x in filter)
 				{
 					if (string.IsNullOrEmpty(x))
 						continue;
-					if (x.Equals(exe_name))
-					{
-						// Error Here
-						return false;
-					}
 					gamestbl.Add(new MelonGameAttribute(name: x));
+					if (x.Equals(exe_name))
+						game_found = true;
 				}
+				if (!game_found)
+                {
+					// Error Here
+					return false;
+                }
             }
 
 			string plugin_name = pluginInstance.Name;
