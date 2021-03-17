@@ -39,14 +39,14 @@ namespace MelonLoader.CompatibilityLayers
 
 		internal override bool CheckAndCreate(Assembly asm, string filelocation, bool is_plugin, ref MelonBase baseInstance)
 		{
-			if (is_plugin)
-            {
-				// Error Here | IPA Plugins can Only be Loaded as Mods
-				return false;
-            }
-
 			if (string.IsNullOrEmpty(filelocation))
 				filelocation = asm.GetName().Name;
+
+			if (is_plugin)
+            {
+				MelonLogger.Error($"Plugin Expected, Got Mod {plugin_type.AssemblyQualifiedName} in {filelocation}");
+				return false;
+            }
 
 			IPlugin pluginInstance = Activator.CreateInstance(plugin_type) as IPlugin;
 
@@ -57,7 +57,6 @@ namespace MelonLoader.CompatibilityLayers
 			List<MelonGameAttribute> gamestbl = null;
 			if ((filter != null) && (filter.Count() > 0))
             {
-
 				string exe_name = Path.GetFileNameWithoutExtension(string.Copy(MelonUtils.GetApplicationPath()));
 				gamestbl = new List<MelonGameAttribute>();
 				bool game_found = false;
@@ -71,7 +70,7 @@ namespace MelonLoader.CompatibilityLayers
 				}
 				if (!game_found)
                 {
-					// Error Here
+					MelonLogger.Error($"Incompatible Game for Mod: {filelocation}");
 					return false;
                 }
             }

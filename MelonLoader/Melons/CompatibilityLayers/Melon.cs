@@ -154,7 +154,7 @@ namespace MelonLoader.CompatibilityLayers
 				}
 				if (!is_compatible)
 				{
-					MelonLogger.Error($"Incompatible Game for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
+					MelonLogger.Error($"Incompatible Game for {(is_plugin ? "Plugin" : "Mod")}: {filelocation}");
 					return false;
 				}
 			}
@@ -183,7 +183,7 @@ namespace MelonLoader.CompatibilityLayers
 			}
 			if (!is_compatible)
 			{
-				MelonLogger.Error($"Incompatible Platform for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
+				MelonLogger.Error($"Incompatible Platform for {(is_plugin ? "Plugin" : "Mod")}: {filelocation}");
 				return false;
 			}
 			return true;
@@ -199,7 +199,7 @@ namespace MelonLoader.CompatibilityLayers
 			bool is_mono_expected_il2cpp = (!MelonUtils.IsGameIl2Cpp() && (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP));
 			if (is_il2cpp_expected_mono || is_mono_expected_il2cpp)
 			{
-				MelonLogger.Error($"Incompatible Platform Domain for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
+				MelonLogger.Error($"Incompatible Platform Domain for {(is_plugin ? "Plugin" : "Mod")}: {filelocation}");
 				return false;
 			}
 			return true;
@@ -240,7 +240,7 @@ namespace MelonLoader.CompatibilityLayers
 
 			if (!major_is_acceptable || !minor_is_acceptable || !revision_is_acceptable || !patch_is_acceptable)
 			{
-				MelonLogger.Error($"Incompatible MelonLoader Version for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
+				MelonLogger.Error($"Incompatible MelonLoader Version for {(is_plugin ? "Plugin" : "Mod")}: {filelocation}");
 				return false;
 			}
 
@@ -258,7 +258,7 @@ namespace MelonLoader.CompatibilityLayers
 				return true;
 			if (!currentHashCode.Equals(verifyLoaderBuildAttribute.HashCode))
 			{
-				MelonLogger.Error($"Incompatible MelonLoader Build for {(is_plugin ? "Plugin" : "Mod")} {filelocation}");
+				MelonLogger.Error($"Incompatible MelonLoader Build for {(is_plugin ? "Plugin" : "Mod")}: {filelocation}");
 				return false;
 			}
 			return true;
