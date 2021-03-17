@@ -33,7 +33,6 @@ namespace MelonLoader
             try { bHaptics_NativeLibrary.Load(); } catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
             MelonPreferences.Load();
             MelonHandler.LoadPlugins();
-            Main.LegacySupport();
             MelonHandler.OnPreInitialization();
         }
 
@@ -45,7 +44,6 @@ namespace MelonLoader
             try { bHaptics.Start(); } catch (Exception ex) { MelonLogger.Warning("bHaptics.Start Exception: " + ex.ToString()); bHaptics.WasError = true; }
             MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.LoadMods();
-            Main.LegacySupport();
             MelonHandler.OnApplicationStart_Mods();
             MelonHandler.OnApplicationLateStart_Plugins();
             MelonHandler.OnApplicationLateStart_Mods();

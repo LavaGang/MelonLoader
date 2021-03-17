@@ -118,6 +118,9 @@
 93. Added Compatibility Layer Resolver for IPA Plugins to be Loaded as Mods.
 94. MelonInfo Attribute No Longer Requires that an Author be Set.
 95. Fixed Issue with IPA Compatibility Layer not Loading Multi-Plugin Assemblies.
+96. Fixed Issue with Harmony Patch Attributes not abiding by Melon Priority or Dependency Graph.
+97. Fixed Issue with RegisterTypeInIl2Cpp Attribute not abiding by Melon Priority or Dependency Graph.
+98. Fixed Harmony Patch Attribute Collision Issue with IPA Compatibility Layer and Multi-Plugin Assemblies.
 
 ---
 

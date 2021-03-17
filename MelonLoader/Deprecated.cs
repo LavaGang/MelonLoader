@@ -55,13 +55,6 @@ namespace MelonLoader
         public static string GetUnityVersion() => MelonUtils.GetUnityVersion();
         [Obsolete("Main.GetUserDataPath is obsolete. Please use MelonUtils.GetUserDataDirectory instead.")]
         public static string GetUserDataPath() => MelonUtils.UserDataDirectory;
-        internal static void LegacySupport()
-        {
-            Mods = MelonHandler.Mods;
-            Plugins = MelonHandler.Plugins;
-            IsVRChat = MelonUtils.IsVRChat;
-            IsBoneworks = MelonUtils.IsBONEWORKS;
-        }
     }
     [Obsolete("MelonConsole is obsolete.")]
     public class MelonConsole

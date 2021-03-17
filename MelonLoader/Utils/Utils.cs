@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Text;
+#pragma warning disable 0618
 
 namespace MelonLoader
 {
@@ -20,6 +21,8 @@ namespace MelonLoader
             UserDataDirectory = Path.Combine(GameDirectory, "UserData");
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
+            Main.IsVRChat = IsVRChat;
+            Main.IsBoneworks = IsBONEWORKS;
         }
 
         public static string GameDirectory { get; private set; }

@@ -68,6 +68,7 @@ namespace MelonLoader
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(plugin));
                 MelonLogger.Msg("------------------------------");
             }
+            SetupAttributes_Plugins();
         }
 
         internal static void LoadMods()
@@ -94,6 +95,7 @@ namespace MelonLoader
                 MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(mod));
                 MelonLogger.Msg("------------------------------");
             }
+            SetupAttributes_Mods();
         }
         
         private static string GetMelonHash(MelonBase melonBase)
@@ -186,10 +188,10 @@ namespace MelonLoader
                     }
                     catch(Exception ex) { MelonLogger.Error(ex.ToString()); }
                 }
-            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
-            _Mods = _Mods.OrderBy(x => x.Priority).ToList();
-            DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
-            DependencyGraph<MelonMod>.TopologicalSort(_Mods);
+            if (plugins)
+                SortPlugins();
+            else
+                SortMods();
         }
 
         public static bool IsMelonAlreadyLoaded(string name) => (IsPluginAlreadyLoaded(name) || IsModAlreadyLoaded(name));
@@ -271,29 +273,12 @@ namespace MelonLoader
             if (melonTbl.Count <= 0)
                 return;
 
-            if (resolver is CompatibilityLayers.Melon)
-                RegisterIl2CppInjectAttributes(asm);
-
             foreach (MelonBase melon in melonTbl)
             {
-                if (melon is MelonMod)
+                if (is_plugin)
                     _Mods.Add((MelonMod)melon);
                 else
                     _Plugins.Add((MelonPlugin)melon);
-                HarmonyPatchAttributes(melon);
-            }
-        }
-
-        private static void HarmonyPatchAttributes(MelonBase baseInstance)
-        {
-            try { baseInstance.Harmony.PatchAll(baseInstance.Assembly); }
-            catch (Exception)
-            {
-                if (baseInstance is MelonMod)
-                    _Mods.Remove((MelonMod)baseInstance);
-                else
-                    _Plugins.Remove((MelonPlugin)baseInstance);
-                throw;
             }
         }
 
@@ -345,6 +330,46 @@ namespace MelonLoader
             return output.ToArray();
         }
 
+        public static void SortPlugins()
+        {
+            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
+            DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
+            Main.Plugins = _Plugins;
+        }
+
+        public static void SortMods()
+        {
+            _Mods = _Mods.OrderBy(x => x.Priority).ToList();
+            DependencyGraph<MelonMod>.TopologicalSort(_Mods);
+            Main.Mods = _Mods;
+        }
+
+        private static void SetupAttributes_Plugins()
+        {
+            List<Assembly> setupasm = new List<Assembly>();
+            InvokeMelonPluginMethod(x =>
+            {
+                if (setupasm.Contains(x.Assembly))
+                    return;
+                //RegisterIl2CppInjectAttributes(x.Assembly);
+                x.Harmony.PatchAll(x.Assembly);
+                setupasm.Add(x.Assembly);
+            }, true);
+        }
+
+        private static void SetupAttributes_Mods()
+        {
+            List<Assembly> setupasm = new List<Assembly>();
+            InvokeMelonModMethod(x =>
+            {
+                if (setupasm.Contains(x.Assembly))
+                    return;
+                RegisterIl2CppInjectAttributes(x.Assembly);
+                x.Harmony.PatchAll(x.Assembly);
+                setupasm.Add(x.Assembly);
+            }, true);
+        }
+
         internal static void OnPreInitialization() => InvokeMelonPluginMethod(x => x.OnPreInitialization(), true);
         internal static void OnApplicationStart_Plugins() => InvokeMelonPluginMethod(x => x.OnApplicationStart(), true);
         internal static void OnApplicationStart_Mods() => InvokeMelonModMethod(x => x.OnApplicationStart(), true);
@@ -392,22 +417,6 @@ namespace MelonLoader
             InvokeMelonModMethod(x => x.OnUpdate());
         }
 
-        private delegate void InvokeMelonModMethodDelegate(MelonMod mod);
-        private static void InvokeMelonModMethod(InvokeMelonModMethodDelegate method, bool remove_failed = false)
-        {
-            if (_Mods.Count <= 0)
-                return;
-            List<MelonMod> failedMods = (remove_failed ? new List<MelonMod>() : null);
-            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
-            while (ModEnumerator.MoveNext())
-                try { method(ModEnumerator.Current); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); if (remove_failed) failedMods.Add(ModEnumerator.Current); }
-            if (!remove_failed)
-                return;
-            _Mods.RemoveAll(failedMods.Contains);
-            _Mods = _Mods.OrderBy(x => x.Priority).ToList();
-            DependencyGraph<MelonMod>.TopologicalSort(_Mods);
-        }
-
         private delegate void InvokeMelonPluginMethodDelegate(MelonPlugin plugin);
         private static void InvokeMelonPluginMethod(InvokeMelonPluginMethodDelegate method, bool remove_failed = false)
         {
@@ -420,8 +429,22 @@ namespace MelonLoader
             if (!remove_failed)
                 return;
             _Plugins.RemoveAll(failedPlugins.Contains);
-            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
-            DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
+            SortPlugins();
+        }
+
+        private delegate void InvokeMelonModMethodDelegate(MelonMod mod);
+        private static void InvokeMelonModMethod(InvokeMelonModMethodDelegate method, bool remove_failed = false)
+        {
+            if (_Mods.Count <= 0)
+                return;
+            List<MelonMod> failedMods = (remove_failed ? new List<MelonMod>() : null);
+            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
+            while (ModEnumerator.MoveNext())
+                try { method(ModEnumerator.Current); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); if (remove_failed) failedMods.Add(ModEnumerator.Current); }
+            if (!remove_failed)
+                return;
+            _Mods.RemoveAll(failedMods.Contains);
+            SortMods();
         }
 
         internal enum LoadMode
