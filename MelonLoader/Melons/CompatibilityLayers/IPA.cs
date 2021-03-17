@@ -53,10 +53,10 @@ namespace MelonLoader.CompatibilityLayers
 			}
 
 			foreach (Type plugin_type in plugin_types)
-				LoadPlugin(plugin_type, asm, filelocation, ref melonTbl);
+				LoadPlugin(plugin_type, filelocation, ref melonTbl);
 		}
 
-		private void LoadPlugin(Type plugin_type, Assembly asm, string filelocation, ref List<MelonBase> melonTbl)
+		private void LoadPlugin(Type plugin_type, string filelocation, ref List<MelonBase> melonTbl)
         {
 			IPlugin pluginInstance = Activator.CreateInstance(plugin_type) as IPlugin;
 
