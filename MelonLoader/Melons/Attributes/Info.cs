@@ -38,15 +38,5 @@ namespace MelonLoader
             Author = author;
             DownloadLink = downloadLink;
         }
-
-        /*
-        public MelonInfoAttribute(string name, string version, string author = null, string downloadLink = null)
-        {
-            Name = name;
-            Version = version;
-            Author = author;
-            DownloadLink = downloadLink;
-        }
-        */
     }
 }

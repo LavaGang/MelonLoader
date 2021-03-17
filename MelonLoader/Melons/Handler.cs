@@ -266,21 +266,26 @@ namespace MelonLoader
                 return;
             }
 
-            MelonBase baseInstance = null;
-            if (!resolver.CheckAndCreate(asm, filelocation, is_plugin, ref baseInstance))
+            List<MelonBase> melonTbl = new List<MelonBase>();
+            resolver.CheckAndCreate(filelocation, is_plugin, ref melonTbl);
+            if (melonTbl.Count <= 0)
                 return;
 
             if (resolver is CompatibilityLayers.Melon)
                 RegisterIl2CppInjectAttributes(asm);
-            HarmonyPatchAttributes(baseInstance);
+
+            foreach (MelonBase melon in melonTbl)
+            {
+                if (melon is MelonMod)
+                    _Mods.Add((MelonMod)melon);
+                else
+                    _Plugins.Add((MelonPlugin)melon);
+                HarmonyPatchAttributes(melon);
+            }
         }
 
         private static void HarmonyPatchAttributes(MelonBase baseInstance)
         {
-            if (baseInstance is MelonMod)
-                _Mods.Add((MelonMod)baseInstance);
-            else
-                _Plugins.Add((MelonPlugin)baseInstance);
             try { baseInstance.Harmony.PatchAll(baseInstance.Assembly); }
             catch (Exception)
             {

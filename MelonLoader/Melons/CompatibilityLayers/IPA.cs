@@ -12,11 +12,12 @@ namespace MelonLoader.CompatibilityLayers
 {
 	internal class IPA : MelonCompatibilityLayerResolver
 	{
-		private Type plugin_type = null;
-		private IPA(Type type) => plugin_type = type;
+		private Type[] plugin_types = null;
+		private Assembly asm = null;
+		private IPA(Assembly assembly, IEnumerable<Type> types) { asm = assembly; plugin_types = Enumerable.ToArray(types); }
 
 		internal static void Register()
-        {
+		{
 			MelonCompatibilityLayer.LayerResolveEvents += TryResolve;
 			MelonCompatibilityLayer.AssemblyResolveEvents += AddAssemblyResolver;
 		}
@@ -33,23 +34,30 @@ namespace MelonLoader.CompatibilityLayers
 		{
 			if (args.inter != null)
 				return;
-			Type plugin_type = args.assembly.GetTypes().FirstOrDefault(x => (x.GetInterface("IPlugin") != null));
-			if (plugin_type == null)
+			IEnumerable<Type> plugin_types = args.assembly.GetTypes().Where(x => (x.GetInterface("IPlugin") != null));
+			if ((plugin_types == null)
+				|| (plugin_types.Count() <= 0))
 				return;
-			args.inter = new IPA(plugin_type);
+			args.inter = new IPA(args.assembly, plugin_types);
 		}
 
-		internal override bool CheckAndCreate(Assembly asm, string filelocation, bool is_plugin, ref MelonBase baseInstance)
+		internal override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
 		{
 			if (string.IsNullOrEmpty(filelocation))
 				filelocation = asm.GetName().Name;
 
 			if (is_plugin)
-            {
-				MelonLogger.Error($"Plugin Expected, Got Mod {plugin_type.AssemblyQualifiedName} in {filelocation}");
-				return false;
-            }
+			{
+				MelonLogger.Error($"Mod in Plugins Folder: {filelocation}");
+				return;
+			}
 
+			foreach (Type plugin_type in plugin_types)
+				LoadPlugin(plugin_type, asm, filelocation, ref melonTbl);
+		}
+
+		private void LoadPlugin(Type plugin_type, Assembly asm, string filelocation, ref List<MelonBase> melonTbl)
+        {
 			IPlugin pluginInstance = Activator.CreateInstance(plugin_type) as IPlugin;
 
 			string[] filter = null;
@@ -58,7 +66,7 @@ namespace MelonLoader.CompatibilityLayers
 
 			List<MelonGameAttribute> gamestbl = null;
 			if ((filter != null) && (filter.Count() > 0))
-            {
+			{
 				string exe_name = Path.GetFileNameWithoutExtension(string.Copy(MelonUtils.GetApplicationPath()));
 				gamestbl = new List<MelonGameAttribute>();
 				bool game_found = false;
@@ -71,21 +79,20 @@ namespace MelonLoader.CompatibilityLayers
 						game_found = true;
 				}
 				if (!game_found)
-                {
+				{
 					MelonLogger.Error($"Incompatible Game for Mod: {filelocation}");
-					return false;
-                }
-            }
+					return;
+				}
+			}
 
 			string plugin_name = pluginInstance.Name;
 			if (string.IsNullOrEmpty(plugin_name))
 				plugin_name = plugin_type.FullName;
-
-			bool isAlreadyLoaded = (is_plugin ? MelonHandler.IsPluginAlreadyLoaded(plugin_name) : MelonHandler.IsModAlreadyLoaded(plugin_name));
-			if (isAlreadyLoaded)
+			
+			if (MelonHandler.IsModAlreadyLoaded(plugin_name))
 			{
-				MelonLogger.Warning("Duplicate File: " + filelocation);
-				return false;
+				MelonLogger.Error($"Duplicate Mod {plugin_name}: {filelocation}");
+				return;
 			}
 
 			string plugin_version = pluginInstance.Version;
@@ -104,9 +111,8 @@ namespace MelonLoader.CompatibilityLayers
 			wrapper.Assembly = asm;
 			wrapper.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
 
-			baseInstance = wrapper;
+			melonTbl.Add(wrapper);
 			PluginManager._Plugins.Add(pluginInstance);
-			return true;
 		}
 	}
 

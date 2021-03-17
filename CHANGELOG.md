@@ -117,6 +117,7 @@
 92. Cleaned Up Melon Method Call Implementation.
 93. Added Compatibility Layer Resolver for IPA Plugins to be Loaded as Mods.
 94. MelonInfo Attribute No Longer Requires that an Author be Set.
+95. Fixed Issue with IPA Compatibility Layer not Loading Multi-Plugin Assemblies.
 
 ---
 

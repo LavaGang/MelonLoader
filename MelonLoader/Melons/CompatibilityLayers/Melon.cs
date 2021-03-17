@@ -8,45 +8,50 @@ namespace MelonLoader.CompatibilityLayers
 {
 	internal class Melon : MelonCompatibilityLayerResolver
 	{
+		private Type[] melon_types = null;
+		private Assembly asm = null;
+		private Melon(Assembly assembly, IEnumerable<Type> types) { asm = assembly; melon_types = Enumerable.ToArray(types); }
+
 		internal static void Register() => MelonCompatibilityLayer.LayerResolveEvents += TryResolve;
 
 		private static void TryResolve(object sender, MelonCompatibilityLayerResolverEventArgs args)
 		{
 			if (args.inter != null)
 				return;
-			Type melon_type = args.assembly.GetTypes().FirstOrDefault(x => x.IsSubclassOf(typeof(MelonBase)));
-			if (melon_type == null)
+			IEnumerable<Type> melon_types = args.assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(MelonBase)));
+			if ((melon_types == null)
+				|| (melon_types.Count() <= 0))
 				return;
-			args.inter = new Melon();
+			args.inter = new Melon(args.assembly, melon_types);
 		}
 
-		internal override bool CheckAndCreate(Assembly asm, string filelocation, bool is_plugin, ref MelonBase baseInstance)
+		internal override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
 		{
 			MelonInfoAttribute infoAttribute = null;
-			if (!CheckInfoAttribute(asm, filelocation, is_plugin, ref infoAttribute))
-				return false;
+			if (!CheckInfoAttribute(filelocation, is_plugin, ref infoAttribute))
+				return;
 
 			List<MelonGameAttribute> gameAttributes = null;
-			if (!CheckGameAttributes(asm, filelocation, is_plugin, ref gameAttributes))
-				return false;
+			if (!CheckGameAttributes(filelocation, is_plugin, ref gameAttributes))
+				return;
 
-			if (!CheckPlatformAttribute(asm, filelocation, is_plugin))
-				return false;
+			if (!CheckPlatformAttribute(filelocation, is_plugin))
+				return;
 
-			if (!CheckPlatformDomainAttribute(asm, filelocation, is_plugin))
-				return false;
+			if (!CheckPlatformDomainAttribute(filelocation, is_plugin))
+				return;
 
-			if (!CheckVerifyLoaderVersionAttribute(asm, filelocation, is_plugin))
-				return false;
+			if (!CheckVerifyLoaderVersionAttribute(filelocation, is_plugin))
+				return;
 
-			if (!CheckVerifyLoaderBuildAttribute(asm, filelocation, is_plugin))
-				return false;
+			if (!CheckVerifyLoaderBuildAttribute(filelocation, is_plugin))
+				return;
 
-			baseInstance = Activator.CreateInstance(infoAttribute.SystemType) as MelonBase;
+			MelonBase baseInstance = Activator.CreateInstance(infoAttribute.SystemType) as MelonBase;
 			if (baseInstance == null)
 			{
 				MelonLogger.Error($"Failed to Create Instance for {filelocation}");
-				return false;
+				return;
 			}
 
 			baseInstance.Info = infoAttribute;
@@ -63,10 +68,10 @@ namespace MelonLoader.CompatibilityLayers
 			baseInstance.Assembly = asm;
 			baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
 
-			return true;
+			melonTbl.Add(baseInstance);
 		}
 
-		private static bool CheckInfoAttribute(Assembly asm, string filelocation, bool is_plugin, ref MelonInfoAttribute infoAttribute)
+		private bool CheckInfoAttribute(string filelocation, bool is_plugin, ref MelonInfoAttribute infoAttribute)
 		{
 			if (string.IsNullOrEmpty(filelocation))
 				filelocation = asm.GetName().Name;
@@ -112,14 +117,14 @@ namespace MelonLoader.CompatibilityLayers
 			bool isAlreadyLoaded = (is_plugin ? MelonHandler.IsPluginAlreadyLoaded(infoAttribute.Name) : MelonHandler.IsModAlreadyLoaded(infoAttribute.Name));
 			if (isAlreadyLoaded)
 			{
-				MelonLogger.Warning("Duplicate File: " + filelocation);
+				MelonLogger.Error($"Duplicate {(is_plugin ? "Plugin" : "Mod")} {infoAttribute.Name}: {filelocation}");
 				return false;
 			}
 
 			return true;
 		}
 
-		private static bool CheckGameAttributes(Assembly asm, string filelocation, bool is_plugin, ref List<MelonGameAttribute> gameAttributes)
+		private bool CheckGameAttributes(string filelocation, bool is_plugin, ref List<MelonGameAttribute> gameAttributes)
 		{
 			gameAttributes = new List<MelonGameAttribute>();
 			MelonGameAttribute[] gameatt = MelonHandler.PullCustomAttributesFromAssembly<MelonGameAttribute>(asm);
@@ -160,7 +165,7 @@ namespace MelonLoader.CompatibilityLayers
 			return true;
 		}
 
-		private static bool CheckPlatformAttribute(Assembly asm, string filelocation, bool is_plugin)
+		private bool CheckPlatformAttribute(string filelocation, bool is_plugin)
 		{
 			MelonPlatformAttribute platformAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonPlatformAttribute>(asm);
 			if ((platformAttribute == null)
@@ -187,7 +192,7 @@ namespace MelonLoader.CompatibilityLayers
 			return true;
 		}
 
-		private static bool CheckPlatformDomainAttribute(Assembly asm, string filelocation, bool is_plugin)
+		private bool CheckPlatformDomainAttribute(string filelocation, bool is_plugin)
 		{
 			MelonPlatformDomainAttribute platformDomainAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonPlatformDomainAttribute>(asm);
 			if ((platformDomainAttribute == null)
@@ -204,7 +209,7 @@ namespace MelonLoader.CompatibilityLayers
 		}
 
 		private static int[] CurrentMLVersionIntArr = null;
-		private static bool CheckVerifyLoaderVersionAttribute(Assembly asm, string filelocation, bool is_plugin)
+		private bool CheckVerifyLoaderVersionAttribute(string filelocation, bool is_plugin)
 		{
 			VerifyLoaderVersionAttribute verifyLoaderVersionAttribute = MelonHandler.PullCustomAttributeFromAssembly<VerifyLoaderVersionAttribute>(asm);
 			if (verifyLoaderVersionAttribute == null)
@@ -245,7 +250,7 @@ namespace MelonLoader.CompatibilityLayers
 			return true;
 		}
 
-		private static bool CheckVerifyLoaderBuildAttribute(Assembly asm, string filelocation, bool is_plugin)
+		private bool CheckVerifyLoaderBuildAttribute(string filelocation, bool is_plugin)
 		{
 			VerifyLoaderBuildAttribute verifyLoaderBuildAttribute = MelonHandler.PullCustomAttributeFromAssembly<VerifyLoaderBuildAttribute>(asm);
 			if ((verifyLoaderBuildAttribute == null)

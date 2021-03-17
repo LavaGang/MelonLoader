@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace MelonLoader
@@ -29,7 +30,7 @@ namespace MelonLoader
 
     internal class MelonCompatibilityLayerResolver
     {
-        internal virtual bool CheckAndCreate(Assembly asm, string filelocation, bool is_plugin, ref MelonBase baseInstance) => false;
+        internal virtual void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl) { }
     }
 
     internal class MelonCompatibilityLayerResolverEventArgs : EventArgs
