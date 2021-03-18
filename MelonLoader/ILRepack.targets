@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Target Name="ILRepacker_Debug" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+		<ItemGroup>
+			<AssemblyFile Include="$(OutputPath)$(AssemblyName).dll" />
+		</ItemGroup>
+		<ItemGroup>
+			<InputAssemblies Include="@(AssemblyFile)" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.dll" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Mdb.dll" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Pdb.dll" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Rocks.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.RuntimeDetour.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.Utils.dll" />
+		</ItemGroup>
+		<ILRepack
+			Parallel="true"
+			DebugInfo="true"
+			InputAssemblies="@(InputAssemblies)"
+			TargetKind="Dll"
+			OutputFile="@(AssemblyFile)"
+		/>
+    </Target>
+	
+	<Target Name="ILRepacker_Release" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+		<ItemGroup>
+			<AssemblyFile Include="$(OutputPath)$(AssemblyName).dll" />
+		</ItemGroup>
+		<ItemGroup>
+			<InputAssemblies Include="@(AssemblyFile)" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.dll" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Mdb.dll" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Pdb.dll" />
+			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Rocks.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.RuntimeDetour.dll" />
+			<InputAssemblies Include="$(OutputPath)MonoMod.Utils.dll" />
+		</ItemGroup>
+		<ILRepack
+			Parallel="true"
+			DebugInfo="false"
+			InputAssemblies="@(InputAssemblies)"
+			TargetKind="Dll"
+			OutputFile="@(AssemblyFile)"
+		/>
+    </Target>
+</Project>

@@ -121,6 +121,7 @@
 96. Fixed Issue with Harmony Patch Attributes not abiding by Melon Priority or Dependency Graph.
 97. Fixed Issue with RegisterTypeInIl2Cpp Attribute not abiding by Melon Priority or Dependency Graph.
 98. Fixed Harmony Patch Attribute Collision Issue with IPA Compatibility Layer and Multi-Plugin Assemblies.
+99. Fixed Issue with ILRepack not Running for Debug Compilation of MelonLoader.dll.
 
 ---
 
