@@ -38,7 +38,8 @@ jobs:
       - name: Copy x64 Output
         shell: cmd
         run: |
-          xcopy Output\Debug\MelonLoader Output\Debug\x64\MelonLoader\ /E /H /Y
+          xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x64\MelonLoader\Dependencies /E /H /Y
+          xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x64\MelonLoader\ /E /H /Y
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build MelonLoader Core x86
         shell: cmd
@@ -46,7 +47,8 @@ jobs:
       - name: Copy x86 Output
         shell: cmd
         run: |
-          xcopy Output\Debug\MelonLoader Output\Debug\x86\MelonLoader\ /E /H /Y
+          xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x86\MelonLoader\Dependencies /E /H /Y
+          xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x86\MelonLoader\ /E /H /Y
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build Proxy DLL - x86
         shell: cmd
