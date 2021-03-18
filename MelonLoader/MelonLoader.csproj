@@ -52,6 +52,10 @@
     <None Include="Libs\Tomlyn\Syntax\Syntax.cd" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompatibilityLayers\IPA\IEnhancedPlugin.cs" />
+    <Compile Include="CompatibilityLayers\IPA\IPlugin.cs" />
+    <Compile Include="CompatibilityLayers\IPA\ModPrefs.cs" />
+    <Compile Include="CompatibilityLayers\IPA\PluginManager.cs" />
     <Compile Include="Libs\bHaptics\API.cs" />
     <Compile Include="Deprecated.cs" />
     <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
