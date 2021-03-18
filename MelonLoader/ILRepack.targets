@@ -6,12 +6,12 @@
 		</ItemGroup>
 		<ItemGroup>
 			<InputAssemblies Include="@(AssemblyFile)" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.dll" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Mdb.dll" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Pdb.dll" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Rocks.dll" />
-			<InputAssemblies Include="$(OutputPath)MonoMod.RuntimeDetour.dll" />
-			<InputAssemblies Include="$(OutputPath)MonoMod.Utils.dll" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Mdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Pdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Rocks'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.RuntimeDetour'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -28,12 +28,12 @@
 		</ItemGroup>
 		<ItemGroup>
 			<InputAssemblies Include="@(AssemblyFile)" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.dll" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Mdb.dll" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Pdb.dll" />
-			<InputAssemblies Include="$(OutputPath)Mono.Cecil.Rocks.dll" />
-			<InputAssemblies Include="$(OutputPath)MonoMod.RuntimeDetour.dll" />
-			<InputAssemblies Include="$(OutputPath)MonoMod.Utils.dll" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Mdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Pdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Rocks'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.RuntimeDetour'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
