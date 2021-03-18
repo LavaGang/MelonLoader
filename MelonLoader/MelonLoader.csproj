@@ -107,7 +107,7 @@
     <Compile Include="Libs\HarmonyX\Tools\SymbolExtensions.cs" />
     <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
     <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
-    <Compile Include="Melons\CompatibilityLayers\IPA.cs" />
+    <Compile Include="CompatibilityLayers\IPA.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
@@ -187,8 +187,8 @@
     <Compile Include="Melons\Attributes\Priority.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderBuild.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
-    <Compile Include="Melons\CL.cs" />
-    <Compile Include="Melons\CompatibilityLayers\Melon.cs" />
+    <Compile Include="CL.cs" />
+    <Compile Include="CompatibilityLayers\Melon.cs" />
     <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Category.cs" />
