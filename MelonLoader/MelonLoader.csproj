@@ -48,24 +48,49 @@
     <Content Include="Libs\Tomlyn\license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\Fixes\ApplicationBase.cs" />
+    <Compile Include="Extensions\Fixes\ExtraCleanup.cs" />
+    <Compile Include="Extensions\Fixes\InvariantCurrentCulture.cs" />
+    <Compile Include="Extensions\Fixes\QuitFix.cs" />
+    <Compile Include="Extensions\Fixes\UnhandledException.cs" />
+    <Compile Include="Extensions\Layers\Melon2\HarmonyShield.cs" />
+    <Compile Include="Extensions\Layers\Melon2\Imports.cs" />
+    <Compile Include="Extensions\Layers\Melon2\Main.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonConsole.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonLoaderBase.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonModGameAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonModInfoAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonModLogger.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonPluginGameAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonPluginInfoAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon2\ModPrefs.cs" />
+    <Compile Include="Extensions\Layers\Mono.Cecil.cs" />
     <None Include="Libs\Tomlyn\readme.md" />
     <None Include="Libs\Tomlyn\Syntax\Syntax.cd" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompatibilityLayers\IPA\IEnhancedPlugin.cs" />
-    <Compile Include="CompatibilityLayers\IPA\IPlugin.cs" />
-    <Compile Include="CompatibilityLayers\IPA\ModPrefs.cs" />
-    <Compile Include="CompatibilityLayers\IPA\PluginManager.cs" />
-    <Compile Include="Libs\bHaptics\API.cs" />
-    <Compile Include="Deprecated.cs" />
-    <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
-    <Compile Include="HarmonyExtension\Shield.cs" />
-    <Compile Include="HarmonyExtension\Deprecated\Attributes.cs" />
-    <Compile Include="HarmonyExtension\Deprecated\AccessTools.cs" />
-    <Compile Include="HarmonyExtension\Deprecated\HarmonyInstance.cs" />
-    <Compile Include="HarmonyExtension\Deprecated\HarmonyMethod.cs" />
-    <Compile Include="HarmonyExtension\Il2CppMethodPatcher.cs" />
-    <Compile Include="HarmonyExtension\UnityMagicMethods.cs" />
+    <Compile Include="Extensions\Layers\Harmony.cs" />
+    <Compile Include="Extensions\Layers\IPA\IEnhancedPlugin.cs" />
+    <Compile Include="Extensions\Layers\IPA\IPlugin.cs" />
+    <Compile Include="Extensions\Layers\IPA\ModPrefs.cs" />
+    <Compile Include="Extensions\Layers\IPA\PluginManager.cs" />
+    <Compile Include="Extensions\Layers\MonoMod.cs" />
+    <Compile Include="Extensions\Layers\SharpZipLib.cs" />
+    <Compile Include="Extensions\Layers\TinyJSON.cs" />
+    <Compile Include="Extensions\Layers\Tomlyn.cs" />
+    <Compile Include="Extensions\Shields\Harmony\HarmonyManipulator_Manipulate.cs" />
+    <Compile Include="Extensions\Shields\Harmony\Harmony_Patch.cs" />
+    <Compile Include="Extensions\Shields\Harmony\PatchFunctions_ReversePatch.cs" />
+    <Compile Include="Utils\bHaptics\API.cs" />
+    <Compile Include="Extensions\Layers\Melon2\MelonPrefs.cs" />
+    <Compile Include="Utils\bHaptics\NativeLibrary.cs" />
+    <Compile Include="Extensions\PatchShield.cs" />
+    <Compile Include="Extensions\Layers\Harmony12\Attributes.cs" />
+    <Compile Include="Extensions\Layers\Harmony12\AccessTools.cs" />
+    <Compile Include="Extensions\Layers\Harmony12\HarmonyInstance.cs" />
+    <Compile Include="Extensions\Layers\Harmony12\HarmonyMethod.cs" />
+    <Compile Include="Extensions\Il2CppMethodPatcher.cs" />
+    <Compile Include="Extensions\UnityMagicMethods.cs" />
     <Compile Include="Libs\HarmonyX\Extras\DelegateTypeFactory.cs" />
     <Compile Include="Libs\HarmonyX\Extras\FastAccess.cs" />
     <Compile Include="Libs\HarmonyX\Extras\MethodInvoker.cs" />
@@ -111,7 +136,7 @@
     <Compile Include="Libs\HarmonyX\Tools\SymbolExtensions.cs" />
     <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
     <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
-    <Compile Include="CompatibilityLayers\IPA.cs" />
+    <Compile Include="Extensions\Layers\IPA.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
@@ -191,8 +216,8 @@
     <Compile Include="Melons\Attributes\Priority.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderBuild.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
-    <Compile Include="CL.cs" />
-    <Compile Include="CompatibilityLayers\Melon.cs" />
+    <Compile Include="Extensions\CompatibilityLayer.cs" />
+    <Compile Include="Extensions\Layers\Melon.cs" />
     <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Category.cs" />
@@ -297,6 +322,7 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
   </ItemGroup>
+  <ItemGroup />
   <ItemDefinitionGroup>
     <PackageReference ExcludeAssets="runtime" />
   </ItemDefinitionGroup>

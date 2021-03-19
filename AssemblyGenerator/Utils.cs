@@ -23,8 +23,8 @@ namespace MelonLoader.AssemblyGenerator
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         internal extern static string GetAssemblyGeneratorPath();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static bool ForceRegeneration();
+        //[MethodImpl(MethodImplOptions.InternalCall)]
+        //internal extern static bool ForceRegeneration();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         internal extern static string ForceVersion_UnityDependencies();

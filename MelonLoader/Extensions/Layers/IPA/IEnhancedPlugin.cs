@@ -7,7 +7,7 @@ namespace IllusionPlugin
 	{
 		[Obsolete("IllusionPlugin.IEnhancedPlugin.Filter is Only Here for Compatibility Reasons. Please use the MelonGame Attribute instead.")]
 		string[] Filter { get; }
-		[Obsolete("IllusionPlugin.IEnhancedPlugin.OnLateUpdate() is Only Here for Compatibility Reasons. Please use MelonPlugin.OnLateUpdate() or MelonMod.OnLateUpdate() instead.")]
+		[Obsolete("IllusionPlugin.IEnhancedPlugin.OnLateUpdate() is Only Here for Compatibility Reasons. Please use MelonBase.OnLateUpdate() instead.")]
 		void OnLateUpdate();
 	}
 }

@@ -7,13 +7,6 @@ class InternalCalls
 public:
 	static void Initialize();
 
-	class MelonCore
-	{
-	public:
-		static void AddInternalCalls();
-		static bool QuitFix();
-	};
-
 	class MelonLogger
 	{
 	public:
@@ -68,6 +61,13 @@ public:
 		static void AddInternalCalls();
 		static bool IsEnabled();
 		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
+	};
+
+	class Fixes_QuitFix
+	{
+	public:
+		static void AddInternalCalls();
+		static bool ShouldRun();
 	};
 
 	class SupportModules

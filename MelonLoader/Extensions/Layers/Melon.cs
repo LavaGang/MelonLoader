@@ -6,15 +6,25 @@ using System.Reflection;
 
 namespace MelonLoader.CompatibilityLayers
 {
-	internal class Melon : MelonCompatibilityLayerResolver
+	internal class Melon_CL : MelonCompatibilityLayer.Resolver
 	{
 		private Type[] melon_types = null;
 		private Assembly asm = null;
-		private Melon(Assembly assembly, IEnumerable<Type> types) { asm = assembly; melon_types = Enumerable.ToArray(types); }
+		private Melon_CL(Assembly assembly, IEnumerable<Type> types) { asm = assembly; melon_types = Enumerable.ToArray(types); }
 
-		internal static void Register() => MelonCompatibilityLayer.LayerResolveEvents += TryResolve;
+		internal static void Setup(AppDomain domain)
+		{
+			domain.AssemblyResolve += (sender, args) =>
+				(args.Name.StartsWith("MelonLoader.ModHandler, Version=")
+				|| args.Name.StartsWith("MelonLoader, Version="))
+				? typeof(Melon_CL).Assembly
+				: null;
+			MelonCompatibilityLayer.ResolveAssemblyToLayerResolverEvents += ResolveAssemblyToLayerResolver;
+			MelonCompatibilityLayer.RefreshPluginsTableEvents += (ds, da) => RefreshPluginsTable();
+			MelonCompatibilityLayer.RefreshModsTableEvents += (ds, da) => RefreshModsTable();
+		}
 
-		private static void TryResolve(object sender, MelonCompatibilityLayerResolverEventArgs args)
+		private static void ResolveAssemblyToLayerResolver(object sender, MelonCompatibilityLayer.LayerResolveEventArgs args)
 		{
 			if (args.inter != null)
 				return;
@@ -22,7 +32,17 @@ namespace MelonLoader.CompatibilityLayers
 			if ((melon_types == null)
 				|| (melon_types.Count() <= 0))
 				return;
-			args.inter = new Melon(args.assembly, melon_types);
+			args.inter = new Melon_CL(args.assembly, melon_types);
+		}
+
+		private static void RefreshPluginsTable()
+        {
+			Main.Plugins = MelonHandler._Plugins;
+        }
+
+		private static void RefreshModsTable()
+		{
+			Main.Mods = MelonHandler._Mods;
 		}
 
 		internal override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)

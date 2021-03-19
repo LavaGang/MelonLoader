@@ -124,6 +124,9 @@
 99. Fixed Issue with ILRepack not Running for Debug Compilation of MelonLoader.dll.
 100. Fixed Issue with ILRepack not using NuGet Package Paths for Merging.
 101. Fixed Issue with MelonLoader.dll Compilation would copy NuGet Package Dependencies to Output Folder.
+102. Improved Compatibility Layer Resolve System.
+103. Improved MelonLoader Core Initialization.
+104. Temporarily Disabled the "--melonloader.agfregenerate" Launch Option.
 
 ---
 

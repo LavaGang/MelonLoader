@@ -45,6 +45,19 @@ namespace MelonLoader
                 Directory.CreateDirectory(ModsDirectory);
         }
 
+        internal static Assembly AssemblyResolver(object sender, ResolveEventArgs args)
+        {
+            string assembly_name = args.Name.Split(',')[0];
+            string dll_name = (assembly_name + ".dll");
+            string plugins_path = Path.Combine(MelonHandler.PluginsDirectory, dll_name);
+            if (File.Exists(plugins_path))
+                return Assembly.LoadFile(plugins_path);
+            string mods_path = Path.Combine(MelonHandler.ModsDirectory, dll_name);
+            if (File.Exists(mods_path))
+                return Assembly.LoadFile(mods_path);
+            return null;
+        }
+
         internal static void LoadPlugins()
         {
             MelonLogger.Msg("Loading Plugins...");
@@ -256,7 +269,7 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(filelocation))
                 filelocation = asm.GetName().Name;
 
-            MelonCompatibilityLayerResolver resolver = MelonCompatibilityLayer.Resolve(asm);
+            MelonCompatibilityLayer.Resolver resolver = MelonCompatibilityLayer.ResolveAssemblyToLayerResolver(asm);
             if (resolver == null)
             {
                 // File Is Not Compatible
@@ -319,14 +332,14 @@ namespace MelonLoader
         {
             _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
-            Main.Plugins = _Plugins;
+            MelonCompatibilityLayer.RefreshPluginsTable();
         }
 
         private static void SortMods()
         {
             _Mods = _Mods.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
-            Main.Mods = _Mods;
+            MelonCompatibilityLayer.RefreshModsTable();
         }
 
         private static void RegisterIl2CppInjectAttributes(Assembly asm)

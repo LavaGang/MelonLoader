@@ -12,7 +12,7 @@
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
-	MelonCore::AddInternalCalls();
+	Fixes_QuitFix::AddInternalCalls();
 	MelonLogger::AddInternalCalls();
 	MelonUtils::AddInternalCalls();
 	MelonHandler::AddInternalCalls();
@@ -22,9 +22,9 @@ void InternalCalls::Initialize()
 	AssemblyGenerator_Utils::AddInternalCalls();
 }
 
-#pragma region MelonCore
-bool InternalCalls::MelonCore::QuitFix() { return Core::QuitFix; }
-void InternalCalls::MelonCore::AddInternalCalls() { Mono::AddInternalCall("MelonLoader.Core::QuitFix", QuitFix); }
+#pragma region Fixes_QuitFix
+bool InternalCalls::Fixes_QuitFix::ShouldRun() { return Core::QuitFix; }
+void InternalCalls::Fixes_QuitFix::AddInternalCalls() { Mono::AddInternalCall("MelonLoader.Fixes.QuitFix::ShouldRun", ShouldRun); }
 #pragma endregion
 
 #pragma region MelonLogger
@@ -239,7 +239,7 @@ void InternalCalls::AssemblyGenerator_Utils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetManagedDirectory", InternalCalls::MelonUtils::GetManagedDirectory);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetConfigDirectory", GetConfigDirectory);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetAssemblyGeneratorPath", GetAssemblyGeneratorPath);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceRegeneration", ForceRegeneration);
+	//Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceRegeneration", ForceRegeneration);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceVersion_UnityDependencies", ForceVersion_UnityDependencies);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceVersion_Dumper", ForceVersion_Dumper);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceVersion_Il2CppAssemblyUnhollower", ForceVersion_Il2CppAssemblyUnhollower);

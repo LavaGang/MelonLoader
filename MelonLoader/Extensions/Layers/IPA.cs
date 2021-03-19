@@ -9,27 +9,24 @@ using IllusionInjector;
 
 namespace MelonLoader.CompatibilityLayers
 {
-	internal class IPA : MelonCompatibilityLayerResolver
+	internal class IPA_CL : MelonCompatibilityLayer.Resolver
 	{
 		private Type[] plugin_types = null;
 		private Assembly asm = null;
-		private IPA(Assembly assembly, IEnumerable<Type> types) { asm = assembly; plugin_types = Enumerable.ToArray(types); }
+		private IPA_CL(Assembly assembly, IEnumerable<Type> types) { asm = assembly; plugin_types = Enumerable.ToArray(types); }
 
-		internal static void Register()
+		internal static void Setup(AppDomain domain)
 		{
-			MelonCompatibilityLayer.LayerResolveEvents += TryResolve;
-			MelonCompatibilityLayer.AssemblyResolveEvents += AddAssemblyResolver;
+			domain.AssemblyResolve += (sender, args) =>
+				(args.Name.StartsWith("IllusionPlugin, Version=")
+				|| args.Name.StartsWith("IllusionInjector, Version="))
+				? typeof(IPA_CL).Assembly
+				: null;
+			MelonCompatibilityLayer.ResolveAssemblyToLayerResolverEvents += ResolveAssemblyToLayerResolver;
+			MelonCompatibilityLayer.RefreshModsTableEvents += (ds, da) => RefreshModsTable();
 		}
 
-		private static void AddAssemblyResolver(object ds, EventArgs da) => AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-		{
-			if (args.Name.StartsWith("IllusionPlugin, Version=")
-				|| args.Name.StartsWith("IllusionInjector, Version="))
-				return typeof(IPA).Assembly;
-			return null;
-		};
-
-		private static void TryResolve(object sender, MelonCompatibilityLayerResolverEventArgs args)
+		private static void ResolveAssemblyToLayerResolver(object sender, MelonCompatibilityLayer.LayerResolveEventArgs args)
 		{
 			if (args.inter != null)
 				return;
@@ -37,7 +34,12 @@ namespace MelonLoader.CompatibilityLayers
 			if ((plugin_types == null)
 				|| (plugin_types.Count() <= 0))
 				return;
-			args.inter = new IPA(args.assembly, plugin_types);
+			args.inter = new IPA_CL(args.assembly, plugin_types);
+		}
+
+		private static void RefreshModsTable()
+		{
+			// PluginManager Conversion Here
 		}
 
 		internal override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
@@ -100,8 +102,8 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
-			IPA_MelonModWrapper wrapper = new IPA_MelonModWrapper(pluginInstance);
-			wrapper.Info = new MelonInfoAttribute(typeof(IPA_MelonModWrapper), plugin_name, plugin_version);
+			MelonModWrapper wrapper = new MelonModWrapper(pluginInstance);
+			wrapper.Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version);
 			if (gamestbl != null)
 				wrapper.Games = gamestbl.ToArray();
 			wrapper.ConsoleColor = MelonLogger.DefaultMelonColor;
@@ -113,18 +115,18 @@ namespace MelonLoader.CompatibilityLayers
 			melonTbl.Add(wrapper);
 			PluginManager._Plugins.Add(pluginInstance);
 		}
-	}
 
-	internal class IPA_MelonModWrapper : MelonMod
-	{
-		private IPlugin pluginInstance;
-		internal IPA_MelonModWrapper(IPlugin plugin) => pluginInstance = plugin;
-		public override void OnApplicationStart() => pluginInstance.OnApplicationStart();
-		public override void OnApplicationQuit() => pluginInstance.OnApplicationQuit();
-		public override void OnSceneWasLoaded(int buildIndex, string sceneName) => pluginInstance.OnLevelWasLoaded(buildIndex);
-		public override void OnSceneWasInitialized(int buildIndex, string sceneName) => pluginInstance.OnLevelWasInitialized(buildIndex);
-		public override void OnUpdate() => pluginInstance.OnUpdate();
-		public override void OnFixedUpdate() => pluginInstance.OnFixedUpdate();
-		public override void OnLateUpdate() { if (pluginInstance is IEnhancedPlugin) ((IEnhancedPlugin)pluginInstance).OnLateUpdate(); }
+		private class MelonModWrapper : MelonMod
+		{
+			private IPlugin pluginInstance;
+			internal MelonModWrapper(IPlugin plugin) => pluginInstance = plugin;
+			public override void OnApplicationStart() => pluginInstance.OnApplicationStart();
+			public override void OnApplicationQuit() => pluginInstance.OnApplicationQuit();
+			public override void OnSceneWasLoaded(int buildIndex, string sceneName) => pluginInstance.OnLevelWasLoaded(buildIndex);
+			public override void OnSceneWasInitialized(int buildIndex, string sceneName) => pluginInstance.OnLevelWasInitialized(buildIndex);
+			public override void OnUpdate() => pluginInstance.OnUpdate();
+			public override void OnFixedUpdate() => pluginInstance.OnFixedUpdate();
+			public override void OnLateUpdate() { if (pluginInstance is IEnhancedPlugin) ((IEnhancedPlugin)pluginInstance).OnLateUpdate(); }
+		}
 	}
 }
