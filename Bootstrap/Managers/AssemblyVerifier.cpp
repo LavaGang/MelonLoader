@@ -1,9 +1,8 @@
-#ifdef PORT_DISABLE
 #include "AssemblyVerifier.h"
 #include "Hook.h"
 #include <unordered_map>
 #include <math.h>
-#include "../Utils/Debug.h"
+#include "../Utils/Console/Debug.h"
 #pragma warning(disable:4244)
 
 AssemblyVerifier::callOriginalLoadFrom_t AssemblyVerifier::callOriginalLoadFrom;
@@ -223,4 +222,3 @@ void AssemblyVerifier::InstallHooks()
 	}
 }
 
-#endif

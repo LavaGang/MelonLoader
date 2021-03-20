@@ -1,6 +1,13 @@
-#ifdef PORT_DISABLE
 #pragma once
 #include "Mono.h"
+
+#ifndef __stdcall
+#define __stdcall __attribute__((__stdcall__))
+#endif
+
+#ifndef __forceinline
+#define __forceinline __attribute__((always_inline))
+#endif
 
 struct AssemblyVerifier {
 	static void InstallHooks();
@@ -16,4 +23,3 @@ private:
 	static Mono::Object** __stdcall LoadRawPatch(Mono::Object** appDomain, Mono::Object** bytes, Mono::Object** symbolStore, Mono::Object** evidence, int refonly, void* stackMark, void* error);
 };
 
-#endif
