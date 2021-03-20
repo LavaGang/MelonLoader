@@ -4,13 +4,13 @@
 #include "../Utils/AssemblyGenerator.h"
 #include "Hook.h"
 #include "Mono.h"
-#include "../Utils/Console.h"
-#include "../Utils/Debug.h"
+#include "../Utils/Console/Console.h"
+#include "../Utils/Console/Debug.h"
 #include <string>
 #include "AssemblyVerifier.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Console/Logger.h"
 
 #ifdef __ANDROID__
 #include <dlfcn.h>
@@ -134,7 +134,7 @@ bool Il2Cpp::Exports::Initialize()
 	// test_fn = (testFnDef)GetExport("TestExternalCall");
 	// test_fn_untyped = GetExport("TestExternalCall");
 	
-	if (ImportError)
+	if (!Assertion::ShouldContinue)
 	{
 		Logger::Error("One or more symbols failed to load.");
 	}
@@ -149,6 +149,7 @@ bool Il2Cpp::ApplyPatches()
 	Patches::il2cpp_unity_install_unitytls_interface = new Patcher((void *)Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
 
 	Patches::il2cpp_init->ApplyPatch();
+	Patches::il2cpp_unity_install_unitytls_interface->ApplyPatch();
 
 	return true;
 }
@@ -186,7 +187,11 @@ Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj
 
 void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct)
 {
-
+	Patches::il2cpp_unity_install_unitytls_interface->ClearPatch();
+	Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
+	Patches::il2cpp_unity_install_unitytls_interface->ApplyPatch();
+	Logger::Warning("UNITY TLS FOUND");
+	UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
 }
 
 // void Il2Cpp::Hooks::test_fn(int value)

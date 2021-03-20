@@ -1,5 +1,7 @@
-#ifdef PORT_DISABLE
+#ifdef _WIN32
 #include <Windows.h>
+#endif
+
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -7,7 +9,7 @@
 #include "../Base/Core.h"
 #include "Il2Cpp.h"
 #include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Console/Logger.h"
 #pragma comment(lib,"version.lib")
 
 char* Game::ApplicationPath = NULL;
@@ -16,8 +18,14 @@ char* Game::DataPath = NULL;
 char* Game::Developer = NULL;
 char* Game::Name = NULL;
 char* Game::UnityVersion = NULL;
-bool Game::IsIl2Cpp = false;
 
+#ifdef PORT_DISABLE
+bool Game::IsIl2Cpp = false;
+#else
+bool Game::IsIl2Cpp = true;
+#endif
+
+#ifdef PORT_DISABLE
 bool Game::Initialize()
 {
 	if (!SetupPaths())

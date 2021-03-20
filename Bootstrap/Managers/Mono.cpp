@@ -1,24 +1,33 @@
-#ifdef PORT_DISABLE
 #include <string>
 #include "Mono.h"
 #include "Game.h"
 #include "Hook.h"
-#include "..\Utils\Assertion.h"
-#include "..\Utils\CommandLine.h"
-#include "..\Utils\Debug.h"
-#include "..\Base\Core.h"
+#include "../Utils/Assertion.h"
+#include "../Utils/Console/CommandLine.h"
+#include "../Utils/Console/Debug.h"
+#include "../Base/Core.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
 #include "Il2Cpp.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Console/Logger.h"
+
+#ifdef __ANDROID__
+#include <dlfcn.h>
+#endif
 
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
 const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };
+const char* Mono::PosixHelperName = "MonoPosixHelper";
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
 char* Mono::ConfigPath = NULL;
+#ifdef _WIN32
 HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
+#elif defined(__ANDROID__)
+void* Mono::Module = NULL;
+void* Mono::PosixHelper = NULL;
+#endif
 Mono::Domain* Mono::domain = NULL;
 bool Mono::IsOldMono = false;
 
@@ -84,7 +93,11 @@ bool Mono::Load()
 {
 	for (int i = 0; i < (sizeof(LibNames) / sizeof(LibNames[0])); i++)
 	{
+#ifdef _WIN32
 		Module = LoadLibraryA((std::string(BasePath) + "\\" + LibNames[i] + ".dll").c_str());
+#elif defined (__ANDROID__)
+		Module = dlopen((std::string("lib") + std::string(LibNames[i]) + ".so").c_str(), RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+#endif
 		if (Module != NULL)
 		{
 			if (i == 0)
@@ -98,7 +111,12 @@ bool Mono::Load()
 		return false;
 	}
 
-	PosixHelper = LoadLibraryA((std::string(BasePath) + "\\MonoPosixHelper.dll").c_str());
+#ifdef _WIN32
+	PosixHelper = LoadLibraryA((std::string(BasePath) + "\\" + Mono::PosixHelperName + ".dll").c_str());
+#elif defined(__ANDROID__)
+	PosixHelper = Module = dlopen((std::string("lib") + std::string(Mono::PosixHelperName) + ".so").c_str(), RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+#endif
+
 	if ((PosixHelper == NULL) && !IsOldMono)
 	{
 		Assertion::ThrowInternalFailure("Failed to Load Mono Posix Helper!");
@@ -107,6 +125,7 @@ bool Mono::Load()
 	return Exports::Initialize();
 }
 
+#ifdef PORT_DISABLE
 bool Mono::SetupPaths()
 {
 	std::string MonoDir = std::string();
@@ -198,6 +217,8 @@ void Mono::CreateDomain(const char* name)
 		Exports::mono_domain_set_config(domain, Game::BasePath, name);
 }
 
+#endif
+
 void Mono::AddInternalCall(const char* name, void* method)
 {
 	Debug::Msg(name);
@@ -219,57 +240,58 @@ bool Mono::Exports::Initialize()
 #define MONODEF(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn);
 
 	MONODEF(mono_jit_init)
-		MONODEF(mono_thread_set_main)
-		MONODEF(mono_thread_current)
-		MONODEF(mono_add_internal_call)
-		MONODEF(mono_lookup_internal_call)
-		MONODEF(mono_runtime_invoke)
-		MONODEF(mono_method_get_name)
-		MONODEF(mono_domain_assembly_open)
-		MONODEF(mono_assembly_get_image)
-		MONODEF(mono_class_from_name)
-		MONODEF(mono_class_get_method_from_name)
-		MONODEF(mono_string_to_utf8)
-		MONODEF(mono_string_new)
-		MONODEF(mono_object_get_class)
-		MONODEF(mono_class_get_property_from_name)
-		MONODEF(mono_property_get_get_method)
+	MONODEF(mono_thread_set_main)
+	MONODEF(mono_thread_current)
+	MONODEF(mono_add_internal_call)
+	MONODEF(mono_lookup_internal_call)
+	MONODEF(mono_runtime_invoke)
+	MONODEF(mono_method_get_name)
+	MONODEF(mono_domain_assembly_open)
+	MONODEF(mono_assembly_get_image)
+	MONODEF(mono_class_from_name)
+	MONODEF(mono_class_get_method_from_name)
+	MONODEF(mono_string_to_utf8)
+	MONODEF(mono_string_new)
+	MONODEF(mono_object_get_class)
+	MONODEF(mono_class_get_property_from_name)
+	MONODEF(mono_property_get_get_method)
 
+	if (!IsOldMono)
+	{
+		MONODEF(mono_domain_set_config)
+		MONODEF(mono_unity_get_unitytls_interface)
+		MONODEF(mono_free)
+	}
+	else
+		MONODEF(g_free)
+
+	if (Game::IsIl2Cpp)
+	{
+		MONODEF(mono_set_assemblies_path)
+		MONODEF(mono_assembly_setrootdir)
+		MONODEF(mono_set_config_dir)
+			
 		if (!IsOldMono)
-		{
-			MONODEF(mono_domain_set_config)
-				MONODEF(mono_unity_get_unitytls_interface)
-				MONODEF(mono_free)
-		}
-		else
-			MONODEF(g_free)
-
-			if (Game::IsIl2Cpp)
-			{
-				MONODEF(mono_set_assemblies_path)
-					MONODEF(mono_assembly_setrootdir)
-					MONODEF(mono_set_config_dir)
-					if (!IsOldMono)
-						MONODEF(mono_runtime_set_main_args)
-
-						MONODEF(mono_raise_exception)
-						MONODEF(mono_get_exception_bad_image_format)
-						MONODEF(mono_image_open_full)
-						MONODEF(mono_image_open_from_data_full)
-						MONODEF(mono_image_close)
-						MONODEF(mono_image_get_table_rows)
-						MONODEF(mono_metadata_decode_table_row_col)
-						MONODEF(mono_array_addr_with_size)
-						MONODEF(mono_array_length)
-						MONODEF(mono_metadata_string_heap)
-						MONODEF(mono_class_get_name)
-			}
-			else
-				MONODEF(mono_jit_init_version)
+			MONODEF(mono_runtime_set_main_args)
+			
+		MONODEF(mono_raise_exception)
+		MONODEF(mono_get_exception_bad_image_format)
+		MONODEF(mono_image_open_full)
+		MONODEF(mono_image_open_from_data_full)
+		MONODEF(mono_image_close)
+		MONODEF(mono_image_get_table_rows)
+		MONODEF(mono_metadata_decode_table_row_col)
+		MONODEF(mono_array_addr_with_size)
+		MONODEF(mono_array_length)
+		MONODEF(mono_metadata_string_heap)
+		MONODEF(mono_class_get_name)
+	}
+	else
+		MONODEF(mono_jit_init_version)
 
 #undef MONODEF
 
-				return Assertion::ShouldContinue;
+	return Assertion::ShouldContinue;
 }
 
 void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
@@ -328,4 +350,3 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 }
 
 void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
-#endif

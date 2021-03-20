@@ -1,6 +1,7 @@
 #pragma once
-#ifdef PORT_DISABLE
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 
 
 class Mono
@@ -16,7 +17,7 @@ public:
 	struct Object;
 	struct String;
 
-	static HMODULE Module;
+	static void* Module;
 	static Domain* domain;
 	static bool IsOldMono;
 	static char* ManagedPath;
@@ -206,6 +207,6 @@ private:
 	static char* BasePath;
 	static const char* LibNames[];
 	static const char* FolderNames[];
-	static HMODULE PosixHelper;
+	static void* PosixHelper;
+	static const char* PosixHelperName;
 };
-#endif

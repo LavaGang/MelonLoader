@@ -1,4 +1,3 @@
-#ifdef PORT_DISABLE
 #pragma once
 #include <string>
 
@@ -23,4 +22,3 @@ private:
 	static std::string ReadUnityVersionFromFileInfo();
 	static std::string ReadUnityVersionFromGlobalGameManagers();
 };
-#endif

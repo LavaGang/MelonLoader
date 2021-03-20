@@ -1,8 +1,8 @@
 #include "Assertion.h"
 #include "../Base/Core.h"
-#include "Debug.h"
-#include "Logger.h"
-#include "Console.h"
+#include "Console/Debug.h"
+#include "Console/Logger.h"
+#include "Console/Console.h"
 #include <string>
 #include <iostream>
 

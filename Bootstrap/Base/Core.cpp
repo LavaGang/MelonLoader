@@ -1,13 +1,13 @@
 #include "Core.h"
-#include "../Utils/CommandLine.h"
-#include "../Utils/Console.h"
+#include "../Utils/Console/CommandLine.h"
+#include "../Utils/Console/Console.h"
 #include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Console/Logger.h"
 #include "../Managers/Game.h"
 #include "../Managers/Mono.h"
 #include "../Managers/Il2Cpp.h"
 #include "../Managers/Hook.h"
-#include "../Utils/Debug.h"
+#include "../Utils/Console/Debug.h"
 #include "../Utils/AnalyticsBlocker.h"
 #include "../Utils/HashCode.h"
 #include "./Liberation/Liberation.h"
@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-#include "../Utils/PatchHelper.h"
+#include "../Utils/Patching/PatchHelper.h"
 #include "./Keystone/include/keystone/keystone.h"
 
 typedef void (*testFnDef)(void);

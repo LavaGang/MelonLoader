@@ -2,7 +2,7 @@
 #ifdef _WIN32
 #include <Windows.h>
 #endif
-#include "../Patcher.h"
+#include "../Utils/Patching/Patcher.h"
 
 class Il2Cpp
 {
