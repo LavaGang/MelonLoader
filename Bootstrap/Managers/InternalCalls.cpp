@@ -1,7 +1,6 @@
-#ifdef PORT_DISABLE
 #include "InternalCalls.h"
-#include "../Utils/Debug.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Console/Debug.h"
+#include "../Utils/Console/Logger.h"
 #include "Game.h"
 #include "Hook.h"
 #include "../Utils/Assertion.h"
@@ -70,7 +69,13 @@ void InternalCalls::MelonLogger::ThrowInternalFailure(Mono::String* msg)
 }
 
 void InternalCalls::MelonLogger::WriteSpacer() { Logger::WriteSpacer(); }
-void InternalCalls::MelonLogger::Flush() { Logger::Flush(); Console::Flush(); }
+void InternalCalls::MelonLogger::Flush()
+{
+#ifdef PORT_DISABLE
+	Logger::Flush();
+	Console::Flush();
+#endif
+}
 void InternalCalls::MelonLogger::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_PrintModName", Internal_PrintModName);
@@ -104,10 +109,12 @@ Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Ex
 
 void InternalCalls::MelonUtils::SCT(Mono::String* title)
 {
+#ifdef _WIN32
 	if (title == NULL) return;
 	auto str = Mono::Exports::mono_string_to_utf8(title);
 	Console::SetTitle(str);
 	Mono::Free(str);
+#endif
 }
 
 Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepath)
@@ -135,7 +142,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetFileProductName", GetFileProductName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookAttach", Hook::Attach);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookDetach", Hook::Detach);
-
+	
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", GetGameName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
@@ -171,4 +178,3 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonDebug::Internal_Msg", Internal_Msg);
 }
 #pragma endregion
-#endif

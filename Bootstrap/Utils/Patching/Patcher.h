@@ -7,11 +7,11 @@ public:
 	Patcher(void* fnPtr, void* patchPtr);
 	void ApplyPatch();
 	void ClearPatch();
+	void* patchPtr;
 private:
 	char* compiledPatch;
 	Patch* instance;
 	void* fnPtr;
-	void* patchPtr;
 	size_t compiledSize;
 	bool compiled;
 	bool applied;

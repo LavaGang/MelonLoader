@@ -1,7 +1,8 @@
 #include "./PatchHelper.h"
 
 #include <android/log.h>
-
+#include "../Console/Debug.h"
+#include <string.h>
 
 #include "../Console/Logger.h"
 
@@ -22,6 +23,32 @@ bool PatchHelper::Init()
 
 	return true;
 }
+
+// TODO: allow for mutliple attachments to one target
+void PatchHelper::Attach(void* target, void* patch)
+{
+	if (!patchMap.count(target))
+	{
+		patchMap[target] = new Patcher(target, patch);
+	}
+
+	if (Debug::Enabled)
+	{
+		if (patchMap[target]->patchPtr != patch)
+			Logger::Error("A PATCH WAS APPLIED THAT DOESN'T MATCH");
+	}
+
+	patchMap[target]->ApplyPatch();
+}
+
+void PatchHelper::Detach(void* target, void* patch)
+{
+	if (!patchMap.count(target))
+		return;
+
+	patchMap[target]->ClearPatch();
+}
+
 
 // THIS IS INEFFICIENT. YOU DONT NEED A LIBRARY TO DO IT. I JUST DONT KNOW HOW TO GENERATE THE ASSEMBLY BINARY.
 bool PatchHelper::GenerateAsm(void* fnPtr, unsigned char** encode, size_t* size)

@@ -1,7 +1,6 @@
 #pragma once
-#ifdef PORT_DISABLE
 #include "Mono.h"
-#include "../Utils/Console.h"
+#include "../Utils/Console/Console.h"
 
 class InternalCalls
 {
@@ -70,4 +69,3 @@ public:
 		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
 	};
 };
-#endif
