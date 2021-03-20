@@ -1,11 +1,10 @@
-#ifdef PORT_DISABLE
 #include "BaseAssembly.h"
-#include "../Utils/Debug.h"
+#include "../Utils/Console/Debug.h"
 #include "../Base/Core.h"
 #include "Game.h"
 #include <string>
 #include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Console/Logger.h"
 
 char* BaseAssembly::Path = NULL;
 Mono::Method* BaseAssembly::Mono_Start = NULL;
@@ -73,4 +72,3 @@ void BaseAssembly::Start()
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
 }
-#endif

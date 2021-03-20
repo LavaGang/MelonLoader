@@ -1,5 +1,4 @@
 #pragma once
-#ifdef PORT_DISABLE
 #include "Mono.h"
 
 class BaseAssembly
@@ -12,4 +11,3 @@ public:
 private:
 	static Mono::Method* Mono_Start;
 };
-#endif
