@@ -60,5 +60,12 @@ public:
 		static Patcher* il2cpp_runtime_invoke;
 		static Patcher* il2cpp_unity_install_unitytls_interface;
 	};
+
+	class PatchClear
+	{
+	public:
+		// static Patcher* test_fn;
+		static bool il2cpp_runtime_invoke;
+	};
 #endif
 };
