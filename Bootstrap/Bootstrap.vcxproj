@@ -217,6 +217,8 @@
       <Verbose>false</Verbose>
       <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64;DEBUG</PreprocessorDefinitions>
       <Optimization>Disabled</Optimization>
+      <AdditionalOptions>
+      </AdditionalOptions>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>c11</CLanguageStandard> -->
     </ClCompile>
@@ -234,6 +236,8 @@
       <CppLanguageStandard>c++1z</CppLanguageStandard>
       <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64</PreprocessorDefinitions>
       <Optimization>Disabled</Optimization>
+      <AdditionalOptions>
+      </AdditionalOptions>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>Default</CLanguageStandard> -->
     </ClCompile>

@@ -10,6 +10,7 @@
 #include "BaseAssembly.h"
 #include "Il2Cpp.h"
 #include "../Utils/Console/Logger.h"
+#include "../Utils/Helpers/ImportLibHelper.h"
 
 #ifdef __ANDROID__
 #include <dlfcn.h>
@@ -21,6 +22,9 @@ const char* Mono::PosixHelperName = "MonoPosixHelper";
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
 char* Mono::ConfigPath = NULL;
+Mono::Domain* Mono::domain = NULL;
+bool Mono::IsOldMono = false;
+
 #ifdef _WIN32
 HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
@@ -28,9 +32,8 @@ HMODULE Mono::PosixHelper = NULL;
 void* Mono::Module = NULL;
 void* Mono::PosixHelper = NULL;
 #endif
-Mono::Domain* Mono::domain = NULL;
-bool Mono::IsOldMono = false;
 
+#pragma region MonoDeclare
 #define MONODEF(fn) Mono::Exports::fn##_t Mono::Exports::fn = NULL;
 
 MONODEF(mono_jit_init)
@@ -72,10 +75,13 @@ MONODEF(mono_metadata_string_heap)
 MONODEF(mono_class_get_name)
 
 #undef MONODEF
+#pragma endregion MonoDeclare
 
 bool Mono::Initialize()
 {
 	Debug::Msg("Initializing Mono...");
+
+#ifdef PORT_DISABLE
 	if (!SetupPaths())
 	{
 		Assertion::ThrowInternalFailure("Failed to Setup Mono Paths!");
@@ -86,6 +92,8 @@ bool Mono::Initialize()
 	Debug::Msg(("Mono::ConfigPath = " + std::string(ConfigPath)).c_str());
 	IsOldMono = Core::FileExists((std::string(BasePath) + "\\mono.dll").c_str());
 	Debug::Msg(("Mono::IsOldMono = " + std::string((IsOldMono ? "true" : "false"))).c_str());
+#endif
+	
 	return true;
 }
 
@@ -105,6 +113,7 @@ bool Mono::Load()
 			break;
 		}
 	}
+	
 	if (Module == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Load Mono Library!");
@@ -122,6 +131,7 @@ bool Mono::Load()
 		Assertion::ThrowInternalFailure("Failed to Load Mono Posix Helper!");
 		return false;
 	}
+	
 	return Exports::Initialize();
 }
 
@@ -200,24 +210,31 @@ bool Mono::SetupPaths()
 
 	return true;
 }
+#endif
 
 void Mono::CreateDomain(const char* name)
 {
 	if (domain != NULL)
 		return;
+
 	Debug::Msg("Creating Mono Domain...");
+
 	Exports::mono_set_assemblies_path(ManagedPath);
 	Exports::mono_assembly_setrootdir(ManagedPath);
 	Exports::mono_set_config_dir(ConfigPath);
+
+#ifdef PORT_DISABLE
 	if (!IsOldMono)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
+#endif
+	
 	domain = Exports::mono_jit_init(name);
+	
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
+	
 	if (!IsOldMono)
 		Exports::mono_domain_set_config(domain, Game::BasePath, name);
 }
-
-#endif
 
 void Mono::AddInternalCall(const char* name, void* method)
 {
@@ -237,7 +254,8 @@ bool Mono::Exports::Initialize()
 {
 	Debug::Msg("Initializing Mono Exports...");
 
-#define MONODEF(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn);
+#pragma region MonoBind
+#define MONODEF(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
 
 	MONODEF(mono_jit_init)
 	MONODEF(mono_thread_set_main)
@@ -290,6 +308,7 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_jit_init_version)
 
 #undef MONODEF
+#pragma endregion MonoBind
 
 	return Assertion::ShouldContinue;
 }
@@ -298,31 +317,54 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 {
 	if (exceptionObject == NULL)
 		return;
+
 	Class* klass = Exports::mono_object_get_class(exceptionObject);
 	if (klass == NULL)
 		return;
+
 	Property* prop = Exports::mono_class_get_property_from_name(klass, "Message");
 	if (prop == NULL)
 		return;
+	
 	Method* method = Exports::mono_property_get_get_method(prop);
 	if (method == NULL)
 		return;
+	
 	String* returnstr = (String*)Exports::mono_runtime_invoke(method, exceptionObject, NULL, NULL);
 	if (returnstr == NULL)
 		return;
+	
 	const char* returnstrc = Exports::mono_string_to_utf8(returnstr);
 	if (returnstrc == NULL)
 		return;
+	
 	Logger::Error(returnstrc);
 	Exports::mono_free(returnstr);
 }
 
+
+#ifdef __ANDROID__
+bool Mono::ApplyPatches()
+{
+	Patches::mono_unity_get_unitytls_interface = new Patcher((void*)Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
+
+	Patches::mono_unity_get_unitytls_interface->ApplyPatch();
+}
+#endif
+
+#pragma region Hooks
+
+void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
+
+#ifdef _WIN32
 Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* version)
 {
 	if (!Debug::Enabled)
 		Console::SetHandles();
+	
 	Debug::Msg("Detaching Hook from mono_jit_init_version...");
 	Hook::Detach(&(LPVOID&)Exports::mono_jit_init_version, mono_jit_init_version);
+	
 	Debug::Msg("Creating Mono Domain...");
 	domain = Exports::mono_jit_init_version(name, version);
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
@@ -348,5 +390,5 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 	}
 	return Exports::mono_runtime_invoke(method, obj, params, exec);
 }
-
-void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
+#endif
+#pragma endregion Hooks

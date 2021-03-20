@@ -15,6 +15,7 @@
 #ifdef __ANDROID__
 #include <dlfcn.h>
 #endif
+#include "../Utils/Helpers/ImportLibHelper.h"
 
 Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
@@ -28,9 +29,11 @@ Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface_t Il2Cpp::Exports::il2c
 // void* Il2Cpp::Exports::test_fn_untyped = NULL;
 
 // Patcher* Il2Cpp::Patches::test_fn = NULL;
+#ifdef __ANDROID__
 Patcher* Il2Cpp::Patches::il2cpp_init = NULL;
 Patcher* Il2Cpp::Patches::il2cpp_runtime_invoke = NULL;
 Patcher* Il2Cpp::Patches::il2cpp_unity_install_unitytls_interface = NULL;
+#endif
 
 #ifdef _WIN32
 HMODULE Il2Cpp::Module = NULL;
@@ -126,10 +129,10 @@ bool Il2Cpp::Exports::Initialize()
 {
 	Debug::Msg("Initializing Il2Cpp Exports...");
 	
-	il2cpp_init = (il2cpp_init_t)GetExport("il2cpp_init");
-	il2cpp_runtime_invoke = (il2cpp_runtime_invoke_t)GetExport("il2cpp_runtime_invoke");
-	il2cpp_method_get_name = (il2cpp_method_get_name_t)GetExport("il2cpp_method_get_name");
-	il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)GetExport("il2cpp_unity_install_unitytls_interface");
+	il2cpp_init = (il2cpp_init_t)ImportLibHelper::GetExport(Handle, "il2cpp_init");
+	il2cpp_runtime_invoke = (il2cpp_runtime_invoke_t)ImportLibHelper::GetExport(Handle, "il2cpp_runtime_invoke");
+	il2cpp_method_get_name = (il2cpp_method_get_name_t)ImportLibHelper::GetExport(Handle, "il2cpp_method_get_name");
+	il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)ImportLibHelper::GetExport(Handle, "il2cpp_unity_install_unitytls_interface");
 
 	// test_fn = (testFnDef)GetExport("TestExternalCall");
 	// test_fn_untyped = GetExport("TestExternalCall");
@@ -204,20 +207,5 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 // }
 
 #pragma endregion Hooks
-
-void* Il2Cpp::GetExport(const char* name)
-{
-	if (!Assertion::ShouldContinue)
-		return nullptr;
-	
-	void* fnPointer = dlsym(Handle, name);
-
-	// no need to return since already nullptr
-	if (fnPointer == nullptr)
-		Assertion::ThrowInternalFailure(dlerror());
-
-
-	return fnPointer;
-}
 
 #endif

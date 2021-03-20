@@ -47,16 +47,3 @@ void Assertion::ThrowInternalFailure(const char* msg)
 	Logger::Internal_DirectWrite(LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
 #endif
 }
-
-#ifdef _WIN32
-FARPROC Assertion::GetExport(HMODULE mod, const char* export_name)
-{
-	if (!ShouldContinue)
-		return NULL;
-	Debug::Msg(export_name);
-	FARPROC returnval = GetProcAddress(mod, export_name);
-	if (returnval == NULL)
-		ThrowInternalFailure((std::string("Failed to GetExport ( ") + export_name + " )").c_str());
-	return returnval;
-}
-#endif

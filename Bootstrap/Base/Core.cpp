@@ -26,7 +26,7 @@
 typedef void (*testFnDef)(void);
 
 char* Core::Path = NULL;
-const char* Core::Version = "v0.3.0";
+const char* Core::Version = "v0.4.0";
 bool Core::QuitFix = false;
 
 bool Core::Initialize()
@@ -41,16 +41,20 @@ bool Core::Initialize()
 		)
 		return false;
 
-#ifdef PORT_DISABLE
+#ifdef _WIN32
 	CommandLine::Read();
+#endif
 	
-	if (!Console::Initialize()
+	if (
+		!Console::Initialize()
 		|| !Logger::Initialize()
+#ifdef PORT_DISABLE
 		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
-		|| !Mono::Initialize())
+#endif PORT_DISABLE
+		|| !Mono::Initialize()
+		)
 		return false;
-#endif
 	
 	WelcomeMessage();
 
@@ -59,9 +63,7 @@ bool Core::Initialize()
 		!AnalyticsBlocker::Initialize() ||
 #endif
 		!Il2Cpp::Initialize()
-#ifdef PORT_DISABLE
 		|| !Mono::Load()
-#endif
 		)
 		return false;
 
@@ -242,7 +244,11 @@ void Core::WelcomeMessage()
 
 void Core::ApplyHooks()
 {
+	Debug::Msg("Patching il2cpp");
 	Il2Cpp::ApplyPatches();
+	
+	Debug::Msg("Patching mono");
+	Mono::ApplyPatches();
 }
 
 const char* Core::GetOSVersion()

@@ -60,8 +60,5 @@ public:
 		static Patcher* il2cpp_runtime_invoke;
 		static Patcher* il2cpp_unity_install_unitytls_interface;
 	};
-private:
-	static bool ImportError;
-	static void* GetExport(const char* name);
 #endif
 };
