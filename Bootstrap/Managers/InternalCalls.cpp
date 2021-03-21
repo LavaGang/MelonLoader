@@ -12,20 +12,13 @@
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
-	Fixes_QuitFix::AddInternalCalls();
 	MelonLogger::AddInternalCalls();
 	MelonUtils::AddInternalCalls();
-	MelonHandler::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
 	SupportModules::AddInternalCalls();
 	AssemblyGenerator_Logger::AddInternalCalls();
 	AssemblyGenerator_Utils::AddInternalCalls();
 }
-
-#pragma region Fixes_QuitFix
-bool InternalCalls::Fixes_QuitFix::ShouldRun() { return Core::QuitFix; }
-void InternalCalls::Fixes_QuitFix::AddInternalCalls() { Mono::AddInternalCall("MelonLoader.Fixes.QuitFix::ShouldRun", ShouldRun); }
-#pragma endregion
 
 #pragma region MelonLogger
 void InternalCalls::MelonLogger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt)
@@ -144,20 +137,7 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 }
 #pragma endregion
 
-#pragma region MelonHandler
-InternalCalls::MelonHandler::LoadMode InternalCalls::MelonHandler::LoadModeForPlugins = InternalCalls::MelonHandler::LoadMode::NORMAL;
-InternalCalls::MelonHandler::LoadMode InternalCalls::MelonHandler::LoadModeForMods = InternalCalls::MelonHandler::LoadMode::NORMAL;
-InternalCalls::MelonHandler::LoadMode InternalCalls::MelonHandler::GetLoadModeForPlugins() { return LoadModeForPlugins; }
-InternalCalls::MelonHandler::LoadMode InternalCalls::MelonHandler::GetLoadModeForMods() { return LoadModeForMods; }
-void InternalCalls::MelonHandler::AddInternalCalls()
-{
-	Mono::AddInternalCall("MelonLoader.MelonHandler::GetLoadModeForPlugins", GetLoadModeForPlugins);
-	Mono::AddInternalCall("MelonLoader.MelonHandler::GetLoadModeForMods", GetLoadModeForMods);
-}
-#pragma endregion
-
 #pragma region MelonDebug
-bool InternalCalls::MelonDebug::IsEnabled() { return Debug::Enabled; }
 void InternalCalls::MelonDebug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
@@ -168,7 +148,6 @@ void InternalCalls::MelonDebug::Internal_Msg(Console::Color meloncolor, Console:
 }
 void InternalCalls::MelonDebug::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.MelonDebug::IsEnabled", IsEnabled);
 	Mono::AddInternalCall("MelonLoader.MelonDebug::Internal_Msg", Internal_Msg);
 }
 #pragma endregion

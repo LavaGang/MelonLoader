@@ -39,35 +39,11 @@ public:
 		static Mono::String* GetFileProductName(Mono::String* filepath);
 	};
 
-	class MelonHandler
-	{
-	public:
-		static void AddInternalCalls();
-		enum LoadMode
-		{
-			NORMAL,
-			DEV,
-			BOTH
-		};
-		static LoadMode LoadModeForPlugins;
-		static LoadMode LoadModeForMods;
-		static LoadMode GetLoadModeForPlugins();
-		static LoadMode GetLoadModeForMods();
-	};
-
 	class MelonDebug
 	{
 	public:
 		static void AddInternalCalls();
-		static bool IsEnabled();
 		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
-	};
-
-	class Fixes_QuitFix
-	{
-	public:
-		static void AddInternalCalls();
-		static bool ShouldRun();
 	};
 
 	class SupportModules

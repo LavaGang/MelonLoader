@@ -7,12 +7,9 @@ namespace MelonLoader.Fixes
 	{
 		internal static void Run()
 		{
-			if (!ShouldRun())
+			if (!MelonCommandLine.Core.QuitFix)
 				return;
 			Process.GetCurrentProcess().Kill();
 		}
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		private extern static bool ShouldRun();
 	}
 }

@@ -17,6 +17,8 @@ namespace MelonLoader
             Fixes.ApplicationBase.Run(curDomain);
             Fixes.ExtraCleanup.Run();
 
+            MelonCommandLine.Load();
+
             MelonCompatibilityLayer.Setup(curDomain);
 
             if (MelonUtils.IsGameIl2Cpp())

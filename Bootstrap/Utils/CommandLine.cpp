@@ -62,24 +62,6 @@ void CommandLine::Read()
 			Console::ShouldSetTitle = false;
 		else if (strstr(command, AddPrefixToLaunchOption("dab")) != NULL)
 			AnalyticsBlocker::ShouldDAB = true;
-		else if (strstr(command, AddPrefixToLaunchOption("loadmodeplugins")) != NULL)
-		{
-			int loadmode = atoi(argv[i + 1]);
-			if (loadmode < 0)
-				loadmode = 0;
-			else if (loadmode > 2)
-				loadmode = 0;
-			InternalCalls::MelonHandler::LoadModeForPlugins = (InternalCalls::MelonHandler::LoadMode)loadmode;
-		}
-		else if (strstr(command, AddPrefixToLaunchOption("loadmodemods")) != NULL)
-		{
-			int loadmode = atoi(argv[i + 1]);
-			if (loadmode < 0)
-				loadmode = 0;
-			else if (loadmode > 2)
-				loadmode = 0;
-			InternalCalls::MelonHandler::LoadModeForMods = (InternalCalls::MelonHandler::LoadMode)loadmode;
-		}
 		//else if (strstr(command, AddPrefixToLaunchOption("agfregenerate")))
 		//	AssemblyGenerator::ForceRegeneration = true;
 		else if (strstr(command, AddPrefixToLaunchOption("agfvunity")))
@@ -151,8 +133,6 @@ void CommandLine::ReadIniFile()
 	Debug::Enabled = (!iniFile->ReadValue("Core", "Debug").empty() && iniFile->ReadValue("Core", "Debug")._Equal("true"));
 	iniFile->WriteValue("Core", "Debug", (Debug::Enabled ? "true" : "false"));
 #endif
-	Core::QuitFix = (!iniFile->ReadValue("Core", "QuitFix").empty() && iniFile->ReadValue("Core", "QuitFix")._Equal("true"));
-	iniFile->WriteValue("Core", "QuitFix", (Core::QuitFix ? "true" : "false"));
 
 #ifndef DEBUG
 	Console::ShouldHide = (!iniFile->ReadValue("Console", "Enabled").empty() && iniFile->ReadValue("Console", "Enabled")._Equal("false"));
@@ -181,16 +161,6 @@ void CommandLine::ReadIniFile()
 
 	AnalyticsBlocker::ShouldDAB = (!iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB").empty() && iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB")._Equal("true"));
 	iniFile->WriteValue("AnalyticsBlocker", "ShouldDAB", (AnalyticsBlocker::ShouldDAB ? "true" : "false"));
-
-	InternalCalls::MelonHandler::LoadModeForPlugins = (iniFile->ReadValue("LoadMode", "Plugins").empty() ? InternalCalls::MelonHandler::LoadMode::NORMAL : (
-		iniFile->ReadValue("LoadMode", "Plugins")._Equal("1") ? InternalCalls::MelonHandler::LoadMode::DEV : (
-			iniFile->ReadValue("LoadMode", "Plugins")._Equal("2") ? InternalCalls::MelonHandler::LoadMode::BOTH : InternalCalls::MelonHandler::LoadMode::NORMAL)));
-	iniFile->WriteValue("LoadMode", "Plugins", std::to_string(InternalCalls::MelonHandler::LoadModeForPlugins));
-	InternalCalls::MelonHandler::LoadModeForMods = (iniFile->ReadValue("LoadMode", "Mods").empty() ? InternalCalls::MelonHandler::LoadMode::NORMAL : (
-		iniFile->ReadValue("LoadMode", "Mods")._Equal("1") ? InternalCalls::MelonHandler::LoadMode::DEV : (
-			iniFile->ReadValue("LoadMode", "Mods")._Equal("2") ? InternalCalls::MelonHandler::LoadMode::BOTH : InternalCalls::MelonHandler::LoadMode::NORMAL)));
-	iniFile->WriteValue("LoadMode", "Mods", std::to_string(InternalCalls::MelonHandler::LoadModeForMods));
-
 
 	std::string ForceUnityDependencies_Version = iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies_Version");
 	if (ForceUnityDependencies_Version.empty())

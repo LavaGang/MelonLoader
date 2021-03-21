@@ -218,6 +218,7 @@
     <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
     <Compile Include="Extensions\CompatibilityLayer.cs" />
     <Compile Include="Extensions\Layers\Melon.cs" />
+    <Compile Include="CommandLine.cs" />
     <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Category.cs" />
@@ -227,7 +228,7 @@
     <Compile Include="Preferences\TomlMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\BuildInfo.cs" />
-    <Compile Include="Utils\Utils.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\DependencyGraph.cs" />
     <Compile Include="Utils\Logger.cs" />

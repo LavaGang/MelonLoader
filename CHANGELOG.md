@@ -127,6 +127,7 @@
 102. Improved Compatibility Layer Resolve System.
 103. Improved MelonLoader Core Initialization.
 104. Temporarily Disabled the "--melonloader.agfregenerate" Launch Option.
+105. Added Managed-Sided Command Line Interface.
 
 ---
 
