@@ -85,15 +85,21 @@ namespace MelonLoader.Support
 
         private static void InitializeUnityVersion()
         {
-            string unityVersion = MelonUtils.GetUnityVersion();
+            string unityVersion = string.Copy(MelonUtils.GetUnityVersion());
             if (string.IsNullOrEmpty(unityVersion))
                 return;
             string[] unityVersionSplit = unityVersion.Split('.');
+            if ((unityVersionSplit == null) || (unityVersionSplit.Length < 2))
+                return;
             int major = int.Parse(unityVersionSplit[0]);
             int minor = int.Parse(unityVersionSplit[1]);
-            string patchString = unityVersionSplit[2];
-            char firstBadChar = patchString.FirstOrDefault(it => it < '0' || it > '9');
-            int patch = int.Parse(firstBadChar == 0 ? patchString : patchString.Substring(0, patchString.IndexOf(firstBadChar)));
+            int patch = 0;
+            if (unityVersionSplit.Length > 2)
+            {
+                string patchString = unityVersionSplit[2];
+                char firstBadChar = patchString.FirstOrDefault(it => it < '0' || it > '9');
+                patch = int.Parse(firstBadChar == 0 ? patchString : patchString.Substring(0, patchString.IndexOf(firstBadChar)));
+            }
             UnityVersionHandler.Initialize(major, minor, patch);
         }
 

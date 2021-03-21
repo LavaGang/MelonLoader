@@ -8,7 +8,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             Version = MelonCommandLine.AssemblyGenerator.ForceVersion_UnityDependencies;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = MelonUtils.GetUnityVersion();
+                Version = string.Copy(MelonUtils.GetUnityVersion());
             URL = "https://github.com/LavaGang/Unity-Runtime-Libraries/raw/master/" + Version + ".zip";
             Destination = Path.Combine(Core.BasePath, "UnityDependencies");
         }

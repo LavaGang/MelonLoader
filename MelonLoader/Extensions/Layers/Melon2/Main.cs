@@ -15,7 +15,7 @@ namespace MelonLoader
         [Obsolete("MelonLoader.Main.IsBoneworks is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.IsBONEWORKS instead.")]
         public static bool IsBoneworks = false;
         [Obsolete("MelonLoader.Main.GetUnityVersion is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetUnityVersion instead.")]
-        public static string GetUnityVersion() => MelonUtils.GetUnityVersion();
+        public static string GetUnityVersion() => string.Copy(MelonUtils.GetUnityVersion());
         [Obsolete("MelonLoader.Main.GetUserDataPath is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetUserDataDirectory instead.")]
         public static string GetUserDataPath() => MelonUtils.UserDataDirectory;
     }

@@ -129,6 +129,7 @@
 104. Temporarily Disabled the "--melonloader.agfregenerate" Launch Option.
 105. Added Managed-Sided Command Line Interface.
 106. Converted Assembly Generator to be ran by Base Assembly.
+107. Fixed Issue with Parsing Unity Version on Weirdly Marked Versions.
 
 ---
 
