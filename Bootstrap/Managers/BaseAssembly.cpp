@@ -5,6 +5,7 @@
 #include <string>
 #include "../Utils/Assertion.h"
 #include "../Utils/Logger.h"
+#include "../Utils/AssemblyGenerator.h"
 
 char* BaseAssembly::PathMono = NULL;
 char* BaseAssembly::PreloadPath = NULL;
@@ -46,16 +47,20 @@ bool BaseAssembly::Initialize()
 	}
 	Logger::WriteSpacer();
 	Mono::Object* exObj = NULL;
-	Mono::Exports::mono_runtime_invoke(Mono_Initialize, NULL, NULL, &exObj);
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_Initialize, NULL, NULL, &exObj);
 	if (exObj != NULL)
 	{
 		Mono::LogException(exObj);
 		Assertion::ThrowInternalFailure("Failed to Invoke Initialize Method!");
 		return false;
 	}
+	int returnval = *(int*)((char*)result + 0x8);
+	if (Game::IsIl2Cpp)
+		AssemblyGenerator::Cleanup();
+	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
-	return true;
+	return (returnval == 0);
 }
 
 void BaseAssembly::Preload()
@@ -106,12 +111,16 @@ void BaseAssembly::Start()
 	Debug::Msg("Starting Base Assembly...");
 	Logger::WriteSpacer();
 	Mono::Object* exObj = NULL;
-	Mono::Exports::mono_runtime_invoke(Mono_Start, NULL, NULL, &exObj);
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_Start, NULL, NULL, &exObj);
 	if (exObj != NULL)
 	{
 		Mono::LogException(exObj);
 		Assertion::ThrowInternalFailure("Failed to Invoke Start Method!");
 	}
+	int returnval = *(int*)((char*)result + 0x8);
+	if (Game::IsIl2Cpp)
+		AssemblyGenerator::Cleanup();
+	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
 }

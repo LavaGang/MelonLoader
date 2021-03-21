@@ -7,7 +7,7 @@ namespace MelonLoader.AssemblyGenerator
     {
         internal Il2CppAssemblyUnhollower()
         {
-            Version = Utils.ForceVersion_Il2CppAssemblyUnhollower();
+            Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.LAST_RESPONSE.ForceUnhollowerVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
@@ -30,10 +30,10 @@ namespace MelonLoader.AssemblyGenerator
         {
             if (!ShouldDownload())
             {
-                Logger.Msg("Il2CppAssemblyUnhollower is up to date. No Download Needed.");
+                MelonLogger.Msg("Il2CppAssemblyUnhollower is up to date. No Download Needed.");
                 return true;
             }
-            Logger.Msg("Downloading Il2CppAssemblyUnhollower...");
+            MelonLogger.Msg("Downloading Il2CppAssemblyUnhollower...");
             if (base.Download())
             {
                 Save();
@@ -44,7 +44,7 @@ namespace MelonLoader.AssemblyGenerator
 
         internal bool Execute()
         {
-            Logger.Msg("Executing Il2CppAssemblyUnhollower...");
+            MelonLogger.Msg("Executing Il2CppAssemblyUnhollower...");
             List<string> parameters = new List<string>();
             parameters.Add($"--input={ Core.dumper.Output }");
             parameters.Add($"--output={ Output }");

@@ -6,9 +6,9 @@ namespace MelonLoader.AssemblyGenerator
     {
         internal UnityDependencies()
         {
-            Version = Utils.ForceVersion_UnityDependencies();
+            Version = MelonCommandLine.AssemblyGenerator.ForceVersion_UnityDependencies;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = Utils.GetUnityVersion();
+                Version = MelonUtils.GetUnityVersion();
             URL = "https://github.com/LavaGang/Unity-Runtime-Libraries/raw/master/" + Version + ".zip";
             Destination = Path.Combine(Core.BasePath, "UnityDependencies");
         }
@@ -25,10 +25,10 @@ namespace MelonLoader.AssemblyGenerator
         {
             if (!ShouldDownload())
             {
-                Logger.Msg("Unity Dependencies are up to date. No Download Needed.");
+                MelonLogger.Msg("Unity Dependencies are up to date. No Download Needed.");
                 return true;
             }
-            Logger.Msg("Downloading Unity " + Version + " Dependencies...");
+            MelonLogger.Msg("Downloading Unity " + Version + " Dependencies...");
             if (base.Download())
             {
                 Save();

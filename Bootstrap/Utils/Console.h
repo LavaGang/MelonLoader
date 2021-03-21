@@ -8,7 +8,6 @@ public:
 	static HANDLE OutputHandle;
 	static bool ShouldHide;
 	static bool ShouldSetTitle;
-	static bool GeneratingAssembly;
 	static bool AlwaysOnTop;
 	static bool HideWarnings;
 	static bool UseManualColoring;

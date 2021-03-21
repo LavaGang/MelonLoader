@@ -20,11 +20,11 @@ namespace MelonLoader.AssemblyGenerator
         {
             Core.AssemblyGenerationNeeded = true;
             string tempfile = Path.GetTempFileName();
-            Logger.Msg($"Downloading {URL} to {tempfile}");
+            MelonLogger.Msg($"Downloading {URL} to {tempfile}");
             try { Core.webClient.DownloadFile(URL, tempfile); }
             catch (Exception ex)
             {
-                Logger.Error(ex.ToString());
+                MelonLogger.Error(ex.ToString());
                 if (File.Exists(tempfile))
                     File.Delete(tempfile);
                 return false;
@@ -34,7 +34,7 @@ namespace MelonLoader.AssemblyGenerator
             {
                 if (Directory.Exists(Destination))
                 {
-                    Logger.Msg($"Cleaning {Destination}");
+                    MelonLogger.Msg($"Cleaning {Destination}");
                     foreach (var entry in Directory.EnumerateFileSystemEntries(Destination))
                     {
                         if (Directory.Exists(entry))
@@ -45,7 +45,7 @@ namespace MelonLoader.AssemblyGenerator
                 }
                 else
                 {
-                    Logger.Msg($"Creating Directory {Destination}");
+                    MelonLogger.Msg($"Creating Directory {Destination}");
                     Directory.CreateDirectory(Destination);
                 }
             }
@@ -54,20 +54,20 @@ namespace MelonLoader.AssemblyGenerator
             if (!filenamefromurl.EndsWith(".zip"))
             {
                 string filepath = Path.Combine(Destination, (string.IsNullOrEmpty(NewFileName) ? filenamefromurl : NewFileName));
-                Logger.Msg($"Moving {tempfile} to {filepath}");
+                MelonLogger.Msg($"Moving {tempfile} to {filepath}");
                 if (File.Exists(filepath)) File.Delete(filepath);
                 File.Move(tempfile, filepath);
                 return true;
             }
 
-            Logger.Msg($"Extracting {tempfile} to {Destination}");
+            MelonLogger.Msg($"Extracting {tempfile} to {Destination}");
             try
             {
                 using var stream = new FileStream(tempfile, FileMode.Open, FileAccess.Read);
                 using var zip = new ZipArchive(stream);
                 foreach (var zipArchiveEntry in zip.Entries)
                 {
-                    Logger.Msg($"Extracting {zipArchiveEntry.FullName}");
+                    MelonLogger.Msg($"Extracting {zipArchiveEntry.FullName}");
                     using var entryStream = zipArchiveEntry.Open();
                     using var targetStream = new FileStream(Path.Combine(Destination, zipArchiveEntry.FullName), FileMode.OpenOrCreate, FileAccess.Write);
                     entryStream.CopyTo(targetStream);
@@ -75,7 +75,7 @@ namespace MelonLoader.AssemblyGenerator
             }
             catch (Exception ex)
             {
-                Logger.Error(ex.ToString());
+                MelonLogger.Error(ex.ToString());
                 if (File.Exists(tempfile))
                     File.Delete(tempfile);
                 return false;
@@ -104,7 +104,7 @@ namespace MelonLoader.AssemblyGenerator
                 Directory.CreateDirectory(Output);
             if (!File.Exists(ExePath))
             {
-                Logger.Error(Path.GetFileName(ExePath) + " Doesn't Exist!");
+                MelonLogger.Error(Path.GetFileName(ExePath) + " Doesn't Exist!");
                 return false;
             }
             try
@@ -126,7 +126,7 @@ namespace MelonLoader.AssemblyGenerator
                     :
                     string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => Regex.Replace(it, @"(\\+)$", @"$1$1")));
 
-                Logger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
+                MelonLogger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
 
                 Process process = new Process();
                 process.StartInfo = processStartInfo;
@@ -147,11 +147,11 @@ namespace MelonLoader.AssemblyGenerator
                 Core.OverrideAppDomainBase(Core.BasePath);
                 return (process.ExitCode == 0);
             }
-            catch (Exception ex) { Logger.Error(ex.ToString()); Core.OverrideAppDomainBase(Core.BasePath); }
+            catch (Exception ex) { MelonLogger.Error(ex.ToString()); Core.OverrideAppDomainBase(Core.BasePath); }
             return false;
         }
 
-        private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else Logger.Msg(e.Data); }
-        private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else Logger.Error(e.Data); }
+        private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else MelonLogger.Msg(e.Data); }
+        private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else MelonLogger.Error(e.Data); }
     }
 }

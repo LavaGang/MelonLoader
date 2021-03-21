@@ -53,16 +53,6 @@ public:
 		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion);
 	};
 
-	class AssemblyGenerator_Logger
-	{
-	public:
-		static void AddInternalCalls();
-		static void Msg(Mono::String* txt);
-		static void Warning(Mono::String* txt);
-		static void Error(Mono::String* txt);
-		static void Debug_Msg(Mono::String* txt);
-	};
-
 	class AssemblyGenerator_Utils
 	{
 	public:
@@ -70,10 +60,6 @@ public:
 		static Mono::String* GetGameAssemblyPath();
 		static Mono::String* GetConfigDirectory();
 		static Mono::String* GetAssemblyGeneratorPath();
-		static bool ForceRegeneration();
-		static Mono::String* ForceVersion_UnityDependencies();
-		static Mono::String* ForceVersion_Dumper();
-		static Mono::String* ForceVersion_Il2CppAssemblyUnhollower();
 		static void SetProcessId(int id);
 	};
 };

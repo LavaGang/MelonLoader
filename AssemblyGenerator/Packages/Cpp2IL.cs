@@ -6,7 +6,7 @@ namespace MelonLoader.AssemblyGenerator
     {
         internal Cpp2IL()
         {
-            Version = Utils.ForceVersion_Dumper();
+            Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Dumper;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.LAST_RESPONSE.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
@@ -31,10 +31,10 @@ namespace MelonLoader.AssemblyGenerator
         {
             if (!ShouldDownload())
             {
-                Logger.Msg("Cpp2IL is up to date. No Download Needed.");
+                MelonLogger.Msg("Cpp2IL is up to date. No Download Needed.");
                 return true;
             }
-            Logger.Msg("Downloading Cpp2IL...");
+            MelonLogger.Msg("Downloading Cpp2IL...");
             if (base.Download())
             {
                 Save();
@@ -45,7 +45,7 @@ namespace MelonLoader.AssemblyGenerator
 
         internal bool Execute()
         {
-            Logger.Msg("Executing Cpp2IL...");
+            MelonLogger.Msg("Executing Cpp2IL...");
             return Execute(new string[] {
                 "--game-path",
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",

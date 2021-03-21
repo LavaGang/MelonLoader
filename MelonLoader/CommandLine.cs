@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace MelonLoader
 {
-    internal static class MelonCommandLine
+    public static class MelonCommandLine
     {
-        internal static Args.AnalyticsBlocker AnalyticsBlocker = new Args.AnalyticsBlocker();
-        internal static Args.AssemblyGenerator AssemblyGenerator = new Args.AssemblyGenerator();
-        internal static Args.Console Console = new Args.Console();
-        internal static Args.Core Core = new Args.Core();
-        internal static Args.Logger Logger = new Args.Logger();
+        public static Args.AnalyticsBlocker AnalyticsBlocker = new Args.AnalyticsBlocker();
+        public static Args.AssemblyGenerator AssemblyGenerator = new Args.AssemblyGenerator();
+        public static Args.Console Console = new Args.Console();
+        public static Args.Core Core = new Args.Core();
+        public static Args.Logger Logger = new Args.Logger();
 
         private class ArgInfo
         {
@@ -310,33 +310,46 @@ namespace MelonLoader
                 string arg = args[i];
                 if (string.IsNullOrEmpty(arg))
                     continue;
-                ArgInfo argInfo = ArgInfoTbl.First(x => (!string.IsNullOrEmpty(x.CommandLine) 
-                    && x.CommandLine.Equals(arg)));
+                ArgInfo argInfo = GetArgInfoFromCommandLine(arg);
                 if ((argInfo == null)
                     || (argInfo.ParseCommandLineArg == null))
                     continue;
-                argInfo.ParseCommandLineArg(args[i + 1]);
+                string value = null;
+                if ((i + 1) < args.Length)
+                    value = args[i + 1];
+                argInfo.ParseCommandLineArg(value);
             }
         }
 
-        internal class Args
+        private static ArgInfo GetArgInfoFromCommandLine(string cmd)
         {
-            internal class AnalyticsBlocker
+            foreach (ArgInfo argInfo in ArgInfoTbl)
             {
-                internal bool ShouldDAB = false;
+                if (!string.IsNullOrEmpty(argInfo.CommandLine)
+                    && argInfo.CommandLine.Equals(cmd))
+                    return argInfo;
+            }
+            return null;
+        }
+
+        public class Args
+        {
+            public class AnalyticsBlocker
+            {
+                public bool ShouldDAB = false;
             }
 
             public class AssemblyGenerator
             {
-                internal bool ForceRegeneration = false;
-                internal string ForceVersion_Dumper = "0.0.0.0";
-                internal string ForceVersion_Il2CppAssemblyUnhollower = "0.0.0.0";
-                internal string ForceVersion_UnityDependencies = "0.0.0.0";
+                public bool ForceRegeneration = false;
+                public string ForceVersion_Dumper = "0.0.0.0";
+                public string ForceVersion_Il2CppAssemblyUnhollower = "0.0.0.0";
+                public string ForceVersion_UnityDependencies = "0.0.0.0";
             }
 
-            internal class Console
+            public class Console
             {
-                internal enum Enum
+                public enum Enum
                 {
                     NORMAL,
                     MAGENTA,
@@ -344,38 +357,38 @@ namespace MelonLoader
                     RANDOMRAINBOW,
                     LEMON
                 }
-                internal Enum DisplayMode = Enum.NORMAL;
+                public Enum DisplayMode = Enum.NORMAL;
 
-                internal bool Enabled = true;
-                internal bool AlwaysOnTop = false;
-                internal bool HideWarnings = false;
-                internal bool SetTitleOnInit = true;
+                public bool Enabled = true;
+                public bool AlwaysOnTop = false;
+                public bool HideWarnings = false;
+                public bool SetTitleOnInit = true;
             }
 
-            internal class Core
+            public class Core
             {
-                internal enum Enum
+                public enum Enum
                 {
                     NORMAL,
                     DEV,
                     BOTH
                 }
-                internal Enum LoadMode_Plugins = Enum.NORMAL;
-                internal Enum LoadMode_Mods = Enum.NORMAL;
+                public Enum LoadMode_Plugins = Enum.NORMAL;
+                public Enum LoadMode_Mods = Enum.NORMAL;
 
 #if DEBUG
-                internal bool DebugMode = true;
+                public bool DebugMode = true;
 #else
-                internal bool DebugMode = false;
+                public bool DebugMode = false;
 #endif
-                internal bool QuitFix = false;
+                public bool QuitFix = false;
             }
 
-            internal class Logger
+            public class Logger
             {
-                internal int Max_Logs = 10;
-                internal int Max_Warnings = 100;
-                internal int Max_Errors = 100;
+                public int Max_Logs = 10;
+                public int Max_Warnings = 100;
+                public int Max_Errors = 100;
             }
         }
     }

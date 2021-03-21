@@ -42,19 +42,16 @@ void CommandLine::Read()
 		if (command == NULL)
 			continue;
 
-		if (strstr(command, "--lemonloader") != NULL)
+		if (strstr(command, "--melonloader.magenta") != NULL)
+			Console::Mode = Console::DisplayMode::MAGENTA;
+		else if (strstr(command, "--melonloader.rainbow") != NULL)
+			Console::Mode = Console::DisplayMode::RAINBOW;
+		else if (strstr(command, "--melonloader.randomrainbow") != NULL)
+			Console::Mode = Console::DisplayMode::RANDOMRAINBOW;
+		else if (strstr(command, "--lemonloader") != NULL)
 			Console::Mode = Console::DisplayMode::LEMON;
-		else
-		{
-			if (strstr(command, "--melonloader.magenta") != NULL)
-				Console::Mode = Console::DisplayMode::MAGENTA;
-			else if (strstr(command, "--melonloader.rainbow") != NULL)
-				Console::Mode = Console::DisplayMode::RAINBOW;
-			else if (strstr(command, "--melonloader.randomrainbow") != NULL)
-				Console::Mode = Console::DisplayMode::RANDOMRAINBOW;
-		}
 
-		if (strstr(command, "--quitfix") != NULL)
+		else if (strstr(command, "--quitfix") != NULL)
 			Core::QuitFix = true;
 		else if (strstr(command, AddPrefixToLaunchOption("consoleontop")) != NULL)
 			Console::AlwaysOnTop = true;
@@ -62,30 +59,7 @@ void CommandLine::Read()
 			Console::ShouldSetTitle = false;
 		else if (strstr(command, AddPrefixToLaunchOption("dab")) != NULL)
 			AnalyticsBlocker::ShouldDAB = true;
-		//else if (strstr(command, AddPrefixToLaunchOption("agfregenerate")))
-		//	AssemblyGenerator::ForceRegeneration = true;
-		else if (strstr(command, AddPrefixToLaunchOption("agfvunity")))
-		{
-			std::string version = argv[i + 1];
-			AssemblyGenerator::ForceVersion_UnityDependencies = new char[version.size() + 1];
-			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_UnityDependencies);
-			AssemblyGenerator::ForceVersion_UnityDependencies[version.size()] = '\0';
-		}
-		else if (strstr(command, AddPrefixToLaunchOption("agfvdumper")))
-		{
-			std::string version = argv[i + 1];
-			AssemblyGenerator::ForceVersion_Dumper = new char[version.size() + 1];
-			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Dumper);
-			AssemblyGenerator::ForceVersion_Dumper[version.size()] = '\0';
-		}
-		else if (strstr(command, AddPrefixToLaunchOption("agfvunhollower")))
-		{
-			std::string version = argv[i + 1];
-			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = new char[version.size() + 1];
-			std::copy(version.begin(), version.end(), AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower);
-			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower[version.size()] = '\0';
-		}
-
+		
 #ifndef DEBUG
 		else if (strstr(command, AddPrefixToLaunchOption("debug")) != NULL)
 			Debug::Enabled = true;
@@ -163,52 +137,4 @@ void CommandLine::ReadIniFile()
 
 	AnalyticsBlocker::ShouldDAB = (!iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB").empty() && iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB")._Equal("true"));
 	iniFile->WriteValue("AnalyticsBlocker", "ShouldDAB", (AnalyticsBlocker::ShouldDAB ? "true" : "false"));
-
-	std::string ForceUnityDependencies_Version = iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies_Version");
-	if (ForceUnityDependencies_Version.empty())
-		iniFile->WriteValue("AssemblyGenerator", "ForceUnityDependencies_Version", "0.0.0.0");
-	if (iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies").empty())
-		iniFile->WriteValue("AssemblyGenerator", "ForceUnityDependencies", "false");
-	else if (iniFile->ReadValue("AssemblyGenerator", "ForceUnityDependencies")._Equal("true"))
-	{
-		if (!ForceUnityDependencies_Version.empty())
-		{
-			AssemblyGenerator::ForceVersion_UnityDependencies = new char[ForceUnityDependencies_Version.size() + 1];
-			std::copy(ForceUnityDependencies_Version.begin(), ForceUnityDependencies_Version.end(), AssemblyGenerator::ForceVersion_UnityDependencies);
-			AssemblyGenerator::ForceVersion_UnityDependencies[ForceUnityDependencies_Version.size()] = '\0';
-		}
-		iniFile->WriteValue("AssemblyGenerator", "ForceUnityDependencies_Version", (std::string(AssemblyGenerator::ForceVersion_UnityDependencies).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_UnityDependencies));
-	}
-	
-	std::string ForceVersion_Dumper = iniFile->ReadValue("AssemblyGenerator", "ForceDumper_Version");
-	if (ForceVersion_Dumper.empty())
-		iniFile->WriteValue("AssemblyGenerator", "ForceDumper_Version", "0.0.0.0");
-	if (iniFile->ReadValue("AssemblyGenerator", "ForceDumper").empty())
-		iniFile->WriteValue("AssemblyGenerator", "ForceDumper", "false");
-	else if (iniFile->ReadValue("AssemblyGenerator", "ForceDumper")._Equal("true"))
-	{
-		if (!ForceVersion_Dumper.empty())
-		{
-			AssemblyGenerator::ForceVersion_Dumper = new char[ForceVersion_Dumper.size() + 1];
-			std::copy(ForceVersion_Dumper.begin(), ForceVersion_Dumper.end(), AssemblyGenerator::ForceVersion_Dumper);
-			AssemblyGenerator::ForceVersion_Dumper[ForceVersion_Dumper.size()] = '\0';
-		}
-		iniFile->WriteValue("AssemblyGenerator", "ForceDumper_Version", (std::string(AssemblyGenerator::ForceVersion_Dumper).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_Dumper));
-	}
-
-	std::string ForceIl2CppAssemblyUnhollower_Version = iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower_Version");
-	if (ForceIl2CppAssemblyUnhollower_Version.empty())
-		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower_Version", "0.0.0.0");
-	if (iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower").empty())
-		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower", "false");
-	else if (iniFile->ReadValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower")._Equal("true"))
-	{
-		if (!ForceIl2CppAssemblyUnhollower_Version.empty())
-		{
-			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower = new char[ForceIl2CppAssemblyUnhollower_Version.size() + 1];
-			std::copy(ForceIl2CppAssemblyUnhollower_Version.begin(), ForceIl2CppAssemblyUnhollower_Version.end(), AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower);
-			AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower[ForceIl2CppAssemblyUnhollower_Version.size()] = '\0';
-		}
-		iniFile->WriteValue("AssemblyGenerator", "ForceIl2CppAssemblyUnhollower_Version", (std::string(AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower).empty() ? "0.0.0.0" : AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower));
-	}
 }

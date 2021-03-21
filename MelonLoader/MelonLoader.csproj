@@ -81,6 +81,7 @@
     <Compile Include="Extensions\Shields\Harmony\HarmonyManipulator_Manipulate.cs" />
     <Compile Include="Extensions\Shields\Harmony\Harmony_Patch.cs" />
     <Compile Include="Extensions\Shields\Harmony\PatchFunctions_ReversePatch.cs" />
+    <Compile Include="Extensions\Il2CppAssemblyGenerator.cs" />
     <Compile Include="Utils\bHaptics\API.cs" />
     <Compile Include="Extensions\Layers\Melon2\MelonPrefs.cs" />
     <Compile Include="Utils\bHaptics\NativeLibrary.cs" />

@@ -91,15 +91,12 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 	Hook::Detach(&(LPVOID&)Exports::il2cpp_init, il2cpp_init);
 	Mono::CreateDomain(name);
 	InternalCalls::Initialize();
-	if (AssemblyGenerator::Initialize())
+	// todo: check if it works/is necessary on mono games
+	AssemblyVerifier::InstallHooks();
+	if (BaseAssembly::Initialize())
 	{
-		// todo: check if it works/is necessary on mono games
-		AssemblyVerifier::InstallHooks();
-		if (BaseAssembly::Initialize())
-		{
-			Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
-			Hook::Attach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
-		}
+		Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
+		Hook::Attach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
 	}
 	Debug::Msg("Creating Il2Cpp Domain...");
 	domain = Exports::il2cpp_init(name);

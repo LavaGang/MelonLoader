@@ -16,7 +16,6 @@ void InternalCalls::Initialize()
 	MelonUtils::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
 	SupportModules::AddInternalCalls();
-	AssemblyGenerator_Logger::AddInternalCalls();
 	AssemblyGenerator_Utils::AddInternalCalls();
 }
 
@@ -161,67 +160,17 @@ void InternalCalls::SupportModules::AddInternalCalls()
 }
 #pragma endregion
 
-#pragma region AssemblyGenerator_Logger
-void InternalCalls::AssemblyGenerator_Logger::Msg(Mono::String* txt)
-{
-	if (txt == NULL) return;
-	auto str = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Msg(str);
-	Mono::Free(str);
-}
-void InternalCalls::AssemblyGenerator_Logger::Warning(Mono::String* txt)
-{
-	if (txt == NULL) return;
-	auto str = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Warning(str);
-	Mono::Free(str);
-}
-void InternalCalls::AssemblyGenerator_Logger::Error(Mono::String* txt)
-{
-	if (txt == NULL) return;
-	auto str = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Error(str);
-	Mono::Free(str);
-}
-void InternalCalls::AssemblyGenerator_Logger::Debug_Msg(Mono::String* txt)
-{
-	if (txt == NULL) return;
-	auto str = Mono::Exports::mono_string_to_utf8(txt);
-	Debug::Msg(str);
-	Mono::Free(str);
-}
-
-void InternalCalls::AssemblyGenerator_Logger::AddInternalCalls()
-{
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Logger::Msg", Msg);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Logger::Warning", Warning);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Logger::Error", Error);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Logger::Debug_Msg", Debug_Msg);
-}
-#pragma endregion
-
 #pragma region AssemblyGenerator_Utils
 Mono::String* InternalCalls::AssemblyGenerator_Utils::GetGameAssemblyPath() { return Mono::Exports::mono_string_new(Mono::domain, Il2Cpp::GameAssemblyPathMono); }
 Mono::String* InternalCalls::AssemblyGenerator_Utils::GetConfigDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ConfigPathMono); }
 Mono::String* InternalCalls::AssemblyGenerator_Utils::GetAssemblyGeneratorPath() { return Mono::Exports::mono_string_new(Mono::domain, AssemblyGenerator::PathMono); }
-bool InternalCalls::AssemblyGenerator_Utils::ForceRegeneration() { return AssemblyGenerator::ForceRegeneration; }
-Mono::String* InternalCalls::AssemblyGenerator_Utils::ForceVersion_UnityDependencies() { return ((AssemblyGenerator::ForceVersion_UnityDependencies != NULL) ? Mono::Exports::mono_string_new(Mono::domain, AssemblyGenerator::ForceVersion_UnityDependencies) : NULL); }
-Mono::String* InternalCalls::AssemblyGenerator_Utils::ForceVersion_Dumper() { return ((AssemblyGenerator::ForceVersion_Dumper != NULL) ? Mono::Exports::mono_string_new(Mono::domain, AssemblyGenerator::ForceVersion_Dumper) : NULL); }
-Mono::String* InternalCalls::AssemblyGenerator_Utils::ForceVersion_Il2CppAssemblyUnhollower() { return ((AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower != NULL) ? Mono::Exports::mono_string_new(Mono::domain, AssemblyGenerator::ForceVersion_Il2CppAssemblyUnhollower) : NULL); }
 void InternalCalls::AssemblyGenerator_Utils::SetProcessId(int id) { AssemblyGenerator::ProcessId = id; }
 
 void InternalCalls::AssemblyGenerator_Utils::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetGameAssemblyPath", GetGameAssemblyPath);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetUnityVersion", InternalCalls::MelonUtils::GetUnityVersion);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetGameName", InternalCalls::MelonUtils::GetGameName);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetManagedDirectory", InternalCalls::MelonUtils::GetManagedDirectory);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetConfigDirectory", GetConfigDirectory);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetAssemblyGeneratorPath", GetAssemblyGeneratorPath);
-	//Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceRegeneration", ForceRegeneration);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceVersion_UnityDependencies", ForceVersion_UnityDependencies);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceVersion_Dumper", ForceVersion_Dumper);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::ForceVersion_Il2CppAssemblyUnhollower", ForceVersion_Il2CppAssemblyUnhollower);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::SetProcessId", SetProcessId);
 }
 #pragma endregion

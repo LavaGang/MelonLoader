@@ -33,8 +33,8 @@ namespace MelonLoader.AssemblyGenerator
             //AssemblyGenerationNeeded = Utils.ForceRegeneration();
 
             GameAssemblyPath = Utils.GetGameAssemblyPath();
-            ManagedPath = Utils.GetManagedDirectory();
-            GameName = Utils.GetGameName();
+            ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
+            GameName = MelonUtils.GameName;
 
             BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
             OverrideAppDomainBase(BasePath);
@@ -62,9 +62,9 @@ namespace MelonLoader.AssemblyGenerator
             // Check for Regex Change against Config
 
             string CurrentGameAssemblyHash;
-            Logger.Msg("Checking GameAssembly...");
-            Logger.Debug_Msg($"Last GameAssembly Hash: {Config.GameAssemblyHash}");
-            Logger.Debug_Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = GetGameAssemblyHash()}");
+            MelonLogger.Msg("Checking GameAssembly...");
+            MelonDebug.Msg($"Last GameAssembly Hash: {Config.GameAssemblyHash}");
+            MelonDebug.Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = GetGameAssemblyHash()}");
 
             if (!AssemblyGenerationNeeded
                 && (string.IsNullOrEmpty(Config.GameAssemblyHash)
@@ -73,10 +73,10 @@ namespace MelonLoader.AssemblyGenerator
 
             if (!AssemblyGenerationNeeded)
             {
-                Logger.Msg("Assembly is up to date. No Generation Needed.");
+                MelonLogger.Msg("Assembly is up to date. No Generation Needed.");
                 return 0;
             }
-            Logger.Msg("Assembly Generation Needed!");
+            MelonLogger.Msg("Assembly Generation Needed!");
 
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
@@ -103,7 +103,7 @@ namespace MelonLoader.AssemblyGenerator
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
             deobfuscationMap.Save();
 
-            Logger.Msg("Assembly Generation Successful!");
+            MelonLogger.Msg("Assembly Generation Successful!");
             return 0;
         }
 
@@ -140,7 +140,7 @@ namespace MelonLoader.AssemblyGenerator
                 string filepath = Path.Combine(ManagedPath, filename);
                 if (File.Exists(filepath))
                 {
-                    Logger.Msg("Deleting " + filename);
+                    MelonLogger.Msg("Deleting " + filename);
                     File.Delete(filepath);
                 }
             }
@@ -154,7 +154,7 @@ namespace MelonLoader.AssemblyGenerator
             {
                 string filepath = filepathtbl[i];
                 string filename = Path.GetFileName(filepath);
-                Logger.Msg("Moving " + filename);
+                MelonLogger.Msg("Moving " + filename);
                 Config.OldFiles.Add(filename);
                 string newfilepath = Path.Combine(ManagedPath, filename);
                 if (File.Exists(newfilepath))

@@ -19,18 +19,18 @@ namespace MelonLoader.AssemblyGenerator
 
         internal static void Contact()
         {
-            Logger.Msg("Contacting RemoteAPI...");
+            MelonLogger.Msg("Contacting RemoteAPI...");
             HostContacts();
             DebugPrintResponse();
         }
 
         private static void DebugPrintResponse()
         {
-            Logger.Msg($"ForceDumperVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.ForceDumperVersion) ? "null" : LAST_RESPONSE.ForceDumperVersion)}");
-            Logger.Msg($"ForceUnhollowerVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.ForceUnhollowerVersion) ? "null" : LAST_RESPONSE.ForceUnhollowerVersion)}");
-            Logger.Msg($"ObfuscationRegex = {(string.IsNullOrEmpty(LAST_RESPONSE.ObfuscationRegex) ? "null" : LAST_RESPONSE.ObfuscationRegex)}");
-            Logger.Msg($"MappingURL = {(string.IsNullOrEmpty(LAST_RESPONSE.MappingURL) ? "null" : LAST_RESPONSE.MappingURL)}");
-            Logger.Msg($"MappingFileSHA512 = {(string.IsNullOrEmpty(LAST_RESPONSE.MappingFileSHA512) ? "null" : LAST_RESPONSE.MappingFileSHA512)}");
+            MelonLogger.Msg($"ForceDumperVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.ForceDumperVersion) ? "null" : LAST_RESPONSE.ForceDumperVersion)}");
+            MelonLogger.Msg($"ForceUnhollowerVersion = {(string.IsNullOrEmpty(LAST_RESPONSE.ForceUnhollowerVersion) ? "null" : LAST_RESPONSE.ForceUnhollowerVersion)}");
+            MelonLogger.Msg($"ObfuscationRegex = {(string.IsNullOrEmpty(LAST_RESPONSE.ObfuscationRegex) ? "null" : LAST_RESPONSE.ObfuscationRegex)}");
+            MelonLogger.Msg($"MappingURL = {(string.IsNullOrEmpty(LAST_RESPONSE.MappingURL) ? "null" : LAST_RESPONSE.MappingURL)}");
+            MelonLogger.Msg($"MappingFileSHA512 = {(string.IsNullOrEmpty(LAST_RESPONSE.MappingFileSHA512) ? "null" : LAST_RESPONSE.MappingFileSHA512)}");
         }
 
         internal class InfoStruct

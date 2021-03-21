@@ -36,10 +36,10 @@ namespace MelonLoader.AssemblyGenerator
                 return true;
             if (!ShouldDownload())
             {
-                Logger.Msg("Deobfuscation Map is up to date. No Download Needed.");
+                MelonLogger.Msg("Deobfuscation Map is up to date. No Download Needed.");
                 return true;
             }
-            Logger.Msg("Downloading Deobfuscation Map...");
+            MelonLogger.Msg("Downloading Deobfuscation Map...");
             if (base.Download(true))
             {
                 Save();

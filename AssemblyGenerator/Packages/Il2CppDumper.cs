@@ -7,7 +7,7 @@ namespace MelonLoader.AssemblyGenerator
     {
         internal Il2CppDumper()
         {
-            Version = Utils.ForceVersion_Dumper();
+            Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Dumper;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.LAST_RESPONSE.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
@@ -37,10 +37,10 @@ namespace MelonLoader.AssemblyGenerator
         {
             if (!ShouldDownload())
             {
-                Logger.Msg("Il2CppDumper is up to date. No Download Needed.");
+                MelonLogger.Msg("Il2CppDumper is up to date. No Download Needed.");
                 return true;
             }
-            Logger.Msg("Downloading Il2CppDumper...");
+            MelonLogger.Msg("Downloading Il2CppDumper...");
             if (base.Download())
             {
                 Save();
@@ -52,7 +52,7 @@ namespace MelonLoader.AssemblyGenerator
         internal bool Execute()
         {
             FixConfig();
-            Logger.Msg("Executing Il2CppDumper...");
+            MelonLogger.Msg("Executing Il2CppDumper...");
             string metadata_path = Path.Combine(Path.Combine(Path.GetDirectoryName(Utils.GetConfigDirectory()), "Metadata"), "global-metadata.dat");
             return Execute(new string[] { Core.GameAssemblyPath, metadata_path });
         }

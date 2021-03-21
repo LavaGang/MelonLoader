@@ -16,7 +16,7 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
                 return;
 
             string ContactURL = $"{API_URL}{API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}";
-            Logger.Debug_Msg($"[Melon1] ContactURL = {ContactURL}");
+            MelonDebug.Msg($"[Melon1] ContactURL = {ContactURL}");
 
             string Response = null;
             try { Response = Core.webClient.DownloadString(ContactURL); }
@@ -28,17 +28,17 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
                     System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
-                        Logger.Debug_Msg($"Game Not Found on RemoteAPI Host [Melon1]");
+                        MelonDebug.Msg($"Game Not Found on RemoteAPI Host [Melon1]");
                         RemoteAPI.ShouldMakeContact = false;
                         return;
                     }
                 }
-                Logger.Error($"Exception while Contacting RemoteAPI Host [Melon1]: {ex}");
+                MelonLogger.Error($"Exception while Contacting RemoteAPI Host [Melon1]: {ex}");
                 return;
             }
 
             bool is_response_null = string.IsNullOrEmpty(Response);
-            Logger.Debug_Msg($"[Melon1] Response = {(is_response_null ? "null" : Response) }");
+            MelonDebug.Msg($"[Melon1] Response = {(is_response_null ? "null" : Response) }");
             if (is_response_null)
                 return;
 
@@ -46,7 +46,7 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
             try { responsearr = JSON.Load(Response); }
             catch (Exception ex)
             {
-                Logger.Error($"Exception while Decoding RemoteAPI Host [Melon1] Response to JSON Variant: {ex}");
+                MelonLogger.Error($"Exception while Decoding RemoteAPI Host [Melon1] Response to JSON Variant: {ex}");
                 return;
             }
 
@@ -54,7 +54,7 @@ namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
             try { responseobj = responsearr.Make<ResponseStruct>(); }
             catch (Exception ex)
             {
-                Logger.Error($"Exception while Converting JSON Variant to RemoteAPI Host [Melon1] ResponseStruct: {ex}");
+                MelonLogger.Error($"Exception while Converting JSON Variant to RemoteAPI Host [Melon1] ResponseStruct: {ex}");
                 return;
             }
 

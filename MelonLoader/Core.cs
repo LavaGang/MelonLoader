@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
@@ -27,21 +26,26 @@ namespace MelonLoader
             PatchShield.Install();
         }
 
-        private static void Initialize()
+        private static int Initialize()
         {
             try { bHaptics_NativeLibrary.Load(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
 
             MelonPreferences.Load();
 
+            if (MelonUtils.IsGameIl2Cpp() && !Il2CppAssemblyGenerator.Run())
+                return 1;
+
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
+
+            return 0;
         }
 
-        private static void Start()
+        private static int Start()
         {
             if (!SupportModule.Initialize())
-                return;
+                return 1;
 
             AddUnityDebugLog();
 
@@ -55,6 +59,8 @@ namespace MelonLoader
 
             MelonHandler.OnApplicationLateStart_Plugins();
             MelonHandler.OnApplicationLateStart_Mods();
+
+            return 0;
         }
 
         internal static void Quit()

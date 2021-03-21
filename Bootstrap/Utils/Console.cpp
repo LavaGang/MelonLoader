@@ -13,7 +13,6 @@
 
 bool Console::ShouldHide = false;
 bool Console::ShouldSetTitle = true;
-bool Console::GeneratingAssembly = false;
 bool Console::AlwaysOnTop = false;
 bool Console::HideWarnings = false;
 Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
@@ -25,7 +24,7 @@ bool Console::UseManualColoring = false;
 
 bool Console::Initialize()
 {
-	if (!Debug::Enabled && ShouldHide && !GeneratingAssembly)
+	if (!Debug::Enabled && ShouldHide)
 		return true;
 	if (!AllocConsole())
 	{
