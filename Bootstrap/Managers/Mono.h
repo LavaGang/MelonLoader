@@ -3,6 +3,8 @@
 #include <Windows.h>
 #endif
 
+#include "../Utils/Patching/Patcher.h"
+
 
 class Mono
 {

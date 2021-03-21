@@ -14,9 +14,16 @@
 
 #ifdef __ANDROID__
 #include <dlfcn.h>
+#include <stdio.h>
+#include <sys/stat.h>
 #endif
 
+#ifdef _WIN32
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
+#elif defined(__ANDROID__)
+const char* Mono::LibNames[] = { "monobdwgc-2.0", "monosgen-2.0" };
+#endif
+
 const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };
 const char* Mono::PosixHelperName = "MonoPosixHelper";
 char* Mono::BasePath = NULL;
@@ -31,6 +38,8 @@ HMODULE Mono::PosixHelper = NULL;
 #elif defined(__ANDROID__)
 void* Mono::Module = NULL;
 void* Mono::PosixHelper = NULL;
+
+Patcher* Mono::Patches::mono_unity_get_unitytls_interface = NULL;
 #endif
 
 #pragma region MonoDeclare
@@ -81,7 +90,6 @@ bool Mono::Initialize()
 {
 	Debug::Msg("Initializing Mono...");
 
-#ifdef PORT_DISABLE
 	if (!SetupPaths())
 	{
 		Assertion::ThrowInternalFailure("Failed to Setup Mono Paths!");
@@ -92,7 +100,6 @@ bool Mono::Initialize()
 	Debug::Msg(("Mono::ConfigPath = " + std::string(ConfigPath)).c_str());
 	IsOldMono = Core::FileExists((std::string(BasePath) + "\\mono.dll").c_str());
 	Debug::Msg(("Mono::IsOldMono = " + std::string((IsOldMono ? "true" : "false"))).c_str());
-#endif
 	
 	return true;
 }
@@ -104,12 +111,16 @@ bool Mono::Load()
 #ifdef _WIN32
 		Module = LoadLibraryA((std::string(BasePath) + "\\" + LibNames[i] + ".dll").c_str());
 #elif defined (__ANDROID__)
-		Module = dlopen((std::string("lib") + std::string(LibNames[i]) + ".so").c_str(), RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+		Debug::Msg((std::string("trying: ") + std::string("lib") + std::string(LibNames[i]) + ".so").c_str());
+		Mono::Module = dlopen((std::string("lib") + std::string(LibNames[i]) + ".so").c_str(), RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
 #endif
+		
 		if (Module != NULL)
 		{
+#ifndef __ANDROID__
 			if (i == 0)
 				IsOldMono = true;
+#endif
 			break;
 		}
 	}
@@ -123,7 +134,7 @@ bool Mono::Load()
 #ifdef _WIN32
 	PosixHelper = LoadLibraryA((std::string(BasePath) + "\\" + Mono::PosixHelperName + ".dll").c_str());
 #elif defined(__ANDROID__)
-	PosixHelper = Module = dlopen((std::string("lib") + std::string(Mono::PosixHelperName) + ".so").c_str(), RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+	PosixHelper = dlopen((std::string("lib") + std::string(Mono::PosixHelperName) + ".so").c_str(), RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
 #endif
 
 	if ((PosixHelper == NULL) && !IsOldMono)
@@ -135,9 +146,9 @@ bool Mono::Load()
 	return Exports::Initialize();
 }
 
-#ifdef PORT_DISABLE
 bool Mono::SetupPaths()
 {
+#ifdef _WIN32
 	std::string MonoDir = std::string();
 	for (int i = 0; i < (sizeof(FolderNames) / sizeof(FolderNames[0])); i++)
 	{
@@ -207,10 +218,49 @@ bool Mono::SetupPaths()
 	ConfigPath = new char[ConfigPathStr.size() + 1];
 	std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 	ConfigPath[ConfigPathStr.size()] = '\0';
+#elif defined(__ANDROID__)
+	if (Game::IsIl2Cpp)
+	{
+		std::string BasePathStr = (std::string(Game::BasePath) + "/melonloader/etc").c_str();
+		BasePath = new char[BasePathStr.size() + 1];
+		std::copy(BasePathStr.begin(), BasePathStr.end(), BasePath);
+		BasePath[BasePathStr.size()] = '\0';
 
+		std::string ManagedPathStr = (std::string(Mono::BasePath) + "/managed").c_str();
+		ManagedPath = new char[ManagedPathStr.size() + 1];
+		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
+		ManagedPath[ManagedPathStr.size()] = '\0';
+		
+		std::string ConfigPathStr = (std::string(Mono::BasePath) + "/config").c_str();
+		ConfigPath = new char[ConfigPathStr.size() + 1];
+		std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
+		ConfigPath[ConfigPathStr.size()] = '\0';
+
+
+		char* Paths[] = {
+			BasePath,
+			ManagedPath,
+			ConfigPath
+		};
+
+		for (auto& path : Paths)
+		{
+			if (!Core::DirectoryExists(path))
+			{
+				Assertion::ThrowInternalFailure((std::string("Failed to load path (") + path + ") because it doesn't exist.").c_str());
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	Assertion::ThrowInternalFailure("(mono) NOT IMPLEMENTED");
+	return false;
+#endif
+	
 	return true;
 }
-#endif
 
 void Mono::CreateDomain(const char* name)
 {
@@ -227,8 +277,12 @@ void Mono::CreateDomain(const char* name)
 	if (!IsOldMono)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
 #endif
+
+	Debug::Msg("Jit init");
 	
 	domain = Exports::mono_jit_init(name);
+
+	Debug::Msg("set thread");
 	
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
 	
@@ -253,7 +307,7 @@ void Mono::Free(void* ptr)
 bool Mono::Exports::Initialize()
 {
 	Debug::Msg("Initializing Mono Exports...");
-
+	
 #pragma region MonoBind
 #define MONODEF(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
 
@@ -346,9 +400,11 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 #ifdef __ANDROID__
 bool Mono::ApplyPatches()
 {
-	Patches::mono_unity_get_unitytls_interface = new Patcher((void*)Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
+	Patches::mono_unity_get_unitytls_interface = new Patcher((void**)&Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
 
 	Patches::mono_unity_get_unitytls_interface->ApplyPatch();
+
+	return true;
 }
 #endif
 

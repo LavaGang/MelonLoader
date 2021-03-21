@@ -100,7 +100,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>Gcc_4_9</PlatformToolset>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
     <AndroidAPILevel>android-27</AndroidAPILevel>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -224,8 +224,9 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
       <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
@@ -243,8 +244,9 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <LibraryDependencies>%(LibraryDependencies)</LibraryDependencies>
       <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -272,19 +274,6 @@
     <ClCompile Include="Utils\Patching\PatchHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Base\Keystone\include\keystone\arm.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\arm64.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\evm.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\hexagon.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\keystone.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\mips.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\ppc.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\sparc.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
-    <ClInclude Include="Base\Liberation\Liberation.h" />
-    <ClInclude Include="Base\MSDetours\detours_x64.h" />
-    <ClInclude Include="Base\MSDetours\detours_x86.h" />
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
     <ClInclude Include="Utils\Patching\Patcher.h" />
     <ClInclude Include="pch.h" />
@@ -311,6 +300,19 @@
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />
     <ClInclude Include="Base\MSDetours\detours_x86.h" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='ARM64'">
+    <ClInclude Include="Base\Keystone\include\keystone\arm.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\arm64.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\evm.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\hexagon.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\keystone.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\mips.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\ppc.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\sparc.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
+    <ClInclude Include="Base\Liberation\Liberation.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ResourceCompile Include="Bootstrap.rc" />

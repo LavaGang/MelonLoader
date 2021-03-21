@@ -25,7 +25,7 @@ bool Game::IsIl2Cpp = false;
 bool Game::IsIl2Cpp = true;
 #endif
 
-#ifdef PORT_DISABLE
+
 bool Game::Initialize()
 {
 	if (!SetupPaths())
@@ -33,6 +33,8 @@ bool Game::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Setup Game Paths!");
 		return false;
 	}
+
+#ifdef PORT_DISABLE
 	std::string GameAssemblyPath = (std::string(BasePath) + "\\GameAssembly.dll");
 	if (Core::FileExists(GameAssemblyPath.c_str()))
 	{
@@ -41,11 +43,13 @@ bool Game::Initialize()
 		std::copy(GameAssemblyPath.begin(), GameAssemblyPath.end(), Il2Cpp::GameAssemblyPath);
 		Il2Cpp::GameAssemblyPath[GameAssemblyPath.size()] = '\0';
 	}
+#endif
 	return true;
 }
 
 bool Game::SetupPaths()
 {
+#ifdef _WIN32
 	LPSTR filepathstr = new CHAR[MAX_PATH];
 	HMODULE exe_module = GetModuleHandleA(NULL);
 	GetModuleFileNameA(exe_module, filepathstr, MAX_PATH);
@@ -65,10 +69,14 @@ bool Game::SetupPaths()
 	DataPath = new char[DataPathStr.size() + 1];
 	std::copy(DataPathStr.begin(), DataPathStr.end(), DataPath);
 	DataPath[DataPathStr.size()] = '\0';
-
+#elif defined(__ANDROID__)
+	BasePath = "/storage/emulated/0/Android/data/com.SirCoolness.PlaygroundQuestGame/files";
+	DataPath = "/storage/emulated/0/Android/data/com.SirCoolness.PlaygroundQuestGame/files";
+#endif
 	return true;
 }
 
+#ifdef PORT_DISABLE
 bool Game::ReadInfo()
 {
 	ReadAppInfo();

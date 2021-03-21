@@ -7,6 +7,7 @@
 #include "../Console/Logger.h"
 
 ks_engine* PatchHelper::ks = nullptr;
+std::map<void*, Patcher*> PatchHelper::patchMap;
 
 bool PatchHelper::Init()
 {
@@ -65,18 +66,18 @@ bool PatchHelper::GenerateAsm(void* fnPtr, unsigned char** encode, size_t* size)
 		"movk x11,%#04x,lsl 48\n"
 		"BR x11";
 
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%#x", fnPtr);
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader-Patch", "%#x", fnPtr);
 
 	// max output is 88 bytes
 	char buffer[88];
 	sprintf(buffer, sourceCode, (uint64_t)fnPtr & 0xFFFF, ((uint64_t)fnPtr >> 16) & 0xFFFF, ((uint64_t)fnPtr >> 32) & 0xFFFF, ((uint64_t)fnPtr >> 48) & 0xFFFF);
 
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%s", buffer);
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader-Patch", "%s", buffer);
 
 	size_t count;
 
 	if (ks_asm(ks, buffer, 0, encode, size, &count) != KS_ERR_OK) {
-		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ERROR: ks_asm() failed & count = %lu, error = %u",count, ks_errno(ks));
+		__android_log_print(ANDROID_LOG_INFO, "MelonLoader-Patch", "ERROR: ks_asm() failed & count = %lu, error = %u",count, ks_errno(ks));
 	}
 	else {
 		// size_t i;
@@ -84,7 +85,7 @@ bool PatchHelper::GenerateAsm(void* fnPtr, unsigned char** encode, size_t* size)
 		// for (i = 0; i < *size; i++) {
 		// 	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%02x ", (char *)(*encode)[i]);
 		// }
-		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Compiled: %lu bytes, statements: %lu\n", *size, count);
+		__android_log_print(ANDROID_LOG_INFO, "MelonLoader-Patch", "Compiled: %lu bytes, statements: %lu\n", *size, count);
 	}
 
 	return true;

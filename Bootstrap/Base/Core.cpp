@@ -22,6 +22,12 @@
 
 #include "../Utils/Patching/PatchHelper.h"
 #include "./Keystone/include/keystone/keystone.h"
+#include <filesystem>
+
+#ifdef __ANDROID__
+#include <stdio.h>
+#include <sys/stat.h>
+#endif
 
 typedef void (*testFnDef)(void);
 
@@ -30,55 +36,66 @@ const char* Core::Version = "v0.4.0";
 bool Core::QuitFix = false;
 
 bool Core::Initialize()
-{	
-	if (
-		!OSVersionCheck()
-#ifdef PORT_DISABLE
-		|| 
-		!Game::Initialize()
+{
+	bool(*InitializationSequence[])()  = {
+		OSVersionCheck,
+		Game::Initialize,
+		PatchHelper::Init,
+#ifdef _WIN32
+		[]()
+		{
+			CommandLine::Read();
+			return true;
+		},
 #endif
-		|| !PatchHelper::Init()
-		)
-		return false;
+		Console::Initialize,
+		Logger::Initialize,
+#ifdef PORT_DISABLE
+		Game::ReadInfo,
+		HashCode::Initialize,
+#endif
+		Mono::Initialize,
+		[]()
+		{
+			WelcomeMessage();
+			return true;
+		},
+#ifdef PORT_DISABLE
+		AnalyticsBlocker::Initialize,
+#endif
+		Il2Cpp::Initialize,
+		Mono::Load,
+#ifdef PORT_DISABLE
+		AnalyticsBlocker::Hook,
+#endif
+		[]()
+		{
+			ApplyHooks();
 
 #ifdef _WIN32
-	CommandLine::Read();
+			if (!Debug::Enabled)
+				Console::NullHandles();
+#endif
+			return true;
+		},
+	};
+
+#ifdef __ANDROID__
+	char tmp[256];
+	getcwd(tmp, sizeof(tmp) / sizeof(tmp[0]));
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Game Dir: %s", tmp);
 #endif
 	
-	if (
-		!Console::Initialize()
-		|| !Logger::Initialize()
-#ifdef PORT_DISABLE
-		|| !Game::ReadInfo()
-		|| !HashCode::Initialize()
-#endif PORT_DISABLE
-		|| !Mono::Initialize()
-		)
-		return false;
-	
-	WelcomeMessage();
-
-	if (
-#ifdef PORT_DISABLE
-		!AnalyticsBlocker::Initialize() ||
+	for (int i = 0; i < sizeof(InitializationSequence) / sizeof(InitializationSequence[0]); i++)
+	{
+		if (!InitializationSequence[i]())
+		{
+#ifdef __ANDROID__
+			__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Initialization sequence failed at position [%d]", i);
 #endif
-		!Il2Cpp::Initialize()
-		|| !Mono::Load()
-		)
-		return false;
-
-	
-#ifdef PORT_DISABLE
-	AnalyticsBlocker::Hook();
-#endif
-
-	ApplyHooks();
-
-	
-#ifdef _WIN32
-	if (!Debug::Enabled)
-		Console::NullHandles();
-#endif
+			return false;
+		}
+	}
 	
 	return true;
 }
@@ -207,6 +224,18 @@ void Core::GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono:
 #elif defined(__ANDROID__)
 JavaVM* Core::Bootstrap = NULL;
 
+bool Core::DirectoryExists(const char* path)
+{
+	struct stat sb;
+	return stat(path, &sb) == 0 && S_ISDIR(sb.st_mode);
+}
+
+bool Core::FileExists(const char* path)
+{
+	struct stat sb;
+	return stat(path, &sb) == 0;
+}
+
 void Core::WelcomeMessage()
 {
 	if (Debug::Enabled)
@@ -249,6 +278,16 @@ void Core::ApplyHooks()
 	
 	Debug::Msg("Patching mono");
 	Mono::ApplyPatches();
+}
+
+const char* Core::GetFileInfoProductName(const char* path)
+{
+	return "Placeholder";
+}
+
+const char* Core::GetFileInfoProductVersion(const char* path)
+{
+	return Core::Version;
 }
 
 const char* Core::GetOSVersion()

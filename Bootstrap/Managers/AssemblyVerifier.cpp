@@ -8,6 +8,17 @@
 AssemblyVerifier::callOriginalLoadFrom_t AssemblyVerifier::callOriginalLoadFrom;
 AssemblyVerifier::callOriginalLoadRaw_t AssemblyVerifier::callOriginalLoadRaw;
 
+// fix source: https://stackoverflow.com/a/35672811
+#if __ANDROID_API__ >= 18
+// #define log2(x) (log((long double) x)*1.4426950408889634)
+#endif
+
+// double log2(double x)
+// {
+// 	return log2l((long double) x);
+// 	// return (log((float) x) * 1.4426950408889634);
+// }
+
 __forceinline bool IsNameValid(const char* name)
 {
 	if (name == NULL)
@@ -203,22 +214,46 @@ void* LookupInternalCall(const char* ns, const char* typeName, const char* metho
 
 void AssemblyVerifier::InstallHooks()
 {
+#ifdef _WIN32
 	callOriginalLoadFrom = static_cast<callOriginalLoadFrom_t>(LookupInternalCall(
 		"System.Reflection", "Assembly", "LoadFrom", 2));
-	if (callOriginalLoadFrom != NULL)
-		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadFrom), &LoadFromPatch);
+#elif defined(__ANDROID__)
+	callOriginalLoadFrom = (callOriginalLoadFrom_t)LookupInternalCall("System.Reflection", "Assembly", "LoadFrom", 2);
+#endif
+	
+	if (callOriginalLoadFrom != NULL) {
+#ifdef _WIN32
+		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadFrom), LoadFromPatch);
+#elif defined(__ANDROID__)
+		Hook::Attach((void**)&callOriginalLoadFrom, (void*)LoadFromPatch);
+#endif
+	}
 	else
 	{
 		Debug::Msg("Can't hook LoadFrom");
 	}
 
+#ifdef _WIN32
 	callOriginalLoadRaw = static_cast<callOriginalLoadRaw_t>(LookupInternalCall(
 		"System", "AppDomain", "LoadAssemblyRaw", 4));
+#elif defined(__ANDROID__)
+	callOriginalLoadRaw = (callOriginalLoadRaw_t)LookupInternalCall(
+		"System", "AppDomain", "LoadAssemblyRaw", 4);
+#endif
+	
 	if (callOriginalLoadRaw != NULL)
-		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadRaw), &LoadRawPatch);
+	{
+#ifdef _WIN32
+		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadRaw), LoadRawPatch);
+#elif defined(__ANDROID__)
+		Hook::Attach((void**)&callOriginalLoadRaw, (void*)LoadRawPatch);
+#endif
+	
+	}
 	else
 	{
 		Debug::Msg("Can't hook LoadRaw");
 	}
 }
 
+#undef log2
