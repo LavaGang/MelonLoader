@@ -118,8 +118,6 @@ void BaseAssembly::Start()
 		Assertion::ThrowInternalFailure("Failed to Invoke Start Method!");
 	}
 	int returnval = *(int*)((char*)result + 0x8);
-	if (Game::IsIl2Cpp)
-		AssemblyGenerator::Cleanup();
 	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
