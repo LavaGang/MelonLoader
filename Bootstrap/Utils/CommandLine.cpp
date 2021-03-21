@@ -133,6 +133,8 @@ void CommandLine::ReadIniFile()
 	Debug::Enabled = (!iniFile->ReadValue("Core", "Debug").empty() && iniFile->ReadValue("Core", "Debug")._Equal("true"));
 	iniFile->WriteValue("Core", "Debug", (Debug::Enabled ? "true" : "false"));
 #endif
+	Core::QuitFix = (!iniFile->ReadValue("Core", "QuitFix").empty() && iniFile->ReadValue("Core", "QuitFix")._Equal("true"));
+	iniFile->WriteValue("Core", "QuitFix", (Core::QuitFix ? "true" : "false"));
 
 #ifndef DEBUG
 	Console::ShouldHide = (!iniFile->ReadValue("Console", "Enabled").empty() && iniFile->ReadValue("Console", "Enabled")._Equal("false"));
