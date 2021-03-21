@@ -59,6 +59,7 @@ namespace MelonLoader.AssemblyGenerator
             deobfuscationMap = new DeobfuscationMap();
             if (!deobfuscationMap.Download())
                 return 1;
+
             // Check for Regex Change against Config
 
             string CurrentGameAssemblyHash;

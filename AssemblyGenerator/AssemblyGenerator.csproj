@@ -66,6 +66,8 @@
     <Compile Include="Utils.cs" />
     <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
       <Private>false</Private>
+      <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>
+      <Name>MelonLoader</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
