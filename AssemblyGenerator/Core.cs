@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Security.Cryptography;
 
 namespace MelonLoader.AssemblyGenerator
@@ -32,11 +31,11 @@ namespace MelonLoader.AssemblyGenerator
 
             //AssemblyGenerationNeeded = Utils.ForceRegeneration();
 
-            GameAssemblyPath = Utils.GetGameAssemblyPath();
+            GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
             ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
             GameName = MelonUtils.GameName;
 
-            BasePath = Path.GetDirectoryName(Utils.GetAssemblyGeneratorPath());
+            BasePath = Path.Combine(Path.Combine(Path.Combine(Path.GetDirectoryName(string.Copy(MelonUtils.GetApplicationPath())), "MelonLoader"), "Dependencies"), "AssemblyGenerator");
             OverrideAppDomainBase(BasePath);
         }
 

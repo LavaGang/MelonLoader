@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -134,7 +135,7 @@ namespace MelonLoader.AssemblyGenerator
                 process.ErrorDataReceived += ErrorStream;
                 process.Start();
 
-                Utils.SetProcessId(process.Id);
+                SetProcessId(process.Id);
 
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
@@ -143,7 +144,7 @@ namespace MelonLoader.AssemblyGenerator
                 ResetEvent_Output.WaitOne();
                 ResetEvent_Error.WaitOne();
 
-                Utils.SetProcessId(0);
+                SetProcessId(0);
                 Core.OverrideAppDomainBase(Core.BasePath);
                 return (process.ExitCode == 0);
             }
@@ -153,5 +154,8 @@ namespace MelonLoader.AssemblyGenerator
 
         private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else MelonLogger.Msg(e.Data); }
         private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else MelonLogger.Error(e.Data); }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void SetProcessId(int id);
     }
 }

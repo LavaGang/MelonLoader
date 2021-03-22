@@ -63,7 +63,6 @@
     <Compile Include="RemoteAPI\Hosts\Melon2.cs" />
     <Compile Include="RemoteAPI\Hosts\Ruby.cs" />
     <Compile Include="RemoteAPI\Hosts\Samboy.cs" />
-    <Compile Include="Utils.cs" />
     <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
       <Private>false</Private>
       <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>

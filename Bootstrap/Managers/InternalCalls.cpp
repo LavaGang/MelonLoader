@@ -161,16 +161,10 @@ void InternalCalls::SupportModules::AddInternalCalls()
 #pragma endregion
 
 #pragma region AssemblyGenerator_Utils
-Mono::String* InternalCalls::AssemblyGenerator_Utils::GetGameAssemblyPath() { return Mono::Exports::mono_string_new(Mono::domain, Il2Cpp::GameAssemblyPathMono); }
-Mono::String* InternalCalls::AssemblyGenerator_Utils::GetConfigDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ConfigPathMono); }
-Mono::String* InternalCalls::AssemblyGenerator_Utils::GetAssemblyGeneratorPath() { return Mono::Exports::mono_string_new(Mono::domain, AssemblyGenerator::PathMono); }
 void InternalCalls::AssemblyGenerator_Utils::SetProcessId(int id) { AssemblyGenerator::ProcessId = id; }
 
 void InternalCalls::AssemblyGenerator_Utils::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetGameAssemblyPath", GetGameAssemblyPath);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetConfigDirectory", GetConfigDirectory);
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::GetAssemblyGeneratorPath", GetAssemblyGeneratorPath);
 	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::SetProcessId", SetProcessId);
 }
 #pragma endregion

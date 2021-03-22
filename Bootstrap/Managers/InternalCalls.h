@@ -57,9 +57,6 @@ public:
 	{
 	public:
 		static void AddInternalCalls();
-		static Mono::String* GetGameAssemblyPath();
-		static Mono::String* GetConfigDirectory();
-		static Mono::String* GetAssemblyGeneratorPath();
 		static void SetProcessId(int id);
 	};
 };

@@ -53,7 +53,7 @@ namespace MelonLoader.AssemblyGenerator
         {
             FixConfig();
             MelonLogger.Msg("Executing Il2CppDumper...");
-            string metadata_path = Path.Combine(Path.Combine(Path.GetDirectoryName(Utils.GetConfigDirectory()), "Metadata"), "global-metadata.dat");
+            string metadata_path = Path.Combine(Path.Combine(Path.Combine(string.Copy(MelonUtils.GetGameDataDirectory()), "il2cpp_data"), "Metadata"), "global-metadata.dat");
             return Execute(new string[] { Core.GameAssemblyPath, metadata_path });
         }
 
