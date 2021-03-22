@@ -53,7 +53,7 @@ public:
 		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion);
 	};
 
-	class AssemblyGenerator_Utils
+	class AssemblyGenerator_ExecutablePackageBase
 	{
 	public:
 		static void AddInternalCalls();

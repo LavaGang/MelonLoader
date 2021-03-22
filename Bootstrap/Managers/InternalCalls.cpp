@@ -16,7 +16,7 @@ void InternalCalls::Initialize()
 	MelonUtils::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
 	SupportModules::AddInternalCalls();
-	AssemblyGenerator_Utils::AddInternalCalls();
+	AssemblyGenerator_ExecutablePackageBase::AddInternalCalls();
 }
 
 #pragma region MelonLogger
@@ -160,11 +160,10 @@ void InternalCalls::SupportModules::AddInternalCalls()
 }
 #pragma endregion
 
-#pragma region AssemblyGenerator_Utils
-void InternalCalls::AssemblyGenerator_Utils::SetProcessId(int id) { AssemblyGenerator::ProcessId = id; }
-
-void InternalCalls::AssemblyGenerator_Utils::AddInternalCalls()
+#pragma region AssemblyGenerator_ExecutablePackageBase
+void InternalCalls::AssemblyGenerator_ExecutablePackageBase::SetProcessId(int id) { AssemblyGenerator::ProcessId = id; }
+void InternalCalls::AssemblyGenerator_ExecutablePackageBase::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.Utils::SetProcessId", SetProcessId);
+	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.ExecutablePackageBase::SetProcessId", SetProcessId);
 }
 #pragma endregion
