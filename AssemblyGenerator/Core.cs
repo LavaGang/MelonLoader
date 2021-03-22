@@ -103,13 +103,16 @@ namespace MelonLoader.AssemblyGenerator
 
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
             deobfuscationMap.Save();
-            
+
             MelonLogger.Msg("Assembly Generation Successful!");
             return 0;
         }
 
         internal static void OverrideAppDomainBase(string basepath)
         {
+            MelonUtils.SetCurrentDomainBaseDirectory(basepath);
+
+            /*
             var property = typeof(AppDomain).GetProperty("FusionStore", BindingFlags.NonPublic | BindingFlags.Instance);
             if (property != null)
             {
@@ -117,6 +120,7 @@ namespace MelonLoader.AssemblyGenerator
                 appDomainBase.ApplicationBase = basepath;
             }
             Directory.SetCurrentDirectory(basepath);
+            */
         }
 
         private static string GetGameAssemblyHash()

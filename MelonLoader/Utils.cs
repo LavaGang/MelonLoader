@@ -44,6 +44,20 @@ namespace MelonLoader
             return builder.ToString();
         }
 
+        public static void SetCurrentDomainBaseDirectory(string dirpath, AppDomain domain = null)
+        {
+            if (domain == null)
+                domain = AppDomain.CurrentDomain;
+            try
+            {
+                ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(domain, new object[0]))
+                    .ApplicationBase = dirpath;
+            }
+            catch (Exception ex) { MelonLogger.Warning($"AppDomainSetup.ApplicationBase Exception: {ex}"); }
+            Directory.SetCurrentDirectory(dirpath);
+        }
+
         public static MelonBase GetMelonFromStackTrace()
         {
             StackTrace st = new StackTrace(3, true);
