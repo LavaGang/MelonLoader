@@ -48,7 +48,11 @@ namespace MelonLoader
                 }
             }
             if (RunMethod != null)
-                return (((int)RunMethod.Invoke(null, new object[0])) == 0);
+            {
+                int returnval = (int)RunMethod.Invoke(null, new object[0]);
+                Fixes.ApplicationBase.Run(AppDomain.CurrentDomain);
+                return returnval == 0;
+            }
             MelonLogger.ThrowInternalFailure($"Failed to Get Run Method for MelonLoader.AssemblyGenerator.Core!");
             return false;
         }

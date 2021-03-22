@@ -8,7 +8,7 @@ namespace MelonLoader.Fixes
 	{
 		internal static void Run(AppDomain domain)
 		{
-			string gameDir = MelonUtils.GameDirectory;
+			string gameDir = string.Copy(MelonUtils.GameDirectory);
 			try
 			{
 				((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance)

@@ -103,7 +103,7 @@ namespace MelonLoader.AssemblyGenerator
 
             Config.GameAssemblyHash = CurrentGameAssemblyHash;
             deobfuscationMap.Save();
-
+            
             MelonLogger.Msg("Assembly Generation Successful!");
             return 0;
         }
