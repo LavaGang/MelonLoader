@@ -12,7 +12,7 @@ namespace HarmonyLib
 	///
 	internal static class PatchInfoSerialization
 	{
-		class Binder : SerializationBinder
+		internal class Binder : SerializationBinder
 		{
 			/// <summary>Control the binding of a serialized object to a type</summary>
 			/// <param name="assemblyName">Specifies the assembly name of the serialized object</param>

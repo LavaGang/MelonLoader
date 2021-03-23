@@ -11,8 +11,8 @@ namespace MelonLoader.CompatibilityLayers
 {
 	internal class IPA_CL : MelonCompatibilityLayer.Resolver
 	{
-		private Type[] plugin_types = null;
-		private Assembly asm = null;
+		private readonly Type[] plugin_types = null;
+		private readonly Assembly asm = null;
 		private IPA_CL(Assembly assembly, IEnumerable<Type> types) { asm = assembly; plugin_types = Enumerable.ToArray(types); }
 
 		internal static void Setup(AppDomain domain)
@@ -102,8 +102,10 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
-			MelonModWrapper wrapper = new MelonModWrapper(pluginInstance);
-			wrapper.Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version);
+			MelonModWrapper wrapper = new MelonModWrapper(pluginInstance)
+			{
+				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version)
+			};
 			if (gamestbl != null)
 				wrapper.Games = gamestbl.ToArray();
 			wrapper.ConsoleColor = MelonLogger.DefaultMelonColor;
@@ -118,7 +120,7 @@ namespace MelonLoader.CompatibilityLayers
 
 		private class MelonModWrapper : MelonMod
 		{
-			private IPlugin pluginInstance;
+			private readonly IPlugin pluginInstance;
 			internal MelonModWrapper(IPlugin plugin) => pluginInstance = plugin;
 			public override void OnApplicationStart() => pluginInstance.OnApplicationStart();
 			public override void OnApplicationQuit() => pluginInstance.OnApplicationQuit();
@@ -126,7 +128,7 @@ namespace MelonLoader.CompatibilityLayers
 			public override void OnSceneWasInitialized(int buildIndex, string sceneName) => pluginInstance.OnLevelWasInitialized(buildIndex);
 			public override void OnUpdate() => pluginInstance.OnUpdate();
 			public override void OnFixedUpdate() => pluginInstance.OnFixedUpdate();
-			public override void OnLateUpdate() { if (pluginInstance is IEnhancedPlugin) ((IEnhancedPlugin)pluginInstance).OnLateUpdate(); }
+			public override void OnLateUpdate() { if (pluginInstance is IEnhancedPlugin plugin) plugin.OnLateUpdate(); }
 		}
 	}
 }

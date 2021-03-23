@@ -61,10 +61,12 @@
     <Compile Include="Extensions\Il2CppAssemblyGenerator.cs" />
     <Compile Include="Extensions\Il2CppMethodPatcher.cs" />
     <Compile Include="Extensions\Layers\Harmony.cs" />
-    <Compile Include="Extensions\Layers\Harmony12\AccessTools.cs" />
-    <Compile Include="Extensions\Layers\Harmony12\Attributes.cs" />
-    <Compile Include="Extensions\Layers\Harmony12\HarmonyInstance.cs" />
-    <Compile Include="Extensions\Layers\Harmony12\HarmonyMethod.cs" />
+    <Compile Include="Extensions\Layers\Harmony12_old\AccessTools.cs" />
+    <Compile Include="Extensions\Layers\Harmony12_old\HarmonyInstance.cs" />
+    <Compile Include="Extensions\Layers\Harmony12_old\HarmonyMethod.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Attributes.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Patch.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Priority.cs" />
     <Compile Include="Extensions\Layers\IPA.cs" />
     <Compile Include="Extensions\Layers\IPA\IEnhancedPlugin.cs" />
     <Compile Include="Extensions\Layers\IPA\IPlugin.cs" />
