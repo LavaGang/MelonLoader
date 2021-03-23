@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace MelonLoader
 {
@@ -24,8 +23,8 @@ namespace MelonLoader
             internal delegate void ParseConfigArgDelegate(ArgInfo argInfo);
             internal ParseConfigArgDelegate ParseConfigArg;
         }
-        private static List<ArgInfo> ArgInfoTbl = new List<ArgInfo>();
-        private static IniFile iniFile = null;
+        private static readonly List<ArgInfo> ArgInfoTbl = new List<ArgInfo>();
+        private static readonly IniFile iniFile = null;
 
         static MelonCommandLine()
         {

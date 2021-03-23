@@ -23,7 +23,7 @@ namespace MelonLoader
 		{
 			int size = melons.Count;
 			vertices = new Vertex[size];
-			IDictionary<string, Vertex> nameLookup = new Dictionary<string, Vertex>(size);
+			Dictionary<string, Vertex> nameLookup = new Dictionary<string, Vertex>(size);
 
 			// Create a vertex in the dependency graph for each Melon to load
 			for (int i = 0; i < size; ++i)
@@ -37,8 +37,8 @@ namespace MelonLoader
 			}
 
 			// Add an edge for each dependency between Melons
-			IDictionary<string, IList<AssemblyName>> melonsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
-			IDictionary<string, IList<AssemblyName>> melonsWithIncompatibilities = new SortedDictionary<string, IList<AssemblyName>>();
+			SortedDictionary<string, IList<AssemblyName>> melonsWithMissingDeps = new SortedDictionary<string, IList<AssemblyName>>();
+			SortedDictionary<string, IList<AssemblyName>> melonsWithIncompatibilities = new SortedDictionary<string, IList<AssemblyName>>();
 			List<AssemblyName> missingDependencies = new List<AssemblyName>();
 			List<AssemblyName> incompatibilities = new List<AssemblyName>();
 			HashSet<string> optionalDependencies = new HashSet<string>();
@@ -222,8 +222,8 @@ namespace MelonLoader
 			internal readonly T melon;
 			internal readonly string name;
 
-			internal readonly IList<Vertex> dependencies;
-			internal readonly IList<Vertex> dependents;
+			internal readonly List<Vertex> dependencies;
+			internal readonly List<Vertex> dependents;
 			internal bool skipLoading;
 
 			internal Vertex(int index, T melon, string name)

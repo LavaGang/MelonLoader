@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 #pragma warning disable 0618
+#pragma warning disable IDE0052 // Remove unread private members "melon_types"
 
 namespace MelonLoader.CompatibilityLayers
 {
 	internal class Melon_CL : MelonCompatibilityLayer.Resolver
 	{
-		private Type[] melon_types = null;
-		private Assembly asm = null;
+		private readonly Type[] melon_types = null;
+        private readonly Assembly asm = null;
 		private Melon_CL(Assembly assembly, IEnumerable<Type> types) { asm = assembly; melon_types = Enumerable.ToArray(types); }
 
 		internal static void Setup(AppDomain domain)

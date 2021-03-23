@@ -7,7 +7,7 @@ namespace MelonLoader
 {
     public static class bHaptics
     {
-        private static int MaxBufferSize = 20;
+        private static readonly int MaxBufferSize = 20;
         private static bool _waserror = false;
         public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Disabling bHaptics API..."); _waserror = value; } }
         internal static void Start()
@@ -104,6 +104,8 @@ namespace MelonLoader
                     return isLeft ? PositionType.FootL : PositionType.FootR;
                 case DeviceType.Tactosy_hands:
                     return isLeft ? PositionType.HandL : PositionType.HandR;
+                case DeviceType.None:
+                    break;
             }
             return PositionType.Head;
         }

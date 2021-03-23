@@ -48,10 +48,10 @@ namespace MelonLoader
         {
             string assembly_name = args.Name.Split(',')[0];
             string dll_name = (assembly_name + ".dll");
-            string plugins_path = Path.Combine(MelonHandler.PluginsDirectory, dll_name);
+            string plugins_path = Path.Combine(PluginsDirectory, dll_name);
             if (File.Exists(plugins_path))
                 return Assembly.LoadFile(plugins_path);
-            string mods_path = Path.Combine(MelonHandler.ModsDirectory, dll_name);
+            string mods_path = Path.Combine(ModsDirectory, dll_name);
             if (File.Exists(mods_path))
                 return Assembly.LoadFile(mods_path);
             return null;
@@ -283,8 +283,8 @@ namespace MelonLoader
 
             foreach (MelonBase melon in melonTbl)
             {
-                if (melon is MelonPlugin)
-                    _Plugins.Add((MelonPlugin)melon);
+                if (melon is MelonPlugin plugin)
+                    _Plugins.Add(plugin);
                 else
                     _Mods.Add((MelonMod)melon);
             }
