@@ -79,7 +79,7 @@ namespace MelonLoader
 				ilcursor.Remove();
 			else
 			{
-				MelonLogger.Error("Harmony Patcher could not rewrite Unhollower method. Expect a stack overflow.");
+				MelonLogger.Error("Harmony Patcher could not rewrite Il2Cpp Unhollowed Method. Expect a stack overflow.");
 				return method;
 			}
 			ilcursor.Emit(Mono.Cecil.Cil.OpCodes.Ldc_I8, copiedMethodInfoPointer.ToInt64());
