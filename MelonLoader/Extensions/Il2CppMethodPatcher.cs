@@ -35,8 +35,8 @@ namespace MelonLoader
 
 		public override MethodBase DetourTo(MethodBase replacement)
 		{
-			if (MelonDebug.IsEnabled() && UnhollowerSupport.IsGeneratedAssemblyType(Original.DeclaringType))
-				WarnIfOriginalMethodIsInlined();
+			if (MelonDebug.IsEnabled())
+				DebugCheck();
 
 			DynamicMethodDefinition newreplacementdmd = CopyOriginal();
 			HarmonyManipulator.Manipulate(Original, Original.GetPatchInfo(), new ILContext(newreplacementdmd.Definition));
@@ -297,29 +297,44 @@ namespace MelonLoader
 			FileLog.LogBuffered(str);
 		}
 
-		private void WarnIfOriginalMethodIsInlined()
+		private void DebugCheck()
 		{
 			PatchInfo patchInfo = Original.GetPatchInfo();
-			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(Original) ?? -1;
-			if ((callerCount == 0)
-				&& !UnityMagicMethods.IsUnityMagicMethod(Original))
-			{
-				Patch basePatch = ((patchInfo.prefixes.Count() > 0) ? patchInfo.prefixes.First()
-					: ((patchInfo.postfixes.Count() > 0) ? patchInfo.postfixes.First()
-					: ((patchInfo.transpilers.Count() > 0) ? patchInfo.transpilers.First()
-					: ((patchInfo.finalizers.Count() > 0) ? patchInfo.finalizers.First() : null))));
 
-				string melonName = FindMelon(melon => ((basePatch != null) && melon.Harmony.Id.Equals(basePatch.owner)));
-				if ((melonName == null) && (basePatch != null))
-				{
-					// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
-					Assembly melonAssembly = basePatch.PatchMethod.DeclaringType?.Assembly;
-					if (melonAssembly != null)
-						melonName = FindMelon(melon => melon.Assembly == melonAssembly);
-				}
-				MelonLogger.ManualWarning(melonName, $"Harmony: Method {Original.FullDescription()} does not appear to get called directly from anywhere, " +
-						"suggesting it may have been inlined and your patch may not be called.");
+			Patch basePatch = ((patchInfo.prefixes.Count() > 0) ? patchInfo.prefixes.First()
+				: ((patchInfo.postfixes.Count() > 0) ? patchInfo.postfixes.First()
+				: ((patchInfo.transpilers.Count() > 0) ? patchInfo.transpilers.First()
+				: ((patchInfo.finalizers.Count() > 0) ? patchInfo.finalizers.First() : null))));
+
+			string melonName = FindMelon(melon => ((basePatch != null) && melon.Harmony.Id.Equals(basePatch.owner)));
+			if ((melonName == null) && (basePatch != null))
+			{
+				// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
+				Assembly melonAssembly = basePatch.PatchMethod.DeclaringType?.Assembly;
+				if (melonAssembly != null)
+					melonName = FindMelon(melon => melon.Assembly == melonAssembly);
 			}
+
+			WarnIfHasTranspiler(patchInfo, melonName);
+			WarnIfOriginalMethodIsInlined(melonName);
+		}
+
+		private void WarnIfOriginalMethodIsInlined(string melonName)
+        {
+			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(Original) ?? -1;
+			if ((callerCount > 0)
+				|| UnityMagicMethods.IsUnityMagicMethod(Original))
+				return;
+			MelonLogger.ManualWarning(melonName, $"Harmony: Method {Original.FullDescription()} does not appear to get called directly from anywhere, " +
+				"suggesting it may have been inlined and your patch may not be called.");
+		}
+
+		private void WarnIfHasTranspiler(PatchInfo patchInfo, string melonName)
+        {
+			if (patchInfo.transpilers.Length <= 0)
+				return;
+			MelonLogger.ManualWarning(melonName, $"Harmony: Method {Original.FullDescription()} will only have its Unhollowed IL available to Transpilers, " +
+				"suggesting you either don't use any Transpilers when Patching this Method or ignore this Warning if modifying the Unhollowed IL is your goal.");
 		}
 
 		private static string FindMelon(Predicate<MelonBase> criterion)

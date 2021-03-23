@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 #pragma warning disable 0618
-#pragma warning disable IDE0052 // Remove unread private members "melon_types"
 
 namespace MelonLoader.CompatibilityLayers
 {
 	internal class Melon_CL : MelonCompatibilityLayer.Resolver
 	{
-		private readonly Type[] melon_types = null;
-        private readonly Assembly asm = null;
+		private Type[] melon_types = null;
+		private Assembly asm = null;
 		private Melon_CL(Assembly assembly, IEnumerable<Type> types) { asm = assembly; melon_types = Enumerable.ToArray(types); }
 
 		internal static void Setup(AppDomain domain)
@@ -36,15 +35,8 @@ namespace MelonLoader.CompatibilityLayers
 			args.inter = new Melon_CL(args.assembly, melon_types);
 		}
 
-		private static void RefreshPluginsTable()
-        {
-			Main.Plugins = MelonHandler._Plugins;
-        }
-
-		private static void RefreshModsTable()
-		{
-			Main.Mods = MelonHandler._Mods;
-		}
+		private static void RefreshPluginsTable() => Main.Plugins = MelonHandler._Plugins;
+		private static void RefreshModsTable() => Main.Mods = MelonHandler._Mods;
 
 		internal override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
 		{

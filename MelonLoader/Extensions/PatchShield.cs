@@ -6,12 +6,19 @@ namespace MelonLoader
 	public class PatchShield : Attribute
 	{
 		internal static void LogException(Exception ex) => MelonLogger.Warning($"Patch Shield Exception: {ex}");
-
 		internal static void Install()
         {
+			// Harmony
 			PatchShields.Harmony.Harmony_Patch.Install();
 			PatchShields.Harmony.PatchFunctions_ReversePatch.Install();
 			PatchShields.Harmony.HarmonyManipulator_Manipulate.Install();
+
+			// MonoMod
+			PatchShields.MonoMod.Hook_Apply.Install();
+			PatchShields.MonoMod.ILHook_Apply.Install();
+
+			// Always Do Last
+			PatchShields.MonoMod.Detour_Apply.Install();
 		}
 	}
 }
