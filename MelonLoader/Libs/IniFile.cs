@@ -38,8 +38,7 @@ namespace MelonLoader
 
         public int GetInt(string section, string name, int defaultValue = 0, bool autoSave = false)
         {
-            int value;
-            if (int.TryParse(ReadValue(section, name), out value))
+            if (int.TryParse(ReadValue(section, name), out int value))
                 return value;
             else if (autoSave)
                 SetInt(section, name, defaultValue);
@@ -49,8 +48,7 @@ namespace MelonLoader
 
         public float GetFloat(string section, string name, float defaultValue = 0f, bool autoSave = false)
         {
-            float value;
-            if (float.TryParse(ReadValue(section, name), out value))
+            if (float.TryParse(ReadValue(section, name), out float value))
                 return value;
             else if (autoSave)
                 SetFloat(section, name, defaultValue);

@@ -51,14 +51,12 @@ namespace MelonLoader.Preferences.IO
                 string[] parts = line.Split('=');
                 if (string.IsNullOrEmpty(parts[0]) || string.IsNullOrEmpty(parts[1]))
                     continue;
-                int val_int = 0;
-                float val_float = 0f;
                 if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
                     SetupRawValue(category, parts[0], TomlObject.ToTomlObject(parts[1].ToLower().StartsWith("true")));
-                else if (int.TryParse(parts[1], out val_int))
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((long) val_int));
-                else if (float.TryParse(parts[1], out val_float))
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((double) val_float));
+                else if (int.TryParse(parts[1], out int val_int))
+                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((long)val_int));
+                else if (float.TryParse(parts[1], out float val_float))
+                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((double)val_float));
                 else
                     SetupRawValue(category, parts[0], TomlObject.ToTomlObject(parts[1].Replace("\r", "")));
             }
@@ -130,22 +128,15 @@ namespace MelonLoader.Preferences.IO
 
         private static ValueSyntax CreateValueSyntaxFromTomlObject(TomlObject obj)
         {
-            switch (obj.Kind)
+            return obj.Kind switch
             {
-                case ObjectKind.Boolean:
-                    return new BooleanValueSyntax(((TomlBoolean)obj).Value);
-                case ObjectKind.String:
-                    return new StringValueSyntax(((TomlString)obj).Value);
-                case ObjectKind.Float:
-                    return new FloatValueSyntax(((TomlFloat)obj).Value);
-                case ObjectKind.Integer:
-                    return new IntegerValueSyntax(((TomlInteger)obj).Value);
-                case ObjectKind.Array:
-                    return CreateArraySyntaxFromTomlArray((TomlArray)obj);
-                default:
-                    break;
-            }
-            return null;
+                ObjectKind.Boolean => new BooleanValueSyntax(((TomlBoolean)obj).Value),
+                ObjectKind.String => new StringValueSyntax(((TomlString)obj).Value),
+                ObjectKind.Float => new FloatValueSyntax(((TomlFloat)obj).Value),
+                ObjectKind.Integer => new IntegerValueSyntax(((TomlInteger)obj).Value),
+                ObjectKind.Array => CreateArraySyntaxFromTomlArray((TomlArray)obj),
+                _ => null
+            };
         }
 
         private static ArraySyntax CreateArraySyntaxFromTomlArray(TomlArray arr)

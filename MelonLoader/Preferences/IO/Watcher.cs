@@ -7,7 +7,7 @@ namespace MelonLoader.Preferences.IO
     {
         private static bool ShouldDisableFileWatcherFunctionality = false;
         private FileSystemWatcher FileWatcher = null;
-        private File PrefFile = null;
+        private readonly File PrefFile = null;
 
         internal Watcher(File preffile)
         {

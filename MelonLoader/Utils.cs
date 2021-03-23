@@ -92,42 +92,25 @@ namespace MelonLoader
 
         public static string ColorToANSI(ConsoleColor color)
         {
-            switch (color)
+            return color switch
             {
-                case ConsoleColor.Black:
-                    return "\x1b[30m";
-                case ConsoleColor.DarkBlue:
-                    return "\x1b[34m";
-                case ConsoleColor.DarkGreen:
-                    return "\x1b[32m";
-                case ConsoleColor.DarkCyan:
-                    return "\x1b[36m";
-                case ConsoleColor.DarkRed:
-                    return "\x1b[31m";
-                case ConsoleColor.DarkMagenta:
-                    return "\x1b[35m";
-                case ConsoleColor.DarkYellow:
-                    return "\x1b[33m";
-                case ConsoleColor.Gray:
-                    return "\x1b[37m";
-                case ConsoleColor.DarkGray:
-                    return "\x1b[90m";
-                case ConsoleColor.Blue:
-                    return "\x1b[94m";
-                case ConsoleColor.Green:
-                    return "\x1b[92m";
-                case ConsoleColor.Cyan:
-                    return "\x1b[96m";
-                case ConsoleColor.Red:
-                    return "\x1b[91m";
-                case ConsoleColor.Magenta:
-                    return "\x1b[95m";
-                case ConsoleColor.Yellow:
-                    return "\x1b[93m";
-                case ConsoleColor.White:
-                default:
-                    return "\x1b[97m";
-            }
+                ConsoleColor.Black => "\x1b[30m",
+                ConsoleColor.DarkBlue => "\x1b[34m",
+                ConsoleColor.DarkGreen => "\x1b[32m",
+                ConsoleColor.DarkCyan => "\x1b[36m",
+                ConsoleColor.DarkRed => "\x1b[31m",
+                ConsoleColor.DarkMagenta => "\x1b[35m",
+                ConsoleColor.DarkYellow => "\x1b[33m",
+                ConsoleColor.Gray => "\x1b[37m",
+                ConsoleColor.DarkGray => "\x1b[90m",
+                ConsoleColor.Blue => "\x1b[94m",
+                ConsoleColor.Green => "\x1b[92m",
+                ConsoleColor.Cyan => "\x1b[96m",
+                ConsoleColor.Red => "\x1b[91m",
+                ConsoleColor.Magenta => "\x1b[95m",
+                ConsoleColor.Yellow => "\x1b[93m",
+                _ => "\x1b[97m",
+            };
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
