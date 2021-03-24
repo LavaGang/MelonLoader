@@ -70,6 +70,7 @@
     <Compile Include="Extensions\Layers\Harmony\Patch.cs" />
     <Compile Include="Extensions\Layers\Harmony\Priority.cs" />
     <Compile Include="Extensions\Layers\Harmony\Tools\AccessTools.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Tools\Extensions.cs" />
     <Compile Include="Extensions\Layers\Harmony\Tools\SymbolExtensions.cs" />
     <Compile Include="Extensions\Layers\IPA.cs" />
     <Compile Include="Extensions\Layers\IPA\IEnhancedPlugin.cs" />

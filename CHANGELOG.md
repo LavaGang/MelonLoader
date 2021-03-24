@@ -133,6 +133,7 @@
 108. Fixed Issue with Mono Base Directory being Wrong causing Crashes.
 109. Added Warning for Transpiler Use on Il2Cpp Unhollowed Methods.
 110. Added More to Harmony Compatibility Layer.
+111. Fixed Issue with Missing Harmony.GeneralExtensions and Harmony.CollectionExtensions in Harmony Compatibility Layer.
 
 ---
 
