@@ -4,7 +4,7 @@ using MelonLoader.Tomlyn;
 using MelonLoader.Tomlyn.Model;
 using MelonLoader.Tomlyn.Syntax;
 
-namespace MelonLoader.AssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal class Config
     {

@@ -10,19 +10,19 @@ namespace MelonLoader
 
         internal static bool Run()
         {
-            MelonLogger.Msg("Loading Il2Cpp Assembly Generator...");
+            MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
             if (RunMethod == null)
             {
-                string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "AssemblyGenerator");
+                string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "Il2CppAssemblyGenerator");
                 if (!Directory.Exists(BaseDirectory))
                 {
-                    MelonLogger.Error("Failed to Find AssemblyGenerator Directory!");
+                    MelonLogger.Error("Failed to Find Il2CppAssemblyGenerator Directory!");
                     return false;
                 }
-                string AssemblyPath = Path.Combine(BaseDirectory, "AssemblyGenerator.dll");
+                string AssemblyPath = Path.Combine(BaseDirectory, "Il2CppAssemblyGenerator.dll");
                 if (!File.Exists(AssemblyPath))
                 {
-                    MelonLogger.Error("Failed to Find AssemblyGenerator.dll!");
+                    MelonLogger.Error("Failed to Find Il2CppAssemblyGenerator.dll!");
                     return false;
                 }
                 try
@@ -30,20 +30,20 @@ namespace MelonLoader
                     Assembly asm = Assembly.LoadFrom(AssemblyPath);
                     if (asm == null)
                     {
-                        MelonLogger.ThrowInternalFailure($"Failed to Load Assembly for AssemblyGenerator.dll!");
+                        MelonLogger.ThrowInternalFailure($"Failed to Load Assembly for Il2CppAssemblyGenerator.dll!");
                         return false;
                     }
-                    Type type = asm.GetType("MelonLoader.AssemblyGenerator.Core");
+                    Type type = asm.GetType("MelonLoader.Il2CppAssemblyGenerator.Core");
                     if (type == null)
                     {
-                        MelonLogger.ThrowInternalFailure($"Failed to Get Type for MelonLoader.AssemblyGenerator.Core!");
+                        MelonLogger.ThrowInternalFailure($"Failed to Get Type for MelonLoader.Il2CppAssemblyGenerator.Core!");
                         return false;
                     }
                     RunMethod = type.GetMethod("Run", BindingFlags.NonPublic | BindingFlags.Static);
                 }
                 catch (Exception ex)
                 {
-                    MelonLogger.ThrowInternalFailure($"Il2Cpp Assembly Generator Exception: {ex}");
+                    MelonLogger.ThrowInternalFailure($"Il2CppAssemblyGenerator Exception: {ex}");
                     return false;
                 }
             }

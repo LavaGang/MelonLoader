@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 
-namespace MelonLoader.AssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal static class Core
     {

@@ -7,7 +7,7 @@
 #include "../Core.h"
 #include "../Utils/HashCode.h"
 #include "Il2Cpp.h"
-#include "../Utils/AssemblyGenerator.h"
+#include "../Utils/Il2CppAssemblyGenerator.h"
 
 void InternalCalls::Initialize()
 {
@@ -16,7 +16,7 @@ void InternalCalls::Initialize()
 	MelonUtils::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
 	SupportModules::AddInternalCalls();
-	AssemblyGenerator_ExecutablePackageBase::AddInternalCalls();
+	Il2CppAssemblyGenerator_ExecutablePackageBase::AddInternalCalls();
 }
 
 #pragma region MelonLogger
@@ -161,9 +161,9 @@ void InternalCalls::SupportModules::AddInternalCalls()
 #pragma endregion
 
 #pragma region AssemblyGenerator_ExecutablePackageBase
-void InternalCalls::AssemblyGenerator_ExecutablePackageBase::SetProcessId(int id) { AssemblyGenerator::ProcessId = id; }
-void InternalCalls::AssemblyGenerator_ExecutablePackageBase::AddInternalCalls()
+void InternalCalls::Il2CppAssemblyGenerator_ExecutablePackageBase::SetProcessId(int id) { Il2CppAssemblyGenerator::ProcessId = id; }
+void InternalCalls::Il2CppAssemblyGenerator_ExecutablePackageBase::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.AssemblyGenerator.ExecutablePackageBase::SetProcessId", SetProcessId);
+	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.ExecutablePackageBase::SetProcessId", SetProcessId);
 }
 #pragma endregion

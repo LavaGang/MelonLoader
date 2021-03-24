@@ -4,7 +4,6 @@
 #include "Debug.h"
 #include "AnalyticsBlocker.h"
 #include "../Managers/InternalCalls.h"
-#include "AssemblyGenerator.h"
 #include "Encoding.h"
 #include "../Managers/Game.h"
 

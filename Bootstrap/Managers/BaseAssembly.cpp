@@ -5,7 +5,7 @@
 #include <string>
 #include "../Utils/Assertion.h"
 #include "../Utils/Logger.h"
-#include "../Utils/AssemblyGenerator.h"
+#include "../Utils/Il2CppAssemblyGenerator.h"
 
 char* BaseAssembly::PathMono = NULL;
 char* BaseAssembly::PreloadPath = NULL;
@@ -56,7 +56,7 @@ bool BaseAssembly::Initialize()
 	}
 	int returnval = *(int*)((char*)result + 0x8);
 	if (Game::IsIl2Cpp)
-		AssemblyGenerator::Cleanup();
+		Il2CppAssemblyGenerator::Cleanup();
 	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();

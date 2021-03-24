@@ -1,9 +1,9 @@
-#include "AssemblyGenerator.h"
+#include "Il2CppAssemblyGenerator.h"
 
-char* AssemblyGenerator::PathMono = NULL;
-int AssemblyGenerator::ProcessId = 0;
+char* Il2CppAssemblyGenerator::PathMono = NULL;
+int Il2CppAssemblyGenerator::ProcessId = 0;
 
-void AssemblyGenerator::Cleanup()
+void Il2CppAssemblyGenerator::Cleanup()
 {
 	if (ProcessId != 0)
 	{

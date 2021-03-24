@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MelonLoader.AssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal static class RemoteAPI
     {

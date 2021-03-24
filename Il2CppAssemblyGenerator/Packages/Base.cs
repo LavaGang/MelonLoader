@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace MelonLoader.AssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal class PackageBase
     {

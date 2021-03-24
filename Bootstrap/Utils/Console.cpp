@@ -6,7 +6,7 @@
 #include <iostream>
 #include <locale.h>
 #include "../Managers/Game.h"
-#include "AssemblyGenerator.h"
+#include "Il2CppAssemblyGenerator.h"
 #include "Logger.h"
 #include <sstream>
 #include <VersionHelpers.h>
@@ -119,7 +119,7 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	case CTRL_LOGOFF_EVENT:
 	case CTRL_SHUTDOWN_EVENT:
 		if (Game::IsIl2Cpp)
-			AssemblyGenerator::Cleanup();
+			Il2CppAssemblyGenerator::Cleanup();
 		Logger::Flush();
 		Flush();
 		Close();

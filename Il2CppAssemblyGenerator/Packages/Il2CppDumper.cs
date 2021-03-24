@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using MelonLoader.TinyJSON;
 
-namespace MelonLoader.AssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal class Il2CppDumper : ExecutablePackageBase
     {

@@ -1,7 +1,6 @@
 #include "Il2Cpp.h"
 #include "Game.h"
 #include "../Utils/Assertion.h"
-#include "../Utils/AssemblyGenerator.h"
 #include "Hook.h"
 #include "Mono.h"
 #include "../Utils/Console.h"

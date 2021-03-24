@@ -2,7 +2,7 @@
 #include "Debug.h"
 #include "../Managers/Game.h"
 #include "../Core.h"
-#include "AssemblyGenerator.h"
+#include "Il2CppAssemblyGenerator.h"
 #include "../Managers/BaseAssembly.h"
 #include "../Utils/Encoding.h"
 #include <wincrypt.h>
@@ -38,19 +38,19 @@ bool HashCode::SetupPaths()
 
     if (!Game::IsIl2Cpp)
         return true;
-    std::string AssemblyGeneratorPath = std::string(Game::BasePath) + "\\MelonLoader\\Dependencies\\AssemblyGenerator\\AssemblyGenerator.dll";
+    std::string AssemblyGeneratorPath = std::string(Game::BasePath) + "\\MelonLoader\\Dependencies\\Il2CppAssemblyGenerator\\Il2CppAssemblyGenerator.dll";
     if (!Core::FileExists(AssemblyGeneratorPath.c_str()))
     {
         Assertion::ThrowInternalFailure("AssemblyGenerator.dll Does Not Exist!");
         return false;
     }
-    AssemblyGenerator::PathMono = new char[AssemblyGeneratorPath.size() + 1];
-    std::copy(AssemblyGeneratorPath.begin(), AssemblyGeneratorPath.end(), AssemblyGenerator::PathMono);
-    AssemblyGenerator::PathMono[AssemblyGeneratorPath.size()] = '\0';
+    Il2CppAssemblyGenerator::PathMono = new char[AssemblyGeneratorPath.size() + 1];
+    std::copy(AssemblyGeneratorPath.begin(), AssemblyGeneratorPath.end(), Il2CppAssemblyGenerator::PathMono);
+    Il2CppAssemblyGenerator::PathMono[AssemblyGeneratorPath.size()] = '\0';
 
 #define TO_UTF8(s) ((s) = Encoding::OsToUtf8((s)))
     
-    TO_UTF8(AssemblyGenerator::PathMono);
+    TO_UTF8(Il2CppAssemblyGenerator::PathMono);
     TO_UTF8(BaseAssembly::PathMono);
 
 #undef TO_UTF8

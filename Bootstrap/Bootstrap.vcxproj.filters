@@ -22,9 +22,6 @@
     <ClCompile Include="Utils\Assertion.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\AssemblyGenerator.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\Logger.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -57,6 +54,9 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="Utils\Encoding.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -94,9 +94,6 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Assertion.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\AssemblyGenerator.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Logger.h">
@@ -137,6 +134,9 @@
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Encoding.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Il2CppAssemblyGenerator.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

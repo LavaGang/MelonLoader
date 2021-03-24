@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 
-class AssemblyGenerator
+class Il2CppAssemblyGenerator
 {
 public:
     static char* PathMono;

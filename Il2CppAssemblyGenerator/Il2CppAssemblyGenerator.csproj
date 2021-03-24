@@ -5,8 +5,8 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>MelonLoader.AssemblyGenerator</RootNamespace>
-    <AssemblyName>AssemblyGenerator</AssemblyName>
+    <RootNamespace>MelonLoader.Il2CppAssemblyGenerator</RootNamespace>
+    <AssemblyName>Il2CppAssemblyGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\Il2CppAssemblyGenerator\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,7 +32,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\AssemblyGenerator\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\Il2CppAssemblyGenerator\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>

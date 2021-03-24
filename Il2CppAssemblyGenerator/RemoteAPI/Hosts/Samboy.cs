@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using MelonLoader.TinyJSON;
 
-namespace MelonLoader.AssemblyGenerator.RemoteAPIHosts
+namespace MelonLoader.Il2CppAssemblyGenerator.RemoteAPIHosts
 {
     internal static class Samboy
     {
