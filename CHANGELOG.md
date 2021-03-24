@@ -132,6 +132,7 @@
 107. Fixed Issue with Parsing Unity Version on Weirdly Marked Versions.
 108. Fixed Issue with Mono Base Directory being Wrong causing Crashes.
 109. Added Warning for Transpiler Use on Il2Cpp Unhollowed Methods.
+110. Added More to Harmony Compatibility Layer.
 
 ---
 
