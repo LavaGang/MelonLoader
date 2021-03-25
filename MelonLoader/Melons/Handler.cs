@@ -112,7 +112,7 @@ namespace MelonLoader
         
         private static void LoadMelons(bool plugins = false)
         {
-            MelonCommandLine.Args.Core.Enum mode = (plugins ? MelonCommandLine.Core.LoadMode_Plugins : MelonCommandLine.Core.LoadMode_Mods);
+            MelonCommandLine.Core.LoadModeEnum mode = (plugins ? MelonCommandLine.Core.LoadMode_Plugins : MelonCommandLine.Core.LoadMode_Mods);
             string basedirectory = (plugins ? PluginsDirectory : ModsDirectory);
 
             // DLLs
@@ -124,10 +124,10 @@ namespace MelonLoader
                     if (string.IsNullOrEmpty(filename))
                         continue;
 
-                    if (mode != MelonCommandLine.Args.Core.Enum.BOTH)
+                    if (mode != MelonCommandLine.Core.LoadModeEnum.BOTH)
                     {
                         bool file_extension_check = filename.EndsWith(".dev.dll");
-                        if (((mode == MelonCommandLine.Args.Core.Enum.NORMAL) && file_extension_check) || ((mode == MelonCommandLine.Args.Core.Enum.DEV) && !file_extension_check))
+                        if (((mode == MelonCommandLine.Core.LoadModeEnum.NORMAL) && file_extension_check) || ((mode == MelonCommandLine.Core.LoadModeEnum.DEV) && !file_extension_check))
                             continue;
                     }
 
@@ -166,10 +166,10 @@ namespace MelonLoader
                                 string filename2 = Path.GetFileName(entry.Name);
                                 if (string.IsNullOrEmpty(filename2))
                                     continue;
-                                if (mode != MelonCommandLine.Args.Core.Enum.BOTH)
+                                if (mode != MelonCommandLine.Core.LoadModeEnum.BOTH)
                                 {
                                     bool file_extension_check = filename2.EndsWith(".dev.dll");
-                                    if (((mode == MelonCommandLine.Args.Core.Enum.NORMAL) && file_extension_check) || ((mode == MelonCommandLine.Args.Core.Enum.DEV) && !file_extension_check))
+                                    if (((mode == MelonCommandLine.Core.LoadModeEnum.NORMAL) && file_extension_check) || ((mode == MelonCommandLine.Core.LoadModeEnum.DEV) && !file_extension_check))
                                         continue;
                                 }
                                 using (MemoryStream memorystream = new MemoryStream())
