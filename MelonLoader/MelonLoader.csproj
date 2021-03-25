@@ -99,9 +99,9 @@
     <Compile Include="Extensions\Shields\Harmony\HarmonyManipulator_Manipulate.cs" />
     <Compile Include="Extensions\Shields\Harmony\Harmony_Patch.cs" />
     <Compile Include="Extensions\Shields\Harmony\PatchFunctions_ReversePatch.cs" />
-    <Compile Include="Extensions\Shields\MonoMod\Detour_Apply.cs" />
-    <Compile Include="Extensions\Shields\MonoMod\Hook_Apply.cs" />
-    <Compile Include="Extensions\Shields\MonoMod\ILHook_Apply.cs" />
+    <Compile Include="Extensions\Shields\MonoMod\Detour_OnDetour.cs" />
+    <Compile Include="Extensions\Shields\MonoMod\Hook_OnDetour.cs" />
+    <Compile Include="Extensions\Shields\MonoMod\ILHook_OnDetour.cs" />
     <Compile Include="Extensions\UnityMagicMethods.cs" />
     <Compile Include="Utils\bHaptics\API.cs" />
     <Compile Include="Utils\bHaptics\NativeLibrary.cs" />

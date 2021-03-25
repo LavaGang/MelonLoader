@@ -14,11 +14,11 @@ namespace MelonLoader
 			PatchShields.Harmony.HarmonyManipulator_Manipulate.Install();
 
 			// MonoMod
-			PatchShields.MonoMod.Hook_Apply.Install();
-			PatchShields.MonoMod.ILHook_Apply.Install();
+			PatchShields.MonoMod.Hook_OnDetour.Install();
+			PatchShields.MonoMod.ILHook_OnDetour.Install();
 
 			// Always Do Last
-			PatchShields.MonoMod.Detour_Apply.Install();
+			PatchShields.MonoMod.Detour_OnDetour.Install();
 		}
 	}
 }
