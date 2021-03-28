@@ -13,5 +13,5 @@ public:
 	static bool GenerateAsm(void*, unsigned char**, size_t*);
 private:
 	static ks_engine* ks;
-	static std::map<void*, Patcher*> patchMap;
+	// static std::map<void*, Patcher*> patchMap;
 };

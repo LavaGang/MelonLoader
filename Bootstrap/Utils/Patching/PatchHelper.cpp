@@ -1,3 +1,4 @@
+#ifdef PORT_DISABLE
 #include "./PatchHelper.h"
 
 #include <android/log.h>
@@ -90,3 +91,4 @@ bool PatchHelper::GenerateAsm(void* fnPtr, unsigned char** encode, size_t* size)
 
 	return true;
 }
+#endif

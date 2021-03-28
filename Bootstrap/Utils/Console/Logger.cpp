@@ -6,6 +6,8 @@
 
 #ifdef _WIN32
 #include <direct.h>
+#elif defined(__ANDROID__)
+#include <android/log.h>
 #endif
 
 #include <list>

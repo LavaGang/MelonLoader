@@ -23,6 +23,12 @@
     <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Console\Logger.cpp" />
     <ClCompile Include="Utils\Patching\PatchHelper.cpp" />
+    <ClCompile Include="Patcher\Patcher.cpp" />
+    <ClCompile Include="Patcher\MemoryHelper.cpp" />
+    <ClCompile Include="Patcher\Instance.cpp" />
+    <ClCompile Include="Patcher\Tests\Instance.spec.cpp" />
+    <ClCompile Include="Utils\UnitTesting\TestHelper.cpp" />
+    <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
@@ -58,6 +64,10 @@
     <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
     <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
     <ClInclude Include="Base\Liberation\Liberation.h" />
+    <ClInclude Include="Patcher\Instance.h" />
+    <ClInclude Include="Utils\UnitTesting\TestHelper.h" />
+    <ClInclude Include="Patcher\Tests\Instance.spec.h" />
+    <ClInclude Include="Patcher\Tests\Suite.spec.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />

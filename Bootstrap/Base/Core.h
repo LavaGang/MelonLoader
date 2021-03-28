@@ -1,18 +1,20 @@
 #pragma once
 #ifdef _WIN32
 #include <Windows.h>
+#elif defined(__ANDROID__)
+#include <jni.h>
 #endif
 #include <chrono>
 
 class Core
 {
 public:
-	#ifdef _WIN32
+#ifdef _WIN32
 	static HINSTANCE Bootstrap;
-	#elif defined(__ANDROID__)
+#elif defined(__ANDROID__)
 	static JavaVM* Bootstrap;
-	#endif
-	
+#endif
+
 	static char* Path;
 	static const char* Version;
 	static const char* ReleaseType;
@@ -30,6 +32,4 @@ public:
 private:
 	static const char* GetOSVersion();
 	static bool OSVersionCheck();
-	static void TestDirectMemAccess();
-	static void TestRedirectFunction(int value);
 };

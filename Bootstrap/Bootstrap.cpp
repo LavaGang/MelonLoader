@@ -3,6 +3,7 @@
 #include "Utils/Console/Logger.h"
 
 #ifdef __ANDROID__
+#include <jni.h>
 extern "C"
 {
 	JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)

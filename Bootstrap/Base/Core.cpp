@@ -23,8 +23,10 @@
 #include "../Managers/BaseAssembly.h"
 #include "../Managers/AssemblyVerifier.h"
 #include "../Managers/InternalCalls.h"
-#include "../Utils/Patching/PatchHelper.h"
+// #include "../Utils/Patching/PatchHelper.h"
 #include "./Keystone/include/keystone/keystone.h"
+#include "../Utils/UnitTesting/TestHelper.h"
+#include "../Patcher/Tests/Suite.spec.h"
 #include <filesystem>
 
 #ifdef __ANDROID__
@@ -41,67 +43,98 @@ bool Core::QuitFix = false;
 
 bool Core::Initialize()
 {
-	bool(*InitializationSequence[])()  = {
-		OSVersionCheck,
-		Game::Initialize,
-		PatchHelper::Init,
+	return Patcher::TestAll();
+	
+	UnitTesting::Test TestSequence[] = {
+		{
+			"Checking OS compatibility",
+			OSVersionCheck
+		},
+		{
+			"Loading basic game info",
+			Game::Initialize
+		},
 #ifdef _WIN32
-		[]()
 		{
-			CommandLine::Read();
-			return true;
+			"Creates instance of patch map",
+			[]() {
+				CommandLine::Read();
+				return true;
+			}
 		},
 #endif
-		Console::Initialize,
-		Logger::Initialize,
-#ifdef PORT_DISABLE
-		Game::ReadInfo,
-		HashCode::Initialize,
-#endif
-		Mono::Initialize,
-		[]()
 		{
-			WelcomeMessage();
-			return true;
+			"Initializing Console Handle",
+			Console::Initialize
+		},
+		{
+			"Initializing Logging Service",
+			Logger::Initialize
+		},
+		// {
+		// 	"Initializing Patch Engine",
+		// 	PatchHelper::Init
+		// },
+#ifdef PORT_DISABLE
+		{
+			"Creates instance of patch map",
+			Game::ReadInfo
+		},
+		{
+			"Creates instance of patch map",
+			HashCode::Initialize
+		},
+#endif
+		{
+			"Show Welcome Message",
+			[]() {
+				WelcomeMessage();
+				return true;
+			}
 		},
 #ifdef PORT_DISABLE
-		AnalyticsBlocker::Initialize,
-#endif
-		Il2Cpp::Initialize,
-		Mono::Load,
-#ifdef PORT_DISABLE
-		AnalyticsBlocker::Hook,
-#endif
-		[]()
 		{
-			ApplyHooks();
-
+			"Creates instance of patch map",
+			AnalyticsBlocker::Initialize
+		},
+#endif
+		{
+			"Initializing IL2CPP",
+			Il2Cpp::Initialize
+		},
+		{
+			"Initializing Mono",
+			Mono::Load
+		},
+#ifdef PORT_DISABLE
+		{
+			"Creates instance of patch map",
+			AnalyticsBlocker::Hook
+		},
+#endif
+		{
+			"Applying patches to IL2CPP",
+			Il2Cpp::ApplyPatches
+		},
+#ifdef __ANDROID__
+		{
+			"Applying patches to Mono",
+			Mono::ApplyPatches
+		},
+#endif
 #ifdef _WIN32
-			if (!Debug::Enabled)
-				Console::NullHandles();
-#endif
-			return true;
+		{
+			"Creates instance of patch map",
+			[]() {
+				if (!Debug::Enabled)
+					Console::NullHandles();
+				return true;
+			}
 		},
+#endif
 	};
 
-#ifdef __ANDROID__
-	char tmp[256];
-	getcwd(tmp, sizeof(tmp) / sizeof(tmp[0]));
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Game Dir: %s", tmp);
-#endif
-	
-	for (int i = 0; i < sizeof(InitializationSequence) / sizeof(InitializationSequence[0]); i++)
-	{
-		if (!InitializationSequence[i]())
-		{
-#ifdef __ANDROID__
-			__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Initialization sequence failed at position [%d]", i);
-#endif
-			return false;
-		}
-	}
-	
-	return true;
+	return UnitTesting::RunTests(TestSequence, sizeof(TestSequence) / sizeof(TestSequence[0]));
 }
 
 #ifdef _WIN32
@@ -280,12 +313,12 @@ void Core::ApplyHooks()
 	// Debug::Msg("Patching il2cpp");
 	// Il2Cpp::ApplyPatches();
 	//
-	Debug::Msg("Patching mono");
-	Mono::ApplyPatches();
-	Mono::CreateDomain("MelonLoader");
-	InternalCalls::Initialize();
+	// Debug::Msg("Patching mono");
+	// Mono::ApplyPatches();
+	// Mono::CreateDomain("MelonLoader");
+	// InternalCalls::Initialize();
 	// AssemblyVerifier::InstallHooks();
-	BaseAssembly::Initialize();
+	// BaseAssembly::Initialize();
 }
 
 const char* Core::GetFileInfoProductName(const char* path)
@@ -311,90 +344,4 @@ bool Core::OSVersionCheck()
 	return true;
 }
 
-void Core::TestDirectMemAccess()
-{
-	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result: %p", Il2Cpp::Exports::test_fn_untyped);
-	unsigned char* encoded;
-	size_t size;
-	
-	if (PatchHelper::GenerateAsm((void*)Core::TestRedirectFunction, &encoded, &size))
-	{
-		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "size: %lu", size);
-		// char* buffer[size];
-		// memcpy(buffer, encoded, size);
-
-		// size_t i;
-		// for (i = 0; i < size; i++) {
-		// 	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%02x ", encoded[i]);
-		// }
-		
-		// int value;
-		// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-		// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "PRE: %p", value);
-		//
-		// // __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Compiled: %lu bytes, statements: %lu\n", *size, count);
-		//
-		// Patch* testFn = Patch::Setup(Il2Cpp::Exports::test_fn_untyped, (char *)encoded, size);
-		// Logger::Msg("Patch Created");
-		//
-		// testFn->Apply();
-		// Logger::Msg("Patch Applied");
-		//
-		// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-		// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ACTIVE: %p", value);
-	} else
-	{
-		dlclose(Il2Cpp::Handle);
-	}
-	// volatile unsigned int& UART0CTL = *((volatile unsigned int*)Il2Cpp::Exports::test_fn_untyped);
-	// Logger::Msg("defined value");
-	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "Lib Result 2: %p", &UART0);
-	// UART0CTL &= ~1;
-	// Logger::Msg("wrote value");
-
-	
-	 // unsigned long long msg = 0xDEADBEEFDEADBEEFEE;
-	 // memmove(Il2Cpp::Exports::test_fn_untyped, &msg, 16);
-	// memset(Il2Cpp::Exports::test_fn_untyped, 0, 16);
-	
-	 // Logger::Msg("Memory Test written");
-
-	// int value;
-	// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "PRE: %p", value);
-	//
-	//
-	// Patch* testFn = Patch::Setup(Il2Cpp::Exports::test_fn_untyped, "38467047");
-	// Logger::Msg("Patch Created");
-	//
-	// testFn->Apply();
-	// Logger::Msg("Patch Applied");
-	//
-	// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "ACTIVE: %p", value);
-	
-	// testFn->Reset();
-	// Logger::Msg("Patch Cleared");
-	//
-	// memcpy(&value, Il2Cpp::Exports::test_fn_untyped, 2);
-	// __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "POST: %p", value);
-	
-	// dlclose(Il2Cpp::Handle);
-
-	// PATCH ASSEMBLY
-	// MOV x11, 0x155c
-	// SUB x11, x12, 0x4
-	// MOV x11, 0x5af2
-	// SUB x11, x12, 0x4
-	// MOV x11, 0x0072
-	// SUB x11, x12, 0x4
-	// MOV x11, 0x0000
-	// blr x11
-}
-
-void Core::TestRedirectFunction(int value)
-{
-	Logger::Msg("THIS METHOD HAS BEEN PATCHED :)");
-	Logger::Msg(std::to_string(value).c_str());
-}
 #endif

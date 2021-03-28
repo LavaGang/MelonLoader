@@ -39,7 +39,7 @@ HMODULE Mono::PosixHelper = NULL;
 void* Mono::Module = NULL;
 void* Mono::PosixHelper = NULL;
 
-Patcher* Mono::Patches::mono_unity_get_unitytls_interface = NULL;
+// Patcher* Mono::Patches::mono_unity_get_unitytls_interface = NULL;
 #endif
 
 #pragma region MonoDeclare
@@ -425,6 +425,8 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 #ifdef __ANDROID__
 bool Mono::ApplyPatches()
 {
+	Debug::Msg("Applying patches for Mono");
+	
 	// Patches::mono_unity_get_unitytls_interface = new Patcher((void**)&Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
 
 	// Patches::mono_unity_get_unitytls_interface->ApplyPatch();

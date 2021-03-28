@@ -1,3 +1,4 @@
+#ifdef PORT_DISABLE
 #pragma once
 #include "../../Base/Liberation/Liberation.h"
 
@@ -17,4 +18,4 @@ private:
 	bool applied;
 	void Compile();
 };
-
+#endif

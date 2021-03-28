@@ -32,11 +32,11 @@ void Hook::Detach(void** target, void* detour)
 #ifdef __ANDROID__
 void Hook::Attach(void** target, void* detour)
 {
-	PatchHelper::Attach(*target, detour);
+	// PatchHelper::Attach(*target, detour);
 }
 
 void Hook::Detach(void** target, void* detour)
 {
-	PatchHelper::Detach(*target, detour);
+	// PatchHelper::Detach(*target, detour);
 }
 #endif

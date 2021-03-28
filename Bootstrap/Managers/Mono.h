@@ -1,6 +1,8 @@
 #pragma once
 #ifdef _WIN32
 #include <Windows.h>
+#elif defined(__ANDROID__)
+#include <string.h>
 #endif
 
 #include "../Utils/Patching/Patcher.h"
@@ -226,7 +228,7 @@ public:
 	class Patches
 	{
 	public:
-		static Patcher* mono_unity_get_unitytls_interface;
+		// static Patcher* mono_unity_get_unitytls_interface;
 	};
 #endif
 
