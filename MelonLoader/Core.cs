@@ -10,6 +10,7 @@ namespace MelonLoader
 {
     internal static class Core
     {
+#if PORT_DISABLE
         static Core()
         {
             try { MelonUtils.Setup(); } catch (Exception ex) { MelonLogger.Error("MelonUtils.Setup Exception: " + ex.ToString()); throw ex; }
@@ -86,5 +87,7 @@ namespace MelonLoader
         private static bool GetCurrentCulturePrefix(ref CultureInfo __result) { __result = CultureInfo.InvariantCulture; return false; }
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static bool QuitFix();
+#endif
     }
+
 }

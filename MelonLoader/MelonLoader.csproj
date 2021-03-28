@@ -1,54 +1,106 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Windows">
+      <Configuration>Debug</Configuration>
+      <Platform>Windows</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Windows">
+      <Configuration>Release</Configuration>
+      <Platform>Windows</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Android">
+      <Configuration>Debug</Configuration>
+      <Platform>Android</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Android">
+      <Configuration>Release</Configuration>
+      <Platform>Android</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F9700790-414B-431B-9F9C-1D9210FAD682}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader</RootNamespace>
     <AssemblyName>MelonLoader</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition="'$(Platform)' == 'Android'">
+    <SchemaVersion>2.0</SchemaVersion>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Desktop' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;DEBUG;NET35;PORT_DISABLE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Desktop' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-    <DefineConstants>NET35</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <DefineConstants>NET35;PORT_DISABLE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'Android'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libs\bHaptics\API.cs" />
     <Compile Include="Deprecated.cs" />
-    <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
-    <Compile Include="Libs\Harmony\UnityMagicMethods.cs" />
-    <Compile Include="Libs\IniFile.cs" />
+    <Compile Include="Entrypoint.cs" />
+    <Compile Include="Utils\Debug.cs" />
+    <Compile Include="Utils\DependencyGraph.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Utils\SupportModule.cs" />
+    <Compile Include="Utils\Unhollower.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)' == 'Desktop'">
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
     <Compile Include="Melons\Coroutines.cs" />
+    <Compile Include="Melons\Attributes\Game.cs" />
+    <Compile Include="Melons\Attributes\Info.cs" />
+    <Compile Include="Melons\Base.cs" />
+    <Compile Include="Melons\Attributes\OptionalDependencies.cs" />
+    <Compile Include="Melons\Handler.cs" />
+    <Compile Include="Melons\Mod.cs" />
+    <Compile Include="Melons\Plugin.cs" />
+    <Compile Include="Melons\Utils.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Types\Boolean_Array.cs" />
     <Compile Include="Preferences\Types\Byte_Array.cs" />
@@ -69,6 +121,8 @@
     <Compile Include="Preferences\Types\String.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\BuildInfo.cs" />
+    <!-- <ItemGroup/> -->
+    <!-- <ItemGroup Condition="'$(Platform)' == 'Desktop'"> -->
     <Compile Include="Libs\Harmony\Attributes.cs" />
     <Compile Include="Libs\Harmony\CodeInstruction.cs" />
     <Compile Include="Libs\Harmony\CodeTranspiler.cs" />
@@ -100,13 +154,6 @@
     <Compile Include="Libs\Harmony\Tools\SymbolExtensions.cs" />
     <Compile Include="Libs\Harmony\Tools\Traverse.cs" />
     <Compile Include="Libs\Harmony\Transpilers.cs" />
-    <Compile Include="Melons\Utils.cs" />
-    <Compile Include="Utils\Debug.cs" />
-    <Compile Include="Utils\DependencyGraph.cs" />
-    <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Core.cs" />
-    <Compile Include="Utils\SupportModule.cs" />
-    <Compile Include="Utils\Unhollower.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Constants.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Exception.cs" />
@@ -248,14 +295,14 @@
     <Compile Include="Libs\Tomlyn\Text\StringUtf8SourceView.cs" />
     <Compile Include="Libs\Tomlyn\Toml.cs" />
     <Compile Include="Libs\Tomlyn\TomlParserOptions.cs" />
-    <Compile Include="Melons\Attributes\Game.cs" />
-    <Compile Include="Melons\Attributes\Info.cs" />
-    <Compile Include="Melons\Base.cs" />
-    <Compile Include="Melons\Attributes\OptionalDependencies.cs" />
-    <Compile Include="Melons\Handler.cs" />
-    <Compile Include="Melons\Mod.cs" />
-    <Compile Include="Melons\Plugin.cs" />
+    <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
+    <Compile Include="Libs\Harmony\UnityMagicMethods.cs" />
+    <Compile Include="Libs\IniFile.cs" />
+    <Compile Include="Libs\bHaptics\API.cs" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="External\" />
+  </ItemGroup>
+  <Import Condition="'$(Platform)' == 'Desktop'" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Condition="'$(Platform)' == 'Android'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

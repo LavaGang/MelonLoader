@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if PORT_DISABLE
+using System;
 using System.Reflection;
 
 namespace MelonLoader
@@ -63,3 +64,4 @@ namespace MelonLoader
         }
     }
 }
+#endif

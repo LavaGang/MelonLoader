@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if PORT_DISABLE
+using System;
 using System.Runtime.CompilerServices;
 
 namespace MelonLoader
@@ -63,3 +64,4 @@ namespace MelonLoader
         private extern static void Internal_Msg(ConsoleColor color, string namesection, string txt);
     }
 }
+#endif

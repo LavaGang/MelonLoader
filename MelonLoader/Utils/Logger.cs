@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if PORT_DISABLE
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -189,3 +190,4 @@ namespace MelonLoader
         public static void LogError(string txt, params object[] args) => Error(txt, args);
     }
 }
+#endif

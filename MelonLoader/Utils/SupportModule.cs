@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if PORT_DISABLE
+using System;
 using System.IO;
 using System.Collections;
 using System.Reflection;
@@ -111,3 +112,4 @@ namespace MelonLoader
         public void BONEWORKS_OnLoadingScreen() => MelonHandler.BONEWORKS_OnLoadingScreen();
     }
 }
+#endif
