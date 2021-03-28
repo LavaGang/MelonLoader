@@ -67,12 +67,5 @@ public:
 		static void AddInternalCalls();
 		static bool IsEnabled();
 		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
-	};
-
-	class TestCalls
-	{
-	public:
-		static void AddInternalCalls();
-		static void TestMsg(Mono::String* message);
-	};
+	}; 
 };

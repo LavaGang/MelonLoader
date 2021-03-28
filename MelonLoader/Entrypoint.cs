@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MelonLoader;
 
 namespace MelonLoader
 {
@@ -9,12 +7,12 @@ namespace MelonLoader
     {
         private static void Initialize()
         {
-
+            External.Debug.Internal_Msg(ConsoleColor.Magenta, "Entrypoint", "This works :)");
         }
 
         private static void Start()
         {
-
+            External.Debug.Internal_Msg(ConsoleColor.Magenta, "Start", "Starting");
         }
     }
 }

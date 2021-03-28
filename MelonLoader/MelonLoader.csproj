@@ -39,7 +39,7 @@
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\$(Platform)\MelonLoader\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -82,6 +82,11 @@
   <ItemGroup>
     <Compile Include="Deprecated.cs" />
     <Compile Include="Entrypoint.cs" />
+    <Compile Include="External\Core.cs" />
+    <Compile Include="External\Debug.cs" />
+    <Compile Include="External\Handler.cs" />
+    <Compile Include="External\Logger.cs" />
+    <Compile Include="External\Utils.cs" />
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\DependencyGraph.cs" />
     <Compile Include="Utils\Logger.cs" />
@@ -300,9 +305,7 @@
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\bHaptics\API.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="External\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Condition="'$(Platform)' == 'Desktop'" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="'$(Platform)' == 'Android'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

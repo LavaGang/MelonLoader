@@ -258,7 +258,7 @@ bool Mono::SetupPaths()
 		}
 
 		// TODO: REMOVE
-		std::string BaseAsmPathStr = (BasePathStr + "/TestAndroidMono.dll").c_str();
+		std::string BaseAsmPathStr = (BasePathStr + "/MelonLoader.dll").c_str();
 		BaseAssembly::Path = new char[BaseAsmPathStr.size() + 1];
 		std::copy(BaseAsmPathStr.begin(), BaseAsmPathStr.end(), BaseAssembly::Path);
 		BaseAssembly::Path[BaseAsmPathStr.size()] = '\0';
@@ -384,8 +384,8 @@ bool Mono::Exports::Initialize()
 
 	if(Debug::Enabled)
 	{
-		// Exports::mono_trace_set_level_string("debug");
-		// Exports::mono_trace_set_mask_string("all");
+		Exports::mono_trace_set_level_string("debug");
+		Exports::mono_trace_set_mask_string("all");
 		Debug::Msg("Enabled Mono Logging");
 	}
 	

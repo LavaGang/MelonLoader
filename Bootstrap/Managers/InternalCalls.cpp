@@ -9,18 +9,18 @@
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
-	// MelonCore::AddInternalCalls();
-	// MelonLogger::AddInternalCalls();
-	// MelonUtils::AddInternalCalls();
-	// MelonHandler::AddInternalCalls();
-	// MelonDebug::AddInternalCalls();
+	MelonCore::AddInternalCalls();
+	MelonLogger::AddInternalCalls();
+	MelonUtils::AddInternalCalls();
+	MelonHandler::AddInternalCalls();
+	MelonDebug::AddInternalCalls();
 }
 
 #pragma region MelonCore
 bool InternalCalls::MelonCore::QuitFix() { return Core::QuitFix; }
 void InternalCalls::MelonCore::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.Core::QuitFix", (void*)QuitFix);
+	Mono::AddInternalCall("MelonLoader.External.Core::QuitFix", (void*)QuitFix);
 }
 #pragma endregion
 
@@ -78,13 +78,13 @@ void InternalCalls::MelonLogger::Flush()
 }
 void InternalCalls::MelonLogger::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_PrintModName", (void*)Internal_PrintModName);
-	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Msg", (void*)Internal_Msg);
-	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Warning", (void*)Internal_Warning);
-	Mono::AddInternalCall("MelonLoader.MelonLogger::Internal_Error", (void*)Internal_Error);
-	Mono::AddInternalCall("MelonLoader.MelonLogger::ThrowInternalFailure", (void*)ThrowInternalFailure);
-	Mono::AddInternalCall("MelonLoader.MelonLogger::WriteSpacer", (void*)WriteSpacer);
-	Mono::AddInternalCall("MelonLoader.MelonLogger::Flush", (void*)Flush);
+	Mono::AddInternalCall("MelonLoader.External.Logger::Internal_PrintModName", (void*)Internal_PrintModName);
+	Mono::AddInternalCall("MelonLoader.External.Logger::Internal_Msg", (void*)Internal_Msg);
+	Mono::AddInternalCall("MelonLoader.External.Logger::Internal_Warning", (void*)Internal_Warning);
+	Mono::AddInternalCall("MelonLoader.External.Logger::Internal_Error", (void*)Internal_Error);
+	Mono::AddInternalCall("MelonLoader.External.Logger::ThrowInternalFailure", (void*)ThrowInternalFailure);
+	Mono::AddInternalCall("MelonLoader.External.Logger::WriteSpacer", (void*)WriteSpacer);
+	Mono::AddInternalCall("MelonLoader.External.Logger::Flush", (void*)Flush);
 }
 #pragma endregion
 
@@ -131,22 +131,21 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGame32Bit", (void*)IsGame32Bit);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", (void*)IsGameIl2Cpp);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::IsOldMono", (void*)IsOldMono);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetApplicationPath", (void*)GetApplicationPath);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetGameDataDirectory", (void*)GetGameDataDirectory);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetUnityVersion", (void*)GetUnityVersion);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetManagedDirectory", (void*)GetManagedDirectory);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::SetConsoleTitle", (void*)SCT);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetFileProductName", (void*)GetFileProductName);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookAttach", (void*)Hook::Attach);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookDetach", (void*)Hook::Detach);
+	Mono::AddInternalCall("MelonLoader.External.Utils::IsGame32Bit", (void*)IsGame32Bit);
+	Mono::AddInternalCall("MelonLoader.External.Utils::IsGameIl2Cpp", (void*)IsGameIl2Cpp);
+	Mono::AddInternalCall("MelonLoader.External.Utils::IsOldMono", (void*)IsOldMono);
+	Mono::AddInternalCall("MelonLoader.External.Utils::GetApplicationPath", (void*)GetApplicationPath);
+	Mono::AddInternalCall("MelonLoader.External.Utils::GetGameDataDirectory", (void*)GetGameDataDirectory);
+	Mono::AddInternalCall("MelonLoader.External.Utils::GetUnityVersion", (void*)GetUnityVersion);
+	Mono::AddInternalCall("MelonLoader.External.Utils::GetManagedDirectory", (void*)GetManagedDirectory);
+	Mono::AddInternalCall("MelonLoader.External.Utils::SetConsoleTitle", (void*)SCT);
+	Mono::AddInternalCall("MelonLoader.External.Utils::GetFileProductName", (void*)GetFileProductName);
+	Mono::AddInternalCall("MelonLoader.External.Utils::NativeHookAttach", (void*)Hook::Attach);
+	Mono::AddInternalCall("MelonLoader.External.Utils::NativeHookDetach", (void*)Hook::Detach);
 	
-	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", (void*)GetGameName);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", (void*)GetGameDeveloper);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", (void*)GetGameDirectory);
-
+	Mono::AddInternalCall("MelonLoader.External.Utils::Internal_GetGameName", (void*)GetGameName);
+	Mono::AddInternalCall("MelonLoader.External.Utils::Internal_GetGameDeveloper", (void*)GetGameDeveloper);
+	Mono::AddInternalCall("MelonLoader.External.Utils::Internal_GetGameDirectory", (void*)GetGameDirectory);
 }
 #pragma endregion
 
@@ -157,8 +156,8 @@ InternalCalls::MelonHandler::LoadMode InternalCalls::MelonHandler::GetLoadModeFo
 InternalCalls::MelonHandler::LoadMode InternalCalls::MelonHandler::GetLoadModeForMods() { return LoadModeForMods; }
 void InternalCalls::MelonHandler::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.MelonHandler::GetLoadModeForPlugins", (void*)GetLoadModeForPlugins);
-	Mono::AddInternalCall("MelonLoader.MelonHandler::GetLoadModeForMods", (void*)GetLoadModeForMods);
+	Mono::AddInternalCall("MelonLoader.External.Handler::GetLoadModeForPlugins", (void*)GetLoadModeForPlugins);
+	Mono::AddInternalCall("MelonLoader.External.Handler::GetLoadModeForMods", (void*)GetLoadModeForMods);
 }
 #pragma endregion
 
@@ -174,18 +173,7 @@ void InternalCalls::MelonDebug::Internal_Msg(Console::Color color, Mono::String*
 }
 void InternalCalls::MelonDebug::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.MelonDebug::IsEnabled", (void*)IsEnabled);
-	Mono::AddInternalCall("MelonLoader.MelonDebug::Internal_Msg", (void*)Internal_Msg);
+	Mono::AddInternalCall("MelonLoader.External.Debug::IsEnabled", (void*)IsEnabled);
+	Mono::AddInternalCall("MelonLoader.External.Debug::Internal_Msg", (void*)Internal_Msg);
 }
 #pragma endregion
-
-void InternalCalls::TestCalls::TestMsg(Mono::String* message)
-{
-	auto txtStr = Mono::Exports::mono_string_to_utf8(message);
-	Logger::Msg(txtStr);
-	Mono::Free(txtStr);
-}
-void InternalCalls::TestCalls::AddInternalCalls()
-{
-	Mono::AddInternalCall("TestAndroidMono.Class1::TestMsg", (void*)TestMsg);
-}

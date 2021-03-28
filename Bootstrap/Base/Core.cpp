@@ -283,7 +283,7 @@ void Core::ApplyHooks()
 	Debug::Msg("Patching mono");
 	Mono::ApplyPatches();
 	Mono::CreateDomain("MelonLoader");
-	InternalCalls::TestCalls::AddInternalCalls();
+	InternalCalls::Initialize();
 	// AssemblyVerifier::InstallHooks();
 	BaseAssembly::Initialize();
 }

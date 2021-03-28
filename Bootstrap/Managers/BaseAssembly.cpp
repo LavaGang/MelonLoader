@@ -29,22 +29,21 @@ bool BaseAssembly::Initialize()
 	}
 	Debug::Msg("Loaded assembly image");
 
-	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "TestAndroidMono", "Class1");
+	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "MelonLoader", "Entrypoint");
 	if (klass == NULL)
 	{
-		Debug::Msg("Failed to find klass");
 		Assertion::ThrowInternalFailure("Cannot find class");
 		return false;
 	}
-	Debug::Msg("Loaded klass");
+	Debug::Msg("Loaded class");
 
-#ifdef PORT_DISABLE
 	Mono::Method* Mono_Initialize = Mono::Exports::mono_class_get_method_from_name(klass, "Initialize", NULL);
 	if (Mono_Initialize == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Get Initialize Method from Mono Class!");
 		return false;
 	}
+	Debug::Msg("Loaded Initialize method");
 
 	Mono_Start = Mono::Exports::mono_class_get_method_from_name(klass, "Start", NULL);
 	if (Mono_Start == NULL)
@@ -52,8 +51,10 @@ bool BaseAssembly::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Get Start Method from Mono Class!");
 		return false;
 	}
+	Debug::Msg("Loaded Start method");
 	
 	Logger::WriteSpacer();
+	
 	Mono::Object* exObj = NULL;
 	Mono::Exports::mono_runtime_invoke(Mono_Initialize, NULL, NULL, &exObj);
 	if (exObj != NULL)
@@ -62,30 +63,10 @@ bool BaseAssembly::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Invoke Initialize Method!");
 		return false;
 	}
-	if (Debug::Enabled)
-		Logger::WriteSpacer();
-#endif
-
-	Mono::Method* Mono_Main = Mono::Exports::mono_class_get_method_from_name(klass, "Main", NULL);
-	if (Mono_Main == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Get Initialize Method from Mono Class!");
-		return false;
-	}
-	Debug::Msg("Loaded entrypoint");
-
-	Logger::WriteSpacer();
-	Mono::Object* exObj = NULL;
-	Mono::Exports::mono_runtime_invoke(Mono_Main, NULL, NULL, &exObj);
-	if (exObj != NULL)
-	{
-		Mono::LogException(exObj);
-		Assertion::ThrowInternalFailure("Failed to Invoke Entrypoint Method!");
-		return false;
-	}
-	if (Debug::Enabled)
-		Logger::WriteSpacer();
 	
+	if (Debug::Enabled)
+		Logger::WriteSpacer();
+
 	return true;
 }
 
