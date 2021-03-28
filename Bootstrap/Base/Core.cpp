@@ -20,6 +20,9 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
+#include "../Managers/BaseAssembly.h"
+#include "../Managers/AssemblyVerifier.h"
+#include "../Managers/InternalCalls.h"
 #include "../Utils/Patching/PatchHelper.h"
 #include "./Keystone/include/keystone/keystone.h"
 #include <filesystem>
@@ -33,6 +36,7 @@ typedef void (*testFnDef)(void);
 
 char* Core::Path = NULL;
 const char* Core::Version = "v0.4.0";
+const char* Core::ReleaseType = "Android Development Build";
 bool Core::QuitFix = false;
 
 bool Core::Initialize()
@@ -242,7 +246,7 @@ void Core::WelcomeMessage()
 		Logger::WriteSpacer();
 	
 	Logger::Msg("------------------------------");
-	Logger::Msg(("MelonLoader " + std::string(Version) + " Open-Beta").c_str());
+	Logger::Msg(("MelonLoader " + std::string(Version) + " " + std::string(ReleaseType)).c_str());
 	// Logger::Msg(("Hash Code: " + std::to_string(HashCode::Hash)).c_str());
 	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
 	Logger::Msg("------------------------------");
@@ -273,11 +277,15 @@ void Core::WelcomeMessage()
 
 void Core::ApplyHooks()
 {
-	Debug::Msg("Patching il2cpp");
-	Il2Cpp::ApplyPatches();
-	
+	// Debug::Msg("Patching il2cpp");
+	// Il2Cpp::ApplyPatches();
+	//
 	Debug::Msg("Patching mono");
 	Mono::ApplyPatches();
+	Mono::CreateDomain("MelonLoader");
+	InternalCalls::TestCalls::AddInternalCalls();
+	// AssemblyVerifier::InstallHooks();
+	BaseAssembly::Initialize();
 }
 
 const char* Core::GetFileInfoProductName(const char* path)

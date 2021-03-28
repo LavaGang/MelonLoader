@@ -149,11 +149,11 @@ bool Il2Cpp::Exports::Initialize()
 
 bool Il2Cpp::ApplyPatches()
 {
-	Patches::il2cpp_init = new Patcher((void *)Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
+	// Patches::il2cpp_init = new Patcher((void *)Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
 	Patches::il2cpp_runtime_invoke = new Patcher((void *)Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
 	Patches::il2cpp_unity_install_unitytls_interface = new Patcher((void *)Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
 
-	Patches::il2cpp_init->ApplyPatch();
+	// Patches::il2cpp_init->ApplyPatch();
 	Patches::il2cpp_unity_install_unitytls_interface->ApplyPatch();
 
 	return true;
@@ -173,12 +173,15 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 		Mono::CreateDomain(name);
 		InternalCalls::Initialize();
 		// todo: check if it works/is necessary on mono games
-		AssemblyVerifier::InstallHooks();
+		// AssemblyVerifier::InstallHooks();
 		if (BaseAssembly::Initialize())
 		{
 			Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
 			Patches::il2cpp_runtime_invoke->ApplyPatch();
 			// Hook::Attach((void **)&Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
+		} else
+		{
+			Debug::Msg("Base assembly failed to setup.");
 		}
 	// }
 	Debug::Msg("Creating Il2Cpp Domain...");
@@ -188,6 +191,7 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 
 Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec)
 {
+	Debug::Msg("Runtime invoke");
 	const char* method_name = Exports::il2cpp_method_get_name(method);
 	if (strstr(method_name, "Internal_ActiveSceneChanged") != NULL)
 	{
@@ -212,7 +216,6 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 	Patches::il2cpp_unity_install_unitytls_interface->ClearPatch();
 	Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
 	Patches::il2cpp_unity_install_unitytls_interface->ApplyPatch();
-	Logger::Warning("UNITY TLS FOUND");
 	UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
 }
 

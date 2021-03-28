@@ -18,6 +18,7 @@ public:
 	struct Property;
 	struct Object;
 	struct String;
+	struct MonoError;
 
 	static void* Module;
 	static Domain* domain;
@@ -176,10 +177,11 @@ public:
 		MONODEF(void*, mono_lookup_internal_call, (Method* method))
 		MONODEF(Object*, mono_runtime_invoke, (Method* method, Object* obj, void** params, Object** exec))
 		MONODEF(const char*, mono_method_get_name, (Method* method))
-		MONODEF(void*, mono_unity_get_unitytls_interface, ())
+		// MONODEF(void*, mono_unity_get_unitytls_interface, ())
 		MONODEF(Assembly*, mono_domain_assembly_open, (Domain* domain, const char* path))
 		MONODEF(Image*, mono_assembly_get_image, (Assembly* assembly))
 		MONODEF(Class*, mono_class_from_name, (Image* image, const char* name_space, const char* name))
+		MONODEF(Class*, mono_class_from_name_checked, (Image* image, const char* name_space, const char* name, MonoError* error))
 		MONODEF(Method*, mono_class_get_method_from_name, (Class* klass, const char* name, int param_count))
 		MONODEF(char*, mono_string_to_utf8, (String* str))
 		MONODEF(String*, mono_string_new, (Domain* domain, const char* str))
@@ -200,6 +202,10 @@ public:
 		MONODEF(uintptr_t, mono_array_length, (Object* array))
 		MONODEF(const char*, mono_metadata_string_heap, (Image* meta, unsigned int table_index))
 		MONODEF(const char*, mono_class_get_name, (Class* klass))
+		
+		MONODEF(const char*, mono_error_get_message, (MonoError* error))
+		MONODEF(void, mono_trace_set_mask_string, (const char* value))
+		MONODEF(void, mono_trace_set_level_string, (const char* value))
 
 #undef MONODEF
 #pragma endregion MonoDefine

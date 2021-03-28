@@ -15,6 +15,7 @@ public:
 	
 	static char* Path;
 	static const char* Version;
+	static const char* ReleaseType;
 	static bool QuitFix;
 	static bool Initialize();
 	static void ApplyHooks();

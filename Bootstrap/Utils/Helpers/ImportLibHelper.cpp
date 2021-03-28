@@ -34,4 +34,24 @@ void* ImportLibHelper::GetExport(void* mod, const char* export_name)
 
 	return fnPointer;
 }
+
+void* ImportLibHelper::GetInternalExport(void* mod, const char* ref_name, uint64_t ref_lib_addr, uint64_t dest_lib_addr)
+{
+	void* ref = GetExport(mod, ref_name);
+	if (!Assertion::ShouldContinue)
+		return NULL;
+
+	Dl_info func_info;
+	dladdr(ref, &func_info);
+
+	size_t addr_named = (size_t)func_info.dli_saddr;
+	uint64_t difference = addr_named - ref_lib_addr;
+	size_t rawPtr = addr_named + difference;
+	void* fnPointer = (void*)(rawPtr);
+
+	if (fnPointer == NULL)
+		Assertion::ThrowInternalFailure(dlerror());
+	
+	return fnPointer;
+}
 #endif

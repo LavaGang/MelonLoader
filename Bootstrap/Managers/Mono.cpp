@@ -21,7 +21,7 @@
 #ifdef _WIN32
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
 #elif defined(__ANDROID__)
-const char* Mono::LibNames[] = { "monobdwgc-2.0", "monosgen-2.0" };
+const char* Mono::LibNames[] = { "monosgen-2.0" };
 #endif
 
 const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };
@@ -58,10 +58,11 @@ MONODEF(mono_add_internal_call)
 MONODEF(mono_lookup_internal_call)
 MONODEF(mono_runtime_invoke)
 MONODEF(mono_method_get_name)
-MONODEF(mono_unity_get_unitytls_interface)
+// MONODEF(mono_unity_get_unitytls_interface)
 MONODEF(mono_domain_assembly_open)
 MONODEF(mono_assembly_get_image)
 MONODEF(mono_class_from_name)
+MONODEF(mono_class_from_name_checked)
 MONODEF(mono_class_get_method_from_name)
 MONODEF(mono_string_to_utf8)
 MONODEF(mono_string_new)
@@ -82,6 +83,10 @@ MONODEF(mono_array_addr_with_size)
 MONODEF(mono_array_length)
 MONODEF(mono_metadata_string_heap)
 MONODEF(mono_class_get_name)
+
+MONODEF(mono_error_get_message)
+MONODEF(mono_trace_set_mask_string)
+MONODEF(mono_trace_set_level_string)
 
 #undef MONODEF
 #pragma endregion MonoDeclare
@@ -231,7 +236,7 @@ bool Mono::SetupPaths()
 		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
 		ManagedPath[ManagedPathStr.size()] = '\0';
 		
-		std::string ConfigPathStr = (std::string(Mono::BasePath) + "/config").c_str();
+		std::string ConfigPathStr = (std::string(Game::DataPath) + "/il2cpp/etc").c_str();
 		ConfigPath = new char[ConfigPathStr.size() + 1];
 		std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 		ConfigPath[ConfigPathStr.size()] = '\0';
@@ -251,6 +256,12 @@ bool Mono::SetupPaths()
 				return false;
 			}
 		}
+
+		// TODO: REMOVE
+		std::string BaseAsmPathStr = (BasePathStr + "/TestAndroidMono.dll").c_str();
+		BaseAssembly::Path = new char[BaseAsmPathStr.size() + 1];
+		std::copy(BaseAsmPathStr.begin(), BaseAsmPathStr.end(), BaseAssembly::Path);
+		BaseAssembly::Path[BaseAsmPathStr.size()] = '\0';
 
 		return true;
 	}
@@ -312,58 +323,72 @@ bool Mono::Exports::Initialize()
 #define MONODEF(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
 
 	MONODEF(mono_jit_init)
-	MONODEF(mono_thread_set_main)
-	MONODEF(mono_thread_current)
-	MONODEF(mono_add_internal_call)
-	MONODEF(mono_lookup_internal_call)
-	MONODEF(mono_runtime_invoke)
-	MONODEF(mono_method_get_name)
-	MONODEF(mono_domain_assembly_open)
-	MONODEF(mono_assembly_get_image)
-	MONODEF(mono_class_from_name)
-	MONODEF(mono_class_get_method_from_name)
-	MONODEF(mono_string_to_utf8)
-	MONODEF(mono_string_new)
-	MONODEF(mono_object_get_class)
-	MONODEF(mono_class_get_property_from_name)
-	MONODEF(mono_property_get_get_method)
+		MONODEF(mono_thread_set_main)
+		MONODEF(mono_thread_current)
+		MONODEF(mono_add_internal_call)
+		MONODEF(mono_lookup_internal_call)
+		MONODEF(mono_runtime_invoke)
+		MONODEF(mono_method_get_name)
+		MONODEF(mono_domain_assembly_open)
+		MONODEF(mono_assembly_get_image)
+		// MONODEF(mono_class_from_name_checked)
+		MONODEF(mono_class_from_name)
+		MONODEF(mono_class_get_method_from_name)
+		MONODEF(mono_string_to_utf8)
+		MONODEF(mono_string_new)
+		MONODEF(mono_object_get_class)
+		MONODEF(mono_class_get_property_from_name)
+		MONODEF(mono_property_get_get_method)
+		MONODEF(mono_error_get_message)
+		MONODEF(mono_trace_set_mask_string)
+		MONODEF(mono_trace_set_level_string)
 
-	if (!IsOldMono)
-	{
-		MONODEF(mono_domain_set_config)
-		MONODEF(mono_unity_get_unitytls_interface)
-		MONODEF(mono_free)
-	}
-	else
-		MONODEF(g_free)
-
-	if (Game::IsIl2Cpp)
-	{
-		MONODEF(mono_set_assemblies_path)
-		MONODEF(mono_assembly_setrootdir)
-		MONODEF(mono_set_config_dir)
-			
 		if (!IsOldMono)
-			MONODEF(mono_runtime_set_main_args)
-			
-		MONODEF(mono_raise_exception)
-		MONODEF(mono_get_exception_bad_image_format)
-		MONODEF(mono_image_open_full)
-		MONODEF(mono_image_open_from_data_full)
-		MONODEF(mono_image_close)
-		MONODEF(mono_image_get_table_rows)
-		MONODEF(mono_metadata_decode_table_row_col)
-		MONODEF(mono_array_addr_with_size)
-		MONODEF(mono_array_length)
-		MONODEF(mono_metadata_string_heap)
-		MONODEF(mono_class_get_name)
-	}
-	else
-		MONODEF(mono_jit_init_version)
+		{
+			MONODEF(mono_domain_set_config)
+				// MONODEF(mono_unity_get_unitytls_interface)
+				MONODEF(mono_free)
+		}
+		else
+			MONODEF(g_free)
 
+			if (Game::IsIl2Cpp)
+			{
+				MONODEF(mono_set_assemblies_path)
+					MONODEF(mono_assembly_setrootdir)
+					MONODEF(mono_set_config_dir)
+
+					if (!IsOldMono)
+						MONODEF(mono_runtime_set_main_args)
+
+						MONODEF(mono_raise_exception)
+						MONODEF(mono_get_exception_bad_image_format)
+						MONODEF(mono_image_open_full)
+						MONODEF(mono_image_open_from_data_full)
+						MONODEF(mono_image_close)
+						MONODEF(mono_image_get_table_rows)
+						MONODEF(mono_metadata_decode_table_row_col)
+						MONODEF(mono_array_addr_with_size)
+						MONODEF(mono_array_length)
+						MONODEF(mono_metadata_string_heap)
+						MONODEF(mono_class_get_name)
+			}
+			else
+				MONODEF(mono_jit_init_version)
+
+#ifdef __ANDROID__
+	// mono_class_get_method_from_name = (mono_class_get_method_from_name_t)ImportLibHelper::GetInternalExport(Module, "mono_class_get_method_from_name", 0x00275ecc, 0x0026c770);
+#endif
 #undef MONODEF
 #pragma endregion MonoBind
 
+	if(Debug::Enabled)
+	{
+		// Exports::mono_trace_set_level_string("debug");
+		// Exports::mono_trace_set_mask_string("all");
+		Debug::Msg("Enabled Mono Logging");
+	}
+	
 	return Assertion::ShouldContinue;
 }
 
@@ -400,9 +425,9 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 #ifdef __ANDROID__
 bool Mono::ApplyPatches()
 {
-	Patches::mono_unity_get_unitytls_interface = new Patcher((void**)&Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
+	// Patches::mono_unity_get_unitytls_interface = new Patcher((void**)&Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
 
-	Patches::mono_unity_get_unitytls_interface->ApplyPatch();
+	// Patches::mono_unity_get_unitytls_interface->ApplyPatch();
 
 	return true;
 }

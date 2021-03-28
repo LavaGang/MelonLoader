@@ -9,11 +9,11 @@
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
-	MelonCore::AddInternalCalls();
-	MelonLogger::AddInternalCalls();
-	MelonUtils::AddInternalCalls();
-	MelonHandler::AddInternalCalls();
-	MelonDebug::AddInternalCalls();
+	// MelonCore::AddInternalCalls();
+	// MelonLogger::AddInternalCalls();
+	// MelonUtils::AddInternalCalls();
+	// MelonHandler::AddInternalCalls();
+	// MelonDebug::AddInternalCalls();
 }
 
 #pragma region MelonCore
@@ -178,3 +178,14 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonDebug::Internal_Msg", (void*)Internal_Msg);
 }
 #pragma endregion
+
+void InternalCalls::TestCalls::TestMsg(Mono::String* message)
+{
+	auto txtStr = Mono::Exports::mono_string_to_utf8(message);
+	Logger::Msg(txtStr);
+	Mono::Free(txtStr);
+}
+void InternalCalls::TestCalls::AddInternalCalls()
+{
+	Mono::AddInternalCall("TestAndroidMono.Class1::TestMsg", (void*)TestMsg);
+}
