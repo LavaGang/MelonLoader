@@ -120,34 +120,22 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Platform)'=='ARM64'" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x86\MelonLoader\Dependencies\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\Int\x86\</IntDir>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\$(Platform)\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\Int\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x86\MelonLoader\Dependencies\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\Int\x86\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x64\MelonLoader\Dependencies\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\Int\x64\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x64\MelonLoader\Dependencies\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\Int\x64\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\ARM64\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\Int\ARM64\</IntDir>
-    <!-- <UseMultiToolTask>true</UseMultiToolTask> -->
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -224,7 +212,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(SolutionDir)Output\$(Configuration)\$(Platform)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
@@ -244,7 +232,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(SolutionDir)Output\$(Configuration)\$(Platform)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
@@ -323,6 +311,7 @@
     <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
     <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
     <ClInclude Include="Base\Liberation\Liberation.h" />
+    <ClInclude Include="$(SolutionDir)\And64InlineHook\And64InlineHook.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ResourceCompile Include="Bootstrap.rc" />
