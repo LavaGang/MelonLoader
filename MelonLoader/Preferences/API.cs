@@ -134,7 +134,7 @@ namespace MelonLoader
         
         public static MelonPreferences_Entry<T> CreateEntry<T>(string category_identifier, string entry_identifier, T default_value, 
             string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false, 
-            ValueValidator validator = null)
+            Preferences.ValueValidator validator = null)
         {
             if (string.IsNullOrEmpty(category_identifier))
                 throw new Exception("category_identifier is null or empty when calling CreateEntry");

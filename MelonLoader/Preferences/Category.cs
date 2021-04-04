@@ -22,7 +22,7 @@ namespace MelonLoader
             => CreateEntry(identifier, default_value, display_name, null, is_hidden, false);
 
         public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null, 
-            string description = null, bool is_hidden = false, bool dont_save_default = false, ValueValidator validator = null)
+            string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null)
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("identifier is null or empty when calling CreateEntry");
