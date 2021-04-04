@@ -7,11 +7,16 @@ namespace MelonLoader
     {
         public string Identifier { get; internal set; }
         public string DisplayName { get; internal set; }
+        public string Description { get; internal set; }
         public bool IsHidden { get; internal set; }
         public bool DontSaveDefault { get; internal set; }
         public MelonPreferences_Category Category { get; internal set; }
 
-        public string GetExceptionMessage(string submsg) => ("Attempted to " + submsg + " " + DisplayName + " when it is a " + GetReflectedType().FullName + "!");
+        public abstract object BoxedValue { get; set; }
+        public Preferences.ValueValidator Validator { get; internal set; }
+
+        public string GetExceptionMessage(string submsg) 
+            => $"Attempted to {submsg} {DisplayName} when it is a {GetReflectedType().FullName}!";
 
         public abstract Type GetReflectedType();
 
@@ -32,12 +37,17 @@ namespace MelonLoader
     public class MelonPreferences_Entry<T> : MelonPreferences_Entry
     {
         private T myValue;
-        
         public T Value
         {
             get => myValue;
             set
             {
+                if (Validator != null)
+                    value = (T)Validator.EnsureValid(value);
+
+                if ((myValue == null && value == null) || (myValue != null && myValue.Equals(value)))
+                    return;
+
                 var old = myValue;
                 myValue = value;
                 EditedValue = myValue;
@@ -45,7 +55,13 @@ namespace MelonLoader
                 FireUntypedValueChanged();
             } 
         }
-        
+
+        public override object BoxedValue
+        {
+            get => myValue;
+            set => Value = (T)value;
+        }
+
         public T EditedValue { get; set; }
         public T DefaultValue { get; set; }
 
