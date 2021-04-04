@@ -5,9 +5,6 @@
 #include <string.h>
 #endif
 
-#include "../Utils/Patching/Patcher.h"
-
-
 class Mono
 {
 public:
@@ -223,14 +220,6 @@ public:
 		static Domain * mono_jit_init_version(const char* name, const char* version);
 #endif
 	};
-
-#ifdef __ANDROID__
-	class Patches
-	{
-	public:
-		// static Patcher* mono_unity_get_unitytls_interface;
-	};
-#endif
 
 private:
 	static char* BasePath;

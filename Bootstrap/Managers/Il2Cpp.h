@@ -2,7 +2,6 @@
 #ifdef _WIN32
 #include <Windows.h>
 #endif
-#include "../Utils/Patching/Patcher.h"
 
 class Il2Cpp
 {
@@ -37,9 +36,6 @@ public:
 		static il2cpp_method_get_name_t il2cpp_method_get_name;
 		typedef void (*il2cpp_unity_install_unitytls_interface_t) (void* unitytlsInterfaceStruct);
 		static il2cpp_unity_install_unitytls_interface_t il2cpp_unity_install_unitytls_interface;
-
-		// typedef void (*testFnDef)(int);
-		// static testFnDef test_fn;
 	};
 
 	class Hooks
@@ -49,22 +45,4 @@ public:
 		static Object* il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
 		static void il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct);
 	};
-	
-#ifdef __ANDROID__
-	class Patches
-	{
-	public:
-		// static Patcher* test_fn;
-		// static Patcher* il2cpp_init;
-		// static Patcher* il2cpp_runtime_invoke;
-		// static Patcher* il2cpp_unity_install_unitytls_interface;
-	};
-
-	class PatchClear
-	{
-	public:
-		// static Patcher* test_fn;
-		static bool il2cpp_runtime_invoke;
-	};
-#endif
 };

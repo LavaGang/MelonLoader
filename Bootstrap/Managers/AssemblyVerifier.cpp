@@ -8,17 +8,6 @@
 AssemblyVerifier::callOriginalLoadFrom_t AssemblyVerifier::callOriginalLoadFrom;
 AssemblyVerifier::callOriginalLoadRaw_t AssemblyVerifier::callOriginalLoadRaw;
 
-// fix source: https://stackoverflow.com/a/35672811
-#if __ANDROID_API__ >= 18
-// #define log2(x) (log((long double) x)*1.4426950408889634)
-#endif
-
-// double log2(double x)
-// {
-// 	return log2l((long double) x);
-// 	// return (log((float) x) * 1.4426950408889634);
-// }
-
 __forceinline bool IsNameValid(const char* name)
 {
 	if (name == NULL)
@@ -225,7 +214,7 @@ void AssemblyVerifier::InstallHooks()
 #ifdef _WIN32
 		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadFrom), LoadFromPatch);
 #elif defined(__ANDROID__)
-		// Hook::Attach((void**)&callOriginalLoadFrom, (void*)LoadFromPatch);
+		Hook::Attach((void**)&callOriginalLoadFrom, (void*)LoadFromPatch);
 #endif
 	}
 	else
@@ -246,7 +235,7 @@ void AssemblyVerifier::InstallHooks()
 #ifdef _WIN32
 		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadRaw), LoadRawPatch);
 #elif defined(__ANDROID__)
-		// Hook::Attach((void**)&callOriginalLoadRaw, (void*)LoadRawPatch);
+		Hook::Attach((void**)&callOriginalLoadRaw, (void*)LoadRawPatch);
 #endif
 	
 	}

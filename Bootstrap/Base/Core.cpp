@@ -10,7 +10,6 @@
 #include "../Utils/Console/Debug.h"
 #include "../Utils/AnalyticsBlocker.h"
 #include "../Utils/HashCode.h"
-#include "./Liberation/Liberation.h"
 #include <dlfcn.h>
 #include <sys/system_properties.h>
 #include <android/log.h>
@@ -23,12 +22,8 @@
 #include "../Managers/BaseAssembly.h"
 #include "../Managers/AssemblyVerifier.h"
 #include "../Managers/InternalCalls.h"
-// #include "../Utils/Patching/PatchHelper.h"
-#include "./Keystone/include/keystone/keystone.h"
 #include "../Utils/UnitTesting/TestHelper.h"
 #include "../Patcher/Tests/Suite.spec.h"
-#include "../Managers/PatchManager.h"
-// #include <filesystem>
 
 #ifdef __ANDROID__
 #include <stdio.h>

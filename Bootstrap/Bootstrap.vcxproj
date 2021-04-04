@@ -212,7 +212,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a;$(SolutionDir)Output\$(Platform)\$(Configuration)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
@@ -232,7 +232,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a;$(SolutionDir)Output\$(Platform)\$(Configuration)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
@@ -240,11 +240,7 @@
   <ItemGroup>
     <ClCompile Include="Bootstrap.cpp" />
     <ClCompile Include="Base\Core.cpp" />
-    <ClCompile Include="Patcher\Instance.cpp" />
-    <ClCompile Include="Patcher\MemoryHelper.cpp" />
-    <ClCompile Include="Patcher\Tests\Instance.spec.cpp" />
     <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
-    <ClCompile Include="Managers\PatchManager.cpp" />
     <ClCompile Include="Utils\Helpers\ImportLibHelper.cpp" />
     <ClCompile Include="Managers\AssemblyVerifier.cpp" />
     <ClCompile Include="Managers\BaseAssembly.cpp" />
@@ -254,7 +250,6 @@
     <ClCompile Include="Managers\Il2Cpp.cpp" />
     <ClCompile Include="Managers\InternalCalls.cpp" />
     <ClCompile Include="Managers\Mono.cpp" />
-    <ClCompile Include="Utils\Patching\Patcher.cpp" />
     <ClCompile Include="Utils\AnalyticsBlocker.cpp" />
     <ClCompile Include="Utils\AssemblyGenerator.cpp" />
     <ClCompile Include="Utils\Assertion.cpp" />
@@ -264,17 +259,12 @@
     <ClCompile Include="Utils\HashCode.cpp" />
     <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Console\Logger.cpp" />
-    <ClCompile Include="Utils\Patching\PatchHelper.cpp" />
     <ClCompile Include="Utils\UnitTesting\TestHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base\funchook\include\funchook.h" />
-    <ClInclude Include="Patcher\Instance.h" />
-    <ClInclude Include="Patcher\Tests\Instance.spec.h" />
     <ClInclude Include="Patcher\Tests\Suite.spec.h" />
-    <ClInclude Include="Managers\PatchManager.h" />
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
-    <ClInclude Include="Utils\Patching\Patcher.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Base\Core.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h" />
@@ -294,26 +284,11 @@
     <ClInclude Include="Utils\HashCode.h" />
     <ClInclude Include="Utils\IniFile.h" />
     <ClInclude Include="Utils\Console\Logger.h" />
-    <ClInclude Include="Utils\Patching\PatchHelper.h" />
     <ClInclude Include="Utils\UnitTesting\TestHelper.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />
     <ClInclude Include="Base\MSDetours\detours_x86.h" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(Platform)'=='ARM64'">
-    <ClInclude Include="Base\Keystone\include\keystone\arm.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\arm64.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\evm.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\hexagon.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\keystone.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\mips.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\ppc.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\sparc.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
-    <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
-    <ClInclude Include="Base\Liberation\Liberation.h" />
-    <ClInclude Include="$(SolutionDir)\And64InlineHook\And64InlineHook.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ResourceCompile Include="Bootstrap.rc" />

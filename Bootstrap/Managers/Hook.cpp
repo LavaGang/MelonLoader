@@ -3,8 +3,6 @@
 #endif
 
 #include "Hook.h"
-#include "../Utils/Patching/PatchHelper.h"
-#include "PatchManager.h"
 #include "../Base/funchook/include/funchook.h"
 #include "../Utils/Console/Logger.h"
 
@@ -37,9 +35,6 @@ std::unordered_map<void**, funchook_t*> Hook::HookMap;
 
 void Hook::Attach(void** target, void* detour)
 {
-	// funchook* funchook = funchook_create();
-	// funchook_prepare(funchook, target, detour);
-	// funchook_install(funchook, 0);
 	int rv;
 	
 	if (HookMap.find(target) == HookMap.end())

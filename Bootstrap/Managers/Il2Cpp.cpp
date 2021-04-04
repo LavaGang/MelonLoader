@@ -25,17 +25,7 @@ Il2Cpp::Exports::il2cpp_init_t Il2Cpp::Exports::il2cpp_init = NULL;
 Il2Cpp::Exports::il2cpp_runtime_invoke_t Il2Cpp::Exports::il2cpp_runtime_invoke = NULL;
 Il2Cpp::Exports::il2cpp_method_get_name_t Il2Cpp::Exports::il2cpp_method_get_name = NULL;
 Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface_t Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface = NULL;
-// Il2Cpp::Exports::testFnDef Il2Cpp::Exports::test_fn = NULL;
-// void* Il2Cpp::Exports::test_fn_untyped = NULL;
 
-// Patcher* Il2Cpp::Patches::test_fn = NULL;
-#ifdef __ANDROID__
-// Patcher* Il2Cpp::Patches::il2cpp_init = NULL;
-// Patcher* Il2Cpp::Patches::il2cpp_runtime_invoke = NULL;
-// Patcher* Il2Cpp::Patches::il2cpp_unity_install_unitytls_interface = NULL;
-
-bool Il2Cpp::PatchClear::il2cpp_runtime_invoke = false;
-#endif
 
 #ifdef _WIN32
 HMODULE Il2Cpp::Module = NULL;
@@ -113,7 +103,6 @@ bool Il2Cpp::Initialize()
 {
 	Debug::Msg("Initializing Il2Cpp...");
 	Handle = dlopen("libil2cpp.so", RTLD_NOW | RTLD_GLOBAL);
-	// Handle = dlopen("libPlaygroundBootstrapper.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
 
 	if (Handle == nullptr)
 	{
@@ -135,9 +124,6 @@ bool Il2Cpp::Exports::Initialize()
 	il2cpp_runtime_invoke = (il2cpp_runtime_invoke_t)ImportLibHelper::GetExport(Handle, "il2cpp_runtime_invoke");
 	il2cpp_method_get_name = (il2cpp_method_get_name_t)ImportLibHelper::GetExport(Handle, "il2cpp_method_get_name");
 	il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)ImportLibHelper::GetExport(Handle, "il2cpp_unity_install_unitytls_interface");
-
-	// test_fn = (testFnDef)GetExport("TestExternalCall");
-	// test_fn_untyped = GetExport("TestExternalCall");
 	
 	if (!Assertion::ShouldContinue)
 	{
@@ -150,17 +136,9 @@ bool Il2Cpp::Exports::Initialize()
 bool Il2Cpp::ApplyPatches()
 {
 	Debug::Msg("Applying patches for Il2CPP");
-	
-	// Patches::il2cpp_init = new Patcher((void *)Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
-	// Patches::il2cpp_runtime_invoke = new Patcher((void *)Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
-	// Patches::il2cpp_unity_install_unitytls_interface = new Patcher((void *)Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
 
 	Hook::Attach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
-	// Hook::Attach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
 	// Hook::Attach((void**)&Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
-	
-	// Patches::il2cpp_init->ApplyPatch();
-	// Patches::il2cpp_unity_install_unitytls_interface->ApplyPatch();
 
 	return true;
 }
@@ -171,7 +149,6 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 	// if (!Debug::Enabled)
 		// Console::SetHandles();
 	
-	Logger::Msg(name);
 	// if (AssemblyGenerator::Initialize())
 	// {
 		Mono::CreateDomain(name);
@@ -182,20 +159,17 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 		{
 			Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
 			Hook::Attach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
-			// Patches::il2cpp_runtime_invoke->ApplyPatch();
-			// Hook::Attach((void **)&Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
 		} else
 		{
 			Debug::Msg("Base assembly failed to setup.");
 		}
 	// }
-	// Debug::Msg("Creating Il2Cpp Domain...");
-	// domain = Exports::il2cpp_init(name);
+
+	domain = Exports::il2cpp_init(name);
 
 	Debug::Msg("Detaching Hook from il2cpp_init...");
-	// Patches::il2cpp_init->ClearPatch();
-	domain = Exports::il2cpp_init(name);
 	Hook::Detach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
+	
 	return domain;
 }
 
@@ -220,15 +194,6 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 	UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
 	return Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
 }
-
-// void Il2Cpp::Hooks::test_fn(int value)
-// {
-// 	Logger::Msg(std::to_string(value).c_str());
-//
-// 	Patches::test_fn->ClearPatch();
-// 	Exports::test_fn(420);
-// 	Patches::test_fn->ApplyPatch();
-// }
 
 #pragma endregion Hooks
 
