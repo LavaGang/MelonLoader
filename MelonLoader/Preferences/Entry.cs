@@ -42,11 +42,11 @@ namespace MelonLoader
             get => myValue;
             set
             {
-                if ((myValue == null && value == null) || (myValue != null && myValue.Equals(value)))
-                    return;
-
                 if (Validator != null)
                     value = (T)Validator.EnsureValid(value);
+
+                if ((myValue == null && value == null) || (myValue != null && myValue.Equals(value)))
+                    return;
 
                 var old = myValue;
                 myValue = value;
