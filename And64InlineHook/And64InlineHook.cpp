@@ -27,11 +27,9 @@
   SOFTWARE.
   */
 #define  __STDC_FORMAT_MACROS
-#include <inttypes.h>
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <android/log.h>
-#include <stdio.h>
 #include <string.h>
 #include <sys/errno.h>
 
@@ -481,10 +479,10 @@ extern "C" {
 #define __uintval(p)               reinterpret_cast<uintptr_t>(p)
 #define __ptr(p)                   reinterpret_cast<void *>(p)
 #define __page_size                4096
-#define __page_align(n)            __align_up(static_cast<uintptr_t>(n), __page_size)
-#define __ptr_align(x)             __ptr(__align_down(reinterpret_cast<uintptr_t>(x), __page_size))
 #define __align_up(x, n)           (((x) + ((n) - 1)) & ~((n) - 1))
 #define __align_down(x, n)         ((x) & -(n))
+#define __page_align(n)            __align_up(static_cast<uintptr_t>(n), __page_size)
+#define __ptr_align(x)             __ptr(__align_down(reinterpret_cast<uintptr_t>(x), __page_size))
 #define __countof(x)               static_cast<intptr_t>(sizeof(x) / sizeof((x)[0])) // must be signed
 #define __atomic_increase(p)       __sync_add_and_fetch(p, 1)
 #define __sync_cmpswap(p, v, n)    __sync_bool_compare_and_swap(p, v, n)

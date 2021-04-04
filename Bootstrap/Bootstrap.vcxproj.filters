@@ -23,12 +23,12 @@
     <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Console\Logger.cpp" />
     <ClCompile Include="Utils\Patching\PatchHelper.cpp" />
-    <ClCompile Include="Patcher\Patcher.cpp" />
     <ClCompile Include="Patcher\MemoryHelper.cpp" />
     <ClCompile Include="Patcher\Instance.cpp" />
     <ClCompile Include="Patcher\Tests\Instance.spec.cpp" />
     <ClCompile Include="Utils\UnitTesting\TestHelper.cpp" />
     <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
+    <ClCompile Include="Managers\PatchManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
@@ -68,6 +68,9 @@
     <ClInclude Include="Utils\UnitTesting\TestHelper.h" />
     <ClInclude Include="Patcher\Tests\Instance.spec.h" />
     <ClInclude Include="Patcher\Tests\Suite.spec.h" />
+    <ClInclude Include="$(SolutionDir)\And64InlineHook\And64InlineHook.h" />
+    <ClInclude Include="Base\funchook\include\funchook.h" />
+    <ClInclude Include="Managers\PatchManager.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />

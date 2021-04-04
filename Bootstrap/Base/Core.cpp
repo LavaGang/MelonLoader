@@ -27,7 +27,8 @@
 #include "./Keystone/include/keystone/keystone.h"
 #include "../Utils/UnitTesting/TestHelper.h"
 #include "../Patcher/Tests/Suite.spec.h"
-#include <filesystem>
+#include "../Managers/PatchManager.h"
+// #include <filesystem>
 
 #ifdef __ANDROID__
 #include <stdio.h>
@@ -43,9 +44,11 @@ bool Core::QuitFix = false;
 
 bool Core::Initialize()
 {
-	return Patcher::TestAll();
-	
 	UnitTesting::Test TestSequence[] = {
+		{
+			"Running Basic Tests",
+			Patcher::TestAll
+		},
 		{
 			"Checking OS compatibility",
 			OSVersionCheck
@@ -71,10 +74,10 @@ bool Core::Initialize()
 			"Initializing Logging Service",
 			Logger::Initialize
 		},
-		// {
-		// 	"Initializing Patch Engine",
-		// 	PatchHelper::Init
-		// },
+		{
+			"Initializing Hooking lib",
+			PatchManager::Initialize
+		},
 #ifdef PORT_DISABLE
 		{
 			"Creates instance of patch map",

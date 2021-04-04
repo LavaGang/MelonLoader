@@ -1,4 +1,4 @@
-#include "Instance.h"
+#include "PatchData.h"
 
 namespace Patcher
 {

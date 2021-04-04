@@ -122,7 +122,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\$(Platform)\$(ProjectName)</OutDir>
+    <OutDir>$(SolutionDir)Output\$(Platform)\$(Configuration)\$(ProjectName)</OutDir>
     <IntDir>$(SolutionDir)$(ProjectName)\Int\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -212,7 +212,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(SolutionDir)Output\$(Configuration)\$(Platform)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a;$(SolutionDir)Output\$(Platform)\$(Configuration)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
@@ -232,7 +232,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(SolutionDir)Output\$(Configuration)\$(Platform)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\Liberation\liberation.a;$(MSBuildProjectDirectory)\Base\Keystone\lib\libkeystone.a;$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a;$(SolutionDir)Output\$(Platform)\$(Configuration)\Lib\And64InlineHook\libAnd64InlineHook.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
@@ -242,9 +242,9 @@
     <ClCompile Include="Base\Core.cpp" />
     <ClCompile Include="Patcher\Instance.cpp" />
     <ClCompile Include="Patcher\MemoryHelper.cpp" />
-    <ClCompile Include="Patcher\Patcher.cpp" />
     <ClCompile Include="Patcher\Tests\Instance.spec.cpp" />
     <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
+    <ClCompile Include="Managers\PatchManager.cpp" />
     <ClCompile Include="Utils\Helpers\ImportLibHelper.cpp" />
     <ClCompile Include="Managers\AssemblyVerifier.cpp" />
     <ClCompile Include="Managers\BaseAssembly.cpp" />
@@ -268,9 +268,11 @@
     <ClCompile Include="Utils\UnitTesting\TestHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base\funchook\include\funchook.h" />
     <ClInclude Include="Patcher\Instance.h" />
     <ClInclude Include="Patcher\Tests\Instance.spec.h" />
     <ClInclude Include="Patcher\Tests\Suite.spec.h" />
+    <ClInclude Include="Managers\PatchManager.h" />
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
     <ClInclude Include="Utils\Patching\Patcher.h" />
     <ClInclude Include="pch.h" />

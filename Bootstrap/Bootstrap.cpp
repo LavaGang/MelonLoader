@@ -1,6 +1,4 @@
 #include "Base/Core.h"
-#include "Managers/Il2Cpp.h"
-#include "Utils/Console/Logger.h"
 
 #ifdef __ANDROID__
 #include <jni.h>

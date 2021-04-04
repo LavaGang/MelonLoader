@@ -4,6 +4,8 @@
 
 #include "Hook.h"
 #include "../Utils/Patching/PatchHelper.h"
+#include "PatchManager.h"
+#include "../Base/funchook/include/funchook.h"
 
 #ifdef _WIN64
 #include "../Base/MSDetours/detours_x64.h"
@@ -32,11 +34,10 @@ void Hook::Detach(void** target, void* detour)
 #ifdef __ANDROID__
 void Hook::Attach(void** target, void* detour)
 {
-	// PatchHelper::Attach(*target, detour);
+	int rv = funchook_prepare(PatchManager::Instance, target, detour);
 }
 
 void Hook::Detach(void** target, void* detour)
 {
-	// PatchHelper::Detach(*target, detour);
 }
 #endif
