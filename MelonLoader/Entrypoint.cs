@@ -7,7 +7,7 @@ namespace MelonLoader
     {
         private static void Initialize()
         {
-            External.Debug.Internal_Msg(ConsoleColor.Magenta, "Entrypoint", "This works :)");
+            External.Debug.Internal_Msg(ConsoleColor.Magenta, "Initialize", "This works :)");
         }
 
         private static void Start()
