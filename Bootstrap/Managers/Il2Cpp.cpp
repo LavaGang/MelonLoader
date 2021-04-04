@@ -155,6 +155,10 @@ bool Il2Cpp::ApplyPatches()
 	// Patches::il2cpp_runtime_invoke = new Patcher((void *)Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
 	// Patches::il2cpp_unity_install_unitytls_interface = new Patcher((void *)Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
 
+	Hook::Attach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
+	// Hook::Attach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
+	// Hook::Attach((void**)&Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
+	
 	// Patches::il2cpp_init->ApplyPatch();
 	// Patches::il2cpp_unity_install_unitytls_interface->ApplyPatch();
 
@@ -173,10 +177,11 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 		Mono::CreateDomain(name);
 		InternalCalls::Initialize();
 		// todo: check if it works/is necessary on mono games
-		// AssemblyVerifier::InstallHooks();
+		AssemblyVerifier::InstallHooks();
 		if (BaseAssembly::Initialize())
 		{
 			Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
+			Hook::Attach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
 			// Patches::il2cpp_runtime_invoke->ApplyPatch();
 			// Hook::Attach((void **)&Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
 		} else
@@ -190,45 +195,30 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	// Patches::il2cpp_init->ClearPatch();
 	domain = Exports::il2cpp_init(name);
+	Hook::Detach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
 	return domain;
 }
 
 Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec)
 {
 	const char* method_name = Exports::il2cpp_method_get_name(method);
-	Debug::Msg(method_name);
+	Il2Cpp::Object* res = Exports::il2cpp_runtime_invoke(method, obj, params, exec);
 	
-	// if (strstr(method_name, "Internal_ActiveSceneChanged") != NULL)
-	// {
-	// 	Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
-	// 	PatchClear::il2cpp_runtime_invoke = true;
-	// 	Patches::il2cpp_runtime_invoke->ClearPatch();
-	// 	// Hook::Detach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
-	// 	BaseAssembly::Start();
-	// }
-	//
-	// Debug::Msg("Not correct");
-	//
-	// Patches::il2cpp_runtime_invoke->ClearPatch();
-	// Object* res = Exports::il2cpp_runtime_invoke(method, obj, params, exec);
-	//
-	//
-	// if (!PatchClear::il2cpp_runtime_invoke)
-	// 	Patches::il2cpp_runtime_invoke->ApplyPatch();
-	//
-	// Debug::Msg("Reapplying patch");
-
-	// Patches::il2cpp_runtime_invoke->ClearPatch();
-	return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
+	if (strstr(method_name, "Internal_ActiveSceneChanged") != NULL)
+	{
+		Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
+		BaseAssembly::Start();
+		Hook::Detach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
+	}
+	
+	return res;
 }
 
 void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct)
 {
-	Debug::Msg("tls interface");
+	Debug::Msg("Unity TLS");
 	UnityTLSInterfaceStruct = unitytlsInterfaceStruct;
-	// Patches::il2cpp_unity_install_unitytls_interface->ClearPatch();
-	// Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
-	// Patches::il2cpp_unity_install_unitytls_interface->ApplyPatch();
+	return Exports::il2cpp_unity_install_unitytls_interface(unitytlsInterfaceStruct);
 }
 
 // void Il2Cpp::Hooks::test_fn(int value)

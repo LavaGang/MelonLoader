@@ -8,6 +8,7 @@
 #include "./Instance.spec.h"
 #include "../../Utils/UnitTesting/TestHelper.h"
 #include "../../Base/funchook/include/funchook.h"
+#include "../../Managers/Hook.h"
 
 namespace Patcher
 {
@@ -46,55 +47,21 @@ namespace Patcher
 			// 		return (trampoline != NULL) && OriginalMethod();
 			// 	}
 			// }
-			// {
-			// 	"funchook",
-			// 	[]()
-			// 	{
-			// 		TestV::OriginalMethod_A = TestV::OriginalMethod;
-			// 		
-			// 		funchook_t* funchook = funchook_create();
-			//
-			// 		UnitTesting::InternalLog(Console::Red, "Funchook started");
-			//
-			// 		int fherrno;
-			// 		
-			// 		__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%p %p %p %p", PatchWorks, TestV::OriginalMethod_A, &TestV::OriginalMethod_A, &TestV::OriginalMethod);
-			//
-			// 		
-			// 		fherrno = funchook_prepare(funchook, (void**)&TestV::OriginalMethod_A, (void*)PatchWorks);
-			// 		if (fherrno != FUNCHOOK_ERROR_SUCCESS)
-			// 		{
-			// 			UnitTesting::InternalLog(Console::DarkRed, (std::string("Failed with code ") + std::to_string(fherrno)).c_str());
-			// 			return false;
-			// 		}
-			//
-			// 		UnitTesting::InternalLog(Console::Red, "Hook created");
-			//
-			// 		fherrno = funchook_install(funchook, 0);
-			// 		if (fherrno != FUNCHOOK_ERROR_SUCCESS)
-			// 		{
-			// 			UnitTesting::InternalLog(Console::DarkRed, (std::string("Failed with code ") + std::to_string(fherrno)).c_str());
-			// 			return false;
-			// 		}
-			//
-			// 		UnitTesting::InternalLog(Console::Red, "Hook applied");
-			//
-			// 		bool res = TestV::OriginalMethod();
-			//
-			// 		UnitTesting::InternalLog(Console::Cyan, "Executed");
-			//
-			// 		fherrno = funchook_destroy(funchook);
-			// 		if (fherrno != FUNCHOOK_ERROR_SUCCESS)
-			// 		{
-			// 			UnitTesting::InternalLog(Console::DarkRed, (std::string("Failed with code ") + std::to_string(fherrno)).c_str());
-			// 			return false;
-			// 		}
-			//
-			// 		UnitTesting::InternalLog(Console::Red, "Funchook cleaned");
-			//
-			// 		return res;
-			// 	}
-			// },
+			{
+				"funchook",
+				[]()
+				{
+					TestV::OriginalMethod_A = TestV::OriginalMethod;
+					//
+					// funchook* funchook = funchook_create();
+					// funchook_prepare(funchook, (void**)&TestV::OriginalMethod_A, (void*)PatchWorks);
+					// funchook_install(funchook, 0);
+					//
+					Hook::Attach((void**)&TestV::OriginalMethod_A, (void*)PatchWorks);
+			
+					return TestV::OriginalMethod();
+				}
+			},
 			// {
 			// 	"auto fail",
 			// 	[]()

@@ -74,10 +74,6 @@ bool Core::Initialize()
 			"Initializing Logging Service",
 			Logger::Initialize
 		},
-		{
-			"Initializing Hooking lib",
-			PatchManager::Initialize
-		},
 #ifdef PORT_DISABLE
 		{
 			"Creates instance of patch map",
@@ -105,8 +101,12 @@ bool Core::Initialize()
 			"Initializing IL2CPP",
 			Il2Cpp::Initialize
 		},
-		{
+				{
 			"Initializing Mono",
+			Mono::Initialize
+		},
+		{
+			"Load Mono",
 			Mono::Load
 		},
 #ifdef PORT_DISABLE

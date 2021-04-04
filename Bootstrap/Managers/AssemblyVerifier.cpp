@@ -225,7 +225,7 @@ void AssemblyVerifier::InstallHooks()
 #ifdef _WIN32
 		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadFrom), LoadFromPatch);
 #elif defined(__ANDROID__)
-		Hook::Attach((void**)&callOriginalLoadFrom, (void*)LoadFromPatch);
+		// Hook::Attach((void**)&callOriginalLoadFrom, (void*)LoadFromPatch);
 #endif
 	}
 	else
@@ -246,7 +246,7 @@ void AssemblyVerifier::InstallHooks()
 #ifdef _WIN32
 		Hook::Attach(reinterpret_cast<void**>(&callOriginalLoadRaw), LoadRawPatch);
 #elif defined(__ANDROID__)
-		Hook::Attach((void**)&callOriginalLoadRaw, (void*)LoadRawPatch);
+		// Hook::Attach((void**)&callOriginalLoadRaw, (void*)LoadRawPatch);
 #endif
 	
 	}
