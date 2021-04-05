@@ -13,6 +13,8 @@ namespace MelonLoader
         public MelonPreferences_Category Category { get; internal set; }
 
         public abstract object BoxedValue { get; set; }
+        public abstract object BoxedEditedValue { get; set; }
+
         public Preferences.ValueValidator Validator { get; internal set; }
 
         public string GetExceptionMessage(string submsg) 
@@ -53,8 +55,11 @@ namespace MelonLoader
                 EditedValue = myValue;
                 OnValueChanged?.Invoke(old, value);
                 FireUntypedValueChanged();
-            } 
+            }
         }
+
+        public T EditedValue { get; set; }
+        public T DefaultValue { get; set; }
 
         public override object BoxedValue
         {
@@ -62,8 +67,11 @@ namespace MelonLoader
             set => Value = (T)value;
         }
 
-        public T EditedValue { get; set; }
-        public T DefaultValue { get; set; }
+        public override object BoxedEditedValue
+        {
+            get => EditedValue;
+            set => EditedValue = (T)value;
+        }
 
         public override void ResetToDefault() => Value = DefaultValue;
 
