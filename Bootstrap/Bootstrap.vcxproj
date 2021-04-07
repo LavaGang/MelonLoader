@@ -207,14 +207,15 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <CLanguageStandard>c11</CLanguageStandard>
+      <AdditionalIncludeDirectories>C:\Program Files\Mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>c11</CLanguageStandard> -->
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\MSBuild\Xamarin\Android\lib\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
+      <LibraryDependencies>c++_static;c++abi;log;android;m;mono-native;MonoPosixHelper;monosgen-2.0</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">

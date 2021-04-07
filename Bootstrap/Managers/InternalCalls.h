@@ -68,4 +68,10 @@ public:
 		static bool IsEnabled();
 		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
 	}; 
+
+	class UnhollowerIl2Cpp
+	{
+	public:
+		static void AddInternalCalls();
+	};
 };

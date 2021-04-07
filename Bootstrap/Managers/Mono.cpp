@@ -12,6 +12,14 @@
 #include "../Utils/Console/Logger.h"
 #include "../Utils/Helpers/ImportLibHelper.h"
 
+#include <mono/jit/jit.h>
+#include <mono/metadata/threads.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/mono-config.h>
+#include <mono/metadata/exception.h>
+#include <mono/utils/mono-logger.h>
+#include <mono/utils/mono-dl-fallback.h>
+
 #ifdef __ANDROID__
 #include <dlfcn.h>
 #include <stdio.h>
@@ -111,6 +119,7 @@ bool Mono::Initialize()
 
 bool Mono::Load()
 {
+#ifdef PORT_DISABLE
 	for (int i = 0; i < (sizeof(LibNames) / sizeof(LibNames[0])); i++)
 	{
 #ifdef _WIN32
@@ -147,7 +156,7 @@ bool Mono::Load()
 		Assertion::ThrowInternalFailure("Failed to Load Mono Posix Helper!");
 		return false;
 	}
-	
+#endif
 	return Exports::Initialize();
 }
 
@@ -320,9 +329,10 @@ bool Mono::Exports::Initialize()
 	Debug::Msg("Initializing Mono Exports...");
 	
 #pragma region MonoBind
-#define MONODEF(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
+#define MONODEF_FALLBACK(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
+#define MONODEF(fn) fn = (fn##_t) ::fn;
 
-	MONODEF(mono_jit_init)
+		MONODEF(mono_jit_init)
 		MONODEF(mono_thread_set_main)
 		MONODEF(mono_thread_current)
 		MONODEF(mono_add_internal_call)
@@ -346,40 +356,41 @@ bool Mono::Exports::Initialize()
 		if (!IsOldMono)
 		{
 			MONODEF(mono_domain_set_config)
-				// MONODEF(mono_unity_get_unitytls_interface)
-				MONODEF(mono_free)
+			// MONODEF(mono_unity_get_unitytls_interface)
+			MONODEF(mono_free)
 		}
 		else
-			MONODEF(g_free)
+			MONODEF_FALLBACK(g_free)
 
-			if (Game::IsIl2Cpp)
-			{
-				MONODEF(mono_set_assemblies_path)
-					MONODEF(mono_assembly_setrootdir)
-					MONODEF(mono_set_config_dir)
+		if (Game::IsIl2Cpp)
+		{
+			MONODEF(mono_set_assemblies_path)
+			MONODEF(mono_assembly_setrootdir)
+			MONODEF(mono_set_config_dir)
 
-					if (!IsOldMono)
-						MONODEF(mono_runtime_set_main_args)
+			if (!IsOldMono)
+				MONODEF(mono_runtime_set_main_args)
 
-						MONODEF(mono_raise_exception)
-						MONODEF(mono_get_exception_bad_image_format)
-						MONODEF(mono_image_open_full)
-						MONODEF(mono_image_open_from_data_full)
-						MONODEF(mono_image_close)
-						MONODEF(mono_image_get_table_rows)
-						MONODEF(mono_metadata_decode_table_row_col)
-						MONODEF(mono_array_addr_with_size)
-						MONODEF(mono_array_length)
-						MONODEF(mono_metadata_string_heap)
-						MONODEF(mono_class_get_name)
-			}
-			else
-				MONODEF(mono_jit_init_version)
+			MONODEF(mono_raise_exception)
+			MONODEF(mono_get_exception_bad_image_format)
+			MONODEF(mono_image_open_full)
+			MONODEF(mono_image_open_from_data_full)
+			MONODEF(mono_image_close)
+			MONODEF(mono_image_get_table_rows)
+			MONODEF(mono_metadata_decode_table_row_col)
+			MONODEF(mono_array_addr_with_size)
+			MONODEF(mono_array_length)
+			MONODEF(mono_metadata_string_heap)
+			MONODEF(mono_class_get_name)
+		}
+		else
+			MONODEF(mono_jit_init_version)
 
 #ifdef __ANDROID__
 	// mono_class_get_method_from_name = (mono_class_get_method_from_name_t)ImportLibHelper::GetInternalExport(Module, "mono_class_get_method_from_name", 0x00275ecc, 0x0026c770);
 #endif
 #undef MONODEF
+#undef MONODEF_FALLBACK
 #pragma endregion MonoBind
 
 	if(Debug::Enabled)
