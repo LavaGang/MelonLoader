@@ -34,7 +34,7 @@ namespace MelonLoader.Tomlyn.Syntax
             else if (double.IsNegativeInfinity(value))
                 Token = new SyntaxToken(TokenKind.NegativeInfinite, TokenKind.NegativeInfinite.ToText());
             else
-                Token = new SyntaxToken(TokenKind.Float, value.ToString(FloatFormat, CultureInfo.InvariantCulture));
+                Token = new SyntaxToken(TokenKind.Float, ToString(TokenKind.Float, value));
             Value = value;
         }
 

@@ -98,6 +98,7 @@
     <Compile Include="Extensions\Layers\Tomlyn.cs" />
     <Compile Include="Extensions\PatchShield.cs" />
     <Compile Include="Extensions\UnityMagicMethods.cs" />
+    <Compile Include="Preferences\ValueValidator.cs" />
     <Compile Include="Utils\bHaptics\API.cs" />
     <Compile Include="Utils\bHaptics\NativeLibrary.cs" />
     <Compile Include="Libs\HarmonyX\Extras\DelegateTypeFactory.cs" />
