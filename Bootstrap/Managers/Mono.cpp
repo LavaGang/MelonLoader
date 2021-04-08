@@ -458,7 +458,7 @@ void Mono::Hooks::mono_print(const char* string, mono_bool is_stdout)
 		return;
 	}
 
-	Logger::Internal_Msg(Console::Color::Gray, "Mono", string);
+	Logger::Internal_Msg(Console::Color::Gray, Console::Color::Gray, "Mono", string);
 }
 
 void Mono::Hooks::mono_printerr(const char* string, mono_bool is_stdout)
@@ -471,7 +471,7 @@ void Mono::Hooks::mono_printerr(const char* string, mono_bool is_stdout)
 		return;
 	}
 
-	Logger::Internal_Msg(Console::Color::Red, "Mono Error", string);
+	Logger::Internal_Msg(Console::Color::Red, Console::Color::Red, "Mono Error", string);
 }
 
 void Mono::Hooks::mono_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data)
@@ -496,7 +496,7 @@ void Mono::Hooks::mono_log(const char* log_domain, const char* log_level, const 
 		},
 	};
 
-	Logger::Internal_DirectWrite(fatal ? LogLevel::Error : LogLevel::Info, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), message);
+	Logger::Internal_DirectWrite(Console::Color::Gray, fatal ? LogLevel::Error : LogLevel::Info, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), message);
 }
 
 void Mono::Hooks::mono_unhandled_exception(MonoObject* exceptionObject, void* user_data)
