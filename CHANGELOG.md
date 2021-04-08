@@ -144,6 +144,8 @@
 119. Added Custom Hosts Interface for Plugins to add new Contact Hosts for the Assembly Generator's RemoteAPI.
 120. Removed VRChat_OnUiManagerInit check and override.
 121. Removed MelonUtils.IsVRChat.
+122. Added System.Collections.Generic.List Mapping Support for MelonPreferences.
+123. Assembly Generator now uses the MelonPreferences API for it's Config.
 
 ---
 

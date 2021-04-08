@@ -19,11 +19,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private void Save()
         {
-            Config.DumperVersion = Version;
+            Config.DumperVersion.Value = Version;
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.DumperVersion) || !Config.DumperVersion.Equals(Version));
+        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.DumperVersion.Value) || !Config.DumperVersion.Value.Equals(Version));
 
         internal override void Cleanup() { }
 

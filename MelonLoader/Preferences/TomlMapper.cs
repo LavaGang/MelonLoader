@@ -26,7 +26,8 @@ namespace MelonLoader
         public void RegisterMapper<T>(Func<TomlObject, T> read, Func<T, TomlObject> write)
         {
             myMappers.Add(typeof(T), new KeyValuePair<Delegate, Delegate>(read, write));
-            myMappers.Add(typeof(T[]), new KeyValuePair<Delegate, Delegate>((Func<TomlObject, T[]>) ReadArray<T>, (Func<T[], TomlObject>) WriteArray<T>));
+            myMappers.Add(typeof(T[]), new KeyValuePair<Delegate, Delegate>((Func<TomlObject, T[]>) ReadArray<T>, (Func<T[], TomlObject>)WriteArray));
+            myMappers.Add(typeof(List<T>), new KeyValuePair<Delegate, Delegate>((Func<TomlObject, List<T>>)ReadList<T>, (Func<List<T>, TomlObject>)WriteList));
         }
         
         public T[] ReadArray<T>(TomlObject value)
@@ -46,7 +47,10 @@ namespace MelonLoader
 
             return arr;
         }
-        
+
+        public List<T> ReadList<T>(TomlObject value) => ReadArray<T>(value).ToList();
+        public TomlArray WriteList<T>(List<T> value) => WriteArray(value.ToArray());
+
         public TomlObject ToToml<T>(T value)
         {
             if (typeof(T).IsEnum)

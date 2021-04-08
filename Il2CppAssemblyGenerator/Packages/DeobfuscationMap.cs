@@ -14,20 +14,20 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Version = RemoteAPI.ReturnedInfo.MappingFileSHA512;
             ObfuscationRegex = RemoteAPI.ReturnedInfo.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
-                ObfuscationRegex = Config.ObfuscationRegex;
+                ObfuscationRegex = Config.ObfuscationRegex.Value;
             if (string.IsNullOrEmpty(ObfuscationRegex) && Core.GameName.Equals("Among Us"))
                 ObfuscationRegex = "[A-Z]{11}";
         }
 
         internal void Save()
         {
-            Config.DeobfuscationMapHash = Version;
-            Config.ObfuscationRegex = ObfuscationRegex;
+            Config.DeobfuscationMapHash.Value = Version;
+            Config.ObfuscationRegex.Value = ObfuscationRegex;
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.DeobfuscationMapHash) ||
-                                          !Config.DeobfuscationMapHash.Equals(Version) ||
+        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.DeobfuscationMapHash.Value) ||
+                                          !Config.DeobfuscationMapHash.Value.Equals(Version) ||
                                           !File.Exists(Path.Combine(Destination, NewFileName)));
 
         internal override bool Download()

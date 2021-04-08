@@ -15,11 +15,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private void Save()
         {
-            Config.UnityVersion = Version;
+            Config.UnityVersion.Value = Version;
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.UnityVersion) || !Config.UnityVersion.Equals(Version));
+        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.UnityVersion.Value) || !Config.UnityVersion.Value.Equals(Version));
 
         internal override bool Download()
         {

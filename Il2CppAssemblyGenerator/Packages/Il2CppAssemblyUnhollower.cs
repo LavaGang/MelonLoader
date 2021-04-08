@@ -20,11 +20,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private void Save()
         {
-            Config.Il2CppAssemblyUnhollowerVersion = Version;
+            Config.UnhollowerVersion.Value = Version;
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Il2CppAssemblyUnhollowerVersion) || !Config.Il2CppAssemblyUnhollowerVersion.Equals(Version));
+        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.UnhollowerVersion.Value) || !Config.UnhollowerVersion.Value.Equals(Version));
 
         internal override bool Download()
         {
