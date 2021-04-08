@@ -326,6 +326,9 @@ namespace Harmony
 		}
 
 		private static string FindMelon(Predicate<MelonBase> criterion) {
+			//throw new NotImplementedException("Not Ported");
+			return null;
+#if PORT_DISABLE
 			string melonName = null;
 			foreach (MelonBase plugin in MelonHandler._Plugins) {
 				if (criterion(plugin)) melonName = plugin.Info.Name;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MelonLoader.Tomlyn.Model;
 using MelonLoader.Tomlyn.Syntax;
@@ -126,8 +126,10 @@ namespace MelonLoader.Preferences
             entry.Type = parser.GetTypeEnum();
             parser.Construct(entry, value);
             category.prefstbl.Add(entry);
+#if PORT_DISABLE
             if (MelonPreferences.SaveAfterEntryCreation)
                 MelonPreferences.Save_Internal();
+#endif
             return entry;
         }
 

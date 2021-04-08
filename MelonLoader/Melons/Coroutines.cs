@@ -1,3 +1,4 @@
+#if PORT_DISABLE
 using System;
 using System.Collections;
 
@@ -30,3 +31,4 @@ namespace MelonLoader
         }
     }
 }
+#endif

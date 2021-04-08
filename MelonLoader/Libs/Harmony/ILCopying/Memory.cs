@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Harmony.ILCopying
 {
+#if PORT_DISABLE
 	[Flags]
 	public enum Protection
 	{
@@ -22,7 +23,17 @@ namespace Harmony.ILCopying
 		PAGE_NOCACHE = 0x200,
 		PAGE_WRITECOMBINE = 0x400
 	}
+#endif
 
+	[Flags]
+	public enum Protection
+	{
+		PROT_NONE = 0x01,
+		PROT_READ = 0x02,
+		PROT_WRITE = 0x04,
+		PROT_EXEC = 0x08
+	}
+	
 	public static class Memory
 	{
 		private static readonly HashSet<PlatformID> WindowsPlatformIDSet = new HashSet<PlatformID>
@@ -32,6 +43,7 @@ namespace Harmony.ILCopying
 
 		public static bool IsWindows => WindowsPlatformIDSet.Contains(Environment.OSVersion.Platform);
 
+#if PORT_DISABLE
 		// Safe to use windows reference since this will only ever be called on windows
 		//
 		[DllImport("kernel32.dll")]
@@ -46,8 +58,20 @@ namespace Harmony.ILCopying
 					throw new System.ComponentModel.Win32Exception();
 			}
 		}
+#endif
+		// Safe to use windows reference since this will only ever be called on windows
+		//
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern int mprotect(IntPtr lpAddress, UIntPtr dwSize, Protection flNewProtect);
 
-		public static string DetourMethod(MethodBase original, MethodBase replacement)
+		public static void UnprotectMemoryPage(long memory)
+		{
+			var success = mprotect(new IntPtr(memory), new UIntPtr(1), Protection.PROT_READ | Protection.PROT_WRITE | Protection.PROT_EXEC) < 0;
+			if (success == false)
+				throw new System.ComponentModel.Win32Exception();
+		}
+
+			public static string DetourMethod(MethodBase original, MethodBase replacement)
 		{
 			var originalCodeStart = GetMethodStart(original, out var exception);
 			if (originalCodeStart == 0)

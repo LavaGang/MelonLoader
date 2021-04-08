@@ -1,4 +1,4 @@
-﻿#if PORT_DISABLE
+#if PORT_DISABLE
 using System;
 using System.Reflection;
 
@@ -17,12 +17,12 @@ namespace MelonLoader
 
         static UnhollowerSupport()
         {
-            if (!MelonUtils.IsGameIl2Cpp())
+            if (!MelonLoader.External.Utils.IsGameIl2Cpp())
                 return;
             Assembly UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
             if (UnhollowerBaseLib == null)
             {
-                MelonLogger.ThrowInternalFailure("Failed to Load Assembly for UnhollowerBaseLib!");
+                External.Logger.ThrowInternalFailure("Failed to Load Assembly for UnhollowerBaseLib!");
                 return;
             }
             Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");

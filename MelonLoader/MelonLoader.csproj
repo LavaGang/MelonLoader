@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Windows">
@@ -33,9 +33,10 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Android'">
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -44,8 +45,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>
+    </PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AndroidManagedSymbols>true</AndroidManagedSymbols>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Desktop' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,8 +65,9 @@
     <DefineConstants>NET35;PORT_DISABLE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Android'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,11 +80,27 @@
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>
+  <PropertyGroup>
+    <!--<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects> -->
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\Assembly-CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="UnhollowerBaseLib">
+      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\UnhollowerBaseLib.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core.cs" />
     <Compile Include="Deprecated.cs" />
     <Compile Include="Entrypoint.cs" />
     <Compile Include="External\Core.cs" />
@@ -90,22 +111,21 @@
     <Compile Include="Utils\Debug.cs" />
     <Compile Include="Utils\DependencyGraph.cs" />
     <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Core.cs" />
     <Compile Include="Utils\SupportModule.cs" />
     <Compile Include="Utils\Unhollower.cs" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(Platform)' == 'Desktop'">
+    <Compile Include="Melons\Base.cs" />
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
     <Compile Include="Melons\Coroutines.cs" />
     <Compile Include="Melons\Attributes\Game.cs" />
     <Compile Include="Melons\Attributes\Info.cs" />
-    <Compile Include="Melons\Base.cs" />
     <Compile Include="Melons\Attributes\OptionalDependencies.cs" />
     <Compile Include="Melons\Handler.cs" />
     <Compile Include="Melons\Mod.cs" />
     <Compile Include="Melons\Plugin.cs" />
     <Compile Include="Melons\Utils.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\BuildInfo.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Types\Boolean_Array.cs" />
     <Compile Include="Preferences\Types\Byte_Array.cs" />
@@ -124,10 +144,7 @@
     <Compile Include="Preferences\Types\Integer.cs" />
     <Compile Include="Preferences\Types\Long.cs" />
     <Compile Include="Preferences\Types\String.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\BuildInfo.cs" />
-    <!-- <ItemGroup/> -->
-    <!-- <ItemGroup Condition="'$(Platform)' == 'Desktop'"> -->
+    <!-- libs -->
     <Compile Include="Libs\Harmony\Attributes.cs" />
     <Compile Include="Libs\Harmony\CodeInstruction.cs" />
     <Compile Include="Libs\Harmony\CodeTranspiler.cs" />
@@ -159,6 +176,78 @@
     <Compile Include="Libs\Harmony\Tools\SymbolExtensions.cs" />
     <Compile Include="Libs\Harmony\Tools\Traverse.cs" />
     <Compile Include="Libs\Harmony\Transpilers.cs" />
+    <Compile Include="Libs\Harmony\UnityMagicMethods.cs" />
+    <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
+    <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
+    <Compile Include="Libs\Tomlyn\Helpers\ThrowHelper.cs" />
+    <Compile Include="Libs\Tomlyn\Model\ObjectKind.cs" />
+    <Compile Include="Libs\Tomlyn\Model\SyntaxTransform.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlArray.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlBoolean.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlDateTime.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlFloat.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlInteger.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlObject.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlString.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlTable.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlTableArray.cs" />
+    <Compile Include="Libs\Tomlyn\Model\TomlValue.cs" />
+    <Compile Include="Libs\Tomlyn\Parsing\ITokenProvider.cs" />
+    <Compile Include="Libs\Tomlyn\Parsing\Lexer.cs" />
+    <Compile Include="Libs\Tomlyn\Parsing\LexerState.cs" />
+    <Compile Include="Libs\Tomlyn\Parsing\Parser.cs" />
+    <Compile Include="Libs\Tomlyn\Parsing\SyntaxTokenValue.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\ArrayItemSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\ArraySyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\BareKeyOrStringValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\BareKeySyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\BooleanValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\DateTimeValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticMessage.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticMessageKind.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticsBag.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\DocumentSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\DottedKeyItemSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\FloatValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\InlineTableItemSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\InlineTableSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\IntegerValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\InvalidSyntaxToken.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\KeySyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\KeyValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SourceSpan.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\StringValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxFactory.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxKind.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxList.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNode.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNodeBase.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNodeExtensions.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxToken.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxTrivia.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxValidator.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\SyntaxVisitor.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\TableArraySyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\TableSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\TableSyntaxBase.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\TextPosition.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\TokenKind.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\TokenKindExtensions.cs" />
+    <Compile Include="Libs\Tomlyn\Syntax\ValueSyntax.cs" />
+    <Compile Include="Libs\Tomlyn\Text\char32.cs" />
+    <Compile Include="Libs\Tomlyn\Text\CharacterIterator.cs" />
+    <Compile Include="Libs\Tomlyn\Text\CharHelper.cs" />
+    <Compile Include="Libs\Tomlyn\Text\CharReaderException.cs" />
+    <Compile Include="Libs\Tomlyn\Text\ISourceView.cs" />
+    <Compile Include="Libs\Tomlyn\Text\IStringView.cs" />
+    <Compile Include="Libs\Tomlyn\Text\StringCharacterIterator.cs" />
+    <Compile Include="Libs\Tomlyn\Text\StringCharacterUtf8Iterator.cs" />
+    <Compile Include="Libs\Tomlyn\Text\StringSourceView.cs" />
+    <Compile Include="Libs\Tomlyn\Text\StringUtf8SourceView.cs" />
+    <Compile Include="Libs\Tomlyn\Toml.cs" />
+    <Compile Include="Libs\Tomlyn\TomlParserOptions.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)' == 'Desktop'">
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Constants.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Exception.cs" />
@@ -231,81 +320,12 @@
     <Compile Include="Libs\TinyJSON\Types\ProxyObject.cs" />
     <Compile Include="Libs\TinyJSON\Types\ProxyString.cs" />
     <Compile Include="Libs\TinyJSON\Types\Variant.cs" />
-    <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
-    <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
-    <Compile Include="Libs\Tomlyn\Helpers\ThrowHelper.cs" />
-    <Compile Include="Libs\Tomlyn\Model\ObjectKind.cs" />
-    <Compile Include="Libs\Tomlyn\Model\SyntaxTransform.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlArray.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlBoolean.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlDateTime.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlFloat.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlInteger.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlObject.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlString.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlTable.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlTableArray.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlValue.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\ITokenProvider.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\Lexer.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\LexerState.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\Parser.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\SyntaxTokenValue.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\ArrayItemSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\ArraySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\BareKeyOrStringValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\BareKeySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\BooleanValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DateTimeValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticMessage.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticMessageKind.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticsBag.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DocumentSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DottedKeyItemSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\FloatValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\InlineTableItemSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\InlineTableSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\IntegerValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\InvalidSyntaxToken.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\KeySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\KeyValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SourceSpan.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\StringValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxFactory.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxKind.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxList.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNode.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNodeBase.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNodeExtensions.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxToken.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxTrivia.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxValidator.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxVisitor.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TableArraySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TableSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TableSyntaxBase.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TextPosition.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TokenKind.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TokenKindExtensions.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\ValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Text\char32.cs" />
-    <Compile Include="Libs\Tomlyn\Text\CharacterIterator.cs" />
-    <Compile Include="Libs\Tomlyn\Text\CharHelper.cs" />
-    <Compile Include="Libs\Tomlyn\Text\CharReaderException.cs" />
-    <Compile Include="Libs\Tomlyn\Text\ISourceView.cs" />
-    <Compile Include="Libs\Tomlyn\Text\IStringView.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringCharacterIterator.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringCharacterUtf8Iterator.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringSourceView.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringUtf8SourceView.cs" />
-    <Compile Include="Libs\Tomlyn\Toml.cs" />
-    <Compile Include="Libs\Tomlyn\TomlParserOptions.cs" />
     <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
-    <Compile Include="Libs\Harmony\UnityMagicMethods.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\bHaptics\API.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Condition="'$(Platform)' == 'Desktop'" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Condition="'$(Platform)' == 'Android'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!--<Import Condition="'$(Platform)' == 'Android'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

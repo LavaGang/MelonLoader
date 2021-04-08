@@ -1,4 +1,3 @@
-﻿#if PORT_DISABLE
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -21,7 +20,7 @@ namespace MelonLoader
                 if (melon.Color != null)
                     color = melon.Color.Color;
             }
-            Internal_Msg(color, namesection, txt);
+            External.Logger.Internal_Msg(color, namesection, txt);
             RunMsgCallbacks(color, namesection, txt);
         }
         public static void Msg(string txt, params object[] args)
@@ -36,7 +35,7 @@ namespace MelonLoader
                     color = melon.Color.Color;
             }
             string fmt = string.Format(txt, args);
-            Internal_Msg(color, namesection, fmt);
+            External.Logger.Internal_Msg(color, namesection, fmt);
             RunMsgCallbacks(color, namesection, fmt);
         }
         public static void Msg(object obj)
@@ -51,7 +50,7 @@ namespace MelonLoader
                     color = melon.Color.Color;
             }
             string objstr = obj.ToString();
-            Internal_Msg(color, namesection, objstr);
+            External.Logger.Internal_Msg(color, namesection, objstr);
             RunMsgCallbacks(color, namesection, objstr);
         }
 
@@ -83,7 +82,7 @@ namespace MelonLoader
         }
         internal static void ManualWarning(string namesection, string txt) {
             namesection = namesection?.Replace(" ", "_");
-            Internal_Warning(namesection, txt);
+            External.Logger.Internal_Warning(namesection, txt);
             RunWarningCallbacks(namesection, txt);
         }
 
@@ -93,7 +92,7 @@ namespace MelonLoader
             MelonBase melon = GetMelonFromStackTrace();
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
-            Internal_Error(namesection, txt);
+            External.Logger.Internal_Error(namesection, txt);
             RunErrorCallbacks(namesection, txt);
         }
         public static void Error(string txt, params object[] args)
@@ -103,7 +102,7 @@ namespace MelonLoader
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
             string fmt = string.Format(txt, args);
-            Internal_Error(namesection, fmt);
+            External.Logger.Internal_Error(namesection, fmt);
             RunErrorCallbacks(namesection, fmt);
         }
         public static void Error(object obj)
@@ -113,12 +112,15 @@ namespace MelonLoader
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
             string objstr = obj.ToString();
-            Internal_Error(namesection, objstr);
+            External.Logger.Internal_Error(namesection, objstr);
             RunErrorCallbacks(namesection, objstr);
         }
 
         internal static MelonBase GetMelonFromStackTrace()
         {
+            //throw new NotImplementedException("Not Ported");
+            return null;
+#if PORT_DISABLE
             StackTrace st = new StackTrace(2, true);
             if (st.FrameCount <= 0)
                 return null;
@@ -126,7 +128,10 @@ namespace MelonLoader
             if (output == null)
                 output = CheckForMelonInFrame(st, 1);
             return output;
+#endif
         }
+
+#if PORT_DISABLE
         private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
         {
             StackFrame sf = st.GetFrame(frame);
@@ -141,11 +146,14 @@ namespace MelonLoader
             Assembly asm = methodClassType.Assembly;
             if (asm == null)
                 return null;
+
             MelonBase melon = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
             if (melon == null)
                 melon = MelonHandler.Mods.Find(x => (x.Assembly == asm));
+
             return melon;
         }
+#endif
 
         internal static void RunMsgCallbacks(ConsoleColor color, string namesection, string msg) => MsgCallbackHandler?.Invoke(color, namesection, msg);
         public static event Action<ConsoleColor, string, string> MsgCallbackHandler;
@@ -153,20 +161,7 @@ namespace MelonLoader
         public static event Action<string, string> WarningCallbackHandler;
         internal static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler?.Invoke(namesection, msg);
         public static event Action<string, string> ErrorCallbackHandler;
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Msg(ConsoleColor color, string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Warning(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Error(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void ThrowInternalFailure(string msg);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void WriteSpacer();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_PrintModName(ConsoleColor color, string name, string version);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Flush();
+
         [Obsolete("Log is obsolete. Please use Msg instead.")]
         public static void Log(string txt) => Msg(txt);
         [Obsolete("Log is obsolete. Please use Msg instead.")]
@@ -179,7 +174,6 @@ namespace MelonLoader
         public static void Log(ConsoleColor color, string txt, params object[] args) => Msg(txt, args);
         [Obsolete("Log is obsolete. Please use Msg instead.")]
         public static void Log(ConsoleColor color, object obj) => Msg(obj);
-
         [Obsolete("LogWarning is obsolete. Please use Warning instead.")]
         public static void LogWarning(string txt) => Warning(txt);
         [Obsolete("LogWarning is obsolete. Please use Warning instead.")]
@@ -190,4 +184,3 @@ namespace MelonLoader
         public static void LogError(string txt, params object[] args) => Error(txt, args);
     }
 }
-#endif

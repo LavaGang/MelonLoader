@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if PORT_DISABLE
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -512,9 +513,6 @@ namespace MelonLoader
             DEV,
             BOTH
         }
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static LoadMode GetLoadModeForPlugins();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static LoadMode GetLoadModeForMods();
     }
 }
+#endif

@@ -37,6 +37,7 @@ namespace MelonLoader
         /// </summary>
         public bool IsCompatibleBecauseUniversal(MelonGameAttribute att) => ((att == null) || Universal || att.Universal);
 
+#if PORT_DISABLE
         [Obsolete("IsCompatible(MelonModGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
         public bool IsCompatible(MelonModGameAttribute att) => ((att == null) || IsCompatibleBecauseUniversal(att) || (att.Developer.Equals(Developer) && att.GameName.Equals(Name)));
         [Obsolete("IsCompatible(MelonPluginGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
@@ -44,6 +45,7 @@ namespace MelonLoader
         [Obsolete("IsCompatibleBecauseUniversal(MelonModGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
         public bool IsCompatibleBecauseUniversal(MelonModGameAttribute att) => ((att == null) || Universal || (string.IsNullOrEmpty(att.Developer) || string.IsNullOrEmpty(att.GameName)));
         [Obsolete("IsCompatibleBecauseUniversal(MelonPluginGameAttribute) is obsolete. Please use IsCompatible(MelonGameAttribute) instead.")]
-        public bool IsCompatibleBecauseUniversal(MelonPluginGameAttribute att) => ((att == null) || Universal || (string.IsNullOrEmpty(att.Developer) || string.IsNullOrEmpty(att.GameName)));
+        public bool IsCompatibleBecauseUniversa
+#endif
     }
 }

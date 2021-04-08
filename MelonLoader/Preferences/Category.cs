@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +14,9 @@ namespace MelonLoader
         {
             Name = name;
             DisplayName = displayname;
+#if PORT_DISABLE
             MelonPreferences.categorytbl.Add(this);
+#endif
         }
 
         public MelonPreferences_Entry GetEntry(string name)
@@ -39,8 +41,10 @@ namespace MelonLoader
             entry.DisplayName = displayname;
             entry.Hidden = hidden;
             Preferences.TypeManager.ConvertCurrentValueType(entry, value);
+#if PORT_DISABLE
             if (MelonPreferences.SaveAfterEntryCreation)
                 MelonPreferences.Save_Internal();
+#endif
             return entry;
         }
     }
