@@ -19,24 +19,25 @@ namespace MelonLoader
             MelonCommandLine.Load();
             MelonCompatibilityLayer.Setup(curDomain);
 
-            if (MelonUtils.IsGameIl2Cpp())
-                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
+            Fixes.Il2CppSupport.Run(curDomain);
 
             PatchShield.Install();
         }
 
         private static int Initialize()
         {
+            Il2CppAssemblyGenerator.Load();
+
             try { bHaptics_NativeLibrary.Load(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
 
             MelonPreferences.Load();
 
-            if (MelonUtils.IsGameIl2Cpp() && !Il2CppAssemblyGenerator.Run())
-                return 1;
-
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
+
+            if (!Il2CppAssemblyGenerator.Run())
+                return 1;
 
             return 0;
         }

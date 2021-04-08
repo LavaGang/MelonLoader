@@ -103,29 +103,6 @@ namespace MelonLoader.Support
             UnityVersionHandler.Initialize(major, minor, patch);
         }
 
-        internal static void VRChat_CheckUiManager()
-        {
-            if (!ShouldCheckForUiManager)
-                return;
-            if (Assembly_CSharp == null)
-                Assembly_CSharp = Assembly.Load("Assembly-CSharp");
-            if (Assembly_CSharp == null)
-                return;
-            if (VRCUiManager == null)
-                VRCUiManager = Assembly_CSharp.GetType("VRCUiManager");
-            if (VRCUiManager == null)
-                return;
-            if (VRCUiManager_Instance == null)
-                VRCUiManager_Instance = VRCUiManager.GetMethods().First(x => (x.ReturnType == VRCUiManager));
-            if (VRCUiManager_Instance == null)
-                return;
-            object returnval = VRCUiManager_Instance.Invoke(null, new object[0]);
-            if (returnval == null)
-                return;
-            ShouldCheckForUiManager = false;
-            Interface.VRChat_OnUiManagerInit();
-        }
-
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);

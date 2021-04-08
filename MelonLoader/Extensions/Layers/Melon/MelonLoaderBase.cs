@@ -5,8 +5,6 @@ namespace MelonLoader
     [Obsolete("MelonLoader.MelonLoaderBase is Only Here for Compatibility Reasons.")]
     public static class MelonLoaderBase
     {
-        [Obsolete("MelonLoader.MelonLoaderBase.IsVRChat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.IsVRChat instead.")]
-        public static bool IsVRChat { get => MelonUtils.IsVRChat; }
         [Obsolete("MelonLoader.MelonLoaderBase.IsBoneworks is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.IsBONEWORKS instead.")]
         public static bool IsBoneworks { get => MelonUtils.IsBONEWORKS; }
         [Obsolete("MelonLoader.MelonLoaderBase.UserDataPath is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetUserDataDirectory instead.")]

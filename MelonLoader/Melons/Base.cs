@@ -86,11 +86,6 @@ namespace MelonLoader
         /// </summary>
         public virtual void OnPreferencesLoaded() { }
 
-        /// <summary>
-        /// Runs upon VRChat's UiManager Initialization. Only runs if the Melon is used in VRChat.
-        /// </summary>
-        public virtual void VRChat_OnUiManagerInit() { }
-
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
         [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]

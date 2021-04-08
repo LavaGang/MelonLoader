@@ -394,7 +394,6 @@ namespace MelonLoader
         internal static void OnGUI() { InvokeMelonPluginMethod(x => x.OnGUI()); InvokeMelonModMethod(x => x.OnGUI()); }
         internal static void OnPreferencesSaved() { InvokeMelonPluginMethod(x => x.OnPreferencesSaved()); InvokeMelonModMethod(x => x.OnPreferencesSaved()); }
         internal static void OnPreferencesLoaded() { InvokeMelonPluginMethod(x => x.OnPreferencesLoaded()); InvokeMelonModMethod(x => x.OnPreferencesLoaded()); }
-        internal static void VRChat_OnUiManagerInit() { InvokeMelonPluginMethod(x => x.VRChat_OnUiManagerInit()); InvokeMelonModMethod(x => x.VRChat_OnUiManagerInit()); }
         internal static void BONEWORKS_OnLoadingScreen() => InvokeMelonModMethod(x => x.BONEWORKS_OnLoadingScreen());
 
         private static bool SceneWasJustLoaded = false;

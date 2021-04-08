@@ -9,9 +9,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Dumper;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = RemoteAPI.LAST_RESPONSE.ForceDumperVersion;
+                Version = RemoteAPI.ReturnedInfo.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "6.5.0";
+                Version = "6.5.3";
             URL = "https://github.com/Perfare/Il2CppDumper/releases/download/v" + Version + "/Il2CppDumper-v" + Version + ".zip";
             Destination = Path.Combine(Core.BasePath, "Il2CppDumper");
             Output = Path.Combine(Destination, "DummyDll");

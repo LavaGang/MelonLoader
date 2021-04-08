@@ -94,7 +94,6 @@ namespace MelonLoader
         void LateUpdate();
         void OnGUI();
         void Quit();
-        void VRChat_OnUiManagerInit();
         void BONEWORKS_OnLoadingScreen();
     }
 
@@ -107,7 +106,6 @@ namespace MelonLoader
         public void LateUpdate() => MelonHandler.OnLateUpdate();
         public void OnGUI() => MelonHandler.OnGUI();
         public void Quit() => Core.Quit();
-        public void VRChat_OnUiManagerInit() => MelonHandler.VRChat_OnUiManagerInit();
         public void BONEWORKS_OnLoadingScreen() => MelonHandler.BONEWORKS_OnLoadingScreen();
     }
 }

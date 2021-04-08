@@ -55,6 +55,7 @@
     <Compile Include="Extensions\CompatibilityLayer.cs" />
     <Compile Include="Extensions\Fixes\ApplicationBase.cs" />
     <Compile Include="Extensions\Fixes\ExtraCleanup.cs" />
+    <Compile Include="Extensions\Fixes\Il2CppSupport.cs" />
     <Compile Include="Extensions\Fixes\InvariantCurrentCulture.cs" />
     <Compile Include="Extensions\Fixes\QuitFix.cs" />
     <Compile Include="Extensions\Fixes\UnhandledException.cs" />
@@ -96,12 +97,6 @@
     <Compile Include="Extensions\Layers\TinyJSON.cs" />
     <Compile Include="Extensions\Layers\Tomlyn.cs" />
     <Compile Include="Extensions\PatchShield.cs" />
-    <Compile Include="Extensions\Shields\Harmony\HarmonyManipulator_Manipulate.cs" />
-    <Compile Include="Extensions\Shields\Harmony\Harmony_Patch.cs" />
-    <Compile Include="Extensions\Shields\Harmony\PatchFunctions_ReversePatch.cs" />
-    <Compile Include="Extensions\Shields\MonoMod\Detour_OnDetour.cs" />
-    <Compile Include="Extensions\Shields\MonoMod\Hook_OnDetour.cs" />
-    <Compile Include="Extensions\Shields\MonoMod\ILHook_OnDetour.cs" />
     <Compile Include="Extensions\UnityMagicMethods.cs" />
     <Compile Include="Utils\bHaptics\API.cs" />
     <Compile Include="Utils\bHaptics\NativeLibrary.cs" />

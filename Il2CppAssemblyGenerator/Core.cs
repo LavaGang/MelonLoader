@@ -29,13 +29,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "Unity web player");
 
-            //AssemblyGenerationNeeded = Utils.ForceRegeneration();
+            AssemblyGenerationNeeded = MelonCommandLine.AssemblyGenerator.ForceRegeneration;
 
             GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
             ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
             GameName = MelonUtils.GameName;
 
-            BasePath = Path.Combine(Path.Combine(Path.Combine(Path.GetDirectoryName(string.Copy(MelonUtils.GetApplicationPath())), "MelonLoader"), "Dependencies"), "AssemblyGenerator");
+            BasePath = Path.GetDirectoryName(typeof(Core).Assembly.Location);
             OverrideAppDomainBase(BasePath);
         }
 

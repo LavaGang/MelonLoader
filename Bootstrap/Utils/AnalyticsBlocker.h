@@ -9,9 +9,8 @@ public:
 	static bool ShouldDAB;
 	static bool Initialize();
 	static void Hook();
-	static bool CheckHostNames(const char* url);
-	static bool IsInBlockedHostNameList(const char* url);
-	static bool IsInDABHostNameList(const char* url);
+	static bool Check(const char* host_name_or_ip);
+	static bool ShouldBlock(const char* host_name_or_ip);
 
 	class wsock32
 	{
@@ -60,6 +59,6 @@ public:
 #endif
 
 private:
-	static const char* HostNames[];
-	static std::list<const char*> HostNames_DAB;
+	static const char* BlockedList[];
+	static std::list<const char*> DABList;
 };

@@ -131,6 +131,16 @@ namespace MelonLoader
 
             ArgInfoTbl.Add(new ArgInfo
             {
+                CommandLine = "--melonloader.consolemonitor",
+                ParseCommandLineArg = (string value) => { int val = Console.Monitor; if (int.TryParse(value, out val)) Console.Monitor = val; },
+
+                Config_Name = "Monitor",
+                Config_Category = Config_Category_Console,
+                ParseConfigArg = (ArgInfo argInfo) => Console.Monitor = iniFile.GetInt(argInfo.Config_Category, argInfo.Config_Name, Console.Monitor, true)
+            });
+
+            ArgInfoTbl.Add(new ArgInfo
+            {
                 CommandLine = "--melonloader.magenta",
                 ParseCommandLineArg = (string value) => Console.DisplayMode = Console.DisplayModeEnum.MAGENTA
             });
@@ -356,6 +366,7 @@ namespace MelonLoader
                 AlwaysOnTop = false;
                 HideWarnings = false;
                 SetTitleOnInit = true;
+                Monitor = 1;
             }
             public enum DisplayModeEnum
             {
@@ -370,6 +381,7 @@ namespace MelonLoader
             public static bool AlwaysOnTop { get; internal set; }
             public static bool HideWarnings { get; internal set; }
             public static bool SetTitleOnInit { get; internal set; }
+            public static int Monitor { get; internal set; }
         }
 
         public static class Core

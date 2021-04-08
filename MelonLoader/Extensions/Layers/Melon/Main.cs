@@ -10,8 +10,6 @@ namespace MelonLoader
         public static List<MelonMod> Mods = null;
         [Obsolete("MelonLoader.Main.Plugins is Only Here for Compatibility Reasons. Please use MelonLoader.MelonHandler.Plugins instead.")]
         public static List<MelonPlugin> Plugins = null;
-        [Obsolete("MelonLoader.Main.IsVRChat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.IsVRChat instead.")]
-        public static bool IsVRChat = false;
         [Obsolete("MelonLoader.Main.IsBoneworks is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.IsBONEWORKS instead.")]
         public static bool IsBoneworks = false;
         [Obsolete("MelonLoader.Main.GetUnityVersion is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetUnityVersion instead.")]

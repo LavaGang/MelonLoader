@@ -134,6 +134,15 @@
 109. Added Warning for Transpiler Use on Il2Cpp Unhollowed Methods.
 110. Added More to Harmony Compatibility Layer.
 111. Fixed Issue with Missing Harmony.GeneralExtensions and Harmony.CollectionExtensions in Harmony Compatibility Layer.
+112. Added Description, Validator and BoxedValue to MelonPreferences_Entry.  (Credits to Sinai :D)
+113. Fixed Issue with not Forcing FloatValueSyntax to serialize with decimal for MelonPreferences_Entry.  (Credits to Sinai :D)
+114. Fixed Order of Validation for MelonPreferences_Entry.  (Credits to Sinai :D)
+115. Moved ValueValidator to its own class.  (Credits to Sinai :D)
+116. Added BoxedEditedValue to MelonPreferences_Entry.  (Credits to Sinai :D)
+117. Moved Plugin Loading and OnPreInitialization to before Assembly Generation.
+118. Added Custom Hosts Interface for Plugins to add new Contact Hosts for the Assembly Generator's RemoteAPI.
+119. Removed VRChat_OnUiManagerInit check and override.
+120. Removed MelonUtils.IsVRChat.
 
 ---
 

@@ -10,9 +10,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Destination = Core.il2cppassemblyunhollower.Destination; // Change Me
             NewFileName = "DeobfuscationMap.csv.gz";
-            URL = RemoteAPI.LAST_RESPONSE.MappingURL;
-            Version = RemoteAPI.LAST_RESPONSE.MappingFileSHA512;
-            ObfuscationRegex = RemoteAPI.LAST_RESPONSE.ObfuscationRegex;
+            URL = RemoteAPI.ReturnedInfo.MappingURL;
+            Version = RemoteAPI.ReturnedInfo.MappingFileSHA512;
+            ObfuscationRegex = RemoteAPI.ReturnedInfo.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
                 ObfuscationRegex = Config.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex) && Core.GameName.Equals("Among Us"))

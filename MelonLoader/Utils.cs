@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Text;
+using MelonLoader.TinyJSON;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -21,7 +22,6 @@ namespace MelonLoader
             UserDataDirectory = Path.Combine(GameDirectory, "UserData");
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
-            Main.IsVRChat = IsVRChat;
             Main.IsBoneworks = IsBONEWORKS;
         }
 
@@ -30,7 +30,6 @@ namespace MelonLoader
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
         public static string GameDeveloper { get; private set; }
         public static string GameName { get; private set; }
-        public static bool IsVRChat { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("VRChat") && !string.IsNullOrEmpty(GameName) && GameName.Equals("VRChat")); }
         public static bool IsBONEWORKS { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("Stress Level Zero") && !string.IsNullOrEmpty(GameName) && GameName.Equals("BONEWORKS")); }
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
@@ -111,6 +110,21 @@ namespace MelonLoader
                 ConsoleColor.Yellow => "\x1b[93m",
                 _ => "\x1b[97m",
             };
+        }
+
+        public static T ParseJSONStringtoStruct<T>(string jsonstr)
+        {
+            Variant jsonarr = null;
+            try { jsonarr = JSON.Load(jsonstr); }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Exception while Decoding JSON String to JSON Variant: {ex}");
+                return default;
+            }
+            T returnobj = default;
+            try { returnobj = jsonarr.Make<T>(); }
+            catch (Exception ex) { MelonLogger.Error($"Exception while Converting JSON Variant to {nameof(T)}: {ex}"); }
+            return returnobj;
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
