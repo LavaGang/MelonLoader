@@ -26,13 +26,16 @@ public:
 	static Domain* domain;
 	static bool IsOldMono;
 	static char* ManagedPath;
-	static char* NativePath;
+	static char* ManagedPathMono;
 	static char* ConfigPath;
+	static char* ConfigPathMono;
+	static char* MonoConfigPathMono;
 	static bool Initialize();
 	static bool Load();
 	static bool SetupPaths();
 	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
+	static String* ObjectToString(Object* obj);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 	static void Free(void* ptr);
 
@@ -180,22 +183,23 @@ public:
 		MONODEF(void*, mono_lookup_internal_call, (Method* method))
 		MONODEF(Object*, mono_runtime_invoke, (Method* method, Object* obj, void** params, Object** exec))
 		MONODEF(const char*, mono_method_get_name, (Method* method))
-		// MONODEF(void*, mono_unity_get_unitytls_interface, ())
+		MONODEF(void*, mono_unity_get_unitytls_interface, ())
 		MONODEF(Assembly*, mono_domain_assembly_open, (Domain* domain, const char* path))
 		MONODEF(Image*, mono_assembly_get_image, (Assembly* assembly))
 		MONODEF(Class*, mono_class_from_name, (Image* image, const char* name_space, const char* name))
-		MONODEF(Class*, mono_class_from_name_checked, (Image* image, const char* name_space, const char* name, MonoError* error))
 		MONODEF(Method*, mono_class_get_method_from_name, (Class* klass, const char* name, int param_count))
 		MONODEF(char*, mono_string_to_utf8, (String* str))
 		MONODEF(String*, mono_string_new, (Domain* domain, const char* str))
 		MONODEF(Class*, mono_object_get_class, (Object* obj))
-		MONODEF(Property*, mono_class_get_property_from_name, (Class* klass, const char* name))
+		MONODEF(String*, mono_object_to_string, (Object* obj, Object** exec))
 		MONODEF(Method*, mono_property_get_get_method, (Property* prop))
 		MONODEF(void, mono_free, (void* ptr))
 		MONODEF(void, g_free, (void* ptr))
 
 		MONODEF(void, mono_raise_exception, (Object* ex))
 		MONODEF(Object*, mono_get_exception_bad_image_format, (const char* msg))
+		MONODEF(const char*, mono_image_get_name, (Image* image))
+
 		MONODEF(Image*, mono_image_open_full, (const char* path, MonoImageOpenStatus* status, bool refonly))
 		MONODEF(Image*, mono_image_open_from_data_full, (const char* data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
 		MONODEF(void, mono_image_close, (Image* image))
@@ -205,10 +209,6 @@ public:
 		MONODEF(uintptr_t, mono_array_length, (Object* array))
 		MONODEF(const char*, mono_metadata_string_heap, (Image* meta, unsigned int table_index))
 		MONODEF(const char*, mono_class_get_name, (Class* klass))
-		
-		MONODEF(const char*, mono_error_get_message, (MonoError* error))
-		MONODEF(void, mono_trace_set_mask_string, (const char* value))
-		MONODEF(void, mono_trace_set_level_string, (const char* value))
 
 #undef MONODEF
 #pragma endregion MonoDefine

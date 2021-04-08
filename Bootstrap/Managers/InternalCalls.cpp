@@ -100,13 +100,21 @@ Mono::String* InternalCalls::MelonUtils::GetGameDirectory() { return Mono::Expor
 Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Game::DataPathMono); }
 Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPathMono); }
+#ifdef PORT_DISABLE
 Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, HashCode::Hash.c_str()); }
+#else 
+Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, "Placeholder Hash"); }
+#endif
 void InternalCalls::MelonUtils::SCT(Mono::String* title)
 {
+#ifdef PORT_DISABLE
     if (title == NULL) return;
     auto str = Mono::Exports::mono_string_to_utf8(title);
     Console::SetTitle(str);
     Mono::Free(str);
+#else 
+    return;
+#endif
 }
 Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepath)
 {

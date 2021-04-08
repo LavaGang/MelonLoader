@@ -6,14 +6,15 @@
 #include "../Utils/Assertion.h"
 #include "../Utils/Console/Logger.h"
 
-char* BaseAssembly::Path = NULL;
+char* BaseAssembly::PathMono = NULL;
+char* BaseAssembly::PreloadPath = NULL;
 Mono::Method* BaseAssembly::Mono_Start = NULL;
 
 bool BaseAssembly::Initialize()
 {
 	Debug::Msg("Initializing Base Assembly...");
-	Debug::Msg(BaseAssembly::Path);
-	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, Path);
+	Debug::Msg(BaseAssembly::PathMono);
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PathMono);
 	if (assembly == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
@@ -70,6 +71,48 @@ bool BaseAssembly::Initialize()
 	return true;
 }
 
+void BaseAssembly::Preload()
+{
+	SetupPaths();
+
+	if (Game::IsIl2Cpp || !Mono::IsOldMono)
+		return;
+
+	if (!Game::IsIl2Cpp && !Core::FileExists(PreloadPath))
+	{
+		Assertion::ThrowInternalFailure("Preload.dll Does Not Exist!");
+		return;
+	}
+
+	Debug::Msg("Initializing Preload Assembly...");
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PreloadPath);
+	if (assembly == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Open Preload Assembly!");
+		return;
+	}
+	Mono::Image* image = Mono::Exports::mono_assembly_get_image(assembly);
+	if (image == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Image from Preload Assembly!");
+		return;
+	}
+	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "MelonLoader.Support", "Preload");
+	if (image == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Class from Preload Image!");
+		return;
+	}
+	Mono::Method* initialize = Mono::Exports::mono_class_get_method_from_name(klass, "Initialize", NULL);
+	if (initialize == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Initialize Method from Preload Class!");
+		return;
+	}
+	Mono::Object* exObj = NULL;
+	Mono::Exports::mono_runtime_invoke(initialize, NULL, NULL, &exObj);
+}
+
 void BaseAssembly::Start()
 {
 	if (Mono_Start == NULL)
@@ -77,12 +120,19 @@ void BaseAssembly::Start()
 	Debug::Msg("Starting Base Assembly...");
 	Logger::WriteSpacer();
 	Mono::Object* exObj = NULL;
-	Mono::Exports::mono_runtime_invoke(Mono_Start, NULL, NULL, &exObj);
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_Start, NULL, NULL, &exObj);
 	if (exObj != NULL)
 	{
 		Mono::LogException(exObj);
 		Assertion::ThrowInternalFailure("Failed to Invoke Start Method!");
 	}
+	int returnval = *(int*)((char*)result + 0x8);
+	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
+}
+
+bool BaseAssembly::SetupPaths()
+{
+	return false;
 }

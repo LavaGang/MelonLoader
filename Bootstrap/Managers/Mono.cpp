@@ -70,12 +70,10 @@ MONODEF(mono_method_get_name)
 MONODEF(mono_domain_assembly_open)
 MONODEF(mono_assembly_get_image)
 MONODEF(mono_class_from_name)
-MONODEF(mono_class_from_name_checked)
 MONODEF(mono_class_get_method_from_name)
 MONODEF(mono_string_to_utf8)
 MONODEF(mono_string_new)
 MONODEF(mono_object_get_class)
-MONODEF(mono_class_get_property_from_name)
 MONODEF(mono_property_get_get_method)
 MONODEF(mono_free)
 MONODEF(g_free)
@@ -91,10 +89,6 @@ MONODEF(mono_array_addr_with_size)
 MONODEF(mono_array_length)
 MONODEF(mono_metadata_string_heap)
 MONODEF(mono_class_get_name)
-
-MONODEF(mono_error_get_message)
-MONODEF(mono_trace_set_mask_string)
-MONODEF(mono_trace_set_level_string)
 
 #undef MONODEF
 #pragma endregion MonoDeclare
@@ -254,11 +248,6 @@ bool Mono::SetupPaths()
 		ManagedPath = new char[ManagedPathStr.size() + 1];
 		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
 		ManagedPath[ManagedPathStr.size()] = '\0';
-
-		std::string NativePathStr = (std::string(Mono::BasePath) + "/native").c_str();
-		NativePath = new char[NativePathStr.size() + 1];
-		std::copy(NativePathStr.begin(), NativePathStr.end(), NativePath);
-		NativePath[NativePathStr.size()] = '\0';
 		
 		std::string ConfigPathStr = (std::string(Game::DataPath) + "/il2cpp/etc").c_str();
 		ConfigPath = new char[ConfigPathStr.size() + 1];
@@ -283,9 +272,14 @@ bool Mono::SetupPaths()
 
 		// TODO: REMOVE
 		std::string BaseAsmPathStr = (BasePathStr + "/MelonLoader.dll").c_str();
-		BaseAssembly::Path = new char[BaseAsmPathStr.size() + 1];
-		std::copy(BaseAsmPathStr.begin(), BaseAsmPathStr.end(), BaseAssembly::Path);
-		BaseAssembly::Path[BaseAsmPathStr.size()] = '\0';
+		BaseAssembly::PathMono = new char[BaseAsmPathStr.size() + 1];
+		std::copy(BaseAsmPathStr.begin(), BaseAsmPathStr.end(), BaseAssembly::PathMono);
+		BaseAssembly::PathMono[BaseAsmPathStr.size()] = '\0';
+
+		std::string PreloadPathStr = (BasePathStr + "/Preload.dll").c_str();
+		BaseAssembly::PreloadPath = new char[PreloadPathStr.size() + 1];
+		std::copy(PreloadPathStr.begin(), PreloadPathStr.end(), BaseAssembly::PreloadPath);
+		BaseAssembly::PreloadPath[PreloadPathStr.size()] = '\0';
 
 		return true;
 	}
