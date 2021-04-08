@@ -241,7 +241,7 @@
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Utils\SupportModule.cs" />
-    <Compile Include="Utils\Unhollower.cs" />
+    <Compile Include="Utils\UnhollowerSupport.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Constants.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Exception.cs" />
