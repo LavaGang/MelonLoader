@@ -43,11 +43,11 @@
     <OutputPath>$(SolutionDir)Output\$(Configuration)\$(Platform)\MelonLoader\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
     <PlatformTarget>
     </PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
   </PropertyGroup>
@@ -65,7 +65,6 @@
     <DefineConstants>NET35;PORT_DISABLE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Android'">
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -80,103 +79,115 @@
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>
+
   <PropertyGroup>
-    <!--<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects> -->
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\Assembly-CSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="UnhollowerBaseLib">
-      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\UnhollowerBaseLib.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\Desktop\assemblies\Il2CppUnhollowed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core.cs" />
-    <Compile Include="Deprecated.cs" />
-    <Compile Include="Entrypoint.cs" />
-    <Compile Include="External\Core.cs" />
-    <Compile Include="External\Debug.cs" />
-    <Compile Include="External\Handler.cs" />
-    <Compile Include="External\Logger.cs" />
-    <Compile Include="External\Utils.cs" />
-    <Compile Include="Utils\Debug.cs" />
-    <Compile Include="Utils\DependencyGraph.cs" />
-    <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Utils\SupportModule.cs" />
-    <Compile Include="Utils\Unhollower.cs" />
-    <Compile Include="Melons\Base.cs" />
-    <Compile Include="Melons\Attributes\Color.cs" />
-    <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
-    <Compile Include="Melons\Coroutines.cs" />
-    <Compile Include="Melons\Attributes\Game.cs" />
-    <Compile Include="Melons\Attributes\Info.cs" />
-    <Compile Include="Melons\Attributes\OptionalDependencies.cs" />
-    <Compile Include="Melons\Handler.cs" />
-    <Compile Include="Melons\Mod.cs" />
-    <Compile Include="Melons\Plugin.cs" />
-    <Compile Include="Melons\Utils.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\BuildInfo.cs" />
-    <Compile Include="Preferences\API.cs" />
-    <Compile Include="Preferences\Types\Boolean_Array.cs" />
-    <Compile Include="Preferences\Types\Byte_Array.cs" />
-    <Compile Include="Preferences\Types\Double_Array.cs" />
-    <Compile Include="Preferences\Types\Float_Array.cs" />
-    <Compile Include="Preferences\Types\Integer_Array.cs" />
-    <Compile Include="Preferences\Types\Long_Array.cs" />
-    <Compile Include="Preferences\Types\String_Array.cs" />
-    <Compile Include="Preferences\Types\Byte.cs" />
-    <Compile Include="Preferences\Category.cs" />
-    <Compile Include="Preferences\Entry.cs" />
-    <Compile Include="Preferences\TypeManager.cs" />
-    <Compile Include="Preferences\Types\Boolean.cs" />
-    <Compile Include="Preferences\Types\Double.cs" />
-    <Compile Include="Preferences\Types\Float.cs" />
-    <Compile Include="Preferences\Types\Integer.cs" />
-    <Compile Include="Preferences\Types\Long.cs" />
-    <Compile Include="Preferences\Types\String.cs" />
-    <!-- libs -->
-    <Compile Include="Libs\Harmony\Attributes.cs" />
-    <Compile Include="Libs\Harmony\CodeInstruction.cs" />
-    <Compile Include="Libs\Harmony\CodeTranspiler.cs" />
-    <Compile Include="Libs\Harmony\Extras\DelegateTypeFactory.cs" />
-    <Compile Include="Libs\Harmony\Extras\FastAccess.cs" />
-    <Compile Include="Libs\Harmony\Extras\MethodInvoker.cs" />
-    <Compile Include="Libs\Harmony\GlobalSuppressions.cs" />
-    <Compile Include="Libs\Harmony\HarmonyInstance.cs" />
-    <Compile Include="Libs\Harmony\HarmonyMethod.cs" />
-    <Compile Include="Libs\Harmony\HarmonySharedState.cs" />
-    <Compile Include="Libs\Harmony\ILCopying\ByteBuffer.cs" />
-    <Compile Include="Libs\Harmony\ILCopying\Emitter.cs" />
-    <Compile Include="Libs\Harmony\ILCopying\ILInstruction.cs" />
-    <Compile Include="Libs\Harmony\ILCopying\Memory.cs" />
-    <Compile Include="Libs\Harmony\ILCopying\MethodCopier.cs" />
-    <Compile Include="Libs\Harmony\ILCopying\Signature.cs" />
-    <Compile Include="Libs\Harmony\MethodPatcher.cs" />
-    <Compile Include="Libs\Harmony\Patch.cs" />
-    <Compile Include="Libs\Harmony\PatchFunctions.cs" />
-    <Compile Include="Libs\Harmony\PatchProcessor.cs" />
-    <Compile Include="Libs\Harmony\Priority.cs" />
-    <Compile Include="Libs\Harmony\Tools\AccessCache.cs" />
-    <Compile Include="Libs\Harmony\Tools\AccessTools.cs" />
-    <Compile Include="Libs\Harmony\Tools\DynamicTools.cs" />
-    <Compile Include="Libs\Harmony\Tools\Extensions.cs" />
-    <Compile Include="Libs\Harmony\Tools\FileLog.cs" />
-    <Compile Include="Libs\Harmony\Tools\PatchTools.cs" />
-    <Compile Include="Libs\Harmony\Tools\SelfPatching.cs" />
-    <Compile Include="Libs\Harmony\Tools\SymbolExtensions.cs" />
-    <Compile Include="Libs\Harmony\Tools\Traverse.cs" />
-    <Compile Include="Libs\Harmony\Transpilers.cs" />
-    <Compile Include="Libs\Harmony\UnityMagicMethods.cs" />
+    <Compile Include="Extensions\CompatibilityLayer.cs" />
+    <Compile Include="Extensions\Fixes\ApplicationBase.cs" />
+    <Compile Include="Extensions\Fixes\ExtraCleanup.cs" />
+    <Compile Include="Extensions\Fixes\InvariantCurrentCulture.cs" />
+    <Compile Include="Extensions\Fixes\QuitFix.cs" />
+    <Compile Include="Extensions\Fixes\UnhandledException.cs" />
+    <Compile Include="Extensions\Il2CppAssemblyGenerator.cs" />
+    <Compile Include="Extensions\Il2CppMethodPatcher.cs" />
+    <Compile Include="Extensions\Layers\Harmony.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Attributes.cs" />
+    <Compile Include="Extensions\Layers\Harmony\HarmonyInstance.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Extras\DelegateTypeFactory.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Extras\FastAccess.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Extras\MethodInvoker.cs" />
+    <Compile Include="Extensions\Layers\Harmony\HarmonyMethod.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Patch.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Priority.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Tools\AccessTools.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Tools\Extensions.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Tools\SymbolExtensions.cs" />
+    <Compile Include="Extensions\Layers\IPA.cs" />
+    <Compile Include="Extensions\Layers\IPA\IEnhancedPlugin.cs" />
+    <Compile Include="Extensions\Layers\IPA\IPlugin.cs" />
+    <Compile Include="Extensions\Layers\IPA\ModPrefs.cs" />
+    <Compile Include="Extensions\Layers\IPA\PluginManager.cs" />
+    <Compile Include="Extensions\Layers\Melon.cs" />
+    <Compile Include="Extensions\Layers\Melon\HarmonyShield.cs" />
+    <Compile Include="Extensions\Layers\Melon\Imports.cs" />
+    <Compile Include="Extensions\Layers\Melon\Main.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonConsole.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonLoaderBase.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonModGameAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonModInfoAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonModLogger.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonPluginGameAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonPluginInfoAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonPrefs.cs" />
+    <Compile Include="Extensions\Layers\Melon\ModPrefs.cs" />
+    <Compile Include="Extensions\Layers\Mono.Cecil.cs" />
+    <Compile Include="Extensions\Layers\MonoMod.cs" />
+    <Compile Include="Extensions\Layers\SharpZipLib.cs" />
+    <Compile Include="Extensions\Layers\TinyJSON.cs" />
+    <Compile Include="Extensions\Layers\Tomlyn.cs" />
+    <Compile Include="Extensions\PatchShield.cs" />
+    <Compile Include="Extensions\Shields\Harmony\HarmonyManipulator_Manipulate.cs" />
+    <Compile Include="Extensions\Shields\Harmony\Harmony_Patch.cs" />
+    <Compile Include="Extensions\Shields\Harmony\PatchFunctions_ReversePatch.cs" />
+    <Compile Include="Extensions\Shields\MonoMod\Detour_OnDetour.cs" />
+    <Compile Include="Extensions\Shields\MonoMod\Hook_OnDetour.cs" />
+    <Compile Include="Extensions\Shields\MonoMod\ILHook_OnDetour.cs" />
+    <Compile Include="Extensions\UnityMagicMethods.cs" />
+    <Compile Include="Preferences\ValueValidator.cs" />
+    <Compile Include="Utils\bHaptics\API.cs" />
+    <Compile Include="Utils\bHaptics\NativeLibrary.cs" />
+    <Compile Include="Libs\HarmonyX\Extras\DelegateTypeFactory.cs" />
+    <Compile Include="Libs\HarmonyX\Extras\FastAccess.cs" />
+    <Compile Include="Libs\HarmonyX\Extras\MethodInvoker.cs" />
+    <Compile Include="Libs\HarmonyX\GlobalSuppressions.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\AccessCache.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\PatchArgumentExtensions.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\PatchFunctions.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\Patching\ILManipulator.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\PatchModels.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\PatchSorter.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\PatchTools.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\Util\EmitterExtensions.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\Util\ILEmitter.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\Util\ILHookExtensions.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\Util\MethodBodyLogExtensions.cs" />
+    <Compile Include="Libs\HarmonyX\Internal\Util\StackTraceFixes.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Attributes.cs" />
+    <Compile Include="Libs\HarmonyX\Public\CodeInstruction.cs" />
+    <Compile Include="Libs\HarmonyX\Public\ExceptionBlock.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Exceptions.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Harmony.cs" />
+    <Compile Include="Libs\HarmonyX\Public\HarmonyException.cs" />
+    <Compile Include="Libs\HarmonyX\Public\HarmonyMethod.cs" />
+    <Compile Include="Libs\HarmonyX\Public\InlineSignature.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Patch.cs" />
+    <Compile Include="Libs\HarmonyX\Public\PatchClassProcessor.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Patches.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Patching\HarmonyManipulator.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Patching\ManagedMethodPatcher.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Patching\MethodPatcher.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Patching\NativeDetourMethodPatcher.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Patching\PatchManager.cs" />
+    <Compile Include="Libs\HarmonyX\Public\PatchProcessor.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Priority.cs" />
+    <Compile Include="Libs\HarmonyX\Public\ReversePatcher.cs" />
+    <Compile Include="Libs\HarmonyX\Public\Transpilers.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\AccessTools.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\CodeMatcher.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\Extensions.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\FileLog.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\JetBrains.Annotations.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\Logger.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\SymbolExtensions.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
+    <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
+    <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
     <Compile Include="Libs\Tomlyn\Helpers\ThrowHelper.cs" />
@@ -246,8 +257,32 @@
     <Compile Include="Libs\Tomlyn\Text\StringUtf8SourceView.cs" />
     <Compile Include="Libs\Tomlyn\Toml.cs" />
     <Compile Include="Libs\Tomlyn\TomlParserOptions.cs" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(Platform)' == 'Desktop'">
+    <Compile Include="Melons\Attributes\AdditionalDependencies.cs" />
+    <Compile Include="Melons\Attributes\Color.cs" />
+    <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
+    <Compile Include="Melons\Attributes\RegisterTypeInIl2Cpp.cs" />
+    <Compile Include="Melons\Attributes\Platform.cs" />
+    <Compile Include="Melons\Attributes\PlatformDomain.cs" />
+    <Compile Include="Melons\Attributes\Priority.cs" />
+    <Compile Include="Melons\Attributes\VerifyLoaderBuild.cs" />
+    <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
+    <Compile Include="CommandLine.cs" />
+    <Compile Include="Utils\Coroutines.cs" />
+    <Compile Include="Preferences\API.cs" />
+    <Compile Include="Preferences\Category.cs" />
+    <Compile Include="Preferences\Entry.cs" />
+    <Compile Include="Preferences\IO\File.cs" />
+    <Compile Include="Preferences\IO\Watcher.cs" />
+    <Compile Include="Preferences\TomlMapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\BuildInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Utils\Debug.cs" />
+    <Compile Include="Utils\DependencyGraph.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Utils\SupportModule.cs" />
+    <Compile Include="Utils\Unhollower.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Constants.cs" />
     <Compile Include="Libs\SharpZipLib\BZip2\BZip2Exception.cs" />
@@ -320,11 +355,23 @@
     <Compile Include="Libs\TinyJSON\Types\ProxyObject.cs" />
     <Compile Include="Libs\TinyJSON\Types\ProxyString.cs" />
     <Compile Include="Libs\TinyJSON\Types\Variant.cs" />
-    <Compile Include="Libs\bHaptics\NativeLibrary.cs" />
-    <Compile Include="Libs\IniFile.cs" />
-    <Compile Include="Libs\bHaptics\API.cs" />
+    <Compile Include="Melons\Attributes\Game.cs" />
+    <Compile Include="Melons\Attributes\Info.cs" />
+    <Compile Include="Melons\Base.cs" />
+    <Compile Include="Melons\Attributes\OptionalDependencies.cs" />
+    <Compile Include="Melons\Handler.cs" />
+    <Compile Include="Melons\Mod.cs" />
+    <Compile Include="Melons\Plugin.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="21.3.1.1" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <PackageReference ExcludeAssets="runtime" />
+  </ItemDefinitionGroup>
   <Import Condition="'$(Platform)' == 'Desktop'" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--<Import Condition="'$(Platform)' == 'Android'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

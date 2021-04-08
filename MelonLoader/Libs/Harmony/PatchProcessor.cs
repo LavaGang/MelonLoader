@@ -337,6 +337,7 @@ namespace Harmony
 				if (criterion(mod)) melonName = mod.Info.Name;
 			}
 			return melonName;
+#endif
 		}
 	}
 }
