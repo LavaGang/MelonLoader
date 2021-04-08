@@ -9,7 +9,7 @@ public:
 	static bool ShouldDAB;
 	static bool Initialize();
 	static void Hook();
-	static bool Check(const char* host_name_or_ip);
+	static bool CheckHostNameOrIP(const char* host_name_or_ip);
 	static bool ShouldBlock(const char* host_name_or_ip);
 
 	class wsock32

@@ -28,7 +28,7 @@ void AnalyticsBlocker::Hook()
 #endif
 }
 
-bool AnalyticsBlocker::Check(const char* host_name_or_ip)
+bool AnalyticsBlocker::CheckHostNameOrIP(const char* host_name_or_ip)
 {
 	std::string host_name_or_ip_str = host_name_or_ip;
 	std::transform(host_name_or_ip_str.begin(), host_name_or_ip_str.end(), host_name_or_ip_str.begin(), [](unsigned char c) { return std::tolower(c); });
@@ -105,7 +105,7 @@ void* AnalyticsBlocker::wsock32::Hooks::Gethostbyname(const char* name)
 {
 	try
 	{
-		if ((name == NULL) || CheckHostNames(name))
+		if ((name == NULL) || CheckHostNameOrIP(name))
 			name = "localhost";
 		return Exports::Gethostbyname(name);
 	}
@@ -158,7 +158,7 @@ int AnalyticsBlocker::ws2_32::Hooks::Getaddrinfo(PCSTR pNodeName, PCSTR pService
 {
 	try
 	{
-		if ((pNodeName == NULL) || CheckHostNames(pNodeName))
+		if ((pNodeName == NULL) || CheckHostNameOrIP(pNodeName))
 			pNodeName = "localhost";
 		return Exports::Getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
 	}
