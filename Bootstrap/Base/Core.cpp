@@ -69,11 +69,11 @@ bool Core::Initialize()
 			"Initializing Logging Service",
 			Logger::Initialize
 		},
-#ifdef PORT_DISABLE
 		{
 			"Creates instance of patch map",
 			Game::ReadInfo
 		},
+#ifdef PORT_DISABLE
 		{
 			"Creates instance of patch map",
 			HashCode::Initialize

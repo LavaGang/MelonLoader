@@ -10,6 +10,7 @@ namespace MelonLoader
 
         internal static void Load()
         {
+#if PORT_DISABLE
             string filename = "bHaptics.x" + (MelonUtils.IsGame32Bit() ? "86" : "64") + ".dll";
             string filepath = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), filename);
             if (!File.Exists(filepath))
@@ -34,6 +35,9 @@ namespace MelonLoader
             GetDelegateFromProcAddress("IsDevicePlaying", out IsDevicePlaying);
             GetDelegateFromProcAddress("TryGetResponseForPosition", out TryGetResponseForPosition);
             GetDelegateFromProcAddress("TryGetExePath", out TryGetExePath);
+#else 
+            throw new NotImplementedException("Not Ported");
+#endif
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -106,14 +110,20 @@ namespace MelonLoader
 
         private static void GetDelegateFromProcAddress<T>(string name, out T output) where T : Delegate
         {
+#if PORT_DISABLE
             IntPtr ptr = GetProcAddress(NativeLib, name);
             if (ptr == IntPtr.Zero)
                 throw new Exception("Unable to Find " + name + " Export!");
             output = Marshal.GetDelegateForFunctionPointer(ptr, typeof(T)) as T;
+#else
+            throw new NotImplementedException("Not Ported");
+#endif
         }
+#if PORT_DISABLE
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         private static extern IntPtr LoadLibrary(string lpLibFileName);
         [DllImport("kernel32")]
         private static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
+#endif
     }
 }
