@@ -34,7 +34,7 @@ void Assertion::ThrowInternalFailure(const char* msg)
 	
 	if (should_print_debug_info)
 	{
-		Logger::Internal_DirectWrite(LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
+		Logger::Internal_DirectWrite(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
 
 		MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 	}
@@ -44,6 +44,6 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		MessageBoxA(NULL, "Please Post your latest.log File\nto #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
 	}
 #elif defined(__ANDROID__)
-	Logger::Internal_DirectWrite(LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
+	Logger::Internal_DirectWrite(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
 #endif
 }

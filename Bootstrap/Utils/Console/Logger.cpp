@@ -92,7 +92,7 @@ void Logger::WriteSpacer()
 }
 
 
-void Logger::Msg(const char* txt)
+void Logger::Msg(Console::Color txtcolor, const char* txt)
 {
 	const Logger::MessagePrefix prefixes[]{
 		Logger::MessagePrefix{
@@ -101,7 +101,7 @@ void Logger::Msg(const char* txt)
 		}
 	};
 
-	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Internal_DirectWrite(txtcolor, LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Warning(const char* txt)
@@ -124,7 +124,7 @@ void Logger::Warning(const char* txt)
 		}
 	};
 
-	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Internal_DirectWrite(Console::Color::Yellow, LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Error(const char* txt)
@@ -147,7 +147,7 @@ void Logger::Error(const char* txt)
 		}
 	};
 
-	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Internal_DirectWrite(Console::Color::Red, LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Internal_PrintModName(Console::Color color, const char* name, const char* version)
@@ -167,10 +167,10 @@ void Logger::Internal_PrintModName(Console::Color color, const char* name, const
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< version;
 
-	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), versionStr.str().c_str());
+	Internal_DirectWrite(color, LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), versionStr.str().c_str());
 }
 
-void Logger::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
+void Logger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
 {
 	if (namesection == NULL)
 	{
@@ -184,12 +184,12 @@ void Logger::Internal_Msg(Console::Color color, const char* namesection, const c
 			GetTimestamp().c_str()
 		},
 		Logger::MessagePrefix{
-			color,
+			meloncolor,
 			namesection
 		}
 	};
 
-	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Internal_DirectWrite(txtcolor, LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
@@ -221,7 +221,7 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 		},
 	};
 
-	Internal_DirectWrite(LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Internal_DirectWrite(Console::Color::Yellow, LogLevel::Warning, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
@@ -254,10 +254,10 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 		},
 	};
 	
-	Internal_DirectWrite(LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Internal_DirectWrite(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
-void Logger::Internal_DirectWrite(LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt)
+void Logger::Internal_DirectWrite(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt)
 {
 	std::stringstream msgColor;
 	std::stringstream msgPlain;
@@ -279,16 +279,22 @@ void Logger::Internal_DirectWrite(LogLevel level, const MessagePrefix prefixes[]
 	}
 
 #ifdef __ANDROID__
-	msgColor << txt
+	msgColor 
+	<< Console::ColorToAnsi(txtcolor)
+	<< txt
 	<< Console::ColorToAnsi(Console::Color::Reset);
 	
-	msgPlain << txt
+	msgPlain 
+	<< txt
 	<< Console::ColorToAnsi(Console::Color::Reset);
 #else
-	msgColor << txt
+	msgColor 
+		<< Console::ColorToAnsi(txtcolor)
+		<< txt
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Reset);
-	msgPlain << txt
+	msgPlain 
+		<< txt
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Reset);
 #endif

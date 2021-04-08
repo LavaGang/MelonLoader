@@ -21,16 +21,18 @@ public:
 	static int MaxLogs;
 	static int MaxWarnings;
 	static int MaxErrors;
+
 	static bool Initialize();
 	static std::string GetTimestamp();
-
 	static void WriteSpacer();
-	static void Msg(const char* txt);
+
+	static void Msg(const char* txt) { Msg(Console::Color::Gray, txt); }
+	static void Msg(Console::Color txtcolor, const char* txt);
 	static void Warning(const char* txt);
 	static void Error(const char* txt);
 
-	static void Internal_PrintModName(Console::Color color, const char* name, const char* version);
-	static void Internal_Msg(Console::Color color, const char* namesection, const char* txt);
+	static void Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version);
+	static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt);
 	static void Internal_Warning(const char* namesection, const char* txt);
 	static void Internal_Error(const char* namesection, const char* txt);
 	
@@ -40,7 +42,7 @@ public:
 		const char* Message;
 	};
 	
-	static void Internal_DirectWrite(LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt);
+	static void Internal_DirectWrite(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt);
 	
 #ifdef PORT_DISABLE
 	class FileStream

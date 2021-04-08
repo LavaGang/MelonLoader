@@ -33,7 +33,7 @@ void Debug::ForceWrite(const char* txt)
 		},
 	};
 	
-	Logger::Internal_DirectWrite(LogLevel::Verbose, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Logger::Internal_DirectWrite(Console::Color::Gray, LogLevel::Verbose, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
 void Debug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
@@ -54,7 +54,7 @@ void Debug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, con
 			timestamp.c_str()
 		},
 		Logger::MessagePrefix{
-			color,
+			meloncolor,
 			namesection
 		},
 		Logger::MessagePrefix{
@@ -63,5 +63,5 @@ void Debug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, con
 		},
 	};
 	
-	Logger::Internal_DirectWrite(LogLevel::Verbose, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
+	Logger::Internal_DirectWrite(txtcolor, LogLevel::Verbose, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
