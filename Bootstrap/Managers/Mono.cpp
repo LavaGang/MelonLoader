@@ -35,8 +35,10 @@ const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdg
 const char* Mono::PosixHelperName = "MonoPosixHelper";
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
-char* Mono::NativePath = NULL;
+char* Mono::ManagedPathMono = NULL;
 char* Mono::ConfigPath = NULL;
+char* Mono::ConfigPathMono = NULL;
+char* Mono::MonoConfigPathMono = NULL;
 Mono::Domain* Mono::domain = NULL;
 bool Mono::IsOldMono = false;
 
@@ -356,11 +358,7 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_string_to_utf8)
 		MONODEF(mono_string_new)
 		MONODEF(mono_object_get_class)
-		MONODEF(mono_class_get_property_from_name)
 		MONODEF(mono_property_get_get_method)
-		MONODEF(mono_error_get_message)
-		MONODEF(mono_trace_set_mask_string)
-		MONODEF(mono_trace_set_level_string)
 
 		if (!IsOldMono)
 		{
@@ -423,8 +421,8 @@ bool Mono::ApplyPatches()
 
 	if (Debug::Enabled)
 	{
-		Exports::mono_trace_set_level_string("debug");
-		Exports::mono_trace_set_mask_string("all");
+		mono_trace_set_level_string("debug");
+		mono_trace_set_mask_string("all");
 		Debug::Msg("Enabled Mono Logging");
 	}
 	
