@@ -80,6 +80,10 @@ bool Core::Initialize()
 		},
 #endif
 		{
+			"Initializing Mono",
+			Mono::Initialize
+		},
+		{
 			"Show Welcome Message",
 			[]() {
 				WelcomeMessage();
@@ -95,10 +99,6 @@ bool Core::Initialize()
 		{
 			"Initializing IL2CPP",
 			Il2Cpp::Initialize
-		},
-				{
-			"Initializing Mono",
-			Mono::Initialize
 		},
 		{
 			"Load Mono",
