@@ -7,9 +7,7 @@ namespace MelonLoader.Tomlyn.Syntax
 {
     public sealed class TableSyntax : TableSyntaxBase
     {
-        public TableSyntax() : base(SyntaxKind.Table)
-        {
-        }
+        public TableSyntax() : base(SyntaxKind.Table) { }
 
         public TableSyntax(string name) : this()
         {
@@ -28,13 +26,8 @@ namespace MelonLoader.Tomlyn.Syntax
             EndOfLineToken = SyntaxFactory.NewLine();
         }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         internal override TokenKind OpenTokenKind => TokenKind.OpenBracket;
-
         internal override TokenKind CloseTokenKind => TokenKind.CloseBracket;
     }
 }

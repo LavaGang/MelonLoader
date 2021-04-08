@@ -10,35 +10,27 @@ namespace MelonLoader.Tomlyn.Model
     /// </summary>
     public abstract class TomlObject
     {
-        internal TomlObject(ObjectKind kind)
-        {
-            Kind = kind;
-        }
+        internal TomlObject(ObjectKind kind) => Kind = kind;
 
         /// <summary>
         /// The kind of the object
         /// </summary>
         public ObjectKind Kind { get; }
 
-        internal static object ToObject(TomlObject tomlObj)
-        {
-            return tomlObj is TomlValue value ? value.ValueAsObject : tomlObj;
-        }
+        internal static object ToObject(TomlObject tomlObj) => tomlObj is TomlValue value ? value.ValueAsObject : tomlObj;
 
         internal static TomlObject ToTomlObject(object value)
         {
             if (value == null)
-            {
                 throw new ArgumentNullException(nameof(value));
-            }
 
             if (value is TomlObject tomlObj) return tomlObj;
             var type = value.GetType();
             if (type == typeof(string)) return new TomlString((string)value);
-            if (type == typeof(long)) return new TomlInteger((long) value);
+            if (type == typeof(long)) return new TomlInteger((long)value);
             if (type == typeof(bool)) return new TomlBoolean((bool)value);
             if (type == typeof(double)) return new TomlFloat((double)value);
-            if (type == typeof(DateTime)) return new TomlDateTime(ObjectKind.LocalDateTime, (DateTime) value);
+            if (type == typeof(DateTime)) return new TomlDateTime(ObjectKind.LocalDateTime, (DateTime)value);
 
             throw new InvalidOperationException($"The type `{type}` of the object is invalid. Only long, bool, double, DateTime and TomlObject are supported");
         }
@@ -46,9 +38,7 @@ namespace MelonLoader.Tomlyn.Model
         internal static TomlObject UpdateObject(TomlObject toUpdate, object value)
         {
             if (value == null)
-            {
                 throw new ArgumentNullException(nameof(value));
-            }
 
             if (value is TomlObject tomlObj) return tomlObj;
             var type = value.GetType();

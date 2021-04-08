@@ -9,7 +9,5 @@ namespace MelonLoader.Tomlyn.Text
     /// (trait) CharacterIterator ala Stark
     /// </summary>
     // ReSharper disable once InconsistentNaming
-    internal interface CharacterIterator : Iterator<char32, int>
-    {
-    }
+    internal interface CharacterIterator : Iterator<char32, int> { }
 }

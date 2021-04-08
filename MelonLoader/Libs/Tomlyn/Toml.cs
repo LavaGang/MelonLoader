@@ -28,9 +28,7 @@ namespace MelonLoader.Tomlyn
             var parser = new Parser<StringSourceView>(lexer);
             var doc = parser.Run();
             if (!doc.HasErrors && options == TomlParserOptions.ParseAndValidate)
-            {
                 Validate(doc);
-            }
             return doc;
         }
 
@@ -48,9 +46,7 @@ namespace MelonLoader.Tomlyn
             var parser = new Parser<StringUtf8SourceView>(lexer);
             var doc = parser.Run();
             if (!doc.HasErrors && options == TomlParserOptions.ParseAndValidate)
-            {
                 Validate(doc);
-            }
             return doc;
         }
 

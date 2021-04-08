@@ -17,9 +17,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// Creates an instance of <see cref="DateTimeValueSyntax"/>
         /// </summary>
         /// <param name="kind">The kind of datetime</param>
-        public DateTimeValueSyntax(SyntaxKind kind) : base(CheckDateTimeKind(kind))
-        {
-        }
+        public DateTimeValueSyntax(SyntaxKind kind) : base(CheckDateTimeKind(kind)) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="DateTimeValueSyntax"/>
@@ -63,16 +61,8 @@ namespace MelonLoader.Tomlyn.Syntax
         public DateTime Value { get; set; }
 
         public override int ChildrenCount => 1;
-
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Token;
-        }
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
+        protected override SyntaxNode GetChildrenImpl(int index) => Token;
 
         private static SyntaxKind CheckDateTimeKind(SyntaxKind kind)
         {

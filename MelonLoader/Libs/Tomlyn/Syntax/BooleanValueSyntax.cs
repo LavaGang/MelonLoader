@@ -14,9 +14,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an instance of a <see cref="BooleanValueSyntax"/>
         /// </summary>
-        public BooleanValueSyntax() : base(SyntaxKind.Boolean)
-        {
-        }
+        public BooleanValueSyntax() : base(SyntaxKind.Boolean) { }
 
         /// <summary>
         /// Creates an instance of a <see cref="BooleanValueSyntax"/>
@@ -46,16 +44,8 @@ namespace MelonLoader.Tomlyn.Syntax
             set => _value = value;
         }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 1;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Token;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => Token;
     }
 }

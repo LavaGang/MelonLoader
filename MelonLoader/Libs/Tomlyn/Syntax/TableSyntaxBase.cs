@@ -13,10 +13,8 @@ namespace MelonLoader.Tomlyn.Syntax
         private SyntaxToken _closeBracket;
         private SyntaxToken _endOfLineToken;
 
-        internal TableSyntaxBase(SyntaxKind kind) : base(kind)
-        {
+        internal TableSyntaxBase(SyntaxKind kind) : base(kind) =>
             Items = new SyntaxList<KeyValueSyntax>() { Parent = this };
-        }
 
         /// <summary>
         /// Gets or sets the open bracket (simple `[` for <see cref="TableSyntax"/>, double `[[` for <see cref="TableArraySyntax"/>)
@@ -60,9 +58,7 @@ namespace MelonLoader.Tomlyn.Syntax
         public SyntaxList<KeyValueSyntax> Items { get; }
         
         public override int ChildrenCount => 5;
-
         internal abstract TokenKind OpenTokenKind { get; }
-
         internal abstract TokenKind CloseTokenKind { get; }
 
         protected override SyntaxNode GetChildrenImpl(int index)

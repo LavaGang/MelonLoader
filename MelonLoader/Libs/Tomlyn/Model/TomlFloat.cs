@@ -12,9 +12,7 @@ namespace MelonLoader.Tomlyn.Model
     /// </summary>
     public sealed class TomlFloat : TomlValue<double>
     {
-        public TomlFloat(double value) : base(ObjectKind.Float, value)
-        {
-        }
+        public TomlFloat(double value) : base(ObjectKind.Float, value) { }
 
         public override string ToString()
         {

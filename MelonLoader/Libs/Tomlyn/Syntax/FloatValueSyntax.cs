@@ -19,9 +19,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an instance of <see cref="FloatValueSyntax"/>
         /// </summary>
-        public FloatValueSyntax() : base(SyntaxKind.Float)
-        {
-        }
+        public FloatValueSyntax() : base(SyntaxKind.Float) { }
 
         /// <summary>
         /// Creates an instance of <see cref="FloatValueSyntax"/>
@@ -30,21 +28,13 @@ namespace MelonLoader.Tomlyn.Syntax
         public FloatValueSyntax(double value) : this()
         {
             if (double.IsNaN(value))
-            {
                 Token = new SyntaxToken(TokenKind.Nan, value < 0 ? TokenKind.NegativeNan.ToText() : TokenKind.Nan.ToText());
-            }
             else if (double.IsPositiveInfinity(value))
-            {
                 Token = new SyntaxToken(TokenKind.PositiveInfinite, TokenKind.PositiveInfinite.ToText());
-            }
             else if (double.IsNegativeInfinity(value))
-            {
                 Token = new SyntaxToken(TokenKind.NegativeInfinite, TokenKind.NegativeInfinite.ToText());
-            }
             else
-            {
-                Token = new SyntaxToken(TokenKind.Float, value.ToString(FloatFormat, CultureInfo.InvariantCulture));
-            }
+                Token = new SyntaxToken(TokenKind.Float, ToString(TokenKind.Float, value));
             Value = value;
         }
 
@@ -62,17 +52,9 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public double Value { get; set; }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 1;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Token;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => Token;
 
         /// <summary>
         /// Output the TOML string representation of a float with the specified token kind.
@@ -112,9 +94,7 @@ namespace MelonLoader.Tomlyn.Syntax
                 // - is in exponential form, or
                 // - already has a decimal point
                 if (c == 'e' || c == 'E' || c == '.')
-                {
                     return text;
-                }
             }
             return text + ".0";
         }

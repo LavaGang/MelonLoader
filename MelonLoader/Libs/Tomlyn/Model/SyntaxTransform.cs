@@ -104,15 +104,9 @@ namespace MelonLoader.Tomlyn.Model
             return ((StringValueSyntax) value).Value;
         }
 
-        public override void Visit(BooleanValueSyntax boolValue)
-        {
-            _currentValue = boolValue.Value;
-        }
+        public override void Visit(BooleanValueSyntax boolValue) => _currentValue = boolValue.Value;
 
-        public override void Visit(StringValueSyntax stringValue)
-        {
-            _currentValue = stringValue.Value;
-        }
+        public override void Visit(StringValueSyntax stringValue) => _currentValue = stringValue.Value;
 
         public override void Visit(DateTimeValueSyntax dateTimeValueSyntax)
         {
@@ -133,25 +127,19 @@ namespace MelonLoader.Tomlyn.Model
             }
         }
 
-        public override void Visit(FloatValueSyntax floatValueSyntax)
-        {
-            _currentValue = floatValueSyntax.Value;
-        }
+        public override void Visit(FloatValueSyntax floatValueSyntax) => _currentValue = floatValueSyntax.Value;
 
-        public override void Visit(IntegerValueSyntax integerValueSyntax)
-        {
-            _currentValue = integerValueSyntax.Value;
-        }
+        public override void Visit(IntegerValueSyntax integerValueSyntax) => _currentValue = integerValueSyntax.Value;
 
         public override void Visit(ArraySyntax array)
         {
-            var tomlArray = new TomlArray(array.ChildrenCount);
             var items = array.Items;
+            var tomlArray = new TomlArray(items.ChildrenCount);
             for(int i = 0; i < items.ChildrenCount; i++)
             {
                 var item = items.GetChildren(i);
                 item.Accept(this);
-                tomlArray.Add(_currentValue);
+                tomlArray[i] = _currentValue;
             }
             _currentValue = tomlArray;
         }

@@ -14,31 +14,11 @@ namespace MelonLoader.Tomlyn.Model
     {
         private readonly List<TomlTable> _items;
 
-        public TomlTableArray() : base(ObjectKind.TableArray)
-        {
-            _items = new List<TomlTable>();
-        }
-
-        internal TomlTableArray(int capacity) : base(ObjectKind.TableArray)
-        {
-            _items = new List<TomlTable>(capacity);
-        }
-
-
-        public List<TomlTable>.Enumerator GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
-
-        IEnumerator<TomlTable> IEnumerable<TomlTable>.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        public TomlTableArray() : base(ObjectKind.TableArray) => _items = new List<TomlTable>();
+        internal TomlTableArray(int capacity) : base(ObjectKind.TableArray) => _items = new List<TomlTable>(capacity);
+        public List<TomlTable>.Enumerator GetEnumerator() => _items.GetEnumerator();
+        IEnumerator<TomlTable> IEnumerable<TomlTable>.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public void Add(TomlTable item)
         {
@@ -46,10 +26,7 @@ namespace MelonLoader.Tomlyn.Model
             _items.Add(item);
         }
 
-        public void Clear()
-        {
-            _items.Clear();
-        }
+        public void Clear() => _items.Clear();
 
         public bool Contains(TomlTable item)
         {
@@ -57,10 +34,7 @@ namespace MelonLoader.Tomlyn.Model
             return _items.Contains(item);
         }
 
-        public void CopyTo(TomlTable[] array, int arrayIndex)
-        {
-            _items.CopyTo(array, arrayIndex);
-        }
+        public void CopyTo(TomlTable[] array, int arrayIndex) => _items.CopyTo(array, arrayIndex);
 
         public bool Remove(TomlTable item)
         {
@@ -83,10 +57,7 @@ namespace MelonLoader.Tomlyn.Model
             _items.Insert(index, item);
         }
 
-        public void RemoveAt(int index)
-        {
-            _items.RemoveAt(index);
-        }
+        public void RemoveAt(int index) => _items.RemoveAt(index);
 
         public TomlTable this[int index]
         {

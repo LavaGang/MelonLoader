@@ -36,9 +36,7 @@ namespace MelonLoader.Tomlyn.Syntax
             }
 
             if (!KeyNameToObjectPath(keyValue.Key, ObjectKind.Table))
-            {
                 return;
-            }
 
             ObjectKind kind;
             switch (keyValue.Value)
@@ -93,36 +91,28 @@ namespace MelonLoader.Tomlyn.Syntax
         public override void Visit(StringValueSyntax stringValue)
         {
             if (stringValue.Token == null)
-            {
                 _diagnostics.Error(stringValue.Span, $"A StringValueSyntax must have a non null Token");
-            }
             base.Visit(stringValue);
         }
 
         public override void Visit(IntegerValueSyntax integerValue)
         {
             if (integerValue.Token == null)
-            {
                 _diagnostics.Error(integerValue.Span, $"A IntegerValueSyntax must have a non null Token");
-            }
             base.Visit(integerValue);
         }
 
         public override void Visit(BooleanValueSyntax boolValue)
         {
             if (boolValue.Token == null)
-            {
                 _diagnostics.Error(boolValue.Span, $"A BooleanValueSyntax must have a non null Token");
-            }
             base.Visit(boolValue);
         }
 
         public override void Visit(FloatValueSyntax floatValue)
         {
             if (floatValue.Token == null)
-            {
                 _diagnostics.Error(floatValue.Span, $"A FloatValueSyntax must have a non null Token");
-            }
             base.Visit(floatValue);
         }
 
@@ -131,14 +121,10 @@ namespace MelonLoader.Tomlyn.Syntax
             VerifyTable(table);
             var savedPath = _currentPath.Clone();
             if (table.Name == null || !KeyNameToObjectPath(table.Name, ObjectKind.Table))
-            {
                 return;
-            }
 
             AddObjectPath(table, ObjectKind.Table, false);
-
             base.Visit(table);
-
             _currentPath = savedPath;
         }
 
@@ -147,11 +133,9 @@ namespace MelonLoader.Tomlyn.Syntax
             VerifyTable(table);
             var savedPath = _currentPath.Clone();
             if (table.Name == null || !KeyNameToObjectPath(table.Name, ObjectKind.Table))
-            {
                 return;
-            }
-            var currentArrayTable = AddObjectPath(table, ObjectKind.TableArray, true);
 
+            var currentArrayTable = AddObjectPath(table, ObjectKind.TableArray, true);
             var savedIndex = _currentArrayIndex;
             _currentArrayIndex = currentArrayTable.ArrayIndex;
 
@@ -165,27 +149,21 @@ namespace MelonLoader.Tomlyn.Syntax
         public override void Visit(BareKeySyntax bareKey)
         {
             if (bareKey.Key == null)
-            {
                 _diagnostics.Error(bareKey.Span, $"A BareKeySyntax must have a non null property Key");
-            }            
             base.Visit(bareKey);
         }
 
         public override void Visit(KeySyntax key)
         {
             if (key.Key == null)
-            {
                 _diagnostics.Error(key.Span, $"A KeySyntax must have a non null property Key");
-            }
             base.Visit(key);
         }
 
         public override void Visit(DateTimeValueSyntax dateTime)
         {
             if (dateTime.Token == null)
-            {
                 _diagnostics.Error(dateTime.Span, $"A DateTimeValueSyntax must have a non null Token");
-            }
             base.Visit(dateTime);
         }
 
@@ -193,29 +171,19 @@ namespace MelonLoader.Tomlyn.Syntax
         {
             var isTableArray = table is TableArraySyntax;
             if (table.OpenBracket == null)
-            {
                 _diagnostics.Error(table.Span, $"The table{(isTableArray? " array" : string.Empty)} must have an {table.OpenTokenKind} `{table.OpenTokenKind.ToText()}`");
-            }
             if (table.CloseBracket == null)
-            {
                 _diagnostics.Error(table.Span, $"The table{(isTableArray ? " array" : string.Empty)} must have an {table.CloseTokenKind} `{table.CloseTokenKind.ToText()}`");
-            }
             if (table.EndOfLineToken == null && table.Items.ChildrenCount > 0)
-            {
                 _diagnostics.Error(table.Span, $"The table{(isTableArray ? " array" : string.Empty)} must have a EndOfLine set after the open/closing brackets and before any elements");
-            }
             if (table.Name == null)
-            {
                 _diagnostics.Error(table.Span, $"The table{(isTableArray ? " array" : string.Empty)} must have a name");
-            }
         }
 
         private bool KeyNameToObjectPath(KeySyntax key, ObjectKind kind)
         {
             if (key.Key == null)
-            {
                 _diagnostics.Error(key.Span, $"The property KeySyntax.Key cannot be null");
-            }
 
             var name = GetStringFromBasic(key.Key);
             if (string.IsNullOrEmpty(name)) return false;
@@ -241,13 +209,9 @@ namespace MelonLoader.Tomlyn.Syntax
             if (_maps.TryGetValue(currentPath, out existingValue))
             {
                 if (!((existingValue.IsImplicit || isImplicit) && (existingValue.Kind == kind || isImplicit && existingValue.Kind == ObjectKind.TableArray && kind == ObjectKind.Table)))
-                {
                     _diagnostics.Error(node.Span, $"The element `{node.ToString().TrimEnd('\r','\n').ToPrintableString()}` with the key `{currentPath}` is already defined at {existingValue.Node.Span.Start} with `{existingValue.Node.ToString().TrimEnd('\r', '\n').ToPrintableString()}` and cannot be redefined");
-                }
                 else if (existingValue.Kind == ObjectKind.TableArray)
-                {
                     _currentPath.Add(existingValue.ArrayIndex);
-                }
             }
             else
             {
@@ -261,13 +225,9 @@ namespace MelonLoader.Tomlyn.Syntax
         {
             string result;
             if (value is BareKeySyntax basicKey)
-            {
                 result = basicKey.Key?.Text;
-            }
             else
-            {
                 result = ((StringValueSyntax) value).Value;
-            }
 
             if (string.IsNullOrEmpty(result))
             {
@@ -282,13 +242,9 @@ namespace MelonLoader.Tomlyn.Syntax
             var savedIndex = _currentArrayIndex;
 
             if (array.OpenBracket == null)
-            {
                 _diagnostics.Error(array.Span, $"The array must have an OpenBracket `[`");
-            }
             else if (array.CloseBracket == null)
-            {
                 _diagnostics.Error(array.Span, $"The array must have an CloseBracket `[`");
-            }
 
             var items = array.Items;
             SyntaxKind firstKind = default;
@@ -297,28 +253,19 @@ namespace MelonLoader.Tomlyn.Syntax
                 var item = items.GetChildren(i);
                 var value = item.Value;
                 if (i == 0)
-                {
                     firstKind = value.Kind;
-                }
                 else if (firstKind != value.Kind)
-                {
                     _diagnostics.Error(value.Span, $"The array item of type `{value.Kind.ToString().ToLowerInvariant()}` doesn't match the type of the first item: `{firstKind.ToString().ToLowerInvariant()}`");
-                }
 
                 if (i + 1 < items.ChildrenCount && item.Comma == null)
-                {
                     _diagnostics.Error(item.Span, $"The array item [{i}] must have a comma `,`");
-                }
             }
             base.Visit(array);
 
             _currentArrayIndex = savedIndex;
         }
 
-        public override void Visit(InlineTableItemSyntax inlineTableItem)
-        {
-            base.Visit(inlineTableItem);
-        }
+        public override void Visit(InlineTableItemSyntax inlineTableItem) => base.Visit(inlineTableItem);
 
         public override void Visit(ArrayItemSyntax arrayItem)
         {
@@ -332,15 +279,8 @@ namespace MelonLoader.Tomlyn.Syntax
             _currentArrayIndex++;
         }
 
-        public override void Visit(DottedKeyItemSyntax dottedKeyItem)
-        {
-            base.Visit(dottedKeyItem);
-        }
-
-        public override void Visit(InlineTableSyntax inlineTable)
-        {
-            base.Visit(inlineTable);
-        }
+        public override void Visit(DottedKeyItemSyntax dottedKeyItem) => base.Visit(dottedKeyItem);
+        public override void Visit(InlineTableSyntax inlineTable) => base.Visit(inlineTable);
 
         private class ObjectPath : List<ObjectPathItem>
         {
@@ -358,34 +298,29 @@ namespace MelonLoader.Tomlyn.Syntax
                 base.Add(new ObjectPathItem(index));
             }
 
-            public ObjectPath Clone()
-            {
-                return (ObjectPath) MemberwiseClone();
-            }
+            public ObjectPath Clone() => (ObjectPath) MemberwiseClone();
 
             public override bool Equals(object obj)
             {
                 var other = (ObjectPath) obj;
-                if (other.Count != Count) return false;
-                if (other._hashCode != _hashCode) return false;
+                if ((other.Count != Count)
+                    || (other._hashCode != _hashCode))
+                    return false;
                 for (int i = 0; i < Count; i++)
-                {
-                    if (this[i] != other[i]) return false;
-                }
+                    if (this[i] != other[i])
+                        return false;
                 return true;
             }
 
-            public override int GetHashCode()
-            {
-                return _hashCode;
-            }
+            public override int GetHashCode() => _hashCode;
 
             public override string ToString()
             {
                 var buffer = new StringBuilder();
                 for (int i = 0; i < Count; i++)
                 {
-                    if (i > 0) buffer.Append('.');
+                    if (i > 0)
+                        buffer.Append('.');
                     buffer.Append(this[i]);
                 }
                 return buffer.ToString();
@@ -402,37 +337,22 @@ namespace MelonLoader.Tomlyn.Syntax
                 IsImplicit = isImplicit;
             }
 
-
             public readonly SyntaxNode Node;
-
             public readonly ObjectKind Kind;
-
             public readonly bool IsImplicit;
-
             public int ArrayIndex;
         }
         
         private readonly struct ObjectPathItem : IEquatable<ObjectPathItem>
         {
-            public ObjectPathItem(string key) : this()
-            {
-                Key = key;
-            }
-
-            public ObjectPathItem(int index) : this()
-            {
-                Index = index;
-            }
-
+            public ObjectPathItem(string key) : this() => Key = key;
+            public ObjectPathItem(int index) : this() => Index = index;
 
             public readonly string Key;
-
             public readonly int Index;
 
-            public bool Equals(ObjectPathItem other)
-            {
-                return string.Equals(Key, other.Key) && Index == other.Index;
-            }
+            public bool Equals(ObjectPathItem other) =>
+                string.Equals(Key, other.Key) && Index == other.Index;
 
             public override bool Equals(object obj)
             {
@@ -448,20 +368,9 @@ namespace MelonLoader.Tomlyn.Syntax
                 }
             }
 
-            public static bool operator ==(ObjectPathItem left, ObjectPathItem right)
-            {
-                return left.Equals(right);
-            }
-
-            public static bool operator !=(ObjectPathItem left, ObjectPathItem right)
-            {
-                return !left.Equals(right);
-            }
-
-            public override string ToString()
-            {
-                return Key ?? $"[{Index}]";
-            }
+            public static bool operator ==(ObjectPathItem left, ObjectPathItem right) => left.Equals(right);
+            public static bool operator !=(ObjectPathItem left, ObjectPathItem right) => !left.Equals(right);
+            public override string ToString() => Key ?? $"[{Index}]";
         }
     }
 }

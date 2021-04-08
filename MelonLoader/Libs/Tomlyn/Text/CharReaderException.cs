@@ -5,10 +5,5 @@ using System;
 
 namespace MelonLoader.Tomlyn.Text
 {
-    internal sealed class CharReaderException : Exception
-    {
-        public CharReaderException(string message) : base(message)
-        {
-        }
-    }
+    internal sealed class CharReaderException : Exception { public CharReaderException(string message) : base(message) { } }
 }

@@ -40,15 +40,11 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public int Line { get; set; }
 
-        public override string ToString()
-        {
-            return $"({Line+1},{Column+1})";
-        }
+        public override string ToString() =>
+            $"({Line+1},{Column+1})";
 
-        public bool Equals(TextPosition other)
-        {
-            return Offset == other.Offset && Column == other.Column && Line == other.Line;
-        }
+        public bool Equals(TextPosition other) =>
+            Offset == other.Offset && Column == other.Column && Line == other.Line;
 
         public override bool Equals(object obj)
         {
@@ -56,19 +52,8 @@ namespace MelonLoader.Tomlyn.Syntax
             return obj is TextPosition && Equals((TextPosition) obj);
         }
 
-        public override int GetHashCode()
-        {
-            return Offset;
-        }
-
-        public static bool operator ==(TextPosition left, TextPosition right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(TextPosition left, TextPosition right)
-        {
-            return !left.Equals(right);
-        }
+        public override int GetHashCode() => Offset;
+        public static bool operator ==(TextPosition left, TextPosition right) => left.Equals(right);
+        public static bool operator !=(TextPosition left, TextPosition right) => !left.Equals(right);
     }
 }

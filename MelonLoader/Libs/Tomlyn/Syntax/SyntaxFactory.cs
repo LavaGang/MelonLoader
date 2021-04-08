@@ -15,19 +15,15 @@ namespace MelonLoader.Tomlyn.Syntax
         /// Creates a trivia whitespace.
         /// </summary>
         /// <returns>A trivia whitespace.</returns>
-        public static SyntaxTrivia Whitespace()
-        {
-            return new SyntaxTrivia(TokenKind.Whitespaces, " ");
-        }
+        public static SyntaxTrivia Whitespace() =>
+            new SyntaxTrivia(TokenKind.Whitespaces, " ");
 
         /// <summary>
         /// Creates a newline trivia.
         /// </summary>
         /// <returns>A new line trivia</returns>
-        public static SyntaxTrivia NewLineTrivia()
-        {
-            return new SyntaxTrivia(TokenKind.NewLine, "\n");
-        }
+        public static SyntaxTrivia NewLineTrivia() =>
+            new SyntaxTrivia(TokenKind.NewLine, "\n");
 
         /// <summary>
         /// Creates a comment trivia.
@@ -44,10 +40,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// Creates a newline token.
         /// </summary>
         /// <returns>A new line token</returns>
-        public static SyntaxToken NewLine()
-        {
-            return new SyntaxToken(TokenKind.NewLine, "\n");
-        }
+        public static SyntaxToken NewLine() =>
+           new SyntaxToken(TokenKind.NewLine, "\n");
 
         /// <summary>
         /// Creates a token from the specified token kind.

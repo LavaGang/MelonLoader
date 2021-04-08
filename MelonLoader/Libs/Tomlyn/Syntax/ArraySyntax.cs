@@ -191,11 +191,7 @@ namespace MelonLoader.Tomlyn.Syntax
             set => ParentToThis(ref _closeBracket, value, TokenKind.CloseBracket);
         }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 3;
 
         protected override SyntaxNode GetChildrenImpl(int index)

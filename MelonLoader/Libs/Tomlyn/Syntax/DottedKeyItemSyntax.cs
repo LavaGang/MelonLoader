@@ -16,9 +16,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an instance of <see cref="DottedKeyItemSyntax"/>
         /// </summary>
-        public DottedKeyItemSyntax() : base(SyntaxKind.DottedKeyItem)
-        {
-        }
+        public DottedKeyItemSyntax() : base(SyntaxKind.DottedKeyItem) { }
 
         /// <summary>
         /// Creates an instance of <see cref="DottedKeyItemSyntax"/>
@@ -49,16 +47,8 @@ namespace MelonLoader.Tomlyn.Syntax
             set => ParentToThis(ref _key, value);
         }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 2;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return index == 0 ? (SyntaxNode)Dot : Key;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => index == 0 ? (SyntaxNode)Dot : Key;
     }
 }

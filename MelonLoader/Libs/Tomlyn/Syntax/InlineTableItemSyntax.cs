@@ -16,18 +16,13 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an instance of <see cref="InlineTableItemSyntax"/>
         /// </summary>
-        public InlineTableItemSyntax() : base(SyntaxKind.InlineTable)
-        {
-        }
+        public InlineTableItemSyntax() : base(SyntaxKind.InlineTable) { }
 
         /// <summary>
         /// Creates an instance of <see cref="InlineTableItemSyntax"/>
         /// </summary>
         /// <param name="keyValue">The key=value</param>
-        public InlineTableItemSyntax(KeyValueSyntax keyValue) : this()
-        {
-            KeyValue = keyValue ?? throw new ArgumentNullException(nameof(keyValue));
-        }
+        public InlineTableItemSyntax(KeyValueSyntax keyValue) : this() => KeyValue = keyValue ?? throw new ArgumentNullException(nameof(keyValue));
 
         /// <summary>
         /// Gets or sets the <see cref="KeyValueSyntax"/>.
@@ -47,16 +42,8 @@ namespace MelonLoader.Tomlyn.Syntax
             set => ParentToThis(ref _comma, value, TokenKind.Comma);
         }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 2;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return index == 0 ? (SyntaxNode)KeyValue : Comma;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => index == 0 ? (SyntaxNode)KeyValue : Comma;
     }
 }

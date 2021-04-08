@@ -10,10 +10,7 @@ namespace MelonLoader.Tomlyn.Model
     /// </summary>
     public abstract class TomlValue : TomlObject
     {
-        internal TomlValue(ObjectKind kind) : base(kind)
-        {
-        }
-
+        internal TomlValue(ObjectKind kind) : base(kind) { }
         public abstract object ValueAsObject { get; }
     }
 
@@ -24,10 +21,7 @@ namespace MelonLoader.Tomlyn.Model
     {
         private T _value;
 
-        internal TomlValue(ObjectKind kind, T value) : base(kind)
-        {
-            _value = value;
-        }
+        internal TomlValue(ObjectKind kind, T value) : base(kind) => _value = value;
 
         public override object ValueAsObject => _value;
 
@@ -52,9 +46,6 @@ namespace MelonLoader.Tomlyn.Model
             return Equals((TomlValue<T>)obj);
         }
 
-        public override int GetHashCode()
-        {
-            return _value.GetHashCode();
-        }
+        public override int GetHashCode() => _value.GetHashCode();
     }
 }

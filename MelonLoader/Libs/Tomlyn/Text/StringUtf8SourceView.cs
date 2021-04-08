@@ -20,15 +20,10 @@ namespace MelonLoader.Tomlyn.Text
         public string GetString(int offset, int length)
         {
             if (offset + length <= _text.Length)
-            {
                 return Encoding.UTF8.GetString(_text, offset, length);
-            }
             return null;
         }
 
-        public StringCharacterUtf8Iterator GetIterator()
-        {
-            return new StringCharacterUtf8Iterator(_text);
-        }
+        public StringCharacterUtf8Iterator GetIterator() => new StringCharacterUtf8Iterator(_text);
     }
 }

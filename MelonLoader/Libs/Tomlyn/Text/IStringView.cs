@@ -12,5 +12,4 @@ namespace MelonLoader.Tomlyn.Text
     {
         TCharIterator GetIterator();
     }
-
 }

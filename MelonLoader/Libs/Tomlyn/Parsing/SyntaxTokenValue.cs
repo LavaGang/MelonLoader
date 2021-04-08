@@ -49,33 +49,25 @@ namespace MelonLoader.Tomlyn.Parsing
         /// </summary>
         public readonly object Value;
 
-        public override string ToString()
-        {
-            return $"{Kind}({Start}:{End})";
-        }
+        public override string ToString() =>
+            $"{Kind}({Start}:{End})";
 
         public string GetText(string text)
         {
             if (Kind == TokenKind.Eof)
-            {
                 return "<eof>";
-            }
             return End.Offset < text.Length ? text.Substring(Start.Offset, End.Offset - Start.Offset + 1) : null;
         }
 
         public string GetText<TTextView>(TTextView text) where TTextView : IStringView
         {
             if (Kind == TokenKind.Eof)
-            {
                 return "<eof>";
-            }
             return text.GetString(Start.Offset, End.Offset - Start.Offset + 1);
         }
 
-        public bool Equals(SyntaxTokenValue other)
-        {
-            return Kind == other.Kind && Start.Equals(other.Start) && End.Equals(other.End);
-        }
+        public bool Equals(SyntaxTokenValue other) =>
+            Kind == other.Kind && Start.Equals(other.Start) && End.Equals(other.End);
 
         public override bool Equals(object obj)
         {
@@ -94,14 +86,7 @@ namespace MelonLoader.Tomlyn.Parsing
             }
         }
 
-        public static bool operator ==(SyntaxTokenValue left, SyntaxTokenValue right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(SyntaxTokenValue left, SyntaxTokenValue right)
-        {
-            return !left.Equals(right);
-        }
+        public static bool operator ==(SyntaxTokenValue left, SyntaxTokenValue right) => left.Equals(right);
+        public static bool operator !=(SyntaxTokenValue left, SyntaxTokenValue right) => !left.Equals(right);
     }
 }

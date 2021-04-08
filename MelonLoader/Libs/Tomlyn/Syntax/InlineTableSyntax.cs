@@ -16,10 +16,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates a new instance of an <see cref="InlineTableSyntax"/>
         /// </summary>
-        public InlineTableSyntax() : base(SyntaxKind.InlineTable)
-        {
+        public InlineTableSyntax() : base(SyntaxKind.InlineTable) =>
             Items = new SyntaxList<InlineTableItemSyntax>() { Parent = this };
-        }
 
         /// <summary>
         /// Creates a new instance of an <see cref="InlineTableSyntax"/>
@@ -64,11 +62,7 @@ namespace MelonLoader.Tomlyn.Syntax
             set => ParentToThis(ref _closeBrace, value, TokenKind.CloseBrace);
         }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 3;
 
         protected override SyntaxNode GetChildrenImpl(int index)

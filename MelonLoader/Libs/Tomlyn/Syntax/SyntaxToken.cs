@@ -11,9 +11,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates a new instance of <see cref="SyntaxToken"/>
         /// </summary>
-        public SyntaxToken() : base(SyntaxKind.Token)
-        {
-        }
+        public SyntaxToken() : base(SyntaxKind.Token) { }
 
         /// <summary>
         /// Creates a new instance of <see cref="SyntaxToken"/>
@@ -36,16 +34,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// </summary>
         public string Text { get; set; }
 
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
-
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
         public override int ChildrenCount => 0;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return null;
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => null;
     }
 }

@@ -6,10 +6,5 @@ namespace MelonLoader.Tomlyn.Model
     /// <summary>
     /// Runtime representation of a TOML string
     /// </summary>
-    public sealed class TomlString : TomlValue<string>
-    {
-        public TomlString(string value) : base(ObjectKind.String, value)
-        {
-        }
-    }
+    public sealed class TomlString : TomlValue<string> { public TomlString(string value) : base(ObjectKind.String, value) { } }
 }

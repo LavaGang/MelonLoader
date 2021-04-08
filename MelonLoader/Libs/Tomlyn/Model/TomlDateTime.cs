@@ -11,9 +11,7 @@ namespace MelonLoader.Tomlyn.Model
     /// </summary>
     public sealed class TomlDateTime : TomlValue<DateTime>
     {
-        public TomlDateTime(ObjectKind kind, DateTime value) : base(CheckDateTimeKind(kind), value)
-        {
-        }
+        public TomlDateTime(ObjectKind kind, DateTime value) : base(CheckDateTimeKind(kind), value) { }
 
         private static ObjectKind CheckDateTimeKind(ObjectKind kind)
         {

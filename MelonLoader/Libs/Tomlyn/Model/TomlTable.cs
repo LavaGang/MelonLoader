@@ -32,29 +32,19 @@ namespace MelonLoader.Tomlyn.Model
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
             foreach (var keyPair in _order)
-            {
                 yield return new KeyValuePair<string, object>(keyPair.Key, ToObject(keyPair.Value));
-            }
         }
 
 
         public IEnumerable<KeyValuePair<string, TomlObject>> GetTomlEnumerator()
         {
             foreach (var keyPair in _order)
-            {
                 yield return new KeyValuePair<string, TomlObject>(keyPair.Key, keyPair.Value);
-            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public void Add(KeyValuePair<string, object> item)
-        {
-            Add(item.Key, item.Value);
-        }
+        public void Add(KeyValuePair<string, object> item) => Add(item.Key, item.Value);
 
         public void Clear()
         {
@@ -62,23 +52,10 @@ namespace MelonLoader.Tomlyn.Model
             _order.Clear();
         }
 
-        public bool Contains(KeyValuePair<string, object> item)
-        {
-            throw new NotSupportedException();
-        }
-
-        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
-        {
-            throw new NotSupportedException();
-        }
-
-        public bool Remove(KeyValuePair<string, object> item)
-        {
-            throw new NotSupportedException();
-        }
-
+        public bool Contains(KeyValuePair<string, object> item) => throw new NotSupportedException();
+        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex) => throw new NotSupportedException();
+        public bool Remove(KeyValuePair<string, object> item) => throw new NotSupportedException();
         public int Count => _map.Count;
-
         public bool IsReadOnly => false;
 
         public void Add(string key, object value)
@@ -89,10 +66,7 @@ namespace MelonLoader.Tomlyn.Model
             _order.Add(new KeyValuePair<string, TomlObject>(key, toml));
         }
 
-        public bool ContainsKey(string key)
-        {
-            return _map.ContainsKey(key);
-        }
+        public bool ContainsKey(string key) => _map.ContainsKey(key);
 
         public bool Remove(string key)
         {
@@ -108,7 +82,6 @@ namespace MelonLoader.Tomlyn.Model
                 }
                 return true;
             }
-
             return false;
         }
 
@@ -120,15 +93,11 @@ namespace MelonLoader.Tomlyn.Model
                 value = ToObject(node);
                 return true;
             }
-
             value = null;
             return false;
         }
 
-        public bool TryGetToml(string key, out TomlObject value)
-        {
-            return _map.TryGetValue(key, out value);
-        }
+        public bool TryGetToml(string key, out TomlObject value) => _map.TryGetValue(key, out value);
 
         public object this[string key]
         {

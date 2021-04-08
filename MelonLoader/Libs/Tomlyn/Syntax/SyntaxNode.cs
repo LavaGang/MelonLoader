@@ -13,10 +13,7 @@ namespace MelonLoader.Tomlyn.Syntax
     /// </summary>
     public abstract class SyntaxNode : SyntaxNodeBase
     {
-        protected SyntaxNode(SyntaxKind kind)
-        {
-            Kind = kind;
-        }
+        protected SyntaxNode(SyntaxKind kind) => Kind = kind;
 
         /// <summary>
         /// Gets the type of node.
@@ -85,9 +82,7 @@ namespace MelonLoader.Tomlyn.Syntax
 
                 WriteTriviaTo(node.LeadingTrivia, writer);
                 if (node is SyntaxToken token)
-                {
                     writer.Write(token.TokenKind.ToText() ?? token.Text);
-                }
                 else
                 {
                     int count = node.ChildrenCount;
@@ -122,13 +117,9 @@ namespace MelonLoader.Tomlyn.Syntax
         {
             if (node?.Parent != null) throw ThrowHelper.GetExpectingNoParentException();
             if (set != null)
-            {
                 set.Parent = null;
-            }
             if (node != null)
-            {
                 node.Parent = this;
-            }
             set = node;
         }
 
@@ -139,10 +130,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <param name="set">The previous child node parented to this instance</param>
         /// <param name="node">The new child node to parent to this instance</param>
         /// <param name="expectedKind">The expected kind of token</param>
-        protected void ParentToThis<TSyntaxNode>(ref TSyntaxNode set, TSyntaxNode node, TokenKind expectedKind) where TSyntaxNode : SyntaxToken
-        {
+        protected void ParentToThis<TSyntaxNode>(ref TSyntaxNode set, TSyntaxNode node, TokenKind expectedKind) where TSyntaxNode : SyntaxToken =>
             ParentToThis(ref set, node, node.TokenKind == expectedKind, expectedKind);
-        }
 
         /// <summary>
         /// Helper method to deparent/parent a <see cref="SyntaxToken"/> to this instance with an expected kind of token condition.
@@ -167,10 +156,8 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <param name="node">The new child node to parent to this instance</param>
         /// <param name="expectedKind1">The expected kind of token (option1)</param>
         /// <param name="expectedKind2">The expected kind of token (option2)</param>
-        protected void ParentToThis<TSyntaxNode>(ref TSyntaxNode set, TSyntaxNode node, TokenKind expectedKind1, TokenKind expectedKind2) where TSyntaxNode : SyntaxToken
-        {
+        protected void ParentToThis<TSyntaxNode>(ref TSyntaxNode set, TSyntaxNode node, TokenKind expectedKind1, TokenKind expectedKind2) where TSyntaxNode : SyntaxToken =>
             ParentToThis(ref set, node, node.TokenKind == expectedKind1 || node.TokenKind == expectedKind2, new ExpectedTuple2<TokenKind, TokenKind>(expectedKind1, expectedKind2));
-        }
 
         private readonly struct ExpectedTuple2<T1, T2>
         {
@@ -181,13 +168,10 @@ namespace MelonLoader.Tomlyn.Syntax
             }
 
             public readonly T1 Value1;
-
             public readonly T2 Value2;
 
-            public override string ToString()
-            {
-                return $"`{Value1}` or `{Value2}`";
-            }
+            public override string ToString() =>
+                $"`{Value1}` or `{Value2}`";
         }
     }
 }

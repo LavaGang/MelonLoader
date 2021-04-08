@@ -14,23 +14,10 @@ namespace MelonLoader.Tomlyn.Syntax
     public abstract class SyntaxList : SyntaxNode
     {
         protected readonly List<SyntaxNode> Children;
-
-        internal SyntaxList() : base(SyntaxKind.List)
-        {
-            Children = new List<SyntaxNode>();
-        }
-
+        internal SyntaxList() : base(SyntaxKind.List) => Children = new List<SyntaxNode>();
         public sealed override int ChildrenCount => Children.Count;
-
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Children[index];
-        }
-
-        public override void Accept(SyntaxVisitor visitor)
-        {
-            visitor.Visit(this);
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => Children[index];
+        public override void Accept(SyntaxVisitor visitor) => visitor.Visit(this);
     }
 
     /// <summary>
@@ -42,9 +29,7 @@ namespace MelonLoader.Tomlyn.Syntax
         /// <summary>
         /// Creates an instance of <see cref="SyntaxList{TSyntaxNode}"/>
         /// </summary>
-        public SyntaxList()
-        {
-        }
+        public SyntaxList() { }
 
         /// <summary>
         /// Adds the specified node to this list.
@@ -58,15 +43,9 @@ namespace MelonLoader.Tomlyn.Syntax
             node.Parent = this;
         }
 
-        public new TSyntaxNode GetChildren(int index)
-        {
-            return (TSyntaxNode)base.GetChildren(index);
-        }
+        public new TSyntaxNode GetChildren(int index) => (TSyntaxNode)base.GetChildren(index);
 
-        protected override SyntaxNode GetChildrenImpl(int index)
-        {
-            return Children[index];
-        }
+        protected override SyntaxNode GetChildrenImpl(int index) => Children[index];
 
         /// <summary>
         /// Removes a node at the specified index.
@@ -95,20 +74,10 @@ namespace MelonLoader.Tomlyn.Syntax
         /// Gets the default enumerator.
         /// </summary>
         /// <returns>The enumerator of this list</returns>
-        public Enumerator GetEnumerator()
-        {
-            return new Enumerator(Children);
-        }
+        public Enumerator GetEnumerator() => new Enumerator(Children);
 
-        IEnumerator<TSyntaxNode> IEnumerable<TSyntaxNode>.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator<TSyntaxNode> IEnumerable<TSyntaxNode>.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// Enumerator of a <see cref="SyntaxList{TSyntaxNode}"/>
@@ -135,10 +104,7 @@ namespace MelonLoader.Tomlyn.Syntax
                 return true;
             }
 
-            public void Reset()
-            {
-                _index = -1;
-            }
+            public void Reset() => _index = -1;
 
             public TSyntaxNode Current
             {
@@ -151,9 +117,7 @@ namespace MelonLoader.Tomlyn.Syntax
 
             object IEnumerator.Current => Current;
 
-            public void Dispose()
-            {
-            }
+            public void Dispose() { }
         }
     }
 }

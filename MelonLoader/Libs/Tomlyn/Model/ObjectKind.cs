@@ -9,25 +9,15 @@ namespace MelonLoader.Tomlyn.Model
     public enum ObjectKind
     {
         Table,
-
         TableArray,
-
         Array,
-
         Boolean,
-
         String,
-
         Integer,
-
         Float,
-
         OffsetDateTime,
-
         LocalDateTime,
-
         LocalDate,
-
         LocalTime,
     }
 }
