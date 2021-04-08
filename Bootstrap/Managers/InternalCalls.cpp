@@ -8,6 +8,9 @@
 
 #include "Il2Cpp.h"
 #include "../Utils/Helpers/ImportLibHelper.h"
+#include "sys/mman.h"
+#include "stdlib.h"
+
 
 #include <dlfcn.h>
 
@@ -20,6 +23,7 @@ void InternalCalls::Initialize()
 	MelonHandler::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
     UnhollowerIl2Cpp::AddInternalCalls();
+    Harmony::AddInternalCalls();
 }
 
 #pragma region MelonCore
@@ -398,5 +402,12 @@ void InternalCalls::UnhollowerIl2Cpp::AddInternalCalls()
         Mono::AddInternalCall((std::string("UnhollowerBaseLib.IL2CPP::") + il2cppCalls[i]).c_str(), resolvedFunc);
 
     }
+}
+#pragma endregion
+
+#pragma region Harmony
+void InternalCalls::Harmony::AddInternalCalls()
+{
+    Mono::AddInternalCall("Harmony.ILCopying.Memory::mprotect", (void*)mprotect);
 }
 #pragma endregion

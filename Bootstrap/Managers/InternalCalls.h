@@ -74,4 +74,10 @@ public:
 	public:
 		static void AddInternalCalls();
 	};
+
+	class Harmony
+	{
+	public:
+		static void AddInternalCalls();
+	};
 };

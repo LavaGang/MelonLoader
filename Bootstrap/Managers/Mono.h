@@ -5,6 +5,9 @@
 #include <string.h>
 #endif
 
+#include <mono/utils/mono-logger.h>
+#include <mono/metadata/object-forward.h>
+
 class Mono
 {
 public:
@@ -23,6 +26,7 @@ public:
 	static Domain* domain;
 	static bool IsOldMono;
 	static char* ManagedPath;
+	static char* NativePath;
 	static char* ConfigPath;
 	static bool Initialize();
 	static bool Load();
@@ -214,6 +218,12 @@ public:
 	{
 	public:
 		static void* mono_unity_get_unitytls_interface();
+
+		static void mono_print(const char* string, mono_bool is_stdout);
+		static void mono_printerr(const char* string, mono_bool is_stdout);
+		static void mono_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data);
+
+		static void mono_unhandled_exception(MonoObject* exc, void* user_data);
 		
 #ifdef _WIN32
 		static Object* mono_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);

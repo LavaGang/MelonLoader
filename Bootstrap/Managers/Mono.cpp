@@ -17,7 +17,6 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/mono-config.h>
 #include <mono/metadata/exception.h>
-#include <mono/utils/mono-logger.h>
 #include <mono/utils/mono-dl-fallback.h>
 
 #ifdef __ANDROID__
@@ -36,6 +35,7 @@ const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdg
 const char* Mono::PosixHelperName = "MonoPosixHelper";
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
+char* Mono::NativePath = NULL;
 char* Mono::ConfigPath = NULL;
 Mono::Domain* Mono::domain = NULL;
 bool Mono::IsOldMono = false;
@@ -144,6 +144,7 @@ bool Mono::Load()
 		Assertion::ThrowInternalFailure("Failed to Load Mono Library!");
 		return false;
 	}
+#endif
 
 #ifdef _WIN32
 	PosixHelper = LoadLibraryA((std::string(BasePath) + "\\" + Mono::PosixHelperName + ".dll").c_str());
@@ -156,7 +157,16 @@ bool Mono::Load()
 		Assertion::ThrowInternalFailure("Failed to Load Mono Posix Helper!");
 		return false;
 	}
-#endif
+
+	//Logger::Msg((std::string(NativePath) + "/libmono-native.so").c_str());
+	void* libNative = dlopen("libmono-native.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+
+	if (libNative == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Load libmono-native.so!");
+		return false;
+	}
+
 	return Exports::Initialize();
 }
 
@@ -244,6 +254,11 @@ bool Mono::SetupPaths()
 		ManagedPath = new char[ManagedPathStr.size() + 1];
 		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
 		ManagedPath[ManagedPathStr.size()] = '\0';
+
+		std::string NativePathStr = (std::string(Mono::BasePath) + "/native").c_str();
+		NativePath = new char[NativePathStr.size() + 1];
+		std::copy(NativePathStr.begin(), NativePathStr.end(), NativePath);
+		NativePath[NativePathStr.size()] = '\0';
 		
 		std::string ConfigPathStr = (std::string(Game::DataPath) + "/il2cpp/etc").c_str();
 		ConfigPath = new char[ConfigPathStr.size() + 1];
@@ -332,7 +347,7 @@ bool Mono::Exports::Initialize()
 #define MONODEF_FALLBACK(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
 #define MONODEF(fn) fn = (fn##_t) ::fn;
 
-		MONODEF(mono_jit_init)
+	MONODEF(mono_jit_init)
 		MONODEF(mono_thread_set_main)
 		MONODEF(mono_thread_current)
 		MONODEF(mono_add_internal_call)
@@ -356,80 +371,54 @@ bool Mono::Exports::Initialize()
 		if (!IsOldMono)
 		{
 			MONODEF(mono_domain_set_config)
-			// MONODEF(mono_unity_get_unitytls_interface)
-			MONODEF(mono_free)
+				// MONODEF(mono_unity_get_unitytls_interface)
+				MONODEF(mono_free)
 		}
 		else
 			MONODEF_FALLBACK(g_free)
 
-		if (Game::IsIl2Cpp)
-		{
-			MONODEF(mono_set_assemblies_path)
-			MONODEF(mono_assembly_setrootdir)
-			MONODEF(mono_set_config_dir)
+			if (Game::IsIl2Cpp)
+			{
+				MONODEF(mono_set_assemblies_path)
+					MONODEF(mono_assembly_setrootdir)
+					MONODEF(mono_set_config_dir)
 
-			if (!IsOldMono)
-				MONODEF(mono_runtime_set_main_args)
+					if (!IsOldMono)
+						MONODEF(mono_runtime_set_main_args)
 
-			MONODEF(mono_raise_exception)
-			MONODEF(mono_get_exception_bad_image_format)
-			MONODEF(mono_image_open_full)
-			MONODEF(mono_image_open_from_data_full)
-			MONODEF(mono_image_close)
-			MONODEF(mono_image_get_table_rows)
-			MONODEF(mono_metadata_decode_table_row_col)
-			MONODEF(mono_array_addr_with_size)
-			MONODEF(mono_array_length)
-			MONODEF(mono_metadata_string_heap)
-			MONODEF(mono_class_get_name)
-		}
-		else
-			MONODEF(mono_jit_init_version)
+						MONODEF(mono_raise_exception)
+						MONODEF(mono_get_exception_bad_image_format)
+						MONODEF(mono_image_open_full)
+						MONODEF(mono_image_open_from_data_full)
+						MONODEF(mono_image_close)
+						MONODEF(mono_image_get_table_rows)
+						MONODEF(mono_metadata_decode_table_row_col)
+						MONODEF(mono_array_addr_with_size)
+						MONODEF(mono_array_length)
+						MONODEF(mono_metadata_string_heap)
+						MONODEF(mono_class_get_name)
+			}
+			else
+				MONODEF(mono_jit_init_version)
 
 #ifdef __ANDROID__
-	// mono_class_get_method_from_name = (mono_class_get_method_from_name_t)ImportLibHelper::GetInternalExport(Module, "mono_class_get_method_from_name", 0x00275ecc, 0x0026c770);
+				// mono_class_get_method_from_name = (mono_class_get_method_from_name_t)ImportLibHelper::GetInternalExport(Module, "mono_class_get_method_from_name", 0x00275ecc, 0x0026c770);
 #endif
 #undef MONODEF
 #undef MONODEF_FALLBACK
 #pragma endregion MonoBind
 
-	if(Debug::Enabled)
-	{
-		Exports::mono_trace_set_level_string("debug");
-		Exports::mono_trace_set_mask_string("all");
-		Debug::Msg("Enabled Mono Logging");
-	}
-	
+	Debug::Msg("Binding Native Lib...");
+
+	mono_dllmap_insert(NULL, "System.Native", NULL, "libmono-native.so", NULL);
+	mono_dllmap_insert(NULL, "System.Net.Security.Native", NULL, "libmono-native.so", NULL);
+
 	return Assertion::ShouldContinue;
 }
 
 void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 {
-	if (exceptionObject == NULL)
-		return;
-
-	Class* klass = Exports::mono_object_get_class(exceptionObject);
-	if (klass == NULL)
-		return;
-
-	Property* prop = Exports::mono_class_get_property_from_name(klass, "Message");
-	if (prop == NULL)
-		return;
-	
-	Method* method = Exports::mono_property_get_get_method(prop);
-	if (method == NULL)
-		return;
-	
-	String* returnstr = (String*)Exports::mono_runtime_invoke(method, exceptionObject, NULL, NULL);
-	if (returnstr == NULL)
-		return;
-	
-	const char* returnstrc = Exports::mono_string_to_utf8(returnstr);
-	if (returnstrc == NULL)
-		return;
-	
-	Logger::Error(returnstrc);
-	Exports::mono_free(returnstr);
+	Hooks::mono_unhandled_exception((MonoObject*)exceptionObject, NULL);
 }
 
 
@@ -437,7 +426,22 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 bool Mono::ApplyPatches()
 {
 	Debug::Msg("Applying patches for Mono");
+
+	if (Debug::Enabled)
+	{
+		Exports::mono_trace_set_level_string("debug");
+		Exports::mono_trace_set_mask_string("all");
+		Debug::Msg("Enabled Mono Logging");
+	}
 	
+	//mono_trace_set_log_handler(&Hooks::mono_log, NULL);
+	mono_trace_set_print_handler(&Hooks::mono_print);
+	mono_trace_set_printerr_handler(&Hooks::mono_printerr);
+
+	mono_install_unhandled_exception_hook(&Hooks::mono_unhandled_exception, NULL);
+
+	Debug::Msg("Defined Mono Handlers");
+
 	// Patches::mono_unity_get_unitytls_interface = new Patcher((void**)&Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
 
 	// Patches::mono_unity_get_unitytls_interface->ApplyPatch();
@@ -449,6 +453,65 @@ bool Mono::ApplyPatches()
 #pragma region Hooks
 
 void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
+
+void Mono::Hooks::mono_print(const char* string, mono_bool is_stdout)
+{
+	if (is_stdout)
+	{
+		if (Debug::Enabled)
+			Debug::Msg("Skip writing STDOUT msg");
+
+		return;
+	}
+
+	Logger::Internal_Msg(Console::Color::Gray, "Mono", string);
+}
+
+void Mono::Hooks::mono_printerr(const char* string, mono_bool is_stdout)
+{
+	if (is_stdout)
+	{
+		if (Debug::Enabled)
+			Debug::Msg("Skip writing STDOUT msg");
+
+		return;
+	}
+
+	Logger::Internal_Msg(Console::Color::Red, "Mono Error", string);
+}
+
+void Mono::Hooks::mono_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data)
+{
+	Console::Color color = fatal ? Console::Gray : Console::Red;
+	const Logger::MessagePrefix prefixes[]{
+		Logger::MessagePrefix{
+			color,
+			Logger::GetTimestamp().c_str()
+		},
+		Logger::MessagePrefix{
+			color,
+			"Mono"
+		},
+		Logger::MessagePrefix{
+			color,
+			log_level
+		},
+		Logger::MessagePrefix{
+			color,
+			log_domain
+		},
+	};
+
+	Logger::Internal_DirectWrite(fatal ? LogLevel::Error : LogLevel::Info, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), message);
+}
+
+void Mono::Hooks::mono_unhandled_exception(MonoObject* exceptionObject, void* user_data)
+{
+	if (exceptionObject == NULL)
+		return;
+
+	mono_print_unhandled_exception(exceptionObject);
+}
 
 #ifdef _WIN32
 Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* version)
