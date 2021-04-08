@@ -19,10 +19,6 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static Component component = null;
         private static Camera OnPostRenderCam = null;
-        private static bool ShouldCheckForUiManager = true;
-        private static Assembly Assembly_CSharp = null;
-        private static Type VRCUiManager = null;
-        private static MethodInfo VRCUiManager_Instance = null;
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
