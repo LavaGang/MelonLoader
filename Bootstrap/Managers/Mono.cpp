@@ -278,7 +278,7 @@ bool Mono::SetupPaths()
 		std::copy(BaseAsmPathStr.begin(), BaseAsmPathStr.end(), BaseAssembly::PathMono);
 		BaseAssembly::PathMono[BaseAsmPathStr.size()] = '\0';
 
-		std::string PreloadPathStr = (BasePathStr + "/Preload.dll").c_str();
+		std::string PreloadPathStr = (BasePathStr + "/support/Preload.dll").c_str();
 		BaseAssembly::PreloadPath = new char[PreloadPathStr.size() + 1];
 		std::copy(PreloadPathStr.begin(), PreloadPathStr.end(), BaseAssembly::PreloadPath);
 		BaseAssembly::PreloadPath[PreloadPathStr.size()] = '\0';

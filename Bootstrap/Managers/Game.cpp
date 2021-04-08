@@ -47,6 +47,8 @@ bool Game::Initialize()
 	Il2Cpp::UnityPlayerPath = new char[UnityPlayerPath.size() + 1];
 	std::copy(UnityPlayerPath.begin(), UnityPlayerPath.end(), Il2Cpp::UnityPlayerPath);
 	Il2Cpp::UnityPlayerPath[UnityPlayerPath.size()] = '\0';
+#else 
+	IsIl2Cpp = true;
 #endif
 	return true;
 }
