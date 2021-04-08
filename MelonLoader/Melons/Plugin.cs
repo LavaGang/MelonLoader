@@ -1,5 +1,5 @@
-﻿#if PORT_DISABLE
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace MelonLoader
@@ -32,5 +32,21 @@ namespace MelonLoader
             }
         }
     }
+
+    internal class MelonPluginEnumerator : IEnumerator<MelonPlugin>
+    {
+        private MelonPlugin currentPlugin = null;
+        private int currentIndex = -1;
+        public bool MoveNext()
+        {
+            if ((MelonHandler._Plugins.Count <= 0) || (++currentIndex >= MelonHandler._Plugins.Count))
+                return false;
+            currentPlugin = MelonHandler._Plugins[currentIndex];
+            return true;
+        }
+        public void Reset() => currentIndex = -1;
+        public MelonPlugin Current => currentPlugin;
+        object IEnumerator.Current => currentPlugin;
+        void IDisposable.Dispose() { }
+    }
 }
-#endif

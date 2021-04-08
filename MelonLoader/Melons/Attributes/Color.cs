@@ -2,7 +2,7 @@
 
 namespace MelonLoader
 {
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Assembly)]
     public class MelonColorAttribute : Attribute
     {
         /// <summary>

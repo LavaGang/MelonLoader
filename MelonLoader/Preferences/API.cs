@@ -1,218 +1,242 @@
-﻿#if PORT_DISABLE
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using MelonLoader.Tomlyn;
-using MelonLoader.Tomlyn.Model;
-using MelonLoader.Tomlyn.Syntax;
 
 namespace MelonLoader
 {
     public static class MelonPreferences
     {
-        private static bool _waserror = false;
-        public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Defaulting MelonPreferences to Fallback Functionality to further avoid File Corruption..."); FileWatcher.EndInit(); _waserror = value; } }
-        private static string FilePath = null;
-        private static string LegacyFilePath = null;
-        internal static List<MelonPreferences_Category> categorytbl = new List<MelonPreferences_Category>();
-        public static List<MelonPreferences_Category> Categories { get => categorytbl.AsReadOnly().ToList(); }
-        private static FileSystemWatcher FileWatcher = new FileSystemWatcher();
+        public static readonly List<MelonPreferences_Category> Categories = new List<MelonPreferences_Category>();
+        public static readonly TomlMapper Mapper = new TomlMapper();
+        internal static List<Preferences.IO.File> PrefFiles = new List<Preferences.IO.File>();
+        internal static Preferences.IO.File DefaultFile = null;
 
-        static MelonPreferences()
-        {
-            FilePath = Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg");
-            LegacyFilePath = Path.Combine(MelonUtils.UserDataDirectory, "modprefs.ini");
-            FileWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
-            FileWatcher.Path = MelonUtils.UserDataDirectory;
-            FileWatcher.Filter = "MelonPreferences.cfg";
-            FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
-            FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
-            FileWatcher.EnableRaisingEvents = true;
-            FileWatcher.BeginInit();
-        }
+        static MelonPreferences() => DefaultFile = new Preferences.IO.File(
+            Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg"), 
+            Path.Combine(MelonUtils.UserDataDirectory, "modprefs.ini"));
 
-        internal static bool SaveAfterEntryCreation = false;
-        internal static bool WasLegacyLoaded = false;
-        internal static void LegacyCheck()
-        {
-            if (!File.Exists(LegacyFilePath))
-                return;
-            string filestr = File.ReadAllText(LegacyFilePath);
-            string[] lines = filestr.Split('\n');
-            MelonPreferences_Category category = null;
-            foreach (string line in lines)
-            {
-                if (string.IsNullOrEmpty(line))
-                    continue;
-                string newline = line.Replace("\n", "").Replace("\r", "").Replace(" ", "");
-                if (newline.Contains("[") && newline.Contains("]"))
-                {
-                    category = CreateCategory(newline.Replace("[", "").Replace("]", ""));
-                    continue;
-                }
-                if (!newline.Contains("="))
-                    continue;
-                string[] parts = line.Split('=');
-                if (string.IsNullOrEmpty(parts[0]) || string.IsNullOrEmpty(parts[1]))
-                    continue;
-                int val_int = 0;
-                float val_float = 0f;
-                if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
-                    category.CreateEntry(parts[0], parts[1].ToLower().StartsWith("true"), hidden: true);
-                else if (int.TryParse(parts[1], out val_int))
-                    category.CreateEntry(parts[0], val_int, hidden: true);
-                else if (float.TryParse(parts[1], out val_float))
-                    category.CreateEntry(parts[0], val_float, hidden: true);
-                else
-                    category.CreateEntry(parts[0], parts[1].Replace("\r", ""), hidden: true);
-            }
-            File.Delete(LegacyFilePath);
-            WasLegacyLoaded = true;
-        }
-
-        private static void OnFileWatcherTriggered(object source, FileSystemEventArgs e) { if (!IsSaving) Load(); else IsSaving = false; }
         public static void Load()
         {
-            if (_waserror || !Load_Internal())
-                return;
-            MelonLogger.Msg("Config Loaded!");
+            try
+            {
+                DefaultFile.LegacyLoad();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Loading Legacy Preferences from {DefaultFile.LegacyFilePath}: {ex}");
+                DefaultFile.WasError = true;
+            }
+
+            try
+            {
+                DefaultFile.Load();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Loading Preferences from {DefaultFile.FilePath}: {ex}");
+                DefaultFile.WasError = true;
+            }
+
+            if (PrefFiles.Count >= 0)
+            {
+                foreach (Preferences.IO.File file in PrefFiles)
+                {
+                    try
+                    {
+                        file.Load();
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Error($"Error while Loading Preferences from {file.FilePath}: {ex}");
+                        file.WasError = true;
+                    }
+                }
+            }
+
+            if (Categories.Count > 0)
+            {
+                foreach (MelonPreferences_Category category in Categories)
+                {
+                    if (category.Entries.Count < 0)
+                        continue;
+                    Preferences.IO.File currentFile = category.File;
+                    if (currentFile == null)
+                        currentFile = DefaultFile;
+                    if (currentFile.WasError)
+                        continue;
+                    foreach (MelonPreferences_Entry entry in category.Entries)
+                        currentFile.SetupEntryFromRawValue(entry);
+                }
+            }
+
+            MelonLogger.Msg("Preferences Loaded!");
             MelonHandler.OnPreferencesLoaded();
         }
-        internal static bool Load_Internal()
-        {
-            if (_waserror || !File.Exists(FilePath))
-                return false;
-            string filestr = File.ReadAllText(FilePath);
-            if (string.IsNullOrEmpty(filestr))
-                return false;
-            DocumentSyntax docsyn = Toml.Parse(filestr);
-            if (docsyn == null)
-                return false;
-            TomlTable model = docsyn.ToModel();
-            if (model.Count <= 0)
-                return false;
-            foreach (KeyValuePair<string, object> keypair in model)
-            {
-                string category_name = keypair.Key;
-                MelonPreferences_Category category = CreateCategory(category_name);
-                TomlTable tbl = (TomlTable)keypair.Value;
-                if (tbl.Count <= 0)
-                    continue;
-                foreach (KeyValuePair<string, object> tblkeypair in tbl)
-                {
-                    string name = tblkeypair.Key;
-                    if (string.IsNullOrEmpty(name))
-                        continue;
-                    TomlObject obj = TomlObject.ToTomlObject(tblkeypair.Value);
-                    if (obj == null)
-                        continue;
-                    MelonPreferences_Entry entry = category.GetEntry(name);
-                    if (entry == null)
-                    {
-                        if (obj.Kind == ObjectKind.String)
-                            entry = category.CreateEntry(name, ((TomlString)obj).Value, hidden: true);
-                        else if (obj.Kind == ObjectKind.Boolean)
-                            entry = category.CreateEntry(name, ((TomlBoolean)obj).Value, hidden: true);
-                        else if (obj.Kind == ObjectKind.Integer)
-                            entry = category.CreateEntry(name, ((TomlInteger)obj).Value, hidden: true);
-                        else if (obj.Kind == ObjectKind.Float)
-                            entry = category.CreateEntry(name, ((TomlFloat)obj).Value, hidden: true);
-                        else if(obj.Kind == ObjectKind.Array)
-                        {
-                            TomlArray arr = (TomlArray)obj;
-                            if (arr.Count() <= 0)
-                                continue;
-                            TomlObject arrobj = TomlObject.ToTomlObject(arr[0]);
-                            if (arrobj.Kind == ObjectKind.String)
-                                entry = category.CreateEntry(name, arr.ToArray<string>(), hidden: true);
-                            else if (arrobj.Kind == ObjectKind.Boolean)
-                                entry = category.CreateEntry(name, arr.ToArray<bool>(), hidden: true);
-                            else if (obj.Kind == ObjectKind.Integer)
-                                entry = category.CreateEntry(name, arr.ToArray<long>(), hidden: true);
-                            else if (obj.Kind == ObjectKind.Float)
-                                entry = category.CreateEntry(name, arr.ToArray<double>(), hidden: true);
-                        }
-                    }
-                    if (entry == null)
-                        continue;
-                    Preferences.TypeManager.Load(entry, obj);
-                }
-            }
-            return true;
-        }
 
-        private static bool IsSaving = false;
         public static void Save()
         {
-            if (!Save_Internal())
-                return;
-            if (!_waserror)
-                MelonLogger.Msg("Config Saved!");
+            foreach (MelonPreferences_Category category in Categories)
+            {
+                Preferences.IO.File currentFile = category.File;
+                if (currentFile == null)
+                    currentFile = DefaultFile;
+                foreach (MelonPreferences_Entry entry in category.Entries)
+                    if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
+                        currentFile.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+            }
+
+            try
+            {
+                DefaultFile.Save();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Saving Preferences to {DefaultFile.FilePath}: {ex}");
+                DefaultFile.WasError = true;
+            }
+
+            if (PrefFiles.Count >= 0)
+            {
+                foreach (Preferences.IO.File file in PrefFiles)
+                {
+                    try
+                    {
+                        file.Save();
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Error($"Error while Saving Preferences to {file.FilePath}: {ex}");
+                        file.WasError = true;
+                    }
+                }
+            }
+
+            MelonLogger.Msg("Preferences Saved!");
             MelonHandler.OnPreferencesSaved();
         }
-        internal static bool Save_Internal()
-        {
-            if (categorytbl.Count <= 0)
-                return false;
-            DocumentSyntax doc = new DocumentSyntax();
-            foreach (MelonPreferences_Category category in categorytbl)
-            {
-                TableSyntax tbl = new TableSyntax(category.Name);
-                foreach (MelonPreferences_Entry entry in category.prefstbl)
-                {
-                    KeyValueSyntax key = Preferences.TypeManager.Save(entry);
-                    if (key != null)
-                        tbl.Items.Add(key);
-                }
-                doc.Tables.Add(tbl);
-            }
-            IsSaving = true;
-            if (!_waserror)
-                File.WriteAllText(FilePath, doc.ToString());
-            return true;
-        }
 
-        public static MelonPreferences_Category GetCategory(string name)
+        public static MelonPreferences_Category CreateCategory(string identifier, string display_name = null)
         {
-            if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling GetCategory");
-            if (categorytbl.Count <= 0)
-                return null;
-            return categorytbl.Find(x => x.Name.Equals(name));
-        }
-
-        public static MelonPreferences_Category CreateCategory(string name, string displayname = null)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new Exception("Name is null or empty when calling CreateCategory");
-            MelonPreferences_Category category = GetCategory(name);
+            if (string.IsNullOrEmpty(identifier))
+                throw new Exception("identifier is null or empty when calling CreateCategory");
+            if (display_name == null)
+                display_name = identifier;
+            MelonPreferences_Category category = GetCategory(identifier);
             if (category != null)
-            {
-                category.DisplayName = displayname;
                 return category;
-            }
-            return new MelonPreferences_Category(name, displayname);
+            return new MelonPreferences_Category(identifier, display_name);
         }
 
-        public static MelonPreferences_Entry.TypeEnum TypeToTypeEnum<T>() => Preferences.TypeManager.TypeToTypeEnum<T>();
-        public static Type TypeEnumToReflectedType(MelonPreferences_Entry.TypeEnum type) => Preferences.TypeManager.TypeEnumToReflectedType(type);
-        public static string TypeEnumToTypeName(MelonPreferences_Entry.TypeEnum type) => Preferences.TypeManager.TypeEnumToTypeName(type);
-        public static string GetCategoryDisplayName(string category_name) => GetCategory(category_name)?.DisplayName;
-        public static MelonPreferences_Entry GetEntry(string category_name, string entry_name) => GetCategory(category_name)?.GetEntry(entry_name);
-        public static bool HasEntry(string category_name, string entry_name) => (GetEntry(category_name, entry_name) != null);
-        public static MelonPreferences_Entry CreateEntry<T>(string category_name, string entry_name, T defaultValue, string displayText = null, bool hideFromList = false) => GetCategory(category_name)?.CreateEntry(entry_name, defaultValue, displayText, hideFromList);
-        public static void SetEntryValue<T>(string category_name, string entry_name, T value) => GetCategory(category_name)?.GetEntry(entry_name)?.SetValue(value);
-        public static T GetEntryValue<T>(string category_name, string entry_name)
+        [Obsolete]
+        public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier,
+            T default_value, string display_name, bool is_hidden) 
+            => CreateEntry(category_identifier, entry_identifier, default_value, display_name, null, is_hidden, false, null);
+        
+        public static MelonPreferences_Entry<T> CreateEntry<T>(string category_identifier, string entry_identifier, T default_value, 
+            string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false, 
+            Preferences.ValueValidator validator = null)
         {
-            MelonPreferences_Category cat = GetCategory(category_name);
+            if (string.IsNullOrEmpty(category_identifier))
+                throw new Exception("category_identifier is null or empty when calling CreateEntry");
+
+            if (string.IsNullOrEmpty(entry_identifier))
+                throw new Exception("entry_identifier is null or empty when calling CreateEntry");
+
+            MelonPreferences_Category category = GetCategory(entry_identifier);
+            if (category == null)
+                category = CreateCategory(category_identifier);
+
+            return category.CreateEntry(entry_identifier, default_value, display_name, description, is_hidden, dont_save_default, validator);
+        }
+
+        public static MelonPreferences_Category GetCategory(string identifier)
+        {
+            if (string.IsNullOrEmpty(identifier))
+                throw new Exception("identifier is null or empty when calling GetCategory");
+            if (Categories.Count <= 0)
+                return null;
+            return Categories.Find(x => x.Identifier.Equals(identifier));
+        }
+        public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
+        public static MelonPreferences_Entry<T> GetEntry<T>(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
+        public static bool HasEntry(string category_identifier, string entry_identifier) => (GetEntry(category_identifier, entry_identifier) != null);
+        public static void SetEntryValue<T>(string category_identifier, string entry_identifier, T value)
+        {
+            var entry = GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
+            if (entry != null) entry.Value = value;
+        }
+
+        public static T GetEntryValue<T>(string category_identifier, string entry_identifier)
+        {
+            MelonPreferences_Category cat = GetCategory(category_identifier);
             if (cat == null)
                 return default;
-            MelonPreferences_Entry entry = cat.GetEntry(entry_name);
+            var entry = cat.GetEntry<T>(entry_identifier);
             if (entry == null)
                 return default;
-            return entry.GetValue<T>();
+            return entry.Value;
         }
+        
+        internal static Preferences.IO.File GetPrefFileFromFilePath(string filepath)
+        {
+            if (PrefFiles.Count <= 0)
+                return null;
+            FileInfo filepathinfo = new FileInfo(filepath);
+            foreach (Preferences.IO.File file in PrefFiles)
+            {
+                FileInfo filepathinfo2 = new FileInfo(file.FilePath);
+                if (filepathinfo.FullName.Equals(filepathinfo2.FullName))
+                    return file;
+            }
+            return null;
+        }
+
+        internal static bool IsFileInUse(Preferences.IO.File file)
+        {
+            if (Categories.Count <= 0)
+                return false;
+            if (file == null)
+                file = DefaultFile;
+            if (file == DefaultFile)
+                return true;
+            foreach (MelonPreferences_Category category in Categories)
+            {
+                Preferences.IO.File currentFile = category.File;
+                if (currentFile == null)
+                    currentFile = DefaultFile;
+                if (currentFile == file)
+                    return true;
+            }
+            return false;
+        }
+
+        internal static void LoadFileAndRefreshCategories(Preferences.IO.File file)
+        {
+            try
+            {
+                file.Load();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Loading Preferences from {file.FilePath}: {ex}");
+                file.WasError = true;
+            }
+            if (file.WasError || (Categories.Count <= 0))
+                return;
+            foreach (MelonPreferences_Category category in Categories)
+            {
+                Preferences.IO.File currentFile = category.File;
+                if (currentFile == null)
+                    currentFile = DefaultFile;
+                if ((currentFile != file) || (category.Entries.Count <= 0))
+                    continue;
+                foreach (MelonPreferences_Entry entry in category.Entries)
+                    currentFile.SetupEntryFromRawValue(entry);
+            }
+            MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
+            MelonHandler.OnPreferencesLoaded();
+        }
+
+        internal static bool IsFilePathDefault(string filepath) => new FileInfo(filepath).FullName.Equals(new FileInfo(DefaultFile.FilePath).FullName);
     }
 }
-#endif

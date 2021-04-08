@@ -2,7 +2,7 @@
 
 namespace MelonLoader
 {
-    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Assembly)]
     public class MelonInfoAttribute : Attribute
     {
         /// <summary>
@@ -30,7 +30,7 @@ namespace MelonLoader
         /// </summary>
         public string DownloadLink { get; internal set; }
 
-        public MelonInfoAttribute(Type type, string name, string version, string author, string downloadLink = null)
+        public MelonInfoAttribute(Type type, string name, string version, string author = null, string downloadLink = null)
         {
             SystemType = type;
             Name = name;

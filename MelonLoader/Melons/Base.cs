@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+#pragma warning disable 0618
 
 namespace MelonLoader
 {
@@ -15,41 +16,20 @@ namespace MelonLoader
         /// </summary>
         public string Location { get; internal set; }
 
-        // <summary>
-        /// Enum for Melon Compatibility.
+        /// <summary>
+        /// Priority of the Melon.
         /// </summary>
-        public enum MelonCompatibility
-        {
-            INCOMPATIBLE,
-            COMPATIBLE,
-            NOATTRIBUTE,
-            UNIVERSAL,
-        }
+        public int Priority { get; internal set; }
 
         /// <summary>
-        /// Compatibility of the Melon.
+        /// Console Color of the Melon.
         /// </summary>
-        public MelonCompatibility Compatibility { get; internal set; }
-
-        /// <summary>
-        /// Gets if the Melon is Universal.
-        /// </summary>
-        public bool IsUniversal { get { return (Compatibility < MelonCompatibility.COMPATIBLE); } }
-
-        /// <summary>
-        /// Gets if the Melon is Compatible with the Game.
-        /// </summary>
-        public bool IsCompatible { get { return (Compatibility < MelonCompatibility.INCOMPATIBLE); } }
+        public ConsoleColor ConsoleColor { get; internal set; }
 
         /// <summary>
         /// Info Attribute of the Melon.
         /// </summary>
         public MelonInfoAttribute Info { get; internal set; }
-
-        /// <summary>
-        /// Color Attribute of the Melon.
-        /// </summary>
-        public MelonColorAttribute Color { get; internal set; }
 
         /// <summary>
         /// Game Attributes of the Melon.
@@ -70,6 +50,11 @@ namespace MelonLoader
         /// Runs after Game Initialization.
         /// </summary>
         public virtual void OnApplicationStart() { }
+
+        /// <summary>
+        /// Runs after OnApplicationStart.
+        /// </summary>
+        public virtual void OnApplicationLateStart() { }
 
         /// <summary>
         /// Runs once per frame.
@@ -108,7 +93,7 @@ namespace MelonLoader
 
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
-        [Obsolete("harmonyInstance is obsolete. Please use Harmony instead.")]
+        [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
         public Harmony.HarmonyInstance harmonyInstance { get => Harmony; }
     }
 }

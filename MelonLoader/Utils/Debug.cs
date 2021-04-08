@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 
 namespace MelonLoader
@@ -7,55 +7,40 @@ namespace MelonLoader
     {
         public static void Msg(string txt)
         {
-            if (!External.Debug.IsEnabled())
+            if (!IsEnabled())
                 return;
-            ConsoleColor color = MelonLogger.DefaultMelonColor;
-            string namesection = null;
-            MelonBase melon = MelonLogger.GetMelonFromStackTrace();
-            if (melon != null)
-            {
-                namesection = melon.Info.Name.Replace(" ", "_");
-                if (melon.Color != null)
-                    color = melon.Color.Color;
-            }
-            External.Logger.Internal_Msg(color, namesection, txt);
-            RunMsgCallbacks(color, namesection, txt);
+            SendMsg(MelonLogger.DefaultTextColor, txt);
         }
         public static void Msg(string txt, params object[] args)
         {
-            if (!External.Debug.IsEnabled())
+            if (!IsEnabled())
                 return;
-            ConsoleColor color = MelonLogger.DefaultMelonColor;
-            string namesection = null;
-            MelonBase melon = MelonLogger.GetMelonFromStackTrace();
-            if (melon != null)
-            {
-                namesection = melon.Info.Name.Replace(" ", "_");
-                if (melon.Color != null)
-                    color = melon.Color.Color;
-            }
-            string fmt = string.Format(txt, args);
-            External.Logger.Internal_Msg(color, namesection, fmt);
-            RunMsgCallbacks(color, namesection, fmt);
+            SendMsg(MelonLogger.DefaultTextColor, string.Format(txt, args));
         }
         public static void Msg(object obj)
         {
-            if (!External.Debug.IsEnabled())
+            if (!IsEnabled())
                 return;
-            ConsoleColor color = MelonLogger.DefaultMelonColor;
+            SendMsg(MelonLogger.DefaultTextColor, obj.ToString());
+        }
+
+        private static void SendMsg(ConsoleColor msgcolor, string msg)
+        {
+            ConsoleColor meloncolor = MelonLogger.DefaultMelonColor;
             string namesection = null;
-            MelonBase melon = MelonLogger.GetMelonFromStackTrace();
+            MelonBase melon = MelonUtils.GetMelonFromStackTrace();
             if (melon != null)
             {
                 namesection = melon.Info.Name.Replace(" ", "_");
-                if (melon.Color != null)
-                    color = melon.Color.Color;
+                msgcolor = melon.ConsoleColor;
             }
-            string objstr = obj.ToString();
-            External.Logger.Internal_Msg(color, namesection, objstr);
-            RunMsgCallbacks(color, namesection, objstr);
+            Internal_Msg(meloncolor, msgcolor, namesection, msg);
+            MsgCallbackHandler?.Invoke(meloncolor, msgcolor, namesection, msg);
         }
-        internal static void RunMsgCallbacks(ConsoleColor color, string namesection, string msg) => MsgCallbackHandler?.Invoke(color, namesection, msg);
-        public static event Action<ConsoleColor, string, string> MsgCallbackHandler;
+
+        public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
+        public static bool IsEnabled() => MelonCommandLine.Core.DebugMode;
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static void Internal_Msg(ConsoleColor meloncolor, ConsoleColor msgcolor, string namesection, string txt);
     }
 }
