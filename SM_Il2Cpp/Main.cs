@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
+using MelonLoader.Support.Preferences;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
@@ -24,6 +27,15 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
+
+            string game_version = Application.version;
+            if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
+                game_version = Application.buildGUID;
+
+            MelonLogger.Msg($"Game Version: {game_version}");
+            SetDefaultConsoleTitleWithGameName(game_version); 
+            UnityMappers.RegisterMappers();
+
             LogSupport.RemoveAllHandlers();
             if (MelonDebug.IsEnabled())
                 LogSupport.InfoHandler += MelonLogger.Msg;
@@ -73,15 +85,21 @@ namespace MelonLoader.Support
 
         private static void InitializeUnityVersion()
         {
-            string unityVersion = MelonUtils.GetUnityVersion();
+            string unityVersion = string.Copy(MelonUtils.GetUnityVersion());
             if (string.IsNullOrEmpty(unityVersion))
                 return;
             string[] unityVersionSplit = unityVersion.Split('.');
+            if ((unityVersionSplit == null) || (unityVersionSplit.Length < 2))
+                return;
             int major = int.Parse(unityVersionSplit[0]);
             int minor = int.Parse(unityVersionSplit[1]);
-            string patchString = unityVersionSplit[2];
-            char firstBadChar = patchString.FirstOrDefault(it => it < '0' || it > '9');
-            int patch = int.Parse(firstBadChar == 0 ? patchString : patchString.Substring(0, patchString.IndexOf(firstBadChar)));
+            int patch = 0;
+            if (unityVersionSplit.Length > 2)
+            {
+                string patchString = unityVersionSplit[2];
+                char firstBadChar = patchString.FirstOrDefault(it => it < '0' || it > '9');
+                patch = int.Parse(firstBadChar == 0 ? patchString : patchString.Substring(0, patchString.IndexOf(firstBadChar)));
+            }
             UnityVersionHandler.Initialize(major, minor, patch);
         }
 
@@ -107,5 +125,9 @@ namespace MelonLoader.Support
             ShouldCheckForUiManager = false;
             Interface.VRChat_OnUiManagerInit();
         }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
     }
 }

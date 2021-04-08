@@ -10,4 +10,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("91865F01-4902-439D-894A-A25708F83C7C")]
 [assembly: AssemblyVersion(MelonLoader.BuildInfo.Version)]
 [assembly: AssemblyFileVersion(MelonLoader.BuildInfo.Version)]
-[assembly: Harmony.HarmonyShield]
+[assembly: MelonLoader.PatchShield]

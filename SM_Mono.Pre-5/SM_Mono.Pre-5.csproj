@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader.Support</RootNamespace>
     <AssemblyName>Mono.Pre-5</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -47,18 +47,22 @@
     <Reference Include="System" />
     <Reference Include="UnityEngine">
       <HintPath>Libs\UnityEngine.dll</HintPath>
-	  <Private>false</Private>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SM_Il2Cpp\Preferences\UnityMappers.cs">
+      <Link>Preferences\UnityMappers.cs</Link>
+    </Compile>
     <Compile Include="Component.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportModule.cs" />
     <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
-	<Private>false</Private>
+      <Private>false</Private>
+      <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>
+      <Name>MelonLoader</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

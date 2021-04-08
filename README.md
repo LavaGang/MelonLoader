@@ -5,9 +5,12 @@
 - All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
 - All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
 - All Mods get placed in the created Mods folder in your Game's Installation Folder.
+- [Proxies](#proxies)
+- [Launch Options](#launch-options)
+- [dnSpy Debugger Usage](#dnspy-debugger-usage)
+- [Wine / Steam Proton Usage](#wine--steam-proton-usage)
+- Guides: [INSTALLER](#how-to-use-the-installer) | [MANUAL USE](#how-to-manually-use-melonloader)
 - Example Projects: [TestPlugin](https://github.com/LavaGang/TestPlugin) & [TestMod](https://github.com/LavaGang/TestMod)
-- [Il2Cpp dnSpy Debugger Usage](#il2cpp-dnspy-debugger-usage)
-- GUIDES: [INSTALLER](https://gitlab.com/HerpDerpinstine/MelonLoader#how-to-use-the-installer) | [MANUAL USE](#how-to-manually-use-melonloader)
 
 ---
 
@@ -21,6 +24,8 @@
 ---
 
 ## HOW TO USE THE INSTALLER:
+
+1. Follow the Instructions in one of the Guides linked below.
 
 - [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader)
 - [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-un-install-melonloader)
@@ -39,7 +44,7 @@
 
 1. Make sure the Game is Closed and Not Running before attempting to Install.
 2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
-3. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
+3. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/download/v0.3.0/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/download/v0.3.0/MelonLoader.x64.zip)]
 4. Extract the MelonLoader folder from the MelonLoader Zip Archive to the Game's Installation Folder.
 5. Extract version.dll from the MelonLoader Zip Archive to the Game's Installation Folder.
 
@@ -84,7 +89,13 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
-## IL2CPP DNSPY DEBUGGER USAGE:
+## WINE / STEAM PROTON USAGE:
+
+- COMING SOON
+
+---
+
+## DNSPY DEBUGGER USAGE:
 
 - COMING SOON
 
@@ -94,13 +105,16 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 - These are additional Launch Options that MelonLoader adds to the Game.
 - These can be used to manipulate how MelonLoader works.
+- After First Launch with MelonLoader these Launch Options can also be configured in MelonLoader/LaunchOptions.ini  
+If a Launch Option is in your Game's Command Line it will ignore its value in the INI file.
 
 | Argument | Description |
 | - | - |
 | --no-mods | Launch game without loading any Plugins Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
 | --melonloader.consoleontop | Forces the Console to always stay on-top of all other Applications |
-| --melonloader.hideconsole | Hides the Normal Console |
+| --melonloader.consoledst | Keeps the Console Title as Original |
+| --melonloader.hideconsole | Hides the Console |
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |
 | --melonloader.dab | Debug Analytics Blocker |
@@ -111,30 +125,35 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
-| --melonloader.loadmodemods  | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.agfregenerate | Forces Regeneration of Assembly |
 | --melonloader.agfvunity | Forces use a Specified Version of Unity Dependencies |
-| --melonloader.agfvdumper | Forces use a Specified Version of Il2CppDumper |
+| --melonloader.agfvdumper | Forces use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces use a Specified Version of Il2CppAssemblyUnhollower |
 
 ---
 
 ## LICENSING & CREDITS:
 
-MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
+MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/LICENSE.md) for the full License.
 
-Third-party libraries used as source code or bundled in binary form:
-- [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/Detours/LICENSE.md) for the full License.
+Third-party libraries used as Source Code and/or bundled in Binary Form:
+- [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/Detours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
-- [Harmony](https://github.com/pardeike/Harmony) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/Harmony/LICENSE) for the full License.
-- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/TinyJSON/LICENSE.md) for the full License.
-- [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/Tomlyn/license.txt) for the full License.
-- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/SharpZipLib/LICENSE.txt) for the full License.
+- [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/HarmonyX/LICENSE) for the full License.
+- [MonoMod](https://github.com/MonoMod/MonoMod) is licensed under the MIT License. See [LICENSE](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) for the full License.
+- [Mono.Cecil](https://github.com/jbevain/cecil/tree/release/0.10) is licensed under the MIT License. See [LICENSE](https://github.com/jbevain/cecil/blob/release/0.10/LICENSE.txt) for the full License.
+- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/TinyJSON/LICENSE.md) for the full License.
+- [Tomlyn](https://github.com/xoofx/Tomlyn) is licensed under the BSD 2-Clause "Simplified" License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/Tomlyn/license.txt) for the full License.
+- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/MelonLoader/Libs/SharpZipLib/LICENSE.txt) for the full License.
 - [UnityEngine.Il2CppAssetBundleManager](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager/blob/master/LICENSE.md) for the full License.
 - [UnityEngine.Il2CppImageConversionManager](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager/blob/master/LICENSE.md) for the full License.
+- [Illusion Plugin Architecture](https://github.com/Eusth/IPA) is licensed under the MIT License. See [LICENSE](https://github.com/Eusth/IPA/blob/master/LICENSE) for the full License.
 - [bHaptics Haptic Library](https://github.com/bhaptics/haptic-library) is licensed under All rights reserved Copyright (c) 2016-2021 bHaptics Inc.  
 See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. Express permission from the company.
 
 External libraries and tools downloaded and used at runtime:
+- [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.
 - [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 - [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
 - Unity Runtime Libraries from [Unity-Runtime-Libraries](https://github.com/LavaGang/Unity-Runtime-Libraries) are part of Unity Software.  
