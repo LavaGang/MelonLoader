@@ -7,19 +7,12 @@ class InternalCalls
 public:
 	static void Initialize();
 
-	class MelonCore
-	{
-	public:
-		static void AddInternalCalls();
-		static bool QuitFix();
-	};
-
 	class MelonLogger
 	{
 	public:
 		static void AddInternalCalls();
-		static void Internal_PrintModName(Console::Color color, Mono::String* name, Mono::String* version);
-		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
+		static void Internal_PrintModName(Console::Color meloncolor, Mono::String* name, Mono::String* version);
+		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
 		static void Internal_Warning(Mono::String* namesection, Mono::String* txt);
 		static void Internal_Error(Mono::String* namesection, Mono::String* txt);
 		static void ThrowInternalFailure(Mono::String* msg);
@@ -41,41 +34,27 @@ public:
 		static Mono::String* GetGameDataDirectory();
 		static Mono::String* GetUnityVersion();
 		static Mono::String* GetManagedDirectory();
+		static Mono::String* GetHashCode();
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
-	};
-
-	class MelonHandler
-	{
-	public:
-		static void AddInternalCalls();
-		enum LoadMode
-		{
-			NORMAL,
-			DEV,
-			BOTH
-		};
-		static LoadMode LoadModeForPlugins;
-		static LoadMode LoadModeForMods;
-		static LoadMode GetLoadModeForPlugins();
-		static LoadMode GetLoadModeForMods();
 	};
 
 	class MelonDebug
 	{
 	public:
 		static void AddInternalCalls();
-		static bool IsEnabled();
-		static void Internal_Msg(Console::Color color, Mono::String* namesection, Mono::String* txt);
+		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
 	}; 
 
-	class UnhollowerIl2Cpp
+	class SupportModules
 	{
 	public:
 		static void AddInternalCalls();
+		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion);
 	};
 
-	class Harmony
+
+	class UnhollowerIl2Cpp
 	{
 	public:
 		static void AddInternalCalls();

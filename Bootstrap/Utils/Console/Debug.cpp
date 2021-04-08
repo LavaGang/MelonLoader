@@ -36,7 +36,7 @@ void Debug::ForceWrite(const char* txt)
 	Logger::Internal_DirectWrite(LogLevel::Verbose, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), txt);
 }
 
-void Debug::Internal_Msg(Console::Color color, const char* namesection, const char* txt)
+void Debug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
 {
 	if (namesection == NULL)
 	{

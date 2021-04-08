@@ -12,5 +12,5 @@ public:
 	static bool Enabled;
 	static void Msg(const char* txt);
 	static void ForceWrite(const char* txt);
-	static void Internal_Msg(Console::Color color, const char* namesection, const char* txt);
+	static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt);
 };
