@@ -3,7 +3,7 @@ name: Build MelonLoader
 # Controls when the action will run. 
 on:
   push:
-    branches: [ci-test, alpha-development]
+    branches: [ci-test, alpha-development, master]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -31,10 +31,10 @@ jobs:
           mkdir Output\Debug\x86\MelonLoader
       - name: Run Nuget Restore
         shell: cmd
-        run: MSBuild -t:restore
+        run: msbuild -t:Restore
       - name: Build Melonloader Core x64
         shell: cmd
-        run: msbuild /t:Rebuild /p:Platform=x64
+        run: msbuild -t:Rebuild -p:Platform=x64
       - name: Copy x64 Output
         shell: cmd
         run: |
@@ -43,7 +43,7 @@ jobs:
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build MelonLoader Core x86
         shell: cmd
-        run: msbuild /t:Rebuild /p:Platform=x86
+        run: msbuild -t:Rebuild -p:Platform=x86
       - name: Copy x86 Output
         shell: cmd
         run: |
@@ -52,10 +52,10 @@ jobs:
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build Proxy DLL - x86
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj /p:Platform=x86 /p:Configuration=Release
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x86 -p:Configuration=Release
       - name: Build Proxy DLL - x64
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj /p:Platform=x64 /p:Configuration=Release
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
       - name: Copy Proxy DLLs to Output
         shell: cmd
         run: |
@@ -63,10 +63,10 @@ jobs:
           copy Proxy\Output\Release\x64\version.dll Output\Debug\x64\version.dll
       - name: Build Bootstrap Lib - x86
         shell: cmd
-        run: msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x86 /p:Configuration=Release
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x86 -p:Configuration=Release
       - name: Build Bootstrap Lib - x64
         shell: cmd
-        run: msbuild Bootstrap\Bootstrap.vcxproj /p:Platform=x64 /p:Configuration=Release
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
       - name: Copy Bootstrap Libs to Output
         shell: cmd
         run: |
