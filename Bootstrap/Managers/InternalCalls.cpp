@@ -216,7 +216,7 @@ void InternalCalls::UnhollowerIl2Cpp::AddInternalCalls()
         "il2cpp_class_is_assignable_from",
         "il2cpp_class_is_subclass_of",
         "il2cpp_class_has_parent",
-        //"il2cpp_type",
+        "il2cpp_class_from_il2cpp_type",
         "il2cpp_class_from_name",
         "il2cpp_class_from_system_type",
         "il2cpp_class_get_element_class",
