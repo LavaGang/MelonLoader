@@ -12,7 +12,11 @@ namespace MelonLoader
         internal static bool Initialize()
         {
             MelonLogger.Msg("Loading Support Module...");
-            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+#if __ANDROID__
+            string BaseDirectory = Path.Combine(MelonUtils.GetApplicationPath(), "files", "melonloader", "etc", "support");
+#else
+            string BaseDirectory = Path.Combine(MelonUtils.GameDirectory, "MelonLoader",  "Dependencies",  "SupportModules");
+#endif
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find SupportModules Directory!");
@@ -28,6 +32,9 @@ namespace MelonLoader
                 MelonLogger.Error("Failed to Find Support Module " + ModuleName + "!");
                 return false;
             }
+
+            MelonDebug.Msg($"Attempting to load Support Module Assembly [{ModulePath}]");
+
             try
             {
                 Assembly assembly = Assembly.LoadFrom(ModulePath);
@@ -56,6 +63,9 @@ namespace MelonLoader
                 }
             }
             catch(Exception ex) { MelonLogger.Error(ex.ToString()); return false; }
+
+            MelonDebug.Msg("Loaded Support Module");
+
             return true;
         }
 

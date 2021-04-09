@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace MelonLoader
 {
@@ -16,7 +16,9 @@ namespace MelonLoader
             Fixes.ApplicationBase.Run(curDomain);
             Fixes.ExtraCleanup.Run();
 
+#if PORT_DISABLE
             MelonCommandLine.Load();
+#endif
             MelonCompatibilityLayer.Setup(curDomain);
 
             if (MelonUtils.IsGameIl2Cpp())
@@ -27,13 +29,17 @@ namespace MelonLoader
 
         private static int Initialize()
         {
+#if PORT_DISABLE
             try { bHaptics_NativeLibrary.Load(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
+#endif
 
             MelonPreferences.Load();
 
+#if PORT_DISABLE
             if (MelonUtils.IsGameIl2Cpp() && !Il2CppAssemblyGenerator.Run())
                 return 1;
+#endif
 
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
@@ -46,8 +52,9 @@ namespace MelonLoader
             if (!SupportModule.Initialize())
                 return 1;
 
+#if PORT_DISABLE
             AddUnityDebugLog();
-
+#endif
             try { bHaptics.Start(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics.Start Exception: " + ex.ToString()); bHaptics.WasError = true; }
 

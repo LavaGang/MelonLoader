@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -28,36 +28,46 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
 
+#if PORT_DISABLE
             string game_version = Application.version;
             if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
                 game_version = Application.buildGUID;
 
             MelonLogger.Msg($"Game Version: {game_version}");
             SetDefaultConsoleTitleWithGameName(game_version); 
+#endif
             UnityMappers.RegisterMappers();
-
             LogSupport.RemoveAllHandlers();
+
             if (MelonDebug.IsEnabled())
                 LogSupport.InfoHandler += MelonLogger.Msg;
+
             LogSupport.WarningHandler += MelonLogger.Warning;
             LogSupport.ErrorHandler += MelonLogger.Error;
+
             if (MelonDebug.IsEnabled())
                 LogSupport.TraceHandler += MelonLogger.Msg;
+
             ClassInjector.DoHook = MelonUtils.NativeHookAttach;
             InitializeUnityVersion();
             ConsoleCleaner();
+
+#if PORT_DISABLE
             SceneManager.sceneLoaded = (
                    (SceneManager.sceneLoaded == null)
                    ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
                    : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
                    );
+
             Camera.onPostRender = (
                 (Camera.onPostRender == null)
                 ? new Action<Camera>(OnPostRender)
                 : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
                 );
+
             ClassInjector.RegisterTypeInIl2Cpp<Component>();
             Component.Create();
+#endif
             return new SupportModule_To();
         }
 
@@ -66,6 +76,7 @@ namespace MelonLoader.Support
 
         private static void ConsoleCleaner()
         {
+#if PORT_DISABLE
             try
             {
                 // Il2CppSystem.Console.SetOut(new Il2CppSystem.IO.StreamWriter(Il2CppSystem.IO.Stream.Null));
@@ -81,6 +92,7 @@ namespace MelonLoader.Support
                 setOutMethod.Invoke(null, new[] { steamWriter });
             }
             catch (Exception ex) { MelonLogger.Error($"Console cleaning failed: {ex}"); }
+#endif
         }
 
         private static void InitializeUnityVersion()
