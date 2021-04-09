@@ -36,10 +36,8 @@ namespace MelonLoader
 
             MelonPreferences.Load();
 
-#if PORT_DISABLE
             if (MelonUtils.IsGameIl2Cpp() && !Il2CppAssemblyGenerator.Run())
                 return 1;
-#endif
 
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();

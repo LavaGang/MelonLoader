@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
+using AssemblyUnhollower;
+using AssemblyUnhollower.Contexts;
+using AssemblyUnhollower.Passes;
+using UnhollowerBaseLib;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal class Il2CppAssemblyUnhollower : ExecutablePackageBase
     {
+#if PORT_DISABLE
         internal Il2CppAssemblyUnhollower()
         {
             Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower;
@@ -60,5 +65,144 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 parameters.Add($"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }");
             return Execute(parameters.ToArray());
         }
+#else
+        internal Il2CppAssemblyUnhollower()
+        {
+            Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
+            Output = Path.Combine(Destination);
+        }
+
+        internal bool Execute()
+        {
+            MelonLogger.Msg("Executing Il2CppAssemblyUnhollower...");
+
+            InstallLogger();
+
+            var options = GenerateOptions();
+
+            return Main(options);
+        }
+
+        private bool Main(UnhollowerOptions options)
+        {
+            if (!Directory.Exists(options.OutputDir))
+                Directory.CreateDirectory(options.OutputDir);
+
+            RewriteGlobalContext rewriteContext;
+
+            LogSupport.Info("Reading assemblies");
+            rewriteContext = new RewriteGlobalContext(options, Directory.EnumerateFiles(options.SourceDir, "*.dll"));
+
+            LogSupport.Info("Computing renames");
+            Pass05CreateRenameGroups.DoPass(rewriteContext);
+            LogSupport.Info("Creating typedefs");
+            Pass10CreateTypedefs.DoPass(rewriteContext);
+            LogSupport.Info("Computing struct blittability");
+            Pass11ComputeTypeSpecifics.DoPass(rewriteContext);
+            LogSupport.Info("Filling typedefs");
+            Pass12FillTypedefs.DoPass(rewriteContext);
+            LogSupport.Info("Filling generic constraints");
+            Pass13FillGenericConstraints.DoPass(rewriteContext);
+            LogSupport.Info("Creating members");
+            Pass15GenerateMemberContexts.DoPass(rewriteContext);
+            LogSupport.Info("Scanning method cross-references");
+            Pass16ScanMethodRefs.DoPass(rewriteContext, options);
+            LogSupport.Info("Finalizing method declarations");
+            Pass18FinalizeMethodContexts.DoPass(rewriteContext);
+            LogSupport.Info($"{Pass18FinalizeMethodContexts.TotalPotentiallyDeadMethods} total potentially dead methods");
+            LogSupport.Info("Filling method parameters");
+            Pass19CopyMethodParameters.DoPass(rewriteContext);
+
+            LogSupport.Info("Creating static constructors");
+            Pass20GenerateStaticConstructors.DoPass(rewriteContext);
+            LogSupport.Info("Creating value type fields");
+            Pass21GenerateValueTypeFields.DoPass(rewriteContext);
+            LogSupport.Info("Creating enums");
+            Pass22GenerateEnums.DoPass(rewriteContext);
+            LogSupport.Info("Creating IntPtr constructors");
+            Pass23GeneratePointerConstructors.DoPass(rewriteContext);
+            LogSupport.Info("Creating type getters");
+            Pass24GenerateTypeStaticGetters.DoPass(rewriteContext);
+            LogSupport.Info("Creating non-blittable struct constructors");
+            Pass25GenerateNonBlittableValueTypeDefaultCtors.DoPass(rewriteContext);
+
+            LogSupport.Info("Creating generic method static constructors");
+            Pass30GenerateGenericMethodStoreConstructors.DoPass(rewriteContext);
+            LogSupport.Info("Creating field accessors");
+            Pass40GenerateFieldAccessors.DoPass(rewriteContext);
+            LogSupport.Info("Filling methods");
+            Pass50GenerateMethods.DoPass(rewriteContext);
+            LogSupport.Info("Generating implicit conversions");
+            Pass60AddImplicitConversions.DoPass(rewriteContext);
+            LogSupport.Info("Creating properties");
+            Pass70GenerateProperties.DoPass(rewriteContext);
+
+            if (options.UnityBaseLibsDir != null)
+            {
+                LogSupport.Info("Unstripping types");
+                Pass79UnstripTypes.DoPass(rewriteContext);
+                LogSupport.Info("Unstripping fields");
+                Pass80UnstripFields.DoPass(rewriteContext);
+                LogSupport.Info("Unstripping methods");
+                Pass80UnstripMethods.DoPass(rewriteContext);
+                LogSupport.Info("Unstripping method bodies");
+                Pass81FillUnstrippedMethodBodies.DoPass(rewriteContext);
+            }
+            else
+                LogSupport.Warning("Not performing unstripping as unity libs are not specified");
+
+            LogSupport.Info("Generating forwarded types");
+            Pass89GenerateForwarders.DoPass(rewriteContext);
+
+            LogSupport.Info("Writing xref cache");
+            Pass89GenerateMethodXrefCache.DoPass(rewriteContext, options);
+
+            LogSupport.Info("Writing assemblies");
+            Pass90WriteToDisk.DoPass(rewriteContext, options);
+
+            LogSupport.Info("Writing method pointer map");
+            Pass91GenerateMethodPointerMap.DoPass(rewriteContext, options);
+
+            if (!options.NoCopyUnhollowerLibs)
+            {
+                File.Copy(typeof(IL2CPP).Assembly.Location, Path.Combine(options.OutputDir, typeof(IL2CPP).Assembly.GetName().Name + ".dll"), true);
+                File.Copy(typeof(UnhollowerRuntimeLib.RuntimeLibMarker).Assembly.Location, Path.Combine(options.OutputDir, typeof(UnhollowerRuntimeLib.RuntimeLibMarker).Assembly.GetName().Name + ".dll"), true);
+                //File.Copy(typeof(Iced.In).Assembly.Location, Path.Combine(options.OutputDir, typeof(Decoder).Assembly.GetName().Name + ".dll"), true);
+            }
+
+            LogSupport.Info("Done!");
+
+            rewriteContext.Dispose();
+
+            return true;
+        }
+
+        private void InstallLogger()
+        {
+            UnhollowerBaseLib.LogSupport.InfoHandler += (msg) => { MelonLogger.Msg(System.ConsoleColor.Magenta, $"[{nameof(AssemblyUnhollower)}] {msg}"); };
+            UnhollowerBaseLib.LogSupport.WarningHandler += (msg) => { MelonLogger.Warning($"[{nameof(AssemblyUnhollower)}] {msg}"); };
+            UnhollowerBaseLib.LogSupport.ErrorHandler += (msg) => { MelonLogger.Error($"[{nameof(AssemblyUnhollower)}] {msg}"); };
+
+            //if (MelonDebug.IsEnabled())
+            //UnhollowerBaseLib.LogSupport.TraceHandler += (msg) => { MelonLogger.Error($"[{nameof(AssemblyUnhollower)}] {msg}"); };
+        }
+
+        private AssemblyUnhollower.UnhollowerOptions GenerateOptions()
+        {
+            var options = new AssemblyUnhollower.UnhollowerOptions
+            {
+                Verbose = true,
+                SourceDir = new Il2CppDumper().Output,
+                OutputDir = Output,
+                MscorlibPath = Path.Combine(Core.BasePath, "reference_assemblies", "mscorlib.dll"),
+                UnityBaseLibsDir = Path.Combine(Core.BasePath, "unity"),
+                GameAssemblyPath = Core.GameAssemblyPath
+            };
+
+            options.AdditionalAssembliesBlacklist.AddRange(new List<string> { "Mono.Security", "Newtonsoft.Json", "Valve.Newtonsoft.Json" });
+
+            return options;
+        }
+#endif
     }
 }

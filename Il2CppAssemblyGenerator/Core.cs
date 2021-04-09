@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
@@ -9,6 +9,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
     {
         internal static string GameName = null;
         internal static string BasePath = null;
+        internal static string AssemblyGeneratorManaged = null;
         internal static string GameAssemblyPath = null;
         internal static string ManagedPath = null;
 
@@ -23,6 +24,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         static Core()
         {
+#if PORT_DISABLE
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
 
@@ -30,17 +32,22 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             webClient.Headers.Add("User-Agent", "Unity web player");
 
             //AssemblyGenerationNeeded = Utils.ForceRegeneration();
+#endif
+            
 
-            GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
             ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
             GameName = MelonUtils.GameName;
 
-            BasePath = Path.Combine(Path.Combine(Path.Combine(Path.GetDirectoryName(string.Copy(MelonUtils.GetApplicationPath())), "MelonLoader"), "Dependencies"), "AssemblyGenerator");
+            BasePath = Path.Combine(string.Copy(MelonUtils.GetApplicationPath()), "files", "melonloader", "etc", "assembly_generation");
+            // TODO: Read APK file instead
+            GameAssemblyPath = Path.Combine(Core.BasePath, "native", "libil2cpp.so");
+            AssemblyGeneratorManaged = Path.Combine(BasePath, "managed");
             OverrideAppDomainBase(BasePath);
         }
 
         private static int Run()
         {
+#if PORT_DISABLE
             RemoteAPI.Contact();
 
             unitydependencies = new UnityDependencies();
@@ -105,6 +112,40 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             MelonLogger.Msg("Assembly Generation Successful!");
             return 0;
+#else
+            string CurrentGameAssemblyHash;
+            MelonLogger.Msg("Checking GameAssembly...");
+            MelonDebug.Msg($"Last GameAssembly Hash: {Config.GameAssemblyHash}");
+            MelonDebug.Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = GetGameAssemblyHash()}");
+
+            if (!AssemblyGenerationNeeded
+                && (string.IsNullOrEmpty(Config.GameAssemblyHash)
+                    || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash)))
+                AssemblyGenerationNeeded = true;
+
+            if (!AssemblyGenerationNeeded)
+            {
+                MelonLogger.Msg("Assembly is up to date. No Generation Needed.");
+                return 0;
+            }
+            MelonLogger.Msg("Assembly Generation Needed!");
+
+            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+
+            il2cppassemblyunhollower.Cleanup();
+            if (!il2cppassemblyunhollower.Execute())
+            {
+                il2cppassemblyunhollower.Cleanup();
+                return 1;
+            }
+
+            OldFiles_Cleanup();
+            OldFiles_LAM();
+
+            il2cppassemblyunhollower.Cleanup();
+
+            return 0;
+#endif
         }
 
         internal static void OverrideAppDomainBase(string basepath)

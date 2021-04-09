@@ -1,10 +1,11 @@
-﻿using System.IO;
+using System.IO;
 using MelonLoader.TinyJSON;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal class Il2CppDumper : ExecutablePackageBase
     {
+#if PORT_DISABLE
         internal Il2CppDumper()
         {
             Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Dumper;
@@ -74,5 +75,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         public bool RequireAnyKey = false;
         public bool ForceIl2CppVersion = false;
         public float ForceVersion = 24.3f;
+    }
+#else
+        internal Il2CppDumper()
+        {
+            Destination = Path.Combine(Core.BasePath, "Il2CppDumper_DummyDll");
+            Output = Path.Combine(Destination);
+        }
+#endif
     }
 }
