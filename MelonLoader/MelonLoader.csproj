@@ -79,7 +79,6 @@
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>
-
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
@@ -365,9 +364,20 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
-    <PackageReference Include="MonoMod.RuntimeDetour" Version="21.3.1.1" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\external\MonoMod\MonoMod.RuntimeDetour\MonoMod.RuntimeDetour.csproj">
+      <Project>{d0c584c0-81d7-486e-b70e-d7f9256e0909}</Project>
+      <Name>MonoMod.RuntimeDetour</Name>
+      <SetTargetFramework>TargetFramework=net40</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\external\MonoMod\MonoMod.Utils\MonoMod.Utils.csproj">
+      <Project>{1839cfe2-3db0-45a8-b03d-9aa797479a3a}</Project>
+      <Name>MonoMod.Utils</Name>
+      <SetTargetFramework>TargetFramework=net40</SetTargetFramework>
+    </ProjectReference>
   </ItemGroup>
   <ItemDefinitionGroup>
     <PackageReference ExcludeAssets="runtime" />
