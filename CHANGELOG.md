@@ -146,6 +146,7 @@
 121. Removed MelonUtils.IsVRChat.
 122. Added System.Collections.Generic.List Mapping Support for MelonPreferences.
 123. Assembly Generator now uses the MelonPreferences API for it's Config.
+124. Fixed NRE Issue with MelonUtils.ParseJSONStringtoStruct.
 
 ---
 

@@ -114,6 +114,8 @@ namespace MelonLoader
 
         public static T ParseJSONStringtoStruct<T>(string jsonstr)
         {
+            if (string.IsNullOrEmpty(jsonstr))
+                return default;
             Variant jsonarr = null;
             try { jsonarr = JSON.Load(jsonstr); }
             catch (Exception ex)
@@ -121,6 +123,8 @@ namespace MelonLoader
                 MelonLogger.Error($"Exception while Decoding JSON String to JSON Variant: {ex}");
                 return default;
             }
+            if (jsonarr == null)
+                return default;
             T returnobj = default;
             try { returnobj = jsonarr.Make<T>(); }
             catch (Exception ex) { MelonLogger.Error($"Exception while Converting JSON Variant to {nameof(T)}: {ex}"); }
