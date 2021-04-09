@@ -6,12 +6,12 @@ namespace MelonLoader
     {
         static Core()
         {
+            try { MelonUtils.Setup(); } catch (Exception ex) { MelonLogger.Error("MelonUtils.Setup Exception: " + ex.ToString()); throw ex; }
+
             AppDomain curDomain = AppDomain.CurrentDomain;
 
             Fixes.UnhandledException.Run(curDomain);
             Fixes.InvariantCurrentCulture.Install();
-
-            try { MelonUtils.Setup(); } catch (Exception ex) { MelonLogger.Error("MelonUtils.Setup Exception: " + ex.ToString()); throw ex; }
 
             Fixes.ApplicationBase.Run(curDomain);
             Fixes.ExtraCleanup.Run();
