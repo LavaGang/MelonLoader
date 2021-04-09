@@ -113,6 +113,8 @@ namespace MelonLoader.Preferences.IO
                 TableSyntax tbl = new TableSyntax(keyValuePair.Key);
                 foreach (KeyValuePair<string, TomlObject> keyValuePair2 in keyValuePair.Value.ToArray())
                 {
+                    if (keyValuePair2.Value == null)
+                        continue;
                     ValueSyntax syn = CreateValueSyntaxFromTomlObject(keyValuePair2.Value);
                     if (syn == null)
                         continue;
@@ -131,7 +133,7 @@ namespace MelonLoader.Preferences.IO
             return obj.Kind switch
             {
                 ObjectKind.Boolean => new BooleanValueSyntax(((TomlBoolean)obj).Value),
-                ObjectKind.String => new StringValueSyntax(((TomlString)obj).Value),
+                ObjectKind.String =>  new StringValueSyntax(string.IsNullOrEmpty(((TomlString)obj).Value) ? "" : ((TomlString)obj).Value),
                 ObjectKind.Float => new FloatValueSyntax(((TomlFloat)obj).Value),
                 ObjectKind.Integer => new IntegerValueSyntax(((TomlInteger)obj).Value),
                 ObjectKind.Array => CreateArraySyntaxFromTomlArray((TomlArray)obj),
