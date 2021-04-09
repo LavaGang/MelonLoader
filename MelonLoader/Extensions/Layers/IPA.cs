@@ -104,15 +104,14 @@ namespace MelonLoader.CompatibilityLayers
 
 			MelonModWrapper wrapper = new MelonModWrapper(pluginInstance)
 			{
-				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version)
+				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version),
+				Games = (gamestbl != null) ? gamestbl.ToArray() : null,
+				ConsoleColor = MelonLogger.DefaultMelonColor,
+				Priority = 0,
+				Location = filelocation,
+				Assembly = asm,
+				Harmony = Harmony.HarmonyInstance.Create(asm.FullName)
 			};
-			if (gamestbl != null)
-				wrapper.Games = gamestbl.ToArray();
-			wrapper.ConsoleColor = MelonLogger.DefaultMelonColor;
-			wrapper.Priority = 0;
-			wrapper.Location = filelocation;
-			wrapper.Assembly = asm;
-			wrapper.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
 
 			melonTbl.Add(wrapper);
 			PluginManager._Plugins.Add(pluginInstance);
