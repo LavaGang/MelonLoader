@@ -24,8 +24,6 @@ void* ImportLibHelper::GetExport(void* mod, const char* export_name)
 	if (!Assertion::ShouldContinue)
 		return NULL;
 	
-	Debug::Msg(export_name);
-	
 	void* fnPointer = dlsym(mod, export_name);
 
 	// no need to return since already nullptr

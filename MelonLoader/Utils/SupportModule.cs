@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections;
 using System.Reflection;
@@ -13,7 +13,7 @@ namespace MelonLoader
         {
             MelonLogger.Msg("Loading Support Module...");
 #if __ANDROID__
-            string BaseDirectory = Path.Combine(MelonUtils.GetApplicationPath(), "files", "melonloader", "etc", "support");
+            string BaseDirectory = Path.Combine(MelonUtils.GetApplicationPath(), "files/melonloader/etc/support");
 #else
             string BaseDirectory = Path.Combine(MelonUtils.GameDirectory, "MelonLoader",  "Dependencies",  "SupportModules");
 #endif

@@ -14,7 +14,7 @@ namespace MelonLoader
             if (RunMethod == null)
             {
 #if __ANDROID__
-                string BaseDirectory = Path.Combine(string.Copy(MelonUtils.GetApplicationPath()), "files", "melonloader", "etc", "assembly_generation", "managed");
+                string BaseDirectory = Path.Combine(string.Copy(MelonUtils.GetApplicationPath()), "files/melonloader/etc/assembly_generation/managed");
 #else
                 string BaseDirectory = Path.Combine(MelonUtils.GameDirectory, "MelonLoader", "Dependencies", "Il2CppAssemblyGenerator");
 #endif

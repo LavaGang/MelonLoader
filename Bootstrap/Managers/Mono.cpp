@@ -405,6 +405,8 @@ bool Mono::Exports::Initialize()
 	mono_dllmap_insert(NULL, "System.Native", NULL, "libmono-native.so", NULL);
 	mono_dllmap_insert(NULL, "System.Net.Security.Native", NULL, "libmono-native.so", NULL);
 
+	mono_dllmap_insert(NULL, "GameAssembly", NULL, "libil2cpp.so", NULL);
+
 	return Assertion::ShouldContinue;
 }
 
