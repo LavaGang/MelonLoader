@@ -22,35 +22,31 @@ bool BaseAssembly::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
 		return false;
 	}
-	Debug::Msg("1");
 	Mono::Image* image = Mono::Exports::mono_assembly_get_image(assembly);
 	if (image == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Get Image from Mono Assembly!");
 		return false;
 	}
-	Debug::Msg("2");
 	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "MelonLoader", "Core");
 	if (image == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Get Class from Mono Image!");
 		return false;
 	}
-	Debug::Msg("3");
 	Mono::Method* Mono_Initialize = Mono::Exports::mono_class_get_method_from_name(klass, "Initialize", NULL);
 	if (Mono_Initialize == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Get Initialize Method from Mono Class!");
 		return false;
 	}
-	Debug::Msg("4");
 	Mono_Start = Mono::Exports::mono_class_get_method_from_name(klass, "Start", NULL);
 	if (Mono_Start == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Get Start Method from Mono Class!");
 		return false;
 	}
-	Debug::Msg("5");
+	
 	Logger::WriteSpacer();
 	Mono::Object* exObj = NULL;
 	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_Initialize, NULL, NULL, &exObj);
@@ -60,8 +56,7 @@ bool BaseAssembly::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Invoke Initialize Method!");
 		return false;
 	}
-	Debug::Msg("6");
-
+	
 	int returnval = *(int*)((char*)result + 0x8);
 #ifdef PORT_DISABLE
 	if (Game::IsIl2Cpp)
@@ -70,8 +65,6 @@ bool BaseAssembly::Initialize()
 	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
-
-	Debug::Msg("7");
 
 	return (returnval == 0);
 }
