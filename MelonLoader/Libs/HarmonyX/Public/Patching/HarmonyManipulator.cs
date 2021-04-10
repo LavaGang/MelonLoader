@@ -32,14 +32,14 @@ namespace HarmonyLib.Public.Patching
 		private static readonly string PARAM_INDEX_PREFIX = "__";
 		private static readonly string INSTANCE_FIELD_PREFIX = "___";
 
-		private static readonly MethodInfo GetMethodFromHandle1 =
-			typeof(MethodBase).GetMethod("GetMethodFromHandle", new[] {typeof(RuntimeMethodHandle)});
+		//private static readonly MethodInfo GetMethodFromHandle1 =
+		//	typeof(MethodBase).GetMethod("GetMethodFromHandle", new[] {typeof(RuntimeMethodHandle)});
 
-		private static readonly MethodInfo GetMethodFromHandle2 = typeof(MethodBase).GetMethod("GetMethodFromHandle",
-			new[] {typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle)});
+		//private static readonly MethodInfo GetMethodFromHandle2 = typeof(MethodBase).GetMethod("GetMethodFromHandle",
+		//	new[] {typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle)});
 
-		private static MethodInfo LogPatchExceptionMethod =
-			AccessTools.Method(typeof(HarmonyManipulator), nameof(LogPatchException));
+		//private static MethodInfo LogPatchExceptionMethod =
+		//	AccessTools.Method(typeof(HarmonyManipulator), nameof(LogPatchException));
 
 		private static void LogPatchException(object errorObject, string patch)
 		{
@@ -91,36 +91,42 @@ namespace HarmonyLib.Public.Patching
 		///
 		public static void Manipulate(MethodBase original, PatchInfo patchInfo, ILContext ctx)
 		{
-			SortPatches(original, patchInfo, out var sortedPrefixes, out var sortedPostfixes, out var sortedTranspilers,
-				out var sortedFinalizers, out var sortedILManipulators);
-
-			Logger.Log(Logger.LogChannel.Info, () =>
-			{
-				var sb = new StringBuilder();
-
-				sb.AppendLine(
-					$"Patching {original.FullDescription()} with {sortedPrefixes.Count} prefixes, {sortedPostfixes.Count} postfixes, {sortedTranspilers.Count} transpilers, {sortedFinalizers.Count} finalizers");
-
-				void Print(ICollection<PatchContext> list, string type)
-				{
-					if (list.Count == 0)
-						return;
-					sb.AppendLine($"{list.Count} {type}:");
-					foreach (var fix in list)
-						sb.AppendLine($"* {fix.method.FullDescription()}");
-				}
-
-				Print(sortedPrefixes, "prefixes");
-				Print(sortedPostfixes, "postfixes");
-				Print(sortedTranspilers, "transpilers");
-				Print(sortedFinalizers, "finalizers");
-				Print(sortedILManipulators, "ilmanipulators");
-
-				return sb.ToString();
-			});
-
-			MakePatched(original, ctx, sortedPrefixes, sortedPostfixes, sortedTranspilers, sortedFinalizers, sortedILManipulators);
+			ManipulateCrashFix(original, patchInfo, ctx);
 		}
+
+		// TODO: this seems to be caused by patch shield crashing it ...
+		public static void ManipulateCrashFix(MethodBase original, PatchInfo patchInfo, ILContext ctx)
+		{
+            SortPatches(original, patchInfo, out var sortedPrefixes, out var sortedPostfixes, out var sortedTranspilers,
+                out var sortedFinalizers, out var sortedILManipulators);
+
+            Logger.Log(Logger.LogChannel.Info, () =>
+            {
+                var sb = new StringBuilder();
+
+                sb.AppendLine(
+                    $"Patching {original.FullDescription()} with {sortedPrefixes.Count} prefixes, {sortedPostfixes.Count} postfixes, {sortedTranspilers.Count} transpilers, {sortedFinalizers.Count} finalizers");
+
+                void Print(ICollection<PatchContext> list, string type)
+                {
+                    if (list.Count == 0)
+                        return;
+                    sb.AppendLine($"{list.Count} {type}:");
+                    foreach (var fix in list)
+                        sb.AppendLine($"* {fix.method.FullDescription()}");
+                }
+
+                Print(sortedPrefixes, "prefixes");
+                Print(sortedPostfixes, "postfixes");
+                Print(sortedTranspilers, "transpilers");
+                Print(sortedFinalizers, "finalizers");
+                Print(sortedILManipulators, "ilmanipulators");
+
+                return sb.ToString();
+            });
+
+            MakePatched(original, ctx, sortedPrefixes, sortedPostfixes, sortedTranspilers, sortedFinalizers, sortedILManipulators);
+        }
 
 		private static void WriteTranspiledMethod(ILContext ctx, MethodBase original, List<PatchContext> transpilers)
 		{
@@ -589,13 +595,13 @@ namespace HarmonyLib.Public.Patching
 
 		private static void EmitTryCatchWrapper(ILEmitter il, MethodInfo target, ILEmitter.Label start)
 		{
-			var exBlock = il.BeginExceptionBlock(start);
-			il.BeginHandler(exBlock, ExceptionHandlerType.Catch, typeof(object));
-			il.Emit(OpCodes.Ldstr, target.FullDescription());
-			il.Emit(OpCodes.Call, LogPatchExceptionMethod);
-			il.EndExceptionBlock(exBlock);
-			// Force proper closure in case nothing is emitted after the catch
-			il.Emit(OpCodes.Nop);
+			//var exBlock = il.BeginExceptionBlock(start);
+			//il.BeginHandler(exBlock, ExceptionHandlerType.Catch, typeof(object));
+			//il.Emit(OpCodes.Ldstr, target.FullDescription());
+			//il.Emit(OpCodes.Call, LogPatchExceptionMethod);
+			//il.EndExceptionBlock(exBlock);
+			//// Force proper closure in case nothing is emitted after the catch
+			//il.Emit(OpCodes.Nop);
 		}
 
 		private static void EmitResultUnbox(ILEmitter il, MethodBase original, VariableDefinition tmp, VariableDefinition result)
@@ -626,15 +632,15 @@ namespace HarmonyLib.Public.Patching
 
 		private static bool EmitOriginalBaseMethod(ILEmitter il, MethodBase original)
 		{
-			if (original is MethodInfo method)
-				il.Emit(OpCodes.Ldtoken, method);
-			else if (original is ConstructorInfo constructor)
-				il.Emit(OpCodes.Ldtoken, constructor);
-			else return false;
+			//if (original is MethodInfo method)
+			//	il.Emit(OpCodes.Ldtoken, method);
+			//else if (original is ConstructorInfo constructor)
+			//	il.Emit(OpCodes.Ldtoken, constructor);
+			//else return false;
 
-			var type = original.ReflectedType;
-			if (type.IsGenericType) il.Emit(OpCodes.Ldtoken, type);
-			il.Emit(OpCodes.Call, type.IsGenericType ? GetMethodFromHandle2 : GetMethodFromHandle1);
+			//var type = original.ReflectedType;
+			//if (type.IsGenericType) il.Emit(OpCodes.Ldtoken, type);
+			//il.Emit(OpCodes.Call, type.IsGenericType ? GetMethodFromHandle2 : GetMethodFromHandle1);
 			return true;
 		}
 

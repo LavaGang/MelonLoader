@@ -13,9 +13,10 @@ namespace MelonLoader
         {
             MelonLogger.Msg("Loading Support Module...");
 #if __ANDROID__
-            string BaseDirectory = Path.Combine(MelonUtils.GetApplicationPath(), "files/melonloader/etc/support");
+            MelonLogger.Msg(MelonUtils.GameDirectory);
+            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "melonloader"), "etc"), "support");
 #else
-            string BaseDirectory = Path.Combine(MelonUtils.GameDirectory, "MelonLoader",  "Dependencies",  "SupportModules");
+            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
 #endif
             if (!Directory.Exists(BaseDirectory))
             {
@@ -32,9 +33,6 @@ namespace MelonLoader
                 MelonLogger.Error("Failed to Find Support Module " + ModuleName + "!");
                 return false;
             }
-
-            MelonDebug.Msg($"Attempting to load Support Module Assembly [{ModulePath}]");
-
             try
             {
                 Assembly assembly = Assembly.LoadFrom(ModulePath);
@@ -62,10 +60,7 @@ namespace MelonLoader
                     return false;
                 }
             }
-            catch(Exception ex) { MelonLogger.Error(ex.ToString()); return false; }
-
-            MelonDebug.Msg("Loaded Support Module");
-
+            catch (Exception ex) { MelonLogger.Error(ex.ToString()); return false; }
             return true;
         }
 
@@ -104,7 +99,6 @@ namespace MelonLoader
         void LateUpdate();
         void OnGUI();
         void Quit();
-        void VRChat_OnUiManagerInit();
         void BONEWORKS_OnLoadingScreen();
     }
 
@@ -117,7 +111,6 @@ namespace MelonLoader
         public void LateUpdate() => MelonHandler.OnLateUpdate();
         public void OnGUI() => MelonHandler.OnGUI();
         public void Quit() => Core.Quit();
-        public void VRChat_OnUiManagerInit() => MelonHandler.VRChat_OnUiManagerInit();
         public void BONEWORKS_OnLoadingScreen() => MelonHandler.BONEWORKS_OnLoadingScreen();
     }
 }

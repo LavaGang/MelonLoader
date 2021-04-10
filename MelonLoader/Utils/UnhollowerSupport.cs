@@ -32,7 +32,7 @@ namespace MelonLoader
             Il2CppObjectBaseToPtrMethod = IL2CPPType.GetMethod("Il2CppObjectBaseToPtr");
             Il2CppStringToManagedMethod = IL2CPPType.GetMethod("Il2CppStringToManaged");
             ManagedStringToIl2CppMethod = IL2CPPType.GetMethod("ManagedStringToIl2Cpp");
-            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethod("RegisterTypeInIl2Cpp", new[] { typeof(bool) });
+            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethod("RegisterTypeInIl2Cpp", new[] { typeof(bool) } );
             GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
             Il2CppCallerCountAttributeType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Attributes.CallerCountAttribute");
             Il2CppCallerCountField = Il2CppCallerCountAttributeType.GetField("Count", BindingFlags.Public | BindingFlags.Instance);
@@ -82,7 +82,7 @@ namespace MelonLoader
             object[] callerCountAttributes = original.GetCustomAttributes(Il2CppCallerCountAttributeType, false);
             if (callerCountAttributes.Length != 1)
                 return null;
-            return (int) Il2CppCallerCountField.GetValue(callerCountAttributes[0]);
+            return (int)Il2CppCallerCountField.GetValue(callerCountAttributes[0]);
         }
 
         public static void RegisterTypeInIl2CppDomain(Type type)

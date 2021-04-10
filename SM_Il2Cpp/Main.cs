@@ -68,6 +68,7 @@ namespace MelonLoader.Support
             ClassInjector.RegisterTypeInIl2Cpp<Component>();
             Component.Create();
 #endif
+
             return new SupportModule_To();
         }
 
@@ -117,6 +118,7 @@ namespace MelonLoader.Support
 
         internal static void VRChat_CheckUiManager()
         {
+#if PORT_DISABLE
             if (!ShouldCheckForUiManager)
                 return;
             if (Assembly_CSharp == null)
@@ -136,6 +138,7 @@ namespace MelonLoader.Support
                 return;
             ShouldCheckForUiManager = false;
             Interface.VRChat_OnUiManagerInit();
+#endif
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]

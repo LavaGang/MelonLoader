@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -50,9 +50,16 @@ namespace MelonLoader
                 domain = AppDomain.CurrentDomain;
             try
             {
+#if NET5_0
+                var appDomainSetup = ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(domain, new object[0]));
+
+                appDomainSetup.GetType().GetProperty("ApplicationBase").SetValue(appDomainSetup, dirpath);
+#else
                 ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance)
                     .GetValue(domain, new object[0]))
                     .ApplicationBase = dirpath;
+#endif
             }
             catch (Exception ex) { MelonLogger.Warning($"AppDomainSetup.ApplicationBase Exception: {ex}"); }
             Directory.SetCurrentDirectory(dirpath);

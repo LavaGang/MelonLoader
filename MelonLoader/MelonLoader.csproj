@@ -33,7 +33,7 @@
     <TargetFrameworks>net35</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Android'">
-    <TargetFrameworks>net45</TargetFrameworks>
+    <TargetFrameworks>net35</TargetFrameworks>
   </PropertyGroup>
   <!--
   <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
@@ -81,7 +81,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;__ANDROID__;NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;__ANDROID__</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android' ">
     <DebugSymbols>false</DebugSymbols>
@@ -93,7 +93,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
-    <!--<PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />-->
+    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\external\MonoMod\MonoMod.RuntimeDetour\MonoMod.RuntimeDetour.csproj">

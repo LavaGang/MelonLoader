@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -24,12 +24,20 @@ namespace MelonLoader
 		internal static void TryResolve(object sender, PatchManager.PatcherResolverEventArgs args)
 		{
 			if (UnhollowerSupport.IsGeneratedAssemblyType(args.Original.DeclaringType))
+            {
+				MelonLogger.Log("IsGeneratedAssemblyType");
 				args.MethodPatcher = new HarmonyIl2CppMethodPatcher(args.Original);
+			}
+
+			MelonLogger.Log("Resolved");
 		}
 
 		private HarmonyIl2CppMethodPatcher(MethodBase original) : base(original)
 		{
+			MelonLogger.ManualWarning("HarmonyIl2CppMethodPatcher", "1");
+
 			originalMethodInfoPointer = UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(Original);
+			MelonLogger.ManualWarning("HarmonyIl2CppMethodPatcher", "2");
 			copiedMethodInfoPointer = CopyMethodInfoStruct(originalMethodInfoPointer);
 		}
 
@@ -39,7 +47,8 @@ namespace MelonLoader
 				DebugCheck();
 
 			DynamicMethodDefinition newreplacementdmd = CopyOriginal();
-			HarmonyManipulator.Manipulate(Original, Original.GetPatchInfo(), new ILContext(newreplacementdmd.Definition));
+
+			HarmonyManipulator.ManipulateCrashFix(Original, Original.GetPatchInfo(), new ILContext(newreplacementdmd.Definition));
 			MethodInfo newreplacement = newreplacementdmd.Generate();
 
 			MethodInfo il2CppShim = CreateIl2CppShim(newreplacement).Generate();
@@ -55,6 +64,11 @@ namespace MelonLoader
 			PatchTools.RememberObject(Original, new PotatoTriple { First = newreplacement, Second = il2CppShim, Third = il2CppShimDelegate });
 
 			return newreplacement;
+		}
+
+		private static void ManipulateTest(MethodBase original, PatchInfo patchInfo, ILContext ctx)
+        {
+			HarmonyManipulator.ManipulateCrashFix(original, patchInfo, ctx);
 		}
 
 		public override DynamicMethodDefinition CopyOriginal()
