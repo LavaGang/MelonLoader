@@ -148,6 +148,7 @@
 123. Assembly Generator now uses the MelonPreferences API for it's Config.
 124. Fixed NRE Issue with MelonUtils.ParseJSONStringtoStruct.
 125. Fixed String Null Issue with MelonPreferences.
+126. Fixed NIE Issue with FileSystemWatcher on GORN failing to be caught properly.
 
 ---
 

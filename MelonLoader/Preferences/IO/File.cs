@@ -13,19 +13,16 @@ namespace MelonLoader.Preferences.IO
         internal string FilePath = null;
         internal string LegacyFilePath = null;
         internal bool IsSaving = false;
+        internal bool ShouldSave = true;
         internal Dictionary<string, Dictionary<string, TomlObject>> RawValue = new Dictionary<string, Dictionary<string, TomlObject>>();
         internal Watcher FileWatcher = null;
 
-        internal File(string filepath)
-        {
-            FilePath = filepath;
-            FileWatcher = new Watcher(this);
-        }
 
-        internal File(string filepath, string legacyfilepath)
+        internal File(string filepath, string legacyfilepath = null, bool shouldsave = true)
         {
             FilePath = filepath;
             LegacyFilePath = legacyfilepath;
+            ShouldSave = shouldsave;
             FileWatcher = new Watcher(this);
         }
 
@@ -105,7 +102,7 @@ namespace MelonLoader.Preferences.IO
 
         internal void Save()
         {
-            if (_waserror)
+            if (_waserror || !ShouldSave)
                 return;
             DocumentSyntax doc = new DocumentSyntax();
             foreach (KeyValuePair<string, Dictionary<string, TomlObject>> keyValuePair in RawValue.ToArray())

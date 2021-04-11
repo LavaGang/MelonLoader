@@ -127,7 +127,7 @@ namespace MelonLoader
                 return default;
             T returnobj = default;
             try { returnobj = jsonarr.Make<T>(); }
-            catch (Exception ex) { MelonLogger.Error($"Exception while Converting JSON Variant to {nameof(T)}: {ex}"); }
+            catch (Exception ex) { MelonLogger.Error($"Exception while Converting JSON Variant to {typeof(T).Name}: {ex}"); }
             return returnobj;
         }
 

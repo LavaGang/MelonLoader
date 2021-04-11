@@ -7,20 +7,20 @@ namespace MelonLoader
     {
         public string Identifier { get; internal set; }
         public string DisplayName { get; internal set; }
+        public bool IsHidden { get; internal set; }
         public readonly List<MelonPreferences_Entry> Entries = new List<MelonPreferences_Entry>();
         internal Preferences.IO.File File = null;
 
-        internal MelonPreferences_Category(string identifier, string display_name)
+        internal MelonPreferences_Category(string identifier, string display_name, bool is_hidden = false)
         {
             Identifier = identifier;
             DisplayName = display_name;
+            IsHidden = is_hidden;
             MelonPreferences.Categories.Add(this);
         }
 
-        [Obsolete]
         public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name, bool is_hidden) 
             => CreateEntry(identifier, default_value, display_name, null, is_hidden, false);
-
         public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null, 
             string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null)
         {
@@ -71,7 +71,7 @@ namespace MelonLoader
         public MelonPreferences_Entry<T> GetEntry<T>(string identifier) => (MelonPreferences_Entry<T>)GetEntry(identifier);
         public bool HasEntry(string identifier) => GetEntry(identifier) != null;
 
-        public void SetFilePath(string filepath)
+        public void SetFilePath(string filepath, bool autoload = true)
         {
             if (File != null)
             {
@@ -92,7 +92,8 @@ namespace MelonLoader
                     MelonPreferences.PrefFiles.Add(File);
                 }
             }
-            MelonPreferences.LoadFileAndRefreshCategories(File);
+            if (autoload)
+                MelonPreferences.LoadFileAndRefreshCategories(File);
         }
 
         public void ResetFilePath()
@@ -109,7 +110,7 @@ namespace MelonLoader
             MelonPreferences.LoadFileAndRefreshCategories(MelonPreferences.DefaultFile);
         }
 
-        public void SaveToFile()
+        public void SaveToFile(bool printmsg = true)
         {
             Preferences.IO.File currentfile = File;
             if (currentfile == null)
@@ -126,16 +127,19 @@ namespace MelonLoader
                 MelonLogger.Error($"Error while Saving Preferences to {currentfile.FilePath}: {ex}");
                 currentfile.WasError = true;
             }
-            MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
+            if (printmsg)
+                MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
             MelonHandler.OnPreferencesSaved();
         }
 
-        public void LoadFromFile()
+        public void LoadFromFile(bool printmsg = true)
         {
             Preferences.IO.File currentfile = File;
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
-            MelonPreferences.LoadFileAndRefreshCategories(currentfile);
+            MelonPreferences.LoadFileAndRefreshCategories(currentfile, printmsg);
         }
+
+        public void DestroyFileWatcher() => File?.FileWatcher.Destroy();
     }
 }

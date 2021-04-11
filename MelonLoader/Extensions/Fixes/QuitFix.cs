@@ -6,7 +6,7 @@ namespace MelonLoader.Fixes
 	{
 		internal static void Run()
 		{
-			if (!MelonCommandLine.Core.QuitFix)
+			if (!MelonLaunchOptions.Core.QuitFix)
 				return;
 			Process.GetCurrentProcess().Kill();
 		}

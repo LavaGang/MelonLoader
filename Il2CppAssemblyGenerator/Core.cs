@@ -29,7 +29,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "Unity web player");
 
-            AssemblyGenerationNeeded = MelonCommandLine.AssemblyGenerator.ForceRegeneration;
+            AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
             GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
             ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
@@ -41,6 +41,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static int Run()
         {
+            Config.Load();
+
             RemoteAPI.Contact();
 
             unitydependencies = new UnityDependencies();
@@ -100,10 +102,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
 
+            MelonLogger.Msg("Assembly Generation Successful!");
             Config.GameAssemblyHash.Value = CurrentGameAssemblyHash;
             deobfuscationMap.Save();
 
-            MelonLogger.Msg("Assembly Generation Successful!");
             return 0;
         }
 

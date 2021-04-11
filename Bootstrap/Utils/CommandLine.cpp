@@ -41,15 +41,8 @@ void CommandLine::Read()
 		if (command == NULL)
 			continue;
 
-		if (strstr(command, "--melonloader.magenta") != NULL)
-			Console::Mode = Console::DisplayMode::MAGENTA;
-		else if (strstr(command, "--melonloader.rainbow") != NULL)
-			Console::Mode = Console::DisplayMode::RAINBOW;
-		else if (strstr(command, "--melonloader.randomrainbow") != NULL)
-			Console::Mode = Console::DisplayMode::RANDOMRAINBOW;
-		else if (strstr(command, "--lemonloader") != NULL)
-			Console::Mode = Console::DisplayMode::LEMON;
-
+		if (strstr(command, "--melonloader.consolemode") != NULL)
+			Console::Mode = (Console::DisplayMode)GetIntFromConstChar(argv[i + 1], 0);
 		else if (strstr(command, "--quitfix") != NULL)
 			Core::QuitFix = true;
 		else if (strstr(command, AddPrefixToLaunchOption("consoleontop")) != NULL)

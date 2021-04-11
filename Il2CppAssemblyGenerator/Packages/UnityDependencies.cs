@@ -6,7 +6,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
     {
         internal UnityDependencies()
         {
-            Version = MelonCommandLine.AssemblyGenerator.ForceVersion_UnityDependencies;
+            Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_UnityDependencies;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = string.Copy(MelonUtils.GetUnityVersion());
             URL = "https://github.com/LavaGang/Unity-Runtime-Libraries/raw/master/" + Version + ".zip";

@@ -16,7 +16,8 @@ namespace MelonLoader
             Fixes.ApplicationBase.Run(curDomain);
             Fixes.ExtraCleanup.Run();
 
-            MelonCommandLine.Load();
+            MelonPreferences.Load();
+            MelonLaunchOptions.Load();
             MelonCompatibilityLayer.Setup(curDomain);
 
             Fixes.Il2CppSupport.Run(curDomain);
@@ -30,8 +31,6 @@ namespace MelonLoader
 
             try { bHaptics_NativeLibrary.Load(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
-
-            MelonPreferences.Load();
 
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();

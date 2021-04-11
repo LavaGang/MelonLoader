@@ -6,7 +6,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
     {
         internal Cpp2IL()
         {
-            Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Dumper;
+            Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.ReturnedInfo.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))

@@ -115,7 +115,9 @@ namespace MelonLoader
             MelonHandler.OnPreferencesSaved();
         }
 
-        public static MelonPreferences_Category CreateCategory(string identifier, string display_name = null)
+        public static MelonPreferences_Category CreateCategory(string identifier) => CreateCategory(identifier, null, false);
+        public static MelonPreferences_Category CreateCategory(string identifier, string display_name = null) => CreateCategory(identifier, display_name, false);
+        public static MelonPreferences_Category CreateCategory(string identifier, string display_name = null, bool is_hidden = false, bool should_save = true)
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("identifier is null or empty when calling CreateCategory");
@@ -124,7 +126,7 @@ namespace MelonLoader
             MelonPreferences_Category category = GetCategory(identifier);
             if (category != null)
                 return category;
-            return new MelonPreferences_Category(identifier, display_name);
+            return new MelonPreferences_Category(identifier, display_name, is_hidden);
         }
 
         [Obsolete]
@@ -210,7 +212,7 @@ namespace MelonLoader
             return false;
         }
 
-        internal static void LoadFileAndRefreshCategories(Preferences.IO.File file)
+        internal static void LoadFileAndRefreshCategories(Preferences.IO.File file, bool printmsg = true)
         {
             try
             {
@@ -233,7 +235,8 @@ namespace MelonLoader
                 foreach (MelonPreferences_Entry entry in category.Entries)
                     currentFile.SetupEntryFromRawValue(entry);
             }
-            MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
+            if (printmsg)
+                MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
             MelonHandler.OnPreferencesLoaded();
         }
 

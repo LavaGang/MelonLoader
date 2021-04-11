@@ -225,7 +225,7 @@
     <Compile Include="Melons\Attributes\Priority.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderBuild.cs" />
     <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
-    <Compile Include="CommandLine.cs" />
+    <Compile Include="LaunchOptions.cs" />
     <Compile Include="Utils\Coroutines.cs" />
     <Compile Include="Preferences\API.cs" />
     <Compile Include="Preferences\Category.cs" />
