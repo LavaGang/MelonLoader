@@ -24,6 +24,7 @@
     <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
     <ClCompile Include="Utils\Encoding.cpp" />
     <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
+    <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
@@ -51,6 +52,22 @@
     <ClInclude Include="Base\funchook\include\funchook.h" />
     <ClInclude Include="Utils\Encoding.h" />
     <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
+    <ClInclude Include="Utils\AssemblyUnhollower\XrefScannerBindings.h" />
+    <ClInclude Include="Base\capstone\include\capstone\arm.h" />
+    <ClInclude Include="Base\capstone\include\capstone\arm64.h" />
+    <ClInclude Include="Base\capstone\include\capstone\capstone.h" />
+    <ClInclude Include="Base\capstone\include\capstone\evm.h" />
+    <ClInclude Include="Base\capstone\include\capstone\m68k.h" />
+    <ClInclude Include="Base\capstone\include\capstone\m680x.h" />
+    <ClInclude Include="Base\capstone\include\capstone\mips.h" />
+    <ClInclude Include="Base\capstone\include\capstone\mos65xx.h" />
+    <ClInclude Include="Base\capstone\include\capstone\platform.h" />
+    <ClInclude Include="Base\capstone\include\capstone\ppc.h" />
+    <ClInclude Include="Base\capstone\include\capstone\sparc.h" />
+    <ClInclude Include="Base\capstone\include\capstone\systemz.h" />
+    <ClInclude Include="Base\capstone\include\capstone\tms320c64x.h" />
+    <ClInclude Include="Base\capstone\include\capstone\x86.h" />
+    <ClInclude Include="Base\capstone\include\capstone\xcore.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />

@@ -10,6 +10,10 @@ namespace TestMod3
     {
         public override void OnApplicationStart()
         {
+            MelonLogger.Msg("starting");
+            //foreach (var el in UnhollowerRuntimeLib.XrefScans.XrefScanner.XrefScanImpl_Test())
+            //{
+            //}
             //typeof(TestScript).GetProperty("ModSuccess").GetGetMethod().GetMethodBody();
             MelonLogger.Msg("test");
             //MelonLogger.Msg(typeof(global::TestScript).GetProperty("ModSuccess").GetGetMethod().GetMethodBody() == null);
@@ -26,9 +30,9 @@ namespace TestMod3
 
             if (textMesh == null)
             {
-                MelonLogger.Log("text mesh is null");
+                MelonLogger.Msg("text mesh is null");
                 return;
-            }    
+            }
 
             textMesh.text = "MELON LOADER WORKS!";
             textMesh.color = Color.green;

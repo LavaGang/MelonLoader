@@ -12,6 +12,10 @@
 
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\UnhollowerBaseLib\UnhollowerBaseLib.csproj" />
+    <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\UnhollowerRuntimeLib\UnhollowerRuntimeLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Assembly-CSharp, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -22,12 +26,6 @@
     </Reference>
     <Reference Include="Il2CppSystem">
       <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\Il2CppSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="UnhollowerBaseLib">
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\UnhollowerBaseLib.dll</HintPath>
-    </Reference>
-    <Reference Include="UnhollowerRuntimeLib">
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\UnhollowerRuntimeLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\UnityEngine.dll</HintPath>

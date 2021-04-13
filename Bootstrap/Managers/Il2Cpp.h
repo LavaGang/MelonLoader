@@ -18,6 +18,7 @@ public:
 	static HMODULE Module;
 #elif defined(__ANDROID__)
 	static void* Handle;
+	static void* MemLoc;
 #endif
 	
 	static bool Initialize();

@@ -53,10 +53,12 @@ public:
 		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion);
 	};
 
-
 	class UnhollowerIl2Cpp
 	{
 	public:
 		static void AddInternalCalls();
+	private:
+		static void* GetProcAddress(void* hModule, Mono::String* procName);
+		static void* LoadLibrary(Mono::String* lpFileName);
 	};
 };

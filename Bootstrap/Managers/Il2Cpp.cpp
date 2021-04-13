@@ -14,6 +14,7 @@
 
 #ifdef __ANDROID__
 #include <dlfcn.h>
+#include <android/log.h>
 #endif
 #include "../Utils/Helpers/ImportLibHelper.h"
 
@@ -98,11 +99,12 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 }
 #elif defined(__ANDROID__)
 void* Il2Cpp::Handle = NULL;
+void* Il2Cpp::MemLoc = NULL;
 
 bool Il2Cpp::Initialize()
 {
 	Debug::Msg("Initializing Il2Cpp...");
-	Handle = dlopen("libil2cpp.so", RTLD_NOW | RTLD_GLOBAL);
+	Handle = dlopen("libil2cpp.so", RTLD_NOW | RTLD_GLOBAL | RTLD_GLOBAL);
 
 	if (Handle == nullptr)
 	{
@@ -112,6 +114,7 @@ bool Il2Cpp::Initialize()
 	}
 
 	Debug::Msg("Loaded Il2Cpp");
+	//__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%p", Il2Cpp::Handle);
 
 	return Exports::Initialize();
 }
@@ -125,6 +128,16 @@ bool Il2Cpp::Exports::Initialize()
 	il2cpp_method_get_name = (il2cpp_method_get_name_t)ImportLibHelper::GetExport(Handle, "il2cpp_method_get_name");
 	il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)ImportLibHelper::GetExport(Handle, "il2cpp_unity_install_unitytls_interface");
 	
+	Dl_info dlInfo;
+	dladdr((void*)il2cpp_init, &dlInfo);
+	MemLoc = dlInfo.dli_fbase;
+
+	Dl_info dlInfo1;
+	dladdr((void*)il2cpp_runtime_invoke, &dlInfo1);
+	
+	if (MemLoc != dlInfo1.dli_fbase)
+		Assertion::ThrowInternalFailure("Address mismatch");
+
 	if (!Assertion::ShouldContinue)
 	{
 		Logger::Error("One or more symbols failed to load.");

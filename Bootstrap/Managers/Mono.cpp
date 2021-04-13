@@ -423,7 +423,7 @@ bool Mono::ApplyPatches()
 
 	if (Debug::Enabled)
 	{
-		mono_trace_set_level_string("debug");
+		mono_trace_set_level_string("warning");
 		mono_trace_set_mask_string("all");
 		Debug::Msg("Enabled Mono Logging");
 	}

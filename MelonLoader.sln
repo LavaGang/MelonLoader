@@ -6,7 +6,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Proxy", "Proxy\Proxy.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bootstrap", "Bootstrap\Bootstrap.vcxproj", "{78DEE0AF-2263-488A-8EBF-8325218EB6C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader", "MelonLoader\MelonLoader.csproj", "{F9700790-414B-431B-9F9C-1D9210FAD682}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader", "MelonLoader\MelonLoader.csproj", "{F9700790-414B-431B-9F9C-1D9210FAD682}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM_Il2Cpp", "SM_Il2Cpp\SM_Il2Cpp.csproj", "{4BEAF9B5-F780-414B-8F2E-59DA4A91BE50}"
 EndProject
@@ -19,8 +19,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM_Preload", "SM_Preload\SM_Preload.csproj", "{140F10B0-CC78-4209-8FD8-AD2CAF320D13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Il2CppAssemblyGenerator", "Il2CppAssemblyGenerator\Il2CppAssemblyGenerator.csproj", "{A6452A3F-4BD6-497A-97DA-24F7DF97B234}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMod", "TestMod\TestMod.csproj", "{9DB81130-3B49-4CF2-9E99-C5007E327F4D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support Modules", "Support Modules", "{D377B522-7C04-4C24-91DC-35118DE2D03F}"
 EndProject
@@ -47,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnhollowerRuntimeLib", "ext
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyUnhollower", "external\Il2CppAssemblyUnhollower\AssemblyUnhollower\AssemblyUnhollower.csproj", "{C38D9B8A-443B-4F81-AADC-7BD74D8EA007}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMod3", "TestMod3\TestMod3.csproj", "{D00267A9-3F6E-481E-94F4-148D515B02A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestMod3", "TestMod3\TestMod3.csproj", "{D00267A9-3F6E-481E-94F4-148D515B02A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -603,46 +601,6 @@ Global
 		{A6452A3F-4BD6-497A-97DA-24F7DF97B234}.ReleaseTrace|x64.Build.0 = Release|Any CPU
 		{A6452A3F-4BD6-497A-97DA-24F7DF97B234}.ReleaseTrace|x86.ActiveCfg = Release|Any CPU
 		{A6452A3F-4BD6-497A-97DA-24F7DF97B234}.ReleaseTrace|x86.Build.0 = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|ARM.Build.0 = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|ARM64.ActiveCfg = Debug|Android
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|ARM64.Build.0 = Debug|Android
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|x64.Build.0 = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Debug|x86.Build.0 = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugLegacy|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugLegacy|ARM.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugLegacy|ARM64.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugLegacy|x64.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugLegacy|x86.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugTrace|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugTrace|ARM.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugTrace|ARM64.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugTrace|x64.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.DebugTrace|x86.ActiveCfg = Debug|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|ARM.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|ARM.Build.0 = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|ARM64.Build.0 = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|x64.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|x64.Build.0 = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|x86.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.Release|x86.Build.0 = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseLegacy|Any CPU.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseLegacy|ARM.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseLegacy|ARM64.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseLegacy|x64.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseLegacy|x86.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseTrace|Any CPU.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseTrace|ARM.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseTrace|ARM64.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseTrace|x64.ActiveCfg = Release|Any CPU
-		{9DB81130-3B49-4CF2-9E99-C5007E327F4D}.ReleaseTrace|x86.ActiveCfg = Release|Any CPU
 		{D0C584C0-81D7-486E-B70E-D7F9256E0909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0C584C0-81D7-486E-B70E-D7F9256E0909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0C584C0-81D7-486E-B70E-D7F9256E0909}.Debug|ARM.ActiveCfg = Debug|Any CPU

@@ -10,6 +10,8 @@
 #include "../Utils/Helpers/ImportLibHelper.h"
 #include "sys/mman.h"
 #include "stdlib.h"
+#include "../Utils/AssemblyUnhollower/XrefScannerBindings.h"
+#include <android/log.h>
 
 
 #include <dlfcn.h>
@@ -393,7 +395,45 @@ void InternalCalls::UnhollowerIl2Cpp::AddInternalCalls()
             break;
         }
         Mono::AddInternalCall((std::string("UnhollowerBaseLib.IL2CPP::") + il2cppCalls[i]).c_str(), (void*)resolvedFunc);
-
     }
+
+    Mono::AddInternalCall("UnhollowerRuntimeLib.ClassInjector::GetProcAddress", (void*)GetProcAddress);
+    Mono::AddInternalCall("UnhollowerRuntimeLib.ClassInjector::LoadLibrary", (void*)LoadLibrary);
+
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanner::XrefScanImplNative", (void*)XrefScannerBindings::XrefScanner::XrefScanImplNative);
+
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScannerLowLevel::JumpTargetsImpl", (void*)XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl);
+
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo", (void*)XrefScannerBindings::XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo);
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo", (void*)XrefScannerBindings::XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo);
+}
+
+void* InternalCalls::UnhollowerIl2Cpp::GetProcAddress(void* hModule, Mono::String* procName)
+{
+    char* parsedSym = Mono::Exports::mono_string_to_utf8(procName);
+    void* res = dlsym(hModule, parsedSym);
+    Mono::Free(parsedSym);
+    return res;
+}
+
+void* InternalCalls::UnhollowerIl2Cpp::LoadLibrary(Mono::String* lpFileName)
+{
+    char* parsedLib = Mono::Exports::mono_string_to_utf8(lpFileName);
+    Debug::Msg(parsedLib);
+    if (strcmp(parsedLib, "GameAssembly.dll") == 0)
+    {
+        __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "c++ %p", Il2Cpp::MemLoc);
+
+        //Dl_info dlInfo;
+        //dladdr(Il2Cpp::Handle, &dlInfo);
+        //Mono::Free(parsedLib);
+        return Il2Cpp::MemLoc;
+    }
+
+    void* res = dlopen(parsedLib, RTLD_NOW | RTLD_GLOBAL);
+    Dl_info dlInfo;
+    dladdr(res, &dlInfo);
+    Mono::Free(parsedLib);
+    return dlInfo.dli_fbase;
 }
 #pragma endregion

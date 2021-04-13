@@ -24,6 +24,7 @@
 #include "../Managers/InternalCalls.h"
 #include "../Utils/UnitTesting/TestHelper.h"
 #include "../Patcher/Tests/Suite.spec.h"
+#include "../Utils/AssemblyUnhollower/XrefScannerBindings.h"
 
 #ifdef __ANDROID__
 #include <stdio.h>
@@ -79,6 +80,10 @@ bool Core::Initialize()
 			HashCode::Initialize
 		},
 #endif
+		{
+			"Initializing Capstone",
+			XrefScannerBindings::Init
+		},
 		{
 			"Initializing Mono",
 			Mono::Initialize
