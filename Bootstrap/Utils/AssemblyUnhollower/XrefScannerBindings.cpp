@@ -218,9 +218,41 @@ void XrefScannerBindings::XrefScanner::XrefScanImplNative(void* codeStart, bool 
 		return;
 	}
 
-	res.type = XrefType::Method;
 	res.target = codeStart;
 	res.codeStart = codeStart;
+
+	disassemblyInstance* dis = disMap[codeStart];
+	
+	if (!dis->exit)
+		for (; dis->counter[1] < 1000; dis->counter[1]++) {
+			cs_insn instruction = dis->cs_ins[dis->counter[1]];
+			//funchook_disasm_log_instruction(&instruction);
+
+			if (dis->exit)
+				break;
+
+			if (HAS_GROUP(ARM64_GRP_RET))
+				break;
+
+			if (HAS_GROUP(ARM64_GRP_INT))
+				break;
+
+			if (HAS_GROUP(ARM64_GRP_JUMP) || HAS_GROUP(ARM64_GRP_CALL))
+			{
+				//Debug::Msg("Jump");
+				dis->counter[1]++;
+				//return NULL;
+				res.type = XrefType::Method;
+				res.target = Utils::ExtractTargetAddress(dis, instruction);
+				PartialCleanup(codeStart);
+				return;
+			}
+
+			if (instruction.id == ARM64_INS_MOV) {
+				funchook_disasm_log_instruction(&instruction);
+			}
+		}
+
 
 	res.complete = true;
 	Cleanup(codeStart);
@@ -236,8 +268,8 @@ void* XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl(void* codeStart)
 
 	disassemblyInstance* dis = disMap[codeStart];
 
-	for (; dis->counter < 1000; dis->counter++) {
-		cs_insn instruction = dis->cs_ins[dis->counter];
+	for (; dis->counter[0] < 1024*1024; dis->counter[0]++) {
+		cs_insn instruction = dis->cs_ins[dis->counter[0]];
 		//funchook_disasm_log_instruction(&instruction);
 
 		if (dis->exit)
@@ -252,7 +284,7 @@ void* XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl(void* codeStart)
 				dis->exit = true;
 
 			//Debug::Msg("Jump");
-			dis->counter++;
+			dis->counter[0]++;
 			//return NULL;
 			auto res = Utils::ExtractTargetAddress(dis, instruction);
 			PartialCleanup(codeStart);

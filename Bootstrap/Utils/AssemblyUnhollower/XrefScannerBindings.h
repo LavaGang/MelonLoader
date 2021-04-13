@@ -43,7 +43,7 @@ public:
 		bool use_cs;
 		cs_insn* cs_ins;
 		size_t cs_len;
-		size_t counter;
+		size_t counter[6];
 		bool exit;
 	};
 
