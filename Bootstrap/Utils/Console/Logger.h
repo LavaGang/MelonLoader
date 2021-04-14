@@ -31,10 +31,26 @@ public:
 	static void Warning(const char* txt);
 	static void Error(const char* txt);
 
+	static void Msgf(Console::Color txtcolor, const char* fmt, ...);
+	static void Warningf(const char* fmt, ...);
+	static void Errorf(const char* fmt, ...);
+
+	static void vMsgf(Console::Color txtcolor, const char* fmt, va_list args);
+	static void vWarningf(const char* fmt, va_list args);
+	static void vErrorf(const char* fmt, va_list args);
+
 	static void Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version);
 	static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt);
 	static void Internal_Warning(const char* namesection, const char* txt);
 	static void Internal_Error(const char* namesection, const char* txt);
+
+	static void Internal_Msgf(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* fmt, ...);
+	static void Internal_Warningf(const char* namesection, const char* fmt, ...);
+	static void Internal_Errorf(const char* namesection, const char* fmt, ...);
+
+	static void Internal_vMsgf(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* fmt, va_list args);
+	static void Internal_vWarningf(const char* namesection, const char* fmt, va_list args);
+	static void Internal_vErrorf(const char* namesection, const char* fmt, va_list args);
 	
 	struct MessagePrefix
 	{
@@ -43,6 +59,9 @@ public:
 	};
 	
 	static void Internal_DirectWrite(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt);
+	static void Internal_DirectWritef(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* fmt, ...);
+	static void Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* fmt, va_list args);
+
 	
 #ifdef PORT_DISABLE
 	class FileStream

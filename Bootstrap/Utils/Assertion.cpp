@@ -19,10 +19,12 @@ void Assertion::ThrowInternalFailure(const char* msg)
 	std::string timestamp = Logger::GetTimestamp();
 	
 	const Logger::MessagePrefix prefixes[]{
+#ifndef __ANDROID__
 		Logger::MessagePrefix{
 			Console::Green,
 			timestamp.c_str()
 		},
+#endif
 		Logger::MessagePrefix{
 			Console::Red,
 			"INTERNAL FAILURE"

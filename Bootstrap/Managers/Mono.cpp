@@ -478,10 +478,12 @@ void Mono::Hooks::mono_log(const char* log_domain, const char* log_level, const 
 {
 	Console::Color color = fatal ? Console::Gray : Console::Red;
 	const Logger::MessagePrefix prefixes[]{
+#ifndef __ANDROID__
 		Logger::MessagePrefix{
 			color,
 			Logger::GetTimestamp().c_str()
 		},
+#endif
 		Logger::MessagePrefix{
 			color,
 			"Mono"
