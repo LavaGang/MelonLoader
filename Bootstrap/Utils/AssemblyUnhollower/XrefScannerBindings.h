@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <unordered_map>
 #include <capstone/capstone.h>
-#include <unicorn/unicorn.h>
 
 class XrefScannerBindings
 {
@@ -20,49 +19,61 @@ public:
 		void* codeStart;
 	};
 
+	struct DisassemblyInstance {
+		void* codeStart;
+		size_t dependants;
+		bool exit;
+
+		// capstone data
+		bool use_cs;
+		cs_insn* cs_ins;
+		size_t cs_len;
+		uint64_t cs_addr;
+	};
+
+	struct DecoderSettings
+	{
+		void* codeStart;
+		uint64_t transaction;
+		int limit;
+	};
+
 	static bool Init();
 
 	class XrefScanner {
 	public:
-		static void XrefScanImplNative(void* codeStart, bool skipClassCheck, XrefScanImplNativeRes& res);
+		static void XrefScanImplNative(const DecoderSettings* decoder, bool skipClassCheck, XrefScanImplNativeRes& res);
 	};
 
 	class XrefScannerLowLevel {
 	public:
-		static void* JumpTargetsImpl(void* codeStart);
+		static void* JumpTargetsImpl(const DecoderSettings* decoder);
 	};
 
 	class XrefScanUtilFinder {
 	public:
-		static void* FindLastRcxReadAddressBeforeCallTo(void* codeStart, void* callTarget);
-		static void* FindByteWriteTargetRightAfterCallTo(void* codeStart, void* callTarget);
-	};
-
-	struct disassemblyInstance {
-		void* codeStart;
-		bool use_cs;
-		cs_insn* cs_ins;
-		size_t cs_len;
-		size_t counter[6];
-		bool exit;
+		static void* FindLastRcxReadAddressBeforeCallTo(const DecoderSettings*, void* callTarget);
+		static void* FindByteWriteTargetRightAfterCallTo(const DecoderSettings*, void* callTarget);
 	};
 
 	static csh cs;
-	static uc_engine* uc;
 private:
 	
-	static std::unordered_map<void*, disassemblyInstance*> disMap;
-	static void CheckEntry(void* codeStart);
-	static bool CheckCapstone(void* codeStart);
-	static void CleanupCapstoneInstance(void* codeStart);
-	static void Cleanup(void* codeStart);
-	static void PartialCleanup(void* codeStart);
+	static std::unordered_map<uint64_t, DisassemblyInstance*> disassemble;
+	static std::unordered_map<uint64_t, size_t*> transactions;
+	static DisassemblyInstance* CheckEntry(const DecoderSettings*);
+	static bool CheckCapstone(const DecoderSettings*);
+	static void CleanupCapstoneInstance(const DecoderSettings*);
+	static void Cleanup(const DecoderSettings*);
+	static void PartialCleanup(const DecoderSettings*);
+	static DisassemblyInstance* GetDisassembly(const DecoderSettings*);
+	static size_t* GetCounter(const DecoderSettings*);
 
 	class Utils
 	{
 	public:
 		static bool HasGroup(uint8_t groups[8], size_t groupCount, uint8_t group);
 		static bool RegInteracted(uint16_t registers[20], size_t reg_count, uint16_t reg);
-		static void* ExtractTargetAddress(disassemblyInstance* dis, cs_insn& instruction);
+		static void* ExtractTargetAddress(DisassemblyInstance* dis, cs_insn& instruction);
 	};
 };

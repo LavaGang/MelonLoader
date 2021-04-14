@@ -17,6 +17,20 @@ namespace TestMod3
             //typeof(TestScript).GetProperty("ModSuccess").GetGetMethod().GetMethodBody();
             MelonLogger.Msg("test");
             //MelonLogger.Msg(typeof(global::TestScript).GetProperty("ModSuccess").GetGetMethod().GetMethodBody() == null);
+
+            //UnhollowerBaseLib.LogSupport.TraceHandler += (msg) => MelonLogger.Msg(msg);
+
+            UnhollowerRuntimeLib.ClassInjector.RegisterTypeInIl2Cpp<TestType>();
+        }
+    }
+
+    class TestType : UnityEngine.MonoBehaviour
+    {
+        public TestType(IntPtr value) : base(value) { }
+
+        void FixedUpdate()
+        {
+            MelonLogger.Msg("Fixed update");
         }
     }
 
@@ -38,6 +52,7 @@ namespace TestMod3
             textMesh.color = Color.green;
 
             __instance.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+            __instance.gameObject.AddComponent<TestType>();
         }
     }
 }

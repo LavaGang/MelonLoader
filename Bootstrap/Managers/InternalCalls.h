@@ -60,5 +60,7 @@ public:
 	private:
 		static void* GetProcAddress(void* hModule, Mono::String* procName);
 		static void* LoadLibrary(Mono::String* lpFileName);
+		static void* GetAsmLoc();
+		static void CleanupDisasm();
 	};
 };

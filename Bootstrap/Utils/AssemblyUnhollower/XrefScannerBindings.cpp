@@ -7,6 +7,7 @@
 #include <math.h>
 #include <funchook.h>
 
+#pragma region Constants
 // 4kb
 #define MIN_PAGE_SIZE 0x1000
 // 4mb
@@ -18,24 +19,22 @@
 #define PRIxPTR ""
 #define ADDR_FMT "%08" PRIxPTR
 
+#define DECODER_DEFAULT_LIMIT 1000
+
+#pragma endregion
+
 csh XrefScannerBindings::cs = NULL;
-uc_engine* XrefScannerBindings::uc = NULL;
-std::unordered_map<void*, XrefScannerBindings::disassemblyInstance*> XrefScannerBindings::disMap;
+std::unordered_map<uint64_t, XrefScannerBindings::DisassemblyInstance*> XrefScannerBindings::disassemble;
+std::unordered_map<uint64_t, size_t*> XrefScannerBindings::transactions;
 
-static void funchook_logv(int set_error, const char* fmt, va_list ap)
-{
-	__android_log_vprint(ANDROID_LOG_INFO, "MelonLoader", fmt, ap);
-
-}
-
+#pragma region FunchookHelper
 void funchook_log(const char* fmt, ...)
 {
 	va_list ap;
 	va_start(ap, fmt);
-	funchook_logv(0, fmt, ap);
+	Logger::vMsgf(Console::Color::DarkCyan, fmt, ap);
 	va_end(ap);
 }
-
 
 static const char* reg_name(csh handle, unsigned int reg_id)
 {
@@ -87,6 +86,8 @@ void funchook_disasm_log_instruction(cs_insn* insn)
 		}
 	}
 }
+#pragma endregion
+
 bool XrefScannerBindings::Init()
 {
 	if (cs_open(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN, &cs) != CS_ERR_OK)
@@ -97,16 +98,10 @@ bool XrefScannerBindings::Init()
 
 	cs_option(cs, CS_OPT_DETAIL, CS_OPT_ON);
 
-	uc_err ucErr;
-	if ((ucErr = uc_open(UC_ARCH_ARM64, UC_MODE_LITTLE_ENDIAN, &uc)) != UC_ERR_OK) {
-		Logger::Error("uc_open() failed");
-		Logger::Error(uc_strerror(ucErr));
-		return false;
-	}
-
 	return true;
 }
 
+#pragma region Utils
 bool XrefScannerBindings::Utils::HasGroup(uint8_t groups[8], size_t groupCount, uint8_t group)
 {
 	for (int i = 0; i < groupCount; i++)
@@ -123,7 +118,7 @@ bool XrefScannerBindings::Utils::RegInteracted(uint16_t registers[20], size_t re
 	return false;
 }
 
-void* XrefScannerBindings::Utils::ExtractTargetAddress(disassemblyInstance* dis, cs_insn& instruction)
+void* XrefScannerBindings::Utils::ExtractTargetAddress(DisassemblyInstance* dis, cs_insn& instruction)
 {
 	if (instruction.detail->arm64.op_count == 0)
 	{
@@ -143,89 +138,145 @@ void* XrefScannerBindings::Utils::ExtractTargetAddress(disassemblyInstance* dis,
 	auto dest =  (void*)lastOp.imm;
 	return dest;
 }
+#pragma endregion
 
-void XrefScannerBindings::CheckEntry(void* codeStart)
+#pragma region Lifecycle
+XrefScannerBindings::DisassemblyInstance* XrefScannerBindings::CheckEntry(const DecoderSettings* decoder)
 {
-	if (disMap.find(codeStart) == disMap.end())
+	if (disassemble.find(decoder->transaction) == disassemble.end())
 	{
-		disMap[codeStart] = (disassemblyInstance*)malloc(sizeof(disassemblyInstance));
-		memset(disMap[codeStart], 0, sizeof(disassemblyInstance));
-		disMap[codeStart]->codeStart = codeStart;
+		disassemble[decoder->transaction] = (DisassemblyInstance*)malloc(sizeof(DisassemblyInstance));
+		memset(disassemble[decoder->transaction], 0, sizeof(DisassemblyInstance));
+		disassemble[decoder->transaction]->codeStart = decoder->codeStart;
 	}
-	else {
-		Debug::Msg("entry exists");
+
+	if (transactions.find(decoder->transaction) == transactions.end()) {
+		// Technically this is error prone, if this gets called more than once per itteration
+		disassemble[decoder->transaction]->dependants++;
+		transactions[decoder->transaction] = (size_t*)malloc(sizeof(size_t));
+		*(transactions[decoder->transaction]) = 0;
 	}
+
+	return disassemble[decoder->transaction];
 }
 
-bool XrefScannerBindings::CheckCapstone(void* codeStart)
+bool XrefScannerBindings::CheckCapstone(const DecoderSettings* decoder)
 {
-	CheckEntry(codeStart);
+	auto dis = CheckEntry(decoder);
+	if (dis == NULL)
+		return false;
 
-	if (!disMap[codeStart]->use_cs) {
-		disMap[codeStart]->cs_len = cs_disasm(cs, (uint8_t*)codeStart, 1000, (uint64_t)codeStart, 0, &(disMap[codeStart]->cs_ins));
+	if (dis->use_cs)
+		return true;
 
-		if (disMap[codeStart]->cs_len == 0) {
-			free(disMap[codeStart]);
-			Logger::Error("Failed to setup capstone");
-			return false;
-		}
+	dis->cs_len = decoder->limit;
+	dis->cs_ins = cs_malloc(cs);
+	dis->cs_addr = (uint64_t)decoder->codeStart;
 
-		disMap[codeStart]->use_cs = true;
-	}
+	//if (dis->cs_len >= decoder->limit)
+	//	return true;
+
+//if (dis->cs_len != 0)
+//	cs_free(dis->cs_ins, dis->cs_len);
+
+	//if (
+	//	(dis->cs_len = cs_disasm(
+	//		cs,
+	//		(const uint8_t*)(dis->codeStart),
+	//		decoder->limit, // FIXME: This can cause a seg fault
+	//		(uint64_t)dis->codeStart,
+	//		0,
+	//		(cs_insn**)(&(dis->cs_ins))
+	//	)) == 0
+	//) {
+	//	Logger::Errorf("Failed to setup capstone %d", dis->cs_len);
+	//	Cleanup(decoder);
+	//	return false;
+	//}
+
+	dis->use_cs = true;
 
 	return true;
 }
 
-void XrefScannerBindings::CleanupCapstoneInstance(void* codeStart)
+void XrefScannerBindings::CleanupCapstoneInstance(const DecoderSettings* decoder)
 {
-	cs_free(disMap[codeStart]->cs_ins, disMap[codeStart]->cs_len);
-	disMap[codeStart]->use_cs = false;
+	auto dis = GetDisassembly(decoder);
+	if (dis == NULL || !dis->use_cs)
+		return;
+
+	cs_free(dis->cs_ins, 1);
+	dis->use_cs = false;
 }
 
-void XrefScannerBindings::Cleanup(void* codeStart)
+void XrefScannerBindings::Cleanup(const DecoderSettings* decoder)
 {
-	if (disMap.find(codeStart) == disMap.end())
+	auto dis = GetDisassembly(decoder);
+	if (dis == NULL)
+		return;
+
+	CleanupCapstoneInstance(decoder);
+	free(dis);
+
+	auto counter = GetCounter(decoder);
+	if (counter != NULL)
+		free(counter);
+
+	transactions.erase(decoder->transaction);
+	disassemble.erase(decoder->transaction);
+}
+
+void XrefScannerBindings::PartialCleanup(const DecoderSettings* decoder)
+{
+	if (disassemble.find(decoder->transaction) == disassemble.end())
 	{
 		Debug::Msg("Not Found");
 		return;
 	}
 
-	if (disMap[codeStart]->use_cs)
-		CleanupCapstoneInstance(codeStart);
-
-	free(disMap[codeStart]);
-	disMap.erase(codeStart);
+	CleanupCapstoneInstance(decoder);
 }
 
-void XrefScannerBindings::PartialCleanup(void* codeStart)
+XrefScannerBindings::DisassemblyInstance* XrefScannerBindings::GetDisassembly(const DecoderSettings* decoder)
 {
-	if (disMap.find(codeStart) == disMap.end())
+	if (disassemble.find(decoder->transaction) != disassemble.end())
 	{
-		Debug::Msg("Not Found");
-		return;
+		return disassemble[decoder->transaction];
 	}
-
-	if (disMap[codeStart]->use_cs)
-		CleanupCapstoneInstance(codeStart);
+	Debug::Msg("Not found");
+	return NULL;
 }
 
-void XrefScannerBindings::XrefScanner::XrefScanImplNative(void* codeStart, bool skipClassCheck, XrefScanImplNativeRes& res)
+size_t* XrefScannerBindings::GetCounter(const DecoderSettings* decoder)
 {
-	if (!CheckCapstone(codeStart))
+	if (transactions.find(decoder->transaction) != transactions.end())
+		return transactions[decoder->transaction];
+
+	return NULL;
+}
+
+#pragma endregion
+
+#pragma region Native Implementations
+void XrefScannerBindings::XrefScanner::XrefScanImplNative(const DecoderSettings* decoder, bool skipClassCheck, XrefScanImplNativeRes& res)
+{
+	if (!CheckCapstone(decoder))
 	{
 		res.complete = true;
-		Cleanup(codeStart);
+		Cleanup(decoder);
 		return;
 	}
 
-	res.target = codeStart;
-	res.codeStart = codeStart;
+	DisassemblyInstance* dis = GetDisassembly(decoder);
+	size_t* counter = GetCounter(decoder);
 
-	disassemblyInstance* dis = disMap[codeStart];
-	
+	res.codeStart = dis->codeStart;
+	uint8_t* startingIns = ((uint8_t*)dis->cs_addr);
+
 	if (!dis->exit)
-		for (; dis->counter[1] < 1000; dis->counter[1]++) {
-			cs_insn instruction = dis->cs_ins[dis->counter[1]];
+		//for (; *counter < dis->cs_len && *counter < decoder->limit; (*counter)++) {
+		while(cs_disasm_iter(cs, (const uint8_t**)(&startingIns), &dis->cs_len, &dis->cs_addr, dis->cs_ins)) {
+			cs_insn instruction = dis->cs_ins[0];
 			//funchook_disasm_log_instruction(&instruction);
 
 			if (dis->exit)
@@ -240,37 +291,44 @@ void XrefScannerBindings::XrefScanner::XrefScanImplNative(void* codeStart, bool 
 			if (HAS_GROUP(ARM64_GRP_JUMP) || HAS_GROUP(ARM64_GRP_CALL))
 			{
 				//Debug::Msg("Jump");
-				dis->counter[1]++;
+				(*counter)++;
 				//return NULL;
 				res.type = XrefType::Method;
 				res.target = Utils::ExtractTargetAddress(dis, instruction);
-				PartialCleanup(codeStart);
+
+				//PartialCleanup(decoder);
 				return;
 			}
 
 			if (instruction.id == ARM64_INS_MOV) {
-				funchook_disasm_log_instruction(&instruction);
+				//funchook_disasm_log_instruction(&instruction);
+				continue;
 			}
 		}
 
 
 	res.complete = true;
-	Cleanup(codeStart);
+	Cleanup(decoder);
 }
 
-void* XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl(void* codeStart)
+void* XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl(const DecoderSettings* decoder)
 {
-	if (!CheckCapstone(codeStart))
+	if (!CheckCapstone(decoder))
 	{
-		Cleanup(codeStart);
+		Cleanup(decoder);
 		return NULL;
 	}
 
-	disassemblyInstance* dis = disMap[codeStart];
+	DisassemblyInstance* dis = GetDisassembly(decoder);
+	size_t* counter = GetCounter(decoder);
 
-	for (; dis->counter[0] < 1024*1024; dis->counter[0]++) {
-		cs_insn instruction = dis->cs_ins[dis->counter[0]];
-		//funchook_disasm_log_instruction(&instruction);
+	//Debug::Msgf("%d %p %p", dis->cs_len, dis->cs_addr, decoder->codeStart);
+	uint8_t* startingIns = ((uint8_t*)dis->cs_addr);
+
+	//for (; (*counter) < decoder->limit; (*counter)++) {
+	while (cs_disasm_iter(cs, (const uint8_t**)(&startingIns), &dis->cs_len, &dis->cs_addr, dis->cs_ins)) {
+		cs_insn instruction = dis->cs_ins[0];
+		//funchook_disasm_log_instruction(&instruction);		
 
 		if (dis->exit)
 			break;
@@ -284,40 +342,121 @@ void* XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl(void* codeStart)
 				dis->exit = true;
 
 			//Debug::Msg("Jump");
-			dis->counter[0]++;
+			*counter = *counter + 1;
 			//return NULL;
 			auto res = Utils::ExtractTargetAddress(dis, instruction);
-			PartialCleanup(codeStart);
+
+			PartialCleanup(decoder);
 			return res;
 		}
 	}
 	
-	Cleanup(codeStart);
+	Cleanup(decoder);
 	return NULL;
 }
 
-void* XrefScannerBindings::XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo(void* codeStart, void* callTarget)
+void* XrefScannerBindings::XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo(const DecoderSettings* decoder, void* callTarget)
 {
-	//if (!CheckCapstone(codeStart))
-	//{
-	//	Cleanup(codeStart);
-	//	return NULL;
-	//}
+	if (!CheckCapstone(decoder))
+	{
+		Cleanup(decoder);
+		return NULL;
+	}
 
-	//Cleanup(codeStart);
+	void* lastReadReg_x = NULL;
+
+	DisassemblyInstance* dis = GetDisassembly(decoder);
+	size_t* counter = GetCounter(decoder);
+
+	//for (; (*counter) < decoder->limit; (*counter)++) {
+	while (cs_disasm_iter(cs, (const uint8_t**)(&dis->cs_ins), &dis->cs_len, &dis->cs_addr, dis->cs_ins)) {
+		cs_insn instruction = dis->cs_ins[0];
+
+		if (dis->exit)
+			break;
+
+		if (HAS_GROUP(ARM64_GRP_RET))
+			return NULL;
+
+		if (HAS_GROUP(ARM64_GRP_JUMP))
+			continue;
+
+		if (HAS_GROUP(ARM64_GRP_INT))
+			return NULL;
+
+		if (HAS_GROUP(ARM64_GRP_CALL))
+		{
+			*counter = *counter + 1;
+			auto target = Utils::ExtractTargetAddress(dis, instruction);
+			if (target == callTarget)
+			{
+				Cleanup(decoder);
+				return lastReadReg_x;
+			}
+		}
+
+		if (instruction.id == ARM64_INS_MOV)
+		{
+			Debug::Msg("FindLastRcxReadAddressBeforeCallTo");
+			funchook_disasm_log_instruction(&instruction);
+		}
+	}
+
+	Cleanup(decoder);
 	return NULL;
 }
 
-void* XrefScannerBindings::XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo(void* codeStart, void* callTarget)
+void* XrefScannerBindings::XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo(const DecoderSettings* decoder, void* callTarget)
 {
-	//if (!CheckCapstone(codeStart))
-	//{
-	//	Cleanup(codeStart);
-	//	return NULL;
-	//}
+	if (!CheckCapstone(decoder))
+	{
+		Cleanup(decoder);
+		return NULL;
+	}
 
-	//Cleanup(codeStart);
+	void* lastReadReg_x = NULL;
+	bool seenCall = false;
+
+	DisassemblyInstance* dis = GetDisassembly(decoder);
+	size_t* counter = GetCounter(decoder);
+
+	//for (; (*counter) < decoder->limit; (*counter)++) {
+	while (cs_disasm_iter(cs, (const uint8_t**)(&dis->cs_ins), &dis->cs_len, &dis->cs_addr, dis->cs_ins)) {
+		cs_insn instruction = dis->cs_ins[0];
+
+		if (dis->exit)
+			break;
+
+		if (HAS_GROUP(ARM64_GRP_RET))
+			return NULL;
+
+		if (HAS_GROUP(ARM64_GRP_JUMP))
+			continue;
+
+		if (HAS_GROUP(ARM64_GRP_INT))
+			return NULL;
+
+		if (HAS_GROUP(ARM64_GRP_CALL))
+		{
+			*counter = *counter + 1;
+			auto target = Utils::ExtractTargetAddress(dis, instruction);
+			if (target == callTarget)
+			{
+				seenCall = true;
+				continue;
+			}
+		}
+
+		if (instruction.id == ARM64_INS_MOV && seenCall)
+		{
+			Debug::Msg("FindByteWriteTargetRightAfterCallTo");
+			funchook_disasm_log_instruction(&instruction);
+		}
+	}
+
+	Cleanup(decoder);
 	return NULL;
 }
+#pragma endregion
 
 #undef HAS_GROUP

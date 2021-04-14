@@ -400,12 +400,15 @@ void InternalCalls::UnhollowerIl2Cpp::AddInternalCalls()
     Mono::AddInternalCall("UnhollowerRuntimeLib.ClassInjector::GetProcAddress", (void*)GetProcAddress);
     Mono::AddInternalCall("UnhollowerRuntimeLib.ClassInjector::LoadLibrary", (void*)LoadLibrary);
 
-    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanner::XrefScanImplNative", (void*)XrefScannerBindings::XrefScanner::XrefScanImplNative);
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.CSHelper::GetAsmLoc", (void*)GetAsmLoc);
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.CSHelper::CleanupDisasm_Native", (void*)CleanupDisasm);
 
-    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScannerLowLevel::JumpTargetsImpl", (void*)XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl);
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanner::XrefScanImpl_Native", (void*)XrefScannerBindings::XrefScanner::XrefScanImplNative);
 
-    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo", (void*)XrefScannerBindings::XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo);
-    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo", (void*)XrefScannerBindings::XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo);
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScannerLowLevel::JumpTargetsImpl_Native", (void*)XrefScannerBindings::XrefScannerLowLevel::JumpTargetsImpl);
+
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo_Native", (void*)XrefScannerBindings::XrefScanUtilFinder::FindLastRcxReadAddressBeforeCallTo);
+    Mono::AddInternalCall("UnhollowerRuntimeLib.XrefScans.XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo_Native", (void*)XrefScannerBindings::XrefScanUtilFinder::FindByteWriteTargetRightAfterCallTo);
 }
 
 void* InternalCalls::UnhollowerIl2Cpp::GetProcAddress(void* hModule, Mono::String* procName)
@@ -421,19 +424,18 @@ void* InternalCalls::UnhollowerIl2Cpp::LoadLibrary(Mono::String* lpFileName)
     char* parsedLib = Mono::Exports::mono_string_to_utf8(lpFileName);
     Debug::Msg(parsedLib);
     if (strcmp(parsedLib, "GameAssembly.dll") == 0)
-    {
-        __android_log_print(ANDROID_LOG_INFO, "MelonLoader", "c++ %p", Il2Cpp::MemLoc);
+        return Il2Cpp::Handle;
 
-        //Dl_info dlInfo;
-        //dladdr(Il2Cpp::Handle, &dlInfo);
-        //Mono::Free(parsedLib);
-        return Il2Cpp::MemLoc;
-    }
+    return dlopen(parsedLib, RTLD_NOW | RTLD_GLOBAL);
+}
 
-    void* res = dlopen(parsedLib, RTLD_NOW | RTLD_GLOBAL);
-    Dl_info dlInfo;
-    dladdr(res, &dlInfo);
-    Mono::Free(parsedLib);
-    return dlInfo.dli_fbase;
+void* InternalCalls::UnhollowerIl2Cpp::GetAsmLoc()
+{
+    return Il2Cpp::MemLoc;
+}
+
+void InternalCalls::UnhollowerIl2Cpp::CleanupDisasm()
+{
+    Debug::Msg("CleanupDisasm not implemented");
 }
 #pragma endregion
