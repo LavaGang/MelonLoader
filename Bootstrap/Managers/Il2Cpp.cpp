@@ -100,6 +100,7 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 #elif defined(__ANDROID__)
 void* Il2Cpp::Handle = NULL;
 void* Il2Cpp::MemLoc = NULL;
+const char* Il2Cpp::LibPath = NULL;
 
 bool Il2Cpp::Initialize()
 {
@@ -131,10 +132,13 @@ bool Il2Cpp::Exports::Initialize()
 	Dl_info dlInfo;
 	dladdr((void*)il2cpp_init, &dlInfo);
 	MemLoc = dlInfo.dli_fbase;
+	LibPath = dlInfo.dli_fname;
 
 	Dl_info dlInfo1;
 	dladdr((void*)il2cpp_runtime_invoke, &dlInfo1);
 	
+	Debug::Msgf("%s", dlInfo.dli_fname);
+
 	if (MemLoc != dlInfo1.dli_fbase)
 		Assertion::ThrowInternalFailure("Address mismatch");
 

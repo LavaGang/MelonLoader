@@ -25,19 +25,13 @@ namespace MelonLoader
 		{
 			if (UnhollowerSupport.IsGeneratedAssemblyType(args.Original.DeclaringType))
             {
-				MelonLogger.Log("IsGeneratedAssemblyType");
 				args.MethodPatcher = new HarmonyIl2CppMethodPatcher(args.Original);
 			}
-
-			MelonLogger.Log("Resolved");
 		}
 
 		private HarmonyIl2CppMethodPatcher(MethodBase original) : base(original)
 		{
-			MelonLogger.ManualWarning("HarmonyIl2CppMethodPatcher", "1");
-
 			originalMethodInfoPointer = UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(Original);
-			MelonLogger.ManualWarning("HarmonyIl2CppMethodPatcher", "2");
 			copiedMethodInfoPointer = CopyMethodInfoStruct(originalMethodInfoPointer);
 		}
 

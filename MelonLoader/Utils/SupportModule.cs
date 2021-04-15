@@ -23,10 +23,14 @@ namespace MelonLoader
                 MelonLogger.Error("Failed to Find SupportModules Directory!");
                 return false;
             }
+#if __ANDROID__
+            string ModuleName = "Il2Cpp.dll";
+#else
             string ModuleName = (MelonUtils.IsGameIl2Cpp() ? "Il2Cpp.dll"
                 : (File.Exists(Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll")) ? "Mono.dll"
                 : (IsOldUnity() ? "Mono.Pre-5.dll"
                 : "Mono.Pre-2017.dll")));
+#endif
             string ModulePath = Path.Combine(BaseDirectory, ModuleName);
             if (!File.Exists(ModulePath))
             {

@@ -32,6 +32,7 @@ public:
 		static Mono::String* GetGameDeveloper();
 		static Mono::String* GetGameDirectory();
 		static Mono::String* GetGameDataDirectory();
+		static Mono::String* GetMainAssemblyLoc();
 		static Mono::String* GetUnityVersion();
 		static Mono::String* GetManagedDirectory();
 		static Mono::String* GetHashCode();

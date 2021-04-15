@@ -16,28 +16,24 @@
     <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\UnhollowerRuntimeLib\UnhollowerRuntimeLib.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>C:\Users\Akiva\Desktop\dump\assembly_generation\bar\managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Il2Cppmscorlib, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
-      <Private>true</Private>
+    <Reference Include="Il2Cppmscorlib">
       <Aliases>mscorlib</Aliases>
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\Il2cppmscorlib.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem">
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\Il2CppSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule, Version=3.7.1.6, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>C:\Users\Akiva\Desktop\dump\assembly_generation\bar\managed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="MelonLoader">
-      <HintPath>..\Output\Debug\Android\MelonLoader\net35\MelonLoader.dll</HintPath>
+      <HintPath>C:\Users\Akiva\Desktop\dump\assembly_generation\bar\managed\MelonLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Users\Akiva\Desktop\dump\assembly_generation\bar\managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>C:\Users\Akiva\Desktop\dump\assembly_generation\bar\managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>..\..\..\Desktop\assemblies\NativeUnhollow\managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>C:\Users\Akiva\Desktop\dump\assembly_generation\bar\managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -139,6 +139,9 @@ namespace MelonLoader
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetManagedDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetMainAssemblyLoc();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void SetConsoleTitle([MarshalAs(UnmanagedType.LPStr)] string title);
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]

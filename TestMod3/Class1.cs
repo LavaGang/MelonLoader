@@ -21,6 +21,7 @@ namespace TestMod3
             //UnhollowerBaseLib.LogSupport.TraceHandler += (msg) => MelonLogger.Msg(msg);
 
             UnhollowerRuntimeLib.ClassInjector.RegisterTypeInIl2Cpp<TestType>();
+            //MelonLogger.Msg(UnhollowerBaseLib.IL2CPP.il2cpp_resolve_icall("UnityEngine.Transform::SetAsLastSibling").ToInt64());
         }
     }
 
@@ -39,20 +40,24 @@ namespace TestMod3
     {
         static void Postfix(TestScript __instance)
         {
-            var textMesh = __instance.GetComponent<TextMesh>();
-            MelonLogger.Msg(textMesh);
+            MelonLogger.Msg("foo");
+            MelonLogger.Msg(__instance.GetType().FullName);
 
-            if (textMesh == null)
-            {
-                MelonLogger.Msg("text mesh is null");
-                return;
-            }
+            var textMesh = __instance.GetComponent<TextMesh>();
+            
+
+            //if (textMesh == null)
+            //{
+            //    MelonLogger.Msg("text mesh is null");
+            //    return;
+            //}
 
             textMesh.text = "MELON LOADER WORKS!";
-            textMesh.color = Color.green;
+            MelonLogger.Msg(textMesh.text);
+            //textMesh.color = Color.green;
 
-            __instance.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-            __instance.gameObject.AddComponent<TestType>();
+            //__instance.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+            //__instance.gameObject.AddComponent<TestType>();
         }
     }
 }

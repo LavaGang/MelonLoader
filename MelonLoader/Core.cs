@@ -47,6 +47,7 @@ namespace MelonLoader
 
         private static int Start()
         {
+            MelonDebug.Msg(MelonUtils.GetMainAssemblyLoc());
             if (!SupportModule.Initialize())
                 return 1;
 

@@ -52,7 +52,6 @@ namespace MelonLoader.Support
             InitializeUnityVersion();
             ConsoleCleaner();
 
-#if PORT_DISABLE
             SceneManager.sceneLoaded = (
                    (SceneManager.sceneLoaded == null)
                    ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
@@ -67,7 +66,6 @@ namespace MelonLoader.Support
 
             ClassInjector.RegisterTypeInIl2Cpp<Component>();
             Component.Create();
-#endif
 
             return new SupportModule_To();
         }

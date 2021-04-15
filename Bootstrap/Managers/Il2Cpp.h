@@ -19,6 +19,7 @@ public:
 #elif defined(__ANDROID__)
 	static void* Handle;
 	static void* MemLoc;
+	static const char* LibPath;
 #endif
 	
 	static bool Initialize();
