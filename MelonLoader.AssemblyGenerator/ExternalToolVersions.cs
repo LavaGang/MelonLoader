@@ -2,7 +2,7 @@ namespace MelonLoader.AssemblyGenerator
 {
     public static class ExternalToolVersions
     {
-        public static string Il2CppDumperVersion = "6.4.12";
+        public static string Il2CppDumperVersion = "6.5.3";
         public static string Il2CppDumperUrl = "https://github.com/Perfare/Il2CppDumper/releases/download/v" + Il2CppDumperVersion + "/Il2CppDumper-v" + Il2CppDumperVersion + ".zip";
 
         public static string Il2CppAssemblyUnhollowerVersion = "0.4.10.0";
