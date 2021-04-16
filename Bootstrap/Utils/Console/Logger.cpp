@@ -418,7 +418,7 @@ void Logger::Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, con
 #ifdef __ANDROID__
 	// todo: write to logfile
 	const char* messageC = msgColor.str().c_str();
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", messageC);
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%s", messageC);
 #elif defined(_WIN32)
 	//TODO: implement printf
 	LogFile << msgPlain.str();

@@ -29,6 +29,7 @@
 #ifdef __ANDROID__
 #include <stdio.h>
 #include <sys/stat.h>
+#include "../Managers/AndroidData.h"
 #endif
 
 typedef void (*testFnDef)(void);
@@ -49,6 +50,12 @@ bool Core::Initialize()
 			"Checking OS compatibility",
 			OSVersionCheck
 		},
+#ifdef __ANDROID__
+		{
+			"Initializing Android data",
+			AndroidData::Initialize
+		},
+#endif
 		{
 			"Loading basic game info",
 			Game::Initialize

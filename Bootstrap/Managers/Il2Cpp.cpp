@@ -137,8 +137,6 @@ bool Il2Cpp::Exports::Initialize()
 	Dl_info dlInfo1;
 	dladdr((void*)il2cpp_runtime_invoke, &dlInfo1);
 	
-	Debug::Msgf("%s", dlInfo.dli_fname);
-
 	if (MemLoc != dlInfo1.dli_fbase)
 		Assertion::ThrowInternalFailure("Address mismatch");
 

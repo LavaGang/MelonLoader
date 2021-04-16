@@ -25,6 +25,7 @@
     <ClCompile Include="Utils\Encoding.cpp" />
     <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
     <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
+    <ClCompile Include="Managers\AndroidData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="Base\capstone\include\capstone\tms320c64x.h" />
     <ClInclude Include="Base\capstone\include\capstone\x86.h" />
     <ClInclude Include="Base\capstone\include\capstone\xcore.h" />
+    <ClInclude Include="Managers\AndroidData.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />

@@ -207,13 +207,13 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <CLanguageStandard>c11</CLanguageStandard>
-      <AdditionalIncludeDirectories>J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\funchook\include;J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\capstone\include;J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\unicorn\include;C:\Program Files\Mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\funchook\include;J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\capstone\include;C:\Program Files\Mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>c11</CLanguageStandard> -->
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\MSBuild\Xamarin\Android\lib\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a;$(MSBuildProjectDirectory)\Base\unicorn\lib\libunicorn.a</AdditionalDependencies>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <LibraryDependencies>c++_static;c++abi;log;android;m;MonoPosixHelper;monosgen-2.0</LibraryDependencies>
     </Link>
@@ -239,6 +239,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Managers\AndroidData.cpp" />
     <ClCompile Include="Bootstrap.cpp" />
     <ClCompile Include="Base\Core.cpp" />
     <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
@@ -265,6 +266,7 @@
     <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Managers\AndroidData.h" />
     <ClInclude Include="Base\capstone\include\capstone\arm.h" />
     <ClInclude Include="Base\capstone\include\capstone\arm64.h" />
     <ClInclude Include="Base\capstone\include\capstone\capstone.h" />

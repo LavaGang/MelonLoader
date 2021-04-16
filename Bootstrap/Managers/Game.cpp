@@ -7,6 +7,9 @@
 #include "../Utils/Assertion.h"
 #include "../Utils/Console/Logger.h"
 #include "../Utils/Encoding.h"
+#include "../Utils/Console/Debug.h"
+#include "AndroidData.h"
+#include <string.h>
 #pragma comment(lib,"version.lib")
 
 #ifdef _WIN32
@@ -83,9 +86,30 @@ bool Game::SetupPaths()
 #undef MONO_STR
 
 #elif defined(__ANDROID__)
-	ApplicationPath = "/storage/emulated/0/Android/data/com.SirCoolness.PlaygroundQuestGame";
-	BasePath = "/storage/emulated/0/Android/data/com.SirCoolness.PlaygroundQuestGame/files";
-	DataPath = "/storage/emulated/0/Android/data/com.SirCoolness.PlaygroundQuestGame/files";
+	size_t BaseDirLen = strlen(AndroidData::BaseDataDir);
+	size_t AppNameLen = strlen(AndroidData::AppName);
+	size_t AppPathLen = BaseDirLen + AppNameLen + 2;
+	ApplicationPath = (char*)malloc(AppPathLen);
+
+	memcpy(ApplicationPath, AndroidData::BaseDataDir, BaseDirLen);
+	memcpy(ApplicationPath + BaseDirLen + 1, AndroidData::AppName, AppNameLen);
+
+	ApplicationPath[BaseDirLen] = '/';
+	ApplicationPath[AppPathLen - 1] = '\0';
+
+	size_t PathLen = strlen(AndroidData::DataDir);
+	BasePath = (char*)malloc(PathLen + 1);
+	DataPath = (char*)malloc(PathLen + 1);
+
+	memcpy(BasePath, AndroidData::DataDir, PathLen);
+	memcpy(DataPath, AndroidData::DataDir, PathLen);
+
+	BasePath[PathLen] = '\0';
+	DataPath[PathLen] = '\0';
+
+	Debug::Msg(ApplicationPath);
+	Debug::Msg(BasePath);
+	Debug::Msg(DataPath);
 #endif
 
 	return true;
