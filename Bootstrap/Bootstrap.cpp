@@ -7,6 +7,7 @@ extern "C"
 	JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	{
 		Core::Bootstrap = vm;
+		vm->GetEnv((void**)&Core::Env, JNI_VERSION_1_6);
 		return (Core::Initialize() ? JNI_VERSION_1_6 : 0x0);
 	}
 }

@@ -13,6 +13,7 @@ public:
 	static HINSTANCE Bootstrap;
 #elif defined(__ANDROID__)
 	static JavaVM* Bootstrap;
+	static JNIEnv* Env;
 #endif
 
 	static char* Path;
