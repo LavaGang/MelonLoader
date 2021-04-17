@@ -45,6 +45,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             RemoteAPI.Contact();
 
+            unitydependencies = new UnityDependencies();
+            if (!unitydependencies.Download())
+                return 1;
+
             dumper = new Il2CppDumper();
             if (!dumper.Download())
                 return 1;
@@ -55,10 +59,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             deobfuscationMap = new DeobfuscationMap();
             if (!deobfuscationMap.Download())
-                return 1;
-
-            unitydependencies = new UnityDependencies();
-            if (!unitydependencies.Download())
                 return 1;
 
             // Check for Regex Change against Config
@@ -107,21 +107,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             deobfuscationMap.Save();
 
             return 0;
-        }
-
-        internal static void OverrideAppDomainBase(string basepath)
-        {
-            MelonUtils.SetCurrentDomainBaseDirectory(basepath);
-
-            /*
-            var property = typeof(AppDomain).GetProperty("FusionStore", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (property != null)
-            {
-                var appDomainBase = ((AppDomainSetup)property.GetValue(AppDomain.CurrentDomain, new object[0]));
-                appDomainBase.ApplicationBase = basepath;
-            }
-            Directory.SetCurrentDirectory(basepath);
-            */
         }
 
         private static string GetGameAssemblyHash()
