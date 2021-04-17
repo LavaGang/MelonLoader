@@ -41,10 +41,6 @@ mono_crash.*
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-x64/
-x86/
-SrcLibs/bHaptics/build32
-SrcLibs/bHaptics/build64
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
@@ -373,19 +369,23 @@ MigrationBackup/
 # End of https://www.toptal.com/developers/gitignore/api/git,visualstudio
 
 Output
-Detours\samples
-Detours\lib.X86
-Detours\lib.X64
-Detours\bin.X86
-Detours\bin.X64
-Detours\src\obj.X86
-Detours\src\obj.X64
+x64/
+x86/
+SrcLibs/bHaptics/build32
+SrcLibs/bHaptics/build64
+SrcLibs/Detours/samples
+SrcLibs/Detours/lib.X86
+SrcLibs/Detours/lib.X64
+SrcLibs/Detours/bin.X86
+SrcLibs/Detours/bin.X64
+SrcLibs/Detours/src/obj.X86
+SrcLibs/Detours/src/obj.X64
 MelonLoader\bin
 MelonLoader\obj
 MelonLoader\.vs
-AssemblyGenerator\bin
-AssemblyGenerator\obj
-AssemblyGenerator\.vs
+Il2CppAssemblyGenerator\bin
+Il2CppAssemblyGenerator\obj
+Il2CppAssemblyGenerator\.vs
 Bootstrap\bin
 Bootstrap\obj
 Bootstrap\.vs
@@ -394,6 +394,9 @@ Proxy\obj
 Proxy\.vs
 Proxy\x64
 Proxy\x86
+SM_Preload\bin
+SM_Preload\obj
+SM_Preload\.vs
 SM_Il2Cpp\bin
 SM_Il2Cpp\obj
 SM_Il2Cpp\.vs
