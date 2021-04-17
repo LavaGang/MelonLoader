@@ -7,5 +7,7 @@ class Assertion
 {
 public:
 	static bool ShouldContinue;
+	// dont kill the application if something fails
+	static bool DontDie;
 	static void ThrowInternalFailure(const char* msg);
 };

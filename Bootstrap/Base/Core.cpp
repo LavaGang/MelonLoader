@@ -144,7 +144,7 @@ bool Core::Initialize()
 #endif
 	};
 
-	return UnitTesting::RunTests(TestSequence, sizeof(TestSequence) / sizeof(TestSequence[0]));
+	return UnitTesting::RunTests(TestSequence, sizeof(TestSequence) / sizeof(TestSequence[0])) || Assertion::DontDie;
 }
 
 #ifdef _WIN32

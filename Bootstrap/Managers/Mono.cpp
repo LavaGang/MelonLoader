@@ -259,8 +259,7 @@ bool Mono::SetupPaths()
 
 		char* Paths[] = {
 			BasePath,
-			ManagedPath,
-			ConfigPath
+			ManagedPath
 		};
 
 		for (auto& path : Paths)
@@ -270,6 +269,13 @@ bool Mono::SetupPaths()
 				Assertion::ThrowInternalFailure((std::string("Failed to load path (") + path + ") because it doesn't exist.").c_str());
 				return false;
 			}
+		}
+
+		if (!Core::DirectoryExists(ConfigPath))
+		{
+			Assertion::ThrowInternalFailure((std::string("Failed to load path (") + ConfigPath + ") because it doesn't exist. Please restart the game after it loads.").c_str());
+			Assertion::DontDie = true;
+			return false;
 		}
 
 		// TODO: REMOVE

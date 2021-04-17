@@ -7,6 +7,7 @@
 #include <iostream>
 
 bool Assertion::ShouldContinue = true;
+bool Assertion::DontDie = false;
 
 void Assertion::ThrowInternalFailure(const char* msg)
 {
