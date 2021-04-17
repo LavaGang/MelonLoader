@@ -19,12 +19,12 @@ namespace MelonLoader.CompatibilityLayers
 				|| args.Name.StartsWith("MelonLoader, Version="))
 				? typeof(Melon_CL).Assembly
 				: null;
-			MelonCompatibilityLayer.ResolveAssemblyToLayerResolverEvents += ResolveAssemblyToLayerResolver;
-			MelonCompatibilityLayer.RefreshPluginsTableEvents += (ds, da) => RefreshPluginsTable();
-			MelonCompatibilityLayer.RefreshModsTableEvents += (ds, da) => RefreshModsTable();
+			MelonCompatibilityLayer.AddResolveAssemblyToLayerResolverEvent(ResolveAssemblyToLayerResolver);
+			MelonCompatibilityLayer.AddRefreshPluginsTableEvent(RefreshPluginsTable);
+			MelonCompatibilityLayer.AddRefreshModsTableEvent(RefreshModsTable);
 		}
 
-		private static void ResolveAssemblyToLayerResolver(object sender, MelonCompatibilityLayer.LayerResolveEventArgs args)
+		private static void ResolveAssemblyToLayerResolver(MelonCompatibilityLayer.LayerResolveEventArgs args)
 		{
 			if (args.inter != null)
 				return;
@@ -38,7 +38,7 @@ namespace MelonLoader.CompatibilityLayers
 		private static void RefreshPluginsTable() => Main.Plugins = MelonHandler._Plugins;
 		private static void RefreshModsTable() => Main.Mods = MelonHandler._Mods;
 
-		internal override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
+		public override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
 		{
 			MelonInfoAttribute infoAttribute = null;
 			if (!CheckInfoAttribute(filelocation, is_plugin, ref infoAttribute))
@@ -60,28 +60,23 @@ namespace MelonLoader.CompatibilityLayers
 			if (!CheckVerifyLoaderBuildAttribute(filelocation, is_plugin))
 				return;
 
-			MelonBase baseInstance = Activator.CreateInstance(infoAttribute.SystemType) as MelonBase;
-			if (baseInstance == null)
-			{
-				MelonLogger.Error($"Failed to Create Instance for {filelocation}");
-				return;
-			}
-
-			baseInstance.Info = infoAttribute;
-			baseInstance.Games = gameAttributes.ToArray();
-
 			MelonColorAttribute coloratt = MelonHandler.PullCustomAttributeFromAssembly<MelonColorAttribute>(asm);
-			baseInstance.ConsoleColor = ((coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color);
-
 			MelonPriorityAttribute priorityatt = MelonHandler.PullCustomAttributeFromAssembly<MelonPriorityAttribute>(asm);
-			baseInstance.Priority = ((priorityatt == null) ? 0 : priorityatt.Priority);
 
-			baseInstance.OptionalDependencies = MelonHandler.PullCustomAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm);
-			baseInstance.Location = filelocation;
-			baseInstance.Assembly = asm;
-			baseInstance.Harmony = Harmony.HarmonyInstance.Create(asm.FullName);
+			MelonBase instance = MelonCompatibilityLayer.CreateMelonFromWrapperData(new MelonCompatibilityLayer.WrapperData()
+			{
+				Assembly = asm,
+				Info = infoAttribute,
+				Games = gameAttributes.ToArray(),
+				OptionalDependencies = MelonHandler.PullCustomAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm),
+				ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
+				Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
+				Location = filelocation
+			});
+			if (instance == null)
+				return;
 
-			melonTbl.Add(baseInstance);
+			melonTbl.Add(instance);
 		}
 
 		private bool CheckInfoAttribute(string filelocation, bool is_plugin, ref MelonInfoAttribute infoAttribute)

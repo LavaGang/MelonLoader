@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM_Preload", "SM_Preload\SM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Il2CppAssemblyGenerator", "Il2CppAssemblyGenerator\Il2CppAssemblyGenerator.csproj", "{A6452A3F-4BD6-497A-97DA-24F7DF97B234}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM_CompatibilityLayer", "SM_CompatibilityLayer\SM_CompatibilityLayer.csproj", "{94D9DBC9-E538-435B-BBE5-6A5BE312077F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,18 @@ Global
 		{A6452A3F-4BD6-497A-97DA-24F7DF97B234}.Release|x64.Build.0 = Release|Any CPU
 		{A6452A3F-4BD6-497A-97DA-24F7DF97B234}.Release|x86.ActiveCfg = Release|Any CPU
 		{A6452A3F-4BD6-497A-97DA-24F7DF97B234}.Release|x86.Build.0 = Release|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Debug|x64.Build.0 = Debug|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Debug|x86.Build.0 = Debug|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Release|x64.ActiveCfg = Release|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Release|x64.Build.0 = Release|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Release|x86.ActiveCfg = Release|Any CPU
+		{94D9DBC9-E538-435B-BBE5-6A5BE312077F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

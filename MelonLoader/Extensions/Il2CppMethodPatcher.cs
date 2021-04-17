@@ -306,7 +306,7 @@ namespace MelonLoader
 				: ((patchInfo.transpilers.Count() > 0) ? patchInfo.transpilers.First()
 				: ((patchInfo.finalizers.Count() > 0) ? patchInfo.finalizers.First() : null))));
 
-			string melonName = FindMelon(melon => ((basePatch != null) && melon.Harmony.Id.Equals(basePatch.owner)));
+			string melonName = FindMelon(melon => ((basePatch != null) && melon.HarmonyInstance.Id.Equals(basePatch.owner)));
 			if ((melonName == null) && (basePatch != null))
 			{
 				// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.

@@ -365,7 +365,7 @@ namespace MelonLoader
                 if (setupasm.Contains(x.Assembly))
                     return;
                 //RegisterIl2CppInjectAttributes(x.Assembly);
-                x.Harmony.PatchAll(x.Assembly);
+                x.HarmonyInstance.PatchAll(x.Assembly);
                 setupasm.Add(x.Assembly);
             }, true);
         }
@@ -378,7 +378,7 @@ namespace MelonLoader
                 if (setupasm.Contains(x.Assembly))
                     return;
                 RegisterIl2CppInjectAttributes(x.Assembly);
-                x.Harmony.PatchAll(x.Assembly);
+                x.HarmonyInstance.PatchAll(x.Assembly);
                 setupasm.Add(x.Assembly);
             }, true);
         }

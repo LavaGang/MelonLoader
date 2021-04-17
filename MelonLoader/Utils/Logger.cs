@@ -5,8 +5,8 @@ namespace MelonLoader
 {
     public class MelonLogger
     {
-        internal static ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
-        internal static ConsoleColor DefaultTextColor = ConsoleColor.Gray;
+        public static readonly ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
+        public static readonly ConsoleColor DefaultTextColor = ConsoleColor.Gray;
 
         public static void Msg(string txt) => SendMsg(DefaultTextColor, txt);
         public static void Msg(string txt, params object[] args) => SendMsg(DefaultTextColor, string.Format(txt, args));

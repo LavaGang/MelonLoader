@@ -45,14 +45,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libs\Tomlyn\license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Libs\Tomlyn\readme.md" />
-    <None Include="Libs\Tomlyn\Syntax\Syntax.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Extensions\CompatibilityLayer.cs" />
+    <Compile Include="Utils\CompatibilityLayer.cs" />
     <Compile Include="Extensions\Fixes\ApplicationBase.cs" />
     <Compile Include="Extensions\Fixes\ExtraCleanup.cs" />
     <Compile Include="Extensions\Fixes\Il2CppSupport.cs" />
@@ -61,7 +54,6 @@
     <Compile Include="Extensions\Fixes\UnhandledException.cs" />
     <Compile Include="Extensions\Il2CppAssemblyGenerator.cs" />
     <Compile Include="Extensions\Il2CppMethodPatcher.cs" />
-    <Compile Include="Extensions\Layers\Harmony.cs" />
     <Compile Include="Extensions\Layers\Harmony\Attributes.cs" />
     <Compile Include="Extensions\Layers\Harmony\HarmonyInstance.cs" />
     <Compile Include="Extensions\Layers\Harmony\Extras\DelegateTypeFactory.cs" />
@@ -73,11 +65,6 @@
     <Compile Include="Extensions\Layers\Harmony\Tools\AccessTools.cs" />
     <Compile Include="Extensions\Layers\Harmony\Tools\Extensions.cs" />
     <Compile Include="Extensions\Layers\Harmony\Tools\SymbolExtensions.cs" />
-    <Compile Include="Extensions\Layers\IPA.cs" />
-    <Compile Include="Extensions\Layers\IPA\IEnhancedPlugin.cs" />
-    <Compile Include="Extensions\Layers\IPA\IPlugin.cs" />
-    <Compile Include="Extensions\Layers\IPA\ModPrefs.cs" />
-    <Compile Include="Extensions\Layers\IPA\PluginManager.cs" />
     <Compile Include="Extensions\Layers\Melon.cs" />
     <Compile Include="Extensions\Layers\Melon\HarmonyShield.cs" />
     <Compile Include="Extensions\Layers\Melon\Imports.cs" />
@@ -91,11 +78,6 @@
     <Compile Include="Extensions\Layers\Melon\MelonPluginInfoAttribute.cs" />
     <Compile Include="Extensions\Layers\Melon\MelonPrefs.cs" />
     <Compile Include="Extensions\Layers\Melon\ModPrefs.cs" />
-    <Compile Include="Extensions\Layers\Mono.Cecil.cs" />
-    <Compile Include="Extensions\Layers\MonoMod.cs" />
-    <Compile Include="Extensions\Layers\SharpZipLib.cs" />
-    <Compile Include="Extensions\Layers\TinyJSON.cs" />
-    <Compile Include="Extensions\Layers\Tomlyn.cs" />
     <Compile Include="Extensions\PatchShield.cs" />
     <Compile Include="Extensions\UnityMagicMethods.cs" />
     <Compile Include="Preferences\ValueValidator.cs" />

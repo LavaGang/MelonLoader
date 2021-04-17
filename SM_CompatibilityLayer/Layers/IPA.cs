@@ -22,11 +22,11 @@ namespace MelonLoader.CompatibilityLayers
 				|| args.Name.StartsWith("IllusionInjector, Version="))
 				? typeof(IPA_CL).Assembly
 				: null;
-			MelonCompatibilityLayer.ResolveAssemblyToLayerResolverEvents += ResolveAssemblyToLayerResolver;
-			MelonCompatibilityLayer.RefreshModsTableEvents += (ds, da) => RefreshModsTable();
+			MelonCompatibilityLayer.AddResolveAssemblyToLayerResolverEvent(ResolveAssemblyToLayerResolver);
+			MelonCompatibilityLayer.AddRefreshModsTableEvent(RefreshModsTable);
 		}
 
-		private static void ResolveAssemblyToLayerResolver(object sender, MelonCompatibilityLayer.LayerResolveEventArgs args)
+		private static void ResolveAssemblyToLayerResolver(MelonCompatibilityLayer.LayerResolveEventArgs args)
 		{
 			if (args.inter != null)
 				return;
@@ -42,7 +42,7 @@ namespace MelonLoader.CompatibilityLayers
 			// PluginManager Conversion Here
 		}
 
-		internal override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
+		public override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
 		{
 			if (string.IsNullOrEmpty(filelocation))
 				filelocation = asm.GetName().Name;
@@ -58,7 +58,7 @@ namespace MelonLoader.CompatibilityLayers
 		}
 
 		private void LoadPlugin(Type plugin_type, string filelocation, ref List<MelonBase> melonTbl)
-        {
+		{
 			IPlugin pluginInstance = Activator.CreateInstance(plugin_type) as IPlugin;
 
 			string[] filter = null;
@@ -89,7 +89,7 @@ namespace MelonLoader.CompatibilityLayers
 			string plugin_name = pluginInstance.Name;
 			if (string.IsNullOrEmpty(plugin_name))
 				plugin_name = plugin_type.FullName;
-			
+
 			if (MelonHandler.IsModAlreadyLoaded(plugin_name))
 			{
 				MelonLogger.Error($"Duplicate Mod {plugin_name}: {filelocation}");
@@ -102,16 +102,16 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
-			MelonModWrapper wrapper = new MelonModWrapper(pluginInstance)
+			MelonBase wrapper = MelonCompatibilityLayer.CreateMelonFromWrapperData(new MelonCompatibilityLayer.WrapperData()
 			{
+				Assembly = asm,
 				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version),
 				Games = (gamestbl != null) ? gamestbl.ToArray() : null,
-				ConsoleColor = MelonLogger.DefaultMelonColor,
 				Priority = 0,
-				Location = filelocation,
-				Assembly = asm,
-				Harmony = Harmony.HarmonyInstance.Create(asm.FullName)
-			};
+				Location = filelocation
+			});
+			if (wrapper == null)
+				return;
 
 			melonTbl.Add(wrapper);
 			PluginManager._Plugins.Add(pluginInstance);
