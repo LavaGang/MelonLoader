@@ -31,7 +31,7 @@ void Hook::Detach(void** target, void* detour)
 #endif
 
 #ifdef __ANDROID__
-std::unordered_map<void**, funchook_t*> Hook::HookMap;
+std::unordered_map<void**, Hook::FunchookDef*> Hook::HookMap;
 
 void Hook::Attach(void** target, void* detour)
 {
@@ -39,8 +39,10 @@ void Hook::Attach(void** target, void* detour)
 	
 	if (HookMap.find(target) == HookMap.end())
 	{
-		HookMap[target] = funchook_create();
-		rv = funchook_prepare(HookMap[target], target, detour);
+		HookMap[target] = (Hook::FunchookDef*)malloc(sizeof(Hook::FunchookDef));
+		HookMap[target]->original = *target;
+		HookMap[target]->handle = funchook_create();
+		rv = funchook_prepare(HookMap[target]->handle, target, detour);
 		if (rv != 0)
 		{
 			Logger::Error("Failed to prepare hook");
@@ -48,7 +50,7 @@ void Hook::Attach(void** target, void* detour)
 		}
 	}
 	
-	rv = funchook_install(HookMap[target], 0);
+	rv = funchook_install(HookMap[target]->handle, 0);
 	if (rv != 0)
 	{
 		Logger::Error("Failed to install hook");
@@ -68,12 +70,16 @@ void Hook::Detach(void** target, void* detour)
 		return;
 	}
 
-	rv = funchook_uninstall(HookMap[target], 0);
+	void* reset = HookMap[target]->original;
+
+	rv = funchook_uninstall(HookMap[target]->handle, 0);
 	if (rv != 0)
 	{
 		Logger::Error("Failed to uninstall hook");
 		return;
 	}
+
+	*target = reset;
 
 	return;
 }

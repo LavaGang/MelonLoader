@@ -153,7 +153,7 @@ bool Il2Cpp::ApplyPatches()
 	Debug::Msg("Applying patches for Il2CPP");
 
 	Hook::Attach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
-	// Hook::Attach((void**)&Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
+	Hook::Attach((void**)&Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
 
 	return true;
 }
@@ -191,16 +191,13 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec)
 {
 	const char* method_name = Exports::il2cpp_method_get_name(method);
-	Il2Cpp::Object* res = Exports::il2cpp_runtime_invoke(method, obj, params, exec);
-	
 	if (strstr(method_name, "Internal_ActiveSceneChanged") != NULL)
 	{
 		Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
+		Hook::Detach((void**)&(Exports::il2cpp_runtime_invoke), (void*)il2cpp_runtime_invoke);
 		BaseAssembly::Start();
-		Hook::Detach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
 	}
-	
-	return res;
+	return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
 }
 
 void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct)

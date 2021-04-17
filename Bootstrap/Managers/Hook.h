@@ -10,6 +10,10 @@ public:
 	static void Detach(void** target, void* detour);
 #ifdef __ANDROID__
 private:
-	static std::unordered_map<void**, funchook_t*> HookMap;
+	struct FunchookDef {
+		funchook_t* handle;
+		void* original;
+	};
+	static std::unordered_map<void**, FunchookDef*> HookMap;
 #endif
 };
