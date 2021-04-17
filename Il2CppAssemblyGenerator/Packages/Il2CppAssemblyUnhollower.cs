@@ -189,6 +189,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private AssemblyUnhollower.UnhollowerOptions GenerateOptions()
         {
+            MelonDebug.Msg(new Il2CppDumper().Output);
             var options = new AssemblyUnhollower.UnhollowerOptions
             {
                 Verbose = true,

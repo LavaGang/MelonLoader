@@ -130,11 +130,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             }
             MelonLogger.Msg("Assembly Generation Needed!");
 
+            dumper = new Il2CppDumper();
             il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
-
+            
+            dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
-            if (!il2cppassemblyunhollower.Execute())
+
+            if (!dumper.Execute() || !il2cppassemblyunhollower.Execute())
             {
+                dumper.Cleanup();
                 il2cppassemblyunhollower.Cleanup();
                 return 1;
             }
@@ -142,7 +146,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             OldFiles_Cleanup();
             OldFiles_LAM();
 
+            dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
+
+            Config.GameAssemblyHash = CurrentGameAssemblyHash;
+            //deobfuscationMap.Save();
+            Config.Save();
+
+            MelonLogger.Msg("Assembly Generation Successful!");
 
             return 0;
 #endif
