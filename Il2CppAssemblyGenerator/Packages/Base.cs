@@ -147,7 +147,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 SetProcessId(0);
                 return (process.ExitCode == 0);
             }
-            catch (Exception ex) { MelonLogger.Error(ex.ToString()); Core.OverrideAppDomainBase(Core.BasePath); }
+            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             return false;
         }
 

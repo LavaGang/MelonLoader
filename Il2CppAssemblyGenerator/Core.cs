@@ -36,7 +36,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             GameName = MelonUtils.GameName;
 
             BasePath = Path.GetDirectoryName(typeof(Core).Assembly.Location);
-            OverrideAppDomainBase(BasePath);
         }
 
         private static int Run()
