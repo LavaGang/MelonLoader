@@ -40,7 +40,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             BasePath = Path.Combine(string.Copy(MelonUtils.GetApplicationPath()), "files", "melonloader", "etc", "assembly_generation");
             // TODO: Read APK file instead
-            GameAssemblyPath = Path.Combine(Core.BasePath, "native", "libil2cpp.so");
+            GameAssemblyPath = Path.Combine(string.Copy(MelonUtils.GetMainAssemblyLoc()));
             AssemblyGeneratorManaged = Path.Combine(BasePath, "managed");
             OverrideAppDomainBase(BasePath);
         }

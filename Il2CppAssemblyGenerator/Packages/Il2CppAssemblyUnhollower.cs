@@ -195,7 +195,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 Verbose = true,
                 SourceDir = new Il2CppDumper().Output,
                 OutputDir = Output,
-                MscorlibPath = Path.Combine(Core.BasePath, "reference_assemblies", "mscorlib.dll"),
+                MscorlibPath = Path.Combine(string.Copy(MelonUtils.GetManagedDirectory()), "mscorlib.dll"),
                 UnityBaseLibsDir = Path.Combine(Core.BasePath, "unity"),
                 GameAssemblyPath = Core.GameAssemblyPath
             };
