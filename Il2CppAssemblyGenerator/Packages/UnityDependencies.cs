@@ -10,7 +10,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = string.Copy(MelonUtils.GetUnityVersion());
             URL = "https://github.com/LavaGang/Unity-Runtime-Libraries/raw/master/" + Version + ".zip";
-            Destination = Path.Combine(Core.BasePath, "UnityDependencies");
+            Destination = Core.il2cppassemblyunhollower.Destination;
         }
 
         private void Save()

@@ -149,6 +149,7 @@
 124. Fixed NRE Issue with MelonUtils.ParseJSONStringtoStruct.
 125. Fixed String Null Issue with MelonPreferences.
 126. Fixed NIE Issue with FileSystemWatcher on GORN failing to be caught properly.
+127. Fixed Issue with Il2CppAssemblyUnhollower Unstripping Methods and failing to Resolve Unity Dependencies.
 
 ---
 

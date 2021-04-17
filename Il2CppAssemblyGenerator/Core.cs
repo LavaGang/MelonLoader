@@ -45,10 +45,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             RemoteAPI.Contact();
 
-            unitydependencies = new UnityDependencies();
-            if (!unitydependencies.Download())
-                return 1;
-
             dumper = new Il2CppDumper();
             if (!dumper.Download())
                 return 1;
@@ -59,6 +55,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             deobfuscationMap = new DeobfuscationMap();
             if (!deobfuscationMap.Download())
+                return 1;
+
+            unitydependencies = new UnityDependencies();
+            if (!unitydependencies.Download())
                 return 1;
 
             // Check for Regex Change against Config
