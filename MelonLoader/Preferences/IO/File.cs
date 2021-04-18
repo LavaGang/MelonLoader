@@ -49,8 +49,8 @@ namespace MelonLoader.Preferences.IO
             string filestr = System.IO.File.ReadAllText(LegacyFilePath);
             string[] lines = filestr.Split('\n');
             string category = null;
-            
-            document = Tomlet.Tomlet.DocumentFrom(new TomlTable());
+
+            document = TomlDocument.CreateEmpty();
             
             foreach (string line in lines)
             {
@@ -69,13 +69,13 @@ namespace MelonLoader.Preferences.IO
                 if (string.IsNullOrEmpty(parts[0]) || string.IsNullOrEmpty(parts[1]))
                     continue;
                 if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
-                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(parts[1].ToLower().StartsWith("true")));
+                    InsertIntoDocument(category, parts[0], TomletMain.ValueFrom(parts[1].ToLower().StartsWith("true")));
                 else if (int.TryParse(parts[1], out int val_int))
-                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(val_int));
+                    InsertIntoDocument(category, parts[0], TomletMain.ValueFrom(val_int));
                 else if (float.TryParse(parts[1], out float val_float))
-                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(val_float));
+                    InsertIntoDocument(category, parts[0], TomletMain.ValueFrom(val_float));
                 else
-                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(parts[1].Replace("\r", "")));
+                    InsertIntoDocument(category, parts[0], TomletMain.ValueFrom(parts[1].Replace("\r", "")));
             }
         }
 

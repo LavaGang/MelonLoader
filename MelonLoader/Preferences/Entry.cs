@@ -1,4 +1,5 @@
 ﻿using System;
+using Tomlet;
 using Tomlet.Models;
 
 namespace MelonLoader
@@ -85,13 +86,13 @@ namespace MelonLoader
 
         public override void Load(TomlValue obj)
         {
-            Value = Tomlet.Tomlet.To<T>(obj);
+            Value = TomletMain.To<T>(obj);
         }
 
         public override TomlValue Save()
         {
             Value = EditedValue;
-            return Tomlet.Tomlet.ValueFrom(Value);
+            return TomletMain.ValueFrom(Value);
         }
     }
 }
