@@ -1,3 +1,4 @@
+using Tomlet;
 using UnityEngine;
 using TomlValue = Tomlet.Models.TomlValue;
 
@@ -7,12 +8,12 @@ namespace MelonLoader.Support.Preferences
     {
         internal static void RegisterMappers()
         {
-            Tomlet.Tomlet.RegisterMapper(WriteColor, ReadColor);
-            Tomlet.Tomlet.RegisterMapper(WriteColor32, ReadColor32);
-            Tomlet.Tomlet.RegisterMapper(WriteVector2, ReadVector2);
-            Tomlet.Tomlet.RegisterMapper(WriteVector3, ReadVector3);
-            Tomlet.Tomlet.RegisterMapper(WriteVector4, ReadVector4);
-            Tomlet.Tomlet.RegisterMapper(WriteQuaternion, ReadQuaternion);
+            TomletMain.RegisterMapper(WriteColor, ReadColor);
+            TomletMain.RegisterMapper(WriteColor32, ReadColor32);
+            TomletMain.RegisterMapper(WriteVector2, ReadVector2);
+            TomletMain.RegisterMapper(WriteVector3, ReadVector3);
+            TomletMain.RegisterMapper(WriteVector4, ReadVector4);
+            TomletMain.RegisterMapper(WriteQuaternion, ReadQuaternion);
         }
 
         private static Color ReadColor(TomlValue value)

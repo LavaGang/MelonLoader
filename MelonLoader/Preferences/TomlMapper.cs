@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Tomlet;
 using Tomlet.Models;
-
 
 namespace MelonLoader
 {

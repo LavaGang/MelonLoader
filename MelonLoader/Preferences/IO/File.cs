@@ -127,6 +127,27 @@ namespace MelonLoader.Preferences.IO
             }
         }
 
+        internal TomlTable TryGetCategoryTable(string category)
+        {
+            lock (document)
+            {
+                try
+                {
+                    return document.GetSubTable(category);
+                }
+                catch (TomlTypeMismatchException)
+                {
+                    //Ignore
+                }
+                catch (TomlNoSuchValueException)
+                {
+                    //Ignore
+                }
+
+                return null;
+            }
+        }
+
         internal void SetupEntryFromRawValue(MelonPreferences_Entry entry)
         {
             lock (document)

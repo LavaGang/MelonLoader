@@ -45,6 +45,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Preferences\ReflectiveCategory.cs" />
     <Compile Include="Utils\CompatibilityLayer.cs" />
     <Compile Include="Extensions\Fixes\ApplicationBase.cs" />
     <Compile Include="Extensions\Fixes\ExtraCleanup.cs" />
@@ -242,7 +243,7 @@
     <PackageReference Include="MonoMod.RuntimeDetour" Version="21.3.1.1" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
-    <PackageReference Include="Samboy063.Tomlet" Version="1.1.0" />
+    <PackageReference Include="Samboy063.Tomlet" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup />
   <ItemDefinitionGroup>
