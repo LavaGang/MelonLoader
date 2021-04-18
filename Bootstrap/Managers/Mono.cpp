@@ -434,7 +434,7 @@ bool Mono::ApplyPatches()
 		Debug::Msg("Enabled Mono Logging");
 	}
 	
-	//mono_trace_set_log_handler(&Hooks::mono_log, NULL);
+	mono_trace_set_log_handler(&Hooks::mono_log, NULL);
 	mono_trace_set_print_handler(&Hooks::mono_print);
 	mono_trace_set_printerr_handler(&Hooks::mono_printerr);
 

@@ -43,10 +43,6 @@ bool Core::Initialize()
 {
 	UnitTesting::Test TestSequence[] = {
 		{
-			"Running Basic Tests",
-			Patcher::TestAll
-		},
-		{
 			"Checking OS compatibility",
 			OSVersionCheck
 		},

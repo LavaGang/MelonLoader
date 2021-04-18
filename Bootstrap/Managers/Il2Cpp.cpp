@@ -153,7 +153,7 @@ bool Il2Cpp::ApplyPatches()
 	Debug::Msg("Applying patches for Il2CPP");
 
 	Hook::Attach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
-	Hook::Attach((void**)&Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
+	//Hook::Attach((void**)&Exports::il2cpp_unity_install_unitytls_interface, (void*)Hooks::il2cpp_unity_install_unitytls_interface);
 
 	return true;
 }
