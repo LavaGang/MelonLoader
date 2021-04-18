@@ -15,7 +15,7 @@ namespace MelonLoader.Preferences
         public string Identifier { get; internal set; }
         public string DisplayName { get; internal set; }
 
-        public static MelonPreferences_ReflectiveCategory Create<T>(string categoryName, string displayName) => new MelonPreferences_ReflectiveCategory(typeof(T), categoryName, displayName);
+        internal static MelonPreferences_ReflectiveCategory Create<T>(string categoryName, string displayName) => new MelonPreferences_ReflectiveCategory(typeof(T), categoryName, displayName);
         
         private MelonPreferences_ReflectiveCategory(Type type, string categoryName, string displayName)
         {
@@ -25,11 +25,13 @@ namespace MelonLoader.Preferences
             MelonPreferences.ReflectiveCategories.Add(type, this);
         }
 
-        public void Load(TomlValue tomlValue) => value = TomletMain.To(type, tomlValue);
+        internal void LoadDefaults() => value = Activator.CreateInstance(type);
 
-        public TomlValue Save() => TomletMain.ValueFrom(type, value);
+        internal void Load(TomlValue tomlValue) => value = TomletMain.To(type, tomlValue);
 
-        public T GetValue<T>() where T : new()
+        internal TomlValue Save() => TomletMain.ValueFrom(type, value);
+
+        internal T GetValue<T>() where T : new()
         {
             if (typeof(T) != type)
                 return default;
@@ -75,10 +77,26 @@ namespace MelonLoader.Preferences
             }
             MelonPreferences.LoadFileAndRefreshCategories(MelonPreferences.DefaultFile);
         }
-
-        public void SetToDefault()
+        
+        public void SaveToFile(bool printmsg = true)
         {
-            value = Activator.CreateInstance(type);
+            IO.File currentfile = File;
+            if (currentfile == null)
+                currentfile = MelonPreferences.DefaultFile;
+            
+            currentfile.document.PutValue(Identifier, Save());
+            try
+            {
+                currentfile.Save();
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Error while Saving Preferences to {currentfile.FilePath}: {ex}");
+                currentfile.WasError = true;
+            }
+            if (printmsg)
+                MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
+            MelonHandler.OnPreferencesSaved();
         }
     }
 }
