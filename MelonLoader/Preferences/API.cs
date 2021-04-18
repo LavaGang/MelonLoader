@@ -79,7 +79,10 @@ namespace MelonLoader
                     if (currentFile.WasError)
                         continue;
                     if (!(currentFile.TryGetCategoryTable(category.Identifier) is { } table))
+                    {
+                        category.SetToDefault();
                         continue;
+                    }
 
                     category.Load(table);
                 }
@@ -293,7 +296,10 @@ namespace MelonLoader
                 if (currentFile != file)
                     continue;
                 if (!(file.TryGetCategoryTable(category.Identifier) is { } table))
+                {
+                    category.SetToDefault();
                     continue;
+                }
 
                 category.Load(table);
             }

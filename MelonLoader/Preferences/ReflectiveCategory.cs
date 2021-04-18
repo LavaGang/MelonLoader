@@ -75,5 +75,10 @@ namespace MelonLoader.Preferences
             }
             MelonPreferences.LoadFileAndRefreshCategories(MelonPreferences.DefaultFile);
         }
+
+        public void SetToDefault()
+        {
+            value = Activator.CreateInstance(type);
+        }
     }
 }
