@@ -1,20 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using MelonLoader.Tomlyn;
-using MelonLoader.Tomlyn.Model;
-using MelonLoader.Tomlyn.Syntax;
+﻿using System.Linq;
+using Tomlet;
+using Tomlet.Exceptions;
+using Tomlet.Models;
+using TomlValue = Tomlet.Models.TomlValue;
 
 namespace MelonLoader.Preferences.IO
 {
     internal class File
     {
         private bool _waserror = false;
-        internal bool WasError { get => _waserror; set { if (value == true) { MelonLogger.Warning($"Defaulting {FilePath} to Fallback Functionality to further avoid File Corruption..."); IsSaving = false; FileWatcher.Destroy(); } _waserror = value; } }
+
+        internal bool WasError
+        {
+            get => _waserror;
+            set
+            {
+                if (value == true)
+                {
+                    MelonLogger.Warning($"Defaulting {FilePath} to Fallback Functionality to further avoid File Corruption...");
+                    IsSaving = false;
+                    FileWatcher.Destroy();
+                }
+
+                _waserror = value;
+            }
+        }
+
         internal string FilePath = null;
         internal string LegacyFilePath = null;
         internal bool IsSaving = false;
         internal bool ShouldSave = true;
-        internal Dictionary<string, Dictionary<string, TomlObject>> RawValue = new Dictionary<string, Dictionary<string, TomlObject>>();
+        internal TomlDocument document;
         internal Watcher FileWatcher = null;
 
 
@@ -33,6 +49,9 @@ namespace MelonLoader.Preferences.IO
             string filestr = System.IO.File.ReadAllText(LegacyFilePath);
             string[] lines = filestr.Split('\n');
             string category = null;
+            
+            document = Tomlet.Tomlet.DocumentFrom(new TomlTable());
+            
             foreach (string line in lines)
             {
                 if (string.IsNullOrEmpty(line))
@@ -43,19 +62,20 @@ namespace MelonLoader.Preferences.IO
                     category = newline.Replace("[", "").Replace("]", "");
                     continue;
                 }
+
                 if (!newline.Contains("="))
                     continue;
                 string[] parts = line.Split('=');
                 if (string.IsNullOrEmpty(parts[0]) || string.IsNullOrEmpty(parts[1]))
                     continue;
                 if (parts[1].ToLower().StartsWith("true") || parts[1].ToLower().StartsWith("false"))
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject(parts[1].ToLower().StartsWith("true")));
+                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(parts[1].ToLower().StartsWith("true")));
                 else if (int.TryParse(parts[1], out int val_int))
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((long)val_int));
+                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(val_int));
                 else if (float.TryParse(parts[1], out float val_float))
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject((double)val_float));
+                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(val_float));
                 else
-                    SetupRawValue(category, parts[0], TomlObject.ToTomlObject(parts[1].Replace("\r", "")));
+                    InsertIntoDocument(category, parts[0], Tomlet.Tomlet.ValueFrom(parts[1].Replace("\r", "")));
             }
         }
 
@@ -65,125 +85,65 @@ namespace MelonLoader.Preferences.IO
                 return;
             if (!System.IO.File.Exists(FilePath))
                 return;
-            string filestr = System.IO.File.ReadAllText(FilePath);
-            if (string.IsNullOrEmpty(filestr))
-                return;
-            DocumentSyntax docsyn = Toml.Parse(filestr);
-            if (docsyn == null)
-                return;
-            TomlTable docmodel = docsyn.ToModel();
-            if (docmodel.Count <= 0)
-                return;
-            foreach (KeyValuePair<string, object> keypair in docmodel)
-            {
-                string category = keypair.Key;
-                if (string.IsNullOrEmpty(category))
-                    continue;
-                TomlTable tbl = (TomlTable)keypair.Value;
-                if (tbl.Count <= 0)
-                    continue;
-                foreach (KeyValuePair<string, object> tblkeypair in tbl)
-                {
-                    string identifier = tblkeypair.Key;
-                    if (string.IsNullOrEmpty(identifier))
-                        continue;
-                    TomlObject obj = null;
-                    if (tblkeypair.Value is TomlObject tomlObj)
-                        obj = tomlObj;
-                    else
-                        obj = TomlObject.ToTomlObject(tblkeypair.Value);
 
-                    if (obj == null)
-                        continue;
-                    SetupRawValue(category, identifier, obj);
-                }
-            }
+            document = TomlParser.ParseFile(FilePath);
         }
 
         internal void Save()
         {
             if (_waserror || !ShouldSave)
                 return;
-            DocumentSyntax doc = new DocumentSyntax();
-            foreach (KeyValuePair<string, Dictionary<string, TomlObject>> keyValuePair in RawValue.ToArray())
-            {
-                TableSyntax tbl = new TableSyntax(keyValuePair.Key);
-                foreach (KeyValuePair<string, TomlObject> keyValuePair2 in keyValuePair.Value.ToArray())
-                {
-                    if (keyValuePair2.Value == null)
-                        continue;
-                    ValueSyntax syn = CreateValueSyntaxFromTomlObject(keyValuePair2.Value);
-                    if (syn == null)
-                        continue;
-                    tbl.Items.Add(new KeyValueSyntax(keyValuePair2.Key, syn));
-                }
-                doc.Tables.Add(tbl);
-            }
+
             IsSaving = true;
-            System.IO.File.WriteAllText(FilePath, doc.ToString());
+            System.IO.File.WriteAllText(FilePath, document.SerializedValue);
             if ((LegacyFilePath != null) && System.IO.File.Exists(LegacyFilePath))
                 System.IO.File.Delete(LegacyFilePath);
         }
-
-        private static ValueSyntax CreateValueSyntaxFromTomlObject(TomlObject obj)
+        
+        private static string QuoteKey(string key)
         {
-            return obj.Kind switch
-            {
-                ObjectKind.Boolean => new BooleanValueSyntax(((TomlBoolean)obj).Value),
-                ObjectKind.String =>  new StringValueSyntax(string.IsNullOrEmpty(((TomlString)obj).Value) ? "" : ((TomlString)obj).Value),
-                ObjectKind.Float => new FloatValueSyntax(((TomlFloat)obj).Value),
-                ObjectKind.Integer => new IntegerValueSyntax(((TomlInteger)obj).Value),
-                ObjectKind.Array => CreateArraySyntaxFromTomlArray((TomlArray)obj),
-                _ => null
-            };
+            return key.Contains('"') 
+                ? $"'{key}'"
+                : $"\"{key}\"";
         }
 
-        private static ArraySyntax CreateArraySyntaxFromTomlArray(TomlArray arr)
+        internal void InsertIntoDocument(string category, string key, TomlValue value)
         {
-            var newSyntax = new ArraySyntax
+            if(!document.ContainsKey(category))
+                document.PutValue(category, new TomlTable());
+            
+            try
             {
-                OpenBracket = SyntaxFactory.Token(TokenKind.OpenBracket),
-                CloseBracket = SyntaxFactory.Token(TokenKind.CloseBracket)
-            };
-            for(var i = 0; i < arr.Count; i++)
-            {
-                var item = new ArrayItemSyntax {Value = CreateValueSyntaxFromTomlObject(arr.GetTomlObject(i))};
-                if (i + 1 < arr.Count)
-                {
-                    item.Comma = SyntaxFactory.Token(TokenKind.Comma);
-                    item.Comma.AddTrailingWhitespace();
-                }
-                newSyntax.Items.Add(item);
+                var categoryTable = document.GetSubTable(category);
+                categoryTable.PutValue(QuoteKey(key), value);
             }
-
-            return newSyntax;
-        }
-
-        internal void SetupRawValue(string category_identifier, string entry_identifier, TomlObject obj)
-        {
-            lock (RawValue)
+            catch (TomlTypeMismatchException)
             {
-                if (!RawValue.TryGetValue(category_identifier, out Dictionary<string, TomlObject> prefdict))
-                {
-                    RawValue[category_identifier] = new Dictionary<string, TomlObject>();
-                    prefdict = RawValue[category_identifier];
-                }
-                lock (prefdict)
-                    prefdict[entry_identifier] = obj;
+                //Ignore
+            }
+            catch (TomlNoSuchValueException)
+            {
+                //Ignore
             }
         }
 
         internal void SetupEntryFromRawValue(MelonPreferences_Entry entry)
         {
-            lock (RawValue)
+            lock (document)
             {
-                if (!RawValue.TryGetValue(entry.Category.Identifier, out Dictionary<string, TomlObject> prefdict))
-                    return;
-                lock (prefdict)
+                try
                 {
-                    if (!prefdict.TryGetValue(entry.Identifier, out TomlObject obj))
-                        return;
-                    entry.Load(obj);
+                    var categoryTable = document.GetSubTable(entry.Category.Identifier);
+                    var value = categoryTable.GetValue(QuoteKey(entry.Identifier));
+                    entry.Load(value);
+                }
+                catch (TomlTypeMismatchException)
+                {
+                    //Ignore
+                }
+                catch (TomlNoSuchValueException)
+                {
+                    //Ignore
                 }
             }
         }

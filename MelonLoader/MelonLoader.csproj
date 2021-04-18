@@ -129,75 +129,6 @@
     <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
     <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
     <Compile Include="Libs\IniFile.cs" />
-    <Compile Include="Libs\Tomlyn\Collections\Iterator.cs" />
-    <Compile Include="Libs\Tomlyn\Helpers\DateTimeRFC3339.cs" />
-    <Compile Include="Libs\Tomlyn\Helpers\ThrowHelper.cs" />
-    <Compile Include="Libs\Tomlyn\Model\ObjectKind.cs" />
-    <Compile Include="Libs\Tomlyn\Model\SyntaxTransform.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlArray.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlBoolean.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlDateTime.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlFloat.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlInteger.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlObject.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlString.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlTable.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlTableArray.cs" />
-    <Compile Include="Libs\Tomlyn\Model\TomlValue.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\ITokenProvider.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\Lexer.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\LexerState.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\Parser.cs" />
-    <Compile Include="Libs\Tomlyn\Parsing\SyntaxTokenValue.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\ArrayItemSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\ArraySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\BareKeyOrStringValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\BareKeySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\BooleanValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DateTimeValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticMessage.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticMessageKind.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DiagnosticsBag.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DocumentSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\DottedKeyItemSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\FloatValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\InlineTableItemSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\InlineTableSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\IntegerValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\InvalidSyntaxToken.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\KeySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\KeyValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SourceSpan.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\StringValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxFactory.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxKind.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxList.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNode.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNodeBase.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxNodeExtensions.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxToken.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxTrivia.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxValidator.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\SyntaxVisitor.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TableArraySyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TableSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TableSyntaxBase.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TextPosition.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TokenKind.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\TokenKindExtensions.cs" />
-    <Compile Include="Libs\Tomlyn\Syntax\ValueSyntax.cs" />
-    <Compile Include="Libs\Tomlyn\Text\char32.cs" />
-    <Compile Include="Libs\Tomlyn\Text\CharacterIterator.cs" />
-    <Compile Include="Libs\Tomlyn\Text\CharHelper.cs" />
-    <Compile Include="Libs\Tomlyn\Text\CharReaderException.cs" />
-    <Compile Include="Libs\Tomlyn\Text\ISourceView.cs" />
-    <Compile Include="Libs\Tomlyn\Text\IStringView.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringCharacterIterator.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringCharacterUtf8Iterator.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringSourceView.cs" />
-    <Compile Include="Libs\Tomlyn\Text\StringUtf8SourceView.cs" />
-    <Compile Include="Libs\Tomlyn\Toml.cs" />
-    <Compile Include="Libs\Tomlyn\TomlParserOptions.cs" />
     <Compile Include="Melons\Attributes\AdditionalDependencies.cs" />
     <Compile Include="Melons\Attributes\Color.cs" />
     <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
@@ -311,6 +242,7 @@
     <PackageReference Include="MonoMod.RuntimeDetour" Version="21.3.1.1" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
+    <PackageReference Include="Samboy063.Tomlet" Version="1.0.2" />
   </ItemGroup>
   <ItemGroup />
   <ItemDefinitionGroup>

@@ -82,7 +82,7 @@ namespace MelonLoader
                     currentFile = DefaultFile;
                 foreach (MelonPreferences_Entry entry in category.Entries)
                     if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
-                        currentFile.SetupRawValue(category.Identifier, entry.Identifier, entry.Save());
+                        currentFile.InsertIntoDocument(category.Identifier, entry.Identifier, entry.Save());
             }
 
             try

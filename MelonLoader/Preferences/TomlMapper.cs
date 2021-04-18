@@ -1,83 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using MelonLoader.Tomlyn.Model;
+using Tomlet.Models;
+
 
 namespace MelonLoader
 {
     public class TomlMapper
     {
-        private readonly Dictionary<Type, KeyValuePair<Delegate, Delegate>> myMappers = new Dictionary<Type, KeyValuePair<Delegate, Delegate>>();
+        public T[] ReadArray<T>(TomlValue value) => Tomlet.Tomlet.To<T[]>(value);
 
-        public TomlMapper()
-        {
-            RegisterMapper(o => (o as TomlString)?.Value, s => new TomlString(s));
-            RegisterMapper(o => (o as TomlBoolean)?.Value ?? default, s => new TomlBoolean(s));
-            
-            RegisterMapper(o => (o as TomlInteger)?.Value ?? default, s => new TomlInteger(s));
-            RegisterMapper(o => (int) ((o as TomlInteger)?.Value ?? default), s => new TomlInteger(s));
-            RegisterMapper(o => (byte) ((o as TomlInteger)?.Value ?? default), s => new TomlInteger(s));
-            RegisterMapper(o => (short) ((o as TomlInteger)?.Value ?? default), s => new TomlInteger(s));
-            
-            RegisterMapper(o => (o as TomlFloat)?.Value ?? (o as TomlInteger)?.Value ?? default, s => new TomlFloat(s));
-            RegisterMapper(o => (float) ((o as TomlFloat)?.Value ?? (o as TomlInteger)?.Value ?? default), s => new TomlFloat(s));
-        }
+        public TomlArray WriteArray<T>(T[] value) => (TomlArray) Tomlet.Tomlet.ValueFrom(value);
 
-        public void RegisterMapper<T>(Func<TomlObject, T> read, Func<T, TomlObject> write)
-        {
-            myMappers.Add(typeof(T), new KeyValuePair<Delegate, Delegate>(read, write));
-            myMappers.Add(typeof(T[]), new KeyValuePair<Delegate, Delegate>((Func<TomlObject, T[]>) ReadArray<T>, (Func<T[], TomlObject>)WriteArray));
-            myMappers.Add(typeof(List<T>), new KeyValuePair<Delegate, Delegate>((Func<TomlObject, List<T>>)ReadList<T>, (Func<List<T>, TomlObject>)WriteList));
-        }
-        
-        public T[] ReadArray<T>(TomlObject value)
-        {
-            if (!(value is TomlArray array))
-                return new T[0];
+        public List<T> ReadList<T>(TomlValue value) => Tomlet.Tomlet.To<List<T>>(value);
+        public TomlArray WriteList<T>(List<T> value) => (TomlArray) Tomlet.Tomlet.ValueFrom(value);
 
-            return array.GetTomlEnumerator().Select(FromToml<T>).ToArray();
-        }
+        public TomlValue ToToml<T>(T value) => Tomlet.Tomlet.ValueFrom(value);
 
-        public TomlArray WriteArray<T>(T[] value)
-        {
-            var arr = new TomlArray(value.Length);
-
-            for (var i = 0; i < value.Length; i++)
-                arr[i] = ToToml(value[i]);
-
-            return arr;
-        }
-
-        public List<T> ReadList<T>(TomlObject value) => ReadArray<T>(value).ToList();
-        public TomlArray WriteList<T>(List<T> value) => WriteArray(value.ToArray());
-
-        public TomlObject ToToml<T>(T value)
-        {
-            if (typeof(T).IsEnum)
-                return ((Func<string, TomlObject>) myMappers[typeof(string)].Value)(value.ToString());
-
-            if (!myMappers.TryGetValue(typeof(T), out var mapper))
-                throw new ArgumentException($"Attempting to serialize unknown type {typeof(T)}");
-
-            return ((Func<T, TomlObject>) mapper.Value)(value);
-        }
-
-        public T FromToml<T>(TomlObject value)
-        {
-            if (typeof(T).IsEnum)
-            {
-                string enumValue = ((Func <TomlObject, string>) myMappers[typeof(string)].Key)(value);
-                if (TryParseEnum<T>(enumValue, out object parsedEnum))
-                    return (T)parsedEnum;
-                else
-                    throw new ArgumentException($"Attempting to deserialize Enum {typeof(T).Name} with invalid value {enumValue}");
-            }
-                    
-            if (!myMappers.TryGetValue(typeof(T), out var mapper))
-                throw new ArgumentException($"Attempting to deserialize unknown type {typeof(T)}");
-
-            return ((Func<TomlObject, T>) mapper.Key)(value);
-        }
+        public T FromToml<T>(TomlValue value) => Tomlet.Tomlet.To<T>(value);
 
         private static bool TryParseEnum<T>(string enumValue, out object parsedEnum)
         {
