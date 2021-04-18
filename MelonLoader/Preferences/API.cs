@@ -198,6 +198,14 @@ namespace MelonLoader
             return default;
         }
 
+        public static void SaveCategory<T>(bool printmsg = true)
+        {
+            if (!ReflectiveCategories.TryGetValue(typeof(T), out MelonPreferences_ReflectiveCategory category))
+                return;
+            
+            category.SaveToFile(printmsg);
+        }
+
         public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
         public static MelonPreferences_Entry<T> GetEntry<T>(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
         public static bool HasEntry(string category_identifier, string entry_identifier) => (GetEntry(category_identifier, entry_identifier) != null);
