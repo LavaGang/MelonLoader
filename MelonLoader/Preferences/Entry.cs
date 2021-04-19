@@ -1,5 +1,6 @@
 ﻿using System;
-using MelonLoader.Tomlyn.Model;
+using Tomlet;
+using Tomlet.Models;
 
 namespace MelonLoader
 {
@@ -28,8 +29,8 @@ namespace MelonLoader
         public abstract string GetDefaultValueAsString();
         public abstract string GetValueAsString();
 
-        public abstract void Load(TomlObject obj);
-        public abstract TomlObject Save();
+        public abstract void Load(TomlValue obj);
+        public abstract TomlValue Save();
 
         public event Action OnValueChangedUntyped;
 
@@ -83,15 +84,15 @@ namespace MelonLoader
         public override string GetDefaultValueAsString() => DefaultValue?.ToString();
         public override string GetValueAsString() => Value?.ToString();
 
-        public override void Load(TomlObject obj)
+        public override void Load(TomlValue obj)
         {
-            Value = MelonPreferences.Mapper.FromToml<T>(obj);
+            Value = TomletMain.To<T>(obj);
         }
 
-        public override TomlObject Save()
+        public override TomlValue Save()
         {
             Value = EditedValue;
-            return MelonPreferences.Mapper.ToToml(Value);
+            return TomletMain.ValueFrom(Value);
         }
     }
 }
