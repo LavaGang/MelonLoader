@@ -240,14 +240,12 @@
     <PackageReference Include="ILRepack.Lib.MSBuild.Task">
       <Version>2.0.18.2</Version>
     </PackageReference>
-    <PackageReference Include="MonoMod.RuntimeDetour" Version="21.3.1.1" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
-    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="21.4.2.3" ExcludeAssets="runtime">
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="Samboy063.Tomlet" Version="1.1.2" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemDefinitionGroup>
-    <PackageReference ExcludeAssets="runtime" />
-  </ItemDefinitionGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
