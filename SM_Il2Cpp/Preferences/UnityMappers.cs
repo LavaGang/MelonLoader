@@ -1,6 +1,6 @@
 using Tomlet;
+using Tomlet.Models;
 using UnityEngine;
-using TomlValue = Tomlet.Models.TomlValue;
 
 namespace MelonLoader.Support.Preferences
 {

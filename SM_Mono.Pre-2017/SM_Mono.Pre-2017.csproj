@@ -64,8 +64,5 @@
       <Name>MelonLoader</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Samboy063.Tomlet" Version="1.1.2" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
