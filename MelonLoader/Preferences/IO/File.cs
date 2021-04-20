@@ -30,7 +30,7 @@ namespace MelonLoader.Preferences.IO
         internal string LegacyFilePath = null;
         internal bool IsSaving = false;
         internal bool ShouldSave = true;
-        internal TomlDocument document;
+        internal TomlDocument document = TomlDocument.CreateEmpty();
         internal Watcher FileWatcher = null;
 
 
@@ -85,7 +85,6 @@ namespace MelonLoader.Preferences.IO
                 return;
             if (!System.IO.File.Exists(FilePath))
                 return;
-
             document = TomlParser.ParseFile(FilePath);
         }
 
@@ -93,7 +92,6 @@ namespace MelonLoader.Preferences.IO
         {
             if (_waserror || !ShouldSave)
                 return;
-
             IsSaving = true;
             System.IO.File.WriteAllText(FilePath, document.SerializedValue);
             if ((LegacyFilePath != null) && System.IO.File.Exists(LegacyFilePath))
@@ -109,7 +107,7 @@ namespace MelonLoader.Preferences.IO
 
         internal void InsertIntoDocument(string category, string key, TomlValue value)
         {
-            if(!document.ContainsKey(category))
+            if (!document.ContainsKey(category))
                 document.PutValue(category, new TomlTable());
             
             try

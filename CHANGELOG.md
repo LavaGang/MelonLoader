@@ -153,6 +153,14 @@
 128. Fixed Issue with Il2CppAssemblyGenerator not setting Working Directory for ProcessStartInfo.
 129. Added Separate Support Module for Compatibility Layer System to keep References Clean.
 130. Made Compatibility Layer System Extendible.
+131. Removed Tomlyn.  (Credits to Samboy :D)
+132. Added Tomlet created by Samboy.  (Credits to Samboy :D)
+133. Converted MelonPreferences to use Tomlet.  (Credits to Samboy :D)
+134. Updated to Tomlet 1.1.0.  (Credits to Samboy :D)
+135. Added ReflectiveCategory API for Type-Checked Category Creation.  (Credits to Samboy :D)
+136. Added SaveToFile to ReflectiveCategory.  (Credits to Samboy :D)
+137. Added a Force-Save option to ReflectiveCategory.  (Credits to Samboy :D)
+138. Fixed NRE Issue with MelonPreferences when Parsing TOML Document.
 
 ---
 
