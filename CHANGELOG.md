@@ -161,6 +161,7 @@
 136. Added SaveToFile to ReflectiveCategory.  (Credits to Samboy :D)
 137. Added a Force-Save option to ReflectiveCategory.  (Credits to Samboy :D)
 138. Fixed NRE Issue with MelonPreferences when Parsing TOML Document.
+139. Fixed Issue with DAB functionality not properly iterating its list.
 
 ---
 

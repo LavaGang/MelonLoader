@@ -39,7 +39,7 @@ bool AnalyticsBlocker::CheckHostNameOrIP(const char* host_name_or_ip)
 	{
 		if (should_block)
 			Debug::DirectWrite(("Host Name or IP Blocked: " + host_name_or_ip_str).c_str());
-		else if (std::find(DABList.begin(), DABList.end(), host_name_or_ip) == DABList.end())
+		else if (!HasDabbed(host_name_or_ip))
 		{
 			Debug::DirectWrite(("Unique Host Name or IP Found: " + host_name_or_ip_str).c_str());
 			DABList.push_back(host_name_or_ip_str.c_str());
@@ -54,6 +54,20 @@ bool AnalyticsBlocker::ShouldBlock(const char* host_name_or_ip)
 	for (int i = 0; i < (sizeof(BlockedList) / sizeof(BlockedList[0])); i++)
 	{
 		if (strstr(host_name_or_ip, BlockedList[i]) != NULL)
+		{
+			found = true;
+			break;
+		}
+	}
+	return found;
+}
+
+bool AnalyticsBlocker::HasDabbed(const char* host_name_or_ip)
+{
+	bool found = false;
+	for (auto entry = DABList.begin(); entry != DABList.end(); ++entry)
+	{
+		if (strstr(host_name_or_ip, *entry) != NULL)
 		{
 			found = true;
 			break;
