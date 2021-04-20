@@ -8,11 +8,9 @@ namespace MelonLoader.Preferences
     {
         private Type type;
         private object value;
-        private string categoryName;
-        private string displayName;
         internal IO.File File = null;
         
-        public string Identifier { get; internal set; }
+        public string Identifier { get;  internal set; }
         public string DisplayName { get; internal set; }
 
         internal static MelonPreferences_ReflectiveCategory Create<T>(string categoryName, string displayName) => new MelonPreferences_ReflectiveCategory(typeof(T), categoryName, displayName);
@@ -20,8 +18,8 @@ namespace MelonLoader.Preferences
         private MelonPreferences_ReflectiveCategory(Type type, string categoryName, string displayName)
         {
             this.type = type;
-            this.categoryName = categoryName;
-            this.displayName = displayName;
+            this.Identifier = categoryName;
+            this.DisplayName = displayName;
             MelonPreferences.ReflectiveCategories.Add(type, this);
         }
 
