@@ -40,8 +40,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static int Run()
         {
-            Config.Load();
-
             RemoteAPI.Contact();
 
             unitydependencies = new UnityDependencies();
@@ -64,12 +62,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             string CurrentGameAssemblyHash;
             MelonLogger.Msg("Checking GameAssembly...");
-            MelonDebug.Msg($"Last GameAssembly Hash: {Config.GameAssemblyHash.Value}");
+            MelonDebug.Msg($"Last GameAssembly Hash: {Config.Values.GameAssemblyHash}");
             MelonDebug.Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = GetGameAssemblyHash()}");
 
             if (!AssemblyGenerationNeeded
-                && (string.IsNullOrEmpty(Config.GameAssemblyHash.Value)
-                    || !Config.GameAssemblyHash.Value.Equals(CurrentGameAssemblyHash)))
+                && (string.IsNullOrEmpty(Config.Values.GameAssemblyHash)
+                    || !Config.Values.GameAssemblyHash.Equals(CurrentGameAssemblyHash)))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)
@@ -102,7 +100,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             il2cppassemblyunhollower.Cleanup();
 
             MelonLogger.Msg("Assembly Generation Successful!");
-            Config.GameAssemblyHash.Value = CurrentGameAssemblyHash;
+            Config.Values.GameAssemblyHash = CurrentGameAssemblyHash;
             deobfuscationMap.Save();
 
             return 0;
@@ -122,11 +120,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static void OldFiles_Cleanup()
         {
-            if (Config.OldFiles.Value.Count <= 0)
+            if (Config.Values.OldFiles.Count <= 0)
                 return;
-            for (int i = 0; i < Config.OldFiles.Value.Count; i++)
+            for (int i = 0; i < Config.Values.OldFiles.Count; i++)
             {
-                string filename = Config.OldFiles.Value[i];
+                string filename = Config.Values.OldFiles[i];
                 string filepath = Path.Combine(ManagedPath, filename);
                 if (File.Exists(filepath))
                 {
@@ -134,7 +132,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     File.Delete(filepath);
                 }
             }
-            Config.OldFiles.Value.Clear();
+            Config.Values.OldFiles.Clear();
         }
 
         private static void OldFiles_LAM()
@@ -145,7 +143,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 string filepath = filepathtbl[i];
                 string filename = Path.GetFileName(filepath);
                 MelonLogger.Msg("Moving " + filename);
-                Config.OldFiles.Value.Add(filename);
+                Config.Values.OldFiles.Add(filename);
                 string newfilepath = Path.Combine(ManagedPath, filename);
                 if (File.Exists(newfilepath))
                     File.Delete(newfilepath);
