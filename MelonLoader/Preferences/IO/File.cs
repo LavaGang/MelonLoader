@@ -2,7 +2,6 @@
 using Tomlet;
 using Tomlet.Exceptions;
 using Tomlet.Models;
-using TomlValue = Tomlet.Models.TomlValue;
 
 namespace MelonLoader.Preferences.IO
 {
@@ -32,7 +31,6 @@ namespace MelonLoader.Preferences.IO
         internal bool ShouldSave = true;
         internal TomlDocument document = TomlDocument.CreateEmpty();
         internal Watcher FileWatcher = null;
-
 
         internal File(string filepath, string legacyfilepath = null, bool shouldsave = true)
         {
@@ -96,12 +94,10 @@ namespace MelonLoader.Preferences.IO
                 System.IO.File.Delete(LegacyFilePath);
         }
         
-        private static string QuoteKey(string key)
-        {
-            return key.Contains('"') 
+        private static string QuoteKey(string key) =>
+            key.Contains('"') 
                 ? $"'{key}'"
                 : $"\"{key}\"";
-        }
 
         internal void InsertIntoDocument(string category, string key, TomlValue value)
         {

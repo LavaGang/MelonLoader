@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using MelonLoader.Preferences;
-using Tomlet.Models;
 
 namespace MelonLoader
 {
