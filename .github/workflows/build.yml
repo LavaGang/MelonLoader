@@ -40,7 +40,7 @@ jobs:
         run: |
           xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x64\MelonLoader\Dependencies\ /E /H /Y
           xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x64\MelonLoader\ /E /H /Y
-		  xcopy Output\Debug\MelonLoader\Tomlet.* Output\Debug\x64\MelonLoader\ /E /H /Y
+          copy Output\Debug\MelonLoader\Tomlet.dll Output\Debug\x64\MelonLoader\Tomlet.dll
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build MelonLoader Core x86
         shell: cmd
@@ -50,7 +50,7 @@ jobs:
         run: |
           xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x86\MelonLoader\Dependencies\ /E /H /Y
           xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x86\MelonLoader\ /E /H /Y
-		  xcopy Output\Debug\MelonLoader\Tomlet.* Output\Debug\x86\MelonLoader\ /E /H /Y
+          copy Output\Debug\MelonLoader\Tomlet.dll Output\Debug\x86\MelonLoader\Tomlet.dll
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build Proxy DLL - x86
         shell: cmd
