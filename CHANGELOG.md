@@ -162,6 +162,7 @@
 137. Added a Force-Save option to ReflectiveCategory.  (Credits to Samboy :D)
 138. Fixed NRE Issue with MelonPreferences when Parsing TOML Document.
 139. Fixed Issue with DAB functionality not properly iterating its list.
+140. Changed Assembly Generator Config to use new Reflective Categories.  (Credits to Samboy :D)
 
 ---
 

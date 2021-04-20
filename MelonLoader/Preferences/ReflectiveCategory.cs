@@ -98,5 +98,7 @@ namespace MelonLoader.Preferences
                 MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
             MelonHandler.OnPreferencesSaved();
         }
+
+        public void DestroyFileWatcher() => File?.FileWatcher.Destroy();
     }
 }

@@ -16,17 +16,19 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             FilePath = Path.Combine(Core.BasePath, "Config.cfg");
 
             Category = MelonPreferences.CreateCategory<AssemblyGeneratorConfiguration>("Il2CppAssemblyGenerator");
-            Category.SetFilePath(FilePath, true);
+            Category.SetFilePath(FilePath);
+            Category.DestroyFileWatcher();
 
             Values = MelonPreferences.GetCategory<AssemblyGeneratorConfiguration>("Il2CppAssemblyGenerator");
 
             if (!File.Exists(FilePath))
-                Category.SaveToFile(false);
+                Save();
         }
 
         internal static void Save() => Category.SaveToFile(false);
 
-        public class AssemblyGeneratorConfiguration {
+        public class AssemblyGeneratorConfiguration
+        {
             public string GameAssemblyHash = null;
             public string DeobfuscationMapHash = null;
             public string ObfuscationRegex = null;

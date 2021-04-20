@@ -70,7 +70,10 @@ namespace MelonLoader
                     foreach (MelonPreferences_Entry entry in category.Entries)
                         currentFile.SetupEntryFromRawValue(entry);
                 }
+            }
 
+            if (ReflectiveCategories.Count > 0)
+            {
                 foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
                 {
                     Preferences.IO.File currentFile = category.File;
@@ -94,22 +97,27 @@ namespace MelonLoader
 
         public static void Save()
         {
-            foreach (MelonPreferences_Category category in Categories)
+            if (Categories.Count > 0)
             {
-                Preferences.IO.File currentFile = category.File;
-                if (currentFile == null)
-                    currentFile = DefaultFile;
-                foreach (MelonPreferences_Entry entry in category.Entries)
-                    if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
-                        currentFile.InsertIntoDocument(category.Identifier, entry.Identifier, entry.Save());
+                foreach (MelonPreferences_Category category in Categories)
+                {
+                    Preferences.IO.File currentFile = category.File;
+                    if (currentFile == null)
+                        currentFile = DefaultFile;
+                    foreach (MelonPreferences_Entry entry in category.Entries)
+                        if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
+                            currentFile.InsertIntoDocument(category.Identifier, entry.Identifier, entry.Save());
+                }
             }
-
-            foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
+            if (ReflectiveCategories.Count > 0)
             {
-                Preferences.IO.File currentFile = category.File;
-                if (currentFile == null)
-                    currentFile = DefaultFile;
-                currentFile.document.PutValue(category.Identifier, category.Save());
+                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
+                {
+                    Preferences.IO.File currentFile = category.File;
+                    if (currentFile == null)
+                        currentFile = DefaultFile;
+                    currentFile.document.PutValue(category.Identifier, category.Save());
+                }
             }
 
             try
