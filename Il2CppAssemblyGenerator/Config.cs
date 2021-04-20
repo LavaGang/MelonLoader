@@ -1,43 +1,39 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using MelonLoader.Preferences;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal class Config
     {
         private static string FilePath;
-        private static MelonPreferences_Category Category;
-        internal static MelonPreferences_Entry<string> GameAssemblyHash;
-        internal static MelonPreferences_Entry<string> DeobfuscationMapHash;
-        internal static MelonPreferences_Entry<string> ObfuscationRegex;
-        internal static MelonPreferences_Entry<string> UnityVersion;
-        internal static MelonPreferences_Entry<string> DumperVersion;
-        internal static MelonPreferences_Entry<string> UnhollowerVersion;
-        internal static MelonPreferences_Entry<List<string>> OldFiles;
+        private static MelonPreferences_ReflectiveCategory Category;
+
+        internal static AssemblyGeneratorConfiguration Values;
 
         static Config()
         {
             FilePath = Path.Combine(Core.BasePath, "Config.cfg");
 
-            Category = MelonPreferences.CreateCategory("Il2CppAssemblyGenerator", is_hidden: true);
-            Category.SetFilePath(FilePath, false);
-            Category.DestroyFileWatcher();
+            Category = MelonPreferences.CreateCategory<AssemblyGeneratorConfiguration>("Il2CppAssemblyGenerator");
+            Category.SetFilePath(FilePath, true);
 
-            GameAssemblyHash = Category.CreateEntry<string>("GameAssemblyHash", null, is_hidden: true);
-            DeobfuscationMapHash = Category.CreateEntry<string>("DeobfuscationMapHash", null, is_hidden: true);
-            ObfuscationRegex = Category.CreateEntry<string>("ObfuscationRegex", null, is_hidden: true);
-            UnityVersion = Category.CreateEntry("UnityVersion", "0.0.0.0", is_hidden: true);
-            DumperVersion = Category.CreateEntry("DumperVersion", "0.0.0.0", is_hidden: true);
-            UnhollowerVersion = Category.CreateEntry("UnhollowerVersion", "0.0.0.0", is_hidden: true);
-            OldFiles = Category.CreateEntry("OldFiles", new List<string>(), is_hidden: true);
+            Values = MelonPreferences.GetCategory<AssemblyGeneratorConfiguration>("Il2CppAssemblyGenerator");
 
-            if (File.Exists(FilePath))
-                Load();
-            else
-                Save();
+            if (!File.Exists(FilePath))
+                Category.SaveToFile(false);
         }
 
-        internal static void Load() => Category.LoadFromFile(false);
         internal static void Save() => Category.SaveToFile(false);
+
+        public class AssemblyGeneratorConfiguration {
+            public string GameAssemblyHash = null;
+            public string DeobfuscationMapHash = null;
+            public string ObfuscationRegex = null;
+            public string UnityVersion = "0.0.0.0";
+            public string DumperVersion = "0.0.0.0";
+            public string UnhollowerVersion = "0.0.0.0";
+            public List<string> OldFiles = new List<string>();
+        }
     }
 }
