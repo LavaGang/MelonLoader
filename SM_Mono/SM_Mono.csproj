@@ -49,6 +49,10 @@
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+	<Reference Include="Tomlet">
+      <HintPath>$(OutputPath)..\..\Tomlet.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SM_Il2Cpp\Preferences\UnityMappers.cs">
@@ -63,7 +67,6 @@
       <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>
       <Name>MelonLoader</Name>
     </ProjectReference>
-	<PackageReference Include="Samboy063.Tomlet" Version="1.1.2" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
