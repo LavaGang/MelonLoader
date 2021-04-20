@@ -50,8 +50,6 @@ namespace MelonLoader.Preferences.IO
             string[] lines = filestr.Split('\n');
             string category = null;
 
-            document = TomlDocument.CreateEmpty();
-            
             foreach (string line in lines)
             {
                 if (string.IsNullOrEmpty(line))

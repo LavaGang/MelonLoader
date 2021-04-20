@@ -37,7 +37,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 Save();
         }
 
-        internal static void Load() => Category.LoadFromFile(MelonLaunchOptions.Core.DebugMode);
-        internal static void Save() => Category.SaveToFile(MelonLaunchOptions.Core.DebugMode);
+        internal static void Load() => Category.LoadFromFile(false);
+        internal static void Save() => Category.SaveToFile(false);
     }
 }
