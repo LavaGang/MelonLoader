@@ -26,6 +26,8 @@
     <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
     <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
     <ClCompile Include="Managers\AndroidData.cpp" />
+    <ClCompile Include="External\bHapticsBridge.cpp" />
+    <ClCompile Include="Utils\Console\JavaLogBridge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
@@ -70,6 +72,7 @@
     <ClInclude Include="Base\capstone\include\capstone\x86.h" />
     <ClInclude Include="Base\capstone\include\capstone\xcore.h" />
     <ClInclude Include="Managers\AndroidData.h" />
+    <ClInclude Include="External\bHapticsBridge.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />

@@ -239,10 +239,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\bHapticsBridge.cpp" />
     <ClCompile Include="Managers\AndroidData.cpp" />
     <ClCompile Include="Bootstrap.cpp" />
     <ClCompile Include="Base\Core.cpp" />
     <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
+    <ClCompile Include="Utils\Console\JavaLogBridge.cpp" />
     <ClCompile Include="Utils\Encoding.cpp" />
     <ClCompile Include="Utils\Helpers\ImportLibHelper.cpp" />
     <ClCompile Include="Managers\AssemblyVerifier.cpp" />
@@ -266,6 +268,7 @@
     <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="External\bHapticsBridge.h" />
     <ClInclude Include="Managers\AndroidData.h" />
     <ClInclude Include="Base\capstone\include\capstone\arm.h" />
     <ClInclude Include="Base\capstone\include\capstone\arm64.h" />
