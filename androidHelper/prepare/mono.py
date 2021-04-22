@@ -36,4 +36,34 @@ def install_mono(path):
 
 
 def install_mono_native(path):
-    return True
+    if not os.path.isdir(mono_native_assemblies_path):
+        print("%s does not exist" % mono_native_assemblies_path)
+        return False
+
+    lib_dir = os.path.join(path, "lib")
+    dest_dirs = os.listdir(lib_dir)
+    mono_abi_dirs = os.listdir(mono_native_assemblies_path)
+
+    abi_count = 0
+
+    for abi in helpers.Settings.supported_abi:
+        if abi not in dest_dirs:
+            continue
+
+        if abi not in mono_abi_dirs:
+            print("WARNING: missing ABI %s in mono")
+            continue
+
+        abi_count += 1
+        install_mono_abi(lib_dir, abi)
+
+    return abi_count > 0
+
+
+# TODO: Fix for multiple ABI
+def install_mono_abi(path, abi):
+    mono_abi_dir = os.path.join(mono_native_assemblies_path, abi)
+    dest_abi_dir = os.path.join(path, abi)
+
+    for key, value in mono_native_assemblies.items():
+        shutil.copyfile(os.path.join(mono_abi_dir, key), os.path.join(dest_abi_dir, value))
