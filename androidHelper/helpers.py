@@ -3,3 +3,18 @@ import os
 base_dir = os.path.dirname(os.path.realpath(__file__))
 file_path = os.path.join(base_dir, "build")
 bin_path = os.path.join(base_dir, "bin")
+
+
+def error(message):
+    print("Error: %s" % message)
+    exit(1)
+
+
+def prepare_dir(path):
+    if os.path.isdir(path):
+        return
+
+    if os.path.exists(path):
+        error("%s exists but is not folder" % path)
+
+    os.makedirs(name=path, exist_ok=True)
