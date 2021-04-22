@@ -24,15 +24,7 @@ def clean(path):
     os.remove(path)
 
 
-def main():
-    if len(sys.argv) != 2:
-        error("usage \"py install_to_apk.py <path to apk>\"")
-
-    apk_path = sys.argv[1]
-    if not validate_path(apk_path):
-        error("\"%s\" is not a file.")
-
-    apk_path = os.path.realpath(apk_path)
+def install_apk(apk_path):
     output_path = os.path.join(helpers.Settings.file_path, helpers.file_name(apk_path))
 
     if helpers.file_name(apk_path) == prepare.support.support_dirname:
@@ -90,6 +82,17 @@ def main():
 
     if not prepare.il2cpp_assembly_generation.install_il2cpp_gen(output_path):
         error("Failed to install il2cpp assembly generator")
+
+
+def main():
+    if len(sys.argv) != 2:
+        error("usage \"py install_to_apk.py <path to apk>\"")
+
+    apk_path = sys.argv[1]
+    if not validate_path(apk_path):
+        error("\"%s\" is not a file.")
+
+    install_apk(os.path.realpath(apk_path))
 
 
 if __name__ == '__main__':
