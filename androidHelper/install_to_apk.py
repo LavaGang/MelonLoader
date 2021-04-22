@@ -24,7 +24,7 @@ def clean(path):
     os.remove(path)
 
 
-def install_apk(apk_path):
+def install_apk(apk_path, build_output_path):
     if not validate_path(apk_path):
         error("\"%s\" is not a file.")
 
@@ -86,19 +86,19 @@ def install_apk(apk_path):
     if not prepare.il2cpp_assembly_generation.install_il2cpp_gen(output_path):
         error("Failed to install il2cpp assembly generator")
 
-    if not wrapper.apktool.build(output_path, os.path.join(os.getcwd(), os.path.basename(apk_path))):
+    if not wrapper.apktool.build(output_path, build_output_path):
         error("Failed to disassemble.")
 
 
 def main():
     if len(sys.argv) != 2:
-        error("usage \"py install_to_apk.py <path to apk>\"")
+        helpers.error("usage \"py %s <path to apk>\"" % os.path.basename(__file__))
 
     apk_path = sys.argv[1]
     if not validate_path(apk_path):
         error("\"%s\" is not a file.")
 
-    install_apk(os.path.realpath(apk_path))
+    install_apk(os.path.realpath(apk_path), os.path.join(os.getcwd(), os.path.basename(apk_path)))
 
 
 if __name__ == '__main__':
