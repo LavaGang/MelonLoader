@@ -6,6 +6,7 @@ import prepare.injection
 import prepare.bootstrap
 import prepare.mono
 import prepare.unity
+import prepare.melonloader
 
 import helpers
 import wrapper.apktool
@@ -78,6 +79,9 @@ def main():
 
     if helpers.Settings.unity_unstripped() and not prepare.unity.install_native_original_unity_assemblies(output_path):
         error("Failed to install unity unstripped native assemblies")
+
+    if not prepare.melonloader.install_melonloader(output_path):
+        error("Failed to install melonloader assembly")
 
 
 if __name__ == '__main__':
