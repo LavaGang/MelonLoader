@@ -8,6 +8,7 @@ import prepare.mono
 import prepare.unity
 import prepare.melonloader
 import prepare.support_module
+import prepare.il2cpp_assembly_generation
 
 import helpers
 import wrapper.apktool
@@ -86,6 +87,9 @@ def main():
 
     if not prepare.support_module.install_support_modules(output_path):
         error("Failed to install support modules")
+
+    if not prepare.il2cpp_assembly_generation.install_il2cpp_gen(output_path):
+        error("Failed to install il2cpp assembly generator")
 
 
 if __name__ == '__main__':
