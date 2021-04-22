@@ -3,15 +3,12 @@ import sys
 
 import prepare.support
 import prepare.injection
+import prepare.bootstrap
 
 import helpers
 import wrapper.apktool
 
 from helpers import error as error
-
-
-def file_name(path):
-    return os.path.splitext(os.path.basename(path))[0]
 
 
 def validate_path(path):
@@ -31,10 +28,10 @@ def main():
         error("\"%s\" is not a file.")
 
     apk_path = os.path.realpath(apk_path)
-    output_path = os.path.join(helpers.file_path, file_name(apk_path))
+    output_path = os.path.join(helpers.file_path, helpers.file_name(apk_path))
 
-    if file_name(apk_path) == prepare.support.support_dirname:
-        error("apk cannot be named %s.apk" % (file_name(apk_path)))
+    if helpers.file_name(apk_path) == prepare.support.support_dirname:
+        error("apk cannot be named %s.apk" % (helpers.file_name(apk_path)))
 
     helpers.prepare_dir(helpers.file_path)
 
@@ -43,6 +40,9 @@ def main():
         if not wrapper.apktool.decompile(apk_path, output_path, force=True):
             error("Failed to disassemble.")
         wrapper.apktool.write_hash(output_path, apk_path)
+
+    if not helpers.check_abi_support(output_path):
+        error("No supported ABIs found. Supported ABIs are [%s]." % ", ".join(helpers.supported_abi))
 
     if not prepare.support.disassemble_apk():
         error("Failed to disassemble support apk.")
@@ -61,6 +61,9 @@ def main():
 
     if not prepare.injection.install_injection(output_path):
         error("Failed to inject into java")
+
+    if not prepare.bootstrap.install_bootstrap(output_path):
+        error("Failed to install %s" % prepare.bootstrap.bootstrap_file)
 
 
 if __name__ == '__main__':

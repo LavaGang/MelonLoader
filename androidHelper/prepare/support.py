@@ -95,19 +95,17 @@ def install_native(path):
     if not os.path.isdir(path):
         return False
 
-    native_base = "lib"
-
     copy_paths = []
 
-    source_dirs = os.listdir(os.path.join(support_apk_dest, native_base))
-    dest_dirs = os.listdir(os.path.join(path, native_base))
+    source_dirs = os.listdir(os.path.join(support_apk_dest, "lib"))
+    dest_dirs = os.listdir(os.path.join(path, "lib"))
 
     for dir in dest_dirs:
         if dir not in source_dirs:
             print("Failed to find native libs for ABI: %s" % dir)
             continue
 
-        copy_sub_path_m(path, os.path.join(native_base, dir))
+        copy_sub_path_m(path, os.path.join("lib", dir))
 
     return True
 
