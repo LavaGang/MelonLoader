@@ -9,6 +9,9 @@ class Settings:
     _visual_studio_path = ""
     _unity_editor_path = ""
     _unity_unstripped = False
+    _keytool_path = ""
+    _keystore_password = ""
+    _apksigner_path = ""
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
     file_path = os.path.join(base_dir, "build")
@@ -31,6 +34,21 @@ class Settings:
         return Settings._unity_unstripped
 
     @staticmethod
+    def keytool_path():
+        Settings.load_config()
+        return Settings._keytool_path
+
+    @staticmethod
+    def keystore_password():
+        Settings.load_config()
+        return Settings._keystore_password
+
+    @staticmethod
+    def apksigner_path():
+        Settings.load_config()
+        return Settings._apksigner_path
+
+    @staticmethod
     def load_config():
         if Settings._config_read:
             return
@@ -41,6 +59,9 @@ class Settings:
         Settings._visual_studio_path = os.path.realpath(data['VisualStudioBase'])
         Settings._unity_editor_path = os.path.realpath(data['UnityEditorBase'])
         Settings._unity_unstripped = data['UnityUnstripped']
+        Settings._keytool_path = data['KeytoolPath']
+        Settings._keystore_password = data['KeystorePassword']
+        Settings._apksigner_path = data['ApkSignerPath']
 
         Settings._config_read = True
 
