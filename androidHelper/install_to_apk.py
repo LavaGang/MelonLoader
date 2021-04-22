@@ -2,6 +2,8 @@ import os
 import sys
 
 import prepare.support
+import prepare.injection
+
 import helpers
 import wrapper.apktool
 
@@ -53,6 +55,9 @@ def main():
 
     if not prepare.support.install_assets(output_path):
         error("Failed to install assets")
+
+    if not prepare.injection.install_injection(output_path):
+        error("Failed to inject into java")
 
 
 if __name__ == '__main__':
