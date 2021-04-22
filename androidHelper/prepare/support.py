@@ -6,8 +6,8 @@ import xml.etree.ElementTree as ET
 
 support_dirname = 'support'
 
-support_apk_path = os.path.join(helpers.base_dir, '..', 'APKBindings', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
-support_apk_dest = os.path.join(helpers.file_path, support_dirname)
+support_apk_path = os.path.join(helpers.Settings.base_dir, '..', 'APKBindings', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
+support_apk_dest = os.path.join(helpers.Settings.file_path, support_dirname)
 
 
 def clean():

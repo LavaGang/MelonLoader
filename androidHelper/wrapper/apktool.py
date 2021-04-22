@@ -1,7 +1,7 @@
 import os
 import helpers
 
-apktool_path = os.path.join(helpers.bin_path, 'apktool.jar')
+apktool_path = os.path.join(helpers.Settings.bin_path, 'apktool.jar')
 
 
 def write_hash(path, compressed_path):

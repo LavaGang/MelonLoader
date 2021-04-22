@@ -4,6 +4,7 @@ import sys
 import prepare.support
 import prepare.injection
 import prepare.bootstrap
+import prepare.mono
 
 import helpers
 import wrapper.apktool
@@ -28,12 +29,12 @@ def main():
         error("\"%s\" is not a file.")
 
     apk_path = os.path.realpath(apk_path)
-    output_path = os.path.join(helpers.file_path, helpers.file_name(apk_path))
+    output_path = os.path.join(helpers.Settings.file_path, helpers.file_name(apk_path))
 
     if helpers.file_name(apk_path) == prepare.support.support_dirname:
         error("apk cannot be named %s.apk" % (helpers.file_name(apk_path)))
 
-    helpers.prepare_dir(helpers.file_path)
+    helpers.prepare_dir(helpers.Settings.file_path)
 
     if not wrapper.apktool.check_hash(output_path, apk_path):
         print("%s hash changed" % apk_path)
@@ -42,7 +43,7 @@ def main():
         wrapper.apktool.write_hash(output_path, apk_path)
 
     if not helpers.check_abi_support(output_path):
-        error("No supported ABIs found. Supported ABIs are [%s]." % ", ".join(helpers.supported_abi))
+        error("No supported ABIs found. Supported ABIs are [%s]." % ", ".join(helpers.Settings.supported_abi))
 
     if not prepare.support.disassemble_apk():
         error("Failed to disassemble support apk.")
@@ -64,6 +65,12 @@ def main():
 
     if not prepare.bootstrap.install_bootstrap(output_path):
         error("Failed to install %s" % prepare.bootstrap.bootstrap_file)
+
+    if not prepare.mono.install_mono(output_path):
+        error("Failed to install mono assemblies")
+
+    if not prepare.mono.install_mono_native(output_path):
+        error("Failed to install native mono assemblies")
 
 
 if __name__ == '__main__':

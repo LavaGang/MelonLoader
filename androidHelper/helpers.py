@@ -1,11 +1,34 @@
 import os
 import hashlib
+import json
 
-base_dir = os.path.dirname(os.path.realpath(__file__))
-file_path = os.path.join(base_dir, "build")
-bin_path = os.path.join(base_dir, "bin")
 
-supported_abi = ["arm64-v8a"]
+class Settings:
+    _config_read = False
+
+    _visual_studio_path = ""
+
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    file_path = os.path.join(base_dir, "build")
+    bin_path = os.path.join(base_dir, "bin")
+    supported_abi = ["arm64-v8a"]
+
+    @staticmethod
+    def visual_studio_path():
+        Settings.load_config()
+        return Settings._visual_studio_path
+
+
+    @staticmethod
+    def load_config():
+        if Settings._config_read:
+            return
+
+        with open(os.path.join(Settings.base_dir, "config.json")) as f:
+            data = json.load(f)
+
+        Settings._visual_studio_path = os.path.realpath(data['VisualStudioBase'])
+
 
 
 def error(message):
@@ -49,7 +72,7 @@ def check_abi_support(path):
     support_count = 0
 
     for abi in dest_dirs:
-        if abi in supported_abi:
+        if abi in Settings.supported_abi:
             support_count += 1
             continue
 
