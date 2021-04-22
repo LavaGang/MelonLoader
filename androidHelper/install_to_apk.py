@@ -25,6 +25,9 @@ def clean(path):
 
 
 def install_apk(apk_path):
+    if not validate_path(apk_path):
+        error("\"%s\" is not a file.")
+
     output_path = os.path.join(helpers.Settings.file_path, helpers.file_name(apk_path))
 
     if helpers.file_name(apk_path) == prepare.support.support_dirname:
@@ -82,6 +85,9 @@ def install_apk(apk_path):
 
     if not prepare.il2cpp_assembly_generation.install_il2cpp_gen(output_path):
         error("Failed to install il2cpp assembly generator")
+
+    if not wrapper.apktool.build(output_path, os.path.join(os.getcwd(), os.path.basename(apk_path))):
+        error("Failed to disassemble.")
 
 
 def main():

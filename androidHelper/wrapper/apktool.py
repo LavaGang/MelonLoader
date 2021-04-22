@@ -1,6 +1,5 @@
 import os
 import helpers
-
 apktool_path = os.path.join(helpers.Settings.bin_path, 'apktool.jar')
 
 
@@ -32,7 +31,6 @@ def check_hash(path, compressed_path):
 
 
 def apktool_run(command):
-    print(command)
     return os.system("java -jar -Duser.language=en -Dfile.encoding=UTF8 \"%s\" %s" % (apktool_path, command)) == 0
 
 
@@ -42,7 +40,6 @@ def decompile(path, output, force=False):
     if force:
         command = command + " -f"
 
-    print(command)
     return apktool_run(command)
 
 
