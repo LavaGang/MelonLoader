@@ -16,8 +16,11 @@ def clean():
 
 
 def disassemble_apk():
-    if not wrapper.apktool.decompile(support_apk_path, support_apk_dest, force=True):
-        return False
+    if not wrapper.apktool.check_hash(support_apk_dest, support_apk_path):
+        print("%s hash changed" % support_apk_path)
+        if not wrapper.apktool.decompile(support_apk_path, support_apk_dest, force=True):
+            return False
+        wrapper.apktool.write_hash(support_apk_dest, support_apk_path)
 
     return True
 

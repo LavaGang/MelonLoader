@@ -38,8 +38,11 @@ def main():
 
     helpers.prepare_dir(helpers.file_path)
 
-    if not os.path.isdir(output_path) and not wrapper.apktool.decompile(apk_path, output_path):
-        error("Failed to disassemble.")
+    if not wrapper.apktool.check_hash(output_path, apk_path):
+        print("%s hash changed" % apk_path)
+        if not wrapper.apktool.decompile(apk_path, output_path, force=True):
+            error("Failed to disassemble.")
+        wrapper.apktool.write_hash(output_path, apk_path)
 
     if not prepare.support.disassemble_apk():
         error("Failed to disassemble support apk.")
