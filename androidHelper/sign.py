@@ -2,6 +2,7 @@ import sys
 import os
 import helpers
 import wrapper.keytool
+import wrapper.apksigner
 
 keystore_path = os.path.join(helpers.Settings.file_path, "sign.jks")
 
@@ -16,7 +17,9 @@ def sign(apk_path):
             "static_sign", helpers.Settings.keystore_password(), keystore_path):
         helpers.error("Failed to generate keystore")
 
-    
+    if not wrapper.apksigner.sign_apk(apk_path, keystore_path, helpers.Settings.keystore_password()):
+        helpers.error("Failed to sign %s" % apk_path)
+
 
 def main():
     if len(sys.argv) != 2:
