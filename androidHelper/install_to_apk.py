@@ -7,6 +7,7 @@ import prepare.bootstrap
 import prepare.mono
 import prepare.unity
 import prepare.melonloader
+import prepare.support_module
 
 import helpers
 import wrapper.apktool
@@ -82,6 +83,9 @@ def main():
 
     if not prepare.melonloader.install_melonloader(output_path):
         error("Failed to install melonloader assembly")
+
+    if not prepare.support_module.install_support_modules(output_path):
+        error("Failed to install support modules")
 
 
 if __name__ == '__main__':

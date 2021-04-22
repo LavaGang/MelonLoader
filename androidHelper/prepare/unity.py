@@ -42,6 +42,7 @@ def install_unity_assemblies(path):
     managed_dir = os.path.join(helpers.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, "Managed")
     if not os.path.isdir(managed_dir):
         print("Cannot find unity managed dir %s" % managed_dir)
+        return False
 
     assemblies_path = os.path.join(path, "assets", "melonloader", "etc", "assembly_generation", "unity")
     helpers.prepare_dir(assemblies_path)
