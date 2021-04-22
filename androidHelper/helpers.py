@@ -7,6 +7,8 @@ class Settings:
     _config_read = False
 
     _visual_studio_path = ""
+    _unity_editor_path = ""
+    _unity_unstripped = False
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
     file_path = os.path.join(base_dir, "build")
@@ -18,6 +20,15 @@ class Settings:
         Settings.load_config()
         return Settings._visual_studio_path
 
+    @staticmethod
+    def unity_editor_path():
+        Settings.load_config()
+        return Settings._unity_editor_path
+
+    @staticmethod
+    def unity_unstripped():
+        Settings.load_config()
+        return Settings._unity_unstripped
 
     @staticmethod
     def load_config():
@@ -28,6 +39,10 @@ class Settings:
             data = json.load(f)
 
         Settings._visual_studio_path = os.path.realpath(data['VisualStudioBase'])
+        Settings._unity_editor_path = os.path.realpath(data['UnityEditorBase'])
+        Settings._unity_unstripped = data['UnityUnstripped']
+
+        Settings._config_read = True
 
 
 

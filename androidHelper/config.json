@@ -1,3 +1,5 @@
 {
-  "VisualStudioBase": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community"
+  "VisualStudioBase": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community",
+  "UnityEditorBase": "C:\\Program Files\\Unity\\Hub\\Editor",
+  "UnityUnstripped": true
 }

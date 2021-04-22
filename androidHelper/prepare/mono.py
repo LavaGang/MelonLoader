@@ -60,7 +60,6 @@ def install_mono_native(path):
     return abi_count > 0
 
 
-# TODO: Fix for multiple ABI
 def install_mono_abi(path, abi):
     mono_abi_dir = os.path.join(mono_native_assemblies_path, abi)
     dest_abi_dir = os.path.join(path, abi)
