@@ -1,6 +1,6 @@
 import os
 import helpers
-import java
+from . import java
 
 apktool_path = os.path.join(helpers.Settings.bin_path, 'apktool.jar')
 
@@ -33,16 +33,16 @@ def check_hash(path, compressed_path):
 
 
 def apktool_run(*command):
-    return java.java_run(apktool_path, *command) == 0
+    return java.java_run(apktool_path, *command).returncode == 0
 
 
 def decompile(path, output, force=False):
-    command = "d \"%s\" -o \"%s\"" % (path, output)
+    command = ["d", path, "-o", output]
 
     if force:
-        command = command + " -f"
+        command = command + ["-f"]
 
-    return apktool_run(command)
+    return apktool_run(*command)
 
 
 def build(path, output):

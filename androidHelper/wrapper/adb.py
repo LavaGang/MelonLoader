@@ -1,9 +1,10 @@
 import os
 import helpers
+import subprocess
 
 
-def adb_run(cmd):
-    return os.system("adb %s" % cmd)
+def adb_run(*cmd, capture_output=False):
+    return subprocess.run(["adb"] + list(cmd), capture_output=capture_output)
 
 
 def adb_shell(cmd):
@@ -28,6 +29,46 @@ def id_exists(id):
 def pull_apk(id):
     apk_name = "%s.apk" % id
     path = find_apk(id)
-    adb_run("pull \"%s\" \"%s\"" % (path, os.path.join(helpers.Settings.file_path, apk_name)))
+    adb_run("pull", path, os.path.join(helpers.Settings.file_path, apk_name))
 
     return apk_name
+
+
+def install_apk(apk_path, safe=True):
+    if not os.path.isfile(apk_path):
+        print("Cannot find file %s" % apk_path)
+        return False
+
+    res = adb_run("install", "-d", "-r", "-t", apk_path, capture_output=(not safe))
+    if safe:
+        return res.returncode == 0
+
+    if res.returncode == 0:
+        return True
+
+    token_start = b"Failure ["
+    msg = res.stderr
+    loc = msg.find(token_start) + len(token_start)
+    loc = msg.find(b" ", loc) + 1
+    start = msg.find(b" ", loc) + 1
+    end = msg.find(b" ", start)
+
+    package = msg[start:end].decode('utf-8')
+
+    if not id_exists(package):
+        print(msg.decode("utf-8"))
+        return False
+
+    if not uninstall_apk(package):
+        return False
+
+    return adb_run("install", "-d", "-r", "-t", apk_path).returncode == 0
+
+
+# TODO: add -k
+def uninstall_apk(id):
+    if not id_exists(id):
+        print("Package %s does not exist" % id)
+        return False
+
+    return adb_run("uninstall", id).returncode == 0

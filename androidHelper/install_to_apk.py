@@ -87,7 +87,7 @@ def install_apk(apk_path, build_output_path):
         error("Failed to install il2cpp assembly generator")
 
     if not wrapper.apktool.build(output_path, build_output_path):
-        error("Failed to disassemble.")
+        error("Failed to build.")
 
 
 def main():

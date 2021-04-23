@@ -1,4 +1,6 @@
 import install_to_apk
+import sign
+import deploy
 import wrapper.keytool
 import wrapper.adb
 import helpers
@@ -13,9 +15,10 @@ def full_install(id):
     apk_file = os.path.join(helpers.Settings.file_path, wrapper.adb.pull_apk(id))
     apk_file_modded = os.path.join(helpers.Settings.file_path, "%s-ml.apk" % helpers.file_name(apk_file))
 
-    # install_to_apk.install_apk(apk_file, apk_file_modded)
+    install_to_apk.install_apk(apk_file, apk_file_modded)
 
-    wrapper.keytool.keytool_generate(helpers.Settings.keystore_password())
+    sign.sign(apk_file_modded)
+    deploy.deploy_apk(apk_file_modded)
 
 
 def main():
