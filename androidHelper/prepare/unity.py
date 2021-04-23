@@ -14,17 +14,33 @@ def get_unity_version(path):
     if not os.path.isfile(res_file):
         return None
 
+    blank_count = 0
     version = b""
     with open(res_file, "rb") as file:
-        file.seek(0x30)
+        file.seek(0x0)
 
-        while True:
+        limit = 128
+        i = 0
+        while i < limit:
+            i += 1
             char = file.read(1)
 
             if int(char[0]) == 0x0:
-                break
+                blank_count += 1
 
-            version += char
+                if len(version) > 0:
+                    break
+
+            if blank_count < 4:
+                continue
+
+            if int(char[0]) == 0x35 or int(char[0]) == 0x32 or len(version) > 0:
+                version += char
+            elif int(char[0]) != 0x0:
+                blank_count = 0
+
+    if i >= limit:
+        return None
 
     return version.decode('utf-8')
 
@@ -35,8 +51,13 @@ def check_editor(path):
 
 
 def install_unity_assemblies(path):
+    version = get_unity_version(path)
+
     if not check_editor(path):
-        print("Failed to find editor %s" % path)
+        if version is not None:
+            print("Failed to find unity editor %s" % version)
+        else:
+            print("Failed to detect unity version for %s" % path)
         return False
 
     managed_dir = os.path.join(helpers.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, "Managed")
@@ -59,8 +80,13 @@ def install_unity_assemblies(path):
 
 
 def install_native_original_unity_assemblies(path):
+    version = get_unity_version(path)
+
     if not check_editor(path):
-        print("Failed to find editor %s" % path)
+        if version is not None:
+            print("Failed to find unity editor %s" % version)
+        else:
+            print("Failed to detect unity version for %s" % path)
         return False
 
     libs_dir = os.path.join(helpers.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, native_assemblies_dir)
@@ -76,7 +102,7 @@ def install_native_original_unity_assemblies(path):
             continue
 
         if abi not in libs_dir_sub:
-            print("WARNING: missing ABI %s in unity")
+            print("WARNING: missing ABI %s in unity" % abi)
             continue
 
         abi_dir = os.path.join(libs_dir, abi)

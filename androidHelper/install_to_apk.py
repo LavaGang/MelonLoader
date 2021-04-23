@@ -75,7 +75,7 @@ def install_apk(apk_path, build_output_path):
         error("Failed to install unity assemblies")
 
     if helpers.Settings.unity_unstripped() and not prepare.unity.install_native_original_unity_assemblies(output_path):
-        error("Failed to install unity unstripped native assemblies")
+        print("WARNING: Failed to install unstripped unity assemblies. Some engine code may not be available.")
 
     if not prepare.melonloader.install_melonloader(output_path):
         error("Failed to install melonloader assembly")

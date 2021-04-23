@@ -2,7 +2,9 @@ import os
 import helpers
 import mmap
 
-injection_target_path = os.path.join("smali", "com", "unity3d", "player", "UnityPlayer.smali")
+smali_directories = ["smali", "smali_assets", "smali_classes2"]
+
+injection_target_path = os.path.join("com", "unity3d", "player", "UnityPlayer.smali")
 tab_char = b"    "
 
 
@@ -18,21 +20,31 @@ def find_line_endings(s):
 
 
 def find_section(path, section_fn):
-    found_pos = -1
+    if isinstance(section_fn, list):
+        section_fns = section_fn
+    else:
+        section_fns = [section_fn]
 
     with open(path, 'rb', 0) as file:
         with mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ) as s:
-            line_endings = find_line_endings(s)
+            for func in section_fns:
+                s.seek(0)
+                line_endings = find_line_endings(s)
 
-            found_pos = s.find(section_fn)
-            s.seek(found_pos)
+                found_pos = s.find(func)
+                if found_pos == -1:
+                    continue
+                s.seek(found_pos)
 
-            local_pos = s.find(b".locals ")
-            s.seek(local_pos)
+                local_pos = s.find(b".locals ")
+                if found_pos == -1:
+                    continue
+                s.seek(local_pos)
 
-            found_pos = s.find(line_endings) + len(line_endings)
+                return s.find(line_endings) + len(line_endings)
 
-    return found_pos
+
+    return -1
 
 
 def get_injection_label(key, line_endings, end=False):
@@ -100,10 +112,23 @@ def write_injection(path, loc, key, code):
 
 
 def install_injection(path):
-    injection_target = os.path.join(path, injection_target_path)
+    injection_target = None
+    default_err = None
+    for sm_dir in smali_directories:
+        injection_target = os.path.join(path, sm_dir, injection_target_path)
 
-    if not os.path.isfile(injection_target):
-        helpers.error("Failed to find %s for injection." % injection_target)
+        if not os.path.isfile(injection_target):
+            if default_err is None:
+                default_err = "Failed to find %s for injection." % injection_target
+        else:
+            default_err = None
+            break
+
+    if default_err is not None:
+        helpers.error(default_err)
+
+    if injection_target is None:
+        helpers.error("Cannot find injection target")
 
     write_injection(
         injection_target,
@@ -116,7 +141,11 @@ def install_injection(path):
     write_injection(
         injection_target,
         find_section(injection_target,
-                     b".method public constructor <init>(Landroid/content/Context;Lcom/unity3d/player/IUnityPlayerLifecycleEvents;)V"),
+             [
+                 b".method public constructor <init>(Landroid/content/Context;Lcom/unity3d/player/IUnityPlayerLifecycleEvents;)V",
+                 b".method public constructor <init>(Landroid/content/Context;)V"
+             ]
+        ),
         b"CONTEXT LISTENER",
         b"invoke-static {p0}, Lcom/melonloader/ContextHelper;->DefineContext(Landroid/content/Context;)V"
     )
