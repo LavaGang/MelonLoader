@@ -86,7 +86,7 @@ def install_java(path):
         return False
 
     copy_sub_path_m(path, "smali")
-    copy_sub_path(path, "smali_classes2", "smali")
+    copy_sub_path_m(path, "smali_classes2")
 
     return True
 

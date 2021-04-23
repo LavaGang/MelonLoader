@@ -40,11 +40,14 @@ def install_apk(apk_path, safe=True):
         return False
 
     res = adb_run("install", "-d", "-r", "-t", apk_path, capture_output=(not safe))
-    if safe:
-        return res.returncode == 0
 
     if res.returncode == 0:
+        print(res.stdout.decode('utf-8'))
         return True
+
+    if safe:
+        print(res.stderr.decode('utf-8'))
+        return False
 
     token_start = b"Failure ["
     msg = res.stderr

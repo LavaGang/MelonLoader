@@ -147,7 +147,7 @@ def install_injection(path):
              ]
         ),
         b"CONTEXT LISTENER",
-        b"invoke-static {p0}, Lcom/melonloader/ContextHelper;->DefineContext(Landroid/content/Context;)V"
+        b"invoke-static {p1}, Lcom/melonloader/ContextHelper;->DefineContext(Landroid/content/Context;)V"
     )
 
     return True

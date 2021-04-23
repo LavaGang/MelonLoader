@@ -1,46 +1,98 @@
 import os
 import helpers
 import shutil
+import mmap
 
-unity_resources_file = os.path.join("assets", "bin", "Data", "unity default resources")
+
+unity_exception_label = b".method public final declared-synchronized uncaughtException"
+unity_class_file_prefixs = "abcdefghijklmnopqrstuvwxyz"
+unity_java_file_dir = os.path.join("com", "unity3d", "player")
+smali_directories = ["smali", "smali_assets", "smali_classes2"]
 il2cpp_base_dir = os.path.join("Editor", "Data", "PlaybackEngines", "AndroidPlayer", "Variations", "il2cpp")
 native_assemblies_dir = os.path.join("Release", "Libs")
 
 native_assemblies = ["libunity.so", "libmain.so"]
 
 
+class Cache:
+    unity_exception_file = None
+
+
+def is_unity_exception_file(smali_file):
+    with open(smali_file, "rb") as file:
+        with mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ) as s:
+            return s.find(unity_exception_label) != -1
+
+
+def get_exception_file(path):
+    if Cache.unity_exception_file is not None:
+        return Cache.unity_exception_file
+
+    for smali_dir in smali_directories:
+        unity_player_base_path = os.path.join(path, smali_dir, unity_java_file_dir)
+
+        if not os.path.isdir(unity_player_base_path):
+            continue
+
+        for letter in list(unity_class_file_prefixs):
+            smali_file = os.path.join(unity_player_base_path, letter + ".smali")
+
+            if not os.path.isfile(smali_file):
+                continue
+
+            if is_unity_exception_file(smali_file):
+                Cache.unity_exception_file = smali_file
+                return smali_file
+
+    return None
+
+
+def find_line_endings(s):
+    line_endings = b"\n"
+
+    s.seek(0)
+
+    if s.find(b"\r\n") >= 0:
+        line_endings = b"\r\n"
+
+    return line_endings
+
+
 def get_unity_version(path):
-    res_file = os.path.join(path, unity_resources_file)
+    res_file = get_exception_file(path)
     if not os.path.isfile(res_file):
         return None
 
-    blank_count = 0
-    version = b""
+    version_prefix = b"Unity version"
+
     with open(res_file, "rb") as file:
-        file.seek(0x0)
+        with mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ) as s:
+            s.seek(0)
+            line_endings = find_line_endings(s)
 
-        limit = 128
-        i = 0
-        while i < limit:
-            i += 1
-            char = file.read(1)
+            found_pos = s.find(version_prefix)
+            if found_pos == -1:
+                return None
+            s.seek(found_pos)
 
-            if int(char[0]) == 0x0:
-                blank_count += 1
+            found_pos = s.find(b"const-string")
+            if found_pos == -1:
+                return None
+            s.seek(found_pos)
 
-                if len(version) > 0:
-                    break
+            start_pos = s.find(b"\"")
+            if start_pos == -1:
+                return None
+            start_pos += 1
 
-            if blank_count < 4:
-                continue
+            s.seek(start_pos)
 
-            if int(char[0]) == 0x35 or int(char[0]) == 0x32 or len(version) > 0:
-                version += char
-            elif int(char[0]) != 0x0:
-                blank_count = 0
+            end_pos = s.find(b"\"")
+            if end_pos == -1:
+                return None
 
-    if i >= limit:
-        return None
+        file.seek(start_pos)
+        version = file.read(end_pos - start_pos)
 
     return version.decode('utf-8')
 
