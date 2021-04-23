@@ -12,13 +12,6 @@
 #include "../Utils/Console/Logger.h"
 #include "../Utils/Helpers/ImportLibHelper.h"
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/threads.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/mono-config.h>
-#include <mono/metadata/exception.h>
-#include <mono/utils/mono-dl-fallback.h>
-
 #ifdef __ANDROID__
 #include <dlfcn.h>
 #include <stdio.h>
@@ -92,6 +85,15 @@ MONODEF(mono_array_length)
 MONODEF(mono_metadata_string_heap)
 MONODEF(mono_class_get_name)
 
+MONODEF(mono_trace_set_level_string)
+MONODEF(mono_trace_set_mask_string)
+MONODEF(mono_trace_set_log_handler)
+MONODEF(mono_trace_set_print_handler)
+MONODEF(mono_trace_set_printerr_handler)
+MONODEF(mono_install_unhandled_exception_hook)
+MONODEF(mono_print_unhandled_exception)
+MONODEF(mono_dllmap_insert)
+
 #undef MONODEF
 #pragma endregion MonoDeclare
 
@@ -115,7 +117,6 @@ bool Mono::Initialize()
 
 bool Mono::Load()
 {
-#ifdef PORT_DISABLE
 	for (int i = 0; i < (sizeof(LibNames) / sizeof(LibNames[0])); i++)
 	{
 #ifdef _WIN32
@@ -140,7 +141,6 @@ bool Mono::Load()
 		Assertion::ThrowInternalFailure("Failed to Load Mono Library!");
 		return false;
 	}
-#endif
 
 #ifdef _WIN32
 	PosixHelper = LoadLibraryA((std::string(BasePath) + "\\" + Mono::PosixHelperName + ".dll").c_str());
@@ -155,13 +155,13 @@ bool Mono::Load()
 	}
 
 	//Logger::Msg((std::string(NativePath) + "/libmono-native.so").c_str());
-	void* libNative = dlopen("libmono-native.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
-
-	if (libNative == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Load libmono-native.so!");
-		return false;
-	}
+	// void* libNative = dlopen("libmono-native.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+	//
+	// if (libNative == NULL)
+	// {
+	// 	Assertion::ThrowInternalFailure("Failed to Load libmono-native.so!");
+	// 	return false;
+	// }
 
 	return Exports::Initialize();
 }
@@ -259,23 +259,18 @@ bool Mono::SetupPaths()
 
 		char* Paths[] = {
 			BasePath,
-			ManagedPath
+			ManagedPath,
+			ConfigPath
 		};
 
 		for (auto& path : Paths)
 		{
 			if (!Core::DirectoryExists(path))
 			{
-				Assertion::ThrowInternalFailure((std::string("Failed to load path (") + path + ") because it doesn't exist.").c_str());
+				Assertion::ThrowInternalFailure((std::string("Failed to load path (") + path + ") because it doesn't exist.  Please restart the game after it loads.").c_str());
+				Assertion::DontDie = true;
 				return false;
 			}
-		}
-
-		if (!Core::DirectoryExists(ConfigPath))
-		{
-			Assertion::ThrowInternalFailure((std::string("Failed to load path (") + ConfigPath + ") because it doesn't exist. Please restart the game after it loads.").c_str());
-			Assertion::DontDie = true;
-			return false;
 		}
 
 		// TODO: REMOVE
@@ -346,10 +341,9 @@ bool Mono::Exports::Initialize()
 	Debug::Msg("Initializing Mono Exports...");
 	
 #pragma region MonoBind
-#define MONODEF_FALLBACK(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
-#define MONODEF(fn) fn = (fn##_t) ::fn;
+#define MONODEF(fn) fn = (fn##_t) ImportLibHelper::GetExport(Module, #fn);
 
-	MONODEF(mono_jit_init)
+		MONODEF(mono_jit_init)
 		MONODEF(mono_thread_set_main)
 		MONODEF(mono_thread_current)
 		MONODEF(mono_add_internal_call)
@@ -366,6 +360,16 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_object_get_class)
 		MONODEF(mono_property_get_get_method)
 
+		MONODEF(mono_trace_set_level_string)
+		MONODEF(mono_trace_set_mask_string)
+		MONODEF(mono_trace_set_log_handler)
+		MONODEF(mono_trace_set_print_handler)
+		MONODEF(mono_trace_set_printerr_handler)
+		MONODEF(mono_install_unhandled_exception_hook)
+		MONODEF(mono_print_unhandled_exception)
+		MONODEF(mono_dllmap_insert)
+
+
 		if (!IsOldMono)
 		{
 			MONODEF(mono_domain_set_config)
@@ -373,7 +377,7 @@ bool Mono::Exports::Initialize()
 				MONODEF(mono_free)
 		}
 		else
-			MONODEF_FALLBACK(g_free)
+			MONODEF(g_free)
 
 			if (Game::IsIl2Cpp)
 			{
@@ -403,7 +407,6 @@ bool Mono::Exports::Initialize()
 				// mono_class_get_method_from_name = (mono_class_get_method_from_name_t)ImportLibHelper::GetInternalExport(Module, "mono_class_get_method_from_name", 0x00275ecc, 0x0026c770);
 #endif
 #undef MONODEF
-#undef MONODEF_FALLBACK
 #pragma endregion MonoBind
 
 	Debug::Msg("Binding Native Lib...");
@@ -418,7 +421,7 @@ bool Mono::Exports::Initialize()
 
 void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 {
-	Hooks::mono_unhandled_exception((MonoObject*)exceptionObject, NULL);
+	Hooks::mono_unhandled_exception((Object*)exceptionObject, NULL);
 }
 
 
@@ -429,16 +432,16 @@ bool Mono::ApplyPatches()
 
 	if (Debug::Enabled)
 	{
-		mono_trace_set_level_string("warning");
-		mono_trace_set_mask_string("all");
+		Exports::mono_trace_set_level_string("warning");
+		Exports::mono_trace_set_mask_string("all");
 		Debug::Msg("Enabled Mono Logging");
 	}
 	
-	mono_trace_set_log_handler(&Hooks::mono_log, NULL);
-	mono_trace_set_print_handler(&Hooks::mono_print);
-	mono_trace_set_printerr_handler(&Hooks::mono_printerr);
+	Exports::mono_trace_set_log_handler(&Hooks::mono_log, NULL);
+	Exports::mono_trace_set_print_handler(&Hooks::mono_print);
+	Exports::mono_trace_set_printerr_handler(&Hooks::mono_printerr);
 
-	mono_install_unhandled_exception_hook(&Hooks::mono_unhandled_exception, NULL);
+	Exports::mono_install_unhandled_exception_hook(&Hooks::mono_unhandled_exception, NULL);
 
 	Debug::Msg("Defined Mono Handlers");
 
@@ -507,12 +510,12 @@ void Mono::Hooks::mono_log(const char* log_domain, const char* log_level, const 
 	Logger::Internal_DirectWrite(Console::Color::Gray, fatal ? LogLevel::Error : LogLevel::Info, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), message);
 }
 
-void Mono::Hooks::mono_unhandled_exception(MonoObject* exceptionObject, void* user_data)
+void Mono::Hooks::mono_unhandled_exception(Object* exceptionObject, void* user_data)
 {
 	if (exceptionObject == NULL)
 		return;
 
-	mono_print_unhandled_exception(exceptionObject);
+	Exports::mono_print_unhandled_exception(exceptionObject);
 }
 
 #ifdef _WIN32

@@ -207,7 +207,7 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <CLanguageStandard>c11</CLanguageStandard>
-      <AdditionalIncludeDirectories>J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\funchook\include;J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\capstone\include;C:\Program Files\Mono\include\mono-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\funchook\include;J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\capstone\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>c11</CLanguageStandard> -->
     </ClCompile>
@@ -215,7 +215,7 @@
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\MSBuild\Xamarin\Android\lib\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <LibraryDependencies>c++_static;c++abi;log;android;m;MonoPosixHelper;monosgen-2.0</LibraryDependencies>
+      <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">

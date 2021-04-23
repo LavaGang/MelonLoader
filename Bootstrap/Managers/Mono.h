@@ -5,9 +5,6 @@
 #include <string.h>
 #endif
 
-#include <mono/utils/mono-logger.h>
-#include <mono/metadata/object-forward.h>
-
 class Mono
 {
 public:
@@ -39,20 +36,25 @@ public:
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 	static void Free(void* ptr);
 
+	typedef int32_t mono_bool;
+	typedef void (*MonoPrintCallback) (const char* string, mono_bool is_stdout);
+	typedef void (*MonoLogCallback) (const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data);
+	typedef void  (*MonoUnhandledExceptionFunc) (Object* exc, void* user_data);
+	
 #ifdef __ANDROID__
 	static bool ApplyPatches();
 #endif
 
 #pragma region ENUMS
-	typedef enum
+	using MonoImageOpenStatus = enum
 	{
 		MONO_IMAGE_OK,
 		MONO_IMAGE_ERROR_ERRNO,
 		MONO_IMAGE_MISSING_ASSEMBLYREF,
 		MONO_IMAGE_IMAGE_INVALID
-	} MonoImageOpenStatus;
+	};
 
-	typedef enum
+	using MonoMetaTableEnum = enum
 	{
 		MONO_TABLE_MODULE,
 		MONO_TABLE_TYPEREF,
@@ -120,7 +122,7 @@ public:
 
 #define MONO_TABLE_LAST MONO_TABLE_CUSTOMDEBUGINFORMATION
 #define MONO_TABLE_NUM (MONO_TABLE_LAST + 1)
-	} MonoMetaTableEnum;
+	};
 
 	enum
 	{
@@ -161,7 +163,7 @@ public:
 	};
 
 #pragma endregion ENUMS
-	
+
 	class Exports
 	{
 	public:
@@ -201,7 +203,8 @@ public:
 		MONODEF(const char*, mono_image_get_name, (Image* image))
 
 		MONODEF(Image*, mono_image_open_full, (const char* path, MonoImageOpenStatus* status, bool refonly))
-		MONODEF(Image*, mono_image_open_from_data_full, (const char* data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
+		MONODEF(Image*, mono_image_open_from_data_full,
+		        (const char* data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
 		MONODEF(void, mono_image_close, (Image* image))
 		MONODEF(int, mono_image_get_table_rows, (Image* image, int table_id))
 		MONODEF(unsigned int, mono_metadata_decode_table_row_col, (Image* image, int table, int idx, unsigned int col))
@@ -209,6 +212,15 @@ public:
 		MONODEF(uintptr_t, mono_array_length, (Object* array))
 		MONODEF(const char*, mono_metadata_string_heap, (Image* meta, unsigned int table_index))
 		MONODEF(const char*, mono_class_get_name, (Class* klass))
+
+		MONODEF(void, mono_trace_set_level_string, (const char* value))
+		MONODEF(void, mono_trace_set_mask_string, (const char* value))
+		MONODEF(void, mono_trace_set_log_handler, (MonoLogCallback callback, void* user_data))
+		MONODEF(void, mono_trace_set_print_handler, (MonoPrintCallback callback))
+		MONODEF(void, mono_trace_set_printerr_handler, (MonoPrintCallback callback))
+		MONODEF(void, mono_install_unhandled_exception_hook, (MonoUnhandledExceptionFunc func, void* user_data))
+		MONODEF(void, mono_print_unhandled_exception, (Object* exec))
+		MONODEF(void, mono_dllmap_insert, (Image* assembly, const char* dll, const char* func, const char* tdll, const char* tfunc))
 
 #undef MONODEF
 #pragma endregion MonoDefine
@@ -221,10 +233,11 @@ public:
 
 		static void mono_print(const char* string, mono_bool is_stdout);
 		static void mono_printerr(const char* string, mono_bool is_stdout);
-		static void mono_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data);
+		static void mono_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal,
+		                     void* user_data);
 
-		static void mono_unhandled_exception(MonoObject* exc, void* user_data);
-		
+		static void mono_unhandled_exception(Object* exc, void* user_data);
+
 #ifdef _WIN32
 		static Object* mono_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
 		static Domain * mono_jit_init_version(const char* name, const char* version);
