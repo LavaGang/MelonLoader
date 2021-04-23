@@ -3,7 +3,7 @@ import helpers
 import shutil
 
 bootstrap_file = "libBootstrap.so"
-bootstrap_build_dir = os.path.join(helpers.Settings.base_dir, "..", "Output", "ARM64", "Debug", "Bootstrap")
+bootstrap_build_dir = os.path.join(helpers.Settings.base_dir, "..", "Output", "Debug", "ARM64", "Bootstrap")
 
 
 def install_bootstrap(path):
