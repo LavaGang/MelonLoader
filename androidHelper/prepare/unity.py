@@ -1,5 +1,5 @@
 import os
-import helpers
+from helper import common
 import shutil
 import mmap
 
@@ -158,7 +158,7 @@ def get_unity_version(path):
 
 def check_editor(path):
     version = get_unity_version(path)
-    return os.path.isdir(os.path.join(helpers.Settings.unity_editor_path(), version))
+    return os.path.isdir(os.path.join(common.Settings.unity_editor_path(), version))
 
 
 def install_unity_assemblies(path):
@@ -171,13 +171,13 @@ def install_unity_assemblies(path):
             print("Failed to detect unity version for %s" % path)
         return False
 
-    managed_dir = os.path.join(helpers.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, "Managed")
+    managed_dir = os.path.join(common.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, "Managed")
     if not os.path.isdir(managed_dir):
         print("Cannot find unity managed dir %s" % managed_dir)
         return False
 
     assemblies_path = os.path.join(path, "assets", "melonloader", "etc", "assembly_generation", "unity")
-    helpers.prepare_dir(assemblies_path)
+    common.prepare_dir(assemblies_path)
     for path in os.listdir(managed_dir):
         if not os.path.isfile(os.path.join(managed_dir, path)):
             continue
@@ -200,7 +200,7 @@ def install_native_original_unity_assemblies(path):
             print("Failed to detect unity version for %s" % path)
         return False
 
-    libs_dir = os.path.join(helpers.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, native_assemblies_dir)
+    libs_dir = os.path.join(common.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, native_assemblies_dir)
     dest_dir = os.path.join(path, "lib")
 
     libs_dir_sub = os.listdir(libs_dir)
@@ -208,7 +208,7 @@ def install_native_original_unity_assemblies(path):
 
     abi_count = 0
 
-    for abi in helpers.Settings.supported_abi:
+    for abi in common.Settings.supported_abi:
         if abi not in dest_dir_sub:
             continue
 

@@ -10,10 +10,10 @@ import prepare.melonloader
 import prepare.support_module
 import prepare.il2cpp_assembly_generation
 
-import helpers
+from helper import common
 import wrapper.apktool
 
-from helpers import error as error
+from helper.common import error as error
 
 
 def validate_path(path):
@@ -28,12 +28,12 @@ def install_apk(apk_path, build_output_path):
     if not validate_path(apk_path):
         error("\"%s\" is not a file.")
 
-    output_path = os.path.join(helpers.Settings.file_path, helpers.file_name(apk_path))
+    output_path = os.path.join(common.Settings.file_path, common.file_name(apk_path))
 
-    if helpers.file_name(apk_path) == prepare.support.support_dirname:
-        error("apk cannot be named %s.apk" % (helpers.file_name(apk_path)))
+    if common.file_name(apk_path) == prepare.support.support_dirname:
+        error("apk cannot be named %s.apk" % (common.file_name(apk_path)))
 
-    helpers.prepare_dir(helpers.Settings.file_path)
+    common.prepare_dir(common.Settings.file_path)
 
     if not wrapper.apktool.check_hash(output_path, apk_path):
         print("%s hash changed" % apk_path)
@@ -41,8 +41,8 @@ def install_apk(apk_path, build_output_path):
             error("Failed to disassemble.")
         wrapper.apktool.write_hash(output_path, apk_path)
 
-    if not helpers.check_abi_support(output_path):
-        error("No supported ABIs found. Supported ABIs are [%s]." % ", ".join(helpers.Settings.supported_abi))
+    if not common.check_abi_support(output_path):
+        error("No supported ABIs found. Supported ABIs are [%s]." % ", ".join(common.Settings.supported_abi))
 
     if not prepare.support.disassemble_apk():
         error("Failed to disassemble support apk.")
@@ -74,7 +74,7 @@ def install_apk(apk_path, build_output_path):
     if not prepare.unity.install_unity_assemblies(output_path):
         error("Failed to install unity assemblies")
 
-    if helpers.Settings.unity_unstripped() and not prepare.unity.install_native_original_unity_assemblies(output_path):
+    if common.Settings.unity_unstripped() and not prepare.unity.install_native_original_unity_assemblies(output_path):
         print("WARNING: Failed to install unstripped unity assemblies. Some engine code may not be available.")
 
     if not prepare.melonloader.install_melonloader(output_path):
@@ -92,7 +92,7 @@ def install_apk(apk_path, build_output_path):
 
 def main():
     if len(sys.argv) != 2:
-        helpers.error("usage \"py %s <path to apk>\"" % os.path.basename(__file__))
+        common.error("usage \"py %s <path to apk>\"" % os.path.basename(__file__))
 
     apk_path = sys.argv[1]
     if not validate_path(apk_path):

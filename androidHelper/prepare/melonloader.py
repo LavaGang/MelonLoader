@@ -1,9 +1,9 @@
 import os
-import helpers
+from helper import common
 import shutil
 
 melonloader_file = "MelonLoader.dll"
-melonloader_build_dir = os.path.join(helpers.Settings.base_dir, "..", "Output", "Debug", "Android", "MelonLoader", "net35")
+melonloader_build_dir = os.path.join(common.Settings.base_dir, "..", "Output", "Debug", "Android", "MelonLoader", "net35")
 
 
 def install_melonloader(path):

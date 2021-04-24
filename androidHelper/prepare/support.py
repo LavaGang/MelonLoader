@@ -1,15 +1,14 @@
 import os
-import helpers
+from helper import common
 import wrapper.apktool
 import shutil
 import xml.etree.ElementTree as ET
-import pathlib
 import collections
 
 support_dirname = 'support'
 
-support_apk_path = os.path.join(helpers.Settings.base_dir, '..', 'APKBindings', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
-support_apk_dest = os.path.join(helpers.Settings.file_path, support_dirname)
+support_apk_path = os.path.join(common.Settings.base_dir, '..', 'APKBindings', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
+support_apk_dest = os.path.join(common.Settings.file_path, support_dirname)
 
 
 def clean():
@@ -190,7 +189,7 @@ def install_assets(path):
     if not os.path.isdir(os.path.join(support_apk_dest, "assets")):
         return True
 
-    helpers.prepare_dir(os.path.join(path, "assets"))
+    common.prepare_dir(os.path.join(path, "assets"))
 
     copy_sub_path_m(path, "assets")
 

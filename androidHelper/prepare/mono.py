@@ -1,9 +1,9 @@
 import os
-import helpers
+from helper import common
 import shutil
 
-mono_assemblies_path = os.path.join(helpers.Settings.visual_studio_path(), "Common7", "IDE", "ReferenceAssemblies", "Microsoft", "Framework", "MonoAndroid", "v1.0")
-mono_native_assemblies_path = os.path.join(helpers.Settings.visual_studio_path(), "MSBuild", "Xamarin", "Android", "lib")
+mono_assemblies_path = os.path.join(common.Settings.visual_studio_path(), "Common7", "IDE", "ReferenceAssemblies", "Microsoft", "Framework", "MonoAndroid", "v1.0")
+mono_native_assemblies_path = os.path.join(common.Settings.visual_studio_path(), "MSBuild", "Xamarin", "Android", "lib")
 
 # key value relationship so file can be renamed when copied
 # key is orignal name
@@ -21,7 +21,7 @@ def install_mono(path):
         return False
 
     assemblies_path = os.path.join(path, "assets", "melonloader", "etc", "managed")
-    helpers.prepare_dir(assemblies_path)
+    common.prepare_dir(assemblies_path)
 
     for path in os.listdir(mono_assemblies_path):
         if not os.path.isfile(os.path.join(mono_assemblies_path, path)):
@@ -46,7 +46,7 @@ def install_mono_native(path):
 
     abi_count = 0
 
-    for abi in helpers.Settings.supported_abi:
+    for abi in common.Settings.supported_abi:
         if abi not in dest_dirs:
             continue
 

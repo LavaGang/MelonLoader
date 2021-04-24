@@ -1,5 +1,5 @@
 import os
-import helpers
+from helper import common
 import subprocess
 
 
@@ -13,7 +13,7 @@ def adb_shell(cmd):
 
 def find_apk(id):
     if not id_exists(id):
-        helpers.error("%s is not a package" % id)
+        common.error("%s is not a package" % id)
 
     path = adb_shell("pm path %s" % id)
     path = path.removeprefix("package:").rstrip("\n\s")
@@ -29,7 +29,7 @@ def id_exists(id):
 def pull_apk(id):
     apk_name = "%s.apk" % id
     path = find_apk(id)
-    adb_run("pull", path, os.path.join(helpers.Settings.file_path, apk_name))
+    adb_run("pull", path, os.path.join(common.Settings.file_path, apk_name))
 
     return apk_name
 

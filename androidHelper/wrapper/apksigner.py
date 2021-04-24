@@ -1,8 +1,8 @@
 import os
-import helpers
+from helper import common
 from . import java
 
-apksigner_path = helpers.Settings.apksigner_path()
+apksigner_path = common.Settings.apksigner_path()
 
 
 def apksigner_run(*cmd):

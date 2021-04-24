@@ -1,16 +1,16 @@
 import os
-import helpers
+from helper import common
 import shutil
 
 bootstrap_file = "libBootstrap.so"
-bootstrap_build_dir = os.path.join(helpers.Settings.base_dir, "..", "Output", "Debug", "ARM64", "Bootstrap")
+bootstrap_build_dir = os.path.join(common.Settings.base_dir, "..", "Output", "Debug", "ARM64", "Bootstrap")
 
 
 def install_bootstrap(path):
     lib_dir = os.path.join(path, "lib")
     dest_dirs = os.listdir(lib_dir)
 
-    for abi in helpers.Settings.supported_abi:
+    for abi in common.Settings.supported_abi:
         if abi not in dest_dirs:
             continue
 

@@ -1,19 +1,19 @@
 import os
-import helpers
+from helper import common
 import shutil
 
 asm_gen_paths = [
-    os.path.join(helpers.Settings.base_dir, "..", "Output", "Debug", "AnyCPU", "MelonLoader", "Dependencies", "Il2CppAssemblyGenerator", "net4.7.2"),
-    os.path.join(helpers.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "AssemblyUnhollower.dll"),
-    os.path.join(helpers.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "Iced.dll"), # TODO: Remove
-    os.path.join(helpers.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerBaseLib", "bin", "Debug", "net4.7.2", "UnhollowerBaseLib.dll"),
-    os.path.join(helpers.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerRuntimeLib", "bin", "Debug", "net4.7.2", "UnhollowerRuntimeLib.dll")
+    os.path.join(common.Settings.base_dir, "..", "Output", "Debug", "AnyCPU", "MelonLoader", "Dependencies", "Il2CppAssemblyGenerator", "net4.7.2"),
+    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "AssemblyUnhollower.dll"),
+    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "Iced.dll"), # TODO: Remove
+    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerBaseLib", "bin", "Debug", "net4.7.2", "UnhollowerBaseLib.dll"),
+    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerRuntimeLib", "bin", "Debug", "net4.7.2", "UnhollowerRuntimeLib.dll")
 ]
 
 
 def install_il2cpp_gen(path):
     assemblies_path = os.path.join(path, "assets", "melonloader", "etc", "assembly_generation", "managed")
-    helpers.prepare_dir(assemblies_path)
+    common.prepare_dir(assemblies_path)
 
     for path in asm_gen_paths:
         if os.path.isdir(path):

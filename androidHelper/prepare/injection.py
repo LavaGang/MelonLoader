@@ -1,5 +1,5 @@
 import os
-import helpers
+from helper import common
 import mmap
 
 smali_directories = ["smali", "smali_assets", "smali_classes2"]
@@ -76,7 +76,7 @@ def find_injection(path, key, line_endings):
         return None
 
     if injection_start == -1 or injection_end == -1:
-        helpers.error("Injection in %s is missing a key")
+        common.error("Injection in %s is missing a key")
 
     return injection_start, injection_end + len(end_label)
 
@@ -125,10 +125,10 @@ def install_injection(path):
             break
 
     if default_err is not None:
-        helpers.error(default_err)
+        common.error(default_err)
 
     if injection_target is None:
-        helpers.error("Cannot find injection target")
+        common.error("Cannot find injection target")
 
     write_injection(
         injection_target,

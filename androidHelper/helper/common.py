@@ -14,8 +14,8 @@ class Settings:
     _apksigner_path = ""
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(base_dir, "build")
-    bin_path = os.path.join(base_dir, "bin")
+    file_path = os.path.join(base_dir, "../build")
+    bin_path = os.path.join(base_dir, "../bin")
     supported_abi = ["arm64-v8a"]
 
     @staticmethod
@@ -53,7 +53,7 @@ class Settings:
         if Settings._config_read:
             return
 
-        with open(os.path.join(Settings.base_dir, "config.json")) as f:
+        with open(os.path.join(Settings.base_dir, "../config.json")) as f:
             data = json.load(f)
 
         Settings._visual_studio_path = os.path.realpath(data['VisualStudioBase'])

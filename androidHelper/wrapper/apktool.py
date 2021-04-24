@@ -1,8 +1,8 @@
 import os
-import helpers
+from helper import common
 from . import java
 
-apktool_path = os.path.join(helpers.Settings.bin_path, 'apktool.jar')
+apktool_path = os.path.join(common.Settings.bin_path, 'apktool.jar')
 
 
 def write_hash(path, compressed_path):
@@ -12,7 +12,7 @@ def write_hash(path, compressed_path):
         return False
 
     with open(hash_path, "wb") as file:
-        file.write(helpers.hash_file(compressed_path))
+        file.write(common.hash_file(compressed_path))
 
     return True
 
@@ -24,12 +24,12 @@ def check_hash(path, compressed_path):
         return False
 
     if not os.path.isfile(hash_path):
-        helpers.error("%s is expected to be a hash file")
+        common.error("%s is expected to be a hash file")
 
     with open(hash_path, "rb") as file:
         contents = file.read()
 
-    return contents == helpers.hash_file(compressed_path)
+    return contents == common.hash_file(compressed_path)
 
 
 def apktool_run(*command):

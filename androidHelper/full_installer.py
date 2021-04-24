@@ -3,17 +3,17 @@ import sign
 import deploy
 import wrapper.keytool
 import wrapper.adb
-import helpers
+from helper import common
 import os
 import sys
 
 
 def full_install(id):
     if not wrapper.adb.id_exists(id):
-        helpers.error("Cannot find %s" % id)
+        common.error("Cannot find %s" % id)
 
-    apk_file = os.path.join(helpers.Settings.file_path, wrapper.adb.pull_apk(id))
-    apk_file_modded = os.path.join(helpers.Settings.file_path, "%s-ml.apk" % helpers.file_name(apk_file))
+    apk_file = os.path.join(common.Settings.file_path, wrapper.adb.pull_apk(id))
+    apk_file_modded = os.path.join(common.Settings.file_path, "%s-ml.apk" % common.file_name(apk_file))
 
     install_to_apk.install_apk(apk_file, apk_file_modded)
 
@@ -23,7 +23,7 @@ def full_install(id):
 
 def main():
     if len(sys.argv) != 2:
-        helpers.error("usage \"py %s <package name>\"" % os.path.basename(__file__))
+        common.error("usage \"py %s <package name>\"" % os.path.basename(__file__))
 
     full_install(sys.argv[1])
 

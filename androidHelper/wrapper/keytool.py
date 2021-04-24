@@ -1,8 +1,7 @@
-import os
-import helpers
+from helper import common
 import subprocess
 
-keytool_path = helpers.Settings.keytool_path()
+keytool_path = common.Settings.keytool_path()
 default_options = {
     "cn": "",
     "ou": "",

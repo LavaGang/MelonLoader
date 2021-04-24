@@ -1,8 +1,8 @@
 import os
-import helpers
+from helper import common
 import shutil
 
-support_module_dir = os.path.join(helpers.Settings.base_dir, "..", "Output", "Debug", "MelonLoader", "Dependencies", "SupportModules")
+support_module_dir = os.path.join(common.Settings.base_dir, "..", "Output", "Debug", "MelonLoader", "Dependencies", "SupportModules")
 
 
 def install_support_modules(path):
@@ -11,7 +11,7 @@ def install_support_modules(path):
         return False
 
     assemblies_path = os.path.join(path, "assets", "melonloader", "etc", "support")
-    helpers.prepare_dir(assemblies_path)
+    common.prepare_dir(assemblies_path)
     for path in os.listdir(support_module_dir):
         if not os.path.isfile(os.path.join(support_module_dir, path)):
             continue
