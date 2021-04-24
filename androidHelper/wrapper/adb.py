@@ -75,3 +75,19 @@ def uninstall_apk(id):
         return False
 
     return adb_run("uninstall", id).returncode == 0
+
+
+def stop_apk(id):
+    if not id_exists(id):
+        print("Package %s does not exist" % id)
+        return False
+
+    return adb_run("shell", "am", "force-stop", id)
+
+
+def start_apk(id):
+    if not id_exists(id):
+        print("Package %s does not exist" % id)
+        return False
+
+    return adb_run("shell", "am", "start", "-n", "%s/com.unity3d.player.UnityPlayerActivity" % id)
