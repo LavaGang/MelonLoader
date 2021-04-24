@@ -29,6 +29,7 @@
 #ifdef __ANDROID__
 #include <stdio.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include "../Managers/AndroidData.h"
 #endif
 
@@ -268,6 +269,19 @@ void Core::GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono:
 JavaVM* Core::Bootstrap = NULL;
 JNIEnv* Core::Env = NULL;
 
+void Core::ApplyHooks()
+{
+	// Debug::Msg("Patching il2cpp");
+	// Il2Cpp::ApplyPatches();
+	//
+	// Debug::Msg("Patching mono");
+	// Mono::ApplyPatches();
+	// Mono::CreateDomain("MelonLoader");
+	// InternalCalls::Initialize();
+	// AssemblyVerifier::InstallHooks();
+	// BaseAssembly::Initialize();
+}
+
 bool Core::DirectoryExists(const char* path)
 {
 	struct stat sb;
@@ -315,17 +329,10 @@ void Core::WelcomeMessage()
 	// Debug::Msg(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
 }
 
-void Core::ApplyHooks()
+void Core::KillCurrentProcess()
 {
-	// Debug::Msg("Patching il2cpp");
-	// Il2Cpp::ApplyPatches();
-	//
-	// Debug::Msg("Patching mono");
-	// Mono::ApplyPatches();
-	// Mono::CreateDomain("MelonLoader");
-	// InternalCalls::Initialize();
-	// AssemblyVerifier::InstallHooks();
-	// BaseAssembly::Initialize();
+	Logger::Error("Thread Core::KillCurrentProcess() invoked, killing process.");
+	pthread_kill(getpid(), SIGQUIT);
 }
 
 const char* Core::GetFileInfoProductName(const char* path)
@@ -349,6 +356,13 @@ const char* Core::GetOSVersion()
 bool Core::OSVersionCheck()
 {
 	return true;
+}
+
+extern "C" {
+	void Java_com_melonloader_Core_KillCurrentProcess(JNIEnv* env, jclass type)
+	{
+		Core::KillCurrentProcess();
+	}
 }
 
 #endif
