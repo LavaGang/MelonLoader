@@ -13,8 +13,6 @@ public class ContextHelper {
         ApplicationState.Context = context;
 
         LogBridge.msg("Application Context Defined");
-
-        AssemblyHelper.InstallAssemblies();
     }
 
     public static boolean CheckContext(String error) {

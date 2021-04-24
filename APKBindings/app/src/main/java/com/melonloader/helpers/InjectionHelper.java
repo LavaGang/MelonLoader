@@ -26,6 +26,7 @@ public class InjectionHelper {
     public static void Initialize(Context context)
     {
         ContextHelper.DefineContext(context);
+        AssemblyHelper.InstallAssemblies();
         Bootstrap.Initialize();
     }
 }
