@@ -22,9 +22,10 @@
 #include "../Managers/BaseAssembly.h"
 #include "../Managers/AssemblyVerifier.h"
 #include "../Managers/InternalCalls.h"
-#include "../Utils/UnitTesting/TestHelper.h"
 #include "../Patcher/Tests/Suite.spec.h"
 #include "../Utils/AssemblyUnhollower/XrefScannerBindings.h"
+#include "../Utils/Sequence.h"
+#include "../preprocess.h"
 
 #ifdef __ANDROID__
 #include <stdio.h>
@@ -40,13 +41,35 @@ const char* Core::Version = "v0.4.0";
 const char* Core::ReleaseType = "Android Development Build";
 bool Core::QuitFix = false;
 
-bool Core::Initialize()
+bool Core::Inject()
 {
-	UnitTesting::Test TestSequence[] = {
+	Sequence::Element Sequence[] = {
 		{
 			"Checking OS compatibility",
 			OSVersionCheck
 		},
+		{
+			"Initializing Console Handle",
+			Console::Initialize
+		},
+		{
+			"Initializing Logging Service",
+			Logger::Initialize
+		},
+	};
+	
+	return Sequence::Run(S_ARR(Sequence)) || Assertion::DontDie;
+}
+
+bool Core::Initialize()
+{
+	Sequence::Element Sequence[] = {
+#ifdef _WIN32
+		{
+			"Initializing Bare Functionality",
+			Inject
+		},
+#endif
 #ifdef __ANDROID__
 		{
 			"Initializing Android data",
@@ -66,14 +89,6 @@ bool Core::Initialize()
 			}
 		},
 #endif
-		{
-			"Initializing Console Handle",
-			Console::Initialize
-		},
-		{
-			"Initializing Logging Service",
-			Logger::Initialize
-		},
 		{
 			"Creates instance of patch map",
 			Game::ReadInfo
@@ -141,7 +156,7 @@ bool Core::Initialize()
 #endif
 	};
 
-	return UnitTesting::RunTests(TestSequence, sizeof(TestSequence) / sizeof(TestSequence[0])) || Assertion::DontDie;
+	return Sequence::Run(S_ARR(Sequence)) || Assertion::DontDie;
 }
 
 #ifdef _WIN32

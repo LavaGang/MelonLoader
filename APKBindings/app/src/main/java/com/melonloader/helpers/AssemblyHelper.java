@@ -1,7 +1,9 @@
-package com.melonloader;
+package com.melonloader.helpers;
 
-import android.content.ContextWrapper;
 import android.content.res.AssetManager;
+
+import com.melonloader.ApplicationState;
+import com.melonloader.LogBridge;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +27,8 @@ public class AssemblyHelper {
         LogBridge.msg("Installing Assemblies");
 
         new AssemblyHelper();
+
+        AssetManager am = ApplicationState.Context.getAssets();
 
         File path = ApplicationState.Context.getExternalFilesDir(null);
         return AssemblyHelper.instance.CopyAssetsTo(path);

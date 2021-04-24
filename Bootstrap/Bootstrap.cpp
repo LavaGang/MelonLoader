@@ -7,13 +7,12 @@ extern "C"
 	JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	{
 		Core::Bootstrap = vm;
-		JNIEnv* myNewEnv;
-		JavaVMAttachArgs args;
-		args.version = JNI_VERSION_1_6; // choose your JNI version
-		args.name = NULL; // you might want to give the java thread a name
-		args.group = NULL; // you might want to assign the java thread to a ThreadGroup
-		vm->AttachCurrentThread((JNIEnv**)&Core::Env, &args);
-		return (Core::Initialize() ? JNI_VERSION_1_6 : 0x0);
+		return (Core::Inject() ? JNI_VERSION_1_6 : 0x0);
+	}
+
+	jboolean Java_com_melonloader_Bootstrap_Initialize()
+	{
+		return (jboolean)Core::Initialize();
 	}
 }
 #endif

@@ -20,6 +20,9 @@ public:
 	static const char* Version;
 	static const char* ReleaseType;
 	static bool QuitFix;
+	// Android: Starts when application first loads. This means that some functionality wont be available until a context is created.
+	// Windows: Runs first during initialization
+	static bool Inject();
 	static bool Initialize();
 	static void ApplyHooks();
 	static bool DirectoryExists(const char* path);

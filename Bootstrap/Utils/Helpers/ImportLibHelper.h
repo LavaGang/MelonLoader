@@ -1,6 +1,8 @@
 #pragma once
 #ifdef _WIN32
 #include <Windows.h>
+#elif defined(__ANDROID__)
+#include <stdint.h>
 #endif
 class ImportLibHelper
 {

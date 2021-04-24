@@ -135,7 +135,7 @@ def install_injection(path):
         find_section(injection_target,
                      b".method static constructor <clinit>()V"),
         b"BOOTSTRAP",
-        b"invoke-static {}, Lcom/melonloader/InjectionHelper;->Inject()V"
+        b"invoke-static {}, Lcom/melonloader/helpers/InjectionHelper;->InjectBootstrap()V"
     )
 
     write_injection(
@@ -147,7 +147,7 @@ def install_injection(path):
              ]
         ),
         b"CONTEXT LISTENER",
-        b"invoke-static {p1}, Lcom/melonloader/ContextHelper;->DefineContext(Landroid/content/Context;)V"
+        b"invoke-static {p1}, Lcom/melonloader/helpers/InjectionHelper;->Initialize(Landroid/content/Context;)V"
     )
 
     return True

@@ -1,10 +1,9 @@
-package com.melonloader;
+package com.melonloader.helpers;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
-import com.melonloader.bridge.Assertion;
+import com.melonloader.ApplicationState;
+import com.melonloader.LogBridge;
 import com.melonloader.exceptions.MissingContext;
 
 public class ContextHelper {

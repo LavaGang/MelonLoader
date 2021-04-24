@@ -208,6 +208,8 @@
       </AdditionalOptions>
       <CLanguageStandard>c11</CLanguageStandard>
       <AdditionalIncludeDirectories>J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\funchook\include;J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\capstone\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>c11</CLanguageStandard> -->
     </ClCompile>
@@ -228,6 +230,8 @@
       <AdditionalOptions>
       </AdditionalOptions>
       <CLanguageStandard>c11</CLanguageStandard>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
       <!-- <CLanguageStandard>Default</CLanguageStandard> -->
     </ClCompile>
@@ -264,6 +268,7 @@
     <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
     <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Console\Logger.cpp" />
+    <ClCompile Include="Utils\Sequence.cpp" />
     <ClCompile Include="Utils\UnitTesting\TestHelper.cpp" />
     <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
   </ItemGroup>
@@ -289,7 +294,7 @@
     <ClInclude Include="Patcher\Tests\Suite.spec.h" />
     <ClInclude Include="Utils\Encoding.h" />
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
-    <ClInclude Include="pch.h" />
+    <ClInclude Include="preprocess.h" />
     <ClInclude Include="Base\Core.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h" />
     <ClInclude Include="Managers\BaseAssembly.h" />
@@ -309,6 +314,7 @@
     <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
     <ClInclude Include="Utils\IniFile.h" />
     <ClInclude Include="Utils\Console\Logger.h" />
+    <ClInclude Include="Utils\Sequence.h" />
     <ClInclude Include="Utils\UnitTesting\TestHelper.h" />
     <ClInclude Include="Utils\AssemblyUnhollower\XrefScannerBindings.h" />
   </ItemGroup>
