@@ -8,7 +8,7 @@ public class InjectionHelper {
         try {
             System.loadLibrary("Bootstrap");
         } catch (UnsatisfiedLinkError e) {
-            LogBridge.error("Failed to load \'libBootstrap.so\' - Perhaps its not in lib?");
+            LogBridge.error("Failed to load \"libBootstrap.so\" - Perhaps its not in lib?");
             throw e;
         }
 
