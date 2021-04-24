@@ -28,6 +28,7 @@ public:
 		static bool IsGameIl2Cpp();
 		static bool IsOldMono();
 		static Mono::String* GetApplicationPath();
+		static Mono::String* GetGamePackage();
 		static Mono::String* GetGameName();
 		static Mono::String* GetGameDeveloper();
 		static Mono::String* GetGameDirectory();

@@ -13,6 +13,7 @@ namespace MelonLoader
     {
         internal static void Setup()
         {
+            GamePackage = string.Copy(Internal_GetGamePackage());
             GameDeveloper = string.Copy(Internal_GetGameDeveloper());
             GameName = string.Copy(Internal_GetGameName());
             HashCode = string.Copy(Internal_GetHashCode());
@@ -28,6 +29,7 @@ namespace MelonLoader
         public static string GameDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
+        public static string GamePackage { get; private set; }
         public static string GameDeveloper { get; private set; }
         public static string GameName { get; private set; }
         public static bool IsVRChat { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("VRChat") && !string.IsNullOrEmpty(GameName) && GameName.Equals("VRChat")); }
@@ -150,7 +152,13 @@ namespace MelonLoader
         public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
-
+#if __ANDROID__
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string Internal_GetGamePackage();
+#else
+        private static string Internal_GetGamePackage() => null;
+#endif
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameName();
