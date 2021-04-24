@@ -14,6 +14,9 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#elif defined(__ANDROID__)
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 #endif
 
 char* Game::ApplicationPath = NULL;
@@ -164,7 +167,6 @@ void Game::ReadAppInfo()
 
 bool Game::ReadUnityVersion()
 {
-#if PORT_DISABLE
 	std::string version = ReadUnityVersionFromFileInfo();
 	if (version.empty() || (strstr(version.c_str(), ".") == NULL))
 		version = ReadUnityVersionFromGlobalGameManagers();
@@ -175,18 +177,19 @@ bool Game::ReadUnityVersion()
 		Assertion::ThrowInternalFailure("Failed to Read Unity Version from File Info or globalgamemanagers!");
 		return false;
 	}
+
 	UnityVersion = new char[version.size() + 1];
 	std::copy(version.begin(), version.end(), UnityVersion);
 	UnityVersion[version.size()] = '\0';
-#else 
-	UnityVersion = "2020.1.8f1";
-#endif
+
+	Debug::Msgf("Detected Unity %s", UnityVersion);
+
 	return true;
 }
 
 std::string Game::ReadUnityVersionFromFileInfo()
 {
-#ifdef PORT_DISABLE
+#ifdef _WIN32
 	const char* output = Core::GetFileInfoProductVersion(ApplicationPath);
 	if (output == NULL)
 		return std::string();
@@ -194,14 +197,15 @@ std::string Game::ReadUnityVersionFromFileInfo()
 	outputstr = outputstr.substr(0, outputstr.find_last_of('.'));
 	return outputstr;
 #else 
-	Assertion::ThrowInternalFailure("Not Implemented");
-	return "";
+	return std::string();
 #endif
 }
 
+// TODO: load asset manager globally
 std::string Game::ReadUnityVersionFromGlobalGameManagers()
 {
-#ifdef PORT_DISABLE
+#ifdef _WIN32
+#define STARTING_INDEX 22
 	std::string globalgamemanagerspath = std::string(DataPath) + "\\globalgamemanagers";
 	if (!Core::FileExists(globalgamemanagerspath.c_str()))
 		return std::string();
@@ -210,26 +214,54 @@ std::string Game::ReadUnityVersionFromGlobalGameManagers()
 		return std::string();
 	std::vector<char> filedata((std::istreambuf_iterator<char>(globalgamemanagersstream)), (std::istreambuf_iterator<char>()));
 	globalgamemanagersstream.close();
+#elif defined(__ANDROID__)
+#define STARTING_INDEX 0x14
+	jclass jCore = Core::Env->FindClass("com/melonloader/Core");
+	if (jCore == NULL)
+		return std::string();
+
+	jmethodID mid = Core::Env->GetStaticMethodID(jCore, "GetAssetManager", "()Landroid/content/res/AssetManager;");
+	if (mid == NULL)
+		return std::string();
+
+	jobject jAM = Core::Env->CallStaticObjectMethod(jCore, mid);
+	AAssetManager* am = AAssetManager_fromJava(Core::Env, jAM);
+	if (am == NULL)
+		return std::string();
+
+	AAsset* asset = AAssetManager_open(am, "bin/Data/globalgamemanagers", AASSET_MODE_BUFFER);
+	if (asset == NULL)
+		return std::string();
+	
+	const char* filedata = (const char*)AAsset_getBuffer(asset);
+	if (filedata == NULL)
+		return std::string();
+#endif
+
 	std::stringstream output;
-	int i = 22;
+	int i = STARTING_INDEX;
+#undef STARTING_INDEX
+	
 	while (filedata[i] != NULL)
 	{
 		char bit = filedata[i];
-		if (bit == 0x00)
+		if (bit == 0x00 || bit == 0x66)
 			break;
 		output << filedata[i];
 		i++;
 	}
-	return output.str();
-#else
-	Assertion::ThrowInternalFailure("Not Implemented");
-	return "";
+
+#ifdef __ANDROID__
+	AAsset_close(asset);
 #endif
+
+	return output.str();
 }
 
 std::string Game::ReadUnityVersionFromMainData()
 {
-#ifdef PORT_DISABLE
+#ifdef _WIN32
+#define STARTING_INDEX 20
 	std::string maindatapath = std::string(DataPath) + "\\mainData";
 	if (!Core::FileExists(maindatapath.c_str()))
 		return std::string();
@@ -238,19 +270,45 @@ std::string Game::ReadUnityVersionFromMainData()
 		return std::string();
 	std::vector<char> filedata((std::istreambuf_iterator<char>(maindatastream)), (std::istreambuf_iterator<char>()));
 	maindatastream.close();
+#elif defined(__ANDROID__)
+#define STARTING_INDEX 0x12
+	jclass jCore = Core::Env->FindClass("com/melonloader/Core");
+	if (jCore == NULL)
+		return std::string();
+
+	jmethodID mid = Core::Env->GetStaticMethodID(jCore, "GetAssetManager", "()Landroid/content/res/AssetManager;");
+	if (mid == NULL)
+		return std::string();
+
+	jobject jAM = Core::Env->CallStaticObjectMethod(jCore, mid);
+	AAssetManager* am = AAssetManager_fromJava(Core::Env, jAM);
+	if (am == NULL)
+		return std::string();
+
+	AAsset* asset = AAssetManager_open(am, "bin/Data/data.unity3d", AASSET_MODE_BUFFER);
+	if (asset == NULL)
+		return std::string();
+
+	const char* filedata = (const char*)AAsset_getBuffer(asset);
+	if (filedata == NULL)
+		return std::string();
+#endif
 	std::stringstream output;
-	int i = 20;
+	int i = STARTING_INDEX;
+#undef STARTING_INDEX
+	
 	while (filedata[i] != NULL)
 	{
 		char bit = filedata[i];
-		if (bit == 0x66)
+		if (bit == 0x0 || bit == 0x66)
 			break;
 		output << filedata[i];
 		i++;
 	}
-	return output.str();
-#else
-	Assertion::ThrowInternalFailure("Not Implemented");
-	return "";
+
+#ifdef __ANDROID__
+	AAsset_close(asset);
 #endif
+	
+	return output.str();
 }
