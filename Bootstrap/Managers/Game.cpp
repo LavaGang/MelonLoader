@@ -181,9 +181,16 @@ void Game::ReadAppInfo()
 	if (NameEnd == std::string::npos)
 		NameEnd = PackageStr.size();
 	
-	Developer = (char*)PackageStr.substr(DeveloperStart + 1, NameStart - DeveloperStart - 1).c_str();
-	Name = (char*)PackageStr.substr(NameStart + 1, NameEnd - NameStart).c_str();
-
+	std::string DeveloperStr = PackageStr.substr(DeveloperStart + 1, NameStart - DeveloperStart - 1);
+	Developer = new char[DeveloperStr.size() + 1];
+	std::copy(DeveloperStr.begin(), DeveloperStr.end(), Developer);
+	Developer[DeveloperStr.size()] = '\0';
+	
+	std::string NameStr = PackageStr.substr(NameStart + 1, NameEnd - NameStart);
+	Name = new char[NameStr.size() + 1];
+	std::copy(NameStr.begin(), NameStr.end(), Name);
+	Name[NameStr.size()] = '\0';
+	
 	Debug::Msgf("Developer: %s", Developer);
 	Debug::Msgf("Name:      %s", Name);
 #endif
