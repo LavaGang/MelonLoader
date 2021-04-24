@@ -256,23 +256,6 @@ bool Mono::SetupPaths()
 		std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 		ConfigPath[ConfigPathStr.size()] = '\0';
 
-
-		char* Paths[] = {
-			BasePath,
-			ManagedPath,
-			ConfigPath
-		};
-
-		for (auto& path : Paths)
-		{
-			if (!Core::DirectoryExists(path))
-			{
-				Assertion::ThrowInternalFailure((std::string("Failed to load path (") + path + ") because it doesn't exist.  Please restart the game after it loads.").c_str());
-				Assertion::DontDie = true;
-				return false;
-			}
-		}
-
 		// TODO: REMOVE
 		std::string BaseAsmPathStr = (BasePathStr + "/MelonLoader.dll").c_str();
 		BaseAssembly::PathMono = new char[BaseAsmPathStr.size() + 1];
@@ -448,6 +431,26 @@ bool Mono::ApplyPatches()
 	// Patches::mono_unity_get_unitytls_interface = new Patcher((void**)&Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
 
 	// Patches::mono_unity_get_unitytls_interface->ApplyPatch();
+
+	return true;
+}
+
+bool Mono::CheckPaths()
+{
+	char* Paths[] = {
+		BasePath,
+		ManagedPath,
+		ConfigPath
+	};
+
+	for (auto& path : Paths)
+	{
+		if (!Core::DirectoryExists(path))
+		{
+			Logger::Errorf("Failed to load path (%s) because it doesn't exist.  Please restart the game after it loads.", path);
+			return false;
+		}
+	}
 
 	return true;
 }

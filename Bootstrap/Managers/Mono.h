@@ -43,6 +43,7 @@ public:
 	
 #ifdef __ANDROID__
 	static bool ApplyPatches();
+	static bool CheckPaths();
 #endif
 
 #pragma region ENUMS

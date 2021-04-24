@@ -163,6 +163,12 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 {
 	// if (!Debug::Enabled)
 		// Console::SetHandles();
+
+	if (!Mono::CheckPaths())
+	{
+		Logger::Error("Skipping initialization of MelonLoader");
+		goto exit_early;	
+	}
 	
 	// if (AssemblyGenerator::Initialize())
 	// {
@@ -182,6 +188,7 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 
 	domain = Exports::il2cpp_init(name);
 
+	exit_early:	
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	Hook::Detach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
 	
