@@ -18,6 +18,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Windows</Platform>
     <ProjectGuid>{F9700790-414B-431B-9F9C-1D9210FAD682}</ProjectGuid>
     <ProductVersion>0.3.1</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
