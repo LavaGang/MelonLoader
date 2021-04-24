@@ -3,6 +3,8 @@ import helpers
 import wrapper.apktool
 import shutil
 import xml.etree.ElementTree as ET
+import pathlib
+import collections
 
 support_dirname = 'support'
 
@@ -81,12 +83,86 @@ def copy_sub_path(dest_dir, source, dest):
     shutil.copytree(source, dest, dirs_exist_ok=True)
 
 
+# basically figure out when to start merging smali folders
+# dont want to cause an issue where it constantly is creating new smali folders
+# so it also checks for the first merge directory
+def get_starting_class_i(path):
+    if not os.path.isdir(path):
+        return False
+
+    ls_dir = os.listdir(path)
+    prefix = "smali_classes"
+    smali_dirs = []
+
+    first_classes = os.walk(os.path.join(support_apk_dest, "smali"))
+    first_classes = list(first_classes)
+
+    s_cls = {}
+
+    count = 0
+
+    i = 0
+    for root, sub_path, files in list(first_classes):
+        s_cls[root.lstrip(os.path.join(support_apk_dest, "smali"))] = collections.Counter(files)
+        count += len(files)
+        i += 1
+
+    i = 1
+
+    for sm_path in ls_dir:
+        sm_path_full = os.path.join(path, sm_path)
+        if not os.path.isdir(sm_path_full):
+            continue
+
+        if not sm_path.startswith(prefix) and sm_path != "smali":
+            continue
+
+        hit = 0
+        sm_classes = os.walk(sm_path_full)
+
+        for root, _, files in list(sm_classes):
+            key = root.lstrip(sm_path_full)
+            if key not in s_cls:
+                continue
+
+            overlap = list((s_cls[key] & collections.Counter(files)).elements())
+            hit += len(overlap)
+
+        if hit == count or hit > 10:
+            break
+
+        i += 1
+
+    return i
+
+
 def install_java(path):
     if not os.path.isdir(path):
         return False
 
-    copy_sub_path_m(path, "smali")
-    copy_sub_path_m(path, "smali_classes2")
+    let_starting_index = get_starting_class_i(path)
+
+    ls_dir = os.listdir(support_apk_dest)
+    prefix = "smali_classes"
+
+    found_dirs = []
+
+    for sm_path in ls_dir:
+        if not os.path.isdir(os.path.join(support_apk_dest, path)):
+            continue
+
+        if not sm_path.startswith(prefix) and sm_path != "smali":
+            continue
+
+        found_dirs.append(sm_path)
+
+    found_dirs = sorted(found_dirs)
+    for dir in found_dirs:
+        if let_starting_index == 1:
+            copy_sub_path(path, dir, "smali")
+        else:
+            copy_sub_path(path, dir, "smali_classes" + str(let_starting_index))
+        let_starting_index += 1
 
     return True
 
