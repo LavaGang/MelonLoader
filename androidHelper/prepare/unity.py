@@ -10,6 +10,8 @@ unity_java_file_dir = os.path.join("com", "unity3d", "player")
 smali_directories = ["smali", "smali_assets", "smali_classes2"]
 il2cpp_base_dir = os.path.join("Editor", "Data", "PlaybackEngines", "AndroidPlayer", "Variations", "il2cpp")
 native_assemblies_dir = os.path.join("Release", "Libs")
+unity_globalgamemanager = os.path.join("assets", "bin", "Data", "globalgamemanagers")
+unity_maindata = os.path.join("assets", "bin", "Data", "data.unity3d")
 
 native_assemblies = ["libunity.so", "libmain.so"]
 
@@ -58,7 +60,7 @@ def find_line_endings(s):
     return line_endings
 
 
-def get_unity_version(path):
+def get_unity_version_fallback(path):
     res_file = get_exception_file(path)
     if not os.path.isfile(res_file):
         return None
@@ -95,6 +97,63 @@ def get_unity_version(path):
         version = file.read(end_pos - start_pos)
 
     return version.decode('utf-8')
+
+
+def get_unity_version_globalgamemanager(path):
+    gm_path = os.path.join(path, unity_globalgamemanager)
+    if not os.path.isfile(gm_path):
+        return None
+
+    buffer = b""
+    with open(gm_path, "rb") as file:
+        file.seek(0x14)
+
+        while True:
+            char = file.read(1)
+
+            if int(char[0]) == 0x0:
+                break
+
+            buffer += char
+
+    return buffer.decode("utf-8")
+
+
+def get_unity_version_maindata(path):
+    maindata_path = os.path.join(path, unity_maindata)
+    if not os.path.isfile(maindata_path):
+        return None
+
+    buffer = b""
+    with open(maindata_path, "rb") as file:
+        file.seek(0x12)
+
+        while True:
+            char = file.read(1)
+
+            if int(char[0]) == 0x0:
+                break
+
+            buffer += char
+
+    return buffer.decode("utf-8")
+
+
+def get_unity_version(path):
+    unity_version = get_unity_version_globalgamemanager(path)
+    if unity_version is not None:
+        return unity_version
+
+    unity_version = get_unity_version_maindata(path)
+    if unity_version is not None:
+        return unity_version
+
+    unity_version = get_unity_version_fallback(path)
+    if unity_version is not None:
+        return unity_version
+
+    print("Cannot find unity version")
+    return None
 
 
 def check_editor(path):
