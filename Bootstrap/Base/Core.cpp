@@ -90,7 +90,7 @@ bool Core::Initialize()
 		},
 #endif
 		{
-			"Creates instance of patch map",
+			"Reading Game Info",
 			Game::ReadInfo
 		},
 #ifdef PORT_DISABLE

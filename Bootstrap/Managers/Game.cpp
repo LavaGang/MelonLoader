@@ -25,6 +25,7 @@ char* Game::DataPath = NULL;
 char* Game::ApplicationPathMono = NULL;
 char* Game::BasePathMono = NULL;
 char* Game::DataPathMono = NULL;
+char* Game::Package = NULL;
 char* Game::Developer = NULL;
 char* Game::Name = NULL;
 char* Game::UnityVersion = NULL;
@@ -159,9 +160,32 @@ void Game::ReadAppInfo()
 	appinfofile.close();
 	FirstRun = false;
 	Console::SetDefaultTitleWithGameName();
-#else
-	Developer = "SirCoolness";
-	Name = "PlaygroundQuestGame";
+#elif defined(__ANDROID__)
+	size_t AppNameLen = strlen(AndroidData::AppName);
+	Package = (char*)malloc(AppNameLen + 1);
+	memcpy(Package, AndroidData::AppName, AppNameLen);
+	Package[AppNameLen] = '\0';
+
+	Debug::Msgf("Package:   %s", Package);
+
+	std::string PackageStr = std::string(Package);
+	size_t DeveloperStart = PackageStr.find('.');
+	if (DeveloperStart == std::string::npos)
+		return;
+
+	size_t NameStart = PackageStr.find('.', DeveloperStart + 1);
+	if (NameStart == std::string::npos)
+		return;
+
+	size_t NameEnd = PackageStr.find('.', NameStart + 1);
+	if (NameEnd == std::string::npos)
+		NameEnd = PackageStr.size();
+	
+	Developer = (char*)PackageStr.substr(DeveloperStart + 1, NameStart - DeveloperStart - 1).c_str();
+	Name = (char*)PackageStr.substr(NameStart + 1, NameEnd - NameStart).c_str();
+
+	Debug::Msgf("Developer: %s", Developer);
+	Debug::Msgf("Name:      %s", Name);
 #endif
 }
 
@@ -182,7 +206,7 @@ bool Game::ReadUnityVersion()
 	std::copy(version.begin(), version.end(), UnityVersion);
 	UnityVersion[version.size()] = '\0';
 
-	Debug::Msgf("Detected Unity %s", UnityVersion);
+	Debug::Msgf("Unity:     %s", UnityVersion);
 
 	return true;
 }
