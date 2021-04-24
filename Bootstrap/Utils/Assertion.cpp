@@ -50,3 +50,25 @@ void Assertion::ThrowInternalFailure(const char* msg)
 	Logger::Internal_DirectWrite(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
 #endif
 }
+
+#ifdef __ANDROID__
+#include <jni.h>
+extern "C" {
+	jboolean Java_com_melonloader_bridge_Assertion_getShouldContinue(JNIEnv* env, jclass type) {
+		return (jboolean)Assertion::ShouldContinue;
+	}
+
+	jboolean Java_com_melonloader_bridge_Assertion_getDontDie(JNIEnv* env, jclass type) {
+		return (jboolean)Assertion::DontDie;
+	}
+
+	void Java_com_melonloader_bridge_Assertion_ThrowInternalFailure(JNIEnv* env, jclass type, jstring msg)
+	{
+		const char* cMsg = env->GetStringUTFChars(msg, nullptr);
+
+		Assertion::ThrowInternalFailure(cMsg);
+
+		env->ReleaseStringUTFChars(msg, cMsg);
+	}
+}
+#endif
