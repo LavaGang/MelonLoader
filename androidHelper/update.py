@@ -14,6 +14,7 @@ import prepare.unity
 import prepare.melonloader
 import prepare.support_module
 import prepare.il2cpp_assembly_generation
+from variants import paths
 
 keystore_path = os.path.join(common.Settings.file_path, "sign.jks")
 
@@ -53,7 +54,7 @@ def update(output_path):
         common.error("Failed to inject into java")
 
     if not prepare.bootstrap.install_bootstrap(output_path):
-        common.error("Failed to install %s" % prepare.bootstrap.bootstrap_file)
+        common.error("Failed to install %s" % paths.Paths.bootstrap_file)
 
     if not prepare.mono.install_mono(output_path):
         common.error("Failed to install mono assemblies")

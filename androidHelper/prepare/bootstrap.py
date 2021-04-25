@@ -1,9 +1,7 @@
 import os
 from helper import common
 import shutil
-
-bootstrap_file = "libBootstrap.so"
-bootstrap_build_dir = os.path.join(common.Settings.base_dir, "..", "Output", "Debug", "ARM64", "Bootstrap")
+from variants import paths
 
 
 def install_bootstrap(path):
@@ -21,4 +19,4 @@ def install_bootstrap(path):
 
 # TODO: Fix for multiple ABI
 def install_bootstrap_abi(path, abi):
-    shutil.copyfile(os.path.join(bootstrap_build_dir, bootstrap_file), os.path.join(path, abi, bootstrap_file))
+    shutil.copyfile(os.path.join(paths.Paths.bootstrap_build_dir, paths.Paths.bootstrap_file), os.path.join(path, abi, paths.Paths.bootstrap_file))

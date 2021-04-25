@@ -9,6 +9,7 @@ import prepare.unity
 import prepare.melonloader
 import prepare.support_module
 import prepare.il2cpp_assembly_generation
+from variants import paths
 
 from helper import common
 import wrapper.apktool
@@ -30,7 +31,7 @@ def install_apk(apk_path, build_output_path):
 
     output_path = os.path.join(common.Settings.file_path, common.file_name(apk_path))
 
-    if common.file_name(apk_path) == prepare.support.support_dirname:
+    if common.file_name(apk_path) == paths.Paths.support_dirname:
         error("apk cannot be named %s.apk" % (common.file_name(apk_path)))
 
     common.prepare_dir(common.Settings.file_path)
@@ -63,7 +64,7 @@ def install_apk(apk_path, build_output_path):
         error("Failed to inject into java")
 
     if not prepare.bootstrap.install_bootstrap(output_path):
-        error("Failed to install %s" % prepare.bootstrap.bootstrap_file)
+        error("Failed to install %s" % paths.Paths.bootstrap_file)
 
     if not prepare.mono.install_mono(output_path):
         error("Failed to install mono assemblies")

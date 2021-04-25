@@ -2,18 +2,10 @@ import os
 from helper import common
 import shutil
 import mmap
-
+from variants import paths
 
 unity_exception_label = b".method public final declared-synchronized uncaughtException"
 unity_class_file_prefixs = "abcdefghijklmnopqrstuvwxyz"
-unity_java_file_dir = os.path.join("com", "unity3d", "player")
-smali_directories = ["smali", "smali_assets", "smali_classes2"]
-il2cpp_base_dir = os.path.join("Editor", "Data", "PlaybackEngines", "AndroidPlayer", "Variations", "il2cpp")
-native_assemblies_dir = os.path.join("Release", "Libs")
-unity_globalgamemanager = os.path.join("assets", "bin", "Data", "globalgamemanagers")
-unity_maindata = os.path.join("assets", "bin", "Data", "data.unity3d")
-
-native_assemblies = ["libunity.so", "libmain.so"]
 
 
 class Cache:
@@ -30,8 +22,8 @@ def get_exception_file(path):
     if Cache.unity_exception_file is not None:
         return Cache.unity_exception_file
 
-    for smali_dir in smali_directories:
-        unity_player_base_path = os.path.join(path, smali_dir, unity_java_file_dir)
+    for smali_dir in common.get_smali_dirs(path):
+        unity_player_base_path = os.path.join(path, smali_dir, paths.Paths.unity_java_file_dir)
 
         if not os.path.isdir(unity_player_base_path):
             continue
@@ -100,7 +92,7 @@ def get_unity_version_fallback(path):
 
 
 def get_unity_version_globalgamemanager(path):
-    gm_path = os.path.join(path, unity_globalgamemanager)
+    gm_path = os.path.join(path, paths.Paths.unity_globalgamemanager)
     if not os.path.isfile(gm_path):
         return None
 
@@ -120,7 +112,7 @@ def get_unity_version_globalgamemanager(path):
 
 
 def get_unity_version_maindata(path):
-    maindata_path = os.path.join(path, unity_maindata)
+    maindata_path = os.path.join(path, paths.Paths.unity_maindata)
     if not os.path.isfile(maindata_path):
         return None
 
@@ -171,21 +163,22 @@ def install_unity_assemblies(path):
             print("Failed to detect unity version for %s" % path)
         return False
 
-    managed_dir = os.path.join(common.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, "Managed")
+    managed_dir = os.path.join(common.Settings.unity_editor_path(), get_unity_version(path), paths.Paths.unity_il2cpp_base_dir, "Managed")
     if not os.path.isdir(managed_dir):
         print("Cannot find unity managed dir %s" % managed_dir)
         return False
 
-    assemblies_path = os.path.join(path, "assets", "melonloader", "etc", "assembly_generation", "unity")
+    assemblies_path = os.path.join(path, paths.Paths.unity_assemblies_dest)
     common.prepare_dir(assemblies_path)
-    for path in os.listdir(managed_dir):
-        if not os.path.isfile(os.path.join(managed_dir, path)):
+    for m_path in os.listdir(managed_dir):
+        f_path = os.path.join(managed_dir, m_path)
+        if not os.path.isfile(f_path):
             continue
 
-        if not path.endswith(".dll"):
+        if not m_path.endswith(".dll"):
             continue
 
-        shutil.copyfile(os.path.join(managed_dir, path), os.path.join(assemblies_path, path))
+        shutil.copyfile(f_path, os.path.join(assemblies_path, m_path))
 
     return True
 
@@ -200,7 +193,7 @@ def install_native_original_unity_assemblies(path):
             print("Failed to detect unity version for %s" % path)
         return False
 
-    libs_dir = os.path.join(common.Settings.unity_editor_path(), get_unity_version(path), il2cpp_base_dir, native_assemblies_dir)
+    libs_dir = os.path.join(common.Settings.unity_editor_path(), get_unity_version(path), paths.Paths.unity_il2cpp_base_dir, paths.Paths.unity_native_assemblies_dir)
     dest_dir = os.path.join(path, "lib")
 
     libs_dir_sub = os.listdir(libs_dir)
@@ -230,5 +223,5 @@ def install_unity_abi(src, path, abi):
     unity_abi_dir = os.path.join(src, abi)
     dest_abi_dir = os.path.join(path, abi)
 
-    for value in native_assemblies:
+    for value in paths.Paths.unity_native_assemblies:
         shutil.copyfile(os.path.join(unity_abi_dir, value), os.path.join(dest_abi_dir, value))

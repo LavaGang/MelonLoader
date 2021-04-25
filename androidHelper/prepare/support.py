@@ -4,24 +4,20 @@ import wrapper.apktool
 import shutil
 import xml.etree.ElementTree as ET
 import collections
-
-support_dirname = 'support'
-
-support_apk_path = os.path.join(common.Settings.base_dir, '..', 'APKBindings', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
-support_apk_dest = os.path.join(common.Settings.file_path, support_dirname)
+from variants import paths
 
 
 def clean():
-    if os.path.exists(support_apk_dest):
-        os.remove(support_apk_dest)
+    if os.path.exists(paths.Paths.support_apk_dest):
+        os.remove(paths.Paths.support_apk_dest)
 
 
 def disassemble_apk():
-    if not wrapper.apktool.check_hash(support_apk_dest, support_apk_path):
-        print("%s hash changed" % support_apk_path)
-        if not wrapper.apktool.decompile(support_apk_path, support_apk_dest, force=True):
+    if not wrapper.apktool.check_hash(paths.Paths.support_apk_dest, paths.Paths.support_apk_path):
+        print("%s hash changed" % paths.Paths.support_apk_path)
+        if not wrapper.apktool.decompile(paths.Paths.support_apk_path, paths.Paths.support_apk_dest, force=True):
             return False
-        wrapper.apktool.write_hash(support_apk_dest, support_apk_path)
+        wrapper.apktool.write_hash(paths.Paths.support_apk_dest, paths.Paths.support_apk_path)
 
     return True
 
@@ -72,7 +68,7 @@ def copy_sub_path_m(dest_dir, mutual_path):
 
 
 def copy_sub_path(dest_dir, source, dest):
-    source = os.path.join(support_apk_dest, source)
+    source = os.path.join(paths.Paths.support_apk_dest, source)
     dest = os.path.join(dest_dir, dest)
 
     if not os.path.isdir(source):
@@ -93,7 +89,7 @@ def get_starting_class_i(path):
     prefix = "smali_classes"
     smali_dirs = []
 
-    first_classes = os.walk(os.path.join(support_apk_dest, "smali"))
+    first_classes = os.walk(os.path.join(paths.Paths.support_apk_dest, "smali"))
     first_classes = list(first_classes)
 
     s_cls = {}
@@ -102,7 +98,7 @@ def get_starting_class_i(path):
 
     i = 0
     for root, sub_path, files in list(first_classes):
-        s_cls[root.lstrip(os.path.join(support_apk_dest, "smali"))] = collections.Counter(files)
+        s_cls[root.lstrip(os.path.join(paths.Paths.support_apk_dest, "smali"))] = collections.Counter(files)
         count += len(files)
         i += 1
 
@@ -141,13 +137,13 @@ def install_java(path):
 
     let_starting_index = get_starting_class_i(path)
 
-    ls_dir = os.listdir(support_apk_dest)
+    ls_dir = os.listdir(paths.Paths.support_apk_dest)
     prefix = "smali_classes"
 
     found_dirs = []
 
     for sm_path in ls_dir:
-        if not os.path.isdir(os.path.join(support_apk_dest, path)):
+        if not os.path.isdir(os.path.join(paths.Paths.support_apk_dest, path)):
             continue
 
         if not sm_path.startswith(prefix) and sm_path != "smali":
@@ -172,7 +168,7 @@ def install_native(path):
 
     copy_paths = []
 
-    source_dirs = os.listdir(os.path.join(support_apk_dest, "lib"))
+    source_dirs = os.listdir(os.path.join(paths.Paths.support_apk_dest, "lib"))
     dest_dirs = os.listdir(os.path.join(path, "lib"))
 
     for dir in dest_dirs:
@@ -186,7 +182,7 @@ def install_native(path):
 
 
 def install_assets(path):
-    if not os.path.isdir(os.path.join(support_apk_dest, "assets")):
+    if not os.path.isdir(os.path.join(paths.Paths.support_apk_dest, "assets")):
         return True
 
     common.prepare_dir(os.path.join(path, "assets"))
@@ -202,7 +198,7 @@ def install_permissions(path):
 
     dest_perms_file = os.path.join(path, "AndroidManifest.xml")
 
-    source_perms = get_permissions(os.path.join(support_apk_dest, "AndroidManifest.xml"))
+    source_perms = get_permissions(os.path.join(paths.Paths.support_apk_dest, "AndroidManifest.xml"))
     dest_perms = get_permissions(dest_perms_file)
 
     if source_perms is None or dest_perms is None:

@@ -1,21 +1,14 @@
 import os
 from helper import common
 import shutil
-
-asm_gen_paths = [
-    os.path.join(common.Settings.base_dir, "..", "Output", "Debug", "AnyCPU", "MelonLoader", "Dependencies", "Il2CppAssemblyGenerator", "net4.7.2"),
-    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "AssemblyUnhollower.dll"),
-    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "Iced.dll"), # TODO: Remove
-    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerBaseLib", "bin", "Debug", "net4.7.2", "UnhollowerBaseLib.dll"),
-    os.path.join(common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerRuntimeLib", "bin", "Debug", "net4.7.2", "UnhollowerRuntimeLib.dll")
-]
+from variants import paths
 
 
 def install_il2cpp_gen(path):
-    assemblies_path = os.path.join(path, "assets", "melonloader", "etc", "assembly_generation", "managed")
+    assemblies_path = os.path.join(path, paths.Paths.il2cpp_gen_assemblies_path)
     common.prepare_dir(assemblies_path)
 
-    for path in asm_gen_paths:
+    for path in paths.Paths.il2cpp_gen_asm_paths:
         if os.path.isdir(path):
             install_asm_dir(assemblies_path, path)
         elif os.path.isfile(path):

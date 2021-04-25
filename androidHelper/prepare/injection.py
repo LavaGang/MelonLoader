@@ -1,10 +1,8 @@
 import os
 from helper import common
 import mmap
+from variants import paths
 
-smali_directories = ["smali", "smali_assets", "smali_classes2"]
-
-injection_target_path = os.path.join("com", "unity3d", "player", "UnityPlayer.smali")
 tab_char = b"    "
 
 
@@ -42,7 +40,6 @@ def find_section(path, section_fn):
                 s.seek(local_pos)
 
                 return s.find(line_endings) + len(line_endings)
-
 
     return -1
 
@@ -114,8 +111,8 @@ def write_injection(path, loc, key, code):
 def install_injection(path):
     injection_target = None
     default_err = None
-    for sm_dir in smali_directories:
-        injection_target = os.path.join(path, sm_dir, injection_target_path)
+    for sm_dir in common.get_smali_dirs(path):
+        injection_target = os.path.join(path, sm_dir, paths.Paths.injection_target_path)
 
         if not os.path.isfile(injection_target):
             if default_err is None:

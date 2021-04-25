@@ -115,3 +115,13 @@ def check_abi_support(path):
         print("WARNING: unsupported abi %s" % abi)
 
     return support_count > 0
+
+
+def get_smali_dirs(path):
+    out = []
+
+    for item in os.listdir(path):
+        if item == "smali" or item.startswith("smali_classes"):
+            out.append(item)
+
+    return out

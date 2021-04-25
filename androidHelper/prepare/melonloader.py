@@ -1,13 +1,11 @@
 import os
 from helper import common
 import shutil
-
-melonloader_file = "MelonLoader.dll"
-melonloader_build_dir = os.path.join(common.Settings.base_dir, "..", "Output", "Debug", "Android", "MelonLoader", "net35")
+from variants import paths
 
 
 def install_melonloader(path):
-    asm = os.path.join(melonloader_build_dir, melonloader_file)
+    asm = os.path.join(paths.Paths.melonloader_build_dir, paths.Paths.melonloader_file)
 
     if not os.path.exists(asm):
         print("Cannot find %s" % asm)
@@ -17,5 +15,5 @@ def install_melonloader(path):
         print("%s is not a file" % asm)
         return False
 
-    shutil.copyfile(asm, os.path.join(path, "assets", "melonloader", "etc", melonloader_file))
+    shutil.copyfile(asm, os.path.join(path, paths.Paths.melonloader_dest, paths.Paths.melonloader_file))
     return True
