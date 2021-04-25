@@ -99,7 +99,7 @@ def main():
     if not validate_path(apk_path):
         error("\"%s\" is not a file.")
 
-    install_apk(os.path.realpath(apk_path), os.path.join(os.getcwd(), os.path.basename(apk_path)))
+    install_apk(os.path.realpath(apk_path), os.path.join(os.getcwd(), common.file_name(apk_path) + "-ml.apk"))
 
 
 if __name__ == '__main__':
