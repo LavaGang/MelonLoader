@@ -4,6 +4,7 @@ import helper.common
 import json
 import glob
 import shutil
+import zipfile
 from helper import common
 
 import prepare.support
@@ -28,6 +29,10 @@ glob_pattern = [
 ]
 
 assemblies_base_dir = os.path.join(output_dir, "bin", "precompiled")
+
+
+def zip_content():
+    shutil.make_archive(os.path.join(os.getcwd(), "melonloader-android"), 'zip', root_dir=output_dir, base_dir=".")
 
 
 def copy_binaries():
@@ -76,6 +81,8 @@ def copy_binaries():
 
 
 def main():
+    shutil.rmtree(output_dir)
+
     # get all tools
     m_save_map = []
     for el in save_map:
@@ -132,6 +139,9 @@ def main():
 
     copy_binaries()
     shutil.copyfile(os.path.join(common.Settings.base_dir, "Readme.md"), os.path.join(output_dir, "Readme.md"))
+
+    print("Zipping up")
+    zip_content()
 
 
 if __name__ == '__main__':

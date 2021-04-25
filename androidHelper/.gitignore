@@ -140,3 +140,4 @@ cython_debug/
 build/
 
 !variants/release/
+melonloader-android.zip
