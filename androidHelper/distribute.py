@@ -131,6 +131,7 @@ def main():
         f.write(buffer)
 
     copy_binaries()
+    shutil.copyfile(os.path.join(common.Settings.base_dir, "Readme.md"), os.path.join(output_dir, "Readme.md"))
 
 
 if __name__ == '__main__':
