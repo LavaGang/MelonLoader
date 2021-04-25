@@ -133,7 +133,7 @@ def main():
     with open(os.path.join(output_dir, "variants", "__init__.py"), "r") as f:
         buffer = f.read()
 
-    buffer = buffer.replace(" dev ", " release ")
+    buffer = buffer.replace(" .dev ", " .release ")
 
     with open(os.path.join(output_dir, "variants", "__init__.py"), "w") as f:
         f.write(buffer)
