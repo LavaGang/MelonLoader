@@ -11,7 +11,7 @@ default_options = {
 
 
 def keytool_run(*args):
-    return subprocess.run([keytool_path] + list(args)) == 0
+    return subprocess.run([keytool_path] + list(args)).returncode == 0
 
 
 def keytool_generate(label, password, output, dname=None, validity=10000):
@@ -33,7 +33,7 @@ def keytool_generate(label, password, output, dname=None, validity=10000):
         "-keysize",
         "2048",
         "-validity",
-        validity,
+        str(validity),
         "-dname",
         "cn=%s, ou=%s, o=%s, c=%s" % (dname["cn"], dname["ou"], dname["o"], dname["c"])
     ) == 0

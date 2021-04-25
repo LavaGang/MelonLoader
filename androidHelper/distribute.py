@@ -20,8 +20,6 @@ from variants import paths
 save_map = helper.get_tools.default_save_map + [
     (os.path.join(helper.common.Settings.bin_path, os.path.basename(helper.common.Settings.apksigner_path())),
      helper.common.Settings.apksigner_path(), "ApkSignerPath"),
-    (os.path.join(helper.common.Settings.bin_path, os.path.basename(helper.common.Settings.keytool_path())),
-     helper.common.Settings.keytool_path(), "KeytoolPath"),
 ]
 
 output_dir = os.path.join(helper.common.Settings.file_path, "dist")
@@ -50,22 +48,13 @@ def copy_binaries():
         if not os.path.isdir(path):
             os.makedirs(path)
 
-    paths.Paths.il2cpp_gen_assemblies_path = os.path.join("runtime", "assembly_generation", "managed")
+    paths.Paths.il2cpp_gen_assemblies_path = os.path.join("runtime", "assembly_generation")
     paths.Paths.melonloader_dest = os.path.join("runtime")
-    paths.Paths.mono_assemblies_target = os.path.join("runtime", "managed")
+    paths.Paths.mono_assemblies_target = os.path.join("runtime", "managed", "mono")
     paths.Paths.support_module_dest = os.path.join("runtime", "support")
 
-    # TODO: extract to correct dir
-    if not prepare.support.install_java(java_dir):
-        common.error("Failed to install java code from support code.")
-
-    if not prepare.support.install_native(java_dir):
-        common.error("Failed to install native code from support code.")
-
-    shutil.copyfile(os.path.join(paths.Paths.support_apk_dest, "AndroidManifest.xml"), os.path.join(java_dir, "AndroidManifest.xml"))
-
-    if not prepare.support.install_assets(java_dir):
-        common.error("Failed to install assets")
+    shutil.copyfile(paths.Paths.support_apk_path, os.path.join(assemblies_base_dir, os.path.basename(paths.Paths.support_apk_path)))
+    shutil.move(os.path.join(assemblies_base_dir, os.path.basename(paths.Paths.support_apk_path)), os.path.join(assemblies_base_dir, "apk_extensions.apk"))
 
     if not prepare.bootstrap.install_bootstrap(assemblies_base_dir):
         common.error("Failed to install %s" % paths.Paths.bootstrap_file)
@@ -118,7 +107,7 @@ def main():
         json.dump(config, f, indent=4)
 
     # copy python files
-    found_files = glob.glob("**/[!build]*.py") + glob.glob("*.py") + glob.glob("variants/release/**/*.py")
+    found_files = glob.glob("**/*.py") + glob.glob("*.py") + glob.glob("variants/release/*.py")
     for file in found_files:
         if not os.path.isdir(os.path.dirname(os.path.join(output_dir, file))):
             os.makedirs(os.path.dirname(os.path.join(output_dir, file)))
@@ -128,6 +117,9 @@ def main():
         rem = glob.glob(pattern)
         for file in rem:
             os.remove(os.path.join(output_dir, file))
+
+    if os.path.isdir(os.path.join(output_dir, "dist")):
+        shutil.rmtree(os.path.join(output_dir, "dist"))
 
     # fix variants
     with open(os.path.join(output_dir, "variants", "__init__.py"), "r") as f:
