@@ -26,5 +26,6 @@ android {
 }
 
 dependencies {
+    implementation "androidx.core:core-ktx:+"
     implementation fileTree(dir: 'libs', include: ['*.aar'])
 }

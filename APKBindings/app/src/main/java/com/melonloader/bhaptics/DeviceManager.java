@@ -1,5 +1,13 @@
 package com.melonloader.bhaptics;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
+
 import com.bhaptics.bhapticsmanger.BhapticsManager;
 import com.bhaptics.bhapticsmanger.BhapticsManagerCallback;
 import com.bhaptics.bhapticsmanger.BhapticsModule;
@@ -43,7 +51,7 @@ public class DeviceManager {
         manager.addBhapticsManageCallback(new BhapticsManagerCallback() {
             @Override
             public void onDeviceUpdate(List<BhapticsDevice> list) {
-                onDeviceUpdate_native((BhapticsDevice[]) list.toArray());
+                onDeviceUpdate_native(list.toArray());
             }
 
             @Override
@@ -70,7 +78,44 @@ public class DeviceManager {
         PlayerWrapper.AddPlayerCallback();
     }
 
-    public static native void onDeviceUpdate_native(BhapticsDevice[] devices);
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void onResume() {
+        if (ApplicationState.Context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            LogBridge.error("onResume: permission ACCESS_FINE_LOCATION");
+            ActivityCompat.requestPermissions(ApplicationState.Activity,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
+        } else {
+            manager.scan();
+        }
+
+//        if (!hasPermissions(ApplicationState.Activity.getApplicationContext(),
+//                Manifest.permission.READ_EXTERNAL_STORAGE,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//            ActivityCompat.requestPermissions(ApplicationState.Activity,
+//                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,},
+//                    1);
+//        }
+//
+//        LogBridge.msg("Complete");
+    }
+
+    public static void onDestroy() {
+        BhapticsModule.destroy();
+    }
+    
+    public static native void onDeviceUpdate_native(Object[] devices);
 
     public static native void onScanStatusChange_native(boolean b);
 

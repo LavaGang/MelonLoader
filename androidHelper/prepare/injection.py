@@ -17,7 +17,7 @@ def find_line_endings(s):
     return line_endings
 
 
-def find_section(path, section_fn):
+def find_section(path, section_fn, after_super=False):
     if isinstance(section_fn, list):
         section_fns = section_fn
     else:
@@ -35,9 +35,15 @@ def find_section(path, section_fn):
                 s.seek(found_pos)
 
                 local_pos = s.find(b".locals ")
-                if found_pos == -1:
+                if local_pos == -1:
                     continue
                 s.seek(local_pos)
+
+                if after_super:
+                    super_pos = s.find(b"invoke-super ")
+                    if super_pos == -1:
+                        continue
+                    s.seek(super_pos)
 
                 return s.find(line_endings) + len(line_endings)
 
@@ -83,7 +89,7 @@ def cleanup_injection_s(contents, current_injection):
 
     return b"".join(
         [contents[:start],
-         contents[-(len(contents)-end):]])
+         contents[-(len(contents) - end):]])
 
 
 def write_injection(path, loc, key, code):
@@ -121,6 +127,8 @@ def install_injection(path):
             default_err = None
             break
 
+    activity_target = os.path.join(os.path.dirname(injection_target), "UnityPlayerActivity.smali")
+
     if default_err is not None:
         common.error(default_err)
 
@@ -138,14 +146,81 @@ def install_injection(path):
     write_injection(
         injection_target,
         find_section(injection_target,
-             [
-                 b".method public constructor <init>(Landroid/content/Context;Lcom/unity3d/player/IUnityPlayerLifecycleEvents;)V",
-                 b".method public constructor <init>(Landroid/content/Context;)V"
-             ]
-        ),
+                     [
+                         b".method public constructor <init>(Landroid/content/Context;Lcom/unity3d/player/IUnityPlayerLifecycleEvents;)V",
+                         b".method public constructor <init>(Landroid/content/Context;)V"
+                     ]
+                     ),
         b"CONTEXT LISTENER",
         b"invoke-static {p1}, Lcom/melonloader/helpers/InjectionHelper;->Initialize(Landroid/content/Context;)V"
     )
 
-    return True
+    write_injection(
+        activity_target,
+        find_section(activity_target,
+                     b".method public onConfigurationChanged(Landroid/content/res/Configuration;)V",
+                     after_super=True
+                     ),
+        b"onConfigurationChanged",
+        b"invoke-static {p0, p1}, Lcom/melonloader/helpers/ActivityHelper;->onConfigurationChanged(Landroid/app/Activity;Landroid/content/res/Configuration;)V"
+    )
 
+    write_injection(
+        activity_target,
+        find_section(activity_target,
+                     b".method protected onCreate(Landroid/os/Bundle;)V",
+                     after_super=True
+                     ),
+        b"onCreate",
+        b"invoke-static {p0, p1}, Lcom/melonloader/helpers/ActivityHelper;->onCreate(Landroid/app/Activity;Landroid/os/Bundle;)V"
+    )
+
+    write_injection(
+        activity_target,
+        find_section(activity_target,
+                     b".method protected onDestroy()V"
+                     ),
+        b"onDestroy",
+        b"invoke-static {p0}, Lcom/melonloader/helpers/ActivityHelper;->onDestroy(Landroid/app/Activity;)V"
+    )
+
+    write_injection(
+        activity_target,
+        find_section(activity_target,
+                     b".method protected onNewIntent(Landroid/content/Intent;)V"
+                     ),
+        b"onNewIntent",
+        b"invoke-static {p0, p1}, Lcom/melonloader/helpers/ActivityHelper;->onNewIntent(Landroid/app/Activity;Landroid/content/Intent;)V"
+    )
+
+    write_injection(
+        activity_target,
+        find_section(activity_target,
+                     b".method protected onPause()V",
+                     after_super=True
+                     ),
+        b"onPause",
+        b"invoke-static {p0}, Lcom/melonloader/helpers/ActivityHelper;->onPause(Landroid/app/Activity;)V"
+    )
+
+    write_injection(
+        activity_target,
+        find_section(activity_target,
+                     b".method protected onResume()V",
+                     after_super=True
+                     ),
+        b"onResume",
+        b"invoke-static {p0}, Lcom/melonloader/helpers/ActivityHelper;->onResume(Landroid/app/Activity;)V"
+    )
+
+    write_injection(
+        activity_target,
+        find_section(activity_target,
+                     b".method public onWindowFocusChanged(Z)V",
+                     after_super=True
+                     ),
+        b"onWindowFocusChanged",
+        b"invoke-static {p0, p1}, Lcom/melonloader/helpers/ActivityHelper;->onWindowFocusChanged(Landroid/app/Activity;Z)V"
+    )
+
+    return True
