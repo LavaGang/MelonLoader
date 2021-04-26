@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader
@@ -202,5 +203,8 @@ namespace MelonLoader
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
             public int[] values;
         };
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void TestDotArray([MarshalAs(UnmanagedType.LPStr)] string key, [MarshalAs(UnmanagedType.LPStr)] string position, int[] indexes, int index_len, int[] intensities, int intensity_len, int duration);
     }
 }
