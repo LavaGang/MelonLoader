@@ -12,6 +12,7 @@
 #include "stdlib.h"
 #include "../Utils/AssemblyUnhollower/XrefScannerBindings.h"
 #include <android/log.h>
+#include "bHapticsPlayer.h"
 
 
 #include <dlfcn.h>
@@ -24,6 +25,7 @@ void InternalCalls::Initialize()
     MelonDebug::AddInternalCalls();
     SupportModules::AddInternalCalls();
     UnhollowerIl2Cpp::AddInternalCalls();
+    BHaptics::AddInternalCalls();
 }
 
 #pragma region MelonLogger
@@ -230,5 +232,24 @@ void* InternalCalls::UnhollowerIl2Cpp::GetAsmLoc()
 void InternalCalls::UnhollowerIl2Cpp::CleanupDisasm()
 {
     Debug::Msg("CleanupDisasm not implemented");
+}
+#pragma endregion
+
+#pragma region bHaptics
+void InternalCalls::BHaptics::AddInternalCalls()
+{
+    Mono::AddInternalCall("MelonLoader.bHaptics::TestDotArray", (void*)TestDotArray);
+}
+
+void InternalCalls::BHaptics::TestDotArray(Mono::String* key, Mono::String* position, int* indexes, size_t indexes_len, int* intensity, size_t intensity_len, int duration)
+{
+    Debug::Msg("Native Test");
+    char* cKey = Mono::Exports::mono_string_to_utf8(key);
+    char* cPosition = Mono::Exports::mono_string_to_utf8(position);
+
+    bHapticsPlayer::Core::SubmitDotArray(cKey, cPosition, indexes, indexes_len, intensity, intensity_len, duration);
+
+    Mono::Free(cKey);
+    Mono::Free(cPosition);
 }
 #pragma endregion

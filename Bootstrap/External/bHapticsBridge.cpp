@@ -1,4 +1,3 @@
-#include "bHapticsBridge.h"
 #include <jni.h>
 #include "../Utils/Console/Debug.h"
 
@@ -21,6 +20,7 @@ extern "C" {
 	{
 		Debug::Msgf("bHaptics: onChangeResponse");
 	}
+	
 	void Java_com_melonloader_bhaptics_DeviceManager_onConnect_1native(JNIEnv* env, jclass type, jstring s)
 	{
 		const char* cMsg = env->GetStringUTFChars(s, nullptr);

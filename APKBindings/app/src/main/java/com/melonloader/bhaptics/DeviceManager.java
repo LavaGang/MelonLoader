@@ -19,7 +19,7 @@ import com.melonloader.LogBridge;
 import java.util.List;
 
 public class DeviceManager {
-    private static boolean isStarted = false;
+    public static boolean isStarted = false;
     public static BhapticsManager manager;
     public static HapticPlayer player;
 
@@ -30,8 +30,7 @@ public class DeviceManager {
         if (!ApplicationState.ContextDefined)
             throw new Exception("Cannot start device manager! Missing Context.");
 
-        if (isStarted)
-        {
+        if (isStarted) {
             LogBridge.warning("DeviceManager.start() was blocked because already running.");
             return;
         }
@@ -46,12 +45,12 @@ public class DeviceManager {
         isStarted = true;
     }
 
-    private static void applyCallbacks()
-    {
+    private static void applyCallbacks() {
         manager.addBhapticsManageCallback(new BhapticsManagerCallback() {
             @Override
             public void onDeviceUpdate(List<BhapticsDevice> list) {
                 onDeviceUpdate_native(list.toArray());
+                PairDevices(list);
             }
 
             @Override
@@ -111,10 +110,21 @@ public class DeviceManager {
 //        LogBridge.msg("Complete");
     }
 
+    public static void PairDevices(List<BhapticsDevice> devices)
+    {
+        for (BhapticsDevice device: devices) {
+            if (device.isPaired())
+                continue;
+
+            LogBridge.msg("Pairing " + device.getAddress());
+            manager.pair(device.getAddress());
+        }
+    }
+
     public static void onDestroy() {
         BhapticsModule.destroy();
     }
-    
+
     public static native void onDeviceUpdate_native(Object[] devices);
 
     public static native void onScanStatusChange_native(boolean b);

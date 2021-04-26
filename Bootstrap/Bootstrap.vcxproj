@@ -243,6 +243,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Managers\bHapticsPlayer.cpp" />
     <ClCompile Include="External\bHapticsBridge.cpp" />
     <ClCompile Include="Managers\AndroidData.cpp" />
     <ClCompile Include="Bootstrap.cpp" />
@@ -273,7 +274,7 @@
     <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="External\bHapticsBridge.h" />
+    <ClInclude Include="Managers\bHapticsPlayer.h" />
     <ClInclude Include="Managers\AndroidData.h" />
     <ClInclude Include="Base\capstone\include\capstone\arm.h" />
     <ClInclude Include="Base\capstone\include\capstone\arm64.h" />

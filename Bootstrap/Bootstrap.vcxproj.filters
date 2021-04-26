@@ -29,6 +29,7 @@
     <ClCompile Include="External\bHapticsBridge.cpp" />
     <ClCompile Include="Utils\Console\JavaLogBridge.cpp" />
     <ClCompile Include="Utils\Sequence.cpp" />
+    <ClCompile Include="Managers\bHapticsPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
@@ -73,8 +74,8 @@
     <ClInclude Include="Base\capstone\include\capstone\x86.h" />
     <ClInclude Include="Base\capstone\include\capstone\xcore.h" />
     <ClInclude Include="Managers\AndroidData.h" />
-    <ClInclude Include="External\bHapticsBridge.h" />
     <ClInclude Include="Utils\Sequence.h" />
+    <ClInclude Include="Managers\bHapticsPlayer.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
     <ClInclude Include="Base\MSDetours\detours_x64.h" />

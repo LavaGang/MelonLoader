@@ -65,4 +65,12 @@ public:
 		static void* GetAsmLoc();
 		static void CleanupDisasm();
 	};
+
+	class BHaptics
+	{
+	public:
+		static void AddInternalCalls();
+	private:
+		static void TestDotArray(Mono::String* key, Mono::String* position, int* indexes, size_t indexes_len, int* intensity, size_t intensity_len, int duration);
+	};
 };
