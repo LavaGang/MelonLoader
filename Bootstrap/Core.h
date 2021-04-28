@@ -12,7 +12,6 @@ public:
 	static char* Path;
 	static std::string Version;
 	static bool Is_ALPHA_PreRelease;
-	static bool QuitFix;
 	static void Initialize(HINSTANCE hinstDLL);
 	static bool DirectoryExists(const char* path);
 	static bool FileExists(const char* path);

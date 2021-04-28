@@ -43,8 +43,6 @@ void CommandLine::Read()
 
 		if (strstr(command, "--melonloader.consolemode") != NULL)
 			Console::Mode = (Console::DisplayMode)GetIntFromConstChar(argv[i + 1], 0);
-		else if (strstr(command, "--quitfix") != NULL)
-			Core::QuitFix = true;
 		else if (strstr(command, AddPrefixToLaunchOption("consoleontop")) != NULL)
 			Console::AlwaysOnTop = true;
 		else if (strstr(command, AddPrefixToLaunchOption("consoledst")) != NULL)
@@ -98,11 +96,7 @@ void CommandLine::ReadIniFile()
 #ifndef DEBUG
 	Debug::Enabled = (!iniFile->ReadValue("Core", "Debug").empty() && iniFile->ReadValue("Core", "Debug")._Equal("true"));
 	iniFile->WriteValue("Core", "Debug", (Debug::Enabled ? "true" : "false"));
-#endif
-	Core::QuitFix = (!iniFile->ReadValue("Core", "QuitFix").empty() && iniFile->ReadValue("Core", "QuitFix")._Equal("true"));
-	iniFile->WriteValue("Core", "QuitFix", (Core::QuitFix ? "true" : "false"));
 
-#ifndef DEBUG
 	Console::ShouldHide = (!iniFile->ReadValue("Console", "Enabled").empty() && iniFile->ReadValue("Console", "Enabled")._Equal("false"));
 	iniFile->WriteValue("Console", "Enabled", (Console::ShouldHide ? "false" : "true"));
 #endif
