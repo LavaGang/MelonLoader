@@ -164,6 +164,8 @@
 139. Fixed Issue with DAB functionality not properly iterating its list.
 140. Changed Assembly Generator Config to use new Reflective Categories.  (Credits to Samboy :D)
 141. Fixed NRE Issue with Reflective Categories.
+142. Updated Il2CppAssemblyUnhollower to v0.4.14.0.
+143. Updated Il2CppDumper to v6.6.2.
 
 ---
 

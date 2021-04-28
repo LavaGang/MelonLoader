@@ -133,8 +133,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 process.ErrorDataReceived += ErrorStream;
                 process.Start();
 
-                
-
                 SetProcessId(process.Id);
 
                 process.BeginOutputReadLine();
