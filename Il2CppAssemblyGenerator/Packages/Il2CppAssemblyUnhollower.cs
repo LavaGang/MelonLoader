@@ -58,7 +58,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             parameters.Add("--blacklist-assembly=Valve.Newtonsoft.Json");
             if (!string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex))
                 parameters.Add($"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }");
-            return Execute(parameters.ToArray(), working_directory: Core.unitydependencies.Destination);
+            return Execute(parameters.ToArray());
         }
     }
 }
