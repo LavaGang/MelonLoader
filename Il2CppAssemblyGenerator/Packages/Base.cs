@@ -99,7 +99,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Directory.Delete(Output, true);
         }
 
-        internal bool Execute(string[] args, bool parenthesize_args = true)
+        internal bool Execute(string[] args, bool parenthesize_args = true, string working_directory = null)
         {
             if (!Directory.Exists(Output))
                 Directory.CreateDirectory(Output);
@@ -123,7 +123,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 processStartInfo.RedirectStandardOutput = true;
                 processStartInfo.RedirectStandardError = true;
                 processStartInfo.CreateNoWindow = true;
-                processStartInfo.WorkingDirectory = Core.unitydependencies.Destination;
+                processStartInfo.WorkingDirectory = string.IsNullOrEmpty(working_directory) ? Path.GetDirectoryName(ExePath) : working_directory;
 
                 MelonLogger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
 
