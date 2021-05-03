@@ -26,7 +26,6 @@ namespace MelonLoader
         private static int Initialize()
         {
             Il2CppAssemblyGenerator.Load();
-            Fixes.Il2CppSupport.Run(AppDomain.CurrentDomain);
 
             try { bHaptics_NativeLibrary.Load(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
@@ -36,6 +35,8 @@ namespace MelonLoader
 
             if (!Il2CppAssemblyGenerator.Run())
                 return 1;
+
+            Fixes.Il2CppSupport.Run(AppDomain.CurrentDomain);
 
             return 0;
         }
