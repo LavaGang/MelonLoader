@@ -169,6 +169,7 @@
 144. Improved BHaptics Support Implementation.
 145. Fixed Issue with PatchShield preventing Harmony Patching on some Games.
 146. Temporarily Disabled Launch Options Config File.
+147. Fixed Issue with Il2Cpp Support Fixes running before Il2CppAssemblyGenerator.
 
 ---
 

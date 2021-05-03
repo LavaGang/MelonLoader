@@ -20,14 +20,13 @@ namespace MelonLoader
             MelonLaunchOptions.Load();
             MelonCompatibilityLayer.Setup(curDomain);
 
-            Fixes.Il2CppSupport.Run(curDomain);
-
             PatchShield.Install();
         }
 
         private static int Initialize()
         {
             Il2CppAssemblyGenerator.Load();
+            Fixes.Il2CppSupport.Run(AppDomain.CurrentDomain);
 
             try { bHaptics_NativeLibrary.Load(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
