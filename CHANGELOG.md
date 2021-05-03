@@ -166,6 +166,8 @@
 141. Fixed NRE Issue with Reflective Categories.
 142. Updated Il2CppAssemblyUnhollower to v0.4.14.0.
 143. Updated Il2CppDumper to v6.6.2.
+144. Improved BHaptics Support Implementation.
+145. Fixed Issue with PatchShield preventing Harmony Patching on some Games.
 
 ---
 

@@ -1,11 +1,11 @@
 #include "CommandLine.h"
-#include "../Core.h"
 #include "Logger.h"
 #include "Debug.h"
 #include "AnalyticsBlocker.h"
-#include "../Managers/InternalCalls.h"
 #include "Encoding.h"
+#include "../Core.h"
 #include "../Managers/Game.h"
+#include "../Managers/InternalCalls.h"
 
 int CommandLine::argc = NULL;
 //char** CommandLine::argvMono;
@@ -15,7 +15,7 @@ IniFile* CommandLine::iniFile = NULL;
 
 void CommandLine::Read()
 {
-	ReadIniFile();
+	//ReadIniFile();
 
 	//argc = __argc;
 	//char** argv = __argv;
