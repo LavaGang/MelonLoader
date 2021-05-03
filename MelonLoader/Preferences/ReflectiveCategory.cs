@@ -27,7 +27,13 @@ namespace MelonLoader.Preferences
 
         internal void Load(TomlValue tomlValue) => value = TomletMain.To(type, tomlValue);
 
-        internal TomlValue Save() => TomletMain.ValueFrom(type, value);
+        internal TomlValue Save()
+        {
+            if(value == null)
+                LoadDefaults();
+            
+            return TomletMain.ValueFrom(type, value);
+        }
 
         internal T GetValue<T>() where T : new()
         {
@@ -81,7 +87,7 @@ namespace MelonLoader.Preferences
             IO.File currentfile = File;
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
-            
+
             currentfile.document.PutValue(Identifier, Save());
             try
             {
