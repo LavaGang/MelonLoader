@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Mono.Cecil;
+using MonoMod.Utils;
+using MonoMod.Cil;
 
 namespace MelonLoader.Preferences.IO
 {
@@ -17,18 +20,20 @@ namespace MelonLoader.Preferences.IO
                 return;
             try
             {
-                MethodBody bod = typeof(FileSystemWatcher).GetMethod("Dispose").GetMethodBody();
-                byte[] ilarr = bod.GetILAsByteArray();
-                int ilarrsize = ilarr.Length - 1;
-                if ((ilarr[ilarrsize] == 42)
-                    && (ilarr[ilarrsize - 1] == 10)
-                    && (ilarr[ilarrsize - 2] == 0)
-                    && (ilarr[ilarrsize - 3] == 0))
+                DynamicMethodDefinition method = new DynamicMethodDefinition(typeof(FileSystemWatcher).GetProperty("Path").GetGetMethod());
+                ILContext ilcontext = new ILContext(method.Definition);
+                ILCursor ilcursor = new ILCursor(ilcontext);
+                if ((ilcursor.Instrs.Count == 2) 
+                    && (ilcursor.Instrs[1].OpCode.Code == Mono.Cecil.Cil.Code.Throw))
                 {
-                    MelonLogger.Warning("FileSystemWatcher Exception: NotImplementedException Detected!");
+                    ilcontext.Dispose();
+                    method.Dispose();
+                    MelonLogger.Warning("FileSystemWatcher NotImplementedException Detected! Disabling MelonPreferences FileWatcher Functionality...");
                     ShouldDisableFileWatcherFunctionality = true;
                     return;
                 }
+                ilcontext.Dispose();
+                method.Dispose();
 
                 FileWatcher = new FileSystemWatcher(Path.GetDirectoryName(preffile.FilePath), Path.GetFileName(preffile.FilePath))
                 {

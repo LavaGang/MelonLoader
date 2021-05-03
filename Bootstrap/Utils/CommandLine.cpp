@@ -11,7 +11,7 @@ int CommandLine::argc = NULL;
 //char** CommandLine::argvMono;
 char* CommandLine::argv[64];
 char* CommandLine::argvMono[64];
-IniFile* CommandLine::iniFile = NULL;
+//IniFile* CommandLine::iniFile = NULL;
 
 void CommandLine::Read()
 {
@@ -88,6 +88,7 @@ int CommandLine::GetIntFromConstChar(const char* str, int defaultval)
 	return (negate ? result : -result);
 }
 
+/*
 void CommandLine::ReadIniFile()
 {
 	if (iniFile == NULL)
@@ -124,3 +125,4 @@ void CommandLine::ReadIniFile()
 	AnalyticsBlocker::ShouldDAB = (!iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB").empty() && iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB")._Equal("true"));
 	iniFile->WriteValue("AnalyticsBlocker", "ShouldDAB", (AnalyticsBlocker::ShouldDAB ? "true" : "false"));
 }
+*/
