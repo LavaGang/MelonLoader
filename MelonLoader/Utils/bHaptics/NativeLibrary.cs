@@ -20,6 +20,7 @@ namespace MelonLoader
             GetDelegateFromProcAddress("Initialise", out Initialise);
             GetDelegateFromProcAddress("TurnOff", out TurnOff);
             GetDelegateFromProcAddress("Destroy", out Destroy);
+            GetDelegateFromProcAddress("RegisterFeedback", out RegisterFeedback);
             GetDelegateFromProcAddress("RegisterFeedbackFromTactFile", out RegisterFeedbackFromTactFile);
             GetDelegateFromProcAddress("RegisterFeedbackFromTactFileReflected", out RegisterFeedbackFromTactFileReflected);
             GetDelegateFromProcAddress("SubmitRegistered", out SubmitRegistered);
@@ -47,14 +48,12 @@ namespace MelonLoader
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void dDestroy();
         internal static dDestroy Destroy;
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void dRegisterFeedbackFromTactFile(string str, string tactFileStr);
-        internal static dRegisterFeedbackFromTactFile RegisterFeedbackFromTactFile;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void dRegisterFeedbackFromTactFileReflected(string str, string tactFileStr);
-        internal static dRegisterFeedbackFromTactFileReflected RegisterFeedbackFromTactFileReflected;
+        internal delegate void dRegisterFeedback(string str, string tactFileStr);
+        internal static dRegisterFeedback RegisterFeedback;
+        internal static dRegisterFeedback RegisterFeedbackFromTactFile;
+        internal static dRegisterFeedback RegisterFeedbackFromTactFileReflected;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate void dSubmitRegistered(string key);
