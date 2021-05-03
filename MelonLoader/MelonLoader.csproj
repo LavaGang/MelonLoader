@@ -240,7 +240,7 @@
     <PackageReference Include="ILRepack.Lib.MSBuild.Task">
       <Version>2.0.18.2</Version>
     </PackageReference>
-    <PackageReference Include="MonoMod.RuntimeDetour" Version="21.4.2.3" ExcludeAssets="runtime">
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="21.4.21.3" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" ExcludeAssets="runtime" />
