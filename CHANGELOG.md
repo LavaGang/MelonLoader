@@ -168,6 +168,7 @@
 143. Updated Il2CppDumper to v6.6.2.
 144. Improved BHaptics Support Implementation.
 145. Fixed Issue with PatchShield preventing Harmony Patching on some Games.
+146. Temporarily Disabled Launch Options Config File.
 
 ---
 

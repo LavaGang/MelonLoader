@@ -1,11 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+//using System.Collections.Generic;
+//using System.IO;
 
 namespace MelonLoader
 {
     public static class MelonLaunchOptions
     {
+        internal static void Load()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            if ((args == null)
+                || (args.Length <= 0))
+                return;
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                string arg = args[i];
+                if (string.IsNullOrEmpty(arg))
+                    continue;
+                arg = arg.ToLowerInvariant();
+                int valueint = 0;
+                string valuestr = null;
+                if ((i + 1) < args.Length)
+                    valuestr = args[i + 1];
+                switch (arg)
+                {
+                    case "--melonloader.debug":
+                        Core.DebugMode = true;
+                        goto default;
+                    case "--quitfix":
+                        Core.QuitFix = true;
+                        goto default;
+                    case "--melonloader.agfregenerate":
+                        Il2CppAssemblyGenerator.ForceRegeneration = true;
+                        goto default;
+                    case "--melonloader.agfvdumper":
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        Il2CppAssemblyGenerator.ForceVersion_Dumper = valuestr;
+                        goto default;
+                    case "--melonloader.agfvunhollower":
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        Il2CppAssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower = valuestr;
+                        goto default;
+                    case "--melonloader.agfvunity":
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        Il2CppAssemblyGenerator.ForceVersion_UnityDependencies = valuestr;
+                        goto default;
+                    case "--melonloader.loadmodeplugins":
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        if (!int.TryParse(valuestr, out valueint))
+                            goto default;
+                        if ((valueint >= ((int)Core.LoadModeEnum.NORMAL))
+                        || (valueint <= ((int)Core.LoadModeEnum.BOTH)))
+                            Core.LoadMode_Plugins = (Core.LoadModeEnum)valueint;
+                        goto default;
+                    case "--melonloader.loadmodemods":
+                        if ((i + 1) < args.Length)
+                            valuestr = args[i + 1];
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        if (!int.TryParse(valuestr, out valueint))
+                            goto default;
+                        if ((valueint >= ((int)Core.LoadModeEnum.NORMAL))
+                        || (valueint <= ((int)Core.LoadModeEnum.BOTH)))
+                            Core.LoadMode_Mods = (Core.LoadModeEnum)valueint;
+                        goto default;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        /*
         private static string FilePath = null;
         private static Dictionary<string, MelonPreferences_Entry> CommandLineToEntryDict = new Dictionary<string, MelonPreferences_Entry>();
 
@@ -120,6 +190,7 @@ namespace MelonLoader
                 }
             }
         }
+        */
 
         #region Args
 
@@ -178,90 +249,94 @@ namespace MelonLoader
         */
 
         public static class Core
-        {
-            internal static MelonPreferences_Category Category;
-            internal static void Setup()
             {
-                SetupCategory("Core", ref Category);
-
-                AddOption(Category, "--melonloader.debug", nameof(DebugMode),
-#if DEBUG
-                true,
-#else
-                false,
-#endif
-                new Action<bool, bool>((oldval, newval) => { DebugMode = newval; }));
-
-                AddOption(Category, "--quitfix", nameof(QuitFix), onchangecallback: new Action<bool, bool>((oldval, newval) => { QuitFix = newval; }));
-                AddOption(Category, "--melonloader.loadmodeplugins", nameof(LoadMode_Plugins), onchangecallback: new Action<int, int>((oldval, newval) =>
+                /*
+                internal static MelonPreferences_Category Category;
+                internal static void Setup()
                 {
-                    if ((newval >= ((int)LoadModeEnum.NORMAL))
-                        || (newval <= ((int)LoadModeEnum.BOTH)))
-                        LoadMode_Plugins = (LoadModeEnum)newval;
-                }));
-                AddOption(Category, "--melonloader.loadmodemods", nameof(LoadMode_Mods), onchangecallback: new Action<int, int>((oldval, newval) =>
+                    SetupCategory("Core", ref Category);
+
+                    AddOption(Category, "--melonloader.debug", nameof(DebugMode),
+    #if DEBUG
+                    true,
+    #else
+                    false,
+    #endif
+                    new Action<bool, bool>((oldval, newval) => { DebugMode = newval; }));
+
+                    AddOption(Category, "--quitfix", nameof(QuitFix), onchangecallback: new Action<bool, bool>((oldval, newval) => { QuitFix = newval; }));
+                    AddOption(Category, "--melonloader.loadmodeplugins", nameof(LoadMode_Plugins), onchangecallback: new Action<int, int>((oldval, newval) =>
+                    {
+                        if ((newval >= ((int)LoadModeEnum.NORMAL))
+                            || (newval <= ((int)LoadModeEnum.BOTH)))
+                            LoadMode_Plugins = (LoadModeEnum)newval;
+                    }));
+                    AddOption(Category, "--melonloader.loadmodemods", nameof(LoadMode_Mods), onchangecallback: new Action<int, int>((oldval, newval) =>
+                    {
+                        if ((newval >= ((int)LoadModeEnum.NORMAL))
+                            || (newval <= ((int)LoadModeEnum.BOTH)))
+                            LoadMode_Mods = (LoadModeEnum)newval;
+                    }));
+                }
+                */
+
+                public enum LoadModeEnum
                 {
-                    if ((newval >= ((int)LoadModeEnum.NORMAL))
-                        || (newval <= ((int)LoadModeEnum.BOTH)))
-                        LoadMode_Mods = (LoadModeEnum)newval;
-                }));
+                    NORMAL,
+                    DEV,
+                    BOTH
+                }
+                public static LoadModeEnum LoadMode_Plugins { get; internal set; }
+                public static LoadModeEnum LoadMode_Mods { get; internal set; }
+                public static bool DebugMode { get; internal set; }
+                public static bool QuitFix { get; internal set; }
             }
 
-            public enum LoadModeEnum
+            public static class Il2CppAssemblyGenerator
             {
-                NORMAL,
-                DEV,
-                BOTH
+                /*
+                internal static MelonPreferences_Category Category;
+                internal static void Setup()
+                {
+                    SetupCategory("Il2CppAssemblyGenerator", ref Category);
+
+                    AddOption(Category, "--melonloader.agfregenerate", nameof(ForceRegeneration), false, new Action<bool, bool>((oldval, newval) => { ForceRegeneration = newval; }));
+                    AddOption(Category, "--melonloader.agfvdumper", nameof(ForceVersion_Dumper), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_Dumper = newval; }));
+                    AddOption(Category, "--melonloader.agfvunhollower", nameof(ForceVersion_Il2CppAssemblyUnhollower), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_Il2CppAssemblyUnhollower = newval; }));
+                    AddOption(Category, "--melonloader.agfvunity", nameof(ForceVersion_UnityDependencies), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_UnityDependencies = newval; }));
+                }
+                */
+
+                public static bool ForceRegeneration { get; internal set; }
+                public static string ForceVersion_Dumper { get; internal set; }
+                public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
+                public static string ForceVersion_UnityDependencies { get; internal set; }
             }
-            public static LoadModeEnum LoadMode_Plugins { get; internal set; }
-            public static LoadModeEnum LoadMode_Mods { get; internal set; }
-            public static bool DebugMode { get; internal set; }
-            public static bool QuitFix { get; internal set; }
+
+            /*
+            public static class Logger
+            {
+                internal static MelonPreferences_Category Category;
+                internal static void Setup()
+                {
+                    SetupCategory("Logger", ref Category);
+
+                    AddOption(Category, "--melonloader.maxlogs", nameof(Max_Logs), 10, new Action<int, int>((oldval, newval) => { Max_Logs = newval; }));
+                    AddOption(Category, "--melonloader.maxwarnings", nameof(Max_Warnings), 100, new Action<int, int>((oldval, newval) => { Max_Warnings = newval; }));
+                    AddOption(Category, "--melonloader.maxerrors", nameof(Max_Errors), 100, new Action<int, int>((oldval, newval) => { Max_Errors = newval; }));
+                }
+                static Logger()
+                {
+                    Max_Logs = 10;
+                    Max_Warnings = 100;
+                    Max_Errors = 100;
+                }
+                public static int Max_Logs { get; internal set; }
+                public static int Max_Warnings { get; internal set; }
+                public static int Max_Errors { get; internal set; }
+            }
+            */
+
+            #endregion
         }
-
-        public static class Il2CppAssemblyGenerator
-        {
-            internal static MelonPreferences_Category Category;
-            internal static void Setup()
-            {
-                SetupCategory("Il2CppAssemblyGenerator", ref Category);
-
-                AddOption(Category, "--melonloader.agfregenerate", nameof(ForceRegeneration), false, new Action<bool, bool>((oldval, newval) => { ForceRegeneration = newval; }));
-                AddOption(Category, "--melonloader.agfvdumper", nameof(ForceVersion_Dumper), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_Dumper = newval; }));
-                AddOption(Category, "--melonloader.agfvunhollower", nameof(ForceVersion_Il2CppAssemblyUnhollower), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_Il2CppAssemblyUnhollower = newval; }));
-                AddOption(Category, "--melonloader.agfvunity", nameof(ForceVersion_UnityDependencies), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_UnityDependencies = newval; }));
-            }
-
-            public static bool ForceRegeneration { get; internal set; }
-            public static string ForceVersion_Dumper { get; internal set; }
-            public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
-            public static string ForceVersion_UnityDependencies { get; internal set; }
-        }
-
-        /*
-        public static class Logger
-        {
-            internal static MelonPreferences_Category Category;
-            internal static void Setup()
-            {
-                SetupCategory("Logger", ref Category);
-
-                AddOption(Category, "--melonloader.maxlogs", nameof(Max_Logs), 10, new Action<int, int>((oldval, newval) => { Max_Logs = newval; }));
-                AddOption(Category, "--melonloader.maxwarnings", nameof(Max_Warnings), 100, new Action<int, int>((oldval, newval) => { Max_Warnings = newval; }));
-                AddOption(Category, "--melonloader.maxerrors", nameof(Max_Errors), 100, new Action<int, int>((oldval, newval) => { Max_Errors = newval; }));
-            }
-            static Logger()
-            {
-                Max_Logs = 10;
-                Max_Warnings = 100;
-                Max_Errors = 100;
-            }
-            public static int Max_Logs { get; internal set; }
-            public static int Max_Warnings { get; internal set; }
-            public static int Max_Errors { get; internal set; }
-        }
-        */
-
-        #endregion
     }
-}
