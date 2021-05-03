@@ -8,6 +8,10 @@ namespace MelonLoader
     {
         internal static void Load()
         {
+#if DEBUG
+            Core.DebugMode = true;
+#endif
+
             string[] args = Environment.GetCommandLineArgs();
             if ((args == null)
                 || (args.Length <= 0))
@@ -25,9 +29,11 @@ namespace MelonLoader
                     valuestr = args[i + 1];
                 switch (arg)
                 {
+#if !DEBUG
                     case "--melonloader.debug":
                         Core.DebugMode = true;
                         goto default;
+#endif
                     case "--quitfix":
                         Core.QuitFix = true;
                         goto default;
@@ -192,7 +198,7 @@ namespace MelonLoader
         }
         */
 
-        #region Args
+#region Args
 
         /*
         public static class AnalyticsBlocker
@@ -257,11 +263,11 @@ namespace MelonLoader
                     SetupCategory("Core", ref Category);
 
                     AddOption(Category, "--melonloader.debug", nameof(DebugMode),
-    #if DEBUG
+#if DEBUG
                     true,
-    #else
+#else
                     false,
-    #endif
+#endif
                     new Action<bool, bool>((oldval, newval) => { DebugMode = newval; }));
 
                     AddOption(Category, "--quitfix", nameof(QuitFix), onchangecallback: new Action<bool, bool>((oldval, newval) => { QuitFix = newval; }));
@@ -337,6 +343,6 @@ namespace MelonLoader
             }
             */
 
-            #endregion
+#endregion
         }
     }

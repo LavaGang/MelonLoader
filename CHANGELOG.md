@@ -171,6 +171,7 @@
 146. Temporarily Disabled Launch Options Config File.
 147. Fixed Issue with Il2Cpp Support Fixes running before Il2CppAssemblyGenerator.
 148. Temporarily Reverted Il2CppAssemblyGenerator Config to Legacy Implementation due to Field Exception Issue in Tomlet.
+149. Fixed Launch Option Conflict Issue with Debug Builds.
 
 ---
 
