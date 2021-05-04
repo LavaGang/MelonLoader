@@ -116,7 +116,7 @@ namespace MelonLoader
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
             foreach (MelonPreferences_Entry entry in Entries)
-                if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()))
+                if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()) && entry.GetValueAsString() != null)
                     currentfile.InsertIntoDocument(Identifier, entry.Identifier, entry.Save());
             try
             {
