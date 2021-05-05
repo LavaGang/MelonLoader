@@ -24,17 +24,17 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             DefaultHosts[$"{DefaultHostInfo.Melon.API_URL}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
                 DefaultHostInfo.Melon.Contact;
 
-            DefaultHosts[$"{DefaultHostInfo.Melon1.API_URL}{DefaultHostInfo.Melon1.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
-                DefaultHostInfo.Melon1.Contact;
+            DefaultHosts[$"{DefaultHostInfo.Melon.API_URL_1}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
+                DefaultHostInfo.Melon.Contact;
 
-            DefaultHosts[$"{DefaultHostInfo.Melon2.API_URL}{DefaultHostInfo.Melon2.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
-                DefaultHostInfo.Melon2.Contact;
+            DefaultHosts[$"{DefaultHostInfo.Melon.API_URL_2}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
+                DefaultHostInfo.Melon.Contact;
+
+            DefaultHosts[$"{DefaultHostInfo.Melon.API_URL_SAMBOY}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
+                DefaultHostInfo.Melon.Contact;
 
             DefaultHosts[$"{DefaultHostInfo.Ruby.API_URL}{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}.json"] =
                 DefaultHostInfo.Ruby.Contact;
-
-            DefaultHosts[$"{DefaultHostInfo.Samboy.API_URL}{DefaultHostInfo.Samboy.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
-                DefaultHostInfo.Samboy.Contact;
         }
 
         internal static void Contact()
@@ -56,13 +56,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static bool ContactHosts(Dictionary<string, Func<string, InfoStruct, bool>> hostsdict)
         {
-            if (hostsdict.Count <= 0)
+            if ((hostsdict == null) || (hostsdict.Count <= 0))
                 return false;
-
             foreach (KeyValuePair<string, Func<string, InfoStruct, bool>> pair in hostsdict)
             {
-                if (pair.Value == null)
+                if (string.IsNullOrEmpty(pair.Key) || (pair.Value == null))
                     continue;
+
                 MelonDebug.Msg($"ContactURL = {pair.Key}");
 
                 string Response = null;
@@ -91,7 +91,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 MelonDebug.Msg($"Response = {(is_response_null ? "null" : Response) }");
                 if (is_response_null)
                     continue;
-
                 if (pair.Value(Response, ReturnedInfo))
                     return true;
             }
@@ -103,6 +102,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             internal static class Melon
             {
                 internal static string API_URL = "https://api.melonloader.com/api/";
+                internal static string API_URL_1 = "https://api-1.melonloader.com/api/";
+                internal static string API_URL_2 = "https://api-2.melonloader.com/api/";
+                internal static string API_URL_SAMBOY = "https://melon.samboy.dev/api/";
                 internal static string API_VERSION = "v1";
 
                 internal static bool Contact(string response_str, InfoStruct returninfo)
@@ -120,71 +122,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     return true;
                 }
 
-                private class ResponseStruct
-                {
-                    public string gameSlug = null;
-                    public string gameName = null;
-                    public string mappingUrl = null;
-                    public string mappingFileSHA512 = null;
-                    public string forceCpp2IlVersion = null;
-                    public string forceUnhollowerVersion = null;
-                    public string obfuscationRegex = null;
-                }
-            }
-
-            internal static class Melon1
-            {
-                internal static string API_URL = "https://api-1.melonloader.com/api/";
-                internal static string API_VERSION = "v1";
-
-                internal static bool Contact(string response_str, InfoStruct returninfo)
-                {
-                    ResponseStruct responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
-                    if (responseobj == null)
-                        return false;
-
-                    //returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
-                    returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
-                    returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
-                    returninfo.MappingURL = responseobj.mappingUrl;
-                    returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
-
-                    return true;
-                }
-
-                private class ResponseStruct
-                {
-                    public string gameSlug = null;
-                    public string gameName = null;
-                    public string mappingUrl = null;
-                    public string mappingFileSHA512 = null;
-                    public string forceCpp2IlVersion = null;
-                    public string forceUnhollowerVersion = null;
-                    public string obfuscationRegex = null;
-                }
-            }
-
-            internal static class Melon2
-            {
-                internal static string API_URL = "https://api-2.melonloader.com/api/";
-                internal static string API_VERSION = "v1";
-
-                internal static bool Contact(string response_str, InfoStruct returninfo)
-                {
-                    ResponseStruct responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
-                    if (responseobj == null)
-                        return false;
-
-                    //returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
-                    returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
-                    returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
-                    returninfo.MappingURL = responseobj.mappingUrl;
-                    returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
-
-                    return true;
-                }
-
-                private class ResponseStruct
+                internal class ResponseStruct
                 {
                     public string gameSlug = null;
                     public string gameName = null;
@@ -222,38 +160,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     public string obfuscationRegex = null;
                     public string mappingURL = null;
                     public string mappingFileSHA512 = null;
-                }
-            }
-
-            internal static class Samboy
-            {
-                internal static string API_URL = "https://melon.samboy.dev/api/";
-                internal static string API_VERSION = "v1";
-
-                internal static bool Contact(string response_str, InfoStruct returninfo)
-                {
-                    ResponseStruct responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
-                    if (responseobj == null)
-                        return false;
-
-                    //returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
-                    returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
-                    returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
-                    returninfo.MappingURL = responseobj.mappingUrl;
-                    returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
-
-                    return true;
-                }
-
-                private class ResponseStruct
-                {
-                    public string gameSlug = null;
-                    public string gameName = null;
-                    public string mappingUrl = null;
-                    public string mappingFileSHA512 = null;
-                    public string forceCpp2IlVersion = null;
-                    public string forceUnhollowerVersion = null;
-                    public string obfuscationRegex = null;
                 }
             }
         }

@@ -174,6 +174,8 @@
 149. Fixed Launch Option Conflict Issue with Debug Builds.
 150. Fixed Issue with FileWatcher's NotImplementedException Detection.
 151. Fixed Ambiguous Match Found Issue with UnhollowerSupport.
+152. Fixed NRE Issue with Assembly Generator RemoteAPI.
+153. Fixed MFE Issue with MelonBase.Harmony.
 
 ---
 
