@@ -40,6 +40,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static int Run()
         {
+            Config.Initialize();
+
             RemoteAPI.Contact();
 
             unitydependencies = new UnityDependencies();

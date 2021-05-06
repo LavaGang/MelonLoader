@@ -21,7 +21,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         //internal static AssemblyGeneratorConfiguration Values;
         internal static AssemblyGeneratorConfiguration Values = new AssemblyGeneratorConfiguration();
 
-        static Config()
+        internal static void Initialize()
         {
             FilePath = Path.Combine(Core.BasePath, "Config.cfg");
 
