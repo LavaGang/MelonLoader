@@ -170,12 +170,12 @@
 145. Fixed Issue with PatchShield preventing Harmony Patching on some Games.
 146. Temporarily Disabled Launch Options Config File.
 147. Fixed Issue with Il2Cpp Support Fixes running before Il2CppAssemblyGenerator.
-148. Temporarily Reverted Il2CppAssemblyGenerator Config to Legacy Implementation due to Field Exception Issue in Tomlet.
-149. Fixed Launch Option Conflict Issue with Debug Builds.
-150. Fixed Issue with FileWatcher's NotImplementedException Detection.
-151. Fixed Ambiguous Match Found Issue with UnhollowerSupport.
-152. Fixed NRE Issue with Assembly Generator RemoteAPI.
-153. Fixed MFE Issue with MelonBase.Harmony.
+148. Fixed Launch Option Conflict Issue with Debug Builds.
+149. Fixed Issue with FileWatcher's NotImplementedException Detection.
+150. Fixed Ambiguous Match Found Issue with UnhollowerSupport.
+151. Fixed NRE Issue with Assembly Generator RemoteAPI.
+152. Fixed MFE Issue with MelonBase.Harmony.
+153. Fixed Loading Issue with MelonPreferences_ReflectiveCategory.
 
 ---
 

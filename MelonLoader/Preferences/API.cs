@@ -290,34 +290,36 @@ namespace MelonLoader
                 file.WasError = true;
             }
 
-            if (file.WasError || (Categories.Count <= 0))
+            if (file.WasError)
                 return;
-            foreach (MelonPreferences_Category category in Categories)
-            {
-                Preferences.IO.File currentFile = category.File;
-                if (currentFile == null)
-                    currentFile = DefaultFile;
-                if ((currentFile != file) || (category.Entries.Count <= 0))
-                    continue;
-                foreach (MelonPreferences_Entry entry in category.Entries)
-                    currentFile.SetupEntryFromRawValue(entry);
-            }
 
-            foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
-            {
-                Preferences.IO.File currentFile = category.File;
-                if (currentFile == null)
-                    currentFile = DefaultFile;
-                if (currentFile != file)
-                    continue;
-                if (!(file.TryGetCategoryTable(category.Identifier) is { } table))
+            if (Categories.Count > 0)
+                foreach (MelonPreferences_Category category in Categories)
                 {
-                    category.LoadDefaults();
-                    continue;
+                    Preferences.IO.File currentFile = category.File;
+                    if (currentFile == null)
+                        currentFile = DefaultFile;
+                    if ((currentFile != file) || (category.Entries.Count <= 0))
+                        continue;
+                    foreach (MelonPreferences_Entry entry in category.Entries)
+                        currentFile.SetupEntryFromRawValue(entry);
                 }
 
-                category.Load(table);
-            }
+            if (ReflectiveCategories.Count > 0)
+                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
+                {
+                    Preferences.IO.File currentFile = category.File;
+                    if (currentFile == null)
+                        currentFile = DefaultFile;
+                    if (currentFile != file)
+                        continue;
+                    if (!(file.TryGetCategoryTable(category.Identifier) is { } table))
+                    {
+                        category.LoadDefaults();
+                        continue;
+                    }
+                    category.Load(table);
+                }
 
             if (printmsg)
                 MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");

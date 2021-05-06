@@ -20,6 +20,15 @@ namespace MelonLoader.Preferences
             this.type = type;
             this.Identifier = categoryName;
             this.DisplayName = displayName;
+
+            IO.File currentFile = File;
+            if (currentFile == null)
+                currentFile = MelonPreferences.DefaultFile;
+            if (!(currentFile.TryGetCategoryTable(Identifier) is { } table))
+                LoadDefaults();
+            else
+                Load(table);
+
             MelonPreferences.ReflectiveCategories.Add(type, this);
         }
 
@@ -35,15 +44,16 @@ namespace MelonLoader.Preferences
             return TomletMain.ValueFrom(type, value);
         }
 
-        internal T GetValue<T>() where T : new()
+        public T GetValue<T>() where T : new()
         {
             if (typeof(T) != type)
                 return default;
-
+            if (value == null)
+                LoadDefaults();
             return (T) value;
         }
         
-        public void SetFilePath(string filepath, bool autoload = true)
+        public void SetFilePath(string filepath, bool autoload = true, bool printmsg = true)
         {
             if (File != null)
             {
@@ -65,7 +75,7 @@ namespace MelonLoader.Preferences
                 }
             }
             if (autoload)
-                MelonPreferences.LoadFileAndRefreshCategories(File);
+                MelonPreferences.LoadFileAndRefreshCategories(File, printmsg);
         }
 
         public void ResetFilePath()
@@ -101,6 +111,14 @@ namespace MelonLoader.Preferences
             if (printmsg)
                 MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
             MelonHandler.OnPreferencesSaved();
+        }
+
+        public void LoadFromFile(bool printmsg = true)
+        {
+            IO.File currentfile = File;
+            if (currentfile == null)
+                currentfile = MelonPreferences.DefaultFile;
+            MelonPreferences.LoadFileAndRefreshCategories(currentfile, printmsg);
         }
 
         public void DestroyFileWatcher() => File?.FileWatcher.Destroy();
