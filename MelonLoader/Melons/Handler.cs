@@ -384,6 +384,7 @@ namespace MelonLoader
         }
 
         internal static void OnPreInitialization() => InvokeMelonPluginMethod(x => x.OnPreInitialization(), true);
+        internal static void OnApplicationEarlyStart() => InvokeMelonPluginMethod(x => x.OnApplicationEarlyStart(), true);
         internal static void OnApplicationStart_Plugins() => InvokeMelonPluginMethod(x => x.OnApplicationStart(), true);
         internal static void OnApplicationStart_Mods() => InvokeMelonModMethod(x => x.OnApplicationStart(), true);
         internal static void OnApplicationLateStart_Plugins() => InvokeMelonPluginMethod(x => x.OnApplicationLateStart(), true);

@@ -10,6 +10,7 @@
 char* BaseAssembly::PathMono = NULL;
 char* BaseAssembly::PreloadPath = NULL;
 Mono::Method* BaseAssembly::Mono_Start = NULL;
+Mono::Method* BaseAssembly::Mono_PreStart = NULL;
 
 bool BaseAssembly::Initialize()
 {
@@ -39,6 +40,12 @@ bool BaseAssembly::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Get Initialize Method from Mono Class!");
 		return false;
 	}
+	Mono_PreStart = Mono::Exports::mono_class_get_method_from_name(klass, "PreStart", NULL);
+	if (Mono_PreStart == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get PreStart Method from Mono Class!");
+		return false;
+	}
 	Mono_Start = Mono::Exports::mono_class_get_method_from_name(klass, "Start", NULL);
 	if (Mono_Start == NULL)
 	{
@@ -55,8 +62,6 @@ bool BaseAssembly::Initialize()
 		return false;
 	}
 	int returnval = *(int*)((char*)result + 0x8);
-	if (Game::IsIl2Cpp)
-		Il2CppAssemblyGenerator::Cleanup();
 	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
@@ -102,6 +107,28 @@ void BaseAssembly::Preload()
 	}
 	Mono::Object* exObj = NULL;
 	Mono::Exports::mono_runtime_invoke(initialize, NULL, NULL, &exObj);
+}
+
+bool BaseAssembly::PreStart()
+{
+	if (Mono_PreStart == NULL)
+		return false;
+	Debug::Msg("Pre-Starting Base Assembly...");
+	Logger::WriteSpacer();
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_PreStart, NULL, NULL, &exObj);
+	if (exObj != NULL)
+	{
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Failed to Invoke PreStart Method!");
+	}
+	int returnval = *(int*)((char*)result + 0x8);
+	if (Game::IsIl2Cpp)
+		Il2CppAssemblyGenerator::Cleanup();
+	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
+	if (Debug::Enabled)
+		Logger::WriteSpacer();
+	return (returnval == 0);
 }
 
 void BaseAssembly::Start()
