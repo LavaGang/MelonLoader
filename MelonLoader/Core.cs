@@ -36,7 +36,8 @@ namespace MelonLoader
             if (!Il2CppAssemblyGenerator.Run())
                 return 1;
 
-            Fixes.Il2CppSupport.Run(AppDomain.CurrentDomain);
+            if (MelonUtils.IsGameIl2Cpp())
+                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
 
             return 0;
         }

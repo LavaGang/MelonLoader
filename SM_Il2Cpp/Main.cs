@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -39,7 +40,7 @@ namespace MelonLoader.Support
             LogSupport.ErrorHandler += MelonLogger.Error;
             if (MelonDebug.IsEnabled())
                 LogSupport.TraceHandler += MelonLogger.Msg;
-            ClassInjector.DoHook = MelonUtils.NativeHookAttach;
+            ClassInjector.Detour = new UnhollowerDetour();
             InitializeUnityVersion();
             ConsoleCleaner();
             SceneManager.sceneLoaded = (
@@ -102,5 +103,18 @@ namespace MelonLoader.Support
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
+    }
+
+    internal class UnhollowerDetour : IManagedDetour
+    {
+        private static readonly List<object> PinnedDelegates = new List<object>();
+
+        unsafe public T Detour<T>(IntPtr @from, T to) where T : Delegate
+        {
+            IntPtr* targetVarPointer = &from;
+            PinnedDelegates.Add(to);
+            MelonUtils.NativeHookAttach((IntPtr)targetVarPointer, Marshal.GetFunctionPointerForDelegate(to));
+            return Marshal.GetDelegateForFunctionPointer<T>(from);
+        }
     }
 }

@@ -56,6 +56,8 @@ namespace MelonLoader
                     return;
                 }
 
+                AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;
+
                 Type type = asm.GetType("MelonLoader.Il2CppAssemblyGenerator.Core");
                 if (type == null)
                 {

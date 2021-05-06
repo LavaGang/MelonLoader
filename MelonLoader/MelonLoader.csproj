@@ -49,7 +49,6 @@
     <Compile Include="Utils\CompatibilityLayer.cs" />
     <Compile Include="Extensions\Fixes\ApplicationBase.cs" />
     <Compile Include="Extensions\Fixes\ExtraCleanup.cs" />
-    <Compile Include="Extensions\Fixes\Il2CppSupport.cs" />
     <Compile Include="Extensions\Fixes\InvariantCurrentCulture.cs" />
     <Compile Include="Extensions\Fixes\QuitFix.cs" />
     <Compile Include="Extensions\Fixes\UnhandledException.cs" />
