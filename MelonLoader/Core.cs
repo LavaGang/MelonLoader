@@ -33,6 +33,13 @@ namespace MelonLoader
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
 
+            return 0;
+        }
+
+        private static int PreStart()
+        {
+            MelonHandler.OnApplicationEarlyStart();
+
             if (!Il2CppAssemblyGenerator.Run())
                 return 1;
 

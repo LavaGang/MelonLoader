@@ -11,6 +11,11 @@ namespace MelonLoader
         /// </summary>
         public virtual void OnPreInitialization() { }
 
+        /// <summary>
+        /// Runs after Game Initialization, before OnApplicationStart and (on Il2Cpp games) before Unhollower
+        /// </summary>
+        public virtual void OnApplicationEarlyStart() { }
+
         [Obsolete()]
         private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
         [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead.")]
