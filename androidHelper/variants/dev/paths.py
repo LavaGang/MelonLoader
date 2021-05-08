@@ -47,6 +47,11 @@ class Paths:
     support_apk_path = os.path.join(helper.common.Settings.base_dir, '..', 'APKBindings', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
     support_apk_dest = os.path.join(helper.common.Settings.file_path, support_dirname)
 
+    # xamarin apk
+    xamarin_dirname = 'xamarin'
+    xamarin_apk_path = os.path.join(helper.common.Settings.base_dir, '..', "Output", "Debug", "AnyCPU", "XamarinGenerator", "v8.1", "XamarinGenerator.XamarinGenerator.apk")
+    xamarin_apk_dest = os.path.join(helper.common.Settings.file_path, xamarin_dirname)
+
     # support module
     support_module_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "MelonLoader", "Dependencies", "SupportModules")
     support_module_dest = os.path.join("assets", "melonloader", "etc", "support")

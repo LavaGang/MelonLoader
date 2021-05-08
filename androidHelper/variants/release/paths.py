@@ -43,6 +43,11 @@ class Paths:
     support_apk_path = os.path.join(helper.common.Settings.bin_path, "precompiled", 'apk_extensions.apk')
     support_apk_dest = os.path.join(helper.common.Settings.file_path, support_dirname)
 
+    # xamarin apk
+    xamarin_dirname = 'xamarin'
+    xamarin_apk_path = os.path.join(helper.common.Settings.base_dir, "precompiled", "xamarin_helper.apk")
+    xamarin_apk_dest = os.path.join(helper.common.Settings.file_path, xamarin_dirname)
+
     # support module
     support_module_dir = os.path.join(helper.common.Settings.bin_path, "precompiled", "runtime", "support")
     support_module_dest = os.path.join("assets", "melonloader", "etc", "support")

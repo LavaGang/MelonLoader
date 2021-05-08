@@ -9,6 +9,8 @@ import prepare.unity
 import prepare.melonloader
 import prepare.support_module
 import prepare.il2cpp_assembly_generation
+import prepare.xamarin
+
 from variants import paths
 
 from helper import common
@@ -31,7 +33,7 @@ def install_apk(apk_path, build_output_path):
 
     output_path = os.path.join(common.Settings.file_path, common.file_name(apk_path))
 
-    if common.file_name(apk_path) == paths.Paths.support_dirname:
+    if common.file_name(apk_path) == paths.Paths.support_dirname or common.file_name(apk_path) == paths.Paths.xamarin_dirname:
         error("apk cannot be named %s.apk" % (common.file_name(apk_path)))
 
     common.prepare_dir(common.Settings.file_path)
@@ -48,6 +50,9 @@ def install_apk(apk_path, build_output_path):
     if not prepare.support.disassemble_apk():
         error("Failed to disassemble support apk.")
 
+    if not prepare.xamarin.disassemble_apk():
+        error("Failed to disassemble xamarin apk.")
+
     if not prepare.support.install_java(output_path):
         error("Failed to install java code from support code.")
 
@@ -59,6 +64,9 @@ def install_apk(apk_path, build_output_path):
 
     if not prepare.support.install_assets(output_path):
         error("Failed to install assets")
+
+    if not prepare.xamarin.install_native(output_path):
+        error("Failed to install native libs from xamarin.")
 
     if not prepare.injection.install_injection(output_path):
         error("Failed to inject into java")

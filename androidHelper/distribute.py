@@ -61,6 +61,9 @@ def copy_binaries():
     shutil.copyfile(paths.Paths.support_apk_path, os.path.join(assemblies_base_dir, os.path.basename(paths.Paths.support_apk_path)))
     shutil.move(os.path.join(assemblies_base_dir, os.path.basename(paths.Paths.support_apk_path)), os.path.join(assemblies_base_dir, "apk_extensions.apk"))
 
+    shutil.copyfile(paths.Paths.xamarin_apk_path, os.path.join(assemblies_base_dir, os.path.basename(paths.Paths.xamarin_apk_path)))
+    shutil.move(os.path.join(assemblies_base_dir, os.path.basename(paths.Paths.xamarin_apk_path)), os.path.join(assemblies_base_dir, "xamarin_helper.apk"))
+
     if not prepare.bootstrap.install_bootstrap(assemblies_base_dir):
         common.error("Failed to install %s" % paths.Paths.bootstrap_file)
 

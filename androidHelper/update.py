@@ -14,6 +14,8 @@ import prepare.unity
 import prepare.melonloader
 import prepare.support_module
 import prepare.il2cpp_assembly_generation
+import prepare.xamarin
+
 from variants import paths
 
 keystore_path = os.path.join(common.Settings.file_path, "sign.jks")
@@ -38,6 +40,9 @@ def update(output_path):
     if not prepare.support.disassemble_apk():
         common.error("Failed to disassemble support apk.")
 
+    if not prepare.xamarin.disassemble_apk():
+        common.error("Failed to disassemble xamarin apk.")
+
     if not prepare.support.install_java(output_path):
         common.error("Failed to install java code from support code.")
 
@@ -49,6 +54,9 @@ def update(output_path):
 
     if not prepare.support.install_assets(output_path):
         common.error("Failed to install assets")
+
+    if not prepare.xamarin.install_native(output_path):
+        common.error("Failed to install native libs from xamarin.")
 
     if not prepare.injection.install_injection(output_path):
         common.error("Failed to inject into java")
