@@ -4,8 +4,8 @@
 #include <filesystem>
 #include <fstream>
 #endif
-#include <list>
 #include <string>
+#include <list>
 #include <mutex>
 #include <shared_mutex>
 #include <thread>
@@ -85,7 +85,7 @@ public:
 
 private:
 	static void logThreadLoop();
-	static std::shared_mutex mutex_;
+	static std::mutex mutex_;
 	static std::thread logThread;
 	// Plain : Colored str
 	static std::list<std::pair<std::string, std::string>> logQueue;

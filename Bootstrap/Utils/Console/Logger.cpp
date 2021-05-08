@@ -11,9 +11,11 @@
 #include <android/log.h>
 #endif
 
-#include <list>
 #include <sstream>
+
+#include <list>
 #include <iostream>
+#include <shared_mutex>
 
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtension = ".log";
@@ -23,6 +25,10 @@ int Logger::MaxWarnings = 100;
 int Logger::MaxErrors = 100;
 int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
+
+std::mutex Logger::mutex_;
+std::thread Logger::logThread;
+std::list<std::pair<std::string, std::string>> Logger::logQueue;
 
 #ifdef PORT_DISABLE
 Logger::FileStream Logger::LogFile;
@@ -60,7 +66,7 @@ bool Logger::Initialize()
 #endif
 
 	logThread = std::thread(&logThreadLoop);
-	
+
 	return true;
 }
 
@@ -92,7 +98,7 @@ void Logger::WriteSpacer()
 	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "");
 #elif _WIN32
 	static const std::string lineEnd = "\n";
-	std::shared_lock<std::shared_mutex> lock(mutex_);
+	std::shared_lock<std::mutex> lock(mutex_);
 	logQueue.emplace_back(lineEnd, lineEnd);
 #endif
 }
@@ -420,11 +426,12 @@ void Logger::Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, con
 		<< Console::ColorToAnsi(Console::Color::Reset);
 #endif
 
-	std::shared_lock<std::shared_mutex> lock(mutex_);
-	logQueue.emplace_back(msgPlain.str(), msgColor.str());
+	{
+		std::lock_guard<std::mutex> lock(mutex_);
+		logQueue.emplace_back(msgPlain.str(), msgColor.str());
+	}
+
 	
-
-
 	// oof
 	free(buffer);
 }
@@ -437,20 +444,20 @@ void Logger::logThreadLoop()
 		if (!logQueue.empty())
 		{
 			// Copy the list to avoid keeping control
-			std::unique_lock<std::shared_mutex> lock(mutex_);
+			std::unique_lock<std::mutex> lock(mutex_);
 			std::list<std::pair<std::string, std::string>> copy_list(logQueue);
+
 			logQueue.clear();
-			lock.release();
-
+			lock.unlock();
+			
 			// Now we can write using these strings
-
 			for (auto& pair : copy_list)
 			{
 				const auto msg_plain = pair.first;
 				const auto msg_color = pair.second;
 				#ifdef __ANDROID__
 				// todo: write to logfile
-				const char* messageC = msgColor.c_str();
+				const char* messageC = msg_color.c_str();
 				__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%s", messageC);
 				#elif defined(_WIN32)
 				//TODO: implement printf
@@ -458,8 +465,6 @@ void Logger::logThreadLoop()
 				std::cout << msg_color;
 				#endif
 			}
-			
-			
 		}
 	}
 }
