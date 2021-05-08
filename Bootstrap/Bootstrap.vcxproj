@@ -143,7 +143,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PORT_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -173,7 +173,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PORT_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -202,7 +202,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CppLanguageStandard>c++1z</CppLanguageStandard>
       <Verbose>false</Verbose>
-      <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64;DEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64;DEBUG;__ANDROID__</PreprocessorDefinitions>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>
       </AdditionalOptions>
@@ -225,7 +225,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <!-- <Verbose>false</Verbose> -->
       <CppLanguageStandard>c++1z</CppLanguageStandard>
-      <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64;__ANDROID__</PreprocessorDefinitions>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>
       </AdditionalOptions>
