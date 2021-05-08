@@ -9,6 +9,7 @@
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
 #include "Il2Cpp.h"
+#include "../Utils/AnalyticsBlocker.h"
 #include "../Utils/Console/Logger.h"
 #include "../Utils/Helpers/ImportLibHelper.h"
 
@@ -22,6 +23,8 @@
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
 #elif defined(__ANDROID__)
 const char* Mono::LibNames[] = { "monosgen-2.0" };
+jclass Mono::jMonoDroidHelper = NULL;
+jmethodID Mono::jLoadApplication = NULL;
 #endif
 
 const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };
@@ -94,6 +97,8 @@ MONODEF(mono_install_unhandled_exception_hook)
 MONODEF(mono_print_unhandled_exception)
 MONODEF(mono_dllmap_insert)
 
+MONODEF(mono_domain_get)
+
 #undef MONODEF
 #pragma endregion MonoDeclare
 
@@ -106,6 +111,14 @@ bool Mono::Initialize()
 		Assertion::ThrowInternalFailure("Failed to Setup Mono Paths!");
 		return false;
 	}
+
+	jMonoDroidHelper = ::Core::Env->FindClass("com/melonloader/helpers/MonoDroidHelper");
+	if (jMonoDroidHelper == NULL)
+	{
+		Assertion::ThrowInternalFailure("Cannot find com/melonloader/helpers/MonoDroidHelper");
+		return false;
+	}
+	
 	Debug::Msg(("Mono::BasePath = " + std::string(BasePath)).c_str());
 	Debug::Msg(("Mono::ManagedPath = " + std::string(ManagedPath)).c_str());
 	Debug::Msg(("Mono::ConfigPath = " + std::string(ConfigPath)).c_str());
@@ -154,13 +167,19 @@ bool Mono::Load()
 		return false;
 	}
 
-	//Logger::Msg((std::string(NativePath) + "/libmono-native.so").c_str());
-	// void* libNative = dlopen("libmono-native.so", RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+	// const char* extraLibs[] = {
+	// 	"libmonodroid.so"
+	// };
 	//
-	// if (libNative == NULL)
+	// for (size_t i = 0; i < sizeof(extraLibs) / sizeof(extraLibs[0]); i++)
 	// {
-	// 	Assertion::ThrowInternalFailure("Failed to Load libmono-native.so!");
-	// 	return false;
+	// 	void* lib = dlopen(extraLibs[i], RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
+	// 	if (lib == NULL)
+	// 	{
+	// 		Logger::Errorf("Failed to load %s", extraLibs[i]);
+	// 		Assertion::ThrowInternalFailure("Failed to load library!");
+	// 		return false;
+	// 	}
 	// }
 
 	return Exports::Initialize();
@@ -288,19 +307,38 @@ void Mono::CreateDomain(const char* name)
 	Exports::mono_assembly_setrootdir(ManagedPath);
 	Exports::mono_set_config_dir(ConfigPath);
 
+#ifdef __ANDROID__
+	Debug::Msg("Initializing mono via JNI");
+	if (!InitMonoJNI())
+	{
+		Assertion::ThrowInternalFailure("Failed to initialize mono in JNI");
+		Core::KillCurrentProcess();
+		return; // lol
+	}
+#endif
+
 #ifdef PORT_DISABLE
 	if (!IsOldMono)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
 #endif
 
+#ifdef __ANDROID__
+	Debug::Msg("Finding JIT domain");
+	domain = Exports::mono_domain_get();
+	if (domain == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to find mono domain");
+		Core::KillCurrentProcess();
+		return; // lol
+	}
+#else
 	Debug::Msg("Jit init");
-	
 	domain = Exports::mono_jit_init(name);
 
 	Debug::Msg("set thread");
-	
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
-	
+#endif
+
 	if (!IsOldMono)
 		Exports::mono_domain_set_config(domain, Game::BasePath, name);
 }
@@ -351,6 +389,8 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_install_unhandled_exception_hook)
 		MONODEF(mono_print_unhandled_exception)
 		MONODEF(mono_dllmap_insert)
+	
+		MONODEF(mono_domain_get)
 
 
 		if (!IsOldMono)
@@ -398,7 +438,7 @@ bool Mono::Exports::Initialize()
 	mono_dllmap_insert(NULL, "System.Net.Security.Native", NULL, "libmono-native.so", NULL);
 
 	mono_dllmap_insert(NULL, "GameAssembly", NULL, "libil2cpp.so", NULL);
-
+	
 	return Assertion::ShouldContinue;
 }
 
@@ -406,7 +446,6 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 {
 	Hooks::mono_unhandled_exception((Object*)exceptionObject, NULL);
 }
-
 
 #ifdef __ANDROID__
 bool Mono::ApplyPatches()
@@ -452,6 +491,36 @@ bool Mono::CheckPaths()
 		}
 	}
 
+	return true;
+}
+
+bool Mono::InitMonoJNI()
+{
+	JNIEnv* env = Core::Env;
+	Core::Bootstrap->AttachCurrentThread(&env, NULL);
+
+	if (env == NULL)
+	{
+		Logger::Error("Failed to attach ENV");
+		return false;
+	}
+
+	jclass jMonoDroidHelper = env->FindClass("com/melonloader/helpers/MonoDroidHelper");
+	if (jMonoDroidHelper == NULL)
+	{
+		Assertion::ThrowInternalFailure("Cannot find com/melonloader/helpers/MonoDroidHelper");
+		return false;
+	}
+	
+	jmethodID jLoadApplication = env->GetStaticMethodID(jMonoDroidHelper, "LoadApplication", "()V");
+	if (jLoadApplication == NULL)
+	{
+		Logger::Error("Failed to find Method LoadApplication()V");
+		return false;
+	}
+	
+	Debug::Msg("Starting Mono JNI");
+	env->CallStaticVoidMethod(jMonoDroidHelper, jLoadApplication);
 	return true;
 }
 #endif

@@ -3,6 +3,7 @@
 #include <Windows.h>
 #elif defined(__ANDROID__)
 #include <string.h>
+#include <jni.h>
 #endif
 
 class Mono
@@ -44,6 +45,7 @@ public:
 #ifdef __ANDROID__
 	static bool ApplyPatches();
 	static bool CheckPaths();
+	static bool InitMonoJNI();
 #endif
 
 #pragma region ENUMS
@@ -223,6 +225,8 @@ public:
 		MONODEF(void, mono_print_unhandled_exception, (Object* exec))
 		MONODEF(void, mono_dllmap_insert, (Image* assembly, const char* dll, const char* func, const char* tdll, const char* tfunc))
 
+		MONODEF(Domain*, mono_domain_get, ())
+
 #undef MONODEF
 #pragma endregion MonoDefine
 	};
@@ -251,4 +255,8 @@ private:
 	static const char* FolderNames[];
 	static void* PosixHelper;
 	static const char* PosixHelperName;
+#ifdef __ANDROID__
+	static jclass jMonoDroidHelper;
+	static jmethodID jLoadApplication;
+#endif
 };

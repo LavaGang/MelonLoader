@@ -46,23 +46,23 @@ namespace MelonLoader.Support
             Main.Interface.FixedUpdate();
             Coroutines.ProcessWaitForFixedUpdate();
 
-            if (testStart % 250 == 0)
-            {
-                MelonDebug.Msg("Trying Ping");
-
-                int[] pattern = new[]
-                {
-                    0, 1
-                };
-
-                int[] strength = new[]
-                {
-                    100, 50
-                };
-
-                MelonLoader.bHaptics.TestDotArray("test", "VestFront", pattern, pattern.Length, strength, strength.Length, 1000);
-                MelonDebug.Msg("Ping Executed");
-            }
+            // if (testStart % 250 == 0)
+            // {
+            //     MelonDebug.Msg("Trying Ping");
+            //
+            //     int[] pattern = new[]
+            //     {
+            //         0, 1
+            //     };
+            //
+            //     int[] strength = new[]
+            //     {
+            //         100, 50
+            //     };
+            //
+            //     MelonLoader.bHaptics.TestDotArray("test", "VestFront", pattern, pattern.Length, strength, strength.Length, 1000);
+            //     MelonDebug.Msg("Ping Executed");
+            // }
 
             testStart++;
         }

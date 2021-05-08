@@ -21,6 +21,8 @@ def install_mono(path):
 
         shutil.copyfile(os.path.join(paths.Paths.mono_assemblies_path, path), os.path.join(assemblies_path, path))
 
+    shutil.copyfile(paths.Paths.mono_monodroid_assemblies_path, os.path.join(assemblies_path, os.path.basename(paths.Paths.mono_monodroid_assemblies_path)))
+
     return True
 
 

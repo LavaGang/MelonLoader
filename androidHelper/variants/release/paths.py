@@ -4,16 +4,12 @@ import helper.common
 
 class Paths:
     # bootstrap
-    bootstrap_build_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "ARM64", "Bootstrap")
+    bootstrap_build_dir = os.path.join(helper.common.Settings.bin_path, "precompiled", "lib", "arm64-v8a")
     bootstrap_file = "libBootstrap.so"
 
     # il2cpp assembly generator
     il2cpp_gen_asm_paths = [
-        os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "AnyCPU", "MelonLoader", "Dependencies", "Il2CppAssemblyGenerator", "net4.7.2"),
-        os.path.join(helper.common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "AssemblyUnhollower.dll"),
-        os.path.join(helper.common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "AssemblyUnhollower", "bin", "Debug", "net4.7.2", "Iced.dll"), # TODO: Remove
-        os.path.join(helper.common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerBaseLib", "bin", "Debug", "net4.7.2", "UnhollowerBaseLib.dll"),
-        os.path.join(helper.common.Settings.base_dir, "..", "external", "Il2CppAssemblyUnhollower", "UnhollowerRuntimeLib", "bin", "Debug", "net4.7.2", "UnhollowerRuntimeLib.dll")
+        os.path.join(helper.common.Settings.bin_path, "precompiled", "runtime", "assembly_generation")
     ]
     il2cpp_gen_assemblies_path = os.path.join("assets", "melonloader", "etc", "assembly_generation", "managed")
 
@@ -22,14 +18,14 @@ class Paths:
 
     # melonloader
     melonloader_file = "MelonLoader.dll"
-    melonloader_build_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "Android", "MelonLoader", "net35")
+    melonloader_build_dir = os.path.join(helper.common.Settings.bin_path, "precompiled", "runtime")
     melonloader_dest = os.path.join("assets", "melonloader", "etc")
 
     # mono
-    mono_assemblies_path = os.path.join(helper.common.Settings.visual_studio_path(), "Common7", "IDE", "ReferenceAssemblies", "Microsoft", "Framework", "MonoAndroid", "v1.0")
+    mono_assemblies_path = os.path.join(helper.common.Settings.bin_path, "precompiled", "runtime", "managed", "mono")
     mono_monodroid_assemblies_path = os.path.join(helper.common.Settings.visual_studio_path(), "Common7", "IDE", "ReferenceAssemblies", "Microsoft", "Framework", "MonoAndroid", "v8.1", "Mono.Android.dll")
     mono_assemblies_target = os.path.join("assets", "melonloader", "etc", "managed")
-    mono_native_assemblies_path = os.path.join(helper.common.Settings.visual_studio_path(), "MSBuild", "Xamarin", "Android", "lib")
+    mono_native_assemblies_path = os.path.join(helper.common.Settings.bin_path, "precompiled", "lib")
     # key value relationship so file can be renamed when copied
     # key is orignal name
     # value is copied name
@@ -37,18 +33,18 @@ class Paths:
         "libmono-native.so": "libmono-native.so",
         "libMonoPosixHelper.so": "libMonoPosixHelper.so",
         "libmonosgen-2.0.so": "libmonosgen-2.0.so",
-        "libmono-android.debug.so": "libmonodroid.so",
+        "libmono-android.release.so": "libmonodroid.so",
         "libxa-internal-api.so": "libxa-internal-api.so",
         "libxamarin-debug-app-helper.so": "libxamarin-debug-app-helper.so"
     }
 
     # support apk
     support_dirname = 'support'
-    support_apk_path = os.path.join(helper.common.Settings.base_dir, '..', 'APKBindings', 'app', 'build', 'outputs', 'apk', 'debug', 'app-debug.apk')
+    support_apk_path = os.path.join(helper.common.Settings.bin_path, "precompiled", 'apk_extensions.apk')
     support_apk_dest = os.path.join(helper.common.Settings.file_path, support_dirname)
 
     # support module
-    support_module_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "MelonLoader", "Dependencies", "SupportModules")
+    support_module_dir = os.path.join(helper.common.Settings.bin_path, "precompiled", "runtime", "support")
     support_module_dest = os.path.join("assets", "melonloader", "etc", "support")
 
     # unity
