@@ -58,6 +58,9 @@ bool Logger::Initialize()
 		std::remove(latest_path.c_str());
 	LogFile.latest = std::ofstream(latest_path.c_str());
 #endif
+
+	logThread = std::thread(&logThreadLoop);
+	
 	return true;
 }
 
@@ -83,12 +86,14 @@ std::string Logger::GetTimestamp()
 
 void Logger::WriteSpacer()
 {
+
 #ifdef __ANDROID__
 	// todo: write to logfile
 	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "");
 #elif _WIN32
-	LogFile << std::endl;
-	std::cout << std::endl;
+	static const std::string lineEnd = "\n";
+	std::shared_lock<std::shared_mutex> lock(mutex_);
+	logQueue.emplace_back(lineEnd, lineEnd);
 #endif
 }
 
@@ -415,16 +420,46 @@ void Logger::Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, con
 		<< Console::ColorToAnsi(Console::Color::Reset);
 #endif
 
-#ifdef __ANDROID__
-	// todo: write to logfile
-	const char* messageC = msgColor.str().c_str();
-	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%s", messageC);
-#elif defined(_WIN32)
-	//TODO: implement printf
-	LogFile << msgPlain.str();
-	std::cout << msgColor.str();
-#endif
+	std::shared_lock<std::shared_mutex> lock(mutex_);
+	logQueue.emplace_back(msgPlain.str(), msgColor.str());
+	
+
 
 	// oof
 	free(buffer);
+}
+
+void Logger::logThreadLoop()
+{
+	// Should we use true here or a different condition?
+	while (true)
+	{
+		if (!logQueue.empty())
+		{
+			// Copy the list to avoid keeping control
+			std::unique_lock<std::shared_mutex> lock(mutex_);
+			std::list<std::pair<std::string, std::string>> copy_list(logQueue);
+			logQueue.clear();
+			lock.release();
+
+			// Now we can write using these strings
+
+			for (auto& pair : copy_list)
+			{
+				const auto msg_plain = pair.first;
+				const auto msg_color = pair.second;
+				#ifdef __ANDROID__
+				// todo: write to logfile
+				const char* messageC = msgColor.c_str();
+				__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%s", messageC);
+				#elif defined(_WIN32)
+				//TODO: implement printf
+				LogFile << msg_plain;
+				std::cout << msg_color;
+				#endif
+			}
+			
+			
+		}
+	}
 }

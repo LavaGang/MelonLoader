@@ -4,7 +4,12 @@
 #include <filesystem>
 #include <fstream>
 #endif
+#include <list>
 #include <string>
+#include <mutex>
+#include <shared_mutex>
+#include <thread>
+
 #include "Console.h"
 
 enum LogLevel
@@ -79,6 +84,12 @@ public:
 #endif
 
 private:
+	static void logThreadLoop();
+	static std::shared_mutex mutex_;
+	static std::thread logThread;
+	// Plain : Colored str
+	static std::list<std::pair<std::string, std::string>> logQueue;
+	
 	static const char* FilePrefix;
 	static const char* FileExtension;
 	static const char* LatestLogFileName;
