@@ -28,7 +28,7 @@ int Logger::ErrorCount = 0;
 
 std::mutex Logger::mutex_;
 std::thread Logger::logThread;
-std::list<std::pair<std::string, std::string>> Logger::logQueue;
+std::list<Logger::LogArgs*> Logger::logQueue;
 
 #ifdef PORT_DISABLE
 Logger::FileStream Logger::LogFile;
@@ -65,7 +65,7 @@ bool Logger::Initialize()
 	LogFile.latest = std::ofstream(latest_path.c_str());
 #endif
 
-	logThread = std::thread(&logThreadLoop);
+	logThread = std::thread(&LogThreadHandle);
 
 	return true;
 }
@@ -381,42 +381,91 @@ void Logger::Internal_DirectWritef(Console::Color txtcolor, LogLevel level, cons
 
 void Logger::Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* fmt, va_list args)
 {
+	// allocate LogArgs to heap
+	LogArgs* logArgs = (LogArgs*)malloc(sizeof(LogArgs));
+	logArgs->txtcolor = txtcolor;
+	logArgs->level = level;
+	logArgs->prefixes = (MessagePrefix*)malloc(sizeof(MessagePrefix) * size);
+	logArgs->prefixes_len = size;
+	
+	// TODO: is there a way to do this on a different thread
+	logArgs->buffer = (char*)malloc(vsnprintf(NULL, 0, fmt, args));
+	vsprintf((char*)logArgs->buffer, fmt, args);
+
+	memcpy(logArgs->prefixes, prefixes, sizeof(MessagePrefix) * size);
+	for (size_t i = 0; i < size; i++)
+	{
+		size_t len = strlen(prefixes[i].Message);
+		logArgs->prefixes[i].Message = (char*)malloc(sizeof(char*) * len);
+		memset((void*)(logArgs->prefixes[i].Message + len), 0, 1); // this can be simplified
+		memcpy((char*)logArgs->prefixes[i].Message, prefixes[i].Message, len);
+	}
+
+	// queue up log
+	{
+		std::lock_guard<std::mutex> lock(mutex_);
+		logQueue.emplace_back(logArgs);
+	}
+}
+
+void Logger::LogThreadHandle()
+{
+	// using goto instead of making a recursive call
+	// so the stack doesn't get despacito-ed
+	top:
+
+	// Nesting is ugly, so skipping nesting
+	if (logQueue.empty())
+		goto top;
+
+	// Copy the list to avoid keeping control
+	std::unique_lock<std::mutex> lock(mutex_);
+	auto copy_list(logQueue);
+
+	logQueue.clear();
+	lock.unlock();
+		
+	// Go through queue, and log each element
+	for (auto& pair : copy_list)
+		LogWrite(pair);
+	
+	goto top;
+}
+
+void Logger::LogWrite(Logger::LogArgs* args)
+{
+	// why do we need to create a new stream every time.
 	std::stringstream msgColor;
 	std::stringstream msgPlain;
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < args->prefixes_len; i++)
 	{
 		msgColor << Console::ColorToAnsi(Console::Color::Gray)
 			<< "["
-			<< Console::ColorToAnsi(prefixes[i].Color)
-			<< prefixes[i].Message
+			<< Console::ColorToAnsi(args->prefixes[i].Color)
+			<< args->prefixes[i].Message
 			<< Console::ColorToAnsi(Console::Color::Gray)
 			<< "]"
 			<< Console::ColorToAnsi(Console::Color::Reset)
 			<< " ";
 
 		msgPlain << "["
-			<< prefixes[i].Message
+			<< args->prefixes[i].Message
 			<< "] ";
 	}
 
-	// prob super inefficient to malloc then free
-	// TODO: find a better (threadsafe) way
-	char* buffer = (char*)malloc(vsnprintf(NULL, 0, fmt, args));
-	vsprintf(buffer, fmt, args);
-
 #ifdef __ANDROID__
 	msgColor
-		<< Console::ColorToAnsi(txtcolor)
-		<< buffer
+		<< Console::ColorToAnsi(args->txtcolor)
+		<< args->buffer
 		<< Console::ColorToAnsi(Console::Color::Reset);
 
 	msgPlain
-		<< buffer
+		<< args->buffer
 		<< Console::ColorToAnsi(Console::Color::Reset);
 #else
 	msgColor
-		<< Console::ColorToAnsi(txtcolor)
+		<< Console::ColorToAnsi(args->txtcolor)
 		<< buffer
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Reset);
@@ -426,45 +475,21 @@ void Logger::Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, con
 		<< Console::ColorToAnsi(Console::Color::Reset);
 #endif
 
-	{
-		std::lock_guard<std::mutex> lock(mutex_);
-		logQueue.emplace_back(msgPlain.str(), msgColor.str());
-	}
 
-	
-	// oof
-	free(buffer);
-}
+#ifdef __ANDROID__
+	// todo: write to logfile
+	const char* messageC = msgColor.str().c_str();
+	__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%s", messageC);
+#elif defined(_WIN32)
+	//TODO: implement printf
+	LogFile << msgPlain.str().c_str();
+	std::cout << msgColor.str().c_str();
+#endif
 
-void Logger::logThreadLoop()
-{
-	// Should we use true here or a different condition?
-	while (true)
-	{
-		if (!logQueue.empty())
-		{
-			// Copy the list to avoid keeping control
-			std::unique_lock<std::mutex> lock(mutex_);
-			std::list<std::pair<std::string, std::string>> copy_list(logQueue);
-
-			logQueue.clear();
-			lock.unlock();
-			
-			// Now we can write using these strings
-			for (auto& pair : copy_list)
-			{
-				const auto msg_plain = pair.first;
-				const auto msg_color = pair.second;
-				#ifdef __ANDROID__
-				// todo: write to logfile
-				const char* messageC = msg_color.c_str();
-				__android_log_print(ANDROID_LOG_INFO, "MelonLoader", "%s", messageC);
-				#elif defined(_WIN32)
-				//TODO: implement printf
-				LogFile << msg_plain;
-				std::cout << msg_color;
-				#endif
-			}
-		}
-	}
+	// memory management
+	free((void*)args->buffer); // oof
+	for (int i = 0; i < args->prefixes_len; i++)
+		free((void*)args->prefixes[i].Message);
+	free(args->prefixes);
+	free(args);
 }

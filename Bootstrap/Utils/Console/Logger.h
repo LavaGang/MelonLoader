@@ -84,12 +84,23 @@ public:
 #endif
 
 private:
-	static void logThreadLoop();
+	struct LogArgs
+	{
+		Console::Color txtcolor;
+		LogLevel level;
+		size_t prefixes_len;
+		const char* buffer;
+		MessagePrefix* prefixes;
+	};
+
+	
+	static void LogThreadHandle();
+	static void LogWrite(LogArgs* pair);
 	static std::mutex mutex_;
 	static std::thread logThread;
 	// Plain : Colored str
-	static std::list<std::pair<std::string, std::string>> logQueue;
-	
+	static std::list<Logger::LogArgs*> logQueue;
+
 	static const char* FilePrefix;
 	static const char* FileExtension;
 	static const char* LatestLogFileName;
