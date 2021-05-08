@@ -94,10 +94,8 @@ private:
 		std::vector<MessagePrefix> prefixes;
 
 		// Thanks sc2ad for this pretty good code
+		// Logic is now here so it's lifetime is guaranteed to be as long as we need it to be
 		LogArgs(Console::Color color_, LogLevel level_, const MessagePrefix prefixes_[], const int size, const char* fmt, va_list args) : txtcolor(color_), level(level_),prefixes_len(size), prefixes(make_prefixes(prefixes_, size)), buffer(make_buffer(fmt, args)) {}
-		~LogArgs() {
-			delete[] buffer;
-		}
 	private:
 		 static std::vector<MessagePrefix> make_prefixes(const MessagePrefix prefixes_[], const int size) {
 			auto prefixes = std::vector<MessagePrefix>(size);
