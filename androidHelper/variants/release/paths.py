@@ -33,7 +33,7 @@ class Paths:
         "libmono-native.so": "libmono-native.so",
         "libMonoPosixHelper.so": "libMonoPosixHelper.so",
         "libmonosgen-2.0.so": "libmonosgen-2.0.so",
-        "libmono-android.release.so": "libmonodroid.so",
+        "libmono-android.debug.so": "libmonodroid.so",
         "libxa-internal-api.so": "libxa-internal-api.so",
         "libxamarin-debug-app-helper.so": "libxamarin-debug-app-helper.so"
     }

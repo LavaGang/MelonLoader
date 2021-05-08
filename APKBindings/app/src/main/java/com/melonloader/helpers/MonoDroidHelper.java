@@ -22,10 +22,8 @@ public class MonoDroidHelper {
     static boolean initialized = false;
 
     public static void LoadApplication() {
-        LogBridge.msg("Loading Mono JNI");
-
         synchronized (MonoDroidHelper.class) {
-            LogBridge.msg("foo");
+            LogBridge.msg("Starting Mono");
             if (!ApplicationState.ContextDefined)
                 LogBridge.error("Cannot find context");
 
@@ -50,8 +48,6 @@ public class MonoDroidHelper {
                     getNativeLibraryPath(paramContext)
             };
 
-            LogBridge.msg("Loading libs");
-
             try {
                 if (ApplicationState.Debug) {
                     System.loadLibrary("xamarin-debug-app-helper");
@@ -70,8 +66,6 @@ public class MonoDroidHelper {
                 return;
             }
 
-            LogBridge.msg("initializing");
-
             initInternal(lang, new String[0], runtimeNativeLibDir, appDirs, classLoader, new String[0], Build.VERSION.SDK_INT, isEmulator());
             initialized = true;
         }
@@ -84,7 +78,6 @@ public class MonoDroidHelper {
 
     private static void initInternal(String arg1, String[] arg2, String arg3, String[] arg4, ClassLoader arg5, String[] arg6, int arg7, boolean arg8)
     {
-        LogBridge.msg("bar");
         Class runtime = null;
         try {
             runtime = Class.forName("mono.android.Runtime");
