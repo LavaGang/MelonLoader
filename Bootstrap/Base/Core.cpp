@@ -26,6 +26,8 @@
 #include "../Utils/AssemblyUnhollower/XrefScannerBindings.h"
 #include "../Utils/Sequence.h"
 #include "../preprocess.h"
+#include "../Managers/AssetManagerHelper.h"
+#include "../Managers/StaticSettings.h"
 
 #ifdef __ANDROID__
 #include <stdio.h>
@@ -74,6 +76,14 @@ bool Core::Initialize()
 		{
 			"Initializing Android data",
 			AndroidData::Initialize
+		},
+		{
+			"Loading Asset Manager",
+			AssetManagerHelper::Initialize
+		},
+		{
+			"Loading Static Settings",
+			StaticSettings::Initialize
 		},
 #endif
 		{

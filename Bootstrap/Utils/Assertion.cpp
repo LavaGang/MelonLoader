@@ -28,7 +28,7 @@ bool Assertion::vThrowInternalFailuref(const char* fmt, va_list args)
 {
 	// TODO: implement JNI bindings to show message box and error
 	if (!ShouldContinue)
-		return;
+		return false;
 	
 	ShouldContinue = false;
 
