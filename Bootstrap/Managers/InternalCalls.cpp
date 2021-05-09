@@ -138,6 +138,11 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
     return Mono::Exports::mono_string_new(Mono::domain, info);
 }
 
+void InternalCalls::MelonUtils::GetStaticSettings(StaticSettings::Settings_t &settings)
+{
+    memcpy(&settings, &StaticSettings::Settings, sizeof(StaticSettings::Settings_t));
+}
+
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
     Mono::AddInternalCall("MelonLoader.MelonUtils::IsGame32Bit", (void*)IsGame32Bit);
@@ -158,6 +163,8 @@ void InternalCalls::MelonUtils::AddInternalCalls()
     Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", (void*)GetGameDeveloper);
     Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", (void*)GetGameDirectory);
     Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", (void*)GetHashCode);
+    
+    Mono::AddInternalCall("MelonLoader.MelonUtils::GetStaticSettings", (void*)GetStaticSettings);
 }
 #pragma endregion
 

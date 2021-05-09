@@ -243,11 +243,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Managers\AssetManagerHelper.cpp" />
     <ClCompile Include="Managers\bHapticsPlayer.cpp" />
     <ClCompile Include="External\bHapticsBridge.cpp" />
     <ClCompile Include="Managers\AndroidData.cpp" />
     <ClCompile Include="Bootstrap.cpp" />
     <ClCompile Include="Base\Core.cpp" />
+    <ClCompile Include="Managers\StaticSettings.cpp" />
     <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
     <ClCompile Include="Utils\Console\JavaLogBridge.cpp" />
     <ClCompile Include="Utils\Encoding.cpp" />
@@ -274,6 +276,7 @@
     <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Managers\AssetManagerHelper.h" />
     <ClInclude Include="Managers\bHapticsPlayer.h" />
     <ClInclude Include="Managers\AndroidData.h" />
     <ClInclude Include="Base\capstone\include\capstone\arm.h" />
@@ -292,6 +295,7 @@
     <ClInclude Include="Base\capstone\include\capstone\x86.h" />
     <ClInclude Include="Base\capstone\include\capstone\xcore.h" />
     <ClInclude Include="Base\funchook\include\funchook.h" />
+    <ClInclude Include="Managers\StaticSettings.h" />
     <ClInclude Include="Patcher\Tests\Suite.spec.h" />
     <ClInclude Include="Utils\Encoding.h" />
     <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />

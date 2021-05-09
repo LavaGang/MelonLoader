@@ -52,20 +52,23 @@ namespace MelonLoader.Support
             InitializeUnityVersion();
             ConsoleCleaner();
 
-            SceneManager.sceneLoaded = (
-                   (SceneManager.sceneLoaded == null)
-                   ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
-                   : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
-                   );
+            if (!MelonUtils.StaticSettings.safeMode)
+            {
+                SceneManager.sceneLoaded = (
+                       (SceneManager.sceneLoaded == null)
+                       ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
+                       : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
+                       );
 
-            Camera.onPostRender = (
-                (Camera.onPostRender == null)
-                ? new Action<Camera>(OnPostRender)
-                : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
-                );
+                Camera.onPostRender = (
+                    (Camera.onPostRender == null)
+                    ? new Action<Camera>(OnPostRender)
+                    : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
+                    );
 
-            ClassInjector.RegisterTypeInIl2Cpp<Component>();
-            Component.Create();
+                ClassInjector.RegisterTypeInIl2Cpp<Component>();
+                Component.Create();
+            }
 
             return new SupportModule_To();
         }

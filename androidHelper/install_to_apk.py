@@ -10,6 +10,7 @@ import prepare.melonloader
 import prepare.support_module
 import prepare.il2cpp_assembly_generation
 import prepare.xamarin
+import prepare.static_settings
 
 from variants import paths
 
@@ -83,7 +84,7 @@ def install_apk(apk_path, build_output_path):
     if not prepare.unity.install_unity_assemblies(output_path):
         error("Failed to install unity assemblies")
 
-    if common.Settings.unity_unstripped() and not prepare.unity.install_native_original_unity_assemblies(output_path):
+    if not common.Settings.safe_mode() and not prepare.unity.install_native_original_unity_assemblies(output_path):
         print("WARNING: Failed to install unstripped unity assemblies. Some engine code may not be available.")
 
     if not prepare.melonloader.install_melonloader(output_path):
@@ -94,6 +95,9 @@ def install_apk(apk_path, build_output_path):
 
     if not prepare.il2cpp_assembly_generation.install_il2cpp_gen(output_path):
         error("Failed to install il2cpp assembly generator")
+
+    if not prepare.static_settings.install_settings(output_path):
+        error("Failed to apply static settings")
 
     if not wrapper.apktool.build(output_path, build_output_path):
         error("Failed to build.")
