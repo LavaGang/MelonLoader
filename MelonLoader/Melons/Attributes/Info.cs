@@ -38,12 +38,9 @@ namespace MelonLoader
             string downloadLink = null // Might get Removed. Not sure yet.
         ) {
             SystemType = type;
-            if (!string.IsNullOrEmpty(name))
-                Name = Regex.Replace(name, "[\x00-\x7E]", string.Empty);
-            if (!string.IsNullOrEmpty(version))
-                Version = Regex.Replace(version, "[\x00-\x7E]", string.Empty);
-            if (!string.IsNullOrEmpty(author))
-                Author = Regex.Replace(author, "[\x00-\x7E]", string.Empty);
+            Name = name;
+            Version = version;
+            Author = author;
 
             DownloadLink = downloadLink; // Might get Removed. Not sure yet.
         }
