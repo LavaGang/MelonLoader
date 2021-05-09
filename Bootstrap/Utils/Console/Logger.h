@@ -9,6 +9,7 @@
 #include <mutex>
 #include <shared_mutex>
 #include <thread>
+#include <vector>
 
 #include "Console.h"
 
@@ -60,7 +61,7 @@ public:
 	struct MessagePrefix
 	{
 		Console::Color Color;
-		const char* Message;
+		const std::string Message;
 	};
 	
 	static void Internal_DirectWrite(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* txt);
@@ -89,17 +90,33 @@ private:
 		Console::Color txtcolor;
 		LogLevel level;
 		size_t prefixes_len;
-		const char* buffer;
-		MessagePrefix* prefixes;
+		std::string buffer;
+		std::vector<MessagePrefix> prefixes;
+
+		// Thanks sc2ad for this pretty good code
+		// Logic is now here so it's lifetime is guaranteed to be as long as we need it to be
+		LogArgs(Console::Color color_, LogLevel level_, const MessagePrefix prefixes_[], const int size, const char* fmt, va_list args) : txtcolor(color_), level(level_), prefixes_len(size), prefixes(prefixes_, prefixes_ + size),buffer(make_buffer(fmt, args)) {}
+	private:
+		static char* make_buffer(const char* fmt, va_list args) {
+			char* buffer;
+			auto sz = vsnprintf(nullptr, 0, fmt, args);
+			if (sz <= 0) {
+				buffer = "";
+			} else {
+				buffer = new char[sz];
+				vsprintf(buffer, fmt, args);
+			}
+			return buffer;
+		}
 	};
 
 	
 	static void LogThreadHandle();
-	static void LogWrite(LogArgs* pair);
+	static void LogWrite(LogArgs& pair);
 	static std::mutex mutex_;
 	static std::thread logThread;
 	// Plain : Colored str
-	static std::list<Logger::LogArgs*> logQueue;
+	static std::list<Logger::LogArgs> logQueue;
 
 	static const char* FilePrefix;
 	static const char* FileExtension;
