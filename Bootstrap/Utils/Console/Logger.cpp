@@ -17,6 +17,10 @@
 #include <iostream>
 #include <shared_mutex>
 
+std::mutex Logger::mutex_;
+std::thread Logger::logThread;
+std::list<Logger::LogArgs> Logger::logQueue;
+
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtension = ".log";
 const char* Logger::LatestLogFileName = "Latest";
@@ -25,10 +29,6 @@ int Logger::MaxWarnings = 100;
 int Logger::MaxErrors = 100;
 int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
-
-std::mutex Logger::mutex_;
-std::thread Logger::logThread;
-std::list<Logger::LogArgs*> Logger::logQueue;
 
 #ifdef PORT_DISABLE
 Logger::FileStream Logger::LogFile;
@@ -150,7 +150,7 @@ void Logger::vMsgf(Console::Color txtcolor, const char* fmt, va_list args)
 	const Logger::MessagePrefix prefixes[]{
 		Logger::MessagePrefix{
 			Console::Green,
-			GetTimestamp().c_str()
+			GetTimestamp()
 		}
 	};
 
@@ -381,96 +381,73 @@ void Logger::Internal_DirectWritef(Console::Color txtcolor, LogLevel level, cons
 
 void Logger::Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* fmt, va_list args)
 {
-	// allocate LogArgs to heap
-	LogArgs* logArgs = (LogArgs*)malloc(sizeof(LogArgs));
-	logArgs->txtcolor = txtcolor;
-	logArgs->level = level;
-	logArgs->prefixes = (MessagePrefix*)malloc(sizeof(MessagePrefix) * size);
-	logArgs->prefixes_len = size;
-	
-	// TODO: is there a way to do this on a different thread
-	logArgs->buffer = (char*)malloc(vsnprintf(NULL, 0, fmt, args));
-	vsprintf((char*)logArgs->buffer, fmt, args);
-
-	memcpy(logArgs->prefixes, prefixes, sizeof(MessagePrefix) * size);
-	for (size_t i = 0; i < size; i++)
-	{
-		size_t len = strlen(prefixes[i].Message);
-		logArgs->prefixes[i].Message = (char*)malloc(sizeof(char*) * len);
-		memset((void*)(logArgs->prefixes[i].Message + len), 0, 1); // this can be simplified
-		memcpy((char*)logArgs->prefixes[i].Message, prefixes[i].Message, len);
-	}
-
 	// queue up log
-	{
-		std::lock_guard<std::mutex> lock(mutex_);
-		logQueue.emplace_back(logArgs);
-	}
+	std::lock_guard lock(mutex_);
+	logQueue.emplace_back(txtcolor, level, prefixes, size, fmt, args);
 }
 
 void Logger::LogThreadHandle()
 {
-	// using goto instead of making a recursive call
-	// so the stack doesn't get despacito-ed
-	top:
+	// Sorry SirCoolness, as much as I love goto,
+	// I need that vector to get destroyed
+	while (true)
+	{
+		// Nesting is ugly, so skipping nesting
+		if (logQueue.empty())
+			continue;
 
-	// Nesting is ugly, so skipping nesting
-	if (logQueue.empty())
-		goto top;
+		// Copy the list to avoid keeping control
+		std::unique_lock lock(mutex_);
+		auto copy_list(logQueue);
 
-	// Copy the list to avoid keeping control
-	std::unique_lock<std::mutex> lock(mutex_);
-	auto copy_list(logQueue);
-
-	logQueue.clear();
-	lock.unlock();
+		logQueue.clear();
+		lock.unlock();
 		
-	// Go through queue, and log each element
-	for (auto& pair : copy_list)
-		LogWrite(pair);
-	
-	goto top;
+		// Go through queue, and log each element
+		for (auto& pair : copy_list)
+			LogWrite(pair);
+	}
 }
 
-void Logger::LogWrite(Logger::LogArgs* args)
+void Logger::LogWrite(Logger::LogArgs& args)
 {
 	// why do we need to create a new stream every time.
 	std::stringstream msgColor;
 	std::stringstream msgPlain;
 
-	for (int i = 0; i < args->prefixes_len; i++)
+	for (int i = 0; i < args.prefixes_len; i++)
 	{
 		msgColor << Console::ColorToAnsi(Console::Color::Gray)
 			<< "["
-			<< Console::ColorToAnsi(args->prefixes[i].Color)
-			<< args->prefixes[i].Message
+			<< Console::ColorToAnsi(args.prefixes[i].Color)
+			<< args.prefixes[i].Message
 			<< Console::ColorToAnsi(Console::Color::Gray)
 			<< "]"
 			<< Console::ColorToAnsi(Console::Color::Reset)
 			<< " ";
 
 		msgPlain << "["
-			<< args->prefixes[i].Message
+			<< args.prefixes[i].Message
 			<< "] ";
 	}
 
 #ifdef __ANDROID__
 	msgColor
-		<< Console::ColorToAnsi(args->txtcolor)
-		<< args->buffer
+		<< Console::ColorToAnsi(args.txtcolor)
+		<< args.buffer
 		<< Console::ColorToAnsi(Console::Color::Reset);
 
 	msgPlain
-		<< args->buffer
+		<< args.buffer
 		<< Console::ColorToAnsi(Console::Color::Reset);
 #else
 	msgColor
-		<< Console::ColorToAnsi(args->txtcolor)
-		<< buffer
+		<< Console::ColorToAnsi(args.txtcolor)
+		<< args.buffer
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Reset);
 	msgPlain
-		<< buffer
+		<< args.buffer
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Reset);
 #endif
@@ -485,11 +462,4 @@ void Logger::LogWrite(Logger::LogArgs* args)
 	LogFile << msgPlain.str().c_str();
 	std::cout << msgColor.str().c_str();
 #endif
-
-	// memory management
-	free((void*)args->buffer); // oof
-	for (int i = 0; i < args->prefixes_len; i++)
-		free((void*)args->prefixes[i].Message);
-	free(args->prefixes);
-	free(args);
 }
