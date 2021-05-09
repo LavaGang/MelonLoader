@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace MelonLoader
 {
@@ -33,10 +34,12 @@ namespace MelonLoader
         public MelonInfoAttribute(Type type, string name, string version, string author = null, string downloadLink = null)
         {
             SystemType = type;
-            Name = name;
-            Version = version;
-            Author = author;
-            DownloadLink = downloadLink;
+            if (!string.IsNullOrEmpty(name))
+                Name = Regex.Replace(name, "[\x00-\x7E]", string.Empty);
+            if (!string.IsNullOrEmpty(version))
+                Version = Regex.Replace(version, "[\x00-\x7E]", string.Empty);
+            if (!string.IsNullOrEmpty(author))
+                Author = Regex.Replace(author, "[\x00-\x7E]", string.Empty);
         }
     }
 }
