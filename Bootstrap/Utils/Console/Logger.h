@@ -113,10 +113,10 @@ private:
 	
 	static void LogThreadHandle();
 	static void LogWrite(LogArgs& pair);
-	inline static std::mutex mutex_;
-	inline static std::thread logThread;
+	static std::mutex mutex_;
+	static std::thread logThread;
 	// Plain : Colored str
-	inline static std::list<Logger::LogArgs> logQueue;
+	static std::list<Logger::LogArgs> logQueue;
 
 	static const char* FilePrefix;
 	static const char* FileExtension;

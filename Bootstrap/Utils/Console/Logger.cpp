@@ -17,6 +17,10 @@
 #include <iostream>
 #include <shared_mutex>
 
+std::mutex Logger::mutex_;
+std::thread Logger::logThread;
+std::list<Logger::LogArgs> Logger::logQueue;
+
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtension = ".log";
 const char* Logger::LatestLogFileName = "Latest";
