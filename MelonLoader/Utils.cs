@@ -11,6 +11,14 @@ namespace MelonLoader
 {
     public static class MelonUtils
     {
+        [StructLayout(LayoutKind.Sequential)]
+        public struct StaticSettingsT
+        {
+            public bool safeMode;
+        }
+
+        public static StaticSettingsT StaticSettings;
+
         internal static void Setup()
         {
             GamePackage = string.Copy(Internal_GetGamePackage());
@@ -24,6 +32,8 @@ namespace MelonLoader
                 Directory.CreateDirectory(UserDataDirectory);
             Main.IsVRChat = IsVRChat;
             Main.IsBoneworks = IsBONEWORKS;
+            
+            GetStaticSettings(ref StaticSettings);
         }
 
         public static string GameDirectory { get; private set; }
@@ -171,5 +181,8 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetHashCode();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static void GetStaticSettings(ref StaticSettingsT res);
     }
 }

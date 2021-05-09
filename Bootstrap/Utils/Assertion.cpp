@@ -9,11 +9,26 @@
 bool Assertion::ShouldContinue = true;
 bool Assertion::DontDie = false;
 
-void Assertion::ThrowInternalFailure(const char* msg)
+bool Assertion::ThrowInternalFailure(const char* msg)
 {
-// TODO: implement JNI bindings to show message box and error
+	return ThrowInternalFailuref("%s", msg);
+}
+
+bool Assertion::ThrowInternalFailuref(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vThrowInternalFailuref(fmt, args);
+	va_end(args);
+
+	return false;
+}
+
+bool Assertion::vThrowInternalFailuref(const char* fmt, va_list args)
+{
+	// TODO: implement JNI bindings to show message box and error
 	if (!ShouldContinue)
-		return;
+		return false;
 	
 	ShouldContinue = false;
 
@@ -47,8 +62,10 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		MessageBoxA(NULL, "Please Post your latest.log File\nto #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
 	}
 #elif defined(__ANDROID__)
-	Logger::Internal_DirectWrite(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
+	Logger::Internal_vDirectWritef(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), fmt, args);
 #endif
+
+	return false;
 }
 
 #ifdef __ANDROID__

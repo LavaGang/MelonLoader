@@ -57,6 +57,9 @@ namespace MelonLoader
             try { bHaptics.Start(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics.Start Exception: " + ex.ToString()); bHaptics.WasError = true; }
 
+            if (MelonUtils.StaticSettings.safeMode)
+                MelonLogger.Warning("Safe Mode is enabled. MelonLoader will have reduced functionality.");
+            
             MelonHandler.OnApplicationStart_Plugins();
 
             MelonHandler.LoadMods();

@@ -1,5 +1,6 @@
 #pragma once
 #include "Mono.h"
+#include "StaticSettings.h"
 #include "../Utils/Console/Console.h"
 
 class InternalCalls
@@ -39,6 +40,7 @@ public:
 		static Mono::String* GetHashCode();
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
+		static void GetStaticSettings(StaticSettings::Settings_t &settings);
 	};
 
 	class MelonDebug

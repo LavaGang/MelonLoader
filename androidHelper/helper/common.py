@@ -8,7 +8,7 @@ class Settings:
 
     _visual_studio_path = ""
     _unity_editor_path = ""
-    _unity_unstripped = False
+    _safe_mode = False
     _keytool_path = ""
     _keystore_password = ""
     _apksigner_path = ""
@@ -30,9 +30,9 @@ class Settings:
         return Settings._unity_editor_path
 
     @staticmethod
-    def unity_unstripped():
+    def safe_mode():
         Settings.load_config()
-        return Settings._unity_unstripped
+        return Settings._safe_mode
 
     @staticmethod
     def keytool_path():
@@ -59,7 +59,7 @@ class Settings:
 
         Settings._visual_studio_path = os.path.realpath(data['VisualStudioBase'])
         Settings._unity_editor_path = os.path.realpath(data['UnityEditorBase'])
-        Settings._unity_unstripped = data['UnityUnstripped']
+        Settings._safe_mode = data['SafeMode']
         Settings._keytool_path = data['KeytoolPath']
         Settings._keystore_password = data['KeystorePassword']
         Settings._apksigner_path = data['ApkSignerPath']
