@@ -60,3 +60,7 @@ class Paths:
     unity_maindata = os.path.join("assets", "bin", "Data", "data.unity3d")
     unity_native_assemblies = ["libunity.so", "libmain.so"]
     unity_assemblies_dest = os.path.join("assets", "melonloader", "etc", "assembly_generation", "unity")
+
+    # static settings
+    static_settings_output_dir = os.path.join("assets")
+    static_settings_filename = "static_settings"
