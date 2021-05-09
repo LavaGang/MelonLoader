@@ -95,18 +95,8 @@ private:
 
 		// Thanks sc2ad for this pretty good code
 		// Logic is now here so it's lifetime is guaranteed to be as long as we need it to be
-		LogArgs(Console::Color color_, LogLevel level_, const MessagePrefix prefixes_[], const int size, const char* fmt, va_list args) : txtcolor(color_), level(level_),prefixes_len(size), prefixes(make_prefixes(prefixes_, size))
-		{
-			auto charBuffer = make_buffer(fmt, args);
-			buffer.assign(charBuffer);
-			delete charBuffer;
-		}
+		LogArgs(Console::Color color_, LogLevel level_, const MessagePrefix prefixes_[], const int size, const char* fmt, va_list args) : txtcolor(color_), level(level_), prefixes_len(size), prefixes(prefixes_, prefixes_ + size),buffer(make_buffer(fmt, args)) {}
 	private:
-		 static std::vector<MessagePrefix> make_prefixes(const MessagePrefix prefixes_[], const int size) {
-			auto prefixes = std::vector<MessagePrefix>(size);
-			memcpy(prefixes.data(), prefixes_, sizeof(MessagePrefix) * size);
-			return prefixes;
-		}
 		static char* make_buffer(const char* fmt, va_list args) {
 			char* buffer;
 			auto sz = vsnprintf(nullptr, 0, fmt, args);
