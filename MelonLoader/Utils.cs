@@ -12,12 +12,12 @@ namespace MelonLoader
     public static class MelonUtils
     {
         [StructLayout(LayoutKind.Sequential)]
-        internal struct StaticSettingsT
+        public struct StaticSettingsT
         {
             public bool safeMode;
         }
 
-        internal static StaticSettingsT StaticSettings;
+        public static StaticSettingsT StaticSettings;
 
         internal static void Setup()
         {
