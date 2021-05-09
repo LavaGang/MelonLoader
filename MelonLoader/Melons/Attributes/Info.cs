@@ -29,10 +29,14 @@ namespace MelonLoader
         /// <summary>
         /// Download Link of the Melon.
         /// </summary>
-        public string DownloadLink { get; internal set; }
+        public string DownloadLink { get; internal set; } // Might get Removed. Not sure yet.
 
-        public MelonInfoAttribute(Type type, string name, string version, string author = null, string downloadLink = null)
-        {
+        public MelonInfoAttribute(Type type, 
+            string name, 
+            string version, 
+            string author = null, 
+            string downloadLink = null // Might get Removed. Not sure yet.
+        ) {
             SystemType = type;
             if (!string.IsNullOrEmpty(name))
                 Name = Regex.Replace(name, "[\x00-\x7E]", string.Empty);
@@ -40,6 +44,8 @@ namespace MelonLoader
                 Version = Regex.Replace(version, "[\x00-\x7E]", string.Empty);
             if (!string.IsNullOrEmpty(author))
                 Author = Regex.Replace(author, "[\x00-\x7E]", string.Empty);
+
+            DownloadLink = downloadLink; // Might get Removed. Not sure yet.
         }
     }
 }
