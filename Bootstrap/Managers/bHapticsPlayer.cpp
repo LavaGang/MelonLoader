@@ -1,5 +1,6 @@
 #include "bHapticsPlayer.h"
 #include "../Base/Core.h"
+#include "../Utils/AnalyticsBlocker.h"
 #include "../Utils/Console/Debug.h"
 
 void bHapticsPlayer::HapticPlayer::TurnOff(const char* key)
@@ -443,10 +444,10 @@ bool bHapticsPlayer::BhapticsManager::IsDeviceConnected(const char* type)
     if ((jMID = GetMethod(managerKlass, "isDeviceConnected", "(Lcom/bhaptics/bhapticsmanger/BhapticsManager$DeviceType;)Z", Manager_IsDeviceConnected)) == NULL)
         return;
     
-    jclass jDeviceTypeEnumKlass  = Core::Env->FindClass("com/bhaptics/bhapticsmanger/BhapticsManager$DeviceType");
+    jclass jDeviceTypeEnumKlass = GetKlass("com/bhaptics/bhapticsmanger/BhapticsManager$DeviceType", CachedClassKeys::InlineDeviceType);
     
     jmethodID jDeviceMID;
-    if ((jDeviceMID = GetMethod(jDeviceTypeEnumKlass, "valueOf", "(Ljava/lang/String;)Lcom/bhaptics/bhapticsmanger/BhapticsManager$DeviceType;", DeviceTypeEnum_ValueOf)) == NULL)
+    if ((jDeviceMID = GetMethod(jDeviceTypeEnumKlass, "valueOf", "(Ljava/lang/String;)Lcom/bhaptics/bhapticsmanger/BhapticsManager$DeviceType;", InlineDeviceTypeEnum_ValueOf)) == NULL)
         return;
 
     jstring jDevTypeStr = ::Core::Env->NewStringUTF(type);
@@ -502,11 +503,205 @@ std::tuple<jclass, jobject> bHapticsPlayer::BhapticsManager::GetManager()
     return { ManagerClass, ManagerClassInstance };
 }
 
+bool bHapticsPlayer::BhapticsDevice::IsPing(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "isPing", "()Z", Device_IsPing)) == NULL)
+        return false;
+
+    return Core::Env->CallBooleanMethod(jDevice, jMID);
+}
+
+bool bHapticsPlayer::BhapticsDevice::IsPaired(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "isPaired", "()Z", Device_IsPaired)) == NULL)
+        return false;
+
+    return Core::Env->CallBooleanMethod(jDevice, jMID);
+}
+
+int bHapticsPlayer::BhapticsDevice::GetConnectFailedCount(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getConnectFailCount", "()I", Device_GetConnectFailCount)) == NULL)
+        return 0;
+
+    return Core::Env->CallIntMethod(jDevice, jMID);
+}
+
+int bHapticsPlayer::BhapticsDevice::GetRSSI(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getRssi", "()I", Device_GetRSSI)) == NULL)
+        return 0;
+
+    return Core::Env->CallIntMethod(jDevice, jMID);
+}
+
+const char* bHapticsPlayer::BhapticsDevice::GetConnectionStatus(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getConnectionStatus", "()Lcom/bhaptics/commons/model/ConnectionStatus;", Device_GetConnectionStatus)) == NULL)
+        return new char[] { '\0' };
+
+    jobject jEnum = Core::Env->CallObjectMethod(jDevice, jMID);
+    
+    jclass jEnumKlass = GetKlass("com/bhaptics/commons/model/ConnectionStatus", ConnectionStatus);
+    jmethodID jEnumNameMID;
+    if ((jEnumNameMID = GetMethod(jEnumKlass, "name", "()Ljava/lang/String;", ConnectionStatusEnum_Name)) == NULL)
+        return new char[] { '\0' };
+
+    jstring jName = (jstring)Core::Env->CallObjectMethod(jEnum, jEnumNameMID);
+    
+    return Core::Env->GetStringUTFChars(jName, NULL);
+}
+
+const char* bHapticsPlayer::BhapticsDevice::GetPosition(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getPosition", "()Lcom/bhaptics/commons/model/PositionType;", Device_GetPosition)) == NULL)
+        return new char[] { '\0' };
+
+    jobject jEnum = Core::Env->CallObjectMethod(jDevice, jMID);
+    
+    jclass jEnumKlass = GetKlass("com/bhaptics/commons/model/PositionType", PositionType);
+    jmethodID jEnumNameMID;
+    if ((jEnumNameMID = GetMethod(jEnumKlass, "name", "()Ljava/lang/String;", PositionEnum_Name)) == NULL)
+        return new char[] { '\0' };
+
+    jstring jName = (jstring)Core::Env->CallObjectMethod(jEnum, jEnumNameMID);
+    
+    return Core::Env->GetStringUTFChars(jName, NULL);
+}
+
+const char* bHapticsPlayer::BhapticsDevice::GetAddress(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getAddress", "()Ljava/lang/String;", Device_GetAddress)) == NULL)
+        return new char[] { '\0' };
+
+    jstring jAddress = (jstring)Core::Env->CallObjectMethod(jDevice, jMID);
+    return Core::Env->GetStringUTFChars(jAddress, NULL);
+}
+
+const char* bHapticsPlayer::BhapticsDevice::GetDeviceName(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getDeviceName", "()Ljava/lang/String;", Device_GetDeviceName)) == NULL)
+        return new char[] { '\0' };
+
+    jstring jAddress = (jstring)Core::Env->CallObjectMethod(jDevice, jMID);
+    return Core::Env->GetStringUTFChars(jAddress, NULL);
+}
+
+int bHapticsPlayer::BhapticsDevice::GetBattery(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getBattery", "()I", Device_GetBattery)) == NULL)
+        return 0;
+
+    return Core::Env->CallIntMethod(jDevice, jMID);
+}
+
+const char* bHapticsPlayer::BhapticsDevice::GetType(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getPosition", "()Lcom/bhaptics/commons/model/BhapticsDeviceType;", Device_GetType)) == NULL)
+        return new char[] { '\0' };
+
+    jobject jEnum = Core::Env->CallObjectMethod(jDevice, jMID);
+    
+    jclass jEnumKlass = GetKlass("com/bhaptics/commons/model/BhapticsDeviceType", DeviceType);
+    jmethodID jEnumNameMID;
+    if ((jEnumNameMID = GetMethod(jEnumKlass, "name", "()Ljava/lang/String;", DeviceTypeEnum_Name)) == NULL)
+        return new char[] { '\0' };
+
+    jstring jName = (jstring)Core::Env->CallObjectMethod(jEnum, jEnumNameMID);
+    
+    return Core::Env->GetStringUTFChars(jName, NULL);
+}
+
+std::vector<char> bHapticsPlayer::BhapticsDevice::GetLastBytes(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getLastBytes", "()[B", Device_GetLastBytes)) == NULL)
+        return std::vector<char>();
+    
+    jbyteArray jBytes = (jbyteArray)Core::Env->CallObjectMethod(jDevice, jMID);
+
+    size_t jBytesSize = Core::Env->GetArrayLength(jBytes);
+    std::vector<char> bytes(jBytesSize);
+    jbyte* dataBytes = reinterpret_cast<jbyte*>(bytes.data());
+
+    Core::Env->GetByteArrayRegion(jBytes, 0, jBytesSize, dataBytes);
+
+    Core::Env->DeleteLocalRef(jBytes);
+
+    return bytes;
+}
+
+uint64_t bHapticsPlayer::BhapticsDevice::GetLastScannedTime(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "getLastScannedTime", "()J", Device_GetLastScannedTime)) == NULL)
+        return 0;
+
+    return Core::Env->CallLongMethod(jDevice, jMID);
+}
+
+const char* bHapticsPlayer::BhapticsDevice::ToString(jobject jDevice)
+{
+    jclass deviceKlass = GetKlass("com/bhaptics/commons/model/BhapticsDevice", CachedClassKeys::BhapticsDevice);
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(deviceKlass, "toString", "()Ljava/lang/String;", Device_ToString)) == NULL)
+        return new char[] { '\0' };
+
+    jstring jName = (jstring)Core::Env->CallObjectMethod(jDevice, jMID);
+    
+    return Core::Env->GetStringUTFChars(jName, NULL);
+}
+
 jobject bHapticsPlayer::BhapticsDevice::GetDevice(const char* address)
 {
-    auto [ managerKlass, manager ] = BhapticsManager::GetManager();
-    
+    auto hash = HashAddress(address);
+
+    if (DeviceMap.find(hash) == DeviceMap.end())
+        return NULL;
+
+    return DeviceMap[hash];
 }
+
+std::hash<std::string> bHapticsPlayer::BhapticsDevice::HashAddress(const char* address)
+{
+    return std::hash(std::string(address));
+}
+
 
 jmethodID bHapticsPlayer::GetMethod(jclass klass, const char* name, const char* sig, CachedMethodKeys key)
 {
