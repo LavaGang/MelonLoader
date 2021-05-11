@@ -254,7 +254,7 @@ void InternalCalls::BHaptics::TestDotArray(Mono::String* key, Mono::String* posi
     char* cKey = Mono::Exports::mono_string_to_utf8(key);
     char* cPosition = Mono::Exports::mono_string_to_utf8(position);
 
-    bHapticsPlayer::Core::SubmitDotArray(cKey, cPosition, indexes, indexes_len, intensity, intensity_len, duration);
+    bHapticsPlayer::HapticPlayer::SubmitDot(cKey, cPosition, indexes, indexes_len, intensity, intensity_len, duration);
 
     Mono::Free(cKey);
     Mono::Free(cPosition);
