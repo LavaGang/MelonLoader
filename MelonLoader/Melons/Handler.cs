@@ -237,8 +237,11 @@ namespace MelonLoader
             try
             {
                 byte[] symbols = { 0 };
-                if (File.Exists(filelocation + ".mdb"))
+                if (!string.IsNullOrEmpty(filelocation)
+                    && !filelocation.Contains(".zip/")
+                    && File.Exists(filelocation + ".mdb"))
                     symbols = File.ReadAllBytes(filelocation + ".mdb");
+
                 Assembly asm = Assembly.Load(filedata, symbols);
                 if (asm == null)
                 {
