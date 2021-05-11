@@ -51,10 +51,17 @@ public:
 		static void Ping(const char*);
 		static void PingAll();
 		static bool IsDeviceConnected(const char*);
-	private:
-		static jclass ManagerClass;
-		static jobject ManagerClassInstance;
+		static std::vector<jobject> GetDeviceList();
+		
 		static std::tuple<jclass, jobject> GetManager();
+	private:
+		static jobject ManagerClassInstance;
+		static jclass ManagerClass;
+	};
+	class BhapticsDevice
+	{
+	private:
+		static jobject GetDevice(const char*);
 	};
 private:
 	enum CachedMethodKeys
@@ -86,7 +93,9 @@ private:
 		Manager_SetMotor,
 		Manager_Ping,
 		Manager_PingAll,
-		Manager_IsDeviceConnected
+		Manager_IsDeviceConnected,
+		Manager_GetDeviceList,
+		List_ToArray
 	};
 	static std::unordered_map<CachedMethodKeys, jmethodID> CachedMethods;
 	static jmethodID GetMethod(jclass klass, const char* name, const char* sig, CachedMethodKeys key);
@@ -97,7 +106,9 @@ private:
 		HapticPlayer,
 		DeviceType,
 		PositionType,
-		DeviceManager
+		DeviceManager,
+		JavaList,
+		BhapticsDevice
 	};
 	static std::unordered_map<CachedClassKeys, jclass> CachedClasses;
 	static jclass GetKlass(const char* name, CachedClassKeys key);

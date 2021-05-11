@@ -151,13 +151,13 @@ std::vector<char> bHapticsPlayer::HapticPlayer::GetPositionStatus(const char* po
 
     jmethodID jMID;
     if ((jMID = GetMethod(playerKlass, "getPositionStatus", "(Lcom/bhaptics/commons/model/PositionType;)[B", Player_GetPositionStatus)) == NULL)
-        return;
+        return std::vector<char>();
     
     jclass jPositionEnumKlass  = Core::Env->FindClass("com/bhaptics/commons/model/PositionType");
     
     jmethodID jPositionMID;
     if ((jPositionMID = GetMethod(jPositionEnumKlass, "valueOf", "(Ljava/lang/String;)Lcom/bhaptics/commons/model/PositionType;", PositionEnum_ValueOf)) == NULL)
-        return;
+        return std::vector<char>();
 
     jstring jPostionStr = ::Core::Env->NewStringUTF(position);
 
@@ -459,6 +459,31 @@ bool bHapticsPlayer::BhapticsManager::IsDeviceConnected(const char* type)
     return jIsConnected;
 }
 
+std::vector<jobject> bHapticsPlayer::BhapticsManager::GetDeviceList()
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "getDeviceList", "()Ljava/util/List;", Manager_GetDeviceList)) == NULL)
+        return std::vector<jobject>();
+
+    jobject jDeviceListObj = Core::Env->CallObjectMethod(manager, jMID);
+
+    jclass listKlass = GetKlass("java/util/List", JavaList);
+    jmethodID jListToArrayMID;
+    if ((jListToArrayMID = GetMethod(listKlass, "toArray", "()[Ljava/lang/Object;", List_ToArray)) == NULL)
+        return std::vector<jobject>();
+    jobjectArray jDeviceList = (jobjectArray)Core::Env->CallObjectMethod(jDeviceListObj, jListToArrayMID);
+    
+    size_t jDeviceListLen = Core::Env->GetArrayLength(jDeviceList);
+    std::vector<jobject> deviceList(jDeviceListLen);
+
+    for (size_t i = 0; i < jDeviceListLen; i++)
+        deviceList[i] = Core::Env->GetObjectArrayElement(jDeviceList, i);
+
+    return deviceList;
+}
+
 std::tuple<jclass, jobject> bHapticsPlayer::BhapticsManager::GetManager()
 {
     if (ManagerClass != NULL)
@@ -475,6 +500,12 @@ std::tuple<jclass, jobject> bHapticsPlayer::BhapticsManager::GetManager()
     ManagerClassInstance = Core::Env->GetStaticObjectField(ManagerClass, fieldId);
     
     return { ManagerClass, ManagerClassInstance };
+}
+
+jobject bHapticsPlayer::BhapticsDevice::GetDevice(const char* address)
+{
+    auto [ managerKlass, manager ] = BhapticsManager::GetManager();
+    
 }
 
 jmethodID bHapticsPlayer::GetMethod(jclass klass, const char* name, const char* sig, CachedMethodKeys key)
