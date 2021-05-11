@@ -107,10 +107,10 @@ void bHapticsPlayer::HapticPlayer::SubmitDot(const char* key, const char* positi
     jintArray jindex = ::Core::Env->NewIntArray(index_len);
     jintArray jintensity = ::Core::Env->NewIntArray(intensity_len);
 
-    ::Core::Env->SetIntArrayRegion(jindex, 0, index_len, index);
-    ::Core::Env->SetIntArrayRegion(jintensity, 0, intensity_len, intensity);
+    Core::Env->SetIntArrayRegion(jindex, 0, index_len, index);
+    Core::Env->SetIntArrayRegion(jintensity, 0, intensity_len, intensity);
 
-    ::Core::Env->CallVoidMethod(player, jMID, jkey, jposition, jindex, jintensity, duration);
+    Core::Env->CallVoidMethod(player, jMID, jkey, jposition, jindex, jintensity, duration);
 
     Core::Env->DeleteLocalRef(jkey);
     Core::Env->DeleteLocalRef(jposition);
@@ -161,9 +161,9 @@ std::vector<char> bHapticsPlayer::HapticPlayer::GetPositionStatus(const char* po
 
     jstring jPostionStr = ::Core::Env->NewStringUTF(position);
 
-    jobject jPostion = Core::Env->CallStaticObjectMethod(jPositionEnumKlass, jPositionMID, jPostionStr);
+    jobject jPosition = Core::Env->CallStaticObjectMethod(jPositionEnumKlass, jPositionMID, jPostionStr);
     
-    jbyteArray jStatuses = (jbyteArray)Core::Env->CallObjectMethod(player, jMID, jPostion);
+    jbyteArray jStatuses = (jbyteArray)Core::Env->CallObjectMethod(player, jMID, jPosition);
 
     size_t jStatusesSize = Core::Env->GetArrayLength(jStatuses);
     std::vector<char> statuses(jStatusesSize);
@@ -229,7 +229,8 @@ std::tuple<jclass, jobject> bHapticsPlayer::HapticPlayer::GetPlayer()
     if (PlayerClass != NULL)
         return { PlayerClass, PlayerClassInstance };
     
-    PlayerClass = ::Core::Env->FindClass("com/melonloader/bhaptics/DeviceManager");
+    if ((PlayerClass = GetKlass("com/melonloader/bhaptics/DeviceManager", CachedClassKeys::DeviceManager)) == NULL)
+        return { NULL, NULL };
 
     jfieldID fieldId = ::Core::Env->GetStaticFieldID(PlayerClass, "player", "Lcom/bhaptics/bhapticsmanger/HapticPlayer");
     if (fieldId == NULL) {
@@ -239,6 +240,241 @@ std::tuple<jclass, jobject> bHapticsPlayer::HapticPlayer::GetPlayer()
     PlayerClassInstance = Core::Env->GetStaticObjectField(PlayerClass, fieldId);
     
     return { PlayerClass, PlayerClassInstance };
+}
+
+void bHapticsPlayer::BhapticsManager::Scan()
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "scan", "()V", Manager_Scan)) == NULL)
+        return;
+
+    Core::Env->CallVoidMethod(manager, jMID);
+}
+
+void bHapticsPlayer::BhapticsManager::StopScan()
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "stopScan", "()V", Manager_StopScan)) == NULL)
+        return;
+
+    Core::Env->CallVoidMethod(manager, jMID);
+}
+
+bool bHapticsPlayer::BhapticsManager::IsScanning()
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "isScanning", "()Z", Manager_IsScanning)) == NULL)
+        return;
+
+    return Core::Env->CallBooleanMethod(manager, jMID);
+}
+
+void bHapticsPlayer::BhapticsManager::RefreshPairingInfo()
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "refreshPairingInfo", "()V", Manager_RefreshPairingInfo)) == NULL)
+        return;
+
+    Core::Env->CallVoidMethod(manager, jMID);
+}
+
+void bHapticsPlayer::BhapticsManager::Pair(const char* address)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "pair", "(Ljava/lang/String;)V", Manager_Pair)) == NULL)
+        return;
+
+    jstring jaddress = Core::Env->NewStringUTF(address);
+
+    Core::Env->CallVoidMethod(manager, jMID, jaddress);
+
+    Core::Env->DeleteLocalRef(jaddress);
+}
+
+void bHapticsPlayer::BhapticsManager::PairPositioned(const char* address, const char* position)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "pair", "(Ljava/lang/String;Lcom/bhaptics/commons/model/PositionType;)V", Manager_PairPositioned)) == NULL)
+        return;
+
+    jclass jPositionEnumKlass = GetKlass("com/bhaptics/commons/model/PositionType", CachedClassKeys::PositionType);
+    
+    jmethodID jPositionMID;
+    if ((jPositionMID = GetMethod(jPositionEnumKlass, "valueOf", "(Ljava/lang/String;)Lcom/bhaptics/commons/model/PositionType;", PositionEnum_ValueOf)) == NULL)
+        return;
+
+    jstring jPostionStr = Core::Env->NewStringUTF(position);
+    jobject jPosition = Core::Env->CallStaticObjectMethod(jPositionEnumKlass, jPositionMID, jPostionStr);
+
+    jstring jaddress = Core::Env->NewStringUTF(address);
+    Core::Env->CallVoidMethod(manager, jMID, jaddress, jPosition);
+
+    Core::Env->DeleteLocalRef(jaddress);
+    Core::Env->DeleteLocalRef(jPostionStr);
+}
+
+void bHapticsPlayer::BhapticsManager::Unpair(const char* address)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "unpair", "(Ljava/lang/String;)V", Manager_Unpair)) == NULL)
+        return;
+
+    jstring jaddress = Core::Env->NewStringUTF(address);
+
+    Core::Env->CallVoidMethod(manager, jMID, jaddress);
+
+    Core::Env->DeleteLocalRef(jaddress);
+}
+
+void bHapticsPlayer::BhapticsManager::UnpairAll()
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "unpairAll", "()V", Manager_UnpairAll)) == NULL)
+        return;
+
+    Core::Env->CallVoidMethod(manager, jMID);
+}
+
+void bHapticsPlayer::BhapticsManager::ChangePosition(const char* address, const char* position)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "changePosition", "(Ljava/lang/String;Lcom/bhaptics/commons/model/PositionType;)V", Manager_ChangePosition)) == NULL)
+        return;
+
+    jclass jPositionEnumKlass = GetKlass("com/bhaptics/commons/model/PositionType", CachedClassKeys::PositionType);
+    
+    jmethodID jPositionMID;
+    if ((jPositionMID = GetMethod(jPositionEnumKlass, "valueOf", "(Ljava/lang/String;)Lcom/bhaptics/commons/model/PositionType;", PositionEnum_ValueOf)) == NULL)
+        return;
+
+    jstring jPostionStr = Core::Env->NewStringUTF(position);
+    jobject jPosition = Core::Env->CallStaticObjectMethod(jPositionEnumKlass, jPositionMID, jPostionStr);
+
+    jstring jaddress = Core::Env->NewStringUTF(address);
+    Core::Env->CallVoidMethod(manager, jMID, jaddress, jPosition);
+
+    Core::Env->DeleteLocalRef(jaddress);
+    Core::Env->DeleteLocalRef(jPostionStr);
+}
+
+void bHapticsPlayer::BhapticsManager::TogglePosition(const char* address)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "togglePosition", "(Ljava/lang/String;)V", Manager_TogglePosition)) == NULL)
+        return;
+
+    jstring jaddress = Core::Env->NewStringUTF(address);
+
+    Core::Env->CallVoidMethod(manager, jMID, jaddress);
+
+    Core::Env->DeleteLocalRef(jaddress);
+}
+
+void bHapticsPlayer::BhapticsManager::SetMotor(const char* address, char* bytes, size_t bytes_len)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "setMotor", "(Ljava/lang/String;[B)V", Manager_SetMotor)) == NULL)
+        return;
+
+    jstring jaddress = Core::Env->NewStringUTF(address);
+    jbyteArray jBytes = Core::Env->NewByteArray(bytes_len);
+
+    Core::Env->SetByteArrayRegion(jBytes, 0, bytes_len, (jbyte*)bytes);
+
+    Core::Env->CallVoidMethod(manager, jMID, jaddress, jBytes);
+
+    Core::Env->DeleteLocalRef(jaddress);
+    Core::Env->DeleteLocalRef(jBytes);
+}
+
+void bHapticsPlayer::BhapticsManager::Ping(const char* address)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "ping", "(Ljava/lang/String;)V", Manager_Ping)) == NULL)
+        return;
+
+    jstring jaddress = Core::Env->NewStringUTF(address);
+
+    Core::Env->CallVoidMethod(manager, jMID, jaddress);
+
+    Core::Env->DeleteLocalRef(jaddress);
+}
+
+void bHapticsPlayer::BhapticsManager::PingAll()
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "pingAll", "()V", Manager_PingAll)) == NULL)
+        return;
+
+    Core::Env->CallVoidMethod(manager, jMID);
+}
+
+bool bHapticsPlayer::BhapticsManager::IsDeviceConnected(const char* type)
+{
+    auto [ managerKlass, manager ] = GetManager();
+
+    jmethodID jMID;
+    if ((jMID = GetMethod(managerKlass, "isDeviceConnected", "(Lcom/bhaptics/bhapticsmanger/BhapticsManager$DeviceType;)Z", Manager_IsDeviceConnected)) == NULL)
+        return;
+    
+    jclass jDeviceTypeEnumKlass  = Core::Env->FindClass("com/bhaptics/bhapticsmanger/BhapticsManager$DeviceType");
+    
+    jmethodID jDeviceMID;
+    if ((jDeviceMID = GetMethod(jDeviceTypeEnumKlass, "valueOf", "(Ljava/lang/String;)Lcom/bhaptics/bhapticsmanger/BhapticsManager$DeviceType;", DeviceTypeEnum_ValueOf)) == NULL)
+        return;
+
+    jstring jDevTypeStr = ::Core::Env->NewStringUTF(type);
+    jobject jDevType = Core::Env->CallStaticObjectMethod(jDeviceTypeEnumKlass, jDeviceMID, jDevTypeStr);
+    
+    jboolean jIsConnected = Core::Env->CallBooleanMethod(manager, jMID, jDevType);
+
+    Core::Env->DeleteLocalRef(jDevTypeStr);
+
+    return jIsConnected;
+}
+
+std::tuple<jclass, jobject> bHapticsPlayer::BhapticsManager::GetManager()
+{
+    if (ManagerClass != NULL)
+        return { ManagerClass, ManagerClassInstance };
+    
+    if ((ManagerClass = GetKlass("com/melonloader/bhaptics/DeviceManager", CachedClassKeys::DeviceManager)) == NULL)
+        return { NULL, NULL };
+
+    jfieldID fieldId = Core::Env->GetStaticFieldID(ManagerClass, "manager", "Lcom/bhaptics/bhapticsmanger/BhapticsManager");
+    if (fieldId == NULL) {
+        return { NULL, NULL };
+    }
+
+    ManagerClassInstance = Core::Env->GetStaticObjectField(ManagerClass, fieldId);
+    
+    return { ManagerClass, ManagerClassInstance };
 }
 
 jmethodID bHapticsPlayer::GetMethod(jclass klass, const char* name, const char* sig, CachedMethodKeys key)
@@ -254,4 +490,19 @@ jmethodID bHapticsPlayer::GetMethod(jclass klass, const char* name, const char* 
 
     CachedMethods[key] = jMethodID;
     return jMethodID;
+}
+
+jclass bHapticsPlayer::GetKlass(const char* name, CachedClassKeys key)
+{
+    if (CachedClasses.find(key) != CachedClasses.end())
+        return CachedClasses[key];
+
+    jclass jKlass = Core::Env->FindClass(name);
+    if (jKlass == NULL)
+    {
+        Debug::Msgf("Failed to get %s", name);
+    }
+
+    CachedClasses[key] = jKlass;
+    return jKlass;
 }
