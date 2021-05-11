@@ -70,14 +70,14 @@ namespace MelonLoader
                 return;
             }
             MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg(_Plugins.Count.ToString() + " Plugin" + ((_Plugins.Count > 1) ? "s" : "") + " Loaded");
+            MelonLogger.Msg($"{_Plugins.Count} Plugin{((_Plugins.Count > 1) ? "s" : "")} Loaded");
             MelonLogger.Msg("------------------------------");
             foreach (MelonPlugin plugin in _Plugins)
             {
                 MelonLogger.Internal_PrintModName(plugin.ConsoleColor, plugin.Info.Name, plugin.Info.Version);
                 if (!string.IsNullOrEmpty(plugin.Info.Author))
-                    MelonLogger.Msg("by " + plugin.Info.Author);
-                MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(plugin));
+                    MelonLogger.Msg($"by {plugin.Info.Author}");
+                MelonLogger.Msg($"SHA256 Hash: {GetMelonHash(plugin)}");
                 MelonLogger.Msg("------------------------------");
             }
             SetupAttributes_Plugins();
@@ -97,14 +97,14 @@ namespace MelonLoader
                 return;
             }
             MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg(_Mods.Count.ToString() + " Mod" + ((_Mods.Count > 1) ? "s" : "") + " Loaded");
+            MelonLogger.Msg($"{_Mods.Count} Mod{((_Mods.Count > 1) ? "s" : "")} Loaded");
             MelonLogger.Msg("------------------------------");
             foreach (MelonMod mod in _Mods)
             {
                 MelonLogger.Internal_PrintModName(mod.ConsoleColor, mod.Info.Name, mod.Info.Version);
                 if (!string.IsNullOrEmpty(mod.Info.Author))
-                    MelonLogger.Msg("by " + mod.Info.Author);
-                MelonLogger.Msg("SHA256 Hash: " + GetMelonHash(mod));
+                    MelonLogger.Msg($"by {mod.Info.Author}");
+                MelonLogger.Msg($"SHA256 Hash: {GetMelonHash(mod)}");
                 MelonLogger.Msg("------------------------------");
             }
             SetupAttributes_Mods();
@@ -138,7 +138,7 @@ namespace MelonLoader
                     bool isAlreadyLoaded = (plugins ? IsPluginAlreadyLoaded(melonname) : IsModAlreadyLoaded(melonname));
                     if (isAlreadyLoaded)
                     {
-                        MelonLogger.Warning("Duplicate File: " + filename);
+                        MelonLogger.Warning($"Duplicate File: {filename}");
                         continue;
                     }
 
@@ -184,7 +184,7 @@ namespace MelonLoader
                                         else
                                             break;
                                     }
-                                    LoadFromByteArray(memorystream.ToArray(), (filename + "/" + filename2), plugins);
+                                    LoadFromByteArray(memorystream.ToArray(), $"{filename}/{filename2}", plugins);
                                 }
                             }
                         }
@@ -220,12 +220,12 @@ namespace MelonLoader
                 Assembly asm = Assembly.LoadFrom(filelocation);
                 if (asm == null)
                 {
-                    MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": Assembly.LoadFrom returned null"); ;
+                    MelonLogger.Error($"Failed to Load Assembly for {filelocation}: Assembly.LoadFrom returned null"); ;
                     return;
                 }
                 LoadFromAssembly(asm, filelocation, is_plugin);
             }
-            catch (Exception ex) { MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": " + ex.ToString()); }
+            catch (Exception ex) { MelonLogger.Error($"Failed to Load Assembly for {filelocation}: {ex}"); }
         }
 
         [Obsolete("MelonLoader.MelonHandler.LoadFromAssembly(byte[], string) is obsolete. Please use MelonLoader.MelonHandler.LoadFromAssembly(byte[], string, bool) instead.")]
@@ -238,9 +238,12 @@ namespace MelonLoader
             {
                 byte[] symbols = { 0 };
                 if (!string.IsNullOrEmpty(filelocation)
-                    && !filelocation.Contains(".zip/")
-                    && File.Exists(filelocation + ".mdb"))
-                    symbols = File.ReadAllBytes(filelocation + ".mdb");
+                    && !filelocation.Contains(".zip/"))
+                {
+                    string symbolspath = $"{filelocation}.mdb";
+                    if (File.Exists(symbolspath))
+                        symbols = File.ReadAllBytes(symbolspath);
+                }
 
                 Assembly asm = Assembly.Load(filedata, symbols);
                 if (asm == null)
@@ -248,7 +251,7 @@ namespace MelonLoader
                     if (string.IsNullOrEmpty(filelocation))
                         MelonLogger.Error("Failed to Load Assembly: Assembly.Load returned null");
                     else
-                        MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": Assembly.Load returned null");
+                        MelonLogger.Error($"Failed to Load Assembly for {filelocation}: Assembly.Load returned null");
                     return;
                 }
                 LoadFromAssembly(asm, filelocation, is_plugin);
@@ -256,9 +259,9 @@ namespace MelonLoader
             catch (Exception ex)
             {
                 if (string.IsNullOrEmpty(filelocation))
-                    MelonLogger.Error("Failed to Load Assembly:" + ex.ToString());
+                    MelonLogger.Error($"Failed to Load Assembly: {ex}");
                 else
-                    MelonLogger.Error("Failed to Load Assembly for " + filelocation + ": " + ex.ToString());
+                    MelonLogger.Error($"Failed to Load Assembly for {filelocation}: {ex}");
             }
         }
 
@@ -274,8 +277,7 @@ namespace MelonLoader
             MelonCompatibilityLayer.Resolver resolver = MelonCompatibilityLayer.ResolveAssemblyToLayerResolver(asm);
             if (resolver == null)
             {
-                // File Is Not Compatible
-                // To-Do: Error Here
+                MelonLogger.Error($"Failed to Load Assembly for {filelocation}: No Compatibility Layer Found!");
                 return;
             }
 

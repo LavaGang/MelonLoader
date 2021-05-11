@@ -83,9 +83,7 @@ namespace MelonLoader
             instance.Location = creationData.Location;
             instance.Priority = creationData.Priority;
             instance.ConsoleColor = creationData.ConsoleColor;
-#pragma warning disable CS0618
-            instance.HarmonyInstance = Harmony.HarmonyInstance.Create(instance.Assembly.FullName);
-#pragma warning restore CS0618
+            instance.HarmonyInstance = new HarmonyLib.Harmony(instance.Assembly.FullName);
             return instance;
         }
 

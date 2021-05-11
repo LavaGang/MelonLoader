@@ -88,9 +88,11 @@ namespace MelonLoader
 
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
+
+        private Harmony.HarmonyInstance _OldHarmonyInstance;
         [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
-        public Harmony.HarmonyInstance harmonyInstance { get => new Harmony.HarmonyInstance(HarmonyInstance.Id); }
+        public Harmony.HarmonyInstance harmonyInstance { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
         [Obsolete("Harmony is obsolete. Please use HarmonyInstance instead.")]
-        public Harmony.HarmonyInstance Harmony { get => new Harmony.HarmonyInstance(HarmonyInstance.Id); }
+        public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
     }
 }
