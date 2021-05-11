@@ -76,9 +76,23 @@ public:
 		static const char* ToString(jobject);
 		
 		static jobject GetDevice(const char*);
+		static void OnDeviceUpdate(jobject);
 	private:
 		static std::unordered_map<std::hash<std::string>, jobject> DeviceMap;
 		static std::hash<std::string> HashAddress(const char*);
+	};
+	class Callbacks
+	{
+	public:
+		// Device manager
+		static void OnDeviceUpdate(jobject jDeviceList);
+		static void OnScanStatusChange(jboolean scanning);
+		static void OnChangeResponse();
+		static void OnConnect(jstring address);
+		static void OnDisconnect(jstring address);
+
+		// haptic player
+		static void OnChange();
 	};
 private:
 	enum CachedMethodKeys

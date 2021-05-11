@@ -697,6 +697,60 @@ jobject bHapticsPlayer::BhapticsDevice::GetDevice(const char* address)
     return DeviceMap[hash];
 }
 
+void bHapticsPlayer::BhapticsDevice::OnDeviceUpdate(jobject jDeviceListObj)
+{
+    jclass listKlass = GetKlass("java/util/List", JavaList);
+    jmethodID jListToArrayMID;
+    if ((jListToArrayMID = GetMethod(listKlass, "toArray", "()[Ljava/lang/Object;", List_ToArray)) == NULL)
+        return;
+    jobjectArray jDeviceList = (jobjectArray)Core::Env->CallObjectMethod(jDeviceListObj, jListToArrayMID);
+    
+    size_t jDeviceListLen = Core::Env->GetArrayLength(jDeviceList);
+
+    DeviceMap.clear();
+    
+    for (size_t i = 0; i < jDeviceListLen; i++)
+    {
+        jobject jDevice = Core::Env->GetObjectArrayElement(jDeviceList, i);
+        const char* address = GetAddress(jDevice);
+        auto deviceHash = HashAddress(address);
+
+        DeviceMap[deviceHash] = jDevice;
+        
+        delete address;
+    }
+}
+
+void bHapticsPlayer::Callbacks::OnDeviceUpdate(jobject jDeviceList)
+{
+    BhapticsDevice::OnDeviceUpdate(jDeviceList);
+}
+
+void bHapticsPlayer::Callbacks::OnScanStatusChange(jboolean scanning)
+{
+    // Implement me
+}
+
+void bHapticsPlayer::Callbacks::OnChangeResponse()
+{
+    // Implement me
+}
+
+void bHapticsPlayer::Callbacks::OnConnect(jstring address)
+{
+    // Implement me
+}
+
+void bHapticsPlayer::Callbacks::OnDisconnect(jstring address)
+{
+    // Implement me
+}
+
+void bHapticsPlayer::Callbacks::OnChange()
+{
+    // Implement me
+}
+
 std::hash<std::string> bHapticsPlayer::BhapticsDevice::HashAddress(const char* address)
 {
     return std::hash(std::string(address));
