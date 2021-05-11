@@ -13,6 +13,7 @@ import com.bhaptics.bhapticsmanger.BhapticsManagerCallback;
 import com.bhaptics.bhapticsmanger.BhapticsModule;
 import com.bhaptics.bhapticsmanger.HapticPlayer;
 import com.bhaptics.commons.model.BhapticsDevice;
+import com.bhaptics.commons.model.ConnectionStatus;
 import com.melonloader.ApplicationState;
 import com.melonloader.LogBridge;
 
@@ -49,8 +50,7 @@ public class DeviceManager {
         manager.addBhapticsManageCallback(new BhapticsManagerCallback() {
             @Override
             public void onDeviceUpdate(List<BhapticsDevice> list) {
-                onDeviceUpdate_native(list.toArray());
-                PairDevices(list);
+                onDeviceUpdate_native(list);
             }
 
             @Override
@@ -110,22 +110,11 @@ public class DeviceManager {
 //        LogBridge.msg("Complete");
     }
 
-    public static void PairDevices(List<BhapticsDevice> devices)
-    {
-        for (BhapticsDevice device: devices) {
-            if (device.isPaired())
-                continue;
-
-            LogBridge.msg("Pairing " + device.getAddress());
-            manager.pair(device.getAddress());
-        }
-    }
-
     public static void onDestroy() {
         BhapticsModule.destroy();
     }
 
-    public static native void onDeviceUpdate_native(Object[] devices);
+    public static native void onDeviceUpdate_native(List<BhapticsDevice> devices);
 
     public static native void onScanStatusChange_native(boolean b);
 

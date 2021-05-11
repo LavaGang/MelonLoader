@@ -66,7 +66,15 @@ public class MonoDroidHelper {
                 return;
             }
 
-            initInternal(lang, new String[0], runtimeNativeLibDir, appDirs, classLoader, new String[0], Build.VERSION.SDK_INT, isEmulator());
+            mono.android.Runtime.initInternal(
+                    lang,
+                    new String[0],
+                    runtimeNativeLibDir,
+                    appDirs,
+                    classLoader,
+                    new String[0],
+                    Build.VERSION.SDK_INT,
+                    isEmulator());
             initialized = true;
         }
     }
@@ -74,21 +82,6 @@ public class MonoDroidHelper {
     private static void DebugInit(String[] paramArrayOfString1, String paramString, String[] paramArrayOfString2)
     {
 
-    }
-
-    private static void initInternal(String arg1, String[] arg2, String arg3, String[] arg4, ClassLoader arg5, String[] arg6, int arg7, boolean arg8)
-    {
-        Class runtime = null;
-        try {
-            runtime = Class.forName("mono.android.Runtime");
-            Method m = runtime.getMethod("initInternal", String.class, String[].class, String.class, String[].class, ClassLoader.class, String[].class, int.class, boolean.class);
-            m.invoke(null, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-            LogBridge.msg("baz");
-        } catch (Exception e) {
-            LogBridge.error(e.getMessage());
-            java.lang.Runtime.getRuntime().exit(-1);
-            Core.KillCurrentProcess(); // death
-        }
     }
 
     static boolean isEmulator() {

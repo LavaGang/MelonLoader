@@ -9,15 +9,5 @@ public class PlayerWrapper {
     }
 
 
-    public static void submitDot(String key, String position, int[] indexes, int[] points, int duration)
-    {
-        LogBridge.msg("SubmitDot");
-
-        if (!DeviceManager.isStarted)
-            return;
-
-        DeviceManager.player.submitDot(key, position, indexes, points, duration);
-    }
-
     private static native void onStatusChange_native();
 }
