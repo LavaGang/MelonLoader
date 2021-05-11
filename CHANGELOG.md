@@ -176,6 +176,7 @@
 151. Fixed NRE Issue with Assembly Generator RemoteAPI.
 152. Fixed MFE Issue with MelonBase.Harmony.
 153. Fixed Loading Issue with MelonPreferences_ReflectiveCategory.
+154. Fixed Issue with Loading Melons from ZIP Archives.
 
 ---
 
