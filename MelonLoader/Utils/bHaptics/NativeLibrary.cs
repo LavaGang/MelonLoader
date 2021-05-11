@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !__ANDROID__
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -127,3 +128,4 @@ namespace MelonLoader
 #endif
     }
 }
+#endif
