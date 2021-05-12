@@ -23,7 +23,6 @@ namespace MelonLoader.CompatibilityLayers
 				? typeof(IPA_CL).Assembly
 				: null;
 			MelonCompatibilityLayer.AddResolveAssemblyToLayerResolverEvent(ResolveAssemblyToLayerResolver);
-			MelonCompatibilityLayer.AddRefreshModsTableEvent(RefreshModsTable);
 		}
 
 		private static void ResolveAssemblyToLayerResolver(MelonCompatibilityLayer.LayerResolveEventArgs args)
@@ -35,11 +34,6 @@ namespace MelonLoader.CompatibilityLayers
 				|| (plugin_types.Count() <= 0))
 				return;
 			args.inter = new IPA_CL(args.assembly, plugin_types);
-		}
-
-		private static void RefreshModsTable()
-		{
-			// PluginManager Conversion Here
 		}
 
 		public override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)

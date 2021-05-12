@@ -238,7 +238,7 @@ namespace MelonLoader
             {
                 byte[] symbols = { 0 };
                 if (!string.IsNullOrEmpty(filelocation)
-                    && !filelocation.Contains(".zip/"))
+                    && !filelocation.Replace("\\", "/").Contains(".zip/"))
                 {
                     string symbolspath = $"{filelocation}.mdb";
                     if (File.Exists(symbolspath))
