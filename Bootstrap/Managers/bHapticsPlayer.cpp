@@ -173,7 +173,6 @@ std::vector<char> bHapticsPlayer::HapticPlayer::GetPositionStatus(const char* po
     Core::Env->GetByteArrayRegion(jStatuses, 0, jStatusesSize, dataBytes);
 
     Core::Env->DeleteLocalRef(jPostionStr);
-    Core::Env->DeleteLocalRef(jStatuses);
 
     return statuses;
 }
@@ -657,8 +656,6 @@ std::vector<char> bHapticsPlayer::BhapticsDevice::GetLastBytes(jobject jDevice)
     jbyte* dataBytes = reinterpret_cast<jbyte*>(bytes.data());
 
     Core::Env->GetByteArrayRegion(jBytes, 0, jBytesSize, dataBytes);
-
-    Core::Env->DeleteLocalRef(jBytes);
 
     return bytes;
 }

@@ -184,8 +184,5 @@ namespace MelonLoader
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static void GetStaticSettings(ref StaticSettingsT res);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void ReleaseAddress(IntPtr ptr);
     }
 }
