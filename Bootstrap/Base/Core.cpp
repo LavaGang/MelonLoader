@@ -164,10 +164,6 @@ bool Core::Initialize()
 			}
 		},
 #endif
-		{
-			"Loading base assembly",
-			BaseAssembly::LoadAssembly
-		}
 	};
 
 	return Sequence::Run(S_ARR(Sequence)) || Assertion::DontDie;
