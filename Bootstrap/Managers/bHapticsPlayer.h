@@ -54,6 +54,7 @@ public:
 		static std::vector<jobject> GetDeviceList();
 		
 		static std::tuple<jclass, jobject> GetManager();
+		static std::vector<jobject> ConvertDeviceList(jobject jDeviceList);
 	private:
 		static jobject ManagerClassInstance;
 		static jclass ManagerClass;

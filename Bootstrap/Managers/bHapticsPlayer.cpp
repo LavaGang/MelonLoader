@@ -1,4 +1,6 @@
 #include "bHapticsPlayer.h"
+
+#include "InternalCalls.h"
 #include "../Base/Core.h"
 #include "../Utils/AnalyticsBlocker.h"
 #include "../Utils/Console/Debug.h"
@@ -475,13 +477,7 @@ std::vector<jobject> bHapticsPlayer::BhapticsManager::GetDeviceList()
         return std::vector<jobject>();
     jobjectArray jDeviceList = (jobjectArray)Core::Env->CallObjectMethod(jDeviceListObj, jListToArrayMID);
     
-    size_t jDeviceListLen = Core::Env->GetArrayLength(jDeviceList);
-    std::vector<jobject> deviceList(jDeviceListLen);
-
-    for (size_t i = 0; i < jDeviceListLen; i++)
-        deviceList[i] = Core::Env->GetObjectArrayElement(jDeviceList, i);
-
-    return deviceList;
+    return ConvertDeviceList(jDeviceList);
 }
 
 std::tuple<jclass, jobject> bHapticsPlayer::BhapticsManager::GetManager()
@@ -500,6 +496,17 @@ std::tuple<jclass, jobject> bHapticsPlayer::BhapticsManager::GetManager()
     ManagerClassInstance = Core::Env->GetStaticObjectField(ManagerClass, fieldId);
     
     return { ManagerClass, ManagerClassInstance };
+}
+
+std::vector<jobject> bHapticsPlayer::BhapticsManager::ConvertDeviceList(jobject jDeviceList)
+{    
+    size_t jDeviceListLen = Core::Env->GetArrayLength((jobjectArray)jDeviceList);
+    std::vector<jobject> deviceList(jDeviceListLen);
+
+    for (size_t i = 0; i < jDeviceListLen; i++)
+        deviceList[i] = Core::Env->GetObjectArrayElement((jobjectArray)jDeviceList, i);
+
+    return deviceList;
 }
 
 bool bHapticsPlayer::BhapticsDevice::IsPing(jobject jDevice)
@@ -721,31 +728,32 @@ void bHapticsPlayer::BhapticsDevice::OnDeviceUpdate(jobject jDeviceListObj)
 void bHapticsPlayer::Callbacks::OnDeviceUpdate(jobject jDeviceList)
 {
     BhapticsDevice::OnDeviceUpdate(jDeviceList);
+    InternalCalls::BHaptics::Invoke_OnDeviceUpdate(BhapticsManager::ConvertDeviceList(jDeviceList));
 }
 
 void bHapticsPlayer::Callbacks::OnScanStatusChange(jboolean scanning)
 {
-    // Implement me
+    InternalCalls::BHaptics::Invoke_OnScanStatusChange(scanning);
 }
 
 void bHapticsPlayer::Callbacks::OnChangeResponse()
 {
-    // Implement me
+    InternalCalls::BHaptics::Invoke_OnChangeResponse();
 }
 
 void bHapticsPlayer::Callbacks::OnConnect(jstring address)
 {
-    // Implement me
+    InternalCalls::BHaptics::Invoke_OnConnect(Core::Env->GetStringUTFChars(address, NULL));
 }
 
 void bHapticsPlayer::Callbacks::OnDisconnect(jstring address)
 {
-    // Implement me
+    InternalCalls::BHaptics::Invoke_OnConnect(Core::Env->GetStringUTFChars(address, NULL));
 }
 
 void bHapticsPlayer::Callbacks::OnChange()
 {
-    // Implement me
+    InternalCalls::BHaptics::Invoke_OnChange();
 }
 
 std::hash<std::string> bHapticsPlayer::BhapticsDevice::HashAddress(const char* address)
