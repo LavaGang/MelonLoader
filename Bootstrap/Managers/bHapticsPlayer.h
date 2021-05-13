@@ -21,7 +21,7 @@ public:
 		static void TurnOffAll();
 		static void RegisterProject(const char*, const char*);
 		static void RegisterProjectReflected(const char*, const char*);
-		static void SubmitRegistered(const char*, const char*, t_options&);
+		static void SubmitRegistered(const char*, const char*, float intensity, float duration, float offsetAngleX, float offsetY);
 		static void SubmitRegisteredWithTime(const char*, int);
 		static void SubmitDot(const char*, const char*, int*, size_t, int*, size_t, int);
 		static void SubmitPath(const char*, const char*, float*, size_t, float*, size_t, int*, size_t, int);

@@ -63,7 +63,7 @@ void bHapticsPlayer::HapticPlayer::RegisterProjectReflected(const char* key, con
     Core::Env->DeleteLocalRef(jcontents);
 }
 
-void bHapticsPlayer::HapticPlayer::SubmitRegistered(const char* key, const char* alt, t_options& options)
+void bHapticsPlayer::HapticPlayer::SubmitRegistered(const char* key, const char* alt, float intensity, float duration, float offsetAngleX, float offsetY)
 {
     auto [ playerKlass, player ] = GetPlayer();
 
@@ -74,7 +74,7 @@ void bHapticsPlayer::HapticPlayer::SubmitRegistered(const char* key, const char*
     jstring jkey = Core::Env->NewStringUTF(key);
     jstring jalt = Core::Env->NewStringUTF(alt);
 
-    Core::Env->CallVoidMethod(player, jMID, jkey, jalt, options.intensity, options.duration, options.offsetAngleX, options.offsetY);
+    Core::Env->CallVoidMethod(player, jMID, jkey, jalt, intensity, duration, offsetAngleX, offsetY);
     
     Core::Env->DeleteLocalRef(jkey);
     Core::Env->DeleteLocalRef(jalt);
