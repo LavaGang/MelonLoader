@@ -72,11 +72,23 @@ public:
 	{
 	public:
 		static void AddInternalCalls();
+
+		// player
+		static void Invoke_OnChange();
+
+		// connection manager
+		static void Invoke_OnDeviceUpdate(std::vector<jobject> deviceArr);
+		static void Invoke_OnScanStatusChange(bool isScanning);
+		static void Invoke_OnChangeResponse();
+		static void Invoke_OnConnect(const char* address);
+		static void Invoke_OnDisconnect(const char* address);
 	private:
 		// native parser
 		static int ReleaseAddress(intptr_t* address);
 		
 		// player
+		static Mono::Method* Mono_Invoke_OnChange;
+		
 		static void TurnOff(Mono::String* key);
 		static void TurnOffAll();
 		static void RegisterProject(Mono::String* key, Mono::String* contents);
@@ -89,8 +101,14 @@ public:
 		static void Internal_SubmitDot(Mono::String* key, Mono::String* position, int* indexes, int* intensities, int* sizes, int duration);
 		static void Internal_SubmitPath(Mono::String* key, Mono::String* position, float* x, float* y, int* intensities, int* sizes, int duration);
 		static intptr_t Internal_GetPositionStatus(Mono::String* position);
-
+		
 		// connection manager
+		static Mono::Method* Mono_Invoke_OnDeviceUpdate;
+		static Mono::Method* Mono_Invoke_OnScanStatusChange;
+		static Mono::Method* Mono_Invoke_OnChangeResponse;
+		static Mono::Method* Mono_Invoke_OnConnect;
+		static Mono::Method* Mono_Invoke_OnDisconnect;
+
 		static void Scan();
 		static void StopScan();
 		static void RefreshPairingInfo();
@@ -106,6 +124,8 @@ public:
 		static void Internal_ChangePosition(Mono::String* address, Mono::String* position);
 		static void Internal_SetMotor(Mono::String* address, char* bytes, size_t size);
 		static intptr_t Internal_GetDeviceList();
+
+		
 
 		// device
 		static bool Internal_IsPing(Mono::String* address);

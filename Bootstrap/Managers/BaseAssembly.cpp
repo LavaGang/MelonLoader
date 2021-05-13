@@ -10,26 +10,33 @@
 char* BaseAssembly::PathMono = NULL;
 char* BaseAssembly::PreloadPath = NULL;
 Mono::Method* BaseAssembly::Mono_Start = NULL;
+Mono::Assembly* BaseAssembly::Assembly = NULL;
+Mono::Image* BaseAssembly::Image = NULL;
+
+bool BaseAssembly::LoadAssembly()
+{
+	Assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PathMono);
+	if (Assembly == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
+		return false;
+	}
+	Image = Mono::Exports::mono_assembly_get_image(Assembly);
+	if (Image == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Image from Mono Assembly!");
+		return false;
+	}
+
+	return true;
+}
 
 bool BaseAssembly::Initialize()
 {
 	Preload();
 	Debug::Msg("Initializing Base Assembly...");
-
-	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PathMono);
-	if (assembly == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
-		return false;
-	}
-	Mono::Image* image = Mono::Exports::mono_assembly_get_image(assembly);
-	if (image == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Get Image from Mono Assembly!");
-		return false;
-	}
-	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "MelonLoader", "Core");
-	if (image == NULL)
+	Mono::Class* klass = Mono::Exports::mono_class_from_name(Image, "MelonLoader", "Core");
+	if (klass == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Get Class from Mono Image!");
 		return false;

@@ -19,6 +19,8 @@
 
 #include <dlfcn.h>
 
+#include "BaseAssembly.h"
+
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
@@ -245,8 +247,36 @@ void InternalCalls::UnhollowerIl2Cpp::CleanupDisasm()
 #pragma endregion
 
 #pragma region bHaptics
+
 void InternalCalls::BHaptics::AddInternalCalls()
 {
+    Mono::Class* playerKlass = Mono::Exports::mono_class_from_name(BaseAssembly::Image, "MelonLoader", "bHaptics_NativeLibrary");
+    Mono::Class* connectionManagerKlass = Mono::Exports::mono_class_from_name(BaseAssembly::Image, "MelonLoader.ConnectionManager", "ConnectionManager");
+    if (playerKlass == NULL || connectionManagerKlass == NULL)
+    {
+        Assertion::ThrowInternalFailure("Failed to Get Class from Mono Image!");
+        return;
+    }
+    
+    Mono_Invoke_OnChange = Mono::Exports::mono_class_get_method_from_name(playerKlass, "Invoke_OnChange", NULL);
+    
+    Mono_Invoke_OnDeviceUpdate = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnDeviceUpdate", NULL);
+    Mono_Invoke_OnScanStatusChange = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnScanStatusChange", NULL);
+    Mono_Invoke_OnChangeResponse = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnChangeResponse", NULL);
+    Mono_Invoke_OnConnect = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnConnect", NULL);
+    Mono_Invoke_OnDisconnect = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnDisconnect", NULL);
+    if (
+        Mono_Invoke_OnChange == NULL ||
+        Mono_Invoke_OnDeviceUpdate == NULL ||
+        Mono_Invoke_OnScanStatusChange == NULL ||
+        Mono_Invoke_OnChangeResponse == NULL ||
+        Mono_Invoke_OnConnect == NULL ||
+        Mono_Invoke_OnDisconnect == NULL
+        )
+    {
+        Assertion::ThrowInternalFailure("Failed to Get Method from Class!");
+        return;
+    }
 }
 
 int InternalCalls::BHaptics::ReleaseAddress(intptr_t* address)
@@ -254,6 +284,34 @@ int InternalCalls::BHaptics::ReleaseAddress(intptr_t* address)
     delete[] address;
     return 0;
 }
+
+#pragma region Actions
+
+void InternalCalls::BHaptics::Invoke_OnChange()
+{
+}
+
+void InternalCalls::BHaptics::Invoke_OnDeviceUpdate(std::vector<jobject> deviceArr)
+{
+}
+
+void InternalCalls::BHaptics::Invoke_OnScanStatusChange(bool isScanning)
+{
+}
+
+void InternalCalls::BHaptics::Invoke_OnChangeResponse()
+{
+}
+
+void InternalCalls::BHaptics::Invoke_OnConnect(const char* address)
+{
+}
+
+void InternalCalls::BHaptics::Invoke_OnDisconnect(const char* address)
+{
+}
+
+#pragma endregion 
 
 #pragma region HapticPlayer
 
