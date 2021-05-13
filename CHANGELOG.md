@@ -164,23 +164,29 @@
 139. Fixed Issue with DAB functionality not properly iterating its list.
 140. Changed Assembly Generator Config to use new Reflective Categories.  (Credits to Samboy :D)
 141. Fixed NRE Issue with Reflective Categories.
-142. Updated Il2CppAssemblyUnhollower to v0.4.14.0.
-143. Updated Il2CppDumper to v6.6.2.
-144. Improved BHaptics Support Implementation.
-145. Fixed Issue with PatchShield preventing Harmony Patching on some Games.
-146. Temporarily Disabled Launch Options Config File.
-147. Fixed Issue with Il2Cpp Support Fixes running before Il2CppAssemblyGenerator.
-148. Fixed Launch Option Conflict Issue with Debug Builds.
-149. Fixed Issue with FileWatcher's NotImplementedException Detection.
-150. Fixed Ambiguous Match Found Issue with UnhollowerSupport.
-151. Fixed NRE Issue with Assembly Generator RemoteAPI.
-152. Fixed MFE Issue with MelonBase.Harmony.
-153. Fixed Loading Issue with MelonPreferences_ReflectiveCategory.
-154. Fixed Issue with Loading Melons from ZIP Archives.
-155. Rewrote File Handling and Assembly Loading System.
-156. Fixed Issue with Extra Tomlet DLL getting copied to Support Modules.
-157. Added MDB Loading Support for ZIPs.
-158. Added Source Code Detection for ZIPs.
+142. Updated to Tomlet 1.2.0.  (Credits to Samboy :D)
+143. Updated Il2CppAssemblyUnhollower to v0.4.14.0.
+144. Updated Il2CppDumper to v6.6.2.
+145. Improved BHaptics Support Implementation.
+146. Fixed Issue with PatchShield preventing Harmony Patching on some Games.
+147. Temporarily Disabled Launch Options Config File.
+148. Fixed Issue with Il2Cpp Support Fixes running before Il2CppAssemblyGenerator.
+149. Fixed Launch Option Conflict Issue with Debug Builds.
+150. Fixed Issue with FileWatcher's NotImplementedException Detection.
+151. Updated to Tomlet 1.3.0.  (Credits to Samboy :D)
+152. Fixed Ambiguous Match Found Issue with UnhollowerSupport.
+153. Updated to Tomlet 1.3.1.  (Credits to Samboy :D)
+154. Fixed NRE Issue with Preference Entries to TOML.  (Credits to Samboy :D)
+155. Fixed NRE Issue with Assembly Generator RemoteAPI.
+156. Fixed MFE Issue with MelonBase.Harmony.
+157. Fixed Loading Issue with MelonPreferences_ReflectiveCategory.
+158. Added OnEarlyStartOnApplicationEarlyStart for Plugins.  (Credits to Slaynash :3)
+159. Moved Il2CppAssemblyGenerator after OnApplicationEarlyStart.  (Credits to Slaynash :3)
+160. Fixed Issue with Loading Melons from ZIP Archives.
+161. Rewrote File Handling and Assembly Loading System.
+162. Fixed Issue with Extra Tomlet DLL getting copied to Support Modules.
+163. Added MDB Loading Support for ZIPs.
+164. Added Source Code Detection for ZIPs.
 
 ---
 
