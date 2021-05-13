@@ -187,6 +187,7 @@
 162. Fixed Issue with Extra Tomlet DLL getting copied to Support Modules.
 163. Added MDB Loading Support for ZIPs.
 164. Added Source Code Detection for ZIPs.
+165. Fixed Bad Image Format Exception Issue with Loading DLLs from ZIPs.
 
 ---
 

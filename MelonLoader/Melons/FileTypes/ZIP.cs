@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 
 namespace MelonLoader.MelonFileTypes
@@ -41,60 +44,62 @@ namespace MelonLoader.MelonFileTypes
             try
             {
                 using (var filestream = File.OpenRead(filepath))
+                using (var zipstream = new ZipInputStream(filestream))
                 {
-                    using (var zipstream = new ZipInputStream(filestream))
+                    ZipEntry entry;
+                    while ((entry = zipstream.GetNextEntry()) != null)
                     {
-                        ZipEntry entry;
-                        while ((entry = zipstream.GetNextEntry()) != null)
+                        if (string.IsNullOrEmpty(entry.Name))
+                            continue;
+
+                        string entry_path = entry.Name;
+                        string entry_filename = Path.GetFileName(entry.Name);
+                        if (string.IsNullOrEmpty(entry_filename))
+                            continue;
+
+                        string extension = Path.GetExtension(entry_filename);
+                        if (extension.Equals(".cs"))
                         {
-                            if (string.IsNullOrEmpty(entry.Name) || !entry.IsFile)
-                                continue;
+                            source_code_detected = true;
+                            break;
+                        }
 
-                            string extension = Path.GetExtension(entry.Name);
+                        bool is_dll = extension.Equals(".dll");
+                        bool is_mdb = extension.Equals(".mdb");
+                        if (!is_dll && !is_mdb)
+                            continue;
 
-                            if (extension.Equals(".cs"))
+                        ByteArrayPair byteArrayPair = null;
+                        if (!pairs.TryGetValue(entry.Name, out byteArrayPair))
+                        {
+                            byteArrayPair = new ByteArrayPair();
+                            pairs[entry.Name] = byteArrayPair;
+                        }
+
+                        try
+                        {
+                            using (MemoryStream memorystream = new MemoryStream())
                             {
-                                source_code_detected = true;
-                                break;
-                            }
-
-                            bool is_dll = extension.Equals(".dll");
-                            bool is_mdb = extension.Equals(".mdb");
-                            if (!is_dll && !is_mdb)
-                                continue;
-
-                            ByteArrayPair byteArrayPair = null;
-                            if (!pairs.TryGetValue(entry.Name, out byteArrayPair))
-                            {
-                                byteArrayPair = new ByteArrayPair();
-                                pairs[entry.Name] = byteArrayPair;
-                            }
-
-                            try
-                            {
-                                using (MemoryStream memorystream = new MemoryStream())
+                                int size = 0;
+                                byte[] buffer = new byte[4096];
+                                while (true)
                                 {
-                                    int size = 0;
-                                    byte[] buffer = new byte[4096];
-                                    while (true)
-                                    {
-                                        size = zipstream.Read(buffer, 0, buffer.Length);
-                                        if (size > 0)
-                                            memorystream.Write(buffer, 0, size);
-                                        else
-                                            break;
-                                    }
-                                    if (is_dll)
-                                        byteArrayPair.filedata = buffer;
+                                    size = zipstream.Read(buffer, 0, buffer.Length);
+                                    if (size > 0)
+                                        memorystream.Write(buffer, 0, size);
                                     else
-                                        byteArrayPair.symbolsdata = buffer;
+                                        break;
                                 }
+                                if (is_dll)
+                                    byteArrayPair.filedata = memorystream.ToArray();
+                                else if (is_mdb)
+                                    byteArrayPair.symbolsdata = memorystream.ToArray();
                             }
-                            catch (Exception ex)
-                            {
-                                MelonLogger.Error($"Failed to Read Entry {entry.Name} in ZIP Archive {filepath}: {ex}");
-                                continue;
-                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MelonLogger.Error($"Failed to Read Entry {entry.Name} in ZIP Archive {filepath}: {ex}");
+                            continue;
                         }
                     }
                 }

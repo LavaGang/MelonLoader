@@ -80,7 +80,7 @@ namespace MelonLoader.MelonFileTypes
                 {
                     try
                     {
-                        symbolsdata = File.ReadAllBytes(filepath);
+                        symbolsdata = File.ReadAllBytes(symbolspath);
                     }
                     catch (Exception ex)
                     {
@@ -108,13 +108,14 @@ namespace MelonLoader.MelonFileTypes
         {
             if (filedata == null)
                 return;
-            if (symbolsdata == null)
-                symbolsdata = new byte[0];
 
             Assembly melonassembly = null;
             try
             {
-                melonassembly = Assembly.Load(filedata, symbolsdata);
+                if (symbolsdata == null)
+                    melonassembly = Assembly.Load(filedata, symbolsdata);
+                else
+                    melonassembly = Assembly.Load(filedata);
             }
             catch (Exception ex)
             {

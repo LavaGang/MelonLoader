@@ -467,14 +467,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		public const int ENDSIG = 'P' | ('K' << 8) | (5 << 16) | (6 << 24);
 		#endregion
 		
-#if NETCF_1_0 || NETCF_2_0
-		// This isnt so great but is better than nothing.
-        // Trying to work out an appropriate OEM code page would be good.
-        // 850 is a good default for english speakers particularly in Europe.
-		static int defaultCodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
-#else
-		static int defaultCodePage = Thread.CurrentThread.CurrentCulture.TextInfo.OEMCodePage;
-#endif
+		static int defaultCodePage = Encoding.UTF8.CodePage;
 		
 		/// <summary>
 		/// Default encoding used for string conversion.  0 gives the default system OEM code page.
