@@ -83,6 +83,8 @@ public:
 		static void Invoke_OnConnect(const char* address);
 		static void Invoke_OnDisconnect(const char* address);
 	private:
+		static intptr_t ConvertJavaToMonoDeviceList(std::vector<jobject>& jDeviceList);
+		
 		// native parser
 		static int ReleaseAddress(intptr_t* address);
 		
@@ -143,3 +145,4 @@ public:
 		static Mono::String* Internal_ToString(Mono::String* address);
 	};
 };
+

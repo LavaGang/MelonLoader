@@ -279,6 +279,23 @@ void InternalCalls::BHaptics::AddInternalCalls()
     }
 }
 
+intptr_t InternalCalls::BHaptics::ConvertJavaToMonoDeviceList(std::vector<jobject>& jDeviceList)
+{
+    char** resCData = new char*[jDeviceList.size()];
+
+    for (size_t i = 0; i < jDeviceList.size(); i++)
+    {
+        const char* address = bHapticsPlayer::BhapticsDevice::GetAddress(jDeviceList[i]);
+
+        resCData[i] = (char*)malloc(strlen(address));
+        strcpy(resCData[i], address);
+    }
+    
+    int64_t* res = new int64_t[2] { jDeviceList.size(), (int64_t)resCData };
+
+    return (intptr_t)res;
+}
+
 int InternalCalls::BHaptics::ReleaseAddress(intptr_t* address)
 {
     delete[] address;
@@ -289,26 +306,64 @@ int InternalCalls::BHaptics::ReleaseAddress(intptr_t* address)
 
 void InternalCalls::BHaptics::Invoke_OnChange()
 {
+    Mono::Object* exObj = NULL;
+    Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnChange, NULL, NULL, &exObj);
+
+    if (exObj != NULL)
+        Mono::LogException(exObj);
 }
 
 void InternalCalls::BHaptics::Invoke_OnDeviceUpdate(std::vector<jobject> deviceArr)
 {
+    void** args = new void*[1] { (void*)ConvertJavaToMonoDeviceList(deviceArr) };
+    
+    Mono::Object* exObj = NULL;
+    Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnConnect, NULL, args, &exObj);
+
+    if (exObj != NULL)
+        Mono::LogException(exObj);
 }
 
 void InternalCalls::BHaptics::Invoke_OnScanStatusChange(bool isScanning)
 {
+    void** args = new void*[1] { &isScanning };
+    
+    Mono::Object* exObj = NULL;
+    Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnScanStatusChange, NULL, args, &exObj);
+
+    if (exObj != NULL)
+        Mono::LogException(exObj);
 }
 
 void InternalCalls::BHaptics::Invoke_OnChangeResponse()
 {
+    Mono::Object* exObj = NULL;
+    Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnChangeResponse, NULL, NULL, &exObj);
+
+    if (exObj != NULL)
+        Mono::LogException(exObj);
 }
 
 void InternalCalls::BHaptics::Invoke_OnConnect(const char* address)
 {
+    void** args = new void*[1] { Mono::Exports::mono_string_new(Mono::domain, address) };
+    
+    Mono::Object* exObj = NULL;
+    Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnConnect, NULL, args, &exObj);
+
+    if (exObj != NULL)
+        Mono::LogException(exObj);
 }
 
 void InternalCalls::BHaptics::Invoke_OnDisconnect(const char* address)
 {
+    void** args = new void*[1] { Mono::Exports::mono_string_new(Mono::domain, address) };
+    
+    Mono::Object* exObj = NULL;
+    Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnDisconnect, NULL, args, &exObj);
+
+    if (exObj != NULL)
+        Mono::LogException(exObj);
 }
 
 #pragma endregion 
@@ -588,20 +643,7 @@ intptr_t InternalCalls::BHaptics::Internal_GetDeviceList()
 {
     Debug::Msgf("InternalCalls::BHaptics::Internal_GetDeviceList");
     auto resData = bHapticsPlayer::BhapticsManager::GetDeviceList();
-    
-    char** resCData = new char*[resData.size()];
-
-    for (size_t i = 0; i < resData.size(); i++)
-    {
-        const char* address = bHapticsPlayer::BhapticsDevice::GetAddress(resData[i]);
-
-        resCData[i] = (char*)malloc(strlen(address));
-        strcpy(resCData[i], address);
-    }
-    
-    int64_t* res = new int64_t[2] { resData.size(), (int64_t)resCData };
-
-    return (intptr_t)res;
+    return ConvertJavaToMonoDeviceList(resData);
 }
 
 #pragma endregion 
