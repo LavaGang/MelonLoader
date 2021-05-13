@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 
 namespace MelonLoader.MelonFileTypes
