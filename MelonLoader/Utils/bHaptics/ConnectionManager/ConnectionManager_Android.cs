@@ -76,7 +76,7 @@ namespace MelonLoader.ConnectionManager
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
         public extern static void PingAll();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static bool IsDeviceConnected();
+        public extern static bool IsDeviceConnected([MarshalAs(UnmanagedType.LPStr)] string address);
 
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
         private extern static void Internal_Pair([MarshalAs(UnmanagedType.LPStr)] string address);

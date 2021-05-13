@@ -39,7 +39,7 @@ namespace MelonLoader
             for (int i = 0; i < data.Size; i++)
             {
                 result[i] = new BhapticsDevice(Marshal.PtrToStringAnsi(cAddresses[i]));
-                ReleaseAddress(cAddresses[i]);
+                SafeRelease(cAddresses[i]);
             }
             
             return result;
@@ -75,11 +75,17 @@ namespace MelonLoader
         
         private static void Cleanup(IntPtr cArr, ArrayData data)
         {
-            ReleaseAddress(data.Location);
-            ReleaseAddress(cArr);
+            SafeRelease(data.Location);
+            SafeRelease(cArr);
+        }
+
+        private static void SafeRelease(IntPtr ptr)
+        {
+            if (ReleaseAddress(ptr) != 0)
+                throw new Exception("Memory unsuccessfully released. Likely UB.");
         }
         
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void ReleaseAddress(IntPtr ptr);
+        private extern static int ReleaseAddress(IntPtr ptr);
     }
 }
