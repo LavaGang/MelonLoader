@@ -122,7 +122,7 @@ namespace MelonLoader.CompatibilityLayers
 			bool nullcheck_version = string.IsNullOrEmpty(infoAttribute.Version);
 			if (nullcheck_name || nullcheck_version)
 			{
-				MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : ""))} given to MelonInfoAttribute in {filelocation}");
+				MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : ""))} given to MelonInfoAttribute in {filepath}");
 				return false;
 			}
 
