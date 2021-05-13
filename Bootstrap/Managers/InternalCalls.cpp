@@ -277,6 +277,55 @@ void InternalCalls::BHaptics::AddInternalCalls()
         Assertion::ThrowInternalFailure("Failed to Get Method from Class!");
         return;
     }
+    
+    // native parser
+    Mono::AddInternalCall("MelonLoader.NativeParser::ReleaseAddress", (void*)ReleaseAddress);
+
+    // player
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::TurnOff", (void*)TurnOff);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::TurnOffAll", (void*)TurnOffAll);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::RegisterProject", (void*)RegisterProject);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::RegisterProjectReflected", (void*)RegisterProjectReflected);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::SubmitRegistered", (void*)SubmitRegistered);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::SubmitRegisteredWithTime", (void*)SubmitRegisteredWithTime);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::IsRegistered", (void*)IsRegistered);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::IsPlaying", (void*)IsPlaying);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::IsAnythingPlaying", (void*)IsAnythingPlaying);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::Internal_SubmitDot", (void*)Internal_SubmitDot);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::Internal_SubmitPath", (void*)Internal_SubmitPath);
+    Mono::AddInternalCall("MelonLoader.bHaptics_NativeLibrary::Internal_GetPositionStatus", (void*)Internal_GetPositionStatus);
+
+    // connection manager
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Scan", (void*)Scan);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::StopScan", (void*)StopScan);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::RefreshPairingInfo", (void*)RefreshPairingInfo);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Unpair", (void*)Unpair);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::UnpairAll", (void*)UnpairAll);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::TogglePosition", (void*)TogglePosition);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Ping", (void*)Ping);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::PingAll", (void*)PingAll);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::IsDeviceConnected", (void*)IsDeviceConnected);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Internal_Pair", (void*)Internal_Pair);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Internal_PairPositioned", (void*)Internal_PairPositioned);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Internal_GetIsScanning", (void*)Internal_GetIsScanning);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Internal_ChangePosition", (void*)Internal_ChangePosition);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Internal_SetMotor", (void*)Internal_SetMotor);
+    Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Internal_GetDeviceList", (void*)Internal_GetDeviceList);
+
+    // device
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_IsPing", (void*)Internal_IsPing);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_IsPaired", (void*)Internal_IsPaired);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetConnectFailCount", (void*)Internal_GetConnectFailCount);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetRssi", (void*)Internal_GetRssi);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetConnectionStatus", (void*)Internal_GetConnectionStatus);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetPosition", (void*)Internal_GetPosition);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetAddress", (void*)Internal_GetAddress);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetDeviceName", (void*)Internal_GetDeviceName);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetBattery", (void*)Internal_GetBattery);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetType", (void*)Internal_GetType);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetLastBytes", (void*)Internal_GetLastBytes);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetLastScannedTime", (void*)Internal_GetLastScannedTime);
+    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_ToString", (void*)Internal_ToString);
 }
 
 intptr_t InternalCalls::BHaptics::ConvertJavaToMonoDeviceList(std::vector<jobject>& jDeviceList)

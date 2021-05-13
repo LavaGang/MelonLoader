@@ -127,8 +127,6 @@ public:
 		static void Internal_SetMotor(Mono::String* address, char* bytes, size_t size);
 		static intptr_t Internal_GetDeviceList();
 
-		
-
 		// device
 		static bool Internal_IsPing(Mono::String* address);
 		static bool Internal_IsPaired(Mono::String* address);
