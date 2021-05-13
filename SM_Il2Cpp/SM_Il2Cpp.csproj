@@ -65,7 +65,7 @@
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
-	<Reference Include="Tomlet">
+    <Reference Include="Tomlet">
       <HintPath>$(OutputPath)..\..\Tomlet.dll</HintPath>
       <Private>false</Private>
     </Reference>
@@ -85,4 +85,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if EXIST "$(OutputDir)Tomlet.dll" (
+del "$(OutputDir)Tomlet.dll" /q
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

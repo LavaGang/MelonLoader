@@ -13,7 +13,8 @@ namespace MelonLoader.CompatibilityLayers
 	{
 		private readonly Type[] plugin_types = null;
 		private readonly Assembly asm = null;
-		private IPA_CL(Assembly assembly, IEnumerable<Type> types) { asm = assembly; plugin_types = Enumerable.ToArray(types); }
+		private readonly string filepath = null;
+		private IPA_CL(Assembly assembly, string filelocation, IEnumerable<Type> types) { asm = assembly; filepath = filelocation; plugin_types = Enumerable.ToArray(types); }
 
 		internal static void Setup(AppDomain domain)
 		{
@@ -33,22 +34,21 @@ namespace MelonLoader.CompatibilityLayers
 			if ((plugin_types == null)
 				|| (plugin_types.Count() <= 0))
 				return;
-			args.inter = new IPA_CL(args.assembly, plugin_types);
+			args.inter = new IPA_CL(args.assembly, args.filepath, plugin_types);
 		}
 
-		public override void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl)
+		public override void CheckAndCreate(ref List<MelonBase> melonTbl)
 		{
-			if (string.IsNullOrEmpty(filelocation))
-				filelocation = asm.GetName().Name;
-
+			/*
 			if (is_plugin)
 			{
 				MelonLogger.Error($"Mod in Plugins Folder: {filelocation}");
 				return;
 			}
+			*/
 
 			foreach (Type plugin_type in plugin_types)
-				LoadPlugin(plugin_type, filelocation, ref melonTbl);
+				LoadPlugin(plugin_type, filepath, ref melonTbl);
 		}
 
 		private void LoadPlugin(Type plugin_type, string filelocation, ref List<MelonBase> melonTbl)
@@ -75,7 +75,7 @@ namespace MelonLoader.CompatibilityLayers
 				}
 				if (!game_found)
 				{
-					MelonLogger.Error($"Incompatible Game for Mod: {filelocation}");
+					MelonLogger.Error($"Incompatible Game for {filelocation}");
 					return;
 				}
 			}
@@ -86,7 +86,7 @@ namespace MelonLoader.CompatibilityLayers
 
 			if (MelonHandler.IsModAlreadyLoaded(plugin_name))
 			{
-				MelonLogger.Error($"Duplicate Mod {plugin_name}: {filelocation}");
+				MelonLogger.Error($"Duplicate File {plugin_name}: {filelocation}");
 				return;
 			}
 

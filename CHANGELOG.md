@@ -177,6 +177,10 @@
 152. Fixed MFE Issue with MelonBase.Harmony.
 153. Fixed Loading Issue with MelonPreferences_ReflectiveCategory.
 154. Fixed Issue with Loading Melons from ZIP Archives.
+155. Rewrote File Handling and Assembly Loading System.
+156. Fixed Issue with Extra Tomlet DLL getting copied to Support Modules.
+157. Added MDB Loading Support for ZIPs.
+158. Added Source Code Detection for ZIPs.
 
 ---
 

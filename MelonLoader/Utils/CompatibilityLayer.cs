@@ -90,10 +90,11 @@ namespace MelonLoader
         // Assembly to Compatibility Layer Conversion
         private static event Action<LayerResolveEventArgs> ResolveAssemblyToLayerResolverEvents;
         public static void AddResolveAssemblyToLayerResolverEvent(Action<LayerResolveEventArgs> evt) => ResolveAssemblyToLayerResolverEvents += evt;
-        internal static Resolver ResolveAssemblyToLayerResolver(Assembly asm)
+        internal static Resolver ResolveAssemblyToLayerResolver(Assembly asm, string filepath = null)
         {
             LayerResolveEventArgs args = new LayerResolveEventArgs();
             args.assembly = asm;
+            args.filepath = filepath;
             ResolveAssemblyToLayerResolverEvents?.Invoke(args);
             return args.inter;
         }
@@ -109,10 +110,14 @@ namespace MelonLoader
         public static void RefreshModsTable() => RefreshModsTableEvents?.Invoke();
 
         // Resolver Base and Resolver Event Args
-        public class Resolver { public virtual void CheckAndCreate(string filelocation, bool is_plugin, ref List<MelonBase> melonTbl) { } }
+        public class Resolver
+        {
+            public virtual void CheckAndCreate(ref List<MelonBase> melonTbl) { } 
+        }
         public class LayerResolveEventArgs : EventArgs
         {
             public Assembly assembly;
+            public string filepath;
             public Resolver inter;
         }
     }

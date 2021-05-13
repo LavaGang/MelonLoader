@@ -62,25 +62,7 @@ namespace MelonLoader
             MelonLogger.Msg("Loading Plugins...");
             LoadMelons(true);
             MelonLogger.WriteSpacer();
-            if (_Plugins.Count <= 0)
-            {
-                MelonLogger.Msg("------------------------------");
-                MelonLogger.Msg("No Plugins Loaded!");
-                MelonLogger.Msg("------------------------------");
-                return;
-            }
-            MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg($"{_Plugins.Count} Plugin{((_Plugins.Count > 1) ? "s" : "")} Loaded");
-            MelonLogger.Msg("------------------------------");
-            foreach (MelonPlugin plugin in _Plugins)
-            {
-                MelonLogger.Internal_PrintModName(plugin.ConsoleColor, plugin.Info.Name, plugin.Info.Version);
-                if (!string.IsNullOrEmpty(plugin.Info.Author))
-                    MelonLogger.Msg($"by {plugin.Info.Author}");
-                MelonLogger.Msg($"SHA256 Hash: {GetMelonHash(plugin)}");
-                MelonLogger.Msg("------------------------------");
-            }
-            SetupAttributes_Plugins();
+            PrintMelonInfo(_Plugins.ToArray(), true);
         }
 
         internal static void LoadMods()
@@ -89,112 +71,60 @@ namespace MelonLoader
             MelonLogger.Msg("Loading Mods...");
             LoadMelons();
             MelonLogger.WriteSpacer();
-            if (_Mods.Count <= 0)
+            PrintMelonInfo(_Mods.ToArray());
+        }
+
+        private static void PrintMelonInfo(MelonBase[] melontbl, bool is_plugins = false)
+        {
+            if (melontbl.Length <= 0)
             {
                 MelonLogger.Msg("------------------------------");
-                MelonLogger.Msg("No Mods Loaded!");
+                MelonLogger.Msg($"No {(is_plugins ? "Plugins" : "Mods")} Loaded!");
                 MelonLogger.Msg("------------------------------");
                 return;
             }
             MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg($"{_Mods.Count} Mod{((_Mods.Count > 1) ? "s" : "")} Loaded");
+            MelonLogger.Msg($"{melontbl.Length} {(is_plugins ? "Plugin" : "Mod")}{((_Mods.Count > 1) ? "s" : "")} Loaded");
             MelonLogger.Msg("------------------------------");
-            foreach (MelonMod mod in _Mods)
+            foreach (MelonBase melon in melontbl)
             {
-                MelonLogger.Internal_PrintModName(mod.ConsoleColor, mod.Info.Name, mod.Info.Version);
-                if (!string.IsNullOrEmpty(mod.Info.Author))
-                    MelonLogger.Msg($"by {mod.Info.Author}");
-                MelonLogger.Msg($"SHA256 Hash: {GetMelonHash(mod)}");
+                MelonLogger.Internal_PrintModName(melon.ConsoleColor, melon.Info.Name, melon.Info.Version);
+
+                if (!string.IsNullOrEmpty(melon.Info.Author))
+                    MelonLogger.Msg($"by {melon.Info.Author}");
+
+                string melonhash = GetMelonHash(melon);
+                if (!string.IsNullOrEmpty(melonhash))
+                    MelonLogger.Msg($"SHA256 Hash: {melonhash}");
+
                 MelonLogger.Msg("------------------------------");
             }
-            SetupAttributes_Mods();
         }
         
         private static void LoadMelons(bool plugins = false)
         {
-            MelonLaunchOptions.Core.LoadModeEnum mode = (plugins ? MelonLaunchOptions.Core.LoadMode_Plugins : MelonLaunchOptions.Core.LoadMode_Mods);
             string basedirectory = (plugins ? PluginsDirectory : ModsDirectory);
 
-            // DLLs
-            string[] dlltbl = Directory.GetFiles(basedirectory, "*.dll");
-            if (dlltbl.Length > 0)
-                for (int i = 0; i < dlltbl.Length; i++)
-                {
-                    string filename = dlltbl[i];
-                    if (string.IsNullOrEmpty(filename))
-                        continue;
+            MelonFileTypes.DLL.LoadAll(basedirectory, plugins);
+            MelonFileTypes.ZIP.LoadAll(basedirectory);
 
-                    if (mode != MelonLaunchOptions.Core.LoadModeEnum.BOTH)
-                    {
-                        bool file_extension_check = filename.EndsWith(".dev.dll");
-                        if (((mode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL) && file_extension_check) || ((mode == MelonLaunchOptions.Core.LoadModeEnum.DEV) && !file_extension_check))
-                            continue;
-                    }
+            SortPlugins();
+            SortMods();
 
-                    string melonname = MelonUtils.GetFileProductName(filename);
-                    if (string.IsNullOrEmpty(melonname))
-                        melonname = Path.GetFileNameWithoutExtension(filename);
-
-                    bool isAlreadyLoaded = (plugins ? IsPluginAlreadyLoaded(melonname) : IsModAlreadyLoaded(melonname));
-                    if (isAlreadyLoaded)
-                    {
-                        MelonLogger.Warning($"Duplicate File: {filename}");
-                        continue;
-                    }
-
-                    LoadFromFile(filename, plugins);
-                }
-
-            // ZIPs
-            string[] ziptbl = Directory.GetFiles(basedirectory, "*.zip");
-            if (ziptbl.Length > 0)
-                for (int i = 0; i < ziptbl.Length; i++)
-                {
-                    string filename = ziptbl[i];
-                    if (string.IsNullOrEmpty(filename))
-                        continue;
-                    try
-                    {
-                        using (var filestream = File.OpenRead(filename))
-                        using (var zipstream = new ZipInputStream(filestream))
-                        {
-                            ZipEntry entry;
-                            while ((entry = zipstream.GetNextEntry()) != null)
-                            {
-                                if (string.IsNullOrEmpty(entry.Name))
-                                    continue;
-                                string filename2 = Path.GetFileName(entry.Name);
-                                if (string.IsNullOrEmpty(filename2))
-                                    continue;
-                                if (mode != MelonLaunchOptions.Core.LoadModeEnum.BOTH)
-                                {
-                                    bool file_extension_check = filename2.EndsWith(".dev.dll");
-                                    if (((mode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL) && file_extension_check) || ((mode == MelonLaunchOptions.Core.LoadModeEnum.DEV) && !file_extension_check))
-                                        continue;
-                                }
-                                using (MemoryStream memorystream = new MemoryStream())
-                                {
-                                    int size = 0;
-                                    byte[] buffer = new byte[4096];
-                                    while (true)
-                                    {
-                                        size = zipstream.Read(buffer, 0, buffer.Length);
-                                        if (size > 0)
-                                            memorystream.Write(buffer, 0, size);
-                                        else
-                                            break;
-                                    }
-                                    LoadFromByteArray(memorystream.ToArray(), $"{filename}/{filename2}", plugins);
-                                }
-                            }
-                        }
-                    }
-                    catch(Exception ex) { MelonLogger.Error(ex.ToString()); }
-                }
+            // To-Do Check for Melon in Wrong Folder
         }
 
         public static string GetMelonHash(MelonBase melonBase)
         {
+            if ((melonBase == null)
+                || string.IsNullOrEmpty(melonBase.Location))
+                return null;
+
+            string extension = Path.GetExtension(melonBase.Location);
+            if (string.IsNullOrEmpty(extension)
+                || !extension.Equals(".dll"))
+                return null;
+
             byte[] byteHash = sha256.ComputeHash(File.ReadAllBytes(melonBase.Location));
             string finalHash = string.Empty;
             foreach (byte b in byteHash)
@@ -206,83 +136,49 @@ namespace MelonLoader
         public static bool IsPluginAlreadyLoaded(string name) => (_Plugins.Find(x => x.Info.Name.Equals(name)) != null);
         public static bool IsModAlreadyLoaded(string name) => (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
 
-        public static void LoadFromFile(string filelocation, bool is_plugin = false)
+        public static void LoadFromFile(string filepath, string symbolspath = null)
         {
-            if (string.IsNullOrEmpty(filelocation))
+            if (string.IsNullOrEmpty(filepath))
                 return;
-            if (!MelonDebug.IsEnabled())
+            switch (Path.GetExtension(filepath))
             {
-                LoadFromByteArray(File.ReadAllBytes(filelocation), filelocation, is_plugin);
-                return;
-            }
-            try
-            {
-                Assembly asm = Assembly.LoadFrom(filelocation);
-                if (asm == null)
-                {
-                    MelonLogger.Error($"Failed to Load Assembly for {filelocation}: Assembly.LoadFrom returned null"); ;
-                    return;
-                }
-                LoadFromAssembly(asm, filelocation, is_plugin);
-            }
-            catch (Exception ex) { MelonLogger.Error($"Failed to Load Assembly for {filelocation}: {ex}"); }
-        }
-
-        [Obsolete("MelonLoader.MelonHandler.LoadFromAssembly(byte[], string) is obsolete. Please use MelonLoader.MelonHandler.LoadFromAssembly(byte[], string, bool) instead.")]
-        public static void LoadFromByteArray(byte[] filedata, string filelocation = null) => LoadFromByteArray(filedata, filelocation, false);
-        public static void LoadFromByteArray(byte[] filedata, string filelocation = null, bool is_plugin = false)
-        {
-            if ((filedata == null) || (filedata.Length <= 0))
-                return;
-            try
-            {
-                byte[] symbols = { 0 };
-                if (!string.IsNullOrEmpty(filelocation)
-                    && !filelocation.Replace("\\", "/").Contains(".zip/"))
-                {
-                    string symbolspath = $"{filelocation}.mdb";
-                    if (File.Exists(symbolspath))
-                        symbols = File.ReadAllBytes(symbolspath);
-                }
-
-                Assembly asm = Assembly.Load(filedata, symbols);
-                if (asm == null)
-                {
-                    if (string.IsNullOrEmpty(filelocation))
-                        MelonLogger.Error("Failed to Load Assembly: Assembly.Load returned null");
-                    else
-                        MelonLogger.Error($"Failed to Load Assembly for {filelocation}: Assembly.Load returned null");
-                    return;
-                }
-                LoadFromAssembly(asm, filelocation, is_plugin);
-            }
-            catch (Exception ex)
-            {
-                if (string.IsNullOrEmpty(filelocation))
-                    MelonLogger.Error($"Failed to Load Assembly: {ex}");
-                else
-                    MelonLogger.Error($"Failed to Load Assembly for {filelocation}: {ex}");
+                case ".dll":
+                    MelonFileTypes.DLL.LoadFromFile(filepath, symbolspath);
+                    goto default;
+                case ".zip":
+                    MelonFileTypes.ZIP.LoadFromFile(filepath);
+                    goto default;
+                default:
+                    break;
             }
         }
 
-        [Obsolete("MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string) is obsolete. Please use MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string, bool) instead.")]
-        public static void LoadFromAssembly(Assembly asm, string filelocation = null) => LoadFromAssembly(asm, filelocation, false);
-        public static void LoadFromAssembly(Assembly asm, string filelocation = null, bool is_plugin = false)
+        public static void LoadFromByteArray(byte[] filedata, byte[] symbolsdata = null, string filepath = null)
+        {
+            if (filedata == null)
+                return;
+
+            // To-Do Check for ZIP Byte Arrays
+
+            MelonFileTypes.DLL.LoadFromByteArray(filedata, symbolsdata, filepath);
+        }
+
+        public static void LoadFromAssembly(Assembly asm, string filepath = null)
         {
             if (asm == null)
                 return;
-            if (string.IsNullOrEmpty(filelocation))
-                filelocation = asm.GetName().Name;
+            if (string.IsNullOrEmpty(filepath))
+                filepath = asm.GetName().Name;
 
-            MelonCompatibilityLayer.Resolver resolver = MelonCompatibilityLayer.ResolveAssemblyToLayerResolver(asm);
+            MelonCompatibilityLayer.Resolver resolver = MelonCompatibilityLayer.ResolveAssemblyToLayerResolver(asm, filepath);
             if (resolver == null)
             {
-                MelonLogger.Error($"Failed to Load Assembly for {filelocation}: No Compatibility Layer Found!");
+                MelonLogger.Error($"Failed to Load Assembly for {filepath}: No Compatibility Layer Found!");
                 return;
             }
 
             List<MelonBase> melonTbl = new List<MelonBase>();
-            resolver.CheckAndCreate(filelocation, is_plugin, ref melonTbl);
+            resolver.CheckAndCreate(ref melonTbl);
             if (melonTbl.Count <= 0)
                 return;
 
@@ -294,10 +190,7 @@ namespace MelonLoader
                     _Mods.Add((MelonMod)melon);
             }
 
-            if (is_plugin)
-                SortPlugins();
-            else
-                SortMods();
+            // To-Do Check for Late Loads and Display Debug Warning
         }
 
         internal static T PullCustomAttributeFromAssembly<T>(Assembly asm) where T : Attribute
@@ -332,66 +225,40 @@ namespace MelonLoader
             return output.ToArray();
         }
 
-        private static void SortPlugins()
+        public static void SortPlugins()
         {
             _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
             MelonCompatibilityLayer.RefreshPluginsTable();
         }
 
-        private static void SortMods()
+        public static void SortMods()
         {
             _Mods = _Mods.OrderBy(x => x.Priority).ToList();
             DependencyGraph<MelonMod>.TopologicalSort(_Mods);
             MelonCompatibilityLayer.RefreshModsTable();
         }
 
-        private static void RegisterIl2CppInjectAttributes(Assembly asm)
+        internal static void OnPreInitialization()
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                return;
-            Type[] typeTbl = asm.GetTypes();
-            if ((typeTbl == null) || (typeTbl.Length <= 0))
-                return;
-            foreach (Type type in typeTbl)
-            {
-                object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), false);
-                if ((attTbl == null) || (attTbl.Length <= 0))
-                    continue;
-                UnhollowerSupport.RegisterTypeInIl2CppDomain(type);
-            }
+            InvokeMelonPluginMethod(x => x.HarmonyInstance.PatchAll(x.Assembly), true);
+            InvokeMelonPluginMethod(x => x.OnPreInitialization(), true);
         }
 
-        private static void SetupAttributes_Plugins()
+        internal static void OnApplicationStart_Plugins()
         {
-            List<Assembly> setupasm = new List<Assembly>();
-            InvokeMelonPluginMethod(x =>
-            {
-                if (setupasm.Contains(x.Assembly))
-                    return;
-                //RegisterIl2CppInjectAttributes(x.Assembly);
-                x.HarmonyInstance.PatchAll(x.Assembly);
-                setupasm.Add(x.Assembly);
-            }, true);
+            InvokeMelonPluginMethod(x => RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly), true);
+            InvokeMelonPluginMethod(x => x.OnApplicationStart(), true);
         }
 
-        private static void SetupAttributes_Mods()
+        internal static void OnApplicationStart_Mods()
         {
-            List<Assembly> setupasm = new List<Assembly>();
-            InvokeMelonModMethod(x =>
-            {
-                if (setupasm.Contains(x.Assembly))
-                    return;
-                RegisterIl2CppInjectAttributes(x.Assembly);
-                x.HarmonyInstance.PatchAll(x.Assembly);
-                setupasm.Add(x.Assembly);
-            }, true);
+            InvokeMelonModMethod(x => x.HarmonyInstance.PatchAll(x.Assembly), true);
+            InvokeMelonModMethod(x => RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly), true);
+            InvokeMelonModMethod(x => x.OnApplicationStart(), true);
         }
 
-        internal static void OnPreInitialization() => InvokeMelonPluginMethod(x => x.OnPreInitialization(), true);
         internal static void OnApplicationEarlyStart() => InvokeMelonPluginMethod(x => x.OnApplicationEarlyStart(), true);
-        internal static void OnApplicationStart_Plugins() => InvokeMelonPluginMethod(x => x.OnApplicationStart(), true);
-        internal static void OnApplicationStart_Mods() => InvokeMelonModMethod(x => x.OnApplicationStart(), true);
         internal static void OnApplicationLateStart_Plugins() => InvokeMelonPluginMethod(x => x.OnApplicationLateStart(), true);
         internal static void OnApplicationLateStart_Mods() => InvokeMelonModMethod(x => x.OnApplicationLateStart(), true);
         internal static void OnApplicationQuit() { InvokeMelonPluginMethod(x => x.OnApplicationQuit()); InvokeMelonModMethod(x => x.OnApplicationQuit()); }
@@ -464,5 +331,14 @@ namespace MelonLoader
             _Mods.RemoveAll(failedMods.Contains);
             SortMods();
         }
+
+        [Obsolete("MelonLoader.MelonHandler.LoadFromFile(string, bool) is obsolete. Please use MelonLoader.MelonHandler.LoadFromFile(string, string) instead.")]
+        public static void LoadFromFile(string filelocation, bool is_plugin) => LoadFromFile(filelocation);
+        [Obsolete("MelonLoader.MelonHandler.LoadFromByteArray(byte[], string) is obsolete. Please use MelonLoader.MelonHandler.LoadFromByteArray(byte[], byte[], string) instead.")]
+        public static void LoadFromByteArray(byte[] filedata, string filelocation) => LoadFromByteArray(filedata, filepath: filelocation);
+        [Obsolete("MelonLoader.MelonHandler.LoadFromByteArray(byte[], string, bool) is obsolete. Please use MelonLoader.MelonHandler.LoadFromByteArray(byte[], byte[], string) instead.")]
+        public static void LoadFromByteArray(byte[] filedata, string filelocation, bool is_plugin) => LoadFromByteArray(filedata, filepath: filelocation);
+        [Obsolete("MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string, bool) is obsolete. Please use MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string) instead.")]
+        public static void LoadFromAssembly(Assembly asm, string filelocation, bool is_plugin) => LoadFromAssembly(asm, filelocation);
     }
 }
