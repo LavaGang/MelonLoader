@@ -8,11 +8,10 @@ namespace MelonLoader.CompatibilityLayers
 {
 	internal class Melon_CL : MelonCompatibilityLayer.Resolver
 	{
-		private readonly Type[] melon_types = null;
 		private readonly Assembly asm = null;
 		private readonly string filepath = null;
 		private bool is_plugin = false;
-		private Melon_CL(Assembly assembly, string filelocation, IEnumerable<Type> types) { asm = assembly; filepath = filelocation; melon_types = Enumerable.ToArray(types); }
+		private Melon_CL(Assembly assembly, string filelocation) { asm = assembly; filepath = filelocation; }
 
 		internal static void Setup(AppDomain domain)
 		{
@@ -37,7 +36,7 @@ namespace MelonLoader.CompatibilityLayers
 
 			if (string.IsNullOrEmpty(args.filepath))
 				args.filepath = args.assembly.GetName().Name;
-			args.inter = new Melon_CL(args.assembly, args.filepath, melon_types);
+			args.inter = new Melon_CL(args.assembly, args.filepath);
 		}
 
 		private static void RefreshPluginsTable() => Main.Plugins = MelonHandler._Plugins;
