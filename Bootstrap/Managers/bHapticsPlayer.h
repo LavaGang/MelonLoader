@@ -56,8 +56,8 @@ public:
 		static std::tuple<jclass, jobject> GetManager();
 		static std::vector<jobject> ConvertDeviceList(jobject jDeviceList);
 	private:
-		static jobject ManagerClassInstance;
 		static jclass ManagerClass;
+		static jobject ManagerClassInstance;
 	};
 	class BhapticsDevice
 	{
@@ -79,8 +79,8 @@ public:
 		static jobject GetDevice(const char*);
 		static void OnDeviceUpdate(jobject);
 	private:
-		static std::unordered_map<std::hash<std::string>, jobject> DeviceMap;
-		static std::hash<std::string> HashAddress(const char*);
+		static std::unordered_map<size_t, jobject> DeviceMap;
+		static size_t HashAddress(const char*);
 	};
 	class Callbacks
 	{

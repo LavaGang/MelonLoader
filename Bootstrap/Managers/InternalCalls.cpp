@@ -248,6 +248,14 @@ void InternalCalls::UnhollowerIl2Cpp::CleanupDisasm()
 
 #pragma region bHaptics
 
+Mono::Method* InternalCalls::BHaptics::Mono_Invoke_OnChange = NULL;
+
+Mono::Method* InternalCalls::BHaptics::Mono_Invoke_OnDeviceUpdate = NULL;
+Mono::Method* InternalCalls::BHaptics::Mono_Invoke_OnScanStatusChange = NULL;
+Mono::Method* InternalCalls::BHaptics::Mono_Invoke_OnChangeResponse = NULL;
+Mono::Method* InternalCalls::BHaptics::Mono_Invoke_OnConnect = NULL;
+Mono::Method* InternalCalls::BHaptics::Mono_Invoke_OnDisconnect = NULL;
+
 void InternalCalls::BHaptics::AddInternalCalls()
 {
     Mono::Class* playerKlass = Mono::Exports::mono_class_from_name(BaseAssembly::Image, "MelonLoader", "bHaptics_NativeLibrary");
@@ -340,7 +348,7 @@ intptr_t InternalCalls::BHaptics::ConvertJavaToMonoDeviceList(std::vector<jobjec
         strcpy(resCData[i], address);
     }
     
-    int64_t* res = new int64_t[2] { jDeviceList.size(), (int64_t)resCData };
+    int64_t* res = new int64_t[2] { (int64_t)jDeviceList.size(), (intptr_t)resCData };
 
     return (intptr_t)res;
 }
@@ -557,7 +565,7 @@ intptr_t InternalCalls::BHaptics::Internal_GetPositionStatus(Mono::String* posit
     char* resCData = new char[resData.size()];
     std::copy(resData.begin(), resData.end(), resCData);
     
-    int64_t* res = new int64_t[2] { resData.size(), (int64_t)resCData };
+    int64_t* res = new int64_t[2] { (int64_t)resData.size(), (intptr_t)resCData };
 
     return (intptr_t)res;
 }
@@ -831,7 +839,7 @@ intptr_t InternalCalls::BHaptics::Internal_GetLastBytes(Mono::String* address)
     char* resCData = new char[resData.size()];
     std::copy(resData.begin(), resData.end(), resCData);
     
-    int64_t* res = new int64_t[2] { resData.size(), (int64_t)resCData };
+    int64_t* res = new int64_t[2] { (int64_t)resData.size(), (intptr_t)resCData };
 
     return (intptr_t)res;
 }
