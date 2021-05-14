@@ -18,7 +18,7 @@ namespace MelonLoader.bHapticsExtra
 
         public static bool IsScanning => false;
 
-        public static void StartScan()
+        public static void Scan()
         {
             throw new NotImplementedException();
         }

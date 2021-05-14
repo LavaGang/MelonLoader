@@ -95,8 +95,6 @@ public class DeviceManager {
             ActivityCompat.requestPermissions(ApplicationState.Activity,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     1);
-        } else {
-            manager.scan();
         }
 
 //        if (!hasPermissions(ApplicationState.Activity.getApplicationContext(),

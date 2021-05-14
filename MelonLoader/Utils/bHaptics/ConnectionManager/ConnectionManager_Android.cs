@@ -1,4 +1,4 @@
-﻿#if __ANDROID__
+#if __ANDROID__
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -10,36 +10,37 @@ namespace MelonLoader.ConnectionManager
 {
     public class ConnectionManager : BaseConnectionManager
     {
-        public static Action<BhapticsDevice[]> OnDeviceUpdate = (devices) => { };
-        public static Action<bool> OnScanStatusChange = (isScanning) => { };
-        public static Action OnChangeResponse = () => { };
-        public static Action<string> OnConnect = (address) => { };
-        public static Action<string> OnDisconnect = (address) => { };
+        public new static Action<BhapticsDevice[]> OnDeviceUpdate = (devices) => { };
+        public new static Action<bool> OnScanStatusChange = (isScanning) => { };
+        public new static Action OnChangeResponse = () => { };
+        public new static Action<string> OnConnect = (address) => { };
+        public new static Action<string> OnDisconnect = (address) => { };
         
         public new static bool IsConnectionManagerSupported => true;
         public new static bool IsScanning => Internal_GetIsScanning();
 
-        public static void Pair(string address)
+        public new static void Pair(string address)
         {
             Internal_Pair(address);
         }
-        public static void Pair(string address, bHaptics.PositionType position)
+        public new static void Pair(string address, bHaptics.PositionType position)
         {
             Internal_PairPositioned(address, position.ToString());
         }
-        public static void ChangePosition(string address, bHaptics.PositionType position)
+        public new static void ChangePosition(string address, bHaptics.PositionType position)
         {
             Internal_ChangePosition(address, position.ToString());
         }
-        public static void SetMotor(string address, byte[] bytes)
+        public new static void SetMotor(string address, byte[] bytes)
         {
             Internal_SetMotor(address, bytes, bytes.Length);
         }
         
-        public static BhapticsDevice[] GetDeviceList() => NativeParser.ParseDevicesArray(Internal_GetDeviceList());
+        public new static BhapticsDevice[] GetDeviceList() => NativeParser.ParseDevicesArray(Internal_GetDeviceList());
 
         private static void Invoke_OnDeviceUpdate(IntPtr cDeviceArr)
         {
+            MelonLogger.Msg("Mono deivce update");
             OnDeviceUpdate.Invoke(NativeParser.ParseDevicesArray(cDeviceArr));
         }
         private static void Invoke_OnScanStatusChange(bool isScanning)
@@ -59,22 +60,22 @@ namespace MelonLoader.ConnectionManager
             OnDisconnect.Invoke(string.Copy(address));
         }
         
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void Scan();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static void StopScan();
+        public new extern static void Scan();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static void RefreshPairingInfo();
+        public new extern static void StopScan();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static void Unpair([MarshalAs(UnmanagedType.LPStr)] string address);
+        public new extern static void RefreshPairingInfo();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static void UnpairAll();
+        public new extern static void Unpair([MarshalAs(UnmanagedType.LPStr)] string address);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static void TogglePosition([MarshalAs(UnmanagedType.LPStr)] string address);
+        public new extern static void UnpairAll();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static void Ping([MarshalAs(UnmanagedType.LPStr)] string address);
+        public new extern static void TogglePosition([MarshalAs(UnmanagedType.LPStr)] string address);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
-        public extern static void PingAll();
+        public new extern static void Ping([MarshalAs(UnmanagedType.LPStr)] string address);
+        [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
+        public new extern static void PingAll();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Native)]
         public extern static bool IsDeviceConnected([MarshalAs(UnmanagedType.LPStr)] string address);
 
