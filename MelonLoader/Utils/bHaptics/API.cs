@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -15,6 +16,7 @@ namespace MelonLoader
         {
             if (_waserror)
                 return;
+            #if !__ANDROID__
             byte[] buf = new byte[500];
             int size = 0;
             if (!bHaptics_NativeLibrary.TryGetExePath(buf, ref size))
@@ -23,31 +25,169 @@ namespace MelonLoader
                 return;
             }
             bHaptics_NativeLibrary.Initialise("MelonLoader", MelonUtils.GameName.Replace(" ", "_"));
+            #endif
         }
-        internal static void Quit() { if (_waserror) return; bHaptics_NativeLibrary.TurnOff(); bHaptics_NativeLibrary.Destroy(); }
 
-        public static bool IsPlaying() => (!_waserror && bHaptics_NativeLibrary.IsPlaying());
-        public static bool IsPlaying(string key) => (!_waserror && bHaptics_NativeLibrary.IsPlayingKey(key));
-        public static bool IsDeviceConnected(PositionType type) => (!_waserror && bHaptics_NativeLibrary.IsDevicePlaying(type));
-        public static bool IsDeviceConnected(DeviceType type, bool isLeft = true) => (!_waserror && bHaptics_NativeLibrary.IsDevicePlaying(DeviceTypeToPositionType(type, isLeft)));
-        public static bool IsFeedbackRegistered(string key) => (!_waserror && bHaptics_NativeLibrary.IsFeedbackRegistered(key));
+        internal static void Quit()
+        {
+            if (_waserror) return;
+            #if __ANDROID__
+            bHaptics_NativeLibrary.TurnOffAll();
+            ConnectionManager.ConnectionManager.StopScan();
+            #else
+            bHaptics_NativeLibrary.TurnOff();
+            bHaptics_NativeLibrary.Destroy();
+            #endif
+        }
 
-        public static void RegisterTactFileStr(string key, string tactFileStr) { if (!_waserror) bHaptics_NativeLibrary.RegisterFeedbackFromTactFile(key, tactFileStr); }
-        public static void RegisterTactFileStrReflected(string key, string tactFileStr) { if (!_waserror) bHaptics_NativeLibrary.RegisterFeedbackFromTactFileReflected(key, tactFileStr); }
+        public static bool IsPlaying()
+        {
+            #if __ANDROID__
+            return !_waserror && bHaptics_NativeLibrary.IsAnythingPlaying();
+            #else
+            return !_waserror && bHaptics_NativeLibrary.IsPlaying();
+            #endif
+        }
 
-        public static void SubmitRegistered(string key) { if (!_waserror) bHaptics_NativeLibrary.SubmitRegistered(key); }
-        public static void SubmitRegistered(string key, int startTimeMillis) => bHaptics_NativeLibrary.SubmitRegisteredStartMillis(key, startTimeMillis);
-        public static void SubmitRegistered(string key, string altKey, ScaleOption option) { if (!_waserror) bHaptics_NativeLibrary.SubmitRegisteredWithOption(key, altKey, option.Intensity, option.Duration, 1f, 1f); }
-        public static void SubmitRegistered(string key, string altKey, ScaleOption sOption, RotationOption rOption) { if (!_waserror) bHaptics_NativeLibrary.SubmitRegisteredWithOption(key, altKey, sOption.Intensity, sOption.Duration, rOption.OffsetX, rOption.OffsetY); }
+        public static bool IsPlaying(string key)
+        {
+            #if __ANDROID__
+            return !_waserror && bHaptics_NativeLibrary.IsPlaying(key);
+            #else
+            return !_waserror && bHaptics_NativeLibrary.IsPlayingKey(key);
+            #endif
+        }
 
-        public static void TurnOff() { if (!_waserror) bHaptics_NativeLibrary.TurnOff(); }
-        public static void TurnOff(string key) { if (!_waserror) bHaptics_NativeLibrary.TurnOffKey(key); }
+        public static bool IsDeviceConnected(PositionType type)
+        {
+#if __ANDROID__
+            if (_waserror)
+                return false;
+            
+            foreach (var bhapticsDevice in ConnectionManager.ConnectionManager.GetDeviceList())
+            {
+                if (bhapticsDevice.Position == type)
+                    return true;
+            }
+
+            return false;
+#else
+            return !_waserror && bHaptics_NativeLibrary.IsDevicePlaying(type);
+#endif
+        }
+
+        public static bool IsDeviceConnected(DeviceType type, bool isLeft = true) =>
+            IsDeviceConnected(DeviceTypeToPositionType(type, isLeft));
+
+        public static bool IsFeedbackRegistered(string key)
+        {
+#if __ANDROID__
+                return !_waserror && bHaptics_NativeLibrary.IsRegistered(key);
+#else
+                return !_waserror && bHaptics_NativeLibrary.IsFeedbackRegistered(key)
+#endif
+            return false;
+        }
+
+        public static void RegisterTactFileStr(string key, string tactFileStr)
+        {
+            if (!_waserror) 
+                #if __ANDROID__
+                bHaptics_NativeLibrary.RegisterProject(key, tactFileStr);
+                #else
+                bHaptics_NativeLibrary.RegisterFeedbackFromTactFile(key, tactFileStr);
+                #endif
+        }
+
+        public static void RegisterTactFileStrReflected(string key, string tactFileStr)
+        {
+            if (!_waserror) 
+                #if __ANDROID__
+                bHaptics_NativeLibrary.RegisterProjectReflected(key, tactFileStr);
+                #else
+                bHaptics_NativeLibrary.RegisterFeedbackFromTactFileReflected(key, tactFileStr);
+                #endif
+        }
+
+        public static void SubmitRegistered(string key)
+        {
+            if (!_waserror) 
+                #if __ANDROID__
+                bHaptics_NativeLibrary.SubmitRegistered(key, key, 1f, 1f, 0f, 0f);
+                #else
+                bHaptics_NativeLibrary.SubmitRegistered(key);
+                #endif
+        }
+
+        public static void SubmitRegistered(string key, int startTimeMillis)
+        {
+            #if __ANDROID__
+            bHaptics_NativeLibrary.SubmitRegisteredWithTime(key, startTimeMillis);
+            #else
+            bHaptics_NativeLibrary.SubmitRegisteredStartMillis(key, startTimeMillis)
+            #endif
+        }
+
+        public static void SubmitRegistered(string key, string altKey, ScaleOption option)
+        {
+            if (!_waserror) 
+                #if __ANDROID__
+                bHaptics_NativeLibrary.SubmitRegistered(key, altKey, option.Intensity, option.Duration, 0, 0);
+                #else
+                bHaptics_NativeLibrary.SubmitRegisteredWithOption(key, altKey, option.Intensity, option.Duration, 1f, 1f);
+                #endif
+        }
+
+        public static void SubmitRegistered(string key, string altKey, ScaleOption sOption, RotationOption rOption)
+        {
+            if (!_waserror) 
+                #if __ANDROID__
+                bHaptics_NativeLibrary.SubmitRegistered(key, altKey, sOption.Intensity, sOption.Duration, rOption.OffsetX, rOption.OffsetY);
+                #else
+                bHaptics_NativeLibrary.SubmitRegisteredWithOption(key, altKey, sOption.Intensity, sOption.Duration, rOption.OffsetX, rOption.OffsetY);
+                #endif
+        }
+
+        public static void TurnOff()
+        {
+            if (!_waserror) 
+                #if __ANDROID__
+                bHaptics_NativeLibrary.TurnOffAll();
+                #else
+                bHaptics_NativeLibrary.TurnOff();
+                #endif
+        }
+
+        public static void TurnOff(string key)
+        {
+            if (!_waserror)
+                #if __ANDROID__
+                bHaptics_NativeLibrary.TurnOff(key);
+                #else
+                bHaptics_NativeLibrary.TurnOffKey(key);
+                #endif
+        }
 
         public static void Submit(string key, DeviceType type, bool isLeft, byte[] bytes, int durationMillis) => Submit(key, DeviceTypeToPositionType(type, isLeft), bytes, durationMillis);
         public static void Submit(string key, PositionType position, byte[] bytes, int durationMillis)
         {
             if (_waserror)
                 return;
+            #if __ANDROID__
+            int[] indexes = new int[bytes.Length];
+            int[] intensities = new int[bytes.Length];
+
+            for (var i = 0; i < MaxBufferSize; i++)
+            {
+                indexes[i] = i;
+                if (i >= bytes.Length)
+                    continue;
+
+                intensities[i] = bytes[i];
+            }
+            
+            bHaptics_NativeLibrary.SubmitDot(key, position.ToString(), indexes, intensities, durationMillis);
+            #else
             int bytes_size = bytes.Length;
             if (bytes_size != MaxBufferSize)
             {
@@ -56,12 +196,26 @@ namespace MelonLoader
                     newbytes[i] = bytes[i];
             }
             bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, MaxBufferSize, durationMillis);
+            #endif
         }
         public static void Submit(string key, DeviceType type, bool isLeft, List<DotPoint> points, int durationMillis) => Submit(key, DeviceTypeToPositionType(type, isLeft), points, durationMillis);
         public static void Submit(string key, PositionType position, List<DotPoint> points, int durationMillis)
         {
             if (_waserror)
                 return;
+            #if __ANDROID__
+            
+            int[] indexes = new int[points.Count];
+            int[] intensities = new int[points.Count];
+            
+            for (var i = 0; i < points.Count; i++)
+            {
+                indexes[i] = points[i].Index;
+                intensities[i] = points[i].Intensity;
+            }
+            
+            bHaptics_NativeLibrary.SubmitDot(key, position.ToString(), indexes, intensities, durationMillis);
+            #else
             byte[] bytes = new byte[MaxBufferSize];
             for (var i = 0; i < points.Count; i++)
             {
@@ -71,14 +225,30 @@ namespace MelonLoader
                 bytes[point.Index] = (byte)point.Intensity;
             }
             bHaptics_NativeLibrary.SubmitByteArray(key, position, bytes, MaxBufferSize, durationMillis);
+            #endif
         }
         public static void Submit(string key, DeviceType type, bool isLeft, List<PathPoint> points, int durationMillis) => Submit(key, DeviceTypeToPositionType(type, isLeft), points, durationMillis);
         public static void Submit(string key, PositionType position, List<PathPoint> points, int durationMillis)
         {
             if (_waserror)
                 return;
+            #if __ANDROID__
+            float[] x = new float[points.Count];
+            float[] y = new float[points.Count];
+            int[] intensity = new int[points.Count];
+            
+            for (var i = 0; i < points.Count; i++)
+            {
+                x[i] = points[i].X;
+                y[i] = points[i].Y;
+                intensity[i] = points[i].Intensity;
+            }
+            
+            bHaptics_NativeLibrary.SubmitPath(key, position.ToString(), x, y, intensity, durationMillis);
+            #else
             PathPoint[] pathPoints = points.ToArray();
             bHaptics_NativeLibrary.SubmitPathArray(key, position, pathPoints, pathPoints.Length, durationMillis);
+            #endif
         }
 
         public static FeedbackStatus GetCurrentFeedbackStatus(DeviceType type, bool isLeft = true) => GetCurrentFeedbackStatus(DeviceTypeToPositionType(type, isLeft));
@@ -86,8 +256,16 @@ namespace MelonLoader
         {
             if (_waserror)
                 return default;
+            
+            #if __ANDROID__
+            FeedbackStatus status = new FeedbackStatus
+            {
+                values = bHaptics_NativeLibrary.GetPositionStatus(pos).Select(Convert.ToInt32).ToArray()
+            };
+            #else
             FeedbackStatus status;
             bHaptics_NativeLibrary.TryGetResponseForPosition(pos, out status);
+            #endif
             return status;
         }
 
@@ -203,8 +381,5 @@ namespace MelonLoader
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
             public int[] values;
         };
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void TestDotArray([MarshalAs(UnmanagedType.LPStr)] string key, [MarshalAs(UnmanagedType.LPStr)] string position, int[] indexes, int index_len, int[] intensities, int intensity_len, int duration);
     }
 }
