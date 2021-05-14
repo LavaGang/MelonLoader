@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Harmony
 {
@@ -46,134 +45,43 @@ namespace Harmony
 	public class HarmonyPatch : HarmonyLib.HarmonyPatch
 	{
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType) => info.declaringType = declaringType;
+		public HarmonyPatch(Type declaringType) : base(declaringType) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, Type[] argumentTypes)
-		{
-			info.declaringType = declaringType;
-			info.argumentTypes = argumentTypes;
-		}
+		public HarmonyPatch(Type declaringType, Type[] argumentTypes) : base(declaringType, argumentTypes) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, string methodName)
-		{
-			info.declaringType = declaringType;
-			info.methodName = methodName;
-		}
+		public HarmonyPatch(Type declaringType, string methodName) : base(declaringType, methodName) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, string methodName, params Type[] argumentTypes)
-		{
-			info.declaringType = declaringType;
-			info.methodName = methodName;
-			info.argumentTypes = argumentTypes;
-		}
+		public HarmonyPatch(Type declaringType, string methodName, params Type[] argumentTypes) : base(declaringType, methodName, argumentTypes) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations)
-		{
-			info.declaringType = declaringType;
-			info.methodName = methodName;
-			ParseSpecialArguments(argumentTypes, argumentVariations);
-		}
+		public HarmonyPatch(Type declaringType, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, methodName, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, MethodType methodType)
-		{
-			info.declaringType = declaringType;
-			info.methodType = (HarmonyLib.MethodType)methodType;
-		}
+		public HarmonyPatch(Type declaringType, MethodType methodType) : base(declaringType, (HarmonyLib.MethodType)methodType) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, MethodType methodType, params Type[] argumentTypes)
-		{
-			info.declaringType = declaringType;
-			info.methodType = (HarmonyLib.MethodType)methodType;
-			info.argumentTypes = argumentTypes;
-		}
+		public HarmonyPatch(Type declaringType, MethodType methodType, params Type[] argumentTypes) : base(declaringType, (HarmonyLib.MethodType)methodType, argumentTypes) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations)
-		{
-			info.declaringType = declaringType;
-			info.methodType = (HarmonyLib.MethodType)methodType;
-			ParseSpecialArguments(argumentTypes, argumentVariations);
-		}
+		public HarmonyPatch(Type declaringType, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, (HarmonyLib.MethodType)methodType, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type declaringType, string propertyName, MethodType methodType)
-		{
-			info.declaringType = declaringType;
-			info.methodName = propertyName;
-			info.methodType = (HarmonyLib.MethodType)methodType;
-		}
+		public HarmonyPatch(Type declaringType, string propertyName, MethodType methodType) : base(declaringType, propertyName, (HarmonyLib.MethodType)methodType) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(string methodName) => info.methodName = methodName;
+		public HarmonyPatch(string methodName) : base(methodName) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(string methodName, params Type[] argumentTypes)
-		{
-			info.methodName = methodName;
-			info.argumentTypes = argumentTypes;
-		}
+		public HarmonyPatch(string methodName, params Type[] argumentTypes) : base(methodName, argumentTypes) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations)
-		{
-			info.methodName = methodName;
-			ParseSpecialArguments(argumentTypes, argumentVariations);
-		}
+		public HarmonyPatch(string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(methodName, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(string propertyName, MethodType methodType)
-		{
-			info.methodName = propertyName;
-			info.methodType = (HarmonyLib.MethodType)methodType;
-		}
+		public HarmonyPatch(string propertyName, MethodType methodType) : base(propertyName, (HarmonyLib.MethodType)methodType) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(MethodType methodType) => info.methodType = (HarmonyLib.MethodType)methodType;
+		public HarmonyPatch(MethodType methodType) : base((HarmonyLib.MethodType)methodType) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(MethodType methodType, params Type[] argumentTypes)
-		{
-			info.methodType = (HarmonyLib.MethodType)methodType;
-			info.argumentTypes = argumentTypes;
-		}
+		public HarmonyPatch(MethodType methodType, params Type[] argumentTypes) : base((HarmonyLib.MethodType)methodType, argumentTypes) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations)
-		{
-			info.methodType = (HarmonyLib.MethodType)methodType;
-			ParseSpecialArguments(argumentTypes, argumentVariations);
-		}
+		public HarmonyPatch(MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base((HarmonyLib.MethodType)methodType, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type[] argumentTypes) => info.argumentTypes = argumentTypes;
+		public HarmonyPatch(Type[] argumentTypes) : base(argumentTypes) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(Type[] argumentTypes, ArgumentType[] argumentVariations) => ParseSpecialArguments(argumentTypes, argumentVariations);
+		public HarmonyPatch(Type[] argumentTypes, ArgumentType[] argumentVariations) : base(argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch(string propertyName, PropertyMethod type)
-		{
-			info.methodName = propertyName;
-			info.methodType = type == PropertyMethod.Getter ? HarmonyLib.MethodType.Getter : HarmonyLib.MethodType.Setter;
-		}
-
-		private void ParseSpecialArguments(Type[] argumentTypes, ArgumentType[] argumentVariations)
-		{
-			if (argumentVariations == null || argumentVariations.Length == 0)
-			{
-				info.argumentTypes = argumentTypes;
-				return;
-			}
-
-			if (argumentTypes.Length < argumentVariations.Length)
-				throw new ArgumentException("argumentVariations contains more elements than argumentTypes", nameof(argumentVariations));
-
-			var types = new List<Type>();
-			for (var i = 0; i < argumentTypes.Length; i++)
-			{
-				var type = argumentTypes[i];
-				switch (argumentVariations[i])
-				{
-					case ArgumentType.Ref:
-					case ArgumentType.Out:
-						type = type.MakeByRefType();
-						break;
-					case ArgumentType.Pointer:
-						type = type.MakePointerType();
-						break;
-				}
-				types.Add(type);
-			}
-			info.argumentTypes = types.ToArray();
-		}
+		public HarmonyPatch(string propertyName, PropertyMethod type) : base(propertyName, (HarmonyLib.MethodType)type) { }
 	}
 
 	[Obsolete("Harmony.HarmonyPatchAll is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatchAll instead.")]

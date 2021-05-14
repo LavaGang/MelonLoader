@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Reflection.Emit;
+using MonoMod.Utils;
 
 namespace Harmony
 {
@@ -10,91 +11,87 @@ namespace Harmony
 
 	public class FastAccess
 	{
+		[Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true))")]
 		public static InstantiationHandler CreateInstantiationHandler(Type type)
 		{
 			var constructorInfo = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
-			if (constructorInfo == null)
+			if (constructorInfo is null)
 				throw new ApplicationException(string.Format("The type {0} must declare an empty constructor (the constructor may be private, internal, protected, protected internal, or public).", type));
-
-			var dynamicMethod = new DynamicMethod("InstantiateObject_" + type.Name, MethodAttributes.Static | MethodAttributes.Public, CallingConventions.Standard, typeof(object), null, type, true);
+			var dynamicMethod = new DynamicMethodDefinition($"InstantiateObject_{type.Name}", type, null);
 			var generator = dynamicMethod.GetILGenerator();
 			generator.Emit(OpCodes.Newobj, constructorInfo);
 			generator.Emit(OpCodes.Ret);
-			return (InstantiationHandler)dynamicMethod.CreateDelegate(typeof(InstantiationHandler));
+			return (InstantiationHandler)dynamicMethod.Generate().CreateDelegate(typeof(InstantiationHandler));
 		}
 
+		[Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true))")]
 		public static GetterHandler CreateGetterHandler(PropertyInfo propertyInfo)
 		{
 			var getMethodInfo = propertyInfo.GetGetMethod(true);
 			var dynamicGet = CreateGetDynamicMethod(propertyInfo.DeclaringType);
 			var getGenerator = dynamicGet.GetILGenerator();
-
 			getGenerator.Emit(OpCodes.Ldarg_0);
 			getGenerator.Emit(OpCodes.Call, getMethodInfo);
-			BoxIfNeeded(getMethodInfo.ReturnType, getGenerator);
 			getGenerator.Emit(OpCodes.Ret);
-
-			return (GetterHandler)dynamicGet.CreateDelegate(typeof(GetterHandler));
+			return (GetterHandler)dynamicGet.Generate().CreateDelegate(typeof(GetterHandler));
 		}
 
+		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo)")]
 		public static GetterHandler CreateGetterHandler(FieldInfo fieldInfo)
 		{
 			var dynamicGet = CreateGetDynamicMethod(fieldInfo.DeclaringType);
 			var getGenerator = dynamicGet.GetILGenerator();
-
 			getGenerator.Emit(OpCodes.Ldarg_0);
 			getGenerator.Emit(OpCodes.Ldfld, fieldInfo);
-			BoxIfNeeded(fieldInfo.FieldType, getGenerator);
 			getGenerator.Emit(OpCodes.Ret);
-
-			return (GetterHandler)dynamicGet.CreateDelegate(typeof(GetterHandler));
+			return (GetterHandler)dynamicGet.Generate().CreateDelegate(typeof(GetterHandler));
 		}
 
+		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(name) for fields and " +
+			"AccessTools.MethodDelegate<Func<T, S>>(AccessTools.PropertyGetter(typeof(T), name)) for properties")]
 		public static GetterHandler CreateFieldGetter(Type type, params string[] names)
 		{
 			foreach (var name in names)
 			{
-				if (HarmonyLib.AccessTools.Field(typeof(ILGenerator), name) != null)
-					return CreateGetterHandler(HarmonyLib.AccessTools.Field(type, name));
-
-				if (HarmonyLib.AccessTools.Property(typeof(ILGenerator), name) != null)
-					return CreateGetterHandler(HarmonyLib.AccessTools.Property(type, name));
+				var field = type.GetField(name, AccessTools.all);
+				if (field is object)
+					return CreateGetterHandler(field);
+				var property = type.GetProperty(name, AccessTools.all);
+				if (property is object)
+					return CreateGetterHandler(property);
 			}
 			return null;
 		}
 
+		[Obsolete("Use AccessTools.MethodDelegate<Action<T, S>>(PropertyInfo.GetSetMethod(true))")]
 		public static SetterHandler CreateSetterHandler(PropertyInfo propertyInfo)
 		{
 			var setMethodInfo = propertyInfo.GetSetMethod(true);
 			var dynamicSet = CreateSetDynamicMethod(propertyInfo.DeclaringType);
 			var setGenerator = dynamicSet.GetILGenerator();
-
 			setGenerator.Emit(OpCodes.Ldarg_0);
 			setGenerator.Emit(OpCodes.Ldarg_1);
-			UnboxIfNeeded(setMethodInfo.GetParameters()[0].ParameterType, setGenerator);
 			setGenerator.Emit(OpCodes.Call, setMethodInfo);
 			setGenerator.Emit(OpCodes.Ret);
-
-			return (SetterHandler)dynamicSet.CreateDelegate(typeof(SetterHandler));
+			return (SetterHandler)dynamicSet.Generate().CreateDelegate(typeof(SetterHandler));
 		}
 
+		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo)")]
 		public static SetterHandler CreateSetterHandler(FieldInfo fieldInfo)
 		{
 			var dynamicSet = CreateSetDynamicMethod(fieldInfo.DeclaringType);
 			var setGenerator = dynamicSet.GetILGenerator();
-
 			setGenerator.Emit(OpCodes.Ldarg_0);
 			setGenerator.Emit(OpCodes.Ldarg_1);
-			UnboxIfNeeded(fieldInfo.FieldType, setGenerator);
 			setGenerator.Emit(OpCodes.Stfld, fieldInfo);
 			setGenerator.Emit(OpCodes.Ret);
-
-			return (SetterHandler)dynamicSet.CreateDelegate(typeof(SetterHandler));
+			return (SetterHandler)dynamicSet.Generate().CreateDelegate(typeof(SetterHandler));
 		}
 
-		static DynamicMethod CreateGetDynamicMethod(Type type) => new DynamicMethod("DynamicGet_" + type.Name, typeof(object), new Type[] { typeof(object) }, type, true);
-		static DynamicMethod CreateSetDynamicMethod(Type type) => new DynamicMethod("DynamicSet_" + type.Name, typeof(void), new Type[] { typeof(object), typeof(object) }, type, true);
-		static void BoxIfNeeded(Type type, ILGenerator generator) { if (type.IsValueType) generator.Emit(OpCodes.Box, type); }
-		static void UnboxIfNeeded(Type type, ILGenerator generator) { if (type.IsValueType) generator.Emit(OpCodes.Unbox_Any, type); }
+		static DynamicMethodDefinition CreateGetDynamicMethod(Type type)
+			=> new DynamicMethodDefinition($"DynamicGet_{type.Name}", typeof(object), new Type[] { typeof(object) });
+
+		static DynamicMethodDefinition CreateSetDynamicMethod(Type type)
+			=> new DynamicMethodDefinition($"DynamicSet_{type.Name}", typeof(void), new Type[] { typeof(object), typeof(object) });
 	}
 }

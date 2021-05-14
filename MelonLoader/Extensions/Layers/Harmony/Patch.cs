@@ -30,6 +30,7 @@ namespace Harmony
 	{
 		readonly public MethodInfo patch;
 		private HarmonyLib.Patch patchWrapper;
+		[Obsolete("Harmony.Patch is Only Here for Compatibility Reasons. Please use HarmonyLib.Patch instead.")]
 		public Patch(MethodInfo patch, int index, string owner, int priority, string[] before, string[] after) 
 		{
 			this.patch = patch;

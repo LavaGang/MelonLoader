@@ -4,6 +4,7 @@ using System.Reflection;
 
 namespace Harmony
 {
+	[Obsolete("Harmony.AccessTools is Only Here for Compatibility Reasons. Please use HarmonyLib.AccessTools instead.")]
 	public static class AccessTools
 	{
 		public static BindingFlags all = HarmonyLib.AccessTools.all;
