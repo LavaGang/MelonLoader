@@ -80,7 +80,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
                         MelonDebug.Msg($"Game Not Found on RemoteAPI Host ({pair.Key})");
-                        continue;
+                        break;
                     }
 
                     MelonLogger.Error($"WebException ({Enum.GetName(typeof(System.Net.HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({pair.Key}): {ex}");
@@ -90,7 +90,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 bool is_response_null = string.IsNullOrEmpty(Response);
                 MelonDebug.Msg($"Response = {(is_response_null ? "null" : Response) }");
                 if (is_response_null)
-                    continue;
+                    break;
                 if (pair.Value(Response, ReturnedInfo))
                     return true;
             }
