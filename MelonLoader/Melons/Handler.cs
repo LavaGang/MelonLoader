@@ -283,6 +283,7 @@ namespace MelonLoader
         }
 
         internal static void OnSceneWasInitialized(int buildIndex, string sceneName) => InvokeMelonModMethod(x => x.OnSceneWasInitialized(buildIndex, sceneName));
+        internal static void OnSceneWasUnloaded(int buildIndex, string sceneName) => InvokeMelonModMethod(x => x.OnSceneWasUnloaded(buildIndex, sceneName));
 
         private static bool InitializeScene = false;
         internal static void OnUpdate()

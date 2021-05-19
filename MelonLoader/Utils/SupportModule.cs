@@ -89,6 +89,7 @@ namespace MelonLoader
     {
         void OnSceneWasLoaded(int buildIndex, string sceneName);
         void OnSceneWasInitialized(int buildIndex, string sceneName);
+        void OnSceneWasUnloaded(int buildIndex, string sceneName);
         void Update();
         void FixedUpdate();
         void LateUpdate();
@@ -101,6 +102,7 @@ namespace MelonLoader
     {
         public void OnSceneWasLoaded(int buildIndex, string sceneName) => MelonHandler.OnSceneWasLoaded(buildIndex, sceneName);
         public void OnSceneWasInitialized(int buildIndex, string sceneName) => MelonHandler.OnSceneWasInitialized(buildIndex, sceneName);
+        public void OnSceneWasUnloaded(int buildIndex, string sceneName) => MelonHandler.OnSceneWasUnloaded(buildIndex, sceneName);
         public void Update() => MelonHandler.OnUpdate();
         public void FixedUpdate() => MelonHandler.OnFixedUpdate();
         public void LateUpdate() => MelonHandler.OnLateUpdate();

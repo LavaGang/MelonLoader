@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using MelonLoader.Support.Preferences;
 using UnityEngine;
@@ -22,11 +23,21 @@ namespace MelonLoader.Support
             SetDefaultConsoleTitleWithGameName(game_version);
             UnityMappers.RegisterMappers();
 
-            SceneManager.sceneLoaded += OnSceneLoad;
+            try
+            {
+                SceneManager.sceneLoaded += OnSceneLoad;
+            }
+            catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneLoaded override failed: {ex}"); }
+            try
+            {
+                SceneManager.sceneUnloaded += OnSceneUnload;
+            }
+            catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneUnloaded override failed: {ex}"); }
             return new SupportModule_To();
         }
 
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (obj == null) Component.Create(); if (!scene.Equals(null)) Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
+        private static void OnSceneUnload(Scene scene) { if (scene == null) return; Interface.OnSceneWasUnloaded(scene.buildIndex, scene.name); }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]

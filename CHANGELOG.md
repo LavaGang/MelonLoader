@@ -189,6 +189,7 @@
 164. Added Source Code Detection for ZIPs.
 165. Fixed Bad Image Format Exception Issue with Loading DLLs from ZIPs.
 166. Fixed Issue with Assembly Generator Contacting All RemoteAPI Hosts when One Responded.
+167. Added OnSceneWasUnloaded MelonMod Override.
 
 ---
 

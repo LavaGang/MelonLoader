@@ -40,25 +40,49 @@ namespace MelonLoader.Support
             LogSupport.ErrorHandler += MelonLogger.Error;
             if (MelonDebug.IsEnabled())
                 LogSupport.TraceHandler += MelonLogger.Msg;
+
             ClassInjector.Detour = new UnhollowerDetour();
             InitializeUnityVersion();
             ConsoleCleaner();
-            SceneManager.sceneLoaded = (
-                   (SceneManager.sceneLoaded == null)
-                   ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
-                   : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
-                   );
-            Camera.onPostRender = (
-                (Camera.onPostRender == null)
-                ? new Action<Camera>(OnPostRender)
-                : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
-                );
+
+            try
+            {
+                SceneManager.sceneLoaded = (
+                    (SceneManager.sceneLoaded == null)
+                    ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
+                    : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
+                    );
+            }
+            catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneLoaded override failed: {ex}"); }
+
+            try
+            {
+                SceneManager.sceneUnloaded = (
+                    (SceneManager.sceneUnloaded == null)
+                    ? new Action<Scene>(OnSceneUnload)
+                    : Il2CppSystem.Delegate.Combine(SceneManager.sceneUnloaded, (UnityAction<Scene>)new Action<Scene>(OnSceneUnload)).Cast<UnityAction<Scene>>()
+                    );
+            }
+            catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneUnloaded override failed: {ex}"); }
+
+            try
+            {
+                Camera.onPostRender = (
+                    (Camera.onPostRender == null)
+                    ? new Action<Camera>(OnPostRender)
+                    : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
+                    );
+            }
+            catch (Exception ex) { MelonLogger.Error($"Camera.onPostRender override failed: {ex}"); }
+
             ClassInjector.RegisterTypeInIl2Cpp<Component>();
             Component.Create();
             return new SupportModule_To();
         }
 
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (scene == null) return; if (MelonUtils.IsBONEWORKS) BONEWORKS_SceneHandler.OnSceneLoad(scene.buildIndex, scene.name); else Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
+        private static void OnSceneUnload(Scene scene) { if (scene == null) return; Interface.OnSceneWasUnloaded(scene.buildIndex, scene.name); }
+
         private static void OnPostRender(Camera cam) { if (OnPostRenderCam == null) OnPostRenderCam = cam; if (OnPostRenderCam == cam) Coroutines.ProcessWaitForEndOfFrame(); }
 
         private static void ConsoleCleaner()
