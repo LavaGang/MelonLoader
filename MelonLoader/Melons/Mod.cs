@@ -19,7 +19,7 @@ namespace MelonLoader
         /// <summary>
         /// Runs when a Scene has Unloaded and is passed the Scene's Build Index and Name.
         /// </summary>
-        public virtual void OnSceneWasUnloaded(int buildIndex, string sceneName) { MelonLogger.Msg(sceneName); }
+        public virtual void OnSceneWasUnloaded(int buildIndex, string sceneName) { }
 
         /// <summary>
         /// Can run multiple times per frame. Mostly used for Physics.
