@@ -62,18 +62,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             }
 
             MelonLogger.Msg($"Extracting {tempfile} to {Destination}");
-            try
-            {
-                using var stream = new FileStream(tempfile, FileMode.Open, FileAccess.Read);
-                using var zip = new ZipArchive(stream);
-                foreach (var zipArchiveEntry in zip.Entries)
-                {
-                    MelonLogger.Msg($"Extracting {zipArchiveEntry.FullName}");
-                    using var entryStream = zipArchiveEntry.Open();
-                    using var targetStream = new FileStream(Path.Combine(Destination, zipArchiveEntry.FullName), FileMode.OpenOrCreate, FileAccess.Write);
-                    entryStream.CopyTo(targetStream);
-                }
-            }
+            try { ZipFile.ExtractToDirectory(tempfile, Destination); }
             catch (Exception ex)
             {
                 MelonLogger.Error(ex.ToString());
