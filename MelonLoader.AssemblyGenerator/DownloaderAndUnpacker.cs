@@ -26,17 +26,8 @@ namespace MelonLoader.AssemblyGenerator
             Logger.Log($"Downloading {url} to {tempFile}");
             Program.webClient.DownloadFile(url, tempFile);
             Logger.Log($"Extracting {tempFile} to {destinationFolder}");
-            
-            using var stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read);
-            using var zip = new ZipArchive(stream);
-            
-            foreach (var zipArchiveEntry in zip.Entries)
-            {
-                Logger.Log($"Extracting {zipArchiveEntry.FullName}");
-                using var entryStream = zipArchiveEntry.Open();
-                using var targetStream = new FileStream(Path.Combine(destinationFolder, zipArchiveEntry.FullName), FileMode.OpenOrCreate, FileAccess.Write);
-                entryStream.CopyTo(targetStream);
-            }
+
+            ZipFile.ExtractToDirectory(tempFile, destinationFolder);
         }
     }
 }
