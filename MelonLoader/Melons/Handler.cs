@@ -293,6 +293,7 @@ namespace MelonLoader
 
             MelonEnumerator<T> enumerator = new MelonEnumerator<T>(melons.ToArray());
             while (enumerator.MoveNext())
+            {
                 try { method(enumerator.Current); }
                 catch (Exception ex)
                 {
@@ -300,6 +301,7 @@ namespace MelonLoader
                     if (remove_failed)
                         failedMelons.Add(enumerator.Current);
                 }
+            }
 
             if (remove_failed)
             {
