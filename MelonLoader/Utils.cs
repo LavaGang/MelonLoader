@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -129,6 +130,38 @@ namespace MelonLoader
             try { returnobj = jsonarr.Make<T>(); }
             catch (Exception ex) { MelonLogger.Error($"Exception while Converting JSON Variant to {typeof(T).Name}: {ex}"); }
             return returnobj;
+        }
+
+        public static T PullAttributeFromAssembly<T>(Assembly asm) where T : Attribute
+        {
+            T[] attributetbl = PullAttributesFromAssembly<T>(asm);
+            if ((attributetbl == null) || (attributetbl.Length <= 0))
+                return null;
+            return attributetbl[0];
+        }
+
+        public static T[] PullAttributesFromAssembly<T>(Assembly asm, bool throw_exceptions = false) where T : Attribute
+        {
+            Attribute[] att_tbl = Attribute.GetCustomAttributes(asm);
+            if ((att_tbl == null) || (att_tbl.Length <= 0))
+                return null;
+            Type requestedType = typeof(T);
+            List<T> output = new List<T>();
+            foreach (Attribute att in att_tbl)
+            {
+                Type attType = att.GetType();
+                string attAssemblyName = attType.Assembly.GetName().Name;
+                string requestedAssemblyName = requestedType.Assembly.GetName().Name;
+                if ((attType == requestedType)
+                    || attType.FullName.Equals(requestedType.FullName)
+                    || ((attAssemblyName.Equals("MelonLoader")
+                        || attAssemblyName.Equals("MelonLoader.ModHandler"))
+                        && (requestedAssemblyName.Equals("MelonLoader")
+                        || requestedAssemblyName.Equals("MelonLoader.ModHandler"))
+                        && attType.Name.Equals(requestedType.Name)))
+                    output.Add(att as T);
+            }
+            return output.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]

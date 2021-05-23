@@ -64,15 +64,15 @@ namespace MelonLoader.CompatibilityLayers
 			if (!CheckVerifyLoaderBuildAttribute())
 				return;
 
-			MelonColorAttribute coloratt = MelonHandler.PullCustomAttributeFromAssembly<MelonColorAttribute>(asm);
-			MelonPriorityAttribute priorityatt = MelonHandler.PullCustomAttributeFromAssembly<MelonPriorityAttribute>(asm);
+			MelonColorAttribute coloratt = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(asm);
+			MelonPriorityAttribute priorityatt = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(asm);
 
 			MelonBase instance = MelonCompatibilityLayer.CreateMelonFromWrapperData(new MelonCompatibilityLayer.WrapperData()
 			{
 				Assembly = asm,
 				Info = infoAttribute,
 				Games = gameAttributes.ToArray(),
-				OptionalDependencies = MelonHandler.PullCustomAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm),
+				OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm),
 				ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
 				Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
 				Location = filepath
@@ -85,13 +85,13 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckInfoAttribute(ref MelonInfoAttribute infoAttribute)
 		{
-			infoAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonInfoAttribute>(asm);
+			infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(asm);
 
 			// Legacy Support
 			if (infoAttribute == null)
-				infoAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonModInfoAttribute>(asm)?.Convert();
+				infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonModInfoAttribute>(asm)?.Convert();
 			if (infoAttribute == null)
-				infoAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonPluginInfoAttribute>(asm)?.Convert();
+				infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonPluginInfoAttribute>(asm)?.Convert();
 
 			if ((infoAttribute == null) || (infoAttribute.SystemType == null))
 			{
@@ -139,16 +139,16 @@ namespace MelonLoader.CompatibilityLayers
 		private bool CheckGameAttributes(ref List<MelonGameAttribute> gameAttributes)
 		{
 			gameAttributes = new List<MelonGameAttribute>();
-			MelonGameAttribute[] gameatt = MelonHandler.PullCustomAttributesFromAssembly<MelonGameAttribute>(asm);
+			MelonGameAttribute[] gameatt = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(asm);
 			if ((gameatt != null) && (gameatt.Length > 0))
 				gameAttributes.AddRange(gameatt);
 
 			// Legacy Support
-			MelonModGameAttribute[] legacymodgameAttributes = MelonHandler.PullCustomAttributesFromAssembly<MelonModGameAttribute>(asm);
+			MelonModGameAttribute[] legacymodgameAttributes = MelonUtils.PullAttributesFromAssembly<MelonModGameAttribute>(asm);
 			if ((legacymodgameAttributes != null) && (legacymodgameAttributes.Length > 0))
 				foreach (MelonModGameAttribute legacyatt in legacymodgameAttributes)
 					gameAttributes.Add(legacyatt.Convert());
-			MelonPluginGameAttribute[] legacyplugingameAttributes = MelonHandler.PullCustomAttributesFromAssembly<MelonPluginGameAttribute>(asm);
+			MelonPluginGameAttribute[] legacyplugingameAttributes = MelonUtils.PullAttributesFromAssembly<MelonPluginGameAttribute>(asm);
 			if ((legacyplugingameAttributes != null) && (legacyplugingameAttributes.Length > 0))
 				foreach (MelonPluginGameAttribute legacyatt in legacyplugingameAttributes)
 					gameAttributes.Add(legacyatt.Convert());
@@ -179,7 +179,7 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckPlatformAttribute()
 		{
-			MelonPlatformAttribute platformAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonPlatformAttribute>(asm);
+			MelonPlatformAttribute platformAttribute = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(asm);
 			if ((platformAttribute == null)
 				|| (platformAttribute.Platforms == null)
 				|| (platformAttribute.Platforms.Length <= 0))
@@ -206,7 +206,7 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckPlatformDomainAttribute()
 		{
-			MelonPlatformDomainAttribute platformDomainAttribute = MelonHandler.PullCustomAttributeFromAssembly<MelonPlatformDomainAttribute>(asm);
+			MelonPlatformDomainAttribute platformDomainAttribute = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(asm);
 			if ((platformDomainAttribute == null)
 				|| (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.UNIVERSAL))
 				return true;
@@ -223,7 +223,7 @@ namespace MelonLoader.CompatibilityLayers
 		private static int[] CurrentMLVersionIntArr = null;
 		private bool CheckVerifyLoaderVersionAttribute()
 		{
-			VerifyLoaderVersionAttribute verifyLoaderVersionAttribute = MelonHandler.PullCustomAttributeFromAssembly<VerifyLoaderVersionAttribute>(asm);
+			VerifyLoaderVersionAttribute verifyLoaderVersionAttribute = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(asm);
 			if (verifyLoaderVersionAttribute == null)
 				return true;
 
@@ -264,7 +264,7 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckVerifyLoaderBuildAttribute()
 		{
-			VerifyLoaderBuildAttribute verifyLoaderBuildAttribute = MelonHandler.PullCustomAttributeFromAssembly<VerifyLoaderBuildAttribute>(asm);
+			VerifyLoaderBuildAttribute verifyLoaderBuildAttribute = MelonUtils.PullAttributeFromAssembly<VerifyLoaderBuildAttribute>(asm);
 			if ((verifyLoaderBuildAttribute == null)
 				|| string.IsNullOrEmpty(verifyLoaderBuildAttribute.HashCode))
 				return true;

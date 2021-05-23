@@ -191,6 +191,8 @@
 166. Fixed Issue with Assembly Generator Contacting All RemoteAPI Hosts when One Responded.
 167. Added OnSceneWasUnloaded MelonMod Override.
 168. Fixed IOException Issue with Assembly Generator extracting ZIP Archives.  (Credits to Extacy :D)
+169. Fixed Issue with MelonHandler being unable to resolve MelonPriority type.
+170. Added Better Exception Handling during Melon Resolving.
 
 ---
 

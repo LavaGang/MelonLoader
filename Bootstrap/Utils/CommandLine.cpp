@@ -15,6 +15,10 @@ char* CommandLine::argvMono[64];
 
 void CommandLine::Read()
 {
+#ifdef DEBUG
+	Debug::Enabled = true;
+#endif
+
 	//ReadIniFile();
 
 	//argc = __argc;

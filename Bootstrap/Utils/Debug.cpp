@@ -3,12 +3,6 @@
 #include "Assertion.h"
 #include <iostream>
 
-#ifdef DEBUG
-bool Debug::Enabled = true;
-#else
-bool Debug::Enabled = false;
-#endif
-
 void Debug::Msg(const char* txt)
 {
 	if (!Enabled || !Assertion::ShouldContinue)

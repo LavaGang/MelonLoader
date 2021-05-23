@@ -59,24 +59,14 @@ bool Console::Initialize()
 
 void Console::SetDefaultTitle()
 {
-	if (Debug::Enabled)
-	{
-		std::string versionstr = Core::GetVersionStr();
-		SetTitle(("[D] " + versionstr).c_str());
-	}
-	else
-		SetTitle(Core::GetVersionStr());
+	std::string versionstr = Core::GetVersionStr();
+	SetTitle(((Debug::Enabled ? "[D] " : "") + versionstr).c_str());
 }
 
 void Console::SetDefaultTitleWithGameName(const char* GameVersion)
 {
-	if (Debug::Enabled)
-	{
-		std::string versionstr = Core::GetVersionStrWithGameName(GameVersion);
-		SetTitle(("[D] " + versionstr).c_str());
-	}
-	else
-		SetTitle(Core::GetVersionStrWithGameName(GameVersion));
+	std::string versionstr = Core::GetVersionStrWithGameName(GameVersion);
+	SetTitle(((Debug::Enabled ? "[D] " : "") + versionstr).c_str());
 }
 
 void Console::Flush()

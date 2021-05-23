@@ -12,4 +12,7 @@ namespace MelonLoader
 
         public MelonPriorityAttribute(int priority = 0) => Priority = priority;
     }
+
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public class MelonPriority : MelonPriorityAttribute { public MelonPriority(int priority = 0) : base(priority) { } }
 }

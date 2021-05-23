@@ -176,52 +176,24 @@ namespace MelonLoader
                 return;
             }
 
-            List<MelonBase> melonTbl = new List<MelonBase>();
-            resolver.CheckAndCreate(ref melonTbl);
-            if (melonTbl.Count <= 0)
-                return;
-
-            foreach (MelonBase melon in melonTbl)
+            try
             {
-                if (melon is MelonPlugin plugin)
-                    _Plugins.Add(plugin);
-                else
-                    _Mods.Add((MelonMod)melon);
+                List<MelonBase> melonTbl = new List<MelonBase>();
+                resolver.CheckAndCreate(ref melonTbl);
+                if (melonTbl.Count <= 0)
+                    return;
+
+                foreach (MelonBase melon in melonTbl)
+                {
+                    if (melon is MelonPlugin plugin)
+                        _Plugins.Add(plugin);
+                    else
+                        _Mods.Add((MelonMod)melon);
+                }
+
+                // To-Do Check for Late Loads and Display Debug Warning
             }
-
-            // To-Do Check for Late Loads and Display Debug Warning
-        }
-
-        internal static T PullCustomAttributeFromAssembly<T>(Assembly asm) where T : Attribute
-        {
-            T[] attributetbl = PullCustomAttributesFromAssembly<T>(asm);
-            if ((attributetbl == null) || (attributetbl.Count() <= 0))
-                return null;
-            return attributetbl.First();
-        }
-
-        internal static T[] PullCustomAttributesFromAssembly<T>(Assembly asm) where T : Attribute
-        {
-            Attribute[] att_tbl = Attribute.GetCustomAttributes(asm);
-            if ((att_tbl == null) || (att_tbl.Length <= 0))
-                return null;
-            Type requestedType = typeof(T);
-            List<T> output = new List<T>();
-            foreach (Attribute att in att_tbl)
-            {
-                Type attType = att.GetType();
-                string attAssemblyName = attType.Assembly.GetName().Name;
-                string requestedAssemblyName = requestedType.Assembly.GetName().Name;
-                if ((attType == requestedType)
-                    || attType.FullName.Equals(requestedType.FullName)
-                    || ((attAssemblyName.Equals("MelonLoader")
-                        || attAssemblyName.Equals("MelonLoader.ModHandler"))
-                        && (requestedAssemblyName.Equals("MelonLoader")
-                        || requestedAssemblyName.Equals("MelonLoader.ModHandler"))
-                        && attType.Name.Equals(requestedType.Name)))
-                    output.Add(att as T);
-            }
-            return output.ToArray();
+            catch(Exception ex) { MelonLogger.Error($"Failed to Resolve Melons from Assembly for {filepath}: {ex}"); }
         }
 
         public static void SortPlugins()
@@ -239,23 +211,26 @@ namespace MelonLoader
         }
 
         internal static void OnPreInitialization()
-        {
-            InvokeMelonPluginMethod(x => x.HarmonyInstance.PatchAll(x.Assembly), true);
-            InvokeMelonPluginMethod(x => x.OnPreInitialization(), true);
-        }
+            => InvokeMelonPluginMethod(x =>
+            {
+                x.HarmonyInstance.PatchAll(x.Assembly);
+                x.OnPreInitialization();
+            }, true);
 
         internal static void OnApplicationStart_Plugins()
-        {
-            InvokeMelonPluginMethod(x => RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly), true);
-            InvokeMelonPluginMethod(x => x.OnApplicationStart(), true);
-        }
+            => InvokeMelonPluginMethod(x =>
+            {
+                RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
+                x.OnApplicationStart();
+            }, true);
 
         internal static void OnApplicationStart_Mods()
-        {
-            InvokeMelonModMethod(x => x.HarmonyInstance.PatchAll(x.Assembly), true);
-            InvokeMelonModMethod(x => RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly), true);
-            InvokeMelonModMethod(x => x.OnApplicationStart(), true);
-        }
+            => InvokeMelonModMethod(x =>
+            {
+                x.HarmonyInstance.PatchAll(x.Assembly);
+                RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
+                x.OnApplicationStart();
+            }, true);
 
         internal static void OnApplicationEarlyStart() => InvokeMelonPluginMethod(x => x.OnApplicationEarlyStart(), true);
         internal static void OnApplicationLateStart_Plugins() => InvokeMelonPluginMethod(x => x.OnApplicationLateStart(), true);
