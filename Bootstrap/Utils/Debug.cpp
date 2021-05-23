@@ -3,6 +3,8 @@
 #include "Assertion.h"
 #include <iostream>
 
+bool Debug::Enabled = false;
+
 void Debug::Msg(const char* txt)
 {
 	if (!Enabled || !Assertion::ShouldContinue)
