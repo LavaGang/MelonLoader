@@ -193,7 +193,7 @@ namespace MelonLoader
 
                 // To-Do Check for Late Loads and Display Debug Warning
             }
-            catch(Exception ex) { MelonLogger.Error($"Failed to Resolve Melons from Assembly for {filepath}: {ex}"); }
+            catch(Exception ex) { MelonLogger.Error($"Failed to Resolve Melons for {filepath}: {ex}"); }
         }
 
         public static void SortPlugins()
