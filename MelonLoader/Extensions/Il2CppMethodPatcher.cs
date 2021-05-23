@@ -341,7 +341,7 @@ namespace MelonLoader
 		{
 			string melonName = null;
 
-			MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
+			MelonEnumerator<MelonPlugin> PluginEnumerator = new MelonEnumerator<MelonPlugin>(MelonHandler._Plugins.ToArray());
 			while (PluginEnumerator.MoveNext())
 				if (criterion(PluginEnumerator.Current))
 				{
@@ -349,9 +349,9 @@ namespace MelonLoader
 					break;
 				}
 
-			if (melonName == null)
+			if (string.IsNullOrEmpty(melonName))
 			{
-				MelonModEnumerator ModEnumerator = new MelonModEnumerator();
+				MelonEnumerator<MelonMod> ModEnumerator = new MelonEnumerator<MelonMod>(MelonHandler._Mods.ToArray());
 				while (ModEnumerator.MoveNext())
 					if (criterion(ModEnumerator.Current))
 					{
