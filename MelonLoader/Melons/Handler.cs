@@ -211,37 +211,37 @@ namespace MelonLoader
         }
 
         internal static void OnPreInitialization()
-            => InvokeMelonPluginMethod(x =>
+            => InvokeMelonMethod(ref _Plugins, x =>
             {
                 x.HarmonyInstance.PatchAll(x.Assembly);
                 x.OnPreInitialization();
             }, true);
 
         internal static void OnApplicationStart_Plugins()
-            => InvokeMelonPluginMethod(x =>
+            => InvokeMelonMethod(ref _Plugins, x =>
             {
                 RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
                 x.OnApplicationStart();
             }, true);
 
         internal static void OnApplicationStart_Mods()
-            => InvokeMelonModMethod(x =>
+            => InvokeMelonMethod(ref _Mods, x =>
             {
                 x.HarmonyInstance.PatchAll(x.Assembly);
                 RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
                 x.OnApplicationStart();
             }, true);
 
-        internal static void OnApplicationEarlyStart() => InvokeMelonPluginMethod(x => x.OnApplicationEarlyStart(), true);
-        internal static void OnApplicationLateStart_Plugins() => InvokeMelonPluginMethod(x => x.OnApplicationLateStart(), true);
-        internal static void OnApplicationLateStart_Mods() => InvokeMelonModMethod(x => x.OnApplicationLateStart(), true);
-        internal static void OnApplicationQuit() { InvokeMelonPluginMethod(x => x.OnApplicationQuit()); InvokeMelonModMethod(x => x.OnApplicationQuit()); }
-        internal static void OnFixedUpdate() => InvokeMelonModMethod(x => x.OnFixedUpdate());
-        internal static void OnLateUpdate() { InvokeMelonPluginMethod(x => x.OnLateUpdate()); InvokeMelonModMethod(x => x.OnLateUpdate()); }
-        internal static void OnGUI() { InvokeMelonPluginMethod(x => x.OnGUI()); InvokeMelonModMethod(x => x.OnGUI()); }
-        internal static void OnPreferencesSaved() { InvokeMelonPluginMethod(x => x.OnPreferencesSaved()); InvokeMelonModMethod(x => x.OnPreferencesSaved()); }
-        internal static void OnPreferencesLoaded() { InvokeMelonPluginMethod(x => x.OnPreferencesLoaded()); InvokeMelonModMethod(x => x.OnPreferencesLoaded()); }
-        internal static void BONEWORKS_OnLoadingScreen() => InvokeMelonModMethod(x => x.BONEWORKS_OnLoadingScreen());
+        internal static void OnApplicationEarlyStart() => InvokeMelonMethod(ref _Plugins, x => x.OnApplicationEarlyStart(), true);
+        internal static void OnApplicationLateStart_Plugins() => InvokeMelonMethod(ref _Plugins, x => x.OnApplicationLateStart(), true);
+        internal static void OnApplicationLateStart_Mods() => InvokeMelonMethod(ref _Mods, x => x.OnApplicationLateStart(), true);
+        internal static void OnApplicationQuit() => InvokeMelonMethod(x => x.OnApplicationQuit());
+        internal static void OnFixedUpdate() => InvokeMelonMethod(ref _Mods, x => x.OnFixedUpdate());
+        internal static void OnLateUpdate() => InvokeMelonMethod(x => x.OnLateUpdate());
+        internal static void OnGUI() => InvokeMelonMethod(x => x.OnGUI());
+        internal static void OnPreferencesSaved() => InvokeMelonMethod(x => x.OnPreferencesSaved());
+        internal static void OnPreferencesLoaded() => InvokeMelonMethod(x => x.OnPreferencesLoaded());
+        internal static void BONEWORKS_OnLoadingScreen() => InvokeMelonMethod(ref _Mods, x => x.BONEWORKS_OnLoadingScreen());
 
         private static bool SceneWasJustLoaded = false;
         private static int CurrentSceneBuildIndex = -1;
@@ -254,11 +254,11 @@ namespace MelonLoader
                 CurrentSceneBuildIndex = buildIndex;
                 CurrentSceneName = sceneName;
             }
-            InvokeMelonModMethod(x => x.OnSceneWasLoaded(buildIndex, sceneName));
+            InvokeMelonMethod(ref _Mods, x => x.OnSceneWasLoaded(buildIndex, sceneName));
         }
 
-        internal static void OnSceneWasInitialized(int buildIndex, string sceneName) => InvokeMelonModMethod(x => x.OnSceneWasInitialized(buildIndex, sceneName));
-        internal static void OnSceneWasUnloaded(int buildIndex, string sceneName) => InvokeMelonModMethod(x => x.OnSceneWasUnloaded(buildIndex, sceneName));
+        internal static void OnSceneWasInitialized(int buildIndex, string sceneName) => InvokeMelonMethod(ref _Mods, x => x.OnSceneWasInitialized(buildIndex, sceneName));
+        internal static void OnSceneWasUnloaded(int buildIndex, string sceneName) => InvokeMelonMethod(ref _Mods, x => x.OnSceneWasUnloaded(buildIndex, sceneName));
 
         private static bool InitializeScene = false;
         internal static void OnUpdate()
@@ -273,38 +273,41 @@ namespace MelonLoader
                 SceneWasJustLoaded = false;
                 InitializeScene = true;
             }
-            InvokeMelonPluginMethod(x => x.OnUpdate());
-            InvokeMelonModMethod(x => x.OnUpdate());
+            InvokeMelonMethod(x => x.OnUpdate());
         }
 
-        private delegate void InvokeMelonPluginMethodDelegate(MelonPlugin plugin);
-        private static void InvokeMelonPluginMethod(InvokeMelonPluginMethodDelegate method, bool remove_failed = false)
+        private delegate void InvokeMelonMethodDelegate(MelonBase melon);
+        private delegate void InvokeMelonMethodDelegate<T>(T melon) where T : MelonBase;
+        private static void InvokeMelonMethod(InvokeMelonMethodDelegate method, bool remove_failed = false)
         {
-            if (_Plugins.Count <= 0)
-                return;
-            List<MelonPlugin> failedPlugins = (remove_failed ? new List<MelonPlugin>() : null);
-            MelonPluginEnumerator PluginEnumerator = new MelonPluginEnumerator();
-            while (PluginEnumerator.MoveNext())
-                try { method(PluginEnumerator.Current); } catch (Exception ex) { MelonLogger.ManualMelonError(PluginEnumerator.Current, ex.ToString()); if (remove_failed) failedPlugins.Add(PluginEnumerator.Current); }
-            if (!remove_failed)
-                return;
-            _Plugins.RemoveAll(failedPlugins.Contains);
-            SortPlugins();
+            InvokeMelonMethod(ref _Plugins, x => method(x), remove_failed);
+            InvokeMelonMethod(ref _Mods, x => method(x), remove_failed);
         }
-
-        private delegate void InvokeMelonModMethodDelegate(MelonMod mod);
-        private static void InvokeMelonModMethod(InvokeMelonModMethodDelegate method, bool remove_failed = false)
+        private static void InvokeMelonMethod<T>(ref List<T> melons, InvokeMelonMethodDelegate<T> method, bool remove_failed = false) where T : MelonBase
         {
-            if (_Mods.Count <= 0)
+            if ((melons == null)
+                || (melons.Count <= 0))
                 return;
-            List<MelonMod> failedMods = (remove_failed ? new List<MelonMod>() : null);
-            MelonModEnumerator ModEnumerator = new MelonModEnumerator();
-            while (ModEnumerator.MoveNext())
-                try { method(ModEnumerator.Current); } catch (Exception ex) { MelonLogger.ManualMelonError(ModEnumerator.Current, ex.ToString()); if (remove_failed) failedMods.Add(ModEnumerator.Current); }
-            if (!remove_failed)
-                return;
-            _Mods.RemoveAll(failedMods.Contains);
-            SortMods();
+
+            List<T> failedMelons = (remove_failed ? new List<T>() : null);
+
+            MelonEnumerator<T> enumerator = new MelonEnumerator<T>(melons.ToArray());
+            while (enumerator.MoveNext())
+                try { method(enumerator.Current); }
+                catch (Exception ex)
+                {
+                    MelonLogger.ManualMelonError(enumerator.Current, ex.ToString());
+                    if (remove_failed)
+                        failedMelons.Add(enumerator.Current);
+                }
+
+            if (remove_failed)
+            {
+                melons.RemoveAll(failedMelons.Contains);
+                melons = melons.OrderBy(x => x.Priority).ToList();
+                DependencyGraph<T>.TopologicalSort(melons);
+                MelonCompatibilityLayer.RefreshModsTable();
+            }
         }
 
         [Obsolete("MelonLoader.MelonHandler.LoadFromFile(string, bool) is obsolete. Please use MelonLoader.MelonHandler.LoadFromFile(string, string) instead.")]

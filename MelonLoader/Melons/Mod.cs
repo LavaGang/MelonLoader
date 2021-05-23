@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace MelonLoader
@@ -52,22 +51,5 @@ namespace MelonLoader
                 _LegacyGameAttributes = newatts.ToArray();
                 return _LegacyGameAttributes;
             } }
-    }
-
-    internal class MelonModEnumerator : IEnumerator<MelonMod>
-    {
-        private MelonMod currentMod = null;
-        private int currentIndex = -1;
-        public bool MoveNext()
-        {
-            if ((MelonHandler._Mods.Count <= 0) || (++currentIndex >= MelonHandler._Mods.Count))
-                return false;
-            currentMod = MelonHandler._Mods[currentIndex];
-            return true;
-        }
-        public void Reset() => currentIndex = -1;
-        public MelonMod Current => currentMod;
-        object IEnumerator.Current => currentMod;
-        void IDisposable.Dispose() { }
     }
 }

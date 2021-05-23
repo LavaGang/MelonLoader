@@ -58,6 +58,10 @@ namespace MelonLoader
             string namesection = null;
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
+            ManualError(namesection, txt);
+        }
+        internal static void ManualError(string namesection, string txt)
+        {
             Internal_Error(namesection, txt);
             RunErrorCallbacks(namesection, txt);
         }
