@@ -107,8 +107,7 @@ namespace MelonLoader
             MelonFileTypes.DLL.LoadAll(basedirectory, plugins);
             MelonFileTypes.ZIP.LoadAll(basedirectory);
 
-            SortPlugins();
-            SortMods();
+            SortAll();
 
             // To-Do Check for Melon in Wrong Folder
         }
@@ -196,20 +195,6 @@ namespace MelonLoader
             catch(Exception ex) { MelonLogger.Error($"Failed to Resolve Melons for {filepath}: {ex}"); }
         }
 
-        public static void SortPlugins()
-        {
-            _Plugins = _Plugins.OrderBy(x => x.Priority).ToList();
-            DependencyGraph<MelonPlugin>.TopologicalSort(_Plugins);
-            MelonCompatibilityLayer.RefreshPluginsTable();
-        }
-
-        public static void SortMods()
-        {
-            _Mods = _Mods.OrderBy(x => x.Priority).ToList();
-            DependencyGraph<MelonMod>.TopologicalSort(_Mods);
-            MelonCompatibilityLayer.RefreshModsTable();
-        }
-
         internal static void OnPreInitialization()
             => InvokeMelonMethod(ref _Plugins, x =>
             {
@@ -276,6 +261,15 @@ namespace MelonLoader
             InvokeMelonMethod(x => x.OnUpdate());
         }
 
+        public static void SortAll() { SortPlugins(); SortMods(); }
+        public static void SortPlugins() { SortMelons(ref _Plugins); MelonCompatibilityLayer.RefreshPluginsTable(); }
+        public static void SortMods() { SortMelons(ref _Mods); MelonCompatibilityLayer.RefreshModsTable(); }
+        private static void SortMelons<T>(ref List<T> melons) where T : MelonBase
+        {
+            melons = melons.OrderBy(x => x.Priority).ToList();
+            DependencyGraph<T>.TopologicalSort(melons);
+        }
+
         private delegate void InvokeMelonMethodDelegate(MelonBase melon);
         private delegate void InvokeMelonMethodDelegate<T>(T melon) where T : MelonBase;
         private static void InvokeMelonMethod(InvokeMelonMethodDelegate method, bool remove_failed = false)
@@ -306,6 +300,7 @@ namespace MelonLoader
             if (remove_failed)
             {
                 melons.RemoveAll(failedMelons.Contains);
+
                 melons = melons.OrderBy(x => x.Priority).ToList();
                 DependencyGraph<T>.TopologicalSort(melons);
                 MelonCompatibilityLayer.RefreshModsTable();
