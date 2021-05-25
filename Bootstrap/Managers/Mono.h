@@ -34,6 +34,14 @@ public:
 
 	typedef enum
 	{
+		MONO_DEBUG_FORMAT_NONE,
+		MONO_DEBUG_FORMAT_MONO,
+		/* Deprecated, the mdb debugger is not longer supported. */
+		MONO_DEBUG_FORMAT_DEBUGGER
+	} MonoDebugFormat;
+
+	typedef enum
+	{
 		MONO_IMAGE_OK,
 		MONO_IMAGE_ERROR_ERRNO,
 		MONO_IMAGE_MISSING_ASSEMBLYREF,
@@ -195,6 +203,9 @@ public:
 		MONODEF(uintptr_t, mono_array_length, (Object *array))
 		MONODEF(const char*, mono_metadata_string_heap, (Image *meta, unsigned int table_index))
 		MONODEF(const char*, mono_class_get_name, (Class *klass))
+
+		MONODEF(void, mono_debug_init, (MonoDebugFormat format))
+		MONODEF(void, mono_debug_domain_create, (Domain* domain))
 		
 		#undef MONODEF
 	};

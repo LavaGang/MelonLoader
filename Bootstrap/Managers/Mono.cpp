@@ -66,6 +66,9 @@ MONODEF(mono_array_length)
 MONODEF(mono_metadata_string_heap)
 MONODEF(mono_class_get_name)
 
+MONODEF(mono_debug_init)
+MONODEF(mono_debug_domain_create)
+
 #undef MONODEF
 
 bool Mono::Initialize()
@@ -211,10 +214,11 @@ void Mono::CreateDomain(const char* name)
 	Exports::mono_set_assemblies_path(ManagedPathMono);
 	Exports::mono_assembly_setrootdir(ManagedPathMono);
 	Exports::mono_set_config_dir(MonoConfigPathMono);
-	if (!IsOldMono) {
+	if (!IsOldMono)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argvMono);
-	}
+	Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 	domain = Exports::mono_jit_init(name);
+	Exports::mono_debug_domain_create(domain);
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
 	if (!IsOldMono)
 	{
@@ -259,6 +263,9 @@ bool Mono::Exports::Initialize()
 	MONODEF(mono_object_get_class)
 	MONODEF(mono_property_get_get_method)
 	MONODEF(mono_image_get_name)
+
+	MONODEF(mono_debug_init)
+	MONODEF(mono_debug_domain_create)
 
 	if (!IsOldMono)
 	{
@@ -331,7 +338,9 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 	Debug::Msg("Detaching Hook from mono_jit_init_version...");
 	Hook::Detach(&(LPVOID&)Exports::mono_jit_init_version, mono_jit_init_version);
 	Debug::Msg("Creating Mono Domain...");
+	Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 	domain = Exports::mono_jit_init_version(name, version);
+	Exports::mono_debug_domain_create(domain);
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
 	if (!IsOldMono)
 		Exports::mono_domain_set_config(domain, Game::BasePathMono, name);

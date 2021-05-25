@@ -72,6 +72,8 @@ namespace MelonLoader.MelonFileTypes
                 byte[] symbolsdata = new byte[0];
                 if (string.IsNullOrEmpty(symbolspath))
                     symbolspath = Path.Combine(Path.GetDirectoryName(filepath), $"{Path.GetFileNameWithoutExtension(filepath)}.mdb");
+                if (!File.Exists(symbolspath))
+                    symbolspath = $"{filepath}.mdb";
                 if (File.Exists(symbolspath))
                 {
                     try
@@ -108,10 +110,7 @@ namespace MelonLoader.MelonFileTypes
             Assembly melonassembly = null;
             try
             {
-                if (symbolsdata == null)
-                    melonassembly = Assembly.Load(filedata, symbolsdata);
-                else
-                    melonassembly = Assembly.Load(filedata);
+                melonassembly = Assembly.Load(filedata, symbolsdata ?? new byte[0]);
             }
             catch (Exception ex)
             {

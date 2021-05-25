@@ -194,6 +194,7 @@
 169. Fixed Issue with MelonHandler being unable to resolve MelonPriority type.
 170. Added Better Exception Handling during Melon Resolving.
 171. Fixed IOORE Issue with Melon Enumeration.
+172. Fixed Issue with StackTrace not showing Line Numbers even when Debug Symbol Information was present.
 
 ---
 

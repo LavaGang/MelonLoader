@@ -63,8 +63,16 @@ namespace MelonLoader.MelonFileTypes
                         if (!is_dll && !is_mdb)
                             continue;
 
+                        string entrypairid = entry_path;
+                        if (is_mdb)
+                        {
+                            string file_name_no_ext = Path.GetFileNameWithoutExtension(entrypairid);
+                            if (file_name_no_ext.EndsWith(".dll"))
+                                entrypairid = Path.Combine(Path.GetDirectoryName(entry_path), Path.GetFileNameWithoutExtension(file_name_no_ext));
+                        }
+
                         ByteArrayPair byteArrayPair = null;
-                        if (!pairs.TryGetValue(entry.Name, out byteArrayPair))
+                        if (!pairs.TryGetValue(entrypairid, out byteArrayPair))
                         {
                             byteArrayPair = new ByteArrayPair();
                             pairs[entry.Name] = byteArrayPair;
