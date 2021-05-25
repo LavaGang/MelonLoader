@@ -357,7 +357,10 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
 	if (!IsOldMono)
+	{
+		Debug::Msg("Setting Mono Domain Config...");
 		Exports::mono_domain_set_config(domain, Game::BasePathMono, name);
+	}
 	InternalCalls::Initialize();
 	if (BaseAssembly::Initialize())
 	{
