@@ -21,7 +21,7 @@ namespace MelonLoader
         {
             if (!MelonUtils.IsGameIl2Cpp())
                 return;
-            Assembly UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
+            Assembly UnhollowerBaseLib = Assembly.LoadFrom("UnhollowerBaseLib");
             if (UnhollowerBaseLib == null)
             {
                 MelonLogger.ThrowInternalFailure("Failed to Load Assembly for UnhollowerBaseLib!");

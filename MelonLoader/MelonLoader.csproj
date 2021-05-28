@@ -147,51 +147,6 @@
     <Compile Include="Preferences\ValueValidator.cs" />
     <Compile Include="Utils\bHaptics\API.cs" />
     <Compile Include="Utils\bHaptics\NativeLibrary.cs" />
-    <Compile Include="Libs\HarmonyX\Extras\DelegateTypeFactory.cs" />
-    <Compile Include="Libs\HarmonyX\Extras\FastAccess.cs" />
-    <Compile Include="Libs\HarmonyX\Extras\MethodInvoker.cs" />
-    <Compile Include="Libs\HarmonyX\GlobalSuppressions.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\AccessCache.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\PatchArgumentExtensions.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\PatchFunctions.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\Patching\ILManipulator.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\PatchModels.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\PatchSorter.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\PatchTools.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\Util\EmitterExtensions.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\Util\ILEmitter.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\Util\ILHookExtensions.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\Util\MethodBodyLogExtensions.cs" />
-    <Compile Include="Libs\HarmonyX\Internal\Util\StackTraceFixes.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Attributes.cs" />
-    <Compile Include="Libs\HarmonyX\Public\CodeInstruction.cs" />
-    <Compile Include="Libs\HarmonyX\Public\ExceptionBlock.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Exceptions.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Harmony.cs" />
-    <Compile Include="Libs\HarmonyX\Public\HarmonyException.cs" />
-    <Compile Include="Libs\HarmonyX\Public\HarmonyMethod.cs" />
-    <Compile Include="Libs\HarmonyX\Public\InlineSignature.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Patch.cs" />
-    <Compile Include="Libs\HarmonyX\Public\PatchClassProcessor.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Patches.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Patching\HarmonyManipulator.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Patching\ManagedMethodPatcher.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Patching\MethodPatcher.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Patching\NativeDetourMethodPatcher.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Patching\PatchManager.cs" />
-    <Compile Include="Libs\HarmonyX\Public\PatchProcessor.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Priority.cs" />
-    <Compile Include="Libs\HarmonyX\Public\ReversePatcher.cs" />
-    <Compile Include="Libs\HarmonyX\Public\Transpilers.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\AccessTools.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\CodeMatcher.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\Extensions.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\FileLog.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\JetBrains.Annotations.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\Logger.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\SymbolExtensions.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\Traverse.cs" />
-    <Compile Include="Libs\HarmonyX\Tools\TypeNameHelper.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Melons\Attributes\AdditionalDependencies.cs" />
     <Compile Include="Melons\Attributes\Color.cs" />
@@ -239,6 +194,9 @@
     <Compile Include="Melons\Plugin.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="HarmonyX">
+      <Version>2.4.2</Version>
+    </PackageReference>
     <PackageReference Include="ILRepack.Lib.MSBuild.Task">
       <Version>2.0.18.2</Version>
     </PackageReference>

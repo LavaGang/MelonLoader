@@ -195,6 +195,7 @@
 170. Added Better Exception Handling during Melon Resolving.
 171. Fixed IOORE Issue with Melon Enumeration.
 172. Fixed Issue with StackTrace not showing Line Numbers even when Debug Symbol Information was present.
+173. HarmonyX is now integrated and updated through NuGet.
 
 ---
 

@@ -21,33 +21,32 @@ namespace MelonLoader
 
 		internal static void Install()
         {
-			PatchProcessor_OriginalRef = AccessTools.FieldRefAccess<MethodBase>(typeof(PatchProcessor), "original");
+			Type patchProcessorType = typeof(PatchProcessor);
+			Type patchShieldType = typeof(PatchShield);
+			PatchProcessor_OriginalRef = AccessTools.FieldRefAccess<MethodBase>(patchProcessorType, "original");
 			HarmonyLib.Harmony harmonyInstance = new HarmonyLib.Harmony("PatchShield");
 
 			try
 			{
 				harmonyInstance.Patch(
-					typeof(PatchFunctions).GetMethod("ReversePatch", BindingFlags.NonPublic | BindingFlags.Static),
-					new HarmonyMethod(typeof(PatchShield).GetMethod("PatchMethod_PatchFunctions_ReversePatch", BindingFlags.NonPublic | BindingFlags.Static))
+					AccessTools.Method("HarmonyLib.PatchFunctions:ReversePatch"),
+					new HarmonyMethod(AccessTools.Method(patchShieldType, "PatchMethod_PatchFunctions_ReversePatch"))
 					);
 			}
 			catch (Exception ex) { LogException(ex); }
 
 			try
 			{
-				foreach (MethodInfo method in typeof(PatchProcessor).GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(x => x.Name.Equals("Unpatch")))
-					harmonyInstance.Patch(
-						method,
-						new HarmonyMethod(typeof(PatchShield).GetMethod("PatchMethod_PatchProcessor_Unpatch", BindingFlags.NonPublic | BindingFlags.Static))
-						);
+				HarmonyMethod unpatchMethod = new HarmonyMethod(AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Unpatch"));
+				foreach (MethodInfo method in patchProcessorType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(x => x.Name.Equals("Unpatch")))
+					harmonyInstance.Patch(method, unpatchMethod);
 			}
 			catch (Exception ex) { LogException(ex); }
 
 			try
 			{
-				harmonyInstance.Patch(
-					typeof(PatchProcessor).GetMethod("Patch", BindingFlags.Public | BindingFlags.Instance),
-					new HarmonyMethod(typeof(PatchShield).GetMethod("PatchMethod_PatchProcessor_Patch", BindingFlags.NonPublic | BindingFlags.Static))
+				harmonyInstance.Patch(AccessTools.Method(patchProcessorType, "Patch"),
+					new HarmonyMethod(AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Patch"))
 					);
 			}
 			catch (Exception ex) { LogException(ex); }

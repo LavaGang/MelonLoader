@@ -12,6 +12,7 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Rocks'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.RuntimeDetour'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -34,6 +35,7 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Rocks'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.RuntimeDetour'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -42,5 +44,18 @@
 			TargetKind="Dll"
 			OutputFile="@(AssemblyFile)"
 		/>
+    </Target>
+	
+	<Target Name="Cleanup" AfterTargets="ILRepack">
+		<ItemGroup>
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.dll" />
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.Mdb.dll" />
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.Pdb.dll" />
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.Rocks.dll" />
+			<FilesToDelete Include="$(OutputPath)MonoMod.RuntimeDetour.dll" />
+			<FilesToDelete Include="$(OutputPath)MonoMod.Utils.dll" />
+			<FilesToDelete Include="$(OutputPath)0Harmony.dll" />
+		</ItemGroup>
+		<Delete Files="@(FilesToDelete)" />
     </Target>
 </Project>

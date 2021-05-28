@@ -21,6 +21,18 @@ namespace MelonLoader
 		private IntPtr copiedMethodInfoPointer;
 		private IntPtr methodDetourPointer;
 
+		private delegate void PatchTools_RememberObject_Delegate(object key, object value);
+		private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;	
+
+		static HarmonyIl2CppMethodPatcher()
+        {
+			try { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len"); }
+			catch { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length"); }
+			try { localsGetter = AccessTools.FieldRefAccess<ILGenerator, LocalBuilder[]>("locals"); } catch { }
+			try { localCountGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_localCount"); } catch { }
+			PatchTools_RememberObject = AccessTools.Method("HarmonyLib.PatchTools:RememberObject").CreateDelegate<PatchTools_RememberObject_Delegate>();
+		}
+
 		internal static void TryResolve(object sender, PatchManager.PatcherResolverEventArgs args)
 		{
 			if (UnhollowerSupport.IsGeneratedAssemblyType(args.Original.DeclaringType))
@@ -52,7 +64,7 @@ namespace MelonLoader
 			MelonUtils.NativeHookAttach(copiedMethodInfoPointer, il2CppShimDelegatePtr);
 			methodDetourPointer = il2CppShimDelegatePtr;
 
-			PatchTools.RememberObject(Original, new PotatoTriple { First = newreplacement, Second = il2CppShim, Third = il2CppShimDelegate });
+			PatchTools_RememberObject(Original, new PotatoTriple { First = newreplacement, Second = il2CppShim, Third = il2CppShimDelegate });
 
 			return newreplacement;
 		}
@@ -197,60 +209,66 @@ namespace MelonLoader
 			if (paramType.IsValueType)
 				return;
 
-			if (paramType.IsByRef)
-			{
-				Type elementType = paramType.GetElementType();
+			Type currentType = paramType;
+			bool byRef = paramType.IsByRef;
+			if (byRef)
+				currentType = paramType.GetElementType();
 
-				if (paramType.GetElementType() == typeof(string))
-				{
-					// byRefLocal = Il2CppStringToManaged(*ptr);
-					// return ref byRefLocal;
-
-					byRefLocal = il.DeclareLocal(elementType);
-					il.Emit(OpCodes.Ldind_I);
-					il.Emit(OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
-					il.Emit(OpCodes.Stloc, byRefLocal);
-					il.Emit(OpCodes.Ldloca, byRefLocal);
-				}
-				else if (UnhollowerSupport.IsGeneratedAssemblyType(elementType))
-				{
-					// byRefLocal = *ptr == 0 ? null : new SomeType(*ptr);
-					// return ref byRefLocal;
-					Label ptrNonZero = il.DefineLabel();
-					Label done = il.DefineLabel();
-
-					byRefLocal = il.DeclareLocal(elementType);
-					il.Emit(OpCodes.Ldind_I);
-					il.Emit(OpCodes.Dup);
-					il.Emit(OpCodes.Brtrue_S, ptrNonZero);
-					il.Emit(OpCodes.Pop);
-					il.Emit(OpCodes.Br_S, done);
-					il.MarkLabel(ptrNonZero);
-					il.Emit(OpCodes.Newobj, Il2CppConstuctor(elementType));
-					il.Emit(OpCodes.Stloc, byRefLocal);
-					il.MarkLabel(done);
-					il.Emit(OpCodes.Ldloca, byRefLocal);
-				}
-			}
-			else if (paramType == typeof(string))
+			if (currentType == typeof(string))
 			{
 				// return Il2CppStringToManaged(ptr);
+
+				// byRefLocal = Il2CppStringToManaged(*ptr);
+				// return ref byRefLocal;
+
+				if (byRef)
+				{
+					byRefLocal = il.DeclareLocal(currentType);
+					il.Emit(OpCodes.Ldind_I);
+				}
+
 				il.Emit(OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
+
+				if (byRef)
+				{
+					il.Emit(OpCodes.Stloc, byRefLocal);
+					il.Emit(OpCodes.Ldloca, byRefLocal);
+				}
 			}
-			else if (UnhollowerSupport.IsGeneratedAssemblyType(paramType))
+			else if (UnhollowerSupport.IsGeneratedAssemblyType(currentType))
 			{
 				// return ptr == 0 ? null : new SomeType(ptr);
+
+				// byRefLocal = *ptr == 0 ? null : new SomeType(*ptr);
+				// return ref byRefLocal;
+
 				Label ptrNonZero = il.DefineLabel();
 				Label done = il.DefineLabel();
+
+				if (byRef)
+				{
+					byRefLocal = il.DeclareLocal(currentType);
+					il.Emit(OpCodes.Ldind_I);
+				}
 
 				il.Emit(OpCodes.Dup);
 				il.Emit(OpCodes.Brtrue_S, ptrNonZero);
 				il.Emit(OpCodes.Pop);
-				il.Emit(OpCodes.Ldnull);
+
+				if (!byRef)
+					il.Emit(OpCodes.Ldnull);
+
 				il.Emit(OpCodes.Br_S, done);
 				il.MarkLabel(ptrNonZero);
-				il.Emit(OpCodes.Newobj, Il2CppConstuctor(paramType));
+				il.Emit(OpCodes.Newobj, Il2CppConstuctor(currentType));
+
+				if (byRef)
+					il.Emit(OpCodes.Stloc, byRefLocal);
+
 				il.MarkLabel(done);
+
+				if (byRef)
+					il.Emit(OpCodes.Ldloca, byRefLocal);
 			}
 		}
 
@@ -265,11 +283,6 @@ namespace MelonLoader
 		private static string CodePos(ILGenerator il)
 		{
 			int offset = 0;
-
-			if (codeLenGetter == null)
-				try { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len"); }
-				catch { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length"); }
-
 			if (codeLenGetter != null)
 				offset = codeLenGetter(il);
 			return string.Format("L_{0:x4}: ", offset);
@@ -279,12 +292,6 @@ namespace MelonLoader
 		{
 			if (!HarmonyFileLog.Enabled)
 				return;
-
-			if (localsGetter == null)
-				try { localsGetter = AccessTools.FieldRefAccess<ILGenerator, LocalBuilder[]>("locals"); } catch { }
-			if (localCountGetter == null)
-				try { localCountGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_localCount"); } catch { }
-
 			var localCount = -1;
 			var localsArray = localsGetter != null ? localsGetter(il) : null;
 			if ((localsArray != null) && (localsArray.Length > 0))
