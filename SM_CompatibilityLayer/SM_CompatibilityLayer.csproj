@@ -40,9 +40,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Layers\IPA.cs" />
     <Compile Include="Layers\IPA\IEnhancedPlugin.cs" />
@@ -53,14 +50,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
-      <Project>{f9700790-414b-431b-9f9c-1d9210fad682}</Project>
-      <Name>MelonLoader</Name>
-      <Private>False</Private>
-    </ProjectReference>
+    <Reference Include="System" />
+	<Reference Include="MelonLoader">
+      <HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

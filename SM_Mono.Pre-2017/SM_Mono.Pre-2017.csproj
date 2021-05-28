@@ -40,17 +40,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
       <HintPath>Libs\UnityEngine.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="Tomlet">
-      <HintPath>$(OutputPath)..\..\Tomlet.dll</HintPath>
+    <Reference Include="MelonLoader">
+      <HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
@@ -62,16 +59,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportModule.cs" />
-    <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
-      <Private>false</Private>
-      <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>
-      <Name>MelonLoader</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if EXIST "$(OutputDir)Tomlet.dll" (
-del "$(OutputDir)Tomlet.dll" /q
-)</PostBuildEvent>
-  </PropertyGroup>
 </Project>
