@@ -17,7 +17,8 @@ namespace MelonLoader
                 || args.Name.StartsWith($"Mono.Cecil.Rocks{versionending}")
                 || args.Name.StartsWith($"MonoMod.RuntimeDetour{versionending}")
                 || args.Name.StartsWith($"MonoMod.Utils{versionending}")
-                || args.Name.StartsWith($"0Harmony{versionending}"))
+                || args.Name.StartsWith($"0Harmony{versionending}")
+                || args.Name.StartsWith($"Tomlet{versionending}"))
                 ? typeof(MelonCompatibilityLayer).Assembly
                 : null;
             CompatibilityLayers.Melon_CL.Setup(domain);
