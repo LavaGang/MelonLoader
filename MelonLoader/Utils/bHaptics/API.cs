@@ -150,7 +150,7 @@ namespace MelonLoader
 
         public class ScaleOption
         {
-            public ScaleOption(float intensity, float duration)
+            public ScaleOption(float intensity = 1f, float duration = 1f)
             {
                 Intensity = intensity;
                 Duration = duration;
@@ -162,7 +162,7 @@ namespace MelonLoader
 
         public class DotPoint
         {
-            public DotPoint(int index, int intensity)
+            public DotPoint(int index, int intensity = 50)
             {
                 if ((index < 0) || (index > MaxBufferSize))
                     throw new Exception("Invalid argument index : " + index);
@@ -177,7 +177,7 @@ namespace MelonLoader
         [StructLayout(LayoutKind.Sequential)]
         public struct PathPoint
         {
-            public PathPoint(float x, float y, int intensity, int motorCount = 3)
+            public PathPoint(float x, float y, int intensity = 50, int motorCount = 3)
             {
                 X = MelonUtils.Clamp(x, 0f, 1f);
                 Y = MelonUtils.Clamp(y, 0f, 1f);
