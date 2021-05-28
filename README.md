@@ -105,8 +105,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 - These are additional Launch Options that MelonLoader adds to the Game.
 - These can be used to manipulate how MelonLoader works.
-- After First Launch with MelonLoader these Launch Options can also be configured in MelonLoader/LaunchOptions.ini  
-If a Launch Option is in your Game's Command Line it will ignore its value in the INI file.
 
 | Argument | Description |
 | - | - |
