@@ -239,10 +239,11 @@ namespace MelonLoader
                 CurrentSceneBuildIndex = buildIndex;
                 CurrentSceneName = sceneName;
             }
+            InvokeMelonMethod(ref _Mods, x => x.OnLevelWasLoaded(buildIndex));
             InvokeMelonMethod(ref _Mods, x => x.OnSceneWasLoaded(buildIndex, sceneName));
         }
 
-        internal static void OnSceneWasInitialized(int buildIndex, string sceneName) => InvokeMelonMethod(ref _Mods, x => x.OnSceneWasInitialized(buildIndex, sceneName));
+        internal static void OnSceneWasInitialized(int buildIndex, string sceneName) { InvokeMelonMethod(ref _Mods, x => x.OnLevelWasInitialized(buildIndex)); InvokeMelonMethod(ref _Mods, x => x.OnSceneWasInitialized(buildIndex, sceneName)); }
         internal static void OnSceneWasUnloaded(int buildIndex, string sceneName) => InvokeMelonMethod(ref _Mods, x => x.OnSceneWasUnloaded(buildIndex, sceneName));
 
         private static bool InitializeScene = false;
