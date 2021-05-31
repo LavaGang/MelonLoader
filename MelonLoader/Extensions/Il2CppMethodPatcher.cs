@@ -186,8 +186,8 @@ namespace MelonLoader
 				il.Emit(OpCodes.Ldloc, returnLocal);
 				ConvertTypeToIl2Cpp(il, patchReturnType);
 			}
-			il.Emit(OpCodes.Ret);
 
+			il.Emit(OpCodes.Ret);
 			return method;
 		}
 
