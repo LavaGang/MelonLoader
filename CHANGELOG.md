@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.3.1 ALPHA Pre-Release](#v031-alpha-pre-release)  
+[v0.4.0 ALPHA Pre-Release](#v040-alpha-pre-release)  
 [v0.3.0 ALPHA Pre-Release](#v030-alpha-pre-release)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
@@ -21,7 +21,7 @@
 
 ---
 
-### v0.3.1 ALPHA Pre-Release:
+### v0.4.0 ALPHA Pre-Release:
 
 1. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
 2. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
