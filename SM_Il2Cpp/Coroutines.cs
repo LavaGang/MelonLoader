@@ -100,8 +100,9 @@ namespace MelonLoader.Support
             }
             catch (Exception e)
             {
-                MelonLogger.Error(e.ToString());
+                MelonLogger.Error($"Exception in coroutine of type {enumerator?.GetType().AssemblyQualifiedName}: {e}");
                 Stop(FindOriginalCoro(enumerator)); // We want the entire coroutine hierachy to stop when an error happen
+                return; // don't re-add this coroutine to the list
             }
 
             var next = enumerator.Current;
