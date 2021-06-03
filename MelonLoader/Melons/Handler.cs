@@ -106,9 +106,7 @@ namespace MelonLoader
 
             MelonFileTypes.DLL.LoadAll(basedirectory, plugins);
             MelonFileTypes.ZIP.LoadAll(basedirectory);
-
-            SortAll();
-
+            
             // To-Do Check for Melon in Wrong Folder
         }
 
@@ -190,6 +188,9 @@ namespace MelonLoader
                         _Mods.Add((MelonMod)melon);
                 }
 
+                SortMelons(ref _Mods);
+                SortMelons(ref _Plugins);
+
                 // To-Do Check for Late Loads and Display Debug Warning
             }
             catch(Exception ex) { MelonLogger.Error($"Failed to Resolve Melons for {filepath}: {ex}"); }
@@ -262,13 +263,14 @@ namespace MelonLoader
             InvokeMelonMethod(x => x.OnUpdate());
         }
 
-        public static void SortAll() { SortPlugins(); SortMods(); }
-        public static void SortPlugins() { SortMelons(ref _Plugins); MelonCompatibilityLayer.RefreshPluginsTable(); }
-        public static void SortMods() { SortMelons(ref _Mods); MelonCompatibilityLayer.RefreshModsTable(); }
         private static void SortMelons<T>(ref List<T> melons) where T : MelonBase
         {
             melons = melons.OrderBy(x => x.Priority).ToList();
             DependencyGraph<T>.TopologicalSort(melons);
+            if (typeof(T) == typeof(MelonMod))
+                MelonCompatibilityLayer.RefreshModsTable();
+            else if (typeof(T) == typeof(MelonPlugin))
+                MelonCompatibilityLayer.RefreshPluginsTable();
         }
 
         private delegate void InvokeMelonMethodDelegate(MelonBase melon);
@@ -301,10 +303,7 @@ namespace MelonLoader
             if (remove_failed)
             {
                 melons.RemoveAll(failedMelons.Contains);
-
-                melons = melons.OrderBy(x => x.Priority).ToList();
-                DependencyGraph<T>.TopologicalSort(melons);
-                MelonCompatibilityLayer.RefreshModsTable();
+                SortMelons(ref melons);
             }
         }
 

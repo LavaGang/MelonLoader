@@ -198,6 +198,7 @@
 173. HarmonyX is now integrated and updated through NuGet.
 174. Fixed Issue with ILRepack and Tomlet Conflicting.
 175. Fixed Issue with UnhollowerSupport causing BIF Exception to be thrown.
+176. Fixed Issue with Melon Sorting.
 
 ---
 
