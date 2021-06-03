@@ -265,8 +265,8 @@ namespace MelonLoader
 
         private static void SortMelons<T>(ref List<T> melons) where T : MelonBase
         {
-            melons = melons.OrderBy(x => x.Priority).ToList();
             DependencyGraph<T>.TopologicalSort(melons);
+            melons = melons.OrderBy(x => x.Priority).ToList();
             if (typeof(T) == typeof(MelonMod))
                 MelonCompatibilityLayer.RefreshModsTable();
             else if (typeof(T) == typeof(MelonPlugin))
