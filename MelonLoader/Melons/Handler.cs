@@ -106,7 +106,10 @@ namespace MelonLoader
 
             MelonFileTypes.DLL.LoadAll(basedirectory, plugins);
             MelonFileTypes.ZIP.LoadAll(basedirectory);
-            
+
+            SortMelons(ref _Mods);
+            SortMelons(ref _Plugins);
+
             // To-Do Check for Melon in Wrong Folder
         }
 
@@ -187,9 +190,6 @@ namespace MelonLoader
                     else
                         _Mods.Add((MelonMod)melon);
                 }
-
-                SortMelons(ref _Mods);
-                SortMelons(ref _Plugins);
 
                 // To-Do Check for Late Loads and Display Debug Warning
             }
