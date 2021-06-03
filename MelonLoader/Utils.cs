@@ -132,17 +132,17 @@ namespace MelonLoader
             return returnobj;
         }
 
-        public static T PullAttributeFromAssembly<T>(Assembly asm) where T : Attribute
+        public static T PullAttributeFromAssembly<T>(Assembly asm, bool inherit = false) where T : Attribute
         {
-            T[] attributetbl = PullAttributesFromAssembly<T>(asm);
+            T[] attributetbl = PullAttributesFromAssembly<T>(asm, inherit);
             if ((attributetbl == null) || (attributetbl.Length <= 0))
                 return null;
             return attributetbl[0];
         }
 
-        public static T[] PullAttributesFromAssembly<T>(Assembly asm, bool throw_exceptions = false) where T : Attribute
+        public static T[] PullAttributesFromAssembly<T>(Assembly asm, bool inherit = false) where T : Attribute
         {
-            Attribute[] att_tbl = Attribute.GetCustomAttributes(asm);
+            Attribute[] att_tbl = Attribute.GetCustomAttributes(asm, inherit);
             if ((att_tbl == null) || (att_tbl.Length <= 0))
                 return null;
             Type requestedType = typeof(T);

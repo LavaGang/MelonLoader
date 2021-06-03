@@ -200,6 +200,7 @@
 175. Fixed Issue with UnhollowerSupport causing BIF Exception to be thrown.
 176. Fixed Issue with Melon Sorting.
 177. Fixed Issue with Dependency Sorting.
+178. Fixed Issue with Assembly Attribute Finding in MelonHandler.
 
 ---
 

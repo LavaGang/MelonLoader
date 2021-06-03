@@ -65,7 +65,7 @@ namespace MelonLoader.CompatibilityLayers
 				return;
 
 			MelonColorAttribute coloratt = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(asm);
-			MelonPriorityAttribute priorityatt = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(asm);
+			MelonPriorityAttribute priorityatt = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(asm, true);
 
 			MelonBase instance = MelonCompatibilityLayer.CreateMelonFromWrapperData(new MelonCompatibilityLayer.WrapperData()
 			{
