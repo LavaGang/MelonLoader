@@ -86,15 +86,15 @@ namespace MelonLoader
             return (int)Il2CppCallerCountField.GetValue(callerCountAttributes[0]);
         }
 
-        public static void RegisterTypeInIl2CppDomain(Type type) => RegisterTypeInIl2CppDomain(type, false);
-        public static void RegisterTypeInIl2CppDomain(Type type, bool suppress_message)
+        public static void RegisterTypeInIl2CppDomain(Type type) => RegisterTypeInIl2CppDomain(type, true);
+        public static void RegisterTypeInIl2CppDomain(Type type, bool logSuccess)
         {
             if (!MelonUtils.IsGameIl2Cpp())
                 throw new Exception("RegisterTypeInIl2CppDomain can't be used on Non-Il2Cpp Games");
             if (type == null)
                 throw new NullReferenceException("The type cannot be null.");
             MethodInfo genericMethod = ClassInjectorRegisterTypeInIl2Cpp.MakeGenericMethod(type);
-            genericMethod.Invoke(null, new object[] { suppress_message });
+            genericMethod.Invoke(null, new object[] { logSuccess });
         }
     }
 }

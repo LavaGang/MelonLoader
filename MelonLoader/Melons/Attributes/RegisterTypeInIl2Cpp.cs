@@ -6,9 +6,9 @@ namespace MelonLoader
     [AttributeUsage(AttributeTargets.Class)]
     public class RegisterTypeInIl2Cpp : Attribute
     {
-        internal bool Suppress_Message = false;
+        internal bool LogSuccess = false;
         public RegisterTypeInIl2Cpp() { }
-        public RegisterTypeInIl2Cpp(bool suppress_message) { Suppress_Message = suppress_message; }
+        public RegisterTypeInIl2Cpp(bool logSuccess) { LogSuccess = logSuccess; }
 
         public static void RegisterAssembly(Assembly asm)
         {
@@ -23,7 +23,9 @@ namespace MelonLoader
                 if ((attTbl == null) || (attTbl.Length <= 0))
                     continue;
                 RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
-                UnhollowerSupport.RegisterTypeInIl2CppDomain(type, att.Suppress_Message);
+                if (att == null)
+                    continue;
+                UnhollowerSupport.RegisterTypeInIl2CppDomain(type, att.LogSuccess);
             }
         }
     }
