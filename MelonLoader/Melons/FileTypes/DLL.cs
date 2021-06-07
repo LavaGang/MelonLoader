@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader.MelonFileTypes
@@ -8,13 +9,22 @@ namespace MelonLoader.MelonFileTypes
     {
         internal static void LoadAll(string folderpath, bool is_plugins = false)
         {
-            string[] filearr = Directory.GetFiles(folderpath, (
-                (is_plugins 
-                ? MelonLaunchOptions.Core.LoadMode_Plugins 
-                : MelonLaunchOptions.Core.LoadMode_Mods) 
-                == MelonLaunchOptions.Core.LoadModeEnum.DEV) 
-                ? ".dev.dll"
-                : "*.dll");
+            string[] filearr = Directory.GetFiles(folderpath).Where(x =>
+            {
+                if (string.IsNullOrEmpty(x))
+                    return false;
+                string extension = Path.GetExtension(x);
+                if (string.IsNullOrEmpty(extension))
+                    return false;
+                MelonLaunchOptions.Core.LoadModeEnum loadMode = is_plugins 
+                    ? MelonLaunchOptions.Core.LoadMode_Plugins 
+                    : MelonLaunchOptions.Core.LoadMode_Mods;
+                if (loadMode == MelonLaunchOptions.Core.LoadModeEnum.BOTH)
+                    return extension.Equals(".dev.dll") || extension.Equals(".dll");
+                if (loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV)
+                    return extension.Equals(".dev.dll");
+                return extension.Equals(".dll");
+            }).ToArray();
 
             if (filearr.Length <= 0)
                 return;
