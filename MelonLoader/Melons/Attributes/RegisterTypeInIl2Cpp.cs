@@ -6,6 +6,10 @@ namespace MelonLoader
     [AttributeUsage(AttributeTargets.Class)]
     public class RegisterTypeInIl2Cpp : Attribute
     {
+        internal bool Suppress_Message = false;
+        public RegisterTypeInIl2Cpp() { }
+        public RegisterTypeInIl2Cpp(bool suppress_message) { Suppress_Message = suppress_message; }
+
         public static void RegisterAssembly(Assembly asm)
         {
             if (!MelonUtils.IsGameIl2Cpp())
@@ -18,7 +22,8 @@ namespace MelonLoader
                 object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), false);
                 if ((attTbl == null) || (attTbl.Length <= 0))
                     continue;
-                UnhollowerSupport.RegisterTypeInIl2CppDomain(type);
+                RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
+                UnhollowerSupport.RegisterTypeInIl2CppDomain(type, att.Suppress_Message);
             }
         }
     }

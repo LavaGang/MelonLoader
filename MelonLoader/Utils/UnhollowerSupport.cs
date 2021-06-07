@@ -33,7 +33,7 @@ namespace MelonLoader
             Il2CppObjectBaseToPtrMethod = IL2CPPType.GetMethod("Il2CppObjectBaseToPtr");
             Il2CppStringToManagedMethod = IL2CPPType.GetMethod("Il2CppStringToManaged");
             ManagedStringToIl2CppMethod = IL2CPPType.GetMethod("ManagedStringToIl2Cpp");
-            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethods().First(x => (x.Name.Equals("RegisterTypeInIl2Cpp") && (x.GetParameters().Count() == 0)));
+            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethods().First(x => (x.Name.Equals("RegisterTypeInIl2Cpp") && (x.GetParameters().Count() == 1)));
             GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
             Il2CppCallerCountAttributeType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Attributes.CallerCountAttribute");
             Il2CppCallerCountField = Il2CppCallerCountAttributeType.GetField("Count", BindingFlags.Public | BindingFlags.Instance);
@@ -86,14 +86,15 @@ namespace MelonLoader
             return (int)Il2CppCallerCountField.GetValue(callerCountAttributes[0]);
         }
 
-        public static void RegisterTypeInIl2CppDomain(Type type)
+        public static void RegisterTypeInIl2CppDomain(Type type) => RegisterTypeInIl2CppDomain(type, false);
+        public static void RegisterTypeInIl2CppDomain(Type type, bool suppress_message)
         {
             if (!MelonUtils.IsGameIl2Cpp())
                 throw new Exception("RegisterTypeInIl2CppDomain can't be used on Non-Il2Cpp Games");
             if (type == null)
                 throw new NullReferenceException("The type cannot be null.");
             MethodInfo genericMethod = ClassInjectorRegisterTypeInIl2Cpp.MakeGenericMethod(type);
-            genericMethod.Invoke(null, new object[0]);
+            genericMethod.Invoke(null, new object[] { suppress_message });
         }
     }
 }
