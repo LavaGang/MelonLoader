@@ -6,7 +6,7 @@ namespace MelonLoader
     [AttributeUsage(AttributeTargets.Class)]
     public class RegisterTypeInIl2Cpp : Attribute
     {
-        internal bool LogSuccess = false;
+        internal bool LogSuccess = true;
         public RegisterTypeInIl2Cpp() { }
         public RegisterTypeInIl2Cpp(bool logSuccess) { LogSuccess = logSuccess; }
 
