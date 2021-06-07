@@ -60,9 +60,7 @@ namespace MelonLoader
                             goto default;
                         if (!int.TryParse(valuestr, out valueint))
                             goto default;
-                        if ((valueint >= ((int)Core.LoadModeEnum.NORMAL))
-                        || (valueint <= ((int)Core.LoadModeEnum.BOTH)))
-                            Core.LoadMode_Plugins = (Core.LoadModeEnum)valueint;
+                        Core.LoadMode_Plugins = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
                         goto default;
                     case "--melonloader.loadmodemods":
                         if ((i + 1) < args.Length)
@@ -71,9 +69,7 @@ namespace MelonLoader
                             goto default;
                         if (!int.TryParse(valuestr, out valueint))
                             goto default;
-                        if ((valueint >= ((int)Core.LoadModeEnum.NORMAL))
-                        || (valueint <= ((int)Core.LoadModeEnum.BOTH)))
-                            Core.LoadMode_Mods = (Core.LoadModeEnum)valueint;
+                        Core.LoadMode_Mods = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
                         goto default;
                     default:
                         break;
