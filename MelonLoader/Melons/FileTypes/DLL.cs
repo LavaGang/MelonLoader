@@ -9,23 +9,15 @@ namespace MelonLoader.MelonFileTypes
     {
         internal static void LoadAll(string folderpath, bool is_plugins = false)
         {
-            string[] filearr = Directory.GetFiles(folderpath).Where(x =>
-            {
-                if (string.IsNullOrEmpty(x))
-                    return false;
-                string extension = Path.GetExtension(x);
-                if (string.IsNullOrEmpty(extension))
-                    return false;
-                MelonLaunchOptions.Core.LoadModeEnum loadMode = is_plugins 
-                    ? MelonLaunchOptions.Core.LoadMode_Plugins 
-                    : MelonLaunchOptions.Core.LoadMode_Mods;
-                if (loadMode == MelonLaunchOptions.Core.LoadModeEnum.BOTH)
-                    return extension.Equals(".dev.dll") || extension.Equals(".dll");
-                if (loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV)
-                    return extension.Equals(".dev.dll");
-                return extension.Equals(".dll");
-            }).ToArray();
-
+            MelonLaunchOptions.Core.LoadModeEnum loadMode = is_plugins
+                ? MelonLaunchOptions.Core.LoadMode_Plugins
+                : MelonLaunchOptions.Core.LoadMode_Mods;
+            string[] filearr = Directory.GetFiles(folderpath).Where(x => 
+                Path.GetExtension(x).Equals(".dll")
+                && ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV) ? x.EndsWith(".dev.dll")
+                : ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL) ? !x.EndsWith(".dev.dll")
+                : true))
+            ).ToArray();
             if (filearr.Length <= 0)
                 return;
 

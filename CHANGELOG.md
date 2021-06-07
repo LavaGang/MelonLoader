@@ -203,6 +203,7 @@
 178. Fixed Issue with Assembly Attribute Finding in MelonHandler.
 179. Improved IL2CPP coroutine exception reporting to include faulty coroutine name, don't continue running an erroring-out coroutine.    (Credits to knah :D)
 180. Fixed Issue with MelonHandler checking File Extensions.
+181. Fixed Issue with MelonHandler not properly abiding by Load Mode.
 
 ---
 
