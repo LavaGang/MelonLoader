@@ -8,7 +8,7 @@ namespace MelonLoader
     {
         internal static Type IL2CPPType = null;
         internal static Type Il2CppObjectBaseType = null;
-        internal static Type Il2CppMethodInfoType = null;
+        internal static MethodInfo CopyMethodInfoStructMethod = null;
         internal static MethodInfo Il2CppObjectBaseToPtrMethod = null;
         internal static MethodInfo Il2CppStringToManagedMethod = null;
         internal static MethodInfo ManagedStringToIl2CppMethod = null;
@@ -29,7 +29,7 @@ namespace MelonLoader
             }
             IL2CPPType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP");
             Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
-            Il2CppMethodInfoType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Runtime.Il2CppMethodInfo");
+            CopyMethodInfoStructMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Runtime.UnityVersionHandler").GetMethod("CopyMethodInfoStruct");
             Il2CppObjectBaseToPtrMethod = IL2CPPType.GetMethod("Il2CppObjectBaseToPtr");
             Il2CppStringToManagedMethod = IL2CPPType.GetMethod("Il2CppStringToManaged");
             ManagedStringToIl2CppMethod = IL2CPPType.GetMethod("ManagedStringToIl2Cpp");
