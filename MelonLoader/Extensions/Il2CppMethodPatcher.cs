@@ -42,7 +42,7 @@ namespace MelonLoader
 		private HarmonyIl2CppMethodPatcher(MethodBase original) : base(original)
 		{
 			originalMethodInfoPointer = UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(Original);
-			copiedMethodInfoPointer = CopyMethodInfoStruct(originalMethodInfoPointer);
+			copiedMethodInfoPointer = (IntPtr)UnhollowerSupport.CopyMethodInfoStructMethod.Invoke(null, new object[] { originalMethodInfoPointer });
 		}
 
 		public override MethodBase DetourTo(MethodBase replacement)
@@ -97,19 +97,6 @@ namespace MelonLoader
 			ilcursor.Emit(Mono.Cecil.Cil.OpCodes.Ldc_I8, copiedMethodInfoPointer.ToInt64());
 			ilcursor.Emit(Mono.Cecil.Cil.OpCodes.Conv_I);
 			return method;
-		}
-
-		private IntPtr CopyMethodInfoStruct(IntPtr origMethodInfo)
-		{
-			// Il2CppMethodInfo *copiedMethodInfo = malloc(sizeof(Il2CppMethodInfo));
-			int sizeOfMethodInfo = Marshal.SizeOf(UnhollowerSupport.Il2CppMethodInfoType);
-			IntPtr copiedMethodInfo = Marshal.AllocHGlobal(sizeOfMethodInfo);
-
-			// *copiedMethodInfo = *origMethodInfo;
-			object temp = Marshal.PtrToStructure(origMethodInfo, UnhollowerSupport.Il2CppMethodInfoType);
-			Marshal.StructureToPtr(temp, copiedMethodInfo, false);
-
-			return copiedMethodInfo;
 		}
 
 		private DynamicMethodDefinition CreateIl2CppShim(MethodInfo patch)
