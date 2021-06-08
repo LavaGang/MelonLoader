@@ -234,26 +234,31 @@ namespace MelonLoader.CompatibilityLayers
 				CurrentMLVersionIntArr[0] = int.Parse(versionArgs[0]);
 				CurrentMLVersionIntArr[1] = int.Parse(versionArgs[1]);
 				CurrentMLVersionIntArr[2] = int.Parse(versionArgs[2]);
-				CurrentMLVersionIntArr[3] = int.Parse(versionArgs[3]);
+				CurrentMLVersionIntArr[3] = ((versionArgs.Length == 4) && !string.IsNullOrEmpty(versionArgs[3])) ? int.Parse(versionArgs[3]) : 0;
 			}
 
-			bool major_is_acceptable = ((verifyLoaderVersionAttribute.Major == CurrentMLVersionIntArr[0])
-				|| (verifyLoaderVersionAttribute.IsMinimum
-					&& (CurrentMLVersionIntArr[0] > verifyLoaderVersionAttribute.Major)));
+			bool is_minimum = verifyLoaderVersionAttribute.IsMinimum;
 
-			bool minor_is_acceptable = ((verifyLoaderVersionAttribute.Minor == CurrentMLVersionIntArr[1])
-				|| (verifyLoaderVersionAttribute.IsMinimum
-					&& (CurrentMLVersionIntArr[1] > verifyLoaderVersionAttribute.Minor)));
+			bool major_is_acceptable = is_minimum
+				? (verifyLoaderVersionAttribute.Major <= CurrentMLVersionIntArr[0])
+				: (verifyLoaderVersionAttribute.Major == CurrentMLVersionIntArr[0]);
 
-			bool revision_is_acceptable = ((verifyLoaderVersionAttribute.Revision == CurrentMLVersionIntArr[2])
-				|| (verifyLoaderVersionAttribute.IsMinimum
-					&& (CurrentMLVersionIntArr[2] > verifyLoaderVersionAttribute.Revision)));
+			bool minor_is_acceptable = is_minimum
+				? (verifyLoaderVersionAttribute.Minor <= CurrentMLVersionIntArr[1])
+				: (verifyLoaderVersionAttribute.Minor == CurrentMLVersionIntArr[1]);
 
-			bool patch_is_acceptable = ((verifyLoaderVersionAttribute.Patch == CurrentMLVersionIntArr[3])
-				|| (verifyLoaderVersionAttribute.IsMinimum
-					&& (CurrentMLVersionIntArr[3] > verifyLoaderVersionAttribute.Patch)));
+			bool patch_is_acceptable = is_minimum
+				? (verifyLoaderVersionAttribute.Patch <= CurrentMLVersionIntArr[2])
+				: (verifyLoaderVersionAttribute.Patch == CurrentMLVersionIntArr[2]);
 
-			if (!major_is_acceptable || !minor_is_acceptable || !revision_is_acceptable || !patch_is_acceptable)
+			bool revision_is_acceptable = is_minimum
+				? (verifyLoaderVersionAttribute.Revision <= CurrentMLVersionIntArr[3])
+				: (verifyLoaderVersionAttribute.Revision == CurrentMLVersionIntArr[3]);
+
+			if (!major_is_acceptable
+				|| !minor_is_acceptable
+				|| !patch_is_acceptable
+				|| !revision_is_acceptable)
 			{
 				MelonLogger.Error($"Incompatible MelonLoader Version for {(is_plugin ? "Plugin" : "Mod")}: {filepath}");
 				return false;

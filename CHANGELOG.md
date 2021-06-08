@@ -1,7 +1,7 @@
 ### Version List:
 
-[v0.4.0 ALPHA Pre-Release](#v040-alpha-pre-release)  
-[v0.3.0 ALPHA Pre-Release](#v030-alpha-pre-release)  
+[v0.4.0 Open-Beta](#v040-open-beta)  
+[v0.3.0 Open-Beta](#v030-open-beta)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
 [v0.2.7.2 Open-Beta](#v0272-open-beta)  
@@ -21,7 +21,7 @@
 
 ---
 
-### v0.4.0 ALPHA Pre-Release:
+### v0.4.0 Open-Beta:
 
 1. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
 2. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
@@ -205,10 +205,12 @@
 180. Fixed Issue with MelonHandler checking File Extensions.
 181. Fixed Issue with MelonHandler not properly abiding by Load Mode.
 182. Added Message Suppression Support for the RegisterTypeInIl2Cpp Attribute.
+183. Fixed Issue with VerifyLoaderVersion Attribute causing an IOORE when parsing SemVer.
+184. Fixed Issue with VerifyLoaderVersion Attribute not properly abiding by IsMinimum.
 
 ---
 
-### v0.3.0 ALPHA Pre-Release:
+### v0.3.0 Open-Beta:
 
 1. Rewrote Proxy from scratch.
 2. Rewrote Bootstrap from scratch.
