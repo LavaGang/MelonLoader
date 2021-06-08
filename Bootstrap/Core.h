@@ -20,8 +20,8 @@ public:
 	static void KillCurrentProcess();
 	static const char* GetFileInfoProductName(const char* path);
 	static const char* GetFileInfoProductVersion(const char* path);
-	static const char* GetVersionStr();
-	static const char* GetVersionStrWithGameName(const char* GameVersion = NULL);
+	static std::string GetVersionStr();
+	static std::string GetVersionStrWithGameName(const char* GameVersion = NULL);
 
 private:
 	static const char* GetOSVersion();

@@ -207,6 +207,10 @@
 182. Added Message Suppression Support for the RegisterTypeInIl2Cpp Attribute.
 183. Fixed Issue with VerifyLoaderVersion Attribute causing an IOORE when parsing SemVer.
 184. Fixed Issue with VerifyLoaderVersion Attribute not properly abiding by IsMinimum.
+185. Updated Il2CppAssemblyUnhollower to v0.4.15.0.
+186. Fixed Issue with newer Il2CppAssemblyUnhollower version breaking Harmony Patching.    (Credits to ds5678 :D)
+187. Fixed Issue with Displaying MelonLoader Version Information.
+188. Updated Il2CppAssemblyUnhollower to v0.4.15.1.
 
 ---
 

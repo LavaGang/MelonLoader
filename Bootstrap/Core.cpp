@@ -18,29 +18,34 @@
 
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::Path = NULL;
-std::string Core::Version = "v0.4.0";
+std::string Core::Version = "0.4.0";
 bool Core::Is_ALPHA_PreRelease = false;
 Core::wine_get_version_t Core::wine_get_version = NULL;
 
-const char* Core::GetVersionStr()
+std::string Core::GetVersionStr()
 {
-	return (std::string(CommandLine::GetPrefix())
-		+ " "
-		+ Version
-		+ (Is_ALPHA_PreRelease
-			? " ALPHA Pre-Release" 
-			: " Open-Beta")).c_str();
+	std::string versionstr = std::string();
+	if (Console::Mode == Console::DisplayMode::LEMON)
+		versionstr += "Lemon";
+	else
+		versionstr += "Melon";
+	versionstr += "Loader v" + Version + " ";
+	if (Is_ALPHA_PreRelease)
+		versionstr += "ALPHA Pre-Release";
+	else
+		versionstr += "Open-Beta";
+	return versionstr;
 }
 
-const char* Core::GetVersionStrWithGameName(const char* GameVersion)
+std::string Core::GetVersionStrWithGameName(const char* GameVersion)
 {
-	return (std::string(GetVersionStr())
-		+ std::string(" - ")
-		+ std::string(Game::Name)
+	return (GetVersionStr()
+		+ " - "
+		+ Game::Name
 		+ " "
 		+ ((GameVersion == NULL)
 			? ""
-			: GameVersion)).c_str();
+			: GameVersion));
 }
 
 void Core::Initialize(HINSTANCE hinstDLL)
@@ -88,7 +93,7 @@ void Core::WelcomeMessage()
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
 	Logger::Msg("------------------------------");
-	Logger::Msg(GetVersionStr());
+	Logger::Msg(GetVersionStr().c_str());
 	Logger::Msg((std::string("OS: ") + GetOSVersion()).c_str());
 	Logger::Msg(("Hash Code: " + HashCode::Hash).c_str());
 	Logger::Msg("------------------------------");

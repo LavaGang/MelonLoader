@@ -47,25 +47,25 @@ void CommandLine::Read()
 
 		if (strstr(command, "--melonloader.consolemode") != NULL)
 			Console::Mode = (Console::DisplayMode)GetIntFromConstChar(argv[i + 1], 0);
-		else if (strstr(command, AddPrefixToLaunchOption("consoleontop")) != NULL)
+		else if (strstr(command, "--melonloader.consoleontop") != NULL)
 			Console::AlwaysOnTop = true;
-		else if (strstr(command, AddPrefixToLaunchOption("consoledst")) != NULL)
+		else if (strstr(command, "--melonloader.consoledst") != NULL)
 			Console::ShouldSetTitle = false;
-		else if (strstr(command, AddPrefixToLaunchOption("dab")) != NULL)
+		else if (strstr(command, "--melonloader.dab") != NULL)
 			AnalyticsBlocker::ShouldDAB = true;
 		
 #ifndef DEBUG
-		else if (strstr(command, AddPrefixToLaunchOption("debug")) != NULL)
+		else if (strstr(command, "--melonloader.debug") != NULL)
 			Debug::Enabled = true;
-		else if (strstr(command, AddPrefixToLaunchOption("hideconsole")) != NULL)
+		else if (strstr(command, "--melonloader.hideconsole") != NULL)
 			Console::ShouldHide = true;
-		else if (strstr(command, AddPrefixToLaunchOption("hidewarnings")) != NULL)
+		else if (strstr(command, "--melonloader.hidewarnings") != NULL)
 			Console::HideWarnings = true;
-		else if (strstr(command, AddPrefixToLaunchOption("maxlogs")) != NULL)
+		else if (strstr(command, "--melonloader.maxlogs") != NULL)
 			Logger::MaxLogs = GetIntFromConstChar(argv[i + 1], 10);
-		else if (strstr(command, AddPrefixToLaunchOption("maxwarnings")) != NULL)
+		else if (strstr(command, "--melonloader.maxwarnings") != NULL)
 			Logger::MaxWarnings = GetIntFromConstChar(argv[i + 1], 10);
-		else if (strstr(command, AddPrefixToLaunchOption("maxerrors")) != NULL)
+		else if (strstr(command, "--melonloader.maxerrors") != NULL)
 			Logger::MaxErrors = GetIntFromConstChar(argv[i + 1], 10);
 #endif
 	}
