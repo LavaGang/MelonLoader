@@ -211,6 +211,7 @@
 186. Fixed Issue with newer Il2CppAssemblyUnhollower version breaking Harmony Patching.    (Credits to ds5678 :D)
 187. Fixed Issue with Displaying MelonLoader Version Information.
 188. Updated Il2CppAssemblyUnhollower to v0.4.15.1.
+189. Added Missing Harmony Patch Forwarders.    (Credits to ds5678 :D)
 
 ---
 
