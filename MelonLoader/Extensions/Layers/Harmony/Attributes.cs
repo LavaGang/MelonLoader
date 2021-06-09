@@ -45,6 +45,8 @@ namespace Harmony
 	public class HarmonyPatch : HarmonyLib.HarmonyPatch
 	{
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+		public HarmonyPatch() : base() { }
+		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
 		public HarmonyPatch(Type declaringType) : base(declaringType) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
 		public HarmonyPatch(Type declaringType, Type[] argumentTypes) : base(declaringType, argumentTypes) { }
@@ -82,6 +84,8 @@ namespace Harmony
 		public HarmonyPatch(Type[] argumentTypes, ArgumentType[] argumentVariations) : base(argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
 		public HarmonyPatch(string propertyName, PropertyMethod type) : base(propertyName, (HarmonyLib.MethodType)type) { }
+		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+		public HarmonyPatch(string assemblyQualifiedDeclaringType, string methodName, MethodType methodType, Type[] argumentTypes = null, ArgumentType[] argumentVariations = null) : base(assemblyQualifiedDeclaringType, methodName, (HarmonyLib.MethodType)methodType, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 	}
 
 	[Obsolete("Harmony.HarmonyPatchAll is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatchAll instead.")]
