@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Logo.png">
+  <img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Text.png">
+</p>
 
 ## GENERAL INFORMATION:
-
+- [The Official Wiki](https://melonwiki.xyz)
 - Debug Mode is for Debugging MelonLoader, Plugins, Mods.
 - All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
 - All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
@@ -27,8 +31,12 @@
 
 1. Follow the Instructions in one of the Guides linked below.
 
-- [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) | [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader)
-- [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-un-install-melonloader)
+| Installer Guides: |
+| - |
+| [INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) |
+| [UPDATE](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) |
+| [RE-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-install-re-install-or-update-melonloader) |
+| [UN-INSTALL](https://github.com/LavaGang/MelonLoader.Installer/blob/master/README.md#how-to-un-install-melonloader) |
 
 ---
 
@@ -65,10 +73,12 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ## PROXIES:
 
-- You are able to rename the Proxy DLL to the list of allowed DLLs below.
-- These are mainly for compatibility reasons.
+- The Proxy DLL is able to be Renamed to the Compatible File Names below.
+- By Default the Proxy is named as "version.dll".
+- For most Unity Games the Default File Name should work perfectly fine.
+- Some Unity Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Unity Engine used by the Game, etc.
 
-| Name |
+| File Names: |
 | - |
 | version.dll |
 | winmm.dll |
@@ -79,7 +89,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 ## LOAD MODES:
 
 - Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
-- These are the Values that those Launch Options accept and what each of them do.
+- Below is the Compatible Values and what each of them do.
 
 | Value | Action |
 | - | - |
@@ -135,7 +145,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/LICENSE.md) for the full License.
 
-Third-party libraries used as Source Code and/or bundled in Binary Form:
+Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/alpha-development/Detours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/BepInEx/HarmonyX/blob/master/LICENSE) for the full License.
@@ -148,9 +158,9 @@ Third-party libraries used as Source Code and/or bundled in Binary Form:
 - [UnityEngine.Il2CppImageConversionManager](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager/blob/master/LICENSE.md) for the full License.
 - [Illusion Plugin Architecture](https://github.com/Eusth/IPA) is licensed under the MIT License. See [LICENSE](https://github.com/Eusth/IPA/blob/master/LICENSE) for the full License.
 - [bHaptics Haptic Library](https://github.com/bhaptics/haptic-library) is licensed under All rights reserved Copyright (c) 2016-2021 bHaptics Inc.  
-See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. Express permission from the company.
+See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. We have Express Permission from bHaptics.
 
-External libraries and tools downloaded and used at runtime:
+External Libraries and Tools that are downloaded and used at Runtime:
 - [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.
 - [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 - [Il2CppAssemblyUnhollower](https://github.com/knah/Il2CppAssemblyUnhollower) is licensed under the GNU Lesser General Public License v3.0. See [LICENSE](https://github.com/knah/Il2CppAssemblyUnhollower/blob/master/LICENSE) for the full License.
