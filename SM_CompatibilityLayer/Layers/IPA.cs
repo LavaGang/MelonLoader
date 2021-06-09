@@ -30,7 +30,7 @@ namespace MelonLoader.CompatibilityLayers
 		{
 			if (args.inter != null)
 				return;
-			IEnumerable<Type> plugin_types = args.assembly.GetTypes().Where(x => (x.GetInterface("IPlugin") != null));
+			IEnumerable<Type> plugin_types = args.assembly.GetOnlyValidTypes().Where(x => (x.GetInterface("IPlugin") != null));
 			if ((plugin_types == null)
 				|| (plugin_types.Count() <= 0))
 				return;
@@ -39,14 +39,6 @@ namespace MelonLoader.CompatibilityLayers
 
 		public override void CheckAndCreate(ref List<MelonBase> melonTbl)
 		{
-			/*
-			if (is_plugin)
-			{
-				MelonLogger.Error($"Mod in Plugins Folder: {filelocation}");
-				return;
-			}
-			*/
-
 			foreach (Type plugin_type in plugin_types)
 				LoadPlugin(plugin_type, filepath, ref melonTbl);
 		}

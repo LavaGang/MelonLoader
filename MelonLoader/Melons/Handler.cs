@@ -102,15 +102,33 @@ namespace MelonLoader
         
         private static void LoadMelons(bool plugins = false)
         {
-            string basedirectory = (plugins ? PluginsDirectory : ModsDirectory);
+            string basedirectory = plugins ? PluginsDirectory : ModsDirectory;
+
+            MelonBase[] original_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
             MelonFileTypes.DLL.LoadAll(basedirectory, plugins);
             MelonFileTypes.ZIP.LoadAll(basedirectory);
 
+            MelonBase[] new_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
+
+            List<MelonBase> failedMelons = new List<MelonBase>();
+            MelonEnumerator<MelonBase> enumerator = new MelonEnumerator<MelonBase>(new_array.ToArray());
+            while (enumerator.MoveNext())
+            {
+                if (!original_array.Contains(enumerator.Current))
+                {
+                    MelonLogger.Error($"{(plugins ? "Mod" : "Plugin")} {enumerator.Current.Info.Name} is in the {(plugins ? "Plugins" : "Mods")} Folder: {enumerator.Current.Location}");
+                    failedMelons.Add(enumerator.Current);
+                }
+            }
+
+            if (plugins)
+                _Mods.RemoveAll(failedMelons.Contains);
+            else
+                _Plugins.RemoveAll(failedMelons.Contains);
+
             SortMelons(ref _Mods);
             SortMelons(ref _Plugins);
-
-            // To-Do Check for Melon in Wrong Folder
         }
 
         public static string GetMelonHash(MelonBase melonBase)

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader
 {
     public static class MelonCompatibilityLayer
     {
+        internal static bool ModWarning = true;
+
         internal static void Setup(AppDomain domain)
         {
             string versionending = ", Version=";
@@ -71,6 +74,15 @@ namespace MelonLoader
         }
         public static MelonBase CreateMelonFromWrapperData(WrapperData creationData)
         {
+            if (ModWarning)
+            {
+                if (creationData.Info.SystemType.IsSubclassOf(typeof(MelonMod)))
+                {
+                    MelonLogger.Error($"Mod {creationData.Info.Name} is in the Plugins Folder: {creationData.Location}");
+                    return null;
+                }
+            }
+
             MelonBase instance = Activator.CreateInstance(creationData.Info.SystemType) as MelonBase;
             if (instance == null)
             {
@@ -91,7 +103,7 @@ namespace MelonLoader
         // Assembly to Compatibility Layer Conversion
         private static event Action<LayerResolveEventArgs> ResolveAssemblyToLayerResolverEvents;
         public static void AddResolveAssemblyToLayerResolverEvent(Action<LayerResolveEventArgs> evt) => ResolveAssemblyToLayerResolverEvents += evt;
-        internal static Resolver ResolveAssemblyToLayerResolver(Assembly asm, string filepath = null)
+        internal static Resolver ResolveAssemblyToLayerResolver(Assembly asm, string filepath)
         {
             LayerResolveEventArgs args = new LayerResolveEventArgs();
             args.assembly = asm;
@@ -120,6 +132,14 @@ namespace MelonLoader
             public Assembly assembly;
             public string filepath;
             public Resolver inter;
+        }
+
+        public static Type[] GetOnlyValidTypes(this Assembly assembly)
+        {
+            Type[] returnval = null;
+            try { returnval = assembly.GetTypes(); }
+            catch (ReflectionTypeLoadException ex) { returnval = ex.Types.Where(x => x != null).ToArray(); }
+            return returnval;
         }
     }
 }

@@ -51,6 +51,8 @@ namespace MelonLoader
 
         private static int Start()
         {
+            MelonCompatibilityLayer.ModWarning = false;
+
             if (!SupportModule.Initialize())
                 return 1;
 

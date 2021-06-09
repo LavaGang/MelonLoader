@@ -29,7 +29,8 @@ namespace MelonLoader.CompatibilityLayers
 		{
 			if (args.inter != null)
 				return;
-			IEnumerable<Type> melon_types = args.assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(MelonBase)));
+
+			IEnumerable<Type> melon_types = args.assembly.GetOnlyValidTypes().Where(x => x.IsSubclassOf(typeof(MelonBase)));
 			if ((melon_types == null)
 				|| (melon_types.Count() <= 0))
 				return;
@@ -106,16 +107,6 @@ namespace MelonLoader.CompatibilityLayers
 				MelonLogger.Error($"Type Specified {infoAttribute.SystemType.AssemblyQualifiedName} is not a Subclass of MelonPlugin or MelonMod in {filepath}");
 				return false;
 			}
-
-			/*
-			bool plugin_expected_got_mod = (is_plugin && is_mod_subclass);
-			bool mod_expected_got_plugin = (!is_plugin && is_plugin_subclass);
-			if (plugin_expected_got_mod || mod_expected_got_plugin)
-			{
-				MelonLogger.Error($"{(plugin_expected_got_mod ? "Plugin" : "Mod")} Expected, Got {(plugin_expected_got_mod ? "Mod" : "Plugin")} {infoAttribute.SystemType.AssemblyQualifiedName} in {filelocation}");
-				return false;
-			}
-			*/
 
 			bool nullcheck_name = string.IsNullOrEmpty(infoAttribute.Name);
 			bool nullcheck_version = string.IsNullOrEmpty(infoAttribute.Version);
