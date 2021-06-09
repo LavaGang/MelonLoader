@@ -10,7 +10,7 @@ namespace Harmony
 		[Obsolete("Harmony.HarmonyInstance is obsolete. Please use HarmonyLib.Harmony instead.")]
 		public HarmonyInstance(string id) : base(id) { }
 
-		[Obsolete("Harmony.HarmonyInstance.Create is obsolete. Please use HarmonyLib.Harmony.Create instead.")]
+		[Obsolete("Harmony.HarmonyInstance.Create is obsolete. Please use the HarmonyLib.Harmony Constructor instead.")]
 		public static HarmonyInstance Create(string id)
 		{
 			if (id == null) throw new Exception("id cannot be null");
