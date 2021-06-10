@@ -213,6 +213,7 @@
 188. Updated Il2CppAssemblyUnhollower to v0.4.15.1.
 189. Added Missing Harmony Patch Forwarders.    (Credits to ds5678 :D)
 190. Added Error Message for when a Plugin or Mod attempts to Load from the Wrong Folder.
+191. Updated Tomlet to v1.3.3.
 
 ---
 

@@ -82,9 +82,11 @@ namespace MelonLoader
                 MelonLogger.Msg("------------------------------");
                 return;
             }
+
             MelonLogger.Msg("------------------------------");
             MelonLogger.Msg($"{melontbl.Length} {(is_plugins ? "Plugin" : "Mod")}{((_Mods.Count > 1) ? "s" : "")} Loaded");
             MelonLogger.Msg("------------------------------");
+
             foreach (MelonBase melon in melontbl)
             {
                 MelonLogger.Internal_PrintModName(melon.ConsoleColor, melon.Info.Name, melon.Info.Version);
