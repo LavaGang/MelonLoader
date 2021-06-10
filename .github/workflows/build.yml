@@ -1,0 +1,121 @@
+name: Build MelonLoader
+
+# Controls when the action will run. 
+on:
+  push:
+    branches: [ci-test, alpha-development, master]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: setup-msbuild
+        uses: microsoft/setup-msbuild@v1
+      - name: Setup Build
+        shell: cmd
+        run: | 
+          mkdir Output
+          mkdir Output\Debug
+          mkdir Output\Debug\x64
+          mkdir Output\Debug\x64\MelonLoader
+          mkdir Output\Debug\x86
+          mkdir Output\Debug\x86\MelonLoader
+      - name: Run Nuget Restore
+        shell: cmd
+        run: msbuild -t:Restore
+      - name: Build Melonloader Core x64
+        shell: cmd
+        run: msbuild -t:Rebuild -p:Platform=x64
+      - name: Copy x64 Output
+        shell: cmd
+        run: |
+          xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x64\MelonLoader\Dependencies\ /E /H /Y
+          xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x64\MelonLoader\ /E /H /Y
+          rmdir /S /Q Output\Debug\MelonLoader >nul
+      - name: Build MelonLoader Core x86
+        shell: cmd
+        run: msbuild -t:Rebuild -p:Platform=x86
+      - name: Copy x86 Output
+        shell: cmd
+        run: |
+          xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x86\MelonLoader\Dependencies\ /E /H /Y
+          xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x86\MelonLoader\ /E /H /Y
+          rmdir /S /Q Output\Debug\MelonLoader >nul
+      - name: Build Proxy DLL - x86
+        shell: cmd
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x86 -p:Configuration=Release
+      - name: Build Proxy DLL - x64
+        shell: cmd
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
+      - name: Copy Proxy DLLs to Output
+        shell: cmd
+        run: |
+          copy Proxy\Output\Release\x86\version.dll Output\Debug\x86\version.dll
+          copy Proxy\Output\Release\x64\version.dll Output\Debug\x64\version.dll
+      - name: Build Bootstrap Lib - x86
+        shell: cmd
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x86 -p:Configuration=Release
+      - name: Build Bootstrap Lib - x64
+        shell: cmd
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
+      - name: Copy Bootstrap Libs to Output
+        shell: cmd
+        run: |
+          copy Bootstrap\Output\Release\x86\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x86\Melonloader\Dependencies\
+          copy Bootstrap\Output\Release\x64\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x64\Melonloader\Dependencies\
+      - name: Finalize Build
+        shell: cmd
+        run: |
+          echo Copying Managed Libs to Both Folders...
+          mkdir Output\Debug\x86\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Debug\x64\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
+          echo.
+          echo Copying Mono x86...
+          mkdir Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
+          xcopy BaseLibs\MonoBleedingEdge.x86 Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
+          echo.
+          echo Copying Mono x64...
+          mkdir Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
+          xcopy BaseLibs\MonoBleedingEdge.x64 Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
+          echo.
+          echo Copying bHaptics DLLs...
+          copy BaseLibs\bHaptics.x86.dll Output\Debug\x86\MelonLoader\Dependencies\
+          copy BaseLibs\bHaptics.x64.dll Output\Debug\x64\MelonLoader\Dependencies\
+          echo.
+          echo Copying NOTICE.txt...
+          copy NOTICE.txt Output\Debug\x86
+          copy NOTICE.txt Output\Debug\x64
+          echo.
+          echo Creating Documentation Folder...
+          mkdir Documentation
+          copy CHANGELOG.md Documentation\
+          copy LICENSE.md Documentation\
+          copy NOTICE.txt Documentation\
+          copy README.md Documentation
+          mkdir Output\Debug\x64\MelonLoader\Documentation
+          mkdir Output\Debug\x86\MelonLoader\Documentation
+          echo.
+          echo Copying Documentation to Final Artifact Folders...
+          xcopy Documentation Output\Debug\x64\MelonLoader\Documentation\ /E /H /Y
+          xcopy Documentation Output\Debug\x86\MelonLoader\Documentation\ /E /H /Y
+      - uses: actions/upload-artifact@v2
+        name: Uploading x64 Zip...
+        with:
+          name: MelonLoader.x64.CI
+          path: ./Output/Debug/x64/*
+      - uses: actions/upload-artifact@v2
+        name: Uploading x86 Zip...
+        with:
+          name: MelonLoader.x86.CI
+          path: ./Output/Debug/x86/*

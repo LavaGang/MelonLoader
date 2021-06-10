@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F9700790-414B-431B-9F9C-1D9210FAD682}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MelonLoader</RootNamespace>
+    <AssemblyName>MelonLoader</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>8.0</LangVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+    <DefineConstants>TRACE;NET35;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+    <DefineConstants>NET35</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Libs\SharpZipLib\BZip2\BZip2.cs" />
+    <Compile Include="Libs\SharpZipLib\BZip2\BZip2Constants.cs" />
+    <Compile Include="Libs\SharpZipLib\BZip2\BZip2Exception.cs" />
+    <Compile Include="Libs\SharpZipLib\BZip2\BZip2InputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\BZip2\BZip2OutputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Checksums\Adler32.cs" />
+    <Compile Include="Libs\SharpZipLib\Checksums\CRC32.cs" />
+    <Compile Include="Libs\SharpZipLib\Checksums\IChecksum.cs" />
+    <Compile Include="Libs\SharpZipLib\Checksums\StrangeCRC.cs" />
+    <Compile Include="Libs\SharpZipLib\Core\FileSystemScanner.cs" />
+    <Compile Include="Libs\SharpZipLib\Core\INameTransform.cs" />
+    <Compile Include="Libs\SharpZipLib\Core\IScanFilter.cs" />
+    <Compile Include="Libs\SharpZipLib\Core\NameFilter.cs" />
+    <Compile Include="Libs\SharpZipLib\Core\PathFilter.cs" />
+    <Compile Include="Libs\SharpZipLib\Core\StreamUtils.cs" />
+    <Compile Include="Libs\SharpZipLib\Core\WindowsPathUtils.cs" />
+    <Compile Include="Libs\SharpZipLib\Encryption\PkzipClassic.cs" />
+    <Compile Include="Libs\SharpZipLib\Encryption\ZipAESStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Encryption\ZipAESTransform.cs" />
+    <Compile Include="Libs\SharpZipLib\GZip\GZIPConstants.cs" />
+    <Compile Include="Libs\SharpZipLib\GZip\GZipException.cs" />
+    <Compile Include="Libs\SharpZipLib\GZip\GzipInputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\GZip\GzipOutputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Lzw\LzwConstants.cs" />
+    <Compile Include="Libs\SharpZipLib\Lzw\LzwException.cs" />
+    <Compile Include="Libs\SharpZipLib\Lzw\LzwInputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\SharpZipBaseException.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\InvalidHeaderException.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\TarArchive.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\TarBuffer.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\TarEntry.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\TarException.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\TarHeader.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\TarInputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Tar\TarOutputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\Deflater.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\DeflaterConstants.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\DeflaterEngine.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\DeflaterHuffman.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\DeflaterPending.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\Inflater.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\InflaterDynHeader.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\InflaterHuffmanTree.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\PendingBuffer.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\Streams\DeflaterOutputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\Streams\InflaterInputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\Streams\OutputWindow.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\Compression\Streams\StreamManipulator.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\FastZip.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\IEntryFactory.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\WindowsNameTransform.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipConstants.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipEntry.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipEntryFactory.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipException.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipExtraData.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipFile.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipHelperStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipInputStream.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipNameTransform.cs" />
+    <Compile Include="Libs\SharpZipLib\Zip\ZipOutputStream.cs" />
+    <Compile Include="Melons\OAE.cs" />
+    <Compile Include="Melons\FileTypes\DLL.cs" />
+    <Compile Include="Melons\FileTypes\ZIP.cs" />
+    <Compile Include="Preferences\ReflectiveCategory.cs" />
+    <Compile Include="Utils\CompatibilityLayer.cs" />
+    <Compile Include="Extensions\Fixes\ApplicationBase.cs" />
+    <Compile Include="Extensions\Fixes\ExtraCleanup.cs" />
+    <Compile Include="Extensions\Fixes\InvariantCurrentCulture.cs" />
+    <Compile Include="Extensions\Fixes\QuitFix.cs" />
+    <Compile Include="Extensions\Fixes\UnhandledException.cs" />
+    <Compile Include="Extensions\Il2CppAssemblyGenerator.cs" />
+    <Compile Include="Extensions\Il2CppMethodPatcher.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Attributes.cs" />
+    <Compile Include="Extensions\Layers\Harmony\HarmonyInstance.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Extras\DelegateTypeFactory.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Extras\FastAccess.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Extras\MethodInvoker.cs" />
+    <Compile Include="Extensions\Layers\Harmony\HarmonyMethod.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Patch.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Priority.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Tools\AccessTools.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Tools\Extensions.cs" />
+    <Compile Include="Extensions\Layers\Harmony\Tools\SymbolExtensions.cs" />
+    <Compile Include="Extensions\Layers\Melon.cs" />
+    <Compile Include="Extensions\Layers\Melon\HarmonyShield.cs" />
+    <Compile Include="Extensions\Layers\Melon\Imports.cs" />
+    <Compile Include="Extensions\Layers\Melon\Main.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonConsole.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonLoaderBase.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonModGameAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonModInfoAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonModLogger.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonPluginGameAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonPluginInfoAttribute.cs" />
+    <Compile Include="Extensions\Layers\Melon\MelonPrefs.cs" />
+    <Compile Include="Extensions\Layers\Melon\ModPrefs.cs" />
+    <Compile Include="Extensions\PatchShield.cs" />
+    <Compile Include="Extensions\UnityMagicMethods.cs" />
+    <Compile Include="Preferences\ValueValidator.cs" />
+    <Compile Include="Utils\bHaptics\API.cs" />
+    <Compile Include="Utils\bHaptics\NativeLibrary.cs" />
+    <Compile Include="Libs\IniFile.cs" />
+    <Compile Include="Melons\Attributes\AdditionalDependencies.cs" />
+    <Compile Include="Melons\Attributes\Color.cs" />
+    <Compile Include="Melons\Attributes\IncompatibleAssemblies.cs" />
+    <Compile Include="Melons\Attributes\RegisterTypeInIl2Cpp.cs" />
+    <Compile Include="Melons\Attributes\Platform.cs" />
+    <Compile Include="Melons\Attributes\PlatformDomain.cs" />
+    <Compile Include="Melons\Attributes\Priority.cs" />
+    <Compile Include="Melons\Attributes\VerifyLoaderBuild.cs" />
+    <Compile Include="Melons\Attributes\VerifyLoaderVersion.cs" />
+    <Compile Include="LaunchOptions.cs" />
+    <Compile Include="Utils\Coroutines.cs" />
+    <Compile Include="Preferences\API.cs" />
+    <Compile Include="Preferences\Category.cs" />
+    <Compile Include="Preferences\Entry.cs" />
+    <Compile Include="Preferences\IO\File.cs" />
+    <Compile Include="Preferences\IO\Watcher.cs" />
+    <Compile Include="Preferences\TomlMapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\BuildInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Utils\Debug.cs" />
+    <Compile Include="Utils\DependencyGraph.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Utils\SupportModule.cs" />
+    <Compile Include="Utils\UnhollowerSupport.cs" />
+    <Compile Include="Libs\TinyJSON\Decoder.cs" />
+    <Compile Include="Libs\TinyJSON\EncodeOptions.cs" />
+    <Compile Include="Libs\TinyJSON\Encoder.cs" />
+    <Compile Include="Libs\TinyJSON\Extensions.cs" />
+    <Compile Include="Libs\TinyJSON\JSON.cs" />
+    <Compile Include="Libs\TinyJSON\Types\ProxyArray.cs" />
+    <Compile Include="Libs\TinyJSON\Types\ProxyBoolean.cs" />
+    <Compile Include="Libs\TinyJSON\Types\ProxyNumber.cs" />
+    <Compile Include="Libs\TinyJSON\Types\ProxyObject.cs" />
+    <Compile Include="Libs\TinyJSON\Types\ProxyString.cs" />
+    <Compile Include="Libs\TinyJSON\Types\Variant.cs" />
+    <Compile Include="Melons\Attributes\Game.cs" />
+    <Compile Include="Melons\Attributes\Info.cs" />
+    <Compile Include="Melons\Base.cs" />
+    <Compile Include="Melons\Attributes\OptionalDependencies.cs" />
+    <Compile Include="Melons\Handler.cs" />
+    <Compile Include="Melons\Mod.cs" />
+    <Compile Include="Melons\Plugin.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HarmonyX">
+      <Version>2.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task">
+      <Version>2.0.18.2</Version>
+    </PackageReference>
+    <PackageReference Include="Samboy063.Tomlet" Version="1.3.3" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

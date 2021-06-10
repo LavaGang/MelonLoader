@@ -1,0 +1,2 @@
+## THIS FOLDER HAS BEEN MOVED TO ITS OWN DEDICATED REPOSITORY AND WILL SOON BE REMOVED!
+## PLEASE COMMIT ANY CHANGES TO THE NEW REPOSITORY INSTEAD: [https://github.com/LavaGang/Unity-Runtime-Libraries](https://github.com/LavaGang/Unity-Runtime-Libraries)

@@ -1,5 +1,7 @@
 ### Version List:
 
+[v0.4.0 Open-Beta](#v040-open-beta)  
+[v0.3.0 Open-Beta](#v030-open-beta)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
 [v0.2.7.3 Open-Beta](#v0273-open-beta)  
 [v0.2.7.2 Open-Beta](#v0272-open-beta)  
@@ -19,7 +21,445 @@
 
 ---
 
+### v0.4.0 Open-Beta:
+
+1. Tweaked Assembly Load exceptions logging.    (Credits to Slaynash :3)
+2. Fixed Assembly Load logging typo.    (Credits to Slaynash :3)
+3. Added MelonUtils.HashCode.
+4. Fixed Issue with UnityCrashHandler.
+5. Cleaned up Console Title Renaming.
+6. Added Game Name to Console Title.
+7. Added Game Version to Console Title.
+8. Changed Debug Mode Indicator in Console Title to "[D]".
+9. Updated bHaptics Native Library to v1.5.3.
+10. Fixed Issue with Console Always On Top Launch Options causing Warnings to be Hidden.
+11 Fixed Issue with Force Version Launch Options being overwritten.
+12. Fixed Issue with Force Version Launch Options counting "0.0.0.0" as a valid version.
+13. Added "--melonloader.consoledst" Launch Option. When Used it will set the Console Title as the Game Name.
+14. Added Secret Lemon.
+15. Added Game Version to Logs.
+16. Fixed Collision Issue with Hash Code Generation.
+17. Improved Hash Code Generation.
+18. Improved SamboyAPI Implementation in Assembly Generator.
+19. Added Wine Detection to Operating System Check.
+20. Converted Assembly Generator to using Internal Calls instead of Native Exports.
+21. Removed Native Exports from Bootstrap.
+22. Fixed Issue where Debug Mode's "[D]" would print to log.
+23. Fixed Issue with SamboyAPI not parsing correctly.
+24. Added Among Us Deobfuscation Mapping.
+25. Fixed Issue with Game Version returning 0.
+26. Fixed Issue with Deobfuscation not abiding by Config's Obfuscation Regex as a fallback.
+27. Fixed Issue with bHaptics Library causing "Unable to Connect" to be spammed in Console.
+28. Added Color32 Support to MelonPreferences.
+29. Internal Failures now Kill the Process when thrown.
+30. Fixed Issue with Analytics Blocker incorrectly blocking certain hosts.
+31. Added OnApplicationLateStart Melon Override.
+32. Added Missing Attribute Cleanup Fix from Installer.
+33. Improved Proxy.
+34. Added dont_save_default Option to MelonPreferences.    (Credits to YOWChap :D)
+35. Added Backwards Compatibility for MelonPreferences.    (Credits to knah :D)
+36. Fixed the return type of the MelonPreferences API.    (Credits to knah :D)
+37. Fixed Issue with HostName Check in Analytics Blocker.
+38. Fixed Issue with HarmonyInstance.Unpatch not doing a proper null check.
+39. Proxy will now have an Error Popup when it has an Invalid File Name.
+40. Updated Il2CppDumper to v6.5.0.
+41. Added Object Oriented File System for MelonPreferences.
+42. Added MelonPreferences_Category.SetFilePath.
+43. Added MelonPreferences_Category.ResetFilePath.
+44. Fixed Issue with Core Initialization.
+45. Fixed Conflict Issue with Multiple MelonPreferences Categories using the same file.
+46. Fixed Issue with File Watcher System and Separated MelonPreferences Files.
+47. Fixed Issue with OnPreferencesLoaded not being called on Creation of a Separated MelonPreferences File.
+48. Moved GetMelonFromStackTrace to MelonUtils.
+49. Made GetMelonFromStackTrace Accessible.
+50. Fixed Encoding Issue with Mono API.    (Credits to constfold :3)
+51. Fixed Issue with LoadLibrary failing when a DLL file path contains Non-ASCII Characters.    (Credits to constfold :3)
+52. Fixed Issue with Unicode Command Line.    (Credits to constfold :3)
+53. Removed MelonBase.Compatibility.
+54. Added MelonPlatform Attribute.
+55. Added MelonPlatformDomain Attribute.
+56. Added Proper Check for if MelonPlugin or MelonMod is Incorrectly Loaded.
+57. Implemented MelonPlatform Attribute Check.
+58. Implemented MelonPlatformDomain Attribute Check.
+59. Added MelonAdditionalDependencies Attribute.
+60. Implemented MelonAdditionalDependencies Attribute Check.
+61. Implemented File Path Display for Latest.log when Internal Failures occur.
+62. Fixed Issue with Missing Plugin Check.
+63. Fixed Issue with TomlArray trying to act as a List.
+64. Made Initialization Exception Logging more Verbose.    (Credits to constfold :3)
+65. Fixed Issue with TomlArray Transform causing Out of Range Exception.
+66. Fixed Issue with FileSystemWatcher throwing an NIE on some MonoBleedingEdge Games.
+67. Changed TomlArray.Insert to TomlArray.Replace.
+68. Upgraded Harmony Library to HarmonyX.
+69. Ported Il2Cpp Patch Fix to HarmonyX Patcher.
+70. Added Compatibility Layer for Harmony.
+71. Added and Implemented RegisterTypeInIl2Cpp Attribute to further streamline Registering Custom Types in Il2Cpp.
+72. Fixed Internal Failure Issue from Missing Exports with Older Mono.
+73. Added MelonPreferences_Category.SaveToFile Method.
+74. Added MelonPreferences_Category.LoadFromFile Method.
+75. Added VerifyLoaderVersion Attribute for Melons to Specify MelonLoader Version Dependency.
+76. Added VerifyLoaderBuild Attribute for Melons to Specify MelonLoader Build Dependency.
+77. Implemented Fallback System to Assembly Generator.
+78. Implemented Fallback Obfuscation Regex for Among Us.
+79. Added Enum support in MelonPreferences.    (Credits to loukylor :3)
+80. Fixed Issue with Enum.TryParse in TomlMapper.
+81. Fixed Issue with Console Title being improperly set on older Unity Versions.
+82. Fixed Issue with Missing System.dll on older Unity Versions.
+83. Fixed MME Issue on older Unity Versions.
+84. Fixed Issue with Mods not running on older Unity Versions.
+85. Added Load Balancing Hosting for Assembly Generator RemoteAPI.    (Credits to DubyaDude and Samboy :D)
+86. Fixed Small Bug in the RemoteAPI Request System for the Assembly Generator.
+87. Added Compatibility Layer Resolver to MelonHandler for Future Changes.
+88. Cleaned Up Inlined Harmony Patch Warning Implementation for Il2Cpp Games.
+89. Isolated All Harmony Modifications to their own Files.
+90. Updated HarmonyX to v2.4.0.
+91. Fixed Issue with Assembly Generator causing Regeneration every Launch.
+92. Cleaned Up Melon Method Call Implementation.
+93. Added Compatibility Layer Resolver for IPA Plugins to be Loaded as Mods.
+94. MelonInfo Attribute No Longer Requires that an Author be Set.
+95. Fixed Issue with IPA Compatibility Layer not Loading Multi-Plugin Assemblies.
+96. Fixed Issue with Harmony Patch Attributes not abiding by Melon Priority or Dependency Graph.
+97. Fixed Issue with RegisterTypeInIl2Cpp Attribute not abiding by Melon Priority or Dependency Graph.
+98. Fixed Harmony Patch Attribute Collision Issue with IPA Compatibility Layer and Multi-Plugin Assemblies.
+99. Fixed Issue with ILRepack not Running for Debug Compilation of MelonLoader.dll.
+100. Fixed Issue with ILRepack not using NuGet Package Paths for Merging.
+101. Fixed Issue with MelonLoader.dll Compilation would copy NuGet Package Dependencies to Output Folder.
+102. Improved Compatibility Layer Resolve System.
+103. Improved MelonLoader Core Initialization.
+104. Temporarily Disabled the "--melonloader.agfregenerate" Launch Option.
+105. Added Managed-Sided Command Line Interface.
+106. Converted Assembly Generator to be ran by Base Assembly.
+107. Fixed Issue with Parsing Unity Version on Weirdly Marked Versions.
+108. Fixed Issue with Mono Base Directory being Wrong causing Crashes.
+109. Added Warning for Transpiler Use on Il2Cpp Unhollowed Methods.
+110. Added More to Harmony Compatibility Layer.
+111. Fixed Issue with Missing Harmony.GeneralExtensions and Harmony.CollectionExtensions in Harmony Compatibility Layer.
+112. Added Description, Validator and BoxedValue to MelonPreferences_Entry.  (Credits to Sinai :D)
+113. Fixed Issue with not Forcing FloatValueSyntax to serialize with decimal for MelonPreferences_Entry.  (Credits to Sinai :D)
+114. Fixed Order of Validation for MelonPreferences_Entry.  (Credits to Sinai :D)
+115. Moved ValueValidator to its own class.  (Credits to Sinai :D)
+116. Added BoxedEditedValue to MelonPreferences_Entry.  (Credits to Sinai :D)
+117. Moved Plugin Loading and OnPreInitialization to before Assembly Generation.
+118. Added MelonUtils.ParseJSONStringtoStruct.
+119. Added Custom Hosts Interface for Plugins to add new Contact Hosts for the Assembly Generator's RemoteAPI.
+120. Removed VRChat_OnUiManagerInit check and override.
+121. Removed MelonUtils.IsVRChat.
+122. Added System.Collections.Generic.List Mapping Support for MelonPreferences.
+123. Assembly Generator now uses the MelonPreferences API for it's Config.
+124. Fixed NRE Issue with MelonUtils.ParseJSONStringtoStruct.
+125. Fixed String Null Issue with MelonPreferences.
+126. Fixed NIE Issue with FileSystemWatcher on GORN failing to be caught properly.
+127. Fixed Issue with Il2CppAssemblyUnhollower Unstripping Methods and failing to Resolve Unity Dependencies.
+128. Fixed Issue with Il2CppAssemblyGenerator not setting Working Directory for ProcessStartInfo.
+129. Added Separate Support Module for Compatibility Layer System to keep References Clean.
+130. Made Compatibility Layer System Extendible.
+131. Removed Tomlyn.  (Credits to Samboy :D)
+132. Added Tomlet created by Samboy.  (Credits to Samboy :D)
+133. Converted MelonPreferences to use Tomlet.  (Credits to Samboy :D)
+134. Updated to Tomlet 1.1.0.  (Credits to Samboy :D)
+135. Added ReflectiveCategory API for Type-Checked Category Creation.  (Credits to Samboy :D)
+136. Added SaveToFile to ReflectiveCategory.  (Credits to Samboy :D)
+137. Added a Force-Save option to ReflectiveCategory.  (Credits to Samboy :D)
+138. Fixed NRE Issue with MelonPreferences when Parsing TOML Document.
+139. Fixed Issue with DAB functionality not properly iterating its list.
+140. Changed Assembly Generator Config to use new Reflective Categories.  (Credits to Samboy :D)
+141. Fixed NRE Issue with Reflective Categories.
+142. Updated to Tomlet 1.2.0.  (Credits to Samboy :D)
+143. Updated Il2CppAssemblyUnhollower to v0.4.14.0.
+144. Updated Il2CppDumper to v6.6.2.
+145. Improved BHaptics Support Implementation.
+146. Fixed Issue with PatchShield preventing Harmony Patching on some Games.
+147. Temporarily Disabled Launch Options Config File.
+148. Fixed Issue with Il2Cpp Support Fixes running before Il2CppAssemblyGenerator.
+149. Fixed Launch Option Conflict Issue with Debug Builds.
+150. Fixed Issue with FileWatcher's NotImplementedException Detection.
+151. Updated to Tomlet 1.3.0.  (Credits to Samboy :D)
+152. Fixed Ambiguous Match Found Issue with UnhollowerSupport.
+153. Updated to Tomlet 1.3.1.  (Credits to Samboy :D)
+154. Fixed NRE Issue with Preference Entries to TOML.  (Credits to Samboy :D)
+155. Fixed NRE Issue with Assembly Generator RemoteAPI.
+156. Fixed MFE Issue with MelonBase.Harmony.
+157. Fixed Loading Issue with MelonPreferences_ReflectiveCategory.
+158. Added OnEarlyStartOnApplicationEarlyStart for Plugins.  (Credits to Slaynash :3)
+159. Moved Il2CppAssemblyGenerator after OnApplicationEarlyStart.  (Credits to Slaynash :3)
+160. Fixed Issue with Loading Melons from ZIP Archives.
+161. Rewrote File Handling and Assembly Loading System.
+162. Fixed Issue with Extra Tomlet DLL getting copied to Support Modules.
+163. Added MDB Loading Support for ZIPs.
+164. Added Source Code Detection for ZIPs.
+165. Fixed Bad Image Format Exception Issue with Loading DLLs from ZIPs.
+166. Fixed Issue with Assembly Generator Contacting All RemoteAPI Hosts when One Responded.
+167. Added OnSceneWasUnloaded MelonMod Override.
+168. Fixed IOException Issue with Assembly Generator extracting ZIP Archives.  (Credits to Extacy :D)
+169. Fixed Issue with MelonHandler being unable to resolve MelonPriority type.
+170. Added Better Exception Handling during Melon Resolving.
+171. Fixed IOORE Issue with Melon Enumeration.
+172. Fixed Issue with StackTrace not showing Line Numbers even when Debug Symbol Information was present.
+173. HarmonyX is now integrated and updated through NuGet.
+174. Fixed Issue with ILRepack and Tomlet Conflicting.
+175. Fixed Issue with UnhollowerSupport causing BIF Exception to be thrown.
+176. Fixed Issue with Melon Sorting.
+177. Fixed Issue with Dependency Sorting.
+178. Fixed Issue with Assembly Attribute Finding in MelonHandler.
+179. Improved IL2CPP coroutine exception reporting to include faulty coroutine name, don't continue running an erroring-out coroutine.    (Credits to knah :D)
+180. Fixed Issue with MelonHandler checking File Extensions.
+181. Fixed Issue with MelonHandler not properly abiding by Load Mode.
+182. Added Message Suppression Support for the RegisterTypeInIl2Cpp Attribute.
+183. Fixed Issue with VerifyLoaderVersion Attribute causing an IOORE when parsing SemVer.
+184. Fixed Issue with VerifyLoaderVersion Attribute not properly abiding by IsMinimum.
+185. Updated Il2CppAssemblyUnhollower to v0.4.15.0.
+186. Fixed Issue with newer Il2CppAssemblyUnhollower version breaking Harmony Patching.    (Credits to ds5678 :D)
+187. Fixed Issue with Displaying MelonLoader Version Information.
+188. Updated Il2CppAssemblyUnhollower to v0.4.15.1.
+189. Added Missing Harmony Patch Forwarders.    (Credits to ds5678 :D)
+190. Added Error Message for when a Plugin or Mod attempts to Load from the Wrong Folder.
+191. Updated Tomlet to v1.3.3.
+
+---
+
+### v0.3.0 Open-Beta:
+
+1. Rewrote Proxy from scratch.
+2. Rewrote Bootstrap from scratch.
+3. Rewrote MelonLoader from scratch.
+4. Rewrote AssemblyGenerator from scratch.
+5. Rewrote Support Modules from scratch.
+6. Added x86 Support.
+7. Proxy now has the ability to be named version.dll, winmm.dll, or winhttp.dll.
+8. OnModSettingsApplied has been changed to OnPreferencesSaved.
+9. Temporarily Removed OnLevelIsLoading.
+10. Internal Failures are now a lot more informative.
+11. Debug Mode is now a lot more informative.
+12. Logs folder has been moved to MelonLoader/Logs.
+13. Logger now produces a latest.log file in the MelonLoader folder.
+14. Removed LightJson. Not Needed.
+15. Load Mode "-dev" Name Extension has been changed to ".dev" Extension.
+16. Added Launch Option "--melonloader.dab" to Debug Analytics Blocker.
+17. Fixed Assembly Resolve Issue between Plugins and Mods.
+18. MelonHandler now requires Name, Version, and Author to all be properly set in Melons.
+19. Author is now mandatory to be set in MelonInfoAttribute for Melons. It can no longer be set to null.
+20. Fixed issue with Support Module due to Time.deltaTime being stripped.
+21. Fixed Issue with Mono Support Module.
+22. Fixed Issue with Assembly Generator.
+23. Fixed Issue with Queued Coroutines in Mono Pre-5 Games.
+24. Re-added "--quitfix" Launch Option.
+25. Fixed Console On Top Check.
+26. Fixed Legacy Support for OnLevelWasLoaded and OnLevelWasInitialized.
+27. Fixed Legacy Support for Preferences and OnModSettingsApplied.
+28. Fixed Type Overwrite Issue with MelonPreferences.
+29. Fixed Loading Issue when a Plugin is in the Mods folder or vice-versa.
+30. Improved Loading of Plugins and Mods.
+31. Re-added UnityEngine.Il2CppAssetBundleManager.
+32. Fixed Issue with UnityEngine.Il2CppAssetBundleManager being outdated.
+33. Changed Unity Dependencies URL to LavaGang/Unity-Runtime-Libraries.
+34. Fixed Type Overwrite Issue with MelonPreferences when Loading during Runtime.
+35. Fixed Legacy Support for MelonPluginInfo and MelonPluginGame.
+36. Re-added Launch Option "--melonloader.agregenerate".
+37. Re-added Launch Option "--melonloader.agfvunhollower".
+38. Added Launch Option "--melonloader.agfvdumper" to Force the Version of Il2CppDumper to use.
+39. Added Launch Option "--melonloader.agfvunity" to Force the Version of Unity Dependencies to use.
+40. Fixed Assembly Resolve Issue when a Plugin references a Mod.
+41. Fixed Displacement Issue when calling Save for MelonPreferences or Legacy MelonPrefs.
+42. Fixed Issue with Legacy MelonPrefs logging "Legacy Config Saved!" even when nothing happened.
+43. Fixed Issue with DEV Load Mode not working with ZIP Archives.
+44. Added Check to MelonHandler to make sure Plugins and Mods only load once from 1 DLL copy.
+45. Legacy MelonPrefs now properly redirect to MelonPreferences.
+46. Added MelonUtils.IsOldMono.
+47. Fixed Issue with MelonPreferences creating a new entry when one already exists.
+48. Added Auto-Converter to convert MelonPrefs to MelonPreferences.
+49. Fixed Issue with Auto-Converter deleting modprefs.ini but not saving MelonPreferences.cfg.
+50. Fixed Issue with Console Output not Flushing.
+51. Fixed Issue with Log Output not Flushing.
+52. Fixed Crash Issue with Fresh Install Assembly Generation.
+53. Support Module now uses MelonUtils.GetUnityVersion properly.
+54. Fixed Hooking Issue with Harmony Attributes.
+55. Fixed Issue with Reflection based Assembly Resolving.
+56. Moved Plugins and Mods folders back to the Game Installation folder.
+57. Fixed ConsoleOnTop Focusing Issues.
+58. Added More HostNames to Analytics Blocker.
+59. Fixed Issue with Legacy MelonPrefs Support when GetString or SetString was called.
+60. Added "MonoBleedingEdge.x86" and "MonoBleedingEdge.x64" to the Mono Directory Search.
+61. Fixed Issue with certain Mono Games causing the Mono Directory Search to fail.
+62. Disabled Close Button on Console during Assembly Generation.
+63. Console will now properly appear for Assembly Generation only on Il2Cpp Games when using Launch Option "--melonloader.hideconsole".
+64. Fixed Issue with Launch Option "--melonloader.hideconsole" causing a Crash.
+65. Fixed Execution Order of Console Initialization when using Launch Option "--melonloader.hideconsole".
+66. Fixed Issue with Il2CppDumper and Il2CppAssemblyUnhollower hanging when Games are closed during Assembly Generation.
+67. Launch Option "--melonloader.dab" no longer requires "--melonloader.debug".
+68. Fixed Visual C++ Error that occurs when closing certain Games by closing the Console  (for example: Audica).
+69. Fixed Issue with Launch Option "--melonloader.hideconsole" ignoring "--melonloader.debug".
+70. Fixed Console Coloring Issue.
+71. Added MelonDebug.Msg.
+72. Fixed Issue with MelonLoader Unity Debug Log not running when Plugins are loaded.
+73. Fixed Issue with VRChat_OnUiManagerInit not getting called.
+74. MelonLoader Unity Debug Log is now default even when no Plugins or Mods are loaded.
+75. Fixed Issue with No Attribute showing as Universal.
+76. Implemented Fallback Game Compatibility for Melons when no app.info is found.
+77. Added Internal Failure when failing to get Unity Version.
+78. Implemented globalgamemanagers as Fallback for Unity Version.
+79. Added Try Catch to Support Module Loading.
+80. Fixed Issue with Unity Version Fallback not Triggering.
+81. Fixed Issue with Exceptions not including StackTrace.
+82. Fixed Issue with certain Mono Games not having the FileVersionInfo class.
+83. Added Value Change Callbacks to MelonPreferences Entries.
+84. Cleaned up MelonPreferences Entry Exception Handling.
+85. Fixed Issue with Launch Option "--melonloader.dab" that caused it to only Log when "--melonloader.debug" was used.
+86. Fixed Issue with Bootstrap Game Warnings not Logging.
+87. Fixed Issue with Il2Cpp Support Module failing to Parse Unity Version.
+88. Fixed Issue with Il2Cpp Support Module failing to load "Assembly-CSharp.dll" on VRChat.
+89. Added Legacy Style Methods to MelonPreferences.
+90. Fixed Issue with the GetString and SetString methods for ModPrefs and MelonPrefs Legacy Support.
+91. Fixed Logger Flushing.
+92. Redirected 0Harmony.dll References to MelonLoader.dll.
+93. Added Current Culture Fix to ensure Culture is always Invariant.
+94. Fixed Issue with Product Names and Versions not using Translation Query.
+95. Fixed Issue with Debug Compilation.
+96. Added SHA512 Check to Installer Updates.
+97. Added SHA512 Check to Installer Downloads.
+98. Fixed Issue when using the Installer to install v0.2.
+99. Fixed Issue with Releases Selection in Installer not being properly Sorted.
+100. Added Shortcut Support to Installer.
+101. Added HarmonyShield Attribute.
+102. HarmonyShield now protects Methods and Assembly from being patched.
+103. Added HarmonyShield Protection to MelonLoader, SM_Il2Cpp, SM_Mono, SM_Mono.Pre-2017, and SM_Mono.Pre-5.
+104. Fixed Issue with Unneeded Return in Logger breaking Logs after Plugin Loading.
+105. Fixed Issue with Console Buffer.
+106. Fixed Issue with Console Coloring.
+107. Added MelonColor Attribute for Melons to set their Name Color.
+108. Fixed Issue with OnSceneWasLoaded not being called.
+109. Added string Parameter to OnSceneWasLoaded and OnSceneWasInitialized that gets passed the Scene's Name.
+110. Plugins and Mods now have their Names Colorized properly when Loading.
+111. Added HarmonyShield Support for Classes and Structs.
+112. Fixed Internal Failure with mono_free on Non-BleedingEdge Mono Games.
+113. Improved HashCode Implementation.
+114. Added HashCodes for Support Modules.
+115. Added File Change Detection for MelonPreferences.
+116. Fixed Issue with MelonPreferences not Updating after Load.
+117. Added MelonIncompatibleAssembliesAttribute to mark Plugins and Mods as Incompatible with each other.    (Credits to YOWChap :D)
+118. Fixed Issue with 127.0.0.1 showing as a Unique Host Name.
+119. Fixed Issue with ValueEdited of MelonPreferences.
+120. Fixed Issue with ValueEdited not correctly saving to MelonPreferences when Save is called.
+121. Fixed Issue with ValueEdited not being set when Auto-Converter runs.
+122. Added UnityEngine.Il2CppImageConversionManager to Managed folder to help with Image Conversion on Il2Cpp Games.
+123. Added Better Exception Handling for MelonLoader Core Initialization.
+124. Added Error Log File Output to Installer.
+125. Added MelonPreferences Auto-Downgrade System to Installer.
+126. Added MelonUtils.ColorToANSI to convert ConsoleColor to ANSI String.
+127. Fixed Issue with ALPHA Setting in Installer not abiding by Selected Theme.
+128. Fixed Issue with MelonPreferences Auto-Downgrade System in Installer when clean installing.
+129. Fixed Issue with Assembly Generator not Logging Launch Arguments.
+130. Added LaunchOptions.ini to allow for Configuration of Launch Options without using the Command Line.
+131. Fixed Issue where Launch Option "--melonloader.hidewarnings" would not function correctly.
+132. Added OnPreferencesLoaded Override for Plugins and Mods.
+133. Fixed Issue where Plugins weren't given priority for OnApplicationStart.
+134. Fixed Issue where certain Games would be unable to have their Unity Version read.
+135. Temporarily removed the Force-Regenerate Launch Option.
+136. Added GameAssembly Hash Check Logs.
+137. Added double and long Support to MelonPreferences.
+138. Improved MelonPreferences Type Conversion when Loading.
+139. Improved Lambda Expression Usage in MelonPreferences.
+140. Improved MelonPreferences Type Conversion when Loading string, floats, ints, longs, and doubles.
+141. Improved MelonPreferences Change Callback Invoking.
+142. Fixed Issue where Bootstrap and Proxy would cause Crashes when compiled under Debug Compilation.
+143. Improved Core Initialization.
+144. Fixed Issue with MelonPreferences Caching on Load and not setting the cache as Hidden.
+145. Fixed Issue with Older Mono that doesn't need a Posix Helper Native Module.
+146. Fixed Issue with Logger not properly detecting the Calling Melon.
+147. Fixed Issue with Debug Logger not properly coloring Melons.
+148. MelonPreferences Type Handling is now Modular for easier extension.
+149. MelonPreferences now supports the Type byte.
+150. Fixed Issue with MelonPreferences Loading when there is an Unhandled Type in the Config File.
+151. Fixed Issue with MelonPreferences where Saving would Trigger the FileWatcher and cause a needless reload.
+152. Fixed Issue with MelonPreferences where the Config File wasn't creating itself on Initialization.
+153. Fixed Issue with MelonPreferences causing the Config File to ignore certain Preferences during Initialization.
+154. Fixed Issue with Compatibility Layer failing to resolve type for MelonLoader.UnhollowerSupport.
+155. Fixed Issue with Compatibility Layer failing to resolve MelonMod.InfoAttribute, MelonMod.GameAttributes, MelonPlugin.InfoAttribute, and MelonPlugin.GameAttributes.
+156. Fixed Issue with Mods on BONEWORKS having OnSceneWasLoaded and OnSceneWasInitialized called too early.
+157. Fixed Issue with Mods on BONEWORKS having OnSceneWasLoaded and OnSceneWasInitialized called for the Loading Screen.
+158. Added BONEWORKS_OnLoadingScreen Override for Mods and it runs when BONEWORKS shows the Loading Screen.
+159. Fixed Issue with MelonDebug.Msg causing Crash.
+160. Fixed Issue with MelonDebug.Msg not checking if Debug is Enabled.
+161. Added MelonUtils.GetCurrentGameAttribute that returns the Current Game's MelonGameAttribute.
+162. Added MelonGameAttribute.Universal, MelonGameAttribute.IsCompatible, and MelonGameAttribute.IsCompatibleBecauseUniversal.
+163. Fixed Issue with BONEWORKS_OnLoadingScreen not being called.
+164. Fixed Issue with Certain Melons having the wrong Default Color.
+165. Improved MelonPreferences Error Handling.
+166. Improved MelonPreferences Unsupported Type Handling.
+167. Added string[] and bool[] Support to MelonPreferences.
+168. Added int[] and float[] Support to MelonPreferences.
+169. Fixed Issue with MelonPreferences Value Type Conversion causing Conflicts in File.
+170. Added long[] Support to MelonPreferences.
+171. Added byte[] Support to MelonPreferences.
+172. Added Warning to Debug Mode for when Attempting to Harmony Patch Methods that may possibly be Inlined.    (Credits to zeobviouslyfakeacc :3)
+173. Added a Built-In bHaptics API.
+174. Fixed Issue with MelonPreferences not setting properly while using Fallback Functionality.
+175. Fixed Issue with Melon Name not Showing for Inline Harmony Patch Detection Warning.    (Credits to zeobviouslyfakeacc :3)
+176. Fixed Issue with Null Reference Exception from MelonLogger.ManualWarning.    (Credits to zeobviouslyfakeacc :3)
+177. Fixed Issue with Null Reference Exception from Inline Harmony Patch Detection.
+178. Fixed Issue with MelonUtils.IsVRChat causing Null Reference Exception.
+179. Fixed Issue with MelonUtils.IsBONEWORKS causing Null Reference Exception.
+180. Fixed Issue with Native Unity Logs showing when not in Debug Mode.
+181. Fixed Issue with Certain Unity Games when the EXE has no Information Attached.
+182. Fixed Issue with Unity Games using a Version older than 5.0 not Loading Mods.
+183. Fixed Issue with Unity Games using a Version older than 5.0 having mainData instead of globalgamemanagers.
+184. Fixed Issue with Support Modules with Mono Games not having UnityEngine.Transform.SetAsLastSibling.
+185. Added Preload Support Module.
+186. Fixed Issue with Unity Games not having System.Core.dll.
+187. Added bHaptics.DeviceType.
+188. Added bHaptics.IsDeviceConnected.
+189. Added bHaptics.DeviceTypeToPositionType.
+190. Added bHaptics.DeviceType Methods.
+191. Fixed Issue with Support Modules throwing a Target Framework Exception.
+192. Fixed Internal Failure with Operating Systems older than Windows 10.
+193. Fixed Issue with C# 9 Record Types making Assemblies Unloadable.    (Credits to knah :D)
+194. Added Melon Hashes to Logs.   (Credits to TrevTV :P)
+195. Temporarily Disabled Analytics Blocker for x86 (32bit) to Fix Random Crash Issue.
+196. Fixed Issue with Console Coloring on Operating Systems older than Windows 10.
+197. Fixed Issue with app.info Does Not Exist Warning showing Twice.
+198. Re-Implemented Color Variations of MelonLogger.Msg.
+199. Fixed Issue with Melon Logging Traceback not finding certain Melons in the Call Stack.
+200. Added MDB Symbol Support.    (Credits to avail :P)
+201. Added Deobfuscation Map Support.
+202. Added "--melonloader.agfregenerate" Launch Option.
+203. Re-factored Assembly Generator.
+204. Re-factored MelonPreferences.
+205. MelonPreferences Entries are now Extendable for Custom Type Support.
+206. Added MelonPriority Assembly Attribute.
+207. Fixed String Issue with MelonPreferences.
+208. Re-factored MelonColor Support.
+209. Fixed Issue with Legacy Settings failing to Load and breaking settings system completely.    (Credits to knah :D)
+210. Fixed Issue suppress exceptions from Settings Save/Load.    (Credits to knah :D)
+211. Rewrote settings classes to be much cleaner and easier to extend.    (Credits to knah :D)
+212. Updated Il2CppAssemblyUnhollower to v0.4.13.0.    (Credits to knah :D)
+213. Fixed Issue with Deobfuscation Map not Downloading if File does not Exist.    (Credits to knah :D)
+214. Fixed Issue String Settings not loading from TOML.    (Credits to knah :D)
+215. Fixed Issue Legacy Float Settings with Round Values not loading from INI.    (Credits to knah :D)
+216. Rewrote TOML Array Handling.    (Credits to knah :D)
+217. Fixed Issue with Virtual Terminal Processing on some systems.
+218. Fixed Issue with MelonPreferences having Category and Entry Display Names not be set to Identifier when null.
+219. Fixed Issue with MelonPreferences.CreateEntry not creating Category.
+220. Fixed Issue with MelonPreferences.CreateCategory causing an Exception when it wasn't supposed to.
+221. Fixed Issue with "Collection was modified" Error.
+222. Fixed No Melon Attribute Found Issue.
+223. Fixed Issue with Melon Override Exceptions not showing which Melon it was.
+224. Fixed Issue with Protobuf Assemblies being rejected.    (Credits to knah :D)
+225. Fixed Issue with Assembly Generator's OverrideAppDomainBase Method under Mono.    (Credits to MiincK :D)
+226. Changed MelonBase.Color to MelonBase.ConsoleColor.
+227. Fixed Enumerator Issue with Index Loop Locking.
+228. Fixed Issue with Duplicate Melons causing the rest of the Melons to Not Load.
+229. Added MonoBleedingEdge Metadata.
+230. Re-factored Assembly Generator run with Mono instead of CLR.    (Credits to MiincK :D)
+231. Fixed NRE Issue with Audica and similar games.    (Credits to MiincK :D)
+232. Fixed log file name time format.    (Credits to MiincK :D)
+233. Fixed NRE Issue with Newer Games after Audica.    (Credits to MiincK :D)
+234. Changed Mono Configuration Directory on Il2Cpp Games to the Included Metadata.    (Credits to MiincK :D)
+235. Fixed Issue with Assembly Generator getting the Incorrect Configuration Directory.    (Credits to MiincK :D)
+236. Fixed Issue with Assembly Generator when Deobfuscation Map already exists.    (Credits to knah :D)
+
+---
+
 ### v0.2.7.4 Open-Beta:
+
 1. Fixed Issue with Amplitude using new Endpoints.
 
 ---
@@ -59,7 +499,7 @@
 ### v0.2.6 Open-Beta:
 
 1. Fixed Issue with Logger Timestamp making New Lines.
-2. Added Silent Launch Option to Installer.  (Credits to trevtv :P)
+2. Added Silent Launch Option to Installer.   (Credits to TrevTV :P)
 3. Fixed Internal Failure caused by DisableAnalytics for certain users.
 4. Added Operating System log to startup info.
 5. Added ValueTupleBridge to Managed Folder.
@@ -98,7 +538,7 @@
 38. Fixed Issue with Plugins not getting OnGUI called.
 39. Plugins are now able to use VRChat_OnUiManagerInit.
 40. Fixed Coroutine Queue for Mono Games.
-41. Added Launch Option --melonloader.consoleontop.  (Credits to trevtv :P)
+41. Added Launch Option --melonloader.consoleontop.  (Credits to TrevTV :P)
 42. Fixed Issue with Assembly Generator not stopping when failing to Download.
 43. Escalated Assembly Generator failures to Internal Failures.
 44. Fixed Issue where Assembly Generator failures would cause a Crash.
@@ -145,7 +585,7 @@
 
 ### v0.2.4 Open-Beta:
 
-1. Added Error Output Log to Installer.  (Credits to trevtv :P)
+1. Added Error Output Log to Installer.  (Credits to TrevTV :P)
 2. Use List.Count / Array.Length property instead of Linq's Count() method.  (Credits to zeobviouslyfakeacc :3)
 3. Added mechanism to catch when game is open to display additional information.  (Credits to DubyaDude ^.^)
 4. Harmony: Remove prefixes after postfixes to fix unpatching patches with __state variables.  (Credits to zeobviouslyfakeacc :3)
@@ -515,4 +955,4 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 ### v0.0.1 Closed-Beta:
 
-1) Initial Commit and Rewrite.
+1. Initial Commit and Rewrite.

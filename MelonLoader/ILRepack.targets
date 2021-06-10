@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Target Name="ILRepacker_Debug" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+		<ItemGroup>
+			<AssemblyFile Include="$(OutputPath)$(AssemblyName).dll" />
+		</ItemGroup>
+		<ItemGroup>
+			<InputAssemblies Include="@(AssemblyFile)" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Mdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Pdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Rocks'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.RuntimeDetour'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
+		</ItemGroup>
+		<ILRepack
+			Parallel="true"
+			DebugInfo="true"
+			InputAssemblies="@(InputAssemblies)"
+			TargetKind="Dll"
+			OutputFile="@(AssemblyFile)"
+		/>
+    </Target>
+	
+	<Target Name="ILRepacker_Release" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+		<ItemGroup>
+			<AssemblyFile Include="$(OutputPath)$(AssemblyName).dll" />
+		</ItemGroup>
+		<ItemGroup>
+			<InputAssemblies Include="@(AssemblyFile)" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Mdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Pdb'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Mono.Cecil.Rocks'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.RuntimeDetour'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
+		</ItemGroup>
+		<ILRepack
+			Parallel="true"
+			DebugInfo="false"
+			InputAssemblies="@(InputAssemblies)"
+			TargetKind="Dll"
+			OutputFile="@(AssemblyFile)"
+		/>
+    </Target>
+	
+	<Target Name="Cleanup" AfterTargets="ILRepack">
+		<ItemGroup>
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.dll" />
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.Mdb.dll" />
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.Pdb.dll" />
+			<FilesToDelete Include="$(OutputPath)Mono.Cecil.Rocks.dll" />
+			<FilesToDelete Include="$(OutputPath)MonoMod.RuntimeDetour.dll" />
+			<FilesToDelete Include="$(OutputPath)MonoMod.Utils.dll" />
+			<FilesToDelete Include="$(OutputPath)0Harmony.dll" />
+			<FilesToDelete Include="$(OutputPath)Tomlet.dll" />
+		</ItemGroup>
+		<Delete Files="@(FilesToDelete)" />
+    </Target>
+</Project>
