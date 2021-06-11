@@ -219,7 +219,8 @@ namespace MelonLoader
         internal static void OnPreInitialization()
             => InvokeMelonMethod(ref _Plugins, x =>
             {
-                x.HarmonyInstance.PatchAll(x.Assembly);
+                if (MelonUtils.PullAttributeFromAssembly<HarmonyLib.HarmonyDontPatchAll>(x.Assembly) == null)
+                    x.HarmonyInstance.PatchAll(x.Assembly);
                 x.OnPreInitialization();
             }, true);
 
@@ -233,7 +234,8 @@ namespace MelonLoader
         internal static void OnApplicationStart_Mods()
             => InvokeMelonMethod(ref _Mods, x =>
             {
-                x.HarmonyInstance.PatchAll(x.Assembly);
+                if (MelonUtils.PullAttributeFromAssembly<HarmonyLib.HarmonyDontPatchAll>(x.Assembly) == null)
+                    x.HarmonyInstance.PatchAll(x.Assembly);
                 RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
                 x.OnApplicationStart();
             }, true);

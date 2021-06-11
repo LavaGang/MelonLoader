@@ -214,6 +214,7 @@
 189. Added Missing Harmony Patch Forwarders.    (Credits to ds5678 :D)
 190. Added Error Message for when a Plugin or Mod attempts to Load from the Wrong Folder.
 191. Updated Tomlet to v1.3.3.
+192. Added HarmonyLib.HarmonyDontPatchAll Assembly Attribute.
 
 ---
 
