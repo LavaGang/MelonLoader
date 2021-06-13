@@ -218,6 +218,7 @@
 193. Prepared Changes for Il2CppAssemblyUnhollower v0.4.15.2.    (Credits to [ds5678](https://github.com/ds5678) :D)
 194. Added dnSpy Debugger Environment Variable Handling.    (Credits to [TechInterMezzo](https://github.com/TechInterMezzo) :D)
 195. Fixed Issue with DNSPY_UNITY_DBG Environment Variable not being Handled.
+196. Fixed Crash Issue with Certain Oculus Platform Games.
 
 ---
 
