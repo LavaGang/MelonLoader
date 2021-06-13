@@ -222,7 +222,10 @@ void Mono::CreateDomain(const char* name)
 
 	if (Debug::Enabled)
 	{
-		Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
+		if (IsOldMono)
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
+		else
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
 		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 	}
 
@@ -366,7 +369,10 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 
 	if (Debug::Enabled)
 	{
-		Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
+		if (IsOldMono)
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
+		else
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
 		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 	}
 
