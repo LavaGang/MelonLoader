@@ -18,7 +18,7 @@ namespace MelonLoader.Support
     {
         internal static ISupportModule_From Interface = null;
         internal static GameObject obj = null;
-        internal static Component component = null;
+        internal static SM_Component component = null;
         private static Camera OnPostRenderCam = null;
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
@@ -75,8 +75,8 @@ namespace MelonLoader.Support
             }
             catch (Exception ex) { MelonLogger.Error($"Camera.onPostRender override failed: {ex}"); }
 
-            ClassInjector.RegisterTypeInIl2Cpp<Component>();
-            Component.Create();
+            ClassInjector.RegisterTypeInIl2Cpp<SM_Component>();
+            SM_Component.Create();
             return new SupportModule_To();
         }
 

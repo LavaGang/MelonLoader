@@ -11,7 +11,7 @@ namespace MelonLoader.Support
     {
         internal static ISupportModule_From Interface = null;
         internal static GameObject obj = null;
-        internal static Component component = null;
+        internal static SM_Component component = null;
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
@@ -35,7 +35,7 @@ namespace MelonLoader.Support
             return new SupportModule_To();
         }
 
-        private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (obj == null) Component.Create(); if (!scene.Equals(null)) Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
+        private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (obj == null) SM_Component.Create(); if (!scene.Equals(null)) Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
         private static void OnSceneUnload(Scene scene) { if (scene == null) return; Interface.OnSceneWasUnloaded(scene.buildIndex, scene.name); }
 
         [MethodImpl(MethodImplOptions.InternalCall)]

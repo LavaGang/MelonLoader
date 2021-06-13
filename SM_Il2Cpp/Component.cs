@@ -4,19 +4,19 @@ using UnityEngine;
 
 namespace MelonLoader.Support
 {
-    internal class Component : MonoBehaviour
+    internal class SM_Component : MonoBehaviour
     {
         private static bool IsDestroying = false;
         private delegate bool SetAsLastSiblingDelegate(IntPtr transformptr);
         private static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
-        public Component(IntPtr value) : base(value) { }
-        public Component() : base(UnhollowerRuntimeLib.ClassInjector.DerivedConstructorPointer<Component>()) { UnhollowerRuntimeLib.ClassInjector.DerivedConstructorBody(this); }
-        static Component() => SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
+        public SM_Component(IntPtr value) : base(value) { }
+        public SM_Component() : base(UnhollowerRuntimeLib.ClassInjector.DerivedConstructorPointer<Component>()) { UnhollowerRuntimeLib.ClassInjector.DerivedConstructorBody(this); }
+        static SM_Component() => SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
         internal static void Create()
         {
             Main.obj = new GameObject();
             DontDestroyOnLoad(Main.obj);
-            Main.component = Main.obj.AddComponent(UnhollowerRuntimeLib.Il2CppType.Of<Component>()).TryCast<Component>();
+            Main.component = Main.obj.AddComponent(UnhollowerRuntimeLib.Il2CppType.Of<SM_Component>()).TryCast<SM_Component>();
             Main.component.SiblingFix();
         }
         private void SiblingFix()
