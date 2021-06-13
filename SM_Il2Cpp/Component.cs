@@ -10,7 +10,7 @@ namespace MelonLoader.Support
         private delegate bool SetAsLastSiblingDelegate(IntPtr transformptr);
         private static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
         public SM_Component(IntPtr value) : base(value) { }
-        public SM_Component() : base(UnhollowerRuntimeLib.ClassInjector.DerivedConstructorPointer<Component>()) { UnhollowerRuntimeLib.ClassInjector.DerivedConstructorBody(this); }
+        public SM_Component() : base(UnhollowerRuntimeLib.ClassInjector.DerivedConstructorPointer<SM_Component>()) { UnhollowerRuntimeLib.ClassInjector.DerivedConstructorBody(this); }
         static SM_Component() => SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
         internal static void Create()
         {
