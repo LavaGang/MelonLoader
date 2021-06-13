@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
@@ -143,8 +144,10 @@ namespace MelonLoader
         public static T[] PullAttributesFromAssembly<T>(Assembly asm, bool inherit = false) where T : Attribute
         {
             Attribute[] att_tbl = Attribute.GetCustomAttributes(asm, inherit);
+
             if ((att_tbl == null) || (att_tbl.Length <= 0))
                 return null;
+
             Type requestedType = typeof(T);
             List<T> output = new List<T>();
             foreach (Attribute att in att_tbl)
@@ -152,6 +155,7 @@ namespace MelonLoader
                 Type attType = att.GetType();
                 string attAssemblyName = attType.Assembly.GetName().Name;
                 string requestedAssemblyName = requestedType.Assembly.GetName().Name;
+
                 if ((attType == requestedType)
                     || attType.FullName.Equals(requestedType.FullName)
                     || ((attAssemblyName.Equals("MelonLoader")
@@ -161,7 +165,22 @@ namespace MelonLoader
                         && attType.Name.Equals(requestedType.Name)))
                     output.Add(att as T);
             }
+
             return output.ToArray();
+        }
+
+        public static IEnumerable<Type> GetValidTypes(this Assembly asm)
+            => GetValidTypes(asm, null);
+        public static IEnumerable<Type> GetValidTypes(this Assembly asm, Func<Type, bool> predicate)
+        {
+            IEnumerable<Type> returnval = Enumerable.Empty<Type>();
+            try { returnval = asm.GetTypes().AsEnumerable(); }
+            catch (ReflectionTypeLoadException ex) { returnval = ex.Types; }
+            return returnval.Where(x =>
+                ((x != null)
+                    && ((predicate != null)
+                        ? predicate(x)
+                        : true)));
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]

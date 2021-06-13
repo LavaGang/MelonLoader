@@ -30,7 +30,7 @@ namespace MelonLoader.CompatibilityLayers
 			if (args.inter != null)
 				return;
 
-			IEnumerable<Type> melon_types = args.assembly.GetOnlyValidTypes().Where(x => x.IsSubclassOf(typeof(MelonBase)));
+			IEnumerable<Type> melon_types = args.assembly.GetValidTypes(x => x.IsSubclassOf(typeof(MelonBase)));
 			if ((melon_types == null)
 				|| (melon_types.Count() <= 0))
 				return;

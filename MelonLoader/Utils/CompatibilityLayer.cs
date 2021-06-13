@@ -133,13 +133,5 @@ namespace MelonLoader
             public string filepath;
             public Resolver inter;
         }
-
-        public static Type[] GetOnlyValidTypes(this Assembly assembly)
-        {
-            Type[] returnval = null;
-            try { returnval = assembly.GetTypes(); }
-            catch (ReflectionTypeLoadException ex) { returnval = ex.Types.Where(x => x != null).ToArray(); }
-            return returnval;
-        }
     }
 }
