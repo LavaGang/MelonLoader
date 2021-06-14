@@ -70,7 +70,7 @@ namespace MelonLoader
 
             SystemType = typeof(T);
             if (SystemType.IsAbstract && SystemType.IsSealed)
-                throw new Exception("Specified Type must be Non-Static!");
+                throw new Exception($"Specified Type {SystemType.FullName} must be Non-Static!");
 
             Instance = (T)Activator.CreateInstance(SystemType);
 
