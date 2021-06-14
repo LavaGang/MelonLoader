@@ -171,7 +171,7 @@
     <Compile Include="Utils\DependencyGraph.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="Libs\NativeLibrary.cs" />
+    <Compile Include="Utils\NativeLibrary.cs" />
     <Compile Include="Utils\SupportModule.cs" />
     <Compile Include="Utils\UnhollowerSupport.cs" />
     <Compile Include="Libs\TinyJSON\Decoder.cs" />
