@@ -21,7 +21,7 @@ namespace MelonLoader.Preferences.IO
                 MethodInfo method = AccessTools.PropertyGetter(typeof(FileSystemWatcher), "Path");
                 if (method == null)
                     throw new NullReferenceException("No Path Property Get Method Found!");
-                if (method.IsMethodNotImplemented())
+                if (method.IsNotImplemented())
                 {
                     MelonLogger.Warning("FileSystemWatcher NotImplementedException Detected! Disabling MelonPreferences FileWatcher Functionality...");
                     ShouldDisableFileWatcherFunctionality = true;

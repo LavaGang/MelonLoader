@@ -71,7 +71,7 @@ namespace MelonLoader
 
 		public override DynamicMethodDefinition CopyOriginal()
 		{
-			DynamicMethodDefinition method = new DynamicMethodDefinition(Original);
+			DynamicMethodDefinition method = Original.ToNewDynamicMethodDefinition();
 			method.Definition.Name += "_wrapper";
 			ILContext ilcontext = new ILContext(method.Definition);
 			ILCursor ilcursor = new ILCursor(ilcontext);

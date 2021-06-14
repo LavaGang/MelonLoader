@@ -18,24 +18,24 @@ namespace MelonLoader
             if (NativeLib == IntPtr.Zero)
                 throw new Exception("Unable to Load bHaptics Native Library!");
 
-            NativeLib.GetNativeLibraryExport(nameof(Initialise)).FunctionPointerToDelegate(out Initialise);
-            NativeLib.GetNativeLibraryExport(nameof(TurnOff)).FunctionPointerToDelegate(out TurnOff);
-            NativeLib.GetNativeLibraryExport(nameof(Destroy)).FunctionPointerToDelegate(out Destroy);
-            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedback)).FunctionPointerToDelegate(out RegisterFeedback);
-            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedbackFromTactFile)).FunctionPointerToDelegate(out RegisterFeedbackFromTactFile);
-            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedbackFromTactFileReflected)).FunctionPointerToDelegate(out RegisterFeedbackFromTactFileReflected);
-            NativeLib.GetNativeLibraryExport(nameof(SubmitRegistered)).FunctionPointerToDelegate(out SubmitRegistered);
-            NativeLib.GetNativeLibraryExport(nameof(SubmitRegisteredStartMillis)).FunctionPointerToDelegate(out SubmitRegisteredStartMillis);
-            NativeLib.GetNativeLibraryExport(nameof(SubmitRegisteredWithOption)).FunctionPointerToDelegate(out SubmitRegisteredWithOption);
-            NativeLib.GetNativeLibraryExport(nameof(SubmitByteArray)).FunctionPointerToDelegate(out SubmitByteArray);
-            NativeLib.GetNativeLibraryExport(nameof(SubmitPathArray)).FunctionPointerToDelegate(out SubmitPathArray);
-            NativeLib.GetNativeLibraryExport(nameof(IsFeedbackRegistered)).FunctionPointerToDelegate(out IsFeedbackRegistered);
-            NativeLib.GetNativeLibraryExport(nameof(IsPlaying)).FunctionPointerToDelegate(out IsPlaying);
-            NativeLib.GetNativeLibraryExport(nameof(IsPlayingKey)).FunctionPointerToDelegate(out IsPlayingKey);
-            NativeLib.GetNativeLibraryExport(nameof(TurnOffKey)).FunctionPointerToDelegate(out TurnOffKey);
-            NativeLib.GetNativeLibraryExport(nameof(IsDevicePlaying)).FunctionPointerToDelegate(out IsDevicePlaying);
-            NativeLib.GetNativeLibraryExport(nameof(TryGetResponseForPosition)).FunctionPointerToDelegate(out TryGetResponseForPosition);
-            NativeLib.GetNativeLibraryExport(nameof(TryGetExePath)).FunctionPointerToDelegate(out TryGetExePath);
+            NativeLib.GetNativeLibraryExport(nameof(Initialise)).GetDelegate(out Initialise);
+            NativeLib.GetNativeLibraryExport(nameof(TurnOff)).GetDelegate(out TurnOff);
+            NativeLib.GetNativeLibraryExport(nameof(Destroy)).GetDelegate(out Destroy);
+            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedback)).GetDelegate(out RegisterFeedback);
+            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedbackFromTactFile)).GetDelegate(out RegisterFeedbackFromTactFile);
+            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedbackFromTactFileReflected)).GetDelegate(out RegisterFeedbackFromTactFileReflected);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitRegistered)).GetDelegate(out SubmitRegistered);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitRegisteredStartMillis)).GetDelegate(out SubmitRegisteredStartMillis);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitRegisteredWithOption)).GetDelegate(out SubmitRegisteredWithOption);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitByteArray)).GetDelegate(out SubmitByteArray);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitPathArray)).GetDelegate(out SubmitPathArray);
+            NativeLib.GetNativeLibraryExport(nameof(IsFeedbackRegistered)).GetDelegate(out IsFeedbackRegistered);
+            NativeLib.GetNativeLibraryExport(nameof(IsPlaying)).GetDelegate(out IsPlaying);
+            NativeLib.GetNativeLibraryExport(nameof(IsPlayingKey)).GetDelegate(out IsPlayingKey);
+            NativeLib.GetNativeLibraryExport(nameof(TurnOffKey)).GetDelegate(out TurnOffKey);
+            NativeLib.GetNativeLibraryExport(nameof(IsDevicePlaying)).GetDelegate(out IsDevicePlaying);
+            NativeLib.GetNativeLibraryExport(nameof(TryGetResponseForPosition)).GetDelegate(out TryGetResponseForPosition);
+            NativeLib.GetNativeLibraryExport(nameof(TryGetExePath)).GetDelegate(out TryGetExePath);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

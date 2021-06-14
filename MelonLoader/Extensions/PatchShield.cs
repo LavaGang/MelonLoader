@@ -29,14 +29,14 @@ namespace MelonLoader
 			{
 				Core.HarmonyInstance.Patch(
 					AccessTools.Method("HarmonyLib.PatchFunctions:ReversePatch"),
-					AccessTools.Method(patchShieldType, "PatchMethod_PatchFunctions_ReversePatch").ToHarmonyMethod()
+					AccessTools.Method(patchShieldType, "PatchMethod_PatchFunctions_ReversePatch").ToNewHarmonyMethod()
 					);
 			}
 			catch (Exception ex) { LogException(ex); }
 
 			try
 			{
-				HarmonyMethod unpatchMethod = AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Unpatch").ToHarmonyMethod();
+				HarmonyMethod unpatchMethod = AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Unpatch").ToNewHarmonyMethod();
 				foreach (MethodInfo method in patchProcessorType.GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(x => x.Name.Equals("Unpatch")))
 					Core.HarmonyInstance.Patch(method, unpatchMethod);
 			}
@@ -45,7 +45,7 @@ namespace MelonLoader
 			try
 			{
 				Core.HarmonyInstance.Patch(AccessTools.Method(patchProcessorType, "Patch"),
-					AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Patch").ToHarmonyMethod()
+					AccessTools.Method(patchShieldType, "PatchMethod_PatchProcessor_Patch").ToNewHarmonyMethod()
 					);
 			}
 			catch (Exception ex) { LogException(ex); }

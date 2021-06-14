@@ -11,7 +11,7 @@ namespace MelonLoader.Fixes
 		internal static void Install()
 		{
 			Type threadType = typeof(Thread);
-			HarmonyMethod patchMethod = AccessTools.Method(typeof(InvariantCurrentCulture), "PatchMethod").ToHarmonyMethod();
+			HarmonyMethod patchMethod = AccessTools.Method(typeof(InvariantCurrentCulture), "PatchMethod").ToNewHarmonyMethod();
 
 			try{ Core.HarmonyInstance.Patch(AccessTools.PropertyGetter(threadType, "CurrentCulture"), patchMethod); }
 			catch (Exception ex) { MelonLogger.Warning($"Thread.CurrentCulture Exception: {ex}"); }
