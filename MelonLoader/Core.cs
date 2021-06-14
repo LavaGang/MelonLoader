@@ -12,7 +12,7 @@ namespace MelonLoader
         static Core()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
-            HarmonyInstance = new HarmonyLib.Harmony("MelonLoader");
+            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
             Fixes.UnhandledException.Run(curDomain);
             Fixes.InvariantCurrentCulture.Install();
