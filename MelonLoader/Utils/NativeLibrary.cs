@@ -83,12 +83,11 @@ namespace MelonLoader
                 if (fieldInfo.IsStatic)
                     continue;
 
-                string fieldName = fieldInfo.Name;
                 Type fieldType = fieldInfo.FieldType;
                 if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length <= 0)
                     continue;
 
-                fieldInfo.SetValue(Instance, GetExport(fieldType, fieldName));
+                fieldInfo.SetValue(Instance, GetExport(fieldType, fieldInfo.Name));
             }
         }
     }
