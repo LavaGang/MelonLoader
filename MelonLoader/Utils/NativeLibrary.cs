@@ -15,9 +15,9 @@ namespace MelonLoader
         }
 
         public static NativeLibrary Load(string filepath)
-            => LoadLib(filepath).ToNativeLibrary();
+            => LoadLib(filepath).ToNewNativeLibrary();
         public static NativeLibrary<T> Load<T>(string filepath)
-            => LoadLib(filepath).ToNativeLibrary<T>();
+            => LoadLib(filepath).ToNewNativeLibrary<T>();
         public static T ReflectiveLoad<T>(string filepath)
             => Load<T>(filepath).Instance;
         public static IntPtr LoadLib(string filepath)
@@ -31,14 +31,14 @@ namespace MelonLoader
         }
 
         public IntPtr GetExport(string name)
-            => GetExportInternal(Ptr, name);
+            => GetExport(Ptr, name);
         public Delegate GetExport(Type type, string name)
             => GetExport(name).GetDelegate(type);
         public T GetExport<T>(string name) where T : Delegate
             => GetExport(name).GetDelegate<T>();
         public void GetExport<T>(string name, out T output) where T : Delegate
             => output = GetExport<T>(name);
-        private static IntPtr GetExportInternal(IntPtr nativeLib, string name)
+        public static IntPtr GetExport(IntPtr nativeLib, string name)
         {
             if (nativeLib == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(nativeLib));

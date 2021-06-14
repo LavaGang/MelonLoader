@@ -231,12 +231,12 @@ namespace MelonLoader
             return del;
         }
 
-        public static NativeLibrary ToNativeLibrary(this IntPtr ptr)
+        public static NativeLibrary ToNewNativeLibrary(this IntPtr ptr)
             => new NativeLibrary(ptr);
-        public static NativeLibrary<T> ToNativeLibrary<T>(this IntPtr ptr)
+        public static NativeLibrary<T> ToNewNativeLibrary<T>(this IntPtr ptr)
             => new NativeLibrary<T>(ptr);
         public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
-            => ToNativeLibrary(ptr).GetExport(name);
+            => NativeLibrary.GetExport(ptr, name);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsGame32Bit();
