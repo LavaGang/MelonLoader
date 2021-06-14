@@ -219,8 +219,9 @@
 194. Added dnSpy Debugger Environment Variable Handling.    (Credits to [TechInterMezzo](https://github.com/TechInterMezzo) :D)
 195. Fixed Issue with DNSPY_UNITY_DBG Environment Variable not being Handled.
 196. Fixed Crash Issue with Certain Oculus Platform Games.
-197. Fixed Issue with Directory Check overextending.
-198. 
+197. Fix wrong type being created in IL2CPP SM_Component.    (Credits to [knah](https://github.com/knah) :D)
+198. Updated Il2CppAssemblyUnhollower to v0.4.15.2.    (Credits to [knah](https://github.com/knah) :D)
+199. Fixed Issue with Directory Check overextending.
 
 ---
 
