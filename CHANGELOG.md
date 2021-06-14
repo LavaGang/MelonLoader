@@ -222,6 +222,7 @@
 197. Fix wrong type being created in IL2CPP SM_Component.    (Credits to [knah](https://github.com/knah) :D)
 198. Updated Il2CppAssemblyUnhollower to v0.4.15.2.    (Credits to [knah](https://github.com/knah) :D)
 199. Fixed Issue with Directory Check overextending.
+200. Improved Native Library Handling.
 
 ---
 

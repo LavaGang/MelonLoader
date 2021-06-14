@@ -29,9 +29,7 @@ namespace MelonLoader
         private static int Initialize()
         {
             Il2CppAssemblyGenerator.Load();
-
-            try { bHaptics_NativeLibrary.Load(); } 
-            catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
+            bHaptics.Load();
 
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
@@ -58,9 +56,7 @@ namespace MelonLoader
                 return 1;
 
             AddUnityDebugLog();
-
-            try { bHaptics.Start(); } 
-            catch (Exception ex) { MelonLogger.Warning("bHaptics.Start Exception: " + ex.ToString()); bHaptics.WasError = true; }
+            bHaptics.Start();
 
             MelonHandler.OnApplicationStart_Plugins();
 
@@ -79,9 +75,7 @@ namespace MelonLoader
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchAll();
-
-            try { bHaptics.Quit(); } 
-            catch (Exception ex) { MelonLogger.Warning("bHaptics.Quit Exception: " + ex.ToString()); bHaptics.WasError = true; }
+            bHaptics.Quit();
 
             MelonLogger.Flush();
             Fixes.QuitFix.Run();

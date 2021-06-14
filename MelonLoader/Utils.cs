@@ -217,49 +217,26 @@ namespace MelonLoader
             return new DynamicMethodDefinition(methodBase);
         }
 
-        public static T GetDelegate<T>(this IntPtr ptr) where T : Delegate
-        {
-            if (ptr == IntPtr.Zero)
-                throw new ArgumentNullException(nameof(ptr));
-
-            Delegate del = Marshal.GetDelegateForFunctionPointer(ptr, typeof(T));
-            if (del == null)
-                throw new Exception($"Unable to Get Delegate of Type {typeof(T).FullName} for Function Pointer!");
-
-            return del as T;
-        }
         public static void GetDelegate<T>(this IntPtr ptr, out T output) where T : Delegate
             => output = ptr.GetDelegate<T>();
-
-        public static IntPtr GetNativeLibrary(string filename)
-        {
-            if (string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException(nameof(filename));
-
-            IntPtr returnval = LoadLibrary(filename);
-            if (returnval == IntPtr.Zero)
-                throw new Exception($"Unable to Load Native Library {filename}!");
-
-            return returnval;
-        }
-        public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
+        public static T GetDelegate<T>(this IntPtr ptr) where T : Delegate
+            => ptr.GetDelegate(typeof(T)) as T;
+        public static Delegate GetDelegate(this IntPtr ptr, Type type)
         {
             if (ptr == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(ptr));
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name));
-
-            IntPtr returnval = GetProcAddress(ptr, name);
-            if (returnval == IntPtr.Zero)
-                throw new Exception($"Unable to Find Native Library Export {name}!");
-
-            return returnval;
+            Delegate del = Marshal.GetDelegateForFunctionPointer(ptr, type);
+            if (del == null)
+                throw new Exception($"Unable to Get Delegate of Type {type.FullName} for Function Pointer!");
+            return del;
         }
 
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern IntPtr LoadLibrary(string lpLibFileName);
-        [DllImport("kernel32")]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
+        public static NativeLibrary ToNativeLibrary(this IntPtr ptr)
+            => new NativeLibrary(ptr);
+        public static NativeLibrary<T> ToNativeLibrary<T>(this IntPtr ptr)
+            => new NativeLibrary<T>(ptr);
+        public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
+            => ToNativeLibrary(ptr).GetExport(name);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsGame32Bit();
@@ -284,6 +261,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
