@@ -212,7 +212,7 @@ namespace MelonLoader
                 throw new ArgumentNullException(nameof(ptr));
             Delegate del = Marshal.GetDelegateForFunctionPointer(ptr, typeof(T));
             if (del == null)
-                throw new Exception($"Unable to Get Delegate for Function Pointer!");
+                throw new Exception($"Unable to Get Delegate of Type {typeof(T).FullName} for Function Pointer!");
             return del as T;
         }
         public static void FunctionPointerToDelegate<T>(this IntPtr ptr, out T output) where T : Delegate
