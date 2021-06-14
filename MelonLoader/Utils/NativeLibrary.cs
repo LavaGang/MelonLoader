@@ -60,7 +60,6 @@ namespace MelonLoader
 
     public class NativeLibrary<T> : NativeLibrary
     {
-        public readonly Type SystemType;
         public readonly T Instance;
 
         public NativeLibrary(IntPtr ptr) : base(ptr)
@@ -68,13 +67,13 @@ namespace MelonLoader
             if (ptr == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(ptr));
 
-            SystemType = typeof(T);
-            if (SystemType.IsAbstract && SystemType.IsSealed)
-                throw new Exception($"Specified Type {SystemType.FullName} must be Non-Static!");
+            Type specifiedType = typeof(T);
+            if (specifiedType.IsAbstract && specifiedType.IsSealed)
+                throw new Exception($"Specified Type {specifiedType.FullName} must be Non-Static!");
 
-            Instance = (T)Activator.CreateInstance(SystemType);
+            Instance = (T)Activator.CreateInstance(specifiedType);
 
-            FieldInfo[] fields = SystemType.GetFields(HarmonyLib.AccessTools.all);
+            FieldInfo[] fields = specifiedType.GetFields(HarmonyLib.AccessTools.all);
             if (fields.Length <= 0)
                 return;
 
