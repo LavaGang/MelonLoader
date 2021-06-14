@@ -14,27 +14,28 @@ namespace MelonLoader
             string filepath = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), filename);
             if (!File.Exists(filepath))
                 throw new Exception("Failed to find " + filename + "!");
-            NativeLib = LoadLibrary(filepath);
+            NativeLib = MelonUtils.GetNativeLibrary(filepath);
             if (NativeLib == IntPtr.Zero)
                 throw new Exception("Unable to Load bHaptics Native Library!");
-            GetDelegateFromProcAddress("Initialise", out Initialise);
-            GetDelegateFromProcAddress("TurnOff", out TurnOff);
-            GetDelegateFromProcAddress("Destroy", out Destroy);
-            GetDelegateFromProcAddress("RegisterFeedback", out RegisterFeedback);
-            GetDelegateFromProcAddress("RegisterFeedbackFromTactFile", out RegisterFeedbackFromTactFile);
-            GetDelegateFromProcAddress("RegisterFeedbackFromTactFileReflected", out RegisterFeedbackFromTactFileReflected);
-            GetDelegateFromProcAddress("SubmitRegistered", out SubmitRegistered);
-            GetDelegateFromProcAddress("SubmitRegisteredStartMillis", out SubmitRegisteredStartMillis);
-            GetDelegateFromProcAddress("SubmitRegisteredWithOption", out SubmitRegisteredWithOption);
-            GetDelegateFromProcAddress("SubmitByteArray", out SubmitByteArray);
-            GetDelegateFromProcAddress("SubmitPathArray", out SubmitPathArray);
-            GetDelegateFromProcAddress("IsFeedbackRegistered", out IsFeedbackRegistered);
-            GetDelegateFromProcAddress("IsPlaying", out IsPlaying);
-            GetDelegateFromProcAddress("IsPlayingKey", out IsPlayingKey);
-            GetDelegateFromProcAddress("TurnOffKey", out TurnOffKey);
-            GetDelegateFromProcAddress("IsDevicePlaying", out IsDevicePlaying);
-            GetDelegateFromProcAddress("TryGetResponseForPosition", out TryGetResponseForPosition);
-            GetDelegateFromProcAddress("TryGetExePath", out TryGetExePath);
+
+            NativeLib.GetNativeLibraryExport(nameof(Initialise)).FunctionPointerToDelegate(out Initialise);
+            NativeLib.GetNativeLibraryExport(nameof(TurnOff)).FunctionPointerToDelegate(out TurnOff);
+            NativeLib.GetNativeLibraryExport(nameof(Destroy)).FunctionPointerToDelegate(out Destroy);
+            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedback)).FunctionPointerToDelegate(out RegisterFeedback);
+            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedbackFromTactFile)).FunctionPointerToDelegate(out RegisterFeedbackFromTactFile);
+            NativeLib.GetNativeLibraryExport(nameof(RegisterFeedbackFromTactFileReflected)).FunctionPointerToDelegate(out RegisterFeedbackFromTactFileReflected);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitRegistered)).FunctionPointerToDelegate(out SubmitRegistered);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitRegisteredStartMillis)).FunctionPointerToDelegate(out SubmitRegisteredStartMillis);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitRegisteredWithOption)).FunctionPointerToDelegate(out SubmitRegisteredWithOption);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitByteArray)).FunctionPointerToDelegate(out SubmitByteArray);
+            NativeLib.GetNativeLibraryExport(nameof(SubmitPathArray)).FunctionPointerToDelegate(out SubmitPathArray);
+            NativeLib.GetNativeLibraryExport(nameof(IsFeedbackRegistered)).FunctionPointerToDelegate(out IsFeedbackRegistered);
+            NativeLib.GetNativeLibraryExport(nameof(IsPlaying)).FunctionPointerToDelegate(out IsPlaying);
+            NativeLib.GetNativeLibraryExport(nameof(IsPlayingKey)).FunctionPointerToDelegate(out IsPlayingKey);
+            NativeLib.GetNativeLibraryExport(nameof(TurnOffKey)).FunctionPointerToDelegate(out TurnOffKey);
+            NativeLib.GetNativeLibraryExport(nameof(IsDevicePlaying)).FunctionPointerToDelegate(out IsDevicePlaying);
+            NativeLib.GetNativeLibraryExport(nameof(TryGetResponseForPosition)).FunctionPointerToDelegate(out TryGetResponseForPosition);
+            NativeLib.GetNativeLibraryExport(nameof(TryGetExePath)).FunctionPointerToDelegate(out TryGetExePath);
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -102,17 +103,5 @@ namespace MelonLoader
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate bool dTryGetExePath(byte[] buf, ref int size);
         internal static dTryGetExePath TryGetExePath;
-
-        private static void GetDelegateFromProcAddress<T>(string name, out T output) where T : Delegate
-        {
-            IntPtr ptr = GetProcAddress(NativeLib, name);
-            if (ptr == IntPtr.Zero)
-                throw new Exception("Unable to Find " + name + " Export!");
-            output = Marshal.GetDelegateForFunctionPointer(ptr, typeof(T)) as T;
-        }
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern IntPtr LoadLibrary(string lpLibFileName);
-        [DllImport("kernel32")]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
     }
 }

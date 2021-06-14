@@ -11,12 +11,12 @@ namespace MelonLoader.Fixes
 		internal static void Install()
 		{
 			Type threadType = typeof(Thread);
-			MethodInfo patchMethod = AccessTools.Method(typeof(InvariantCurrentCulture), "PatchMethod");
+			HarmonyMethod patchMethod = AccessTools.Method(typeof(InvariantCurrentCulture), "PatchMethod").ToHarmonyMethod();
 
-			try{ Core.HarmonyInstance.Patch(AccessTools.PropertyGetter(threadType, "CurrentCulture"), new HarmonyMethod(patchMethod)); }
+			try{ Core.HarmonyInstance.Patch(AccessTools.PropertyGetter(threadType, "CurrentCulture"), patchMethod); }
 			catch (Exception ex) { MelonLogger.Warning($"Thread.CurrentCulture Exception: {ex}"); }
 
-			try { Core.HarmonyInstance.Patch(AccessTools.PropertyGetter(threadType, "CurrentUICulture"), new HarmonyMethod(patchMethod)); }
+			try { Core.HarmonyInstance.Patch(AccessTools.PropertyGetter(threadType, "CurrentUICulture"), patchMethod); }
 			catch (Exception ex) { MelonLogger.Warning($"Thread.CurrentUICulture Exception: {ex}"); }
 		}
 

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Mono.Cecil;
-using MonoMod.Utils;
-using MonoMod.Cil;
+using HarmonyLib;
 
 namespace MelonLoader.Preferences.IO
 {
@@ -20,20 +18,15 @@ namespace MelonLoader.Preferences.IO
                 return;
             try
             {
-                DynamicMethodDefinition method = new DynamicMethodDefinition(typeof(FileSystemWatcher).GetProperty("Path").GetGetMethod());
-                ILContext ilcontext = new ILContext(method.Definition);
-                ILCursor ilcursor = new ILCursor(ilcontext);
-                if ((ilcursor.Instrs.Count == 2) 
-                    && (ilcursor.Instrs[1].OpCode.Code == Mono.Cecil.Cil.Code.Throw))
+                MethodInfo method = AccessTools.PropertyGetter(typeof(FileSystemWatcher), "Path");
+                if (method == null)
+                    throw new NullReferenceException("No Path Property Get Method Found!");
+                if (method.IsMethodNotImplemented())
                 {
-                    ilcontext.Dispose();
-                    method.Dispose();
                     MelonLogger.Warning("FileSystemWatcher NotImplementedException Detected! Disabling MelonPreferences FileWatcher Functionality...");
                     ShouldDisableFileWatcherFunctionality = true;
                     return;
                 }
-                ilcontext.Dispose();
-                method.Dispose();
 
                 FileWatcher = new FileSystemWatcher(Path.GetDirectoryName(preffile.FilePath), Path.GetFileName(preffile.FilePath))
                 {

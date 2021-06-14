@@ -5,7 +5,6 @@ namespace MelonLoader.Preferences
     public abstract class ValueValidator
     {
         public abstract bool IsValid(object value);
-
         public abstract object EnsureValid(object value);
     }
 
@@ -30,9 +29,7 @@ namespace MelonLoader.Preferences
         }
 
         public override bool IsValid(object value)
-        {
-            return MaxValue.CompareTo(value) >= 0 && MinValue.CompareTo(value) <= 0;
-        }
+            => MaxValue.CompareTo(value) >= 0 && MinValue.CompareTo(value) <= 0;
 
         public override object EnsureValid(object value)
         {

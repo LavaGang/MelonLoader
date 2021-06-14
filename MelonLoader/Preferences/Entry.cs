@@ -33,7 +33,6 @@ namespace MelonLoader
         public abstract TomlValue Save();
 
         public event Action OnValueChangedUntyped;
-
         protected void FireUntypedValueChanged() => OnValueChangedUntyped?.Invoke();
     }
 
@@ -84,11 +83,7 @@ namespace MelonLoader
         public override string GetDefaultValueAsString() => DefaultValue?.ToString();
         public override string GetValueAsString() => Value?.ToString();
 
-        public override void Load(TomlValue obj)
-        {
-            Value = TomletMain.To<T>(obj);
-        }
-
+        public override void Load(TomlValue obj) => Value = TomletMain.To<T>(obj);
         public override TomlValue Save()
         {
             Value = EditedValue;
