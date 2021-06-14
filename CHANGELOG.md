@@ -220,6 +220,7 @@
 195. Fixed Issue with DNSPY_UNITY_DBG Environment Variable not being Handled.
 196. Fixed Crash Issue with Certain Oculus Platform Games.
 197. Fixed Issue with Directory Check overextending.
+198. 
 
 ---
 

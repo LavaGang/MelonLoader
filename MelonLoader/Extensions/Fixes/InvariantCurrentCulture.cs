@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using MonoMod.RuntimeDetour;
+using HarmonyLib;
 
 namespace MelonLoader.Fixes
 {
@@ -10,27 +10,20 @@ namespace MelonLoader.Fixes
 	{
 		internal static void Install()
 		{
-			MethodInfo patchMethod = typeof(InvariantCurrentCulture).GetMethod("New", BindingFlags.NonPublic | BindingFlags.Static);
+			Type threadType = typeof(Thread);
+			MethodInfo patchMethod = AccessTools.Method(typeof(InvariantCurrentCulture), "PatchMethod");
 
-			try
-			{
-				IDetour CurrentCulture_Detour = new Detour(
-					typeof(Thread).GetProperty("CurrentCulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(),
-					patchMethod
-				);
-			}
+			try{ Core.HarmonyInstance.Patch(AccessTools.PropertyGetter(threadType, "CurrentCulture"), new HarmonyMethod(patchMethod)); }
 			catch (Exception ex) { MelonLogger.Warning($"Thread.CurrentCulture Exception: {ex}"); }
 
-			try
-			{
-				IDetour CurrentUICulture_Detour = new Detour(
-					typeof(Thread).GetProperty("CurrentUICulture", BindingFlags.Public | BindingFlags.Instance).GetGetMethod(),
-					patchMethod
-				);
-			}
+			try { Core.HarmonyInstance.Patch(AccessTools.PropertyGetter(threadType, "CurrentUICulture"), new HarmonyMethod(patchMethod)); }
 			catch (Exception ex) { MelonLogger.Warning($"Thread.CurrentUICulture Exception: {ex}"); }
 		}
 
-		private static CultureInfo New(HarmonyLib.Harmony self) => CultureInfo.InvariantCulture;
+		private static bool PatchMethod(ref CultureInfo __result)
+		{
+			__result = CultureInfo.InvariantCulture;
+			return false;
+		}
 	}
 }

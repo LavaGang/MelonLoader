@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using HarmonyLib;
 
 namespace MelonLoader
 {
     internal static class Core
     {
+        internal static HarmonyLib.Harmony HarmonyInstance = null;
+
         static Core()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
+            HarmonyInstance = new HarmonyLib.Harmony("MelonLoader");
 
             Fixes.UnhandledException.Run(curDomain);
             Fixes.InvariantCurrentCulture.Install();
@@ -75,7 +81,7 @@ namespace MelonLoader
             MelonHandler.OnApplicationQuit();
             MelonPreferences.Save();
 
-            //Harmony.HarmonyInstance.UnpatchAllInstances();
+            HarmonyInstance.UnpatchAll();
 
             try { bHaptics.Quit(); } 
             catch (Exception ex) { MelonLogger.Warning("bHaptics.Quit Exception: " + ex.ToString()); bHaptics.WasError = true; }
