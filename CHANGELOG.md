@@ -219,6 +219,7 @@
 194. Added dnSpy Debugger Environment Variable Handling.    (Credits to [TechInterMezzo](https://github.com/TechInterMezzo) :D)
 195. Fixed Issue with DNSPY_UNITY_DBG Environment Variable not being Handled.
 196. Fixed Crash Issue with Certain Oculus Platform Games.
+197. Fixed Issue with Directory Check overextending.
 
 ---
 

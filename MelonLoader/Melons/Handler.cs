@@ -125,7 +125,10 @@ namespace MelonLoader
             }
 
             if (plugins)
+            {
                 _Mods.RemoveAll(failedMelons.Contains);
+                MelonCompatibilityLayer.CreationCheck = false;
+            }
             else
                 _Plugins.RemoveAll(failedMelons.Contains);
 
