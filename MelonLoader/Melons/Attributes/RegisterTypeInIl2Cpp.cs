@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader
@@ -14,8 +16,8 @@ namespace MelonLoader
         {
             if (!MelonUtils.IsGameIl2Cpp())
                 return;
-            Type[] typeTbl = asm.GetTypes();
-            if ((typeTbl == null) || (typeTbl.Length <= 0))
+            IEnumerable<Type> typeTbl = asm.GetValidTypes();
+            if ((typeTbl == null) || (typeTbl.Count() <= 0))
                 return;
             foreach (Type type in typeTbl)
             {
