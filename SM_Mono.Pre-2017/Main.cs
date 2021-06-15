@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using MelonLoader.Support.Preferences;
@@ -16,9 +17,9 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
-            string game_version = Application.version;
+            string game_version = ApplicationHandler.GetVersion();
             if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
-                game_version = Application.buildGUID;
+                game_version = ApplicationHandler.GetBuildGUID();
             MelonLogger.Msg($"Game Version: {game_version}");
             SetDefaultConsoleTitleWithGameName(game_version);
             UnityMappers.RegisterMappers();

@@ -223,6 +223,7 @@
 198. Updated Il2CppAssemblyUnhollower to v0.4.15.2.    (Credits to [knah](https://github.com/knah) :D)
 199. Fixed Issue with Directory Check overextending.
 200. Improved Native Library Handling.
+201. Fixed NRE Issue with Support Module being unable to find Application.buildGUID on Certain Unity Engine Versions.
 
 ---
 
