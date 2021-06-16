@@ -47,8 +47,7 @@ namespace MelonLoader
 
 		public override MethodBase DetourTo(MethodBase replacement)
 		{
-			if (MelonDebug.IsEnabled())
-				DebugCheck();
+			DebugCheck();
 
 			DynamicMethodDefinition newreplacementdmd = CopyOriginal();
 			HarmonyManipulator.Manipulate(Original, Original.GetPatchInfo(), new ILContext(newreplacementdmd.Definition));
@@ -57,7 +56,7 @@ namespace MelonLoader
 			MethodInfo il2CppShim = CreateIl2CppShim(newreplacement).Generate();
 			Type il2CppShimDelegateType = DelegateTypeFactory.instance.CreateDelegateType(il2CppShim, CallingConvention.Cdecl);
 			Delegate il2CppShimDelegate = il2CppShim.CreateDelegate(il2CppShimDelegateType);
-			IntPtr il2CppShimDelegatePtr = Marshal.GetFunctionPointerForDelegate(il2CppShimDelegate);
+			IntPtr il2CppShimDelegatePtr = il2CppShimDelegate.GetFunctionPointer();
 
 			if (methodDetourPointer != IntPtr.Zero)
 				MelonUtils.NativeHookDetach(copiedMethodInfoPointer, methodDetourPointer);
@@ -293,6 +292,9 @@ namespace MelonLoader
 
 		private void DebugCheck()
 		{
+			if (!MelonDebug.IsEnabled())
+				return;
+			
 			PatchInfo patchInfo = Original.GetPatchInfo();
 
 			Patch basePatch = ((patchInfo.prefixes.Count() > 0) ? patchInfo.prefixes.First()

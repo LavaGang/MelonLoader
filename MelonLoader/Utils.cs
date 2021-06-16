@@ -218,9 +218,9 @@ namespace MelonLoader
         }
 
         public static void GetDelegate<T>(this IntPtr ptr, out T output) where T : Delegate
-            => output = ptr.GetDelegate<T>();
+            => output = GetDelegate<T>(ptr);
         public static T GetDelegate<T>(this IntPtr ptr) where T : Delegate
-            => ptr.GetDelegate(typeof(T)) as T;
+            => GetDelegate(ptr, typeof(T)) as T;
         public static Delegate GetDelegate(this IntPtr ptr, Type type)
         {
             if (ptr == IntPtr.Zero)
@@ -230,6 +230,8 @@ namespace MelonLoader
                 throw new Exception($"Unable to Get Delegate of Type {type.FullName} for Function Pointer!");
             return del;
         }
+        public static IntPtr GetFunctionPointer(this Delegate del)
+            => Marshal.GetFunctionPointerForDelegate(del);
 
         public static NativeLibrary ToNewNativeLibrary(this IntPtr ptr)
             => new NativeLibrary(ptr);
