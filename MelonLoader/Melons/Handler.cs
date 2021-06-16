@@ -222,7 +222,7 @@ namespace MelonLoader
         internal static void OnPreInitialization()
             => InvokeMelonMethod(ref _Plugins, x =>
             {
-                if (MelonUtils.PullAttributeFromAssembly<HarmonyLib.HarmonyDontPatchAll>(x.Assembly) == null)
+                if (MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(x.Assembly) == null)
                     x.HarmonyInstance.PatchAll(x.Assembly);
                 x.OnPreInitialization();
             }, true);
@@ -237,7 +237,7 @@ namespace MelonLoader
         internal static void OnApplicationStart_Mods()
             => InvokeMelonMethod(ref _Mods, x =>
             {
-                if (MelonUtils.PullAttributeFromAssembly<HarmonyLib.HarmonyDontPatchAll>(x.Assembly) == null)
+                if (MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(x.Assembly) == null)
                     x.HarmonyInstance.PatchAll(x.Assembly);
                 RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
                 x.OnApplicationStart();
@@ -265,12 +265,22 @@ namespace MelonLoader
                 CurrentSceneBuildIndex = buildIndex;
                 CurrentSceneName = sceneName;
             }
-            InvokeMelonMethod(ref _Mods, x => x.OnLevelWasLoaded(buildIndex));
-            InvokeMelonMethod(ref _Mods, x => x.OnSceneWasLoaded(buildIndex, sceneName));
+            InvokeMelonMethod(ref _Mods, x =>
+            {
+                x.OnLevelWasLoaded(buildIndex);
+                x.OnSceneWasLoaded(buildIndex, sceneName);
+            });
         }
 
-        internal static void OnSceneWasInitialized(int buildIndex, string sceneName) { InvokeMelonMethod(ref _Mods, x => x.OnLevelWasInitialized(buildIndex)); InvokeMelonMethod(ref _Mods, x => x.OnSceneWasInitialized(buildIndex, sceneName)); }
-        internal static void OnSceneWasUnloaded(int buildIndex, string sceneName) => InvokeMelonMethod(ref _Mods, x => x.OnSceneWasUnloaded(buildIndex, sceneName));
+        internal static void OnSceneWasInitialized(int buildIndex, string sceneName)
+            => InvokeMelonMethod(ref _Mods, x =>
+            {
+                x.OnLevelWasInitialized(buildIndex);
+                x.OnSceneWasInitialized(buildIndex, sceneName);
+            });
+
+        internal static void OnSceneWasUnloaded(int buildIndex, string sceneName)
+            => InvokeMelonMethod(ref _Mods, x => x.OnSceneWasUnloaded(buildIndex, sceneName));
 
         private static bool InitializeScene = false;
         internal static void OnUpdate()

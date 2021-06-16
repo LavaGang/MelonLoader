@@ -214,7 +214,7 @@
 189. Added Missing Harmony Patch Forwarders.    (Credits to [ds5678](https://github.com/ds5678) :D)
 190. Added Error Message for when a Plugin or Mod attempts to Load from the Wrong Folder.
 191. Updated Tomlet to v1.3.3.
-192. Added HarmonyLib.HarmonyDontPatchAll Assembly Attribute.
+192. Added MelonLoader.HarmonyDontPatchAll Assembly Attribute.
 193. Prepared Changes for Il2CppAssemblyUnhollower v0.4.15.2.    (Credits to [ds5678](https://github.com/ds5678) :D)
 194. Added dnSpy Debugger Environment Variable Handling.    (Credits to [TechInterMezzo](https://github.com/TechInterMezzo) :D)
 195. Fixed Issue with DNSPY_UNITY_DBG Environment Variable not being Handled.
