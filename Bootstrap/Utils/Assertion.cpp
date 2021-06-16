@@ -43,13 +43,13 @@ void Assertion::ThrowInternalFailure(const char* msg)
 	}
 }
 
-FARPROC Assertion::GetExport(HMODULE mod, const char* export_name)
+FARPROC Assertion::GetExport(HMODULE mod, const char* export_name, bool internalfailure)
 {
 	if (!ShouldContinue)
 		return NULL;
 	Debug::Msg(export_name);
 	FARPROC returnval = GetProcAddress(mod, export_name);
-	if (returnval == NULL)
+	if (internalfailure && (returnval == NULL))
 		ThrowInternalFailure((std::string("Failed to GetExport ( ") + export_name + " )").c_str());
 	return returnval;
 }

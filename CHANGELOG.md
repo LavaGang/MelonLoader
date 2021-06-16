@@ -224,6 +224,7 @@
 199. Fixed Issue with Directory Check overextending.
 200. Improved Native Library Handling.
 201. Fixed NRE Issue with Support Module being unable to find Application.buildGUID on Certain Unity Engine Versions.
+202. Fixed Issue with Export mono_debug_domain_create on Older Mono Versions.
 
 ---
 
