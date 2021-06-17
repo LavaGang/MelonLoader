@@ -29,6 +29,7 @@ bool Mono::IsOldMono = false;
 
 MONODEF(mono_jit_init)
 MONODEF(mono_jit_init_version)
+MONODEF(mono_jit_parse_options)
 MONODEF(mono_set_assemblies_path)
 MONODEF(mono_assembly_setrootdir)
 MONODEF(mono_set_config_dir)
@@ -220,7 +221,13 @@ void Mono::CreateDomain(const char* name)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argvMono);
 
 	if (Debug::Enabled)
+	{
+		if (IsOldMono)
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
+		else
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
 		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+	}
 
 	domain = Exports::mono_jit_init(name);
 
@@ -256,6 +263,7 @@ bool Mono::Exports::Initialize()
 	#define MONODEF(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn);
 
 	MONODEF(mono_jit_init)
+	MONODEF(mono_jit_parse_options)
 	MONODEF(mono_thread_set_main)
 	MONODEF(mono_thread_current)
 	MONODEF(mono_add_internal_call)
@@ -340,6 +348,18 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 	Free(returnstr);
 }
 
+void Mono::ParseEnvOption(const char* name)
+{
+	const int size = 1024;
+	char env[size];
+	DWORD length = GetEnvironmentVariableA(name, env, size);
+	if (length > 0 && length < size)
+	{
+		char* options[1] = { env };
+		Exports::mono_jit_parse_options(1, options);
+	}
+}
+
 Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* version)
 {
 	Console::SetHandles();
@@ -348,7 +368,13 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 	Debug::Msg("Creating Mono Domain...");
 
 	if (Debug::Enabled)
+	{
+		if (IsOldMono)
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
+		else
+			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
 		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+	}
 
 	domain = Exports::mono_jit_init_version(name, version);
 

@@ -166,6 +166,7 @@ public:
 
 		MONODEF(Domain*, mono_jit_init, (const char* name))
 		MONODEF(Domain*, mono_jit_init_version, (const char* name, const char* version))
+		MONODEF(void*, mono_jit_parse_options, (int argc, char* argv[]))
 		MONODEF(void, mono_set_assemblies_path, (const char* path))
 		MONODEF(void, mono_assembly_setrootdir, (const char* path))
 		MONODEF(void, mono_set_config_dir, (const char* path))
@@ -223,4 +224,6 @@ private:
 	static const char* LibNames[];
 	static const char* FolderNames[];
 	static HMODULE PosixHelper;
+
+	static void ParseEnvOption(const char* name);
 };

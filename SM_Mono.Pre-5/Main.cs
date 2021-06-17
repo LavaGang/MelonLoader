@@ -11,7 +11,7 @@ namespace MelonLoader.Support
     {
         internal static ISupportModule_From Interface = null;
         internal static GameObject obj = null;
-        internal static Component component = null;
+        internal static SM_Component component = null;
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
@@ -22,7 +22,7 @@ namespace MelonLoader.Support
 
             UnityMappers.RegisterMappers();
 
-            Component.Create();
+            SM_Component.Create();
             return new SupportModule_To();
         }
         [MethodImpl(MethodImplOptions.InternalCall)]

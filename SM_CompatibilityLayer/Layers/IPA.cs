@@ -30,10 +30,12 @@ namespace MelonLoader.CompatibilityLayers
 		{
 			if (args.inter != null)
 				return;
-			IEnumerable<Type> plugin_types = args.assembly.GetOnlyValidTypes().Where(x => (x.GetInterface("IPlugin") != null));
+
+			IEnumerable<Type> plugin_types = args.assembly.GetValidTypes(x => x.GetInterface("IPlugin") != null);
 			if ((plugin_types == null)
 				|| (plugin_types.Count() <= 0))
 				return;
+
 			args.inter = new IPA_CL(args.assembly, args.filepath, plugin_types);
 		}
 
