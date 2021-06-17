@@ -25,6 +25,7 @@
 
 1. Fixed Issue with Compatibility Layer system throwing NRE about Default Constructors.
 2. Added MelonCompatibilityLayer.WrapperData Extensions.
+3. Fixed Case Issue with MelonHandler not handling File Extensions properly.
 
 ---
 

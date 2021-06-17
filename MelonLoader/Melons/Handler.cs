@@ -162,7 +162,7 @@ namespace MelonLoader
         {
             if (string.IsNullOrEmpty(filepath))
                 return;
-            switch (Path.GetExtension(filepath))
+            switch (Path.GetExtension(filepath).ToLowerInvariant())
             {
                 case ".dll":
                     MelonFileTypes.DLL.LoadFromFile(filepath, symbolspath);
