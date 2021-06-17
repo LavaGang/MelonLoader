@@ -21,6 +21,13 @@
 
 ---
 
+### v0.4.1 ALPHA Pre-Release:
+
+1. Fixed Issue with Compatibility Layer system throwing NRE about Default Constructors.
+2. Added MelonCompatibilityLayer.WrapperData Extensions.
+
+---
+
 ### v0.4.0 Open-Beta:
 
 1. Tweaked Assembly Load exceptions logging.    (Credits to [Slaynash](https://github.com/Slaynash) :3)

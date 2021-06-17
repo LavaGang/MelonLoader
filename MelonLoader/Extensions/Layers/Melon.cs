@@ -68,7 +68,7 @@ namespace MelonLoader.CompatibilityLayers
 			MelonColorAttribute coloratt = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(asm);
 			MelonPriorityAttribute priorityatt = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(asm, true);
 
-			MelonBase instance = MelonCompatibilityLayer.CreateMelonFromWrapperData(new MelonCompatibilityLayer.WrapperData()
+			MelonBase instance = new MelonCompatibilityLayer.WrapperData()
 			{
 				Assembly = asm,
 				Info = infoAttribute,
@@ -77,7 +77,7 @@ namespace MelonLoader.CompatibilityLayers
 				ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
 				Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
 				Location = filepath
-			});
+			}.CreateMelon();
 			if (instance == null)
 				return;
 

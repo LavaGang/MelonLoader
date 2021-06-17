@@ -90,25 +90,25 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
-			MelonBase wrapper = MelonCompatibilityLayer.CreateMelonFromWrapperData(new MelonCompatibilityLayer.WrapperData()
+			MelonModWrapper wrapper = new MelonCompatibilityLayer.WrapperData()
 			{
 				Assembly = asm,
 				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version),
 				Games = (gamestbl != null) ? gamestbl.ToArray() : null,
 				Priority = 0,
 				Location = filelocation
-			});
+			}.CreateMelon<MelonModWrapper>();
 			if (wrapper == null)
 				return;
 
+			wrapper.pluginInstance = pluginInstance;
 			melonTbl.Add(wrapper);
 			PluginManager._Plugins.Add(pluginInstance);
 		}
 
 		private class MelonModWrapper : MelonMod
 		{
-			private readonly IPlugin pluginInstance;
-			internal MelonModWrapper(IPlugin plugin) => pluginInstance = plugin;
+			internal IPlugin pluginInstance;
 			public override void OnApplicationStart() => pluginInstance.OnApplicationStart();
 			public override void OnApplicationQuit() => pluginInstance.OnApplicationQuit();
 			public override void OnSceneWasLoaded(int buildIndex, string sceneName) => pluginInstance.OnLevelWasLoaded(buildIndex);

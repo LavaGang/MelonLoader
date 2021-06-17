@@ -18,8 +18,8 @@
 
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::Path = NULL;
-std::string Core::Version = "0.4.0";
-bool Core::Is_ALPHA_PreRelease = false;
+std::string Core::Version = "0.4.1";
+bool Core::Is_ALPHA_PreRelease = true;
 Core::wine_get_version_t Core::wine_get_version = NULL;
 
 std::string Core::GetVersionStr()

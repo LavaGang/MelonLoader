@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace MelonLoader
 {
@@ -71,7 +72,14 @@ namespace MelonLoader
             public int Priority = 0;
             public string Location = null;
         }
-        public static MelonBase CreateMelonFromWrapperData(WrapperData creationData)
+        public static T CreateMelon<T>(this WrapperData creationData) where T : MelonBase
+        {
+            MelonBase baseMelon = CreateMelon(creationData);
+            if (baseMelon == null)
+                return default;
+            return baseMelon as T;
+        }
+        public static MelonBase CreateMelon(this WrapperData creationData)
         {
             if (CreationCheck)
             {
@@ -82,7 +90,7 @@ namespace MelonLoader
                 }
             }
 
-            MelonBase instance = Activator.CreateInstance(creationData.Info.SystemType) as MelonBase;
+            MelonBase instance = FormatterServices.GetUninitializedObject(creationData.Info.SystemType) as MelonBase;
             if (instance == null)
             {
                 MelonLogger.Error($"Failed to Create Instance for {creationData.Location}");
