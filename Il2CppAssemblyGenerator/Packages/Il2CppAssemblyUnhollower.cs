@@ -79,7 +79,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             InstallLogger();
 
             var options = GenerateOptions();
-
+            
             return Main(options);
         }
 

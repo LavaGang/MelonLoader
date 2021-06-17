@@ -173,6 +173,7 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 	// if (AssemblyGenerator::Initialize())
 	// {
 		Mono::CreateDomain(name);
+		BaseAssembly::LoadAssembly();
 		InternalCalls::Initialize();
 		// todo: check if it works/is necessary on mono games
 		//AssemblyVerifier::InstallHooks();
