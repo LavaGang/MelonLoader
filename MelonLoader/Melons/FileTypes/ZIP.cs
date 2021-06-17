@@ -51,7 +51,7 @@ namespace MelonLoader.MelonFileTypes
                         if (string.IsNullOrEmpty(entry_filename))
                             continue;
 
-                        string extension = Path.GetExtension(entry_filename);
+                        string extension = Path.GetExtension(entry_filename).ToLowerInvariant();
                         if (extension.Equals(".cs"))
                         {
                             source_code_detected = true;

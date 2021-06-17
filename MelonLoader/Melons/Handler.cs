@@ -142,7 +142,7 @@ namespace MelonLoader
                 || string.IsNullOrEmpty(melonBase.Location))
                 return null;
 
-            string extension = Path.GetExtension(melonBase.Location);
+            string extension = Path.GetExtension(melonBase.Location).ToLowerInvariant();
             if (string.IsNullOrEmpty(extension)
                 || !extension.Equals(".dll"))
                 return null;
