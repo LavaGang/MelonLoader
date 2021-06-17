@@ -231,7 +231,7 @@ void Mono::CreateDomain(const char* name)
 
 	domain = Exports::mono_jit_init(name);
 
-	if (Debug::Enabled)
+	if (Debug::Enabled && (Exports::mono_debug_domain_create != NULL))
 		Exports::mono_debug_domain_create(domain);
 
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
@@ -261,6 +261,7 @@ bool Mono::Exports::Initialize()
 	Debug::Msg("Initializing Mono Exports...");
 
 	#define MONODEF(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn);
+	#define MONODEF_NOINTERNALFAILURE(fn) fn = (fn##_t) Assertion::GetExport(Module, #fn, false);
 
 	MONODEF(mono_jit_init)
 	MONODEF(mono_jit_parse_options)
@@ -281,7 +282,13 @@ bool Mono::Exports::Initialize()
 	MONODEF(mono_image_get_name)
 
 	MONODEF(mono_debug_init)
-	MONODEF(mono_debug_domain_create)
+	if (Debug::Enabled)
+	{
+		if (Mono::IsOldMono)
+			MONODEF_NOINTERNALFAILURE(mono_debug_domain_create)
+		else
+			MONODEF(mono_debug_domain_create)
+	}
 
 	if (!IsOldMono)
 	{
@@ -378,7 +385,7 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 
 	domain = Exports::mono_jit_init_version(name, version);
 
-	if (Debug::Enabled)
+	if (Debug::Enabled && (Exports::mono_debug_domain_create != NULL))
 		Exports::mono_debug_domain_create(domain);
 
 	Exports::mono_thread_set_main(Exports::mono_thread_current());

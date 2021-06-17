@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader
 {
     public static class MelonCompatibilityLayer
     {
-        internal static bool ModWarning = true;
+        internal static bool CreationCheck = true;
 
         internal static void Setup(AppDomain domain)
         {
@@ -74,7 +73,7 @@ namespace MelonLoader
         }
         public static MelonBase CreateMelonFromWrapperData(WrapperData creationData)
         {
-            if (ModWarning)
+            if (CreationCheck)
             {
                 if (creationData.Info.SystemType.IsSubclassOf(typeof(MelonMod)))
                 {

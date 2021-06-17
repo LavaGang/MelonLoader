@@ -214,11 +214,17 @@
 189. Added Missing Harmony Patch Forwarders.    (Credits to [ds5678](https://github.com/ds5678) :D)
 190. Added Error Message for when a Plugin or Mod attempts to Load from the Wrong Folder.
 191. Updated Tomlet to v1.3.3.
-192. Added HarmonyLib.HarmonyDontPatchAll Assembly Attribute.
+192. Added MelonLoader.HarmonyDontPatchAll Assembly Attribute.
 193. Prepared Changes for Il2CppAssemblyUnhollower v0.4.15.2.    (Credits to [ds5678](https://github.com/ds5678) :D)
 194. Added dnSpy Debugger Environment Variable Handling.    (Credits to [TechInterMezzo](https://github.com/TechInterMezzo) :D)
 195. Fixed Issue with DNSPY_UNITY_DBG Environment Variable not being Handled.
 196. Fixed Crash Issue with Certain Oculus Platform Games.
+197. Fix wrong type being created in IL2CPP SM_Component.    (Credits to [knah](https://github.com/knah) :D)
+198. Updated Il2CppAssemblyUnhollower to v0.4.15.2.    (Credits to [knah](https://github.com/knah) :D)
+199. Fixed Issue with Directory Check overextending.
+200. Improved Native Library Handling.
+201. Fixed NRE Issue with Support Module being unable to find Application.buildGUID on Certain Unity Engine Versions.
+202. Fixed Issue with Export mono_debug_domain_create on Older Mono Versions.
 
 ---
 

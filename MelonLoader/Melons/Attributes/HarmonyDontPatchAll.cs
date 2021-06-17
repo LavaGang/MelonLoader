@@ -1,7 +1,7 @@
 ﻿using System;
 
-namespace HarmonyLib
+namespace MelonLoader
 {
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class HarmonyDontPatchAll : Attribute { public HarmonyDontPatchAll() { } }
+    public class HarmonyDontPatchAllAttribute : Attribute { public HarmonyDontPatchAllAttribute() { } }
 }

@@ -7,6 +7,9 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Text;
+using MonoMod.Utils;
+using MonoMod.Cil;
+using HarmonyLib;
 using MelonLoader.TinyJSON;
 #pragma warning disable 0618
 
@@ -183,6 +186,60 @@ namespace MelonLoader
                         : true)));
         }
 
+        public static bool IsNotImplemented(this MethodBase methodBase)
+        {
+            if (methodBase == null)
+                throw new ArgumentNullException(nameof(methodBase));
+
+            DynamicMethodDefinition method = methodBase.ToNewDynamicMethodDefinition();
+            ILContext ilcontext = new ILContext(method.Definition);
+            ILCursor ilcursor = new ILCursor(ilcontext);
+
+            bool returnval = (ilcursor.Instrs.Count == 2)
+                && (ilcursor.Instrs[1].OpCode.Code == Mono.Cecil.Cil.Code.Throw);
+
+            ilcontext.Dispose();
+            method.Dispose();
+            return returnval;
+        }
+
+        public static HarmonyMethod ToNewHarmonyMethod(this MethodInfo methodInfo)
+        {
+            if (methodInfo == null)
+                throw new ArgumentNullException(nameof(methodInfo));
+            return new HarmonyMethod(methodInfo);
+        }
+
+        public static DynamicMethodDefinition ToNewDynamicMethodDefinition(this MethodBase methodBase)
+        {
+            if (methodBase == null)
+                throw new ArgumentNullException(nameof(methodBase));
+            return new DynamicMethodDefinition(methodBase);
+        }
+
+        public static void GetDelegate<T>(this IntPtr ptr, out T output) where T : Delegate
+            => output = GetDelegate<T>(ptr);
+        public static T GetDelegate<T>(this IntPtr ptr) where T : Delegate
+            => GetDelegate(ptr, typeof(T)) as T;
+        public static Delegate GetDelegate(this IntPtr ptr, Type type)
+        {
+            if (ptr == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(ptr));
+            Delegate del = Marshal.GetDelegateForFunctionPointer(ptr, type);
+            if (del == null)
+                throw new Exception($"Unable to Get Delegate of Type {type.FullName} for Function Pointer!");
+            return del;
+        }
+        public static IntPtr GetFunctionPointer(this Delegate del)
+            => Marshal.GetFunctionPointerForDelegate(del);
+
+        public static NativeLibrary ToNewNativeLibrary(this IntPtr ptr)
+            => new NativeLibrary(ptr);
+        public static NativeLibrary<T> ToNewNativeLibrary<T>(this IntPtr ptr)
+            => new NativeLibrary<T>(ptr);
+        public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
+            => NativeLibrary.GetExport(ptr, name);
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsGame32Bit();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -206,6 +263,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]

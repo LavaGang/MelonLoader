@@ -4,9 +4,12 @@ namespace MelonLoader
 {
     internal static class Core
     {
+        internal static HarmonyLib.Harmony HarmonyInstance = null;
+
         static Core()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
+            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
             Fixes.UnhandledException.Run(curDomain);
             Fixes.InvariantCurrentCulture.Install();
@@ -26,9 +29,7 @@ namespace MelonLoader
         private static int Initialize()
         {
             Il2CppAssemblyGenerator.Load();
-
-            try { bHaptics_NativeLibrary.Load(); } 
-            catch (Exception ex) { MelonLogger.Warning("bHaptics_NativeLibrary.Load Exception: " + ex.ToString()); bHaptics.WasError = true; }
+            bHaptics.Load();
 
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
@@ -51,15 +52,11 @@ namespace MelonLoader
 
         private static int Start()
         {
-            MelonCompatibilityLayer.ModWarning = false;
-
             if (!SupportModule.Initialize())
                 return 1;
 
             AddUnityDebugLog();
-
-            try { bHaptics.Start(); } 
-            catch (Exception ex) { MelonLogger.Warning("bHaptics.Start Exception: " + ex.ToString()); bHaptics.WasError = true; }
+            bHaptics.Start();
 
             MelonHandler.OnApplicationStart_Plugins();
 
@@ -77,10 +74,8 @@ namespace MelonLoader
             MelonHandler.OnApplicationQuit();
             MelonPreferences.Save();
 
-            //Harmony.HarmonyInstance.UnpatchAllInstances();
-
-            try { bHaptics.Quit(); } 
-            catch (Exception ex) { MelonLogger.Warning("bHaptics.Quit Exception: " + ex.ToString()); bHaptics.WasError = true; }
+            HarmonyInstance.UnpatchAll();
+            bHaptics.Quit();
 
             MelonLogger.Flush();
             Fixes.QuitFix.Run();

@@ -145,8 +145,7 @@
     <Compile Include="Extensions\PatchShield.cs" />
     <Compile Include="Extensions\UnityMagicMethods.cs" />
     <Compile Include="Preferences\ValueValidator.cs" />
-    <Compile Include="Utils\bHaptics\API.cs" />
-    <Compile Include="Utils\bHaptics\NativeLibrary.cs" />
+    <Compile Include="Utils\bHaptics.cs" />
     <Compile Include="Libs\IniFile.cs" />
     <Compile Include="Melons\Attributes\AdditionalDependencies.cs" />
     <Compile Include="Melons\Attributes\Color.cs" />
@@ -172,6 +171,7 @@
     <Compile Include="Utils\DependencyGraph.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Utils\NativeLibrary.cs" />
     <Compile Include="Utils\SupportModule.cs" />
     <Compile Include="Utils\UnhollowerSupport.cs" />
     <Compile Include="Libs\TinyJSON\Decoder.cs" />

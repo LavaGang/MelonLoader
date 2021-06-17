@@ -6,7 +6,7 @@ namespace MelonLoader.Preferences
 {
     public class MelonPreferences_ReflectiveCategory
     {
-        private Type type;
+        private Type SystemType;
         private object value;
         internal IO.File File = null;
         
@@ -17,9 +17,9 @@ namespace MelonLoader.Preferences
         
         private MelonPreferences_ReflectiveCategory(Type type, string categoryName, string displayName)
         {
-            this.type = type;
-            this.Identifier = categoryName;
-            this.DisplayName = displayName;
+            SystemType = type;
+            Identifier = categoryName;
+            DisplayName = displayName;
 
             IO.File currentFile = File;
             if (currentFile == null)
@@ -32,21 +32,21 @@ namespace MelonLoader.Preferences
             MelonPreferences.ReflectiveCategories.Add(type, this);
         }
 
-        internal void LoadDefaults() => value = Activator.CreateInstance(type);
+        internal void LoadDefaults() => value = Activator.CreateInstance(SystemType);
 
-        internal void Load(TomlValue tomlValue) => value = TomletMain.To(type, tomlValue);
+        internal void Load(TomlValue tomlValue) => value = TomletMain.To(SystemType, tomlValue);
 
         internal TomlValue Save()
         {
             if(value == null)
                 LoadDefaults();
             
-            return TomletMain.ValueFrom(type, value);
+            return TomletMain.ValueFrom(SystemType, value);
         }
 
         public T GetValue<T>() where T : new()
         {
-            if (typeof(T) != type)
+            if (typeof(T) != SystemType)
                 return default;
             if (value == null)
                 LoadDefaults();

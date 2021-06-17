@@ -4,7 +4,6 @@ using System.Reflection;
 
 namespace MelonLoader
 {
-
 	/*
 	 * A list of Unity's built-in messages / magic methods and their (optional) argument types.
 	 * Used to prevent false-positive "IL2CPP method got inlined, patch may not work" warnings.
@@ -25,11 +24,8 @@ namespace MelonLoader
 		static UnityMagicMethods()
 		{
 			Assembly unityAssembly = Assembly.Load("UnityEngine");
-			Type unityType(string name)
-			{
-				// This may return null - especially for types such as NetworkPlayer that have been removed in newer Unity versions
-				return unityAssembly.GetType(name);
-			}
+			Type unityType(string name) // This may return null - especially for types such as NetworkPlayer that have been removed in newer Unity versions
+				=> unityAssembly.GetType(name);
 
 			MonoBehaviourType = unityType("UnityEngine.MonoBehaviour");
 			ScriptableObjectType = unityType("UnityEngine.ScriptableObject");
@@ -114,50 +110,44 @@ namespace MelonLoader
 
 		internal static bool IsUnityMagicMethod(MethodBase method)
 		{
-			if (method == null || method.IsStatic || method.IsAbstract || method.IsGenericMethod || method.IsConstructor)
-			{
+			if (method == null
+				|| method.IsStatic
+				|| method.IsAbstract
+				|| method.IsGenericMethod
+				|| method.IsConstructor)
 				return false;
-			}
 
 			Type owner = method.DeclaringType;
 			if (owner.IsSubclassOf(MonoBehaviourType))
-			{
 				return CheckMagicMethod(method, MonoBehaviourMethods);
-			}
 			else if (owner.IsSubclassOf(ScriptableObjectType))
-			{
 				return CheckMagicMethod(method, ScriptableObjectMethods);
-			}
-			else
-			{
-				return false;
-			}
+			return false;
 		}
 
 		private static bool CheckMagicMethod(MethodBase method, Dictionary<string, Type[]> magicMethods)
 		{
-			if (!magicMethods.TryGetValue(method.Name, out Type[] magicArgTypes)) return false;
+			if (!magicMethods.TryGetValue(method.Name, out Type[] magicArgTypes))
+				return false;
 
 			ParameterInfo[] parameters = method.GetParameters();
 
 			// No-args method with the correct name and correct owner -> magic method
 			// If there are arguments, all of their types have to match the magic method template. This may be too restrictive.
+
 			if (parameters.Length == 0)
-			{
 				return true;
-			}
 			else if (parameters.Length != magicArgTypes.Length)
-			{
 				return false;
-			}
-			else
+
+			for (int i = 0; i < parameters.Length; ++i)
 			{
-				for (int i = 0; i < parameters.Length; ++i)
-				{
-					if (magicArgTypes[i] == null || magicArgTypes[i] != parameters[i].ParameterType) return false;
-				}
-				return true;
+				if (magicArgTypes[i] == null
+					|| magicArgTypes[i] != parameters[i].ParameterType)
+					return false;
 			}
+
+			return true;
 		}
 	}
 }
