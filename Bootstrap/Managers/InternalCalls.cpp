@@ -21,6 +21,8 @@
 
 #include "BaseAssembly.h"
 
+bool InternalCalls::Initialized = false;
+
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
@@ -30,6 +32,8 @@ void InternalCalls::Initialize()
     SupportModules::AddInternalCalls();
     UnhollowerIl2Cpp::AddInternalCalls();
     BHaptics::AddInternalCalls();
+
+    // Initialized = true;
 }
 
 #pragma region MelonLogger
@@ -268,11 +272,11 @@ void InternalCalls::BHaptics::AddInternalCalls()
     
     Mono_Invoke_OnChange = Mono::Exports::mono_class_get_method_from_name(playerKlass, "Invoke_OnChange", NULL);
     
-    Mono_Invoke_OnDeviceUpdate = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnDeviceUpdate", NULL);
-    Mono_Invoke_OnScanStatusChange = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnScanStatusChange", NULL);
+    Mono_Invoke_OnDeviceUpdate = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnDeviceUpdate", 1);
+    Mono_Invoke_OnScanStatusChange = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnScanStatusChange", 1);
     Mono_Invoke_OnChangeResponse = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnChangeResponse", NULL);
-    Mono_Invoke_OnConnect = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnConnect", NULL);
-    Mono_Invoke_OnDisconnect = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnDisconnect", NULL);
+    Mono_Invoke_OnConnect = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnConnect", 1);
+    Mono_Invoke_OnDisconnect = Mono::Exports::mono_class_get_method_from_name(connectionManagerKlass, "Invoke_OnDisconnect", 1);
     if (
         Mono_Invoke_OnChange == NULL ||
         Mono_Invoke_OnDeviceUpdate == NULL ||
@@ -282,7 +286,7 @@ void InternalCalls::BHaptics::AddInternalCalls()
         Mono_Invoke_OnDisconnect == NULL
         )
     {
-        Assertion::ThrowInternalFailure("Failed to Get Method from Class!");
+        Assertion::ThrowInternalFailuref("Failed to Get Method from Class! (%p %p %p %p %p %p)", Mono_Invoke_OnChange, Mono_Invoke_OnDeviceUpdate, Mono_Invoke_OnScanStatusChange, Mono_Invoke_OnChangeResponse, Mono_Invoke_OnConnect, Mono_Invoke_OnDisconnect);
         return;
     }
     
@@ -321,8 +325,8 @@ void InternalCalls::BHaptics::AddInternalCalls()
     Mono::AddInternalCall("MelonLoader.ConnectionManager.ConnectionManager::Internal_GetDeviceList", (void*)Internal_GetDeviceList);
 
     // device
-    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_IsPing", (void*)Internal_IsPing);
-    Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_IsPaired", (void*)Internal_IsPaired);
+    // Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_IsPing", (void*)Internal_IsPing);
+    // Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_IsPaired", (void*)Internal_IsPaired);
     Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetConnectFailCount", (void*)Internal_GetConnectFailCount);
     Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetRssi", (void*)Internal_GetRssi);
     Mono::AddInternalCall("MelonLoader.Utils.bHapticsExtra.BhapticsDevice::Internal_GetConnectionStatus", (void*)Internal_GetConnectionStatus);
@@ -363,6 +367,9 @@ int InternalCalls::BHaptics::ReleaseAddress(intptr_t* address)
 
 void InternalCalls::BHaptics::Invoke_OnChange()
 {
+    if (!Initialized)
+        return;
+    
     Mono::Object* exObj = NULL;
     Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnChange, NULL, NULL, &exObj);
 
@@ -372,6 +379,9 @@ void InternalCalls::BHaptics::Invoke_OnChange()
 
 void InternalCalls::BHaptics::Invoke_OnDeviceUpdate(std::vector<jobject> deviceArr)
 {
+    if (!Initialized)
+        return;
+    
     void** args = new void*[1] { (void*)ConvertJavaToMonoDeviceList(deviceArr) };
     
     Mono::Object* exObj = NULL;
@@ -383,6 +393,9 @@ void InternalCalls::BHaptics::Invoke_OnDeviceUpdate(std::vector<jobject> deviceA
 
 void InternalCalls::BHaptics::Invoke_OnScanStatusChange(bool isScanning)
 {
+    if (!Initialized)
+        return;
+        
     void** args = new void*[1] { &isScanning };
     
     Mono::Object* exObj = NULL;
@@ -394,6 +407,9 @@ void InternalCalls::BHaptics::Invoke_OnScanStatusChange(bool isScanning)
 
 void InternalCalls::BHaptics::Invoke_OnChangeResponse()
 {
+    if (!Initialized)
+        return;
+        
     Mono::Object* exObj = NULL;
     Mono::Exports::mono_runtime_invoke(Mono_Invoke_OnChangeResponse, NULL, NULL, &exObj);
 
@@ -403,6 +419,9 @@ void InternalCalls::BHaptics::Invoke_OnChangeResponse()
 
 void InternalCalls::BHaptics::Invoke_OnConnect(const char* address)
 {
+    if (!Initialized)
+        return;
+    
     void** args = new void*[1] { Mono::Exports::mono_string_new(Mono::domain, address) };
     
     Mono::Object* exObj = NULL;
@@ -414,6 +433,9 @@ void InternalCalls::BHaptics::Invoke_OnConnect(const char* address)
 
 void InternalCalls::BHaptics::Invoke_OnDisconnect(const char* address)
 {
+    if (!Initialized)
+        return;
+    
     void** args = new void*[1] { Mono::Exports::mono_string_new(Mono::domain, address) };
     
     Mono::Object* exObj = NULL;

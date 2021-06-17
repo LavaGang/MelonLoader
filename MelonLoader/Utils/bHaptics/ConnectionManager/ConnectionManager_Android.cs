@@ -1,4 +1,4 @@
-#if __ANDROID__
+﻿#if __ANDROID__
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -8,7 +8,7 @@ using MelonLoader.Utils.bHapticsExtra;
 
 namespace MelonLoader.ConnectionManager
 {
-    public class ConnectionManager : BaseConnectionManager
+    public class ConnectionManager
     {
         public new static Action<BhapticsDevice[]> OnDeviceUpdate = (devices) => { };
         public new static Action<bool> OnScanStatusChange = (isScanning) => { };

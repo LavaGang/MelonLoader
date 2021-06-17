@@ -6,6 +6,7 @@
 class InternalCalls
 {
 public:
+	static bool Initialized;
 	static void Initialize();
 
 	class MelonLogger

@@ -16,6 +16,14 @@ std::unordered_map<size_t, jobject> bHapticsPlayer::BhapticsDevice::DeviceMap;
 std::unordered_map<bHapticsPlayer::CachedMethodKeys, jmethodID> bHapticsPlayer::CachedMethods;
 std::unordered_map<bHapticsPlayer::CachedClassKeys, jclass> bHapticsPlayer::CachedClasses;
 
+bool bHapticsPlayer::Initialize()
+{
+    if (GetKlass("com/melonloader/bhaptics/DeviceManager", CachedClassKeys::DeviceManager) == NULL)
+        return false;
+
+    return true;
+}
+
 void bHapticsPlayer::HapticPlayer::TurnOff(const char* key)
 {
     auto [ playerKlass, player ] = GetPlayer();

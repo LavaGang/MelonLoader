@@ -6,6 +6,8 @@
 class bHapticsPlayer
 {
 public:
+	static bool Initialize();
+	
 	class HapticPlayer
 	{
 	public:

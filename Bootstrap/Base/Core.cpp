@@ -27,6 +27,7 @@
 #include "../Utils/Sequence.h"
 #include "../preprocess.h"
 #include "../Managers/AssetManagerHelper.h"
+#include "../Managers/bHapticsPlayer.h"
 #include "../Managers/StaticSettings.h"
 
 #ifdef __ANDROID__
@@ -152,6 +153,10 @@ bool Core::Initialize()
 		{
 			"Applying patches to Mono",
 			Mono::ApplyPatches
+		},
+		{
+			"Initializing Bhaptics",
+			bHapticsPlayer::Initialize
 		},
 #endif
 #ifdef _WIN32
