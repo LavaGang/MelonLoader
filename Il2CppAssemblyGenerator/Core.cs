@@ -24,6 +24,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         static Core()
         {
+            AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 #if PORT_DISABLE
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
@@ -33,7 +34,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             //AssemblyGenerationNeeded = Utils.ForceRegeneration();
 #endif
-            
 
             ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
             GameName = MelonUtils.GameName;
@@ -115,12 +115,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 #else
             string CurrentGameAssemblyHash;
             MelonLogger.Msg("Checking GameAssembly...");
-            MelonDebug.Msg($"Last GameAssembly Hash: {Config.GameAssemblyHash}");
+            MelonDebug.Msg($"Last GameAssembly Hash: {Config.Values.GameAssemblyHash}");
             MelonDebug.Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = GetGameAssemblyHash()}");
 
             if (!AssemblyGenerationNeeded
-                && (string.IsNullOrEmpty(Config.GameAssemblyHash)
-                    || !Config.GameAssemblyHash.Equals(CurrentGameAssemblyHash)))
+                && (string.IsNullOrEmpty(Config.Values.GameAssemblyHash)
+                    || !Config.Values.GameAssemblyHash.Equals(CurrentGameAssemblyHash)))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)
@@ -129,7 +129,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 return 0;
             }
             MelonLogger.Msg("Assembly Generation Needed!");
-
+            
             dumper = new Il2CppDumper();
             il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
             
@@ -149,7 +149,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             dumper.Cleanup();
             il2cppassemblyunhollower.Cleanup();
 
-            Config.GameAssemblyHash = CurrentGameAssemblyHash;
+            Config.Values.GameAssemblyHash = CurrentGameAssemblyHash;
             //deobfuscationMap.Save();
             Config.Save();
 
@@ -188,11 +188,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static void OldFiles_Cleanup()
         {
-            if (Config.OldFiles.Count <= 0)
+            if (Config.Values.OldFiles.Count <= 0)
                 return;
-            for (int i = 0; i < Config.OldFiles.Count; i++)
+            for (int i = 0; i < Config.Values.OldFiles.Count; i++)
             {
-                string filename = Config.OldFiles[i];
+                string filename = Config.Values.OldFiles[i];
                 string filepath = Path.Combine(ManagedPath, filename);
                 if (File.Exists(filepath))
                 {
@@ -200,7 +200,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     File.Delete(filepath);
                 }
             }
-            Config.OldFiles.Clear();
+            Config.Values.OldFiles.Clear();
         }
 
         private static void OldFiles_LAM()
@@ -211,7 +211,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 string filepath = filepathtbl[i];
                 string filename = Path.GetFileName(filepath);
                 MelonLogger.Msg("Moving " + filename);
-                Config.OldFiles.Add(filename);
+                Config.Values.OldFiles.Add(filename);
                 string newfilepath = Path.Combine(ManagedPath, filename);
                 if (File.Exists(newfilepath))
                     File.Delete(newfilepath);

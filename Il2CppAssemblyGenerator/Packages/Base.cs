@@ -62,18 +62,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             }
 
             MelonLogger.Msg($"Extracting {tempfile} to {Destination}");
-            try
-            {
-                using var stream = new FileStream(tempfile, FileMode.Open, FileAccess.Read);
-                using var zip = new ZipArchive(stream);
-                foreach (var zipArchiveEntry in zip.Entries)
-                {
-                    MelonLogger.Msg($"Extracting {zipArchiveEntry.FullName}");
-                    using var entryStream = zipArchiveEntry.Open();
-                    using var targetStream = new FileStream(Path.Combine(Destination, zipArchiveEntry.FullName), FileMode.OpenOrCreate, FileAccess.Write);
-                    entryStream.CopyTo(targetStream);
-                }
-            }
+            try { ZipFile.ExtractToDirectory(tempfile, Destination); }
             catch (Exception ex)
             {
                 MelonLogger.Error(ex.ToString());
@@ -112,20 +101,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             {
                 ResetEvent_Output = new AutoResetEvent(false);
                 ResetEvent_Error = new AutoResetEvent(false);
-                Core.OverrideAppDomainBase(Destination);
 
-                ProcessStartInfo processStartInfo = new ProcessStartInfo(ExePath);
-                processStartInfo.UseShellExecute = false;
-                processStartInfo.RedirectStandardOutput = true;
-                processStartInfo.RedirectStandardError = true;
-                processStartInfo.CreateNoWindow = true;
-
-                processStartInfo.Arguments =
+                ProcessStartInfo processStartInfo = new ProcessStartInfo(ExePath, 
                     parenthesize_args
                     ?
                     string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => ("\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\"")))
                     :
-                    string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => Regex.Replace(it, @"(\\+)$", @"$1$1")));
+                    string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => Regex.Replace(it, @"(\\+)$", @"$1$1"))));
+                processStartInfo.UseShellExecute = false;
+                processStartInfo.RedirectStandardOutput = true;
+                processStartInfo.RedirectStandardError = true;
+                processStartInfo.CreateNoWindow = true;
+                processStartInfo.WorkingDirectory = Path.GetDirectoryName(ExePath);
 
                 MelonLogger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
 
@@ -145,10 +132,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 ResetEvent_Error.WaitOne();
 
                 SetProcessId(0);
-                Core.OverrideAppDomainBase(Core.BasePath);
                 return (process.ExitCode == 0);
             }
-            catch (Exception ex) { MelonLogger.Error(ex.ToString()); Core.OverrideAppDomainBase(Core.BasePath); }
+            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
             return false;
         }
 

@@ -259,6 +259,9 @@ namespace MelonLoader
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetManagedDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string GetMainAssemblyLoc();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void SetConsoleTitle([MarshalAs(UnmanagedType.LPStr)] string title);
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
@@ -269,6 +272,14 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
 
+#if __ANDROID__
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private extern static string Internal_GetGamePackage();
+#else
+        private static string Internal_GetGamePackage() => null;
+#endif
+        
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameName();
