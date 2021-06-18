@@ -414,3 +414,9 @@ SM_Mono.Pre-2017\.vs
 /MelonLoader.x64.zip
 /MelonLoader.Installer.exe
 /packages/Samboy063.Tomlet.1.1.2
+
+
+SrcLibs/bHaptics/out/
+
+Int/
+.idea/

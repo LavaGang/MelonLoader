@@ -1,55 +1,91 @@
 #include "Assertion.h"
-#include "../Core.h"
-#include "Debug.h"
-#include "Logger.h"
-#include "Console.h"
-#include "../Managers/Game.h"
+#include "../Base/Core.h"
+#include "Console/Debug.h"
+#include "Console/Logger.h"
+#include "Console/Console.h"
 #include <string>
 #include <iostream>
 
 bool Assertion::ShouldContinue = true;
+bool Assertion::DontDie = false;
 
-void Assertion::ThrowInternalFailure(const char* msg)
+bool Assertion::ThrowInternalFailure(const char* msg)
 {
-	if (ShouldContinue)
+	return ThrowInternalFailuref("%s", msg);
+}
+
+bool Assertion::ThrowInternalFailuref(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vThrowInternalFailuref(fmt, args);
+	va_end(args);
+
+	return false;
+}
+
+bool Assertion::vThrowInternalFailuref(const char* fmt, va_list args)
+{
+	// TODO: implement JNI bindings to show message box and error
+	if (!ShouldContinue)
+		return false;
+	
+	ShouldContinue = false;
+
+	std::string timestamp = Logger::GetTimestamp();
+	
+	const Logger::MessagePrefix prefixes[]{
+#ifndef __ANDROID__
+		Logger::MessagePrefix{
+			Console::Green,
+			timestamp.c_str()
+		},
+#endif
+		Logger::MessagePrefix{
+			Console::Red,
+			"INTERNAL FAILURE"
+		},
+	};
+	
+#ifdef _WIN32
+	bool should_print_debug_info = (!Logger::LogFile.coss.is_open() || Debug::Enabled);
+	
+	if (should_print_debug_info)
 	{
-		ShouldContinue = false;
-		std::string timestamp = Logger::GetTimestamp();
-		Logger::LogFile << "[" << timestamp << "] [INTERNAL FAILURE] " << msg << std::endl;
-		bool should_print_debug_info = (!Logger::LogFile.coss.is_open() || Debug::Enabled);
-		if (should_print_debug_info)
-		{
-			std::cout
-				<< Console::ColorToAnsi(Console::Color::Red)
-				<< "["
-				<< timestamp
-				<< "] [INTERNAL FAILURE] "
-				<< msg
-				<< std::endl
-				<< Console::ColorToAnsi(Console::Color::Gray, false);
-			MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
-		}
-		else
-		{
-			Console::Close();
-			MessageBoxA(NULL, ("Please upload the log file \""
-				+ std::string(Game::BasePath)
-				+ "\\MelonLoader\\" 
-				+ Logger::LatestLogFileName 
-				+ Logger::FileExtension 
-				+ "\" when requesting support.").c_str(), "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-		}
-		Core::KillCurrentProcess();
+		Logger::Internal_DirectWrite(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), msg);
+
+		MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
+	}
+	else
+	{
+		Console::Close();
+		MessageBoxA(NULL, "Please Post your latest.log File\nto #internal-failure in the MelonLoader Discord!", "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
+	}
+#elif defined(__ANDROID__)
+	Logger::Internal_vDirectWritef(Console::Color::Red, LogLevel::Error, prefixes, sizeof(prefixes) / sizeof(prefixes[0]), fmt, args);
+#endif
+
+	return false;
+}
+
+#ifdef __ANDROID__
+#include <jni.h>
+extern "C" {
+	jboolean Java_com_melonloader_bridge_Assertion_getShouldContinue(JNIEnv* env, jclass type) {
+		return (jboolean)Assertion::ShouldContinue;
+	}
+
+	jboolean Java_com_melonloader_bridge_Assertion_getDontDie(JNIEnv* env, jclass type) {
+		return (jboolean)Assertion::DontDie;
+	}
+
+	void Java_com_melonloader_bridge_Assertion_ThrowInternalFailure(JNIEnv* env, jclass type, jstring msg)
+	{
+		const char* cMsg = env->GetStringUTFChars(msg, nullptr);
+
+		Assertion::ThrowInternalFailure(cMsg);
+
+		env->ReleaseStringUTFChars(msg, cMsg);
 	}
 }
-
-FARPROC Assertion::GetExport(HMODULE mod, const char* export_name, bool internalfailure)
-{
-	if (!ShouldContinue)
-		return NULL;
-	Debug::Msg(export_name);
-	FARPROC returnval = GetProcAddress(mod, export_name);
-	if (internalfailure && (returnval == NULL))
-		ThrowInternalFailure((std::string("Failed to GetExport ( ") + export_name + " )").c_str());
-	return returnval;
-}
+#endif

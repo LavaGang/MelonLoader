@@ -1,14 +1,21 @@
+#ifdef PORT_DISABLE
 #pragma once
 #include <Windows.h>
-#include <string>
+#include <metahost.h>
+#include <sstream>
 
 class HashCode
 {
 public:
-	static std::string Hash;
+	static DWORD Hash;
+	static char* Path_SM_Il2Cpp;
+	static char* Path_SM_Mono;
+	static char* Path_SM_Mono_Pre2017;
+	static char* Path_SM_Mono_Pre5;
 	static bool Initialize();
 	static bool SetupPaths();
 
 private:
-	static bool GenerateHash(const char* path);
+	static void AddHash(const char* path);
 };
+#endif

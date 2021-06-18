@@ -1,0 +1,9 @@
+[submodule "external/MonoMod"]
+	path = external/MonoMod
+	url = https://github.com/MonoMod/MonoMod.git
+[submodule "external/Il2CppAssemblyUnhollower"]
+	path = external/Il2CppAssemblyUnhollower
+	url = https://github.com/SirCoolness/Il2CppAssemblyUnhollower.git
+[submodule "external/Il2CppDumper"]
+	path = external/Il2CppDumper
+	url = https://github.com/Perfare/Il2CppDumper

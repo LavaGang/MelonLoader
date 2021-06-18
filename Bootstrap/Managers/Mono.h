@@ -1,6 +1,10 @@
 #pragma once
+#ifdef _WIN32
 #include <Windows.h>
-
+#elif defined(__ANDROID__)
+#include <string.h>
+#include <jni.h>
+#endif
 
 class Mono
 {
@@ -14,8 +18,9 @@ public:
 	struct Property;
 	struct Object;
 	struct String;
+	struct MonoError;
 
-	static HMODULE Module;
+	static void* Module;
 	static Domain* domain;
 	static bool IsOldMono;
 	static char* ManagedPath;
@@ -32,23 +37,27 @@ public:
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 	static void Free(void* ptr);
 
-	typedef enum
-	{
-		MONO_DEBUG_FORMAT_NONE,
-		MONO_DEBUG_FORMAT_MONO,
-		/* Deprecated, the mdb debugger is not longer supported. */
-		MONO_DEBUG_FORMAT_DEBUGGER
-	} MonoDebugFormat;
+	typedef int32_t mono_bool;
+	typedef void (*MonoPrintCallback) (const char* string, mono_bool is_stdout);
+	typedef void (*MonoLogCallback) (const char* log_domain, const char* log_level, const char* message, mono_bool fatal, void* user_data);
+	typedef void  (*MonoUnhandledExceptionFunc) (Object* exc, void* user_data);
+	
+#ifdef __ANDROID__
+	static bool ApplyPatches();
+	static bool CheckPaths();
+	static bool InitMonoJNI();
+#endif
 
-	typedef enum
+#pragma region ENUMS
+	using MonoImageOpenStatus = enum
 	{
 		MONO_IMAGE_OK,
 		MONO_IMAGE_ERROR_ERRNO,
 		MONO_IMAGE_MISSING_ASSEMBLYREF,
 		MONO_IMAGE_IMAGE_INVALID
-	} MonoImageOpenStatus;
+	};
 
-	typedef enum
+	using MonoMetaTableEnum = enum
 	{
 		MONO_TABLE_MODULE,
 		MONO_TABLE_TYPEREF,
@@ -114,9 +123,9 @@ public:
 		MONO_TABLE_STATEMACHINEMETHOD,
 		MONO_TABLE_CUSTOMDEBUGINFORMATION
 
-		#define MONO_TABLE_LAST MONO_TABLE_CUSTOMDEBUGINFORMATION
-		#define MONO_TABLE_NUM (MONO_TABLE_LAST + 1)
-	} MonoMetaTableEnum;
+#define MONO_TABLE_LAST MONO_TABLE_CUSTOMDEBUGINFORMATION
+#define MONO_TABLE_NUM (MONO_TABLE_LAST + 1)
+	};
 
 	enum
 	{
@@ -156,17 +165,18 @@ public:
 		MONO_TYPEREF_SIZE
 	};
 
+#pragma endregion ENUMS
 
 	class Exports
 	{
 	public:
 		static bool Initialize();
-		
-		#define MONODEF(rt, fn, args) typedef rt (* fn##_t) args; static fn##_t fn;
+
+#pragma region MonoDefine
+#define MONODEF(rt, fn, args) typedef rt (* fn##_t) args; static fn##_t fn;
 
 		MONODEF(Domain*, mono_jit_init, (const char* name))
 		MONODEF(Domain*, mono_jit_init_version, (const char* name, const char* version))
-		MONODEF(void*, mono_jit_parse_options, (int argc, char* argv[]))
 		MONODEF(void, mono_set_assemblies_path, (const char* path))
 		MONODEF(void, mono_assembly_setrootdir, (const char* path))
 		MONODEF(void, mono_set_config_dir, (const char* path))
@@ -190,40 +200,63 @@ public:
 		MONODEF(Method*, mono_property_get_get_method, (Property* prop))
 		MONODEF(void, mono_free, (void* ptr))
 		MONODEF(void, g_free, (void* ptr))
-		
-		MONODEF(void, mono_raise_exception, (Object *ex))
-		MONODEF(Object*, mono_get_exception_bad_image_format, (const char *msg))
-		MONODEF(const char*, mono_image_get_name, (Image* image))
-			
-        MONODEF(Image*, mono_image_open_full, (const char *path, MonoImageOpenStatus* status, bool refonly))
-        MONODEF(Image*, mono_image_open_from_data_full, (const char *data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
-        MONODEF(void, mono_image_close, (Image* image))
-        MONODEF(int, mono_image_get_table_rows, (Image *image, int table_id))
-		MONODEF(unsigned int, mono_metadata_decode_table_row_col, (Image *image, int table,int idx, unsigned int col))
-		MONODEF(char*, mono_array_addr_with_size, (Object *array, int size, uintptr_t idx))
-		MONODEF(uintptr_t, mono_array_length, (Object *array))
-		MONODEF(const char*, mono_metadata_string_heap, (Image *meta, unsigned int table_index))
-		MONODEF(const char*, mono_class_get_name, (Class *klass))
 
-		MONODEF(void, mono_debug_init, (MonoDebugFormat format))
-		MONODEF(void, mono_debug_domain_create, (Domain* domain))
-		
-		#undef MONODEF
+		MONODEF(void, mono_raise_exception, (Object* ex))
+		MONODEF(Object*, mono_get_exception_bad_image_format, (const char* msg))
+		MONODEF(const char*, mono_image_get_name, (Image* image))
+
+		MONODEF(Image*, mono_image_open_full, (const char* path, MonoImageOpenStatus* status, bool refonly))
+		MONODEF(Image*, mono_image_open_from_data_full,
+		        (const char* data, unsigned int size, bool need_copy, MonoImageOpenStatus* status, bool refonly))
+		MONODEF(void, mono_image_close, (Image* image))
+		MONODEF(int, mono_image_get_table_rows, (Image* image, int table_id))
+		MONODEF(unsigned int, mono_metadata_decode_table_row_col, (Image* image, int table, int idx, unsigned int col))
+		MONODEF(char*, mono_array_addr_with_size, (Object* array, int size, uintptr_t idx))
+		MONODEF(uintptr_t, mono_array_length, (Object* array))
+		MONODEF(const char*, mono_metadata_string_heap, (Image* meta, unsigned int table_index))
+		MONODEF(const char*, mono_class_get_name, (Class* klass))
+
+		MONODEF(void, mono_trace_set_level_string, (const char* value))
+		MONODEF(void, mono_trace_set_mask_string, (const char* value))
+		MONODEF(void, mono_trace_set_log_handler, (MonoLogCallback callback, void* user_data))
+		MONODEF(void, mono_trace_set_print_handler, (MonoPrintCallback callback))
+		MONODEF(void, mono_trace_set_printerr_handler, (MonoPrintCallback callback))
+		MONODEF(void, mono_install_unhandled_exception_hook, (MonoUnhandledExceptionFunc func, void* user_data))
+		MONODEF(void, mono_print_unhandled_exception, (Object* exec))
+		MONODEF(void, mono_dllmap_insert, (Image* assembly, const char* dll, const char* func, const char* tdll, const char* tfunc))
+
+		MONODEF(Domain*, mono_domain_get, ())
+
+#undef MONODEF
+#pragma endregion MonoDefine
 	};
 
 	class Hooks
 	{
 	public:
-		static Domain* mono_jit_init_version(const char* name, const char* version);
-		static Object* mono_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
 		static void* mono_unity_get_unitytls_interface();
+
+		static void mono_print(const char* string, mono_bool is_stdout);
+		static void mono_printerr(const char* string, mono_bool is_stdout);
+		static void mono_log(const char* log_domain, const char* log_level, const char* message, mono_bool fatal,
+		                     void* user_data);
+
+		static void mono_unhandled_exception(Object* exc, void* user_data);
+
+#ifdef _WIN32
+		static Object* mono_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
+		static Domain * mono_jit_init_version(const char* name, const char* version);
+#endif
 	};
 
 private:
 	static char* BasePath;
 	static const char* LibNames[];
 	static const char* FolderNames[];
-	static HMODULE PosixHelper;
-
-	static void ParseEnvOption(const char* name);
+	static void* PosixHelper;
+	static const char* PosixHelperName;
+#ifdef __ANDROID__
+	static jclass jMonoDroidHelper;
+	static jmethodID jLoadApplication;
+#endif
 };

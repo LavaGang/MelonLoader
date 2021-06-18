@@ -6,9 +6,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
     {
         internal Cpp2IL()
         {
-            Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
+            Version = MelonCommandLine.AssemblyGenerator.ForceVersion_Dumper;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = RemoteAPI.ReturnedInfo.ForceDumperVersion;
+                Version = RemoteAPI.LAST_RESPONSE.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "commit_1aba7eee0667903dd465d897d88df15c2fe8b991";
             URL = "https://github.com/SamboyCoding/Cpp2IL/releases/download/" + Version + "/Cpp2IL-Win.exe";
@@ -19,11 +19,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private void Save()
         {
-            Config.Values.DumperVersion = Version;
+            Config.DumperVersion = Version;
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Values.DumperVersion) || !Config.Values.DumperVersion.Equals(Version));
+        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.DumperVersion) || !Config.DumperVersion.Equals(Version));
 
         internal override void Cleanup() { }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -17,13 +17,50 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
-    <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{78dee0af-2263-488a-8ebf-8325218eb6c9}</ProjectGuid>
     <RootNamespace>Bootstrap</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <Keyword>Android</Keyword>
+    <ApplicationType>Android</ApplicationType>
+    <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals" Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <Keyword>Android</Keyword>
+    <ApplicationType>Android</ApplicationType>
+    <ApplicationTypeRevision>3.0</ApplicationTypeRevision>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -54,11 +91,21 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+    <AndroidAPILevel>android-27</AndroidAPILevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Clang_5_0</PlatformToolset>
+    <AndroidAPILevel>android-27</AndroidAPILevel>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -71,32 +118,30 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Platform)'=='ARM64'" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x86\MelonLoader\Dependencies\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\x86\</IntDir>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\$(Platform)\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)$(ProjectName)\Int\$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x86\MelonLoader\Dependencies\</OutDir>
-    <IntDir>$(SolutionDir)$(ProjectName)\x86\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)$(ProjectName)\x64\</IntDir>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x64\MelonLoader\Dependencies\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)$(ProjectName)\x64\</IntDir>
-    <OutDir>$(SolutionDir)Output\$(Configuration)\x64\MelonLoader\Dependencies\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PORT_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -112,7 +157,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PORT_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -126,7 +171,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PORT_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -142,7 +187,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PORT_DISABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -152,9 +197,63 @@
       <AdditionalDependencies>Base/MSDetours/detours_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <Verbose>false</Verbose>
+      <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64;DEBUG;__ANDROID__</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <CLanguageStandard>c11</CLanguageStandard>
+      <AdditionalIncludeDirectories>J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\funchook\include;J:\Users\Akiva\RiderProjects\MelonLoader\Bootstrap\Base\capstone\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
+      <!-- <CLanguageStandard>c11</CLanguageStandard> -->
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\MSBuild\Xamarin\Android\lib\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <!-- <Verbose>false</Verbose> -->
+      <CppLanguageStandard>c++1z</CppLanguageStandard>
+      <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);_M_ARM64;__ANDROID__</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <CLanguageStandard>c11</CLanguageStandard>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <!-- <PreprocessorDefinitions>__ANDROID_API__=$(AndroidAPILevelNumber);%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
+      <!-- <CLanguageStandard>Default</CLanguageStandard> -->
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\Microsoft Visual Studio\2019\Community\MSBuild\Xamarin\Android\lib\arm64-v8a;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(MSBuildProjectDirectory)\Base\funchook\lib\libfunchook.a;$(MSBuildProjectDirectory)\Base\capstone\lib\libcapstone.a</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <LibraryDependencies>c++_static;c++abi;log;android;m</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Base\DllMain.cpp" />
+    <ClCompile Include="Managers\AssetManagerHelper.cpp" />
+    <ClCompile Include="Managers\bHapticsPlayer.cpp" />
+    <ClCompile Include="External\bHapticsBridge.cpp" />
+    <ClCompile Include="Managers\AndroidData.cpp" />
+    <ClCompile Include="Bootstrap.cpp" />
+    <ClCompile Include="Base\Core.cpp" />
+    <ClCompile Include="Managers\StaticSettings.cpp" />
+    <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
+    <ClCompile Include="Utils\Console\JavaLogBridge.cpp" />
+    <ClCompile Include="Utils\Encoding.cpp" />
+    <ClCompile Include="Utils\Helpers\ImportLibHelper.cpp" />
     <ClCompile Include="Managers\AssemblyVerifier.cpp" />
     <ClCompile Include="Managers\BaseAssembly.cpp" />
     <ClCompile Include="Managers\Game.cpp" />
@@ -163,21 +262,45 @@
     <ClCompile Include="Managers\InternalCalls.cpp" />
     <ClCompile Include="Managers\Mono.cpp" />
     <ClCompile Include="Utils\AnalyticsBlocker.cpp" />
-    <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
+    <ClCompile Include="Utils\AssemblyGenerator.cpp" />
     <ClCompile Include="Utils\Assertion.cpp" />
-    <ClCompile Include="Utils\CommandLine.cpp" />
-    <ClCompile Include="Utils\Console.cpp" />
-    <ClCompile Include="Utils\Debug.cpp" />
-    <ClCompile Include="Utils\Encoding.cpp" />
+    <ClCompile Include="Utils\Console\CommandLine.cpp" />
+    <ClCompile Include="Utils\Console\Console.cpp" />
+    <ClCompile Include="Utils\Console\Debug.cpp" />
     <ClCompile Include="Utils\HashCode.cpp" />
+    <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
     <ClCompile Include="Utils\IniFile.cpp" />
-    <ClCompile Include="Utils\Logger.cpp" />
-    <ClCompile Include="Utils\PointerUtils.cpp" />
+    <ClCompile Include="Utils\Console\Logger.cpp" />
+    <ClCompile Include="Utils\Sequence.cpp" />
+    <ClCompile Include="Utils\UnitTesting\TestHelper.cpp" />
+    <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core.h" />
-    <ClInclude Include="Base\MSDetours\detours_x64.h" />
-    <ClInclude Include="Base\MSDetours\detours_x86.h" />
+    <ClInclude Include="Managers\AssetManagerHelper.h" />
+    <ClInclude Include="Managers\bHapticsPlayer.h" />
+    <ClInclude Include="Managers\AndroidData.h" />
+    <ClInclude Include="Base\capstone\include\capstone\arm.h" />
+    <ClInclude Include="Base\capstone\include\capstone\arm64.h" />
+    <ClInclude Include="Base\capstone\include\capstone\capstone.h" />
+    <ClInclude Include="Base\capstone\include\capstone\evm.h" />
+    <ClInclude Include="Base\capstone\include\capstone\m680x.h" />
+    <ClInclude Include="Base\capstone\include\capstone\m68k.h" />
+    <ClInclude Include="Base\capstone\include\capstone\mips.h" />
+    <ClInclude Include="Base\capstone\include\capstone\mos65xx.h" />
+    <ClInclude Include="Base\capstone\include\capstone\platform.h" />
+    <ClInclude Include="Base\capstone\include\capstone\ppc.h" />
+    <ClInclude Include="Base\capstone\include\capstone\sparc.h" />
+    <ClInclude Include="Base\capstone\include\capstone\systemz.h" />
+    <ClInclude Include="Base\capstone\include\capstone\tms320c64x.h" />
+    <ClInclude Include="Base\capstone\include\capstone\x86.h" />
+    <ClInclude Include="Base\capstone\include\capstone\xcore.h" />
+    <ClInclude Include="Base\funchook\include\funchook.h" />
+    <ClInclude Include="Managers\StaticSettings.h" />
+    <ClInclude Include="Patcher\Tests\Suite.spec.h" />
+    <ClInclude Include="Utils\Encoding.h" />
+    <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
+    <ClInclude Include="preprocess.h" />
+    <ClInclude Include="Base\Core.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h" />
     <ClInclude Include="Managers\BaseAssembly.h" />
     <ClInclude Include="Managers\Game.h" />
@@ -185,21 +308,27 @@
     <ClInclude Include="Managers\Il2Cpp.h" />
     <ClInclude Include="Managers\InternalCalls.h" />
     <ClInclude Include="Managers\Mono.h" />
-    <ClInclude Include="Base\resource.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Utils\AnalyticsBlocker.h" />
-    <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
+    <ClInclude Include="Utils\AssemblyGenerator.h" />
     <ClInclude Include="Utils\Assertion.h" />
-    <ClInclude Include="Utils\CommandLine.h" />
-    <ClInclude Include="Utils\Console.h" />
-    <ClInclude Include="Utils\Debug.h" />
-    <ClInclude Include="Utils\Encoding.h" />
+    <ClInclude Include="Utils\Console\CommandLine.h" />
+    <ClInclude Include="Utils\Console\Console.h" />
+    <ClInclude Include="Utils\Console\Debug.h" />
     <ClInclude Include="Utils\HashCode.h" />
+    <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
     <ClInclude Include="Utils\IniFile.h" />
-    <ClInclude Include="Utils\Logger.h" />
-    <ClInclude Include="Utils\PointerUtils.h" />
+    <ClInclude Include="Utils\Console\Logger.h" />
+    <ClInclude Include="Utils\Sequence.h" />
+    <ClInclude Include="Utils\UnitTesting\TestHelper.h" />
+    <ClInclude Include="Utils\AssemblyUnhollower\XrefScannerBindings.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Base\Bootstrap.rc" />
+  <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
+    <ClInclude Include="Base\MSDetours\detours_x64.h" />
+    <ClInclude Include="Base\MSDetours\detours_x86.h" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
+    <ResourceCompile Include="Bootstrap.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

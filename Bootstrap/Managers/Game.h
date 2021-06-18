@@ -5,6 +5,7 @@ class Game
 {
 public:
 	static char* ApplicationPath;
+	static char* Package; // Android Only
 	static char* BasePath;
 	static char* DataPath;
 	static char* ApplicationPathMono;

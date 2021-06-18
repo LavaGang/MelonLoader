@@ -1,20 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
-    <RootNamespace>MelonLoader.Il2CppAssemblyGenerator</RootNamespace>
-    <AssemblyName>Il2CppAssemblyGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <LangVersion>8.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
     <ProjectGuid>{A6452A3F-4BD6-497A-97DA-24F7DF97B234}</ProjectGuid>
+    <ProductVersion>0.3.1</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Il2CppAssemblyGenerator</AssemblyName>
+    <RootNamespace>MelonLoader.Il2CppAssemblyGenerator</RootNamespace>
+    <TargetFramework>net4.7.2</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\$(Platform)\MelonLoader\Dependencies\Il2CppAssemblyGenerator\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <!--
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
@@ -40,31 +44,35 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  -->
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
-    <Compile Include="Core.cs" />
-    <Compile Include="Packages\Base.cs" />
-    <Compile Include="Packages\Cpp2IL.cs" />
-    <Compile Include="Packages\DeobfuscationMap.cs" />
-    <Compile Include="Packages\Il2CppAssemblyUnhollower.cs" />
-    <Compile Include="Packages\Il2CppDumper.cs" />
-    <Compile Include="Packages\UnityDependencies.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteAPI.cs" />
+    <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\AssemblyUnhollower\AssemblyUnhollower.csproj">
+      <Project>{c38d9b8a-443b-4f81-aadc-7bd74d8ea007}</Project>
+      <Name>AssemblyUnhollower</Name>
+      <SetTargetFramework>TargetFramework=net4.7.2</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\UnhollowerBaseLib\UnhollowerBaseLib.csproj">
+      <Project>{cfd5288b-9168-4f7b-9dd4-1f97eb9097b6}</Project>
+      <Name>UnhollowerBaseLib</Name>
+      <SetTargetFramework>TargetFramework=net4.7.2</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\UnhollowerRuntimeLib\UnhollowerRuntimeLib.csproj">
+      <Project>{55c20110-8f5d-4581-a092-9b17e2c971b8}</Project>
+      <Name>UnhollowerRuntimeLib</Name>
+      <SetTargetFramework>TargetFramework=net4.7.2</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\external\Il2CppDumper\Il2CppDumper\Il2CppDumper.csproj" />
     <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
       <Private>false</Private>
       <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>
       <Name>MelonLoader</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

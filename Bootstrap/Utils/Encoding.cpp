@@ -1,4 +1,6 @@
+#ifdef PORT_DISABLE
 #include "Encoding.h"
+#include <Windows.h>
 
 char* Encoding::OsToUtf8(const char* osStr)
 {
@@ -36,3 +38,4 @@ char* Encoding::Utf8ToOs(const char* utf8Str)
 	delete[] wstr;
 	return str;
 }
+#endif

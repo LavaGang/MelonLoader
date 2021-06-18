@@ -1,6 +1,7 @@
 #pragma once
+#ifdef _WIN32
 #include <Windows.h>
-
+#endif
 
 class Il2Cpp
 {
@@ -10,13 +11,19 @@ public:
 	struct Object;
 
 	static char* GameAssemblyPath;
-	static char* GameAssemblyPathMono;
-	static char* UnityPlayerPath;
-	static HMODULE Module;
 	static Domain* domain;
 	static void* UnityTLSInterfaceStruct;
+
+#ifdef _WIN32
+	static HMODULE Module;
+#elif defined(__ANDROID__)
+	static void* Handle;
+	static void* MemLoc;
+	static const char* LibPath;
+#endif
+	
 	static bool Initialize();
-	static void CallInstallUnityTLSInterface();
+	static bool ApplyPatches();
 
 	class Exports
 	{

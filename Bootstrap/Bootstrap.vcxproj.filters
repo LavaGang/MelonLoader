@@ -1,148 +1,97 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Utils\CommandLine.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\Hook.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Console.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\Game.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\Mono.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\Il2Cpp.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Assertion.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Logger.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Debug.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\InternalCalls.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\BaseAssembly.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\AnalyticsBlocker.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\HashCode.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Managers\AssemblyVerifier.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\IniFile.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\PointerUtils.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Base\DllMain.cpp">
-      <Filter>Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Encoding.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
+    <ClCompile Include="Bootstrap.cpp" />
+    <ClCompile Include="Base\Core.cpp" />
+    <ClCompile Include="Utils\Helpers\ImportLibHelper.cpp" />
+    <ClCompile Include="Managers\AssemblyVerifier.cpp" />
+    <ClCompile Include="Managers\BaseAssembly.cpp" />
+    <ClCompile Include="Managers\Game.cpp" />
+    <ClCompile Include="Managers\Hook.cpp" />
+    <ClCompile Include="Managers\Il2Cpp.cpp" />
+    <ClCompile Include="Managers\InternalCalls.cpp" />
+    <ClCompile Include="Managers\Mono.cpp" />
+    <ClCompile Include="Utils\AnalyticsBlocker.cpp" />
+    <ClCompile Include="Utils\AssemblyGenerator.cpp" />
+    <ClCompile Include="Utils\Assertion.cpp" />
+    <ClCompile Include="Utils\Console\CommandLine.cpp" />
+    <ClCompile Include="Utils\Console\Console.cpp" />
+    <ClCompile Include="Utils\Console\Debug.cpp" />
+    <ClCompile Include="Utils\HashCode.cpp" />
+    <ClCompile Include="Utils\IniFile.cpp" />
+    <ClCompile Include="Utils\Console\Logger.cpp" />
+    <ClCompile Include="Utils\UnitTesting\TestHelper.cpp" />
+    <ClCompile Include="Patcher\Tests\Suite.spec.cpp" />
+    <ClCompile Include="Utils\Encoding.cpp" />
+    <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
+    <ClCompile Include="Utils\AssemblyUnhollower\XrefScannerBindings.cpp" />
+    <ClCompile Include="Managers\AndroidData.cpp" />
+    <ClCompile Include="External\bHapticsBridge.cpp" />
+    <ClCompile Include="Utils\Console\JavaLogBridge.cpp" />
+    <ClCompile Include="Utils\Sequence.cpp" />
+    <ClCompile Include="Managers\bHapticsPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{49d9200e-44b5-44ac-839f-97d39a3f5010}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Base">
-      <UniqueIdentifier>{62683d2d-3bde-4ffd-8474-87a2b2403734}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers">
-      <UniqueIdentifier>{5689d597-5adb-4646-8a26-57d0d5f522ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Base\MSDetours">
-      <UniqueIdentifier>{fc78f094-efe0-4d26-a6d9-b1a636c8592a}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="Utils\Helpers\ImportLibHelper.h" />
+    <ClInclude Include="preprocess.h" />
+    <ClInclude Include="Base\Core.h" />
+    <ClInclude Include="Managers\AssemblyVerifier.h" />
+    <ClInclude Include="Managers\BaseAssembly.h" />
+    <ClInclude Include="Managers\Game.h" />
+    <ClInclude Include="Managers\Hook.h" />
+    <ClInclude Include="Managers\Il2Cpp.h" />
+    <ClInclude Include="Managers\InternalCalls.h" />
+    <ClInclude Include="Managers\Mono.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Utils\AnalyticsBlocker.h" />
+    <ClInclude Include="Utils\AssemblyGenerator.h" />
+    <ClInclude Include="Utils\Assertion.h" />
+    <ClInclude Include="Utils\Console\CommandLine.h" />
+    <ClInclude Include="Utils\Console\Console.h" />
+    <ClInclude Include="Utils\Console\Debug.h" />
+    <ClInclude Include="Utils\HashCode.h" />
+    <ClInclude Include="Utils\IniFile.h" />
+    <ClInclude Include="Utils\Console\Logger.h" />
+    <ClInclude Include="Utils\UnitTesting\TestHelper.h" />
+    <ClInclude Include="Patcher\Tests\Suite.spec.h" />
+    <ClInclude Include="Base\funchook\include\funchook.h" />
+    <ClInclude Include="Utils\Encoding.h" />
+    <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
+    <ClInclude Include="Utils\AssemblyUnhollower\XrefScannerBindings.h" />
+    <ClInclude Include="Base\capstone\include\capstone\arm.h" />
+    <ClInclude Include="Base\capstone\include\capstone\arm64.h" />
+    <ClInclude Include="Base\capstone\include\capstone\capstone.h" />
+    <ClInclude Include="Base\capstone\include\capstone\evm.h" />
+    <ClInclude Include="Base\capstone\include\capstone\m68k.h" />
+    <ClInclude Include="Base\capstone\include\capstone\m680x.h" />
+    <ClInclude Include="Base\capstone\include\capstone\mips.h" />
+    <ClInclude Include="Base\capstone\include\capstone\mos65xx.h" />
+    <ClInclude Include="Base\capstone\include\capstone\platform.h" />
+    <ClInclude Include="Base\capstone\include\capstone\ppc.h" />
+    <ClInclude Include="Base\capstone\include\capstone\sparc.h" />
+    <ClInclude Include="Base\capstone\include\capstone\systemz.h" />
+    <ClInclude Include="Base\capstone\include\capstone\tms320c64x.h" />
+    <ClInclude Include="Base\capstone\include\capstone\x86.h" />
+    <ClInclude Include="Base\capstone\include\capstone\xcore.h" />
+    <ClInclude Include="Managers\AndroidData.h" />
+    <ClInclude Include="Utils\Sequence.h" />
+    <ClInclude Include="Managers\bHapticsPlayer.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Utils\CommandLine.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\Hook.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Console.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\Game.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\Mono.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\Il2Cpp.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Assertion.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Logger.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Debug.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\InternalCalls.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\BaseAssembly.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\AnalyticsBlocker.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\HashCode.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\MSDetours\detours_x64.h">
-      <Filter>Base\MSDetours</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\MSDetours\detours_x86.h">
-      <Filter>Base\MSDetours</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\AssemblyVerifier.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\IniFile.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\PointerUtils.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h" />
-    <ClInclude Include="Base\resource.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Encoding.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Il2CppAssemblyGenerator.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
+  <ItemGroup Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Win32'">
+    <ClInclude Include="Base\MSDetours\detours_x64.h" />
+    <ClInclude Include="Base\MSDetours\detours_x86.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Base\Bootstrap.rc">
-      <Filter>Base</Filter>
-    </ResourceCompile>
+  <ItemGroup Condition="'$(Platform)'=='ARM64'">
+    <ClInclude Include="Base\Keystone\include\keystone\arm.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\arm64.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\evm.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\hexagon.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\keystone.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\mips.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\ppc.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\sparc.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\systemz.h" />
+    <ClInclude Include="Base\Keystone\include\keystone\x86.h" />
+    <ClInclude Include="Base\Liberation\Liberation.h" />
   </ItemGroup>
 </Project>

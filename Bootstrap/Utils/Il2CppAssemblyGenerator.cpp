@@ -1,4 +1,6 @@
+#ifdef PORT_DISABLE
 #include "Il2CppAssemblyGenerator.h"
+#include <Windows.h>
 
 char* Il2CppAssemblyGenerator::PathMono = NULL;
 int Il2CppAssemblyGenerator::ProcessId = 0;
@@ -16,3 +18,4 @@ void Il2CppAssemblyGenerator::Cleanup()
 		ProcessId = 0;
 	}
 }
+#endif
