@@ -21,8 +21,8 @@ namespace MelonLoader
 
             MelonPreferences.Load();
             MelonLaunchOptions.Load();
-            MelonCompatibilityLayer.Setup(curDomain);
 #if !__ANDROID__
+            MelonCompatibilityLayer.Setup(curDomain);
             PatchShield.Install();
 #endif
         }

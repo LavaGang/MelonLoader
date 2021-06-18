@@ -12,16 +12,24 @@ namespace MelonLoader
         internal static bool Initialize()
         {
             MelonLogger.Msg("Loading Support Module...");
+#if __ANDROID__
+            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "melonloader"), "etc"), "support");
+#else
             string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+#endif
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find SupportModules Directory!");
                 return false;
             }
+#if __ANDROID__
+            string ModuleName = "Il2Cpp.dll";
+#else
             string ModuleName = (MelonUtils.IsGameIl2Cpp() ? "Il2Cpp.dll"
                 : (File.Exists(Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll")) ? "Mono.dll"
                 : (IsOldUnity() ? "Mono.Pre-5.dll"
                 : "Mono.Pre-2017.dll")));
+#endif
             string ModulePath = Path.Combine(BaseDirectory, ModuleName);
             if (!File.Exists(ModulePath))
             {

@@ -33,7 +33,11 @@ namespace MelonLoader
         {
             try
             {
+#if __ANDROID__
+                string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "melonloader"), "etc"), "support");
+#else
                 string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+#endif
                 if (!Directory.Exists(BaseDirectory))
                 {
                     MelonLogger.Error("Failed to Find SupportModules Directory!");

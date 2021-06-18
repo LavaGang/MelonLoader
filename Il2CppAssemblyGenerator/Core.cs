@@ -47,6 +47,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static int Run()
         {
+            Config.Initialize();
+            
 #if PORT_DISABLE
             RemoteAPI.Contact();
 

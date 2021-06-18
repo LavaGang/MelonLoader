@@ -33,7 +33,11 @@ namespace MelonLoader
 
             MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
 
-            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "Il2CppAssemblyGenerator");
+#if __ANDROID__
+            string BaseDirectory = Path.Combine(string.Copy(MelonUtils.GetApplicationPath()), "files/melonloader/etc/assembly_generation/managed");
+#else
+            string BaseDirectory = Path.Combine(MelonUtils.GameDirectory, "MelonLoader", "Dependencies", "Il2CppAssemblyGenerator");
+#endif
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find Il2CppAssemblyGenerator Directory!");
