@@ -53,7 +53,7 @@ class Paths:
     xamarin_apk_dest = os.path.join(helper.common.Settings.file_path, xamarin_dirname)
 
     # support module
-    support_module_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "MelonLoader", "Dependencies", "SupportModules")
+    support_module_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "Android", "MelonLoader", "Dependencies", "SupportModules", "net4.7.2")
     support_module_dest = os.path.join("assets", "melonloader", "etc", "support")
 
     # unity

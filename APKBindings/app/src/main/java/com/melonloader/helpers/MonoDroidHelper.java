@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.util.Log;
 
+import java.io.File;
 import java.lang.reflect.*;
 
 import com.melonloader.ApplicationState;
@@ -42,9 +43,11 @@ public class MonoDroidHelper {
             ClassLoader classLoader = paramContext.getClassLoader();
             String runtimeNativeLibDir = getNativeLibraryPath(paramApplicationInfo);
 
+            File path = ApplicationState.Context.getExternalFilesDir(null);
+
             String[] appDirs = {
-                    "/storage/emulated/0/Android/data/com.SirCoolness.PlaygroundQuestGame/files/melonloader/etc",
-                    "/storage/emulated/0/Android/data/com.SirCoolness.PlaygroundQuestGame/files/melonloader/etc/tmp",
+                    path + "/melonloader/etc",
+                    path + "/melonloader/etc/tmp",
                     getNativeLibraryPath(paramContext)
             };
 
@@ -72,7 +75,7 @@ public class MonoDroidHelper {
                     runtimeNativeLibDir,
                     appDirs,
                     classLoader,
-                    new String[0],
+                    new String[] { "MelonLoader.dll" },
                     Build.VERSION.SDK_INT,
                     isEmulator());
             initialized = true;

@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoMod.RuntimeDetour", "ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoMod.Utils", "external\MonoMod\MonoMod.Utils\MonoMod.Utils.csproj", "{1839CFE2-3DB0-45A8-B03D-9AA797479A3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinGenerator", "XamarinGenerator\XamarinGenerator.csproj", "{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -218,6 +220,16 @@ Global
 		{1839CFE2-3DB0-45A8-B03D-9AA797479A3A}.Release|x64.Build.0 = Release|Any CPU
 		{1839CFE2-3DB0-45A8-B03D-9AA797479A3A}.Release|x86.ActiveCfg = Release|Any CPU
 		{1839CFE2-3DB0-45A8-B03D-9AA797479A3A}.Release|x86.Build.0 = Release|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Debug|x64.Build.0 = Debug|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Debug|x86.Build.0 = Debug|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Debug|Android-ARM64.ActiveCfg = Debug|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Debug|Android-ARM64.Build.0 = Debug|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Release|x64.ActiveCfg = Release|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Release|x64.Build.0 = Release|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Release|x86.ActiveCfg = Release|Any CPU
+		{105C1849-FE23-4B8D-8FBC-3E30D6FA437D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

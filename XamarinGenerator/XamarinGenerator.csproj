@@ -22,7 +22,7 @@
         <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
         <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
         <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
-        <OutputPath>$(SolutionDir)Output\$(Configuration)\$(Platform)\XamarinGenerator\$(TargetFrameworkVersion)\</OutputPath>
+        <OutputPath>..\Output\$(Configuration)\$(Platform)\XamarinGenerator\$(TargetFrameworkVersion)\</OutputPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <DebugSymbols>True</DebugSymbols>

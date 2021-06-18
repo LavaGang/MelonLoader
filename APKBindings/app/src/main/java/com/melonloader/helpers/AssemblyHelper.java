@@ -31,7 +31,12 @@ public class AssemblyHelper {
         AssetManager am = ApplicationState.Context.getAssets();
 
         File path = ApplicationState.Context.getExternalFilesDir(null);
-        return AssemblyHelper.instance.CopyAssetsTo(path);
+        return AssemblyHelper.instance.CopyAssetsTo(path) &&
+                AssemblyHelper.instance.CreateOverride(
+                "melonloader/etc/MelonLoader.dll",
+                "MelonLoader.dll",
+                path + "/melonloader/etc/.__override__"
+                );
     }
 
     private boolean CopyAssetsTo(File path)
@@ -80,6 +85,50 @@ public class AssemblyHelper {
         OutputStream out = null;
         try {
             in = assetManager.open(filename);
+            String newFileName = base + "/" + filename;
+            out = new FileOutputStream(newFileName);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e) {
+            LogBridge.error(e.getMessage());
+        }
+    }
+
+    // lazy way to create overrides dir
+    // dont do this
+    private boolean CreateOverride(String am_path, String path, String folder)
+    {
+        try {
+            File dir = new File(folder);
+            if (!dir.exists())
+                dir.mkdir();
+
+            copyFileDirect(am_path, path, folder);
+        } catch (SecurityException e) {
+            LogBridge.error(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    // giga shit
+    private void copyFileDirect(String am_path, String filename, String base) {
+        AssetManager assetManager = ApplicationState.Context.getAssets();
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(am_path);
             String newFileName = base + "/" + filename;
             out = new FileOutputStream(newFileName);
 
