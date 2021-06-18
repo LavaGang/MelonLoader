@@ -6,4 +6,4 @@
 	url = https://github.com/SirCoolness/Il2CppAssemblyUnhollower.git
 [submodule "external/Il2CppDumper"]
 	path = external/Il2CppDumper
-	url = https://github.com/Perfare/Il2CppDumper
+	url = https://github.com/SirCoolness/Il2CppDumper
