@@ -62,10 +62,6 @@
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="MelonLoader">
-      <HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BONEWORKS_SceneHandler.cs" />
@@ -76,6 +72,10 @@
     <Compile Include="UnityMappers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportModule.cs" />
+    <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
+      <Private>false</Private>
+      <Name>MelonLoader</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
