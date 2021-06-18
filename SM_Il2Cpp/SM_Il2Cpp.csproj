@@ -1,46 +1,50 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Windows">
+      <Configuration>Debug</Configuration>
+      <Platform>Windows</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Windows">
+      <Configuration>Release</Configuration>
+      <Platform>Windows</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Android">
+      <Configuration>Debug</Configuration>
+      <Platform>Android</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Android">
+      <Configuration>Release</Configuration>
+      <Platform>Android</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
+    <Platform Condition=" '$(Platform)' == '' ">Windows</Platform>
+    
+    <ProjectGuid>{4BEAF9B5-F780-414B-8F2E-59DA4A91BE50}</ProjectGuid>
     <RootNamespace>MelonLoader.Support</RootNamespace>
     <AssemblyName>Il2Cpp</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+
+    <ProductVersion>0.3.1</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFramework>net4.7.2</TargetFramework>
     <LangVersion>8.0</LangVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-    <ProjectGuid>{4BEAF9B5-F780-414B-8F2E-59DA4A91BE50}</ProjectGuid>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+    <OutputType>Library</OutputType>
+    <Platforms>Android;Windows</Platforms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
+  <PropertyGroup>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\$(Platform)\MelonLoader\Dependencies\SupportModules\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="Il2Cppmscorlib">
       <HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
       <Private>false</Private>
@@ -49,33 +53,17 @@
       <HintPath>Libs\Il2CppSystem.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="UnhollowerBaseLib">
-      <HintPath>Libs\UnhollowerBaseLib.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnhollowerRuntimeLib">
-      <HintPath>Libs\UnhollowerRuntimeLib.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="MelonLoader">
+      <HintPath>$(OutputPath)\..\..\..\net35\MelonLoader.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BONEWORKS_SceneHandler.cs" />
-    <Compile Include="Component.cs" />
-    <Compile Include="Coroutines.cs" />
-    <Compile Include="ApplicationHandler.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="UnityMappers.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SupportModule.cs" />
-    <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
-      <Private>false</Private>
-      <Name>MelonLoader</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\UnhollowerBaseLib\UnhollowerBaseLib.csproj" SetTargetFramework="TargetFramework=net4.7.2" />
+    <ProjectReference Include="..\external\Il2CppAssemblyUnhollower\UnhollowerRuntimeLib\UnhollowerRuntimeLib.csproj" SetTargetFramework="TargetFramework=net4.7.2" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

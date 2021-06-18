@@ -8,13 +8,13 @@
       <Configuration>Release</Configuration>
       <Platform>Windows</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|Android-ARM64">
+    <ProjectConfiguration Include="Debug|Android">
       <Configuration>Debug</Configuration>
-      <Platform>Android-ARM64</Platform>
+      <Platform>Android</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Android-ARM64">
+    <ProjectConfiguration Include="Release|Android">
       <Configuration>Release</Configuration>
-      <Platform>Android-ARM64</Platform>
+      <Platform>Android</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup>
@@ -26,7 +26,7 @@
     <OutputType>Library</OutputType>
     <AssemblyName>MelonLoader</AssemblyName>
     <LangVersion>latest</LangVersion>
-    <Platforms>Windows;Android-ARM64</Platforms>
+    <Platforms>Windows;Android</Platforms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
@@ -35,7 +35,7 @@
   <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
     <TargetFramework>net35</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'Android-ARM64'">
+  <PropertyGroup Condition="'$(Platform)' == 'Android'">
     <TargetFramework>net35</TargetFramework>
   </PropertyGroup>
   <!--
@@ -45,7 +45,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'Android-ARM64'">
+  <PropertyGroup Condition="'$(Platform)' == 'Android'">
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -76,17 +76,17 @@
     <Optimize>true</Optimize>
     <DefineConstants>NET35;PORT_DISABLE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'Android-ARM64'">
+  <PropertyGroup Condition="'$(Platform)' == 'Android'">
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android-ARM64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;__ANDROID__</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android-ARM64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
@@ -116,6 +116,6 @@
     <PackageReference ExcludeAssets="runtime" />
   </ItemDefinitionGroup>
   <!--<Import Condition="'$(Platform)' == 'Desktop'" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /> -->
-  <!--<Import Condition="'$(Platform)' == 'Android-ARM64'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
+  <!--<Import Condition="'$(Platform)' == 'Android'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
   <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
 </Project>
