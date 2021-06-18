@@ -203,7 +203,8 @@ Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj
 	{
 		Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
 		Hook::Detach((void**)&(Exports::il2cpp_runtime_invoke), (void*)il2cpp_runtime_invoke);
-		BaseAssembly::Start();
+		if (BaseAssembly::PreStart())
+			BaseAssembly::Start();
 	}
 	return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
 }

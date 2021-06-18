@@ -8,7 +8,7 @@ public:
 	static char* PreloadPath;
 	static bool LoadAssembly();
 	static bool Initialize();
-	static void Preload();
+	static bool PreStart();
 	static void Start();
 	static bool SetupPaths();
 
@@ -16,5 +16,6 @@ public:
 	static Mono::Image* Image;
 
 private:
+	static Mono::Method* Mono_PreStart;
 	static Mono::Method* Mono_Start;
 };
