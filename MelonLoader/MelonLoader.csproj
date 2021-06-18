@@ -8,13 +8,13 @@
       <Configuration>Release</Configuration>
       <Platform>Windows</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|Android">
+    <ProjectConfiguration Include="Debug|Android-ARM64">
       <Configuration>Debug</Configuration>
-      <Platform>Android</Platform>
+      <Platform>Android-ARM64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Android">
+    <ProjectConfiguration Include="Release|Android-ARM64">
       <Configuration>Release</Configuration>
-      <Platform>Android</Platform>
+      <Platform>Android-ARM64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup>
@@ -26,16 +26,17 @@
     <OutputType>Library</OutputType>
     <AssemblyName>MelonLoader</AssemblyName>
     <LangVersion>latest</LangVersion>
-    <Platforms>Android;Windows</Platforms>
+    <Platforms>Windows;Android-ARM64</Platforms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
-    <TargetFrameworks>net35</TargetFrameworks>
+    <TargetFramework>net35</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'Android'">
-    <TargetFrameworks>net35</TargetFrameworks>
+  <PropertyGroup Condition="'$(Platform)' == 'Android-ARM64'">
+    <TargetFramework>net35</TargetFramework>
   </PropertyGroup>
   <!--
   <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
@@ -44,7 +45,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'Android'">
+  <PropertyGroup Condition="'$(Platform)' == 'Android-ARM64'">
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -75,17 +76,17 @@
     <Optimize>true</Optimize>
     <DefineConstants>NET35;PORT_DISABLE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)' == 'Android'">
+  <PropertyGroup Condition="'$(Platform)' == 'Android-ARM64'">
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Android-ARM64' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;__ANDROID__</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Android-ARM64' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
@@ -96,6 +97,8 @@
   <ItemGroup>
     <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
     <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
+    <PackageReference Include="HarmonyX" Version="2.4.2" />
+    <PackageReference Include="Samboy063.Tomlet" Version="1.3.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\external\MonoMod\MonoMod.RuntimeDetour\MonoMod.RuntimeDetour.csproj">
@@ -113,6 +116,6 @@
     <PackageReference ExcludeAssets="runtime" />
   </ItemDefinitionGroup>
   <!--<Import Condition="'$(Platform)' == 'Desktop'" Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /> -->
-  <!--<Import Condition="'$(Platform)' == 'Android'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
+  <!--<Import Condition="'$(Platform)' == 'Android-ARM64'" Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
   <!--<Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />-->
 </Project>

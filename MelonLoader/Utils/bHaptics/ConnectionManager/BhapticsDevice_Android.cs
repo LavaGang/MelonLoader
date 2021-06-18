@@ -33,7 +33,7 @@ namespace MelonLoader.Utils.bHapticsExtra
 
         public DateTime LastScannedTime => NativeParser.ParseUnixTime(Internal_GetLastScannedTime(DeviceAddress));
 
-        public string ToString()
+        public override string ToString()
         {
             return string.Copy(Internal_ToString(DeviceAddress));
         }

@@ -12,6 +12,12 @@ namespace MelonLoader
         private static readonly int MaxBufferSize = 20;
         private static bool _waserror = false;
         public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Disabling bHaptics API..."); _waserror = value; } }
+
+        internal static void Load()
+        {
+            // stub
+        }
+        
         internal static void Start()
         {
             if (_waserror)
@@ -86,7 +92,6 @@ namespace MelonLoader
 #else
                 return !_waserror && bHaptics_NativeLibrary.IsFeedbackRegistered(key)
 #endif
-            return false;
         }
 
         public static void RegisterTactFileStr(string key, string tactFileStr)
