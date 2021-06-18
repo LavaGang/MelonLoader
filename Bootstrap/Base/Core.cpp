@@ -154,10 +154,10 @@ bool Core::Initialize()
 			"Applying patches to Mono",
 			Mono::ApplyPatches
 		},
-		{
-			"Initializing Bhaptics",
-			bHapticsPlayer::Initialize
-		},
+		// {
+		// 	"Initializing Bhaptics",
+		// 	bHapticsPlayer::Initialize
+		// },
 #endif
 #ifdef _WIN32
 		{
