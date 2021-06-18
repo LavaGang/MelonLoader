@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.4.1 ALPHA Pre-Release](#v041-alpha-pre-release)
 [v0.4.0 Open-Beta](#v040-open-beta)  
 [v0.3.0 Open-Beta](#v030-open-beta)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
@@ -27,6 +28,7 @@
 2. Added MelonCompatibilityLayer.WrapperData Extensions.
 3. Fixed Case Issue with MelonHandler not handling File Extensions properly.
 4. Fixed Case Issue with MelonHandler not handling File Extensions inside ZIPs properly.
+5. Fixed Issue with the Close Button of the Console still being Active during Assembly Generation.
 
 ---
 

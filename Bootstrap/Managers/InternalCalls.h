@@ -53,10 +53,16 @@ public:
 		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion);
 	};
 
-	class Il2CppAssemblyGenerator_ExecutablePackageBase
+	class IIl2CppAssemblyGenerator
 	{
 	public:
 		static void AddInternalCalls();
-		static void SetProcessId(int id);
+
+		class ExecutablePackageBase
+		{
+		public:
+			static void AddInternalCalls();
+			static void SetProcessId(int id);
+		};
 	};
 };

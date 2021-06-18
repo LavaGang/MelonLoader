@@ -16,7 +16,8 @@ void InternalCalls::Initialize()
 	MelonUtils::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
 	SupportModules::AddInternalCalls();
-	Il2CppAssemblyGenerator_ExecutablePackageBase::AddInternalCalls();
+	IIl2CppAssemblyGenerator::AddInternalCalls();
+	IIl2CppAssemblyGenerator::ExecutablePackageBase::AddInternalCalls();
 }
 
 #pragma region MelonLogger
@@ -160,10 +161,20 @@ void InternalCalls::SupportModules::AddInternalCalls()
 }
 #pragma endregion
 
-#pragma region AssemblyGenerator_ExecutablePackageBase
-void InternalCalls::Il2CppAssemblyGenerator_ExecutablePackageBase::SetProcessId(int id) { Il2CppAssemblyGenerator::ProcessId = id; }
-void InternalCalls::Il2CppAssemblyGenerator_ExecutablePackageBase::AddInternalCalls()
+#pragma region AssemblyGenerator
+void InternalCalls::IIl2CppAssemblyGenerator::AddInternalCalls()
+{
+	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator::EnableCloseButton", Console::EnableCloseButton);
+	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator::DisableCloseButton", Console::DisableCloseButton);
+	ExecutablePackageBase::AddInternalCalls();
+}
+
+#pragma region ExecutablePackageBase
+void InternalCalls::IIl2CppAssemblyGenerator::ExecutablePackageBase::SetProcessId(int id) { Il2CppAssemblyGenerator::ProcessId = id; }
+void InternalCalls::IIl2CppAssemblyGenerator::ExecutablePackageBase::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.ExecutablePackageBase::SetProcessId", SetProcessId);
 }
+#pragma endregion
+
 #pragma endregion
