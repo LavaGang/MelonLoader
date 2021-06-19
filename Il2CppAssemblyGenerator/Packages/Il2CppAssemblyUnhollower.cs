@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AssemblyUnhollower;
 using AssemblyUnhollower.Contexts;
+using AssemblyUnhollower.MetadataAccess;
 using AssemblyUnhollower.Passes;
 using UnhollowerBaseLib;
 
@@ -70,6 +72,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
             Output = Path.Combine(Destination);
+            
+            MelonLoader.MelonDebug.Msg(Output);
         }
 
         internal bool Execute()
@@ -89,9 +93,30 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 Directory.CreateDirectory(options.OutputDir);
 
             RewriteGlobalContext rewriteContext;
+            IIl2CppMetadataAccess gameAssemblies;
+            IMetadataAccess systemAssemblies;
+            IMetadataAccess unityAssemblies;
 
+            
             LogSupport.Info("Reading assemblies");
-            rewriteContext = new RewriteGlobalContext(options, Directory.EnumerateFiles(options.SourceDir, "*.dll"));
+            gameAssemblies = new CecilMetadataAccess(Directory.EnumerateFiles(options.SourceDir, "*.dll"));
+            
+            LogSupport.Info("Reading system assemblies");
+            if (!string.IsNullOrEmpty(options.SystemLibrariesPath)) 
+                systemAssemblies = new CecilMetadataAccess(Directory.EnumerateFiles(options.SystemLibrariesPath, "*.dll")
+                    .Where(it => Path.GetFileName(it).StartsWith("System.") || Path.GetFileName(it) == "mscorlib.dll" || Path.GetFileName(it) == "netstandard.dll"));
+            else
+                systemAssemblies = new CecilMetadataAccess(new[] {options.MscorlibPath});
+            
+            if (!string.IsNullOrEmpty(options.UnityBaseLibsDir))
+            {
+                LogSupport.Info("Reading unity assemblies");
+                unityAssemblies = new CecilMetadataAccess(Directory.EnumerateFiles(options.UnityBaseLibsDir, "*.dll"));
+            }
+            else
+                unityAssemblies = NullMetadataAccess.Instance;
+            
+            rewriteContext = new RewriteGlobalContext(options, gameAssemblies, systemAssemblies, unityAssemblies);
 
             LogSupport.Info("Computing renames");
             Pass05CreateRenameGroups.DoPass(rewriteContext);
@@ -197,7 +222,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 OutputDir = Output,
                 MscorlibPath = Path.Combine(string.Copy(MelonUtils.GetManagedDirectory()), "mscorlib.dll"),
                 UnityBaseLibsDir = Path.Combine(Core.BasePath, "unity"),
-                GameAssemblyPath = Core.GameAssemblyPath
+                GameAssemblyPath = Core.GameAssemblyPath,
+                SystemLibrariesPath = MelonUtils.GetManagedDirectory()
             };
 
             options.AdditionalAssembliesBlacklist.AddRange(new List<string> { "Mono.Security", "Newtonsoft.Json", "Valve.Newtonsoft.Json" });

@@ -345,7 +345,7 @@ void Mono::CreateDomain(const char* name)
 
 void Mono::AddInternalCall(const char* name, void* method)
 {
-	Debug::Msg(name);
+	// Debug::Msg(name);
 	Exports::mono_add_internal_call(name, method);
 }
 

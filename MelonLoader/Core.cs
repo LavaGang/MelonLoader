@@ -21,8 +21,9 @@ namespace MelonLoader
 
             MelonPreferences.Load();
             MelonLaunchOptions.Load();
-#if !__ANDROID__
+            
             MelonCompatibilityLayer.Setup(curDomain);
+#if !__ANDROID__
             PatchShield.Install();
 #endif
         }
@@ -56,7 +57,7 @@ namespace MelonLoader
             if (!SupportModule.Initialize())
                 return 1;
 
-            AddUnityDebugLog();
+            // AddUnityDebugLog();
             // bHaptics.Start();
 
             MelonHandler.OnApplicationStart_Plugins();

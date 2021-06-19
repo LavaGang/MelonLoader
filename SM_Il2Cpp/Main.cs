@@ -30,7 +30,9 @@ namespace MelonLoader.Support
                 game_version = ApplicationHandler.GetBuildGUID();
 
             MelonLogger.Msg($"Game Version: {game_version}");
-            SetDefaultConsoleTitleWithGameName(game_version); 
+            #if !__ANDROID__
+            SetDefaultConsoleTitleWithGameName(game_version);
+            #endif
             UnityMappers.RegisterMappers();
 
             LogSupport.RemoveAllHandlers();

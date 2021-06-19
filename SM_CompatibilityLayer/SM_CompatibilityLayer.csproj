@@ -1,61 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Windows">
+      <Configuration>Debug</Configuration>
+      <Platform>Windows</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Windows">
+      <Configuration>Release</Configuration>
+      <Platform>Windows</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Android">
+      <Configuration>Debug</Configuration>
+      <Platform>Android</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Android">
+      <Configuration>Release</Configuration>
+      <Platform>Android</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
+    <Platform Condition=" '$(Platform)' == '' ">Windows</Platform>
+
+    <ProjectGuid>{94D9DBC9-E538-435B-BBE5-6A5BE312077F}</ProjectGuid>
     <RootNamespace>MelonLoader.Support</RootNamespace>
     <AssemblyName>CompatibilityLayer</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+
+    <ProductVersion>0.4.1</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <TargetFramework>net4.7.2</TargetFramework>
     <LangVersion>8.0</LangVersion>
+
+    <OutputType>Library</OutputType>
+    <Platforms>Android;Windows</Platforms>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-    <ProjectGuid>{94D9DBC9-E538-435B-BBE5-6A5BE312077F}</ProjectGuid>
+
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\$(Platform)\MelonLoader\Dependencies\SupportModules\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Output\Debug\MelonLoader\Dependencies\SupportModules\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Output\Release\MelonLoader\Dependencies\SupportModules\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Layers\IPA.cs" />
-    <Compile Include="Layers\IPA\IEnhancedPlugin.cs" />
-    <Compile Include="Layers\IPA\IPlugin.cs" />
-    <Compile Include="Layers\IPA\ModPrefs.cs" />
-    <Compile Include="Layers\IPA\PluginManager.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-	<Reference Include="MelonLoader">
-      <HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
+    <Reference Include="MelonLoader">
+      <HintPath>$(OutputPath)\..\..\..\net35\MelonLoader.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
