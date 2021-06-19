@@ -61,5 +61,5 @@ public:
 
 private:
 	static const char* BlockedList[];
-	static std::list<const char*> DABList;
+	static std::list<std::string> DABList;
 };

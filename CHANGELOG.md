@@ -30,6 +30,7 @@
 4. Fixed Case Issue with MelonHandler not handling File Extensions inside ZIPs properly.
 5. Fixed Issue with the Close Button of the Console still being Active during Assembly Generation.
 6. Fixed Issue with MelonHandler not calling OnModSettingsApplied on Legacy Melons.
+7. Fixed Issue with DAB not properly caching already found Hosts.
 
 ---
 
