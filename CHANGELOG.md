@@ -22,13 +22,14 @@
 
 ---
 
-### v0.4.1 ALPHA Pre-Release:
+### v0.4.1 Open-Beta:
 
 1. Fixed Issue with Compatibility Layer system throwing NRE about Default Constructors.
 2. Added MelonCompatibilityLayer.WrapperData Extensions.
 3. Fixed Case Issue with MelonHandler not handling File Extensions properly.
 4. Fixed Case Issue with MelonHandler not handling File Extensions inside ZIPs properly.
 5. Fixed Issue with the Close Button of the Console still being Active during Assembly Generation.
+6. Fixed Issue with MelonHandler not calling OnModSettingsApplied on Legacy Melons.
 
 ---
 
