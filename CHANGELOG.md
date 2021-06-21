@@ -31,6 +31,8 @@
 5. Fixed Issue with the Close Button of the Console still being Active during Assembly Generation.
 6. Fixed Issue with MelonHandler not calling OnModSettingsApplied on Legacy Melons.
 7. Fixed Issue with DAB not properly caching already found Hosts.
+8. Fixed NRE Issue in Il2CppAssemblyGenerator.RemoteAPI.ContactHosts.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
+9. Updated Tomlet to v1.3.4.    (Credits to [loukylor](https://github.com/loukylor) and [Samboy](https://github.com/SamboyCoding) :3)
 
 ---
 
