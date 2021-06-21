@@ -69,7 +69,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 try { Response = Core.webClient.DownloadString(pair.Key); }
                 catch (Exception ex)
                 {
-                    if (!(ex is System.Net.WebException))
+                    if (!(ex is System.Net.WebException) || ((System.Net.WebException) ex).Response == null)
                     {
                         MelonLogger.Error($"Exception while Contacting RemoteAPI Host ({pair.Key}): {ex}");
                         continue;
