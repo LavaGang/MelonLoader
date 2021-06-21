@@ -36,6 +36,7 @@ namespace MelonLoader
         public static string GameDeveloper { get; private set; }
         public static string GameName { get; private set; }
         public static bool IsBONEWORKS { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("Stress Level Zero") && !string.IsNullOrEmpty(GameName) && GameName.Equals("BONEWORKS")); }
+        public static bool IsDemeo { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("Resolution Games") && !string.IsNullOrEmpty(GameName) && GameName.Equals("115913 Demeo")); }
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
 

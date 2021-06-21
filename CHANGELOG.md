@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.4.1 ALPHA Pre-Release](#v041-alpha-pre-release)
+[v0.4.1 Open-Beta](#v041-open-beta)
 [v0.4.0 Open-Beta](#v040-open-beta)  
 [v0.3.0 Open-Beta](#v030-open-beta)  
 [v0.2.7.4 Open-Beta](#v0274-open-beta)  
@@ -22,13 +22,17 @@
 
 ---
 
-### v0.4.1 ALPHA Pre-Release:
+### v0.4.1 Open-Beta:
 
 1. Fixed Issue with Compatibility Layer system throwing NRE about Default Constructors.
 2. Added MelonCompatibilityLayer.WrapperData Extensions.
 3. Fixed Case Issue with MelonHandler not handling File Extensions properly.
 4. Fixed Case Issue with MelonHandler not handling File Extensions inside ZIPs properly.
 5. Fixed Issue with the Close Button of the Console still being Active during Assembly Generation.
+6. Fixed Issue with MelonHandler not calling OnModSettingsApplied on Legacy Melons.
+7. Fixed Issue with DAB not properly caching already found Hosts.
+8. Fixed NRE Issue in Il2CppAssemblyGenerator.RemoteAPI.ContactHosts.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
+9. Updated Tomlet to v1.3.4.    (Credits to [loukylor](https://github.com/loukylor) and [Samboy](https://github.com/SamboyCoding) :3)
 
 ---
 
