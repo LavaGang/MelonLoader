@@ -22,7 +22,7 @@ class Paths:
 
     # melonloader
     melonloader_file = "MelonLoader.dll"
-    melonloader_build_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "Android", "MelonLoader", "net35")
+    melonloader_build_dir = os.path.join(helper.common.Settings.base_dir, "..", "Output", "Debug", "Android", "MelonLoader", "net4.7.2")
     melonloader_dest = os.path.join("assets", "melonloader", "etc")
 
     # mono

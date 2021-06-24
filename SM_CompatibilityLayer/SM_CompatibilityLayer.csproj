@@ -44,7 +44,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="MelonLoader">
-      <HintPath>$(OutputPath)\..\..\..\net35\MelonLoader.dll</HintPath>
+      <HintPath>$(OutputPath)\..\..\..\net4.7.2\MelonLoader.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

@@ -36,7 +36,7 @@
     <TargetFramework>net35</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'Android'">
-    <TargetFramework>net35</TargetFramework>
+    <TargetFramework>net4.7.2</TargetFramework>
   </PropertyGroup>
   <!--
   <PropertyGroup Condition="'$(Platform)' == 'Desktop'">
@@ -104,12 +104,12 @@
     <ProjectReference Include="..\external\MonoMod\MonoMod.RuntimeDetour\MonoMod.RuntimeDetour.csproj">
       <Project>{d0c584c0-81d7-486e-b70e-d7f9256e0909}</Project>
       <Name>MonoMod.RuntimeDetour</Name>
-      <SetTargetFramework>TargetFramework=net35</SetTargetFramework>
+      <SetTargetFramework>TargetFramework=net40</SetTargetFramework>
     </ProjectReference>
     <ProjectReference Include="..\external\MonoMod\MonoMod.Utils\MonoMod.Utils.csproj">
       <Project>{1839cfe2-3db0-45a8-b03d-9aa797479a3a}</Project>
       <Name>MonoMod.Utils</Name>
-      <SetTargetFramework>TargetFramework=net35</SetTargetFramework>
+      <SetTargetFramework>TargetFramework=net40</SetTargetFramework>
     </ProjectReference>
   </ItemGroup>
   <ItemDefinitionGroup>

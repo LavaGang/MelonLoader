@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Windows">
       <Configuration>Debug</Configuration>
@@ -60,7 +60,7 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="MelonLoader">
-      <HintPath>$(OutputPath)\..\..\..\net35\MelonLoader.dll</HintPath>
+      <HintPath>$(OutputPath)\..\..\..\net4.7.2\MelonLoader.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
