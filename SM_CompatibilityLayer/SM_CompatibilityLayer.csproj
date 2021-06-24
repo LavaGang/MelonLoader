@@ -46,6 +46,10 @@
     <Compile Include="Layers\IPA\IPlugin.cs" />
     <Compile Include="Layers\IPA\ModPrefs.cs" />
     <Compile Include="Layers\IPA\PluginManager.cs" />
+    <Compile Include="Layers\MuseDashModLoader.cs" />
+    <Compile Include="Layers\MuseDashModLoader\IMod.cs" />
+    <Compile Include="Layers\MuseDashModLoader\ModLoader.cs" />
+    <Compile Include="Layers\MuseDashModLoader\ModLogger.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,6 +60,5 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

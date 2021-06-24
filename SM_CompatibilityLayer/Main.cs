@@ -10,6 +10,7 @@ namespace MelonLoader.Support
         private static void Setup(AppDomain domain)
         {
             IPA_CL.Setup(domain);
+            MuseDashModLoader.Setup(domain);
         }
     }
 }
