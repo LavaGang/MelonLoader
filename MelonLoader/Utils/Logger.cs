@@ -25,6 +25,8 @@ namespace MelonLoader
 
         private static void SendMsg(ConsoleColor txtcolor, string txt)
         {
+            if (string.IsNullOrEmpty(txt))
+                txt = "null";
             ConsoleColor meloncolor = DefaultMelonColor;
             string namesection = null;
             MelonBase melon = MelonUtils.GetMelonFromStackTrace();
@@ -36,18 +38,29 @@ namespace MelonLoader
             Internal_Msg(meloncolor, txtcolor, namesection, txt);
             RunMsgCallbacks(meloncolor, txtcolor, namesection, txt);
         }
+
         private static void SendWarning(string txt)
         {
+            if (string.IsNullOrEmpty(txt))
+                txt = "null";
             string namesection = null;
             MelonBase melon = MelonUtils.GetMelonFromStackTrace();
             if (melon != null)
                 namesection = melon.Info.Name;
             ManualWarning(namesection, txt);
         }
-        private static void SendError(string txt) => ManualMelonError(MelonUtils.GetMelonFromStackTrace(), txt);
+
+        private static void SendError(string txt)
+        {
+            if (string.IsNullOrEmpty(txt))
+                txt = "null";
+            ManualMelonError(MelonUtils.GetMelonFromStackTrace(), txt);
+        }
 
         internal static void ManualWarning(string namesection, string txt)
         {
+            if (string.IsNullOrEmpty(txt))
+                txt = "null";
             namesection = namesection?.Replace(" ", "_");
             Internal_Warning(namesection, txt);
             RunWarningCallbacks(namesection, txt);
@@ -55,13 +68,18 @@ namespace MelonLoader
 
         internal static void ManualMelonError(MelonBase melon, string txt)
         {
+            if (string.IsNullOrEmpty(txt))
+                txt = "null";
             string namesection = null;
             if (melon != null)
                 namesection = melon.Info.Name.Replace(" ", "_");
             ManualError(namesection, txt);
         }
+
         internal static void ManualError(string namesection, string txt)
         {
+            if (string.IsNullOrEmpty(txt))
+                txt = "null";
             Internal_Error(namesection, txt);
             RunErrorCallbacks(namesection, txt);
         }
