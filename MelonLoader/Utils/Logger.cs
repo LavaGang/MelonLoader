@@ -33,7 +33,12 @@ namespace MelonLoader
                 namesection = melon.Info.Name.Replace(" ", "_");
                 meloncolor = melon.ConsoleColor;
             }
-            Internal_Msg(meloncolor, txtcolor, namesection, txt);
+            
+            if (txt != null)
+                Internal_Msg(meloncolor, txtcolor, namesection, txt);
+            else
+                Internal_Msg(meloncolor, txtcolor, namesection, "null");
+            
             RunMsgCallbacks(meloncolor, txtcolor, namesection, txt);
         }
         private static void SendWarning(string txt)
