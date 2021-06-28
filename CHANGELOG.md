@@ -37,7 +37,7 @@
 11. Fixed Issue with MelonLogger causing Crash on null Input Text.    (Credits to [loukylor](https://github.com/loukylor) :3)
 12. Fixed Issue with MelonLogger not allowing Empty Input Text.    (Credits to [ds5678](https://github.com/ds5678) :D)
 13. Updated Il2CppDumper to v6.6.3.
-14. Updated Cpp2IL to v2020.1.
+14. Updated Cpp2IL to v2021.0.
 15. Swapped out Il2CppDumper for Cpp2IL.
 16. Added "--melonloader.agfoffline" Launch Option to Force the Assembly Generator to Run without Contacting the Remote API.
 
