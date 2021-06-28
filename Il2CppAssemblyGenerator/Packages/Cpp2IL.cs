@@ -10,11 +10,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.ReturnedInfo.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "commit_1aba7eee0667903dd465d897d88df15c2fe8b991";
+                Version = "2021.0";
             URL = "https://github.com/SamboyCoding/Cpp2IL/releases/download/" + Version + "/Cpp2IL-Win.exe";
             Destination = Path.Combine(Core.BasePath, "Cpp2IL");
             Output = Path.Combine(Destination, "cpp2il_out");
-            ExePath = Path.Combine(Destination, "Cpp2IL-Win.exe");
+            ExePath = Path.Combine(Destination, "Cpp2IL-2021.0-Windows.exe");
         }
 
         private void Save()
@@ -47,6 +47,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             MelonLogger.Msg("Executing Cpp2IL...");
             return Execute(new string[] {
+                MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
                 "--game-path",
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
                 "--exe-name",
