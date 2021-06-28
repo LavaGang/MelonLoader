@@ -33,6 +33,13 @@
 7. Fixed Issue with DAB not properly caching already found Hosts.
 8. Fixed NRE Issue in Il2CppAssemblyGenerator.RemoteAPI.ContactHosts.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
 9. Updated Tomlet to v1.3.4.    (Credits to [loukylor](https://github.com/loukylor) and [Samboy](https://github.com/SamboyCoding) :3)
+10. Added MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
+11. Fixed Issue with MelonLogger causing Crash on null Input Text.    (Credits to [loukylor](https://github.com/loukylor) :3)
+12. Fixed Issue with MelonLogger not allowing Empty Input Text.    (Credits to [ds5678](https://github.com/ds5678) :D)
+13. Updated Il2CppDumper to v6.6.3.
+14. Updated Cpp2IL to v2020.1.
+15. Swapped out Il2CppDumper for Cpp2IL.
+16. Added "--melonloader.agfoffline" Launch Option to Force the Assembly Generator to Run without Contacting the Remote API.
 
 ---
 

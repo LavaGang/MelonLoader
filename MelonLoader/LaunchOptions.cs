@@ -37,6 +37,9 @@ namespace MelonLoader
                     case "--quitfix":
                         Core.QuitFix = true;
                         goto default;
+                    case "--melonloader.agfoffline":
+                        Il2CppAssemblyGenerator.OfflineMode = true;
+                        goto default;
                     case "--melonloader.agfregenerate":
                         Il2CppAssemblyGenerator.ForceRegeneration = true;
                         goto default;
@@ -310,6 +313,7 @@ namespace MelonLoader
                 */
 
                 public static bool ForceRegeneration { get; internal set; }
+                public static bool OfflineMode { get; internal set; }
                 public static string ForceVersion_Dumper { get; internal set; }
                 public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
                 public static string ForceVersion_UnityDependencies { get; internal set; }

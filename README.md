@@ -146,6 +146,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ Disable: 0 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.agfoffline | Forces Assembly Generator to Run without Contacting the Remote API |
 | --melonloader.agfregenerate | Forces Regeneration of Assembly |
 | --melonloader.agfvunity | Forces use a Specified Version of Unity Dependencies |
 | --melonloader.agfvdumper | Forces use a Specified Version of Dumper |

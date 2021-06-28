@@ -14,7 +14,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal static WebClient webClient = null;
 
-        internal static Il2CppDumper dumper = null;
+        internal static Cpp2IL dumper = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
@@ -42,23 +42,26 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Config.Initialize();
 
-            RemoteAPI.Contact();
+            if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
+            {
+                RemoteAPI.Contact();
 
-            unitydependencies = new UnityDependencies();
-            if (!unitydependencies.Download())
-                return 1;
+                unitydependencies = new UnityDependencies();
+                if (!unitydependencies.Download())
+                    return 1;
 
-            dumper = new Il2CppDumper();
-            if (!dumper.Download())
-                return 1;
+                dumper = new Cpp2IL();
+                if (!dumper.Download())
+                    return 1;
 
-            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
-            if (!il2cppassemblyunhollower.Download())
-                return 1;
+                il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+                if (!il2cppassemblyunhollower.Download())
+                    return 1;
 
-            deobfuscationMap = new DeobfuscationMap();
-            if (!deobfuscationMap.Download())
-                return 1;
+                deobfuscationMap = new DeobfuscationMap();
+                if (!deobfuscationMap.Download())
+                    return 1;
+            }
 
             // Check for Regex Change against Config
 
