@@ -41,6 +41,7 @@
 15. Swapped out Il2CppDumper for Cpp2IL.
 16. Added "--melonloader.agfoffline" Launch Option to Force the Assembly Generator to Run without Contacting the Remote API.
 17. Fixed Issue with MelonLogger not abiding by Warning and Error Caps.
+18. Fixed Issue with Assembly Generator using the wrong Download URL for Cpp2IL.
 
 ---
 

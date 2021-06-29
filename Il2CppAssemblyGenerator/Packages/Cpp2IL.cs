@@ -11,10 +11,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 Version = RemoteAPI.ReturnedInfo.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "2021.0";
-            URL = "https://github.com/SamboyCoding/Cpp2IL/releases/download/" + Version + "/Cpp2IL-Win.exe";
+            string exe_name = $"Cpp2IL-{Version}-Windows.exe";
+            URL = $"https://github.com/SamboyCoding/Cpp2IL/releases/download/{Version}/{exe_name}";
             Destination = Path.Combine(Core.BasePath, "Cpp2IL");
             Output = Path.Combine(Destination, "cpp2il_out");
-            ExePath = Path.Combine(Destination, "Cpp2IL-2021.0-Windows.exe");
+            ExePath = Path.Combine(Destination, exe_name);
         }
 
         private void Save()
