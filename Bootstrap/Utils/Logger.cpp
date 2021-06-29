@@ -110,6 +110,8 @@ void Logger::Warning(const char* txt)
 			return;
 		WarningCount++;
 	}
+	else
+		return;
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [WARNING] " << txt << std::endl;
 	if (!Console::HideWarnings)
@@ -131,6 +133,8 @@ void Logger::Error(const char* txt)
 			return;
 		ErrorCount++;
 	}
+	else
+		return;
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [ERROR] " << txt << std::endl;
 	std::cout
@@ -205,6 +209,8 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 			return;
 		WarningCount++;
 	}
+	else
+		return;
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [" << namesection << "] [WARNING] " << txt << std::endl;
 	if (!Console::HideWarnings)
@@ -233,6 +239,8 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 			return;
 		ErrorCount++;
 	}
+	else
+		return;
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] [" << namesection << "] [ERROR] " << txt << std::endl;
 	std::cout
