@@ -8,10 +8,9 @@ namespace MelonLoader.CompatibilityLayers
 {
 	internal class Melon_CL : MelonCompatibilityLayer.Resolver
 	{
-		private readonly Assembly asm = null;
-		private readonly string filepath = null;
 		private bool is_plugin = false;
-		private Melon_CL(Assembly assembly, string filelocation) { asm = assembly; filepath = filelocation; }
+
+		private Melon_CL(Assembly assembly, string filepath) : base(assembly, filepath) { }
 
 		internal static void Setup(AppDomain domain)
 		{
@@ -31,8 +30,7 @@ namespace MelonLoader.CompatibilityLayers
 				return;
 
 			IEnumerable<Type> melon_types = args.assembly.GetValidTypes(x => x.IsSubclassOf(typeof(MelonBase)));
-			if ((melon_types == null)
-				|| (melon_types.Count() <= 0))
+			if ((melon_types == null) || !melon_types.Any())
 				return;
 
 			if (string.IsNullOrEmpty(args.filepath))
@@ -65,18 +63,18 @@ namespace MelonLoader.CompatibilityLayers
 			if (!CheckVerifyLoaderBuildAttribute())
 				return;
 
-			MelonColorAttribute coloratt = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(asm);
-			MelonPriorityAttribute priorityatt = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(asm, true);
+			MelonColorAttribute coloratt = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(Assembly);
+			MelonPriorityAttribute priorityatt = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(Assembly, true);
 
 			MelonBase instance = new MelonCompatibilityLayer.WrapperData()
 			{
-				Assembly = asm,
+				Assembly = Assembly,
 				Info = infoAttribute,
 				Games = gameAttributes.ToArray(),
-				OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm),
+				OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly),
 				ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
 				Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
-				Location = filepath
+				Location = FilePath
 			}.CreateMelon();
 			if (instance == null)
 				return;
@@ -86,17 +84,17 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckInfoAttribute(ref MelonInfoAttribute infoAttribute)
 		{
-			infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(asm);
+			infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(Assembly);
 
 			// Legacy Support
 			if (infoAttribute == null)
-				infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonModInfoAttribute>(asm)?.Convert();
+				infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonModInfoAttribute>(Assembly)?.Convert();
 			if (infoAttribute == null)
-				infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonPluginInfoAttribute>(asm)?.Convert();
+				infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonPluginInfoAttribute>(Assembly)?.Convert();
 
 			if ((infoAttribute == null) || (infoAttribute.SystemType == null))
 			{
-				MelonLogger.Error($"No {((infoAttribute == null) ? "MelonInfoAttribute Found" : "Type given to MelonInfoAttribute")} in {filepath}");
+				MelonLogger.Error($"No {((infoAttribute == null) ? "MelonInfoAttribute Found" : "Type given to MelonInfoAttribute")} in {FilePath}");
 				return false;
 			}
 
@@ -104,7 +102,7 @@ namespace MelonLoader.CompatibilityLayers
 			bool is_mod_subclass = infoAttribute.SystemType.IsSubclassOf(typeof(MelonMod));
 			if (!is_plugin && !is_mod_subclass)
 			{
-				MelonLogger.Error($"Type Specified {infoAttribute.SystemType.AssemblyQualifiedName} is not a Subclass of MelonPlugin or MelonMod in {filepath}");
+				MelonLogger.Error($"Type Specified {infoAttribute.SystemType.AssemblyQualifiedName} is not a Subclass of MelonPlugin or MelonMod in {FilePath}");
 				return false;
 			}
 
@@ -112,7 +110,7 @@ namespace MelonLoader.CompatibilityLayers
 			bool nullcheck_version = string.IsNullOrEmpty(infoAttribute.Version);
 			if (nullcheck_name || nullcheck_version)
 			{
-				MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : ""))} given to MelonInfoAttribute in {filepath}");
+				MelonLogger.Error($"No {(nullcheck_name ? "Name" : (nullcheck_version ? "Version" : ""))} given to MelonInfoAttribute in {FilePath}");
 				return false;
 			}
 
@@ -120,7 +118,7 @@ namespace MelonLoader.CompatibilityLayers
 				? MelonHandler.IsPluginAlreadyLoaded(infoAttribute.Name)
 				: MelonHandler.IsModAlreadyLoaded(infoAttribute.Name))
 			{
-				MelonLogger.Error($"Duplicate {(is_plugin ? "Plugin" : "Mod")} {infoAttribute.Name}: {filepath}");
+				MelonLogger.Error($"Duplicate {(is_plugin ? "Plugin" : "Mod")} {infoAttribute.Name}: {FilePath}");
 				return false;
 			}
 
@@ -130,16 +128,16 @@ namespace MelonLoader.CompatibilityLayers
 		private bool CheckGameAttributes(ref List<MelonGameAttribute> gameAttributes)
 		{
 			gameAttributes = new List<MelonGameAttribute>();
-			MelonGameAttribute[] gameatt = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(asm);
+			MelonGameAttribute[] gameatt = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(Assembly);
 			if ((gameatt != null) && (gameatt.Length > 0))
 				gameAttributes.AddRange(gameatt);
 
 			// Legacy Support
-			MelonModGameAttribute[] legacymodgameAttributes = MelonUtils.PullAttributesFromAssembly<MelonModGameAttribute>(asm);
+			MelonModGameAttribute[] legacymodgameAttributes = MelonUtils.PullAttributesFromAssembly<MelonModGameAttribute>(Assembly);
 			if ((legacymodgameAttributes != null) && (legacymodgameAttributes.Length > 0))
 				foreach (MelonModGameAttribute legacyatt in legacymodgameAttributes)
 					gameAttributes.Add(legacyatt.Convert());
-			MelonPluginGameAttribute[] legacyplugingameAttributes = MelonUtils.PullAttributesFromAssembly<MelonPluginGameAttribute>(asm);
+			MelonPluginGameAttribute[] legacyplugingameAttributes = MelonUtils.PullAttributesFromAssembly<MelonPluginGameAttribute>(Assembly);
 			if ((legacyplugingameAttributes != null) && (legacyplugingameAttributes.Length > 0))
 				foreach (MelonPluginGameAttribute legacyatt in legacyplugingameAttributes)
 					gameAttributes.Add(legacyatt.Convert());
@@ -160,7 +158,7 @@ namespace MelonLoader.CompatibilityLayers
 				}
 				if (!is_compatible)
 				{
-					MelonLogger.Error($"Incompatible Game for {(is_plugin ? "Plugin" : "Mod")}: {filepath}");
+					MelonLogger.Error($"Incompatible Game for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
 					return false;
 				}
 			}
@@ -170,7 +168,7 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckPlatformAttribute()
 		{
-			MelonPlatformAttribute platformAttribute = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(asm);
+			MelonPlatformAttribute platformAttribute = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(Assembly);
 			if ((platformAttribute == null)
 				|| (platformAttribute.Platforms == null)
 				|| (platformAttribute.Platforms.Length <= 0))
@@ -189,7 +187,7 @@ namespace MelonLoader.CompatibilityLayers
 			}
 			if (!is_compatible)
 			{
-				MelonLogger.Error($"Incompatible Platform for {(is_plugin ? "Plugin" : "Mod")}: {filepath}");
+				MelonLogger.Error($"Incompatible Platform for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
 				return false;
 			}
 			return true;
@@ -197,7 +195,7 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckPlatformDomainAttribute()
 		{
-			MelonPlatformDomainAttribute platformDomainAttribute = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(asm);
+			MelonPlatformDomainAttribute platformDomainAttribute = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(Assembly);
 			if ((platformDomainAttribute == null)
 				|| (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.UNIVERSAL))
 				return true;
@@ -205,7 +203,7 @@ namespace MelonLoader.CompatibilityLayers
 			bool is_mono_expected_il2cpp = (!MelonUtils.IsGameIl2Cpp() && (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP));
 			if (is_il2cpp_expected_mono || is_mono_expected_il2cpp)
 			{
-				MelonLogger.Error($"Incompatible Platform Domain for {(is_plugin ? "Plugin" : "Mod")}: {filepath}");
+				MelonLogger.Error($"Incompatible Platform Domain for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
 				return false;
 			}
 			return true;
@@ -214,7 +212,7 @@ namespace MelonLoader.CompatibilityLayers
 		private static int[] CurrentMLVersionIntArr = null;
 		private bool CheckVerifyLoaderVersionAttribute()
 		{
-			VerifyLoaderVersionAttribute verifyLoaderVersionAttribute = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(asm);
+			VerifyLoaderVersionAttribute verifyLoaderVersionAttribute = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(Assembly);
 			if (verifyLoaderVersionAttribute == null)
 				return true;
 
@@ -251,7 +249,7 @@ namespace MelonLoader.CompatibilityLayers
 				|| !patch_is_acceptable
 				|| !revision_is_acceptable)
 			{
-				MelonLogger.Error($"Incompatible MelonLoader Version for {(is_plugin ? "Plugin" : "Mod")}: {filepath}");
+				MelonLogger.Error($"Incompatible MelonLoader Version for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
 				return false;
 			}
 
@@ -260,7 +258,7 @@ namespace MelonLoader.CompatibilityLayers
 
 		private bool CheckVerifyLoaderBuildAttribute()
 		{
-			VerifyLoaderBuildAttribute verifyLoaderBuildAttribute = MelonUtils.PullAttributeFromAssembly<VerifyLoaderBuildAttribute>(asm);
+			VerifyLoaderBuildAttribute verifyLoaderBuildAttribute = MelonUtils.PullAttributeFromAssembly<VerifyLoaderBuildAttribute>(Assembly);
 			if ((verifyLoaderBuildAttribute == null)
 				|| string.IsNullOrEmpty(verifyLoaderBuildAttribute.HashCode))
 				return true;
@@ -269,7 +267,7 @@ namespace MelonLoader.CompatibilityLayers
 				return true;
 			if (!currentHashCode.Equals(verifyLoaderBuildAttribute.HashCode))
 			{
-				MelonLogger.Error($"Incompatible MelonLoader Build for {(is_plugin ? "Plugin" : "Mod")}: {filepath}");
+				MelonLogger.Error($"Incompatible MelonLoader Build for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
 				return false;
 			}
 			return true;

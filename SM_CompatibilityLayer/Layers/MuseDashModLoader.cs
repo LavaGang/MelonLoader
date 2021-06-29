@@ -9,19 +9,18 @@ namespace MelonLoader.CompatibilityLayers
 {
     internal class MuseDashModLoader : MelonCompatibilityLayer.Resolver
     {
-        private readonly Assembly asm;
-        private readonly string filepath;
         private readonly Type[] mod_types;
 
-        private MuseDashModLoader(Assembly assembly, string filelocation, IEnumerable<Type> types)
-        {
-            asm = assembly;
-            filepath = filelocation;
-            mod_types = types.ToArray();
-        }
+        private MuseDashModLoader(Assembly assembly, string filepath, IEnumerable<Type> types) : base(assembly, filepath)
+            => mod_types = types.ToArray();
 
         internal static void Setup(AppDomain domain)
         {
+            // To-Do:
+            // Detect if MuseDashModLoader is already Installed
+            // Point domain.AssemblyResolve to already installed MuseDashModLoader Assembly
+            // Point ResolveAssemblyToLayerResolver to Dummy MelonCompatibilityLayer.Resolver
+            
             domain.AssemblyResolve += (sender, args) =>
                 args.Name.StartsWith("ModHelper, Version=") || args.Name.StartsWith("ModLoader, Version=")
                     ? typeof(MuseDashModLoader).Assembly
@@ -34,8 +33,12 @@ namespace MelonLoader.CompatibilityLayers
             if (args.inter != null)
                 return;
 
-            var mod_types = args.assembly.GetValidTypes(x => x.GetInterface("IMod") != null);
-            if (mod_types == null || !mod_types.Any())
+            IEnumerable<Type> mod_types = args.assembly.GetValidTypes(x =>
+            {
+                Type[] interfaces = x.GetInterfaces();
+                return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IMod));  // To-Do: Change to Type Reflection based on Setup
+            });
+            if ((mod_types == null) || !mod_types.Any())
                 return;
 
             args.inter = new MuseDashModLoader(args.assembly, args.filepath, mod_types);
@@ -44,10 +47,10 @@ namespace MelonLoader.CompatibilityLayers
         public override void CheckAndCreate(ref List<MelonBase> melonTbl)
         {
             foreach (var mod_type in mod_types)
-                LoadMod(mod_type, filepath, ref melonTbl);
+                LoadMod(mod_type, ref melonTbl);
         }
 
-        private void LoadMod(Type mod_type, string filelocation, ref List<MelonBase> melonTbl)
+        private void LoadMod(Type mod_type, ref List<MelonBase> melonTbl)
         {
             var modInstance = Activator.CreateInstance(mod_type) as IMod;
 
@@ -58,21 +61,21 @@ namespace MelonLoader.CompatibilityLayers
 
             if (MelonHandler.IsModAlreadyLoaded(mod_name))
             {
-                MelonLogger.Error($"Duplicate File {mod_name}: {filelocation}");
+                MelonLogger.Error($"Duplicate File {mod_name}: {FilePath}");
                 return;
             }
 
-            var mod_version = asm.GetName().Version.ToString();
+            var mod_version = Assembly.GetName().Version.ToString();
             if (string.IsNullOrEmpty(mod_version) || mod_version.Equals("0.0.0.0"))
                 mod_version = "1.0.0.0";
 
             var wrapper = new MelonCompatibilityLayer.WrapperData
             {
-                Assembly = asm,
+                Assembly = Assembly,
                 Info = new MelonInfoAttribute(typeof(MelonModWrapper), mod_name, mod_version, modInstance.Author, modInstance.HomePage),
                 Games = null,
                 Priority = 0,
-                Location = filelocation
+                Location = FilePath
             }.CreateMelon<MelonModWrapper>();
 
             if (wrapper == null)
@@ -80,7 +83,7 @@ namespace MelonLoader.CompatibilityLayers
 
             wrapper.modInstance = modInstance;
             melonTbl.Add(wrapper);
-            (typeof(ModLoader.ModLoader).GetField("mods", BindingFlags.Static | BindingFlags.NonPublic)?.GetValue(null) as List<IMod>)?.Add(modInstance);
+            ModLoader.ModLoader.mods.Add(modInstance);
         }
 
         private class MelonModWrapper : MelonMod

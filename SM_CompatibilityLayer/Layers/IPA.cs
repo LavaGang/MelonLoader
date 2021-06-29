@@ -12,12 +12,17 @@ namespace MelonLoader.CompatibilityLayers
 	internal class IPA_CL : MelonCompatibilityLayer.Resolver
 	{
 		private readonly Type[] plugin_types = null;
-		private readonly Assembly asm = null;
-		private readonly string filepath = null;
-		private IPA_CL(Assembly assembly, string filelocation, IEnumerable<Type> types) { asm = assembly; filepath = filelocation; plugin_types = Enumerable.ToArray(types); }
+
+		private IPA_CL(Assembly assembly, string filepath, IEnumerable<Type> types) : base(assembly, filepath)
+			=> plugin_types = types.ToArray();
 
 		internal static void Setup(AppDomain domain)
 		{
+			// To-Do:
+			// Detect if IPA is already Installed
+			// Point domain.AssemblyResolve to already installed MuseDashModLoader Assembly
+			// Point ResolveAssemblyToLayerResolver to Dummy MelonCompatibilityLayer.Resolver
+
 			domain.AssemblyResolve += (sender, args) =>
 				(args.Name.StartsWith("IllusionPlugin, Version=")
 				|| args.Name.StartsWith("IllusionInjector, Version="))
@@ -31,9 +36,12 @@ namespace MelonLoader.CompatibilityLayers
 			if (args.inter != null)
 				return;
 
-			IEnumerable<Type> plugin_types = args.assembly.GetValidTypes(x => x.GetInterface("IPlugin") != null);
-			if ((plugin_types == null)
-				|| (plugin_types.Count() <= 0))
+			IEnumerable<Type> plugin_types = args.assembly.GetValidTypes(x =>
+			{
+				Type[] interfaces = x.GetInterfaces();
+				return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IPlugin)); // To-Do: Change to Type Reflection based on Setup
+			});
+			if ((plugin_types == null) || !plugin_types.Any())
 				return;
 
 			args.inter = new IPA_CL(args.assembly, args.filepath, plugin_types);
@@ -42,10 +50,10 @@ namespace MelonLoader.CompatibilityLayers
 		public override void CheckAndCreate(ref List<MelonBase> melonTbl)
 		{
 			foreach (Type plugin_type in plugin_types)
-				LoadPlugin(plugin_type, filepath, ref melonTbl);
+				LoadPlugin(plugin_type, ref melonTbl);
 		}
 
-		private void LoadPlugin(Type plugin_type, string filelocation, ref List<MelonBase> melonTbl)
+		private void LoadPlugin(Type plugin_type, ref List<MelonBase> melonTbl)
 		{
 			IPlugin pluginInstance = Activator.CreateInstance(plugin_type) as IPlugin;
 
@@ -69,7 +77,7 @@ namespace MelonLoader.CompatibilityLayers
 				}
 				if (!game_found)
 				{
-					MelonLogger.Error($"Incompatible Game for {filelocation}");
+					MelonLogger.Error($"Incompatible Game for {FilePath}");
 					return;
 				}
 			}
@@ -80,23 +88,23 @@ namespace MelonLoader.CompatibilityLayers
 
 			if (MelonHandler.IsModAlreadyLoaded(plugin_name))
 			{
-				MelonLogger.Error($"Duplicate File {plugin_name}: {filelocation}");
+				MelonLogger.Error($"Duplicate File {plugin_name}: {FilePath}");
 				return;
 			}
 
 			string plugin_version = pluginInstance.Version;
 			if (string.IsNullOrEmpty(plugin_version))
-				plugin_version = asm.GetName().Version.ToString();
+				plugin_version = Assembly.GetName().Version.ToString();
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
 			MelonModWrapper wrapper = new MelonCompatibilityLayer.WrapperData()
 			{
-				Assembly = asm,
+				Assembly = Assembly,
 				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version),
 				Games = (gamestbl != null) ? gamestbl.ToArray() : null,
 				Priority = 0,
-				Location = filelocation
+				Location = FilePath
 			}.CreateMelon<MelonModWrapper>();
 			if (wrapper == null)
 				return;

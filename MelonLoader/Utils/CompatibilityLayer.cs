@@ -132,6 +132,13 @@ namespace MelonLoader
         // Resolver Base and Resolver Event Args
         public class Resolver
         {
+            public readonly Assembly Assembly = null;
+            public readonly string FilePath = null;
+            public Resolver(Assembly assembly, string filepath)
+            {
+                Assembly = assembly;
+                FilePath = filepath;
+            }
             public virtual void CheckAndCreate(ref List<MelonBase> melonTbl) { } 
         }
         public class LayerResolveEventArgs : EventArgs
