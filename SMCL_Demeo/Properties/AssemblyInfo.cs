@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct(MelonLoader.BuildInfo.Name)]
 [assembly: AssemblyCopyright("Created by " + MelonLoader.BuildInfo.Author)]
 [assembly: AssemblyTrademark(MelonLoader.BuildInfo.Company)]
-[assembly: Guid("E75DD5B4-4BE4-4387-80FA-79C143CC72F1")]
+[assembly: Guid("FEAA0159-5871-4419-9827-3CF5CAD69A53")]
 [assembly: AssemblyVersion(MelonLoader.BuildInfo.Version)]
 [assembly: AssemblyFileVersion(MelonLoader.BuildInfo.Version)]
 [assembly: MelonLoader.PatchShield]
