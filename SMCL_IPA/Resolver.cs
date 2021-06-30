@@ -9,43 +9,12 @@ using IllusionInjector;
 
 namespace MelonLoader.CompatibilityLayers
 {
-	internal class IPA_CL : MelonCompatibilityLayer.Resolver
+	internal class IPA_Resolver : MelonCompatibilityLayer.Resolver
 	{
 		private readonly Type[] plugin_types = null;
 
-		private IPA_CL(Assembly assembly, string filepath, IEnumerable<Type> types) : base(assembly, filepath)
+		internal IPA_Resolver(Assembly assembly, string filepath, IEnumerable<Type> types) : base(assembly, filepath)
 			=> plugin_types = types.ToArray();
-
-		internal static void Setup(AppDomain domain)
-		{
-			// To-Do:
-			// Detect if IPA is already Installed
-			// Point domain.AssemblyResolve to already installed MuseDashModLoader Assembly
-			// Point ResolveAssemblyToLayerResolver to Dummy MelonCompatibilityLayer.Resolver
-
-			domain.AssemblyResolve += (sender, args) =>
-				(args.Name.StartsWith("IllusionPlugin, Version=")
-				|| args.Name.StartsWith("IllusionInjector, Version="))
-				? typeof(IPA_CL).Assembly
-				: null;
-			MelonCompatibilityLayer.AddResolveAssemblyToLayerResolverEvent(ResolveAssemblyToLayerResolver);
-		}
-
-		private static void ResolveAssemblyToLayerResolver(MelonCompatibilityLayer.LayerResolveEventArgs args)
-		{
-			if (args.inter != null)
-				return;
-
-			IEnumerable<Type> plugin_types = args.assembly.GetValidTypes(x =>
-			{
-				Type[] interfaces = x.GetInterfaces();
-				return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IPlugin)); // To-Do: Change to Type Reflection based on Setup
-			});
-			if ((plugin_types == null) || !plugin_types.Any())
-				return;
-
-			args.inter = new IPA_CL(args.assembly, args.filepath, plugin_types);
-		}
 
 		public override void CheckAndCreate(ref List<MelonBase> melonTbl)
 		{

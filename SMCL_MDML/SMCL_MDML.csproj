@@ -5,22 +5,22 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>MelonLoader.Support</RootNamespace>
-    <AssemblyName>CompatibilityLayer</AssemblyName>
+    <RootNamespace>MelonLoader.CompatibilityLayers</RootNamespace>
+    <AssemblyName>MDML</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
-    <ProjectGuid>{94D9DBC9-E538-435B-BBE5-6A5BE312077F}</ProjectGuid>
+    <ProjectGuid>{15CFF766-420B-47EF-9E4A-E73D35A4AB44}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Output\Debug\MelonLoader\Dependencies\SupportModules\</OutputPath>
+    <OutputPath>..\Output\Debug\MelonLoader\Dependencies\CompatibilityLayers\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,7 +32,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Output\Release\MelonLoader\Dependencies\SupportModules\</OutputPath>
+    <OutputPath>..\Output\Release\MelonLoader\Dependencies\CompatibilityLayers\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -41,21 +41,16 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Layers\IPA.cs" />
-    <Compile Include="Layers\IPA\IEnhancedPlugin.cs" />
-    <Compile Include="Layers\IPA\IPlugin.cs" />
-    <Compile Include="Layers\IPA\ModPrefs.cs" />
-    <Compile Include="Layers\IPA\PluginManager.cs" />
-    <Compile Include="Layers\MuseDashModLoader.cs" />
-    <Compile Include="Layers\MuseDashModLoader\IMod.cs" />
-    <Compile Include="Layers\MuseDashModLoader\ModLoader.cs" />
-    <Compile Include="Layers\MuseDashModLoader\ModLogger.cs" />
+    <Compile Include="MuseDashModLoader\IMod.cs" />
+    <Compile Include="MuseDashModLoader\ModLoader.cs" />
+    <Compile Include="MuseDashModLoader\ModLogger.cs" />
+    <Compile Include="Resolver.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-	<Reference Include="MelonLoader">
+    <Reference Include="MelonLoader">
       <HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
       <Private>false</Private>
     </Reference>

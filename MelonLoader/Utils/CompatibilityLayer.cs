@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -9,9 +11,28 @@ namespace MelonLoader
     public static class MelonCompatibilityLayer
     {
         internal static bool CreationCheck = true;
+        private static string BaseDirectory = null;
+        private static List<ModuleListing> Modules = new List<ModuleListing>()
+        {
+            // Illusion Plugin Architecture
+            new ModuleListing("IPA.dll", x =>
+            {
+                x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
+                x.ShouldDelete = MelonUtils.IsGameIl2Cpp();
+            }),
+
+            // MuseDashModLoader
+            new ModuleListing("MDML.dll", x =>
+            {
+                x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
+                x.ShouldDelete = MelonUtils.IsGameIl2Cpp();
+            }),
+        };
 
         internal static void Setup(AppDomain domain)
         {
+            BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+
             string versionending = ", Version=";
             domain.AssemblyResolve += (sender, args) =>
                 (args.Name.StartsWith($"Mono.Cecil{versionending}")
@@ -24,42 +45,59 @@ namespace MelonLoader
                 || args.Name.StartsWith($"Tomlet{versionending}"))
                 ? typeof(MelonCompatibilityLayer).Assembly
                 : null;
+
             CompatibilityLayers.Melon_CL.Setup(domain);
-            SetupSupportModule(domain);
-            domain.AssemblyResolve += MelonHandler.AssemblyResolver;
         }
 
-        private static void SetupSupportModule(AppDomain domain)
+        internal enum SetupType
         {
-            try
+            OnPreInitialization,
+            OnApplicationStart
+        }
+        internal static void SetupModules(SetupType setupType, AppDomain domain)
+        {
+            if (!Directory.Exists(BaseDirectory))
+                return;
+
+            ModuleEnumerator enumerator = new ModuleEnumerator();
+            while (enumerator.MoveNext())
             {
-                string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
-                if (!Directory.Exists(BaseDirectory))
+                string ModulePath = Path.Combine(BaseDirectory, enumerator.Current.FileName);
+                if (!File.Exists(ModulePath))
+                    continue;
+
+                try
                 {
-                    MelonLogger.Error("Failed to Find SupportModules Directory!");
-                    return;
+                    if (enumerator.Current.LoadSpecifier != null)
+                    {
+                        ModuleListing.LoadSpecifierArgs args = new ModuleListing.LoadSpecifierArgs();
+                        enumerator.Current.LoadSpecifier(args);
+                        if (!args.ShouldLoad)
+                            continue;
+
+                        if (args.ShouldDelete)
+                        {
+                            File.Delete(ModulePath);
+                            continue;
+                        }
+                    }
+
+                    Assembly assembly = Assembly.LoadFrom(ModulePath);
+                    if (assembly == null)
+                        continue;
+
+                    Type[] ModuleTypes = assembly.GetValidTypes(x => x.GetInterfaces().Contains(typeof(Module))).ToArray();
+                    if ((ModuleTypes.Length <= 0) || (ModuleTypes[0] == null))
+                        continue;
+
+                    Module Interface = (Module)Activator.CreateInstance(ModuleTypes[0]);
+                    if (Interface == null)
+                        continue;
+
+                    Interface.Setup(domain);
                 }
-                Assembly CompatibilityLayerAssembly = Assembly.LoadFrom(Path.Combine(BaseDirectory, "CompatibilityLayer.dll"));
-                if (CompatibilityLayerAssembly == null)
-                {
-                    MelonLogger.Error("Failed to Load Assembly for CompatibilityLayer!");
-                    return;
-                }
-                Type CompatibilityLayerType = CompatibilityLayerAssembly.GetType("MelonLoader.Support.CompatibilityLayer");
-                if (CompatibilityLayerType == null)
-                {
-                    MelonLogger.Error("Failed to Get Type for CompatibilityLayer!");
-                    return;
-                }
-                MethodInfo CompatibilityLayerSetupMethod = CompatibilityLayerType.GetMethod("Setup", BindingFlags.NonPublic | BindingFlags.Static);
-                if (CompatibilityLayerType == null)
-                {
-                    MelonLogger.Error("Failed to Get Setup Method for CompatibilityLayer!");
-                    return;
-                }
-                CompatibilityLayerSetupMethod.Invoke(null, new object[] { domain });
+                catch (Exception ex) { MelonDebug.Error(ex.ToString()); continue; }
             }
-            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
         }
 
         public class WrapperData
@@ -129,7 +167,15 @@ namespace MelonLoader
         public static void AddRefreshModsTableEvent(Action evt) => RefreshModsTableEvents += evt;
         public static void RefreshModsTable() => RefreshModsTableEvents?.Invoke();
 
-        // Resolver Base and Resolver Event Args
+        // Resolver Event Args
+        public class LayerResolveEventArgs : EventArgs
+        {
+            public Assembly assembly;
+            public string filepath;
+            public Resolver inter;
+        }
+
+        // Resolver Base
         public class Resolver
         {
             public readonly Assembly Assembly = null;
@@ -139,13 +185,59 @@ namespace MelonLoader
                 Assembly = assembly;
                 FilePath = filepath;
             }
-            public virtual void CheckAndCreate(ref List<MelonBase> melonTbl) { } 
+            public virtual void CheckAndCreate(ref List<MelonBase> melonTbl) { }
         }
-        public class LayerResolveEventArgs : EventArgs
+
+        // Module Base
+        public interface Module
         {
-            public Assembly assembly;
-            public string filepath;
-            public Resolver inter;
+            public abstract void Setup(AppDomain domain);
+        }
+
+        // Module Listing
+        internal class ModuleListing
+        {
+            internal string FileName = null;
+            internal class LoadSpecifierArgs
+            {
+                internal SetupType SetupType = SetupType.OnPreInitialization;
+                internal bool ShouldLoad = false;
+                internal bool ShouldDelete = false;
+            }
+            internal Action<LoadSpecifierArgs> LoadSpecifier = null;
+            internal ModuleListing(string filename)
+                => FileName = filename;
+            internal ModuleListing(string filename, Action<LoadSpecifierArgs> loadSpecifier)
+            {
+                FileName = filename;
+                LoadSpecifier = loadSpecifier;
+            }
+        }
+
+        // Module Enumerator
+        internal class ModuleEnumerator : IEnumerator
+        {
+            private ModuleListing[] ObjectTable;
+            private int CurrentIndex = 0;
+            internal ModuleEnumerator()
+                => ObjectTable = Modules.ToArray();
+            object IEnumerator.Current => Current;
+            public ModuleListing Current { get; private set; }
+            public bool MoveNext()
+            {
+                if ((ObjectTable == null)
+                    || (ObjectTable.Length <= 0)
+                    || (CurrentIndex >= ObjectTable.Length))
+                    return false;
+                Current = ObjectTable[CurrentIndex];
+                CurrentIndex++;
+                return true;
+            }
+            public void Reset()
+            {
+                CurrentIndex = 0;
+                Current = default;
+            }
         }
     }
 }

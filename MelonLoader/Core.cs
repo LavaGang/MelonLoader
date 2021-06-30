@@ -31,6 +31,7 @@ namespace MelonLoader
             Il2CppAssemblyGenerator.Load();
             bHaptics.Load();
 
+            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization, AppDomain.CurrentDomain);
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
 
@@ -59,7 +60,7 @@ namespace MelonLoader
             bHaptics.Start();
 
             MelonHandler.OnApplicationStart_Plugins();
-
+            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart, AppDomain.CurrentDomain);
             MelonHandler.LoadMods();
             MelonHandler.OnApplicationStart_Mods();
 

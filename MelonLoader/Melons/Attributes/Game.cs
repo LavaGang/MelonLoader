@@ -5,7 +5,7 @@ namespace MelonLoader
     [AttributeUsage(AttributeTargets.Assembly)]
     public class MelonGameAttribute : Attribute
     {
-        public MelonGameAttribute(string developer = null, string name = null) { Developer = developer; Name = Name; }
+        public MelonGameAttribute(string developer = null, string name = null) { Developer = developer; Name = name; }
 
         /// <summary>
         /// Developer of the Game.

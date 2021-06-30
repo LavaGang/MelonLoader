@@ -7,42 +7,12 @@ using ModHelper;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class MuseDashModLoader : MelonCompatibilityLayer.Resolver
+    internal class MuseDashModLoader_Resolver : MelonCompatibilityLayer.Resolver
     {
         private readonly Type[] mod_types;
 
-        private MuseDashModLoader(Assembly assembly, string filepath, IEnumerable<Type> types) : base(assembly, filepath)
+        internal MuseDashModLoader_Resolver(Assembly assembly, string filepath, IEnumerable<Type> types) : base(assembly, filepath)
             => mod_types = types.ToArray();
-
-        internal static void Setup(AppDomain domain)
-        {
-            // To-Do:
-            // Detect if MuseDashModLoader is already Installed
-            // Point domain.AssemblyResolve to already installed MuseDashModLoader Assembly
-            // Point ResolveAssemblyToLayerResolver to Dummy MelonCompatibilityLayer.Resolver
-            
-            domain.AssemblyResolve += (sender, args) =>
-                args.Name.StartsWith("ModHelper, Version=") || args.Name.StartsWith("ModLoader, Version=")
-                    ? typeof(MuseDashModLoader).Assembly
-                    : null;
-            MelonCompatibilityLayer.AddResolveAssemblyToLayerResolverEvent(ResolveAssemblyToLayerResolver);
-        }
-
-        private static void ResolveAssemblyToLayerResolver(MelonCompatibilityLayer.LayerResolveEventArgs args)
-        {
-            if (args.inter != null)
-                return;
-
-            IEnumerable<Type> mod_types = args.assembly.GetValidTypes(x =>
-            {
-                Type[] interfaces = x.GetInterfaces();
-                return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IMod));  // To-Do: Change to Type Reflection based on Setup
-            });
-            if ((mod_types == null) || !mod_types.Any())
-                return;
-
-            args.inter = new MuseDashModLoader(args.assembly, args.filepath, mod_types);
-        }
 
         public override void CheckAndCreate(ref List<MelonBase> melonTbl)
         {

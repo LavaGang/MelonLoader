@@ -43,6 +43,8 @@
 17. Fixed Issue with MelonLogger not abiding by Warning and Error Caps.
 18. Fixed Issue with Assembly Generator using the wrong Download URL for Cpp2IL.
 19. Updated Cpp2IL to v2021.0.1.
+20. Fixed Issue with MelonGameAttribute not setting Name after Creation.
+21. Converted Compatibility Layer System to be Module Based.
 
 ---
 

@@ -41,6 +41,7 @@ namespace MelonLoader
             ModsDirectory = Path.Combine(MelonUtils.GameDirectory, "Mods");
             if (!Directory.Exists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;
         }
 
         internal static Assembly AssemblyResolver(object sender, ResolveEventArgs args)

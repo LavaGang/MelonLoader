@@ -24,6 +24,15 @@ namespace MelonLoader
             SendMsg(MelonLogger.DefaultTextColor, obj.ToString());
         }
 
+        public static void Error(string txt)
+        {
+            if (!IsEnabled())
+                return;
+            SendError(txt);
+        }
+
+        private static void SendError(string txt) => MelonLogger.ManualMelonError(MelonUtils.GetMelonFromStackTrace(), txt ?? "null");
+
         private static void SendMsg(ConsoleColor msgcolor, string msg)
         {
             ConsoleColor meloncolor = MelonLogger.DefaultMelonColor;
