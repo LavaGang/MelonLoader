@@ -43,7 +43,7 @@ namespace MelonLoader.CompatibilityLayers
                     name = mod.Info.Name,
                     version = mod.Info.Version,
                     author = mod.Info.Author,
-                    description = "No Description"
+                    description = mod.Info.DownloadLink
                 });
             }
         }
