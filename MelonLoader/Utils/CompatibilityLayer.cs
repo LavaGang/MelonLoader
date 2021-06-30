@@ -157,7 +157,7 @@ namespace MelonLoader
             return instance;
         }
 
-        // Assembly to Compatibility Layer Conversion
+        // Assembly to Resolver Conversion
         private delegate Resolver AssemblyToResolverDelegate(Assembly assembly, string filepath);
         private static event Func<Assembly, string, Resolver> AssemblyToResolverEvents;
         public static void AddAssemblyToResolverEvent(Func<Assembly, string, Resolver> evt) => AssemblyToResolverEvents += evt;
