@@ -71,7 +71,9 @@ namespace MelonLoader
                     if (enumerator.Current.LoadSpecifier != null)
                     {
                         ModuleListing.LoadSpecifierArgs args = new ModuleListing.LoadSpecifierArgs();
+                        args.SetupType = setupType;
                         enumerator.Current.LoadSpecifier(args);
+
                         if (!args.ShouldLoad)
                             continue;
 
@@ -93,7 +95,7 @@ namespace MelonLoader
                     Module Interface = FormatterServices.GetUninitializedObject(ModuleTypes[0]) as Module;
                     if (Interface == null)
                         continue;
-
+                    
                     Interface.Setup(domain);
                 }
                 catch (Exception ex) { MelonDebug.Error(ex.ToString()); continue; }
