@@ -46,6 +46,7 @@
 20. Fixed Issue with MelonGameAttribute not setting Name after Creation.
 21. Converted Compatibility Layer System to be Module Based.
 22. Fixed Issue with Compatibility Layer System running Module Setup twice.
+23. Implemented Demeo Integration.
 
 ---
 

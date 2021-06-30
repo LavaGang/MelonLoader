@@ -27,6 +27,13 @@ namespace MelonLoader
                 x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
                 x.ShouldDelete = MelonUtils.IsGameIl2Cpp();
             }),
+
+            // Demeo Integration
+            new ModuleListing("Demeo.dll", x =>
+            {
+                x.ShouldLoad = x.SetupType == SetupType.OnApplicationStart;
+                x.ShouldDelete = MelonUtils.IsGameIl2Cpp() || !MelonUtils.IsDemeo;
+            }),
         };
 
         internal static void Setup(AppDomain domain)
