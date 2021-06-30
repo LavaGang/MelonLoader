@@ -90,7 +90,7 @@ namespace MelonLoader
                     if ((ModuleTypes.Length <= 0) || (ModuleTypes[0] == null))
                         continue;
 
-                    Module Interface = (Module)Activator.CreateInstance(ModuleTypes[0]);
+                    Module Interface = FormatterServices.GetUninitializedObject(ModuleTypes[0]) as Module;
                     if (Interface == null)
                         continue;
 
