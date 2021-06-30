@@ -15,7 +15,6 @@ namespace MelonLoader.CompatibilityLayers
 			// Point domain.AssemblyResolve to already installed IPA Assembly
 			// Point ResolveAssemblyToLayerResolver to Dummy MelonCompatibilityLayer.Resolver
 
-			MelonLogger.Msg("IPA_Module");
 			domain.AssemblyResolve += (sender, args) =>
 				(args.Name.StartsWith("IllusionPlugin, Version=")
 				|| args.Name.StartsWith("IllusionInjector, Version="))

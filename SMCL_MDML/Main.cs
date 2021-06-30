@@ -15,7 +15,6 @@ namespace MelonLoader.CompatibilityLayers
             // Point domain.AssemblyResolve to already installed MuseDashModLoader Assembly
             // Point ResolveAssemblyToLayerResolver to Dummy MelonCompatibilityLayer.Resolver
 
-            MelonLogger.Msg("MuseDashModLoader_Module");
             domain.AssemblyResolve += (sender, args) =>
                 args.Name.StartsWith("ModHelper, Version=") || args.Name.StartsWith("ModLoader, Version=")
                     ? typeof(MuseDashModLoader_Module).Assembly
