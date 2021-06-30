@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using IllusionPlugin;
 #pragma warning disable 0618
 
@@ -8,35 +9,31 @@ namespace MelonLoader.CompatibilityLayers
 {
     internal class IPA_Module : MelonCompatibilityLayer.Module
     {
-        public void Setup(AppDomain domain)
+        public override void Setup()
         {
 			// To-Do:
 			// Detect if IPA is already Installed
 			// Point domain.AssemblyResolve to already installed IPA Assembly
-			// Point ResolveAssemblyToLayerResolver to Dummy MelonCompatibilityLayer.Resolver
+			// Point GetResolverFromAssembly to Dummy MelonCompatibilityLayer.Resolver
 
-			domain.AssemblyResolve += (sender, args) =>
+			AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
 				(args.Name.StartsWith("IllusionPlugin, Version=")
 				|| args.Name.StartsWith("IllusionInjector, Version="))
 				? typeof(IPA_Module).Assembly
 				: null;
-			MelonCompatibilityLayer.AddResolveAssemblyToLayerResolverEvent(ResolveAssemblyToLayerResolver);
 		}
 
-		private static void ResolveAssemblyToLayerResolver(MelonCompatibilityLayer.LayerResolveEventArgs args)
+		public override MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
 		{
-			if (args.inter != null)
-				return;
-
-			IEnumerable<Type> plugin_types = args.assembly.GetValidTypes(x =>
+			IEnumerable<Type> plugin_types = assembly.GetValidTypes(x =>
 			{
 				Type[] interfaces = x.GetInterfaces();
 				return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IPlugin)); // To-Do: Change to Type Reflection based on Setup
 			});
 			if ((plugin_types == null) || !plugin_types.Any())
-				return;
+				return null;
 
-			args.inter = new IPA_Resolver(args.assembly, args.filepath, plugin_types);
+			return new IPA_Resolver(assembly, filepath, plugin_types);
 		}
 	}
 }

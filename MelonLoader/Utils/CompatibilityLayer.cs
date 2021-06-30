@@ -36,12 +36,12 @@ namespace MelonLoader
             }),
         };
 
-        internal static void Setup(AppDomain domain)
+        internal static void Setup()
         {
             BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "CompatibilityLayers");
 
             string versionending = ", Version=";
-            domain.AssemblyResolve += (sender, args) =>
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
                 (args.Name.StartsWith($"Mono.Cecil{versionending}")
                 || args.Name.StartsWith($"Mono.Cecil.Mdb{versionending}")
                 || args.Name.StartsWith($"Mono.Cecil.Pdb{versionending}")
@@ -53,7 +53,7 @@ namespace MelonLoader
                 ? typeof(MelonCompatibilityLayer).Assembly
                 : null;
 
-            CompatibilityLayers.Melon_CL.Setup(domain);
+            CompatibilityLayers.Melon_Resolver.Setup();
         }
 
         internal enum SetupType
@@ -61,7 +61,7 @@ namespace MelonLoader
             OnPreInitialization,
             OnApplicationStart
         }
-        internal static void SetupModules(SetupType setupType, AppDomain domain)
+        internal static void SetupModules(SetupType setupType)
         {
             if (!Directory.Exists(BaseDirectory))
                 return;
@@ -99,11 +99,14 @@ namespace MelonLoader
                     if ((ModuleTypes.Length <= 0) || (ModuleTypes[0] == null))
                         continue;
 
-                    Module Interface = FormatterServices.GetUninitializedObject(ModuleTypes[0]) as Module;
-                    if (Interface == null)
+                    Module moduleInstance = FormatterServices.GetUninitializedObject(ModuleTypes[0]) as Module;
+                    if (moduleInstance == null)
                         continue;
-                    
-                    Interface.Setup(domain);
+
+                    moduleInstance.Setup();
+                    AddAssemblyToResolverEvent(moduleInstance.GetResolverFromAssembly);
+                    AddRefreshPluginsEvent(moduleInstance.RefreshPlugins);
+                    AddRefreshPluginsEvent(moduleInstance.RefreshMods);
                 }
                 catch (Exception ex) { MelonDebug.Error(ex.ToString()); continue; }
             }
@@ -155,34 +158,33 @@ namespace MelonLoader
         }
 
         // Assembly to Compatibility Layer Conversion
-        private static event Action<LayerResolveEventArgs> ResolveAssemblyToLayerResolverEvents;
-        public static void AddResolveAssemblyToLayerResolverEvent(Action<LayerResolveEventArgs> evt) => ResolveAssemblyToLayerResolverEvents += evt;
-        internal static Resolver ResolveAssemblyToLayerResolver(Assembly asm, string filepath)
+        private delegate Resolver AssemblyToResolverDelegate(Assembly assembly, string filepath);
+        private static event Func<Assembly, string, Resolver> AssemblyToResolverEvents;
+        public static void AddAssemblyToResolverEvent(Func<Assembly, string, Resolver> evt) => AssemblyToResolverEvents += evt;
+        internal static Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
         {
-            LayerResolveEventArgs args = new LayerResolveEventArgs();
-            args.assembly = asm;
-            args.filepath = filepath;
-            ResolveAssemblyToLayerResolverEvents?.Invoke(args);
-            return args.inter;
+            Delegate[] invoke_list = AssemblyToResolverEvents.GetInvocationList();
+            if (invoke_list.Length <= 0)
+                return null;
+            for (int i = 0; i < invoke_list.Length; i++)
+            {
+                AssemblyToResolverDelegate func = (AssemblyToResolverDelegate)invoke_list[i];
+                Resolver resolver = func(assembly, filepath);
+                if (resolver != null)
+                    return resolver;
+            }
+            return null;
         }
 
         // Refresh Event - Plugins
-        private static event Action RefreshPluginsTableEvents;
-        public static void AddRefreshPluginsTableEvent(Action evt) => RefreshPluginsTableEvents += evt;
-        public static void RefreshPluginsTable() => RefreshPluginsTableEvents?.Invoke();
+        private static event Action RefreshPluginsEvents;
+        public static void AddRefreshPluginsEvent(Action evt) => RefreshPluginsEvents += evt;
+        public static void RefreshPlugins() => RefreshPluginsEvents?.Invoke();
 
         // Refresh Event - Mods
-        private static event Action RefreshModsTableEvents;
-        public static void AddRefreshModsTableEvent(Action evt) => RefreshModsTableEvents += evt;
-        public static void RefreshModsTable() => RefreshModsTableEvents?.Invoke();
-
-        // Resolver Event Args
-        public class LayerResolveEventArgs : EventArgs
-        {
-            public Assembly assembly;
-            public string filepath;
-            public Resolver inter;
-        }
+        private static event Action RefreshModsEvents;
+        public static void AddRefreshModsEvent(Action evt) => RefreshModsEvents += evt;
+        public static void RefreshMods() => RefreshModsEvents?.Invoke();
 
         // Resolver Base
         public class Resolver
@@ -198,9 +200,12 @@ namespace MelonLoader
         }
 
         // Module Base
-        public interface Module
+        public class Module
         {
-            public abstract void Setup(AppDomain domain);
+            public virtual void Setup() { }
+            public virtual Resolver GetResolverFromAssembly(Assembly assembly, string filepath) { return null; }
+            public virtual void RefreshPlugins() { }
+            public virtual void RefreshMods() { }
         }
 
         // Module Listing

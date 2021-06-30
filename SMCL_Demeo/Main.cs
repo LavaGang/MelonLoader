@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using MelonLoader;
 using Boardgame.Modding;
@@ -11,21 +10,14 @@ namespace MelonLoader.CompatibilityLayers
     {
         private static List<ModdingAPI.ModInformation> ModInformation = new List<ModdingAPI.ModInformation>();
 
-        public void Setup(AppDomain domain)
+        public override void Setup()
         {
-            MelonCompatibilityLayer.AddRefreshModsTableEvent(Refresh);
             HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
             harmony.Patch(typeof(ModdingAPI).GetMethod("GetInstalledMods", BindingFlags.Public | BindingFlags.Instance),
                 typeof(Demeo_Module).GetMethod("GetInstalledMods", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
         }
 
-        private static bool GetInstalledMods(ref List<ModdingAPI.ModInformation> __result)
-        {
-            __result = ModInformation;
-            return false;
-        }
-
-        private static void Refresh()
+        public override void RefreshMods()
         {
             ModInformation.Clear();
             MelonMod[] mods = MelonHandler.Mods.ToArray();
@@ -45,5 +37,7 @@ namespace MelonLoader.CompatibilityLayers
                 });
             }
         }
+
+        private static bool GetInstalledMods(ref List<ModdingAPI.ModInformation> __result) { __result = ModInformation; return false; }
     }
 }

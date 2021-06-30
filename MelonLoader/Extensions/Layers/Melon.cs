@@ -6,40 +6,38 @@ using System.Reflection;
 
 namespace MelonLoader.CompatibilityLayers
 {
-	internal class Melon_CL : MelonCompatibilityLayer.Resolver
+	internal class Melon_Resolver : MelonCompatibilityLayer.Resolver
 	{
 		private bool is_plugin = false;
 
-		private Melon_CL(Assembly assembly, string filepath) : base(assembly, filepath) { }
+		private Melon_Resolver(Assembly assembly, string filepath) : base(assembly, filepath) { }
 
-		internal static void Setup(AppDomain domain)
+		internal static void Setup()
 		{
-			domain.AssemblyResolve += (sender, args) =>
+			AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
 				(args.Name.StartsWith("MelonLoader.ModHandler, Version=")
 				|| args.Name.StartsWith("MelonLoader, Version="))
-				? typeof(Melon_CL).Assembly
+				? typeof(Melon_Resolver).Assembly
 				: null;
-			MelonCompatibilityLayer.AddResolveAssemblyToLayerResolverEvent(ResolveAssemblyToLayerResolver);
-			MelonCompatibilityLayer.AddRefreshPluginsTableEvent(RefreshPluginsTable);
-			MelonCompatibilityLayer.AddRefreshModsTableEvent(RefreshModsTable);
+
+			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
+			MelonCompatibilityLayer.AddRefreshPluginsEvent(RefreshPlugins);
+			MelonCompatibilityLayer.AddRefreshModsEvent(RefreshMods);
 		}
 
-		private static void ResolveAssemblyToLayerResolver(MelonCompatibilityLayer.LayerResolveEventArgs args)
+		private static MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
 		{
-			if (args.inter != null)
-				return;
-
-			IEnumerable<Type> melon_types = args.assembly.GetValidTypes(x => x.IsSubclassOf(typeof(MelonBase)));
+			IEnumerable<Type> melon_types = assembly.GetValidTypes(x => x.IsSubclassOf(typeof(MelonBase)));
 			if ((melon_types == null) || !melon_types.Any())
-				return;
+				return null;
 
-			if (string.IsNullOrEmpty(args.filepath))
-				args.filepath = args.assembly.GetName().Name;
-			args.inter = new Melon_CL(args.assembly, args.filepath);
+			if (string.IsNullOrEmpty(filepath))
+				filepath = assembly.GetName().Name;
+			return new Melon_Resolver(assembly, filepath);
 		}
 
-		private static void RefreshPluginsTable() => Main.Plugins = MelonHandler._Plugins;
-		private static void RefreshModsTable() => Main.Mods = MelonHandler._Mods;
+		private static void RefreshPlugins() => Main.Plugins = MelonHandler.Plugins;
+		private static void RefreshMods() => Main.Mods = MelonHandler.Mods;
 
 		public override void CheckAndCreate(ref List<MelonBase> melonTbl)
 		{

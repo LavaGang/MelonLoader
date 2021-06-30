@@ -21,7 +21,7 @@ namespace MelonLoader
 
             MelonPreferences.Load();
             MelonLaunchOptions.Load();
-            MelonCompatibilityLayer.Setup(curDomain);
+            MelonCompatibilityLayer.Setup();
 
             PatchShield.Install();
         }
@@ -31,7 +31,7 @@ namespace MelonLoader
             Il2CppAssemblyGenerator.Load();
             bHaptics.Load();
 
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization, AppDomain.CurrentDomain);
+            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
 
@@ -60,7 +60,7 @@ namespace MelonLoader
             bHaptics.Start();
 
             MelonHandler.OnApplicationStart_Plugins();
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart, AppDomain.CurrentDomain);
+            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
             MelonHandler.LoadMods();
             MelonHandler.OnApplicationStart_Mods();
 

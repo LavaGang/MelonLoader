@@ -193,7 +193,7 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(filepath))
                 filepath = asm.GetName().Name;
 
-            MelonCompatibilityLayer.Resolver resolver = MelonCompatibilityLayer.ResolveAssemblyToLayerResolver(asm, filepath);
+            MelonCompatibilityLayer.Resolver resolver = MelonCompatibilityLayer.GetResolverFromAssembly(asm, filepath);
             if (resolver == null)
             {
                 MelonLogger.Error($"Failed to Load Assembly for {filepath}: No Compatibility Layer Found!");
@@ -311,10 +311,10 @@ namespace MelonLoader
         {
             DependencyGraph<T>.TopologicalSort(melons);
             melons = melons.OrderBy(x => x.Priority).ToList();
-            if (typeof(T) == typeof(MelonMod))
-                MelonCompatibilityLayer.RefreshModsTable();
-            else if (typeof(T) == typeof(MelonPlugin))
-                MelonCompatibilityLayer.RefreshPluginsTable();
+            if (typeof(T) == typeof(MelonPlugin))
+                MelonCompatibilityLayer.RefreshPlugins();
+            else if (typeof(T) == typeof(MelonMod))
+                MelonCompatibilityLayer.RefreshMods();
         }
 
         private delegate void InvokeMelonMethodDelegate(MelonBase melon);
