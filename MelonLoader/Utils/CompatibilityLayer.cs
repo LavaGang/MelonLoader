@@ -168,7 +168,7 @@ namespace MelonLoader
                 return null;
             for (int i = 0; i < invoke_list.Length; i++)
             {
-                AssemblyToResolverDelegate func = (AssemblyToResolverDelegate)invoke_list[i];
+                AssemblyToResolverDelegate func = new AssemblyToResolverDelegate((Func<Assembly, string, Resolver>)invoke_list[i]);
                 Resolver resolver = func(assembly, filepath);
                 if (resolver != null)
                     return resolver;
