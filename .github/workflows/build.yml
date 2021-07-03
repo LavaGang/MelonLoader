@@ -110,12 +110,12 @@ jobs:
           xcopy Documentation Output\Debug\x64\MelonLoader\Documentation\ /E /H /Y
           xcopy Documentation Output\Debug\x86\MelonLoader\Documentation\ /E /H /Y
       - uses: actions/upload-artifact@v2
-        name: Uploading x64 Zip...
-        with:
-          name: MelonLoader.x64.CI
-          path: ./Output/Debug/x64/*
-      - uses: actions/upload-artifact@v2
-        name: Uploading x86 Zip...
+        name: Upload Zip | Windows - x86
         with:
           name: MelonLoader.x86.CI
           path: ./Output/Debug/x86/*
+      - uses: actions/upload-artifact@v2
+        name: Upload Zip | Windows - x64
+        with:
+          name: MelonLoader.x64.CI
+          path: ./Output/Debug/x64/*
