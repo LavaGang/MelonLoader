@@ -71,7 +71,7 @@
       <UniqueIdentifier>{5689d597-5adb-4646-8a26-57d0d5f522ba}</UniqueIdentifier>
     </Filter>
     <Filter Include="Base\MSDetours">
-      <UniqueIdentifier>{fc78f094-efe0-4d26-a6d9-b1a636c8592a}</UniqueIdentifier>
+      <UniqueIdentifier>{a8ba5734-c9ac-4a6e-9e6b-54adb361cf32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,12 +114,6 @@
     <ClInclude Include="Utils\HashCode.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Base\MSDetours\detours_x64.h">
-      <Filter>Base\MSDetours</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\MSDetours\detours_x86.h">
-      <Filter>Base\MSDetours</Filter>
-    </ClInclude>
     <ClInclude Include="Managers\AssemblyVerifier.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -138,6 +132,15 @@
     </ClInclude>
     <ClInclude Include="Utils\Il2CppAssemblyGenerator.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MSDetours\detours.h">
+      <Filter>Base\MSDetours</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MSDetours\detours.x64.h">
+      <Filter>Base\MSDetours</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MSDetours\detours.x86.h">
+      <Filter>Base\MSDetours</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

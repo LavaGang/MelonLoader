@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-#pragma warning disable 0649
 
 namespace MelonLoader
 {
@@ -27,7 +26,7 @@ namespace MelonLoader
             {
                 NativeLib = NativeLibrary.ReflectiveLoad<NativeExports>(filepath);
                 if (NativeLib == null)
-                    throw new Exception("Failed to Setup Native Library!");
+                    throw new Exception("Failed to ReflectiveLoad bHaptics Native Library!");
 
                 byte[] buf = new byte[500];
                 int size = 0;
@@ -43,8 +42,8 @@ namespace MelonLoader
         {
             if (_waserror)
                 return;
-            try { NativeLib.Initialise("MelonLoader", MelonUtils.GameName.Replace(" ", "_")); }
-            catch (Exception ex) { MelonLogger.Warning($"bHaptics.Start Exception: {ex}"); WasError = true; }
+            try { NativeLib.Initialise(Marshal.StringToHGlobalAnsi("MelonLoader"), Marshal.StringToHGlobalAnsi(MelonUtils.GameName.Replace(" ", "_"))); }
+            catch (Exception ex) { MelonLogger.Warning($"bHaptics.Start Exception: {ex}"); WasError = true; return; }
             MelonLogger.Msg("bHaptics Support Initialized!");
         }
 
@@ -61,22 +60,22 @@ namespace MelonLoader
         }
 
         public static bool IsPlaying() => (!_waserror && NativeLib.IsPlaying());
-        public static bool IsPlaying(string key) => (!_waserror && NativeLib.IsPlayingKey(key));
+        public static bool IsPlaying(string key) => (!_waserror && NativeLib.IsPlayingKey(Marshal.StringToHGlobalAnsi(key)));
         public static bool IsDeviceConnected(PositionType type) => (!_waserror && NativeLib.IsDevicePlaying(type));
         public static bool IsDeviceConnected(DeviceType type, bool isLeft = true) => (!_waserror && NativeLib.IsDevicePlaying(DeviceTypeToPositionType(type, isLeft)));
-        public static bool IsFeedbackRegistered(string key) => (!_waserror && NativeLib.IsFeedbackRegistered(key));
+        public static bool IsFeedbackRegistered(string key) => (!_waserror && NativeLib.IsFeedbackRegistered(Marshal.StringToHGlobalAnsi(key)));
 
-        public static void RegisterFeedback(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedback(key, tactFileStr); }
-        public static void RegisterFeedbackFromTactFile(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedbackFromTactFile(key, tactFileStr); }
-        public static void RegisterFeedbackFromTactFileReflected(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedbackFromTactFileReflected(key, tactFileStr); }
+        public static void RegisterFeedback(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedback(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(tactFileStr)); }
+        public static void RegisterFeedbackFromTactFile(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedbackFromTactFile(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(tactFileStr)); }
+        public static void RegisterFeedbackFromTactFileReflected(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedbackFromTactFileReflected(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(tactFileStr)); }
 
-        public static void SubmitRegistered(string key) { if (!_waserror) NativeLib.SubmitRegistered(key); }
-        public static void SubmitRegistered(string key, int startTimeMillis) => NativeLib.SubmitRegisteredStartMillis(key, startTimeMillis);
-        public static void SubmitRegistered(string key, string altKey, ScaleOption option) { if (!_waserror) NativeLib.SubmitRegisteredWithOption(key, altKey, option.Intensity, option.Duration, 1f, 1f); }
-        public static void SubmitRegistered(string key, string altKey, ScaleOption sOption, RotationOption rOption) { if (!_waserror) NativeLib.SubmitRegisteredWithOption(key, altKey, sOption.Intensity, sOption.Duration, rOption.OffsetX, rOption.OffsetY); }
+        public static void SubmitRegistered(string key) { if (!_waserror) NativeLib.SubmitRegistered(Marshal.StringToHGlobalAnsi(key)); }
+        public static void SubmitRegistered(string key, int startTimeMillis) => NativeLib.SubmitRegisteredStartMillis(Marshal.StringToHGlobalAnsi(key), startTimeMillis);
+        public static void SubmitRegistered(string key, string altKey, ScaleOption option) { if (!_waserror) NativeLib.SubmitRegisteredWithOption(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(altKey), option.Intensity, option.Duration, 1f, 1f); }
+        public static void SubmitRegistered(string key, string altKey, ScaleOption sOption, RotationOption rOption) { if (!_waserror) NativeLib.SubmitRegisteredWithOption(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(altKey), sOption.Intensity, sOption.Duration, rOption.OffsetX, rOption.OffsetY); }
 
         public static void TurnOff() { if (!_waserror) NativeLib.TurnOff(); }
-        public static void TurnOff(string key) { if (!_waserror) NativeLib.TurnOffKey(key); }
+        public static void TurnOff(string key) { if (!_waserror) NativeLib.TurnOffKey(Marshal.StringToHGlobalAnsi(key)); }
 
         public static void Submit(string key, DeviceType type, bool isLeft, byte[] bytes, int durationMillis) => Submit(key, DeviceTypeToPositionType(type, isLeft), bytes, durationMillis);
         public static void Submit(string key, PositionType position, byte[] bytes, int durationMillis)
@@ -90,7 +89,7 @@ namespace MelonLoader
                 for (int i = 0; i < bytes_size; i++)
                     newbytes[i] = bytes[i];
             }
-            NativeLib.SubmitByteArray(key, position, bytes, MaxBufferSize, durationMillis);
+            NativeLib.SubmitByteArray(Marshal.StringToHGlobalAnsi(key), position, bytes, MaxBufferSize, durationMillis);
         }
         public static void Submit(string key, DeviceType type, bool isLeft, List<DotPoint> points, int durationMillis) => Submit(key, DeviceTypeToPositionType(type, isLeft), points, durationMillis);
         public static void Submit(string key, PositionType position, List<DotPoint> points, int durationMillis)
@@ -105,7 +104,7 @@ namespace MelonLoader
                     continue;
                 bytes[point.Index] = (byte)point.Intensity;
             }
-            NativeLib.SubmitByteArray(key, position, bytes, MaxBufferSize, durationMillis);
+            NativeLib.SubmitByteArray(Marshal.StringToHGlobalAnsi(key), position, bytes, MaxBufferSize, durationMillis);
         }
         public static void Submit(string key, DeviceType type, bool isLeft, List<PathPoint> points, int durationMillis) => Submit(key, DeviceTypeToPositionType(type, isLeft), points, durationMillis);
         public static void Submit(string key, PositionType position, List<PathPoint> points, int durationMillis)
@@ -113,7 +112,7 @@ namespace MelonLoader
             if (_waserror)
                 return;
             PathPoint[] pathPoints = points.ToArray();
-            NativeLib.SubmitPathArray(key, position, pathPoints, pathPoints.Length, durationMillis);
+            NativeLib.SubmitPathArray(Marshal.StringToHGlobalAnsi(key), position, pathPoints, pathPoints.Length, durationMillis);
         }
 
         public static FeedbackStatus GetCurrentFeedbackStatus(DeviceType type, bool isLeft = true) => GetCurrentFeedbackStatus(DeviceTypeToPositionType(type, isLeft));
@@ -242,70 +241,67 @@ namespace MelonLoader
         private class NativeExports
         {
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dInitialise(string appId, string appName);
-            internal dInitialise Initialise;
+            internal delegate void dInitialise(IntPtr appId, IntPtr appName);
+            internal dInitialise Initialise = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dTurnOff();
-            internal dTurnOff TurnOff;
+            internal delegate void dVoid();
+            internal dVoid TurnOff = null;
+            internal dVoid Destroy = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dDestroy();
-            internal dDestroy Destroy;
+            internal delegate void dRegisterFeedback(IntPtr key, IntPtr tactFileStr);
+            internal dRegisterFeedback RegisterFeedback = null;
+            internal dRegisterFeedback RegisterFeedbackFromTactFile = null;
+            internal dRegisterFeedback RegisterFeedbackFromTactFileReflected = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dRegisterFeedback(string str, string tactFileStr);
-            internal dRegisterFeedback RegisterFeedback;
-            internal dRegisterFeedback RegisterFeedbackFromTactFile;
-            internal dRegisterFeedback RegisterFeedbackFromTactFileReflected;
+            internal delegate void dSubmitRegistered(IntPtr key);
+            internal dSubmitRegistered SubmitRegistered = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dSubmitRegistered(string key);
-            internal dSubmitRegistered SubmitRegistered;
+            internal delegate void dSubmitRegisteredStartMillis(IntPtr key, int startTimeMillis);
+            internal dSubmitRegisteredStartMillis SubmitRegisteredStartMillis = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dSubmitRegisteredStartMillis(string key, int startTimeMillis);
-            internal dSubmitRegisteredStartMillis SubmitRegisteredStartMillis;
+            internal delegate void dSubmitRegisteredWithOption(IntPtr key, IntPtr altKey, float intensity, float duration, float offsetX, float offsetY);
+            internal dSubmitRegisteredWithOption SubmitRegisteredWithOption = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dSubmitRegisteredWithOption(string key, string altKey, float intensity, float duration, float offsetX, float offsetY);
-            internal dSubmitRegisteredWithOption SubmitRegisteredWithOption;
+            internal delegate void dSubmitByteArray(IntPtr key, PositionType pos, byte[] bytes, int length, int durationMillis);
+            internal dSubmitByteArray SubmitByteArray = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dSubmitByteArray(string key, PositionType pos, byte[] bytes, int length, int durationMillis);
-            internal dSubmitByteArray SubmitByteArray;
+            internal delegate void dSubmitPathArray(IntPtr key, PositionType pos, PathPoint[] points, int length, int durationMillis);
+            internal dSubmitPathArray SubmitPathArray = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dSubmitPathArray(string key, PositionType pos, PathPoint[] points, int length, int durationMillis);
-            internal dSubmitPathArray SubmitPathArray;
-
-            [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate bool dIsFeedbackRegistered(string key);
-            internal dIsFeedbackRegistered IsFeedbackRegistered;
+            internal delegate bool dIsFeedbackRegistered(IntPtr key);
+            internal dIsFeedbackRegistered IsFeedbackRegistered = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
             internal delegate bool dIsPlaying();
-            internal dIsPlaying IsPlaying;
+            internal dIsPlaying IsPlaying = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate bool dIsPlayingKey(string key);
-            internal dIsPlayingKey IsPlayingKey;
+            internal delegate bool dIsPlayingKey(IntPtr key);
+            internal dIsPlayingKey IsPlayingKey = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            internal delegate void dTurnOffKey(string key);
-            internal dTurnOffKey TurnOffKey;
+            internal delegate void dTurnOffKey(IntPtr key);
+            internal dTurnOffKey TurnOffKey = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
             internal delegate bool dIsDevicePlaying(PositionType pos);
-            internal dIsDevicePlaying IsDevicePlaying;
+            internal dIsDevicePlaying IsDevicePlaying = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
             internal delegate bool dTryGetResponseForPosition(PositionType pos, out FeedbackStatus status);
-            internal dTryGetResponseForPosition TryGetResponseForPosition;
+            internal dTryGetResponseForPosition TryGetResponseForPosition = null;
 
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
             internal delegate bool dTryGetExePath(byte[] buf, ref int size);
-            internal dTryGetExePath TryGetExePath;
+            internal dTryGetExePath TryGetExePath = null;
         }
     }
 }

@@ -5,73 +5,74 @@ using System.Text.RegularExpressions;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
-    public static class RemoteAPI
+    internal static class RemoteAPI
     {
-        public class InfoStruct
+        internal class InfoStruct
         {
-            public string ForceDumperVersion = null;
-            public string ForceUnhollowerVersion = null;
-            public string ObfuscationRegex = null;
-            public string MappingURL = null;
-            public string MappingFileSHA512 = null;
+            internal string ForceDumperVersion = null;
+            internal string ForceUnhollowerVersion = null;
+            internal string ObfuscationRegex = null;
+            internal string MappingURL = null;
+            internal string MappingFileSHA512 = null;
         }
-        internal static InfoStruct ReturnedInfo = new InfoStruct();
-        private static Dictionary<string, Func<string, InfoStruct, bool>> DefaultHosts = new Dictionary<string, Func<string, InfoStruct, bool>>();
-        public static Dictionary<string, Func<string, InfoStruct, bool>> CustomHosts = new Dictionary<string, Func<string, InfoStruct, bool>>();
+        internal static InfoStruct Info = new InfoStruct();
+
+        private class HostInfo
+        {
+            internal string URL = null;
+            internal Func<string, InfoStruct> Func = null;
+            internal HostInfo(string url, Func<string, InfoStruct> func)
+            {
+                URL = url;
+                Func = func;
+            }
+        }
+        private static List<HostInfo> HostList = null;
 
         static RemoteAPI()
         {
-            DefaultHosts[$"{DefaultHostInfo.Melon.API_URL}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
-                DefaultHostInfo.Melon.Contact;
+            string gamename = Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant();
 
-            DefaultHosts[$"{DefaultHostInfo.Melon.API_URL_1}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
-                DefaultHostInfo.Melon.Contact;
-
-            DefaultHosts[$"{DefaultHostInfo.Melon.API_URL_2}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
-                DefaultHostInfo.Melon.Contact;
-
-            DefaultHosts[$"{DefaultHostInfo.Melon.API_URL_SAMBOY}{DefaultHostInfo.Melon.API_VERSION}/game/{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}"] =
-                DefaultHostInfo.Melon.Contact;
-
-            DefaultHosts[$"{DefaultHostInfo.Ruby.API_URL}{Regex.Replace(Core.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant()}.json"] =
-                DefaultHostInfo.Ruby.Contact;
+            HostList = new List<HostInfo> {
+                new HostInfo($"{DefaultHostInfo.Melon.API_URL}{gamename}", DefaultHostInfo.Melon.Contact),
+                new HostInfo($"{DefaultHostInfo.Melon.API_URL_1}{gamename}", DefaultHostInfo.Melon.Contact),
+                new HostInfo($"{DefaultHostInfo.Melon.API_URL_2}{gamename}", DefaultHostInfo.Melon.Contact),
+                new HostInfo($"{DefaultHostInfo.Melon.API_URL_SAMBOY}{gamename}", DefaultHostInfo.Melon.Contact),
+                new HostInfo($"{DefaultHostInfo.Ruby.API_URL}{gamename}.json", DefaultHostInfo.Ruby.Contact),
+            };
         }
 
         internal static void Contact()
         {
             MelonLogger.Msg("Contacting RemoteAPI...");
 
-            bool ContactReturnValue = ContactHosts(CustomHosts);
-            if (!ContactReturnValue)
-                ContactReturnValue = ContactHosts(DefaultHosts);
+            ContactHosts();
 
-            MelonDebug.Msg($"ContactReturnValue = {ContactReturnValue}");
-
-            MelonLogger.Msg($"ForceDumperVersion = {(string.IsNullOrEmpty(ReturnedInfo.ForceDumperVersion) ? "null" : ReturnedInfo.ForceDumperVersion)}");
-            MelonLogger.Msg($"ForceUnhollowerVersion = {(string.IsNullOrEmpty(ReturnedInfo.ForceUnhollowerVersion) ? "null" : ReturnedInfo.ForceUnhollowerVersion)}");
-            MelonLogger.Msg($"ObfuscationRegex = {(string.IsNullOrEmpty(ReturnedInfo.ObfuscationRegex) ? "null" : ReturnedInfo.ObfuscationRegex)}");
-            MelonLogger.Msg($"MappingURL = {(string.IsNullOrEmpty(ReturnedInfo.MappingURL) ? "null" : ReturnedInfo.MappingURL)}");
-            MelonLogger.Msg($"MappingFileSHA512 = {(string.IsNullOrEmpty(ReturnedInfo.MappingFileSHA512) ? "null" : ReturnedInfo.MappingFileSHA512)}");
+            MelonLogger.Msg($"ForceDumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
+            MelonLogger.Msg($"ForceUnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
+            MelonLogger.Msg($"ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
+            MelonLogger.Msg($"MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
+            MelonLogger.Msg($"MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");
         }
 
-        private static bool ContactHosts(Dictionary<string, Func<string, InfoStruct, bool>> hostsdict)
+        private static void ContactHosts()
         {
-            if ((hostsdict == null) || (hostsdict.Count <= 0))
-                return false;
-            foreach (KeyValuePair<string, Func<string, InfoStruct, bool>> pair in hostsdict)
+            if ((HostList == null) || (HostList.Count <= 0))
+                return;
+            foreach (HostInfo info in HostList)
             {
-                if (string.IsNullOrEmpty(pair.Key) || (pair.Value == null))
+                if (string.IsNullOrEmpty(info.URL) || (info.Func == null))
                     continue;
 
-                MelonDebug.Msg($"ContactURL = {pair.Key}");
+                MelonDebug.Msg($"ContactURL = {info.URL}");
 
                 string Response = null;
-                try { Response = Core.webClient.DownloadString(pair.Key); }
+                try { Response = Core.webClient.DownloadString(info.URL); }
                 catch (Exception ex)
                 {
                     if (!(ex is System.Net.WebException) || ((System.Net.WebException) ex).Response == null)
                     {
-                        MelonLogger.Error($"Exception while Contacting RemoteAPI Host ({pair.Key}): {ex}");
+                        MelonLogger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
                         continue;
                     }
 
@@ -79,11 +80,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
-                        MelonDebug.Msg($"Game Not Found on RemoteAPI Host ({pair.Key})");
+                        MelonDebug.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
                         break;
                     }
 
-                    MelonLogger.Error($"WebException ({Enum.GetName(typeof(System.Net.HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({pair.Key}): {ex}");
+                    MelonLogger.Error($"WebException ({Enum.GetName(typeof(System.Net.HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
                     continue;
                 }
 
@@ -91,35 +92,39 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 MelonDebug.Msg($"Response = {(is_response_null ? "null" : Response) }");
                 if (is_response_null)
                     break;
-                if (pair.Value(Response, ReturnedInfo))
-                    return true;
+
+                InfoStruct returnInfo = info.Func(Response);
+                if (returnInfo == null)
+                    continue;
+
+                Info = returnInfo;
+                break;
             }
-            return false;
         }
 
         private class DefaultHostInfo
         {
             internal static class Melon
             {
-                internal static string API_URL = "https://api.melonloader.com/api/";
-                internal static string API_URL_1 = "https://api-1.melonloader.com/api/";
-                internal static string API_URL_2 = "https://api-2.melonloader.com/api/";
-                internal static string API_URL_SAMBOY = "https://melon.samboy.dev/api/";
                 internal static string API_VERSION = "v1";
+                internal static string API_URL = $"https://api.melonloader.com/api/{API_VERSION}/game/";
+                internal static string API_URL_1 = $"https://api-1.melonloader.com/api/{API_VERSION}/game/";
+                internal static string API_URL_2 = $"https://api-2.melonloader.com/api/{API_VERSION}/game/";
+                internal static string API_URL_SAMBOY = $"https://melon.samboy.dev/api/{API_VERSION}/game/";
 
-                internal static bool Contact(string response_str, InfoStruct returninfo)
+                internal static InfoStruct Contact(string response_str)
                 {
                     ResponseStruct responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
                     if (responseobj == null)
-                        return false;
+                        return null;
 
+                    InfoStruct returninfo = new InfoStruct();
                     //returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
                     returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
                     returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
                     returninfo.MappingURL = responseobj.mappingUrl;
                     returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
-
-                    return true;
+                    return returninfo;
                 }
 
                 internal class ResponseStruct
@@ -138,19 +143,19 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             {
                 internal static string API_URL = "https://ruby-core.com/api/ml/";
 
-                internal static bool Contact(string response_str, InfoStruct returninfo)
+                internal static InfoStruct Contact(string response_str)
                 {
                     ResponseStruct responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
                     if (responseobj == null)
-                        return false;
+                        return null;
 
+                    InfoStruct returninfo = new InfoStruct();
                     //returninfo.ForceDumperVersion = responseobj.forceDumperVersion;
                     returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
                     returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
                     returninfo.MappingURL = responseobj.mappingURL;
                     returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
-
-                    return true;
+                    return returninfo;
                 }
 
                 private class ResponseStruct

@@ -47,6 +47,7 @@
 21. Converted Compatibility Layer System to be Module Based.
 22. Fixed Issue with Compatibility Layer System running Module Setup twice.
 23. Implemented Demeo Integration.
+24. Fixed String Marshalling Issue with bHaptics Native Library.
 
 ---
 

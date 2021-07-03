@@ -103,7 +103,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,7 +119,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -133,7 +133,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,7 +149,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -175,9 +175,10 @@
     <ClCompile Include="Utils\PointerUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base\MSDetours\detours.h" />
+    <ClInclude Include="Base\MSDetours\detours.x64.h" />
+    <ClInclude Include="Base\MSDetours\detours.x86.h" />
     <ClInclude Include="Core.h" />
-    <ClInclude Include="Base\MSDetours\detours_x64.h" />
-    <ClInclude Include="Base\MSDetours\detours_x86.h" />
     <ClInclude Include="Managers\AssemblyVerifier.h" />
     <ClInclude Include="Managers\BaseAssembly.h" />
     <ClInclude Include="Managers\Game.h" />

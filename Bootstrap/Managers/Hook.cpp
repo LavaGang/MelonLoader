@@ -1,10 +1,6 @@
 #include <Windows.h>
 #include "Hook.h"
-#ifdef _WIN64
-#include "../Base/MSDetours/detours_x64.h"
-#else
-#include "../Base/MSDetours/detours_x86.h"
-#endif
+#include "../Base/MSDetours/detours.h"
 
 void Hook::Attach(void** target, void* detour)
 {

@@ -8,7 +8,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = RemoteAPI.ReturnedInfo.ForceDumperVersion;
+                Version = RemoteAPI.Info.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "2021.0.1";
             string exe_name = $"Cpp2IL-{Version}-Windows.exe";
