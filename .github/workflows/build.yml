@@ -35,7 +35,7 @@ jobs:
       - name: Build MelonLoader Core | Windows - x86
         shell: cmd
         run: msbuild -t:Rebuild -p:Platform="Windows - x86"
-      - name: Copy x86 Output
+      - name: Copy Output | Windows - x86
         shell: cmd
         run: |
           xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x86\MelonLoader\Dependencies\ /E /H /Y
@@ -44,7 +44,7 @@ jobs:
       - name: Build Melonloader Core | Windows - x64
         shell: cmd
         run: msbuild -t:Rebuild -p:Platform="Windows - x64"
-      - name: Copy x64 Output
+      - name: Copy Output | Windows - x64
         shell: cmd
         run: |
           xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x64\MelonLoader\Dependencies\ /E /H /Y
@@ -52,10 +52,10 @@ jobs:
           rmdir /S /Q Output\Debug\MelonLoader >nul
       - name: Build Proxy DLL | Windows - x86
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform="Windows - x86" -p:Configuration=Release
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform=Win32 -p:Configuration=Release
       - name: Build Proxy DLL | Windows - x64
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform="Windows - x64" -p:Configuration=Release
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
       - name: Copy Proxy DLLs to Output
         shell: cmd
         run: |
@@ -63,10 +63,10 @@ jobs:
           copy Proxy\Output\Release\x64\version.dll Output\Debug\x64\version.dll
       - name: Build Bootstrap Lib | Windows - x86
         shell: cmd
-        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform="Windows - x86" -p:Configuration=Release
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=Win32 -p:Configuration=Release
       - name: Build Bootstrap Lib | Windows - x64
         shell: cmd
-        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform="Windows - x64" -p:Configuration=Release
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
       - name: Copy Bootstrap Libs to Output
         shell: cmd
         run: |
