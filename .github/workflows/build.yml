@@ -32,41 +32,41 @@ jobs:
       - name: Run Nuget Restore
         shell: cmd
         run: msbuild -t:Restore
-      - name: Build Melonloader Core x64
+      - name: Build MelonLoader Core | Windows - x86
         shell: cmd
-        run: msbuild -t:Rebuild -p:Platform=x64
-      - name: Copy x64 Output
-        shell: cmd
-        run: |
-          xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x64\MelonLoader\Dependencies\ /E /H /Y
-          xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x64\MelonLoader\ /E /H /Y
-          rmdir /S /Q Output\Debug\MelonLoader >nul
-      - name: Build MelonLoader Core x86
-        shell: cmd
-        run: msbuild -t:Rebuild -p:Platform=x86
+        run: msbuild -t:Rebuild -p:Platform="Windows - x86"
       - name: Copy x86 Output
         shell: cmd
         run: |
           xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x86\MelonLoader\Dependencies\ /E /H /Y
           xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x86\MelonLoader\ /E /H /Y
           rmdir /S /Q Output\Debug\MelonLoader >nul
-      - name: Build Proxy DLL - x86
+      - name: Build Melonloader Core | Windows - x64
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x86 -p:Configuration=Release
-      - name: Build Proxy DLL - x64
+        run: msbuild -t:Rebuild -p:Platform="Windows - x64"
+      - name: Copy x64 Output
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
+        run: |
+          xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x64\MelonLoader\Dependencies\ /E /H /Y
+          xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x64\MelonLoader\ /E /H /Y
+          rmdir /S /Q Output\Debug\MelonLoader >nul
+      - name: Build Proxy DLL | Windows - x86
+        shell: cmd
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform="Windows - x86" -p:Configuration=Release
+      - name: Build Proxy DLL | Windows - x64
+        shell: cmd
+        run: msbuild Proxy\Proxy.vcxproj -p:Platform="Windows - x64" -p:Configuration=Release
       - name: Copy Proxy DLLs to Output
         shell: cmd
         run: |
           copy Proxy\Output\Release\x86\version.dll Output\Debug\x86\version.dll
           copy Proxy\Output\Release\x64\version.dll Output\Debug\x64\version.dll
-      - name: Build Bootstrap Lib - x86
+      - name: Build Bootstrap Lib | Windows - x86
         shell: cmd
-        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x86 -p:Configuration=Release
-      - name: Build Bootstrap Lib - x64
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform="Windows - x86" -p:Configuration=Release
+      - name: Build Bootstrap Lib | Windows - x64
         shell: cmd
-        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
+        run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform="Windows - x64" -p:Configuration=Release
       - name: Copy Bootstrap Libs to Output
         shell: cmd
         run: |
