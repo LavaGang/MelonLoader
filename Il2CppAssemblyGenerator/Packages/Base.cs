@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -88,7 +89,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Directory.Delete(Output, true);
         }
 
-        internal bool Execute(string[] args, bool parenthesize_args = true)
+        internal bool Execute(string[] args, bool parenthesize_args = true, Dictionary<string, string> environment = null)
         {
             if (!Directory.Exists(Output))
                 Directory.CreateDirectory(Output);
@@ -113,6 +114,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 processStartInfo.RedirectStandardError = true;
                 processStartInfo.CreateNoWindow = true;
                 processStartInfo.WorkingDirectory = Path.GetDirectoryName(ExePath);
+
+                if (environment != null)
+                {
+                    foreach (var kvp in environment)
+                    {
+                        processStartInfo.EnvironmentVariables[kvp.Key] = kvp.Value;
+                    }
+                }
 
                 MelonLogger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
 

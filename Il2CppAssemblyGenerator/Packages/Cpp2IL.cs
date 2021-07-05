@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
@@ -56,7 +57,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 "--skip-analysis",
                 "--skip-metadata-txts",
                 "--disable-registration-prompts"
-            }, false);
+            }, false, new Dictionary<string, string>() {
+                {"NO_COLOR", "1"}
+            });
         }
     }
 }
