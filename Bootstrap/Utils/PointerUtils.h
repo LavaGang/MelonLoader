@@ -3,10 +3,6 @@
 #include <stdint.h>
 #include <vector>
 
-typedef void (*voidfunc_t) ();
-typedef void* (*voidptrreturnfunc_t)();
-typedef bool (*boolfunc_t) ();
-
 class PointerUtils
 {
 public:
