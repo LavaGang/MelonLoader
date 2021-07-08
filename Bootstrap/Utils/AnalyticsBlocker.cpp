@@ -10,20 +10,17 @@ std::list<std::string> AnalyticsBlocker::DABList = { new char[8] { 0x6e, 0x74, 0
 
 bool AnalyticsBlocker::Initialize()
 {
-#ifdef _WIN64
 	Debug::Msg("Initializing Analytics Blocker...");
-	return (wsock32::Initialize()
+	return wsock32::Initialize()
+#ifdef _WIN64
 		&& ws2_32::Initialize()
-		);
-#else
-	return true;
 #endif
-}
+;}
 
 void AnalyticsBlocker::Hook()
 {
-#ifdef _WIN64
 	wsock32::Hooks::Initialize();
+#ifdef _WIN64
 	ws2_32::Hooks::Initialize();
 #endif
 }
@@ -115,7 +112,7 @@ void AnalyticsBlocker::wsock32::Hooks::Initialize()
 	Hook::Attach(&(LPVOID&)Exports::Gethostbyname, Gethostbyname);
 }
 
-void* AnalyticsBlocker::wsock32::Hooks::Gethostbyname(const char* name)
+hostent* AnalyticsBlocker::wsock32::Hooks::Gethostbyname(const char* name)
 {
 	try
 	{
@@ -124,6 +121,7 @@ void* AnalyticsBlocker::wsock32::Hooks::Gethostbyname(const char* name)
 		return Exports::Gethostbyname(name);
 	}
 	catch(...){}
+	WSASetLastError(WSATRY_AGAIN);
 	return NULL;
 }
 #pragma endregion
@@ -168,7 +166,7 @@ void AnalyticsBlocker::ws2_32::Hooks::Initialize()
 	Hook::Attach(&(LPVOID&)Exports::Getaddrinfo, Getaddrinfo);
 }
 
-int AnalyticsBlocker::ws2_32::Hooks::Getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult)
+DWORD AnalyticsBlocker::ws2_32::Hooks::Getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, const ADDRINFOA* pHints, PADDRINFOA* ppResult)
 {
 	try
 	{

@@ -3,6 +3,15 @@
 #include <list>
 #include <string>
 
+
+#ifdef _WIN64
+#include <winsock2.h>
+#pragma comment (lib, "ws2_32.lib")
+#else
+#include <winsock.h>
+#pragma comment (lib, "wsock32.lib")
+#endif
+
 class AnalyticsBlocker
 {
 public:
@@ -23,7 +32,7 @@ public:
 		{
 		public:
 			static bool Initialize();
-			typedef void* (__stdcall* gethostbyname_t) (const char* name);
+			typedef hostent* (__stdcall* gethostbyname_t) (const char* name);
 			static gethostbyname_t Gethostbyname;
 		};
 
@@ -31,7 +40,7 @@ public:
 		{
 		public:
 			static void Initialize();
-			static void* Gethostbyname(const char* name);
+			static hostent* Gethostbyname(const char* name);
 		};
 	};
 
@@ -46,7 +55,7 @@ public:
 		{
 		public:
 			static bool Initialize();
-			typedef int(__stdcall* getaddrinfo_t) (PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult);
+			typedef DWORD (__stdcall* getaddrinfo_t) (PCSTR pNodeName, PCSTR pServiceName, const ADDRINFOA* pHints, PADDRINFOA* ppResult);
 			static getaddrinfo_t Getaddrinfo;
 		};
 
@@ -54,7 +63,7 @@ public:
 		{
 		public:
 			static void Initialize();
-			static int Getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, void* pHints, void* ppResult);
+			static DWORD Getaddrinfo(PCSTR pNodeName, PCSTR pServiceName, const ADDRINFOA* pHints, PADDRINFOA* ppResult);
 		};
 	};
 #endif

@@ -181,6 +181,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Base\DllMain.cpp" />
+    <ClCompile Include="Exports\Ex_psapi.cpp" />
     <ClCompile Include="Exports\Ex_winhttp.cpp" />
     <ClCompile Include="Exports\Ex_winmm.cpp" />
     <ClCompile Include="Core.cpp" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Exports\Exports.def" />
+    <MASM Include="Exports\psapi.asm" />
     <MASM Include="Exports\version.asm">
       <FileType>Document</FileType>
     </MASM>

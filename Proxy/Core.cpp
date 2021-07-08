@@ -36,7 +36,9 @@ void Core::Load(HINSTANCE hinstDLL)
 		return;
 	}
 
-	if (strstr(filename.c_str(), "version") != NULL)
+	if (strstr(filename.c_str(), "psapi") != NULL)
+		LoadExports_psapi(originaldll);
+	else if (strstr(filename.c_str(), "version") != NULL)
 		LoadExports_version(originaldll);
 	else if (strstr(filename.c_str(), "winmm") != NULL)
 		LoadExports_winmm(originaldll);

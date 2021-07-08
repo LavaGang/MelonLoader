@@ -10,6 +10,9 @@
     <MASM Include="Exports\winmm.asm">
       <Filter>Exports</Filter>
     </MASM>
+    <MASM Include="Exports\psapi.asm">
+      <Filter>Exports</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\DllMain.cpp">
@@ -23,6 +26,9 @@
       <Filter>Exports</Filter>
     </ClCompile>
     <ClCompile Include="Exports\Ex_winmm.cpp">
+      <Filter>Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="Exports\Ex_psapi.cpp">
       <Filter>Exports</Filter>
     </ClCompile>
   </ItemGroup>
