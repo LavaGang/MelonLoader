@@ -181,6 +181,7 @@ DWORD AnalyticsBlocker::ws2_32::Hooks::Getaddrinfo(PCSTR pNodeName, PCSTR pServi
 		return Exports::Getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
 	}
 	catch (...){}
+	WSASetLastError(WSATRY_AGAIN);
 	return WSATRY_AGAIN;
 }
 #pragma endregion
