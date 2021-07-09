@@ -194,7 +194,7 @@ void InternalCalls::MelonDebug::Internal_Msg(Console::Color meloncolor, Console:
 	}
 	auto txtStrOs = Encoding::Utf8ToOs(txtStr);
 	Mono::Free(txtStr);
-	Logger::Internal_Msg(meloncolor, txtcolor, nsStrOs, txtStrOs);
+	Debug::Internal_Msg(meloncolor, txtcolor, nsStrOs, txtStrOs);
 
 	delete[] txtStrOs;
 	delete[] nsStrOs;
