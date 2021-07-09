@@ -32,22 +32,27 @@
 6. Fixed Issue with MelonHandler not calling OnModSettingsApplied on Legacy Melons.
 7. Fixed Issue with DAB not properly caching already found Hosts.
 8. Fixed NRE Issue in Il2CppAssemblyGenerator.RemoteAPI.ContactHosts.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
-9. Updated Tomlet to v1.3.4.    (Credits to [loukylor](https://github.com/loukylor) and [Samboy](https://github.com/SamboyCoding) :3)
+9. Updated Tomlet to v1.3.5.    (Credits to [loukylor](https://github.com/loukylor) and [Samboy](https://github.com/SamboyCoding) :3)
 10. Added MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
 11. Fixed Issue with MelonLogger causing Crash on null Input Text.    (Credits to [loukylor](https://github.com/loukylor) :3)
 12. Fixed Issue with MelonLogger not allowing Empty Input Text.    (Credits to [ds5678](https://github.com/ds5678) :D)
 13. Updated Il2CppDumper to v6.6.3.
-14. Updated Cpp2IL to v2021.0.
 15. Swapped out Il2CppDumper for Cpp2IL.
 16. Added "--melonloader.agfoffline" Launch Option to Force the Assembly Generator to Run without Contacting the Remote API.
 17. Fixed Issue with MelonLogger not abiding by Warning and Error Caps.
 18. Fixed Issue with Assembly Generator using the wrong Download URL for Cpp2IL.
-19. Updated Cpp2IL to v2021.0.1.
+19. Updated Cpp2IL to v2021.1.    (Credits to [ardittristan](https://github.com/ardittristan) and [Samboy](https://github.com/SamboyCoding) :3)
 20. Fixed Issue with MelonGameAttribute not setting Name after Creation.
 21. Converted Compatibility Layer System to be Module Based.
 22. Fixed Issue with Compatibility Layer System running Module Setup twice.
 23. Implemented Demeo Integration.
 24. Fixed String Marshalling Issue with bHaptics Native Library.
+25. Update Il2CppAssemblyUnhollower to v0.4.15.3.
+26. Fixed Issue with Compatibility Layer System incorrectly casting Delegates.    (Credits to [ds5678](https://github.com/ds5678) :D)
+27. Fixed Issue with Log Coloration from Cpp2IL.    (Credits to [Samboy](https://github.com/SamboyCoding) :3)
+28. Improved Analytics Blocker.
+29. Added "psapi.dll" Support to Proxy.
+30. Fixed Encoding Issue with MelonLogger.    (Credits to [lolligun](https://github.com/lolligun) :D)
 
 ---
 
