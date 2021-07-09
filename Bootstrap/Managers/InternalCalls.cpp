@@ -8,6 +8,7 @@
 #include "../Utils/HashCode.h"
 #include "Il2Cpp.h"
 #include "../Utils/Il2CppAssemblyGenerator.h"
+#include "../Utils/Encoding.h"
 
 void InternalCalls::Initialize()
 {
@@ -25,43 +26,85 @@ void InternalCalls::MelonLogger::Internal_Msg(Console::Color meloncolor, Console
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Internal_Msg(meloncolor, txtcolor, nsStr, txtStr);
-	if (nsStr != NULL) Mono::Free(nsStr);
+
+	char* nsStrOs = NULL;
+	if (nsStr != NULL) 
+	{
+		nsStrOs = Encoding::Utf8ToOs(nsStr);
+		Mono::Free(nsStr); 
+	}
+	auto txtStrOs = Encoding::Utf8ToOs(txtStr);
 	Mono::Free(txtStr);
+	Logger::Internal_Msg(meloncolor, txtcolor, nsStrOs, txtStrOs);
+
+	delete[] txtStrOs;
+	delete[] nsStrOs;
 }
 
 void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color meloncolor, Mono::String* name, Mono::String* version)
 {
 	auto nameStr = Mono::Exports::mono_string_to_utf8(name);
 	auto versionStr = Mono::Exports::mono_string_to_utf8(version);
-	Logger::Internal_PrintModName(meloncolor, nameStr, versionStr);
+
+	auto nameStrOs = Encoding::Utf8ToOs(nameStr);
+	auto versionStrOs = Encoding::Utf8ToOs(versionStr);
+
 	Mono::Free(nameStr);
 	Mono::Free(versionStr);
+
+	Logger::Internal_PrintModName(meloncolor, nameStrOs, versionStrOs);
+
+	delete[] nameStrOs;
+	delete[] versionStrOs;
 }
 
 void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Internal_Warning(nsStr, txtStr);
-	if (nsStr != NULL) Mono::Free(nsStr);
+
+	char* nsStrOs = NULL;
+	if (nsStr != NULL) 
+	{
+		nsStrOs = Encoding::Utf8ToOs(nsStr);
+		Mono::Free(nsStr);
+	}
+	auto txtStrOs = Encoding::Utf8ToOs(txtStr);
 	Mono::Free(txtStr);
+
+	Logger::Internal_Warning(nsStrOs, txtStrOs);
+
+	delete[] nsStrOs;
+	delete[] txtStrOs;
 }
 
 void InternalCalls::MelonLogger::Internal_Error(Mono::String* namesection, Mono::String* txt)
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Logger::Internal_Error(nsStr, txtStr);
-	if (nsStr != NULL) Mono::Free(nsStr);
+
+	char* nsStrOs = NULL;
+	if (nsStr != NULL)
+	{
+		nsStrOs = Encoding::Utf8ToOs(nsStr);
+		Mono::Free(nsStr);
+	}
+	auto txtStrOs = Encoding::Utf8ToOs(txtStr);
 	Mono::Free(txtStr);
+
+	Logger::Internal_Error(nsStrOs, txtStrOs);
+
+	delete[] nsStrOs;
+	delete[] txtStrOs;
 }
 
 void InternalCalls::MelonLogger::ThrowInternalFailure(Mono::String* msg)
 {
 	auto str = Mono::Exports::mono_string_to_utf8(msg);
-	Assertion::ThrowInternalFailure(str);
+	auto strOs = Encoding::Utf8ToOs(str);
+	Assertion::ThrowInternalFailure(strOs);
 	Mono::Free(str);
+	delete[] strOs;
 }
 
 void InternalCalls::MelonLogger::WriteSpacer() { Logger::WriteSpacer(); }
@@ -142,9 +185,19 @@ void InternalCalls::MelonDebug::Internal_Msg(Console::Color meloncolor, Console:
 {
 	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
 	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-	Debug::Internal_Msg(meloncolor, txtcolor, nsStr, txtStr);
-	if (nsStr != NULL) Mono::Free(nsStr);
+
+	char* nsStrOs = NULL;
+	if (nsStr != NULL) 
+	{
+		nsStrOs = Encoding::Utf8ToOs(nsStr);
+		Mono::Free(nsStr); 
+	}
+	auto txtStrOs = Encoding::Utf8ToOs(txtStr);
 	Mono::Free(txtStr);
+	Debug::Internal_Msg(meloncolor, txtcolor, nsStrOs, txtStrOs);
+
+	delete[] txtStrOs;
+	delete[] nsStrOs;
 }
 void InternalCalls::MelonDebug::AddInternalCalls()
 {
