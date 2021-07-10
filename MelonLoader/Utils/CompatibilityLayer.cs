@@ -140,12 +140,13 @@ namespace MelonLoader
                 }
             }
 
-            MelonBase instance = FormatterServices.GetUninitializedObject(creationData.Info.SystemType) as MelonBase;
+            MelonBase instance = Activator.CreateInstance(creationData.Info.SystemType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null) as MelonBase;
             if (instance == null)
             {
                 MelonLogger.Error($"Failed to Create Instance for {creationData.Location}");
                 return null;
             }
+
             instance.Assembly = creationData.Assembly;
             instance.Info = creationData.Info;
             instance.Games = creationData.Games;
@@ -154,6 +155,7 @@ namespace MelonLoader
             instance.Priority = creationData.Priority;
             instance.ConsoleColor = creationData.ConsoleColor;
             instance.HarmonyInstance = new HarmonyLib.Harmony(instance.Assembly.FullName);
+
             return instance;
         }
 
