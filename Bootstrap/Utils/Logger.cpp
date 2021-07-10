@@ -17,32 +17,31 @@ int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
 Logger::FileStream Logger::LogFile;
 
-std::string Log::BuildConsoleString() const
+void Log::BuildConsoleString(std::ostream& stream) const
 {
-	// Always initialize string with timestamp
-	std::string consoleStr = 
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) +
-		"[" +
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Green)) +
-		Logger::GetTimestamp() +
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) +
+	// Always initialize stream with timestamp
+	stream << 
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
+		"[" <<
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Green)) <<
+		Logger::GetTimestamp() <<
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
 		"] ";
 
 	// If the logging melon has a name, print it
-	if (namesection != nullptr) consoleStr = consoleStr + "[" +
-		melonAnsiColor +
-		namesection +
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) +
+	if (namesection != nullptr) stream << "[" <<
+		Console::ColorToAnsi(melonAnsiColor) <<
+		namesection <<
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
 		"] ";
 
 	// Print the [LOGTYPE] prefix if needed
-	if (logMeta->printLogTypeName) consoleStr = consoleStr + "[" + Console::ColorToAnsi(logMeta->logCategoryColor) + logMeta->logTypeString + Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) + "] ";
+	if (logMeta->printLogTypeName) stream << "[" << Console::ColorToAnsi(logMeta->logCategoryColor) << logMeta->logTypeString << Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) << "] ";
 
 	// If we're not coloring the whole line, use the specified input text color. If we are, the color would already be declared
-	if (!logMeta->colorFullLine) consoleStr = consoleStr + textAnsiColor;
+	if (!logMeta->colorFullLine) stream << Console::ColorToAnsi(textAnsiColor);
 	
-	return consoleStr +
-		txt +
+	stream << txt <<
 		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray), false);
 }
 
@@ -56,7 +55,7 @@ std::string Log::BuildLogString() const
 
 void Log::LogToConsoleAndFile() const
 {
-	std::cout << BuildConsoleString();
+	BuildConsoleString(std::cout);
 	Logger::LogFile << BuildLogString();
 	Logger::WriteSpacer();
 }

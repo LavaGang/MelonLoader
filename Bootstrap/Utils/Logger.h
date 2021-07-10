@@ -43,7 +43,7 @@ class Log
 {
 	LogMeta* logMeta;
 	
-	std::string melonAnsiColor, textAnsiColor;
+	Console::Color melonAnsiColor, textAnsiColor;
 	
 	const char* namesection;
 	const char* txt;
@@ -51,8 +51,8 @@ class Log
 public:
 	Log(const LogType type, const Console::Color meloncolor, const Console::Color txtcolor, const char* namesection, const char* txt) :
 	logMeta(LogTypes[type].second),
-	melonAnsiColor(Console::ColorToAnsi(logMeta->GetColorOverride(meloncolor))),	// If the log meta says we need to color the whole string,
-	textAnsiColor(Console::ColorToAnsi(logMeta->GetColorOverride(txtcolor))),		// swap out the input colors with the overrides to avoid confusion
+	melonAnsiColor(logMeta->GetColorOverride(meloncolor)),	// If the log meta says we need to color the whole string,
+	textAnsiColor(logMeta->GetColorOverride(txtcolor)),		// swap out the input colors with the overrides to avoid confusion
 	namesection(namesection), txt(txt) {}
 
 	Log(const LogType type, const Console::Color txtcolor, const char* namesection, const char* txt) :
@@ -61,7 +61,7 @@ public:
 	Log(const LogType type, const char* namesection, const char* txt) :
 	Log(type, Console::Color::Gray, namesection, txt) {}
 
-	std::string BuildConsoleString() const;	// Constructs a string with color to print to the console (Doesn't include linebreak)
+	void BuildConsoleString(std::ostream& stream) const;	// Constructs a string with color to print to the console (Doesn't include linebreak)
 	std::string BuildLogString() const;	// Constructs a string without color to log to file (Doesn't include linebreak)
 
 	void LogToConsoleAndFile() const;	// Shorthand way to log to console and write to file with linebreak afterwards
