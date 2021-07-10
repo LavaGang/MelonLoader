@@ -5,6 +5,14 @@
 
 ---
 
+<p align="center">
+	<img src="https://img.shields.io/github/v/release/LavaGang/MelonLoader?label=latest">
+	<img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader/total.svg">
+	<img src="https://img.shields.io/discord/663449315876012052?label=discord">
+</p>
+
+---
+
 ## GENERAL INFORMATION:
 
 - Debug Mode is for Development Purposes. Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
