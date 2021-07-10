@@ -6,9 +6,10 @@
 ---
 
 <p align="center">
-	<img src="https://img.shields.io/github/v/release/LavaGang/MelonLoader?label=latest">
-	<img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader/total.svg">
-	<img src="https://img.shields.io/discord/663449315876012052?label=discord">
+	<img src="https://img.shields.io/github/v/release/LavaGang/MelonLoader?label=latest&style=for-the-badge">
+	<img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader/total.svg?style=for-the-badge">
+	<img src="https://img.shields.io/github/contributors/LavaGang/MelonLoader?style=for-the-badge">
+	<img src="https://img.shields.io/discord/663449315876012052?label=discord&style=for-the-badge">
 </p>
 
 ---
