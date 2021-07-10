@@ -5,71 +5,66 @@
 #include <string>
 #include "Console.h"
 
+
 enum LogType
 {
 	Msg,
 	Warning,
-	Error
+	Error,
+	Debug
 };
 
-static const char* LogTypeToString(LogType logType)
+// Contains metadata about all log types and how they should be constructed in console and log file
+struct LogMeta
 {
-	switch (logType)
-	{
-		case Warning: return "WARNING";
-		case Error: return "ERROR";
+	Console::Color logCategoryColor = Console::Color::Gray;	// Used to color the log type and as an override if we need to color the whole log
+	const char* logTypeString;	// A string literal representation of the log name. E.G. 'WARNING', 'ERROR'
+	bool colorFullLine;	// Override ALL line colors with the log category color. Used primarily for Warning and Error logs to stand out
+	bool printLogTypeName;	// The [LOGTYPE] text
 
-		default:
-		case Msg: return "MSG";
-	}
-}
+	explicit LogMeta(const char* stringLiteral = nullptr, const bool _colorFullLine = false, const Console::Color logMainColor = static_cast<Console::Color>(-1)) :
+	logCategoryColor(logMainColor), logTypeString(stringLiteral), colorFullLine(_colorFullLine && logMainColor >= 0), printLogTypeName(stringLiteral != nullptr)
+	{}
+
+	// If we're printing a log category that requires the whole line to be one color, use that color instead
+	Console::Color GetColorOverride(Console::Color colorToReturnIfNone)
+	{return colorFullLine ? logCategoryColor : colorToReturnIfNone;}
+};
+
+// Declares metadata for logs
+static std::pair<LogType, LogMeta*> LogTypes[] = {
+	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta()),
+	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta("WARNING", true, Console::Color::Yellow)),
+	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta("ERROR", true, Console::Color::Red)),
+	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta("DEBUG", false, Console::Color::Blue))
+};
 
 class Log
 {
-	LogType logType;
+	LogMeta* logMeta;
 	
 	std::string melonAnsiColor, textAnsiColor;
 	
 	const char* namesection;
 	const char* txt;
-
-	static Console::Color GetConsoleColorForLogType(const LogType type)
-	{
-		switch (type)
-		{
-			case Warning: return Console::Color::Yellow;
-			case Error: return Console::Color::Red;
-			default: return Console::Color::Gray;
-		}
-	}
-
-	Console::Color CheckForColorOverride(const Console::Color colorSuggestion) const
-	{
-		if (logType == Msg) return colorSuggestion;
-		return GetConsoleColorForLogType(logType);
-	}
 	
 public:
 	Log(const LogType type, const Console::Color meloncolor, const Console::Color txtcolor, const char* namesection, const char* txt) :
-	logType(type),
-	melonAnsiColor(Console::ColorToAnsi(CheckForColorOverride(meloncolor))),
-	textAnsiColor(Console::ColorToAnsi(CheckForColorOverride(txtcolor))),
+	logMeta(LogTypes[type].second),
+	melonAnsiColor(Console::ColorToAnsi(logMeta->GetColorOverride(meloncolor))),	// If the log meta says we need to color the whole string,
+	textAnsiColor(Console::ColorToAnsi(logMeta->GetColorOverride(txtcolor))),		// swap out the input colors with the overrides to avoid confusion
 	namesection(namesection), txt(txt) {}
 
 	Log(const LogType type, const Console::Color txtcolor, const char* namesection, const char* txt) :
-	logType(type),
-	melonAnsiColor(Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray))),
-	textAnsiColor(Console::ColorToAnsi(CheckForColorOverride(txtcolor))),
-	namesection(namesection), txt(txt) {}
+	Log(type, Console::Color::Gray, txtcolor, namesection, txt) {}
 
 	Log(const LogType type, const char* namesection, const char* txt) :
-	logType(type),
-	melonAnsiColor(Console::ColorToAnsi(GetConsoleColorForLogType(type))),
-	textAnsiColor(Console::ColorToAnsi(GetConsoleColorForLogType(type))),
-	namesection(namesection), txt(txt) {}
+	Log(type, Console::Color::Gray, namesection, txt) {}
 
-	std::string BuildConsoleString() const;
-	std::string BuildLogString() const;
+	std::string BuildConsoleString() const;	// Constructs a string with color to print to the console (Doesn't include linebreak)
+	std::string BuildLogString() const;	// Constructs a string without color to log to file (Doesn't include linebreak)
+
+	void LogToConsoleAndFile() const;	// Shorthand way to log to console and write to file with linebreak afterwards
 };
 
 class Logger
@@ -83,12 +78,10 @@ public:
 	static void WriteSpacer();
 
 	static void Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version);
-	static void QuickLog(const char* txt, LogType logType = Msg)
-	{
-		Log newLog = Log(logType, nullptr, txt);
-		LogFile << newLog.BuildLogString();
-		std::cout << newLog.BuildConsoleString();
-	}
+	
+	static void QuickLog(const char* txt, LogType logType = Msg)	// Like std::cout but prepends timestamp and appends to logfile
+	{Log(logType, nullptr, txt).LogToConsoleAndFile();}
+	
 	static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt);
 	static void Internal_Warning(const char* namesection, const char* txt);
 	static void Internal_Error(const char* namesection, const char* txt);

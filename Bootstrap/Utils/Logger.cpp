@@ -19,36 +19,46 @@ Logger::FileStream Logger::LogFile;
 
 std::string Log::BuildConsoleString() const
 {
+	// Always initialize string with timestamp
 	std::string consoleStr = 
-		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray)) +
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) +
 		"[" +
-		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Green)) +
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Green)) +
 		Logger::GetTimestamp() +
-		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray)) +
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) +
 		"] ";
 
+	// If the logging melon has a name, print it
 	if (namesection != nullptr) consoleStr = consoleStr + "[" +
 		melonAnsiColor +
 		namesection +
-		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray)) +
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) +
 		"] ";
 
-	// Not applying coloring here under the assumption that the log type requires the whole line to be colored regardless
-	if (logType != Msg) consoleStr = consoleStr + "[" + LogTypeToString(logType) + "] ";
+	// Print the [LOGTYPE] prefix if needed
+	if (logMeta->printLogTypeName) consoleStr = consoleStr + "[" + Console::ColorToAnsi(logMeta->logCategoryColor) + logMeta->logTypeString + Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) + "] ";
 
+	// If we're not coloring the whole line, use the specified input text color. If we are, the color would already be declared
+	if (!logMeta->colorFullLine) consoleStr = consoleStr + textAnsiColor;
+	
 	return consoleStr +
-		textAnsiColor +
 		txt +
-		"\n" +
-		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray), false);
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray), false);
 }
 
 std::string Log::BuildLogString() const
 {
 	std::string logStr = "[" + Logger::GetTimestamp() + "] ";
 	if (namesection != nullptr)	logStr = logStr + "[" + namesection + "] ";
-	if (logType != Msg) logStr = logStr + "[" + LogTypeToString(logType) + "] ";
-	return logStr + txt + "\n";
+	if (logMeta->printLogTypeName) logStr = logStr + "[" + logMeta->logTypeString + "] ";
+	return logStr + txt;
+}
+
+void Log::LogToConsoleAndFile() const
+{
+	std::cout << BuildConsoleString();
+	Logger::LogFile << BuildLogString();
+	Logger::WriteSpacer();
 }
 
 bool Logger::Initialize()
@@ -120,7 +130,7 @@ void Logger::WriteSpacer()
 
 void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version)
 {
-	// Not using log object for this as we're modifying conventional log writing as well as console writing
+	// Not using log object for this as we're modifying conventional coloring
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] " << name << " v" << version << std::endl;
 	std::cout
@@ -134,7 +144,6 @@ void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, 
 		<< name
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< " v"
-		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< version
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Gray, false);
@@ -142,9 +151,7 @@ void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, 
 
 void Logger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
 {
-	const Log newLog = Log(Msg, meloncolor, txtcolor, namesection, txt);
-	LogFile << newLog.BuildLogString();
-	std::cout << newLog.BuildConsoleString();
+	Log(Msg, meloncolor, txtcolor, namesection, txt).LogToConsoleAndFile();
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
@@ -158,9 +165,7 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 	else if (MaxWarnings < 0)
 		return;
 
-	const Log newLog = Log(Warning, namesection, txt);
-	LogFile << newLog.BuildLogString();
-	std::cout << newLog.BuildConsoleString();
+	Log(Warning, namesection, txt).LogToConsoleAndFile();
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
@@ -174,7 +179,5 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 	else if (MaxErrors < 0)
 		return;
 	
-	const Log newLog = Log(Error, namesection, txt);
-	LogFile << newLog.BuildLogString();
-	std::cout << newLog.BuildConsoleString();
+	Log(Error, namesection, txt).LogToConsoleAndFile();
 }
