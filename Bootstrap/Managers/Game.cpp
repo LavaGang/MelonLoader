@@ -89,7 +89,7 @@ void Game::ReadAppInfo()
 	if (!Core::FileExists(appinfopath.c_str()))
 	{
 		if (FirstRun)
-			Logger::Warning("app.info DOES NOT EXIST! Defaulting to UNKNOWN for Company and Product Names");
+			Logger::QuickLog("app.info DOES NOT EXIST! Defaulting to UNKNOWN for Company and Product Names", Warning);
 		std::string unknown = "UNKNOWN";
 		Developer = new char[unknown.size() + 1];
 		std::copy(unknown.begin(), unknown.end(), Developer);

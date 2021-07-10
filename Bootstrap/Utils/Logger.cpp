@@ -6,7 +6,6 @@
 #include <direct.h>
 #include <list>
 #include <sstream>
-#include <iostream>
 
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtension = ".log";
@@ -17,6 +16,40 @@ int Logger::MaxErrors = 100;
 int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
 Logger::FileStream Logger::LogFile;
+
+std::string Log::BuildConsoleString() const
+{
+	std::string consoleStr = 
+		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray)) +
+		"[" +
+		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Green)) +
+		Logger::GetTimestamp() +
+		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray)) +
+		"] ";
+
+	if (namesection != nullptr) consoleStr = consoleStr + "[" +
+		melonAnsiColor +
+		namesection +
+		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray)) +
+		"] ";
+
+	// Not applying coloring here under the assumption that the log type requires the whole line to be colored regardless
+	if (logType != Msg) consoleStr = consoleStr + "[" + LogTypeToString(logType) + "] ";
+
+	return consoleStr +
+		textAnsiColor +
+		txt +
+		"\n" +
+		Console::ColorToAnsi(CheckForColorOverride(Console::Color::Gray), false);
+}
+
+std::string Log::BuildLogString() const
+{
+	std::string logStr = "[" + Logger::GetTimestamp() + "] ";
+	if (namesection != nullptr)	logStr = logStr + "[" + namesection + "] ";
+	if (logType != Msg) logStr = logStr + "[" + LogTypeToString(logType) + "] ";
+	return logStr + txt + "\n";
+}
 
 bool Logger::Initialize()
 {
@@ -85,70 +118,9 @@ void Logger::WriteSpacer()
 	std::cout << std::endl;
 }
 
-void Logger::Msg(Console::Color txtcolor, const char* txt)
-{
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(txtcolor)
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
-}
-
-void Logger::Warning(const char* txt)
-{
-	if (MaxWarnings > 0)
-	{
-		if (WarningCount >= MaxWarnings)
-			return;
-		WarningCount++;
-	}
-	else if (MaxWarnings < 0)
-		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [WARNING] " << txt << std::endl;
-	if (!Console::HideWarnings)
-		std::cout 
-			<< Console::ColorToAnsi(Console::Color::Yellow)
-			<< "["
-			<< timestamp
-			<< "] [WARNING] "
-			<< txt
-			<< std::endl
-			<< Console::ColorToAnsi(Console::Color::Gray, false);
-}
-
-void Logger::Error(const char* txt)
-{
-	if (MaxErrors > 0)
-	{
-		if (ErrorCount >= MaxErrors)
-			return;
-		ErrorCount++;
-	}
-	else if (MaxErrors < 0)
-		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [ERROR] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Red)
-		<< "["
-		<< timestamp
-		<< "] [ERROR] "
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
-}
-
 void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version)
 {
+	// Not using log object for this as we're modifying conventional log writing as well as console writing
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] " << name << " v" << version << std::endl;
 	std::cout
@@ -170,39 +142,13 @@ void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, 
 
 void Logger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
 {
-	if (namesection == NULL)
-	{
-		Msg(txtcolor, txt);
-		return;
-	}
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(meloncolor)
-		<< namesection
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(txtcolor)
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
+	const Log newLog = Log(Msg, meloncolor, txtcolor, namesection, txt);
+	LogFile << newLog.BuildLogString();
+	std::cout << newLog.BuildConsoleString();
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
 {
-	if (namesection == NULL)
-	{
-		Warning(txt);
-		return;
-	}
 	if (MaxWarnings > 0)
 	{
 		if (WarningCount >= MaxWarnings)
@@ -211,28 +157,14 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 	}
 	else if (MaxWarnings < 0)
 		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] [WARNING] " << txt << std::endl;
-	if (!Console::HideWarnings)
-		std::cout
-			<< Console::ColorToAnsi(Console::Color::Yellow)
-			<< "["
-			<< timestamp
-			<< "] ["
-			<< namesection
-			<< "] [WARNING] "
-			<< txt
-			<< std::endl
-			<< Console::ColorToAnsi(Console::Color::Gray, false);
+
+	const Log newLog = Log(Warning, namesection, txt);
+	LogFile << newLog.BuildLogString();
+	std::cout << newLog.BuildConsoleString();
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
 {
-	if (namesection == NULL)
-	{
-		Error(txt);
-		return;
-	}
 	if (MaxErrors > 0)
 	{
 		if (ErrorCount >= MaxErrors)
@@ -241,16 +173,8 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 	}
 	else if (MaxErrors < 0)
 		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] [ERROR] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Red)
-		<< "["
-		<< timestamp
-		<< "] ["
-		<< namesection
-		<< "] [ERROR] "
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
+	
+	const Log newLog = Log(Error, namesection, txt);
+	LogFile << newLog.BuildLogString();
+	std::cout << newLog.BuildConsoleString();
 }

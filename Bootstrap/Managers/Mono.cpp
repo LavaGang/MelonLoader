@@ -351,7 +351,7 @@ void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 	const char* returnstrc = Exports::mono_string_to_utf8(returnstr);
 	if (returnstrc == NULL)
 		return;
-	Logger::Error(returnstrc);
+	Logger::QuickLog(returnstrc, Error);
 	Free(returnstr);
 }
 
