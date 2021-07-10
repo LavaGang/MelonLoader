@@ -6,7 +6,6 @@
 #include <direct.h>
 #include <list>
 #include <sstream>
-#include <iostream>
 
 const char* Logger::FilePrefix = "MelonLoader_";
 const char* Logger::FileExtension = ".log";
@@ -17,6 +16,49 @@ int Logger::MaxErrors = 100;
 int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
 Logger::FileStream Logger::LogFile;
+
+void Log::BuildConsoleString(std::ostream& stream) const
+{
+	// Always initialize stream with timestamp
+	stream << 
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
+		"[" <<
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Green)) <<
+		Logger::GetTimestamp() <<
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
+		"] ";
+
+	// If the logging melon has a name, print it
+	if (namesection != nullptr) stream << "[" <<
+		Console::ColorToAnsi(melonAnsiColor) <<
+		namesection <<
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
+		"] ";
+
+	// Print the [LOGTYPE] prefix if needed
+	if (logMeta->printLogTypeName) stream << "[" << Console::ColorToAnsi(logMeta->logCategoryColor) << logMeta->logTypeString << Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) << "] ";
+
+	// If we're not coloring the whole line, use the specified input text color. If we are, the color would already be declared
+	if (!logMeta->colorFullLine) stream << Console::ColorToAnsi(textAnsiColor);
+	
+	stream << txt <<
+		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray), false);
+}
+
+std::string Log::BuildLogString() const
+{
+	std::string logStr = "[" + Logger::GetTimestamp() + "] ";
+	if (namesection != nullptr)	logStr = logStr + "[" + namesection + "] ";
+	if (logMeta->printLogTypeName) logStr = logStr + "[" + logMeta->logTypeString + "] ";
+	return logStr + txt;
+}
+
+void Log::LogToConsoleAndFile() const
+{
+	BuildConsoleString(std::cout);
+	Logger::LogFile << BuildLogString();
+	Logger::WriteSpacer();
+}
 
 bool Logger::Initialize()
 {
@@ -85,70 +127,9 @@ void Logger::WriteSpacer()
 	std::cout << std::endl;
 }
 
-void Logger::Msg(Console::Color txtcolor, const char* txt)
-{
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(txtcolor)
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
-}
-
-void Logger::Warning(const char* txt)
-{
-	if (MaxWarnings > 0)
-	{
-		if (WarningCount >= MaxWarnings)
-			return;
-		WarningCount++;
-	}
-	else if (MaxWarnings < 0)
-		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [WARNING] " << txt << std::endl;
-	if (!Console::HideWarnings)
-		std::cout 
-			<< Console::ColorToAnsi(Console::Color::Yellow)
-			<< "["
-			<< timestamp
-			<< "] [WARNING] "
-			<< txt
-			<< std::endl
-			<< Console::ColorToAnsi(Console::Color::Gray, false);
-}
-
-void Logger::Error(const char* txt)
-{
-	if (MaxErrors > 0)
-	{
-		if (ErrorCount >= MaxErrors)
-			return;
-		ErrorCount++;
-	}
-	else if (MaxErrors < 0)
-		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [ERROR] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Red)
-		<< "["
-		<< timestamp
-		<< "] [ERROR] "
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
-}
-
 void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version)
 {
+	// Not using log object for this as we're modifying conventional coloring
 	std::string timestamp = GetTimestamp();
 	LogFile << "[" << timestamp << "] " << name << " v" << version << std::endl;
 	std::cout
@@ -162,7 +143,6 @@ void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, 
 		<< name
 		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< " v"
-		<< Console::ColorToAnsi(Console::Color::Gray)
 		<< version
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Gray, false);
@@ -170,39 +150,11 @@ void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, 
 
 void Logger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
 {
-	if (namesection == NULL)
-	{
-		Msg(txtcolor, txt);
-		return;
-	}
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(Console::Color::Green)
-		<< timestamp
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "["
-		<< Console::ColorToAnsi(meloncolor)
-		<< namesection
-		<< Console::ColorToAnsi(Console::Color::Gray)
-		<< "] "
-		<< Console::ColorToAnsi(txtcolor)
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
+	Log(Msg, meloncolor, txtcolor, namesection, txt).LogToConsoleAndFile();
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
 {
-	if (namesection == NULL)
-	{
-		Warning(txt);
-		return;
-	}
 	if (MaxWarnings > 0)
 	{
 		if (WarningCount >= MaxWarnings)
@@ -211,28 +163,12 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 	}
 	else if (MaxWarnings < 0)
 		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] [WARNING] " << txt << std::endl;
-	if (!Console::HideWarnings)
-		std::cout
-			<< Console::ColorToAnsi(Console::Color::Yellow)
-			<< "["
-			<< timestamp
-			<< "] ["
-			<< namesection
-			<< "] [WARNING] "
-			<< txt
-			<< std::endl
-			<< Console::ColorToAnsi(Console::Color::Gray, false);
+
+	Log(Warning, namesection, txt).LogToConsoleAndFile();
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
 {
-	if (namesection == NULL)
-	{
-		Error(txt);
-		return;
-	}
 	if (MaxErrors > 0)
 	{
 		if (ErrorCount >= MaxErrors)
@@ -241,16 +177,6 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 	}
 	else if (MaxErrors < 0)
 		return;
-	std::string timestamp = GetTimestamp();
-	LogFile << "[" << timestamp << "] [" << namesection << "] [ERROR] " << txt << std::endl;
-	std::cout
-		<< Console::ColorToAnsi(Console::Color::Red)
-		<< "["
-		<< timestamp
-		<< "] ["
-		<< namesection
-		<< "] [ERROR] "
-		<< txt
-		<< std::endl
-		<< Console::ColorToAnsi(Console::Color::Gray, false);
+	
+	Log(Error, namesection, txt).LogToConsoleAndFile();
 }
