@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Logo.png">
-  <img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Text.png">
+  <a href="#"><img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Logo.png"></a>
+  <a href="#"><img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Text.png"></a>
 </p>
 
 ---
 
 <p align="center">
 	<a href="https://github.com/LavaGang/MelonLoader/releases/latest"><img src="https://img.shields.io/github/v/release/LavaGang/MelonLoader?label=latest&style=for-the-badge"></a>
-	<a href="https://github.com/LavaGang/MelonLoader"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader/total.svg?style=for-the-badge"></a>
+	<a href="#"><img src="https://img.shields.io/github/downloads/LavaGang/MelonLoader/total.svg?style=for-the-badge"></a>
 	<a href="https://github.com/LavaGang/MelonLoader/graphs/contributors"><img src="https://img.shields.io/github/contributors/LavaGang/MelonLoader?style=for-the-badge"></a>
 	<a href="https://discord.gg/2Wn3N2P"><img src="https://img.shields.io/discord/663449315876012052?label=discord&style=for-the-badge&color=blueviolet"></a>
 </p>
