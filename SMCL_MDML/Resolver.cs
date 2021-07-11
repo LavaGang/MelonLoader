@@ -54,6 +54,7 @@ namespace MelonLoader.CompatibilityLayers
             wrapper.modInstance = modInstance;
             melonTbl.Add(wrapper);
             ModLoader.ModLoader.mods.Add(modInstance);
+            ModLoader.ModLoader.LoadDependency(mod_type.Assembly);
         }
 
         private class MelonModWrapper : MelonMod
