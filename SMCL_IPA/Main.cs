@@ -21,9 +21,11 @@ namespace MelonLoader.CompatibilityLayers
 				|| args.Name.StartsWith("IllusionInjector, Version="))
 				? typeof(IPA_Module).Assembly
 				: null;
+
+			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
 		}
 
-		public override MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
+		private static MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
 		{
 			IEnumerable<Type> plugin_types = assembly.GetValidTypes(x =>
 			{

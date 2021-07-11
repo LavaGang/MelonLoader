@@ -15,9 +15,11 @@ namespace MelonLoader.CompatibilityLayers
             HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
             harmony.Patch(typeof(ModdingAPI).GetMethod("GetInstalledMods", BindingFlags.Public | BindingFlags.Instance),
                 typeof(Demeo_Module).GetMethod("GetInstalledMods", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
+
+            MelonCompatibilityLayer.AddRefreshModsEvent(RefreshMods);
         }
 
-        public override void RefreshMods()
+        private static void RefreshMods()
         {
             ModInformation.Clear();
             MelonMod[] mods = MelonHandler.Mods.ToArray();

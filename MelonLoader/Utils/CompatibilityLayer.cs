@@ -104,9 +104,9 @@ namespace MelonLoader
 
                     moduleInstance.Setup();
 
-                    AddAssemblyToResolverEvent(moduleInstance.GetResolverFromAssembly);
-                    AddRefreshPluginsEvent(moduleInstance.RefreshPlugins);
-                    AddRefreshModsEvent(moduleInstance.RefreshMods);
+                    //AddAssemblyToResolverEvent(moduleInstance.GetResolverFromAssembly);
+                    //AddRefreshPluginsEvent(moduleInstance.RefreshPlugins);
+                    //AddRefreshModsEvent(moduleInstance.RefreshMods);
 
                     enumerator.Current.Interface = moduleInstance;
 
@@ -206,13 +206,7 @@ namespace MelonLoader
         }
 
         // Module Base
-        public class Module
-        {
-            public virtual void Setup() { }
-            public virtual Resolver GetResolverFromAssembly(Assembly assembly, string filepath) { return null; }
-            public virtual void RefreshPlugins() { }
-            public virtual void RefreshMods() { }
-        }
+        public class Module { public virtual void Setup() { } }
 
         // Module Listing
         internal class ModuleListing
