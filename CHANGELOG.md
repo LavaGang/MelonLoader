@@ -53,6 +53,9 @@
 28. Improved Analytics Blocker.
 29. Added "psapi.dll" Support to Proxy.
 30. Fixed Encoding Issue with MelonLogger.    (Credits to [lolligun](https://github.com/lolligun) :D)
+31. Cleaned Up Logger Implementation.    (Credits to [benaclejames](https://github.com/benaclejames) :D)
+32. Fixed Issue with Console not properly using Non-Ansi Manual Coloring.    (Credits to [benaclejames](https://github.com/benaclejames) :D)
+33. Fixed Issue with Default Melon Constructors not being run.
 
 ---
 
