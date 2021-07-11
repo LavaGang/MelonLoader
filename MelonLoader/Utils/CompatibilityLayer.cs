@@ -103,13 +103,7 @@ namespace MelonLoader
                         continue;
 
                     moduleInstance.Setup();
-
-                    //AddAssemblyToResolverEvent(moduleInstance.GetResolverFromAssembly);
-                    //AddRefreshPluginsEvent(moduleInstance.RefreshPlugins);
-                    //AddRefreshModsEvent(moduleInstance.RefreshMods);
-
                     enumerator.Current.Interface = moduleInstance;
-
                     MelonDebug.Msg($"Loaded Compatibility Layer: {enumerator.Current.FileName}");
                 }
                 catch (Exception ex) { MelonDebug.Error(ex.ToString()); continue; }
