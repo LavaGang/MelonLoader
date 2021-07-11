@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.4.2 Open-Beta](#v042-open-beta)  
 [v0.4.1 Open-Beta](#v041-open-beta)  
 [v0.4.0 Open-Beta](#v040-open-beta)  
 [v0.3.0 Open-Beta](#v030-open-beta)  
@@ -19,6 +20,18 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.4.2 Open-Beta:
+
+1. Fixed Issue with Internal Calls being added twice.
+2. Fixed Issue with Compatibility Layer System not running Constructors.
+3. Fixed Issue with Compatibility Layer System having the RefreshMods event ran for Plugins.
+4. Fixed Issue with Compatibility Layer System's Assembly to Resolver conversion check failing.
+5. Updated Cpp2IL to v2021.1.1.
+6. Updated Il2CppAssemblyUnhollower to v0.4.15.4.
+7. Fixed Dependency Issue with MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
 
 ---
 

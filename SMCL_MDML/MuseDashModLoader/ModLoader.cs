@@ -15,7 +15,6 @@ namespace ModLoader
         [Obsolete("ModLoader.ModLoader.depends is Only Here for Compatibility Reasons. ")]
         internal static Dictionary<string, Assembly> depends = new Dictionary<string, Assembly>();
         
-        
         public static void LoadDependency(Assembly assembly)
         {
             foreach (string dependStr in assembly.GetManifestResourceNames())
