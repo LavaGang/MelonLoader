@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using MelonLoader;
 using ModHelper;
+#pragma warning disable 0618
 
 namespace ModLoader
 {
