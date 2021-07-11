@@ -106,7 +106,7 @@ namespace MelonLoader
                     enumerator.Current.Interface = moduleInstance;
                     MelonDebug.Msg($"Loaded Compatibility Layer: {enumerator.Current.FileName}");
                 }
-                catch (Exception ex) { MelonDebug.Error(ex.ToString()); continue; }
+                catch (Exception ex) { MelonDebug.Error($"Compatibility Layer [{enumerator.Current.FileName}] threw an Exception: {ex}"); continue; }
             }
         }
 
