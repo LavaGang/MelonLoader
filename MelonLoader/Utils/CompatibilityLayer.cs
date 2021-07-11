@@ -94,19 +94,23 @@ namespace MelonLoader
                     Assembly assembly = Assembly.LoadFrom(ModulePath);
                     if (assembly == null)
                         continue;
-
-                    Type[] ModuleTypes = assembly.GetValidTypes(x => x.GetInterfaces().Contains(typeof(Module))).ToArray();
+                    Type[] ModuleTypes = assembly.GetValidTypes(x => x.IsSubclassOf(typeof(Module))).ToArray();
                     if ((ModuleTypes.Length <= 0) || (ModuleTypes[0] == null))
                         continue;
 
-                    Module moduleInstance = FormatterServices.GetUninitializedObject(ModuleTypes[0]) as Module;
+                    Module moduleInstance = Activator.CreateInstance(ModuleTypes[0], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null) as Module;
                     if (moduleInstance == null)
                         continue;
 
                     moduleInstance.Setup();
+
                     AddAssemblyToResolverEvent(moduleInstance.GetResolverFromAssembly);
                     AddRefreshPluginsEvent(moduleInstance.RefreshPlugins);
-                    AddRefreshPluginsEvent(moduleInstance.RefreshMods);
+                    AddRefreshModsEvent(moduleInstance.RefreshMods);
+
+                    enumerator.Current.Interface = moduleInstance;
+
+                    MelonDebug.Msg($"Loaded Compatibility Layer: {enumerator.Current.FileName}");
                 }
                 catch (Exception ex) { MelonDebug.Error(ex.ToString()); continue; }
             }
@@ -214,6 +218,7 @@ namespace MelonLoader
         internal class ModuleListing
         {
             internal string FileName = null;
+            internal Module Interface = null;
             internal class LoadSpecifierArgs
             {
                 internal SetupType SetupType = SetupType.OnPreInitialization;

@@ -18,7 +18,6 @@ void InternalCalls::Initialize()
 	MelonDebug::AddInternalCalls();
 	SupportModules::AddInternalCalls();
 	IIl2CppAssemblyGenerator::AddInternalCalls();
-	IIl2CppAssemblyGenerator::ExecutablePackageBase::AddInternalCalls();
 }
 
 #pragma region MelonLogger
