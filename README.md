@@ -124,13 +124,13 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ## WINE / STEAM PROTON USAGE:
 
-- COMING SOON
+- GUIDE COMING SOON
 
 ---
 
 ## DNSPY DEBUGGER USAGE:
 
-- COMING SOON
+- GUIDE COMING SOON
 
 ---
 
