@@ -128,7 +128,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 - Below is the Compatible Values and what each of them do.
 
 | Value | Mode |
-| - | - | - |
+| - | - |
 | 0 | Normal |
 | 1 | Magenta |
 | 2 | Rainbow |
