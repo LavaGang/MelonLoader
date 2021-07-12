@@ -32,6 +32,7 @@
 5. Updated Cpp2IL to v2021.1.1.
 6. Updated Il2CppAssemblyUnhollower to v0.4.15.4.
 7. Fixed Dependency Issue with MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
+8. Fixed Issue with --melonloader.consolemode Launch Option not being properly capped.
 
 ---
 

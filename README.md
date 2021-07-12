@@ -122,6 +122,20 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
+## CONSOLE DISPLAY MODES:
+
+- Console Display Modes are built in Themes for the Console
+- Below is the Compatible Values and what each of them do.
+
+| Value | Mode |
+| - | - | - |
+| 0 | Normal |
+| 1 | Magenta |
+| 2 | Rainbow |
+| 3 | Random Rainbow |
+
+---
+
 ## WINE / STEAM PROTON USAGE:
 
 - GUIDE COMING SOON
@@ -143,15 +157,13 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | - | - |
 | --no-mods | Launches the Game without loading any Plugins or Mods |
 | --quitfix | Fixes the Hanging Process Issue with some Games |
+| --melonloader.consolemode | Changes the Theme Display Mode of the Console [ Default = 0 ] |
 | --melonloader.consoleontop | Forces the Console to always stay on-top of all other Applications |
 | --melonloader.consoledst | Keeps the Console Title as Original |
 | --melonloader.hideconsole | Hides the Console |
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |
 | --melonloader.dab | Debug Analytics Blocker |
-| --melonloader.magenta | Magenta Console Color |
-| --melonloader.rainbow | Rainbow Console Color |
-| --melonloader.randomrainbow | Random Rainbow Console Color |
 | --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ NoCap: 0 ] |
 | --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |

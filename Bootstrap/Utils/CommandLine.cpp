@@ -46,7 +46,16 @@ void CommandLine::Read()
 			continue;
 
 		if (strstr(command, "--melonloader.consolemode") != NULL)
-			Console::Mode = (Console::DisplayMode)GetIntFromConstChar(argv[i + 1], 0);
+		{
+			int mode = GetIntFromConstChar(argv[i + 1], 0);
+			int min = (int)Console::DisplayMode::NORMAL;
+			int max = (int)Console::DisplayMode::LEMON;
+			if (mode < min)
+				mode = min;
+			if (mode > max)
+				mode = max;
+			Console::Mode = (Console::DisplayMode)mode;
+		}
 		else if (strstr(command, "--melonloader.consoleontop") != NULL)
 			Console::AlwaysOnTop = true;
 		else if (strstr(command, "--melonloader.consoledst") != NULL)
