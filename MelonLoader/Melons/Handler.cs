@@ -88,7 +88,10 @@ namespace MelonLoader
             MelonLogger.Msg($"{melontbl.Length} {(is_plugins ? "Plugin" : "Mod")}{((_Mods.Count > 1) ? "s" : "")} Loaded");
             MelonLogger.Msg("------------------------------");
 
-            foreach (MelonBase melon in melontbl)
+            List<MelonBase> melontblList = new List<MelonBase>(melontbl);
+            melontblList.Sort((MelonBase left, MelonBase right) => string.Compare(left.Info.Name, right.Info.Name));
+
+            foreach (MelonBase melon in melontblList)
             {
                 MelonLogger.Internal_PrintModName(melon.ConsoleColor, melon.Info.Name, melon.Info.Version);
 
