@@ -14,7 +14,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal static WebClient webClient = null;
 
-        internal static Cpp2IL dumper = null;
+        internal static Il2CppDumper dumper = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
@@ -50,7 +50,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                dumper = new Cpp2IL();
+                dumper = new Il2CppDumper();
                 if (!dumper.Download())
                     return 1;
 
