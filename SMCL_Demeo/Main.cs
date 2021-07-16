@@ -26,14 +26,13 @@ namespace MelonLoader.CompatibilityLayers
             ModInformation.Clear();
             ParseMelons(MelonHandler.Plugins);
             ParseMelons(MelonHandler.Mods);
+            ModInformation.Sort((ModdingAPI.ModInformation left, ModdingAPI.ModInformation right) => string.Compare(left.name, right.name));
         }
 
         private static void ParseMelons<T>(List<T> melons) where T : MelonBase
         {
             if (melons.Count <= 0)
                 return;
-
-            melons.Sort((T left, T right) => string.Compare(left.Info.Name, right.Info.Name));
 
             for (int i = 0; i < melons.Count; i++)
             {
