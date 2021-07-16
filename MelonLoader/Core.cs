@@ -28,10 +28,10 @@ namespace MelonLoader
 
         private static int Initialize()
         {
-            Il2CppAssemblyGenerator.Load();
             bHaptics.Load();
 
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
+
             MelonHandler.LoadPlugins();
             MelonHandler.OnPreInitialization();
 
@@ -42,11 +42,12 @@ namespace MelonLoader
         {
             MelonHandler.OnApplicationEarlyStart();
 
-            if (!Il2CppAssemblyGenerator.Run())
-                return 1;
-
             if (MelonUtils.IsGameIl2Cpp())
+            {
+                if (!Il2CppAssemblyGenerator.Run())
+                    return 1;
                 HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
+            }
 
             MelonUtils.SetupPreStart();
 

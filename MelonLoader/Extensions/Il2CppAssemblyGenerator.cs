@@ -14,8 +14,7 @@ namespace MelonLoader
 
         internal static bool Run()
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                return true;
+            Load();
 
             if (RunMethod != null)
             {
@@ -29,11 +28,8 @@ namespace MelonLoader
             return false;
         }
 
-        internal static void Load()
+        private static void Load()
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                return;
-
             MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
 
             string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "Il2CppAssemblyGenerator");
