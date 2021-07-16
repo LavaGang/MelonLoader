@@ -49,7 +49,7 @@ namespace MelonLoader
             SetDefaultConsoleTitleWithGameName(game_version);
         }
 
-        internal static string Version { get; private set; }
+        internal static string Version { get; private set; } = "0";
 
         private static void MethodInfoCheck(MethodInfo method, ref string game_version)
         {
