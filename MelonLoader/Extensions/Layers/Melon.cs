@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 #pragma warning disable 0618
@@ -49,6 +51,10 @@ namespace MelonLoader.CompatibilityLayers
 			if (!CheckGameAttributes(ref gameAttributes))
 				return;
 
+			List<MelonProcessAttribute> processAttributes = null;
+			if (!CheckProcessAttributes(ref processAttributes))
+				return;
+
 			if (!CheckPlatformAttribute())
 				return;
 
@@ -69,6 +75,7 @@ namespace MelonLoader.CompatibilityLayers
 				Assembly = Assembly,
 				Info = infoAttribute,
 				Games = gameAttributes.ToArray(),
+				Processes = processAttributes.ToArray(),
 				OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly),
 				ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
 				Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
@@ -122,6 +129,40 @@ namespace MelonLoader.CompatibilityLayers
 
 			return true;
 		}
+
+		private bool CheckProcessAttributes(ref List<MelonProcessAttribute> processAttributes)
+        {
+			processAttributes = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly).ToList();
+			if (processAttributes.Count <= 0)
+				return true;
+
+			string current_exe_path = Process.GetCurrentProcess().MainModule.FileName;
+			string current_exe_name = Path.GetFileName(current_exe_path);
+			string current_exe_name_no_ext = Path.GetFileNameWithoutExtension(current_exe_path);
+
+			bool is_compatible = false;
+			for (int i = 0; i < processAttributes.Count; i++)
+			{
+				MelonProcessAttribute melonProcessAttribute = processAttributes[i];
+				if (melonProcessAttribute == null)
+					continue;
+
+				if (melonProcessAttribute.Universal 
+					|| current_exe_name.Equals(melonProcessAttribute.EXE_Name)
+					|| current_exe_name_no_ext.Equals(melonProcessAttribute.EXE_Name))
+				{
+					is_compatible = true;
+					break;
+				}
+			}
+			if (!is_compatible)
+			{
+				MelonLogger.Error($"Incompatible Process Executable for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
+				return false;
+			}
+
+			return true;
+        }
 
 		private bool CheckGameAttributes(ref List<MelonGameAttribute> gameAttributes)
 		{

@@ -115,6 +115,7 @@ namespace MelonLoader
             public Assembly Assembly = null;
             public MelonInfoAttribute Info = null;
             public MelonGameAttribute[] Games = null;
+            public MelonProcessAttribute[] Processes = null;
             public MelonOptionalDependenciesAttribute OptionalDependencies = null;
             public ConsoleColor ConsoleColor = MelonLogger.DefaultMelonColor;
             public int Priority = 0;
@@ -148,6 +149,7 @@ namespace MelonLoader
             instance.Assembly = creationData.Assembly;
             instance.Info = creationData.Info;
             instance.Games = creationData.Games;
+            instance.Processes = creationData.Processes;
             instance.OptionalDependencies = creationData.OptionalDependencies;
             instance.Location = creationData.Location;
             instance.Priority = creationData.Priority;

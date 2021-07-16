@@ -37,6 +37,11 @@ namespace MelonLoader
         public MelonGameAttribute[] Games { get; internal set; }
 
         /// <summary>
+        /// Game Attributes of the Melon.
+        /// </summary>
+        public MelonProcessAttribute[] Processes { get; internal set; }
+
+        /// <summary>
         /// Optional Dependencies Attribute of the Melon.
         /// </summary>
         public MelonOptionalDependenciesAttribute OptionalDependencies { get; internal set; }
