@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
-using System.Text;
-using MonoMod.Utils;
-using MonoMod.Cil;
-using HarmonyLib;
-using MelonLoader.TinyJSON;
 
 namespace MelonLoader
 {

@@ -209,7 +209,7 @@ void InternalCalls::SupportModules::SetDefaultConsoleTitleWithGameName(Mono::Str
 void InternalCalls::SupportModules::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", MelonUtils::GetManagedDirectory);
-	Mono::AddInternalCall("MelonLoader.Support.Main::SetDefaultConsoleTitleWithGameName", SetDefaultConsoleTitleWithGameName);
+	Mono::AddInternalCall("MelonLoader.GameVersionHandler::SetDefaultConsoleTitleWithGameName", SetDefaultConsoleTitleWithGameName);
 }
 #pragma endregion
 
