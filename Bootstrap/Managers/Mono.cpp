@@ -416,7 +416,8 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 	{
 		Debug::Msg("Detaching Hook from mono_runtime_invoke...");
 		Hook::Detach(&(LPVOID&)Exports::mono_runtime_invoke, mono_runtime_invoke);
-		BaseAssembly::Start();
+		if (BaseAssembly::PreStart())
+			BaseAssembly::Start();
 	}
 	return Exports::mono_runtime_invoke(method, obj, params, exec);
 }

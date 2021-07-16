@@ -40,6 +40,7 @@
 13. Added MelonProcess Attribute.
 14. Added MelonGameVersion Attribute for Mods.
 15. Added --melonloader.agfcpp2il Launch Option.
+16. Fixed Issue with Core PreStart and OnApplicationEarlyStart not getting called on Mono Games.
 
 ---
 
