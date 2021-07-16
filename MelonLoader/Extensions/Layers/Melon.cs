@@ -215,10 +215,7 @@ namespace MelonLoader.CompatibilityLayers
 			if (gameVersionAttributes.Count <= 0)
 				return true;
 
-			string game_version = MelonUtils.Application_Version;
-			if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
-				game_version = MelonUtils.Application_BuildGUID;
-
+			string game_version = MelonUtils.GameVersion;
 			bool is_compatible = false;
 			for (int i = 0; i < gameVersionAttributes.Count; i++)
 			{

@@ -40,16 +40,20 @@ namespace MelonLoader
 
         private static int PreStart()
         {
+            if (!MelonUtils.IsGameIl2Cpp())
+                GameVersionHandler.Setup();
+
             MelonHandler.OnApplicationEarlyStart();
 
             if (MelonUtils.IsGameIl2Cpp())
             {
                 if (!Il2CppAssemblyGenerator.Run())
                     return 1;
+                
                 HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
-            }
 
-            MelonUtils.SetupPreStart();
+                GameVersionHandler.Setup();
+            }
 
             return 0;
         }

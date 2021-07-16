@@ -15,7 +15,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             ObfuscationRegex = RemoteAPI.Info.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
                 ObfuscationRegex = Config.Values.ObfuscationRegex;
-            if (string.IsNullOrEmpty(ObfuscationRegex) && Core.GameName.Equals("Among Us"))
+            if (string.IsNullOrEmpty(ObfuscationRegex) && MelonUtils.GameName.Equals("Among Us"))
                 ObfuscationRegex = "[A-Z]{11}";
         }
 

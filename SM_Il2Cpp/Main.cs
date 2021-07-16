@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
 using MelonLoader.Support.Preferences;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
@@ -24,13 +22,6 @@ namespace MelonLoader.Support
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
-
-            string game_version = MelonUtils.Application_Version;
-            if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
-                game_version = MelonUtils.Application_BuildGUID;
-
-            MelonLogger.Msg($"Game Version: {game_version}");
-            SetDefaultConsoleTitleWithGameName(game_version); 
             UnityMappers.RegisterMappers();
 
             LogSupport.RemoveAllHandlers();
@@ -156,10 +147,6 @@ namespace MelonLoader.Support
             }
             UnityVersionHandler.Initialize(major, minor, patch);
         }
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
     }
 
     internal class UnhollowerDetour : IManagedDetour
