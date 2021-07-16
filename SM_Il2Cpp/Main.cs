@@ -25,9 +25,9 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
 
-            string game_version = ApplicationHandler.GetVersion();
+            string game_version = MelonUtils.Application_Version;
             if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
-                game_version = ApplicationHandler.GetBuildGUID();
+                game_version = MelonUtils.Application_BuildGUID;
 
             MelonLogger.Msg($"Game Version: {game_version}");
             SetDefaultConsoleTitleWithGameName(game_version); 

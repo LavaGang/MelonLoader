@@ -51,8 +51,10 @@ namespace MelonLoader.CompatibilityLayers
 			if (!CheckGameAttributes(ref gameAttributes))
 				return;
 
-			List<MelonProcessAttribute> processAttributes = null;
-			if (!CheckProcessAttributes(ref processAttributes))
+			if (!CheckProcessAttributes())
+				return;
+
+			if (!CheckGameVersionAttribute())
 				return;
 
 			if (!CheckPlatformAttribute())
@@ -75,7 +77,6 @@ namespace MelonLoader.CompatibilityLayers
 				Assembly = Assembly,
 				Info = infoAttribute,
 				Games = gameAttributes.ToArray(),
-				Processes = processAttributes.ToArray(),
 				OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly),
 				ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
 				Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
@@ -130,40 +131,6 @@ namespace MelonLoader.CompatibilityLayers
 			return true;
 		}
 
-		private bool CheckProcessAttributes(ref List<MelonProcessAttribute> processAttributes)
-        {
-			processAttributes = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly).ToList();
-			if (processAttributes.Count <= 0)
-				return true;
-
-			string current_exe_path = Process.GetCurrentProcess().MainModule.FileName;
-			string current_exe_name = Path.GetFileName(current_exe_path);
-			string current_exe_name_no_ext = Path.GetFileNameWithoutExtension(current_exe_path);
-
-			bool is_compatible = false;
-			for (int i = 0; i < processAttributes.Count; i++)
-			{
-				MelonProcessAttribute melonProcessAttribute = processAttributes[i];
-				if (melonProcessAttribute == null)
-					continue;
-
-				if (melonProcessAttribute.Universal 
-					|| current_exe_name.Equals(melonProcessAttribute.EXE_Name)
-					|| current_exe_name_no_ext.Equals(melonProcessAttribute.EXE_Name))
-				{
-					is_compatible = true;
-					break;
-				}
-			}
-			if (!is_compatible)
-			{
-				MelonLogger.Error($"Incompatible Process Executable for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
-				return false;
-			}
-
-			return true;
-        }
-
 		private bool CheckGameAttributes(ref List<MelonGameAttribute> gameAttributes)
 		{
 			gameAttributes = new List<MelonGameAttribute>();
@@ -204,6 +171,77 @@ namespace MelonLoader.CompatibilityLayers
 
 			return true;
 		}
+
+		private bool CheckProcessAttributes()
+		{
+			List<MelonProcessAttribute> processAttributes = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly).ToList();
+			if (processAttributes.Count <= 0)
+				return true;
+
+			string current_exe_path = Process.GetCurrentProcess().MainModule.FileName;
+			string current_exe_name = Path.GetFileName(current_exe_path);
+			string current_exe_name_no_ext = Path.GetFileNameWithoutExtension(current_exe_path);
+
+			bool is_compatible = false;
+			for (int i = 0; i < processAttributes.Count; i++)
+			{
+				MelonProcessAttribute melonProcessAttribute = processAttributes[i];
+				if (melonProcessAttribute == null)
+					continue;
+
+				if (melonProcessAttribute.Universal
+					|| current_exe_name.Equals(melonProcessAttribute.EXE_Name)
+					|| current_exe_name_no_ext.Equals(melonProcessAttribute.EXE_Name))
+				{
+					is_compatible = true;
+					break;
+				}
+			}
+			if (!is_compatible)
+			{
+				MelonLogger.Error($"Incompatible Process Executable for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
+				return false;
+			}
+
+			return true;
+		}
+
+		private bool CheckGameVersionAttribute()
+        {
+			if (!is_plugin) // Temporarily Skip this Check for Plugins
+				return true;
+
+			List<MelonGameVersionAttribute> gameVersionAttributes = MelonUtils.PullAttributesFromAssembly<MelonGameVersionAttribute>(Assembly).ToList();
+			if (gameVersionAttributes.Count <= 0)
+				return true;
+
+			string game_version = MelonUtils.Application_Version;
+			if (string.IsNullOrEmpty(game_version) || game_version.Equals("0"))
+				game_version = MelonUtils.Application_BuildGUID;
+
+			bool is_compatible = false;
+			for (int i = 0; i < gameVersionAttributes.Count; i++)
+			{
+				MelonGameVersionAttribute melonGameVersionAttribute = gameVersionAttributes[i];
+				if (melonGameVersionAttribute == null)
+					continue;
+
+				if (melonGameVersionAttribute.Universal
+					|| game_version.Equals(melonGameVersionAttribute.Version))
+				{
+					is_compatible = true;
+					break;
+				}
+			}
+			if (!is_compatible)
+			{
+				//MelonLogger.Error($"Incompatible Game Version for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
+				MelonLogger.Error($"Incompatible Game Version for Mod: {FilePath}");
+				return false;
+			}
+
+			return true;
+        }
 
 		private bool CheckPlatformAttribute()
 		{

@@ -2,7 +2,7 @@
 
 namespace MelonLoader
 {
-    [AttributeUsage(AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class MelonProcessAttribute : Attribute
     {
         public MelonProcessAttribute(string exe_name = null)

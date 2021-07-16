@@ -71,7 +71,6 @@
     <Compile Include="BONEWORKS_SceneHandler.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Coroutines.cs" />
-    <Compile Include="ApplicationHandler.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="UnityMappers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,10 +18,13 @@ namespace MelonLoader
                 MelonLogger.Error("Failed to Find SupportModules Directory!");
                 return false;
             }
-            string ModuleName = (MelonUtils.IsGameIl2Cpp() ? "Il2Cpp.dll"
-                : (File.Exists(Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll")) ? "Mono.dll"
-                : (IsOldUnity() ? "Mono.Pre-5.dll"
-                : "Mono.Pre-2017.dll")));
+            string ModuleName = (MelonUtils.IsGameIl2Cpp()
+                ? "Il2Cpp.dll"
+                : (File.Exists(Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll"))
+                    ? "Mono.dll"
+                    : (IsOldUnity() 
+                        ? "Mono.Pre-5.dll"
+                        : "Mono.Pre-2017.dll")));
             string ModulePath = Path.Combine(BaseDirectory, ModuleName);
             if (!File.Exists(ModulePath))
             {

@@ -55,9 +55,6 @@
     <Compile Include="..\SM_Il2Cpp\UnityMappers.cs">
       <Link>UnityMappers.cs</Link>
     </Compile>
-	<Compile Include="..\SM_Il2Cpp\ApplicationHandler.cs">
-      <Link>ApplicationHandler.cs</Link>
-    </Compile>
     <Compile Include="Component.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

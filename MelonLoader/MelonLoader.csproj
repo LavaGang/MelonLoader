@@ -105,6 +105,7 @@
     <Compile Include="Libs\SharpZipLib\Zip\ZipInputStream.cs" />
     <Compile Include="Libs\SharpZipLib\Zip\ZipNameTransform.cs" />
     <Compile Include="Libs\SharpZipLib\Zip\ZipOutputStream.cs" />
+    <Compile Include="Melons\Attributes\GameVersion.cs" />
     <Compile Include="Melons\Attributes\HarmonyDontPatchAll.cs" />
     <Compile Include="Melons\Attributes\Process.cs" />
     <Compile Include="Melons\OAE.cs" />
