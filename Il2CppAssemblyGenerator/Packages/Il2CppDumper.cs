@@ -3,7 +3,7 @@ using MelonLoader.TinyJSON;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
-    internal class Il2CppDumper : ExecutablePackageBase
+    internal class Il2CppDumper : DumperBase
     {
         internal Il2CppDumper()
         {
@@ -21,10 +21,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         private void Save()
         {
             Config.Values.DumperVersion = Version;
+            Config.Values.DumperIsCpp2IL = false;
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Values.DumperVersion) || !Config.Values.DumperVersion.Equals(Version));
+        private bool ShouldDownload() => (
+            Config.Values.DumperIsCpp2IL
+            || string.IsNullOrEmpty(Config.Values.DumperVersion)
+            || !Config.Values.DumperVersion.Equals(Version));
 
         internal override void Cleanup()
         {
@@ -49,7 +53,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             return false;
         }
 
-        internal bool Execute()
+        internal override bool Execute()
         {
             FixConfig();
             MelonLogger.Msg("Executing Il2CppDumper...");

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
-    internal class Cpp2IL : ExecutablePackageBase
+    internal class Cpp2IL : DumperBase
     {
         internal Cpp2IL()
         {
@@ -22,10 +22,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         private void Save()
         {
             Config.Values.DumperVersion = Version;
+            Config.Values.DumperIsCpp2IL = true;
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Values.DumperVersion) || !Config.Values.DumperVersion.Equals(Version));
+        private bool ShouldDownload() => (
+            !Config.Values.DumperIsCpp2IL
+            || string.IsNullOrEmpty(Config.Values.DumperVersion)
+            || !Config.Values.DumperVersion.Equals(Version));
 
         internal override void Cleanup() { }
 
@@ -45,7 +49,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             return false;
         }
 
-        internal bool Execute()
+        internal override bool Execute()
         {
             MelonLogger.Msg("Executing Cpp2IL...");
             return Execute(new string[] {

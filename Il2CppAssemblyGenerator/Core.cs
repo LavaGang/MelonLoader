@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
+    internal class DumperBase : ExecutablePackageBase { internal virtual bool Execute() { return true; } };
+
     internal static class Core
     {
         internal static string GameName = null;
@@ -14,7 +16,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal static WebClient webClient = null;
 
-        internal static Il2CppDumper dumper = null;
+        internal static DumperBase dumper = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
@@ -50,7 +52,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                dumper = new Il2CppDumper();
+                if (MelonLaunchOptions.Il2CppAssemblyGenerator.UseCpp2IL)
+                    dumper = new Cpp2IL();
+                else
+                    dumper = new Il2CppDumper();
+
                 if (!dumper.Download())
                     return 1;
 
