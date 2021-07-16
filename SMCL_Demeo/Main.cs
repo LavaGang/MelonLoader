@@ -16,26 +16,37 @@ namespace MelonLoader.CompatibilityLayers
             harmony.Patch(typeof(ModdingAPI).GetMethod("GetInstalledMods", BindingFlags.Public | BindingFlags.Instance),
                 typeof(Demeo_Module).GetMethod("GetInstalledMods", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
 
-            MelonCompatibilityLayer.AddRefreshModsEvent(RefreshMods);
+            MelonCompatibilityLayer.AddRefreshPluginsEvent(Refresh);
+            MelonCompatibilityLayer.AddRefreshModsEvent(Refresh);
+            Refresh();
         }
 
-        private static void RefreshMods()
+        private static void Refresh()
         {
             ModInformation.Clear();
-            MelonMod[] mods = MelonHandler.Mods.ToArray();
-            if (mods.Length <= 0)
+            ParseMelons(MelonHandler.Plugins);
+            ParseMelons(MelonHandler.Mods);
+        }
+
+        private static void ParseMelons<T>(List<T> melons) where T : MelonBase
+        {
+            if (melons.Count <= 0)
                 return;
-            for (int i = 0; i < mods.Length; i++)
+
+            melons.Sort((T left, T right) => string.Compare(left.Info.Name, right.Info.Name));
+
+            for (int i = 0; i < melons.Count; i++)
             {
-                MelonMod mod = mods[i];
-                if (mod == null)
+                T melon = melons[i];
+                if (melon == null)
                     continue;
+
                 ModInformation.Add(new ModdingAPI.ModInformation()
                 {
-                    name = mod.Info.Name,
-                    version = mod.Info.Version,
-                    author = mod.Info.Author,
-                    description = mod.Info.DownloadLink
+                    name = melon.Info.Name,
+                    version = melon.Info.Version,
+                    author = melon.Info.Author,
+                    description = melon.Info.DownloadLink
                 });
             }
         }

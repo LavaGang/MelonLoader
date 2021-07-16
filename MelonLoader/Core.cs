@@ -59,8 +59,8 @@ namespace MelonLoader
             AddUnityDebugLog();
             bHaptics.Start();
 
-            MelonHandler.OnApplicationStart_Plugins();
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
+            MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.LoadMods();
             MelonHandler.OnApplicationStart_Mods();
 
