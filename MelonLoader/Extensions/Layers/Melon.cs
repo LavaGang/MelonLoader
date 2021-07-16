@@ -215,7 +215,7 @@ namespace MelonLoader.CompatibilityLayers
 			if (gameVersionAttributes.Count <= 0)
 				return true;
 
-			string game_version = MelonUtils.GameVersion;
+			string game_version = GameVersionHandler.Version;
 			bool is_compatible = false;
 			for (int i = 0; i < gameVersionAttributes.Count; i++)
 			{
