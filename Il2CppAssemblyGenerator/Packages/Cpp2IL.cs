@@ -22,7 +22,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         private void Save()
         {
             Config.Values.DumperVersion = Version;
-            //Config.Values.DumperIsCpp2IL = true;
+            Config.Values.DumperIsCpp2IL = true;
             Config.Save();
         }
 
