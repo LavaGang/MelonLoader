@@ -35,48 +35,11 @@ namespace MelonLoader
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
         public static string GameDeveloper { get; private set; }
         public static string GameName { get; private set; }
+        public static string GameVersion { get => GameVersionHandler.Version; }
         public static bool IsBONEWORKS { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("Stress Level Zero") && !string.IsNullOrEmpty(GameName) && GameName.Equals("BONEWORKS")); }
         public static bool IsDemeo { get => (!string.IsNullOrEmpty(GameDeveloper) && GameDeveloper.Equals("Resolution Games") && !string.IsNullOrEmpty(GameName) && GameName.Equals("Demeo")); }
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
-
-        private static MethodInfo Application_get_version = null;
-        private static MethodInfo Application_get_buildGUID = null;
-        internal static void SetupPreStart()
-        {
-            Assembly assembly = Assembly.Load(
-                File.Exists(Path.Combine(GetManagedDirectory(), "UnityEngine.CoreModule.dll"))
-                ? "UnityEngine.CoreModule"
-                : "UnityEngine");
-            if (assembly == null)
-                return;
-
-            Type applicationType = assembly.GetType("UnityEngine.Application");
-            if (applicationType == null)
-                return;
-
-            PropertyInfo versionProp = applicationType.GetProperty("version");
-            if (versionProp != null)
-                Application_get_version = versionProp.GetGetMethod();
-
-            PropertyInfo buildGUIDProp = applicationType.GetProperty("buildGUID");
-            if (buildGUIDProp != null)
-                Application_get_buildGUID = buildGUIDProp.GetGetMethod();
-        }
-
-        public static string Application_Version
-        {
-            get => (Application_get_version != null)
-                 ? (string)Application_get_version.Invoke(null, new object[0])
-                 : null;
-        }
-
-        public static string Application_BuildGUID
-        {
-            get => (Application_get_buildGUID != null)
-                ? (string)Application_get_buildGUID.Invoke(null, new object[0])
-                : null;
-        }
 
         public static string RandomString(int length)
         {

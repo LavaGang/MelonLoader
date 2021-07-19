@@ -29,18 +29,16 @@
 2. Fixed Issue with Compatibility Layer System not running Constructors.
 3. Fixed Issue with Compatibility Layer System having the RefreshMods event ran for Plugins.
 4. Fixed Issue with Compatibility Layer System's Assembly to Resolver conversion check failing.
-5. Updated Cpp2IL to v2021.1.1.
+5. Updated Cpp2IL to v2021.1.2.
 6. Updated Il2CppAssemblyUnhollower to v0.4.15.4.
 7. Fixed Dependency Issue with MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
 8. Fixed Issue with --melonloader.consolemode Launch Option not being properly capped.
-9. Added Melon Name Sorting for Printout Log.    (Credits to [ds5678](https://github.com/ds5678) :D)
+9. Added Melon Name Sorting for Printout Log.    (Credits to [ds5678](https://github.com/ds5678) :D)  
 10. Updated Il2CppDumper to v6.6.5.
-11. Temporarily Swapped Cpp2IL with Il2CppDumper as Default Dumper.
-12. Fixed Issue with Demeo Integration not showing Plugins.
-13. Added MelonProcess Attribute.
-14. Added MelonGameVersion Attribute for Mods.
-15. Added --melonloader.agfcpp2il Launch Option.
-16. Fixed Issue with Core PreStart and OnApplicationEarlyStart not getting called on Mono Games.
+11. Fixed Issue with Demeo Integration not showing Plugins.
+12. Added MelonProcess Attribute.
+13. Added MelonGameVersion Attribute for Mods.
+14. Fixed Issue with Core PreStart and OnApplicationEarlyStart not getting called on Mono Games.
 
 ---
 

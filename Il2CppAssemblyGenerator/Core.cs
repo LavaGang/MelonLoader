@@ -9,7 +9,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
     internal static class Core
     {
-        internal static string GameName = null;
         internal static string BasePath = null;
         internal static string GameAssemblyPath = null;
         internal static string ManagedPath = null;
@@ -35,7 +34,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
             ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
-            GameName = MelonUtils.GameName;
 
             BasePath = Path.GetDirectoryName(typeof(Core).Assembly.Location);
         }
@@ -52,11 +50,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                if (MelonLaunchOptions.Il2CppAssemblyGenerator.UseCpp2IL)
-                    dumper = new Cpp2IL();
-                else
-                    dumper = new Il2CppDumper();
-
+                dumper = new Cpp2IL();
                 if (!dumper.Download())
                     return 1;
 

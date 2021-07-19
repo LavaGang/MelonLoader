@@ -171,7 +171,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.agfoffline | Forces Assembly Generator to Run without Contacting the Remote API |
 | --melonloader.agfregenerate | Forces Regeneration of Assembly |
-| --melonloader.agfcpp2il | Forces Assembly Generator to use Cpp2IL instead of Il2CppDumper as the Dumper |
 | --melonloader.agfvunity | Forces Assembly Generator to use a Specified Version of Unity Dependencies |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
