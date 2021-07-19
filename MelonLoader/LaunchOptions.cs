@@ -38,9 +38,9 @@ namespace MelonLoader
                         Core.QuitFix = true;
                         goto default;
 
-                    case "--melonloader.agfcpp2il":
-                        Il2CppAssemblyGenerator.UseCpp2IL = true;
-                        goto default;
+                    //case "--melonloader.agfcpp2il":
+                    //    Il2CppAssemblyGenerator.UseCpp2IL = true;
+                    //    goto default;
                     case "--melonloader.agfoffline":
                         Il2CppAssemblyGenerator.OfflineMode = true;
                         goto default;
@@ -259,36 +259,6 @@ namespace MelonLoader
 
         public static class Core
         {
-            /*
-            internal static MelonPreferences_Category Category;
-            internal static void Setup()
-            {
-                SetupCategory("Core", ref Category);
-
-                AddOption(Category, "--melonloader.debug", nameof(DebugMode),
-#if DEBUG
-                true,
-#else
-                false,
-#endif
-                new Action<bool, bool>((oldval, newval) => { DebugMode = newval; }));
-
-                AddOption(Category, "--quitfix", nameof(QuitFix), onchangecallback: new Action<bool, bool>((oldval, newval) => { QuitFix = newval; }));
-                AddOption(Category, "--melonloader.loadmodeplugins", nameof(LoadMode_Plugins), onchangecallback: new Action<int, int>((oldval, newval) =>
-                {
-                    if ((newval >= ((int)LoadModeEnum.NORMAL))
-                        || (newval <= ((int)LoadModeEnum.BOTH)))
-                        LoadMode_Plugins = (LoadModeEnum)newval;
-                }));
-                AddOption(Category, "--melonloader.loadmodemods", nameof(LoadMode_Mods), onchangecallback: new Action<int, int>((oldval, newval) =>
-                {
-                    if ((newval >= ((int)LoadModeEnum.NORMAL))
-                        || (newval <= ((int)LoadModeEnum.BOTH)))
-                        LoadMode_Mods = (LoadModeEnum)newval;
-                }));
-            }
-            */
-
             public enum LoadModeEnum
             {
                 NORMAL,
@@ -303,20 +273,7 @@ namespace MelonLoader
 
         public static class Il2CppAssemblyGenerator
         {
-            /*
-            internal static MelonPreferences_Category Category;
-            internal static void Setup()
-            {
-                SetupCategory("Il2CppAssemblyGenerator", ref Category);
-
-                AddOption(Category, "--melonloader.agfregenerate", nameof(ForceRegeneration), false, new Action<bool, bool>((oldval, newval) => { ForceRegeneration = newval; }));
-                AddOption(Category, "--melonloader.agfvdumper", nameof(ForceVersion_Dumper), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_Dumper = newval; }));
-                AddOption(Category, "--melonloader.agfvunhollower", nameof(ForceVersion_Il2CppAssemblyUnhollower), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_Il2CppAssemblyUnhollower = newval; }));
-                AddOption(Category, "--melonloader.agfvunity", nameof(ForceVersion_UnityDependencies), "0.0.0.0", new Action<string, string>((oldval, newval) => { ForceVersion_UnityDependencies = newval; }));
-            }
-            */
-
-            public static bool UseCpp2IL { get; internal set; }
+            //public static bool UseCpp2IL { get; internal set; }
             public static bool ForceRegeneration { get; internal set; }
             public static bool OfflineMode { get; internal set; }
             public static string ForceVersion_Dumper { get; internal set; }
