@@ -50,11 +50,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                if (MelonLaunchOptions.Il2CppAssemblyGenerator.UseCpp2IL)
-                    dumper = new Cpp2IL();
-                else
-                    dumper = new Il2CppDumper();
-
+                dumper = new Cpp2IL();
                 if (!dumper.Download())
                     return 1;
 

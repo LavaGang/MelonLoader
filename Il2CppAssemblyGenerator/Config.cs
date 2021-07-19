@@ -33,7 +33,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             public string ObfuscationRegex = null;
             public string UnityVersion = "0.0.0.0";
             public string DumperVersion = "0.0.0.0";
-            public bool DumperIsCpp2IL = false;
             public string UnhollowerVersion = "0.0.0.0";
             public List<string> OldFiles = new List<string>();
         }
