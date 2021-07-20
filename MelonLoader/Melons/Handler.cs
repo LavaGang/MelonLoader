@@ -35,10 +35,10 @@ namespace MelonLoader
         private static SHA256 sha256 = SHA256.Create();
         static MelonHandler()
         {
-            PluginsDirectory = Path.Combine(MelonUtils.GameDirectory, "Plugins");
+            PluginsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Plugins");
             if (!Directory.Exists(PluginsDirectory))
                 Directory.CreateDirectory(PluginsDirectory);
-            ModsDirectory = Path.Combine(MelonUtils.GameDirectory, "Mods");
+            ModsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Mods");
             if (!Directory.Exists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;

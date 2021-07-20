@@ -15,8 +15,11 @@
 #include "Utils/Debug.h"
 #include "Utils/AnalyticsBlocker.h"
 #include "Utils/HashCode.h"
+#include "Utils/Encoding.h"
 
 HINSTANCE Core::Bootstrap = NULL;
+char* Core::BasePath = NULL;
+char* Core::BasePathMono = NULL;
 char* Core::Path = NULL;
 std::string Core::Version = "0.4.2";
 bool Core::Is_ALPHA_PreRelease = false;
@@ -51,6 +54,7 @@ std::string Core::GetVersionStrWithGameName(const char* GameVersion)
 void Core::Initialize(HINSTANCE hinstDLL)
 {
 	Bootstrap = hinstDLL;
+	SetBasePath();
 	SetupWineCheck();
 	if (!OSVersionCheck() || !Game::Initialize())
 		return;
@@ -111,6 +115,7 @@ void Core::WelcomeMessage()
 	Logger::QuickLog("------------------------------");
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
+	Debug::Msg(("Core::BasePath = " + std::string(BasePath)).c_str());
 	Debug::Msg(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
 	Debug::Msg(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
 	Debug::Msg(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
@@ -213,6 +218,23 @@ void Core::SetupWineCheck()
 	if (wine_get_version_proc == NULL)
 		return;
 	wine_get_version = (wine_get_version_t)wine_get_version_proc;
+}
+
+void Core::SetBasePath()
+{
+	LPSTR filepathstr = new CHAR[MAX_PATH];
+	GetModuleFileNameA(Bootstrap, filepathstr, MAX_PATH);
+	std::string filepathstr2 = filepathstr;
+	delete[] filepathstr;
+	filepathstr2 = filepathstr2.substr(0, filepathstr2.find_last_of("\\/"));
+	filepathstr2 = filepathstr2.substr(0, filepathstr2.find_last_of("\\/"));
+	filepathstr2 = filepathstr2.substr(0, filepathstr2.find_last_of("\\/"));
+	BasePath = new char[filepathstr2.size() + 1];
+	std::copy(filepathstr2.begin(), filepathstr2.end(), BasePath);
+	BasePath[filepathstr2.size()] = '\0';
+#define MONO_STR(s) ((s ## Mono) = Encoding::OsToUtf8((s)))
+	MONO_STR(BasePath);
+#undef MONO_STR
 }
 
 bool Core::DirectoryExists(const char* path) { struct stat Stat; return ((stat(path, &Stat) == 0) && (Stat.st_mode & S_IFDIR)); }

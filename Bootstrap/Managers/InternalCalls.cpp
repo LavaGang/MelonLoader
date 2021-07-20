@@ -16,7 +16,7 @@ void InternalCalls::Initialize()
 	MelonLogger::AddInternalCalls();
 	MelonUtils::AddInternalCalls();
 	MelonDebug::AddInternalCalls();
-	SupportModules::AddInternalCalls();
+	GameVersionHandler::AddInternalCalls();
 	IIl2CppAssemblyGenerator::AddInternalCalls();
 }
 
@@ -132,6 +132,7 @@ bool InternalCalls::MelonUtils::IsGame32Bit()
 bool InternalCalls::MelonUtils::IsGameIl2Cpp() { return Game::IsIl2Cpp; }
 bool InternalCalls::MelonUtils::IsOldMono() { return Mono::IsOldMono; }
 Mono::String* InternalCalls::MelonUtils::GetApplicationPath() { return Mono::Exports::mono_string_new(Mono::domain, Game::ApplicationPathMono); }
+Mono::String* InternalCalls::MelonUtils::GetBaseDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Core::BasePathMono); }
 Mono::String* InternalCalls::MelonUtils::GetGameName() { return Mono::Exports::mono_string_new(Mono::domain, Game::Name); }
 Mono::String* InternalCalls::MelonUtils::GetGameDeveloper() { return Mono::Exports::mono_string_new(Mono::domain, Game::Developer); }
 Mono::String* InternalCalls::MelonUtils::GetGameDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Game::BasePathMono); }
@@ -172,10 +173,13 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookAttach", Hook::Attach);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookDetach", Hook::Detach);
 
+	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetBaseDirectory", GetBaseDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", GetGameName);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
+
+	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
 }
 #pragma endregion
 
@@ -204,11 +208,10 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 }
 #pragma endregion
 
-#pragma region SupportModules
-void InternalCalls::SupportModules::SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion) { Console::SetDefaultTitleWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL); }
-void InternalCalls::SupportModules::AddInternalCalls()
+#pragma region GameVersionHandler
+void InternalCalls::GameVersionHandler::SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion) { Console::SetDefaultTitleWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL); }
+void InternalCalls::GameVersionHandler::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", MelonUtils::GetManagedDirectory);
 	Mono::AddInternalCall("MelonLoader.GameVersionHandler::SetDefaultConsoleTitleWithGameName", SetDefaultConsoleTitleWithGameName);
 }
 #pragma endregion

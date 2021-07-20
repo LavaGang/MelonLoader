@@ -8,21 +8,14 @@
 #include "../Managers/InternalCalls.h"
 
 int CommandLine::argc = NULL;
-//char** CommandLine::argvMono;
 char* CommandLine::argv[64];
 char* CommandLine::argvMono[64];
-//IniFile* CommandLine::iniFile = NULL;
 
 void CommandLine::Read()
 {
 #ifdef DEBUG
 	Debug::Enabled = true;
 #endif
-
-	//ReadIniFile();
-
-	//argc = __argc;
-	//char** argv = __argv;
 
 	char* nextchar = NULL;
 	char* curchar = strtok_s(GetCommandLineA(), " ", &nextchar);
@@ -37,15 +30,12 @@ void CommandLine::Read()
 	if (argc <= 0)
 		return;
 
-	//argvMono = (char**)malloc(sizeof(argv[0]) * argc);
 	for (int i = 0; i < argc; i++)
 	{
 		const char* command = argv[i];
-		//argvMono[i] = Encoding::OsToUtf8(command);
 		if (command == NULL)
 			continue;
-
-		if (strstr(command, "--melonloader.consolemode") != NULL)
+		else if (strstr(command, "--melonloader.consolemode") != NULL)
 		{
 			int mode = GetIntFromConstChar(argv[i + 1], 0);
 			int min = (int)Console::DisplayMode::NORMAL;
@@ -100,42 +90,3 @@ int CommandLine::GetIntFromConstChar(const char* str, int defaultval)
 	}
 	return (negate ? result : -result);
 }
-
-/*
-void CommandLine::ReadIniFile()
-{
-	if (iniFile == NULL)
-		iniFile = new IniFile((std::string(Game::BasePath) + "\\MelonLoader\\LaunchOptions.ini"));
-
-#ifndef DEBUG
-	Debug::Enabled = (!iniFile->ReadValue("Core", "Debug").empty() && iniFile->ReadValue("Core", "Debug")._Equal("true"));
-	iniFile->WriteValue("Core", "Debug", (Debug::Enabled ? "true" : "false"));
-
-	Console::ShouldHide = (!iniFile->ReadValue("Console", "Enabled").empty() && iniFile->ReadValue("Console", "Enabled")._Equal("false"));
-	iniFile->WriteValue("Console", "Enabled", (Console::ShouldHide ? "false" : "true"));
-#endif
-	Console::Mode = (iniFile->ReadValue("Console", "Mode").empty() ? Console::Mode : (
-		iniFile->ReadValue("Console", "Mode")._Equal("1") ? Console::DisplayMode::MAGENTA : (
-			iniFile->ReadValue("Console", "Mode")._Equal("2") ? Console::DisplayMode::RAINBOW :
-			(iniFile->ReadValue("Console", "Mode")._Equal("3") ? Console::DisplayMode::RANDOMRAINBOW : 
-				(iniFile->ReadValue("Console", "Mode")._Equal("4") ? Console::DisplayMode::LEMON : Console::Mode)))));
-	iniFile->WriteValue("Console", "Mode", std::to_string(Console::Mode));
-	Console::AlwaysOnTop = (!iniFile->ReadValue("Console", "AlwaysOnTop").empty() && iniFile->ReadValue("Console", "AlwaysOnTop")._Equal("true"));
-	iniFile->WriteValue("Console", "AlwaysOnTop", (Console::AlwaysOnTop ? "true" : "false"));
-	iniFile->WriteValue("Console", "DontSetTitle", (Console::ShouldSetTitle ? "false" : "true"));
-#ifndef DEBUG
-	Console::HideWarnings = (!iniFile->ReadValue("Console", "HideWarnings").empty() && iniFile->ReadValue("Console", "HideWarnings")._Equal("true"));
-	iniFile->WriteValue("Console", "HideWarnings", (Console::HideWarnings ? "true" : "false"));
-
-	Logger::MaxLogs = (!iniFile->ReadValue("Logger", "MaxLogs").empty() ? GetIntFromConstChar(iniFile->ReadValue("Console", "MaxLogs").c_str(), Logger::MaxLogs) : Logger::MaxLogs);
-	iniFile->WriteValue("Logger", "MaxLogs", std::to_string(Logger::MaxLogs));
-	Logger::MaxWarnings = (!iniFile->ReadValue("Logger", "MaxWarnings").empty() ? GetIntFromConstChar(iniFile->ReadValue("Console", "MaxWarnings").c_str(), Logger::MaxWarnings) : Logger::MaxWarnings);
-	iniFile->WriteValue("Logger", "MaxWarnings", std::to_string(Logger::MaxWarnings));
-	Logger::MaxErrors = (!iniFile->ReadValue("Logger", "MaxErrors").empty() ? GetIntFromConstChar(iniFile->ReadValue("Console", "MaxErrors").c_str(), Logger::MaxErrors) : Logger::MaxErrors);
-	iniFile->WriteValue("Logger", "MaxErrors", std::to_string(Logger::MaxErrors));
-#endif
-
-	AnalyticsBlocker::ShouldDAB = (!iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB").empty() && iniFile->ReadValue("AnalyticsBlocker", "ShouldDAB")._Equal("true"));
-	iniFile->WriteValue("AnalyticsBlocker", "ShouldDAB", (AnalyticsBlocker::ShouldDAB ? "true" : "false"));
-}
-*/

@@ -12,7 +12,7 @@ namespace MelonLoader
         internal static bool Initialize()
         {
             MelonLogger.Msg("Loading Support Module...");
-            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find SupportModules Directory!");

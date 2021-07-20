@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <filesystem>
+#pragma warning (disable:4244)
 
 void Core::Load(HINSTANCE hinstDLL)
 {
@@ -53,7 +54,39 @@ void Core::Load(HINSTANCE hinstDLL)
 
 	if (strstr(GetCommandLineA(), "--no-mods") != NULL)
 		return;
-	LoadLibraryA("MelonLoader\\Dependencies\\Bootstrap.dll");
+
+	std::string bootstrap_path = GetBootstrapPath();
+	HMODULE bootstrap_module = LoadLibraryA(bootstrap_path.c_str());
+	if (bootstrap_module == NULL)
+		MessageBoxA(NULL, "Unable to Find Bootstrap.dll in Base Directory! Continuing without MelonLoader...", "MelonLoader", MB_ICONERROR | MB_OK);
+}
+
+std::string Core::GetBootstrapPath()
+{
+	std::string defaultpath = "MelonLoader\\Dependencies\\Bootstrap.dll";
+	std::string returnval = defaultpath;
+	int argc = __argc;
+	wchar_t** argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+	for (int i = 0; i < argc; i++)
+	{
+		wchar_t* arg = argv[i];
+		if (arg == NULL)
+			continue;
+		if (wcscmp(arg, L"--melonloader.basedir") == 0)
+		{
+			wchar_t* arg_dir = argv[i + 1];
+			if (arg_dir == NULL)
+				break;
+			else
+			{
+				std::wstring ws(arg_dir);
+				returnval = std::string(ws.begin(), ws.end()) + "\\" + defaultpath;
+				break;
+			}
+		}
+	}
+	LocalFree(argv);
+	return returnval;
 }
 
 void Core::ApplicationCheck()

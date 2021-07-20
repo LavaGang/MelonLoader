@@ -122,7 +122,7 @@ bool Mono::SetupPaths()
 	{
 		if (Game::IsIl2Cpp)
 		{
-			std::string str_melon = (std::string(Game::BasePath) + "\\MelonLoader\\Dependencies\\" + FolderNames[i]);
+			std::string str_melon = (std::string(Core::BasePath) + "\\MelonLoader\\Dependencies\\" + FolderNames[i]);
 			if (Core::DirectoryExists(str_melon.c_str()))
 			{
 				MonoDir = str_melon;
@@ -158,7 +158,7 @@ bool Mono::SetupPaths()
 		std::copy(MonoDir.begin(), MonoDir.end(), BasePath);
 		BasePath[MonoDir.size()] = '\0';
 
-		std::string ManagedPathStr = (std::string(Game::BasePath) + "\\MelonLoader\\Managed");
+		std::string ManagedPathStr = (std::string(Core::BasePath) + "\\MelonLoader\\Managed");
 		ManagedPath = new char[ManagedPathStr.size() + 1];
 		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
 		ManagedPath[ManagedPathStr.size()] = '\0';

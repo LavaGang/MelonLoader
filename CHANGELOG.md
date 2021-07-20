@@ -39,6 +39,7 @@
 12. Added MelonProcess Attribute.
 13. Added MelonGameVersion Attribute for Mods.
 14. Fixed Issue with Core PreStart and OnApplicationEarlyStart not getting called on Mono Games.
+15. Added --melonloader.basedir Launch Option.
 
 ---
 

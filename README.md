@@ -174,6 +174,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.agfvunity | Forces Assembly Generator to use a Specified Version of Unity Dependencies |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
+| --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
 
 ---
 

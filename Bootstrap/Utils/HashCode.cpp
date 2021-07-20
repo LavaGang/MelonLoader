@@ -21,12 +21,12 @@ bool HashCode::Initialize()
 
 bool HashCode::SetupPaths()
 {
-    std::string CorePath = std::string(Game::BasePath) + "\\MelonLoader\\Dependencies\\Bootstrap.dll";
+    std::string CorePath = std::string(Core::BasePath) + "\\MelonLoader\\Dependencies\\Bootstrap.dll";
     Core::Path = new char[CorePath.size() + 1];
     std::copy(CorePath.begin(), CorePath.end(), Core::Path);
     Core::Path[CorePath.size()] = '\0';
 
-    std::string BaseAssemblyPath = std::string(Game::BasePath) + "\\MelonLoader\\MelonLoader.dll";
+    std::string BaseAssemblyPath = std::string(Core::BasePath) + "\\MelonLoader\\MelonLoader.dll";
     if (!Core::FileExists(BaseAssemblyPath.c_str()))
     {
         Assertion::ThrowInternalFailure("MelonLoader.dll Does Not Exist!");
@@ -38,7 +38,7 @@ bool HashCode::SetupPaths()
 
     if (!Game::IsIl2Cpp)
         return true;
-    std::string AssemblyGeneratorPath = std::string(Game::BasePath) + "\\MelonLoader\\Dependencies\\Il2CppAssemblyGenerator\\Il2CppAssemblyGenerator.dll";
+    std::string AssemblyGeneratorPath = std::string(Core::BasePath) + "\\MelonLoader\\Dependencies\\Il2CppAssemblyGenerator\\Il2CppAssemblyGenerator.dll";
     if (!Core::FileExists(AssemblyGeneratorPath.c_str()))
     {
         Assertion::ThrowInternalFailure("AssemblyGenerator.dll Does Not Exist!");

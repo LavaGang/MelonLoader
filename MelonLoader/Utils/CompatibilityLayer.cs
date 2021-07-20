@@ -38,7 +38,7 @@ namespace MelonLoader
 
         internal static void Setup()
         {
-            BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.GameDirectory, "MelonLoader"), "Dependencies"), "CompatibilityLayers");
+            BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "CompatibilityLayers");
 
             string versionending = ", Version=";
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>

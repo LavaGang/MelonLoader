@@ -28,6 +28,7 @@ public:
 		static bool IsGameIl2Cpp();
 		static bool IsOldMono();
 		static Mono::String* GetApplicationPath();
+		static Mono::String* GetBaseDirectory();
 		static Mono::String* GetGameName();
 		static Mono::String* GetGameDeveloper();
 		static Mono::String* GetGameDirectory();
@@ -46,7 +47,7 @@ public:
 		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
 	};
 
-	class SupportModules
+	class GameVersionHandler
 	{
 	public:
 		static void AddInternalCalls();

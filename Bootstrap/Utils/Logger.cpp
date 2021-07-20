@@ -68,7 +68,7 @@ bool Logger::Initialize()
 		MaxWarnings = 0;
 		MaxErrors = 0;
 	}
-	std::string logFolderPath = std::string(Game::BasePath) + "\\MelonLoader\\Logs";
+	std::string logFolderPath = std::string(Core::BasePath) + "\\MelonLoader\\Logs";
 	if (Core::DirectoryExists(logFolderPath.c_str()))
 		CleanOldLogs(logFolderPath.c_str());
 	else if (_mkdir(logFolderPath.c_str()) != 0)
@@ -83,7 +83,7 @@ bool Logger::Initialize()
 	std::stringstream filepath;
 	filepath << logFolderPath << "\\" << FilePrefix << std::put_time(&bt, "%y-%m-%d_%H-%M-%S") << "." << std::setfill('0') << std::setw(3) << ms.count() << FileExtension;
 	LogFile.coss = std::ofstream(filepath.str());
-	std::string latest_path = (std::string(Game::BasePath) + "\\MelonLoader\\" + LatestLogFileName + FileExtension);
+	std::string latest_path = (std::string(Core::BasePath) + "\\MelonLoader\\" + LatestLogFileName + FileExtension);
 	if (Core::FileExists(latest_path.c_str()))
 		std::remove(latest_path.c_str());
 	LogFile.latest = std::ofstream(latest_path.c_str());

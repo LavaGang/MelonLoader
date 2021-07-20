@@ -23,13 +23,15 @@ namespace MelonLoader
             GameName = string.Copy(Internal_GetGameName());
             HashCode = string.Copy(Internal_GetHashCode());
             CurrentGameAttribute = new MelonGameAttribute(GameDeveloper, GameName);
+            BaseDirectory = string.Copy(Internal_GetBaseDirectory());
             GameDirectory = string.Copy(Internal_GetGameDirectory());
-            UserDataDirectory = Path.Combine(GameDirectory, "UserData");
+            UserDataDirectory = Path.Combine(BaseDirectory, "UserData");
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
             Main.IsBoneworks = IsBONEWORKS;
         }
 
+        public static string BaseDirectory { get; private set; }
         public static string GameDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
@@ -271,6 +273,9 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public extern static string Internal_GetBaseDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameName();

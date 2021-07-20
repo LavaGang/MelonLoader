@@ -73,7 +73,7 @@ void BaseAssembly::Preload()
 	if (Game::IsIl2Cpp || !Mono::IsOldMono)
 		return;
 
-	std::string PreloadAssemblyPath = std::string(Game::BasePath) + "\\MelonLoader\\Dependencies\\SupportModules\\Preload.dll";
+	std::string PreloadAssemblyPath = std::string(Core::BasePath) + "\\MelonLoader\\Dependencies\\SupportModules\\Preload.dll";
 	if (!Game::IsIl2Cpp && !Core::FileExists(PreloadAssemblyPath.c_str()))
 	{
 		Assertion::ThrowInternalFailure("Preload.dll Does Not Exist!");

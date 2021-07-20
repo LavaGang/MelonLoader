@@ -9,6 +9,8 @@ class Core
 {
 public:
 	static HINSTANCE Bootstrap;
+	static char* BasePath;
+	static char* BasePathMono;
 	static char* Path;
 	static std::string Version;
 	static bool Is_ALPHA_PreRelease;
@@ -22,6 +24,7 @@ public:
 	static const char* GetFileInfoProductVersion(const char* path);
 	static std::string GetVersionStr();
 	static std::string GetVersionStrWithGameName(const char* GameVersion = NULL);
+	static void SetBasePath();
 
 private:
 	static const char* GetOSVersion();
