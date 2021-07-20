@@ -9,7 +9,7 @@ namespace MelonLoader.MelonFileTypes
     {
         internal static void LoadAll(string folderpath)
         {
-            string[] filearr = Directory.GetFiles(folderpath, "*.zip");
+            string[] filearr = Directory.GetFiles(folderpath, "*.zip", SearchOption.AllDirectories);
             if (filearr.Length <= 0)
                 return;
             for (int i = 0; i < filearr.Length; i++)
