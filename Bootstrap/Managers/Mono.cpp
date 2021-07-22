@@ -14,6 +14,7 @@
 
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
 const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };
+char* Mono::LibPath = NULL;
 char* Mono::BasePath = NULL;
 char* Mono::ManagedPath = NULL;
 char* Mono::ManagedPathMono = NULL;
@@ -90,16 +91,8 @@ bool Mono::Initialize()
 
 bool Mono::Load()
 {
-	for (int i = 0; i < (sizeof(LibNames) / sizeof(LibNames[0])); i++)
-	{
-		Module = LoadLibraryA((std::string(BasePath) + "\\" + LibNames[i] + ".dll").c_str());
-		if (Module != NULL)
-		{
-			if (i == 0)
-				IsOldMono = true;
-			break;
-		}
-	}
+	Debug::Msg("Loading Mono Library...");
+	Module = LoadLibraryA(LibPath);
 	if (Module == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Load Mono Library!");
@@ -115,49 +108,82 @@ bool Mono::Load()
 	return Exports::Initialize();
 }
 
-bool Mono::SetupPaths()
+std::string Mono::CheckLibName(std::string base_path, std::string folder_name, std::string lib_name)
 {
-	std::string MonoDir = std::string();
-	for (int i = 0; i < (sizeof(FolderNames) / sizeof(FolderNames[0])); i++)
+	if (!Core::DirectoryExists(base_path.c_str()))
+		return std::string();
+
+	std::string new_path = base_path + "\\" + folder_name;
+	if (!Core::DirectoryExists(new_path.c_str()))
+		return std::string();
+
+	std::string lib_path = new_path + "\\" + lib_name + ".dll";
+	if (!Core::FileExists(lib_path.c_str()))
+		return std::string();
+	return lib_path;
+}
+
+std::string Mono::CheckFolderName(std::string folder_name)
+{
+	std::string MonoLibPath = std::string();
+
+	for (int z = 0; z < (sizeof(LibNames) / sizeof(LibNames[0])); z++)
 	{
 		if (Game::IsIl2Cpp)
 		{
-			std::string str_melon = (std::string(Core::BasePath) + "\\MelonLoader\\Dependencies\\" + FolderNames[i]);
-			if (Core::DirectoryExists(str_melon.c_str()))
-			{
-				MonoDir = str_melon;
+			MonoLibPath = CheckLibName(Core::BasePath, ("MelonLoader\\Dependencies\\" + folder_name), LibNames[z]);
+			if (!MonoLibPath.empty())
 				break;
-			}
 		}
 		else
 		{
-			std::string str_base = (std::string(Game::BasePath) + "\\" + FolderNames[i]);
-			if (Core::DirectoryExists(str_base.c_str()))
-			{
-				MonoDir = str_base;
+			MonoLibPath = CheckLibName(Game::BasePath, folder_name, LibNames[z]);
+			if (!MonoLibPath.empty())
 				break;
-			}
-			std::string str_data = (std::string(Game::DataPath) + "\\" + FolderNames[i]);
-			if (Core::DirectoryExists(str_data.c_str()))
-			{
-				MonoDir = str_data;
+			MonoLibPath = CheckLibName(Game::BasePath, (folder_name + "\\EmbedRuntime"), LibNames[z]);
+			if (!MonoLibPath.empty())
 				break;
-			}
+
+			MonoLibPath = CheckLibName(Game::DataPath, folder_name, LibNames[z]);
+			if (!MonoLibPath.empty())
+				break;
+			MonoLibPath = CheckLibName(Game::DataPath, (folder_name + "\\EmbedRuntime"), LibNames[z]);
+			if (!MonoLibPath.empty())
+				break;
 		}
 	}
-	if (MonoDir.empty())
+
+	return MonoLibPath;
+}
+
+bool Mono::SetupPaths()
+{
+	std::string MonoLibPath = std::string();
+	for (int i = 0; i < (sizeof(FolderNames) / sizeof(FolderNames[0])); i++)
 	{
-		Assertion::ThrowInternalFailure("Failed to Find Mono Directory!");
+		MonoLibPath = CheckFolderName(FolderNames[i]);
+		if (!MonoLibPath.empty())
+			break;
+	}
+	if (MonoLibPath.empty())
+	{
+		Assertion::ThrowInternalFailure("Failed to Find Mono Library!");
 		return false;
 	}
+
 #define MONO_STR(s) ((s ## Mono) = Encoding::OsToUtf8((s)))
+
+	LibPath = new char[MonoLibPath.size() + 1];
+	std::copy(MonoLibPath.begin(), MonoLibPath.end(), LibPath);
+	LibPath[MonoLibPath.size()] = '\0';
+
+	std::string MonoDir = MonoLibPath.substr(0, MonoLibPath.find_last_of("\\/"));
+	BasePath = new char[MonoDir.size() + 1];
+	std::copy(MonoDir.begin(), MonoDir.end(), BasePath);
+	BasePath[MonoDir.size()] = '\0';
 
 	if (Game::IsIl2Cpp)
 	{
-		BasePath = new char[MonoDir.size() + 1];
-		std::copy(MonoDir.begin(), MonoDir.end(), BasePath);
-		BasePath[MonoDir.size()] = '\0';
-
 		std::string ManagedPathStr = (std::string(Core::BasePath) + "\\MelonLoader\\Managed");
 		ManagedPath = new char[ManagedPathStr.size() + 1];
 		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
@@ -181,19 +207,15 @@ bool Mono::SetupPaths()
 		return true;
 	}
 
-	std::string BasePathStr = (MonoDir + "\\EmbedRuntime");
-	if (!Core::DirectoryExists(BasePathStr.c_str()))
-		BasePathStr = MonoDir;
-	BasePath = new char[BasePathStr.size() + 1];
-	std::copy(BasePathStr.begin(), BasePathStr.end(), BasePath);
-	BasePath[BasePathStr.size()] = '\0';
-
 	std::string ManagedPathStr = (std::string(Game::DataPath) + "\\Managed");
 	ManagedPath = new char[ManagedPathStr.size() + 1];
 	std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
 	ManagedPath[ManagedPathStr.size()] = '\0';
 
-	std::string ConfigPathStr = (MonoDir + "\\etc");
+	std::string ConfigPathStr = MonoDir;
+	if (strstr(ConfigPathStr.c_str(), "EmbedRuntime"))
+		ConfigPathStr = ConfigPathStr.substr(0, ConfigPathStr.find_last_of("\\/"));
+	ConfigPathStr = (ConfigPathStr + "\\etc");
 	ConfigPath = new char[ConfigPathStr.size() + 1];
 	std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
 	ConfigPath[ConfigPathStr.size()] = '\0';

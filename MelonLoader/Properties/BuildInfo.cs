@@ -6,6 +6,6 @@
         public const string Description = "MelonLoader";
         public const string Author = "Lava Gang";
         public const string Company = "discord.gg/2Wn3N2P";
-        public const string Version = "0.4.2";
+        public const string Version = "0.4.3";
     }
 }

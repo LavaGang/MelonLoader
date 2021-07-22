@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.4.3 Open-Beta](#v043-open-beta)  
 [v0.4.2 Open-Beta](#v042-open-beta)  
 [v0.4.1 Open-Beta](#v041-open-beta)  
 [v0.4.0 Open-Beta](#v040-open-beta)  
@@ -20,6 +21,13 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.4.3 Open-Beta:
+
+1. Fixed Issue with Mono Library Scanning.
+2. Updated HarmonyX to v2.5.1.
 
 ---
 

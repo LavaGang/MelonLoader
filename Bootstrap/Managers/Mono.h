@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-
+#include <string>
 
 class Mono
 {
@@ -18,6 +18,7 @@ public:
 	static HMODULE Module;
 	static Domain* domain;
 	static bool IsOldMono;
+	static char* LibPath;
 	static char* ManagedPath;
 	static char* ManagedPathMono;
 	static char* ConfigPath;
@@ -31,6 +32,8 @@ public:
 	static String* ObjectToString(Object* obj);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 	static void Free(void* ptr);
+	static std::string CheckFolderName(std::string folder_name);
+	static std::string CheckLibName(std::string base_path, std::string folder_name, std::string lib_name);
 
 	typedef enum
 	{
