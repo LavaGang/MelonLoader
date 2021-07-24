@@ -28,6 +28,8 @@
 
 1. Fixed Issue with Mono Library Scanning.
 2. Updated HarmonyX to v2.5.1.
+3. Updated Cpp2IL to v2021.2.2.
+4. Fixed Issue with Assembly Generator not responding to RemoteAPI when Forcing Dumper Version.
 
 ---
 

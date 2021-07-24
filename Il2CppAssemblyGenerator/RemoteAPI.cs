@@ -119,7 +119,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                         return null;
 
                     InfoStruct returninfo = new InfoStruct();
-                    //returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
+                    returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
                     returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
                     returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
                     returninfo.MappingURL = responseobj.mappingUrl;
