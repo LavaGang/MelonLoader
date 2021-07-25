@@ -46,14 +46,17 @@ namespace MelonLoader
 
         private static Assembly AssemblyResolver(object sender, ResolveEventArgs args)
         {
-            string assembly_name = args.Name.Split(',')[0];
-            string dll_name = (assembly_name + ".dll");
+            AssemblyName assembly_name = new AssemblyName(args.Name);
+            string dll_name = $"{assembly_name.Name}.dll";
+
             string plugins_path = Path.Combine(PluginsDirectory, dll_name);
             if (File.Exists(plugins_path))
                 return Assembly.LoadFile(plugins_path);
+
             string mods_path = Path.Combine(ModsDirectory, dll_name);
             if (File.Exists(mods_path))
                 return Assembly.LoadFile(mods_path);
+
             return null;
         }
 

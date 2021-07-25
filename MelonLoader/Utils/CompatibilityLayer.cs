@@ -40,18 +40,20 @@ namespace MelonLoader
         {
             BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "CompatibilityLayers");
 
-            string versionending = ", Version=";
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-                (args.Name.StartsWith($"Mono.Cecil{versionending}")
-                || args.Name.StartsWith($"Mono.Cecil.Mdb{versionending}")
-                || args.Name.StartsWith($"Mono.Cecil.Pdb{versionending}")
-                || args.Name.StartsWith($"Mono.Cecil.Rocks{versionending}")
-                || args.Name.StartsWith($"MonoMod.RuntimeDetour{versionending}")
-                || args.Name.StartsWith($"MonoMod.Utils{versionending}")
-                || args.Name.StartsWith($"0Harmony{versionending}")
-                || args.Name.StartsWith($"Tomlet{versionending}"))
-                ? typeof(MelonCompatibilityLayer).Assembly
-                : null;
+            Assembly base_assembly = typeof(MelonCompatibilityLayer).Assembly;
+            AppDomain.CurrentDomain.AssemblyResolve += (object sender, ResolveEventArgs args) => 
+                new AssemblyName(args.Name).Name switch
+                {
+                    "Mono.Cecil" => base_assembly,
+                    "Mono.Cecil.Mdb" => base_assembly,
+                    "Mono.Cecil.Pdb" => base_assembly,
+                    "Mono.Cecil.Rocks" => base_assembly,
+                    "MonoMod.RuntimeDetour" => base_assembly,
+                    "MonoMod.Utils" => base_assembly,
+                    "0Harmony" => base_assembly,
+                    "Tomlet" => base_assembly,
+                    _ => null,
+                };
 
             CompatibilityLayers.Melon_Resolver.Setup();
         }

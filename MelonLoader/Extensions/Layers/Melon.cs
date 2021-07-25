@@ -16,11 +16,14 @@ namespace MelonLoader.CompatibilityLayers
 
 		internal static void Setup()
 		{
-			AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-				(args.Name.StartsWith("MelonLoader.ModHandler, Version=")
-				|| args.Name.StartsWith("MelonLoader, Version="))
-				? typeof(Melon_Resolver).Assembly
-				: null;
+			Assembly base_assembly = typeof(Melon_Resolver).Assembly;
+			AppDomain.CurrentDomain.AssemblyResolve += (object sender, ResolveEventArgs args) =>
+				new AssemblyName(args.Name).Name switch
+				{
+					"MelonLoader" => base_assembly,
+					"MelonLoader.ModHandler" => base_assembly,
+					_ => null,
+				};
 
 			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
 			MelonCompatibilityLayer.AddRefreshPluginsEvent(RefreshPlugins);

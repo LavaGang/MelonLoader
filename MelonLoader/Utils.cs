@@ -50,11 +50,18 @@ namespace MelonLoader
 
         private static Assembly LibsAssemblyResolver(object sender, ResolveEventArgs args)
         {
-            string assembly_name = args.Name.Split(',')[0];
-            string dll_name = (assembly_name + ".dll");
+            AssemblyName assembly_name = new AssemblyName(args.Name);
+
+            string dll_name = $"{assembly_name.Name}.dll";
             string lib_path = Path.Combine(UserLibsDirectory, dll_name);
             if (File.Exists(lib_path))
                 return Assembly.LoadFile(lib_path);
+
+            dll_name = $"{assembly_name.Name}.{assembly_name.Version}.dll";
+            lib_path = Path.Combine(UserLibsDirectory, dll_name);
+            if (File.Exists(lib_path))
+                return Assembly.LoadFile(lib_path);
+
             return null;
         }
 
