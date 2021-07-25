@@ -52,12 +52,12 @@ namespace MelonLoader
         {
             AssemblyName assembly_name = new AssemblyName(args.Name);
 
-            string dll_name = $"{assembly_name.Name}.dll";
+            string dll_name = $"{assembly_name.Name}.{assembly_name.Version}.dll";
             string lib_path = Path.Combine(UserLibsDirectory, dll_name);
             if (File.Exists(lib_path))
                 return Assembly.LoadFile(lib_path);
 
-            dll_name = $"{assembly_name.Name}.{assembly_name.Version}.dll";
+            dll_name = $"{assembly_name.Name}.dll";
             lib_path = Path.Combine(UserLibsDirectory, dll_name);
             if (File.Exists(lib_path))
                 return Assembly.LoadFile(lib_path);
