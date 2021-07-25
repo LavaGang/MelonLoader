@@ -15,7 +15,6 @@ void InternalCalls::Initialize()
 	Debug::Msg("Initializing Internal Calls...");
 	MelonLogger::AddInternalCalls();
 	MelonUtils::AddInternalCalls();
-	MelonDebug::AddInternalCalls();
 	GameVersionHandler::AddInternalCalls();
 	IIl2CppAssemblyGenerator::AddInternalCalls();
 }
@@ -180,31 +179,6 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
 
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
-}
-#pragma endregion
-
-#pragma region MelonDebug
-void InternalCalls::MelonDebug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt)
-{
-	auto nsStr = namesection != NULL ? Mono::Exports::mono_string_to_utf8(namesection) : NULL;
-	auto txtStr = Mono::Exports::mono_string_to_utf8(txt);
-
-	char* nsStrOs = NULL;
-	if (nsStr != NULL) 
-	{
-		nsStrOs = Encoding::Utf8ToOs(nsStr);
-		Mono::Free(nsStr); 
-	}
-	auto txtStrOs = Encoding::Utf8ToOs(txtStr);
-	Mono::Free(txtStr);
-	Debug::Internal_Msg(meloncolor, txtcolor, nsStrOs, txtStrOs);
-
-	delete[] txtStrOs;
-	delete[] nsStrOs;
-}
-void InternalCalls::MelonDebug::AddInternalCalls()
-{
-	Mono::AddInternalCall("MelonLoader.MelonDebug::Internal_Msg", Internal_Msg);
 }
 #pragma endregion
 

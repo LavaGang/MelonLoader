@@ -1,55 +1,41 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
 namespace MelonLoader
 {
     public static class MelonDebug
     {
+        public static void Msg(object obj)
+        {
+            if (!IsEnabled())
+                return;
+            MelonLogger.Internal_Msg(ConsoleColor.Blue, MelonLogger.DefaultTextColor, "DEBUG", obj.ToString());
+            MsgCallbackHandler?.Invoke(MelonLogger.DefaultTextColor, obj.ToString());
+        }
         public static void Msg(string txt)
         {
             if (!IsEnabled())
                 return;
-            SendMsg(MelonLogger.DefaultTextColor, txt);
+            MelonLogger.Internal_Msg(ConsoleColor.Blue, MelonLogger.DefaultTextColor, "DEBUG", txt);
+            MsgCallbackHandler?.Invoke(MelonLogger.DefaultTextColor, txt);
         }
         public static void Msg(string txt, params object[] args)
         {
             if (!IsEnabled())
                 return;
-            SendMsg(MelonLogger.DefaultTextColor, string.Format(txt, args));
-        }
-        public static void Msg(object obj)
-        {
-            if (!IsEnabled())
-                return;
-            SendMsg(MelonLogger.DefaultTextColor, obj.ToString());
+            MelonLogger.Internal_Msg(ConsoleColor.Blue, MelonLogger.DefaultTextColor, "DEBUG", string.Format(txt, args));
+            MsgCallbackHandler?.Invoke(MelonLogger.DefaultTextColor, string.Format(txt, args));
         }
 
         public static void Error(string txt)
         {
             if (!IsEnabled())
                 return;
-            SendError(txt);
+            MelonLogger.Internal_Error("DEBUG", txt);
+            ErrorCallbackHandler?.Invoke(txt);
         }
 
-        private static void SendError(string txt) => MelonLogger.ManualMelonError(MelonUtils.GetMelonFromStackTrace(), txt ?? "null");
-
-        private static void SendMsg(ConsoleColor msgcolor, string msg)
-        {
-            ConsoleColor meloncolor = MelonLogger.DefaultMelonColor;
-            string namesection = null;
-            MelonBase melon = MelonUtils.GetMelonFromStackTrace();
-            if (melon != null)
-            {
-                namesection = melon.Info.Name.Replace(" ", "_");
-                msgcolor = melon.ConsoleColor;
-            }
-            Internal_Msg(meloncolor, msgcolor, namesection, msg);
-            MsgCallbackHandler?.Invoke(meloncolor, msgcolor, namesection, msg);
-        }
-
-        public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
+        public static event Action<ConsoleColor, string> MsgCallbackHandler;
+        public static event Action<string> ErrorCallbackHandler;
         public static bool IsEnabled() => MelonLaunchOptions.Core.DebugMode;
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Msg(ConsoleColor meloncolor, ConsoleColor msgcolor, string namesection, string txt);
     }
 }

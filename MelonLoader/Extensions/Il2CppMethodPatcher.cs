@@ -20,6 +20,7 @@ namespace MelonLoader
 		private IntPtr originalMethodInfoPointer;
 		private IntPtr copiedMethodInfoPointer;
 		private IntPtr methodDetourPointer;
+		private bool hasWarned = false;
 
 		private delegate void PatchTools_RememberObject_Delegate(object key, object value);
 		private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;	
@@ -292,9 +293,10 @@ namespace MelonLoader
 
 		private void DebugCheck()
 		{
-			if (!MelonDebug.IsEnabled())
+			if (!MelonDebug.IsEnabled() || hasWarned)
 				return;
-			
+			hasWarned = true;
+
 			PatchInfo patchInfo = Original.GetPatchInfo();
 
 			Patch basePatch = ((patchInfo.prefixes.Count() > 0) ? patchInfo.prefixes.First()
@@ -302,61 +304,69 @@ namespace MelonLoader
 				: ((patchInfo.transpilers.Count() > 0) ? patchInfo.transpilers.First()
 				: ((patchInfo.finalizers.Count() > 0) ? patchInfo.finalizers.First() : null))));
 
-			string melonName = FindMelon(melon => ((basePatch != null) && melon.HarmonyInstance.Id.Equals(basePatch.owner)));
-			if ((melonName == null) && (basePatch != null))
+			MelonLogger.Instance loggerInstance = FindMelon(melon => ((basePatch != null) && melon.HarmonyInstance.Id.Equals(basePatch.owner)));
+			if ((loggerInstance == null) && (basePatch != null))
 			{
 				// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
 				Assembly melonAssembly = basePatch.PatchMethod.DeclaringType?.Assembly;
 				if (melonAssembly != null)
-					melonName = FindMelon(melon => melon.Assembly == melonAssembly);
+					loggerInstance = FindMelon(melon => melon.Assembly == melonAssembly);
 			}
 
-			WarnIfHasTranspiler(patchInfo, melonName);
-			WarnIfOriginalMethodIsInlined(melonName);
+			WarnIfHasTranspiler(patchInfo, loggerInstance);
+			WarnIfOriginalMethodIsInlined(loggerInstance);
 		}
 
-		private void WarnIfOriginalMethodIsInlined(string melonName)
+		private void WarnIfOriginalMethodIsInlined(MelonLogger.Instance loggerInstance)
         {
 			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(Original) ?? -1;
 			if ((callerCount > 0)
 				|| UnityMagicMethods.IsUnityMagicMethod(Original))
 				return;
-			MelonLogger.ManualWarning(melonName, $"Harmony: Method {Original.FullDescription()} does not appear to get called directly from anywhere, " +
-				"suggesting it may have been inlined and your patch may not be called.");
+			string txt = $"Harmony: Method {Original.FullDescription()} does not appear to get called directly from anywhere, " +
+				"suggesting it may have been inlined and your patch may not be called.";
+			if (loggerInstance != null)
+				loggerInstance.Warning(txt);
+			else
+				MelonLogger.Warning(txt);
 		}
 
-		private void WarnIfHasTranspiler(PatchInfo patchInfo, string melonName)
+		private void WarnIfHasTranspiler(PatchInfo patchInfo, MelonLogger.Instance loggerInstance)
         {
 			if (patchInfo.transpilers.Length <= 0)
 				return;
-			MelonLogger.ManualWarning(melonName, $"Harmony: Method {Original.FullDescription()} will only have its Unhollowed IL available to Transpilers, " +
-				"suggesting you either don't use any Transpilers when Patching this Method or ignore this Warning if modifying the Unhollowed IL is your goal.");
+			string txt = $"Harmony: Method {Original.FullDescription()} will only have its Unhollowed IL available to Transpilers, " +
+				"suggesting you either don't use any Transpilers when Patching this Method or ignore this Warning if modifying the Unhollowed IL is your goal.";
+			if (loggerInstance != null)
+				loggerInstance.Warning(txt);
+			else
+				MelonLogger.Warning(txt);
 		}
 
-		private static string FindMelon(Predicate<MelonBase> criterion)
+		private static MelonLogger.Instance FindMelon(Predicate<MelonBase> criterion)
 		{
-			string melonName = null;
+			MelonLogger.Instance loggerInstance = null;
 
 			MelonEnumerator<MelonPlugin> PluginEnumerator = new MelonEnumerator<MelonPlugin>(MelonHandler._Plugins.ToArray());
 			while (PluginEnumerator.MoveNext())
 				if (criterion(PluginEnumerator.Current))
 				{
-					melonName = PluginEnumerator.Current.Info.Name;
+					loggerInstance = PluginEnumerator.Current.LoggerInstance;
 					break;
 				}
 
-			if (string.IsNullOrEmpty(melonName))
+			if (loggerInstance == null)
 			{
 				MelonEnumerator<MelonMod> ModEnumerator = new MelonEnumerator<MelonMod>(MelonHandler._Mods.ToArray());
 				while (ModEnumerator.MoveNext())
 					if (criterion(ModEnumerator.Current))
 					{
-						melonName = ModEnumerator.Current.Info.Name;
+						loggerInstance = ModEnumerator.Current.LoggerInstance;
 						break;
 					}
 			}
 
-			return melonName;
+			return loggerInstance;
 		}
 
 		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });

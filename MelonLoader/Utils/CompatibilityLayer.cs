@@ -155,6 +155,7 @@ namespace MelonLoader
             instance.Priority = creationData.Priority;
             instance.ConsoleColor = creationData.ConsoleColor;
             instance.HarmonyInstance = new HarmonyLib.Harmony(instance.Assembly.FullName);
+            instance.LoggerInstance = new MelonLogger.Instance(creationData.Info.Name, creationData.ConsoleColor);
 
             return instance;
         }

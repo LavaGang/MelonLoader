@@ -47,6 +47,11 @@ namespace MelonLoader
         public HarmonyLib.Harmony HarmonyInstance { get; internal set; }
 
         /// <summary>
+        /// Auto-Created MelonLogger Instance of the Melon.
+        /// </summary>
+        public MelonLogger.Instance LoggerInstance { get; internal set; }
+
+        /// <summary>
         /// Runs after Game Initialization.
         /// </summary>
         public virtual void OnApplicationStart() { }

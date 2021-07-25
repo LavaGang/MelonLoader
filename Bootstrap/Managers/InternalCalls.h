@@ -40,13 +40,6 @@ public:
 		static Mono::String* GetFileProductName(Mono::String* filepath);
 	};
 
-	class MelonDebug
-	{
-	public:
-		static void AddInternalCalls();
-		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
-	};
-
 	class GameVersionHandler
 	{
 	public:
