@@ -16,11 +16,14 @@ namespace MelonLoader.CompatibilityLayers
 			// Point domain.AssemblyResolve to already installed IPA Assembly
 			// Point GetResolverFromAssembly to Dummy MelonCompatibilityLayer.Resolver
 
-			AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-				(args.Name.StartsWith("IllusionPlugin, Version=")
-				|| args.Name.StartsWith("IllusionInjector, Version="))
-				? typeof(IPA_Module).Assembly
-				: null;
+			Assembly base_assembly = typeof(IPA_Module).Assembly;
+			AppDomain.CurrentDomain.AssemblyResolve += (object sender, ResolveEventArgs args) =>
+				new AssemblyName(args.Name).Name switch
+				{
+					"IllusionPlugin" => base_assembly,
+					"IllusionInjector" => base_assembly,
+					_ => null,
+				};
 
 			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
 		}
