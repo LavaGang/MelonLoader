@@ -28,6 +28,8 @@
 ### v0.4.4 Open-Beta:
 
 1. Added User Libs Directory and Assembly Resolver.
+2. Replaced StackTrace System in MelonLogger with Instance Based System.
+3. Fixed Issue with Il2Cpp Harmony Method Patcher throwing Debug Warnings multiple times for the same Method.
 
 ---
 

@@ -344,7 +344,7 @@ namespace MelonLoader
                 try { method(enumerator.Current); }
                 catch (Exception ex)
                 {
-                    MelonLogger.ManualMelonError(enumerator.Current, ex.ToString());
+                    enumerator.Current.LoggerInstance.Error(ex.ToString());
                     if (remove_failed)
                         failedMelons.Add(enumerator.Current);
                 }

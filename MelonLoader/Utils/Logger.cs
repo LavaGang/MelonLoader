@@ -8,81 +8,80 @@ namespace MelonLoader
         public static readonly ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
         public static readonly ConsoleColor DefaultTextColor = ConsoleColor.Gray;
 
-        public static void Msg(string txt) => SendMsg(DefaultTextColor, txt);
-        public static void Msg(string txt, params object[] args) => SendMsg(DefaultTextColor, string.Format(txt, args));
-        public static void Msg(object obj) => SendMsg(DefaultTextColor, obj.ToString());
-        public static void Msg(ConsoleColor txtcolor, string txt) => SendMsg(txtcolor, txt);
-        public static void Msg(ConsoleColor txtcolor, string txt, params object[] args) => SendMsg(txtcolor, string.Format(txt, args));
-        public static void Msg(ConsoleColor txtcolor, object obj) => SendMsg(txtcolor, obj.ToString());
+        public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());
+        public static void Msg(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt);
+        public static void Msg(string txt, params object[] args) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, string.Format(txt, args));
 
-        public static void Warning(string txt) => SendWarning(txt);
-        public static void Warning(string txt, params object[] args) => SendWarning(string.Format(txt, args));
-        public static void Warning(object obj) => SendWarning(obj.ToString());
+        public static void Msg(ConsoleColor txt_color, object obj) => NativeMsg(DefaultMelonColor, txt_color, null, obj.ToString());
+        public static void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt);
+        public static void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
 
-        public static void Error(string txt) => SendError(txt);
-        public static void Error(string txt, params object[] args) => SendError(string.Format(txt, args));
-        public static void Error(object obj) => SendError(obj.ToString());
+        public static void Warning(object obj) => NativeWarning(null, obj.ToString());
+        public static void Warning(string txt) => NativeWarning(null, txt);
+        public static void Warning(string txt, params object[] args) => NativeWarning(null, string.Format(txt, args));
 
-        private static void SendMsg(ConsoleColor txtcolor, string txt)
+        public static void Error(object obj) => NativeError(null, obj.ToString());
+        public static void Error(string txt) => NativeError(null, txt);
+        public static void Error(string txt, params object[] args) => NativeError(null, string.Format(txt, args));
+
+        private static void NativeMsg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
         {
-            ConsoleColor meloncolor = DefaultMelonColor;
-            string namesection = null;
-            MelonBase melon = MelonUtils.GetMelonFromStackTrace();
-            if (melon != null)
-            {
-                namesection = melon.Info.Name.Replace(" ", "_");
-                meloncolor = melon.ConsoleColor;
-            }
-            Internal_Msg(meloncolor, txtcolor, namesection, txt ?? "null");
-            RunMsgCallbacks(meloncolor, txtcolor, namesection, txt ?? "null");
+            Internal_Msg(namesection_color, txt_color, namesection, txt ?? "null");
+            RunMsgCallbacks(namesection_color, txt_color, namesection, txt ?? "null");
         }
 
-        private static void SendWarning(string txt)
+        private static void NativeWarning(string namesection, string txt)
         {
-            string namesection = null;
-            MelonBase melon = MelonUtils.GetMelonFromStackTrace();
-            if (melon != null)
-                namesection = melon.Info.Name;
-            ManualWarning(namesection, txt ?? "null");
-        }
-
-        private static void SendError(string txt) => ManualMelonError(MelonUtils.GetMelonFromStackTrace(), txt ?? "null");
-
-        internal static void ManualWarning(string namesection, string txt)
-        {
-            namesection = namesection?.Replace(" ", "_");
             Internal_Warning(namesection, txt ?? "null");
             RunWarningCallbacks(namesection, txt ?? "null");
         }
 
-        internal static void ManualMelonError(MelonBase melon, string txt)
-        {
-            string namesection = null;
-            if (melon != null)
-                namesection = melon.Info.Name.Replace(" ", "_");
-            ManualError(namesection, txt ?? "null");
-        }
-
-        internal static void ManualError(string namesection, string txt)
+        private static void NativeError(string namesection, string txt)
         {
             Internal_Error(namesection, txt ?? "null");
             RunErrorCallbacks(namesection, txt ?? "null");
         }
 
-        internal static void RunMsgCallbacks(ConsoleColor meloncolor, ConsoleColor txtcolor, string namesection, string msg) => MsgCallbackHandler?.Invoke(meloncolor, txtcolor, namesection, msg);
+        internal static void RunMsgCallbacks(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt) => MsgCallbackHandler?.Invoke(namesection_color, txt_color, namesection, txt);
         public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
-        internal static void RunWarningCallbacks(string namesection, string msg) => WarningCallbackHandler?.Invoke(namesection, msg);
+        internal static void RunWarningCallbacks(string namesection, string txt) => WarningCallbackHandler?.Invoke(namesection, txt);
         public static event Action<string, string> WarningCallbackHandler;
-        internal static void RunErrorCallbacks(string namesection, string msg) => ErrorCallbackHandler?.Invoke(namesection, msg);
+        internal static void RunErrorCallbacks(string namesection, string txt) => ErrorCallbackHandler?.Invoke(namesection, txt);
         public static event Action<string, string> ErrorCallbackHandler;
+
+        public class Instance
+        {
+            private string Name = null;
+            private ConsoleColor Color = DefaultMelonColor;
+            public Instance() { }
+            public Instance(string name) => Name = name?.Replace(" ", "_");
+            public Instance(string name, ConsoleColor color) : this(name) => Color = color;
+
+            public void Msg(object obj) => NativeMsg(Color, DefaultTextColor, Name, obj.ToString());
+            public void Msg(string txt) => NativeMsg(Color, DefaultTextColor, Name, txt);
+            public void Msg(string txt, params object[] args) => NativeMsg(Color, DefaultTextColor, Name, string.Format(txt, args));
+
+            public void Msg(ConsoleColor txt_color, object obj) => NativeMsg(Color, txt_color, Name, obj.ToString());
+            public void Msg(ConsoleColor txt_color, string txt) => NativeMsg(Color, txt_color, Name, txt);
+            public void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(Color, txt_color, Name, string.Format(txt, args));
+
+            public void Warning(object obj) => NativeWarning(Name, obj.ToString());
+            public void Warning(string txt) => NativeWarning(Name, txt);
+            public void Warning(string txt, params object[] args) => NativeWarning(Name, string.Format(txt, args));
+
+            public void Error(object obj) => NativeError(Name, obj.ToString());
+            public void Error(string txt) => NativeError(Name, txt);
+            public void Error(string txt, params object[] args) => NativeError(Name, string.Format(txt, args));
+        }
+
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Msg(ConsoleColor meloncolor, ConsoleColor txtcolor, string namesection, string txt);
+        internal extern static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static void Internal_Warning(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Error(string namesection, string txt);
+        internal extern static void Internal_Error(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void ThrowInternalFailure(string msg);
+        internal extern static void ThrowInternalFailure(string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void WriteSpacer();
         [MethodImpl(MethodImplOptions.InternalCall)]

@@ -30,7 +30,7 @@ namespace MelonLoader
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
 
-            UserLibsDirectory = Path.Combine(BaseDirectory, "Libs");
+            UserLibsDirectory = Path.Combine(UserDataDirectory, "Libs");
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
