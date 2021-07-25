@@ -44,7 +44,7 @@ namespace MelonLoader
             AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;
         }
 
-        internal static Assembly AssemblyResolver(object sender, ResolveEventArgs args)
+        private static Assembly AssemblyResolver(object sender, ResolveEventArgs args)
         {
             string assembly_name = args.Name.Split(',')[0];
             string dll_name = (assembly_name + ".dll");

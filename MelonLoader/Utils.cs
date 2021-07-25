@@ -28,12 +28,27 @@ namespace MelonLoader
             UserDataDirectory = Path.Combine(BaseDirectory, "UserData");
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
+            UserLibsDirectory = Path.Combine(BaseDirectory, "Libs");
+            if (!Directory.Exists(UserLibsDirectory))
+                Directory.CreateDirectory(UserLibsDirectory);
             Main.IsBoneworks = IsBONEWORKS;
+            AppDomain.CurrentDomain.AssemblyResolve += LibsAssemblyResolver;
+        }
+
+        private static Assembly LibsAssemblyResolver(object sender, ResolveEventArgs args)
+        {
+            string assembly_name = args.Name.Split(',')[0];
+            string dll_name = (assembly_name + ".dll");
+            string plugins_path = Path.Combine(UserLibsDirectory, dll_name);
+            if (File.Exists(plugins_path))
+                return Assembly.LoadFile(plugins_path);
+            return null;
         }
 
         public static string BaseDirectory { get; private set; }
         public static string GameDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
+        public static string UserLibsDirectory { get; private set; }
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
         public static string GameDeveloper { get; private set; }
         public static string GameName { get; private set; }
@@ -275,7 +290,7 @@ namespace MelonLoader
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string Internal_GetBaseDirectory();
+        private extern static string Internal_GetBaseDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameName();
