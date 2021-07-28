@@ -421,3 +421,5 @@ SrcLibs/bHaptics/out/
 Int/
 .idea/
 Bootstrap/tools/.env
+
+JavaBindings/build/
