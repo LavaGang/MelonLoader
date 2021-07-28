@@ -1,11 +1,9 @@
 #include "BaseAssembly.h"
 #include "../Utils/Console/Debug.h"
-#include "../Base/Core.h"
 #include "Game.h"
 #include <string>
 #include "../Utils/Assertion.h"
 #include "../Utils/Console/Logger.h"
-#include "../Utils/UnitTesting/TestHelper.h"
 #include "../Utils/Il2CppAssemblyGenerator.h"
 
 char* BaseAssembly::PathMono = NULL;

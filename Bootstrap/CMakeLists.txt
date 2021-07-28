@@ -15,6 +15,8 @@ function(omit_path GLOB_VARIABLE EXCLUDED_DIR)
     set(${GLOB_VARIABLE} ${${GLOB_VARIABLE}} PARENT_SCOPE)
 endfunction()
 
+set(BOOTSTRAP_DEPS "")
+
 file(GLOB_RECURSE SRC_FILES  "./Managers/*.cpp" "./Utils/*.cpp")
 file(GLOB_RECURSE HEADERS_FILES "./Managers/*.h" "./Utils/*.h" ./Core.h)
 
@@ -28,6 +30,7 @@ if(PLATFORM STREQUAL "ANDROID")
     add_compile_definitions(__ANDROID__ PORT_DISABLE)
 
     list(APPEND SRC_FILES ./Base/main.cpp)
+    list(APPEND BOOTSTRAP_DEPS capstone-shared funchook-shared log android)
 elseif(PLATFORM STREQUAL "WINDOWS")
     add_compile_definitions(_WIN32)
 
@@ -83,4 +86,4 @@ if(DEFINED USE_FUNCHOOK)
     set_property(TARGET funchook-shared PROPERTY LINK_LIBRARIES dl capstone-shared)
 endif()
 
-target_link_libraries(${PROJECT_NAME} capstone-shared funchook-shared)
+target_link_libraries(${PROJECT_NAME} ${BOOTSTRAP_DEPS})

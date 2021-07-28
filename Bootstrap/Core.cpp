@@ -1,17 +1,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sstream>
+#include <time.h>
 
 #include "Core.h"
 #include "Managers/Game.h"
 #include "Managers/Mono.h"
 #include "Managers/Il2Cpp.h"
 #include "Managers/Hook.h"
-#include "Utils/CommandLine.h"
-#include "Utils/Console.h"
+#include "Utils/Console/CommandLine.h"
+#include "Utils/Console/Console.h"
 #include "Utils/Assertion.h"
-#include "Utils/Logger.h"
-#include "Utils/Debug.h"
+#include "Utils/Console/Logger.h"
+#include "Utils/Console/Debug.h"
 #include "Utils/AnalyticsBlocker.h"
 #include "Utils/HashCode.h"
 #include "Utils/Sequence.h"
@@ -300,7 +301,16 @@ const char* Core::GetFileInfoProductVersion(const char* path)
 }
 
 bool Core::DirectoryExists(const char* path) { struct stat Stat; return ((stat(path, &Stat) == 0) && (Stat.st_mode & S_IFDIR)); }
-void Core::GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt) { *now = std::chrono::system_clock::now(); *ms = std::chrono::duration_cast<std::chrono::milliseconds>((*now).time_since_epoch()) % 1000; time_t timer = std::chrono::system_clock::to_time_t(*now); localtime_s(bt, &timer); }
+void Core::GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt) {
+    *now = std::chrono::system_clock::now();
+    *ms = std::chrono::duration_cast<std::chrono::milliseconds>((*now).time_since_epoch()) % 1000;
+    time_t timer = std::chrono::system_clock::to_time_t(*now);
+#if _WIN32
+    localtime_s(bt, &timer);
+#elif defined(__ANDROID__)
+    localtime_r(&timer, bt);
+#endif
+}
 
 bool Core::FileExists(const char* path) {
 #ifdef _WIN32
