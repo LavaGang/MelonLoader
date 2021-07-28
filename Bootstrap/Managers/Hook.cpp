@@ -2,8 +2,9 @@
 #include <Windows.h>
 #endif
 
+#include <funchook.h>
+
 #include "Hook.h"
-#include "../Base/funchook/include/funchook.h"
 #include "../Utils/Console/Logger.h"
 
 #ifdef _WIN64

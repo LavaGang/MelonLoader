@@ -1,3 +1,4 @@
+#ifndef PORT_DISABLE
 #pragma once
 #include <Windows.h>
 #include <stdint.h>
@@ -19,3 +20,4 @@ public:
 	static uint64_t ResolvePtrOffsetFromInstruction(uint64_t instruction, uint64_t start, uint64_t end);
 	static uint64_t ResolvePtrOffsetFromInstructionPattern(HMODULE mod, const char* pattern, uint64_t start, uint64_t end);
 };
+#endif

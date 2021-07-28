@@ -69,7 +69,7 @@ public:
 	static void Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, const MessagePrefix prefixes[], const int size, const char* fmt, va_list args);
 
 	
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	class FileStream
 	{
 	public:
@@ -124,7 +124,7 @@ private:
 	static int WarningCount;
 	static int ErrorCount;
 	static void CleanOldLogs(const char* path);
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	static bool CompareWritetime(const std::filesystem::directory_entry& first, const std::filesystem::directory_entry& second) { return first.last_write_time().time_since_epoch() >= second.last_write_time().time_since_epoch(); }
 #endif
 };

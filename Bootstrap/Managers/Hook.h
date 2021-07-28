@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <unordered_map>
-#include "../Base/funchook/include/funchook.h"
+#include <funchook.h>
 
 class Hook
 {

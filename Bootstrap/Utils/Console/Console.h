@@ -1,33 +1,50 @@
 #pragma once
+#include <string>
 
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
-#include <string>
-
 class Console
 {
 public:
 #ifdef _WIN32
-	static HANDLE OutputHandle;
-	static bool AlwaysOnTop;
-	static bool ShouldHide;
+    static HANDLE OutputHandle;
 #endif
-	static bool GeneratingAssembly;
+	static bool ShouldHide;
+	static bool ShouldSetTitle;
+	static bool AlwaysOnTop;
 	static bool HideWarnings;
+	static bool UseManualColoring;
 	enum DisplayMode
 	{
 		NORMAL,
 		MAGENTA,
 		RAINBOW,
-		RANDOMRAINBOW
+		RANDOMRAINBOW,
+		LEMON
 	};
 	static DisplayMode Mode;
 
+#ifdef _WIN32
+    static void SetTitle(const char* title) { if (ShouldSetTitle) SetConsoleTitleA(title); }
+    static BOOL WINAPI EventHandler(DWORD evt);
+
+    static void SetHandles();
+	static void NullHandles();
+
+    static void SetDefaultTitle();
+    static void SetDefaultTitleWithGameName(const char* GameVersion = NULL);
+    static void EnableCloseButton();
+    static void DisableCloseButton();
+#endif
+
 	static bool Initialize();
+	static void Flush();
+	static void Close();
 	enum Color
 	{
+	    Reset = -1,
 		Black = 0,
 		DarkBlue = 1,
 		DarkGreen = 2,
@@ -43,27 +60,18 @@ public:
 		Red = 12,
 		Magenta = 13,
 		Yellow = 14,
-		White = 15,
-		Reset = -1
+		White = 15
 	};
-	static std::string ColorToAnsi(Color color);
-#ifdef _WIN32
-	static void EnableCloseButton();
-	static void DisableCloseButton();
-	static void SetHandles();
-	static void NullHandles();
-	static void Flush();
-	static void Close();
-	static void SetTitle(const char* title) { SetConsoleTitleA(title); }
-	static BOOL WINAPI EventHandler(DWORD evt);
-#endif
+	static std::string ColorToAnsi(Color color, bool modecheck = true);
 
 private:
-	static int rainbow;
-	static Color GetRainbowColor();
 #ifdef _WIN32
 	static HWND Window;
 	static HMENU Menu;
 	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }
+#elif defined(__ANDROID__)
+    static bool IsInitialized() { return true; }
 #endif
+	static int rainbow;
+	static Color GetRainbowColor();
 };

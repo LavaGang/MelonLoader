@@ -1,63 +1,73 @@
-#include "Console.h"
-#include "../../Base/Core.h"
 #include <string>
-#include "../Assertion.h"
-#include "Debug.h"
-#include <iostream>
-//#include <clocale>
-#include "../../Managers/Game.h"
-#include "../AssemblyGenerator.h"
-#include "Logger.h"
-#include <sstream>
 
-bool Console::GeneratingAssembly = false;
-bool Console::HideWarnings = false;
-Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
-int Console::rainbow = 1;
+#include "Console.h"
+#include "Debug.h"
 
 #ifdef _WIN32
-bool Console::ShouldHide = false;
-bool Console::AlwaysOnTop = false;
-HANDLE Console::OutputHandle = NULL;
+#include <iostream>
+#include <locale.h>
+#include <VersionHelpers.h>
+#include <sstream>
+#endif
 
+#ifdef _WIN32
 HWND Console::Window = NULL;
 HMENU Console::Menu = NULL;
+HANDLE Console::OutputHandle = NULL;
+#endif
+
+#ifdef __ANDROID__
+Console::DisplayMode Console::Mode = Console::DisplayMode::LEMON;
+#else
+Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
+#endif
+
+bool Console::ShouldHide = false;
+bool Console::ShouldSetTitle = true;
+bool Console::AlwaysOnTop = false;
+bool Console::HideWarnings = false;
+int Console::rainbow = 1;
+bool Console::UseManualColoring = false;
 
 bool Console::Initialize()
 {
-	if (!Debug::Enabled && ShouldHide && !GeneratingAssembly)
+	if (!Debug::Enabled && ShouldHide)
 		return true;
-	if (!AllocConsole())
+
+#ifdef _WIN32
+    if (!AllocConsole())
 	{
 		Assertion::ThrowInternalFailure("Failed to Allocate Console!");
 		return false;
 	}
-	Window = GetConsoleWindow();
+
+    Window = GetConsoleWindow();
 	Menu = GetSystemMenu(Window, FALSE);
-	SetConsoleCtrlHandler(EventHandler, TRUE);
-	std::string window_name = std::string("MelonLoader ") + Core::Version + " ALPHA Pre-Release";
-	if (Debug::Enabled)
-		SetTitle((window_name + " - Debug Mode").c_str());
-	else
-		SetTitle(window_name.c_str());
+
+    SetConsoleCtrlHandler(EventHandler, TRUE);
+	SetDefaultTitle();
 	SetForegroundWindow(Window);
 	if (AlwaysOnTop)
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-	freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
+
+    freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 	freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetHandles();
 	DWORD mode = 0;
 	if (!GetConsoleMode(OutputHandle, &mode))
 	{
-		Assertion::ThrowInternalFailure("Failed to Get Console Mode!");
-		return false;
+		mode = 0x3;
+		if (!SetConsoleMode(OutputHandle, mode))
+		{
+			UseManualColoring = true;
+			return true;
+		}
 	}
 	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
-	{
-		Assertion::ThrowInternalFailure("Failed to Enable Virtual Terminal Processing!");
-		return false;
-	}
+		UseManualColoring = true;
+#endif
+
 	return true;
 }
 
@@ -65,68 +75,29 @@ void Console::Flush()
 {
 	if (!IsInitialized())
 		return;
+#ifndef __ANDROID__
 	std::cout.flush();
+#endif
 }
 
 void Console::Close()
 {
 	if (!IsInitialized())
 		return;
-	ShowWindow(Window, 0);
+
+#ifdef _WIN32
+    ShowWindow(Window, 0);
 	Window = NULL;
 	Menu = NULL;
 	OutputHandle = NULL;
-}
-
-void Console::SetHandles()
-{
-	SetStdHandle(STD_OUTPUT_HANDLE, Console::OutputHandle);
-	SetStdHandle(STD_ERROR_HANDLE, Console::OutputHandle);
-}
-
-void Console::NullHandles()
-{
-	SetStdHandle(STD_OUTPUT_HANDLE, NULL);
-	SetStdHandle(STD_ERROR_HANDLE, NULL);
-}
-
-void Console::EnableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED); }
-void Console::DisableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED)); }
-BOOL WINAPI Console::EventHandler(DWORD evt)
-{
-	switch (evt)
-	{
-	case CTRL_C_EVENT:
-	case CTRL_CLOSE_EVENT:
-	case CTRL_LOGOFF_EVENT:
-	case CTRL_SHUTDOWN_EVENT:
-		if (Game::IsIl2Cpp)
-			AssemblyGenerator::Cleanup();
-		Logger::Flush();
-		Flush();
-		Close();
-		Core::KillCurrentProcess();
-	default:
-		return FALSE;
-	}
-}
-
-#elif defined(__ANDROID__)
-
-bool Console::Initialize()
-{
-	return true;
-}
-
 #endif
+}
 
 Console::Color Console::GetRainbowColor()
 {
 	if (Mode == DisplayMode::RANDOMRAINBOW)
 		return (Console::Color)(1 + (rand() * (int)(15 - 1) / RAND_MAX));
-	
-	const Console::Color returnval = (Console::Color)rainbow;
-	
+	Console::Color returnval = (Console::Color)rainbow;
 	rainbow++;
 	if (rainbow > 15)
 		rainbow = 1;
@@ -135,16 +106,26 @@ Console::Color Console::GetRainbowColor()
 	return returnval;
 }
 
-std::string Console::ColorToAnsi(Color color)
+std::string Console::ColorToAnsi(Color color, bool modecheck)
 {
-	color = ((Mode == Console::DisplayMode::MAGENTA)
-		? Color::Magenta
-		: (((Mode == Console::DisplayMode::RAINBOW) || (Mode == Console::DisplayMode::RANDOMRAINBOW))
-			? GetRainbowColor()
-			: color));
+	if (modecheck)
+		color = ((Mode == DisplayMode::MAGENTA)
+			? Color::Magenta
+			: (((Mode == DisplayMode::RAINBOW) || (Mode == DisplayMode::RANDOMRAINBOW))
+				? GetRainbowColor()
+				: ((Mode == DisplayMode::LEMON)
+					? Color::Yellow
+					: color)));
+	if (UseManualColoring)
+	{
+#ifdef _WIN32
+		SetConsoleTextAttribute(OutputHandle, color);
+#endif
+		return std::string();
+	}
 	switch (color)
 	{
-	case Color::Black:
+    case Color::Black:
 		return "\x1b[30m";
 	case Color::DarkBlue:
 		return "\x1b[34m";
@@ -174,10 +155,57 @@ std::string Console::ColorToAnsi(Color color)
 		return "\x1b[95m";
 	case Color::Yellow:
 		return "\x1b[93m";
-	case Color::Reset:
-		return "\x1b[0m";
 	case Color::White:
-	default:
-		return "\x1b[97m";
+        return "\x1b[97m";
+    case Color::Reset:
+    default:
+        return "\x1b[0m";
 	}
 }
+
+#ifdef _WIN32
+void Console::SetDefaultTitle()
+{
+	std::string versionstr = Core::GetVersionStr();
+	SetTitle(((Debug::Enabled ? "[D] " : "") + versionstr).c_str());
+}
+
+void Console::SetDefaultTitleWithGameName(const char* GameVersion)
+{
+	std::string versionstr = Core::GetVersionStrWithGameName(GameVersion);
+	SetTitle(((Debug::Enabled ? "[D] " : "") + versionstr).c_str());
+}
+
+void Console::SetHandles()
+{
+	SetStdHandle(STD_OUTPUT_HANDLE, Console::OutputHandle);
+	SetStdHandle(STD_ERROR_HANDLE, Console::OutputHandle);
+}
+
+void Console::NullHandles()
+{
+	SetStdHandle(STD_OUTPUT_HANDLE, NULL);
+	SetStdHandle(STD_ERROR_HANDLE, NULL);
+}
+
+void Console::EnableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED); }
+void Console::DisableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED)); }
+BOOL WINAPI Console::EventHandler(DWORD evt)
+{
+	switch (evt)
+	{
+	case CTRL_C_EVENT:
+	case CTRL_CLOSE_EVENT:
+	case CTRL_LOGOFF_EVENT:
+	case CTRL_SHUTDOWN_EVENT:
+		if (Game::IsIl2Cpp)
+			Il2CppAssemblyGenerator::Cleanup();
+		Logger::Flush();
+		Flush();
+		Close();
+		Core::KillCurrentProcess();
+	default:
+		return FALSE;
+	}
+}
+#endif
