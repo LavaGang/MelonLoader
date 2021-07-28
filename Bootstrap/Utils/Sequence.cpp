@@ -1,11 +1,11 @@
 #include "Sequence.h"
 
-#include "Console/Logger.h"
 #include "Console/Debug.h"
 
-bool Sequence::Run(struct Element* elements, size_t len)
+bool Sequence::Run(std::vector<Element> elements)
 {
 	bool passed = true;
+	auto len = elements.size();
 
 	for (size_t i = 0; i < len; i++)
 	{

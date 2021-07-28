@@ -1,4 +1,4 @@
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 #include <Windows.h>
 #include "CommandLine.h"
 #include "Console.h"

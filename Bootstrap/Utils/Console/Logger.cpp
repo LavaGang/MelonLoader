@@ -30,7 +30,7 @@ int Logger::MaxErrors = 100;
 int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
 
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 Logger::FileStream Logger::LogFile;
 #endif
 
@@ -43,7 +43,7 @@ bool Logger::Initialize()
 		MaxErrors = 0;
 	}
 
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	std::string logFolderPath = std::string(Game::BasePath) + "\\MelonLoader\\Logs";
 	if (Core::DirectoryExists(logFolderPath.c_str()))
 		CleanOldLogs(logFolderPath.c_str());
@@ -70,12 +70,12 @@ bool Logger::Initialize()
 	return true;
 }
 
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 #endif
 
 std::string Logger::GetTimestamp()
 {
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	std::chrono::system_clock::time_point now;
 	std::chrono::milliseconds ms;
 	std::tm bt;

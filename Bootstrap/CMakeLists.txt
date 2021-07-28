@@ -15,18 +15,23 @@ function(omit_path GLOB_VARIABLE EXCLUDED_DIR)
     set(${GLOB_VARIABLE} ${${GLOB_VARIABLE}} PARENT_SCOPE)
 endfunction()
 
-file(GLOB_RECURSE SRC_FILES "*.cpp")
-file(GLOB_RECURSE HEADERS_FILES "*.h")
+file(GLOB_RECURSE SRC_FILES  "./Managers/*.cpp" "./Utils/*.cpp")
+file(GLOB_RECURSE HEADERS_FILES "./Managers/*.h" "./Utils/*.h" ./Core.h)
 
-omit_path("SRC_FILES" ".cmake/*")
-omit_path("SRC_FILES" "external/*")
-
-omit_path("HEADERS_FILES" ".cmake/*")
-omit_path("HEADERS_FILES" "external/*")
+list(APPEND SRC_FILES ./Core.cpp)
+list(APPEND HEADERS_FILES ./Core.h)
 
 if(PLATFORM STREQUAL "ANDROID")
     set(USE_CAPSTONE YES)
     set(USE_FUNCHOOK YES)
+
+    add_compile_definitions(__ANDROID__ PORT_DISABLE)
+
+    list(APPEND SRC_FILES ./Base/main.cpp)
+elseif(PLATFORM STREQUAL "WINDOWS")
+    add_compile_definitions(_WIN32)
+
+    list(APPEND SRC_FILES ./Base/DLLMain.cpp)
 elseif(NOT DEFINED PLATFORM)
     message(FATAL_ERROR "PLATFORM is unset")
 endif()

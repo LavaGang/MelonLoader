@@ -86,7 +86,7 @@ bool BaseAssembly::Initialize()
 	}
 	
 	int returnval = *(int*)((char*)result + 0x8);
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	if (Game::IsIl2Cpp)
 		Il2CppAssemblyGenerator::Cleanup();
 #endif

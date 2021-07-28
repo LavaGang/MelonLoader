@@ -169,7 +169,10 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 		Logger::Error("Skipping initialization of MelonLoader");
 		goto exit_early;	
 	}
-	
+
+
+    domain = Exports::il2cpp_init(name);
+
 	// if (AssemblyGenerator::Initialize())
 	// {
 		Mono::CreateDomain(name);
@@ -186,8 +189,6 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 			Debug::Msg("Base assembly failed to setup.");
 		}
 	// }
-
-	domain = Exports::il2cpp_init(name);
 
 	exit_early:	
 	Debug::Msg("Detaching Hook from il2cpp_init...");

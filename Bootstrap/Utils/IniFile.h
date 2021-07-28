@@ -1,5 +1,5 @@
 #pragma once
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 #include <string>
 
 class IniFile

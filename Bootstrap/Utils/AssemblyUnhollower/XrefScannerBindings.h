@@ -1,8 +1,11 @@
 #pragma once
+#ifdef __ANDROID__
+
 #include <stdint.h>
 #include <unordered_map>
 #include <capstone/capstone.h>
 
+// TODO move to Mono Domain
 class XrefScannerBindings
 {
 public:
@@ -77,3 +80,4 @@ private:
 		static void* ExtractTargetAddress(DisassemblyInstance* dis, cs_insn& instruction);
 	};
 };
+#endif

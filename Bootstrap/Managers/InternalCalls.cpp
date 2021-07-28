@@ -82,7 +82,7 @@ void InternalCalls::MelonLogger::ThrowInternalFailure(Mono::String* msg)
 
 void InternalCalls::MelonLogger::WriteSpacer() { Logger::WriteSpacer(); }
 void InternalCalls::MelonLogger::Flush() { 
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
     Logger::Flush(); Console::Flush(); 
 #endif
 }
@@ -118,14 +118,14 @@ Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::E
 Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPath); }
 Mono::String* InternalCalls::MelonUtils::GetMainAssemblyLoc() { return Mono::Exports::mono_string_new(Mono::domain, Il2Cpp::LibPath); }
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, HashCode::Hash.c_str()); }
 #else 
 Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, "Placeholder Hash"); }
 #endif
 void InternalCalls::MelonUtils::SCT(Mono::String* title)
 {
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
     if (title == NULL) return;
     auto str = Mono::Exports::mono_string_to_utf8(title);
     Console::SetTitle(str);
@@ -193,7 +193,7 @@ void InternalCalls::MelonDebug::AddInternalCalls()
 
 #pragma region SupportModules
 void InternalCalls::SupportModules::SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion) { 
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
     Console::SetDefaultTitleWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL);
 #endif
 }

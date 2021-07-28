@@ -317,7 +317,7 @@ void Mono::CreateDomain(const char* name)
 	}
 #endif
 
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	if (!IsOldMono)
 		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argv);
 #endif
