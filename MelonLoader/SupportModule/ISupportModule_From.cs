@@ -1,6 +1,6 @@
 ﻿namespace MelonLoader
 {
-	public interface ISupportModule_From
+    public interface ISupportModule_From
     {
         void OnSceneWasLoaded(int buildIndex, string sceneName);
         void OnSceneWasInitialized(int buildIndex, string sceneName);

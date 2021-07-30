@@ -9,82 +9,82 @@ using System.Threading;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
-	internal class ExecutablePackageBase : PackageBase
-	{
-		internal static AutoResetEvent ResetEvent_Output;
-		internal static AutoResetEvent ResetEvent_Error;
-		internal string ExePath = null;
-		internal string Output = null;
+    internal class ExecutablePackageBase : PackageBase
+    {
+        internal static AutoResetEvent ResetEvent_Output;
+        internal static AutoResetEvent ResetEvent_Error;
+        internal string ExePath = null;
+        internal string Output = null;
 
-		internal virtual void Cleanup()
-		{
-			if (!Directory.Exists(Output))
-				return;
-			Directory.Delete(Output, true);
-		}
+        internal virtual void Cleanup()
+        {
+            if (!Directory.Exists(Output))
+                return;
+            Directory.Delete(Output, true);
+        }
 
-		internal bool Execute(string[] args, bool parenthesize_args = true, Dictionary<string, string> environment = null)
-		{
-			if (!Directory.Exists(Output))
-				Directory.CreateDirectory(Output);
-			if (!File.Exists(ExePath))
-			{
-				MelonLogger.Error(Path.GetFileName(ExePath) + " Doesn't Exist!");
-				return false;
-			}
-			try
-			{
-				ResetEvent_Output = new AutoResetEvent(false);
-				ResetEvent_Error = new AutoResetEvent(false);
+        internal bool Execute(string[] args, bool parenthesize_args = true, Dictionary<string, string> environment = null)
+        {
+            if (!Directory.Exists(Output))
+                Directory.CreateDirectory(Output);
+            if (!File.Exists(ExePath))
+            {
+                MelonLogger.Error(Path.GetFileName(ExePath) + " Doesn't Exist!");
+                return false;
+            }
+            try
+            {
+                ResetEvent_Output = new AutoResetEvent(false);
+                ResetEvent_Error = new AutoResetEvent(false);
 
-				ProcessStartInfo processStartInfo = new ProcessStartInfo(ExePath,
-					parenthesize_args
-					?
-					string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => "\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\""))
-					:
-					string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => Regex.Replace(it, @"(\\+)$", @"$1$1"))));
-				processStartInfo.UseShellExecute = false;
-				processStartInfo.RedirectStandardOutput = true;
-				processStartInfo.RedirectStandardError = true;
-				processStartInfo.CreateNoWindow = true;
-				processStartInfo.WorkingDirectory = Path.GetDirectoryName(ExePath);
+                ProcessStartInfo processStartInfo = new ProcessStartInfo(ExePath,
+                    parenthesize_args
+                    ?
+                    string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => "\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\""))
+                    :
+                    string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => Regex.Replace(it, @"(\\+)$", @"$1$1"))));
+                processStartInfo.UseShellExecute = false;
+                processStartInfo.RedirectStandardOutput = true;
+                processStartInfo.RedirectStandardError = true;
+                processStartInfo.CreateNoWindow = true;
+                processStartInfo.WorkingDirectory = Path.GetDirectoryName(ExePath);
 
-				if (environment != null)
-				{
-					foreach (var kvp in environment)
-					{
-						processStartInfo.EnvironmentVariables[kvp.Key] = kvp.Value;
-					}
-				}
+                if (environment != null)
+                {
+                    foreach (var kvp in environment)
+                    {
+                        processStartInfo.EnvironmentVariables[kvp.Key] = kvp.Value;
+                    }
+                }
 
-				MelonLogger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
+                MelonLogger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
 
-				Process process = new Process();
-				process.StartInfo = processStartInfo;
-				process.OutputDataReceived += OutputStream;
-				process.ErrorDataReceived += ErrorStream;
-				process.Start();
+                Process process = new Process();
+                process.StartInfo = processStartInfo;
+                process.OutputDataReceived += OutputStream;
+                process.ErrorDataReceived += ErrorStream;
+                process.Start();
 
-				SetProcessId(process.Id);
+                SetProcessId(process.Id);
 
-				process.BeginOutputReadLine();
-				process.BeginErrorReadLine();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
-				process.WaitForExit();
-				ResetEvent_Output.WaitOne();
-				ResetEvent_Error.WaitOne();
+                process.WaitForExit();
+                ResetEvent_Output.WaitOne();
+                ResetEvent_Error.WaitOne();
 
-				SetProcessId(0);
-				return process.ExitCode == 0;
-			}
-			catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
-			return false;
-		}
+                SetProcessId(0);
+                return process.ExitCode == 0;
+            }
+            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+            return false;
+        }
 
-		private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else MelonLogger.Msg(e.Data); }
-		private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else MelonLogger.Error(e.Data); }
+        private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else MelonLogger.Msg(e.Data); }
+        private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else MelonLogger.Error(e.Data); }
 
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		internal extern static void SetProcessId(int id);
-	}
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void SetProcessId(int id);
+    }
 }
