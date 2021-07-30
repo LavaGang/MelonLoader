@@ -21,6 +21,6 @@ namespace MelonLoader.Support
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string GetManagedDirectory();
+        private static extern string GetManagedDirectory();
     }
 }

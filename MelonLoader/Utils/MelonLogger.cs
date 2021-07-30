@@ -76,19 +76,19 @@ namespace MelonLoader.Utils
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt);
+        internal static extern void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Warning(string namesection, string txt);
+        private static extern void Internal_Warning(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_Error(string namesection, string txt);
+        internal static extern void Internal_Error(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void ThrowInternalFailure(string txt);
+        internal static extern void ThrowInternalFailure(string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void WriteSpacer();
+        internal static extern void WriteSpacer();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_PrintModName(ConsoleColor meloncolor, string name, string version);
+        internal static extern void Internal_PrintModName(ConsoleColor meloncolor, string name, string version);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Flush();
+        internal static extern void Flush();
 
         [Obsolete("Log is obsolete. Please use Msg instead.")]
         public static void Log(string txt) => Msg(txt);

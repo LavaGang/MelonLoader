@@ -86,6 +86,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else MelonLogger.Error(e.Data); }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void SetProcessId(int id);
+        internal static extern void SetProcessId(int id);
     }
 }

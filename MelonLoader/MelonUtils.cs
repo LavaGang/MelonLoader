@@ -285,48 +285,48 @@ namespace MelonLoader
             => NativeLibrary.GetExport(ptr, name);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsGame32Bit();
+        public static extern bool IsGame32Bit();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsGameIl2Cpp();
+        public static extern bool IsGameIl2Cpp();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsOldMono();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetApplicationPath();
+        public static extern bool IsOldMono();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetGameDataDirectory();
+        public static extern string GetApplicationPath();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetUnityVersion();
+        public static extern string GetGameDataDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetManagedDirectory();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void SetConsoleTitle([MarshalAs(UnmanagedType.LPStr)] string title);
+        public static extern string GetUnityVersion();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
+        public static extern string GetManagedDirectory();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern void SetConsoleTitle([MarshalAs(UnmanagedType.LPStr)] string title);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        public static extern string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
+        public static extern void NativeHookAttach(IntPtr target, IntPtr detour);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
+        public static extern void NativeHookDetach(IntPtr target, IntPtr detour);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetBaseDirectory();
+        private static extern string Internal_GetBaseDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameName();
+        private static extern string Internal_GetGameName();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameDeveloper();
+        private static extern string Internal_GetGameDeveloper();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameDirectory();
+        private static extern string Internal_GetGameDirectory();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetHashCode();
+        private static extern string Internal_GetHashCode();
     }
 }

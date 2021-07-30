@@ -71,8 +71,8 @@ namespace MelonLoader.InternalUtils
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void EnableCloseButton();
+        private static extern void EnableCloseButton();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void DisableCloseButton();
+        private static extern void DisableCloseButton();
     }
 }

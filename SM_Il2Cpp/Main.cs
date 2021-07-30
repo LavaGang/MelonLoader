@@ -155,7 +155,7 @@ namespace MelonLoader.Support
     {
         private static readonly List<object> PinnedDelegates = new List<object>();
 
-        unsafe public T Detour<T>(IntPtr @from, T to) where T : Delegate
+        public unsafe T Detour<T>(IntPtr @from, T to) where T : Delegate
         {
             IntPtr* targetVarPointer = &from;
             PinnedDelegates.Add(to);
