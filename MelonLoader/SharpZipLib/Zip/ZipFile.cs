@@ -2089,7 +2089,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 			byte[] centralExtraData = ed.GetEntryData();
 
 			WriteLEShort(centralExtraData.Length);
-			WriteLEShort(entry.Comment != null ? entry.Comment.Length : 0);
+			WriteLEShort(entry.Comment?.Length ?? 0);
 
 			WriteLEShort(0);	// disk number
 			WriteLEShort(0);	// internal file attributes

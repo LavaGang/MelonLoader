@@ -48,9 +48,7 @@ namespace MelonLoader
         {
             if (!string.IsNullOrEmpty(game_version) && !game_version.Equals("0"))
                 return;
-            game_version = (method != null)
-                ? (string)method.Invoke(null, new object[0])
-                : null;
+            game_version = (string) method?.Invoke(null, new object[0]);
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]

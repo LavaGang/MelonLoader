@@ -421,7 +421,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 				WriteLEInt(( int )startOfCentralDirectory);
 			}
 
-			int commentLength = (comment != null) ? comment.Length : 0;
+			int commentLength = comment?.Length ?? 0;
 
 			if ( commentLength > 0xffff ) {
 				throw new ZipException(string.Format("Comment length({0}) is too long can only be 64K", commentLength));

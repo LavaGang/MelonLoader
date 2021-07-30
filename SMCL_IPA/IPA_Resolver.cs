@@ -75,7 +75,7 @@ namespace MelonLoader.CompatibilityLayers
 			{
 				Assembly = Assembly,
 				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version),
-				Games = (gamestbl != null) ? gamestbl.ToArray() : null,
+				Games = gamestbl?.ToArray(),
 				Priority = 0,
 				Location = FilePath
 			}.CreateMelon<MelonModWrapper>();

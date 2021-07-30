@@ -227,9 +227,7 @@ namespace MelonLoader
             catch (ReflectionTypeLoadException ex) { returnval = ex.Types; }
             return returnval.Where(x =>
                 ((x != null)
-                    && ((predicate != null)
-                        ? predicate(x)
-                        : true)));
+                    && (predicate?.Invoke(x) ?? true)));
         }
 
         public static bool IsNotImplemented(this MethodBase methodBase)

@@ -717,7 +717,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 				throw new ArgumentOutOfRangeException("headerID");
 			}
 
-			int addLength = (fieldData == null) ? 0 : fieldData.Length;
+			int addLength = fieldData?.Length ?? 0;
 
 			if ( addLength > ushort.MaxValue ) {
 #if NETCF_1_0

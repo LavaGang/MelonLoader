@@ -86,8 +86,8 @@ namespace MelonLoader.CompatibilityLayers
                 Info = infoAttribute,
                 Games = gameAttributes.ToArray(),
                 OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly),
-                ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
-                Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
+                ConsoleColor = coloratt?.Color ?? MelonLogger.DefaultMelonColor,
+                Priority = priorityatt?.Priority ?? 0,
                 Location = FilePath
             }.CreateMelon();
             if (instance == null)

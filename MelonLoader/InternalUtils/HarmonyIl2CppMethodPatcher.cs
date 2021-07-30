@@ -283,7 +283,7 @@ namespace MelonLoader.InternalUtils
             if (!HarmonyFileLog.Enabled)
                 return;
             var localCount = -1;
-            var localsArray = localsGetter != null ? localsGetter(il) : null;
+            var localsArray = localsGetter?.Invoke(il);
             if (localsArray != null && localsArray.Length > 0)
                 localCount = localsArray.Length;
             else if (localCountGetter != null)
