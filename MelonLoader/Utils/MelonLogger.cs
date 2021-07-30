@@ -43,11 +43,11 @@ namespace MelonLoader
         }
 
         internal static void RunMsgCallbacks(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt) => MsgCallbackHandler?.Invoke(namesection_color, txt_color, namesection, txt);
-        public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
+        public static event LemonAction<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
         internal static void RunWarningCallbacks(string namesection, string txt) => WarningCallbackHandler?.Invoke(namesection, txt);
-        public static event Action<string, string> WarningCallbackHandler;
+        public static event LemonAction<string, string> WarningCallbackHandler;
         internal static void RunErrorCallbacks(string namesection, string txt) => ErrorCallbackHandler?.Invoke(namesection, txt);
-        public static event Action<string, string> ErrorCallbackHandler;
+        public static event LemonAction<string, string> ErrorCallbackHandler;
 
         public class Instance
         {

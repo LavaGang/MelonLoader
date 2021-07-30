@@ -64,7 +64,7 @@ namespace MelonLoader.InternalUtils
             MelonUtils.NativeHookAttach(copiedMethodInfoPointer, il2CppShimDelegatePtr);
             methodDetourPointer = il2CppShimDelegatePtr;
 
-            PatchTools_RememberObject(Original, new PotatoTriple { First = newreplacement, Second = il2CppShim, Third = il2CppShimDelegate });
+            PatchTools_RememberObject(Original, new LemonTuple<MethodInfo, MethodInfo, Delegate>{ Item1 = newreplacement, Item2 = il2CppShim, Item3 = il2CppShimDelegate });
 
             return newreplacement;
         }
@@ -347,7 +347,7 @@ namespace MelonLoader.InternalUtils
         {
             MelonLogger.Instance loggerInstance = null;
 
-            MelonEnumerator<MelonPlugin> PluginEnumerator = new MelonEnumerator<MelonPlugin>(MelonHandler._Plugins.ToArray());
+            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonHandler._Plugins.ToArray());
             while (PluginEnumerator.MoveNext())
                 if (criterion(PluginEnumerator.Current))
                 {
@@ -357,7 +357,7 @@ namespace MelonLoader.InternalUtils
 
             if (loggerInstance == null)
             {
-                MelonEnumerator<MelonMod> ModEnumerator = new MelonEnumerator<MelonMod>(MelonHandler._Mods.ToArray());
+                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonHandler._Mods.ToArray());
                 while (ModEnumerator.MoveNext())
                     if (criterion(ModEnumerator.Current))
                     {
@@ -371,12 +371,5 @@ namespace MelonLoader.InternalUtils
 
         private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
         public override DynamicMethodDefinition PrepareOriginal() => null;
-
-        private class PotatoTriple
-        {
-            public MethodBase First;
-            public MethodBase Second;
-            public Delegate Third;
-        }
     }
 }

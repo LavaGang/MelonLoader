@@ -1,5 +1,6 @@
 ﻿using MelonLoader.InternalUtils;
 using System;
+using System.Diagnostics;
 
 namespace MelonLoader
 {
@@ -7,17 +8,14 @@ namespace MelonLoader
     {
         internal static HarmonyLib.Harmony HarmonyInstance = null;
 
-        static Core()
+        private static int Initialize()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
+            Fixes.UnhandledException.Install(curDomain);
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
-            Fixes.UnhandledException.Run(curDomain);
-            Fixes.InvariantCurrentCulture.Install();
-
-            try { MelonUtils.Setup(); } catch (Exception ex) { MelonLogger.Error("MelonUtils.Setup Exception: " + ex.ToString()); throw ex; }
-
-            Fixes.ApplicationBase.Run(curDomain);
+            Fixes.ForcedCultureInfo.Install();
+            MelonUtils.Setup(curDomain);
             Fixes.ExtraCleanup.Run();
 
             MelonPreferences.Load();
@@ -25,10 +23,7 @@ namespace MelonLoader
             MelonCompatibilityLayer.Setup();
 
             PatchShield.Install();
-        }
 
-        private static int Initialize()
-        {
             bHaptics.Load();
 
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
@@ -87,7 +82,9 @@ namespace MelonLoader
             bHaptics.Quit();
 
             MelonLogger.Flush();
-            Fixes.QuitFix.Run();
+
+            if (MelonLaunchOptions.Core.QuitFix)
+                Process.GetCurrentProcess().Kill();
         }
 
         private static void AddUnityDebugLog()

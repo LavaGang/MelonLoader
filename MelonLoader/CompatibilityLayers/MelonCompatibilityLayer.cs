@@ -162,8 +162,8 @@ namespace MelonLoader
 
         // Assembly to Resolver Conversion
         private delegate Resolver AssemblyToResolverDelegate(Assembly assembly, string filepath);
-        private static event Func<Assembly, string, Resolver> AssemblyToResolverEvents;
-        public static void AddAssemblyToResolverEvent(Func<Assembly, string, Resolver> evt) => AssemblyToResolverEvents += evt;
+        private static event LemonFunc<Assembly, string, Resolver> AssemblyToResolverEvents;
+        public static void AddAssemblyToResolverEvent(LemonFunc<Assembly, string, Resolver> evt) => AssemblyToResolverEvents += evt;
         internal static Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
         {
             Delegate[] invoke_list = AssemblyToResolverEvents.GetInvocationList();
@@ -171,7 +171,7 @@ namespace MelonLoader
                 return null;
             for (int i = 0; i < invoke_list.Length; i++)
             {
-                AssemblyToResolverDelegate func = new AssemblyToResolverDelegate((Func<Assembly, string, Resolver>)invoke_list[i]);
+                AssemblyToResolverDelegate func = new AssemblyToResolverDelegate((LemonFunc<Assembly, string, Resolver>)invoke_list[i]);
                 Resolver resolver = func(assembly, filepath);
                 if (resolver != null)
                     return resolver;
@@ -180,13 +180,13 @@ namespace MelonLoader
         }
 
         // Refresh Event - Plugins
-        private static event Action RefreshPluginsEvents;
-        public static void AddRefreshPluginsEvent(Action evt) => RefreshPluginsEvents += evt;
+        private static event LemonAction RefreshPluginsEvents;
+        public static void AddRefreshPluginsEvent(LemonAction evt) => RefreshPluginsEvents += evt;
         public static void RefreshPlugins() => RefreshPluginsEvents?.Invoke();
 
         // Refresh Event - Mods
-        private static event Action RefreshModsEvents;
-        public static void AddRefreshModsEvent(Action evt) => RefreshModsEvents += evt;
+        private static event LemonAction RefreshModsEvents;
+        public static void AddRefreshModsEvent(LemonAction evt) => RefreshModsEvents += evt;
         public static void RefreshMods() => RefreshModsEvents?.Invoke();
 
         // Resolver Base
@@ -216,10 +216,10 @@ namespace MelonLoader
                 internal bool ShouldLoad = false;
                 internal bool ShouldDelete = false;
             }
-            internal Action<LoadSpecifierArgs> LoadSpecifier = null;
+            internal LemonAction<LoadSpecifierArgs> LoadSpecifier = null;
             internal ModuleListing(string filename)
                 => FileName = filename;
-            internal ModuleListing(string filename, Action<LoadSpecifierArgs> loadSpecifier)
+            internal ModuleListing(string filename, LemonAction<LoadSpecifierArgs> loadSpecifier)
             {
                 FileName = filename;
                 LoadSpecifier = loadSpecifier;
