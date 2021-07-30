@@ -1,8 +1,9 @@
-﻿using System;
+﻿using MelonLoader.InternalUtils;
+using System;
 
 namespace MelonLoader
 {
-    internal static class Core
+	internal static class Core
     {
         internal static HarmonyLib.Harmony HarmonyInstance = null;
 

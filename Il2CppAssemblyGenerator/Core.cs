@@ -1,13 +1,13 @@
-﻿using System;
+﻿using MelonLoader.Il2CppAssemblyGenerator.Packages;
+using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
-    internal class DumperBase : ExecutablePackageBase { internal virtual bool Execute() { return true; } };
 
-    internal static class Core
+	internal static class Core
     {
         internal static string BasePath = null;
         internal static string GameAssemblyPath = null;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.InternalUtils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Security.Cryptography;
 
 namespace MelonLoader
 {
-    public static class MelonHandler
+	public static class MelonHandler
     {
         /// <summary>
         /// Directory of Plugins.
@@ -115,8 +116,8 @@ namespace MelonLoader
 
             MelonBase[] original_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
-            MelonFileTypes.DLL.LoadAll(basedirectory, plugins);
-            MelonFileTypes.ZIP.LoadAll(basedirectory);
+            FileTypes.DLL.LoadAll(basedirectory, plugins);
+            FileTypes.ZIP.LoadAll(basedirectory);
 
             MelonBase[] new_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
@@ -172,10 +173,10 @@ namespace MelonLoader
             switch (Path.GetExtension(filepath).ToLowerInvariant())
             {
                 case ".dll":
-                    MelonFileTypes.DLL.LoadFromFile(filepath, symbolspath);
+                    FileTypes.DLL.LoadFromFile(filepath, symbolspath);
                     goto default;
                 case ".zip":
-                    MelonFileTypes.ZIP.LoadFromFile(filepath);
+                    FileTypes.ZIP.LoadFromFile(filepath);
                     goto default;
                 default:
                     break;
@@ -189,7 +190,7 @@ namespace MelonLoader
 
             // To-Do Check for ZIP Byte Arrays
 
-            MelonFileTypes.DLL.LoadFromByteArray(filedata, symbolsdata, filepath);
+            FileTypes.DLL.LoadFromByteArray(filedata, symbolsdata, filepath);
         }
 
         public static void LoadFromAssembly(Assembly asm, string filepath = null)

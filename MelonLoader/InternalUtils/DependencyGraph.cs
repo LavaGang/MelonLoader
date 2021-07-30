@@ -4,7 +4,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace MelonLoader
+namespace MelonLoader.InternalUtils
 {
 	internal class DependencyGraph<T> where T : MelonBase
 	{
@@ -53,31 +53,31 @@ namespace MelonLoader
 				additionalDependencies.Clear();
 
 				MelonOptionalDependenciesAttribute optionals = (MelonOptionalDependenciesAttribute)Attribute.GetCustomAttribute(melonAssembly, typeof(MelonOptionalDependenciesAttribute));
-				if ((optionals != null)
-					&& (optionals.AssemblyNames != null))
+				if (optionals != null
+					&& optionals.AssemblyNames != null)
 					optionalDependencies.UnionWith(optionals.AssemblyNames);
 
 				MelonAdditionalDependenciesAttribute additionals = (MelonAdditionalDependenciesAttribute)Attribute.GetCustomAttribute(melonAssembly, typeof(MelonAdditionalDependenciesAttribute));
-				if ((additionals != null)
-					&& (additionals.AssemblyNames != null))
+				if (additionals != null
+					&& additionals.AssemblyNames != null)
 					additionalDependencies.UnionWith(additionals.AssemblyNames);
 
 				MelonIncompatibleAssembliesAttribute incompatibleAssemblies = (MelonIncompatibleAssembliesAttribute)Attribute.GetCustomAttribute(melonAssembly, typeof(MelonIncompatibleAssembliesAttribute));
-				if ((incompatibleAssemblies != null)
-					&& (incompatibleAssemblies.AssemblyNames != null))
-                {
-                    foreach (string name in incompatibleAssemblies.AssemblyNames)
-                        foreach (Vertex v in vertices)
-                        {
+				if (incompatibleAssemblies != null
+					&& incompatibleAssemblies.AssemblyNames != null)
+				{
+					foreach (string name in incompatibleAssemblies.AssemblyNames)
+						foreach (Vertex v in vertices)
+						{
 							AssemblyName assemblyName = v.melon.Assembly.GetName();
-							if ((v != melonVertex)
-								&& (assemblyName.Name == name))
-                            {
+							if (v != melonVertex
+								&& assemblyName.Name == name)
+							{
 								incompatibilities.Add(assemblyName);
 								v.skipLoading = true;
-                            }
+							}
 						}
-                }
+				}
 
 				foreach (AssemblyName dependency in melonAssembly.GetReferencedAssemblies())
 				{
@@ -103,10 +103,8 @@ namespace MelonLoader
 				}
 
 				if (missingDependencies.Count > 0)
-				{
 					// melonVertex.skipLoading = true;
 					melonsWithMissingDeps.Add(melonVertex.melon.Info.Name, missingDependencies.ToArray());
-				}
 
 				if (incompatibilities.Count > 0)
 					melonsWithIncompatibilities.Add(melonVertex.melon.Info.Name, incompatibilities.ToArray());
@@ -114,9 +112,9 @@ namespace MelonLoader
 
 			// Some Melons are missing dependencies. Don't load these Melons and show an error message
 			if (melonsWithMissingDeps.Count > 0)
-				MelonLogger.Warning(BuildMissingDependencyMessage(melonsWithMissingDeps)); 
+				MelonLogger.Warning(BuildMissingDependencyMessage(melonsWithMissingDeps));
 
-			if(melonsWithIncompatibilities.Count > 0)
+			if (melonsWithIncompatibilities.Count > 0)
 				MelonLogger.Warning(BuildIncompatibleAssembliesMessage(melonsWithIncompatibilities));
 		}
 
@@ -136,7 +134,8 @@ namespace MelonLoader
 			}
 		}
 
-		private static string BuildMissingDependencyMessage(IDictionary<string, IList<AssemblyName>> melonsWithMissingDeps) {
+		private static string BuildMissingDependencyMessage(IDictionary<string, IList<AssemblyName>> melonsWithMissingDeps)
+		{
 			StringBuilder messageBuilder = new StringBuilder("Some Melons are missing dependencies, which you may have to install.\n" +
 				"If these are optional dependencies, mark them as optional using the MelonOptionalDependencies attribute.\n" +
 				"This warning will turn into an error and Melons with missing dependencies will not be loaded in the next version of MelonLoader.\n");
