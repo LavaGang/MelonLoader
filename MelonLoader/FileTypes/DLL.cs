@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace MelonLoader.MelonFileTypes
+namespace MelonLoader.FileTypes
 {
     internal static class DLL
     {

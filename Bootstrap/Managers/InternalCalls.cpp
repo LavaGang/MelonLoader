@@ -193,8 +193,8 @@ void InternalCalls::GameVersionHandler::AddInternalCalls()
 #pragma region AssemblyGenerator
 void InternalCalls::IIl2CppAssemblyGenerator::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator::EnableCloseButton", Console::EnableCloseButton);
-	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator::DisableCloseButton", Console::DisableCloseButton);
+	Mono::AddInternalCall("MelonLoader.InternalUtils.Il2CppAssemblyGenerator::EnableCloseButton", Console::EnableCloseButton);
+	Mono::AddInternalCall("MelonLoader.InternalUtils.Il2CppAssemblyGenerator::DisableCloseButton", Console::DisableCloseButton);
 	ExecutablePackageBase::AddInternalCalls();
 }
 
@@ -202,7 +202,7 @@ void InternalCalls::IIl2CppAssemblyGenerator::AddInternalCalls()
 void InternalCalls::IIl2CppAssemblyGenerator::ExecutablePackageBase::SetProcessId(int id) { Il2CppAssemblyGenerator::ProcessId = id; }
 void InternalCalls::IIl2CppAssemblyGenerator::ExecutablePackageBase::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.ExecutablePackageBase::SetProcessId", SetProcessId);
+	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.Packages.ExecutablePackageBase::SetProcessId", SetProcessId);
 }
 #pragma endregion
 

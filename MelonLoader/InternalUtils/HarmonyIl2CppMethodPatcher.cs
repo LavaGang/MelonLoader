@@ -10,7 +10,7 @@ using Mono.Cecil;
 using MonoMod.Utils;
 using MonoMod.Cil;
 
-namespace MelonLoader
+namespace MelonLoader.InternalUtils
 {
 	internal class HarmonyIl2CppMethodPatcher : MethodPatcher
 	{
@@ -23,10 +23,10 @@ namespace MelonLoader
 		private bool hasWarned = false;
 
 		private delegate void PatchTools_RememberObject_Delegate(object key, object value);
-		private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;	
+		private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;
 
 		static HarmonyIl2CppMethodPatcher()
-        {
+		{
 			try { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len"); }
 			catch { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length"); }
 			try { localsGetter = AccessTools.FieldRefAccess<ILGenerator, LocalBuilder[]>("locals"); } catch { }
@@ -281,7 +281,7 @@ namespace MelonLoader
 				return;
 			var localCount = -1;
 			var localsArray = localsGetter != null ? localsGetter(il) : null;
-			if ((localsArray != null) && (localsArray.Length > 0))
+			if (localsArray != null && localsArray.Length > 0)
 				localCount = localsArray.Length;
 			else if (localCountGetter != null)
 				localCount = localCountGetter(il);
@@ -299,13 +299,13 @@ namespace MelonLoader
 
 			PatchInfo patchInfo = Original.GetPatchInfo();
 
-			Patch basePatch = ((patchInfo.prefixes.Count() > 0) ? patchInfo.prefixes.First()
-				: ((patchInfo.postfixes.Count() > 0) ? patchInfo.postfixes.First()
-				: ((patchInfo.transpilers.Count() > 0) ? patchInfo.transpilers.First()
-				: ((patchInfo.finalizers.Count() > 0) ? patchInfo.finalizers.First() : null))));
+			Patch basePatch = patchInfo.prefixes.Count() > 0 ? patchInfo.prefixes.First()
+				: patchInfo.postfixes.Count() > 0 ? patchInfo.postfixes.First()
+				: patchInfo.transpilers.Count() > 0 ? patchInfo.transpilers.First()
+				: patchInfo.finalizers.Count() > 0 ? patchInfo.finalizers.First() : null;
 
-			MelonLogger.Instance loggerInstance = FindMelon(melon => ((basePatch != null) && melon.HarmonyInstance.Id.Equals(basePatch.owner)));
-			if ((loggerInstance == null) && (basePatch != null))
+			MelonLogger.Instance loggerInstance = FindMelon(melon => basePatch != null && melon.HarmonyInstance.Id.Equals(basePatch.owner));
+			if (loggerInstance == null && basePatch != null)
 			{
 				// Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
 				Assembly melonAssembly = basePatch.PatchMethod.DeclaringType?.Assembly;
@@ -318,9 +318,9 @@ namespace MelonLoader
 		}
 
 		private void WarnIfOriginalMethodIsInlined(MelonLogger.Instance loggerInstance)
-        {
+		{
 			int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(Original) ?? -1;
-			if ((callerCount > 0)
+			if (callerCount > 0
 				|| UnityMagicMethods.IsUnityMagicMethod(Original))
 				return;
 			string txt = $"Harmony: Method {Original.FullDescription()} does not appear to get called directly from anywhere, " +
@@ -332,7 +332,7 @@ namespace MelonLoader
 		}
 
 		private void WarnIfHasTranspiler(PatchInfo patchInfo, MelonLogger.Instance loggerInstance)
-        {
+		{
 			if (patchInfo.transpilers.Length <= 0)
 				return;
 			string txt = $"Harmony: Method {Original.FullDescription()} will only have its Unhollowed IL available to Transpilers, " +
@@ -371,7 +371,7 @@ namespace MelonLoader
 
 		private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
 		public override DynamicMethodDefinition PrepareOriginal() => null;
-		
+
 		private class PotatoTriple
 		{
 			public MethodBase First;

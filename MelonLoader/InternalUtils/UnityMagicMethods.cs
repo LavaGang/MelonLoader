@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MelonLoader
+namespace MelonLoader.InternalUtils
 {
 	/*
 	 * A list of Unity's built-in messages / magic methods and their (optional) argument types.
