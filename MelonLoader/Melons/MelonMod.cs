@@ -37,12 +37,12 @@ namespace MelonLoader.Melons
         [Obsolete("OnLevelWasInitialized is obsolete. Please use OnSceneWasInitialized instead.")]
         public virtual void OnLevelWasInitialized(int level) { }
 
-        [Obsolete()]
-        private MelonModInfoAttribute _LegacyInfoAttribute = null;
+        [Obsolete]
+        private MelonModInfoAttribute _LegacyInfoAttribute;
         [Obsolete("MelonMod.InfoAttribute is obsolete. Please use MelonBase.Info instead.")]
         public MelonModInfoAttribute InfoAttribute { get { if (_LegacyInfoAttribute == null) _LegacyInfoAttribute = new MelonModInfoAttribute(Info.SystemType, Info.Name, Info.Version, Info.Author, Info.DownloadLink); return _LegacyInfoAttribute; } }
-        [Obsolete()]
-        private MelonModGameAttribute[] _LegacyGameAttributes = null;
+        [Obsolete]
+        private MelonModGameAttribute[] _LegacyGameAttributes;
         [Obsolete("MelonMod.GameAttributes is obsolete. Please use MelonBase.Games instead.")]
         public MelonModGameAttribute[] GameAttributes { get {
                 if (_LegacyGameAttributes != null)

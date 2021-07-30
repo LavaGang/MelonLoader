@@ -102,7 +102,6 @@ namespace MelonLoader.FileTypes
                         catch (Exception ex)
                         {
                             MelonLogger.Error($"Failed to Read Entry {entry.Name} in ZIP Archive {filepath}: {ex}");
-                            continue;
                         }
                     }
                 }
@@ -124,8 +123,8 @@ namespace MelonLoader.FileTypes
 
             foreach (KeyValuePair<string, ByteArrayPair> keyValuePair in pairs)
             {
-                if ((keyValuePair.Value == null)
-                    || (keyValuePair.Value.filedata == null))
+                if (keyValuePair.Value == null
+                    || keyValuePair.Value.filedata == null)
                     continue;
                 DLL.LoadFromByteArray(keyValuePair.Value.filedata, keyValuePair.Value.symbolsdata, filepath);
             }

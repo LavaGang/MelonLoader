@@ -31,12 +31,12 @@ namespace MelonLoader.BackwardsCompatibility.Melon
                 foreach (MelonPreferences_Entry entry in category.Entries)
                 {
                     Type reflectedType = entry.GetReflectedType();
-                    if ((reflectedType != typeof(string))
-                        && (reflectedType != typeof(bool))
-                        && (reflectedType != typeof(int))
-                        && (reflectedType != typeof(float))
-                        && (reflectedType != typeof(double))
-                        && (reflectedType != typeof(long)))
+                    if (reflectedType != typeof(string)
+                        && reflectedType != typeof(bool)
+                        && reflectedType != typeof(int)
+                        && reflectedType != typeof(float)
+                        && reflectedType != typeof(double)
+                        && reflectedType != typeof(long))
                         continue;
                     MelonPreference newpref = new MelonPreference(entry);
                     newprefsdict.Add(entry.Identifier, newpref);
@@ -53,20 +53,14 @@ namespace MelonLoader.BackwardsCompatibility.Melon
         public static string GetString(string section, string name)
         {
             MelonPreferences_Category category = MelonPreferences.GetCategory(section);
-            if (category == null)
-                return null;
-            MelonPreferences_Entry entry = category.GetEntry(name);
-            if (entry == null)
-                return null;
-            return entry.GetValueAsString();
+            MelonPreferences_Entry entry = category?.GetEntry(name);
+            return entry?.GetValueAsString();
         }
         [Obsolete("MelonLoader.MelonPrefs.SetString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryString instead.")]
         public static void SetString(string section, string name, string value)
         {
             MelonPreferences_Category category = MelonPreferences.GetCategory(section);
-            if (category == null)
-                return;
-            MelonPreferences_Entry entry = category.GetEntry(name);
+            MelonPreferences_Entry entry = category?.GetEntry(name);
             if (entry == null)
                 return;
             switch (entry)
@@ -122,15 +116,16 @@ namespace MelonLoader.BackwardsCompatibility.Melon
                 {
                     if (Entry.GetReflectedType() == typeof(string))
                         return MelonPreferenceType.STRING;
-                    else if (Entry.GetReflectedType() == typeof(bool))
+                    if (Entry.GetReflectedType() == typeof(bool))
                         return MelonPreferenceType.BOOL;
-                    else if ((Entry.GetReflectedType() == typeof(float))
-                        || (Entry.GetReflectedType() == typeof(double)))
+                    if (Entry.GetReflectedType() == typeof(float)
+                        || Entry.GetReflectedType() == typeof(double))
                         return MelonPreferenceType.FLOAT;
-                    else if ((Entry.GetReflectedType() == typeof(int))
-                        || (Entry.GetReflectedType() == typeof(long))
-                        || (Entry.GetReflectedType() == typeof(byte)))
+                    if (Entry.GetReflectedType() == typeof(int)
+                        || Entry.GetReflectedType() == typeof(long)
+                        || Entry.GetReflectedType() == typeof(byte))
                         return MelonPreferenceType.INT;
+
                     return (MelonPreferenceType)4;
                 }
             }
@@ -141,24 +136,18 @@ namespace MelonLoader.BackwardsCompatibility.Melon
 
             internal MelonPreference(MelonPreferences_Entry entry) => Entry = entry;
             internal MelonPreference(MelonPreference pref) => Entry = pref.Entry;
-            private MelonPreferences_Entry Entry = null;
+            private MelonPreferences_Entry Entry;
             private static string GetEditedString(string section, string name)
             {
                 MelonPreferences_Category category = MelonPreferences.GetCategory(section);
-                if (category == null)
-                    return null;
-                MelonPreferences_Entry entry = category.GetEntry(name);
-                if (entry == null)
-                    return null;
+                MelonPreferences_Entry entry = category?.GetEntry(name);
 
-                return entry.GetEditedValueAsString();
+                return entry?.GetEditedValueAsString();
             }
             private static void SetEditedString(string section, string name, string value)
             {
                 MelonPreferences_Category category = MelonPreferences.GetCategory(section);
-                if (category == null)
-                    return;
-                MelonPreferences_Entry entry = category.GetEntry(name);
+                MelonPreferences_Entry entry = category?.GetEntry(name);
                 if (entry == null)
                     return;
                 switch (entry)

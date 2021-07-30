@@ -7,10 +7,10 @@ namespace MelonLoader.Utils
 {
     public static class bHaptics
     {
-        private static NativeExports NativeLib = null;
+        private static NativeExports NativeLib;
         private static readonly int MaxBufferSize = 20;
-        private static bool _waserror = false;
-        public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Disabling bHaptics API..."); _waserror = value; } }
+        private static bool _waserror;
+        public static bool WasError { get => _waserror; internal set { if (value) MelonLogger.Warning("Disabling bHaptics API..."); _waserror = value; } }
 
         internal static void Load()
         {
@@ -59,11 +59,11 @@ namespace MelonLoader.Utils
             catch (Exception ex) { MelonLogger.Warning($"bHaptics.Quit Exception: {ex}"); WasError = true; }
         }
 
-        public static bool IsPlaying() => (!_waserror && NativeLib.IsPlaying());
-        public static bool IsPlaying(string key) => (!_waserror && NativeLib.IsPlayingKey(Marshal.StringToHGlobalAnsi(key)));
-        public static bool IsDeviceConnected(PositionType type) => (!_waserror && NativeLib.IsDevicePlaying(type));
-        public static bool IsDeviceConnected(DeviceType type, bool isLeft = true) => (!_waserror && NativeLib.IsDevicePlaying(DeviceTypeToPositionType(type, isLeft)));
-        public static bool IsFeedbackRegistered(string key) => (!_waserror && NativeLib.IsFeedbackRegistered(Marshal.StringToHGlobalAnsi(key)));
+        public static bool IsPlaying() => !_waserror && NativeLib.IsPlaying();
+        public static bool IsPlaying(string key) => !_waserror && NativeLib.IsPlayingKey(Marshal.StringToHGlobalAnsi(key));
+        public static bool IsDeviceConnected(PositionType type) => !_waserror && NativeLib.IsDevicePlaying(type);
+        public static bool IsDeviceConnected(DeviceType type, bool isLeft = true) => !_waserror && NativeLib.IsDevicePlaying(DeviceTypeToPositionType(type, isLeft));
+        public static bool IsFeedbackRegistered(string key) => !_waserror && NativeLib.IsFeedbackRegistered(Marshal.StringToHGlobalAnsi(key));
 
         public static void RegisterFeedback(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedback(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(tactFileStr)); }
         public static void RegisterFeedbackFromTactFile(string key, string tactFileStr) { if (!_waserror) NativeLib.RegisterFeedbackFromTactFile(Marshal.StringToHGlobalAnsi(key), Marshal.StringToHGlobalAnsi(tactFileStr)); }
@@ -100,7 +100,7 @@ namespace MelonLoader.Utils
             for (var i = 0; i < points.Count; i++)
             {
                 DotPoint point = points[i];
-                if ((point.Index < 0) || (point.Index > MaxBufferSize))
+                if (point.Index < 0 || point.Index > MaxBufferSize)
                     continue;
                 bytes[point.Index] = (byte)point.Intensity;
             }
@@ -178,8 +178,8 @@ namespace MelonLoader.Utils
                 OffsetY = offsetY;
             }
             public float OffsetX, OffsetY;
-            public override string ToString() => "RotationOption { OffsetX=" + OffsetX.ToString() +
-                       ", OffsetY=" + OffsetY.ToString() + " }";
+            public override string ToString() => "RotationOption { OffsetX=" + OffsetX +
+                       ", OffsetY=" + OffsetY + " }";
         }
 
         public class ScaleOption
@@ -190,22 +190,22 @@ namespace MelonLoader.Utils
                 Duration = duration;
             }
             public float Intensity, Duration;
-            public override string ToString() => "ScaleOption { Intensity=" + Intensity.ToString() +
-                       ", Duration=" + Duration.ToString() + " }";
+            public override string ToString() => "ScaleOption { Intensity=" + Intensity +
+                       ", Duration=" + Duration + " }";
         }
 
         public class DotPoint
         {
             public DotPoint(int index, int intensity = 50)
             {
-                if ((index < 0) || (index > MaxBufferSize))
+                if (index < 0 || index > MaxBufferSize)
                     throw new Exception("Invalid argument index : " + index);
                 Intensity = MelonUtils.Clamp(intensity, 0, 100);
                 Index = index;
             }
             public int Index, Intensity;
-            public override string ToString() => "DotPoint { Index=" + Index.ToString() +
-                       ", Intensity=" + Intensity.ToString() + " }";
+            public override string ToString() => "DotPoint { Index=" + Index +
+                       ", Intensity=" + Intensity + " }";
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -225,10 +225,10 @@ namespace MelonLoader.Utils
             // if 0 means default motor count, now 3
             public int MotorCount;
 
-            public override string ToString() => "PathPoint { X=" + X.ToString() +
-                       ", Y=" + Y.ToString() +
-                       ", MotorCount=" + MotorCount.ToString() +
-                       ", Intensity=" + Intensity.ToString() + " }";
+            public override string ToString() => "PathPoint { X=" + X +
+                       ", Y=" + Y +
+                       ", MotorCount=" + MotorCount +
+                       ", Intensity=" + Intensity + " }";
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -236,7 +236,7 @@ namespace MelonLoader.Utils
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
             public int[] values;
-        };
+        }
 
         private class NativeExports
         {

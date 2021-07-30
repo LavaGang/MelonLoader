@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MelonLoader.Melons;
+using MelonLoader.Preferences.IO;
 using MelonLoader.Utils;
 
 namespace MelonLoader.Preferences
@@ -11,7 +12,7 @@ namespace MelonLoader.Preferences
         public string DisplayName { get; internal set; }
         public bool IsHidden { get; internal set; }
         public readonly List<MelonPreferences_Entry> Entries = new List<MelonPreferences_Entry>();
-        internal Preferences.IO.File File = null;
+        internal File File;
 
         internal MelonPreferences_Category(string identifier, string display_name, bool is_hidden = false)
         {
@@ -22,9 +23,9 @@ namespace MelonLoader.Preferences
         }
 
         public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name, bool is_hidden) 
-            => CreateEntry(identifier, default_value, display_name, null, is_hidden, false);
+            => CreateEntry(identifier, default_value, display_name, null, is_hidden);
         public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null, 
-            string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null)
+            string description = null, bool is_hidden = false, bool dont_save_default = false, ValueValidator validator = null)
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("identifier is null or empty when calling CreateEntry");
@@ -52,7 +53,7 @@ namespace MelonLoader.Preferences
                 Validator = validator,
             };
 
-            Preferences.IO.File currentFile = File;
+            File currentFile = File;
             if (currentFile == null)
                 currentFile = MelonPreferences.DefaultFile;
             currentFile.SetupEntryFromRawValue(entry);
@@ -77,7 +78,7 @@ namespace MelonLoader.Preferences
         {
             if (File != null)
             {
-                Preferences.IO.File oldfile = File;
+                File oldfile = File;
                 File = null;
                 if (!MelonPreferences.IsFileInUse(oldfile))
                 {
@@ -90,7 +91,7 @@ namespace MelonLoader.Preferences
                 File = MelonPreferences.GetPrefFileFromFilePath(filepath);
                 if (File == null)
                 {
-                    File = new Preferences.IO.File(filepath);
+                    File = new File(filepath);
                     MelonPreferences.PrefFiles.Add(File);
                 }
             }
@@ -102,7 +103,7 @@ namespace MelonLoader.Preferences
         {
             if (File == null)
                 return;
-            Preferences.IO.File oldfile = File;
+            File oldfile = File;
             File = null;
             if (!MelonPreferences.IsFileInUse(oldfile))
             {
@@ -114,7 +115,7 @@ namespace MelonLoader.Preferences
 
         public void SaveToFile(bool printmsg = true)
         {
-            Preferences.IO.File currentfile = File;
+            File currentfile = File;
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
             foreach (MelonPreferences_Entry entry in Entries)
@@ -136,7 +137,7 @@ namespace MelonLoader.Preferences
 
         public void LoadFromFile(bool printmsg = true)
         {
-            Preferences.IO.File currentfile = File;
+            File currentfile = File;
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
             MelonPreferences.LoadFileAndRefreshCategories(currentfile, printmsg);

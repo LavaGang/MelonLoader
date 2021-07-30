@@ -9,7 +9,7 @@ namespace MelonLoader.Support
 {
     internal static class Main
     {
-        internal static ISupportModule_From Interface = null;
+        internal static ISupportModule_From Interface;
         internal static GameObject obj = null;
         internal static SM_Component component = null;
 

@@ -1,16 +1,17 @@
 ﻿using System;
 using UnhollowerBaseLib;
+using UnhollowerRuntimeLib;
 using UnityEngine;
 
 namespace MelonLoader.Support
 {
     internal class SM_Component : MonoBehaviour
     {
-        private static bool IsDestroying = false;
+        private static bool IsDestroying;
         private delegate bool SetAsLastSiblingDelegate(IntPtr transformptr);
         private static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
         public SM_Component(IntPtr value) : base(value) { }
-        public SM_Component() : base(UnhollowerRuntimeLib.ClassInjector.DerivedConstructorPointer<SM_Component>()) { UnhollowerRuntimeLib.ClassInjector.DerivedConstructorBody(this); }
+        public SM_Component() : base(ClassInjector.DerivedConstructorPointer<SM_Component>()) { ClassInjector.DerivedConstructorBody(this); }
         static SM_Component() => SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
         internal static void Create()
         {
@@ -27,7 +28,7 @@ namespace MelonLoader.Support
         internal void Destroy()
         {
             IsDestroying = true;
-            GameObject.Destroy(gameObject);
+            Destroy(gameObject);
         }
         void Start() => SiblingFix();
         void Update()

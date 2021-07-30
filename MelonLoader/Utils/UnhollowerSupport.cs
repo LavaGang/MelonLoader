@@ -6,16 +6,16 @@ namespace MelonLoader.Utils
 {
     public static class UnhollowerSupport
     {
-        internal static Type IL2CPPType = null;
-        internal static Type Il2CppObjectBaseType = null;
-        internal static MethodInfo CopyMethodInfoStructMethod = null;
-        internal static MethodInfo Il2CppObjectBaseToPtrMethod = null;
-        internal static MethodInfo Il2CppStringToManagedMethod = null;
-        internal static MethodInfo ManagedStringToIl2CppMethod = null;
-        internal static MethodInfo GetIl2CppMethodInfoPointerFieldForGeneratedMethod = null;
-        internal static MethodInfo ClassInjectorRegisterTypeInIl2Cpp = null;
-        private static Type Il2CppCallerCountAttributeType = null;
-        private static FieldInfo Il2CppCallerCountField = null;
+        internal static Type IL2CPPType;
+        internal static Type Il2CppObjectBaseType;
+        internal static MethodInfo CopyMethodInfoStructMethod;
+        internal static MethodInfo Il2CppObjectBaseToPtrMethod;
+        internal static MethodInfo Il2CppStringToManagedMethod;
+        internal static MethodInfo ManagedStringToIl2CppMethod;
+        internal static MethodInfo GetIl2CppMethodInfoPointerFieldForGeneratedMethod;
+        internal static MethodInfo ClassInjectorRegisterTypeInIl2Cpp;
+        private static Type Il2CppCallerCountAttributeType;
+        private static FieldInfo Il2CppCallerCountField;
 
         static UnhollowerSupport()
         {
@@ -33,13 +33,13 @@ namespace MelonLoader.Utils
             Il2CppObjectBaseToPtrMethod = IL2CPPType.GetMethod("Il2CppObjectBaseToPtr");
             Il2CppStringToManagedMethod = IL2CPPType.GetMethod("Il2CppStringToManaged");
             ManagedStringToIl2CppMethod = IL2CPPType.GetMethod("ManagedStringToIl2Cpp");
-            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethods().First(x => x.Name.Equals("RegisterTypeInIl2Cpp") && !x.IsGenericMethod && (x.GetParameters().Count() == 2));
+            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethods().First(x => x.Name.Equals("RegisterTypeInIl2Cpp") && !x.IsGenericMethod && x.GetParameters().Count() == 2);
             GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
             Il2CppCallerCountAttributeType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Attributes.CallerCountAttribute");
             Il2CppCallerCountField = Il2CppCallerCountAttributeType.GetField("Count", BindingFlags.Public | BindingFlags.Instance);
         }
 
-        public static bool IsGeneratedAssemblyType(Type type) => (Il2CppObjectBaseType != null) && (type != null) && type.IsSubclassOf(Il2CppObjectBaseType);
+        public static bool IsGeneratedAssemblyType(Type type) => Il2CppObjectBaseType != null && type != null && type.IsSubclassOf(Il2CppObjectBaseType);
 
         public static IntPtr MethodBaseToIl2CppMethodInfoPointer(MethodBase method)
         {
@@ -73,7 +73,7 @@ namespace MelonLoader.Utils
                 throw new NullReferenceException("The ptr cannot be IntPtr.Zero.");
             if (!IsGeneratedAssemblyType(typeof(T)))
                 throw new NullReferenceException("The type must be a Generated Assembly Type.");
-            return (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
+            return (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
         }
 
         public static int? GetIl2CppMethodCallerCount(MethodBase original)

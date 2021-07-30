@@ -45,7 +45,8 @@ namespace Harmony
 	public class HarmonyPatch : HarmonyLib.HarmonyPatch
 	{
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
-		public HarmonyPatch() : base() { }
+		public HarmonyPatch()
+		{ }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
 		public HarmonyPatch(Type declaringType) : base(declaringType) { }
 		[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]

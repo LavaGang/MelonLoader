@@ -4,18 +4,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
-using MonoMod.Utils;
-using MonoMod.Cil;
 using HarmonyLib;
 using MelonLoader.Attributes;
 using MelonLoader.BackwardsCompatibility.Melon;
-using MelonLoader.Lemons;
 using MelonLoader.Melons;
 using MelonLoader.TinyJSON;
 using MelonLoader.Utils;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using MonoMod.Utils;
 
 #pragma warning disable 0618
 
@@ -40,16 +40,16 @@ namespace MelonLoader
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
-            IsBONEWORKS = (!string.IsNullOrEmpty(GameDeveloper) 
-                && GameDeveloper.Equals("Stress Level Zero") 
-                && !string.IsNullOrEmpty(GameName) 
-                && GameName.Equals("BONEWORKS"));
+            IsBONEWORKS = !string.IsNullOrEmpty(GameDeveloper) 
+                          && GameDeveloper.Equals("Stress Level Zero") 
+                          && !string.IsNullOrEmpty(GameName) 
+                          && GameName.Equals("BONEWORKS");
             Main.IsBoneworks = IsBONEWORKS;
 
-            IsDemeo = (!string.IsNullOrEmpty(GameDeveloper)
-                && GameDeveloper.Equals("Resolution Games") 
-                && !string.IsNullOrEmpty(GameName) 
-                && GameName.Equals("Demeo"));
+            IsDemeo = !string.IsNullOrEmpty(GameDeveloper)
+                      && GameDeveloper.Equals("Resolution Games") 
+                      && !string.IsNullOrEmpty(GameName) 
+                      && GameName.Equals("Demeo");
 
             domain.AssemblyResolve += LibsAssemblyResolver;
             SetCurrentDomainBaseDirectory(GameDirectory, domain);
@@ -96,8 +96,7 @@ namespace MelonLoader
 
         public static void SetCurrentDomainBaseDirectory(string dirpath, AppDomain domain = null)
         {
-            if (domain == null)
-                domain = AppDomain.CurrentDomain;
+            domain ??= AppDomain.CurrentDomain;
             try
             {
                 ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance)
@@ -113,30 +112,20 @@ namespace MelonLoader
             StackTrace st = new StackTrace(3, true);
             if (st.FrameCount <= 0)
                 return null;
-            MelonBase output = CheckForMelonInFrame(st);
-            if (output == null)
-                output = CheckForMelonInFrame(st, 1);
-            if (output == null)
-                output = CheckForMelonInFrame(st, 2);
+            MelonBase output = (CheckForMelonInFrame(st) ?? CheckForMelonInFrame(st, 1)) ?? CheckForMelonInFrame(st, 2);
             return output;
         }
         private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
         {
             StackFrame sf = st.GetFrame(frame);
-            if (sf == null)
-                return null;
-            MethodBase method = sf.GetMethod();
-            if (method == null)
-                return null;
-            Type methodClassType = method.DeclaringType;
-            if (methodClassType == null)
-                return null;
-            Assembly asm = methodClassType.Assembly;
+            MethodBase method = sf?.GetMethod();
+            Type methodClassType = method?.DeclaringType;
+            Assembly asm = methodClassType?.Assembly;
             if (asm == null)
                 return null;
-            MelonBase melon = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
+            MelonBase melon = MelonHandler.Plugins.Find(x => x.Assembly == asm);
             if (melon == null)
-                melon = MelonHandler.Mods.Find(x => (x.Assembly == asm));
+                melon = MelonHandler.Mods.Find(x => x.Assembly == asm);
             return melon;
         }
 
@@ -185,7 +174,7 @@ namespace MelonLoader
         public static T PullAttributeFromAssembly<T>(Assembly asm, bool inherit = false) where T : Attribute
         {
             T[] attributetbl = PullAttributesFromAssembly<T>(asm, inherit);
-            if ((attributetbl == null) || (attributetbl.Length <= 0))
+            if (attributetbl == null || attributetbl.Length <= 0)
                 return null;
             return attributetbl[0];
         }
@@ -194,7 +183,7 @@ namespace MelonLoader
         {
             Attribute[] att_tbl = Attribute.GetCustomAttributes(asm, inherit);
 
-            if ((att_tbl == null) || (att_tbl.Length <= 0))
+            if (att_tbl == null || att_tbl.Length <= 0)
                 return null;
 
             Type requestedType = typeof(T);
@@ -205,13 +194,13 @@ namespace MelonLoader
                 string attAssemblyName = attType.Assembly.GetName().Name;
                 string requestedAssemblyName = requestedType.Assembly.GetName().Name;
 
-                if ((attType == requestedType)
+                if (attType == requestedType
                     || attType.FullName.Equals(requestedType.FullName)
-                    || ((attAssemblyName.Equals("MelonLoader")
+                    || (attAssemblyName.Equals("MelonLoader")
                         || attAssemblyName.Equals("MelonLoader.ModHandler"))
-                        && (requestedAssemblyName.Equals("MelonLoader")
+                    && (requestedAssemblyName.Equals("MelonLoader")
                         || requestedAssemblyName.Equals("MelonLoader.ModHandler"))
-                        && attType.Name.Equals(requestedType.Name)))
+                    && attType.Name.Equals(requestedType.Name))
                     output.Add(att as T);
             }
 
@@ -226,8 +215,8 @@ namespace MelonLoader
             try { returnval = asm.GetTypes().AsEnumerable(); }
             catch (ReflectionTypeLoadException ex) { returnval = ex.Types; }
             return returnval.Where(x =>
-                ((x != null)
-                    && (predicate?.Invoke(x) ?? true)));
+                x != null
+                && (predicate?.Invoke(x) ?? true));
         }
 
         public static bool IsNotImplemented(this MethodBase methodBase)
@@ -239,8 +228,8 @@ namespace MelonLoader
             ILContext ilcontext = new ILContext(method.Definition);
             ILCursor ilcursor = new ILCursor(ilcontext);
 
-            bool returnval = (ilcursor.Instrs.Count == 2)
-                && (ilcursor.Instrs[1].OpCode.Code == Mono.Cecil.Cil.Code.Throw);
+            bool returnval = ilcursor.Instrs.Count == 2
+                && ilcursor.Instrs[1].OpCode.Code == Code.Throw;
 
             ilcontext.Dispose();
             method.Dispose();

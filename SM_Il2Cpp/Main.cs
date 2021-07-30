@@ -11,15 +11,16 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using PropertyInfo = System.Reflection.PropertyInfo;
 
 namespace MelonLoader.Support
 {
     internal static class Main
     {
-        internal static ISupportModule_From Interface = null;
+        internal static ISupportModule_From Interface;
         internal static GameObject obj = null;
         internal static SM_Component component = null;
-        private static Camera OnPostRenderCam = null;
+        private static Camera OnPostRenderCam;
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
@@ -40,31 +41,25 @@ namespace MelonLoader.Support
 
             try
             {
-                SceneManager.sceneLoaded = (
-                    (SceneManager.sceneLoaded == null)
+                SceneManager.sceneLoaded = SceneManager.sceneLoaded == null
                     ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
-                    : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
-                    );
+                    : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>();
             }
             catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneLoaded override failed: {ex}"); }
 
             try
             {
-                SceneManager.sceneUnloaded = (
-                    (SceneManager.sceneUnloaded == null)
+                SceneManager.sceneUnloaded = SceneManager.sceneUnloaded == null
                     ? new Action<Scene>(OnSceneUnload)
-                    : Il2CppSystem.Delegate.Combine(SceneManager.sceneUnloaded, (UnityAction<Scene>)new Action<Scene>(OnSceneUnload)).Cast<UnityAction<Scene>>()
-                    );
+                    : Il2CppSystem.Delegate.Combine(SceneManager.sceneUnloaded, (UnityAction<Scene>)new Action<Scene>(OnSceneUnload)).Cast<UnityAction<Scene>>();
             }
             catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneUnloaded override failed: {ex}"); }
 
             try
             {
-                Camera.onPostRender = (
-                    (Camera.onPostRender == null)
+                Camera.onPostRender = Camera.onPostRender == null
                     ? new Action<Camera>(OnPostRender)
-                    : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
-                    );
+                    : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>();
             }
             catch (Exception ex) { MelonLogger.Error($"Camera.onPostRender override failed: {ex}"); }
 
@@ -78,8 +73,8 @@ namespace MelonLoader.Support
 
         private static void OnPostRender(Camera cam) { if (OnPostRenderCam == null) OnPostRenderCam = cam; if (OnPostRenderCam == cam) Coroutines.ProcessWaitForEndOfFrame(); }
 
-        private static Assembly Il2Cppmscorlib = null;
-        private static Type streamType = null;
+        private static Assembly Il2Cppmscorlib;
+        private static Type streamType;
         private static void ConsoleCleaner()
         {
             // Il2CppSystem.Console.SetOut(new Il2CppSystem.IO.StreamWriter(Il2CppSystem.IO.Stream.Null));
@@ -93,7 +88,7 @@ namespace MelonLoader.Support
                 if (streamType == null)
                     throw new Exception("Unable to Find Type Il2CppSystem.IO.Stream!");
 
-                System.Reflection.PropertyInfo propertyInfo = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public);
+                PropertyInfo propertyInfo = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public);
                 if (propertyInfo == null)
                     throw new Exception("Unable to Find Property Il2CppSystem.IO.Stream.Null!");
 
@@ -136,7 +131,7 @@ namespace MelonLoader.Support
             if (string.IsNullOrEmpty(unityVersion))
                 return;
             string[] unityVersionSplit = unityVersion.Split('.');
-            if ((unityVersionSplit == null) || (unityVersionSplit.Length < 2))
+            if (unityVersionSplit == null || unityVersionSplit.Length < 2)
                 return;
             int major = int.Parse(unityVersionSplit[0]);
             int minor = int.Parse(unityVersionSplit[1]);
@@ -155,7 +150,7 @@ namespace MelonLoader.Support
     {
         private static readonly List<object> PinnedDelegates = new List<object>();
 
-        public unsafe T Detour<T>(IntPtr @from, T to) where T : Delegate
+        public unsafe T Detour<T>(IntPtr from, T to) where T : Delegate
         {
             IntPtr* targetVarPointer = &from;
             PinnedDelegates.Add(to);

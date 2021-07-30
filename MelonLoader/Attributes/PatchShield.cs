@@ -15,10 +15,10 @@ namespace MelonLoader.Attributes
 		private static void LogException(Exception ex) => MelonLogger.Warning($"Patch Shield Exception: {ex}");
 
 		private static bool MethodCheck(MethodBase method) =>
-			(method != null)
-			&& (method.DeclaringType.Assembly.GetCustomAttributes(typeof(PatchShield), false).Length <= 0)
-			&& (method.DeclaringType.GetCustomAttributes(typeof(PatchShield), false).Length <= 0)
-			&& (method.GetCustomAttributes(typeof(PatchShield), false).Length <= 0);
+			method != null
+			&& method.DeclaringType.Assembly.GetCustomAttributes(typeof(PatchShield), false).Length <= 0
+			&& method.DeclaringType.GetCustomAttributes(typeof(PatchShield), false).Length <= 0
+			&& method.GetCustomAttributes(typeof(PatchShield), false).Length <= 0;
 
 		internal static void Install()
         {

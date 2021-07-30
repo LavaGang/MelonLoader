@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Reflection.Emit;
+
 #pragma warning disable 0618
 
 namespace Harmony

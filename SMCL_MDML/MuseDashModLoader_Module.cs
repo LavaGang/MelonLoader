@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ModHelper;
+
 #pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers
@@ -17,7 +18,7 @@ namespace MelonLoader.CompatibilityLayers
             // Point GetResolverFromAssembly to Dummy MelonCompatibilityLayer.Resolver
 
             Assembly base_assembly = typeof(MuseDashModLoader_Module).Assembly;
-            AppDomain.CurrentDomain.AssemblyResolve += (object sender, ResolveEventArgs args) =>
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
                 new AssemblyName(args.Name).Name switch
                 {
                     "ModHelper" => base_assembly,
@@ -33,9 +34,9 @@ namespace MelonLoader.CompatibilityLayers
             IEnumerable<Type> mod_types = assembly.GetValidTypes(x =>
             {
                 Type[] interfaces = x.GetInterfaces();
-                return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IMod));  // To-Do: Change to Type Reflection based on Setup
+                return interfaces != null && interfaces.Any() && interfaces.Contains(typeof(IMod));  // To-Do: Change to Type Reflection based on Setup
             });
-            if ((mod_types == null) || !mod_types.Any())
+            if (mod_types == null || !mod_types.Any())
                 return null;
 
             return new MuseDashModLoader_Resolver(assembly, filepath, mod_types);

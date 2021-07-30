@@ -15,7 +15,7 @@ namespace MelonLoader.Attributes
             UNIVERSAL,
             MONO,
             IL2CPP
-        };
+        }
 
         /// <summary>
         /// Platform Domain Compatibility of the Melon.

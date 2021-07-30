@@ -17,7 +17,7 @@ namespace MelonLoader.Preferences
         public abstract object BoxedValue { get; set; }
         public abstract object BoxedEditedValue { get; set; }
 
-        public Preferences.ValueValidator Validator { get; internal set; }
+        public ValueValidator Validator { get; internal set; }
 
         public string GetExceptionMessage(string submsg) 
             => $"Attempted to {submsg} {DisplayName} when it is a {GetReflectedType().FullName}!";
@@ -48,7 +48,7 @@ namespace MelonLoader.Preferences
                 if (Validator != null)
                     value = (T)Validator.EnsureValid(value);
 
-                if ((myValue == null && value == null) || (myValue != null && myValue.Equals(value)))
+                if (myValue == null && value == null || myValue != null && myValue.Equals(value))
                     return;
 
                 var old = myValue;

@@ -5,7 +5,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class DeobfuscationMap : PackageBase
     {
-        internal string ObfuscationRegex = null;
+        internal string ObfuscationRegex;
 
         internal DeobfuscationMap()
         {

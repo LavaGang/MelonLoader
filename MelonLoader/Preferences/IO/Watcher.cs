@@ -8,9 +8,9 @@ namespace MelonLoader.Preferences.IO
 {
     internal class Watcher
     {
-        private static bool ShouldDisableFileWatcherFunctionality = false;
-        private FileSystemWatcher FileWatcher = null;
-        private readonly File PrefFile = null;
+        private static bool ShouldDisableFileWatcherFunctionality;
+        private FileSystemWatcher FileWatcher;
+        private readonly File PrefFile;
 
         internal Watcher(File preffile)
         {
@@ -34,13 +34,13 @@ namespace MelonLoader.Preferences.IO
                     NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite,
                     EnableRaisingEvents = true
                 };
-                FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
-                FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
+                FileWatcher.Created += OnFileWatcherTriggered;
+                FileWatcher.Changed += OnFileWatcherTriggered;
                 FileWatcher.BeginInit();
             }
             catch (Exception ex)
             {
-                MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
+                MelonLogger.Warning("FileSystemWatcher Exception: " + ex);
                 ShouldDisableFileWatcherFunctionality = true;
                 FileWatcher = null;
             }
@@ -48,7 +48,7 @@ namespace MelonLoader.Preferences.IO
 
         internal void Destroy()
         {
-            if (ShouldDisableFileWatcherFunctionality || (FileWatcher == null))
+            if (ShouldDisableFileWatcherFunctionality || FileWatcher == null)
                 return;
             try
             {
@@ -57,7 +57,7 @@ namespace MelonLoader.Preferences.IO
             }
             catch (Exception ex)
             {
-                MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
+                MelonLogger.Warning("FileSystemWatcher Exception: " + ex);
                 ShouldDisableFileWatcherFunctionality = true;
             }
             FileWatcher = null;

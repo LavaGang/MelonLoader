@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using MelonLoader;
 using MelonLoader.Utils;
 
 namespace ModHelper

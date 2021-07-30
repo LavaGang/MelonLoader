@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using MelonLoader;
 using Boardgame.Modding;
 using MelonLoader.Melons;
 
@@ -35,7 +34,7 @@ namespace MelonLoader.CompatibilityLayers
             if (melons.Count <= 0)
                 return;
 
-            melons.Sort((T left, T right) => string.Compare(left.Info.Name, right.Info.Name));
+            melons.Sort((left, right) => string.Compare(left.Info.Name, right.Info.Name));
 
             for (int i = 0; i < melons.Count; i++)
             {
@@ -43,7 +42,7 @@ namespace MelonLoader.CompatibilityLayers
                 if (melon == null)
                     continue;
 
-                ModInformation.Add(new ModdingAPI.ModInformation()
+                ModInformation.Add(new ModdingAPI.ModInformation
                 {
                     name = melon.Info.Name,
                     version = melon.Info.Version,

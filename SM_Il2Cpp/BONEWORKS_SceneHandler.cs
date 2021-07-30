@@ -3,11 +3,11 @@
     class BONEWORKS_SceneHandler
     {
         private static int LastSceneIndex = -9;
-        private static string LastSceneName = null;
-        private static bool IsLoading = false;
-        private static bool HasFinishedLoading = false;
-        private static bool ShouldWait = false;
-        private static bool HasGotLoadingSceneIndex = false;
+        private static string LastSceneName;
+        private static bool IsLoading;
+        private static bool HasFinishedLoading;
+        private static bool ShouldWait;
+        private static bool HasGotLoadingSceneIndex;
         private static int LoadingSceneIndex = -9;
 
         internal static void OnSceneLoad(int current_scene, string current_scene_name)

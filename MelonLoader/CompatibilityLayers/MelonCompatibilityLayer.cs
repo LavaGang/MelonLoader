@@ -14,8 +14,8 @@ namespace MelonLoader.CompatibilityLayers
     public static class MelonCompatibilityLayer
     {
         internal static bool CreationCheck = true;
-        private static string BaseDirectory = null;
-        private static List<ModuleListing> Modules = new List<ModuleListing>()
+        private static string BaseDirectory;
+        private static List<ModuleListing> Modules = new List<ModuleListing>
         {
             // Illusion Plugin Architecture
             new ModuleListing("IPA.dll", x =>
@@ -44,7 +44,7 @@ namespace MelonLoader.CompatibilityLayers
             BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "CompatibilityLayers");
 
             Assembly base_assembly = typeof(MelonCompatibilityLayer).Assembly;
-            AppDomain.CurrentDomain.AssemblyResolve += (object sender, ResolveEventArgs args) => 
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => 
                 new AssemblyName(args.Name).Name switch
                 {
                     "Mono.Cecil" => base_assembly,
@@ -58,7 +58,7 @@ namespace MelonLoader.CompatibilityLayers
                     _ => null,
                 };
 
-            CompatibilityLayers.Melon_Resolver.Setup();
+            Melon_Resolver.Setup();
         }
 
         internal enum SetupType
@@ -100,7 +100,7 @@ namespace MelonLoader.CompatibilityLayers
                     if (assembly == null)
                         continue;
                     Type[] ModuleTypes = assembly.GetValidTypes(x => x.IsSubclassOf(typeof(Module))).ToArray();
-                    if ((ModuleTypes.Length <= 0) || (ModuleTypes[0] == null))
+                    if (ModuleTypes.Length <= 0 || ModuleTypes[0] == null)
                         continue;
 
                     Module moduleInstance = Activator.CreateInstance(ModuleTypes[0], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null) as Module;
@@ -111,7 +111,8 @@ namespace MelonLoader.CompatibilityLayers
                     enumerator.Current.Interface = moduleInstance;
                     MelonDebug.Msg($"Loaded Compatibility Layer: {enumerator.Current.FileName}");
                 }
-                catch (Exception ex) { MelonDebug.Error($"Compatibility Layer [{enumerator.Current.FileName}] threw an Exception: {ex}"); continue; }
+                catch (Exception ex) { MelonDebug.Error($"Compatibility Layer [{enumerator.Current.FileName}] threw an Exception: {ex}");
+                }
             }
         }
 
@@ -128,8 +129,6 @@ namespace MelonLoader.CompatibilityLayers
         public static T CreateMelon<T>(this WrapperData creationData) where T : MelonBase
         {
             MelonBase baseMelon = CreateMelon(creationData);
-            if (baseMelon == null)
-                return default;
             return baseMelon as T;
         }
         public static MelonBase CreateMelon(this WrapperData creationData)
@@ -195,8 +194,8 @@ namespace MelonLoader.CompatibilityLayers
         // Resolver Base
         public class Resolver
         {
-            public readonly Assembly Assembly = null;
-            public readonly string FilePath = null;
+            public readonly Assembly Assembly;
+            public readonly string FilePath;
             public Resolver(Assembly assembly, string filepath)
             {
                 Assembly = assembly;
@@ -211,15 +210,15 @@ namespace MelonLoader.CompatibilityLayers
         // Module Listing
         internal class ModuleListing
         {
-            internal string FileName = null;
-            internal Module Interface = null;
+            internal string FileName;
+            internal Module Interface;
             internal class LoadSpecifierArgs
             {
                 internal SetupType SetupType = SetupType.OnPreInitialization;
-                internal bool ShouldLoad = false;
-                internal bool ShouldDelete = false;
+                internal bool ShouldLoad;
+                internal bool ShouldDelete;
             }
-            internal LemonAction<LoadSpecifierArgs> LoadSpecifier = null;
+            internal LemonAction<LoadSpecifierArgs> LoadSpecifier;
             internal ModuleListing(string filename)
                 => FileName = filename;
             internal ModuleListing(string filename, LemonAction<LoadSpecifierArgs> loadSpecifier)
@@ -233,16 +232,16 @@ namespace MelonLoader.CompatibilityLayers
         internal class ModuleEnumerator : IEnumerator
         {
             private ModuleListing[] ObjectTable;
-            private int CurrentIndex = 0;
+            private int CurrentIndex;
             internal ModuleEnumerator()
                 => ObjectTable = Modules.ToArray();
             object IEnumerator.Current => Current;
             public ModuleListing Current { get; private set; }
             public bool MoveNext()
             {
-                if ((ObjectTable == null)
-                    || (ObjectTable.Length <= 0)
-                    || (CurrentIndex >= ObjectTable.Length))
+                if (ObjectTable == null
+                    || ObjectTable.Length <= 0
+                    || CurrentIndex >= ObjectTable.Length)
                     return false;
                 Current = ObjectTable[CurrentIndex];
                 CurrentIndex++;

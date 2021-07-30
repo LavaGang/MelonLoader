@@ -1,8 +1,8 @@
-﻿using MelonLoader.Il2CppAssemblyGenerator.Packages;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
+using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
@@ -10,18 +10,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
 	internal static class Core
     {
-        internal static string BasePath = null;
-        internal static string GameAssemblyPath = null;
-        internal static string ManagedPath = null;
+        internal static string BasePath;
+        internal static string GameAssemblyPath;
+        internal static string ManagedPath;
 
-        internal static WebClient webClient = null;
+        internal static WebClient webClient;
 
-        internal static DumperBase dumper = null;
-        internal static UnityDependencies unitydependencies = null;
-        internal static DeobfuscationMap deobfuscationMap = null;
-        internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
+        internal static DumperBase dumper;
+        internal static UnityDependencies unitydependencies;
+        internal static DeobfuscationMap deobfuscationMap;
+        internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower;
 
-        internal static bool AssemblyGenerationNeeded = false;
+        internal static bool AssemblyGenerationNeeded;
 
         static Core()
         {

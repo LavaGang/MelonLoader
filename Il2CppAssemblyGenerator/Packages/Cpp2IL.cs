@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using MelonLoader.Utils;
 
@@ -51,16 +52,17 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         internal override bool Execute()
         {
             MelonLogger.Msg("Executing Cpp2IL...");
-            return Execute(new string[] {
+            return Execute(new[] {
                 MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
                 "--game-path",
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
                 "--exe-name",
-                "\"" + System.Diagnostics.Process.GetCurrentProcess().ProcessName + "\"",
+                "\"" + Process.GetCurrentProcess().ProcessName + "\"",
                 "--skip-analysis",
                 "--skip-metadata-txts",
                 "--disable-registration-prompts"
-            }, false, new Dictionary<string, string>() {
+            }, false, new Dictionary<string, string>
+            {
                 {"NO_COLOR", "1"}
             });
         }

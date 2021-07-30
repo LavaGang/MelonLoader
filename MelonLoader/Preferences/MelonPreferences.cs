@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MelonLoader.Melons;
 using MelonLoader.Utils;
+using File = MelonLoader.Preferences.IO.File;
 
 namespace MelonLoader.Preferences
 {
@@ -11,10 +12,10 @@ namespace MelonLoader.Preferences
         public static readonly List<MelonPreferences_Category> Categories = new List<MelonPreferences_Category>();
         public static readonly Dictionary<Type, MelonPreferences_ReflectiveCategory> ReflectiveCategories = new Dictionary<Type, MelonPreferences_ReflectiveCategory>();
         public static readonly TomlMapper Mapper = new TomlMapper();
-        internal static List<Preferences.IO.File> PrefFiles = new List<Preferences.IO.File>();
-        internal static Preferences.IO.File DefaultFile = null;
+        internal static List<File> PrefFiles = new List<File>();
+        internal static File DefaultFile;
 
-        static MelonPreferences() => DefaultFile = new Preferences.IO.File(
+        static MelonPreferences() => DefaultFile = new File(
             Path.Combine(MelonUtils.UserDataDirectory, "MelonPreferences.cfg"),
             Path.Combine(MelonUtils.UserDataDirectory, "modprefs.ini"));
 
@@ -42,7 +43,7 @@ namespace MelonLoader.Preferences
 
             if (PrefFiles.Count >= 0)
             {
-                foreach (Preferences.IO.File file in PrefFiles)
+                foreach (File file in PrefFiles)
                 {
                     try
                     {
@@ -62,7 +63,7 @@ namespace MelonLoader.Preferences
                 {
                     if (category.Entries.Count <= 0)
                         continue;
-                    Preferences.IO.File currentFile = category.File;
+                    File currentFile = category.File;
                     if (currentFile == null)
                         currentFile = DefaultFile;
                     if (currentFile.WasError)
@@ -76,7 +77,7 @@ namespace MelonLoader.Preferences
             {
                 foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
                 {
-                    Preferences.IO.File currentFile = category.File;
+                    File currentFile = category.File;
                     if (currentFile == null)
                         currentFile = DefaultFile;
                     if (currentFile.WasError)
@@ -101,7 +102,7 @@ namespace MelonLoader.Preferences
             {
                 foreach (MelonPreferences_Category category in Categories)
                 {
-                    Preferences.IO.File currentFile = category.File;
+                    File currentFile = category.File;
                     if (currentFile == null)
                         currentFile = DefaultFile;
                     foreach (MelonPreferences_Entry entry in category.Entries)
@@ -113,7 +114,7 @@ namespace MelonLoader.Preferences
             {
                 foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
                 {
-                    Preferences.IO.File currentFile = category.File;
+                    File currentFile = category.File;
                     if (currentFile == null)
                         currentFile = DefaultFile;
                     currentFile.document.PutValue(category.Identifier, category.Save());
@@ -132,7 +133,7 @@ namespace MelonLoader.Preferences
 
             if (PrefFiles.Count >= 0)
             {
-                foreach (Preferences.IO.File file in PrefFiles)
+                foreach (File file in PrefFiles)
                 {
                     try
                     {
@@ -170,11 +171,11 @@ namespace MelonLoader.Preferences
         [Obsolete]
         public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier,
             T default_value, string display_name, bool is_hidden)
-            => CreateEntry(category_identifier, entry_identifier, default_value, display_name, null, is_hidden, false, null);
+            => CreateEntry(category_identifier, entry_identifier, default_value, display_name, null, is_hidden);
 
         public static MelonPreferences_Entry<T> CreateEntry<T>(string category_identifier, string entry_identifier, T default_value,
             string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false,
-            Preferences.ValueValidator validator = null)
+            ValueValidator validator = null)
         {
             if (string.IsNullOrEmpty(category_identifier))
                 throw new Exception("category_identifier is null or empty when calling CreateEntry");
@@ -216,7 +217,7 @@ namespace MelonLoader.Preferences
 
         public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
         public static MelonPreferences_Entry<T> GetEntry<T>(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
-        public static bool HasEntry(string category_identifier, string entry_identifier) => (GetEntry(category_identifier, entry_identifier) != null);
+        public static bool HasEntry(string category_identifier, string entry_identifier) => GetEntry(category_identifier, entry_identifier) != null;
 
         public static void SetEntryValue<T>(string category_identifier, string entry_identifier, T value)
         {
@@ -227,20 +228,18 @@ namespace MelonLoader.Preferences
         public static T GetEntryValue<T>(string category_identifier, string entry_identifier)
         {
             MelonPreferences_Category cat = GetCategory(category_identifier);
-            if (cat == null)
-                return default;
-            var entry = cat.GetEntry<T>(entry_identifier);
+            var entry = cat?.GetEntry<T>(entry_identifier);
             if (entry == null)
                 return default;
             return entry.Value;
         }
 
-        internal static Preferences.IO.File GetPrefFileFromFilePath(string filepath)
+        internal static File GetPrefFileFromFilePath(string filepath)
         {
             if (PrefFiles.Count <= 0)
                 return null;
             FileInfo filepathinfo = new FileInfo(filepath);
-            foreach (Preferences.IO.File file in PrefFiles)
+            foreach (File file in PrefFiles)
             {
                 FileInfo filepathinfo2 = new FileInfo(file.FilePath);
                 if (filepathinfo.FullName.Equals(filepathinfo2.FullName))
@@ -250,7 +249,7 @@ namespace MelonLoader.Preferences
             return null;
         }
 
-        internal static bool IsFileInUse(Preferences.IO.File file)
+        internal static bool IsFileInUse(File file)
         {
             if (Categories.Count <= 0)
                 return false;
@@ -260,7 +259,7 @@ namespace MelonLoader.Preferences
                 return true;
             foreach (MelonPreferences_Category category in Categories)
             {
-                Preferences.IO.File currentFile = category.File;
+                File currentFile = category.File;
                 if (currentFile == null)
                     currentFile = DefaultFile;
                 if (currentFile == file)
@@ -269,7 +268,7 @@ namespace MelonLoader.Preferences
 
             foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
             {
-                Preferences.IO.File currentFile = category.File;
+                File currentFile = category.File;
                 if (currentFile == null)
                     currentFile = DefaultFile;
                 if (currentFile == file)
@@ -279,7 +278,7 @@ namespace MelonLoader.Preferences
             return false;
         }
 
-        internal static void LoadFileAndRefreshCategories(Preferences.IO.File file, bool printmsg = true)
+        internal static void LoadFileAndRefreshCategories(File file, bool printmsg = true)
         {
             try
             {
@@ -297,10 +296,10 @@ namespace MelonLoader.Preferences
             if (Categories.Count > 0)
                 foreach (MelonPreferences_Category category in Categories)
                 {
-                    Preferences.IO.File currentFile = category.File;
+                    File currentFile = category.File;
                     if (currentFile == null)
                         currentFile = DefaultFile;
-                    if ((currentFile != file) || (category.Entries.Count <= 0))
+                    if (currentFile != file || category.Entries.Count <= 0)
                         continue;
                     foreach (MelonPreferences_Entry entry in category.Entries)
                         currentFile.SetupEntryFromRawValue(entry);
@@ -309,7 +308,7 @@ namespace MelonLoader.Preferences
             if (ReflectiveCategories.Count > 0)
                 foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
                 {
-                    Preferences.IO.File currentFile = category.File;
+                    File currentFile = category.File;
                     if (currentFile == null)
                         currentFile = DefaultFile;
                     if (currentFile != file)

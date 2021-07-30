@@ -16,9 +16,9 @@ namespace MelonLoader.FileTypes
                 : MelonLaunchOptions.Core.LoadMode_Mods;
             string[] filearr = Directory.GetFiles(folderpath).Where(x => 
                 Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
-                && ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV) ? x.ToLowerInvariant().EndsWith(".dev.dll")
-                : ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL) ? !x.ToLowerInvariant().EndsWith(".dev.dll")
-                : true))
+                && (loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV ? x.ToLowerInvariant().EndsWith(".dev.dll")
+                : loadMode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL ? !x.ToLowerInvariant().EndsWith(".dev.dll")
+                : true)
             ).ToArray();
             if (filearr.Length <= 0)
                 return;

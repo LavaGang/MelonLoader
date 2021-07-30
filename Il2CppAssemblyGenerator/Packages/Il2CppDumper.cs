@@ -26,9 +26,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Save();
         }
 
-        private bool ShouldDownload() => (
-            string.IsNullOrEmpty(Config.Values.DumperVersion)
-            || !Config.Values.DumperVersion.Equals(Version));
+        private bool ShouldDownload() => string.IsNullOrEmpty(Config.Values.DumperVersion)
+                                         || !Config.Values.DumperVersion.Equals(Version);
 
         internal override void Cleanup()
         {
@@ -58,7 +57,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             FixConfig();
             MelonLogger.Msg("Executing Il2CppDumper...");
             string metadata_path = Path.Combine(Path.Combine(Path.Combine(string.Copy(MelonUtils.GetGameDataDirectory()), "il2cpp_data"), "Metadata"), "global-metadata.dat");
-            return Execute(new string[] { Core.GameAssemblyPath, metadata_path });
+            return Execute(new[] { Core.GameAssemblyPath, metadata_path });
         }
 
         private void FixConfig() => File.WriteAllText(Path.Combine(Destination, "config.json"), Encoder.Encode(new Il2CppDumperConfig(), EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));

@@ -18,12 +18,12 @@ namespace MelonLoader.Attributes
             if (!MelonUtils.IsGameIl2Cpp())
                 return;
             IEnumerable<Type> typeTbl = asm.GetValidTypes();
-            if ((typeTbl == null) || (typeTbl.Count() <= 0))
+            if (typeTbl == null || typeTbl.Count() <= 0)
                 return;
             foreach (Type type in typeTbl)
             {
                 object[] attTbl = type.GetCustomAttributes(typeof(RegisterTypeInIl2Cpp), false);
-                if ((attTbl == null) || (attTbl.Length <= 0))
+                if (attTbl == null || attTbl.Length <= 0)
                     continue;
                 RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
                 if (att == null)

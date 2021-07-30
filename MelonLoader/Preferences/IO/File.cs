@@ -8,14 +8,14 @@ namespace MelonLoader.Preferences.IO
 {
     internal class File
     {
-        private bool _waserror = false;
+        private bool _waserror;
 
         internal bool WasError
         {
             get => _waserror;
             set
             {
-                if (value == true)
+                if (value)
                 {
                     MelonLogger.Warning($"Defaulting {FilePath} to Fallback Functionality to further avoid File Corruption...");
                     IsSaving = false;
@@ -26,12 +26,12 @@ namespace MelonLoader.Preferences.IO
             }
         }
 
-        internal string FilePath = null;
-        internal string LegacyFilePath = null;
-        internal bool IsSaving = false;
+        internal string FilePath;
+        internal string LegacyFilePath;
+        internal bool IsSaving;
         internal bool ShouldSave = true;
         internal TomlDocument document = TomlDocument.CreateEmpty();
-        internal Watcher FileWatcher = null;
+        internal Watcher FileWatcher;
 
         internal File(string filepath, string legacyfilepath = null, bool shouldsave = true)
         {
@@ -91,7 +91,7 @@ namespace MelonLoader.Preferences.IO
                 return;
             IsSaving = true;
             System.IO.File.WriteAllText(FilePath, document.SerializedValue);
-            if ((LegacyFilePath != null) && System.IO.File.Exists(LegacyFilePath))
+            if (LegacyFilePath != null && System.IO.File.Exists(LegacyFilePath))
                 System.IO.File.Delete(LegacyFilePath);
         }
         

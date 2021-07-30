@@ -11,8 +11,8 @@ namespace MelonLoader
 #endif
 
             string[] args = Environment.GetCommandLineArgs();
-            if ((args == null)
-                || (args.Length <= 0))
+            if (args == null
+                || args.Length <= 0)
                 return;
 
             for (int i = 0; i < args.Length; i++)
@@ -23,7 +23,7 @@ namespace MelonLoader
                 arg = arg.ToLowerInvariant();
                 int valueint = 0;
                 string valuestr = null;
-                if ((i + 1) < args.Length)
+                if (i + 1 < args.Length)
                     valuestr = args[i + 1];
                 switch (arg)
                 {
@@ -65,7 +65,7 @@ namespace MelonLoader
                         Core.LoadMode_Plugins = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
                         goto default;
                     case "--melonloader.loadmodemods":
-                        if ((i + 1) < args.Length)
+                        if (i + 1 < args.Length)
                             valuestr = args[i + 1];
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;

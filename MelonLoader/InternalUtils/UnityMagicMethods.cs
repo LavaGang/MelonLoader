@@ -12,14 +12,14 @@ namespace MelonLoader.InternalUtils
     internal static class UnityMagicMethods
     {
 
-        private static Type MonoBehaviourType = null;
-        private static Type ScriptableObjectType = null;
+        private static Type MonoBehaviourType;
+        private static Type ScriptableObjectType;
 
         // Key = name of magic method. Value = optional argument types
         // See: https://docs.unity3d.com/ScriptReference/MonoBehaviour.html
-        private static Dictionary<string, Type[]> MonoBehaviourMethods = null;
+        private static Dictionary<string, Type[]> MonoBehaviourMethods;
         // See: https://docs.unity3d.com/ScriptReference/ScriptableObject.html
-        private static Dictionary<string, Type[]> ScriptableObjectMethods = null;
+        private static Dictionary<string, Type[]> ScriptableObjectMethods;
 
         static UnityMagicMethods()
         {
@@ -120,7 +120,7 @@ namespace MelonLoader.InternalUtils
             Type owner = method.DeclaringType;
             if (owner.IsSubclassOf(MonoBehaviourType))
                 return CheckMagicMethod(method, MonoBehaviourMethods);
-            else if (owner.IsSubclassOf(ScriptableObjectType))
+            if (owner.IsSubclassOf(ScriptableObjectType))
                 return CheckMagicMethod(method, ScriptableObjectMethods);
             return false;
         }
@@ -137,7 +137,7 @@ namespace MelonLoader.InternalUtils
 
             if (parameters.Length == 0)
                 return true;
-            else if (parameters.Length != magicArgTypes.Length)
+            if (parameters.Length != magicArgTypes.Length)
                 return false;
 
             for (int i = 0; i < parameters.Length; ++i)

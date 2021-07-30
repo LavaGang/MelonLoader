@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 #pragma warning disable 0618
 
 namespace Harmony
@@ -12,7 +13,8 @@ namespace Harmony
 		[Obsolete("Harmony.HarmonyMethod.prioritiy is obsolete. Please use HarmonyLib.HarmonyMethod.priority instead.")]
 		public int prioritiy = -1;
 		[Obsolete("Harmony.HarmonyMethod is obsolete. Please use HarmonyLib.HarmonyMethod instead.")]
-		public HarmonyMethod() : base() { }
+		public HarmonyMethod()
+		{ }
 		[Obsolete("Harmony.HarmonyMethod is obsolete. Please use HarmonyLib.HarmonyMethod instead.")]
 		public HarmonyMethod(MethodInfo method) : base(method) { }
 		[Obsolete("Harmony.HarmonyMethod is obsolete. Please use HarmonyLib.HarmonyMethod instead.")]

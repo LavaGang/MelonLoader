@@ -1,16 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using MelonLoader.Utils;
 
 namespace MelonLoader
 {
     internal static class GameVersionHandler
     {
-        private static MethodInfo Application_get_version = null;
-        private static MethodInfo Application_get_buildGUID = null;
+        private static MethodInfo Application_get_version;
+        private static MethodInfo Application_get_buildGUID;
 
         internal static void Setup()
         {
@@ -18,19 +18,16 @@ namespace MelonLoader
                 File.Exists(Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll"))
                 ? "UnityEngine.CoreModule"
                 : "UnityEngine");
-            if (assembly != null)
+            Type applicationType = assembly?.GetType("UnityEngine.Application");
+            if (applicationType != null)
             {
-                Type applicationType = assembly.GetType("UnityEngine.Application");
-                if (applicationType != null)
-                {
-                    PropertyInfo versionProp = applicationType.GetProperty("version");
-                    if (versionProp != null)
-                        Application_get_version = versionProp.GetGetMethod();
+                PropertyInfo versionProp = applicationType.GetProperty("version");
+                if (versionProp != null)
+                    Application_get_version = versionProp.GetGetMethod();
 
-                    PropertyInfo buildGUIDProp = applicationType.GetProperty("buildGUID");
-                    if (buildGUIDProp != null)
-                        Application_get_buildGUID = buildGUIDProp.GetGetMethod();
-                }
+                PropertyInfo buildGUIDProp = applicationType.GetProperty("buildGUID");
+                if (buildGUIDProp != null)
+                    Application_get_buildGUID = buildGUIDProp.GetGetMethod();
             }
 
             string game_version = "0";

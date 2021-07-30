@@ -1,5 +1,6 @@
 ﻿using System;
 using MelonLoader.Melons;
+using MelonLoader.Preferences.IO;
 using MelonLoader.Utils;
 using Tomlet;
 using Tomlet.Models;
@@ -10,7 +11,7 @@ namespace MelonLoader.Preferences
     {
         private Type SystemType;
         private object value;
-        internal IO.File File = null;
+        internal File File;
         
         public string Identifier { get;  internal set; }
         public string DisplayName { get; internal set; }
@@ -23,7 +24,7 @@ namespace MelonLoader.Preferences
             Identifier = categoryName;
             DisplayName = displayName;
 
-            IO.File currentFile = File;
+            File currentFile = File;
             if (currentFile == null)
                 currentFile = MelonPreferences.DefaultFile;
             if (!(currentFile.TryGetCategoryTable(Identifier) is { } table))
@@ -59,7 +60,7 @@ namespace MelonLoader.Preferences
         {
             if (File != null)
             {
-                IO.File oldfile = File;
+                File oldfile = File;
                 File = null;
                 if (!MelonPreferences.IsFileInUse(oldfile))
                 {
@@ -72,7 +73,7 @@ namespace MelonLoader.Preferences
                 File = MelonPreferences.GetPrefFileFromFilePath(filepath);
                 if (File == null)
                 {
-                    File = new IO.File(filepath);
+                    File = new File(filepath);
                     MelonPreferences.PrefFiles.Add(File);
                 }
             }
@@ -84,7 +85,7 @@ namespace MelonLoader.Preferences
         {
             if (File == null)
                 return;
-            IO.File oldfile = File;
+            File oldfile = File;
             File = null;
             if (!MelonPreferences.IsFileInUse(oldfile))
             {
@@ -96,7 +97,7 @@ namespace MelonLoader.Preferences
         
         public void SaveToFile(bool printmsg = true)
         {
-            IO.File currentfile = File;
+            File currentfile = File;
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
 
@@ -117,7 +118,7 @@ namespace MelonLoader.Preferences
 
         public void LoadFromFile(bool printmsg = true)
         {
-            IO.File currentfile = File;
+            File currentfile = File;
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
             MelonPreferences.LoadFileAndRefreshCategories(currentfile, printmsg);

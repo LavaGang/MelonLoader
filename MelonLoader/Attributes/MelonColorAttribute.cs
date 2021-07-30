@@ -12,6 +12,6 @@ namespace MelonLoader.Attributes
         public ConsoleColor Color { get; internal set; }
 
         public MelonColorAttribute() { Color = MelonLogger.DefaultMelonColor; }
-        public MelonColorAttribute(ConsoleColor color) { Color = ((color == ConsoleColor.Black) ? MelonLogger.DefaultMelonColor : color); }
+        public MelonColorAttribute(ConsoleColor color) { Color = color == ConsoleColor.Black ? MelonLogger.DefaultMelonColor : color; }
     }
 }

@@ -52,7 +52,7 @@ namespace MelonLoader.Utils
 
         public class Instance
         {
-            private string Name = null;
+            private string Name;
             private ConsoleColor Color = DefaultMelonColor;
             public Instance() { }
             public Instance(string name) => Name = name?.Replace(" ", "_");

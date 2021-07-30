@@ -6,27 +6,27 @@ using System.Runtime.InteropServices;
 using HarmonyLib;
 using HarmonyLib.Public.Patching;
 using HarmonyLib.Tools;
-using MelonLoader.Lemons;
 using MelonLoader.Melons;
 using MelonLoader.Utils;
 using Mono.Cecil;
-using MonoMod.Utils;
 using MonoMod.Cil;
+using MonoMod.Utils;
+using OpCodes = Mono.Cecil.Cil.OpCodes;
 
 namespace MelonLoader.InternalUtils
 {
     internal class HarmonyIl2CppMethodPatcher : MethodPatcher
     {
-        private static AccessTools.FieldRef<ILGenerator, int> codeLenGetter = null;
-        private static AccessTools.FieldRef<ILGenerator, LocalBuilder[]> localsGetter = null;
-        private static AccessTools.FieldRef<ILGenerator, int> localCountGetter = null;
+        private static AccessTools.FieldRef<ILGenerator, int> codeLenGetter;
+        private static AccessTools.FieldRef<ILGenerator, LocalBuilder[]> localsGetter;
+        private static AccessTools.FieldRef<ILGenerator, int> localCountGetter;
         private IntPtr originalMethodInfoPointer;
         private IntPtr copiedMethodInfoPointer;
         private IntPtr methodDetourPointer;
-        private bool hasWarned = false;
+        private bool hasWarned;
 
         private delegate void PatchTools_RememberObject_Delegate(object key, object value);
-        private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;
+        private static PatchTools_RememberObject_Delegate PatchTools_RememberObject;
 
         static HarmonyIl2CppMethodPatcher()
         {
@@ -97,8 +97,8 @@ namespace MelonLoader.InternalUtils
                 MelonLogger.Error("Harmony Patcher could not rewrite Il2Cpp Unhollowed Method. Expect a stack overflow.");
                 return method;
             }
-            ilcursor.Emit(Mono.Cecil.Cil.OpCodes.Ldc_I8, copiedMethodInfoPointer.ToInt64());
-            ilcursor.Emit(Mono.Cecil.Cil.OpCodes.Conv_I);
+            ilcursor.Emit(OpCodes.Ldc_I8, copiedMethodInfoPointer.ToInt64());
+            ilcursor.Emit(OpCodes.Conv_I);
             return method;
         }
 
@@ -132,29 +132,29 @@ namespace MelonLoader.InternalUtils
             LocalBuilder[] byRefValues = new LocalBuilder[patchParams.Length];
             for (int i = 0; i < patchParamTypes.Length; ++i)
             {
-                il.Emit(OpCodes.Ldarg, i);
+                il.Emit(System.Reflection.Emit.OpCodes.Ldarg, i);
                 ConvertArgument(il, patchParamTypes[i], ref byRefValues[i]);
                 if (byRefValues[i] != null)
                     LogLocalVariable(il, byRefValues[i]);
             }
 
             // Call the original patch with the now-correct types
-            il.Emit(OpCodes.Call, patch);
+            il.Emit(System.Reflection.Emit.OpCodes.Call, patch);
 
             // Store the result, if any
             if (returnLocal != null)
-                il.Emit(OpCodes.Stloc, returnLocal);
+                il.Emit(System.Reflection.Emit.OpCodes.Stloc, returnLocal);
 
             // Catch any exceptions that may have been thrown
             il.BeginCatchBlock(exceptionType);
 
             // MelonLogger.LogError("Exception in ...\n" + exception.ToString());
-            il.Emit(OpCodes.Stloc, exceptionLocal);
-            il.Emit(OpCodes.Ldstr, $"Exception in Harmony patch of method {Original.FullDescription()}:\n");
-            il.Emit(OpCodes.Ldloc, exceptionLocal);
-            il.Emit(OpCodes.Call, AccessTools.DeclaredMethod(typeof(Exception), "ToString", new Type[0]));
-            il.Emit(OpCodes.Call, AccessTools.DeclaredMethod(typeof(string), "Concat", new Type[] { typeof(string), typeof(string) }));
-            il.Emit(OpCodes.Call, AccessTools.DeclaredMethod(typeof(MelonLogger), "Error", new Type[] { typeof(string) }));
+            il.Emit(System.Reflection.Emit.OpCodes.Stloc, exceptionLocal);
+            il.Emit(System.Reflection.Emit.OpCodes.Ldstr, $"Exception in Harmony patch of method {Original.FullDescription()}:\n");
+            il.Emit(System.Reflection.Emit.OpCodes.Ldloc, exceptionLocal);
+            il.Emit(System.Reflection.Emit.OpCodes.Call, AccessTools.DeclaredMethod(typeof(Exception), "ToString", new Type[0]));
+            il.Emit(System.Reflection.Emit.OpCodes.Call, AccessTools.DeclaredMethod(typeof(string), "Concat", new[] { typeof(string), typeof(string) }));
+            il.Emit(System.Reflection.Emit.OpCodes.Call, AccessTools.DeclaredMethod(typeof(MelonLogger), "Error", new[] { typeof(string) }));
 
             // Close the exception block
             il.EndExceptionBlock();
@@ -164,20 +164,20 @@ namespace MelonLoader.InternalUtils
             {
                 if (byRefValues[i] == null)
                     continue;
-                il.Emit(OpCodes.Ldarg_S, i);
-                il.Emit(OpCodes.Ldloc, byRefValues[i]);
+                il.Emit(System.Reflection.Emit.OpCodes.Ldarg_S, i);
+                il.Emit(System.Reflection.Emit.OpCodes.Ldloc, byRefValues[i]);
                 ConvertTypeToIl2Cpp(il, patchParamTypes[i].GetElementType());
-                il.Emit(OpCodes.Stind_I);
+                il.Emit(System.Reflection.Emit.OpCodes.Stind_I);
             }
 
             // Load the return value, if any, and unwrap it if required
             if (returnLocal != null)
             {
-                il.Emit(OpCodes.Ldloc, returnLocal);
+                il.Emit(System.Reflection.Emit.OpCodes.Ldloc, returnLocal);
                 ConvertTypeToIl2Cpp(il, patchReturnType);
             }
 
-            il.Emit(OpCodes.Ret);
+            il.Emit(System.Reflection.Emit.OpCodes.Ret);
             return method;
         }
 
@@ -214,15 +214,15 @@ namespace MelonLoader.InternalUtils
                 if (byRef)
                 {
                     byRefLocal = il.DeclareLocal(currentType);
-                    il.Emit(OpCodes.Ldind_I);
+                    il.Emit(System.Reflection.Emit.OpCodes.Ldind_I);
                 }
 
-                il.Emit(OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
+                il.Emit(System.Reflection.Emit.OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
 
                 if (byRef)
                 {
-                    il.Emit(OpCodes.Stloc, byRefLocal);
-                    il.Emit(OpCodes.Ldloca, byRefLocal);
+                    il.Emit(System.Reflection.Emit.OpCodes.Stloc, byRefLocal);
+                    il.Emit(System.Reflection.Emit.OpCodes.Ldloca, byRefLocal);
                 }
             }
             else if (UnhollowerSupport.IsGeneratedAssemblyType(currentType))
@@ -238,36 +238,36 @@ namespace MelonLoader.InternalUtils
                 if (byRef)
                 {
                     byRefLocal = il.DeclareLocal(currentType);
-                    il.Emit(OpCodes.Ldind_I);
+                    il.Emit(System.Reflection.Emit.OpCodes.Ldind_I);
                 }
 
-                il.Emit(OpCodes.Dup);
-                il.Emit(OpCodes.Brtrue_S, ptrNonZero);
-                il.Emit(OpCodes.Pop);
+                il.Emit(System.Reflection.Emit.OpCodes.Dup);
+                il.Emit(System.Reflection.Emit.OpCodes.Brtrue_S, ptrNonZero);
+                il.Emit(System.Reflection.Emit.OpCodes.Pop);
 
                 if (!byRef)
-                    il.Emit(OpCodes.Ldnull);
+                    il.Emit(System.Reflection.Emit.OpCodes.Ldnull);
 
-                il.Emit(OpCodes.Br_S, done);
+                il.Emit(System.Reflection.Emit.OpCodes.Br_S, done);
                 il.MarkLabel(ptrNonZero);
-                il.Emit(OpCodes.Newobj, Il2CppConstuctor(currentType));
+                il.Emit(System.Reflection.Emit.OpCodes.Newobj, Il2CppConstuctor(currentType));
 
                 if (byRef)
-                    il.Emit(OpCodes.Stloc, byRefLocal);
+                    il.Emit(System.Reflection.Emit.OpCodes.Stloc, byRefLocal);
 
                 il.MarkLabel(done);
 
                 if (byRef)
-                    il.Emit(OpCodes.Ldloca, byRefLocal);
+                    il.Emit(System.Reflection.Emit.OpCodes.Ldloca, byRefLocal);
             }
         }
 
         private static void ConvertTypeToIl2Cpp(ILGenerator il, Type returnType)
         {
             if (returnType == typeof(string))
-                il.Emit(OpCodes.Call, UnhollowerSupport.ManagedStringToIl2CppMethod);
+                il.Emit(System.Reflection.Emit.OpCodes.Call, UnhollowerSupport.ManagedStringToIl2CppMethod);
             else if (!returnType.IsValueType && UnhollowerSupport.IsGeneratedAssemblyType(returnType))
-                il.Emit(OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
+                il.Emit(System.Reflection.Emit.OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
         }
 
         private static string CodePos(ILGenerator il)
@@ -372,7 +372,7 @@ namespace MelonLoader.InternalUtils
             return loggerInstance;
         }
 
-        private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new Type[] { typeof(IntPtr) });
+        private static ConstructorInfo Il2CppConstuctor(Type type) => AccessTools.DeclaredConstructor(type, new[] { typeof(IntPtr) });
         public override DynamicMethodDefinition PrepareOriginal() => null;
     }
 }

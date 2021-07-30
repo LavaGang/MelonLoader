@@ -7,7 +7,7 @@ namespace MelonLoader.SupportModule
 {
     internal static class SupportModule
     {
-        internal static ISupportModule_To Interface = null;
+        internal static ISupportModule_To Interface;
 
         internal static bool Initialize()
         {
@@ -18,13 +18,13 @@ namespace MelonLoader.SupportModule
                 MelonLogger.Error("Failed to Find SupportModules Directory!");
                 return false;
             }
-            string ModuleName = (MelonUtils.IsGameIl2Cpp()
+            string ModuleName = MelonUtils.IsGameIl2Cpp()
                 ? "Il2Cpp.dll"
-                : (File.Exists(Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll"))
+                : File.Exists(Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll"))
                     ? "Mono.dll"
-                    : (IsOldUnity() 
+                    : IsOldUnity() 
                         ? "Mono.Pre-5.dll"
-                        : "Mono.Pre-2017.dll")));
+                        : "Mono.Pre-2017.dll";
             string ModulePath = Path.Combine(BaseDirectory, ModuleName);
             if (!File.Exists(ModulePath))
             {
@@ -67,12 +67,8 @@ namespace MelonLoader.SupportModule
             try
             {
                 Assembly unityengine = Assembly.Load("UnityEngine");
-                if (unityengine == null)
-                    return true;
-                Type scenemanager = unityengine.GetType("UnityEngine.SceneManagement.SceneManager");
-                if (scenemanager == null)
-                    return true;
-                EventInfo sceneLoaded = scenemanager.GetEvent("sceneLoaded");
+                Type scenemanager = unityengine?.GetType("UnityEngine.SceneManagement.SceneManager");
+                EventInfo sceneLoaded = scenemanager?.GetEvent("sceneLoaded");
                 if (sceneLoaded == null)
                     return true;
                 return false;

@@ -6,6 +6,7 @@ using MelonLoader.Attributes;
 using MelonLoader.Melons;
 using MelonLoader.Utils;
 using ModHelper;
+
 #pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers

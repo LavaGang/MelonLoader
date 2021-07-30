@@ -89,9 +89,9 @@ namespace Harmony
 		}
 
 		static DynamicMethodDefinition CreateGetDynamicMethod(Type type)
-			=> new DynamicMethodDefinition($"DynamicGet_{type.Name}", typeof(object), new Type[] { typeof(object) });
+			=> new DynamicMethodDefinition($"DynamicGet_{type.Name}", typeof(object), new[] { typeof(object) });
 
 		static DynamicMethodDefinition CreateSetDynamicMethod(Type type)
-			=> new DynamicMethodDefinition($"DynamicSet_{type.Name}", typeof(void), new Type[] { typeof(object), typeof(object) });
+			=> new DynamicMethodDefinition($"DynamicSet_{type.Name}", typeof(void), new[] { typeof(object), typeof(object) });
 	}
 }

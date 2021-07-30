@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using HarmonyLib;
 
 namespace MelonLoader.Utils
 {
@@ -73,7 +74,7 @@ namespace MelonLoader.Utils
 
             Instance = (T)Activator.CreateInstance(specifiedType);
 
-            FieldInfo[] fields = specifiedType.GetFields(HarmonyLib.AccessTools.all);
+            FieldInfo[] fields = specifiedType.GetFields(AccessTools.all);
             if (fields.Length <= 0)
                 return;
 

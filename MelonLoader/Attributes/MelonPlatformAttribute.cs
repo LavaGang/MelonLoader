@@ -15,7 +15,7 @@ namespace MelonLoader.Attributes
             UNIVERSAL,
             WINDOWS_X86,
             WINDOWS_X64
-        };
+        }
 
         /// <summary>
         /// Platforms Compatible with the Melon.

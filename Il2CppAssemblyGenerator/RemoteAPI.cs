@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text.RegularExpressions;
 using MelonLoader.Utils;
 
@@ -11,25 +12,25 @@ namespace MelonLoader.Il2CppAssemblyGenerator
     {
         internal class InfoStruct
         {
-            internal string ForceDumperVersion = null;
-            internal string ForceUnhollowerVersion = null;
-            internal string ObfuscationRegex = null;
-            internal string MappingURL = null;
-            internal string MappingFileSHA512 = null;
+            internal string ForceDumperVersion;
+            internal string ForceUnhollowerVersion;
+            internal string ObfuscationRegex;
+            internal string MappingURL;
+            internal string MappingFileSHA512;
         }
         internal static InfoStruct Info = new InfoStruct();
 
         private class HostInfo
         {
-            internal string URL = null;
-            internal LemonFunc<string, InfoStruct> Func = null;
+            internal string URL;
+            internal LemonFunc<string, InfoStruct> Func;
             internal HostInfo(string url, LemonFunc<string, InfoStruct> func)
             {
                 URL = url;
                 Func = func;
             }
         }
-        private static List<HostInfo> HostList = null;
+        private static List<HostInfo> HostList;
 
         static RemoteAPI()
         {
@@ -59,11 +60,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static void ContactHosts()
         {
-            if ((HostList == null) || (HostList.Count <= 0))
+            if (HostList == null || HostList.Count <= 0)
                 return;
             foreach (HostInfo info in HostList)
             {
-                if (string.IsNullOrEmpty(info.URL) || (info.Func == null))
+                if (string.IsNullOrEmpty(info.URL) || info.Func == null)
                     continue;
 
                 MelonDebug.Msg($"ContactURL = {info.URL}");
@@ -72,21 +73,21 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 try { Response = Core.webClient.DownloadString(info.URL); }
                 catch (Exception ex)
                 {
-                    if (!(ex is System.Net.WebException) || ((System.Net.WebException) ex).Response == null)
+                    if (!(ex is WebException) || ((WebException) ex).Response == null)
                     {
                         MelonLogger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
                         continue;
                     }
 
-                    System.Net.WebException we = (System.Net.WebException)ex;
-                    System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
-                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    WebException we = (WebException)ex;
+                    HttpWebResponse response = (HttpWebResponse)we.Response;
+                    if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         MelonDebug.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
                         break;
                     }
 
-                    MelonLogger.Error($"WebException ({Enum.GetName(typeof(System.Net.HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
+                    MelonLogger.Error($"WebException ({Enum.GetName(typeof(HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
                     continue;
                 }
 

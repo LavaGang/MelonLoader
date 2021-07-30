@@ -30,7 +30,7 @@ namespace MelonLoader.Utils
             string value = ReadValue(section, name);
             if (!string.IsNullOrEmpty(value))
                 return value;
-            else if (autoSave)
+            if (autoSave)
                 SetString(section, name, defaultValue);
             return defaultValue;
         }
@@ -40,7 +40,7 @@ namespace MelonLoader.Utils
         {
             if (int.TryParse(ReadValue(section, name), out int value))
                 return value;
-            else if (autoSave)
+            if (autoSave)
                 SetInt(section, name, defaultValue);
             return defaultValue;
         }
@@ -50,7 +50,7 @@ namespace MelonLoader.Utils
         {
             if (float.TryParse(ReadValue(section, name), out float value))
                 return value;
-            else if (autoSave)
+            if (autoSave)
                 SetFloat(section, name, defaultValue);
             return defaultValue;
         }
@@ -60,8 +60,8 @@ namespace MelonLoader.Utils
         {
             string sVal = GetString(section, name, null);
             if ("true".Equals(sVal) || "1".Equals(sVal) || "0".Equals(sVal) || "false".Equals(sVal))
-                return ("true".Equals(sVal) || "1".Equals(sVal));
-            else if (autoSave)
+                return "true".Equals(sVal) || "1".Equals(sVal);
+            if (autoSave)
                 SetBool(section, name, defaultValue);
             return defaultValue;
         }

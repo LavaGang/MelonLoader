@@ -9,8 +9,8 @@ namespace Harmony
 	{
 		public static BindingFlags all = HarmonyLib.AccessTools.all;
 		public static Type TypeByName(string name) => HarmonyLib.AccessTools.TypeByName(name);
-        public static T FindIncludingBaseTypes<T>(Type type, Func<Type, T> action) where T : class => HarmonyLib.AccessTools.FindIncludingBaseTypes<T>(type, action);
-        public static T FindIncludingInnerTypes<T>(Type type, Func<Type, T> action) where T : class => HarmonyLib.AccessTools.FindIncludingInnerTypes<T>(type, action);
+        public static T FindIncludingBaseTypes<T>(Type type, Func<Type, T> action) where T : class => HarmonyLib.AccessTools.FindIncludingBaseTypes(type, action);
+        public static T FindIncludingInnerTypes<T>(Type type, Func<Type, T> action) where T : class => HarmonyLib.AccessTools.FindIncludingInnerTypes(type, action);
 		public static FieldInfo Field(Type type, string name) => HarmonyLib.AccessTools.Field(type, name);
 		public static FieldInfo Field(Type type, int idx) => HarmonyLib.AccessTools.DeclaredField(type, idx);
 		public static PropertyInfo DeclaredProperty(Type type, string name) => HarmonyLib.AccessTools.DeclaredProperty(type, name);

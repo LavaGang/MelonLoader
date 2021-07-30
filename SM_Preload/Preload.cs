@@ -1,6 +1,7 @@
 ﻿using System.IO;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using MelonLoader.Support.Properties;
 
 namespace MelonLoader.Support
 {
@@ -12,11 +13,11 @@ namespace MelonLoader.Support
 
             string SystemPath = Path.Combine(ManagedFolder, "System.dll");
             if (!File.Exists(SystemPath))
-                File.WriteAllBytes(SystemPath, Properties.Resources.System);
+                File.WriteAllBytes(SystemPath, Resources.System);
 
             string SystemCorePath = Path.Combine(ManagedFolder, "System.Core.dll");
             if (!File.Exists(SystemCorePath))
-                File.WriteAllBytes(SystemCorePath, Properties.Resources.System_Core);
+                File.WriteAllBytes(SystemCorePath, Resources.System_Core);
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]

@@ -1,8 +1,10 @@
-﻿using MelonLoader.InternalUtils;
-using System;
+﻿using System;
 using System.Diagnostics;
+using HarmonyLib.Public.Patching;
 using MelonLoader.Attributes;
 using MelonLoader.CompatibilityLayers;
+using MelonLoader.Fixes;
+using MelonLoader.InternalUtils;
 using MelonLoader.Melons;
 using MelonLoader.Preferences;
 using MelonLoader.Utils;
@@ -11,17 +13,17 @@ namespace MelonLoader
 {
 	internal static class Core
     {
-        internal static HarmonyLib.Harmony HarmonyInstance = null;
+        internal static HarmonyLib.Harmony HarmonyInstance;
 
         private static int Initialize()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
-            Fixes.UnhandledException.Install(curDomain);
+            UnhandledException.Install(curDomain);
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
-            Fixes.ForcedCultureInfo.Install();
+            ForcedCultureInfo.Install();
             MelonUtils.Setup(curDomain);
-            Fixes.ExtraCleanup.Run();
+            ExtraCleanup.Run();
 
             MelonPreferences.Load();
             MelonLaunchOptions.Load();
@@ -51,7 +53,7 @@ namespace MelonLoader
                 if (!Il2CppAssemblyGenerator.Run())
                     return 1;
                 
-                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
+                PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
 
                 GameVersionHandler.Setup();
             }

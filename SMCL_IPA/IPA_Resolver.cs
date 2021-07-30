@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using IllusionPlugin;
 using IllusionInjector;
+using IllusionPlugin;
 using MelonLoader.Attributes;
 using MelonLoader.Melons;
 using MelonLoader.Utils;
@@ -15,7 +15,7 @@ namespace MelonLoader.CompatibilityLayers
 {
 	internal class IPA_Resolver : MelonCompatibilityLayer.Resolver
 	{
-		private readonly Type[] plugin_types = null;
+		private readonly Type[] plugin_types;
 
 		internal IPA_Resolver(Assembly assembly, string filepath, IEnumerable<Type> types) : base(assembly, filepath)
 			=> plugin_types = types.ToArray();
@@ -35,7 +35,7 @@ namespace MelonLoader.CompatibilityLayers
 				filter = ((IEnhancedPlugin)pluginInstance).Filter;
 
 			List<MelonGameAttribute> gamestbl = null;
-			if ((filter != null) && (filter.Count() > 0))
+			if (filter != null && filter.Count() > 0)
 			{
 				string exe_name = Path.GetFileNameWithoutExtension(string.Copy(MelonUtils.GetApplicationPath()));
 				gamestbl = new List<MelonGameAttribute>();
@@ -71,7 +71,7 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
-			MelonModWrapper wrapper = new MelonCompatibilityLayer.WrapperData()
+			MelonModWrapper wrapper = new MelonCompatibilityLayer.WrapperData
 			{
 				Assembly = Assembly,
 				Info = new MelonInfoAttribute(typeof(MelonModWrapper), plugin_name, plugin_version),

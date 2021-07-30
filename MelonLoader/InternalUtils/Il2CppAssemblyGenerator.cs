@@ -9,8 +9,8 @@ namespace MelonLoader.InternalUtils
     internal static class Il2CppAssemblyGenerator
     {
         private static string FileNameWithExtension = "Il2CppAssemblyGenerator.dll";
-        private static Assembly asm = null;
-        private static MethodInfo RunMethod = null;
+        private static Assembly asm;
+        private static MethodInfo RunMethod;
         internal static Assembly AssemblyResolver(object sender, ResolveEventArgs args) => args.Name.StartsWith($"{Path.GetFileNameWithoutExtension(FileNameWithExtension)}, Version=") ? asm : null;
 
         internal static bool Run()
@@ -61,7 +61,7 @@ namespace MelonLoader.InternalUtils
                 Type type = asm.GetType("MelonLoader.Il2CppAssemblyGenerator.Core");
                 if (type == null)
                 {
-                    MelonLogger.ThrowInternalFailure($"Failed to Get Type for MelonLoader.Il2CppAssemblyGenerator.Core!");
+                    MelonLogger.ThrowInternalFailure("Failed to Get Type for MelonLoader.Il2CppAssemblyGenerator.Core!");
                     return;
                 }
 

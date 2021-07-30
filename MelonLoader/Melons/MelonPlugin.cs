@@ -17,12 +17,12 @@ namespace MelonLoader.Melons
         /// </summary>
         public virtual void OnApplicationEarlyStart() { }
 
-        [Obsolete()]
-        private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
+        [Obsolete]
+        private MelonPluginInfoAttribute _LegacyInfoAttribute;
         [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead.")]
         public MelonPluginInfoAttribute InfoAttribute { get { if (_LegacyInfoAttribute == null) _LegacyInfoAttribute = new MelonPluginInfoAttribute(Info.SystemType, Info.Name, Info.Version, Info.Author, Info.DownloadLink); return _LegacyInfoAttribute; } }
-        [Obsolete()]
-        private MelonPluginGameAttribute[] _LegacyGameAttributes = null;
+        [Obsolete]
+        private MelonPluginGameAttribute[] _LegacyGameAttributes;
         [Obsolete("MelonPlugin.GameAttributes is obsolete. Please use MelonBase.Games instead.")]
         public MelonPluginGameAttribute[] GameAttributes
         {

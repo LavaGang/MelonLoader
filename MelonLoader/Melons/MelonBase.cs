@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Harmony;
 using MelonLoader.Attributes;
 using MelonLoader.Utils;
 
@@ -97,10 +98,10 @@ namespace MelonLoader.Melons
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
 
-        private Harmony.HarmonyInstance _OldHarmonyInstance;
+        private HarmonyInstance _OldHarmonyInstance;
         [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
-        public Harmony.HarmonyInstance harmonyInstance { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
+        public HarmonyInstance harmonyInstance { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
         [Obsolete("Harmony is obsolete. Please use HarmonyInstance instead.")]
-        public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
+        public HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
     }
 }

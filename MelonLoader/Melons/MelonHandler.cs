@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Security.Cryptography;
 using MelonLoader.Attributes;
 using MelonLoader.CompatibilityLayers;
+using MelonLoader.FileTypes;
 using MelonLoader.InternalUtils;
-using MelonLoader.Lemons;
 using MelonLoader.Utils;
 
 #pragma warning disable 0618
@@ -94,11 +94,11 @@ namespace MelonLoader.Melons
             }
 
             MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg($"{melontbl.Length} {(is_plugins ? "Plugin" : "Mod")}{((_Mods.Count > 1) ? "s" : "")} Loaded");
+            MelonLogger.Msg($"{melontbl.Length} {(is_plugins ? "Plugin" : "Mod")}{(_Mods.Count > 1 ? "s" : "")} Loaded");
             MelonLogger.Msg("------------------------------");
 
             List<MelonBase> melontblList = new List<MelonBase>(melontbl);
-            melontblList.Sort((MelonBase left, MelonBase right) => string.Compare(left.Info.Name, right.Info.Name));
+            melontblList.Sort((left, right) => string.Compare(left.Info.Name, right.Info.Name));
 
             foreach (MelonBase melon in melontblList)
             {
@@ -121,8 +121,8 @@ namespace MelonLoader.Melons
 
             MelonBase[] original_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
-            FileTypes.DLL.LoadAll(basedirectory, plugins);
-            FileTypes.ZIP.LoadAll(basedirectory);
+            DLL.LoadAll(basedirectory, plugins);
+            ZIP.LoadAll(basedirectory);
 
             MelonBase[] new_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
@@ -151,7 +151,7 @@ namespace MelonLoader.Melons
 
         public static string GetMelonHash(MelonBase melonBase)
         {
-            if ((melonBase == null)
+            if (melonBase == null
                 || string.IsNullOrEmpty(melonBase.Location))
                 return null;
 
@@ -167,9 +167,9 @@ namespace MelonLoader.Melons
             return finalHash;
         }
 
-        public static bool IsMelonAlreadyLoaded(string name) => (IsPluginAlreadyLoaded(name) || IsModAlreadyLoaded(name));
-        public static bool IsPluginAlreadyLoaded(string name) => (_Plugins.Find(x => x.Info.Name.Equals(name)) != null);
-        public static bool IsModAlreadyLoaded(string name) => (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
+        public static bool IsMelonAlreadyLoaded(string name) => IsPluginAlreadyLoaded(name) || IsModAlreadyLoaded(name);
+        public static bool IsPluginAlreadyLoaded(string name) => _Plugins.Find(x => x.Info.Name.Equals(name)) != null;
+        public static bool IsModAlreadyLoaded(string name) => _Mods.Find(x => x.Info.Name.Equals(name)) != null;
 
         public static void LoadFromFile(string filepath, string symbolspath = null)
         {
@@ -178,10 +178,10 @@ namespace MelonLoader.Melons
             switch (Path.GetExtension(filepath).ToLowerInvariant())
             {
                 case ".dll":
-                    FileTypes.DLL.LoadFromFile(filepath, symbolspath);
+                    DLL.LoadFromFile(filepath, symbolspath);
                     goto default;
                 case ".zip":
-                    FileTypes.ZIP.LoadFromFile(filepath);
+                    ZIP.LoadFromFile(filepath);
                     goto default;
                 default:
                     break;
@@ -195,7 +195,7 @@ namespace MelonLoader.Melons
 
             // To-Do Check for ZIP Byte Arrays
 
-            FileTypes.DLL.LoadFromByteArray(filedata, symbolsdata, filepath);
+            DLL.LoadFromByteArray(filedata, symbolsdata, filepath);
         }
 
         public static void LoadFromAssembly(Assembly asm, string filepath = null)
@@ -275,9 +275,9 @@ namespace MelonLoader.Melons
         });
         internal static void BONEWORKS_OnLoadingScreen() => InvokeMelonMethod(ref _Mods, x => x.BONEWORKS_OnLoadingScreen());
 
-        private static bool SceneWasJustLoaded = false;
+        private static bool SceneWasJustLoaded;
         private static int CurrentSceneBuildIndex = -1;
-        private static string CurrentSceneName = null;
+        private static string CurrentSceneName;
         internal static void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
             if (!MelonUtils.IsBONEWORKS)
@@ -303,7 +303,7 @@ namespace MelonLoader.Melons
         internal static void OnSceneWasUnloaded(int buildIndex, string sceneName)
             => InvokeMelonMethod(ref _Mods, x => x.OnSceneWasUnloaded(buildIndex, sceneName));
 
-        private static bool InitializeScene = false;
+        private static bool InitializeScene;
         internal static void OnUpdate()
         {
             if (InitializeScene)
@@ -338,11 +338,11 @@ namespace MelonLoader.Melons
         }
         private static void InvokeMelonMethod<T>(ref List<T> melons, InvokeMelonMethodDelegate<T> method, bool remove_failed = false) where T : MelonBase
         {
-            if ((melons == null)
-                || (melons.Count <= 0))
+            if (melons == null
+                || melons.Count <= 0)
                 return;
 
-            List<T> failedMelons = (remove_failed ? new List<T>() : null);
+            List<T> failedMelons = remove_failed ? new List<T>() : null;
 
             LemonEnumerator<T> enumerator = new LemonEnumerator<T>(melons.ToArray());
             while (enumerator.MoveNext())

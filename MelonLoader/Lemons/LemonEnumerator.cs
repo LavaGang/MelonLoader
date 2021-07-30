@@ -7,7 +7,7 @@ namespace MelonLoader
     public class LemonEnumerator<T> : IEnumerator
     {
         private T[] LemonPatch;
-        private int NextLemon = 0;
+        private int NextLemon;
 
         public LemonEnumerator(T[] lemons)
             => LemonPatch = lemons.ToArray();
@@ -20,9 +20,9 @@ namespace MelonLoader
         bool IEnumerator.MoveNext() => MoveNext();
         public bool MoveNext()
         {
-            if ((LemonPatch == null)
-                   || (LemonPatch.Length <= 0)
-                   || (NextLemon >= LemonPatch.Length))
+            if (LemonPatch == null
+                   || LemonPatch.Length <= 0
+                   || NextLemon >= LemonPatch.Length)
                 return false;
             Current = LemonPatch[NextLemon];
             NextLemon++;
