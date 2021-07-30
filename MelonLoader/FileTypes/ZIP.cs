@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 
-namespace MelonLoader.MelonFileTypes
+namespace MelonLoader.FileTypes
 {
     internal static class ZIP
     {

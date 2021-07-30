@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.TinyJSON;
 
 namespace MelonLoader.Il2CppAssemblyGenerator

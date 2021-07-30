@@ -7,7 +7,7 @@ using MonoMod.RuntimeDetour;
 namespace MelonLoader
 {
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct)]
-	public class PatchShield : Attribute
+	public class PatchShield : Attribute //Naming violation?
 	{
 		private static AccessTools.FieldRef<object, MethodBase> PatchProcessor_OriginalRef;
 

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace MelonLoader.Il2CppAssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class DeobfuscationMap : PackageBase
     {
@@ -26,9 +26,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Values.DeobfuscationMapHash) ||
+        private bool ShouldDownload() => string.IsNullOrEmpty(Config.Values.DeobfuscationMapHash) ||
                                           !Config.Values.DeobfuscationMapHash.Equals(Version) ||
-                                          !File.Exists(Path.Combine(Destination, NewFileName)));
+                                          !File.Exists(Path.Combine(Destination, NewFileName));
 
         internal override bool Download()
         {

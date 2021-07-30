@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace MelonLoader.Il2CppAssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class Cpp2IL : DumperBase
     {
@@ -25,9 +25,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Save();
         }
 
-        private bool ShouldDownload() => (
+        private bool ShouldDownload() =>
             string.IsNullOrEmpty(Config.Values.DumperVersion)
-            || !Config.Values.DumperVersion.Equals(Version));
+            || !Config.Values.DumperVersion.Equals(Version);
 
         internal override void Cleanup() { }
 

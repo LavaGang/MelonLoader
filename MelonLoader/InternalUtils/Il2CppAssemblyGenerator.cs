@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace MelonLoader
+namespace MelonLoader.InternalUtils
 {
     internal static class Il2CppAssemblyGenerator
     {
@@ -22,7 +22,7 @@ namespace MelonLoader
                 int returnval = (int)RunMethod.Invoke(null, new object[0]);
                 EnableCloseButton();
                 Fixes.ApplicationBase.Run(AppDomain.CurrentDomain);
-                return (returnval == 0);
+                return returnval == 0;
             }
 
             return false;

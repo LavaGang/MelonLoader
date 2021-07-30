@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace MelonLoader.Il2CppAssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class Il2CppAssemblyUnhollower : ExecutablePackageBase
     {
@@ -24,7 +24,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Values.UnhollowerVersion) || !Config.Values.UnhollowerVersion.Equals(Version));
+        private bool ShouldDownload() => string.IsNullOrEmpty(Config.Values.UnhollowerVersion) || !Config.Values.UnhollowerVersion.Equals(Version);
 
         internal override bool Download()
         {
