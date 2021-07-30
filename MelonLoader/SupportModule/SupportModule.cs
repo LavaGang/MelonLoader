@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace MelonLoader
 {
-	internal static class SupportModule
+    internal static class SupportModule
     {
         internal static ISupportModule_To Interface = null;
 
