@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
 
-namespace MelonLoader
+namespace MelonLoader.Preferences
 {
     public class MelonPreferences_Category
     {

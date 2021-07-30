@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using MelonLoader.Melons;
 
-namespace MelonLoader
+namespace MelonLoader.BackwardsCompatibility.Melon
 {
     [Obsolete("MelonLoader.Main is Only Here for Compatibility Reasons.")]
     public static class Main

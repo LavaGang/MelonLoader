@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using MelonLoader.Attributes;
 
 [assembly: AssemblyTitle(MelonLoader.BuildInfo.Description)]
 [assembly: AssemblyDescription(MelonLoader.BuildInfo.Description)]
@@ -10,4 +11,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("CD98B694-D833-41B0-AF57-A6B9D024B045")]
 [assembly: AssemblyVersion(MelonLoader.BuildInfo.Version)]
 [assembly: AssemblyFileVersion(MelonLoader.BuildInfo.Version)]
-[assembly: MelonLoader.PatchShield]
+[assembly: PatchShield]

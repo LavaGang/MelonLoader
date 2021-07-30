@@ -2,7 +2,7 @@
 using Tomlet;
 using Tomlet.Models;
 
-namespace MelonLoader
+namespace MelonLoader.Preferences
 {
     public abstract class MelonPreferences_Entry
     {

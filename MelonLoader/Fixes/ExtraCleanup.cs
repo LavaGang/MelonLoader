@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Fixes
 {

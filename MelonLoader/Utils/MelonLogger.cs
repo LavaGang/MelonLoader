@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace MelonLoader
+namespace MelonLoader.Utils
 {
     public class MelonLogger
     {

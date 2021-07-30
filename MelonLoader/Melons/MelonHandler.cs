@@ -1,13 +1,18 @@
-﻿using MelonLoader.InternalUtils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using MelonLoader.Attributes;
+using MelonLoader.CompatibilityLayers;
+using MelonLoader.InternalUtils;
+using MelonLoader.Lemons;
+using MelonLoader.Utils;
+
 #pragma warning disable 0618
 
-namespace MelonLoader
+namespace MelonLoader.Melons
 {
 	public static class MelonHandler
     {

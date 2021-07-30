@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace MelonLoader
+namespace MelonLoader.Utils
 {
     public class MelonCoroutines
     {
@@ -13,9 +13,9 @@ namespace MelonLoader
         /// <returns>An object that can be passed to Stop to stop this coroutine</returns>
         public static object Start(IEnumerator routine)
         {
-            if (SupportModule.Interface == null)
+            if (SupportModule.SupportModule.Interface == null)
                 throw new NotSupportedException("Support module must be initialized before starting coroutines");
-            return SupportModule.Interface.StartCoroutine(routine);
+            return SupportModule.SupportModule.Interface.StartCoroutine(routine);
         }
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace MelonLoader
         /// <param name="coroutineToken">The coroutine to stop</param>
         public static void Stop(object coroutineToken)
         {
-            if (SupportModule.Interface == null)
+            if (SupportModule.SupportModule.Interface == null)
                 throw new NotSupportedException("Support module must be initialized before starting coroutines");
-            SupportModule.Interface.StopCoroutine(coroutineToken);
+            SupportModule.SupportModule.Interface.StopCoroutine(coroutineToken);
         }
     }
 }

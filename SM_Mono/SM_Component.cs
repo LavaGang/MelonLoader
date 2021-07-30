@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using MelonLoader.Utils;
 using UnityEngine;
 
 namespace MelonLoader.Support

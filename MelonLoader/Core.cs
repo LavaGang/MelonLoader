@@ -1,6 +1,11 @@
 ﻿using MelonLoader.InternalUtils;
 using System;
 using System.Diagnostics;
+using MelonLoader.Attributes;
+using MelonLoader.CompatibilityLayers;
+using MelonLoader.Melons;
+using MelonLoader.Preferences;
+using MelonLoader.Utils;
 
 namespace MelonLoader
 {
@@ -56,7 +61,7 @@ namespace MelonLoader
 
         private static int Start()
         {
-            if (!SupportModule.Initialize())
+            if (!SupportModule.SupportModule.Initialize())
                 return 1;
 
             AddUnityDebugLog();
@@ -89,9 +94,9 @@ namespace MelonLoader
 
         private static void AddUnityDebugLog()
         {
-            SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
-            SupportModule.Interface.UnityDebugLog("~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!   ~");
-            SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
+            SupportModule.SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
+            SupportModule.SupportModule.Interface.UnityDebugLog("~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!   ~");
+            SupportModule.SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
         }
     }
 }

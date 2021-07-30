@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
 
 namespace MelonLoader.FileTypes
 {

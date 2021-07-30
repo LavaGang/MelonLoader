@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MelonLoader
+namespace MelonLoader.BackwardsCompatibility.Melon
 {
     [Obsolete("MelonLoader.MelonLoaderBase is Only Here for Compatibility Reasons.")]
     public static class MelonLoaderBase

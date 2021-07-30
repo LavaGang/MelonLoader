@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
+using MelonLoader.Attributes;
+using MelonLoader.Lemons;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
 
-namespace MelonLoader
+namespace MelonLoader.CompatibilityLayers
 {
     public static class MelonCompatibilityLayer
     {

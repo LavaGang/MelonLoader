@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using MelonLoader.Attributes;
+using MelonLoader.BackwardsCompatibility.Melon;
 
-namespace MelonLoader
+namespace MelonLoader.Melons
 {
     public abstract class MelonPlugin : MelonBase
     {

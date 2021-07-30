@@ -1,6 +1,7 @@
 ﻿using System;
+using MelonLoader.Utils;
 
-namespace MelonLoader
+namespace MelonLoader.Attributes
 {
     [AttributeUsage(AttributeTargets.Assembly)]
     public class MelonColorAttribute : Attribute

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {

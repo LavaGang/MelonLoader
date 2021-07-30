@@ -1,4 +1,6 @@
 ﻿using System;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
 using Tomlet;
 using Tomlet.Models;
 

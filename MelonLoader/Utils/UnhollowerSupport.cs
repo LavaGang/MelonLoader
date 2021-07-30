@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace MelonLoader
+namespace MelonLoader.Utils
 {
     public static class UnhollowerSupport
     {

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Reflection;
+using MelonLoader.Attributes;
+using MelonLoader.Utils;
+
 #pragma warning disable 0618
 
-namespace MelonLoader
+namespace MelonLoader.Melons
 {
     public class MelonBase
     {

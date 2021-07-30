@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace MelonLoader
+namespace MelonLoader.SupportModule
 {
     public interface ISupportModule_To
     {

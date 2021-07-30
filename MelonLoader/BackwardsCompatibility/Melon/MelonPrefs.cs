@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using MelonLoader.Preferences;
 
-namespace MelonLoader
+namespace MelonLoader.BackwardsCompatibility.Melon
 {
     [Obsolete("MelonLoader.MelonPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead.")]
     public class MelonPrefs

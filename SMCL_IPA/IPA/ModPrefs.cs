@@ -1,5 +1,6 @@
 ﻿using System;
 using MelonLoader;
+using MelonLoader.Preferences;
 
 namespace IllusionPlugin
 {

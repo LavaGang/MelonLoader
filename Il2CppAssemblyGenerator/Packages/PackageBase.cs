@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {

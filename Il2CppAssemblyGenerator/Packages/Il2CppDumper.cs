@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.TinyJSON;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {

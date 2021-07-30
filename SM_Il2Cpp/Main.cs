@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using MelonLoader.Support.Preferences;
+using MelonLoader.SupportModule;
+using MelonLoader.Utils;
 using UnhollowerBaseLib;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;

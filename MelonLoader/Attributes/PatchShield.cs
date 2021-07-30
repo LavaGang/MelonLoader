@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using MelonLoader.Utils;
 using MonoMod.RuntimeDetour;
 
-namespace MelonLoader
+namespace MelonLoader.Attributes
 {
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct)]
 	public class PatchShield : Attribute //Naming violation?

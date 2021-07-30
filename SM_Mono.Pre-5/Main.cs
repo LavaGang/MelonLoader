@@ -1,4 +1,5 @@
 ﻿using MelonLoader.Support.Preferences;
+using MelonLoader.SupportModule;
 using UnityEngine;
 
 namespace MelonLoader.Support

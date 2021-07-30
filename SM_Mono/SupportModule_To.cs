@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MelonLoader.SupportModule;
 using UnityEngine;
 
 namespace MelonLoader.Support

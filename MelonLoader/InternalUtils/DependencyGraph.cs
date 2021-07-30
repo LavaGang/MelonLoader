@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using MelonLoader.Attributes;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
 
 namespace MelonLoader.InternalUtils
 {

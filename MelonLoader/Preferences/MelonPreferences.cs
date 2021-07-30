@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using MelonLoader.Preferences;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
 
-namespace MelonLoader
+namespace MelonLoader.Preferences
 {
     public static class MelonPreferences
     {

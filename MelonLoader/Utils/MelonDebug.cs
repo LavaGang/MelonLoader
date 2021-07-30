@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MelonLoader
+namespace MelonLoader.Utils
 {
     public static class MelonDebug
     {

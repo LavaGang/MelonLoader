@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader
+namespace MelonLoader.Utils
 {
     public class NativeLibrary
     {

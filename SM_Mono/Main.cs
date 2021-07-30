@@ -1,5 +1,7 @@
 ﻿using System;
 using MelonLoader.Support.Preferences;
+using MelonLoader.SupportModule;
+using MelonLoader.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

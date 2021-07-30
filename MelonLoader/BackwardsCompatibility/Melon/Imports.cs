@@ -1,6 +1,7 @@
 ﻿using System;
+using MelonLoader.Utils;
 
-namespace MelonLoader
+namespace MelonLoader.BackwardsCompatibility.Melon
 {
     [Obsolete("MelonLoader.Imports is Only Here for Compatibility Reasons.")]
     public static class Imports

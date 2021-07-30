@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using MelonLoader.Utils;
+
 #pragma warning disable 0649
 
 namespace MelonLoader.Il2CppAssemblyGenerator

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MelonLoader.Preferences;
+
 #pragma warning disable 0108
 
-namespace MelonLoader
+namespace MelonLoader.BackwardsCompatibility.Melon
 {
     [Obsolete("MelonLoader.ModPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead.")]
     public class ModPrefs : MelonPrefs

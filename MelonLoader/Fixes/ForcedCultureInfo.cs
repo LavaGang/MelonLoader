@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using HarmonyLib;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Fixes
 {

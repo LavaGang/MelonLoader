@@ -1,6 +1,7 @@
 ﻿using System;
+using MelonLoader.BackwardsCompatibility.Melon;
 
-namespace MelonLoader
+namespace MelonLoader.Attributes
 {
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public class MelonGameAttribute : Attribute

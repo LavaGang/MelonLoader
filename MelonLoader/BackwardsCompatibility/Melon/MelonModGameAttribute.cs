@@ -1,6 +1,7 @@
 ﻿using System;
+using MelonLoader.Attributes;
 
-namespace MelonLoader
+namespace MelonLoader.BackwardsCompatibility.Melon
 {
     [Obsolete("MelonLoader.MelonModGameAttribute is Only Here for Compatibility Reasons. Please use MelonLoader.MelonGame instead.")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]

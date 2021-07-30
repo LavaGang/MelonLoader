@@ -10,7 +10,13 @@ using System.Text;
 using MonoMod.Utils;
 using MonoMod.Cil;
 using HarmonyLib;
+using MelonLoader.Attributes;
+using MelonLoader.BackwardsCompatibility.Melon;
+using MelonLoader.Lemons;
+using MelonLoader.Melons;
 using MelonLoader.TinyJSON;
+using MelonLoader.Utils;
+
 #pragma warning disable 0618
 
 namespace MelonLoader

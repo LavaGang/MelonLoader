@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using MelonLoader.Utils;
 
 namespace MelonLoader.InternalUtils
 {

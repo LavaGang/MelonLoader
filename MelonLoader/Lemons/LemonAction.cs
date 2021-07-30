@@ -1,4 +1,4 @@
-﻿namespace MelonLoader
+﻿namespace MelonLoader.Lemons
 {
     public delegate void LemonAction();
     public delegate void LemonAction<in T1>(T1 arg1);

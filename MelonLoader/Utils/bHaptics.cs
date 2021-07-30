@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader
+namespace MelonLoader.Utils
 {
     public static class bHaptics
     {

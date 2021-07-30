@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using MelonLoader;
+using MelonLoader.Utils;
 using ModHelper;
 #pragma warning disable 0618
 

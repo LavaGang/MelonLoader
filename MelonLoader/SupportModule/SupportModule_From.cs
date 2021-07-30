@@ -1,4 +1,6 @@
-﻿namespace MelonLoader
+﻿using MelonLoader.Melons;
+
+namespace MelonLoader.SupportModule
 {
     internal class SupportModule_From : ISupportModule_From
     {

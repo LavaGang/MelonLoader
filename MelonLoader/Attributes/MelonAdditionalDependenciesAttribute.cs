@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MelonLoader
+namespace MelonLoader.Attributes
 {
     [AttributeUsage(AttributeTargets.Assembly)]
     public class MelonAdditionalDependenciesAttribute : Attribute

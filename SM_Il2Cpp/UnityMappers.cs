@@ -1,3 +1,4 @@
+using MelonLoader.Preferences;
 using Tomlet;
 using Tomlet.Models;
 using UnityEngine;

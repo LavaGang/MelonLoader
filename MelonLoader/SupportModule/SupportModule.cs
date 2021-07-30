@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using MelonLoader.Utils;
 
-namespace MelonLoader
+namespace MelonLoader.SupportModule
 {
     internal static class SupportModule
     {

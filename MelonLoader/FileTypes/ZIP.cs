@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip;
+using MelonLoader.Utils;
 
 namespace MelonLoader.FileTypes
 {

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {

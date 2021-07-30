@@ -5,6 +5,10 @@ using System.Linq;
 using System.Reflection;
 using IllusionPlugin;
 using IllusionInjector;
+using MelonLoader.Attributes;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
+
 #pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers

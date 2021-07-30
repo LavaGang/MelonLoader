@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MelonLoader
+namespace MelonLoader.Utils
 {
     public class IniFile
     {

@@ -4,6 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Attributes;
+using MelonLoader.BackwardsCompatibility.Melon;
+using MelonLoader.Melons;
+using MelonLoader.Utils;
+
 #pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers

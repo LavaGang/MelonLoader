@@ -1,6 +1,7 @@
 ﻿using System;
+using MelonLoader.Attributes;
 
-namespace MelonLoader
+namespace MelonLoader.BackwardsCompatibility.Melon
 {
     [Obsolete("MelonLoader.MelonModInfoAttribute is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo instead.")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]

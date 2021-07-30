@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Utils;
 
-namespace MelonLoader
+namespace MelonLoader.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class RegisterTypeInIl2Cpp : Attribute //Naming violation?
