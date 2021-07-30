@@ -44,7 +44,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fixes\ForcedCultureInfo.cs" />
     <Compile Include="GameVersionHandler.cs" />
+    <Compile Include="Lemons\LemonAction.cs" />
+    <Compile Include="Lemons\LemonEnumerator.cs" />
+    <Compile Include="Lemons\LemonFunc.cs" />
+    <Compile Include="Lemons\LemonTuple.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Constants.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Exception.cs" />
@@ -109,15 +114,11 @@
     <Compile Include="Attributes\MelonGameVersionAttribute.cs" />
     <Compile Include="Attributes\HarmonyDontPatchAllAttribute.cs" />
     <Compile Include="Attributes\MelonProcessAttribute.cs" />
-    <Compile Include="Melons\MelonEnumerator.cs" />
     <Compile Include="FileTypes\DLL.cs" />
     <Compile Include="FileTypes\ZIP.cs" />
     <Compile Include="Preferences\MelonPreferences_ReflectiveCategory.cs" />
     <Compile Include="CompatibilityLayers\MelonCompatibilityLayer.cs" />
-    <Compile Include="Fixes\ApplicationBase.cs" />
     <Compile Include="Fixes\ExtraCleanup.cs" />
-    <Compile Include="Fixes\InvariantCurrentCulture.cs" />
-    <Compile Include="Fixes\QuitFix.cs" />
     <Compile Include="Fixes\UnhandledException.cs" />
     <Compile Include="InternalUtils\Il2CppAssemblyGenerator.cs" />
     <Compile Include="InternalUtils\HarmonyIl2CppMethodPatcher.cs" />

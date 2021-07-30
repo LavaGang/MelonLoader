@@ -17,7 +17,7 @@ namespace MelonLoader
 {
     public static class MelonUtils
     {
-        internal static void Setup()
+        internal static void Setup(AppDomain domain)
         {
             GameDeveloper = string.Copy(Internal_GetGameDeveloper());
             GameName = string.Copy(Internal_GetGameName());
@@ -45,7 +45,8 @@ namespace MelonLoader
                 && !string.IsNullOrEmpty(GameName) 
                 && GameName.Equals("Demeo"));
 
-            AppDomain.CurrentDomain.AssemblyResolve += LibsAssemblyResolver;
+            domain.AssemblyResolve += LibsAssemblyResolver;
+            SetCurrentDomainBaseDirectory(GameDirectory, domain);
         }
 
         private static Assembly LibsAssemblyResolver(object sender, ResolveEventArgs args)
@@ -213,7 +214,7 @@ namespace MelonLoader
 
         public static IEnumerable<Type> GetValidTypes(this Assembly asm)
             => GetValidTypes(asm, null);
-        public static IEnumerable<Type> GetValidTypes(this Assembly asm, Func<Type, bool> predicate)
+        public static IEnumerable<Type> GetValidTypes(this Assembly asm, LemonFunc<Type, bool> predicate)
         {
             IEnumerable<Type> returnval = Enumerable.Empty<Type>();
             try { returnval = asm.GetTypes().AsEnumerable(); }

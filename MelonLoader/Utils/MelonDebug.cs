@@ -34,8 +34,8 @@ namespace MelonLoader
             ErrorCallbackHandler?.Invoke(txt);
         }
 
-        public static event Action<ConsoleColor, string> MsgCallbackHandler;
-        public static event Action<string> ErrorCallbackHandler;
+        public static event LemonAction<ConsoleColor, string> MsgCallbackHandler;
+        public static event LemonAction<string> ErrorCallbackHandler;
         public static bool IsEnabled() => MelonLaunchOptions.Core.DebugMode;
     }
 }

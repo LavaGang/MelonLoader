@@ -122,7 +122,7 @@ namespace MelonLoader
             MelonBase[] new_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
             List<MelonBase> failedMelons = new List<MelonBase>();
-            MelonEnumerator<MelonBase> enumerator = new MelonEnumerator<MelonBase>(new_array.ToArray());
+            LemonEnumerator<MelonBase> enumerator = new LemonEnumerator<MelonBase>(new_array.ToArray());
             while (enumerator.MoveNext())
             {
                 if (!original_array.Contains(enumerator.Current))
@@ -339,7 +339,7 @@ namespace MelonLoader
 
             List<T> failedMelons = (remove_failed ? new List<T>() : null);
 
-            MelonEnumerator<T> enumerator = new MelonEnumerator<T>(melons.ToArray());
+            LemonEnumerator<T> enumerator = new LemonEnumerator<T>(melons.ToArray());
             while (enumerator.MoveNext())
             {
                 try { method(enumerator.Current); }

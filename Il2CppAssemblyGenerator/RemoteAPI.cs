@@ -20,8 +20,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         private class HostInfo
         {
             internal string URL = null;
-            internal Func<string, InfoStruct> Func = null;
-            internal HostInfo(string url, Func<string, InfoStruct> func)
+            internal LemonFunc<string, InfoStruct> Func = null;
+            internal HostInfo(string url, LemonFunc<string, InfoStruct> func)
             {
                 URL = url;
                 Func = func;
