@@ -423,3 +423,4 @@ Int/
 Bootstrap/tools/.env
 
 JavaBindings/build/
+!JavaBindings/bin/

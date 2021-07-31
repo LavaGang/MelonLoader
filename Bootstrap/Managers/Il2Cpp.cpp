@@ -101,6 +101,7 @@ void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterf
 void* Il2Cpp::Handle = NULL;
 void* Il2Cpp::MemLoc = NULL;
 const char* Il2Cpp::LibPath = NULL;
+int Il2Cpp::SceneChanges = 0;
 
 bool Il2Cpp::Initialize()
 {
@@ -160,12 +161,6 @@ bool Il2Cpp::ApplyPatches()
 	return true;
 }
 
-void Il2Cpp::OnIl2cppInit(const char *domain) {
-    OnIl2cppReady();
-    Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
-    Hook::Attach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
-}
-
 void Il2Cpp::OnIl2cppReady() {
     std::thread t(MonoThreadHandle);
     Debug::Msg("starting thread");
@@ -173,34 +168,19 @@ void Il2Cpp::OnIl2cppReady() {
 }
 
 void Il2Cpp::MonoThreadHandle() {
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-
-    // if (AssemblyGenerator::Initialize())
-    // {
-    Mono::CreateDomain("foobar");
-    Debug::Msg("Domain created");
+    Mono::CreateDomain("Mono Domain");
     BaseAssembly::LoadAssembly();
-    Debug::Msg("Loading assembly");
     InternalCalls::Initialize();
-    Debug::Msg("Initialized calls");
     // todo: check if it works/is necessary on mono games
     //AssemblyVerifier::InstallHooks();
-    if (BaseAssembly::Initialize())
-    {
-        //        Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
-        //        Hook::Attach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
-    } else
+    if (!BaseAssembly::Initialize())
     {
         Debug::Msg("Base assembly failed to setup.");
+        return;
     }
-    // }
 
-    Debug::Msg("init complete");
-
-    while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        Debug::Msg("Update");
-    }
+//    if (BaseAssembly::PreStart())
+//        BaseAssembly::Start();
 }
 
 #pragma region Hooks
@@ -217,13 +197,12 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 		goto exit_early;	
 	}
 
-	domain = Exports::il2cpp_init(name);
+	Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
+	Hook::Attach((void**)&Exports::il2cpp_runtime_invoke, (void*)Hooks::il2cpp_runtime_invoke);
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+	exit_early:
+    domain = Exports::il2cpp_init(name);
 
-    OnIl2cppInit(name);
-
-	exit_early:	
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	Hook::Detach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
 	
@@ -232,20 +211,24 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 
 Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec)
 {
-    Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
-    Hook::Detach((void**)&(Exports::il2cpp_runtime_invoke), (void*)il2cpp_runtime_invoke);
-    return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
+    const char* method_name = Exports::il2cpp_method_get_name(method);
 
-	const char* method_name = Exports::il2cpp_method_get_name(method);
-	if (strstr(method_name, "Internal_ActiveSceneChanged") != NULL)
-	{
-		Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
-		Hook::Detach((void**)&(Exports::il2cpp_runtime_invoke), (void*)il2cpp_runtime_invoke);
-		OnIl2cppReady();
-		if (BaseAssembly::PreStart())
-			BaseAssembly::Start();
-	}
-	return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
+    auto sceneChange = strstr(method_name, "Internal_ActiveSceneChanged") != NULL;
+
+    if (sceneChange)
+        SceneChanges++;
+
+    // mono cannot be initialized on the first scene change on android
+    // otherwise it breaks GC
+    if (sceneChange && SceneChanges >= 2)
+    {
+        Debug::Msg("Detaching Hook from il2cpp_runtime_invoke...");
+        Hook::Detach((void**)&(Exports::il2cpp_runtime_invoke), (void*)il2cpp_runtime_invoke);
+
+        OnIl2cppReady();
+    }
+
+    return Exports::il2cpp_runtime_invoke(method, obj, params, exec);
 }
 
 void Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct)

@@ -21,12 +21,12 @@ public:
 	static void* MemLoc;
 	static const char* LibPath;
 #endif
-	
 	static bool Initialize();
 	static bool ApplyPatches();
 
 private:
-    static void OnIl2cppInit(const char* domain);
+    static int SceneChanges;
+
     static void OnIl2cppReady();
     static void MonoThreadHandle();
 
