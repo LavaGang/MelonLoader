@@ -17,7 +17,7 @@ HANDLE Console::OutputHandle = NULL;
 #endif
 
 #ifdef __ANDROID__
-Console::DisplayMode Console::Mode = Console::DisplayMode::LEMON;
+Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
 #else
 Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
 #endif

@@ -25,6 +25,11 @@ public:
 	static bool Initialize();
 	static bool ApplyPatches();
 
+private:
+    static void OnIl2cppInit(const char* domain);
+    static void OnIl2cppReady();
+    static void MonoThreadHandle();
+
 	class Exports
 	{
 	public:

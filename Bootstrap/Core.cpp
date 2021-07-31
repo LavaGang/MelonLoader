@@ -132,6 +132,10 @@ bool Core::Initialize()
                     "Initializing Capstone",
                     XrefScannerBindings::Init
             },
+            {
+                "Initialize Funchook",
+                Hook::FunchookPrepare
+            },
 #endif
             {
                     "Initializing Mono",

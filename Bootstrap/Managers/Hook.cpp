@@ -2,10 +2,13 @@
 #include <Windows.h>
 #endif
 
-#include <funchook.h>
+#ifdef __ANDROID__
+#include "AndroidData.h"
+#endif
 
 #include "Hook.h"
 #include "../Utils/Console/Logger.h"
+
 
 #ifdef _WIN64
 #include "../Base/MSDetours/detours_x64.h"
@@ -83,5 +86,13 @@ void Hook::Detach(void** target, void* detour)
 	*target = reset;
 
 	return;
+}
+#endif
+
+#ifdef __ANDROID__
+bool Hook::FunchookPrepare() {
+    funchook_set_debug_file((std::string(AndroidData::DataDir) + "/funchook.log").c_str());
+
+    return true;
 }
 #endif

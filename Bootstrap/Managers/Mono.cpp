@@ -112,12 +112,12 @@ bool Mono::Initialize()
 		return false;
 	}
 
-	jMonoDroidHelper = ::Core::Env->FindClass("com/melonloader/helpers/MonoDroidHelper");
-	if (jMonoDroidHelper == NULL)
-	{
-		Assertion::ThrowInternalFailure("Cannot find com/melonloader/helpers/MonoDroidHelper");
-		return false;
-	}
+//	jMonoDroidHelper = ::Core::Env->FindClass("com/melonloader/helpers/MonoDroidHelper");
+//	if (jMonoDroidHelper == NULL)
+//	{
+//		Assertion::ThrowInternalFailure("Cannot find com/melonloader/helpers/MonoDroidHelper");
+//		return false;
+//	}
 	
 	Debug::Msg(("Mono::BasePath = " + std::string(BasePath)).c_str());
 	Debug::Msg(("Mono::ManagedPath = " + std::string(ManagedPath)).c_str());
@@ -157,15 +157,15 @@ bool Mono::Load()
 
 #ifdef _WIN32
 	PosixHelper = LoadLibraryA((std::string(BasePath) + "\\" + Mono::PosixHelperName + ".dll").c_str());
-#elif defined(__ANDROID__)
-	PosixHelper = dlopen((std::string("lib") + std::string(Mono::PosixHelperName) + ".so").c_str(), RTLD_NOW & RTLD_NODELETE & RTLD_GLOBAL);
 #endif
 
+#ifdef _WIN32
 	if ((PosixHelper == NULL) && !IsOldMono)
 	{
 		Assertion::ThrowInternalFailure("Failed to Load Mono Posix Helper!");
 		return false;
 	}
+#endif
 
 	// const char* extraLibs[] = {
 	// 	"libmonodroid.so"
@@ -305,16 +305,15 @@ void Mono::CreateDomain(const char* name)
 
 	Exports::mono_set_assemblies_path(ManagedPath);
 	Exports::mono_assembly_setrootdir(ManagedPath);
-	Exports::mono_set_config_dir(ConfigPath);
 
 #ifdef __ANDROID__
-	Debug::Msg("Initializing mono via JNI");
-	if (!InitMonoJNI())
-	{
-		Assertion::ThrowInternalFailure("Failed to initialize mono in JNI");
-		Core::KillCurrentProcess();
-		return; // lol
-	}
+//	Debug::Msg("Initializing mono via JNI");
+//	if (!InitMonoJNI())
+//	{
+//		Assertion::ThrowInternalFailure("Failed to initialize mono in JNI");
+//		Core::KillCurrentProcess();
+//		return; // lol
+//	}
 #endif
 
 #ifndef PORT_DISABLE
@@ -323,14 +322,16 @@ void Mono::CreateDomain(const char* name)
 #endif
 
 #ifdef __ANDROID__
-	Debug::Msg("Finding JIT domain");
-	domain = Exports::mono_domain_get();
-	if (domain == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to find mono domain");
-		Core::KillCurrentProcess();
-		return; // lol
-	}
+//	Debug::Msg("Finding JIT domain");
+//	domain = Exports::mono_domain_get();
+//	if (domain == NULL)
+//	{
+//		Assertion::ThrowInternalFailure("Failed to find mono domain");
+//		Core::KillCurrentProcess();
+//		return; // lol
+//	}
+    domain = Exports::mono_jit_init(name);
+    Exports::mono_thread_set_main(Exports::mono_thread_current());
 #else
 	Debug::Msg("Jit init");
 	domain = Exports::mono_jit_init(name);
@@ -339,13 +340,16 @@ void Mono::CreateDomain(const char* name)
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
 #endif
 
+// not needed in newer version of mono
+#ifdef _WIN32
 	if (!IsOldMono)
 		Exports::mono_domain_set_config(domain, Game::BasePath, name);
+#endif
 }
 
 void Mono::AddInternalCall(const char* name, void* method)
 {
-	// Debug::Msg(name);
+    Debug::Msgf("Adding: %s", name);
 	Exports::mono_add_internal_call(name, method);
 }
 
@@ -426,16 +430,10 @@ bool Mono::Exports::Initialize()
 			else
 				MONODEF(mono_jit_init_version)
 
-#ifdef __ANDROID__
-				// mono_class_get_method_from_name = (mono_class_get_method_from_name_t)ImportLibHelper::GetInternalExport(Module, "mono_class_get_method_from_name", 0x00275ecc, 0x0026c770);
-#endif
 #undef MONODEF
 #pragma endregion MonoBind
 
 	Debug::Msg("Binding Native Lib...");
-
-	mono_dllmap_insert(NULL, "System.Native", NULL, "libmono-native.so", NULL);
-	mono_dllmap_insert(NULL, "System.Net.Security.Native", NULL, "libmono-native.so", NULL);
 
 	mono_dllmap_insert(NULL, "GameAssembly", NULL, "libil2cpp.so", NULL);
 	

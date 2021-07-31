@@ -34,18 +34,6 @@ bool BaseAssembly::LoadAssembly()
 bool BaseAssembly::Initialize()
 {
 	Debug::Msg("Initializing Base Assembly...");
-	Assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PathMono);
-	if (Assembly == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
-		return false;
-	}
-	Image = Mono::Exports::mono_assembly_get_image(Assembly);
-	if (Image == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Get Image from Mono Assembly!");
-		return false;
-	}
 	Mono::Class* klass = Mono::Exports::mono_class_from_name(Image, "MelonLoader", "Core");
 	if (klass == NULL)
 	{

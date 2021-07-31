@@ -86,4 +86,8 @@ if(DEFINED USE_FUNCHOOK)
     set_property(TARGET funchook-shared PROPERTY LINK_LIBRARIES dl capstone-shared)
 endif()
 
+#if (CMAKE_BUILD_TYPE EQUAL "Debug")
+add_compile_definitions(DEBUG)
+#endif()
+
 target_link_libraries(${PROJECT_NAME} ${BOOTSTRAP_DEPS})

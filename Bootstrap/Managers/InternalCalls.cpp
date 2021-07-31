@@ -31,9 +31,9 @@ void InternalCalls::Initialize()
     MelonDebug::AddInternalCalls();
     SupportModules::AddInternalCalls();
     UnhollowerIl2Cpp::AddInternalCalls();
-    BHaptics::AddInternalCalls();
+//    BHaptics::AddInternalCalls();
 
-    // Initialized = true;
+     Initialized = true;
 }
 
 #pragma region MelonLogger
