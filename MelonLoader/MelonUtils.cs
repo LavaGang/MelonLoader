@@ -287,6 +287,8 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsOldMono();
         [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static bool IsUnderWineOrSteamProton();
+        [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetApplicationPath();
         [MethodImpl(MethodImplOptions.InternalCall)]

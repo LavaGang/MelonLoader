@@ -25,6 +25,7 @@ public:
 	static std::string GetVersionStr();
 	static std::string GetVersionStrWithGameName(const char* GameVersion = NULL);
 	static void SetBasePath();
+	static bool IsRunningInWine() { return ((wine_get_version == NULL) ? false : true); }
 
 private:
 	static const char* GetOSVersion();
@@ -32,5 +33,4 @@ private:
 	typedef const char* (*wine_get_version_t) ();
 	static wine_get_version_t wine_get_version;
 	static void SetupWineCheck();
-	static bool IsRunningInWine() { return ((wine_get_version == NULL) ? false : true); }
 };

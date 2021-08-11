@@ -163,6 +163,8 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGame32Bit", IsGame32Bit);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", IsGameIl2Cpp);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsOldMono", IsOldMono);
+	Mono::AddInternalCall("MelonLoader.MelonUtils::IsUnderWineOrSteamProton", Core::IsRunningInWine);
+	
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetApplicationPath", GetApplicationPath);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetGameDataDirectory", GetGameDataDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetUnityVersion", GetUnityVersion);

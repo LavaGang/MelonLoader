@@ -30,6 +30,8 @@
 1. Added User Libs Directory and Assembly Resolver.
 2. Replaced StackTrace System in MelonLogger with Instance Based System.
 3. Fixed Issue with Il2Cpp Harmony Method Patcher throwing Debug Warnings multiple times for the same Method.
+4. Implemented Temporary Workaround for Cpp2IL Failing under Wine or Steam Proton.
+5. Updated Cpp2IL to v2021.3.4.
 
 ---
 
