@@ -32,6 +32,8 @@
 3. Fixed Issue with Il2Cpp Harmony Method Patcher throwing Debug Warnings multiple times for the same Method.
 4. Implemented Temporary Workaround for Cpp2IL Failing under Wine or Steam Proton.
 5. Updated Cpp2IL to v2021.3.4.
+6. Updated HarmonyX to v2.5.4.
+7. Updated MonoMod to v21.8.5.1.
 
 ---
 
