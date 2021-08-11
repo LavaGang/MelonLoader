@@ -50,7 +50,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                dumper = new Cpp2IL();
+                // Temporary Workaround for Cpp2IL Failing under Wine or Steam Proton
+                if (MelonUtils.IsUnderWineOrSteamProton())
+                    dumper = new Il2CppDumper();
+                else
+                    dumper = new Cpp2IL();
                 if (!dumper.Download())
                     return 1;
 
