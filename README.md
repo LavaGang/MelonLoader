@@ -149,7 +149,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 3. And in the `Arguments` box, add `--melonloader.debug` and any other arguments you want
 4. Finally, to add breakpoints, simply drag and drop the mod you want to debug into dnSpy's Assembly Explorer, then add breakpoints regularly.
 
-Make sure that any other doorstops or loaders that do not support dnSpy's debugger have been uninstalled from your game. They will cause the game to crash.
+You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](http://localhost:3000/#/modders/debugging).
 
 ---
 
