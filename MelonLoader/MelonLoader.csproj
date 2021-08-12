@@ -149,6 +149,7 @@
     <Compile Include="Attributes\PatchShield.cs" />
     <Compile Include="InternalUtils\UnityMagicMethods.cs" />
     <Compile Include="Preferences\ValueValidator.cs" />
+    <Compile Include="MonoInternals\MonoResolveManager.cs" />
     <Compile Include="Utils\bHaptics.cs" />
     <Compile Include="Utils\IniFile.cs" />
     <Compile Include="Attributes\MelonAdditionalDependenciesAttribute.cs" />
