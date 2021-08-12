@@ -38,6 +38,7 @@ public:
 		static Mono::String* GetHashCode();
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
+		static void* GetMonoLibraryPointer();
 	};
 
 	class GameVersionHandler

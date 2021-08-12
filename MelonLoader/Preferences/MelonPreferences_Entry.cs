@@ -32,7 +32,7 @@ namespace MelonLoader
         public abstract void Load(TomlValue obj);
         public abstract TomlValue Save();
 
-        public event LemonAction OnValueChangedUntyped;
+        public event Action OnValueChangedUntyped;
         protected void FireUntypedValueChanged() => OnValueChangedUntyped?.Invoke();
     }
 
@@ -75,7 +75,7 @@ namespace MelonLoader
 
         public override void ResetToDefault() => Value = DefaultValue;
 
-        public event LemonAction<T, T> OnValueChanged;
+        public event Action<T, T> OnValueChanged;
 
         public override Type GetReflectedType() => typeof(T);
 

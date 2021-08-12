@@ -326,5 +326,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetHashCode();
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static IntPtr GetMonoLibraryPointer();
     }
 }

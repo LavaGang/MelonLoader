@@ -157,9 +157,11 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 		return NULL;
 	return Mono::Exports::mono_string_new(Mono::domain, info);
 }
+void* InternalCalls::MelonUtils::GetMonoLibraryPointer() { return Mono::Module; }
 
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
+
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGame32Bit", IsGame32Bit);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", IsGameIl2Cpp);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsOldMono", IsOldMono);
@@ -179,6 +181,8 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
+
+	Mono::AddInternalCall("MelonLoader.MelonUtils::GetMonoLibraryPointer", GetMonoLibraryPointer);
 
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
 }

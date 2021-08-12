@@ -12,11 +12,14 @@ namespace MelonLoader
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.UnhandledException.Install(curDomain);
-            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
-
-            Fixes.ForcedCultureInfo.Install();
             MelonUtils.Setup(curDomain);
+
+            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
+            Fixes.ForcedCultureInfo.Install();
             Fixes.ExtraCleanup.Run();
+
+            //if (!MonoInternals.MonoResolveManager.Setup())
+            //    return 1;
 
             MelonPreferences.Load();
             MelonLaunchOptions.Load();
