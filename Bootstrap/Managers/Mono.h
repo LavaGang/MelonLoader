@@ -12,8 +12,19 @@ public:
 	struct Class;
 	struct Method;
 	struct Property;
-	struct Object;
+	struct Object
+	{
+		void* vtable;
+		void* synchronisation;
+	};
 	struct String;
+
+	struct ReflectionAssembly {
+		Object object;
+		Assembly* assembly;
+		/* CAS related */
+		Object* evidence;	/* Evidence */
+	};
 
 	static HMODULE Module;
 	static Domain* domain;
@@ -158,7 +169,6 @@ public:
 		MONO_TYPEREF_NAMESPACE,
 		MONO_TYPEREF_SIZE
 	};
-
 
 	class Exports
 	{

@@ -157,8 +157,9 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 		return NULL;
 	return Mono::Exports::mono_string_new(Mono::domain, info);
 }
-void* InternalCalls::MelonUtils::GetMonoLibraryPointer() { return Mono::Module; }
 
+void* InternalCalls::MelonUtils::GetMonoLibraryPointer() { return Mono::Module; }
+Mono::Assembly* InternalCalls::MelonUtils::GetNativeAssemblyforManagedAssembly(Mono::ReflectionAssembly* assembly) { return assembly->assembly; }
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
 
@@ -182,9 +183,10 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
 
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetMonoLibraryPointer", GetMonoLibraryPointer);
-
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
+
+	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetLibPtr", GetMonoLibraryPointer);
+	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetNativeAssemblyforManagedAssembly", GetNativeAssemblyforManagedAssembly);
 }
 #pragma endregion
 

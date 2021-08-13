@@ -1,6 +1,8 @@
-﻿using MelonLoader.InternalUtils;
-using System;
+﻿using System;
 using System.Diagnostics;
+using MelonLoader.InternalUtils;
+using MelonLoader.MonoInternals;
+using MonoMod.RuntimeDetour;
 
 namespace MelonLoader
 {
@@ -11,24 +13,30 @@ namespace MelonLoader
         private static int Initialize()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
-            Fixes.UnhandledException.Install(curDomain);
-            MelonUtils.Setup(curDomain);
 
-            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
-            Fixes.ForcedCultureInfo.Install();
+            Fixes.UnhandledException.Install(curDomain);
+
+            if (!MonoLibrary.Setup()
+                || !MonoAssemblyResolveManager.Setup())
+                return 1;
+
+            // Custom AssemblyResolve events to be Removed Later
+            curDomain.AssemblyResolve += MelonCompatibilityLayer.AssemblyResolve;
+            curDomain.AssemblyResolve += CompatibilityLayers.Melon_Resolver.AssemblyResolve;
+
+            MelonUtils.Setup(curDomain);
             Fixes.ExtraCleanup.Run();
 
-            //if (!MonoInternals.MonoResolveManager.Setup())
-            //    return 1;
+            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
+
+            Fixes.ForcedCultureInfo.Install();
+            PatchShield.Install();
 
             MelonPreferences.Load();
             MelonLaunchOptions.Load();
-            MelonCompatibilityLayer.Setup();
-
-            PatchShield.Install();
-
             bHaptics.Load();
 
+            MelonCompatibilityLayer.Setup();
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
 
             MelonHandler.LoadPlugins();
