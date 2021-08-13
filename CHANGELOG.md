@@ -34,6 +34,8 @@
 5. Updated Cpp2IL to v2021.3.4.
 6. Updated HarmonyX to v2.5.4.
 7. Updated MonoMod to v21.8.5.1.
+8. Fixed Missing Method Issue caused by LemonAction.
+9. Refactored Temporary Workaround for Wine/Proton to also help with OSes older than Windows 8 or Server 2012.
 
 ---
 
