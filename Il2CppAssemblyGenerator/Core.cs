@@ -50,11 +50,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                // Temporary Workaround for Cpp2IL Failing under Wine or Steam Proton
-                if (MelonUtils.IsUnderWineOrSteamProton())
+                // Temporary Workaround for Cpp2IL Failing
+                if (MelonUtils.IsUnderWineOrSteamProton() // Is Wine or Steam Proton
+                    || (Environment.OSVersion.Version.Major < 6) // Is Older than even Vista
+                    || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 2))) // Is Older than Windows 8 or Server 2012
                     dumper = new Il2CppDumper();
                 else
                     dumper = new Cpp2IL();
+
                 if (!dumper.Download())
                     return 1;
 
