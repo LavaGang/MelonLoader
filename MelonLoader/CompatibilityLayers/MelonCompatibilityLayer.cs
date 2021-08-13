@@ -41,24 +41,6 @@ namespace MelonLoader
             CompatibilityLayers.Melon_Resolver.Setup();
         }
 
-        // Custom AssemblyResolve event to be Removed Later
-        internal static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            Assembly base_assembly = typeof(MelonCompatibilityLayer).Assembly;
-            return new AssemblyName(args.Name).Name switch
-            {
-                "Mono.Cecil" => base_assembly,
-                "Mono.Cecil.Mdb" => base_assembly,
-                "Mono.Cecil.Pdb" => base_assembly,
-                "Mono.Cecil.Rocks" => base_assembly,
-                "MonoMod.RuntimeDetour" => base_assembly,
-                "MonoMod.Utils" => base_assembly,
-                "0Harmony" => base_assembly,
-                "Tomlet" => base_assembly,
-                _ => null,
-            };
-        }
-
         internal enum SetupType
         {
             OnPreInitialization,

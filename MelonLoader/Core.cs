@@ -20,10 +20,6 @@ namespace MelonLoader
                 || !MonoAssemblyResolveManager.Setup())
                 return 1;
 
-            // Custom AssemblyResolve events to be Removed Later
-            curDomain.AssemblyResolve += MelonCompatibilityLayer.AssemblyResolve;
-            curDomain.AssemblyResolve += CompatibilityLayers.Melon_Resolver.AssemblyResolve;
-
             MelonUtils.Setup(curDomain);
             Fixes.ExtraCleanup.Run();
 
