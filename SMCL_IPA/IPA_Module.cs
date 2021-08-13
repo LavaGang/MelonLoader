@@ -16,14 +16,14 @@ namespace MelonLoader.CompatibilityLayers
 			// Point domain.AssemblyResolve to already installed IPA Assembly
 			// Point GetResolverFromAssembly to Dummy MelonCompatibilityLayer.Resolver
 
+			string[] assembly_list =
+			{
+				"IllusionPlugin",
+				"IllusionInjector",
+			};
 			Assembly base_assembly = typeof(IPA_Module).Assembly;
-			AppDomain.CurrentDomain.AssemblyResolve += (object sender, ResolveEventArgs args) =>
-				new AssemblyName(args.Name).Name switch
-				{
-					"IllusionPlugin" => base_assembly,
-					"IllusionInjector" => base_assembly,
-					_ => null,
-				};
+			foreach (string assemblyName in assembly_list)
+				MonoInternals.MonoAssemblyResolveManager.GetInfo(assemblyName).MasterOverride = base_assembly;
 
 			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
 		}

@@ -7,10 +7,9 @@ namespace MelonLoader.InternalUtils
 {
     internal static class Il2CppAssemblyGenerator
     {
-        private static string FileNameWithExtension = "Il2CppAssemblyGenerator.dll";
+        private static string FileName = "Il2CppAssemblyGenerator";
         private static Assembly asm = null;
         private static MethodInfo RunMethod = null;
-        internal static Assembly AssemblyResolver(object sender, ResolveEventArgs args) => args.Name.StartsWith($"{Path.GetFileNameWithoutExtension(FileNameWithExtension)}, Version=") ? asm : null;
 
         internal static bool Run()
         {
@@ -39,10 +38,10 @@ namespace MelonLoader.InternalUtils
                 return;
             }
 
-            string AssemblyPath = Path.Combine(BaseDirectory, FileNameWithExtension);
+            string AssemblyPath = Path.Combine(BaseDirectory, $"{FileName}.dll");
             if (!File.Exists(AssemblyPath))
             {
-                MelonLogger.Error($"Failed to Find {FileNameWithExtension}!");
+                MelonLogger.Error($"Failed to Find {FileName}.dll!");
                 return;
             }
 
@@ -51,11 +50,11 @@ namespace MelonLoader.InternalUtils
                 asm = Assembly.LoadFrom(AssemblyPath);
                 if (asm == null)
                 {
-                    MelonLogger.ThrowInternalFailure($"Failed to Load Assembly for {FileNameWithExtension}!");
+                    MelonLogger.ThrowInternalFailure($"Failed to Load Assembly for {FileName}.dll!");
                     return;
                 }
 
-                AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;
+                MonoInternals.MonoAssemblyResolveManager.GetInfo(FileName).MasterOverride = asm;
 
                 Type type = asm.GetType("MelonLoader.Il2CppAssemblyGenerator.Core");
                 if (type == null)
