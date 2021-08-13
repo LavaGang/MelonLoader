@@ -60,11 +60,13 @@ namespace MelonLoader.MonoInternals
                 Listings_RefOnly[name] = new AssemblyResolveInfo();
                 return Listings_RefOnly[name];
             }
-
-            if (Listings.TryGetValue(name, out AssemblyResolveInfo resolveInfo))
-                return resolveInfo;
-            Listings[name] = new AssemblyResolveInfo();
-            return Listings[name];
+            else
+            {
+                if (Listings.TryGetValue(name, out AssemblyResolveInfo resolveInfo))
+                    return resolveInfo;
+                Listings[name] = new AssemblyResolveInfo();
+                return Listings[name];
+            }
         }
 
         public class AssemblyResolveInfo
