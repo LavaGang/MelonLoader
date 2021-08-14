@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
-using MonoMod.RuntimeDetour;
 
 namespace MelonLoader
 {
@@ -12,7 +11,6 @@ namespace MelonLoader
 
         private static int Initialize()
         {
-            Environment.SetEnvironmentVariable("MONOMOD_DMD_TYPE", "cecil");
             AppDomain curDomain = AppDomain.CurrentDomain;
 
             Fixes.UnhandledException.Install(curDomain);
