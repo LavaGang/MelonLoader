@@ -12,6 +12,7 @@ namespace MelonLoader
 
         private static int Initialize()
         {
+            Environment.SetEnvironmentVariable("MONOMOD_DMD_TYPE", "cecil");
             AppDomain curDomain = AppDomain.CurrentDomain;
 
             Fixes.UnhandledException.Install(curDomain);

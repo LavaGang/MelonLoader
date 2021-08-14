@@ -32,6 +32,8 @@ namespace MelonLoader.MonoInternals
             foreach (string assemblyName in assembly_list)
                 GetInfo(assemblyName).MasterOverride = base_assembly;
 
+            MelonDebug.Msg("[MonoAssemblyResolveManager] Setup Successful!");
+
             return true;
         }
 
@@ -137,7 +139,6 @@ namespace MelonLoader.MonoInternals
                     return false;
                 }
 
-                MelonDebug.Msg("[MonoAssemblyResolveManager] Setup Successful!");
                 return true;
             }
 
@@ -150,7 +151,7 @@ namespace MelonLoader.MonoInternals
                 Assembly assembly = Resolve(refOnly, assemblyName_Name, assemblyName_Version);
                 if (assembly == null)
                     return IntPtr.Zero;
-                MelonDebug.Msg($"{assembly.GetName()}, Location=\"{assembly.Location}\"");
+
                 return MonoLibrary.GetNativeAssemblyforManagedAssembly(assembly); // MonoReflectionAssembly*->assembly
             }
 
