@@ -8,7 +8,6 @@ namespace MelonLoader.MonoInternals
     public static class MonoAssemblyResolveManager
     {
         private static Dictionary<string, AssemblyResolveInfo> Listings = new Dictionary<string, AssemblyResolveInfo>();
-        private static Dictionary<string, AssemblyResolveInfo> Listings_RefOnly = new Dictionary<string, AssemblyResolveInfo>();
 
         internal static bool Setup()
         {
@@ -28,6 +27,9 @@ namespace MelonLoader.MonoInternals
                 "0Harmony",
                 "Tomlet"
             };
+
+            //HarmonyLib.Harmony.VersionInfo(out Version version);
+
             Assembly base_assembly = typeof(MonoAssemblyResolveManager).Assembly;
             foreach (string assemblyName in assembly_list)
                 GetInfo(assemblyName).MasterOverride = base_assembly;
@@ -57,10 +59,10 @@ namespace MelonLoader.MonoInternals
         {
             if (refOnly)
             {
-                if (Listings_RefOnly.TryGetValue(name, out AssemblyResolveInfo resolveInfo))
+                if (Listings.TryGetValue(name, out AssemblyResolveInfo resolveInfo))
                     return resolveInfo;
-                Listings_RefOnly[name] = new AssemblyResolveInfo();
-                return Listings_RefOnly[name];
+                Listings[name] = new AssemblyResolveInfo();
+                return Listings[name];
             }
             else
             {
