@@ -56,7 +56,7 @@ namespace MelonLoader.MonoInternals
             };
             Assembly base_assembly = typeof(MonoResolveManager).Assembly;
             foreach (string assemblyName in assembly_list)
-                GetAssemblyInfo(assemblyName).Fallback = base_assembly;
+                GetAssemblyInfo(assemblyName).Override = base_assembly;
 
             MelonDebug.Msg("[MonoResolveManager] Setup Successful!");
 
