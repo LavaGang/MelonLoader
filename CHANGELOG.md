@@ -56,7 +56,7 @@
 4. Fixed Issue with Compatibility Layer System's Assembly to Resolver conversion check failing.
 5. Updated Cpp2IL to v2021.1.2.
 6. Updated Il2CppAssemblyUnhollower to v0.4.15.4.
-7. Fixed Dependency Issue with MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
+7. Fixed Dependency Issue with [MuseDashModLoader](https://github.com/mo10/MuseDashModLoader) Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
 8. Fixed Issue with --melonloader.consolemode Launch Option not being properly capped.
 9. Added Melon Name Sorting for Printout Log.    (Credits to [ds5678](https://github.com/ds5678) :D)  
 10. Updated Il2CppDumper to v6.6.5.
@@ -79,7 +79,7 @@
 7. Fixed Issue with DAB not properly caching already found Hosts.
 8. Fixed NRE Issue in Il2CppAssemblyGenerator.RemoteAPI.ContactHosts.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
 9. Updated Tomlet to v1.3.5.    (Credits to [loukylor](https://github.com/loukylor) and [Samboy](https://github.com/SamboyCoding) :3)
-10. Added MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
+10. Added [MuseDashModLoader](https://github.com/mo10/MuseDashModLoader) Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
 11. Fixed Issue with MelonLogger causing Crash on null Input Text.    (Credits to [loukylor](https://github.com/loukylor) :3)
 12. Fixed Issue with MelonLogger not allowing Empty Input Text.    (Credits to [ds5678](https://github.com/ds5678) :D)
 13. Updated Il2CppDumper to v6.6.3.

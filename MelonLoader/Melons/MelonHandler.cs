@@ -42,23 +42,6 @@ namespace MelonLoader
             ModsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Mods");
             if (!Directory.Exists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);
-            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolver;
-        }
-
-        private static Assembly AssemblyResolver(object sender, ResolveEventArgs args)
-        {
-            AssemblyName assembly_name = new AssemblyName(args.Name);
-            string dll_name = $"{assembly_name.Name}.dll";
-
-            string plugins_path = Path.Combine(PluginsDirectory, dll_name);
-            if (File.Exists(plugins_path))
-                return Assembly.LoadFile(plugins_path);
-
-            string mods_path = Path.Combine(ModsDirectory, dll_name);
-            if (File.Exists(mods_path))
-                return Assembly.LoadFile(mods_path);
-
-            return null;
         }
 
         internal static void LoadPlugins()

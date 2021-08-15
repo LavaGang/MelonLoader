@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.MonoInternals;
 using IllusionPlugin;
 #pragma warning disable 0618
 
@@ -23,7 +24,7 @@ namespace MelonLoader.CompatibilityLayers
 			};
 			Assembly base_assembly = typeof(IPA_Module).Assembly;
 			foreach (string assemblyName in assembly_list)
-				MonoInternals.MonoAssemblyResolveManager.GetInfo(assemblyName).MasterOverride = base_assembly;
+				MonoResolveManager.GetAssemblyInfo(assemblyName).Override = base_assembly;
 
 			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
 		}

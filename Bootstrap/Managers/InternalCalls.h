@@ -39,7 +39,9 @@ public:
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
 		static void* GetMonoLibraryPointer();
-		static Mono::Assembly* GetNativeAssemblyforManagedAssembly(Mono::ReflectionAssembly* assembly);
+		static Mono::Assembly* GetNativeAssemblyFromManagedAssembly(Mono::ReflectionAssembly* assembly);
+		static Mono::Domain* GetNativeDomainFromManagedAppDomain(Mono::AppDomain* appDomain);
+		static Mono::ReflectionAssembly* CastManagedAssemblyPtr(void* ptr);
 	};
 
 	class GameVersionHandler

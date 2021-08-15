@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Text;
-using MonoMod.Utils;
 using MonoMod.Cil;
+using MonoMod.Utils;
 using HarmonyLib;
 using MelonLoader.TinyJSON;
 #pragma warning disable 0618
@@ -25,12 +25,13 @@ namespace MelonLoader
             CurrentGameAttribute = new MelonGameAttribute(GameDeveloper, GameName);
             BaseDirectory = string.Copy(Internal_GetBaseDirectory());
             GameDirectory = string.Copy(Internal_GetGameDirectory());
+            SetCurrentDomainBaseDirectory(GameDirectory, domain);
 
             UserDataDirectory = Path.Combine(BaseDirectory, "UserData");
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
 
-            UserLibsDirectory = Path.Combine(UserDataDirectory, "Libs");
+            UserLibsDirectory = Path.Combine(BaseDirectory, "UserLibs");
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
@@ -44,11 +45,9 @@ namespace MelonLoader
                 && GameDeveloper.Equals("Resolution Games") 
                 && !string.IsNullOrEmpty(GameName) 
                 && GameName.Equals("Demeo"));
-
-            domain.AssemblyResolve += LibsAssemblyResolver;
-            SetCurrentDomainBaseDirectory(GameDirectory, domain);
         }
 
+        /*
         private static Assembly LibsAssemblyResolver(object sender, ResolveEventArgs args)
         {
             AssemblyName assembly_name = new AssemblyName(args.Name);
@@ -65,6 +64,7 @@ namespace MelonLoader
 
             return null;
         }
+        */
 
         public static string BaseDirectory { get; private set; }
         public static string GameDirectory { get; private set; }

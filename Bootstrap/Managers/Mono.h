@@ -19,11 +19,25 @@ public:
 	};
 	struct String;
 
-	struct ReflectionAssembly {
+	struct ReflectionAssembly
+	{
 		Object object;
 		Assembly* assembly;
 		/* CAS related */
 		Object* evidence;	/* Evidence */
+	};
+
+	struct MarshalByRefObject
+	{
+		Object obj;
+		Object* identity;
+	};
+
+	/* This is a copy of System.AppDomain */
+	struct AppDomain
+	{
+		MarshalByRefObject mbr;
+		Domain* data;
 	};
 
 	static HMODULE Module;
