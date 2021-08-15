@@ -9,7 +9,7 @@ namespace MelonLoader.MonoInternals
 {
     public static class MonoResolveManager
     {
-        private static readonly List<SearchDirectoryInfo> SearchDirectoryList = new List<SearchDirectoryInfo>();
+        private static List<SearchDirectoryInfo> SearchDirectoryList = new List<SearchDirectoryInfo>();
         private static Dictionary<string, AssemblyResolveInfo> AssemblyDict = new Dictionary<string, AssemblyResolveInfo>();
 
         public delegate void OnAssemblyLoadHandler(Assembly assembly);
@@ -74,8 +74,6 @@ namespace MelonLoader.MonoInternals
             // Run Passthrough Events
             if (assembly == null)
                 assembly = OnAssemblyResolve?.Invoke(requested_name, requested_version);
-
-            // Search Directories
 
             // Load if Valid Assembly
             if (assembly != null)
