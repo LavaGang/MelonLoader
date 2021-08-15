@@ -54,7 +54,7 @@ namespace MelonLoader.InternalUtils
                     return;
                 }
 
-                MonoInternals.MonoAssemblyResolveManager.GetInfo(FileName).MasterOverride = asm;
+                MonoInternals.MonoResolveManager.GetAssemblyInfo(FileName).Override = asm;
 
                 Type type = asm.GetType("MelonLoader.Il2CppAssemblyGenerator.Core");
                 if (type == null)

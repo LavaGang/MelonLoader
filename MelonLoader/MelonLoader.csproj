@@ -119,7 +119,6 @@
     <Compile Include="FileTypes\ZIP.cs" />
     <Compile Include="Preferences\MelonPreferences_ReflectiveCategory.cs" />
     <Compile Include="CompatibilityLayers\MelonCompatibilityLayer.cs" />
-    <Compile Include="Fixes\ExtraCleanup.cs" />
     <Compile Include="Fixes\UnhandledException.cs" />
     <Compile Include="InternalUtils\Il2CppAssemblyGenerator.cs" />
     <Compile Include="InternalUtils\HarmonyIl2CppMethodPatcher.cs" />
@@ -150,7 +149,7 @@
     <Compile Include="Attributes\PatchShield.cs" />
     <Compile Include="InternalUtils\UnityMagicMethods.cs" />
     <Compile Include="Preferences\ValueValidator.cs" />
-    <Compile Include="MonoInternals\MonoAssemblyResolveManager.cs" />
+    <Compile Include="MonoInternals\MonoResolveManager.cs" />
     <Compile Include="Utils\bHaptics.cs" />
     <Compile Include="Utils\IniFile.cs" />
     <Compile Include="Attributes\MelonAdditionalDependenciesAttribute.cs" />

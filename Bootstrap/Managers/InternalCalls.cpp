@@ -159,7 +159,9 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 }
 
 void* InternalCalls::MelonUtils::GetMonoLibraryPointer() { return Mono::Module; }
-Mono::Assembly* InternalCalls::MelonUtils::GetNativeAssemblyforManagedAssembly(Mono::ReflectionAssembly* assembly) { return assembly->assembly; }
+Mono::Assembly* InternalCalls::MelonUtils::GetNativeAssemblyFromManagedAssembly(Mono::ReflectionAssembly* assembly) { return assembly->assembly; }
+Mono::Domain* InternalCalls::MelonUtils::GetNativeDomainFromManagedAppDomain(Mono::AppDomain* appDomain) { return appDomain->data; }
+Mono::ReflectionAssembly* InternalCalls::MelonUtils::CastManagedAssemblyPtr(void* ptr) { return (Mono::ReflectionAssembly*)ptr; }
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
 
@@ -186,7 +188,9 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
 
 	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetLibPtr", GetMonoLibraryPointer);
-	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetNativeAssemblyforManagedAssembly", GetNativeAssemblyforManagedAssembly);
+	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetNativeAssemblyFromManagedAssembly", GetNativeAssemblyFromManagedAssembly);
+	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetNativeDomainFromManagedAppDomain", GetNativeDomainFromManagedAppDomain);
+	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::CastManagedAssemblyPtr", CastManagedAssemblyPtr);
 }
 #pragma endregion
 
