@@ -73,6 +73,14 @@ namespace MelonLoader.Support
                         ProcessNextOfCoroutine(tuple.Coroutine);
                     }
                 }
+                else if (tuple.WaitCondition is AsyncOperation asyncOperation)
+                {
+                    if (asyncOperation.isDone)
+                    {
+                        ourCoroutinesStore.RemoveAt(i);
+                        ProcessNextOfCoroutine(tuple.Coroutine);
+                    }
+                }
             }
             
             ProcessCoroList(ourNextFrameCoroutines);
@@ -118,7 +126,8 @@ namespace MelonLoader.Support
                     ourWaitForEndOfFrameCoroutines.Add(enumerator);
                     return;
                 case WaitForSeconds _:
-                    break; // do nothing, this one is supported in Process
+                case AsyncOperation _:
+                    break; // do nothing, these ones are supported in Process
                 case Il2CppObjectBase il2CppObjectBase:
                     var nextAsEnumerator = il2CppObjectBase.TryCast<Il2CppSystem.Collections.IEnumerator>();
                     if (nextAsEnumerator != null) // il2cpp IEnumerator also handles CustomYieldInstruction
