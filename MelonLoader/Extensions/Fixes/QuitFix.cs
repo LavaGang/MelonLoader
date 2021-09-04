@@ -5,9 +5,10 @@ namespace MelonLoader.Fixes
 	internal static class QuitFix
 	{
 		
-		if (!MelonLaunchOptions.Core.QuitFix)
-			return;
-		Process.GetCurrentProcess().Kill();
+		internal static void Run()
+		{
+			Process.GetCurrentProcess().Kill();
+		}
 		
 	}
 }
