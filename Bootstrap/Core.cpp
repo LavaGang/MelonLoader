@@ -55,6 +55,9 @@ void Core::Initialize(HINSTANCE hinstDLL)
 {
 	Bootstrap = hinstDLL;
 	SetBasePath();
+
+	CheckPathASCII(); // Check if the game path contains any non-ascii characters before initializing anything
+
 	SetupWineCheck();
 	if (!OSVersionCheck() || !Game::Initialize())
 		return;
@@ -90,6 +93,15 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	}
 	if (!Debug::Enabled)
 		Console::NullHandles();
+}
+
+void Core::CheckPathASCII() 
+{
+	if (std::string(BasePath).find('?') != std::string::npos)
+	{
+		Assertion::ThrowInternalFailure("The game directory path contains non-ASCII characters,\nwhich are not supported by MelonLoader.\nPlease remove them and try again.");
+		return;
+	}
 }
 
 void Core::WelcomeMessage()
