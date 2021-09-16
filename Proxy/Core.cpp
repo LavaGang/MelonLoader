@@ -58,7 +58,7 @@ void Core::Load(HINSTANCE hinstDLL)
 	std::string bootstrap_path = GetBootstrapPath();
 	if (bootstrap_path.find('?') != std::string::npos)
 	{
-		MessageBoxA(NULL, "The game directory path contains non-ASCII characters,\nwhich are not supported by MelonLoader.\nPlease remove them and try again.", "MelonLoader", MB_ICONERROR | MB_OK);
+		MessageBoxA(NULL, "The base directory path contains non-ASCII characters,\nwhich are not supported by MelonLoader.\nPlease remove them and try again.", "MelonLoader", MB_ICONERROR | MB_OK);
 		return;
 	}
 
