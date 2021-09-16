@@ -36,6 +36,15 @@
 7. Updated MonoMod to v21.8.5.1.
 8. Fixed Missing Method Issue caused by LemonAction.
 9. Refactored Temporary Workaround for Wine/Proton to also help with OSes older than Windows 8 or Server 2012.
+10. Implemented MonoResolveManager and Assembly Resolving Management System.
+11. Updated Tomlet to v2.0.0.
+12. Removed symbolsdata null check.    (Credits to [AuM0b](https://github.com/AuM0b) :D)  
+13. Implemented Directory Priority Scanning for MonoResolveManager.
+14. Implemented SteamManifestReader.
+15. Fixed Issue with Bhaptics API and Steam Version of Bhaptics Player.
+16. Added an error message for paths with non-ASCII characters.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)  
+17. File Pathing is now printed to Log by Default to help aid in Debugging.
+18. Implemented Non-ASCII Character Check in Proxy.
 
 ---
 
