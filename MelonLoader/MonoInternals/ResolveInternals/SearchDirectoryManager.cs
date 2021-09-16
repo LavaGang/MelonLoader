@@ -64,7 +64,6 @@ namespace MelonLoader.MonoInternals.ResolveInternals
             while (enumerator.MoveNext())
             {
                 string folderpath = enumerator.Current.Path;
-                MelonLogger.Msg($"Scanning Directory: {folderpath}");
 
                 string filepath = Directory.GetFiles(folderpath).Where(x =>
                     !string.IsNullOrEmpty(x)
