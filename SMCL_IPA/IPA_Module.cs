@@ -14,7 +14,7 @@ namespace MelonLoader.CompatibilityLayers
         {
 			// To-Do:
 			// Detect if IPA is already Installed
-			// Point domain.AssemblyResolve to already installed IPA Assembly
+			// Point AssemblyResolveInfo to already installed IPA Assembly
 			// Point GetResolverFromAssembly to Dummy MelonCompatibilityLayer.Resolver
 
 			string[] assembly_list =
@@ -24,7 +24,7 @@ namespace MelonLoader.CompatibilityLayers
 			};
 			Assembly base_assembly = typeof(IPA_Module).Assembly;
 			foreach (string assemblyName in assembly_list)
-				MonoResolveManager.GetAssemblyInfo(assemblyName).Override = base_assembly;
+				MonoResolveManager.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 
 			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
 		}

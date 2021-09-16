@@ -45,6 +45,10 @@ namespace MelonLoader.MonoInternals
         public extern static Assembly CastManagedAssemblyPtr(IntPtr ptr);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate IntPtr dmono_assembly_open_full(IntPtr filepath, IntPtr status, bool refonly);
+        public dmono_assembly_open_full mono_assembly_open_full = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr dmono_assembly_get_object(IntPtr domain, IntPtr assembly);
         public dmono_assembly_get_object mono_assembly_get_object = null;
 
@@ -53,7 +57,6 @@ namespace MelonLoader.MonoInternals
         public dmono_install_hook mono_install_assembly_preload_hook = null;
         public dmono_install_hook mono_install_assembly_load_hook = null;
         public dmono_install_hook mono_install_assembly_search_hook = null;
-        public dmono_install_hook mono_install_assembly_refonly_search_hook = null;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr dmono_assembly_name_get_name(IntPtr assemblyName);
