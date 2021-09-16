@@ -31,7 +31,8 @@ namespace MelonLoader
             }
             catch (Exception ex) { MelonLogger.Warning($"bHaptics.Load Exception: {ex}"); WasError = true; }
 
-            if (!ExePathCheck())
+            if (!ExePathCheck()
+                && !SteamLibraryCheck())
             {
                 MelonDebug.Msg("bHaptics Player Not Installed!");
                 WasError = true;
