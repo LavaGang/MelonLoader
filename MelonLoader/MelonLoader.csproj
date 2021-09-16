@@ -51,6 +51,10 @@
     <Compile Include="Lemons\LemonFunc.cs" />
     <Compile Include="Lemons\LemonTuple.cs" />
     <Compile Include="MonoInternals\MonoLibrary.cs" />
+    <Compile Include="MonoInternals\ResolveInternals\AssemblyManager.cs" />
+    <Compile Include="MonoInternals\ResolveInternals\AssemblyManagerHooks.cs" />
+    <Compile Include="MonoInternals\AssemblyResolveInfo.cs" />
+    <Compile Include="MonoInternals\ResolveInternals\SearchDirectoryManager.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Constants.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Exception.cs" />
@@ -210,5 +214,6 @@
     </PackageReference>
     <PackageReference Include="Samboy063.Tomlet" Version="2.0.0" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

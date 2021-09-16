@@ -55,7 +55,9 @@
     <Compile Include="..\SM_Il2Cpp\UnityMappers.cs">
       <Link>UnityMappers.cs</Link>
     </Compile>
-    <Compile Include="SM_Component.cs" />
+	<Compile Include="..\SM_Mono\SM_Component.cs">
+      <Link>SM_Component.cs</Link>
+    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupportModule_To.cs" />
