@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using MelonLoader.Utils;
 
 namespace MelonLoader
 {
@@ -55,8 +56,8 @@ namespace MelonLoader
 
         private static bool SteamLibraryCheck()
         {
-
-            return false;
+            string steam_folder_path = SteamManifestReader.GetInstallPathFromAppId("1573010");
+            return !string.IsNullOrEmpty(steam_folder_path);
         }
 
         internal static void Start()

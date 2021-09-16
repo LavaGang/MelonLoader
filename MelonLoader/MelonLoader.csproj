@@ -185,6 +185,7 @@
     <Compile Include="Utils\NativeLibrary.cs" />
     <Compile Include="SupportModule\SupportModule.cs" />
     <Compile Include="SupportModule\SupportModule_From.cs" />
+    <Compile Include="Utils\SteamManifestReader.cs" />
     <Compile Include="Utils\UnhollowerSupport.cs" />
     <Compile Include="TinyJSON\Decoder.cs" />
     <Compile Include="TinyJSON\EncodeOptions.cs" />
