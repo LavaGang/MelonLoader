@@ -127,10 +127,10 @@ void Core::WelcomeMessage()
 	Logger::QuickLog("------------------------------");
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
-	Debug::Msg(("Core::BasePath = " + std::string(BasePath)).c_str());
-	Debug::Msg(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
-	Debug::Msg(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
-	Debug::Msg(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
+	Logger::QuickLog(("Core::BasePath = " + std::string(BasePath)).c_str());
+	Logger::QuickLog(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
+	Logger::QuickLog(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
+	Logger::QuickLog(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
 }
 
 bool Core::OSVersionCheck()
