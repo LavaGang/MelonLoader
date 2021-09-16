@@ -18,7 +18,7 @@ public:
 	static bool DirectoryExists(const char* path);
 	static bool FileExists(const char* path);
 	static void GetLocalTime(std::chrono::system_clock::time_point* now, std::chrono::milliseconds* ms, std::tm* bt);
-	static void CheckPathASCII();
+	static bool CheckPathASCII();
 	static void WelcomeMessage();
 	static void KillCurrentProcess();
 	static const char* GetFileInfoProductName(const char* path);
