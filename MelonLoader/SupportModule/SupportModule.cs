@@ -130,7 +130,7 @@ namespace MelonLoader
         }
 
         // Module Listing
-        internal class ModuleListing
+        private class ModuleListing
         {
             internal string FileName = null;
             internal delegate bool dLoadSpecifier();

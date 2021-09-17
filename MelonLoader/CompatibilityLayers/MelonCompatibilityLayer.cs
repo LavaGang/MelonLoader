@@ -189,7 +189,7 @@ namespace MelonLoader
         public class Module { public virtual void Setup() { } }
 
         // Module Listing
-        internal class ModuleListing
+        private class ModuleListing
         {
             internal string FileName = null;
             internal Module Interface = null;
