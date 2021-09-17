@@ -59,7 +59,7 @@ namespace MelonLoader
 
         private static int Start()
         {
-            if (!SupportModule.Initialize())
+            if (!SupportModule.Setup())
                 return 1;
 
             AddUnityDebugLog();

@@ -55,8 +55,6 @@ void Core::Initialize(HINSTANCE hinstDLL)
 {
 	Bootstrap = hinstDLL;
 	SetBasePath();
-	if (!CheckPathASCII()) // Check if the game path contains any non-ascii characters before initializing anything
-		return;
 
 	SetupWineCheck();
 	if (!OSVersionCheck() || !Game::Initialize())
@@ -64,6 +62,7 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	CommandLine::Read();
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
+		|| !CheckPathASCII()
 		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())

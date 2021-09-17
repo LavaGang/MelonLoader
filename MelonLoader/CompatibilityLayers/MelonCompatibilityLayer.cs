@@ -51,7 +51,7 @@ namespace MelonLoader
             if (!Directory.Exists(BaseDirectory))
                 return;
 
-            ModuleEnumerator enumerator = new ModuleEnumerator();
+            LemonEnumerator<ModuleListing> enumerator = new LemonEnumerator<ModuleListing>(Modules);
             while (enumerator.MoveNext())
             {
                 string ModulePath = Path.Combine(BaseDirectory, enumerator.Current.FileName);
@@ -206,32 +206,6 @@ namespace MelonLoader
             {
                 FileName = filename;
                 LoadSpecifier = loadSpecifier;
-            }
-        }
-
-        // Module Enumerator
-        internal class ModuleEnumerator : IEnumerator
-        {
-            private ModuleListing[] ObjectTable;
-            private int CurrentIndex = 0;
-            internal ModuleEnumerator()
-                => ObjectTable = Modules.ToArray();
-            object IEnumerator.Current => Current;
-            public ModuleListing Current { get; private set; }
-            public bool MoveNext()
-            {
-                if ((ObjectTable == null)
-                    || (ObjectTable.Length <= 0)
-                    || (CurrentIndex >= ObjectTable.Length))
-                    return false;
-                Current = ObjectTable[CurrentIndex];
-                CurrentIndex++;
-                return true;
-            }
-            public void Reset()
-            {
-                CurrentIndex = 0;
-                Current = default;
             }
         }
     }
