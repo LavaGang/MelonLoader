@@ -45,6 +45,8 @@
 16. Added an error message for paths with non-ASCII characters.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)  
 17. File Pathing is now printed to Log by Default to help aid in Debugging.
 18. Implemented Non-ASCII Character Check in Proxy.
+19. Fixed Issue with ASCII Character Check preventing Bootstrap from Loading.
+20. Implemented Automated Cleanup System for Support Modules.
 
 ---
 
