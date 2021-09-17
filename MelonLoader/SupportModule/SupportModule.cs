@@ -71,7 +71,12 @@ namespace MelonLoader
                 }
             }
 
-            return (Interface != null);
+            if (Interface == null)
+            {
+                MelonLogger.Error("No Support Module Loaded!");
+                return false;
+            }
+            return true;
         }
 
         private static bool LoadInterface(string ModulePath)
