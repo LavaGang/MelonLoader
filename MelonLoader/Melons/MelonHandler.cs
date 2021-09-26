@@ -56,6 +56,7 @@ namespace MelonLoader
         {
             MelonLogger.WriteSpacer();
             MelonLogger.Msg("Loading Mods...");
+            MelonStartScreen.LoadingMods();
             LoadMelons();
             MelonLogger.WriteSpacer();
             PrintMelonInfo(_Mods.ToArray());
@@ -219,24 +220,50 @@ namespace MelonLoader
             }, true);
 
         internal static void OnApplicationStart_Plugins()
-            => InvokeMelonMethod(ref _Plugins, x =>
+        {
+            MelonStartScreen.OnApplicationStart_Plugins();
+            InvokeMelonMethod(ref _Plugins, x =>
             {
+                MelonStartScreen.OnApplicationStart_Plugin(x.Info.Name);
                 RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
                 x.OnApplicationStart();
             }, true);
+        }
 
         internal static void OnApplicationStart_Mods()
-            => InvokeMelonMethod(ref _Mods, x =>
+        {
+            MelonStartScreen.OnApplicationStart_Mods();
+            InvokeMelonMethod(ref _Mods, x =>
             {
+                MelonStartScreen.OnApplicationStart_Mod(x.Info.Name);
                 if (MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(x.Assembly) == null)
                     x.HarmonyInstance.PatchAll(x.Assembly);
                 RegisterTypeInIl2Cpp.RegisterAssembly(x.Assembly);
                 x.OnApplicationStart();
             }, true);
+        }
+
+        internal static void OnApplicationLateStart_Plugins()
+        {
+            MelonStartScreen.OnApplicationLateStart_Plugins();
+            InvokeMelonMethod(ref _Plugins, x =>
+            {
+                MelonStartScreen.OnApplicationLateStart_Plugin(x.Info.Name);
+                x.OnApplicationLateStart();
+            }, true);
+        }
+
+        internal static void OnApplicationLateStart_Mods()
+        {
+            MelonStartScreen.OnApplicationLateStart_Mods();
+            InvokeMelonMethod(ref _Mods, x =>
+            {
+                MelonStartScreen.OnApplicationLateStart_Mod(x.Info.Name);
+                x.OnApplicationLateStart();
+            }, true);
+        }
 
         internal static void OnApplicationEarlyStart() => InvokeMelonMethod(ref _Plugins, x => x.OnApplicationEarlyStart(), true);
-        internal static void OnApplicationLateStart_Plugins() => InvokeMelonMethod(ref _Plugins, x => x.OnApplicationLateStart(), true);
-        internal static void OnApplicationLateStart_Mods() => InvokeMelonMethod(ref _Mods, x => x.OnApplicationLateStart(), true);
         internal static void OnApplicationQuit() => InvokeMelonMethod(x => x.OnApplicationQuit());
         internal static void OnFixedUpdate() => InvokeMelonMethod(ref _Mods, x => x.OnFixedUpdate());
         internal static void OnLateUpdate() => InvokeMelonMethod(x => x.OnLateUpdate());

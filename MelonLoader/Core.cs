@@ -44,11 +44,18 @@ namespace MelonLoader
 
             MelonHandler.OnApplicationEarlyStart();
 
+            int startScreenResult = MelonStartScreen.LoadAndRun(Il2CppGameSetup);
+
+            return startScreenResult;
+        }
+
+        private static int Il2CppGameSetup()
+        {
             if (MelonUtils.IsGameIl2Cpp())
             {
                 if (!Il2CppAssemblyGenerator.Run())
                     return 1;
-                
+
                 HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
 
                 GameVersionHandler.Setup();
@@ -68,10 +75,14 @@ namespace MelonLoader
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
             MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.LoadMods();
+            MelonStartScreen.DisplayModLoadIssuesIfNeeded();
+
             MelonHandler.OnApplicationStart_Mods();
 
             MelonHandler.OnApplicationLateStart_Plugins();
             MelonHandler.OnApplicationLateStart_Mods();
+
+            MelonStartScreen.Finish();
 
             return 0;
         }
