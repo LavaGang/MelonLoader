@@ -23,6 +23,7 @@ namespace MelonLoader
         public static void Error(object obj) => NativeError(null, obj.ToString());
         public static void Error(string txt) => NativeError(null, txt);
         public static void Error(string txt, params object[] args) => NativeError(null, string.Format(txt, args));
+        public static void Error(string txt, Exception ex) => NativeError(null, $"{txt}\n{ex}");
 
         private static void NativeMsg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
         {
@@ -72,6 +73,7 @@ namespace MelonLoader
             public void Error(object obj) => NativeError(Name, obj.ToString());
             public void Error(string txt) => NativeError(Name, txt);
             public void Error(string txt, params object[] args) => NativeError(Name, string.Format(txt, args));
+            public void Error(string txt, Exception ex) => NativeError(Name, $"{txt}\n{ex}");
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
