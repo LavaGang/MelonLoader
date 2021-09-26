@@ -12,7 +12,7 @@ namespace MelonLoader.MelonStartScreen
         private static readonly Dictionary<ModLoadStep, string> stepsNames = new Dictionary<ModLoadStep, string>()
         {
             { ModLoadStep.OnApplicationStart_Plugins, "OnApplicationStart - Plugin" },
-            { ModLoadStep.LoadMods, "Loading Mod" },
+            { ModLoadStep.LoadMods, "Loading Mods" },
             { ModLoadStep.OnApplicationStart_Mods, "OnApplicationStart - Mod" },
             { ModLoadStep.OnApplicationLateStart_Plugins, "OnApplicationLateStart - Plugin" },
             { ModLoadStep.OnApplicationLateStart_Mods, "OnApplicationLateStart - Mod" }
