@@ -181,6 +181,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Base\DllMain.cpp" />
+    <ClCompile Include="Exports.cpp" />
     <ClCompile Include="Exports\Ex_psapi.cpp" />
     <ClCompile Include="Exports\Ex_winhttp.cpp" />
     <ClCompile Include="Exports\Ex_winmm.cpp" />
@@ -203,6 +204,9 @@
   <ItemGroup>
     <ClInclude Include="Core.h" />
     <ClInclude Include="Base\resource.h" />
+    <ClInclude Include="Exports.h" />
+    <ClInclude Include="Utils\Directory.h" />
+    <ClInclude Include="Utils\File.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Base\Proxy.rc" />
