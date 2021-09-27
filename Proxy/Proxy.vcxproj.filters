@@ -31,6 +31,7 @@
     <ClCompile Include="Exports\Ex_psapi.cpp">
       <Filter>Exports</Filter>
     </ClCompile>
+    <ClCompile Include="Exports.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">
@@ -39,12 +40,22 @@
     <Filter Include="Exports">
       <UniqueIdentifier>{55065569-1650-4acf-8d0f-823717368cae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{03bf83a5-b02f-4131-bb68-2fab5376d048}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base\resource.h">
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Exports.h" />
+    <ClInclude Include="Utils\Directory.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\File.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Exports\Exports.def">

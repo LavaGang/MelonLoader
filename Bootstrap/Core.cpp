@@ -250,8 +250,6 @@ void Core::SetBasePath()
 	std::copy(filepathstr2.begin(), filepathstr2.end(), BasePath);
 	BasePath[filepathstr2.size()] = '\0';
 	BasePathMono = Encoding::OsToUtf8(BasePath);
-
-
 }
 
 bool Core::DirectoryExists(const char* path) { struct stat Stat; return ((stat(path, &Stat) == 0) && (Stat.st_mode & S_IFDIR)); }
