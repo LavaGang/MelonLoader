@@ -1,8 +1,7 @@
 #include "../Exports.h"
 
 FARPROC OriginalFuncs_psapi[27];
-
-const char* Exports::ExportNames_psapi[] = {
+const char* Exports::ExportNames_psapi[27] = {
 	"EmptyWorkingSet",
 	"EnumDeviceDrivers",
 	"EnumPageFilesA",
