@@ -46,7 +46,11 @@ namespace MelonLoader.MelonStartScreen
             settings.verticalOverflow = VerticalWrapMode.Overflow;
             settings.scaleFactor = 1f;
             settings.lineSpacing = 1f;
-            melonloaderversionTextmesh = TextMeshGenerator.Generate("<color=#78f764>Melon</color><color=#ff3c6a>Loader</color> " + BuildInfo.Version + " Alpha Pre-Release", settings);
+
+            string melonloaderText = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                ? "<color=#FFCC4D>LemonLoader</color>"
+                : "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>"; 
+            melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} {BuildInfo.Version} Open-Beta", settings);
 
             progressBar = new ProgressBar(width: 540, height: 36);
         }
