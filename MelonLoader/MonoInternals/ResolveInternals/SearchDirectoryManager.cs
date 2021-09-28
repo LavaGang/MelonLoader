@@ -56,10 +56,6 @@ namespace MelonLoader.MonoInternals.ResolveInternals
 
         internal static Assembly Scan(string requested_name)
         {
-            IntPtr curDomainPtr = MonoLibrary.GetNativeDomainFromManagedAppDomain(AppDomain.CurrentDomain);
-            if (curDomainPtr == IntPtr.Zero)
-                return null;
-
             LemonEnumerator<SearchDirectoryInfo> enumerator = new LemonEnumerator<SearchDirectoryInfo>(SearchDirectoryList);
             while (enumerator.MoveNext())
             {
@@ -78,7 +74,7 @@ namespace MelonLoader.MonoInternals.ResolveInternals
                 if (assemblyptr == IntPtr.Zero)
                     continue;
 
-                IntPtr assemblyReflectionPtr = MonoLibrary.Instance.mono_assembly_get_object(curDomainPtr, assemblyptr);
+                IntPtr assemblyReflectionPtr = MonoLibrary.Instance.mono_assembly_get_object(MonoLibrary.GetRootDomainPtr(), assemblyptr);
 
                 return MonoLibrary.CastManagedAssemblyPtr(assemblyReflectionPtr);
             }

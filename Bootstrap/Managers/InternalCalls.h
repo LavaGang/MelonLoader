@@ -38,9 +38,8 @@ public:
 		static Mono::String* GetHashCode();
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
-		static void* GetMonoLibraryPointer();
-		static Mono::Assembly* GetNativeAssemblyFromManagedAssembly(Mono::ReflectionAssembly* assembly);
-		static Mono::Domain* GetNativeDomainFromManagedAppDomain(Mono::AppDomain* appDomain);
+		static void* GetLibPtr();
+		static void* GetRootDomainPtr();
 		static Mono::ReflectionAssembly* CastManagedAssemblyPtr(void* ptr);
 	};
 

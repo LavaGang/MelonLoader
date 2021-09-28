@@ -53,7 +53,6 @@
     <Compile Include="Lemons\LemonTuple.cs" />
     <Compile Include="MonoInternals\MonoLibrary.cs" />
     <Compile Include="MonoInternals\ResolveInternals\AssemblyManager.cs" />
-    <Compile Include="MonoInternals\ResolveInternals\AssemblyManagerHooks.cs" />
     <Compile Include="MonoInternals\AssemblyResolveInfo.cs" />
     <Compile Include="MonoInternals\ResolveInternals\SearchDirectoryManager.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2.cs" />

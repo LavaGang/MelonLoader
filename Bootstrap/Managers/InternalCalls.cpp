@@ -158,13 +158,12 @@ Mono::String* InternalCalls::MelonUtils::GetFileProductName(Mono::String* filepa
 	return Mono::Exports::mono_string_new(Mono::domain, info);
 }
 
-void* InternalCalls::MelonUtils::GetMonoLibraryPointer() { return Mono::Module; }
-Mono::Assembly* InternalCalls::MelonUtils::GetNativeAssemblyFromManagedAssembly(Mono::ReflectionAssembly* assembly) { return assembly->assembly; }
-Mono::Domain* InternalCalls::MelonUtils::GetNativeDomainFromManagedAppDomain(Mono::AppDomain* appDomain) { return appDomain->data; }
+void* InternalCalls::MelonUtils::GetLibPtr() { return Mono::Module; }
+void* InternalCalls::MelonUtils::GetRootDomainPtr() { return Mono::domain; }
 Mono::ReflectionAssembly* InternalCalls::MelonUtils::CastManagedAssemblyPtr(void* ptr) { return (Mono::ReflectionAssembly*)ptr; }
+
 void InternalCalls::MelonUtils::AddInternalCalls()
 {
-
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGame32Bit", IsGame32Bit);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGameIl2Cpp", IsGameIl2Cpp);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsOldMono", IsOldMono);
@@ -187,10 +186,10 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 
 	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
 
-	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetLibPtr", GetMonoLibraryPointer);
-	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetNativeAssemblyFromManagedAssembly", GetNativeAssemblyFromManagedAssembly);
-	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetNativeDomainFromManagedAppDomain", GetNativeDomainFromManagedAppDomain);
+	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetLibPtr", GetLibPtr);
+	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetRootDomainPtr", GetRootDomainPtr);
 	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::CastManagedAssemblyPtr", CastManagedAssemblyPtr);
+	Mono::AddInternalCall("MelonLoader.MonoInternals.ResolveInternals.AssemblyManager::InstallHooks", Mono::InstallAssemblyHooks);
 }
 #pragma endregion
 

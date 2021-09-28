@@ -71,6 +71,11 @@ MONODEF(mono_class_get_name)
 MONODEF(mono_debug_init)
 MONODEF(mono_debug_domain_create)
 
+MONODEF(mono_install_assembly_preload_hook)
+MONODEF(mono_install_assembly_search_hook)
+MONODEF(mono_install_assembly_load_hook)
+MONODEF(mono_assembly_get_object)
+
 #undef MONODEF
 
 bool Mono::Initialize()
@@ -229,6 +234,13 @@ bool Mono::SetupPaths()
 	return true;
 }
 
+void Mono::InstallAssemblyHooks()
+{
+	Exports::mono_install_assembly_preload_hook(Hooks::AssemblyPreLoad, NULL);
+	Exports::mono_install_assembly_search_hook(Hooks::AssemblySearch, NULL);
+	Exports::mono_install_assembly_load_hook(Hooks::AssemblyLoad, NULL);
+}
+
 void Mono::CreateDomain(const char* name)
 {
 	if (domain != NULL)
@@ -302,6 +314,11 @@ bool Mono::Exports::Initialize()
 	MONODEF(mono_object_get_class)
 	MONODEF(mono_property_get_get_method)
 	MONODEF(mono_image_get_name)
+
+	MONODEF(mono_install_assembly_preload_hook)
+	MONODEF(mono_install_assembly_search_hook)
+	MONODEF(mono_install_assembly_load_hook)
+	MONODEF(mono_assembly_get_object)
 
 	MONODEF(mono_debug_init)
 	if (Debug::Enabled)
@@ -445,3 +462,100 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 }
 
 void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
+
+Mono::Assembly* Mono::Hooks::AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data)
+{
+	if (BaseAssembly::AssemblyManager_Resolve == NULL)
+		return NULL;
+
+	if (aname == NULL)
+		return NULL;
+
+	String* name = Mono::Exports::mono_string_new(domain, aname->name);
+	uint16_t version_major = aname->major;
+	uint16_t version_minor = aname->minor;
+	uint16_t version_build = aname->build;
+	uint16_t version_revision = aname->revision;
+	bool is_preload = true;
+	void* args[] = {
+		name,
+		&version_major,
+		&version_minor,
+		&version_build,
+		&version_revision,
+		&is_preload
+	};
+
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(BaseAssembly::AssemblyManager_Resolve, NULL, args, &exObj);
+	if (exObj != NULL)
+	{
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Failed to Invoke MelonLoader.MonoInternals.ResolveInternals.AssemblyManager.Resolve!");
+	}
+
+	if (result != NULL)
+		return ((Mono::ReflectionAssembly*)result)->assembly;
+	return NULL;
+}
+
+Mono::Assembly* Mono::Hooks::AssemblySearch(AssemblyName* aname, void* user_data)
+{
+	if (BaseAssembly::AssemblyManager_Resolve == NULL)
+		return NULL;
+
+	if (aname == NULL)
+		return NULL;
+
+	String* name = Mono::Exports::mono_string_new(domain, aname->name);
+	uint16_t version_major = aname->major;
+	uint16_t version_minor = aname->minor;
+	uint16_t version_build = aname->build;
+	uint16_t version_revision = aname->revision;
+	bool is_preload = false;
+	void* args[] = {
+		name,
+		&version_major,
+		&version_minor,
+		&version_build,
+		&version_revision,
+		&is_preload
+	};
+
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(BaseAssembly::AssemblyManager_Resolve, NULL, args, &exObj);
+	if (exObj != NULL)
+	{
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Failed to Invoke MelonLoader.MonoInternals.ResolveInternals.AssemblyManager.Resolve!");
+	}
+
+	if (result != NULL)
+		return ((Mono::ReflectionAssembly*)result)->assembly;
+	return NULL;
+}
+
+void Mono::Hooks::AssemblyLoad(Assembly* assembly, void* user_data)
+{
+	if (BaseAssembly::AssemblyManager_LoadInfo == NULL)
+		return;
+
+	if (assembly == NULL)
+		return;
+
+	ReflectionAssembly* reflectionAssembly = Exports::mono_assembly_get_object(Mono::domain, assembly);
+	if (reflectionAssembly == NULL)
+		return;
+
+	void* args[] = {
+		reflectionAssembly
+	};
+
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(BaseAssembly::AssemblyManager_LoadInfo, NULL, args, &exObj);
+	if (exObj != NULL)
+	{
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Failed to Invoke MelonLoader.MonoInternals.ResolveInternals.AssemblyManager.Load!");
+	}
+}

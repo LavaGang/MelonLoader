@@ -25,10 +25,6 @@ namespace MelonLoader.MelonStartScreen
 
         private static int LoadAndRun(Func<int> functionToWaitForAsync)
         {
-            foreach (string arg in Environment.GetCommandLineArgs())
-                if (arg.ToLower() == "--melonloader.disablestartscreen")
-                    return functionToWaitForAsync();
-
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+
             // If we can't find them (signatures changed or <2018.1.0), then we run the function and return.
             if (!NativeSignatureResolver.Apply())

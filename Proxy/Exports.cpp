@@ -29,3 +29,9 @@ bool Exports::IsFileNameCompatible(std::string proxy_filename, int& index)
 	}
 	return found;
 }
+
+void Exports::Load(HMODULE originaldll, const char** ExportNames, FARPROC* OriginalFuncs, int ArraySize)
+{
+	for (int i = 0; i < ArraySize; i++)
+		OriginalFuncs[i] = GetProcAddress(originaldll, ExportNames[i]);
+}

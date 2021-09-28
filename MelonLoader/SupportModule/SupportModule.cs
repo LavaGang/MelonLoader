@@ -61,8 +61,6 @@ namespace MelonLoader
 
                     if (!LoadInterface(ModulePath))
                         continue;
-
-                    MelonDebug.Msg($"Support Module Loaded: {enumerator.Current.FileName}");
                 }
                 catch (Exception ex)
                 {
