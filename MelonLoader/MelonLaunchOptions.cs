@@ -27,6 +27,7 @@ namespace MelonLoader
                     valuestr = args[i + 1];
                 switch (arg)
                 {
+                    // Core
 #if !DEBUG
                     case "--melonloader.debug":
                         Core.DebugMode = true;
@@ -38,6 +39,43 @@ namespace MelonLoader
                     case "--melonloader.disablestartscreen":
                         Core.StartScreen = false;
                         goto default;
+                    case "--melonloader.loadmodeplugins":
+                        if ((i + 1) < args.Length)
+                            valuestr = args[i + 1];
+                        else
+                            goto default;
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        if (!int.TryParse(valuestr, out valueint))
+                            goto default;
+                        Core.LoadMode_Plugins = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
+                        goto default;
+                    case "--melonloader.loadmodemods":
+                        if ((i + 1) < args.Length)
+                            valuestr = args[i + 1];
+                        else
+                            goto default;
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        if (!int.TryParse(valuestr, out valueint))
+                            goto default;
+                        Core.LoadMode_Mods = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
+                        goto default;
+
+                    // Console
+                    case "--melonloader.consolemode":
+                        if ((i + 1) < args.Length)
+                            valuestr = args[i + 1];
+                        else
+                            goto default;
+                        if (string.IsNullOrEmpty(valuestr))
+                            goto default;
+                        if (!int.TryParse(valuestr, out valueint))
+                            goto default;
+                        Console.Mode = (Console.DisplayMode)MelonUtils.Clamp(valueint, (int)Console.DisplayMode.NORMAL, (int)Console.DisplayMode.LEMON);
+                        goto default;
+
+                    // Il2CppAssemblyGenerator
                     case "--melonloader.agfoffline":
                         Il2CppAssemblyGenerator.OfflineMode = true;
                         goto default;
@@ -59,22 +97,7 @@ namespace MelonLoader
                             goto default;
                         Il2CppAssemblyGenerator.ForceVersion_UnityDependencies = valuestr;
                         goto default;
-                    case "--melonloader.loadmodeplugins":
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        if (!int.TryParse(valuestr, out valueint))
-                            goto default;
-                        Core.LoadMode_Plugins = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
-                        goto default;
-                    case "--melonloader.loadmodemods":
-                        if ((i + 1) < args.Length)
-                            valuestr = args[i + 1];
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        if (!int.TryParse(valuestr, out valueint))
-                            goto default;
-                        Core.LoadMode_Mods = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
-                        goto default;
+
                     default:
                         break;
                 }
@@ -95,6 +118,19 @@ namespace MelonLoader
             public static bool DebugMode { get; internal set; }
             public static bool QuitFix { get; internal set; }
             public static bool StartScreen { get; internal set; } = true;
+        }
+
+        public static class Console
+        {
+            public enum DisplayMode
+            {
+                NORMAL,
+                MAGENTA,
+                RAINBOW,
+                RANDOMRAINBOW,
+                LEMON
+            };
+            public static DisplayMode Mode { get; internal set; }
         }
 
         public static class Il2CppAssemblyGenerator

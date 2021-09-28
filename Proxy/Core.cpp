@@ -121,9 +121,8 @@ bool Core::IsUnityGame(std::string exe_filepath_no_ext)
 	std::string datapath = exe_filepath_no_ext + "_Data";
 	if (!Directory::Exists(datapath.c_str()))
 		return false;
-	if (!File::Exists((datapath + "\\globalgamemanagers").c_str()))
-		return false;
-	return true;
+	return (File::Exists((datapath + "\\globalgamemanagers").c_str())
+		|| File::Exists((datapath + "\\data.unity3d").c_str()));
 }
 
 void Core::Error(std::string reason, bool should_kill)
