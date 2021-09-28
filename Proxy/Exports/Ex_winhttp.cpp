@@ -1,8 +1,7 @@
 #include "../Exports.h"
 
 FARPROC OriginalFuncs_winhttp[65];
-
-const char* Exports::ExportNames_winhttp[] = {
+const char* Exports::ExportNames_winhttp[65] = {
 	"Private1",
 	"SvchostPushServiceGlobals",
 	"WinHttpAddRequestHeaders",

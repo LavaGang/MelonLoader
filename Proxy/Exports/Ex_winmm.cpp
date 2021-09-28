@@ -1,8 +1,7 @@
 #include "../Exports.h"
 
 FARPROC OriginalFuncs_winmm[181];
-
-const char* Exports::ExportNames_winmm[] = {
+const char* Exports::ExportNames_winmm[181] = {
 		"CloseDriver",
 		"DefDriverProc",
 		"DriverCallback",
