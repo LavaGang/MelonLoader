@@ -51,6 +51,7 @@
 22. Implemented Loading and Start Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 23. Added Unity Game Check to Proxy.
 24. Fixed Issue with MonoResolveManager on x86 Platform.
+25. Fixed Issue with Proxy's Unity Game Check on Older Unity Versions.
 
 ---
 
