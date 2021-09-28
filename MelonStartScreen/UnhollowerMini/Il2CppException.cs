@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+#pragma warning disable 0649
 
 namespace UnhollowerMini
 {

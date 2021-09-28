@@ -36,10 +36,7 @@ namespace MelonLoader.MonoInternals
         private extern static IntPtr GetLibPtr();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static IntPtr GetNativeAssemblyFromManagedAssembly(Assembly asm);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static IntPtr GetNativeDomainFromManagedAppDomain(AppDomain domain);
+        internal extern static IntPtr GetRootDomainPtr();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static Assembly CastManagedAssemblyPtr(IntPtr ptr);
@@ -51,19 +48,5 @@ namespace MelonLoader.MonoInternals
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr dmono_assembly_get_object(IntPtr domain, IntPtr assembly);
         public dmono_assembly_get_object mono_assembly_get_object = null;
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void dmono_install_hook(IntPtr hookfunc, IntPtr user_data);
-        public dmono_install_hook mono_install_assembly_preload_hook = null;
-        public dmono_install_hook mono_install_assembly_load_hook = null;
-        public dmono_install_hook mono_install_assembly_search_hook = null;
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr dmono_assembly_name_get_name(IntPtr assemblyName);
-        public dmono_assembly_name_get_name mono_assembly_name_get_name = null;
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate ushort dmono_assembly_name_get_version(IntPtr assemblyName, ushort* minor, ushort* build, ushort* revision);
-        public dmono_assembly_name_get_version mono_assembly_name_get_version = null;
     }
 }

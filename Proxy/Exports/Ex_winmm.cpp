@@ -1,11 +1,8 @@
 #include "../Exports.h"
 
-extern "C" FARPROC OriginalFuncs_winmm[181];
 FARPROC OriginalFuncs_winmm[181];
 
-void Exports::Load_winmm(HMODULE originaldll)
-{
-	const char* ExportNames_winmm[] = {
+const char* Exports::ExportNames_winmm[] = {
 		"CloseDriver",
 		"DefDriverProc",
 		"DriverCallback",
@@ -187,8 +184,4 @@ void Exports::Load_winmm(HMODULE originaldll)
 		"waveOutUnprepareHeader",
 		"waveOutWrite",
 		"ExportByOrdinal2"
-	};
-
-	for (int i = 0; i < (sizeof(ExportNames_winmm) / sizeof(ExportNames_winmm[0])); i++)
-		OriginalFuncs_winmm[i] = GetProcAddress(originaldll, ExportNames_winmm[i]);
-}
+};

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader.MonoInternals.ResolveInternals
 {
     internal static class AssemblyManager
     {
-        private static Dictionary<string, AssemblyResolveInfo> InfoDict = new Dictionary<string, AssemblyResolveInfo>();
+        internal static Dictionary<string, AssemblyResolveInfo> InfoDict = new Dictionary<string, AssemblyResolveInfo>();
 
         internal static bool Setup()
         {
-            if (!AssemblyManagerHooks.Setup())
-                return false;
+            InstallHooks();
 
             // Setup all Loaded Assemblies
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -29,7 +29,12 @@ namespace MelonLoader.MonoInternals.ResolveInternals
             return InfoDict[name];
         }
 
-        internal static Assembly Resolve(string requested_name, Version requested_version, bool should_search = true)
+        private static Assembly Resolve(string requested_name, ushort major, ushort minor, ushort build, ushort revision, bool is_preload)
+        {
+            Version requested_version = new Version(major, minor, build, revision);
+            return Resolve(requested_name, requested_version, is_preload);
+        }
+        private static Assembly Resolve(string requested_name, Version requested_version, bool is_preload)
         {
             // Get Resolve Information Object
             AssemblyResolveInfo resolveInfo = GetInfo(requested_name);
@@ -42,7 +47,7 @@ namespace MelonLoader.MonoInternals.ResolveInternals
                 assembly = MonoResolveManager.SafeInvoke_OnAssemblyResolve(requested_name, requested_version);
 
             // Search Directories
-            if (should_search && (assembly == null))
+            if (is_preload && (assembly == null))
                 assembly = SearchDirectoryManager.Scan(requested_name);
 
             // Load if Valid Assembly
@@ -67,5 +72,8 @@ namespace MelonLoader.MonoInternals.ResolveInternals
             // Run Passthrough Events
             MonoResolveManager.SafeInvoke_OnAssemblyLoad(assembly);
         }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private extern static void InstallHooks();
     }
 }

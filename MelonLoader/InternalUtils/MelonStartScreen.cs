@@ -24,6 +24,9 @@ namespace MelonLoader.InternalUtils
 
         internal static int LoadAndRun(Func<int> functionToWaitForAsync)
         {
+            if (!MelonLaunchOptions.Core.StartScreen)
+                return functionToWaitForAsync();
+
             Load();
 
             if (LoadAndRunMethod != null)

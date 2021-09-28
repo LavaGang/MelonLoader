@@ -35,7 +35,9 @@ namespace MelonLoader
                     case "--quitfix":
                         Core.QuitFix = true;
                         goto default;
-
+                    case "--melonloader.disablestartscreen":
+                        Core.StartScreen = false;
+                        goto default;
                     case "--melonloader.agfoffline":
                         Il2CppAssemblyGenerator.OfflineMode = true;
                         goto default;
@@ -92,6 +94,7 @@ namespace MelonLoader
             public static LoadModeEnum LoadMode_Mods { get; internal set; }
             public static bool DebugMode { get; internal set; }
             public static bool QuitFix { get; internal set; }
+            public static bool StartScreen { get; internal set; } = true;
         }
 
         public static class Il2CppAssemblyGenerator
