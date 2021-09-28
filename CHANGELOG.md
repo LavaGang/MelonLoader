@@ -47,6 +47,10 @@
 18. Implemented Non-ASCII Character Check in Proxy.
 19. Fixed Issue with ASCII Character Check preventing Bootstrap from Loading.
 20. Implemented Automated Cleanup System for Support Modules.
+21. Added MelonLogger Error Overloads for Exceptions.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
+22. Implemented Loading and Start Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+23. Added Unity Game Check to Proxy.
+24. Fixed Issue with MonoResolveManager on x86 Platform.
 
 ---
 
