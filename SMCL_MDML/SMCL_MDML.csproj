@@ -44,8 +44,8 @@
     <Compile Include="MuseDashModLoader\IMod.cs" />
     <Compile Include="MuseDashModLoader\ModLoader.cs" />
     <Compile Include="MuseDashModLoader\ModLogger.cs" />
-    <Compile Include="MuseDashModLoader_Resolver.cs" />
-    <Compile Include="MuseDashModLoader_Module.cs" />
+    <Compile Include="Resolver.cs" />
+    <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

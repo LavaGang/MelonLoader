@@ -24,14 +24,14 @@ namespace MelonLoader
             new ModuleListing("MDML.dll", x =>
             {
                 x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
-                x.ShouldDelete = MelonUtils.IsGameIl2Cpp();
+                x.ShouldDelete = /*!MelonUtils.IsMuseDash ||*/ MelonUtils.IsGameIl2Cpp();
             }),
 
             // Demeo Integration
             new ModuleListing("Demeo.dll", x =>
             {
                 x.ShouldLoad = x.SetupType == SetupType.OnApplicationStart;
-                x.ShouldDelete = MelonUtils.IsGameIl2Cpp() || !MelonUtils.IsDemeo;
+                x.ShouldDelete = !MelonUtils.IsDemeo || MelonUtils.IsGameIl2Cpp();
             }),
         };
 

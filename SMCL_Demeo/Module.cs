@@ -2,7 +2,6 @@
 using System.Reflection;
 using MelonLoader;
 using Boardgame.Modding;
-#pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers
 {
