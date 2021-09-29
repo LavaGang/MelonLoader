@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ModHelper;
-#pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers
 {
@@ -60,9 +59,7 @@ namespace MelonLoader.CompatibilityLayers
         private class MelonModWrapper : MelonMod
         {
             internal IMod modInstance;
-            
             public override void OnApplicationStart() => modInstance.DoPatching();
-            
         }
     }
 }

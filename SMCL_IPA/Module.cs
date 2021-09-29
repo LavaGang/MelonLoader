@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using MelonLoader.MonoInternals;
 using IllusionPlugin;
-#pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers
 {
