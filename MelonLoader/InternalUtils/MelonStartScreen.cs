@@ -27,17 +27,16 @@ namespace MelonLoader.InternalUtils
             if (!MelonLaunchOptions.Core.StartScreen)
                 return functionToWaitForAsync();
 
-            Load();
+            if (!Load())
+                return functionToWaitForAsync();
 
             if (LoadAndRunMethod != null)
-            {
                 return (int)LoadAndRunMethod.Invoke(null, new object[] { functionToWaitForAsync });
-            }
 
             return -1;
         }
 
-        private static void Load()
+        private static bool Load()
         {
             MelonLogger.Msg("Loading MelonStartScreen...");
 
@@ -46,7 +45,7 @@ namespace MelonLoader.InternalUtils
             if (!File.Exists(AssemblyPath))
             {
                 MelonLogger.Error($"Failed to Find {FileName}.dll!");
-                return;
+                return false;
             }
 
             try
@@ -54,8 +53,8 @@ namespace MelonLoader.InternalUtils
                 asm = Assembly.LoadFrom(AssemblyPath);
                 if (asm == null)
                 {
-                    MelonLogger.ThrowInternalFailure($"Failed to Load Assembly for {FileName}.dll!");
-                    return;
+                    MelonLogger.Error($"Failed to Load Assembly for {FileName}.dll!");
+                    return false;
                 }
 
                 MonoInternals.MonoResolveManager.GetAssemblyResolveInfo(FileName).Override = asm;
@@ -63,8 +62,8 @@ namespace MelonLoader.InternalUtils
                 Type type = asm.GetType("MelonLoader.MelonStartScreen.Core");
                 if (type == null)
                 {
-                    MelonLogger.ThrowInternalFailure($"Failed to Get Type for MelonLoader.MelonStartScreen.Core!");
-                    return;
+                    MelonLogger.Error($"Failed to Get Type for MelonLoader.MelonStartScreen.Core!");
+                    return false;
                 }
 
                 LoadAndRunMethod = type.GetMethod("LoadAndRun", BindingFlags.NonPublic | BindingFlags.Static);
@@ -80,7 +79,8 @@ namespace MelonLoader.InternalUtils
                 OnApplicationLateStart_ModMethod = type.GetMethod("OnApplicationLateStart_Mod", BindingFlags.NonPublic | BindingFlags.Static);
                 FinishMethod = type.GetMethod("Finish", BindingFlags.NonPublic | BindingFlags.Static);
             }
-            catch (Exception ex) { MelonLogger.ThrowInternalFailure($"MelonStartScreen Exception: {ex}"); }
+            catch (Exception ex) { MelonLogger.Error($"MelonStartScreen Exception: {ex}"); return false; }
+            return true;
         }
 
         internal static void OnApplicationStart_Plugins() =>
