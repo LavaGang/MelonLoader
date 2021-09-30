@@ -29,7 +29,7 @@ namespace MelonLoader.Preferences
             else
                 Load(table);
 
-            MelonPreferences.ReflectiveCategories.Add(type, this);
+            MelonPreferences.ReflectiveCategories.Add(this);
         }
 
         internal void LoadDefaults() => value = Activator.CreateInstance(SystemType);
