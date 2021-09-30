@@ -8,7 +8,7 @@ namespace MelonLoader
     public static class MelonPreferences
     {
         public static readonly List<MelonPreferences_Category> Categories = new List<MelonPreferences_Category>();
-        public static readonly Dictionary<Type, MelonPreferences_ReflectiveCategory> ReflectiveCategories = new Dictionary<Type, MelonPreferences_ReflectiveCategory>();
+        public static readonly List<MelonPreferences_ReflectiveCategory> ReflectiveCategories = new List<MelonPreferences_ReflectiveCategory>();
         public static readonly TomlMapper Mapper = new TomlMapper();
         internal static List<Preferences.IO.File> PrefFiles = new List<Preferences.IO.File>();
         internal static Preferences.IO.File DefaultFile = null;
@@ -73,7 +73,7 @@ namespace MelonLoader
 
             if (ReflectiveCategories.Count > 0)
             {
-                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
+                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories)
                 {
                     Preferences.IO.File currentFile = category.File;
                     if (currentFile == null)
@@ -110,7 +110,7 @@ namespace MelonLoader
             }
             if (ReflectiveCategories.Count > 0)
             {
-                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
+                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories)
                 {
                     Preferences.IO.File currentFile = category.File;
                     if (currentFile == null)
@@ -199,18 +199,25 @@ namespace MelonLoader
 
         public static T GetCategory<T>(string identifier) where T : new()
         {
-            if (ReflectiveCategories.TryGetValue(typeof(T), out MelonPreferences_ReflectiveCategory category))
+            if (string.IsNullOrEmpty(identifier))
+                throw new Exception("identifier is null or empty when calling GetCategory");
+            if (ReflectiveCategories.Count <= 0)
+                return default;
+            MelonPreferences_ReflectiveCategory category = ReflectiveCategories.Find(x => x.Identifier.Equals(identifier));
+            if (category != null)
                 return category.GetValue<T>();
-
             return default;
         }
 
-        public static void SaveCategory<T>(bool printmsg = true)
+        public static void SaveCategory<T>(string identifier, bool printmsg = true)
         {
-            if (!ReflectiveCategories.TryGetValue(typeof(T), out MelonPreferences_ReflectiveCategory category))
+            if (string.IsNullOrEmpty(identifier))
+                throw new Exception("identifier is null or empty when calling GetCategory");
+            if (ReflectiveCategories.Count <= 0)
                 return;
-            
-            category.SaveToFile(printmsg);
+            MelonPreferences_ReflectiveCategory category = ReflectiveCategories.Find(x => x.Identifier.Equals(identifier));
+            if (category != null)
+                category.SaveToFile(printmsg);
         }
 
         public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
@@ -266,7 +273,7 @@ namespace MelonLoader
                     return true;
             }
 
-            foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
+            foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories)
             {
                 Preferences.IO.File currentFile = category.File;
                 if (currentFile == null)
@@ -306,7 +313,7 @@ namespace MelonLoader
                 }
 
             if (ReflectiveCategories.Count > 0)
-                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories.Values)
+                foreach (MelonPreferences_ReflectiveCategory category in ReflectiveCategories)
                 {
                     Preferences.IO.File currentFile = category.File;
                     if (currentFile == null)
