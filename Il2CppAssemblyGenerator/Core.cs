@@ -50,9 +50,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                // Temporary Workaround for Cpp2IL Failing
-                if ((Environment.OSVersion.Version.Major < 6) // Is Older than even Vista
-                    || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 2))) // Is Older than Windows 8 or Server 2012
+                // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
+                if ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
+                    || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1))) // Is Older than Windows 7 or Server 2008 R2
                     dumper = new Il2CppDumper();
                 else
                     dumper = new Cpp2IL();
