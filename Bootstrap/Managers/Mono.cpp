@@ -115,9 +115,6 @@ bool Mono::Load()
 
 std::string Mono::CheckLibName(std::string base_path, std::string folder_name, std::string lib_name)
 {
-	if (!Core::DirectoryExists(base_path.c_str()))
-		return std::string();
-
 	std::string new_path = base_path + "\\" + folder_name;
 	if (!Core::DirectoryExists(new_path.c_str()))
 		return std::string();
