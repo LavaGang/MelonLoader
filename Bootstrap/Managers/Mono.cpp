@@ -122,6 +122,7 @@ std::string Mono::CheckLibName(std::string base_path, std::string folder_name, s
 	std::string lib_path = new_path + "\\" + lib_name + ".dll";
 	if (!Core::FileExists(lib_path.c_str()))
 		return std::string();
+
 	return lib_path;
 }
 
