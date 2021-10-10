@@ -11,8 +11,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.Info.ForceDumperVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "2021.3.4";
-            string exe_name = $"Cpp2IL-{Version}-Windows.exe";
+                Version = "2021.4.0";
+            string exe_name = $"Cpp2IL-{Version}-Windows-Netframework472.exe";
             URL = $"https://github.com/SamboyCoding/Cpp2IL/releases/download/{Version}/{exe_name}";
             Destination = Path.Combine(Core.BasePath, "Cpp2IL");
             Output = Path.Combine(Destination, "cpp2il_out");
