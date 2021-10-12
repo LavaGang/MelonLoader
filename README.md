@@ -14,6 +14,7 @@
 
 ---
 
+
 ## GENERAL INFORMATION:
 
 - Debug Mode is for Development Purposes. Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
@@ -27,6 +28,11 @@
 - [dnSpy Debugger Usage](#dnspy-debugger-usage)
 - [Wine / Steam Proton Usage](#wine--steam-proton-usage)
 - [Android & Oculus Quest Support (__WIP__)](https://melonwiki.xyz/#/android/general)
+
+| Nightly Builds: |
+| - |
+| [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
+| [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
 
 | Usage Guides: |
 | - |
