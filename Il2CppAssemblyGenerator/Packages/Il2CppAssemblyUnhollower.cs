@@ -12,7 +12,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceUnhollowerVersion;
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "0.4.15.4";
-            URL = "https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v" + Version + "/Il2CppAssemblyUnhollower." + Version + ".zip";
+            URL = $"https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v{Version}/Il2CppAssemblyUnhollower.{Version}.zip";
             Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
             Output = Path.Combine(Destination, "Managed");
             ExePath = Path.Combine(Destination, "AssemblyUnhollower.exe");
@@ -45,20 +45,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         internal bool Execute()
         {
             MelonLogger.Msg("Executing Il2CppAssemblyUnhollower...");
-            List<string> parameters = new List<string>();
-            parameters.Add($"--input={ Core.dumper.Output }");
-            parameters.Add($"--output={ Output }");
-            parameters.Add($"--mscorlib={ Path.Combine(Core.ManagedPath, "mscorlib.dll") }");
-            parameters.Add($"--unity={ Core.unitydependencies.Destination }");
-            parameters.Add($"--gameassembly={ Core.GameAssemblyPath }");
-            if (!string.IsNullOrEmpty(Core.deobfuscationMap.Version))
-                parameters.Add($"--rename-map={ Path.Combine(Core.deobfuscationMap.Destination, Core.deobfuscationMap.NewFileName) }");
-            parameters.Add("--blacklist-assembly=Mono.Security");
-            parameters.Add("--blacklist-assembly=Newtonsoft.Json");
-            parameters.Add("--blacklist-assembly=Valve.Newtonsoft.Json");
-            if (!string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex))
-                parameters.Add($"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }");
-            return Execute(parameters.ToArray());
+            return Execute(new string[] {
+                $"--input={ Core.dumper.Output }",
+                $"--output={ Output }",
+                $"--mscorlib={ Path.Combine(Core.ManagedPath, "mscorlib.dll") }",
+                $"--unity={ Core.unitydependencies.Destination }",
+                $"--gameassembly={ Core.GameAssemblyPath }",
+                string.IsNullOrEmpty(Core.deobfuscationMap.Version) ? string.Empty : $"--rename-map={ Path.Combine(Core.deobfuscationMap.Destination, Core.deobfuscationMap.NewFileName) }",
+                "--blacklist-assembly=Mono.Security",
+                "--blacklist-assembly=Newtonsoft.Json",
+                "--blacklist-assembly=Valve.Newtonsoft.Json",
+                string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }"
+            });
         }
     }
 }

@@ -8,14 +8,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal DeobfuscationMap()
         {
-            Destination = Core.il2cppassemblyunhollower.Destination; // Change Me
+            Destination = Core.BasePath;
             NewFileName = "DeobfuscationMap.csv.gz";
             URL = RemoteAPI.Info.MappingURL;
             Version = RemoteAPI.Info.MappingFileSHA512;
             ObfuscationRegex = RemoteAPI.Info.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
                 ObfuscationRegex = Config.Values.ObfuscationRegex;
-            if (string.IsNullOrEmpty(ObfuscationRegex) && MelonUtils.GameName.Equals("Among Us"))
+            if (string.IsNullOrEmpty(ObfuscationRegex) 
+                && MelonUtils.GameName.Equals("Among Us"))
                 ObfuscationRegex = "[A-Z]{11}";
         }
 
