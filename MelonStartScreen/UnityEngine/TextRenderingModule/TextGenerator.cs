@@ -3,7 +3,7 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    class TextGenerator : Il2CppObjectBase
+    class TextGenerator : InternalObjectBase
     {
         private delegate int get_vertexCountDelegate(IntPtr @this);
         private delegate IntPtr GetVerticesArrayDelegate(IntPtr @this);
@@ -15,46 +15,46 @@ namespace UnityEngine
 
         static TextGenerator()
         {
-            Il2CppClassPointerStore<TextGenerator>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.TextRenderingModule.dll", "UnityEngine", "TextGenerator");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<TextGenerator>.NativeClassPtr);
+            InternalClassPointerStore<TextGenerator>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.TextRenderingModule.dll", "UnityEngine", "TextGenerator");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<TextGenerator>.NativeClassPtr);
 
-            m_ctor = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<TextGenerator>.NativeClassPtr, ".ctor", "System.Void");
+            m_ctor = UnityInternals.GetMethod(InternalClassPointerStore<TextGenerator>.NativeClassPtr, ".ctor", "System.Void");
 
-            m_Populate = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<TextGenerator>.NativeClassPtr, "Populate", "System.Boolean", "System.String", "UnityEngine.TextGenerationSettings");
+            m_Populate = UnityInternals.GetMethod(InternalClassPointerStore<TextGenerator>.NativeClassPtr, "Populate", "System.Boolean", "System.String", "UnityEngine.TextGenerationSettings");
 
-            fd_get_vertexCount = IL2CPP.ResolveICall<get_vertexCountDelegate>("UnityEngine.TextGenerator::get_vertexCount");
-            fd_GetVerticesArray = IL2CPP.ResolveICall<GetVerticesArrayDelegate>("UnityEngine.TextGenerator::GetVerticesArray");
+            fd_get_vertexCount = UnityInternals.ResolveICall<get_vertexCountDelegate>("UnityEngine.TextGenerator::get_vertexCount");
+            fd_GetVerticesArray = UnityInternals.ResolveICall<GetVerticesArrayDelegate>("UnityEngine.TextGenerator::GetVerticesArray");
         }
 
         public TextGenerator(IntPtr ptr) : base(ptr) { }
 
-        public unsafe TextGenerator() : this(IL2CPP.il2cpp_object_new(Il2CppClassPointerStore<TextGenerator>.NativeClassPtr))
+        public unsafe TextGenerator() : this(UnityInternals.object_new(InternalClassPointerStore<TextGenerator>.NativeClassPtr))
         {
             IntPtr returnedException = default;
-            IL2CPP.il2cpp_runtime_invoke(m_ctor, IL2CPP.Il2CppObjectBaseToPtrNotNull(this), (void**)0, ref returnedException);
+            UnityInternals.runtime_invoke(m_ctor, UnityInternals.ObjectBaseToPtrNotNull(this), (void**)0, ref returnedException);
             Il2CppException.RaiseExceptionIfNecessary(returnedException);
         }
 
         public unsafe bool Populate(string str, TextGenerationSettings settings)
         {
             void** args = stackalloc void*[2];
-            args[0] = (void*)IL2CPP.ManagedStringToIl2Cpp(str);
-            args[1] = (void*)IL2CPP.il2cpp_object_unbox(IL2CPP.Il2CppObjectBaseToPtrNotNull(settings));
+            args[0] = (void*)UnityInternals.ManagedStringToInternal(str);
+            args[1] = (void*)UnityInternals.object_unbox(UnityInternals.ObjectBaseToPtrNotNull(settings));
             IntPtr returnedException = default;
-            IntPtr obj = IL2CPP.il2cpp_runtime_invoke(m_Populate, IL2CPP.Il2CppObjectBaseToPtrNotNull(this), args, ref returnedException);
+            IntPtr obj = UnityInternals.runtime_invoke(m_Populate, UnityInternals.ObjectBaseToPtrNotNull(this), args, ref returnedException);
             Il2CppException.RaiseExceptionIfNecessary(returnedException);
-            return *(bool*)IL2CPP.il2cpp_object_unbox(obj);
+            return *(bool*)UnityInternals.object_unbox(obj);
         }
 
-        public int vertexCount => fd_get_vertexCount(IL2CPP.Il2CppObjectBaseToPtrNotNull(this));
+        public int vertexCount => fd_get_vertexCount(UnityInternals.ObjectBaseToPtrNotNull(this));
 
         public unsafe UIVertex[] GetVerticesArray()
         {
-            IntPtr intPtr = fd_GetVerticesArray(IL2CPP.Il2CppObjectBaseToPtrNotNull(this));
+            IntPtr intPtr = fd_GetVerticesArray(UnityInternals.ObjectBaseToPtrNotNull(this));
             if (intPtr == IntPtr.Zero) return null;
-            UIVertex[] arr = new UIVertex[IL2CPP.il2cpp_array_length(intPtr)];
+            UIVertex[] arr = new UIVertex[UnityInternals.array_length(intPtr)];
             for (int i = 0; i < arr.Length; ++i)
-                arr[i] = ((UIVertex*)(intPtr + 4 * IntPtr.Size))[i];
+                arr[i] = ((UIVertex*)((long)intPtr + 4 * IntPtr.Size))[i];
             return arr;
         }
     }

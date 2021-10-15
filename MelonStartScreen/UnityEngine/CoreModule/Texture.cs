@@ -3,7 +3,7 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    internal class Texture : Il2CppObjectBase
+    internal class Texture : InternalObjectBase
     {
         private delegate int GetDataWidthDelegate(IntPtr @this);
         private delegate int GetDataHeightDelegate(IntPtr @this);
@@ -15,22 +15,22 @@ namespace UnityEngine
 
         static Texture()
         {
-            Il2CppClassPointerStore<Texture>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Texture");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Texture>.NativeClassPtr);
+            InternalClassPointerStore<Texture>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Texture");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<Texture>.NativeClassPtr);
 
-            getDataWidth = IL2CPP.ResolveICall<GetDataWidthDelegate>("UnityEngine.Texture::GetDataWidth");
-            getDataHeight = IL2CPP.ResolveICall<GetDataHeightDelegate>("UnityEngine.Texture::GetDataHeight");
-            set_filterMode_ = IL2CPP.ResolveICall<set_filterModeDelegate>("UnityEngine.Texture::set_filterMode");
+            getDataWidth = UnityInternals.ResolveICall<GetDataWidthDelegate>("UnityEngine.Texture::GetDataWidth");
+            getDataHeight = UnityInternals.ResolveICall<GetDataHeightDelegate>("UnityEngine.Texture::GetDataHeight");
+            set_filterMode_ = UnityInternals.ResolveICall<set_filterModeDelegate>("UnityEngine.Texture::set_filterMode");
         }
 
         public Texture(IntPtr ptr) : base(ptr) { }
 
-        public int width => getDataWidth(IL2CPP.Il2CppObjectBaseToPtrNotNull(this));
-        public int height => getDataHeight(IL2CPP.Il2CppObjectBaseToPtrNotNull(this));
+        public int width => getDataWidth(UnityInternals.ObjectBaseToPtrNotNull(this));
+        public int height => getDataHeight(UnityInternals.ObjectBaseToPtrNotNull(this));
 
         public FilterMode filterMode
         {
-            set => set_filterMode_(IL2CPP.Il2CppObjectBaseToPtrNotNull(this), value);
+            set => set_filterMode_(UnityInternals.ObjectBaseToPtrNotNull(this), value);
         }
     }
 }

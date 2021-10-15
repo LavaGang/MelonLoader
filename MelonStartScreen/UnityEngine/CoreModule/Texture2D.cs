@@ -14,15 +14,15 @@ namespace UnityEngine
 
         static Texture2D()
         {
-            Il2CppClassPointerStore<Texture2D>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Texture2D");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Texture2D>.NativeClassPtr);
+            InternalClassPointerStore<Texture2D>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Texture2D");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<Texture2D>.NativeClassPtr);
 
-            m_ctor = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<Texture2D>.NativeClassPtr, ".ctor", "System.Void", "System.Int32", "System.Int32");
+            m_ctor = UnityInternals.GetMethod(InternalClassPointerStore<Texture2D>.NativeClassPtr, ".ctor", "System.Void", "System.Int32", "System.Int32");
 
-            m_get_whiteTexture = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<Texture2D>.NativeClassPtr, "get_whiteTexture", "UnityEngine.Texture2D");
+            m_get_whiteTexture = UnityInternals.GetMethod(InternalClassPointerStore<Texture2D>.NativeClassPtr, "get_whiteTexture", "UnityEngine.Texture2D");
 
-            m_SetPixelsImpl = IL2CPP.ResolveICall<SetPixelsImplDelegate>("UnityEngine.Texture2D::SetPixelsImpl");
-            m_Apply = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<Texture2D>.NativeClassPtr, "Apply", "System.Void");
+            m_SetPixelsImpl = UnityInternals.ResolveICall<SetPixelsImplDelegate>("UnityEngine.Texture2D::SetPixelsImpl");
+            m_Apply = UnityInternals.GetMethod(InternalClassPointerStore<Texture2D>.NativeClassPtr, "Apply", "System.Void");
         }
 
         public Texture2D(IntPtr ptr) : base(ptr) { }
@@ -32,19 +32,19 @@ namespace UnityEngine
             get
             {
                 IntPtr returnedException = IntPtr.Zero;
-                IntPtr intPtr = IL2CPP.il2cpp_runtime_invoke(m_get_whiteTexture, IntPtr.Zero, (void**)0, ref returnedException);
+                IntPtr intPtr = UnityInternals.runtime_invoke(m_get_whiteTexture, IntPtr.Zero, (void**)0, ref returnedException);
                 Il2CppException.RaiseExceptionIfNecessary(returnedException);
                 return intPtr == IntPtr.Zero ? null : new Texture2D(intPtr);
             }
         }
 
-        public unsafe Texture2D(int width, int height) : base(IL2CPP.il2cpp_object_new(Il2CppClassPointerStore<Texture2D>.NativeClassPtr))
+        public unsafe Texture2D(int width, int height) : base(UnityInternals.object_new(InternalClassPointerStore<Texture2D>.NativeClassPtr))
         {
             void** args = stackalloc void*[2];
             args[0] = &width;
             args[1] = &height;
             IntPtr returnedException = default;
-            IL2CPP.il2cpp_runtime_invoke(m_ctor, IL2CPP.Il2CppObjectBaseToPtrNotNull(this), args, ref returnedException);
+            UnityInternals.runtime_invoke(m_ctor, UnityInternals.ObjectBaseToPtrNotNull(this), args, ref returnedException);
             Il2CppException.RaiseExceptionIfNecessary(returnedException);
         }
 
@@ -60,20 +60,20 @@ namespace UnityEngine
 
         public unsafe void SetPixelsImpl(int x, int y, int w, int h, Color[] pixel, int miplevel, int frame)
         {
-            IntPtr pixelArrayPtr = IL2CPP.il2cpp_array_new(Il2CppClassPointerStore<Color>.NativeClassPtr, (uint)pixel.Length);
+            IntPtr pixelArrayPtr = UnityInternals.array_new(InternalClassPointerStore<Color>.NativeClassPtr, (uint)pixel.Length);
             for (var i = 0; i < pixel.Length; i++)
             {
-                IntPtr arrayStartPointer = IntPtr.Add(pixelArrayPtr, 4 * IntPtr.Size);
+                IntPtr arrayStartPointer = (IntPtr)((long)pixelArrayPtr + 4 * IntPtr.Size);
                 ((Color*)arrayStartPointer.ToPointer())[i] = pixel[i];
             }
 
-            m_SetPixelsImpl(IL2CPP.Il2CppObjectBaseToPtrNotNull(this), x, y, w, h, pixelArrayPtr, miplevel, frame);
+            m_SetPixelsImpl(UnityInternals.ObjectBaseToPtrNotNull(this), x, y, w, h, pixelArrayPtr, miplevel, frame);
         }
 
         public unsafe void Apply()
         {
             IntPtr returnedException = default;
-            IL2CPP.il2cpp_runtime_invoke(m_Apply, IL2CPP.Il2CppObjectBaseToPtrNotNull(this), (void**)0, ref returnedException);
+            UnityInternals.runtime_invoke(m_Apply, UnityInternals.ObjectBaseToPtrNotNull(this), (void**)0, ref returnedException);
             Il2CppException.RaiseExceptionIfNecessary(returnedException);
         }
     }

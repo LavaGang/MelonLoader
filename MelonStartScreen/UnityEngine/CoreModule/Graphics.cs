@@ -3,7 +3,7 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    internal class Graphics : Il2CppObjectBase
+    internal class Graphics : InternalObjectBase
     {
         private delegate IntPtr Internal_DrawMeshNow1_InjectedDelegate(IntPtr mesh, int subsetIndex, ref Vector3 position, ref Quaternion rotation);
 
@@ -12,11 +12,10 @@ namespace UnityEngine
 
         static Graphics()
         {
-            Il2CppClassPointerStore<Graphics>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Graphics");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Graphics>.NativeClassPtr);
-            m_DrawTexture = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<Graphics>.NativeClassPtr, "DrawTexture", "System.Void", new string[] { "UnityEngine.Rect", "UnityEngine.Texture", "UnityEngine.Material", "System.Int32" });
+            InternalClassPointerStore<Graphics>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Graphics");
+            m_DrawTexture = UnityInternals.GetMethod(InternalClassPointerStore<Graphics>.NativeClassPtr, "DrawTexture", "System.Void", new string[] { "UnityEngine.Rect", "UnityEngine.Texture", "UnityEngine.Material", "System.Int32" });
 
-            fd_Internal_DrawMeshNow1_Injected = IL2CPP.ResolveICall<Internal_DrawMeshNow1_InjectedDelegate>("UnityEngine.Graphics::Internal_DrawMeshNow1_Injected");
+            fd_Internal_DrawMeshNow1_Injected = UnityInternals.ResolveICall<Internal_DrawMeshNow1_InjectedDelegate>("UnityEngine.Graphics::Internal_DrawMeshNow1_Injected");
         }
 
         public Graphics(IntPtr ptr) : base(ptr) { }
@@ -25,11 +24,11 @@ namespace UnityEngine
         {
             void** args = stackalloc void*[4];
             args[0] = &screenRect;
-            args[1] = (void*)IL2CPP.Il2CppObjectBaseToPtrNotNull(texture);
+            args[1] = (void*)UnityInternals.ObjectBaseToPtrNotNull(texture);
             args[2] = (void*)material;
             args[3] = &pass;
             IntPtr returnedException = default;
-            IL2CPP.il2cpp_runtime_invoke(m_DrawTexture, IntPtr.Zero, args, ref returnedException);
+            UnityInternals.runtime_invoke(m_DrawTexture, IntPtr.Zero, args, ref returnedException);
             Il2CppException.RaiseExceptionIfNecessary(returnedException);
         }
 
@@ -47,6 +46,6 @@ namespace UnityEngine
             Internal_DrawMeshNow1_Injected(mesh, subsetIndex, ref position, ref rotation);
 
         private static void Internal_DrawMeshNow1_Injected(Mesh mesh, int subsetIndex, ref Vector3 position, ref Quaternion rotation) =>
-            fd_Internal_DrawMeshNow1_Injected(IL2CPP.Il2CppObjectBaseToPtr(mesh), subsetIndex, ref position, ref rotation);
+            fd_Internal_DrawMeshNow1_Injected(UnityInternals.ObjectBaseToPtr(mesh), subsetIndex, ref position, ref rotation);
     }
 }

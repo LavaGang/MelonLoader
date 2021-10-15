@@ -3,7 +3,7 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    internal class TextGenerationSettings : Il2CppObjectBase
+    internal class TextGenerationSettings : InternalObjectBase
     {
         private static readonly int classsize;
 
@@ -28,30 +28,30 @@ namespace UnityEngine
 
         static TextGenerationSettings()
         {
-            Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.TextRenderingModule.dll", "UnityEngine", "TextGenerationSettings");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr);
+            InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.TextRenderingModule.dll", "UnityEngine", "TextGenerationSettings");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr);
             uint align = 0;
-            classsize = IL2CPP.il2cpp_class_value_size(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, ref align);
+            classsize = UnityInternals.class_value_size(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, ref align);
 
 
-            f_font = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "font");
-			f_color = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "color");
-			f_fontSize = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "fontSize");
-			f_lineSpacing = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "lineSpacing");
-			f_richText = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "richText");
-			f_scaleFactor = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "scaleFactor");
-			f_fontStyle = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "fontStyle");
-			f_textAnchor = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "textAnchor");
-			//f_alignByGeometry = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "alignByGeometry");
-			//f_resizeTextForBestFit = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "resizeTextForBestFit");
-			//f_resizeTextMinSize = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "resizeTextMinSize");
-			//f_resizeTextMaxSize = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "resizeTextMaxSize");
-			//f_updateBounds = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "updateBounds");
-			f_verticalOverflow = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "verticalOverflow");
-			//f_horizontalOverflow = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "horizontalOverflow");
-			f_generationExtents = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "generationExtents");
-			f_pivot = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "pivot");
-			//f_generateOutOfBounds = IL2CPP.GetIl2CppField(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, "generateOutOfBounds");
+            f_font = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "font");
+			f_color = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "color");
+			f_fontSize = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "fontSize");
+			f_lineSpacing = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "lineSpacing");
+			f_richText = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "richText");
+			f_scaleFactor = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "scaleFactor");
+			f_fontStyle = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "fontStyle");
+			f_textAnchor = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "textAnchor");
+			//f_alignByGeometry = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "alignByGeometry");
+			//f_resizeTextForBestFit = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "resizeTextForBestFit");
+			//f_resizeTextMinSize = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "resizeTextMinSize");
+			//f_resizeTextMaxSize = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "resizeTextMaxSize");
+			//f_updateBounds = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "updateBounds");
+			f_verticalOverflow = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "verticalOverflow");
+			//f_horizontalOverflow = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "horizontalOverflow");
+			f_generationExtents = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "generationExtents");
+			f_pivot = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "pivot");
+			//f_generateOutOfBounds = UnityInternals.GetField(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, "generateOutOfBounds");
 		}
 
         public TextGenerationSettings(IntPtr ptr) : base(ptr) { }
@@ -59,78 +59,78 @@ namespace UnityEngine
         public unsafe TextGenerationSettings()
         {
             byte** data = stackalloc byte*[classsize];
-            IntPtr pointer = IL2CPP.il2cpp_value_box(Il2CppClassPointerStore<TextGenerationSettings>.NativeClassPtr, (IntPtr)data);
-            myGcHandle = IL2CPP.il2cpp_gchandle_new(pointer, false);
+            IntPtr pointer = UnityInternals.value_box(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, (IntPtr)data);
+            myGcHandle = UnityInternals.gchandle_new(pointer, false);
         }
 
         public unsafe Font font
         {
             get
             {
-                IntPtr intPtr = *(IntPtr*)((uint)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_font));
+                IntPtr intPtr = *(IntPtr*)((uint)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_font));
                 return (intPtr != IntPtr.Zero) ? new Font(intPtr) : null;
             }
-            set => *(IntPtr*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_font)) = IL2CPP.Il2CppObjectBaseToPtr(value);
+            set => *(IntPtr*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_font)) = UnityInternals.ObjectBaseToPtr(value);
         }
 
         public unsafe Color color
         {
-            get => *(Color*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_color));
-            set => *(Color*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_color)) = value;
+            get => *(Color*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_color));
+            set => *(Color*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_color)) = value;
         }
 
         public unsafe int fontSize
         {
-            get => *(int*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_fontSize));
-            set => *(int*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_fontSize)) = value;
+            get => *(int*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_fontSize));
+            set => *(int*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_fontSize)) = value;
         }
 
         public unsafe float lineSpacing
         {
-            get => *(float*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_lineSpacing));
-            set => *(float*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_lineSpacing)) = value;
+            get => *(float*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_lineSpacing));
+            set => *(float*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_lineSpacing)) = value;
         }
 
         public unsafe bool richText
         {
-            get => *(bool*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_richText));
-            set => *(bool*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_richText)) = value;
+            get => *(bool*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_richText));
+            set => *(bool*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_richText)) = value;
         }
 
         public unsafe float scaleFactor
         {
-            get => *(float*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_scaleFactor));
-            set => *(float*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_scaleFactor)) = value;
+            get => *(float*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_scaleFactor));
+            set => *(float*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_scaleFactor)) = value;
         }
 
         public unsafe FontStyle fontStyle
         {
-            get => *(FontStyle*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_fontStyle));
-            set => *(FontStyle*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_fontStyle)) = value;
+            get => *(FontStyle*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_fontStyle));
+            set => *(FontStyle*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_fontStyle)) = value;
         }
 
         public unsafe TextAnchor textAnchor
         {
-            get => *(TextAnchor*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_textAnchor));
-            set => *(TextAnchor*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_textAnchor)) = value;
+            get => *(TextAnchor*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_textAnchor));
+            set => *(TextAnchor*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_textAnchor)) = value;
         }
 
         public unsafe VerticalWrapMode verticalOverflow
         {
-            get => *(VerticalWrapMode*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_verticalOverflow));
-            set => *(VerticalWrapMode*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_verticalOverflow)) = value;
+            get => *(VerticalWrapMode*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_verticalOverflow));
+            set => *(VerticalWrapMode*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_verticalOverflow)) = value;
         }
 
         public unsafe Vector2 generationExtents
         {
-            get => *(Vector2*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_generationExtents));
-            set => *(Vector2*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_generationExtents)) = value;
+            get => *(Vector2*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_generationExtents));
+            set => *(Vector2*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_generationExtents)) = value;
         }
 
         public unsafe Vector2 pivot
         {
-            get => *(Vector2*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_pivot));
-            set => *(Vector2*)((ulong)IL2CPP.Il2CppObjectBaseToPtrNotNull(this) + IL2CPP.il2cpp_field_get_offset(f_pivot)) = value;
+            get => *(Vector2*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_pivot));
+            set => *(Vector2*)((ulong)UnityInternals.ObjectBaseToPtrNotNull(this) + UnityInternals.field_get_offset(f_pivot)) = value;
         }
     }
 }

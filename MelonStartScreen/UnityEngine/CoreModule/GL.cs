@@ -9,10 +9,10 @@ namespace UnityEngine
 
         static GL()
         {
-            Il2CppClassPointerStore<GL>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "GL");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<GL>.NativeClassPtr);
+            InternalClassPointerStore<GL>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "GL");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<GL>.NativeClassPtr);
 
-            m_get_sRGBWrite = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<GL>.NativeClassPtr, "get_sRGBWrite", "System.Boolean");
+            m_get_sRGBWrite = UnityInternals.GetMethod(InternalClassPointerStore<GL>.NativeClassPtr, "get_sRGBWrite", "System.Boolean");
         }
 
         public unsafe static bool sRGBWrite
@@ -20,9 +20,9 @@ namespace UnityEngine
             get
             {
                 IntPtr returnedException = default;
-                IntPtr obj = IL2CPP.il2cpp_runtime_invoke(m_get_sRGBWrite, IntPtr.Zero, (void**)0, ref returnedException);
+                IntPtr obj = UnityInternals.runtime_invoke(m_get_sRGBWrite, IntPtr.Zero, (void**)0, ref returnedException);
                 Il2CppException.RaiseExceptionIfNecessary(returnedException);
-                return *(bool*)IL2CPP.il2cpp_object_unbox(obj);
+                return *(bool*)UnityInternals.object_unbox(obj);
             }
             // set
         }

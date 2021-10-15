@@ -17,8 +17,7 @@ namespace UnityEngine
 
         static Quaternion()
         {
-            Il2CppClassPointerStore<Quaternion>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Quaternion");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Quaternion>.NativeClassPtr);
+            InternalClassPointerStore<Quaternion>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Quaternion");
         }
 
         public static Quaternion identity => new Quaternion();

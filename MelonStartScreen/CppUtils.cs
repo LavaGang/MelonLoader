@@ -1,19 +1,11 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace MelonLoader.MelonStartScreen
 {
     internal static class CppUtils
     {
-        public static unsafe string CharArrayPtrToString(this IntPtr ptr)
-        {
-            byte* text = (byte*)ptr;
-            int length = 0;
-            while (text[length] != 0)
-                ++length;
-
-            return Encoding.UTF8.GetString(text, length);
-        }
         internal static unsafe IntPtr Sigscan(IntPtr module, int moduleSize, string signature)
         {
             string signatureSpaceless = signature.Replace(" ", "");
