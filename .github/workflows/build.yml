@@ -3,7 +3,9 @@ name: Build MelonLoader
 # Controls when the action will run. 
 on:
   push:
-    branches: [ci-test, alpha-development, master]
+    branches: [alpha-development, master]
+  pull_request:
+    branches: [ alpha-development, master ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
