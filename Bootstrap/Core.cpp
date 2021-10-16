@@ -195,10 +195,26 @@ const char* Core::GetFileInfoProductVersion(const char* path)
 	return (LPCSTR)buffer2;
 }
 
+VERSIONHELPERAPI IsWindows11OrGreater()
+{
+	OSVERSIONINFOEXW osinfo = { sizeof(osinfo), HIBYTE(_WIN32_WINNT_WIN10), LOBYTE(_WIN32_WINNT_WIN10), 22000, 0, { 0 }, 0, 0 };
+
+	DWORDLONG const mask = VerSetConditionMask(
+		VerSetConditionMask(
+			VerSetConditionMask(
+				0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+			VER_MINORVERSION, VER_GREATER_EQUAL),
+		VER_BUILDNUMBER, VER_GREATER_EQUAL);
+
+	return VerifyVersionInfoW(&osinfo, VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER, mask) != FALSE;
+}
+
 const char* Core::GetOSVersion()
 {
 	if (IsRunningInWine())
 		return (std::string("Wine ") + wine_get_version()).c_str();
+	else if (IsWindows11OrGreater())
+		return "Windows 11";
 	else if (IsWindows10OrGreater())
 		return "Windows 10";
 	else if (IsWindows8Point1OrGreater())
