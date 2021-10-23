@@ -17,8 +17,8 @@ namespace UnityEngine
 
         static Rect()
         {
-            Il2CppClassPointerStore<Rect>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Rect");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Rect>.NativeClassPtr);
+            InternalClassPointerStore<Rect>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Rect");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<Rect>.NativeClassPtr);
         }
 
         public Rect(int x, int y, int width, int height)

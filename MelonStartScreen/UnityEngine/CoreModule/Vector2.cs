@@ -13,8 +13,8 @@ namespace UnityEngine
 
         static Vector2()
         {
-            Il2CppClassPointerStore<Vector2>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Vector2");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Vector2>.NativeClassPtr);
+            InternalClassPointerStore<Vector2>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Vector2");
+            //UnityInternals.runtime_class_init(InternalClassPointerStore<Vector2>.NativeClassPtr);
         }
 
         public Vector2(float x, float y)

@@ -11,8 +11,8 @@ namespace Il2CppSystem
 
         static Int32()
         {
-            Il2CppClassPointerStore<int>.NativeClassPtr = IL2CPP.GetIl2CppClass("mscorlib.dll", "System", "Int32");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<int>.NativeClassPtr);
+            InternalClassPointerStore<int>.NativeClassPtr = UnityInternals.GetClass("mscorlib.dll", "System", "Int32");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<int>.NativeClassPtr);
         }
     }
 }

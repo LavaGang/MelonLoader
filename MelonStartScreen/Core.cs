@@ -5,12 +5,14 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using UnhollowerMini;
 using Windows;
 
 namespace MelonLoader.MelonStartScreen
 {
     internal static class Core
     {
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate IntPtr User32SetTimerDelegate(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, IntPtr lpTimerFunc);
 
         private static bool initialized = false;
@@ -23,7 +25,7 @@ namespace MelonLoader.MelonStartScreen
         private static int functionRunResult = 0;
 
 
-        private static int LoadAndRun(Func<int> functionToWaitForAsync)
+        private static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+
             // If we can't find them (signatures changed or <2018.1.0), then we run the function and return.
@@ -35,7 +37,9 @@ namespace MelonLoader.MelonStartScreen
                 if (!ApplyUser32SetTimerPatch())
                     return functionToWaitForAsync();
 
+                MelonDebug.Msg("Initializing Screen Renderer");
                 ScreenRenderer.Init();
+                MelonDebug.Msg("Screen Renderer initialized");
 
                 RegisterMessageCallbacks();
 
@@ -66,45 +70,36 @@ namespace MelonLoader.MelonStartScreen
 
         private static unsafe bool ApplyUser32SetTimerPatch()
         {
-            IntPtr moduleAddress = IntPtr.Zero;
+            IntPtr original = PEUtils.GetExportedFunctionPointerForModule("USER32.dll", "SetTimer");
+            MelonLogger.Msg($"User32::SetTimer original: 0x{(long)original:X}");
 
-            // We get the USER32.dll module address from the list of loaded modules/libraries
-            foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
-            {
-                if (module.ModuleName == "USER32.dll")
-                {
-                    moduleAddress = module.BaseAddress;
-                    break;
-                }
-            }
-
-            if (moduleAddress == IntPtr.Zero)
-            {
-                MelonLogger.Error($"Failed to find module \"USER32.dll\"");
-                return false;
-            }
-
-            // Then we look for the exported function "SetTimer" from User32, so we can hook it
-            IntPtr original = PEUtils.GetExportedFunctionPointerForModule(moduleAddress, "SetTimer");
-
-            // We get a native function pointer to User32SetTimerDetour from out current class
-            IntPtr detourPtr = typeof(Core).GetMethod("User32SetTimerDetour", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer();
-
-            if (detourPtr == IntPtr.Zero)
+            if (original == IntPtr.Zero)
             {
                 MelonLogger.Error("Failed to find USER32.dll::SetTimer");
                 return false;
             }
 
+            // We get a native function pointer to User32SetTimerDetour from our current class
+            //IntPtr detourPtr = typeof(Core).GetMethod("User32SetTimerDetour", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer();
+            IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((User32SetTimerDelegate)User32SetTimerDetour);
+
+            if (detourPtr == IntPtr.Zero)
+            {
+                MelonLogger.Error("Failed to find User32SetTimerDetour");
+                return false;
+            }
+
             // And we patch SetTimer to replace it by our hook
+            MelonLogger.Msg($"Applying USER32.dll::SetTimer Hook at 0x{original.ToInt64():X}");
             MelonUtils.NativeHookAttach((IntPtr)(&original), detourPtr);
-            user32SetTimerOriginal = Marshal.GetDelegateForFunctionPointer<User32SetTimerDelegate>(original);
+            MelonLogger.Msg($"Creating delegate for original USER32.dll::SetTimer (0x{original.ToInt64():X})");
+            user32SetTimerOriginal = (User32SetTimerDelegate)Marshal.GetDelegateForFunctionPointer(original, typeof(User32SetTimerDelegate));
             MelonLogger.Msg("Applied USER32.dll::SetTimer patch");
 
             return true;
         }
 
-        private static IntPtr User32SetTimerDetour(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, IntPtr timerProc)
+        private unsafe static IntPtr User32SetTimerDetour(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, IntPtr timerProc)
         {
             if (nextSetTimerIsUnity)
             {
@@ -117,7 +112,7 @@ namespace MelonLoader.MelonStartScreen
 
         #endregion
 
-        private static void StartFunction(Func<int> func)
+        private static void StartFunction(LemonFunc<int> func)
         {
             new Thread(() =>
             {

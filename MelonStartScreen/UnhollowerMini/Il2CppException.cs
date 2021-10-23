@@ -17,10 +17,10 @@ namespace UnhollowerMini
             if (ParseMessageHook != null) return ParseMessageHook(exception);
             if (ourMessageBytes == null) ourMessageBytes = new byte[65536];
             fixed (byte* message = ourMessageBytes)
-                IL2CPP.il2cpp_format_exception(exception, message, ourMessageBytes.Length);
+                UnityInternals.format_exception(exception, message, ourMessageBytes.Length);
             string builtMessage = Encoding.UTF8.GetString(ourMessageBytes, 0, Array.IndexOf(ourMessageBytes, (byte)0));
             fixed (byte* message = ourMessageBytes)
-                IL2CPP.il2cpp_format_stack_trace(exception, message, ourMessageBytes.Length);
+                UnityInternals.format_stack_trace(exception, message, ourMessageBytes.Length);
             builtMessage +=
                 "\n" + Encoding.UTF8.GetString(ourMessageBytes, 0, Array.IndexOf(ourMessageBytes, (byte)0));
             return builtMessage;

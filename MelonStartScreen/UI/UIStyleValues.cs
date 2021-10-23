@@ -23,10 +23,11 @@ namespace MelonLoader.MelonStartScreen.UI
             progressbarInnerTexture = UIUtils.CreateColorTexture(new Color(1.00f, 0.23f, 0.42f));
 
             melonloaderLogoTexture = new Texture2D(2, 2);
-            ImageConversion.LoadImage(melonloaderLogoTexture, Convert.FromBase64String(
+            bool imgLoaded = ImageConversion.LoadImage(melonloaderLogoTexture, Convert.FromBase64String(
                 (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                 ? ImageDatas.LemonLogo
                 : ImageDatas.MelonLogo), false);
+            MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
 
             funnyAnimation = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray(), 90);
 

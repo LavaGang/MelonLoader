@@ -7,8 +7,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader.MelonStartScreen</RootNamespace>
     <AssemblyName>MelonStartScreen</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <LangVersion>8.0</LangVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <LangVersion>9.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -45,8 +45,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core.cs" />
@@ -77,11 +75,11 @@
     <Compile Include="UI\ProgressBar.cs" />
     <Compile Include="UI\UIStyleValues.cs" />
     <Compile Include="UI\UIUtils.cs" />
-    <Compile Include="UnhollowerMini\IL2CPP.cs" />
-    <Compile Include="UnhollowerMini\Il2CppClassPointerStore.cs" />
+    <Compile Include="UnhollowerMini\UnityInternals.cs" />
     <Compile Include="UnhollowerMini\Il2CppException.cs" />
-    <Compile Include="UnhollowerMini\Il2CppObjectBase.cs" />
-    <Compile Include="UnhollowerMini\Il2CppType.cs" />
+    <Compile Include="UnhollowerMini\InternalClassPointerStore.cs" />
+    <Compile Include="UnhollowerMini\InternalObjectBase.cs" />
+    <Compile Include="UnhollowerMini\InternalType.cs" />
     <Compile Include="UnhollowerMini\ObjectCollectedException.cs" />
     <Compile Include="UnityEngine\CoreModule\Color.cs" />
     <Compile Include="UnityEngine\CoreModule\Color32.cs" />
@@ -89,6 +87,7 @@
     <Compile Include="UnityEngine\CoreModule\GL.cs" />
     <Compile Include="UnityEngine\CoreModule\Graphics.cs" />
     <Compile Include="UnityEngine\CoreModule\ImageConversion.cs" />
+    <Compile Include="UnityEngine\CoreModule\Internal_DrawTextureArguments.cs" />
     <Compile Include="UnityEngine\CoreModule\Material.cs" />
     <Compile Include="UnityEngine\CoreModule\Mesh.cs" />
     <Compile Include="UnityEngine\CoreModule\Quaternion.cs" />

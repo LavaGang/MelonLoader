@@ -3,29 +3,29 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    internal class Material : Il2CppObjectBase
+    internal class Material : InternalObjectBase
     {
         private static IntPtr m_SetPass;
 
         static Material()
         {
-            Il2CppClassPointerStore<Material>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Material");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Material>.NativeClassPtr);
+            InternalClassPointerStore<Material>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Material");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<Material>.NativeClassPtr);
 
-            m_SetPass = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<Material>.NativeClassPtr, "SetPass", "System.Boolean", "System.Int32");
+            m_SetPass = UnityInternals.GetMethod(InternalClassPointerStore<Material>.NativeClassPtr, "SetPass", "System.Boolean", "System.Int32");
         }
 
         public Material(IntPtr ptr) : base(ptr) { }
 
         public unsafe bool SetPass(int pass)
         {
-            IL2CPP.Il2CppObjectBaseToPtrNotNull(this);
+            UnityInternals.ObjectBaseToPtrNotNull(this);
             void** ptr = stackalloc void*[1];
             ptr[0] = &pass;
             IntPtr returnedException = default;
-            IntPtr obj = IL2CPP.il2cpp_runtime_invoke(m_SetPass, IL2CPP.Il2CppObjectBaseToPtrNotNull(this), (void**)ptr, ref returnedException);
+            IntPtr obj = UnityInternals.runtime_invoke(m_SetPass, UnityInternals.ObjectBaseToPtrNotNull(this), (void**)ptr, ref returnedException);
             Il2CppException.RaiseExceptionIfNecessary(returnedException);
-            return *(bool*)IL2CPP.il2cpp_object_unbox(obj);
+            return *(bool*)UnityInternals.object_unbox(obj);
         }
     }
 }

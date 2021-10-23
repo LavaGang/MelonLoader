@@ -20,9 +20,9 @@ namespace UnityEngine
 
         static Color()
         {
-            Il2CppClassPointerStore<Color>.NativeClassPtr = IL2CPP.GetIl2CppClass("UnityEngine.CoreModule.dll", "UnityEngine", "Color");
-            IL2CPP.il2cpp_runtime_class_init(Il2CppClassPointerStore<Color>.NativeClassPtr);
-            m_ToString = IL2CPP.GetIl2CppMethod(Il2CppClassPointerStore<Color>.NativeClassPtr, "ToString", "System.String");
+            InternalClassPointerStore<Color>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Color");
+            UnityInternals.runtime_class_init(InternalClassPointerStore<Color>.NativeClassPtr);
+            m_ToString = UnityInternals.GetMethod(InternalClassPointerStore<Color>.NativeClassPtr, "ToString", "System.String");
         }
 
         public Color(float r, float g, float b, float a = 1f)
