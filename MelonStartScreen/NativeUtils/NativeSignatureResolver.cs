@@ -1,6 +1,8 @@
 ﻿using MelonLoader;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -64,7 +66,11 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                 {
                     bool hasAttribute = false;
                     bool signaturefound = false;
-                    foreach (NativeSignatureAttribute attribute in fi.GetCustomAttributes<NativeSignatureAttribute>())
+                    IOrderedEnumerable<NativeSignatureAttribute> nativeSignatureAttributes = fi.GetCustomAttributes(false)
+                        .Where(attr => attr is NativeSignatureAttribute)
+                        .Select(attr => (NativeSignatureAttribute)attr)
+                        .OrderByDescending(attr => attr.LookupIndex);
+                    foreach (NativeSignatureAttribute attribute in nativeSignatureAttributes)
                     {
                         hasAttribute = true;
                         if ((attribute.Flags & currentFlags) != attribute.Flags)
@@ -79,7 +85,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                         if (ptr == IntPtr.Zero)
                         {
                             success = false;
-                            MelonLogger.Error("Failed to find the signature for field " + fi.Name + " in module");
+                            MelonLogger.Error("Failed to find the signature for field " + fi.Name + " in module. Signature: " + attribute.Signature);
                             break;
                         }
 
@@ -90,6 +96,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                         else
                             MelonLogger.Error($"Invalid target type for field \"{fi.FieldType} {fi.Name}\"");
 
+                        MelonDebug.Msg("Signature for " + fi.Name + ": " + attribute.Signature);
                         break;
                     }
 
@@ -104,7 +111,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
             return success;
         }
 
-        private static bool IsUnityVersionOverOrEqual(string currentversion, string[] validversions)
+        internal static bool IsUnityVersionOverOrEqual(string currentversion, string[] validversions)
         {
             if (validversions == null || validversions.Length == 0)
                 return true;

@@ -22,9 +22,10 @@ namespace MelonLoader.InternalUtils
         private static MethodInfo OnApplicationLateStart_ModsMethod = null;
         private static MethodInfo OnApplicationLateStart_ModMethod = null;
 
-        internal static int LoadAndRun(Func<int> functionToWaitForAsync)
+        internal static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
-            if (!MelonLaunchOptions.Core.StartScreen)
+            // We don't support Unity versions under 2017.2.0 (yet?)
+            if (!MelonLaunchOptions.Core.StartScreen || !MelonUtils.GetUnityVersion().StartsWith("20") || MelonUtils.GetUnityVersion().StartsWith("2017.1"))
                 return functionToWaitForAsync();
 
             if (!Load())
