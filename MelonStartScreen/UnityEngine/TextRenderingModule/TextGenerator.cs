@@ -48,13 +48,15 @@ namespace UnityEngine
 
         public int vertexCount => fd_get_vertexCount(UnityInternals.ObjectBaseToPtrNotNull(this));
 
-        public unsafe UIVertex[] GetVerticesArray()
+        public unsafe UIVertexWrapper[] GetVerticesArray()
         {
             IntPtr intPtr = fd_GetVerticesArray(UnityInternals.ObjectBaseToPtrNotNull(this));
             if (intPtr == IntPtr.Zero) return null;
-            UIVertex[] arr = new UIVertex[UnityInternals.array_length(intPtr)];
+            UIVertexWrapper[] arr = new UIVertexWrapper[UnityInternals.array_length(intPtr)];
             for (int i = 0; i < arr.Length; ++i)
-                arr[i] = ((UIVertex*)((long)intPtr + 4 * IntPtr.Size))[i];
+                arr[i] = new UIVertexWrapper((IntPtr)((long)intPtr + 4 * IntPtr.Size + i * UIVertexWrapper.sizeOfElement));
+            // arr[i] =  ( (UIVertex*)((long)intPtr + 4 * IntPtr.Size) )[i];
+            // arr[i] = *( (UIVertex*)((long)intPtr + 4 * IntPtr.Size) + (i * sizeof(UIVertex)))
             return arr;
         }
     }

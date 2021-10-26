@@ -53,6 +53,7 @@
     <Compile Include="NativeUtils\Il2CppSystem\Byte.cs" />
     <Compile Include="NativeUtils\Il2CppSystem\Int32.cs" />
     <Compile Include="NativeUtils\Il2CppSystem\Type.cs" />
+    <Compile Include="NativeUtils\NativeFieldValueAttribute.cs" />
     <Compile Include="NativeUtils\NativeSignatureAttribute.cs" />
     <Compile Include="NativeUtils\NativeSignatureFlags.cs" />
     <Compile Include="NativeUtils\NativeSignatureResolver.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="UnityEngine\CoreModule\Vector2.cs" />
     <Compile Include="UnityEngine\CoreModule\Vector3.cs" />
     <Compile Include="UnityEngine\CoreModule\Vector4.cs" />
+    <Compile Include="UnityEngine\CoreModule\VertexAttribute.cs" />
     <Compile Include="UnityEngine\CoreModule\VerticalWrapMode.cs" />
     <Compile Include="UnityEngine\TextRenderingModule\Font.cs" />
     <Compile Include="UnityEngine\TextRenderingModule\FontStyle.cs" />

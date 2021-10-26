@@ -12,8 +12,9 @@ namespace MelonLoader.MelonStartScreen
             generator.Populate(text, settings);
 
             Mesh mesh = new Mesh();
-            UIVertex[] vertices = generator.GetVerticesArray();
-            mesh.vertices = vertices.Select(v => v.position).ToArray();
+            UIVertexWrapper[] vertices = generator.GetVerticesArray();
+            Vector3[] verticesPosition = vertices.Select(v => v.position).ToArray();
+            mesh.vertices = verticesPosition;
             if (GL.sRGBWrite)
                 mesh.colors = vertices.Select(v => {
                     Color color = v.color;
@@ -23,7 +24,7 @@ namespace MelonLoader.MelonStartScreen
                     return color;
                 }).ToArray();
             else
-                mesh.colors32 = vertices.Select(v => v.color).ToArray();
+                mesh.colors = vertices.Select(v => (Color)v.color).ToArray();
             mesh.normals = vertices.Select(v => v.normal).ToArray();
             mesh.tangents = vertices.Select(v => v.tangent).ToArray();
             mesh.uv = vertices.Select(v => v.uv0).ToArray();

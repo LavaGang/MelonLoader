@@ -105,6 +105,35 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                         MelonLogger.Error("Failed to find a signature for field " + fi.Name + " for this version of Unity");
                         success = false;
                     }
+
+                    hasAttribute = false;
+                    signaturefound = false;
+                    IOrderedEnumerable<NativeFieldValueAttribute> nativeFieldValueAttributes = fi.GetCustomAttributes(false)
+                        .Where(attr => attr is NativeFieldValueAttribute)
+                        .Select(attr => (NativeFieldValueAttribute)attr)
+                        .OrderByDescending(attr => attr.LookupIndex);
+                    foreach (NativeFieldValueAttribute attribute in nativeFieldValueAttributes)
+                    {
+                        hasAttribute = true;
+                        if ((attribute.Flags & currentFlags) != attribute.Flags)
+                            continue;
+
+                        if (!IsUnityVersionOverOrEqual(currentUnityVersion, attribute.MinimalUnityVersions))
+                            continue;
+
+                        signaturefound = true;
+
+                        fi.SetValue(null, attribute.Value);
+
+                        MelonDebug.Msg("Value for " + fi.Name + ": " + attribute.Value);
+                        break;
+                    }
+
+                    if (hasAttribute && !signaturefound)
+                    {
+                        MelonLogger.Error("Failed to find a value for field " + fi.Name + " for this version of Unity");
+                        success = false;
+                    }
                 }
             }
 

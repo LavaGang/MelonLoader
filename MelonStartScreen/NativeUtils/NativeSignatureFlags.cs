@@ -2,6 +2,8 @@
 {
     internal enum NativeSignatureFlags
     {
+        None = 0,
+
         Il2Cpp = 1,
         Mono = 2,
 
@@ -10,6 +12,6 @@
 
         X86 = 16,
         X64 = 32,
-        //ARMEABIV7A = 64
+        //ARMEABIV7A = 64,
     }
 }
