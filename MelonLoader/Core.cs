@@ -44,9 +44,7 @@ namespace MelonLoader
 
             MelonHandler.OnApplicationEarlyStart();
 
-            int startScreenResult = MelonStartScreen.LoadAndRun(Il2CppGameSetup);
-
-            return startScreenResult;
+            return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
         private static int Il2CppGameSetup()

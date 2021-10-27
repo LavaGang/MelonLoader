@@ -1,6 +1,6 @@
 ### Version List:
 
-[v0.4.4 Open-Beta](#v044-open-beta)  
+[v0.5.0 Open-Beta](#v050-open-beta)  
 [v0.4.3 Open-Beta](#v043-open-beta)  
 [v0.4.2 Open-Beta](#v042-open-beta)  
 [v0.4.1 Open-Beta](#v041-open-beta)  
@@ -25,33 +25,44 @@
 
 ---
 
-### v0.4.4 Open-Beta:
+### v0.5.0 Open-Beta:
 
 1. Added User Libs Directory and Assembly Resolver.
 2. Replaced StackTrace System in MelonLogger with Instance Based System.
 3. Fixed Issue with Il2Cpp Harmony Method Patcher throwing Debug Warnings multiple times for the same Method.
 4. Implemented Temporary Workaround for Cpp2IL Failing under Wine or Steam Proton.
-5. Updated Cpp2IL to v2021.3.4.
-6. Updated HarmonyX to v2.5.4.
-7. Updated MonoMod to v21.8.5.1.
-8. Fixed Missing Method Issue caused by LemonAction.
-9. Refactored Temporary Workaround for Wine/Proton to also help with OSes older than Windows 8 or Server 2012.
-10. Implemented MonoResolveManager and Assembly Resolving Management System.
-11. Updated Tomlet to v2.0.0.
-12. Removed symbolsdata null check.    (Credits to [AuM0b](https://github.com/AuM0b) :D)  
-13. Implemented Directory Priority Scanning for MonoResolveManager.
-14. Implemented SteamManifestReader.
-15. Fixed Issue with Bhaptics API and Steam Version of Bhaptics Player.
-16. Added an error message for paths with non-ASCII characters.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)  
-17. File Pathing is now printed to Log by Default to help aid in Debugging.
-18. Implemented Non-ASCII Character Check in Proxy.
-19. Fixed Issue with ASCII Character Check preventing Bootstrap from Loading.
-20. Implemented Automated Cleanup System for Support Modules.
-21. Added MelonLogger Error Overloads for Exceptions.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
-22. Implemented Loading and Start Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-23. Added Unity Game Check to Proxy.
-24. Fixed Issue with MonoResolveManager on x86 Platform.
-25. Fixed Issue with Proxy's Unity Game Check on Older Unity Versions.
+5. Fixed Missing Method Issue caused by LemonAction.
+6. Implemented MonoResolveManager and Assembly Resolving Management System.
+7. Removed symbolsdata null check.    (Credits to [AuM0b](https://github.com/AuM0b) :D)  
+8. Implemented Directory Priority Scanning for MonoResolveManager.
+9. Implemented SteamManifestReader.
+10. Fixed Issue with Bhaptics API and Steam Version of Bhaptics Player.
+11. Added an error message for paths with non-ASCII characters.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)  
+12. File Pathing is now printed to Log by Default to help aid in Debugging.
+13. Implemented Non-ASCII Character Check in Proxy.
+14. Fixed Issue with ASCII Character Check preventing Bootstrap from Loading.
+15. Implemented Automated Cleanup System for Support Modules.
+16. Added MelonLogger Error Overloads for Exceptions.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
+17. Implemented Loading Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+18. Added Unity Game Check to Proxy.
+19. Fixed Issue with MonoResolveManager on x86 Platform.
+20. Fixed Issue with Proxy's Unity Game Check on Older Unity Versions.
+21. Made Failure to Properly Load MelonStartScreen less severe of an Error.
+22. Fixed Type Locking Issue with MelonPreferences_ReflectiveCategory.
+23. Fixed Issue with MelonLoader reading the wrong Unity Version from EXEs with Custom Info.
+24. Removed base_path DirectoryExists Check in Mono::CheckLibName.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
+25. Fixed Issue with new Cpp2IL Download.
+26. Moved Obfuscation Mapping Download to Il2CppAssemblyGenerator folder.
+27. Added '@' Character to Assembly Verification.
+28. Fixed Issue with the Loading Screen using stripped Func instead of LemonFunc.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+29. Fixed Issue with the Loading Screen not functioning under Mono Games.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+30. Improved Loading Screen Compatibility.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+31. Changed UnityEngine.Mesh Implementation in Loading Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+32. Fixed Issue with the Loading Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+33. Updated HarmonyX to v2.5.7.
+34. Updated Tomlet to v2.0.2.	
+35. Updated Cpp2IL to v2021.5.0.
+36. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
 
 ---
 

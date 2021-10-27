@@ -63,7 +63,7 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SupportModule_To.cs" />
+    <Compile Include="..\SM_Mono\SupportModule_To.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
