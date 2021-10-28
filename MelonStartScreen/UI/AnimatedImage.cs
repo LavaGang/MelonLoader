@@ -15,31 +15,44 @@ namespace MelonLoader.MelonStartScreen.UI
         {
             if (string.IsNullOrEmpty(filepath))
                 throw new ArgumentNullException(nameof(filepath));
-            byte[][] framebuffer = ImageFrameParser.FileToFrameBuffer(filepath);
-            if (framebuffer == null)
+            ImageFrameParser.ParsedInfo parsedInfo = ImageFrameParser.FromFile(filepath);
+            if (parsedInfo == null)
                 return null;
-            return new AnimatedImage(framebuffer, framedelayms);
+            return new AnimatedImage(parsedInfo, framedelayms);
         }
 
         public static AnimatedImage FromByteArray(byte[] filedata, float framedelayms = 90f, ImageFormat frame_format = null)
         {
             if (filedata == null)
                 throw new ArgumentNullException(nameof(filedata));
-            byte[][] framebuffer = ImageFrameParser.ByteArrayToFrameBuffer(filedata);
-            if (framebuffer == null)
+            ImageFrameParser.ParsedInfo parsedInfo = ImageFrameParser.FromByteArray(filedata);
+            if (parsedInfo == null)
                 return null;
-            return new AnimatedImage(framebuffer, framedelayms);
+            return new AnimatedImage(parsedInfo, framedelayms);
         }
 
-        public AnimatedImage(byte[][] framebuffer, float framedelayms = 90f)
+        public AnimatedImage(int width, int height, byte[][] framebuffer, float framedelayms = 90f)
         {
             frameDelayMS = framedelayms;
             textures = new Texture2D[framebuffer.Length];
             for (int i = 0; i < framebuffer.Length; ++i)
             {
-                Texture2D tex = new Texture2D(2, 2);
+                Texture2D tex = new Texture2D(width, height);
                 tex.filterMode = FilterMode.Point;
                 ImageConversion.LoadImage(tex, framebuffer[i], false);
+                textures[i] = tex;
+            }
+        }
+
+        public AnimatedImage(ImageFrameParser.ParsedInfo parsedInfo, float framedelayms = 90f)
+        {
+            frameDelayMS = framedelayms;
+            textures = new Texture2D[parsedInfo.FrameBuffer.Length];
+            for (int i = 0; i < parsedInfo.FrameBuffer.Length; ++i)
+            {
+                Texture2D tex = new Texture2D(parsedInfo.Width, parsedInfo.Height);
+                tex.filterMode = FilterMode.Point;
+                ImageConversion.LoadImage(tex, parsedInfo.FrameBuffer[i], false);
                 textures[i] = tex;
             }
         }

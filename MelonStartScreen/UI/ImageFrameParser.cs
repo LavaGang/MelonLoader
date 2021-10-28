@@ -7,24 +7,37 @@ namespace MelonLoader.MelonStartScreen.UI
 {
     public static class ImageFrameParser
     {
-        public static byte[][] FileToFrameBuffer(string filepath, ImageFormat frame_format = null)
+        public class ParsedInfo
+        {
+            public int Width;
+            public int Height;
+            public byte[][] FrameBuffer;
+        }
+
+        public static ParsedInfo FromFile(string filepath, ImageFormat frame_format = null)
         {
             if (string.IsNullOrEmpty(filepath))
                 throw new ArgumentNullException(nameof(filepath));
-
-            if (!File.Exists(filepath))
-                return null;
 
             Image image = Image.FromFile(filepath);
             if (image == null)
                 return null;
 
             byte[][] framebuffer = image.ToFrameBuffer(frame_format);
+            if (framebuffer == null)
+                return null;
+
+            ParsedInfo parsedInfo = new ParsedInfo()
+            {
+                Width = image.Width,
+                Height = image.Height,
+                FrameBuffer = framebuffer
+            };
             image.Dispose();
-            return framebuffer;
+            return parsedInfo;
         }
 
-        public static byte[][] ByteArrayToFrameBuffer(byte[] filedata, ImageFormat frame_format = null)
+        public static ParsedInfo FromByteArray(byte[] filedata, ImageFormat frame_format = null)
         {
             if (filedata == null)
                 throw new ArgumentNullException(nameof(filedata));
@@ -39,10 +52,19 @@ namespace MelonLoader.MelonStartScreen.UI
                 return null;
 
             byte[][] framebuffer = image.ToFrameBuffer(frame_format);
-            image.Dispose();
-            return framebuffer;
-        }
+            if (framebuffer == null)
+                return null;
 
+            ParsedInfo parsedInfo = new ParsedInfo()
+            {
+                Width = image.Width,
+                Height = image.Height,
+                FrameBuffer = framebuffer
+            };
+            image.Dispose();
+            return parsedInfo;
+        }
+       
         public static byte[][] ToFrameBuffer(this Image image, ImageFormat frame_format = null)
         {
             if (image == null)
