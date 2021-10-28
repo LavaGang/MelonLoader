@@ -62,10 +62,15 @@
 33. Fixed Issue with the Loading Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 34. Added Console Quick Edit Mode Fix.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
 35. Added "--melonloader.consolequickedit" Launch Option.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
-36. Updated HarmonyX to v2.5.7.
-37. Updated Tomlet to v2.0.2.	
-38. Updated Cpp2IL to v2021.5.0.
-39. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
+36. Fixed Crash Issue with Mesh::SetArrayForChannelImpl.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+37. Reimplemented Image Frame Parsing for Loading Screen.
+38. Custom Loading Screen Image File Name is now Case Insensitive.
+39. Improved Frame Size Handling when Parsing Custom Loading Screen Image.
+40. Improved Manual FrameBuffer Input for Image Frame Parsing.
+41. Updated HarmonyX to v2.5.7.
+42. Updated Tomlet to v2.0.2.	
+43. Updated Cpp2IL to v2021.5.0.
+44. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
 
 ---
 
