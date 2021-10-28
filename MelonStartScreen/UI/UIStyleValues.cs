@@ -30,9 +30,8 @@ namespace MelonLoader.MelonStartScreen.UI
                 : ImageDatas.MelonLogo), false);
             MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
 
-            bool load_default = true;
-            string custom_image_path = Path.Combine(MelonUtils.UserDataDirectory, "Loading.gif");
-            if (File.Exists(custom_image_path))
+            string custom_image_path = ScanForCustomImage();
+            if (!string.IsNullOrEmpty(custom_image_path))
             {
                 MelonDebug.Msg("[UIStyleValues] Found Custom Loading Screen Image!");
                 try
@@ -40,17 +39,18 @@ namespace MelonLoader.MelonStartScreen.UI
                     MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Image...");
                     funnyAnimation = AnimatedImage.FromFile(custom_image_path);
                     if (funnyAnimation != null)
-                    {
-                        load_default = false;
                         MelonDebug.Msg("[UIStyleValues] Custom Loading Screen Image Loaded!");
-                    }
                     else
                         MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: AnimatedImage.FromFile returned null");
                 }
-                catch (Exception ex) { MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: {ex}"); }
+                catch (Exception ex)
+                {
+                    funnyAnimation = null;
+                    MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: {ex}");
+                }
             }
 
-            if (load_default)
+            if (funnyAnimation == null)
             {
                 MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Default Loading Screen Image...");
                 funnyAnimation = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
@@ -59,6 +59,16 @@ namespace MelonLoader.MelonStartScreen.UI
 
             // Load default font
             standardFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        }
+
+        private static string ScanForCustomImage()
+        {
+            string[] files = Directory.GetFiles(MelonUtils.UserDataDirectory);
+            if (files.Length <= 0)
+                return null;
+            return files.FirstOrDefault(x => 
+                Path.GetFileNameWithoutExtension(x).ToLowerInvariant().Equals("loading")
+                && Path.GetExtension(x).ToLowerInvariant().Equals(".gif"));
         }
     }
 }

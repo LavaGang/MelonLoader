@@ -24,6 +24,25 @@ namespace MelonLoader.MelonStartScreen.UI
             return framebuffer;
         }
 
+        public static byte[][] ByteArrayToFrameBuffer(byte[] filedata, ImageFormat frame_format = null)
+        {
+            if (filedata == null)
+                throw new ArgumentNullException(nameof(filedata));
+
+            Image image = null;
+            using (MemoryStream ms = new MemoryStream(filedata))
+            {
+                image = Image.FromStream(ms);
+                ms.Close();
+            }
+            if (image == null)
+                return null;
+
+            byte[][] framebuffer = image.ToFrameBuffer(frame_format);
+            image.Dispose();
+            return framebuffer;
+        }
+
         public static byte[][] ToFrameBuffer(this Image image, ImageFormat frame_format = null)
         {
             if (image == null)

@@ -21,6 +21,16 @@ namespace MelonLoader.MelonStartScreen.UI
             return new AnimatedImage(framebuffer, framedelayms);
         }
 
+        public static AnimatedImage FromByteArray(byte[] filedata, float framedelayms = 90f, ImageFormat frame_format = null)
+        {
+            if (filedata == null)
+                throw new ArgumentNullException(nameof(filedata));
+            byte[][] framebuffer = ImageFrameParser.ByteArrayToFrameBuffer(filedata);
+            if (framebuffer == null)
+                return null;
+            return new AnimatedImage(framebuffer, framedelayms);
+        }
+
         public AnimatedImage(byte[][] framebuffer, float framedelayms = 90f)
         {
             frameDelayMS = framedelayms;
