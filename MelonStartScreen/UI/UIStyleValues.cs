@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -29,7 +30,32 @@ namespace MelonLoader.MelonStartScreen.UI
                 : ImageDatas.MelonLogo), false);
             MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
 
-            funnyAnimation = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray(), 90);
+            bool load_default = true;
+            string custom_image_path = Path.Combine(MelonUtils.UserDataDirectory, "Loading.gif");
+            if (File.Exists(custom_image_path))
+            {
+                MelonDebug.Msg("[UIStyleValues] Found Custom Loading Screen GIF!");
+                try
+                {
+                    MelonDebug.Msg("[UIStyleValues] Loading GIF Frame Buffer...");
+                    byte[][] framebuffer = GifParser.GifToFrameBuffer(custom_image_path);
+                    if (framebuffer != null)
+                    {
+                        load_default = false;
+                        MelonDebug.Msg("[UIStyleValues] Creating AnimatedImage from GIF Frame Buffer...");
+                        funnyAnimation = new AnimatedImage(framebuffer, 90);
+                        MelonDebug.Msg("[UIStyleValues] Custom Loading Screen GIF Loaded!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    load_default = true;
+                    MelonDebug.Error($"[UIStyleValues] Failed To Load GIF Frame Buffer: {ex}");
+                }
+            }
+
+            if (load_default)
+                funnyAnimation = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray(), 90);
 
             // Load default font
             standardFont = Resources.GetBuiltinResource<Font>("Arial.ttf");

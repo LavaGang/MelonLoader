@@ -22,6 +22,7 @@ HANDLE Console::OutputHandle = NULL;
 HANDLE Console::InputHandle = NULL;
 int Console::rainbow = 1;
 bool Console::AllowQuickEdit = false;
+bool Console::UseLegacyColoring = false;
 
 bool Console::Initialize()
 {
@@ -52,8 +53,10 @@ bool Console::Initialize()
 
 	SetHandles();
 
-	AddConsoleModeFlag(OutputHandle, 0x3);
-	AddConsoleModeFlag(OutputHandle, ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+
+	if (!AddConsoleModeFlag(OutputHandle, 0x3)
+		|| AddConsoleModeFlag(OutputHandle, ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+		UseLegacyColoring = true;
 
 	AddConsoleModeFlag(InputHandle, ENABLE_EXTENDED_FLAGS);
 	if (AllowQuickEdit)
@@ -176,7 +179,7 @@ std::string Console::ColorToAnsi(Color color, bool modecheck)
 					? Color::Yellow
 					: color)));
 
-	if (!CanUseSpecialColoring())
+	if (UseLegacyColoring)
 	{
 		SetConsoleTextAttribute(OutputHandle, color);
 		return std::string();
