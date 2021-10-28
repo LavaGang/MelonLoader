@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MelonLoader;
+using MelonLoader.MelonStartScreen.NativeUtils;
+using System;
 using UnhollowerMini;
 using UnityEngine.Rendering;
 
@@ -6,11 +8,18 @@ namespace UnityEngine
 {
     internal sealed class Mesh : InternalObjectBase
     {
+        private delegate void SetArrayForChannelImpl_2017(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize);
+        private delegate void SetArrayForChannelImpl_2019(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize, int valuesStart, int valuesCount);
+        private delegate void SetArrayForChannelImpl_2020(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize, int valuesStart, int valuesCount, int updateFlags);
+
         private static readonly IntPtr m_ctor;
         private static readonly IntPtr m_set_triangles;
         private static readonly IntPtr m_RecalculateBounds;
 
-        private static unsafe readonly delegate* unmanaged[Cdecl]<IntPtr, int, int, int, IntPtr, int, void> m_SetArrayForChannelImpl;
+        private static readonly SetArrayForChannelImpl_2017 m_SetArrayForChannelImpl_2017;
+        private static readonly SetArrayForChannelImpl_2019 m_SetArrayForChannelImpl_2019;
+        private static readonly SetArrayForChannelImpl_2020 m_SetArrayForChannelImpl_2020;
+        private static readonly int type_SetArrayForChannelImpl = -1;
 
         unsafe static Mesh()
         {
@@ -21,7 +30,22 @@ namespace UnityEngine
 
             m_set_triangles = UnityInternals.GetMethod(InternalClassPointerStore<Mesh>.NativeClassPtr, "set_triangles", "System.Void", "System.Int32[]");
             m_RecalculateBounds = UnityInternals.GetMethod(InternalClassPointerStore<Mesh>.NativeClassPtr, "RecalculateBounds", "System.Void");
-            m_SetArrayForChannelImpl = (delegate* unmanaged[Cdecl]<IntPtr, int, int, int, IntPtr, int, void>)UnityInternals.ResolveICall("UnityEngine.Mesh::SetArrayForChannelImpl");
+
+            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2020.1.0" }))
+            {
+                m_SetArrayForChannelImpl_2020 = UnityInternals.ResolveICall<SetArrayForChannelImpl_2020>("UnityEngine.Mesh::SetArrayForChannelImpl");
+                type_SetArrayForChannelImpl = 2;
+            }
+            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2019.3.0" }))
+            {
+                m_SetArrayForChannelImpl_2019 = UnityInternals.ResolveICall<SetArrayForChannelImpl_2019>("UnityEngine.Mesh::SetArrayForChannelImpl");
+                type_SetArrayForChannelImpl = 1;
+            }
+            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2017.1.0" }))
+            {
+                m_SetArrayForChannelImpl_2017 = UnityInternals.ResolveICall<SetArrayForChannelImpl_2017>("UnityEngine.Mesh::SetArrayForChannelImpl");
+                type_SetArrayForChannelImpl = 0;
+            }
         }
 
         public Mesh(IntPtr ptr) : base(ptr) { }
@@ -35,12 +59,19 @@ namespace UnityEngine
 
         private unsafe void SetArrayForChannel<T>(int channel, T[] values, int channelDimensions) where T : unmanaged
         {
+            int valuesCount = values.Length;
+
             UnityInternals.ObjectBaseToPtrNotNull(this);
-            IntPtr valueArrayPtr = UnityInternals.array_new(InternalClassPointerStore<T>.NativeClassPtr, (ulong)values.Length);
-            for (var i = 0; i < values.Length; i++)
+            IntPtr valueArrayPtr = UnityInternals.array_new(InternalClassPointerStore<T>.NativeClassPtr, (ulong)valuesCount);
+            for (var i = 0; i < valuesCount; i++)
                 ((T*)((long)valueArrayPtr + 4 * IntPtr.Size))[i] = values[i];
 
-            m_SetArrayForChannelImpl(UnityInternals.ObjectBaseToPtrNotNull(this), channel, 0 /* float */, channelDimensions, valueArrayPtr, (values == null) ? 0 : values.Length);
+            if (type_SetArrayForChannelImpl == 0)
+                m_SetArrayForChannelImpl_2017(UnityInternals.ObjectBaseToPtrNotNull(this), channel, 0 /* float */, channelDimensions, valueArrayPtr, valuesCount);
+            else if (type_SetArrayForChannelImpl == 1)
+                m_SetArrayForChannelImpl_2019(UnityInternals.ObjectBaseToPtrNotNull(this), channel, 0 /* float */, channelDimensions, valueArrayPtr, valuesCount, 0, valuesCount);
+            else if (type_SetArrayForChannelImpl == 2)
+                m_SetArrayForChannelImpl_2020(UnityInternals.ObjectBaseToPtrNotNull(this), channel, 0 /* float */, channelDimensions, valueArrayPtr, valuesCount, 0, valuesCount, 0 /* MeshUpdateFlags.Default */);
         }
 
 

@@ -31,5 +31,10 @@ namespace UnityEngine
         {
             return new Vector3(a.x * d, a.y * d, a.z * d);
         }
+
+        public override string ToString()
+        {
+            return $"{x} {y} {z}";
+        }
     }
 }
