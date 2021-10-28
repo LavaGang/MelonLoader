@@ -34,28 +34,28 @@ namespace MelonLoader.MelonStartScreen.UI
             string custom_image_path = Path.Combine(MelonUtils.UserDataDirectory, "Loading.gif");
             if (File.Exists(custom_image_path))
             {
-                MelonDebug.Msg("[UIStyleValues] Found Custom Loading Screen GIF!");
+                MelonDebug.Msg("[UIStyleValues] Found Custom Loading Screen Image!");
                 try
                 {
-                    MelonDebug.Msg("[UIStyleValues] Loading GIF Frame Buffer...");
-                    byte[][] framebuffer = GifParser.GifToFrameBuffer(custom_image_path);
-                    if (framebuffer != null)
+                    MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Image...");
+                    funnyAnimation = AnimatedImage.FromFile(custom_image_path);
+                    if (funnyAnimation != null)
                     {
                         load_default = false;
-                        MelonDebug.Msg("[UIStyleValues] Creating AnimatedImage from GIF Frame Buffer...");
-                        funnyAnimation = new AnimatedImage(framebuffer, 90);
-                        MelonDebug.Msg("[UIStyleValues] Custom Loading Screen GIF Loaded!");
+                        MelonDebug.Msg("[UIStyleValues] Custom Loading Screen Image Loaded!");
                     }
+                    else
+                        MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: AnimatedImage.FromFile returned null");
                 }
-                catch (Exception ex)
-                {
-                    load_default = true;
-                    MelonDebug.Error($"[UIStyleValues] Failed To Load GIF Frame Buffer: {ex}");
-                }
+                catch (Exception ex) { MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: {ex}"); }
             }
 
             if (load_default)
-                funnyAnimation = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray(), 90);
+            {
+                MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Default Loading Screen Image...");
+                funnyAnimation = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
+                MelonDebug.Msg("[UIStyleValues] Default Loading Screen Image Loaded!");
+            }
 
             // Load default font
             standardFont = Resources.GetBuiltinResource<Font>("Arial.ttf");

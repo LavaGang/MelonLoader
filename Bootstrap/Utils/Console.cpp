@@ -53,7 +53,6 @@ bool Console::Initialize()
 
 	SetHandles();
 
-
 	if (!AddConsoleModeFlag(OutputHandle, 0x3)
 		|| !AddConsoleModeFlag(OutputHandle, ENABLE_VIRTUAL_TERMINAL_PROCESSING))
 		UseLegacyColoring = true;

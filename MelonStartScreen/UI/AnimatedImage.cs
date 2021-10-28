@@ -1,25 +1,36 @@
-﻿using System.Diagnostics;
-using UnhollowerMini;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing.Imaging;
 using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
 {
     internal class AnimatedImage
     {
-        private float imagedelayms;
+        private float frameDelayMS = 90f;
         private Texture2D[] textures;
         private Stopwatch stopwatch = new Stopwatch();
 
-        public AnimatedImage(byte[][] images, float imagedelayms)
+        public static AnimatedImage FromFile(string filepath, float framedelayms = 90f, ImageFormat frame_format = null)
         {
-            this.imagedelayms = imagedelayms;
-            this.textures = new Texture2D[images.Length];
-            for (int i = 0; i < images.Length; ++i)
+            if (string.IsNullOrEmpty(filepath))
+                throw new ArgumentNullException(nameof(filepath));
+            byte[][] framebuffer = ImageFrameParser.FileToFrameBuffer(filepath);
+            if (framebuffer == null)
+                return null;
+            return new AnimatedImage(framebuffer, framedelayms);
+        }
+
+        public AnimatedImage(byte[][] framebuffer, float framedelayms = 90f)
+        {
+            frameDelayMS = framedelayms;
+            textures = new Texture2D[framebuffer.Length];
+            for (int i = 0; i < framebuffer.Length; ++i)
             {
                 Texture2D tex = new Texture2D(2, 2);
                 tex.filterMode = FilterMode.Point;
-                ImageConversion.LoadImage(tex, images[i], false);
-                this.textures[i] = tex;
+                ImageConversion.LoadImage(tex, framebuffer[i], false);
+                textures[i] = tex;
             }
         }
 
@@ -28,7 +39,7 @@ namespace MelonLoader.MelonStartScreen.UI
             if (!stopwatch.IsRunning)
                 stopwatch.Start();
 
-            int image = (int)((float)(stopwatch.ElapsedMilliseconds / imagedelayms) % textures.Length);
+            int image = (int)((float)(stopwatch.ElapsedMilliseconds / frameDelayMS) % textures.Length);
 
             Graphics.DrawTexture(new Rect(x, y, width, height), textures[image]);
         }
