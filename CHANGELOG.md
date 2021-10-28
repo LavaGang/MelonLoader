@@ -44,25 +44,28 @@
 15. Implemented Automated Cleanup System for Support Modules.
 16. Added MelonLogger Error Overloads for Exceptions.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
 17. Implemented Loading Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-18. Added Unity Game Check to Proxy.
-19. Fixed Issue with MonoResolveManager on x86 Platform.
-20. Fixed Issue with Proxy's Unity Game Check on Older Unity Versions.
-21. Made Failure to Properly Load MelonStartScreen less severe of an Error.
-22. Fixed Type Locking Issue with MelonPreferences_ReflectiveCategory.
-23. Fixed Issue with MelonLoader reading the wrong Unity Version from EXEs with Custom Info.
-24. Removed base_path DirectoryExists Check in Mono::CheckLibName.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
-25. Fixed Issue with new Cpp2IL Download.
-26. Moved Obfuscation Mapping Download to Il2CppAssemblyGenerator folder.
-27. Added '@' Character to Assembly Verification.
-28. Fixed Issue with the Loading Screen using stripped Func instead of LemonFunc.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-29. Fixed Issue with the Loading Screen not functioning under Mono Games.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-30. Improved Loading Screen Compatibility.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-31. Changed UnityEngine.Mesh Implementation in Loading Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-32. Fixed Issue with the Loading Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-33. Updated HarmonyX to v2.5.7.
-34. Updated Tomlet to v2.0.2.	
-35. Updated Cpp2IL to v2021.5.0.
-36. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
+18. Added "--melonloader.disablestartscreen" Launch Option.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+19. Added Unity Game Check to Proxy.
+20. Fixed Issue with MonoResolveManager on x86 Platform.
+21. Fixed Issue with Proxy's Unity Game Check on Older Unity Versions.
+22. Made Failure to Properly Load MelonStartScreen less severe of an Error.
+23. Fixed Type Locking Issue with MelonPreferences_ReflectiveCategory.
+24. Fixed Issue with MelonLoader reading the wrong Unity Version from EXEs with Custom Info.
+25. Removed base_path DirectoryExists Check in Mono::CheckLibName.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
+26. Fixed Issue with new Cpp2IL Download.
+27. Moved Obfuscation Mapping Download to Il2CppAssemblyGenerator folder.
+28. Added '@' Character to Assembly Verification.
+29. Fixed Issue with the Loading Screen using stripped Func instead of LemonFunc.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+30. Fixed Issue with the Loading Screen not functioning under Mono Games.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+31. Improved Loading Screen Compatibility.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+32. Changed UnityEngine.Mesh Implementation in Loading Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+33. Fixed Issue with the Loading Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+34. Added Console Quick Edit Mode Fix.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
+35. Added "--melonloader.consolequickedit" Launch Option.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
+36. Updated HarmonyX to v2.5.7.
+37. Updated Tomlet to v2.0.2.	
+38. Updated Cpp2IL to v2021.5.0.
+39. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
 
 ---
 

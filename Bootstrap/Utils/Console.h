@@ -6,11 +6,12 @@ class Console
 {
 public:
 	static HANDLE OutputHandle;
+	static HANDLE InputHandle;
 	static bool ShouldHide;
 	static bool ShouldSetTitle;
 	static bool AlwaysOnTop;
 	static bool HideWarnings;
-	static bool UseManualColoring;
+	static bool AllowQuickEdit;
 	enum DisplayMode
 	{
 		NORMAL,
@@ -22,6 +23,10 @@ public:
 	static DisplayMode Mode;
 
 	static bool Initialize();
+	static bool AddConsoleModeFlag(HANDLE handle, DWORD flag);
+	static bool RemoveConsoleModeFlag(HANDLE handle, DWORD flag);
+	static bool HasConsoleModeFlag(HANDLE handle, DWORD flag);
+	static bool CanUseSpecialColoring() { return HasConsoleModeFlag(OutputHandle, 0x3) && HasConsoleModeFlag(OutputHandle, ENABLE_VIRTUAL_TERMINAL_PROCESSING); };
 	static void Flush();
 	static void Close();
 	static void SetTitle(const char* title) { if (ShouldSetTitle) SetConsoleTitleA(title); }
