@@ -31,6 +31,18 @@ namespace MelonLoader.MelonStartScreen.UI
             return new AnimatedImage(parsedInfo, framedelayms);
         }
 
+        public static AnimatedImage FromFrameBuffer(byte[][] frameBuffer, float framedelayms = 90f, ImageFormat frame_format = null)
+        {
+            if (frameBuffer == null)
+                throw new ArgumentNullException(nameof(frameBuffer));
+            ImageFrameParser.ParsedInfo parsedInfo = ImageFrameParser.FromFrameBuffer(frameBuffer);
+            if (parsedInfo == null)
+                return null;
+            return new AnimatedImage(parsedInfo, framedelayms);
+        }
+
+        public AnimatedImage(ImageFrameParser.ParsedInfo parsedInfo, float framedelayms = 90f)
+            : this(parsedInfo.Width, parsedInfo.Height, parsedInfo.FrameBuffer, framedelayms) { }
         public AnimatedImage(int width, int height, byte[][] framebuffer, float framedelayms = 90f)
         {
             frameDelayMS = framedelayms;
@@ -40,19 +52,6 @@ namespace MelonLoader.MelonStartScreen.UI
                 Texture2D tex = new Texture2D(width, height);
                 tex.filterMode = FilterMode.Point;
                 ImageConversion.LoadImage(tex, framebuffer[i], false);
-                textures[i] = tex;
-            }
-        }
-
-        public AnimatedImage(ImageFrameParser.ParsedInfo parsedInfo, float framedelayms = 90f)
-        {
-            frameDelayMS = framedelayms;
-            textures = new Texture2D[parsedInfo.FrameBuffer.Length];
-            for (int i = 0; i < parsedInfo.FrameBuffer.Length; ++i)
-            {
-                Texture2D tex = new Texture2D(parsedInfo.Width, parsedInfo.Height);
-                tex.filterMode = FilterMode.Point;
-                ImageConversion.LoadImage(tex, parsedInfo.FrameBuffer[i], false);
                 textures[i] = tex;
             }
         }

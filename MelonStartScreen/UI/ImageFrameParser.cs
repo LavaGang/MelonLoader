@@ -12,9 +12,10 @@ namespace MelonLoader.MelonStartScreen.UI
             public int Width;
             public int Height;
             public byte[][] FrameBuffer;
+            public ImageFormat FrameFormat;
         }
 
-        public static ParsedInfo FromFile(string filepath, ImageFormat frame_format = null)
+        public static ParsedInfo FromFile(string filepath, ImageFormat frameformat = null)
         {
             if (string.IsNullOrEmpty(filepath))
                 throw new ArgumentNullException(nameof(filepath));
@@ -23,7 +24,10 @@ namespace MelonLoader.MelonStartScreen.UI
             if (image == null)
                 return null;
 
-            byte[][] framebuffer = image.ToFrameBuffer(frame_format);
+            if (frameformat == null)
+                frameformat = ImageFormat.Png;
+
+            byte[][] framebuffer = image.ToFrameBuffer(frameformat);
             if (framebuffer == null)
                 return null;
 
@@ -31,13 +35,14 @@ namespace MelonLoader.MelonStartScreen.UI
             {
                 Width = image.Width,
                 Height = image.Height,
-                FrameBuffer = framebuffer
+                FrameBuffer = framebuffer,
+                FrameFormat = frameformat
             };
             image.Dispose();
             return parsedInfo;
         }
 
-        public static ParsedInfo FromByteArray(byte[] filedata, ImageFormat frame_format = null)
+        public static ParsedInfo FromByteArray(byte[] filedata, ImageFormat frameformat = null)
         {
             if (filedata == null)
                 throw new ArgumentNullException(nameof(filedata));
@@ -51,7 +56,10 @@ namespace MelonLoader.MelonStartScreen.UI
             if (image == null)
                 return null;
 
-            byte[][] framebuffer = image.ToFrameBuffer(frame_format);
+            if (frameformat == null)
+                frameformat = ImageFormat.Png;
+
+            byte[][] framebuffer = image.ToFrameBuffer(frameformat);
             if (framebuffer == null)
                 return null;
 
@@ -59,12 +67,38 @@ namespace MelonLoader.MelonStartScreen.UI
             {
                 Width = image.Width,
                 Height = image.Height,
-                FrameBuffer = framebuffer
+                FrameBuffer = framebuffer,
+                FrameFormat = frameformat
             };
             image.Dispose();
             return parsedInfo;
         }
-       
+
+        public static ParsedInfo FromFrameBuffer(byte[][] framebuffer, ImageFormat frameformat = null)
+        {
+            if (framebuffer == null)
+                throw new ArgumentNullException(nameof(framebuffer));
+
+            Image image = null;
+            using (MemoryStream ms = new MemoryStream(framebuffer[0]))
+            {
+                image = Image.FromStream(ms);
+                ms.Close();
+            }
+            if (image == null)
+                return null;
+
+            ParsedInfo parsedInfo = new ParsedInfo()
+            {
+                Width = image.Width,
+                Height = image.Height,
+                FrameBuffer = framebuffer,
+                FrameFormat = frameformat
+            };
+            image.Dispose();
+            return parsedInfo;
+        }
+
         public static byte[][] ToFrameBuffer(this Image image, ImageFormat frame_format = null)
         {
             if (image == null)

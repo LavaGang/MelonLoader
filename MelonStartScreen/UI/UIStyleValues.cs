@@ -53,7 +53,7 @@ namespace MelonLoader.MelonStartScreen.UI
             if (funnyAnimation == null)
             {
                 MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Default Loading Screen Image...");
-                funnyAnimation = new AnimatedImage(33, 40, ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
+                funnyAnimation = AnimatedImage.FromFrameBuffer(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
                 MelonDebug.Msg("[UIStyleValues] Default Loading Screen Image Loaded!");
             }
 
