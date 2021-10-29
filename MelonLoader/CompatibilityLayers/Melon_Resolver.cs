@@ -21,18 +21,6 @@ namespace MelonLoader.CompatibilityLayers
             MelonCompatibilityLayer.AddRefreshModsEvent(RefreshMods);
         }
 
-        // Custom AssemblyResolve event to be Removed Later
-        internal static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            Assembly base_assembly = typeof(Melon_Resolver).Assembly;
-            return new AssemblyName(args.Name).Name switch
-            {
-                "MelonLoader" => base_assembly,
-                "MelonLoader.ModHandler" => base_assembly,
-                _ => null,
-            };
-        }
-
         private static MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
         {
             IEnumerable<Type> melon_types = assembly.GetValidTypes(x => x.IsSubclassOf(typeof(MelonBase)));

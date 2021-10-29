@@ -462,6 +462,14 @@ namespace UnhollowerMini
             public short attrs;
             public byte type;
             public byte bitflags;
+
+            internal void applyZeroes()
+            {
+                data = (IntPtr)0;
+                attrs = 0;
+                type = 0;
+                bitflags = 0;
+            }
         }
 
         public static IntPtr class_get_type(IntPtr klass)
