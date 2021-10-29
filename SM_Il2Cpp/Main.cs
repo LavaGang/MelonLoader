@@ -17,7 +17,6 @@ namespace MelonLoader.Support
         internal static ISupportModule_From Interface = null;
         internal static GameObject obj = null;
         internal static SM_Component component = null;
-        private static Camera OnPostRenderCam = null;
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
@@ -56,15 +55,7 @@ namespace MelonLoader.Support
             }
             catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneUnloaded override failed: {ex}"); }
 
-            try
-            {
-                Camera.onPostRender = (
-                    (Camera.onPostRender == null)
-                    ? new Action<Camera>(OnPostRender)
-                    : Il2CppSystem.Delegate.Combine(Camera.onPostRender, (Camera.CameraCallback)new Action<Camera>(OnPostRender)).Cast<Camera.CameraCallback>()
-                    );
-            }
-            catch (Exception ex) { MelonLogger.Error($"Camera.onPostRender override failed: {ex}"); }
+            MonoEnumeratorWrapper.Register();
 
             ClassInjector.RegisterTypeInIl2Cpp<SM_Component>();
             SM_Component.Create();
@@ -73,8 +64,6 @@ namespace MelonLoader.Support
 
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (scene == null) return; if (MelonUtils.IsBONEWORKS) BONEWORKS_SceneHandler.OnSceneLoad(scene.buildIndex, scene.name); else Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
         private static void OnSceneUnload(Scene scene) { if (scene == null) return; Interface.OnSceneWasUnloaded(scene.buildIndex, scene.name); }
-
-        private static void OnPostRender(Camera cam) { if (OnPostRenderCam == null) OnPostRenderCam = cam; if (OnPostRenderCam == cam) Coroutines.ProcessWaitForEndOfFrame(); }
 
         private static Assembly Il2Cppmscorlib = null;
         private static Type streamType = null;
