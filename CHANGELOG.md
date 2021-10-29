@@ -69,8 +69,8 @@
 40. Improved Manual FrameBuffer Input for Image Frame Parsing.
 41. Updated HarmonyX to v2.5.7.
 42. Updated Tomlet to v2.0.2.	
-~~43. Updated Cpp2IL to v2021.5.0.~~
-~~44. Updated Il2CppAssemblyUnhollower to v0.4.16.1.~~
+43. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
+~~44. Updated Cpp2IL to v2021.5.0.~~
 
 ---
 
