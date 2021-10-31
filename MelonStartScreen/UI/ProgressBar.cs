@@ -38,7 +38,7 @@ namespace MelonLoader.MelonStartScreen.UI
             Graphics.DrawTexture(new Rect(x + 9, y + 9, (int)((width - 18) * Math.Min(1.0f, progress)), height - 18), innerTexture);
 
             font.material.SetPass(0);
-            Graphics.DrawMeshNow(textmesh, new Vector3(x + width / 2, y + height / 2 + 2, 0), Quaternion.identity);
+            Graphics.DrawMeshNow(textmesh, new Vector3(x + width / 2, y + height / 2 + 1, 0), Quaternion.identity);
         }
 
         private void RefreshTextmesh()
