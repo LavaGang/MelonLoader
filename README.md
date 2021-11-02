@@ -18,7 +18,7 @@ FreedomLoader is intended to give you the freedom of running any mod, wether it 
 This comes with a few Security Concerns:
 * Obfuscated Mods can hide basically anything they want inside of them.
 * You may run the risk of getting your Accounts compromised.
-* This goes beyond just the game your modding, nothing prevents a mod (In the official MelonLoader too) from getting your discord token, or sniffing around your browser's password storage. The difference being on MelonLoader, only mods where you can read the source code (either by being open source, or using software like DnSpy) can run. This makes FreedomLoader inherently less secure.
+* This goes beyond just the game you're modding, nothing prevents a mod (In the official MelonLoader too) from getting your discord token, or sniffing around your browser's password storage. The difference being on MelonLoader, only mods where you can read the source code (either by being open source, or using software like DnSpy) can run. This makes FreedomLoader inherently less secure.
 * We do still block malicious URL's (except for certain Mods, because otherwise they couldn't even run)
 
 ## GENERAL INFORMATION:
