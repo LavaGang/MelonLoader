@@ -330,7 +330,6 @@ bool Mono::Exports::Initialize()
 	if (!IsOldMono)
 	{
 		MONODEF(mono_domain_set_config)
-		MONODEF(mono_unity_get_unitytls_interface)
 		MONODEF(mono_free)
 		MONODEF(mono_object_to_string)
 	}
@@ -342,8 +341,12 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_set_assemblies_path)
 		MONODEF(mono_assembly_setrootdir)
 		MONODEF(mono_set_config_dir)
+
 		if (!IsOldMono)
+		{
+			MONODEF(mono_unity_get_unitytls_interface)
 			MONODEF(mono_runtime_set_main_args)
+		}
 
 		MONODEF(mono_raise_exception)
 		MONODEF(mono_get_exception_bad_image_format)

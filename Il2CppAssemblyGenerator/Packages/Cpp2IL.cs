@@ -13,16 +13,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "2021.5.2";
+                Version = "2021.5.3";
 
             Destination = Path.Combine(Core.BasePath, "Cpp2IL");
             Output = Path.Combine(Destination, "cpp2il_out");
-
-            //URL = $"https://github.com/SamboyCoding/Cpp2IL/releases/download/{Version}/Cpp2IL-{Version}-Windows-Netframework472.zip";
-            //ExePath = Path.Combine(Destination, "Cpp2IL.exe");
-
-            URL = $"https://github.com/SamboyCoding/Cpp2IL/releases/download/{Version}/Cpp2IL-{Version}-Windows.exe";
-            ExePath = Path.Combine(Destination, $"Cpp2IL-{Version}-Windows.exe");
+            URL = $"https://github.com/SamboyCoding/Cpp2IL/releases/download/{Version}/Cpp2IL-{Version}-Windows-Netframework472.zip";
+            ExePath = Path.Combine(Destination, "Cpp2IL.exe"); 
         }
 
         private void Save()
