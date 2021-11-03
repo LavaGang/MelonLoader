@@ -123,7 +123,7 @@ bool Core::IsUnityGame(std::string exe_filepath_no_ext)
 		return false;
 	if (File::Exists((datapath + "\\globalgamemanagers").c_str())
 		|| File::Exists((datapath + "\\data.unity3d").c_str())
-		|| File::Exists((datapath + "\\mainData").c_str()));
+		|| File::Exists((datapath + "\\mainData").c_str()))
 		return true;
 	return false;
 }

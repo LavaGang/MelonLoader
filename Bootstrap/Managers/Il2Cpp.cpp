@@ -39,6 +39,10 @@ bool Il2Cpp::Initialize()
 
 void Il2Cpp::CallInstallUnityTLSInterface()
 {
+	if ((Mono::Exports::mono_unity_get_unitytls_interface == NULL)
+		|| (Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface == NULL))
+		return;
+
 	Debug::Msg("Trying to find InstallUnityTlsInterface");
 	HMODULE mod = LoadLibraryA(Il2Cpp::UnityPlayerPath);
 	// Unity 2018

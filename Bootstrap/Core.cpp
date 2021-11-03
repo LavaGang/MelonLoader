@@ -55,10 +55,12 @@ void Core::Initialize(HINSTANCE hinstDLL)
 {
 	Bootstrap = hinstDLL;
 	SetBasePath();
-
 	SetupWineCheck();
-	if (!OSVersionCheck() || !Game::Initialize())
+
+	if (!OSVersionCheck() 
+		|| !Game::Initialize())
 		return;
+
 	CommandLine::Read();
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
@@ -67,21 +69,32 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
 		return;
+
 	WelcomeMessage();
+
 	if (!AnalyticsBlocker::Initialize()
 		|| !Il2Cpp::Initialize()
 		|| !Mono::Load())
 		return;
+
 	AnalyticsBlocker::Hook();
+
 	if (Game::IsIl2Cpp)
 	{
 		if (!Mono::IsOldMono)
 		{
-			Debug::Msg("Attaching Hook to il2cpp_unity_install_unitytls_interface...");
-			Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface, Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface);
-			Debug::Msg("Attaching Hook to mono_unity_get_unitytls_interface...");
-			Hook::Attach(&(LPVOID&)Mono::Exports::mono_unity_get_unitytls_interface, Mono::Hooks::mono_unity_get_unitytls_interface);
+			if ((Mono::Exports::mono_unity_get_unitytls_interface != NULL)
+				&& (Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface != NULL))
+			{
+				Debug::Msg("Attaching Hook to il2cpp_unity_install_unitytls_interface...");
+				Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface, Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface);
+				Debug::Msg("Attaching Hook to mono_unity_get_unitytls_interface...");
+				Hook::Attach(&(LPVOID&)Mono::Exports::mono_unity_get_unitytls_interface, Mono::Hooks::mono_unity_get_unitytls_interface);
+			}
+			else
+				Logger::QuickLog("Failed to Bridge Mono TLS! Web Connection based C# Methods may not work as intended.");
 		}
+
 		Debug::Msg("Attaching Hook to il2cpp_init...");
 		Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_init, Il2Cpp::Hooks::il2cpp_init);
 	}
@@ -90,6 +103,7 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		Debug::Msg("Attaching Hook to mono_jit_init_version...");
 		Hook::Attach(&(LPVOID&)Mono::Exports::mono_jit_init_version, Mono::Hooks::mono_jit_init_version);
 	}
+
 	if (!Debug::Enabled)
 		Console::NullHandles();
 }

@@ -344,7 +344,8 @@ bool Mono::Exports::Initialize()
 
 		if (!IsOldMono)
 		{
-			MONODEF(mono_unity_get_unitytls_interface)
+			if (Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface != NULL)
+				MONODEF_NOINTERNALFAILURE(mono_unity_get_unitytls_interface)
 			MONODEF(mono_runtime_set_main_args)
 		}
 
