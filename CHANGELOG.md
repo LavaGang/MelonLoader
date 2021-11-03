@@ -43,7 +43,7 @@
 14. Fixed Issue with ASCII Character Check preventing Bootstrap from Loading.
 15. Implemented Automated Cleanup System for Support Modules.
 16. Added MelonLogger Error Overloads for Exceptions.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
-17. Implemented Loading Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+17. Implemented Start Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 18. Added "--melonloader.disablestartscreen" Launch Option.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 19. Added Unity Game Check to Proxy.
 20. Fixed Issue with MonoResolveManager on x86 Platform.
@@ -55,22 +55,26 @@
 26. Fixed Issue with new Cpp2IL Download.
 27. Moved Obfuscation Mapping Download to Il2CppAssemblyGenerator folder.
 28. Added '@' Character to Assembly Verification.
-29. Fixed Issue with the Loading Screen using stripped Func instead of LemonFunc.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-30. Fixed Issue with the Loading Screen not functioning under Mono Games.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-31. Improved Loading Screen Compatibility.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-32. Changed UnityEngine.Mesh Implementation in Loading Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-33. Fixed Issue with the Loading Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+29. Fixed Issue with the Start Screen using stripped Func instead of LemonFunc.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+30. Fixed Issue with the Start Screen not functioning under Mono Games.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+31. Improved Start Screen Compatibility.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+32. Changed UnityEngine.Mesh Implementation in Start Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+33. Fixed Issue with the Start Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 34. Added Console Quick Edit Mode Fix.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
 35. Added "--melonloader.consolequickedit" Launch Option.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
 36. Fixed Crash Issue with Mesh::SetArrayForChannelImpl.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-37. Reimplemented Image Frame Parsing for Loading Screen.
-38. Custom Loading Screen Image File Name is now Case Insensitive.
-39. Improved Frame Size Handling when Parsing Custom Loading Screen Image.
+37. Reimplemented Image Frame Parsing for Start Screen.
+38. Custom Start Screen Image File Name is now Case Insensitive.
+39. Improved Frame Size Handling when Parsing Custom Start Screen Image.
 40. Improved Manual FrameBuffer Input for Image Frame Parsing.
-41. Updated HarmonyX to v2.5.7.
-42. Updated Tomlet to v2.0.2.	
-43. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
-44. Updated Cpp2IL to v2021.5.3.
+41. Changed UnityEngine.Material Implementation in Start Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+42. Fixed Issue with Mono TLS Bridge running on Mono Games.
+43. Fixed Issue with Proxy not properly detecting Unity Games.
+44. Fixed Issue with Mono TLS Bridge not failing Gracefully.
+45. Updated HarmonyX to v2.5.7.
+46. Updated Tomlet to v2.0.2.	
+47. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
+48. Updated Cpp2IL to v2021.5.3.
 
 ---
 
