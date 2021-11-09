@@ -12,10 +12,10 @@ namespace UnityEngine
         public Vector3 normal;
         public Vector4 tangent;
         public Color32 color;
-        public Vector2 uv0;
-        public Vector2 uv1;
-        public Vector2 uv2;
-        public Vector2 uv3;
+        public Vector4 uv0;
+        public Vector4 uv1;
+        public Vector4 uv2;
+        public Vector4 uv3;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -100,7 +100,7 @@ namespace UnityEngine
             throw new Exception("UIVertex mode not set");
 
         public unsafe Vector2 uv0 =>
-            mode == 2 ? (*(UIVertex_2020*)ptr).uv0 :
+            mode == 2 ? (Vector2)(*(UIVertex_2020*)ptr).uv0 :
             mode == 1 ? (*(UIVertex_2018*)ptr).uv0 :
             mode == 0 ? (*(UIVertex_2017*)ptr).uv0 :
             throw new Exception("UIVertex mode not set");

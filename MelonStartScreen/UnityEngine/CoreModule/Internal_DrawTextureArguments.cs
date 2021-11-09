@@ -76,7 +76,7 @@ namespace UnityEngine
         public Color bottomBorderColor; // Added
         public Color color;
         public Vector4 borderWidths;
-        public Vector4 cornerRadius;
+        public Vector4 cornerRadiuses;
         public bool smoothCorners; // Added
         public int pass;
         public IntPtr texture;
