@@ -78,7 +78,7 @@ namespace MelonLoader.MelonStartScreen
                 Graphics.DrawTexture(new Rect((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight), UIStyleValues.melonloaderLogoTexture);
 
                 // Animated image
-                UIStyleValues.funnyAnimation?.Render(sw - 200, 200, 132, -160);
+                UIStyleValues.funnyAnimation?.Render(sw - 200, 200, 132);
 
                 UIStyleValues.standardFont.material.SetPass(0);
                 Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);

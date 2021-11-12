@@ -7,8 +7,12 @@ namespace MelonLoader.MelonStartScreen.UI
 {
     internal class AnimatedImage
     {
+        public readonly int width, height;
+
         private float frameDelayMS = 90f;
         private Texture2D[] textures;
+        private float aspectRatio;
+
         private Stopwatch stopwatch = new Stopwatch();
 
         public static AnimatedImage FromFile(string filepath, float framedelayms = 90f, ImageFormat frame_format = null)
@@ -47,6 +51,9 @@ namespace MelonLoader.MelonStartScreen.UI
         {
             frameDelayMS = framedelayms;
             textures = new Texture2D[framebuffer.Length];
+            this.width = width;
+            this.height = height;
+            aspectRatio = width / (float)height;
             for (int i = 0; i < framebuffer.Length; ++i)
             {
                 Texture2D tex = new Texture2D(width, height);
@@ -56,14 +63,14 @@ namespace MelonLoader.MelonStartScreen.UI
             }
         }
 
-        public void Render(int x, int y, int width, int height)
+        public void Render(int x, int y, int width)
         {
             if (!stopwatch.IsRunning)
                 stopwatch.Start();
 
             int image = (int)((float)(stopwatch.ElapsedMilliseconds / frameDelayMS) % textures.Length);
 
-            Graphics.DrawTexture(new Rect(x, y, width, height), textures[image]);
+            Graphics.DrawTexture(new Rect(x, y, width, -(int)(width / aspectRatio)), textures[image]);
         }
     }
 }
