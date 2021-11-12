@@ -34,6 +34,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Save();
                 return true;
             }
+
+            ThrowInternalFailure("Failed to Download Unity Dependencies!");
             return false;
         }
     }

@@ -465,42 +465,7 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 
 void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
 
-Mono::Assembly* Mono::Hooks::AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data)
-{
-	if (BaseAssembly::AssemblyManager_Resolve == NULL)
-		return NULL;
-
-	if (aname == NULL)
-		return NULL;
-
-	String* name = Mono::Exports::mono_string_new(domain, aname->name);
-	uint16_t version_major = aname->major;
-	uint16_t version_minor = aname->minor;
-	uint16_t version_build = aname->build;
-	uint16_t version_revision = aname->revision;
-	bool is_preload = true;
-	void* args[] = {
-		name,
-		&version_major,
-		&version_minor,
-		&version_build,
-		&version_revision,
-		&is_preload
-	};
-
-	Mono::Object* exObj = NULL;
-	Mono::Object* result = Mono::Exports::mono_runtime_invoke(BaseAssembly::AssemblyManager_Resolve, NULL, args, &exObj);
-	if (exObj != NULL)
-	{
-		Mono::LogException(exObj);
-		Assertion::ThrowInternalFailure("Failed to Invoke MelonLoader.MonoInternals.ResolveInternals.AssemblyManager.Resolve!");
-	}
-
-	if (result != NULL)
-		return ((Mono::ReflectionAssembly*)result)->assembly;
-	return NULL;
-}
-
+Mono::Assembly* Mono::Hooks::AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data) { return AssemblySearch(aname, user_data); }
 Mono::Assembly* Mono::Hooks::AssemblySearch(AssemblyName* aname, void* user_data)
 {
 	if (BaseAssembly::AssemblyManager_Resolve == NULL)

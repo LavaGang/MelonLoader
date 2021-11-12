@@ -40,13 +40,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Save();
                 return true;
             }
+
+            ThrowInternalFailure("Failed to Download Il2CppAssemblyUnhollower!");
             return false;
         }
 
         internal bool Execute()
         {
             MelonLogger.Msg("Executing Il2CppAssemblyUnhollower...");
-            return Execute(new string[] {
+            if (Execute(new string[] {
                 $"--input={ Core.dumper.Output }",
                 $"--output={ Output }",
                 $"--mscorlib={ Path.Combine(Core.ManagedPath, "mscorlib.dll") }",
@@ -57,7 +59,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "--blacklist-assembly=Newtonsoft.Json",
                 "--blacklist-assembly=Valve.Newtonsoft.Json",
                 string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }"
-            });
+            }))
+                return true;
+
+            ThrowInternalFailure("Failed to Execute Il2CppAssemblyUnhollower!");
+            return false;
         }
     }
 }

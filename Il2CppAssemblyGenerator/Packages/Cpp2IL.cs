@@ -46,13 +46,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Save();
                 return true;
             }
+
+            ThrowInternalFailure("Failed to Download Cpp2IL!");
             return false;
         }
 
         internal override bool Execute()
         {
             MelonLogger.Msg("Executing Cpp2IL...");
-            return Execute(new string[] {
+            if (Execute(new string[] {
                 MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
                 "--game-path",
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
@@ -63,7 +65,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "--disable-registration-prompts"
             }, false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"}
-            });
+            }))
+                return true;
+
+            ThrowInternalFailure("Failed to Execute Cpp2IL!");
+            return false;
         }
     }
 }

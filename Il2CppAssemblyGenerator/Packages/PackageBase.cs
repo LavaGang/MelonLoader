@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
@@ -65,7 +66,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                     File.Delete(tempfile);
                 return false;
             }
+
             return true;
         }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal extern static void ThrowInternalFailure(string txt);
     }
 }

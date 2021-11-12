@@ -46,6 +46,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Save();
                 return true;
             }
+
+            ThrowInternalFailure("Failed to Download Deobfuscation Map!");
             return false;
         }
     }
