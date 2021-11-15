@@ -29,11 +29,11 @@ namespace MelonLoader.MelonStartScreen
         {
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+
             // If we can't find them (signatures changed or <2018.1.0), then we run the function and return.
-            if (!NativeSignatureResolver.Apply())
-                return functionToWaitForAsync();
-
             try
             {
+                if (!NativeSignatureResolver.Apply())
+                    return functionToWaitForAsync();
+
                 if (!ApplyUser32SetTimerPatch())
                     return functionToWaitForAsync();
 
