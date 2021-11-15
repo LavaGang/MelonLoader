@@ -5,7 +5,8 @@ namespace UnityEngine
 {
     internal class Material : InternalObjectBase
     {
-        private static unsafe delegate* unmanaged[Cdecl]<IntPtr, int, bool> m_SetPass;
+        private delegate bool d_SetPass(IntPtr @this, int pass);
+        private static readonly d_SetPass m_SetPass;
 
         unsafe static Material()
         {
@@ -13,7 +14,7 @@ namespace UnityEngine
             UnityInternals.runtime_class_init(InternalClassPointerStore<Material>.NativeClassPtr);
 
             //m_SetPass = UnityInternals.GetMethod(InternalClassPointerStore<Material>.NativeClassPtr, "SetPass", "System.Boolean", "System.Int32");
-            m_SetPass = (delegate* unmanaged[Cdecl]<IntPtr, int, bool>)UnityInternals.ResolveICall("UnityEngine.Material::SetPass");
+            m_SetPass = UnityInternals.ResolveICall<d_SetPass>("UnityEngine.Material::SetPass");
         }
 
         public Material(IntPtr ptr) : base(ptr) { }

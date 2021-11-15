@@ -44,13 +44,13 @@ namespace UnhollowerMini
                 if (returnedName == 0x1234)
                     monoClassOffset = 0;
                 else if (returnedName == 0x5678)
-                    monoClassOffset = 4;
+                    monoClassOffset = (uint)IntPtr.Size * 1;
                 else if (returnedName == 0x9012)
-                    monoClassOffset = 8;
+                    monoClassOffset = (uint)IntPtr.Size * 2;
                 else
                     throw new Exception("Failed to find MonoClass name offset");
 
-                MelonDebug.Msg("monoClassOffset? " + monoClassOffset);
+                MelonDebug.Msg("monoClassOffset? "  + monoClassOffset);
             }
         }
 
@@ -365,9 +365,13 @@ namespace UnhollowerMini
             public MonoMethodSignature* signature;
             /* name is useful mostly for debugging */
             public byte* name;
+
+            public IntPtr method_pointer;
+            public IntPtr invoke_pointer;
+
             /* this is used by the inlining algorithm */
             public ushort bitfield;
-            public short slot;
+            public int slot;
 
             internal void applyZeroes()
             {
@@ -377,6 +381,8 @@ namespace UnhollowerMini
                 klass = (MonoClass*)0;
                 signature = (MonoMethodSignature*)0;
                 name = (byte*)0;
+                method_pointer = IntPtr.Zero;
+                invoke_pointer = IntPtr.Zero;
                 bitfield = 0;
                 slot = 0;
             }

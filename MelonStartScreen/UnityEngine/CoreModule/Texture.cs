@@ -18,7 +18,6 @@ namespace UnityEngine
         static Texture()
         {
             InternalClassPointerStore<Texture>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Texture");
-            UnityInternals.runtime_class_init(InternalClassPointerStore<Texture>.NativeClassPtr);
 
             if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2018.1.0" }))
             {

@@ -5,11 +5,12 @@ namespace UnityEngine
 {
     internal sealed class GL
     {
-        private static unsafe readonly delegate* unmanaged[Cdecl]<bool> m_get_sRGBWrite;
+        private delegate bool d_get_sRGBWrite();
+        private static readonly d_get_sRGBWrite m_get_sRGBWrite;
 
         unsafe static GL()
         {
-            m_get_sRGBWrite = (delegate* unmanaged[Cdecl]<bool>)UnityInternals.ResolveICall("UnityEngine.GL::get_sRGBWrite");
+            m_get_sRGBWrite = UnityInternals.ResolveICall<d_get_sRGBWrite>("UnityEngine.GL::get_sRGBWrite");
         }
 
         public unsafe static bool sRGBWrite
