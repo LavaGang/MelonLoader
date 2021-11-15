@@ -9,9 +9,6 @@ namespace UnityEngine
 
         unsafe static GL()
         {
-            InternalClassPointerStore<GL>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "GL");
-            UnityInternals.runtime_class_init(InternalClassPointerStore<GL>.NativeClassPtr);
-
             m_get_sRGBWrite = (delegate* unmanaged[Cdecl]<bool>)UnityInternals.ResolveICall("UnityEngine.GL::get_sRGBWrite");
         }
 
