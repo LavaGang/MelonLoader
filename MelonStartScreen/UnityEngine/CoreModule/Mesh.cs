@@ -1,7 +1,6 @@
 ﻿using MelonLoader;
 using MelonLoader.MelonStartScreen.NativeUtils;
 using System;
-using System.Runtime.InteropServices;
 using UnhollowerMini;
 using UnityEngine.Rendering;
 
@@ -9,9 +8,9 @@ namespace UnityEngine
 {
     internal sealed class Mesh : InternalObjectBase
     {
-        private delegate void SetArrayForChannelImpl_2017(IntPtr @this, int channel, int format, int dim, Array values, int arraySize);
-        private delegate void SetArrayForChannelImpl_2019(IntPtr @this, int channel, int format, int dim, Array values, int arraySize, int valuesStart, int valuesCount);
-        private delegate void SetArrayForChannelImpl_2020(IntPtr @this, int channel, int format, int dim, Array values, int arraySize, int valuesStart, int valuesCount, int updateFlags);
+        private delegate void SetArrayForChannelImpl_2017(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize);
+        private delegate void SetArrayForChannelImpl_2019(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize, int valuesStart, int valuesCount);
+        private delegate void SetArrayForChannelImpl_2020(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize, int valuesStart, int valuesCount, int updateFlags);
 
         private static readonly IntPtr m_ctor;
         private static readonly IntPtr m_set_triangles;
@@ -22,7 +21,7 @@ namespace UnityEngine
         private static readonly SetArrayForChannelImpl_2020 m_SetArrayForChannelImpl_2020;
         private static readonly int type_SetArrayForChannelImpl = -1;
 
-        unsafe static Mesh()
+        static Mesh()
         {
             InternalClassPointerStore<Mesh>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Mesh");
             UnityInternals.runtime_class_init(InternalClassPointerStore<Mesh>.NativeClassPtr);
@@ -58,42 +57,87 @@ namespace UnityEngine
             Il2CppException.RaiseExceptionIfNecessary(returnedException);
         }
 
-        private unsafe void SetArrayForChannel(int channel, Array values, int channelDimensions)
+        private unsafe void SetArrayForChannelImpl(int channel, IntPtr values, int channelDimensions, int valuesCount)
         {
-            int valuesCount = values.Length;
-
             if (type_SetArrayForChannelImpl == 0)
                 m_SetArrayForChannelImpl_2017(UnityInternals.ObjectBaseToPtrNotNull(this), channel, 0 /* float */, channelDimensions, values, valuesCount);
             else if (type_SetArrayForChannelImpl == 1)
                 m_SetArrayForChannelImpl_2019(UnityInternals.ObjectBaseToPtrNotNull(this), channel, 0 /* float */, channelDimensions, values, valuesCount, 0, valuesCount);
             else if (type_SetArrayForChannelImpl == 2)
                 m_SetArrayForChannelImpl_2020(UnityInternals.ObjectBaseToPtrNotNull(this), channel, 0 /* float */, channelDimensions, values, valuesCount, 0, valuesCount, 0 /* MeshUpdateFlags.Default */);
+            else
+                throw new NotImplementedException("SetArrayForChannel isn't implemented for this version of Unity");
         }
 
 
         public unsafe Vector3[] vertices
         {
-            set => SetArrayForChannel(VertexAttribute.Vertex, value, 3);
+            set
+            {
+                int valuesCount = value.Length;
+
+                IntPtr valueArrayPtr = UnityInternals.array_new(InternalClassPointerStore<Vector3>.NativeClassPtr, (ulong)valuesCount);
+                for (var i = 0; i < valuesCount; i++)
+                    ((Vector3*)((long)valueArrayPtr + 4 * IntPtr.Size))[i] = value[i];
+
+                SetArrayForChannelImpl(VertexAttribute.Vertex, valueArrayPtr, 3, valuesCount);
+            }
         }
 
         public unsafe Vector3[] normals
         {
-            set => SetArrayForChannel(VertexAttribute.Normal, value, 3);
+            set
+            {
+                int valuesCount = value.Length;
+
+                IntPtr valueArrayPtr = UnityInternals.array_new(InternalClassPointerStore<Vector3>.NativeClassPtr, (ulong)valuesCount);
+                for (var i = 0; i < valuesCount; i++)
+                    ((Vector3*)((long)valueArrayPtr + 4 * IntPtr.Size))[i] = value[i];
+
+                SetArrayForChannelImpl(VertexAttribute.Normal, valueArrayPtr, 3, valuesCount);
+            }
         }
 
         public unsafe Vector4[] tangents
         {
-            set => SetArrayForChannel(VertexAttribute.Tangent, value, 4);
+            set
+            {
+                int valuesCount = value.Length;
+
+                IntPtr valueArrayPtr = UnityInternals.array_new(InternalClassPointerStore<Vector4>.NativeClassPtr, (ulong)valuesCount);
+                for (var i = 0; i < valuesCount; i++)
+                    ((Vector4*)((long)valueArrayPtr + 4 * IntPtr.Size))[i] = value[i];
+
+                SetArrayForChannelImpl(VertexAttribute.Tangent, valueArrayPtr, 4, valuesCount);
+            }
         }
 
         public unsafe Vector2[] uv
         {
-            set => SetArrayForChannel(VertexAttribute.TexCoord0, value, 2);
+            set
+            {
+                int valuesCount = value.Length;
+
+                IntPtr valueArrayPtr = UnityInternals.array_new(InternalClassPointerStore<Vector2>.NativeClassPtr, (ulong)valuesCount);
+                for (var i = 0; i < valuesCount; i++)
+                    ((Vector2*)((long)valueArrayPtr + 4 * IntPtr.Size))[i] = value[i];
+
+                SetArrayForChannelImpl(VertexAttribute.TexCoord0, valueArrayPtr, 2, valuesCount);
+            }
         }
 
         public unsafe Color[] colors
         {
-            set => SetArrayForChannel(VertexAttribute.Color, value, 4);
+            set
+            {
+                int valuesCount = value.Length;
+
+                IntPtr valueArrayPtr = UnityInternals.array_new(InternalClassPointerStore<Color>.NativeClassPtr, (ulong)valuesCount);
+                for (var i = 0; i < valuesCount; i++)
+                    ((Color*)((long)valueArrayPtr + 4 * IntPtr.Size))[i] = value[i];
+
+                SetArrayForChannelImpl(VertexAttribute.Color, valueArrayPtr, 4, valuesCount);
+            }
         }
 
         public unsafe int[] triangles
