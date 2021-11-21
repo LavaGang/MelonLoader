@@ -7,7 +7,7 @@
 #include "../Utils/Encoding.h"
 #include <wincrypt.h>
 #include "Assertion.h"
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include <sstream>
 
 std::string HashCode::Hash;

@@ -6,7 +6,7 @@
 #include "../Core.h"
 #include "Il2Cpp.h"
 #include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Logging/Logger.h"
 #include "../Utils/Encoding.h"
 #pragma comment(lib,"version.lib")
 

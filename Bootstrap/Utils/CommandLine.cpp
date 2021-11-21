@@ -1,5 +1,5 @@
 #include "CommandLine.h"
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include "Debug.h"
 #include "AnalyticsBlocker.h"
 #include "Encoding.h"

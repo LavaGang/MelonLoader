@@ -1,5 +1,5 @@
 #include "Debug.h"
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include "Assertion.h"
 
 bool Debug::Enabled = false;
@@ -13,7 +13,7 @@ void Debug::Msg(const char* txt)
 
 void Debug::DirectWrite(const char* txt)
 {
-	Log(LogType::Debug, nullptr, txt).LogToConsoleAndFile();
+	Logger::LogToConsoleAndFile(Log(LogType::Debug, nullptr, txt));
 }
 
 void Debug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
@@ -21,5 +21,5 @@ void Debug::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, con
 	if (!Enabled || !Assertion::ShouldContinue)
 		return;
 
-	Log(LogType::Debug, meloncolor, txtcolor, namesection, txt).LogToConsoleAndFile();
+	Logger::LogToConsoleAndFile(Log(LogType::Debug, meloncolor, txtcolor, namesection, txt));
 }

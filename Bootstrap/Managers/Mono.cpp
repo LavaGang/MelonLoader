@@ -10,7 +10,7 @@
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
 #include "Il2Cpp.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Logging/Logger.h"
 
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
 const char* Mono::FolderNames[] = { "Mono", "MonoBleedingEdge", "MonoBleedingEdge.x86", "MonoBleedingEdge.x64" };

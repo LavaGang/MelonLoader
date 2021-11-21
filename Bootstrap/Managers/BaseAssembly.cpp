@@ -4,7 +4,7 @@
 #include "Game.h"
 #include <string>
 #include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Logging/Logger.h"
 #include "../Utils/Il2CppAssemblyGenerator.h"
 
 char* BaseAssembly::PathMono = NULL;

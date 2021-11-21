@@ -1,10 +1,6 @@
-#pragma once
-#include <fstream>
-#include <filesystem>
-#include <iostream>
-#include <string>
-#include "Console.h"
-
+﻿#pragma once
+#include <ostream>
+#include "../Console.h"
 
 enum LogType
 {
@@ -39,7 +35,7 @@ static std::pair<LogType, LogMeta*> LogTypes[] = {
 	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta("DEBUG", false, Console::Color::Blue))
 };
 
-class Log
+struct Log
 {
 	LogMeta* logMeta;
 	
@@ -48,7 +44,6 @@ class Log
 	const char* namesection;
 	const char* txt;
 	
-public:
 	Log(const LogType type, const Console::Color meloncolor, const Console::Color txtcolor, const char* namesection, const char* txt) :
 	logMeta(LogTypes[type].second),
 	melonAnsiColor(logMeta->GetColorOverride(meloncolor)),	// If the log meta says we need to color the whole string,
@@ -63,48 +58,4 @@ public:
 
 	void BuildConsoleString(std::ostream& stream) const;	// Constructs a string with color to print to the console (Doesn't include linebreak)
 	std::string BuildLogString() const;	// Constructs a string without color to log to file (Doesn't include linebreak)
-
-	void LogToConsoleAndFile() const;	// Shorthand way to log to console and write to file with linebreak afterwards
-};
-
-class Logger
-{
-public:
-	static int MaxLogs;
-	static int MaxWarnings;
-	static int MaxErrors;
-	static bool Initialize();
-	static std::string GetTimestamp();
-	static void WriteSpacer();
-
-	static void Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version);
-	
-	static void QuickLog(const char* txt, LogType logType = Msg)	// Like std::cout but prepends timestamp and appends to logfile
-	{Log(logType, nullptr, txt).LogToConsoleAndFile();}
-	
-	static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt);
-	static void Internal_Warning(const char* namesection, const char* txt);
-	static void Internal_Error(const char* namesection, const char* txt);
-
-	class FileStream
-	{
-	public:
-		std::ofstream coss;
-		std::ofstream latest;
-		template <class T>
-		FileStream& operator<< (T val) { if (coss.is_open()) coss << val; if (latest.is_open()) latest << val; return *this; }
-		FileStream& operator<< (std::ostream& (*pfun)(std::ostream&)) { if (coss.is_open()) pfun(coss); if (latest.is_open()) pfun(latest); return *this; }
-		void Flush() { if (coss.is_open()) coss.flush(); if (latest.is_open()) latest.flush(); }
-	};
-	static FileStream LogFile;
-	static void Flush() { LogFile.Flush(); }
-
-	static const char* LatestLogFileName;
-	static const char* FileExtension;
-private:
-	static const char* FilePrefix;
-	static int WarningCount;
-	static int ErrorCount;
-	static void CleanOldLogs(const char* path);
-	static bool CompareWritetime(const std::filesystem::directory_entry& first, const std::filesystem::directory_entry& second) { return first.last_write_time().time_since_epoch() >= second.last_write_time().time_since_epoch(); }
 };
