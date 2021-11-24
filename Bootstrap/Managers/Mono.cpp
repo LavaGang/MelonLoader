@@ -465,8 +465,9 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 
 void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
 
-Mono::Assembly* Mono::Hooks::AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data) { return AssemblySearch(aname, user_data); }
-Mono::Assembly* Mono::Hooks::AssemblySearch(AssemblyName* aname, void* user_data)
+Mono::Assembly* Mono::Hooks::AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data) { return AssemblyResolve(aname, user_data, true); }
+Mono::Assembly* Mono::Hooks::AssemblySearch(AssemblyName* aname, void* user_data) { return AssemblyResolve(aname, user_data, false); }
+Mono::Assembly* Mono::Hooks::AssemblyResolve(AssemblyName* aname, void* user_data, bool is_preload)
 {
 	if (BaseAssembly::AssemblyManager_Resolve == NULL)
 		return NULL;
@@ -479,7 +480,6 @@ Mono::Assembly* Mono::Hooks::AssemblySearch(AssemblyName* aname, void* user_data
 	uint16_t version_minor = aname->minor;
 	uint16_t version_build = aname->build;
 	uint16_t version_revision = aname->revision;
-	bool is_preload = false;
 	void* args[] = {
 		name,
 		&version_major,

@@ -271,6 +271,7 @@ public:
 
 		static Assembly* AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data);
 		static Assembly* AssemblySearch(AssemblyName* aname, void* user_data);
+		static Assembly* AssemblyResolve(AssemblyName* aname, void* user_data, bool is_preload);
 		static void AssemblyLoad(Assembly* assembly, void* user_data);
 	};
 
