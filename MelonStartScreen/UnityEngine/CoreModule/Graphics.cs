@@ -20,7 +20,10 @@ namespace UnityEngine
             InternalClassPointerStore<Graphics>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Graphics");
             fd_Internal_DrawTexture = UnityInternals.ResolveICall<Internal_DrawTextureDelegate>("UnityEngine.Graphics::Internal_DrawTexture");
 
-            fd_Internal_DrawMeshNow1_Injected = UnityInternals.ResolveICall<Internal_DrawMeshNow1_InjectedDelegate>("UnityEngine.Graphics::Internal_DrawMeshNow1_Injected");
+            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2018.2.0", "2019.1.0" }))
+                fd_Internal_DrawMeshNow1_Injected = UnityInternals.ResolveICall<Internal_DrawMeshNow1_InjectedDelegate>("UnityEngine.Graphics::Internal_DrawMeshNow1_Injected");
+            else
+                fd_Internal_DrawMeshNow1_Injected = UnityInternals.ResolveICall<Internal_DrawMeshNow1_InjectedDelegate>("UnityEngine.Graphics::INTERNAL_CALL_Internal_DrawMeshNow1");
 
             if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2019.3.0", "2020.1.0" }))
                 m_DrawTexture_Internal_struct = 3;
