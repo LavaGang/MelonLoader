@@ -28,7 +28,7 @@ namespace MelonLoader.Fixes
 			if (__0 == null)
 				throw new NullReferenceException("Patch Method");
 			if ((__0 != null) && !__0.IsStatic)
-				throw new Exception("Patch Method can't be an Instance Method!");
+				throw new Exception("Patch Method must be a Static Method!");
 			return true;
 		}
 	}
