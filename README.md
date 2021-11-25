@@ -99,48 +99,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
-## PROXIES:
-
-- The Proxy DLL is able to be Renamed to the Compatible File Names below.
-- By Default the Proxy is named as "version.dll".
-- For most Unity Games the Default File Name should work perfectly fine.
-- Some Unity Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Unity Engine used by the Game, etc.
-
-| File Names: |
-| - |
-| psapi.dll |
-| version.dll |
-| winhttp.dll |
-| winmm.dll |
-
----
-
-## LOAD MODES:
-
-- Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
-- Below is the Compatible Values and what each of them do.
-
-| Value | Action |
-| - | - |
-| 0 | Load Only if the File doesn't have the ".dev.dll" Extension |
-| 1 | Load Only if the File has the ".dev.dll" Extension |
-| 2 | Load All |
-
----
-
-## CONSOLE DISPLAY MODES:
-
-- Console Display Modes are built in Themes for the Console
-- Below is the Compatible Values and what each of them do.
-
-| Value | Mode |
-| - | - |
-| 0 | Normal |
-| 1 | Magenta |
-| 2 | Rainbow |
-| 3 | Random Rainbow |
-
----
 
 ## WINE / STEAM PROTON USAGE:
 
@@ -188,6 +146,49 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 | --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 | --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
 | --melonloader.disablestartscreen | Disable the Start Screen |
+
+---
+
+## LOAD MODES:
+
+- Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
+- Below is the Compatible Values and what each of them do.
+
+| Value | Action |
+| - | - |
+| 0 | Load Only if the File doesn't have the ".dev.dll" Extension |
+| 1 | Load Only if the File has the ".dev.dll" Extension |
+| 2 | Load All |
+
+---
+
+## CONSOLE DISPLAY MODES:
+
+- Console Display Modes are built in Themes for the Console
+- Below is the Compatible Values and what each of them do.
+
+| Value | Mode |
+| - | - |
+| 0 | Normal |
+| 1 | Magenta |
+| 2 | Rainbow |
+| 3 | Random Rainbow |
+
+---
+
+## PROXIES:
+
+- The Proxy DLL is able to be Renamed to the Compatible File Names below.
+- By Default the Proxy is named as "version.dll".
+- For most Unity Games the Default File Name should work perfectly fine.
+- Some Unity Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Unity Engine used by the Game, etc.
+
+| File Names: |
+| - |
+| psapi.dll |
+| version.dll |
+| winhttp.dll |
+| winmm.dll |
 
 ---
 
