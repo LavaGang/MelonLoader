@@ -22,6 +22,7 @@ namespace MelonLoader
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
             Fixes.ForcedCultureInfo.Install();
+            Fixes.InstancePatchFix.Install();
             PatchShield.Install();
 
             MelonPreferences.Load();

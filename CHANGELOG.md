@@ -85,6 +85,7 @@
 58. Switched Coroutine System for Il2Cpp to a Wrapper based Interface.    (Credits to [HookedBehemoth](https://github.com/HookedBehemoth) :D)  
 59. Fixed occasional double-logging issue with MelonLogger.    (Credits to [benaclejames](https://github.com/benaclejames) :D)  
 60. Removed Useless Logger Instance Constructor.
+61. Added more Comprehensive Exception Message when attempting to use an Instance Patch Method.
 
 ---
 

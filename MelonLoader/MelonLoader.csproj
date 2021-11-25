@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fixes\ForcedCultureInfo.cs" />
+    <Compile Include="Fixes\InstancePatchFix.cs" />
     <Compile Include="GameVersionHandler.cs" />
     <Compile Include="InternalUtils\MelonStartScreen.cs" />
     <Compile Include="Lemons\LemonAction.cs" />
