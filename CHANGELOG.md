@@ -64,8 +64,6 @@
 35. Improved Start Screen Compatibility.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 36. Changed UnityEngine.Mesh Implementation in Start Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 37. Fixed Issue with the Start Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
-38. Added Console Quick Edit Mode Fix.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
-39. Added "--melonloader.consolequickedit" Launch Option.    (Credits to [KosmicShovel](https://github.com/KosmicShovel) :3)
 40. Fixed Crash Issue with Mesh::SetArrayForChannelImpl.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 41. Reimplemented Image Frame Parsing for Start Screen.
 42. Custom Start Screen Image File Name is now Case Insensitive.

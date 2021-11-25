@@ -131,7 +131,6 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 | --melonloader.consoledst | Keeps the Console Title as Original |
 | --melonloader.hideconsole | Hides the Console |
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
-| --melonloader.consolequickedit | Enables Use of the Console's Quick Edit Mode |
 | --melonloader.debug | Debug Mode |
 | --melonloader.dab | Debug Analytics Blocker |
 | --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ NoCap: 0 ] |

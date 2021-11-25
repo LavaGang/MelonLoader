@@ -11,7 +11,6 @@ public:
 	static bool ShouldSetTitle;
 	static bool AlwaysOnTop;
 	static bool HideWarnings;
-	static bool AllowQuickEdit;
 	static bool UseLegacyColoring;
 	enum DisplayMode
 	{

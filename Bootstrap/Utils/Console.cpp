@@ -21,7 +21,6 @@ HMENU Console::Menu = NULL;
 HANDLE Console::OutputHandle = NULL;
 HANDLE Console::InputHandle = NULL;
 int Console::rainbow = 1;
-bool Console::AllowQuickEdit = false;
 bool Console::UseLegacyColoring = false;
 
 bool Console::Initialize()
@@ -58,10 +57,10 @@ bool Console::Initialize()
 		UseLegacyColoring = true;
 
 	AddConsoleModeFlag(InputHandle, ENABLE_EXTENDED_FLAGS);
-	if (AllowQuickEdit)
-		AddConsoleModeFlag(InputHandle, ENABLE_QUICK_EDIT_MODE);
-	else
-		RemoveConsoleModeFlag(InputHandle, ENABLE_QUICK_EDIT_MODE);
+	RemoveConsoleModeFlag(InputHandle, ENABLE_MOUSE_INPUT);
+	RemoveConsoleModeFlag(InputHandle, ENABLE_WINDOW_INPUT);
+	RemoveConsoleModeFlag(InputHandle, ENABLE_INSERT_MODE);
+	//RemoveConsoleModeFlag(InputHandle, ENABLE_QUICK_EDIT_MODE);
 
 	return true;
 }
