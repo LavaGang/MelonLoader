@@ -199,7 +199,8 @@
     <ClCompile Include="Utils\Encoding.cpp" />
     <ClCompile Include="Utils\HashCode.cpp" />
     <ClCompile Include="Utils\IniFile.cpp" />
-    <ClCompile Include="Utils\Logger.cpp" />
+    <ClCompile Include="Utils\Logging\Log.cpp" />
+    <ClCompile Include="Utils\Logging\Logger.cpp" />
     <ClCompile Include="Utils\PointerUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -224,7 +225,8 @@
     <ClInclude Include="Utils\Encoding.h" />
     <ClInclude Include="Utils\HashCode.h" />
     <ClInclude Include="Utils\IniFile.h" />
-    <ClInclude Include="Utils\Logger.h" />
+    <ClInclude Include="Utils\Logging\Log.h" />
+    <ClInclude Include="Utils\Logging\Logger.h" />
     <ClInclude Include="Utils\PointerUtils.h" />
   </ItemGroup>
   <ItemGroup>

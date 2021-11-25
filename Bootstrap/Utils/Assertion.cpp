@@ -1,7 +1,7 @@
 #include "Assertion.h"
 #include "../Core.h"
 #include "Debug.h"
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include "Console.h"
 #include "../Managers/Game.h"
 #include <string>

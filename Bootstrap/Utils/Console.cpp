@@ -7,7 +7,7 @@
 #include <locale.h>
 #include "../Managers/Game.h"
 #include "Il2CppAssemblyGenerator.h"
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include <sstream>
 #include <VersionHelpers.h>
 

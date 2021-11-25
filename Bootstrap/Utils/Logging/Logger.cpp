@@ -1,8 +1,7 @@
 #include "Logger.h"
-#include "../Managers/Game.h"
-#include "../Core.h"
-#include "Assertion.h"
-#include "Debug.h"
+#include "../../Core.h"
+#include "../Assertion.h"
+#include "../Debug.h"
 #include <direct.h>
 #include <list>
 #include <sstream>
@@ -16,49 +15,8 @@ int Logger::MaxErrors = 100;
 int Logger::WarningCount = 0;
 int Logger::ErrorCount = 0;
 Logger::FileStream Logger::LogFile;
+std::mutex Logger::logMutex;
 
-void Log::BuildConsoleString(std::ostream& stream) const
-{
-	// Always initialize stream with timestamp
-	stream << 
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
-		"[" <<
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Green)) <<
-		Logger::GetTimestamp() <<
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
-		"] ";
-
-	// If the logging melon has a name, print it
-	if (namesection != nullptr) stream << "[" <<
-		Console::ColorToAnsi(melonAnsiColor) <<
-		namesection <<
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) <<
-		"] ";
-
-	// Print the [LOGTYPE] prefix if needed
-	if (logMeta->printLogTypeName) stream << "[" << Console::ColorToAnsi(logMeta->logCategoryColor) << logMeta->logTypeString << Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray)) << "] ";
-
-	// If we're not coloring the whole line, use the specified input text color. If we are, the color would already be declared
-	if (!logMeta->colorFullLine) stream << Console::ColorToAnsi(textAnsiColor);
-	
-	stream << txt <<
-		Console::ColorToAnsi(logMeta->GetColorOverride(Console::Color::Gray), false);
-}
-
-std::string Log::BuildLogString() const
-{
-	std::string logStr = "[" + Logger::GetTimestamp() + "] ";
-	if (namesection != nullptr)	logStr = logStr + "[" + namesection + "] ";
-	if (logMeta->printLogTypeName) logStr = logStr + "[" + logMeta->logTypeString + "] ";
-	return logStr + txt;
-}
-
-void Log::LogToConsoleAndFile() const
-{
-	BuildConsoleString(std::cout);
-	Logger::LogFile << BuildLogString();
-	Logger::WriteSpacer();
-}
 
 bool Logger::Initialize()
 {
@@ -88,6 +46,14 @@ bool Logger::Initialize()
 		std::remove(latest_path.c_str());
 	LogFile.latest = std::ofstream(latest_path.c_str());
 	return true;
+}
+
+void Logger::LogToConsoleAndFile(Log log)
+{
+	std::lock_guard guard(logMutex);
+	log.BuildConsoleString(std::cout);
+	LogFile << log.BuildLogString();
+	WriteSpacer();
 }
 
 void Logger::CleanOldLogs(const char* path)
@@ -150,7 +116,7 @@ void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, 
 
 void Logger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
 {
-	Log(Msg, meloncolor, txtcolor, namesection, txt).LogToConsoleAndFile();
+	LogToConsoleAndFile(Log(Msg, meloncolor, txtcolor, namesection, txt));
 }
 
 void Logger::Internal_Warning(const char* namesection, const char* txt)
@@ -164,7 +130,7 @@ void Logger::Internal_Warning(const char* namesection, const char* txt)
 	else if (MaxWarnings < 0)
 		return;
 
-	Log(Warning, namesection, txt).LogToConsoleAndFile();
+	LogToConsoleAndFile(Log(Warning, namesection, txt));
 }
 
 void Logger::Internal_Error(const char* namesection, const char* txt)
@@ -178,5 +144,5 @@ void Logger::Internal_Error(const char* namesection, const char* txt)
 	else if (MaxErrors < 0)
 		return;
 	
-	Log(Error, namesection, txt).LogToConsoleAndFile();
+	LogToConsoleAndFile(Log(Error, namesection, txt));
 }

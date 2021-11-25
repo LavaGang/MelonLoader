@@ -11,7 +11,7 @@
 #include "Utils/CommandLine.h"
 #include "Utils/Console.h"
 #include "Utils/Assertion.h"
-#include "Utils/Logger.h"
+#include "Utils/Logging/Logger.h"
 #include "Utils/Debug.h"
 #include "Utils/AnalyticsBlocker.h"
 #include "Utils/HashCode.h"

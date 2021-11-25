@@ -1,6 +1,6 @@
 #include "InternalCalls.h"
 #include "../Utils/Debug.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Logging/Logger.h"
 #include "Game.h"
 #include "Hook.h"
 #include "../Utils/Assertion.h"
