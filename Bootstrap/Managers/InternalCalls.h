@@ -7,6 +7,13 @@ class InternalCalls
 public:
 	static void Initialize();
 
+	class MelonDebug
+	{
+	public:
+		static void AddInternalCalls();
+		static bool IsEnabled();
+	};
+
 	class MelonLogger
 	{
 	public:

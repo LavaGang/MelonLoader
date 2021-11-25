@@ -6,9 +6,9 @@ namespace MelonLoader
     {
         internal static void Load()
         {
-#if DEBUG
-            Core.DebugMode = true;
-#endif
+//#if DEBUG
+//            Core.DebugMode = true;
+//#endif
 
             string[] args = Environment.GetCommandLineArgs();
             if ((args == null)
@@ -28,11 +28,11 @@ namespace MelonLoader
                 switch (arg)
                 {
                     // Core
-#if !DEBUG
-                    case "--melonloader.debug":
-                        Core.DebugMode = true;
-                        goto default;
-#endif
+//#if !DEBUG
+//                    case "--melonloader.debug":
+//                        Core.DebugMode = true;
+//                        goto default;
+//#endif
                     case "--quitfix":
                         Core.QuitFix = true;
                         goto default;
@@ -115,7 +115,7 @@ namespace MelonLoader
             }
             public static LoadModeEnum LoadMode_Plugins { get; internal set; }
             public static LoadModeEnum LoadMode_Mods { get; internal set; }
-            public static bool DebugMode { get; internal set; }
+            //public static bool DebugMode { get; internal set; }
             public static bool QuitFix { get; internal set; }
             public static bool StartScreen { get; internal set; } = true;
         }

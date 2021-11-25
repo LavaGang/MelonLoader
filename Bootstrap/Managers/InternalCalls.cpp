@@ -13,11 +13,20 @@
 void InternalCalls::Initialize()
 {
 	Debug::Msg("Initializing Internal Calls...");
+	MelonDebug::AddInternalCalls();
 	MelonLogger::AddInternalCalls();
 	MelonUtils::AddInternalCalls();
 	GameVersionHandler::AddInternalCalls();
 	IIl2CppAssemblyGenerator::AddInternalCalls();
 }
+
+#pragma region MelonDebug
+bool InternalCalls::MelonDebug::IsEnabled() { return Debug::Enabled; }
+void InternalCalls::MelonDebug::AddInternalCalls()
+{
+	Mono::AddInternalCall("MelonLoader.MelonDebug::IsEnabled", IsEnabled);
+}
+#pragma endregion
 
 #pragma region MelonLogger
 void InternalCalls::MelonLogger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt)
