@@ -60,7 +60,6 @@ namespace MelonLoader
         {
             private string Name = null;
             private ConsoleColor Color = DefaultMelonColor;
-            public Instance() { }
             public Instance(string name) => Name = name?.Replace(" ", "_");
             public Instance(string name, ConsoleColor color) : this(name) => Color = color;
 
