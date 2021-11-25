@@ -10,6 +10,9 @@
 
 class Logger
 {
+	static std::mutex logMutex;
+	
+public:
 	static int MaxLogs;
 	static int MaxWarnings;
 	static int MaxErrors;
@@ -17,9 +20,6 @@ class Logger
 	static int WarningCount;
 	static int ErrorCount;
 	
-	static std::mutex logMutex;
-	
-public:
 	static bool Initialize();
 	static std::string GetTimestamp();
 	static void WriteSpacer();

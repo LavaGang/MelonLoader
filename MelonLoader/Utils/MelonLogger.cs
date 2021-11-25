@@ -27,18 +27,24 @@ namespace MelonLoader
 
         private static void NativeMsg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
         {
+            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
+            
             Internal_Msg(namesection_color, txt_color, namesection, txt ?? "null");
             RunMsgCallbacks(namesection_color, txt_color, namesection, txt ?? "null");
         }
 
         private static void NativeWarning(string namesection, string txt)
         {
+            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
+            
             Internal_Warning(namesection, txt ?? "null");
             RunWarningCallbacks(namesection, txt ?? "null");
         }
 
         private static void NativeError(string namesection, string txt)
         {
+            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
+            
             Internal_Error(namesection, txt ?? "null");
             RunErrorCallbacks(namesection, txt ?? "null");
         }
