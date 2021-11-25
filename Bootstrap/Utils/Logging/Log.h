@@ -30,9 +30,9 @@ struct LogMeta
 // Declares metadata for logs
 static std::pair<LogType, LogMeta*> LogTypes[] = {
 	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta()),
-	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta("WARNING", true, Console::Color::Yellow)),
-	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta("ERROR", true, Console::Color::Red)),
-	std::make_pair<LogType, LogMeta*>(Msg, new LogMeta("DEBUG", false, Console::Color::Blue))
+	std::make_pair<LogType, LogMeta*>(Warning, new LogMeta("WARNING", true, Console::Color::Yellow)),
+	std::make_pair<LogType, LogMeta*>(Error, new LogMeta("ERROR", true, Console::Color::Red)),
+	std::make_pair<LogType, LogMeta*>(Debug, new LogMeta("DEBUG", false, Console::Color::Blue))
 };
 
 struct Log
