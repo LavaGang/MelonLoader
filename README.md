@@ -146,6 +146,7 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 | --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 | --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
 | --melonloader.disablestartscreen | Disable the Start Screen |
+| --melonloader.disableunityclc | Disable Unity Console Log Cleaner | 
 
 ---
 

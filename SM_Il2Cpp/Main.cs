@@ -34,7 +34,8 @@ namespace MelonLoader.Support
             ClassInjector.Detour = new UnhollowerDetour();
             InitializeUnityVersion();
 
-            ConsoleCleaner();
+            if (MelonLaunchOptions.Console.CleanUnityLogs)
+                ConsoleCleaner();
 
             try
             {

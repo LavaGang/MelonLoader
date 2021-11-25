@@ -12,6 +12,7 @@ public:
 	static bool AlwaysOnTop;
 	static bool HideWarnings;
 	static bool UseLegacyColoring;
+	static bool CleanUnityLogs;
 	enum DisplayMode
 	{
 		NORMAL,

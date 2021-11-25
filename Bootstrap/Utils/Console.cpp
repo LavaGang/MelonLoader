@@ -22,6 +22,7 @@ HANDLE Console::OutputHandle = NULL;
 HANDLE Console::InputHandle = NULL;
 int Console::rainbow = 1;
 bool Console::UseLegacyColoring = false;
+bool Console::CleanUnityLogs = true;
 
 bool Console::Initialize()
 {

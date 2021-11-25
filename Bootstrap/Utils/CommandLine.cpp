@@ -52,6 +52,8 @@ void CommandLine::Read()
 			Console::ShouldSetTitle = false;
 		else if (strstr(command, "--melonloader.dab") != NULL)
 			AnalyticsBlocker::ShouldDAB = true;
+		else if (strstr(command, "--melonloader.disableunityclc") != NULL)
+			Console::CleanUnityLogs = false;
 
 #ifndef DEBUG
 		else if (strstr(command, "--melonloader.debug") != NULL)

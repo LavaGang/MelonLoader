@@ -104,7 +104,8 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		Hook::Attach(&(LPVOID&)Mono::Exports::mono_jit_init_version, Mono::Hooks::mono_jit_init_version);
 	}
 
-	Console::NullHandles();
+	if (Console::CleanUnityLogs)
+		Console::NullHandles();
 }
 
 bool Core::CheckPathASCII() 

@@ -74,6 +74,9 @@ namespace MelonLoader
                             goto default;
                         Console.Mode = (Console.DisplayMode)MelonUtils.Clamp(valueint, (int)Console.DisplayMode.NORMAL, (int)Console.DisplayMode.LEMON);
                         goto default;
+                    case "--melonloader.disableunityclc":
+                        Console.CleanUnityLogs = false;
+                        goto default;
 
                     // Il2CppAssemblyGenerator
                     case "--melonloader.agfoffline":
@@ -131,6 +134,7 @@ namespace MelonLoader
                 LEMON
             };
             public static DisplayMode Mode { get; internal set; }
+            public static bool CleanUnityLogs { get; internal set; } = true;
         }
 
         public static class Il2CppAssemblyGenerator
