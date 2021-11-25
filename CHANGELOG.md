@@ -71,10 +71,21 @@
 42. Fixed Issue with Mono TLS Bridge running on Mono Games.
 43. Fixed Issue with Proxy not properly detecting Unity Games.
 44. Fixed Issue with Mono TLS Bridge not failing Gracefully.
-45. Updated HarmonyX to v2.5.7.
-46. Updated Tomlet to v2.0.2.	
-47. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
-48. Updated Cpp2IL to v2021.5.3.
+45. Fixed Issue with Start Screen Support of Unity 2020.2.0+.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+46. Implemented Automatic Aspect Ratio Sizing for Custom Start Screen Image.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+47. Il2Cpp Assembly Generation issues now elevated to Internal Failure.
+48. [StartScreen] Removed UE.GL class initializer.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+49. [StartScreen] Put the NSR in a try/catch.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+50. [StartScreen] Mono + Mono x64 fixes.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+51. [StartScreen] Fix UE.Graphics icall fallback.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+52. [StartScreen] Fix text rendering on Mono.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+53. Fixed Resolving Issue with MonoResolveManager.
+54. Switched Coroutine System for Il2Cpp to a Wrapper based Interface.    (Credits to [HookedBehemoth](https://github.com/HookedBehemoth) :D)  
+55. Fixed occasional double-logging issue with MelonLogger.    (Credits to [benaclejames](https://github.com/benaclejames) :D)  
+56. Updated HarmonyX to v2.5.7.
+57. Updated Tomlet to v2.0.2.	
+58. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
+59. Updated Cpp2IL to v2021.5.3.
 
 ---
 
