@@ -40,7 +40,7 @@ namespace MelonLoader.Support
             try
             {
                 SceneManager.sceneLoaded = (
-                    (SceneManager.sceneLoaded == null)
+                    (ReferenceEquals(SceneManager.sceneLoaded, null))
                     ? new Action<Scene, LoadSceneMode>(OnSceneLoad)
                     : Il2CppSystem.Delegate.Combine(SceneManager.sceneLoaded, (UnityAction<Scene, LoadSceneMode>)new Action<Scene, LoadSceneMode>(OnSceneLoad)).Cast<UnityAction<Scene, LoadSceneMode>>()
                     );
@@ -50,7 +50,7 @@ namespace MelonLoader.Support
             try
             {
                 SceneManager.sceneUnloaded = (
-                    (SceneManager.sceneUnloaded == null)
+                    (ReferenceEquals(SceneManager.sceneUnloaded, null))
                     ? new Action<Scene>(OnSceneUnload)
                     : Il2CppSystem.Delegate.Combine(SceneManager.sceneUnloaded, (UnityAction<Scene>)new Action<Scene>(OnSceneUnload)).Cast<UnityAction<Scene>>()
                     );
