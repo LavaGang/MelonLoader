@@ -9,10 +9,12 @@ namespace MelonLoader.Fixes
 {
 	internal static class ProcessFix
 	{
-		private static MainWindowFinder mainWindowFinder = new MainWindowFinder();
+		private static MainWindowFinder mainWindowFinder;
 
 		internal static void Install()
 		{
+			mainWindowFinder = new MainWindowFinder();
+
 			Type processFixType = typeof(ProcessFix);
 			Type processType = typeof(Process);
 
@@ -49,11 +51,11 @@ namespace MelonLoader.Fixes
 
 		// Taken and Modified from .NET Framework's System.dll
 		[DllImport("user32.dll", BestFitMapping = true, CharSet = CharSet.Auto)]
-		public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
+		private static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
 
 		// Taken and Modified from .NET Framework's System.dll
 		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		public static extern int GetWindowTextLength(HandleRef hWnd);
+		private static extern int GetWindowTextLength(HandleRef hWnd);
 
 		// Taken and Modified from .NET Framework's System.dll
 		internal class MainWindowFinder
@@ -71,7 +73,7 @@ namespace MelonLoader.Fixes
                 return false;
             }
 
-            public IntPtr FindMainWindow(int processId)
+			internal IntPtr FindMainWindow(int processId)
             {
                 Handle = (IntPtr)0;
                 ID = processId;
@@ -84,19 +86,19 @@ namespace MelonLoader.Fixes
             private bool IsMainWindow(IntPtr handle)
                 => (!(GetWindow(new HandleRef(this, handle), 4) != (IntPtr)0) && IsWindowVisible(new HandleRef(this, handle)));
 
-			internal delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
+			private delegate bool EnumThreadWindowsCallback(IntPtr hWnd, IntPtr lParam);
 
 			[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = false, SetLastError = true)]
-            public static extern int GetWindowThreadProcessId(HandleRef handle, out int processId);
+			private static extern int GetWindowThreadProcessId(HandleRef handle, out int processId);
 
             [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = false, SetLastError = true)]
-            public static extern bool EnumWindows(EnumThreadWindowsCallback callback, IntPtr extraData);
+			private static extern bool EnumWindows(EnumThreadWindowsCallback callback, IntPtr extraData);
 
 			[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-			public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
+			private static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
 
 			[DllImport("user32.dll", CharSet = CharSet.Auto)]
-			public static extern bool IsWindowVisible(HandleRef hWnd);
+			private static extern bool IsWindowVisible(HandleRef hWnd);
 		}
     }
 }
