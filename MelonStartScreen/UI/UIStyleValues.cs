@@ -23,6 +23,7 @@ namespace MelonLoader.MelonStartScreen.UI
             progressbarOuterTexture = UIUtils.CreateColorTexture(new Color(0.47f, 0.97f, 0.39f));
             progressbarInnerTexture = UIUtils.CreateColorTexture(new Color(1.00f, 0.23f, 0.42f));
 
+            MelonDebug.Msg("[UIStyleValues] LoadImage Logo");
             melonloaderLogoTexture = new Texture2D(2, 2);
             bool imgLoaded = ImageConversion.LoadImage(melonloaderLogoTexture, Convert.FromBase64String(
                 (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
@@ -30,6 +31,7 @@ namespace MelonLoader.MelonStartScreen.UI
                 : ImageDatas.MelonLogo), false);
             MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
 
+            /*
             string custom_image_path = ScanForCustomImage();
             if (!string.IsNullOrEmpty(custom_image_path))
             {
@@ -49,18 +51,20 @@ namespace MelonLoader.MelonStartScreen.UI
                     MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: {ex}");
                 }
             }
+            */
 
-            if (funnyAnimation == null)
-            {
-                MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Default Loading Screen Image...");
-                funnyAnimation = AnimatedImage.FromFrameBuffer(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
-                MelonDebug.Msg("[UIStyleValues] Default Loading Screen Image Loaded!");
-            }
+            //if (funnyAnimation == null)
+            //{
+                MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Start Screen Image...");
+                funnyAnimation = new AnimatedImage(5, 5, ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
+                MelonDebug.Msg("[UIStyleValues] Start Screen Image Loaded!");
+            //}
 
             // Load default font
             standardFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
 
+        /*
         private static string ScanForCustomImage()
         {
             string[] files = Directory.GetFiles(MelonUtils.UserDataDirectory);
@@ -70,5 +74,6 @@ namespace MelonLoader.MelonStartScreen.UI
                 Path.GetFileNameWithoutExtension(x).ToLowerInvariant().Equals("loading")
                 && Path.GetExtension(x).ToLowerInvariant().Equals(".gif"));
         }
+        */
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
+﻿//using System;
+//using System.Drawing;
+//using System.Drawing.Imaging;
+//using System.IO;
 
 namespace MelonLoader.MelonStartScreen.UI
 {
@@ -12,9 +12,10 @@ namespace MelonLoader.MelonStartScreen.UI
             public int Width;
             public int Height;
             public byte[][] FrameBuffer;
-            public ImageFormat FrameFormat;
+            //public ImageFormat FrameFormat;
         }
 
+        /*
         public static ParsedInfo FromFile(string filepath, ImageFormat frameformat = null)
         {
             if (string.IsNullOrEmpty(filepath))
@@ -125,5 +126,6 @@ namespace MelonLoader.MelonStartScreen.UI
 
             return framebuffer;
         }
+        */
     }
 }

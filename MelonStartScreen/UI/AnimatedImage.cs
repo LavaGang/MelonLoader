@@ -1,6 +1,6 @@
-﻿using System;
+﻿//using System;
 using System.Diagnostics;
-using System.Drawing.Imaging;
+//using System.Drawing.Imaging;
 using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
@@ -15,6 +15,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
         private Stopwatch stopwatch = new Stopwatch();
 
+        /*
         public static AnimatedImage FromFile(string filepath, float framedelayms = 90f, ImageFormat frame_format = null)
         {
             if (string.IsNullOrEmpty(filepath))
@@ -44,6 +45,7 @@ namespace MelonLoader.MelonStartScreen.UI
                 return null;
             return new AnimatedImage(parsedInfo, framedelayms);
         }
+        */
 
         public AnimatedImage(ImageFrameParser.ParsedInfo parsedInfo, float framedelayms = 90f)
             : this(parsedInfo.Width, parsedInfo.Height, parsedInfo.FrameBuffer, framedelayms) { }
