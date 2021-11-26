@@ -89,6 +89,7 @@
 62. Fixed Conflict Issue with Debug Mode.
 63. Added "--melonloader.disableunityclc" Launch Option to toggle Unity Console Log Cleaner.
 64. Fixed Issue with Process.MainWindowHandle and Process.MainWindowTitle returning null.
+65. Fixed Issue with Animated Image on Start Screen using Incorrect Sizing.
 
 ---
 

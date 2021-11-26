@@ -56,7 +56,7 @@ namespace MelonLoader.MelonStartScreen.UI
             //if (funnyAnimation == null)
             //{
                 MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Start Screen Image...");
-                funnyAnimation = new AnimatedImage(5, 5, ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
+                funnyAnimation = new AnimatedImage(33, 40, ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
                 MelonDebug.Msg("[UIStyleValues] Start Screen Image Loaded!");
             //}
 
