@@ -23,6 +23,7 @@ namespace MelonLoader
 
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();
+            Fixes.ProcessFix.Install();
             PatchShield.Install();
 
             MelonPreferences.Load();
