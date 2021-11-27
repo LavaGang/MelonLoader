@@ -58,7 +58,6 @@ namespace UnhollowerMini
         {
             public IntPtr ptr;
             public string name;
-            public List<InternalClass> classes = new List<InternalClass>();
 
             public InternalAssembly(IntPtr ptr)
             {
@@ -66,27 +65,10 @@ namespace UnhollowerMini
                 if (MelonUtils.IsGameIl2Cpp())
                 {
                     name = Marshal.PtrToStringAnsi(il2cpp_image_get_filename(this.ptr));
-                    uint classCount = il2cpp_image_get_class_count(this.ptr);
-                    for (uint i = 0; i < classCount; ++i)
-                        classes.Add(new InternalClass(il2cpp_image_get_class(this.ptr, i)));
                 }
                 else
                 {
                     name = Marshal.PtrToStringAnsi(mono_image_get_filename(this.ptr));
-
-                    IntPtr table_info = mono_image_get_table_info(this.ptr, 2 /*MONO_TABLE_TYPEDEF*/);
-                    int rows = mono_table_info_get_rows(table_info);
-                    for (int i = 0; i < rows; i++)
-                    {
-                        uint[] cols = new uint[6 /*MONO_TYPEDEF_SIZE*/];
-                        mono_metadata_decode_row(table_info, i, cols, 6 /*MONO_TYPEDEF_SIZE*/);
-                        string classname  = Marshal.PtrToStringAnsi(mono_metadata_string_heap(this.ptr, cols[1 /*MONO_TYPEDEF_NAME*/]));
-                        string name_space = Marshal.PtrToStringAnsi(mono_metadata_string_heap(this.ptr, cols[2 /*MONO_TYPEDEF_NAMESPACE*/]));
-                        if (string.IsNullOrEmpty(classname))
-                            continue;
-
-                        classes.Add(new InternalClass(mono_class_from_name(this.ptr, name_space, classname), name_space, classname));
-                    }
                 }
             }
         }
@@ -135,20 +117,17 @@ namespace UnhollowerMini
                 InternalAssembly assembly = assemblies.FirstOrDefault(a => a.name == assemblyname);
                 if (assembly == null)
                 {
-                    //MelonLogger.Error("Unable to find assembly " + assemblyname + " in il2cpp domain");
-                    //return IntPtr.Zero;
                     throw new Exception("Unable to find assembly " + assemblyname + " in il2cpp domain");
                 }
 
-                InternalClass clazz = assembly.classes.FirstOrDefault(c => c.name_space == name_space && c.name == classname);
+                IntPtr clazz = il2cpp_class_from_name(assembly.ptr, name_space, classname);
                 if (clazz == null)
                 {
-                    //MelonLogger.Error("Unable to find class " + name_space + "." + classname + " in assembly " + assemblyname);
-                    //return IntPtr.Zero;
                     throw new Exception("Unable to find class " + name_space + "." + classname + " in assembly " + assemblyname);
                 }
-                MelonDebug.Msg($" > 0x{(long)clazz.ptr:X}");
-                return clazz.ptr;
+
+                MelonDebug.Msg($" > 0x{(long)clazz:X}");
+                return clazz;
             }
             else
             {
@@ -156,16 +135,12 @@ namespace UnhollowerMini
                 Assembly ass = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name + ".dll" == assemblyname);
                 if (ass == null)
                 {
-                    //MelonLogger.Error("Unable to find assembly " + assemblyname + " in mono domain");
-                    //return IntPtr.Zero;
                     throw new Exception("Unable to find assembly " + assemblyname + " in mono domain");
                 }
 
                 Type t = ass.GetType(fullname);
                 if (t == null)
                 {
-                    //MelonLogger.Error("Unable to find class " + fullname + " in assembly " + assemblyname);
-                    //return IntPtr.Zero;
                     throw new Exception("Unable to find class " + fullname + " in assembly " + assemblyname);
                 }
                 MelonDebug.Msg($" > 0x{(long)(*(IntPtr*)t.TypeHandle.Value):X}");
@@ -181,7 +156,6 @@ namespace UnhollowerMini
 
             var field = MelonUtils.IsGameIl2Cpp() ? il2cpp_class_get_field_from_name(clazz, fieldName) : mono_class_get_field_from_name(clazz, fieldName);
             if (field == IntPtr.Zero)
-                // MelonLogger.Error($"Field {fieldName} was not found on class {Marshal.PtrToStringAnsi(MelonUtils.IsGameIl2Cpp() ? il2cpp_class_get_name(clazz) : mono_class_get_name(clazz))}");
                 throw new Exception($"Field {fieldName} was not found on class {Marshal.PtrToStringAnsi(MelonUtils.IsGameIl2Cpp() ? il2cpp_class_get_name(clazz) : mono_class_get_name(clazz))}");
             MelonDebug.Msg($" > 0x{(long)field:X}");
             return field;
@@ -338,8 +312,9 @@ namespace UnhollowerMini
                 *(IntPtr*)((long)&monoMethod->klass->nested_in_0x08 + monoClassOffset) = Marshal.StringToHGlobalAnsi(name_space);
                 *(IntPtr*)((long)&monoMethod->klass->nested_in_0x04 + monoClassOffset) = Marshal.StringToHGlobalAnsi(name);
             }
+
             MonoMethodSignature* monoMethodSignature = (MonoMethodSignature*)Marshal.AllocHGlobal(sizeof(MonoMethodSignature));
-            monoMethodSignature->param_cout = 0;
+            monoMethodSignature->ApplyZeroes();
             monoMethod->signature = monoMethodSignature;
 
             return monoMethod;
@@ -394,6 +369,12 @@ namespace UnhollowerMini
             public IntPtr ret;
             public ushort param_cout;
             // ...
+
+            internal void ApplyZeroes()
+            {
+                ret = (IntPtr)0;
+                param_cout = 0;
+            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -704,8 +685,6 @@ namespace UnhollowerMini
         [DllImport("GameAssembly", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern IntPtr il2cpp_image_get_filename(IntPtr image);
         [DllImport("GameAssembly", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern uint il2cpp_image_get_class_count(IntPtr image);
-        [DllImport("GameAssembly", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern IntPtr il2cpp_image_get_class(IntPtr image, uint index);
+        private static extern IntPtr il2cpp_class_from_name(IntPtr image, string namespaze, string name);
     }
 }
