@@ -31,10 +31,16 @@ namespace MelonLoader.Assertions
         }
 
         private static bool IsNull_object(object obj)
-            => obj.Equals(null);
+            => obj == null;
         private static bool IsNull_string(string obj)
             => string.IsNullOrEmpty(obj);
         private static bool IsEqual_object(object obj, object obj2)
-            => obj.Equals(obj2);
+        {
+            if (obj == null)
+                return obj2 == null;
+            if (obj2 == null)
+                return obj == null;
+            return obj.Equals(obj2);
+        }
     }
 }

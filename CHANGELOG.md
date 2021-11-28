@@ -95,6 +95,7 @@
 68. [StartScreen] <U2018.3 and Mono x64 fixes.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 69. Added MelonLoader.Assertions.LemonAssert Utility for Universal Assertions Functionality.
 70. Implemented Map Based Backend for Assertions under MelonLoader.Assertions.LemonAssertMapping.
+71. Fixed Issue with LemonAssert.IsNull Mapping.
 
 ---
 
