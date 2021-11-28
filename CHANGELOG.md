@@ -92,6 +92,9 @@
 65. Improved Assembly Verifier to make it less angry about small assemblies.    (Credits to [knah](https://github.com/knah) :D)
 66. Use ReferenceEquals to compare il2cpp delegates as op_equality is not always present.    (Credits to [knah](https://github.com/knah) :D)
 67. Fixed Issue with Animated Image on Start Screen using Incorrect Sizing.
+68. [StartScreen] <U2018.3 and Mono x64 fixes.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+69. Added MelonLoader.Assertions.LemonAssert Utility for Universal Assertions Functionality.
+70. Implemented Map Based Backend for Assertions under MelonLoader.Assertions.LemonAssertMapping.
 
 ---
 
