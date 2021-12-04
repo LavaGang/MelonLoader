@@ -48,11 +48,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             ContactHosts();
 
-            MelonLogger.Msg($"ForceDumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
-            MelonLogger.Msg($"ForceUnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
-            MelonLogger.Msg($"ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
-            MelonLogger.Msg($"MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
-            MelonLogger.Msg($"MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");
+            MelonLogger.Msg($"RemoteAPI.ForceDumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
+            MelonLogger.Msg($"RemoteAPI.ForceUnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
+            MelonLogger.Msg($"RemoteAPI.ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
+            MelonLogger.Msg($"RemoteAPI.MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
+            MelonLogger.Msg($"RemoteAPI.MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");
         }
 
         private static void ContactHosts()

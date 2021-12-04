@@ -117,6 +117,7 @@
 2. Updated HarmonyX to v2.5.1.
 3. Updated Cpp2IL to v2021.2.4.
 4. Fixed Issue with Assembly Generator not responding to RemoteAPI when Forcing Dumper Version.
+5. Fixed Issue with Offline Mode throwing an NRE during Assembly Generation.
 
 ---
 

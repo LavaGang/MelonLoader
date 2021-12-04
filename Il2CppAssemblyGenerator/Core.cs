@@ -43,29 +43,26 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Initialize();
 
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
-            {
                 RemoteAPI.Contact();
 
-                unitydependencies = new UnityDependencies();
-                if (!unitydependencies.Download())
-                    return 1;
+            unitydependencies = new UnityDependencies();
 
-                // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
-                if ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
-                    || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1))) // Is Older than Windows 7 or Server 2008 R2
-                    dumper = new Il2CppDumper();
-                else
-                    dumper = new Cpp2IL();
+            // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
+            if ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
+                || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1))) // Is Older than Windows 7 or Server 2008 R2
+                dumper = new Il2CppDumper();
+            else
+                dumper = new Cpp2IL();
 
-                if (!dumper.Download())
-                    return 1;
+            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+            deobfuscationMap = new DeobfuscationMap();
 
-                il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
-                if (!il2cppassemblyunhollower.Download())
-                    return 1;
-
-                deobfuscationMap = new DeobfuscationMap();
-                if (!deobfuscationMap.Download())
+            if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
+            {
+                if (!unitydependencies.Download()
+                    || !dumper.Download()
+                    || !il2cppassemblyunhollower.Download()
+                    || !deobfuscationMap.Download())
                     return 1;
             }
 
