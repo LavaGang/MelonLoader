@@ -45,8 +45,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
                 RemoteAPI.Contact();
 
-            unitydependencies = new UnityDependencies();
-
             // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
             if ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
                 || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1))) // Is Older than Windows 7 or Server 2008 R2
@@ -55,7 +53,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 dumper = new Cpp2IL();
 
             il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+            unitydependencies = new UnityDependencies();
             deobfuscationMap = new DeobfuscationMap();
+
+            MelonLogger.Msg($"Using Dumper Version: {(string.IsNullOrEmpty(dumper.Version) ? "null" : dumper.Version)}");
+            MelonLogger.Msg($"Using Il2CppAssemblyUnhollower Version = {(string.IsNullOrEmpty(il2cppassemblyunhollower.Version) ? "null" : il2cppassemblyunhollower.Version)}");
+            MelonLogger.Msg($"Using Unity Dependencies Version = {(string.IsNullOrEmpty(unitydependencies.Version) ? "null" : unitydependencies.Version)}");
+            if (!string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
+                MelonLogger.Msg($"Using Deobfuscation Regex = {deobfuscationMap.ObfuscationRegex}");
 
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
             {
