@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using MelonLoader.Utils;
 
 namespace MelonLoader
 {
@@ -10,7 +11,7 @@ namespace MelonLoader
         private static NativeExports NativeLib = null;
         private static readonly int MaxBufferSize = 20;
         private static bool _waserror = false;
-        public static bool WasError { get => _waserror; internal set { if (value == true) MelonLogger.Warning("Disabling bHaptics API..."); _waserror = value; } }
+        public static bool WasError { get => _waserror; internal set { if (value == true) MelonDebug.Msg("Disabling bHaptics API..."); _waserror = value; } }
 
         internal static void Load()
         {
@@ -27,22 +28,43 @@ namespace MelonLoader
                 NativeLib = NativeLibrary.ReflectiveLoad<NativeExports>(filepath);
                 if (NativeLib == null)
                     throw new Exception("Failed to ReflectiveLoad bHaptics Native Library!");
-
-                byte[] buf = new byte[500];
-                int size = 0;
-                if (!NativeLib.TryGetExePath(buf, ref size))
-                    _waserror = true;
-                else
-                    MelonDebug.Msg("bHaptics Native Library Loaded!");
+                MelonDebug.Msg("bHaptics Native Library Loaded!");
             }
             catch (Exception ex) { MelonLogger.Warning($"bHaptics.Load Exception: {ex}"); WasError = true; }
+
+            if (!ExePathCheck()
+                && !SteamLibraryCheck())
+            {
+                MelonDebug.Msg("bHaptics Player Not Installed!");
+                WasError = true;
+                return;
+            }
+
+            MelonDebug.Msg("bHaptics API Initialized!");
+        }
+
+        private static bool ExePathCheck()
+        {
+            try
+            {
+                byte[] buf = new byte[500];
+                int size = 0;
+                return NativeLib.TryGetExePath(buf, ref size);
+            }
+            catch (Exception ex) { MelonLogger.Warning($"bHaptics.ExePathCheck Exception: {ex}"); return false; }
+        }
+
+        private static bool SteamLibraryCheck()
+        {
+            string steam_folder_path = SteamManifestReader.GetInstallPathFromAppId("1573010");
+            return !string.IsNullOrEmpty(steam_folder_path);
         }
 
         internal static void Start()
         {
             if (_waserror)
                 return;
-            try { NativeLib.Initialise(Marshal.StringToHGlobalAnsi("MelonLoader"), Marshal.StringToHGlobalAnsi(MelonUtils.GameName.Replace(" ", "_"))); }
+            try { NativeLib.Initialise(Marshal.StringToHGlobalAnsi(BuildInfo.Name.Replace(" ", "_")), Marshal.StringToHGlobalAnsi(MelonUtils.GameName.Replace(" ", "_"))); }
             catch (Exception ex) { MelonLogger.Warning($"bHaptics.Start Exception: {ex}"); WasError = true; return; }
             MelonLogger.Msg("bHaptics Support Initialized!");
         }

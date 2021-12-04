@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.5.0 Open-Beta](#v050-open-beta)  
 [v0.4.3 Open-Beta](#v043-open-beta)  
 [v0.4.2 Open-Beta](#v042-open-beta)  
 [v0.4.1 Open-Beta](#v041-open-beta)  
@@ -24,6 +25,82 @@
 
 ---
 
+### v0.5.0 Open-Beta:
+
+1. Updated HarmonyX to v2.6.1.
+2. Updated Tomlet to v2.1.0.	
+3. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
+4. Updated Cpp2IL to v2021.5.3.
+5. Added User Libs Directory and Assembly Resolver.
+6. Replaced StackTrace System in MelonLogger with Instance Based System.
+7 Fixed Issue with Il2Cpp Harmony Method Patcher throwing Debug Warnings multiple times for the same Method.
+8. Implemented Temporary Workaround for Cpp2IL Failing under Wine or Steam Proton.
+9. Fixed Missing Method Issue caused by LemonAction.
+10. Implemented MonoResolveManager and Assembly Resolving Management System.
+11. Removed symbolsdata null check.    (Credits to [AuM0b](https://github.com/AuM0b) :D)  
+12. Implemented Directory Priority Scanning for MonoResolveManager.
+13. Implemented SteamManifestReader.
+14. Fixed Issue with Bhaptics API and Steam Version of Bhaptics Player.
+15. Added an error message for paths with non-ASCII characters.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)  
+16. File Pathing is now printed to Log by Default to help aid in Debugging.
+17. Implemented Non-ASCII Character Check in Proxy.
+18. Fixed Issue with ASCII Character Check preventing Bootstrap from Loading.
+19. Implemented Automated Cleanup System for Support Modules.
+20. Added MelonLogger Error Overloads for Exceptions.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
+21. Implemented Start Screen.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+22. Added "--melonloader.disablestartscreen" Launch Option.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+23. Added Unity Game Check to Proxy.
+24. Fixed Issue with MonoResolveManager on x86 Platform.
+25. Fixed Issue with Proxy's Unity Game Check on Older Unity Versions.
+26. Made Failure to Properly Load MelonStartScreen less severe of an Error.
+27. Fixed Type Locking Issue with MelonPreferences_ReflectiveCategory.
+28. Fixed Issue with MelonLoader reading the wrong Unity Version from EXEs with Custom Info.
+29. Removed base_path DirectoryExists Check in Mono::CheckLibName.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
+30. Fixed Issue with new Cpp2IL Download.
+31. Moved Obfuscation Mapping Download to Il2CppAssemblyGenerator folder.
+32. Added '@' Character to Assembly Verification.
+33. Fixed Issue with the Start Screen using stripped Func instead of LemonFunc.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+34. Fixed Issue with the Start Screen not functioning under Mono Games.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+35. Improved Start Screen Compatibility.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+36. Changed UnityEngine.Mesh Implementation in Start Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+37. Fixed Issue with the Start Screen's UIVertex Implementation.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+40. Fixed Crash Issue with Mesh::SetArrayForChannelImpl.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+41. Reimplemented Image Frame Parsing for Start Screen.
+42. Custom Start Screen Image File Name is now Case Insensitive.
+43. Improved Frame Size Handling when Parsing Custom Start Screen Image.
+44. Improved Manual FrameBuffer Input for Image Frame Parsing.
+45. Changed UnityEngine.Material Implementation in Start Screen to Internal Calls.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+46. Fixed Issue with Mono TLS Bridge running on Mono Games.
+47. Fixed Issue with Proxy not properly detecting Unity Games.
+48. Fixed Issue with Mono TLS Bridge not failing Gracefully.
+49. Fixed Issue with Start Screen Support of Unity 2020.2.0+.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+50. Implemented Automatic Aspect Ratio Sizing for Custom Start Screen Image.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+51. Il2Cpp Assembly Generation issues now elevated to Internal Failure.
+52. [StartScreen] Removed UE.GL class initializer.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+53. [StartScreen] Put the NSR in a try/catch.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+54. [StartScreen] Mono + Mono x64 fixes.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+55. [StartScreen] Fix UE.Graphics icall fallback.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+56. [StartScreen] Fix text rendering on Mono.   (Credits to [Slaynash](https://github.com/Slaynash) :3)
+57. Fixed Resolving Issue with MonoResolveManager.
+58. Switched Coroutine System for Il2Cpp to a Wrapper based Interface.    (Credits to [HookedBehemoth](https://github.com/HookedBehemoth) :D)  
+59. Fixed occasional double-logging issue with MelonLogger.    (Credits to [benaclejames](https://github.com/benaclejames) :D)  
+60. Removed Useless Logger Instance Constructor.
+61. Added more Comprehensive Exception Message when attempting to use an Instance Patch Method.
+62. Fixed Conflict Issue with Debug Mode.
+63. Added "--melonloader.disableunityclc" Launch Option to toggle Unity Console Log Cleaner.
+64. Fixed Issue with Process.MainWindowHandle and Process.MainWindowTitle returning null.
+65. Improved Assembly Verifier to make it less angry about small assemblies.    (Credits to [knah](https://github.com/knah) :D)
+66. Use ReferenceEquals to compare il2cpp delegates as op_equality is not always present.    (Credits to [knah](https://github.com/knah) :D)
+67. Fixed Issue with Animated Image on Start Screen using Incorrect Sizing.
+68. [StartScreen] <U2018.3 and Mono x64 fixes.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+69. Added MelonLoader.Assertions.LemonAssert Utility for Universal Assertions Functionality.
+70. Implemented Map Based Backend for Assertions under MelonLoader.Assertions.LemonAssertMapping.
+71. Fixed Issue with LemonAssert.IsNull Mapping.
+72. Implemented SemVer Library.
+73. Fixed Comparison Issue with VerifyLoaderVersion Attribute.
+
+---
+
 ### v0.4.3 Open-Beta:
 
 1. Fixed Issue with Mono Library Scanning.
@@ -41,7 +118,7 @@
 4. Fixed Issue with Compatibility Layer System's Assembly to Resolver conversion check failing.
 5. Updated Cpp2IL to v2021.1.2.
 6. Updated Il2CppAssemblyUnhollower to v0.4.15.4.
-7. Fixed Dependency Issue with MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
+7. Fixed Dependency Issue with [MuseDashModLoader](https://github.com/mo10/MuseDashModLoader) Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
 8. Fixed Issue with --melonloader.consolemode Launch Option not being properly capped.
 9. Added Melon Name Sorting for Printout Log.    (Credits to [ds5678](https://github.com/ds5678) :D)  
 10. Updated Il2CppDumper to v6.6.5.
@@ -64,7 +141,7 @@
 7. Fixed Issue with DAB not properly caching already found Hosts.
 8. Fixed NRE Issue in Il2CppAssemblyGenerator.RemoteAPI.ContactHosts.    (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
 9. Updated Tomlet to v1.3.5.    (Credits to [loukylor](https://github.com/loukylor) and [Samboy](https://github.com/SamboyCoding) :3)
-10. Added MuseDashModLoader Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
+10. Added [MuseDashModLoader](https://github.com/mo10/MuseDashModLoader) Compatibility Layer.    (Credits to [gompocp](https://github.com/gompocp) :D)
 11. Fixed Issue with MelonLogger causing Crash on null Input Text.    (Credits to [loukylor](https://github.com/loukylor) :3)
 12. Fixed Issue with MelonLogger not allowing Empty Input Text.    (Credits to [ds5678](https://github.com/ds5678) :D)
 13. Updated Il2CppDumper to v6.6.3.

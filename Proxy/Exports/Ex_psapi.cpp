@@ -1,8 +1,7 @@
-#include "../Core.h"
+#include "../Exports.h"
 
-extern "C" FARPROC OriginalFuncs_psapi[27];
 FARPROC OriginalFuncs_psapi[27];
-const char* ExportNames_psapi[] = {
+const char* Exports::ExportNames_psapi[27] = {
 	"EmptyWorkingSet",
 	"EnumDeviceDrivers",
 	"EnumPageFilesA",
@@ -31,9 +30,3 @@ const char* ExportNames_psapi[] = {
 	"QueryWorkingSet",
 	"QueryWorkingSetEx"
 };
-
-void Core::LoadExports_psapi(HMODULE originaldll)
-{
-	for (int i = 0; i < (sizeof(ExportNames_psapi) / sizeof(ExportNames_psapi[0])); i++)
-		OriginalFuncs_psapi[i] = GetProcAddress(originaldll, ExportNames_psapi[i]);
-}

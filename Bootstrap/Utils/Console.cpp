@@ -1,4 +1,4 @@
-#include "Console.h"
+	#include "Console.h"
 #include "../Core.h"
 #include <string>
 #include "Assertion.h"
@@ -7,7 +7,7 @@
 #include <locale.h>
 #include "../Managers/Game.h"
 #include "Il2CppAssemblyGenerator.h"
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include <sstream>
 #include <VersionHelpers.h>
 
@@ -19,42 +19,77 @@ Console::DisplayMode Console::Mode = Console::DisplayMode::NORMAL;
 HWND Console::Window = NULL;
 HMENU Console::Menu = NULL;
 HANDLE Console::OutputHandle = NULL;
+HANDLE Console::InputHandle = NULL;
 int Console::rainbow = 1;
-bool Console::UseManualColoring = false;
+bool Console::UseLegacyColoring = false;
+bool Console::CleanUnityLogs = true;
 
 bool Console::Initialize()
 {
 	if (!Debug::Enabled && ShouldHide)
 		return true;
+
 	if (!AllocConsole())
 	{
 		Assertion::ThrowInternalFailure("Failed to Allocate Console!");
 		return false;
 	}
+
 	Window = GetConsoleWindow();
 	Menu = GetSystemMenu(Window, FALSE);
+
 	SetConsoleCtrlHandler(EventHandler, TRUE);
 	SetDefaultTitle();
 	SetForegroundWindow(Window);
+
 	if (AlwaysOnTop)
 		SetWindowPos(Window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+
+	freopen_s(reinterpret_cast<FILE**>(stdin), "CONIN$", "r", stdin);
 	freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
 	freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
+	InputHandle = GetStdHandle(STD_INPUT_HANDLE);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
 	SetHandles();
-	DWORD mode = 0;
-	if (!GetConsoleMode(OutputHandle, &mode))
-	{
-		mode = 0x3;
-		if (!SetConsoleMode(OutputHandle, mode))
-		{
-			UseManualColoring = true;
-			return true;
-		}
-	}
-	if (!SetConsoleMode(OutputHandle, (mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)))
-		UseManualColoring = true;
+
+	if (!AddConsoleModeFlag(OutputHandle, 0x3)
+		|| !AddConsoleModeFlag(OutputHandle, ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+		UseLegacyColoring = true;
+
+	AddConsoleModeFlag(InputHandle, ENABLE_EXTENDED_FLAGS);
+	RemoveConsoleModeFlag(InputHandle, ENABLE_MOUSE_INPUT);
+	RemoveConsoleModeFlag(InputHandle, ENABLE_WINDOW_INPUT);
+	RemoveConsoleModeFlag(InputHandle, ENABLE_INSERT_MODE);
+	//RemoveConsoleModeFlag(InputHandle, ENABLE_QUICK_EDIT_MODE);
+
 	return true;
+}
+
+bool Console::AddConsoleModeFlag(HANDLE handle, DWORD flag)
+{
+	DWORD mode = 0;
+	if (GetConsoleMode(handle, &mode))
+		mode |= flag;
+	else
+		mode = flag;
+	return SetConsoleMode(handle, mode);
+}
+
+bool Console::RemoveConsoleModeFlag(HANDLE handle, DWORD flag)
+{
+	DWORD mode = 0;
+	if (GetConsoleMode(handle, &mode))
+		mode &= ~flag;
+	return SetConsoleMode(handle, mode);
+}
+
+bool Console::HasConsoleModeFlag(HANDLE handle, DWORD flag)
+{
+	DWORD mode = 0;
+	if (!GetConsoleMode(handle, &mode))
+		return false;
+	return ((mode & flag) == flag);
 }
 
 void Console::SetDefaultTitle()
@@ -142,11 +177,13 @@ std::string Console::ColorToAnsi(Color color, bool modecheck)
 				: ((Mode == DisplayMode::LEMON)
 					? Color::Yellow
 					: color)));
-	if (UseManualColoring)
+
+	if (UseLegacyColoring)
 	{
 		SetConsoleTextAttribute(OutputHandle, color);
 		return std::string();
 	}
+
 	switch (color)
 	{
 	case Color::Black:

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.TinyJSON;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
@@ -7,11 +8,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
     {
         internal Il2CppDumper()
         {
-            //Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
-            //if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-            //    Version = RemoteAPI.Info.ForceDumperVersion;
-            //if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "6.6.5";
+            Version = "6.6.5";
             URL = "https://github.com/Perfare/Il2CppDumper/releases/download/v" + Version + "/Il2CppDumper-v" + Version + ".zip";
             Destination = Path.Combine(Core.BasePath, "Il2CppDumper");
             Output = Path.Combine(Destination, "DummyDll");
@@ -48,6 +45,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 Save();
                 return true;
             }
+
+            ThrowInternalFailure("Failed to Download Il2CppDumper!");
             return false;
         }
 
@@ -55,8 +54,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             FixConfig();
             MelonLogger.Msg("Executing Il2CppDumper...");
-            string metadata_path = Path.Combine(Path.Combine(Path.Combine(string.Copy(MelonUtils.GetGameDataDirectory()), "il2cpp_data"), "Metadata"), "global-metadata.dat");
-            return Execute(new string[] { Core.GameAssemblyPath, metadata_path });
+            if (Execute(new string[] {
+                Core.GameAssemblyPath,
+                Path.Combine(MelonUtils.GetGameDataDirectory(), "il2cpp_data", "Metadata", "global-metadata.dat")
+            }))
+                return true;
+
+            ThrowInternalFailure("Failed to Execute Il2CppDumper!");
+            return false;
         }
 
         private void FixConfig() => File.WriteAllText(Path.Combine(Destination, "config.json"), Encoder.Encode(new Il2CppDumperConfig(), EncodeOptions.NoTypeHints | EncodeOptions.PrettyPrint));

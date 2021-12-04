@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMCL_Demeo", "SMCL_Demeo\SM
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonStartScreen", "MelonStartScreen\MelonStartScreen.csproj", "{762D7545-6F6B-441A-B040-49CC31A1713B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Windows - x64 = Debug|Windows - x64
@@ -147,6 +149,14 @@ Global
 		{12853B23-E7D9-4E10-AC7F-83382561239F}.Release|Windows - x64.Build.0 = Release|Any CPU
 		{12853B23-E7D9-4E10-AC7F-83382561239F}.Release|Windows - x86.ActiveCfg = Release|Any CPU
 		{12853B23-E7D9-4E10-AC7F-83382561239F}.Release|Windows - x86.Build.0 = Release|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x64.ActiveCfg = Debug|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x64.Build.0 = Debug|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x86.ActiveCfg = Debug|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x86.Build.0 = Debug|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x64.ActiveCfg = Release|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x64.Build.0 = Release|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x86.ActiveCfg = Release|Any CPU
+		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

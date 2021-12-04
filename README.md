@@ -14,6 +14,7 @@
 
 ---
 
+
 ## GENERAL INFORMATION:
 
 - Debug Mode is for Development Purposes. Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
@@ -27,6 +28,11 @@
 - [dnSpy Debugger Usage](#dnspy-debugger-usage)
 - [Wine / Steam Proton Usage](#wine--steam-proton-usage)
 - [Android & Oculus Quest Support (__WIP__)](https://melonwiki.xyz/#/android/general)
+
+| Nightly Builds: |
+| - |
+| [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
+| [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
 
 | Usage Guides: |
 | - |
@@ -93,48 +99,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
-## PROXIES:
-
-- The Proxy DLL is able to be Renamed to the Compatible File Names below.
-- By Default the Proxy is named as "version.dll".
-- For most Unity Games the Default File Name should work perfectly fine.
-- Some Unity Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Unity Engine used by the Game, etc.
-
-| File Names: |
-| - |
-| psapi.dll |
-| version.dll |
-| winhttp.dll |
-| winmm.dll |
-
----
-
-## LOAD MODES:
-
-- Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
-- Below is the Compatible Values and what each of them do.
-
-| Value | Action |
-| - | - |
-| 0 | Load Only if the File doesn't have the ".dev.dll" Extension |
-| 1 | Load Only if the File has the ".dev.dll" Extension |
-| 2 | Load All |
-
----
-
-## CONSOLE DISPLAY MODES:
-
-- Console Display Modes are built in Themes for the Console
-- Below is the Compatible Values and what each of them do.
-
-| Value | Mode |
-| - | - |
-| 0 | Normal |
-| 1 | Magenta |
-| 2 | Rainbow |
-| 3 | Random Rainbow |
-
----
 
 ## WINE / STEAM PROTON USAGE:
 
@@ -180,6 +144,51 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 | --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
+| --melonloader.disablestartscreen | Disable the Start Screen |
+| --melonloader.disableunityclc | Disable Unity Console Log Cleaner | 
+
+---
+
+## LOAD MODES:
+
+- Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
+- Below is the Compatible Values and what each of them do.
+
+| Value | Action |
+| - | - |
+| 0 | Load Only if the File doesn't have the ".dev.dll" Extension |
+| 1 | Load Only if the File has the ".dev.dll" Extension |
+| 2 | Load All |
+
+---
+
+## CONSOLE DISPLAY MODES:
+
+- Console Display Modes are built in Themes for the Console
+- Below is the Compatible Values and what each of them do.
+
+| Value | Mode |
+| - | - |
+| 0 | Normal |
+| 1 | Magenta |
+| 2 | Rainbow |
+| 3 | Random Rainbow |
+
+---
+
+## PROXIES:
+
+- The Proxy DLL is able to be Renamed to the Compatible File Names below.
+- By Default the Proxy is named as "version.dll".
+- For most Unity Games the Default File Name should work perfectly fine.
+- Some Unity Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Unity Engine used by the Game, etc.
+
+| File Names: |
+| - |
+| psapi.dll |
+| version.dll |
+| winhttp.dll |
+| winmm.dll |
 
 ---
 
@@ -194,9 +203,10 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [MonoMod](https://github.com/MonoMod/MonoMod) is licensed under the MIT License. See [LICENSE](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) for the full License.
 - [Mono.Cecil](https://github.com/jbevain/cecil) is licensed under the MIT License. See [LICENSE](https://github.com/jbevain/cecil/blob/master/LICENSE.txt) for the full License.
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) is licensed under the MIT License. See [LICENSE](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md) for the full License.
-- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/TinyJSON/LICENSE.md) for the full License.
+- [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/TinyJSON/LICENSE.md) for the full License.
 - [Tomlet](https://github.com/SamboyCoding/Tomlet) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Tomlet/blob/master/LICENSE) for the full License.
-- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/Libs/SharpZipLib/LICENSE.txt) for the full License.
+- [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/SharpZipLib/LICENSE.txt) for the full License.
+- [Semver](https://github.com/maxhauser/semver) is licensed under the MIT License. See [LICENSE](https://github.com/maxhauser/semver/blob/master/License.txt) for the full License.
 - [UnityEngine.Il2CppAssetBundleManager](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager/blob/master/LICENSE.md) for the full License.
 - [UnityEngine.Il2CppImageConversionManager](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager/blob/master/LICENSE.md) for the full License.
 - [Illusion Plugin Architecture](https://github.com/Eusth/IPA) is licensed under the MIT License. See [LICENSE](https://github.com/Eusth/IPA/blob/master/LICENSE) for the full License.

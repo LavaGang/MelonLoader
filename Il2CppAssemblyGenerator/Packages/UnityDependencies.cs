@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace MelonLoader.Il2CppAssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class UnityDependencies : PackageBase
     {
@@ -19,7 +19,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Values.UnityVersion) || !Config.Values.UnityVersion.Equals(Version));
+        private bool ShouldDownload() => string.IsNullOrEmpty(Config.Values.UnityVersion) || !Config.Values.UnityVersion.Equals(Version);
 
         internal override bool Download()
         {
@@ -34,6 +34,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 Save();
                 return true;
             }
+
+            ThrowInternalFailure("Failed to Download Unity Dependencies!");
             return false;
         }
     }

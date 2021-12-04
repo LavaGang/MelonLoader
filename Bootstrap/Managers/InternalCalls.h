@@ -7,6 +7,13 @@ class InternalCalls
 public:
 	static void Initialize();
 
+	class MelonDebug
+	{
+	public:
+		static void AddInternalCalls();
+		static bool IsEnabled();
+	};
+
 	class MelonLogger
 	{
 	public:
@@ -38,13 +45,9 @@ public:
 		static Mono::String* GetHashCode();
 		static void SCT(Mono::String* title);
 		static Mono::String* GetFileProductName(Mono::String* filepath);
-	};
-
-	class MelonDebug
-	{
-	public:
-		static void AddInternalCalls();
-		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
+		static void* GetLibPtr();
+		static void* GetRootDomainPtr();
+		static Mono::ReflectionAssembly* CastManagedAssemblyPtr(void* ptr);
 	};
 
 	class GameVersionHandler

@@ -39,6 +39,10 @@ bool Il2Cpp::Initialize()
 
 void Il2Cpp::CallInstallUnityTLSInterface()
 {
+	if ((Mono::Exports::mono_unity_get_unitytls_interface == NULL)
+		|| (Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface == NULL))
+		return;
+
 	Debug::Msg("Trying to find InstallUnityTlsInterface");
 	HMODULE mod = LoadLibraryA(Il2Cpp::UnityPlayerPath);
 	// Unity 2018
@@ -78,7 +82,7 @@ bool Il2Cpp::Exports::Initialize()
 	il2cpp_runtime_invoke = (il2cpp_runtime_invoke_t)Assertion::GetExport(Module, "il2cpp_runtime_invoke");
 	il2cpp_method_get_name = (il2cpp_method_get_name_t)Assertion::GetExport(Module, "il2cpp_method_get_name");
 	if (!Mono::IsOldMono)
-		il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)Assertion::GetExport(Module, "il2cpp_unity_install_unitytls_interface");
+		il2cpp_unity_install_unitytls_interface = (il2cpp_unity_install_unitytls_interface_t)Assertion::GetExport(Module, "il2cpp_unity_install_unitytls_interface", false);
 	return Assertion::ShouldContinue;
 }
 

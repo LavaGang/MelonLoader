@@ -1,13 +1,13 @@
-﻿using System;
+﻿using MelonLoader.Il2CppAssemblyGenerator.Packages;
+using System;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
-    internal class DumperBase : ExecutablePackageBase { internal virtual bool Execute() { return true; } };
 
-    internal static class Core
+	internal static class Core
     {
         internal static string BasePath = null;
         internal static string GameAssemblyPath = null;
@@ -50,7 +50,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (!unitydependencies.Download())
                     return 1;
 
-                dumper = new Cpp2IL();
+                // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
+                if ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
+                    || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1))) // Is Older than Windows 7 or Server 2008 R2
+                    dumper = new Il2CppDumper();
+                else
+                    dumper = new Cpp2IL();
+
                 if (!dumper.Download())
                     return 1;
 

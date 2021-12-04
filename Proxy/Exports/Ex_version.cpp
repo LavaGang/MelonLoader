@@ -1,8 +1,8 @@
 #include "../Core.h"
+#include "../Exports.h"
 
-extern "C" FARPROC OriginalFuncs_version[17];
 FARPROC OriginalFuncs_version[17];
-const char* ExportNames_version[] = {
+const char* Exports::ExportNames_version[17] = {
 	"GetFileVersionInfoA",
 	"GetFileVersionInfoByHandle",
 	"GetFileVersionInfoExA",
@@ -21,9 +21,3 @@ const char* ExportNames_version[] = {
 	"VerQueryValueA",
 	"VerQueryValueW"
 };
-
-void Core::LoadExports_version(HMODULE originaldll)
-{
-	for (int i = 0; i < (sizeof(ExportNames_version) / sizeof(ExportNames_version[0])); i++)
-		OriginalFuncs_version[i] = GetProcAddress(originaldll, ExportNames_version[i]);
-}

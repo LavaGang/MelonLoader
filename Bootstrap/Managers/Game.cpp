@@ -6,7 +6,7 @@
 #include "../Core.h"
 #include "Il2Cpp.h"
 #include "../Utils/Assertion.h"
-#include "../Utils/Logger.h"
+#include "../Utils/Logging/Logger.h"
 #include "../Utils/Encoding.h"
 #pragma comment(lib,"version.lib")
 
@@ -30,7 +30,6 @@ bool Game::Initialize()
 		return false;
 	}
 	std::string GameAssemblyPath = (std::string(BasePath) + "\\GameAssembly.dll");
-	std::string UnityPlayerPath = (std::string(BasePath) + "\\UnityPlayer.dll");
 	if (Core::FileExists(GameAssemblyPath.c_str()))
 	{
 		IsIl2Cpp = true;
@@ -40,9 +39,12 @@ bool Game::Initialize()
 
 		Il2Cpp::GameAssemblyPathMono = Encoding::OsToUtf8(Il2Cpp::GameAssemblyPath);
 	}
+
+	std::string UnityPlayerPath = (std::string(BasePath) + "\\UnityPlayer.dll");
 	Il2Cpp::UnityPlayerPath = new char[UnityPlayerPath.size() + 1];
 	std::copy(UnityPlayerPath.begin(), UnityPlayerPath.end(), Il2Cpp::UnityPlayerPath);
 	Il2Cpp::UnityPlayerPath[UnityPlayerPath.size()] = '\0';
+
 	return true;
 }
 
@@ -128,7 +130,7 @@ bool Game::ReadUnityVersion()
 		version = ReadUnityVersionFromMainData();
 	if (version.empty() || (strstr(version.c_str(), ".") == NULL))
 	{
-		Assertion::ThrowInternalFailure("Failed to Read Unity Version from File Info or globalgamemanagers!");
+		Assertion::ThrowInternalFailure("Failed to Read Unity Version from UnityPlayer.dll, globalgamemanagers, or mainData!");
 		return false;
 	}
 	UnityVersion = new char[version.size() + 1];
@@ -139,7 +141,7 @@ bool Game::ReadUnityVersion()
 
 std::string Game::ReadUnityVersionFromFileInfo()
 {
-	const char* output = Core::GetFileInfoProductVersion(ApplicationPath);
+	const char* output = Core::GetFileInfoProductVersion(Il2Cpp::UnityPlayerPath);
 	if (output == NULL)
 		return std::string();
 	std::string outputstr = output;

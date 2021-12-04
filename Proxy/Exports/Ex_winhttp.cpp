@@ -1,8 +1,7 @@
-#include "../Core.h"
+#include "../Exports.h"
 
-extern "C" FARPROC OriginalFuncs_winhttp[65];
 FARPROC OriginalFuncs_winhttp[65];
-const char* ExportNames_winhttp[] = {
+const char* Exports::ExportNames_winhttp[65] = {
 	"Private1",
 	"SvchostPushServiceGlobals",
 	"WinHttpAddRequestHeaders",
@@ -69,9 +68,3 @@ const char* ExportNames_winhttp[] = {
 	"WinHttpWriteData",
 	"WinHttpWriteProxySettings"
 };
-
-void Core::LoadExports_winhttp(HMODULE originaldll)
-{
-	for (int i = 0; i < (sizeof(ExportNames_winhttp) / sizeof(ExportNames_winhttp[0])); i++)
-		OriginalFuncs_winhttp[i] = GetProcAddress(originaldll, ExportNames_winhttp[i]);
-}

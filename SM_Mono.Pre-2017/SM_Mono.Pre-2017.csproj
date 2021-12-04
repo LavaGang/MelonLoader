@@ -55,10 +55,12 @@
     <Compile Include="..\SM_Il2Cpp\UnityMappers.cs">
       <Link>UnityMappers.cs</Link>
     </Compile>
-    <Compile Include="Component.cs" />
-    <Compile Include="Main.cs" />
+	<Compile Include="..\SM_Mono\SM_Component.cs">
+      <Link>SM_Component.cs</Link>
+    </Compile>
+    <Compile Include="..\SM_Mono\Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SupportModule.cs" />
+    <Compile Include="..\SM_Mono\SupportModule_To.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

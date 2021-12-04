@@ -69,12 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BONEWORKS_SceneHandler.cs" />
-    <Compile Include="Component.cs" />
-    <Compile Include="Coroutines.cs" />
+    <Compile Include="SM_Component.cs" />
+    <Compile Include="MonoEnumeratorWrapper.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="UnityMappers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SupportModule.cs" />
+    <Compile Include="SupportModule_To.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MelonLoader.MelonStartScreen</RootNamespace>
+    <AssemblyName>MelonStartScreen</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <LangVersion>9.0</LangVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <ProjectGuid>{762D7545-6F6B-441A-B040-49CC31A1713B}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core.cs" />
+    <Compile Include="CppUtils.cs" />
+    <Compile Include="ModLoadStep.cs" />
+    <Compile Include="NativeUtils\Il2CppSystem\Byte.cs" />
+    <Compile Include="NativeUtils\Il2CppSystem\Int32.cs" />
+    <Compile Include="NativeUtils\Il2CppSystem\Type.cs" />
+    <Compile Include="NativeUtils\NativeFieldValueAttribute.cs" />
+    <Compile Include="NativeUtils\NativeSignatureAttribute.cs" />
+    <Compile Include="NativeUtils\NativeSignatureFlags.cs" />
+    <Compile Include="NativeUtils\NativeSignatureResolver.cs" />
+    <Compile Include="NativeUtils\PEParser\ImageDataDescriptor.cs" />
+    <Compile Include="NativeUtils\PEParser\ImageExportDirectory.cs" />
+    <Compile Include="NativeUtils\PEParser\ImageFileHeader.cs" />
+    <Compile Include="NativeUtils\PEParser\ImageNtHeaders.cs" />
+    <Compile Include="NativeUtils\PEParser\ImageSectionHeader.cs" />
+    <Compile Include="NativeUtils\PEParser\ImageThunkData32.cs" />
+    <Compile Include="NativeUtils\PEParser\ImageThunkData64.cs" />
+    <Compile Include="NativeUtils\PEParser\OptionalFileHeader32.cs" />
+    <Compile Include="NativeUtils\PEParser\OptionalFileHeader64.cs" />
+    <Compile Include="NativeUtils\PEParser\PEUtils.cs" />
+    <Compile Include="ProgressParser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScreenRenderer.cs" />
+    <Compile Include="TextMeshGenerator.cs" />
+    <Compile Include="UI\AnimatedImage.cs" />
+    <Compile Include="UI\ImageFrameParser.cs" />
+    <Compile Include="UI\ImageDatas.cs" />
+    <Compile Include="UI\ProgressBar.cs" />
+    <Compile Include="UI\UIStyleValues.cs" />
+    <Compile Include="UI\UIUtils.cs" />
+    <Compile Include="UnhollowerMini\UnityInternals.cs" />
+    <Compile Include="UnhollowerMini\Il2CppException.cs" />
+    <Compile Include="UnhollowerMini\InternalClassPointerStore.cs" />
+    <Compile Include="UnhollowerMini\InternalObjectBase.cs" />
+    <Compile Include="UnhollowerMini\InternalType.cs" />
+    <Compile Include="UnhollowerMini\ObjectCollectedException.cs" />
+    <Compile Include="UnityEngine\CoreModule\Color.cs" />
+    <Compile Include="UnityEngine\CoreModule\Color32.cs" />
+    <Compile Include="UnityEngine\CoreModule\FilterMode.cs" />
+    <Compile Include="UnityEngine\CoreModule\GL.cs" />
+    <Compile Include="UnityEngine\CoreModule\Graphics.cs" />
+    <Compile Include="UnityEngine\CoreModule\ImageConversion.cs" />
+    <Compile Include="UnityEngine\CoreModule\Internal_DrawTextureArguments.cs" />
+    <Compile Include="UnityEngine\CoreModule\Material.cs" />
+    <Compile Include="UnityEngine\CoreModule\Mesh.cs" />
+    <Compile Include="UnityEngine\CoreModule\Quaternion.cs" />
+    <Compile Include="UnityEngine\CoreModule\Rect.cs" />
+    <Compile Include="UnityEngine\CoreModule\Resources.cs" />
+    <Compile Include="UnityEngine\CoreModule\Screen.cs" />
+    <Compile Include="UnityEngine\CoreModule\Texture.cs" />
+    <Compile Include="UnityEngine\CoreModule\Texture2D.cs" />
+    <Compile Include="UnityEngine\CoreModule\Vector2.cs" />
+    <Compile Include="UnityEngine\CoreModule\Vector3.cs" />
+    <Compile Include="UnityEngine\CoreModule\Vector4.cs" />
+    <Compile Include="UnityEngine\CoreModule\VertexAttribute.cs" />
+    <Compile Include="UnityEngine\CoreModule\VerticalWrapMode.cs" />
+    <Compile Include="UnityEngine\TextRenderingModule\Font.cs" />
+    <Compile Include="UnityEngine\TextRenderingModule\FontStyle.cs" />
+    <Compile Include="UnityEngine\TextRenderingModule\TextAnchor.cs" />
+    <Compile Include="UnityEngine\TextRenderingModule\TextGenerationSettings.cs" />
+    <Compile Include="UnityEngine\TextRenderingModule\TextGenerator.cs" />
+    <Compile Include="UnityEngine\TextRenderingModule\UIVertex.cs" />
+    <Compile Include="UnityPlayer\GfxDevice.cs" />
+    <Compile Include="Windows\DropFile.cs" />
+    <Compile Include="Windows\Msg.cs" />
+    <Compile Include="Windows\Point.cs" />
+    <Compile Include="Windows\User32.cs" />
+    <Compile Include="Windows\WindowMessage.cs" />
+    <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
+      <Private>false</Private>
+      <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>
+      <Name>MelonLoader</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

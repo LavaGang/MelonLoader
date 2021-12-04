@@ -12,8 +12,47 @@ public:
 	struct Class;
 	struct Method;
 	struct Property;
-	struct Object;
+	struct Object
+	{
+		void* vtable;
+		void* synchronisation;
+	};
 	struct String;
+
+	struct ReflectionAssembly
+	{
+		Object object;
+		Assembly* assembly;
+		/* CAS related */
+		Object* evidence;	/* Evidence */
+	};
+
+	struct MarshalByRefObject
+	{
+		Object obj;
+		Object* identity;
+	};
+
+	/* This is a copy of System.AppDomain */
+	struct AppDomain
+	{
+		MarshalByRefObject mbr;
+		Domain* data;
+	};
+
+	struct AssemblyName
+	{
+		const char* name;
+		const char* culture;
+		const char* hash_value;
+		const char* public_key;
+		// string of 16 hex chars + 1 NULL
+		char public_key_token[17];
+		uint32_t hash_alg;
+		uint32_t hash_len;
+		uint32_t flags;
+		uint16_t major, minor, build, revision, arch;
+	};
 
 	static HMODULE Module;
 	static Domain* domain;
@@ -27,6 +66,7 @@ public:
 	static bool Initialize();
 	static bool Load();
 	static bool SetupPaths();
+	static void InstallAssemblyHooks();
 	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
 	static String* ObjectToString(Object* obj);
@@ -34,6 +74,10 @@ public:
 	static void Free(void* ptr);
 	static std::string CheckFolderName(std::string folder_name);
 	static std::string CheckLibName(std::string base_path, std::string folder_name, std::string lib_name);
+
+	typedef Assembly* (*AssemblyPreLoadFunc) (AssemblyName* aname, char** assemblies_path, void* user_data);
+	typedef Assembly* (*AssemblySearchFunc) (AssemblyName* aname, void* user_data);
+	typedef void (*AssemblyLoadFunc) (Assembly* assembly, void* user_data);
 
 	typedef enum
 	{
@@ -159,7 +203,6 @@ public:
 		MONO_TYPEREF_SIZE
 	};
 
-
 	class Exports
 	{
 	public:
@@ -210,6 +253,11 @@ public:
 
 		MONODEF(void, mono_debug_init, (MonoDebugFormat format))
 		MONODEF(void, mono_debug_domain_create, (Domain* domain))
+
+		MONODEF(void, mono_install_assembly_preload_hook, (AssemblyPreLoadFunc func, void* user_data))
+		MONODEF(void, mono_install_assembly_search_hook, (AssemblySearchFunc func, void* user_data))
+		MONODEF(void, mono_install_assembly_load_hook, (AssemblyLoadFunc func, void* user_data))
+		MONODEF(ReflectionAssembly*, mono_assembly_get_object, (Domain* domain, Assembly* assembly))
 		
 		#undef MONODEF
 	};
@@ -220,6 +268,11 @@ public:
 		static Domain* mono_jit_init_version(const char* name, const char* version);
 		static Object* mono_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
 		static void* mono_unity_get_unitytls_interface();
+
+		static Assembly* AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data);
+		static Assembly* AssemblySearch(AssemblyName* aname, void* user_data);
+		static Assembly* AssemblyResolve(AssemblyName* aname, void* user_data, bool is_preload);
+		static void AssemblyLoad(Assembly* assembly, void* user_data);
 	};
 
 private:

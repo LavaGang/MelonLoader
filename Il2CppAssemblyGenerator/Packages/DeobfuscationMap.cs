@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace MelonLoader.Il2CppAssemblyGenerator
+namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class DeobfuscationMap : PackageBase
     {
@@ -8,14 +8,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal DeobfuscationMap()
         {
-            Destination = Core.il2cppassemblyunhollower.Destination; // Change Me
+            Destination = Core.BasePath;
             NewFileName = "DeobfuscationMap.csv.gz";
             URL = RemoteAPI.Info.MappingURL;
             Version = RemoteAPI.Info.MappingFileSHA512;
             ObfuscationRegex = RemoteAPI.Info.ObfuscationRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
                 ObfuscationRegex = Config.Values.ObfuscationRegex;
-            if (string.IsNullOrEmpty(ObfuscationRegex) && MelonUtils.GameName.Equals("Among Us"))
+            if (string.IsNullOrEmpty(ObfuscationRegex) 
+                && MelonUtils.GameName.Equals("Among Us"))
                 ObfuscationRegex = "[A-Z]{11}";
         }
 
@@ -26,9 +27,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Config.Save();
         }
 
-        private bool ShouldDownload() => (string.IsNullOrEmpty(Config.Values.DeobfuscationMapHash) ||
+        private bool ShouldDownload() => string.IsNullOrEmpty(Config.Values.DeobfuscationMapHash) ||
                                           !Config.Values.DeobfuscationMapHash.Equals(Version) ||
-                                          !File.Exists(Path.Combine(Destination, NewFileName)));
+                                          !File.Exists(Path.Combine(Destination, NewFileName));
 
         internal override bool Download()
         {
@@ -45,6 +46,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 Save();
                 return true;
             }
+
+            ThrowInternalFailure("Failed to Download Deobfuscation Map!");
             return false;
         }
     }

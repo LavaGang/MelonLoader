@@ -41,7 +41,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
+    <Compile Include="Preload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\MelonLoader\Properties\BuildInfo.cs">
       <Link>Properties\BuildInfo.cs</Link>

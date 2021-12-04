@@ -11,7 +11,7 @@
 #include "Utils/CommandLine.h"
 #include "Utils/Console.h"
 #include "Utils/Assertion.h"
-#include "Utils/Logger.h"
+#include "Utils/Logging/Logger.h"
 #include "Utils/Debug.h"
 #include "Utils/AnalyticsBlocker.h"
 #include "Utils/HashCode.h"
@@ -21,7 +21,7 @@ HINSTANCE Core::Bootstrap = NULL;
 char* Core::BasePath = NULL;
 char* Core::BasePathMono = NULL;
 char* Core::Path = NULL;
-std::string Core::Version = "0.4.3";
+std::string Core::Version = "0.5.0";
 bool Core::Is_ALPHA_PreRelease = false;
 Core::wine_get_version_t Core::wine_get_version = NULL;
 
@@ -56,30 +56,45 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	Bootstrap = hinstDLL;
 	SetBasePath();
 	SetupWineCheck();
-	if (!OSVersionCheck() || !Game::Initialize())
+
+	if (!OSVersionCheck() 
+		|| !Game::Initialize())
 		return;
+
 	CommandLine::Read();
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
+		|| !CheckPathASCII()
 		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
 		return;
+
 	WelcomeMessage();
+
 	if (!AnalyticsBlocker::Initialize()
 		|| !Il2Cpp::Initialize()
 		|| !Mono::Load())
 		return;
+
 	AnalyticsBlocker::Hook();
+
 	if (Game::IsIl2Cpp)
 	{
 		if (!Mono::IsOldMono)
 		{
-			Debug::Msg("Attaching Hook to il2cpp_unity_install_unitytls_interface...");
-			Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface, Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface);
-			Debug::Msg("Attaching Hook to mono_unity_get_unitytls_interface...");
-			Hook::Attach(&(LPVOID&)Mono::Exports::mono_unity_get_unitytls_interface, Mono::Hooks::mono_unity_get_unitytls_interface);
+			if ((Mono::Exports::mono_unity_get_unitytls_interface != NULL)
+				&& (Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface != NULL))
+			{
+				Debug::Msg("Attaching Hook to il2cpp_unity_install_unitytls_interface...");
+				Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface, Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface);
+				Debug::Msg("Attaching Hook to mono_unity_get_unitytls_interface...");
+				Hook::Attach(&(LPVOID&)Mono::Exports::mono_unity_get_unitytls_interface, Mono::Hooks::mono_unity_get_unitytls_interface);
+			}
+			else
+				Logger::QuickLog("Failed to Bridge Mono TLS! Web Connection based C# Methods may not work as intended.");
 		}
+
 		Debug::Msg("Attaching Hook to il2cpp_init...");
 		Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_init, Il2Cpp::Hooks::il2cpp_init);
 	}
@@ -88,8 +103,24 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		Debug::Msg("Attaching Hook to mono_jit_init_version...");
 		Hook::Attach(&(LPVOID&)Mono::Exports::mono_jit_init_version, Mono::Hooks::mono_jit_init_version);
 	}
-	if (!Debug::Enabled)
+
+	if (Console::CleanUnityLogs)
 		Console::NullHandles();
+}
+
+bool Core::CheckPathASCII() 
+{
+	if (std::string(BasePath).find('?') != std::string::npos)
+	{
+		Assertion::ThrowInternalFailure("The base directory path contains non-ASCII characters,\nwhich are not supported by MelonLoader.\nPlease remove them and try again.");
+		return false;
+	}
+	if (std::string(Game::BasePath).find('?') != std::string::npos)
+	{
+		Assertion::ThrowInternalFailure("The game directory path contains non-ASCII characters,\nwhich are not supported by MelonLoader.\nPlease remove them and try again.");
+		return false;
+	}
+	return true;
 }
 
 void Core::WelcomeMessage()
@@ -115,10 +146,10 @@ void Core::WelcomeMessage()
 	Logger::QuickLog("------------------------------");
 	if (Debug::Enabled)
 		Logger::WriteSpacer();
-	Debug::Msg(("Core::BasePath = " + std::string(BasePath)).c_str());
-	Debug::Msg(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
-	Debug::Msg(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
-	Debug::Msg(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
+	Logger::QuickLog(("Core::BasePath = " + std::string(BasePath)).c_str());
+	Logger::QuickLog(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
+	Logger::QuickLog(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
+	Logger::QuickLog(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
 }
 
 bool Core::OSVersionCheck()
@@ -178,10 +209,26 @@ const char* Core::GetFileInfoProductVersion(const char* path)
 	return (LPCSTR)buffer2;
 }
 
+VERSIONHELPERAPI IsWindows11OrGreater()
+{
+	OSVERSIONINFOEXW osinfo = { sizeof(osinfo), HIBYTE(_WIN32_WINNT_WIN10), LOBYTE(_WIN32_WINNT_WIN10), 22000, 0, { 0 }, 0, 0 };
+
+	DWORDLONG const mask = VerSetConditionMask(
+		VerSetConditionMask(
+			VerSetConditionMask(
+				0, VER_MAJORVERSION, VER_GREATER_EQUAL),
+			VER_MINORVERSION, VER_GREATER_EQUAL),
+		VER_BUILDNUMBER, VER_GREATER_EQUAL);
+
+	return VerifyVersionInfoW(&osinfo, VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER, mask) != FALSE;
+}
+
 const char* Core::GetOSVersion()
 {
 	if (IsRunningInWine())
 		return (std::string("Wine ") + wine_get_version()).c_str();
+	else if (IsWindows11OrGreater())
+		return "Windows 11";
 	else if (IsWindows10OrGreater())
 		return "Windows 10";
 	else if (IsWindows8Point1OrGreater())

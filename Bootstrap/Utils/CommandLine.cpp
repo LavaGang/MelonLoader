@@ -1,5 +1,5 @@
 #include "CommandLine.h"
-#include "Logger.h"
+#include "Logging/Logger.h"
 #include "Debug.h"
 #include "AnalyticsBlocker.h"
 #include "Encoding.h"
@@ -52,7 +52,9 @@ void CommandLine::Read()
 			Console::ShouldSetTitle = false;
 		else if (strstr(command, "--melonloader.dab") != NULL)
 			AnalyticsBlocker::ShouldDAB = true;
-		
+		else if (strstr(command, "--melonloader.disableunityclc") != NULL)
+			Console::CleanUnityLogs = false;
+
 #ifndef DEBUG
 		else if (strstr(command, "--melonloader.debug") != NULL)
 			Debug::Enabled = true;

@@ -18,9 +18,9 @@ __forceinline bool IsNameValid(const char* name)
     while (const char c = *name)
     {
         if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '<' || c == '>'
-            || c == '`' || c == '.' || c == '=' || c == '-' || c == '|' || c == ',' || c == '[' || c == ']' || c == '$' || c == ':'))
+            || c == '`' || c == '.' || c == '=' || c == '-' || c == '|' || c == ',' || c == '[' || c == ']' || c == '$'
+            || c == ':' || c == '@'))
             return false;
-
         name++;
     }
 
@@ -50,7 +50,7 @@ __forceinline bool CheckAssembly(Mono::Image* image)
     auto numMethodDefs = Mono::Exports::mono_image_get_table_rows(image, Mono::MONO_TABLE_METHOD);
     auto numFieldDefs = Mono::Exports::mono_image_get_table_rows(image, Mono::MONO_TABLE_FIELD);
 
-    int delegateIndex = -1;
+    int delegateIndex = -2;
 
     for (int i = 0; i < numTypeRefs; i++)
     {
@@ -69,8 +69,6 @@ __forceinline bool CheckAssembly(Mono::Image* image)
         }
     }
 
-    delegateIndex |= Mono::MONO_TABLE_TYPEREF << 24;
-
     auto symbolCounts = std::unordered_map<char, int>();
 
     for (int i = 0; i < numTypeDefs; i++)
@@ -81,11 +79,12 @@ __forceinline bool CheckAssembly(Mono::Image* image)
         auto typeNsStr = Mono::Exports::mono_metadata_string_heap(image, typeNsIndex);
         auto typeNameStr = Mono::Exports::mono_metadata_string_heap(image, typeNameIndex);
 
-        const auto baseType = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_EXTENDS);
+        const auto baseTypeRef = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_EXTENDS);
+        const auto baseType = ((baseTypeRef & 3) == 1) ? (baseTypeRef >> 2) - 1 : -1;
         if (baseType == delegateIndex)
         {
             const auto fieldIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_FIELD_LIST);
-            const auto nextFieldIndex = i == numTypeDefs - 1 ? numFieldDefs : Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i + 1, Mono::MONO_TYPEDEF_FIELD_LIST);
+            const auto nextFieldIndex = i == numTypeDefs - 1 ? (numFieldDefs + 1) : Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i + 1, Mono::MONO_TYPEDEF_FIELD_LIST);
             if (fieldIndex != nextFieldIndex)
                 return false;
         }
@@ -96,12 +95,12 @@ __forceinline bool CheckAssembly(Mono::Image* image)
         if (strstr(typeNameStr, "<Module>") != NULL)
         {
             const auto fieldIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_FIELD_LIST);
-            const auto nextFieldIndex = i == numTypeDefs - 1 ? numFieldDefs : Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i + 1, Mono::MONO_TYPEDEF_FIELD_LIST);
+            const auto nextFieldIndex = (i == numTypeDefs - 1) ? (numFieldDefs + 1) : Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i + 1, Mono::MONO_TYPEDEF_FIELD_LIST);
             if (fieldIndex != nextFieldIndex)
                 return false;
 
             const auto methodIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_METHOD_LIST);
-            const auto nextMethodIndex = i == numTypeDefs - 1 ? numMethodDefs : Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i + 1, Mono::MONO_TYPEDEF_METHOD_LIST);
+            const auto nextMethodIndex = (i == numTypeDefs - 1) ? (numMethodDefs + 1) : Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i + 1, Mono::MONO_TYPEDEF_METHOD_LIST);
             if (methodIndex != nextMethodIndex)
                 return false;
         }
@@ -119,6 +118,10 @@ __forceinline bool CheckAssembly(Mono::Image* image)
 
         CountChars(nameStr, symbolCounts);
     }
+    
+    // exclude small assemblies from this check as they often get false positives
+    if (numTypeDefs + numMethodDefs < 20)
+        return true;
 
     double totalChars = 0;
     for (auto pair : symbolCounts)
