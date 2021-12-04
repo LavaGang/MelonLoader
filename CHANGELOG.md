@@ -32,6 +32,8 @@
 2. Fixed Issue with Force Launch Options not checking Argument Count.
 3. Fixed Issue with Proxy not properly detecting UnityCrashHandler.
 4. Fixed Issue with Proxy not properly locating Bootstrap.
+5. Fixed Issue with Offline Mode throwing an NRE during Assembly Generation.
+6. Fixed Issue with Launch Options causing Crash.
 
 ---
 
@@ -117,8 +119,6 @@
 2. Updated HarmonyX to v2.5.1.
 3. Updated Cpp2IL to v2021.2.4.
 4. Fixed Issue with Assembly Generator not responding to RemoteAPI when Forcing Dumper Version.
-5. Fixed Issue with Offline Mode throwing an NRE during Assembly Generation.
-6. Fixed Issue with Launch Options causing Crash.
 
 ---
 
