@@ -7,9 +7,7 @@ namespace MelonLoader
     {
         public MelonPlatformAttribute(params CompatiblePlatforms[] platforms) => Platforms = platforms;
 
-        // <summary>
-        /// Enum for Melon Platform Compatibility.
-        /// </summary>
+        // <summary>Enum for Melon Platform Compatibility.</summary>
         public enum CompatiblePlatforms
         {
             UNIVERSAL,
@@ -17,9 +15,7 @@ namespace MelonLoader
             WINDOWS_X64
         };
 
-        /// <summary>
-        /// Platforms Compatible with the Melon.
-        /// </summary>
+        // <summary>Platforms Compatible with the Melon.</summary>
         public CompatiblePlatforms[] Platforms { get; internal set; }
     }
 }

@@ -7,9 +7,7 @@ namespace MelonLoader
     {
         public MelonPlatformDomainAttribute(CompatibleDomains domain = CompatibleDomains.UNIVERSAL) => Domain = domain;
 
-        // <summary>
-        /// Enum for Melon Platform Domain Compatibility.
-        /// </summary>
+        // <summary>Enum for Melon Platform Domain Compatibility.</summary>
         public enum CompatibleDomains
         {
             UNIVERSAL,
@@ -17,9 +15,7 @@ namespace MelonLoader
             IL2CPP
         };
 
-        /// <summary>
-        /// Platform Domain Compatibility of the Melon.
-        /// </summary>
+        // <summary>Platform Domain Compatibility of the Melon.</summary>
         public CompatibleDomains Domain { get; internal set; }
     }
 }

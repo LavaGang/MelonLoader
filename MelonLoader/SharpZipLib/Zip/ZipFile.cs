@@ -4281,7 +4281,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		/// <param name="stream">The current stream.</param>
 		/// <returns>Returns a stream suitable for direct updating.</returns>
-		/// <remarks>If the <paramref name="current"/> stream is not null this is used as is.</remarks>
+		/// <remarks>If <paramref name="stream">the current stream</paramref> is not null this is used as is.</remarks>
 		public override Stream OpenForDirectUpdate(Stream stream)
 		{
 			Stream result;
