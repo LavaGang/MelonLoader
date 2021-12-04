@@ -64,9 +64,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
             {
-                if (!unitydependencies.Download()
-                    || !dumper.Download()
+                if (!dumper.Download()
                     || !il2cppassemblyunhollower.Download()
+                    || !unitydependencies.Download()
                     || !deobfuscationMap.Download())
                     return 1;
             }

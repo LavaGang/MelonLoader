@@ -48,8 +48,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             ContactHosts();
 
-            MelonLogger.Msg($"RemoteAPI.ForceDumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
-            MelonLogger.Msg($"RemoteAPI.ForceUnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
+            MelonLogger.Msg($"RemoteAPI.DumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
+            MelonLogger.Msg($"RemoteAPI.UnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
             MelonLogger.Msg($"RemoteAPI.ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
             MelonLogger.Msg($"RemoteAPI.MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
             MelonLogger.Msg($"RemoteAPI.MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");

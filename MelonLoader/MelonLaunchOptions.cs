@@ -40,10 +40,6 @@ namespace MelonLoader
                         Core.StartScreen = false;
                         goto default;
                     case "--melonloader.loadmodeplugins":
-                        if ((i + 1) < args.Length)
-                            valuestr = args[i + 1];
-                        else
-                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         if (!int.TryParse(valuestr, out valueint))
@@ -51,10 +47,6 @@ namespace MelonLoader
                         Core.LoadMode_Plugins = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
                         goto default;
                     case "--melonloader.loadmodemods":
-                        if ((i + 1) < args.Length)
-                            valuestr = args[i + 1];
-                        else
-                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         if (!int.TryParse(valuestr, out valueint))
@@ -64,10 +56,6 @@ namespace MelonLoader
 
                     // Console
                     case "--melonloader.consolemode":
-                        if ((i + 1) < args.Length)
-                            valuestr = args[i + 1];
-                        else
-                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         if (!int.TryParse(valuestr, out valueint))
@@ -86,28 +74,16 @@ namespace MelonLoader
                         Il2CppAssemblyGenerator.ForceRegeneration = true;
                         goto default;
                     case "--melonloader.agfvdumper":
-                        if ((i + 1) < args.Length)
-                            valuestr = args[i + 1];
-                        else
-                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         Il2CppAssemblyGenerator.ForceVersion_Dumper = valuestr;
                         goto default;
                     case "--melonloader.agfvunhollower":
-                        if ((i + 1) < args.Length)
-                            valuestr = args[i + 1];
-                        else
-                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         Il2CppAssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower = valuestr;
                         goto default;
                     case "--melonloader.agfvunity":
-                        if ((i + 1) < args.Length)
-                            valuestr = args[i + 1];
-                        else
-                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         Il2CppAssemblyGenerator.ForceVersion_UnityDependencies = valuestr;
