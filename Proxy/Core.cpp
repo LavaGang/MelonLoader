@@ -50,7 +50,8 @@ void Core::Load(HINSTANCE hinstDLL)
 	if (strstr(GetCommandLineA(), "--no-mods") != NULL)
 		return;
 
-	std::string bootstrap_path = GetBootstrapPath();
+	std::string BasePath = filepath.substr(0, filepath.find_last_of("\\/"));
+	std::string bootstrap_path = GetBootstrapPath(BasePath);
 	if (bootstrap_path.empty())
 		return;
 
@@ -90,9 +91,9 @@ HMODULE Core::LoadOriginalDLL(std::string proxy_filepath, std::string proxy_file
 	return originaldll;
 }
 
-std::string Core::GetBootstrapPath()
+std::string Core::GetBootstrapPath(std::string BasePath)
 {
-	std::string defaultpath = "MelonLoader\\Dependencies\\Bootstrap.dll";
+	std::string defaultpath = BasePath + "\\MelonLoader\\Dependencies\\Bootstrap.dll";
 	std::string returnval = defaultpath;
 
 	int argc = __argc;

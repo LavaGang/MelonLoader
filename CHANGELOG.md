@@ -31,6 +31,7 @@
 1. Added '(' and ')' Character to Assembly Verification.
 2. Fixed Issue with Force Launch Options not checking Argument Count.
 3. Fixed Issue with Proxy not properly detecting UnityCrashHandler.
+4. Fixed Issue with Proxy not properly location Bootstrap.
 
 ---
 
