@@ -8,21 +8,34 @@ namespace MelonLoader
         public static readonly ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
         public static readonly ConsoleColor DefaultTextColor = ConsoleColor.Gray;
 
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Msg(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt);
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Msg(string txt, params object[] args) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, string.Format(txt, args));
 
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Msg(ConsoleColor txt_color, object obj) => NativeMsg(DefaultMelonColor, txt_color, null, obj.ToString());
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt);
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
 
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Warning(object obj) => NativeWarning(null, obj.ToString());
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Warning(string txt) => NativeWarning(null, txt);
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Warning(string txt, params object[] args) => NativeWarning(null, string.Format(txt, args));
 
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Error(object obj) => NativeError(null, obj.ToString());
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Error(string txt) => NativeError(null, txt);
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Error(string txt, params object[] args) => NativeError(null, string.Format(txt, args));
+        [Obsolete("In a future update this MelonLogger Method will no longer automatically find the name of the Melon running it. Use LoggerInstance instead if you want the Melon's name added.")]
         public static void Error(string txt, Exception ex) => NativeError(null, $"{txt}\n{ex}");
 
         private static void NativeMsg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
