@@ -268,13 +268,17 @@ namespace MelonLoader.CompatibilityLayers
             if ((platformDomainAttribute == null)
                 || (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.UNIVERSAL))
                 return true;
-            bool is_il2cpp_expected_mono = (MelonUtils.IsGameIl2Cpp() && (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.MONO));
-            bool is_mono_expected_il2cpp = (!MelonUtils.IsGameIl2Cpp() && (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP));
-            if (is_il2cpp_expected_mono || is_mono_expected_il2cpp)
+            
+            bool is_acceptable = MelonUtils.IsGameIl2Cpp()
+                ? (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP)
+                : (platformDomainAttribute.Domain == MelonPlatformDomainAttribute.CompatibleDomains.MONO);
+
+            if (!is_acceptable)
             {
                 MelonLogger.Error($"Incompatible Platform Domain for {(is_plugin ? "Plugin" : "Mod")}: {FilePath}");
                 return false;
             }
+
             return true;
         }
 
