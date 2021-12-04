@@ -86,16 +86,28 @@ namespace MelonLoader
                         Il2CppAssemblyGenerator.ForceRegeneration = true;
                         goto default;
                     case "--melonloader.agfvdumper":
+                        if ((i + 1) < args.Length)
+                            valuestr = args[i + 1];
+                        else
+                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         Il2CppAssemblyGenerator.ForceVersion_Dumper = valuestr;
                         goto default;
                     case "--melonloader.agfvunhollower":
+                        if ((i + 1) < args.Length)
+                            valuestr = args[i + 1];
+                        else
+                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         Il2CppAssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower = valuestr;
                         goto default;
                     case "--melonloader.agfvunity":
+                        if ((i + 1) < args.Length)
+                            valuestr = args[i + 1];
+                        else
+                            goto default;
                         if (string.IsNullOrEmpty(valuestr))
                             goto default;
                         Il2CppAssemblyGenerator.ForceVersion_UnityDependencies = valuestr;
