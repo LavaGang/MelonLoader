@@ -10,11 +10,15 @@ void Core::Load(HINSTANCE hinstDLL)
 	std::for_each(proxy_filepath.begin(), proxy_filepath.end(), [](char& character) { character = ::tolower(character); });
 	std::string proxy_filepath_no_ext = proxy_filepath.substr(0, proxy_filepath.find_last_of("."));
 
-	std::string exe_filepath = File::GetModuleFilePath(GetModuleHandleA(NULL));
-	std::string exe_filepath_no_ext = exe_filepath.substr(0, exe_filepath.find_last_of("."));
-	std::for_each(exe_filepath.begin(), exe_filepath.end(), [](char& character) { character = ::tolower(character); });
+	LPSTR filepathstr = new CHAR[MAX_PATH];
+	HMODULE exe_module = GetModuleHandleA(NULL);
+	GetModuleFileNameA(exe_module, filepathstr, MAX_PATH);
+	std::string filepath = filepathstr;
+	delete[] filepathstr;
 
-	if (IsUnityCrashHandler(exe_filepath))
+	std::string filepath_lowercase = filepath.c_str();
+	std::transform(filepath_lowercase.begin(), filepath_lowercase.end(), filepath_lowercase.begin(), [](unsigned char c) { return std::tolower(c); });
+	if (IsUnityCrashHandler(filepath_lowercase))
 	{
 		KillItDead();
 		return;
@@ -37,7 +41,7 @@ void Core::Load(HINSTANCE hinstDLL)
 
 	Exports::Load(index, originaldll);
 
-	if (!IsUnityGame(exe_filepath_no_ext))
+	if (!IsUnityGame(filepath))
 	{
 		Error("Proxy has been loaded by a Process that is not a Unity Game!");
 		return;
@@ -116,9 +120,9 @@ std::string Core::GetBootstrapPath()
 	return returnval;
 }
 
-bool Core::IsUnityGame(std::string exe_filepath_no_ext)
+bool Core::IsUnityGame(std::string filepath)
 {
-	std::string datapath = exe_filepath_no_ext + "_Data";
+	std::string datapath = (filepath.substr(0, filepath.find_last_of(".")) + "_Data");
 	if (!Directory::Exists(datapath.c_str()))
 		return false;
 	if (File::Exists((datapath + "\\globalgamemanagers").c_str())
