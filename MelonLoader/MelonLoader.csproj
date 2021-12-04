@@ -60,6 +60,8 @@
     <Compile Include="MonoInternals\ResolveInternals\AssemblyManager.cs" />
     <Compile Include="MonoInternals\AssemblyResolveInfo.cs" />
     <Compile Include="MonoInternals\ResolveInternals\SearchDirectoryManager.cs" />
+    <Compile Include="Semver\IntExtensions.cs" />
+    <Compile Include="Semver\SemVersion.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Constants.cs" />
     <Compile Include="SharpZipLib\BZip2\BZip2Exception.cs" />
@@ -213,13 +215,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="HarmonyX">
-      <Version>2.5.7</Version>
+      <Version>2.6.1</Version>
     </PackageReference>
     <PackageReference Include="ILRepack.Lib.MSBuild.Task">
       <Version>2.0.18.2</Version>
     </PackageReference>
-    <PackageReference Include="Samboy063.Tomlet" Version="2.0.2" />
+    <PackageReference Include="Samboy063.Tomlet" Version="2.1.0" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

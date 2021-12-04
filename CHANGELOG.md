@@ -27,8 +27,8 @@
 
 ### v0.5.0 Open-Beta:
 
-1. Updated HarmonyX to v2.5.7.
-2. Updated Tomlet to v2.0.2.	
+1. Updated HarmonyX to v2.6.1.
+2. Updated Tomlet to v2.1.0.	
 3. Updated Il2CppAssemblyUnhollower to v0.4.16.1.
 4. Updated Cpp2IL to v2021.5.3.
 5. Added User Libs Directory and Assembly Resolver.
@@ -96,6 +96,8 @@
 69. Added MelonLoader.Assertions.LemonAssert Utility for Universal Assertions Functionality.
 70. Implemented Map Based Backend for Assertions under MelonLoader.Assertions.LemonAssertMapping.
 71. Fixed Issue with LemonAssert.IsNull Mapping.
+72. Implemented SemVer Library.
+73. Fixed Comparison Issue with VerifyLoaderVersion Attribute.
 
 ---
 
