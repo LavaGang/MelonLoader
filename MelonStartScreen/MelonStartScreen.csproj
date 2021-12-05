@@ -96,6 +96,7 @@
     <Compile Include="UnityEngine\CoreModule\Rect.cs" />
     <Compile Include="UnityEngine\CoreModule\Resources.cs" />
     <Compile Include="UnityEngine\CoreModule\Screen.cs" />
+    <Compile Include="UnityEngine\CoreModule\SystemInfo.cs" />
     <Compile Include="UnityEngine\CoreModule\Texture.cs" />
     <Compile Include="UnityEngine\CoreModule\Texture2D.cs" />
     <Compile Include="UnityEngine\CoreModule\Vector2.cs" />

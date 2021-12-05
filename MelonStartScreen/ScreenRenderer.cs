@@ -2,6 +2,7 @@
 using MelonLoader.MelonStartScreen.UI;
 using System;
 using UnityEngine;
+using UnityEngine.CoreModule;
 using UnityPlayer;
 
 namespace MelonLoader.MelonStartScreen
@@ -23,6 +24,8 @@ namespace MelonLoader.MelonStartScreen
 #pragma warning restore 0649
 
         public static bool disabled = false;
+
+        private static uint shouldCallWFLPAGT = 0;
 
         private static Mesh melonloaderversionTextmesh;
         private static ProgressBar progressBar;
@@ -56,6 +59,12 @@ namespace MelonLoader.MelonStartScreen
             melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} v{BuildInfo.Version} Open-Beta", settings);
 
             progressBar = new ProgressBar(width: 540, height: 36);
+
+            uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
+            MelonDebug.Msg("Graphics Device Type: " + graphicsDeviceType);
+            shouldCallWFLPAGT = NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" })
+                && (graphicsDeviceType == /*DX11*/2 || graphicsDeviceType == /*DX12*/18)
+                ? graphicsDeviceType : 0;
         }
 
 
@@ -89,6 +98,8 @@ namespace MelonLoader.MelonStartScreen
                 progressBar.Render();
 
                 GfxDevice.PresentFrame();
+                if (shouldCallWFLPAGT != 0)
+                    GfxDevice.WaitForLastPresentationAndGetTimestamp(shouldCallWFLPAGT);
             }
             catch (Exception e)
             {

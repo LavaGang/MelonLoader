@@ -66,6 +66,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                 {
                     bool hasAttribute = false;
                     bool signaturefound = false;
+                    bool optionalOnEarlyVersion = false;
                     IOrderedEnumerable<NativeSignatureAttribute> nativeSignatureAttributes = fi.GetCustomAttributes(false)
                         .Where(attr => attr is NativeSignatureAttribute)
                         .Select(attr => (NativeSignatureAttribute)attr)
@@ -80,6 +81,12 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                             continue;
 
                         signaturefound = true;
+
+                        if (attribute.Signature == null)
+                        {
+                            optionalOnEarlyVersion = true;
+                            break;
+                        }
 
                         IntPtr ptr = CppUtils.Sigscan(moduleAddress, moduleSize, attribute.Signature);
                         if (ptr == IntPtr.Zero)
@@ -100,7 +107,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                         break;
                     }
 
-                    if (hasAttribute && !signaturefound)
+                    if (hasAttribute && !signaturefound && !optionalOnEarlyVersion)
                     {
                         MelonLogger.Error("Failed to find a signature for field " + fi.Name + " for this version of Unity");
                         success = false;

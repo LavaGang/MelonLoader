@@ -6,6 +6,24 @@ namespace MelonLoader.MelonStartScreen
 {
     internal static class CppUtils
     {
+        public static unsafe IntPtr ResolveRelativeInstruction(IntPtr instruction)
+        {
+            byte opcode = *(byte*)instruction;
+            if (opcode != 0xE8 && opcode != 0xE9)
+                return IntPtr.Zero;
+
+            return ResolvePtrOffset((IntPtr)((long)instruction + 1), (IntPtr)((long)instruction + 5)); // CALL: E8 [rel32] / JMP: E9 [rel32]
+        }
+
+        public static unsafe IntPtr ResolvePtrOffset(IntPtr offset32Ptr, IntPtr nextInstructionPtr)
+        {
+            uint jmpOffset = *(uint*)offset32Ptr;
+            uint valueUInt = new ConvertClass() { valueULong = (ulong)nextInstructionPtr }.valueUInt;
+            long delta = nextInstructionPtr.ToInt64() - valueUInt;
+            uint newPtrInt = unchecked(valueUInt + jmpOffset);
+            return new IntPtr(newPtrInt + delta);
+        }
+
         internal static unsafe IntPtr Sigscan(IntPtr module, int moduleSize, string signature)
         {
             string signatureSpaceless = signature.Replace(" ", "");
@@ -53,6 +71,16 @@ namespace MelonLoader.MelonStartScreen
         {
             int val = (int)hex;
             return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        private class ConvertClass
+        {
+            [FieldOffset(0)]
+            public ulong valueULong;
+
+            [FieldOffset(0)]
+            public uint valueUInt;
         }
     }
 }

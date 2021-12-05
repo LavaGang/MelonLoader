@@ -1,10 +1,17 @@
-﻿using MelonLoader.MelonStartScreen.NativeUtils;
+﻿using MelonLoader;
+using MelonLoader.MelonStartScreen;
+using MelonLoader.MelonStartScreen.NativeUtils;
+using System;
+using System.Runtime.InteropServices;
+using UnhollowerMini;
 
 namespace UnityPlayer
 {
     internal class GfxDevice
     {
         private delegate void PresentFrameDelegate();
+        private delegate void WaitForLastPresentationAndGetTimestampDelegate(IntPtr gfxDevice);
+        private delegate IntPtr GetRealGfxDeviceDelegate();
 
 #pragma warning disable 0649
         #region m_PresentFrame Signatures
@@ -17,9 +24,50 @@ namespace UnityPlayer
         [NativeSignature(03, NativeSignatureFlags.X64, "40 53 48 83 ec 20 e8 ?? ?? ?? ?? 48 8b c8 48 8b d8 e8 ?? ?? ?? ?? e8 ?? ?? ?? ?? 48 85 c0 74", "2018.4.18", "2019.3.0", "2020.1.0")]
         #endregion
         private static PresentFrameDelegate m_PresentFrame;
+
+        #region m_D3D11WaitForLastPresentationAndGetTimestamp Signatures
+        [NativeSignature(00, NativeSignatureFlags.None, null, "2017.1.0")]
+        [NativeSignature(01, NativeSignatureFlags.X64, "48 89 5c 24 10 56 48 81 ec 90 00 00 00 0f 29 b4 24 80 00 00 00 48 8b f1", "2020.2.7", "2020.3.0", "2021.1.0")]
+        #endregion
+        private static WaitForLastPresentationAndGetTimestampDelegate m_D3D11WaitForLastPresentationAndGetTimestamp;
+
+        #region m_D3D12WaitForLastPresentationAndGetTimestamp Signatures
+        [NativeSignature(00, NativeSignatureFlags.None, null, "2017.1.0")]
+        [NativeSignature(01, NativeSignatureFlags.X64, "48 89 5c 24 08 57 48 81 ec 90 00 00 00 0f 29 b4 24 80 00 00 00 48 8b d9", "2020.2.7", "2020.3.0", "2021.1.0")]
+        #endregion
+        private static WaitForLastPresentationAndGetTimestampDelegate m_D3D12WaitForLastPresentationAndGetTimestamp;
 #pragma warning restore 0649
+
+        private static GetRealGfxDeviceDelegate m_GetRealGfxDevice;
+
+        static GfxDevice()
+        {
+            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" }))
+            {
+                // `FrameTimingManager_CUSTOM_CaptureFrameTimings()` calls `GetRealGfxDevice()` after 4 bytes.
+                m_GetRealGfxDevice = (GetRealGfxDeviceDelegate)Marshal.GetDelegateForFunctionPointer(
+                    CppUtils.ResolveRelativeInstruction(
+                        (IntPtr)((long)UnityInternals.ResolveICall("UnityEngine.FrameTimingManager::CaptureFrameTimings") + 4)),
+                    typeof(GetRealGfxDeviceDelegate));
+            }
+        }
 
         public static void PresentFrame() =>
             m_PresentFrame();
+
+        public static IntPtr GetRealGfxDevice() =>
+            m_GetRealGfxDevice();
+
+        internal static void WaitForLastPresentationAndGetTimestamp(uint deviceType)
+        {
+            IntPtr gfxDevice = GetRealGfxDevice();
+
+            switch (deviceType)
+            {
+                case /*DX11*/ 2: m_D3D11WaitForLastPresentationAndGetTimestamp(gfxDevice); break;
+                case /*DX12*/18: m_D3D12WaitForLastPresentationAndGetTimestamp(gfxDevice); break;
+                default: throw new NotImplementedException();
+            }
+        }
     }
 }
