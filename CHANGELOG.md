@@ -35,6 +35,7 @@
 5. Fixed Issue with Proxy not properly locating Bootstrap.
 6. Fixed Issue with Offline Mode throwing an NRE during Assembly Generation.
 7. Fixed Issue with Launch Options causing Crash.
+8. Fixed Issue with Older OS Check running under Wine/Proton.
 
 ---
 

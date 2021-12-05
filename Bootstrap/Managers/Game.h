@@ -14,7 +14,6 @@ public:
 	static char* Name;
 	static char* UnityVersion;
 	static bool IsIl2Cpp;
-	static bool FirstRun;
 
 	static bool Initialize();
 	static bool SetupPaths();

@@ -46,8 +46,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 RemoteAPI.Contact();
 
             // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
-            if ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
-                || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1))) // Is Older than Windows 7 or Server 2008 R2
+            if (!MelonUtils.IsUnderWineOrSteamProton() && ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
+                || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1)))) // Is Older than Windows 7 or Server 2008 R2
                 dumper = new Il2CppDumper();
             else
                 dumper = new Cpp2IL();
