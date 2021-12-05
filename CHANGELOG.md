@@ -28,12 +28,13 @@
 
 ### v0.5.1 Open-Beta:
 
-1. Added '(' and ')' Character to Assembly Verification.
-2. Fixed Issue with Force Launch Options not checking Argument Count.
-3. Fixed Issue with Proxy not properly detecting UnityCrashHandler.
-4. Fixed Issue with Proxy not properly locating Bootstrap.
-5. Fixed Issue with Offline Mode throwing an NRE during Assembly Generation.
-6. Fixed Issue with Launch Options causing Crash.
+1. Updated Il2CppAssemblyUnhollower to v0.4.16.2.
+2. Added '(' and ')' Character to Assembly Verification.
+3. Fixed Issue with Force Launch Options not checking Argument Count.
+4. Fixed Issue with Proxy not properly detecting UnityCrashHandler.
+5. Fixed Issue with Proxy not properly locating Bootstrap.
+6. Fixed Issue with Offline Mode throwing an NRE during Assembly Generation.
+7. Fixed Issue with Launch Options causing Crash.
 
 ---
 
