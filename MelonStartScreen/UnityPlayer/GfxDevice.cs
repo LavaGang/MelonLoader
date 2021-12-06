@@ -27,12 +27,17 @@ namespace UnityPlayer
 
         #region m_D3D11WaitForLastPresentationAndGetTimestamp Signatures
         [NativeSignature(00, NativeSignatureFlags.None, null, "2017.1.0")]
+        [NativeSignature(01, NativeSignatureFlags.X86, "55 8b ec 83 ec 40 53 56 8b d9 57 89 5d fc e8 ?? ?? ?? ?? 6a 02 8b c8", "2020.2.7", "2020.3.0", "2021.1.0")]
+        [NativeSignature(02, NativeSignatureFlags.X86, "55 8b ec 83 ec 48 53 56 8b d9 57 89 5d fc e8 ?? ?? ?? ?? 6a 02 8b c8", "2020.3.9", "2021.1.5", "2021.2.0")]
         [NativeSignature(01, NativeSignatureFlags.X64, "48 89 5c 24 10 56 48 81 ec 90 00 00 00 0f 29 b4 24 80 00 00 00 48 8b f1", "2020.2.7", "2020.3.0", "2021.1.0")]
         #endregion
         private static WaitForLastPresentationAndGetTimestampDelegate m_D3D11WaitForLastPresentationAndGetTimestamp;
 
         #region m_D3D12WaitForLastPresentationAndGetTimestamp Signatures
         [NativeSignature(00, NativeSignatureFlags.None, null, "2017.1.0")]
+        [NativeSignature(01, NativeSignatureFlags.X86, "55 8b ec 83 ec 40 53 56 57 8b f9 89 7d f4 e8 ?? ?? ?? ?? 6a 02 8b c8", "2020.2.7", "2020.3.0", "2021.1.0")]
+        [NativeSignature(02, NativeSignatureFlags.X86, "55 8b ec 83 ec 48 56 57 8b f9 89 7d f0 e8 ?? ?? ?? ?? 6a 02 8b c8", "2020.3.9", "2021.1.5")]
+        [NativeSignature(03, NativeSignatureFlags.X86, "55 8b ec 83 ec 48 56 57 8b f9 89 7d f8 e8 ?? ?? ?? ?? 6a 02 8b c8", "2021.2.0")]
         [NativeSignature(01, NativeSignatureFlags.X64, "48 89 5c 24 08 57 48 81 ec 90 00 00 00 0f 29 b4 24 80 00 00 00 48 8b d9", "2020.2.7", "2020.3.0", "2021.1.0")]
         #endregion
         private static WaitForLastPresentationAndGetTimestampDelegate m_D3D12WaitForLastPresentationAndGetTimestamp;
@@ -47,7 +52,7 @@ namespace UnityPlayer
                 // `FrameTimingManager_CUSTOM_CaptureFrameTimings()` calls `GetRealGfxDevice()` after 4 bytes.
                 m_GetRealGfxDevice = (GetRealGfxDeviceDelegate)Marshal.GetDelegateForFunctionPointer(
                     CppUtils.ResolveRelativeInstruction(
-                        (IntPtr)((long)UnityInternals.ResolveICall("UnityEngine.FrameTimingManager::CaptureFrameTimings") + 4)),
+                        (IntPtr)((long)UnityInternals.ResolveICall("UnityEngine.FrameTimingManager::CaptureFrameTimings") + (MelonUtils.IsGame32Bit() ? 0 : 4))),
                     typeof(GetRealGfxDeviceDelegate));
             }
         }
