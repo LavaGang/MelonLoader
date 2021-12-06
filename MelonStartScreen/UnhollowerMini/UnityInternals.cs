@@ -294,9 +294,10 @@ namespace UnhollowerMini
             int parenthesisIndex = typeAndMethod[1].IndexOf('(');
             if (parenthesisIndex >= 0)
                 typeAndMethod[1] = typeAndMethod[1].Substring(0, parenthesisIndex);
-            MonoMethod* monoMethod = (MonoMethod*)Marshal.AllocHGlobal(sizeof(MonoMethod));
+            // We add a padding to the end of each allocated memory since our structs are supposed to be bigger than the one we have here
+            MonoMethod* monoMethod = (MonoMethod*)Marshal.AllocHGlobal(sizeof(MonoMethod) + 0x100);
             monoMethod->applyZeroes();
-            monoMethod->klass = (MonoClass*)Marshal.AllocHGlobal(sizeof(MonoClass));
+            monoMethod->klass = (MonoClass*)Marshal.AllocHGlobal(sizeof(MonoClass) + 0x100);
             monoMethod->klass->applyZeroes();
             monoMethod->name = (byte*)Marshal.StringToHGlobalAnsi(typeAndMethod[1]);
             int lastDotIndex = typeAndMethod[0].LastIndexOf('.');
