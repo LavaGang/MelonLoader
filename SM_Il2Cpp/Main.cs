@@ -57,6 +57,7 @@ namespace MelonLoader.Support
             }
             catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneUnloaded override failed: {ex}"); }
 
+            /*
             try
             {
                 Camera.onPostRender = (
@@ -66,8 +67,9 @@ namespace MelonLoader.Support
                     );
             }
             catch (Exception ex) { MelonLogger.Error($"Camera.onPostRender override failed: {ex}"); }
+            */
 
-            //MonoEnumeratorWrapper.Register();
+            MonoEnumeratorWrapper.Register();
 
             ClassInjector.RegisterTypeInIl2Cpp<SM_Component>();
             SM_Component.Create();
@@ -77,8 +79,8 @@ namespace MelonLoader.Support
         private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (scene == null) return; if (MelonUtils.IsBONEWORKS) BONEWORKS_SceneHandler.OnSceneLoad(scene.buildIndex, scene.name); else Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
         private static void OnSceneUnload(Scene scene) { if (scene == null) return; Interface.OnSceneWasUnloaded(scene.buildIndex, scene.name); }
 
-        private static Camera OnPostRenderCam = null;
-        private static void OnPostRender(Camera cam) { if (OnPostRenderCam == null) OnPostRenderCam = cam; if (OnPostRenderCam == cam) Coroutines.ProcessWaitForEndOfFrame(); }
+        //private static Camera OnPostRenderCam = null;
+        //private static void OnPostRender(Camera cam) { if (OnPostRenderCam == null) OnPostRenderCam = cam; if (OnPostRenderCam == cam) Coroutines.ProcessWaitForEndOfFrame(); }
 
         private static Assembly Il2Cppmscorlib = null;
         private static Type streamType = null;
@@ -95,7 +97,7 @@ namespace MelonLoader.Support
                 if (streamType == null)
                     throw new Exception("Unable to Find Type Il2CppSystem.IO.Stream!");
 
-                System.Reflection.PropertyInfo propertyInfo = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public);
+                PropertyInfo propertyInfo = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public);
                 if (propertyInfo == null)
                     throw new Exception("Unable to Find Property Il2CppSystem.IO.Stream.Null!");
 
