@@ -35,7 +35,10 @@
 5. Fixed Issue with Proxy not properly locating Bootstrap.
 6. Fixed Issue with Offline Mode throwing an NRE during Assembly Generation.
 7. Fixed Issue with Launch Options causing Crash.
-8. Fixed Issue with Older OS Check running under Wine/Proton.
+8. [StartScreen] Fix resize crash on DX11/DX12.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+9. Fixed Issue with Older OS Check running under Wine/Proton.
+10. [StartScreen] Resize fix x86.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
+11. [StartScreen] Fixed crash on mono.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 
 ---
 
