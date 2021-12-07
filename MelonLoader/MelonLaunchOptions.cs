@@ -1,96 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MelonLoader
 {
     public static class MelonLaunchOptions
     {
+        private static Dictionary<string, Action> WithoutArg = new Dictionary<string, Action>();
+        private static Dictionary<string, Action<string>> WithArg = new Dictionary<string, Action<string>>();
+
+        static MelonLaunchOptions()
+        {
+            Core.Setup();
+            Console.Setup();
+            Il2CppAssemblyGenerator.Setup();
+        }
+
         internal static void Load()
         {
-//#if DEBUG
-//            Core.DebugMode = true;
-//#endif
-
-            string[] args = Environment.GetCommandLineArgs();
-            if ((args == null)
-                || (args.Length <= 0))
-                return;
-
-            for (int i = 0; i < args.Length; i++)
+            LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(Environment.GetCommandLineArgs());
+            while (argEnumerator.MoveNext())
             {
-                string arg = args[i];
-                if (string.IsNullOrEmpty(arg))
+                if (string.IsNullOrEmpty(argEnumerator.Current))
                     continue;
-                arg = arg.ToLowerInvariant();
-                int valueint = 0;
-                string valuestr = null;
-                if ((i + 1) < args.Length)
-                    valuestr = args[i + 1];
-                switch (arg)
+
+                if (!argEnumerator.Current.StartsWith("--"))
+                    continue;
+
+                string cmd = argEnumerator.Current.Remove(0, 2);
+
+                if (WithoutArg.TryGetValue(cmd, out Action withoutArgFunc))
+                    withoutArgFunc();
+                else if (WithArg.TryGetValue(cmd, out Action<string> withArgFunc))
                 {
-                    // Core
-//#if !DEBUG
-//                    case "--melonloader.debug":
-//                        Core.DebugMode = true;
-//                        goto default;
-//#endif
-                    case "--quitfix":
-                        Core.QuitFix = true;
-                        goto default;
-                    case "--melonloader.disablestartscreen":
-                        Core.StartScreen = false;
-                        goto default;
-                    case "--melonloader.loadmodeplugins":
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        if (!int.TryParse(valuestr, out valueint))
-                            goto default;
-                        Core.LoadMode_Plugins = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
-                        goto default;
-                    case "--melonloader.loadmodemods":
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        if (!int.TryParse(valuestr, out valueint))
-                            goto default;
-                        Core.LoadMode_Mods = (Core.LoadModeEnum)MelonUtils.Clamp(valueint, (int)Core.LoadModeEnum.NORMAL, (int)Core.LoadModeEnum.BOTH);
-                        goto default;
+                    if (!argEnumerator.MoveNext())
+                        continue;
 
-                    // Console
-                    case "--melonloader.consolemode":
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        if (!int.TryParse(valuestr, out valueint))
-                            goto default;
-                        Console.Mode = (Console.DisplayMode)MelonUtils.Clamp(valueint, (int)Console.DisplayMode.NORMAL, (int)Console.DisplayMode.LEMON);
-                        goto default;
-                    case "--melonloader.disableunityclc":
-                        Console.CleanUnityLogs = false;
-                        goto default;
+                    if (string.IsNullOrEmpty(argEnumerator.Current))
+                        continue;
 
-                    // Il2CppAssemblyGenerator
-                    case "--melonloader.agfoffline":
-                        Il2CppAssemblyGenerator.OfflineMode = true;
-                        goto default;
-                    case "--melonloader.agfregenerate":
-                        Il2CppAssemblyGenerator.ForceRegeneration = true;
-                        goto default;
-                    case "--melonloader.agfvdumper":
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        Il2CppAssemblyGenerator.ForceVersion_Dumper = valuestr;
-                        goto default;
-                    case "--melonloader.agfvunhollower":
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        Il2CppAssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower = valuestr;
-                        goto default;
-                    case "--melonloader.agfvunity":
-                        if (string.IsNullOrEmpty(valuestr))
-                            goto default;
-                        Il2CppAssemblyGenerator.ForceVersion_UnityDependencies = valuestr;
-                        goto default;
+                    if (argEnumerator.Current.StartsWith("--"))
+                        continue;
 
-                    default:
-                        break;
+                    withArgFunc(argEnumerator.Current);
                 }
             }
         }
@@ -106,9 +57,24 @@ namespace MelonLoader
             }
             public static LoadModeEnum LoadMode_Plugins { get; internal set; }
             public static LoadModeEnum LoadMode_Mods { get; internal set; }
-            //public static bool DebugMode { get; internal set; }
             public static bool QuitFix { get; internal set; }
             public static bool StartScreen { get; internal set; } = true;
+
+            internal static void Setup()
+            {
+                WithoutArg["quitfix"] = () => QuitFix = true;
+                WithoutArg["melonloader.disablestartscreen"] = () => StartScreen = false;
+                WithArg["melonloader.loadmodeplugins"] = (string arg) =>
+                {
+                    if (int.TryParse(arg, out int valueint))
+                        LoadMode_Plugins = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
+                };
+                WithArg["melonloader.loadmodemods"] = (string arg) =>
+                {
+                    if (int.TryParse(arg, out int valueint))
+                        LoadMode_Mods = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
+                };
+            }
         }
 
         public static class Console
@@ -123,6 +89,16 @@ namespace MelonLoader
             };
             public static DisplayMode Mode { get; internal set; }
             public static bool CleanUnityLogs { get; internal set; } = true;
+
+            internal static void Setup()
+            {
+                WithoutArg["melonloader.disableunityclc"] = () => CleanUnityLogs = false;
+                WithArg["melonloader.consolemode"] = (string arg) =>
+                {
+                    if (int.TryParse(arg, out int valueint))
+                        Mode = (DisplayMode)MelonUtils.Clamp(valueint, (int)DisplayMode.NORMAL, (int)DisplayMode.LEMON);
+                };
+            }
         }
 
         public static class Il2CppAssemblyGenerator
@@ -132,6 +108,15 @@ namespace MelonLoader
             public static string ForceVersion_Dumper { get; internal set; }
             public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
             public static string ForceVersion_UnityDependencies { get; internal set; }
+
+            internal static void Setup()
+            {
+                WithoutArg["melonloader.agfoffline"] = () => OfflineMode = true;
+                WithoutArg["melonloader.agfregenerate"] = () => ForceRegeneration = true;
+                WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;
+                WithArg["melonloader.agfvunhollower"] = (string arg) => ForceVersion_Il2CppAssemblyUnhollower = arg;
+                WithArg["melonloader.agfvunity"] = (string arg) => ForceVersion_UnityDependencies = arg;
+            }
         }
 #endregion
     }
