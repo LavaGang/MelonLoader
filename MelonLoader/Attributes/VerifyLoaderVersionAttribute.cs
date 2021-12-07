@@ -38,18 +38,14 @@ namespace MelonLoader
 
 
         public VerifyLoaderVersionAttribute(int major, int minor, int patch) : this($"{major}.{minor}.{patch}.0", false) { }
+        public VerifyLoaderVersionAttribute(int major, int minor, int patch, bool is_minimum) : this($"{major}.{minor}.{patch}.0", is_minimum) { }
+        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision) : this($"{major}.{minor}.{patch}.{revision}", false) { }
+        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision, bool is_minimum) : this($"{major}.{minor}.{patch}.{revision}", is_minimum) { }
         public VerifyLoaderVersionAttribute(string version) : this(version, false) { }
         public VerifyLoaderVersionAttribute(string version, bool is_minimum)
         {
             SemVer = SemVersion.Parse(version);
             IsMinimum = is_minimum;
         }
-
-        /*
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch) { Major = major; Minor = minor; Patch = patch; }
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch, bool isminimum) { Major = major; Minor = minor; Patch = patch; IsMinimum = isminimum; }
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision) { Major = major; Minor = minor; Patch = patch; Revision = revision; }
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision, bool isminimum) { Major = major; Minor = minor; Patch = patch; Revision = revision; IsMinimum = isminimum; }
-        */
     }
 }

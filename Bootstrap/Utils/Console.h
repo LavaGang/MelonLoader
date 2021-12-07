@@ -24,9 +24,6 @@ public:
 	static DisplayMode Mode;
 
 	static bool Initialize();
-	static bool AddConsoleModeFlag(HANDLE handle, DWORD flag);
-	static bool RemoveConsoleModeFlag(HANDLE handle, DWORD flag);
-	static bool HasConsoleModeFlag(HANDLE handle, DWORD flag);
 	static void Flush();
 	static void Close();
 	static void SetTitle(const char* title) { if (ShouldSetTitle) SetConsoleTitleA(title); }

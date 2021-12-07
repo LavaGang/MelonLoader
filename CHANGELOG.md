@@ -40,7 +40,8 @@
 10. [StartScreen] Resize fix x86.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 11. [StartScreen] Fixed crash on mono.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 12. Rewrote MelonLaunchOptions Loading.
-13. Temporarily Reverted Il2Cpp Coroutine Interface changes.
+13. Fixed Issue with Console not displaying Properly under Wine/Proton.
+14. Fixed Issue with VerifyLoaderVersion Attribute missing methods.
 
 ---
 

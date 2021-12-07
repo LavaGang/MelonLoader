@@ -50,46 +50,37 @@ bool Console::Initialize()
 	freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
 	InputHandle = GetStdHandle(STD_INPUT_HANDLE);
 	OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-
 	SetHandles();
 
-	if (!AddConsoleModeFlag(OutputHandle, 0x3)
-		|| !AddConsoleModeFlag(OutputHandle, ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+	DWORD mode = 0;
+	GetConsoleMode(OutputHandle, &mode);
+	
+	if (Core::IsRunningInWine())
 		UseLegacyColoring = true;
 
-	AddConsoleModeFlag(InputHandle, ENABLE_EXTENDED_FLAGS);
-	RemoveConsoleModeFlag(InputHandle, ENABLE_MOUSE_INPUT);
-	RemoveConsoleModeFlag(InputHandle, ENABLE_WINDOW_INPUT);
-	RemoveConsoleModeFlag(InputHandle, ENABLE_INSERT_MODE);
-	//RemoveConsoleModeFlag(InputHandle, ENABLE_QUICK_EDIT_MODE);
+	mode |= 0x3;
+	if (!SetConsoleMode(OutputHandle, mode))
+	{
+		UseLegacyColoring = true;
+		mode &= ~0x3;
+	}
+	else
+	{
+		mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+		if (!SetConsoleMode(OutputHandle, mode))
+		{
+			UseLegacyColoring = true;
+			mode &= ~ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+		}
+	}
+
+	mode |= ENABLE_EXTENDED_FLAGS;
+	mode &= ~ENABLE_MOUSE_INPUT;
+	mode &= ~ENABLE_WINDOW_INPUT;
+	mode &= ~ENABLE_INSERT_MODE;
+	SetConsoleMode(OutputHandle, mode);
 
 	return true;
-}
-
-bool Console::AddConsoleModeFlag(HANDLE handle, DWORD flag)
-{
-	DWORD mode = 0;
-	if (GetConsoleMode(handle, &mode))
-		mode |= flag;
-	else
-		mode = flag;
-	return SetConsoleMode(handle, mode);
-}
-
-bool Console::RemoveConsoleModeFlag(HANDLE handle, DWORD flag)
-{
-	DWORD mode = 0;
-	if (GetConsoleMode(handle, &mode))
-		mode &= ~flag;
-	return SetConsoleMode(handle, mode);
-}
-
-bool Console::HasConsoleModeFlag(HANDLE handle, DWORD flag)
-{
-	DWORD mode = 0;
-	if (!GetConsoleMode(handle, &mode))
-		return false;
-	return ((mode & flag) == flag);
 }
 
 void Console::SetDefaultTitle()
