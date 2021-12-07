@@ -30,7 +30,7 @@
             }
             else
             {
-                if (current_scene >= 0)
+                if (current_scene != -1)
                 {
                     LastSceneIndex = current_scene;
                     LastSceneName = current_scene_name;
