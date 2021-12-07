@@ -32,9 +32,9 @@ namespace MelonLoader.Support
         void Start() => SiblingFix();
         void Awake()
         {
-            foreach (var queuedCoroutine in SupportModule_To.QueuedCoroutines)
-                StartCoroutine(new Il2CppSystem.Collections.IEnumerator(new MonoEnumeratorWrapper(queuedCoroutine).Pointer));
-            SupportModule_To.QueuedCoroutines.Clear();
+            //foreach (var queuedCoroutine in SupportModule_To.QueuedCoroutines)
+            //    StartCoroutine(new Il2CppSystem.Collections.IEnumerator(new MonoEnumeratorWrapper(queuedCoroutine).Pointer));
+            //SupportModule_To.QueuedCoroutines.Clear();
         }
         void Update()
         {
@@ -42,8 +42,13 @@ namespace MelonLoader.Support
             if (MelonUtils.IsBONEWORKS)
                 BONEWORKS_SceneHandler.OnUpdate();
             Main.Interface.Update();
+            Coroutines.Process();
         }
-        void FixedUpdate() => Main.Interface.FixedUpdate();
+        void FixedUpdate()
+        {
+            Main.Interface.FixedUpdate();
+            Coroutines.ProcessWaitForFixedUpdate();
+        }
         void LateUpdate() => Main.Interface.LateUpdate();
         void OnGUI() => Main.Interface.OnGUI();
         void OnDestroy() { if (!IsDestroying) Create(); }

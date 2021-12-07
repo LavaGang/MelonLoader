@@ -6,7 +6,9 @@ namespace MelonLoader.Support
 {
     internal class SupportModule_To : ISupportModule_To
     {
+        /*
         internal static readonly List<IEnumerator> QueuedCoroutines = new List<IEnumerator>();
+
         public object StartCoroutine(IEnumerator coroutine)
         {
             if (Main.component != null)
@@ -21,6 +23,11 @@ namespace MelonLoader.Support
             else
                 Main.component.StopCoroutine(coroutineToken as Coroutine);
         }
+        */
+
+        public object StartCoroutine(IEnumerator coroutine) => Coroutines.Start(coroutine);
+        public void StopCoroutine(object coroutineToken) => Coroutines.Stop((IEnumerator)coroutineToken);
+
         public void UnityDebugLog(string msg) => Debug.Log(msg);
     }
 }

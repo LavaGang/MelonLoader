@@ -47,25 +47,6 @@ namespace MelonLoader
                 && GameName.Equals("Demeo"));
         }
 
-        /*
-        private static Assembly LibsAssemblyResolver(object sender, ResolveEventArgs args)
-        {
-            AssemblyName assembly_name = new AssemblyName(args.Name);
-
-            string dll_name = $"{assembly_name.Name}.{assembly_name.Version}.dll";
-            string lib_path = Path.Combine(UserLibsDirectory, dll_name);
-            if (File.Exists(lib_path))
-                return Assembly.LoadFile(lib_path);
-
-            dll_name = $"{assembly_name.Name}.dll";
-            lib_path = Path.Combine(UserLibsDirectory, dll_name);
-            if (File.Exists(lib_path))
-                return Assembly.LoadFile(lib_path);
-
-            return null;
-        }
-        */
-
         public static string BaseDirectory { get; private set; }
         public static string GameDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
