@@ -14,18 +14,21 @@ namespace MelonLoader.Support
         public MonoEnumeratorWrapper(IEnumerator _enumerator) : base(ClassInjector.DerivedConstructorPointer<MonoEnumeratorWrapper>())
         {
             ClassInjector.DerivedConstructorBody(this);
-            enumerator = _enumerator ?? throw new NullReferenceException("routine is null");;
+            enumerator = _enumerator ?? throw new NullReferenceException("routine is null");
         }
 
         public Il2CppSystem.Object /*IEnumerator.*/Current
         {
-            get => enumerator.Current switch
+            get
+            {
+                return enumerator.Current switch
                 {
+                    null => null,
                     IEnumerator next => new MonoEnumeratorWrapper(next),
                     Il2CppSystem.Object il2cppObject => il2cppObject,
-                    null => null,
                     _ => throw new NotSupportedException($"{enumerator.GetType()}: Unsupported type {enumerator.Current.GetType()}"),
                 };
+            }
         }
 
         public bool MoveNext() => enumerator.MoveNext();
