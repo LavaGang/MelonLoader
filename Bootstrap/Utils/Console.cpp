@@ -58,11 +58,11 @@ bool Console::Initialize()
 	if (Core::IsRunningInWine())
 		UseLegacyColoring = true;
 
-	mode |= ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT;
+	mode |= (ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
 	if (!SetConsoleMode(OutputHandle, mode))
 	{
 		UseLegacyColoring = true;
-		mode &= ~ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT;
+		mode &= ~(ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
 	}
 	else
 	{
@@ -75,9 +75,7 @@ bool Console::Initialize()
 	}
 
 	mode |= ENABLE_EXTENDED_FLAGS;
-	mode &= ~ENABLE_MOUSE_INPUT;
-	mode &= ~ENABLE_WINDOW_INPUT;
-	mode &= ~ENABLE_INSERT_MODE;
+	mode &= ~(ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT | ENABLE_INSERT_MODE);
 	SetConsoleMode(OutputHandle, mode);
 
 	return true;
