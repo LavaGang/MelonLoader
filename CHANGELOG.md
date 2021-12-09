@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.5.2 Open-Beta](#v052-open-beta)  
 [v0.5.1 Open-Beta](#v051-open-beta)  
 [v0.5.0 Open-Beta](#v050-open-beta)  
 [v0.4.3 Open-Beta](#v043-open-beta)  
@@ -23,6 +24,12 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.5.2 Open-Beta:
+
+1. Fixed Issue with --melonloader.basedir Launch Option not finding Bootstrap.dll.
 
 ---
 

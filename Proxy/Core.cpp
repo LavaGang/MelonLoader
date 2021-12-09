@@ -93,8 +93,8 @@ HMODULE Core::LoadOriginalDLL(std::string proxy_filepath, std::string proxy_file
 
 std::string Core::GetBootstrapPath(std::string BasePath)
 {
-	std::string defaultpath = BasePath + "\\MelonLoader\\Dependencies\\Bootstrap.dll";
-	std::string returnval = defaultpath;
+	std::string defaultpath = "MelonLoader\\Dependencies\\Bootstrap.dll";
+	std::string returnval = BasePath + "\\" + defaultpath;
 
 	int argc = __argc;
 	wchar_t** argv = CommandLineToArgvW(GetCommandLineW(), &argc);
