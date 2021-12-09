@@ -30,6 +30,7 @@
 ### v0.5.2 Open-Beta:
 
 1. Fixed Issue with --melonloader.basedir Launch Option not finding Bootstrap.dll.
+2. Fixed Issue with Console not properly Coloring Melon Names.    (Credits to [benaclejames](https://github.com/benaclejames) :D)  
 
 ---
 

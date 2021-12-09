@@ -40,7 +40,15 @@ namespace MelonLoader
 
         private static void NativeMsg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
         {
-            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
+            if (string.IsNullOrEmpty(namesection))
+            {
+                MelonBase melon = MelonUtils.GetMelonFromStackTrace();
+                if (melon != null)
+                {
+                    namesection = melon.Info?.Name?.Replace(" ", "_");
+                    namesection_color = melon.ConsoleColor;
+                }
+            }
             
             Internal_Msg(namesection_color, txt_color, namesection, txt ?? "null");
             RunMsgCallbacks(namesection_color, txt_color, namesection, txt ?? "null");
