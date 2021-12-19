@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.5.3 Open-Beta](#v053-open-beta)  
 [v0.5.2 Open-Beta](#v052-open-beta)  
 [v0.5.1 Open-Beta](#v051-open-beta)  
 [v0.5.0 Open-Beta](#v050-open-beta)  
@@ -26,7 +27,9 @@
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
 
 ---
+
 ### v0.5.3 Open-Beta:
+
 1. Fixed Connection Issue on Demeo.
 2. Added Demeo_LobbyRequired Attribute to Compatibility Layer to enforce all lobby members on Demeo to have a specific melon and version.
 
