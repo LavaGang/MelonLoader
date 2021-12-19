@@ -2,18 +2,24 @@
 using System.Reflection;
 using MelonLoader;
 using Boardgame.Modding;
+using RGCommon;
 
 namespace MelonLoader.CompatibilityLayers
 {
     internal class Demeo_Module : MelonCompatibilityLayer.Module
     {
+        private static string ConnectionString;
         private static List<ModdingAPI.ModInformation> ModInformation = new List<ModdingAPI.ModInformation>();
 
         public override void Setup()
         {
             HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
+
             harmony.Patch(typeof(ModdingAPI).GetMethod("GetInstalledMods", BindingFlags.Public | BindingFlags.Instance),
                 typeof(Demeo_Module).GetMethod("GetInstalledMods", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
+
+            harmony.Patch(typeof(GameStateMachine).GetMethod("GetConnectionString", BindingFlags.Public | BindingFlags.Static),
+                typeof(Demeo_Module).GetMethod("GetConnectionString", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
 
             MelonCompatibilityLayer.AddRefreshPluginsEvent(Refresh);
             MelonCompatibilityLayer.AddRefreshModsEvent(Refresh);
@@ -22,6 +28,7 @@ namespace MelonLoader.CompatibilityLayers
 
         private static void Refresh()
         {
+            ConnectionString = VersionInformation.MajorMinorVersion;
             ModInformation.Clear();
             ParseMelons(MelonHandler.Plugins);
             ParseMelons(MelonHandler.Mods);
@@ -31,8 +38,6 @@ namespace MelonLoader.CompatibilityLayers
         {
             if (melons.Count <= 0)
                 return;
-
-            melons.Sort((T left, T right) => string.Compare(left.Info.Name, right.Info.Name));
 
             for (int i = 0; i < melons.Count; i++)
             {
@@ -47,9 +52,15 @@ namespace MelonLoader.CompatibilityLayers
                     author = melon.Info.Author,
                     description = melon.Info.DownloadLink
                 });
+
+                if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequired>(melon.Assembly) != null)
+                    ConnectionString += $", {melon.Info.Name} v{melon.Info.Version}";
             }
+
+            ModInformation.Sort((ModdingAPI.ModInformation left, ModdingAPI.ModInformation right) => string.Compare(left.name, right.name));
         }
 
         private static bool GetInstalledMods(ref List<ModdingAPI.ModInformation> __result) { __result = ModInformation; return false; }
+        private static bool GetConnectionString(ref string __result) { __result = ConnectionString; return false; }
     }
 }
