@@ -122,7 +122,7 @@ hostent* AnalyticsBlocker::wsock32::Hooks::Gethostbyname(const char* name)
 {
 	try
 	{
-		if ((name == NULL) || CheckHostNameOrIP(name))
+		if (name != NULL && CheckHostNameOrIP(name))
 			name = "localhost";
 		return Exports::Gethostbyname(name);
 	}
@@ -176,7 +176,7 @@ DWORD AnalyticsBlocker::ws2_32::Hooks::Getaddrinfo(PCSTR pNodeName, PCSTR pServi
 {
 	try
 	{
-		if ((pNodeName == NULL) || CheckHostNameOrIP(pNodeName))
+		if (pNodeName != NULL && CheckHostNameOrIP(pNodeName))
 			pNodeName = "localhost";
 		return Exports::Getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
 	}
