@@ -10,9 +10,7 @@ namespace MelonLoader.MelonStartScreen
         public int Delay; // milliseconds
         public Color32[] RawImage;
 
-        public Image()
-        {
-        }
+        public Image() { }
 
         public Image(Image img)
         {
@@ -22,10 +20,7 @@ namespace MelonLoader.MelonStartScreen
             RawImage = img.RawImage != null ? (Color32[])img.RawImage.Clone() : null;
         }
 
-        public object Clone()
-        {
-            return new Image(this);
-        }
+        public object Clone() => new Image(this);
 
         public Texture2D CreateTexture()
         {
@@ -33,7 +28,6 @@ namespace MelonLoader.MelonStartScreen
             {
                 filterMode = FilterMode.Point
             };
-
 
             Color[] colors = new Color[RawImage.Length];
             for (int i = 0; i < colors.Length; i++)

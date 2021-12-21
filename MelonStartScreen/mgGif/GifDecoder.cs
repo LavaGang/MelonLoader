@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Text;
 using UnityEngine;
 
@@ -12,12 +11,10 @@ namespace MelonLoader.MelonStartScreen
         public ushort Height;
         public Color32 BackgroundColour;
 
-
         //------------------------------------------------------------------------------
         // GIF format enums
 
-        //[Flags]
-        enum ImageFlag
+        private enum ImageFlag
         {
             Interlaced = 0x40,
             ColourTable = 0x80,
@@ -25,14 +22,14 @@ namespace MelonLoader.MelonStartScreen
             BitDepthMask = 0x70,
         }
 
-        enum Block
+        private enum Block
         {
             Image = 0x2C,
             Extension = 0x21,
             End = 0x3B
         }
 
-        enum Extension
+        private enum Extension
         {
             GraphicControl = 0xF9,
             Comments = 0xFE,
@@ -40,7 +37,7 @@ namespace MelonLoader.MelonStartScreen
             ApplicationData = 0xFF
         }
 
-        enum Disposal
+        private enum Disposal
         {
             None = 0x00,
             DoNotDispose = 0x04,
@@ -48,49 +45,47 @@ namespace MelonLoader.MelonStartScreen
             ReturnToPrevious = 0x0C
         }
 
-        [Flags]
-        enum ControlFlags
+        private enum ControlFlags
         {
             HasTransparency = 0x01,
             DisposalMask = 0x0C
         }
 
-
         //------------------------------------------------------------------------------
 
-        const uint NoCode = 0xFFFF;
-        const ushort NoTransparency = 0xFFFF;
+        private const uint NoCode = 0xFFFF;
+        private const ushort NoTransparency = 0xFFFF;
 
         // input stream to decode
-        byte[] Input;
-        int D;
+        private byte[] Input;
+
+        private int D;
 
         // colour table
-        Color32[] GlobalColourTable;
-        Color32[] LocalColourTable;
-        Color32[] ActiveColourTable;
-        ushort TransparentIndex;
+        private Color32[] GlobalColourTable;
+
+        private Color32[] LocalColourTable;
+        private Color32[] ActiveColourTable;
+        private ushort TransparentIndex;
 
         // current image
-        Image Image = new Image();
-        ushort ImageLeft;
-        ushort ImageTop;
-        ushort ImageWidth;
-        ushort ImageHeight;
+        private Image Image = new Image();
 
-        Color32[] Output;
-        Color32[] PreviousImage;
+        private ushort ImageLeft;
+        private ushort ImageTop;
+        private ushort ImageWidth;
+        private ushort ImageHeight;
 
-        readonly int[] Pow2 = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096 };
+        private Color32[] Output;
+        private Color32[] PreviousImage;
+
+        private readonly int[] Pow2 = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096 };
 
         //------------------------------------------------------------------------------
         // ctor
 
-        public GifDecoder(byte[] data)
-            : this()
-        {
-            Load(data);
-        }
+        public GifDecoder(byte[] data) : this()
+            => Load(data);
 
         public GifDecoder Load(byte[] data)
         {
@@ -108,30 +103,19 @@ namespace MelonLoader.MelonStartScreen
             return this;
         }
 
-
         //------------------------------------------------------------------------------
         // reading data utility functions
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        byte ReadByte()
-        {
-            return Input[D++];
-        }
+        private byte ReadByte() => Input[D++];
 
-        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        ushort ReadUInt16()
-        {
-            return (ushort)(Input[D++] | Input[D++] << 8);
-        }
+        private ushort ReadUInt16() => (ushort)(Input[D++] | Input[D++] << 8);
 
         //------------------------------------------------------------------------------
 
-        void ReadHeader()
+        private void ReadHeader()
         {
             if (Input == null || Input.Length <= 12)
-            {
                 throw new Exception("Invalid data");
-            }
 
             // signature
 
@@ -157,9 +141,7 @@ namespace MelonLoader.MelonStartScreen
             ReadByte(); // aspect ratio
 
             if (flags.HasFlag(ImageFlag.ColourTable))
-            {
                 ReadColourTable(GlobalColourTable, flags);
-            }
 
             BackgroundColour = GlobalColourTable[bgIndex];
         }
@@ -171,9 +153,7 @@ namespace MelonLoader.MelonStartScreen
             // if at start of data, read header
 
             if (D == 0)
-            {
                 ReadHeader();
-            }
 
             // read blocks until we find an image block
 
@@ -190,9 +170,7 @@ namespace MelonLoader.MelonStartScreen
                             var img = ReadImageBlock();
 
                             if (img != null)
-                            {
                                 return img;
-                            }
                         }
                         break;
 
@@ -201,13 +179,9 @@ namespace MelonLoader.MelonStartScreen
                             var ext = (Extension)ReadByte();
 
                             if (ext == Extension.GraphicControl)
-                            {
                                 ReadControlBlock();
-                            }
                             else
-                            {
                                 SkipBlocks();
-                            }
                         }
                         break;
 
@@ -227,7 +201,7 @@ namespace MelonLoader.MelonStartScreen
 
         //------------------------------------------------------------------------------
 
-        Color32[] ReadColourTable(Color32[] colourTable, ImageFlag flags)
+        private Color32[] ReadColourTable(Color32[] colourTable, ImageFlag flags)
         {
             var tableSize = Pow2[(int)(flags & ImageFlag.TableSizeMask) + 1];
 
@@ -246,7 +220,7 @@ namespace MelonLoader.MelonStartScreen
 
         //------------------------------------------------------------------------------
 
-        void SkipBlocks()
+        private void SkipBlocks()
         {
             var blockSize = Input[D++];
 
@@ -259,7 +233,7 @@ namespace MelonLoader.MelonStartScreen
 
         //------------------------------------------------------------------------------
 
-        void ReadControlBlock()
+        private void ReadControlBlock()
         {
             // read block
 
@@ -272,13 +246,9 @@ namespace MelonLoader.MelonStartScreen
             // has transparent colour?
 
             if (flags.HasFlag(ControlFlags.HasTransparency))
-            {
                 TransparentIndex = transparentColour;
-            }
             else
-            {
                 TransparentIndex = NoTransparency;
-            }
 
             // dispose of current image
 
@@ -303,9 +273,7 @@ namespace MelonLoader.MelonStartScreen
                     Output = new Color32[Width * Height];
 
                     if (PreviousImage != null)
-                    {
                         Array.Copy(PreviousImage, Output, Output.Length);
-                    }
 
                     break;
             }
@@ -313,7 +281,7 @@ namespace MelonLoader.MelonStartScreen
 
         //------------------------------------------------------------------------------
 
-        Image ReadImageBlock()
+        private Image ReadImageBlock()
         {
             // read image block header
 
@@ -326,20 +294,14 @@ namespace MelonLoader.MelonStartScreen
             // bad image if we don't have any dimensions
 
             if (ImageWidth == 0 || ImageHeight == 0)
-            {
                 return null;
-            }
 
             // read colour table
 
             if (flags.HasFlag(ImageFlag.ColourTable))
-            {
                 ActiveColourTable = ReadColourTable(LocalColourTable, flags);
-            }
             else
-            {
                 ActiveColourTable = GlobalColourTable;
-            }
 
             if (Output == null)
             {
@@ -354,9 +316,7 @@ namespace MelonLoader.MelonStartScreen
             // deinterlace
 
             if (flags.HasFlag(ImageFlag.Interlaced))
-            {
                 Deinterlace();
-            }
 
             // return image
 
@@ -367,7 +327,7 @@ namespace MelonLoader.MelonStartScreen
         //------------------------------------------------------------------------------
         // decode interlaced images
 
-        void Deinterlace()
+        private void Deinterlace()
         {
             var numRows = Output.Length / Width;
             var writePos = Output.Length - Width; // NB: work backwards due to Y-coord flip
@@ -410,364 +370,20 @@ namespace MelonLoader.MelonStartScreen
         }
 
         //------------------------------------------------------------------------------
-        // DecompressLZW()
-
-#if mgGIF_UNSAFE
-
-        bool        Disposed = false;
-
-        int         CodesLength;
-        IntPtr      CodesHandle;
-        ushort*     pCodes;
-
-        IntPtr      CurBlock;
-        uint*       pCurBlock;
-
-        const int   MaxCodes = 4096;
-        IntPtr      Indices;
-        ushort**    pIndicies;
-
-        public Decoder()
-        {
-            // unmanaged allocations
-
-            CodesLength = 128 * 1024;
-            CodesHandle = Marshal.AllocHGlobal( CodesLength * sizeof( ushort ) );
-            pCodes      = (ushort*) CodesHandle.ToPointer();
-
-            CurBlock    = Marshal.AllocHGlobal( 64 * sizeof( uint ) );
-            pCurBlock   = (uint*) CurBlock.ToPointer();
-
-            Indices     = Marshal.AllocHGlobal( MaxCodes * sizeof( ushort* ) );
-            pIndicies   = (ushort**) Indices.ToPointer();
-        }
-
-        protected virtual void Dispose( bool disposing )
-        {
-            if( Disposed )
-            {
-                return;
-            }
-
-            // release unmanaged resources
-
-            Marshal.FreeHGlobal( CodesHandle );
-            Marshal.FreeHGlobal( CurBlock );
-            Marshal.FreeHGlobal( Indices );
-            
-            Disposed = true;
-        }
-
-        ~Decoder()
-        {
-            Dispose( false );
-        }
-
-        public void Dispose()
-        {
-            Dispose( true );
-            GC.SuppressFinalize( this );
-        }
-
-        void DecompressLZW()
-        {
-            var pCodeBufferEnd = pCodes + CodesLength;
-
-            fixed( byte* pData = Input )
-            {
-                fixed( Color32* pOutput = Output, pColourTable = ActiveColourTable )
-                {
-                    var row       = ( Height - ImageTop - 1 ) * Width; // start at end of array as we are reversing the row order
-                    var safeWidth = ImageLeft + ImageWidth > Width ? Width - ImageLeft : ImageWidth;
-
-                    var pWrite    = &pOutput[ row + ImageLeft ];
-                    var pRow      = pWrite;
-                    var pRowEnd   = pWrite + ImageWidth;
-                    var pImageEnd = pWrite + safeWidth;
-
-                    // setup codes
-
-                    int minimumCodeSize = Input[ D++ ];
-
-                    if( minimumCodeSize > 11 )
-                    {
-                        minimumCodeSize = 11;
-                    }
-
-                    var codeSize        = minimumCodeSize + 1;
-                    var nextSize        = Pow2[ codeSize ];
-                    var maximumCodeSize = Pow2[ minimumCodeSize ];
-                    var clearCode       = maximumCodeSize;
-                    var endCode         = maximumCodeSize + 1;
-
-                    // initialise buffers
-
-                    var numCodes  = maximumCodeSize + 2;
-                    var pCodesEnd = pCodes;
-
-                    for( ushort i = 0; i < numCodes; i++ )
-                    {
-                        pIndicies[ i ] = pCodesEnd;
-                        *pCodesEnd++ = 1;
-                        *pCodesEnd++ = i;
-                    }
-
-                    // LZW decode loop
-
-                    uint previousCode   = NoCode;   // last code processed
-                    uint mask           = (uint) ( nextSize - 1 ); // mask out code bits
-                    uint shiftRegister  = 0;        // shift register holds the bytes coming in from the input stream, we shift down by the number of bits
-
-                    int  bitsAvailable  = 0;        // number of bits available to read in the shift register
-                    int  bytesAvailable = 0;        // number of bytes left in current block
-
-                    uint* pD = pCurBlock;           // pointer to next bits in current block
-
-                    while( true )
-                    {
-                        // get next code
-
-                        uint curCode = shiftRegister & mask;
-
-                        // did we read enough bits?
-
-                        if( bitsAvailable >= codeSize )
-                        {
-                            // we had enough bits in the shift register so shunt it down
-                            bitsAvailable -= codeSize;
-                            shiftRegister >>= codeSize;
-                        }
-                        else
-                        {
-                            // not enough bits in register, so get more
-
-                            // if start of new block
-
-                            if( bytesAvailable <= 0 )
-                            {
-                                // read blocksize
-
-                                var pBlock = &pData[ D++ ];
-                                bytesAvailable = *pBlock++;
-                                D += bytesAvailable;
-
-                                // exit if end of stream
-
-                                if( bytesAvailable == 0 )
-                                {
-                                    return;
-                                }
-
-                                // copy block into buffer
-
-                                pCurBlock[ ( bytesAvailable - 1 ) / 4 ] = 0; // zero last entry
-                                Buffer.MemoryCopy( pBlock, pCurBlock, 256, bytesAvailable );
-
-                                // reset data pointer
-                                pD = pCurBlock;
-                            }
-
-                            // load shift register from data pointer
-
-                            shiftRegister = *pD++;
-                            int newBits = bytesAvailable >= 4 ? 32 : bytesAvailable * 8;
-                            bytesAvailable -= 4;
-
-                            // read remaining bits
-
-                            if( bitsAvailable > 0 )
-                            {
-                                var bitsRemaining = codeSize - bitsAvailable;
-                                curCode |= ( shiftRegister << bitsAvailable ) & mask;
-                                shiftRegister >>= bitsRemaining;
-                                bitsAvailable = newBits - bitsRemaining;
-                            }
-                            else
-                            {
-                                curCode = shiftRegister & mask;
-                                shiftRegister >>= codeSize;
-                                bitsAvailable = newBits - codeSize;
-                            }
-                        }
-
-                        // process code
-
-                        if( curCode == clearCode )
-                        {
-                            // reset codes
-                            codeSize = minimumCodeSize + 1;
-                            nextSize = Pow2[ codeSize ];
-                            numCodes = maximumCodeSize + 2;
-
-                            // reset buffer write pos
-                            pCodesEnd = &pCodes[ numCodes * 2 ];
-
-                            // clear previous code
-                            previousCode = NoCode;
-                            mask = (uint)( nextSize - 1 );
-
-                            continue;
-                        }
-                        else if( curCode == endCode )
-                        {
-                            // stop
-                            break;
-                        }
-
-                        bool plusOne = false;
-                        ushort* pCodePos = null;
-
-                        if( curCode < numCodes )
-                        {
-                            // write existing code
-                            pCodePos = pIndicies[ curCode ];
-                        }
-                        else if( previousCode != NoCode )
-                        {
-                            // write previous code
-                            pCodePos = pIndicies[ previousCode ];
-                            plusOne = true;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-
-
-                        // output colours
-
-                        var codeLength = *pCodePos++;
-                        var newCode    = *pCodePos;
-                        var pEnd       = pCodePos + codeLength;
-
-                        do
-                        {
-                            var code = *pCodePos++;
-
-                            if( code != TransparentIndex && pWrite < pImageEnd )
-                            {
-                                *pWrite = pColourTable[ code ];
-                            }
-
-                            if( ++pWrite == pRowEnd )
-                            {
-                                pRow -= Width;
-                                pWrite    = pRow;
-                                pRowEnd   = pRow + ImageWidth;
-                                pImageEnd = pRow + safeWidth;
-
-                                if( pWrite < pOutput )
-                                {
-                                    SkipBlocks();
-                                    return;
-                                }
-                            }
-                        }
-                        while( pCodePos < pEnd );
-
-                        if( plusOne )
-                        {
-                            if( newCode != TransparentIndex && pWrite < pImageEnd )
-                            {
-                                *pWrite = pColourTable[ newCode ];
-                            }
-
-                            if( ++pWrite == pRowEnd )
-                            {
-                                pRow -= Width;
-                                pWrite    = pRow;
-                                pRowEnd   = pRow + ImageWidth;
-                                pImageEnd = pRow + safeWidth;
-
-                                if( pWrite < pOutput )
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        // create new code
-
-                        if( previousCode != NoCode && numCodes != MaxCodes )
-                        {
-                            // get previous code from buffer
-
-                            pCodePos = pIndicies[ previousCode ];
-                            codeLength = *pCodePos++;
-
-                            // resize buffer if required (should be rare)
-
-                            if( pCodesEnd + codeLength + 1 >= pCodeBufferEnd )
-                            {
-                                var pBase = pCodes;
-
-                                // realloc buffer
-                                CodesLength *= 2;
-                                CodesHandle = Marshal.ReAllocHGlobal( CodesHandle, (IntPtr)( CodesLength * sizeof( ushort ) ) );
-
-                                pCodes         = (ushort*) CodesHandle.ToPointer();
-                                pCodeBufferEnd = pCodes + CodesLength;
-
-                                // rebase pointers
-
-                                pCodesEnd = pCodes + ( pCodesEnd - pBase );
-
-                                for( int i=0; i < numCodes; i++ )
-                                {
-                                    pIndicies[ i ] = pCodes + ( pIndicies[ i ] - pBase );
-                                }
-
-                                pCodePos = pIndicies[ previousCode ];
-                                pCodePos++;
-                            }
-
-                            // add new code
-
-                            pIndicies[ numCodes++ ] = pCodesEnd;
-                            *pCodesEnd++ = (ushort)( codeLength + 1 );
-
-                            // copy previous code sequence
-
-                            Buffer.MemoryCopy( pCodePos, pCodesEnd, codeLength * sizeof( ushort ), codeLength * sizeof( ushort ) );
-                            pCodesEnd += codeLength;
-
-                            // append new code
-
-                            *pCodesEnd++ = newCode;
-                        }
-
-                        // increase code size?
-
-                        if( numCodes >= nextSize && codeSize < 12 )
-                        {
-                            nextSize = Pow2[ ++codeSize ];
-                            mask     = (uint)( nextSize - 1 );
-                        }
-
-                        // remember last code processed
-                        previousCode = curCode;
-                    }
-
-                    // consume any remaining blocks
-                    SkipBlocks();
-                }
-            }
-        }
-
-#else
 
         // dispose isn't needed for the safe implementation but keep here for interface parity
 
         public GifDecoder() { }
+
         public void Dispose() { Dispose(true); }
+
         protected virtual void Dispose(bool disposing) { }
 
+        private int[] Indices = new int[4096];
+        private ushort[] Codes = new ushort[128 * 1024];
+        private uint[] CurBlock = new uint[64];
 
-        int[] Indices = new int[4096];
-        ushort[] Codes = new ushort[128 * 1024];
-        uint[] CurBlock = new uint[64];
-
-        void DecompressLZW()
+        private void DecompressLZW()
         {
             // output write position
 
@@ -780,9 +396,7 @@ namespace MelonLoader.MelonStartScreen
             int minimumCodeSize = Input[D++];
 
             if (minimumCodeSize > 11)
-            {
                 minimumCodeSize = 11;
-            }
 
             var codeSize = minimumCodeSize + 1;
             var nextSize = Pow2[codeSize];
@@ -828,7 +442,6 @@ namespace MelonLoader.MelonStartScreen
                 {
                     // reload shift register
 
-
                     // if start of new block
 
                     if (bytesAvailable <= 0)
@@ -838,9 +451,7 @@ namespace MelonLoader.MelonStartScreen
 
                         // exit if end of stream
                         if (bytesAvailable == 0)
-                        {
                             return;
-                        }
 
                         // read block
                         CurBlock[(bytesAvailable - 1) / 4] = 0; // zero last entry
@@ -911,11 +522,8 @@ namespace MelonLoader.MelonStartScreen
                     plusOne = true;
                 }
                 else
-                {
                     continue;
-                }
-
-
+                
                 // output colours
 
                 var codeLength = Codes[codePos++];
@@ -946,9 +554,7 @@ namespace MelonLoader.MelonStartScreen
                 if (plusOne)
                 {
                     if (newCode != TransparentIndex && col < Width)
-                    {
                         Output[row + col] = ActiveColourTable[newCode];
-                    }
 
                     if (++col == rightEdge)
                     {
@@ -956,9 +562,7 @@ namespace MelonLoader.MelonStartScreen
                         row -= Width;
 
                         if (row < 0)
-                        {
                             break;
-                        }
                     }
                 }
 
@@ -974,9 +578,7 @@ namespace MelonLoader.MelonStartScreen
                     // resize buffer if required (should be rare)
 
                     if (codesEnd + codeLength + 1 >= Codes.Length)
-                    {
                         Array.Resize(ref Codes, Codes.Length * 2);
-                    }
 
                     // add new code
 
@@ -988,9 +590,7 @@ namespace MelonLoader.MelonStartScreen
                     var stop = codesEnd + codeLength;
 
                     while (codesEnd < stop)
-                    {
                         Codes[codesEnd++] = Codes[codePos++];
-                    }
 
                     // append new code
 
@@ -1012,30 +612,14 @@ namespace MelonLoader.MelonStartScreen
             // skip any remaining blocks
             SkipBlocks();
         }
-#endif // mgGIF_UNSAFE
 
         public static string Ident()
         {
             var v = "1.1";
             var e = BitConverter.IsLittleEndian ? "L" : "B";
-
-#if ENABLE_IL2CPP
-            var b = "N";
-#else
             var b = "M";
-#endif
-
-#if mgGIF_UNSAFE
-            var s = "U";
-#else
             var s = "S";
-#endif
-
-#if NET_4_6
-            var n = "4.x";
-#else
             var n = "2.0";
-#endif
 
             return $"{v} {e}{s}{b} {n}";
         }

@@ -1,6 +1,4 @@
-﻿//using System;
-using System.Diagnostics;
-//using System.Drawing.Imaging;
+﻿using System.Diagnostics;
 using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
@@ -15,40 +13,6 @@ namespace MelonLoader.MelonStartScreen.UI
 
         private Stopwatch stopwatch = new Stopwatch();
 
-        /*
-        public static AnimatedImage FromFile(string filepath, float framedelayms = 90f, ImageFormat frame_format = null)
-        {
-            if (string.IsNullOrEmpty(filepath))
-                throw new ArgumentNullException(nameof(filepath));
-            ImageFrameParser.ParsedInfo parsedInfo = ImageFrameParser.FromFile(filepath);
-            if (parsedInfo == null)
-                return null;
-            return new AnimatedImage(parsedInfo, framedelayms);
-        }
-
-        public static AnimatedImage FromByteArray(byte[] filedata, float framedelayms = 90f, ImageFormat frame_format = null)
-        {
-            if (filedata == null)
-                throw new ArgumentNullException(nameof(filedata));
-            ImageFrameParser.ParsedInfo parsedInfo = ImageFrameParser.FromByteArray(filedata);
-            if (parsedInfo == null)
-                return null;
-            return new AnimatedImage(parsedInfo, framedelayms);
-        }
-
-        public static AnimatedImage FromFrameBuffer(byte[][] frameBuffer, float framedelayms = 90f, ImageFormat frame_format = null)
-        {
-            if (frameBuffer == null)
-                throw new ArgumentNullException(nameof(frameBuffer));
-            ImageFrameParser.ParsedInfo parsedInfo = ImageFrameParser.FromFrameBuffer(frameBuffer);
-            if (parsedInfo == null)
-                return null;
-            return new AnimatedImage(parsedInfo, framedelayms);
-        }
-        */
-
-        public AnimatedImage(ImageFrameParser.ParsedInfo parsedInfo, float framedelayms = 90f)
-            : this(parsedInfo.Width, parsedInfo.Height, parsedInfo.FrameBuffer, framedelayms) { }
         public AnimatedImage(int width, int height, byte[][] framebuffer, float framedelayms = 90f)
         {
             frameDelayMS = framedelayms;

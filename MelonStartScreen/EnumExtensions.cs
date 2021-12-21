@@ -8,6 +8,7 @@ namespace MelonLoader.MelonStartScreen
     public static class EnumExtensions
     {
         /// <summary>
+        /// From: http://www.sambeauvois.be/blog/2011/08/enum-hasflag-method-extension-for-4-0-framework/
         /// A FX 3.5 way to mimic the FX4 "HasFlag" method.
         /// </summary>
         /// <param name="variable">The tested enum.</param>

@@ -31,28 +31,6 @@ namespace MelonLoader.MelonStartScreen.UI
                 : ImageDatas.MelonLogo), false);
             MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
 
-            /*
-            string custom_image_path = ScanForCustomImage();
-            if (!string.IsNullOrEmpty(custom_image_path))
-            {
-                MelonDebug.Msg("[UIStyleValues] Found Custom Loading Screen Image!");
-                try
-                {
-                    MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Image...");
-                    funnyAnimation = AnimatedImage.FromFile(custom_image_path);
-                    if (funnyAnimation != null)
-                        MelonDebug.Msg("[UIStyleValues] Custom Loading Screen Image Loaded!");
-                    else
-                        MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: AnimatedImage.FromFile returned null");
-                }
-                catch (Exception ex)
-                {
-                    funnyAnimation = null;
-                    MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: {ex}");
-                }
-            }
-            */
-
             string customGif = ScanForCustomImage();
             if (!string.IsNullOrEmpty(customGif))
             {
@@ -109,6 +87,5 @@ namespace MelonLoader.MelonStartScreen.UI
                 Path.GetFileNameWithoutExtension(x).ToLowerInvariant().Equals("loading")
                 && Path.GetExtension(x).ToLowerInvariant().Equals(".gif"));
         }
-        
     }
 }
