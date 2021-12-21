@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
@@ -39,9 +40,9 @@ namespace MelonLoader.MelonStartScreen.UI
                 try
                 {
                     MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Image...");
-                    var decoder = new GifDecoder(File.ReadAllBytes(customGif));
+                    GifDecoder decoder = new GifDecoder(File.ReadAllBytes(customGif));
 
-                    System.Collections.Generic.List<Texture2D> images = new System.Collections.Generic.List<Texture2D>();
+                    List<Texture2D> images = new List<Texture2D>();
                     var img = decoder.NextImage();
 
                     int width = img.Width;
