@@ -80,7 +80,7 @@
 
 1. Make sure the Game is Closed and Not Running before attempting to Install.
 2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
-3. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/download/v0.3.0/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/download/v0.3.0/MelonLoader.x64.zip)]
+3. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
 4. Extract the MelonLoader folder from the MelonLoader Zip Archive to the Game's Installation Folder.
 5. Extract version.dll from the MelonLoader Zip Archive to the Game's Installation Folder.
 
