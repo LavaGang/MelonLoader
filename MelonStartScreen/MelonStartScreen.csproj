@@ -49,6 +49,9 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="CppUtils.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="mgGif\GifDecoder.cs" />
+    <Compile Include="mgGif\Image.cs" />
     <Compile Include="ModLoadStep.cs" />
     <Compile Include="NativeUtils\Il2CppSystem\Byte.cs" />
     <Compile Include="NativeUtils\Il2CppSystem\Int32.cs" />
@@ -72,7 +75,6 @@
     <Compile Include="ScreenRenderer.cs" />
     <Compile Include="TextMeshGenerator.cs" />
     <Compile Include="UI\AnimatedImage.cs" />
-    <Compile Include="UI\ImageFrameParser.cs" />
     <Compile Include="UI\ImageDatas.cs" />
     <Compile Include="UI\ProgressBar.cs" />
     <Compile Include="UI\UIStyleValues.cs" />
