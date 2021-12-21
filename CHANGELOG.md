@@ -30,8 +30,9 @@
 
 ### v0.5.3 Open-Beta:
 
-1. Fixed Connection Issue on Demeo.
-2. Added Demeo_LobbyRequired Attribute to Compatibility Layer to enforce all lobby members on Demeo to have a specific melon and version.
+1. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
+2. Fixed Connection Issue on Demeo.
+3. Added Demeo_LobbyRequired Attribute to Compatibility Layer to enforce all lobby members on Demeo to have a specific melon and version.
 
 ---
 
