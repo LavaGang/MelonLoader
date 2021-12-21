@@ -47,6 +47,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
                     int width = img.Width;
                     int height = img.Height;
+                    int delay = img.Delay;
 
                     while (img != null)
                     {
@@ -54,7 +55,7 @@ namespace MelonLoader.MelonStartScreen.UI
                         img = decoder.NextImage();
                     }
 
-                    funnyAnimation = new AnimatedImage(width, height, images.ToArray());
+                    funnyAnimation = new AnimatedImage(width, height, images.ToArray(), delay);
 
                     if (funnyAnimation != null)
                         MelonDebug.Msg("[UIStyleValues] Custom Loading Screen Image Loaded!");

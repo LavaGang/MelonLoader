@@ -31,6 +31,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
         public AnimatedImage(int width, int height, Texture2D[] frames, float framedelayms = 90f)
         {
+            frameDelayMS = framedelayms;
             textures = frames;
             this.width = width;
             this.height = height;

@@ -24,10 +24,8 @@ namespace MelonLoader.MelonStartScreen
 
         public Texture2D CreateTexture()
         {
-            var tex = new Texture2D(Width, Height)
-            {
-                filterMode = FilterMode.Point
-            };
+            var tex = new Texture2D(Width, Height);
+            tex.filterMode = FilterMode.Point;
 
             Color[] colors = new Color[RawImage.Length];
             for (int i = 0; i < colors.Length; i++)
