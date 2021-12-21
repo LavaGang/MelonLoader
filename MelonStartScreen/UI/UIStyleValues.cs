@@ -56,27 +56,37 @@ namespace MelonLoader.MelonStartScreen.UI
             string customGif = ScanForCustomImage();
             if (!string.IsNullOrEmpty(customGif))
             {
-                MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Image...");
-                var decoder = new GifDecoder(File.ReadAllBytes(customGif));
+                MelonDebug.Msg("[UIStyleValues] Found Custom Loading Screen Image!");
 
-                System.Collections.Generic.List<Texture2D> images = new System.Collections.Generic.List<Texture2D>();
-                var img = decoder.NextImage();
-
-                int width = img.Width;
-                int height = img.Height;
-
-                while (img != null)
+                try
                 {
-                    images.Add(img.CreateTexture());
-                    img = decoder.NextImage();
+                    MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Image...");
+                    var decoder = new GifDecoder(File.ReadAllBytes(customGif));
+
+                    System.Collections.Generic.List<Texture2D> images = new System.Collections.Generic.List<Texture2D>();
+                    var img = decoder.NextImage();
+
+                    int width = img.Width;
+                    int height = img.Height;
+
+                    while (img != null)
+                    {
+                        images.Add(img.CreateTexture());
+                        img = decoder.NextImage();
+                    }
+
+                    funnyAnimation = new AnimatedImage(width, height, images.ToArray());
+
+                    if (funnyAnimation != null)
+                        MelonDebug.Msg("[UIStyleValues] Custom Loading Screen Image Loaded!");
+                    else
+                        MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: something returned null");
                 }
-
-                funnyAnimation = new AnimatedImage(width, height, images.ToArray());
-
-                if (funnyAnimation != null)
-                    MelonDebug.Msg("[UIStyleValues] Custom Loading Screen Image Loaded!");
-                else
-                    MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: something returned null");
+                catch (Exception ex)
+                {
+                    funnyAnimation = null;
+                    MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: {ex}");
+                }
             }
 
             if (funnyAnimation == null)
