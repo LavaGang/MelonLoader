@@ -49,6 +49,9 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="CppUtils.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="GifDecoder.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="ModLoadStep.cs" />
     <Compile Include="NativeUtils\Il2CppSystem\Byte.cs" />
     <Compile Include="NativeUtils\Il2CppSystem\Int32.cs" />

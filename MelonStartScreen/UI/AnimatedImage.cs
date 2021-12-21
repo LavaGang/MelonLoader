@@ -65,6 +65,14 @@ namespace MelonLoader.MelonStartScreen.UI
             }
         }
 
+        public AnimatedImage(int width, int height, Texture2D[] frames, float framedelayms = 90f)
+        {
+            textures = frames;
+            this.width = width;
+            this.height = height;
+            aspectRatio = width / (float)height;
+        }
+
         public void Render(int x, int y, int width)
         {
             if (!stopwatch.IsRunning)

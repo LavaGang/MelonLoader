@@ -1,0 +1,48 @@
+﻿using System;
+using UnityEngine;
+
+namespace MelonLoader.MelonStartScreen
+{
+    internal class Image : ICloneable
+    {
+        public int Width;
+        public int Height;
+        public int Delay; // milliseconds
+        public Color32[] RawImage;
+
+        public Image()
+        {
+        }
+
+        public Image(Image img)
+        {
+            Width = img.Width;
+            Height = img.Height;
+            Delay = img.Delay;
+            RawImage = img.RawImage != null ? (Color32[])img.RawImage.Clone() : null;
+        }
+
+        public object Clone()
+        {
+            return new Image(this);
+        }
+
+        public Texture2D CreateTexture()
+        {
+            var tex = new Texture2D(Width, Height)
+            {
+                filterMode = FilterMode.Point
+            };
+
+
+            Color[] colors = new Color[RawImage.Length];
+            for (int i = 0; i < colors.Length; i++)
+                colors[i] = RawImage[i];
+
+            tex.SetPixels(colors);
+            tex.Apply();
+
+            return tex;
+        }
+    }
+}
