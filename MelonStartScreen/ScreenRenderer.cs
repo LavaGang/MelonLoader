@@ -41,10 +41,10 @@ namespace MelonLoader.MelonStartScreen
 
             TextGenerationSettings settings = new TextGenerationSettings();
             settings.textAnchor = TextAnchor.MiddleCenter;
-            settings.color = new Color(1, 1, 1);
+            settings.color = UI.Customization.Config.Colors.Text.Value;
             settings.generationExtents = new Vector2(540, 47.5f);
             settings.richText = true;
-            settings.font = UIStyleValues.standardFont;
+            settings.font = UIStyleValues.TextFont;
             settings.pivot = new Vector2(0.5f, 0.5f);
             settings.fontSize = 24;
             settings.fontStyle = FontStyle.Bold;
@@ -83,13 +83,13 @@ namespace MelonLoader.MelonStartScreen
                 int logoHeight = (int)(sh * 0.4f);
                 int logoWidth = (int)(logoHeight * logoRatio);
 
-                Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.backgroundTexture);
-                Graphics.DrawTexture(new Rect((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight), UIStyleValues.melonloaderLogoTexture);
+                Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
+                Graphics.DrawTexture(new Rect((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight), UIStyleValues.LogoTexture);
 
                 // Animated image
                 UIStyleValues.Animation?.Render(sw - 200, 200, 132);
 
-                UIStyleValues.standardFont.material.SetPass(0);
+                UIStyleValues.TextFont.material.SetPass(0);
                 Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
 
                 progressBar.SetPosition(

@@ -8,8 +8,8 @@ namespace MelonLoader.MelonStartScreen.UI
         private int x, y;
         private int width, height;
         private Font font;
-        private Texture2D outerTexture;
         private Texture2D innerTexture;
+        private Texture2D outerTexture;
 
         public float progress;
         public string text = "";
@@ -24,9 +24,9 @@ namespace MelonLoader.MelonStartScreen.UI
             this.width = width;
             this.height = height;
 
-            font = UIStyleValues.standardFont;
-            outerTexture = UIStyleValues.progressbarOuterTexture;
-            innerTexture = UIStyleValues.progressbarInnerTexture;
+            font = UIStyleValues.TextFont;
+            innerTexture = UIStyleValues.ProgressBarTexture;
+            outerTexture = UIStyleValues.ProgressBarOutlineTexture;
         }
 
         public void Render()
@@ -34,7 +34,7 @@ namespace MelonLoader.MelonStartScreen.UI
             RefreshTextmesh();
 
             Graphics.DrawTexture(new Rect(x, y, width, height), outerTexture);
-            Graphics.DrawTexture(new Rect(x + 6, y + 6, width - 12, height - 12), UIStyleValues.backgroundTexture);
+            Graphics.DrawTexture(new Rect(x + 6, y + 6, width - 12, height - 12), UIStyleValues.BackgroundTexture);
             Graphics.DrawTexture(new Rect(x + 9, y + 9, (int)((width - 18) * Math.Min(1.0f, progress)), height - 18), innerTexture);
 
             font.material.SetPass(0);
@@ -50,7 +50,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
             TextGenerationSettings settings2 = new TextGenerationSettings();
             settings2.textAnchor = TextAnchor.MiddleCenter;
-            settings2.color = new Color(1, 1, 1);
+            settings2.color = UI.Customization.Config.Colors.Text.Value;
             settings2.generationExtents = new Vector2(540, 47.5f);
             settings2.richText = true;
             settings2.font = font;
