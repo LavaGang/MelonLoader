@@ -44,7 +44,7 @@
 12. Added Optional MelonID Attribute for Melons.
 13. Updated Logger to Print MelonID when set.
 14. Removed Obsolete Attributes from MelonLogger static methods.
-15. Internal Failures now print their proper Failure Messages even if not in Debug Mode.
+15. Internal Failures now print their proper Failure Messages in the MessageBox even if not in Debug Mode.
 
 ---
 
