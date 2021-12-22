@@ -7,21 +7,20 @@ namespace MelonLoader.Melons
 {
     internal static class FileHandler
     {
-        private static string[] DefaultExtensionWhitelist =
+        private static string[] ExtensionBlacklist =
         {
-            ".dll",
-            ".json",
-            ".mdb",
-            ".pdb",
-            ".xml",
-            ".txt",
-            ".md",
-            ".unity3d",
-            ".modcomponent"
+            ".zip",
+            ".rar",
+            ".bz2",
+            ".gz",
+            ".lzw",
+            ".tar",
+            ".xz",
+            ".7z"
         };
 
-        private static bool IsExtensionWhitelisted(string filepath)
-            => DefaultExtensionWhitelist.Contains(Path.GetExtension(filepath).ToLowerInvariant());
+        private static bool IsExtensionBlacklisted(string filepath)
+            => ExtensionBlacklist.Contains(Path.GetExtension(filepath).ToLowerInvariant());
 
         internal static void LoadAll(string folderpath, bool is_plugins = false)
         {
@@ -39,9 +38,9 @@ namespace MelonLoader.Melons
                 if (string.IsNullOrEmpty(filepath))
                     continue;
                 
-                if (!IsExtensionWhitelisted(filepath))
+                if (IsExtensionBlacklisted(filepath))
                 {
-                    MelonLogger.Msg($"Invalid File Extension for {filepath}");
+                    MelonLogger.Error($"Invalid File Extension for {filepath}");
                     continue;
                 }
 
@@ -78,9 +77,9 @@ namespace MelonLoader.Melons
             if (string.IsNullOrEmpty(filepath))
                 return;
 
-            if (!IsExtensionWhitelisted(filepath))
+            if (IsExtensionBlacklisted(filepath))
             {
-                MelonLogger.Msg($"Invalid File Extension for {filepath}");
+                MelonLogger.Error($"Invalid File Extension for {filepath}");
                 return;
             }
 
