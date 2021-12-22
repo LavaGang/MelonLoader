@@ -1,5 +1,8 @@
 ﻿using System.IO;
 using UnityEngine;
+using Tomlet;
+using Tomlet.Models;
+using MelonLoader;
 
 namespace MelonLoader.MelonStartScreen.UI.Customization
 {
@@ -9,6 +12,8 @@ namespace MelonLoader.MelonStartScreen.UI.Customization
 
         internal static void Load()
         {
+            TomletMain.RegisterMapper(WriteColor, ReadColor);
+
             FilePath = Path.Combine(MelonUtils.UserDataDirectory, "StartScreen.cfg");
 
             Colors.Setup();
@@ -37,6 +42,20 @@ namespace MelonLoader.MelonStartScreen.UI.Customization
                 ProgressBarOutline = Category.CreateEntry(nameof(ProgressBarOutline), new Color(1.00f, 0.23f, 0.42f), nameof(ProgressBarOutline));
                 Text = Category.CreateEntry(nameof(Text), new Color(1, 1, 1), nameof(Text));
             }
+        }
+
+        private static Color ReadColor(TomlValue value)
+        {
+            float[] floats = MelonPreferences.Mapper.ReadArray<float>(value);
+            if (floats == null || floats.Length != 4)
+                return default;
+            return new Color(floats[0] / 255f, floats[1] / 255f, floats[2] / 255f, floats[3] / 255f);
+        }
+
+        private static TomlValue WriteColor(Color value)
+        {
+            float[] floats = new[] { value.r * 255, value.g * 255, value.b * 255, value.a * 255 };
+            return MelonPreferences.Mapper.WriteArray(floats);
         }
     }
 }
