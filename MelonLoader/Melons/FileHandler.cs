@@ -3,28 +3,54 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace MelonLoader.FileTypes
+namespace MelonLoader.Melons
 {
-    internal static class DLL
+    internal static class FileHandler
     {
+        private static string[] DefaultExtensionWhitelist =
+        {
+            ".dll",
+            ".json",
+            ".mdb",
+            ".pdb",
+            ".xml",
+            ".txt",
+            ".md"
+        };
+
+        private static bool IsExtensionWhitelisted(string filepath)
+            => DefaultExtensionWhitelist.Contains(Path.GetExtension(filepath).ToLowerInvariant());
+
         internal static void LoadAll(string folderpath, bool is_plugins = false)
         {
-            MelonLaunchOptions.Core.LoadModeEnum loadMode = is_plugins
-                ? MelonLaunchOptions.Core.LoadMode_Plugins
-                : MelonLaunchOptions.Core.LoadMode_Mods;
-            string[] filearr = Directory.GetFiles(folderpath).Where(x => 
-                Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
-                && ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV) ? x.ToLowerInvariant().EndsWith(".dev.dll")
-                : ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL) ? !x.ToLowerInvariant().EndsWith(".dev.dll")
-                : true))
-            ).ToArray();
+            string[] filearr = Directory.GetFiles(folderpath).ToArray();
             if (filearr.Length <= 0)
                 return;
+
+            MelonLaunchOptions.Core.LoadModeEnum loadMode = is_plugins
+                  ? MelonLaunchOptions.Core.LoadMode_Plugins
+                  : MelonLaunchOptions.Core.LoadMode_Mods;
 
             for (int i = 0; i < filearr.Length; i++)
             {
                 string filepath = filearr[i];
                 if (string.IsNullOrEmpty(filepath))
+                    continue;
+                
+                if (!IsExtensionWhitelisted(filepath))
+                {
+                    MelonLogger.Error($"Invalid File Extension for {filepath}");
+                    continue;
+                }
+
+                string lowerFilePath = filepath.ToLowerInvariant();
+
+                if ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL)
+                    && lowerFilePath.EndsWith(".dev.dll"))
+                    continue;
+
+                if ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV)
+                    && !lowerFilePath.EndsWith(".dev.dll"))
                     continue;
 
                 string melonname = MelonUtils.GetFileProductName(filepath);
@@ -47,6 +73,14 @@ namespace MelonLoader.FileTypes
         {
             if (string.IsNullOrEmpty(filepath))
                 return;
+
+            if (!IsExtensionWhitelisted(filepath))
+            {
+                MelonLogger.Error($"Invalid File Extension for {filepath}");
+                return;
+            }
+
+            // To-Do: File Type Check
 
             if (MelonDebug.IsEnabled())
             {
@@ -108,6 +142,8 @@ namespace MelonLoader.FileTypes
         {
             if (filedata == null)
                 return;
+
+            // To-Do: File Type Check
 
             Assembly melonassembly = null;
             try

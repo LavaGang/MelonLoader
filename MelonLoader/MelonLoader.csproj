@@ -67,8 +67,7 @@
     <Compile Include="Attributes\MelonGameVersionAttribute.cs" />
     <Compile Include="Attributes\HarmonyDontPatchAllAttribute.cs" />
     <Compile Include="Attributes\MelonProcessAttribute.cs" />
-    <Compile Include="FileTypes\DLL.cs" />
-    <Compile Include="FileTypes\ZIP.cs" />
+    <Compile Include="Melons\FileHandler.cs" />
     <Compile Include="Preferences\MelonPreferences_ReflectiveCategory.cs" />
     <Compile Include="CompatibilityLayers\MelonCompatibilityLayer.cs" />
     <Compile Include="Fixes\UnhandledException.cs" />

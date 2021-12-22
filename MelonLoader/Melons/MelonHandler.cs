@@ -100,8 +100,7 @@ namespace MelonLoader
 
             MelonBase[] original_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
-            FileTypes.DLL.LoadAll(basedirectory, plugins);
-            FileTypes.ZIP.LoadAll(basedirectory);
+            Melons.FileHandler.LoadAll(basedirectory, plugins);
 
             MelonBase[] new_array = plugins ? Array.ConvertAll(_Mods.ToArray(), x => (MelonBase)x) : Array.ConvertAll(_Plugins.ToArray(), x => (MelonBase)x);
 
@@ -134,15 +133,11 @@ namespace MelonLoader
                 || string.IsNullOrEmpty(melonBase.Location))
                 return null;
 
-            string extension = Path.GetExtension(melonBase.Location).ToLowerInvariant();
-            if (string.IsNullOrEmpty(extension)
-                || !extension.Equals(".dll"))
-                return null;
-
             byte[] byteHash = sha256.ComputeHash(File.ReadAllBytes(melonBase.Location));
             string finalHash = string.Empty;
             foreach (byte b in byteHash)
                 finalHash += b.ToString("x2");
+
             return finalHash;
         }
 
@@ -151,31 +146,9 @@ namespace MelonLoader
         public static bool IsModAlreadyLoaded(string name) => (_Mods.Find(x => x.Info.Name.Equals(name)) != null);
 
         public static void LoadFromFile(string filepath, string symbolspath = null)
-        {
-            if (string.IsNullOrEmpty(filepath))
-                return;
-            switch (Path.GetExtension(filepath).ToLowerInvariant())
-            {
-                case ".dll":
-                    FileTypes.DLL.LoadFromFile(filepath, symbolspath);
-                    goto default;
-                case ".zip":
-                    FileTypes.ZIP.LoadFromFile(filepath);
-                    goto default;
-                default:
-                    break;
-            }
-        }
-
+            => Melons.FileHandler.LoadFromFile(filepath, symbolspath);
         public static void LoadFromByteArray(byte[] filedata, byte[] symbolsdata = null, string filepath = null)
-        {
-            if (filedata == null)
-                return;
-
-            // To-Do Check for ZIP Byte Arrays
-
-            FileTypes.DLL.LoadFromByteArray(filedata, symbolsdata, filepath);
-        }
+            => Melons.FileHandler.LoadFromByteArray(filedata, symbolsdata, filepath);
 
         public static void LoadFromAssembly(Assembly asm, string filepath = null)
         {

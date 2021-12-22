@@ -33,12 +33,13 @@
 1. Updated HarmonyX to v2.7.0.
 2. Updated Tomlet to v2.2.0.
 3. Updated SharpZipLib to v1.3.3.
-3. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
-4. Fixed Connection Issue on Demeo.
-5. Added Demeo_LobbyRequired Attribute to Compatibility Layer to enforce all lobby members on Demeo to have a specific melon and version.
-6. Implemented mgGif for Start Screen Image Parsing.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
-7. Reimplemented Image Frame Parsing for Start Screen.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
-8. Moved EnumExtensions from MelonStartScreen Assembly to Main MelonLoader Assembly.
+4. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
+5. Fixed Connection Issue on Demeo.
+6. Added Demeo_LobbyRequired Attribute to Compatibility Layer to enforce all lobby members on Demeo to have a specific melon and version.
+7. Implemented mgGif for Start Screen Image Parsing.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
+8. Reimplemented Image Frame Parsing for Start Screen.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
+9. Moved EnumExtensions from MelonStartScreen Assembly to Main MelonLoader Assembly.
+10. Removed ZIP Loading Functionality for Plugins and Mods folders.
 
 ---
 
