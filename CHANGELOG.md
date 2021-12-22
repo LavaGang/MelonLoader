@@ -43,6 +43,7 @@
 11. Fixed Issue with FileHandler Blacklist.
 12. Added Optional MelonID Attribute for Melons.
 13. Updated Logger to Print MelonID when set.
+14. Removed Obsolete Attributes from MelonLogger static methods.
 
 ---
 
