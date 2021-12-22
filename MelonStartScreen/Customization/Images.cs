@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using MelonLoader.MelonStartScreen.UI;
 
-namespace MelonLoader.MelonStartScreen.UI.Customization
+namespace MelonLoader.MelonStartScreen.Customization
 {
     internal static class Images
     {

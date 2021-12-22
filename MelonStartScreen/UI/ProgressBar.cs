@@ -25,20 +25,27 @@ namespace MelonLoader.MelonStartScreen.UI
             this.height = height;
 
             font = UIStyleValues.TextFont;
-            innerTexture = UIStyleValues.ProgressBarTexture;
-            outerTexture = UIStyleValues.ProgressBarOutlineTexture;
+            innerTexture = UIStyleValues.ProgressBarInnerTexture;
+            outerTexture = UIStyleValues.ProgressBarOuterTexture;
         }
 
         public void Render()
         {
-            RefreshTextmesh();
+            if (Customization.Config.ProgressText.Enabled)
+                RefreshTextmesh();
 
-            Graphics.DrawTexture(new Rect(x, y, width, height), outerTexture);
-            Graphics.DrawTexture(new Rect(x + 6, y + 6, width - 12, height - 12), UIStyleValues.BackgroundTexture);
-            Graphics.DrawTexture(new Rect(x + 9, y + 9, (int)((width - 18) * Math.Min(1.0f, progress)), height - 18), innerTexture);
+            if (Customization.Config.ProgressBar.Enabled)
+            {
+                Graphics.DrawTexture(new Rect(x, y, width, height), outerTexture);
+                Graphics.DrawTexture(new Rect(x + 6, y + 6, width - 12, height - 12), UIStyleValues.BackgroundTexture);
+                Graphics.DrawTexture(new Rect(x + 9, y + 9, (int)((width - 18) * Math.Min(1.0f, progress)), height - 18), innerTexture);
+            }
 
-            font.material.SetPass(0);
-            Graphics.DrawMeshNow(textmesh, new Vector3(x + width / 2, y + height / 2 + 1, 0), Quaternion.identity);
+            if (Customization.Config.ProgressText.Enabled)
+            {
+                font.material.SetPass(0);
+                Graphics.DrawMeshNow(textmesh, new Vector3(x + width / 2, y + height / 2 + 1, 0), Quaternion.identity);
+            }
         }
 
         private void RefreshTextmesh()
@@ -50,7 +57,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
             TextGenerationSettings settings2 = new TextGenerationSettings();
             settings2.textAnchor = TextAnchor.MiddleCenter;
-            settings2.color = UI.Customization.Config.Colors.Text.Value;
+            settings2.color = Customization.Config.ProgressText.TextColor;
             settings2.generationExtents = new Vector2(540, 47.5f);
             settings2.richText = true;
             settings2.font = font;

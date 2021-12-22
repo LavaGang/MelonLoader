@@ -39,26 +39,31 @@ namespace MelonLoader.MelonStartScreen
             UIStyleValues.Init();
             MelonDebug.Msg("UIStyleValues Initialized");
 
-            TextGenerationSettings settings = new TextGenerationSettings();
-            settings.textAnchor = TextAnchor.MiddleCenter;
-            settings.color = UI.Customization.Config.Colors.Text.Value;
-            settings.generationExtents = new Vector2(540, 47.5f);
-            settings.richText = true;
-            settings.font = UIStyleValues.TextFont;
-            settings.pivot = new Vector2(0.5f, 0.5f);
-            settings.fontSize = 24;
-            settings.fontStyle = FontStyle.Bold;
-            settings.verticalOverflow = VerticalWrapMode.Overflow;
-            settings.scaleFactor = 1f;
-            settings.lineSpacing = 1f;
-            MelonDebug.Msg("TextGenerationSettings settings set");
+            if (Customization.Config.VersionText.Enabled)
+            {
+                TextGenerationSettings settings = new TextGenerationSettings();
+                settings.textAnchor = TextAnchor.MiddleCenter;
+                settings.color = Customization.Config.VersionText.TextColor;
+                settings.generationExtents = new Vector2(540, 47.5f);
+                settings.richText = true;
+                settings.font = UIStyleValues.TextFont;
+                settings.pivot = new Vector2(0.5f, 0.5f);
+                settings.fontSize = 24;
+                settings.fontStyle = FontStyle.Bold;
+                settings.verticalOverflow = VerticalWrapMode.Overflow;
+                settings.scaleFactor = 1f;
+                settings.lineSpacing = 1f;
+                MelonDebug.Msg("TextGenerationSettings settings set");
 
-            string melonloaderText = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
-                ? "<color=#FFCC4D>LemonLoader</color>"
-                : "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>"; 
-            melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} v{BuildInfo.Version} Open-Beta", settings);
+                string melonloaderText = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                    ? "<color=#FFCC4D>LemonLoader</color>"
+                    : "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>";
+                melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} v{BuildInfo.Version} Open-Beta", settings);
+            }
 
-            progressBar = new ProgressBar(width: 540, height: 36);
+            if (Customization.Config.ProgressBar.Enabled
+                || Customization.Config.ProgressText.Enabled)
+                progressBar = new ProgressBar(width: 540, height: 36);
 
             uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
             MelonDebug.Msg("Graphics Device Type: " + graphicsDeviceType);
@@ -83,19 +88,27 @@ namespace MelonLoader.MelonStartScreen
                 int logoHeight = (int)(sh * 0.4f);
                 int logoWidth = (int)(logoHeight * logoRatio);
 
-                Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
-                Graphics.DrawTexture(new Rect((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight), UIStyleValues.LogoTexture);
+                if (UIStyleValues.BackgroundTexture != null)
+                    Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
+
+                if (UIStyleValues.LogoTexture != null)
+                    Graphics.DrawTexture(new Rect((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight), UIStyleValues.LogoTexture);
 
                 // Animated image
                 UIStyleValues.Animation?.Render(sw - 200, 200, 132);
 
                 UIStyleValues.TextFont.material.SetPass(0);
-                Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
 
-                progressBar.SetPosition(
-                    (sw - 540) / 2,
-                    sh - ((sh - 36) / 2 + (logoHeight / 2) + 50));
-                progressBar.Render();
+                if (melonloaderversionTextmesh != null)
+                    Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
+
+                if (progressBar != null)
+                {
+                    progressBar.SetPosition(
+                        (sw - 540) / 2,
+                        sh - ((sh - 36) / 2 + (logoHeight / 2) + 50));
+                    progressBar.Render();
+                }
 
                 GfxDevice.PresentFrame();
                 if (shouldCallWFLPAGT != 0)

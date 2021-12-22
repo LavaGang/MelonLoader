@@ -23,10 +23,11 @@ namespace MelonLoader.MelonStartScreen
         private static bool functionRunDone = false;
         private static int functionRunResult = 0;
 
-
         private static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
-            UI.Customization.Config.Load();
+            Customization.Config.Load();
+            if (!Customization.Config.General.UseStartScreen)
+                return functionToWaitForAsync();
 
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+
             // If we can't find them (signatures changed or <2018.1.0), then we run the function and return.
