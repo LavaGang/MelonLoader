@@ -1,97 +1,78 @@
-// GZipConstants.cs
-//
-// Copyright (C) 2001 Mike Krueger
-//
-// This file was translated from java, it was part of the GNU Classpath
-// Copyright (C) 2001 Free Software Foundation, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-// 
-// As a special exception, the copyright holders of this library give you
-// permission to link this library with independent modules to produce an
-// executable, regardless of the license terms of these independent
-// modules, and to copy and distribute the resulting executable under
-// terms of your choice, provided that you also meet, for each linked
-// independent module, the terms and conditions of the license of that
-// module.  An independent module is a module which is not derived from
-// or based on this library.  If you modify this library, you may extend
-// this exception to your version of the library, but you are not
-// obligated to do so.  If you do not wish to do so, delete this
-// exception statement from your version.
+using System;
+using System.Text;
 
-namespace MelonLoader.ICSharpCode.SharpZipLib.GZip 
+namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 {
-	
 	/// <summary>
 	/// This class contains constants used for gzip.
 	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "kept for backwards compatibility")]
 	sealed public class GZipConstants
 	{
 		/// <summary>
-		/// Magic number found at start of GZIP header
+		/// First GZip identification byte
 		/// </summary>
-		public const int GZIP_MAGIC = 0x1F8B;
-		
-		/*  The flag byte is divided into individual bits as follows:
-			
-			bit 0   FTEXT
-			bit 1   FHCRC
-			bit 2   FEXTRA
-			bit 3   FNAME
-			bit 4   FCOMMENT
-			bit 5   reserved
-			bit 6   reserved
-			bit 7   reserved
-		 */
-		 
+		public const byte ID1 = 0x1F;
+
 		/// <summary>
-		/// Flag bit mask for text
+		/// Second GZip identification byte
 		/// </summary>
-		public const int FTEXT    = 0x1;
-		
+		public const byte ID2 = 0x8B;
+
 		/// <summary>
-		/// Flag bitmask for Crc
+		/// Deflate compression method
 		/// </summary>
-		public const int FHCRC    = 0x2;
-		
+		public const byte CompressionMethodDeflate = 0x8;
+
 		/// <summary>
-		/// Flag bit mask for extra
+		/// Get the GZip specified encoding (CP-1252 if supported, otherwise ASCII)
 		/// </summary>
-		public const int FEXTRA   = 0x4;
-		
-		/// <summary>
-		/// flag bitmask for name
-		/// </summary>
-		public const int FNAME    = 0x8;
-		
-		/// <summary>
-		/// flag bit mask indicating comment is present
-		/// </summary>
-		public const int FCOMMENT = 0x10;
-		
-		/// <summary>
-		/// Initialise default instance.
-		/// </summary>
-		/// <remarks>Constructor is private to prevent instances being created.</remarks>
-		GZipConstants()
+		public static Encoding Encoding
 		{
+			get
+			{
+				try
+				{
+					return Encoding.GetEncoding(1252);
+				}
+				catch
+				{
+					return Encoding.ASCII;
+				}
+			}
 		}
+
+	}
+
+	/// <summary>
+	/// GZip header flags
+	/// </summary>
+	[Flags]
+	public enum GZipFlags: byte
+	{
+		/// <summary>
+		/// Text flag hinting that the file is in ASCII
+		/// </summary>
+		FTEXT = 0x1 << 0,
+
+		/// <summary>
+		/// CRC flag indicating that a CRC16 preceeds the data
+		/// </summary>
+		FHCRC = 0x1 << 1,
+
+		/// <summary>
+		/// Extra flag indicating that extra fields are present
+		/// </summary>
+		FEXTRA = 0x1 << 2,
+
+		/// <summary>
+		/// Filename flag indicating that the original filename is present
+		/// </summary>
+		FNAME = 0x1 << 3,
+
+		/// <summary>
+		/// Flag bit mask indicating that a comment is present
+		/// </summary>
+		FCOMMENT = 0x1 << 4,
 	}
 }

@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="CppUtils.cs" />
-    <Compile Include="EnumExtensions.cs" />
     <Compile Include="mgGif\GifDecoder.cs" />
     <Compile Include="mgGif\Image.cs" />
     <Compile Include="ModLoadStep.cs" />

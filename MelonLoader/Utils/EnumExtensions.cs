@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MelonLoader.MelonStartScreen
+namespace MelonLoader
 {
     /// <summary>
     /// Extentions for enums.

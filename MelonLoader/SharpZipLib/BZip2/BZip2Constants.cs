@@ -1,44 +1,9 @@
-// BZip2Constants.cs
-// Copyright (C) 2001 Mike Krueger
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-// 
-// As a special exception, the copyright holders of this library give you
-// permission to link this library with independent modules to produce an
-// executable, regardless of the license terms of these independent
-// modules, and to copy and distribute the resulting executable under
-// terms of your choice, provided that you also meet, for each linked
-// independent module, the terms and conditions of the license of that
-// module.  An independent module is a module which is not derived from
-// or based on this library.  If you modify this library, you may extend
-// this exception to your version of the library, but you are not
-// obligated to do so.  If you do not wish to do so, delete this
-// exception statement from your version.
-
-namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2 
+namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2
 {
-	
 	/// <summary>
 	/// Defines internal values for both compression and decompression
 	/// </summary>
-	internal sealed class BZip2Constants
+	internal static class BZip2Constants
 	{
 		/// <summary>
 		/// Random numbers used to randomise repetitive blocks
@@ -101,97 +66,52 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2
 		/// <summary>
 		/// When multiplied by compression parameter (1-9) gives the block size for compression
 		/// 9 gives the best compression but uses the most memory.
-		/// </summary>		
+		/// </summary>
 		public const int BaseBlockSize = 100000;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int MaximumAlphaSize = 258;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int MaximumCodeLength = 23;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int RunA = 0;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int RunB = 1;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int GroupCount = 6;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int GroupSize = 50;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int NumberOfIterations = 4;
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int MaximumSelectors = (2 + (900000 / GroupSize));
-		
+
 		/// <summary>
 		/// Backend constant
 		/// </summary>
 		public const int OvershootBytes = 20;
-		
-		private BZip2Constants()
-		{
-		}
 	}
 }
-	
-/* This file was derived from a file containing this license:
- * 
- * This file is a part of bzip2 and/or libbzip2, a program and
- * library for lossless, block-sorting data compression.
- * 
- * Copyright (C) 1996-1998 Julian R Seward.  All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 
- * 1. Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- * 
- * 2. The origin of this software must not be misrepresented; you must 
- * not claim that you wrote the original software.  If you use this 
- * software in a product, an acknowledgment in the product 
- * documentation would be appreciated but is not required.
- * 
- * 3. Altered source versions must be plainly marked as such, and must
- * not be misrepresented as being the original software.
- * 
- * 4. The name of the author may not be used to endorse or promote 
- * products derived from this software without specific prior written 
- * permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
- * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * Java version ported by Keiron Liddle, Aftex Software <keiron@aftexsw.com> 1999-2001
- */

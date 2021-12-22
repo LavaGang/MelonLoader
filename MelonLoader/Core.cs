@@ -93,7 +93,7 @@ namespace MelonLoader
             MelonHandler.OnApplicationQuit();
             MelonPreferences.Save();
 
-            HarmonyInstance.UnpatchAll();
+            HarmonyInstance.UnpatchSelf();
             bHaptics.Quit();
 
             MelonLogger.Flush();

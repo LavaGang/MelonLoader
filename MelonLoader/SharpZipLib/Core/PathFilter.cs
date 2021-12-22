@@ -1,38 +1,3 @@
-// PathFilter.cs
-//
-// Copyright 2005 John Reilly
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-// 
-// As a special exception, the copyright holders of this library give you
-// permission to link this library with independent modules to produce an
-// executable, regardless of the license terms of these independent
-// modules, and to copy and distribute the resulting executable under
-// terms of your choice, provided that you also meet, for each linked
-// independent module, the terms and conditions of the license of that
-// module.  An independent module is a module which is not derived from
-// or based on this library.  If you modify this library, you may extend
-// this exception to your version of the library, but you are not
-// obligated to do so.  If you do not wish to do so, delete this
-// exception statement from your version.
-
 using System;
 using System.IO;
 
@@ -46,6 +11,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 	public class PathFilter : IScanFilter
 	{
 		#region Constructors
+
 		/// <summary>
 		/// Initialise a new instance of <see cref="PathFilter"></see>.
 		/// </summary>
@@ -54,9 +20,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		{
 			nameFilter_ = new NameFilter(filter);
 		}
-		#endregion
+
+		#endregion Constructors
 
 		#region IScanFilter Members
+
 		/// <summary>
 		/// Test a name to see if it matches the filter.
 		/// </summary>
@@ -67,17 +35,23 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		{
 			bool result = false;
 
-			if ( name != null ) {
+			if (name != null)
+			{
 				string cooked = (name.Length > 0) ? Path.GetFullPath(name) : "";
 				result = nameFilter_.IsMatch(cooked);
 			}
 			return result;
 		}
-		#endregion
+
+		private readonly
+
+		#endregion IScanFilter Members
 
 		#region Instance Fields
+
 		NameFilter nameFilter_;
-		#endregion
+
+		#endregion Instance Fields
 	}
 
 	/// <summary>
@@ -87,6 +61,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 	public class ExtendedPathFilter : PathFilter
 	{
 		#region Constructors
+
 		/// <summary>
 		/// Initialise a new instance of ExtendedPathFilter.
 		/// </summary>
@@ -133,9 +108,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 			MinDate = minDate;
 			MaxDate = maxDate;
 		}
-		#endregion
+
+		#endregion Constructors
 
 		#region IScanFilter Members
+
 		/// <summary>
 		/// Test a filename to see if it matches the filter.
 		/// </summary>
@@ -146,9 +123,10 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		{
 			bool result = base.IsMatch(name);
 
-			if ( result ) {
-				FileInfo fileInfo = new FileInfo(name);
-				result = 
+			if (result)
+			{
+				var fileInfo = new FileInfo(name);
+				result =
 					(MinSize <= fileInfo.Length) &&
 					(MaxSize >= fileInfo.Length) &&
 					(MinDate <= fileInfo.LastWriteTime) &&
@@ -157,9 +135,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 			}
 			return result;
 		}
-		#endregion
+
+		#endregion IScanFilter Members
 
 		#region Properties
+
 		/// <summary>
 		/// Get/set the minimum size/length for a file that will match this filter.
 		/// </summary>
@@ -170,14 +150,15 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 			get { return minSize_; }
 			set
 			{
-				if ( (value < 0) || (maxSize_ < value) ) {
-					throw new ArgumentOutOfRangeException("value");
+				if ((value < 0) || (maxSize_ < value))
+				{
+					throw new ArgumentOutOfRangeException(nameof(value));
 				}
 
 				minSize_ = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// Get/set the maximum size/length for a file that will match this filter.
 		/// </summary>
@@ -188,8 +169,9 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 			get { return maxSize_; }
 			set
 			{
-				if ( (value < 0) || (minSize_ > value) ) {
-					throw new ArgumentOutOfRangeException("value");
+				if ((value < 0) || (minSize_ > value))
+				{
+					throw new ArgumentOutOfRangeException(nameof(value));
 				}
 
 				maxSize_ = value;
@@ -209,12 +191,9 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 
 			set
 			{
-				if ( value > maxDate_ ) {
-#if NETCF_1_0
-					throw new ArgumentOutOfRangeException("value");
-#else
-					throw new ArgumentOutOfRangeException("value", "Exceeds MaxDate");
-#endif
+				if (value > maxDate_)
+				{
+					throw new ArgumentOutOfRangeException(nameof(value), "Exceeds MaxDate");
 				}
 
 				minDate_ = value;
@@ -234,25 +213,25 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 
 			set
 			{
-				if ( minDate_ > value ) {
-#if NETCF_1_0
-					throw new ArgumentOutOfRangeException("value");
-#else
-					throw new ArgumentOutOfRangeException("value", "Exceeds MinDate");
-#endif
+				if (minDate_ > value)
+				{
+					throw new ArgumentOutOfRangeException(nameof(value), "Exceeds MinDate");
 				}
 
 				maxDate_ = value;
 			}
 		}
-		#endregion
+
+		#endregion Properties
 
 		#region Instance Fields
-		long minSize_;
-		long maxSize_ = long.MaxValue;
-		DateTime minDate_ = DateTime.MinValue;
-		DateTime maxDate_ = DateTime.MaxValue;
-		#endregion
+
+		private long minSize_;
+		private long maxSize_ = long.MaxValue;
+		private DateTime minDate_ = DateTime.MinValue;
+		private DateTime maxDate_ = DateTime.MaxValue;
+
+		#endregion Instance Fields
 	}
 
 	/// <summary>
@@ -262,7 +241,6 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 	[Obsolete("Use ExtendedPathFilter instead")]
 	public class NameAndSizeFilter : PathFilter
 	{
-
 		/// <summary>
 		/// Initialise a new instance of NameAndSizeFilter.
 		/// </summary>
@@ -275,7 +253,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 			MinSize = minSize;
 			MaxSize = maxSize;
 		}
-		
+
 		/// <summary>
 		/// Test a filename to see if it matches the filter.
 		/// </summary>
@@ -285,31 +263,34 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		{
 			bool result = base.IsMatch(name);
 
-			if ( result ) {
-				FileInfo fileInfo = new FileInfo(name);
+			if (result)
+			{
+				var fileInfo = new FileInfo(name);
 				long length = fileInfo.Length;
-				result = 
+				result =
 					(MinSize <= length) &&
 					(MaxSize >= length);
 			}
 			return result;
 		}
-		
+
 		/// <summary>
 		/// Get/set the minimum size for a file that will match this filter.
 		/// </summary>
 		public long MinSize
 		{
 			get { return minSize_; }
-			set {
-				if ( (value < 0) || (maxSize_ < value) ) {
-					throw new ArgumentOutOfRangeException("value");
+			set
+			{
+				if ((value < 0) || (maxSize_ < value))
+				{
+					throw new ArgumentOutOfRangeException(nameof(value));
 				}
 
 				minSize_ = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// Get/set the maximum size for a file that will match this filter.
 		/// </summary>
@@ -318,8 +299,9 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 			get { return maxSize_; }
 			set
 			{
-				if ( (value < 0) || (minSize_ > value) ) {
-					throw new ArgumentOutOfRangeException("value");
+				if ((value < 0) || (minSize_ > value))
+				{
+					throw new ArgumentOutOfRangeException(nameof(value));
 				}
 
 				maxSize_ = value;
@@ -327,8 +309,10 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		}
 
 		#region Instance Fields
-		long minSize_;
-		long maxSize_ = long.MaxValue;
-		#endregion
+
+		private long minSize_;
+		private long maxSize_ = long.MaxValue;
+
+		#endregion Instance Fields
 	}
 }

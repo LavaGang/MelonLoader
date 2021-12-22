@@ -1,44 +1,6 @@
-// ZipEntryFactory.cs
-//
-// Copyright 2006 John Reilly
-//
-// Copyright (C) 2001 Free Software Foundation, Inc.
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-//
-// Linking this library statically or dynamically with other modules is
-// making a combined work based on this library.  Thus, the terms and
-// conditions of the GNU General Public License cover the whole
-// combination.
-// 
-// As a special exception, the copyright holders of this library give you
-// permission to link this library with independent modules to produce an
-// executable, regardless of the license terms of these independent
-// modules, and to copy and distribute the resulting executable under
-// terms of your choice, provided that you also meet, for each linked
-// independent module, the terms and conditions of the license of that
-// module.  An independent module is a module which is not derived from
-// or based on this library.  If you modify this library, you may extend
-// this exception to your version of the library, but you are not
-// obligated to do so.  If you do not wish to do so, delete this
-// exception statement from your version.
-
+using MelonLoader.ICSharpCode.SharpZipLib.Core;
 using System;
 using System.IO;
-
-using MelonLoader.ICSharpCode.SharpZipLib.Core;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
@@ -48,6 +10,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 	public class ZipEntryFactory : IEntryFactory
 	{
 		#region Enumerations
+
 		/// <summary>
 		/// Defines the possible values to be used for the <see cref="ZipEntry.DateTime"/>.
 		/// </summary>
@@ -57,39 +20,47 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 			/// Use the recorded LastWriteTime value for the file.
 			/// </summary>
 			LastWriteTime,
+
 			/// <summary>
 			/// Use the recorded LastWriteTimeUtc value for the file
 			/// </summary>
 			LastWriteTimeUtc,
+
 			/// <summary>
 			/// Use the recorded CreateTime value for the file.
 			/// </summary>
 			CreateTime,
+
 			/// <summary>
 			/// Use the recorded CreateTimeUtc value for the file.
 			/// </summary>
 			CreateTimeUtc,
+
 			/// <summary>
 			/// Use the recorded LastAccessTime value for the file.
 			/// </summary>
 			LastAccessTime,
+
 			/// <summary>
 			/// Use the recorded LastAccessTimeUtc value for the file.
 			/// </summary>
 			LastAccessTimeUtc,
+
 			/// <summary>
 			/// Use a fixed value.
 			/// </summary>
 			/// <remarks>The actual <see cref="DateTime"/> value used can be
-			/// specified via the <see cref="ZipEntryFactory(DateTime)"/> constructor or 
+			/// specified via the <see cref="ZipEntryFactory(DateTime)"/> constructor or
 			/// using the <see cref="ZipEntryFactory(TimeSetting)"/> with the setting set
 			/// to <see cref="TimeSetting.Fixed"/> which will use the <see cref="DateTime"/> when this class was constructed.
 			/// The <see cref="FixedDateTime"/> property can also be used to set this value.</remarks>
 			Fixed,
 		}
-		#endregion
+
+		#endregion Enumerations
 
 		#region Constructors
+
 		/// <summary>
 		/// Initialise a new instance of the <see cref="ZipEntryFactory"/> class.
 		/// </summary>
@@ -97,32 +68,32 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		public ZipEntryFactory()
 		{
 			nameTransform_ = new ZipNameTransform();
+			isUnicodeText_ = ZipStrings.UseUnicode;
 		}
 
 		/// <summary>
 		/// Initialise a new instance of <see cref="ZipEntryFactory"/> using the specified <see cref="TimeSetting"/>
 		/// </summary>
 		/// <param name="timeSetting">The <see cref="TimeSetting">time setting</see> to use when creating <see cref="ZipEntry">Zip entries</see>.</param>
-		public ZipEntryFactory(TimeSetting timeSetting)
+		public ZipEntryFactory(TimeSetting timeSetting) : this()
 		{
 			timeSetting_ = timeSetting;
-			nameTransform_ = new ZipNameTransform();
 		}
 
 		/// <summary>
 		/// Initialise a new instance of <see cref="ZipEntryFactory"/> using the specified <see cref="DateTime"/>
 		/// </summary>
 		/// <param name="time">The time to set all <see cref="ZipEntry.DateTime"/> values to.</param>
-		public ZipEntryFactory(DateTime time)
+		public ZipEntryFactory(DateTime time) : this()
 		{
 			timeSetting_ = TimeSetting.Fixed;
 			FixedDateTime = time;
-			nameTransform_ = new ZipNameTransform();
 		}
 
-		#endregion
+		#endregion Constructors
 
 		#region Properties
+
 		/// <summary>
 		/// Get / set the <see cref="INameTransform"/> to be used when creating new <see cref="ZipEntry"/> values.
 		/// </summary>
@@ -132,12 +103,14 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		public INameTransform NameTransform
 		{
 			get { return nameTransform_; }
-			set 
+			set
 			{
-				if (value == null) {
+				if (value == null)
+				{
 					nameTransform_ = new ZipNameTransform();
 				}
-				else {
+				else
+				{
 					nameTransform_ = value;
 				}
 			}
@@ -160,8 +133,9 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 			get { return fixedDateTime_; }
 			set
 			{
-				if (value.Year < 1970) {
-					throw new ArgumentException("Value is too old to be valid", "value");
+				if (value.Year < 1970)
+				{
+					throw new ArgumentException("Value is too old to be valid", nameof(value));
 				}
 				fixedDateTime_ = value;
 			}
@@ -188,7 +162,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		}
 
 		/// <summary>
-		/// Get set a value indicating wether unidoce text should be set on.
+		/// Get set a value indicating whether unidoce text should be set on.
 		/// </summary>
 		public bool IsUnicodeText
 		{
@@ -196,7 +170,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 			set { isUnicodeText_ = value; }
 		}
 
-		#endregion
+		#endregion Properties
 
 		#region IEntryFactory Members
 
@@ -207,18 +181,30 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		/// <returns>Returns a new <see cref="ZipEntry"/> based on the <paramref name="fileName"/>.</returns>
 		public ZipEntry MakeFileEntry(string fileName)
 		{
-			return MakeFileEntry(fileName, true);
+			return MakeFileEntry(fileName, null, true);
 		}
 
 		/// <summary>
-		/// Make a new <see cref="ZipEntry"/> from a name.
+		/// Make a new <see cref="ZipEntry"/> for a file.
 		/// </summary>
 		/// <param name="fileName">The name of the file to create a new entry for.</param>
 		/// <param name="useFileSystem">If true entry detail is retrieved from the file system if the file exists.</param>
 		/// <returns>Returns a new <see cref="ZipEntry"/> based on the <paramref name="fileName"/>.</returns>
 		public ZipEntry MakeFileEntry(string fileName, bool useFileSystem)
 		{
-			ZipEntry result = new ZipEntry(nameTransform_.TransformFile(fileName));
+			return MakeFileEntry(fileName, null, useFileSystem);
+		}
+
+		/// <summary>
+		/// Make a new <see cref="ZipEntry"/> from a name.
+		/// </summary>
+		/// <param name="fileName">The name of the file to create a new entry for.</param>
+		/// <param name="entryName">An alternative name to be used for the new entry. Null if not applicable.</param>
+		/// <param name="useFileSystem">If true entry detail is retrieved from the file system if the file exists.</param>
+		/// <returns>Returns a new <see cref="ZipEntry"/> based on the <paramref name="fileName"/>.</returns>
+		public ZipEntry MakeFileEntry(string fileName, string entryName, bool useFileSystem)
+		{
+			var result = new ZipEntry(nameTransform_.TransformFile(!string.IsNullOrEmpty(entryName) ? entryName : fileName));
 			result.IsUnicodeText = isUnicodeText_;
 
 			int externalAttributes = 0;
@@ -239,11 +225,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 						break;
 
 					case TimeSetting.CreateTimeUtc:
-#if NETCF_1_0 || NETCF_2_0
-						result.DateTime = fi.CreationTime.ToUniversalTime();
-#else
 						result.DateTime = fi.CreationTimeUtc;
-#endif
 						break;
 
 					case TimeSetting.LastAccessTime:
@@ -251,11 +233,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 						break;
 
 					case TimeSetting.LastAccessTimeUtc:
-#if NETCF_1_0 || NETCF_2_0
-						result.DateTime = fi.LastAccessTime.ToUniversalTime();
-#else
 						result.DateTime = fi.LastAccessTimeUtc;
-#endif
 						break;
 
 					case TimeSetting.LastWriteTime:
@@ -263,11 +241,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 						break;
 
 					case TimeSetting.LastWriteTimeUtc:
-#if NETCF_1_0 || NETCF_2_0
-						result.DateTime = fi.LastWriteTime.ToUniversalTime();
-#else
 						result.DateTime = fi.LastWriteTimeUtc;
-#endif
 						break;
 
 					case TimeSetting.Fixed:
@@ -296,7 +270,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 				externalAttributes |= setAttributes_;
 				result.ExternalFileAttributes = externalAttributes;
 			}
-			
+
 			return result;
 		}
 
@@ -318,11 +292,10 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		/// <returns>Returns a new <see cref="ZipEntry"></see> representing a directory.</returns>
 		public ZipEntry MakeDirectoryEntry(string directoryName, bool useFileSystem)
 		{
-			
-			ZipEntry result = new ZipEntry(nameTransform_.TransformDirectory(directoryName));
-            result.IsUnicodeText = isUnicodeText_;
-            result.Size = 0;
-			
+			var result = new ZipEntry(nameTransform_.TransformDirectory(directoryName));
+			result.IsUnicodeText = isUnicodeText_;
+			result.Size = 0;
+
 			int externalAttributes = 0;
 
 			DirectoryInfo di = null;
@@ -331,7 +304,6 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 			{
 				di = new DirectoryInfo(directoryName);
 			}
-
 
 			if ((di != null) && di.Exists)
 			{
@@ -342,11 +314,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 						break;
 
 					case TimeSetting.CreateTimeUtc:
-#if NETCF_1_0 || NETCF_2_0
-						result.DateTime = di.CreationTime.ToUniversalTime();
-#else
 						result.DateTime = di.CreationTimeUtc;
-#endif
 						break;
 
 					case TimeSetting.LastAccessTime:
@@ -354,11 +322,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 						break;
 
 					case TimeSetting.LastAccessTimeUtc:
-#if NETCF_1_0 || NETCF_2_0
-						result.DateTime = di.LastAccessTime.ToUniversalTime();
-#else
 						result.DateTime = di.LastAccessTimeUtc;
-#endif
 						break;
 
 					case TimeSetting.LastWriteTime:
@@ -366,11 +330,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 						break;
 
 					case TimeSetting.LastWriteTimeUtc:
-#if NETCF_1_0 || NETCF_2_0
-						result.DateTime = di.LastWriteTime.ToUniversalTime();
-#else
 						result.DateTime = di.LastWriteTimeUtc;
-#endif
 						break;
 
 					case TimeSetting.Fixed:
@@ -397,17 +357,19 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 
 			return result;
 		}
-		
-		#endregion
+
+		#endregion IEntryFactory Members
 
 		#region Instance Fields
-		INameTransform nameTransform_;
-		DateTime fixedDateTime_ = DateTime.Now;
-		TimeSetting timeSetting_;
-		bool isUnicodeText_;
 
-		int getAttributes_ = -1;
-		int setAttributes_;
-		#endregion
+		private INameTransform nameTransform_;
+		private DateTime fixedDateTime_ = DateTime.Now;
+		private TimeSetting timeSetting_ = TimeSetting.LastWriteTime;
+		private bool isUnicodeText_;
+
+		private int getAttributes_ = -1;
+		private int setAttributes_;
+
+		#endregion Instance Fields
 	}
 }
