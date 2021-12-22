@@ -71,7 +71,7 @@ namespace MelonLoader
         public MelonPreferences_Entry<T> GetEntry<T>(string identifier) => (MelonPreferences_Entry<T>)GetEntry(identifier);
         public bool HasEntry(string identifier) => GetEntry(identifier) != null;
 
-        public void SetFilePath(string filepath, bool autoload = true)
+        public void SetFilePath(string filepath, bool autoload = true, bool printmsg = true)
         {
             if (File != null)
             {
@@ -93,7 +93,7 @@ namespace MelonLoader
                 }
             }
             if (autoload)
-                MelonPreferences.LoadFileAndRefreshCategories(File);
+                MelonPreferences.LoadFileAndRefreshCategories(File, printmsg);
         }
 
         public void ResetFilePath()

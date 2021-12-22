@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
@@ -11,18 +8,18 @@ namespace MelonLoader.MelonStartScreen.UI
         public static Font standardFont;
 
         public static Texture2D backgroundTexture;
-        public static Texture2D progressbarOuterTexture;
         public static Texture2D progressbarInnerTexture;
+        public static Texture2D progressbarOuterTexture;
 
         public static Texture2D melonloaderLogoTexture;
 
-        public static AnimatedImage funnyAnimation;
+        public static AnimatedImage Animation;
 
         internal static void Init()
         {
-            backgroundTexture = UIUtils.CreateColorTexture(new Color(0.08f, 0.09f, 0.10f));
-            progressbarOuterTexture = UIUtils.CreateColorTexture(new Color(0.47f, 0.97f, 0.39f));
-            progressbarInnerTexture = UIUtils.CreateColorTexture(new Color(1.00f, 0.23f, 0.42f));
+            backgroundTexture = UIUtils.CreateColorTexture(Customization.Config.Colors.Background.Value);
+            progressbarInnerTexture = UIUtils.CreateColorTexture(Customization.Config.Colors.ProgressBar.Value);
+            progressbarOuterTexture = UIUtils.CreateColorTexture(Customization.Config.Colors.ProgressBarOutline.Value);
 
             MelonDebug.Msg("[UIStyleValues] LoadImage Logo");
             melonloaderLogoTexture = new Texture2D(2, 2);
@@ -33,9 +30,9 @@ namespace MelonLoader.MelonStartScreen.UI
             MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
 
             // Load Animated Image
-            funnyAnimation = Customization.Images.LoadAnimatedImage();
+            Animation = Customization.Images.LoadAnimatedImage();
 
-            // Load default font
+            // Load Font
             standardFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
     }

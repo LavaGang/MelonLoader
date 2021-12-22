@@ -46,6 +46,7 @@
 14. Removed Obsolete Attributes from MelonLogger static methods.
 15. Internal Failures now print their proper Failure Messages in the MessageBox even if not in Debug Mode.
 16. Cleaned Up Start Screen's Animated Image Customization.
+17. Added Start Screen Color Customization for Background, Progress Bar, and Progress Bar Outline.
 
 ---
 

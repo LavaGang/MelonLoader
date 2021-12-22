@@ -2,10 +2,9 @@
 using MelonLoader.MelonStartScreen.NativeUtils.PEParser;
 using System;
 using System.Diagnostics;
-using System.Reflection;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using UnhollowerMini;
 using Windows;
 
 namespace MelonLoader.MelonStartScreen
@@ -27,6 +26,8 @@ namespace MelonLoader.MelonStartScreen
 
         private static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
+            UI.Customization.Config.Load();
+
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+
             // If we can't find them (signatures changed or <2018.1.0), then we run the function and return.
             try

@@ -23,7 +23,7 @@ namespace MelonLoader.MelonStartScreen.UI.Customization
 
         internal static AnimatedImage LoadAnimatedImage()
         {
-            string filepath = ScanForCustomImage("Loading.gif");
+            string filepath = ScanForFileInUserData("Loading.gif");
             if (string.IsNullOrEmpty(filepath))
                 return DefaultAnimatedImage();
 
@@ -40,7 +40,7 @@ namespace MelonLoader.MelonStartScreen.UI.Customization
             }
         }
 
-        private static string ScanForCustomImage(string filename)
+        private static string ScanForFileInUserData(string filename)
         {
             string[] files = Directory.GetFiles(MelonUtils.UserDataDirectory);
             if (files.Length <= 0)
