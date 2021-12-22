@@ -17,10 +17,7 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		std::string timestamp = Logger::GetTimestamp();
 		Logger::LogFile << "[" << timestamp << "] [INTERNAL FAILURE] " << msg << std::endl;
 
-		if (!Debug::Enabled)
-			Console::Close();
-		else
-		{
+		if (Console::IsInitialized())
 			std::cout
 				<< Console::ColorToAnsi(Console::Color::Red)
 				<< "["
@@ -29,7 +26,6 @@ void Assertion::ThrowInternalFailure(const char* msg)
 				<< msg
 				<< std::endl
 				<< Console::ColorToAnsi(Console::Color::Gray, false);
-		}
 
 		MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		Core::KillCurrentProcess();

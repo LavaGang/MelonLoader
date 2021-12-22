@@ -32,62 +32,11 @@ namespace MelonLoader.MelonStartScreen.UI
                 : ImageDatas.MelonLogo), false);
             MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
 
-            string customGif = ScanForCustomImage();
-            if (!string.IsNullOrEmpty(customGif))
-            {
-                MelonDebug.Msg("[UIStyleValues] Found Custom Loading Screen Image!");
-
-                try
-                {
-                    MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Image...");
-                    GifDecoder decoder = new GifDecoder(File.ReadAllBytes(customGif));
-
-                    List<Texture2D> images = new List<Texture2D>();
-                    var img = decoder.NextImage();
-
-                    int width = img.Width;
-                    int height = img.Height;
-                    int delay = img.Delay;
-
-                    while (img != null)
-                    {
-                        images.Add(img.CreateTexture());
-                        img = decoder.NextImage();
-                    }
-
-                    funnyAnimation = new AnimatedImage(width, height, images.ToArray(), delay);
-
-                    if (funnyAnimation != null)
-                        MelonDebug.Msg("[UIStyleValues] Custom Loading Screen Image Loaded!");
-                    else
-                        MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: something returned null");
-                }
-                catch (Exception ex)
-                {
-                    funnyAnimation = null;
-                    MelonDebug.Error($"[UIStyleValues] Failed To Load AnimatedImage: {ex}");
-                }
-            }
-
-            if (funnyAnimation == null)
-            {
-                MelonDebug.Msg("[UIStyleValues] Loading AnimatedImage from Start Screen Image...");
-                funnyAnimation = new AnimatedImage(33, 40, ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
-                MelonDebug.Msg("[UIStyleValues] Start Screen Image Loaded!");
-            }
+            // Load Animated Image
+            funnyAnimation = Customization.Images.LoadAnimatedImage();
 
             // Load default font
             standardFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        }
-
-        private static string ScanForCustomImage()
-        {
-            string[] files = Directory.GetFiles(MelonUtils.UserDataDirectory);
-            if (files.Length <= 0)
-                return null;
-            return files.FirstOrDefault(x => 
-                Path.GetFileNameWithoutExtension(x).ToLowerInvariant().Equals("loading")
-                && Path.GetExtension(x).ToLowerInvariant().Equals(".gif"));
         }
     }
 }

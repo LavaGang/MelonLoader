@@ -54,11 +54,11 @@ public:
 	static BOOL WINAPI EventHandler(DWORD evt);
 	static void SetHandles();
 	static void NullHandles();
+	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }
 
 private:
 	static HWND Window;
 	static HMENU Menu;
-	static bool IsInitialized() { return ((Window != NULL) && (Menu != NULL) && (OutputHandle != NULL)); }
 	static int rainbow;
 	static Color GetRainbowColor();
 };

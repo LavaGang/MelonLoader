@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
@@ -12,6 +14,26 @@ namespace MelonLoader.MelonStartScreen.UI
         private float aspectRatio;
 
         private Stopwatch stopwatch = new Stopwatch();
+
+        public AnimatedImage(string filepath)
+        {
+            GifDecoder decoder = new GifDecoder(File.ReadAllBytes(filepath));
+
+            var img = decoder.NextImage();
+            width = img.Width;
+            height = img.Height;
+            frameDelayMS = img.Delay;
+
+            List<Texture2D> images = new List<Texture2D>();
+            while (img != null)
+            {
+                images.Add(img.CreateTexture());
+                img = decoder.NextImage();
+            }
+
+            textures = images.ToArray();
+            aspectRatio = width / (float)height;
+        }
 
         public AnimatedImage(int width, int height, byte[][] framebuffer, float framedelayms = 90f)
         {
