@@ -16,8 +16,10 @@ void Assertion::ThrowInternalFailure(const char* msg)
 		ShouldContinue = false;
 		std::string timestamp = Logger::GetTimestamp();
 		Logger::LogFile << "[" << timestamp << "] [INTERNAL FAILURE] " << msg << std::endl;
-		bool should_print_debug_info = (!Logger::LogFile.coss.is_open() || Debug::Enabled);
-		if (should_print_debug_info)
+
+		if (!Debug::Enabled)
+			Console::Close();
+		else
 		{
 			std::cout
 				<< Console::ColorToAnsi(Console::Color::Red)
@@ -27,18 +29,9 @@ void Assertion::ThrowInternalFailure(const char* msg)
 				<< msg
 				<< std::endl
 				<< Console::ColorToAnsi(Console::Color::Gray, false);
-			MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		}
-		else
-		{
-			Console::Close();
-			MessageBoxA(NULL, ("Please upload the log file \""
-				+ std::string(Game::BasePath)
-				+ "\\MelonLoader\\" 
-				+ Logger::LatestLogFileName 
-				+ Logger::FileExtension 
-				+ "\" when requesting support.").c_str(), "MelonLoader - INTERNAL FAILURE!", MB_OK | MB_ICONERROR);
-		}
+
+		MessageBoxA(NULL, msg, "MelonLoader - INTERNAL FAILURE", MB_OK | MB_ICONERROR);
 		Core::KillCurrentProcess();
 	}
 }
