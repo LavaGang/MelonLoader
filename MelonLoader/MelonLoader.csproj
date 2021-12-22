@@ -49,6 +49,7 @@
     <Compile Include="Assertions\LemonAssert.cs" />
     <Compile Include="Assertions\LemonAssertException.cs" />
     <Compile Include="Assertions\LemonAssertMapping.cs" />
+    <Compile Include="Attributes\MelonIDAttribute.cs" />
     <Compile Include="Fixes\ForcedCultureInfo.cs" />
     <Compile Include="Fixes\InstancePatchFix.cs" />
     <Compile Include="Fixes\ProcessFix.cs" />

@@ -113,7 +113,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void WriteSpacer();
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_PrintModName(ConsoleColor meloncolor, string name, string version);
+        internal extern static void Internal_PrintModName(ConsoleColor meloncolor, string name, string version, string id);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Flush();
 

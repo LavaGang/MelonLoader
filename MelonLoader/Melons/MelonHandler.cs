@@ -81,7 +81,7 @@ namespace MelonLoader
 
             foreach (MelonBase melon in melontblList)
             {
-                MelonLogger.Internal_PrintModName(melon.ConsoleColor, melon.Info.Name, melon.Info.Version);
+                MelonLogger.Internal_PrintModName(melon.ConsoleColor, melon.Info.Name, melon.Info.Version, melon.ID);
 
                 if (!string.IsNullOrEmpty(melon.Info.Author))
                     MelonLogger.Msg($"by {melon.Info.Author}");

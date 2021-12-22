@@ -103,6 +103,7 @@ namespace MelonLoader
             public ConsoleColor ConsoleColor = MelonLogger.DefaultMelonColor;
             public int Priority = 0;
             public string Location = null;
+            public string ID = null;
         }
         public static T CreateMelon<T>(this WrapperData creationData) where T : MelonBase
         {
@@ -137,7 +138,13 @@ namespace MelonLoader
             instance.Priority = creationData.Priority;
             instance.ConsoleColor = creationData.ConsoleColor;
             instance.HarmonyInstance = new HarmonyLib.Harmony(instance.Assembly.FullName);
-            instance.LoggerInstance = new MelonLogger.Instance(creationData.Info.Name, creationData.ConsoleColor);
+
+            instance.ID = creationData.ID;
+            instance.LoggerInstance = new MelonLogger.Instance(
+                string.IsNullOrEmpty(instance.ID)
+                    ? creationData.Info.Name
+                    : $"{instance.ID}:{creationData.Info.Name}", 
+                creationData.ConsoleColor);
 
             return instance;
         }

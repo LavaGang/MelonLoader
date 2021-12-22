@@ -48,7 +48,7 @@ void InternalCalls::MelonLogger::Internal_Msg(Console::Color meloncolor, Console
 	delete[] nsStrOs;
 }
 
-void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color meloncolor, Mono::String* name, Mono::String* version)
+void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color meloncolor, Mono::String* name, Mono::String* version, Mono::String* id)
 {
 	auto nameStr = Mono::Exports::mono_string_to_utf8(name);
 	auto versionStr = Mono::Exports::mono_string_to_utf8(version);
@@ -59,10 +59,21 @@ void InternalCalls::MelonLogger::Internal_PrintModName(Console::Color meloncolor
 	Mono::Free(nameStr);
 	Mono::Free(versionStr);
 
-	Logger::Internal_PrintModName(meloncolor, nameStrOs, versionStrOs);
+	const char* idStrOs = NULL;
+	if (id != NULL)
+	{
+		auto idStr = Mono::Exports::mono_string_to_utf8(id);
+		idStrOs = Encoding::Utf8ToOs(idStr);
+		Mono::Free(idStr);
+	}
+
+	Logger::Internal_PrintModName(meloncolor, nameStrOs, versionStrOs, idStrOs);
 
 	delete[] nameStrOs;
 	delete[] versionStrOs;
+
+	if (idStrOs != NULL)
+		delete[] idStrOs;
 }
 
 void InternalCalls::MelonLogger::Internal_Warning(Mono::String* namesection, Mono::String* txt)

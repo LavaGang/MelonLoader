@@ -18,7 +18,7 @@ public:
 	{
 	public:
 		static void AddInternalCalls();
-		static void Internal_PrintModName(Console::Color meloncolor, Mono::String* name, Mono::String* version);
+		static void Internal_PrintModName(Console::Color meloncolor, Mono::String* name, Mono::String* version, Mono::String* id);
 		static void Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, Mono::String* namesection, Mono::String* txt);
 	    static void Internal_Warning(Mono::String* namesection, Mono::String* txt);
 		static void Internal_Error(Mono::String* namesection, Mono::String* txt);

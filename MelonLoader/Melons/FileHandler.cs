@@ -43,10 +43,12 @@ namespace MelonLoader.Melons
                     continue;
                 }
 
+                // To-Do: File Type Check
+
                 string lowerFilePath = filepath.ToLowerInvariant();
 
                 if ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL)
-                    && lowerFilePath.EndsWith(".dev.dll"))
+                    && !lowerFilePath.EndsWith(".dll"))
                     continue;
 
                 if ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV)
@@ -79,6 +81,10 @@ namespace MelonLoader.Melons
                 MelonLogger.Error($"Invalid File Extension for {filepath}");
                 return;
             }
+
+            string lowerFilePath = filepath.ToLowerInvariant();
+            if (!lowerFilePath.EndsWith(".dll"))
+                return;
 
             // To-Do: File Type Check
 

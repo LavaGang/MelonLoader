@@ -40,6 +40,9 @@
 8. Reimplemented Image Frame Parsing for Start Screen.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
 9. Moved EnumExtensions from MelonStartScreen Assembly to Main MelonLoader Assembly.
 10. Removed ZIP Loading Functionality for Plugins and Mods folders.
+11. Fixed Issue with FileHandler Whitelist.
+12. Added Optional MelonID Attribute for Melons.
+13. Updated Logger to Print MelonID when set.
 
 ---
 

@@ -24,7 +24,7 @@ public:
 	static std::string GetTimestamp();
 	static void WriteSpacer();
 
-	static void Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version);
+	static void Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version, const char* id);
 
 	// Shorthand way to log to console and write to file with linebreak afterwards
 	static void LogToConsoleAndFile(Log log);

@@ -52,6 +52,11 @@ namespace MelonLoader
         public MelonLogger.Instance LoggerInstance { get; internal set; }
 
         /// <summary>
+        /// Optional ID of the Melon.
+        /// </summary>
+        public string ID { get; internal set; }
+
+        /// <summary>
         /// Runs after Game Initialization.
         /// </summary>
         public virtual void OnApplicationStart() { }
