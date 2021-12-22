@@ -17,7 +17,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
         public AnimatedImage(string filepath)
         {
-            GifDecoder decoder = new GifDecoder(File.ReadAllBytes(filepath));
+            mgGif.Decoder decoder = new mgGif.Decoder(File.ReadAllBytes(filepath));
 
             var img = decoder.NextImage();
             width = img.Width;

@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Core.cs" />
     <Compile Include="CppUtils.cs" />
-    <Compile Include="mgGif\GifDecoder.cs" />
+    <Compile Include="mgGif\Decoder.cs" />
     <Compile Include="mgGif\Image.cs" />
     <Compile Include="ModLoadStep.cs" />
     <Compile Include="NativeUtils\Il2CppSystem\Byte.cs" />

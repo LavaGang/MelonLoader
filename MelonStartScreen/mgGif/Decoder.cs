@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Text;
 using UnityEngine;
+using MelonLoader;
 
-namespace MelonLoader.MelonStartScreen
+namespace mgGif
 {
-    internal class GifDecoder : IDisposable
+    internal class Decoder : IDisposable
     {
         public string Version;
         public ushort Width;
@@ -84,10 +85,10 @@ namespace MelonLoader.MelonStartScreen
         //------------------------------------------------------------------------------
         // ctor
 
-        public GifDecoder(byte[] data) : this()
+        public Decoder(byte[] data) : this()
             => Load(data);
 
-        public GifDecoder Load(byte[] data)
+        public Decoder Load(byte[] data)
         {
             Input = data;
             D = 0;
@@ -373,7 +374,7 @@ namespace MelonLoader.MelonStartScreen
 
         // dispose isn't needed for the safe implementation but keep here for interface parity
 
-        public GifDecoder() { }
+        public Decoder() { }
 
         public void Dispose() { Dispose(true); }
 

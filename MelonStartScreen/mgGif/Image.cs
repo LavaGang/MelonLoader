@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MelonLoader.MelonStartScreen
+namespace mgGif
 {
     internal class Image : ICloneable
     {
