@@ -49,6 +49,7 @@
 17. Added Start Screen Color Customization for Background, Progress Bar, and Progress Bar Outline.
 18. Added Start Screen Text Color Customization.
 19. Fixed Issue with Colors Reading and Writing to Start Screen Config Incorrectly.
+20. Implemented Element Toggles for Start Screen.
 
 ---
 
