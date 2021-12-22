@@ -15,7 +15,9 @@ namespace MelonLoader.Melons
             ".pdb",
             ".xml",
             ".txt",
-            ".md"
+            ".md",
+            ".unity3d",
+            ".modcomponent"
         };
 
         private static bool IsExtensionWhitelisted(string filepath)
@@ -43,8 +45,6 @@ namespace MelonLoader.Melons
                     continue;
                 }
 
-                // To-Do: File Type Check
-
                 string lowerFilePath = filepath.ToLowerInvariant();
 
                 if ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.NORMAL)
@@ -54,6 +54,8 @@ namespace MelonLoader.Melons
                 if ((loadMode == MelonLaunchOptions.Core.LoadModeEnum.DEV)
                     && !lowerFilePath.EndsWith(".dev.dll"))
                     continue;
+
+                // To-Do: File Type Check
 
                 string melonname = MelonUtils.GetFileProductName(filepath);
                 if (string.IsNullOrEmpty(melonname))
