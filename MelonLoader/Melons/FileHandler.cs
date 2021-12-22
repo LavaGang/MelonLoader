@@ -41,7 +41,7 @@ namespace MelonLoader.Melons
                 
                 if (!IsExtensionWhitelisted(filepath))
                 {
-                    MelonLogger.Error($"Invalid File Extension for {filepath}");
+                    MelonLogger.Msg($"Invalid File Extension for {filepath}");
                     continue;
                 }
 
@@ -80,7 +80,7 @@ namespace MelonLoader.Melons
 
             if (!IsExtensionWhitelisted(filepath))
             {
-                MelonLogger.Error($"Invalid File Extension for {filepath}");
+                MelonLogger.Msg($"Invalid File Extension for {filepath}");
                 return;
             }
 
