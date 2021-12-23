@@ -1,6 +1,7 @@
 using MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 {
@@ -113,8 +114,8 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 			if (codeLengths[256] == 0)
 				throw new StreamDecodingException("Inflater dynamic header end-of-block code missing");
 
-			litLenTree = new InflaterHuffmanTree(codeLengths);
-			distTree = new InflaterHuffmanTree(codeLengths);
+			litLenTree = new InflaterHuffmanTree(new LemonArraySegment<byte>(codeLengths, 0, litLenCodeCount));
+			distTree = new InflaterHuffmanTree(new LemonArraySegment<byte>(codeLengths, litLenCodeCount, distanceCodeCount));
 
 			yield return true;
 		}

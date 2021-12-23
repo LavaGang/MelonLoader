@@ -77,19 +77,19 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 		/// <param name = "codeLengths">
 		/// the array of code lengths
 		/// </param>
-		public InflaterHuffmanTree(byte[] codeLengths)
+		public InflaterHuffmanTree(IList<byte> codeLengths)
 		{
 			BuildTree(codeLengths);
 		}
 
 		#endregion Constructors
 
-		private void BuildTree(byte[] codeLengths)
+		private void BuildTree(IList<byte> codeLengths)
 		{
 			int[] blCount = new int[MAX_BITLEN + 1];
 			int[] nextCode = new int[MAX_BITLEN + 1];
 
-			for (int i = 0; i < codeLengths.Length; i++)
+			for (int i = 0; i < codeLengths.Count; i++)
 			{
 				int bits = codeLengths[i];
 				if (bits > 0)
@@ -136,7 +136,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 				}
 			}
 
-			for (int i = 0; i < codeLengths.Length; i++)
+			for (int i = 0; i < codeLengths.Count; i++)
 			{
 				int bits = codeLengths[i];
 				if (bits == 0)

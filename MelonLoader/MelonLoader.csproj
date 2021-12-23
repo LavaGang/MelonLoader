@@ -56,6 +56,7 @@
     <Compile Include="GameVersionHandler.cs" />
     <Compile Include="InternalUtils\MelonStartScreen.cs" />
     <Compile Include="Lemons\LemonAction.cs" />
+    <Compile Include="Lemons\LemonArraySegment.cs" />
     <Compile Include="Lemons\LemonEnumerator.cs" />
     <Compile Include="Lemons\LemonFunc.cs" />
     <Compile Include="Lemons\LemonTuple.cs" />
