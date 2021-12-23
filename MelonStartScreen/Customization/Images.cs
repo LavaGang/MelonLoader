@@ -7,38 +7,67 @@ namespace MelonLoader.MelonStartScreen.Customization
 {
     internal static class Images
     {
-        private static AnimatedImage DefaultAnimatedImage()
+        internal static Image Loading()
         {
-            MelonDebug.Msg("[UI.Customization.Images] Loading Default Animated Image...");
 
-            try
+            Image returnval = LoadImage("Loading.gif");
+            if (returnval == null)
+                returnval = LoadImage("Loading.png");
+            if (returnval != null)
             {
-                return new AnimatedImage(33, 40, ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
+                MelonDebug.Msg("[UI.Customization.Images] Found Custom Loading Image!");
+                return returnval;
             }
+
+            try { return new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray()); }
             catch (Exception ex)
             {
-                MelonDebug.Error($"[UI.Customization.Images] Failed To Load Custom Animated Image: {ex}");
+                MelonDebug.Error($"[UI.Customization.Images] Failed To Load Default Loading Image: {ex}");
                 return null;
             }
         }
 
-        internal static AnimatedImage LoadAnimatedImage()
+        internal static Image Logo()
         {
-            string filepath = ScanForFileInUserData("Loading.gif");
-            if (string.IsNullOrEmpty(filepath))
-                return DefaultAnimatedImage();
-
-            MelonDebug.Msg("[UI.Customization.Images] Loading Custom Animated Image!");
+            Image returnval = LoadImage("Logo.gif");
+            if (returnval == null)
+                returnval = LoadImage("Logo.png");
+            if (returnval != null)
+            {
+                MelonDebug.Msg("[UI.Customization.Images] Found Custom Logo Image!");
+                return returnval;
+            }
 
             try
             {
-                return new AnimatedImage(filepath);
+                return new Image(
+                    (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                        ? Properties.Resources.Logo_Lemon
+                        : Properties.Resources.Logo_Melon);
             }
             catch (Exception ex)
             {
-                MelonDebug.Error($"[UI.Customization.Images] Failed To Load Custom Animated Image: {ex}");
-                return DefaultAnimatedImage();
+                MelonLogger.Error($"[UI.Customization.Images] Failed To Load Default Logo Image: {ex}");
+                return null;
             }
+        }
+
+        private static Image LoadImage(string filename)
+        {
+            string filepath = ScanForFileInUserData(filename);
+            if (string.IsNullOrEmpty(filepath))
+                return null;
+
+            if (Path.GetExtension(filepath).ToLowerInvariant().Equals(".gif"))
+            {
+                try { return new AnimatedImage(filepath); }
+                catch (Exception ex) { MelonLogger.Error($"[UI.Customization.Images] Failed To Load AnimatedImage {filepath}: {ex}"); }
+            }
+
+            try { return new Image(filepath); }
+            catch (Exception ex) { MelonLogger.Error($"[UI.Customization.Images] Failed To Load Image {filepath}: {ex}"); }
+
+            return null;
         }
 
         private static string ScanForFileInUserData(string filename)

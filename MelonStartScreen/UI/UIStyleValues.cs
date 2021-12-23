@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
 {
@@ -10,9 +9,9 @@ namespace MelonLoader.MelonStartScreen.UI
         public static Texture2D BackgroundTexture;
         public static Texture2D ProgressBarInnerTexture;
         public static Texture2D ProgressBarOuterTexture;
-        public static Texture2D LogoTexture;
 
-        public static AnimatedImage Animation;
+        public static Image LogoImage;
+        public static Image LoadingImage;
 
         internal static void Init()
         {
@@ -25,19 +24,11 @@ namespace MelonLoader.MelonStartScreen.UI
             }
 
             if (Customization.Config.Logo.Enabled)
-            {
-                MelonDebug.Msg("[UIStyleValues] LoadImage Logo");
-                LogoTexture = new Texture2D(2, 2);
-                bool imgLoaded = ImageConversion.LoadImage(LogoTexture, Convert.FromBase64String(
-                    (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
-                    ? ImageDatas.LemonLogo
-                    : ImageDatas.MelonLogo), false);
-                MelonDebug.Msg("[UIStyleValues] LoadImage returned " + imgLoaded);
-            }
+                LogoImage = Customization.Images.Logo();
 
-            // Load Animated Image
+            // Load Loading Image
             if (Customization.Config.Animation.Enabled)
-                Animation = Customization.Images.LoadAnimatedImage();
+                LoadingImage = Customization.Images.Loading();
 
             // Load Font
             TextFont = Resources.GetBuiltinResource<Font>("Arial.ttf");

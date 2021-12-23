@@ -91,11 +91,9 @@ namespace MelonLoader.MelonStartScreen
                 if (UIStyleValues.BackgroundTexture != null)
                     Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
 
-                if (UIStyleValues.LogoTexture != null)
-                    Graphics.DrawTexture(new Rect((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight), UIStyleValues.LogoTexture);
+                UIStyleValues.LogoImage?.Render((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight);
 
-                // Animated image
-                UIStyleValues.Animation?.Render(sw - 200, 200, 132);
+                UIStyleValues.LoadingImage?.Render(sw - 200, 200, 132);
 
                 UIStyleValues.TextFont.material.SetPass(0);
 

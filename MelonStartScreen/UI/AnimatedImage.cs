@@ -1,28 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
 {
-    internal class AnimatedImage
+    internal class AnimatedImage : Image
     {
-        public readonly int width, height;
-
-        private float frameDelayMS = 90f;
-        private Texture2D[] textures;
-        private float aspectRatio;
-
         private Stopwatch stopwatch = new Stopwatch();
+        private float frameDelayMS = 90f;
+        internal Texture2D[] textures;
 
-        public AnimatedImage(string filepath)
+        internal AnimatedImage(string filepath) : this(File.ReadAllBytes(filepath)) { }
+        internal AnimatedImage(byte[] filedata)
         {
-            mgGif.Decoder decoder = new mgGif.Decoder(File.ReadAllBytes(filepath));
+            mgGif.Decoder decoder = new mgGif.Decoder(filedata);
 
             var img = decoder.NextImage();
-            width = img.Width;
-            height = img.Height;
             frameDelayMS = img.Delay;
+            SetSize(img.Width, img.Height);
 
             List<Texture2D> images = new List<Texture2D>();
             while (img != null)
@@ -32,42 +29,43 @@ namespace MelonLoader.MelonStartScreen.UI
             }
 
             textures = images.ToArray();
-            aspectRatio = width / (float)height;
+            MainTexture = textures[0];
         }
 
-        public AnimatedImage(int width, int height, byte[][] framebuffer, float framedelayms = 90f)
+        internal AnimatedImage(byte[][] framebuffer, float framedelayms = 90f)
         {
             frameDelayMS = framedelayms;
             textures = new Texture2D[framebuffer.Length];
-            this.width = width;
-            this.height = height;
-            aspectRatio = width / (float)height;
+
             for (int i = 0; i < framebuffer.Length; ++i)
             {
-                Texture2D tex = new Texture2D(width, height);
+                Texture2D tex = new Texture2D(2, 2);
                 tex.filterMode = FilterMode.Point;
-                ImageConversion.LoadImage(tex, framebuffer[i], false);
+                if (!ImageConversion.LoadImage(tex, framebuffer[i], false))
+                    throw new Exception("ImageConversion.LoadImage returned false");
                 textures[i] = tex;
             }
+
+            MainTexture = textures[0];
+            SetSize(MainTexture.width, MainTexture.height);
         }
 
-        public AnimatedImage(int width, int height, Texture2D[] frames, float framedelayms = 90f)
+        internal AnimatedImage(Texture2D[] frames, float framedelayms = 90f)
         {
             frameDelayMS = framedelayms;
             textures = frames;
-            this.width = width;
-            this.height = height;
-            aspectRatio = width / (float)height;
+            MainTexture = textures[0];
+            SetSize(MainTexture.width, MainTexture.height);
         }
 
-        public void Render(int x, int y, int width)
+        internal override void Render(int x, int y, int width)
         {
             if (!stopwatch.IsRunning)
                 stopwatch.Start();
 
             int image = (int)((float)(stopwatch.ElapsedMilliseconds / frameDelayMS) % textures.Length);
-
-            Graphics.DrawTexture(new Rect(x, y, width, -(int)(width / aspectRatio)), textures[image]);
+            MainTexture = textures[image];
+            base.Render(x, y, width);
         }
     }
 }

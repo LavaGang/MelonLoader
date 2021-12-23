@@ -52,6 +52,8 @@
 20. Implemented Element Toggles for Start Screen.
 21. Added LemonArraySegment because System.ArraySegment doesn't have interfaces on older .NET Framework versions.
 22. Fixed Issue with SharpZipLib's InflaterHuffmanTree not properly Segmenting Array.
+23. Refactored Start Screen Image Handling.
+24. Added Start Screen Logo Customization.
 
 ---
 
