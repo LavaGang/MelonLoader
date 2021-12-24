@@ -19,7 +19,7 @@ namespace MelonLoader.MelonStartScreen.Customization
 
         internal static void Load()
         {
-            FilePath = Path.Combine(MelonUtils.UserDataDirectory, "MelonStartScreen.cfg");
+            FilePath = Path.Combine(Core.FolderPath, "Config.cfg");
             TomletMain.RegisterMapper(WriteColor, ReadColor);
 
             General = CreateCat<cGeneral>(nameof(General));

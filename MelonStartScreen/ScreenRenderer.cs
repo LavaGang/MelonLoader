@@ -88,8 +88,7 @@ namespace MelonLoader.MelonStartScreen
                 int logoHeight = (int)(sh * 0.4f);
                 int logoWidth = (int)(logoHeight * logoRatio);
 
-                if (UIStyleValues.BackgroundTexture != null)
-                    Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
+                UIStyleValues.BackgroundImage.Render(0, 0, sw, sh);
 
                 UIStyleValues.LogoImage?.Render((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight);
 

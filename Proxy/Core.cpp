@@ -6,23 +6,21 @@
 
 void Core::Load(HINSTANCE hinstDLL)
 {
-	std::string proxy_filepath = File::GetModuleFilePath(hinstDLL);
-	std::for_each(proxy_filepath.begin(), proxy_filepath.end(), [](char& character) { character = ::tolower(character); });
-	std::string proxy_filepath_no_ext = proxy_filepath.substr(0, proxy_filepath.find_last_of("."));
-
 	LPSTR filepathstr = new CHAR[MAX_PATH];
 	HMODULE exe_module = GetModuleHandleA(NULL);
 	GetModuleFileNameA(exe_module, filepathstr, MAX_PATH);
 	std::string filepath = filepathstr;
 	delete[] filepathstr;
 
-	std::string filepath_lowercase = filepath.c_str();
-	std::transform(filepath_lowercase.begin(), filepath_lowercase.end(), filepath_lowercase.begin(), [](unsigned char c) { return std::tolower(c); });
-	if (IsUnityCrashHandler(filepath_lowercase))
+	if (!IsUnityGame(filepath))
 	{
 		KillItDead();
 		return;
 	}
+
+	std::string proxy_filepath = File::GetModuleFilePath(hinstDLL);
+	std::for_each(proxy_filepath.begin(), proxy_filepath.end(), [](char& character) { character = ::tolower(character); });
+	std::string proxy_filepath_no_ext = proxy_filepath.substr(0, proxy_filepath.find_last_of("."));
 
 	int index = -1;
 	if (!Exports::IsFileNameCompatible(proxy_filepath, index))
@@ -40,12 +38,6 @@ void Core::Load(HINSTANCE hinstDLL)
 	}
 
 	Exports::Load(index, originaldll);
-
-	if (!IsUnityGame(filepath))
-	{
-		Error("Proxy has been loaded by a Process that is not a Unity Game!");
-		return;
-	}
 
 	if (strstr(GetCommandLineA(), "--no-mods") != NULL)
 		return;

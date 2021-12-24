@@ -19,10 +19,11 @@ namespace MelonLoader.MelonStartScreen.Customization
                 return returnval;
             }
 
+            MelonDebug.Msg("[UI.Customization.Images] Using Default Loading Image...");
             try { return new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray()); }
             catch (Exception ex)
             {
-                MelonDebug.Error($"[UI.Customization.Images] Failed To Load Default Loading Image: {ex}");
+                MelonLogger.Error($"[UI.Customization.Images] Failed To Load Default Loading Image: {ex}");
                 return null;
             }
         }
@@ -38,6 +39,7 @@ namespace MelonLoader.MelonStartScreen.Customization
                 return returnval;
             }
 
+            MelonDebug.Msg("[UI.Customization.Images] Using Default Logo Image...");
             try
             {
                 return new Image(
@@ -52,9 +54,27 @@ namespace MelonLoader.MelonStartScreen.Customization
             }
         }
 
+        internal static Image Background()
+        {
+            Image returnval = LoadImage("Background.gif");
+            if (returnval == null)
+                returnval = LoadImage("Background.png");
+            if (returnval != null)
+            {
+                MelonDebug.Msg("[UI.Customization.Images] Found Custom Background Image!");
+                return returnval;
+            }
+
+            MelonDebug.Msg("[UI.Customization.Images] Using Solid Color Background...");
+            returnval = new Image();
+            returnval.MainTexture = UIStyleValues.BackgroundTexture;
+            return returnval;
+        }
+
+
         private static Image LoadImage(string filename)
         {
-            string filepath = ScanForFileInUserData(filename);
+            string filepath = ScanForFile(filename);
             if (string.IsNullOrEmpty(filepath))
                 return null;
 
@@ -70,9 +90,9 @@ namespace MelonLoader.MelonStartScreen.Customization
             return null;
         }
 
-        private static string ScanForFileInUserData(string filename)
+        private static string ScanForFile(string filename)
         {
-            string[] files = Directory.GetFiles(MelonUtils.UserDataDirectory);
+            string[] files = Directory.GetFiles(Core.FolderPath);
             if (files.Length <= 0)
                 return null;
             return files.FirstOrDefault(x =>

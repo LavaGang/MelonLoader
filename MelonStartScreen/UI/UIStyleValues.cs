@@ -10,12 +10,14 @@ namespace MelonLoader.MelonStartScreen.UI
         public static Texture2D ProgressBarInnerTexture;
         public static Texture2D ProgressBarOuterTexture;
 
+        public static Image BackgroundImage;
         public static Image LogoImage;
         public static Image LoadingImage;
 
         internal static void Init()
         {
             BackgroundTexture = UIUtils.CreateColorTexture(Customization.Config.General.BackgroundColor);
+            BackgroundImage = Customization.Images.Background();
 
             if (Customization.Config.ProgressBar.Enabled)
             {

@@ -9,7 +9,6 @@ public:
 	static void Load(HINSTANCE hinstDLL);
 
 private:
-	static bool IsUnityCrashHandler(std::string exe_filepath) { return (strstr(exe_filepath.c_str(), "unitycrashhandler") != NULL); };
 	static HMODULE LoadOriginalDLL(std::string proxy_filepath, std::string proxy_filepath_no_ext);
 	static std::string GetBootstrapPath(std::string BasePath);
 	static bool IsUnityGame(std::string exe_filepath);

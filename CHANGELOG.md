@@ -54,6 +54,8 @@
 22. Fixed Issue with SharpZipLib's InflaterHuffmanTree not properly Segmenting Array.
 23. Refactored Start Screen Image Handling.
 24. Added Start Screen Logo Customization.
+25. Added Start Screen Background Image Customization.
+26. Proxy will now terminate any Non-Unity Process that load it without warning. Example of this is UnityCrashHandler.
 
 ---
 
