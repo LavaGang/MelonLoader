@@ -16,6 +16,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
         internal static void Init()
         {
+            TextFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
             BackgroundTexture = UIUtils.CreateColorTexture(Customization.Config.General.BackgroundColor);
             BackgroundImage = Customization.Images.Background();
 
@@ -28,12 +29,8 @@ namespace MelonLoader.MelonStartScreen.UI
             if (Customization.Config.Logo.Enabled)
                 LogoImage = Customization.Images.Logo();
 
-            // Load Loading Image
             if (Customization.Config.Animation.Enabled)
                 LoadingImage = Customization.Images.Loading();
-
-            // Load Font
-            TextFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
     }
 }
