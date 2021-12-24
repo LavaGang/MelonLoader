@@ -55,7 +55,9 @@ namespace MelonLoader.MelonStartScreen.UI
             string fileext = Path.GetExtension(filepath).ToLowerInvariant();
             if (fileext.Equals(".gif"))
                 return new AnimatedImage(filepath);
-            if (fileext.Equals(".png"))
+            if (fileext.Equals(".png")
+                || fileext.Equals(".jpg")
+                || fileext.Equals(".jpeg"))
                 return new Image(filepath);
             return null;
         }
