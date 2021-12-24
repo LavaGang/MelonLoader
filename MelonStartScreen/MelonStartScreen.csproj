@@ -79,8 +79,7 @@
     <Compile Include="ScreenRenderer.cs" />
     <Compile Include="TextMeshGenerator.cs" />
     <Compile Include="UI\AnimatedImage.cs" />
-    <Compile Include="Customization\Images.cs" />
-    <Compile Include="Customization\Config.cs" />
+    <Compile Include="UI\UICustomization.cs" />
     <Compile Include="UI\ImageDatas.cs" />
     <Compile Include="UI\Image.cs" />
     <Compile Include="UI\ProgressBar.cs" />

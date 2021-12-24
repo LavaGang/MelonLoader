@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.IO;
+using System.Linq;
+using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
 {
@@ -17,20 +20,57 @@ namespace MelonLoader.MelonStartScreen.UI
         internal static void Init()
         {
             TextFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            BackgroundTexture = UIUtils.CreateColorTexture(Customization.Config.General.BackgroundColor);
-            BackgroundImage = Customization.Images.Background();
+            BackgroundTexture = UIUtils.CreateColorTexture(UICustomization.General.BackgroundColor);
+            BackgroundImage = LoadImage("Background");
 
-            if (Customization.Config.ProgressBar.Enabled)
+            if (UICustomization.ProgressBar.Enabled)
             {
-                ProgressBarInnerTexture = UIUtils.CreateColorTexture(Customization.Config.ProgressBar.InnerColor);
-                ProgressBarOuterTexture = UIUtils.CreateColorTexture(Customization.Config.ProgressBar.OuterColor);
+                ProgressBarInnerTexture = UIUtils.CreateColorTexture(UICustomization.ProgressBar.InnerColor);
+                ProgressBarOuterTexture = UIUtils.CreateColorTexture(UICustomization.ProgressBar.OuterColor);
             }
 
-            if (Customization.Config.Logo.Enabled)
-                LogoImage = Customization.Images.Logo();
+            if (UICustomization.Logo.Enabled)
+            {
+                LogoImage = LoadImage("Logo");
+                if (LogoImage == null)
+                    LogoImage = new Image(
+                    (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                        ? Properties.Resources.Logo_Lemon
+                        : Properties.Resources.Logo_Melon);
+            }
 
-            if (Customization.Config.Animation.Enabled)
-                LoadingImage = Customization.Images.Loading();
+            if (UICustomization.Animation.Enabled)
+            {
+                LoadingImage = LoadImage("Loading");
+                if (LoadingImage == null)
+                    LoadingImage = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
+            }
+        }
+
+        private static Image LoadImage(string filename)
+        {
+            string filepath = ScanForFile(filename);
+            if (string.IsNullOrEmpty(filepath))
+                return null;
+            string fileext = Path.GetExtension(filepath).ToLowerInvariant();
+            if (fileext.Equals(".gif"))
+                return new AnimatedImage(filepath);
+            if (fileext.Equals(".png"))
+                return new Image(filepath);
+            return null;
+        }
+
+        private static string ScanForFile(string filename)
+        {
+            string[] files = Directory.GetFiles(Core.FolderPath);
+            if (files.Length <= 0)
+                return null;
+            return files.FirstOrDefault(x =>
+                Path.GetFileNameWithoutExtension(x)
+                    .ToLowerInvariant()
+                    .Equals(
+                        filename
+                        .ToLowerInvariant()));
         }
     }
 }

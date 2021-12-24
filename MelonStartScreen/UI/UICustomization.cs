@@ -4,9 +4,9 @@ using Tomlet;
 using Tomlet.Models;
 using MelonLoader;
 
-namespace MelonLoader.MelonStartScreen.Customization
+namespace MelonLoader.MelonStartScreen
 {
-    internal static class Config
+    internal static class UICustomization
     {
         private static string FilePath;
 

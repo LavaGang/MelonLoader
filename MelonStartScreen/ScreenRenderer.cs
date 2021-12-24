@@ -39,11 +39,11 @@ namespace MelonLoader.MelonStartScreen
             UIStyleValues.Init();
             MelonDebug.Msg("UIStyleValues Initialized");
 
-            if (Customization.Config.VersionText.Enabled)
+            if (UICustomization.VersionText.Enabled)
             {
                 TextGenerationSettings settings = new TextGenerationSettings();
                 settings.textAnchor = TextAnchor.MiddleCenter;
-                settings.color = Customization.Config.VersionText.TextColor;
+                settings.color = UICustomization.VersionText.TextColor;
                 settings.generationExtents = new Vector2(540, 47.5f);
                 settings.richText = true;
                 settings.font = UIStyleValues.TextFont;
@@ -61,8 +61,8 @@ namespace MelonLoader.MelonStartScreen
                 melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} v{BuildInfo.Version} Open-Beta", settings);
             }
 
-            if (Customization.Config.ProgressBar.Enabled
-                || Customization.Config.ProgressText.Enabled)
+            if (UICustomization.ProgressBar.Enabled
+                || UICustomization.ProgressText.Enabled)
                 progressBar = new ProgressBar(width: 540, height: 36);
 
             uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
@@ -88,7 +88,10 @@ namespace MelonLoader.MelonStartScreen
                 int logoHeight = (int)(sh * 0.4f);
                 int logoWidth = (int)(logoHeight * logoRatio);
 
-                UIStyleValues.BackgroundImage.Render(0, 0, sw, sh);
+                if (UIStyleValues.BackgroundImage != null)
+                    UIStyleValues.BackgroundImage.Render(0, sh, sw, -sh);
+                else
+                    Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
 
                 UIStyleValues.LogoImage?.Render((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight);
 
