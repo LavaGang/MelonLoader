@@ -31,7 +31,7 @@
 ### v0.5.3 Open-Beta:
 
 1. Updated HarmonyX to v2.7.0.
-2. Updated Tomlet to v3.0.0.
+2. Updated Tomlet to v2.2.0.
 3. Updated SharpZipLib to v1.3.3.
 4. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
 5. Fixed Connection Issue on Demeo.
@@ -56,6 +56,7 @@
 24. Added Start Screen Logo Customization.
 25. Added Start Screen Background Image Customization.
 26. Proxy will now terminate any Non-Unity Process that load it without warning. Example of this is UnityCrashHandler.
+27. Fixed Issue with Custom Start Screen Background Image being Inverted.
 
 ---
 

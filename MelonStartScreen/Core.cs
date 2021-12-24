@@ -31,8 +31,8 @@ namespace MelonLoader.MelonStartScreen
             if (!Directory.Exists(FolderPath))
                 Directory.CreateDirectory(FolderPath);
 
-            Customization.Config.Load();
-            if (!Customization.Config.General.UseStartScreen)
+            UICustomization.Load();
+            if (!UICustomization.General.UseStartScreen)
                 return functionToWaitForAsync();
 
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+
