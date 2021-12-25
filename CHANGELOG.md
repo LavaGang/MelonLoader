@@ -58,6 +58,7 @@
 26. Proxy will now terminate any Non-Unity Process that load it without warning. Example of this is UnityCrashHandler.
 27. Fixed Issue with Custom Start Screen Background Image being Inverted.
 28. Added JPG/JPEG Support to Start Screen Image Customization.
+29. Replaced Start Screen's Default Loading GIF.    (Credits to [gompocp](https://github.com/gompocp) :D)
 
 ---
 

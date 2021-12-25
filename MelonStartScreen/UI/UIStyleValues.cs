@@ -43,7 +43,10 @@ namespace MelonLoader.MelonStartScreen.UI
             {
                 LoadingImage = LoadImage("Loading");
                 if (LoadingImage == null)
-                    LoadingImage = new AnimatedImage(ImageDatas.FunnyImage.Select(data => Convert.FromBase64String(data)).ToArray());
+                    LoadingImage = new AnimatedImage(
+                    (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                        ? Properties.Resources.Loading_Lemon
+                        : Properties.Resources.Loading_Melon);
             }
         }
 
