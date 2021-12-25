@@ -59,6 +59,7 @@
 27. Fixed Issue with Custom Start Screen Background Image being Inverted.
 28. Added JPG/JPEG Support to Start Screen Image Customization.
 29. Replaced Start Screen's Default Loading GIF.    (Credits to [gompocp](https://github.com/gompocp) :D)
+30. Combined Mono Support Modules into 1 Singular Support Module.
 
 ---
 
