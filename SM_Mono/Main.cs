@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using MelonLoader.Support.Preferences;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace MelonLoader.Support
 {
@@ -15,20 +15,31 @@ namespace MelonLoader.Support
         {
             Interface = interface_from;
             UnityMappers.RegisterMappers();
-            try
-            {
-                SceneManager.sceneLoaded += OnSceneLoad;
-            }
-            catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneLoaded override failed: {ex}"); }
-            try
-            {
-                SceneManager.sceneUnloaded += OnSceneUnload;
-            }
-            catch (Exception ex) { MelonLogger.Error($"SceneManager.sceneUnloaded override failed: {ex}"); }
+
+            if (IsOldUnity())
+                SM_Component.Create();
+            else
+                SceneHandler.Init();
+
             return new SupportModule_To();
         }
 
-        private static void OnSceneLoad(Scene scene, LoadSceneMode mode) { if (obj == null) SM_Component.Create(); if (!scene.Equals(null)) Interface.OnSceneWasLoaded(scene.buildIndex, scene.name); }
-        private static void OnSceneUnload(Scene scene) { if (scene == null) return; Interface.OnSceneWasUnloaded(scene.buildIndex, scene.name); }
+        private static bool IsOldUnity()
+        {
+            try
+            {
+                Assembly unityengine = Assembly.Load("UnityEngine");
+                if (unityengine == null)
+                    return true;
+                Type scenemanager = unityengine.GetType("UnityEngine.SceneManagement.SceneManager");
+                if (scenemanager == null)
+                    return true;
+                EventInfo sceneLoaded = scenemanager.GetEvent("sceneLoaded");
+                if (sceneLoaded == null)
+                    return true;
+                return false;
+            }
+            catch { return true; }
+        }
     }
 }

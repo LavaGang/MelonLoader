@@ -40,7 +40,7 @@ namespace MelonLoader.MelonStartScreen.UI
             for (int i = 0; i < framebuffer.Length; ++i)
             {
                 Texture2D tex = new Texture2D(2, 2);
-                tex.filterMode = FilterMode.Point;
+                //tex.filterMode = FilterMode.Point;
                 if (!ImageConversion.LoadImage(tex, framebuffer[i], false))
                     throw new Exception("ImageConversion.LoadImage returned false");
                 textures[i] = tex;

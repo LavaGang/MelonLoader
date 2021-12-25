@@ -23,9 +23,6 @@ namespace MelonLoader.Support
                 Main.component.StopCoroutine(coroutineToken as Coroutine);
         }
 
-        //public object StartCoroutine(IEnumerator coroutine) => Coroutines.Start(coroutine);
-        //public void StopCoroutine(object coroutineToken) => Coroutines.Stop((IEnumerator)coroutineToken);
-
         public void UnityDebugLog(string msg) => Debug.Log(msg);
     }
 }

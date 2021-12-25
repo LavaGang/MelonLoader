@@ -9,28 +9,15 @@ namespace MelonLoader
     {
         internal static ISupportModule_To Interface = null;
 
-        private static string UnityEngine_CoreModule_Path = null;
         private static string BaseDirectory = null;
         private static List<ModuleListing> Modules = new List<ModuleListing>()
         {
             new ModuleListing("Il2Cpp.dll", MelonUtils.IsGameIl2Cpp),
-
-            new ModuleListing("Mono.dll", () => !MelonUtils.IsGameIl2Cpp()
-                && File.Exists(UnityEngine_CoreModule_Path)),
-
-            new ModuleListing("Mono.Pre-5.dll", () => !MelonUtils.IsGameIl2Cpp()
-                && !File.Exists(UnityEngine_CoreModule_Path)
-                && IsOldUnity()),
-
-            new ModuleListing("Mono.Pre-2017.dll", () => !MelonUtils.IsGameIl2Cpp()
-                && !File.Exists(UnityEngine_CoreModule_Path)
-                && !IsOldUnity()),
+            new ModuleListing("Mono.dll", () => !MelonUtils.IsGameIl2Cpp())
         };
 
         internal static bool Setup()
         {
-            UnityEngine_CoreModule_Path = Path.Combine(MelonUtils.GetManagedDirectory(), "UnityEngine.CoreModule.dll");
-
             BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
             if (!Directory.Exists(BaseDirectory))
             {
@@ -107,24 +94,6 @@ namespace MelonLoader
             MelonDebug.Msg($"Support Module Loaded: {ModulePath}");
 
             return true;
-        }
-
-        private static bool IsOldUnity()
-        {
-            try
-            {
-                Assembly unityengine = Assembly.Load("UnityEngine");
-                if (unityengine == null)
-                    return true;
-                Type scenemanager = unityengine.GetType("UnityEngine.SceneManagement.SceneManager");
-                if (scenemanager == null)
-                    return true;
-                EventInfo sceneLoaded = scenemanager.GetEvent("sceneLoaded");
-                if (sceneLoaded == null)
-                    return true;
-                return false;
-            }
-            catch { return true; }
         }
 
         // Module Listing

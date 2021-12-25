@@ -42,9 +42,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
-      <Private>false</Private>
+    <Reference Include="UnityEngine">
+      <HintPath>Libs\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="MelonLoader">
       <HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
@@ -55,6 +54,7 @@
     <Compile Include="..\SM_Il2Cpp\UnityMappers.cs">
       <Link>UnityMappers.cs</Link>
     </Compile>
+    <Compile Include="SceneHandler.cs" />
     <Compile Include="SM_Component.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BONEWORKS_SceneHandler.cs" />
-    <Compile Include="Coroutines.cs" />
     <Compile Include="SM_Component.cs" />
     <Compile Include="MonoEnumeratorWrapper.cs" />
     <Compile Include="Main.cs" />
