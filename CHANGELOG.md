@@ -31,7 +31,7 @@
 ### v0.5.3 Open-Beta:
 
 1. Updated HarmonyX to v2.7.0.
-2. Updated Tomlet to v2.2.0.
+2. Updated Tomlet to v3.0.1.
 3. Updated SharpZipLib to v1.3.3.
 4. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
 5. Fixed Connection Issue on Demeo.

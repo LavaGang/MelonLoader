@@ -23,7 +23,7 @@ namespace MelonLoader
             new ModuleListing("MDML.dll", x =>
             {
                 x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
-                x.ShouldDelete = /*!MelonUtils.IsMuseDash ||*/ MelonUtils.IsGameIl2Cpp();
+                x.ShouldDelete = !MelonUtils.IsMuseDash || MelonUtils.IsGameIl2Cpp();
             }),
 
             // Demeo Integration

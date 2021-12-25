@@ -45,6 +45,11 @@ namespace MelonLoader
                 && GameDeveloper.Equals("Resolution Games") 
                 && !string.IsNullOrEmpty(GameName) 
                 && GameName.Equals("Demeo"));
+
+            IsMuseDash = (!string.IsNullOrEmpty(GameDeveloper)
+                && GameDeveloper.Equals("PeroPeroGames")
+                && !string.IsNullOrEmpty(GameName)
+                && GameName.Equals("Muse Dash"));
         }
 
         public static string BaseDirectory { get; private set; }
@@ -57,6 +62,7 @@ namespace MelonLoader
         public static string GameVersion { get => GameVersionHandler.Version; }
         public static bool IsBONEWORKS { get; private set; }
         public static bool IsDemeo { get; private set; }
+        public static bool IsMuseDash { get; private set; }
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
 
