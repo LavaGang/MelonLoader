@@ -11,14 +11,14 @@ namespace MelonLoader
         public string Identifier { get; internal set; }
         public string DisplayName { get; set; }
         public bool IsHidden { get; set; }
-        //public bool IsInlined { get; set; }
+        public bool IsInlined { get; set; }
 
-        internal MelonPreferences_Category(string identifier, string display_name, bool is_hidden = false/*, bool is_inlined = false*/)
+        internal MelonPreferences_Category(string identifier, string display_name, bool is_hidden = false, bool is_inlined = false)
         {
             Identifier = identifier;
             DisplayName = display_name;
             IsHidden = is_hidden;
-            //IsInlined = is_inlined;
+            IsInlined = is_inlined;
             MelonPreferences.Categories.Add(this);
         }
 
@@ -120,7 +120,7 @@ namespace MelonLoader
                 currentfile = MelonPreferences.DefaultFile;
             foreach (MelonPreferences_Entry entry in Entries)
                 if (!(entry.DontSaveDefault && entry.GetValueAsString() == entry.GetDefaultValueAsString()) && entry.GetValueAsString() != null)
-                    currentfile.InsertIntoDocument(Identifier, entry.Identifier, entry.Save());
+                    currentfile.InsertIntoDocument(Identifier, entry.Identifier, entry.Save(), IsInlined);
             try
             {
                 currentfile.Save();

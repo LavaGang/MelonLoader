@@ -99,7 +99,7 @@ namespace MelonLoader.Preferences.IO
                 ? $"'{key}'"
                 : $"\"{key}\"";
 
-        internal void InsertIntoDocument(string category, string key, TomlValue value)
+        internal void InsertIntoDocument(string category, string key, TomlValue value, bool should_inline = false)
         {
             if (!document.ContainsKey(category))
                 document.PutValue(category, new TomlTable());
@@ -107,6 +107,7 @@ namespace MelonLoader.Preferences.IO
             try
             {
                 var categoryTable = document.GetSubTable(category);
+                categoryTable.ForceNoInline = !should_inline;
                 categoryTable.PutValue(QuoteKey(key), value);
             }
             catch (TomlTypeMismatchException)

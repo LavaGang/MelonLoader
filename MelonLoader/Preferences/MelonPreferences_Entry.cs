@@ -87,7 +87,9 @@ namespace MelonLoader
         public override TomlValue Save()
         {
             Value = EditedValue;
-            return TomletMain.ValueFrom(Value);
+            TomlValue returnval = TomletMain.ValueFrom(Value);
+            returnval.Comments.InlineComment = Description;
+            return returnval;
         }
     }
 }
