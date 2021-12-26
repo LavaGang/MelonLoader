@@ -9,6 +9,7 @@ namespace MelonLoader
         public string Identifier { get; internal set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
+        public string Comment { get; set; }
         public bool IsHidden { get; set; }
         public bool DontSaveDefault { get; set; }
         public MelonPreferences_Category Category { get; internal set; }
@@ -89,6 +90,8 @@ namespace MelonLoader
             Value = EditedValue;
             TomlValue returnval = TomletMain.ValueFrom(Value);
             returnval.Comments.PrecedingComment = Description;
+            returnval.Comments.InlineComment = Comment;
+            returnval.Comments.InlineComment.Replace('\n', ' ');
             return returnval;
         }
     }

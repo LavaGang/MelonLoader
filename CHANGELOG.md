@@ -67,6 +67,7 @@
 35. Added MelonPreferences_Category.IsInlined for inlining the TomlTable of the Category.
 36. MelonPreferences_Entry.Description now Writes to File as a Comment.
 37. Changed MelonPreferences_Entry.Description to Preceding Comment.
+38. Added MelonPreferences_Entry.Comment for Inline Comment.
 
 ---
 
