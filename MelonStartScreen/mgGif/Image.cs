@@ -22,10 +22,10 @@ namespace mgGif
 
         public object Clone() => new Image(this);
 
-        public Texture2D CreateTexture()
+        public Texture2D CreateTexture(FilterMode filterMode = FilterMode.Bilinear)
         {
             var tex = new Texture2D(Width, Height);
-            tex.filterMode = FilterMode.Point;
+            tex.filterMode = filterMode;
 
             Color[] colors = new Color[RawImage.Length];
             for (int i = 0; i < colors.Length; i++)

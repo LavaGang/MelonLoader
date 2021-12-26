@@ -12,8 +12,8 @@ namespace MelonLoader.MelonStartScreen.UI
         private float frameDelayMS = 90f;
         internal Texture2D[] textures;
 
-        internal AnimatedImage(string filepath) : this(File.ReadAllBytes(filepath)) { }
-        internal AnimatedImage(byte[] filedata)
+        internal AnimatedImage(string filepath, FilterMode filterMode = FilterMode.Bilinear) : this(File.ReadAllBytes(filepath), filterMode) { }
+        internal AnimatedImage(byte[] filedata, FilterMode filterMode = FilterMode.Bilinear)
         {
             mgGif.Decoder decoder = new mgGif.Decoder(filedata);
 
@@ -24,7 +24,7 @@ namespace MelonLoader.MelonStartScreen.UI
             List<Texture2D> images = new List<Texture2D>();
             while (img != null)
             {
-                images.Add(img.CreateTexture());
+                images.Add(img.CreateTexture(filterMode));
                 img = decoder.NextImage();
             }
 
@@ -32,7 +32,7 @@ namespace MelonLoader.MelonStartScreen.UI
             MainTexture = textures[0];
         }
 
-        internal AnimatedImage(byte[][] framebuffer, float framedelayms = 90f)
+        internal AnimatedImage(byte[][] framebuffer, float framedelayms = 90f, FilterMode filterMode = FilterMode.Bilinear)
         {
             frameDelayMS = framedelayms;
             textures = new Texture2D[framebuffer.Length];
@@ -40,7 +40,7 @@ namespace MelonLoader.MelonStartScreen.UI
             for (int i = 0; i < framebuffer.Length; ++i)
             {
                 Texture2D tex = new Texture2D(2, 2);
-                //tex.filterMode = FilterMode.Point;
+                tex.filterMode = filterMode;
                 if (!ImageConversion.LoadImage(tex, framebuffer[i], false))
                     throw new Exception("ImageConversion.LoadImage returned false");
                 textures[i] = tex;

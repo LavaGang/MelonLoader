@@ -60,6 +60,8 @@
 28. Added JPG/JPEG Support to Start Screen Image Customization.
 29. Replaced Start Screen's Default Loading GIF.    (Credits to [gompocp](https://github.com/gompocp) :D)
 30. Combined Mono Support Modules into 1 Singular Support Module.
+31. Fixed Start Screen Issue with Image Filtering.
+32. Added Start Screen Image Filtering Customization.
 
 ---
 

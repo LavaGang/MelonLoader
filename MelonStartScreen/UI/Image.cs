@@ -12,26 +12,29 @@ namespace MelonLoader.MelonStartScreen.UI
 
         internal Image() { }
 
-        internal Image(string filepath)
+        internal Image(string filepath, FilterMode filterMode = FilterMode.Bilinear)
         {
             byte[] filedata = File.ReadAllBytes(filepath);
             MainTexture = new Texture2D(2, 2);
+            MainTexture.filterMode = filterMode;
             if (!ImageConversion.LoadImage(MainTexture, filedata, false))
                 throw new Exception("ImageConversion.LoadImage Failed!");
             SetSize(MainTexture.width, MainTexture.height);
         }
 
-        internal Image(byte[] filedata)
+        internal Image(byte[] filedata, FilterMode filterMode = FilterMode.Bilinear)
         {
             MainTexture = new Texture2D(2, 2);
+            MainTexture.filterMode = filterMode;
             if (!ImageConversion.LoadImage(MainTexture, filedata, false))
                 throw new Exception("ImageConversion.LoadImage Failed!");
             SetSize(MainTexture.width, MainTexture.height);
         }
 
-        internal Image(Texture2D maintexture)
+        internal Image(Texture2D maintexture, FilterMode filterMode = FilterMode.Bilinear)
         {
             MainTexture = maintexture;
+            MainTexture.filterMode = filterMode;
             SetSize(MainTexture.width, MainTexture.height);
         }
 
