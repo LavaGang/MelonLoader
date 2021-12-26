@@ -62,6 +62,8 @@
 30. Combined Mono Support Modules into 1 Singular Support Module.
 31. Fixed Start Screen Issue with Image Filtering.
 32. Added Start Screen Image Filtering Customization.
+33. MelonPreferences_Category DisplayName and IsHidden is now Modifiable during Runtime.
+34. MelonPreferences_Entry DisplayName, Description, IsHidden, and DontSaveDefault are now Modifiable during Runtime.
 
 ---
 

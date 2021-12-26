@@ -7,10 +7,10 @@ namespace MelonLoader
     public abstract class MelonPreferences_Entry
     {
         public string Identifier { get; internal set; }
-        public string DisplayName { get; internal set; }
-        public string Description { get; internal set; }
-        public bool IsHidden { get; internal set; }
-        public bool DontSaveDefault { get; internal set; }
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
+        public bool IsHidden { get; set; }
+        public bool DontSaveDefault { get; set; }
         public MelonPreferences_Category Category { get; internal set; }
 
         public abstract object BoxedValue { get; set; }

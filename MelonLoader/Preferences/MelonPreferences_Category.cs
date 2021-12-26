@@ -5,17 +5,20 @@ namespace MelonLoader
 {
     public class MelonPreferences_Category
     {
-        public string Identifier { get; internal set; }
-        public string DisplayName { get; internal set; }
-        public bool IsHidden { get; internal set; }
         public readonly List<MelonPreferences_Entry> Entries = new List<MelonPreferences_Entry>();
         internal Preferences.IO.File File = null;
 
-        internal MelonPreferences_Category(string identifier, string display_name, bool is_hidden = false)
+        public string Identifier { get; internal set; }
+        public string DisplayName { get; set; }
+        public bool IsHidden { get; set; }
+        //public bool IsInlined { get; set; }
+
+        internal MelonPreferences_Category(string identifier, string display_name, bool is_hidden = false/*, bool is_inlined = false*/)
         {
             Identifier = identifier;
             DisplayName = display_name;
             IsHidden = is_hidden;
+            //IsInlined = is_inlined;
             MelonPreferences.Categories.Add(this);
         }
 
