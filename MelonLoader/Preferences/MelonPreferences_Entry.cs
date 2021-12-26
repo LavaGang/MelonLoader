@@ -88,7 +88,7 @@ namespace MelonLoader
         {
             Value = EditedValue;
             TomlValue returnval = TomletMain.ValueFrom(Value);
-            returnval.Comments.InlineComment = Description;
+            returnval.Comments.PrecedingComment = Description;
             return returnval;
         }
     }
