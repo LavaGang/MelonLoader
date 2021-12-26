@@ -66,6 +66,7 @@
 34. MelonPreferences_Entry DisplayName, Description, IsHidden, and DontSaveDefault are now Modifiable during Runtime.
 35. Added MelonPreferences_Category.IsInlined for inlining the TomlTable of the Category.
 36. MelonPreferences_Entry.Description now Writes to File as a Comment.
+37. Changed MelonPreferences_Entry.Description to Preceding Comment.
 
 ---
 
