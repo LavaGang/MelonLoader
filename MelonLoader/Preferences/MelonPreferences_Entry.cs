@@ -91,7 +91,8 @@ namespace MelonLoader
             TomlValue returnval = TomletMain.ValueFrom(Value);
             returnval.Comments.PrecedingComment = Description;
             returnval.Comments.InlineComment = Comment;
-            returnval.Comments.InlineComment.Replace('\n', ' ');
+            if (!string.IsNullOrEmpty(returnval.Comments.InlineComment))
+                returnval.Comments.InlineComment.Replace('\n', ' ');
             return returnval;
         }
     }
