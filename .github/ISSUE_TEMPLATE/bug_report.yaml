@@ -6,14 +6,14 @@ body:
   - type: markdown
     attributes:
       value: |
-        In order to make the process easier, please take a few minutes to fill this out:
+        In order to make the process easier, please take a few minutes to fill this out
   - type: checkboxes
     id: requiredcriteria
     attributes:
-      label: All of the following criteria must be met:
+      label: All of the following criteria must be met
       description: Please take the time to check each critera is met properly.
       options:
-        - label: [Requirements](https://github.com/LavaGang/MelonLoader/blob/master/README.md#requirements) installed.
+        - label: All <a href="https://github.com/LavaGang/MelonLoader/blob/master/README.md#requirements">Requirements</a> must be installed.
           required: true
         - label: Full ``Latest.log`` file included. If no file exists then leave this unchecked and state so.
           required: false
@@ -21,7 +21,7 @@ body:
   - type: checkboxes
     id: optionalcriteria
     attributes:
-      label: All of the following are optional to answer:
+      label: All of the following are optional to answer
       options:
         - label: Tried reinstalling the Game.
           required: false
