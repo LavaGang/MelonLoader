@@ -37,7 +37,7 @@ body:
     id: what-happened
     attributes:
       label: Describe the issue.
-      description: Use the space below to describe the issue you are having:
+      description: Use the space below to describe the issue you are having
     validations:
       required: true
       
