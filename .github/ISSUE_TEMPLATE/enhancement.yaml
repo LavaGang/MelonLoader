@@ -1,0 +1,17 @@
+name: New feature or enhancement
+description: Suggest a feature or enhancement for MelonLoader
+title: "[Enhancement]: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide as much detail as possible for your suggestion.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the new feature or enhancement
+      description: |
+        Please go into as much detail as necessary in describing the new feature or enhancement.
+    validations:
+      required: true

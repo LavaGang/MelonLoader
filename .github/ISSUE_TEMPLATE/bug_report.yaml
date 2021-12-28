@@ -1,0 +1,52 @@
+name: Bug Report
+description: File a bug or crash report
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        In order to make the process easier, please take a few minutes to fill this out:
+  - type: checkboxes
+    id: requiredcriteria
+    attributes:
+      label: All of the following criteria must be met:
+      description: Please take the time to check each critera is met properly.
+      options:
+        - label: [Requirements](https://github.com/LavaGang/MelonLoader/blob/master/README.md#requirements) installed.
+          required: true
+        - label: Full ``Latest.log`` file included. If no file exists then leave this unchecked and state so.
+          required: false
+          
+  - type: checkboxes
+    id: optionalcriteria
+    attributes:
+      label: All of the following are optional to answer:
+      options:
+        - label: Tried reinstalling the Game.
+          required: false
+        - label: Tried reinstalling MelonLoader.
+          required: false
+        - label: Tried restarting PC.
+          required: false
+        - label: Was able to see the Start Screen.
+          required: false
+      
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the issue.
+      description: Use the space below to describe the issue you are having:
+    validations:
+      required: true
+      
+  - type: textarea
+    id: log
+    attributes:
+      label: Latest.log  file:
+      description: |
+        Please copy and paste the contents of your `Latest.log` file from `{Game_Directory}\MelonLoader\Latest.log`.
+        If no such file exists, please state so.
+      render: shell
+    validations:
+      required: true
