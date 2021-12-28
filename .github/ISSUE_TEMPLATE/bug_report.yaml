@@ -36,9 +36,7 @@ body:
     id: what-happened
     attributes:
       label: Describe the issue.
-      description: Use the space below to describe the issue you are having.
-      
-      If you have a `Latest.log` file at `{Game_Directory}\MelonLoader\Latest.log`, please attach it by dragging and dropping it into the text box, or clicking the "Attach file" button at the bottom.
+      description: Use the space below to describe the issue you are having. If you have a `Latest.log` file at `{Game_Directory}\MelonLoader\Latest.log`, please attach it by dragging and dropping it into the text box, or clicking the "Attach file" button at the bottom.
     validations:
       required: true
       
