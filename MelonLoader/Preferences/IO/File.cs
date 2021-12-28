@@ -120,6 +120,52 @@ namespace MelonLoader.Preferences.IO
             }
         }
 
+        internal bool RemoveFromDocument(string category, string key)
+        {
+            if (!document.ContainsKey(category))
+                return false;
+
+            try
+            {
+                var categoryTable = document.GetSubTable(category);
+                return categoryTable.Entries.Remove(key);
+            }
+            catch (TomlTypeMismatchException)
+            {
+                return false;
+            }
+            catch (TomlNoSuchValueException)
+            {
+                return false;
+            }
+        }
+
+        internal bool RenameEntryInDocument(string category, string key, string newKey)
+        {
+            if (!document.ContainsKey(category))
+                return false;
+
+            try
+            {
+                var categoryTable = document.GetSubTable(category);
+                if (!categoryTable.Entries.ContainsKey(key) || categoryTable.Entries.ContainsKey(newKey))
+                    return false;
+
+                TomlValue value = categoryTable.Entries[key];
+                categoryTable.Entries.Remove(key);
+                categoryTable.Entries.Add(newKey, value);
+                return true;
+            }
+            catch (TomlTypeMismatchException)
+            {
+                return false;
+            }
+            catch (TomlNoSuchValueException)
+            {
+                return false;
+            }
+        }
+
         internal TomlTable TryGetCategoryTable(string category)
         {
             lock (document)
