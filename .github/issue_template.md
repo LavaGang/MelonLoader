@@ -19,5 +19,5 @@ In order to make the process easier, please take a few minutes to go through thi
 
 ## User Comment
 
-- __(OPTIONAL)__ - Use the space below to describe the issue you are having:
+- Use the space below to describe the issue you are having:
 
