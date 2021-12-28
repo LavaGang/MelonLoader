@@ -37,7 +37,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 ResetEvent_Output = new AutoResetEvent(false);
                 ResetEvent_Error = new AutoResetEvent(false);
 
-                ProcessStartInfo processStartInfo = new ProcessStartInfo(ExePath,
+                ProcessStartInfo processStartInfo = new ProcessStartInfo($"\"{ExePath.Replace("\"", "\\\"")}\"", // Replacing double quotes for Linux
                     parenthesize_args
                     ?
                     string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => "\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\""))
