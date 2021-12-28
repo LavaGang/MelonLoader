@@ -13,8 +13,7 @@ body:
       label: All of the following criteria must be met
       description: Please take the time to check each critera is met properly.
       options:
-        - label: Requirements installed.
-          description: All <a href="https://github.com/LavaGang/MelonLoader/blob/master/README.md#requirements">Requirements</a> must be installed.
+        - label: All <a href="https://github.com/LavaGang/MelonLoader/blob/master/README.md#requirements">Requirements</a> must be installed.
           required: true
         - label: Full ``Latest.log`` file included. If no file exists then leave this unchecked and state so.
           required: false
