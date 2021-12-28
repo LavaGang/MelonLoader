@@ -36,17 +36,18 @@ body:
     id: what-happened
     attributes:
       label: Describe the issue.
-      description: Use the space below to describe the issue you are having:
+      description: Use the space below to describe the issue you are having.
+      
+      If you have a `Latest.log` file at `{Game_Directory}\MelonLoader\Latest.log`, please attach it by dragging and dropping it into the text box, or clicking the "Attach file" button at the bottom.
     validations:
       required: true
       
-  - type: textarea
-    id: log
+  - type: checkboxes
+    id: attachedlog
     attributes:
-      label: Latest.log  file:
-      description: |
-        Please copy and paste the contents of your `Latest.log` file from `{Game_Directory}\MelonLoader\Latest.log`.
-        If no such file exists, please state so.
-      render: shell
-    validations:
-      required: true
+      label: Did you attach your log file?
+      options:
+        - label: Yes, I attached my log file to the text box above.
+          required: false
+        - label: No, I could not find a log file at `{Game_Directory}\MelonLoader\Latest.log`
+          required: false
