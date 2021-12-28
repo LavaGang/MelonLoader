@@ -11,8 +11,8 @@ In order to make the process easier, please take a few minutes to fill this out:
 
 - All of the following are optional to answer:
 
-	- [ ] Tried reinstalling the Game from clean install.
-	- [ ] Tried reinstalling MelonLoader from clean install.
+	- [ ] Tried reinstalling the Game.
+	- [ ] Tried reinstalling MelonLoader.
 	- [ ] Tried restarting PC.
 	- [ ] Was able to see the Start Screen.
 
