@@ -24,8 +24,8 @@ namespace MelonLoader
 
         public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name, bool is_hidden) 
             => CreateEntry(identifier, default_value, display_name, null, is_hidden, false);
-        public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null, 
-            string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null)
+        public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null,
+            string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null, string oldIdentifier = null)
         {
             if (string.IsNullOrEmpty(identifier))
                 throw new Exception("identifier is null or empty when calling CreateEntry");
@@ -39,6 +39,14 @@ namespace MelonLoader
 
             if (validator != null && !validator.IsValid(default_value))
                 throw new ArgumentException($"Default value '{default_value}' is invalid according to the provided ValueValidator!");
+
+            if (oldIdentifier != null)
+            {
+                if (HasEntry(oldIdentifier))
+                    throw new Exception($"Unable to rename '{oldIdentifier}' when it got already loaded");
+
+                RenameEntry(oldIdentifier, identifier);
+            }
 
             entry = new MelonPreferences_Entry<T>
             {
@@ -61,6 +69,32 @@ namespace MelonLoader
             Entries.Add(entry);
 
             return entry;
+        }
+
+        public bool DeleteEntry(string identifier)
+        {
+            MelonPreferences_Entry entry = GetEntry(identifier);
+            if (entry != null)
+                Entries.Remove(entry);
+
+            Preferences.IO.File currentfile = File;
+            if (currentfile == null)
+                currentfile = MelonPreferences.DefaultFile;
+
+            return currentfile.RemoveFromDocument(Identifier, identifier);
+        }
+
+        public bool RenameEntry(string identifier, string newIdentifier)
+        {
+            MelonPreferences_Entry entry = GetEntry(identifier);
+            if (entry != null)
+                entry.Identifier = newIdentifier;
+
+            Preferences.IO.File currentfile = File;
+            if (currentfile == null)
+                currentfile = MelonPreferences.DefaultFile;
+
+            return currentfile.RenameEntryInDocument(Identifier, identifier, newIdentifier);
         }
 
         public MelonPreferences_Entry GetEntry(string identifier)
