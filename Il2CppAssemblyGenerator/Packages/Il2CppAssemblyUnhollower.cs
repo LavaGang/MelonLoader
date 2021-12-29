@@ -56,8 +56,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 $"--gameassembly={ Core.GameAssemblyPath }",
                 string.IsNullOrEmpty(Core.deobfuscationMap.Version) ? string.Empty : $"--rename-map={ Path.Combine(Core.deobfuscationMap.Destination, Core.deobfuscationMap.NewFileName) }",
                 "--blacklist-assembly=Mono.Security",
-                "--blacklist-assembly=Newtonsoft.Json",
-                "--blacklist-assembly=Valve.Newtonsoft.Json",
                 string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }"
             }))
                 return true;
