@@ -19,7 +19,7 @@ __forceinline bool IsNameValid(const char* name)
     {
         if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '<' || c == '>'
             || c == '`' || c == '.' || c == '=' || c == '-' || c == '|' || c == ',' || c == '[' || c == ']' || c == '$'
-            || c == ':' || c == '@' || c == ')' || c == '('))
+            || c == ':' || c == '@' || c == ')' || c == '(' || c == '?'))
             return false;
         name++;
     }
@@ -120,7 +120,7 @@ __forceinline bool CheckAssembly(Mono::Image* image)
     }
     
     // exclude small assemblies from this check as they often get false positives
-    if (numTypeDefs + numMethodDefs < 20)
+    if (numTypeDefs + numMethodDefs < 50)
         return true;
 
     double totalChars = 0;
