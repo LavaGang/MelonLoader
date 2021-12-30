@@ -12,9 +12,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceUnhollowerVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "0.4.16.3";
-            //URL = $"https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v{Version}/Il2CppAssemblyUnhollower.{Version}.zip";
-            URL = $"https://github.com/HerpDerpinstine/Il2CppAssemblyUnhollower/releases/download/v{Version}/Il2CppAssemblyUnhollower.{Version}.zip";
+                Version = "0.4.17.0";
+            URL = $"https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v{Version}/Il2CppAssemblyUnhollower.{Version}.zip";
             Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
             Output = Path.Combine(Destination, "Managed");
             ExePath = Path.Combine(Destination, "AssemblyUnhollower.exe");
@@ -56,7 +55,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 $"--unity={ Core.unitydependencies.Destination }",
                 $"--gameassembly={ Core.GameAssemblyPath }",
                 string.IsNullOrEmpty(Core.deobfuscationMap.Version) ? string.Empty : $"--rename-map={ Path.Combine(Core.deobfuscationMap.Destination, Core.deobfuscationMap.NewFileName) }",
-                "--blacklist-assembly=Mono.Security",
+
+                "--add-prefix-to=I18N",
+                "--add-prefix-to=ICSharpCode",
+                "--add-prefix-to=Microsoft",
+                "--add-prefix-to=Mono",
+                "--add-prefix-to=Mono.Security",
+                "--add-prefix-to=mscorlib",
+                "--add-prefix-to=Newtonsoft",
+                "--add-prefix-to=System",
+                "--add-prefix-to=TinyJson",
+                "--add-prefix-to=Valve.Newtonsoft",
+
                 string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }"
             }))
                 return true;
