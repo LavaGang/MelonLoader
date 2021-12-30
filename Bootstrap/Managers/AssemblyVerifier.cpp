@@ -120,7 +120,7 @@ __forceinline bool CheckAssembly(Mono::Image* image)
     }
     
     // exclude small assemblies from this check as they often get false positives
-    if (numTypeDefs + numMethodDefs < 50)
+    if (numTypeDefs + numMethodDefs < 25)
         return true;
 
     double totalChars = 0;
