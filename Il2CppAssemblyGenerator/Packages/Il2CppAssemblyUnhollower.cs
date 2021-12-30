@@ -57,13 +57,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 string.IsNullOrEmpty(Core.deobfuscationMap.Version) ? string.Empty : $"--rename-map={ Path.Combine(Core.deobfuscationMap.Destination, Core.deobfuscationMap.NewFileName) }",
                 string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }",
 
-                "--add-prefix-to=I18N",
                 "--add-prefix-to=ICSharpCode",
-                "--add-prefix-to=Microsoft",
-                "--add-prefix-to=Mono",
-                "--add-prefix-to=mscorlib",
                 "--add-prefix-to=Newtonsoft",
-                "--add-prefix-to=System",
                 "--add-prefix-to=TinyJson",
                 "--add-prefix-to=Valve.Newtonsoft"
             }))
