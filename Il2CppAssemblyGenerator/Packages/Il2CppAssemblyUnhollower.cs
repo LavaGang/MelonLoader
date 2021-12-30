@@ -12,8 +12,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceUnhollowerVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "0.4.16.2";
-            URL = $"https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v{Version}/Il2CppAssemblyUnhollower.{Version}.zip";
+                Version = "0.4.16.3";
+            //URL = $"https://github.com/knah/Il2CppAssemblyUnhollower/releases/download/v{Version}/Il2CppAssemblyUnhollower.{Version}.zip";
+            URL = $"https://github.com/HerpDerpinstine/Il2CppAssemblyUnhollower/releases/download/v{Version}/Il2CppAssemblyUnhollower.{Version}.zip";
             Destination = Path.Combine(Core.BasePath, "Il2CppAssemblyUnhollower");
             Output = Path.Combine(Destination, "Managed");
             ExePath = Path.Combine(Destination, "AssemblyUnhollower.exe");
