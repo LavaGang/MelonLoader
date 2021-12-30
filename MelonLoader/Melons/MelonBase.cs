@@ -90,11 +90,19 @@ namespace MelonLoader
         /// Runs when Melon Preferences get saved.
         /// </summary>
         public virtual void OnPreferencesSaved() { }
+        /// <summary>
+        /// Runs when Melon Preferences get saved. Gets passed the Preferences's File Path.
+        /// </summary>
+        public virtual void OnPreferencesSaved(string filepath) { }
 
         /// <summary>
         /// Runs when Melon Preferences get loaded.
         /// </summary>
         public virtual void OnPreferencesLoaded() { }
+        /// <summary>
+        /// Runs when Melon Preferences get loaded. Gets passed the Preferences's File Path.
+        /// </summary>
+        public virtual void OnPreferencesLoaded(string filepath) { }
 
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }

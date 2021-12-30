@@ -241,15 +241,17 @@ namespace MelonLoader
         internal static void OnFixedUpdate() => InvokeMelonMethod(ref _Mods, x => x.OnFixedUpdate());
         internal static void OnLateUpdate() => InvokeMelonMethod(x => x.OnLateUpdate());
         internal static void OnGUI() => InvokeMelonMethod(x => x.OnGUI());
-        internal static void OnPreferencesSaved() => InvokeMelonMethod(x =>
+        internal static void OnPreferencesSaved(string filepath) => InvokeMelonMethod(x =>
         {
             x.OnModSettingsApplied();
             x.OnPreferencesSaved();
+            x.OnPreferencesSaved(filepath);
         });
-        internal static void OnPreferencesLoaded() => InvokeMelonMethod(x =>
+        internal static void OnPreferencesLoaded(string filepath) => InvokeMelonMethod(x =>
         {
             x.OnModSettingsApplied();
             x.OnPreferencesLoaded();
+            x.OnPreferencesLoaded(filepath);
         });
         internal static void BONEWORKS_OnLoadingScreen() => InvokeMelonMethod(ref _Mods, x => x.BONEWORKS_OnLoadingScreen());
 

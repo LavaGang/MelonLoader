@@ -72,6 +72,8 @@
 40. Moved OnApplicationStart Initialization to Component Start.
 41. MelonPreferences files will now Auto-Reset if TomlUnescapedUnicodeControlCharException is thrown when the file is corrupt.
 42. Fixed Assembly Verification Issue with MonoMod DMD Dumping.
+43. Added OnPreferencesSaved string variant that gets passed the Preferences's File Path.
+44. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
 
 ---
 

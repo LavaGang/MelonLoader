@@ -88,11 +88,11 @@ namespace MelonLoader
                     }
 
                     category.Load(table);
+                    MelonHandler.OnPreferencesLoaded(currentFile.FilePath);
                 }
             }
 
             MelonLogger.Msg("Preferences Loaded!");
-            MelonHandler.OnPreferencesLoaded();
         }
 
         public static void Save()
@@ -142,12 +142,13 @@ namespace MelonLoader
                     {
                         MelonLogger.Error($"Error while Saving Preferences to {file.FilePath}: {ex}");
                         file.WasError = true;
+                        continue;
                     }
+                    MelonHandler.OnPreferencesSaved(file.FilePath);
                 }
             }
 
             MelonLogger.Msg("Preferences Saved!");
-            MelonHandler.OnPreferencesSaved();
         }
 
         public static MelonPreferences_Category CreateCategory(string identifier) => CreateCategory(identifier, null, false);
@@ -174,7 +175,7 @@ namespace MelonLoader
 
         public static MelonPreferences_Entry<T> CreateEntry<T>(string category_identifier, string entry_identifier, T default_value,
             string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false,
-            Preferences.ValueValidator validator = null)
+            ValueValidator validator = null)
         {
             if (string.IsNullOrEmpty(category_identifier))
                 throw new Exception("category_identifier is null or empty when calling CreateEntry");
@@ -334,7 +335,8 @@ namespace MelonLoader
 
             if (printmsg)
                 MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
-            MelonHandler.OnPreferencesLoaded();
+
+            MelonHandler.OnPreferencesLoaded(file.FilePath);
         }
 
         internal static bool IsFilePathDefault(string filepath) => new FileInfo(filepath).FullName.Equals(new FileInfo(DefaultFile.FilePath).FullName);
