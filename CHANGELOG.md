@@ -68,13 +68,15 @@
 36. MelonPreferences_Entry.Description now Writes to File as a Comment.
 37. Changed MelonPreferences_Entry.Description to Preceding Comment.
 38. Added MelonPreferences_Entry.Comment for Inline Comment.
-39. Removed Newtonsoft.Json from Il2CppAssemblyUnhollower Blacklist.
-40. Moved OnApplicationStart Initialization to Component Start.
-41. MelonPreferences files will now Auto-Reset if TomlUnescapedUnicodeControlCharException is thrown when the file is corrupt.
-42. Fixed Assembly Verification Issue with MonoMod DMD Dumping.
-43. Added OnPreferencesSaved string variant that gets passed the Preferences's File Path.
-44. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
-45. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
+39. Fixed Issue with Apostrophes in File Pathing.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+40. Added Methods for deleting and renaming Entries in MelonPreferences.    (Credits to [DragonPlayerX](https://github.com/DragonPlayerX) :D)
+41. Removed Newtonsoft.Json from Il2CppAssemblyUnhollower Blacklist.
+42. Moved OnApplicationStart Initialization to Component Start.
+43. MelonPreferences files will now Auto-Reset if TomlUnescapedUnicodeControlCharException is thrown when the file is corrupt.
+44. Fixed Assembly Verification Issue with MonoMod DMD Dumping.
+45. Added OnPreferencesSaved string variant that gets passed the Preferences's File Path.
+46. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
+47. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
 
 ---
 
