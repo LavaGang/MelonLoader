@@ -74,6 +74,12 @@ namespace MelonLoader
             bHaptics.Start();
 
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
+
+            return 0;
+        }
+
+        internal static void OnApplicationStart()
+        {
             MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.LoadMods();
             MelonStartScreen.DisplayModLoadIssuesIfNeeded();
@@ -84,8 +90,6 @@ namespace MelonLoader
             MelonHandler.OnApplicationLateStart_Mods();
 
             MelonStartScreen.Finish();
-
-            return 0;
         }
 
         internal static void Quit()

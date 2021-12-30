@@ -2,6 +2,7 @@
 {
     public interface ISupportModule_From
     {
+        void OnApplicationStart();
         void OnSceneWasLoaded(int buildIndex, string sceneName);
         void OnSceneWasInitialized(int buildIndex, string sceneName);
         void OnSceneWasUnloaded(int buildIndex, string sceneName);

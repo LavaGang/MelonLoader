@@ -29,7 +29,7 @@ namespace MelonLoader.Support
             IsDestroying = true;
             GameObject.Destroy(gameObject);
         }
-        void Start() => SiblingFix();
+        void Start() { SiblingFix(); Main.Interface.OnApplicationStart(); }
         void Awake()
         {
             foreach (var queuedCoroutine in SupportModule_To.QueuedCoroutines)

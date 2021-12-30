@@ -69,6 +69,7 @@
 37. Changed MelonPreferences_Entry.Description to Preceding Comment.
 38. Added MelonPreferences_Entry.Comment for Inline Comment.
 39. Removed Newtonsoft.Json from Il2CppAssemblyUnhollower Blacklist.
+40. Moved OnApplicationStart Initialization to Component Start.
 
 ---
 

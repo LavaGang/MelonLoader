@@ -16,7 +16,7 @@ namespace MelonLoader.Support
             Interface = interface_from;
             UnityMappers.RegisterMappers();
 
-            if (IsOldUnity())
+            if (IsUnity53OrLower())
                 SM_Component.Create();
             else
                 SceneHandler.Init();
@@ -24,7 +24,7 @@ namespace MelonLoader.Support
             return new SupportModule_To();
         }
 
-        private static bool IsOldUnity()
+        private static bool IsUnity53OrLower()
         {
             try
             {

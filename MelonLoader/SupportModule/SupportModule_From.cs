@@ -2,6 +2,7 @@
 {
     internal class SupportModule_From : ISupportModule_From
     {
+        public void OnApplicationStart() => Core.OnApplicationStart();
         public void OnSceneWasLoaded(int buildIndex, string sceneName) => MelonHandler.OnSceneWasLoaded(buildIndex, sceneName);
         public void OnSceneWasInitialized(int buildIndex, string sceneName) => MelonHandler.OnSceneWasInitialized(buildIndex, sceneName);
         public void OnSceneWasUnloaded(int buildIndex, string sceneName) => MelonHandler.OnSceneWasUnloaded(buildIndex, sceneName);
