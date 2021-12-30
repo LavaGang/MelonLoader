@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using MelonLoader.Preferences;
+using Tomlet.Exceptions;
 
 namespace MelonLoader
 {
@@ -291,14 +292,17 @@ namespace MelonLoader
             {
                 file.Load();
             }
+            catch (TomlUnescapedUnicodeControlCharException ex)
+            {
+                MelonLogger.Error($"Error while Loading Preferences from {file.FilePath}: {ex}");
+                return;
+            }
             catch (Exception ex)
             {
                 MelonLogger.Error($"Error while Loading Preferences from {file.FilePath}: {ex}");
                 file.WasError = true;
-            }
-
-            if (file.WasError)
                 return;
+            }
 
             if (Categories.Count > 0)
                 foreach (MelonPreferences_Category category in Categories)
