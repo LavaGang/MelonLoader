@@ -74,6 +74,7 @@
 42. Fixed Assembly Verification Issue with MonoMod DMD Dumping.
 43. Added OnPreferencesSaved string variant that gets passed the Preferences's File Path.
 44. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
+45. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
 
 ---
 

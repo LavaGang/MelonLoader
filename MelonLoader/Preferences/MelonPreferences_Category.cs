@@ -23,7 +23,10 @@ namespace MelonLoader
         }
 
         public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name, bool is_hidden) 
-            => CreateEntry(identifier, default_value, display_name, null, is_hidden, false);
+            => CreateEntry(identifier, default_value, display_name, null, is_hidden, false, null, null);
+        public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name,
+            string description, bool is_hidden, bool dont_save_default, Preferences.ValueValidator validator)
+            => CreateEntry(identifier, default_value, display_name, description, is_hidden, dont_save_default, validator, null);
         public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name = null,
             string description = null, bool is_hidden = false, bool dont_save_default = false, Preferences.ValueValidator validator = null, string oldIdentifier = null)
         {
