@@ -10,8 +10,7 @@ namespace MelonLoader.CompatibilityLayers
 
         public override void Setup()
         {
-            if ((Il2CppMono.Unity.UnityTls.m_GetUnityTlsInterface == IntPtr.Zero)
-                || !PatchMonoExport())
+            if (!PatchMonoExport())
             {
                 Logger.Error("Failed to Bridge Il2Cpp Unity TLS! Web Connection based C# Methods may not work as intended.");
                 return;
