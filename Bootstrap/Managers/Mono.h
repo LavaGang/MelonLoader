@@ -224,7 +224,6 @@ public:
 		MONODEF(void*, mono_lookup_internal_call, (Method* method))
 		MONODEF(Object*, mono_runtime_invoke, (Method* method, Object* obj, void** params, Object** exec))
 		MONODEF(const char*, mono_method_get_name, (Method* method))
-		MONODEF(void*, mono_unity_get_unitytls_interface, ())
 		MONODEF(Assembly*, mono_domain_assembly_open, (Domain* domain, const char* path))
 		MONODEF(Image*, mono_assembly_get_image, (Assembly* assembly))
 		MONODEF(Class*, mono_class_from_name, (Image* image, const char* name_space, const char* name))
@@ -267,7 +266,6 @@ public:
 	public:
 		static Domain* mono_jit_init_version(const char* name, const char* version);
 		static Object* mono_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
-		static void* mono_unity_get_unitytls_interface();
 
 		static Assembly* AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data);
 		static Assembly* AssemblySearch(AssemblyName* aname, void* user_data);

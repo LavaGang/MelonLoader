@@ -81,20 +81,6 @@ void Core::Initialize(HINSTANCE hinstDLL)
 
 	if (Game::IsIl2Cpp)
 	{
-		if (!Mono::IsOldMono)
-		{
-			if ((Mono::Exports::mono_unity_get_unitytls_interface != NULL)
-				&& (Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface != NULL))
-			{
-				Debug::Msg("Attaching Hook to il2cpp_unity_install_unitytls_interface...");
-				Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface, Il2Cpp::Hooks::il2cpp_unity_install_unitytls_interface);
-				Debug::Msg("Attaching Hook to mono_unity_get_unitytls_interface...");
-				Hook::Attach(&(LPVOID&)Mono::Exports::mono_unity_get_unitytls_interface, Mono::Hooks::mono_unity_get_unitytls_interface);
-			}
-			else
-				Logger::QuickLog("Failed to Bridge Mono TLS! Web Connection based C# Methods may not work as intended.");
-		}
-
 		Debug::Msg("Attaching Hook to il2cpp_init...");
 		Hook::Attach(&(LPVOID&)Il2Cpp::Exports::il2cpp_init, Il2Cpp::Hooks::il2cpp_init);
 	}

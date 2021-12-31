@@ -502,14 +502,14 @@ namespace UnhollowerMini
         public static void format_exception(IntPtr ex, void* message, int message_size)
         {
             if (MelonUtils.IsGameIl2Cpp())
-                format_exception(ex, message, message_size);
+                il2cpp_format_exception(ex, message, message_size);
             // TODO Mono mono_format_exception
         }
 
         public static void format_stack_trace(IntPtr ex, void* output, int output_size)
         {
             if (MelonUtils.IsGameIl2Cpp())
-                format_stack_trace(ex, output, output_size);
+                il2cpp_format_stack_trace(ex, output, output_size);
             // TODO mono_format_stack_trace
         }
 

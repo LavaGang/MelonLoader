@@ -42,7 +42,6 @@ MONODEF(mono_add_internal_call)
 MONODEF(mono_lookup_internal_call)
 MONODEF(mono_runtime_invoke)
 MONODEF(mono_method_get_name)
-MONODEF(mono_unity_get_unitytls_interface)
 MONODEF(mono_domain_assembly_open)
 MONODEF(mono_assembly_get_image)
 MONODEF(mono_class_from_name)
@@ -343,11 +342,7 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_set_config_dir)
 
 		if (!IsOldMono)
-		{
-			if (Il2Cpp::Exports::il2cpp_unity_install_unitytls_interface != NULL)
-				MONODEF_NOINTERNALFAILURE(mono_unity_get_unitytls_interface)
 			MONODEF(mono_runtime_set_main_args)
-		}
 
 		MONODEF(mono_raise_exception)
 		MONODEF(mono_get_exception_bad_image_format)
@@ -462,8 +457,6 @@ Mono::Object* Mono::Hooks::mono_runtime_invoke(Method* method, Object* obj, void
 	}
 	return Exports::mono_runtime_invoke(method, obj, params, exec);
 }
-
-void* Mono::Hooks::mono_unity_get_unitytls_interface() { return Il2Cpp::UnityTLSInterfaceStruct; }
 
 Mono::Assembly* Mono::Hooks::AssemblyPreLoad(AssemblyName* aname, char** assemblies_path, void* user_data) { return AssemblyResolve(aname, user_data, true); }
 Mono::Assembly* Mono::Hooks::AssemblySearch(AssemblyName* aname, void* user_data) { return AssemblyResolve(aname, user_data, false); }

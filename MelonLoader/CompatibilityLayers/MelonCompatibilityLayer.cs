@@ -12,6 +12,13 @@ namespace MelonLoader
         private static string BaseDirectory = null;
         private static List<ModuleListing> Modules = new List<ModuleListing>()
         {
+            // Il2Cpp Unity Tls
+            new ModuleListing("Il2CppUnityTls.dll", x =>
+            {
+                x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
+                x.ShouldDelete = !MelonUtils.IsGameIl2Cpp();
+            }),
+
             // Illusion Plugin Architecture
             new ModuleListing("IPA.dll", x =>
             {

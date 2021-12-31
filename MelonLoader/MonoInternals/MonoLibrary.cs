@@ -33,10 +33,10 @@ namespace MelonLoader.MonoInternals
         public static MonoLibrary Instance { get; private set; }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static IntPtr GetLibPtr();
+        public extern static IntPtr GetLibPtr();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static IntPtr GetRootDomainPtr();
+        public extern static IntPtr GetRootDomainPtr();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static Assembly CastManagedAssemblyPtr(IntPtr ptr);

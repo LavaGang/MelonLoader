@@ -29,8 +29,6 @@ public:
 		static il2cpp_runtime_invoke_t il2cpp_runtime_invoke;
 		typedef const char* (*il2cpp_method_get_name_t) (Method* method);
 		static il2cpp_method_get_name_t il2cpp_method_get_name;
-		typedef void (*il2cpp_unity_install_unitytls_interface_t) (void* unitytlsInterfaceStruct);
-		static il2cpp_unity_install_unitytls_interface_t il2cpp_unity_install_unitytls_interface;
 	};
 
 	class Hooks
@@ -38,6 +36,5 @@ public:
 	public:
 		static Domain* il2cpp_init(const char* name);
 		static Object* il2cpp_runtime_invoke(Method* method, Object* obj, void** params, Object** exec);
-		static void il2cpp_unity_install_unitytls_interface(void* unitytlsInterfaceStruct);
 	};
 };
