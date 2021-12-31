@@ -80,6 +80,7 @@
 48. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
 49. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
 50. Added Il2CppUnityTls CL for Managed-sided Il2Cpp Unity TLS Bridging.
+51. Fixed Issue with OnSceneWasLoaded not being called for First Scene Load.
 
 ---
 

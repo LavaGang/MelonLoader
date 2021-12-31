@@ -18,7 +18,7 @@ namespace MelonLoader.Support
         }
         private void SiblingFix() { SetAsLastSiblingMethod?.Invoke(gameObject.transform, new object[0]); SetAsLastSiblingMethod?.Invoke(transform, new object[0]); }
         internal void Destroy() { IsDestroying = true; GameObject.Destroy(gameObject); }
-        void Start() { SiblingFix(); Main.Interface.OnApplicationStart(); }
+        void Start() { SiblingFix(); Main.Interface.OnApplicationLateStart(); }
         void Awake()
         {
             foreach (var queuedCoroutine in SupportModule_To.QueuedCoroutines)
