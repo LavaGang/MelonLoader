@@ -79,6 +79,7 @@
 47. Added OnPreferencesSaved string variant that gets passed the Preferences's File Path.
 48. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
 49. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
+50. Added Il2CppUnityTls CL for Managed-sided Il2Cpp Unity TLS Bridging.
 
 ---
 
