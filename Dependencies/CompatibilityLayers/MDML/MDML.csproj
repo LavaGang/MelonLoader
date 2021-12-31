@@ -6,21 +6,21 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <RootNamespace>MelonLoader.CompatibilityLayers</RootNamespace>
-    <AssemblyName>Demeo</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>MDML</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
-    <ProjectGuid>{12853B23-E7D9-4E10-AC7F-83382561239F}</ProjectGuid>
+    <ProjectGuid>{15CFF766-420B-47EF-9E4A-E73D35A4AB44}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Output\Debug\MelonLoader\Dependencies\CompatibilityLayers\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\Debug\MelonLoader\Dependencies\CompatibilityLayers\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,7 +32,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Output\Release\MelonLoader\Dependencies\CompatibilityLayers\</OutputPath>
+    <OutputPath>$(SolutionDir)Output\Release\MelonLoader\Dependencies\CompatibilityLayers\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -41,7 +41,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Demeo_LobbyRequired.cs" />
+    <Compile Include="MuseDashModLoader\IMod.cs" />
+    <Compile Include="MuseDashModLoader\ModLoader.cs" />
+    <Compile Include="MuseDashModLoader\ModLogger.cs" />
+    <Compile Include="Resolver.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -49,10 +52,6 @@
     <Reference Include="System" />
     <Reference Include="MelonLoader">
       <HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>Libs\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

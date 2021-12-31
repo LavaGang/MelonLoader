@@ -123,7 +123,7 @@
     <Compile Include="Windows\Point.cs" />
     <Compile Include="Windows\User32.cs" />
     <Compile Include="Windows\WindowMessage.cs" />
-    <ProjectReference Include="..\MelonLoader\MelonLoader.csproj">
+    <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj">
       <Private>false</Private>
       <Project>{F9700790-414B-431B-9F9C-1D9210FAD682}</Project>
       <Name>MelonLoader</Name>
