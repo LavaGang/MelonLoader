@@ -10,7 +10,7 @@ namespace MelonLoader.Support
 {
     internal class SM_Component : MonoBehaviour
     {
-        private static bool IsDestroying = false;
+        private bool IsDestroying = false;
 
 #if SM_Il2Cpp
         private delegate bool SetAsLastSiblingDelegate(IntPtr transformptr);
