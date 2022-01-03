@@ -1,4 +1,6 @@
-﻿using UnhollowerMini;
+﻿using MelonLoader;
+using MelonLoader.MelonStartScreen.NativeUtils;
+using UnhollowerMini;
 
 namespace UnityEngine.CoreModule
 {
@@ -9,7 +11,10 @@ namespace UnityEngine.CoreModule
 
         unsafe static SystemInfo()
         {
-            m_GetGraphicsDeviceType = UnityInternals.ResolveICall<d_GetGraphicsDeviceType>("UnityEngine.SystemInfo::GetGraphicsDeviceType");
+            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2018.1.0" }))
+                m_GetGraphicsDeviceType = UnityInternals.ResolveICall<d_GetGraphicsDeviceType>("UnityEngine.SystemInfo::GetGraphicsDeviceType");
+            else
+                m_GetGraphicsDeviceType = UnityInternals.ResolveICall<d_GetGraphicsDeviceType>("UnityEngine.SystemInfo::get_graphicsDeviceType");
         }
 
         public static uint GetGraphicsDeviceType() =>
