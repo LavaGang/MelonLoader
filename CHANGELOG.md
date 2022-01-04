@@ -35,52 +35,53 @@
 3. Updated SharpZipLib to v1.3.3.
 4. Updated Il2CppAssemblyUnhollower to v0.4.17.0.
 5. Updated Newtonsoft.Json to v13.0.1.
-6. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
-7. Fixed Connection Issue on Demeo.
-8. Added Demeo_LobbyRequired Attribute to Compatibility Layer to enforce all lobby members on Demeo to have a specific melon and version.
-9. Implemented mgGif for Start Screen Image Parsing.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
-10. Reimplemented Image Frame Parsing for Start Screen.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
-11. Moved EnumExtensions from MelonStartScreen Assembly to Main MelonLoader Assembly.
-12. Removed ZIP Loading Functionality for Plugins and Mods folders.
-13. Fixed Issue with FileHandler Blacklist.
-14. Added Optional MelonID Attribute for Melons.
-15. Updated Logger to Print MelonID when set.
-16. Removed Obsolete Attributes from MelonLogger static methods.
-17. Internal Failures now print their proper Failure Messages in the MessageBox even if not in Debug Mode.
-18. Cleaned Up Start Screen's Animated Image Customization.
-19. Added Start Screen Color Customization for Background, Progress Bar, and Progress Bar Outline.
-20. Added Start Screen Text Color Customization.
-21. Fixed Issue with Colors Reading and Writing to Start Screen Config Incorrectly.
-22. Implemented Element Toggles for Start Screen.
-23. Added LemonArraySegment because System.ArraySegment doesn't have interfaces on older .NET Framework versions.
-24. Fixed Issue with SharpZipLib's InflaterHuffmanTree not properly Segmenting Array.
-25. Refactored Start Screen Image Handling.
-26. Added Start Screen Logo Customization.
-27. Added Start Screen Background Image Customization.
-28. Proxy will now terminate any Non-Unity Process that load it without warning. Example of this is UnityCrashHandler.
-29. Fixed Issue with Custom Start Screen Background Image being Inverted.
-30. Added JPG/JPEG Support to Start Screen Image Customization.
-31. Replaced Start Screen's Default Loading GIF.    (Credits to [gompocp](https://github.com/gompocp) :D)
-32. Combined Mono Support Modules into 1 Singular Support Module.
-33. Fixed Start Screen Issue with Image Filtering.
-34. Added Start Screen Image Filtering Customization.
-35. MelonPreferences_Category DisplayName and IsHidden is now Modifiable during Runtime.
-36. MelonPreferences_Entry DisplayName, Description, IsHidden, and DontSaveDefault are now Modifiable during Runtime.
-37. Added MelonPreferences_Category.IsInlined for inlining the TomlTable of the Category.
-38. MelonPreferences_Entry.Description now Writes to File as a Comment.
-39. Changed MelonPreferences_Entry.Description to Preceding Comment.
-40. Added MelonPreferences_Entry.Comment for Inline Comment.
-41. Fixed Issue with Apostrophes in File Pathing.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
-42. Added Methods for deleting and renaming Entries in MelonPreferences.    (Credits to [DragonPlayerX](https://github.com/DragonPlayerX) :D)
-43. Removed Newtonsoft.Json from Il2CppAssemblyUnhollower Blacklist.
-44. Moved OnApplicationStart Initialization to Component Start.
-45. MelonPreferences files will now Auto-Reset if TomlUnescapedUnicodeControlCharException is thrown when the file is corrupt.
-46. Fixed Assembly Verification Issue with MonoMod DMD Dumping.
-47. Added OnPreferencesSaved string variant that gets passed the Preferences's File Path.
-48. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
-49. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
-50. Added Il2CppUnityTls CL for Managed-sided Il2Cpp Unity TLS Bridging.
-51. Fixed Issue with OnSceneWasLoaded not being called for First Scene Load.
+6. Updated Cpp2IL to v2022.0.0.
+7. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
+8. Fixed Connection Issue on Demeo.
+9. Added Demeo_LobbyRequired Attribute to Compatibility Layer to enforce all lobby members on Demeo to have a specific melon and version.
+10. Implemented mgGif for Start Screen Image Parsing.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
+11. Reimplemented Image Frame Parsing for Start Screen.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
+12. Moved EnumExtensions from MelonStartScreen Assembly to Main MelonLoader Assembly.
+13. Removed ZIP Loading Functionality for Plugins and Mods folders.
+14. Fixed Issue with FileHandler Blacklist.
+15. Added Optional MelonID Attribute for Melons.
+16. Updated Logger to Print MelonID when set.
+17. Removed Obsolete Attributes from MelonLogger static methods.
+18. Internal Failures now print their proper Failure Messages in the MessageBox even if not in Debug Mode.
+19. Cleaned Up Start Screen's Animated Image Customization.
+20. Added Start Screen Color Customization for Background, Progress Bar, and Progress Bar Outline.
+21. Added Start Screen Text Color Customization.
+22. Fixed Issue with Colors Reading and Writing to Start Screen Config Incorrectly.
+23. Implemented Element Toggles for Start Screen.
+24. Added LemonArraySegment because System.ArraySegment doesn't have interfaces on older .NET Framework versions.
+25. Fixed Issue with SharpZipLib's InflaterHuffmanTree not properly Segmenting Array.
+26. Refactored Start Screen Image Handling.
+27. Added Start Screen Logo Customization.
+28. Added Start Screen Background Image Customization.
+29. Proxy will now terminate any Non-Unity Process that load it without warning. Example of this is UnityCrashHandler.
+30. Fixed Issue with Custom Start Screen Background Image being Inverted.
+31. Added JPG/JPEG Support to Start Screen Image Customization.
+32. Replaced Start Screen's Default Loading GIF.    (Credits to [gompocp](https://github.com/gompocp) :D)
+33. Combined Mono Support Modules into 1 Singular Support Module.
+34. Fixed Start Screen Issue with Image Filtering.
+35. Added Start Screen Image Filtering Customization.
+36. MelonPreferences_Category DisplayName and IsHidden is now Modifiable during Runtime.
+37. MelonPreferences_Entry DisplayName, Description, IsHidden, and DontSaveDefault are now Modifiable during Runtime.
+38. Added MelonPreferences_Category.IsInlined for inlining the TomlTable of the Category.
+39. MelonPreferences_Entry.Description now Writes to File as a Comment.
+40. Changed MelonPreferences_Entry.Description to Preceding Comment.
+41. Added MelonPreferences_Entry.Comment for Inline Comment.
+42. Fixed Issue with Apostrophes in File Pathing.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+43. Added Methods for deleting and renaming Entries in MelonPreferences.    (Credits to [DragonPlayerX](https://github.com/DragonPlayerX) :D)
+44. Removed Newtonsoft.Json from Il2CppAssemblyUnhollower Blacklist.
+45. Moved OnApplicationStart Initialization to Component Start.
+46. MelonPreferences files will now Auto-Reset if TomlUnescapedUnicodeControlCharException is thrown when the file is corrupt.
+47. Fixed Assembly Verification Issue with MonoMod DMD Dumping.
+48. Added OnPreferencesSaved string variant that gets passed the Preferences's File Path.
+49. Added OnPreferencesLoaded string variant that gets passed the Preferences's File Path.
+50. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
+51. Added Il2CppUnityTls CL for Managed-sided Il2Cpp Unity TLS Bridging.
+52. Fixed Issue with OnSceneWasLoaded not being called for First Scene Load.
 
 ---
 

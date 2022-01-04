@@ -13,7 +13,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "2021.5.3";
+                Version = "2022.0.0";
 
             Destination = Path.Combine(Core.BasePath, "Cpp2IL");
             Output = Path.Combine(Destination, "cpp2il_out");
