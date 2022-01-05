@@ -33,7 +33,7 @@
 1. Updated HarmonyX to v2.7.0.
 2. Updated Tomlet to v3.1.2.
 3. Updated SharpZipLib to v1.3.3.
-4. Updated Il2CppAssemblyUnhollower to v0.4.17.0.
+4. Updated Il2CppAssemblyUnhollower to v0.4.17.1.
 5. Updated Newtonsoft.Json to v13.0.1.
 6. Updated Cpp2IL to v2022.0.0.
 7. Removed Analytics Blocker's modification of hostname if NULL.    (Credits to [SirCoolness](https://github.com/SirCoolness) :D)  
