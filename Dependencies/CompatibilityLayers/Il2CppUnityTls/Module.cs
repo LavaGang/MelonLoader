@@ -42,6 +42,16 @@ namespace MelonLoader.CompatibilityLayers
         }
 
         private static IntPtr GetUnityTlsInterface()
-            => Il2CppMono.Unity.UnityTls.GetUnityTlsInterface();
+        {
+            try
+            {
+                return Il2CppMono.Unity.UnityTls.GetUnityTlsInterface();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Il2CppMono.Unity.UnityTls.GetUnityTlsInterface threw Exception: {ex}");
+                return IntPtr.Zero;
+            }
+        }
     }
 }

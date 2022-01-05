@@ -82,6 +82,7 @@
 50. Fixed MissingMethodException Issue with MelonLoader.MelonPreferences_Category.CreateEntry.
 51. Added Il2CppUnityTls CL for Managed-sided Il2Cpp Unity TLS Bridging.
 52. Fixed Issue with OnSceneWasLoaded not being called for First Scene Load.
+53. Added Additional Exception Catching to Il2CppUnityTls CL.
 
 ---
 
