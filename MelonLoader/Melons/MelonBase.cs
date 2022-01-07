@@ -27,6 +27,11 @@ namespace MelonLoader
         public ConsoleColor ConsoleColor { get; internal set; }
 
         /// <summary>
+        /// Console Color of the Author that made this melon.
+        /// </summary>
+        public ConsoleColor AuthorConsoleColor { get; internal set;}
+
+        /// <summary>
         /// Info Attribute of the Melon.
         /// </summary>
         public MelonInfoAttribute Info { get; internal set; }
