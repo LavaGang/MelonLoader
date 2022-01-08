@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using MelonLoader.MonoInternals;
 
 namespace MelonLoader.CompatibilityLayers
@@ -7,16 +10,57 @@ namespace MelonLoader.CompatibilityLayers
     internal class Il2CppUnityTls_Module : MelonCompatibilityLayer.Module
     {
         internal static MelonLogger.Instance Logger = new MelonLogger.Instance("Il2CppUnityTls");
+        private static IntPtr UnityTlsInterface = IntPtr.Zero;
 
-        public override void Setup()
+        public unsafe override void Setup()
         {
             if (!PatchMonoExport())
             {
-                Logger.Error("Failed to Bridge Il2Cpp Unity TLS! Web Connection based C# Methods may not work as intended.");
+                Logger.Error("Web Connection based C# Methods may not work as intended.");
                 return;
             }
 
-            // Call InstallUnityTlsInterface Signature - Bootstrap - Il2Cpp::CallInstallUnityTLSInterface
+            if (!PatchIl2CppExport())
+            {
+                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                return;
+            }
+
+            IntPtr unityplayer = GetUnityPlayerModule(out int unityplayer_size);
+            if (unityplayer == IntPtr.Zero)
+                return;
+
+            IntPtr[] ptrs = null;
+            if (MelonUtils.IsGame32Bit())
+                ptrs = Il2CppUnityTls.CppUtils.SigscanAll(unityplayer, unityplayer_size, "A1 ?? ?? ?? ?? 85 C0 0F 85 68 01 00 00 A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? B8 ?? ?? ?? ?? C7 05");
+            else
+                ptrs = Il2CppUnityTls.CppUtils.SigscanAll(unityplayer, unityplayer_size, "48 8B 0D ?? ?? ?? ?? 48 85 C9 0F 85 DC 01 00 00 48 8B 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 89 05");
+
+            if (ptrs.Length <= 0)
+            {
+                if (MelonUtils.IsGame32Bit())
+                    ptrs = Il2CppUnityTls.CppUtils.SigscanAll(unityplayer, unityplayer_size, "A1 ?? ?? ?? ?? 8B 0D ?? ?? ?? ?? 85 C0 0F 85 68 01 00 00 A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? A1 ?? ?? ?? ?? A3 ?? ?? ?? ?? B8 ?? ?? ?? ?? C7 05");
+                else
+                    ptrs = Il2CppUnityTls.CppUtils.SigscanAll(unityplayer, unityplayer_size, "48 8B 0D ?? ?? ?? ?? 48 8B 15 ?? ?? ?? ?? 48 85 C9 0F 85 DC 01 00 00 48 8B 05 ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 89 05");
+            }
+
+            if (ptrs.Length <= 0)
+            {
+                Logger.Error("InstallUnityTlsInterface was not found!");
+                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                return;
+            }
+
+            foreach (IntPtr ptr in ptrs)
+            {
+                byte* i = (byte*)ptr.ToPointer();
+                if (*i == 0 || (*i & 0xF) == 0xF)
+                    continue;
+                Logger.Msg("Calling InstallUnityTlsInterface...");
+                dInstallUnityTlsInterface installUnityTlsInterface = (dInstallUnityTlsInterface)Marshal.GetDelegateForFunctionPointer(ptr, typeof(dInstallUnityTlsInterface));
+                installUnityTlsInterface();
+                break;
+            }
         }
 
         private unsafe static bool PatchMonoExport()
@@ -41,17 +85,76 @@ namespace MelonLoader.CompatibilityLayers
             return true;
         }
 
-        private static IntPtr GetUnityTlsInterface()
+        private unsafe static bool PatchIl2CppExport()
         {
-            try
+            NativeLibrary il2cppLibrary = NativeLibrary.Load(Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll"));
+            IntPtr export = il2cppLibrary.GetExport("il2cpp_unity_install_unitytls_interface");
+            if (export == IntPtr.Zero)
             {
-                return Il2CppMono.Unity.UnityTls.GetUnityTlsInterface();
+                Logger.Error("Failed to find il2cpp_unity_install_unitytls_interface!");
+                return false;
             }
-            catch (Exception ex)
+
+            Logger.Msg("Patching il2cpp_unity_install_unitytls_interface...");
+            MethodInfo patch = typeof(Il2CppUnityTls_Module).GetMethod("SetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static);
+            IntPtr patchptr = patch.MethodHandle.GetFunctionPointer();
+            MelonUtils.NativeHookAttach((IntPtr)(&export), patchptr);
+            OriginalSetUnityTlsInterface = (dSetUnityTlsInterface)Marshal.GetDelegateForFunctionPointer(export, typeof(dSetUnityTlsInterface));
+
+            return true;
+        }
+
+        private static IntPtr GetUnityPlayerModule(out int moduleSize)
+        {
+            string moduleName = "UnityPlayer.dll";
+#if LINUX
+            // TODO
+#elif OSX
+            // TODO
+#elif ANDROID
+            // TODO
+#else
+            string currentUnityVersion = MelonUtils.GetUnityVersion();
+            if (!currentUnityVersion.StartsWith("20") || currentUnityVersion.StartsWith("2017.1"))
+                moduleName = "player_win.exe";
+#endif
+
+            IntPtr moduleAddress = IntPtr.Zero;
+            moduleSize = 0;
+
+            foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
             {
-                Logger.Error($"Il2CppMono.Unity.UnityTls.GetUnityTlsInterface threw Exception: {ex}");
+                if (module.ModuleName == moduleName)
+                {
+                    moduleAddress = module.BaseAddress;
+                    moduleSize = module.ModuleMemorySize;
+                    break;
+                }
+            }
+
+            if (moduleAddress == IntPtr.Zero)
+            {
+                moduleSize = 0;
+                Logger.Error($"Failed to find module \"{moduleName}\"");
                 return IntPtr.Zero;
             }
+
+            return moduleAddress;
         }
+
+        private static IntPtr GetUnityTlsInterface()
+            => UnityTlsInterface;
+        private static void SetUnityTlsInterface(IntPtr ptr)
+        {
+            UnityTlsInterface = ptr;
+            OriginalSetUnityTlsInterface(ptr);
+        }
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void dSetUnityTlsInterface(IntPtr ptr);
+        private static dSetUnityTlsInterface OriginalSetUnityTlsInterface;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void dInstallUnityTlsInterface();
     }
 }

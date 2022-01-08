@@ -41,13 +41,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CppUtils.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnhollowerMini\Il2CppException.cs" />
-    <Compile Include="UnhollowerMini\InternalClassPointerStore.cs" />
-    <Compile Include="UnhollowerMini\ObjectCollectedException.cs" />
-    <Compile Include="UnhollowerMini\UnityInternals.cs" />
-    <Compile Include="UnityTls.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

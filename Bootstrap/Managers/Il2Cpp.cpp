@@ -36,40 +36,6 @@ bool Il2Cpp::Initialize()
 	return Exports::Initialize();
 }
 
-void Il2Cpp::CallInstallUnityTLSInterface()
-{
-	Debug::Msg("Trying to find InstallUnityTlsInterface");
-	HMODULE mod = LoadLibraryA(Il2Cpp::UnityPlayerPath);
-	// Unity 2018
-	std::vector<uintptr_t> installTLSCandidates = PointerUtils::FindAllPattern(mod,
-#ifdef _WIN64
-		"48 8B 0D ? ? ? ? 48 85 C9 0F 85 DC 01 00 00 48 8B 05 ? ? ? ? 48 8D 0D ? ? ? ? 48 89 05 ? ? ? ? 48 8B 05 ? ? ? ? 48 89 05"
-#else
-		"A1 ? ? ? ? 85 C0 0F 85 68 01 00 00 A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? B8 ? ? ? ? C7 05"
-#endif
-	);
-	if (installTLSCandidates.size() == 0) // Unity 2019+
-		installTLSCandidates = PointerUtils::FindAllPattern(mod,
-#ifdef _WIN64
-			"48 8B 0D ? ? ? ? 48 8B 15 ? ? ? ? 48 85 C9 0F 85 DC 01 00 00 48 8B 05 ? ? ? ? 48 8D 0D ? ? ? ? 48 89 05 ? ? ? ? 48 8B 05 ? ? ? ? 48 89 05"
-#else
-			"A1 ? ? ? ? 8B 0D ? ? ? ? 85 C0 0F 85 68 01 00 00 A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? A1 ? ? ? ? A3 ? ? ? ? B8 ? ? ? ? C7 05"
-#endif
-		);
-	if (installTLSCandidates.size() == 0)
-	{
-		Debug::Msg("InstallUnityTlsInterface was not found!");
-		return;
-	}
-	for (auto i = installTLSCandidates.begin(); i != installTLSCandidates.end(); ++i)
-	{
-		if (!*i || *i & 0xF) continue;
-		Debug::Msg("Calling InstallUnityTlsInterface");
-		((void (*) (void)) * i)();
-		break;
-	}
-}
-
 bool Il2Cpp::Exports::Initialize()
 {
 	Debug::Msg("Initializing Il2Cpp Exports...");
@@ -81,7 +47,6 @@ bool Il2Cpp::Exports::Initialize()
 
 Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 {
-	Il2Cpp::CallInstallUnityTLSInterface();
 	Console::SetHandles();
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	Hook::Detach(&(LPVOID&)Exports::il2cpp_init, il2cpp_init);

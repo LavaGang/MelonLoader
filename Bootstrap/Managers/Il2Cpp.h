@@ -16,7 +16,6 @@ public:
 	static Domain* domain;
 	static void* UnityTLSInterfaceStruct;
 	static bool Initialize();
-	static void CallInstallUnityTLSInterface();
 
 	class Exports
 	{

@@ -52,9 +52,9 @@
     <Compile Include="mgGif\Decoder.cs" />
     <Compile Include="mgGif\Image.cs" />
     <Compile Include="ModLoadStep.cs" />
-    <Compile Include="NativeUtils\Il2CppSystem\Byte.cs" />
-    <Compile Include="NativeUtils\Il2CppSystem\Int32.cs" />
-    <Compile Include="NativeUtils\Il2CppSystem\Type.cs" />
+    <Compile Include="UnhollowerMini\Il2CppSystem\Byte.cs" />
+    <Compile Include="UnhollowerMini\Il2CppSystem\Int32.cs" />
+    <Compile Include="UnhollowerMini\Il2CppSystem\Type.cs" />
     <Compile Include="NativeUtils\NativeFieldValueAttribute.cs" />
     <Compile Include="NativeUtils\NativeSignatureAttribute.cs" />
     <Compile Include="NativeUtils\NativeSignatureFlags.cs" />

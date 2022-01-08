@@ -84,6 +84,7 @@
 52. Fixed Issue with OnSceneWasLoaded not being called for First Scene Load.
 53. [StartScreen] ICall <2018.1 for UE.SystemInfo::GetGraphicsDeviceType.     (Credits to [Slaynash](https://github.com/Slaynash) :3)
 54. Added Additional Exception Catching to Il2CppUnityTls CL.
+55. Moved InstallUnityTlsInterface Signature Scanning from Bootstrap to Il2CppUnityTls CL.
 
 ---
 
