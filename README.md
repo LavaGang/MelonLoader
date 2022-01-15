@@ -127,8 +127,8 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 | Compatible File Names |
 | - |
 | Background |
-| Logo |
 | Loading |
+| Logo |
 
 | Compatible Extensions |
 | - |
