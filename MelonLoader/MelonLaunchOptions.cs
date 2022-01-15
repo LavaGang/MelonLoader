@@ -108,6 +108,7 @@ namespace MelonLoader
             public static string ForceVersion_Dumper { get; internal set; }
             public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
             public static string ForceVersion_UnityDependencies { get; internal set; }
+            public static string ForceRegex { get; internal set; }
 
             internal static void Setup()
             {
@@ -116,6 +117,7 @@ namespace MelonLoader
                 WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;
                 WithArg["melonloader.agfvunhollower"] = (string arg) => ForceVersion_Il2CppAssemblyUnhollower = arg;
                 WithArg["melonloader.agfvunity"] = (string arg) => ForceVersion_UnityDependencies = arg;
+                WithArg["melonloader.agfregex"] = (string arg) => ForceRegex = arg;
             }
         }
 #endregion

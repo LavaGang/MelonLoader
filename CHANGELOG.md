@@ -87,6 +87,7 @@
 55. Moved InstallUnityTlsInterface Signature Scanning from Bootstrap to Il2CppUnityTls CL.
 56. Fixed MissingMethodException Issue with HarmonyLib.AccessTools.
 57. Fixed MissingMethodException Issue with MelonUtils.SetCurrentDomainBaseDirectory.
+58. Added --melonloader.agfregex Launch Option to Force Regex used for Assembly Generation.
 
 ---
 
