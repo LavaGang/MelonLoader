@@ -83,7 +83,7 @@ namespace MelonLoader
             {
                 ((AppDomainSetup)typeof(AppDomain).GetProperty("SetupInformationNoCopy", BindingFlags.NonPublic | BindingFlags.Instance)
                     .GetValue(domain, new object[0]))
-                    .ApplicationBase = dirpath;
+                    .SetApplicationBase(dirpath);
             }
             catch (Exception ex) { MelonLogger.Warning($"AppDomainSetup.ApplicationBase Exception: {ex}"); }
             Directory.SetCurrentDirectory(dirpath);
@@ -242,6 +242,24 @@ namespace MelonLoader
             if (methodBase == null)
                 throw new ArgumentNullException(nameof(methodBase));
             return new DynamicMethodDefinition(methodBase);
+        }
+
+        private static FieldInfo Exception_innerException;
+        public static void SetInnerException(this Exception _this, Exception ex)
+        {
+            if (Exception_innerException == null)
+                Exception_innerException = typeof(Exception).GetField("_innerException", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (Exception_innerException != null)
+                Exception_innerException.SetValue(_this, ex);
+        }
+
+        private static FieldInfo AppDomainSetup_application_base;
+        public static void SetApplicationBase(this AppDomainSetup _this, string value)
+        {
+            if (AppDomainSetup_application_base == null)
+                AppDomainSetup_application_base = typeof(AppDomainSetup).GetField("application_base", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (AppDomainSetup_application_base != null)
+                AppDomainSetup_application_base.SetValue(_this, value);
         }
 
         public static void GetDelegate<T>(this IntPtr ptr, out T output) where T : Delegate

@@ -73,15 +73,12 @@ namespace MelonLoader
 
             Instance = (T)Activator.CreateInstance(specifiedType);
 
-            FieldInfo[] fields = specifiedType.GetFields(HarmonyLib.AccessTools.all);
+            FieldInfo[] fields = specifiedType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             if (fields.Length <= 0)
                 return;
 
             foreach (FieldInfo fieldInfo in fields)
             {
-                if (fieldInfo.IsStatic)
-                    continue;
-
                 Type fieldType = fieldInfo.FieldType;
                 if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length <= 0)
                     continue;

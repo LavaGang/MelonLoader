@@ -85,6 +85,8 @@
 53. [StartScreen] ICall <2018.1 for UE.SystemInfo::GetGraphicsDeviceType.     (Credits to [Slaynash](https://github.com/Slaynash) :3)
 54. Added Additional Exception Catching to Il2CppUnityTls CL.
 55. Moved InstallUnityTlsInterface Signature Scanning from Bootstrap to Il2CppUnityTls CL.
+56. Fixed MissingMethodException Issue with HarmonyLib.AccessTools.
+57. Fixed MissingMethodException Issue with MelonUtils.SetCurrentDomainBaseDirectory.
 
 ---
 
