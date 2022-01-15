@@ -7,7 +7,7 @@ namespace MelonLoader.Fixes
 {
 	internal static class HarmonyMethodExtensionsFix
     {
-        private static MethodInfo HarmonyMethodExtensions_SetValue; // HarmonyMethodExtensions.SetValue(Traverse trv, string name, object val)
+        private static MethodInfo HarmonyMethodExtensions_SetValue;
 
         static HarmonyMethodExtensionsFix()
             => HarmonyMethodExtensions_SetValue = typeof(HarmonyMethodExtensions).GetMethod("SetValue", BindingFlags.NonPublic | BindingFlags.Static);
@@ -18,16 +18,13 @@ namespace MelonLoader.Fixes
             Type HarmonyMethodType = typeof(HarmonyMethod);
             Type ExtensionsType = typeof(HarmonyMethodExtensions);
 
-            MethodInfo HarmonyMethod_Merge_Original = HarmonyMethodType.GetMethod("Merge", BindingFlags.NonPublic | BindingFlags.Static); // HarmonyMethod.Merge(IEnumerable<HarmonyMethod> attributes)
+            MethodInfo HarmonyMethod_Merge_Original = HarmonyMethodType.GetMethod("Merge", BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo HarmonyMethod_Merge_PatchMethod = FixType.GetMethod("HarmonyMethod_Merge_Patch", BindingFlags.NonPublic | BindingFlags.Static);
-
-            MethodInfo HarmonyMethod_ToString_Original = HarmonyMethodType.GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance); // HarmonyMethod.ToString()
+            MethodInfo HarmonyMethod_ToString_Original = HarmonyMethodType.GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
             MethodInfo HarmonyMethod_ToString_PatchMethod = FixType.GetMethod("HarmonyMethod_ToString_Patch", BindingFlags.NonPublic | BindingFlags.Static);
-
-            MethodInfo HarmonyMethodExtensions_Merge_Original = ExtensionsType.GetMethod("Merge", BindingFlags.Public | BindingFlags.Static); // HarmonyMethodExtensions.Merge(this HarmonyMethod master, HarmonyMethod detail)
+            MethodInfo HarmonyMethodExtensions_Merge_Original = ExtensionsType.GetMethod("Merge", BindingFlags.Public | BindingFlags.Static);
             MethodInfo HarmonyMethodExtensions_Merge_PatchMethod = FixType.GetMethod("HarmonyMethodExtensions_Merge_Patch", BindingFlags.NonPublic | BindingFlags.Static);
-
-            MethodInfo HarmonyMethodExtensions_CopyTo_Original = ExtensionsType.GetMethod("CopyTo", BindingFlags.Public | BindingFlags.Static); // HarmonyMethodExtensions.CopyTo(HarmonyMethod from, HarmonyMethod to)
+            MethodInfo HarmonyMethodExtensions_CopyTo_Original = ExtensionsType.GetMethod("CopyTo", BindingFlags.Public | BindingFlags.Static);
             MethodInfo HarmonyMethodExtensions_CopyTo_PatchMethod = FixType.GetMethod("HarmonyMethodExtensions_CopyTo_Patch", BindingFlags.NonPublic | BindingFlags.Static);
 
             try
@@ -40,6 +37,7 @@ namespace MelonLoader.Fixes
             catch (Exception ex) { MelonLogger.Warning($"HarmonyMethodExtensionsFix Exception: {ex}"); }
         }
 
+        // Modified from HarmonyX's HarmonyLib.HarmonyMethod.ImportMethod : https://github.com/BepInEx/HarmonyX/blob/master/Harmony/Public/HarmonyMethod.cs#L68
         internal static void HarmonyMethod_ImportMethod(HarmonyMethod _this, MethodInfo theMethod)
         {
             _this.method = theMethod;
@@ -51,6 +49,7 @@ namespace MelonLoader.Fixes
             }
         }
 
+        // Modified from HarmonyX's HarmonyLib.HarmonyMethod.Merge : https://github.com/BepInEx/HarmonyX/blob/master/Harmony/Public/HarmonyMethod.cs#L140
         private static bool HarmonyMethod_Merge_Patch(IEnumerable<HarmonyMethod> __0, ref HarmonyMethod __result) { __result = HarmonyMethod_Merge(__0); return false; }
         internal static HarmonyMethod HarmonyMethod_Merge(IEnumerable<HarmonyMethod> attributes)
         {
@@ -70,6 +69,7 @@ namespace MelonLoader.Fixes
             return result;
         }
 
+        // Modified from HarmonyX's HarmonyLib.HarmonyMethod.ToString : https://github.com/BepInEx/HarmonyX/blob/master/Harmony/Public/HarmonyMethod.cs#L164
         private static bool HarmonyMethod_ToString_Patch(HarmonyMethod __instance, string __result) { __result = HarmonyMethod_ToString(__instance); return false; }
         internal static string HarmonyMethod_ToString(HarmonyMethod __this)
         {
@@ -83,6 +83,7 @@ namespace MelonLoader.Fixes
             return $"HarmonyMethod[{result}]";
         }
 
+        // Modified from HarmonyX's HarmonyLib.HarmonyMethodExtensions.CopyTo : https://github.com/BepInEx/HarmonyX/blob/master/Harmony/Public/HarmonyMethod.cs#L225
         private static bool HarmonyMethodExtensions_CopyTo_Patch(HarmonyMethod __0, HarmonyMethod __1) { HarmonyMethodExtensions_CopyTo(__0, __1); return false; }
         internal static void HarmonyMethodExtensions_CopyTo(HarmonyMethod from, HarmonyMethod to)
         {
@@ -97,6 +98,7 @@ namespace MelonLoader.Fixes
             });
         }
 
+        // Modified from HarmonyX's HarmonyLib.HarmonyMethodExtensions.Merge : https://github.com/BepInEx/HarmonyX/blob/master/Harmony/Public/HarmonyMethod.cs#L254
         internal static bool HarmonyMethodExtensions_Merge_Patch(HarmonyMethod __0, HarmonyMethod __1, HarmonyMethod __result) { __result = HarmonyMethodExtensions_Merge(__0, __1); return false; }
         internal static HarmonyMethod HarmonyMethodExtensions_Merge(HarmonyMethod master, HarmonyMethod detail)
         {
