@@ -30,7 +30,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             public string GameAssemblyHash = null;
             public string DeobfuscationMapHash = null;
-            public string ObfuscationRegex = null;
             public string UnityVersion = "0.0.0.0";
             public string DumperVersion = "0.0.0.0";
             public string UnhollowerVersion = "0.0.0.0";

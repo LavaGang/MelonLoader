@@ -21,7 +21,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         internal void Save()
         {
             Config.Values.DeobfuscationMapHash = Version;
-            Config.Values.ObfuscationRegex = ObfuscationRegex;
             Config.Save();
         }
 
