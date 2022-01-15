@@ -33,7 +33,7 @@ namespace MelonLoader
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
 
-        private static LemonSHA256 sha256 = LemonSHA256.Create();
+        private static LemonSHA256 sha256 = new LemonSHA256();
         static MelonHandler()
         {
             PluginsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Plugins");

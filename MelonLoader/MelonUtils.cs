@@ -11,6 +11,7 @@ using MonoMod.Cil;
 using MonoMod.Utils;
 using HarmonyLib;
 using MelonLoader.TinyJSON;
+using System.Security.Cryptography;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -234,14 +235,37 @@ namespace MelonLoader
         {
             if (methodInfo == null)
                 throw new ArgumentNullException(nameof(methodInfo));
-            return new HarmonyMethod(methodInfo);
+            HarmonyMethod returnval = new HarmonyMethod();
+            Fixes.HarmonyMethodExtensionsFix.HarmonyMethod_ImportMethod(returnval, methodInfo);
+            return returnval;
         }
+
 
         public static DynamicMethodDefinition ToNewDynamicMethodDefinition(this MethodBase methodBase)
         {
             if (methodBase == null)
                 throw new ArgumentNullException(nameof(methodBase));
             return new DynamicMethodDefinition(methodBase);
+        }
+
+        public static void ForEachElement<T>(this List<T> _this, Action<T> action)
+        {
+            if ((_this == null)
+                || (_this.Count() <= 0)
+                || (action == null))
+                return;
+            foreach (T val in _this)
+                action(val);
+        }
+
+        public static void ForEachElement<T>(this T[] _this, Action<T> action)
+        {
+            if ((_this == null)
+                || (_this.Length <= 0)
+                || (action == null))
+                return;
+            foreach (T val in _this)
+                action(val);
         }
 
         private static FieldInfo Exception_innerException;
@@ -260,6 +284,15 @@ namespace MelonLoader
                 AppDomainSetup_application_base = typeof(AppDomainSetup).GetField("application_base", BindingFlags.NonPublic | BindingFlags.Instance);
             if (AppDomainSetup_application_base != null)
                 AppDomainSetup_application_base.SetValue(_this, value);
+        }
+
+        private static FieldInfo HashAlgorithm_HashSizeValue;
+        public static void SetHashSizeValue(this HashAlgorithm _this, int value)
+        {
+            if (HashAlgorithm_HashSizeValue == null)
+                HashAlgorithm_HashSizeValue = typeof(HashAlgorithm).GetField("HashSizeValue", BindingFlags.Public | BindingFlags.Instance);
+            if (HashAlgorithm_HashSizeValue != null)
+                HashAlgorithm_HashSizeValue.SetValue(_this, value);
         }
 
         // Modified Version of System.IO.Path.HasExtension from .NET Framework's mscorlib.dll

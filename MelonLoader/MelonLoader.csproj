@@ -52,6 +52,7 @@
     <Compile Include="Attributes\MelonIDAttribute.cs" />
     <Compile Include="Fixes\ForcedCultureInfo.cs" />
     <Compile Include="Fixes\AccessToolsFix.cs" />
+    <Compile Include="Fixes\HarmonyMethodExtensionsFix.cs" />
     <Compile Include="Fixes\InstancePatchFix.cs" />
     <Compile Include="Fixes\ProcessFix.cs" />
     <Compile Include="GameVersionHandler.cs" />

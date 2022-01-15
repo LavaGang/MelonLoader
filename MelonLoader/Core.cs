@@ -14,7 +14,6 @@ namespace MelonLoader
             AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.UnhandledException.Install(curDomain);
             MelonUtils.Setup(curDomain);
-            Fixes.AccessToolsFix.Install();
             Assertions.LemonAssertMapping.Setup();
 
             if (!MonoLibrary.Setup()
@@ -22,6 +21,8 @@ namespace MelonLoader
                 return 1;
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
+            Fixes.AccessToolsFix.Install();
+            Fixes.HarmonyMethodExtensionsFix.Install();
 
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();

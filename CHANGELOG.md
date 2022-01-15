@@ -91,6 +91,8 @@
 59. Added LemonSHA256 because System.Security.Cryptography.SHA256 can have Missing Methods.
 60. Fixed MissingMethodException Issue with MelonHandler.sha256.
 61. Fixed MissingMethodException Issue with MonoResolveManager.AddSearchDirectory.
+62. Fixed Issue with LemonSHA256.
+63. Fixed MissingMethodException Issue with HarmonyMethod and HarmonyMethodExtensions.
 
 ---
 
