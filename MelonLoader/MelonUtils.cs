@@ -255,7 +255,7 @@ namespace MelonLoader
                 || (action == null))
                 return;
             foreach (T val in _this)
-                action(val);
+                    action(val);
         }
 
         public static void ForEachElement<T>(this T[] _this, Action<T> action)
@@ -265,7 +265,7 @@ namespace MelonLoader
                 || (action == null))
                 return;
             foreach (T val in _this)
-                action(val);
+                    action(val);
         }
 
         private static FieldInfo Exception_innerException;

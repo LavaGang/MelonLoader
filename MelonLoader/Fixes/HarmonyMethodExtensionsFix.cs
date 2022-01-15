@@ -22,8 +22,8 @@ namespace MelonLoader.Fixes
             MethodInfo HarmonyMethod_Merge_PatchMethod = FixType.GetMethod("HarmonyMethod_Merge_Patch", BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo HarmonyMethod_ToString_Original = HarmonyMethodType.GetMethod("ToString", BindingFlags.Public | BindingFlags.Instance);
             MethodInfo HarmonyMethod_ToString_PatchMethod = FixType.GetMethod("HarmonyMethod_ToString_Patch", BindingFlags.NonPublic | BindingFlags.Static);
-            MethodInfo HarmonyMethodExtensions_Merge_Original = ExtensionsType.GetMethod("Merge", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo HarmonyMethodExtensions_Merge_PatchMethod = FixType.GetMethod("HarmonyMethodExtensions_Merge_Patch", BindingFlags.NonPublic | BindingFlags.Static);
+            //MethodInfo HarmonyMethodExtensions_Merge_Original = ExtensionsType.GetMethod("Merge", BindingFlags.Public | BindingFlags.Static);
+            //MethodInfo HarmonyMethodExtensions_Merge_PatchMethod = FixType.GetMethod("HarmonyMethodExtensions_Merge_Patch", BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo HarmonyMethodExtensions_CopyTo_Original = ExtensionsType.GetMethod("CopyTo", BindingFlags.Public | BindingFlags.Static);
             MethodInfo HarmonyMethodExtensions_CopyTo_PatchMethod = FixType.GetMethod("HarmonyMethodExtensions_CopyTo_Patch", BindingFlags.NonPublic | BindingFlags.Static);
 
@@ -31,7 +31,7 @@ namespace MelonLoader.Fixes
             {
                 Core.HarmonyInstance.Patch(HarmonyMethod_Merge_Original, HarmonyMethod_Merge_PatchMethod.ToNewHarmonyMethod());
                 Core.HarmonyInstance.Patch(HarmonyMethod_ToString_Original, HarmonyMethod_ToString_PatchMethod.ToNewHarmonyMethod());
-                Core.HarmonyInstance.Patch(HarmonyMethodExtensions_Merge_Original, HarmonyMethodExtensions_Merge_PatchMethod.ToNewHarmonyMethod());
+                //Core.HarmonyInstance.Patch(HarmonyMethodExtensions_Merge_Original, HarmonyMethodExtensions_Merge_PatchMethod.ToNewHarmonyMethod());
                 Core.HarmonyInstance.Patch(HarmonyMethodExtensions_CopyTo_Original, HarmonyMethodExtensions_CopyTo_PatchMethod.ToNewHarmonyMethod());
             }
             catch (Exception ex) { MelonLogger.Warning($"HarmonyMethodExtensionsFix Exception: {ex}"); }
@@ -99,14 +99,17 @@ namespace MelonLoader.Fixes
         }
 
         // Modified from HarmonyX's HarmonyLib.HarmonyMethodExtensions.Merge : https://github.com/BepInEx/HarmonyX/blob/master/Harmony/Public/HarmonyMethod.cs#L254
-        internal static bool HarmonyMethodExtensions_Merge_Patch(HarmonyMethod __0, HarmonyMethod __1, HarmonyMethod __result) { __result = HarmonyMethodExtensions_Merge(__0, __1); return false; }
+        /*private static bool HarmonyMethodExtensions_Merge_Patch(HarmonyMethod __0, HarmonyMethod __1, HarmonyMethod __result) { __result = HarmonyMethodExtensions_Merge(__0, __1); return false; }
         internal static HarmonyMethod HarmonyMethodExtensions_Merge(HarmonyMethod master, HarmonyMethod detail)
         {
-            if (detail is null) return master;
+            if (detail is null)
+                return master;
+
             var result = new HarmonyMethod();
             var resultTrv = Traverse.Create(result);
             var masterTrv = Traverse.Create(master);
             var detailTrv = Traverse.Create(detail);
+
             HarmonyMethod.HarmonyFields().ForEachElement(f =>
             {
                 var baseValue = masterTrv.Field(f).GetValue();
@@ -114,7 +117,9 @@ namespace MelonLoader.Fixes
                 if (f != nameof(HarmonyMethod.priority) || (int)detailValue != -1)
                     HarmonyMethodExtensions_SetValue.Invoke(null, new object[] { resultTrv, f, detailValue ?? baseValue });
             });
+
             return result;
         }
+        */
     }
 }
