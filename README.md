@@ -117,6 +117,28 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 
 ---
 
+## START SCREEN CUSTOMIZATION:
+
+- After Initial Launch the Start Screen will create a folder under `UserData/MelonStartScreen`
+- Inside this folder it will create a `Config.cfg` file for Customization Settings.
+- You can also place Custom Images in this folder to have the Start Screen use.
+- Listed below are the Compatible File Names and Extensions for the Custom Images.
+
+| Compatible File Names |
+| - |
+| Background |
+| Logo |
+| Loading |
+
+| Compatible Extensions |
+| - |
+| .gif |
+| .png |
+| .jpg |
+| .jpeg |
+
+---
+
 ## LAUNCH OPTIONS:
 
 - These are additional Launch Options that MelonLoader adds to the Game.
