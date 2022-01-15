@@ -90,6 +90,7 @@
 58. Added --melonloader.agfregex Launch Option to Force Regex used for Assembly Generation.
 59. Added LemonSHA256 because System.Security.Cryptography.SHA256 can have Missing Methods.
 60. Fixed MissingMethodException Issue with MelonHandler.sha256.
+61. Fixed MissingMethodException Issue with MonoResolveManager.AddSearchDirectory.
 
 ---
 

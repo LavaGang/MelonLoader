@@ -262,6 +262,33 @@ namespace MelonLoader
                 AppDomainSetup_application_base.SetValue(_this, value);
         }
 
+        // Modified Version of System.IO.Path.HasExtension from .NET Framework's mscorlib.dll
+        public static bool ContainsExtension(this string path)
+        {
+            if (path != null)
+            {
+                path.CheckInvalidPathChars();
+                int num = path.Length;
+                while (--num >= 0)
+                {
+                    char c = path[num];
+                    if (c == '.')
+                        return num != path.Length - 1;
+                    if (c == Path.DirectorySeparatorChar || c == Path.AltDirectorySeparatorChar || c == Path.VolumeSeparatorChar)
+                        break;
+                }
+            }
+            return false;
+        }
+
+        // Modified Version of System.IO.Path.CheckInvalidPathChars from .NET Framework's mscorlib.dll
+        private static void CheckInvalidPathChars(this string path)
+        {
+            foreach (int num in path)
+                if (num == 34 || num == 60 || num == 62 || num == 124 || num < 32)
+                    throw new ArgumentException("Argument_InvalidPathChars", nameof(path));
+        }
+
         public static void GetDelegate<T>(this IntPtr ptr, out T output) where T : Delegate
             => output = GetDelegate<T>(ptr);
         public static T GetDelegate<T>(this IntPtr ptr) where T : Delegate

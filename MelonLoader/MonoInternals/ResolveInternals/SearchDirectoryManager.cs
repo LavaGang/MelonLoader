@@ -21,7 +21,7 @@ namespace MelonLoader.MonoInternals.ResolveInternals
                 return;
 
             path = Path.GetFullPath(path);
-            if (Path.HasExtension(path))
+            if (path.ContainsExtension())
                 return;
 
             SearchDirectoryInfo searchDirectory = SearchDirectoryList.FirstOrDefault(x => x.Path.Equals(path));
@@ -42,7 +42,7 @@ namespace MelonLoader.MonoInternals.ResolveInternals
                 return;
 
             path = Path.GetFullPath(path);
-            if (Path.HasExtension(path))
+            if (path.ContainsExtension())
                 return;
 
             SearchDirectoryInfo searchDirectory = SearchDirectoryList.FirstOrDefault(x => x.Path.Equals(path));
