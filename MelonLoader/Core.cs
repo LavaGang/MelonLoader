@@ -13,8 +13,8 @@ namespace MelonLoader
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.UnhandledException.Install(curDomain);
-            Fixes.AccessToolsFix.Install();
             MelonUtils.Setup(curDomain);
+            Fixes.AccessToolsFix.Install();
             Assertions.LemonAssertMapping.Setup();
 
             if (!MonoLibrary.Setup()

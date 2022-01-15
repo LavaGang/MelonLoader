@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
+using MelonLoader.Lemons.Cryptography;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -33,7 +33,7 @@ namespace MelonLoader
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
 
-        private static SHA256 sha256 = SHA256.Create();
+        private static LemonSHA256 sha256 = LemonSHA256.Create();
         static MelonHandler()
         {
             PluginsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Plugins");

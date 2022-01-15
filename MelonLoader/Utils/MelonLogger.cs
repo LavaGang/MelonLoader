@@ -94,7 +94,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void Internal_Warning(string namesection, string txt);
+        internal extern static void Internal_Warning(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Internal_Error(string namesection, string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
