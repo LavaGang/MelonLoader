@@ -55,6 +55,7 @@
     <Compile Include="Fixes\ProcessFix.cs" />
     <Compile Include="GameVersionHandler.cs" />
     <Compile Include="InternalUtils\MelonStartScreen.cs" />
+    <Compile Include="Lemons\Cryptography\LemonMD5.cs" />
     <Compile Include="Lemons\Cryptography\LemonSHA512.cs" />
     <Compile Include="Lemons\Cryptography\LemonSHA256.cs" />
     <Compile Include="Lemons\LemonAction.cs" />

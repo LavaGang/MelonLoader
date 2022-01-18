@@ -91,6 +91,7 @@
 59. Fixed MissingMethodException Issue with MelonHandler.sha256.
 60. Fixed MissingMethodException Issue with MonoResolveManager.AddSearchDirectory.
 61. Added LemonSHA512 because System.Security.Cryptography.SHA512 can be stripped.
+62. Added LemonMD5 because System.Security.Cryptography.MD5 can be stripped.
 
 ---
 
