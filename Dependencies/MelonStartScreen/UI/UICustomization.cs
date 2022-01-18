@@ -51,9 +51,9 @@ namespace MelonLoader.MelonStartScreen
         {
             [TomlPrecedingComment("Solid RGBA Color for Background")]
             internal Color SolidColor = new Color(0.08f, 0.09f, 0.10f);
-            [TomlPrecedingComment("If it should Scan for and Load Custom Background Image (.gif | .png | .jpg | .jpeg)")]
+            [TomlPrecedingComment("If should Scan for and Load Custom Background Image  ( true | false )")]
             internal bool ScanForCustomImage = true;
-            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Background Image (Point | Bilinear | Trilinear)")]
+            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Background Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
             internal FilterMode Filter = FilterMode.Bilinear;
         }
 
@@ -61,9 +61,9 @@ namespace MelonLoader.MelonStartScreen
         {
             [TomlPrecedingComment("Toggles the Logo Image")]
             internal bool Enabled = true;
-            [TomlPrecedingComment("If it should Scan for and Load Custom Logo Image (.gif | .png | .jpg | .jpeg)")]
+            [TomlPrecedingComment("If should Scan for and Load Custom Logo Image  ( true | false )")]
             internal bool ScanForCustomImage = true;
-            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Logo Image (Point | Bilinear | Trilinear)")]
+            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Logo Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
             internal FilterMode Filter = FilterMode.Bilinear;
         }
 
@@ -71,9 +71,9 @@ namespace MelonLoader.MelonStartScreen
         {
             [TomlPrecedingComment("Toggles the Loading Image")]
             internal bool Enabled = true;
-            [TomlPrecedingComment("If it should Scan for and Load Custom Loading Image (.gif | .png | .jpg | .jpeg)")]
+            [TomlPrecedingComment("If should Scan for and Load Custom Loading Image  ( true | false )")]
             internal bool ScanForCustomImage = true;
-            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Loading Image (Point | Bilinear | Trilinear)")]
+            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Loading Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
             internal FilterMode Filter = FilterMode.Bilinear;
         }
 

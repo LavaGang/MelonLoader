@@ -30,7 +30,7 @@
 
 ### v0.5.3 Open-Beta:
 
-1. Updated HarmonyX to v2.7.0.
+1. Updated HarmonyX to v2.8.0.
 2. Updated Tomlet to v3.1.2.
 3. Updated SharpZipLib to v1.3.3.
 4. Updated Il2CppAssemblyUnhollower to v0.4.17.1.
