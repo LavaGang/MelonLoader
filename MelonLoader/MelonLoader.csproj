@@ -51,12 +51,11 @@
     <Compile Include="Assertions\LemonAssertMapping.cs" />
     <Compile Include="Attributes\MelonIDAttribute.cs" />
     <Compile Include="Fixes\ForcedCultureInfo.cs" />
-    <Compile Include="Fixes\AccessToolsFix.cs" />
-    <Compile Include="Fixes\HarmonyMethodExtensionsFix.cs" />
     <Compile Include="Fixes\InstancePatchFix.cs" />
     <Compile Include="Fixes\ProcessFix.cs" />
     <Compile Include="GameVersionHandler.cs" />
     <Compile Include="InternalUtils\MelonStartScreen.cs" />
+    <Compile Include="Lemons\Cryptography\LemonSHA512.cs" />
     <Compile Include="Lemons\Cryptography\LemonSHA256.cs" />
     <Compile Include="Lemons\LemonAction.cs" />
     <Compile Include="Lemons\LemonArraySegment.cs" />

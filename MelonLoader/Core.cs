@@ -21,8 +21,6 @@ namespace MelonLoader
                 return 1;
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
-            Fixes.AccessToolsFix.Install();
-            Fixes.HarmonyMethodExtensionsFix.Install();
 
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();

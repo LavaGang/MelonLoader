@@ -85,14 +85,13 @@
 53. [StartScreen] ICall <2018.1 for UE.SystemInfo::GetGraphicsDeviceType.     (Credits to [Slaynash](https://github.com/Slaynash) :3)
 54. Added Additional Exception Catching to Il2CppUnityTls CL.
 55. Moved InstallUnityTlsInterface Signature Scanning from Bootstrap to Il2CppUnityTls CL.
-56. Fixed MissingMethodException Issue with HarmonyLib.AccessTools.
+56. Fixed MissingMethodException Issue with the static constructor HarmonyLib.AccessTools.
 57. Fixed MissingMethodException Issue with MelonUtils.SetCurrentDomainBaseDirectory.
 58. Added --melonloader.agfregex Launch Option to Force Regex used for Assembly Generation.
-59. Added LemonSHA256 because System.Security.Cryptography.SHA256 can have Missing Methods.
+59. Added LemonSHA256 because System.Security.Cryptography.SHA256 can be stripped.
 60. Fixed MissingMethodException Issue with MelonHandler.sha256.
 61. Fixed MissingMethodException Issue with MonoResolveManager.AddSearchDirectory.
-62. Fixed Issue with LemonSHA256.
-63. Fixed MissingMethodException Issue with HarmonyMethod and HarmonyMethodExtensions.
+62. Added LemonSHA512 because System.Security.Cryptography.SHA512 can be stripped.
 
 ---
 

@@ -235,9 +235,7 @@ namespace MelonLoader
         {
             if (methodInfo == null)
                 throw new ArgumentNullException(nameof(methodInfo));
-            HarmonyMethod returnval = new HarmonyMethod();
-            Fixes.HarmonyMethodExtensionsFix.HarmonyMethod_ImportMethod(returnval, methodInfo);
-            return returnval;
+            return new HarmonyMethod(methodInfo);
         }
 
 
@@ -246,35 +244,6 @@ namespace MelonLoader
             if (methodBase == null)
                 throw new ArgumentNullException(nameof(methodBase));
             return new DynamicMethodDefinition(methodBase);
-        }
-
-        public static void ForEachElement<T>(this List<T> _this, Action<T> action)
-        {
-            if ((_this == null)
-                || (_this.Count() <= 0)
-                || (action == null))
-                return;
-            foreach (T val in _this)
-                    action(val);
-        }
-
-        public static void ForEachElement<T>(this T[] _this, Action<T> action)
-        {
-            if ((_this == null)
-                || (_this.Length <= 0)
-                || (action == null))
-                return;
-            foreach (T val in _this)
-                    action(val);
-        }
-
-        private static FieldInfo Exception_innerException;
-        public static void SetInnerException(this Exception _this, Exception ex)
-        {
-            if (Exception_innerException == null)
-                Exception_innerException = typeof(Exception).GetField("_innerException", BindingFlags.NonPublic | BindingFlags.Instance);
-            if (Exception_innerException != null)
-                Exception_innerException.SetValue(_this, ex);
         }
 
         private static FieldInfo AppDomainSetup_application_base;
