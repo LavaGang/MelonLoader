@@ -15,7 +15,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             ObfuscationRegex = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegex;
             if (string.IsNullOrEmpty(ObfuscationRegex))
-                Version = RemoteAPI.Info.ObfuscationRegex;
+                ObfuscationRegex = RemoteAPI.Info.ObfuscationRegex;
         }
 
         internal void Save()
