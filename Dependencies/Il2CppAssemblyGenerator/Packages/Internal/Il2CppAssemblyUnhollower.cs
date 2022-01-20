@@ -55,8 +55,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 $"--unity={ Core.unitydependencies.Destination }",
                 $"--gameassembly={ Core.GameAssemblyPath }",
                 string.IsNullOrEmpty(Core.deobfuscationMap.Version) ? string.Empty : $"--rename-map={ Path.Combine(Core.deobfuscationMap.Destination, Core.deobfuscationMap.NewFileName) }",
-                string.IsNullOrEmpty(Core.deobfuscationMap.ObfuscationRegex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.ObfuscationRegex }",
-
+                string.IsNullOrEmpty(Core.deobfuscationMap.Regex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.Regex }",
                 "--add-prefix-to=ICSharpCode",
                 "--add-prefix-to=Newtonsoft",
                 "--add-prefix-to=TinyJson",

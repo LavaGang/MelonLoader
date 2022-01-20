@@ -4,7 +4,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class DeobfuscationMap : PackageBase
     {
-        internal string ObfuscationRegex = null;
+        internal string Regex = null;
 
         internal DeobfuscationMap()
         {
@@ -13,14 +13,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             URL = RemoteAPI.Info.MappingURL;
             Version = RemoteAPI.Info.MappingFileSHA512;
 
-            ObfuscationRegex = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegex;
-            if (string.IsNullOrEmpty(ObfuscationRegex))
-                ObfuscationRegex = RemoteAPI.Info.ObfuscationRegex;
+            Regex = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegex;
+            if (string.IsNullOrEmpty(Regex))
+                Regex = RemoteAPI.Info.ObfuscationRegex;
         }
 
         internal void Save()
         {
             Config.Values.DeobfuscationMapHash = Version;
+            Config.Values.DeobfuscationRegex = Regex;
             Config.Save();
         }
 

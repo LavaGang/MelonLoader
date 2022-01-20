@@ -92,6 +92,7 @@
 60. Fixed MissingMethodException Issue with MonoResolveManager.AddSearchDirectory.
 61. Added LemonSHA512 because System.Security.Cryptography.SHA512 can be stripped.
 62. Added LemonMD5 because System.Security.Cryptography.MD5 can be stripped.
+63. Fixed Issue with Assembly Generator where Deobfuscation Regex changes wouldn't induce Regeneration.
 
 ---
 

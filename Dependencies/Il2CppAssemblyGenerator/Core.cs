@@ -59,8 +59,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             MelonLogger.Msg($"Using Dumper Version: {(string.IsNullOrEmpty(dumper.Version) ? "null" : dumper.Version)}");
             MelonLogger.Msg($"Using Il2CppAssemblyUnhollower Version = {(string.IsNullOrEmpty(il2cppassemblyunhollower.Version) ? "null" : il2cppassemblyunhollower.Version)}");
             MelonLogger.Msg($"Using Unity Dependencies Version = {(string.IsNullOrEmpty(unitydependencies.Version) ? "null" : unitydependencies.Version)}");
-            if (!string.IsNullOrEmpty(deobfuscationMap.ObfuscationRegex))
-                MelonLogger.Msg($"Using Deobfuscation Regex = {deobfuscationMap.ObfuscationRegex}");
+            if (!string.IsNullOrEmpty(deobfuscationMap.Regex))
+                MelonLogger.Msg($"Using Deobfuscation Regex = {deobfuscationMap.Regex}");
 
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
             {
@@ -71,7 +71,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     return 1;
             }
 
-            // Check for Regex Change against Config
+            if (!AssemblyGenerationNeeded
+                && (
+                (string.IsNullOrEmpty(Config.Values.DeobfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.Regex))
+                || (!string.IsNullOrEmpty(Config.Values.DeobfuscationRegex) && string.IsNullOrEmpty(deobfuscationMap.Regex))
+                || (!string.IsNullOrEmpty(Config.Values.DeobfuscationRegex) && !string.IsNullOrEmpty(deobfuscationMap.Regex) && !Config.Values.DeobfuscationRegex.Equals(deobfuscationMap.Regex))))
+                AssemblyGenerationNeeded = true;
 
             string CurrentGameAssemblyHash;
             MelonLogger.Msg("Checking GameAssembly...");
