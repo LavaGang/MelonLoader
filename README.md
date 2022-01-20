@@ -29,11 +29,6 @@
 - [Wine / Steam Proton Usage](#wine--steam-proton-usage)
 - [Android & Oculus Quest Support (__WIP__)](https://melonwiki.xyz/#/android/general)
 
-| Nightly Builds: |
-| - |
-| [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
-| [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
-
 | Usage Guides: |
 | - |
 | [INSTALLER](#how-to-use-the-installer) |
@@ -43,6 +38,11 @@
 | - |
 | [TestPlugin](https://github.com/LavaGang/TestPlugin) |
 | [TestMod](https://github.com/LavaGang/TestMod) |
+
+| Nightly Builds: |
+| - |
+| [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
+| [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
 
 ---
 
