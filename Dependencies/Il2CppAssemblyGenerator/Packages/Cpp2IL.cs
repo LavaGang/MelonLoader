@@ -3,7 +3,7 @@ using System.IO;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
-    internal class Cpp2IL : DumperBase
+    internal class Cpp2IL : Models.ExecutablePackage
     {
         internal Cpp2IL()
         {
@@ -15,45 +15,22 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "2022.0.0";
 
-            Destination = Path.Combine(Core.BasePath, "Cpp2IL");
-            Output = Path.Combine(Destination, "cpp2il_out");
-            URL = $"https://github.com/SamboyCoding/Cpp2IL/releases/download/{Version}/Cpp2IL-{Version}-Windows-Netframework472.zip";
-            ExePath = Path.Combine(Destination, "Cpp2IL.exe"); 
+            Name = nameof(Cpp2IL);
+            Destination = Path.Combine(Core.BasePath, Name);
+            OutputFolder = Path.Combine(Destination, "cpp2il_out");
+            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-Windows-Netframework472.zip";
+            ExeFilePath = Path.Combine(Destination, $"{Name}.exe");
+            FilePath = Path.Combine(Core.BasePath, $"{Name}_{Version}.zip");
         }
-
-        private void Save()
-        {
-            Config.Values.DumperVersion = Version;
-            Config.Save();
-        }
-
-        private bool ShouldDownload() =>
-            string.IsNullOrEmpty(Config.Values.DumperVersion)
+        internal override bool ShouldSetup() 
+            => string.IsNullOrEmpty(Config.Values.DumperVersion) 
             || !Config.Values.DumperVersion.Equals(Version);
 
-        internal override void Cleanup() { }
-
-        internal override bool Download()
-        {
-            if (!ShouldDownload())
-            {
-                MelonLogger.Msg("Cpp2IL is up to date. No Download Needed.");
-                return true;
-            }
-            MelonLogger.Msg("Downloading Cpp2IL...");
-            if (base.Download())
-            {
-                Save();
-                return true;
-            }
-
-            ThrowInternalFailure("Failed to Download Cpp2IL!");
-            return false;
-        }
+        internal override void Save()
+            => Save(ref Config.Values.DumperVersion);
 
         internal override bool Execute()
         {
-            MelonLogger.Msg("Executing Cpp2IL...");
             if (Execute(new string[] {
                 MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
                 "--game-path",
@@ -68,7 +45,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             }))
                 return true;
 
-            ThrowInternalFailure("Failed to Execute Cpp2IL!");
             return false;
         }
     }

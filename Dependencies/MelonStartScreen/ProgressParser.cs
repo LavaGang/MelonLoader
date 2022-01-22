@@ -116,9 +116,9 @@ namespace MelonLoader.MelonStartScreen
                 @"Initialization - Extracting Il2CppAssemblyUnhollower"
             ),
             new AverageStepDuration(
-                @"Downloading Deobfuscation Map\.\.\.",
+                @"Downloading DeobfuscationMap\.\.\.",
                 500f,
-                @"Initialization - Downloading Deobfuscation Map"
+                @"Initialization - Downloading DeobfuscationMap"
             ),
             new AverageStepDuration(
                 @"Checking GameAssembly\.\.\.",

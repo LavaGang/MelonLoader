@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -17,9 +18,9 @@ namespace MelonLoader.InternalUtils
 
             if (RunMethod != null)
             {
-                DisableCloseButton();
+                DisableCloseButton(Process.GetCurrentProcess().MainWindowHandle);
                 int returnval = (int)RunMethod.Invoke(null, new object[0]);
-                EnableCloseButton();
+                EnableCloseButton(Process.GetCurrentProcess().MainWindowHandle);
                 MelonUtils.SetCurrentDomainBaseDirectory(MelonUtils.GameDirectory);
                 return returnval == 0;
             }
@@ -69,8 +70,8 @@ namespace MelonLoader.InternalUtils
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void EnableCloseButton();
+        private extern static void EnableCloseButton(IntPtr mainWindow);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void DisableCloseButton();
+        private extern static void DisableCloseButton(IntPtr mainWindow);
     }
 }

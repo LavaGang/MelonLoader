@@ -235,8 +235,8 @@ void InternalCalls::IIl2CppAssemblyGenerator::AddInternalCalls()
 void InternalCalls::IIl2CppAssemblyGenerator::ExecutablePackageBase::SetProcessId(int id) { Il2CppAssemblyGenerator::ProcessId = id; }
 void InternalCalls::IIl2CppAssemblyGenerator::ExecutablePackageBase::AddInternalCalls()
 {
-	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.Packages.PackageBase::ThrowInternalFailure", InternalCalls::MelonLogger::ThrowInternalFailure);
-	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.Packages.ExecutablePackageBase::SetProcessId", SetProcessId);
+	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.Packages.Models.PackageBase::ThrowInternalFailure", InternalCalls::MelonLogger::ThrowInternalFailure);
+	Mono::AddInternalCall("MelonLoader.Il2CppAssemblyGenerator.Packages.Models.ExecutablePackage::SetProcessId", SetProcessId);
 }
 #pragma endregion
 

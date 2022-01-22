@@ -51,14 +51,14 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="Packages\DumperBase.cs" />
-    <Compile Include="Packages\PackageBase.cs" />
-    <Compile Include="Packages\Internal\Cpp2IL.cs" />
-    <Compile Include="Packages\Internal\DeobfuscationMap.cs" />
-    <Compile Include="Packages\ExecutablePackageBase.cs" />
-    <Compile Include="Packages\Internal\Il2CppAssemblyUnhollower.cs" />
-    <Compile Include="Packages\Internal\Il2CppDumper.cs" />
-    <Compile Include="Packages\Internal\UnityDependencies.cs" />
+    <Compile Include="FileHandler.cs" />
+    <Compile Include="Packages\Cpp2IL.cs" />
+    <Compile Include="Packages\Il2CppAssemblyUnhollower.cs" />
+    <Compile Include="Packages\Il2CppDumper.cs" />
+    <Compile Include="Packages\Models\ExecutablePackage.cs" />
+    <Compile Include="Packages\Models\PackageBase.cs" />
+    <Compile Include="Packages\DeobfuscationMap.cs" />
+    <Compile Include="Packages\UnityDependencies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteAPI.cs" />
     <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj">

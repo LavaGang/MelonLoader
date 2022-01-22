@@ -49,8 +49,8 @@ public:
 		White = 15
 	};
 	static std::string ColorToAnsi(Color color, bool modecheck = true);
-	static void EnableCloseButton();
-	static void DisableCloseButton();
+	static void EnableCloseButton(HWND mainWindow);
+	static void DisableCloseButton(HWND mainWindow);
 	static BOOL WINAPI EventHandler(DWORD evt);
 	static void SetHandles();
 	static void NullHandles();

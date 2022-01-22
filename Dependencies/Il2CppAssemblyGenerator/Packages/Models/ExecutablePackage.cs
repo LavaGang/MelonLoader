@@ -7,37 +7,41 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace MelonLoader.Il2CppAssemblyGenerator.Packages
+namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
 {
-    internal class ExecutablePackageBase : PackageBase
+    internal class ExecutablePackage : PackageBase
     {
         internal static AutoResetEvent ResetEvent_Output;
         internal static AutoResetEvent ResetEvent_Error;
-        internal string ExePath = null;
-        internal string Output = null;
+        internal string OutputFolder;
+        internal string ExeFilePath;
 
         internal virtual void Cleanup()
         {
-            if (!Directory.Exists(Output))
+            if (!Directory.Exists(OutputFolder))
                 return;
-            Directory.Delete(Output, true);
+            Directory.Delete(OutputFolder, true);
         }
 
+        internal virtual bool Execute() => true;
         internal bool Execute(string[] args, bool parenthesize_args = true, Dictionary<string, string> environment = null)
         {
-            if (!Directory.Exists(Output))
-                Directory.CreateDirectory(Output);
-            if (!File.Exists(ExePath))
+            Cleanup();
+
+            if (!File.Exists(ExeFilePath))
             {
-                MelonLogger.Error(Path.GetFileName(ExePath) + " Doesn't Exist!");
+                MelonLogger.Error($"{ExeFilePath} does not Exist!");
+                ThrowInternalFailure($"Failed to Execute {Name}!");
                 return false;
             }
+
+            MelonLogger.Msg($"Executing {Name}...");
             try
             {
                 ResetEvent_Output = new AutoResetEvent(false);
                 ResetEvent_Error = new AutoResetEvent(false);
 
-                ProcessStartInfo processStartInfo = new ProcessStartInfo($"\"{ExePath.Replace("\"", "\\\"")}\"", // Replacing double quotes for Linux
+                ProcessStartInfo processStartInfo = new ProcessStartInfo($"\"{ExeFilePath.Replace("\"", "\\\"")}\"", // Replacing double quotes for Linux
                     parenthesize_args
                     ?
                     string.Join(" ", args.Where(s => !string.IsNullOrEmpty(s)).Select(it => "\"" + Regex.Replace(it, @"(\\+)$", @"$1$1") + "\""))
@@ -47,7 +51,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 processStartInfo.RedirectStandardOutput = true;
                 processStartInfo.RedirectStandardError = true;
                 processStartInfo.CreateNoWindow = true;
-                processStartInfo.WorkingDirectory = Path.GetDirectoryName(ExePath);
+                processStartInfo.WorkingDirectory = Path.GetDirectoryName(ExeFilePath);
 
                 if (environment != null)
                 {
@@ -57,7 +61,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                     }
                 }
 
-                MelonLogger.Msg("\"" + ExePath + "\" " + processStartInfo.Arguments);
+                MelonLogger.Msg("\"" + ExeFilePath + "\" " + processStartInfo.Arguments);
 
                 Process process = new Process();
                 process.StartInfo = processStartInfo;
@@ -77,7 +81,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 SetProcessId(0);
                 return process.ExitCode == 0;
             }
-            catch (Exception ex) { MelonLogger.Error(ex.ToString()); }
+            catch (Exception ex)
+            {
+                MelonLogger.Error(ex.ToString());
+                ThrowInternalFailure($"Failed to Execute {Name}!");
+            }
+
             return false;
         }
 
@@ -85,6 +94,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else MelonLogger.Error(e.Data); }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void SetProcessId(int id);
+        private extern static void SetProcessId(int id);
     }
 }

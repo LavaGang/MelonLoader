@@ -122,8 +122,19 @@ void Console::NullHandles()
 	SetStdHandle(STD_ERROR_HANDLE, NULL);
 }
 
-void Console::EnableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED); }
-void Console::DisableCloseButton() { if (!IsInitialized()) return; EnableMenuItem(Menu, SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED)); }
+void Console::EnableCloseButton(HWND mainWindow)
+{
+	if (IsInitialized())
+		EnableMenuItem(Menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
+	EnableMenuItem(GetSystemMenu(mainWindow, FALSE), SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
+}
+void Console::DisableCloseButton(HWND mainWindow)
+{
+	if (IsInitialized())
+		EnableMenuItem(Menu, SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED));
+	EnableMenuItem(GetSystemMenu(mainWindow, FALSE), SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED));
+}
+
 BOOL WINAPI Console::EventHandler(DWORD evt)
 {
 	switch (evt)
