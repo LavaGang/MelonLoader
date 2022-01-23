@@ -67,18 +67,20 @@ namespace MelonLoader
 
         private static int Start()
         {
+            bHaptics.Start();
+
+            MelonHandler.OnApplicationStart_Plugins();
+            MelonHandler.LoadMods();
+            MelonHandler.OnPreSupportModule();
+
             if (!SupportModule.Setup())
                 return 1;
 
             AddUnityDebugLog();
-            bHaptics.Start();
 
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
-            MelonHandler.OnApplicationStart_Plugins();
-            MelonHandler.LoadMods();
-            MelonStartScreen.DisplayModLoadIssuesIfNeeded();
-
             MelonHandler.OnApplicationStart_Mods();
+            //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
             return 0;
         }

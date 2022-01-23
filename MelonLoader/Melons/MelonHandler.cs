@@ -236,6 +236,11 @@ namespace MelonLoader
             }, true);
         }
 
+        internal static void OnPreSupportModule()
+        {
+            InvokeMelonMethod(ref _Plugins, x => x.OnPreSupportModule(), true);
+            InvokeMelonMethod(ref _Mods, x => x.OnPreSupportModule(), true);
+        }
         internal static void OnApplicationEarlyStart() => InvokeMelonMethod(ref _Plugins, x => x.OnApplicationEarlyStart(), true);
         internal static void OnApplicationQuit() => InvokeMelonMethod(x => x.OnApplicationQuit());
         internal static void OnFixedUpdate() => InvokeMelonMethod(ref _Mods, x => x.OnFixedUpdate());

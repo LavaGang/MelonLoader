@@ -95,6 +95,7 @@
 63. Fixed Issue with Assembly Generator where Deobfuscation Regex changes wouldn't induce Regeneration.
 64. Rewrote Package System in Assembly Generator.
 65. Fixed Issue with Main Window not having it's Close Button Disabled during Assembly Generation.
+66. Added OnPreSupportModule override for Plugins and Mods.
 
 ---
 

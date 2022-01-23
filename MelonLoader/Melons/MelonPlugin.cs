@@ -11,7 +11,7 @@ namespace MelonLoader
         public virtual void OnPreInitialization() { }
 
         /// <summary>
-        /// Runs after Game Initialization, before OnApplicationStart and (on Il2Cpp games) before Unhollower
+        /// Runs after Game Initialization, before OnApplicationStart and before Assembly Generation on Il2Cpp games
         /// </summary>
         public virtual void OnApplicationEarlyStart() { }
 

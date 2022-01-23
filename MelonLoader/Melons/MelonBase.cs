@@ -57,6 +57,11 @@ namespace MelonLoader
         public string ID { get; internal set; }
 
         /// <summary>
+        /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
+        /// </summary>
+        public virtual void OnPreSupportModule() { }
+
+        /// <summary>
         /// Runs after Game Initialization.
         /// </summary>
         public virtual void OnApplicationStart() { }
