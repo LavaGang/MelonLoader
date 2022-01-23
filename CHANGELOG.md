@@ -96,6 +96,7 @@
 64. Rewrote Package System in Assembly Generator.
 65. Fixed Issue with Main Window not having it's Close Button Disabled during Assembly Generation.
 66. Added OnPreSupportModule override for Plugins and Mods.
+67. Fixed Issue with Initialization of Il2Cpp Harmony Patcher.
 
 ---
 

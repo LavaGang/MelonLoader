@@ -57,8 +57,6 @@ namespace MelonLoader
                 if (!Il2CppAssemblyGenerator.Run())
                     return 1;
 
-                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
-
                 GameVersionHandler.Setup();
             }
 
@@ -76,6 +74,8 @@ namespace MelonLoader
             if (!SupportModule.Setup())
                 return 1;
 
+            if (MelonUtils.IsGameIl2Cpp())
+                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
             AddUnityDebugLog();
 
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
