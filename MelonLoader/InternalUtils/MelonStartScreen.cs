@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Semver;
 
 namespace MelonLoader.InternalUtils
 {
@@ -24,8 +25,14 @@ namespace MelonLoader.InternalUtils
 
         internal static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
-            // We don't support Unity versions under 2017.2.0 (yet?)
-            if (!MelonLaunchOptions.Core.StartScreen || !MelonUtils.GetUnityVersion().StartsWith("20") || MelonUtils.GetUnityVersion().StartsWith("2017.1"))
+            if (!MelonLaunchOptions.Core.StartScreen)
+                return functionToWaitForAsync();
+
+            // Doesn't support Unity versions under 2017.2.0 (yet?)
+            // Doesn't support Unity versions under 2018 (Crashing Issue)
+            SemVersion unityVersion = SemVersion.Parse(MelonUtils.GetUnityVersion());
+            SemVersion minimumVersion = new SemVersion(2018);
+            if (unityVersion < minimumVersion)
                 return functionToWaitForAsync();
 
             if (!Load())

@@ -97,6 +97,7 @@
 65. Fixed Issue with Main Window not having it's Close Button Disabled during Assembly Generation.
 66. Added OnPreSupportModule override for Plugins and Mods.
 67. Fixed Issue with Initialization of Il2Cpp Harmony Patcher.
+68. Temporarily Disabled Start Screen on Unity Versions lower than 2018.
 
 ---
 
