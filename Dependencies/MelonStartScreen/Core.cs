@@ -57,6 +57,7 @@ namespace MelonLoader.MelonStartScreen
             catch (Exception e)
             {
                 MelonLogger.Error(e);
+                ScreenRenderer.disabled = true;
                 return functionToWaitForAsync();
             }
 

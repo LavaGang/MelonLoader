@@ -35,43 +35,50 @@ namespace MelonLoader.MelonStartScreen
             if (disabled)
                 return;
 
-            MelonDebug.Msg("Initializing UIStyleValues");
-            UIStyleValues.Init();
-            MelonDebug.Msg("UIStyleValues Initialized");
-
-            if (UICustomization.VersionText.Enabled)
+            try
             {
-                TextGenerationSettings settings = new TextGenerationSettings();
-                settings.textAnchor = TextAnchor.MiddleCenter;
-                settings.color = UICustomization.VersionText.TextColor;
-                settings.generationExtents = new Vector2(540, 47.5f);
-                settings.richText = true;
-                settings.font = UIStyleValues.TextFont;
-                settings.pivot = new Vector2(0.5f, 0.5f);
-                settings.fontSize = 24;
-                settings.fontStyle = FontStyle.Bold;
-                settings.verticalOverflow = VerticalWrapMode.Overflow;
-                settings.scaleFactor = 1f;
-                settings.lineSpacing = 1f;
-                MelonDebug.Msg("TextGenerationSettings settings set");
+                MelonDebug.Msg("Initializing UIStyleValues");
+                UIStyleValues.Init();
+                MelonDebug.Msg("UIStyleValues Initialized");
 
-                string melonloaderText = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
-                    ? "<color=#FFCC4D>LemonLoader</color>"
-                    : "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>";
-                melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} v{BuildInfo.Version} Open-Beta", settings);
+                if (UICustomization.VersionText.Enabled)
+                {
+                    TextGenerationSettings settings = new TextGenerationSettings();
+                    settings.textAnchor = TextAnchor.MiddleCenter;
+                    settings.color = UICustomization.VersionText.TextColor;
+                    settings.generationExtents = new Vector2(540, 47.5f);
+                    settings.richText = true;
+                    settings.font = UIStyleValues.TextFont;
+                    settings.pivot = new Vector2(0.5f, 0.5f);
+                    settings.fontSize = 24;
+                    settings.fontStyle = FontStyle.Bold;
+                    settings.verticalOverflow = VerticalWrapMode.Overflow;
+                    settings.scaleFactor = 1f;
+                    settings.lineSpacing = 1f;
+                    MelonDebug.Msg("TextGenerationSettings settings set");
+
+                    string melonloaderText = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                        ? "<color=#FFCC4D>LemonLoader</color>"
+                        : "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>";
+                    melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} v{BuildInfo.Version} Open-Beta", settings);
+                }
+
+                if (UICustomization.ProgressBar.Enabled
+                    || UICustomization.ProgressText.Enabled)
+                    progressBar = new ProgressBar(width: 540, height: 36);
+
+                uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
+                MelonDebug.Msg("Graphics Device Type: " + graphicsDeviceType);
+                shouldCallWFLPAGT = NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" })
+                    && (graphicsDeviceType == /*DX11*/2 || graphicsDeviceType == /*DX12*/18)
+                    ? graphicsDeviceType : 0;
             }
-
-            if (UICustomization.ProgressBar.Enabled
-                || UICustomization.ProgressText.Enabled)
-                progressBar = new ProgressBar(width: 540, height: 36);
-
-            uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
-            MelonDebug.Msg("Graphics Device Type: " + graphicsDeviceType);
-            shouldCallWFLPAGT = NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" })
-                && (graphicsDeviceType == /*DX11*/2 || graphicsDeviceType == /*DX12*/18)
-                ? graphicsDeviceType : 0;
+            catch (Exception e)
+            {
+                MelonLogger.Error("Exception while init rendering: " + e);
+                disabled = true;
+            }
         }
-
 
         internal static unsafe void Render()
         {
@@ -117,6 +124,7 @@ namespace MelonLoader.MelonStartScreen
             catch (Exception e)
             {
                 MelonLogger.Error("Exception while rendering: " + e);
+                disabled = true;
             }
         }
 
