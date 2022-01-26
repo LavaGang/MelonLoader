@@ -65,6 +65,7 @@ namespace MelonLoader.CompatibilityLayers
                 return;
 
             MelonColorAttribute coloratt = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(Assembly);
+            MelonAuthorColorAttribute authorcoloratt = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(Assembly);
             MelonPriorityAttribute priorityatt = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(Assembly, true);
             MelonIDAttribute idatt = MelonUtils.PullAttributeFromAssembly<MelonIDAttribute>(Assembly, true);
 
@@ -75,6 +76,7 @@ namespace MelonLoader.CompatibilityLayers
                 Games = gameAttributes.ToArray(),
                 OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly),
                 ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
+                AuthorConsoleColor = (authorcoloratt == null) ? MelonLogger.DefaultTextColor : authorcoloratt.Color,
                 Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
                 Location = FilePath,
                 ID = (idatt == null) ? null : idatt.ID

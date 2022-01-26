@@ -15,28 +15,28 @@ namespace MelonLoader
             // Il2Cpp Unity Tls
             new ModuleListing("Il2CppUnityTls.dll", x =>
             {
-                x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
+                x.SetupType = SetupType.OnPreInitialization;
                 x.ShouldDelete = !MelonUtils.IsGameIl2Cpp();
             }),
 
             // Illusion Plugin Architecture
             new ModuleListing("IPA.dll", x =>
             {
-                x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
+                x.SetupType = SetupType.OnPreInitialization;
                 x.ShouldDelete = MelonUtils.IsGameIl2Cpp();
             }),
 
             // MuseDashModLoader
             new ModuleListing("MDML.dll", x =>
             {
-                x.ShouldLoad = x.SetupType == SetupType.OnPreInitialization;
+                x.SetupType = SetupType.OnPreInitialization;
                 x.ShouldDelete = !MelonUtils.IsMuseDash || MelonUtils.IsGameIl2Cpp();
             }),
 
             // Demeo Integration
             new ModuleListing("Demeo.dll", x =>
             {
-                x.ShouldLoad = x.SetupType == SetupType.OnApplicationStart;
+                x.SetupType = SetupType.OnApplicationStart;
                 x.ShouldDelete = !MelonUtils.IsDemeo || MelonUtils.IsGameIl2Cpp();
             }),
         };
@@ -66,21 +66,20 @@ namespace MelonLoader
 
                 try
                 {
-                    if (enumerator.Current.LoadSpecifier != null)
+                    if (enumerator.Current.LoadSpecifier == null)
+                        continue;
+
+                    ModuleListing.LoadSpecifierArgs args = new ModuleListing.LoadSpecifierArgs();
+                    enumerator.Current.LoadSpecifier(args);
+
+                    if (args.ShouldDelete)
                     {
-                        ModuleListing.LoadSpecifierArgs args = new ModuleListing.LoadSpecifierArgs();
-                        args.SetupType = setupType;
-                        enumerator.Current.LoadSpecifier(args);
-
-                        if (!args.ShouldLoad)
-                            continue;
-
-                        if (args.ShouldDelete)
-                        {
-                            File.Delete(ModulePath);
-                            continue;
-                        }
+                        File.Delete(ModulePath);
+                        continue;
                     }
+
+                    if (args.SetupType != setupType)
+                        continue;
 
                     Assembly assembly = Assembly.LoadFrom(ModulePath);
                     if (assembly == null)
@@ -108,6 +107,7 @@ namespace MelonLoader
             public MelonGameAttribute[] Games = null;
             public MelonOptionalDependenciesAttribute OptionalDependencies = null;
             public ConsoleColor ConsoleColor = MelonLogger.DefaultMelonColor;
+            public ConsoleColor AuthorConsoleColor = MelonLogger.DefaultTextColor;
             public int Priority = 0;
             public string Location = null;
             public string ID = null;
@@ -144,6 +144,7 @@ namespace MelonLoader
             instance.Location = creationData.Location;
             instance.Priority = creationData.Priority;
             instance.ConsoleColor = creationData.ConsoleColor;
+            instance.AuthorConsoleColor = creationData.AuthorConsoleColor;
             instance.HarmonyInstance = new HarmonyLib.Harmony(instance.Assembly.FullName);
 
             instance.ID = creationData.ID;
@@ -209,12 +210,9 @@ namespace MelonLoader
             internal class LoadSpecifierArgs
             {
                 internal SetupType SetupType = SetupType.OnPreInitialization;
-                internal bool ShouldLoad = false;
                 internal bool ShouldDelete = false;
             }
             internal Action<LoadSpecifierArgs> LoadSpecifier = null;
-            internal ModuleListing(string filename)
-                => FileName = filename;
             internal ModuleListing(string filename, Action<LoadSpecifierArgs> loadSpecifier)
             {
                 FileName = filename;
