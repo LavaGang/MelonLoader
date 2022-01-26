@@ -99,6 +99,7 @@
 67. Fixed Issue with Initialization of Il2Cpp Harmony Patcher.
 68. Temporarily Disabled Start Screen on Unity Versions lower than 2018.
 69. Improved Exception Catching on Start Screen.
+70. Added '{' and '}' to Assembly Verifier whitelist.
 
 ---
 
