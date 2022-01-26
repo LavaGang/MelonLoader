@@ -39,7 +39,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 $"--unity={ Core.unitydependencies.Destination }",
                 $"--gameassembly={ Core.GameAssemblyPath }",
                 string.IsNullOrEmpty(Core.deobfuscationMap.Version) ? string.Empty : $"--rename-map={ Core.deobfuscationMap.Destination }",
-                string.IsNullOrEmpty(Core.deobfuscationMap.Regex) ? string.Empty : $"--obf-regex={ Core.deobfuscationMap.Regex }",
+                string.IsNullOrEmpty(Core.deobfuscationRegex.Regex) ? string.Empty : $"--obf-regex={ Core.deobfuscationRegex.Regex }",
                 "--add-prefix-to=ICSharpCode",
                 "--add-prefix-to=Newtonsoft",
                 "--add-prefix-to=TinyJson",

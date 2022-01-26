@@ -18,9 +18,10 @@ namespace MelonLoader.InternalUtils
 
             if (RunMethod != null)
             {
-                DisableCloseButton(Process.GetCurrentProcess().MainWindowHandle);
+                IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
+                DisableCloseButton(windowHandle);
                 int returnval = (int)RunMethod.Invoke(null, new object[0]);
-                EnableCloseButton(Process.GetCurrentProcess().MainWindowHandle);
+                EnableCloseButton(windowHandle);
                 MelonUtils.SetCurrentDomainBaseDirectory(MelonUtils.GameDirectory);
                 return returnval == 0;
             }

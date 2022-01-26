@@ -4,8 +4,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class DeobfuscationMap : Models.PackageBase
     {
-        internal string Regex = null;
-
         internal DeobfuscationMap()
         {
             Name = nameof(DeobfuscationMap);
@@ -13,22 +11,24 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             Destination = FilePath;
             URL = RemoteAPI.Info.MappingURL;
             Version = RemoteAPI.Info.MappingFileSHA512;
-
-            Regex = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegex;
-            if (string.IsNullOrEmpty(Regex))
-                Regex = RemoteAPI.Info.ObfuscationRegex;
         }
 
         internal override bool ShouldSetup()
-            => !string.IsNullOrEmpty(Version)
-                && (string.IsNullOrEmpty(Config.Values.DeobfuscationMapHash) 
-                || !Config.Values.DeobfuscationMapHash.Equals(Version));
-
-        internal override void Save()
         {
-            Config.Values.DeobfuscationRegex = Regex;
-            Version = FileHandler.Hash(Destination);
-            Save(ref Config.Values.DeobfuscationMapHash);
+            if (string.IsNullOrEmpty(URL))
+                return false;
+            if (string.IsNullOrEmpty(Version))
+                return false;
+            else
+            {
+                if (string.IsNullOrEmpty(Config.Values.DeobfuscationMapHash))
+                    return true;
+                if (!Config.Values.DeobfuscationMapHash.Equals(Version))
+                    return true;
+            }
+            return false;
         }
+
+        internal override void Save() => Save(ref Config.Values.DeobfuscationMapHash);
     }
 }

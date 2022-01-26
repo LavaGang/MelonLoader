@@ -101,6 +101,9 @@
 69. Improved Exception Catching on Start Screen.
 70. Added '{' and '}' to Assembly Verifier whitelist.
 71. Fixed Issue with Melon Author Coloring.
+72. Fixed Regeneration Issue with Assembly Generator.
+73. Temporarily Disabled Start Screen on Unity Versions higher than 2020.3.21.
+74. Fixed Issue with Assembly Generator not Re-Enabling the Close Button on the Game Window.
 
 ---
 
