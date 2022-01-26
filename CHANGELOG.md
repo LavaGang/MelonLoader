@@ -103,7 +103,7 @@
 71. Added Melon Author Coloring and MelonAuthorColor Attribute.    (Credits to [adamdev](https://github.com/adamd3v) :D)
 72. Fixed Issue with Melon Author Coloring.
 73. Fixed Regeneration Issue with Assembly Generator.
-74. Temporarily Disabled Start Screen on Unity Versions higher than 2020.3.21.
+74. Temporarily Disabled Start Screen on Unity Versions higher than or equal to 2020.3.22.
 75. Fixed Issue with Assembly Generator not Re-Enabling the Close Button on the Game Window.
 
 ---
