@@ -38,6 +38,7 @@ namespace MelonLoader.MelonStartScreen
             Preferences.MelonPreferences_ReflectiveCategory cat = MelonPreferences.CreateCategory<T>(name, name);
             cat.SetFilePath(FilePath, printmsg: false);
             cat.SaveToFile(false);
+            cat.DestroyFileWatcher();
             return cat.GetValue<T>();
         }
         

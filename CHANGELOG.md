@@ -32,6 +32,7 @@
 ### v0.5.4 Open-Beta:
 
 1. Modified VerifyLoaderVersion Attribute to bring it in line with SemVer spec.
+2. Removed File Watchers from Start Screen Config.
 
 ---
 
