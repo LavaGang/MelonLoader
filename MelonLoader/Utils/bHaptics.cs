@@ -15,11 +15,19 @@ namespace MelonLoader
 
         internal static void Load()
         {
+            if (!ExePathCheck()
+                && !SteamLibraryCheck())
+            {
+                MelonDebug.Msg("bHaptics Player Not Installed!");
+                WasError = true;
+                return;
+            }
+
             string filename = "bHaptics.x" + (MelonUtils.IsGame32Bit() ? "86" : "64") + ".dll";
             string filepath = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), filename);
             if (!File.Exists(filepath))
             {
-                _waserror = true;
+                WasError = true;
                 return;
             }
 
@@ -30,17 +38,20 @@ namespace MelonLoader
                     throw new Exception("Failed to ReflectiveLoad bHaptics Native Library!");
                 MelonDebug.Msg("bHaptics Native Library Loaded!");
             }
-            catch (Exception ex) { MelonLogger.Warning($"bHaptics.Load Exception: {ex}"); WasError = true; }
-
-            if (!ExePathCheck()
-                && !SteamLibraryCheck())
+            catch (Exception ex)
             {
-                MelonDebug.Msg("bHaptics Player Not Installed!");
+                MelonLogger.Warning($"bHaptics.Load Exception: {ex}");
                 WasError = true;
                 return;
             }
 
             MelonDebug.Msg("bHaptics API Initialized!");
+        }
+
+        private static bool IsProcessRunning()
+        {
+
+            return false;
         }
 
         private static bool ExePathCheck()

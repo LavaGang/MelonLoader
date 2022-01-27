@@ -9,7 +9,7 @@ namespace MelonLoader
         /// <summary>
         /// Specified SemVersion.
         /// </summary>
-        public SemVersion SemVer { get; internal set; }
+        public SemVersion SemVer { get; private set; }
 
         /// <summary>
         /// Specified Version Major.
@@ -27,14 +27,9 @@ namespace MelonLoader
         public int Patch { get; }
 
         /// <summary>
-        /// Specified Version Revision.
-        /// </summary>
-        public int Revision { get; }
-
-        /// <summary>
         /// If Version Specified is a Minimum.
         /// </summary>
-        public bool IsMinimum { get; internal set; }
+        public bool IsMinimum { get; private set; }
 
 
         public VerifyLoaderVersionAttribute(int major, int minor, int patch) : this(new SemVersion(major, minor, patch), false) { }

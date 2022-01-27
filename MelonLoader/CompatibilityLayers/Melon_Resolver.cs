@@ -293,12 +293,9 @@ namespace MelonLoader.CompatibilityLayers
             if (verifyLoaderVersionAttribute == null)
                 return true;
 
-            if (CurrentMLVersion == null)
-                CurrentMLVersion = SemVersion.Parse(BuildInfo.Version);
-
             bool is_acceptable = verifyLoaderVersionAttribute.IsMinimum
-                ? (verifyLoaderVersionAttribute.SemVer <= CurrentMLVersion)
-                : (verifyLoaderVersionAttribute.SemVer == CurrentMLVersion);
+                ? (verifyLoaderVersionAttribute.SemVer <= BuildInfo.Version)
+                : (verifyLoaderVersionAttribute.SemVer == BuildInfo.Version);
 
             if (!is_acceptable)
             {
