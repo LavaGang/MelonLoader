@@ -1,5 +1,6 @@
 ### Version List:
 
+[v0.5.4 Open-Beta](#v054-open-beta)  
 [v0.5.3 Open-Beta](#v053-open-beta)  
 [v0.5.2 Open-Beta](#v052-open-beta)  
 [v0.5.1 Open-Beta](#v051-open-beta)  
@@ -25,6 +26,12 @@
 [v0.0.3 Closed-Beta](#v003-closed-beta)  
 [v0.0.2 Closed-Beta](#v002-closed-beta)  
 [v0.0.1 Closed-Beta](#v001-closed-beta)  
+
+---
+
+### v0.5.4 Open-Beta:
+
+1. Modified VerifyLoaderVersion Attribute to bring it in line with SemVer spec.
 
 ---
 

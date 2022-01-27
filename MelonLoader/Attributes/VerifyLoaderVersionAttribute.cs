@@ -37,14 +37,13 @@ namespace MelonLoader
         public bool IsMinimum { get; internal set; }
 
 
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch) : this($"{major}.{minor}.{patch}.0", false) { }
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch, bool is_minimum) : this($"{major}.{minor}.{patch}.0", is_minimum) { }
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision) : this($"{major}.{minor}.{patch}.{revision}", false) { }
-        public VerifyLoaderVersionAttribute(int major, int minor, int patch, int revision, bool is_minimum) : this($"{major}.{minor}.{patch}.{revision}", is_minimum) { }
+        public VerifyLoaderVersionAttribute(int major, int minor, int patch) : this(new SemVersion(major, minor, patch), false) { }
+        public VerifyLoaderVersionAttribute(int major, int minor, int patch, bool is_minimum) : this(new SemVersion(major, minor, patch), is_minimum) { }
         public VerifyLoaderVersionAttribute(string version) : this(version, false) { }
-        public VerifyLoaderVersionAttribute(string version, bool is_minimum)
+        public VerifyLoaderVersionAttribute(string version, bool is_minimum) : this(SemVersion.Parse(version), is_minimum) { }
+        public VerifyLoaderVersionAttribute(SemVersion semver, bool is_minimum)
         {
-            SemVer = SemVersion.Parse(version);
+            SemVer = semver;
             IsMinimum = is_minimum;
         }
     }
