@@ -25,14 +25,6 @@ jobs:
         with:
           name: MLCore
           path: Output/Debug/MelonLoader/
-#       - name: Copy MelonLoader Core Output
-#         shell: cmd
-#         run: |
-#           xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x86\MelonLoader\Dependencies\ /E /H /Y
-#           xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x86\MelonLoader\ /E /H /Y
-#           xcopy Output\Debug\MelonLoader\Dependencies Output\Debug\x64\MelonLoader\Dependencies\ /E /H /Y
-#           xcopy Output\Debug\MelonLoader\MelonLoader.* Output\Debug\x64\MelonLoader\ /E /H /Y
-#           rmdir /S /Q Output\Debug\MelonLoader >nul
   build_proxy_x86:
     runs-on: windows-latest
     steps:
@@ -61,11 +53,6 @@ jobs:
         with:
           name: MLProxyX64
           path: Proxy/Output/Release/x64/version.dll
-#       - name: Copy Proxy DLLs to Output
-#         shell: cmd
-#         run: |
-#           copy Proxy\Output\Release\x86\version.dll Output\Debug\x86\version.dll
-#           copy Proxy\Output\Release\x64\version.dll Output\Debug\x64\version.dll
   build_bootstrap_x86:
     runs-on: windows-latest
     steps:
@@ -94,12 +81,6 @@ jobs:
         with:
           name: MLBootstrapX64
           path: Bootstrap/Output/Release/x64/MelonLoader/Dependencies/Bootstrap.dll
-      
-#       - name: Copy Bootstrap Libs to Output
-#         shell: cmd
-#         run: |
-#           copy Bootstrap\Output\Release\x86\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x86\Melonloader\Dependencies\
-#           copy Bootstrap\Output\Release\x64\MelonLoader\Dependencies\Bootstrap.dll Output\Debug\x64\Melonloader\Dependencies\
   finalize_x64_zip:
     runs-on: windows-latest
     needs: [build_core, build_proxy_x64, build_bootstrap_x64]
@@ -192,3 +173,14 @@ jobs:
         with:
           name: MelonLoader.x86.CI
           path: ./Output/Debug/x86/*
+  cleanup_artifacts:
+    runs-on: windows-latest
+    needs: [finalize_x86_zip, finalize_x64_zip]
+    steps:
+      - uses: GeekyEggo/delete-artifact@v1.0.0
+        with:
+          name: MLCore
+            MLProxyX86
+            MLBootstrapX86
+            MLProxyX64
+            MLBootstrapX64
