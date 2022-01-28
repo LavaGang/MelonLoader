@@ -179,7 +179,8 @@ jobs:
     steps:
       - uses: GeekyEggo/delete-artifact@v1.0.0
         with:
-          name: MLCore
+          name: |
+            MLCore
             MLProxyX86
             MLBootstrapX86
             MLProxyX64
