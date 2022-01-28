@@ -40,6 +40,7 @@
 7. Improved UnityInformationHandler Exception Handling.
 8. Fixed Issue with Il2CppAssemblyUnhollower Initialization.
 9. Fixed Issue with Cpp2IL Package Cleanup.
+10. Fixed Comparison Issue with Semver.
 
 ---
 

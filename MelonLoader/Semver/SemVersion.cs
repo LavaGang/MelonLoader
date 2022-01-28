@@ -29,7 +29,7 @@ namespace Semver
 #if NETSTANDARD
                 RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
 #else
-                RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+                RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
 #endif
 
 #if !NETSTANDARD
