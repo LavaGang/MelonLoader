@@ -18,22 +18,21 @@ namespace MelonLoader.InternalUtils
 
         internal static void Setup()
         {
-            string gameDataPath = MelonUtils.GetGameDataDirectory();
             AssetsManager assetsManager = new AssetsManager();
+            ReadGameInfo(assetsManager);
+            assetsManager.UnloadAll();
 
-            ReadGameManager(gameDataPath, assetsManager);
             SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
 
             MelonLogger.Msg($"Game Name: {GameName}");
             MelonLogger.Msg($"Game Developer: {GameDeveloper}");
             MelonLogger.Msg($"Unity Version: {EngineVersion}");
             MelonLogger.Msg($"Game Version: {GameVersion}");
-
-            assetsManager.UnloadAll();
         }
 
-        private static void ReadGameManager(string gameDataPath, AssetsManager assetsManager)
+        private static void ReadGameInfo(AssetsManager assetsManager)
         {
+            string gameDataPath = MelonUtils.GetGameDataDirectory();
             AssetsFileInstance instance = null;
             try
             {
