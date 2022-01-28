@@ -91,12 +91,6 @@ namespace MelonLoader.CompatibilityLayers
         {
             infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(Assembly);
 
-            // Legacy Support
-            if (infoAttribute == null)
-                infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonModInfoAttribute>(Assembly)?.Convert();
-            if (infoAttribute == null)
-                infoAttribute = MelonUtils.PullAttributeFromAssembly<MelonPluginInfoAttribute>(Assembly)?.Convert();
-
             if ((infoAttribute == null) || (infoAttribute.SystemType == null))
             {
                 MelonLogger.Error($"No {((infoAttribute == null) ? "MelonInfoAttribute Found" : "Type given to MelonInfoAttribute")} in {FilePath}");
@@ -141,11 +135,11 @@ namespace MelonLoader.CompatibilityLayers
             MelonModGameAttribute[] legacymodgameAttributes = MelonUtils.PullAttributesFromAssembly<MelonModGameAttribute>(Assembly);
             if ((legacymodgameAttributes != null) && (legacymodgameAttributes.Length > 0))
                 foreach (MelonModGameAttribute legacyatt in legacymodgameAttributes)
-                    gameAttributes.Add(legacyatt.Convert());
+                    gameAttributes.Add(legacyatt/*.Convert()*/);
             MelonPluginGameAttribute[] legacyplugingameAttributes = MelonUtils.PullAttributesFromAssembly<MelonPluginGameAttribute>(Assembly);
             if ((legacyplugingameAttributes != null) && (legacyplugingameAttributes.Length > 0))
                 foreach (MelonPluginGameAttribute legacyatt in legacyplugingameAttributes)
-                    gameAttributes.Add(legacyatt.Convert());
+                    gameAttributes.Add(legacyatt/*.Convert()*/);
 
             if (!MelonUtils.CurrentGameAttribute.Universal && (gameAttributes.Count > 0))
             {

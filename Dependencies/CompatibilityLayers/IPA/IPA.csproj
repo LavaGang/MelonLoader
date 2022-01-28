@@ -41,7 +41,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Resolver.cs" />
+    <Compile Include="IPAPluginWrapper.cs" />
     <Compile Include="IPA\IEnhancedPlugin.cs" />
     <Compile Include="IPA\IPlugin.cs" />
     <Compile Include="IPA\ModPrefs.cs" />

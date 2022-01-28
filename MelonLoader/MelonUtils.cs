@@ -15,6 +15,7 @@ using MelonLoader.TinyJSON;
 using MelonLoader.InternalUtils;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using MelonLoader.Lemons.Cryptography;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -43,13 +44,18 @@ namespace MelonLoader
             IsDemeo = (UnityInformationHandler.GameDeveloper.Equals("Resolution Games") && UnityInformationHandler.GameName.Equals("Demeo"));
             IsMuseDash = (UnityInformationHandler.GameDeveloper.Equals("PeroPeroGames") && UnityInformationHandler.GameName.Equals("Muse Dash"));
             IsBONEWORKS = (UnityInformationHandler.GameDeveloper.Equals("Stress Level Zero") && UnityInformationHandler.GameName.Equals("BONEWORKS"));
-            Main.IsBoneworks = IsBONEWORKS;
+
+            CurrentPlatform = IsGame32Bit() ? MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86 : MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64; // Temporarily
+
+            CurrentDomain = IsGameIl2Cpp() ? MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP : MelonPlatformDomainAttribute.CompatibleDomains.MONO;
         }
 
         public static string BaseDirectory { get; private set; }
         public static string GameDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
         public static string UserLibsDirectory { get; private set; }
+        public static MelonPlatformAttribute.CompatiblePlatforms CurrentPlatform { get; private set; }
+        public static MelonPlatformDomainAttribute.CompatibleDomains CurrentDomain { get; private set; }
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
         public static bool IsBONEWORKS { get; private set; }
         public static bool IsDemeo { get; private set; }
@@ -135,6 +141,16 @@ namespace MelonLoader
             };
         }
 
+        public static string ComputeSimpleSHA256Hash(string filePath)
+        {
+            byte[] byteHash = LemonSHA256.ComputeSHA256Hash(File.ReadAllBytes(filePath));
+            string finalHash = string.Empty;
+            foreach (byte b in byteHash)
+                finalHash += b.ToString("x2");
+
+            return finalHash;
+        }
+
         public static T ParseJSONStringtoStruct<T>(string jsonstr)
         {
             if (string.IsNullOrEmpty(jsonstr))
@@ -170,25 +186,31 @@ namespace MelonLoader
                 return null;
 
             Type requestedType = typeof(T);
+            string requestedAssemblyName = requestedType.Assembly.GetName().Name;
             List<T> output = new List<T>();
             foreach (Attribute att in att_tbl)
             {
                 Type attType = att.GetType();
                 string attAssemblyName = attType.Assembly.GetName().Name;
-                string requestedAssemblyName = requestedType.Assembly.GetName().Name;
 
                 if ((attType == requestedType)
-                    || attType.FullName.Equals(requestedType.FullName)
+                    || IsTypeEqualToFullName(attType, requestedType.FullName)
                     || ((attAssemblyName.Equals("MelonLoader")
                         || attAssemblyName.Equals("MelonLoader.ModHandler"))
                         && (requestedAssemblyName.Equals("MelonLoader")
                         || requestedAssemblyName.Equals("MelonLoader.ModHandler"))
-                        && attType.Name.Equals(requestedType.Name)))
+                        && IsTypeEqualToName(attType, requestedType.Name)))
                     output.Add(att as T);
             }
 
             return output.ToArray();
         }
+
+        public static bool IsTypeEqualToName(Type type1, string type2)
+            => type1.Name == type2 || (type1 != typeof(object) && IsTypeEqualToName(type1.BaseType, type2));
+
+        public static bool IsTypeEqualToFullName(Type type1, string type2)
+            => type1.FullName == type2 || (type1 != typeof(object) && IsTypeEqualToFullName(type1.BaseType, type2));
 
         public static IEnumerable<Type> GetValidTypes(this Assembly asm)
             => GetValidTypes(asm, null);

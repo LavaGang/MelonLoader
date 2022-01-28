@@ -14,7 +14,7 @@ namespace MelonLoader.CompatibilityLayers
             // To-Do:
             // Detect if MuseDashModLoader is already Installed
             // Point AssemblyResolveInfo to already installed MuseDashModLoader Assembly
-            // Point GetResolverFromAssembly to Dummy MelonCompatibilityLayer.Resolver
+            // Inject Custom Resolver
 
             string[] assembly_list =
             {
@@ -25,20 +25,40 @@ namespace MelonLoader.CompatibilityLayers
             foreach (string assemblyName in assembly_list)
                 MonoResolveManager.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 
-            MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
+            MelonBase.CustomMelonResolvers += Resolve;
         }
 
-        private static MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
+        private MelonBase[] Resolve(Assembly asm)
         {
-            IEnumerable<Type> mod_types = assembly.GetValidTypes(x =>
+            IEnumerable<Type> modTypes = asm.GetValidTypes(x =>
             {
                 Type[] interfaces = x.GetInterfaces();
                 return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IMod));  // To-Do: Change to Type Reflection based on Setup
             });
-            if ((mod_types == null) || !mod_types.Any())
+            if ((modTypes == null) || !modTypes.Any())
                 return null;
 
-            return new MuseDashModLoader_Resolver(assembly, filepath, mod_types);
+            return modTypes.Select(x => LoadMod(asm, x)).ToArray();
+        }
+
+        private MelonBase LoadMod(Assembly asm, Type modType)
+        {
+            var modInstance = Activator.CreateInstance(modType) as IMod;
+
+            var modName = modInstance.Name;
+
+            if (string.IsNullOrEmpty(modName))
+                modName = modType.FullName;
+
+            var modVersion = asm.GetName().Version.ToString();
+            if (string.IsNullOrEmpty(modVersion) || modVersion.Equals("0.0.0.0"))
+                modVersion = "1.0.0.0";
+
+            var melon = MelonBase.CreateWrapper<MuseDashModWrapper>(asm, modName, modVersion);
+            melon.modInstance = modInstance;
+            ModLoader.ModLoader.mods.Add(modInstance);
+            ModLoader.ModLoader.LoadDependency(asm);
+            return melon;
         }
     }
 }

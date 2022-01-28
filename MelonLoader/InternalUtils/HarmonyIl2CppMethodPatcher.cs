@@ -347,7 +347,7 @@ namespace MelonLoader.InternalUtils
         {
             MelonLogger.Instance loggerInstance = null;
 
-            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonHandler._Plugins.ToArray());
+            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonPlugin._registeredMelons.ToArray());
             while (PluginEnumerator.MoveNext())
                 if (criterion(PluginEnumerator.Current))
                 {
@@ -357,7 +357,7 @@ namespace MelonLoader.InternalUtils
 
             if (loggerInstance == null)
             {
-                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonHandler._Mods.ToArray());
+                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonMod._registeredMelons.ToArray());
                 while (ModEnumerator.MoveNext())
                     if (criterion(ModEnumerator.Current))
                     {
