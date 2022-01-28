@@ -22,9 +22,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             ExeFilePath = Path.Combine(Destination, $"{Name}.exe");
             FilePath = Path.Combine(Core.BasePath, $"{Name}_{Version}.zip");
         }
+
         internal override bool ShouldSetup() 
             => string.IsNullOrEmpty(Config.Values.DumperVersion) 
             || !Config.Values.DumperVersion.Equals(Version);
+
+        internal override void Cleanup() { }
 
         internal override void Save()
             => Save(ref Config.Values.DumperVersion);
