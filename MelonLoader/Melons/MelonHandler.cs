@@ -39,6 +39,7 @@ namespace MelonLoader
 
             var files = Directory.GetFiles(path, "*.dll");
             var melons = new List<T>();
+
             foreach (var f in files)
             {
                 var fileMelons = MelonBase.Load(f, out MelonLoadErrorCodes errorCode);
