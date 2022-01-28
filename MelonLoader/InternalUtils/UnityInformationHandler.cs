@@ -20,7 +20,7 @@ namespace MelonLoader.InternalUtils
         {
             string gameDataPath = MelonUtils.GetGameDataDirectory();
             AssetsManager assetsManager = new AssetsManager();
-            assetsManager.LoadIncludedLargeClassPackage();
+            assetsManager.LoadIncludedClassPackage();
 
             ReadGameManager(gameDataPath, assetsManager);
             SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
@@ -56,7 +56,18 @@ namespace MelonLoader.InternalUtils
                 if (assetFiles.Count > 0)
                 {
                     AssetFileInfoEx playerSettings = assetFiles.First();
-                    AssetTypeInstance assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
+                    AssetTypeInstance assetTypeInstance = null;
+                    try
+                    {
+                        assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
+                    }
+                    catch
+                    {
+                        assetsManager.LoadIncludedLargeClassPackage();
+                        assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
+                        assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
+                    }
+
                     if (assetTypeInstance != null)
                     {
                         AssetTypeValueField playerSettings_baseField = assetTypeInstance.GetBaseField();
