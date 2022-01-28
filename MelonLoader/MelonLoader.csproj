@@ -271,6 +271,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\classdata.tpk" />
+    <None Include="Resources\classdata_large.tpk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

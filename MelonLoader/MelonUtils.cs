@@ -36,7 +36,7 @@ namespace MelonLoader
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
-            UnityInformationHandler.Setup();
+            //UnityInformationHandler.Setup();
 
             CurrentGameAttribute = new MelonGameAttribute(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName);
 
@@ -306,10 +306,18 @@ namespace MelonLoader
 
         public static ClassDatabasePackage LoadIncludedClassPackage(this AssetsManager assetsManager)
         {
-            MemoryStream stream = new MemoryStream(Properties.Resources.classdata);
-            ClassDatabasePackage returnval = assetsManager.LoadClassPackage(stream);
-            stream.Close();
-            return returnval;
+            ClassDatabasePackage classPackage = null;
+            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata))
+                classPackage = assetsManager.LoadClassPackage(mstream);
+            return classPackage;
+        }
+
+        public static ClassDatabasePackage LoadIncludedLargeClassPackage(this AssetsManager assetsManager)
+        {
+            ClassDatabasePackage classPackage = null;
+            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata))
+                classPackage = assetsManager.LoadClassPackage(mstream);
+            return classPackage;
         }
 
 

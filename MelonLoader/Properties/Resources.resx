@@ -121,4 +121,7 @@
   <data name="classdata" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\classdata.tpk;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="classdata_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\classdata_large.tpk;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

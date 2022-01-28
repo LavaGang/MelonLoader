@@ -37,6 +37,7 @@
 4. Implemented [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET).
 5. Rewrote Unity Information Handling.
 6. Fixed Issue with Exception Logging on Older Mono versions.
+7. Improved UnityInformationHandler Exception Handling.
 
 ---
 
