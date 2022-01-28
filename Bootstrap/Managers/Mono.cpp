@@ -25,6 +25,7 @@ HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
 Mono::Domain* Mono::domain = NULL;
 bool Mono::IsOldMono = false;
+Mono::Method* Mono::ToStringMethod = NULL;
 
 #define MONODEF(fn) Mono::Exports::fn##_t Mono::Exports::fn = NULL;
 
@@ -305,6 +306,7 @@ bool Mono::Exports::Initialize()
 	MONODEF(mono_domain_assembly_open)
 	MONODEF(mono_assembly_get_image)
 	MONODEF(mono_class_from_name)
+	MONODEF(mono_class_get_name)
 	MONODEF(mono_class_get_method_from_name)
 	MONODEF(mono_string_to_utf8)
 	MONODEF(mono_string_new)
@@ -354,7 +356,6 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_array_addr_with_size)
 		MONODEF(mono_array_length)
 		MONODEF(mono_metadata_string_heap)
-		MONODEF(mono_class_get_name)
 	}
 	else
 		MONODEF(mono_jit_init_version)
@@ -364,24 +365,29 @@ bool Mono::Exports::Initialize()
 	return Assertion::ShouldContinue;
 }
 
-Mono::String* Mono::ObjectToString(Object* obj)
+Mono::String* Mono::ExceptionToString(Object* obj)
 {
 	if (!IsOldMono)
 		return Exports::mono_object_to_string(obj, NULL);
-	Class* objClass = Exports::mono_object_get_class(obj);
-	if (objClass == NULL)
+
+	if (ToStringMethod == NULL)
+	{
+		Assembly* mscorlib = Exports::mono_domain_assembly_open(domain, "mscorlib");
+		Image* mscorlib_image = Exports::mono_assembly_get_image(mscorlib);
+		Class* object_class = Exports::mono_class_from_name(mscorlib_image, "System", "Exception");
+		ToStringMethod = Exports::mono_class_get_method_from_name(object_class, "ToString", NULL);
+	}
+	if (ToStringMethod == NULL)
 		return NULL;
-	Method* method = Exports::mono_class_get_method_from_name(objClass, "ToString", NULL);
-	if (method == NULL)
-		return NULL;
-	return (String*)Exports::mono_runtime_invoke(method, obj, NULL, NULL);
+
+	return (String*)Exports::mono_runtime_invoke(ToStringMethod, obj, NULL, NULL);
 }
 
 void Mono::LogException(Mono::Object* exceptionObject, bool shouldThrow)
 {
 	if (exceptionObject == NULL)
 		return;
-	String* returnstr = ObjectToString(exceptionObject);
+	String* returnstr = ExceptionToString(exceptionObject);
 	if (returnstr == NULL)
 		return;
 	const char* returnstrc = Exports::mono_string_to_utf8(returnstr);

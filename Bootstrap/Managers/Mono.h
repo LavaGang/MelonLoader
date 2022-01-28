@@ -63,13 +63,14 @@ public:
 	static char* ConfigPath;
 	static char* ConfigPathMono;
 	static char* MonoConfigPathMono;
+
 	static bool Initialize();
 	static bool Load();
 	static bool SetupPaths();
 	static void InstallAssemblyHooks();
 	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
-	static String* ObjectToString(Object* obj);
+	static String* ExceptionToString(Object* obj);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 	static void Free(void* ptr);
 	static std::string CheckFolderName(std::string folder_name);
@@ -278,6 +279,7 @@ private:
 	static const char* LibNames[];
 	static const char* FolderNames[];
 	static HMODULE PosixHelper;
+	static Method* ToStringMethod;
 
 	static void ParseEnvOption(const char* name);
 };
