@@ -14,12 +14,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
-      - name: Run Nuget Restore
-        shell: cmd
-        run: msbuild -t:Restore
       - name: Build Melonloader Core
         shell: cmd
-        run: msbuild -t:Rebuild -p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
+        run: msbuild /restore /t:Rebuild /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
       - name: Upload core artifact
         uses: actions/upload-artifact@v2.3.1
         with:
