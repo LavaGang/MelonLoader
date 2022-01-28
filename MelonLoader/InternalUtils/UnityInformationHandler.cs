@@ -55,7 +55,7 @@ namespace MelonLoader.InternalUtils
                 List<AssetFileInfoEx> assetFiles = instance.table.GetAssetsOfType(129);
                 if (assetFiles.Count > 0)
                 {
-                    AssetFileInfoEx playerSettings = instance.table.GetAssetsOfType(129).First();
+                    AssetFileInfoEx playerSettings = assetFiles.First();
                     AssetTypeInstance assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
                     if (assetTypeInstance != null)
                     {
