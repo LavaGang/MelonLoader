@@ -20,7 +20,7 @@ namespace MelonLoader.InternalUtils
         {
             string gameDataPath = MelonUtils.GetGameDataDirectory();
             AssetsManager assetsManager = new AssetsManager();
-            assetsManager.LoadIncludedClassPackage();
+            assetsManager.LoadIncludedLargeClassPackage();
 
             ReadGameManager(gameDataPath, assetsManager);
             SetDefaultConsoleTitleWithGameName(GameName, GameVersion);

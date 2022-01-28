@@ -315,7 +315,7 @@ namespace MelonLoader
         public static ClassDatabasePackage LoadIncludedLargeClassPackage(this AssetsManager assetsManager)
         {
             ClassDatabasePackage classPackage = null;
-            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata))
+            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata_large))
                 classPackage = assetsManager.LoadClassPackage(mstream);
             return classPackage;
         }
