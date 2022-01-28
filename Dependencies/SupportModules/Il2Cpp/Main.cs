@@ -121,7 +121,7 @@ namespace MelonLoader.Support
 
         private static void InitializeUnityVersion()
         {
-            string unityVersion = string.Copy(MelonUtils.GetUnityVersion());
+            string unityVersion = InternalUtils.UnityInformationHandler.GameVersion;
             if (string.IsNullOrEmpty(unityVersion))
                 return;
             string[] unityVersionSplit = unityVersion.Split('.');

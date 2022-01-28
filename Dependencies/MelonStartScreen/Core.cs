@@ -1,5 +1,5 @@
 ﻿using MelonLoader.MelonStartScreen.NativeUtils;
-using MelonLoader.MelonStartScreen.NativeUtils.PEParser;
+using MelonLoader.NativeUtils.PEParser;
 using System;
 using System.Diagnostics;
 using System.IO;

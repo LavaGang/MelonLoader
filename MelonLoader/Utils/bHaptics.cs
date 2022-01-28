@@ -15,19 +15,11 @@ namespace MelonLoader
 
         internal static void Load()
         {
-            if (!ExePathCheck()
-                && !SteamLibraryCheck())
-            {
-                MelonDebug.Msg("bHaptics Player Not Installed!");
-                WasError = true;
-                return;
-            }
-
             string filename = "bHaptics.x" + (MelonUtils.IsGame32Bit() ? "86" : "64") + ".dll";
             string filepath = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), filename);
             if (!File.Exists(filepath))
             {
-                WasError = true;
+                _waserror = true;
                 return;
             }
 
@@ -38,20 +30,17 @@ namespace MelonLoader
                     throw new Exception("Failed to ReflectiveLoad bHaptics Native Library!");
                 MelonDebug.Msg("bHaptics Native Library Loaded!");
             }
-            catch (Exception ex)
+            catch (Exception ex) { MelonLogger.Warning($"bHaptics.Load Exception: {ex}"); WasError = true; }
+
+            if (!ExePathCheck()
+                && !SteamLibraryCheck())
             {
-                MelonLogger.Warning($"bHaptics.Load Exception: {ex}");
+                MelonDebug.Msg("bHaptics Player Not Installed!");
                 WasError = true;
                 return;
             }
 
             MelonDebug.Msg("bHaptics API Initialized!");
-        }
-
-        private static bool IsProcessRunning()
-        {
-
-            return false;
         }
 
         private static bool ExePathCheck()
@@ -75,7 +64,7 @@ namespace MelonLoader
         {
             if (_waserror)
                 return;
-            try { NativeLib.Initialise(Marshal.StringToHGlobalAnsi(BuildInfo.Name.Replace(" ", "_")), Marshal.StringToHGlobalAnsi(MelonUtils.GameName.Replace(" ", "_"))); }
+            try { NativeLib.Initialise(Marshal.StringToHGlobalAnsi(BuildInfo.Name.Replace(" ", "_")), Marshal.StringToHGlobalAnsi(InternalUtils.UnityInformationHandler.GameName.Replace(" ", "_"))); }
             catch (Exception ex) { MelonLogger.Warning($"bHaptics.Start Exception: {ex}"); WasError = true; return; }
             MelonLogger.Msg("bHaptics Support Initialized!");
         }

@@ -1,10 +1,9 @@
-﻿using MelonLoader;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using MelonLoader.NativeUtils;
 
 namespace MelonLoader.MelonStartScreen.NativeUtils
 {
@@ -17,16 +16,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
             currentFlags |= MelonUtils.IsGameIl2Cpp() ? NativeSignatureFlags.Il2Cpp : NativeSignatureFlags.Mono;
             MelonDebug.Msg("Current Unity flags: " + (uint)currentFlags);
 
-            string currentUnityVersion = MelonUtils.GetUnityVersion();
-            int splitIndex = currentUnityVersion.IndexOf('f');
-            if (splitIndex == -1)
-                splitIndex = currentUnityVersion.IndexOf('p');
-            if (splitIndex > 0)
-                currentUnityVersion = currentUnityVersion.Substring(0, splitIndex);
-            MelonDebug.Msg("Unity version: " + currentUnityVersion);
-
-
-
+            string currentUnityVersion = InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType();
             string moduleName = "UnityPlayer.dll";
 #if LINUX
             // TODO

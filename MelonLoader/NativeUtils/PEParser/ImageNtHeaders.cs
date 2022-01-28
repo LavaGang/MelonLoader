@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MelonLoader.MelonStartScreen.NativeUtils.PEParser
+namespace MelonLoader.NativeUtils.PEParser
 {
     [StructLayout(LayoutKind.Explicit)]
-    internal struct ImageNtHeaders
+    public struct ImageNtHeaders
     {
         [FieldOffset(0)]
         public uint signature;

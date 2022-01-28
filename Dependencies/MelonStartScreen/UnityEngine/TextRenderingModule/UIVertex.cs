@@ -53,17 +53,17 @@ namespace UnityEngine
 
         unsafe static UIVertexWrapper()
         {
-            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2020.2.0", "2021.1.0" }))
+            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new string[] { "2020.2.0", "2021.1.0" }))
             {
                 mode = 2;
                 sizeOfElement = sizeof(UIVertex_2020);
             }
-            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2018.1.0" }))
+            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new string[] { "2018.1.0" }))
             {
                 mode = 1;
                 sizeOfElement = sizeof(UIVertex_2018);
             }
-            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2017.2.0" }))
+            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new string[] { "2017.2.0" }))
             {
                 mode = 0;
                 sizeOfElement = sizeof(UIVertex_2017);

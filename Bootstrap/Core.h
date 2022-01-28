@@ -24,7 +24,7 @@ public:
 	static const char* GetFileInfoProductName(const char* path);
 	static const char* GetFileInfoProductVersion(const char* path);
 	static std::string GetVersionStr();
-	static std::string GetVersionStrWithGameName(const char* GameVersion = NULL);
+	static std::string GetVersionStrWithGameName(const char* GameName, const char* GameVersion = NULL);
 	static void SetBasePath();
 	static bool IsRunningInWine() { return ((wine_get_version == NULL) ? false : true); }
 

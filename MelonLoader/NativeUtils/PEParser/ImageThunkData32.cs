@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MelonLoader.MelonStartScreen.NativeUtils.PEParser
+namespace MelonLoader.NativeUtils.PEParser
 {
     [StructLayout(LayoutKind.Explicit)]
-    internal struct ImageThunkData32
+    public struct ImageThunkData32
     {
         [FieldOffset(0)]
         public uint forwarderString;

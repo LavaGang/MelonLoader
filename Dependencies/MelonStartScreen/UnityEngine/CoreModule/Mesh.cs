@@ -31,17 +31,17 @@ namespace UnityEngine
             m_set_triangles = UnityInternals.GetMethod(InternalClassPointerStore<Mesh>.NativeClassPtr, "set_triangles", "System.Void", "System.Int32[]");
             m_RecalculateBounds = UnityInternals.GetMethod(InternalClassPointerStore<Mesh>.NativeClassPtr, "RecalculateBounds", "System.Void");
 
-            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2020.1.0" }))
+            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new string[] { "2020.1.0" }))
             {
                 m_SetArrayForChannelImpl_2020 = UnityInternals.ResolveICall<SetArrayForChannelImpl_2020>("UnityEngine.Mesh::SetArrayForChannelImpl");
                 type_SetArrayForChannelImpl = 2;
             }
-            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2019.3.0" }))
+            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new string[] { "2019.3.0" }))
             {
                 m_SetArrayForChannelImpl_2019 = UnityInternals.ResolveICall<SetArrayForChannelImpl_2019>("UnityEngine.Mesh::SetArrayForChannelImpl");
                 type_SetArrayForChannelImpl = 1;
             }
-            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new string[] { "2017.1.0" }))
+            else if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new string[] { "2017.1.0" }))
             {
                 m_SetArrayForChannelImpl_2017 = UnityInternals.ResolveICall<SetArrayForChannelImpl_2017>("UnityEngine.Mesh::SetArrayForChannelImpl");
                 type_SetArrayForChannelImpl = 0;

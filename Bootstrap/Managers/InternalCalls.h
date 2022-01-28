@@ -36,11 +36,8 @@ public:
 		static bool IsOldMono();
 		static Mono::String* GetApplicationPath();
 		static Mono::String* GetBaseDirectory();
-		static Mono::String* GetGameName();
-		static Mono::String* GetGameDeveloper();
 		static Mono::String* GetGameDirectory();
 		static Mono::String* GetGameDataDirectory();
-		static Mono::String* GetUnityVersion();
 		static Mono::String* GetManagedDirectory();
 		static Mono::String* GetHashCode();
 		static void SCT(Mono::String* title);
@@ -50,11 +47,11 @@ public:
 		static Mono::ReflectionAssembly* CastManagedAssemblyPtr(void* ptr);
 	};
 
-	class GameVersionHandler
+	class UnityInformationHandler
 	{
 	public:
 		static void AddInternalCalls();
-		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion);
+		static void SetDefaultConsoleTitleWithGameName(Mono::String* GameName, Mono::String* GameVersion);
 	};
 
 	class IIl2CppAssemblyGenerator

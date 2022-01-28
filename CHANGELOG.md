@@ -33,6 +33,9 @@
 
 1. Modified VerifyLoaderVersion Attribute to bring it in line with SemVer spec.
 2. Removed File Watchers from Start Screen Config.
+3. Removed Manual Parsing for Game Information.
+4. Implemented [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET).
+5. Rewrote Unity Information Handling.
 
 ---
 

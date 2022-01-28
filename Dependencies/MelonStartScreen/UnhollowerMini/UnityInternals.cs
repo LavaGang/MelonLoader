@@ -31,7 +31,7 @@ namespace UnhollowerMini
             {
                 domain = mono_domain_get();
 
-                string unityVersion = MelonUtils.GetUnityVersion();
+                string unityVersion = MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType();
 
                 MonoClass* testclass = (MonoClass*)Marshal.AllocHGlobal(sizeof(MonoClass));
                 testclass->applyZeroes();

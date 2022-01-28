@@ -214,7 +214,6 @@ namespace MelonLoader.CompatibilityLayers
             if (gameVersionAttributes.Count <= 0)
                 return true;
 
-            string game_version = GameVersionHandler.Version;
             bool is_compatible = false;
             for (int i = 0; i < gameVersionAttributes.Count; i++)
             {
@@ -223,7 +222,7 @@ namespace MelonLoader.CompatibilityLayers
                     continue;
 
                 if (melonGameVersionAttribute.Universal
-                    || game_version.Equals(melonGameVersionAttribute.Version))
+                    || (InternalUtils.UnityInformationHandler.GameVersion == melonGameVersionAttribute.Version))
                 {
                     is_compatible = true;
                     break;
@@ -286,7 +285,6 @@ namespace MelonLoader.CompatibilityLayers
             return true;
         }
 
-        private static SemVersion CurrentMLVersion = null;
         private bool CheckVerifyLoaderVersionAttribute()
         {
             VerifyLoaderVersionAttribute verifyLoaderVersionAttribute = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(Assembly);

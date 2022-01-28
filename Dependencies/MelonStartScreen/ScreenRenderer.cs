@@ -69,7 +69,7 @@ namespace MelonLoader.MelonStartScreen
 
                 uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
                 MelonDebug.Msg("Graphics Device Type: " + graphicsDeviceType);
-                shouldCallWFLPAGT = NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" })
+                shouldCallWFLPAGT = NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" })
                     && (graphicsDeviceType == /*DX11*/2 || graphicsDeviceType == /*DX12*/18)
                     ? graphicsDeviceType : 0;
             }

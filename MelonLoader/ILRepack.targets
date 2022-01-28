@@ -14,6 +14,7 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'AssetsTools.NET'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -38,6 +39,7 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'AssetsTools.NET'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -58,6 +60,7 @@
 			<FilesToDelete Include="$(OutputPath)MonoMod.Utils.dll" />
 			<FilesToDelete Include="$(OutputPath)0Harmony.dll" />
 			<FilesToDelete Include="$(OutputPath)Tomlet.dll" />
+			<FilesToDelete Include="$(OutputPath)AssetsTools.NET.dll" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)" />
     </Target>

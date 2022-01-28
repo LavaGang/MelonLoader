@@ -1,11 +1,13 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MelonLoader.MelonStartScreen.NativeUtils.PEParser
+namespace MelonLoader.NativeUtils.PEParser
 {
     [StructLayout(LayoutKind.Explicit)]
-    internal struct OptionalFileHeader64
+    public struct OptionalFileHeader64
     {
         [FieldOffset(112)]
         public ImageDataDirectory exportTable;
+        [FieldOffset(128)]
+        public ImageDataDirectory resourceTable;
     }
 }

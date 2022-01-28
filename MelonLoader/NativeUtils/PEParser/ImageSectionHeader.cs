@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MelonLoader.MelonStartScreen.NativeUtils.PEParser
+namespace MelonLoader.NativeUtils.PEParser
 {
     [StructLayout(LayoutKind.Explicit)]
-    internal struct ImageSectionHeader
+    public struct ImageSectionHeader
     {
         //[FieldOffset(0)]
         //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]

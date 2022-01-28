@@ -42,26 +42,15 @@ namespace MelonLoader
 
         private static int PreStart()
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                GameVersionHandler.Setup();
-
             MelonHandler.OnApplicationEarlyStart();
 
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
         private static int Il2CppGameSetup()
-        {
-            if (MelonUtils.IsGameIl2Cpp())
-            {
-                if (!Il2CppAssemblyGenerator.Run())
-                    return 1;
-
-                GameVersionHandler.Setup();
-            }
-
-            return 0;
-        }
+            => (MelonUtils.IsGameIl2Cpp()
+                && !Il2CppAssemblyGenerator.Run())
+                ? 1 : 0;
 
         private static int Start()
         {

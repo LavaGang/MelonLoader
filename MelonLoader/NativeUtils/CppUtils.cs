@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Il2CppUnityTls
+namespace MelonLoader.NativeUtils
 {
-    internal static class CppUtils
+    public static class CppUtils
     {
         public static unsafe IntPtr ResolveRelativeInstruction(IntPtr instruction)
         {
@@ -24,7 +24,7 @@ namespace Il2CppUnityTls
             return new IntPtr(newPtrInt + delta);
         }
 
-        internal static unsafe IntPtr[] SigscanAll(IntPtr module, int moduleSize, string signature)
+        public static unsafe IntPtr[] SigscanAll(IntPtr module, int moduleSize, string signature)
         {
             List<IntPtr> ptrs = new List<IntPtr>();
             string signatureSpaceless = signature.Replace(" ", "");
@@ -70,7 +70,7 @@ namespace Il2CppUnityTls
             return ptrs.ToArray();
         }
 
-        internal static unsafe IntPtr Sigscan(IntPtr module, int moduleSize, string signature)
+        public static unsafe IntPtr Sigscan(IntPtr module, int moduleSize, string signature)
         {
             string signatureSpaceless = signature.Replace(" ", "");
             int signatureLength = signatureSpaceless.Length / 2;

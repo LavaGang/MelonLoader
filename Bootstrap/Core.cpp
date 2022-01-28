@@ -40,11 +40,11 @@ std::string Core::GetVersionStr()
 	return versionstr;
 }
 
-std::string Core::GetVersionStrWithGameName(const char* GameVersion)
+std::string Core::GetVersionStrWithGameName(const char* GameName, const char* GameVersion)
 {
 	return (GetVersionStr()
 		+ " - "
-		+ Game::Name
+		+ GameName
 		+ " "
 		+ ((GameVersion == NULL)
 			? ""
@@ -65,7 +65,6 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
 		|| !CheckPathASCII()
-		|| !Game::ReadInfo()
 		|| !HashCode::Initialize()
 		|| !Mono::Initialize())
 		return;
@@ -118,9 +117,6 @@ void Core::WelcomeMessage()
 	Logger::QuickLog((std::string("OS: ") + GetOSVersion()).c_str());
 	Logger::QuickLog(("Hash Code: " + HashCode::Hash).c_str());
 	Logger::QuickLog("------------------------------");
-	Logger::QuickLog(("Name: " + std::string(Game::Name)).c_str());
-	Logger::QuickLog(("Developer: " + std::string(Game::Developer)).c_str());
-	Logger::QuickLog(("Unity Version: " + std::string(Game::UnityVersion)).c_str());
 	Logger::QuickLog(("Game Type: " + std::string((Game::IsIl2Cpp ? "Il2Cpp" : (Mono::IsOldMono ? "Mono" : "MonoBleedingEdge")))).c_str());
 	Logger::QuickLog(
 #ifdef _WIN64

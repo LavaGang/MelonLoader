@@ -5,10 +5,10 @@ namespace MelonLoader
     [Obsolete("MelonLoader.Imports is Only Here for Compatibility Reasons.")]
     public static class Imports
     {
-        [Obsolete("MelonLoader.Imports.GetCompanyName is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetGameDeveloper instead.")]
-        public static string GetCompanyName() => MelonUtils.GameDeveloper;
-        [Obsolete("MelonLoader.Imports.GetProductName is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetGameName instead.")]
-        public static string GetProductName() => MelonUtils.GameName;
+        [Obsolete("MelonLoader.Imports.GetCompanyName is Only Here for Compatibility Reasons. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameDeveloper instead.")]
+        public static string GetCompanyName() => InternalUtils.UnityInformationHandler.GameDeveloper;
+        [Obsolete("MelonLoader.Imports.GetProductName is Only Here for Compatibility Reasons. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameName instead.")]
+        public static string GetProductName() => InternalUtils.UnityInformationHandler.GameName;
         [Obsolete("MelonLoader.Imports.GetGameDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetGameDirectory instead.")]
         public static string GetGameDirectory() => MelonUtils.GameDirectory;
         [Obsolete("MelonLoader.Imports.GetGameDataDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetGameDataDirectory instead.")]

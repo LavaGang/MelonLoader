@@ -31,7 +31,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         static RemoteAPI()
         {
-            string gamename = Regex.Replace(MelonUtils.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant();
+            string gamename = Regex.Replace(InternalUtils.UnityInformationHandler.GameName, "[^a-zA-Z0-9_.]+", "-", RegexOptions.Compiled).ToLowerInvariant();
 
             HostList = new List<HostInfo> {
                 new HostInfo($"{DefaultHostInfo.Melon.API_URL}{gamename}", DefaultHostInfo.Melon.Contact),

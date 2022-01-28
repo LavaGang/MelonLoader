@@ -1,13 +1,12 @@
-﻿using MelonLoader;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.MelonStartScreen.NativeUtils.PEParser
+namespace MelonLoader.NativeUtils.PEParser
 {
-    internal static class PEUtils
+    public static class PEUtils
     {
-        private static unsafe ImageNtHeaders* AnalyseModuleWin(IntPtr moduleBaseAddress)
+        public static unsafe ImageNtHeaders* AnalyseModuleWin(IntPtr moduleBaseAddress)
         {
             //MelonLoader.MelonLogger.Msg("[moduleBaseAddress+0x0]: " + (*(byte*)(moduleBaseAddress + 0x0)));
             if (*(byte*)((long)moduleBaseAddress + 0x0) != 0x4D || *(byte*)((long)moduleBaseAddress + 0x1) != 0x5A)
@@ -24,7 +23,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils.PEParser
             return (ImageNtHeaders*)pPESig;
         }
 
-        internal static IntPtr GetExportedFunctionPointerForModule(string moduleName, string importName)
+        public static IntPtr GetExportedFunctionPointerForModule(string moduleName, string importName)
         {
             IntPtr moduleAddress = IntPtr.Zero;
 
@@ -46,7 +45,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils.PEParser
             return GetExportedFunctionPointerForModule((long)moduleAddress, importName);
         }
 
-        internal static unsafe IntPtr GetExportedFunctionPointerForModule(long moduleBaseAddress, string importName)
+        public static unsafe IntPtr GetExportedFunctionPointerForModule(long moduleBaseAddress, string importName)
         {
             ImageNtHeaders* imageNtHeaders = AnalyseModuleWin((IntPtr)moduleBaseAddress);
             ImageSectionHeader* pSech = ImageFirstSection(imageNtHeaders);

@@ -16,7 +16,7 @@ void InternalCalls::Initialize()
 	MelonDebug::AddInternalCalls();
 	MelonLogger::AddInternalCalls();
 	MelonUtils::AddInternalCalls();
-	GameVersionHandler::AddInternalCalls();
+	UnityInformationHandler::AddInternalCalls();
 	IIl2CppAssemblyGenerator::AddInternalCalls();
 }
 
@@ -154,11 +154,8 @@ bool InternalCalls::MelonUtils::IsGameIl2Cpp() { return Game::IsIl2Cpp; }
 bool InternalCalls::MelonUtils::IsOldMono() { return Mono::IsOldMono; }
 Mono::String* InternalCalls::MelonUtils::GetApplicationPath() { return Mono::Exports::mono_string_new(Mono::domain, Game::ApplicationPathMono); }
 Mono::String* InternalCalls::MelonUtils::GetBaseDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Core::BasePathMono); }
-Mono::String* InternalCalls::MelonUtils::GetGameName() { return Mono::Exports::mono_string_new(Mono::domain, Game::Name); }
-Mono::String* InternalCalls::MelonUtils::GetGameDeveloper() { return Mono::Exports::mono_string_new(Mono::domain, Game::Developer); }
 Mono::String* InternalCalls::MelonUtils::GetGameDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Game::BasePathMono); }
 Mono::String* InternalCalls::MelonUtils::GetGameDataDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Game::DataPathMono); }
-Mono::String* InternalCalls::MelonUtils::GetUnityVersion() { return Mono::Exports::mono_string_new(Mono::domain, Game::UnityVersion); }
 Mono::String* InternalCalls::MelonUtils::GetManagedDirectory() { return Mono::Exports::mono_string_new(Mono::domain, Mono::ManagedPathMono); }
 Mono::String* InternalCalls::MelonUtils::GetHashCode() { return Mono::Exports::mono_string_new(Mono::domain, HashCode::Hash.c_str()); }
 void InternalCalls::MelonUtils::SCT(Mono::String* title)
@@ -193,7 +190,6 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetApplicationPath", GetApplicationPath);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetGameDataDirectory", GetGameDataDirectory);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::GetUnityVersion", GetUnityVersion);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetManagedDirectory", GetManagedDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::SetConsoleTitle", SCT);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::GetFileProductName", GetFileProductName);
@@ -201,8 +197,6 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookDetach", Hook::Detach);
 
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetBaseDirectory", GetBaseDirectory);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameName", GetGameName);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDeveloper", GetGameDeveloper);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetGameDirectory", GetGameDirectory);
 	Mono::AddInternalCall("MelonLoader.MelonUtils::Internal_GetHashCode", GetHashCode);
 
@@ -215,11 +209,17 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 }
 #pragma endregion
 
-#pragma region GameVersionHandler
-void InternalCalls::GameVersionHandler::SetDefaultConsoleTitleWithGameName(Mono::String* GameVersion) { Console::SetDefaultTitleWithGameName(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL); }
-void InternalCalls::GameVersionHandler::AddInternalCalls()
+#pragma region UnityInformationHandler
+void InternalCalls::UnityInformationHandler::SetDefaultConsoleTitleWithGameName(Mono::String* GameName, Mono::String* GameVersion)
 {
-	Mono::AddInternalCall("MelonLoader.GameVersionHandler::SetDefaultConsoleTitleWithGameName", SetDefaultConsoleTitleWithGameName);
+	if (GameName == NULL)
+		return;
+	Console::SetDefaultTitleWithGameName(Mono::Exports::mono_string_to_utf8(GameName),
+		(GameVersion != NULL ? Mono::Exports::mono_string_to_utf8(GameVersion) : NULL)); 
+}
+void InternalCalls::UnityInformationHandler::AddInternalCalls()
+{
+	Mono::AddInternalCall("MelonLoader.InternalUtils.UnityInformationHandler::SetDefaultConsoleTitleWithGameName", SetDefaultConsoleTitleWithGameName);
 }
 #pragma endregion
 

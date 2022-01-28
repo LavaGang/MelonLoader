@@ -6,12 +6,15 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using MonoMod.Cil;
 using MonoMod.Utils;
 using HarmonyLib;
 using MelonLoader.TinyJSON;
-using System.Security.Cryptography;
+using MelonLoader.InternalUtils;
+using AssetsTools.NET;
+using AssetsTools.NET.Extra;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -20,10 +23,7 @@ namespace MelonLoader
     {
         internal static void Setup(AppDomain domain)
         {
-            GameDeveloper = string.Copy(Internal_GetGameDeveloper());
-            GameName = string.Copy(Internal_GetGameName());
             HashCode = string.Copy(Internal_GetHashCode());
-            CurrentGameAttribute = new MelonGameAttribute(GameDeveloper, GameName);
             BaseDirectory = string.Copy(Internal_GetBaseDirectory());
             GameDirectory = string.Copy(Internal_GetGameDirectory());
             SetCurrentDomainBaseDirectory(GameDirectory, domain);
@@ -36,21 +36,14 @@ namespace MelonLoader
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
-            IsBONEWORKS = (!string.IsNullOrEmpty(GameDeveloper) 
-                && GameDeveloper.Equals("Stress Level Zero") 
-                && !string.IsNullOrEmpty(GameName) 
-                && GameName.Equals("BONEWORKS"));
+            UnityInformationHandler.Setup();
+
+            CurrentGameAttribute = new MelonGameAttribute(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName);
+
+            IsDemeo = (UnityInformationHandler.GameDeveloper.Equals("Resolution Games") && UnityInformationHandler.GameName.Equals("Demeo"));
+            IsMuseDash = (UnityInformationHandler.GameDeveloper.Equals("PeroPeroGames") && UnityInformationHandler.GameName.Equals("Muse Dash"));
+            IsBONEWORKS = (UnityInformationHandler.GameDeveloper.Equals("Stress Level Zero") && UnityInformationHandler.GameName.Equals("BONEWORKS"));
             Main.IsBoneworks = IsBONEWORKS;
-
-            IsDemeo = (!string.IsNullOrEmpty(GameDeveloper)
-                && GameDeveloper.Equals("Resolution Games") 
-                && !string.IsNullOrEmpty(GameName) 
-                && GameName.Equals("Demeo"));
-
-            IsMuseDash = (!string.IsNullOrEmpty(GameDeveloper)
-                && GameDeveloper.Equals("PeroPeroGames")
-                && !string.IsNullOrEmpty(GameName)
-                && GameName.Equals("Muse Dash"));
         }
 
         public static string BaseDirectory { get; private set; }
@@ -58,9 +51,6 @@ namespace MelonLoader
         public static string UserDataDirectory { get; private set; }
         public static string UserLibsDirectory { get; private set; }
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
-        public static string GameDeveloper { get; private set; }
-        public static string GameName { get; private set; }
-        public static string GameVersion { get => GameVersionHandler.Version; }
         public static bool IsBONEWORKS { get; private set; }
         public static bool IsDemeo { get; private set; }
         public static bool IsMuseDash { get; private set; }
@@ -314,6 +304,25 @@ namespace MelonLoader
         public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
             => NativeLibrary.GetExport(ptr, name);
 
+        public static ClassDatabasePackage LoadClassPackageFromIncludedMemory(this AssetsManager assetsManager)
+        {
+            MemoryStream stream = new MemoryStream(Properties.Resources.classdata);
+            ClassDatabasePackage returnval = assetsManager.LoadClassPackage(stream);
+            stream.Close();
+            return returnval;
+        }
+
+
+        [Obsolete("MelonLoader.MelonUtils.GetUnityVersion() is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion instead.")]
+        public static string GetUnityVersion() => UnityInformationHandler.EngineVersion.ToStringWithoutType();
+        [Obsolete("MelonLoader.MelonUtils.GameDeveloper is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameDeveloper instead.")]
+        public static string GameDeveloper { get => UnityInformationHandler.GameDeveloper; }
+        [Obsolete("MelonLoader.MelonUtils.GameName is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameName instead.")]
+        public static string GameName { get => UnityInformationHandler.GameName; }
+        [Obsolete("MelonLoader.MelonUtils.GameVersion is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameVersion instead.")]
+        public static string GameVersion { get => UnityInformationHandler.GameVersion; }
+
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsGame32Bit();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -328,9 +337,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetGameDataDirectory();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetUnityVersion();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetManagedDirectory();
@@ -348,12 +354,6 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetBaseDirectory();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameName();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameDeveloper();
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameDirectory();

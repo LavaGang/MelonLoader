@@ -30,12 +30,14 @@ namespace MelonLoader.InternalUtils
 
             // Doesn't support Unity versions lower than 2017.2.0 (yet?)
             // Doesn't support Unity versions lower than 2018 (Crashing Issue)
-            SemVersion unityVersion = SemVersion.Parse(MelonUtils.GetUnityVersion());
-            if (unityVersion < "2018")
+            UnityVersion unityVersion = UnityInformationHandler.EngineVersion;
+            UnityVersion minimumVersion = new UnityVersion(2018);
+            if (unityVersion < minimumVersion)
                 return functionToWaitForAsync();
 
-            // Doesn't support Unity versions higher than or equal to 2020.3.22 (Crashing Issue)
-            if (unityVersion >= "2020.3.22")
+            // Doesn't support Unity versions higher than to 2020.3.21 (Crashing Issue)
+            UnityVersion maximumVersion = new UnityVersion(2020, 3, 21);
+            if (unityVersion > maximumVersion)
                 return functionToWaitForAsync();
 
             if (!Load())

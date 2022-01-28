@@ -1,5 +1,5 @@
 ﻿using MelonLoader;
-using MelonLoader.MelonStartScreen;
+using MelonLoader.NativeUtils;
 using MelonLoader.MelonStartScreen.NativeUtils;
 using System;
 using System.Runtime.InteropServices;
@@ -47,7 +47,7 @@ namespace UnityPlayer
 
         static GfxDevice()
         {
-            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonUtils.GetUnityVersion(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" }))
+            if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" }))
             {
                 // `FrameTimingManager_CUSTOM_CaptureFrameTimings()` calls `GetRealGfxDevice()` after 4 bytes.
                 m_GetRealGfxDevice = (GetRealGfxDeviceDelegate)Marshal.GetDelegateForFunctionPointer(
