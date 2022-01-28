@@ -117,16 +117,17 @@ namespace MelonLoader
             }
 
             // \/ Custom Resolver \/
-            var resolvers = CustomMelonResolvers.GetInvocationList();
-            foreach (var r in resolvers)
-            {
-                var customMelon = (MelonBase[])r.DynamicInvoke(asm);
-                if (customMelon == null || customMelon.Length == 0)
-                    continue;
+            var resolvers = CustomMelonResolvers?.GetInvocationList();
+            if (resolvers != null)
+                foreach (var r in resolvers)
+                {
+                    var customMelon = (MelonBase[])r.DynamicInvoke(asm);
+                    if (customMelon == null || customMelon.Length == 0)
+                        continue;
 
-                errorCode = MelonLoadErrorCodes.None;
-                return customMelon;
-            }
+                    errorCode = MelonLoadErrorCodes.None;
+                    return customMelon;
+                }
 
             // \/ Default resolver \/
             var info = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(asm);
