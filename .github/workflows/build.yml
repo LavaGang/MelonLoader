@@ -104,6 +104,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core, build_proxy_x64, build_bootstrap_x64]
     steps:
+      - uses: actions/checkout@v2
       - name: Download core artifact
         uses: actions/download-artifact@v2.1.0
         with:
@@ -149,6 +150,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core, build_proxy_x86, build_bootstrap_x86]
     steps:
+      - uses: actions/checkout@v2
       - name: Download core artifact
         uses: actions/download-artifact@v2.1.0
         with:
