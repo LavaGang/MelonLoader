@@ -41,7 +41,7 @@ namespace MelonLoader.InternalUtils
             if (instance == null)
                 return;
 
-            assetsManager.LoadClassPackageFromIncludedMemory();
+            assetsManager.LoadIncludedClassPackage();
             assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
 
             EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);

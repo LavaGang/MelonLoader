@@ -304,7 +304,7 @@ namespace MelonLoader
         public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
             => NativeLibrary.GetExport(ptr, name);
 
-        public static ClassDatabasePackage LoadClassPackageFromIncludedMemory(this AssetsManager assetsManager)
+        public static ClassDatabasePackage LoadIncludedClassPackage(this AssetsManager assetsManager)
         {
             MemoryStream stream = new MemoryStream(Properties.Resources.classdata);
             ClassDatabasePackage returnval = assetsManager.LoadClassPackage(stream);
