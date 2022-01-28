@@ -35,8 +35,10 @@ namespace MelonLoader.InternalUtils
             string bundlePath = Path.Combine(gameDataPath, "globalgamemanagers");
             if (!File.Exists(bundlePath))
                 bundlePath = Path.Combine(gameDataPath, "mainData");
+
             if (!File.Exists(bundlePath))
                 return;
+
             AssetsFileInstance instance = assetsManager.LoadAssetsFile(bundlePath, true);
             if (instance == null)
                 return;
