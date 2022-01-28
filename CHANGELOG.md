@@ -41,6 +41,7 @@
 8. Fixed Issue with Il2CppAssemblyUnhollower Initialization.
 9. Fixed Issue with Cpp2IL Package Cleanup.
 10. Fixed Comparison Issue with Semver.
+11. Fixed Issue with Start Screen Background and Logo not Animating Properly.
 
 ---
 

@@ -67,5 +67,15 @@ namespace MelonLoader.MelonStartScreen.UI
             MainTexture = textures[image];
             base.Render(x, y, width);
         }
+
+        internal override void Render(int x, int y, int width, int height)
+        {
+            if (!stopwatch.IsRunning)
+                stopwatch.Start();
+
+            int image = (int)((float)(stopwatch.ElapsedMilliseconds / frameDelayMS) % textures.Length);
+            MainTexture = textures[image];
+            base.Render(x, y, width, height);
+        }
     }
 }
