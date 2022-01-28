@@ -32,7 +32,10 @@ namespace MelonLoader.Support
                 LogSupport.TraceHandler += MelonLogger.Msg;
 
             ClassInjector.Detour = new UnhollowerDetour();
-            InitializeUnityVersion();
+            UnityVersionHandler.Initialize(
+                InternalUtils.UnityInformationHandler.EngineVersion.Major,
+                InternalUtils.UnityInformationHandler.EngineVersion.Minor,
+                InternalUtils.UnityInformationHandler.EngineVersion.Build);
 
             if (MelonLaunchOptions.Console.CleanUnityLogs)
                 ConsoleCleaner();
@@ -117,26 +120,6 @@ namespace MelonLoader.Support
                 setOutMethod.Invoke(null, new[] { nullStreamWriter });
             }
             catch (Exception ex) { MelonLogger.Warning($"Console Cleaner Failed: {ex}"); }
-        }
-
-        private static void InitializeUnityVersion()
-        {
-            string unityVersion = InternalUtils.UnityInformationHandler.GameVersion;
-            if (string.IsNullOrEmpty(unityVersion))
-                return;
-            string[] unityVersionSplit = unityVersion.Split('.');
-            if ((unityVersionSplit == null) || (unityVersionSplit.Length < 2))
-                return;
-            int major = int.Parse(unityVersionSplit[0]);
-            int minor = int.Parse(unityVersionSplit[1]);
-            int patch = 0;
-            if (unityVersionSplit.Length > 2)
-            {
-                string patchString = unityVersionSplit[2];
-                char firstBadChar = patchString.FirstOrDefault(it => it < '0' || it > '9');
-                patch = int.Parse(firstBadChar == 0 ? patchString : patchString.Substring(0, patchString.IndexOf(firstBadChar)));
-            }
-            UnityVersionHandler.Initialize(major, minor, patch);
         }
     }
 

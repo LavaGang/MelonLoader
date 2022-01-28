@@ -56,18 +56,7 @@ namespace MelonLoader.InternalUtils
                 if (assetFiles.Count > 0)
                 {
                     AssetFileInfoEx playerSettings = assetFiles.First();
-                    AssetTypeInstance assetTypeInstance = null;
-                    try
-                    {
-                        assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
-                    }
-                    catch
-                    {
-                        assetsManager.LoadIncludedLargeClassPackage();
-                        assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
-                        assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
-                    }
-
+                    AssetTypeInstance assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
                     if (assetTypeInstance != null)
                     {
                         AssetTypeValueField playerSettings_baseField = assetTypeInstance.GetBaseField();

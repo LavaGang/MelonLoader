@@ -38,6 +38,7 @@
 5. Rewrote Unity Information Handling.
 6. Fixed Issue with Exception Logging on Older Mono versions.
 7. Improved UnityInformationHandler Exception Handling.
+8. Fixed Issue with Il2CppAssemblyUnhollower Initialization.
 
 ---
 
