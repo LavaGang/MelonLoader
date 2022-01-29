@@ -47,27 +47,21 @@ namespace MelonLoader.MelonStartScreen
                     settings.textAnchor = UICustomization.VersionText.Anchor;
                     settings.color = UICustomization.VersionText.TextColor;
                     settings.generationExtents = new Vector2(540, 47.5f);
-                    settings.richText = true;
+                    settings.richText = UICustomization.VersionText.RichText;
                     settings.font = UIStyleValues.TextFont;
                     settings.pivot = new Vector2(0.5f, 0.5f);
-                    settings.fontSize = 24;
-                    settings.fontStyle = FontStyle.Bold;
+                    settings.fontSize = UICustomization.VersionText.FontSize;
+                    settings.fontStyle = UICustomization.VersionText.Style;
                     settings.verticalOverflow = VerticalWrapMode.Overflow;
-                    settings.scaleFactor = 1f;
-                    settings.lineSpacing = 1f;
+                    settings.scaleFactor = UICustomization.VersionText.Scale;
+                    settings.lineSpacing = UICustomization.VersionText.LineSpacing;
                     MelonDebug.Msg("TextGenerationSettings settings set");
 
-                    string loaderName = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON) ? "LemonLoader" : "MelonLoader";
-
                     string versionText = UICustomization.VersionText.Text;
-                    versionText = versionText.Replace("<loaderName/>", loaderName);
+                    versionText = versionText.Replace("<loaderName/>", (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON) ? "LemonLoader" : "MelonLoader");
                     versionText = versionText.Replace("<loaderVersion/>", BuildInfo.Version);
-
-                    if (UICustomization.VersionText.ColorizeLoaderName)
-                    {
-                        versionText = versionText.Replace("LemonLoader", "<color=#FFCC4D>LemonLoader</color>");
-                        versionText = versionText.Replace("MelonLoader", "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>");
-                    }
+                    versionText = versionText.Replace("LemonLoader", "<color=#FFCC4D>LemonLoader</color>");
+                    versionText = versionText.Replace("MelonLoader", "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>");
 
                     melonloaderversionTextmesh = TextMeshGenerator.Generate(versionText, settings);
                 }

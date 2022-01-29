@@ -46,6 +46,7 @@
 13. Fixed Issue with Start Screen Progress Bar Positioning.
 14. Added Start Screen Version Text Customization.
 15. Added Start Screen Version Text Anchor Customization.
+16. Added Start Screen Version Text Style, RichText, FontSize, Scale, and LineSpacing Customization.
 
 ---
 
