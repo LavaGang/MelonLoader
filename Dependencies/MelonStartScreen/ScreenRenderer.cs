@@ -118,7 +118,7 @@ namespace MelonLoader.MelonStartScreen
                     if (UICustomization.VersionText.AutoAlign)
                         Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
                     else
-                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(UICustomization.LoadingImage.CustomPosition.Item1, sh - UICustomization.LoadingImage.CustomPosition.Item2, 0), Quaternion.identity);
+                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(UICustomization.VersionText.CustomPosition.Item1, sh - UICustomization.VersionText.CustomPosition.Item2, 0), Quaternion.identity);
                 }
 
                 if (progressBar != null)
@@ -128,7 +128,7 @@ namespace MelonLoader.MelonStartScreen
                         (sw - 540) / 2,
                         sh - ((sh - 36) / 2 + (logoHeight / 2) + 50));
                     else
-                        progressBar.SetPosition(UICustomization.LoadingImage.CustomPosition.Item1, (sh - progressBar.height) - UICustomization.LoadingImage.CustomPosition.Item2);
+                        progressBar.SetPosition(UICustomization.ProgressBar.CustomPosition.Item1, (sh - progressBar.height) - UICustomization.ProgressBar.CustomPosition.Item2);
                     progressBar.Render();
                 }
 
