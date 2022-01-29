@@ -16,7 +16,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1
       - name: Build Melonloader Core
         shell: cmd
-        run: msbuild /restore /t:Rebuild /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
+        run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
       - name: Upload core artifact
         uses: actions/upload-artifact@v2.3.1
         with:
@@ -30,7 +30,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1
       - name: Build Melonloader Core
         shell: cmd
-        run: msbuild /restore /t:Rebuild /p:Configuration=Release /p:Platform="Windows - x64"
+        run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
       - name: Upload core artifact
         uses: actions/upload-artifact@v2.3.1
         with:
