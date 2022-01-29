@@ -95,25 +95,40 @@ namespace MelonLoader.MelonStartScreen
                 int logoHeight = (int)(sh * 0.4f);
                 int logoWidth = (int)(logoHeight * logoRatio);
 
+                Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
+
                 if (UIStyleValues.BackgroundImage != null)
                     UIStyleValues.BackgroundImage.Render(0, sh, sw, -sh);
+
+                if (UICustomization.LogoImage.AutoAlign)
+                    UIStyleValues.LogoImage?.Render((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight);
                 else
-                    Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
+                    UIStyleValues.LogoImage?.Render(UICustomization.LogoImage.CustomPosition.Item1, sh - UICustomization.LogoImage.CustomPosition.Item2, logoWidth, -logoHeight);
 
-                UIStyleValues.LogoImage?.Render((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight);
 
-                UIStyleValues.LoadingImage?.Render(sw - 200, 200, 132);
+                if (UICustomization.LoadingImage.AutoAlign)
+                    UIStyleValues.LoadingImage?.Render(sw - 200, 200, 132);
+                else
+                    UIStyleValues.LoadingImage?.Render(UICustomization.LoadingImage.CustomPosition.Item1, sh - UICustomization.LoadingImage.CustomPosition.Item2, 132);
 
                 UIStyleValues.TextFont.material.SetPass(0);
 
                 if (melonloaderversionTextmesh != null)
-                    Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
+                {
+                    if (UICustomization.VersionText.AutoAlign)
+                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
+                    else
+                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(UICustomization.LoadingImage.CustomPosition.Item1, sh - UICustomization.LoadingImage.CustomPosition.Item2, 0), Quaternion.identity);
+                }
 
                 if (progressBar != null)
                 {
-                    progressBar.SetPosition(
+                    if (UICustomization.ProgressBar.AutoAlign)
+                        progressBar.SetPosition(
                         (sw - 540) / 2,
                         sh - ((sh - 36) / 2 + (logoHeight / 2) + 50));
+                    else
+                        progressBar.SetPosition(UICustomization.LoadingImage.CustomPosition.Item1, sh - UICustomization.LoadingImage.CustomPosition.Item2);
                     progressBar.Render();
                 }
 

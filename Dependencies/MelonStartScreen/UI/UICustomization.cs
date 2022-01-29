@@ -50,11 +50,11 @@ namespace MelonLoader.MelonStartScreen
 
         internal class cBackground
         {
-            [TomlPrecedingComment("Solid RGBA Color for Background")]
+            [TomlPrecedingComment("Solid RGBA Color of the Background")]
             internal Color SolidColor = new Color(0.08f, 0.09f, 0.10f);
             [TomlPrecedingComment("If should Scan for and Load Custom Background Image  ( true | false )")]
             internal bool ScanForCustomImage = true;
-            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Background Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
+            [TomlPrecedingComment("UnityEngine.FilterMode of the Background Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
             internal FilterMode Filter = FilterMode.Bilinear;
         }
 
@@ -64,8 +64,12 @@ namespace MelonLoader.MelonStartScreen
             internal bool Enabled = true;
             [TomlPrecedingComment("If should Scan for and Load Custom Logo Image  ( true | false )")]
             internal bool ScanForCustomImage = true;
-            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Logo Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
+            [TomlPrecedingComment("UnityEngine.FilterMode of the Logo Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
             internal FilterMode Filter = FilterMode.Bilinear;
+            [TomlPrecedingComment("Toggles the Auto-Alignment of the Logo Image")]
+            internal bool AutoAlign = true;
+            [TomlPrecedingComment("Custom Position of the Logo Image")]
+            internal LemonTuple<int, int> CustomPosition = new LemonTuple<int, int>();
         }
 
         internal class cLoadingImage
@@ -74,23 +78,31 @@ namespace MelonLoader.MelonStartScreen
             internal bool Enabled = true;
             [TomlPrecedingComment("If should Scan for and Load Custom Loading Image  ( true | false )")]
             internal bool ScanForCustomImage = true;
-            [TomlPrecedingComment("UnityEngine.FilterMode for Custom Loading Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
+            [TomlPrecedingComment("UnityEngine.FilterMode of the Loading Image  ( \"Point\" | \"Bilinear\" | \"Trilinear\" )")]
             internal FilterMode Filter = FilterMode.Bilinear;
+            [TomlPrecedingComment("Toggles the Auto-Alignment of the Loading Image")]
+            internal bool AutoAlign = true;
+            [TomlPrecedingComment("Custom Position of the Loading Image")]
+            internal LemonTuple<int, int> CustomPosition = new LemonTuple<int, int>();
         }
 
         internal class cVersionText
         {
             [TomlPrecedingComment("Toggles the Version Text")]
             internal bool Enabled = true;
-            [TomlPrecedingComment("RGBA Color of Version Text")]
+            [TomlPrecedingComment("RGBA Color of the Version Text")]
             internal Color TextColor = new Color(1, 1, 1);
+            [TomlPrecedingComment("Toggles the Auto-Alignment of the Version Text")]
+            internal bool AutoAlign = true;
+            [TomlPrecedingComment("Custom Position of the Version Text")]
+            internal LemonTuple<int, int> CustomPosition = new LemonTuple<int, int>();
         }
 
         internal class cProgressText
         {
             [TomlPrecedingComment("Toggles the Progress Text")]
             internal bool Enabled = true;
-            [TomlPrecedingComment("RGBA Color of Progress Text")]
+            [TomlPrecedingComment("RGBA Color of the Progress Text")]
             internal Color TextColor = new Color(1, 1, 1);
         }
 
@@ -98,10 +110,14 @@ namespace MelonLoader.MelonStartScreen
         {
             [TomlPrecedingComment("Toggles the Progress Bar")]
             internal bool Enabled = true;
-            [TomlPrecedingComment("Inner RGBA Color of Progress Bar")]
+            [TomlPrecedingComment("Inner RGBA Color of the Progress Bar")]
             internal Color InnerColor = new Color(1.00f, 0.23f, 0.42f);
-            [TomlPrecedingComment("Outer RGBA Color of Progress Bar")]
+            [TomlPrecedingComment("Outer RGBA Color of the Progress Bar")]
             internal Color OuterColor = new Color(0.47f, 0.97f, 0.39f);
+            [TomlPrecedingComment("Toggles the Auto-Alignment of the Progress Bar")]
+            internal bool AutoAlign = true;
+            [TomlPrecedingComment("Custom Position of the Progress Bar")]
+            internal LemonTuple<int, int> CustomPosition = new LemonTuple<int, int>();
         }
 
         private static Color ReadColor(TomlValue value)
