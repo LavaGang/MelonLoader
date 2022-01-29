@@ -44,7 +44,7 @@ namespace MelonLoader.MelonStartScreen
                 if (UICustomization.VersionText.Enabled)
                 {
                     TextGenerationSettings settings = new TextGenerationSettings();
-                    settings.textAnchor = TextAnchor.MiddleCenter;
+                    settings.textAnchor = UICustomization.VersionText.Anchor;
                     settings.color = UICustomization.VersionText.TextColor;
                     settings.generationExtents = new Vector2(540, 47.5f);
                     settings.richText = true;
@@ -57,10 +57,19 @@ namespace MelonLoader.MelonStartScreen
                     settings.lineSpacing = 1f;
                     MelonDebug.Msg("TextGenerationSettings settings set");
 
-                    string melonloaderText = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
-                        ? "<color=#FFCC4D>LemonLoader</color>"
-                        : "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>";
-                    melonloaderversionTextmesh = TextMeshGenerator.Generate($"{melonloaderText} v{BuildInfo.Version} Open-Beta", settings);
+                    string loaderName = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON) ? "LemonLoader" : "MelonLoader";
+
+                    string versionText = UICustomization.VersionText.Text;
+                    versionText = versionText.Replace("<loaderName/>", loaderName);
+                    versionText = versionText.Replace("<loaderVersion/>", BuildInfo.Version);
+
+                    if (UICustomization.VersionText.ColorizeLoaderName)
+                    {
+                        versionText = versionText.Replace("LemonLoader", "<color=#FFCC4D>LemonLoader</color>");
+                        versionText = versionText.Replace("MelonLoader", "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>");
+                    }
+
+                    melonloaderversionTextmesh = TextMeshGenerator.Generate(versionText, settings);
                 }
 
                 if (UICustomization.ProgressBar.Enabled

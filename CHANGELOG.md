@@ -44,6 +44,8 @@
 11. Fixed Issue with Start Screen Background and Logo not Animating Properly.
 12. Added Start Screen Element Position Customization.
 13. Fixed Issue with Start Screen Progress Bar Positioning.
+14. Added Start Screen Version Text Customization.
+15. Added Start Screen Version Text Anchor Customization.
 
 ---
 
