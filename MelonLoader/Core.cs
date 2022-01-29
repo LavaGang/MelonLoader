@@ -44,7 +44,6 @@ namespace MelonLoader
         private static int PreStart()
         {
             MelonHandler.OnApplicationEarlyStart();
-
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
@@ -78,7 +77,6 @@ namespace MelonLoader
         {
             MelonHandler.OnApplicationLateStart_Plugins();
             MelonHandler.OnApplicationLateStart_Mods();
-
             MelonStartScreen.Finish();
         }
 
