@@ -128,7 +128,7 @@ namespace MelonLoader.MelonStartScreen
                         (sw - 540) / 2,
                         sh - ((sh - 36) / 2 + (logoHeight / 2) + 50));
                     else
-                        progressBar.SetPosition(UICustomization.LoadingImage.CustomPosition.Item1, sh - UICustomization.LoadingImage.CustomPosition.Item2);
+                        progressBar.SetPosition(UICustomization.LoadingImage.CustomPosition.Item1, (sh - progressBar.height) - UICustomization.LoadingImage.CustomPosition.Item2);
                     progressBar.Render();
                 }
 

@@ -5,9 +5,9 @@ namespace MelonLoader.MelonStartScreen.UI
 {
     internal class ProgressBar
     {
-        private int x, y;
-        private int width, height;
-        private Font font;
+        internal int x, y;
+        internal int width, height;
+        internal Font font;
         private Texture2D innerTexture;
         private Texture2D outerTexture;
 
@@ -17,7 +17,7 @@ namespace MelonLoader.MelonStartScreen.UI
         private string textCached = null;
         private Mesh textmesh;
 
-        public ProgressBar(int x = 0, int y = 0, int width = 0, int height = 0)
+        internal ProgressBar(int x = 0, int y = 0, int width = 0, int height = 0)
         {
             this.x = x;
             this.y = y;
@@ -29,7 +29,7 @@ namespace MelonLoader.MelonStartScreen.UI
             outerTexture = UIStyleValues.ProgressBarOuterTexture;
         }
 
-        public void Render()
+        internal void Render()
         {
             if (UICustomization.ProgressText.Enabled)
                 RefreshTextmesh();
@@ -70,7 +70,7 @@ namespace MelonLoader.MelonStartScreen.UI
             textmesh = TextMeshGenerator.Generate(text, settings2);
         }
 
-        public void SetPosition(int x, int y)
+        internal void SetPosition(int x, int y)
         {
             this.x = x;
             this.y = y;

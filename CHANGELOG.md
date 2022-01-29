@@ -43,6 +43,7 @@
 10. Fixed Comparison Issue with Semver.
 11. Fixed Issue with Start Screen Background and Logo not Animating Properly.
 12. Added Start Screen Element Position Customization.
+13. Fixed Issue with Start Screen Progress Bar Positioning.
 
 ---
 
