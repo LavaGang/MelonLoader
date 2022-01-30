@@ -109,7 +109,6 @@
     <Compile Include="BackwardsCompatibility\Harmony\Tools\AccessTools.cs" />
     <Compile Include="BackwardsCompatibility\Harmony\Tools\Extensions.cs" />
     <Compile Include="BackwardsCompatibility\Harmony\Tools\SymbolExtensions.cs" />
-    <Compile Include="CompatibilityLayers\Melon_Resolver.cs" />
     <Compile Include="BackwardsCompatibility\Melon\HarmonyShield.cs" />
     <Compile Include="BackwardsCompatibility\Melon\Imports.cs" />
     <Compile Include="BackwardsCompatibility\Melon\Main.cs" />
