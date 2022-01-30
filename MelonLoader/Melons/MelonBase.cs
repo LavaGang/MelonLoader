@@ -673,10 +673,10 @@ namespace MelonLoader
             MelonLogger.Msg(ConsoleColor.DarkRed, "------------------------------");
         }
 
-        public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false)
-            => ExecuteList(func, RegisteredMelons, unregisterOnFail);
+        public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)
+            => ExecuteList(func, RegisteredMelons, unregisterOnFail, unregistrationReason);
 
-        public static void ExecuteList<T>(LemonAction<T> func, List<T> melons, bool unregisterOnFail = false) where T : MelonBase
+        public static void ExecuteList<T>(LemonAction<T> func, List<T> melons, bool unregisterOnFail = false, string unregistrationReason = null) where T : MelonBase
         {
             var failedMelons = (unregisterOnFail ? new List<T>() : null);
 
@@ -699,7 +699,7 @@ namespace MelonLoader
             if (unregisterOnFail)
             {
                 foreach (var m in failedMelons)
-                    m.Unregister();
+                    m.Unregister(unregistrationReason);
             }
         }
         #endregion

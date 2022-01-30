@@ -43,7 +43,7 @@ namespace MelonLoader
             return true;
         }
 
-        public static void ExecuteAll(LemonAction<T> func, bool unregisterOnFail = false)
-            => ExecuteList(func, _registeredMelons, unregisterOnFail);
+        public static void ExecuteAll(LemonAction<T> func, bool unregisterOnFail = false, string unregistrationReason = null)
+            => ExecuteList(func, _registeredMelons, unregisterOnFail, unregistrationReason);
     }
 }

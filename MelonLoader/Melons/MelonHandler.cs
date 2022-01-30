@@ -87,7 +87,7 @@ namespace MelonLoader
         }
 
         internal static void OnPreInitialization()
-            => MelonPlugin.ExecuteAll(x => x.OnPreInitialization(), true);
+            => MelonPlugin.ExecuteAll(x => x.OnPreInitialization(), true, "Plugin failed to initialize in OnPreInitialization.");
 
         internal static void OnApplicationStart_Plugins()
         {
@@ -96,7 +96,7 @@ namespace MelonLoader
             {
                 MelonStartScreen.OnApplicationStart_Plugin(x.Info.Name);
                 x.OnApplicationStart();
-            }, true);
+            }, true, "Melon failed to initialize in OnApplicationStart.");
         }
 
         internal static void OnApplicationStart_Mods()
@@ -106,7 +106,7 @@ namespace MelonLoader
             {
                 MelonStartScreen.OnApplicationStart_Mod(x.Info.Name);
                 x.OnApplicationStart();
-            }, true);
+            }, true, "Melon failed to initialize in OnApplicationStart.");
         }
 
         internal static void OnApplicationLateStart_Plugins()
@@ -116,7 +116,7 @@ namespace MelonLoader
             {
                 MelonStartScreen.OnApplicationLateStart_Plugin(x.Info.Name);
                 x.OnApplicationLateStart();
-            }, true);
+            }, true, "Melon failed to initialize in OnApplicationStart.");
         }
 
         internal static void OnApplicationLateStart_Mods()
@@ -126,14 +126,14 @@ namespace MelonLoader
             {
                 MelonStartScreen.OnApplicationLateStart_Mod(x.Info.Name);
                 x.OnApplicationLateStart();
-            }, true);
+            }, true, "Melon failed to initialize in OnApplicationLateStart.");
         }
 
         internal static void OnPreSupportModule()
         {
-            MelonBase.ExecuteAll(x => x.OnPreSupportModule(), true);
+            MelonBase.ExecuteAll(x => x.OnPreSupportModule(), true, "Melon failed to initialize in OnPreSupportModule.");
         }
-        internal static void OnApplicationEarlyStart() => MelonPlugin.ExecuteAll(x => x.OnApplicationEarlyStart(), true);
+        internal static void OnApplicationEarlyStart() => MelonPlugin.ExecuteAll(x => x.OnApplicationEarlyStart(), true, "Plugin failed to initialize in OnApplicationEarlyStart.");
         internal static void OnApplicationQuit() => MelonBase.ExecuteAll(x => x.OnApplicationQuit());
         internal static void OnFixedUpdate() => MelonMod.ExecuteAll(x => x.OnFixedUpdate());
         internal static void OnLateUpdate() => MelonBase.ExecuteAll(x => x.OnLateUpdate());
