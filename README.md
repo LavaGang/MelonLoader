@@ -120,7 +120,7 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 ## START SCREEN CUSTOMIZATION:
 
 - After Initial Launch the Start Screen will create a folder under `UserData/MelonStartScreen`
-- Inside this folder it will create a `Elements` folder and a `Config.cfg` file for Customization Settings.
+- Inside this folder it will create an `Elements` folder and a `Config.cfg` file for Customization Settings.
 - You can also place Custom Images in this folder to further customize the Start Screen.
 - Listed below are the Compatible File Names and Extensions for the Custom Images.
 
