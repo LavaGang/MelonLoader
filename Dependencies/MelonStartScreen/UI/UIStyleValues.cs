@@ -20,37 +20,37 @@ namespace MelonLoader.MelonStartScreen.UI
         internal static void Init()
         {
             TextFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            BackgroundTexture = UIUtils.CreateColorTexture(UICustomization.Background.SolidColor);
+            BackgroundTexture = UIUtils.CreateColorTexture(UIConfig.Background.SolidColor);
 
-            if (UICustomization.ProgressBar.Enabled)
+            if (UIConfig.ProgressBar.Enabled)
             {
-                ProgressBarInnerTexture = UIUtils.CreateColorTexture(UICustomization.ProgressBar.InnerColor);
-                ProgressBarOuterTexture = UIUtils.CreateColorTexture(UICustomization.ProgressBar.OuterColor);
+                ProgressBarInnerTexture = UIUtils.CreateColorTexture(UIConfig.ProgressBar.InnerColor);
+                ProgressBarOuterTexture = UIUtils.CreateColorTexture(UIConfig.ProgressBar.OuterColor);
             }
 
-            if (UICustomization.Background.ScanForCustomImage)
-                BackgroundImage = LoadImage("Background", UICustomization.Background.Filter);
+            if (UIConfig.Background.ScanForCustomImage)
+                BackgroundImage = LoadImage("Background", UIConfig.Background.Filter);
 
-            if (UICustomization.LogoImage.Enabled)
+            if (UIConfig.LogoImage.Enabled)
             {
-                if (UICustomization.LogoImage.ScanForCustomImage)
-                    LogoImage = LoadImage("Logo", UICustomization.LogoImage.Filter);
+                if (UIConfig.LogoImage.ScanForCustomImage)
+                    LogoImage = LoadImage("Logo", UIConfig.LogoImage.Filter);
                 if (LogoImage == null)
                     LogoImage = new Image(
                     (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Logo_Lemon
-                        : Properties.Resources.Logo_Melon, UICustomization.LogoImage.Filter);
+                        : Properties.Resources.Logo_Melon, UIConfig.LogoImage.Filter);
             }
 
-            if (UICustomization.LoadingImage.Enabled)
+            if (UIConfig.LoadingImage.Enabled)
             {
-                if (UICustomization.LoadingImage.ScanForCustomImage)
-                    LoadingImage = LoadImage("Loading", UICustomization.LoadingImage.Filter);
+                if (UIConfig.LoadingImage.ScanForCustomImage)
+                    LoadingImage = LoadImage("Loading", UIConfig.LoadingImage.Filter);
                 if (LoadingImage == null)
                     LoadingImage = new AnimatedImage(
                     (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Loading_Lemon
-                        : Properties.Resources.Loading_Melon, UICustomization.LoadingImage.Filter);
+                        : Properties.Resources.Loading_Melon, UIConfig.LoadingImage.Filter);
             }
         }
 

@@ -41,23 +41,23 @@ namespace MelonLoader.MelonStartScreen
                 UIStyleValues.Init();
                 MelonDebug.Msg("UIStyleValues Initialized");
 
-                if (UICustomization.VersionText.Enabled)
+                if (UIConfig.VersionText.Enabled)
                 {
                     TextGenerationSettings settings = new TextGenerationSettings();
-                    settings.textAnchor = UICustomization.VersionText.Anchor;
-                    settings.color = UICustomization.VersionText.TextColor;
+                    settings.textAnchor = UIConfig.VersionText.Anchor;
+                    settings.color = UIConfig.VersionText.TextColor;
                     settings.generationExtents = new Vector2(540, 47.5f);
-                    settings.richText = UICustomization.VersionText.RichText;
+                    settings.richText = UIConfig.VersionText.RichText;
                     settings.font = UIStyleValues.TextFont;
                     settings.pivot = new Vector2(0.5f, 0.5f);
-                    settings.fontSize = UICustomization.VersionText.FontSize;
-                    settings.fontStyle = UICustomization.VersionText.Style;
+                    settings.fontSize = UIConfig.VersionText.FontSize;
+                    settings.fontStyle = UIConfig.VersionText.Style;
                     settings.verticalOverflow = VerticalWrapMode.Overflow;
-                    settings.scaleFactor = UICustomization.VersionText.Scale;
-                    settings.lineSpacing = UICustomization.VersionText.LineSpacing;
+                    settings.scaleFactor = UIConfig.VersionText.Scale;
+                    settings.lineSpacing = UIConfig.VersionText.LineSpacing;
                     MelonDebug.Msg("TextGenerationSettings settings set");
 
-                    string versionText = UICustomization.VersionText.Text;
+                    string versionText = UIConfig.VersionText.Text;
                     versionText = versionText.Replace("<loaderName/>", (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON) ? "LemonLoader" : "MelonLoader");
                     versionText = versionText.Replace("<loaderVersion/>", BuildInfo.Version);
                     versionText = versionText.Replace("LemonLoader", "<color=#FFCC4D>LemonLoader</color>");
@@ -66,9 +66,9 @@ namespace MelonLoader.MelonStartScreen
                     melonloaderversionTextmesh = TextMeshGenerator.Generate(versionText, settings);
                 }
 
-                if (UICustomization.ProgressBar.Enabled
-                    || UICustomization.ProgressText.Enabled)
-                    progressBar = new ProgressBar(width: 540, height: 36);
+                if (UIConfig.ProgressBar.Enabled || UIConfig.ProgressText.Enabled)
+                    progressBar = new ProgressBar();
+                //progressBar = new ProgressBar(width: 540, height: 36);
 
                 uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
                 MelonDebug.Msg("Graphics Device Type: " + graphicsDeviceType);
@@ -103,36 +103,45 @@ namespace MelonLoader.MelonStartScreen
                 if (UIStyleValues.BackgroundImage != null)
                     UIStyleValues.BackgroundImage.Render(0, sh, sw, -sh);
 
-                if (UICustomization.LogoImage.AutoAlign)
+                if (UIConfig.LogoImage.AutoAlign)
                     UIStyleValues.LogoImage?.Render((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight);
                 else
-                    UIStyleValues.LogoImage?.Render(UICustomization.LogoImage.CustomPosition.Item1, sh - UICustomization.LogoImage.CustomPosition.Item2, logoWidth, -logoHeight);
+                    UIStyleValues.LogoImage?.Render(UIConfig.LogoImage.CustomPosition.Item1, sh - UIConfig.LogoImage.CustomPosition.Item2, logoWidth, -logoHeight);
 
 
-                if (UICustomization.LoadingImage.AutoAlign)
+                if (UIConfig.LoadingImage.AutoAlign)
                     UIStyleValues.LoadingImage?.Render(sw - 200, 200, 132);
                 else
-                    UIStyleValues.LoadingImage?.Render(UICustomization.LoadingImage.CustomPosition.Item1, sh - UICustomization.LoadingImage.CustomPosition.Item2, 132);
+                    UIStyleValues.LoadingImage?.Render(UIConfig.LoadingImage.CustomPosition.Item1, sh - UIConfig.LoadingImage.CustomPosition.Item2, 132);
 
                 UIStyleValues.TextFont.material.SetPass(0);
 
                 if (melonloaderversionTextmesh != null)
                 {
-                    if (UICustomization.VersionText.AutoAlign)
+                    if (UIConfig.VersionText.AutoAlign)
                         Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
                     else
-                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(UICustomization.VersionText.CustomPosition.Item1, sh - UICustomization.VersionText.CustomPosition.Item2, 0), Quaternion.identity);
+                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(UIConfig.VersionText.CustomPosition.Item1, sh - UIConfig.VersionText.CustomPosition.Item2, 0), Quaternion.identity);
                 }
 
                 if (progressBar != null)
                 {
-                    if (UICustomization.ProgressBar.AutoAlign)
-                        progressBar.SetPosition(
-                        (sw - 540) / 2,
-                        sh - ((sh - 36) / 2 + (logoHeight / 2) + 50));
+                    int x, y, width, height = 0;
+                    width = 540;
+                    height = 36;
+
+                    if (UIConfig.ProgressBar.AutoAlign)
+                    {
+                        x = (sw - 540) / 2;
+                        y = sh - ((sh - 36) / 2 + (logoHeight / 2) + 50);
+                    }
                     else
-                        progressBar.SetPosition(UICustomization.ProgressBar.CustomPosition.Item1, (sh - progressBar.height) - UICustomization.ProgressBar.CustomPosition.Item2);
-                    progressBar.Render();
+                    {
+                        x = UIConfig.ProgressBar.CustomPosition.Item1;
+                        y = UIConfig.ProgressBar.CustomPosition.Item2;
+                    }
+                    
+                    progressBar.Render(x, y, width, height);
                 }
 
                 GfxDevice.PresentFrame();

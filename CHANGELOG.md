@@ -47,7 +47,8 @@
 14. Added Start Screen Version Text Customization.
 15. Added Start Screen Version Text Anchor Customization.
 16. Added Start Screen Version Text Style, RichText, FontSize, Scale, and LineSpacing Customization.
-17. Demeo_LobbyRequired has been renamed to Demeo_LobbyRequirement
+17. Demeo_LobbyRequired has been renamed to Demeo_LobbyRequirement.
+18. Cleaned up Start Screen Config.
 
 ---
 
