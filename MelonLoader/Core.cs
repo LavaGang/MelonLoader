@@ -56,7 +56,6 @@ namespace MelonLoader
         {
             bHaptics.Start();
 
-            MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
             MelonHandler.OnPreSupportModule();
 
@@ -67,6 +66,10 @@ namespace MelonLoader
                 HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
             AddUnityDebugLog();
+
+            RegisterTypeInIl2Cpp.SetReady();
+
+            MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.OnApplicationStart_Mods();
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
