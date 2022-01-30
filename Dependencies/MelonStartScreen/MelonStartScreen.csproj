@@ -51,6 +51,13 @@
     <Compile Include="mgGif\Decoder.cs" />
     <Compile Include="mgGif\Image.cs" />
     <Compile Include="ModLoadStep.cs" />
+    <Compile Include="UI\Objects\UI_AnimatedImage.cs" />
+    <Compile Include="UI\Objects\UI_Background.cs" />
+    <Compile Include="UI\Objects\UI_Image.cs" />
+    <Compile Include="UI\Objects\UI_Object.cs" />
+    <Compile Include="UI\Objects\UI_ProgressBar.cs" />
+    <Compile Include="UI\Objects\UI_Text.cs" />
+    <Compile Include="UI\UIAnchor.cs" />
     <Compile Include="UnhollowerMini\Il2CppSystem\Byte.cs" />
     <Compile Include="UnhollowerMini\Il2CppSystem\Int32.cs" />
     <Compile Include="UnhollowerMini\Il2CppSystem\Type.cs" />
@@ -67,10 +74,7 @@
     </Compile>
     <Compile Include="ScreenRenderer.cs" />
     <Compile Include="TextMeshGenerator.cs" />
-    <Compile Include="UI\AnimatedImage.cs" />
     <Compile Include="UI\UIConfig.cs" />
-    <Compile Include="UI\Image.cs" />
-    <Compile Include="UI\ProgressBar.cs" />
     <Compile Include="UI\UIStyleValues.cs" />
     <Compile Include="UI\UIUtils.cs" />
     <Compile Include="UnhollowerMini\UnityInternals.cs" />

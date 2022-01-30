@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -7,69 +6,54 @@ namespace MelonLoader.MelonStartScreen.UI
 {
     internal static class UIStyleValues
     {
-        public static Font TextFont;
+        internal static Font TextFont;
 
-        public static Texture2D BackgroundTexture;
-        public static Texture2D ProgressBarInnerTexture;
-        public static Texture2D ProgressBarOuterTexture;
-
-        public static Image BackgroundImage;
-        public static Image LogoImage;
-        public static Image LoadingImage;
+        internal static Objects.UI_Background Background;
+        internal static Objects.UI_Image LogoImage;
+        internal static Objects.UI_Image LoadingImage;
+        internal static Objects.UI_Text VersionText;
+        internal static Objects.UI_ProgressBar ProgressBar;
 
         internal static void Init()
         {
             TextFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            BackgroundTexture = UIUtils.CreateColorTexture(UIConfig.Background.SolidColor);
+            Background = new Objects.UI_Background(UIConfig.Background);
+            VersionText = new Objects.UI_Text(UIConfig.VersionText);
+            ProgressBar = new Objects.UI_ProgressBar(UIConfig.ProgressBar, UIConfig.ProgressText);
 
-            if (UIConfig.ProgressBar.Enabled)
-            {
-                ProgressBarInnerTexture = UIUtils.CreateColorTexture(UIConfig.ProgressBar.InnerColor);
-                ProgressBarOuterTexture = UIUtils.CreateColorTexture(UIConfig.ProgressBar.OuterColor);
-            }
-
-            if (UIConfig.Background.ScanForCustomImage)
-                BackgroundImage = LoadImage("Background", UIConfig.Background.Filter);
-
-            if (UIConfig.LogoImage.Enabled)
-            {
-                if (UIConfig.LogoImage.ScanForCustomImage)
-                    LogoImage = LoadImage("Logo", UIConfig.LogoImage.Filter);
-                if (LogoImage == null)
-                    LogoImage = new Image(
-                    (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+            if (UIConfig.LogoImage.ScanForCustomImage)
+                LogoImage = LoadImage(UIConfig.LogoImage, "Logo");
+            if (LogoImage == null)
+                LogoImage = new Objects.UI_Image(UIConfig.LogoImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Logo_Lemon
-                        : Properties.Resources.Logo_Melon, UIConfig.LogoImage.Filter);
-            }
+                        : Properties.Resources.Logo_Melon);
 
-            if (UIConfig.LoadingImage.Enabled)
-            {
-                if (UIConfig.LoadingImage.ScanForCustomImage)
-                    LoadingImage = LoadImage("Loading", UIConfig.LoadingImage.Filter);
-                if (LoadingImage == null)
-                    LoadingImage = new AnimatedImage(
-                    (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+            if (UIConfig.LoadingImage.ScanForCustomImage)
+                LoadingImage = LoadImage(UIConfig.LoadingImage, "Loading");
+            if (LoadingImage == null)
+                LoadingImage = new Objects.UI_AnimatedImage(UIConfig.LoadingImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Loading_Lemon
-                        : Properties.Resources.Loading_Melon, UIConfig.LoadingImage.Filter);
-            }
+                        : Properties.Resources.Loading_Melon);
         }
 
-        private static Image LoadImage(string filename, FilterMode filterMode = FilterMode.Bilinear)
+        internal static Objects.UI_Image LoadImage(UIConfig.ImageSettings imageSettings, string filename)
         {
-            string filepath = ScanForFile(filename);
+            string filepath = ScanForFile(Core.FolderPath, filename);
+            if (string.IsNullOrEmpty(filepath))
+                filepath = ScanForFile(Core.ElementsFolderPath, filename);
             if (string.IsNullOrEmpty(filepath))
                 return null;
             string fileext = Path.GetExtension(filepath).ToLowerInvariant();
             if (fileext.Equals(".gif"))
-                return new AnimatedImage(filepath, filterMode);
+                return new Objects.UI_AnimatedImage(imageSettings, filepath);
             if (fileext.Equals(".png")
                 || fileext.Equals(".jpg")
                 || fileext.Equals(".jpeg"))
-                return new Image(filepath, filterMode);
+                return new Objects.UI_Image(imageSettings, filepath);
             return null;
         }
 
-        private static string ScanForFile(string filename)
+        private static string ScanForFile(string folderPath, string filename)
         {
             string[] files = Directory.GetFiles(Core.FolderPath);
             if (files.Length <= 0)

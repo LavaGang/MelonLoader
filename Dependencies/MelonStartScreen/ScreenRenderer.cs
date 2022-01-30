@@ -27,9 +27,6 @@ namespace MelonLoader.MelonStartScreen
 
         private static uint shouldCallWFLPAGT = 0;
 
-        private static Mesh melonloaderversionTextmesh;
-        private static ProgressBar progressBar;
-
         internal static void Init()
         {
             if (disabled)
@@ -40,35 +37,6 @@ namespace MelonLoader.MelonStartScreen
                 MelonDebug.Msg("Initializing UIStyleValues");
                 UIStyleValues.Init();
                 MelonDebug.Msg("UIStyleValues Initialized");
-
-                if (UIConfig.VersionText.Enabled)
-                {
-                    TextGenerationSettings settings = new TextGenerationSettings();
-                    settings.textAnchor = UIConfig.VersionText.Anchor;
-                    settings.color = UIConfig.VersionText.TextColor;
-                    settings.generationExtents = new Vector2(540, 47.5f);
-                    settings.richText = UIConfig.VersionText.RichText;
-                    settings.font = UIStyleValues.TextFont;
-                    settings.pivot = new Vector2(0.5f, 0.5f);
-                    settings.fontSize = UIConfig.VersionText.FontSize;
-                    settings.fontStyle = UIConfig.VersionText.Style;
-                    settings.verticalOverflow = VerticalWrapMode.Overflow;
-                    settings.scaleFactor = UIConfig.VersionText.Scale;
-                    settings.lineSpacing = UIConfig.VersionText.LineSpacing;
-                    MelonDebug.Msg("TextGenerationSettings settings set");
-
-                    string versionText = UIConfig.VersionText.Text;
-                    versionText = versionText.Replace("<loaderName/>", (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON) ? "LemonLoader" : "MelonLoader");
-                    versionText = versionText.Replace("<loaderVersion/>", BuildInfo.Version);
-                    versionText = versionText.Replace("LemonLoader", "<color=#FFCC4D>LemonLoader</color>");
-                    versionText = versionText.Replace("MelonLoader", "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>");
-
-                    melonloaderversionTextmesh = TextMeshGenerator.Generate(versionText, settings);
-                }
-
-                if (UIConfig.ProgressBar.Enabled || UIConfig.ProgressText.Enabled)
-                    progressBar = new ProgressBar();
-                //progressBar = new ProgressBar(width: 540, height: 36);
 
                 uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
                 MelonDebug.Msg("Graphics Device Type: " + graphicsDeviceType);
@@ -92,30 +60,13 @@ namespace MelonLoader.MelonStartScreen
             {
                 m_SetupPixelCorrectCoordinates(false);
 
-                int sw = Screen.width;
-                int sh = Screen.height;
+                UIStyleValues.Background.Render();
+                UIStyleValues.LogoImage.Render();
+                UIStyleValues.LoadingImage.Render();
+                UIStyleValues.ProgressBar.Render();
+                UIStyleValues.VersionText.Render();
 
-                int logoHeight = (int)(sh * 0.4f);
-                int logoWidth = (int)(logoHeight * logoRatio);
-
-                Graphics.DrawTexture(new Rect(0, 0, sw, sh), UIStyleValues.BackgroundTexture);
-
-                if (UIStyleValues.BackgroundImage != null)
-                    UIStyleValues.BackgroundImage.Render(0, sh, sw, -sh);
-
-                if (UIConfig.LogoImage.AutoAlign)
-                    UIStyleValues.LogoImage?.Render((sw - logoWidth) / 2, sh - ((sh - logoHeight) / 2 - 46), logoWidth, -logoHeight);
-                else
-                    UIStyleValues.LogoImage?.Render(UIConfig.LogoImage.CustomPosition.Item1, sh - UIConfig.LogoImage.CustomPosition.Item2, logoWidth, -logoHeight);
-
-
-                if (UIConfig.LoadingImage.AutoAlign)
-                    UIStyleValues.LoadingImage?.Render(sw - 200, 200, 132);
-                else
-                    UIStyleValues.LoadingImage?.Render(UIConfig.LoadingImage.CustomPosition.Item1, sh - UIConfig.LoadingImage.CustomPosition.Item2, 132);
-
-                UIStyleValues.TextFont.material.SetPass(0);
-
+                /*
                 if (melonloaderversionTextmesh != null)
                 {
                     if (UIConfig.VersionText.AutoAlign)
@@ -132,17 +83,16 @@ namespace MelonLoader.MelonStartScreen
 
                     if (UIConfig.ProgressBar.AutoAlign)
                     {
-                        x = (sw - 540) / 2;
-                        y = sh - ((sh - 36) / 2 + (logoHeight / 2) + 50);
+                        x = (sw - width) / 2;
+                        y = sh - ((sh - height) / 2 + (logoHeight / 2) + 50);
                     }
                     else
                     {
                         x = UIConfig.ProgressBar.CustomPosition.Item1;
                         y = UIConfig.ProgressBar.CustomPosition.Item2;
                     }
-                    
-                    progressBar.Render(x, y, width, height);
                 }
+                */
 
                 GfxDevice.PresentFrame();
                 if (shouldCallWFLPAGT != 0)
@@ -157,35 +107,39 @@ namespace MelonLoader.MelonStartScreen
 
         internal static void UpdateMainProgress(string text, float progress)
         {
-            if (progressBar == null)
+            if (UIStyleValues.ProgressBar == null)
                 return;
 
-            progressBar.text = text;
-            progressBar.progress = progress;
+            UIStyleValues.ProgressBar.text.text = text;
+            UIStyleValues.ProgressBar.text.isDirty = true;
+            UIStyleValues.ProgressBar.progress = progress;
         }
 
         internal static void UpdateProgressFromLog(string msg)
         {
-            if (progressBar == null)
+            if (UIStyleValues.ProgressBar == null)
                 return;
 
-            progressBar.progress = ProgressParser.GetProgressFromLog(msg, ref progressBar.text, progressBar.progress);
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromLog(msg, ref UIStyleValues.ProgressBar.text.text, UIStyleValues.ProgressBar.progress);
+            UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
         internal static void UpdateProgressFromMod(string modname)
         {
-            if (progressBar == null)
+            if (UIStyleValues.ProgressBar == null)
                 return;
 
-            progressBar.progress = ProgressParser.GetProgressFromMod(modname, ref progressBar.text);
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(modname, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
         internal static void UpdateProgressState(ModLoadStep step)
         {
-            if (progressBar == null)
+            if (UIStyleValues.ProgressBar == null)
                 return;
 
-            progressBar.progress = ProgressParser.SetModState(step, ref progressBar.text);
+            UIStyleValues.ProgressBar.progress = ProgressParser.SetModState(step, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.text.isDirty = true;
         }
     }
 }

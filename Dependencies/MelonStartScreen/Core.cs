@@ -24,12 +24,17 @@ namespace MelonLoader.MelonStartScreen
         private static int functionRunResult = 0;
 
         internal static string FolderPath;
+        internal static string ElementsFolderPath;
 
         private static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
             FolderPath = Path.Combine(MelonUtils.UserDataDirectory, "MelonStartScreen");
             if (!Directory.Exists(FolderPath))
                 Directory.CreateDirectory(FolderPath);
+
+            ElementsFolderPath = Path.Combine(FolderPath, "Elements");
+            if (!Directory.Exists(ElementsFolderPath))
+                Directory.CreateDirectory(ElementsFolderPath);
 
             UIConfig.Load();
             if (!UIConfig.General.UseStartScreen)
