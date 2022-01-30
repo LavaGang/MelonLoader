@@ -53,7 +53,7 @@ namespace MelonLoader.CompatibilityLayers
                     description = melon.Info.DownloadLink
                 });
 
-                if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequired>(melon.Assembly) != null)
+                if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequirement>(melon.Assembly) != null)
                     ConnectionString += $", {melon.Info.Name} v{melon.Info.Version}";
             }
 
