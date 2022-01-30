@@ -155,6 +155,7 @@ namespace MelonLoader
 
             var priorityAttr = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(asm);
             var colorAttr = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(asm);
+            var authorColorAttr = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(asm);
             var procAttrs = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(asm);
             var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(asm);
             var optionalDependenciesAttr = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm);
@@ -171,6 +172,7 @@ namespace MelonLoader
             melon.Location = asm.Location;
             melon.Priority = priorityAttr == null ? 0 : priorityAttr.Priority;
             melon.ConsoleColor = colorAttr == null ? MelonLogger.DefaultMelonColor : colorAttr.Color;
+            melon.AuthorConsoleColor = authorColorAttr == null ? MelonLogger.DefaultTextColor : authorColorAttr.Color;
             melon.SupportedProcesses = procAttrs;
             melon.Games = gameAttrs;
             melon.SupportedGameVersions = gameVersionAttrs;
@@ -189,14 +191,15 @@ namespace MelonLoader
         /// <summary>
         /// Creates a new Melon instance for a Wrapper.
         /// </summary>
-        public static T CreateWrapper<T>(Assembly assembly, string name, string version, string author = null, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor color = ConsoleColor.Cyan, string id = null) where T : MelonBase, new()
+        public static T CreateWrapper<T>(Assembly assembly, string name, string version, string author = null, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
         {
             var melon = new T();
             melon.Info = new MelonInfoAttribute(typeof(T), name, version, author);
             melon.Assembly = assembly;
             melon.Location = assembly.Location;
             melon.Priority = priority;
-            melon.ConsoleColor = color;
+            melon.ConsoleColor = color ?? MelonLogger.DefaultMelonColor;
+            melon.AuthorConsoleColor = authorColor ?? MelonLogger.DefaultTextColor;
             melon.SupportedProcesses = processes;
             melon.Games = games;
             melon.OptionalDependencies = null;
@@ -642,7 +645,7 @@ namespace MelonLoader
             MelonLogger.Internal_PrintModName(ConsoleColor, Info.Name, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(Info.Author))
-                MelonLogger.Msg($"by {Info.Author}");
+                MelonLogger.Msg(AuthorConsoleColor, $"by {Info.Author}");
 
             if (!string.IsNullOrEmpty(Hash))
                 MelonLogger.Msg($"SHA256 Hash: {Hash}");
@@ -659,7 +662,7 @@ namespace MelonLoader
             MelonLogger.Internal_PrintModName(ConsoleColor, Info.Name, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(Info.Author))
-                MelonLogger.Msg($"by {Info.Author}");
+                MelonLogger.Msg(AuthorConsoleColor, $"by {Info.Author}");
 
             if (!string.IsNullOrEmpty(reason))
             {
