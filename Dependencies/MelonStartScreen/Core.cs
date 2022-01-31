@@ -24,7 +24,7 @@ namespace MelonLoader.MelonStartScreen
         private static int functionRunResult = 0;
 
         internal static string FolderPath;
-        internal static string ElementsFolderPath;
+        internal static string ThemesFolderPath;
 
         private static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
@@ -32,12 +32,12 @@ namespace MelonLoader.MelonStartScreen
             if (!Directory.Exists(FolderPath))
                 Directory.CreateDirectory(FolderPath);
 
-            ElementsFolderPath = Path.Combine(FolderPath, "Elements");
-            if (!Directory.Exists(ElementsFolderPath))
-                Directory.CreateDirectory(ElementsFolderPath);
+            ThemesFolderPath = Path.Combine(FolderPath, "Themes");
+            if (!Directory.Exists(ThemesFolderPath))
+                Directory.CreateDirectory(ThemesFolderPath);
 
             UIConfig.Load();
-            if (!UIConfig.General.UseStartScreen)
+            if (!UIConfig.General.Enabled)
                 return functionToWaitForAsync();
 
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+

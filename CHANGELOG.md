@@ -52,6 +52,7 @@
 19. Rewrote Start Screen UI Element Backend.
 20. Updated AssetsTools.NET to v2.0.11.
 21. Fixed Issue with Melon Author Coloring.
+22. Added Theme Folders and Theme Selection to Start Screen Customization.
 
 ---
 
