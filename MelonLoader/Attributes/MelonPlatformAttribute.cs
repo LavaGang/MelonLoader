@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace MelonLoader
 {
@@ -17,5 +18,8 @@ namespace MelonLoader
 
         // <summary>Platforms Compatible with the Melon.</summary>
         public CompatiblePlatforms[] Platforms { get; internal set; }
+
+        public bool IsCompatible(CompatiblePlatforms platform)
+            => Platforms == null || Platforms.Length == 0 || Platforms.Contains(platform);
     }
 }

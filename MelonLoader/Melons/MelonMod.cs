@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace MelonLoader
 {
-    public abstract class MelonMod : MelonBase
+    public abstract class MelonMod : Melon<MelonMod>
     {
+        static MelonMod()
+        {
+            TypeName = "Mod";
+        }
+
         /// <summary>
         /// Runs when a Scene has Loaded and is passed the Scene's Build Index and Name.
         /// </summary>
@@ -30,6 +36,7 @@ namespace MelonLoader
         /// </summary>
         public virtual void BONEWORKS_OnLoadingScreen() { }
 
+        #region Obsolete Members
         [Obsolete("OnLevelWasLoaded is obsolete. Please use OnSceneWasLoaded instead.")]
         public virtual void OnLevelWasLoaded(int level) { }
         [Obsolete("OnLevelWasInitialized is obsolete. Please use OnSceneWasInitialized instead.")]
@@ -51,5 +58,6 @@ namespace MelonLoader
                 _LegacyGameAttributes = newatts.ToArray();
                 return _LegacyGameAttributes;
             } }
+        #endregion
     }
 }
