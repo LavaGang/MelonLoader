@@ -642,10 +642,7 @@ namespace MelonLoader
             MelonLogger.Msg(ConsoleColor.DarkGreen, "------------------------------");
 
             MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " loaded:");
-            MelonLogger.Internal_PrintModName(ConsoleColor, Info.Name, Info.Version, ID);
-
-            if (!string.IsNullOrEmpty(Info.Author))
-                MelonLogger.Msg(AuthorConsoleColor, $"by {Info.Author}");
+            MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(Hash))
                 MelonLogger.Msg($"SHA256 Hash: {Hash}");
@@ -659,10 +656,7 @@ namespace MelonLoader
             MelonLogger.Msg(ConsoleColor.DarkRed, "------------------------------");
 
             MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " unloaded:");
-            MelonLogger.Internal_PrintModName(ConsoleColor, Info.Name, Info.Version, ID);
-
-            if (!string.IsNullOrEmpty(Info.Author))
-                MelonLogger.Msg(AuthorConsoleColor, $"by {Info.Author}");
+            MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(reason))
             {
