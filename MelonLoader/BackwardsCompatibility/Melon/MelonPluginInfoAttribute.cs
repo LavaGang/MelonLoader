@@ -4,27 +4,19 @@ namespace MelonLoader
 {
     [Obsolete("MelonLoader.MelonPluginInfoAttribute is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo instead.")]
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
-    public class MelonPluginInfoAttribute : Attribute
+    public class MelonPluginInfoAttribute : MelonInfoAttribute
     {
         [Obsolete("MelonLoader.MelonPluginInfoAttribute.SystemType is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo.SystemType instead.")]
-        public Type SystemType { get; }
+        new public Type SystemType => base.SystemType;
         [Obsolete("MelonLoader.MelonPluginInfoAttribute.Name is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo.Name instead.")]
-        public string Name { get; }
+        new public string Name => base.Name;
         [Obsolete("MelonLoader.MelonPluginInfoAttribute.Version is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo.Version instead.")]
-        public string Version { get; }
+        new public string Version => base.Version;
         [Obsolete("MelonLoader.MelonPluginInfoAttribute.Author is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo.Author instead.")]
-        public string Author { get; }
+        new public string Author => base.Author;
         [Obsolete("MelonLoader.MelonPluginInfoAttribute.DownloadLink is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo.DownloadLink instead.")]
-        public string DownloadLink { get; }
+        new public string DownloadLink => base.DownloadLink;
         [Obsolete("MelonLoader.MelonPluginInfoAttribute is Only Here for Compatibility Reasons. Please use MelonLoader.MelonInfo instead.")]
-        public MelonPluginInfoAttribute(Type type, string name, string version, string author, string downloadLink = null)
-        {
-            SystemType = type;
-            Name = name;
-            Version = version;
-            Author = author;
-            DownloadLink = downloadLink;
-        }
-        internal MelonInfoAttribute Convert() => new MelonInfoAttribute(SystemType, Name, Version, Author, DownloadLink);
+        public MelonPluginInfoAttribute(Type type, string name, string version, string author, string downloadLink = null) : base(type, name, version, author, downloadLink) { }
     }
 }

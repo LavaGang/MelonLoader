@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace MelonLoader
 {
-    public abstract class MelonPlugin : MelonBase
+    public abstract class MelonPlugin : Melon<MelonPlugin>
     {
+        static MelonPlugin()
+        {
+            TypeName = "Plugin";
+        }
+
         /// <summary>
         /// Runs before Game Initialization.
         /// </summary>
@@ -15,6 +21,7 @@ namespace MelonLoader
         /// </summary>
         public virtual void OnApplicationEarlyStart() { }
 
+        #region Obsolete Members
         [Obsolete()]
         private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
         [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead.")]
@@ -35,5 +42,6 @@ namespace MelonLoader
                 return _LegacyGameAttributes;
             }
         }
+        #endregion
     }
 }

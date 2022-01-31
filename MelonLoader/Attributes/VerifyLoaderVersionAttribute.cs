@@ -41,5 +41,11 @@ namespace MelonLoader
             SemVer = semver;
             IsMinimum = is_minimum;
         }
+
+        public bool IsCompatible(SemVersion version)
+            => SemVer == null || version == null || (IsMinimum ? SemVer <= version : SemVer == version);
+
+        public bool IsCompatible(string version)
+            => !SemVersion.TryParse(version, out SemVersion ver) || IsCompatible(ver);
     }
 }
