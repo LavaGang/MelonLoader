@@ -84,7 +84,7 @@ namespace MelonLoader
                 MelonLogger.Internal_PrintModName(melon.ConsoleColor, melon.Info.Name, melon.Info.Version, melon.ID);
 
                 if (!string.IsNullOrEmpty(melon.Info.Author))
-                    MelonLogger.Msg($"by {melon.Info.Author}", melon.AuthorConsoleColor);
+                    MelonLogger.Msg(melon.AuthorConsoleColor, $"by {melon.Info.Author}");
 
                 string melonhash = GetMelonHash(melon);
                 if (!string.IsNullOrEmpty(melonhash))
