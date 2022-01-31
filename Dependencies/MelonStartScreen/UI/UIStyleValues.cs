@@ -40,8 +40,6 @@ namespace MelonLoader.MelonStartScreen.UI
         {
             string filepath = ScanForFile(UIConfig.ThemePath, filename);
             if (string.IsNullOrEmpty(filepath))
-                filepath = ScanForFile(Core.FolderPath, filename);
-            if (string.IsNullOrEmpty(filepath))
                 return null;
             string fileext = Path.GetExtension(filepath).ToLowerInvariant();
             if (fileext.Equals(".gif"))
@@ -55,7 +53,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
         private static string ScanForFile(string folderPath, string filename)
         {
-            string[] files = Directory.GetFiles(Core.FolderPath);
+            string[] files = Directory.GetFiles(folderPath);
             if (files.Length <= 0)
                 return null;
             return files.FirstOrDefault(x =>
