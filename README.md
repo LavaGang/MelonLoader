@@ -43,6 +43,7 @@
 | - |
 | [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
 | [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
+| [v0.6.0-rewrite](https://nightly.link/LavaGang/MelonLoader/workflows/build/v0.6.0-rewrite) |
 
 ---
 
