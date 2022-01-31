@@ -9,12 +9,10 @@ using HarmonyLib.Tools;
 using Mono.Cecil;
 using MonoMod.Utils;
 using MonoMod.Cil;
-using UnhollowerBaseLib;
-using MelonLoader.InternalUtils;
 
-namespace MelonLoader.Support
+namespace MelonLoader.InternalUtils
 {
-    internal class HarmonyMethodPatcher : MethodPatcher
+    internal class HarmonyIl2CppMethodPatcher : MethodPatcher
     {
         private static AccessTools.FieldRef<ILGenerator, int> codeLenGetter = null;
         private static AccessTools.FieldRef<ILGenerator, LocalBuilder[]> localsGetter = null;
@@ -27,7 +25,7 @@ namespace MelonLoader.Support
         private delegate void PatchTools_RememberObject_Delegate(object key, object value);
         private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;
 
-        static HarmonyMethodPatcher()
+        static HarmonyIl2CppMethodPatcher()
         {
             try { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len"); }
             catch { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length"); }
@@ -38,15 +36,14 @@ namespace MelonLoader.Support
 
         internal static void TryResolve(object sender, PatchManager.PatcherResolverEventArgs args)
         {
-            if (Main.unhollower.IsInheritedFromIl2CppObjectBase(args.Original.DeclaringType)
-                && !Main.unhollower.IsInjectedType(args.Original.DeclaringType))
-                args.MethodPatcher = new HarmonyMethodPatcher(args.Original);
+            if (UnhollowerSupport.IsGeneratedAssemblyType(args.Original.DeclaringType))
+                args.MethodPatcher = new HarmonyIl2CppMethodPatcher(args.Original);
         }
 
-        private HarmonyMethodPatcher(MethodBase original) : base(original)
+        private HarmonyIl2CppMethodPatcher(MethodBase original) : base(original)
         {
             originalMethodInfoPointer = UnhollowerSupport.MethodBaseToIl2CppMethodInfoPointer(Original);
-            copiedMethodInfoPointer = Main.unhollower.CopyMethodInfoStruct(originalMethodInfoPointer);
+            copiedMethodInfoPointer = (IntPtr)UnhollowerSupport.CopyMethodInfoStructMethod.Invoke(null, new object[] { originalMethodInfoPointer });
         }
 
         public override MethodBase DetourTo(MethodBase replacement)
@@ -79,7 +76,7 @@ namespace MelonLoader.Support
             ILContext ilcontext = new ILContext(method.Definition);
             ILCursor ilcursor = new ILCursor(ilcontext);
             FieldReference tempfieldreference = null;
-            if (ilcursor.TryGotoNext(x => x.MatchLdsfld(out tempfieldreference), x => x.MatchCall(typeof(IL2CPP), "il2cpp_object_get_virtual_method")))
+            if (ilcursor.TryGotoNext(x => x.MatchLdsfld(out tempfieldreference), x => x.MatchCall(UnhollowerSupport.IL2CPPType, "il2cpp_object_get_virtual_method")))
             {
                 // Virtual method: Replace the sequence
                 // - ldarg.0
@@ -90,7 +87,7 @@ namespace MelonLoader.Support
                 ilcursor.Index -= 2;
                 ilcursor.RemoveRange(4);
             }
-            else if (ilcursor.TryGotoNext(x => x.MatchLdsfld(Main.unhollower.MethodBaseToIl2CppFieldInfo(Original))))
+            else if (ilcursor.TryGotoNext(x => x.MatchLdsfld(UnhollowerSupport.MethodBaseToIl2CppFieldInfo(Original))))
                 ilcursor.Remove();
             else
             {
@@ -186,10 +183,10 @@ namespace MelonLoader.Support
             if (type.IsByRef)
             {
                 Type element = type.GetElementType();
-                if (element == typeof(string) || Main.unhollower.IsInheritedFromIl2CppObjectBase(element))
+                if (element == typeof(string) || UnhollowerSupport.IsGeneratedAssemblyType(element))
                     return typeof(IntPtr*);
             }
-            else if (type == typeof(string) || Main.unhollower.IsInheritedFromIl2CppObjectBase(type))
+            else if (type == typeof(string) || UnhollowerSupport.IsGeneratedAssemblyType(type))
                 return typeof(IntPtr);
             return type;
         }
@@ -217,7 +214,7 @@ namespace MelonLoader.Support
                     il.Emit(OpCodes.Ldind_I);
                 }
 
-                il.Emit(OpCodes.Call, AccessTools.DeclaredMethod(typeof(IL2CPP), "Il2CppStringToManaged", new Type[] { typeof(IntPtr) }));
+                il.Emit(OpCodes.Call, UnhollowerSupport.Il2CppStringToManagedMethod);
 
                 if (byRef)
                 {
@@ -225,7 +222,7 @@ namespace MelonLoader.Support
                     il.Emit(OpCodes.Ldloca, byRefLocal);
                 }
             }
-            else if (Main.unhollower.IsInheritedFromIl2CppObjectBase(currentType))
+            else if (UnhollowerSupport.IsGeneratedAssemblyType(currentType))
             {
                 // return ptr == 0 ? null : new SomeType(ptr);
 
@@ -265,9 +262,9 @@ namespace MelonLoader.Support
         private static void ConvertTypeToIl2Cpp(ILGenerator il, Type returnType)
         {
             if (returnType == typeof(string))
-                il.Emit(OpCodes.Call, AccessTools.DeclaredMethod(typeof(IL2CPP), "ManagedStringToIl2Cpp", new Type[] { typeof(string) }));
-            else if (!returnType.IsValueType && Main.unhollower.IsInheritedFromIl2CppObjectBase(returnType))
-                il.Emit(OpCodes.Call, AccessTools.DeclaredMethod(typeof(IL2CPP), "Il2CppObjectBaseToPtr", new Type[] { typeof(Il2CppObjectBase) }));
+                il.Emit(OpCodes.Call, UnhollowerSupport.ManagedStringToIl2CppMethod);
+            else if (!returnType.IsValueType && UnhollowerSupport.IsGeneratedAssemblyType(returnType))
+                il.Emit(OpCodes.Call, UnhollowerSupport.Il2CppObjectBaseToPtrMethod);
         }
 
         private static string CodePos(ILGenerator il)
@@ -322,7 +319,7 @@ namespace MelonLoader.Support
 
         private void WarnIfOriginalMethodIsInlined(MelonLogger.Instance loggerInstance)
         {
-            int callerCount = Main.unhollower.GetIl2CppMethodCallerCount(Original) ?? -1;
+            int callerCount = UnhollowerSupport.GetIl2CppMethodCallerCount(Original) ?? -1;
             if (callerCount > 0
                 || UnityMagicMethods.IsUnityMagicMethod(Original))
                 return;
@@ -350,7 +347,7 @@ namespace MelonLoader.Support
         {
             MelonLogger.Instance loggerInstance = null;
 
-            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonHandler.Plugins);
+            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonPlugin._registeredMelons.ToArray());
             while (PluginEnumerator.MoveNext())
                 if (criterion(PluginEnumerator.Current))
                 {
@@ -360,7 +357,7 @@ namespace MelonLoader.Support
 
             if (loggerInstance == null)
             {
-                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonHandler.Mods);
+                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonMod._registeredMelons.ToArray());
                 while (ModEnumerator.MoveNext())
                     if (criterion(ModEnumerator.Current))
                     {

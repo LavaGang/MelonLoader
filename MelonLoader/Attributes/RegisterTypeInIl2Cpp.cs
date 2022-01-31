@@ -8,7 +8,10 @@ namespace MelonLoader
     [AttributeUsage(AttributeTargets.Class)]
     public class RegisterTypeInIl2Cpp : Attribute //Naming violation?
     {
+        internal static List<Assembly> registrationQueue = new List<Assembly>();
+        internal static bool ready;
         internal bool LogSuccess = true;
+
         public RegisterTypeInIl2Cpp() { }
         public RegisterTypeInIl2Cpp(bool logSuccess) { LogSuccess = logSuccess; }
 
@@ -16,6 +19,13 @@ namespace MelonLoader
         {
             if (!MelonUtils.IsGameIl2Cpp())
                 return;
+
+            if (!ready)
+            {
+                registrationQueue.Add(asm);
+                return;
+            }
+
             IEnumerable<Type> typeTbl = asm.GetValidTypes();
             if ((typeTbl == null) || (typeTbl.Count() <= 0))
                 return;
@@ -29,6 +39,19 @@ namespace MelonLoader
                     continue;
                 UnhollowerSupport.RegisterTypeInIl2CppDomain(type, att.LogSuccess);
             }
+        }
+
+        internal static void SetReady()
+        {
+            ready = true;
+
+            if (registrationQueue == null)
+                return;
+
+            foreach (var asm in registrationQueue)
+                RegisterAssembly(asm);
+
+            registrationQueue = null;
         }
     }
 }

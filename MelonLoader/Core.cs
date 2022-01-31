@@ -37,7 +37,7 @@ namespace MelonLoader
             MelonCompatibilityLayer.Setup();
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
 
-            MelonHandler.LoadPlugins();
+            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
             MelonHandler.OnPreInitialization();
 
             return 0;
@@ -58,8 +58,7 @@ namespace MelonLoader
         {
             bHaptics.Start();
 
-            MelonHandler.OnApplicationStart_Plugins();
-            MelonHandler.LoadMods();
+            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
             MelonHandler.OnPreSupportModule();
 
             if (!SupportModule.Setup())
@@ -67,6 +66,10 @@ namespace MelonLoader
 
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
             AddUnityDebugLog();
+
+            RegisterTypeInIl2Cpp.SetReady();
+
+            MelonHandler.OnApplicationStart_Plugins();
             MelonHandler.OnApplicationStart_Mods();
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
