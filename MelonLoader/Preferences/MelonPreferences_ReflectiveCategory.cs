@@ -1,5 +1,6 @@
 ﻿using System;
 using Tomlet;
+using Tomlet.Exceptions;
 using Tomlet.Models;
 
 namespace MelonLoader.Preferences
@@ -34,7 +35,22 @@ namespace MelonLoader.Preferences
 
         internal void LoadDefaults() => value = Activator.CreateInstance(SystemType);
 
-        internal void Load(TomlValue tomlValue) => value = TomletMain.To(SystemType, tomlValue);
+        internal void Load(TomlValue tomlValue)
+        {
+            try { value = TomletMain.To(SystemType, tomlValue); }
+            catch (TomlTypeMismatchException)
+            {
+                return;
+            }
+            catch (TomlNoSuchValueException)
+            {
+                return;
+            }
+            catch (TomlEnumParseException)
+            {
+                return;
+            }
+        }
 
         internal TomlValue Save()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Tomlet;
+using Tomlet.Exceptions;
 using Tomlet.Models;
 
 namespace MelonLoader
@@ -84,7 +85,22 @@ namespace MelonLoader
         public override string GetDefaultValueAsString() => DefaultValue?.ToString();
         public override string GetValueAsString() => Value?.ToString();
 
-        public override void Load(TomlValue obj) => Value = TomletMain.To<T>(obj);
+        public override void Load(TomlValue obj)
+        {
+            try { Value = TomletMain.To<T>(obj); }
+            catch (TomlTypeMismatchException)
+            {
+                return;
+            }
+            catch (TomlNoSuchValueException)
+            {
+                return;
+            }
+            catch (TomlEnumParseException)
+            {
+                return;
+            }
+        }
         public override TomlValue Save()
         {
             Value = EditedValue;

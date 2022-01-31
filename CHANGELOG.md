@@ -55,6 +55,7 @@
 22. Added Theme Folders and Theme Selection to Start Screen Customization.
 23. Fixed Issue with Custom Start Screen Background Image rendering upside-down.
 24. Fixed Issue with Custom Start Screen Image Scanning not checking the Theme's Folder.
+25. Fixed Issue with TomlEnumParseException during MelonPreferences load causing Crashing.
 
 ---
 
