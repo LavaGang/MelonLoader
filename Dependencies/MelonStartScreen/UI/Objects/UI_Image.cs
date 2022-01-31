@@ -44,7 +44,7 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
         {
             if (!config.Enabled)
                 return;
-            Graphics.DrawTexture(new Rect(x, y, width, height), MainTexture);
+            Graphics.DrawTexture(new Rect(x, height + y, width, -height), MainTexture);
         }
     }
 }
