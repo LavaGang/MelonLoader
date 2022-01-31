@@ -11,6 +11,7 @@ namespace MelonLoader.MelonStartScreen
     internal static class UIConfig
     {
         private static string FilePath;
+        internal static string ThemePath;
 
         internal static cGeneral General;
         internal static cBackground Background;
@@ -22,20 +23,25 @@ namespace MelonLoader.MelonStartScreen
 
         internal static void Load()
         {
-            FilePath = Path.Combine(Core.FolderPath, "Config.cfg");
             TomletMain.RegisterMapper(WriteColor, ReadColor);
 
-            General = CreateCat<cGeneral>(nameof(General));
+            FilePath = Path.Combine(Core.FolderPath, "Config.cfg");
+            General = CreateCat<cGeneral>(FilePath, nameof(General));
+            MelonLogger.Msg($"Using Start Screen Theme: \"{General.Theme}\"");
 
-            Background = CreateCat<cBackground>(Path.Combine(Core.ElementsFolderPath, $"{nameof(Background)}.cfg"), nameof(Background));
-            LogoImage = CreateCat<LogoImageSettings>(Path.Combine(Core.ElementsFolderPath, $"{nameof(LogoImage)}.cfg"), nameof(LogoImage));
-            LoadingImage = CreateCat<LoadingImageSettings>(Path.Combine(Core.ElementsFolderPath, $"{nameof(LoadingImage)}.cfg"), nameof(LoadingImage));
-            VersionText = CreateCat<VersionTextSettings>(Path.Combine(Core.ElementsFolderPath, $"{nameof(VersionText)}.cfg"), nameof(VersionText));
-            ProgressText = CreateCat<ProgressTextSettings>(Path.Combine(Core.ElementsFolderPath, $"{nameof(ProgressText)}.cfg"), nameof(ProgressText));
-            ProgressBar = CreateCat<cProgressBar>(Path.Combine(Core.ElementsFolderPath, $"{nameof(ProgressBar)}.cfg"), nameof(ProgressBar));
+            ThemePath = Path.Combine(Core.ThemesFolderPath, General.Theme);
+            if (!Directory.Exists(ThemePath))
+                Directory.CreateDirectory(ThemePath);
+
+            Background = CreateCat<cBackground>(nameof(Background));
+            LogoImage = CreateCat<LogoImageSettings>(nameof(LogoImage));
+            LoadingImage = CreateCat<LoadingImageSettings>(nameof(LoadingImage));
+            VersionText = CreateCat<VersionTextSettings>(nameof(VersionText));
+            ProgressText = CreateCat<ProgressTextSettings>(nameof(ProgressText));
+            ProgressBar = CreateCat<cProgressBar>(nameof(ProgressBar));
         }
 
-        private static T CreateCat<T>(string name) where T : new() => CreateCat<T>(FilePath, name);
+        private static T CreateCat<T>(string name) where T : new() => CreateCat<T>(Path.Combine(ThemePath, $"{name}.cfg"), name);
         private static T CreateCat<T>(string filePath, string name) where T : new()
         {
             Preferences.MelonPreferences_ReflectiveCategory cat = MelonPreferences.CreateCategory<T>(name, name);
@@ -48,7 +54,9 @@ namespace MelonLoader.MelonStartScreen
         internal class cGeneral
         {
             [TomlPrecedingComment("Toggles the Entire Start Screen  ( true | false )")]
-            internal bool UseStartScreen = true;
+            internal bool Enabled = true;
+            [TomlPrecedingComment("Current Theme of the Start Screen")]
+            internal string Theme = "Default";
         }
 
         internal class cBackground : ImageSettings

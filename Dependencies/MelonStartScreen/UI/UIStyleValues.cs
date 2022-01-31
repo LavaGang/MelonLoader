@@ -38,9 +38,9 @@ namespace MelonLoader.MelonStartScreen.UI
 
         internal static Objects.UI_Image LoadImage(UIConfig.ImageSettings imageSettings, string filename)
         {
-            string filepath = ScanForFile(Core.FolderPath, filename);
+            string filepath = ScanForFile(UIConfig.ThemePath, filename);
             if (string.IsNullOrEmpty(filepath))
-                filepath = ScanForFile(Core.ElementsFolderPath, filename);
+                filepath = ScanForFile(Core.FolderPath, filename);
             if (string.IsNullOrEmpty(filepath))
                 return null;
             string fileext = Path.GetExtension(filepath).ToLowerInvariant();

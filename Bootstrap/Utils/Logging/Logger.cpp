@@ -93,7 +93,7 @@ void Logger::WriteSpacer()
 	std::cout << std::endl;
 }
 
-void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, const char* version, const char* id)
+void Logger::Internal_PrintModName(Console::Color meloncolor, Console::Color authorcolor, const char* name, const char* author, const char* version, const char* id)
 {
 	// Not using log object for this as we're modifying conventional coloring
 	std::string timestamp = GetTimestamp();
@@ -128,6 +128,24 @@ void Logger::Internal_PrintModName(Console::Color meloncolor, const char* name, 
 	std::cout
 		<< std::endl
 		<< Console::ColorToAnsi(Console::Color::Gray, false);
+
+	if (author != NULL)
+	{
+		timestamp = GetTimestamp();
+		LogFile << "[" << timestamp << "] by " << author << std::endl;
+
+		std::cout
+			<< Console::ColorToAnsi(Console::Color::Gray)
+			<< "["
+			<< Console::ColorToAnsi(Console::Color::Green)
+			<< timestamp
+			<< Console::ColorToAnsi(Console::Color::Gray)
+			<< "] by "
+			<< Console::ColorToAnsi(authorcolor)
+			<< author
+			<< std::endl
+			<< Console::ColorToAnsi(Console::Color::Gray, false);
+	}
 }
 
 void Logger::Internal_Msg(Console::Color meloncolor, Console::Color txtcolor, const char* namesection, const char* txt)
