@@ -50,6 +50,7 @@
 17. Demeo_LobbyRequired has been renamed to Demeo_LobbyRequirement.
 18. Cleaned up Start Screen Config.
 19. Rewrote Start Screen UI Element Backend.
+20. Updated AssetsTools.NET to v2.0.11.
 
 ---
 
