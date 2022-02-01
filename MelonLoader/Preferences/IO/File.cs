@@ -120,7 +120,7 @@ namespace MelonLoader.Preferences.IO
             }
         }
 
-        internal bool RemoveFromDocument(string category, string key)
+        internal bool RemoveEntryFromDocument(string category, string key)
         {
             if (!document.ContainsKey(category))
                 return false;
@@ -129,6 +129,24 @@ namespace MelonLoader.Preferences.IO
             {
                 var categoryTable = document.GetSubTable(category);
                 return categoryTable.Entries.Remove(key);
+            }
+            catch (TomlTypeMismatchException)
+            {
+                return false;
+            }
+            catch (TomlNoSuchValueException)
+            {
+                return false;
+            }
+        }
+
+        internal bool RemoveCategoryFromDocument(string category)
+        {
+            if (!document.ContainsKey(category))
+                return false;
+            try
+            {
+                return document.Entries.Remove(category);
             }
             catch (TomlTypeMismatchException)
             {

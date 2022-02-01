@@ -84,7 +84,7 @@ namespace MelonLoader
             if (currentfile == null)
                 currentfile = MelonPreferences.DefaultFile;
 
-            return currentfile.RemoveFromDocument(Identifier, identifier);
+            return currentfile.RemoveEntryFromDocument(Identifier, identifier);
         }
 
         public bool RenameEntry(string identifier, string newIdentifier)

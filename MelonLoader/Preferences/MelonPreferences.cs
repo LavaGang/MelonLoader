@@ -339,6 +339,14 @@ namespace MelonLoader
             MelonHandler.OnPreferencesLoaded(file.FilePath);
         }
 
+        public static void RemoveCategoryFromFile(string filePath, string categoryName)
+        {
+            Preferences.IO.File currentFile = GetPrefFileFromFilePath(filePath);
+            if (currentFile == null)
+                currentFile = DefaultFile;
+            currentFile.RemoveCategoryFromDocument(categoryName);
+        }
+
         internal static bool IsFilePathDefault(string filepath) => new FileInfo(filepath).FullName.Equals(new FileInfo(DefaultFile.FilePath).FullName);
     }
 }
