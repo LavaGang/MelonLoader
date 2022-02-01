@@ -343,7 +343,7 @@ namespace MelonLoader
         {
             Preferences.IO.File currentFile = GetPrefFileFromFilePath(filePath);
             if (currentFile == null)
-                currentFile = DefaultFile;
+                return;
             currentFile.RemoveCategoryFromDocument(categoryName);
         }
 
