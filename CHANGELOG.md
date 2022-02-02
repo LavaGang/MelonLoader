@@ -1,35 +1,35 @@
-### Version List:
-
-[v0.5.4 Open-Beta](#v054-open-beta)  
-[v0.5.3 Open-Beta](#v053-open-beta)  
-[v0.5.2 Open-Beta](#v052-open-beta)  
-[v0.5.1 Open-Beta](#v051-open-beta)  
-[v0.5.0 Open-Beta](#v050-open-beta)  
-[v0.4.3 Open-Beta](#v043-open-beta)  
-[v0.4.2 Open-Beta](#v042-open-beta)  
-[v0.4.1 Open-Beta](#v041-open-beta)  
-[v0.4.0 Open-Beta](#v040-open-beta)  
-[v0.3.0 Open-Beta](#v030-open-beta)  
-[v0.2.7.4 Open-Beta](#v0274-open-beta)  
-[v0.2.7.3 Open-Beta](#v0273-open-beta)  
-[v0.2.7.2 Open-Beta](#v0272-open-beta)  
-[v0.2.7.1 Open-Beta](#v0271-open-beta)  
-[v0.2.7 Open-Beta](#v027-open-beta)  
-[v0.2.6 Open-Beta](#v026-open-beta)  
-[v0.2.5 Open-Beta](#v025-open-beta)  
-[v0.2.4 Open-Beta](#v024-open-beta)  
-[v0.2.3 Open-Beta](#v023-open-beta)  
-[v0.2.2 Open-Beta](#v022-open-beta)  
-[v0.2.1 Open-Beta](#v021-open-beta)  
-[v0.2.0 Open-Beta](#v020-open-beta)  
-[v0.1.0 Open-Beta](#v010-open-beta)  
-[v0.0.3 Closed-Beta](#v003-closed-beta)  
-[v0.0.2 Closed-Beta](#v002-closed-beta)  
-[v0.0.1 Closed-Beta](#v001-closed-beta)  
+| Versions: |
+| - |
+| [v0.5.4](#v054) |
+| [v0.5.3](#v053) | 
+| [v0.5.2](#v052) |
+| [v0.5.1](#v051) |
+| [v0.5.0](#v050) |
+| [v0.4.3](#v043) |
+| [v0.4.2](#v042) |
+| [v0.4.1](#v041) |
+| [v0.4.0](#v040) |
+| [v0.3.0](#v030) |
+| [v0.2.7.4](#v0274) |
+| [v0.2.7.3](#v0273) |
+| [v0.2.7.2](#v0272) |
+| [v0.2.7.1](#v0271) |
+| [v0.2.7](#v027) |
+| [v0.2.6](#v026) |
+| [v0.2.5](#v025) |
+| [v0.2.4](#v024) |
+| [v0.2.3](#v023) |
+| [v0.2.2](#v022) |
+| [v0.2.1](#v021) |
+| [v0.2.0](#v020) |
+| [v0.1.0](#v010) |
+| [v0.0.3](#v003) |
+| [v0.0.2](#v002) |
+| [v0.0.1](#v001) |
 
 ---
 
-### v0.5.4 Open-Beta:
+### v0.5.4:
 
 1. Modified VerifyLoaderVersion Attribute to bring it in line with SemVer spec.
 2. Removed File Watchers from Start Screen Config.
@@ -63,7 +63,7 @@
 
 ---
 
-### v0.5.3 Open-Beta:
+### v0.5.3:
 
 1. Updated HarmonyX to v2.8.0.
 2. Updated Tomlet to v3.1.3.
@@ -143,14 +143,14 @@
 
 ---
 
-### v0.5.2 Open-Beta:
+### v0.5.2:
 
 1. Fixed Issue with --melonloader.basedir Launch Option not finding Bootstrap.dll.
 2. Fixed Issue with Console not properly Coloring Melon Names.    (Credits to [benaclejames](https://github.com/benaclejames) :D)  
 
 ---
 
-### v0.5.1 Open-Beta:
+### v0.5.1:
 
 1. Updated Il2CppAssemblyUnhollower to v0.4.16.2.
 2. Added '(' and ')' Character to Assembly Verification.
@@ -169,7 +169,7 @@
 
 ---
 
-### v0.5.0 Open-Beta:
+### v0.5.0:
 
 1. Updated HarmonyX to v2.6.1.
 2. Updated Tomlet to v2.1.0.	
@@ -245,7 +245,7 @@
 
 ---
 
-### v0.4.3 Open-Beta:
+### v0.4.3:
 
 1. Fixed Issue with Mono Library Scanning.
 2. Updated HarmonyX to v2.5.1.
@@ -254,7 +254,7 @@
 
 ---
 
-### v0.4.2 Open-Beta:
+### v0.4.2:
 
 1. Fixed Issue with Internal Calls being added twice.
 2. Fixed Issue with Compatibility Layer System not running Constructors.
@@ -274,7 +274,7 @@
 
 ---
 
-### v0.4.1 Open-Beta:
+### v0.4.1:
 
 1. Fixed Issue with Compatibility Layer system throwing NRE about Default Constructors.
 2. Added MelonCompatibilityLayer.WrapperData Extensions.
@@ -311,7 +311,7 @@
 
 ---
 
-### v0.4.0 Open-Beta:
+### v0.4.0:
 
 1. Tweaked Assembly Load exceptions logging.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
 2. Fixed Assembly Load logging typo.    (Credits to [Slaynash](https://github.com/Slaynash) :3)
@@ -518,7 +518,7 @@
 
 ---
 
-### v0.3.0 Open-Beta:
+### v0.3.0:
 
 1. Rewrote Proxy from scratch.
 2. Rewrote Bootstrap from scratch.
@@ -759,32 +759,32 @@
 
 ---
 
-### v0.2.7.4 Open-Beta:
+### v0.2.7.4:
 
 1. Fixed Issue with Amplitude using new Endpoints.
 
 ---
 
-### v0.2.7.3 Open-Beta:
+### v0.2.7.3:
 
 1. Updated Il2CppAssemblyUnhollower to v0.4.10.0.
 2. Il2CppDumper and Il2CppAssemblyUnhollower executables will now display their command lines in the log files.    (Credits to [stephenc87](https://github.com/stephenc87) :D)
 
 ---
 
-### v0.2.7.2 Open-Beta:
+### v0.2.7.2:
 
 1. Fixed Small Issue with VRChat_OnUiManagerInit.
 
 ---
 
-### v0.2.7.1 Open-Beta:
+### v0.2.7.1:
 
 1. Use a different approach to console cleaning for better interop with other tools.    (Credits to [knah](https://github.com/knah) :D)
 
 ---
 
-### v0.2.7 Open-Beta:
+### v0.2.7:
 
 1. Console no longer has stdout directed to it.    (Credits to [knah](https://github.com/knah) :D)
 2. Removed VRChat Auth Token Hider as it's no longer necessary.    (Credits to [knah](https://github.com/knah) :D)
@@ -797,7 +797,7 @@
 
 ---
 
-### v0.2.6 Open-Beta:
+### v0.2.6:
 
 1. Fixed Issue with Logger Timestamp making New Lines.
 2. Added Silent Launch Option to Installer.   (Credits to [TrevTV](https://github.com/TrevTV) :P)
@@ -851,7 +851,7 @@
 
 ---
 
-### v0.2.5 Open-Beta:
+### v0.2.5:
 
 1. Fixed Issue that prevented deserializing structs with TinyJSON.  (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
 2. Simplified External Tool Versions.
@@ -884,7 +884,7 @@
 
 ---
 
-### v0.2.4 Open-Beta:
+### v0.2.4:
 
 1. Added Error Output Log to Installer.  (Credits to [TrevTV](https://github.com/TrevTV) :P)
 2. Use List.Count / Array.Length property instead of Linq's Count() method.  (Credits to [zeobviouslyfakeacc](https://github.com/zeobviouslyfakeacc) :3)
@@ -903,7 +903,7 @@
 
 ---
 
-### v0.2.3 Open-Beta:
+### v0.2.3:
 
 1. Added Unity 2019.3.4 Dependencies.
 2. Temporarily Fixed Issue with TLS Fix on Certain Il2Cpp Unity Games.
@@ -981,7 +981,7 @@
 
 ---
 
-### v0.2.2 Open-Beta:
+### v0.2.2:
 
 1. Downgraded Installer to .NET Framework 4.7.2.  (Credits to [knah](https://github.com/knah) :D)
 2. Added Error Messages to Installer.  (Credits to [knah](https://github.com/knah) :D)
@@ -1060,7 +1060,7 @@
 
 ---
 
-### v0.2.1 Open-Beta:
+### v0.2.1:
 
 1. Overwrite files when copying freshly generated assemblies.  (Credits to [knah](https://github.com/knah) :D)
 2. Implemented auto-download of required tools for Il2Cpp games.  (Credits to [knah](https://github.com/knah) :D)
@@ -1071,7 +1071,7 @@
 
 ---
 
-### v0.2.0 Open-Beta:
+### v0.2.0:
 
 1. Fixed Issue with the Console still showing as Closed-Beta.
 2. Fixed Issue with not having MelonLoader.ModHandler.3.5.dll included in the Release zip.
@@ -1124,7 +1124,7 @@
 
 ---
 
-### v0.1.0 Open-Beta:
+### v0.1.0:
 
 1. Moved Exports in MelonLoader.ModHandler to Mono Internal Calls.
 2. Cleaned up Hooking for MelonLoader Internals.
@@ -1189,7 +1189,7 @@
 
 ---
 
-### v0.0.3 Closed-Beta:
+### v0.0.3:
 
 1. General Stability and Optimization Improvements.
 2. Added Support for Mono based Games.
@@ -1226,7 +1226,7 @@
 
 ---
 
-### v0.0.2 Closed-Beta:
+### v0.0.2:
 
 1. Added NET_SDK to be built into MelonLoader.ModHandler as the designated Il2Cpp Wrapper.
 2. Fixed Issue with Mods and Logs folders not being in the correct place next to the game's exe.
@@ -1254,6 +1254,6 @@ MelonLoader [RELEASE] & MelonLoader.ModHandler [RELEASE]  =  Left up to the Laun
 
 ---
 
-### v0.0.1 Closed-Beta:
+### v0.0.1:
 
 1. Initial Commit and Rewrite.
