@@ -124,7 +124,7 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 - Inside this folder it will create a `Themes` folder and a `Config.cfg` file for Customization Settings.
 - You can also place Custom Themes in the created `Themes` folder.
 - Inside `Config.cfg` you can set what Theme folder you would like to use.  
-- If you set your Theme folder to `"Random"` it will randomly pick and load from existing Themes.
+- If you set your Theme folder to `Random` it will randomly pick and load from existing Themes.
 --
 - For Custom Themes you can place Custom Images in their Theme folder to further customize it.
 - Listed below are the Compatible File Names and Extensions for the Custom Images.
