@@ -12,7 +12,7 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
         {
             config = backgroundSettings;
             solidTexture = UIUtils.CreateColorTexture(config.SolidColor);
-            image = UIStyleValues.LoadImage(config, "Background");
+            image = UIUtils.LoadImage(config, "Background");
         }
 
         internal override void Render()

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using System.Linq;
+using UnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
 {
@@ -10,6 +12,51 @@ namespace MelonLoader.MelonStartScreen.UI
             texture.SetPixels(new Color[] { color, color, color, color });
             texture.Apply();
             return texture;
+        }
+
+        internal static Objects.UI_Image LoadImage(UIConfig.ImageSettings imageSettings, string filename)
+        {
+            string filepath = ScanForFile(UIConfig.ThemePath, filename, new string[] { ".gif", ".png", ".jpg", ".jpeg" });
+            if (string.IsNullOrEmpty(filepath))
+                return null;
+
+            string fileext = Path.GetExtension(filepath).ToLowerInvariant();
+
+            if (fileext.Equals(".gif"))
+                return new Objects.UI_AnimatedImage(imageSettings, filepath);
+
+            if (fileext.Equals(".png")
+                || fileext.Equals(".jpg")
+                || fileext.Equals(".jpeg"))
+                return new Objects.UI_Image(imageSettings, filepath);
+
+            return null;
+        }
+
+        internal static string ScanForFile(string folderPath, string filename, string[] fileExts)
+        {
+            string[] files = Directory.GetFiles(folderPath);
+            if (files.Length <= 0)
+                return null;
+
+            string filename_lower = filename.ToLowerInvariant();
+            return files.FirstOrDefault((string filepath) =>
+            {
+                string currentfilename = Path.GetFileNameWithoutExtension(filepath).ToLowerInvariant();
+                if (!currentfilename.Equals(filename_lower))
+                    return false;
+
+                string fileext = Path.GetExtension(filepath).ToLowerInvariant();
+                return fileExts.Contains(fileext);
+            });
+        }
+
+        internal static string RandomFolder(string folderPath)
+        {
+            string[] files = Directory.GetDirectories(folderPath);
+            if (files.Length <= 0)
+                return null;
+            return files[MelonUtils.RandomInt(0, files.Length)];
         }
 
         internal static void AnchorToScreen(UIAnchor anchor, int x, int y, out int out_x, out int out_y)

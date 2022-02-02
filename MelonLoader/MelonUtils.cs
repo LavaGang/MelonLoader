@@ -21,6 +21,8 @@ namespace MelonLoader
 {
     public static class MelonUtils
     {
+        private static readonly Random RandomNumGen = new Random();
+
         internal static void Setup(AppDomain domain)
         {
             HashCode = string.Copy(Internal_GetHashCode());
@@ -57,12 +59,35 @@ namespace MelonLoader
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
 
+        public static int RandomInt()
+        {
+            lock (RandomNumGen)
+                return RandomNumGen.Next();
+        }
+
+        public static int RandomInt(int max)
+        {
+            lock (RandomNumGen)
+                return RandomNumGen.Next(max);
+        }
+
+        public static int RandomInt(int min, int max)
+        {
+            lock (RandomNumGen)
+                return RandomNumGen.Next(min, max);
+        }
+
+        public static double RandomDouble()
+        {
+            lock (RandomNumGen)
+                return RandomNumGen.NextDouble();
+        }
+
         public static string RandomString(int length)
         {
             StringBuilder builder = new StringBuilder();
-            Random rand = new Random();
             for (int i = 0; i < length; i++)
-                builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * rand.NextDouble())) + 65));
+                builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
             return builder.ToString();
         }
 

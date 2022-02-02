@@ -30,7 +30,9 @@ namespace MelonLoader.MelonStartScreen
             General = CreateCat<cGeneral>(FilePath, nameof(General));
 
             bool UseDefault = true;
-            if (!string.IsNullOrEmpty(General.Theme) && !General.Theme.Equals("Default"))
+            if (!string.IsNullOrEmpty(General.Theme)
+                && !General.Theme.Equals("Default")
+                && !General.Theme.Equals("Random"))
             {
                 try
                 {
@@ -46,6 +48,12 @@ namespace MelonLoader.MelonStartScreen
                         throw new DirectoryNotFoundException(ThemePath);
                 }
                 catch (Exception ex) { MelonLogger.Error($"Failed to find Start Screen Theme: {ex}"); }
+            }
+
+            if (General.Theme.Equals("Random"))
+            {
+                ThemePath = UIUtils.RandomFolder(Core.ThemesFolderPath);
+                UseDefault = false;
             }
 
             if (UseDefault)

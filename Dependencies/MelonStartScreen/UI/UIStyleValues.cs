@@ -22,61 +22,18 @@ namespace MelonLoader.MelonStartScreen.UI
             ProgressBar = new Objects.UI_ProgressBar(UIConfig.ProgressBar, UIConfig.ProgressText);
 
             if (UIConfig.LogoImage.ScanForCustomImage)
-                LogoImage = LoadImage(UIConfig.LogoImage, "Logo");
+                LogoImage = UIUtils.LoadImage(UIConfig.LogoImage, "Logo");
             if (LogoImage == null)
                 LogoImage = new Objects.UI_Image(UIConfig.LogoImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Logo_Lemon
                         : Properties.Resources.Logo_Melon);
 
             if (UIConfig.LoadingImage.ScanForCustomImage)
-                LoadingImage = LoadImage(UIConfig.LoadingImage, "Loading");
+                LoadingImage = UIUtils.LoadImage(UIConfig.LoadingImage, "Loading");
             if (LoadingImage == null)
                 LoadingImage = new Objects.UI_AnimatedImage(UIConfig.LoadingImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Loading_Lemon
                         : Properties.Resources.Loading_Melon);
-        }
-
-        internal static Objects.UI_Image LoadImage(UIConfig.ImageSettings imageSettings, string filename)
-        {
-            string filepath = ScanForFile(UIConfig.ThemePath, filename);
-            if (string.IsNullOrEmpty(filepath))
-                return null;
-
-            string fileext = Path.GetExtension(filepath).ToLowerInvariant();
-
-            if (fileext.Equals(".gif"))
-                return new Objects.UI_AnimatedImage(imageSettings, filepath);
-
-            if (fileext.Equals(".png")
-                || fileext.Equals(".jpg")
-                || fileext.Equals(".jpeg"))
-                return new Objects.UI_Image(imageSettings, filepath);
-
-            return null;
-        }
-
-        private static string ScanForFile(string folderPath, string filename)
-        {
-            string[] files = Directory.GetFiles(folderPath);
-            if (files.Length <= 0)
-                return null;
-
-            string filename_lower = filename.ToLowerInvariant();
-            return files.FirstOrDefault((string filepath) =>
-            {
-                string currentfilename = Path.GetFileNameWithoutExtension(filepath).ToLowerInvariant();
-                if (!currentfilename.Equals(filename_lower))
-                    return false;
-
-                string fileext = Path.GetExtension(filepath).ToLowerInvariant();
-                if (!fileext.Equals(".gif")
-                    && !fileext.Equals(".png")
-                    && !fileext.Equals(".jpg")
-                    && !fileext.Equals(".jpeg"))
-                    return false;
-                
-                return true;
-            });
         }
     }
 }
