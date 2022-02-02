@@ -41,13 +41,17 @@ namespace MelonLoader.MelonStartScreen.UI
             string filepath = ScanForFile(UIConfig.ThemePath, filename);
             if (string.IsNullOrEmpty(filepath))
                 return null;
+
             string fileext = Path.GetExtension(filepath).ToLowerInvariant();
+
             if (fileext.Equals(".gif"))
                 return new Objects.UI_AnimatedImage(imageSettings, filepath);
+
             if (fileext.Equals(".png")
                 || fileext.Equals(".jpg")
                 || fileext.Equals(".jpeg"))
                 return new Objects.UI_Image(imageSettings, filepath);
+
             return null;
         }
 
@@ -56,12 +60,23 @@ namespace MelonLoader.MelonStartScreen.UI
             string[] files = Directory.GetFiles(folderPath);
             if (files.Length <= 0)
                 return null;
-            return files.FirstOrDefault(x =>
-                Path.GetFileNameWithoutExtension(x)
-                    .ToLowerInvariant()
-                    .Equals(
-                        filename
-                        .ToLowerInvariant()));
+
+            string filename_lower = filename.ToLowerInvariant();
+            return files.FirstOrDefault((string filepath) =>
+            {
+                string currentfilename = Path.GetFileNameWithoutExtension(filepath).ToLowerInvariant();
+                if (!currentfilename.Equals(filename_lower))
+                    return false;
+
+                string fileext = Path.GetExtension(filepath).ToLowerInvariant();
+                if (!fileext.Equals(".gif")
+                    && !fileext.Equals(".png")
+                    && !fileext.Equals(".jpg")
+                    && !fileext.Equals(".jpeg"))
+                    return false;
+                
+                return true;
+            });
         }
     }
 }

@@ -58,6 +58,7 @@
 25. Fixed Issue with TomlEnumParseException during MelonPreferences load causing Crashing.
 26. Added Default Fallback to Start Screen Customization.
 27. Added Old Category Purging to Start Screen Customization.
+28. Fixed Issue with Custom Start Screen Image Scanning not taking into account File Extension.
 
 ---
 
