@@ -93,6 +93,7 @@ namespace MelonLoader
             }
 
             MelonLogger.Msg("Preferences Loaded!");
+            MelonHandler.OnPreferencesLoaded();
         }
 
         public static void Save()
@@ -149,6 +150,7 @@ namespace MelonLoader
             }
 
             MelonLogger.Msg("Preferences Saved!");
+            MelonHandler.OnPreferencesSaved();
         }
 
         public static MelonPreferences_Category CreateCategory(string identifier) => CreateCategory(identifier, null, false);
@@ -336,6 +338,7 @@ namespace MelonLoader
             if (printmsg)
                 MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
 
+            MelonHandler.OnPreferencesLoaded();
             MelonHandler.OnPreferencesLoaded(file.FilePath);
         }
 
