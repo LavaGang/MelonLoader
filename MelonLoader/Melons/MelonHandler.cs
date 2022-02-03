@@ -157,7 +157,7 @@ namespace MelonLoader
             MelonCompatibilityLayer.Resolver resolver = MelonCompatibilityLayer.GetResolverFromAssembly(asm, filepath);
             if (resolver == null)
             {
-                MelonLogger.Error($"Failed to Load Assembly for {filepath}: No Compatibility Layer Found!");
+                MelonLogger.Msg($"Loaded library assembly at: {filepath}");
                 return;
             }
 
