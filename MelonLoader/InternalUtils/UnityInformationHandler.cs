@@ -24,10 +24,12 @@ namespace MelonLoader.InternalUtils
 
             SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
 
+            MelonLogger.Msg("------------------------------");
             MelonLogger.Msg($"Game Name: {GameName}");
             MelonLogger.Msg($"Game Developer: {GameDeveloper}");
             MelonLogger.Msg($"Unity Version: {EngineVersion}");
             MelonLogger.Msg($"Game Version: {GameVersion}");
+            MelonLogger.Msg("------------------------------");
         }
 
         private static void ReadGameInfo(AssetsManager assetsManager)

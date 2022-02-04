@@ -5,6 +5,7 @@ using Tomlet.Attributes;
 using Tomlet.Models;
 using MelonLoader;
 using MelonLoader.MelonStartScreen.UI;
+using System;
 
 namespace MelonLoader.MelonStartScreen
 {
@@ -27,23 +28,51 @@ namespace MelonLoader.MelonStartScreen
 
             FilePath = Path.Combine(Core.FolderPath, "Config.cfg");
             General = CreateCat<cGeneral>(FilePath, nameof(General));
+
+            bool UseDefault = true;
+            if (!string.IsNullOrEmpty(General.Theme) && !General.Theme.Equals("Default"))
+            {
+                try
+                {
+                    // To-Do: Sanatize themeName
+                    General.Theme = General.Theme
+                        .Replace("\\", "")
+                        .Replace("/", "");
+
+                    ThemePath = Path.Combine(Core.ThemesFolderPath, General.Theme);
+                    if (Directory.Exists(ThemePath))
+                        UseDefault = false;
+                    else
+                        throw new DirectoryNotFoundException(ThemePath);
+                }
+                catch (Exception ex) { MelonLogger.Error($"Failed to find Start Screen Theme: {ex}"); }
+            }
+
+            if (UseDefault)
+            {
+                General.Theme = "Default";
+                ThemePath = Path.Combine(Core.ThemesFolderPath, General.Theme);
+                if (!Directory.Exists(ThemePath))
+                    Directory.CreateDirectory(ThemePath);
+            }
+
             MelonLogger.Msg($"Using Start Screen Theme: \"{General.Theme}\"");
 
-            ThemePath = Path.Combine(Core.ThemesFolderPath, General.Theme);
-            if (!Directory.Exists(ThemePath))
-                Directory.CreateDirectory(ThemePath);
+            Background = CreateCat<cBackground>(nameof(Background), true);
+            LogoImage = CreateCat<LogoImageSettings>(nameof(LogoImage), true);
+            LoadingImage = CreateCat<LoadingImageSettings>(nameof(LoadingImage), true);
+            VersionText = CreateCat<VersionTextSettings>(nameof(VersionText), true);
+            ProgressText = CreateCat<ProgressTextSettings>(nameof(ProgressText), true);
+            ProgressBar = CreateCat<cProgressBar>(nameof(ProgressBar), true);
 
-            Background = CreateCat<cBackground>(nameof(Background));
-            LogoImage = CreateCat<LogoImageSettings>(nameof(LogoImage));
-            LoadingImage = CreateCat<LoadingImageSettings>(nameof(LoadingImage));
-            VersionText = CreateCat<VersionTextSettings>(nameof(VersionText));
-            ProgressText = CreateCat<ProgressTextSettings>(nameof(ProgressText));
-            ProgressBar = CreateCat<cProgressBar>(nameof(ProgressBar));
+            MelonPreferences.SaveCategory<cGeneral>(nameof(General), false);
         }
 
-        private static T CreateCat<T>(string name) where T : new() => CreateCat<T>(Path.Combine(ThemePath, $"{name}.cfg"), name);
-        private static T CreateCat<T>(string filePath, string name) where T : new()
+        private static T CreateCat<T>(string name, bool shouldRemoveOld = false) where T : new() => CreateCat<T>(Path.Combine(ThemePath, $"{name}.cfg"), name, shouldRemoveOld);
+        private static T CreateCat<T>(string filePath, string name, bool shouldRemoveOld = false) where T : new()
         {
+            if (shouldRemoveOld)
+                MelonPreferences.RemoveCategoryFromFile(FilePath, name);
             Preferences.MelonPreferences_ReflectiveCategory cat = MelonPreferences.CreateCategory<T>(name, name);
             cat.SetFilePath(filePath, true, false);
             cat.SaveToFile(false);

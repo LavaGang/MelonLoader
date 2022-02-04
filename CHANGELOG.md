@@ -56,6 +56,8 @@
 23. Fixed Issue with Custom Start Screen Background Image rendering upside-down.
 24. Fixed Issue with Custom Start Screen Image Scanning not checking the Theme's Folder.
 25. Fixed Issue with TomlEnumParseException during MelonPreferences load causing Crashing.
+26. Added Default Fallback to Start Screen Customization.
+27. Added Old Category Purging to Start Screen Customization.
 
 ---
 

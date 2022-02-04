@@ -43,6 +43,7 @@
 | - |
 | [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
 | [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
+| [v0.6.0-rewrite](https://nightly.link/LavaGang/MelonLoader/workflows/build/v0.6.0-rewrite) |
 
 ---
 
@@ -120,8 +121,11 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 ## START SCREEN CUSTOMIZATION:
 
 - After Initial Launch the Start Screen will create a folder under `UserData/MelonStartScreen`
-- Inside this folder it will create an `Elements` folder and a `Config.cfg` file for Customization Settings.
-- You can also place Custom Images in this folder to further customize the Start Screen.
+- Inside this folder it will create a `Themes` folder and a `Config.cfg` file for Customization Settings.
+- You can also place Custom Themes in the created `Themes` folder.
+- Inside `Config.cfg` you can set what Theme folder you would like to use.  
+--
+- For Custom Themes you can place Custom Images in their Theme folder to further customize it.
 - Listed below are the Compatible File Names and Extensions for the Custom Images.
 
 | Compatible File Names |
