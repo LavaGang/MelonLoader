@@ -1,8 +1,0 @@
-{
-  "VisualStudioBase": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community",
-  "UnityEditorBase": "C:\\Program Files\\Unity\\Hub\\Editor",
-  "SafeMode": false,
-  "KeytoolPath": "C:\\Program Files\\Java\\jdk1.8.0_281\\bin\\keytool.exe",
-  "KeystorePassword": "123456",
-  "ApkSignerPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Xamarin\\Android\\apksigner.jar"
-}
