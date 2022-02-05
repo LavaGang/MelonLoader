@@ -57,7 +57,7 @@ namespace MelonLoader
             if (!SupportModule.Initialize())
                 return 1;
 
-            // AddUnityDebugLog();
+            AddUnityDebugLog();
             // bHaptics.Start();
 
             MelonHandler.OnApplicationStart_Plugins();
