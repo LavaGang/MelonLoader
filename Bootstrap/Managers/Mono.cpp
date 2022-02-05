@@ -435,6 +435,9 @@ bool Mono::Exports::Initialize()
 
 	Debug::Msg("Binding Native Lib...");
 
+    mono_dllmap_insert(NULL, "System.Native", NULL, "libmono-native.so", NULL);
+    mono_dllmap_insert(NULL, "System.Net.Security.Native", NULL, "libmono-native.so", NULL);
+
 	mono_dllmap_insert(NULL, "GameAssembly", NULL, "libil2cpp.so", NULL);
 	
 	return Assertion::ShouldContinue;
@@ -457,9 +460,9 @@ bool Mono::ApplyPatches()
 		Debug::Msg("Enabled Mono Logging");
 	}
 	
-	Exports::mono_trace_set_log_handler(&Hooks::mono_log, NULL);
-	Exports::mono_trace_set_print_handler(&Hooks::mono_print);
-	Exports::mono_trace_set_printerr_handler(&Hooks::mono_printerr);
+//	Exports::mono_trace_set_log_handler(&Hooks::mono_log, NULL);
+//	Exports::mono_trace_set_print_handler(&Hooks::mono_print);
+//	Exports::mono_trace_set_printerr_handler(&Hooks::mono_printerr);
 
 	Exports::mono_install_unhandled_exception_hook(&Hooks::mono_unhandled_exception, NULL);
 

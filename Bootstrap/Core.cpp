@@ -162,6 +162,10 @@ bool Core::Initialize()
                     "Load Mono",
                     Mono::Load
             },
+            {
+                    "Applying patches to Mono",
+                    Mono::ApplyPatches
+            },
 #ifndef PORT_DISABLE
             {
                 "Creates instance of patch map",
@@ -173,10 +177,6 @@ bool Core::Initialize()
                     Il2Cpp::ApplyPatches
             },
 #ifdef __ANDROID__
-            {
-                    "Applying patches to Mono",
-                    Mono::ApplyPatches
-            },
             // {
             // 	"Initializing Bhaptics",
             // 	bHapticsPlayer::Initialize

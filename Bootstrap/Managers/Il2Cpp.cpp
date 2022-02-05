@@ -162,13 +162,14 @@ bool Il2Cpp::ApplyPatches()
 }
 
 void Il2Cpp::OnIl2cppReady() {
-    std::thread t(MonoThreadHandle);
-    Debug::Msg("starting thread");
-    t.detach();
+//    std::thread t(MonoThreadHandle);
+//    Debug::Msg("starting thread");
+//    t.detach();
+    MonoThreadHandle();
 }
 
 void Il2Cpp::MonoThreadHandle() {
-    Mono::CreateDomain("Mono Domain");
+//    Mono::CreateDomain("Mono Domain");
     BaseAssembly::LoadAssembly();
     InternalCalls::Initialize();
     // todo: check if it works/is necessary on mono games
@@ -179,8 +180,8 @@ void Il2Cpp::MonoThreadHandle() {
         return;
     }
 
-//    if (BaseAssembly::PreStart())
-//        BaseAssembly::Start();
+    if (BaseAssembly::PreStart())
+        BaseAssembly::Start();
 }
 
 #pragma region Hooks
@@ -191,10 +192,12 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 		 Console::SetHandles();
 #endif
 
-	if (!Mono::CheckPaths())
+    Debug::Msgf("domain: %s", name);
+
+    if (!Mono::CheckPaths())
 	{
 		Logger::Error("Skipping initialization of MelonLoader");
-		goto exit_early;	
+		return NULL;
 	}
 
 	Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
@@ -202,6 +205,8 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 
 	exit_early:
     domain = Exports::il2cpp_init(name);
+
+    Mono::CreateDomain("IL2CPP Root Domain");
 
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	Hook::Detach((void**)&Exports::il2cpp_init, (void*)Hooks::il2cpp_init);
@@ -213,7 +218,8 @@ Il2Cpp::Object* Il2Cpp::Hooks::il2cpp_runtime_invoke(Method* method, Object* obj
 {
     const char* method_name = Exports::il2cpp_method_get_name(method);
 
-    auto sceneChange = strstr(method_name, "Internal_ActiveSceneChanged") != NULL;
+//    auto sceneChange = strstr(method_name, "Internal_ActiveSceneChanged") != NULL;
+    auto sceneChange = strstr(method_name, "Update") != NULL;
 
     if (sceneChange)
         SceneChanges++;

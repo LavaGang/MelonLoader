@@ -8,17 +8,17 @@
 class Hook
 {
 public:
-	static void Attach(void** target, void* detour);
-	static void Detach(void** target, void* detour);
+    static void Attach(void** target, void* detour);
+    static void Detach(void** target, void* detour);
 #ifdef __ANDROID__
-	static bool FunchookPrepare();
+    static bool FunchookPrepare();
 #endif
 #ifdef __ANDROID__
 private:
-	struct FunchookDef {
-		funchook_t* handle;
-		void* original;
-	};
-	static std::unordered_map<void**, FunchookDef*> HookMap;
+    struct FunchookDef {
+        funchook_t* handle;
+        void* original;
+    };
+    static std::unordered_map<void*, FunchookDef*> HookMap;
 #endif
 };
