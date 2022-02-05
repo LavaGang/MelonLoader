@@ -1,4 +1,4 @@
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 #include "HashCode.h"
 #include "Debug.h"
 #include "../Managers/Game.h"

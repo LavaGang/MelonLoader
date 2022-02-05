@@ -1,3 +1,4 @@
+#ifndef PORT_DISABLE
 #include "PointerUtils.h"
 #include <cstdint>
 #include <psapi.h>
@@ -102,3 +103,4 @@ uint64_t PointerUtils::ResolvePtrOffsetFromInstructionPattern(HMODULE mod, const
 {
 	return ResolvePtrOffsetFromInstruction(FindPattern(mod, pattern), start, end);
 }
+#endif

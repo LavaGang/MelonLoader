@@ -1,11 +1,9 @@
 #include "BaseAssembly.h"
 #include "../Utils/Console/Debug.h"
-#include "../Base/Core.h"
 #include "Game.h"
 #include <string>
 #include "../Utils/Assertion.h"
 #include "../Utils/Console/Logger.h"
-#include "../Utils/UnitTesting/TestHelper.h"
 #include "../Utils/Il2CppAssemblyGenerator.h"
 
 char* BaseAssembly::PathMono = NULL;
@@ -36,18 +34,6 @@ bool BaseAssembly::LoadAssembly()
 bool BaseAssembly::Initialize()
 {
 	Debug::Msg("Initializing Base Assembly...");
-	Assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PathMono);
-	if (Assembly == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
-		return false;
-	}
-	Image = Mono::Exports::mono_assembly_get_image(Assembly);
-	if (Image == NULL)
-	{
-		Assertion::ThrowInternalFailure("Failed to Get Image from Mono Assembly!");
-		return false;
-	}
 	Mono::Class* klass = Mono::Exports::mono_class_from_name(Image, "MelonLoader", "Core");
 	if (klass == NULL)
 	{
@@ -86,7 +72,7 @@ bool BaseAssembly::Initialize()
 	}
 	
 	int returnval = *(int*)((char*)result + 0x8);
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	if (Game::IsIl2Cpp)
 		Il2CppAssemblyGenerator::Cleanup();
 #endif

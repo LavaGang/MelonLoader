@@ -1,4 +1,4 @@
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 #include "Encoding.h"
 #include <Windows.h>
 

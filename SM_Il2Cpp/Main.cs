@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -77,7 +77,7 @@ namespace MelonLoader.Support
             }
             catch (Exception ex) { MelonLogger.Error($"Camera.onPostRender override failed: {ex}"); }
 
-            ClassInjector.RegisterTypeInIl2Cpp<SM_Component>();
+            ClassInjector.RegisterTypeInIl2Cpp<SM_Component>(true);
             SM_Component.Create();
             return new SupportModule_To();
         }
@@ -91,7 +91,11 @@ namespace MelonLoader.Support
         private static Type streamType = null;
         private static void ConsoleCleaner()
         {
-            // Il2CppSystem.Console.SetOut(new Il2CppSystem.IO.StreamWriter(Il2CppSystem.IO.Stream.Null));
+            #if __ANDROID__
+            return;
+            #endif
+            
+            Il2CppSystem.Console.SetOut(new Il2CppSystem.IO.StreamWriter(Il2CppSystem.IO.Stream.Null));
             try
             {
                 Il2Cppmscorlib = Assembly.Load("Il2Cppmscorlib");

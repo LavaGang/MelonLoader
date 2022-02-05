@@ -11,15 +11,17 @@ const char* settings_path = "static_settings";
 
 StaticSettings::Settings_t StaticSettings::Settings;
 
+// FIXME: remove or re-implement
 bool StaticSettings::Initialize()
 {
     char* buffer;
     size_t len;
-    ReadSettings(buffer, len);
+//    ReadSettings(buffer, len);
     if (!Assertion::ShouldContinue)
         return false;
 
-    memcpy(&Settings, buffer, len);
+//    memcpy(&Settings, buffer, len);
+    Settings.safeMode = false;
 
     Debug::Msgf("Safe Mode - %s", Settings.safeMode ? "on" : "off");
     

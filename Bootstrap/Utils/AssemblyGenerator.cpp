@@ -1,4 +1,4 @@
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 #include "AssemblyGenerator.h"
 #include "Assertion.h"
 #include "Console.h"

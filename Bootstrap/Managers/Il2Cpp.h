@@ -21,9 +21,14 @@ public:
 	static void* MemLoc;
 	static const char* LibPath;
 #endif
-	
 	static bool Initialize();
 	static bool ApplyPatches();
+
+private:
+    static int SceneChanges;
+
+    static void OnIl2cppReady();
+    static void MonoThreadHandle();
 
 	class Exports
 	{

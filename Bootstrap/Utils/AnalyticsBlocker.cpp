@@ -1,4 +1,4 @@
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 #include "AnalyticsBlocker.h"
 #include "Debug.h"
 #include "Assertion.h"

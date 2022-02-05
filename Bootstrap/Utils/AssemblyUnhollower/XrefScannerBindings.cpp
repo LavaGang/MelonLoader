@@ -1,3 +1,4 @@
+#ifdef __ANDROID__
 #include "XrefScannerBindings.h"
 #include "../Console/Logger.h"
 #include "../Console/Debug.h"
@@ -460,3 +461,4 @@ void* XrefScannerBindings::XrefScanUtilFinder::FindByteWriteTargetRightAfterCall
 #pragma endregion
 
 #undef HAS_GROUP
+#endif

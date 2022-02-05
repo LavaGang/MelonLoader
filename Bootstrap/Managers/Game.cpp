@@ -127,7 +127,7 @@ bool Game::ReadInfo()
 
 void Game::ReadAppInfo()
 {
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 	std::string appinfopath = std::string(DataPath) + "\\app.info";
 	if (!Core::FileExists(appinfopath.c_str()))
 	{

@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "Console/Console.h"
 
 class Sequence
@@ -10,5 +12,5 @@ public:
 		bool(*callback)();
 	};
 
-	static bool Run(struct Element* tests, size_t len);
+	static bool Run(std::vector<Element>);
 };

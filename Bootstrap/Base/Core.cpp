@@ -104,7 +104,7 @@ bool Core::Initialize()
 			"Reading Game Info",
 			Game::ReadInfo
 		},
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 		{
 			"Creates instance of patch map",
 			HashCode::Initialize
@@ -125,7 +125,7 @@ bool Core::Initialize()
 				return true;
 			}
 		},
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 		{
 			"Creates instance of patch map",
 			AnalyticsBlocker::Initialize
@@ -139,7 +139,7 @@ bool Core::Initialize()
 			"Load Mono",
 			Mono::Load
 		},
-#ifdef PORT_DISABLE
+#ifndef PORT_DISABLE
 		{
 			"Creates instance of patch map",
 			AnalyticsBlocker::Hook
