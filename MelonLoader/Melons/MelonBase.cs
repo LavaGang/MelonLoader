@@ -13,8 +13,9 @@ namespace MelonLoader
     public abstract class MelonBase
     {
         #region Static
-        public static Action<MelonBase> onMelonRegistered;
-        public static Action<MelonBase> onMelonUnregistered;
+        public static MelonEvent<MelonBase> OnMelonRegistered = new MelonEvent<MelonBase>();
+        public static MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
+
         public static event LemonFunc<Assembly, MelonBase[]> CustomMelonResolvers;
 
         public static List<MelonBase> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
@@ -234,6 +235,9 @@ namespace MelonLoader
         private MelonGameAttribute[] _games = new MelonGameAttribute[0];
         private MelonProcessAttribute[] _processes = new MelonProcessAttribute[0];
         private MelonGameVersionAttribute[] _gameVersions = new MelonGameVersionAttribute[0];
+
+        public MelonEvent OnRegister = new MelonEvent();
+        public MelonEvent OnUnregister = new MelonEvent();
 
         /// <summary>
         /// Assembly of the Melon.
@@ -597,7 +601,9 @@ namespace MelonLoader
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
 
             PrintLoadInfo();
-            onMelonRegistered?.Invoke(this);
+
+            OnRegister?.Invoke();
+            OnMelonRegistered?.Invoke(this);
             return true;
         }
 
@@ -631,8 +637,11 @@ namespace MelonLoader
             HarmonyInstance.UnpatchSelf();
             HarmonyInstance = null;
             Registered = false;
+
             PrintUnloadInfo(reason);
-            onMelonUnregistered?.Invoke(this);
+
+            OnUnregister?.Invoke();
+            OnMelonUnregistered?.Invoke(this);
             return true;
         }
 
