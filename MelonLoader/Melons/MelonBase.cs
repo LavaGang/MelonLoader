@@ -602,8 +602,8 @@ namespace MelonLoader
 
             PrintLoadInfo();
 
-            OnRegister?.Invoke();
-            OnMelonRegistered?.Invoke(this);
+            OnRegister.Invoke();
+            OnMelonRegistered.Invoke(this);
             return true;
         }
 
@@ -640,8 +640,8 @@ namespace MelonLoader
 
             PrintUnloadInfo(reason);
 
-            OnUnregister?.Invoke();
-            OnMelonUnregistered?.Invoke(this);
+            OnUnregister.Invoke();
+            OnMelonUnregistered.Invoke(this);
             return true;
         }
 
