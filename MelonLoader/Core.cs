@@ -5,7 +5,7 @@ using MelonLoader.MonoInternals;
 
 namespace MelonLoader
 {
-	internal static class Core
+	public static class Core
     {
         internal static HarmonyLib.Harmony HarmonyInstance = null;
 
@@ -36,14 +36,16 @@ namespace MelonLoader
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
 
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
-            MelonHandler.OnPreInitialization();
+            MelonEvents.OnPreInitialization.Invoke();
+            MelonHandler.OnPreInitialization(); // Remove this from here
 
             return 0;
         }
 
         private static int PreStart()
         {
-            MelonHandler.OnApplicationEarlyStart();
+            MelonEvents.OnApplicationEarlyStart.Invoke();
+            MelonHandler.OnApplicationEarlyStart(); // Remove this from here
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
@@ -56,8 +58,7 @@ namespace MelonLoader
         {
             bHaptics.Start();
 
-            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
-            MelonHandler.OnPreSupportModule();
+            MelonEvents.OnPreSupportModule.Invoke();
 
             if (!SupportModule.Setup())
                 return 1;
@@ -69,8 +70,12 @@ namespace MelonLoader
 
             RegisterTypeInIl2Cpp.SetReady();
 
-            MelonHandler.OnApplicationStart_Plugins();
-            MelonHandler.OnApplicationStart_Mods();
+            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
+
+            MelonHandler.OnPreSupportModule(); // Remove this from here
+            MelonEvents.OnApplicationStart.Invoke();
+            MelonHandler.OnApplicationStart_Plugins(); // Remove this from here
+            MelonHandler.OnApplicationStart_Mods(); // Remove this from here
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
             return 0;
@@ -78,14 +83,16 @@ namespace MelonLoader
 
         internal static void OnApplicationLateStart()
         {
-            MelonHandler.OnApplicationLateStart_Plugins();
-            MelonHandler.OnApplicationLateStart_Mods();
+            MelonEvents.OnApplicationLateStart.Invoke();
+            MelonHandler.OnApplicationLateStart_Plugins(); // Remove this from here
+            MelonHandler.OnApplicationLateStart_Mods(); // Remove this from here
             MelonStartScreen.Finish();
         }
 
         internal static void Quit()
         {
-            MelonHandler.OnApplicationQuit();
+            MelonEvents.OnApplicationQuit.Invoke();
+            MelonHandler.OnApplicationQuit(); // Remove this from here
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();

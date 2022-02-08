@@ -13,8 +13,8 @@ namespace MelonLoader
     public abstract class MelonBase
     {
         #region Static
-        public static MelonEvent<MelonBase> OnMelonRegistered = new MelonEvent<MelonBase>();
-        public static MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
+        public static readonly MelonEvent<MelonBase> OnMelonRegistered = new MelonEvent<MelonBase>();
+        public static readonly MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
 
         public static event LemonFunc<Assembly, MelonBase[]> CustomMelonResolvers;
 
@@ -236,8 +236,8 @@ namespace MelonLoader
         private MelonProcessAttribute[] _processes = new MelonProcessAttribute[0];
         private MelonGameVersionAttribute[] _gameVersions = new MelonGameVersionAttribute[0];
 
-        public MelonEvent OnRegister = new MelonEvent();
-        public MelonEvent OnUnregister = new MelonEvent();
+        public readonly MelonEvent OnRegister = new MelonEvent();
+        public readonly MelonEvent OnUnregister = new MelonEvent();
 
         /// <summary>
         /// Assembly of the Melon.
@@ -427,12 +427,12 @@ namespace MelonLoader
         /// <summary>
         /// Runs when the Melon is registered.
         /// </summary>
-        public virtual void InitializeMelon() { }
+        public virtual void OnInitializeMelon() { }
 
         /// <summary>
         /// Runs when the Melon is unregistered.
         /// </summary>
-        public virtual void DeinitializeMelon() { }
+        public virtual void OnDeinitializeMelon() { }
 
         public Compatibility IsCompatibleWith(MelonGameAttribute game, string processName, string gameVersion, 
             string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform, 
@@ -584,7 +584,7 @@ namespace MelonLoader
 
             try
             {
-                InitializeMelon();
+                OnInitializeMelon();
             }
             catch (Exception ex)
             {
@@ -625,7 +625,7 @@ namespace MelonLoader
 
             try
             {
-                DeinitializeMelon();
+                OnDeinitializeMelon();
             }
             catch (Exception ex)
             {
