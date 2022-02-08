@@ -409,6 +409,7 @@ namespace MelonLoader
         /// Runs when Melon Preferences get saved.
         /// </summary>
         public virtual void OnPreferencesSaved() { }
+
         /// <summary>
         /// Runs when Melon Preferences get saved. Gets passed the Preferences's File Path.
         /// </summary>
