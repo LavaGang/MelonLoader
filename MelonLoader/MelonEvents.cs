@@ -1,4 +1,4 @@
-﻿namespace MelonLoader
+namespace MelonLoader
 {
     public static class MelonEvents
     {

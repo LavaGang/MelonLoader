@@ -15,6 +15,7 @@ namespace MelonLoader
         #region Static
         public static readonly MelonEvent<MelonBase> OnMelonRegistered = new MelonEvent<MelonBase>();
         public static readonly MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
+
         public static event LemonFunc<Assembly, MelonBase[]> CustomMelonResolvers;
 
         public static List<MelonBase> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
@@ -237,6 +238,7 @@ namespace MelonLoader
 
         public readonly MelonEvent OnRegister = new MelonEvent();
         public readonly MelonEvent OnUnregister = new MelonEvent();
+
         /// <summary>
         /// Assembly of the Melon.
         /// </summary>

@@ -61,6 +61,10 @@ namespace MelonLoader
             if (Disposed)
                 return;
 
+            MelonAction[] copy;
+            lock (actions)
+                copy = actions.ToArray();
+
             LemonEnumerator<MelonAction> enumerator;
             lock (actions)
                 enumerator = new LemonEnumerator<MelonAction>(actions);
