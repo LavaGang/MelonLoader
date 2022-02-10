@@ -34,7 +34,8 @@ namespace MelonLoader
             Il2CppObjectBaseToPtrMethod = IL2CPPType.GetMethod("Il2CppObjectBaseToPtr");
             Il2CppStringToManagedMethod = IL2CPPType.GetMethod("Il2CppStringToManaged");
             ManagedStringToIl2CppMethod = IL2CPPType.GetMethod("ManagedStringToIl2Cpp");
-            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethods().First(x => x.Name.Equals("RegisterTypeInIl2Cpp") && !x.IsGenericMethod && (x.GetParameters().Count() == 2));
+            // TODO: RHelper may be invalid name
+            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethods().First(x => x.Name.Equals("RHelper") && !x.IsGenericMethod && (x.GetParameters().Count() == 2));
             GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
             Il2CppCallerCountAttributeType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Attributes.CallerCountAttribute");
             Il2CppCallerCountField = Il2CppCallerCountAttributeType.GetField("Count", BindingFlags.Public | BindingFlags.Instance);
