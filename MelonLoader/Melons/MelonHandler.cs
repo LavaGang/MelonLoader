@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using MelonLoader.Lemons.Cryptography;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -152,17 +150,8 @@ namespace MelonLoader
         });
         internal static void BONEWORKS_OnLoadingScreen() => MelonMod.ExecuteAll(x => x.BONEWORKS_OnLoadingScreen());
 
-        private static bool SceneWasJustLoaded = false;
-        private static int CurrentSceneBuildIndex = -1;
-        private static string CurrentSceneName = null;
         internal static void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
-            if (!MelonUtils.IsBONEWORKS)
-            {
-                SceneWasJustLoaded = true;
-                CurrentSceneBuildIndex = buildIndex;
-                CurrentSceneName = sceneName;
-            }
             MelonMod.ExecuteAll(x =>
             {
                 x.OnLevelWasLoaded(buildIndex);
@@ -183,16 +172,6 @@ namespace MelonLoader
         private static bool InitializeScene = false;
         internal static void OnUpdate()
         {
-            if (InitializeScene)
-            {
-                InitializeScene = false;
-                OnSceneWasInitialized(CurrentSceneBuildIndex, CurrentSceneName);
-            }
-            if (SceneWasJustLoaded)
-            {
-                SceneWasJustLoaded = false;
-                InitializeScene = true;
-            }
             MelonBase.ExecuteAll(x => x.OnUpdate());
         }
 
@@ -227,15 +206,15 @@ namespace MelonLoader
 
         [Obsolete("Use 'MelonBase.RegisteredMelons.Any(1)' instead.")]
         public static bool IsMelonAlreadyLoaded(string name)
-            => MelonBase._registeredMelons.Any(x => x.Info.Name == name);
+            => MelonBase._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonPlugin.RegisteredMelons.Any(1)' instead.")]
         public static bool IsPluginAlreadyLoaded(string name)
-            => Melon<MelonPlugin>._registeredMelons.Any(x => x.Info.Name == name);
+            => Melon<MelonPlugin>._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonMod.RegisteredMelons.Any(1)' instead.")]
         public static bool IsModAlreadyLoaded(string name)
-            => Melon<MelonMod>._registeredMelons.Any(x => x.Info.Name == name);
+            => Melon<MelonMod>._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromFile(string filepath, string symbolspath = null)

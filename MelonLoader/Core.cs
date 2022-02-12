@@ -37,7 +37,6 @@ namespace MelonLoader
 
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
             MelonEvents.OnPreInitialization.Invoke();
-            MelonHandler.OnPreInitialization(); // Remove this from here
 
             return 0;
         }
@@ -45,7 +44,6 @@ namespace MelonLoader
         private static int PreStart()
         {
             MelonEvents.OnApplicationEarlyStart.Invoke();
-            MelonHandler.OnApplicationEarlyStart(); // Remove this from here
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
@@ -72,10 +70,7 @@ namespace MelonLoader
 
             MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
 
-            MelonHandler.OnPreSupportModule(); // Remove this from here
             MelonEvents.OnApplicationStart.Invoke();
-            MelonHandler.OnApplicationStart_Plugins(); // Remove this from here
-            MelonHandler.OnApplicationStart_Mods(); // Remove this from here
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
             return 0;
@@ -84,15 +79,12 @@ namespace MelonLoader
         internal static void OnApplicationLateStart()
         {
             MelonEvents.OnApplicationLateStart.Invoke();
-            MelonHandler.OnApplicationLateStart_Plugins(); // Remove this from here
-            MelonHandler.OnApplicationLateStart_Mods(); // Remove this from here
             MelonStartScreen.Finish();
         }
 
         internal static void Quit()
         {
             MelonEvents.OnApplicationQuit.Invoke();
-            MelonHandler.OnApplicationQuit(); // Remove this from here
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();

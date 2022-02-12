@@ -370,6 +370,8 @@ namespace MelonLoader
             }
         }
 
+        #region Callbacks
+
         /// <summary>
         /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
         /// </summary>
@@ -391,7 +393,12 @@ namespace MelonLoader
         public virtual void OnUpdate() { }
 
         /// <summary>
-        /// Runs once per frame after OnUpdate and OnFixedUpdate have finished.
+        /// Can run multiple times per frame. Mostly used for Physics.
+        /// </summary>
+        public virtual void OnFixedUpdate() { }
+
+        /// <summary>
+        /// Runs once per frame, after <see cref="OnUpdate"/>.
         /// </summary>
         public virtual void OnLateUpdate() { }
 
@@ -434,6 +441,8 @@ namespace MelonLoader
         /// Runs when the Melon is unregistered.
         /// </summary>
         public virtual void OnDeinitializeMelon() { }
+
+        #endregion
 
         public Compatibility IsCompatibleWith(MelonGameAttribute game, string processName, string gameVersion, 
             string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform, 
@@ -561,12 +570,12 @@ namespace MelonLoader
         /// <summary>
         /// Registers the Melon.
         /// </summary>
-        public virtual bool Register()
+        public bool Register()
         {
             if (Registered)
                 return false;
 
-            if (IsMelonRegistered(Info.Name, Info.Author) != null)
+            if (FindMelon(Info.Name, Info.Author) != null)
             {
                 MelonLogger.Warning($"Failed to register {MelonTypeName} '{Location}': A Melon with the same Name and Author is already registered!");
                 return false;
@@ -583,6 +592,8 @@ namespace MelonLoader
                 LoggerInstance = new MelonLogger.Instance(string.IsNullOrEmpty(ID) ? Info.Name : $"{ID}:{Info.Name}", ConsoleColor);
             HarmonyInstance = new HarmonyLib.Harmony($"{Assembly.FullName}:{Info.Name}");
 
+            RegisterCallbacks();
+
             try
             {
                 OnInitializeMelon();
@@ -594,12 +605,16 @@ namespace MelonLoader
                 return false;
             }
 
+            if (!RegisterInternal())
+                return false;
+
             _registeredMelons.Add(this);
             Registered = true;
 
             if (!HarmonyDontPatchAll)
                 HarmonyInstance.PatchAll(Assembly);
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
+
 
             PrintLoadInfo();
 
@@ -608,10 +623,31 @@ namespace MelonLoader
             return true;
         }
 
+        protected internal virtual bool RegisterInternal() => true;
+        protected internal virtual bool UnregisterInternal() => true;
+
+        protected internal virtual void RegisterCallbacks()
+        {
+            MelonEvents.OnPreInitialization.Subscribe(OnPreSupportModule);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart);
+            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart);
+            MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit);
+            MelonEvents.OnUpdate.Subscribe(OnUpdate);
+            MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate);
+            MelonEvents.OnGUI.Subscribe(OnGUI);
+            MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate);
+
+            MelonPreferences.OnPreferencesLoaded.Subscribe(OnPreferencesLoaded);
+            MelonPreferences.OnPreferencesLoaded.Subscribe((x) => OnPreferencesLoaded()); // No params sig
+            MelonPreferences.OnPreferencesSaved.Subscribe(OnPreferencesSaved);
+            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnPreferencesSaved()); // No params sig
+            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnModSettingsApplied());
+        }
+
         /// <summary>
-        /// If the Name is registered, returns the registered Melon. Otherwise, returns <see langword="null"/>.
+        /// Tries to find a register Melon to matches the given Info.
         /// </summary>
-        public static MelonBase IsMelonRegistered(string melonName, string melonAuthor)
+        public static MelonBase FindMelon(string melonName, string melonAuthor)
             => RegisteredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
 
         /// <summary>
@@ -619,7 +655,7 @@ namespace MelonLoader
         /// <para>This only unsubscribes the Melon from all Callbacks and unpatches all Methods that were patched by Harmony, but doesn't actually unload the Assembly.</para>
         /// <para>It is recommended to only use this Method in Cases where you 100% know the Melon will not work and/or will only cause Issues.</para>
         /// </summary>
-        public virtual bool Unregister(string reason = null)
+        public bool Unregister(string reason = null)
         {
             if (!Registered)
                 return false;
@@ -633,6 +669,9 @@ namespace MelonLoader
                 MelonLogger.Error($"Failed to properly unregister {MelonTypeName} '{Location}': Melon failed to deinitialize!");
                 MelonLogger.Error(ex.ToString());
             }
+
+            if (!UnregisterInternal())
+                return false;
 
             _registeredMelons.Remove(this);
             HarmonyInstance.UnpatchSelf();
@@ -678,7 +717,7 @@ namespace MelonLoader
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)
-            => ExecuteList(func, RegisteredMelons, unregisterOnFail, unregistrationReason);
+            => ExecuteList(func, _registeredMelons, unregisterOnFail, unregistrationReason);
 
         public static void ExecuteList<T>(LemonAction<T> func, List<T> melons, bool unregisterOnFail = false, string unregistrationReason = null) where T : MelonBase
         {

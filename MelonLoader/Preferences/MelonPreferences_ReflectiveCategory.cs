@@ -128,7 +128,6 @@ namespace MelonLoader.Preferences
                 MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
 
             MelonPreferences.OnPreferencesSaved.Invoke(currentfile.FilePath);
-            MelonHandler.OnPreferencesSaved(currentfile.FilePath); // Remove this later
         }
 
         public void LoadFromFile(bool printmsg = true)

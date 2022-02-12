@@ -107,7 +107,6 @@ namespace MelonLoader
                     category.Load(table);
 
                     OnPreferencesLoaded.Invoke(currentFile.FilePath);
-                    MelonHandler.OnPreferencesLoaded(currentFile.FilePath); // Remove this later
                 }
             }
 
@@ -164,7 +163,6 @@ namespace MelonLoader
                         continue;
                     }
                     OnPreferencesSaved.Invoke(file.FilePath);
-                    MelonHandler.OnPreferencesSaved(file.FilePath); // Remove this later
                 }
             }
 
@@ -357,7 +355,6 @@ namespace MelonLoader
                 MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
 
             OnPreferencesLoaded.Invoke(file.FilePath);
-            MelonHandler.OnPreferencesLoaded(file.FilePath); // Remove this later
         }
 
         public static void RemoveCategoryFromFile(string filePath, string categoryName)

@@ -16,6 +16,9 @@ namespace MelonLoader
             this.oneTimeUse = oneTimeUse;
         }
 
+        public bool CheckIfSubscribed(MethodInfo method, object obj = null)
+            => actions.Exists(x => x.method == method && (obj == null || x.obj == obj));
+
         public void Subscribe(T action, bool unsubscribeOnFirstInvokation = false)
         {
             if (Disposed)
@@ -26,6 +29,9 @@ namespace MelonLoader
                 var acts = MelonAction.Get(action, unsubscribeOnFirstInvokation);
                 foreach (var a in acts)
                 {
+                    if (CheckIfSubscribed(a.method, a.obj))
+                        continue;
+
                     if (a.Melon != null)
                     {
                         a.Melon.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), true);
@@ -50,7 +56,7 @@ namespace MelonLoader
             }
         }
 
-        protected void Invoke(bool unregisterFailedMelons, params object[] args)
+        protected void Invoke(params object[] args)
         {
             if (Disposed)
                 return;
@@ -73,9 +79,6 @@ namespace MelonLoader
                         MelonLogger.Error(ex.ToString());
                     else
                         del.Melon.LoggerInstance.Error(ex.ToString());
-
-                    if (unregisterFailedMelons && del.Melon != null)
-                        del.Melon.Unregister($"Failed to properly execute action: {del.method.DeclaringType.FullName}::{del.method.Name}");
                 }
 
                 if (del.unsubscribeOnFirstInvokation)
@@ -97,56 +100,56 @@ namespace MelonLoader
     public class MelonEvent : MelonEventBase<LemonAction>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(bool unregisterFailedMelons = false)
-            => base.Invoke(unregisterFailedMelons);
+        public void Invoke()
+            => base.Invoke();
     }
     public class MelonEvent<T1> : MelonEventBase<LemonAction<T1>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1);
+        public void Invoke(T1 arg1)
+            => Invoke(arg1);
     }
     public class MelonEvent<T1, T2> : MelonEventBase<LemonAction<T1, T2>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1, arg2);
+        public void Invoke(T1 arg1, T2 arg2)
+            => Invoke(arg1, arg2);
     }
     public class MelonEvent<T1, T2, T3> : MelonEventBase<LemonAction<T1, T2, T3>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1, arg2, arg3);
+        public void Invoke(T1 arg1, T2 arg2, T3 arg3)
+            => Invoke(arg1, arg2, arg3);
     }
     public class MelonEvent<T1, T2, T3, T4> : MelonEventBase<LemonAction<T1, T2, T3, T4>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1, arg2, arg3, arg4);
+        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+            => Invoke(arg1, arg2, arg3, arg4);
     }
     public class MelonEvent<T1, T2, T3, T4, T5> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1, arg2, arg3, arg4, arg5);
+        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+            => Invoke(arg1, arg2, arg3, arg4, arg5);
     }
     public class MelonEvent<T1, T2, T3, T4, T5, T6> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1, arg2, arg3, arg4, arg5, arg6);
+        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+            => Invoke(arg1, arg2, arg3, arg4, arg5, arg6);
     }
     public class MelonEvent<T1, T2, T3, T4, T5, T6, T7> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6, T7>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+            => Invoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
     public class MelonEvent<T1, T2, T3, T4, T5, T6, T7, T8> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6, T7, T8>>
     {
         public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, bool unregisterFailedMelons = false)
-            => Invoke(unregisterFailedMelons, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+            => Invoke(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
     }
     #endregion
 }
