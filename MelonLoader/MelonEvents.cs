@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MelonLoader
+﻿namespace MelonLoader
 {
     public static class MelonEvents
     {
@@ -61,7 +56,7 @@ namespace MelonLoader
         /// <summary>
         /// Occurs when a new Scene is loaded.
         /// <para>
-        /// <br>Arguments:</br>
+        /// Arguments:
         /// <br><see cref="int"/>: Build Index of the Scene.</br>
         /// <br><see cref="string"/>: Name of the Scene.</br>
         /// </para>
@@ -71,7 +66,7 @@ namespace MelonLoader
         /// <summary>
         /// Occurs once a Scene is initialized.
         /// <para>
-        /// <br>Arguments:</br>
+        /// Arguments:
         /// <br><see cref="int"/>: Build Index of the Scene.</br>
         /// <br><see cref="string"/>: Name of the Scene.</br>
         /// </para>
@@ -81,7 +76,7 @@ namespace MelonLoader
         /// <summary>
         /// Occurs once a Scene unloads.
         /// <para>
-        /// <br>Arguments:</br>
+        /// Arguments:
         /// <br><see cref="int"/>: Build Index of the Scene.</br>
         /// <br><see cref="string"/>: Name of the Scene.</br>
         /// </para>
