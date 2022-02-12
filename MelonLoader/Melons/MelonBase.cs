@@ -615,6 +615,7 @@ namespace MelonLoader
                 HarmonyInstance.PatchAll(Assembly);
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
 
+
             PrintLoadInfo();
 
             OnRegister.Invoke();
