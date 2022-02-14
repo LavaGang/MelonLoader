@@ -5,7 +5,7 @@ using MelonLoader.MonoInternals;
 
 namespace MelonLoader
 {
-	public static class Core
+	internal static class Core
     {
         internal static HarmonyLib.Harmony HarmonyInstance = null;
 
