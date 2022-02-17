@@ -9,13 +9,11 @@ on:
 
 jobs:
   build_core_debug:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
-        with:
-          vs-version: '[16.4,17.0)'
       - name: Build Melonloader Core
         shell: cmd
         run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
@@ -25,13 +23,11 @@ jobs:
           name: MLCoreDebug
           path: Output/Debug/MelonLoader/
   build_core_release:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v2
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
-        with:
-          vs-version: '[16.4,17.0)'
       - name: Build Melonloader Core
         shell: cmd
         run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
