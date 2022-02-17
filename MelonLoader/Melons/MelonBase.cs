@@ -592,6 +592,7 @@ namespace MelonLoader
                 LoggerInstance = new MelonLogger.Instance(string.IsNullOrEmpty(ID) ? Info.Name : $"{ID}:{Info.Name}", ConsoleColor);
             HarmonyInstance = new HarmonyLib.Harmony($"{Assembly.FullName}:{Info.Name}");
 
+            Registered = true; // this has to be true before the melon can subscribe to any events
             RegisterCallbacks();
 
             try
@@ -602,6 +603,7 @@ namespace MelonLoader
             {
                 MelonLogger.Error($"Failed to register {MelonTypeName} '{Location}': Melon failed to initialize!");
                 MelonLogger.Error(ex.ToString());
+                Registered = false;
                 return false;
             }
 
@@ -609,7 +611,6 @@ namespace MelonLoader
                 return false;
 
             _registeredMelons.Add(this);
-            Registered = true;
 
             if (!HarmonyDontPatchAll)
                 HarmonyInstance.PatchAll(Assembly);
