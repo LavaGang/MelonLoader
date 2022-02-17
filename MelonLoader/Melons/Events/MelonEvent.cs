@@ -19,14 +19,14 @@ namespace MelonLoader
         public bool CheckIfSubscribed(MethodInfo method, object obj = null)
             => actions.Exists(x => x.method == method && (obj == null || x.obj == obj));
 
-        public void Subscribe(T action, bool unsubscribeOnFirstInvokation = false)
+        public void Subscribe(T action, bool unsubscribeOnFirstInvocation = false)
         {
             if (Disposed)
                 return;
 
             lock (actions)
             {
-                var acts = MelonAction.Get(action, unsubscribeOnFirstInvokation);
+                var acts = MelonAction.Get(action, unsubscribeOnFirstInvocation);
                 foreach (var a in acts)
                 {
                     if (CheckIfSubscribed(a.method, a.obj))
@@ -78,7 +78,7 @@ namespace MelonLoader
                         del.Melon.LoggerInstance.Error(ex.ToString());
                 }
 
-                if (del.unsubscribeOnFirstInvokation)
+                if (del.unsubscribeOnFirstInvocation)
                     Unsubscribe(del.method, del.obj);
             }
 

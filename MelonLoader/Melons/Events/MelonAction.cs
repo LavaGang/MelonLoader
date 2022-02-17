@@ -8,15 +8,15 @@ namespace MelonLoader
     {
         internal readonly MethodInfo method;
         internal readonly object obj;
-        internal readonly bool unsubscribeOnFirstInvokation;
+        internal readonly bool unsubscribeOnFirstInvocation;
 
         internal MelonBase Melon => obj is MelonBase melon ? melon : null;
 
-        private MelonAction(Delegate singleDel, bool unsubscribeOnFirstInvokation)
+        private MelonAction(Delegate singleDel, bool unsubscribeOnFirstInvocation)
         {
             method = singleDel.Method;
             obj = singleDel.Target;
-            this.unsubscribeOnFirstInvokation = unsubscribeOnFirstInvokation;
+            this.unsubscribeOnFirstInvocation = unsubscribeOnFirstInvocation;
         }
 
         internal void Invoke(params object[] args)
@@ -24,7 +24,7 @@ namespace MelonLoader
             method.Invoke(obj, args);
         }
 
-        internal static List<MelonAction> Get(Delegate del, bool unsubscribeOnFirstInvokation = false)
+        internal static List<MelonAction> Get(Delegate del, bool unsubscribeOnFirstInvocation = false)
         {
             var mets = del.GetInvocationList();
             var result = new List<MelonAction>();
@@ -33,7 +33,7 @@ namespace MelonLoader
                 if (met.Target != null && met.Target is MelonBase melon && !melon.Registered)
                     continue;
 
-                result.Add(new MelonAction(met, unsubscribeOnFirstInvokation));
+                result.Add(new MelonAction(met, unsubscribeOnFirstInvocation));
             }
             return result;
         }
