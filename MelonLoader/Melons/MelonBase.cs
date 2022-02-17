@@ -646,7 +646,7 @@ namespace MelonLoader
         }
 
         /// <summary>
-        /// Tries to find a register Melon to matches the given Info.
+        /// Tries to find a registered Melon that matches the given Info.
         /// </summary>
         public static MelonBase FindMelon(string melonName, string melonAuthor)
             => RegisteredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
