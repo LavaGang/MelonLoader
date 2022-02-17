@@ -61,14 +61,11 @@ namespace MelonLoader
             if (Disposed)
                 return;
 
-            MelonAction[] copy;
+            LemonEnumerator<MelonAction> enumerator;
             lock (actions)
-                copy = actions.ToArray();
-
-            LemonEnumerator<MelonAction> enumerator = new LemonEnumerator<MelonAction>(copy);
-            while (enumerator.MoveNext())
+                enumerator = new LemonEnumerator<MelonAction>(actions);
+            foreach (var del in enumerator)
             {
-                var del = enumerator.Current;
                 if (del.Melon != null && !del.Melon.Registered)
                     continue;
 
