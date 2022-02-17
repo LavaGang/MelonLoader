@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,7 +14,10 @@ namespace MelonLoader
         /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
         /// </summary>
         public LemonEnumerator(T[] lemons)
-            => LemonPatch = lemons.ToArray();
+        {
+            LemonPatch = new T[lemons.Length];
+            Array.Copy(lemons, LemonPatch, lemons.Length);
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
