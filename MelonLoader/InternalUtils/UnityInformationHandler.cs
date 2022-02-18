@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 
 namespace MelonLoader.InternalUtils
 {

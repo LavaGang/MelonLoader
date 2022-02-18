@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using AssetRipper.VersionUtilities;
 using MelonLoader;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
@@ -116,8 +117,8 @@ namespace MelonLoader.CompatibilityLayers
 #elif ANDROID
             // TODO
 #else
-            InternalUtils.UnityVersion currentUnityVersion = InternalUtils.UnityInformationHandler.EngineVersion;
-            InternalUtils.UnityVersion minimumVersion = new InternalUtils.UnityVersion(2017, 2);
+            UnityVersion currentUnityVersion = InternalUtils.UnityInformationHandler.EngineVersion;
+            UnityVersion minimumVersion = new UnityVersion(2017, 2);
             if (currentUnityVersion < minimumVersion)
                 moduleName = "player_win.exe";
 #endif
