@@ -347,11 +347,7 @@ namespace MelonLoader
 
 
         [Obsolete("MelonLoader.MelonUtils.GetUnityVersion() is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion instead.")]
-        public static string GetUnityVersion()
-        {
-            var version = UnityInformationHandler.EngineVersion;
-            return $"{version.Major}.{version.Minor}.{version.Build}";
-        }
+        public static string GetUnityVersion() => UnityInformationHandler.EngineVersion.ToStringWithoutType();
         [Obsolete("MelonLoader.MelonUtils.GameDeveloper is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameDeveloper instead.")]
         public static string GameDeveloper { get => UnityInformationHandler.GameDeveloper; }
         [Obsolete("MelonLoader.MelonUtils.GameName is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameName instead.")]
