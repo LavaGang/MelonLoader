@@ -79,7 +79,6 @@ namespace MelonLoader
         internal static void OnApplicationLateStart()
         {
             MelonEvents.OnApplicationLateStart.Invoke();
-            MelonStartScreen.Finish();
         }
 
         internal static void Quit()

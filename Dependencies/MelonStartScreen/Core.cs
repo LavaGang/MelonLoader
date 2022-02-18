@@ -3,6 +3,7 @@ using MelonLoader.NativeUtils.PEParser;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Windows;
@@ -64,12 +65,20 @@ namespace MelonLoader.MelonStartScreen
                 return functionToWaitForAsync();
             }
 
-            // initialized = true;
+            SubscribeToCoreCallbacks();
 
             StartFunction(functionToWaitForAsync);
             MainLoop();
 
             return functionRunResult;
+        }
+
+        private static void SubscribeToCoreCallbacks()
+        {
+            MelonEvents.OnApplicationLateStart.Subscribe(Finish);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart);
+            MelonBase.OnMelonInitializing.Subscribe(OnMelonInitializing);
+            MelonBase.OnMelonsResolving.Subscribe(OnMelonsResolving);
         }
 
         private static void RegisterMessageCallbacks()
@@ -215,63 +224,29 @@ namespace MelonLoader.MelonStartScreen
 
         #region Calls from MelonLoader
 
-        internal static void OnApplicationStart_Plugins()
+        internal static void OnMelonInitializing(MelonBase melon)
         {
-            ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationStart_Plugins);
+            ScreenRenderer.UpdateProgressState(ModLoadStep.InitializeMelons);
+            ScreenRenderer.UpdateProgressFromMod(melon);
             ProcessEventsAndRender();
         }
 
-        internal static void OnApplicationStart_Plugin(string name)
+        internal static void OnMelonsResolving(Assembly asm)
         {
-            ScreenRenderer.UpdateProgressFromMod(name);
+            ScreenRenderer.UpdateProgressState(ModLoadStep.LoadMelons);
+            ScreenRenderer.UpdateProgressFromModAssembly(asm);
             ProcessEventsAndRender();
         }
 
-        internal static void LoadingMods()
+        internal static void OnApplicationStart()
         {
-            ScreenRenderer.UpdateProgressState(ModLoadStep.LoadMods);
+            ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationStart);
             ProcessEventsAndRender();
         }
 
         internal static void DisplayModLoadIssuesIfNeeded()
         {
             // TODO Start a new locking thread with a display of the issues and buttons to either close the game or continue
-        }
-
-        internal static void OnApplicationStart_Mods()
-        {
-            ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationStart_Mods);
-            ProcessEventsAndRender();
-        }
-
-        internal static void OnApplicationStart_Mod(string name)
-        {
-            ScreenRenderer.UpdateProgressFromMod(name);
-            ProcessEventsAndRender();
-        }
-
-        internal static void OnApplicationLateStart_Plugins()
-        {
-            ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationLateStart_Plugins);
-            ProcessEventsAndRender();
-        }
-
-        internal static void OnApplicationLateStart_Plugin(string name)
-        {
-            ScreenRenderer.UpdateProgressFromMod(name);
-            ProcessEventsAndRender();
-        }
-
-        internal static void OnApplicationLateStart_Mods()
-        {
-            ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationLateStart_Mods);
-            ProcessEventsAndRender();
-        }
-
-        internal static void OnApplicationLateStart_Mod(string name)
-        {
-            ScreenRenderer.UpdateProgressFromMod(name);
-            ProcessEventsAndRender();
         }
 
         internal static void Finish()
