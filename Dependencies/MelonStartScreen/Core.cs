@@ -14,8 +14,6 @@ namespace MelonLoader.MelonStartScreen
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate IntPtr User32SetTimerDelegate(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, IntPtr lpTimerFunc);
 
-        private static bool initialized = false;
-
         private static User32SetTimerDelegate user32SetTimerOriginal;
         private static bool nextSetTimerIsUnity = false;
         private static IntPtr titleBarTimer;
@@ -66,7 +64,7 @@ namespace MelonLoader.MelonStartScreen
                 return functionToWaitForAsync();
             }
 
-            initialized = true;
+            // initialized = true;
 
             StartFunction(functionToWaitForAsync);
             MainLoop();
@@ -219,24 +217,18 @@ namespace MelonLoader.MelonStartScreen
 
         internal static void OnApplicationStart_Plugins()
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationStart_Plugins);
             ProcessEventsAndRender();
         }
 
         internal static void OnApplicationStart_Plugin(string name)
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressFromMod(name);
             ProcessEventsAndRender();
         }
 
         internal static void LoadingMods()
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressState(ModLoadStep.LoadMods);
             ProcessEventsAndRender();
         }
@@ -248,56 +240,42 @@ namespace MelonLoader.MelonStartScreen
 
         internal static void OnApplicationStart_Mods()
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationStart_Mods);
             ProcessEventsAndRender();
         }
 
         internal static void OnApplicationStart_Mod(string name)
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressFromMod(name);
             ProcessEventsAndRender();
         }
 
         internal static void OnApplicationLateStart_Plugins()
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationLateStart_Plugins);
             ProcessEventsAndRender();
         }
 
         internal static void OnApplicationLateStart_Plugin(string name)
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressFromMod(name);
             ProcessEventsAndRender();
         }
 
         internal static void OnApplicationLateStart_Mods()
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressState(ModLoadStep.OnApplicationLateStart_Mods);
             ProcessEventsAndRender();
         }
 
         internal static void OnApplicationLateStart_Mod(string name)
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateProgressFromMod(name);
             ProcessEventsAndRender();
         }
 
         internal static void Finish()
         {
-            if (!initialized) return;
-
             ScreenRenderer.UpdateMainProgress("Starting game...", 1f);
             ScreenRenderer.Render(); // Final render, to set the progress bar to 100%
         }
