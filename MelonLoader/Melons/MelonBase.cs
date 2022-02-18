@@ -13,8 +13,21 @@ namespace MelonLoader
     public abstract class MelonBase
     {
         #region Static
+
+        /// <summary>
+        /// Called once a Melon is fully registered.
+        /// </summary>
         public static readonly MelonEvent<MelonBase> OnMelonRegistered = new MelonEvent<MelonBase>();
+
+        /// <summary>
+        /// Called when a Melon unregisters.
+        /// </summary>
         public static readonly MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
+
+        /// <summary>
+        /// Called when a Melon starts initializing.
+        /// </summary>
+        public static readonly MelonEvent<MelonBase> OnMelonInitializing = new MelonEvent<MelonBase>();
 
         public static event LemonFunc<Assembly, MelonBase[]> CustomMelonResolvers;
 
@@ -587,6 +600,8 @@ namespace MelonLoader
                 PrintIncompatibilities(comp, this);
                 return false;
             }
+
+            OnMelonInitializing.Invoke(this);
 
             if (LoggerInstance == null)
                 LoggerInstance = new MelonLogger.Instance(string.IsNullOrEmpty(ID) ? Info.Name : $"{ID}:{Info.Name}", ConsoleColor);
