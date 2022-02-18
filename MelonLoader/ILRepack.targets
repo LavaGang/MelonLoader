@@ -15,6 +15,7 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'AssetsTools.NET'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'VersionUtilities'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -23,7 +24,7 @@
 			TargetKind="Dll"
 			OutputFile="@(AssemblyFile)"
 		/>
-    </Target>
+	</Target>
 	
 	<Target Name="ILRepacker_Release" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<ItemGroup>
@@ -40,6 +41,7 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'AssetsTools.NET'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'VersionUtilities'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -48,7 +50,7 @@
 			TargetKind="Dll"
 			OutputFile="@(AssemblyFile)"
 		/>
-    </Target>
+	</Target>
 	
 	<Target Name="Cleanup" AfterTargets="ILRepack">
 		<ItemGroup>
@@ -61,7 +63,8 @@
 			<FilesToDelete Include="$(OutputPath)0Harmony.dll" />
 			<FilesToDelete Include="$(OutputPath)Tomlet.dll" />
 			<FilesToDelete Include="$(OutputPath)AssetsTools.NET.dll" />
+			<FilesToDelete Include="$(OutputPath)VersionUtilities.dll" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)" />
-    </Target>
+	</Target>
 </Project>

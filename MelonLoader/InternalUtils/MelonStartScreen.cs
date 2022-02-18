@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using AssetRipper.VersionUtilities;
 using Semver;
 
 namespace MelonLoader.InternalUtils
