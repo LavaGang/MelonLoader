@@ -1,6 +1,7 @@
 ﻿using MelonLoader.MelonStartScreen.NativeUtils;
 using MelonLoader.MelonStartScreen.UI;
 using System;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.CoreModule;
 using UnityPlayer;
@@ -124,12 +125,21 @@ namespace MelonLoader.MelonStartScreen
             UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
-        internal static void UpdateProgressFromMod(string modname)
+        internal static void UpdateProgressFromMod(MelonBase melon)
         {
             if (UIStyleValues.ProgressBar == null)
                 return;
 
-            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(modname, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(melon, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.text.isDirty = true;
+        }
+
+        internal static void UpdateProgressFromModAssembly(Assembly asm)
+        {
+            if (UIStyleValues.ProgressBar == null)
+                return;
+
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromModAssembly(asm, ref UIStyleValues.ProgressBar.text.text);
             UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
@@ -138,8 +148,11 @@ namespace MelonLoader.MelonStartScreen
             if (UIStyleValues.ProgressBar == null)
                 return;
 
-            UIStyleValues.ProgressBar.progress = ProgressParser.SetModState(step, ref UIStyleValues.ProgressBar.text.text);
-            UIStyleValues.ProgressBar.text.isDirty = true;
+            if (ProgressParser.SetModState(step, ref UIStyleValues.ProgressBar.text.text, out float generationPart))
+            {
+                UIStyleValues.ProgressBar.progress = generationPart;
+                UIStyleValues.ProgressBar.text.isDirty = true;
+            }
         }
     }
 }

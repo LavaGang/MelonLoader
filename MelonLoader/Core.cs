@@ -36,14 +36,14 @@ namespace MelonLoader
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
 
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
-            MelonHandler.OnPreInitialization();
+            MelonEvents.OnPreInitialization.Invoke();
 
             return 0;
         }
 
         private static int PreStart()
         {
-            MelonHandler.OnApplicationEarlyStart();
+            MelonEvents.OnApplicationEarlyStart.Invoke();
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
@@ -56,8 +56,7 @@ namespace MelonLoader
         {
             bHaptics.Start();
 
-            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
-            MelonHandler.OnPreSupportModule();
+            MelonEvents.OnPreSupportModule.Invoke();
 
             if (!SupportModule.Setup())
                 return 1;
@@ -69,8 +68,9 @@ namespace MelonLoader
 
             RegisterTypeInIl2Cpp.SetReady();
 
-            MelonHandler.OnApplicationStart_Plugins();
-            MelonHandler.OnApplicationStart_Mods();
+            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
+
+            MelonEvents.OnApplicationStart.Invoke();
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
             return 0;
@@ -78,14 +78,12 @@ namespace MelonLoader
 
         internal static void OnApplicationLateStart()
         {
-            MelonHandler.OnApplicationLateStart_Plugins();
-            MelonHandler.OnApplicationLateStart_Mods();
-            MelonStartScreen.Finish();
+            MelonEvents.OnApplicationLateStart.Invoke();
         }
 
         internal static void Quit()
         {
-            MelonHandler.OnApplicationQuit();
+            MelonEvents.OnApplicationQuit.Invoke();
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();

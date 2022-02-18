@@ -11,6 +11,16 @@ namespace MelonLoader
             TypeName = "Plugin";
         }
 
+        protected internal override void RegisterCallbacks()
+        {
+            base.RegisterCallbacks();
+
+            MelonEvents.OnPreInitialization.Subscribe(OnPreInitialization);
+            MelonEvents.OnApplicationEarlyStart.Subscribe(OnApplicationEarlyStart);
+        }
+
+        #region Callbacks
+
         /// <summary>
         /// Runs before Game Initialization.
         /// </summary>
@@ -21,7 +31,10 @@ namespace MelonLoader
         /// </summary>
         public virtual void OnApplicationEarlyStart() { }
 
+        #endregion
+
         #region Obsolete Members
+
         [Obsolete()]
         private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
         [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead.")]
@@ -42,6 +55,7 @@ namespace MelonLoader
                 return _LegacyGameAttributes;
             }
         }
+
         #endregion
     }
 }

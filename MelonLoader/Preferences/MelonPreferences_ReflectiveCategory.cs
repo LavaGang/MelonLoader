@@ -126,7 +126,8 @@ namespace MelonLoader.Preferences
             }
             if (printmsg)
                 MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
-            MelonHandler.OnPreferencesSaved(currentfile.FilePath);
+
+            MelonPreferences.OnPreferencesSaved.Invoke(currentfile.FilePath);
         }
 
         public void LoadFromFile(bool printmsg = true)

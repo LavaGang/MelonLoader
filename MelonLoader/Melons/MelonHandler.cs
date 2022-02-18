@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using MelonLoader.Lemons.Cryptography;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -86,116 +84,6 @@ namespace MelonLoader
             MelonLogger.Error($"Failed to load Melon(s) from '{melonLocation}': {msg}");
         }
 
-        internal static void OnPreInitialization()
-            => MelonPlugin.ExecuteAll(x => x.OnPreInitialization(), true, "Plugin failed to initialize in OnPreInitialization.");
-
-        internal static void OnApplicationStart_Plugins()
-        {
-            MelonStartScreen.OnApplicationStart_Plugins();
-            MelonPlugin.ExecuteAll(x =>
-            {
-                MelonStartScreen.OnApplicationStart_Plugin(x.Info.Name);
-                x.OnApplicationStart();
-            }, true, "Melon failed to initialize in OnApplicationStart.");
-        }
-
-        internal static void OnApplicationStart_Mods()
-        {
-            MelonStartScreen.OnApplicationStart_Mods();
-            MelonMod.ExecuteAll(x =>
-            {
-                MelonStartScreen.OnApplicationStart_Mod(x.Info.Name);
-                x.OnApplicationStart();
-            }, true, "Melon failed to initialize in OnApplicationStart.");
-        }
-
-        internal static void OnApplicationLateStart_Plugins()
-        {
-            MelonStartScreen.OnApplicationLateStart_Plugins();
-            MelonPlugin.ExecuteAll(x =>
-            {
-                MelonStartScreen.OnApplicationLateStart_Plugin(x.Info.Name);
-                x.OnApplicationLateStart();
-            }, true, "Melon failed to initialize in OnApplicationStart.");
-        }
-
-        internal static void OnApplicationLateStart_Mods()
-        {
-            MelonStartScreen.OnApplicationLateStart_Mods();
-            MelonMod.ExecuteAll(x =>
-            {
-                MelonStartScreen.OnApplicationLateStart_Mod(x.Info.Name);
-                x.OnApplicationLateStart();
-            }, true, "Melon failed to initialize in OnApplicationLateStart.");
-        }
-
-        internal static void OnPreSupportModule()
-        {
-            MelonBase.ExecuteAll(x => x.OnPreSupportModule(), true, "Melon failed to initialize in OnPreSupportModule.");
-        }
-        internal static void OnApplicationEarlyStart() => MelonPlugin.ExecuteAll(x => x.OnApplicationEarlyStart(), true, "Plugin failed to initialize in OnApplicationEarlyStart.");
-        internal static void OnApplicationQuit() => MelonBase.ExecuteAll(x => x.OnApplicationQuit());
-        internal static void OnFixedUpdate() => MelonMod.ExecuteAll(x => x.OnFixedUpdate());
-        internal static void OnLateUpdate() => MelonBase.ExecuteAll(x => x.OnLateUpdate());
-        internal static void OnGUI() => MelonBase.ExecuteAll(x => x.OnGUI());
-        internal static void OnPreferencesSaved(string filepath) => MelonBase.ExecuteAll(x =>
-        {
-            x.OnModSettingsApplied();
-            x.OnPreferencesSaved();
-            x.OnPreferencesSaved(filepath);
-        });
-        internal static void OnPreferencesLoaded(string filepath) => MelonBase.ExecuteAll(x =>
-        {
-            x.OnModSettingsApplied();
-            x.OnPreferencesLoaded();
-            x.OnPreferencesLoaded(filepath);
-        });
-        internal static void BONEWORKS_OnLoadingScreen() => MelonMod.ExecuteAll(x => x.BONEWORKS_OnLoadingScreen());
-
-        private static bool SceneWasJustLoaded = false;
-        private static int CurrentSceneBuildIndex = -1;
-        private static string CurrentSceneName = null;
-        internal static void OnSceneWasLoaded(int buildIndex, string sceneName)
-        {
-            if (!MelonUtils.IsBONEWORKS)
-            {
-                SceneWasJustLoaded = true;
-                CurrentSceneBuildIndex = buildIndex;
-                CurrentSceneName = sceneName;
-            }
-            MelonMod.ExecuteAll(x =>
-            {
-                x.OnLevelWasLoaded(buildIndex);
-                x.OnSceneWasLoaded(buildIndex, sceneName);
-            });
-        }
-
-        internal static void OnSceneWasInitialized(int buildIndex, string sceneName)
-            => MelonMod.ExecuteAll(x =>
-            {
-                x.OnLevelWasInitialized(buildIndex);
-                x.OnSceneWasInitialized(buildIndex, sceneName);
-            });
-
-        internal static void OnSceneWasUnloaded(int buildIndex, string sceneName)
-            => MelonMod.ExecuteAll(x => x.OnSceneWasUnloaded(buildIndex, sceneName));
-
-        private static bool InitializeScene = false;
-        internal static void OnUpdate()
-        {
-            if (InitializeScene)
-            {
-                InitializeScene = false;
-                OnSceneWasInitialized(CurrentSceneBuildIndex, CurrentSceneName);
-            }
-            if (SceneWasJustLoaded)
-            {
-                SceneWasJustLoaded = false;
-                InitializeScene = true;
-            }
-            MelonBase.ExecuteAll(x => x.OnUpdate());
-        }
-
         #region Obsolete Members
         /// <summary>
         /// List of Plugins.
@@ -227,15 +115,15 @@ namespace MelonLoader
 
         [Obsolete("Use 'MelonBase.RegisteredMelons.Any(1)' instead.")]
         public static bool IsMelonAlreadyLoaded(string name)
-            => MelonBase._registeredMelons.Any(x => x.Info.Name == name);
+            => MelonBase._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonPlugin.RegisteredMelons.Any(1)' instead.")]
         public static bool IsPluginAlreadyLoaded(string name)
-            => Melon<MelonPlugin>._registeredMelons.Any(x => x.Info.Name == name);
+            => Melon<MelonPlugin>._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonMod.RegisteredMelons.Any(1)' instead.")]
         public static bool IsModAlreadyLoaded(string name)
-            => Melon<MelonMod>._registeredMelons.Any(x => x.Info.Name == name);
+            => Melon<MelonMod>._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromFile(string filepath, string symbolspath = null)

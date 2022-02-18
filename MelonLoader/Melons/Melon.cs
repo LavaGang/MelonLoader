@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace MelonLoader
 {
@@ -20,25 +18,19 @@ namespace MelonLoader
 
         static Melon()
         {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(T).TypeHandle); // to make sure the type initializer was triggered
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(T).TypeHandle); // To make sure that the type initializer of T was triggered.
         }
 
         public sealed override string MelonTypeName => TypeName;
 
-        public sealed override bool Register()
+        protected internal override bool RegisterInternal()
         {
-            if (!base.Register())
-                return false;
-
             _registeredMelons.Add((T)this);
             return true;
         }
 
-        public sealed override bool Unregister(string reason = null)
+        protected internal override bool UnregisterInternal()
         {
-            if (!base.Unregister(reason))
-                return false;
-
             _registeredMelons.Remove((T)this);
             return true;
         }

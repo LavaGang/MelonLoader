@@ -13,8 +13,27 @@ namespace MelonLoader
     public abstract class MelonBase
     {
         #region Static
-        public static Action<MelonBase> onMelonRegistered;
-        public static Action<MelonBase> onMelonUnregistered;
+
+        /// <summary>
+        /// Called once a Melon is fully registered.
+        /// </summary>
+        public static readonly MelonEvent<MelonBase> OnMelonRegistered = new MelonEvent<MelonBase>();
+
+        /// <summary>
+        /// Called when a Melon unregisters.
+        /// </summary>
+        public static readonly MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
+
+        /// <summary>
+        /// Called when a Melon starts initializing.
+        /// </summary>
+        public static readonly MelonEvent<MelonBase> OnMelonInitializing = new MelonEvent<MelonBase>();
+
+        /// <summary>
+        /// Called before the process of resolving Melons from an Assembly has started.
+        /// </summary>
+        public static readonly MelonEvent<Assembly> OnMelonsResolving = new MelonEvent<Assembly>();
+
         public static event LemonFunc<Assembly, MelonBase[]> CustomMelonResolvers;
 
         public static List<MelonBase> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
@@ -116,8 +135,10 @@ namespace MelonLoader
                 return null;
             }
 
-            // \/ Custom Resolver \/
-            var resolvers = CustomMelonResolvers?.GetInvocationList();
+            OnMelonsResolving.Invoke(asm);
+
+           // \/ Custom Resolver \/
+           var resolvers = CustomMelonResolvers?.GetInvocationList();
             if (resolvers != null)
                 foreach (var r in resolvers)
                 {
@@ -234,6 +255,9 @@ namespace MelonLoader
         private MelonGameAttribute[] _games = new MelonGameAttribute[0];
         private MelonProcessAttribute[] _processes = new MelonProcessAttribute[0];
         private MelonGameVersionAttribute[] _gameVersions = new MelonGameVersionAttribute[0];
+
+        public readonly MelonEvent OnRegister = new MelonEvent();
+        public readonly MelonEvent OnUnregister = new MelonEvent();
 
         /// <summary>
         /// Assembly of the Melon.
@@ -366,6 +390,8 @@ namespace MelonLoader
             }
         }
 
+        #region Callbacks
+
         /// <summary>
         /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
         /// </summary>
@@ -387,7 +413,12 @@ namespace MelonLoader
         public virtual void OnUpdate() { }
 
         /// <summary>
-        /// Runs once per frame after OnUpdate and OnFixedUpdate have finished.
+        /// Can run multiple times per frame. Mostly used for Physics.
+        /// </summary>
+        public virtual void OnFixedUpdate() { }
+
+        /// <summary>
+        /// Runs once per frame, after <see cref="OnUpdate"/>.
         /// </summary>
         public virtual void OnLateUpdate() { }
 
@@ -405,6 +436,7 @@ namespace MelonLoader
         /// Runs when Melon Preferences get saved.
         /// </summary>
         public virtual void OnPreferencesSaved() { }
+
         /// <summary>
         /// Runs when Melon Preferences get saved. Gets passed the Preferences's File Path.
         /// </summary>
@@ -423,12 +455,14 @@ namespace MelonLoader
         /// <summary>
         /// Runs when the Melon is registered.
         /// </summary>
-        public virtual void InitializeMelon() { }
+        public virtual void OnInitializeMelon() { }
 
         /// <summary>
         /// Runs when the Melon is unregistered.
         /// </summary>
-        public virtual void DeinitializeMelon() { }
+        public virtual void OnDeinitializeMelon() { }
+
+        #endregion
 
         public Compatibility IsCompatibleWith(MelonGameAttribute game, string processName, string gameVersion, 
             string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform, 
@@ -556,12 +590,12 @@ namespace MelonLoader
         /// <summary>
         /// Registers the Melon.
         /// </summary>
-        public virtual bool Register()
+        public bool Register()
         {
             if (Registered)
                 return false;
 
-            if (IsMelonRegistered(Info.Name, Info.Author) != null)
+            if (FindMelon(Info.Name, Info.Author) != null)
             {
                 MelonLogger.Warning($"Failed to register {MelonTypeName} '{Location}': A Melon with the same Name and Author is already registered!");
                 return false;
@@ -574,37 +608,69 @@ namespace MelonLoader
                 return false;
             }
 
+            OnMelonInitializing.Invoke(this);
+
             if (LoggerInstance == null)
                 LoggerInstance = new MelonLogger.Instance(string.IsNullOrEmpty(ID) ? Info.Name : $"{ID}:{Info.Name}", ConsoleColor);
             HarmonyInstance = new HarmonyLib.Harmony($"{Assembly.FullName}:{Info.Name}");
 
+            Registered = true; // this has to be true before the melon can subscribe to any events
+            RegisterCallbacks();
+
             try
             {
-                InitializeMelon();
+                OnInitializeMelon();
             }
             catch (Exception ex)
             {
                 MelonLogger.Error($"Failed to register {MelonTypeName} '{Location}': Melon failed to initialize!");
                 MelonLogger.Error(ex.ToString());
+                Registered = false;
                 return false;
             }
 
+            if (!RegisterInternal())
+                return false;
+
             _registeredMelons.Add(this);
-            Registered = true;
 
             if (!HarmonyDontPatchAll)
                 HarmonyInstance.PatchAll(Assembly);
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
 
+
             PrintLoadInfo();
-            onMelonRegistered?.Invoke(this);
+
+            OnRegister.Invoke();
+            OnMelonRegistered.Invoke(this);
             return true;
         }
 
+        protected internal virtual bool RegisterInternal() => true;
+        protected internal virtual bool UnregisterInternal() => true;
+
+        protected internal virtual void RegisterCallbacks()
+        {
+            MelonEvents.OnPreInitialization.Subscribe(OnPreSupportModule);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart);
+            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart);
+            MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit);
+            MelonEvents.OnUpdate.Subscribe(OnUpdate);
+            MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate);
+            MelonEvents.OnGUI.Subscribe(OnGUI);
+            MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate);
+
+            MelonPreferences.OnPreferencesLoaded.Subscribe(OnPreferencesLoaded);
+            MelonPreferences.OnPreferencesLoaded.Subscribe((x) => OnPreferencesLoaded()); // No params sig
+            MelonPreferences.OnPreferencesSaved.Subscribe(OnPreferencesSaved);
+            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnPreferencesSaved()); // No params sig
+            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnModSettingsApplied());
+        }
+
         /// <summary>
-        /// If the Name is registered, returns the registered Melon. Otherwise, returns <see langword="null"/>.
+        /// Tries to find a registered Melon that matches the given Info.
         /// </summary>
-        public static MelonBase IsMelonRegistered(string melonName, string melonAuthor)
+        public static MelonBase FindMelon(string melonName, string melonAuthor)
             => RegisteredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
 
         /// <summary>
@@ -612,14 +678,14 @@ namespace MelonLoader
         /// <para>This only unsubscribes the Melon from all Callbacks and unpatches all Methods that were patched by Harmony, but doesn't actually unload the Assembly.</para>
         /// <para>It is recommended to only use this Method in Cases where you 100% know the Melon will not work and/or will only cause Issues.</para>
         /// </summary>
-        public virtual bool Unregister(string reason = null)
+        public bool Unregister(string reason = null)
         {
             if (!Registered)
                 return false;
 
             try
             {
-                DeinitializeMelon();
+                OnDeinitializeMelon();
             }
             catch (Exception ex)
             {
@@ -627,12 +693,18 @@ namespace MelonLoader
                 MelonLogger.Error(ex.ToString());
             }
 
+            if (!UnregisterInternal())
+                return false;
+
             _registeredMelons.Remove(this);
             HarmonyInstance.UnpatchSelf();
             HarmonyInstance = null;
             Registered = false;
+
             PrintUnloadInfo(reason);
-            onMelonUnregistered?.Invoke(this);
+
+            OnUnregister.Invoke();
+            OnMelonUnregistered.Invoke(this);
             return true;
         }
 
@@ -668,7 +740,7 @@ namespace MelonLoader
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)
-            => ExecuteList(func, RegisteredMelons, unregisterOnFail, unregistrationReason);
+            => ExecuteList(func, _registeredMelons, unregisterOnFail, unregistrationReason);
 
         public static void ExecuteList<T>(LemonAction<T> func, List<T> melons, bool unregisterOnFail = false, string unregistrationReason = null) where T : MelonBase
         {
