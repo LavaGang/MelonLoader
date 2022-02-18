@@ -29,6 +29,11 @@ namespace MelonLoader
         /// </summary>
         public static readonly MelonEvent<MelonBase> OnMelonInitializing = new MelonEvent<MelonBase>();
 
+        /// <summary>
+        /// Called before the process of resolving Melons from an Assembly has started.
+        /// </summary>
+        public static readonly MelonEvent<Assembly> OnMelonsResolving = new MelonEvent<Assembly>();
+
         public static event LemonFunc<Assembly, MelonBase[]> CustomMelonResolvers;
 
         public static List<MelonBase> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
@@ -130,8 +135,10 @@ namespace MelonLoader
                 return null;
             }
 
-            // \/ Custom Resolver \/
-            var resolvers = CustomMelonResolvers?.GetInvocationList();
+            OnMelonsResolving.Invoke(asm);
+
+           // \/ Custom Resolver \/
+           var resolvers = CustomMelonResolvers?.GetInvocationList();
             if (resolvers != null)
                 foreach (var r in resolvers)
                 {
