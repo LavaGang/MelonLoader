@@ -33,7 +33,12 @@ namespace MelonLoader
         {
             path = Path.GetFullPath(path);
 
-            MelonLogger.Msg($"Loading {Melon<T>.TypeName}s from '{path}'...");
+            var loadingMsg = $"Loading {Melon<T>.TypeName}s from '{path}'...";
+            var line = new string('-', loadingMsg.Length + 1);
+            MelonLogger.Msg(ConsoleColor.Yellow, line);
+
+            MelonLogger.Msg(loadingMsg);
+            MelonLogger.Msg(ConsoleColor.Yellow, line);
 
             var files = Directory.GetFiles(path, "*.dll");
             var melons = new List<T>();
@@ -61,6 +66,11 @@ namespace MelonLoader
             }
 
             MelonBase.RegisterInOrder(melons);
+
+            MelonLogger.WriteSpacer();
+            MelonLogger.Msg(ConsoleColor.Yellow, line);
+            MelonLogger.Msg($"{Melon<T>._registeredMelons.Count} {Melon<T>.TypeName}s loaded.");
+            MelonLogger.Msg(ConsoleColor.Yellow, line);
         }
 
         public static void PrintErrorCodeMessage(MelonLoadErrorCodes errorCode, string melonLocation)
