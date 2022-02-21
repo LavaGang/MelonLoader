@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Proxy", "Proxy\Proxy.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bootstrap", "Bootstrap\Bootstrap.vcxproj", "{78DEE0AF-2263-488A-8EBF-8325218EB6C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader", "MelonLoader\MelonLoader.csproj", "{F9700790-414B-431B-9F9C-1D9210FAD682}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader", "MelonLoader\MelonLoader.csproj", "{F9700790-414B-431B-9F9C-1D9210FAD682}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SupportModules", "SupportModules", "{8D8A18CB-7319-4220-BED8-6B3E23E6C19F}"
 EndProject
@@ -15,41 +15,47 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencie
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CompatibilityLayers", "CompatibilityLayers", "{AB4D471C-9AB2-4A5F-93E1-8929E436C121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Il2CppAssemblyGenerator", "Dependencies\Il2CppAssemblyGenerator\Il2CppAssemblyGenerator.csproj", "{A6452A3F-4BD6-497A-97DA-24F7DF97B234}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonStartScreen", "Dependencies\MelonStartScreen\MelonStartScreen.csproj", "{762D7545-6F6B-441A-B040-49CC31A1713B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Preload", "Dependencies\SupportModules\Preload\Preload.csproj", "{140F10B0-CC78-4209-8FD8-AD2CAF320D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Il2CppAssemblyGenerator", "Dependencies\Il2CppAssemblyGenerator\Il2CppAssemblyGenerator.csproj", "{A6452A3F-4BD6-497A-97DA-24F7DF97B234}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono", "Dependencies\SupportModules\Mono\Mono.csproj", "{542EC51D-E480-4802-B5AA-96EEC05AF19C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonStartScreen", "Dependencies\MelonStartScreen\MelonStartScreen.csproj", "{762D7545-6F6B-441A-B040-49CC31A1713B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Il2Cpp", "Dependencies\SupportModules\Il2Cpp\Il2Cpp.csproj", "{4BEAF9B5-F780-414B-8F2E-59DA4A91BE50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Preload", "Dependencies\SupportModules\Preload\Preload.csproj", "{140F10B0-CC78-4209-8FD8-AD2CAF320D13}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demeo", "Dependencies\CompatibilityLayers\Demeo\Demeo.csproj", "{12853B23-E7D9-4E10-AC7F-83382561239F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mono", "Dependencies\SupportModules\Mono\Mono.csproj", "{542EC51D-E480-4802-B5AA-96EEC05AF19C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPA", "Dependencies\CompatibilityLayers\IPA\IPA.csproj", "{4FDDBEC0-9C20-456E-8906-77E9CD39C3CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Il2Cpp", "Dependencies\SupportModules\Il2Cpp\Il2Cpp.csproj", "{4BEAF9B5-F780-414B-8F2E-59DA4A91BE50}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDML", "Dependencies\CompatibilityLayers\MDML\MDML.csproj", "{15CFF766-420B-47EF-9E4A-E73D35A4AB44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demeo", "Dependencies\CompatibilityLayers\Demeo\Demeo.csproj", "{12853B23-E7D9-4E10-AC7F-83382561239F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Il2CppUnityTls", "Dependencies\CompatibilityLayers\Il2CppUnityTls\Il2CppUnityTls.csproj", "{B964098D-9C0F-423E-9758-70DE368D1E6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPA", "Dependencies\CompatibilityLayers\IPA\IPA.csproj", "{4FDDBEC0-9C20-456E-8906-77E9CD39C3CA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MDML", "Dependencies\CompatibilityLayers\MDML\MDML.csproj", "{15CFF766-420B-47EF-9E4A-E73D35A4AB44}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Il2CppUnityTls", "Dependencies\CompatibilityLayers\Il2CppUnityTls\Il2CppUnityTls.csproj", "{B964098D-9C0F-423E-9758-70DE368D1E6E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9700790-414B-431B-9F9C-1D9210FAD682} = {F9700790-414B-431B-9F9C-1D9210FAD682}
 	EndProjectSection
