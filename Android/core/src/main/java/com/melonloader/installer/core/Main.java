@@ -64,6 +64,11 @@ public class Main {
         return false;
     }
 
+    public static String DetectUnityVersion(String targetApk, String tempDir)
+    {
+        return (new UnityVersionDetector(targetApk, tempDir)).TryGetVersion();
+    }
+
     public static Properties GetProperties()
     {
         return _properties;

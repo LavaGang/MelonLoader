@@ -33,7 +33,7 @@ public class PathDefinitions {
 
 
         unityBase = Paths.get(base.toString(), "unity");
-        unityNativeBase = Paths.get(unityBase.toString(), "native");
-        unityManagedBase = Paths.get(unityBase.toString(), "managed");
+        unityNativeBase = Paths.get(unityBase.toString(), "Libs");
+        unityManagedBase = Paths.get(unityBase.toString(), "Managed");
     }
 }
