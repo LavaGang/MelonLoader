@@ -19,14 +19,14 @@ namespace MelonLoader
         public bool CheckIfSubscribed(MethodInfo method, object obj = null)
             => actions.Exists(x => x.method == method && (obj == null || x.obj == obj));
 
-        public void Subscribe(T action, bool unsubscribeOnFirstInvocation = false)
+        public void Subscribe(T action, int priority = 0, bool unsubscribeOnFirstInvocation = false)
         {
             if (Disposed)
                 return;
 
             lock (actions)
             {
-                var acts = MelonAction.Get(action, unsubscribeOnFirstInvocation);
+                var acts = MelonAction.Get(action, priority, unsubscribeOnFirstInvocation);
                 foreach (var a in acts)
                 {
                     if (CheckIfSubscribed(a.method, a.obj))
@@ -34,15 +34,30 @@ namespace MelonLoader
 
                     if (a.Melon != null)
                     {
-                        a.Melon.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), true);
+                        a.Melon.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), unsubscribeOnFirstInvocation: true);
                     }
 
-                    actions.Add(a);
+                    AddSorted(a);
                 }
             }
         }
 
-        private void Unsubscribe(MethodInfo method, object obj = null)
+        private void AddSorted(MelonAction action)
+        {
+            for (var a = 0; a < actions.Count; a++)
+            {
+                var act = actions[a];
+                if (action.priority <= act.priority)
+                {
+                    actions.Insert(a, action);
+                    return;
+                }
+            }
+
+            actions.Add(action);
+        }
+
+        public void Unsubscribe(MethodInfo method, object obj = null)
         {
             if (Disposed)
                 return;
