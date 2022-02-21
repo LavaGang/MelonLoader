@@ -75,10 +75,10 @@ namespace MelonLoader.MelonStartScreen
 
         private static void SubscribeToCoreCallbacks()
         {
-            MelonEvents.OnApplicationLateStart.Subscribe(Finish, 100);
-            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, -100);
-            MelonBase.OnMelonInitializing.Subscribe(OnMelonInitializing, -100);
-            MelonBase.OnMelonsResolving.Subscribe(OnMelonsResolving, -100);
+            MelonEvents.OnApplicationLateStart.Subscribe(Finish, int.MinValue);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, int.MaxValue);
+            MelonBase.OnMelonInitializing.Subscribe(OnMelonInitializing, 100);
+            MelonBase.OnMelonsResolving.Subscribe(OnMelonsResolving, 100);
         }
 
         private static void RegisterMessageCallbacks()
