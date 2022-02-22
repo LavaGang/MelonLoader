@@ -14,7 +14,7 @@ namespace MelonLoader
             new MelonModule.Info(Path.Combine(baseDirectory, "Il2CppUnityTls.dll"), () => !MelonUtils.IsGameIl2Cpp()),
 
             // Illusion Plugin Architecture
-            new MelonModule.Info(Path.Combine(baseDirectory, "IPA.dll")),
+            new MelonModule.Info(Path.Combine(baseDirectory, "IPA.dll"), MelonUtils.IsGameIl2Cpp),
 
             // MuseDashModLoader
             new MelonModule.Info(Path.Combine(baseDirectory, "MDML.dll"), MelonUtils.IsGameIl2Cpp, () => !MelonUtils.IsMuseDash),
