@@ -4,17 +4,18 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using MelonLoader;
+using MelonLoader.Modules;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class Il2CppUnityTls_Module : MelonCompatibilityLayer.Module
+    internal class Il2CppUnityTls_Module : MelonModule
     {
         internal static MelonLogger.Instance Logger = new MelonLogger.Instance("Il2CppUnityTls");
         private static IntPtr UnityTlsInterface = IntPtr.Zero;
 
-        public unsafe override void Setup()
+        public unsafe override void OnInitialize()
         {
             if (!PatchMonoExport())
             {

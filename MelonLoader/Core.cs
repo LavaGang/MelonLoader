@@ -32,8 +32,7 @@ namespace MelonLoader
             MelonLaunchOptions.Load();
             bHaptics.Load();
 
-            MelonCompatibilityLayer.Setup();
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
+            MelonCompatibilityLayer.LoadModules();
 
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
             MelonEvents.OnPreInitialization.Invoke();
@@ -63,7 +62,9 @@ namespace MelonLoader
 
             if (MelonUtils.IsGameIl2Cpp())
                 HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
+
+            MelonEvents.OnPreApplicationStart.Invoke(); // Modules should subscribe to this with the lowest priority, preferably int.MinValue
+
             AddUnityDebugLog();
 
             RegisterTypeInIl2Cpp.SetReady();
