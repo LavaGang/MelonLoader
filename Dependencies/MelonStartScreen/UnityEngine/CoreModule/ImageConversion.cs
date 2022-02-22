@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using UnhollowerMini;
+using static MelonLoader.MelonStartScreen.Core;
 
 namespace UnityEngine
 {
@@ -19,7 +20,7 @@ namespace UnityEngine
                 method_LoadImage_ptr = UnityInternals.ResolveICall("UnityEngine.ImageConversion::LoadImage(UnityEngine.Texture2D,System.Byte[],System.Boolean)");
                 if (method_LoadImage_ptr == IntPtr.Zero)
                 {
-                    MelonLogger.Error("Failed to resolve icall UnityEngine.ImageConversion::LoadImage(UnityEngine.Texture2D,System.Byte[],System.Boolean)");
+                    Logger.Error("Failed to resolve icall UnityEngine.ImageConversion::LoadImage(UnityEngine.Texture2D,System.Byte[],System.Boolean)");
                     return false;
                 }
                 if (method_LoadImage_ptr != IntPtr.Zero)
@@ -37,7 +38,7 @@ namespace UnityEngine
 
                 return ImageConversion_LoadImage(tex.Pointer, dataPtr, markNonReadable);
             }
-            MelonLogger.Error("Failed to run UnityEngine.ImageConversion::LoadImage(UnityEngine.Texture2D,System.Byte[],System.Boolean)");
+            Logger.Error("Failed to run UnityEngine.ImageConversion::LoadImage(UnityEngine.Texture2D,System.Byte[],System.Boolean)");
             return false;
         }
     }

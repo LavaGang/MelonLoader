@@ -47,7 +47,7 @@ namespace MelonLoader.MelonStartScreen
             }
             catch (Exception e)
             {
-                MelonLogger.Error("Exception while init rendering: " + e);
+                Core.Logger.Error("Exception while init rendering: " + e);
                 disabled = true;
             }
         }
@@ -101,7 +101,7 @@ namespace MelonLoader.MelonStartScreen
             }
             catch (Exception e)
             {
-                MelonLogger.Error("Exception while rendering: " + e);
+                Core.Logger.Error("Exception while rendering: " + e);
                 disabled = true;
             }
         }

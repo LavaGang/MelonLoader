@@ -45,7 +45,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
 
             if (moduleAddress == IntPtr.Zero)
             {
-                MelonLogger.Error($"Failed to find module \"{moduleName}\"");
+                Core.Logger.Error($"Failed to find module \"{moduleName}\"");
                 return false;
             }
 
@@ -82,7 +82,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                         if (ptr == IntPtr.Zero)
                         {
                             success = false;
-                            MelonLogger.Error("Failed to find the signature for field " + fi.Name + " in module. Signature: " + attribute.Signature);
+                            Core.Logger.Error("Failed to find the signature for field " + fi.Name + " in module. Signature: " + attribute.Signature);
                             break;
                         }
 
@@ -91,7 +91,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                         else if (typeof(IntPtr).IsAssignableFrom(fi.FieldType))
                             fi.SetValue(null, ptr);
                         else
-                            MelonLogger.Error($"Invalid target type for field \"{fi.FieldType} {fi.Name}\"");
+                            Core.Logger.Error($"Invalid target type for field \"{fi.FieldType} {fi.Name}\"");>
 
                         MelonDebug.Msg("Signature for " + fi.Name + ": " + attribute.Signature);
                         break;
@@ -99,7 +99,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
 
                     if (hasAttribute && !signaturefound && !optionalOnEarlyVersion)
                     {
-                        MelonLogger.Error("Failed to find a signature for field " + fi.Name + " for this version of Unity");
+                        Core.Logger.Error("Failed to find a signature for field " + fi.Name + " for this version of Unity");
                         success = false;
                     }
 
@@ -128,7 +128,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
 
                     if (hasAttribute && !signaturefound)
                     {
-                        MelonLogger.Error("Failed to find a value for field " + fi.Name + " for this version of Unity");
+                        Core.Logger.Error("Failed to find a value for field " + fi.Name + " for this version of Unity");
                         success = false;
                     }
                 }
