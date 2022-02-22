@@ -61,7 +61,7 @@ namespace MelonLoader.Modules
 
             var name = asm.GetName().Name;
 
-            var type = asm.GetValidTypes(x => x.IsAssignableFrom(typeof(MelonModule))).FirstOrDefault();
+            var type = asm.GetTypes().FirstOrDefault(x => typeof(MelonModule).IsAssignableFrom(x));
             if (type == null)
             {
                 MelonLogger.Warning($"Failed to load MelonModule '{moduleInfo.fullPath}': No type deriving from MelonModule found.");
@@ -99,7 +99,7 @@ namespace MelonLoader.Modules
 
         public object SendMessage(string name, params object[] arguments)
         {
-            var msg = moduleType.GetMethod(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            var msg = moduleType.GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 
             if (msg == null)
                 return null;
