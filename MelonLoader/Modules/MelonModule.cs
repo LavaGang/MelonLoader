@@ -18,7 +18,7 @@ namespace MelonLoader.Modules
 
         protected MelonModule() { }
 
-        public abstract void OnInitialize();
+        public virtual void OnInitialize() { }
 
         internal static MelonModule Load(Info moduleInfo)
         {
