@@ -12,20 +12,23 @@ namespace MelonLoader.CompatibilityLayers
 {
     internal class Il2CppUnityTls_Module : MelonModule
     {
-        internal static MelonLogger.Instance Logger = new MelonLogger.Instance("Il2CppUnityTls");
+        private static Il2CppUnityTls_Module instance;
+        internal static MelonLogger.Instance ModuleLogger => instance.LoggerInstance;
         private static IntPtr UnityTlsInterface = IntPtr.Zero;
 
         public unsafe override void OnInitialize()
         {
+            instance = this;
+
             if (!PatchMonoExport())
             {
-                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                ModuleLogger.Error("Web Connection based C# Methods may not work as intended.");
                 return;
             }
 
             if (!PatchIl2CppExport())
             {
-                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                ModuleLogger.Error("Web Connection based C# Methods may not work as intended.");
                 return;
             }
 
@@ -49,8 +52,8 @@ namespace MelonLoader.CompatibilityLayers
 
             if (ptrs.Length <= 0)
             {
-                Logger.Error("InstallUnityTlsInterface was not found!");
-                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                ModuleLogger.Error("InstallUnityTlsInterface was not found!");
+                ModuleLogger.Error("Web Connection based C# Methods may not work as intended.");
                 return;
             }
 
@@ -59,7 +62,7 @@ namespace MelonLoader.CompatibilityLayers
                 byte* i = (byte*)ptr.ToPointer();
                 if (*i == 0 || (*i & 0xF) == 0xF)
                     continue;
-                Logger.Msg("Calling InstallUnityTlsInterface...");
+                ModuleLogger.Msg("Calling InstallUnityTlsInterface...");
                 dInstallUnityTlsInterface installUnityTlsInterface = (dInstallUnityTlsInterface)Marshal.GetDelegateForFunctionPointer(ptr, typeof(dInstallUnityTlsInterface));
                 installUnityTlsInterface();
                 break;
@@ -76,11 +79,11 @@ namespace MelonLoader.CompatibilityLayers
             IntPtr export = monoLibrary.GetExport("mono_unity_get_unitytls_interface");
             if (export == IntPtr.Zero)
             {
-                Logger.Error("Failed to find mono_unity_get_unitytls_interface! This should never happen...");
+                ModuleLogger.Error("Failed to find mono_unity_get_unitytls_interface! This should never happen...");
                 return false;
             }
 
-            Logger.Msg("Patching mono_unity_get_unitytls_interface...");
+            ModuleLogger.Msg("Patching mono_unity_get_unitytls_interface...");
             MethodInfo patch = typeof(Il2CppUnityTls_Module).GetMethod("GetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static);
             IntPtr patchptr = patch.MethodHandle.GetFunctionPointer();
             MelonUtils.NativeHookAttach((IntPtr)(&export), patchptr);
@@ -94,11 +97,11 @@ namespace MelonLoader.CompatibilityLayers
             IntPtr export = il2cppLibrary.GetExport("il2cpp_unity_install_unitytls_interface");
             if (export == IntPtr.Zero)
             {
-                Logger.Error("Failed to find il2cpp_unity_install_unitytls_interface!");
+                ModuleLogger.Error("Failed to find il2cpp_unity_install_unitytls_interface!");
                 return false;
             }
 
-            Logger.Msg("Patching il2cpp_unity_install_unitytls_interface...");
+            ModuleLogger.Msg("Patching il2cpp_unity_install_unitytls_interface...");
             MethodInfo patch = typeof(Il2CppUnityTls_Module).GetMethod("SetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static);
             IntPtr patchptr = patch.MethodHandle.GetFunctionPointer();
             MelonUtils.NativeHookAttach((IntPtr)(&export), patchptr);
@@ -139,7 +142,7 @@ namespace MelonLoader.CompatibilityLayers
             if (moduleAddress == IntPtr.Zero)
             {
                 moduleSize = 0;
-                Logger.Error($"Failed to find module \"{moduleName}\"");
+                ModuleLogger.Error($"Failed to find module \"{moduleName}\"");
                 return IntPtr.Zero;
             }
 
