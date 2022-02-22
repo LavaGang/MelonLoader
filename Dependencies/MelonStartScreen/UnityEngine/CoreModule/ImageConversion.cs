@@ -3,6 +3,7 @@ using MelonLoader.MelonStartScreen;
 using System;
 using System.Runtime.InteropServices;
 using UnhollowerMini;
+using static MelonLoader.MelonStartScreen.Core;
 
 namespace UnityEngine
 {
