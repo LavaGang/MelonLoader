@@ -91,7 +91,7 @@ namespace MelonLoader.MelonStartScreen.NativeUtils
                         else if (typeof(IntPtr).IsAssignableFrom(fi.FieldType))
                             fi.SetValue(null, ptr);
                         else
-                            Core.Logger.Error($"Invalid target type for field \"{fi.FieldType} {fi.Name}\"");>
+                            Core.Logger.Error($"Invalid target type for field \"{fi.FieldType} {fi.Name}\"");
 
                         MelonDebug.Msg("Signature for " + fi.Name + ": " + attribute.Signature);
                         break;
