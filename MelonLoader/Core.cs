@@ -47,9 +47,7 @@ namespace MelonLoader
         }
 
         private static int Il2CppGameSetup()
-            => (MelonUtils.IsGameIl2Cpp()
-                && !Il2CppAssemblyGenerator.Run())
-                ? 1 : 0;
+            => Il2CppAssemblyGenerator.Run() ? 0 : 1;
 
         private static int Start()
         {

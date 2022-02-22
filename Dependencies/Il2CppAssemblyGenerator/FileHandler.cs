@@ -16,24 +16,24 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             if (string.IsNullOrEmpty(url))
             {
-                MelonLogger.Error($"url cannot be Null or Empty!");
+                Core.Logger.Error($"url cannot be Null or Empty!");
                 return false;
             }
 
             if (string.IsNullOrEmpty(destination))
             {
-                MelonLogger.Error($"destination cannot be Null or Empty!");
+                Core.Logger.Error($"destination cannot be Null or Empty!");
                 return false;
             }
 
             if (File.Exists(destination))
                 File.Delete(destination);
 
-            MelonLogger.Msg($"Downloading {url} to {destination}");
+            Core.Logger.Msg($"Downloading {url} to {destination}");
             try { Core.webClient.DownloadFile(url, destination); }
             catch (Exception ex)
             {
-                MelonLogger.Error(ex.ToString());
+                Core.Logger.Error(ex.ToString());
 
                 if (File.Exists(destination))
                     File.Delete(destination);
@@ -48,13 +48,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             if (string.IsNullOrEmpty(filepath))
             {
-                MelonLogger.Error($"filepath cannot be Null or Empty!");
+                Core.Logger.Error($"filepath cannot be Null or Empty!");
                 return false;
             }
 
             if (string.IsNullOrEmpty(destination))
             {
-                MelonLogger.Error($"destination cannot be Null or Empty!");
+                Core.Logger.Error($"destination cannot be Null or Empty!");
                 return false;
             }
 
@@ -63,7 +63,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             if (!File.Exists(filepath))
             {
-                MelonLogger.Error($"{filepath} does not Exist!");
+                Core.Logger.Error($"{filepath} does not Exist!");
                 return false;
             }
 
@@ -76,7 +76,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             {
                 if (Directory.Exists(destination))
                 {
-                    MelonLogger.Msg($"Cleaning {destination}");
+                    Core.Logger.Msg($"Cleaning {destination}");
                     foreach (var entry in Directory.EnumerateFileSystemEntries(destination))
                     {
                         if (Directory.Exists(entry))
@@ -87,7 +87,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 }
                 else
                 {
-                    MelonLogger.Msg($"Creating Directory {destination}");
+                    Core.Logger.Msg($"Creating Directory {destination}");
                     Directory.CreateDirectory(destination);
                 }
             }
@@ -95,16 +95,16 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             string filename = Path.GetFileName(filepath);
             if (!filename.EndsWith(".zip"))
             {
-                MelonLogger.Msg($"Moving {filepath} to {destination}");
+                Core.Logger.Msg($"Moving {filepath} to {destination}");
                 File.Move(filepath, destination);
                 return true;
             }
 
-            MelonLogger.Msg($"Extracting {filepath} to {destination}");
+            Core.Logger.Msg($"Extracting {filepath} to {destination}");
             try { ZipFile.ExtractToDirectory(filepath, destination); }
             catch (Exception ex)
             {
-                MelonLogger.Error(ex.ToString());
+                Core.Logger.Error(ex.ToString());
 
                 if (File.Exists(filepath))
                     File.Delete(filepath);

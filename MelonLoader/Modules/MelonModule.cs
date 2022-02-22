@@ -13,6 +13,7 @@ namespace MelonLoader.Modules
         private Type moduleType;
 
         public string Name { get; private set; }
+        public Assembly Assembly { get; private set; }
         public Info ModuleInfo { get; private set; }
         protected MelonLogger.Instance LoggerInstance { get; private set; }
 
@@ -81,6 +82,7 @@ namespace MelonLoader.Modules
 
             obj.moduleType = type;
             obj.Name = name;
+            obj.Assembly = asm;
             obj.ModuleInfo = moduleInfo;
             obj.LoggerInstance = new MelonLogger.Instance(name, ConsoleColor.Magenta); // Magenta cool :)
 
