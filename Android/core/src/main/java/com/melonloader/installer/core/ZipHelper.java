@@ -1,6 +1,7 @@
 package com.melonloader.installer.core;
 
 import net.lingala.zip4j.model.FileHeader;
+import net.lingala.zip4j.model.UnzipParameters;
 import net.lingala.zip4j.model.ZipParameters;
 
 import java.io.*;
@@ -83,16 +84,23 @@ public class ZipHelper {
 
     public void Extract() throws IOException { Extract(false); }
 
-    public void Extract(boolean createFolder) throws IOException {
-        if (addMap.isEmpty())
+    public void Extract(boolean checked) throws IOException {
+        if (extractMap.isEmpty())
             return;
 
         net.lingala.zip4j.ZipFile zip = new net.lingala.zip4j.ZipFile(path);
 
         for (String fileName : extractMap.keySet()) {
-            Main.GetProperties().logger.Log("Extracting: " + fileName + " -> " + addMap.get(fileName));
+            Main.GetProperties().logger.Log("Extracting: " + fileName + " -> " + extractMap.get(fileName));
 
-            zip.extractFile(fileName, extractMap.get(fileName));
+            String rawPath = extractMap.get(fileName);
+            String folderOut = new File(rawPath).getParent().toString();
+            String fileOut = new File(rawPath).getName();
+
+            if (!checked)
+                zip.extractFile(fileName, folderOut, fileOut);
+            else
+                try { zip.extractFile(fileName, folderOut, fileOut); } catch (Exception e) { e.printStackTrace(); }
         }
 
         zip.close();

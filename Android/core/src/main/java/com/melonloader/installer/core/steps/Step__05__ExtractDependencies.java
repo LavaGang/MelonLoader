@@ -18,7 +18,7 @@ public class Step__05__ExtractDependencies extends InstallerStep {
             zipHelper.QueueExtract(file, Paths.get(paths.dependenciesDir.toString(), file).toString());
         }
 
-        zipHelper.Extract(true);
+        zipHelper.Extract();
 
         paths.dexPatch = Paths.get(paths.dependenciesDir.toString(), "dex");
 

@@ -30,7 +30,7 @@ public class Step__06__ExtractUnityLibs  extends InstallerStep {
             zipHelper.QueueExtract(file, Paths.get(paths.unityBase.toString(), file).toString());
         }
 
-        zipHelper.Extract(true);
+        zipHelper.Extract();
 
         return true;
     }

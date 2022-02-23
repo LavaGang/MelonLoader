@@ -15,14 +15,15 @@ public class UnityVersionDetector {
     String tempDir;
     public int MaxName = 256;
 
-    public UnityVersionDetector(String apk, String tempDir) {
+    public UnityVersionDetector(String apk, String _tempDir) {
         targetApk = apk;
-        this.tempDir = tempDir;
+        tempDir = _tempDir;
 
         try {
             ExtractAssets();
         } catch (Exception e) {
             e.printStackTrace();
+            Main.GetProperties().logger.Log(e.toString());
         }
     }
 
@@ -38,6 +39,7 @@ public class UnityVersionDetector {
             return version;
         } catch (Exception e) {
             e.printStackTrace();
+            Main.GetProperties().logger.Log(e.toString());
             return null;
         }
     }
@@ -70,10 +72,10 @@ public class UnityVersionDetector {
         while ((next = buf.read()) != -1)
         {
             char bit = (char)next;
-            if (bit == 0x66)
+            if (bit == 'f')
                 f_found = true;
 
-            if (bit == 0x00 || bit == 0x66)
+            if (bit == '\0' || bit == 'f')
                 break;
             version.append(bit);
 
