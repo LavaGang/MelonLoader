@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.CompatibilityLayers</RootNamespace>
-		<TargetFramework>net35</TargetFramework>
+		<TargetFramework>net472</TargetFramework>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -20,6 +20,10 @@
 		<Reference Include="MelonLoader">
 			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
 			<Private>false</Private>
+		</Reference>
+		<Reference Include="Mono.Security">
+		  <HintPath>..\..\..\BaseLibs\Managed\Mono.Security.dll</HintPath>
+		  <Private>false</Private>
 		</Reference>
 	</ItemGroup>
 </Project>

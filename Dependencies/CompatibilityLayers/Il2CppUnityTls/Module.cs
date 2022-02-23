@@ -3,8 +3,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using HarmonyLib;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
+using Mono.Security.Interface;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 
 namespace MelonLoader.CompatibilityLayers
@@ -29,18 +31,48 @@ namespace MelonLoader.CompatibilityLayers
 
         public unsafe override void Setup()
         {
-            if (!PatchMonoExport())
-            {
-                Logger.Warning("Web Connection based C# Methods may not work as intended.");
-                return;
-            }
+            CleanProviderRegistration();
 
-            if (!PatchIl2CppExport())
-            {
-                Logger.Warning("Web Connection based C# Methods may not work as intended.");
-                return;
-            }
+            if (MelonDebug.IsEnabled())
+                Environment.SetEnvironmentVariable("MONO_TLS_DEBUG", "true");
 
+            if (MonoTlsProviderFactory.IsProviderSupported("apple") || MonoTlsProviderFactory.IsProviderSupported("btls"))
+                Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "apple");
+            else
+                Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "legacy");
+
+            if (PatchExports())
+                RunInstallFunction();
+        }
+
+        private unsafe static bool PatchExports()
+        {
+            IntPtr monolib = MonoLibrary.GetLibPtr();
+            if (monolib == IntPtr.Zero)
+                return false;
+
+            NativeLibrary monoLibrary = new NativeLibrary(monolib);
+            IntPtr mono_export = monoLibrary.GetExport("mono_unity_get_unitytls_interface");
+            if (mono_export == IntPtr.Zero)
+                return false;
+
+            NativeLibrary il2cppLibrary = NativeLibrary.Load(Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll"));
+            IntPtr il2cpp_export = il2cppLibrary.GetExport("il2cpp_unity_install_unitytls_interface");
+            if (il2cpp_export == IntPtr.Zero)
+                return false;
+
+            Logger.Msg("Patching mono_unity_get_unitytls_interface...");
+            MelonUtils.NativeHookAttach((IntPtr)(&mono_export), typeof(Il2CppUnityTls_Module).GetMethod("GetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer());
+
+            Logger.Msg("Patching il2cpp_unity_install_unitytls_interface...");
+            MelonUtils.NativeHookAttach((IntPtr)(&il2cpp_export), typeof(Il2CppUnityTls_Module).GetMethod("SetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer());
+            OriginalSetUnityTlsInterface = (dSetUnityTlsInterface)Marshal.GetDelegateForFunctionPointer(il2cpp_export, typeof(dSetUnityTlsInterface));
+
+            return true;
+        }
+
+        private unsafe static void RunInstallFunction()
+        {
             IntPtr unityplayer = GetUnityPlayerModule(out int unityplayer_size);
             if (unityplayer == IntPtr.Zero)
                 return;
@@ -52,11 +84,7 @@ namespace MelonLoader.CompatibilityLayers
                 ptrs = GetPointers(unityplayer, unityplayer_size, Signatures_x64);
 
             if ((ptrs == null) || (ptrs.Length <= 0))
-            {
-                Logger.Error("Il2CppInstallUnityTlsInterface Function was not found!");
-                Logger.Warning("Web Connection based C# Methods may not work as intended.");
                 return;
-            }
 
             foreach (IntPtr ptr in ptrs)
             {
@@ -79,47 +107,6 @@ namespace MelonLoader.CompatibilityLayers
                     return ptrs;
             }
             return null;
-        }
-
-        private unsafe static bool PatchMonoExport()
-        {
-            IntPtr monolib = MonoLibrary.GetLibPtr();
-            if (monolib == IntPtr.Zero)
-                return false;
-
-            NativeLibrary monoLibrary = new NativeLibrary(monolib);
-            IntPtr export = monoLibrary.GetExport("mono_unity_get_unitytls_interface");
-            if (export == IntPtr.Zero)
-            {
-                Logger.Error("Failed to find mono_unity_get_unitytls_interface! This should never happen...");
-                return false;
-            }
-
-            Logger.Msg("Patching mono_unity_get_unitytls_interface...");
-            MethodInfo patch = typeof(Il2CppUnityTls_Module).GetMethod("GetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static);
-            IntPtr patchptr = patch.MethodHandle.GetFunctionPointer();
-            MelonUtils.NativeHookAttach((IntPtr)(&export), patchptr);
-
-            return true;
-        }
-
-        private unsafe static bool PatchIl2CppExport()
-        {
-            NativeLibrary il2cppLibrary = NativeLibrary.Load(Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll"));
-            IntPtr export = il2cppLibrary.GetExport("il2cpp_unity_install_unitytls_interface");
-            if (export == IntPtr.Zero)
-            {
-                Logger.Error("Failed to find il2cpp_unity_install_unitytls_interface!");
-                return false;
-            }
-
-            Logger.Msg("Patching il2cpp_unity_install_unitytls_interface...");
-            MethodInfo patch = typeof(Il2CppUnityTls_Module).GetMethod("SetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static);
-            IntPtr patchptr = patch.MethodHandle.GetFunctionPointer();
-            MelonUtils.NativeHookAttach((IntPtr)(&export), patchptr);
-            OriginalSetUnityTlsInterface = (dSetUnityTlsInterface)Marshal.GetDelegateForFunctionPointer(export, typeof(dSetUnityTlsInterface));
-
-            return true;
         }
 
         private static IntPtr GetUnityPlayerModule(out int moduleSize)
@@ -161,12 +148,29 @@ namespace MelonLoader.CompatibilityLayers
             return moduleAddress;
         }
 
+        private static Type MonoTlsProviderFactory_Type;
+        private static FieldInfo MonoTlsProviderFactory_providerRegistration;
+        private static FieldInfo MonoTlsProviderFactory_providerCache;
+        private static void CleanProviderRegistration()
+        {
+            if (MonoTlsProviderFactory_Type == null)
+                MonoTlsProviderFactory_Type = AccessTools.TypeByName("Mono.Net.Security.MonoTlsProviderFactory");
+            if (MonoTlsProviderFactory_providerRegistration == null)
+                MonoTlsProviderFactory_providerRegistration = MonoTlsProviderFactory_Type.GetField("providerRegistration", BindingFlags.NonPublic | BindingFlags.Static);
+            if (MonoTlsProviderFactory_providerCache == null)
+                MonoTlsProviderFactory_providerCache = MonoTlsProviderFactory_Type.GetField("providerCache", BindingFlags.NonPublic | BindingFlags.Static);
+            MonoTlsProviderFactory_providerRegistration.SetValue(null, null);
+            MonoTlsProviderFactory_providerCache.SetValue(null, null);
+        }
+
         private static IntPtr GetUnityTlsInterface()
             => UnityTlsInterface;
         private static void SetUnityTlsInterface(IntPtr ptr)
         {
             UnityTlsInterface = ptr;
             OriginalSetUnityTlsInterface(ptr);
+            Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "unitytls");
+            CleanProviderRegistration();
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
