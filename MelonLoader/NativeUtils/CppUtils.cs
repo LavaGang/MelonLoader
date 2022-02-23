@@ -112,6 +112,13 @@ namespace MelonLoader.NativeUtils
             return IntPtr.Zero;
         }
 
+        public static unsafe IntPtr FunctionStart(IntPtr ptr)
+        {
+            long index = ptr.ToInt64();
+            for (; *(byte*)index != 0x55 || *(long*)(index + 1) != 0xEC8B || *(byte*)(index + 4) != 0xEC; index--);
+            return (IntPtr)index;
+        }
+
         // Credits: https://stackoverflow.com/a/9995303
         private static int GetHexVal(char hex)
         {

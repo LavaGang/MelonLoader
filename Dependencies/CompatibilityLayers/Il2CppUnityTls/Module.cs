@@ -48,7 +48,16 @@ namespace MelonLoader.CompatibilityLayers
 
             if (ptrs.Length <= 0)
             {
-                Logger.Error("InstallUnityTlsInterface was not found!");
+                //if (MelonUtils.IsGame32Bit())
+                //    ptrs = CppUtils.SigscanAll(unityplayer, unityplayer_size, "");
+                //else
+                if (!MelonUtils.IsGame32Bit())
+                    ptrs = CppUtils.SigscanAll(unityplayer, unityplayer_size, "48 8B 05 ?? ?? ?? ?? 48 85 C0 0F 85 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05");
+            }
+
+            if (ptrs.Length <= 0)
+            {
+                Logger.Error("Il2CppInstallUnityTlsInterface Function was not found!");
                 Logger.Warning("Web Connection based C# Methods may not work as intended.");
                 return;
             }
@@ -58,8 +67,8 @@ namespace MelonLoader.CompatibilityLayers
                 byte* i = (byte*)ptr.ToPointer();
                 if (*i == 0 || (*i & 0xF) == 0xF)
                     continue;
-                Logger.Msg("Calling InstallUnityTlsInterface...");
-                dInstallUnityTlsInterface installUnityTlsInterface = (dInstallUnityTlsInterface)Marshal.GetDelegateForFunctionPointer(ptr, typeof(dInstallUnityTlsInterface));
+                Logger.Msg("Calling Il2CppInstallUnityTlsInterface...");
+                VoidDelegate installUnityTlsInterface = (VoidDelegate)Marshal.GetDelegateForFunctionPointer(ptr, typeof(VoidDelegate));
                 installUnityTlsInterface();
                 break;
             }
@@ -158,6 +167,6 @@ namespace MelonLoader.CompatibilityLayers
         private static dSetUnityTlsInterface OriginalSetUnityTlsInterface;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void dInstallUnityTlsInterface();
+        private delegate void VoidDelegate();
     }
 }
