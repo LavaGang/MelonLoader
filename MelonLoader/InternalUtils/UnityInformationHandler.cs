@@ -66,8 +66,11 @@ namespace MelonLoader.InternalUtils
                     }
                     catch (Exception ex)
                     {
-                        MelonLogger.Error(ex);
-                        MelonLogger.Warning("Attempting to use Large Class Package...");
+                        if (MelonDebug.IsEnabled())
+                        {
+                            MelonLogger.Error(ex);
+                            MelonLogger.Warning("Attempting to use Large Class Package...");
+                        }
                         assetsManager.LoadIncludedLargeClassPackage();
                         assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
                         assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
@@ -91,7 +94,12 @@ namespace MelonLoader.InternalUtils
                     }
                 }
             }
-            catch(Exception ex) { MelonLogger.Error(ex); }
+            catch(Exception ex)
+            {
+                if (MelonDebug.IsEnabled())
+                    MelonLogger.Error(ex);
+                MelonLogger.Error("Failed to Initialize Assets Manager!");
+            }
             if (instance != null)
                 instance.file.Close();
         }
