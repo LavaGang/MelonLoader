@@ -6,6 +6,30 @@ namespace MelonLoader.NativeUtils
 {
     public static class CppUtils
     {
+        // Credits: https://stackoverflow.com/a/9995303
+        private static int GetHexVal(char hex)
+        {
+            int val = (int)hex;
+            return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        private class ConvertClass
+        {
+            [FieldOffset(0)]
+            public ulong valueULong;
+
+            [FieldOffset(0)]
+            public uint valueUInt;
+        }
+
+        public static unsafe IntPtr FunctionStart(IntPtr ptr)
+        {
+            long index = ptr.ToInt64();
+            for (; *(byte*)index != 0x55 || *(long*)(index + 1) != 0xEC8B || *(byte*)(index + 4) != 0xEC; index--) ;
+            return (IntPtr)index;
+        }
+
         public static unsafe IntPtr ResolveRelativeInstruction(IntPtr instruction)
         {
             byte opcode = *(byte*)instruction;
@@ -110,30 +134,6 @@ namespace MelonLoader.NativeUtils
             }
 
             return IntPtr.Zero;
-        }
-
-        public static unsafe IntPtr FunctionStart(IntPtr ptr)
-        {
-            long index = ptr.ToInt64();
-            for (; *(byte*)index != 0x55 || *(long*)(index + 1) != 0xEC8B || *(byte*)(index + 4) != 0xEC; index--);
-            return (IntPtr)index;
-        }
-
-        // Credits: https://stackoverflow.com/a/9995303
-        private static int GetHexVal(char hex)
-        {
-            int val = (int)hex;
-            return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        private class ConvertClass
-        {
-            [FieldOffset(0)]
-            public ulong valueULong;
-
-            [FieldOffset(0)]
-            public uint valueUInt;
         }
     }
 }

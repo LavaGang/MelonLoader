@@ -48,10 +48,9 @@ namespace MelonLoader.CompatibilityLayers
 
             if (ptrs.Length <= 0)
             {
-                //if (MelonUtils.IsGame32Bit())
-                //    ptrs = CppUtils.SigscanAll(unityplayer, unityplayer_size, "");
-                //else
-                if (!MelonUtils.IsGame32Bit())
+                if (MelonUtils.IsGame32Bit())
+                    ptrs = CppUtils.SigscanAll(unityplayer, unityplayer_size, "");
+                else
                     ptrs = CppUtils.SigscanAll(unityplayer, unityplayer_size, "48 8B 05 ?? ?? ?? ?? 48 85 C0 0F 85 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05");
             }
 
