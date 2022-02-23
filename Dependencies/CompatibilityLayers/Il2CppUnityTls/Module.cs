@@ -19,13 +19,13 @@ namespace MelonLoader.CompatibilityLayers
         {
             if (!PatchMonoExport())
             {
-                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                Logger.Warning("Web Connection based C# Methods may not work as intended.");
                 return;
             }
 
             if (!PatchIl2CppExport())
             {
-                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                Logger.Warning("Web Connection based C# Methods may not work as intended.");
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace MelonLoader.CompatibilityLayers
             if (ptrs.Length <= 0)
             {
                 Logger.Error("InstallUnityTlsInterface was not found!");
-                Logger.Error("Web Connection based C# Methods may not work as intended.");
+                Logger.Warning("Web Connection based C# Methods may not work as intended.");
                 return;
             }
 
