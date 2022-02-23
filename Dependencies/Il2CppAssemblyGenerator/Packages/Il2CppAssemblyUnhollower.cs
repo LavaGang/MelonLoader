@@ -12,7 +12,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceUnhollowerVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "0.4.17.1";
+                Version = "0.4.18.0";
 
             Name = nameof(Il2CppAssemblyUnhollower);
             URL = $"https://github.com/knah/{Name}/releases/download/v{Version}/{Name}.{Version}.zip";
