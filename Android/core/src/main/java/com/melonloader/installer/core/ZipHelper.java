@@ -3,11 +3,14 @@ package com.melonloader.installer.core;
 import net.lingala.zip4j.model.FileHeader;
 import net.lingala.zip4j.model.UnzipParameters;
 import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.tasks.AddFolderToZipTask;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -67,19 +70,48 @@ public class ZipHelper {
         if (addMap.isEmpty())
             return;
 
-        net.lingala.zip4j.ZipFile zip = new net.lingala.zip4j.ZipFile(path);
+        String tempBuildDir = path + ".temp";
+
+        if (Files.exists(Paths.get(tempBuildDir)))
+            FileUtils.deleteDirectory(new File(tempBuildDir));
+
+        Files.createDirectories(Paths.get(tempBuildDir));
 
         for (String fileName : addMap.keySet()) {
-            File file = new File(fileName);
-
             Main.GetProperties().logger.Log("Adding: " + fileName + " -> " + addMap.get(fileName));
+            Path fileTempPath = Paths.get(tempBuildDir, addMap.get(fileName));
+            Path folder = fileTempPath.getParent();
 
-            zip.addFile(file);
-            zip.renameFile(file.getName(), addMap.get(fileName));
+            Files.createDirectories(folder);
+
+            Files.move(Paths.get(fileName), fileTempPath, StandardCopyOption.REPLACE_EXISTING);
         }
-        
+
+        net.lingala.zip4j.ZipFile zip = new net.lingala.zip4j.ZipFile(path);
+
+        ZipParameters params = new ZipParameters();
+        params.setDefaultFolderPath("");
+
+        List<File> filesToAdd = new ArrayList<>();
+
+        for (String s : (new File(tempBuildDir)).list()) {
+            File subfile = new File(Paths.get(tempBuildDir, s).toString());
+            if (subfile.isDirectory()) {
+                Main.GetProperties().logger.Log("adding: " + subfile.getAbsolutePath());
+                zip.addFolder(subfile, params);
+            }
+            else {
+                filesToAdd.add(subfile);
+            }
+        }
+
+        Main.GetProperties().logger.Log("writing base files");
+        zip.addFiles(filesToAdd);
+
         zip.close();
         addMap.clear();
+
+        FileUtils.deleteDirectory(new File(tempBuildDir));
     }
 
     public void Extract() throws IOException { Extract(false); }

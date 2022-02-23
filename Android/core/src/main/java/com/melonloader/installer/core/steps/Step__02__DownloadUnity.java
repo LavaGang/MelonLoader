@@ -13,12 +13,14 @@ public class Step__02__DownloadUnity extends InstallerStep {
             return true;
 
         properties.logger.Log("Downloading Unity Dependencies");
-        downloadFile(properties.unityProvider + "/" + properties.unityVersion + ".zip", paths.unityZip.toString());
+        downloadFile(properties.unityProvider + properties.unityVersion + ".zip", paths.unityZip.toString());
 
-        return false;
+        return true;
     }
 
     protected void downloadFile(String _url, String _output) throws IOException {
+        properties.logger.Log("Downloading [" + _url + "]");
+
         URL url = new URL(_url);
         URLConnection connection = url.openConnection();
         connection.connect();

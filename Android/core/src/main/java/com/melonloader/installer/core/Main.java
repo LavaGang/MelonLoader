@@ -27,6 +27,7 @@ public class Main {
             InstallerStep[] steps = new InstallerStep[] {
                 new Step__00__DetectUnityVersion(),
                 new Step__00__ExtractDex(),
+                new Step__02__DownloadUnity(),
                 new Step__05__ExtractDependencies(),
                 new Step__06__ExtractUnityLibs(),
                 new Step__10__PatchDex(),

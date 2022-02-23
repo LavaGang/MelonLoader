@@ -34,11 +34,10 @@ public class PathDefinitions {
 
         dexPatch = Paths.get(dependenciesDir.toString(), "dex");
 
-
         unityBase = Paths.get(base.toString(), "unity");
         unityNativeBase = Paths.get(unityBase.toString(), "Libs");
         unityManagedBase = Paths.get(unityBase.toString(), "Managed");
-        unityZip = Paths.get(unityBase.toString(), "unity.zip");
+        unityZip = Paths.get(base.toString(), "unity.zip");
 
         keystore = Paths.get(base.toString(), "key.keystore");
     }
