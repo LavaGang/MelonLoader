@@ -1,28 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using MelonLoader;
 using Boardgame.Modding;
+using MelonLoader;
 using RGCommon;
 
 namespace MelonLoader.CompatibilityLayers
 {
     internal class Demeo_Module : MelonCompatibilityLayer.Module
     {
-        private static string ConnectionString;
-        private static List<ModdingAPI.ModInformation> ModInformation = new List<ModdingAPI.ModInformation>();
+        internal static string ConnectionString;
+        internal static List<ModdingAPI.ModInformation> ModInformation = new List<ModdingAPI.ModInformation>();
 
         public override void Setup()
         {
-            MonoInternals.MonoResolveManager.GetAssemblyResolveInfo("Demeo").Override = typeof(Demeo_Module).Assembly;
-
             HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
-
-            harmony.Patch(typeof(ModdingAPI).GetMethod("GetInstalledMods", BindingFlags.Public | BindingFlags.Instance),
-                typeof(Demeo_Module).GetMethod("GetInstalledMods", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
 
             harmony.Patch(typeof(GameStateMachine).GetMethod("GetConnectionString", BindingFlags.Public | BindingFlags.Static),
                 typeof(Demeo_Module).GetMethod("GetConnectionString", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
 
+            if (MelonUtils.IsGameIl2Cpp())
+                Il2Cpp.Patch(harmony);
+            else
+                Mono.Patch(harmony);
+            
             MelonCompatibilityLayer.AddRefreshPluginsEvent(Refresh);
             MelonCompatibilityLayer.AddRefreshModsEvent(Refresh);
             Refresh();
@@ -47,22 +47,21 @@ namespace MelonLoader.CompatibilityLayers
                 if (melon == null)
                     continue;
 
-                ModInformation.Add(new ModdingAPI.ModInformation()
-                {
-                    name = melon.Info.Name,
-                    version = melon.Info.Version,
-                    author = melon.Info.Author,
-                    description = melon.Info.DownloadLink
-                });
+                ModdingAPI.ModInformation info = new ModdingAPI.ModInformation();
+                info.SetName(melon.Info.Name);
+                info.SetVersion(melon.Info.Version);
+                info.SetAuthor(melon.Info.Author);
+                info.SetDescription(melon.Info.DownloadLink);
+
+                ModInformation.Add(info);
 
                 if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequirement>(melon.Assembly) != null)
                     ConnectionString += $", {melon.Info.Name} v{melon.Info.Version}";
             }
 
-            ModInformation.Sort((ModdingAPI.ModInformation left, ModdingAPI.ModInformation right) => string.Compare(left.name, right.name));
+            ModInformation.Sort((ModdingAPI.ModInformation left, ModdingAPI.ModInformation right) => string.Compare(left.GetName(), right.GetName()));
         }
 
-        private static bool GetInstalledMods(ref List<ModdingAPI.ModInformation> __result) { __result = ModInformation; return false; }
         private static bool GetConnectionString(ref string __result) { __result = ConnectionString; return false; }
     }
 }

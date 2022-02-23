@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.CompatibilityLayers</RootNamespace>
-		<TargetFramework>net40</TargetFramework>
+		<TargetFramework>net472</TargetFramework>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -17,15 +17,21 @@
 		<DefineConstants />
 	</PropertyGroup>
 	<ItemGroup>
+		<Reference Include="Il2Cppmscorlib">
+		  <HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
+		  <Private>false</Private>
+		</Reference>
 		<Reference Include="Assembly-CSharp">
-		  <HintPath>Libs\Assembly-CSharp.dll</HintPath>
+			<HintPath>Libs\Assembly-CSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnhollowerBaseLib">
+		  <HintPath>Libs\UnhollowerBaseLib.dll</HintPath>
+		  <Private>false</Private>
 		</Reference>
 		<Reference Include="MelonLoader">
 			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-	</ItemGroup>
-		<ItemGroup>
-		<Compile Include="..\Demeo_Mono\Properties\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
 </Project>

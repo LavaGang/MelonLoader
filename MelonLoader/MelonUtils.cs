@@ -42,7 +42,7 @@ namespace MelonLoader
 
             CurrentGameAttribute = new MelonGameAttribute(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName);
 
-            IsDemeo = (UnityInformationHandler.GameDeveloper.Equals("Resolution Games") && (UnityInformationHandler.GameName.Equals("Demeo") || UnityInformationHandler.GameName.StartsWith("Demeo PC Edition")));
+            IsDemeo = (UnityInformationHandler.GameDeveloper.Equals("Resolution Games") && (UnityInformationHandler.GameName.StartsWith("115913 Demeo") || UnityInformationHandler.GameName.StartsWith("Demeo") || UnityInformationHandler.GameName.StartsWith("Demeo PC Edition")));
             IsMuseDash = (UnityInformationHandler.GameDeveloper.Equals("PeroPeroGames") && UnityInformationHandler.GameName.Equals("Muse Dash"));
             IsBONEWORKS = (UnityInformationHandler.GameDeveloper.Equals("Stress Level Zero") && UnityInformationHandler.GameName.Equals("BONEWORKS"));
             Main.IsBoneworks = IsBONEWORKS;
