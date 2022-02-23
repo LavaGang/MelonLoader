@@ -1,6 +1,5 @@
 ﻿using Boardgame.Modding;
 using System.Reflection;
-using MelonLoader;
 using HarmonyLib;
 
 namespace MelonLoader.CompatibilityLayers

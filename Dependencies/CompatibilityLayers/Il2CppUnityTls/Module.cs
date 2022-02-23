@@ -3,10 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using AssetRipper.VersionUtilities;
-using MelonLoader;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
+using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 
 namespace MelonLoader.CompatibilityLayers
 {
