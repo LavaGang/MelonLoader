@@ -34,10 +34,17 @@ namespace MelonLoader
             }),
 
             // Demeo Integration
-            new ModuleListing("Demeo.dll", x =>
+            new ModuleListing("Demeo_Mono.dll", x =>
             {
                 x.SetupType = SetupType.OnApplicationStart;
                 x.ShouldDelete = !MelonUtils.IsDemeo || MelonUtils.IsGameIl2Cpp();
+            }),
+
+            // Demeo PC Edition Integration
+            new ModuleListing("Demeo_Il2Cpp.dll", x =>
+            {
+                x.SetupType = SetupType.OnApplicationStart;
+                x.ShouldDelete = !MelonUtils.IsDemeo || !MelonUtils.IsGameIl2Cpp();
             }),
         };
 
