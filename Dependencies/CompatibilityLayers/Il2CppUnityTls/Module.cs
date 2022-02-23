@@ -49,17 +49,26 @@ namespace MelonLoader.CompatibilityLayers
         {
             IntPtr monolib = MonoLibrary.GetLibPtr();
             if (monolib == IntPtr.Zero)
+            {
+                Logger.Warning("Unable to find Mono Library Pointer!");
                 return false;
+            }
 
             NativeLibrary monoLibrary = new NativeLibrary(monolib);
             IntPtr mono_export = monoLibrary.GetExport("mono_unity_get_unitytls_interface");
             if (mono_export == IntPtr.Zero)
+            {
+                Logger.Warning("Unable to find Mono's mono_unity_get_unitytls_interface Export!");
                 return false;
+            }
 
             NativeLibrary il2cppLibrary = NativeLibrary.Load(Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll"));
             IntPtr il2cpp_export = il2cppLibrary.GetExport("il2cpp_unity_install_unitytls_interface");
             if (il2cpp_export == IntPtr.Zero)
+            {
+                Logger.Warning("Unable to find Il2Cpp's il2cpp_unity_install_unitytls_interface Export!");
                 return false;
+            }
 
             Logger.Msg("Patching mono_unity_get_unitytls_interface...");
             MelonUtils.NativeHookAttach((IntPtr)(&mono_export), typeof(Il2CppUnityTls_Module).GetMethod("GetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer());
@@ -84,7 +93,10 @@ namespace MelonLoader.CompatibilityLayers
                 ptrs = GetPointers(unityplayer, unityplayer_size, Signatures_x64);
 
             if ((ptrs == null) || (ptrs.Length <= 0))
+            {
+                Logger.Warning("Unable to find Il2CppInstallUnityTlsInterface!");
                 return;
+            }
 
             foreach (IntPtr ptr in ptrs)
             {
@@ -141,7 +153,7 @@ namespace MelonLoader.CompatibilityLayers
             if (moduleAddress == IntPtr.Zero)
             {
                 moduleSize = 0;
-                Logger.Error($"Failed to find module \"{moduleName}\"");
+                Logger.Warning($"Failed to find module \"{moduleName}\"");
                 return IntPtr.Zero;
             }
 
