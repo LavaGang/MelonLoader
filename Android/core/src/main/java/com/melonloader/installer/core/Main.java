@@ -9,11 +9,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class Main {
-    private static Properties _properties = new Properties() {{
+    public static Properties _properties = new Properties() {{
         logger = new SimpleLogger();
     }};
 
     public static boolean Run(Properties properties) {
+        Properties oldProperties = _properties;
         _properties = properties;
         boolean result = true;
 
@@ -24,12 +25,14 @@ public class Main {
             Files.copy(Paths.get(properties.targetApk), paths.outputAPK, StandardCopyOption.REPLACE_EXISTING);
 
             InstallerStep[] steps = new InstallerStep[] {
+                new Step__00__DetectUnityVersion(),
                 new Step__00__ExtractDex(),
                 new Step__05__ExtractDependencies(),
                 new Step__06__ExtractUnityLibs(),
                 new Step__10__PatchDex(),
                 new Step__40__RemoveStaleFiles(),
                 new Step__50__RepackApk(),
+                new Step__55__GeneratingSigner(),
                 new Step__60__Sign(),
             };
 
@@ -44,9 +47,7 @@ public class Main {
             result = false;
         }
 
-        _properties = new Properties() {{
-            logger = new SimpleLogger();
-        }};
+        _properties = oldProperties;
 
         return result;
     }

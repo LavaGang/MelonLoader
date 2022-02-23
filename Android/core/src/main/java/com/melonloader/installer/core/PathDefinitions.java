@@ -17,6 +17,9 @@ public class PathDefinitions {
     public Path unityBase;
     public Path unityNativeBase;
     public Path unityManagedBase;
+    public Path unityZip;
+
+    public Path keystore;
 
     public PathDefinitions(Properties properties)
     {
@@ -26,7 +29,7 @@ public class PathDefinitions {
         dexOriginal = Paths.get(dexBase.toString(), "original");
         dexPatch = Paths.get(dexBase.toString(), "patch");
         dexOutput = Paths.get(dexBase.toString(), "output");
-        outputAPK = Paths.get(base.toString(), "base.apk");
+        outputAPK = properties.outputApk != null ? Paths.get(properties.outputApk) : Paths.get(base.toString(), "base.apk");
         dependenciesDir = Paths.get(base.toString(), "dependencies");
 
         dexPatch = Paths.get(dependenciesDir.toString(), "dex");
@@ -35,5 +38,8 @@ public class PathDefinitions {
         unityBase = Paths.get(base.toString(), "unity");
         unityNativeBase = Paths.get(unityBase.toString(), "Libs");
         unityManagedBase = Paths.get(unityBase.toString(), "Managed");
+        unityZip = Paths.get(unityBase.toString(), "unity.zip");
+
+        keystore = Paths.get(base.toString(), "key.keystore");
     }
 }

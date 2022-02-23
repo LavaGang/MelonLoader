@@ -8,15 +8,19 @@ import java.nio.file.Path;
  */
 public class Properties {
     public String targetApk;
+    public String outputApk;
     public String tempDir;
     public String dependencies;
-    public String unityArchive;
 
+    public String unityProvider = "https://lemon.sircoolness.dev/android/";
+    public String unityVersion;
+
+    // directly set a path instead - both need to be set to apply
     public Path unityNativeBase;
     public Path unityManagedBase;
 
-    public String keystore;
-    public String keystorePass;
+    public String keystoreName = "cert";
+    public String keystorePass = "123456";
 
     public String zipAlign;
 

@@ -1,5 +1,6 @@
 package com.melonloader.installer.core;
 
+import net.lingala.zip4j.model.FileHeader;
 import net.lingala.zip4j.model.ZipParameters;
 
 import java.io.*;
@@ -10,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 public class ZipHelper {
     private static final int BUFFER_SIZE = 4096;
@@ -27,16 +25,15 @@ public class ZipHelper {
     }
 
     public List<String> GetFiles() throws IOException {
-        ZipFile zipFile = new ZipFile(path);
-        Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
-
         List<String> entries = new ArrayList<>();
 
-        while (zipEntries.hasMoreElements()) {
-            ZipEntry entry = (ZipEntry) zipEntries.nextElement();
+        net.lingala.zip4j.ZipFile zip = new net.lingala.zip4j.ZipFile(path);
 
-            entries.add(entry.getName());
+        for (FileHeader fileHeader : zip.getFileHeaders()) {
+            entries.add(fileHeader.getFileName());
         }
+
+        zip.close();
 
         return entries;
     }
@@ -87,33 +84,18 @@ public class ZipHelper {
     public void Extract() throws IOException { Extract(false); }
 
     public void Extract(boolean createFolder) throws IOException {
-        if (extractMap.isEmpty())
+        if (addMap.isEmpty())
             return;
 
-        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(path));
-        ZipEntry entry;
+        net.lingala.zip4j.ZipFile zip = new net.lingala.zip4j.ZipFile(path);
 
-        while ((entry = zipIn.getNextEntry()) != null) {
-            if (entry.isDirectory())
-                continue;
+        for (String fileName : extractMap.keySet()) {
+            Main.GetProperties().logger.Log("Extracting: " + fileName + " -> " + addMap.get(fileName));
 
-            String fileName = entry.getName();
-            if (extractMap.containsKey(fileName)) {
-                String dest = extractMap.get(fileName);
-
-                if (createFolder) {
-                    Files.createDirectories(Paths.get(dest).getParent());
-                }
-
-                Main.GetProperties().logger.Log("Extract: " + fileName + " -> " + dest);
-                extractFile(zipIn, dest);
-            }
-
-            zipIn.closeEntry();
+            zip.extractFile(fileName, extractMap.get(fileName));
         }
 
-        zipIn.close();
-
+        zip.close();
         extractMap.clear();
     }
 
@@ -122,15 +104,5 @@ public class ZipHelper {
         String[] splitPaths = zipPath.split("/");
         String baseName = splitPaths[splitPaths.length - 1];
         return baseName;
-    }
-
-    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
-        byte[] bytesIn = new byte[BUFFER_SIZE];
-        int read = 0;
-        while ((read = zipIn.read(bytesIn)) != -1) {
-            bos.write(bytesIn, 0, read);
-        }
-        bos.close();
     }
 }

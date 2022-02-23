@@ -10,7 +10,7 @@ import java.util.List;
 public class Step__06__ExtractUnityLibs  extends InstallerStep {
     @Override
     public boolean Run() throws Exception {
-        if (properties.unityArchive != null)
+        if (properties.unityNativeBase == null || properties.unityManagedBase == null)
             return RunZip();
 
         // assume unity is installed
@@ -23,7 +23,7 @@ public class Step__06__ExtractUnityLibs  extends InstallerStep {
     private boolean RunZip() throws IOException {
         properties.logger.Log("Extracting Unity Dependencies");
 
-        ZipHelper zipHelper = new ZipHelper(properties.unityArchive);
+        ZipHelper zipHelper = new ZipHelper(paths.unityZip.toString());
         List<String> files = zipHelper.GetFiles();
 
         for (String file : files) {

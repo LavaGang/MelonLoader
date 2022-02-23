@@ -31,7 +31,7 @@ public class UnityVersionDetector {
         try {
             String version;
 
-            version = GameManagerMethod();
+            version = GameManagerMethod(false);
             if (version != null) return version;
 
             version = MainDataMethod();
@@ -45,18 +45,13 @@ public class UnityVersionDetector {
     protected void ExtractAssets() throws IOException {
         ZipHelper zipHelper = new ZipHelper(targetApk);
 
-        List<String> files = zipHelper.GetFiles();
-        for (String fileName : files) {
-            if (fileName.equals("assets/bin/Data/globalgamemanagers"))
-                zipHelper.QueueExtract(fileName, Paths.get(tempDir, "globalgamemanagers").toString());
-            else if (fileName.equals("assets/bin/Data/data.unity3d"))
-                zipHelper.QueueExtract(fileName, Paths.get(tempDir, "data.unity3d").toString());
-        }
+        zipHelper.QueueExtract("assets/bin/Data/globalgamemanagers", Paths.get(tempDir, "globalgamemanagers").toString());
+        zipHelper.QueueExtract("assets/bin/Data/data.unity3d", Paths.get(tempDir, "data.unity3d").toString());
 
         zipHelper.Extract(true);
     }
 
-    protected String GameManagerMethod() throws IOException {
+    protected String GameManagerMethod(boolean f_mode) throws IOException {
         String path = Paths.get(tempDir, "globalgamemanagers").toString();
         BufferedInputStream buf;
         try {
@@ -65,15 +60,19 @@ public class UnityVersionDetector {
             return null;
         }
 
-        buf.skip(0x30);
-
-        int next = 0;
+        buf.skip(f_mode ? 0x14 : 0x30);
 
         StringBuilder version = new StringBuilder();
 
+        boolean f_found = false;
+
+        int next = 0;
         while ((next = buf.read()) != -1)
         {
             char bit = (char)next;
+            if (bit == 0x66)
+                f_found = true;
+
             if (bit == 0x00 || bit == 0x66)
                 break;
             version.append(bit);
@@ -83,6 +82,14 @@ public class UnityVersionDetector {
                 System.out.println("Version Exceeded Size Limit");
                 return null;
             }
+        }
+
+        buf.close();
+
+        if (!f_found) {
+            if (f_mode) return null;
+
+            return GameManagerMethod(true);
         }
 
 

@@ -29,7 +29,7 @@ public class Step__50__RepackApk extends InstallerStep {
         CopyTo(zipHelper, Paths.get(paths.dependenciesDir.toString(), "native"), "*.so", "lib/arm64-v8a");
 
         CopyTo(zipHelper, paths.unityManagedBase, "*.dll", "assets/melonloader/etc/assembly_generation/unity");
-        CopyTo(zipHelper, Paths.get(paths.unityNativeBase.toString(), "arm64-v8a"), "libunity.so", "lib/arm64-v8a");
+        CopyTo(zipHelper, Paths.get(paths.unityNativeBase.toString(), "arm64-v8a"), "*.so", "lib/arm64-v8a");
 
         zipHelper.Write();
 
