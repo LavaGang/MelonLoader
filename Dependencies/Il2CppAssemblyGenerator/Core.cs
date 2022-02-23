@@ -6,7 +6,7 @@ using MelonLoader.Modules;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
-	internal class Core : MelonModule
+    internal class Core : MelonModule
     {
         internal static string BasePath = null;
         internal static string GameAssemblyPath = null;
