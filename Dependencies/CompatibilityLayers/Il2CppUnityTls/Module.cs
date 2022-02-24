@@ -37,6 +37,7 @@ namespace MelonLoader.CompatibilityLayers
         {
             if (MelonDebug.IsEnabled())
                 Environment.SetEnvironmentVariable("MONO_TLS_DEBUG", "true");
+            Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", string.Empty);
 
             if (PatchExports())
                 RunInstallFunction();
