@@ -24,9 +24,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         static Core()
         {
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
-
             webClient = new WebClient();
             webClient.Headers.Add("User-Agent", "Unity web player");
 

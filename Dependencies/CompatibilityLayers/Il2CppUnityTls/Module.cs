@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Security;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using HarmonyLib;
 using MelonLoader.MonoInternals;
@@ -35,12 +34,14 @@ namespace MelonLoader.CompatibilityLayers
 
         public unsafe override void Setup()
         {
-            if (MelonDebug.IsEnabled())
-                Environment.SetEnvironmentVariable("MONO_TLS_DEBUG", "true");
             Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", string.Empty);
 
-            if (PatchExports())
-                RunInstallFunction();
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | (SecurityProtocolType)3072;
+
+            if (!PatchExports())
+                return;
+            RunInstallFunction();
         }
 
         private unsafe static bool PatchExports()
