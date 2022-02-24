@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Security;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 using HarmonyLib;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
@@ -31,15 +35,8 @@ namespace MelonLoader.CompatibilityLayers
 
         public unsafe override void Setup()
         {
-            CleanProviderRegistration();
-
             if (MelonDebug.IsEnabled())
                 Environment.SetEnvironmentVariable("MONO_TLS_DEBUG", "true");
-
-            if (MonoTlsProviderFactory.IsProviderSupported("apple") || MonoTlsProviderFactory.IsProviderSupported("btls"))
-                Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "apple");
-            else
-                Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "legacy");
 
             if (PatchExports())
                 RunInstallFunction();
