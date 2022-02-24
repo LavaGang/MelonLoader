@@ -18,6 +18,11 @@ namespace MelonLoader
         public readonly static MelonEvent OnPreSupportModule = new MelonEvent(true);
 
         /// <summary>
+        /// Called before all Compatiblity Layers are fully initialized.
+        /// </summary>
+        public readonly static MelonEvent OnPreApplicationStart = new MelonEvent(true);
+
+        /// <summary>
         /// Called after all MelonLoader components are fully initialized (including all MelonMods).
         /// <para>Don't use this event to initialize your mods anymore! Instead, override <see cref="MelonBase.OnInitializeMelon"/>.</para>
         /// </summary>

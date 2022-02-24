@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Modules;
 using MelonLoader.MonoInternals;
 using ModHelper;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class MuseDashModLoader_Module : MelonCompatibilityLayer.Module
+    internal class MuseDashModLoader_Module : MelonModule
     {
-        public override void Setup()
+        public override void OnInitialize()
         {
             // To-Do:
             // Detect if MuseDashModLoader is already Installed
