@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Net.Security;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using HarmonyLib;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
-using Mono.Security.Interface;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 
 namespace MelonLoader.CompatibilityLayers

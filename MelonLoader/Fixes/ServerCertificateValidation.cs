@@ -10,7 +10,7 @@ namespace MelonLoader.Fixes
         internal static void Install()
         {
             ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)768 /* SecurityProtocolType.Tls11 */ | (SecurityProtocolType)3072 /* SecurityProtocolType.Tls12 */;
             ServicePointManager.ServerCertificateValidationCallback += CertificateValidation;
         }
         
