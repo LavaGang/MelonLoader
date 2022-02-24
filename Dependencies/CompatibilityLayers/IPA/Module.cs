@@ -6,12 +6,13 @@ using MelonLoader.MonoInternals;
 using IllusionPlugin;
 using System.IO;
 using IllusionInjector;
+using MelonLoader.Modules;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class IPA_Module : MelonCompatibilityLayer.Module
+    internal class IPA_Module : MelonModule
     {
-        public override void Setup()
+        public override void OnInitialize()
         {
 			// To-Do:
 			// Detect if IPA is already Installed

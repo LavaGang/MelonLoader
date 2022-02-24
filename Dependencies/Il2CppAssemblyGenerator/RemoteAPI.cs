@@ -46,15 +46,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal static void Contact()
         {
-            MelonLogger.Msg("Contacting RemoteAPI...");
+            Core.Logger.Msg("Contacting RemoteAPI...");
 
             ContactHosts();
 
-            MelonLogger.Msg($"RemoteAPI.DumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
-            MelonLogger.Msg($"RemoteAPI.UnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
-            MelonLogger.Msg($"RemoteAPI.ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
-            MelonLogger.Msg($"RemoteAPI.MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
-            MelonLogger.Msg($"RemoteAPI.MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");
+            Core.Logger.Msg($"RemoteAPI.DumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
+            Core.Logger.Msg($"RemoteAPI.UnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
+            Core.Logger.Msg($"RemoteAPI.ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
+            Core.Logger.Msg($"RemoteAPI.MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
+            Core.Logger.Msg($"RemoteAPI.MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");
         }
 
         private static void ContactHosts()
@@ -74,7 +74,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 {
                     if (!(ex is System.Net.WebException) || ((System.Net.WebException) ex).Response == null)
                     {
-                        MelonLogger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
+                        Core.Logger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
                         continue;
                     }
 
@@ -82,11 +82,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
                     if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
-                        MelonDebug.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
+                        Core.Logger.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
                         break;
                     }
 
-                    MelonLogger.Error($"WebException ({Enum.GetName(typeof(System.Net.HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
+                    Core.Logger.Error($"WebException ({Enum.GetName(typeof(System.Net.HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
                     continue;
                 }
 

@@ -58,6 +58,7 @@
     <Compile Include="MelonEvents.cs" />
     <Compile Include="Melons\Events\MelonAction.cs" />
     <Compile Include="Melons\Events\MelonEvent.cs" />
+    <Compile Include="Modules\MelonModule.cs" />
     <Compile Include="NativeUtils\CppUtils.cs" />
     <Compile Include="InternalUtils\MelonStartScreen.cs" />
     <Compile Include="InternalUtils\UnityInformationHandler.cs" />

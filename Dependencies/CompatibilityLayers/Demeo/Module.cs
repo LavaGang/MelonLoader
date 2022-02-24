@@ -4,14 +4,21 @@ using MelonLoader;
 using Boardgame.Modding;
 using RGCommon;
 using System.Text;
+using MelonLoader.Modules;
+using System;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class Demeo_Module : MelonCompatibilityLayer.Module
+    internal class Demeo_Module : MelonModule
     {
         private static List<ModdingAPI.ModInformation> ModInformation = new List<ModdingAPI.ModInformation>();
 
-        public override void Setup()
+        public override void OnInitialize()
+        {
+            MelonEvents.OnPreApplicationStart.Subscribe(OnPreAppStart, int.MinValue);
+        }
+
+        private static void OnPreAppStart()
         {
             HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
 
