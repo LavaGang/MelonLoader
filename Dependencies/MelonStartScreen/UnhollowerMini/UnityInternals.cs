@@ -466,7 +466,12 @@ namespace UnhollowerMini
         }
 
         public static void runtime_class_init(IntPtr klass)
-        { if (MelonUtils.IsGameIl2Cpp()) il2cpp_runtime_class_init(klass); else mono_runtime_class_init(klass); }
+        {
+            if (klass == IntPtr.Zero)
+                throw new ArgumentException("Class to init is null");
+
+            if (MelonUtils.IsGameIl2Cpp()) il2cpp_runtime_class_init(klass); else mono_runtime_class_init(klass);
+        }
 
         public static IntPtr runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc) =>
             MelonUtils.IsGameIl2Cpp() ? il2cpp_runtime_invoke(method, obj, param, ref exc) : mono_runtime_invoke(method, obj, param, ref exc);
