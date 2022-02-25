@@ -1,9 +1,13 @@
 ﻿using System.IO;
+using System.Text;
+using MelonLoader.Lemons.Cryptography;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class DeobfuscationMap : Models.PackageBase
     {
+        private static LemonSHA512 lemonSHA512 = new LemonSHA512();
+
         internal DeobfuscationMap()
         {
             Name = nameof(DeobfuscationMap);
@@ -21,14 +25,17 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 return false;
             else
             {
-                if (string.IsNullOrEmpty(Config.Values.DeobfuscationMapHash))
+                if (!File.Exists(FilePath))
                     return true;
-                if (!Config.Values.DeobfuscationMapHash.Equals(Version))
+                byte[] hash = lemonSHA512.ComputeHash(File.ReadAllBytes(FilePath));
+                StringBuilder hashstrb = new StringBuilder(128);
+                foreach (byte b in hash)
+                    hashstrb.Append(b.ToString("X2"));
+                string hashstr = hashstrb.ToString();
+                if (!hashstr.Equals(Version))
                     return true;
             }
             return false;
         }
-
-        internal override void Save() => Save(ref Config.Values.DeobfuscationMapHash);
     }
 }
