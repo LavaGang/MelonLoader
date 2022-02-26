@@ -28,7 +28,7 @@ namespace MelonLoader
                 return;
             }
 
-            var newArgs = new object[arguments.Length];
+            var newArgs = new object[parameters.Length];
             for (var a = 0; a < parameters.Length; a++)
             {
                 var param = parameters[a];
