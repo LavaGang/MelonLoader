@@ -46,7 +46,6 @@
     <Compile Include="Utils\GUIUtils.cs" />
     <Compile Include="Utils\UnityUtils.cs" />
     <Compile Include="Wrappers\GUILayoutWrapper.cs" />
-    <Compile Include="Wrappers\Texture2DWrapper.cs" />
     <Compile Include="Wrappers\WrapUtils.cs" />
   </ItemGroup>
   <ItemGroup>
