@@ -1,6 +1,8 @@
 ﻿using MelonLoader.Modules;
 using MelonLoader.Wrappers;
+using System;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace MelonLoader.Console
@@ -19,6 +21,8 @@ namespace MelonLoader.Console
         public static KeyCode sendKey = KeyCode.Return;
 
         private static bool enabled;
+
+        private static bool notSupported;
 
         private GUIStyle consoleStyle;
         private static bool justEnabled;
@@ -57,43 +61,54 @@ namespace MelonLoader.Console
 
         private void DrawConsole()
         {
-            if (Event.current.character == toggleChar)
-                return;
-
-            if (GUIUtils.OnKeyDown(sendKey) && GUIUtils.IsFocusedOnConsole)
+            try
             {
-                ExecuteCommand();
-            }
+                if (Event.current.character == toggleChar)
+                    return;
 
-            if (consoleStyle == null || consoleStyle.normal.background == null) // Textures become null sometimes for no reason
-            {
-                LoggerInstance.Msg($"Reloading the console style");
-
-                consoleStyle = new GUIStyle(GUI.skin.textField)
+                if (GUIUtils.OnKeyDown(sendKey) && GUIUtils.IsFocusedOnConsole)
                 {
-                    richText = false,
-                    fontSize = (int)(ConsoleFieldHeight * 0.7f),
-                };
+                    ExecuteCommand();
+                }
 
-                var normal = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.5f));
+                if (consoleStyle == null || consoleStyle.normal.background == null) // Textures become null sometimes for no reason
+                {
+                    LoggerInstance.Msg($"Reloading the console style");
 
-                consoleStyle.normal.background = normal;
-                consoleStyle.normal.textColor = consoleTextColor;
+                    consoleStyle = GUIUtils.CopyStyle(GUI.skin.textField);
 
-                consoleStyle.focused.background = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.7f));
-                consoleStyle.focused.textColor = consoleTextColor;
+                    consoleStyle.richText = false;
+                    consoleStyle.fontSize = (int)(ConsoleFieldHeight * 0.7f);
 
-                consoleStyle.hover.background = normal;
-                consoleStyle.hover.textColor = consoleTextColor;
+                    var normal = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.5f));
 
-                consoleStyle.active.background = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.7f));
-                consoleStyle.active.textColor = consoleTextColor;
+                    consoleStyle.normal.background = normal;
+                    consoleStyle.normal.textColor = consoleTextColor;
+
+                    consoleStyle.focused.background = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.7f));
+                    consoleStyle.focused.textColor = consoleTextColor;
+
+                    consoleStyle.hover.background = normal;
+                    consoleStyle.hover.textColor = consoleTextColor;
+
+                    consoleStyle.active.background = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.7f));
+                    consoleStyle.active.textColor = consoleTextColor;
+                }
+
+                var screenHeight = Screen.height;
+                GUI.SetNextControlName(ConsoleFieldName);
+                GUI.skin.settings.selectionColor = selectionColor;
+                consoleText = GUI.TextField(new Rect(0f, screenHeight - ConsoleFieldHeight, Screen.width, ConsoleFieldHeight), consoleText, consoleStyle ?? GUI.skin.textField);
             }
+            catch (Exception ex)
+            {
+                if (!(ex is NotSupportedException || ex is MissingMethodException))
+                    throw;
 
-            var screenHeight = Screen.height;
-            GUI.SetNextControlName(ConsoleFieldName);
-            GUI.skin.settings.selectionColor = selectionColor;
-            consoleText = GUI.TextField(new Rect(0f, screenHeight - ConsoleFieldHeight, Screen.width, ConsoleFieldHeight), consoleText, consoleStyle);
+                LoggerInstance.Warning("Some references have been stripped, disabling the GUI console.");
+                MelonEvents.OnGUI.Unsubscribe(typeof(Module).GetMethod(nameof(OnGUI), BindingFlags.NonPublic | BindingFlags.Instance));
+                return;
+            }
 
             if (justEnabled)
             {
