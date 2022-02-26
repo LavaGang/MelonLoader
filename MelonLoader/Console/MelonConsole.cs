@@ -83,12 +83,21 @@ namespace MelonLoader
         private static void AddDefaultCommands()
         {
             RegisterCommand(new MelonCommand("commands", "Shows a list of all registered commands.", new LemonAction(LogCommands)));
-            RegisterCommand(new MelonCommand("help", "Shows the usage of a command.", new LemonAction<string>(LogCommandUsage), new MelonCommand.Parameter("command", typeof(string))));
+            RegisterCommand(new MelonCommand("help", "Describes a command.", new LemonAction<string>(LogCommandUsage), new MelonCommand.Parameter("command", typeof(string))));
         }
 
         private static void LogCommandUsage(string commandName)
         {
-            //var command = 
+            var command = FindCommand(commandName);
+            if (command == null)
+            {
+                MelonLogger.Error($"Unknown command: '{commandName}'");
+                return;
+            }
+
+            var args = string.Join(" ", command.parameters.Select(x => $"<{x.name}>").ToArray());
+            MelonLogger.Msg($"Usage: '{command.name}{(args.Length == 0 ? "" : $" {args}")}'");
+            MelonLogger.Msg($"Description: '{command.description}'");
         }
 
         private static void LogCommands()
