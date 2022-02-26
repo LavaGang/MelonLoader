@@ -53,7 +53,7 @@ namespace MelonLoader
             if (type == typeof(string))
                 return arg;
 
-            try { Convert.ChangeType(arg, type); }
+            try { return Convert.ChangeType(arg, type); }
             catch { }
             return null;
         }
