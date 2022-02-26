@@ -22,8 +22,6 @@ namespace MelonLoader.Console
 
         private static bool enabled;
 
-        private static bool notSupported;
-
         private GUIStyle consoleStyle;
         private static bool justEnabled;
         private string consoleText = string.Empty;
