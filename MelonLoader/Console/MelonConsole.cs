@@ -19,8 +19,9 @@ namespace MelonLoader
             if (GUIModule == null)
             {
                 MelonLogger.Msg("MelonConsole GUI module not loaded.");
-                return;
             }
+
+            AddDefaultCommands();
         }
 
         public static void ExecuteCommand(string command)
@@ -77,6 +78,22 @@ namespace MelonLoader
             }
 
             cmd.Execute(splitCmd.ToArray());
+        }
+
+        private static void AddDefaultCommands()
+        {
+            RegisterCommand(new MelonCommand("commands", "Shows a list of all registered commands.", new LemonAction(LogCommands)));
+            RegisterCommand(new MelonCommand("help", "Shows the usage of a command.", new LemonAction<string>(LogCommandUsage), new MelonCommand.Parameter("command", typeof(string))));
+        }
+
+        private static void LogCommandUsage(string commandName)
+        {
+            //var command = 
+        }
+
+        private static void LogCommands()
+        {
+            MelonLogger.Msg($"All available commands:\n{string.Join(", ", commands.Select(x => x.name).ToArray())}");
         }
 
 
