@@ -9,7 +9,7 @@ namespace MelonLoader.Console
 {
     internal class Module : MelonModule
     {
-        private const float ConsoleFieldHeight = 40f;
+        private const float ConsoleFieldHeight = 30f;
         public const string ConsoleFieldName = "ConsoleText";
 
         private static Color consoleColor = Color.black;
