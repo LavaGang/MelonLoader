@@ -1,7 +1,6 @@
 ﻿using MelonLoader.Modules;
-using MelonLoader.Wrappers;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
@@ -19,12 +18,17 @@ namespace MelonLoader.Console
         public static KeyCode toggleKey = KeyCode.BackQuote;
         public static char toggleChar = '`';
         public static KeyCode sendKey = KeyCode.Return;
+        public static KeyCode previousKey = KeyCode.UpArrow;
+        public static KeyCode nextKey = KeyCode.DownArrow;
 
         private static bool enabled;
 
         private GUIStyle consoleStyle;
         private static bool justEnabled;
         private string consoleText = string.Empty;
+
+        private readonly List<string> history = new List<string>();
+        private int historyIndex = -1;
 
         public static Module instance;
 
@@ -36,7 +40,7 @@ namespace MelonLoader.Console
 
             LoggerInstance.Msg("Initializing...");
 
-            MelonEvents.OnGUI.Subscribe(OnGUI);
+            MelonEvents.OnGUI.Subscribe(OnGUI, 10000);
 
             RegisterCommands();
         }
@@ -64,10 +68,12 @@ namespace MelonLoader.Console
                 if (Event.current.character == toggleChar)
                     return;
 
-                if (GUIUtils.OnKeyDown(sendKey) && GUIUtils.IsFocusedOnConsole)
-                {
+                if (GUIUtils.OnKeyDown(sendKey))
                     ExecuteCommand();
-                }
+                if (GUIUtils.OnKeyDown(previousKey))
+                    Previous();
+                if (GUIUtils.OnKeyDown(nextKey))
+                    Next();
 
                 if (consoleStyle == null || consoleStyle.normal.background == null) // Textures become null sometimes for no reason
                 {
@@ -93,6 +99,8 @@ namespace MelonLoader.Console
                     consoleStyle.active.textColor = consoleTextColor;
                 }
 
+                GUI.Label(new Rect(15, 15, 100, 50), $"<b><color=#79ed68>Melon</color><color=#f03f6d>Loader</color> <color=grey>v{BuildInfo.Version}</color></b>");
+
                 var screenHeight = Screen.height;
                 GUI.SetNextControlName(ConsoleFieldName);
                 GUI.skin.settings.selectionColor = selectionColor;
@@ -107,6 +115,9 @@ namespace MelonLoader.Console
                 MelonEvents.OnGUI.Unsubscribe(typeof(Module).GetMethod(nameof(OnGUI), BindingFlags.NonPublic | BindingFlags.Instance));
                 return;
             }
+
+            if (historyIndex >= 0 && history[historyIndex] != consoleText)
+                historyIndex = -1;
 
             if (justEnabled)
             {
@@ -130,11 +141,31 @@ namespace MelonLoader.Console
             }
         }
 
+        private void Previous()
+        {
+            if (historyIndex >= history.Count - 1)
+                return;
+
+            historyIndex++;
+            consoleText = history[historyIndex];
+        }
+
+        private void Next()
+        {
+            if (historyIndex <= 0)
+                return;
+
+            historyIndex--;
+            consoleText = history[historyIndex];
+        }
+
         public void ExecuteCommand()
         {
             var cmd = consoleText;
             consoleText = string.Empty;
 
+            if (cmd != string.Empty)
+                history.Insert(0, cmd);
             MelonConsole.ExecuteCommand(cmd);
         }
     }

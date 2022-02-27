@@ -6,8 +6,6 @@ namespace MelonLoader.Wrappers
     internal static class WrapUtils
     {
         private readonly static Type refArray;
-        private readonly static Type structArray;
-        private readonly static MethodInfo structArraySetterMethod;
 
         static WrapUtils()
         {
@@ -25,14 +23,6 @@ namespace MelonLoader.Wrappers
                 {
                     Console.Module.Logger.Error("Failed to resolve type of Il2CppReferenceArray");
                 }
-
-                structArray = asm.GetType("UnhollowerBaseLib.Il2CppStructArray`1");
-                if (structArray == null)
-                {
-                    Console.Module.Logger.Error("Failed to resolve type of Il2CppStructArray");
-                }
-
-                structArraySetterMethod = structArray.GetMethod("set_Item");
 
                 return;
             }
