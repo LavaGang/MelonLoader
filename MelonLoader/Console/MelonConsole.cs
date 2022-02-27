@@ -8,6 +8,7 @@ namespace MelonLoader
 {
     public static class MelonConsole
     {
+        private static readonly MelonLogger.Instance logger = new MelonLogger.Instance("MelonConsole", ConsoleColor.Green);
         private static readonly List<MelonCommand> commands = new List<MelonCommand>();
         private static readonly MelonModule.Info guiModuleInfo = new MelonModule.Info($"MelonLoader{Path.DirectorySeparatorChar}Dependencies{Path.DirectorySeparatorChar}MelonConsoleGUI.dll");
 
@@ -18,7 +19,7 @@ namespace MelonLoader
             GUIModule = MelonModule.Load(guiModuleInfo);
             if (GUIModule == null)
             {
-                MelonLogger.Msg("MelonConsole GUI module not loaded.");
+                logger.Msg("MelonConsole GUI module not loaded.");
             }
 
             AddDefaultCommands();
@@ -68,12 +69,14 @@ namespace MelonLoader
             if (splitCmd.Count == 0)
                 return;
 
+            logger.Msg(string.Join(" ", splitCmd.ToArray()));
+
             var cmdName = splitCmd[0];
             splitCmd.RemoveAt(0);
             var cmd = FindCommand(cmdName);
             if (cmd == null)
             {
-                MelonLogger.Error($"Unknown command: '{cmdName}'");
+                logger.Error($"Unknown command: '{cmdName}'");
                 return;
             }
 
@@ -91,18 +94,18 @@ namespace MelonLoader
             var command = FindCommand(commandName);
             if (command == null)
             {
-                MelonLogger.Error($"Unknown command: '{commandName}'");
+                logger.Error($"Unknown command: '{commandName}'");
                 return;
             }
 
             var args = string.Join(" ", command.parameters.Select(x => $"<{x.name}>").ToArray());
-            MelonLogger.Msg($"Usage: '{command.name}{(args.Length == 0 ? "" : $" {args}")}'");
-            MelonLogger.Msg($"Description: '{command.description}'");
+            logger.Msg($"Usage: '{command.name}{(args.Length == 0 ? "" : $" {args}")}'");
+            logger.Msg($"Description: '{command.description}'");
         }
 
         private static void LogCommands()
         {
-            MelonLogger.Msg($"All available commands:\n{string.Join(", ", commands.Select(x => x.name).ToArray())}");
+            logger.Msg($"All available commands:\n{string.Join(", ", commands.Select(x => x.name).ToArray())}");
         }
 
 
