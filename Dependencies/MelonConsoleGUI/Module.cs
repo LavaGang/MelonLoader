@@ -24,7 +24,6 @@ namespace MelonLoader.Console
         private static bool enabled;
 
         private GUIStyle consoleStyle;
-        private static bool justEnabled;
         private string consoleText = string.Empty;
 
         private readonly List<string> history = new List<string>();
@@ -119,13 +118,6 @@ namespace MelonLoader.Console
             if (historyIndex >= 0 && history[historyIndex] != consoleText)
                 historyIndex = -1;
 
-            if (justEnabled)
-            {
-                justEnabled = false;
-
-                GUI.FocusControl(ConsoleFieldName);
-            }
-
             if (!GUIUtils.IsFocusedOnConsole)
             {
                 Toggle();
@@ -137,7 +129,7 @@ namespace MelonLoader.Console
             enabled = !enabled;
             if (enabled)
             {
-                justEnabled = true;
+                GUI.FocusControl(ConsoleFieldName);
             }
         }
 
