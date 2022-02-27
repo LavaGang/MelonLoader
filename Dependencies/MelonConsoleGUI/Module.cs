@@ -11,9 +11,9 @@ namespace MelonLoader.Console
         private const float ConsoleFieldHeight = 30f;
         public const string ConsoleFieldName = "ConsoleText";
 
-        private static Color consoleColor = Color.black;
         private static Color consoleTextColor = Color.white;
         private static Color selectionColor = new Color32(111, 234, 98, 120);
+        private static Color panelColor = new Color32(0, 0, 0, 200);
 
         public static KeyCode toggleKey = KeyCode.BackQuote;
         public static char toggleChar = '`';
@@ -23,6 +23,7 @@ namespace MelonLoader.Console
 
         private static bool enabled;
 
+        private Texture2D panelTexture;
         private GUIStyle consoleStyle;
         private string consoleText = string.Empty;
 
@@ -51,28 +52,40 @@ namespace MelonLoader.Console
 
         private void OnGUI()
         {
-            if (GUIUtils.OnKeyDown(toggleKey))
-            {
-                Toggle();
-            }
+            var onToggle = GUIUtils.OnKeyDown(toggleKey);
+            if (onToggle)
+                enabled = !enabled;
 
             if (enabled)
-                DrawConsole();
+            {
+                Draw();
+
+                if (onToggle)
+                    GUI.FocusControl(ConsoleFieldName);
+                else if (!GUIUtils.IsFocusedOnConsole)
+                    enabled = false;
+            }
         }
 
-        private void DrawConsole()
+        private void Draw()
         {
             try
             {
                 if (Event.current.character == toggleChar)
-                    return;
+                    Event.current.character = default;
 
                 if (GUIUtils.OnKeyDown(sendKey))
                     ExecuteCommand();
                 if (GUIUtils.OnKeyDown(previousKey))
+                {
                     Previous();
+                    Event.current.keyCode = default;
+                }
                 if (GUIUtils.OnKeyDown(nextKey))
+                {
                     Next();
+                    Event.current.keyCode = default;
+                }
 
                 if (consoleStyle == null || consoleStyle.normal.background == null) // Textures become null sometimes for no reason
                 {
@@ -83,22 +96,22 @@ namespace MelonLoader.Console
                     consoleStyle.richText = false;
                     consoleStyle.fontSize = (int)(ConsoleFieldHeight * 0.7f);
 
-                    var normal = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.5f));
+                    panelTexture = UnityUtils.CreateColorTexture(panelColor);
 
-                    consoleStyle.normal.background = normal;
+                    consoleStyle.normal.background = panelTexture;
                     consoleStyle.normal.textColor = consoleTextColor;
 
-                    consoleStyle.focused.background = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.7f));
+                    consoleStyle.focused.background = panelTexture;
                     consoleStyle.focused.textColor = consoleTextColor;
 
-                    consoleStyle.hover.background = normal;
+                    consoleStyle.hover.background = panelTexture;
                     consoleStyle.hover.textColor = consoleTextColor;
 
-                    consoleStyle.active.background = UnityUtils.CreateColorTexture(consoleColor.ChangeAlpha(0.7f));
+                    consoleStyle.active.background = panelTexture;
                     consoleStyle.active.textColor = consoleTextColor;
                 }
 
-                GUI.Label(new Rect(15, 15, 100, 50), $"<b><color=#79ed68>Melon</color><color=#f03f6d>Loader</color> <color=grey>v{BuildInfo.Version}</color></b>");
+                DrawMelonLoaderPanel();
 
                 var screenHeight = Screen.height;
                 GUI.SetNextControlName(ConsoleFieldName);
@@ -117,20 +130,22 @@ namespace MelonLoader.Console
 
             if (historyIndex >= 0 && history[historyIndex] != consoleText)
                 historyIndex = -1;
-
-            if (!GUIUtils.IsFocusedOnConsole)
-            {
-                Toggle();
-            }
         }
 
-        public static void Toggle()
+        private void DrawMelonLoaderPanel()
         {
-            enabled = !enabled;
-            if (enabled)
-            {
-                GUI.FocusControl(ConsoleFieldName);
-            }
+            // I'm not using GUILayout here cuz all those calculations aren't needed (and cuz i'm too lazy to set it up)
+
+            var x = 20;
+            var y = 20;
+            GUI.DrawTexture(new Rect(x, y, 340, 240), panelTexture);
+
+            x += 10;
+            y += 4;
+            GUI.Label(new Rect(x, y, 300, 400), $"<b><size=20><color=#79ed68>Melon</color><color=#f03f6d>Loader</color>\n<color=grey>v{BuildInfo.Version}</color></size>\n\n\n" +
+                $"<size=18>You have discovered the MelonConsole!</size>\n\n" +
+                $"<size=14>Use the '<i>commands</i>' command to log all the available commands.\n\n" +
+                $"Use the '<i>help <command></i>' command to log all info about a specific command.</size></b>");
         }
 
         private void Previous()
