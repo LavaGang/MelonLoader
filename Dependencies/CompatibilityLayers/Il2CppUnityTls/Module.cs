@@ -171,6 +171,9 @@ namespace MelonLoader.CompatibilityLayers
             => UnityTlsInterface;
         private static void SetUnityTlsInterface(IntPtr ptr)
         {
+            if(UnityTlsInterface != IntPtr.Zero)
+                return;
+            
             UnityTlsInterface = ptr;
             OriginalSetUnityTlsInterface(ptr);
             Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "unitytls");
