@@ -30,35 +30,42 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(command))
                 return;
 
-            var splitCommands = command.Contains(';') ? command.Split(';') : new string[] { command };
-            foreach (var cmd in splitCommands)
+            var lastSplitIdx = 0;
+            while (command.Length > lastSplitIdx)
             {
                 List<string> filteredCommand = new List<string>();
-                var idx = 0;
                 var inQuotes = false;
-                for (var a = 0; a < cmd.Length; a++)
+                var a = lastSplitIdx;
+                for (; a < command.Length; a++)
                 {
-                    var c = cmd[a];
+                    var c = command[a];
                     var isQuote = c == '"';
+                    var isSplit = c == ';';
 
-                    if ((!inQuotes && c == ' ') || isQuote)
+                    if ((!inQuotes && (c == ' ' || isSplit)) || isQuote)
                     {
-                        if (a != idx)
-                            filteredCommand.Add(cmd.Substring(idx, a - idx));
+                        if (a != lastSplitIdx)
+                            filteredCommand.Add(command.Substring(lastSplitIdx, a - lastSplitIdx));
                         else if (inQuotes)
                             filteredCommand.Add(string.Empty);
 
-                        idx = a + 1;
+                        lastSplitIdx = a + 1;
+
+                        if (isSplit)
+                        {
+                            a++;
+                            break;
+                        }
                     }
 
                     if (isQuote)
-                    {
                         inQuotes = !inQuotes;
-                    }
                 }
 
-                if (cmd.Length != idx)
-                    filteredCommand.Add(cmd.Substring(idx, cmd.Length - idx));
+                if (a != lastSplitIdx)
+                    filteredCommand.Add(command.Substring(lastSplitIdx, a - lastSplitIdx));
+
+                lastSplitIdx = a;
 
                 ProcessFilteredCommand(filteredCommand);
             }
