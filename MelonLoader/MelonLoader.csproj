@@ -51,6 +51,7 @@
     <Compile Include="Assertions\LemonAssertMapping.cs" />
     <Compile Include="Attributes\MelonAuthorColorAttribute.cs" />
     <Compile Include="Attributes\MelonIDAttribute.cs" />
+    <Compile Include="Console\MelonCommand.cs" />
     <Compile Include="Fixes\ForcedCultureInfo.cs" />
     <Compile Include="Fixes\InstancePatchFix.cs" />
     <Compile Include="Fixes\ProcessFix.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="MelonEvents.cs" />
     <Compile Include="Melons\Events\MelonAction.cs" />
     <Compile Include="Melons\Events\MelonEvent.cs" />
+    <Compile Include="Console\MelonConsole.cs" />
     <Compile Include="Modules\MelonModule.cs" />
     <Compile Include="NativeUtils\CppUtils.cs" />
     <Compile Include="InternalUtils\MelonStartScreen.cs" />
@@ -116,7 +118,6 @@
     <Compile Include="BackwardsCompatibility\Melon\HarmonyShield.cs" />
     <Compile Include="BackwardsCompatibility\Melon\Imports.cs" />
     <Compile Include="BackwardsCompatibility\Melon\Main.cs" />
-    <Compile Include="BackwardsCompatibility\Melon\MelonConsole.cs" />
     <Compile Include="BackwardsCompatibility\Melon\MelonLoaderBase.cs" />
     <Compile Include="BackwardsCompatibility\Melon\MelonModGameAttribute.cs" />
     <Compile Include="BackwardsCompatibility\Melon\MelonModInfoAttribute.cs" />

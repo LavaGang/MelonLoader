@@ -77,6 +77,9 @@ namespace MelonLoader
 
         internal static void OnApplicationLateStart()
         {
+            MelonConsole.Load();
+            RegisterCommands();
+
             MelonEvents.OnApplicationLateStart.Invoke();
         }
 
@@ -91,7 +94,7 @@ namespace MelonLoader
             MelonLogger.Flush();
 
             if (MelonLaunchOptions.Core.QuitFix)
-                Process.GetCurrentProcess().Kill();
+                KillProcess();
         }
 
         private static void AddUnityDebugLog()
@@ -100,5 +103,13 @@ namespace MelonLoader
             SupportModule.Interface.UnityDebugLog("~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!   ~");
             SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
         }
+
+        private static void RegisterCommands()
+        {
+            MelonConsole.RegisterCommand(new MelonCommand("forceexit", "Kills the current process.", new LemonAction(KillProcess)));
+        }
+
+        private static void KillProcess()
+            => Process.GetCurrentProcess().Kill();
     }
 }
