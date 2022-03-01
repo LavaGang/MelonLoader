@@ -214,17 +214,19 @@ namespace MelonLoader
         /// </summary>
         public static T CreateWrapper<T>(Assembly assembly, string name, string version, string author = null, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
         {
-            var melon = new T();
-            melon.Info = new MelonInfoAttribute(typeof(T), name, version, author);
-            melon.Assembly = assembly;
-            melon.Location = assembly.Location;
-            melon.Priority = priority;
-            melon.ConsoleColor = color ?? MelonLogger.DefaultMelonColor;
-            melon.AuthorConsoleColor = authorColor ?? MelonLogger.DefaultTextColor;
-            melon.SupportedProcesses = processes;
-            melon.Games = games;
-            melon.OptionalDependencies = null;
-            melon.ID = id;
+            var melon = new T
+            {
+                Info = new MelonInfoAttribute(typeof(T), name, version, author),
+                Assembly = assembly,
+                Location = assembly.Location,
+                Priority = priority,
+                ConsoleColor = color ?? MelonLogger.DefaultMelonColor,
+                AuthorConsoleColor = authorColor ?? MelonLogger.DefaultTextColor,
+                SupportedProcesses = processes,
+                Games = games,
+                OptionalDependencies = null,
+                ID = id
+            };
 
             return melon;
         }
@@ -776,7 +778,11 @@ namespace MelonLoader
 
         private Harmony.HarmonyInstance _OldHarmonyInstance;
         [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
+
+#pragma warning disable IDE1006 // Naming Styles
         public Harmony.HarmonyInstance harmonyInstance { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
+#pragma warning restore IDE1006 // Naming Styles
+
         [Obsolete("Harmony is obsolete. Please use HarmonyInstance instead.")]
         public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
         #endregion
