@@ -1,9 +1,7 @@
-﻿using MelonLoader.InternalUtils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-#pragma warning disable 0618
 
 namespace MelonLoader
 {
@@ -35,10 +33,11 @@ namespace MelonLoader
 
             var loadingMsg = $"Loading {Melon<T>.TypeName}s from '{path}'...";
             var line = new string('-', loadingMsg.Length + 1);
-            MelonLogger.Msg(ConsoleColor.Yellow, line);
 
+            MelonLogger.Msg(ConsoleColor.Yellow, line);
             MelonLogger.Msg(loadingMsg);
             MelonLogger.Msg(ConsoleColor.Yellow, line);
+            MelonLogger.WriteSpacer();
 
             var files = Directory.GetFiles(path, "*.dll");
             var melons = new List<T>();
@@ -67,7 +66,6 @@ namespace MelonLoader
 
             MelonBase.RegisterInOrder(melons);
 
-            MelonLogger.WriteSpacer();
             MelonLogger.Msg(ConsoleColor.Yellow, line);
             MelonLogger.Msg($"{Melon<T>._registeredMelons.Count} {Melon<T>.TypeName}s loaded.");
             MelonLogger.Msg(ConsoleColor.Yellow, line);
