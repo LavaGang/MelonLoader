@@ -673,7 +673,7 @@ namespace MelonLoader
         /// Tries to find a registered Melon that matches the given Info.
         /// </summary>
         public static MelonBase FindMelon(string melonName, string melonAuthor)
-            => RegisteredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
+            => _registeredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
 
         /// <summary>
         /// Unregisters the Melon.
@@ -712,24 +712,23 @@ namespace MelonLoader
 
         private void PrintLoadInfo()
         {
-            MelonLogger.WriteSpacer();
             MelonLogger.Msg(ConsoleColor.DarkGreen, "------------------------------");
 
-            MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " loaded:");
+            MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " initialized:");
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(Hash))
                 MelonLogger.Msg($"SHA256 Hash: {Hash}");
 
             MelonLogger.Msg(ConsoleColor.DarkGreen, "------------------------------");
+            MelonLogger.WriteSpacer();
         }
 
         private void PrintUnloadInfo(string reason)
         {
-            MelonLogger.WriteSpacer();
             MelonLogger.Msg(ConsoleColor.DarkRed, "------------------------------");
 
-            MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " unloaded:");
+            MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " deinitialized:");
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(reason))
@@ -739,6 +738,7 @@ namespace MelonLoader
             }
 
             MelonLogger.Msg(ConsoleColor.DarkRed, "------------------------------");
+            MelonLogger.WriteSpacer();
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)
