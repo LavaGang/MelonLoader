@@ -466,127 +466,94 @@ namespace MelonLoader
 
         #endregion
 
-        public Compatibility IsCompatibleWith(MelonGameAttribute game, string processName, string gameVersion, 
+        public Incompatibility[] FindIncompatiblities(MelonGameAttribute game, string processName, string gameVersion, 
             string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform, 
             MelonPlatformDomainAttribute.CompatibleDomains domain)
         {
-            var result = Compatibility.Compatible;
-            var compatible = true;
+            var result = new List<Incompatibility>();
             if (!(Games.Length == 0 || Games.Any(x => x.IsCompatible(game))))
-            {
-                result |= Compatibility.IncompatibleGame;
-                compatible = false;
-            }
+                result.Add(Incompatibility.Game);
             else
             {
                 if (!(SupportedGameVersions.Length == 0 || SupportedGameVersions.Any(x => x.Version == gameVersion)))
-                {
-                    result |= Compatibility.IncompatibleGameVersion;
-                    compatible = false;
-                }
+                    result.Add(Incompatibility.GameVersion);
+
                 if (!(SupportedProcesses.Length == 0 || SupportedProcesses.Any(x => x.IsCompatible(processName))))
-                {
-                    result |= Compatibility.IncompatibleProcessName;
-                    compatible = false;
-                }
+                    result.Add(Incompatibility.ProcessName);
+
                 if (!(SupportedPlatforms == null || SupportedPlatforms.IsCompatible(platform)))
-                {
-                    result |= Compatibility.IncompatiblePlatform;
-                    compatible = false;
-                }
+                    result.Add(Incompatibility.Platform);
+
                 if (!(SupportedDomain == null || SupportedDomain.IsCompatible(domain)))
-                {
-                    result |= Compatibility.IncompatibleDomain;
-                    compatible = false;
-                }
+                    result.Add(Incompatibility.Domain);
             }
             if (!(SupportedMLVersion == null || SupportedMLVersion.IsCompatible(mlVersion)))
-            {
-                result |= Compatibility.IncompatibleMLVersion;
-                compatible = false;
-            }
+                result.Add(Incompatibility.MLVersion);
             else
             {
                 if (!(SupportedMLBuild == null || SupportedMLBuild.IsCompatible(mlBuildHashCode)))
-                {
-                    result |= Compatibility.IncompatibleMLBuild;
-                    compatible = false;
-                }
+                    result.Add(Incompatibility.MLBuild);
             }
 
-            if (!compatible)
-                result &= ~Compatibility.Compatible;
-            return result;
+            return result.ToArray();
         }
 
-        public Compatibility IsCompatibleWithContext()
-            => IsCompatibleWith(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, MelonUtils.GameVersion, BuildInfo.Version, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
+        public Incompatibility[] FindIncompatiblitiesFromContext()
+            => FindIncompatiblities(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, MelonUtils.GameVersion, BuildInfo.Version, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
 
-        public static void PrintIncompatibilities(Compatibility compatibility, MelonBase melon)
+        public static void PrintIncompatibilities(Incompatibility[] incompatibilities, MelonBase melon)
         {
-            if (compatibility.HasFlag(Compatibility.Compatible))
+            if (incompatibilities == null || incompatibilities.Length == 0)
                 return;
 
-            MelonLogger.Msg(ConsoleColor.DarkRed, $"{melon.Info.Name} is incompatible:");
-            if (compatibility.HasFlag(Compatibility.IncompatibleGame))
+            MelonLogger.Msg(ConsoleColor.Red, "------------------------------");
+            MelonLogger.Msg(ConsoleColor.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
+            if (incompatibilities.Contains(Incompatibility.Game))
             {
-                MelonLogger.Msg("- This Melon is only compatible with the following Games:");
+                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Games:");
 
                 foreach (var g in melon.Games)
                     MelonLogger.Msg($"    - '{g.Name}' by {g.Developer}");
-
-                MelonLogger.WriteSpacer();
             }
-            if (compatibility.HasFlag(Compatibility.IncompatibleGameVersion))
+            if (incompatibilities.Contains(Incompatibility.GameVersion))
             {
-                MelonLogger.Msg("- This Melon is only compatible with the following Game Versions:");
+                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Game Versions:");
 
                 foreach (var g in melon.SupportedGameVersions)
                     MelonLogger.Msg($"    - {g.Version}");
-
-                MelonLogger.WriteSpacer();
             }
-            if (compatibility.HasFlag(Compatibility.IncompatibleProcessName))
+            if (incompatibilities.Contains(Incompatibility.ProcessName))
             {
-                MelonLogger.Msg("- This Melon is only compatible with the following Process Names:");
+                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Process Names:");
 
                 foreach (var p in melon.SupportedProcesses)
                     MelonLogger.Msg($"    - '{p.EXE_Name}'");
-
-                MelonLogger.WriteSpacer();
             }
-            if (compatibility.HasFlag(Compatibility.IncompatiblePlatform))
+            if (incompatibilities.Contains(Incompatibility.Platform))
             {
-                MelonLogger.Msg($"- This Melon is only compatible with the following Platforms:");
+                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Platforms:");
 
                 foreach (var p in melon.SupportedPlatforms.Platforms)
                     MelonLogger.Msg($"    - {p}");
-
-                MelonLogger.WriteSpacer();
             }
-            if (compatibility.HasFlag(Compatibility.IncompatibleDomain))
+            if (incompatibilities.Contains(Incompatibility.Domain))
             {
-                MelonLogger.Msg($"- This Melon is only compatible with the following Domain:");
+                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Domain:");
                 MelonLogger.Msg($"    - {melon.SupportedDomain.Domain}");
-
-                MelonLogger.WriteSpacer();
             }
-            if (compatibility.HasFlag(Compatibility.IncompatibleMLVersion))
+            if (incompatibilities.Contains(Incompatibility.MLVersion))
             {
-                MelonLogger.Msg($"- This Melon is only compatible with the following MelonLoader Versions:");
+                MelonLogger.Msg($"- {melon.Info.Name}  is only compatible with the following MelonLoader Versions:");
                 MelonLogger.Msg($"    - {melon.SupportedMLVersion.SemVer}{(melon.SupportedMLVersion.IsMinimum ? " or higher" : "")}");
-
-                MelonLogger.WriteSpacer();
             }
-            if (compatibility.HasFlag(Compatibility.IncompatibleMLBuild))
+            if (incompatibilities.Contains(Incompatibility.MLBuild))
             {
-                MelonLogger.Msg($"- This Melon is only compatible with the following MelonLoader Build Hash Codes:");
+                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following MelonLoader Build Hash Codes:");
                 MelonLogger.Msg($"    - {melon.SupportedMLBuild.HashCode}");
-
-                MelonLogger.WriteSpacer();
             }
 
-            MelonLogger.Msg(ConsoleColor.Red, "-----------------------------------------------------------------------");
+            MelonLogger.Msg(ConsoleColor.Red, "------------------------------");
+            MelonLogger.WriteSpacer();
         }
 
         /// <summary>
@@ -603,8 +570,8 @@ namespace MelonLoader
                 return false;
             }
 
-            var comp = IsCompatibleWithContext();
-            if (!comp.HasFlag(Compatibility.Compatible))
+            var comp = FindIncompatiblitiesFromContext();
+            if (comp.Length != 0)
             {
                 PrintIncompatibilities(comp, this);
                 return false;
@@ -787,17 +754,16 @@ namespace MelonLoader
         public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
         #endregion
 
-        [Flags]
-        public enum Compatibility
+
+        public enum Incompatibility
         {
-            Compatible,
-            IncompatibleMLVersion,
-            IncompatibleMLBuild,
-            IncompatibleGame,
-            IncompatibleGameVersion,
-            IncompatibleProcessName,
-            IncompatibleDomain,
-            IncompatiblePlatform
+            MLVersion,
+            MLBuild,
+            Game,
+            GameVersion,
+            ProcessName,
+            Domain,
+            Platform
         }
     }
 }
