@@ -15,8 +15,8 @@ namespace MelonLoader
         {
             base.RegisterCallbacks();
 
-            MelonEvents.OnPreInitialization.Subscribe(OnPreInitialization);
-            MelonEvents.OnApplicationEarlyStart.Subscribe(OnApplicationEarlyStart);
+            MelonEvents.OnPreInitialization.Subscribe(OnPreInitialization, Priority);
+            MelonEvents.OnApplicationEarlyStart.Subscribe(OnApplicationEarlyStart, Priority);
         }
 
         #region Callbacks

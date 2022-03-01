@@ -653,20 +653,20 @@ namespace MelonLoader
 
         protected internal virtual void RegisterCallbacks()
         {
-            MelonEvents.OnPreInitialization.Subscribe(OnPreSupportModule);
-            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart);
-            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart);
-            MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit);
-            MelonEvents.OnUpdate.Subscribe(OnUpdate);
-            MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate);
-            MelonEvents.OnGUI.Subscribe(OnGUI);
-            MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate);
+            MelonEvents.OnPreInitialization.Subscribe(OnPreSupportModule, Priority);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, Priority);
+            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart, Priority);
+            MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit, Priority);
+            MelonEvents.OnUpdate.Subscribe(OnUpdate, Priority);
+            MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate, Priority);
+            MelonEvents.OnGUI.Subscribe(OnGUI, Priority);
+            MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate, Priority);
 
-            MelonPreferences.OnPreferencesLoaded.Subscribe(OnPreferencesLoaded);
-            MelonPreferences.OnPreferencesLoaded.Subscribe((x) => OnPreferencesLoaded()); // No params sig
-            MelonPreferences.OnPreferencesSaved.Subscribe(OnPreferencesSaved);
-            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnPreferencesSaved()); // No params sig
-            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnModSettingsApplied());
+            MelonPreferences.OnPreferencesLoaded.Subscribe(OnPreferencesLoaded, Priority);
+            MelonPreferences.OnPreferencesLoaded.Subscribe((x) => OnPreferencesLoaded(), Priority); // No params sig
+            MelonPreferences.OnPreferencesSaved.Subscribe(OnPreferencesSaved, Priority);
+            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnPreferencesSaved(), Priority); // No params sig
+            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnModSettingsApplied(), Priority);
         }
 
         /// <summary>
