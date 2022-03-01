@@ -32,13 +32,13 @@ namespace MelonLoader
         {
             base.RegisterCallbacks();
 
-            MelonEvents.OnSceneWasLoaded.Subscribe(OnSceneWasLoaded);
-            MelonEvents.OnSceneWasInitialized.Subscribe(OnSceneWasInitialized);
-            MelonEvents.OnSceneWasUnloaded.Subscribe(OnSceneWasUnloaded);
+            MelonEvents.OnSceneWasLoaded.Subscribe(OnSceneWasLoaded, Priority);
+            MelonEvents.OnSceneWasInitialized.Subscribe(OnSceneWasInitialized, Priority);
+            MelonEvents.OnSceneWasUnloaded.Subscribe(OnSceneWasUnloaded, Priority);
 
-            MelonEvents.OnSceneWasLoaded.Subscribe((idx, name) => OnLevelWasLoaded(idx));
-            MelonEvents.OnSceneWasInitialized.Subscribe((idx, name) => OnLevelWasInitialized(idx));
-            MelonEvents.BONEWORKS_OnLoadingScreen.Subscribe(BONEWORKS_OnLoadingScreen);
+            MelonEvents.OnSceneWasLoaded.Subscribe((idx, name) => OnLevelWasLoaded(idx), Priority);
+            MelonEvents.OnSceneWasInitialized.Subscribe((idx, name) => OnLevelWasInitialized(idx), Priority);
+            MelonEvents.BONEWORKS_OnLoadingScreen.Subscribe(BONEWORKS_OnLoadingScreen, Priority);
         }
 
         #region Callbacks
