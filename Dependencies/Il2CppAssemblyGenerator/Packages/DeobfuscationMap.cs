@@ -30,7 +30,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 byte[] hash = lemonSHA512.ComputeHash(File.ReadAllBytes(FilePath));
                 StringBuilder hashstrb = new StringBuilder(128);
                 foreach (byte b in hash)
-                    hashstrb.Append(b.ToString("X2"));
+                    hashstrb.Append(b.ToString("x2"));
                 string hashstr = hashstrb.ToString();
                 if (!hashstr.Equals(Version))
                     return true;
