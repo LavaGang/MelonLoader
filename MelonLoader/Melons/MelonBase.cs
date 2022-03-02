@@ -397,17 +397,12 @@ namespace MelonLoader
         /// <summary>
         /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
         /// </summary>
-        public virtual void OnPreSupportModule() { }
-
-        /// <summary>
-        /// Runs after Game Initialization.
-        /// </summary>
-        public virtual void OnApplicationStart() { }
+        public virtual void OnPreSupportModule() { } // move to plugins
 
         /// <summary>
         /// Runs after OnApplicationStart.
         /// </summary>
-        public virtual void OnApplicationLateStart() { }
+        public virtual void OnApplicationLateStart() { } // move to plugins
 
         /// <summary>
         /// Runs once per frame.
@@ -740,18 +735,23 @@ namespace MelonLoader
         #endregion
 
         #region Obsolete Members
-        [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
+
+        [Obsolete("Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
 
         private Harmony.HarmonyInstance _OldHarmonyInstance;
-        [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
+        [Obsolete("Please use HarmonyInstance instead.")]
 
 #pragma warning disable IDE1006 // Naming Styles
         public Harmony.HarmonyInstance harmonyInstance { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
 #pragma warning restore IDE1006 // Naming Styles
 
-        [Obsolete("Harmony is obsolete. Please use HarmonyInstance instead.")]
+        [Obsolete("Please use HarmonyInstance instead.")]
         public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
+
+        [Obsolete(".")]
+        public virtual void OnApplicationStart() { } // move to plugins
+
         #endregion
 
 
