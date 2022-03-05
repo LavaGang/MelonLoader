@@ -30,5 +30,9 @@
 			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="Tomlet">
+			<HintPath>$(OutputPath)..\..\Tomlet.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 </Project>

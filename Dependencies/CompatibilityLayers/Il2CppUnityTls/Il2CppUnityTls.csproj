@@ -21,6 +21,14 @@
 			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="0Harmony">
+			<HintPath>$(OutputPath)..\..\0Harmony.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="AssetRipper.VersionUtilities">
+			<HintPath>$(OutputPath)..\..\AssetRipper.VersionUtilities.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 		<Reference Include="Mono.Security">
 		  <HintPath>..\..\..\BaseLibs\Managed\Mono.Security.dll</HintPath>
 		  <Private>false</Private>

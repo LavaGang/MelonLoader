@@ -33,5 +33,9 @@
 			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="0Harmony">
+			<HintPath>$(OutputPath)..\..\0Harmony.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 </Project>

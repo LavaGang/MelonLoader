@@ -29,6 +29,14 @@
 			<HintPath>$(OutputPath)..\MelonLoader.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="Tomlet">
+			<HintPath>$(OutputPath)..\Tomlet.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="AssetRipper.VersionUtilities">
+			<HintPath>$(OutputPath)..\AssetRipper.VersionUtilities.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Resources\Loading_Lemon.dat" />
