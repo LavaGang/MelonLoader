@@ -39,6 +39,8 @@ namespace MelonLoader
             MelonEvents.OnSceneWasLoaded.Subscribe((idx, name) => OnLevelWasLoaded(idx), Priority);
             MelonEvents.OnSceneWasInitialized.Subscribe((idx, name) => OnLevelWasInitialized(idx), Priority);
             MelonEvents.BONEWORKS_OnLoadingScreen.Subscribe(BONEWORKS_OnLoadingScreen, Priority);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, Priority);
+            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart, Priority);
         }
 
         #region Callbacks
