@@ -440,9 +440,9 @@ namespace MelonLoader
         public virtual void OnPreferencesLoaded(string filepath) { }
 
         /// <summary>
-        /// Runs when the Melon is registered. Executed before the Melon's info is printed to the console.
+        /// Runs when the Melon is registered. Executed before the Melon's info is printed to the console. This callback should only be used a constructor for the Melon.
         /// <para>Please note that this callback may run before the Support Module is loaded and before the Engine is fully initialized.
-        /// <br>As a result, creating/getting UnityEngine Objects may not be possible and you would have to override <see cref="OnEngineInitialized"/> instead.</br></para>
+        /// <br>As a result, using unhollowed assemblies and creating/getting UnityEngine Objects may not be possible and you would have to override <see cref="OnEngineInitialized"/> instead.</br></para>
         /// </summary>
         public virtual void OnInitializeMelon() { }
 
