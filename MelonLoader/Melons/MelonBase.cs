@@ -395,16 +395,6 @@ namespace MelonLoader
         #region Callbacks
 
         /// <summary>
-        /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
-        /// </summary>
-        public virtual void OnPreSupportModule() { } // move to plugins
-
-        /// <summary>
-        /// Runs after OnApplicationStart.
-        /// </summary>
-        public virtual void OnApplicationLateStart() { } // move to plugins
-
-        /// <summary>
         /// Runs once per frame.
         /// </summary>
         public virtual void OnUpdate() { }
@@ -450,9 +440,16 @@ namespace MelonLoader
         public virtual void OnPreferencesLoaded(string filepath) { }
 
         /// <summary>
-        /// Runs when the Melon is registered.
+        /// Runs when the Melon is registered. Executed before the Melon's info is printed to the console.
+        /// <para>Please note that this callback may run before the Support Module is loaded and before the Engine is fully initialized.
+        /// <br>As a result, creating/getting UnityEngine Objects may not be possible and you would have to override <see cref="OnEngineInitialized"/> instead.</br></para>
         /// </summary>
         public virtual void OnInitializeMelon() { }
+
+        /// <summary>
+        /// Runs after the Melon has registered and only if the engine is fully initialized (OnApplicationLateStart).
+        /// </summary>
+        public virtual void OnEngineInitialized() { }
 
         /// <summary>
         /// Runs when the Melon is unregistered.
@@ -607,6 +604,18 @@ namespace MelonLoader
 
             OnRegister.Invoke();
             OnMelonRegistered.Invoke(this);
+
+            if (Core.engineInitialized)
+            {
+                try
+                {
+                    OnEngineInitialized();
+                }
+                catch (Exception ex)
+                {
+                    LoggerInstance.Error(ex);
+                }
+            }
             return true;
         }
 
@@ -615,9 +624,6 @@ namespace MelonLoader
 
         protected internal virtual void RegisterCallbacks()
         {
-            MelonEvents.OnPreInitialization.Subscribe(OnPreSupportModule, Priority);
-            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, Priority);
-            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart, Priority);
             MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit, Priority);
             MelonEvents.OnUpdate.Subscribe(OnUpdate, Priority);
             MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate, Priority);
@@ -629,6 +635,9 @@ namespace MelonLoader
             MelonPreferences.OnPreferencesSaved.Subscribe(OnPreferencesSaved, Priority);
             MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnPreferencesSaved(), Priority); // No params sig
             MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnModSettingsApplied(), Priority);
+
+            if (!Core.engineInitialized)
+                MelonEvents.OnApplicationLateStart.Subscribe(OnEngineInitialized, Priority);
         }
 
         /// <summary>
@@ -748,9 +757,6 @@ namespace MelonLoader
 
         [Obsolete("Please use HarmonyInstance instead.")]
         public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
-
-        [Obsolete(".")]
-        public virtual void OnApplicationStart() { } // move to plugins
 
         #endregion
 

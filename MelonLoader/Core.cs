@@ -8,7 +8,8 @@ namespace MelonLoader
 {
 	internal static class Core
     {
-        internal static HarmonyLib.Harmony HarmonyInstance = null;
+        internal static HarmonyLib.Harmony HarmonyInstance;
+        internal static bool engineInitialized;
 
         private static int Initialize()
         {
@@ -54,21 +55,19 @@ namespace MelonLoader
         {
             bHaptics.Start();
 
-            MelonEvents.OnPreSupportModule.Invoke();
+            MelonEvents.OnPreModsLoaded.Invoke();
+            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
 
+            MelonEvents.OnPreSupportModule.Invoke();
             if (!SupportModule.Setup())
                 return 1;
 
             if (MelonUtils.IsGameIl2Cpp())
                 HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
 
-            MelonEvents.OnPreApplicationStart.Invoke(); // Modules should subscribe to this with the lowest priority, preferably int.MinValue
-
             AddUnityDebugLog();
 
             RegisterTypeInIl2Cpp.SetReady();
-
-            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
 
             MelonEvents.OnApplicationStart.Invoke();
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
@@ -78,6 +77,7 @@ namespace MelonLoader
 
         internal static void OnApplicationLateStart()
         {
+            engineInitialized = true;
             MelonEvents.OnApplicationLateStart.Invoke();
         }
 

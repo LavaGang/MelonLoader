@@ -8,7 +8,7 @@ namespace MelonLoader
         public readonly static MelonEvent OnPreInitialization = new MelonEvent(true);
 
         /// <summary>
-        /// Called before the Start Screen is loaded.
+        /// Called after Game Initialization, before OnApplicationStart and before Assembly Generation on Il2Cpp games.
         /// </summary>
         public readonly static MelonEvent OnApplicationEarlyStart = new MelonEvent(true);
 
@@ -16,11 +16,6 @@ namespace MelonLoader
         /// Called after all MelonMods are initialized and before the right Support Module is loaded.
         /// </summary>
         public readonly static MelonEvent OnPreSupportModule = new MelonEvent(true);
-
-        /// <summary>
-        /// Called before all Compatiblity Layers are fully initialized.
-        /// </summary>
-        public readonly static MelonEvent OnPreApplicationStart = new MelonEvent(true);
 
         /// <summary>
         /// Called after all MelonLoader components are fully initialized (including all MelonMods).
@@ -87,6 +82,11 @@ namespace MelonLoader
         /// </para>
         /// </summary>
         public readonly static MelonEvent<int, string> OnSceneWasUnloaded = new MelonEvent<int, string>();
+
+        /// <summary>
+        /// Called before MelonMods are loaded from the Mods folder.
+        /// </summary>
+        public readonly static MelonEvent OnPreModsLoaded = new MelonEvent(true);
 
         /// <summary>
         /// Called when BONEWORKS shows the Loading Screen. Only runs if the Melon is used in BONEWORKS.
