@@ -5,7 +5,6 @@ using Boardgame.Modding;
 using RGCommon;
 using System.Text;
 using MelonLoader.Modules;
-using System;
 
 namespace MelonLoader.CompatibilityLayers
 {
@@ -15,7 +14,7 @@ namespace MelonLoader.CompatibilityLayers
 
         public override void OnInitialize()
         {
-            MelonEvents.OnPreApplicationStart.Subscribe(OnPreAppStart, int.MinValue);
+            MelonEvents.OnApplicationStart.Subscribe(OnPreAppStart, int.MaxValue);
         }
 
         private static void OnPreAppStart()
