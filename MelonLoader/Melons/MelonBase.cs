@@ -399,9 +399,6 @@ namespace MelonLoader
 
             _registeredMelons.Add(this);
 
-            if (!MelonAssembly.HarmonyDontPatchAll)
-                HarmonyInstance.PatchAll(MelonAssembly.Assembly);
-
             PrintLoadInfo();
 
             OnRegister.Invoke();
@@ -409,16 +406,23 @@ namespace MelonLoader
 
             if (Core.engineInitialized)
             {
-                try
-                {
-                    OnEngineInitialized();
-                }
-                catch (Exception ex)
-                {
-                    LoggerInstance.Error(ex);
-                }
+                EngineInitialized();
             }
             return true;
+        }
+
+        private void EngineInitialized()
+        {
+            if (!MelonAssembly.HarmonyDontPatchAll)
+                HarmonyInstance.PatchAll(MelonAssembly.Assembly);
+            try
+            {
+                OnEngineInitialized();
+            }
+            catch (Exception ex)
+            {
+                LoggerInstance.Error(ex);
+            }
         }
 
         protected internal virtual bool RegisterInternal() => true;
@@ -432,14 +436,25 @@ namespace MelonLoader
             MelonEvents.OnGUI.Subscribe(OnGUI, Priority);
             MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate, Priority);
 
+            var prefsLoaded = new LemonAction<string>((x) => OnPreferencesLoaded());
+            var prefsSaved = new LemonAction<string>((x) => OnPreferencesSaved());
+            var prefsApplied = new LemonAction<string>((x) => OnModSettingsApplied());
             MelonPreferences.OnPreferencesLoaded.Subscribe(OnPreferencesLoaded, Priority);
-            MelonPreferences.OnPreferencesLoaded.Subscribe((x) => OnPreferencesLoaded(), Priority); // No params sig
+            MelonPreferences.OnPreferencesLoaded.Subscribe(prefsLoaded, Priority); // No params sig
             MelonPreferences.OnPreferencesSaved.Subscribe(OnPreferencesSaved, Priority);
-            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnPreferencesSaved(), Priority); // No params sig
-            MelonPreferences.OnPreferencesSaved.Subscribe((x) => OnModSettingsApplied(), Priority);
+            MelonPreferences.OnPreferencesSaved.Subscribe(prefsSaved, Priority); // No params sig
+            MelonPreferences.OnPreferencesSaved.Subscribe(prefsApplied, Priority);
+
+            // Gotta unsubscribe from own delegates
+            OnUnregister.Subscribe(() =>
+            {
+                MelonPreferences.OnPreferencesLoaded.Unsubscribe(prefsLoaded.Method, prefsLoaded.Target);
+                MelonPreferences.OnPreferencesSaved.Unsubscribe(prefsSaved.Method, prefsSaved.Target);
+                MelonPreferences.OnPreferencesSaved.Unsubscribe(prefsApplied.Method, prefsApplied.Target);
+            }, unsubscribeOnFirstInvocation: true);
 
             if (!Core.engineInitialized)
-                MelonEvents.OnApplicationLateStart.Subscribe(OnEngineInitialized, Priority);
+                MelonEvents.OnApplicationLateStart.Subscribe(EngineInitialized, Priority, true);
         }
 
         /// <summary>
