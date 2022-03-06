@@ -34,6 +34,7 @@ namespace MelonLoader
 
                     if (a.melonAssembly != null)
                     {
+                        MelonDebug.Msg($"MelonAssembly '{a.melonAssembly.Assembly.GetName().Name}' subscribed to {a.method.Name}");
                         a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), unsubscribeOnFirstInvocation: true);
                     }
 
@@ -67,7 +68,16 @@ namespace MelonLoader
                 if (method.IsStatic)
                     obj = null;
 
-                actions.RemoveAll(x => x.method == method && (obj == null || x.obj == obj));
+                for (var a = 0; a < actions.Count; a++)
+                {
+                    var act = actions[a];
+                    if (act.method != method || (obj != null && act.obj != obj))
+                        continue;
+
+                    actions.RemoveAt(a);
+                    if (act.melonAssembly != null)
+                        MelonDebug.Msg($"MelonAssembly '{act.melonAssembly.Assembly.GetName().Name}' unsubscribed from {act.method.Name}");
+                }
             }
         }
 

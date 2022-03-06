@@ -27,10 +27,13 @@ namespace MelonLoader
         /// <summary>
         /// Gets the MelonAssembly of the given member. If the given member is not in any MelonAssembly, returns null.
         /// </summary>
-        public static MelonAssembly GetMelonAssemblyOfMember(MemberInfo member)
+        public static MelonAssembly GetMelonAssemblyOfMember(MemberInfo member, object obj = null)
         {
             if (member == null)
                 return null;
+
+            if (obj != null && obj is MelonBase melon)
+                return melon.MelonAssembly;
 
             var name = member.DeclaringType.Assembly.FullName;
             var ma = loadedAssemblies.Find(x => x.Assembly.FullName == name);
@@ -103,6 +106,7 @@ namespace MelonLoader
                 return ma;
 
             MelonLogger.Msg($"Loading Melon Assembly: '{assembly.Location}'...");
+            OnAssemblyResolving.Invoke(assembly);
             ma = new MelonAssembly(assembly);
             loadedAssemblies.Add(ma);
             ma.LoadMelons();
@@ -176,8 +180,6 @@ namespace MelonLoader
 
         private void LoadMelons()
         {
-            OnAssemblyResolving.Invoke(Assembly);
-
             // \/ Custom Resolver \/
             var resolvers = CustomMelonResolvers?.GetInvocationList();
             if (resolvers != null)
