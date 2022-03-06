@@ -28,10 +28,10 @@ namespace MelonLoader.CompatibilityLayers
 			foreach (string assemblyName in assembly_list)
 				MonoResolveManager.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 
-			MelonBase.CustomMelonResolvers += Resolve;
+			MelonAssembly.CustomMelonResolvers += Resolve;
 		}
 
-        private MelonBase[] Resolve(Assembly asm)
+        private ResolvedMelons Resolve(Assembly asm)
 		{
 			IEnumerable<Type> pluginTypes = asm.GetValidTypes(x =>
 			{
@@ -39,14 +39,32 @@ namespace MelonLoader.CompatibilityLayers
 				return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IPlugin)); // To-Do: Change to Type Reflection based on Setup
 			});
 			if ((pluginTypes == null) || !pluginTypes.Any())
-				return null;
+				return new ResolvedMelons(null, null);
 
-			return pluginTypes.Select(x => LoadPlugin(asm, x)).ToArray();
+			var melons = new List<MelonBase>();
+			var rotten = new List<RottenMelon>();
+			foreach (var t in pluginTypes)
+            {
+				var mel = LoadPlugin(asm, t, out RottenMelon rm);
+				if (mel != null)
+					melons.Add(mel);
+				else
+					rotten.Add(rm);
+            }
+			return new ResolvedMelons(melons.ToArray(), rotten.ToArray());
 		}
 
-		private MelonBase LoadPlugin(Assembly asm, Type pluginType)
+		private MelonBase LoadPlugin(Assembly asm, Type pluginType, out RottenMelon rottenMelon)
 		{
-			IPlugin pluginInstance = Activator.CreateInstance(pluginType) as IPlugin;
+			rottenMelon = null;
+			IPlugin pluginInstance;
+			try
+			{ pluginInstance = Activator.CreateInstance(pluginType) as IPlugin; }
+            catch (Exception ex)
+            {
+				rottenMelon = new RottenMelon(pluginType, "Failed to create a new instance of the IPA Plugin.", ex);
+				return null;
+            }
 
 			MelonProcessAttribute[] processAttrs = null;
 			if (pluginInstance is IEnhancedPlugin enPl)
@@ -62,7 +80,7 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
-			var melon = MelonBase.CreateWrapper<IPAPluginWrapper>(asm, pluginName, plugin_version, processes: processAttrs);
+			var melon = MelonBase.CreateWrapper<IPAPluginWrapper>(pluginName, plugin_version, processes: processAttrs);
 
 			melon.pluginInstance = pluginInstance;
 			PluginManager._Plugins.Add(pluginInstance);

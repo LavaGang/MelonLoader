@@ -44,13 +44,11 @@ namespace MelonLoader
 
             foreach (var f in files)
             {
-                var fileMelons = MelonBase.Load(f, out MelonLoadErrorCodes errorCode);
-                if (errorCode != MelonLoadErrorCodes.None)
-                {
-                    PrintErrorCodeMessage(errorCode, f);
+                var asm = MelonAssembly.LoadMelonAssembly(f);
+                if (asm == null)
                     continue;
-                }
-                foreach (var m in fileMelons)
+
+                foreach (var m in asm.LoadedMelons)
                 {
                     if (m is T t)
                     {
@@ -64,32 +62,11 @@ namespace MelonLoader
                 }
             }
 
-            MelonBase.RegisterInOrder(melons);
+            MelonBase.RegisterSorted(melons);
 
             MelonLogger.Msg(ConsoleColor.Yellow, line);
             MelonLogger.Msg($"{Melon<T>._registeredMelons.Count} {Melon<T>.TypeName}s loaded.");
             MelonLogger.Msg(ConsoleColor.Yellow, line);
-        }
-
-        public static void PrintErrorCodeMessage(MelonLoadErrorCodes errorCode, string melonLocation)
-        {
-            if (errorCode == MelonLoadErrorCodes.None)
-                return;
-
-            var msg = errorCode switch
-            {
-                MelonLoadErrorCodes.InvalidPath => "The given Path does not exist!",
-                MelonLoadErrorCodes.ModNotSupported => "The given Assembly is incompatible with MelonLoader; no Compatibility Layer found!",
-                MelonLoadErrorCodes.WrongFileExtension => "The given File is not a valid .NET Assembly!",
-                MelonLoadErrorCodes.InvalidMelonType => "The main Melon Type is incompatible with MelonLoader; make sure it derives from one of the Melon types (MelonLoader.MelonMod for example)!",
-                MelonLoadErrorCodes.FailedToLoadAssembly => "Failed to load the Assembly!",
-                MelonLoadErrorCodes.AssemblyIsNull => "Assembly is Null!",
-                MelonLoadErrorCodes.FailedToReadFile => "Failed to read the File from the given Path!",
-                MelonLoadErrorCodes.FailedToInitializeMelon => "Something went wrong while initializing the main Melon Instance!",
-                _ => "Unknown Error"
-            };
-
-            MelonLogger.Error($"Failed to load Melon(s) from '{melonLocation}': {msg}");
         }
 
         #region Obsolete Members
@@ -105,85 +82,62 @@ namespace MelonLoader
         [Obsolete("Use 'MelonMod.RegisteredMelons' instead.")]
         public static List<MelonMod> Mods => Melon<MelonMod>.RegisteredMelons;
 
-        [Obsolete("MelonLoader.MelonHandler.LoadFromFile(string, bool) is obsolete. Please use MelonLoader.MelonHandler.LoadFromFile(string, string) instead.")]
+        [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromFile(string filelocation, bool is_plugin) => LoadFromFile(filelocation);
 
-        [Obsolete("MelonLoader.MelonHandler.LoadFromByteArray(byte[], string) is obsolete. Please use MelonLoader.MelonHandler.LoadFromByteArray(byte[], byte[], string) instead.")]
+        [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromByteArray(byte[] filedata, string filelocation) => LoadFromByteArray(filedata, filepath: filelocation);
 
-        [Obsolete("MelonLoader.MelonHandler.LoadFromByteArray(byte[], string, bool) is obsolete. Please use MelonLoader.MelonHandler.LoadFromByteArray(byte[], byte[], string) instead.")]
+        [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromByteArray(byte[] filedata, string filelocation, bool is_plugin) => LoadFromByteArray(filedata, filepath: filelocation);
 
-        [Obsolete("MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string, bool) is obsolete. Please use MelonLoader.MelonHandler.LoadFromAssembly(Assembly, string) instead.")]
+        [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromAssembly(Assembly asm, string filelocation, bool is_plugin) => LoadFromAssembly(asm, filelocation);
 
-        [Obsolete("Use 'melonBase.Hash' instead.")]
+        [Obsolete("Use 'MelonBase.Hash' instead.")]
         public static string GetMelonHash(MelonBase melonBase)
             => melonBase.Hash;
 
-        [Obsolete("Use 'MelonBase.RegisteredMelons.Any(1)' instead.")]
+        [Obsolete("Use 'MelonBase.RegisteredMelons.Exists(1)' instead.")]
         public static bool IsMelonAlreadyLoaded(string name)
             => MelonBase._registeredMelons.Exists(x => x.Info.Name == name);
 
-        [Obsolete("Use 'MelonPlugin.RegisteredMelons.Any(1)' instead.")]
+        [Obsolete("Use 'MelonPlugin.RegisteredMelons.Exists(1)' instead.")]
         public static bool IsPluginAlreadyLoaded(string name)
             => Melon<MelonPlugin>._registeredMelons.Exists(x => x.Info.Name == name);
 
-        [Obsolete("Use 'MelonMod.RegisteredMelons.Any(1)' instead.")]
+        [Obsolete("Use 'MelonMod.RegisteredMelons.Exists(1)' instead.")]
         public static bool IsModAlreadyLoaded(string name)
             => Melon<MelonMod>._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromFile(string filepath, string symbolspath = null)
         {
-            if (filepath == null)
+            var asm = MelonAssembly.LoadMelonAssembly(filepath);
+            if (asm == null)
                 return;
 
-            filepath = Path.GetFullPath(filepath);
-
-            var melons = MelonBase.Load(filepath, out MelonLoadErrorCodes errorCode);
-            if (errorCode != MelonLoadErrorCodes.None)
-            {
-                PrintErrorCodeMessage(errorCode, filepath);
-                return;
-            }
-
-            foreach (var m in melons)
-                m.Register();
+            MelonBase.RegisterSorted(asm.LoadedMelons);
         }
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromByteArray(byte[] filedata, byte[] symbolsdata = null, string filepath = null)
         {
-            if (filedata == null)
+            var asm = MelonAssembly.LoadMelonAssembly(filedata, symbolsdata);
+            if (asm == null)
                 return;
 
-            var melons = MelonBase.Load(filedata, out MelonLoadErrorCodes errorCode, symbolsdata);
-            if (errorCode != MelonLoadErrorCodes.None)
-            {
-                PrintErrorCodeMessage(errorCode, "Raw Assembly Data");
-                return;
-            }
-
-            foreach (var m in melons)
-                m.Register();
+            MelonBase.RegisterSorted(asm.LoadedMelons);
         }
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromAssembly(Assembly asm, string filepath = null)
         {
-            if (asm == null)
+            var ma = MelonAssembly.LoadMelonAssembly(asm);
+            if (ma == null)
                 return;
 
-            var melons = MelonBase.Load(asm, out MelonLoadErrorCodes errorCode);
-            if (errorCode != MelonLoadErrorCodes.None)
-            {
-                PrintErrorCodeMessage(errorCode, asm.Location);
-                return;
-            }
-
-            foreach (var m in melons)
-                m.Register();
+            MelonBase.RegisterSorted(ma.LoadedMelons);
         }
         #endregion
     }

@@ -39,7 +39,7 @@ namespace MelonLoader.CompatibilityLayers
 
         private static void AppendMelonInfo(StringBuilder sb, MelonBase m)
         {
-            if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequirement>(m.Assembly) != null)
+            if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequirement>(m.MelonAssembly.Assembly) != null)
                 sb.Append($", {m.Info.Name} v{m.Info.Version}");
         }
 

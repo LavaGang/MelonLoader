@@ -11,11 +11,12 @@ namespace MelonLoader
         internal readonly bool unsubscribeOnFirstInvocation;
         internal readonly int priority;
 
-        internal MelonBase Melon => obj is MelonBase melon ? melon : null;
+        internal readonly MelonAssembly melonAssembly;
 
         private MelonAction(Delegate singleDel, int priority, bool unsubscribeOnFirstInvocation)
         {
             method = singleDel.Method;
+            melonAssembly = MelonAssembly.GetMelonAssemblyOfMember(method);
             obj = singleDel.Target;
             this.priority = priority;
             this.unsubscribeOnFirstInvocation = unsubscribeOnFirstInvocation;
