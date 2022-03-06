@@ -404,17 +404,26 @@ namespace MelonLoader
             OnRegister.Invoke();
             OnMelonRegistered.Invoke(this);
 
+            if (MelonEvents.OnApplicationStart.Disposed)
+                HarmonyInit();
+            else
+                MelonEvents.OnApplicationStart.Subscribe(HarmonyInit, Priority, true);
+
             if (Core.engineInitialized)
-            {
                 EngineInitialized();
-            }
+            else
+                MelonEvents.OnApplicationLateStart.Subscribe(EngineInitialized, Priority, true);
             return true;
+        }
+
+        private void HarmonyInit()
+        {
+            if (!MelonAssembly.HarmonyDontPatchAll)
+                HarmonyInstance.PatchAll(MelonAssembly.Assembly);
         }
 
         private void EngineInitialized()
         {
-            if (!MelonAssembly.HarmonyDontPatchAll)
-                HarmonyInstance.PatchAll(MelonAssembly.Assembly);
             try
             {
                 OnEngineInitialized();
@@ -452,9 +461,6 @@ namespace MelonLoader
                 MelonPreferences.OnPreferencesSaved.Unsubscribe(prefsSaved.Method, prefsSaved.Target);
                 MelonPreferences.OnPreferencesSaved.Unsubscribe(prefsApplied.Method, prefsApplied.Target);
             }, unsubscribeOnFirstInvocation: true);
-
-            if (!Core.engineInitialized)
-                MelonEvents.OnApplicationLateStart.Subscribe(EngineInitialized, Priority, true);
         }
 
         /// <summary>
