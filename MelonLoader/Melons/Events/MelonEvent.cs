@@ -32,9 +32,9 @@ namespace MelonLoader
                     if (CheckIfSubscribed(a.method, a.obj))
                         continue;
 
-                    if (a.Melon != null)
+                    if (a.melonAssembly != null)
                     {
-                        a.Melon.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), unsubscribeOnFirstInvocation: true);
+                        a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), unsubscribeOnFirstInvocation: true);
                     }
 
                     AddSorted(a);
@@ -81,16 +81,13 @@ namespace MelonLoader
                 enumerator = new LemonEnumerator<MelonAction>(actions);
             foreach (var del in enumerator)
             {
-                if (del.Melon != null && !del.Melon.Registered)
-                    continue;
-
                 try { del.Invoke(args); }
                 catch (Exception ex)
                 {
-                    if (del.Melon == null)
+                    if (del.melonAssembly == null || del.melonAssembly.LoadedMelons.Count == 0)
                         MelonLogger.Error(ex.ToString());
                     else
-                        del.Melon.LoggerInstance.Error(ex.ToString());
+                        del.melonAssembly.LoadedMelons[0].LoggerInstance.Error(ex.ToString());
                 }
 
                 if (del.unsubscribeOnFirstInvocation)

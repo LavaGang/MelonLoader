@@ -168,6 +168,9 @@ namespace MelonLoader
 
         public static string ComputeSimpleSHA256Hash(string filePath)
         {
+            if (!File.Exists(filePath))
+                return "null";
+
             byte[] byteHash = LemonSHA256.ComputeSHA256Hash(File.ReadAllBytes(filePath));
             string finalHash = string.Empty;
             foreach (byte b in byteHash)
@@ -236,6 +239,9 @@ namespace MelonLoader
 
         public static bool IsTypeEqualToFullName(Type type1, string type2)
             => type1.FullName == type2 || (type1 != typeof(object) && IsTypeEqualToFullName(type1.BaseType, type2));
+
+        public static string MakePlural(this string str, int amount)
+            => amount == 1 ? str : $"{str}s";
 
         public static IEnumerable<Type> GetValidTypes(this Assembly asm)
             => GetValidTypes(asm, null);

@@ -25,200 +25,22 @@ namespace MelonLoader
         public static readonly MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
 
         /// <summary>
-        /// Called when a Melon starts initializing.
+        /// Called before a Melon starts initializing.
         /// </summary>
         public static readonly MelonEvent<MelonBase> OnMelonInitializing = new MelonEvent<MelonBase>();
-
-        /// <summary>
-        /// Called before the process of resolving Melons from an Assembly has started.
-        /// </summary>
-        public static readonly MelonEvent<Assembly> OnMelonsResolving = new MelonEvent<Assembly>();
-
-        public static event LemonFunc<Assembly, MelonBase[]> CustomMelonResolvers;
 
         public static List<MelonBase> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
         internal static List<MelonBase> _registeredMelons = new List<MelonBase>();
 
         /// <summary>
-        /// Loads an Assembly from 'filePath' and returns all the Melons within the Assembly.
-        /// </summary>
-        /// <param name="filePath">Path of the Assembly containing the Melons</param>
-        /// <param name="errorCode">Returned Error Code</param>S
-        public static MelonBase[] Load(string filePath, out MelonLoadErrorCodes errorCode)
-        {
-            filePath = Path.GetFullPath(filePath);
-
-            if (!File.Exists(filePath))
-            {
-                errorCode = MelonLoadErrorCodes.InvalidPath;
-                return null;
-            }
-            if (!filePath.EndsWith(".dll"))
-            {
-                errorCode = MelonLoadErrorCodes.WrongFileExtension;
-                return null;
-            }
-
-            var mdbPath = filePath.Remove(filePath.Length - 3) + "mdb";
-            if (File.Exists(mdbPath))
-            {
-                byte[] mdbBytes = null;
-                try
-                {
-                    mdbBytes = File.ReadAllBytes(mdbPath);
-                }
-                catch { }
-
-                if (mdbBytes != null)
-                {
-                    byte[] asmBytes;
-                    try
-                    {
-                        asmBytes = File.ReadAllBytes(filePath);
-                    }
-                    catch
-                    {
-                        errorCode = MelonLoadErrorCodes.FailedToReadFile;
-                        return null;
-                    }
-
-                    return Load(asmBytes, out errorCode, mdbBytes);
-                }
-            }
-
-            Assembly asm;
-            try
-            {
-                asm = Assembly.LoadFrom(filePath);
-            }
-            catch
-            {
-                errorCode = MelonLoadErrorCodes.FailedToLoadAssembly;
-                return null;
-            }
-
-            return Load(asm, out errorCode);
-        }
-
-        /// <summary>
-        /// Loads all Melons from raw Assembly Data.
-        /// </summary>
-        /// <param name="rawAssembly">Assembly Data containing the Melons</param>
-        /// <param name="errorCode">Returned Error Code</param>
-        /// <param name="mdbData">Assembly's MDB Data (Optional)</param>
-        public static MelonBase[] Load(byte[] rawAssembly, out MelonLoadErrorCodes errorCode, byte[] mdbData = null)
-        {
-            Assembly asm;
-            try
-            {
-                asm = mdbData == null ? Assembly.Load(rawAssembly) : Assembly.Load(rawAssembly, mdbData);
-            }
-            catch
-            {
-                errorCode = MelonLoadErrorCodes.FailedToLoadAssembly;
-                return null;
-            }
-
-            return Load(asm, out errorCode);
-        }
-
-        /// <summary>
-        /// Loads all Melons from an Assembly.
-        /// </summary>
-        /// <param name="asm">Assembly containing the Melons</param>
-        /// <param name="errorCode">Returned Error Code</param>
-        public static MelonBase[] Load(Assembly asm, out MelonLoadErrorCodes errorCode)
-        {
-            if (asm == null)
-            {
-                errorCode = MelonLoadErrorCodes.AssemblyIsNull;
-                return null;
-            }
-
-            OnMelonsResolving.Invoke(asm);
-
-           // \/ Custom Resolver \/
-           var resolvers = CustomMelonResolvers?.GetInvocationList();
-            if (resolvers != null)
-                foreach (var r in resolvers)
-                {
-                    var customMelon = (MelonBase[])r.DynamicInvoke(asm);
-                    if (customMelon == null || customMelon.Length == 0)
-                        continue;
-
-                    errorCode = MelonLoadErrorCodes.None;
-                    return customMelon;
-                }
-
-            // \/ Default resolver \/
-            var info = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(asm);
-            if (info == null)
-            {
-                errorCode = MelonLoadErrorCodes.ModNotSupported;
-                return null;
-            }
-            if (info.SystemType == null || !info.SystemType.IsSubclassOf(typeof(MelonBase)))
-            {
-                errorCode = MelonLoadErrorCodes.InvalidMelonType;
-                return null;
-            }
-
-            MelonBase melon; 
-            try
-            {
-                melon = (MelonBase)Activator.CreateInstance(info.SystemType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
-            }
-            catch
-            {
-                errorCode = MelonLoadErrorCodes.FailedToInitializeMelon;
-                return null;
-            }
-
-            var priorityAttr = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(asm);
-            var colorAttr = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(asm);
-            var authorColorAttr = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(asm);
-            var procAttrs = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(asm);
-            var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(asm);
-            var optionalDependenciesAttr = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(asm);
-            var idAttr = MelonUtils.PullAttributeFromAssembly<MelonIDAttribute>(asm);
-            var gameVersionAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameVersionAttribute>(asm);
-            var platformAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(asm);
-            var domainAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(asm);
-            var mlVersionAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(asm);
-            var mlBuildAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderBuildAttribute>(asm);
-            var harmonyDPAAttr = MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(asm);
-
-            melon.Info = info;
-            melon.Assembly = asm;
-            melon.Location = asm.Location;
-            melon.Priority = priorityAttr == null ? 0 : priorityAttr.Priority;
-            melon.ConsoleColor = colorAttr == null ? MelonLogger.DefaultMelonColor : colorAttr.Color;
-            melon.AuthorConsoleColor = authorColorAttr == null ? MelonLogger.DefaultTextColor : authorColorAttr.Color;
-            melon.SupportedProcesses = procAttrs;
-            melon.Games = gameAttrs;
-            melon.SupportedGameVersions = gameVersionAttrs;
-            melon.SupportedPlatforms = platformAttr;
-            melon.SupportedDomain = domainAttr;
-            melon.SupportedMLVersion = mlVersionAttr;
-            melon.SupportedMLBuild = mlBuildAttr;
-            melon.OptionalDependencies = optionalDependenciesAttr;
-            melon.ID = idAttr?.ID;
-            melon.HarmonyDontPatchAll = harmonyDPAAttr != null;
-
-            errorCode = MelonLoadErrorCodes.None;
-            return new MelonBase[] { melon };
-        }
-
-        /// <summary>
         /// Creates a new Melon instance for a Wrapper.
         /// </summary>
-        public static T CreateWrapper<T>(Assembly assembly, string name, string version, string author = null, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
+        public static T CreateWrapper<T>(string name, string version, string author = null, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
         {
             var melon = new T
             {
                 Info = new MelonInfoAttribute(typeof(T), name, version, author),
-                Assembly = assembly,
-                Location = assembly.Location,
+                MelonAssembly = MelonAssembly.LoadMelonAssembly(typeof(T).Assembly),
                 Priority = priority,
                 ConsoleColor = color ?? MelonLogger.DefaultMelonColor,
                 AuthorConsoleColor = authorColor ?? MelonLogger.DefaultTextColor,
@@ -232,9 +54,9 @@ namespace MelonLoader
         }
 
         /// <summary>
-        /// Registers a List of Melons in Order.
+        /// Registers a List of Melons in the right order.
         /// </summary>
-        public static void RegisterInOrder<T>(List<T> melons) where T : MelonBase
+        public static void RegisterSorted<T>(IList<T> melons) where T : MelonBase
         {
             if (melons == null)
                 return;
@@ -245,15 +67,16 @@ namespace MelonLoader
                 m.Register();
         }
 
-        private static void SortMelons<T>(ref List<T> melons) where T : MelonBase
+        private static void SortMelons<T>(ref IList<T> melons) where T : MelonBase
         {
             DependencyGraph<T>.TopologicalSort(melons);
             melons = melons.OrderBy(x => x.Priority).ToList();
         }
+
         #endregion
 
         #region Instance
-        private string _hash;
+
         private MelonGameAttribute[] _games = new MelonGameAttribute[0];
         private MelonProcessAttribute[] _processes = new MelonProcessAttribute[0];
         private MelonGameVersionAttribute[] _gameVersions = new MelonGameVersionAttribute[0];
@@ -262,14 +85,9 @@ namespace MelonLoader
         public readonly MelonEvent OnUnregister = new MelonEvent();
 
         /// <summary>
-        /// Assembly of the Melon.
+        /// MelonAssembly of the Melon.
         /// </summary>
-        public Assembly Assembly { get; internal set; }
-
-        /// <summary>
-        /// File Location of the Melon.
-        /// </summary>
-        public string Location { get; internal set; }
+        public MelonAssembly MelonAssembly { get; internal set; }
 
         /// <summary>
         /// Priority of the Melon.
@@ -357,8 +175,6 @@ namespace MelonLoader
         /// </summary>
         public HarmonyLib.Harmony HarmonyInstance { get; internal set; }
 
-        public bool HarmonyDontPatchAll { get; internal set; }
-
         /// <summary>
         /// Auto-Created MelonLogger Instance of the Melon.
         /// </summary>
@@ -378,19 +194,6 @@ namespace MelonLoader
         /// Name of the current Melon Type.
         /// </summary>
         public abstract string MelonTypeName { get; }
-
-        /// <summary>
-        /// A SHA256 Hash of the Assembly.
-        /// </summary>
-        public string Hash
-        {
-            get
-            {
-                if (_hash == null)
-                    _hash = MelonUtils.ComputeSimpleSHA256Hash(Location);
-                return _hash;
-            }
-        }
 
         #region Callbacks
 
@@ -573,7 +376,8 @@ namespace MelonLoader
 
             if (LoggerInstance == null)
                 LoggerInstance = new MelonLogger.Instance(string.IsNullOrEmpty(ID) ? Info.Name : $"{ID}:{Info.Name}", ConsoleColor);
-            HarmonyInstance = new HarmonyLib.Harmony($"{Assembly.FullName}:{Info.Name}");
+            if (HarmonyInstance == null)
+                HarmonyInstance = new HarmonyLib.Harmony($"{Assembly.FullName}:{Info.Name}");
 
             Registered = true; // this has to be true before the melon can subscribe to any events
             RegisterCallbacks();
@@ -595,10 +399,8 @@ namespace MelonLoader
 
             _registeredMelons.Add(this);
 
-            if (!HarmonyDontPatchAll)
-                HarmonyInstance.PatchAll(Assembly);
-            RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
-
+            if (!MelonAssembly.HarmonyDontPatchAll)
+                HarmonyInstance.PatchAll(MelonAssembly.Assembly);
 
             PrintLoadInfo();
 
@@ -620,7 +422,7 @@ namespace MelonLoader
         }
 
         protected internal virtual bool RegisterInternal() => true;
-        protected internal virtual bool UnregisterInternal() => true;
+        protected internal virtual void UnregisterInternal() { }
 
         protected internal virtual void RegisterCallbacks()
         {
@@ -647,14 +449,21 @@ namespace MelonLoader
             => _registeredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
 
         /// <summary>
-        /// Unregisters the Melon.
-        /// <para>This only unsubscribes the Melon from all Callbacks and unpatches all Methods that were patched by Harmony, but doesn't actually unload the Assembly.</para>
-        /// <para>It is recommended to only use this Method in Cases where you 100% know the Melon will not work and/or will only cause Issues.</para>
+        /// Unregisters the Melon and all other Melons located in the same Assembly.
+        /// <para>This only unsubscribes the Melons from all Callbacks and unpatches all Methods that were patched by Harmony, but doesn't actually unload the whole Assembly.</para>
         /// </summary>
-        public bool Unregister(string reason = null)
+        public void Unregister(string reason = null)
         {
             if (!Registered)
-                return false;
+                return;
+
+            MelonAssembly.UnregisterMelons(reason);
+        }
+
+        internal void UnregisterInstance(string reason)
+        {
+            if (!Registered)
+                return;
 
             try
             {
@@ -666,19 +475,16 @@ namespace MelonLoader
                 MelonLogger.Error(ex.ToString());
             }
 
-            if (!UnregisterInternal())
-                return false;
+            UnregisterInternal();
 
             _registeredMelons.Remove(this);
             HarmonyInstance.UnpatchSelf();
-            HarmonyInstance = null;
             Registered = false;
 
             PrintUnloadInfo(reason);
 
             OnUnregister.Invoke();
             OnMelonUnregistered.Invoke(this);
-            return true;
         }
 
         private void PrintLoadInfo()
@@ -757,6 +563,18 @@ namespace MelonLoader
 
         [Obsolete("Please use HarmonyInstance instead.")]
         public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
+
+        [Obsolete("Please use MelonAssembly.Assembly instead.")]
+        public Assembly Assembly => MelonAssembly.Assembly;
+
+        [Obsolete("Please use MelonAssembly.HarmonyDontPatchAll instead.")]
+        public bool HarmonyDontPatchAll => MelonAssembly.HarmonyDontPatchAll;
+
+        [Obsolete("Please use MelonAssembly.Hash instead.")]
+        public string Hash => MelonAssembly.Hash;
+
+        [Obsolete("Please use MelonAssembly.Assembly.Location instead.")]
+        public string Location => MelonAssembly.Assembly.Location;
 
         #endregion
 

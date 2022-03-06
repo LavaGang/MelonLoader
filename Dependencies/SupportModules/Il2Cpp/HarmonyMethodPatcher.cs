@@ -310,7 +310,7 @@ namespace MelonLoader.InternalUtils
                 // Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
                 Assembly melonAssembly = basePatch.PatchMethod.DeclaringType?.Assembly;
                 if (melonAssembly != null)
-                    loggerInstance = FindMelon(melon => melon.Assembly == melonAssembly);
+                    loggerInstance = FindMelon(melon => melon.MelonAssembly.Assembly == melonAssembly);
             }
 
             WarnIfHasTranspiler(patchInfo, loggerInstance);

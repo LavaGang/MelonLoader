@@ -58,6 +58,9 @@
     <Compile Include="MelonEvents.cs" />
     <Compile Include="Melons\Events\MelonAction.cs" />
     <Compile Include="Melons\Events\MelonEvent.cs" />
+    <Compile Include="Melons\MelonAssembly.cs" />
+    <Compile Include="Melons\ResolvedMelons.cs" />
+    <Compile Include="Melons\RottenMelon.cs" />
     <Compile Include="Modules\MelonModule.cs" />
     <Compile Include="NativeUtils\CppUtils.cs" />
     <Compile Include="InternalUtils\MelonStartScreen.cs" />
@@ -71,7 +74,6 @@
     <Compile Include="Lemons\LemonFunc.cs" />
     <Compile Include="Lemons\LemonTuple.cs" />
     <Compile Include="Melons\Melon.cs" />
-    <Compile Include="Melons\MelonLoadErrorCodes.cs" />
     <Compile Include="MonoInternals\MonoLibrary.cs" />
     <Compile Include="MonoInternals\ResolveInternals\AssemblyManager.cs" />
     <Compile Include="MonoInternals\AssemblyResolveInfo.cs" />

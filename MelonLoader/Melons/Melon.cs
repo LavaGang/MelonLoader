@@ -29,10 +29,9 @@ namespace MelonLoader
             return true;
         }
 
-        protected internal override bool UnregisterInternal()
+        protected internal override void UnregisterInternal()
         {
             _registeredMelons.Remove((T)this);
-            return true;
         }
 
         public static void ExecuteAll(LemonAction<T> func, bool unregisterOnFail = false, string unregistrationReason = null)

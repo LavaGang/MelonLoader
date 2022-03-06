@@ -26,10 +26,10 @@ namespace MelonLoader.CompatibilityLayers
             foreach (string assemblyName in assembly_list)
                 MonoResolveManager.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 
-            MelonBase.CustomMelonResolvers += Resolve;
+            MelonAssembly.CustomMelonResolvers += Resolve;
         }
 
-        private MelonBase[] Resolve(Assembly asm)
+        private ResolvedMelons Resolve(Assembly asm)
         {
             IEnumerable<Type> modTypes = asm.GetValidTypes(x =>
             {
@@ -37,14 +37,32 @@ namespace MelonLoader.CompatibilityLayers
                 return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IMod));  // To-Do: Change to Type Reflection based on Setup
             });
             if ((modTypes == null) || !modTypes.Any())
-                return null;
+                return new ResolvedMelons(null, null);
 
-            return modTypes.Select(x => LoadMod(asm, x)).ToArray();
+            var melons = new List<MelonBase>();
+            var rotten = new List<RottenMelon>();
+            foreach (var t in modTypes)
+            {
+                var mel = LoadMod(asm, t, out RottenMelon rm);
+                if (mel != null)
+                    melons.Add(mel);
+                else
+                    rotten.Add(rm);
+            }
+            return new ResolvedMelons(melons.ToArray(), rotten.ToArray());
         }
 
-        private MelonBase LoadMod(Assembly asm, Type modType)
+        private MelonBase LoadMod(Assembly asm, Type modType, out RottenMelon rottenMelon)
         {
-            var modInstance = Activator.CreateInstance(modType) as IMod;
+            rottenMelon = null;
+
+            IMod modInstance;
+            try { modInstance = Activator.CreateInstance(modType) as IMod; }
+            catch (Exception ex)
+            {
+                rottenMelon = new RottenMelon(modType, "Failed to create an instance of the MMDL Mod.", ex);
+                return null;
+            }
 
             var modName = modInstance.Name;
 
@@ -55,7 +73,7 @@ namespace MelonLoader.CompatibilityLayers
             if (string.IsNullOrEmpty(modVersion) || modVersion.Equals("0.0.0.0"))
                 modVersion = "1.0.0.0";
 
-            var melon = MelonBase.CreateWrapper<MuseDashModWrapper>(asm, modName, modVersion);
+            var melon = MelonBase.CreateWrapper<MuseDashModWrapper>(modName, modVersion);
             melon.modInstance = modInstance;
             ModLoader.ModLoader.mods.Add(modInstance);
             ModLoader.ModLoader.LoadDependency(asm);

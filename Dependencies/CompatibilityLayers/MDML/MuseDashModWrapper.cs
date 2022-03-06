@@ -5,6 +5,6 @@ namespace MelonLoader
     internal class MuseDashModWrapper : MelonMod
     {
         internal IMod modInstance;
-        public override void OnApplicationStart() => modInstance.DoPatching();
+        public override void OnEngineInitialized() => modInstance.DoPatching();
     }
 }
