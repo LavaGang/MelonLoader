@@ -471,7 +471,7 @@ namespace MelonLoader
 
         /// <summary>
         /// Unregisters the Melon and all other Melons located in the same Assembly.
-        /// <para>This only unsubscribes the Melons from all Callbacks and unpatches all Methods that were patched by Harmony, but doesn't actually unload the whole Assembly.</para>
+        /// <para>This only unsubscribes the Melons from all Callbacks/<see cref="MelonEvent"/>s and unpatches all Methods that were patched by Harmony, but doesn't actually unload the whole Assembly.</para>
         /// </summary>
         public void Unregister(string reason = null)
         {

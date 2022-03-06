@@ -16,8 +16,8 @@ namespace MelonLoader
         private MelonAction(Delegate singleDel, int priority, bool unsubscribeOnFirstInvocation)
         {
             method = singleDel.Method;
-            melonAssembly = MelonAssembly.GetMelonAssemblyOfMember(method);
             obj = singleDel.Target;
+            melonAssembly = MelonAssembly.GetMelonAssemblyOfMember(method, obj);
             this.priority = priority;
             this.unsubscribeOnFirstInvocation = unsubscribeOnFirstInvocation;
         }
