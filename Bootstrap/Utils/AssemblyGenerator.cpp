@@ -5,7 +5,7 @@
 #include "Debug.h"
 #include "../Managers/Game.h"
 #include <string>
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "../Utils/Logger.h"
 #include "../Managers/Mono.h"
 #include "HashCode.h"

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include "Game.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "Il2Cpp.h"
 #include "../Utils/Assertion.h"
 #include "../Utils/Console/Logger.h"

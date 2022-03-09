@@ -2,7 +2,7 @@
 #include "HashCode.h"
 #include "Debug.h"
 #include "../Managers/Game.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "AssemblyGenerator.h"
 #include "../Managers/BaseAssembly.h"
 #include <string>

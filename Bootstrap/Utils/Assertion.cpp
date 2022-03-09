@@ -1,5 +1,5 @@
 #include "Assertion.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "Console/Debug.h"
 #include "Console/Logger.h"
 #include "Console/Console.h"

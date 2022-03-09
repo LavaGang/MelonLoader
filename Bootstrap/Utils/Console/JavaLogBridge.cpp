@@ -1,5 +1,4 @@
 #include <jni.h>
-#include "../../Base/Core.h"
 #include "./Logger.h"
 
 extern "C" {
