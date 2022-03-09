@@ -1,5 +1,6 @@
 package com.melonloader.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.melonloader.ApplicationState;
@@ -30,9 +31,11 @@ public class InjectionHelper {
         LogBridge.msg("libBootstrap.so successfully loaded");
     }
 
-    public static void Initialize(Context context)
+    public static void Initialize(Activity context)
     {
+        ApplicationState.UpdateActivity(context);
         ContextHelper.DefineContext(context);
+
         AssemblyHelper.InstallAssemblies();
 
         Bootstrap.Initialize();

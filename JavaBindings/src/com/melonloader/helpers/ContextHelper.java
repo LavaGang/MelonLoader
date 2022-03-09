@@ -1,5 +1,6 @@
 package com.melonloader.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.melonloader.ApplicationState;
@@ -7,7 +8,7 @@ import com.melonloader.LogBridge;
 import com.melonloader.exceptions.MissingContext;
 
 public class ContextHelper {
-    public static void DefineContext(Context context)
+    public static void DefineContext(Activity context)
     {
         ApplicationState.ContextDefined = true;
         ApplicationState.Context = context;

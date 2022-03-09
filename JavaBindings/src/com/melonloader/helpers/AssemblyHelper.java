@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Paths;
 
 public class AssemblyHelper {
     private static AssemblyHelper instance;
@@ -30,8 +31,7 @@ public class AssemblyHelper {
 
         AssetManager am = ApplicationState.Context.getAssets();
 
-        File path = ApplicationState.Context.getExternalFilesDir(null);
-        return AssemblyHelper.instance.CopyAssetsTo(path);
+        return AssemblyHelper.instance.CopyAssetsTo(new File(ApplicationState.BaseDirectory));
     }
 
     private boolean CopyAssetsTo(File path)
