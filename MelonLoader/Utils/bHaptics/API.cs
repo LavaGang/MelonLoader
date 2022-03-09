@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using HarmonyLib.Tools;
 
 namespace MelonLoader
 {
@@ -22,7 +23,9 @@ namespace MelonLoader
         {
             if (_waserror)
                 return;
-            #if !__ANDROID__
+            #if __ANDROID__
+            bHaptics_NativeLibrary.Start();
+            #else
             byte[] buf = new byte[500];
             int size = 0;
             if (!bHaptics_NativeLibrary.TryGetExePath(buf, ref size))
@@ -39,7 +42,7 @@ namespace MelonLoader
             if (_waserror) return;
             #if __ANDROID__
             bHaptics_NativeLibrary.TurnOffAll();
-            ConnectionManager.ConnectionManager.StopScan();
+            bHaptics_NativeLibrary.Stop();
             #else
             bHaptics_NativeLibrary.TurnOff();
             bHaptics_NativeLibrary.Destroy();
@@ -69,12 +72,13 @@ namespace MelonLoader
 #if __ANDROID__
             if (_waserror)
                 return false;
-            
-            foreach (var bhapticsDevice in ConnectionManager.ConnectionManager.GetDeviceList())
-            {
-                if (bhapticsDevice.Position == type)
-                    return true;
-            }
+
+            MelonLogger.Warning($"{nameof(IsDeviceConnected)} is not supported on android - yet");
+            // foreach (var bhapticsDevice in ConnectionManager.ConnectionManager.GetDeviceList())
+            // {
+            //     if (bhapticsDevice.Position == type)
+            //         return true;
+            // }
 
             return false;
 #else
@@ -191,7 +195,7 @@ namespace MelonLoader
                 intensities[i] = bytes[i];
             }
             
-            bHaptics_NativeLibrary.SubmitDot(key, position.ToString(), indexes, intensities, durationMillis);
+            bHaptics_NativeLibrary.SubmitDot(key, position, indexes, intensities, durationMillis);
             #else
             int bytes_size = bytes.Length;
             if (bytes_size != MaxBufferSize)
@@ -219,7 +223,7 @@ namespace MelonLoader
                 intensities[i] = points[i].Intensity;
             }
             
-            bHaptics_NativeLibrary.SubmitDot(key, position.ToString(), indexes, intensities, durationMillis);
+            bHaptics_NativeLibrary.SubmitDot(key, position, indexes, intensities, durationMillis);
             #else
             byte[] bytes = new byte[MaxBufferSize];
             for (var i = 0; i < points.Count; i++)
@@ -263,10 +267,13 @@ namespace MelonLoader
                 return default;
             
             #if __ANDROID__
-            FeedbackStatus status = new FeedbackStatus
-            {
-                values = bHaptics_NativeLibrary.GetPositionStatus(pos).Select(Convert.ToInt32).ToArray()
-            };
+            // FeedbackStatus status = new FeedbackStatus
+            // {
+            //     values = bHaptics_NativeLibrary.GetPositionStatus(pos).Select(Convert.ToInt32).ToArray()
+            // };
+            MelonLogger.Warning($"{nameof(GetCurrentFeedbackStatus)} is not supported on android - yet");
+            
+            FeedbackStatus status = new FeedbackStatus();
             #else
             FeedbackStatus status;
             bHaptics_NativeLibrary.TryGetResponseForPosition(pos, out status);

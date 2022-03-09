@@ -14,6 +14,8 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'UnmanagedArray'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'System.Memory'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -38,6 +40,8 @@
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'MonoMod.Utils'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == '0Harmony'" />
 			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'Tomlet'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'UnmanagedArray'" />
+			<InputAssemblies Include="@(ReferencePathWithRefAssemblies)" Condition="'%(filename)' == 'System.Memory'" />
 		</ItemGroup>
 		<ILRepack
 			Parallel="true"
@@ -58,6 +62,8 @@
 			<FilesToDelete Include="$(OutputPath)MonoMod.Utils.dll" />
 			<FilesToDelete Include="$(OutputPath)0Harmony.dll" />
 			<FilesToDelete Include="$(OutputPath)Tomlet.dll" />
+			<FilesToDelete Include="$(OutputPath)UnmanagedArray.dll" />
+			<FilesToDelete Include="$(OutputPath)System.Memory.dll" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)" />
     </Target>
