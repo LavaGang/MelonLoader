@@ -10,6 +10,7 @@
 
 #include "../Utils/Console/Debug.h"
 #include "../Utils/Assertion.h"
+#include "../Core.h"
 
 char* AndroidData::BaseDataDir = "/storage/emulated/0/Android/data";
 char* AndroidData::AppName = NULL;
@@ -46,8 +47,31 @@ void AndroidData::GetAppName()
 
 void AndroidData::GetDataDir()
 {
-    std::string DataDirStr = (std::string(BaseDataDir) + "/" + std::string(AppName) + "/files");
-    DataDir = new char[DataDirStr.size() + 1];
-    std::copy(DataDirStr.begin(), DataDirStr.end(), DataDir);
-    DataDir[DataDirStr.size()] = '\0';
+    auto env = Core::GetEnv();
+
+    auto klass = env->FindClass("com/melonloader/ApplicationState");
+    if (klass == nullptr) {
+        Assertion::ThrowInternalFailure("Failed to find com/melonloader/ApplicationState");
+        return;
+    }
+
+    auto fieldId = env->GetStaticFieldID(klass, "BaseDirectory", "Ljava/lang/String;");
+    if (fieldId == nullptr) {
+        Assertion::ThrowInternalFailure("Failed to find com/melonloader/ApplicationState::BaseDirectory");
+        return;
+    }
+
+    auto jStr = env->GetStaticObjectField(klass, fieldId);
+    if (jStr == nullptr) {
+        Assertion::ThrowInternalFailure("com.melonloader.ApplicationState::BaseDirectory is null");
+        return;
+    }
+
+    const char* cStr = env->GetStringUTFChars((jstring)jStr, nullptr);
+    const size_t cStrSize = strlen(cStr);
+    DataDir = new char[cStrSize + 1];
+    std::strcpy(DataDir, cStr);
+    DataDir[cStrSize] = '\0';
+
+    env->DeleteLocalRef(jStr);
 }

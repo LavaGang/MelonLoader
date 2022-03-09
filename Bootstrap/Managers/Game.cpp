@@ -90,30 +90,18 @@ bool Game::SetupPaths()
 #undef MONO_STR
 
 #elif defined(__ANDROID__)
-	size_t BaseDirLen = strlen(AndroidData::BaseDataDir);
-	size_t AppNameLen = strlen(AndroidData::AppName);
-	size_t AppPathLen = BaseDirLen + AppNameLen + 2;
-	ApplicationPath = (char*)malloc(AppPathLen);
-
-	memcpy(ApplicationPath, AndroidData::BaseDataDir, BaseDirLen);
-	memcpy(ApplicationPath + BaseDirLen + 1, AndroidData::AppName, AppNameLen);
-
-	ApplicationPath[BaseDirLen] = '/';
-	ApplicationPath[AppPathLen - 1] = '\0';
-
-	size_t PathLen = strlen(AndroidData::DataDir);
+    size_t PathLen = strlen(AndroidData::DataDir);
 	BasePath = (char*)malloc(PathLen + 1);
 	DataPath = (char*)malloc(PathLen + 1);
+    ApplicationPath = (char*)malloc(PathLen + 1);
 
-	memcpy(BasePath, AndroidData::DataDir, PathLen);
-	memcpy(DataPath, AndroidData::DataDir, PathLen);
+    strcpy(BasePath, AndroidData::DataDir);
+    strcpy(DataPath, AndroidData::DataDir);
+    strcpy(ApplicationPath, AndroidData::DataDir);
 
-	BasePath[PathLen] = '\0';
-	DataPath[PathLen] = '\0';
-
-	Debug::Msg(ApplicationPath);
-	Debug::Msg(BasePath);
-	Debug::Msg(DataPath);
+    BasePath[PathLen] = '\0';
+    DataPath[PathLen] = '\0';
+    ApplicationPath[PathLen] = '\0';
 #endif
 
 	return true;
@@ -246,17 +234,18 @@ std::string Game::ReadUnityVersionFromGlobalGameManagers()
 	std::vector<char> filedata((std::istreambuf_iterator<char>(globalgamemanagersstream)), (std::istreambuf_iterator<char>()));
 	globalgamemanagersstream.close();
 #elif defined(__ANDROID__)
-#define STARTING_INDEX 0x14
-	jclass jCore = Core::Env->FindClass("com/melonloader/Core");
+    auto env = Core::GetEnv();
+
+	jclass jCore = env->FindClass("com/melonloader/Core");
 	if (jCore == NULL)
 		return std::string();
 
-	jmethodID mid = Core::Env->GetStaticMethodID(jCore, "GetAssetManager", "()Landroid/content/res/AssetManager;");
+	jmethodID mid = env->GetStaticMethodID(jCore, "GetAssetManager", "()Landroid/content/res/AssetManager;");
 	if (mid == NULL)
 		return std::string();
 
-	jobject jAM = Core::Env->CallStaticObjectMethod(jCore, mid);
-	AAssetManager* am = AAssetManager_fromJava(Core::Env, jAM);
+	jobject jAM = env->CallStaticObjectMethod(jCore, mid);
+	AAssetManager* am = AAssetManager_fromJava(env, jAM);
 	if (am == NULL)
 		return std::string();
 
@@ -270,8 +259,8 @@ std::string Game::ReadUnityVersionFromGlobalGameManagers()
 #endif
 
 	std::stringstream output;
+#ifdef _WIN32
 	int i = STARTING_INDEX;
-#undef STARTING_INDEX
 	
 	while (filedata[i] != NULL)
 	{
@@ -281,13 +270,35 @@ std::string Game::ReadUnityVersionFromGlobalGameManagers()
 		output << filedata[i];
 		i++;
 	}
+#elif defined(__ANDROID__)
+    bool f_found = false;
+    int starting_index = 0x14;
 
-#ifdef __ANDROID__
+    lazy_recursion:
+    int i = starting_index;
+
+    while (filedata[i] != NULL)
+    {
+        char bit = filedata[i];
+        if (bit == 0x66)
+            f_found = true;
+        if (bit == 0x00 || bit == 0x66)
+            break;
+        output << filedata[i];
+        i++;
+    }
+
+    if (starting_index < 0x30 && !f_found) {
+        starting_index = 0x30;
+        goto lazy_recursion;
+    }
+
 	AAsset_close(asset);
 #endif
 
 	return output.str();
 }
+#undef STARTING_INDEX
 
 std::string Game::ReadUnityVersionFromMainData()
 {
