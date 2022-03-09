@@ -1,9 +1,6 @@
 package com.melonloader.installer.core;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -18,6 +15,9 @@ public class UnityVersionDetector {
     public UnityVersionDetector(String apk, String _tempDir) {
         targetApk = apk;
         tempDir = _tempDir;
+
+        if (apk == null)
+            return;
 
         try {
             ExtractAssets();
@@ -54,13 +54,10 @@ public class UnityVersionDetector {
     }
 
     protected String GameManagerMethod(boolean f_mode) throws IOException {
-        String path = Paths.get(tempDir, "globalgamemanagers").toString();
-        BufferedInputStream buf;
-        try {
-            buf = new BufferedInputStream(new FileInputStream(path));
-        } catch (FileNotFoundException e) {
-            return null;
-        }
+        InputStream stream = getStream("globalgamemanagers");
+        if (stream == null) return null;
+
+        BufferedInputStream buf = new BufferedInputStream(stream);
 
         buf.skip(f_mode ? 0x14 : 0x30);
 
@@ -82,11 +79,13 @@ public class UnityVersionDetector {
             if (version.length() >= MaxName)
             {
                 System.out.println("Version Exceeded Size Limit");
-                return null;
+                f_found = false;
+                break;
             }
         }
 
         buf.close();
+        stream.close();
 
         if (!f_found) {
             if (f_mode) return null;
@@ -99,13 +98,10 @@ public class UnityVersionDetector {
     }
 
     protected String MainDataMethod() throws IOException {
-        String path = Paths.get(tempDir, "data.unity3d").toString();
-        BufferedInputStream buf;
-        try {
-            buf = new BufferedInputStream(new FileInputStream(path));
-        } catch (FileNotFoundException e) {
-            return null;
-        }
+        InputStream stream = getStream("data.unity3d");
+        if (stream == null) return null;
+
+        BufferedInputStream buf = new BufferedInputStream(stream);
 
         buf.skip(0x12);
 
@@ -123,10 +119,25 @@ public class UnityVersionDetector {
             if (version.length() >= MaxName)
             {
                 System.out.println("Version Exceeded Size Limit");
+                buf.close();
                 return null;
             }
         }
 
+        buf.close();
+        stream.close();
+
         return version.toString();
+    }
+
+    protected InputStream getStream(String local_path)
+    {
+        String path = Paths.get(tempDir, local_path).toString();
+
+        try {
+            return new FileInputStream(path);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 }
