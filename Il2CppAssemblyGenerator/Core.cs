@@ -38,7 +38,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
             GameName = MelonUtils.GameName;
 
-            BasePath = Path.Combine(string.Copy(MelonUtils.GetApplicationPath()), "files", "melonloader", "etc", "assembly_generation");
+            BasePath = Path.Combine(string.Copy(MelonUtils.GetApplicationPath()), "melonloader", "etc", "assembly_generation");
             // TODO: Read APK file instead
             GameAssemblyPath = Path.Combine(string.Copy(MelonUtils.GetMainAssemblyLoc()));
             AssemblyGeneratorManaged = Path.Combine(BasePath, "managed");
