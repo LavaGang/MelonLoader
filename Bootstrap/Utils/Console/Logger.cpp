@@ -381,7 +381,12 @@ void Logger::Internal_vDirectWritef(Console::Color txtcolor, LogLevel level, con
 {
 	// queue up log
 	std::lock_guard lock(mutex_);
-	logQueue.emplace_back(txtcolor, level, prefixes, size, fmt, args);
+
+//    va_list heap_args;
+//    va_copy(heap_args, args);
+//	logQueue.emplace_back(txtcolor, level, prefixes, size, fmt, args);
+    __android_log_vprint(ANDROID_LOG_INFO, "MelonLoader", fmt, args);
+
 }
 
 void Logger::LogThreadHandle()

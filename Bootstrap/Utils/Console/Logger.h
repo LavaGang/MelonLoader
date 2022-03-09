@@ -106,6 +106,9 @@ private:
 				buffer = new char[sz];
 				vsprintf(buffer, fmt, args);
 			}
+
+            va_end(args);
+
 			return buffer;
 		}
 	};
