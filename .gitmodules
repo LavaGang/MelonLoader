@@ -7,3 +7,6 @@
 [submodule "external/Il2CppDumper"]
 	path = external/Il2CppDumper
 	url = https://github.com/SirCoolness/Il2CppDumper
+[submodule "external/BHapticsHapticLibrary"]
+    path = external/BHapticsHapticLibrary
+    url = https://github.com/bhaptics/haptic-library.git
