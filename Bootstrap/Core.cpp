@@ -27,6 +27,8 @@
 #include "./Managers/AssetManagerHelper.h"
 #include "./Managers/StaticSettings.h"
 #include "./Utils/AssemblyUnhollower/XrefScannerBindings.h"
+#include "Managers/BHapticsBridge.h"
+
 #endif
 
 #ifdef _WIN32
@@ -104,6 +106,10 @@ bool Core::Initialize()
                     StaticSettings::Initialize
             },
 #endif
+            {
+                "Initializing bHaptics",
+                BHapticsBridge::Initialize,
+            },
             {
                     "Loading basic game info",
                     Game::Initialize
@@ -193,6 +199,7 @@ bool Core::Initialize()
 		},
 #endif
     };
+
 
     return Sequence::Run(Sequence) || Assertion::DontDie;
 }
@@ -359,6 +366,18 @@ const char* Core::GetOSVersion()
 	// TODO: pull more info
 	return "Android";
 #endif
+}
+
+JNIEnv *Core::GetEnv() {
+    JNIEnv* env = NULL;
+
+    if (Core::Bootstrap->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_EDETACHED) {
+        return env;
+    }
+
+    Core::Bootstrap->AttachCurrentThread(&env, 0);
+
+    return env;
 }
 
 #ifdef _WIN32

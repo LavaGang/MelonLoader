@@ -17,7 +17,10 @@ public:
     static HINSTANCE Bootstrap;
 #elif defined(__ANDROID__)
     static JavaVM* Bootstrap;
+
+    [[deprecated("use Core::GetEnv()")]]
     static JNIEnv* Env;
+    static JNIEnv* GetEnv();
 #endif
 
 	static char* Path;
