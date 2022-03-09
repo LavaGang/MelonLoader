@@ -2,6 +2,7 @@
 
 TEMP_MONO_BCL=$(realpath "$HOME/CLionProjects/melonloader-mono/sdks/out/android-bcl/monodroid")
 TEMP_MONO_BINARIES=$(realpath "$HOME/CLionProjects/melonloader-mono/sdks/out/android-arm64-v8a-debug/lib")
+TEMP_BHAPTICS_BINARY=$(realpath "$HOME/CLionProjects/MelonLoader/bhaptics_experiments/bhaptics_core/jni/arm64-v8a/libbhaptics-native-lib.so")
 
 PROJECT_DIR=$(realpath "$(dirname -- "$(readlink -f -- "${BASH_SOURCE}")")/../")
 BASE_DIR=$(realpath "$(dirname -- "$(readlink -f -- "${BASH_SOURCE}")")")
@@ -38,3 +39,4 @@ cp "${PROJECT_DIR}/${BOOTSTRAP_COMPILE_SUB_PATH}/libBootstrap.so" "${OUTPUT_BASE
 cp "${PROJECT_DIR}/${BOOTSTRAP_COMPILE_SUB_PATH}/funchook/libfunchook.so" "${OUTPUT_BASE}/native/"
 cp "${PROJECT_DIR}/${BOOTSTRAP_COMPILE_SUB_PATH}/capstone/libcapstone.so" "${OUTPUT_BASE}/native/"
 cp ${TEMP_MONO_BINARIES}/*.so "${OUTPUT_BASE}/native/"
+cp "${TEMP_BHAPTICS_BINARY}" "${OUTPUT_BASE}/native/"

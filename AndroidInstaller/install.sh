@@ -24,10 +24,14 @@ mkdir -p "${OUTPUT_DIR}/patched"
 
 cp "${TARGET_APK}" "${MODIFIED_APK}"
 
+echo "unpacking dex"
+
 # Patch APK dex
 unzip -jo "${MODIFIED_APK}" "*.dex" -d "${OUTPUT_DIR}/source"
 echo "${OUTPUT_DIR}/patched" "${OUTPUT_DIR}/source" "${DEPENDENCIES_DIR}/dex"
 bin/dexpatcher --output "${OUTPUT_DIR}/patched" "${OUTPUT_DIR}/source" "${DEPENDENCIES_DIR}/dex"
+
+echo "loading additional files"
 
 # Prepare managed files
 mkdir -p "${OUTPUT_DIR}/patched/assets/melonloader/etc/managed/"
@@ -38,8 +42,8 @@ mkdir -p "${OUTPUT_DIR}/patched/assets/melonloader/etc/managed/etc/"
 cp ${DEPENDENCIES_DIR}/core/* "${OUTPUT_DIR}/patched/assets/melonloader/etc/"
 
 # Prepare support modules
-mkdir -p "${OUTPUT_DIR}/patched/assets/melonloader/etc/managed/etc/support/"
-cp ${DEPENDENCIES_DIR}/support_modules/* "${OUTPUT_DIR}/patched/assets/melonloader/etc/managed/etc/support/"
+mkdir -p "${OUTPUT_DIR}/patched/assets/melonloader/etc/support/"
+cp ${DEPENDENCIES_DIR}/support_modules/* "${OUTPUT_DIR}/patched/assets/melonloader/etc/support/"
 
 # Prepare assembly generation managed
 mkdir -p "${OUTPUT_DIR}/patched/assets/melonloader/etc/assembly_generation/managed/"
@@ -56,9 +60,13 @@ mkdir -p "${OUTPUT_DIR}/patched/lib/arm64-v8a/"
 cp "${DEPENDENCIES_DIR}"/native/*.so "${OUTPUT_DIR}/patched/lib/arm64-v8a/"
 cp "${UNITY_NATIVE_LIBS_PATH}/arm64-v8a/libunity.so" "${OUTPUT_DIR}/patched/lib/arm64-v8a/"
 
+echo "repacking"
+
 # Re-pack APK
 zip -d "${MODIFIED_APK}" "*.dex" "META-INF/*" "lib/*/libunity.so"
 (cd "${OUTPUT_DIR}/patched/" && zip -ur $MODIFIED_APK .)
+
+echo "signing"
 
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "${BASE_DIR}/bin/dev.keystore" -storepass "123456" "${MODIFIED_APK}" alias_name
 zipalign 4 "${MODIFIED_APK}" "${MODIFIED_APK}.align"
