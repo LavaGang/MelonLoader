@@ -5,7 +5,7 @@
 #include "../Utils/Assertion.h"
 #include "../Utils/Console/CommandLine.h"
 #include "../Utils/Console/Debug.h"
-#include "../Base/Core.h"
+#include "../Core.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
 #include "Il2Cpp.h"
@@ -98,6 +98,9 @@ MONODEF(mono_print_unhandled_exception)
 MONODEF(mono_dllmap_insert)
 
 MONODEF(mono_domain_get)
+MONODEF(mono_melonloader_set_thread_checker)
+MONODEF(mono_thread_attach)
+MONODEF(mono_melonloader_thread_suspend_reload)
 
 #undef MONODEF
 #pragma endregion MonoDeclare
@@ -332,6 +335,7 @@ void Mono::CreateDomain(const char* name)
 //	}
     domain = Exports::mono_jit_init(name);
     Exports::mono_thread_set_main(Exports::mono_thread_current());
+//    Exports::mono_thread_a
 #else
 	Debug::Msg("Jit init");
 	domain = Exports::mono_jit_init(name);
@@ -397,6 +401,11 @@ bool Mono::Exports::Initialize()
 		MONODEF(mono_domain_get)
 
 
+        MONODEF(mono_melonloader_set_thread_checker)
+        MONODEF(mono_thread_attach)
+        MONODEF(mono_melonloader_thread_suspend_reload)
+
+
 		if (!IsOldMono)
 		{
 			MONODEF(mono_domain_set_config)
@@ -439,7 +448,8 @@ bool Mono::Exports::Initialize()
     mono_dllmap_insert(NULL, "System.Net.Security.Native", NULL, "libmono-native.so", NULL);
 
 	mono_dllmap_insert(NULL, "GameAssembly", NULL, "libil2cpp.so", NULL);
-	
+	mono_dllmap_insert(NULL, "haptic_library", NULL, "libbhaptics-native-lib.so", NULL);
+
 	return Assertion::ShouldContinue;
 }
 
@@ -471,6 +481,8 @@ bool Mono::ApplyPatches()
 	// Patches::mono_unity_get_unitytls_interface = new Patcher((void**)&Exports::mono_unity_get_unitytls_interface, (void*)Hooks::mono_unity_get_unitytls_interface);
 
 	// Patches::mono_unity_get_unitytls_interface->ApplyPatch();
+
+    Exports::mono_melonloader_set_thread_checker(CheckThread);
 
 	return true;
 }
@@ -524,6 +536,22 @@ bool Mono::InitMonoJNI()
 	env->CallStaticVoidMethod(jMonoDroidHelper, jLoadApplication);
 	return true;
 }
+
+bool Mono::CheckThread(pthread_t tid) {
+    Debug::Msgf("checking: %p", tid);
+
+    size_t size;
+    auto threads = Il2Cpp::Exports::il2cpp_thread_get_all_attached_threads(&size);
+
+    for (size_t i = 0; i < size; i++) {
+        Debug::Msgf("Il2Cpp Thread: [%p]", threads[i]->internal_thread->tid);
+        if (threads[i]->internal_thread->tid == tid)
+            return false;
+    }
+
+    return true;
+}
+
 #endif
 
 #pragma region Hooks

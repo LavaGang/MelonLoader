@@ -172,6 +172,8 @@ public:
 	public:
 		static bool Initialize();
 
+        typedef bool (*tCheckThread) (pthread_t tid);
+
 #pragma region MonoDefine
 #define MONODEF(rt, fn, args) typedef rt (* fn##_t) args; static fn##_t fn;
 
@@ -226,6 +228,9 @@ public:
 		MONODEF(void, mono_dllmap_insert, (Image* assembly, const char* dll, const char* func, const char* tdll, const char* tfunc))
 
 		MONODEF(Domain*, mono_domain_get, ())
+        MONODEF(void, mono_melonloader_set_thread_checker, (tCheckThread callback))
+        MONODEF(Thread*, mono_thread_attach, (Domain* domain))
+        MONODEF(void, mono_melonloader_thread_suspend_reload, (void))
 
 #undef MONODEF
 #pragma endregion MonoDefine
@@ -259,4 +264,6 @@ private:
 	static jclass jMonoDroidHelper;
 	static jmethodID jLoadApplication;
 #endif
+
+    static bool CheckThread(pthread_t tid);
 };
