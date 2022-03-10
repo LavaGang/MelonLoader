@@ -10,3 +10,12 @@
 [submodule "external/BHapticsHapticLibrary"]
     path = external/BHapticsHapticLibrary
     url = https://github.com/bhaptics/haptic-library.git
+[submodule "external/BHapticsHapticLibrary"]
+    path = external/BHapticsHapticLibrary
+    url = https://github.com/bhaptics/haptic-library.git
+[submodule "Bootstrap/external/capstone"]
+    path = Bootstrap/external/capstone
+	url = https://github.com/capstone-engine/capstone.git
+[submodule "Bootstrap/external/funchook"]
+    path = Bootstrap/external/funchook
+	url = https://github.com/kubo/funchook.git
