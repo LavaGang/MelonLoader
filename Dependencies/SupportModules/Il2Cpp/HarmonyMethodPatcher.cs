@@ -11,7 +11,6 @@ using MonoMod.Utils;
 using MonoMod.Cil;
 using UnhollowerBaseLib;
 using MelonLoader.InternalUtils;
-using MelonLoader.Attributes;
 
 namespace MelonLoader.Support
 {
@@ -24,8 +23,6 @@ namespace MelonLoader.Support
         private IntPtr copiedMethodInfoPointer;
         private IntPtr methodDetourPointer;
         private bool hasWarned = false;
-
-        internal ManagedMethodPatcher managedPatcher;
 
         private delegate void PatchTools_RememberObject_Delegate(object key, object value);
         private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;
@@ -43,11 +40,7 @@ namespace MelonLoader.Support
         {
             if (Main.unhollower.IsInheritedFromIl2CppObjectBase(args.Original.DeclaringType)
                 && !Main.unhollower.IsInjectedType(args.Original.DeclaringType))
-            {
-                HarmonyMethodPatcher newpatcher = new HarmonyMethodPatcher(args.Original);
-                newpatcher.managedPatcher = new ManagedMethodPatcher(args.Original);
-                args.MethodPatcher = newpatcher;
-            }
+                args.MethodPatcher = new HarmonyMethodPatcher(args.Original);
         }
 
         private HarmonyMethodPatcher(MethodBase original) : base(original)
@@ -58,25 +51,6 @@ namespace MelonLoader.Support
 
         public override MethodBase DetourTo(MethodBase replacement)
         {
-            PatchInfo info = Original.GetPatchInfo();
-            Patch last_prefix = info.prefixes.LastOrDefault();
-            Patch last_postfix = info.postfixes.LastOrDefault();
-            if (((last_prefix != null) 
-                && ((last_prefix.PatchMethod.GetCustomAttribute<HideFromIl2CppHarmonyPatcherAttribute>() != null) 
-                || (last_prefix.PatchMethod.DeclaringType.GetCustomAttribute<HideFromIl2CppHarmonyPatcherAttribute>() != null)))
-                 || ((last_postfix != null) &&
-                    ((last_postfix.PatchMethod.GetCustomAttribute<HideFromIl2CppHarmonyPatcherAttribute>() != null) 
-                    || (last_postfix.PatchMethod.DeclaringType.GetCustomAttribute<HideFromIl2CppHarmonyPatcherAttribute>() != null))))
-            {
-                var dmd = managedPatcher.PrepareOriginal();
-                if (dmd != null)
-                {
-                    var ctx = new ILContext(dmd.Definition);
-                    HarmonyManipulator.Manipulate(Original, Original.GetPatchInfo(), ctx);
-                }
-                return managedPatcher.DetourTo(dmd?.Generate());
-            }
-
             DebugCheck();
 
             DynamicMethodDefinition newreplacementdmd = CopyOriginal();
