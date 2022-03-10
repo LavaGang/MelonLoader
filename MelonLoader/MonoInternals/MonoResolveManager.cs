@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using MelonLoader.MonoInternals.ResolveInternals;
 
@@ -28,14 +29,6 @@ namespace MelonLoader.MonoInternals
             {
                 "MelonLoader",
                 "MelonLoader.ModHandler",
-                "Mono.Cecil",
-                "Mono.Cecil.Mdb",
-                "Mono.Cecil.Pdb",
-                "Mono.Cecil.Rocks",
-                "MonoMod.RuntimeDetour",
-                "MonoMod.Utils",
-                "0Harmony",
-                "Tomlet"
             };
             Assembly base_assembly = typeof(MonoResolveManager).Assembly;
             foreach (string assemblyName in assembly_list)
