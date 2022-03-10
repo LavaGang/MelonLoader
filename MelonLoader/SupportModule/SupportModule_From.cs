@@ -12,5 +12,6 @@
         public void OnGUI() => MelonHandler.OnGUI();
         public void Quit() => Core.Quit();
         public void BONEWORKS_OnLoadingScreen() => MelonHandler.BONEWORKS_OnLoadingScreen();
+        public void SetUnhollowerSupportInterface(UnhollowerSupport.Interface inter) { if (UnhollowerSupport.SMInterface == null) UnhollowerSupport.SMInterface = inter; }
     }
 }

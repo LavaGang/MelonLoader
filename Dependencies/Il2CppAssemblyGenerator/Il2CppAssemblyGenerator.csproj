@@ -16,20 +16,23 @@
 		<DebugType>None</DebugType>
 		<DefineConstants />
 	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject />
-	</PropertyGroup>
 	<ItemGroup>
-		<Reference Include="System.IO.Compression" />
+		<Reference Include="AssetRipper.VersionUtilities">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Tomlet">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="MelonLoader">
-			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(OutputPath)..\..\AssetRipper.VersionUtilities.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
+	  <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj">
+	    <Private>false</Private>
+	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+	  </ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="System.IO.Compression" />
 	</ItemGroup>
 </Project>

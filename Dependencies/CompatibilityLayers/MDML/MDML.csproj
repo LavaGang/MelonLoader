@@ -17,9 +17,9 @@
 		<DefineConstants />
 	</PropertyGroup>
 	<ItemGroup>
-		<Reference Include="MelonLoader">
-			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
+	  <ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj">
+	    <Private>false</Private>
+	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+	  </ProjectReference>
 	</ItemGroup>
 </Project>

@@ -14,21 +14,18 @@
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DebugType>None</DebugType>
-	<DefineConstants />
+		<DefineConstants />
 	</PropertyGroup>
-		<ItemGroup>
-			<Compile Include="..\..\..\MelonLoader\Properties\BuildInfo.cs" Link="Properties\BuildInfo.cs" />
-				<Compile Update="Properties\Resources.Designer.cs">
-				<AutoGen>True</AutoGen>
-				<DesignTime>True</DesignTime>
-				<DependentUpon>Resources.resx</DependentUpon>
-			</Compile>
-		</ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\..\..\MelonLoader\Properties\BuildInfo.cs" Link="Properties\BuildInfo.cs" />
+			<Compile Update="Properties\Resources.Designer.cs">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
 	<ItemGroup>
 		<Content Include="Resources\System.Core.dll" />
 		<Content Include="Resources\System.dll" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
 	</ItemGroup>
 </Project>

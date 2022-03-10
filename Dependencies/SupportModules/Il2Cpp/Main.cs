@@ -13,7 +13,8 @@ namespace MelonLoader.Support
 {
     internal static class Main
     {
-        internal static ISupportModule_From Interface = null;
+        internal static ISupportModule_From Interface;
+        internal static UnhollowerInterface unhollower;
         internal static GameObject obj = null;
         internal static SM_Component component = null;
 
@@ -63,6 +64,10 @@ namespace MelonLoader.Support
 
             ClassInjector.RegisterTypeInIl2Cpp<SM_Component>();
             SM_Component.Create();
+            unhollower = new UnhollowerInterface();
+            Interface.SetUnhollowerSupportInterface(unhollower);
+            HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyMethodPatcher.TryResolve;
+
             return new SupportModule_To();
         }
 

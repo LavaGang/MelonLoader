@@ -16,25 +16,20 @@
 		<DebugType>None</DebugType>
 		<DefineConstants />
 	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject />
-	</PropertyGroup>
 	<ItemGroup>
 		<Compile Update="Properties\Resources.Designer.cs">
 			<AutoGen>True</AutoGen>
 			<DesignTime>True</DesignTime>
 			<DependentUpon>Resources.resx</DependentUpon>
 		</Compile>
-		<Reference Include="MelonLoader">
-			<HintPath>$(OutputPath)..\MelonLoader.dll</HintPath>
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="AssetRipper.VersionUtilities">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Tomlet">
-			<HintPath>$(OutputPath)..\Tomlet.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(OutputPath)..\AssetRipper.VersionUtilities.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
@@ -43,5 +38,11 @@
 		<None Include="Resources\Loading_Melon.dat" />
 		<None Include="Resources\Logo_Lemon.dat" />
 		<None Include="Resources\Logo_Melon.dat" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj">
+	    <Private>false</Private>
+	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+	  </ProjectReference>
 	</ItemGroup>
 </Project>

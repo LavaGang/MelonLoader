@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net;
 using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
 
@@ -18,6 +17,7 @@ namespace MelonLoader
 
             MelonUtils.Setup(curDomain);
             Assertions.LemonAssertMapping.Setup();
+            MelonHandler.Setup();
 
             if (!MonoLibrary.Setup()
                 || !MonoResolveManager.Setup())
@@ -65,8 +65,6 @@ namespace MelonLoader
             if (!SupportModule.Setup())
                 return 1;
 
-            if (MelonUtils.IsGameIl2Cpp())
-                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
             MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
             AddUnityDebugLog();
             MelonHandler.OnApplicationStart_Mods();

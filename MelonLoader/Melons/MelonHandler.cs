@@ -11,6 +11,8 @@ namespace MelonLoader
 {
 	public static class MelonHandler
     {
+        private static LemonSHA256 sha256 = new LemonSHA256();
+
         /// <summary>
         /// Directory of Plugins.
         /// </summary>
@@ -33,8 +35,7 @@ namespace MelonLoader
         public static List<MelonMod> Mods { get => _Mods.AsReadOnly().ToList(); }
         internal static List<MelonMod> _Mods = new List<MelonMod>();
 
-        private static LemonSHA256 sha256 = new LemonSHA256();
-        static MelonHandler()
+        internal static void Setup()
         {
             PluginsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Plugins");
             if (!Directory.Exists(PluginsDirectory))

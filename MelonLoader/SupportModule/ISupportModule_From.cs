@@ -12,5 +12,6 @@
         void OnGUI();
         void Quit();
         void BONEWORKS_OnLoadingScreen();
+        void SetUnhollowerSupportInterface(UnhollowerSupport.Interface inter);
     }
 }

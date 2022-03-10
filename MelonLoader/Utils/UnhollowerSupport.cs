@@ -1,74 +1,79 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader
 {
     public static class UnhollowerSupport
     {
-        internal static Type IL2CPPType = null;
-        internal static Type Il2CppObjectBaseType = null;
-        internal static MethodInfo CopyMethodInfoStructMethod = null;
-        internal static MethodInfo Il2CppObjectBaseToPtrMethod = null;
-        internal static MethodInfo Il2CppStringToManagedMethod = null;
-        internal static MethodInfo ManagedStringToIl2CppMethod = null;
-        internal static MethodInfo GetIl2CppMethodInfoPointerFieldForGeneratedMethod = null;
-        internal static MethodInfo ClassInjectorRegisterTypeInIl2Cpp = null;
-        private static Type Il2CppCallerCountAttributeType = null;
-        private static FieldInfo Il2CppCallerCountField = null;
+        public interface Interface
+        {
+            bool IsInheritedFromIl2CppObjectBase(Type type);
+            public bool IsInjectedType(Type type);
+            public IntPtr GetClassPointerForType(Type type);
+            FieldInfo MethodBaseToIl2CppFieldInfo(MethodBase method);
+            int? GetIl2CppMethodCallerCount(MethodBase method);
+            void RegisterTypeInIl2CppDomain(Type type, bool logSuccess);
+            IntPtr CopyMethodInfoStruct(IntPtr ptr);
+        }
+        internal static Interface SMInterface;
 
-        static UnhollowerSupport()
+        private static void ValidateInterface()
         {
             if (!MelonUtils.IsGameIl2Cpp())
-                return;
-            Assembly UnhollowerBaseLib = Assembly.Load("UnhollowerBaseLib");
-            if (UnhollowerBaseLib == null)
-            {
-                MelonLogger.ThrowInternalFailure("Failed to Load Assembly for UnhollowerBaseLib!");
-                return;
-            }
-            IL2CPPType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.IL2CPP");
-            Il2CppObjectBaseType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Il2CppObjectBase");
-            CopyMethodInfoStructMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Runtime.UnityVersionHandler").GetMethod("CopyMethodInfoStruct");
-            Il2CppObjectBaseToPtrMethod = IL2CPPType.GetMethod("Il2CppObjectBaseToPtr");
-            Il2CppStringToManagedMethod = IL2CPPType.GetMethod("Il2CppStringToManaged");
-            ManagedStringToIl2CppMethod = IL2CPPType.GetMethod("ManagedStringToIl2Cpp");
-            ClassInjectorRegisterTypeInIl2Cpp = UnhollowerBaseLib.GetType("UnhollowerRuntimeLib.ClassInjector").GetMethods().First(x => x.Name.Equals("RegisterTypeInIl2Cpp") && !x.IsGenericMethod && (x.GetParameters().Count() == 2));
-            GetIl2CppMethodInfoPointerFieldForGeneratedMethod = UnhollowerBaseLib.GetType("UnhollowerBaseLib.UnhollowerUtils").GetMethod("GetIl2CppMethodInfoPointerFieldForGeneratedMethod");
-            Il2CppCallerCountAttributeType = UnhollowerBaseLib.GetType("UnhollowerBaseLib.Attributes.CallerCountAttribute");
-            Il2CppCallerCountField = Il2CppCallerCountAttributeType.GetField("Count", BindingFlags.Public | BindingFlags.Instance);
+                throw new Exception("MelonLoader.UnhollowerSupport can't be used on Non-Il2Cpp Games");
+            if (SMInterface == null)
+                throw new NullReferenceException("SMInterface cannot be null.");
         }
 
-        public static bool IsGeneratedAssemblyType(Type type) => (Il2CppObjectBaseType != null) && (type != null) && type.IsSubclassOf(Il2CppObjectBaseType);
+        public static bool IsGeneratedAssemblyType(Type type)
+            => IsInheritedFromIl2CppObjectBase(type) && !IsInjectedType(type);
+
+        public static bool IsInheritedFromIl2CppObjectBase(Type type)
+        {
+            ValidateInterface();
+            if (type == null)
+                throw new NullReferenceException("The type cannot be null.");
+            return SMInterface.IsInheritedFromIl2CppObjectBase(type);
+        }
+
+        public static bool IsInjectedType(Type type)
+        {
+            ValidateInterface();
+            if (type == null)
+                throw new NullReferenceException("The type cannot be null.");
+            return SMInterface.IsInjectedType(type);
+        }
+
+        public static IntPtr GetClassPointerForType(Type type)
+        {
+            ValidateInterface();
+            if (type == null)
+                throw new NullReferenceException("The type cannot be null.");
+            return SMInterface.GetClassPointerForType(type);
+        }
 
         public static IntPtr MethodBaseToIl2CppMethodInfoPointer(MethodBase method)
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                throw new Exception("MethodBaseToIl2CppMethodInfoPointer can't be used on Non-Il2Cpp Games");
+            ValidateInterface();
             if (method == null)
                 throw new NullReferenceException("The method cannot be null.");
-            FieldInfo methodPtr = (FieldInfo)GetIl2CppMethodInfoPointerFieldForGeneratedMethod.Invoke(null, new object[] { method });
-            if (methodPtr == null)
-                throw new NotSupportedException($"Cannot get IntPtr for {method.Name} as there is no corresponding IL2CPP method");
-            return (IntPtr)methodPtr.GetValue(null);
+            FieldInfo field = MethodBaseToIl2CppFieldInfo(method);
+            if (field == null)
+                return IntPtr.Zero;
+            return (IntPtr)field.GetValue(null);
         }
 
         public static FieldInfo MethodBaseToIl2CppFieldInfo(MethodBase method)
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                throw new Exception("MethodBaseToIl2CppFieldInfo can't be used on Non-Il2Cpp Games");
+            ValidateInterface();
             if (method == null)
                 throw new NullReferenceException("The method cannot be null.");
-            FieldInfo methodPtr = (FieldInfo)GetIl2CppMethodInfoPointerFieldForGeneratedMethod.Invoke(null, new object[] { method });
-            if (methodPtr == null)
-                throw new NotSupportedException($"Cannot get IntPtr for {method.Name} as there is no corresponding IL2CPP method");
-            return methodPtr;
+            return SMInterface.MethodBaseToIl2CppFieldInfo(method);
         }
 
         public static T Il2CppObjectPtrToIl2CppObject<T>(IntPtr ptr)
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                throw new Exception("Il2CppObjectPtrToIl2CppObject can't be used on Non-Il2Cpp Games");
+            ValidateInterface();
             if (ptr == IntPtr.Zero)
                 throw new NullReferenceException("The ptr cannot be IntPtr.Zero.");
             if (!IsGeneratedAssemblyType(typeof(T)))
@@ -76,24 +81,27 @@ namespace MelonLoader
             return (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
         }
 
-        public static int? GetIl2CppMethodCallerCount(MethodBase original)
+        public static int? GetIl2CppMethodCallerCount(MethodBase method)
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                throw new Exception("GetIl2CppMethodCallerCount can't be used on Non-Il2Cpp Games");
-            object[] callerCountAttributes = original.GetCustomAttributes(Il2CppCallerCountAttributeType, false);
-            if (callerCountAttributes.Length != 1)
-                return null;
-            return (int)Il2CppCallerCountField.GetValue(callerCountAttributes[0]);
+            ValidateInterface();
+            if (method == null)
+                throw new NullReferenceException("The method cannot be null.");
+            return SMInterface.GetIl2CppMethodCallerCount(method);
         }
 
         public static void RegisterTypeInIl2CppDomain(Type type) => RegisterTypeInIl2CppDomain(type, true);
         public static void RegisterTypeInIl2CppDomain(Type type, bool logSuccess)
         {
-            if (!MelonUtils.IsGameIl2Cpp())
-                throw new Exception("RegisterTypeInIl2CppDomain can't be used on Non-Il2Cpp Games");
+            ValidateInterface();
             if (type == null)
                 throw new NullReferenceException("The type cannot be null.");
-            ClassInjectorRegisterTypeInIl2Cpp.Invoke(null, new object[] { type , logSuccess });
+            SMInterface.RegisterTypeInIl2CppDomain(type, logSuccess);
+        }
+
+        public static IntPtr CopyMethodInfoStruct(IntPtr ptr)
+        {
+            ValidateInterface();
+            return SMInterface.CopyMethodInfoStruct(ptr);
         }
     }
 }

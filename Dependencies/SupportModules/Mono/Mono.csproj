@@ -21,18 +21,18 @@
 			<HintPath>Libs\UnityEngine.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+		<Reference Include="Tomlet">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\Il2Cpp\UnityMappers.cs" Link="UnityMappers.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="MelonLoader">
-			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="Tomlet">
-			<HintPath>$(OutputPath)..\..\Tomlet.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
+	  <ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj">
+	    <Private>false</Private>
+	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+	  </ProjectReference>
 	</ItemGroup>
 </Project>

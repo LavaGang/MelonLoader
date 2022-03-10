@@ -9,7 +9,7 @@ namespace MelonLoader.InternalUtils
      * Used to prevent false-positive "IL2CPP method got inlined, patch may not work" warnings.
      * Put in its own static class to prevent unnecessary initialization for Mono games.
      */
-    internal static class UnityMagicMethods
+    public static class UnityMagicMethods
     {
 
         private static Type MonoBehaviourType = null;
@@ -108,7 +108,7 @@ namespace MelonLoader.InternalUtils
             };
         }
 
-        internal static bool IsUnityMagicMethod(MethodBase method)
+        public static bool IsUnityMagicMethod(MethodBase method)
         {
             if (method == null
                 || method.IsStatic

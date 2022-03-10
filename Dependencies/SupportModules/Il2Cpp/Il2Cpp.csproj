@@ -38,20 +38,34 @@
 			<HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="MelonLoader">
-			<HintPath>$(OutputPath)..\..\MelonLoader.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="Tomlet">
-			<HintPath>$(OutputPath)..\..\Tomlet.dll</HintPath>
+		<Reference Include="0Harmony">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(OutputPath)..\..\AssetRipper.VersionUtilities.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Mono.Cecil">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Mono.Cecil.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="MonoMod.Utils">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\MonoMod.Utils.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Tomlet">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\Mono\SM_Component.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj">
+	    <Private>false</Private>
+	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+	  </ProjectReference>
 	</ItemGroup>
 </Project>

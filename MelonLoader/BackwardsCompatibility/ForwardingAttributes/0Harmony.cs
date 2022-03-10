@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+#pragma warning disable 0618
 
 [assembly: TypeForwardedTo(typeof(HarmonyLib.DelegateTypeFactory))]
 [assembly: TypeForwardedTo(typeof(HarmonyLib.GetterHandler<,>))]

@@ -20,6 +20,14 @@
 	<PropertyGroup>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
 	</PropertyGroup>
+	<ItemDefinitionGroup>
+		  <PackageReference>
+				 <PrivateAssets>all</PrivateAssets>
+		  </PackageReference>
+		  <ProjectReference>
+				 <PrivateAssets>all</PrivateAssets>
+		  </ProjectReference>
+   </ItemDefinitionGroup>
 	<ItemGroup>
 		<Compile Update="Properties\Resources.Designer.cs">
 			<AutoGen>True</AutoGen>
