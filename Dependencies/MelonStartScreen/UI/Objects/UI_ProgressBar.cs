@@ -15,13 +15,21 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
         {
             config = progressBarSettings;
             text = new UI_Text(textSettings);
+
             innerTexture = UIUtils.CreateColorTexture(config.InnerColor);
+            innerTexture.hideFlags = HideFlags.HideAndDontSave;
+            innerTexture.DontDestroyOnLoad();
+
             outerTexture = UIUtils.CreateColorTexture(config.OuterColor);
+            outerTexture.hideFlags = HideFlags.HideAndDontSave;
+            outerTexture.DontDestroyOnLoad();
+
+            AllElements.Add(this);
         }
 
         internal override void Render()
         {
-            if (config.Enabled)
+            if (config.Enabled && (outerTexture != null) && (UIStyleValues.Background.solidTexture != null) && (innerTexture != null))
             {
                 UIUtils.AnchorToScreen(config.ScreenAnchor, config.Position.Item1, config.Position.Item2, out int anchor_x, out int anchor_y);
                 UIUtils.AnchorToObject(config.Anchor, anchor_x, anchor_y, config.Size.Item1, config.Size.Item2, out anchor_x, out anchor_y);
@@ -32,6 +40,24 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             }
 
             text?.Render();
+        }
+
+        internal override void Dispose()
+        {
+            if (innerTexture != null)
+            {
+                innerTexture.DestroyImmediate();
+                innerTexture = null;
+            }
+
+            if (outerTexture != null)
+            {
+                outerTexture.DestroyImmediate();
+                outerTexture = null;
+            }
+
+            if (text != null)
+                text.Dispose();
         }
     }
 }

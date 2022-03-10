@@ -26,7 +26,6 @@ namespace UnhollowerMini
             myGcHandle = UnityInternals.gchandle_new(pointer, false);
         }
 
-
         ~InternalObjectBase()
         {
             UnityInternals.gchandle_free(myGcHandle);

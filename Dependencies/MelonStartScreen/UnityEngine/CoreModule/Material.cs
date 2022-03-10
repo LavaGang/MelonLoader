@@ -3,7 +3,7 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    internal class Material : InternalObjectBase
+    internal class Material : UnityObject
     {
         private delegate bool d_SetPass(IntPtr @this, int pass);
         private static readonly d_SetPass m_SetPass;

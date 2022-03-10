@@ -5,7 +5,7 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    internal class Texture : InternalObjectBase
+    internal class Texture : UnityObject
     {
         private delegate int GetDataWidthDelegate(IntPtr @this);
         private delegate int GetDataHeightDelegate(IntPtr @this);

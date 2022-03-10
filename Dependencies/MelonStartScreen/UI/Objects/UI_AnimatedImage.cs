@@ -24,18 +24,24 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             List<Texture2D> images = new List<Texture2D>();
             while (img != null)
             {
-                images.Add(img.CreateTexture(config.Filter));
+                Texture2D newtexture = img.CreateTexture(config.Filter);
+                newtexture.hideFlags = HideFlags.HideAndDontSave;
+                newtexture.DontDestroyOnLoad();
+
+                images.Add(newtexture);
                 img = decoder.NextImage();
             }
 
             textures = images.ToArray();
             MainTexture = textures[0];
             AspectRatio = MainTexture.width / (float)MainTexture.height;
+
+            AllElements.Add(this);
         }
 
         internal override void Render()
         {
-            if (!config.Enabled)
+            if (!config.Enabled || (textures == null) || (textures.Length <= 0))
             {
                 if (stopwatch.IsRunning)
                     stopwatch.Stop();
@@ -67,6 +73,18 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             MainTexture = textures[image];
 
             base.Render(x, y, width, height);
+        }
+
+        internal override void Dispose()
+        {
+            if ((textures == null) || (textures.Length <= 0))
+                return;
+
+            foreach (Texture2D texture in textures)
+                texture.DestroyImmediate();
+
+            textures = null;
+            MainTexture = null;
         }
     }
 }

@@ -3,7 +3,7 @@ using UnhollowerMini;
 
 namespace UnityEngine
 {
-    internal class Font : InternalObjectBase
+    internal class Font : UnityObject
     {
         private static IntPtr m_get_material;
 

@@ -11,8 +11,12 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
         internal UI_Background(UIConfig.cBackground backgroundSettings)
         {
             config = backgroundSettings;
-            solidTexture = UIUtils.CreateColorTexture(config.SolidColor);
             image = UIUtils.LoadImage(config, "Background");
+
+            solidTexture = UIUtils.CreateColorTexture(config.SolidColor);
+            solidTexture.hideFlags = HideFlags.HideAndDontSave;
+            solidTexture.DontDestroyOnLoad();
+            AllElements.Add(this);
         }
 
         internal override void Render()
@@ -20,7 +24,8 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             int sw = Screen.width;
             int sh = Screen.height;
 
-            Graphics.DrawTexture(new Rect(0, 0, sw, sh), solidTexture);
+            if (solidTexture != null)
+                Graphics.DrawTexture(new Rect(0, 0, sw, sh), solidTexture);
 
             if (image != null)
             {
@@ -29,6 +34,15 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
                 else
                     image.Render();
             }
+        }
+
+        internal override void Dispose()
+        {
+            if (solidTexture == null)
+                return;
+
+            solidTexture.DestroyImmediate();
+            solidTexture = null;
         }
     }
 }

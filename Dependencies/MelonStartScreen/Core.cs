@@ -51,18 +51,27 @@ namespace MelonLoader.MelonStartScreen
                     return functionToWaitForAsync();
 
                 MelonDebug.Msg("Initializing Screen Renderer");
-                ScreenRenderer.Init();
+                if (!ScreenRenderer.Init())
+                {
+                    UI.Objects.UI_Object.DisposeOfAll();
+                    return functionToWaitForAsync();
+                }
                 MelonDebug.Msg("Screen Renderer initialized");
 
                 RegisterMessageCallbacks();
 
                 // Initial render
                 ScreenRenderer.Render();
+                if (ScreenRenderer.disabled)
+                {
+                    UI.Objects.UI_Object.DisposeOfAll();
+                    return functionToWaitForAsync();
+                }
             }
             catch (Exception e)
             {
                 MelonLogger.Error(e);
-                ScreenRenderer.disabled = true;
+                UI.Objects.UI_Object.DisposeOfAll();
                 return functionToWaitForAsync();
             }
 
@@ -300,6 +309,7 @@ namespace MelonLoader.MelonStartScreen
 
             ScreenRenderer.UpdateMainProgress("Starting game...", 1f);
             ScreenRenderer.Render(); // Final render, to set the progress bar to 100%
+            UI.Objects.UI_Object.DisposeOfAll();
         }
 
         #endregion

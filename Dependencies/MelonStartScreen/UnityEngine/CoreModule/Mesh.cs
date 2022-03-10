@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 
 namespace UnityEngine
 {
-    internal sealed class Mesh : InternalObjectBase
+    internal sealed class Mesh : UnityObject
     {
         private delegate void SetArrayForChannelImpl_2017(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize);
         private delegate void SetArrayForChannelImpl_2019(IntPtr @this, int channel, int format, int dim, IntPtr values, int arraySize, int valuesStart, int valuesCount);

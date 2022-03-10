@@ -125,6 +125,7 @@ namespace MelonLoader.MelonStartScreen
                 1000f,
                 @"Initialization - Checking GameAssembly"
             ),
+
             // Cpp2IL
             // Slaynash: I skipped a lot of steps taking less than 100ms, but we may want to add them back for slower platforms
             new AverageStepDuration(
@@ -182,34 +183,7 @@ namespace MelonLoader.MelonStartScreen
                 4000f,
                 "Cpp2IL - Saving assemblies"
             ),
-            /*
-            // Il2CppDumper
-            (
-                @"Initializing metadata\.\.\.",
-                3500f,
-                null
-            ),
-            (
-                @"Initializing il2cpp file\.\.\.",
-                1800f,
-                null
-            ),
-            (
-                @"Dumping\.\.\.",
-                1400f,
-                null
-            ),
-            (
-                @"Generate struct\.\.\.",
-                26000f,
-                null
-            ),
-            (
-                @"Generate dummy dll\.\.\.",
-                13000f,
-                null
-            ),
-            */
+
             // Il2CppAssemblyUnhollower
             new AverageStepDuration(
                 @"Reading assemblies\.\.\.",
@@ -301,18 +275,6 @@ namespace MelonLoader.MelonStartScreen
                 132f,
                 "Il2CppAssemblyUnhollower - Creating type getters"
             ),
-            /*
-            (
-                @"Creating non-blittable struct constructors\.\.\.",
-                38f,
-                "Il2CppAssemblyUnhollower - Creating non-blittable struct constructors"
-            ),
-            (
-                @"Creating generic method static constructors\.\.\.",
-                42f,
-                "Il2CppAssemblyUnhollower - Creating generic method static constructors"
-            ),
-            */
             new AverageStepDuration(
                 @"Creating field accessors\.\.\.",
                 1642f,
@@ -373,6 +335,7 @@ namespace MelonLoader.MelonStartScreen
                 89f,
                 "Il2CppAssemblyUnhollower - Writing method pointer map"
             ),
+
             // Move files
             new AverageStepDuration(
                 @"Deleting .*\.dll",

@@ -10,7 +10,6 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
         internal Texture2D MainTexture;
         internal float AspectRatio;
 
-        internal UI_Image() { }
         internal UI_Image(UIConfig.ImageSettings imageSettings, string filepath) => LoadImage(imageSettings, File.ReadAllBytes(filepath));
         internal UI_Image(UIConfig.ImageSettings imageSettings, byte[] filedata) => LoadImage(imageSettings, filedata);
 
@@ -25,11 +24,18 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
                 throw new Exception("ImageConversion.LoadImage Failed!");
 
             AspectRatio = MainTexture.width / (float)MainTexture.height;
+
+            MainTexture.hideFlags = HideFlags.HideAndDontSave;
+            MainTexture.DontDestroyOnLoad();
+
+            AllElements.Add(this);
         }
 
         internal override void Render()
         {
             if (!config.Enabled)
+                return;
+            if (MainTexture == null)
                 return;
 
             int aspectHeight = config.MaintainAspectRatio ? (int)(config.Size.Item1 / AspectRatio) : config.Size.Item2;
@@ -45,6 +51,15 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             if (!config.Enabled)
                 return;
             Graphics.DrawTexture(new Rect(x, height + y, width, -height), MainTexture);
+        }
+
+        internal override void Dispose()
+        {
+            if (MainTexture == null)
+                return;
+
+            MainTexture.DestroyImmediate();
+            MainTexture = null;
         }
     }
 }

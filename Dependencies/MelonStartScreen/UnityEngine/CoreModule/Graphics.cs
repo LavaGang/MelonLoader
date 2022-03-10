@@ -39,6 +39,9 @@ namespace UnityEngine
 
         public unsafe static void DrawTexture(Rect screenRect, Texture2D texture)
         {
+            if ((texture == null) || (texture.Pointer == IntPtr.Zero))
+                return;
+
             if (m_DrawTexture_Internal_struct == 0)
             {
                 Internal_DrawTextureArguments_2017 args = default;
@@ -95,7 +98,11 @@ namespace UnityEngine
         private static void Internal_DrawMeshNow1(Mesh mesh, int subsetIndex, Vector3 position, Quaternion rotation) =>
             Internal_DrawMeshNow1_Injected(mesh, subsetIndex, ref position, ref rotation);
 
-        private static void Internal_DrawMeshNow1_Injected(Mesh mesh, int subsetIndex, ref Vector3 position, ref Quaternion rotation) =>
+        private static void Internal_DrawMeshNow1_Injected(Mesh mesh, int subsetIndex, ref Vector3 position, ref Quaternion rotation)
+        {
+            if ((mesh == null) || (mesh.Pointer == IntPtr.Zero))
+                return;
             fd_Internal_DrawMeshNow1_Injected(UnityInternals.ObjectBaseToPtr(mesh), subsetIndex, ref position, ref rotation);
+        }
     }
 }
