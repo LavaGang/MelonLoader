@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using MelonUnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI.Objects
 {

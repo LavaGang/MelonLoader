@@ -2,9 +2,9 @@
 using MelonLoader.MelonStartScreen.NativeUtils;
 using System;
 using UnhollowerMini;
-using UnityEngine.Rendering;
+using MelonUnityEngine.Rendering;
 
-namespace UnityEngine
+namespace MelonUnityEngine
 {
     internal sealed class Mesh : UnityObject
     {

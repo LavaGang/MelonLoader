@@ -3,7 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using UnhollowerMini;
 
-namespace UnityEngine
+namespace MelonUnityEngine
 {
     internal static class ImageConversion
     {

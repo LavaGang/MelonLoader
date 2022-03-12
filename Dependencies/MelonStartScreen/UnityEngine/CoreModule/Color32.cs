@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using UnhollowerMini;
 
-namespace UnityEngine
+namespace MelonUnityEngine
 {
     [StructLayout(LayoutKind.Explicit)]
     internal struct Color32

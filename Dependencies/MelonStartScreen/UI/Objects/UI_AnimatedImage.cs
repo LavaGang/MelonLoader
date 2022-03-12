@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using UnityEngine;
+using MelonUnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI.Objects
 {

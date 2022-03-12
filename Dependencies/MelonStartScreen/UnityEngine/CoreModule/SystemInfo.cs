@@ -2,7 +2,7 @@
 using MelonLoader.MelonStartScreen.NativeUtils;
 using UnhollowerMini;
 
-namespace UnityEngine.CoreModule
+namespace MelonUnityEngine.CoreModule
 {
     internal sealed class SystemInfo
     {

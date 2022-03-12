@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using UnityEngine;
+using MelonUnityEngine;
 using MelonLoader;
 
 namespace mgGif

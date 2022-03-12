@@ -3,7 +3,7 @@ using MelonLoader.MelonStartScreen.NativeUtils;
 using System;
 using System.Runtime.InteropServices;
 
-namespace UnityEngine
+namespace MelonUnityEngine
 {
     [StructLayout(LayoutKind.Sequential)]
     internal struct UIVertex_2020
