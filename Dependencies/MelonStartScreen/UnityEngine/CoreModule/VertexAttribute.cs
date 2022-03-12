@@ -1,6 +1,6 @@
 ﻿using MelonLoader.MelonStartScreen.NativeUtils;
 
-namespace UnityEngine.Rendering
+namespace MelonUnityEngine.Rendering
 {
     static class VertexAttribute
     {

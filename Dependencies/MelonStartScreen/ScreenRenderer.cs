@@ -1,8 +1,8 @@
 ﻿using MelonLoader.MelonStartScreen.NativeUtils;
 using MelonLoader.MelonStartScreen.UI;
 using System;
-using UnityEngine;
-using UnityEngine.CoreModule;
+using MelonUnityEngine;
+using MelonUnityEngine.CoreModule;
 using UnityPlayer;
 
 namespace MelonLoader.MelonStartScreen

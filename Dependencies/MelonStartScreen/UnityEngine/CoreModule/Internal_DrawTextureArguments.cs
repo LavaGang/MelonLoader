@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace UnityEngine
+namespace MelonUnityEngine
 {
     // 2017.2.0
     [StructLayout(LayoutKind.Sequential)]

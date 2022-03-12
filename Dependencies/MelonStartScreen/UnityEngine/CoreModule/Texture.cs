@@ -3,7 +3,7 @@ using MelonLoader.MelonStartScreen.NativeUtils;
 using System;
 using UnhollowerMini;
 
-namespace UnityEngine
+namespace MelonUnityEngine
 {
     internal class Texture : UnityObject
     {

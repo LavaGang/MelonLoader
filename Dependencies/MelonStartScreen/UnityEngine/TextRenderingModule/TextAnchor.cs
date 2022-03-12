@@ -1,4 +1,4 @@
-﻿namespace UnityEngine
+﻿namespace MelonUnityEngine
 {
     internal enum TextAnchor
 	{
