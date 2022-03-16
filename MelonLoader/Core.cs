@@ -9,7 +9,6 @@ namespace MelonLoader
 	internal static class Core
     {
         internal static HarmonyLib.Harmony HarmonyInstance;
-        internal static bool engineInitialized;
 
         private static int Initialize()
         {
@@ -62,28 +61,17 @@ namespace MelonLoader
             if (!SupportModule.Setup())
                 return 1;
 
-            if (MelonUtils.IsGameIl2Cpp())
-                HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyIl2CppMethodPatcher.TryResolve;
-
             AddUnityDebugLog();
-
+            HarmonyIl2CppMethodPatcher.Init();
             RegisterTypeInIl2Cpp.SetReady();
 
             MelonEvents.OnApplicationStart.Invoke();
-            //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
             return 0;
         }
 
-        internal static void OnApplicationLateStart()
-        {
-            engineInitialized = true;
-            MelonEvents.OnApplicationLateStart.Invoke();
-        }
-
         internal static void Quit()
         {
-            MelonEvents.OnApplicationQuit.Invoke();
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();
@@ -97,9 +85,11 @@ namespace MelonLoader
 
         private static void AddUnityDebugLog()
         {
-            SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
-            SupportModule.Interface.UnityDebugLog("~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!   ~");
-            SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
+            var msg = "~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Game Developers!   ~";
+            var line = new string('-', msg.Length);
+            SupportModule.Interface.UnityDebugLog(line);
+            SupportModule.Interface.UnityDebugLog(msg);
+            SupportModule.Interface.UnityDebugLog(line);
         }
     }
 }

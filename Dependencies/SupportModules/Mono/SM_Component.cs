@@ -10,14 +10,14 @@ namespace MelonLoader.Support
 {
     internal class SM_Component : MonoBehaviour
     {
-        private bool IsDestroying = false;
+        private bool isQuitting;
 
 #if SM_Il2Cpp
         private delegate bool SetAsLastSiblingDelegate(IntPtr transformptr);
         private static SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
         public SM_Component(IntPtr value) : base(value) { }
 #else
-        private static MethodInfo SetAsLastSiblingMethod = null;
+        private static MethodInfo SetAsLastSiblingMethod;
 #endif
 
         static SM_Component()
@@ -62,8 +62,7 @@ namespace MelonLoader.Support
 
         internal void Destroy()
         {
-            IsDestroying = true;
-            GameObject.Destroy(gameObject);
+            Destroy(gameObject);
         }
 
         void Start()
@@ -85,6 +84,7 @@ namespace MelonLoader.Support
 
         void Update()
         {
+            isQuitting = false;
             SiblingFix();
 #if SM_Il2Cpp
             if (MelonUtils.IsBONEWORKS)
@@ -95,14 +95,24 @@ namespace MelonLoader.Support
 
         void OnDestroy()
         {
-            if (!IsDestroying)
+            if (!isQuitting)
+            {
                 Create();
+                return;
+            }
+
+            OnApplicationDefiniteQuit();
         }
 
         void OnApplicationQuit()
         {
-            Destroy();
+            isQuitting = true;
             Main.Interface.Quit();
+        }
+
+        void OnApplicationDefiniteQuit()
+        {
+            Main.Interface.DefiniteQuit();
         }
 
         void FixedUpdate() => Main.Interface.FixedUpdate();

@@ -7,8 +7,8 @@
         private static int currentSceneBuildIndex = -1;
         private static string currentSceneName;
 
-        public void OnApplicationLateStart() 
-            => Core.OnApplicationLateStart();
+        public void OnApplicationLateStart()
+            => MelonEvents.OnApplicationLateStart.Invoke();
 
         public void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
@@ -53,8 +53,14 @@
         public void OnGUI() 
             => MelonEvents.OnGUI.Invoke();
 
-        public void Quit() 
-            => Core.Quit();
+        public void Quit()
+            => MelonEvents.OnApplicationQuit.Invoke();
+
+        public void DefiniteQuit()
+        {
+            MelonEvents.OnApplicationDefiniteQuit.Invoke();
+            Core.Quit();
+        }
 
         public void BONEWORKS_OnLoadingScreen() 
             => MelonEvents.BONEWORKS_OnLoadingScreen.Invoke();

@@ -34,7 +34,7 @@ namespace MelonLoader
 
                     if (a.melonAssembly != null)
                     {
-                        MelonDebug.Msg($"MelonAssembly '{a.melonAssembly.Assembly.GetName().Name}' subscribed to {a.method.Name}");
+                        MelonDebug.Msg($"MelonAssembly '{a.melonAssembly.Assembly.GetName().Name}' subscribed with {a.method.Name}");
                         a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), unsubscribeOnFirstInvocation: true);
                     }
 
@@ -76,7 +76,7 @@ namespace MelonLoader
 
                     actions.RemoveAt(a);
                     if (act.melonAssembly != null)
-                        MelonDebug.Msg($"MelonAssembly '{act.melonAssembly.Assembly.GetName().Name}' unsubscribed from {act.method.Name}");
+                        MelonDebug.Msg($"MelonAssembly '{act.melonAssembly.Assembly.GetName().Name}' unsubscribed with {act.method.Name}");
                 }
             }
         }
