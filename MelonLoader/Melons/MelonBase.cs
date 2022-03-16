@@ -218,9 +218,14 @@ namespace MelonLoader
         public virtual void OnGUI() { }
 
         /// <summary>
-        /// Runs when the Game is told to Close.
+        /// Runs on a quit request. It is possible to abort the request in this callback.
         /// </summary>
         public virtual void OnApplicationQuit() { }
+
+        /// <summary>
+        /// Runs before the Application is closed. It is not possible to prevent the game from closing at this point.
+        /// </summary>
+        public virtual void OnApplicationDefiniteQuit() { }
 
         /// <summary>
         /// Runs when Melon Preferences get saved.
@@ -245,14 +250,19 @@ namespace MelonLoader
         /// <summary>
         /// Runs when the Melon is registered. Executed before the Melon's info is printed to the console. This callback should only be used a constructor for the Melon.
         /// <para>Please note that this callback may run before the Support Module is loaded and before the Engine is fully initialized.
-        /// <br>As a result, using unhollowed assemblies and creating/getting UnityEngine Objects may not be possible and you would have to override <see cref="OnEngineInitialized"/> instead.</br></para>
+        /// <br>As a result, using unhollowed assemblies and creating/getting UnityEngine Objects may not be possible and you would have to override <see cref="OnLoaderInitialized"/> instead.</br></para>
         /// </summary>
         public virtual void OnInitializeMelon() { }
 
         /// <summary>
-        /// Runs after the Melon has registered and only if the engine is fully initialized (OnApplicationLateStart).
+        /// Runs after the Melon has registered. This callback waits until MelonLoader has fully initialized (<see cref="MelonEvents.OnApplicationStart"/>).
         /// </summary>
-        public virtual void OnEngineInitialized() { }
+        public virtual void OnLoaderInitialized() { }
+
+        /// <summary>
+        /// Runs after <see cref="OnLoaderInitialized"/>. This callback waits until Unity has invoked the first 'Start' messages (<see cref="MelonEvents.OnApplicationLateStart"/>).
+        /// </summary>
+        public virtual void OnLoaderLateInitialized() { }
 
         /// <summary>
         /// Runs when the Melon is unregistered.
@@ -405,14 +415,15 @@ namespace MelonLoader
             OnMelonRegistered.Invoke(this);
 
             if (MelonEvents.OnApplicationStart.Disposed)
-                HarmonyInit();
+                LoaderInitialized();
             else
-                MelonEvents.OnApplicationStart.Subscribe(HarmonyInit, Priority, true);
+                MelonEvents.OnApplicationStart.Subscribe(LoaderInitialized, Priority, true);
 
-            if (Core.engineInitialized)
-                EngineInitialized();
+            if (MelonEvents.OnApplicationLateStart.Disposed)
+                OnLoaderLateInitialized();
             else
-                MelonEvents.OnApplicationLateStart.Subscribe(EngineInitialized, Priority, true);
+                MelonEvents.OnApplicationLateStart.Subscribe(OnLoaderLateInitialized, Priority, true);
+
             return true;
         }
 
@@ -422,11 +433,12 @@ namespace MelonLoader
                 HarmonyInstance.PatchAll(MelonAssembly.Assembly);
         }
 
-        private void EngineInitialized()
+        private void LoaderInitialized()
         {
+            HarmonyInit();
             try
             {
-                OnEngineInitialized();
+                OnLoaderInitialized();
             }
             catch (Exception ex)
             {
@@ -440,27 +452,27 @@ namespace MelonLoader
         protected internal virtual void RegisterCallbacks()
         {
             MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit, Priority);
+            MelonEvents.OnApplicationDefiniteQuit.Subscribe(OnApplicationDefiniteQuit, Priority);
             MelonEvents.OnUpdate.Subscribe(OnUpdate, Priority);
             MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate, Priority);
             MelonEvents.OnGUI.Subscribe(OnGUI, Priority);
             MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate, Priority);
 
-            var prefsLoaded = new LemonAction<string>((x) => OnPreferencesLoaded());
-            var prefsSaved = new LemonAction<string>((x) => OnPreferencesSaved());
-            var prefsApplied = new LemonAction<string>((x) => OnModSettingsApplied());
-            MelonPreferences.OnPreferencesLoaded.Subscribe(OnPreferencesLoaded, Priority);
-            MelonPreferences.OnPreferencesLoaded.Subscribe(prefsLoaded, Priority); // No params sig
-            MelonPreferences.OnPreferencesSaved.Subscribe(OnPreferencesSaved, Priority);
-            MelonPreferences.OnPreferencesSaved.Subscribe(prefsSaved, Priority); // No params sig
-            MelonPreferences.OnPreferencesSaved.Subscribe(prefsApplied, Priority);
+            MelonPreferences.OnPreferencesLoaded.Subscribe(PrefsLoaded, Priority);
+            MelonPreferences.OnPreferencesSaved.Subscribe(PrefsSaved, Priority);
+        }
 
-            // Gotta unsubscribe from own delegates
-            OnUnregister.Subscribe(() =>
-            {
-                MelonPreferences.OnPreferencesLoaded.Unsubscribe(prefsLoaded.Method, prefsLoaded.Target);
-                MelonPreferences.OnPreferencesSaved.Unsubscribe(prefsSaved.Method, prefsSaved.Target);
-                MelonPreferences.OnPreferencesSaved.Unsubscribe(prefsApplied.Method, prefsApplied.Target);
-            }, unsubscribeOnFirstInvocation: true);
+        private void PrefsSaved(string path)
+        {
+            OnPreferencesSaved(path);
+            OnPreferencesSaved();
+            OnModSettingsApplied();
+        }
+
+        private void PrefsLoaded(string path)
+        {
+            OnPreferencesLoaded(path);
+            OnPreferencesLoaded();
         }
 
         /// <summary>

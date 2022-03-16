@@ -19,19 +19,24 @@ namespace MelonLoader
 
         /// <summary>
         /// Called after all MelonLoader components are fully initialized (including all MelonMods).
-        /// <para>Don't use this event to initialize your Melons anymore! Instead, override <see cref="MelonBase.OnInitializeMelon"/> or <see cref="MelonBase.OnEngineInitialized"/>.</para>
+        /// <para>Don't use this event to initialize your Melons anymore! Instead, override <see cref="MelonBase.OnInitializeMelon"/> or <see cref="MelonBase.OnLoaderInitialized"/>.</para>
         /// </summary>
         public readonly static MelonEvent OnApplicationStart = new MelonEvent(true);
 
         /// <summary>
-        /// Called when the Engine is fully initialized.
+        /// Called when the first 'Start' Unity Messages are invoked.
         /// </summary>
         public readonly static MelonEvent OnApplicationLateStart = new MelonEvent(true);
 
         /// <summary>
-        /// Called before the Application is closed.
+        /// Called before the Application is closed. It is not possible to prevent the game from closing at this point.
         /// </summary>
-        public readonly static MelonEvent OnApplicationQuit = new MelonEvent(true);
+        public readonly static MelonEvent OnApplicationDefiniteQuit = new MelonEvent(true);
+
+        /// <summary>
+        /// Called on a quit request. It is possible to abort the request in this callback.
+        /// </summary>
+        public readonly static MelonEvent OnApplicationQuit = new MelonEvent();
 
         /// <summary>
         /// Called once per frame.

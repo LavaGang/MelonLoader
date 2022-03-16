@@ -34,6 +34,14 @@ namespace MelonLoader.InternalUtils
             PatchTools_RememberObject = AccessTools.Method("HarmonyLib.PatchTools:RememberObject").CreateDelegate<PatchTools_RememberObject_Delegate>();
         }
 
+        internal static void Init()
+        {
+            if (!MelonUtils.IsGameIl2Cpp())
+                return;
+
+            PatchManager.ResolvePatcher += TryResolve;
+        }
+
         internal static void TryResolve(object sender, PatchManager.PatcherResolverEventArgs args)
         {
             if (UnhollowerSupport.IsGeneratedAssemblyType(args.Original.DeclaringType))
