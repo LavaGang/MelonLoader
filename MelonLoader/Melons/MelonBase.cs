@@ -479,15 +479,15 @@ namespace MelonLoader
         /// Unregisters the Melon and all other Melons located in the same Assembly.
         /// <para>This only unsubscribes the Melons from all Callbacks/<see cref="MelonEvent"/>s and unpatches all Methods that were patched by Harmony, but doesn't actually unload the whole Assembly.</para>
         /// </summary>
-        public void Unregister(string reason = null)
+        public void Unregister(string reason = null, bool silent = false)
         {
             if (!Registered)
                 return;
 
-            MelonAssembly.UnregisterMelons(reason);
+            MelonAssembly.UnregisterMelons(reason, silent);
         }
 
-        internal void UnregisterInstance(string reason)
+        internal void UnregisterInstance(string reason, bool silent)
         {
             if (!Registered)
                 return;
@@ -508,7 +508,8 @@ namespace MelonLoader
             HarmonyInstance.UnpatchSelf();
             Registered = false;
 
-            PrintUnloadInfo(reason);
+            if (!silent)
+                PrintUnloadInfo(reason);
 
             OnUnregister.Invoke();
             OnMelonUnregistered.Invoke(this);

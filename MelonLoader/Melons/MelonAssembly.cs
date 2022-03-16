@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader
@@ -170,16 +169,23 @@ namespace MelonLoader
         /// <summary>
         /// Unregisters all Melons in this Assembly.
         /// </summary>
-        public void UnregisterMelons(string reason = null)
+        public void UnregisterMelons(string reason = null, bool silent = false)
         {
             foreach (var m in loadedMelons)
-                m.UnregisterInstance(reason);
+                m.UnregisterInstance(reason, silent);
 
             OnUnregister.Invoke();
         }
 
+        private void OnApplicationQuit()
+        {
+            UnregisterMelons("MelonLoader is deinitializing.", true);
+        }
+
         private void LoadMelons()
         {
+            MelonEvents.OnApplicationDefiniteQuit.Subscribe(OnApplicationQuit);
+
             // \/ Custom Resolver \/
             var resolvers = CustomMelonResolvers?.GetInvocationList();
             if (resolvers != null)
