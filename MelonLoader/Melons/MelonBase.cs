@@ -223,11 +223,6 @@ namespace MelonLoader
         public virtual void OnApplicationQuit() { }
 
         /// <summary>
-        /// Runs before the Application is closed. It is not possible to prevent the game from closing at this point.
-        /// </summary>
-        public virtual void OnApplicationDefiniteQuit() { }
-
-        /// <summary>
         /// Runs when Melon Preferences get saved.
         /// </summary>
         public virtual void OnPreferencesSaved() { }
@@ -265,7 +260,7 @@ namespace MelonLoader
         public virtual void OnLoaderLateInitialized() { }
 
         /// <summary>
-        /// Runs when the Melon is unregistered.
+        /// Runs when the Melon is unregistered. Also runs before the Application is closed (<see cref="MelonEvents.OnApplicationDefiniteQuit"/>).
         /// </summary>
         public virtual void OnDeinitializeMelon() { }
 
@@ -452,7 +447,6 @@ namespace MelonLoader
         protected internal virtual void RegisterCallbacks()
         {
             MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit, Priority);
-            MelonEvents.OnApplicationDefiniteQuit.Subscribe(OnApplicationDefiniteQuit, Priority);
             MelonEvents.OnUpdate.Subscribe(OnUpdate, Priority);
             MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate, Priority);
             MelonEvents.OnGUI.Subscribe(OnGUI, Priority);
