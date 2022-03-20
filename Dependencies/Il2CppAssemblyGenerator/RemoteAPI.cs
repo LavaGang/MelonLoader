@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Semver;
+
 #pragma warning disable 0649
 
 namespace MelonLoader.Il2CppAssemblyGenerator
@@ -96,6 +98,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 InfoStruct returnInfo = info.Func(Response);
                 if (returnInfo == null)
                     continue;
+
+                if (SemVersion.Parse(returnInfo.ForceDumperVersion) <= SemVersion.Parse("2022.0.2"))
+                    returnInfo.ForceDumperVersion = null;
 
                 Info = returnInfo;
                 break;

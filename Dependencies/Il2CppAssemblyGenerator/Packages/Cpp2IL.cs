@@ -36,7 +36,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool Execute()
         {
-            if (SemVersion.Parse(Version) <= SemVersion.Parse("2022.0.0"))
+            if (SemVersion.Parse(Version) <= SemVersion.Parse("2022.0.999"))
                 return ExecuteOld();
             return ExecuteNew();
         }
