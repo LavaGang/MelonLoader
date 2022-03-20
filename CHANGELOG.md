@@ -83,6 +83,8 @@
 50. Implemented Management and Disposal Handling for Start Screen UI Elements.
 51. Used a different namespace for UnityEngine classes in Start Screen wrapper.   (Credits to [Sinai](https://github.com/sinai-dev) :D)
 52. Removed runtime_class_init Call from MelonUnityEngine.UnityObject to fix Crashing Issue.
+53. Updated Cpp2IL to v2022.1.0-pre-release.3.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
+54. Added Version Check to Cpp2IL Package Usage.
 
 ---
 

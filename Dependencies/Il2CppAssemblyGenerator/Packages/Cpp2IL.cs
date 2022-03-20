@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using Semver;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
@@ -34,16 +36,46 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool Execute()
         {
+            if (SemVersion.Parse(Version) <= SemVersion.Parse("2022.0.0"))
+                return ExecuteOld();
+            return ExecuteNew();
+        }
+
+        private bool ExecuteNew()
+        {
             if (Execute(new string[] {
                 MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
                 "--game-path",
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
                 "--exe-name",
-                "\"" + System.Diagnostics.Process.GetCurrentProcess().ProcessName + "\"",
+                "\"" + Process.GetCurrentProcess().ProcessName + "\"",
+
                 "--use-processor",
                 "attributeinjector",
                 "--output-as",
                 "dummydll"
+
+            }, false, new Dictionary<string, string>() {
+                {"NO_COLOR", "1"}
+            }))
+                return true;
+
+            return false;
+        }
+
+        private bool ExecuteOld()
+        {
+            if (Execute(new string[] {
+                MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
+                "--game-path",
+                "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
+                "--exe-name",
+                "\"" + Process.GetCurrentProcess().ProcessName + "\"",
+
+                "--skip-analysis",
+                "--skip-metadata-txts",
+                "--disable-registration-prompts"
+
             }, false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"}
             }))
