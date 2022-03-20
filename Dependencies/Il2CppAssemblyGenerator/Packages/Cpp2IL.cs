@@ -13,7 +13,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "2022.0.0";
+                Version = "2022.1.0-pre-release.3";
 
             Name = nameof(Cpp2IL);
             Destination = Path.Combine(Core.BasePath, Name);
@@ -40,9 +40,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
                 "--exe-name",
                 "\"" + System.Diagnostics.Process.GetCurrentProcess().ProcessName + "\"",
-                "--skip-analysis",
-                "--skip-metadata-txts",
-                "--disable-registration-prompts"
+                "--use-processor",
+                "attributeinjector",
+                "--output-as",
+                "dummydll"
             }, false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"}
             }))
