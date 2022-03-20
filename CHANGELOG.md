@@ -81,8 +81,8 @@
 48. Fixed Issue with Solution Build Dependencies copying to Output Directory.
 49. Fixed Issue with Il2Cpp Harmony Patcher breaking on Custom Il2Cpp Types.   (Credits to [ds5678](https://github.com/ds5678) :D)
 50. Implemented Management and Disposal Handling for Start Screen UI Elements.
-51. Used a different namespace for UnityEngine classes in Start Screen wrapper.
-52. Removed runtime_class_init Call from MelonUnityEngine.UnityObject to fix Crashing Issue.   (Credits to [Sinai](https://github.com/sinai-dev) :D)
+51. Used a different namespace for UnityEngine classes in Start Screen wrapper.   (Credits to [Sinai](https://github.com/sinai-dev) :D)
+52. Removed runtime_class_init Call from MelonUnityEngine.UnityObject to fix Crashing Issue.
 
 ---
 
