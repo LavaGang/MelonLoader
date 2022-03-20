@@ -14,7 +14,6 @@ namespace MelonUnityEngine
         static Vector2()
         {
             InternalClassPointerStore<Vector2>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Vector2");
-            //UnityInternals.runtime_class_init(InternalClassPointerStore<Vector2>.NativeClassPtr);
         }
 
         public Vector2(float x, float y)

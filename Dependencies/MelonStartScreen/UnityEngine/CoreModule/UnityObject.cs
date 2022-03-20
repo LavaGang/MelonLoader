@@ -15,7 +15,7 @@ namespace MelonUnityEngine
         unsafe static UnityObject()
         {
             InternalClassPointerStore<UnityObject>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Object");
-            UnityInternals.runtime_class_init(InternalClassPointerStore<UnityObject>.NativeClassPtr);
+            //UnityInternals.runtime_class_init(InternalClassPointerStore<UnityObject>.NativeClassPtr);
 
             m_DestroyImmediate = UnityInternals.GetMethod(InternalClassPointerStore<UnityObject>.NativeClassPtr, "DestroyImmediate", "System.Void", "UnityEngine.Object");
             m_DontDestroyOnLoad = UnityInternals.GetMethod(InternalClassPointerStore<UnityObject>.NativeClassPtr, "DontDestroyOnLoad", "System.Void", "UnityEngine.Object");
