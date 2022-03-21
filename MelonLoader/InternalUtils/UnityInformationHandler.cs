@@ -106,7 +106,7 @@ namespace MelonLoader.InternalUtils
             {
                 if (MelonDebug.IsEnabled())
                     MelonLogger.Error(ex);
-                MelonLogger.Error($"Failed to Initialize Assets Manager: {ex}");
+                MelonLogger.Error("Failed to Initialize Assets Manager!");
             }
             if (instance != null)
                 instance.file.Close();
