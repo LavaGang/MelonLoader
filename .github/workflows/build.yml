@@ -11,7 +11,7 @@ jobs:
   build_core_debug:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Melonloader Core
@@ -25,7 +25,7 @@ jobs:
   build_core_release:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Melonloader Core
@@ -39,7 +39,7 @@ jobs:
   build_proxy_x86:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Proxy DLL | Windows - x86
@@ -53,7 +53,7 @@ jobs:
   build_proxy_x64:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Proxy DLL | Windows - x64
@@ -67,7 +67,7 @@ jobs:
   build_bootstrap_x86:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Bootstrap Lib | Windows - x86
@@ -81,7 +81,7 @@ jobs:
   build_bootstrap_x64:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Bootstrap Lib | Windows - x64
@@ -96,7 +96,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_proxy_x64, build_bootstrap_x64]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download core artifact
         uses: actions/download-artifact@v2.1.0
         with:
@@ -142,7 +142,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_proxy_x86, build_bootstrap_x86]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download core artifact
         uses: actions/download-artifact@v2.1.0
         with:
@@ -188,7 +188,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_proxy_x64, build_bootstrap_x64]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download core artifact
         uses: actions/download-artifact@v2.1.0
         with:
@@ -234,7 +234,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_proxy_x86, build_bootstrap_x86]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download core artifact
         uses: actions/download-artifact@v2.1.0
         with:
