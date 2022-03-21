@@ -42,18 +42,24 @@ namespace MelonLoader.InternalUtils
                 string bundlePath = Path.Combine(gameDataPath, "globalgamemanagers");
                 if (!File.Exists(bundlePath))
                     bundlePath = Path.Combine(gameDataPath, "mainData");
+
                 if (!File.Exists(bundlePath))
+                {
                     bundlePath = Path.Combine(gameDataPath, "data.unity3d");
+                    if (!File.Exists(bundlePath))
+                        return;
 
-                if (!File.Exists(bundlePath))
-                    return;
-
-                instance = assetsManager.LoadAssetsFile(bundlePath, true);
+                    BundleFileInstance bundleFile = assetsManager.LoadBundleFile(bundlePath);
+                    instance = assetsManager.LoadAssetsFileFromBundle(bundleFile, "globalgamemanagers");
+                }
+                else
+                    instance = assetsManager.LoadAssetsFile(bundlePath, true);
                 if (instance == null)
                     return;
 
                 assetsManager.LoadIncludedClassPackage();
-                assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
+                if (!instance.file.typeTree.hasTypeTree)
+                    assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
                 EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);
 
                 List<AssetFileInfoEx> assetFiles = instance.table.GetAssetsOfType(129);
@@ -100,7 +106,7 @@ namespace MelonLoader.InternalUtils
             {
                 if (MelonDebug.IsEnabled())
                     MelonLogger.Error(ex);
-                MelonLogger.Error("Failed to Initialize Assets Manager!");
+                MelonLogger.Error($"Failed to Initialize Assets Manager: {ex}");
             }
             if (instance != null)
                 instance.file.Close();
