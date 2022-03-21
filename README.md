@@ -124,8 +124,8 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 - Inside this folder it will create a `Themes` folder and a `Config.cfg` file for Customization Settings.
 - You can also place Custom Themes in the created `Themes` folder.
 - Inside `Config.cfg` you can set what Theme folder you would like to use.  
-- If you set your Theme folder to `Random` it will randomly pick and load from existing Themes.
---
+- If you set your Theme folder to `Random` it will randomly pick and load from existing Themes.  
+
 - For Custom Themes you can place Custom Images in their Theme folder to further customize it.
 - Listed below are the Compatible File Names and Extensions for the Custom Images.
 
@@ -241,6 +241,7 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [MuseDashModLoader](https://github.com/mo10/MuseDashModLoader) is licensed under the MIT License. See [LICENSE](https://github.com/mo10/MuseDashModLoader/blob/master/LICENSE) for the full License.
 - [mgGif](https://github.com/gwaredd/mgGif) is licensed under the MIT License. See [LICENSE](https://github.com/gwaredd/mgGif/blob/main/LICENSE) for the full License.
 - [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) is licensed under the MIT License. See [LICENSE](https://github.com/nesrak1/AssetsTools.NET/blob/master/LICENSE) for the full License.
+- [AssetRipper.VersionUtilities](https://github.com/AssetRipper/VersionUtilities) is licensed under the MIT License. See [LICENSE](https://github.com/AssetRipper/VersionUtilities/blob/master/License.md) for the full License.
 - [bHaptics Haptic Library](https://github.com/bhaptics/haptic-library) is licensed under All rights reserved Copyright (c) 2016-2021 bHaptics Inc.  
 See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. We have Express Permission from bHaptics.
 
