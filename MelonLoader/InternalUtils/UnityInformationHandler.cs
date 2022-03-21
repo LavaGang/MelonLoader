@@ -42,6 +42,8 @@ namespace MelonLoader.InternalUtils
                 string bundlePath = Path.Combine(gameDataPath, "globalgamemanagers");
                 if (!File.Exists(bundlePath))
                     bundlePath = Path.Combine(gameDataPath, "mainData");
+                if (!File.Exists(bundlePath))
+                    bundlePath = Path.Combine(gameDataPath, "data.unity3d");
 
                 if (!File.Exists(bundlePath))
                     return;
