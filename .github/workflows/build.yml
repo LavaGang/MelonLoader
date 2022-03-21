@@ -18,7 +18,7 @@ jobs:
         shell: cmd
         run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
       - name: Upload core artifact
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3
         with:
           name: MLCoreDebug
           path: Output/Debug/MelonLoader/
@@ -32,7 +32,7 @@ jobs:
         shell: cmd
         run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
       - name: Upload core artifact
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3
         with:
           name: MLCoreRelease
           path: Output/Release/MelonLoader/
@@ -46,7 +46,7 @@ jobs:
         shell: cmd
         run: msbuild Proxy\Proxy.vcxproj -p:Platform=Win32 -p:Configuration=Release
       - name: Upload proxy x86
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3
         with:
           name: MLProxyX86
           path: Proxy/Output/Release/x86/version.dll
@@ -60,7 +60,7 @@ jobs:
         shell: cmd
         run: msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
       - name: Upload proxy x64
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64
           path: Proxy/Output/Release/x64/version.dll
@@ -74,7 +74,7 @@ jobs:
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=Win32 -p:Configuration=Release
       - name: Upload proxy x64
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX86
           path: Bootstrap/Output/Release/x86/MelonLoader/Dependencies/Bootstrap.dll
@@ -88,7 +88,7 @@ jobs:
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
       - name: Upload proxy x64
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX64
           path: Bootstrap/Output/Release/x64/MelonLoader/Dependencies/Bootstrap.dll
@@ -133,7 +133,7 @@ jobs:
           copy LICENSE.md Output\Debug\x64\MelonLoader\Documentation\
           copy NOTICE.txt Output\Debug\x64\MelonLoader\Documentation\
           copy README.md Output\Debug\x64\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x64
         with:
           name: MelonLoader.x64.CI.Debug
@@ -179,7 +179,7 @@ jobs:
           copy LICENSE.md Output\Debug\x86\MelonLoader\Documentation\
           copy NOTICE.txt Output\Debug\x86\MelonLoader\Documentation\
           copy README.md Output\Debug\x86\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x86
         with:
           name: MelonLoader.x86.CI.Debug
@@ -225,7 +225,7 @@ jobs:
           copy LICENSE.md Output\Release\x64\MelonLoader\Documentation\
           copy NOTICE.txt Output\Release\x64\MelonLoader\Documentation\
           copy README.md Output\Release\x64\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x64
         with:
           name: MelonLoader.x64.CI.Release
@@ -271,7 +271,7 @@ jobs:
           copy LICENSE.md Output\Release\x86\MelonLoader\Documentation\
           copy NOTICE.txt Output\Release\x86\MelonLoader\Documentation\
           copy README.md Output\Release\x86\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x86
         with:
           name: MelonLoader.x86.CI.Release
