@@ -99,7 +99,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 if (returnInfo == null)
                     continue;
 
-                if (SemVersion.Parse(returnInfo.ForceDumperVersion) <= SemVersion.Parse("2022.0.2"))
+                if (returnInfo.ForceDumperVersion != null && SemVersion.Parse(returnInfo.ForceDumperVersion) <= SemVersion.Parse("2022.0.2"))
                     returnInfo.ForceDumperVersion = null;
 
                 Info = returnInfo;
