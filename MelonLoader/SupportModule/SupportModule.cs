@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -18,7 +19,7 @@ namespace MelonLoader
 
         internal static bool Setup()
         {
-            BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "SupportModules");
+            BaseDirectory = GameDirectoryManager.SupportModuleDirectory;
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find SupportModules Directory!");

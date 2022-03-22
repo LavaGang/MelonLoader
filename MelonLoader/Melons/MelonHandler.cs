@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using MelonLoader.Lemons.Cryptography;
+using MelonLoader.Utils;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -37,10 +38,10 @@ namespace MelonLoader
 
         internal static void Setup()
         {
-            PluginsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Plugins");
+            PluginsDirectory = GameDirectoryManager.PluginsDirectory;
             if (!Directory.Exists(PluginsDirectory))
                 Directory.CreateDirectory(PluginsDirectory);
-            ModsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Mods");
+            ModsDirectory = GameDirectoryManager.ModsDirectory;
             if (!Directory.Exists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);
         }

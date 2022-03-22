@@ -15,6 +15,7 @@ using MelonLoader.TinyJSON;
 using MelonLoader.InternalUtils;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using MelonLoader.Utils;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -25,16 +26,19 @@ namespace MelonLoader
 
         internal static void Setup(AppDomain domain)
         {
-            HashCode = string.Copy(Internal_GetHashCode());
-            BaseDirectory = string.Copy(Internal_GetBaseDirectory());
-            GameDirectory = string.Copy(Internal_GetGameDirectory());
+            //HashCode = string.Copy(BootstrapInterop.Internal_GetHashCode());
+            HashCode = "0000000000DEADBEEF15DEADF00D0000000000";
+
+            BaseDirectory = GameDirectoryManager.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
+            GameDirectory = GameDirectoryManager.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+
             SetCurrentDomainBaseDirectory(GameDirectory, domain);
 
-            UserDataDirectory = Path.Combine(BaseDirectory, "UserData");
+            UserDataDirectory = GameDirectoryManager.UserDataDirectory;
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
 
-            UserLibsDirectory = Path.Combine(BaseDirectory, "UserLibs");
+            UserLibsDirectory = GameDirectoryManager.UserLibsDirectory;
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
@@ -356,10 +360,17 @@ namespace MelonLoader
         public static string GameVersion { get => UnityInformationHandler.GameVersion; }
 
 
+#if !NET6_0
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsGame32Bit();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsGameIl2Cpp();
+#else
+        public static bool IsGame32Bit() => !Environment.Is64BitProcess;
+#endif
+
+
+        public static bool IsGameIl2Cpp() => Directory.Exists(Path.Combine(GetGameDataDirectory(), "il2cpp_data"));
+
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsOldMono();
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -367,9 +378,15 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetApplicationPath();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetGameDataDirectory();
+        
+        public static string GetGameDataDirectory()
+        {
+            string gameName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+
+            //TODO Verify this is sufficient
+            return Path.Combine(GameDirectoryManager.GameRootDirectory, gameName + "_Data");
+        }
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetManagedDirectory();
@@ -390,8 +407,5 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         private extern static string Internal_GetGameDirectory();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetHashCode();
     }
 }

@@ -91,20 +91,37 @@ namespace MelonLoader
             public void Error(string txt, Exception ex) => NativeError(Name, $"{txt}\n{ex}");
         }
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_Warning(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_Error(string namesection, string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void ThrowInternalFailure(string txt);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void WriteSpacer();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Internal_PrintModName(ConsoleColor meloncolor, ConsoleColor authorcolor, string name, string author, string version, string id);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void Flush();
+        internal static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
+        {
+            //TODO Colors
+            Console.WriteLine($"[{DateTime.Now:T}] {(namesection == null ? "" : $"[{namesection}] ")}{txt}");
+        }
+
+        internal static void Internal_Warning(string namesection, string txt) => Internal_Msg(ConsoleColor.Yellow, ConsoleColor.Yellow, namesection, txt);
+
+        
+        internal static void Internal_Error(string namesection, string txt) => Internal_Msg(ConsoleColor.Red, ConsoleColor.Red, namesection, txt);
+
+
+        internal static void ThrowInternalFailure(string txt) => Internal_Error("TODO: Internal Failure Impl", txt);
+
+
+        internal static void WriteSpacer() => Internal_Warning("TODO", "Print Spacer Here");
+
+        
+        internal static void Internal_PrintModName(ConsoleColor meloncolor, ConsoleColor authorcolor, string name, string author, string version, string id)
+        {
+            //TODO Colors
+            Console.WriteLine($"[{DateTime.Now:T}] {name} v{version}{(id == null ? "" : $" ({id})")}");
+            Console.WriteLine($"[{DateTime.Now:T}] by {author}");
+        }
+
+        
+        internal static void Flush()
+        {
+            Internal_Warning("TODO", "MelonLogger::Flush");
+        }
+
 
         [Obsolete("Log is obsolete. Please use Msg instead.")]
         public static void Log(string txt) => Msg(txt);

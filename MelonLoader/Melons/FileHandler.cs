@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -56,7 +57,7 @@ namespace MelonLoader.Melons
 
                 // To-Do: File Type Check
 
-                string melonname = MelonUtils.GetFileProductName(filepath);
+                string melonname = GetMelonName(filepath);
                 if (string.IsNullOrEmpty(melonname))
                     melonname = Path.GetFileNameWithoutExtension(filepath);
 
@@ -70,6 +71,16 @@ namespace MelonLoader.Melons
 
                 LoadFromFile(filepath);
             }
+        }
+
+        private static string GetMelonName(string filePath)
+        {
+#if !NET6_0
+            return MelonUtils.GetFileProductName(filePath);
+#else
+            FileVersionInfo info = FileVersionInfo.GetVersionInfo(filePath);
+            return info.ProductName;
+#endif
         }
 
         internal static void LoadFromFile(string filepath, string symbolspath = null)

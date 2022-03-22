@@ -27,6 +27,7 @@ namespace MelonLoader.MonoInternals
             }
 
             MelonDebug.Msg("[MonoLibrary] Setup Successful!");
+           
             return true;
         }
 

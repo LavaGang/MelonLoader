@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security;
 using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
 
@@ -19,9 +20,15 @@ namespace MelonLoader
             Assertions.LemonAssertMapping.Setup();
             MelonHandler.Setup();
 
-            if (!MonoLibrary.Setup()
-                || !MonoResolveManager.Setup())
-                return 1;
+            try
+            {
+                if (!MonoLibrary.Setup()
+                    || !MonoResolveManager.Setup())
+                    return 1;
+            } catch(SecurityException)
+            {
+                MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
+            }
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 

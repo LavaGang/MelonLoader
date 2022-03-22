@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using AssetRipper.VersionUtilities;
+using MelonLoader.Utils;
 using Semver;
 
 namespace MelonLoader.InternalUtils
@@ -54,7 +55,7 @@ namespace MelonLoader.InternalUtils
         {
             MelonLogger.Msg("Loading MelonStartScreen...");
 
-            string BaseDirectory = Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies");
+            string BaseDirectory = GameDirectoryManager.DependenciesDirectory;
             string AssemblyPath = Path.Combine(BaseDirectory, $"{FileName}.dll");
             if (!File.Exists(AssemblyPath))
             {

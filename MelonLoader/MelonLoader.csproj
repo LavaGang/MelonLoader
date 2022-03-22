@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net35</TargetFramework>
+		<TargetFrameworks>net35;net6</TargetFrameworks>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
 		<DocumentationFile>..\Output\$(Configuration)\MelonLoader\MelonLoader.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugType>full</DebugType>

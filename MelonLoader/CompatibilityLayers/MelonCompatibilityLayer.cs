@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace MelonLoader
 
         internal static void Setup()
         {
-            BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "CompatibilityLayers");
+            BaseDirectory = GameDirectoryManager.CompatibilityLayerDirectory;
             CompatibilityLayers.Melon_Resolver.Setup();
         }
 

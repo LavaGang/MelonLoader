@@ -78,9 +78,9 @@ bool DotnetRuntime::LoadHostFxr()
 
 void DotnetRuntime::Initialize()
 {
-	std::string baseDir = std::string(Core::BasePath) + "\\MelonLoader\\";
+	std::string baseDir = std::string(Core::BasePath) + std::string("\\MelonLoader\\net6\\");
 
-	size_t length = mbstowcs(nullptr, baseDir.c_str(), 0);
+	size_t length = strlen(baseDir.c_str()) + 1;
 	
 	wchar_t* wc = new wchar_t[length];
 	mbstowcs(wc, baseDir.c_str(), length);

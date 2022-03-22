@@ -15,7 +15,6 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(MonoMod.Utils.DMDGenerator<>))]
 [assembly: TypeForwardedTo(typeof(MonoMod.Utils.DMDCecilGenerator))]
 [assembly: TypeForwardedTo(typeof(MonoMod.Utils.DMDEmitDynamicMethodGenerator))]
-[assembly: TypeForwardedTo(typeof(MonoMod.Utils.DMDEmitMethodBuilderGenerator))]
 [assembly: TypeForwardedTo(typeof(MonoMod.Utils.DynamicMethodDefinition))]
 [assembly: TypeForwardedTo(typeof(MonoMod.Utils.DynamicMethodHelper))]
 [assembly: TypeForwardedTo(typeof(MonoMod.Utils.DynamicMethodReference))]
@@ -44,3 +43,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(MonoMod.Cil.IILReferenceBag))]
 [assembly: TypeForwardedTo(typeof(MonoMod.Cil.NopILReferenceBag))]
 [assembly: TypeForwardedTo(typeof(MonoMod.Cil.RuntimeILReferenceBag))]
+
+#if !NET6_0
+[assembly: TypeForwardedTo(typeof(MonoMod.Utils.DMDEmitMethodBuilderGenerator))] 
+#endif

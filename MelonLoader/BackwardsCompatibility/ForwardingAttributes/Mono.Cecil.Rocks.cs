@@ -7,6 +7,9 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(Mono.Cecil.Rocks.MethodDefinitionRocks))]
 [assembly: TypeForwardedTo(typeof(Mono.Cecil.Rocks.ModuleDefinitionRocks))]
 [assembly: TypeForwardedTo(typeof(Mono.Cecil.Rocks.ParameterReferenceRocks))]
-[assembly: TypeForwardedTo(typeof(Mono.Cecil.Rocks.SecurityDeclarationRocks))]
 [assembly: TypeForwardedTo(typeof(Mono.Cecil.Rocks.TypeDefinitionRocks))]
 [assembly: TypeForwardedTo(typeof(Mono.Cecil.Rocks.TypeReferenceRocks))]
+
+#if !NET6_0
+[assembly: TypeForwardedTo(typeof(Mono.Cecil.Rocks.SecurityDeclarationRocks))]
+#endif

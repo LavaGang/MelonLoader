@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -33,7 +34,7 @@ namespace MelonLoader.InternalUtils
         {
             MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
 
-            string BaseDirectory = Path.Combine(Path.Combine(Path.Combine(MelonUtils.BaseDirectory, "MelonLoader"), "Dependencies"), "Il2CppAssemblyGenerator");
+            string BaseDirectory = GameDirectoryManager.Il2CppAssemblyGeneratorDirectory;
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find Il2CppAssemblyGenerator Directory!");

@@ -23,7 +23,7 @@ namespace MelonLoader.InternalUtils
             ReadGameInfo(assetsManager);
             assetsManager.UnloadAll();
 
-            SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
+            BootstrapInterop.SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
 
             MelonLogger.Msg("------------------------------");
             MelonLogger.Msg($"Game Name: {GameName}");
@@ -112,8 +112,6 @@ namespace MelonLoader.InternalUtils
                 instance.file.Close();
         }
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
+        
     }
 }
