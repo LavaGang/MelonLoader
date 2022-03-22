@@ -9,7 +9,7 @@ namespace MelonLoader
     {
         internal static HarmonyLib.Harmony HarmonyInstance = null;
 
-        private static int Initialize()
+        internal static int Initialize()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.UnhandledException.Install(curDomain);

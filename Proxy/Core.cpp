@@ -60,8 +60,9 @@ void Core::Load(HINSTANCE hinstDLL)
 	}
 
 	HMODULE bootstrap_module = LoadLibraryA(bootstrap_path.c_str());
+	int err = GetLastError();
 	if (bootstrap_module == NULL)
-		Error("Unable to Load Bootstrap.dll from Base Directory!");
+		Error(std::string("Unable to Load Bootstrap.dll from Base Directory! GetLastError() = " + std::to_string(err)).c_str());
 }
 
 HMODULE Core::LoadOriginalDLL(std::string proxy_filepath, std::string proxy_filepath_no_ext)

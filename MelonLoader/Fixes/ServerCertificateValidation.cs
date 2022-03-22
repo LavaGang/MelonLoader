@@ -9,9 +9,15 @@ namespace MelonLoader.Fixes
     {
         internal static void Install()
         {
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)768 /* SecurityProtocolType.Tls11 */ | (SecurityProtocolType)3072 /* SecurityProtocolType.Tls12 */;
-            ServicePointManager.ServerCertificateValidationCallback += CertificateValidation;
+            try
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)768 /* SecurityProtocolType.Tls11 */ | (SecurityProtocolType)3072 /* SecurityProtocolType.Tls12 */;
+                ServicePointManager.ServerCertificateValidationCallback += CertificateValidation;
+            } catch(Exception ex)
+            {
+                MelonLogger.Warning("Failed to configure service point manager: " + ex.Message);
+            }
         }
         
         // Based on: https://stackoverflow.com/questions/43457050/error-getting-response-stream-write-the-authentication-or-decryption-has-faile

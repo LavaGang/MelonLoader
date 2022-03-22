@@ -58,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="Utils\Logging\Logger.cpp" />
     <ClCompile Include="Utils\Logging\Log.cpp" />
+    <ClCompile Include="Managers\DotnetRuntime.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utils">
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Logging\Logger.h" />
     <ClInclude Include="Utils\Logging\Log.h" />
+    <ClInclude Include="Managers\DotnetRuntime.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Base\Bootstrap.rc">

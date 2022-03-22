@@ -10,6 +10,7 @@
 #include "AssemblyVerifier.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
+#include "DotnetRuntime.h"
 
 Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
@@ -50,15 +51,18 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 	Console::SetHandles();
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	Hook::Detach(&(LPVOID&)Exports::il2cpp_init, il2cpp_init);
-	Mono::CreateDomain(name);
-	InternalCalls::Initialize();
+	//Mono::CreateDomain(name);
+	//InternalCalls::Initialize();
 	// todo: check if it works/is necessary on mono games
-	AssemblyVerifier::InstallHooks();
-	if (BaseAssembly::Initialize())
-	{
-		Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
-		Hook::Attach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
-	}
+	//AssemblyVerifier::InstallHooks();
+	//if (BaseAssembly::Initialize())
+	//{
+	//	Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");
+	//	Hook::Attach(&(LPVOID&)Exports::il2cpp_runtime_invoke, il2cpp_runtime_invoke);
+	//}
+
+	DotnetRuntime::Initialize();
+
 	Debug::Msg("Creating Il2Cpp Domain...");
 	domain = Exports::il2cpp_init(name);
 	return domain;
