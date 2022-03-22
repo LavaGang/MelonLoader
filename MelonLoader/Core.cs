@@ -50,7 +50,7 @@ namespace MelonLoader
             return 0;
         }
 
-        private static int PreStart()
+        internal static int PreStart()
         {
             MelonHandler.OnApplicationEarlyStart();
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
@@ -61,7 +61,7 @@ namespace MelonLoader
                 && !Il2CppAssemblyGenerator.Run())
                 ? 1 : 0;
 
-        private static int Start()
+        internal static int Start()
         {
             bHaptics.Start();
 

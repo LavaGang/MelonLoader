@@ -9,5 +9,17 @@ namespace MelonLoader.NativeHost
         {
             Core.Initialize();
         }
+
+        [UnmanagedCallersOnly]
+        static void PreStart()
+        {
+            Core.PreStart();
+        }
+
+        [UnmanagedCallersOnly]
+        static void Start()
+        {
+            Core.Start();
+        }
     }
 }
