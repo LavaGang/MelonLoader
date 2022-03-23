@@ -16,6 +16,7 @@
 #include "Utils/AnalyticsBlocker.h"
 #include "Utils/HashCode.h"
 #include "Utils/Encoding.h"
+#include "Managers/DotnetRuntime.h"
 
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::BasePath = NULL;
@@ -65,15 +66,22 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
 		|| !CheckPathASCII()
-		|| !HashCode::Initialize()
-		|| !Mono::Initialize())
+		|| !HashCode::Initialize())
+		return;
+
+	if (!Game::IsIl2Cpp && !Mono::Initialize())
+		//If we're a mono game and we failed to init mono, die
 		return;
 
 	WelcomeMessage();
 
 	if (!AnalyticsBlocker::Initialize()
-		|| !Il2Cpp::Initialize()
-		|| !Mono::Load())
+		|| !Il2Cpp::Initialize())
+		return;
+
+	bool runtime_initialized = Game::IsIl2Cpp ? DotnetRuntime::LoadDotNet() : Mono::Load();
+
+	if (!runtime_initialized)
 		return;
 
 	AnalyticsBlocker::Hook();

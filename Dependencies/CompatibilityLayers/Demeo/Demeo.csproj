@@ -36,7 +36,7 @@
 		  <Private>false</Private>
 		</Reference>
 		<Reference Include="0Harmony">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\0Harmony.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\net35\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>

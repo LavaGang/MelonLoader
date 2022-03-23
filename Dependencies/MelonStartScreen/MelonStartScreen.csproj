@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.MelonStartScreen</RootNamespace>
-		<TargetFramework>net35</TargetFramework>
+		<TargetFrameworks>net35;net6</TargetFrameworks>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -25,11 +25,15 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\\$(TargetFramework)\AssetRipper.VersionUtilities.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Tomlet">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\\$(TargetFramework)\Tomlet.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="0Harmony">
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\\$(TargetFramework)\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>

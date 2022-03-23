@@ -1,25 +1,52 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace MelonLoader.NativeHost
 {
     public static class NativeEntryPoint
     {
+        private static MelonLogger.Instance loggerInstance = new MelonLogger.Instance("NewEntryPoint");
+
         [UnmanagedCallersOnly]
-        static void Initialize()
+        unsafe static void Initialize(HostImports* imports)
         {
+            loggerInstance.Msg("Initializing. Imports: " + (IntPtr) imports);
+            imports->PreStart = &PreStart;
+            imports->Start = &Start;
             Core.Initialize();
         }
 
-        [UnmanagedCallersOnly]
+        [UnmanagedCallersOnly(CallConvs = new[] {typeof(CallConvStdcall)})]
         static void PreStart()
         {
-            Core.PreStart();
+            loggerInstance.Msg("PreStarting.");
+
+            try
+            {
+                Core.PreStart();
+            } catch(Exception ex)
+            {
+                loggerInstance.Error("Caught exception invoking PreStart!", ex);
+                Thread.Sleep(2000);
+                Environment.Exit(1);
+            }
         }
 
-        [UnmanagedCallersOnly]
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
         static void Start()
         {
-            Core.Start();
+            loggerInstance.Msg("Starting.");
+
+            try
+            {
+                Core.Start();
+            }
+            catch (Exception ex)
+            {
+                loggerInstance.Error("Caught exception invoking Start!", ex);
+                Thread.Sleep(2000);
+                Environment.Exit(1);
+            }
         }
     }
 }

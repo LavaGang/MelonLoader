@@ -7,8 +7,6 @@
 #include "../Utils/Debug.h"
 #include "../Core.h"
 
-using string_t = std::basic_string<char_t>;
-
 //Windows specific defines
 #define STR(s) L ## s 
 #define DIR_SEPARATOR L'\\'
@@ -27,31 +25,39 @@ void* get_export(void* h, const char* name)
 }
 //End Windows specific defines
 
-load_assembly_and_get_function_pointer_fn DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
+void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 {
-	// Load .NET Core
-	void* load_assembly_and_get_function_pointer = nullptr;
+	// Init .NET Runtime
+	void* result_ptr = nullptr;
 	hostfxr_handle cxt = nullptr;
+
+	//Call the initialization function
 	int rc = init_fptr(config_path, nullptr, &cxt);
+
+	//Check for errors
 	if (rc != 0 || cxt == nullptr)
 	{
 		Assertion::ThrowInternalFailure((std::string("Dotnet Init failed. Return code: ") + std::to_string(rc) + " )").c_str());
 		close_fptr(cxt);
-		return nullptr;
+		return;
 	}
 
 	// Get the load assembly function pointer
 	rc = get_delegate_fptr(
 		cxt,
 		hdt_load_assembly_and_get_function_pointer,
-		&load_assembly_and_get_function_pointer);
-	if (rc != 0 || load_assembly_and_get_function_pointer == nullptr) 
+		&result_ptr);
+
+	//Check for errors
+	if (rc != 0 || result_ptr == nullptr) 
 	{
 		Assertion::ThrowInternalFailure((std::string("Dotnet: Get delegate failed. Return code: ") + std::to_string(rc) + " )").c_str());
 	}
 
+	//Save the pointer
+	DotnetRuntime::load_assembly_and_get_function_pointer = (load_assembly_and_get_function_pointer_fn) result_ptr;
+
 	close_fptr(cxt);
-	return (load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer;
 }
 
 bool DotnetRuntime::LoadHostFxr()
@@ -76,50 +82,57 @@ bool DotnetRuntime::LoadHostFxr()
 	return (init_fptr && get_delegate_fptr && close_fptr);
 }
 
-void DotnetRuntime::Initialize()
+bool DotnetRuntime::LoadDotNet() 
 {
+	//Because ML uses char* everywhere, and dotnet expects wchar*, we have to convert.
 	std::string baseDir = std::string(Core::BasePath) + std::string("\\MelonLoader\\net6\\");
 
 	size_t length = strlen(baseDir.c_str()) + 1;
-	
 	wchar_t* wc = new wchar_t[length];
 	mbstowcs(wc, baseDir.c_str(), length);
+	ml_net6_directory = wc;
 
-	string_t root_path = wc;
-	//auto pos = root_path.find_last_of(DIR_SEPARATOR);
-	//assert(pos != string_t::npos);
-	//root_path = root_path.substr(0, pos + 1);
-
-	if (!LoadHostFxr()) 
+	//Conversion done, load the runtime host itself. This will fail if the user doesn't have .net 6 installed.
+	if (!LoadHostFxr())
 	{
 		Assertion::ThrowInternalFailure("Failed to initialize hostfxr!");
-		return;
+		return false;
 	}
 
-	
 	Debug::Msg((std::string("HostFXR loaded. Using root_path = ") + baseDir).c_str());
 
-	const string_t config_path = root_path + STR("MelonLoader.runtimeconfig.json");
-	load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
-	load_assembly_and_get_function_pointer = GetDotNetLoadAssembly(config_path.c_str());
+	//Dotnet needs to load the runtime config json file
+	const string_t config_path = ml_net6_directory + STR("MelonLoader.runtimeconfig.json");
+	GetDotNetLoadAssembly(config_path.c_str());
 
-	if(load_assembly_and_get_function_pointer == nullptr)
+	if (DotnetRuntime::load_assembly_and_get_function_pointer == nullptr) 
+	{
 		Assertion::ThrowInternalFailure("Failed to GetDotNetLoadAssembly!");
+		return false;
+	}
 
 	Debug::Msg("Got DotNetLoadAssembly");
 
-	const string_t ml_managed_path = root_path + STR("MelonLoader.NativeHost.dll");
-	const char_t* dotnet_type = STR("MelonLoader.NativeHost.NativeEntryPoint, MelonLoader.NativeHost");
-	const char_t* dotnet_type_method = STR("Initialize");
+	return true;
+}
 
-	void(__stdcall *init)() = nullptr;
-	int rc = load_assembly_and_get_function_pointer(
-		ml_managed_path.c_str(),
-		dotnet_type,
-		dotnet_type_method,
-		UNMANAGEDCALLERSONLY_METHOD /*delegate_type_name*/,
-		nullptr,
-		(void**)&init);
+void DotnetRuntime::CallInitialize()
+{
+	//Pointer for managed initialize function
+	void(__stdcall * init)(host_imports*) = nullptr;
+
+	const string_t ml_managed_path = ml_net6_directory + STR("MelonLoader.NativeHost.dll"); //Path to assembly
+	const char_t* dotnet_type = STR("MelonLoader.NativeHost.NativeEntryPoint, MelonLoader.NativeHost"); //Assembly-Qualified name of the type to load
+	const char_t* dotnet_type_method = STR("Initialize"); //Name of the function to load
+
+	int rc = DotnetRuntime::load_assembly_and_get_function_pointer(
+		ml_managed_path.c_str(), //Path
+		dotnet_type, //AQN of type
+		dotnet_type_method, //Method
+		UNMANAGEDCALLERSONLY_METHOD, //Function type - in this case, an [UnmanagedCallersOnly] one
+		nullptr, //Reserved
+		(void**)&init //Result ptr
+	); 
 
 	if(rc != 0 || init == nullptr)
 	{
@@ -127,9 +140,45 @@ void DotnetRuntime::Initialize()
 		return;
 	}
 
-	init();
+	Debug::Msg("[Dotnet] Invoking Managed ML Initialize Method");
+
+	//Allocate a struct for the returned functions
+	host_imports imports;
+
+	//Now we have the pointer, call managed init method
+	init(&imports);
+
+	Debug::Msg((std::string("Got imports. PreStart: " + std::to_string((unsigned long)imports.pre_start) + ", Start: " + std::to_string((unsigned long)imports.start))).c_str());
+
+	//Save the returned functions
+	DotnetRuntime::imports = imports;
+}
+
+void DotnetRuntime::CallPreStart()
+{
+	if (DotnetRuntime::imports.pre_start == nullptr)
+	{
+		Assertion::ThrowInternalFailure("Trying to call PreStart when we haven't called Initialize yet.");
+		return;
+	}
+
+	DotnetRuntime::imports.pre_start();
+}
+
+void DotnetRuntime::CallStart()
+{
+	if (DotnetRuntime::imports.start == nullptr)
+	{
+		Assertion::ThrowInternalFailure("Trying to call Start when we haven't called Initialize yet.");
+		return;
+	}
+
+	DotnetRuntime::imports.start();
 }
 
 hostfxr_initialize_for_runtime_config_fn DotnetRuntime::init_fptr;
 hostfxr_get_runtime_delegate_fn DotnetRuntime::get_delegate_fptr;
 hostfxr_close_fn DotnetRuntime::close_fptr;
+load_assembly_and_get_function_pointer_fn DotnetRuntime::load_assembly_and_get_function_pointer;
+string_t DotnetRuntime::ml_net6_directory;
+DotnetRuntime::host_imports DotnetRuntime::imports;

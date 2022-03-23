@@ -14,6 +14,8 @@ std::string HashCode::Hash;
 
 bool HashCode::Initialize()
 {
+    Debug::Msg("HashCode::Initialize");
+
     if (!SetupPaths())
         return false;
     return GenerateHash(Core::Path);

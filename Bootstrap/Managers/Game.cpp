@@ -8,6 +8,7 @@
 #include "../Utils/Assertion.h"
 #include "../Utils/Logging/Logger.h"
 #include "../Utils/Encoding.h"
+#include "../Utils/Debug.h"
 #pragma comment(lib,"version.lib")
 
 char* Game::ApplicationPath = NULL;

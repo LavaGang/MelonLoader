@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
 	<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
