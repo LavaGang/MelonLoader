@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using HarmonyLib;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
+using MelonLoader.Utils;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 
 namespace MelonLoader.CompatibilityLayers
@@ -30,6 +31,9 @@ namespace MelonLoader.CompatibilityLayers
 
         public unsafe override void Setup()
         {
+            if (MelonEnvironment.IsDotnetRuntime)
+                return;
+
             Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "default");
 
             if (!PatchExports())

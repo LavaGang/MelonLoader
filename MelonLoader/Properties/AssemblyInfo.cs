@@ -13,3 +13,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion(MelonLoader.BuildInfo.Version)]
 [assembly: MelonLoader.PatchShield]
 [assembly: InternalsVisibleTo("MelonLoader.NativeHost")]
+[assembly: InternalsVisibleTo("Il2CppAssemblyGenerator")]

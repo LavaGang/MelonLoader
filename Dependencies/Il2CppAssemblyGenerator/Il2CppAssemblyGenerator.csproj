@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Il2CppAssemblyGenerator</RootNamespace>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFramework>net6</TargetFramework>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -18,11 +18,11 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\AssetRipper.VersionUtilities.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Tomlet">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\Tomlet.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
@@ -31,8 +31,5 @@
 	    <Private>false</Private>
 	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
 	  </ProjectReference>
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="System.IO.Compression" />
 	</ItemGroup>
 </Project>

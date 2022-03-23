@@ -42,6 +42,10 @@ namespace MelonLoader.InternalUtils
             if (unityVersion > maximumVersion)
                 return functionToWaitForAsync();
 
+            //Bail out on dotnet for now.
+            //if (MelonEnvironment.IsDotnetRuntime)
+            //    return functionToWaitForAsync();
+
             if (!Load())
                 return functionToWaitForAsync();
 
@@ -55,7 +59,7 @@ namespace MelonLoader.InternalUtils
         {
             MelonLogger.Msg("Loading MelonStartScreen...");
 
-            string BaseDirectory = GameDirectoryManager.DependenciesDirectory;
+            string BaseDirectory = MelonEnvironment.OurRuntimeDirectory;
             string AssemblyPath = Path.Combine(BaseDirectory, $"{FileName}.dll");
             if (!File.Exists(AssemblyPath))
             {

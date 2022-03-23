@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Security;
 using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
+
+#if NET6_0
+using System.Runtime.Loader;
+#endif
 
 namespace MelonLoader
 {
@@ -13,6 +18,7 @@ namespace MelonLoader
         internal static int Initialize()
         {
             AppDomain curDomain = AppDomain.CurrentDomain;
+            Fixes.DotnetLoadFromManagedFolderFix.Install();
             Fixes.UnhandledException.Install(curDomain);
             Fixes.ServerCertificateValidation.Install();
 

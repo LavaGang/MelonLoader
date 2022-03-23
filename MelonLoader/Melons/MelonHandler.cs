@@ -38,10 +38,10 @@ namespace MelonLoader
 
         internal static void Setup()
         {
-            PluginsDirectory = GameDirectoryManager.PluginsDirectory;
+            PluginsDirectory = MelonEnvironment.PluginsDirectory;
             if (!Directory.Exists(PluginsDirectory))
                 Directory.CreateDirectory(PluginsDirectory);
-            ModsDirectory = GameDirectoryManager.ModsDirectory;
+            ModsDirectory = MelonEnvironment.ModsDirectory;
             if (!Directory.Exists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);
         }

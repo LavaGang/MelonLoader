@@ -29,16 +29,16 @@ namespace MelonLoader
             //HashCode = string.Copy(BootstrapInterop.Internal_GetHashCode());
             HashCode = "0000000000DEADBEEF15DEADF00D0000000000";
 
-            BaseDirectory = GameDirectoryManager.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
-            GameDirectory = GameDirectoryManager.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            BaseDirectory = MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
+            GameDirectory = MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
 
             SetCurrentDomainBaseDirectory(GameDirectory, domain);
 
-            UserDataDirectory = GameDirectoryManager.UserDataDirectory;
+            UserDataDirectory = MelonEnvironment.UserDataDirectory;
             if (!Directory.Exists(UserDataDirectory))
                 Directory.CreateDirectory(UserDataDirectory);
 
-            UserLibsDirectory = GameDirectoryManager.UserLibsDirectory;
+            UserLibsDirectory = MelonEnvironment.UserLibsDirectory;
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
@@ -97,6 +97,9 @@ namespace MelonLoader
 
         public static void SetCurrentDomainBaseDirectory(string dirpath, AppDomain domain = null)
         {
+            if (MelonEnvironment.IsDotnetRuntime)
+                return;
+
             if (domain == null)
                 domain = AppDomain.CurrentDomain;
             try
@@ -225,7 +228,11 @@ namespace MelonLoader
         {
             IEnumerable<Type> returnval = Enumerable.Empty<Type>();
             try { returnval = asm.GetTypes().AsEnumerable(); }
-            catch (ReflectionTypeLoadException ex) { returnval = ex.Types; }
+            catch (ReflectionTypeLoadException ex) 
+            {
+                Console.WriteLine(ex);
+                returnval = ex.Types; 
+            }
             return returnval.Where(x =>
                 ((x != null)
                     && ((predicate != null)
@@ -368,28 +375,22 @@ namespace MelonLoader
 #endif
 
 
-        public static bool IsGameIl2Cpp() => Directory.Exists(Path.Combine(GetGameDataDirectory(), "il2cpp_data"));
+        public static bool IsGameIl2Cpp() => Directory.Exists(MelonEnvironment.Il2CppDataDirectory);
 
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsOldMono();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsUnderWineOrSteamProton();
+
+        public static bool IsUnderWineOrSteamProton() => BootstrapInterop.IsUnderWineOrSteamProton();
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetApplicationPath();
-        
-        public static string GetGameDataDirectory()
-        {
-            string gameName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
 
-            //TODO Verify this is sufficient
-            return Path.Combine(GameDirectoryManager.GameRootDirectory, gameName + "_Data");
-        }
+        public static string GetGameDataDirectory() => MelonEnvironment.UnityGameDataDirectory;
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetManagedDirectory();
+        public static string GetManagedDirectory() => MelonEnvironment.MelonManagedDirectory;
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void SetConsoleTitle([MarshalAs(UnmanagedType.LPStr)] string title);
         [MethodImpl(MethodImplOptions.InternalCall)]

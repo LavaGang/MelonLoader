@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Support</RootNamespace>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFramework>net6</TargetFramework>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -39,23 +39,23 @@
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="0Harmony">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\0Harmony.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\AssetRipper.VersionUtilities.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Mono.Cecil">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Mono.Cecil.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\Mono.Cecil.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="MonoMod.Utils">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\MonoMod.Utils.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\MonoMod.Utils.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Tomlet">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
+			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\Tomlet.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>

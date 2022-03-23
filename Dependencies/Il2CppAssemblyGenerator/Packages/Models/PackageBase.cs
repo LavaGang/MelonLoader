@@ -54,7 +54,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
             Config.Save();
         }
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void ThrowInternalFailure(string txt);
+
+        internal static void ThrowInternalFailure(string txt) => MelonLogger.ThrowInternalFailure(txt);
     }
 }

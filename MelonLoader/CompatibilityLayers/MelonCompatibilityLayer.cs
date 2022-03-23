@@ -44,7 +44,7 @@ namespace MelonLoader
 
         internal static void Setup()
         {
-            BaseDirectory = GameDirectoryManager.CompatibilityLayerDirectory;
+            BaseDirectory = MelonEnvironment.CompatibilityLayerDirectory;
             CompatibilityLayers.Melon_Resolver.Setup();
         }
 

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using MelonLoader.Il2CppAssemblyGenerator.Packages;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
@@ -30,7 +31,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
             GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
-            ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
+            ManagedPath = MelonEnvironment.MelonManagedDirectory;
 
             BasePath = Path.GetDirectoryName(typeof(Core).Assembly.Location);
         }

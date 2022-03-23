@@ -123,7 +123,7 @@ void DotnetRuntime::CallInitialize()
 
 	const string_t ml_managed_path = ml_net6_directory + STR("MelonLoader.NativeHost.dll"); //Path to assembly
 	const char_t* dotnet_type = STR("MelonLoader.NativeHost.NativeEntryPoint, MelonLoader.NativeHost"); //Assembly-Qualified name of the type to load
-	const char_t* dotnet_type_method = STR("Initialize"); //Name of the function to load
+	const char_t* dotnet_type_method = STR("LoadStage1"); //Name of the function to load
 
 	int rc = DotnetRuntime::load_assembly_and_get_function_pointer(
 		ml_managed_path.c_str(), //Path
@@ -136,19 +136,34 @@ void DotnetRuntime::CallInitialize()
 
 	if(rc != 0 || init == nullptr)
 	{
-		Assertion::ThrowInternalFailure((std::string("Failed to get MelonLoader.NativeHost.NativeEntryPoint.Initialize! RC = " + std::to_string(rc)).c_str()));
+		Assertion::ThrowInternalFailure((std::string("Failed to get MelonLoader.NativeHost.NativeEntryPoint.LoadStage1! RC = " + std::to_string(rc)).c_str()));
 		return;
 	}
 
-	Debug::Msg("[Dotnet] Invoking Managed ML Initialize Method");
-
-	//Allocate a struct for the returned functions
-	host_imports imports;
+	Debug::Msg("[Dotnet] Invoking Managed ML LoadStage1 Method...");
 
 	//Now we have the pointer, call managed init method
-	init(&imports);
+	//This gives us the ptr to our own LoadAssemblyAndGetFuncPtr method, which actually uses the default assembly load context. Microsoft, WHY?
+	init(&DotnetRuntime::imports);
+	
+	const char_t* dotnet_type_method_secondstage = STR("LoadStage2"); //Name of the function to load
+	void(__stdcall * init2)(host_imports*) = nullptr;
 
-	Debug::Msg((std::string("Got imports. PreStart: " + std::to_string((unsigned long)imports.pre_start) + ", Start: " + std::to_string((unsigned long)imports.start))).c_str());
+	Debug::Msg("[Dotnet] Reloading NativeHost into correct load context and getting LoadStage2 pointer...");
+	DotnetRuntime::imports.load_assembly_and_get_ptr(
+		ml_managed_path.c_str(), //Path
+		dotnet_type, //AQN of type
+		dotnet_type_method_secondstage, //Method
+		&init2
+	);
+
+	if(init2 == nullptr)
+
+	Debug::Msg("[Dotnet] Invoking LoadStage2 to get pointers for initialization functions in correct context...");
+	init2(&DotnetRuntime::imports);
+
+	Debug::Msg("[Dotnet] Invoking Initialize...");
+	DotnetRuntime::imports.initialize();
 
 	//Save the returned functions
 	DotnetRuntime::imports = imports;

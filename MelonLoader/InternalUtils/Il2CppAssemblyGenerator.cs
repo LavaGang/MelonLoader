@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace MelonLoader.InternalUtils
 {
@@ -20,9 +19,9 @@ namespace MelonLoader.InternalUtils
             if (RunMethod != null)
             {
                 IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
-                DisableCloseButton(windowHandle);
+                BootstrapInterop.DisableCloseButton(windowHandle);
                 int returnval = (int)RunMethod.Invoke(null, new object[0]);
-                EnableCloseButton(windowHandle);
+                BootstrapInterop.EnableCloseButton(windowHandle);
                 MelonUtils.SetCurrentDomainBaseDirectory(MelonUtils.GameDirectory);
                 return returnval == 0;
             }
@@ -34,7 +33,7 @@ namespace MelonLoader.InternalUtils
         {
             MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
 
-            string BaseDirectory = GameDirectoryManager.Il2CppAssemblyGeneratorDirectory;
+            string BaseDirectory = MelonEnvironment.Il2CppAssemblyGeneratorDirectory;
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find Il2CppAssemblyGenerator Directory!");
@@ -71,9 +70,6 @@ namespace MelonLoader.InternalUtils
             catch (Exception ex) { MelonLogger.ThrowInternalFailure($"Il2CppAssemblyGenerator Exception: {ex}"); }
         }
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void EnableCloseButton(IntPtr mainWindow);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void DisableCloseButton(IntPtr mainWindow);
+        
     }
 }

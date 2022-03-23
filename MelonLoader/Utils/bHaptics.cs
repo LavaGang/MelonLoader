@@ -16,7 +16,7 @@ namespace MelonLoader
         internal static void Load()
         {
             string filename = "bHaptics.x" + (MelonUtils.IsGame32Bit() ? "86" : "64") + ".dll";
-            string filepath = Path.Combine(GameDirectoryManager.DependenciesDirectory, filename);
+            string filepath = Path.Combine(MelonEnvironment.DependenciesDirectory, filename);
             if (!File.Exists(filepath))
             {
                 _waserror = true;

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 #pragma warning disable 0618
 
 namespace MelonLoader.CompatibilityLayers
@@ -24,7 +25,10 @@ namespace MelonLoader.CompatibilityLayers
 
         private static MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
         {
+            MelonDebug.Msg($"Assembly {assembly.FullName}, valid type count is {assembly.GetValidTypes().Count()}");
+
             IEnumerable<Type> melon_types = assembly.GetValidTypes(x => x.IsSubclassOf(typeof(MelonBase)));
+            
             if ((melon_types == null) || !melon_types.Any())
                 return null;
 

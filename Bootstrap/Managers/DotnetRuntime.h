@@ -2,6 +2,7 @@
 #include <coreclr_delegates.h>
 #include <nethost.h>
 #include <hostfxr.h>
+#include <Windows.h>
 
 using string_t = std::basic_string<char_t>;
 
@@ -17,6 +18,9 @@ public:
 private:
 	struct host_imports
 	{
+		void(*load_assembly_and_get_ptr)(const char_t*, const char_t*, const char_t*, void(__stdcall**)(host_imports*));
+
+		host_delegate initialize;
 		host_delegate pre_start;
 		host_delegate start;
 	};

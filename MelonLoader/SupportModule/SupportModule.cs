@@ -19,7 +19,7 @@ namespace MelonLoader
 
         internal static bool Setup()
         {
-            BaseDirectory = GameDirectoryManager.SupportModuleDirectory;
+            BaseDirectory = MelonEnvironment.SupportModuleDirectory;
             if (!Directory.Exists(BaseDirectory))
             {
                 MelonLogger.Error("Failed to Find SupportModules Directory!");
