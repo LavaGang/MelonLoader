@@ -397,8 +397,8 @@ namespace MelonLoader
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
+        public static void NativeHookAttach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
 

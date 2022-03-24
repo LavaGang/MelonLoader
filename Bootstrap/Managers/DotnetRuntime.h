@@ -16,9 +16,14 @@ public:
 	static void CallPreStart();
 	static void CallStart();
 private:
+	struct host_exports
+	{
+		void (*detour_attach)(void** target, void* detour);
+	};
+
 	struct host_imports
 	{
-		void(*load_assembly_and_get_ptr)(const char_t*, const char_t*, const char_t*, void(__stdcall**)(host_imports*));
+		void(*load_assembly_and_get_ptr)(const char_t*, const char_t*, const char_t*, void(__stdcall**)(host_imports*, host_exports*));
 
 		host_delegate initialize;
 		host_delegate pre_start;
@@ -33,6 +38,7 @@ private:
 	static string_t ml_net6_directory;
 
 	static host_imports imports;
+	static host_exports exports;
 
 	static bool LoadHostFxr();
 	static void GetDotNetLoadAssembly(const char_t* config_path);

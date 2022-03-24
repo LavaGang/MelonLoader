@@ -6,6 +6,7 @@
 #include "../Utils/Assertion.h"
 #include "../Utils/Debug.h"
 #include "../Core.h"
+#include "Hook.h"
 
 //Windows specific defines
 #define STR(s) L ## s 
@@ -32,6 +33,7 @@ void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 	hostfxr_handle cxt = nullptr;
 
 	//Call the initialization function
+	Debug::Msg("Calling init_fptr...");
 	int rc = init_fptr(config_path, nullptr, &cxt);
 
 	//Check for errors
@@ -42,6 +44,7 @@ void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 		return;
 	}
 
+	Debug::Msg("Getting load_assembly_and_get_function_pointer...");
 	// Get the load assembly function pointer
 	rc = get_delegate_fptr(
 		cxt,
@@ -57,6 +60,7 @@ void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 	//Save the pointer
 	DotnetRuntime::load_assembly_and_get_function_pointer = (load_assembly_and_get_function_pointer_fn) result_ptr;
 
+	Debug::Msg("Calling close_fptr...");
 	close_fptr(cxt);
 }
 
@@ -147,7 +151,7 @@ void DotnetRuntime::CallInitialize()
 	init(&DotnetRuntime::imports);
 	
 	const char_t* dotnet_type_method_secondstage = STR("LoadStage2"); //Name of the function to load
-	void(__stdcall * init2)(host_imports*) = nullptr;
+	void(__stdcall * init2)(host_imports*, host_exports*) = nullptr;
 
 	Debug::Msg("[Dotnet] Reloading NativeHost into correct load context and getting LoadStage2 pointer...");
 	DotnetRuntime::imports.load_assembly_and_get_ptr(
@@ -157,10 +161,16 @@ void DotnetRuntime::CallInitialize()
 		&init2
 	);
 
-	if(init2 == nullptr)
+	if (init2 == nullptr) 
+	{
+		Assertion::ThrowInternalFailure("Failed to get MelonLoader.NativeHost.NativeEntryPoint.LoadStage2!");
+		return;
+	}
+
+	DotnetRuntime::exports.detour_attach = &Hook::Attach;
 
 	Debug::Msg("[Dotnet] Invoking LoadStage2 to get pointers for initialization functions in correct context...");
-	init2(&DotnetRuntime::imports);
+	init2(&DotnetRuntime::imports, &DotnetRuntime::exports);
 
 	Debug::Msg("[Dotnet] Invoking Initialize...");
 	DotnetRuntime::imports.initialize();
@@ -197,3 +207,4 @@ hostfxr_close_fn DotnetRuntime::close_fptr;
 load_assembly_and_get_function_pointer_fn DotnetRuntime::load_assembly_and_get_function_pointer;
 string_t DotnetRuntime::ml_net6_directory;
 DotnetRuntime::host_imports DotnetRuntime::imports;
+DotnetRuntime::host_exports DotnetRuntime::exports;

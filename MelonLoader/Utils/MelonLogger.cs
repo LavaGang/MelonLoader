@@ -106,7 +106,7 @@ namespace MelonLoader
         internal static void ThrowInternalFailure(string txt) => Internal_Error("TODO: Internal Failure Impl", txt);
 
 
-        internal static void WriteSpacer() => Internal_Warning("TODO", "Print Spacer Here");
+        internal static void WriteSpacer() => Console.WriteLine(); //TODO Write to file too
 
         
         internal static void Internal_PrintModName(ConsoleColor meloncolor, ConsoleColor authorcolor, string name, string author, string version, string id)

@@ -4,8 +4,12 @@ using System.Runtime.InteropServices;
 
 namespace MelonLoader
 {
-    internal static class BootstrapInterop
+    internal unsafe static class BootstrapInterop
     {
+#if NET6_0
+        internal static delegate* unmanaged<void**, void*, void> HookAttach;
+#endif
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         internal extern static string Internal_GetHashCode();
@@ -25,7 +29,9 @@ namespace MelonLoader
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static bool IsUnderWineOrSteamProton();
-#else 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
+#else
         public static void EnableCloseButton(IntPtr mainWindow) 
         {
             MelonLogger.Warning("TODO: EnableCloseButton");
@@ -40,6 +46,11 @@ namespace MelonLoader
         {
             MelonLogger.Warning("TODO: IsUnderWineOrSteamProton");
             return false;
+        }
+
+        public static unsafe void NativeHookAttach(IntPtr target, IntPtr detour) 
+        {
+            HookAttach((void**) target, (void*) detour);
         }
 #endif
     }

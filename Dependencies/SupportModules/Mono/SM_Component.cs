@@ -66,13 +66,13 @@ namespace MelonLoader.Support
             GameObject.Destroy(gameObject);
         }
 
-        void Start()
+        public void Start()
         {
             SiblingFix();
             Main.Interface.OnApplicationLateStart();
         }
 
-        void Awake()
+        public void Awake()
         {
             foreach (var queuedCoroutine in SupportModule_To.QueuedCoroutines)
 #if SM_Il2Cpp
@@ -83,7 +83,7 @@ namespace MelonLoader.Support
             SupportModule_To.QueuedCoroutines.Clear();
         }
 
-        void Update()
+        public void Update()
         {
             SiblingFix();
 #if SM_Il2Cpp
@@ -93,20 +93,20 @@ namespace MelonLoader.Support
             Main.Interface.Update();
         }
 
-        void OnDestroy()
+        public void OnDestroy()
         {
             if (!IsDestroying)
                 Create();
         }
 
-        void OnApplicationQuit()
+        public void OnApplicationQuit()
         {
             Destroy();
             Main.Interface.Quit();
         }
 
-        void FixedUpdate() => Main.Interface.FixedUpdate();
-        void LateUpdate() => Main.Interface.LateUpdate();
-        void OnGUI() => Main.Interface.OnGUI();
+        public void FixedUpdate() => Main.Interface.FixedUpdate();
+        public void LateUpdate() => Main.Interface.LateUpdate();
+        public void OnGUI() => Main.Interface.OnGUI();
     }
 }

@@ -7,6 +7,8 @@ namespace MelonLoader.NativeHost
 {
     public static class NativeEntryPoint
     {
+        internal static HostExports Exports;
+
         [UnmanagedCallersOnly]
         unsafe static void LoadStage1(HostImports* imports)
         {
@@ -16,12 +18,14 @@ namespace MelonLoader.NativeHost
 
 
         [UnmanagedCallersOnly]
-        unsafe static void LoadStage2(HostImports* imports)
+        unsafe static void LoadStage2(HostImports* imports, HostExports* exports)
         {
             Console.WriteLine("[NewEntryPoint] Configuring imports...");
             imports->Initialize = &Initialize;
             imports->PreStart = &PreStart;
             imports->Start = &Start;
+
+            Exports = *exports;
         }
 
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
@@ -65,16 +69,18 @@ namespace MelonLoader.NativeHost
         {
             Console.WriteLine("[NewEntryPoint] Starting.");
 
-            try
-            {
-                MelonLoaderInvoker.Start();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("[NewEntryPoint] Caught exception invoking Start! " + ex);
-                Thread.Sleep(5000);
-                Environment.Exit(1);
-            }
+            MelonLoaderInvoker.Start();
+
+            //try
+            //{
+            //    MelonLoaderInvoker.Start();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("[NewEntryPoint] Caught exception invoking Start! " + ex);
+            //    Thread.Sleep(5000);
+            //    Environment.Exit(1);
+            //}
         }
 
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]

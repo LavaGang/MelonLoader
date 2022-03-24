@@ -33,8 +33,8 @@ namespace MelonLoader
                 if (!File.Exists(ModulePath))
                     continue;
 
-                try
-                {
+                //try
+                //{
                     if (enumerator.Current.LoadSpecifier != null)
                     {
                         if (!enumerator.Current.LoadSpecifier())
@@ -49,12 +49,12 @@ namespace MelonLoader
 
                     if (!LoadInterface(ModulePath))
                         continue;
-                }
-                catch (Exception ex)
-                {
-                    MelonDebug.Error($"Support Module [{enumerator.Current.FileName}] threw an Exception: {ex}");
-                    continue;
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MelonDebug.Error($"Support Module [{enumerator.Current.FileName}] threw an Exception: {ex}");
+                //    continue;
+                //}
             }
 
             if (Interface == null)
