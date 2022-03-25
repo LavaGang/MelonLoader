@@ -24,7 +24,10 @@ namespace MelonLoader.Fixes
         {
             var potentialDllPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, name.Name + ".dll");
             if (File.Exists(potentialDllPath))
+            {
+                MelonDebug.Msg($"[DotnetManagedFolder] Loading from {potentialDllPath}...");
                 return alc.LoadFromAssemblyPath(potentialDllPath);
+            }
 
             return null;
         }

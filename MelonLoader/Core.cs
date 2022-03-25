@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security;
 using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
+using MelonLoader.Utils;
+using System.IO;
 
 #if NET6_0
 using System.Runtime.Loader;
@@ -17,6 +19,9 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
+            MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
+            MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+
             AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.DotnetLoadFromManagedFolderFix.Install();
             Fixes.UnhandledException.Install(curDomain);

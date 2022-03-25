@@ -8,6 +8,7 @@ namespace MelonLoader
     {
 #if NET6_0
         internal static delegate* unmanaged<void**, void*, void> HookAttach;
+        internal static delegate* unmanaged<void**, void*, void> HookDetach;
 #endif
 
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -31,6 +32,8 @@ namespace MelonLoader
         public extern static bool IsUnderWineOrSteamProton();
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookAttach(IntPtr target, IntPtr detour);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
 #else
         public static void EnableCloseButton(IntPtr mainWindow) 
         {
@@ -51,6 +54,11 @@ namespace MelonLoader
         public static unsafe void NativeHookAttach(IntPtr target, IntPtr detour) 
         {
             HookAttach((void**) target, (void*) detour);
+        }
+
+        public static unsafe void NativeHookDetach(IntPtr target, IntPtr detour)
+        {
+            HookDetach((void**)target, (void*)detour);
         }
 #endif
     }

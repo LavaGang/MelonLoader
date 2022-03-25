@@ -29,8 +29,8 @@ namespace MelonLoader
             //HashCode = string.Copy(BootstrapInterop.Internal_GetHashCode());
             HashCode = "0000000000DEADBEEF15DEADF00D0000000000";
 
-            BaseDirectory = MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
-            GameDirectory = MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            BaseDirectory = MelonEnvironment.MelonLoaderDirectory;
+            GameDirectory = MelonEnvironment.GameRootDirectory;
 
             SetCurrentDomainBaseDirectory(GameDirectory, domain);
 
@@ -399,8 +399,7 @@ namespace MelonLoader
 
         public static void NativeHookAttach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
+        public static void NativeHookDetach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookDetach(target, detour);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]

@@ -19,6 +19,7 @@ private:
 	struct host_exports
 	{
 		void (*detour_attach)(void** target, void* detour);
+		void (*detour_detach)(void** target, void* detour);
 	};
 
 	struct host_imports

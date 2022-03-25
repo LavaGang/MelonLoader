@@ -7,6 +7,7 @@
 #include "../Utils/Debug.h"
 #include "../Core.h"
 #include "Hook.h"
+#include <iostream>
 
 //Windows specific defines
 #define STR(s) L ## s 
@@ -69,9 +70,16 @@ bool DotnetRuntime::LoadHostFxr()
 	// Pre-allocate a large buffer for the path to hostfxr
 	char_t buffer[MAX_PATH];
 	size_t buffer_size = sizeof(buffer) / sizeof(char_t);
-	int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
+
+	get_hostfxr_parameters params;
+
+	params.dotnet_root = STR("C:\\Users\\Sam\\Documents\\debugdotnet603");
+
+	int rc = get_hostfxr_path(buffer, &buffer_size, &params);
 	if (rc != 0)
 		return false;
+
+	std::wcout << L"Using hostfxr_path = " << buffer << L"." << std::endl;
 
 	// Load hostfxr and get desired exports
 	void* lib = load_library(buffer);
@@ -168,6 +176,7 @@ void DotnetRuntime::CallInitialize()
 	}
 
 	DotnetRuntime::exports.detour_attach = &Hook::Attach;
+	DotnetRuntime::exports.detour_detach = &Hook::Detach;
 
 	Debug::Msg("[Dotnet] Invoking LoadStage2 to get pointers for initialization functions in correct context...");
 	init2(&DotnetRuntime::imports, &DotnetRuntime::exports);

@@ -1,5 +1,6 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using MelonLoader.Utils;
+using System;
+using System.IO;
 
 namespace MelonLoader
 {
@@ -7,6 +8,9 @@ namespace MelonLoader
     {
         public static readonly ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
         public static readonly ConsoleColor DefaultTextColor = ConsoleColor.Gray;
+        
+        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest-Managed.log"), FileMode.Create);
+        private static StreamWriter LogWriter = new StreamWriter(LogStream);
 
         public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());
         public static void Msg(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt);
@@ -93,6 +97,8 @@ namespace MelonLoader
 
         internal static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
         {
+            LogWriter.WriteLine($"[{DateTime.Now:T}] {(namesection == null ? "" : $"[{namesection}] ")}{txt}");
+
             //TODO Colors
             Console.WriteLine($"[{DateTime.Now:T}] {(namesection == null ? "" : $"[{namesection}] ")}{txt}");
         }
@@ -106,11 +112,17 @@ namespace MelonLoader
         internal static void ThrowInternalFailure(string txt) => Internal_Error("TODO: Internal Failure Impl", txt);
 
 
-        internal static void WriteSpacer() => Console.WriteLine(); //TODO Write to file too
+        internal static void WriteSpacer()
+        {
+            LogWriter.WriteLine();
+            Console.WriteLine();
+        }
 
-        
         internal static void Internal_PrintModName(ConsoleColor meloncolor, ConsoleColor authorcolor, string name, string author, string version, string id)
         {
+            LogWriter.WriteLine($"[{DateTime.Now:T}] {name} v{version}{(id == null ? "" : $" ({id})")}");
+            LogWriter.WriteLine($"[{DateTime.Now:T}] by {author}");
+
             //TODO Colors
             Console.WriteLine($"[{DateTime.Now:T}] {name} v{version}{(id == null ? "" : $" ({id})")}");
             Console.WriteLine($"[{DateTime.Now:T}] by {author}");
@@ -119,7 +131,7 @@ namespace MelonLoader
         
         internal static void Flush()
         {
-            Internal_Warning("TODO", "MelonLogger::Flush");
+            LogWriter.Flush();
         }
 
 
