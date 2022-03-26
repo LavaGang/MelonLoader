@@ -69,18 +69,16 @@ namespace MelonLoader.NativeHost
         {
             Console.WriteLine("[NewEntryPoint] Starting.");
 
-            MelonLoaderInvoker.Start();
-
-            //try
-            //{
-            //    MelonLoaderInvoker.Start();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("[NewEntryPoint] Caught exception invoking Start! " + ex);
-            //    Thread.Sleep(5000);
-            //    Environment.Exit(1);
-            //}
+            try
+            {
+                MelonLoaderInvoker.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[NewEntryPoint] Caught exception invoking Start! " + ex);
+                Thread.Sleep(5000);
+                Environment.Exit(1);
+            }
         }
 
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]

@@ -73,19 +73,31 @@ bool DotnetRuntime::LoadHostFxr()
 
 	get_hostfxr_parameters params;
 
-	params.dotnet_root = STR("C:\\Users\\Sam\\Documents\\debugdotnet603");
+	//params.dotnet_root = STR("C:\\Users\\Sam\\Documents\\debugdotnet603");
 
-	int rc = get_hostfxr_path(buffer, &buffer_size, &params);
-	if (rc != 0)
+	int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
+	if (rc != 0) 
+	{
+		if (rc == HOST_LOADLIB_FAILED)
+			Assertion::ThrowInternalFailure("Failed to locate hostfxr - library load call failed. Wrong architecture dotnet installed?");
+		else if(rc == HOST_MISSING_FILE)
+			Assertion::ThrowInternalFailure("Failed to locate hostfxr - could not find a required dll. Corrupt dotnet installation?");
+		else if(rc == HOST_MISSING_ENTRYPOINT)
+			Assertion::ThrowInternalFailure("Failed to locate hostfxr - could not find a required entry point. Outdated dotnet installation?");
+		else
+			Assertion::ThrowInternalFailure((std::string("Failed to locate hostfxr - unknown error, got HRESULT ") + std::to_string(rc)).c_str());
+
 		return false;
+	}
 
 	std::wcout << L"Using hostfxr_path = " << buffer << L"." << std::endl;
 
 	// Load hostfxr and get desired exports
 	void* lib = load_library(buffer);
 
+	int hr = GetLastError();
 	if(lib == nullptr)
-		Assertion::ThrowInternalFailure("Failed to LoadLibrary hostfxr!");
+		Assertion::ThrowInternalFailure((std::string("Failed to LoadLibrary hostfxr! GetLastError() = ") + std::to_string(hr)).c_str());
 
 	init_fptr = (hostfxr_initialize_for_runtime_config_fn)get_export(lib, "hostfxr_initialize_for_runtime_config");
 	get_delegate_fptr = (hostfxr_get_runtime_delegate_fn)get_export(lib, "hostfxr_get_runtime_delegate");
