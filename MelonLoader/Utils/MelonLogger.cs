@@ -2,13 +2,15 @@
 using System;
 using System.IO;
 
+using static MelonLoader.Utils.LoggerUtils;
+
 namespace MelonLoader
 {
     public class MelonLogger
     {
         public static readonly ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
         public static readonly ConsoleColor DefaultTextColor = ConsoleColor.Gray;
-        
+
         private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest-Managed.log"), FileMode.Create);
         private static StreamWriter LogWriter = new StreamWriter(LogStream);
 
@@ -20,12 +22,12 @@ namespace MelonLoader
         public static void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt);
         public static void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
 
-        
+
         public static void Warning(object obj) => NativeWarning(null, obj.ToString());
         public static void Warning(string txt) => NativeWarning(null, txt);
         public static void Warning(string txt, params object[] args) => NativeWarning(null, string.Format(txt, args));
 
-        
+
         public static void Error(object obj) => NativeError(null, obj.ToString());
         public static void Error(string txt) => NativeError(null, txt);
         public static void Error(string txt, params object[] args) => NativeError(null, string.Format(txt, args));
@@ -42,7 +44,7 @@ namespace MelonLoader
                     namesection_color = melon.ConsoleColor;
                 }
             }
-            
+
             Internal_Msg(namesection_color, txt_color, namesection, txt ?? "null");
             RunMsgCallbacks(namesection_color, txt_color, namesection, txt ?? "null");
         }
@@ -50,7 +52,7 @@ namespace MelonLoader
         private static void NativeWarning(string namesection, string txt)
         {
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
-            
+
             Internal_Warning(namesection, txt ?? "null");
             RunWarningCallbacks(namesection, txt ?? "null");
         }
@@ -58,7 +60,7 @@ namespace MelonLoader
         private static void NativeError(string namesection, string txt)
         {
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
-            
+
             Internal_Error(namesection, txt ?? "null");
             RunErrorCallbacks(namesection, txt ?? "null");
         }
@@ -97,15 +99,38 @@ namespace MelonLoader
 
         internal static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
         {
-            LogWriter.WriteLine($"[{DateTime.Now:T}] {(namesection == null ? "" : $"[{namesection}] ")}{txt}");
+            LogWriter.WriteLine($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
 
-            //TODO Colors
-            Console.WriteLine($"[{DateTime.Now:T}] {(namesection == null ? "" : $"[{namesection}] ")}{txt}");
+            WriteTimestamp(namesection_color == ConsoleColor.Red && txt_color == ConsoleColor.Red);
+
+            if (namesection is not null)
+            {
+                Console.Write($"{ColorToAnsi(ConsoleColor.Gray)}[");
+                Console.Write($"{ColorToAnsi(namesection_color)}{namesection}");
+                Console.Write($"{ColorToAnsi(ConsoleColor.Gray)}] ");
+            }
+
+            Console.Write($"{ColorToAnsi(txt_color)}{txt}\n");
+        }
+
+        internal static void WriteTimestamp(bool error)
+        {
+            if (error)
+            {
+                Console.Write($"{ColorToAnsi(ConsoleColor.Red)}[");
+                Console.Write($"{GetTimeStamp()}");
+                Console.Write($"] ");
+                return;
+            }
+
+            Console.Write($"{ColorToAnsi(ConsoleColor.Gray)}[");
+            Console.Write($"{ColorToAnsi(ConsoleColor.Green)}{GetTimeStamp()}");
+            Console.Write($"{ColorToAnsi(ConsoleColor.Gray)}] ");
         }
 
         internal static void Internal_Warning(string namesection, string txt) => Internal_Msg(ConsoleColor.Yellow, ConsoleColor.Yellow, namesection, txt);
 
-        
+
         internal static void Internal_Error(string namesection, string txt) => Internal_Msg(ConsoleColor.Red, ConsoleColor.Red, namesection, txt);
 
 
@@ -120,15 +145,18 @@ namespace MelonLoader
 
         internal static void Internal_PrintModName(ConsoleColor meloncolor, ConsoleColor authorcolor, string name, string author, string version, string id)
         {
-            LogWriter.WriteLine($"[{DateTime.Now:T}] {name} v{version}{(id == null ? "" : $" ({id})")}");
-            LogWriter.WriteLine($"[{DateTime.Now:T}] by {author}");
+            LogWriter.WriteLine($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
+            LogWriter.WriteLine($"[{GetTimeStamp()}] by {author}");
 
             //TODO Colors
-            Console.WriteLine($"[{DateTime.Now:T}] {name} v{version}{(id == null ? "" : $" ({id})")}");
-            Console.WriteLine($"[{DateTime.Now:T}] by {author}");
+
+            WriteTimestamp(false);
+            Console.WriteLine($"{ColorToAnsi(meloncolor)}{name} v{version}{(id == null ? "" : $" ({id})")}");
+            WriteTimestamp(false);
+            Console.WriteLine($"{ColorToAnsi(authorcolor)}by {author}");
         }
 
-        
+
         internal static void Flush()
         {
             LogWriter.Flush();
