@@ -16,6 +16,7 @@ namespace MelonLoader
 	internal static class Core
     {
         internal static HarmonyLib.Harmony HarmonyInstance = null;
+        internal static bool Is_ALPHA_PreRelease = false;
 
         internal static int Initialize()
         {

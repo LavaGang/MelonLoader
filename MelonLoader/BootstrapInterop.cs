@@ -15,11 +15,15 @@ namespace MelonLoader
         [return: MarshalAs(UnmanagedType.LPStr)]
         internal extern static string Internal_GetHashCode();
 
-        //[MethodImpl(MethodImplOptions.InternalCall)]
-        //[return: MarshalAs(UnmanagedType.LPStr)]
-        internal /*extern */static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null)
+        internal static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null)
         {
-            MelonLogger.Warning($"TODO: SetDefaultConsoleTitleWithGameName({GameName}, {GameVersion})");
+            var lemon = MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON;
+            var versionStr = $"{(lemon ? "Lemon" : "Melon")}Loader " +
+                $"v{BuildInfo.Version} " +
+                $"{(Core.Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}" +
+                $" - {GameName} {(GameVersion is null ? "" : GameVersion)}";
+
+            Console.Title = versionStr;
         }
 
 #if !NET6_0
