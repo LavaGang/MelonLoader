@@ -41,8 +41,12 @@ namespace MelonLoader
 
         public static bool IsEnabled() 
         {
-            MelonLogger.Warning("TODO: MelonDebug.IsEnabled");
+#if DEBUG
             return true;
+#endif
+#pragma warning disable CS0162 // Unreachable code detected
+            return MelonLaunchOptions.Core.IsDebug;
+#pragma warning restore CS0162 // Unreachable code detected
         }
     }
 }

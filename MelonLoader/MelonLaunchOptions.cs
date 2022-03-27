@@ -59,6 +59,7 @@ namespace MelonLoader
             public static LoadModeEnum LoadMode_Mods { get; internal set; }
             public static bool QuitFix { get; internal set; }
             public static bool StartScreen { get; internal set; } = true;
+            public static bool IsDebug { get; internal set; }
 
             internal static void Setup()
             {
@@ -74,6 +75,7 @@ namespace MelonLoader
                     if (int.TryParse(arg, out int valueint))
                         LoadMode_Mods = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
                 };
+                WithoutArg["melonloader.debug"] = () => IsDebug = true;
             }
         }
 
