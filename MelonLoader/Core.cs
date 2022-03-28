@@ -19,11 +19,7 @@ namespace MelonLoader
         internal static HarmonyLib.Harmony HarmonyInstance = null;
         internal static bool Is_ALPHA_PreRelease = false;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private delegate string StringFn();
-
-        internal static StringFn WineGetVersion;
+        internal static NativeLibrary.StringDelegate WineGetVersion;
 
         internal static int Initialize()
         {
@@ -123,10 +119,14 @@ namespace MelonLoader
         private static void SetupWineCheck()
         {
             IntPtr dll = NativeLibrary.LoadLibrary("ntdll.dll");
-            StringFn wine_get_version_proc = NativeLibrary.GetExportedFunction<StringFn>(dll, "wine_get_version");
-            if (wine_get_version_proc is null)
+            IntPtr wine_get_version_proc = NativeLibrary.GetProcAddress(dll, "wine_get_version");
+            if (wine_get_version_proc == IntPtr.Zero)
                 return;
-            WineGetVersion = wine_get_version_proc;
+
+            WineGetVersion = (NativeLibrary.StringDelegate)Marshal.GetDelegateForFunctionPointer(
+                wine_get_version_proc, 
+                typeof(NativeLibrary.StringDelegate)
+                );
         }
 
         private static void AddUnityDebugLog()
