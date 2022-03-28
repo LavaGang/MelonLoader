@@ -12,7 +12,7 @@ namespace MelonLoader
         public static readonly ConsoleColor DefaultTextColor = ConsoleColor.Gray;
 
         private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest-Managed.log"), FileMode.Create);
-        private static StreamWriter LogWriter = new StreamWriter(LogStream);
+        internal static StreamWriter LogWriter = new StreamWriter(LogStream);
 
         public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());
         public static void Msg(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt);
@@ -134,7 +134,7 @@ namespace MelonLoader
         internal static void Internal_Error(string namesection, string txt) => Internal_Msg(ConsoleColor.Red, ConsoleColor.Red, namesection, txt);
 
 
-        internal static void ThrowInternalFailure(string txt) => Internal_Error("TODO: Internal Failure Impl", txt);
+        internal static void ThrowInternalFailure(string txt) => Assertion.ThrowInternalFailure(txt);
 
 
         internal static void WriteSpacer()
@@ -147,8 +147,6 @@ namespace MelonLoader
         {
             LogWriter.WriteLine($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
             LogWriter.WriteLine($"[{GetTimeStamp()}] by {author}");
-
-            //TODO Colors
 
             WriteTimestamp(false);
             Console.WriteLine($"{ColorToAnsi(meloncolor)}{name} v{version}{(id == null ? "" : $" ({id})")}");
