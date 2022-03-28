@@ -39,14 +39,31 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static void NativeHookDetach(IntPtr target, IntPtr detour);
 #else
+
+        private const int MF_BYCOMMAND = 0x00000000;
+
+        private const int MF_ENABLED = 0x00000000;
+        private const int MF_GRAYED = 0x00000001;
+        private const int MF_DISABLED = 0x00000002;
+        public const int SC_CLOSE = 0xF060;
+
+        [DllImport("user32.dll")]
+        public static extern int EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        [DllImport("kernel32.dll", ExactSpelling = true)]
+        private static extern IntPtr GetConsoleWindow();
+
         public static void EnableCloseButton(IntPtr mainWindow) 
         {
-            MelonLogger.Warning("TODO: EnableCloseButton");
+            EnableMenuItem(GetSystemMenu(mainWindow, false), SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
         }
 
         public static void DisableCloseButton(IntPtr mainWindow)
         {
-            MelonLogger.Warning("TODO: DisableCloseButton");
+            EnableMenuItem(GetSystemMenu(mainWindow, false), SC_CLOSE, (MF_BYCOMMAND | MF_DISABLED | MF_GRAYED));
         }
 
         public static bool IsUnderWineOrSteamProton()
