@@ -20,16 +20,24 @@ namespace MelonLoader.Fixes
             AssemblyLoadContext.Default.Resolving += OnResolve;
         }
 
-        private static System.Reflection.Assembly OnResolve(AssemblyLoadContext alc, AssemblyName name)
+        private static Assembly TryLoad(AssemblyLoadContext alc, string path)
         {
-            var potentialDllPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, name.Name + ".dll");
-            if (File.Exists(potentialDllPath))
+            if (File.Exists(path))
             {
-                MelonDebug.Msg($"[DotnetManagedFolder] Loading from {potentialDllPath}...");
-                return alc.LoadFromAssemblyPath(potentialDllPath);
+                MelonDebug.Msg($"[DotnetManagedFolder] Loading from {path}...");
+                return alc.LoadFromAssemblyPath(path);
             }
 
             return null;
+        }
+
+        private static Assembly OnResolve(AssemblyLoadContext alc, AssemblyName name)
+        {
+            var filename = name.Name + ".dll";
+            var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
+            var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, name.Name + ".dll");
+
+            return TryLoad(alc, managedPath) ?? TryLoad(alc, userlibsPath);
         }
 #endif
     }
