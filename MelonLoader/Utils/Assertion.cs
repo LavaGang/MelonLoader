@@ -8,6 +8,7 @@ namespace MelonLoader.Utils
     {
         internal static bool ShouldContinue = true;
 
+        //TODO: Could this be done in a better way? net35/6 load PresentationFramework differently so I could not rely on it
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         internal static extern IntPtr MessageBox(int hWnd, String text, String caption, uint type);
 
