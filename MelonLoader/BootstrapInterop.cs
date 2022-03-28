@@ -68,8 +68,7 @@ namespace MelonLoader
 
         public static bool IsUnderWineOrSteamProton()
         {
-            MelonLogger.Warning("TODO: IsUnderWineOrSteamProton");
-            return false;
+            return Core.WineGetVersion is not null;
         }
 
         public static unsafe void NativeHookAttach(IntPtr target, IntPtr detour) 

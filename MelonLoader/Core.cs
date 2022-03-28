@@ -6,6 +6,7 @@ using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
 using MelonLoader.Utils;
 using System.IO;
+using System.Runtime.InteropServices;
 
 #if NET6_0
 using System.Runtime.Loader;
@@ -18,11 +19,17 @@ namespace MelonLoader
         internal static HarmonyLib.Harmony HarmonyInstance = null;
         internal static bool Is_ALPHA_PreRelease = false;
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        private delegate string StringFn();
+
+        internal static StringFn WineGetVersion;
+
         internal static int Initialize()
         {
             MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-
+            SetupWineCheck();
             AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.DotnetLoadFromManagedFolderFix.Install();
             Fixes.UnhandledException.Install(curDomain);
@@ -111,6 +118,15 @@ namespace MelonLoader
 
             if (MelonLaunchOptions.Core.QuitFix)
                 Process.GetCurrentProcess().Kill();
+        }
+
+        private static void SetupWineCheck()
+        {
+            IntPtr dll = NativeLibrary.LoadLibrary("ntdll.dll");
+            StringFn wine_get_version_proc = NativeLibrary.GetExportedFunction<StringFn>(dll, "wine_get_version");
+            if (wine_get_version_proc is null)
+                return;
+            WineGetVersion = wine_get_version_proc;
         }
 
         private static void AddUnityDebugLog()

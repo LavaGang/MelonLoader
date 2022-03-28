@@ -53,9 +53,17 @@ namespace MelonLoader
         }
 
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern IntPtr LoadLibrary(string lpLibFileName);
+        internal static extern IntPtr LoadLibrary(string lpLibFileName);
         [DllImport("kernel32")]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
+        internal static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
+        [DllImport("kernel32")]
+        internal static extern IntPtr FreeLibrary(IntPtr hModule);
+
+        internal static T GetExportedFunction<T>(IntPtr module, string name)
+        {
+            T delegateForFunctionPointer = Marshal.GetDelegateForFunctionPointer<T>(GetProcAddress(module, name));
+            return delegateForFunctionPointer;
+        }
     }
 
     public class NativeLibrary<T> : NativeLibrary
