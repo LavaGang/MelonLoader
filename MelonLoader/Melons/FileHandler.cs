@@ -3,6 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+#if NET6_0
+using System.Runtime.Loader;
+#endif
 
 namespace MelonLoader.Melons
 {
@@ -105,7 +108,11 @@ namespace MelonLoader.Melons
                 Assembly melonassembly = null;
                 try
                 {
+#if !NET6_0
                     melonassembly = Assembly.LoadFrom(filepath);
+#else
+                    melonassembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
+#endif
                 }
                 catch (Exception ex)
                 {
