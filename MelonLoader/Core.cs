@@ -47,6 +47,9 @@ namespace MelonLoader
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
+#if NET6_0
+            AssemblyVerifier.InstallHooks();
+#endif
             Fixes.DotnetAssemblyLoadContextFix.Install();
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();

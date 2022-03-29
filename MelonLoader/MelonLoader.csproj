@@ -43,4 +43,9 @@
 		<None Include="Resources\classdata.tpk" />
 		<None Include="Resources\classdata_large.tpk" />
 	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
+	  <PackageReference Include="AsmResolver.DotNet">
+	    <Version>4.9.0</Version>
+	  </PackageReference>
+	</ItemGroup>
 </Project>
