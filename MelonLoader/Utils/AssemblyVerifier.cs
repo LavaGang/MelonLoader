@@ -62,15 +62,15 @@ namespace MelonLoader.Utils
 
             for (int i = 0; i < numTypeRefs; i++)
             {
-                var type = image.GetImportedTypeReferences().ElementAt(i);
+                var type = image.GetAllTypes().ElementAt(i);
 
                 var nsStr = type.Namespace;
                 var nameStr = type.Name;
 
                 if (nameStr.CompareTo("MulticastDelegate") == 0 && nsStr.CompareTo("System") == 0)
                 {
-                    delegateIndex = i;
-                    break;
+                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid MulticastDelegate with Fields!");
+                    return false;
                 }
             }
 
@@ -81,21 +81,13 @@ namespace MelonLoader.Utils
                 var typeNsStr = type.Namespace;
                 var typeNameStr = type.Name;
 
-                var a = type.BaseType;
+                var baseType = type.BaseType;
 
-                if (a is not null)
+                if (baseType is not null && i == delegateIndex)
                 {
-                    var baseType = image.GetAllTypes().ToList().IndexOf((TypeDefinition)a);
-                    if (baseType == delegateIndex)
-                    {
-                        var fieldIndex = i;
-                        var nextFieldIndex = i == numTypeDefs - 1 ? (numFieldDefs + 1) : i + 1;
-                        if (fieldIndex != nextFieldIndex)
-                        {
-                            MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid field index!");
-                            return false;
-                        }
-                    }
+                    var typeDef = (TypeDefinition)baseType;
+                    if (typeDef.Fields.Count != 0)
+                        return false;
                 }
 
                 if (!IsNameValid(typeNsStr))
@@ -112,7 +104,11 @@ namespace MelonLoader.Utils
 
                 if (typeNameStr.Contains("<Module>"))
                 {
-                    //TODO: something about method indexes
+                    if (type.Fields.Count != 0 || type.Methods.Count != 0)
+                    {
+                        MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module with Fields or Methods!");
+                        return false;
+                    }
                 }
 
                 CountChars(typeNameStr, ref symbolCounts);
