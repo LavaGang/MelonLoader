@@ -115,8 +115,26 @@ namespace MelonLoader
         public static MelonBase GetMelonFromStackTrace()
         {
             StackTrace st = new StackTrace(3, true);
+            return GetMelonFromStackTrace(st);
+        }
+
+        public static MelonBase GetMelonFromStackTrace(StackTrace st, bool allFrames = false)
+        {
             if (st.FrameCount <= 0)
                 return null;
+
+            if(allFrames)
+            {
+                foreach (StackFrame frame in st.GetFrames())
+                {
+                    MelonBase ret = CheckForMelonInFrame(frame);
+                    if (ret != null)
+                        return ret;
+                }
+                return null;
+                
+            }
+
             MelonBase output = CheckForMelonInFrame(st);
             if (output == null)
                 output = CheckForMelonInFrame(st, 1);
@@ -124,11 +142,18 @@ namespace MelonLoader
                 output = CheckForMelonInFrame(st, 2);
             return output;
         }
+
         private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
         {
             StackFrame sf = st.GetFrame(frame);
             if (sf == null)
                 return null;
+
+            return CheckForMelonInFrame(sf);
+        }
+
+        private static MelonBase CheckForMelonInFrame(StackFrame sf)
+        {
             MethodBase method = sf.GetMethod();
             if (method == null)
                 return null;

@@ -28,7 +28,24 @@ namespace MelonLoader.Support
                 };
         }
 
-        public bool MoveNext() => enumerator.MoveNext();
+        public bool MoveNext()
+        {
+            try
+            {
+                return enumerator.MoveNext();
+            } catch(Exception e)
+            {
+                var melon = MelonUtils.GetMelonFromStackTrace(new System.Diagnostics.StackTrace(e), true);
+
+                if (melon != null)
+                    melon.LoggerInstance.Error("Unhandled exception in coroutine. It will not continue executing.", e);
+                else
+                    MelonLogger.Error("[Error: Could not identify source] Unhandled exception in coroutine. It will not continue executing.", e);
+
+                return false;
+            }
+        }
+
         public void Reset() => enumerator.Reset();
     }
 }
