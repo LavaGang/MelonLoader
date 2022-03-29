@@ -35,10 +35,19 @@ namespace MelonLoader.Fixes
         {
             var filename = name.Name + ".dll";
             var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
+            var modsPath = Path.Combine(MelonEnvironment.ModsDirectory, filename);
             var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, filename);
             var gameRootPath = Path.Combine(MelonEnvironment.GameRootDirectory, filename);
 
-            return TryLoad(alc, managedPath) ?? TryLoad(alc, userlibsPath) ?? TryLoad(alc, gameRootPath);
+            var ret = TryLoad(alc, managedPath)
+                ?? TryLoad(alc, modsPath)
+                ?? TryLoad(alc, userlibsPath)
+                ?? TryLoad(alc, gameRootPath);
+
+            if (ret == null)
+                MelonDebug.Msg($"[DotnetManagedFolder]Failed to find {filename} in any of the known search directories");
+
+            return ret;
         }
 #endif
     }

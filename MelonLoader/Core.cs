@@ -23,6 +23,8 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
+            Debugger.Launch();
+
             MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             SetupWineCheck();

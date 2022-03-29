@@ -39,8 +39,10 @@ __forceinline void CountChars(const char* str, std::unordered_map<char, int>& ma
 
 __forceinline bool CheckAssembly(Mono::Image* image)
 {
+    //Get the name of the image
     const char* imagename = Mono::Exports::mono_image_get_name(image);
 
+    //Get the number of modules
     auto moduleCount = Mono::Exports::mono_image_get_table_rows(image, Mono::MONO_TABLE_MODULE);
     if (moduleCount != 1)
         return false;
@@ -52,12 +54,12 @@ __forceinline bool CheckAssembly(Mono::Image* image)
 
     int delegateIndex = -2;
 
+    //Find which type index is the MulticastDelegate class
     for (int i = 0; i < numTypeRefs; i++)
     {
-        auto nsIndex = Mono::Exports::mono_metadata_decode_table_row_col(
-            image, Mono::MONO_TABLE_TYPEREF, i, Mono::MONO_TYPEREF_NAMESPACE);
-        auto nameIndex = Mono::Exports::mono_metadata_decode_table_row_col(
-            image, Mono::MONO_TABLE_TYPEREF, i, Mono::MONO_TYPEREF_NAME);
+        //Get the ith namespace and name
+        auto nsIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEREF, i, Mono::MONO_TYPEREF_NAMESPACE);
+        auto nameIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEREF, i, Mono::MONO_TYPEREF_NAME);
 
         auto nsStr = Mono::Exports::mono_metadata_string_heap(image, nsIndex);
         auto nameStr = Mono::Exports::mono_metadata_string_heap(image, nameIndex);
@@ -73,14 +75,18 @@ __forceinline bool CheckAssembly(Mono::Image* image)
 
     for (int i = 0; i < numTypeDefs; i++)
     {
+        //Get name and namespace
         auto typeNsIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_NAMESPACE);
         auto typeNameIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_NAME);
 
         auto typeNsStr = Mono::Exports::mono_metadata_string_heap(image, typeNsIndex);
         auto typeNameStr = Mono::Exports::mono_metadata_string_heap(image, typeNameIndex);
 
+        //Get base type 
         const auto baseTypeRef = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_EXTENDS);
         const auto baseType = ((baseTypeRef & 3) == 1) ? (baseTypeRef >> 2) - 1 : -1;
+
+        //If we inherit from multicastdelegate...
         if (baseType == delegateIndex)
         {
             const auto fieldIndex = Mono::Exports::mono_metadata_decode_table_row_col(image, Mono::MONO_TABLE_TYPEDEF, i, Mono::MONO_TYPEDEF_FIELD_LIST);

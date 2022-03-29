@@ -10,6 +10,29 @@ namespace MelonLoader.Utils
 {
     internal static class AssemblyVerifier
     {
+        private static HashSet<char> AllowedSymbols = new()
+        {
+            '_',
+            '<',
+            '>',
+            '`',
+            '.',
+            '=',
+            '-',
+            '|',
+            ',',
+            '[',
+            ']',
+            '$',
+            ':',
+            '@',
+            '(',
+            ')',
+            '?',
+            '{',
+            '}'
+        };
+
         private static bool IsNameValid(string name)
         {
             if (name is null) 
@@ -17,9 +40,13 @@ namespace MelonLoader.Utils
 
             foreach (char c in name)
             {
-                if (!(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '<' || c == '>'
-                || c == '`' || c == '.' || c == '=' || c == '-' || c == '|' || c == ',' || c == '[' || c == ']' || c == '$'
-                || c == ':' || c == '@' || c == ')' || c == '(' || c == '?' || c == '{' || c == '}'))
+                bool isOk = false;
+                isOk |= c is >= 'a' and <= 'z';
+                isOk |= c is >= 'A' and <= 'Z';
+                isOk |= c is >= '0' and <= '9';
+                isOk |= AllowedSymbols.Contains(c);
+
+                if (!isOk)
                     return false;
             }
 
@@ -48,63 +75,44 @@ namespace MelonLoader.Utils
                 MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module Count!");
                 return false;
             }
-            int numTypeDefs = image.GetAllTypes().Count();
+            var allTypes = image.GetAllTypes().ToList();
+            int numTypeDefs = allTypes.Count();
             int numTypeRefs = image.GetImportedTypeReferences().Count();
-            int numMethodDefs = 0;
-            int numFieldDefs = 0;
-            foreach(var type in image.GetAllTypes())
-            {
-                numMethodDefs += type.Methods.Count;
-                numFieldDefs += type.Fields.Count;
-            }
-
-            int delegateIndex = -2;
-
-            for (int i = 0; i < numTypeRefs; i++)
-            {
-                var type = image.GetAllTypes().ElementAt(i);
-
-                var nsStr = type.Namespace;
-                var nameStr = type.Name;
-
-                if (nameStr.CompareTo("MulticastDelegate") == 0 && nsStr.CompareTo("System") == 0)
-                {
-                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid MulticastDelegate with Fields!");
-                    return false;
-                }
-            }
+            int numMethodDefs = allTypes.SelectMany(t => t.Methods).Count();
+            int numFieldDefs = allTypes.SelectMany(t => t.Fields).Count();
 
             var symbolCounts = new Dictionary<char, int>();
-            for (int i = 0; i < numTypeDefs; i++)
+            foreach (var type in allTypes)
             {
-                var type = image.GetAllTypes().ElementAt(i);
                 var typeNsStr = type.Namespace;
                 var typeNameStr = type.Name;
 
                 var baseType = type.BaseType;
 
-                if (baseType is not null && i == delegateIndex)
+                if (baseType != null && baseType.IsTypeOf("System", "MulticastDelegate"))
                 {
-                    var typeDef = (TypeDefinition)baseType;
-                    if (typeDef.Fields.Count != 0)
+                    if (type.Fields.Count != 0)
+                    {
+                        MelonDebug.Msg($"{type.FullName} inherits from MulticastDelegate and has fields!");
                         return false;
+                    }
                 }
 
-                if (!IsNameValid(typeNsStr))
+                if ((string) typeNsStr != null && !IsNameValid(typeNsStr))
                 {
-                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Namespace String {typeNsStr}");
+                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Namespace String \"{typeNsStr ?? "null"}\"");
                     return false;
                 }
 
                 if (!IsNameValid(typeNameStr))
                 {
-                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Type Name String {typeNameStr}");
+                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Type Name String \"{typeNameStr ?? null}\"");
                     return false;
                 }
 
-                if (typeNameStr.Contains("<Module>"))
+                if (typeNameStr == "<Module>")
                 {
-                    if (type.Fields.Count != 0 || type.Methods.Count != 0)
+                    if (type.Fields.Count + type.Methods.Count != 0)
                     {
                         MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module with Fields or Methods!");
                         return false;
@@ -112,10 +120,9 @@ namespace MelonLoader.Utils
                 }
 
                 CountChars(typeNameStr, ref symbolCounts);
-
             }
 
-            foreach(var type in image.GetAllTypes())
+            foreach(var type in allTypes)
             {
                 foreach(var method in type.Methods)
                 {
@@ -129,7 +136,10 @@ namespace MelonLoader.Utils
             }
 
             if (numTypeDefs + numMethodDefs < 25)
+            {
+                MelonDebug.Msg($"[AssemblyVerifier] {image.Name} has too few chars to check entropy");
                 return true;
+            }
 
             double totalChars = 0;
 
@@ -148,6 +158,8 @@ namespace MelonLoader.Utils
                 MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Entropy: {totalEntropy}!");
                 return false;
             }
+
+            MelonDebug.Msg($"[AssemblyVerifier] {image.Name} passes");
 
             return true;
 
