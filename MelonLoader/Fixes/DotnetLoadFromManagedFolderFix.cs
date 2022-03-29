@@ -35,9 +35,10 @@ namespace MelonLoader.Fixes
         {
             var filename = name.Name + ".dll";
             var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
-            var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, name.Name + ".dll");
+            var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, filename);
+            var gameRootPath = Path.Combine(MelonEnvironment.GameRootDirectory, filename);
 
-            return TryLoad(alc, managedPath) ?? TryLoad(alc, userlibsPath);
+            return TryLoad(alc, managedPath) ?? TryLoad(alc, userlibsPath) ?? TryLoad(alc, gameRootPath);
         }
 #endif
     }
