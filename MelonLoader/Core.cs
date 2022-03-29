@@ -47,6 +47,7 @@ namespace MelonLoader
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
+            Fixes.DotnetAssemblyLoadContextFix.Install();
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();
             Fixes.ProcessFix.Install();
