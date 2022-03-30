@@ -72,7 +72,7 @@ namespace MelonLoader.Utils
 
             if (moduleCount is not 1)
             {
-                MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module Count!");
+                //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module Count!");
                 return false;
             }
             var allTypes = image.GetAllTypes().ToList();
@@ -93,20 +93,20 @@ namespace MelonLoader.Utils
                 {
                     if (type.Fields.Count != 0)
                     {
-                        MelonDebug.Msg($"{type.FullName} inherits from MulticastDelegate and has fields!");
+                        //MelonDebug.Msg($"{type.FullName} inherits from MulticastDelegate and has fields!");
                         return false;
                     }
                 }
 
                 if ((string) typeNsStr != null && !IsNameValid(typeNsStr))
                 {
-                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Namespace String \"{typeNsStr ?? "null"}\"");
+                    //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Namespace String \"{typeNsStr ?? "null"}\"");
                     return false;
                 }
 
                 if (!IsNameValid(typeNameStr))
                 {
-                    MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Type Name String \"{typeNameStr ?? null}\"");
+                    //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Type Name String \"{typeNameStr ?? null}\"");
                     return false;
                 }
 
@@ -114,7 +114,7 @@ namespace MelonLoader.Utils
                 {
                     if (type.Fields.Count + type.Methods.Count != 0)
                     {
-                        MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module with Fields or Methods!");
+                        //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module with Fields or Methods!");
                         return false;
                     }
                 }
@@ -128,7 +128,7 @@ namespace MelonLoader.Utils
                 {
                     if (!IsNameValid(method.Name))
                     {
-                        MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Method: {method.Name}!");
+                        //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Method: {method.Name}!");
                         return false;
                     }
                     CountChars(method.Name, ref symbolCounts);
@@ -137,7 +137,7 @@ namespace MelonLoader.Utils
 
             if (numTypeDefs + numMethodDefs < 25)
             {
-                MelonDebug.Msg($"[AssemblyVerifier] {image.Name} has too few chars to check entropy");
+                //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} has too few chars to check entropy");
                 return true;
             }
 
@@ -155,11 +155,11 @@ namespace MelonLoader.Utils
 
             if (totalEntropy < 4 || totalEntropy > 5.25)
             {
-                MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Entropy: {totalEntropy}!");
+                //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Entropy: {totalEntropy}!");
                 return false;
             }
 
-            MelonDebug.Msg($"[AssemblyVerifier] {image.Name} passes");
+            //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} passes");
 
             return true;
 
