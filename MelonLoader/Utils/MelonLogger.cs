@@ -65,6 +65,16 @@ namespace MelonLoader
             RunErrorCallbacks(namesection, txt ?? "null");
         }
 
+        public static void BigError(string namesection, string txt)
+        {
+            RunErrorCallbacks(namesection, txt ?? "null");
+
+            Internal_Error(namesection, new string('=', 50));
+            foreach (var line in txt.Split('\n'))
+                Internal_Error(namesection, line);
+            Internal_Error(namesection, new string('=', 50));
+        }
+
         internal static void RunMsgCallbacks(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt) => MsgCallbackHandler?.Invoke(namesection_color, txt_color, namesection, txt);
         public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
         internal static void RunWarningCallbacks(string namesection, string txt) => WarningCallbackHandler?.Invoke(namesection, txt);
@@ -95,6 +105,8 @@ namespace MelonLoader
             public void Error(string txt) => NativeError(Name, txt);
             public void Error(string txt, params object[] args) => NativeError(Name, string.Format(txt, args));
             public void Error(string txt, Exception ex) => NativeError(Name, $"{txt}\n{ex}");
+
+            public void BigError(string txt) => MelonLogger.BigError(Name, txt);
         }
 
         internal static void Internal_Msg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)

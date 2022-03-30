@@ -1,6 +1,13 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
+#if NET6_0
+using Microsoft.Diagnostics.Runtime;
+#endif
 
 namespace MelonLoader
 {
@@ -73,12 +80,60 @@ namespace MelonLoader
 
         public static unsafe void NativeHookAttach(IntPtr target, IntPtr detour) 
         {
+            if (MelonDebug.IsEnabled() && !SanityCheckDetour(detour))
+                return;
+
             HookAttach((void**) target, (void*) detour);
+        }
+
+        private static bool SanityCheckDetour(IntPtr detour)
+        {
+            using DataTarget dt = DataTarget.CreateSnapshotAndAttach(Environment.ProcessId);
+            ClrRuntime runtime = dt.ClrVersions.First().CreateRuntime();
+
+            ClrMethod method = runtime.GetMethodByInstructionPointer((ulong)detour.ToInt64());
+
+            if (method != null)
+            {
+                var managedMethod = MethodBaseHelper.GetMethodBaseFromHandle((IntPtr)method.MethodDesc);
+
+                if (managedMethod?.GetCustomAttribute<UnmanagedCallersOnlyAttribute>() == null)
+                {
+                    //We have provided a direct managed method as the pointer to detour to. This doesn't work under CoreCLR, so we yell at the user and stop
+                    var melon = MelonUtils.GetMelonFromStackTrace();
+
+                    PrintDirtyDelegateWarning(melon?.LoggerInstance ?? new MelonLogger.Instance("Bad Delegate"), melon?.Info.Name ?? "Unknown mod", managedMethod);
+                    return false;
+                }
+                else
+                {
+                    //MelonDebug.Msg($"{managedMethod.Name} is fine, has unmanagedcallersonly");
+                }
+            }
+            else
+            {
+                //MelonDebug.Msg($"0x{detour.ToInt64():X} is fine, doesn't appear to be a managed method");
+            }
+
+            return true;
         }
 
         public static unsafe void NativeHookDetach(IntPtr target, IntPtr detour)
         {
             HookDetach((void**)target, (void*)detour);
+        }
+
+        private static void PrintDirtyDelegateWarning(MelonLogger.Instance offendingMelonLogger, string offendingMelonName, MethodBase offendingMethod)
+        {
+            var logger = offendingMelonLogger;
+
+            logger.BigError(
+                   $"The mod {offendingMelonName} has attempted to detour a native method to a managed one.\n"
+                 + $"The managed method target is {offendingMethod.DeclaringType.Name}::{offendingMethod.Name}\n"
+                 +  "If this hadn't been stopped, the runtime would have crashed.\n"
+                 +  "Modder: Either create an [UnmanagedFunctionPointer] delegate from your function, and use Marshal.GetFunctionPointerFromDelegate,\n"
+                 +  "or annotate your patch function as [UnmanagedCallersOnly] (target net5.0), and then you can directly use &Method as the hook target."
+            );
         }
 #endif
     }
