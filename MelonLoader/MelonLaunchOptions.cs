@@ -60,6 +60,7 @@ namespace MelonLoader
             public static bool QuitFix { get; internal set; }
             public static bool StartScreen { get; internal set; } = true;
             public static bool IsDebug { get; internal set; }
+            public static bool UserWantsDebugger { get; internal set; }
 
             internal static void Setup()
             {
@@ -76,6 +77,7 @@ namespace MelonLoader
                         LoadMode_Mods = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
                 };
                 WithoutArg["melonloader.debug"] = () => IsDebug = true;
+                WithoutArg["melonloader.launchdebugger"] = () => UserWantsDebugger = true;
             }
         }
 
