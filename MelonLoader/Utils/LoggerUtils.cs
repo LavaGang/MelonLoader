@@ -34,9 +34,6 @@ namespace MelonLoader.Utils
             return ConsoleAnsiiDict[color];
         }
 
-        internal static string GetTimeStamp()
-        {
-            return DateTime.Now.ToString("HH:mm:ss:fff");
-        }
+        internal static string GetTimeStamp() => $"{DateTime.Now:HH:mm:ss.fff}";
     }
 }
