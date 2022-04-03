@@ -119,7 +119,7 @@ namespace MelonLoader.MelonStartScreen
 
             // And we patch SetTimer to replace it by our hook
             MelonLogger.Msg($"Applying USER32.dll::SetTimer Hook at 0x{original.ToInt64():X}");
-            MelonUtils.NativeHookAttach((IntPtr)(&original), (IntPtr) detourPtr);
+            MelonUtils.NativeHookAttachDirect((IntPtr)(&original), (IntPtr) detourPtr);
             MelonLogger.Msg($"Creating delegate for original USER32.dll::SetTimer (0x{original.ToInt64():X})");
             user32SetTimerOriginal = (User32SetTimerDelegate)Marshal.GetDelegateForFunctionPointer(original, typeof(User32SetTimerDelegate));
             MelonLogger.Msg("Applied USER32.dll::SetTimer patch");

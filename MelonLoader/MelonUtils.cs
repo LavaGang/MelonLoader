@@ -402,6 +402,13 @@ namespace MelonLoader
 
         public static void NativeHookAttach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
 
+#if NET6_0
+        internal static void NativeHookAttachDirect(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttachDirect(target, detour);
+#else
+        //On mono, NativeHookAttach *is* direct.
+        internal static void NativeHookAttachDirect(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
+#endif
+
         public static void NativeHookDetach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookDetach(target, detour);
 
         [MethodImpl(MethodImplOptions.InternalCall)]

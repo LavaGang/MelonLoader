@@ -67,10 +67,10 @@ namespace MelonLoader.CompatibilityLayers
             }
 
             Logger.Msg("Patching mono_unity_get_unitytls_interface...");
-            MelonUtils.NativeHookAttach((IntPtr)(&mono_export), typeof(Il2CppUnityTls_Module).GetMethod("GetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer());
+            MelonUtils.NativeHookAttachDirect((IntPtr)(&mono_export), typeof(Il2CppUnityTls_Module).GetMethod("GetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer());
 
             Logger.Msg("Patching il2cpp_unity_install_unitytls_interface...");
-            MelonUtils.NativeHookAttach((IntPtr)(&il2cpp_export), typeof(Il2CppUnityTls_Module).GetMethod("SetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer());
+            MelonUtils.NativeHookAttachDirect((IntPtr)(&il2cpp_export), typeof(Il2CppUnityTls_Module).GetMethod("SetUnityTlsInterface", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer());
             OriginalSetUnityTlsInterface = (dSetUnityTlsInterface)Marshal.GetDelegateForFunctionPointer(il2cpp_export, typeof(dSetUnityTlsInterface));
 
             return true;

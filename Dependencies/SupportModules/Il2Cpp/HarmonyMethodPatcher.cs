@@ -64,7 +64,7 @@ namespace MelonLoader.Support
 
             if (methodDetourPointer != IntPtr.Zero)
                 MelonUtils.NativeHookDetach(copiedMethodInfoPointer, methodDetourPointer);
-            MelonUtils.NativeHookAttach(copiedMethodInfoPointer, il2CppShimDelegatePtr);
+            MelonUtils.NativeHookAttachDirect(copiedMethodInfoPointer, il2CppShimDelegatePtr);
             methodDetourPointer = il2CppShimDelegatePtr;
 
             PatchTools_RememberObject(Original, new LemonTuple<MethodInfo, MethodInfo, Delegate>{ Item1 = newreplacement, Item2 = il2CppShim, Item3 = il2CppShimDelegate });

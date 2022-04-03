@@ -7,7 +7,7 @@ using System.Text;
 
 #nullable enable
 
-namespace MelonLoader.Utils
+namespace MelonLoader.CoreClrUtils
 {
     internal static class MethodBaseHelper
     {
