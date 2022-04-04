@@ -232,7 +232,7 @@ namespace MelonLoader
             try { returnval = asm.GetTypes().AsEnumerable(); }
             catch (ReflectionTypeLoadException ex) 
             {
-                MelonLogger.Error($"Failed to load all types in assembly {asm.FullName} due to {ex.Message}");
+                MelonLogger.Error($"Failed to load all types in assembly {asm.FullName} due to: {ex.Message}", ex);
                 //Console.WriteLine(ex);
                 returnval = ex.Types; 
             }

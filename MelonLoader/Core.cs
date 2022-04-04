@@ -52,8 +52,9 @@ namespace MelonLoader
 
 #if NET6_0
             AssemblyVerifier.InstallHooks();
-#endif
             Fixes.DotnetAssemblyLoadContextFix.Install();
+            Fixes.DotnetModHandlerRedirectionFix.Install();
+#endif
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();
             Fixes.ProcessFix.Install();

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
-#endif
 
 namespace MelonLoader.Fixes
 {
@@ -15,13 +14,10 @@ namespace MelonLoader.Fixes
 
         internal static void Install()
         {
-#if NET6_0
             Core.HarmonyInstance.Patch(AccessTools.Method(typeof(Assembly), nameof(Assembly.Load), new Type[] { typeof(byte[]), typeof(byte[]) }), new HarmonyMethod(typeof(DotnetAssemblyLoadContextFix), nameof(PreAssemblyLoad)));
             Core.HarmonyInstance.Patch(AccessTools.Method(typeof(Assembly), nameof(Assembly.LoadFile)), new HarmonyMethod(typeof(DotnetAssemblyLoadContextFix), nameof(PreAssemblyLoadFile)));
-#endif
-        }
 
-#if NET6_0
+        }
 
         private delegate Assembly DelegateInternalLoad(ReadOnlySpan<byte> arrAssembly, ReadOnlySpan<byte> arrSymbols);
 
@@ -68,6 +64,7 @@ namespace MelonLoader.Fixes
 
             return false;
         }
-#endif
+
     }
 }
+#endif

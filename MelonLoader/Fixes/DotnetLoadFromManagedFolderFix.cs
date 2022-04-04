@@ -33,7 +33,12 @@ namespace MelonLoader.Fixes
 
         private static Assembly OnResolve(AssemblyLoadContext alc, AssemblyName name)
         {
+            if (name.Name == "MelonLoader.ModHandler")
+                //Redirect ModHandler to main MelonLoader dll (us)
+                return Assembly.GetExecutingAssembly();
+
             var filename = name.Name + ".dll";
+
             var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
             var modsPath = Path.Combine(MelonEnvironment.ModsDirectory, filename);
             var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, filename);
