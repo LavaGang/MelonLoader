@@ -84,6 +84,8 @@ bool DotnetRuntime::LoadHostFxr()
 			Assertion::ThrowInternalFailure("Failed to locate hostfxr - could not find a required dll. Corrupt dotnet installation?");
 		else if(rc == HOST_MISSING_ENTRYPOINT)
 			Assertion::ThrowInternalFailure("Failed to locate hostfxr - could not find a required entry point. Outdated dotnet installation?");
+		else if(rc == HOSTFXR_NO_FRAMEWORK)
+			Assertion::ThrowInternalFailure("HostFXR returned no viable frameworks. Make sure you have .NET Runtime 6.0.3 installed for the correct architecture!");
 		else
 			Assertion::ThrowInternalFailure((std::string("Failed to locate hostfxr - unknown error, got HRESULT ") + std::to_string(rc)).c_str());
 

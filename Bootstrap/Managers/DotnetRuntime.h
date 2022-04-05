@@ -11,6 +11,7 @@ typedef void (*host_delegate)();
 #define HOST_LOADLIB_FAILED 0x80008082
 #define HOST_MISSING_FILE 0x80008083
 #define HOST_MISSING_ENTRYPOINT 0x80008084
+#define HOSTFXR_NO_FRAMEWORK 0x80008096
 
 class DotnetRuntime
 {
