@@ -386,8 +386,6 @@ namespace MelonLoader
 
         public static bool IsUnderWineOrSteamProton() => BootstrapInterop.IsUnderWineOrSteamProton();
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
         public static string GetApplicationPath() => MelonEnvironment.GameExecutablePath;
 
         public static string GetGameDataDirectory() => MelonEnvironment.UnityGameDataDirectory;
