@@ -122,7 +122,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.3\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.3\runtimes\win-x86\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -157,7 +157,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.3\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.3\runtimes\win-x64\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
