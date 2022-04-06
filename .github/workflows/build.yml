@@ -73,7 +73,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.x
+          dotnet-version: "6.0.103"
       - name: Build Bootstrap Lib | Windows - x86
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=Win32 -p:Configuration=Release
@@ -91,7 +91,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.x
+          dotnet-version: "6.0.103"
       - name: Build Bootstrap Lib | Windows - x64
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
