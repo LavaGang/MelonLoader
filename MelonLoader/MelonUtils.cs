@@ -392,8 +392,11 @@ namespace MelonLoader
 
         public static string GetManagedDirectory() => MelonEnvironment.MelonManagedDirectory;
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static void SetConsoleTitle([MarshalAs(UnmanagedType.LPStr)] string title);
+        public static void SetConsoleTitle(string title)
+        {
+            Console.Title = title;
+        }
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         public extern static string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
