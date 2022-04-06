@@ -78,12 +78,7 @@ namespace MelonLoader.Melons
 
         private static string GetMelonName(string filePath)
         {
-#if !NET6_0
             return MelonUtils.GetFileProductName(filePath);
-#else
-            FileVersionInfo info = FileVersionInfo.GetVersionInfo(filePath);
-            return info.ProductName;
-#endif
         }
 
         internal static void LoadFromFile(string filepath, string symbolspath = null)

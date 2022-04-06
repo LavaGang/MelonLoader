@@ -397,9 +397,13 @@ namespace MelonLoader
             Console.Title = title;
         }
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetFileProductName([MarshalAs(UnmanagedType.LPStr)] string filepath);
+        public static string GetFileProductName(string filepath)
+        {
+            var fileInfo = FileVersionInfo.GetVersionInfo(filepath);
+            if (fileInfo != null)
+                return fileInfo.ProductName;
+            return null;
+        }
 
         public static void NativeHookAttach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
 
