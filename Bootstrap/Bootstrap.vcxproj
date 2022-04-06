@@ -114,7 +114,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.3\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.3\runtimes\win-x86\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
