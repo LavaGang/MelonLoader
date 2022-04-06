@@ -18,6 +18,7 @@ namespace MelonLoader.Utils
         public static string MelonLoaderDirectory { get; internal set; }
         public static string GameRootDirectory { get; internal set; }
 
+        public static string GameExecutablePath => Process.GetCurrentProcess().MainModule.FileName;
         public static string MelonBaseDirectory => Directory.GetParent(MelonLoaderDirectory).FullName;
         public static string DependenciesDirectory => Path.Combine(MelonLoaderDirectory, "Dependencies");
         public static string SupportModuleDirectory => Path.Combine(DependenciesDirectory, "SupportModules");
@@ -29,7 +30,7 @@ namespace MelonLoader.Utils
         public static string UserDataDirectory => Path.Combine(MelonBaseDirectory, "UserData");
         public static string OurRuntimeDirectory => Path.Combine(MelonLoaderDirectory, OurRuntimeName);
 
-        public static string GameExecutableName => Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+        public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
         public static string UnityGameDataDirectory => Path.Combine(GameRootDirectory, GameExecutableName + "_Data");
         public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "il2cpp_data");
 

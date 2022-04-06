@@ -388,7 +388,7 @@ namespace MelonLoader
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [return: MarshalAs(UnmanagedType.LPStr)]
-        public extern static string GetApplicationPath();
+        public static string GetApplicationPath() => MelonEnvironment.GameExecutablePath;
 
         public static string GetGameDataDirectory() => MelonEnvironment.UnityGameDataDirectory;
 
