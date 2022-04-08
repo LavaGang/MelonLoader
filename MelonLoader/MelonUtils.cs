@@ -26,8 +26,11 @@ namespace MelonLoader
 
         internal static void Setup(AppDomain domain)
         {
-            //HashCode = string.Copy(BootstrapInterop.Internal_GetHashCode());
-            HashCode = "0000000000DEADBEEF15DEADF00D0000000000";
+            using (var sha = SHA256.Create()) 
+                HashCode = string.Join("", sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X")).ToArray());
+            
+
+            Core.WelcomeMessage();
 
             BaseDirectory = MelonEnvironment.MelonLoaderDirectory;
             GameDirectory = MelonEnvironment.GameRootDirectory;
@@ -382,7 +385,7 @@ namespace MelonLoader
 
         public static bool IsOldMono() => File.Exists(MelonEnvironment.GameRootDirectory + "\\mono.dll");
 
-        public static bool IsUnderWineOrSteamProton() => BootstrapInterop.IsUnderWineOrSteamProton();
+        public static bool IsUnderWineOrSteamProton() => Core.WineGetVersion is not null;
 
         public static string GetApplicationPath() => MelonEnvironment.GameExecutablePath;
 
@@ -414,11 +417,15 @@ namespace MelonLoader
 
         public static void NativeHookDetach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookDetach(target, detour);
 
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetBaseDirectory();
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static string Internal_GetGameDirectory();
+
+        //Removing these as they're private so mods shouldn't need them
+        //Can potentially be redirected to MelonEnvironment if really needed.
+
+        //[MethodImpl(MethodImplOptions.InternalCall)]
+        //[return: MarshalAs(UnmanagedType.LPStr)]
+        //private extern static string Internal_GetBaseDirectory();
+        //[MethodImpl(MethodImplOptions.InternalCall)]
+        //[return: MarshalAs(UnmanagedType.LPStr)]
+        //private extern static string Internal_GetGameDirectory();
     }
 }

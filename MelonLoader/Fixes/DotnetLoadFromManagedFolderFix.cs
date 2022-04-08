@@ -50,7 +50,7 @@ namespace MelonLoader.Fixes
                 ?? TryLoad(alc, gameRootPath);
 
             if (ret == null)
-                MelonDebug.Msg($"[DotnetManagedFolder]Failed to find {filename} in any of the known search directories");
+                MelonDebug.Msg($"[DotnetManagedFolder] Failed to find {filename} in any of the known search directories");
 
             return ret;
         }

@@ -37,9 +37,6 @@
     <ClCompile Include="Utils\HashCode.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Managers\AssemblyVerifier.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\IniFile.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -111,9 +108,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\HashCode.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Managers\AssemblyVerifier.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\IniFile.h">

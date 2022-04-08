@@ -66,11 +66,6 @@ namespace MelonLoader
             EnableMenuItem(GetSystemMenu(mainWindow, 0), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-        public static bool IsUnderWineOrSteamProton()
-        {
-            return Core.WineGetVersion is not null;
-        }
-
         public static void NativeHookAttach(IntPtr target, IntPtr detour) 
         {
             //SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.

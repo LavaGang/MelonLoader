@@ -14,11 +14,7 @@ std::string HashCode::Hash;
 
 bool HashCode::Initialize()
 {
-    Debug::Msg("HashCode::Initialize");
-
-    if (!SetupPaths())
-        return false;
-    return GenerateHash(Core::Path);
+    return SetupPaths();
 }
 
 bool HashCode::SetupPaths()
@@ -70,63 +66,5 @@ bool HashCode::SetupPaths()
 
 #undef TO_UTF8
 
-    return true;
-}
-
-bool HashCode::GenerateHash(const char* path)
-{
-    if ((path == NULL) || (!Core::FileExists(path)))
-        return false;
-    HCRYPTPROV cryptprov = 0;
-    if (!CryptAcquireContextA(&cryptprov, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
-        return false;
-    HCRYPTHASH crypthash = 0;
-    if (!CryptCreateHash(cryptprov, CALG_MD5, 0, 0, &crypthash))
-    {
-        CryptReleaseContext(cryptprov, 0);
-        return false;
-    }
-    HANDLE filehandle = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-    if (filehandle == INVALID_HANDLE_VALUE)
-    {
-        CryptReleaseContext(cryptprov, 0);
-        return false;
-    }
-    DWORD filebufsize = 2048;
-    BYTE filebuf[2048];
-    DWORD readoffset = NULL;
-    bool readsuccess = false;
-    while (readsuccess = ReadFile(filehandle, filebuf, filebufsize, &readoffset, NULL))
-    {
-        if (readoffset == NULL)
-            break;
-        if (!CryptHashData(crypthash, filebuf, readoffset, 0))
-        {
-            readsuccess = false;
-            break;
-        }
-    }
-    CloseHandle(filehandle);
-    if (!readsuccess)
-    {
-        CryptReleaseContext(cryptprov, 0);
-        CryptDestroyHash(crypthash);
-        return false;
-    }
-    DWORD dhash = 16;
-    BYTE hashbuf[16];
-    CHAR chartbl[] = "0123456789abcdef";
-    std::string hashout;
-    if (!CryptGetHashParam(crypthash, HP_HASHVAL, (BYTE*)&hashbuf, &dhash, 0))
-    {
-        CryptReleaseContext(cryptprov, 0);
-        CryptDestroyHash(crypthash);
-        return false;
-    }
-    for (DWORD i = 0; i < dhash; i++)
-        hashout += std::to_string(chartbl[hashbuf[i] >> 4]) + std::to_string(chartbl[hashbuf[i] & 0xf]);
-    Hash = hashout;
-    CryptDestroyHash(crypthash);
-    CryptReleaseContext(cryptprov, 0);
     return true;
 }

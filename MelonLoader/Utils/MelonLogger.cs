@@ -11,7 +11,7 @@ namespace MelonLoader
         public static readonly ConsoleColor DefaultMelonColor = ConsoleColor.Cyan;
         public static readonly ConsoleColor DefaultTextColor = ConsoleColor.Gray;
 
-        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest-Managed.log"), FileMode.Create);
+        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create);
         internal static StreamWriter LogWriter = new StreamWriter(LogStream);
 
         public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());

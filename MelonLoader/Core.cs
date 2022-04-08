@@ -34,9 +34,8 @@ namespace MelonLoader
             Fixes.UnhandledException.Install(curDomain);
             Fixes.ServerCertificateValidation.Install();
 
-            WelcomeMessage();
-
             MelonUtils.Setup(curDomain);
+
             Assertions.LemonAssertMapping.Setup();
             MelonHandler.Setup();
 
@@ -128,10 +127,10 @@ namespace MelonLoader
             var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
             MelonLogger.Msg($"Game Arch: {archString}");
             MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg($"Core BasePath: {MelonEnvironment.MelonBaseDirectory}");
-            MelonLogger.Msg($"Game BasePath: {MelonEnvironment.GameRootDirectory}");
-            MelonLogger.Msg($"Game DataPath: {MelonEnvironment.UnityGameDataDirectory}");
-            MelonLogger.Msg($"Game ApplicationPath: {MelonEnvironment.GameExecutablePath}");
+            MelonLogger.Msg($"Core::BasePath: {MelonEnvironment.MelonBaseDirectory}");
+            MelonLogger.Msg($"Game::BasePath: {MelonEnvironment.GameRootDirectory}");
+            MelonLogger.Msg($"Game::DataPath: {MelonEnvironment.UnityGameDataDirectory}");
+            MelonLogger.Msg($"Game::ApplicationPath: {MelonEnvironment.GameExecutablePath}");
         }
 
         [DllImport("ntdll.dll", SetLastError = true)]
@@ -145,7 +144,7 @@ namespace MelonLoader
             internal readonly uint MajorVersion;
             internal readonly uint MinorVersion;
 
-            private readonly uint BuildNumber;
+            internal readonly uint BuildNumber;
 
             private readonly uint PlatformId;
 
@@ -155,10 +154,11 @@ namespace MelonLoader
 
         internal static string GetOSVersion()
         {
-            if (BootstrapInterop.IsUnderWineOrSteamProton())
+            if (MelonUtils.IsUnderWineOrSteamProton())
                 return $"Wine {WineGetVersion()}";
             RtlGetVersion(out OsVersionInfo versionInformation);
             var minor = versionInformation.MinorVersion;
+            var build = versionInformation.BuildNumber;
 
             string versionString = "";
 
@@ -186,7 +186,10 @@ namespace MelonLoader
                         versionString = "Windows 8.1";
                     break;
                 case 10:
-                    versionString = "Windows 10";
+                    if (build >= 22000)
+                        versionString = "Windows 11";
+                    else
+                        versionString = "Windows 10";
                     break;
                 default:
                     versionString = "Unknown";
