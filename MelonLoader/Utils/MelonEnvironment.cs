@@ -39,10 +39,10 @@ namespace MelonLoader.Utils
         internal static void PrintEnvironment()
         {
             //These must not be changed, lum needs them
-            MelonLogger.Msg($"Core::BasePath: {MelonBaseDirectory}");
-            MelonLogger.Msg($"Game::BasePath: {GameRootDirectory}");
-            MelonLogger.Msg($"Game::DataPath: {UnityGameDataDirectory}");
-            MelonLogger.Msg($"Game::ApplicationPath: {GameExecutablePath}");
+            MelonLogger.Msg($"Core::BasePath = {MelonBaseDirectory}");
+            MelonLogger.Msg($"Game::BasePath = {GameRootDirectory}");
+            MelonLogger.Msg($"Game::DataPath = {UnityGameDataDirectory}");
+            MelonLogger.Msg($"Game::ApplicationPath = {GameExecutablePath}");
 
             MelonLogger.Msg($"Runtime Type: {OurRuntimeName}");
         }
