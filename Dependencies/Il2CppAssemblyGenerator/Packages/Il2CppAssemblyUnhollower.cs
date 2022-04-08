@@ -8,8 +8,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         {
             Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower;
 #if !DEBUG
-            if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = RemoteAPI.Info.ForceUnhollowerVersion;
+            //if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
+            //    Version = RemoteAPI.Info.ForceUnhollowerVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = "0.4.18.0-coreclr.1";
