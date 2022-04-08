@@ -83,7 +83,7 @@ namespace MelonLoader
 
             foreach (MelonBase melon in melontblList)
             {
-                MelonLogger.Internal_PrintModName(melon.ConsoleColor, melon.AuthorConsoleColor, melon.Info.Name, melon.Info.Author, melon.Info.Version, melon.ID);
+                MelonLogger.Internal_PrintModName(melon.ConsoleDrawingColor, melon.AuthorDrawingColor, melon.Info.Name, melon.Info.Author, melon.Info.Version, melon.ID);
 
                 string melonhash = GetMelonHash(melon);
                 if (!string.IsNullOrEmpty(melonhash))

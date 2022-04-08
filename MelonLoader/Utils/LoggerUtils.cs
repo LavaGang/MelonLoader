@@ -1,37 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace MelonLoader.Utils
 {
     internal static class LoggerUtils
     {
-        internal static Dictionary<ConsoleColor, string> ConsoleAnsiiDict = new Dictionary<ConsoleColor, string>
+        internal static Dictionary<ConsoleColor, Color> ConsoleColorDict = new Dictionary<ConsoleColor, Color>
         {
-            { ConsoleColor.Black, "\x1b[30m" },
-            { ConsoleColor.DarkBlue, "\x1b[34m" },
-            { ConsoleColor.DarkGreen, "\x1b[32m" },
-            { ConsoleColor.DarkCyan, "\x1b[36m" },
-            { ConsoleColor.DarkRed, "\x1b[31m" },
-            { ConsoleColor.DarkMagenta, "\x1b[35m" },
-            { ConsoleColor.DarkYellow, "\x1b[33m" },
-            { ConsoleColor.Gray, "\x1b[37m" },
-            { ConsoleColor.DarkGray, "\x1b[90m" },
-            { ConsoleColor.Blue, "\x1b[94m" } ,
-            { ConsoleColor.Green, "\x1b[92m" },
-            { ConsoleColor.Cyan, "\x1b[96m" },
-            { ConsoleColor.Red, "\x1b[91m" },
-            { ConsoleColor.Magenta, "\x1b[95m" },
-            { ConsoleColor.Yellow, "\x1b[93m" },
-            { ConsoleColor.White, "\x1b[97m" },
-
+            { ConsoleColor.Black, Color.Black },
+            { ConsoleColor.DarkBlue, Color.DarkBlue },
+            { ConsoleColor.DarkGreen, Color.DarkGreen },
+            { ConsoleColor.DarkCyan, Color.DarkCyan },
+            { ConsoleColor.DarkRed, Color.DarkGreen },
+            { ConsoleColor.DarkMagenta, Color.DarkMagenta },
+            { ConsoleColor.DarkYellow, Color.Yellow },
+            { ConsoleColor.Gray, Color.LightGray },
+            { ConsoleColor.DarkGray, Color.DarkGray },
+            { ConsoleColor.Blue, Color.CornflowerBlue } ,
+            { ConsoleColor.Green, Color.LimeGreen },
+            { ConsoleColor.Cyan, Color.Cyan },
+            { ConsoleColor.Red, Color.IndianRed },
+            { ConsoleColor.Magenta, Color.Magenta },
+            { ConsoleColor.Yellow, Color.LightYellow },
+            { ConsoleColor.White, Color.White },
         };
 
-        internal static string ColorToAnsi(ConsoleColor color)
+        internal static Dictionary<Color, ConsoleColor> DrawingColorDict = new Dictionary<Color, ConsoleColor>
         {
-            if (!ConsoleAnsiiDict.ContainsKey(color))
-                return ConsoleAnsiiDict[ConsoleColor.White];
+            { Color.Black, ConsoleColor.Black },
+            { Color.DarkBlue, ConsoleColor.DarkBlue },
+            { Color.DarkGreen, ConsoleColor.DarkGreen },
+            { Color.DarkCyan, ConsoleColor.DarkCyan },
+            { Color.DarkRed, ConsoleColor.DarkGreen },
+            { Color.DarkMagenta, ConsoleColor.DarkMagenta },
+            { Color.Yellow, ConsoleColor.DarkYellow },
+            { Color.LightGray, ConsoleColor.Gray },
+            { Color.DarkGray, ConsoleColor.DarkGray },
+            { Color.CornflowerBlue, ConsoleColor.Blue } ,
+            { Color.LimeGreen, ConsoleColor.Green },
+            { Color.Cyan, ConsoleColor.Cyan },
+            { Color.IndianRed, ConsoleColor.Red },
+            { Color.Magenta, ConsoleColor.Magenta },
+            { Color.LightYellow, ConsoleColor.Yellow },
+            { Color.White, ConsoleColor.White },
+        };
 
-            return ConsoleAnsiiDict[color];
+        internal static Color ConsoleColorToDrawingColor(ConsoleColor color)
+        {
+            if (!ConsoleColorDict.ContainsKey(color))
+                return Color.White;
+
+            return ConsoleColorDict[color];
+        }
+
+        internal static ConsoleColor DrawingColorToConsoleColor(Color color)
+        {
+            if (!DrawingColorDict.ContainsKey(color))
+                return ConsoleColor.White;
+
+            return DrawingColorDict[color];
         }
 
         internal static string GetTimeStamp() => $"{DateTime.Now:HH:mm:ss.fff}";

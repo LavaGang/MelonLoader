@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
+using System.Drawing;
 
 namespace MelonLoader
 {
@@ -8,22 +10,22 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.Internal_Msg(ConsoleColor.Blue, MelonLogger.DefaultTextColor, "DEBUG", obj.ToString());
-            MsgCallbackHandler?.Invoke(MelonLogger.DefaultTextColor, obj.ToString());
+            MelonLogger.Internal_Msg(Color.CornflowerBlue, MelonLogger.DefaultTextColor, "DEBUG", obj.ToString());
+            MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), obj.ToString());
         }
         public static void Msg(string txt)
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.Internal_Msg(ConsoleColor.Blue, MelonLogger.DefaultTextColor, "DEBUG", txt);
-            MsgCallbackHandler?.Invoke(MelonLogger.DefaultTextColor, txt);
+            MelonLogger.Internal_Msg(Color.CornflowerBlue, MelonLogger.DefaultTextColor, "DEBUG", txt);
+            MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), txt);
         }
         public static void Msg(string txt, params object[] args)
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.Internal_Msg(ConsoleColor.Blue, MelonLogger.DefaultTextColor, "DEBUG", string.Format(txt, args));
-            MsgCallbackHandler?.Invoke(MelonLogger.DefaultTextColor, string.Format(txt, args));
+            MelonLogger.Internal_Msg(Color.CornflowerBlue, MelonLogger.DefaultTextColor, "DEBUG", string.Format(txt, args));
+            MsgCallbackHandler?.Invoke(LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultTextColor), string.Format(txt, args));
         }
 
         public static void Error(string txt)

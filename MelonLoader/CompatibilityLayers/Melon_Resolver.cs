@@ -1,4 +1,5 @@
-﻿using Semver;
+﻿using MelonLoader.Utils;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -79,8 +80,8 @@ namespace MelonLoader.CompatibilityLayers
                 Info = infoAttribute,
                 Games = gameAttributes.ToArray(),
                 OptionalDependencies = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly),
-                ConsoleColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.Color,
-                AuthorConsoleColor = (authorcoloratt == null) ? MelonLogger.DefaultTextColor : authorcoloratt.Color,
+                ConsoleDrawingColor = (coloratt == null) ? MelonLogger.DefaultMelonColor : coloratt.DrawingColor,
+                AuthorDrawingColor = (authorcoloratt == null) ? MelonLogger.DefaultTextColor : authorcoloratt.DrawingColor,
                 Priority = (priorityatt == null) ? 0 : priorityatt.Priority,
                 Location = FilePath,
                 ID = (idatt == null) ? null : idatt.ID

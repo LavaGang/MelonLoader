@@ -1,6 +1,7 @@
 ﻿using MelonLoader.Utils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -107,8 +108,8 @@ namespace MelonLoader
             public MelonInfoAttribute Info = null;
             public MelonGameAttribute[] Games = null;
             public MelonOptionalDependenciesAttribute OptionalDependencies = null;
-            public ConsoleColor ConsoleColor = MelonLogger.DefaultMelonColor;
-            public ConsoleColor AuthorConsoleColor = MelonLogger.DefaultTextColor;
+            public Color ConsoleDrawingColor = MelonLogger.DefaultMelonColor;
+            public Color AuthorDrawingColor = MelonLogger.DefaultTextColor;
             public int Priority = 0;
             public string Location = null;
             public string ID = null;
@@ -144,8 +145,8 @@ namespace MelonLoader
             instance.OptionalDependencies = creationData.OptionalDependencies;
             instance.Location = creationData.Location;
             instance.Priority = creationData.Priority;
-            instance.ConsoleColor = creationData.ConsoleColor;
-            instance.AuthorConsoleColor = creationData.AuthorConsoleColor;
+            instance.ConsoleDrawingColor = creationData.ConsoleDrawingColor;
+            instance.AuthorDrawingColor = creationData.AuthorDrawingColor;
             instance.HarmonyInstance = new HarmonyLib.Harmony(instance.Assembly.FullName);
 
             instance.ID = creationData.ID;
@@ -153,7 +154,7 @@ namespace MelonLoader
                 string.IsNullOrEmpty(instance.ID)
                     ? creationData.Info.Name
                     : $"{instance.ID}:{creationData.Info.Name}", 
-                creationData.ConsoleColor);
+                creationData.ConsoleDrawingColor);
 
             return instance;
         }

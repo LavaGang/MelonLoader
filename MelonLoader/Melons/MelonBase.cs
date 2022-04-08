@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
+using System.Drawing;
 using System.Reflection;
 #pragma warning disable 0618
 
@@ -22,14 +24,34 @@ namespace MelonLoader
         public int Priority { get; internal set; }
 
         /// <summary>
-        /// Console Color of the Melon.
+        /// Console Color of the Melon
         /// </summary>
-        public ConsoleColor ConsoleColor { get; internal set; }
+        public Color ConsoleDrawingColor { get; internal set; }
 
         /// <summary>
         /// Console Color of the Author that made this melon.
         /// </summary>
-        public ConsoleColor AuthorConsoleColor { get; internal set;}
+        public Color AuthorDrawingColor { get; internal set; }
+
+        /// <summary>
+        /// Console Color of the Melon.
+        /// </summary>
+        [Obsolete("ConsoleColor is Obsolete. MelonLoader now supports the use of System.Drawing.Color with the ConsoleDrawingColor property.")]
+        public ConsoleColor ConsoleColor 
+        {
+            get => LoggerUtils.DrawingColorToConsoleColor(ConsoleDrawingColor); 
+            internal set => ConsoleDrawingColor = LoggerUtils.ConsoleColorToDrawingColor(value);
+        }
+
+        /// <summary>
+        /// Console Color of the Author that made this melon.
+        /// </summary>
+        [Obsolete("AuthorConsoleColor is Obsolete. MelonLoader now supports the use of System.Drawing.Color with the AuthorDrawingColor property.")]
+        public ConsoleColor AuthorConsoleColor
+        {
+            get => LoggerUtils.DrawingColorToConsoleColor(AuthorDrawingColor);
+            internal set => AuthorDrawingColor = LoggerUtils.ConsoleColorToDrawingColor(value);
+        }
 
         /// <summary>
         /// Info Attribute of the Melon.
