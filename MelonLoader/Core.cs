@@ -34,6 +34,8 @@ namespace MelonLoader
             Fixes.UnhandledException.Install(curDomain);
             Fixes.ServerCertificateValidation.Install();
 
+            WelcomeMessage();
+
             MelonUtils.Setup(curDomain);
             Assertions.LemonAssertMapping.Setup();
             MelonHandler.Setup();
@@ -101,6 +103,97 @@ namespace MelonLoader
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
             return 0;
+        }
+
+        internal static string GetVersionString()
+        {
+            var lemon = MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON;
+            var versionStr = $"{(lemon ? "Lemon" : "Melon")}Loader " +
+                $"v{BuildInfo.Version} " +
+                $"{(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
+            return versionStr;
+        }
+
+        internal static void WelcomeMessage()
+        {
+            if (MelonDebug.IsEnabled())
+                MelonLogger.WriteSpacer();
+            MelonLogger.Msg("------------------------------");
+            MelonLogger.Msg(GetVersionString());
+            MelonLogger.Msg($"OS: {GetOSVersion()}");
+            MelonLogger.Msg($"Hash Code: {MelonUtils.HashCode}");
+            MelonLogger.Msg("------------------------------");
+            var typeString = MelonUtils.IsGameIl2Cpp() ? "Il2cpp" : MelonUtils.IsOldMono() ? "Mono" : "MonoBleedingEdge";
+            MelonLogger.Msg($"Game Type: {typeString}");
+            var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
+            MelonLogger.Msg($"Game Arch: {archString}");
+            MelonLogger.Msg("------------------------------");
+            MelonLogger.Msg($"Core BasePath: {MelonEnvironment.MelonBaseDirectory}");
+            MelonLogger.Msg($"Game BasePath: {MelonEnvironment.GameRootDirectory}");
+            MelonLogger.Msg($"Game DataPath: {MelonEnvironment.UnityGameDataDirectory}");
+            MelonLogger.Msg($"Game ApplicationPath: {MelonEnvironment.GameExecutablePath}");
+        }
+
+        [DllImport("ntdll.dll", SetLastError = true)]
+        internal static extern uint RtlGetVersion(out OsVersionInfo versionInformation); // return type should be the NtStatus enum
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct OsVersionInfo
+        {
+            private readonly uint OsVersionInfoSize;
+
+            internal readonly uint MajorVersion;
+            internal readonly uint MinorVersion;
+
+            private readonly uint BuildNumber;
+
+            private readonly uint PlatformId;
+
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            internal readonly string CSDVersion;
+        }
+
+        internal static string GetOSVersion()
+        {
+            if (BootstrapInterop.IsUnderWineOrSteamProton())
+                return $"Wine {WineGetVersion()}";
+            RtlGetVersion(out OsVersionInfo versionInformation);
+            var minor = versionInformation.MinorVersion;
+
+            string versionString = "";
+
+            switch (versionInformation.MajorVersion)
+            {
+                case 4:
+                    versionString = "Windows 95/98/Me/NT";
+                    break;
+                case 5:
+                    if (minor == 0)
+                        versionString = "Windows 2000";
+                    if (minor == 1)
+                        versionString = "Windows XP";
+                    if (minor == 2)
+                        versionString = "Windows 2003";
+                    break;
+                case 6:
+                    if (minor == 0)
+                        versionString = "Windows Vista";
+                    if (minor == 1)
+                        versionString = "Windows 7";
+                    if (minor == 2)
+                        versionString = "Windows 8";
+                    if (minor == 3)
+                        versionString = "Windows 8.1";
+                    break;
+                case 10:
+                    versionString = "Windows 10";
+                    break;
+                default:
+                    versionString = "Unknown";
+                    break;
+            }
+
+            return $"{versionString}";
         }
 
         internal static void OnApplicationLateStart()

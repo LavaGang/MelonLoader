@@ -73,7 +73,7 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		//If we're a mono game and we failed to init mono, die
 		return;
 
-	WelcomeMessage();
+	//WelcomeMessage();
 
 	if (!AnalyticsBlocker::Initialize()
 		|| !Il2Cpp::Initialize())

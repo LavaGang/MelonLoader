@@ -380,9 +380,7 @@ namespace MelonLoader
 
         public static bool IsGameIl2Cpp() => Directory.Exists(MelonEnvironment.Il2CppDataDirectory);
 
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsOldMono();
+        public static bool IsOldMono() => File.Exists(MelonEnvironment.GameRootDirectory + "\\mono.dll");
 
         public static bool IsUnderWineOrSteamProton() => BootstrapInterop.IsUnderWineOrSteamProton();
 
