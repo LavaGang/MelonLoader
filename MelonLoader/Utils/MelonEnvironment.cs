@@ -35,5 +35,16 @@ namespace MelonLoader.Utils
         public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "il2cpp_data");
 
         public static string MelonManagedDirectory => Path.Combine(MelonLoaderDirectory, "Managed");
+
+        internal static void PrintEnvironment()
+        {
+            //These must not be changed, lum needs them
+            MelonLogger.Msg($"Core::BasePath: {MelonBaseDirectory}");
+            MelonLogger.Msg($"Game::BasePath: {GameRootDirectory}");
+            MelonLogger.Msg($"Game::DataPath: {UnityGameDataDirectory}");
+            MelonLogger.Msg($"Game::ApplicationPath: {GameExecutablePath}");
+
+            MelonLogger.Msg($"Runtime Type: {OurRuntimeName}");
+        }
     }
 }

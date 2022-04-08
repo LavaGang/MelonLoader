@@ -115,8 +115,9 @@ namespace MelonLoader
 
         internal static void WelcomeMessage()
         {
-            if (MelonDebug.IsEnabled())
-                MelonLogger.WriteSpacer();
+            //if (MelonDebug.IsEnabled())
+            //    MelonLogger.WriteSpacer();
+
             MelonLogger.Msg("------------------------------");
             MelonLogger.Msg(GetVersionString());
             MelonLogger.Msg($"OS: {GetOSVersion()}");
@@ -127,10 +128,8 @@ namespace MelonLoader
             var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
             MelonLogger.Msg($"Game Arch: {archString}");
             MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg($"Core::BasePath: {MelonEnvironment.MelonBaseDirectory}");
-            MelonLogger.Msg($"Game::BasePath: {MelonEnvironment.GameRootDirectory}");
-            MelonLogger.Msg($"Game::DataPath: {MelonEnvironment.UnityGameDataDirectory}");
-            MelonLogger.Msg($"Game::ApplicationPath: {MelonEnvironment.GameExecutablePath}");
+
+            MelonEnvironment.PrintEnvironment();
         }
 
         [DllImport("ntdll.dll", SetLastError = true)]
