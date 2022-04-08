@@ -71,10 +71,6 @@ bool DotnetRuntime::LoadHostFxr()
 	char_t buffer[MAX_PATH];
 	size_t buffer_size = sizeof(buffer) / sizeof(char_t);
 
-	get_hostfxr_parameters params;
-
-	//params.dotnet_root = STR("C:\\Users\\Sam\\Documents\\debugdotnet603");
-
 	int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
 	if (rc != 0) 
 	{
