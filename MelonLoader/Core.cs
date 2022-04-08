@@ -100,7 +100,6 @@ namespace MelonLoader
             AddUnityDebugLog();
             MelonHandler.OnApplicationStart_Mods();
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
-            MelonLogger.Error("ERROR EXAMPLE");
 
             return 0;
         }
