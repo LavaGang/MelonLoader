@@ -30,6 +30,9 @@ namespace MelonLoader
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             SetupWineCheck();
 
+            if (MelonUtils.IsUnderWineOrSteamProton())
+                Pastel.ConsoleExtensions.Disable();
+
             ManagedAnalyticsBlocker.Install();
 
             AppDomain curDomain = AppDomain.CurrentDomain;
