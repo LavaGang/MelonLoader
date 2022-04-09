@@ -61,6 +61,7 @@ namespace MelonLoader
             public static bool StartScreen { get; internal set; } = true;
             public static bool IsDebug { get; internal set; }
             public static bool UserWantsDebugger { get; internal set; }
+            public static bool ShouldDisplayAnalyticsBlocker { get; internal set; }
 
             internal static void Setup()
             {
@@ -78,6 +79,7 @@ namespace MelonLoader
                 };
                 WithoutArg["melonloader.debug"] = () => IsDebug = true;
                 WithoutArg["melonloader.launchdebugger"] = () => UserWantsDebugger = true;
+                WithoutArg["melonloader.dab"] = () => ShouldDisplayAnalyticsBlocker = true;
             }
         }
 

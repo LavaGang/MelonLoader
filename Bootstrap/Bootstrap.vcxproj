@@ -171,7 +171,6 @@
     <ClCompile Include="Managers\Il2Cpp.cpp" />
     <ClCompile Include="Managers\InternalCalls.cpp" />
     <ClCompile Include="Managers\Mono.cpp" />
-    <ClCompile Include="Utils\AnalyticsBlocker.cpp" />
     <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
     <ClCompile Include="Utils\Assertion.cpp" />
     <ClCompile Include="Utils\CommandLine.cpp" />
@@ -197,7 +196,6 @@
     <ClInclude Include="Managers\InternalCalls.h" />
     <ClInclude Include="Managers\Mono.h" />
     <ClInclude Include="Base\resource.h" />
-    <ClInclude Include="Utils\AnalyticsBlocker.h" />
     <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
     <ClInclude Include="Utils\Assertion.h" />
     <ClInclude Include="Utils\CommandLine.h" />

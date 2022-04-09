@@ -31,9 +31,6 @@
     <ClCompile Include="Managers\BaseAssembly.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\AnalyticsBlocker.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\HashCode.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -103,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="Managers\BaseAssembly.h">
       <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\AnalyticsBlocker.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\HashCode.h">
       <Filter>Utils</Filter>

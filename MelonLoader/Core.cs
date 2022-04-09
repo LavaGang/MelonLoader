@@ -29,6 +29,9 @@ namespace MelonLoader
             MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             SetupWineCheck();
+
+            ManagedAnalyticsBlocker.Install();
+
             AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.DotnetLoadFromManagedFolderFix.Install();
             Fixes.UnhandledException.Install(curDomain);
@@ -214,6 +217,7 @@ namespace MelonLoader
             bHaptics.Quit();
 
             MelonLogger.Flush();
+            MelonLogger.Close();
 
             if (MelonLaunchOptions.Core.QuitFix)
                 Process.GetCurrentProcess().Kill();

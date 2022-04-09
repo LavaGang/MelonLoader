@@ -1,7 +1,6 @@
 #include "CommandLine.h"
 #include "Logging/Logger.h"
 #include "Debug.h"
-#include "AnalyticsBlocker.h"
 #include "Encoding.h"
 #include "../Core.h"
 #include "../Managers/Game.h"
@@ -50,8 +49,6 @@ void CommandLine::Read()
 			Console::AlwaysOnTop = true;
 		else if (strstr(command, "--melonloader.consoledst") != NULL)
 			Console::ShouldSetTitle = false;
-		else if (strstr(command, "--melonloader.dab") != NULL)
-			AnalyticsBlocker::ShouldDAB = true;
 		else if (strstr(command, "--melonloader.disableunityclc") != NULL)
 			Console::CleanUnityLogs = false;
 

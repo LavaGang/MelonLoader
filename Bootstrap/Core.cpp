@@ -13,7 +13,6 @@
 #include "Utils/Assertion.h"
 #include "Utils/Logging/Logger.h"
 #include "Utils/Debug.h"
-#include "Utils/AnalyticsBlocker.h"
 #include "Utils/HashCode.h"
 #include "Utils/Encoding.h"
 #include "Managers/DotnetRuntime.h"
@@ -73,18 +72,13 @@ void Core::Initialize(HINSTANCE hinstDLL)
 		//If we're a mono game and we failed to init mono, die
 		return;
 
-	//WelcomeMessage();
-
-	if (!AnalyticsBlocker::Initialize()
-		|| !Il2Cpp::Initialize())
+	if (!Il2Cpp::Initialize())
 		return;
 
 	bool runtime_initialized = Game::IsIl2Cpp ? DotnetRuntime::LoadDotNet() : Mono::Load();
 
 	if (!runtime_initialized)
 		return;
-
-	AnalyticsBlocker::Hook();
 
 	if (Game::IsIl2Cpp)
 	{

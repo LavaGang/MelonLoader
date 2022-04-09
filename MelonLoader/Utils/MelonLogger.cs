@@ -13,8 +13,12 @@ namespace MelonLoader
         public static readonly Color DefaultMelonColor = Color.Cyan;
         public static readonly Color DefaultTextColor = Color.LightGray;
 
-        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create);
-        internal static StreamWriter LogWriter = new StreamWriter(LogStream);
+#if !NET6_0
+        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+#else
+        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
+#endif
+        internal static StreamWriter LogWriter = new(LogStream, Encoding.UTF8, 1);
 
         public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());
         public static void Msg(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt);
@@ -206,6 +210,12 @@ namespace MelonLoader
         internal static void Flush()
         {
             LogWriter.Flush();
+            LogStream.Flush();
+        }
+
+        internal static void Close()
+        {
+            LogWriter.Close();
         }
 
 
