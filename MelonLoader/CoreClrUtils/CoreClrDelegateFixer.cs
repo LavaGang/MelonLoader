@@ -30,7 +30,7 @@ namespace MelonLoader.CoreClrUtils
                 if (managedMethod?.GetCustomAttribute<UnmanagedCallersOnlyAttribute>() == null)
                 {
                     //We have provided a direct managed method as the pointer to detour to. This doesn't work under CoreCLR, so we yell at the user and stop
-                    var melon = MelonUtils.GetMelonFromStackTrace();
+                    var melon = MelonUtils.GetMelonFromStackTrace(new System.Diagnostics.StackTrace());
 
                     var logger = melon?.LoggerInstance ?? new MelonLogger.Instance("Bad Delegate");
                     var modName = melon?.Info.Name ?? "Unknown mod";
@@ -55,6 +55,9 @@ namespace MelonLoader.CoreClrUtils
                             MelonLogger.Error("Failed to repair invalid native hook: ", ex);
                             //Ignore, fall down to error below
                         }
+                    } else
+                    {
+                        logger.Error($"Failed to resolve the offending melon from the stack and/or the managed method target. ManagedMethod is {managedMethod}, of type {managedMethod.GetType()}, stack is {Environment.StackTrace}");
                     }
 
                     PrintDirtyDelegateWarning(logger, modName, managedMethod);

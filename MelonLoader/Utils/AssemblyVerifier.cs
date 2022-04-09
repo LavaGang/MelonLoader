@@ -215,24 +215,7 @@ namespace MelonLoader.Utils
         private static HarmonyMethod GetLocalPatch(string name)
         {
             return typeof(AssemblyVerifier).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod();
-        }
-
-        internal static void InstallHooks()
-        {
-            /*var byteArray = new byte[] { };
-            Type[] originalTypes = new Type[] { typeof(string) };
-            MethodInfo callOriginalLoadFrom = typeof(Assembly).GetMethod(nameof(Assembly.LoadFrom), originalTypes);
-
-            originalTypes = new Type[] { byteArray.GetType() };
-
-            MethodInfo callOriginalLoadRaw = typeof(AppDomain).GetMethod(nameof(AppDomain.Load), originalTypes);
-
-            Core.HarmonyInstance.Patch(callOriginalLoadFrom, GetLocalPatch(nameof(LoadFromPatch)), null);
-            Core.HarmonyInstance.Patch(callOriginalLoadRaw, GetLocalPatch(nameof(LoadRawPatch)), null);*/
-
-        }
-
-        
+        }        
     }
 }
 #endif
