@@ -22,7 +22,7 @@ namespace MelonLoader.Utils
             { ConsoleColor.Cyan, Color.Cyan },
             { ConsoleColor.Red, Color.IndianRed },
             { ConsoleColor.Magenta, Color.Magenta },
-            { ConsoleColor.Yellow, Color.YellowGreen },
+            { ConsoleColor.Yellow, Color.Yellow },
             { ConsoleColor.White, Color.White },
         };
 
@@ -34,7 +34,7 @@ namespace MelonLoader.Utils
             { Color.DarkCyan, ConsoleColor.DarkCyan },
             { Color.DarkRed, ConsoleColor.DarkGreen },
             { Color.DarkMagenta, ConsoleColor.DarkMagenta },
-            { Color.Yellow, ConsoleColor.DarkYellow },
+            { Color.Yellow, ConsoleColor.Yellow },
             { Color.LightGray, ConsoleColor.Gray },
             { Color.DarkGray, ConsoleColor.DarkGray },
             { Color.CornflowerBlue, ConsoleColor.Blue } ,
@@ -42,7 +42,6 @@ namespace MelonLoader.Utils
             { Color.Cyan, ConsoleColor.Cyan },
             { Color.IndianRed, ConsoleColor.Red },
             { Color.Magenta, ConsoleColor.Magenta },
-            { Color.YellowGreen, ConsoleColor.Yellow },
             { Color.White, ConsoleColor.White },
         };
 
