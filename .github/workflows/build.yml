@@ -44,12 +44,14 @@ jobs:
         uses: microsoft/setup-msbuild@v1
       - name: Build Proxy DLL | Windows - x86
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform=Win32 -p:Configuration=Release
+        run: |
+          msbuild Proxy\Proxy.vcxproj -p:Platform=Win32 -p:Configuration=Release
+          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.3\runtimes\win-x86\native\nethost.dll Proxy\Output\Release\x86\
       - name: Upload proxy x86
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX86
-          path: Proxy/Output/Release/x86/version.dll
+          path: Proxy/Output/Release/x86/*.dll
   build_proxy_x64:
     runs-on: windows-latest
     steps:
@@ -58,12 +60,14 @@ jobs:
         uses: microsoft/setup-msbuild@v1
       - name: Build Proxy DLL | Windows - x64
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
+        run: |
+          msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
+          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.3\runtimes\win-x64\native\nethost.dll Proxy\Output\Release\x64\
       - name: Upload proxy x64
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64
-          path: Proxy/Output/Release/x64/version.dll
+          path: Proxy/Output/Release/x64/*.dll
   build_bootstrap_x86:
     runs-on: windows-latest
     steps:
