@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader.Utils
 {
     internal static class AssemblyVerifier
     {
+
         private static HashSet<char> AllowedSymbols = new()
         {
             '_',
@@ -32,6 +34,16 @@ namespace MelonLoader.Utils
             '{',
             '}'
         };
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        internal static void EnsureInitialized()
+        {
+            var dummyListToEnsureThisCodeDoesntGetNuked = new List<object>();
+
+            //Force load AsmResolver
+            dummyListToEnsureThisCodeDoesntGetNuked.Add(new Constant(AsmResolver.PE.DotNet.Metadata.Tables.Rows.ElementType.Class, null));
+            dummyListToEnsureThisCodeDoesntGetNuked.Add(typeof(AsmResolver.PE.File.PEFile));
+        }
 
         private static bool IsNameValid(string name)
         {
@@ -165,7 +177,7 @@ namespace MelonLoader.Utils
 
         }
 
-        internal static (bool, string) LoadFromPatch(string assemblyFile)
+        internal static (bool, string) VerifyFile(string assemblyFile)
         {
             if (assemblyFile is not null)
             {
@@ -183,7 +195,7 @@ namespace MelonLoader.Utils
             return (true, null);
         }
 
-        internal static (bool, string) LoadRawPatch(byte[] rawAssembly)
+        internal static (bool, string) VerifyByteArray(byte[] rawAssembly)
         {
             if (rawAssembly is not null)
             {
