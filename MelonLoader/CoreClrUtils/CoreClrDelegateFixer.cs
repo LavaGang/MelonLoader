@@ -68,8 +68,12 @@ namespace MelonLoader.CoreClrUtils
         private static Type GetHookWrapperDelegateType(MelonBase melon, MethodInfo managedMethod)
         {
             var methodId = $"{melon.Info.Name.Replace(' ', '_')}_{managedMethod.DeclaringType.Namespace.Replace('.', '_')}_{managedMethod.Name}";
+            var typeName = $"BrokenHookWrapperDelegate_{methodId}";
 
-            var type = module.DefineType($"BrokenHookWrapperDelegate_{methodId}", TypeAttributes.Sealed | TypeAttributes.Public, typeof(MulticastDelegate));
+            if (module.GetType(typeName) is { } ret)
+                return ret;
+
+            var type = module.DefineType(typeName, TypeAttributes.Sealed | TypeAttributes.Public, typeof(MulticastDelegate));
             type.SetCustomAttribute(new CustomAttributeBuilder(typeof(UnmanagedFunctionPointerAttribute).GetConstructor(new[] { typeof(CallingConvention) }), new object[] { CallingConvention.Cdecl }));
 
             var ctor = type.DefineConstructor(MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Public, CallingConventions.HasThis, new[] { typeof(object), typeof(IntPtr) });
