@@ -171,7 +171,7 @@ namespace MelonLoader
             return builder.ToString();
         }
 
-        internal static void Internal_Warning(string namesection, string txt) => Internal_Msg(Color.LightYellow, Color.LightYellow, namesection, txt);
+        internal static void Internal_Warning(string namesection, string txt) => Internal_Msg(Color.Yellow, Color.Yellow, namesection, txt);
 
 
         internal static void Internal_Error(string namesection, string txt) => Internal_Msg(Color.IndianRed, Color.IndianRed, namesection, txt);

@@ -22,7 +22,7 @@ namespace MelonLoader.Utils
             { ConsoleColor.Cyan, Color.Cyan },
             { ConsoleColor.Red, Color.IndianRed },
             { ConsoleColor.Magenta, Color.Magenta },
-            { ConsoleColor.Yellow, Color.LightYellow },
+            { ConsoleColor.Yellow, Color.YellowGreen },
             { ConsoleColor.White, Color.White },
         };
 
@@ -42,7 +42,7 @@ namespace MelonLoader.Utils
             { Color.Cyan, ConsoleColor.Cyan },
             { Color.IndianRed, ConsoleColor.Red },
             { Color.Magenta, ConsoleColor.Magenta },
-            { Color.LightYellow, ConsoleColor.Yellow },
+            { Color.YellowGreen, ConsoleColor.Yellow },
             { Color.White, ConsoleColor.White },
         };
 
