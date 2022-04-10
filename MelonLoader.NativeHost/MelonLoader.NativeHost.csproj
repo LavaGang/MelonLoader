@@ -7,6 +7,7 @@
 	<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
 	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

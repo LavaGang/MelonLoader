@@ -8,6 +8,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)\Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugType>full</DebugType>

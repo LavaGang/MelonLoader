@@ -9,6 +9,7 @@
 		<DocumentationFile>..\Output\$(Configuration)\MelonLoader\MelonLoader.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<EnableDynamicLoading>true</EnableDynamicLoading>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugType>full</DebugType>
