@@ -40,8 +40,13 @@ void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 	//Check for errors
 	if (rc != 0 || cxt == nullptr)
 	{
-		Assertion::ThrowInternalFailure((std::string("Dotnet Init failed. Return code: ") + std::to_string(rc) + " )").c_str());
 		close_fptr(cxt);
+
+		if (rc == HOSTFXR_NO_FRAMEWORK)
+			Assertion::ThrowInternalFailure("HostFXR returned no viable frameworks. Make sure you have .NET Runtime 6.0.3 installed for the correct architecture!");
+		else 
+			Assertion::ThrowInternalFailure((std::string("Dotnet Init failed. Return code: ") + std::to_string(rc) + " )").c_str());
+
 		return;
 	}
 
@@ -77,11 +82,9 @@ bool DotnetRuntime::LoadHostFxr()
 		if (rc == HOST_LOADLIB_FAILED)
 			Assertion::ThrowInternalFailure("Failed to locate hostfxr - library load call failed. Wrong architecture dotnet installed?");
 		else if(rc == HOST_MISSING_FILE)
-			Assertion::ThrowInternalFailure("Failed to locate hostfxr - could not find a required dll. Corrupt dotnet installation?");
+			Assertion::ThrowInternalFailure("No .NET runtime installations were found. Please visit https://dot.net and download the latest .NET Runtime version 6");
 		else if(rc == HOST_MISSING_ENTRYPOINT)
 			Assertion::ThrowInternalFailure("Failed to locate hostfxr - could not find a required entry point. Outdated dotnet installation?");
-		else if(rc == HOSTFXR_NO_FRAMEWORK)
-			Assertion::ThrowInternalFailure("HostFXR returned no viable frameworks. Make sure you have .NET Runtime 6.0.3 installed for the correct architecture!");
 		else
 			Assertion::ThrowInternalFailure((std::string("Failed to locate hostfxr - unknown error, got HRESULT ") + std::to_string(rc)).c_str());
 
