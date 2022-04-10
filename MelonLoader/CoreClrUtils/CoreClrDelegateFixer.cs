@@ -30,7 +30,7 @@ namespace MelonLoader.CoreClrUtils
                 if (managedMethod?.GetCustomAttribute<UnmanagedCallersOnlyAttribute>() == null)
                 {
                     //We have provided a direct managed method as the pointer to detour to. This doesn't work under CoreCLR, so we yell at the user and stop
-                    var melon = MelonUtils.GetMelonFromStackTrace(new System.Diagnostics.StackTrace());
+                    var melon = MelonUtils.GetMelonFromStackTrace(new System.Diagnostics.StackTrace(), true);
 
                     var logger = melon?.LoggerInstance ?? new MelonLogger.Instance("Bad Delegate");
                     var modName = melon?.Info.Name ?? "Unknown mod";
