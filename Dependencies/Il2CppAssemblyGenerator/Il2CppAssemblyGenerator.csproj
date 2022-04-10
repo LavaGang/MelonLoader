@@ -10,13 +10,6 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>full</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>None</DebugType>
-		<DefineConstants />
-	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="AssetRipper.VersionUtilities">
 			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\$(TargetFramework)\AssetRipper.VersionUtilities.dll</HintPath>

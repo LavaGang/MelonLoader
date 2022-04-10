@@ -12,11 +12,9 @@
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>full</DebugType>
 		<DefineConstants>TRACE;NET35;DEBUG</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>None</DebugType>
 		<DefineConstants>NET35</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup>

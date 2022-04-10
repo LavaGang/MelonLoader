@@ -10,13 +10,6 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>full</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>None</DebugType>
-		<DefineConstants />
-	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="..\..\..\MelonLoader\Properties\BuildInfo.cs" Link="Properties\BuildInfo.cs" />
 			<Compile Update="Properties\Resources.Designer.cs">
