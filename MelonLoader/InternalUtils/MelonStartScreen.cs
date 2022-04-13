@@ -69,7 +69,11 @@ namespace MelonLoader.InternalUtils
 
             try
             {
+#if NET6_0
+                asm = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(AssemblyPath);
+#else
                 asm = Assembly.LoadFrom(AssemblyPath);
+#endif
                 if (asm == null)
                 {
                     MelonLogger.Error($"Failed to Load Assembly for {FileName}.dll!");

@@ -98,16 +98,24 @@ namespace MelonLoader.Melons
 
             // To-Do: File Type Check
 
+            //NET6: Always load from file because PDBs are automatically handled, and calling Assembly.Load from a byte array is no bueno, especially as we lose assembly location data and symbols.
+#if NET6_0
+            try
+            {
+                var asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
+
+                MelonHandler.LoadFromAssembly(asm);
+            } catch(Exception ex)
+            {
+                MelonLogger.Error($"Failed to Load Assembly for {filepath}: {ex}");
+            }
+#else
             if (MelonDebug.IsEnabled())
             {
                 Assembly melonassembly = null;
                 try
                 {
-#if !NET6_0
                     melonassembly = Assembly.LoadFrom(filepath);
-#else
-                    melonassembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
-#endif
                 }
                 catch (Exception ex)
                 {
@@ -156,6 +164,7 @@ namespace MelonLoader.Melons
 
                 LoadFromByteArray(filedata, symbolsdata, filepath);
             }
+#endif
         }
 
         internal static void LoadFromByteArray(byte[] filedata, byte[] symbolsdata = null, string filepath = null)
@@ -168,7 +177,14 @@ namespace MelonLoader.Melons
             Assembly melonassembly = null;
             try
             {
+#if NET6_0
+                var fileStream = new MemoryStream(filedata);
+                var symStream = symbolsdata == null ? null : new MemoryStream(symbolsdata);
+
+                melonassembly = AssemblyLoadContext.Default.LoadFromStream(fileStream, symStream);
+#else
                 melonassembly = Assembly.Load(filedata, symbolsdata);
+#endif
             }
             catch (Exception ex)
             {
