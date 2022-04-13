@@ -212,6 +212,8 @@ namespace MelonLoader
 
         internal static void Quit()
         {
+            MelonDebug.Msg("[ML Core] Received Quit from Support Module. Shutting down...");
+
             MelonHandler.OnApplicationQuit();
             MelonPreferences.Save();
 
@@ -220,6 +222,8 @@ namespace MelonLoader
 
             MelonLogger.Flush();
             MelonLogger.Close();
+
+            System.Threading.Thread.Sleep(200);
 
             if (MelonLaunchOptions.Core.QuitFix)
                 Process.GetCurrentProcess().Kill();

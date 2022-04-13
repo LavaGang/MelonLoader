@@ -83,7 +83,11 @@ namespace MelonLoader
                     if (args.SetupType != setupType)
                         continue;
 
+#if NET6_0
+                    Assembly assembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(ModulePath);
+#else
                     Assembly assembly = Assembly.LoadFrom(ModulePath);
+#endif
                     if (assembly == null)
                         continue;
                     Type[] ModuleTypes = assembly.GetValidTypes(x => x.IsSubclassOf(typeof(Module))).ToArray();

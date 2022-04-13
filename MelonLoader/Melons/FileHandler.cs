@@ -104,7 +104,7 @@ namespace MelonLoader.Melons
             {
                 var asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
 
-                MelonHandler.LoadFromAssembly(asm);
+                MelonHandler.LoadFromAssembly(asm, filepath);
             } catch(Exception ex)
             {
                 MelonLogger.Error($"Failed to Load Assembly for {filepath}: {ex}");
