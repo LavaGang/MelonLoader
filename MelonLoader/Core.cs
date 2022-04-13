@@ -8,10 +8,6 @@ using MelonLoader.Utils;
 using System.IO;
 using System.Runtime.InteropServices;
 
-#if NET6_0
-using System.Runtime.Loader;
-#endif
-
 namespace MelonLoader
 {
 	internal static class Core
@@ -23,8 +19,13 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
+            MelonLaunchOptions.Load();
+
             if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
+            {
+                Console.WriteLine("[Init] User requested debugger, attempting to launch now...");
                 Debugger.Launch();
+            }
 
             MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
@@ -67,7 +68,6 @@ namespace MelonLoader
             PatchShield.Install();
 
             MelonPreferences.Load();
-            MelonLaunchOptions.Load();
             bHaptics.Load();
 
             MelonCompatibilityLayer.Setup();
