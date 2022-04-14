@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace MelonLoader.MelonStartScreen
@@ -25,11 +27,9 @@ namespace MelonLoader.MelonStartScreen
 
         private static readonly Dictionary<ModLoadStep, string> stepsNames = new Dictionary<ModLoadStep, string>()
         {
-            { ModLoadStep.OnApplicationStart_Plugins, "OnApplicationStart - Plugin" },
-            { ModLoadStep.LoadMods, "Loading Mods" },
-            { ModLoadStep.OnApplicationStart_Mods, "OnApplicationStart - Mod" },
-            { ModLoadStep.OnApplicationLateStart_Plugins, "OnApplicationLateStart - Plugin" },
-            { ModLoadStep.OnApplicationLateStart_Mods, "OnApplicationLateStart - Mod" }
+            { ModLoadStep.LoadMelons, "Loading Melons..." },
+            { ModLoadStep.InitializeMelons, "Starting Melons..." },
+            { ModLoadStep.OnApplicationStart, "Finishing up Melons..." }
         };
 
         public static float GetProgressFromLog(string data, ref string progressText, float default_) // TODO flags (il2cpp/mono, cpp2il/il2cppdumper)
@@ -59,23 +59,36 @@ namespace MelonLoader.MelonStartScreen
             return progressTime > 0 ? (progressTime / totalTime) * (generationPercent * 0.01f) : default_;
         }
 
-        public static float GetProgressFromMod(string modname, ref string progressText)
+        public static float GetProgressFromMod(MelonBase melon, ref string progressText)
         {
-            progressText = $"{currentStepName}: {modname}";
+            progressText = $"{currentStepName} {melon.MelonTypeName}: {melon.Info.Name} {melon.Info.Version}";
 
             float generationPart = generationPercent * 0.01f;
-            return generationPart + (((int)currentStep - 1) * ((1 - generationPart) / 5));
+            return generationPart + (((int)currentStep - 1) * ((1 - generationPart) / 4));
         }
 
-        public static float SetModState(ModLoadStep step, ref string progressText)
+        public static float GetProgressFromModAssembly(Assembly asm, ref string progressText)
         {
+            progressText = $"{currentStepName}: {Path.GetFileName(asm.Location)}";
+
+            float generationPart = generationPercent * 0.01f;
+            return generationPart + (((int)currentStep - 1) * ((1 - generationPart) / 4));
+        }
+
+        public static bool SetModState(ModLoadStep step, ref string progressText, out float generationPart)
+        {
+            generationPart = generationPercent * 0.01f;
+            generationPart += ((int)step - 1) * ((1 - generationPart) / 3);
+
+            if (currentStep == step)
+                return false;
+
             currentStep = step;
             if (!stepsNames.TryGetValue(step, out currentStepName))
                 currentStepName = $"{step}";
             progressText = currentStepName;
 
-            float generationPart = generationPercent * 0.01f;
-            return generationPart + (((int)currentStep - 1) * ((1 - generationPart) / 5));
+            return true;
         }
 
         internal static readonly AverageStepDuration[] averageStepDurations = new AverageStepDuration[]

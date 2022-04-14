@@ -4,12 +4,15 @@ using System.Linq;
 using System.Reflection;
 using MelonLoader.MonoInternals;
 using IllusionPlugin;
+using System.IO;
+using IllusionInjector;
+using MelonLoader.Modules;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class IPA_Module : MelonCompatibilityLayer.Module
+    internal class IPA_Module : MelonModule
     {
-        public override void Setup()
+        public override void OnInitialize()
         {
 			// To-Do:
 			// Detect if IPA is already Installed
@@ -25,20 +28,45 @@ namespace MelonLoader.CompatibilityLayers
 			foreach (string assemblyName in assembly_list)
 				MonoResolveManager.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 
-			MelonCompatibilityLayer.AddAssemblyToResolverEvent(GetResolverFromAssembly);
+			MelonBase.CustomMelonResolvers += Resolve;
 		}
 
-		private static MelonCompatibilityLayer.Resolver GetResolverFromAssembly(Assembly assembly, string filepath)
+        private MelonBase[] Resolve(Assembly asm)
 		{
-			IEnumerable<Type> plugin_types = assembly.GetValidTypes(x =>
+			IEnumerable<Type> pluginTypes = asm.GetValidTypes(x =>
 			{
 				Type[] interfaces = x.GetInterfaces();
 				return (interfaces != null) && interfaces.Any() && interfaces.Contains(typeof(IPlugin)); // To-Do: Change to Type Reflection based on Setup
 			});
-			if ((plugin_types == null) || !plugin_types.Any())
+			if ((pluginTypes == null) || !pluginTypes.Any())
 				return null;
 
-			return new IPA_Resolver(assembly, filepath, plugin_types);
+			return pluginTypes.Select(x => LoadPlugin(asm, x)).ToArray();
+		}
+
+		private MelonBase LoadPlugin(Assembly asm, Type pluginType)
+		{
+			IPlugin pluginInstance = Activator.CreateInstance(pluginType) as IPlugin;
+
+			MelonProcessAttribute[] processAttrs = null;
+			if (pluginInstance is IEnhancedPlugin enPl)
+				processAttrs = enPl.Filter?.Select(x => new MelonProcessAttribute(x)).ToArray();
+
+			string pluginName = pluginInstance.Name;
+			if (string.IsNullOrEmpty(pluginName))
+				pluginName = pluginType.FullName;
+
+			string plugin_version = pluginInstance.Version;
+			if (string.IsNullOrEmpty(plugin_version))
+				plugin_version = asm.GetName().Version.ToString();
+			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
+				plugin_version = "1.0.0.0";
+
+			var melon = MelonBase.CreateWrapper<IPAPluginWrapper>(asm, pluginName, plugin_version, processes: processAttrs);
+
+			melon.pluginInstance = pluginInstance;
+			PluginManager._Plugins.Add(pluginInstance);
+			return melon;
 		}
 	}
 }

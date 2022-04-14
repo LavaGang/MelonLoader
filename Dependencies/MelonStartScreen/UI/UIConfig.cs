@@ -47,7 +47,7 @@ namespace MelonLoader.MelonStartScreen
                     else
                         throw new DirectoryNotFoundException(ThemePath);
                 }
-                catch (Exception ex) { MelonLogger.Error($"Failed to find Start Screen Theme: {ex}"); }
+                catch (Exception ex) { Core.Logger.Error($"Failed to find Start Screen Theme: {ex}"); }
             }
 
             if (General.Theme.Equals("Random"))
@@ -64,7 +64,7 @@ namespace MelonLoader.MelonStartScreen
                     Directory.CreateDirectory(ThemePath);
             }
 
-            MelonLogger.Msg($"Using Start Screen Theme: \"{General.Theme}\"");
+            Core.Logger.Msg($"Using Start Screen Theme: \"{General.Theme}\"");
 
             Background = CreateCat<cBackground>(nameof(Background), true);
             LogoImage = CreateCat<LogoImageSettings>(nameof(LogoImage), true);

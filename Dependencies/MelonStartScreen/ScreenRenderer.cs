@@ -4,6 +4,7 @@ using System;
 using MelonUnityEngine;
 using MelonUnityEngine.CoreModule;
 using UnityPlayer;
+using System.Reflection;
 
 namespace MelonLoader.MelonStartScreen
 {
@@ -45,7 +46,8 @@ namespace MelonLoader.MelonStartScreen
             }
             catch (Exception e)
             {
-                MelonLogger.Error("Exception while init rendering: " + e);
+                Core.Logger.Error("Exception while init rendering: " + e);
+                disabled = true;
             }
             return false;
         }
@@ -71,7 +73,7 @@ namespace MelonLoader.MelonStartScreen
             }
             catch (Exception e)
             {
-                MelonLogger.Error("Exception while rendering: " + e);
+                Core.Logger.Error("Exception while rendering: " + e);
                 disabled = true;
             }
         }
@@ -95,12 +97,21 @@ namespace MelonLoader.MelonStartScreen
             UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
-        internal static void UpdateProgressFromMod(string modname)
+        internal static void UpdateProgressFromMod(MelonBase melon)
         {
             if (UIStyleValues.ProgressBar == null)
                 return;
 
-            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(modname, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(melon, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.text.isDirty = true;
+        }
+
+        internal static void UpdateProgressFromModAssembly(Assembly asm)
+        {
+            if (UIStyleValues.ProgressBar == null)
+                return;
+
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromModAssembly(asm, ref UIStyleValues.ProgressBar.text.text);
             UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
@@ -109,8 +120,11 @@ namespace MelonLoader.MelonStartScreen
             if (UIStyleValues.ProgressBar == null)
                 return;
 
-            UIStyleValues.ProgressBar.progress = ProgressParser.SetModState(step, ref UIStyleValues.ProgressBar.text.text);
-            UIStyleValues.ProgressBar.text.isDirty = true;
+            if (ProgressParser.SetModState(step, ref UIStyleValues.ProgressBar.text.text, out float generationPart))
+            {
+                UIStyleValues.ProgressBar.progress = generationPart;
+                UIStyleValues.ProgressBar.text.isDirty = true;
+            }
         }
     }
 }

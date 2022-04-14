@@ -1,4 +1,5 @@
 ﻿using MelonLoader;
+using MelonLoader.MelonStartScreen;
 using System;
 using System.Runtime.InteropServices;
 using UnhollowerMini;

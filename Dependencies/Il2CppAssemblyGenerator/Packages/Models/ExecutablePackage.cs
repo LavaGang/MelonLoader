@@ -30,12 +30,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
 
             if (!File.Exists(ExeFilePath))
             {
-                MelonLogger.Error($"{ExeFilePath} does not Exist!");
+                Core.Logger.Error($"{ExeFilePath} does not Exist!");
                 ThrowInternalFailure($"Failed to Execute {Name}!");
                 return false;
             }
 
-            MelonLogger.Msg($"Executing {Name}...");
+            Core.Logger.Msg($"Executing {Name}...");
             try
             {
                 ResetEvent_Output = new AutoResetEvent(false);
@@ -61,7 +61,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
                     }
                 }
 
-                MelonLogger.Msg("\"" + ExeFilePath + "\" " + processStartInfo.Arguments);
+                Core.Logger.Msg("\"" + ExeFilePath + "\" " + processStartInfo.Arguments);
 
                 Process process = new Process();
                 process.StartInfo = processStartInfo;
@@ -83,15 +83,15 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
             }
             catch (Exception ex)
             {
-                MelonLogger.Error(ex.ToString());
+                Core.Logger.Error(ex.ToString());
                 ThrowInternalFailure($"Failed to Execute {Name}!");
             }
 
             return false;
         }
 
-        private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else MelonLogger.Msg(e.Data); }
-        private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else MelonLogger.Error(e.Data); }
+        private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else Core.Logger.Msg(e.Data); }
+        private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else Core.Logger.Error(e.Data); }
 
         
         private static void SetProcessId(int id)

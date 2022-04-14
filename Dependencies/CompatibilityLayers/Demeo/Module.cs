@@ -3,15 +3,23 @@ using System.Reflection;
 using Boardgame.Modding;
 using MelonLoader;
 using RGCommon;
+using System.Text;
+using MelonLoader.Modules;
+using System;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class Demeo_Module : MelonCompatibilityLayer.Module
+    internal class Demeo_Module : MelonModule
     {
         internal static string ConnectionString;
         internal static List<ModdingAPI.ModInformation> ModInformation = new List<ModdingAPI.ModInformation>();
 
-        public override void Setup()
+        public override void OnInitialize()
+        {
+            MelonEvents.OnPreApplicationStart.Subscribe(OnPreAppStart, int.MinValue);
+        }
+
+        private static void OnPreAppStart()
         {
             HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
 
@@ -22,46 +30,38 @@ namespace MelonLoader.CompatibilityLayers
                 Il2Cpp.Patch(harmony);
             else
                 Mono.Patch(harmony);
-            
-            MelonCompatibilityLayer.AddRefreshPluginsEvent(Refresh);
-            MelonCompatibilityLayer.AddRefreshModsEvent(Refresh);
-            Refresh();
         }
 
-        private static void Refresh()
-        {
-            ConnectionString = VersionInformation.MajorMinorVersion;
-            ModInformation.Clear();
-            ParseMelons(MelonHandler.Plugins);
-            ParseMelons(MelonHandler.Mods);
-        }
-
-        private static void ParseMelons<T>(List<T> melons) where T : MelonBase
-        {
-            if (melons.Count <= 0)
-                return;
-
-            for (int i = 0; i < melons.Count; i++)
+        private static ModdingAPI.ModInformation ParseMelon(MelonBase melon)
+            => new ModdingAPI.ModInformation()
             {
-                T melon = melons[i];
-                if (melon == null)
-                    continue;
+                name = melon.Info.Name,
+                version = melon.Info.Version,
+                author = melon.Info.Author,
+                description = melon.Info.DownloadLink
+            };
 
-                ModdingAPI.ModInformation info = new ModdingAPI.ModInformation();
-                info.SetName(melon.Info.Name);
-                info.SetVersion(melon.Info.Version);
-                info.SetAuthor(melon.Info.Author);
-                info.SetDescription(melon.Info.DownloadLink);
+        private static void AppendMelonInfo(StringBuilder sb, MelonBase m)
+        {
+            if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequirement>(m.Assembly) != null)
+                sb.Append($", {m.Info.Name} v{m.Info.Version}");
+        }
 
-                ModInformation.Add(info);
+        private static bool GetInstalledMods(ref List<ModdingAPI.ModInformation> __result)
+        {
+            var result = new List<ModdingAPI.ModInformation>();
 
-                if (MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequirement>(melon.Assembly) != null)
-                    ConnectionString += $", {melon.Info.Name} v{melon.Info.Version}";
-            }
+            foreach (var m in MelonMod.RegisteredMelons)
+                result.Add(ParseMelon(m));
+            foreach (var m in MelonPlugin.RegisteredMelons)
+                result.Add(ParseMelon(m));
 
-            ModInformation.Sort((ModdingAPI.ModInformation left, ModdingAPI.ModInformation right) => string.Compare(left.GetName(), right.GetName()));
+            result.Sort((ModdingAPI.ModInformation left, ModdingAPI.ModInformation right) => string.Compare(left.name, right.name));
+            __result = result;
+            return false;
         }
 
         private static bool GetConnectionString(ref string __result) { __result = ConnectionString; return false; }
+
     }
 }

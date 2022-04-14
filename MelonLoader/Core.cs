@@ -70,40 +70,41 @@ namespace MelonLoader
             MelonPreferences.Load();
             bHaptics.Load();
 
-            MelonCompatibilityLayer.Setup();
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
+            MelonCompatibilityLayer.LoadModules();
 
-            MelonHandler.LoadPlugins();
-            MelonHandler.OnPreInitialization();
+            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
+            MelonEvents.OnPreInitialization.Invoke();
 
             return 0;
         }
 
         internal static int PreStart()
         {
-            MelonHandler.OnApplicationEarlyStart();
+            MelonEvents.OnApplicationEarlyStart.Invoke();
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
         private static int Il2CppGameSetup()
-            => (MelonUtils.IsGameIl2Cpp()
-                && !Il2CppAssemblyGenerator.Run())
-                ? 1 : 0;
+            => Il2CppAssemblyGenerator.Run() ? 0 : 1;
 
         internal static int Start()
         {
             bHaptics.Start();
 
-            MelonHandler.OnApplicationStart_Plugins();
-            MelonHandler.LoadMods();
-            MelonHandler.OnPreSupportModule();
+            MelonEvents.OnPreSupportModule.Invoke();
 
             if (!SupportModule.Setup())
                 return 1;
 
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
+            MelonEvents.OnPreApplicationStart.Invoke(); // Modules should subscribe to this with the lowest priority, preferably int.MinValue
+
             AddUnityDebugLog();
-            MelonHandler.OnApplicationStart_Mods();
+
+            RegisterTypeInIl2Cpp.SetReady();
+
+            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
+
+            MelonEvents.OnApplicationStart.Invoke();
             //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
 
             return 0;
@@ -205,16 +206,14 @@ namespace MelonLoader
 
         internal static void OnApplicationLateStart()
         {
-            MelonHandler.OnApplicationLateStart_Plugins();
-            MelonHandler.OnApplicationLateStart_Mods();
-            MelonStartScreen.Finish();
+            MelonEvents.OnApplicationLateStart.Invoke();
         }
 
         internal static void Quit()
         {
             MelonDebug.Msg("[ML Core] Received Quit from Support Module. Shutting down...");
 
-            MelonHandler.OnApplicationQuit();
+            MelonEvents.OnApplicationQuit.Invoke();
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();

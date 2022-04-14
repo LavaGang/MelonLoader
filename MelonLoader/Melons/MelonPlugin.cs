@@ -1,10 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace MelonLoader
 {
-    public abstract class MelonPlugin : MelonBase
+    public abstract class MelonPlugin : Melon<MelonPlugin>
     {
+        static MelonPlugin()
+        {
+            TypeName = "Plugin";
+        }
+
+        protected internal override void RegisterCallbacks()
+        {
+            base.RegisterCallbacks();
+
+            MelonEvents.OnPreInitialization.Subscribe(OnPreInitialization);
+            MelonEvents.OnApplicationEarlyStart.Subscribe(OnApplicationEarlyStart);
+        }
+
+        #region Callbacks
+
         /// <summary>
         /// Runs before Game Initialization.
         /// </summary>
@@ -14,6 +30,10 @@ namespace MelonLoader
         /// Runs after Game Initialization, before OnApplicationStart and before Assembly Generation on Il2Cpp games
         /// </summary>
         public virtual void OnApplicationEarlyStart() { }
+
+        #endregion
+
+        #region Obsolete Members
 
         [Obsolete()]
         private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
@@ -35,5 +55,7 @@ namespace MelonLoader
                 return _LegacyGameAttributes;
             }
         }
+
+        #endregion
     }
 }
