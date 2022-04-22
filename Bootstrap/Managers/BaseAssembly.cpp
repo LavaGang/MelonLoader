@@ -14,6 +14,7 @@ bool BaseAssembly::Initialize()
 {
 	if (Game::IsIl2Cpp) 
 	{
+		DotnetRuntime::LoadDotNet();
 		DotnetRuntime::CallInitialize();
 		return true;
 	}

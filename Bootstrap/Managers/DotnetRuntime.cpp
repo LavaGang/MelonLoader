@@ -50,7 +50,7 @@ void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 		return;
 	}
 
-	Debug::Msg("Getting load_assembly_and_get_function_pointer...");
+	Debug::Msg("Calling get_delegate_fptr to get load_assembly_and_get_function_pointer...");
 	// Get the load assembly function pointer
 	rc = get_delegate_fptr(
 		cxt,

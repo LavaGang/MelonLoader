@@ -75,7 +75,7 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	if (!Il2Cpp::Initialize())
 		return;
 
-	bool runtime_initialized = Game::IsIl2Cpp ? DotnetRuntime::LoadDotNet() : Mono::Load();
+	bool runtime_initialized = Game::IsIl2Cpp ? /*DotnetRuntime::LoadDotNet()*/ true : Mono::Load();
 
 	if (!runtime_initialized)
 		return;
