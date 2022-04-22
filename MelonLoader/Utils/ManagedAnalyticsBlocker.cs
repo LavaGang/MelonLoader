@@ -199,6 +199,7 @@ namespace MelonLoader.Utils
             return ret;
         }
 
+#pragma warning disable CS0649 //Field XXX is never assigned to
         private struct hostent
         {
             public byte* h_name; //char*
@@ -225,5 +226,6 @@ namespace MelonLoader.Utils
             public sockaddr* ai_addr;
             public addrinfo* ai_next;
         }
+#pragma warning restore
     }
 }

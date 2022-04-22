@@ -65,8 +65,8 @@ namespace MelonLoader.Melons
                     melonname = Path.GetFileNameWithoutExtension(filepath);
 
                 if (is_plugins 
-                    ? MelonHandler.IsPluginAlreadyLoaded(melonname) 
-                    : MelonHandler.IsModAlreadyLoaded(melonname))
+                    ? MelonPlugin.RegisteredMelons.Any(m => m.Info.Name == melonname)
+                    : MelonMod.RegisteredMelons.Any(m => m.Info.Name == melonname))
                 {
                     MelonLogger.Error($"Duplicate File: {filepath}");
                     continue;
