@@ -7,14 +7,18 @@ using System.Runtime.Loader;
 
 namespace MelonLoader.Fixes
 {
-    internal class DotnetLoadFromManagedFolderFix
+    internal static class DotnetLoadFromManagedFolderFix
     {
+
 #if !NET6_0
         internal static void Install()
         {
 
         }
-#else 
+#else
+        //TODO Update for non-windows platforms in future, or when updating runtime
+        private static readonly string OurRuntimeDir = Path.Combine(MelonEnvironment.OurRuntimeDirectory, "runtimes", "win", "lib", "net6.0"); 
+
         internal static void Install()
         {
             AssemblyLoadContext.Default.Resolving += OnResolve;
@@ -39,12 +43,14 @@ namespace MelonLoader.Fixes
 
             var filename = name.Name + ".dll";
 
+            var osSpecificPath = Path.Combine(OurRuntimeDir, filename);
             var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
             var modsPath = Path.Combine(MelonEnvironment.ModsDirectory, filename);
             var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, filename);
             var gameRootPath = Path.Combine(MelonEnvironment.GameRootDirectory, filename);
 
-            var ret = TryLoad(alc, managedPath)
+            var ret = TryLoad(alc, osSpecificPath)
+                ?? TryLoad(alc, managedPath)
                 ?? TryLoad(alc, modsPath)
                 ?? TryLoad(alc, userlibsPath)
                 ?? TryLoad(alc, gameRootPath);
