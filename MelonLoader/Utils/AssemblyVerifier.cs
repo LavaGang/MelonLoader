@@ -1,5 +1,8 @@
 ﻿#if NET6_0
 using AsmResolver.DotNet;
+using AsmResolver.PE.DotNet.Metadata.Strings;
+using AsmResolver.PE.DotNet.Metadata.Tables;
+using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -87,11 +90,14 @@ namespace MelonLoader.Utils
                 //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module Count!");
                 return false;
             }
+            var tableStream = image.DotNetDirectory.Metadata.GetStream<TablesStream>();
+            var stringStream = image.DotNetDirectory.Metadata.GetStream<StringsStream>();
+
             var allTypes = image.GetAllTypes().ToList();
-            int numTypeDefs = allTypes.Count();
-            int numTypeRefs = image.GetImportedTypeReferences().Count();
-            int numMethodDefs = allTypes.SelectMany(t => t.Methods).Count();
-            int numFieldDefs = allTypes.SelectMany(t => t.Fields).Count();
+            var numTypeDefs = allTypes.Count;
+
+            var methodTable = (MetadataTable<MethodDefinitionRow>) tableStream.GetTable(TableIndex.Method);
+            var numMethodDefs = methodTable.Count;
 
             var symbolCounts = new Dictionary<char, int>();
             foreach (var type in allTypes)
@@ -134,17 +140,17 @@ namespace MelonLoader.Utils
                 CountChars(typeNameStr, ref symbolCounts);
             }
 
-            foreach(var type in allTypes)
+            foreach(var method in methodTable)
             {
-                foreach(var method in type.Methods)
+                var methodName = stringStream.GetStringByIndex(method.Name);
+                
+                if(!IsNameValid(methodName))
                 {
-                    if (!IsNameValid(method.Name))
-                    {
-                        //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Method: {method.Name}!");
-                        return false;
-                    }
-                    CountChars(method.Name, ref symbolCounts);
+                    //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Method: {method.Name}!");
+                    return false;
                 }
+
+                CountChars(methodName, ref symbolCounts);
             }
 
             if (numTypeDefs + numMethodDefs < 25)
