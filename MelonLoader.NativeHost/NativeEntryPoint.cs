@@ -23,6 +23,8 @@ namespace MelonLoader.NativeHost
             Console.WriteLine("[NewEntryPoint] Configuring imports...");
             imports->LoadAssemblyFromBytes = &StereoHostingApi.LoadAssemblyFromByteArray;
             imports->GetTypeFromAssembly = &StereoHostingApi.GetTypeByName;
+            imports->ConstructType = &StereoHostingApi.ConstructType;
+            imports->InvokeMethod = &StereoHostingApi.InvokeMethod;
 
             imports->Initialize = &Initialize;
             imports->PreStart = &PreStart;
