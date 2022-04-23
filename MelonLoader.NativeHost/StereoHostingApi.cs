@@ -62,7 +62,7 @@ namespace MelonLoader.NativeHost
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
         internal static unsafe int GetTypeByName(int assemblyId, IntPtr namePtr)
         {
-            if (assemblyId >= _loadedAssemblies.Count)
+            if (assemblyId < 0 || assemblyId >= _loadedAssemblies.Count)
                 return ID_OUT_OF_BOUNDS;
 
             var asm = _loadedAssemblies[assemblyId];
@@ -70,7 +70,10 @@ namespace MelonLoader.NativeHost
             var name = Marshal.PtrToStringUni(namePtr);
             var type = asm.GetType(name);
             if (type == null)
+            {
+                Console.WriteLine($"[Stereo] Couldn't find type with name '{name}'");
                 return TYPE_NAME_NOT_FOUND;
+            }
 
             var ret = _loadedTypes.Count;
             _loadedTypes.Add(type);
@@ -80,7 +83,7 @@ namespace MelonLoader.NativeHost
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
         internal static unsafe int ConstructType(int typeId, int numParams, IntPtr* pParamTypes, IntPtr* pParamValues)
         {
-            if (typeId >= _loadedTypes.Count)
+            if (typeId < 0 || typeId >= _loadedTypes.Count)
                 return ID_OUT_OF_BOUNDS;
 
             var type = _loadedTypes[typeId];
@@ -109,7 +112,7 @@ namespace MelonLoader.NativeHost
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
         internal static unsafe int InvokeMethod(int typeId, IntPtr pMethodName, int instanceId, int numParams, IntPtr* pParamTypes, IntPtr* pParamValues)
         {
-            if (typeId >= _loadedTypes.Count)
+            if (typeId < 0 || typeId >= _loadedTypes.Count)
                 return ID_OUT_OF_BOUNDS;
 
             var type = _loadedTypes[typeId];
@@ -146,7 +149,10 @@ namespace MelonLoader.NativeHost
             var method = type.GetMethod(methodName, (BindingFlags)(-1), paramTypes!);
 
             if (method == null)
+            {
+                Console.WriteLine($"[Stereo] Couldn't find method with name '{methodName}'");
                 return METHOD_NAME_NOT_FOUND;
+            }
 
             method.Invoke(instance, paramValues);
 
