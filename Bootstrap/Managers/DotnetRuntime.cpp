@@ -223,6 +223,26 @@ void DotnetRuntime::CallStart()
 	DotnetRuntime::imports.start();
 }
 
+extern "C" __declspec(dllexport) int dotnet_runtime_load_assembly_from_bytes(char* data, int length)
+{
+	return DotnetRuntime::imports.load_assembly_from_bytes(data, length);
+}
+
+extern "C" __declspec(dllexport) int dotnet_runtime_get_type(int assembly_id, char_t* type_name)
+{
+	return DotnetRuntime::imports.get_type_from_assembly(assembly_id, type_name);
+}
+
+extern "C" __declspec(dllexport) int dotnet_runtime_construct_type(int type_id, int num_params, char_t** param_types, void** param_values)
+{
+	return DotnetRuntime::imports.construct_type(type_id, num_params, param_types, param_values);
+}
+
+extern "C" __declspec(dllexport) int dotnet_runtime_invoke_method(int type_id, char_t * method_name, int instance_id, int num_params, char_t** param_types, void** param_values)
+{
+	return DotnetRuntime::imports.invoke_method(type_id, method_name, instance_id, num_params, param_types, param_values);
+}
+
 hostfxr_initialize_for_runtime_config_fn DotnetRuntime::init_fptr;
 hostfxr_get_runtime_delegate_fn DotnetRuntime::get_delegate_fptr;
 hostfxr_close_fn DotnetRuntime::close_fptr;

@@ -16,11 +16,6 @@ typedef void (*host_delegate)();
 class DotnetRuntime
 {
 public:
-	static bool LoadDotNet();
-	static void CallInitialize();
-	static void CallPreStart();
-	static void CallStart();
-private:
 	struct host_exports
 	{
 		void (*detour_attach)(void** target, void* detour);
@@ -31,10 +26,23 @@ private:
 	{
 		void(*load_assembly_and_get_ptr)(const char_t*, const char_t*, const char_t*, void(__stdcall**)(host_imports*, host_exports*));
 
+		int(*load_assembly_from_bytes)(char* data, int length);
+		int(*get_type_from_assembly)(int assembly_id, char_t* type_name);
+		int(*construct_type)(int type_id, int num_params, char_t** param_types, void** param_values);
+		int(*invoke_method)(int type_id, char_t* method_name, int instance_id, int num_params, char_t** param_types, void** param_values);
+
 		host_delegate initialize;
 		host_delegate pre_start;
 		host_delegate start;
 	};
+
+	static bool LoadDotNet();
+	static void CallInitialize();
+	static void CallPreStart();
+	static void CallStart();
+
+	static host_imports imports;
+private:
 
 	static hostfxr_initialize_for_runtime_config_fn init_fptr;
 	static hostfxr_get_runtime_delegate_fn get_delegate_fptr;
@@ -43,7 +51,6 @@ private:
 
 	static string_t ml_net6_directory;
 
-	static host_imports imports;
 	static host_exports exports;
 
 	static bool LoadHostFxr();

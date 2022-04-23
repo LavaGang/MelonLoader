@@ -13,7 +13,7 @@ namespace MelonLoader.NativeHost
         unsafe static void LoadStage1(HostImports* imports)
         {
             Console.WriteLine("[NewEntryPoint] Passing ptr to LoadAssemblyAndGetFuncPtr back to host...");
-            imports->LoadAssemblyAndGetPtr = &LoadAssemblyAndGetFuncPtr;
+            imports->LoadAssemblyAndGetPtr = &StereoHostingApi.LoadAssemblyAndGetFuncPtr;
         }
 
 
@@ -21,6 +21,9 @@ namespace MelonLoader.NativeHost
         unsafe static void LoadStage2(HostImports* imports, HostExports* exports)
         {
             Console.WriteLine("[NewEntryPoint] Configuring imports...");
+            imports->LoadAssemblyFromBytes = &StereoHostingApi.LoadAssemblyFromByteArray;
+            imports->GetTypeFromAssembly = &StereoHostingApi.GetTypeByName;
+
             imports->Initialize = &Initialize;
             imports->PreStart = &PreStart;
             imports->Start = &Start;
@@ -81,28 +84,7 @@ namespace MelonLoader.NativeHost
             }
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-        unsafe static void LoadAssemblyAndGetFuncPtr(IntPtr pathNative, IntPtr typeNameNative, IntPtr methodNameNative, void** resultHandle)
-        {
-            var assemblyPath = Marshal.PtrToStringUni(pathNative);
-            var typeName = Marshal.PtrToStringUni(typeNameNative);
-            var methodName = Marshal.PtrToStringUni(methodNameNative);
-
-            if ((IntPtr)resultHandle == IntPtr.Zero)
-                throw new ArgumentNullException(nameof(resultHandle));
-
-            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
-
-            Func<AssemblyName, Assembly> resolver = name => AssemblyLoadContext.Default.LoadFromAssemblyName(name);
-
-            var type = Type.GetType(typeName, resolver, null, true);
-            var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-
-            if (method == null)
-                throw new MissingMethodException(typeName, methodName);
-
-           *resultHandle = (void*) method.MethodHandle.GetFunctionPointer();
-        }
+        
 
         private static Assembly? OnResolveAssembly(AssemblyLoadContext alc, AssemblyName name)
         {
