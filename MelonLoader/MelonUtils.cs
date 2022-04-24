@@ -363,16 +363,16 @@ namespace MelonLoader
         public static ClassDatabasePackage LoadIncludedClassPackage(this AssetsManager assetsManager)
         {
             ClassDatabasePackage classPackage = null;
-            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata))
-                classPackage = assetsManager.LoadClassPackage(mstream);
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("classdata.tpk"))
+                classPackage = assetsManager.LoadClassPackage(stream);
             return classPackage;
         }
 
         public static ClassDatabasePackage LoadIncludedLargeClassPackage(this AssetsManager assetsManager)
         {
             ClassDatabasePackage classPackage = null;
-            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata_large))
-                classPackage = assetsManager.LoadClassPackage(mstream);
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("classdata_large.tpk"))
+                classPackage = assetsManager.LoadClassPackage(stream);
             return classPackage;
         }
 

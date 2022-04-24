@@ -11,13 +11,6 @@
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
 		<Reference Include="AssetRipper.VersionUtilities">
 			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\\$(TargetFramework)\AssetRipper.VersionUtilities.dll</HintPath>
 			<Private>false</Private>
