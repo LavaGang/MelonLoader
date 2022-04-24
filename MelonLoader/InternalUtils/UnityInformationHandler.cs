@@ -58,8 +58,12 @@ namespace MelonLoader.InternalUtils
                     return;
 
                 assetsManager.LoadIncludedClassPackage();
+                bool didLoad = true;
                 if (!instance.file.typeTree.hasTypeTree)
-                    assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
+                {
+                    didLoad = assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion) != null;
+                }
+
                 EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);
 
                 List<AssetFileInfoEx> assetFiles = instance.table.GetAssetsOfType(129);
@@ -70,6 +74,8 @@ namespace MelonLoader.InternalUtils
                     AssetTypeInstance assetTypeInstance = null;
                     try
                     {
+                        if(!didLoad)
+                            throw new("LoadClassDatabaseFromPackage returned null for small tpk. Too-new unity version?");
                         assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
                     }
                     catch (Exception ex)
@@ -80,7 +86,11 @@ namespace MelonLoader.InternalUtils
                             MelonLogger.Warning("Attempting to use Large Class Package...");
                         }
                         assetsManager.LoadIncludedLargeClassPackage();
-                        assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
+                        var classDb = assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
+                        
+                        if(classDb != null)
+                            throw new("LoadClassDatabaseFromPackage returned null for large tpk. Too-new unity version?");
+                        
                         assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
                     }
 
