@@ -228,22 +228,22 @@ extern "C" __declspec(dllexport) int dotnet_runtime_load_assembly_from_bytes(cha
 	return DotnetRuntime::imports.load_assembly_from_bytes(data, length);
 }
 
-extern "C" __declspec(dllexport) int dotnet_runtime_get_type(int assembly_id, char_t* type_name)
+extern "C" __declspec(dllexport) int dotnet_runtime_get_type(int assembly_id, const char_t* type_name)
 {
 	return DotnetRuntime::imports.get_type_from_assembly(assembly_id, type_name);
 }
 
-extern "C" __declspec(dllexport) int dotnet_runtime_construct_type(int type_id, int num_params, char_t** param_types, void** param_values)
+extern "C" __declspec(dllexport) int dotnet_runtime_construct_type(int type_id, int num_params, const char_t** param_types, void** param_values)
 {
 	return DotnetRuntime::imports.construct_type(type_id, num_params, param_types, param_values);
 }
 
-extern "C" __declspec(dllexport) int dotnet_runtime_invoke_method(int type_id, char_t * method_name, int instance_id, int num_params, char_t** param_types, void** param_values)
+extern "C" __declspec(dllexport) int dotnet_runtime_invoke_method(int type_id, const char_t * method_name, int instance_id, int num_params, const char_t** param_types, void** param_values)
 {
 	return DotnetRuntime::imports.invoke_method(type_id, method_name, instance_id, num_params, param_types, param_values);
 }
 
-extern "C" __declspec(dllexport) void* dotnet_runtime_get_uco_method_pointer(int type_id, char_t * method_name, int num_params, char_t** param_types)
+extern "C" __declspec(dllexport) void* dotnet_runtime_get_uco_method_pointer(int type_id, const char_t * method_name, int num_params, const char_t** param_types)
 {
 	return DotnetRuntime::imports.get_uco_method_pointer(type_id, method_name, num_params, param_types);
 }
