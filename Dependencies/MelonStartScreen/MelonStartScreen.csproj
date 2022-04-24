@@ -25,10 +25,10 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="Resources\Loading_Lemon.dat" />
-		<None Include="Resources\Loading_Melon.dat" />
-		<None Include="Resources\Logo_Lemon.dat" />
-		<None Include="Resources\Logo_Melon.dat" />
+		<EmbeddedResource Include="Resources\Loading_Lemon.dat" />
+		<EmbeddedResource Include="Resources\Loading_Melon.dat" />
+		<EmbeddedResource Include="Resources\Logo_Lemon.dat" />
+		<EmbeddedResource Include="Resources\Logo_Melon.dat" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj">

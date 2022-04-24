@@ -17,7 +17,7 @@ namespace MelonLoader.MelonStartScreen.UI
 
         private static byte[] GetResource(string name)
         {
-            using var s = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+            using var s = Assembly.GetExecutingAssembly().GetManifestResourceStream($"MelonLoader.MelonStartScreen.Resources.{name}");
             if (s == null)
                 return null;
 #if NET6_0
