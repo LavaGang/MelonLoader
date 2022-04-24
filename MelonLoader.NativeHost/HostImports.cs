@@ -8,6 +8,7 @@
         public delegate* unmanaged[Stdcall]<int, IntPtr, int> GetTypeFromAssembly;
         public delegate* unmanaged[Stdcall]<int, int, IntPtr*, IntPtr*, int> ConstructType;
         public delegate* unmanaged[Stdcall]<int, IntPtr, int, int, IntPtr*, IntPtr*, int> InvokeMethod;
+        public delegate* unmanaged[Stdcall]<int, IntPtr, int, IntPtr*, nuint> GetPointerToUcoMethod;
 
         public delegate* unmanaged[Stdcall]<void> Initialize;
         public delegate* unmanaged[Stdcall]<void> PreStart;

@@ -25,6 +25,7 @@ namespace MelonLoader.NativeHost
             imports->GetTypeFromAssembly = &StereoHostingApi.GetTypeByName;
             imports->ConstructType = &StereoHostingApi.ConstructType;
             imports->InvokeMethod = &StereoHostingApi.InvokeMethod;
+            imports->GetPointerToUcoMethod = &StereoHostingApi.GetPointerToUcoMethod;
 
             imports->Initialize = &Initialize;
             imports->PreStart = &PreStart;

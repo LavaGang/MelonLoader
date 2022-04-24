@@ -150,13 +150,53 @@ namespace MelonLoader.NativeHost
 
             if (method == null)
             {
-                Console.WriteLine($"[Stereo] Couldn't find method with name '{methodName}'");
+                Console.WriteLine($"[Stereo] Couldn't find method with name '{methodName}', param types {string.Join<Type?>(", ", paramTypes)}");
                 return METHOD_NAME_NOT_FOUND;
             }
 
             method.Invoke(instance, paramValues);
 
             return 0; //Success
+        }
+
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+        internal static unsafe nuint GetPointerToUcoMethod(int typeId, IntPtr pMethodName, int numParams, IntPtr* pParamTypes)
+        {
+            if (typeId < 0 || typeId >= _loadedTypes.Count)
+                return 0;
+
+            var type = _loadedTypes[typeId];
+
+            string[] paramTypeNames;
+            if (numParams == 0)
+            {
+                paramTypeNames = Array.Empty<string>();
+            }
+            else
+            {
+                paramTypeNames = new string[numParams];
+                for (var i = 0; i < numParams; i++)
+                    paramTypeNames[i] = Marshal.PtrToStringUni(pParamTypes[i]) ?? throw new($"Null parameter type at index {i}");
+            }
+
+            var paramTypes = paramTypeNames.Select(p => $"System.{GetSystemTypeName(p)}").Select(Type.GetType).ToArray();
+            var methodName = Marshal.PtrToStringUni(pMethodName)!;
+
+            var method = type.GetMethod(methodName, (BindingFlags)(-1), paramTypes!);
+
+            if(method == null)
+            {
+                Console.WriteLine($"[Stereo] Couldn't find method with name '{methodName}', param types {string.Join<Type?>(", ", paramTypes)}");
+                return 0;
+            }
+
+            if(method.GetCustomAttribute<UnmanagedCallersOnlyAttribute>() == null)
+            {
+                Console.WriteLine($"[Stereo] {method} is not annotated as UnmanagedCallersOnly, so cannot have a pointer returned from GetPointerToUcoMethod");
+                return 0;
+            }
+
+            return (nuint) method.MethodHandle.GetFunctionPointer().ToInt64();
         }
 
         private static string GetSystemTypeName(string primitiveName)

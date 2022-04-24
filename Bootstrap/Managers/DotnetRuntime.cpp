@@ -243,6 +243,11 @@ extern "C" __declspec(dllexport) int dotnet_runtime_invoke_method(int type_id, c
 	return DotnetRuntime::imports.invoke_method(type_id, method_name, instance_id, num_params, param_types, param_values);
 }
 
+extern "C" __declspec(dllexport) void* dotnet_runtime_get_uco_method_pointer(int type_id, char_t * method_name, int num_params, char_t** param_types)
+{
+	return DotnetRuntime::imports.get_uco_method_pointer(type_id, method_name, num_params, param_types);
+}
+
 hostfxr_initialize_for_runtime_config_fn DotnetRuntime::init_fptr;
 hostfxr_get_runtime_delegate_fn DotnetRuntime::get_delegate_fptr;
 hostfxr_close_fn DotnetRuntime::close_fptr;
