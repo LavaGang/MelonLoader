@@ -30,7 +30,7 @@ public:
 		int(*get_type_from_assembly)(int assembly_id, const char_t* type_name);
 		int(*construct_type)(int type_id, int num_params, const char_t** param_types, void** param_values);
 		int(*invoke_method)(int type_id, const char_t* method_name, int instance_id, int num_params, const char_t** param_types, void** param_values);
-		(void*)(*get_uco_method_pointer)(int type_id, const char_t* method_name, int num_params, const char_t** param_types);
+		void*(*get_uco_method_pointer)(int type_id, const char_t* method_name, int num_params, const char_t** param_types);
 
 		host_delegate initialize;
 		host_delegate pre_start;
