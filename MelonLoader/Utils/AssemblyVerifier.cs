@@ -3,11 +3,9 @@ using AsmResolver.DotNet;
 using AsmResolver.PE.DotNet.Metadata.Strings;
 using AsmResolver.PE.DotNet.Metadata.Tables;
 using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace MelonLoader.Utils
@@ -81,16 +79,16 @@ namespace MelonLoader.Utils
 
         internal static bool CheckAssembly(ModuleDefinition image)
         {
-            string imageName = image.Name;
+            // string imageName = image.Name;
 
-            var moduleCount = image.Assembly.Modules.Count;
+            var moduleCount = image.Assembly!.Modules.Count;
 
             if (moduleCount is not 1)
             {
                 //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Module Count!");
                 return false;
             }
-            var tableStream = image.DotNetDirectory.Metadata.GetStream<TablesStream>();
+            var tableStream = image.DotNetDirectory!.Metadata!.GetStream<TablesStream>();
             var stringStream = image.DotNetDirectory.Metadata.GetStream<StringsStream>();
 
             var allTypes = image.GetAllTypes().ToList();
@@ -159,19 +157,13 @@ namespace MelonLoader.Utils
                 return true;
             }
 
-            double totalChars = 0;
+            var totalChars = symbolCounts.Aggregate(0.0, (current, pair) => current + pair.Value);
 
-            foreach(var pair in symbolCounts)
-                totalChars += pair.Value;
-
-            double totalEntropy = 0;
-
-            foreach (var pair in symbolCounts)
-                totalEntropy += pair.Value * Math.Log2(pair.Value / totalChars);
+            var totalEntropy = symbolCounts.Sum(pair => pair.Value * Math.Log2(pair.Value / totalChars));
 
             totalEntropy /= -totalChars;
 
-            if (totalEntropy < 4 || totalEntropy > 5.25)
+            if (totalEntropy is < 4 or > 5.25)
             {
                 //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Entropy: {totalEntropy}!");
                 return false;
@@ -189,10 +181,7 @@ namespace MelonLoader.Utils
             {
                 var module = ModuleDefinition.FromFile(assemblyFile);
 
-                if (module is null)
-                    return (false, "Failed to load assembly");
-
-                bool checkResult = CheckAssembly(module);
+                var checkResult = CheckAssembly(module);
 
                 if (!checkResult)
                     return (false, "Invalid assembly");
@@ -207,21 +196,13 @@ namespace MelonLoader.Utils
             {
                 var module = ModuleDefinition.FromBytes(rawAssembly);
 
-                if (module is null)
-                    return (false, "Failed to load assembly");
-
-                bool checkResult = CheckAssembly(module);
+                var checkResult = CheckAssembly(module);
 
                 if (!checkResult)
                     return (false, "Invalid assembly");
             }
             return (true, null);
         }
-
-        private static HarmonyMethod GetLocalPatch(string name)
-        {
-            return typeof(AssemblyVerifier).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod();
-        }        
     }
 }
 #endif

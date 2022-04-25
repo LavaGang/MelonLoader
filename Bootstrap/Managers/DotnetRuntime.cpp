@@ -15,12 +15,12 @@
 
 void* load_library(const char_t* path)
 {
-	HMODULE h = ::LoadLibraryW(path);
+	HMODULE h = LoadLibraryW(path);
 	return (void*)h;
 }
 void* get_export(void* h, const char* name)
 {
-	void* f = ::GetProcAddress((HMODULE)h, name);
+	void* f = GetProcAddress((HMODULE)h, name);
 	if(f == nullptr)
 		Assertion::ThrowInternalFailure((std::string("Failed to GetProcAddress ( ") + name + " )").c_str());
 	return f;
@@ -35,7 +35,7 @@ void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 
 	//Call the initialization function
 	Debug::Msg("Calling init_fptr...");
-	int rc = init_fptr(config_path, nullptr, &cxt);
+	unsigned int rc = init_fptr(config_path, nullptr, &cxt);
 
 	//Check for errors
 	if (rc != 0 || cxt == nullptr)
@@ -76,7 +76,7 @@ bool DotnetRuntime::LoadHostFxr()
 	char_t buffer[MAX_PATH];
 	size_t buffer_size = sizeof(buffer) / sizeof(char_t);
 
-	int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
+	unsigned int rc = get_hostfxr_path(buffer, &buffer_size, nullptr);
 	if (rc != 0) 
 	{
 		if (rc == HOST_LOADLIB_FAILED)
@@ -96,7 +96,7 @@ bool DotnetRuntime::LoadHostFxr()
 	// Load hostfxr and get desired exports
 	void* lib = load_library(buffer);
 
-	int hr = GetLastError();
+	DWORD hr = GetLastError();
 	if(lib == nullptr)
 		Assertion::ThrowInternalFailure((std::string("Failed to LoadLibrary hostfxr! GetLastError() = ") + std::to_string(hr)).c_str());
 
