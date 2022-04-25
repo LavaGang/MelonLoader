@@ -88,7 +88,7 @@ namespace MelonLoader.InternalUtils
                         assetsManager.LoadIncludedLargeClassPackage();
                         var classDb = assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
                         
-                        if(classDb != null)
+                        if(classDb == null)
                             throw new("LoadClassDatabaseFromPackage returned null for large tpk. Too-new unity version?");
                         
                         assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
