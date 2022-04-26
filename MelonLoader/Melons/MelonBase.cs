@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -55,12 +56,26 @@ namespace MelonLoader
                 errorCode = MelonLoadErrorCodes.InvalidPath;
                 return null;
             }
+
             if (!filePath.EndsWith(".dll"))
             {
                 errorCode = MelonLoadErrorCodes.WrongFileExtension;
                 return null;
             }
 
+#if NET6_0
+            Assembly asm;
+            try
+            {
+                //This handles loading of side-by-side PDB and also populates Assembly.Location
+                asm = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
+            }
+            catch (Exception e)
+            {
+                errorCode = MelonLoadErrorCodes.FailedToLoadAssembly;
+                return null;
+            }
+#else
             var mdbPath = filePath.Remove(filePath.Length - 3) + "mdb";
             if (File.Exists(mdbPath))
             {
@@ -98,6 +113,7 @@ namespace MelonLoader
                 errorCode = MelonLoadErrorCodes.FailedToLoadAssembly;
                 return null;
             }
+#endif
 
             return Load(asm, out errorCode);
         }
@@ -113,7 +129,19 @@ namespace MelonLoader
             Assembly asm;
             try
             {
+#if NET6_0
+                using var ms = new MemoryStream(rawAssembly);
+                
+                if(mdbData == null)
+                    asm = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromStream(ms);
+                else
+                {
+                    using var debugDataStream = new MemoryStream(mdbData);
+                    asm = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromStream(ms, debugDataStream);
+                }
+#else
                 asm = mdbData == null ? Assembly.Load(rawAssembly) : Assembly.Load(rawAssembly, mdbData);
+#endif
             }
             catch
             {
@@ -139,12 +167,12 @@ namespace MelonLoader
 
             OnMelonsResolving.Invoke(asm);
 
-           // \/ Custom Resolver \/
-           var resolvers = CustomMelonResolvers?.GetInvocationList();
+            // \/ Custom Resolver \/
+            var resolvers = CustomMelonResolvers?.GetInvocationList();
             if (resolvers != null)
                 foreach (var r in resolvers)
                 {
-                    var customMelon = (MelonBase[])r.DynamicInvoke(asm);
+                    var customMelon = (MelonBase[]) r.DynamicInvoke(asm);
                     if (customMelon == null || customMelon.Length == 0)
                         continue;
 
@@ -159,16 +187,17 @@ namespace MelonLoader
                 errorCode = MelonLoadErrorCodes.ModNotSupported;
                 return null;
             }
+
             if (info.SystemType == null || !info.SystemType.IsSubclassOf(typeof(MelonBase)))
             {
                 errorCode = MelonLoadErrorCodes.InvalidMelonType;
                 return null;
             }
 
-            MelonBase melon; 
+            MelonBase melon;
             try
             {
-                melon = (MelonBase)Activator.CreateInstance(info.SystemType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                melon = (MelonBase) Activator.CreateInstance(info.SystemType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
             }
             catch
             {
@@ -208,7 +237,7 @@ namespace MelonLoader
             melon.HarmonyDontPatchAll = harmonyDPAAttr != null;
 
             errorCode = MelonLoadErrorCodes.None;
-            return new MelonBase[] { melon };
+            return new MelonBase[] {melon};
         }
 
         /// <summary>
@@ -250,9 +279,11 @@ namespace MelonLoader
             DependencyGraph<T>.TopologicalSort(melons);
             melons = melons.OrderBy(x => x.Priority).ToList();
         }
+
         #endregion
 
         #region Instance
+
         private string _hash;
         private MelonGameAttribute[] _games = new MelonGameAttribute[0];
         private MelonProcessAttribute[] _processes = new MelonProcessAttribute[0];
@@ -290,9 +321,9 @@ namespace MelonLoader
         /// Console Color of the Melon.
         /// </summary>
         [Obsolete("ConsoleColor is Obsolete. MelonLoader now supports the use of System.Drawing.Color with the ConsoleDrawingColor property.")]
-        public ConsoleColor ConsoleColor 
+        public ConsoleColor ConsoleColor
         {
-            get => LoggerUtils.DrawingColorToConsoleColor(ConsoleDrawingColor); 
+            get => LoggerUtils.DrawingColorToConsoleColor(ConsoleDrawingColor);
             internal set => ConsoleDrawingColor = LoggerUtils.ConsoleColorToDrawingColor(value);
         }
 
@@ -317,10 +348,7 @@ namespace MelonLoader
         public MelonProcessAttribute[] SupportedProcesses
         {
             get => _processes;
-            internal set
-            {
-                _processes = (value == null || value.Any(x => x.Universal)) ? new MelonProcessAttribute[0] : value;
-            }
+            internal set { _processes = (value == null || value.Any(x => x.Universal)) ? new MelonProcessAttribute[0] : value; }
         }
 
         /// <summary>
@@ -329,10 +357,7 @@ namespace MelonLoader
         public MelonGameAttribute[] Games
         {
             get => _games;
-            internal set
-            {
-                _games = (value == null || value.Any(x => x.Universal)) ? new MelonGameAttribute[0] : value;
-            }
+            internal set { _games = (value == null || value.Any(x => x.Universal)) ? new MelonGameAttribute[0] : value; }
         }
 
         /// <summary>
@@ -341,10 +366,7 @@ namespace MelonLoader
         public MelonGameVersionAttribute[] SupportedGameVersions
         {
             get => _gameVersions;
-            internal set
-            {
-                _gameVersions = (value == null || value.Any(x => x.Universal)) ? new MelonGameVersionAttribute[0] : value;
-            }
+            internal set { _gameVersions = (value == null || value.Any(x => x.Universal)) ? new MelonGameVersionAttribute[0] : value; }
         }
 
         /// <summary>
@@ -417,77 +439,105 @@ namespace MelonLoader
         /// <summary>
         /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
         /// </summary>
-        public virtual void OnPreSupportModule() { }
+        public virtual void OnPreSupportModule()
+        {
+        }
 
         /// <summary>
         /// Runs after Game Initialization.
         /// </summary>
-        public virtual void OnApplicationStart() { }
+        public virtual void OnApplicationStart()
+        {
+        }
 
         /// <summary>
         /// Runs after OnApplicationStart.
         /// </summary>
-        public virtual void OnApplicationLateStart() { }
+        public virtual void OnApplicationLateStart()
+        {
+        }
 
         /// <summary>
         /// Runs once per frame.
         /// </summary>
-        public virtual void OnUpdate() { }
+        public virtual void OnUpdate()
+        {
+        }
 
         /// <summary>
         /// Can run multiple times per frame. Mostly used for Physics.
         /// </summary>
-        public virtual void OnFixedUpdate() { }
+        public virtual void OnFixedUpdate()
+        {
+        }
 
         /// <summary>
         /// Runs once per frame, after <see cref="OnUpdate"/>.
         /// </summary>
-        public virtual void OnLateUpdate() { }
+        public virtual void OnLateUpdate()
+        {
+        }
 
         /// <summary>
         /// Can run multiple times per frame. Mostly used for Unity's IMGUI.
         /// </summary>
-        public virtual void OnGUI() { }
+        public virtual void OnGUI()
+        {
+        }
 
         /// <summary>
         /// Runs when the Game is told to Close.
         /// </summary>
-        public virtual void OnApplicationQuit() { }
+        public virtual void OnApplicationQuit()
+        {
+        }
 
         /// <summary>
         /// Runs when Melon Preferences get saved.
         /// </summary>
-        public virtual void OnPreferencesSaved() { }
+        public virtual void OnPreferencesSaved()
+        {
+        }
 
         /// <summary>
         /// Runs when Melon Preferences get saved. Gets passed the Preferences's File Path.
         /// </summary>
-        public virtual void OnPreferencesSaved(string filepath) { }
+        public virtual void OnPreferencesSaved(string filepath)
+        {
+        }
 
         /// <summary>
         /// Runs when Melon Preferences get loaded.
         /// </summary>
-        public virtual void OnPreferencesLoaded() { }
-        
+        public virtual void OnPreferencesLoaded()
+        {
+        }
+
         /// <summary>
         /// Runs when Melon Preferences get loaded. Gets passed the Preferences's File Path.
         /// </summary>
-        public virtual void OnPreferencesLoaded(string filepath) { }
+        public virtual void OnPreferencesLoaded(string filepath)
+        {
+        }
 
         /// <summary>
         /// Runs when the Melon is registered.
         /// </summary>
-        public virtual void OnInitializeMelon() { }
+        public virtual void OnInitializeMelon()
+        {
+        }
 
         /// <summary>
         /// Runs when the Melon is unregistered.
         /// </summary>
-        public virtual void OnDeinitializeMelon() { }
+        public virtual void OnDeinitializeMelon()
+        {
+        }
 
         #endregion
 
-        public Compatibility IsCompatibleWith(MelonGameAttribute game, string processName, string gameVersion, 
-            string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform, 
+        public Compatibility IsCompatibleWith(MelonGameAttribute game, string processName, string gameVersion,
+            string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform,
             MelonPlatformDomainAttribute.CompatibleDomains domain)
         {
             var result = Compatibility.Compatible;
@@ -504,22 +554,26 @@ namespace MelonLoader
                     result |= Compatibility.IncompatibleGameVersion;
                     compatible = false;
                 }
+
                 if (!(SupportedProcesses.Length == 0 || SupportedProcesses.Any(x => x.IsCompatible(processName))))
                 {
                     result |= Compatibility.IncompatibleProcessName;
                     compatible = false;
                 }
+
                 if (!(SupportedPlatforms == null || SupportedPlatforms.IsCompatible(platform)))
                 {
                     result |= Compatibility.IncompatiblePlatform;
                     compatible = false;
                 }
+
                 if (!(SupportedDomain == null || SupportedDomain.IsCompatible(domain)))
                 {
                     result |= Compatibility.IncompatibleDomain;
                     compatible = false;
                 }
             }
+
             if (!(SupportedMLVersion == null || SupportedMLVersion.IsCompatible(mlVersion)))
             {
                 result |= Compatibility.IncompatibleMLVersion;
@@ -557,6 +611,7 @@ namespace MelonLoader
 
                 MelonLogger.WriteSpacer();
             }
+
             if (compatibility.HasFlag(Compatibility.IncompatibleGameVersion))
             {
                 MelonLogger.Msg("- This Melon is only compatible with the following Game Versions:");
@@ -566,6 +621,7 @@ namespace MelonLoader
 
                 MelonLogger.WriteSpacer();
             }
+
             if (compatibility.HasFlag(Compatibility.IncompatibleProcessName))
             {
                 MelonLogger.Msg("- This Melon is only compatible with the following Process Names:");
@@ -575,6 +631,7 @@ namespace MelonLoader
 
                 MelonLogger.WriteSpacer();
             }
+
             if (compatibility.HasFlag(Compatibility.IncompatiblePlatform))
             {
                 MelonLogger.Msg($"- This Melon is only compatible with the following Platforms:");
@@ -584,6 +641,7 @@ namespace MelonLoader
 
                 MelonLogger.WriteSpacer();
             }
+
             if (compatibility.HasFlag(Compatibility.IncompatibleDomain))
             {
                 MelonLogger.Msg($"- This Melon is only compatible with the following Domain:");
@@ -591,6 +649,7 @@ namespace MelonLoader
 
                 MelonLogger.WriteSpacer();
             }
+
             if (compatibility.HasFlag(Compatibility.IncompatibleMLVersion))
             {
                 MelonLogger.Msg($"- This Melon is only compatible with the following MelonLoader Versions:");
@@ -598,6 +657,7 @@ namespace MelonLoader
 
                 MelonLogger.WriteSpacer();
             }
+
             if (compatibility.HasFlag(Compatibility.IncompatibleMLBuild))
             {
                 MelonLogger.Msg($"- This Melon is only compatible with the following MelonLoader Build Hash Codes:");
@@ -781,7 +841,10 @@ namespace MelonLoader
                 if (!melon.Registered)
                     continue;
 
-                try { func(melon); }
+                try
+                {
+                    func(melon);
+                }
                 catch (Exception ex)
                 {
                     melon.LoggerInstance.Error(ex.ToString());
@@ -796,17 +859,38 @@ namespace MelonLoader
                     m.Unregister(unregistrationReason);
             }
         }
+
         #endregion
 
         #region Obsolete Members
+
         [Obsolete("OnModSettingsApplied is obsolete. Please use OnPreferencesSaved instead.")]
-        public virtual void OnModSettingsApplied() { }
+        public virtual void OnModSettingsApplied()
+        {
+        }
 
         private Harmony.HarmonyInstance _OldHarmonyInstance;
+
         [Obsolete("harmonyInstance is obsolete. Please use HarmonyInstance instead.")]
-        public Harmony.HarmonyInstance harmonyInstance { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
+        public Harmony.HarmonyInstance harmonyInstance
+        {
+            get
+            {
+                if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id);
+                return _OldHarmonyInstance;
+            }
+        }
+
         [Obsolete("Harmony is obsolete. Please use HarmonyInstance instead.")]
-        public Harmony.HarmonyInstance Harmony { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
+        public Harmony.HarmonyInstance Harmony
+        {
+            get
+            {
+                if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id);
+                return _OldHarmonyInstance;
+            }
+        }
+
         #endregion
 
         [Flags]
