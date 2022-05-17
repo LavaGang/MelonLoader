@@ -1,37 +1,26 @@
 #include "Exports.h"
 
-const char* Exports::CompatibleFileNames[] = {
-	"psapi",
-	"version",
-	"winhttp",
-	"winmm"
-};
+FARPROC OriginalFuncs_psapi[27];
+FARPROC OriginalFuncs_version[17];
+FARPROC OriginalFuncs_winhttp[65];
+FARPROC OriginalFuncs_winmm[181];
 
-Exports::LoadExportsFunc Exports::LoadFuncs[4] = {
-	Load_psapi,
-	Load_version,
-	Load_winhttp,
-	Load_winmm
-};
-
-bool Exports::IsFileNameCompatible(std::string proxy_filename, int& index)
+bool exports::is_file_name_compatible(const std::wstring& proxy_filename, std::size_t* index)
 {
-	index = -1;
-	bool found = false;
-	for (int i = 0; i < (sizeof(CompatibleFileNames) / sizeof(CompatibleFileNames[0])); i++)
+	for (std::size_t i = 0; i < compatible_file_names.size(); ++i)
 	{
-		if (strstr(proxy_filename.c_str(), CompatibleFileNames[i]) != NULL)
+		if (proxy_filename == compatible_file_names[i])
 		{
-			index = i;
-			found = true;
-			break;
+			*index = i;
+			return true;
 		}
 	}
-	return found;
+
+	return false;
 }
 
-void Exports::Load(HMODULE originaldll, const char** ExportNames, FARPROC* OriginalFuncs, int ArraySize)
+void exports::load(const HMODULE originaldll, const char* const* export_names, FARPROC* original_funcs, const std::size_t array_size)
 {
-	for (int i = 0; i < ArraySize; i++)
-		OriginalFuncs[i] = GetProcAddress(originaldll, ExportNames[i]);
+	for (int i = 0; i < array_size; i++)
+		original_funcs[i] = GetProcAddress(originaldll, export_names[i]);
 }

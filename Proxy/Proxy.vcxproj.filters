@@ -19,19 +19,10 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Exports\Ex_version.cpp">
-      <Filter>Exports</Filter>
-    </ClCompile>
-    <ClCompile Include="Exports\Ex_winhttp.cpp">
-      <Filter>Exports</Filter>
-    </ClCompile>
-    <ClCompile Include="Exports\Ex_winmm.cpp">
-      <Filter>Exports</Filter>
-    </ClCompile>
-    <ClCompile Include="Exports\Ex_psapi.cpp">
-      <Filter>Exports</Filter>
-    </ClCompile>
     <ClCompile Include="Exports.cpp" />
+    <ClCompile Include="Utils\Utility.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Base">
@@ -50,11 +41,11 @@
     </ClInclude>
     <ClInclude Include="Core.h" />
     <ClInclude Include="Exports.h" />
-    <ClInclude Include="Utils\Directory.h">
+    <ClInclude Include="Utils\Utility.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\File.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="Exports\export_resources.h">
+      <Filter>Exports</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

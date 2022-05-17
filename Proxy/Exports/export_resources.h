@@ -1,7 +1,9 @@
-#include "../Exports.h"
+#pragma once
+#include <array>
 
-FARPROC OriginalFuncs_winmm[181];
-const char* Exports::ExportNames_winmm[181] = {
+namespace export_resources
+{
+	constexpr std::array<const char*, 181ull> ExportNames_winmm = {
 		"CloseDriver",
 		"DefDriverProc",
 		"DriverCallback",
@@ -183,4 +185,123 @@ const char* Exports::ExportNames_winmm[181] = {
 		"waveOutUnprepareHeader",
 		"waveOutWrite",
 		"ExportByOrdinal2"
-};
+	};
+
+	constexpr std::array<const char*, 65ull> ExportNames_winhttp = {
+		"Private1",
+		"SvchostPushServiceGlobals",
+		"WinHttpAddRequestHeaders",
+		"WinHttpAutoProxySvcMain",
+		"WinHttpCheckPlatform",
+		"WinHttpCloseHandle",
+		"WinHttpConnect",
+		"WinHttpConnectionDeletePolicyEntries",
+		"WinHttpConnectionDeleteProxyInfo",
+		"WinHttpConnectionFreeNameList",
+		"WinHttpConnectionFreeProxyInfo",
+		"WinHttpConnectionFreeProxyList",
+		"WinHttpConnectionGetNameList",
+		"WinHttpConnectionGetProxyInfo",
+		"WinHttpConnectionGetProxyList",
+		"WinHttpConnectionSetPolicyEntries",
+		"WinHttpConnectionSetProxyInfo",
+		"WinHttpConnectionUpdateIfIndexTable",
+		"WinHttpCrackUrl",
+		"WinHttpCreateProxyResolver",
+		"WinHttpCreateUrl",
+		"WinHttpDetectAutoProxyConfigUrl",
+		"WinHttpFreeProxyResult",
+		"WinHttpFreeProxyResultEx",
+		"WinHttpFreeProxySettings",
+		"WinHttpGetDefaultProxyConfiguration",
+		"WinHttpGetIEProxyConfigForCurrentUser",
+		"WinHttpGetProxyForUrl",
+		"WinHttpGetProxyForUrlEx",
+		"WinHttpGetProxyForUrlEx2",
+		"WinHttpGetProxyForUrlHvsi",
+		"WinHttpGetProxyResult",
+		"WinHttpGetProxyResultEx",
+		"WinHttpGetProxySettingsVersion",
+		"WinHttpGetTunnelSocket",
+		"WinHttpOpen",
+		"WinHttpOpenRequest",
+		"WinHttpPacJsWorkerMain",
+		"WinHttpProbeConnectivity",
+		"WinHttpQueryAuthSchemes",
+		"WinHttpQueryDataAvailable",
+		"WinHttpQueryHeaders",
+		"WinHttpQueryOption",
+		"WinHttpReadData",
+		"WinHttpReadProxySettings",
+		"WinHttpReadProxySettingsHvsi",
+		"WinHttpReceiveResponse",
+		"WinHttpResetAutoProxy",
+		"WinHttpSaveProxyCredentials",
+		"WinHttpSendRequest",
+		"WinHttpSetCredentials",
+		"WinHttpSetDefaultProxyConfiguration",
+		"WinHttpSetOption",
+		"WinHttpSetStatusCallback",
+		"WinHttpSetTimeouts",
+		"WinHttpTimeFromSystemTime",
+		"WinHttpTimeToSystemTime",
+		"WinHttpWebSocketClose",
+		"WinHttpWebSocketCompleteUpgrade",
+		"WinHttpWebSocketQueryCloseStatus",
+		"WinHttpWebSocketReceive",
+		"WinHttpWebSocketSend",
+		"WinHttpWebSocketShutdown",
+		"WinHttpWriteData",
+		"WinHttpWriteProxySettings"
+	};
+
+	constexpr std::array<const char*, 17ull> ExportNames_version = {
+		"GetFileVersionInfoA",
+		"GetFileVersionInfoByHandle",
+		"GetFileVersionInfoExA",
+		"GetFileVersionInfoExW",
+		"GetFileVersionInfoSizeA",
+		"GetFileVersionInfoSizeExA",
+		"GetFileVersionInfoSizeExW",
+		"GetFileVersionInfoSizeW",
+		"GetFileVersionInfoW",
+		"VerFindFileA",
+		"VerFindFileW",
+		"VerInstallFileA",
+		"VerInstallFileW",
+		"VerLanguageNameA",
+		"VerLanguageNameW",
+		"VerQueryValueA",
+		"VerQueryValueW"
+	};
+
+	constexpr std::array<const char*, 27ull> ExportNames_psapi = {
+		"EmptyWorkingSet",
+		"EnumDeviceDrivers",
+		"EnumPageFilesA",
+		"EnumPageFilesW",
+		"EnumProcessModules",
+		"EnumProcessModulesEx",
+		"EnumProcesses",
+		"GetDeviceDriverBaseNameA",
+		"GetDeviceDriverBaseNameW",
+		"GetDeviceDriverFileNameA",
+		"GetDeviceDriverFileNameW",
+		"GetMappedFileNameA",
+		"GetMappedFileNameW",
+		"GetModuleBaseNameA",
+		"GetModuleBaseNameW",
+		"GetModuleFileNameExA",
+		"GetModuleFileNameExW",
+		"GetModuleInformation",
+		"GetPerformanceInfo",
+		"GetProcessImageFileNameA",
+		"GetProcessImageFileNameW",
+		"GetProcessMemoryInfo",
+		"GetWsChanges",
+		"GetWsChangesEx",
+		"InitializeProcessForWsWatch",
+		"QueryWorkingSet",
+		"QueryWorkingSetEx"
+	};
+}
