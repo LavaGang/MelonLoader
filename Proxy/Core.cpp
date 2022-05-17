@@ -91,7 +91,7 @@ HMODULE core::load_original_proxy(const std::filesystem::path& proxy_filepath, c
 
 std::filesystem::path core::get_bootstrap_path(const std::filesystem::path& base_path)
 {
-	const std::wstring defaultpath = L"MelonLoader\\Dependencies\\Bootstrap.dll";
+	constexpr auto defaultpath = L"MelonLoader\\Dependencies\\Bootstrap.dll";
 	std::filesystem::path returnval = base_path / defaultpath;
 
 	int argc = __argc;
