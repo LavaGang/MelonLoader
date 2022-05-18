@@ -10,7 +10,7 @@ extern "C" FARPROC OriginalFuncs_winmm[181];
 
 namespace exports
 {
-	inline constexpr std::array<const wchar_t*, 4ull> compatible_file_names = {
+	inline constexpr std::array<const wchar_t*, 4> compatible_file_names = {
 		L"psapi.dll",
 		L"version.dll",
 		L"winhttp.dll",
@@ -25,7 +25,7 @@ namespace exports
 	inline void load_winmm(const HMODULE originaldll) { load(originaldll, export_resources::ExportNames_winmm.data(), OriginalFuncs_winmm, export_resources::ExportNames_winmm.size()); }
 
 	using load_exports_func = decltype(&load_psapi);
-	inline constexpr std::array<load_exports_func, 4ull> load_funcs = {
+	inline constexpr std::array<load_exports_func, 4> load_funcs = {
 		load_psapi,
 		load_version,
 		load_winhttp,

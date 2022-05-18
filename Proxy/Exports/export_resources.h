@@ -3,7 +3,7 @@
 
 namespace export_resources
 {
-	constexpr std::array<const char*, 181ull> ExportNames_winmm = {
+	constexpr std::array<const char*, 181> ExportNames_winmm = {
 		"CloseDriver",
 		"DefDriverProc",
 		"DriverCallback",
@@ -187,7 +187,7 @@ namespace export_resources
 		"ExportByOrdinal2"
 	};
 
-	constexpr std::array<const char*, 65ull> ExportNames_winhttp = {
+	constexpr std::array<const char*, 65> ExportNames_winhttp = {
 		"Private1",
 		"SvchostPushServiceGlobals",
 		"WinHttpAddRequestHeaders",
@@ -255,7 +255,7 @@ namespace export_resources
 		"WinHttpWriteProxySettings"
 	};
 
-	constexpr std::array<const char*, 17ull> ExportNames_version = {
+	constexpr std::array<const char*, 17> ExportNames_version = {
 		"GetFileVersionInfoA",
 		"GetFileVersionInfoByHandle",
 		"GetFileVersionInfoExA",
@@ -275,7 +275,7 @@ namespace export_resources
 		"VerQueryValueW"
 	};
 
-	constexpr std::array<const char*, 27ull> ExportNames_psapi = {
+	constexpr std::array<const char*, 27> ExportNames_psapi = {
 		"EmptyWorkingSet",
 		"EnumDeviceDrivers",
 		"EnumPageFilesA",
