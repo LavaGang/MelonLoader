@@ -45,10 +45,7 @@ void core::initialize(HINSTANCE hinst_dll)
 
 	// @note: confirm we're loading into a unity game
 	if (!is_unity(filepath))
-	{
-		error("Uh oh! Looks like you're trying to run Melonloader on a non Unity game.");
 		return;
-	}
 
 	if (strstr(GetCommandLineA(), "--no-mods") != nullptr)
 		return;
