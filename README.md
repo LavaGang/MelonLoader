@@ -103,7 +103,11 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ## WINE / STEAM PROTON USAGE:
 
-- GUIDE COMING SOON
+* Follow the instructions in section `INSTALL` as if you're using windows.
+* Do one of the following things 
+* * (steam proton only:) using the following launch option: `WINEDLLOVERRIDES="version=n,b" %command%`
+* * append "version=n,b" to environment variable `WINEDLLOVERRIDES`
+
 
 ---
 
