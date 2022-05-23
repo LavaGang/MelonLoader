@@ -1,111 +1,117 @@
 #include "Core.h"
 #include "Exports.h"
-#include "Utils/Directory.h"
-#include "Utils/File.h"
+#include "Utils/Utility.h"
+
 #pragma warning (disable:4244)
 
-void Core::Load(HINSTANCE hinstDLL)
+void core::initialize(HINSTANCE hinst_dll)
 {
-	LPSTR filepathstr = new CHAR[MAX_PATH];
-	HMODULE exe_module = GetModuleHandleA(NULL);
-	GetModuleFileNameA(exe_module, filepathstr, MAX_PATH);
-	std::string filepath = filepathstr;
-	delete[] filepathstr;
-
-	if (!IsUnityGame(filepath))
+	// @note: get execution path
+	std::vector<char> path_buf;
+	DWORD copied = 0;
+	do
 	{
-		KillItDead();
+		path_buf.resize(path_buf.size() + MAX_PATH);
+		copied = GetModuleFileNameA(nullptr, path_buf.data(), static_cast<DWORD>(path_buf.size()));
+	}
+	while (copied >= path_buf.size());
+
+	path_buf.resize(copied);
+	const std::filesystem::path filepath(path_buf.begin(), path_buf.end());
+
+	// @note: get file path of proxy, tolowercase the file name
+	const auto proxy_filepath = utility::get_module_file_path(hinst_dll);
+	auto proxy_filename = proxy_filepath.filename().wstring();
+	std::transform(proxy_filename.begin(), proxy_filename.end(), proxy_filename.begin(), towlower);
+
+	// @note: is compatible proxy
+	std::size_t index = -1;
+	if (!exports::is_file_name_compatible(proxy_filename, &index))
+	{
+		error("Proxy has an Incompatible File Name!", true);
 		return;
 	}
 
-	std::string proxy_filepath = File::GetModuleFilePath(hinstDLL);
-	std::for_each(proxy_filepath.begin(), proxy_filepath.end(), [](char& character) { character = ::tolower(character); });
-	std::string proxy_filepath_no_ext = proxy_filepath.substr(0, proxy_filepath.find_last_of("."));
-
-	int index = -1;
-	if (!Exports::IsFileNameCompatible(proxy_filepath, index))
+	// @note: load original libs
+	const HMODULE originaldll = load_original_proxy(proxy_filepath, proxy_filepath.filename().stem().wstring());
+	if (!originaldll)
 	{
-		Error("Proxy has an Incompatible File Name!", true);
-		KillItDead();
+		error(L"Failed to Load Original " + proxy_filepath.wstring() + L"!", true);
 		return;
 	}
 
-	HMODULE originaldll = LoadOriginalDLL(proxy_filepath, proxy_filepath_no_ext);
-	if (originaldll == NULL)
-	{
-		Error(("Failed to Load Original " + proxy_filepath + "!").c_str(), true);
-		return;
-	}
+	// @note: load original lib exports
+	exports::load(index, originaldll);
 
-	Exports::Load(index, originaldll);
-
-	if (strstr(GetCommandLineA(), "--no-mods") != NULL)
+	// @note: confirm we're loading into a unity game
+	if (!is_unity(filepath))
 		return;
 
-	std::string BasePath = filepath.substr(0, filepath.find_last_of("\\/"));
-	std::string bootstrap_path = GetBootstrapPath(BasePath);
+	if (strstr(GetCommandLineA(), "--no-mods") != nullptr)
+		return;
+
+	// @note: confirm bootstrap exists
+	const auto bootstrap_path = get_bootstrap_path(filepath.parent_path());
 	if (bootstrap_path.empty())
 		return;
 
-	if (bootstrap_path.find('?') != std::string::npos)
+	if (!exists(bootstrap_path))
 	{
-		Error("The base directory path contains non-ASCII characters,\nwhich are not supported by MelonLoader.\nPlease remove them and try again.");
+		error("Bootstrap.dll does not Exist in Base Directory!");
 		return;
 	}
 
-	if (!File::Exists(bootstrap_path.c_str()))
-	{
-		Error("Bootstrap.dll does not Exist in Base Directory!");
-		return;
-	}
-
-	HMODULE bootstrap_module = LoadLibraryA(bootstrap_path.c_str());
-	if (bootstrap_module == NULL)
-		Error("Unable to Load Bootstrap.dll from Base Directory!");
+	// @note: load bootstrap lib
+	const HMODULE bootstrap_module = LoadLibraryW(bootstrap_path.c_str());
+	if (!bootstrap_module)
+		error("Unable to Load Bootstrap.dll from Base Directory!");
 }
 
-HMODULE Core::LoadOriginalDLL(std::string proxy_filepath, std::string proxy_filepath_no_ext)
+HMODULE core::load_original_proxy(const std::filesystem::path& proxy_filepath, const std::wstring& proxy_filepath_no_ext)
 {
-	HMODULE originaldll = LoadLibraryA((proxy_filepath_no_ext + "_original.dll").c_str());
-	if (originaldll == NULL)
+	HMODULE originaldll = LoadLibraryW((proxy_filepath_no_ext + L"_original.dll").c_str());
+
+	if (!originaldll)
 	{
-		char* system32path = new char[MAX_PATH];
-		if (GetSystemDirectoryA(system32path, MAX_PATH) == NULL)
+		wchar_t system32_path[MAX_PATH];
+
+		if (GetSystemDirectoryW(system32_path, MAX_PATH) == NULL)
 		{
-			delete[] system32path;
-			Error("Failed to Get System32 Directory!");
-			KillItDead();
-			return NULL;
+			error("Failed to Get System32 Directory!");
+			terminate_process();
+			return nullptr;
 		}
-		originaldll = LoadLibraryA((std::string(system32path) + "\\" + proxy_filepath).c_str());
-		delete[] system32path;
+
+		const auto path = std::filesystem::path(system32_path);
+		originaldll = LoadLibraryW((path / proxy_filepath.filename()).c_str());
 	}
+
 	return originaldll;
 }
 
-std::string Core::GetBootstrapPath(std::string BasePath)
+std::filesystem::path core::get_bootstrap_path(const std::filesystem::path& base_path)
 {
-	std::string defaultpath = "MelonLoader\\Dependencies\\Bootstrap.dll";
-	std::string returnval = BasePath + "\\" + defaultpath;
+	constexpr auto defaultpath = L"MelonLoader\\Dependencies\\Bootstrap.dll";
+	std::filesystem::path returnval = base_path / defaultpath;
 
 	int argc = __argc;
 	wchar_t** argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+
 	for (int i = 0; i < argc; i++)
 	{
 		wchar_t* arg = argv[i];
-		if (arg == NULL)
+		if (!arg)
 			continue;
+
 		if (wcscmp(arg, L"--melonloader.basedir") == 0)
 		{
 			wchar_t* arg_dir = argv[i + 1];
-			if (arg_dir == NULL)
+			if (!arg_dir)
 				break;
-			else
-			{
-				std::wstring ws(arg_dir);
-				returnval = std::string(ws.begin(), ws.end()) + "\\" + defaultpath;
-				break;
-			}
+
+			returnval = arg_dir;
+			returnval /= defaultpath;
+			break;
 		}
 	}
 	LocalFree(argv);
@@ -113,28 +119,37 @@ std::string Core::GetBootstrapPath(std::string BasePath)
 	return returnval;
 }
 
-bool Core::IsUnityGame(std::string filepath)
+bool core::is_unity(const std::filesystem::path& exe_filepath)
 {
-	std::string datapath = (filepath.substr(0, filepath.find_last_of(".")) + "_Data");
-	if (!Directory::Exists(datapath.c_str()))
+	const auto filename = exe_filepath.filename().stem().wstring();
+	const auto datapath = exe_filepath.parent_path() / (filename + L"_Data");
+
+	if (!exists(datapath))
 		return false;
-	if (File::Exists((datapath + "\\globalgamemanagers").c_str())
-		|| File::Exists((datapath + "\\data.unity3d").c_str())
-		|| File::Exists((datapath + "\\mainData").c_str()))
+
+	if (exists(datapath / L"globalgamemanagers") || exists(datapath / L"\\data.unity3d") || exists(datapath / L"\\mainData"))
 		return true;
+
 	return false;
 }
 
-void Core::Error(std::string reason, bool should_kill)
+void core::error(const std::string& reason, const bool should_kill)
 {
-	MessageBoxA(NULL, (reason + " " + (should_kill ? "Preventing Startup" : "Continuing without MelonLoader") + "...").c_str(), "MelonLoader", MB_ICONERROR | MB_OK);
+	MessageBoxA(nullptr, (reason + " " + (should_kill ? "Preventing Startup" : "Continuing without MelonLoader") + "...").c_str(), "MelonLoader", MB_ICONERROR | MB_OK);
 	if (should_kill)
-		KillItDead();
-};
+		terminate_process();
+}
 
-void Core::KillItDead()
+void core::error(const std::wstring& reason, const bool should_kill)
 {
-	HANDLE current_process = GetCurrentProcess();
+	MessageBoxW(nullptr, (reason + L" " + (should_kill ? L"Preventing Startup" : L"Continuing without MelonLoader") + L"...").c_str(), L"MelonLoader", MB_ICONERROR | MB_OK);
+	if (should_kill)
+		terminate_process();
+}
+
+void core::terminate_process()
+{
+	const HANDLE current_process = GetCurrentProcess();
 	TerminateProcess(current_process, NULL);
 	CloseHandle(current_process);
-};
+}

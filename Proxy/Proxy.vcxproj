@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -182,11 +182,8 @@
   <ItemGroup>
     <ClCompile Include="Base\DllMain.cpp" />
     <ClCompile Include="Exports.cpp" />
-    <ClCompile Include="Exports\Ex_psapi.cpp" />
-    <ClCompile Include="Exports\Ex_winhttp.cpp" />
-    <ClCompile Include="Exports\Ex_winmm.cpp" />
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Exports\Ex_version.cpp" />
+    <ClCompile Include="Utils\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Exports\Exports.def" />
@@ -205,8 +202,8 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="Base\resource.h" />
     <ClInclude Include="Exports.h" />
-    <ClInclude Include="Utils\Directory.h" />
-    <ClInclude Include="Utils\File.h" />
+    <ClInclude Include="Exports\export_resources.h" />
+    <ClInclude Include="Utils\Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Base\Proxy.rc" />
