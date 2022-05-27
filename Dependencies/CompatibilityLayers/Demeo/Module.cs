@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Boardgame.Modding;
+using HarmonyLib;
+using Prototyping;
 
 namespace MelonLoader.CompatibilityLayers
 {
@@ -7,6 +11,10 @@ namespace MelonLoader.CompatibilityLayers
     {
         public override void Setup()
         {
+            HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
+            harmony.Patch(Assembly.Load("Assembly-CSharp").GetType("Prototyping.RG").GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static),
+                typeof(Demeo_Module).GetMethod("InitFix", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
+
             MelonCompatibilityLayer.AddRefreshPluginsEvent(Refresh);
             MelonCompatibilityLayer.AddRefreshModsEvent(Refresh);
             Refresh();
@@ -41,6 +49,15 @@ namespace MelonLoader.CompatibilityLayers
                 info.SetIsNetworkCompatible(MelonUtils.PullAttributeFromAssembly<Demeo_LobbyRequirement>(melon.Assembly) == null);
                 ModdingAPI.ExternallyInstalledMods.Add(info);
             }
+        }
+
+        private static bool InitFix()
+        {
+            if (MotherbrainGlobalVars.IsRunningOnDesktop)
+                RG.SetVrMode(false);
+            else
+                RG.SetVrMode(RG.XRDeviceIsPresent());
+            return true;
         }
     }
 }
