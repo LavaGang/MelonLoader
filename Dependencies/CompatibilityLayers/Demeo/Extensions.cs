@@ -104,5 +104,25 @@ namespace MelonLoader.CompatibilityLayers
                     description_field.SetValue(info, description);
             }
         }
+
+        private static FieldInfo isNetworkCompatible_field;
+        private static MethodInfo isNetworkCompatible_method;
+        internal static void SetIsNetworkCompatible(this ModdingAPI.ModInformation info, bool isNetworkCompatible)
+        {
+            if (MelonUtils.IsGameIl2Cpp())
+            {
+                if (isNetworkCompatible_method == null)
+                    isNetworkCompatible_method = AccessTools.Property(typeof(ModdingAPI.ModInformation), "isNetworkCompatible").GetSetMethod();
+                if (isNetworkCompatible_method != null)
+                    isNetworkCompatible_method.Invoke(info, new object[] { isNetworkCompatible });
+            }
+            else
+            {
+                if (isNetworkCompatible_field == null)
+                    isNetworkCompatible_field = AccessTools.Field(typeof(ModdingAPI.ModInformation), "isNetworkCompatible");
+                if (isNetworkCompatible_field != null)
+                    isNetworkCompatible_field.SetValue(info, isNetworkCompatible);
+            }
+        }
     }
 }
