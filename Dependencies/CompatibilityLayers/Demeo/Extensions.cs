@@ -47,6 +47,24 @@ namespace MelonLoader.CompatibilityLayers
 
         private static FieldInfo version_field;
         private static MethodInfo version_method;
+        internal static string GetVersion(this ModdingAPI.ModInformation info)
+        {
+            if (MelonUtils.IsGameIl2Cpp())
+            {
+                if (version_method == null)
+                    version_method = AccessTools.Property(typeof(ModdingAPI.ModInformation), "version").GetGetMethod();
+                if (version_method != null)
+                    return (string)version_method.Invoke(info, new object[0]);
+            }
+            else
+            {
+                if (version_field == null)
+                    version_field = AccessTools.Field(typeof(ModdingAPI.ModInformation), "version");
+                if (version_field != null)
+                    return (string)version_field.GetValue(info);
+            }
+            return null;
+        }
         internal static void SetVersion(this ModdingAPI.ModInformation info, string version)
         {
             if (MelonUtils.IsGameIl2Cpp())
@@ -67,6 +85,24 @@ namespace MelonLoader.CompatibilityLayers
 
         private static FieldInfo author_field;
         private static MethodInfo author_method;
+        internal static string GetAuthor(this ModdingAPI.ModInformation info)
+        {
+            if (MelonUtils.IsGameIl2Cpp())
+            {
+                if (author_method == null)
+                    author_method = AccessTools.Property(typeof(ModdingAPI.ModInformation), "author").GetGetMethod();
+                if (author_method != null)
+                    return (string)author_method.Invoke(info, new object[0]);
+            }
+            else
+            {
+                if (author_field == null)
+                    author_field = AccessTools.Field(typeof(ModdingAPI.ModInformation), "author");
+                if (author_field != null)
+                    return (string)author_field.GetValue(info);
+            }
+            return null;
+        }
         internal static void SetAuthor(this ModdingAPI.ModInformation info, string author)
         {
             if (MelonUtils.IsGameIl2Cpp())
