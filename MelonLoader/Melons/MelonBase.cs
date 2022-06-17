@@ -198,6 +198,21 @@ namespace MelonLoader
         #region Callbacks
 
         /// <summary>
+        /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
+        /// </summary>
+        public virtual void OnPreSupportModule() { }
+
+        /// <summary>
+        /// Runs after Game Initialization.
+        /// </summary>
+        public virtual void OnApplicationStart() { }
+
+        /// <summary>
+        /// Runs after OnApplicationStart.
+        /// </summary>
+        public virtual void OnApplicationLateStart() { }
+
+        /// <summary>
         /// Runs once per frame.
         /// </summary>
         public virtual void OnUpdate() { }

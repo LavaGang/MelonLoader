@@ -42,22 +42,9 @@ namespace MelonLoader
         public virtual void OnPreModsLoaded() { }
 
         /// <summary>
-        /// Runs when the engine is fully initialized.
-        /// </summary>
-        public virtual void OnApplicationLateStart() { }
-
-        /// <summary>
-        /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
-        /// </summary>
-        public virtual void OnPreSupportModule() { }
-
-        /// <summary>
         /// Runs after all MelonLoader components are fully initialized (including all MelonMods).
         /// </summary>
         public virtual void OnApplicationStarted() { }
-
-        [Obsolete("Please override OnPreModsLoaded or subscribe to the MelonEvents::OnPreModsLoaded event instead.")]
-        public virtual void OnApplicationStart() { }
 
         #endregion
 
