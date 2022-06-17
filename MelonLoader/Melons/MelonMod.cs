@@ -60,13 +60,13 @@ namespace MelonLoader
         /// </summary>
         public virtual void OnSceneWasUnloaded(int buildIndex, string sceneName) { }
 
-        [Obsolete("This callback became a plugin-only callback. To initialize your Mod, override either OnInitializeMelon or OnEngineInitialized instead.")]
+        [Obsolete("This callback became a plugin-only callback. To initialize your Mod, override either OnInitializeMelon or OnLoaderInitialized instead.")]
         public virtual void OnPreSupportModule() { }
 
-        [Obsolete("This callback became a plugin-only callback. To initialize your Mod, override either OnInitializeMelon or OnEngineInitialized instead.")]
+        [Obsolete("This callback became a plugin-only callback. To initialize your Mod, override either OnInitializeMelon or OnLoaderInitialized instead.")]
         public virtual void OnApplicationStart() { }
 
-        [Obsolete("This callback became a plugin-only callback. To initialize your Mod, override either OnInitializeMelon or OnEngineInitialized instead.")]
+        [Obsolete("This callback became a plugin-only callback. To initialize your Mod, override either OnInitializeMelon or OnLoaderInitialized instead.")]
         public virtual void OnApplicationLateStart() { }
 
         #endregion
