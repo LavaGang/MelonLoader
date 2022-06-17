@@ -4,14 +4,16 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using HarmonyLib;
+using MelonLoader.Modules;
 using MelonLoader.MonoInternals;
 using MelonLoader.NativeUtils;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class Il2CppUnityTls_Module : MelonCompatibilityLayer.Module
+    internal class Il2CppUnityTls_Module : MelonModule
     {
+        private static Il2CppUnityTls_Module Instance;
         internal static MelonLogger.Instance Logger = new MelonLogger.Instance("Il2CppUnityTls");
         private static IntPtr UnityTlsInterface = IntPtr.Zero;
 
@@ -28,8 +30,10 @@ namespace MelonLoader.CompatibilityLayers
             "48 8B 05 ?? ?? ?? ?? 48 85 C0 0F 85 ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 05"
         };
 
-        public unsafe override void Setup()
+        public unsafe override void OnInitialize()
         {
+            Instance = this;
+
             Environment.SetEnvironmentVariable("MONO_TLS_PROVIDER", "default");
 
             if (!PatchExports())

@@ -11,6 +11,23 @@ namespace MelonLoader
         public static readonly List<MelonPreferences_Category> Categories = new List<MelonPreferences_Category>();
         public static readonly List<MelonPreferences_ReflectiveCategory> ReflectiveCategories = new List<MelonPreferences_ReflectiveCategory>();
         public static readonly TomlMapper Mapper = new TomlMapper();
+
+        /// <summary>
+        /// Occurs when a Preferences File has been loaded.
+        /// <para>
+        /// <see cref="string"/>: Path of the Preferences File.
+        /// </para>
+        /// </summary>
+        public static readonly MelonEvent<string> OnPreferencesLoaded = new MelonEvent<string>();
+
+        /// <summary>
+        /// Occurs when a Preferences File has been saved.
+        /// <para>
+        /// <see cref="string"/>: Path of the Preferences File.
+        /// </para>
+        /// </summary>
+        public static readonly MelonEvent<string> OnPreferencesSaved = new MelonEvent<string>();
+
         internal static List<Preferences.IO.File> PrefFiles = new List<Preferences.IO.File>();
         internal static Preferences.IO.File DefaultFile = null;
 
@@ -88,12 +105,12 @@ namespace MelonLoader
                     }
 
                     category.Load(table);
-                    MelonHandler.OnPreferencesLoaded(currentFile.FilePath);
+
+                    OnPreferencesLoaded.Invoke(currentFile.FilePath);
                 }
             }
 
             MelonLogger.Msg("Preferences Loaded!");
-            MelonHandler.OnPreferencesLoaded();
         }
 
         public static void Save()
@@ -145,12 +162,11 @@ namespace MelonLoader
                         file.WasError = true;
                         continue;
                     }
-                    MelonHandler.OnPreferencesSaved(file.FilePath);
+                    OnPreferencesSaved.Invoke(file.FilePath);
                 }
             }
 
             MelonLogger.Msg("Preferences Saved!");
-            MelonHandler.OnPreferencesSaved();
         }
 
         public static MelonPreferences_Category CreateCategory(string identifier) => CreateCategory(identifier, null, false);
@@ -338,8 +354,7 @@ namespace MelonLoader
             if (printmsg)
                 MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
 
-            MelonHandler.OnPreferencesLoaded();
-            MelonHandler.OnPreferencesLoaded(file.FilePath);
+            OnPreferencesLoaded.Invoke(file.FilePath);
         }
 
         public static void RemoveCategoryFromFile(string filePath, string categoryName)

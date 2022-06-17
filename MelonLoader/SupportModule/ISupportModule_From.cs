@@ -13,6 +13,6 @@
         void Quit();
         void DefiniteQuit();
         void BONEWORKS_OnLoadingScreen();
-        void SetUnhollowerSupportInterface(UnhollowerSupport.Interface inter);
+        void SetUnhollowerSupportInterface(UnhollowerSupport.Interface unhollower);
     }
 }

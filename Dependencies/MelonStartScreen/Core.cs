@@ -1,4 +1,5 @@
 ﻿using MelonLoader.MelonStartScreen.NativeUtils;
+using MelonLoader.Modules;
 using MelonLoader.NativeUtils.PEParser;
 using System;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using Windows;
 
 namespace MelonLoader.MelonStartScreen
 {
-    internal static class Core
+    internal class Core : MelonModule
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate IntPtr User32SetTimerDelegate(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, IntPtr lpTimerFunc);
@@ -25,8 +26,19 @@ namespace MelonLoader.MelonStartScreen
         internal static string FolderPath;
         internal static string ThemesFolderPath;
 
+        public static Core instance;
+
+        public static MelonLogger.Instance Logger => instance.LoggerInstance;
+
+        public override void OnInitialize() 
+        {
+            instance = this;
+        }
+
         private static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
+            Logger.Msg("Initializing...");
+
             FolderPath = Path.Combine(MelonUtils.UserDataDirectory, "MelonStartScreen");
             if (!Directory.Exists(FolderPath))
                 Directory.CreateDirectory(FolderPath);
@@ -50,27 +62,18 @@ namespace MelonLoader.MelonStartScreen
                     return functionToWaitForAsync();
 
                 MelonDebug.Msg("Initializing Screen Renderer");
-                if (!ScreenRenderer.Init())
-                {
-                    UI.Objects.UI_Object.DisposeOfAll();
-                    return functionToWaitForAsync();
-                }
+                ScreenRenderer.Init();
                 MelonDebug.Msg("Screen Renderer initialized");
 
                 RegisterMessageCallbacks();
 
                 // Initial render
                 ScreenRenderer.Render();
-                if (ScreenRenderer.disabled)
-                {
-                    UI.Objects.UI_Object.DisposeOfAll();
-                    return functionToWaitForAsync();
-                }
             }
             catch (Exception e)
             {
-                MelonLogger.Error(e);
-                UI.Objects.UI_Object.DisposeOfAll();
+                Logger.Error(e);
+                ScreenRenderer.disabled = true;
                 return functionToWaitForAsync();
             }
 
@@ -84,10 +87,10 @@ namespace MelonLoader.MelonStartScreen
 
         private static void SubscribeToCoreCallbacks()
         {
-            MelonEvents.OnApplicationLateStart.Subscribe(Finish);
-            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart);
-            MelonBase.OnMelonInitializing.Subscribe(OnMelonInitializing);
-            MelonBase.OnMelonsResolving.Subscribe(OnMelonsResolving);
+            MelonEvents.OnApplicationLateStart.Subscribe(Finish, int.MinValue);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, int.MaxValue);
+            MelonBase.OnMelonInitializing.Subscribe(OnMelonInitializing, 100);
+            MelonAssembly.OnAssemblyResolving.Subscribe(OnMelonsResolving, 100);
         }
 
         private static void RegisterMessageCallbacks()
@@ -101,11 +104,11 @@ namespace MelonLoader.MelonStartScreen
         private static unsafe bool ApplyUser32SetTimerPatch()
         {
             IntPtr original = PEUtils.GetExportedFunctionPointerForModule("USER32.dll", "SetTimer");
-            MelonLogger.Msg($"User32::SetTimer original: 0x{(long)original:X}");
+            MelonDebug.Msg($"User32::SetTimer original: 0x{(long)original:X}");
 
             if (original == IntPtr.Zero)
             {
-                MelonLogger.Error("Failed to find USER32.dll::SetTimer");
+                MelonDebug.Error("Failed to find USER32.dll::SetTimer");
                 return false;
             }
 
@@ -115,16 +118,16 @@ namespace MelonLoader.MelonStartScreen
 
             if (detourPtr == IntPtr.Zero)
             {
-                MelonLogger.Error("Failed to find User32SetTimerDetour");
+                MelonDebug.Error("Failed to find User32SetTimerDetour");
                 return false;
             }
 
             // And we patch SetTimer to replace it by our hook
-            MelonLogger.Msg($"Applying USER32.dll::SetTimer Hook at 0x{original.ToInt64():X}");
+            MelonDebug.Msg($"Applying USER32.dll::SetTimer Hook at 0x{original.ToInt64():X}");
             MelonUtils.NativeHookAttach((IntPtr)(&original), detourPtr);
-            MelonLogger.Msg($"Creating delegate for original USER32.dll::SetTimer (0x{original.ToInt64():X})");
+            MelonDebug.Msg($"Creating delegate for original USER32.dll::SetTimer (0x{original.ToInt64():X})");
             user32SetTimerOriginal = (User32SetTimerDelegate)Marshal.GetDelegateForFunctionPointer(original, typeof(User32SetTimerDelegate));
-            MelonLogger.Msg("Applied USER32.dll::SetTimer patch");
+            MelonDebug.Msg("Applied USER32.dll::SetTimer patch");
 
             return true;
         }
@@ -262,7 +265,11 @@ namespace MelonLoader.MelonStartScreen
         {
             ScreenRenderer.UpdateMainProgress("Starting game...", 1f);
             ScreenRenderer.Render(); // Final render, to set the progress bar to 100%
-            UI.Objects.UI_Object.DisposeOfAll();
+
+            MelonEvents.OnApplicationLateStart.Unsubscribe(typeof(Core).GetMethod(nameof(Finish), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
+            MelonEvents.OnApplicationStart.Unsubscribe(typeof(Core).GetMethod(nameof(OnApplicationStart), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
+            MelonBase.OnMelonInitializing.Unsubscribe(typeof(Core).GetMethod(nameof(OnMelonInitializing), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
+            MelonAssembly.OnAssemblyResolving.Unsubscribe(typeof(Core).GetMethod(nameof(OnMelonsResolving), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic));
         }
 
         #endregion

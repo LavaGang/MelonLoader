@@ -1,7 +1,7 @@
 ﻿using MelonLoader.MelonStartScreen.NativeUtils;
 using MelonLoader.MelonStartScreen.UI;
 using System;
-using MelonUnityEngine;
+using System.Reflection;
 using MelonUnityEngine.CoreModule;
 using UnityPlayer;
 
@@ -27,8 +27,11 @@ namespace MelonLoader.MelonStartScreen
 
         private static uint shouldCallWFLPAGT = 0;
 
-        internal static bool Init()
+        internal static void Init()
         {
+            if (disabled)
+                return;
+
             try
             {
                 MelonDebug.Msg("Initializing UIStyleValues");
@@ -40,14 +43,12 @@ namespace MelonLoader.MelonStartScreen
                 shouldCallWFLPAGT = NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new[] { "2020.2.7", "2020.3.0", "2021.1.0" })
                     && (graphicsDeviceType == /*DX11*/2 || graphicsDeviceType == /*DX12*/18)
                     ? graphicsDeviceType : 0;
-
-                return true;
             }
             catch (Exception e)
             {
-                MelonLogger.Error("Exception while init rendering: " + e);
+                Core.Logger.Error("Exception while init rendering: " + e);
+                disabled = true;
             }
-            return false;
         }
 
         internal static unsafe void Render()
@@ -65,13 +66,41 @@ namespace MelonLoader.MelonStartScreen
                 UIStyleValues.ProgressBar.Render();
                 UIStyleValues.VersionText.Render();
 
+                /*
+                if (melonloaderversionTextmesh != null)
+                {
+                    if (UIConfig.VersionText.AutoAlign)
+                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
+                    else
+                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(UIConfig.VersionText.CustomPosition.Item1, sh - UIConfig.VersionText.CustomPosition.Item2, 0), Quaternion.identity);
+                }
+
+                if (progressBar != null)
+                {
+                    int x, y, width, height = 0;
+                    width = 540;
+                    height = 36;
+
+                    if (UIConfig.ProgressBar.AutoAlign)
+                    {
+                        x = (sw - width) / 2;
+                        y = sh - ((sh - height) / 2 + (logoHeight / 2) + 50);
+                    }
+                    else
+                    {
+                        x = UIConfig.ProgressBar.CustomPosition.Item1;
+                        y = UIConfig.ProgressBar.CustomPosition.Item2;
+                    }
+                }
+                */
+
                 GfxDevice.PresentFrame();
                 if (shouldCallWFLPAGT != 0)
                     GfxDevice.WaitForLastPresentationAndGetTimestamp(shouldCallWFLPAGT);
             }
             catch (Exception e)
             {
-                MelonLogger.Error("Exception while rendering: " + e);
+                Core.Logger.Error("Exception while rendering: " + e);
                 disabled = true;
             }
         }
@@ -95,12 +124,21 @@ namespace MelonLoader.MelonStartScreen
             UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
-        internal static void UpdateProgressFromMod(string modname)
+        internal static void UpdateProgressFromMod(MelonBase melon)
         {
             if (UIStyleValues.ProgressBar == null)
                 return;
 
-            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(modname, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(melon, ref UIStyleValues.ProgressBar.text.text);
+            UIStyleValues.ProgressBar.text.isDirty = true;
+        }
+
+        internal static void UpdateProgressFromModAssembly(Assembly asm)
+        {
+            if (UIStyleValues.ProgressBar == null)
+                return;
+
+            UIStyleValues.ProgressBar.progress = ProgressParser.GetProgressFromModAssembly(asm, ref UIStyleValues.ProgressBar.text.text);
             UIStyleValues.ProgressBar.text.isDirty = true;
         }
 
@@ -109,8 +147,11 @@ namespace MelonLoader.MelonStartScreen
             if (UIStyleValues.ProgressBar == null)
                 return;
 
-            UIStyleValues.ProgressBar.progress = ProgressParser.SetModState(step, ref UIStyleValues.ProgressBar.text.text);
-            UIStyleValues.ProgressBar.text.isDirty = true;
+            if (ProgressParser.SetModState(step, ref UIStyleValues.ProgressBar.text.text, out float generationPart))
+            {
+                UIStyleValues.ProgressBar.progress = generationPart;
+                UIStyleValues.ProgressBar.text.isDirty = true;
+            }
         }
     }
 }
