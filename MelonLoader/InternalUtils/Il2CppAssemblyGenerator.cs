@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace MelonLoader.InternalUtils
@@ -15,11 +14,11 @@ namespace MelonLoader.InternalUtils
 
         internal static bool Run()
         {
-            MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
-
             var module = MelonModule.Load(moduleInfo);
             if (module == null)
                 return true;
+
+            MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
 
             MonoInternals.MonoResolveManager.GetAssemblyResolveInfo("Il2CppAssemblyGenerator").Override = module.Assembly;
 
