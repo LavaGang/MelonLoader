@@ -85,6 +85,7 @@ namespace MelonLoader.NativeUtils
                 }
                 else
                 {
+                    index -= processed;
                     processed = 0;
                 }
 
@@ -127,6 +128,7 @@ namespace MelonLoader.NativeUtils
                 }
                 else
                 {
+                    index -= processed;
                     processed = 0;
                 }
 
