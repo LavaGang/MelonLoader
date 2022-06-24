@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.x.x](#v0xx) |
 | [v0.5.4](#v054) |
 | [v0.5.3](#v053) | 
 | [v0.5.2](#v052) |
@@ -26,6 +27,47 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.x.x:
+
+1. Rewrote Proxy.   (Credits to [autumncpp](https://github.com/autumncpp) :D)
+2. Updated [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) to v2.0.12.
+3. Updated [AssetRipper.VersionUtilities](https://github.com/AssetRipper/VersionUtilities) to v1.2.1.
+4. Removed Game Block.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+5. Updated [HarmonyX](https://github.com/BepInEx/HarmonyX) to v2.10.0.
+6. Rewrote MelonHandler.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+7. Added more events to ML's core.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+8. Added MelonModules.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+9. Rewrote Compatibility Layer Base.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+10. Turned Il2CppAssemblyGenerator into a MelonModule.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+11. Made MelonModule::OnInitialize virtual.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+12. Forced all MelonStartScreen logs to use the module logger instance.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+13. Turned MelonStartScreen into a MelonModule.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+14. Fixed IPA's MelonModules info.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+15. Forced the Il2CppUnityTls module to use the MelonModule logger instance.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+16. Fixed some MelonModule issues.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+17. Added new MelonModule type and rewrote the MelonCompatiblityLayer loader.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+18. Added priorities to start screen event subscriptions.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+19. Added a 'priority' option to MelonEvents.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+20. Applied melon priority to callback subscriptions.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+21. Fixed Issue with Melon incompatiblity check.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+22. Resorted the load order in Core::Start.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+23. Tagged some mod callbacks as obsolete.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+24. Updated summary for the MelonEvents::OnApplicationStart event.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+25. Updated summary of MelonBase::OnInitializeMelon.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+26. Added MelonAssemblies.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+27. Fixed Melon event deinitialized.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+28. Fixed Issue with Harmony patching too early and late.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+29. Fixed Issue with Melons not unsubscribing from all MelonEvents.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+30. Replaced normal events in MelonPreferences_Entry with MelonEvents.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+31. Fixed MelonLoader's deinitialization time.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+32. Added 2 new Melon callbacks.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+33. Fixed Crash Issue with Demeo Compatibility Layer.
+34. Fixed Issue with VR Mode on Demeo.
+35. Fixed Issues with Demeo CL not refreshing Melon Listings.
+36. Fixed MME Issue with MelonBase.
 
 ---
 
