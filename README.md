@@ -163,14 +163,20 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
+| --melonloader.disablestartscreen | Disable the Start Screen |
+
+
+- These ones below are Unity Engine specific Launch Options.
+
+| Argument | Description |
+| - | - |
 | --melonloader.agfoffline | Forces Assembly Generator to Run without Contacting the Remote API |
 | --melonloader.agfregenerate | Forces Regeneration of Assembly |
+| --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
 | --melonloader.agfvunity | Forces Assembly Generator to use a Specified Version of Unity Dependencies |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
-| --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
-| --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
-| --melonloader.disablestartscreen | Disable the Start Screen |
 | --melonloader.disableunityclc | Disable Unity Console Log Cleaner | 
 
 ---
@@ -206,8 +212,8 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 - The Proxy DLL is able to be Renamed to the Compatible File Names below.
 - By Default the Proxy is named as "version.dll".
-- For most Unity Games the Default File Name should work perfectly fine.
-- Some Unity Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Unity Engine used by the Game, etc.
+- For most Games the Default File Name should work perfectly fine.
+- Some Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Engine used by the Game, etc.
 
 | File Names: |
 | - |
