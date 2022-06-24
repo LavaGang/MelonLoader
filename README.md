@@ -14,7 +14,6 @@
 
 ---
 
-
 ## GENERAL INFORMATION:
 
 - Debug Mode is for Development Purposes. Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
@@ -44,6 +43,16 @@
 | [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
 | [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
 | [v0.6.0-rewrite](https://nightly.link/LavaGang/MelonLoader/workflows/build/v0.6.0-rewrite) |
+
+---
+
+## SPECIAL THANKS TO OUR WONDERFUL PATRONS:
+
+- Givo
+- Florian Fahrenberger
+- Python
+- SirCoolness
+- SlidyDev
 
 ---
 
@@ -242,6 +251,7 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [mgGif](https://github.com/gwaredd/mgGif) is licensed under the MIT License. See [LICENSE](https://github.com/gwaredd/mgGif/blob/main/LICENSE) for the full License.
 - [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) is licensed under the MIT License. See [LICENSE](https://github.com/nesrak1/AssetsTools.NET/blob/master/LICENSE) for the full License.
 - [AssetRipper.VersionUtilities](https://github.com/AssetRipper/VersionUtilities) is licensed under the MIT License. See [LICENSE](https://github.com/AssetRipper/VersionUtilities/blob/master/License.md) for the full License.
+- Steam Library, VDF, and ACF Parsing from [SteamFinder.cs](https://github.com/Umbranoxio/BeatSaberModInstaller/blob/master/BeatSaberModManager/Dependencies/SteamFinder.cs) by [Umbranoxio](https://github.com/Umbranoxio) and [Dalet](https://github.com/Dalet).
 - [bHaptics Haptic Library](https://github.com/bhaptics/haptic-library) is licensed under All rights reserved Copyright (c) 2016-2021 bHaptics Inc.  
 See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. We have Express Permission from bHaptics.
 
