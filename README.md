@@ -1,3 +1,4 @@
+
 <p align="center">
   <a href="#"><img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Icon.png"></a>
   <a href="#"><img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Text.png"></a>
@@ -54,11 +55,11 @@ Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 
 ## ❤️ SPECIAL THANKS TO OUR WONDERFUL PATRONS ❤️
 
-- Givo
-- Florian Fahrenberger
-- Python
-- SirCoolness
-- SlidyDev
+- **Givo**  
+- **Florian Fahrenberger**  
+- **Python**  
+- **SirCoolness**  
+- **SlidyDev**  
 
 ---
 
