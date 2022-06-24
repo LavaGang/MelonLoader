@@ -69,6 +69,7 @@
 35. Fixed Issues with Demeo CL not refreshing Melon Listings.
 36. Fixed MME Issue with MelonBase.
 37. Updated [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to v2022.1.0-pre-release.6.
+38. Backported StackFrame.GetMethod Fix.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
 
 ---
 

@@ -23,6 +23,7 @@ namespace MelonLoader
     public static class MelonUtils
     {
         private static readonly Random RandomNumGen = new Random();
+        private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
 
         internal static void Setup(AppDomain domain)
         {
@@ -114,8 +115,26 @@ namespace MelonLoader
         public static MelonBase GetMelonFromStackTrace()
         {
             StackTrace st = new StackTrace(3, true);
+            return GetMelonFromStackTrace(st);
+        }
+
+        public static MelonBase GetMelonFromStackTrace(StackTrace st, bool allFrames = false)
+        {
             if (st.FrameCount <= 0)
                 return null;
+
+            if (allFrames)
+            {
+                foreach (StackFrame frame in st.GetFrames())
+                {
+                    MelonBase ret = CheckForMelonInFrame(frame);
+                    if (ret != null)
+                        return ret;
+                }
+                return null;
+
+            }
+
             MelonBase output = CheckForMelonInFrame(st);
             if (output == null)
                 output = CheckForMelonInFrame(st, 1);
@@ -123,25 +142,23 @@ namespace MelonLoader
                 output = CheckForMelonInFrame(st, 2);
             return output;
         }
+
         private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
         {
             StackFrame sf = st.GetFrame(frame);
             if (sf == null)
                 return null;
-            MethodBase method = sf.GetMethod();
-            if (method == null)
-                return null;
-            Type methodClassType = method.DeclaringType;
-            if (methodClassType == null)
-                return null;
-            Assembly asm = methodClassType.Assembly;
-            if (asm == null)
-                return null;
-            MelonBase melon = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
-            if (melon == null)
-                melon = MelonHandler.Mods.Find(x => (x.Assembly == asm));
-            return melon;
+
+            return CheckForMelonInFrame(sf);
         }
+
+        private static MelonBase CheckForMelonInFrame(StackFrame sf)
+            //The JIT compiler on .NET 6 on Windows 10 (win11 is fine, somehow) really doesn't like us calling StackFrame.GetMethod here
+            //Rather than trying to work out why, I'm just going to call it via reflection.
+            => GetMelonFromAssembly(((MethodBase)StackFrameGetMethod.Invoke(sf, new object[0]))?.DeclaringType?.Assembly);
+
+        private static MelonBase GetMelonFromAssembly(Assembly asm)
+            => asm == null ? null : MelonHandler.Plugins.Cast<MelonBase>().FirstOrDefault(x => x.Assembly == asm) ?? MelonHandler.Mods.FirstOrDefault(x => x.Assembly == asm);
 
         public static string ColorToANSI(ConsoleColor color)
         {
