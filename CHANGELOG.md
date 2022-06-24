@@ -68,6 +68,7 @@
 34. Fixed Issue with VR Mode on Demeo.
 35. Fixed Issues with Demeo CL not refreshing Melon Listings.
 36. Fixed MME Issue with MelonBase.
+37. Updated [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to v2022.1.0-pre-release.6.
 
 ---
 
