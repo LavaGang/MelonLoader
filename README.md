@@ -16,17 +16,22 @@
 
 ## GENERAL INFORMATION:
 
-- Debug Mode is for Development Purposes. Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
+- Debug Mode is for Development Purposes.  
+Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
+<br></br>
 - All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
 - All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
 - All Mods get placed in the created Mods folder in your Game's Installation Folder.
 <br></br>
 - [The Official Wiki](https://melonwiki.xyz)
+<br></br>
 - [Proxies](#proxies)
 - [Launch Options](#launch-options)
-- [dnSpy Debugger Usage](#dnspy-debugger-usage)
-- [Wine / Steam Proton Usage](#wine--steam-proton-usage)
+- [Debugging](https://melonwiki.xyz/#/modders/debugging)
+<br></br>
+- [Linux Support (__WINE / STEAM PROTON__)](https://melonwiki.xyz/#/README?id=linux-instructions)
 - [Android & Oculus Quest Support (__WIP__)](https://melonwiki.xyz/#/android/general)
+<br></br>
 
 | Usage Guides: |
 | - |
@@ -43,10 +48,11 @@
 | [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
 | [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
 | [v0.6.0-rewrite](https://nightly.link/LavaGang/MelonLoader/workflows/build/v0.6.0-rewrite) |
+| [universality](https://nightly.link/LavaGang/MelonLoader/workflows/build/universality) |
 
 ---
 
-## SPECIAL THANKS TO OUR WONDERFUL PATRONS:
+## ❤️ SPECIAL THANKS TO OUR WONDERFUL PATRONS ❤️
 
 - Givo
 - Florian Fahrenberger
@@ -106,24 +112,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 4. Remove the Plugins folder from the Game's Installation Folder.
 5. Remove the Mods folder from the Game's Installation Folder.
 6. Remove the UserData folder from the Game's Installation Folder.
-
----
-
-
-## WINE / STEAM PROTON USAGE:
-
-- GUIDE COMING SOON
-
----
-
-## DNSPY DEBUGGER USAGE:
-
-1. Go into dnSpy, then in the top, select `Debug` -> `Start Debugging` and select `Unity` as the debug engine.
-2. Then, for the executable, select your game's executable
-3. And in the `Arguments` box, add `--melonloader.debug` and any other arguments you want
-4. Finally, to add breakpoints, simply drag and drop the mod you want to debug into dnSpy's Assembly Explorer, then add breakpoints regularly.
-
-You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](https://melonwiki.xyz/#/modders/debugging).
 
 ---
 
