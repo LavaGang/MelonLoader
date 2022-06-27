@@ -67,7 +67,7 @@ namespace MelonLoader.Support
             MelonUtils.NativeHookAttach(copiedMethodInfoPointer, il2CppShimDelegatePtr);
             methodDetourPointer = il2CppShimDelegatePtr;
 
-            PatchTools_RememberObject(Original, new LemonTuple<MethodInfo, MethodInfo, Delegate>{ Item1 = newreplacement, Item2 = il2CppShim, Item3 = il2CppShimDelegate });
+            PatchTools_RememberObject(Original, new LemonTuple<MethodInfo, MethodInfo, Delegate> { Item1 = newreplacement, Item2 = il2CppShim, Item3 = il2CppShimDelegate });
 
             return newreplacement;
         }
@@ -291,7 +291,7 @@ namespace MelonLoader.Support
             else
                 localCount = 0;
             var str = string.Format("{0}Local var {1}: {2}{3}", CodePos(il), localCount - 1, variable.LocalType.FullName, variable.IsPinned ? "(pinned)" : "");
-            FileLog.LogBuffered(str);
+            HarmonyFileLog.Writer.WriteLine(str);
         }
 
         private void DebugCheck()
@@ -313,7 +313,7 @@ namespace MelonLoader.Support
                 // Patching using a custom Harmony instance; try to infer the melon assembly from the container type, prefix, postfix, or transpiler.
                 Assembly melonAssembly = basePatch.PatchMethod.DeclaringType?.Assembly;
                 if (melonAssembly != null)
-                    loggerInstance = FindMelon(melon => melon.Assembly == melonAssembly);
+                    loggerInstance = FindMelon(melon => melon.MelonAssembly.Assembly == melonAssembly);
             }
 
             WarnIfHasTranspiler(patchInfo, loggerInstance);
@@ -350,7 +350,7 @@ namespace MelonLoader.Support
         {
             MelonLogger.Instance loggerInstance = null;
 
-            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonHandler.Plugins);
+            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonPlugin.RegisteredMelons);
             while (PluginEnumerator.MoveNext())
                 if (criterion(PluginEnumerator.Current))
                 {
@@ -360,7 +360,7 @@ namespace MelonLoader.Support
 
             if (loggerInstance == null)
             {
-                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonHandler.Mods);
+                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonMod.RegisteredMelons);
                 while (ModEnumerator.MoveNext())
                     if (criterion(ModEnumerator.Current))
                     {

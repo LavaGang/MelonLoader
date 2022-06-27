@@ -1,3 +1,4 @@
+
 <p align="center">
   <a href="#"><img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Icon.png"></a>
   <a href="#"><img src="https://raw.githubusercontent.com/LavaGang/MelonLoader.Installer/master/Resources/ML_Text.png"></a>
@@ -14,20 +15,24 @@
 
 ---
 
-
 ## GENERAL INFORMATION:
 
-- Debug Mode is for Development Purposes. Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
+- Debug Mode is for Development Purposes.  
+Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
+<br></br>
 - All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
 - All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
 - All Mods get placed in the created Mods folder in your Game's Installation Folder.
 <br></br>
 - [The Official Wiki](https://melonwiki.xyz)
+<br></br>
 - [Proxies](#proxies)
 - [Launch Options](#launch-options)
-- [dnSpy Debugger Usage](#dnspy-debugger-usage)
-- [Wine / Steam Proton Usage](#wine--steam-proton-usage)
+- [Debugging](https://melonwiki.xyz/#/modders/debugging)
+<br></br>
+- [Linux Support (__WINE / STEAM PROTON__)](https://melonwiki.xyz/#/README?id=linux-instructions)
 - [Android & Oculus Quest Support (__WIP__)](https://melonwiki.xyz/#/android/general)
+<br></br>
 
 | Usage Guides: |
 | - |
@@ -44,6 +49,17 @@
 | [master](https://nightly.link/LavaGang/MelonLoader/workflows/build/master) |
 | [alpha-development](https://nightly.link/LavaGang/MelonLoader/workflows/build/alpha-development) |
 | [v0.6.0-rewrite](https://nightly.link/LavaGang/MelonLoader/workflows/build/v0.6.0-rewrite) |
+| [universality](https://nightly.link/LavaGang/MelonLoader/workflows/build/universality) |
+
+---
+
+## ❤️ SPECIAL THANKS TO OUR WONDERFUL PATRONS ❤️
+
+- **Givo**  
+- **Florian Fahrenberger**  
+- **Python**  
+- **SirCoolness**  
+- **SlidyDev**  
 
 ---
 
@@ -100,24 +116,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
-
-## WINE / STEAM PROTON USAGE:
-
-- GUIDE COMING SOON
-
----
-
-## DNSPY DEBUGGER USAGE:
-
-1. Go into dnSpy, then in the top, select `Debug` -> `Start Debugging` and select `Unity` as the debug engine.
-2. Then, for the executable, select your game's executable
-3. And in the `Arguments` box, add `--melonloader.debug` and any other arguments you want
-4. Finally, to add breakpoints, simply drag and drop the mod you want to debug into dnSpy's Assembly Explorer, then add breakpoints regularly.
-
-You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](https://melonwiki.xyz/#/modders/debugging).
-
----
-
 ## START SCREEN CUSTOMIZATION:
 
 - After Initial Launch the Start Screen will create a folder under `UserData/MelonStartScreen`
@@ -165,14 +163,20 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
+| --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
+| --melonloader.disablestartscreen | Disable the Start Screen |
+
+
+- These ones below are Unity Engine specific Launch Options.
+
+| Argument | Description |
+| - | - |
 | --melonloader.agfoffline | Forces Assembly Generator to Run without Contacting the Remote API |
 | --melonloader.agfregenerate | Forces Regeneration of Assembly |
+| --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
 | --melonloader.agfvunity | Forces Assembly Generator to use a Specified Version of Unity Dependencies |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
 | --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
-| --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
-| --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
-| --melonloader.disablestartscreen | Disable the Start Screen |
 | --melonloader.disableunityclc | Disable Unity Console Log Cleaner | 
 
 ---
@@ -208,8 +212,8 @@ You can read more about attaching the dnSpy debugger in the [MelonLoader wiki](h
 
 - The Proxy DLL is able to be Renamed to the Compatible File Names below.
 - By Default the Proxy is named as "version.dll".
-- For most Unity Games the Default File Name should work perfectly fine.
-- Some Unity Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Unity Engine used by the Game, etc.
+- For most Games the Default File Name should work perfectly fine.
+- Some Games may have you use a different Proxy File Name depending on the Architecture, Operating System, version of the Engine used by the Game, etc.
 
 | File Names: |
 | - |
@@ -242,6 +246,7 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [mgGif](https://github.com/gwaredd/mgGif) is licensed under the MIT License. See [LICENSE](https://github.com/gwaredd/mgGif/blob/main/LICENSE) for the full License.
 - [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) is licensed under the MIT License. See [LICENSE](https://github.com/nesrak1/AssetsTools.NET/blob/master/LICENSE) for the full License.
 - [AssetRipper.VersionUtilities](https://github.com/AssetRipper/VersionUtilities) is licensed under the MIT License. See [LICENSE](https://github.com/AssetRipper/VersionUtilities/blob/master/License.md) for the full License.
+- Steam Library, VDF, and ACF Parsing from [SteamFinder.cs](https://github.com/Umbranoxio/BeatSaberModInstaller/blob/master/BeatSaberModManager/Dependencies/SteamFinder.cs) by [Umbranoxio](https://github.com/Umbranoxio) and [Dalet](https://github.com/Dalet).
 - [bHaptics Haptic Library](https://github.com/bhaptics/haptic-library) is licensed under All rights reserved Copyright (c) 2016-2021 bHaptics Inc.  
 See [Terms and Conditions](https://www.bhaptics.com/legals/terms-and-conditions) for the full License. We have Express Permission from bHaptics.
 

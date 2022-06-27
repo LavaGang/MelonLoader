@@ -19,7 +19,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
 
             if (!ShouldSetup())
             {
-                MelonLogger.Msg($"{Name} is up to date.");
+                Core.Logger.Msg($"{Name} is up to date.");
                 return true;
             }
 
@@ -28,7 +28,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode
                 && ((this is DeobfuscationMap) || !File.Exists(FilePath)))
             {
-                MelonLogger.Msg($"Downloading {Name}...");
+                Core.Logger.Msg($"Downloading {Name}...");
                 if (!FileHandler.Download(URL, FilePath))
                 {
                     ThrowInternalFailure($"Failed to Download {Name}!");
@@ -36,7 +36,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
                 }
             }
 
-            MelonLogger.Msg($"Processing {Name}...");
+            Core.Logger.Msg($"Processing {Name}...");
             if (!FileHandler.Process(FilePath, Destination))
             {
                 ThrowInternalFailure($"Failed to Process {Name}!");

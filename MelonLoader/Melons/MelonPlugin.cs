@@ -1,10 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+#pragma warning disable 0618 // Disabling the obsolete references warning to prevent the IDE going crazy when subscribing deprecated methods to some events in RegisterCallbacks
 
 namespace MelonLoader
 {
-    public abstract class MelonPlugin : MelonBase
+    public abstract class MelonPlugin : Melon<MelonPlugin>
     {
+        static MelonPlugin()
+        {
+            TypeName = "Plugin";
+        }
+
+        protected internal override void RegisterCallbacks()
+        {
+            base.RegisterCallbacks();
+
+            MelonEvents.OnPreInitialization.Subscribe(OnPreInitialization, Priority);
+            MelonEvents.OnApplicationEarlyStart.Subscribe(OnApplicationEarlyStart, Priority);
+            MelonEvents.OnPreModsLoaded.Subscribe(OnPreModsLoaded, Priority);
+            MelonEvents.OnPreModsLoaded.Subscribe(OnApplicationStart, Priority);
+            MelonEvents.OnApplicationStart.Subscribe(OnApplicationStarted, Priority);
+            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart, Priority);
+            MelonEvents.OnPreSupportModule.Subscribe(OnPreSupportModule, Priority);
+        }
+
+        #region Callbacks
+
         /// <summary>
         /// Runs before Game Initialization.
         /// </summary>
@@ -14,6 +35,20 @@ namespace MelonLoader
         /// Runs after Game Initialization, before OnApplicationStart and before Assembly Generation on Il2Cpp games
         /// </summary>
         public virtual void OnApplicationEarlyStart() { }
+
+        /// <summary>
+        /// Runs before MelonMods are loaded from the Mods folder.
+        /// </summary>
+        public virtual void OnPreModsLoaded() { }
+
+        /// <summary>
+        /// Runs after all MelonLoader components are fully initialized (including all MelonMods).
+        /// </summary>
+        public virtual void OnApplicationStarted() { }
+
+        #endregion
+
+        #region Obsolete Members
 
         [Obsolete()]
         private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
@@ -35,5 +70,7 @@ namespace MelonLoader
                 return _LegacyGameAttributes;
             }
         }
+
+        #endregion
     }
 }

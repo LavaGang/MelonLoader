@@ -15,6 +15,7 @@ using MelonLoader.TinyJSON;
 using MelonLoader.InternalUtils;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using MelonLoader.Lemons.Cryptography;
 #pragma warning disable 0618
 
 namespace MelonLoader
@@ -22,6 +23,7 @@ namespace MelonLoader
     public static class MelonUtils
     {
         private static readonly Random RandomNumGen = new Random();
+        private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
 
         internal static void Setup(AppDomain domain)
         {
@@ -45,13 +47,18 @@ namespace MelonLoader
             IsDemeo = (UnityInformationHandler.GameDeveloper.Equals("Resolution Games") && (UnityInformationHandler.GameName.StartsWith("115913 Demeo") || UnityInformationHandler.GameName.StartsWith("Demeo") || UnityInformationHandler.GameName.StartsWith("Demeo PC Edition")));
             IsMuseDash = (UnityInformationHandler.GameDeveloper.Equals("PeroPeroGames") && UnityInformationHandler.GameName.Equals("Muse Dash"));
             IsBONEWORKS = (UnityInformationHandler.GameDeveloper.Equals("Stress Level Zero") && UnityInformationHandler.GameName.Equals("BONEWORKS"));
-            Main.IsBoneworks = IsBONEWORKS;
+
+            CurrentPlatform = IsGame32Bit() ? MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86 : MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64; // Temporarily
+
+            CurrentDomain = IsGameIl2Cpp() ? MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP : MelonPlatformDomainAttribute.CompatibleDomains.MONO;
         }
 
         public static string BaseDirectory { get; private set; }
         public static string GameDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
         public static string UserLibsDirectory { get; private set; }
+        public static MelonPlatformAttribute.CompatiblePlatforms CurrentPlatform { get; private set; }
+        public static MelonPlatformDomainAttribute.CompatibleDomains CurrentDomain { get; private set; }
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
         public static bool IsBONEWORKS { get; private set; }
         public static bool IsDemeo { get; private set; }
@@ -108,8 +115,26 @@ namespace MelonLoader
         public static MelonBase GetMelonFromStackTrace()
         {
             StackTrace st = new StackTrace(3, true);
+            return GetMelonFromStackTrace(st);
+        }
+
+        public static MelonBase GetMelonFromStackTrace(StackTrace st, bool allFrames = false)
+        {
             if (st.FrameCount <= 0)
                 return null;
+
+            if (allFrames)
+            {
+                foreach (StackFrame frame in st.GetFrames())
+                {
+                    MelonBase ret = CheckForMelonInFrame(frame);
+                    if (ret != null)
+                        return ret;
+                }
+                return null;
+
+            }
+
             MelonBase output = CheckForMelonInFrame(st);
             if (output == null)
                 output = CheckForMelonInFrame(st, 1);
@@ -117,25 +142,23 @@ namespace MelonLoader
                 output = CheckForMelonInFrame(st, 2);
             return output;
         }
+
         private static MelonBase CheckForMelonInFrame(StackTrace st, int frame = 0)
         {
             StackFrame sf = st.GetFrame(frame);
             if (sf == null)
                 return null;
-            MethodBase method = sf.GetMethod();
-            if (method == null)
-                return null;
-            Type methodClassType = method.DeclaringType;
-            if (methodClassType == null)
-                return null;
-            Assembly asm = methodClassType.Assembly;
-            if (asm == null)
-                return null;
-            MelonBase melon = MelonHandler.Plugins.Find(x => (x.Assembly == asm));
-            if (melon == null)
-                melon = MelonHandler.Mods.Find(x => (x.Assembly == asm));
-            return melon;
+
+            return CheckForMelonInFrame(sf);
         }
+
+        private static MelonBase CheckForMelonInFrame(StackFrame sf)
+            //The JIT compiler on .NET 6 on Windows 10 (win11 is fine, somehow) really doesn't like us calling StackFrame.GetMethod here
+            //Rather than trying to work out why, I'm just going to call it via reflection.
+            => GetMelonFromAssembly(((MethodBase)StackFrameGetMethod.Invoke(sf, new object[0]))?.DeclaringType?.Assembly);
+
+        private static MelonBase GetMelonFromAssembly(Assembly asm)
+            => asm == null ? null : MelonHandler.Plugins.Cast<MelonBase>().FirstOrDefault(x => x.Assembly == asm) ?? MelonHandler.Mods.FirstOrDefault(x => x.Assembly == asm);
 
         public static string ColorToANSI(ConsoleColor color)
         {
@@ -158,6 +181,19 @@ namespace MelonLoader
                 ConsoleColor.Yellow => "\x1b[93m",
                 _ => "\x1b[97m",
             };
+        }
+
+        public static string ComputeSimpleSHA256Hash(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return "null";
+
+            byte[] byteHash = LemonSHA256.ComputeSHA256Hash(File.ReadAllBytes(filePath));
+            string finalHash = string.Empty;
+            foreach (byte b in byteHash)
+                finalHash += b.ToString("x2");
+
+            return finalHash;
         }
 
         public static T ParseJSONStringtoStruct<T>(string jsonstr)
@@ -195,25 +231,34 @@ namespace MelonLoader
                 return null;
 
             Type requestedType = typeof(T);
+            string requestedAssemblyName = requestedType.Assembly.GetName().Name;
             List<T> output = new List<T>();
             foreach (Attribute att in att_tbl)
             {
                 Type attType = att.GetType();
                 string attAssemblyName = attType.Assembly.GetName().Name;
-                string requestedAssemblyName = requestedType.Assembly.GetName().Name;
 
                 if ((attType == requestedType)
-                    || attType.FullName.Equals(requestedType.FullName)
+                    || IsTypeEqualToFullName(attType, requestedType.FullName)
                     || ((attAssemblyName.Equals("MelonLoader")
                         || attAssemblyName.Equals("MelonLoader.ModHandler"))
                         && (requestedAssemblyName.Equals("MelonLoader")
                         || requestedAssemblyName.Equals("MelonLoader.ModHandler"))
-                        && attType.Name.Equals(requestedType.Name)))
+                        && IsTypeEqualToName(attType, requestedType.Name)))
                     output.Add(att as T);
             }
 
             return output.ToArray();
         }
+
+        public static bool IsTypeEqualToName(Type type1, string type2)
+            => type1.Name == type2 || (type1 != typeof(object) && IsTypeEqualToName(type1.BaseType, type2));
+
+        public static bool IsTypeEqualToFullName(Type type1, string type2)
+            => type1.FullName == type2 || (type1 != typeof(object) && IsTypeEqualToFullName(type1.BaseType, type2));
+
+        public static string MakePlural(this string str, int amount)
+            => amount == 1 ? str : $"{str}s";
 
         public static IEnumerable<Type> GetValidTypes(this Assembly asm)
             => GetValidTypes(asm, null);

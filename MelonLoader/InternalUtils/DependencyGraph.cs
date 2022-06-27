@@ -28,7 +28,7 @@ namespace MelonLoader.InternalUtils
             // Create a vertex in the dependency graph for each Melon to load
             for (int i = 0; i < size; ++i)
             {
-                Assembly melonAssembly = melons[i].Assembly;
+                Assembly melonAssembly = melons[i].MelonAssembly.Assembly;
                 string melonName = melons[i].Info.Name;
 
                 Vertex melonVertex = new Vertex(i, melons[i], melonName);
@@ -46,7 +46,7 @@ namespace MelonLoader.InternalUtils
 
             foreach (Vertex melonVertex in vertices)
             {
-                Assembly melonAssembly = melonVertex.melon.Assembly;
+                Assembly melonAssembly = melonVertex.melon.MelonAssembly.Assembly;
                 missingDependencies.Clear();
                 optionalDependencies.Clear();
                 incompatibilities.Clear();
@@ -69,7 +69,7 @@ namespace MelonLoader.InternalUtils
                     foreach (string name in incompatibleAssemblies.AssemblyNames)
                         foreach (Vertex v in vertices)
                         {
-                            AssemblyName assemblyName = v.melon.Assembly.GetName();
+                            AssemblyName assemblyName = v.melon.MelonAssembly.Assembly.GetName();
                             if (v != melonVertex
                                 && assemblyName.Name == name)
                             {

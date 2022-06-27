@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-#pragma warning disable 0618
 
 namespace Harmony
 {

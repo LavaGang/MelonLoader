@@ -9,7 +9,7 @@ on:
 
 jobs:
   build_core_debug:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
@@ -23,7 +23,7 @@ jobs:
           name: MLCoreDebug
           path: Output/Debug/MelonLoader/
   build_core_release:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild

@@ -2,12 +2,13 @@
 using System.Diagnostics;
 using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
+#pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
 {
 	internal static class Core
     {
-        internal static HarmonyLib.Harmony HarmonyInstance = null;
+        internal static HarmonyLib.Harmony HarmonyInstance;
 
         private static int Initialize()
         {
@@ -17,7 +18,6 @@ namespace MelonLoader
 
             MelonUtils.Setup(curDomain);
             Assertions.LemonAssertMapping.Setup();
-            MelonHandler.Setup();
 
             if (!MonoLibrary.Setup()
                 || !MonoResolveManager.Setup())
@@ -34,55 +34,44 @@ namespace MelonLoader
             MelonLaunchOptions.Load();
             bHaptics.Load();
 
-            MelonCompatibilityLayer.Setup();
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnPreInitialization);
+            MelonCompatibilityLayer.LoadModules();
 
-            MelonHandler.LoadPlugins();
-            MelonHandler.OnPreInitialization();
+            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
+            MelonEvents.OnPreInitialization.Invoke();
 
             return 0;
         }
 
         private static int PreStart()
         {
-            MelonHandler.OnApplicationEarlyStart();
+            MelonEvents.OnApplicationEarlyStart.Invoke();
             return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
         }
 
         private static int Il2CppGameSetup()
-            => (MelonUtils.IsGameIl2Cpp()
-                && !Il2CppAssemblyGenerator.Run())
-                ? 1 : 0;
+            => Il2CppAssemblyGenerator.Run() ? 0 : 1;
 
         private static int Start()
         {
             bHaptics.Start();
 
-            MelonHandler.OnApplicationStart_Plugins();
-            MelonHandler.LoadMods();
-            MelonHandler.OnPreSupportModule();
+            MelonEvents.OnPreModsLoaded.Invoke();
+            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
 
+            MelonEvents.OnPreSupportModule.Invoke();
             if (!SupportModule.Setup())
                 return 1;
 
-            MelonCompatibilityLayer.SetupModules(MelonCompatibilityLayer.SetupType.OnApplicationStart);
             AddUnityDebugLog();
-            MelonHandler.OnApplicationStart_Mods();
-            //MelonStartScreen.DisplayModLoadIssuesIfNeeded();
+            RegisterTypeInIl2Cpp.SetReady();
+
+            MelonEvents.OnApplicationStart.Invoke();
 
             return 0;
         }
 
-        internal static void OnApplicationLateStart()
-        {
-            MelonHandler.OnApplicationLateStart_Plugins();
-            MelonHandler.OnApplicationLateStart_Mods();
-            MelonStartScreen.Finish();
-        }
-
         internal static void Quit()
         {
-            MelonHandler.OnApplicationQuit();
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();
@@ -96,9 +85,11 @@ namespace MelonLoader
 
         private static void AddUnityDebugLog()
         {
-            SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
-            SupportModule.Interface.UnityDebugLog("~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Developers!   ~");
-            SupportModule.Interface.UnityDebugLog("--------------------------------------------------------------------------------------------------");
+            var msg = "~   This Game has been MODIFIED using MelonLoader. DO NOT report any issues to the Game Developers!   ~";
+            var line = new string('-', msg.Length);
+            SupportModule.Interface.UnityDebugLog(line);
+            SupportModule.Interface.UnityDebugLog(msg);
+            SupportModule.Interface.UnityDebugLog(line);
         }
     }
 }
