@@ -198,19 +198,9 @@ namespace MelonLoader
         #region Callbacks
 
         /// <summary>
-        /// Runs before Support Module Initialization, after Assembly Generation on Il2Cpp Games
+        /// Runs before Support Module Initialization and after Assembly Generation for Il2Cpp Games.
         /// </summary>
         public virtual void OnPreSupportModule() { }
-
-        /// <summary>
-        /// Runs after Game Initialization.
-        /// </summary>
-        public virtual void OnApplicationStart() { }
-
-        /// <summary>
-        /// Runs after OnApplicationStart.
-        /// </summary>
-        public virtual void OnApplicationLateStart() { }
 
         /// <summary>
         /// Runs once per frame.
@@ -466,6 +456,7 @@ namespace MelonLoader
             MelonEvents.OnLateUpdate.Subscribe(OnLateUpdate, Priority);
             MelonEvents.OnGUI.Subscribe(OnGUI, Priority);
             MelonEvents.OnFixedUpdate.Subscribe(OnFixedUpdate, Priority);
+            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart, Priority);
 
             MelonPreferences.OnPreferencesLoaded.Subscribe(PrefsLoaded, Priority);
             MelonPreferences.OnPreferencesSaved.Subscribe(PrefsSaved, Priority);
@@ -594,12 +585,18 @@ namespace MelonLoader
 
         #region Obsolete Members
 
+        private Harmony.HarmonyInstance _OldHarmonyInstance;
+
+        [Obsolete("Please use either the OnLoaderLateInitialized callback, or the 'MelonEvents::OnApplicationLateStart' event instead.")]
+        public virtual void OnApplicationLateStart() { }
+
+        [Obsolete("For mods, use OnLoaderInitialized or OnLoaderLateInitialized instead. For plugins, use OnPreModsLoaded instead.")]
+        public virtual void OnApplicationStart() { }
+
         [Obsolete("Please use OnPreferencesSaved instead.")]
         public virtual void OnModSettingsApplied() { }
 
-        private Harmony.HarmonyInstance _OldHarmonyInstance;
         [Obsolete("Please use HarmonyInstance instead.")]
-
 #pragma warning disable IDE1006 // Naming Styles
         public Harmony.HarmonyInstance harmonyInstance { get { if (_OldHarmonyInstance == null) _OldHarmonyInstance = new Harmony.HarmonyInstance(HarmonyInstance.Id); return _OldHarmonyInstance; } }
 #pragma warning restore IDE1006 // Naming Styles
