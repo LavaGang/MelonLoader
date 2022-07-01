@@ -20,7 +20,6 @@ namespace MelonLoader
             MelonEvents.OnPreModsLoaded.Subscribe(OnPreModsLoaded, Priority);
             MelonEvents.OnPreModsLoaded.Subscribe(OnApplicationStart, Priority);
             MelonEvents.OnApplicationStart.Subscribe(OnApplicationStarted, Priority);
-            MelonEvents.OnApplicationLateStart.Subscribe(OnApplicationLateStart, Priority);
             MelonEvents.OnPreSupportModule.Subscribe(OnPreSupportModule, Priority);
         }
 
@@ -37,7 +36,7 @@ namespace MelonLoader
         public virtual void OnApplicationEarlyStart() { }
 
         /// <summary>
-        /// Runs before MelonMods are loaded from the Mods folder.
+        /// Runs before MelonMods from the Mods folder are loaded.
         /// </summary>
         public virtual void OnPreModsLoaded() { }
 
