@@ -35,11 +35,11 @@ namespace MelonLoader
         /// <summary>
         /// Creates a new Melon instance for a Wrapper.
         /// </summary>
-        public static T CreateWrapper<T>(string name, string version, string author = null, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
+        public static T CreateWrapper<T>(string name, string author, string version, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
         {
             var melon = new T
             {
-                Info = new MelonInfoAttribute(typeof(T), name, version, author),
+                Info = new MelonInfoAttribute(name, author, version, null, typeof(T)),
                 MelonAssembly = MelonAssembly.LoadMelonAssembly(typeof(T).Assembly),
                 Priority = priority,
                 ConsoleColor = color ?? MelonLogger.DefaultMelonColor,
