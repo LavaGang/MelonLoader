@@ -24,7 +24,7 @@ namespace MelonLoader
         /// <summary>
         /// Author of the Melon.
         /// </summary>
-        public string Author { get; internal set; } // This used to be optional, but is now required (for i)
+        public string Author { get; internal set; } // This used to be optional, but is now required
 
         /// <summary>
         /// Download Link of the Melon.
