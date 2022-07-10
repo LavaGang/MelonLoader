@@ -14,7 +14,7 @@ namespace MelonLoader
 
         public RottenMelon(Type type, string errorMessage, Exception exception = null)
         {
-            assembly = MelonAssembly.LoadMelonAssembly(type.Assembly);
+            assembly = MelonAssembly.LoadMelonAssembly(null, type.Assembly);
             this.type = type;
             this.errorMessage = errorMessage;
             this.exception = exception;

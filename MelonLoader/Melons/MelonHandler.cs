@@ -40,14 +40,22 @@ namespace MelonLoader
             MelonLogger.WriteSpacer();
 
             var files = Directory.GetFiles(path, "*.dll");
-            var melons = new List<T>();
+            var melonAssemblies = new List<MelonAssembly>();
 
             foreach (var f in files)
             {
-                var asm = MelonAssembly.LoadMelonAssembly(f);
+                var asm = MelonAssembly.LoadMelonAssembly(f, false);
                 if (asm == null)
                     continue;
 
+                melonAssemblies.Add(asm);
+            }
+
+            var melons = new List<T>();
+
+            foreach (var asm in melonAssemblies)
+            {
+                asm.LoadMelons();
                 foreach (var m in asm.LoadedMelons)
                 {
                     if (m is T t)
@@ -61,6 +69,8 @@ namespace MelonLoader
                     }
                 }
             }
+
+            MelonLogger.WriteSpacer();
 
             MelonBase.RegisterSorted(melons);
 
@@ -123,7 +133,7 @@ namespace MelonLoader
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromByteArray(byte[] filedata, byte[] symbolsdata = null, string filepath = null)
         {
-            var asm = MelonAssembly.LoadMelonAssembly(filedata, symbolsdata);
+            var asm = MelonAssembly.LoadRawMelonAssembly(filepath, filedata, symbolsdata);
             if (asm == null)
                 return;
 
@@ -133,7 +143,7 @@ namespace MelonLoader
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromAssembly(Assembly asm, string filepath = null)
         {
-            var ma = MelonAssembly.LoadMelonAssembly(asm);
+            var ma = MelonAssembly.LoadMelonAssembly(filepath, asm);
             if (ma == null)
                 return;
 

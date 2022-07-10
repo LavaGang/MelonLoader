@@ -80,7 +80,7 @@ namespace MelonLoader.CompatibilityLayers
 			if (string.IsNullOrEmpty(plugin_version) || plugin_version.Equals("0.0.0.0"))
 				plugin_version = "1.0.0.0";
 
-			var melon = MelonBase.CreateWrapper<IPAPluginWrapper>(pluginName, plugin_version, processes: processAttrs);
+			var melon = MelonBase.CreateWrapper<IPAPluginWrapper>(pluginName, null, plugin_version, processes: processAttrs);
 
 			melon.pluginInstance = pluginInstance;
 			PluginManager._Plugins.Add(pluginInstance);

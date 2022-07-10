@@ -73,7 +73,7 @@ namespace MelonLoader.CompatibilityLayers
             if (string.IsNullOrEmpty(modVersion) || modVersion.Equals("0.0.0.0"))
                 modVersion = "1.0.0.0";
 
-            var melon = MelonBase.CreateWrapper<MuseDashModWrapper>(modName, modVersion);
+            var melon = MelonBase.CreateWrapper<MuseDashModWrapper>(modName, null, modVersion);
             melon.modInstance = modInstance;
             ModLoader.ModLoader.mods.Add(modInstance);
             ModLoader.ModLoader.LoadDependency(asm);

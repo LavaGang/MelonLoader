@@ -35,12 +35,12 @@ namespace MelonLoader
         /// <summary>
         /// Creates a new Melon instance for a Wrapper.
         /// </summary>
-        public static T CreateWrapper<T>(string name, string version, string author = null, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
+        public static T CreateWrapper<T>(string name, string author, string version, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
         {
             var melon = new T
             {
-                Info = new MelonInfoAttribute(typeof(T), name, version, author),
-                MelonAssembly = MelonAssembly.LoadMelonAssembly(typeof(T).Assembly),
+                Info = new MelonInfoAttribute(name, author, version, null, typeof(T)),
+                MelonAssembly = MelonAssembly.LoadMelonAssembly(null, typeof(T).Assembly),
                 Priority = priority,
                 ConsoleColor = color ?? MelonLogger.DefaultMelonColor,
                 AuthorConsoleColor = authorColor ?? MelonLogger.DefaultTextColor,
@@ -613,8 +613,8 @@ namespace MelonLoader
         [Obsolete("Please use MelonAssembly.Hash instead.")]
         public string Hash => MelonAssembly.Hash;
 
-        [Obsolete("Please use MelonAssembly.Assembly.Location instead.")]
-        public string Location => MelonAssembly.Assembly.Location;
+        [Obsolete("Please use MelonAssembly.Location instead.")]
+        public string Location => MelonAssembly.Location;
 
         #endregion
 
