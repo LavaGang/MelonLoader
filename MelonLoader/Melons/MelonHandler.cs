@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader
 {
     public static class MelonHandler
     {
+        /// <summary>
+        /// A couple common naming conventions for mods that may care about their assemblies definitely being loaded first,
+        /// even before the dependency graph can be made. This will almost never matter, but in a few niche
+        /// cases could prevent modders from needing to care about alphabetical ordering when naming their DLLs.
+        /// </summary>
+        private static readonly string[] PriorityLoadTerms = { "API", "Helper", "Lib"};
+        
         /// <summary>
         /// Directory of Plugins.
         /// </summary>
@@ -39,7 +47,9 @@ namespace MelonLoader
             MelonLogger.Msg(ConsoleColor.Yellow, line);
             MelonLogger.WriteSpacer();
 
-            var files = Directory.GetFiles(path, "*.dll");
+            var files = Directory.GetFiles(path, "*.dll")
+                .OrderByDescending(s => PriorityLoadTerms.Any(term => Path.GetFileName(s).Contains(term)))
+                .ThenBy(s => s);
             var melons = new List<T>();
 
             foreach (var f in files)
