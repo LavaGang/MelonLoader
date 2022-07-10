@@ -43,13 +43,14 @@
 9. Gave all MelonModules their own logger instances.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
 10. Added MelonAssemblies.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
 11. Fixed MelonLoader's deinitialization time.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
-12. Added a new constructor for MelonInfo.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+12. Started a slow transition to the Semver format upon Melons.    (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
 13. Fixed Crash Issue with Demeo Compatibility Layer.
 14. Fixed Issue with VR Mode on Demeo.
 15. Fixed Issues with Demeo CL not refreshing Melon Listings.
 16. Fixed MME Issue with MelonBase.
 17. Updated [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to v2022.1.0-pre-release.6.
 18. Backported StackFrame::GetMethod Fix.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
+19. Added a singleton class for Melons (Melon<T>)    (Credits to [SlidyDev](https://github.com/SlidyDev) :])
 
 ---
 
