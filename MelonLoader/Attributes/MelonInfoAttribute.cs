@@ -31,7 +31,7 @@ namespace MelonLoader
         /// </summary>
         public string DownloadLink { get; internal set; } // Might get Removed. Not sure yet.
 
-        public MelonInfoAttribute(Type type, string name, string author, SemVersion version, string downloadLink = null)
+        public MelonInfoAttribute(Type type, string name, string author, uint versionMajor, uint versionMinor = 0, uint versionPatch = 0, string downloadLink = null)
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
@@ -42,14 +42,11 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(author))
                 throw new ArgumentNullException(nameof(author));
 
-            if (version == null)
-                throw new ArgumentNullException(nameof(version));
-
             SystemType = type;
             Name = name;
             Author = author;
 
-            Version = version.ToString();
+            Version = $"{versionMajor}.{versionMinor}.{versionPatch}";
 
             DownloadLink = downloadLink; // Might get Removed. Not sure yet.
         }
