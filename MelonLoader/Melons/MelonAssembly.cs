@@ -43,7 +43,8 @@ namespace MelonLoader
         /// Loads or finds a MelonAssembly from path.
         /// </summary>
         /// <param name="path">Path of the MelonAssembly</param>
-        public static MelonAssembly LoadMelonAssembly(string path)
+        /// <param name="loadMelons">Sets whether Melons should be auto-loaded or not</param>
+        public static MelonAssembly LoadMelonAssembly(string path, bool loadMelons = true)
         {
             if (path == null)
             {
@@ -64,13 +65,13 @@ namespace MelonLoader
                 return null;
             }
 
-            return LoadMelonAssembly(assembly);
+            return LoadMelonAssembly(path, assembly, loadMelons);
         }
 
         /// <summary>
         /// Loads or finds a MelonAssembly from raw Assembly Data.
         /// </summary>
-        public static MelonAssembly LoadMelonAssembly(byte[] assemblyData, byte[] symbolsData = null)
+        public static MelonAssembly LoadRawMelonAssembly(string path, byte[] assemblyData, byte[] symbolsData = null, bool loadMelons = true)
         {
             if (assemblyData == null)
                 MelonLogger.Error("Failed to load a Melon Assembly: assemblyData cannot be null.");
@@ -86,14 +87,17 @@ namespace MelonLoader
                 return null;
             }
 
-            return LoadMelonAssembly(assembly);
+            return LoadMelonAssembly(path, assembly, loadMelons);
         }
 
         /// <summary>
         /// Loads or finds a MelonAssembly.
         /// </summary>
-        public static MelonAssembly LoadMelonAssembly(Assembly assembly)
+        public static MelonAssembly LoadMelonAssembly(string path, Assembly assembly, bool loadMelons = true)
         {
+            if (!File.Exists(path))
+                path = assembly.Location;
+
             if (assembly == null)
             {
                 MelonLogger.Error("Failed to load a Melon Assembly: Assembly cannot be null.");
@@ -104,23 +108,18 @@ namespace MelonLoader
             if (ma != null)
                 return ma;
 
-            MelonLogger.Msg($"Loading Melon Assembly: '{assembly.Location}'...");
+            var shortPath = path;
+            if (shortPath.StartsWith(MelonUtils.BaseDirectory))
+                shortPath = "." + shortPath.Remove(0, MelonUtils.BaseDirectory.Length);
+
+            MelonLogger.Msg($"Loading Melon Assembly: '{shortPath}'...");
             OnAssemblyResolving.Invoke(assembly);
-            ma = new MelonAssembly(assembly);
+            ma = new MelonAssembly(assembly, path);
             loadedAssemblies.Add(ma);
-            ma.LoadMelons();
-            MelonLogger.Msg($"{ma.loadedMelons.Count} {"Melon".MakePlural(ma.loadedMelons.Count)} loaded.");
-            if (ma.rottenMelons.Count != 0)
-            {
-                MelonLogger.Error($"Failed to load {ma.rottenMelons.Count} {"Melon".MakePlural(ma.rottenMelons.Count)}:");
-                foreach (var r in ma.rottenMelons)
-                {
-                    MelonLogger.Error($"Failed to load Melon '{r.type.FullName}': {r.errorMessage}");
-                    if (r.exception != null)
-                        MelonLogger.Error(r.exception);
-                }
-            }
-            MelonLogger.WriteSpacer();
+
+            if (loadMelons)
+                ma.LoadMelons();
+
             return ma;
         }
 
@@ -129,6 +128,7 @@ namespace MelonLoader
         #region Instance
 
         private string _hash;
+        private bool melonsLoaded;
 
         private List<MelonBase> loadedMelons = new List<MelonBase>();
         private List<RottenMelon> rottenMelons = new List<RottenMelon>();
@@ -149,7 +149,10 @@ namespace MelonLoader
                 return _hash;
             }
         }
+
         public Assembly Assembly { get; private set; }
+
+        public string Location { get; private set; }
 
         /// <summary>
         /// A list of all loaded Melons in the Assembly.
@@ -161,9 +164,10 @@ namespace MelonLoader
         /// </summary>
         public ReadOnlyCollection<RottenMelon> RottenMelons => rottenMelons.AsReadOnly();
 
-        private MelonAssembly(Assembly assembly)
+        private MelonAssembly(Assembly assembly, string location)
         {
-            this.Assembly = assembly;
+            Assembly = assembly;
+            Location = location ?? "";
         }
 
         /// <summary>
@@ -182,8 +186,11 @@ namespace MelonLoader
             UnregisterMelons("MelonLoader is deinitializing.", true);
         }
 
-        private void LoadMelons()
+        public void LoadMelons()
         {
+            if (melonsLoaded)
+                return;
+
             MelonEvents.OnApplicationDefiniteQuit.Subscribe(OnApplicationQuit);
 
             // \/ Custom Resolver \/
@@ -249,6 +256,20 @@ namespace MelonLoader
             loadedMelons.Add(melon);
 
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
+
+            MelonLogger.Msg($"{loadedMelons.Count} {"Melon".MakePlural(loadedMelons.Count)} loaded from {Path.GetFileName(Location)}.");
+            if (rottenMelons.Count != 0)
+            {
+                MelonLogger.Error($"Failed to load {rottenMelons.Count} {"Melon".MakePlural(rottenMelons.Count)} from {Path.GetFileName(Location)}:");
+                foreach (var r in rottenMelons)
+                {
+                    MelonLogger.Error($"Failed to load Melon '{r.type.FullName}': {r.errorMessage}");
+                    if (r.exception != null)
+                        MelonLogger.Error(r.exception);
+                }
+            }
+
+            melonsLoaded = true;
         }
 
         #endregion

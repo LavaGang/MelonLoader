@@ -40,7 +40,7 @@ namespace MelonLoader
             var melon = new T
             {
                 Info = new MelonInfoAttribute(name, author, version, null, typeof(T)),
-                MelonAssembly = MelonAssembly.LoadMelonAssembly(typeof(T).Assembly),
+                MelonAssembly = MelonAssembly.LoadMelonAssembly(null, typeof(T).Assembly),
                 Priority = priority,
                 ConsoleColor = color ?? MelonLogger.DefaultMelonColor,
                 AuthorConsoleColor = authorColor ?? MelonLogger.DefaultTextColor,
@@ -613,8 +613,8 @@ namespace MelonLoader
         [Obsolete("Please use MelonAssembly.Hash instead.")]
         public string Hash => MelonAssembly.Hash;
 
-        [Obsolete("Please use MelonAssembly.Assembly.Location instead.")]
-        public string Location => MelonAssembly.Assembly.Location;
+        [Obsolete("Please use MelonAssembly.Location instead.")]
+        public string Location => MelonAssembly.Location;
 
         #endregion
 
