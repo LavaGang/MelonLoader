@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MelonLoader
 {
-    public abstract class MelonMod : Melon<MelonMod>
+    public abstract class MelonMod : MelonTypeBase<MelonMod>
     {
         static MelonMod()
         {

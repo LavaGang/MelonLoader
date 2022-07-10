@@ -24,6 +24,22 @@ namespace MelonLoader
         public static ReadOnlyCollection<MelonAssembly> LoadedAssemblies => loadedAssemblies.AsReadOnly();
 
         /// <summary>
+        /// Tries to find the instance of Melon with type T, whether it's registered or not
+        /// </summary>
+        public static T FindMelonInstance<T>() where T : MelonBase
+        {
+            foreach (var asm in loadedAssemblies)
+            {
+                foreach (var melon in asm.loadedMelons)
+                {
+                    if (melon is T teaMelon)
+                        return teaMelon;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets the MelonAssembly of the given member. If the given member is not in any MelonAssembly, returns null.
         /// </summary>
         public static MelonAssembly GetMelonAssemblyOfMember(MemberInfo member, object obj = null)
