@@ -1,4 +1,4 @@
-﻿namespace MelonLoader.Melons
+﻿namespace MelonLoader
 {
     public static class Melon<T> where T : MelonBase
     {
