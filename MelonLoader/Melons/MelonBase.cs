@@ -1,9 +1,7 @@
 ﻿using MelonLoader.InternalUtils;
-using MelonLoader.Lemons.Cryptography;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 #pragma warning disable 0618
@@ -17,20 +15,20 @@ namespace MelonLoader
         /// <summary>
         /// Called once a Melon is fully registered.
         /// </summary>
-        public static readonly MelonEvent<MelonBase> OnMelonRegistered = new MelonEvent<MelonBase>();
+        public static readonly MelonEvent<MelonBase> OnMelonRegistered = new();
 
         /// <summary>
         /// Called when a Melon unregisters.
         /// </summary>
-        public static readonly MelonEvent<MelonBase> OnMelonUnregistered = new MelonEvent<MelonBase>();
+        public static readonly MelonEvent<MelonBase> OnMelonUnregistered = new();
 
         /// <summary>
         /// Called before a Melon starts initializing.
         /// </summary>
-        public static readonly MelonEvent<MelonBase> OnMelonInitializing = new MelonEvent<MelonBase>();
+        public static readonly MelonEvent<MelonBase> OnMelonInitializing = new();
 
         public static List<MelonBase> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
-        internal static List<MelonBase> _registeredMelons = new List<MelonBase>();
+        internal static List<MelonBase> _registeredMelons = new();
 
         /// <summary>
         /// Creates a new Melon instance for a Wrapper.
@@ -81,8 +79,8 @@ namespace MelonLoader
         private MelonProcessAttribute[] _processes = new MelonProcessAttribute[0];
         private MelonGameVersionAttribute[] _gameVersions = new MelonGameVersionAttribute[0];
 
-        public readonly MelonEvent OnRegister = new MelonEvent();
-        public readonly MelonEvent OnUnregister = new MelonEvent();
+        public readonly MelonEvent OnRegister = new();
+        public readonly MelonEvent OnUnregister = new();
 
         /// <summary>
         /// MelonAssembly of the Melon.
@@ -102,7 +100,7 @@ namespace MelonLoader
         /// <summary>
         /// Console Color of the Author that made this melon.
         /// </summary>
-        public ConsoleColor AuthorConsoleColor { get; internal set;}
+        public ConsoleColor AuthorConsoleColor { get; internal set; }
 
         /// <summary>
         /// Info Attribute of the Melon.
@@ -115,10 +113,7 @@ namespace MelonLoader
         public MelonProcessAttribute[] SupportedProcesses
         {
             get => _processes;
-            internal set
-            {
-                _processes = (value == null || value.Any(x => x.Universal)) ? new MelonProcessAttribute[0] : value;
-            }
+            internal set => _processes = (value == null || value.Any(x => x.Universal)) ? new MelonProcessAttribute[0] : value;
         }
 
         /// <summary>
@@ -127,10 +122,7 @@ namespace MelonLoader
         public MelonGameAttribute[] Games
         {
             get => _games;
-            internal set
-            {
-                _games = (value == null || value.Any(x => x.Universal)) ? new MelonGameAttribute[0] : value;
-            }
+            internal set => _games = (value == null || value.Any(x => x.Universal)) ? new MelonGameAttribute[0] : value;
         }
 
         /// <summary>
@@ -139,10 +131,7 @@ namespace MelonLoader
         public MelonGameVersionAttribute[] SupportedGameVersions
         {
             get => _gameVersions;
-            internal set
-            {
-                _gameVersions = (value == null || value.Any(x => x.Universal)) ? new MelonGameVersionAttribute[0] : value;
-            }
+            internal set => _gameVersions = (value == null || value.Any(x => x.Universal)) ? new MelonGameVersionAttribute[0] : value;
         }
 
         /// <summary>
@@ -241,7 +230,7 @@ namespace MelonLoader
         /// Runs when Melon Preferences get loaded.
         /// </summary>
         public virtual void OnPreferencesLoaded() { }
-        
+
         /// <summary>
         /// Runs when Melon Preferences get loaded. Gets passed the Preferences's File Path.
         /// </summary>
@@ -271,8 +260,8 @@ namespace MelonLoader
 
         #endregion
 
-        public Incompatibility[] FindIncompatiblities(MelonGameAttribute game, string processName, string gameVersion, 
-            string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform, 
+        public Incompatibility[] FindIncompatiblities(MelonGameAttribute game, string processName, string gameVersion,
+            string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform,
             MelonPlatformDomainAttribute.CompatibleDomains domain)
         {
             var result = new List<Incompatibility>();
@@ -304,7 +293,9 @@ namespace MelonLoader
         }
 
         public Incompatibility[] FindIncompatiblitiesFromContext()
-            => FindIncompatiblities(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, MelonUtils.GameVersion, BuildInfo.Version, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
+        {
+            return FindIncompatiblities(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, MelonUtils.GameVersion, BuildInfo.Version, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
+        }
 
         public static void PrintIncompatibilities(Incompatibility[] incompatibilities, MelonBase melon)
         {
@@ -446,7 +437,11 @@ namespace MelonLoader
             }
         }
 
-        protected internal virtual bool RegisterInternal() => true;
+        protected internal virtual bool RegisterInternal()
+        {
+            return true;
+        }
+
         protected internal virtual void UnregisterInternal() { }
 
         protected internal virtual void RegisterCallbacks()
@@ -479,7 +474,9 @@ namespace MelonLoader
         /// Tries to find a registered Melon that matches the given Info.
         /// </summary>
         public static MelonBase FindMelon(string melonName, string melonAuthor)
-            => _registeredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
+        {
+            return _registeredMelons.Find(x => x.Info.Name == melonName && x.Info.Author == melonAuthor);
+        }
 
         /// <summary>
         /// Unregisters the Melon and all other Melons located in the same Assembly.
@@ -553,13 +550,15 @@ namespace MelonLoader
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)
-            => ExecuteList(func, _registeredMelons, unregisterOnFail, unregistrationReason);
+        {
+            ExecuteList(func, _registeredMelons, unregisterOnFail, unregistrationReason);
+        }
 
         public static void ExecuteList<T>(LemonAction<T> func, List<T> melons, bool unregisterOnFail = false, string unregistrationReason = null) where T : MelonBase
         {
             var failedMelons = (unregisterOnFail ? new List<T>() : null);
 
-            LemonEnumerator<T> enumerator = new LemonEnumerator<T>(melons.ToArray());
+            LemonEnumerator<T> enumerator = new(melons.ToArray());
             while (enumerator.MoveNext())
             {
                 var melon = enumerator.Current;

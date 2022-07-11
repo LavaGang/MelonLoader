@@ -13,15 +13,31 @@ namespace MelonLoader
         /// <summary>
         /// Called before a process of resolving Melons from a MelonAssembly has started.
         /// </summary>
-        public static readonly MelonEvent<Assembly> OnAssemblyResolving = new MelonEvent<Assembly>();
+        public static readonly MelonEvent<Assembly> OnAssemblyResolving = new();
         public static event LemonFunc<Assembly, ResolvedMelons> CustomMelonResolvers;
 
-        internal static List<MelonAssembly> loadedAssemblies = new List<MelonAssembly>();
+        internal static List<MelonAssembly> loadedAssemblies = new();
 
         /// <summary>
         /// List of all loaded MelonAssemblies.
         /// </summary>
         public static ReadOnlyCollection<MelonAssembly> LoadedAssemblies => loadedAssemblies.AsReadOnly();
+
+        /// <summary>
+        /// Tries to find the instance of Melon with type T, whether it's registered or not
+        /// </summary>
+        public static T FindMelonInstance<T>() where T : MelonBase
+        {
+            foreach (var asm in loadedAssemblies)
+            {
+                foreach (var melon in asm.loadedMelons)
+                {
+                    if (melon is T teaMelon)
+                        return teaMelon;
+                }
+            }
+            return null;
+        }
 
         /// <summary>
         /// Gets the MelonAssembly of the given member. If the given member is not in any MelonAssembly, returns null.
@@ -130,10 +146,10 @@ namespace MelonLoader
         private string _hash;
         private bool melonsLoaded;
 
-        private List<MelonBase> loadedMelons = new List<MelonBase>();
-        private List<RottenMelon> rottenMelons = new List<RottenMelon>();
+        private readonly List<MelonBase> loadedMelons = new();
+        private readonly List<RottenMelon> rottenMelons = new();
 
-        public readonly MelonEvent OnUnregister = new MelonEvent();
+        public readonly MelonEvent OnUnregister = new();
 
         public bool HarmonyDontPatchAll { get; private set; } = true;
 

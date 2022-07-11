@@ -27,11 +27,11 @@ namespace MelonLoader
                 Directory.CreateDirectory(ModsDirectory);
         }
 
-        public static void LoadMelonsFromDirectory<T>(string path) where T : Melon<T>
+        public static void LoadMelonsFromDirectory<T>(string path) where T : MelonTypeBase<T>
         {
             path = Path.GetFullPath(path);
 
-            var loadingMsg = $"Loading {Melon<T>.TypeName}s from '{path}'...";
+            var loadingMsg = $"Loading {MelonTypeBase<T>.TypeName}s from '{path}'...";
             var line = new string('-', loadingMsg.Length + 1);
 
             MelonLogger.Msg(ConsoleColor.Yellow, line);
@@ -64,7 +64,7 @@ namespace MelonLoader
                     }
                     else
                     {
-                        MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{path}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {Melon<T>.TypeName}. Make sure it's in the right Directory.");
+                        MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{path}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {MelonTypeBase<T>.TypeName}. Make sure it's in the right Directory.");
                         continue;
                     }
                 }
@@ -75,7 +75,7 @@ namespace MelonLoader
             MelonBase.RegisterSorted(melons);
 
             MelonLogger.Msg(ConsoleColor.Yellow, line);
-            MelonLogger.Msg($"{Melon<T>._registeredMelons.Count} {Melon<T>.TypeName}s loaded.");
+            MelonLogger.Msg($"{MelonTypeBase<T>._registeredMelons.Count} {MelonTypeBase<T>.TypeName}s loaded.");
             MelonLogger.Msg(ConsoleColor.Yellow, line);
         }
 
@@ -84,13 +84,13 @@ namespace MelonLoader
         /// List of Plugins.
         /// </summary>
         [Obsolete("Use 'MelonPlugin.RegisteredMelons' instead.")]
-        public static List<MelonPlugin> Plugins => Melon<MelonPlugin>.RegisteredMelons;
+        public static List<MelonPlugin> Plugins => MelonTypeBase<MelonPlugin>.RegisteredMelons;
 
         /// <summary>
         /// List of Mods.
         /// </summary>
         [Obsolete("Use 'MelonMod.RegisteredMelons' instead.")]
-        public static List<MelonMod> Mods => Melon<MelonMod>.RegisteredMelons;
+        public static List<MelonMod> Mods => MelonTypeBase<MelonMod>.RegisteredMelons;
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromFile(string filelocation, bool is_plugin) => LoadFromFile(filelocation);
@@ -114,11 +114,11 @@ namespace MelonLoader
 
         [Obsolete("Use 'MelonPlugin.RegisteredMelons.Exists(1)' instead.")]
         public static bool IsPluginAlreadyLoaded(string name)
-            => Melon<MelonPlugin>._registeredMelons.Exists(x => x.Info.Name == name);
+            => MelonTypeBase<MelonPlugin>._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonMod.RegisteredMelons.Exists(1)' instead.")]
         public static bool IsModAlreadyLoaded(string name)
-            => Melon<MelonMod>._registeredMelons.Exists(x => x.Info.Name == name);
+            => MelonTypeBase<MelonMod>._registeredMelons.Exists(x => x.Info.Name == name);
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromFile(string filepath, string symbolspath = null)

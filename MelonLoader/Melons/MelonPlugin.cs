@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MelonLoader
 {
-    public abstract class MelonPlugin : Melon<MelonPlugin>
+    public abstract class MelonPlugin : MelonTypeBase<MelonPlugin>
     {
         static MelonPlugin()
         {
@@ -62,7 +62,7 @@ namespace MelonLoader
             {
                 if (_LegacyGameAttributes != null)
                     return _LegacyGameAttributes;
-                List<MelonPluginGameAttribute> newatts = new List<MelonPluginGameAttribute>();
+                List<MelonPluginGameAttribute> newatts = new();
                 foreach (MelonGameAttribute att in Games)
                     newatts.Add(new MelonPluginGameAttribute(att.Developer, att.Name));
                 _LegacyGameAttributes = newatts.ToArray();
