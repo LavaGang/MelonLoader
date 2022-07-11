@@ -26,11 +26,7 @@ namespace Semver
                 @"(?>\.(?<patch>\d+))?" +
                 @"(?>\-(?<pre>[0-9A-Za-z\-\.]+))?" +
                 @"(?>\+(?<build>[0-9A-Za-z\-\.]+))?$",
-#if NETSTANDARD
                 RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
-#else
-                RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture);
-#endif
 
 #if !NETSTANDARD
         /// <summary>
