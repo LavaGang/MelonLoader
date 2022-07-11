@@ -21,7 +21,7 @@ namespace Semver
 #endif
     {
         private static readonly Regex ParseEx =
-            new Regex(@"^(?<major>\d+)" +
+            new(@"^(?<major>\d+)" +
                 @"(?>\.(?<minor>\d+))?" +
                 @"(?>\.(?<patch>\d+))?" +
                 @"(?>\-(?<pre>[0-9A-Za-z\-\.]+))?" +

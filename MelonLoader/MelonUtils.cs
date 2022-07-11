@@ -22,7 +22,7 @@ namespace MelonLoader
 {
     public static class MelonUtils
     {
-        private static readonly Random RandomNumGen = new Random();
+        private static readonly Random RandomNumGen = new();
         private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
 
         internal static void Setup(AppDomain domain)
@@ -92,7 +92,7 @@ namespace MelonLoader
 
         public static string RandomString(int length)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
             for (int i = 0; i < length; i++)
                 builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
             return builder.ToString();
@@ -114,7 +114,7 @@ namespace MelonLoader
 
         public static MelonBase GetMelonFromStackTrace()
         {
-            StackTrace st = new StackTrace(3, true);
+            StackTrace st = new(3, true);
             return GetMelonFromStackTrace(st);
         }
 
@@ -200,7 +200,7 @@ namespace MelonLoader
         {
             if (string.IsNullOrEmpty(jsonstr))
                 return default;
-            Variant jsonarr = null;
+            Variant jsonarr;
             try { jsonarr = JSON.Load(jsonstr); }
             catch (Exception ex)
             {
@@ -232,7 +232,7 @@ namespace MelonLoader
 
             Type requestedType = typeof(T);
             string requestedAssemblyName = requestedType.Assembly.GetName().Name;
-            List<T> output = new List<T>();
+            List<T> output = new();
             foreach (Attribute att in att_tbl)
             {
                 Type attType = att.GetType();
@@ -262,16 +262,14 @@ namespace MelonLoader
 
         public static IEnumerable<Type> GetValidTypes(this Assembly asm)
             => GetValidTypes(asm, null);
+
         public static IEnumerable<Type> GetValidTypes(this Assembly asm, LemonFunc<Type, bool> predicate)
         {
             IEnumerable<Type> returnval = Enumerable.Empty<Type>();
             try { returnval = asm.GetTypes().AsEnumerable(); }
             catch (ReflectionTypeLoadException ex) { returnval = ex.Types; }
-            return returnval.Where(x =>
-                ((x != null)
-                    && ((predicate != null)
-                        ? predicate(x)
-                        : true)));
+
+            return returnval.Where(x => (x != null) && (predicate == null || predicate(x)));
         }
 
         public static bool IsNotImplemented(this MethodBase methodBase)
@@ -280,8 +278,8 @@ namespace MelonLoader
                 throw new ArgumentNullException(nameof(methodBase));
 
             DynamicMethodDefinition method = methodBase.ToNewDynamicMethodDefinition();
-            ILContext ilcontext = new ILContext(method.Definition);
-            ILCursor ilcursor = new ILCursor(ilcontext);
+            ILContext ilcontext = new(method.Definition);
+            ILCursor ilcursor = new(ilcontext);
 
             bool returnval = (ilcursor.Instrs.Count == 2)
                 && (ilcursor.Instrs[1].OpCode.Code == Mono.Cecil.Cil.Code.Throw);
@@ -368,16 +366,16 @@ namespace MelonLoader
             => Marshal.GetFunctionPointerForDelegate(del);
 
         public static NativeLibrary ToNewNativeLibrary(this IntPtr ptr)
-            => new NativeLibrary(ptr);
+            => new(ptr);
         public static NativeLibrary<T> ToNewNativeLibrary<T>(this IntPtr ptr)
-            => new NativeLibrary<T>(ptr);
+            => new(ptr);
         public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
             => NativeLibrary.GetExport(ptr, name);
 
         public static ClassDatabasePackage LoadIncludedClassPackage(this AssetsManager assetsManager)
         {
             ClassDatabasePackage classPackage = null;
-            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata))
+            using (MemoryStream mstream = new(Properties.Resources.classdata))
                 classPackage = assetsManager.LoadClassPackage(mstream);
             return classPackage;
         }
@@ -385,7 +383,7 @@ namespace MelonLoader
         public static ClassDatabasePackage LoadIncludedLargeClassPackage(this AssetsManager assetsManager)
         {
             ClassDatabasePackage classPackage = null;
-            using (MemoryStream mstream = new MemoryStream(Properties.Resources.classdata_large))
+            using (MemoryStream mstream = new(Properties.Resources.classdata_large))
                 classPackage = assetsManager.LoadClassPackage(mstream);
             return classPackage;
         }

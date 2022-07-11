@@ -80,7 +80,7 @@ namespace MelonLoader
         public MelonModGameAttribute[] GameAttributes { get {
                 if (_LegacyGameAttributes != null)
                     return _LegacyGameAttributes;
-                List<MelonModGameAttribute> newatts = new List<MelonModGameAttribute>();
+                List<MelonModGameAttribute> newatts = new();
                 foreach (MelonGameAttribute att in Games)
                     newatts.Add(new MelonModGameAttribute(att.Developer, att.Name));
                 _LegacyGameAttributes = newatts.ToArray();

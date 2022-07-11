@@ -9,7 +9,7 @@ namespace MelonLoader
         /// List of registered <typeparamref name="T"/>s.
         /// </summary>
         new public static List<T> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
-        new internal static List<T> _registeredMelons = new List<T>();
+        new internal static List<T> _registeredMelons = new();
 
         /// <summary>
         /// A Human-Readable Name for <typeparamref name="T"/>.
