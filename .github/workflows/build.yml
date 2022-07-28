@@ -45,12 +45,12 @@ jobs:
       - name: Setup .NET Core # Proxy needs dotnet for nethost.dll
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.103"
+          dotnet-version: "6.0.301"
       - name: Build Proxy DLL | Windows - x86
         shell: cmd
         run: |
           msbuild Proxy\Proxy.vcxproj -p:Platform=Win32 -p:Configuration=Release
-          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.3\runtimes\win-x86\native\nethost.dll Proxy\Output\Release\x86\
+          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.6\runtimes\win-x86\native\nethost.dll Proxy\Output\Release\x86\
       - name: Upload proxy x86
         uses: actions/upload-artifact@v3
         with:
@@ -65,12 +65,12 @@ jobs:
       - name: Setup .NET Core # Proxy needs dotnet for nethost.dll
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.103"
+          dotnet-version: "6.0.301"
       - name: Build Proxy DLL | Windows - x64
         shell: cmd
         run: |
           msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
-          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.3\runtimes\win-x64\native\nethost.dll Proxy\Output\Release\x64\
+          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.6\runtimes\win-x64\native\nethost.dll Proxy\Output\Release\x64\
       - name: Upload proxy x64
         uses: actions/upload-artifact@v3
         with:
@@ -85,7 +85,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.103"
+          dotnet-version: "6.0.301"
       - name: Build Bootstrap Lib | Windows - x86
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=Win32 -p:Configuration=Release
@@ -103,7 +103,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.103"
+          dotnet-version: "6.0.301"
       - name: Build Bootstrap Lib | Windows - x64
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
