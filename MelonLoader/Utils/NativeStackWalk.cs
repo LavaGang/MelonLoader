@@ -1,5 +1,6 @@
 #if NET6_0
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -226,7 +227,7 @@ public unsafe class NativeStackWalk
     public static void DumpStack()
     {
         Console.WriteLine("Don't use this.");
-        return;
+        //return;
         
         var tbi = stackalloc THREAD_BASIC_INFORMATION[1];
         var status = NtQueryInformationThread(GetCurrentThread(), 0, tbi, (uint)sizeof(THREAD_BASIC_INFORMATION), null);
@@ -245,6 +246,12 @@ public unsafe class NativeStackWalk
         var ctxData = (CONTEXT*)NativeMemory.AllocZeroed(2048 * 2 * 2);
         RtlCaptureContext(ctxData);
         // var rip = (void*)ctxData->Rip;
+        
+        if((nint) ctxData->Rsp > (nint)tib->StackLimit && (nint)ctxData->Rsp < (nint)tib->StackBase)
+        {
+            top = (void*)ctxData->Rsp;
+        }
+        
         var current = (void**)((nint)top & (~IntPtr.Size));
 
         Console.WriteLine($"{(nint) end - (nint) top} bytes in stack");
@@ -257,10 +264,13 @@ public unsafe class NativeStackWalk
             Console.WriteLine($"Address: 0x{addr:X2} (Called: 0x{calledAddr:X2})");
 
             next:
-            current += 1;
+            current ++;
         }
 
         NativeMemory.Free(ctxData);
+        
+        Console.WriteLine(Environment.StackTrace);
+        Debugger.Break();
     }
 }
 #endif
