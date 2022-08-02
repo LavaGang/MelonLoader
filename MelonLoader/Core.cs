@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
+using bHapticsLib;
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
@@ -33,6 +34,7 @@ namespace MelonLoader
 
             MelonPreferences.Load();
             bHaptics.Load();
+            MelonLaunchOptions.Load();
 
             MelonCompatibilityLayer.LoadModules();
 
@@ -53,7 +55,7 @@ namespace MelonLoader
 
         private static int Start()
         {
-            bHaptics.Start();
+            bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName, maxRetries: 0);
 
             MelonEvents.OnPreModsLoaded.Invoke();
             MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
@@ -75,7 +77,7 @@ namespace MelonLoader
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();
-            bHaptics.Quit();
+            bHapticsManager.Disconnect();
 
             MelonLogger.Flush();
 

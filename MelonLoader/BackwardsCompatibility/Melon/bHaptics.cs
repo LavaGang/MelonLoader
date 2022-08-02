@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MelonLoader.Utils;
+using System;
 using System.Collections.Generic;
 
 namespace MelonLoader
@@ -6,6 +7,25 @@ namespace MelonLoader
     public static class bHaptics
     {
         public static bool WasError { get => false; }
+
+        /*
+        private static bool ExePathCheck()
+        {
+            try
+            {
+                byte[] buf = new byte[500];
+                int size = 0;
+                return NativeLib.TryGetExePath(buf, ref size);
+            }
+            catch (Exception ex) { MelonLogger.Warning($"bHaptics.ExePathCheck Exception: {ex}"); return false; }
+        }
+
+        private static bool SteamLibraryCheck()
+        {
+            string steam_folder_path = SteamManifestReader.GetInstallPathFromAppId("1573010");
+            return !string.IsNullOrEmpty(steam_folder_path);
+        }
+        */
 
         public class FeedbackStatus { public int[] values; };
 
