@@ -42,4 +42,9 @@
 		<None Include="Resources\classdata.tpk" />
 		<None Include="Resources\classdata_large.tpk" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="bHapticsLib">
+	    <HintPath>..\BaseLibs\bHapticsLib.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 </Project>
