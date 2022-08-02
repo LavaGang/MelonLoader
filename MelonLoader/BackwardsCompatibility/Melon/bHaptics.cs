@@ -1,30 +1,10 @@
-﻿using MelonLoader.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace MelonLoader
 {
     public static class bHaptics
     {
-        /*
-        private static bool ExePathCheck()
-        {
-            try
-            {
-                byte[] buf = new byte[500];
-                int size = 0;
-                return NativeLib.TryGetExePath(buf, ref size);
-            }
-            catch (Exception ex) { MelonLogger.Warning($"bHaptics.ExePathCheck Exception: {ex}"); return false; }
-        }
-
-        private static bool SteamLibraryCheck()
-        {
-            string steam_folder_path = SteamManifestReader.GetInstallPathFromAppId("1573010");
-            return !string.IsNullOrEmpty(steam_folder_path);
-        }
-        */
-
         [Obsolete("MelonLoader.bHaptics.WasError is Only Here for Compatibility Reasons.")]
         public static bool WasError { get => false; }
 
@@ -123,8 +103,6 @@ namespace MelonLoader
         public static void Submit(string key, PositionType position, List<PathPoint> points, int durationMillis)
             => bHapticsLib.bHapticsManager.Play(key, durationMillis, (bHapticsLib.PositionID)(int)position, points.ConvertAll(PathPointConverter));
 
-        [Obsolete("MelonLoader.bHaptics.FeedbackStatus is Only Here for Compatibility Reasons.")]
-        public class FeedbackStatus { public int[] values; };
         [Obsolete("MelonLoader.bHaptics.GetCurrentFeedbackStatus is Only Here for Compatibility Reasons. Please use bHapticsLib.bHapticsManager.GetDeviceStatus instead.")]
         public static FeedbackStatus GetCurrentFeedbackStatus(PositionType pos)
             => new FeedbackStatus { values = bHapticsLib.bHapticsManager.GetDeviceStatus((bHapticsLib.PositionID)(int)pos) };
@@ -143,6 +121,11 @@ namespace MelonLoader
         [Obsolete("MelonLoader.bHaptics.IsDeviceConnected(DeviceType) is Only Here for Compatibility Reasons. Please use bHapticsLib.bHapticsManager.IsDeviceConnected instead.")]
         public static bool IsDeviceConnected(DeviceType type, bool isLeft = true)
             => IsDeviceConnected(DeviceTypeToPositionType(type, isLeft));
+
+
+
+        [Obsolete("MelonLoader.bHaptics.FeedbackStatus is Only Here for Compatibility Reasons.")]
+        public class FeedbackStatus { public int[] values; };
         [Obsolete("MelonLoader.bHaptics.DeviceTypeToPositionType(DeviceType) is Only Here for Compatibility Reasons.")]
         public static PositionType DeviceTypeToPositionType(DeviceType pos, bool isLeft = true)
         {
@@ -163,7 +146,7 @@ namespace MelonLoader
             }
             return PositionType.Head;
         }
-        [Obsolete("MelonLoader.bHaptics.DeviceType is Only Here for Compatibility Reasons. Please use bHapticsLib.PositionID instead.")]
+        [Obsolete("MelonLoader.bHaptics.DeviceType is Only Here for Compatibility Reasons.")]
         public enum DeviceType
         {
             None = 0,
