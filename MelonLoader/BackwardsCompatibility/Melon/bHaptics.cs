@@ -34,17 +34,33 @@ namespace MelonLoader
         }
 
         [Obsolete("MelonLoader.bHaptics.RotationOption is Only Here for Compatibility Reasons. Please use bHapticsLib.RotationOption instead.")]
-        public class RotationOption : bHapticsLib.RotationOption { }
+        public class RotationOption : bHapticsLib.RotationOption
+        {
+            [Obsolete("MelonLoader.bHaptics.RotationOption is Only Here for Compatibility Reasons. Please use bHapticsLib.RotationOption instead.")]
+            public RotationOption(float offsetAngleX = 0, float offsetY = 0) : base(offsetAngleX, offsetY) { }
+        }
         [Obsolete("MelonLoader.bHaptics.ScaleOption is Only Here for Compatibility Reasons. Please use bHapticsLib.ScaleOption instead.")]
-        public class ScaleOption : bHapticsLib.ScaleOption { }
+        public class ScaleOption : bHapticsLib.ScaleOption
+        {
+            [Obsolete("MelonLoader.bHaptics.ScaleOption is Only Here for Compatibility Reasons. Please use bHapticsLib.ScaleOption instead.")]
+            public ScaleOption(float intensity = 1, float duration = 1) : base(intensity, duration) { }
+        }
 
         [Obsolete("MelonLoader.bHaptics.DotPoint is Only Here for Compatibility Reasons. Please use bHapticsLib.DotPoint instead.")]
-        public class DotPoint : bHapticsLib.DotPoint { }
+        public class DotPoint : bHapticsLib.DotPoint
+        {
+            [Obsolete("MelonLoader.bHaptics.DotPoint is Only Here for Compatibility Reasons. Please use bHapticsLib.DotPoint instead.")]
+            public DotPoint(int index = 0, int intensity = 50) : base(index, intensity) { }
+        }
         [Obsolete]
         private static Converter<DotPoint, bHapticsLib.DotPoint> DotPointConverter = new Converter<DotPoint, bHapticsLib.DotPoint>((x) => x);
 
         [Obsolete("MelonLoader.bHaptics.PathPoint is Only Here for Compatibility Reasons. Please use bHapticsLib.PathPoint instead.")]
-        public class PathPoint : bHapticsLib.PathPoint { }
+        public class PathPoint : bHapticsLib.PathPoint
+        {
+            [Obsolete("MelonLoader.bHaptics.PathPoint is Only Here for Compatibility Reasons. Please use bHapticsLib.PathPoint instead.")]
+            public PathPoint(float x = 0, float y = 0, int intensity = 50, int motorCount = 3) : base(x, y, intensity, motorCount) { }
+        }
         [Obsolete]
         private static Converter<PathPoint, bHapticsLib.PathPoint> PathPointConverter = new Converter<PathPoint, bHapticsLib.PathPoint>((x) => x);
 
