@@ -127,7 +127,7 @@ bool core::is_unity(const std::filesystem::path& exe_filepath)
 	if (!exists(datapath))
 		return false;
 
-	if (exists(datapath / L"globalgamemanagers") || exists(datapath / L"\\data.unity3d") || exists(datapath / L"\\mainData"))
+	if (exists(datapath / L"globalgamemanagers") || exists(datapath / L"data.unity3d") || exists(datapath / L"mainData"))
 		return true;
 
 	return false;
