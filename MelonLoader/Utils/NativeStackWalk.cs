@@ -1,9 +1,12 @@
 #if NET6_0
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace MelonLoader;
 
@@ -82,6 +85,115 @@ public unsafe class NativeStackWalk
         // (...)
     }
 
+    [Flags]
+    public enum SymFlag : uint
+    {
+        VALUEPRESENT = 0x00000001,
+        REGISTER = 0x00000008,
+        REGREL = 0x00000010,
+        FRAMEREL = 0x00000020,
+        PARAMETER = 0x00000040,
+        LOCAL = 0x00000080,
+        CONSTANT = 0x00000100,
+        EXPORT = 0x00000200,
+        FORWARDER = 0x00000400,
+        FUNCTION = 0x00000800,
+        VIRTUAL = 0x00001000,
+        THUNK = 0x00002000,
+        TLSREL = 0x00004000,
+        SLOT = 0x00008000,
+        ILREL = 0x00010000,
+        METADATA = 0x00020000,
+        CLR_TOKEN = 0x00040000,
+    }
+
+    [Flags]
+    public enum SymOptions : uint
+    {
+        SYMOPT_CASE_INSENSITIVE = 0x00000001,
+        SYMOPT_UNDNAME = 0x00000002,
+        SYMOPT_DEFERRED_LOADS = 0x00000004,
+        SYMOPT_NO_CPP = 0x00000008,
+        SYMOPT_LOAD_LINES = 0x00000010,
+        SYMOPT_OMAP_FIND_NEAREST = 0x00000020,
+        SYMOPT_LOAD_ANYTHING = 0x00000040,
+        SYMOPT_IGNORE_CVREC = 0x00000080,
+        SYMOPT_NO_UNQUALIFIED_LOADS = 0x00000100,
+        SYMOPT_FAIL_CRITICAL_ERRORS = 0x00000200,
+        SYMOPT_EXACT_SYMBOLS = 0x00000400,
+        SYMOPT_ALLOW_ABSOLUTE_SYMBOLS = 0x00000800,
+        SYMOPT_IGNORE_NT_SYMPATH = 0x00001000,
+        SYMOPT_INCLUDE_32BIT_MODULES = 0x00002000,
+        SYMOPT_PUBLICS_ONLY = 0x00004000,
+        SYMOPT_NO_PUBLICS = 0x00008000,
+        SYMOPT_AUTO_PUBLICS = 0x00010000,
+        SYMOPT_NO_IMAGE_SEARCH = 0x00020000,
+        SYMOPT_SECURE = 0x00040000,
+        SYMOPT_NO_PROMPTS = 0x00080000,
+        SYMOPT_OVERWRITE = 0x00100000,
+        SYMOPT_IGNORE_IMAGEDIR = 0x00200000,
+        SYMOPT_FLAT_DIRECTORY = 0x00400000,
+        SYMOPT_DEBUG = 0x80000000,
+    }
+
+    [Flags]
+    public enum SymTagEnum : uint
+    {
+        Null,
+        Exe,
+        Compiland,
+        CompilandDetails,
+        CompilandEnv,
+        Function,
+        Block,
+        Data,
+        Annotation,
+        Label,
+        PublicSymbol,
+        UDT,
+        Enum,
+        FunctionType,
+        PointerType,
+        ArrayType,
+        BaseType,
+        Typedef,
+        BaseClass,
+        Friend,
+        FunctionArgType,
+        FuncDebugStart,
+        FuncDebugEnd,
+        UsingNamespace,
+        VTableShape,
+        VTable,
+        Custom,
+        Thunk,
+        CustomType,
+        ManagedType,
+        Dimension
+    };
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4)]
+    public struct SYMBOL_INFO
+    {
+        public uint SizeOfStruct;
+        public uint TypeIndex;
+        public ulong Reserved1;
+        public ulong Reserved2;
+        public uint Index;
+        public uint Size;
+        public ulong ModBase;
+        public SymFlag Flags;
+        public ulong Value;
+        public ulong Address;
+        public uint Register;
+        public uint Scope;
+        public SymTagEnum Tag;
+        public uint NameLen;
+        public uint MaxNameLen;
+
+        public char* NameDummy;
+    }
+
     #endregion
 
     #region Native Imports
@@ -98,7 +210,34 @@ public unsafe class NativeStackWalk
     [DllImport("kernel32.dll")]
     private static extern nint GetCurrentThread();
 
+    [DllImport("dbghelp.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SymInitialize(void* hProcess, string UserSearchPath, int fInvadeProcess);
+
+    [DllImport("dbghelp.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SymFromAddr(void* hProcess, ulong Address, ulong* Displacement, SYMBOL_INFO* Symbol);
+    
+    //SymSetoptions import
+    [DllImport("dbghelp.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SymSetOptions(SymOptions SymOptions);
+    
+    [DllImport("dbghelp.dll", SetLastError = true)]
+    public static extern ulong SymGetModuleBase64(void* hProcess, ulong Address);
+
+    [DllImport("dbghelp.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SymCleanup(void* hProcess);
+    
+    //GetModuleFileNameEx import
+    [DllImport("psapi.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool GetModuleFileNameEx(void* hProcess, void* hModule, [Out] char* lpFilename, uint nSize);
+
     #endregion
+
+    private static readonly List<string> _resultNames = new();
 
     [MethodImpl(MethodImplOptions.NoOptimization)]
     public static bool IsValidAddress(ulong addr) => !IsBadReadPtr((void*)(addr - 6), 7);
@@ -224,11 +363,12 @@ public unsafe class NativeStackWalk
         return false;
     }
 
+    // [SupportedOSPlatform("windows")]
     public static void DumpStack()
     {
         Console.WriteLine("Don't use this.");
         //return;
-        
+
         var tbi = stackalloc THREAD_BASIC_INFORMATION[1];
         var status = NtQueryInformationThread(GetCurrentThread(), 0, tbi, (uint)sizeof(THREAD_BASIC_INFORMATION), null);
 
@@ -246,31 +386,112 @@ public unsafe class NativeStackWalk
         var ctxData = (CONTEXT*)NativeMemory.AllocZeroed(2048 * 2 * 2);
         RtlCaptureContext(ctxData);
         // var rip = (void*)ctxData->Rip;
-        
-        if((nint) ctxData->Rsp > (nint)tib->StackLimit && (nint)ctxData->Rsp < (nint)tib->StackBase)
+
+        if ((nint)ctxData->Rsp > (nint)tib->StackLimit && (nint)ctxData->Rsp < (nint)tib->StackBase)
         {
             top = (void*)ctxData->Rsp;
         }
-        
+
         var current = (void**)((nint)top & (~IntPtr.Size));
 
-        Console.WriteLine($"{(nint) end - (nint) top} bytes in stack");
+        Console.WriteLine($"{(nint)end - (nint)top} bytes in stack");
 
+        var addresses = new List<nuint>();
+        var ptrSize = IntPtr.Size;
+        var is64bit = ptrSize == 8;
+        
         while ((nint)current < (nint)end)
         {
             var addr = *(ulong*)current;
-            if (!IsValidAddress(addr) || !IsReturnAddress(addr, out var calledAddr)) goto next;
+            
+            if(!IsValidAddress(addr))
+                goto next;
 
-            Console.WriteLine($"Address: 0x{addr:X2} (Called: 0x{calledAddr:X2})");
+            if(is64bit && addr < 0x70000000000)
+                goto next; // skip addresses in low memory
+            
+            if (!IsReturnAddress(addr, out var calledAddr)) goto next;
+
+            // Console.WriteLine($"Address: 0x{addr:X2} (Called: 0x{calledAddr:X2})");
+            addresses.Add((nuint)addr);
 
             next:
-            current ++;
+            current++;
         }
 
         NativeMemory.Free(ctxData);
-        
-        Console.WriteLine(Environment.StackTrace);
-        Debugger.Break();
+
+        var handle = (void*)Process.GetCurrentProcess().Handle;
+
+        var tempDir = Environment.GetEnvironmentVariable("TEMP") ?? throw new("TEMP not set");
+
+        var cacheDir = Path.Combine(tempDir, "MelonLoader_SymServ_Cache");
+
+        if (!Directory.Exists(cacheDir))
+            Directory.CreateDirectory(cacheDir);
+
+        var userPath = $"cache*{cacheDir};srv*https://msdl.microsoft.com/download/symbols;srv*https://symbolserver.unity3d.com";
+        Console.WriteLine($"Symbol Path: {userPath}");
+
+        SymSetOptions(SymOptions.SYMOPT_UNDNAME | SymOptions.SYMOPT_DEFERRED_LOADS | SymOptions.SYMOPT_DEBUG);
+
+        if (!SymInitialize(handle, userPath, 1))
+        {
+            Console.WriteLine($"Failed to SymInitialize. GetLastError: 0x{Marshal.GetLastWin32Error():X}");
+            return;
+        }
+
+        var symSize = sizeof(SYMBOL_INFO);
+        var displacement = 0ul;
+        foreach (var address in addresses)
+        {
+            var moduleBase = SymGetModuleBase64(handle, address);
+            Console.WriteLine($"Module base: 0x{moduleBase:X}");
+
+            var ret = (char*) NativeMemory.Alloc(256 * sizeof(char));
+            if (GetModuleFileNameEx(handle, (void*)moduleBase, ret, 256))
+            {
+                var moduleName = Marshal.PtrToStringAnsi((IntPtr)ret);
+                Console.WriteLine(moduleName);
+            }
+            NativeMemory.Free(ret);
+            
+            var maxNameLen = 512;
+            var pSym = Marshal.AllocHGlobal(symSize + maxNameLen*2);
+            
+            ZeroMem(pSym, symSize + maxNameLen*2);
+            
+            var symbol = (SYMBOL_INFO*)pSym;
+
+            // symbol->Name = name;
+            symbol->SizeOfStruct = (uint)symSize;
+            symbol->MaxNameLen = (uint)(maxNameLen - 1);
+
+            if (SymFromAddr(handle, address, &displacement, symbol))
+            {
+                //The problem is that the name is not actually populated.
+                //Maybe symbols are actually resolved but dbghelp is not playing ball.
+                var str = Marshal.PtrToStringAnsi((IntPtr)(&symbol->NameDummy));
+                Console.WriteLine($"{str} (0x{address - displacement:X}) + 0x{displacement:X}. Flags: {symbol->Flags}, Tag: {symbol->Tag}, index: {symbol->Index}");
+            }
+            else
+            {
+                Console.WriteLine($"Unknown symbol 0x{address:X}, GetLastError: 0x{Marshal.GetLastWin32Error():X}");
+            }
+            
+            Marshal.FreeHGlobal(pSym);
+        }
+
+        SymCleanup(handle);
+    }
+
+    private static void ZeroMem(IntPtr ptr, int size)
+    {
+        var cursor = (byte*)ptr;
+        while (size-- > 0)
+        {
+            *cursor++ = 0;
+        }
     }
 }
 #endif

@@ -221,7 +221,7 @@ namespace MelonLoader
             bHaptics.Quit();
 
             MelonLogger.Flush();
-            MelonLogger.Close();
+            // MelonLogger.Close();
 
             System.Threading.Thread.Sleep(200);
 

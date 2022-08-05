@@ -82,6 +82,9 @@ namespace MelonLoader.Utils
 
         private static bool CheckShouldBlock(string hostname)
         {
+            if (string.IsNullOrEmpty(hostname))
+                return false;
+            
             hostname = hostname.Trim().ToLowerInvariant();
 
             var shouldBlock = _blockList.Any(b => hostname.Contains(b));
@@ -149,6 +152,9 @@ namespace MelonLoader.Utils
 #endif
         private static hostent* gethostbyname_hook(byte* name)
         {
+            if (name == null || (IntPtr) name == IntPtr.Zero)
+                return original_gethostbyname(name);
+            
             var hostname = Marshal.PtrToStringAnsi((IntPtr)name);
 
             var shouldBlock = CheckShouldBlock(hostname);
@@ -176,6 +182,9 @@ namespace MelonLoader.Utils
 #endif
         private static int getaddrinfo_hook(byte* pNodeName, byte* pServiceName, addrinfo* pHints, addrinfo** ppResult)
         {
+            if (pNodeName == null || (IntPtr) pNodeName == IntPtr.Zero)
+                return original_getaddrinfo(pNodeName, pServiceName, pHints, ppResult);
+            
             var hostname = Marshal.PtrToStringAnsi((IntPtr)pNodeName);
 
             var shouldBlock = CheckShouldBlock(hostname);
