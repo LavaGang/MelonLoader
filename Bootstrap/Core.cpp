@@ -21,7 +21,7 @@ HINSTANCE Core::Bootstrap = NULL;
 char* Core::BasePath = NULL;
 char* Core::BasePathMono = NULL;
 char* Core::Path = NULL;
-std::string Core::Version = "0.5.4";
+std::string Core::Version = "0.5.5";
 bool Core::Is_ALPHA_PreRelease = false;
 Core::wine_get_version_t Core::wine_get_version = NULL;
 
