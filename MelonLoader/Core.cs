@@ -38,6 +38,8 @@ namespace MelonLoader
 
             MelonCompatibilityLayer.LoadModules();
 
+            bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
+
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
             MelonEvents.OnPreInitialization.Invoke();
 
@@ -55,8 +57,6 @@ namespace MelonLoader
 
         private static int Start()
         {
-            bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
-
             MelonEvents.OnPreModsLoaded.Invoke();
             MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonHandler.ModsDirectory);
 
