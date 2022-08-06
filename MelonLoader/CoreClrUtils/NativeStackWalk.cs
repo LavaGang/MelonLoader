@@ -1,20 +1,27 @@
 #if NET6_0
+
+#nullable enable
+#pragma warning disable CS0169
+#pragma warning disable CS0649
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
+using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 
 namespace MelonLoader.CoreClrUtils;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
-public unsafe class NativeStackWalk
+// ReSharper disable UnusedMember.Local, InconsistentNaming
+public static unsafe class NativeStackWalk
 {
-    // private static MelonLogger.Instance log = new("NativeStackWalk");
-
+    private static MelonLogger.Instance Logger = new MelonLogger.Instance("NativeStackWalk", Color.GreenYellow);
+    
     #region Native Structs
 
     [StructLayout(LayoutKind.Sequential, Pack = 16)]
@@ -69,7 +76,7 @@ public unsafe class NativeStackWalk
     private struct THREAD_BASIC_INFORMATION
     {
         public uint ExitStatus;
-        public void* TebBaseAddress;
+        public NT_TIB* TebBaseAddress;
         public CLIENT_ID ClientId;
         public uint* AffinityMask;
         public uint Priority;
@@ -237,16 +244,17 @@ public unsafe class NativeStackWalk
 
     #endregion
     
+    #region Helper Methods
     
     [MethodImpl(MethodImplOptions.NoOptimization)]
-    private static bool IsValidAddress(ulong addr) => !IsBadReadPtr((void*)(addr - 6), 7);
+    private static bool IsValidAddress(ulong addr, bool is64Bit) => !IsBadReadPtr((void*)(addr - 6), 7) && (!is64Bit || addr > 0x70000000000);
 
-    private static bool TryGetCalleeSite(ulong addr, out ulong callee)
+    private static bool TryGetCalleeSite(ulong addr, bool is64Bit, out ulong callee)
     {
         callee = 0;
         while (true)
         {
-            if (!IsValidAddress(addr))
+            if (!IsValidAddress(addr, is64Bit))
                 return false;
 
             var inst = new[] { *(byte*)addr, *(byte*)(addr + 1) };
@@ -258,7 +266,7 @@ public unsafe class NativeStackWalk
             else if (inst[0] == 0xE9)
             {
                 //jmp relative
-                if (!IsValidAddress(addr + 1))
+                if (!IsValidAddress(addr + 1, is64Bit))
                     return false;
 
                 addr += 5ul + (ulong)*(int*)(addr + 1);
@@ -268,11 +276,11 @@ public unsafe class NativeStackWalk
                 //call or jmp absolute
                 if (inst[1] == 0x25)
                 {
-                    if (!IsValidAddress(addr + 2))
+                    if (!IsValidAddress(addr + 2, is64Bit))
                         return false;
 
                     var displace = *(uint*)(addr + 2);
-                    if (!IsValidAddress(displace))
+                    if (!IsValidAddress(displace, is64Bit))
                         return false;
 
                     addr = displace;
@@ -290,17 +298,21 @@ public unsafe class NativeStackWalk
         }
     }
 
-    private static bool IsReturnAddress(ulong addr, out ulong calledAddr)
+    private static bool IsReturnAddress(ulong addr, bool is64Bit, out ulong calledAddr)
     {
+        calledAddr = 0;
+        if (!IsValidAddress(addr, is64Bit))
+            return false;
+        
         var cursor = (byte*)addr;
         if (cursor[-5] == 0xE8)
         {
             //call relative address
 
             calledAddr = addr + *(uint*)(cursor - 4);
-            if (IsValidAddress(calledAddr))
+            if (IsValidAddress(calledAddr, is64Bit))
             {
-                if (TryGetCalleeSite(calledAddr, out var callee))
+                if (TryGetCalleeSite(calledAddr, is64Bit, out var callee))
                 {
                     calledAddr = callee;
                 }
@@ -361,9 +373,8 @@ public unsafe class NativeStackWalk
         calledAddr = 0;
         return false;
     }
-
-    // [SupportedOSPlatform("windows")]
-    public static void DumpStack()
+    
+    private static (IntPtr top, IntPtr end) GetStackBounds()
     {
         var tbi = stackalloc THREAD_BASIC_INFORMATION[1];
         var status = NtQueryInformationThread(GetCurrentThread(), 0, tbi, (uint)sizeof(THREAD_BASIC_INFORMATION), null);
@@ -371,54 +382,27 @@ public unsafe class NativeStackWalk
         if (status != 0)
         {
             Console.WriteLine($"[Error] NtQueryInformationThread failed: 0x{status:X2}");
-            return;
+            return (IntPtr.Zero, IntPtr.Zero);
         }
 
-        // The TEB's first field is the TIB
-        var tib = (NT_TIB*)tbi->TebBaseAddress;
+        var tib = tbi->TebBaseAddress;
         var top = tib->StackLimit;
         var end = tib->StackBase;
 
         var ctxData = (CONTEXT*)NativeMemory.AllocZeroed(2048 * 2 * 2);
         RtlCaptureContext(ctxData);
-        // var rip = (void*)ctxData->Rip;
 
         if ((nint)ctxData->Rsp > (nint)tib->StackLimit && (nint)ctxData->Rsp < (nint)tib->StackBase)
         {
             top = (void*)ctxData->Rsp;
         }
 
-        var current = (void**)((nint)top & (~IntPtr.Size));
-
-        Console.WriteLine($"{(nint)end - (nint)top} bytes in stack.");
-
-        var addresses = new List<nuint>();
-        var ptrSize = IntPtr.Size;
-        var is64bit = ptrSize == 8;
-        
-        while ((nint)current < (nint)end)
-        {
-            var addr = *(ulong*)current;
-            
-            if(!IsValidAddress(addr))
-                goto next;
-
-            if(is64bit && addr < 0x70000000000)
-                goto next; // skip addresses in low memory
-            
-            if (!IsReturnAddress(addr, out var calledAddr)) goto next;
-
-            // Console.WriteLine($"Address: 0x{addr:X2} (Called: 0x{calledAddr:X2})");
-            addresses.Add((nuint)addr);
-
-            next:
-            current++;
-        }
-
         NativeMemory.Free(ctxData);
+        return ((IntPtr) top, (IntPtr) end);
+    }
 
-        var handle = (void*)Process.GetCurrentProcess().Handle;
-
+    private static int InitDbgHelp(void* handle)
+    {
         var tempDir = Environment.GetEnvironmentVariable("TEMP") ?? throw new("TEMP not set");
 
         var cacheDir = Path.Combine(tempDir, "MelonLoader_SymServ_Cache");
@@ -427,83 +411,156 @@ public unsafe class NativeStackWalk
             Directory.CreateDirectory(cacheDir);
 
         var userPath = $"cache*{cacheDir};srv*https://msdl.microsoft.com/download/symbols;srv*https://symbolserver.unity3d.com";
-        Console.WriteLine($"Symbol Path: {userPath}");
 
         SymSetOptions(SymOptions.SYMOPT_UNDNAME | SymOptions.SYMOPT_DEFERRED_LOADS);
 
         if (!SymInitialize(handle, userPath, 1))
         {
-            Console.WriteLine($"Failed to SymInitialize. GetLastError: 0x{Marshal.GetLastWin32Error():X}");
-            return;
+            return Marshal.GetLastWin32Error();
+        }
+
+        return 0;
+    }
+    
+    #endregion
+    public class NativeStackFrame
+    {
+        public ulong Pointer;
+        public string? ModulePath;
+        public string? Function;
+        public ulong Offset;
+
+        public string? ModuleName => Path.GetFileName(ModulePath);
+    }
+
+    [SupportedOSPlatform("windows")]
+    [Pure]
+    public static List<NativeStackFrame> GetNativeStackFrames()
+    {
+        //Get the top and bottom of the managed stack
+        var (t, e) = GetStackBounds();
+        
+        if(t == IntPtr.Zero || e == IntPtr.Zero)
+            throw new("Failed to get stack bounds");
+        
+        var top = (nint)t;
+        var end = (nint)e;
+
+        var current = top & ~IntPtr.Size; //Align
+
+        var addresses = new List<nuint>();
+        var ptrSize = IntPtr.Size;
+        var is64bit = ptrSize == 8;
+
+        //Loop through the stack looking for potential addresses
+        while (current + ptrSize < end + 1)
+        {
+            var addr = *(ulong*)current;
+            current += 4;
+            
+            if (!IsReturnAddress(addr, is64bit, out _)) 
+                continue;
+
+            addresses.Add((nuint)addr);
+        }
+
+        var handle = (void*)Process.GetCurrentProcess().Handle;
+
+        //Initialize DbgHelp to get symbol names
+        
+        int initResult;
+        if ((initResult = InitDbgHelp(handle)) != 0)
+        {
+            throw new($"InitDbgHelp failed (result {initResult})");
         }
 
         var symSize = sizeof(SYMBOL_INFO);
         var displacement = 0ul;
+        var ret = new List<NativeStackFrame>();
+        
+        //Try to get information for each frame in the stack
         foreach (var address in addresses)
         {
-            Console.Write($"Stack Frame: 0x{address:X}");
+            var frame = new NativeStackFrame { Pointer = address };
+            ret.Add(frame);
             
             var moduleBase = SymGetModuleBase64(handle, address);
+            
+            if(moduleBase == 0)
+                //Skip frames that don't have a module (JIT code, probably)
+                continue;
 
-            Console.Write($". Module base: 0x{moduleBase:X}");
-
-            var ret = (char*) NativeMemory.Alloc(256 * sizeof(char));
-            if (GetModuleFileNameEx(handle, (void*)moduleBase, ret, 256))
+            //Get the path of the module from its base address
+            var moduleNameBuff = (char*) NativeMemory.Alloc(256 * sizeof(char));
+            if (GetModuleFileNameEx(handle, (void*)moduleBase, moduleNameBuff, 256))
             {
-                var moduleName = Marshal.PtrToStringAnsi((IntPtr)ret);
-                Console.Write($" -> {Path.GetFileName(moduleName)}");
+                var moduleName = Marshal.PtrToStringAnsi((IntPtr)moduleNameBuff);
+                frame.ModulePath = moduleName;
             }
-            NativeMemory.Free(ret);
+            NativeMemory.Free(moduleNameBuff);
             
+            //Attempt to load actual symbol information via dbghelp
             var maxNameLen = 255u;
-            var pSym = Marshal.AllocHGlobal((int)(symSize + maxNameLen * sizeof(char)));
-            
-            SetMem(pSym, symSize, 0);
-            SetMem(pSym + (symSize - 4), (int)(maxNameLen * sizeof(char)), 69);
-            
-            var symbol = (SYMBOL_INFO*)pSym;
+            var symbol = (SYMBOL_INFO*) NativeMemory.Alloc((nuint)(symSize + maxNameLen * sizeof(char)));
 
-            // var charData = (char*) Marshal.AllocHGlobal((maxNameLen + 1) * sizeof(char));
-            
-            // SetMem((IntPtr)charData, (maxNameLen + 1) * sizeof(char));
-            
-            // symbol->NameDummy = charData;
             symbol->SizeOfStruct = (uint)symSize;
             symbol->MaxNameLen = maxNameLen;
 
             if (SymFromAddrW(handle, address, &displacement, symbol))
             {
-                //The problem is that the name is not actually populated.
-                //Maybe symbols are actually resolved but dbghelp is not playing ball.
-                PrintSym(symbol, displacement, address);
-            }
-            else
-            {
-                Console.WriteLine($" => Unknown symbol 0x{address:X}, GetLastError: 0x{Marshal.GetLastWin32Error():X}");
+                //We have a symbol, get the name and offset
+                var nameBuffer = new byte[symbol->NameLen * sizeof(char)];
+                Marshal.Copy((IntPtr)symbol->NameDummy, nameBuffer, 0, nameBuffer.Length);
+                frame.Function = Encoding.Unicode.GetString(nameBuffer);
+                frame.Offset = displacement;
             }
             
-            Marshal.FreeHGlobal(pSym);
+            NativeMemory.Free(symbol);
         }
 
+        //De-initialize DbgHelp
         SymCleanup(handle);
+
+        return ret;
     }
 
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private static void PrintSym(SYMBOL_INFO* symbol, ulong displacement, ulong address)
+    [SupportedOSPlatform("windows")]
+    public static string NativeStackTrace
     {
-        var nameBuffer = new byte[symbol->NameLen * sizeof(char)];
-        Marshal.Copy((IntPtr)symbol->NameDummy, nameBuffer, 0, nameBuffer.Length);
-        var str = Encoding.Unicode.GetString(nameBuffer);
-        Console.WriteLine($" => Resolved sym \"{str}\" (len {symbol->NameLen}) (0x{address - displacement:X}) + 0x{displacement:X}. Flags: {symbol->Flags}, Tag: {symbol->Tag}, index: {symbol->Index}. GetLastError: 0x{Marshal.GetLastWin32Error():X}");
-    }
-
-    private static void SetMem(IntPtr ptr, int size, byte value)
-    {
-        var cursor = (byte*)ptr;
-        while (size-- > 0)
+        get
         {
-            *cursor++ = value;
+            var sb = new StringBuilder();
+            
+            GetNativeStackFrames().ForEach(f => sb.AppendLine(FormatFrame(f)));
+
+            return sb.ToString();
         }
     }
+
+    private static string FormatFrame(NativeStackFrame frame)
+    {
+        var frameBuilder = new StringBuilder();
+        
+        if (frame.Function == null)
+        {
+            frameBuilder.Append($"at 0x{frame.Pointer:X}");
+            
+            if(frame.ModuleName is {} mn)
+                frameBuilder.Append($" in {mn}");
+            else
+                frameBuilder.Append(" (unknown module)");
+        }
+        else
+        {
+            frameBuilder.Append($"at {frame.Function} + 0x{frame.Offset:X}");
+            if (frame.ModuleName is not "GameAssembly.dll")
+                frameBuilder.Append($" in {frame.ModuleName}");
+        }
+
+        return frameBuilder.ToString();
+    }
+
+    [SupportedOSPlatform("windows")]
+    public static void LogNativeStackTrace() => GetNativeStackFrames().ForEach(f => Logger.Msg(FormatFrame(f)));
 }
 #endif

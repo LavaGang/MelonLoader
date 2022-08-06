@@ -9,12 +9,13 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 #if NET6_0
+using System.Threading;
 using MelonLoader.CoreClrUtils;
 #endif
 
 namespace MelonLoader
 {
-	internal static class Core
+    internal static class Core
     {
         internal static HarmonyLib.Harmony HarmonyInstance = null;
         internal static bool Is_ALPHA_PreRelease = false;
@@ -40,12 +41,11 @@ namespace MelonLoader
 
             ManagedAnalyticsBlocker.Install();
 
-            AppDomain curDomain = AppDomain.CurrentDomain;
             Fixes.DotnetLoadFromManagedFolderFix.Install();
-            Fixes.UnhandledException.Install(curDomain);
+            Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
             Fixes.ServerCertificateValidation.Install();
 
-            MelonUtils.Setup(curDomain);
+            MelonUtils.Setup(AppDomain.CurrentDomain);
 
             Assertions.LemonAssertMapping.Setup();
             MelonHandler.Setup();
@@ -55,7 +55,8 @@ namespace MelonLoader
                 if (!MonoLibrary.Setup()
                     || !MonoResolveManager.Setup())
                     return 1;
-            } catch(SecurityException)
+            }
+            catch (SecurityException)
             {
                 MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
             }
@@ -63,7 +64,9 @@ namespace MelonLoader
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
 
 #if NET6_0
-            NativeStackWalk.DumpStack();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                NativeStackWalk.LogNativeStackTrace();
+
             Fixes.DotnetAssemblyLoadContextFix.Install();
             Fixes.DotnetModHandlerRedirectionFix.Install();
 #endif
@@ -119,8 +122,8 @@ namespace MelonLoader
         {
             var lemon = MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON;
             var versionStr = $"{(lemon ? "Lemon" : "Melon")}Loader " +
-                $"v{BuildInfo.Version} " +
-                $"{(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
+                             $"v{BuildInfo.Version} " +
+                             $"{(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
             return versionStr;
         }
 
@@ -218,6 +221,16 @@ namespace MelonLoader
         {
             MelonDebug.Msg("[ML Core] Received Quit from Support Module. Shutting down...");
 
+#if NET6_0
+            // MelonLogger.Msg("Quit stacktrace:");
+            //
+            // if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            //     NativeStackWalk.LogNativeStackTrace();
+            //
+            // Thread.Sleep(1000);
+            // Debugger.Break();
+#endif
+
             MelonEvents.OnApplicationQuit.Invoke();
             MelonPreferences.Save();
 
@@ -241,9 +254,9 @@ namespace MelonLoader
                 return;
 
             WineGetVersion = (NativeLibrary.StringDelegate)Marshal.GetDelegateForFunctionPointer(
-                wine_get_version_proc, 
+                wine_get_version_proc,
                 typeof(NativeLibrary.StringDelegate)
-                );
+            );
         }
 
         private static void AddUnityDebugLog()
