@@ -6,9 +6,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
+using System.Text;
 
-namespace MelonLoader;
+namespace MelonLoader.CoreClrUtils;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public unsafe class NativeStackWalk
@@ -18,7 +18,7 @@ public unsafe class NativeStackWalk
     #region Native Structs
 
     [StructLayout(LayoutKind.Sequential, Pack = 16)]
-    public struct CONTEXT
+    private struct CONTEXT
     {
         public ulong P1Home;
         public ulong P2Home;
@@ -60,13 +60,13 @@ public unsafe class NativeStackWalk
         public ulong Rip;
     }
 
-    public struct CLIENT_ID
+    private struct CLIENT_ID
     {
         public void* UniqueProcess;
         public void* UniqueThread;
     }
 
-    public struct THREAD_BASIC_INFORMATION
+    private struct THREAD_BASIC_INFORMATION
     {
         public uint ExitStatus;
         public void* TebBaseAddress;
@@ -76,7 +76,7 @@ public unsafe class NativeStackWalk
         public uint BasePriority;
     }
 
-    public struct NT_TIB
+    private struct NT_TIB
     {
         void* ExceptionList;
         public void* StackBase;
@@ -86,7 +86,7 @@ public unsafe class NativeStackWalk
     }
 
     [Flags]
-    public enum SymFlag : uint
+    private enum SymFlag : uint
     {
         VALUEPRESENT = 0x00000001,
         REGISTER = 0x00000008,
@@ -108,7 +108,7 @@ public unsafe class NativeStackWalk
     }
 
     [Flags]
-    public enum SymOptions : uint
+    private enum SymOptions : uint
     {
         SYMOPT_CASE_INSENSITIVE = 0x00000001,
         SYMOPT_UNDNAME = 0x00000002,
@@ -137,7 +137,7 @@ public unsafe class NativeStackWalk
     }
 
     [Flags]
-    public enum SymTagEnum : uint
+    private enum SymTagEnum : uint
     {
         Null,
         Exe,
@@ -172,8 +172,8 @@ public unsafe class NativeStackWalk
         Dimension
     };
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4)]
-    public struct SYMBOL_INFO
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 8)]
+    private struct SYMBOL_INFO
     {
         public uint SizeOfStruct;
         public uint TypeIndex;
@@ -191,7 +191,7 @@ public unsafe class NativeStackWalk
         public uint NameLen;
         public uint MaxNameLen;
 
-        public char* NameDummy;
+        public fixed char NameDummy[2];
     }
 
     #endregion
@@ -212,37 +212,36 @@ public unsafe class NativeStackWalk
 
     [DllImport("dbghelp.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool SymInitialize(void* hProcess, string UserSearchPath, int fInvadeProcess);
+    private static extern bool SymInitialize(void* hProcess, string UserSearchPath, int fInvadeProcess);
 
     [DllImport("dbghelp.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool SymFromAddr(void* hProcess, ulong Address, ulong* Displacement, SYMBOL_INFO* Symbol);
+    private static extern bool SymFromAddrW(void* hProcess, ulong Address, ulong* Displacement, SYMBOL_INFO* Symbol);
     
     //SymSetoptions import
     [DllImport("dbghelp.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool SymSetOptions(SymOptions SymOptions);
+    private static extern bool SymSetOptions(SymOptions SymOptions);
     
     [DllImport("dbghelp.dll", SetLastError = true)]
-    public static extern ulong SymGetModuleBase64(void* hProcess, ulong Address);
+    private static extern ulong SymGetModuleBase64(void* hProcess, ulong Address);
 
     [DllImport("dbghelp.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool SymCleanup(void* hProcess);
+    private static extern bool SymCleanup(void* hProcess);
     
     //GetModuleFileNameEx import
     [DllImport("psapi.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool GetModuleFileNameEx(void* hProcess, void* hModule, [Out] char* lpFilename, uint nSize);
+    private static extern bool GetModuleFileNameEx(void* hProcess, void* hModule, [Out] char* lpFilename, uint nSize);
 
     #endregion
-
-    private static readonly List<string> _resultNames = new();
-
+    
+    
     [MethodImpl(MethodImplOptions.NoOptimization)]
-    public static bool IsValidAddress(ulong addr) => !IsBadReadPtr((void*)(addr - 6), 7);
+    private static bool IsValidAddress(ulong addr) => !IsBadReadPtr((void*)(addr - 6), 7);
 
-    public static bool TryGetCalleeSite(ulong addr, out ulong callee)
+    private static bool TryGetCalleeSite(ulong addr, out ulong callee)
     {
         callee = 0;
         while (true)
@@ -291,7 +290,7 @@ public unsafe class NativeStackWalk
         }
     }
 
-    public static bool IsReturnAddress(ulong addr, out ulong calledAddr)
+    private static bool IsReturnAddress(ulong addr, out ulong calledAddr)
     {
         var cursor = (byte*)addr;
         if (cursor[-5] == 0xE8)
@@ -366,9 +365,6 @@ public unsafe class NativeStackWalk
     // [SupportedOSPlatform("windows")]
     public static void DumpStack()
     {
-        Console.WriteLine("Don't use this.");
-        //return;
-
         var tbi = stackalloc THREAD_BASIC_INFORMATION[1];
         var status = NtQueryInformationThread(GetCurrentThread(), 0, tbi, (uint)sizeof(THREAD_BASIC_INFORMATION), null);
 
@@ -394,7 +390,7 @@ public unsafe class NativeStackWalk
 
         var current = (void**)((nint)top & (~IntPtr.Size));
 
-        Console.WriteLine($"{(nint)end - (nint)top} bytes in stack");
+        Console.WriteLine($"{(nint)end - (nint)top} bytes in stack.");
 
         var addresses = new List<nuint>();
         var ptrSize = IntPtr.Size;
@@ -433,7 +429,7 @@ public unsafe class NativeStackWalk
         var userPath = $"cache*{cacheDir};srv*https://msdl.microsoft.com/download/symbols;srv*https://symbolserver.unity3d.com";
         Console.WriteLine($"Symbol Path: {userPath}");
 
-        SymSetOptions(SymOptions.SYMOPT_UNDNAME | SymOptions.SYMOPT_DEFERRED_LOADS | SymOptions.SYMOPT_DEBUG);
+        SymSetOptions(SymOptions.SYMOPT_UNDNAME | SymOptions.SYMOPT_DEFERRED_LOADS);
 
         if (!SymInitialize(handle, userPath, 1))
         {
@@ -445,38 +441,45 @@ public unsafe class NativeStackWalk
         var displacement = 0ul;
         foreach (var address in addresses)
         {
+            Console.Write($"Stack Frame: 0x{address:X}");
+            
             var moduleBase = SymGetModuleBase64(handle, address);
-            Console.WriteLine($"Module base: 0x{moduleBase:X}");
+
+            Console.Write($". Module base: 0x{moduleBase:X}");
 
             var ret = (char*) NativeMemory.Alloc(256 * sizeof(char));
             if (GetModuleFileNameEx(handle, (void*)moduleBase, ret, 256))
             {
                 var moduleName = Marshal.PtrToStringAnsi((IntPtr)ret);
-                Console.WriteLine(moduleName);
+                Console.Write($" -> {Path.GetFileName(moduleName)}");
             }
             NativeMemory.Free(ret);
             
-            var maxNameLen = 512;
-            var pSym = Marshal.AllocHGlobal(symSize + maxNameLen*2);
+            var maxNameLen = 255u;
+            var pSym = Marshal.AllocHGlobal((int)(symSize + maxNameLen * sizeof(char)));
             
-            ZeroMem(pSym, symSize + maxNameLen*2);
+            SetMem(pSym, symSize, 0);
+            SetMem(pSym + (symSize - 4), (int)(maxNameLen * sizeof(char)), 69);
             
             var symbol = (SYMBOL_INFO*)pSym;
 
-            // symbol->Name = name;
+            // var charData = (char*) Marshal.AllocHGlobal((maxNameLen + 1) * sizeof(char));
+            
+            // SetMem((IntPtr)charData, (maxNameLen + 1) * sizeof(char));
+            
+            // symbol->NameDummy = charData;
             symbol->SizeOfStruct = (uint)symSize;
-            symbol->MaxNameLen = (uint)(maxNameLen - 1);
+            symbol->MaxNameLen = maxNameLen;
 
-            if (SymFromAddr(handle, address, &displacement, symbol))
+            if (SymFromAddrW(handle, address, &displacement, symbol))
             {
                 //The problem is that the name is not actually populated.
                 //Maybe symbols are actually resolved but dbghelp is not playing ball.
-                var str = Marshal.PtrToStringAnsi((IntPtr)(&symbol->NameDummy));
-                Console.WriteLine($"{str} (0x{address - displacement:X}) + 0x{displacement:X}. Flags: {symbol->Flags}, Tag: {symbol->Tag}, index: {symbol->Index}");
+                PrintSym(symbol, displacement, address);
             }
             else
             {
-                Console.WriteLine($"Unknown symbol 0x{address:X}, GetLastError: 0x{Marshal.GetLastWin32Error():X}");
+                Console.WriteLine($" => Unknown symbol 0x{address:X}, GetLastError: 0x{Marshal.GetLastWin32Error():X}");
             }
             
             Marshal.FreeHGlobal(pSym);
@@ -485,12 +488,21 @@ public unsafe class NativeStackWalk
         SymCleanup(handle);
     }
 
-    private static void ZeroMem(IntPtr ptr, int size)
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void PrintSym(SYMBOL_INFO* symbol, ulong displacement, ulong address)
+    {
+        var nameBuffer = new byte[symbol->NameLen * sizeof(char)];
+        Marshal.Copy((IntPtr)symbol->NameDummy, nameBuffer, 0, nameBuffer.Length);
+        var str = Encoding.Unicode.GetString(nameBuffer);
+        Console.WriteLine($" => Resolved sym \"{str}\" (len {symbol->NameLen}) (0x{address - displacement:X}) + 0x{displacement:X}. Flags: {symbol->Flags}, Tag: {symbol->Tag}, index: {symbol->Index}. GetLastError: 0x{Marshal.GetLastWin32Error():X}");
+    }
+
+    private static void SetMem(IntPtr ptr, int size, byte value)
     {
         var cursor = (byte*)ptr;
         while (size-- > 0)
         {
-            *cursor++ = 0;
+            *cursor++ = value;
         }
     }
 }

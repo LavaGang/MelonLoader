@@ -8,6 +8,10 @@ using MelonLoader.Utils;
 using System.IO;
 using System.Runtime.InteropServices;
 
+#if NET6_0
+using MelonLoader.CoreClrUtils;
+#endif
+
 namespace MelonLoader
 {
 	internal static class Core
