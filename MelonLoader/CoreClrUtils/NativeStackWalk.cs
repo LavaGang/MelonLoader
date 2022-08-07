@@ -10,10 +10,13 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
+using MelonLoader.Utils;
+using Microsoft.Diagnostics.Runtime;
 
 namespace MelonLoader.CoreClrUtils;
 
@@ -22,6 +25,8 @@ public static unsafe class NativeStackWalk
 {
     private static MelonLogger.Instance Logger = new MelonLogger.Instance("NativeStackWalk", Color.GreenYellow);
     
+    private static Dictionary<ulong, string> _registeredHooks = new();
+
     #region Native Structs
 
     [StructLayout(LayoutKind.Sequential, Pack = 16)]
@@ -410,7 +415,7 @@ public static unsafe class NativeStackWalk
         if (!Directory.Exists(cacheDir))
             Directory.CreateDirectory(cacheDir);
 
-        var userPath = $"cache*{cacheDir};srv*https://msdl.microsoft.com/download/symbols;srv*https://symbolserver.unity3d.com";
+        var userPath = $"cache*{cacheDir};srv*https://msdl.microsoft.com/download/symbols;srv*https://symbolserver.unity3d.com;{MelonEnvironment.GameRootDirectory}";
 
         SymSetOptions(SymOptions.SYMOPT_UNDNAME | SymOptions.SYMOPT_DEFERRED_LOADS);
 
@@ -420,6 +425,17 @@ public static unsafe class NativeStackWalk
         }
 
         return 0;
+    }
+
+    private static string? GetHookName(ulong ip)
+    {
+        foreach (var (addr, name) in _registeredHooks)
+        {
+            if (Math.Abs((long) ip - (long) addr) < 0x400)
+                return name;
+        }
+
+        return null;
     }
     
     #endregion
@@ -431,6 +447,12 @@ public static unsafe class NativeStackWalk
         public ulong Offset;
 
         public string? ModuleName => Path.GetFileName(ModulePath);
+    }
+
+    internal static void RegisterHookAddr(ulong addr, string hookName)
+    {
+        // Logger.Msg($"Registering hook: 0x{addr:X} => {hookName}");
+        _registeredHooks[addr] = hookName;
     }
 
     [SupportedOSPlatform("windows")]
@@ -485,10 +507,34 @@ public static unsafe class NativeStackWalk
             ret.Add(frame);
             
             var moduleBase = SymGetModuleBase64(handle, address);
-            
-            if(moduleBase == 0)
-                //Skip frames that don't have a module (JIT code, probably)
-                continue;
+
+            if (moduleBase == 0)
+            {
+                //Jitted method?
+                using (var dt = DataTarget.CreateSnapshotAndAttach(Environment.ProcessId))
+                {
+                    var runtime = dt.ClrVersions.First().CreateRuntime();
+
+                    if (runtime.GetMethodByInstructionPointer(address) is { } method)
+                    {
+                        frame.Function = $"(managed) {method.Signature}";
+
+                        if (MethodBaseHelper.GetMethodBaseFromHandle((IntPtr)method.MethodDesc) is { } md)
+                        {
+                            frame.ModulePath = md.Module.Assembly.Location;
+                        }
+
+                        frame.Offset = address - method.NativeCode;
+                        continue;
+                    }
+                }
+
+                if (frame.Function == null && GetHookName(address) is {} hookName)
+                {
+                    frame.Function = $"(detour) {hookName}";
+                    frame.ModulePath = "(injected code)";
+                }
+            }
 
             //Get the path of the module from its base address
             var moduleNameBuff = (char*) NativeMemory.Alloc(256 * sizeof(char));
@@ -552,9 +598,26 @@ public static unsafe class NativeStackWalk
         }
         else
         {
-            frameBuilder.Append($"at {frame.Function} + 0x{frame.Offset:X}");
-            if (frame.ModuleName is not "GameAssembly.dll")
-                frameBuilder.Append($" in {frame.ModuleName}");
+            var offsetSigned = BitConverter.ToInt64(BitConverter.GetBytes(frame.Offset));
+            var isSymbolAccurate = offsetSigned is >= 0 and < 0x4000;
+            var isGa = frame.ModuleName == "GameAssembly.dll";
+
+            frameBuilder.Append("at ");
+
+            if (isSymbolAccurate && isGa)
+                frameBuilder.Append("(IL2CPP) ");
+
+            if (isSymbolAccurate)
+            {
+                frameBuilder.Append($"{frame.Function}");
+                if (offsetSigned != 0)
+                    frameBuilder.Append($" + 0x{frame.Offset:X}");
+            }
+            else
+                frameBuilder.Append($"0x{frame.Pointer:X} <pdb not available or does not contain symbol>");
+            
+            if (!isSymbolAccurate || !isGa)
+                frameBuilder.Append($" in {frame.ModuleName ?? "<err: null module name>"}");
         }
 
         return frameBuilder.ToString();

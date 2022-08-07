@@ -21,7 +21,7 @@ namespace MelonLoader
         internal static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null)
         {
             string versionStr = Core.GetVersionString() +
-                $" - {GameName} {(GameVersion is null ? "" : GameVersion)}";
+                                $" - {GameName} {(GameVersion is null ? "" : GameVersion)}";
 
             Console.Title = versionStr;
         }
@@ -56,7 +56,7 @@ namespace MelonLoader
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern IntPtr GetConsoleWindow();
 
-        public static void EnableCloseButton(IntPtr mainWindow) 
+        public static void EnableCloseButton(IntPtr mainWindow)
         {
             EnableMenuItem(GetSystemMenu(mainWindow, 0), SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
         }
@@ -66,13 +66,17 @@ namespace MelonLoader
             EnableMenuItem(GetSystemMenu(mainWindow, 0), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-        public static void NativeHookAttach(IntPtr target, IntPtr detour) 
+        public static void NativeHookAttach(IntPtr target, IntPtr detour)
         {
             //SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.
-            if (/*MelonDebug.IsEnabled() && */ !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
+            if ( /*MelonDebug.IsEnabled() && */ !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
                 return;
 
             NativeHookAttachDirect(target, detour);
+
+#if NET6_0
+            NativeStackWalk.RegisterHookAddr((ulong)detour, $"Mod-requested detour of 0x{target:X}");
+#endif
         }
 
         internal static unsafe void NativeHookAttachDirect(IntPtr target, IntPtr detour)

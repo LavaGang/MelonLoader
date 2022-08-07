@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using HarmonyLib;
 using HarmonyLib.Public.Patching;
 using HarmonyLib.Tools;
+using MelonLoader.CoreClrUtils;
 using Mono.Cecil;
 using MonoMod.Utils;
 using MonoMod.Cil;
@@ -25,14 +26,36 @@ namespace MelonLoader.Support
         private bool hasWarned = false;
 
         private delegate void PatchTools_RememberObject_Delegate(object key, object value);
+
         private static PatchTools_RememberObject_Delegate PatchTools_RememberObject = null;
 
         static HarmonyMethodPatcher()
         {
-            try { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len"); }
-            catch { codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length"); }
-            try { localsGetter = AccessTools.FieldRefAccess<ILGenerator, LocalBuilder[]>("locals"); } catch { }
-            try { localCountGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_localCount"); } catch { }
+            try
+            {
+                codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("code_len");
+            }
+            catch
+            {
+                codeLenGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_length");
+            }
+
+            try
+            {
+                localsGetter = AccessTools.FieldRefAccess<ILGenerator, LocalBuilder[]>("locals");
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                localCountGetter = AccessTools.FieldRefAccess<ILGenerator, int>("m_localCount");
+            }
+            catch
+            {
+            }
+
             PatchTools_RememberObject = AccessTools.Method("HarmonyLib.PatchTools:RememberObject").CreateDelegate<PatchTools_RememberObject_Delegate>();
         }
 
@@ -64,10 +87,16 @@ namespace MelonLoader.Support
 
             if (methodDetourPointer != IntPtr.Zero)
                 MelonUtils.NativeHookDetach(copiedMethodInfoPointer, methodDetourPointer);
+
             MelonUtils.NativeHookAttachDirect(copiedMethodInfoPointer, il2CppShimDelegatePtr);
+
+#if NET6_0
+            NativeStackWalk.RegisterHookAddr((ulong)il2CppShimDelegatePtr, $"Harmony Hook for {Original.FullDescription()}");
+#endif
+
             methodDetourPointer = il2CppShimDelegatePtr;
 
-            PatchTools_RememberObject(Original, new LemonTuple<MethodInfo, MethodInfo, Delegate>{ Item1 = newreplacement, Item2 = il2CppShim, Item3 = il2CppShimDelegate });
+            PatchTools_RememberObject(Original, new LemonTuple<MethodInfo, MethodInfo, Delegate> { Item1 = newreplacement, Item2 = il2CppShim, Item3 = il2CppShimDelegate });
 
             return newreplacement;
         }
@@ -97,6 +126,7 @@ namespace MelonLoader.Support
                 MelonLogger.Error("Harmony Patcher could not rewrite Il2Cpp Unhollowed Method. Expect a stack overflow.");
                 return method;
             }
+
             ilcursor.Emit(Mono.Cecil.Cil.OpCodes.Ldc_I8, copiedMethodInfoPointer.ToInt64());
             ilcursor.Emit(Mono.Cecil.Cil.OpCodes.Conv_I);
             return method;
@@ -121,6 +151,7 @@ namespace MelonLoader.Support
                 returnLocal = il.DeclareLocal(patchReturnType);
                 LogLocalVariable(il, returnLocal);
             }
+
             Type exceptionType = typeof(Exception);
             LocalBuilder exceptionLocal = il.DeclareLocal(exceptionType);
             LogLocalVariable(il, exceptionLocal);
@@ -191,6 +222,7 @@ namespace MelonLoader.Support
             }
             else if (type == typeof(string) || Main.unhollower.IsInheritedFromIl2CppObjectBase(type))
                 return typeof(IntPtr);
+
             return type;
         }
 
@@ -327,7 +359,7 @@ namespace MelonLoader.Support
                 || UnityMagicMethods.IsUnityMagicMethod(Original))
                 return;
             string txt = $"Harmony: Method {Original.FullDescription()} does not appear to get called directly from anywhere, " +
-                "suggesting it may have been inlined and your patch may not be called.";
+                         "suggesting it may have been inlined and your patch may not be called.";
             if (loggerInstance != null)
                 loggerInstance.Warning(txt);
             else
@@ -339,7 +371,7 @@ namespace MelonLoader.Support
             if (patchInfo.transpilers.Length <= 0)
                 return;
             string txt = $"Harmony: Method {Original.FullDescription()} will only have its Unhollowed IL available to Transpilers, " +
-                "suggesting you either don't use any Transpilers when Patching this Method or ignore this Warning if modifying the Unhollowed IL is your goal.";
+                         "suggesting you either don't use any Transpilers when Patching this Method or ignore this Warning if modifying the Unhollowed IL is your goal.";
             if (loggerInstance != null)
                 loggerInstance.Warning(txt);
             else
