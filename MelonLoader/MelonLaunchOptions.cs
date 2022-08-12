@@ -59,6 +59,7 @@ namespace MelonLoader
             public static LoadModeEnum LoadMode_Mods { get; internal set; }
             public static bool QuitFix { get; internal set; }
             public static bool StartScreen { get; internal set; } = true;
+            public static string UnityVersion { get; internal set; }
 
             internal static void Setup()
             {
@@ -74,6 +75,7 @@ namespace MelonLoader
                     if (int.TryParse(arg, out int valueint))
                         LoadMode_Mods = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
                 };
+                WithArg["melonloader.unityversion"] = (string arg) => UnityVersion = arg;
             }
         }
 
@@ -107,7 +109,6 @@ namespace MelonLoader
             public static bool OfflineMode { get; internal set; }
             public static string ForceVersion_Dumper { get; internal set; }
             public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
-            public static string ForceVersion_UnityDependencies { get; internal set; }
             public static string ForceRegex { get; internal set; }
 
             internal static void Setup()
@@ -116,7 +117,6 @@ namespace MelonLoader
                 WithoutArg["melonloader.agfregenerate"] = () => ForceRegeneration = true;
                 WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;
                 WithArg["melonloader.agfvunhollower"] = (string arg) => ForceVersion_Il2CppAssemblyUnhollower = arg;
-                WithArg["melonloader.agfvunity"] = (string arg) => ForceVersion_UnityDependencies = arg;
                 WithArg["melonloader.agfregex"] = (string arg) => ForceRegex = arg;
             }
         }
