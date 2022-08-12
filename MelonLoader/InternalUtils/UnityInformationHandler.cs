@@ -14,7 +14,7 @@ namespace MelonLoader.InternalUtils
     {
         public static string GameName { get; private set; } = "UNKNOWN";
         public static string GameDeveloper { get; private set; } = "UNKNOWN";
-        public static UnityVersion EngineVersion { get; private set; }
+        public static UnityVersion EngineVersion { get; private set; } = new UnityVersion();
         public static string GameVersion { get; private set; } = "0";
 
         internal static void Setup()
@@ -25,31 +25,11 @@ namespace MelonLoader.InternalUtils
 
             if (!string.IsNullOrEmpty(MelonLaunchOptions.Core.UnityVersion))
             {
-                try
-                {
-                    EngineVersion = UnityVersion.Parse(MelonLaunchOptions.Core.UnityVersion);
-                }
+                try { EngineVersion = UnityVersion.Parse(MelonLaunchOptions.Core.UnityVersion); }
                 catch (Exception ex)
                 {
                     if (MelonDebug.IsEnabled())
                         MelonLogger.Error(ex);
-                    EngineVersion = new UnityVersion();
-                }
-            }
-            else
-            {
-                if (EngineVersion == null)
-                {
-                    try
-                    {
-                        EngineVersion = UnityVersion.ParseFromDllName("UnityPlayer");
-                    }
-                    catch (Exception ex)
-                    {
-                        if (MelonDebug.IsEnabled())
-                            MelonLogger.Error(ex);
-                        EngineVersion = new UnityVersion();
-                    }
                 }
             }
 
@@ -91,8 +71,7 @@ namespace MelonLoader.InternalUtils
                 if (!instance.file.typeTree.hasTypeTree)
                     assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
 
-                if (string.IsNullOrEmpty(MelonLaunchOptions.Core.UnityVersion))
-                    EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);
+                EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);
 
                 List<AssetFileInfoEx> assetFiles = instance.table.GetAssetsOfType(129);
                 if (assetFiles.Count > 0)

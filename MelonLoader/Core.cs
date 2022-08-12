@@ -16,6 +16,7 @@ namespace MelonLoader
             Fixes.UnhandledException.Install(curDomain);
             Fixes.ServerCertificateValidation.Install();
 
+            MelonLaunchOptions.Load();
             MelonUtils.Setup(curDomain);
             Assertions.LemonAssertMapping.Setup();
 
@@ -31,7 +32,6 @@ namespace MelonLoader
             PatchShield.Install();
 
             MelonPreferences.Load();
-            MelonLaunchOptions.Load();
             bHaptics.Load();
 
             MelonCompatibilityLayer.LoadModules();

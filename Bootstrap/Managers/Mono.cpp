@@ -243,10 +243,14 @@ void Mono::CreateDomain(const char* name)
 {
 	if (domain != NULL)
 		return;
-	Debug::Msg("Creating Mono Domain...");
 
+	Debug::Msg("Setting Mono Assemblies Path...");
 	Exports::mono_set_assemblies_path(ManagedPathMono);
+
+	Debug::Msg("Setting Mono Assembly Root Directory...");
 	Exports::mono_assembly_setrootdir(ManagedPathMono);
+
+	Debug::Msg("Setting Mono Config Directory...");
 	Exports::mono_set_config_dir(MonoConfigPathMono);
 
 	if (!IsOldMono)
@@ -254,19 +258,28 @@ void Mono::CreateDomain(const char* name)
 
 	if (Debug::Enabled)
 	{
+		Debug::Msg("Parsing Dnspy Debugger Environment Options...");
 		if (IsOldMono)
 			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
 		else
 			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
+
+		Debug::Msg("Initializing Mono Debug...");
 		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 	}
 
+	Debug::Msg("Creating Mono Domain...");
 	domain = Exports::mono_jit_init(name);
 
 	if (Debug::Enabled && (Exports::mono_debug_domain_create != NULL))
+	{
+		Debug::Msg("Creating Mono Debug Domain...");
 		Exports::mono_debug_domain_create(domain);
+	}
 
+	Debug::Msg("Setting Mono Main Thread...");
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
+
 	if (!IsOldMono)
 	{
 		Debug::Msg("Setting Mono Domain Config...");
@@ -414,28 +427,37 @@ Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* v
 	Console::SetHandles();
 	Debug::Msg("Detaching Hook from mono_jit_init_version...");
 	Hook::Detach(&(LPVOID&)Exports::mono_jit_init_version, mono_jit_init_version);
-	Debug::Msg("Creating Mono Domain...");
 
 	if (Debug::Enabled)
 	{
+		Debug::Msg("Parsing Dnspy Debugger Environment Options...");
 		if (IsOldMono)
 			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
 		else
 			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
-		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+
+		//Debug::Msg("Initializing Mono Debug...");
+		//Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
 	}
 
+	Debug::Msg("Creating Mono Domain...");
 	domain = Exports::mono_jit_init_version(name, version);
 
 	if (Debug::Enabled && (Exports::mono_debug_domain_create != NULL))
+	{
+		Debug::Msg("Creating Mono Debug Domain...");
 		Exports::mono_debug_domain_create(domain);
+	}
 
+	Debug::Msg("Setting Mono Main Thread...");
 	Exports::mono_thread_set_main(Exports::mono_thread_current());
+
 	if (!IsOldMono)
 	{
 		Debug::Msg("Setting Mono Domain Config...");
 		Exports::mono_domain_set_config(domain, Game::BasePathMono, name);
 	}
+
 	InternalCalls::Initialize();
 	if (BaseAssembly::Initialize())
 	{
