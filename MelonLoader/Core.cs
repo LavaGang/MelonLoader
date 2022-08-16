@@ -33,7 +33,6 @@ namespace MelonLoader
             PatchShield.Install();
 
             MelonPreferences.Load();
-            bHaptics.Load();
             MelonLaunchOptions.Load();
 
             MelonCompatibilityLayer.LoadModules();
