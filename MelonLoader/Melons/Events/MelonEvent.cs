@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Harmony;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -6,7 +7,8 @@ namespace MelonLoader
 {
     public abstract class MelonEventBase<T> where T : Delegate
     {
-        private readonly List<MelonAction> actions = new List<MelonAction>();
+        private readonly List<MelonAction> actions = new();
+        private LemonEnumerator<MelonAction> cachedEnumerator = new(new List<MelonAction>());
         public readonly bool oneTimeUse;
 
         public bool Disposed { get; private set; }
@@ -17,7 +19,12 @@ namespace MelonLoader
         }
 
         public bool CheckIfSubscribed(MethodInfo method, object obj = null)
-            => actions.Exists(x => x.method == method && (obj == null || x.obj == obj));
+        {
+            lock (actions)
+            {
+                return actions.Exists(x => x.method == method && (obj == null || x.obj == obj));
+            }
+        }
 
         public void Subscribe(T action, int priority = 0, bool unsubscribeOnFirstInvocation = false)
         {
@@ -38,24 +45,29 @@ namespace MelonLoader
                         a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.method, a.obj), unsubscribeOnFirstInvocation: true);
                     }
 
-                    AddSorted(a);
+                    for (var b = 0; b < actions.Count; b++)
+                    {
+                        var act = actions[b];
+                        if (a.priority >= act.priority)
+                        {
+                            actions.Insert(b, a);
+                            UpdateEnumerator();
+                            return;
+                        }
+                    }
+
+                    actions.Add(a);
+                    UpdateEnumerator();
                 }
             }
         }
 
-        private void AddSorted(MelonAction action)
+        public void Unsubscribe(T action)
         {
-            for (var a = 0; a < actions.Count; a++)
+            foreach (var inv in action.GetInvocationList())
             {
-                var act = actions[a];
-                if (action.priority >= act.priority)
-                {
-                    actions.Insert(a, action);
-                    return;
-                }
+                Unsubscribe(inv.Method, inv.Target);
             }
-
-            actions.Add(action);
         }
 
         public void Unsubscribe(MethodInfo method, object obj = null)
@@ -68,17 +80,27 @@ namespace MelonLoader
                 if (method.IsStatic)
                     obj = null;
 
+                var any = false;
                 for (var a = 0; a < actions.Count; a++)
                 {
                     var act = actions[a];
                     if (act.method != method || (obj != null && act.obj != obj))
                         continue;
 
+                    any = true;
                     actions.RemoveAt(a);
                     if (act.melonAssembly != null)
                         MelonDebug.Msg($"MelonAssembly '{act.melonAssembly.Assembly.GetName().Name}' unsubscribed with {act.method.Name}");
                 }
+
+                if (any)
+                    UpdateEnumerator();
             }
+        }
+
+        private void UpdateEnumerator()
+        {
+            cachedEnumerator = new LemonEnumerator<MelonAction>(actions);
         }
 
         protected void Invoke(params object[] args)
@@ -86,9 +108,7 @@ namespace MelonLoader
             if (Disposed)
                 return;
 
-            LemonEnumerator<MelonAction> enumerator;
-            lock (actions)
-                enumerator = new LemonEnumerator<MelonAction>(actions);
+            var enumerator = cachedEnumerator;
             foreach (var del in enumerator)
             {
                 try { del.Invoke(args); }
