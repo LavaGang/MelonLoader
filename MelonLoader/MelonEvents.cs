@@ -41,22 +41,22 @@ namespace MelonLoader
         /// <summary>
         /// Called once per frame.
         /// </summary>
-        public readonly static MelonEvent OnUpdate = new MelonEvent();
+        public readonly static VeryStupidEvent OnUpdate = new VeryStupidEvent();
 
         /// <summary>
         /// Called every 0.02 seconds, unless Time.fixedDeltaTime has a different Value. It is recommended to do all important Physics calculations inside this Callback.
         /// </summary>
-        public readonly static MelonEvent OnFixedUpdate = new MelonEvent();
+        public readonly static VeryStupidEvent OnFixedUpdate = new VeryStupidEvent();
 
         /// <summary>
         /// Called once per frame, after <see cref="OnUpdate"/>.
         /// </summary>
-        public readonly static MelonEvent OnLateUpdate = new MelonEvent();
+        public readonly static VeryStupidEvent OnLateUpdate = new VeryStupidEvent();
 
         /// <summary>
         /// Called at every IMGUI event. Only use this for drawing IMGUI Elements.
         /// </summary>
-        public readonly static MelonEvent OnGUI = new MelonEvent();
+        public readonly static VeryStupidEvent OnGUI = new VeryStupidEvent();
 
         /// <summary>
         /// Called when a new Scene is loaded.

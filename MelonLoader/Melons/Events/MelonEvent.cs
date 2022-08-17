@@ -115,6 +115,33 @@ namespace MelonLoader
         }
     }
 
+    public class VeryStupidEvent
+    {
+        private struct VSEInternal
+        {
+            public Action del;
+            public int priority;
+        }
+        private List<VSEInternal> activeEvents = new();
+        public void Subscribe(Action del, int priority)
+        {
+            var index = activeEvents.FindIndex(x => x.priority < priority);
+            if (index == -1) index = activeEvents.Count;
+            activeEvents.Insert(index, new VSEInternal { del = del, priority = priority });
+        }
+        public void Invoke()
+        {
+            foreach (var vse in activeEvents)
+            {
+                try { vse.del(); }
+                catch (Exception ex)
+                {
+                    MelonLogger.Error(ex.ToString());
+                }
+            }
+        }
+    }
+
     #region Param Children
     public class MelonEvent : MelonEventBase<LemonAction>
     {
