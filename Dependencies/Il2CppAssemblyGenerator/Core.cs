@@ -22,15 +22,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal static bool AssemblyGenerationNeeded = false;
 
-        public static Core instance;
-        internal static MelonLogger.Instance Logger => instance.LoggerInstance;
+        internal static MelonLogger.Instance Logger;
 
         public override void OnInitialize()
         {
-            instance = this;
+            Logger = LoggerInstance;
 
             webClient = new WebClient();
-            webClient.Headers.Add("User-Agent", "Unity web player");
+            webClient.Headers.Add("User-Agent", $"{BuildInfo.Name} v{BuildInfo.Version}");
 
             AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
