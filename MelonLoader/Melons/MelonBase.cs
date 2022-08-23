@@ -241,8 +241,8 @@ namespace MelonLoader
         /// Runs when the Melon is registered. Executed before the Melon's info is printed to the console. This callback should only be used a constructor for the Melon.
         /// </summary>
         /// <remarks>
-        /// Please note that this callback may run before the Support Module is loaded and before the Engine is fully initialized.
-        /// <br>As a result, using unhollowed assemblies and creating/getting UnityEngine Objects may not be possible and you would have to override <see cref="OnInitializeMelon"/> instead.</br>
+        /// Please note that this callback may run before the Support Module is loaded.
+        /// <br>As a result, using unhollowed assemblies may not be possible yet and you would have to override <see cref="OnInitializeMelon"/> instead.</br>
         /// </remarks>
         public virtual void OnEarlyInitializeMelon() { }
 
