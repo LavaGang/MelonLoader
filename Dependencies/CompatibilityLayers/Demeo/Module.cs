@@ -14,21 +14,27 @@ namespace MelonLoader.CompatibilityLayers
         {
             MelonEvents.OnApplicationStart.Subscribe(OnPreAppStart, int.MaxValue);
             MelonBase.OnMelonRegistered.Subscribe(ParseMelon, int.MaxValue);
-            MelonBase.OnMelonUnregistered.Subscribe(OnUnRegister, int.MaxValue);
+            MelonBase.OnMelonUnregistered.Subscribe(OnUnregister, int.MaxValue);
         }
 
         private static void OnPreAppStart()
         {
-            HarmonyLib.Harmony harmony = new HarmonyLib.Harmony("DemeoIntegration");
+            HarmonyLib.Harmony harmony = new("DemeoIntegration");
 
             harmony.Patch(Assembly.Load("Assembly-CSharp").GetType("Prototyping.RG").GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static),
                 typeof(Demeo_Module).GetMethod("InitFix", BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod());
 
-            MelonPlugin.RegisteredMelons.ForEach(x => ParseMelon(x));
-            MelonMod.RegisteredMelons.ForEach(x => ParseMelon(x));
+            foreach (var m in MelonPlugin.RegisteredMelons)
+            {
+                ParseMelon(m);
+            }
+            foreach (var m in MelonMod.RegisteredMelons)
+            {
+                ParseMelon(m);
+            }
         }
 
-        private static void OnUnRegister(MelonBase melon)
+        private static void OnUnregister(MelonBase melon)
         {
             if (melon == null)
                 return;
