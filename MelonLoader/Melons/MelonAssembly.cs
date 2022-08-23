@@ -160,8 +160,7 @@ namespace MelonLoader
         {
             get
             {
-                if (_hash == null)
-                    _hash = MelonUtils.ComputeSimpleSHA256Hash(Assembly.Location);
+                _hash ??= MelonUtils.ComputeSimpleSHA256Hash(Assembly.Location);
                 return _hash;
             }
         }

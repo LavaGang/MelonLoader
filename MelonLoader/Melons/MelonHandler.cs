@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace MelonLoader
@@ -84,13 +85,13 @@ namespace MelonLoader
         /// List of Plugins.
         /// </summary>
         [Obsolete("Use 'MelonPlugin.RegisteredMelons' instead.")]
-        public static List<MelonPlugin> Plugins => MelonTypeBase<MelonPlugin>.RegisteredMelons;
+        public static List<MelonPlugin> Plugins => MelonTypeBase<MelonPlugin>.RegisteredMelons.ToList();
 
         /// <summary>
         /// List of Mods.
         /// </summary>
         [Obsolete("Use 'MelonMod.RegisteredMelons' instead.")]
-        public static List<MelonMod> Mods => MelonTypeBase<MelonMod>.RegisteredMelons;
+        public static List<MelonMod> Mods => MelonTypeBase<MelonMod>.RegisteredMelons.ToList();
 
         [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
         public static void LoadFromFile(string filelocation, bool is_plugin) => LoadFromFile(filelocation);
