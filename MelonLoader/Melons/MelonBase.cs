@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 #pragma warning disable 0618
@@ -525,9 +526,7 @@ namespace MelonLoader
 
             MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " initialized:");
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
-
-            if (!string.IsNullOrEmpty(Hash))
-                MelonLogger.Msg($"SHA256 Hash: {Hash}");
+            MelonLogger.Msg(ConsoleColor.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
 
             MelonLogger.Msg(ConsoleColor.DarkGreen, "------------------------------");
         }

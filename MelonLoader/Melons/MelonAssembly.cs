@@ -137,7 +137,7 @@ namespace MelonLoader
                 ma.LoadMelons();
             
             MelonLogger.Msg(ConsoleColor.DarkGray, $"Melon Assembly loaded: '{shortPath}'");
-            MelonLogger.Msg(ConsoleColor.DarkGray, $"Hash: '{shortPath}'");
+            MelonLogger.Msg(ConsoleColor.DarkGray, $"SHA256 Hash: '{ma.Hash}'");
             return ma;
         }
 
