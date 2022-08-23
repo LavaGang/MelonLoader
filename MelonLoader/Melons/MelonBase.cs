@@ -530,7 +530,6 @@ namespace MelonLoader
                 MelonLogger.Msg($"SHA256 Hash: {Hash}");
 
             MelonLogger.Msg(ConsoleColor.DarkGreen, "------------------------------");
-            MelonLogger.WriteSpacer();
         }
 
         private void PrintUnloadInfo(string reason)
@@ -547,7 +546,6 @@ namespace MelonLoader
             }
 
             MelonLogger.Msg(ConsoleColor.DarkRed, "------------------------------");
-            MelonLogger.WriteSpacer();
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)
