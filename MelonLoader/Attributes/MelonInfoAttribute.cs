@@ -56,10 +56,9 @@ namespace MelonLoader
             Author = string.IsNullOrEmpty(author) ? "UNKNOWN" : author;
             DownloadLink = downloadLink; // Might get Removed. Not sure yet.
 
-            if (!SemVersion.TryParse(version, out SemVersion semver))
-                MelonLogger.Warning($"==Normal users can ignore this warning==\nMelon '{name}' by '{Author}' has version '{version}' which does not use the Semantic Versioning format. Versions using formats other than the Semantic Versioning format will not be allowed in the future versions of MelonLoader.\nFor more details, see: https://semver.org");
+            var isSemVer = SemVersion.TryParse(version, out SemVersion semver);
 
-            Version = semver?.ToString() ?? (string.IsNullOrEmpty(version) ? "1.0.0" : version);
+            Version = isSemVer ? semver.ToString() : (string.IsNullOrEmpty(version) ? "1.0.0" : version);
         }
     }
 }
