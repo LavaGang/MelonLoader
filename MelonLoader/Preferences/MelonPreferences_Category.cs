@@ -22,7 +22,7 @@ namespace MelonLoader
             MelonPreferences.Categories.Add(this);
         }
 
-        public MelonPreferences_Entry CreateEntry<T>(string identifier, T default_value, string display_name, bool is_hidden) 
+        public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name, bool is_hidden) 
             => CreateEntry(identifier, default_value, display_name, null, is_hidden, false, null, null);
         public MelonPreferences_Entry<T> CreateEntry<T>(string identifier, T default_value, string display_name,
             string description, bool is_hidden, bool dont_save_default, Preferences.ValueValidator validator)
