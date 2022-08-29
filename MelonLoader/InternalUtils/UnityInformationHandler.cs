@@ -15,7 +15,7 @@ namespace MelonLoader.InternalUtils
 {
     public static class UnityInformationHandler
     {
-        private static readonly Regex UnityVersionRegex = new Regex(@"^[0-9]+\.[0-9]+\.[0-9]+[abcfx][0-9]+$", RegexOptions.Compiled);
+        private static readonly Regex UnityVersionRegex = new Regex(@"^[0-9]+\.[0-9]+\.[0-9]+[abcfx][0-9]+$");
 
         public static string GameName { get; private set; } = "UNKNOWN";
         public static string GameDeveloper { get; private set; } = "UNKNOWN";
