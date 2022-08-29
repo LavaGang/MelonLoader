@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Semver;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -128,22 +129,22 @@ namespace MelonLoader
             if (shortPath.StartsWith(MelonUtils.BaseDirectory))
                 shortPath = "." + shortPath.Remove(0, MelonUtils.BaseDirectory.Length);
 
-            MelonLogger.Msg($"Loading Melon Assembly: '{shortPath}'...");
             OnAssemblyResolving.Invoke(assembly);
             ma = new MelonAssembly(assembly, path);
             loadedAssemblies.Add(ma);
 
             if (loadMelons)
                 ma.LoadMelons();
-
+            
+            MelonLogger.Msg(ConsoleColor.DarkGray, $"Melon Assembly loaded: '{shortPath}'");
+            MelonLogger.Msg(ConsoleColor.DarkGray, $"SHA256 Hash: '{ma.Hash}'");
             return ma;
         }
 
         #endregion
 
         #region Instance
-
-        private string _hash;
+        
         private bool melonsLoaded;
 
         private readonly List<MelonBase> loadedMelons = new();
@@ -156,15 +157,7 @@ namespace MelonLoader
         /// <summary>
         /// A SHA256 Hash of the Assembly.
         /// </summary>
-        public string Hash
-        {
-            get
-            {
-                if (_hash == null)
-                    _hash = MelonUtils.ComputeSimpleSHA256Hash(Assembly.Location);
-                return _hash;
-            }
-        }
+        public string Hash { get; private set; }
 
         public Assembly Assembly { get; private set; }
 
@@ -183,7 +176,8 @@ namespace MelonLoader
         private MelonAssembly(Assembly assembly, string location)
         {
             Assembly = assembly;
-            Location = location ?? "";
+            Location = location ?? ""; 
+            Hash = MelonUtils.ComputeSimpleSHA256Hash(Location);
         }
 
         /// <summary>
@@ -207,73 +201,78 @@ namespace MelonLoader
             if (melonsLoaded)
                 return;
 
+            melonsLoaded = true;
+
             MelonEvents.OnApplicationDefiniteQuit.Subscribe(OnApplicationQuit);
 
             // \/ Custom Resolver \/
             var resolvers = CustomMelonResolvers?.GetInvocationList();
             if (resolvers != null)
-                foreach (var r in resolvers)
+                foreach (LemonFunc<Assembly, ResolvedMelons> r in resolvers)
                 {
-                    var customMelon = (ResolvedMelons)r.DynamicInvoke(Assembly);
+                    var customMelon = r.Invoke(Assembly);
 
                     loadedMelons.AddRange(customMelon.loadedMelons);
                     rottenMelons.AddRange(customMelon.rottenMelons);
                 }
 
+            
             // \/ Default resolver \/
             var info = MelonUtils.PullAttributeFromAssembly<MelonInfoAttribute>(Assembly);
-            if (info == null)
-                return;
-
-            if (info.SystemType == null || !info.SystemType.IsSubclassOf(typeof(MelonBase)))
-                return;
-
-            MelonBase melon;
-            try
+            if (info != null && info.SystemType != null && info.SystemType.IsSubclassOf(typeof(MelonBase)))
             {
-                melon = (MelonBase)Activator.CreateInstance(info.SystemType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                MelonBase melon;
+                try
+                {
+                    melon = (MelonBase)Activator.CreateInstance(info.SystemType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                }
+                catch (Exception ex)
+                {
+                    melon = null;
+                    rottenMelons.Add(new RottenMelon(info.SystemType, "Failed to create an instance of the Melon.", ex));
+                }
+
+                if (melon != null)
+                {
+                    var priorityAttr = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(Assembly);
+                    var colorAttr = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(Assembly);
+                    var authorColorAttr = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(Assembly);
+                    var procAttrs = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly);
+                    var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(Assembly);
+                    var optionalDependenciesAttr = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly);
+                    var idAttr = MelonUtils.PullAttributeFromAssembly<MelonIDAttribute>(Assembly);
+                    var gameVersionAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameVersionAttribute>(Assembly);
+                    var platformAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(Assembly);
+                    var domainAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(Assembly);
+                    var mlVersionAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(Assembly);
+                    var mlBuildAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderBuildAttribute>(Assembly);
+                    var harmonyDPAAttr = MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(Assembly);
+
+                    melon.Info = info;
+                    melon.MelonAssembly = this;
+                    melon.Priority = priorityAttr == null ? 0 : priorityAttr.Priority;
+                    melon.ConsoleColor = colorAttr == null ? MelonLogger.DefaultMelonColor : colorAttr.Color;
+                    melon.AuthorConsoleColor = authorColorAttr == null ? MelonLogger.DefaultTextColor : authorColorAttr.Color;
+                    melon.SupportedProcesses = procAttrs;
+                    melon.Games = gameAttrs;
+                    melon.SupportedGameVersions = gameVersionAttrs;
+                    melon.SupportedPlatforms = platformAttr;
+                    melon.SupportedDomain = domainAttr;
+                    melon.SupportedMLVersion = mlVersionAttr;
+                    melon.SupportedMLBuild = mlBuildAttr;
+                    melon.OptionalDependencies = optionalDependenciesAttr;
+                    melon.ID = idAttr?.ID;
+                    HarmonyDontPatchAll = harmonyDPAAttr != null;
+
+                    loadedMelons.Add(melon);
+
+                    if (!SemVersion.TryParse(info.Version, out _))
+                        MelonLogger.Warning($"==Normal users can ignore this warning==\nMelon '{info.Name}' by '{info.Author}' has version '{info.Version}' which does not use the Semantic Versioning format. Versions using formats other than the Semantic Versioning format will not be supported in the future versions of MelonLoader.\nFor more details, see: https://semver.org");
+                }
             }
-            catch (Exception ex)
-            {
-                rottenMelons.Add(new RottenMelon(info.SystemType, "Failed to create an instance of the Melon.", ex));
-                return;
-            }
-
-            var priorityAttr = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(Assembly);
-            var colorAttr = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(Assembly);
-            var authorColorAttr = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(Assembly);
-            var procAttrs = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly);
-            var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(Assembly);
-            var optionalDependenciesAttr = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly);
-            var idAttr = MelonUtils.PullAttributeFromAssembly<MelonIDAttribute>(Assembly);
-            var gameVersionAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameVersionAttribute>(Assembly);
-            var platformAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformAttribute>(Assembly);
-            var domainAttr = MelonUtils.PullAttributeFromAssembly<MelonPlatformDomainAttribute>(Assembly);
-            var mlVersionAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderVersionAttribute>(Assembly);
-            var mlBuildAttr = MelonUtils.PullAttributeFromAssembly<VerifyLoaderBuildAttribute>(Assembly);
-            var harmonyDPAAttr = MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(Assembly);
-
-            melon.Info = info;
-            melon.MelonAssembly = this;
-            melon.Priority = priorityAttr == null ? 0 : priorityAttr.Priority;
-            melon.ConsoleColor = colorAttr == null ? MelonLogger.DefaultMelonColor : colorAttr.Color;
-            melon.AuthorConsoleColor = authorColorAttr == null ? MelonLogger.DefaultTextColor : authorColorAttr.Color;
-            melon.SupportedProcesses = procAttrs;
-            melon.Games = gameAttrs;
-            melon.SupportedGameVersions = gameVersionAttrs;
-            melon.SupportedPlatforms = platformAttr;
-            melon.SupportedDomain = domainAttr;
-            melon.SupportedMLVersion = mlVersionAttr;
-            melon.SupportedMLBuild = mlBuildAttr;
-            melon.OptionalDependencies = optionalDependenciesAttr;
-            melon.ID = idAttr?.ID;
-            HarmonyDontPatchAll = harmonyDPAAttr != null;
-
-            loadedMelons.Add(melon);
 
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
-
-            MelonLogger.Msg($"{loadedMelons.Count} {"Melon".MakePlural(loadedMelons.Count)} loaded from {Path.GetFileName(Location)}.");
+            
             if (rottenMelons.Count != 0)
             {
                 MelonLogger.Error($"Failed to load {rottenMelons.Count} {"Melon".MakePlural(rottenMelons.Count)} from {Path.GetFileName(Location)}:");
@@ -284,8 +283,6 @@ namespace MelonLoader
                         MelonLogger.Error(r.exception);
                 }
             }
-
-            melonsLoaded = true;
         }
 
         #endregion

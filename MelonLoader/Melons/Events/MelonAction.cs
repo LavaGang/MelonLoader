@@ -1,42 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace MelonLoader
 {
-    internal class MelonAction
+    internal class MelonAction<T> where T : Delegate
     {
-        internal readonly MethodInfo method;
-        internal readonly object obj;
+        internal readonly T del;
         internal readonly bool unsubscribeOnFirstInvocation;
         internal readonly int priority;
 
         internal readonly MelonAssembly melonAssembly;
 
-        private MelonAction(Delegate singleDel, int priority, bool unsubscribeOnFirstInvocation)
+        private MelonAction(T singleDel, int priority, bool unsubscribeOnFirstInvocation)
         {
-            method = singleDel.Method;
-            obj = singleDel.Target;
-            melonAssembly = MelonAssembly.GetMelonAssemblyOfMember(method, obj);
+            del = singleDel;
+            melonAssembly = MelonAssembly.GetMelonAssemblyOfMember(del.Method, del.Target);
             this.priority = priority;
             this.unsubscribeOnFirstInvocation = unsubscribeOnFirstInvocation;
         }
 
-        internal void Invoke(params object[] args)
-        {
-            method.Invoke(obj, args);
-        }
-
-        internal static List<MelonAction> Get(Delegate del, int priority = 0, bool unsubscribeOnFirstInvocation = false)
+        internal static List<MelonAction<T>> Get(T del, int priority = 0, bool unsubscribeOnFirstInvocation = false)
         {
             var mets = del.GetInvocationList();
-            var result = new List<MelonAction>();
+            var result = new List<MelonAction<T>>();
             foreach (var met in mets)
             {
                 if (met.Target != null && met.Target is MelonBase melon && !melon.Registered)
                     continue;
 
-                result.Add(new MelonAction(met, priority, unsubscribeOnFirstInvocation));
+                result.Add(new MelonAction<T>((T)met, priority, unsubscribeOnFirstInvocation));
             }
             return result;
         }

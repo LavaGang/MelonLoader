@@ -11,8 +11,8 @@ namespace MelonLoader.CompatibilityLayers
 	internal class IPAPluginWrapper : MelonMod
 	{
 		internal IPlugin pluginInstance;
-		public override void OnLoaderInitialized() => pluginInstance.OnApplicationStart();
-		public override void OnApplicationQuit() => pluginInstance.OnApplicationQuit();
+		public override void OnInitializeMelon() => pluginInstance.OnApplicationStart();
+		public override void OnDeinitializeMelon() => pluginInstance.OnApplicationQuit();
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName) => pluginInstance.OnLevelWasLoaded(buildIndex);
 		public override void OnSceneWasInitialized(int buildIndex, string sceneName) => pluginInstance.OnLevelWasInitialized(buildIndex);
 		public override void OnUpdate() => pluginInstance.OnUpdate();

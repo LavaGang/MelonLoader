@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MelonLoader
@@ -8,7 +9,7 @@ namespace MelonLoader
         /// <summary>
         /// List of registered <typeparamref name="T"/>s.
         /// </summary>
-        new public static List<T> RegisteredMelons => _registeredMelons.AsReadOnly().ToList();
+        new public static ReadOnlyCollection<T> RegisteredMelons => _registeredMelons.AsReadOnly();
         new internal static List<T> _registeredMelons = new();
 
         /// <summary>

@@ -350,7 +350,7 @@ namespace MelonLoader.Support
         {
             MelonLogger.Instance loggerInstance = null;
 
-            LemonEnumerator<MelonPlugin> PluginEnumerator = new LemonEnumerator<MelonPlugin>(MelonPlugin.RegisteredMelons);
+            LemonEnumerator<MelonPlugin> PluginEnumerator = new(MelonPlugin.RegisteredMelons);
             while (PluginEnumerator.MoveNext())
                 if (criterion(PluginEnumerator.Current))
                 {
@@ -360,7 +360,7 @@ namespace MelonLoader.Support
 
             if (loggerInstance == null)
             {
-                LemonEnumerator<MelonMod> ModEnumerator = new LemonEnumerator<MelonMod>(MelonMod.RegisteredMelons);
+                LemonEnumerator<MelonMod> ModEnumerator = new(MelonMod.RegisteredMelons);
                 while (ModEnumerator.MoveNext())
                     if (criterion(ModEnumerator.Current))
                     {

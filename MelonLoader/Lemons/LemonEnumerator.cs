@@ -19,7 +19,7 @@ namespace MelonLoader
         /// <summary>
         /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
         /// </summary>
-        public LemonEnumerator(List<T> lemons)
+        public LemonEnumerator(IList<T> lemons)
             => LemonPatch = lemons.ToArray();
 
         object IEnumerator.Current => Current;
