@@ -7,21 +7,24 @@ using System.Runtime.CompilerServices;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
+using System.Diagnostics;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MelonLoader.InternalUtils
 {
     public static class UnityInformationHandler
     {
+        private static readonly Regex UnityVersionRegex = new Regex(@"^[0-9]+\.[0-9]+\.[0-9]+[abcfx][0-9]+$", RegexOptions.Compiled);
+
         public static string GameName { get; private set; } = "UNKNOWN";
         public static string GameDeveloper { get; private set; } = "UNKNOWN";
-        public static UnityVersion EngineVersion { get; private set; } = new UnityVersion();
+        public static UnityVersion EngineVersion { get; private set; } = UnityVersion.MinVersion;
         public static string GameVersion { get; private set; } = "0";
 
         internal static void Setup()
         {
-            AssetsManager assetsManager = new AssetsManager();
-            ReadGameInfo(assetsManager);
-            assetsManager.UnloadAll();
+            string gameDataPath = MelonUtils.GetGameDataDirectory();
 
             if (!string.IsNullOrEmpty(MelonLaunchOptions.Core.UnityVersion))
             {
@@ -30,6 +33,23 @@ namespace MelonLoader.InternalUtils
                 {
                     if (MelonDebug.IsEnabled())
                         MelonLogger.Error(ex);
+                }
+            }
+
+            if (EngineVersion == UnityVersion.MinVersion)
+            {
+                AssetsManager assetsManager = new AssetsManager();
+                ReadGameInfo(assetsManager, gameDataPath);
+                assetsManager.UnloadAll();
+
+                if (EngineVersion == UnityVersion.MinVersion)
+                {
+                    try { EngineVersion = ReadVersionFallback(gameDataPath); }
+                    catch (Exception ex)
+                    {
+                        if (MelonDebug.IsEnabled())
+                            MelonLogger.Error(ex);
+                    }
                 }
             }
 
@@ -43,9 +63,8 @@ namespace MelonLoader.InternalUtils
             MelonLogger.Msg("------------------------------");
         }
 
-        private static void ReadGameInfo(AssetsManager assetsManager)
+        private static void ReadGameInfo(AssetsManager assetsManager, string gameDataPath)
         {
-            string gameDataPath = MelonUtils.GetGameDataDirectory();
             AssetsFileInstance instance = null;
             try
             {
@@ -121,6 +140,79 @@ namespace MelonLoader.InternalUtils
             }
             if (instance != null)
                 instance.file.Close();
+        }
+
+        private static UnityVersion ReadVersionFallback(string gameDataPath)
+        {
+            string unityPlayerPath = Path.Combine(MelonUtils.GameDirectory, "UnityPlayer.dll");
+            if (!File.Exists(unityPlayerPath))
+                unityPlayerPath = MelonUtils.GetApplicationPath();
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                var unityVer = FileVersionInfo.GetVersionInfo(unityPlayerPath);
+                return new UnityVersion((ushort)unityVer.FileMajorPart, (ushort)unityVer.FileMinorPart, (ushort)unityVer.FileBuildPart);
+            }
+
+            var globalgamemanagersPath = Path.Combine(gameDataPath, "globalgamemanagers");
+            if (File.Exists(globalgamemanagersPath))
+                return GetVersionFromGlobalGameManagers(File.ReadAllBytes(globalgamemanagersPath));
+
+            var dataPath = Path.Combine(gameDataPath, "data.unity3d");
+            if (File.Exists(dataPath))
+                return GetVersionFromDataUnity3D(File.OpenRead(dataPath));
+
+            return default;
+        }
+
+        private static UnityVersion GetVersionFromGlobalGameManagers(byte[] ggmBytes)
+        {
+            var verString = new StringBuilder();
+            var idx = 0x14;
+            while (ggmBytes[idx] != 0)
+            {
+                verString.Append(Convert.ToChar(ggmBytes[idx]));
+                idx++;
+            }
+
+            string unityVer = verString.ToString();
+            if (!UnityVersionRegex.IsMatch(unityVer))
+            {
+                idx = 0x30;
+                verString = new StringBuilder();
+                while (ggmBytes[idx] != 0)
+                {
+                    verString.Append(Convert.ToChar(ggmBytes[idx]));
+                    idx++;
+                }
+
+                unityVer = verString.ToString().Trim();
+            }
+
+            return UnityVersion.Parse(unityVer);
+        }
+
+        private static UnityVersion GetVersionFromDataUnity3D(Stream fileStream)
+        {
+            var verString = new StringBuilder();
+
+            if (fileStream.CanSeek)
+                fileStream.Seek(0x12, SeekOrigin.Begin);
+            else
+            {
+                if (fileStream.Read(new byte[0x12], 0, 0x12) != 0x12)
+                    throw new("Failed to seek to 0x12 in data.unity3d");
+            }
+
+            while (true)
+            {
+                var read = fileStream.ReadByte();
+                if (read == 0)
+                    break;
+                verString.Append(Convert.ToChar(read));
+            }
+
+            return UnityVersion.Parse(verString.ToString().Trim());
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
