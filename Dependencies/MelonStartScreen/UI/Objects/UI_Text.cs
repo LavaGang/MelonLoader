@@ -4,12 +4,12 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 {
     internal class UI_Text : UI_Object
     {
-        private UIConfig.TextSettings config;
+        private UI_Config.TextSettings config;
         private Mesh mesh;
         internal bool isDirty = true;
         internal string text;
 
-        internal UI_Text(UIConfig.TextSettings textSettings)
+        internal UI_Text(UI_Config.TextSettings textSettings)
         {
             config = textSettings;
             text = config.Text;
@@ -24,11 +24,11 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
                 return;
 
             UpdateMesh();
-            UIStyleValues.TextFont.material.SetPass(0);
+            UI_StyleValues.TextFont.material.SetPass(0);
             if (mesh == null)
                 return;
 
-            UIUtils.AnchorToScreen(config.ScreenAnchor, x, y, out int anchor_x, out int anchor_y);
+            UI_Utils.AnchorToScreen(config.ScreenAnchor, x, y, out int anchor_x, out int anchor_y);
             Graphics.DrawMeshNow(mesh, new Vector3(anchor_x, anchor_y, 0), Quaternion.identity);
         }
 
@@ -50,7 +50,7 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             settings.pivot = new Vector2(0.5f, 0.5f);
             settings.verticalOverflow = VerticalWrapMode.Overflow;
 
-            settings.font = UIStyleValues.TextFont; // To-Do: Font Customization
+            settings.font = UI_StyleValues.TextFont; // To-Do: Font Customization
 
             settings.textAnchor = (TextAnchor)config.Anchor;
             settings.color = config.TextColor;

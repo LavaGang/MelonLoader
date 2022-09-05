@@ -1,6 +1,6 @@
 ﻿namespace MelonLoader.MelonStartScreen.UI
 {
-    internal enum UIAnchor
+    internal enum UI_Anchor
     {
         // Upper
         UpperLeft,

@@ -4,16 +4,16 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 {
     internal class UI_Background : UI_Object
     {
-        private UIConfig.cBackground config;
+        private UI_Config.cBackground config;
         private UI_Image image;
         internal Texture2D solidTexture;
 
-        internal UI_Background(UIConfig.cBackground backgroundSettings)
+        internal UI_Background(UI_Config.cBackground backgroundSettings)
         {
             config = backgroundSettings;
-            image = UIUtils.LoadImage(config, "Background");
+            image = UI_Utils.LoadImage(config, "Background");
 
-            solidTexture = UIUtils.CreateColorTexture(config.SolidColor);
+            solidTexture = UI_Utils.CreateColorTexture(config.SolidColor);
             solidTexture.hideFlags = HideFlags.HideAndDontSave;
             solidTexture.DontDestroyOnLoad();
             AllElements.Add(this);

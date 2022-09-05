@@ -4,7 +4,7 @@ using MelonUnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI
 {
-    internal static class UIStyleValues
+    internal static class UI_StyleValues
     {
         internal static Font TextFont;
 
@@ -17,21 +17,21 @@ namespace MelonLoader.MelonStartScreen.UI
         internal static void Init()
         {
             TextFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            Background = new Objects.UI_Background(UIConfig.Background);
-            VersionText = new Objects.UI_Text(UIConfig.VersionText);
-            ProgressBar = new Objects.UI_ProgressBar(UIConfig.ProgressBar, UIConfig.ProgressText);
+            Background = new Objects.UI_Background(UI_Config.Background);
+            VersionText = new Objects.UI_Text(UI_Config.VersionText);
+            ProgressBar = new Objects.UI_ProgressBar(UI_Config.ProgressBar, UI_Config.ProgressText);
 
-            if (UIConfig.LogoImage.ScanForCustomImage)
-                LogoImage = UIUtils.LoadImage(UIConfig.LogoImage, "Logo");
+            if (UI_Config.LogoImage.ScanForCustomImage)
+                LogoImage = UI_Utils.LoadImage(UI_Config.LogoImage, "Logo");
             if (LogoImage == null)
-                LogoImage = new Objects.UI_Image(UIConfig.LogoImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                LogoImage = new Objects.UI_Image(UI_Config.LogoImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Logo_Lemon
                         : Properties.Resources.Logo_Melon);
 
-            if (UIConfig.LoadingImage.ScanForCustomImage)
-                LoadingImage = UIUtils.LoadImage(UIConfig.LoadingImage, "Loading");
+            if (UI_Config.LoadingImage.ScanForCustomImage)
+                LoadingImage = UI_Utils.LoadImage(UI_Config.LoadingImage, "Loading");
             if (LoadingImage == null)
-                LoadingImage = new Objects.UI_AnimatedImage(UIConfig.LoadingImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
+                LoadingImage = new Objects.UI_AnimatedImage(UI_Config.LoadingImage, (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON)
                         ? Properties.Resources.Loading_Lemon
                         : Properties.Resources.Loading_Melon);
         }

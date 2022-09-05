@@ -37,6 +37,10 @@ namespace MelonLoader.MelonStartScreen
 
         private static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
+            // Start Screen has no signatures for Development Builds of UnityPlayer.dll
+            if (MelonUnityEngine.UnityDebug.isDebugBuild)
+                return functionToWaitForAsync();
+
             Logger.Msg("Initializing...");
 
             FolderPath = Path.Combine(MelonUtils.UserDataDirectory, "MelonStartScreen");
@@ -47,8 +51,8 @@ namespace MelonLoader.MelonStartScreen
             if (!Directory.Exists(ThemesFolderPath))
                 Directory.CreateDirectory(ThemesFolderPath);
 
-            UIConfig.Load();
-            if (!UIConfig.General.Enabled)
+            UI_Config.Load();
+            if (!UI_Config.General.Enabled)
                 return functionToWaitForAsync();
 
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+

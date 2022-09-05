@@ -6,14 +6,14 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 {
     internal class UI_Image : UI_Object
     {
-        internal UIConfig.ImageSettings config;
+        internal UI_Config.ImageSettings config;
         internal Texture2D MainTexture;
         internal float AspectRatio;
 
-        internal UI_Image(UIConfig.ImageSettings imageSettings, string filepath) => LoadImage(imageSettings, File.ReadAllBytes(filepath));
-        internal UI_Image(UIConfig.ImageSettings imageSettings, byte[] filedata) => LoadImage(imageSettings, filedata);
+        internal UI_Image(UI_Config.ImageSettings imageSettings, string filepath) => LoadImage(imageSettings, File.ReadAllBytes(filepath));
+        internal UI_Image(UI_Config.ImageSettings imageSettings, byte[] filedata) => LoadImage(imageSettings, filedata);
 
-        internal virtual void LoadImage(UIConfig.ImageSettings imageSettings, byte[] filedata)
+        internal virtual void LoadImage(UI_Config.ImageSettings imageSettings, byte[] filedata)
         {
             config = imageSettings;
 
@@ -40,8 +40,8 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 
             int aspectHeight = config.MaintainAspectRatio ? (int)(config.Size.Item1 / AspectRatio) : config.Size.Item2;
 
-            UIUtils.AnchorToScreen(config.ScreenAnchor, config.Position.Item1, config.Position.Item2, out int anchor_x, out int anchor_y);
-            UIUtils.AnchorToObject(config.Anchor, anchor_x, anchor_y, config.Size.Item1, -aspectHeight, out anchor_x, out anchor_y);
+            UI_Utils.AnchorToScreen(config.ScreenAnchor, config.Position.Item1, config.Position.Item2, out int anchor_x, out int anchor_y);
+            UI_Utils.AnchorToObject(config.Anchor, anchor_x, anchor_y, config.Size.Item1, -aspectHeight, out anchor_x, out anchor_y);
 
             Graphics.DrawTexture(new Rect(anchor_x, anchor_y, config.Size.Item1, -aspectHeight), MainTexture);
         }

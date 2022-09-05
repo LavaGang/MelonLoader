@@ -9,7 +9,7 @@ using System;
 
 namespace MelonLoader.MelonStartScreen
 {
-    internal static class UIConfig
+    internal static class UI_Config
     {
         private static string FilePath;
         internal static string ThemePath;
@@ -52,7 +52,7 @@ namespace MelonLoader.MelonStartScreen
 
             if (General.Theme.Equals("Random"))
             {
-                ThemePath = UIUtils.RandomFolder(Core.ThemesFolderPath);
+                ThemePath = UI_Utils.RandomFolder(Core.ThemesFolderPath);
                 UseDefault = false;
             }
 
@@ -109,8 +109,8 @@ namespace MelonLoader.MelonStartScreen
             public ProgressTextSettings()
             {
                 Position.Item2 = 56;
-                Anchor = UIAnchor.MiddleCenter;
-                ScreenAnchor = UIAnchor.MiddleCenter;
+                Anchor = UI_Anchor.MiddleCenter;
+                ScreenAnchor = UI_Anchor.MiddleCenter;
             }
         }
 
@@ -122,8 +122,8 @@ namespace MelonLoader.MelonStartScreen
                 Size.Item1 = 540;
                 Size.Item2 = 36;
 
-                Anchor = UIAnchor.MiddleCenter;
-                ScreenAnchor = UIAnchor.MiddleCenter;
+                Anchor = UI_Anchor.MiddleCenter;
+                ScreenAnchor = UI_Anchor.MiddleCenter;
             }
 
             [TomlPrecedingComment("Inner RGBA Color of the Progress Bar")]
@@ -138,8 +138,8 @@ namespace MelonLoader.MelonStartScreen
             {
                 Text = "<loaderName/> v<loaderVersion/> Open-Beta";
                 TextSize = 24;
-                Anchor = UIAnchor.MiddleCenter;
-                ScreenAnchor = UIAnchor.MiddleCenter;
+                Anchor = UI_Anchor.MiddleCenter;
+                ScreenAnchor = UI_Anchor.MiddleCenter;
                 Position.Item2 = 16;
             }
         }
@@ -152,8 +152,8 @@ namespace MelonLoader.MelonStartScreen
                 Size.Item2 = 212;
                 Position.Item2 = -(Size.Item2 / 2);
 
-                Anchor = UIAnchor.MiddleCenter;
-                ScreenAnchor = UIAnchor.MiddleCenter;
+                Anchor = UI_Anchor.MiddleCenter;
+                ScreenAnchor = UI_Anchor.MiddleCenter;
             }
         }
 
@@ -165,8 +165,8 @@ namespace MelonLoader.MelonStartScreen
                 Size.Item1 = 200;
                 Size.Item2 = 132;
 
-                Anchor = UIAnchor.LowerRight;
-                ScreenAnchor = UIAnchor.LowerRight;
+                Anchor = UI_Anchor.LowerRight;
+                ScreenAnchor = UI_Anchor.LowerRight;
             }
         }
 
@@ -181,9 +181,9 @@ namespace MelonLoader.MelonStartScreen
             internal LemonTuple<int, int> Size = new LemonTuple<int, int>();
 
             [TomlPrecedingComment("Anchor of the Text relative to Itself  ( \"None\" | \"UpperLeft\" | \"UpperCenter\" | \"UpperRight\" | \"MiddleLeft\" | \"MiddleCenter\" | \"MiddleRight\" | \"LowerLeft\" | \"LowerCenter\" | \"LowerRight\" )")]
-            internal UIAnchor Anchor = UIAnchor.UpperLeft;
+            internal UI_Anchor Anchor = UI_Anchor.UpperLeft;
             [TomlPrecedingComment("Anchor of the Text relative to the Screen  ( \"None\" | \"UpperLeft\" | \"UpperCenter\" | \"UpperRight\" | \"MiddleLeft\" | \"MiddleCenter\" | \"MiddleRight\" | \"LowerLeft\" | \"LowerCenter\" | \"LowerRight\" )")]
-            internal UIAnchor ScreenAnchor = UIAnchor.UpperLeft;
+            internal UI_Anchor ScreenAnchor = UI_Anchor.UpperLeft;
         }
 
         internal class TextSettings : ElementSettings
