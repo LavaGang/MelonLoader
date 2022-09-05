@@ -65,13 +65,29 @@ namespace UnityPlayer
 
         internal static void WaitForLastPresentationAndGetTimestamp(uint deviceType)
         {
+            if (m_GetRealGfxDevice == null)
+                throw new NotImplementedException();
+
             IntPtr gfxDevice = GetRealGfxDevice();
+            if (gfxDevice == IntPtr.Zero)
+                throw new NotImplementedException();
 
             switch (deviceType)
             {
-                case /*DX11*/ 2: m_D3D11WaitForLastPresentationAndGetTimestamp(gfxDevice); break;
-                case /*DX12*/18: m_D3D12WaitForLastPresentationAndGetTimestamp(gfxDevice); break;
-                default: throw new NotImplementedException();
+                case /*DX11*/ 2:
+                    if (m_D3D11WaitForLastPresentationAndGetTimestamp == null)
+                        throw new NotImplementedException();
+                    m_D3D11WaitForLastPresentationAndGetTimestamp(gfxDevice); 
+                    break;
+
+                case /*DX12*/ 18:
+                    if (m_D3D12WaitForLastPresentationAndGetTimestamp == null)
+                        throw new NotImplementedException();
+                    m_D3D12WaitForLastPresentationAndGetTimestamp(gfxDevice); 
+                    break;
+
+                default:
+                    throw new NotImplementedException();
             }
         }
     }
