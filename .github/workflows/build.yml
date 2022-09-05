@@ -1,11 +1,6 @@
 name: Build MelonLoader
 
-on:
-  push:
-    branches: [ master, alpha-development, v0.6.0-rewrite ]
-  pull_request:
-    branches: [ master, alpha-development, v0.6.0-rewrite ]
-  workflow_dispatch:
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build_core_debug:
