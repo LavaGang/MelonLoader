@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-[assembly: TypeForwardedTo(typeof(System.Runtime.CompilerServices.IgnoresAccessChecksToAttribute))]
+[assembly: TypeForwardedTo(typeof(IgnoresAccessChecksToAttribute))]
 [assembly: TypeForwardedTo(typeof(MonoMod.ModInterop.ModExportNameAttribute))]
 [assembly: TypeForwardedTo(typeof(MonoMod.ModInterop.ModImportNameAttribute))]
 [assembly: TypeForwardedTo(typeof(MonoMod.ModInterop.ModInteropManager))]

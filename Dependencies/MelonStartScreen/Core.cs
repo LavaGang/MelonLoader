@@ -162,8 +162,6 @@ namespace MelonLoader.MelonStartScreen
             }.Start();
         }
 
-
-
         private static void MainLoop()
         {
             while (!functionRunDone) // WM_QUIT

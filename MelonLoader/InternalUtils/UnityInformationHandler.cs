@@ -15,8 +15,6 @@ namespace MelonLoader.InternalUtils
 {
     public static class UnityInformationHandler
     {
-        private static readonly Regex UnityVersionRegex = new Regex(@"^[0-9]+\.[0-9]+\.[0-9]+[abcfx][0-9]+$");
-
         public static string GameName { get; private set; } = "UNKNOWN";
         public static string GameDeveloper { get; private set; } = "UNKNOWN";
         public static UnityVersion EngineVersion { get; private set; } = UnityVersion.MinVersion;
@@ -154,13 +152,29 @@ namespace MelonLoader.InternalUtils
                 return new UnityVersion((ushort)unityVer.FileMajorPart, (ushort)unityVer.FileMinorPart, (ushort)unityVer.FileBuildPart);
             }
 
-            var globalgamemanagersPath = Path.Combine(gameDataPath, "globalgamemanagers");
-            if (File.Exists(globalgamemanagersPath))
-                return GetVersionFromGlobalGameManagers(File.ReadAllBytes(globalgamemanagersPath));
+            try
+            {
+                var globalgamemanagersPath = Path.Combine(gameDataPath, "globalgamemanagers");
+                if (File.Exists(globalgamemanagersPath))
+                    return GetVersionFromGlobalGameManagers(File.ReadAllBytes(globalgamemanagersPath));
+            }
+            catch (Exception ex)
+            {
+                if (MelonDebug.IsEnabled())
+                    MelonLogger.Error(ex);
+            }
 
-            var dataPath = Path.Combine(gameDataPath, "data.unity3d");
-            if (File.Exists(dataPath))
-                return GetVersionFromDataUnity3D(File.OpenRead(dataPath));
+            try
+            {
+                var dataPath = Path.Combine(gameDataPath, "data.unity3d");
+                if (File.Exists(dataPath))
+                    return GetVersionFromDataUnity3D(File.OpenRead(dataPath));
+            }
+            catch (Exception ex)
+            {
+                if (MelonDebug.IsEnabled())
+                    MelonLogger.Error(ex);
+            }
 
             return default;
         }
@@ -175,6 +189,7 @@ namespace MelonLoader.InternalUtils
                 idx++;
             }
 
+            Regex UnityVersionRegex = new Regex(@"^[0-9]+\.[0-9]+\.[0-9]+[abcfx][0-9]+$", RegexOptions.Compiled);
             string unityVer = verString.ToString();
             if (!UnityVersionRegex.IsMatch(unityVer))
             {
