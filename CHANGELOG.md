@@ -1,6 +1,6 @@
 | Versions: |
 | - |
-| [v0.x.x](#v0xx) |
+| [v0.5.5](#v055) |
 | [v0.5.4](#v054) |
 | [v0.5.3](#v053) | 
 | [v0.5.2](#v052) |
@@ -30,7 +30,7 @@
 
 ---
 
-### v0.x.x:
+### v0.5.5:
 
 1. Rewrote Proxy.   (Credits to [autumncpp](https://github.com/autumncpp) :D)
 2. Updated [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) to v2.0.12.
@@ -50,7 +50,24 @@
 16. Fixed MME Issue with MelonBase.
 17. Updated [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to v2022.1.0-pre-release.6.
 18. Backported StackFrame::GetMethod Fix.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
-19. Added a singleton class for Melons (Melon<T>)    (Credits to [SlidyDev](https://github.com/SlidyDev) :])
+19. Added a singleton class for Melons (Melon<T>)     (Credits to [SlidyDev](https://github.com/SlidyDev) :])
+20. Fixed Issue with Unity Game Check in Proxy.
+21. Removed ``--melonloader.agfvunity`` Launch Option.
+22. Added ``--melonloader.unityversion`` Launch Option.
+23. Added Backup Unity Version Parsing Method.
+24. Fixed Issue with Reading Launch Options.
+25. Temporarily disabled mono_debug_init Call for Mono Games to fix Crash Issue.
+26. Removed Useless DLL Name Parse.
+27. Downgraded HarmonyX and MonoMod.RuntimeDetour to fix NRE issue with MonoMod's ReflectionHelper.
+28. Added a simpler unsub method for melon events.     (Credits to [Samboy](https://github.com/SamboyCoding) :3)
+29. Replaced Assembly Generator User-Agent with Build Version.
+30. Cleaned the melon info log format.     (Credits to [SlidyDev](https://github.com/SlidyDev) :])
+31. Implemented Fallback Unity Version Parsing.     (Credits to [Samboy](https://github.com/SamboyCoding) and [ds5678](https://github.com/ds5678) :D)
+32. Swapped out the official bHaptics library with the open-source bHapticsLib.
+33. Fixed MRE Issue with MelonLoader.Core referencing the Obsolete bHaptics class.
+34. Fixed Regex Compatibility Issue with Older Runtimes.
+35. Added additional null checking for Start Screen's GfxDevice.
+36. Fixed issue with Signature Scanning on Unity 2020.3.15 x86 Mono.
 
 ---
 
