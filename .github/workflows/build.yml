@@ -118,9 +118,6 @@ jobs:
           mkdir Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
           xcopy BaseLibs\MonoBleedingEdge.x64 Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
           echo.
-          echo Copying bHaptics DLL...
-          copy BaseLibs\bHaptics.x64.dll Output\Debug\x64\MelonLoader\Dependencies\
-          echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x64
           mkdir Output\Debug\x64\MelonLoader\Documentation
@@ -163,9 +160,6 @@ jobs:
           echo Copying Mono x86...
           mkdir Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
           xcopy BaseLibs\MonoBleedingEdge.x86 Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
-          echo.
-          echo Copying bHaptics DLL...
-          copy BaseLibs\bHaptics.x86.dll Output\Debug\x86\MelonLoader\Dependencies\
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x86
@@ -210,9 +204,6 @@ jobs:
           mkdir Output\Release\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
           xcopy BaseLibs\MonoBleedingEdge.x64 Output\Release\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
           echo.
-          echo Copying bHaptics DLL...
-          copy BaseLibs\bHaptics.x64.dll Output\Release\x64\MelonLoader\Dependencies\
-          echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x64
           mkdir Output\Release\x64\MelonLoader\Documentation
@@ -255,9 +246,6 @@ jobs:
           echo Copying Mono x86...
           mkdir Output\Release\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
           xcopy BaseLibs\MonoBleedingEdge.x86 Output\Release\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
-          echo.
-          echo Copying bHaptics DLL...
-          copy BaseLibs\bHaptics.x86.dll Output\Release\x86\MelonLoader\Dependencies\
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x86
