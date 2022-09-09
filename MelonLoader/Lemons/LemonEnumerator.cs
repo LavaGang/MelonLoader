@@ -45,10 +45,15 @@ namespace MelonLoader
         }
 
         public IEnumerator<T> GetEnumerator() // for foreach loops
-            => this;
+        {
+            Reset();
+            return this;
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
-            => this;
+        {
+            return GetEnumerator();
+        }
 
         public void Dispose()
         {
