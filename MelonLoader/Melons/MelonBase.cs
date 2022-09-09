@@ -56,18 +56,19 @@ namespace MelonLoader
         /// <summary>
         /// Registers a List of Melons in the right order.
         /// </summary>
-        public static void RegisterSorted<T>(IList<T> melons) where T : MelonBase
+        public static void RegisterSorted<T>(IEnumerable<T> melons) where T : MelonBase
         {
             if (melons == null)
                 return;
 
-            SortMelons(ref melons);
+            var collection = melons.ToList();
+            SortMelons(ref collection);
 
             foreach (var m in melons)
                 m.Register();
         }
 
-        private static void SortMelons<T>(ref IList<T> melons) where T : MelonBase
+        private static void SortMelons<T>(ref List<T> melons) where T : MelonBase
         {
             DependencyGraph<T>.TopologicalSort(melons);
             melons = melons.OrderBy(x => x.Priority).ToList();
