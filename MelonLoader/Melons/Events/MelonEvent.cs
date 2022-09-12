@@ -7,7 +7,7 @@ namespace MelonLoader
     public abstract class MelonEventBase<T> where T : Delegate
     {
         private readonly List<MelonAction<T>> actions = new();
-        private LemonEnumerator<MelonAction<T>> cachedEnumerator = new(new List<MelonAction<T>>());
+        private MelonAction<T>[] cachedActionsArray = new MelonAction<T>[0];
         public readonly bool oneTimeUse;
 
         public bool Disposed { get; private set; }
@@ -99,7 +99,7 @@ namespace MelonLoader
 
         private void UpdateEnumerator()
         {
-            cachedEnumerator = new LemonEnumerator<MelonAction<T>>(actions);
+            cachedActionsArray = actions.ToArray();
         }
 
         protected void Invoke(Action<T> delegateInvoker)
@@ -107,9 +107,10 @@ namespace MelonLoader
             if (Disposed)
                 return;
 
-            var enumerator = cachedEnumerator;
-            foreach (var del in enumerator)
+            var actionsArray = cachedActionsArray;
+            for (var a = 0; a < actionsArray.Length; a++)
             {
+                var del = actionsArray[a];
                 try { delegateInvoker(del.del); }
                 catch (Exception ex)
                 {
