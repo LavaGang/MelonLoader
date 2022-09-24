@@ -66,8 +66,8 @@ namespace MelonLoader
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
             
 #if NET6_0
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                NativeStackWalk.LogNativeStackTrace();
+            // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                // NativeStackWalk.LogNativeStackTrace();
 
             Fixes.DotnetAssemblyLoadContextFix.Install();
             Fixes.DotnetModHandlerRedirectionFix.Install();
