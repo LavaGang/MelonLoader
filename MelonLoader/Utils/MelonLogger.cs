@@ -20,6 +20,9 @@ namespace MelonLoader
 #endif
         internal static StreamWriter LogWriter = new(LogStream, Encoding.UTF8, 1);
 
+        //Identical to Msg(string) except it skips walking the stack to find a melon
+        internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);
+
         public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());
         public static void Msg(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt);
         public static void Msg(string txt, params object[] args) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, string.Format(txt, args));
@@ -28,6 +31,9 @@ namespace MelonLoader
         public static void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DefaultMelonColor, ConsoleColorToDrawingColor(txt_color), null, txt);
         public static void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, ConsoleColorToDrawingColor(txt_color), null, string.Format(txt, args));
 
+        //Identical to Msg(Color, string) except it skips walking the stack to find a melon
+        public static void MsgDirect(Color txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt, true);
+        
         public static void Msg(Color txt_color, object obj) => NativeMsg(DefaultMelonColor, txt_color, null, obj.ToString());
         public static void Msg(Color txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt);
         public static void Msg(Color txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, txt_color, null, string.Format(txt, args));
@@ -43,10 +49,10 @@ namespace MelonLoader
         public static void Error(string txt, params object[] args) => NativeError(null, string.Format(txt, args));
         public static void Error(string txt, Exception ex) => NativeError(null, $"{txt}\n{ex}");
 
-        public static void WriteLine(int length = 30) => Msg(new string('-', length));
-        public static void WriteLine(Color color, int length = 30) => Msg(color, new string('-', length));
+        public static void WriteLine(int length = 30) => MsgDirect(new string('-', length));
+        public static void WriteLine(Color color, int length = 30) => MsgDirect(color, new string('-', length));
         
-        private static void NativeMsg(Color namesection_color, Color txt_color, string namesection, string txt)
+        private static void NativeMsg(Color namesection_color, Color txt_color, string namesection, string txt, bool skipStackWalk = false)
         {
             if (string.IsNullOrEmpty(namesection))
             {

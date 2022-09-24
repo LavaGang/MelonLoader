@@ -11,6 +11,7 @@ using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 using MelonLoader.Utils;
@@ -67,12 +68,12 @@ namespace MelonLoader.InternalUtils
             if (string.IsNullOrEmpty(GameVersion))
                 GameVersion = DefaultInfo;
 
-            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.Msg($"Game Name: {GameName}");
             MelonLogger.Msg($"Game Developer: {GameDeveloper}");
             MelonLogger.Msg($"Unity Version: {EngineVersion}");
             MelonLogger.Msg($"Game Version: {GameVersion}");
-            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.WriteSpacer();
         }
 

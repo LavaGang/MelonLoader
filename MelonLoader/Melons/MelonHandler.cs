@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -82,7 +83,7 @@ namespace MelonLoader
             MelonBase.RegisterSorted(melons);
 
             if (hasWroteLine)
-                MelonLogger.WriteLine(ConsoleColor.Magenta);
+                MelonLogger.WriteLine(Color.Magenta);
 
             var count = MelonTypeBase<T>._registeredMelons.Count;
             MelonLogger.Msg($"{count} {MelonTypeBase<T>.TypeName.MakePlural(count)} loaded.");

@@ -309,49 +309,49 @@ namespace MelonLoader
                 return;
 
             MelonLogger.WriteLine(Color.Red);
-            MelonLogger.Msg(Color.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
+            MelonLogger.MsgDirect(Color.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
             if (incompatibilities.Contains(Incompatibility.Game))
             {
-                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Games:");
+                MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Games:");
 
                 foreach (var g in melon.Games)
-                    MelonLogger.Msg($"    - '{g.Name}' by {g.Developer}");
+                    MelonLogger.MsgDirect($"    - '{g.Name}' by {g.Developer}");
             }
             if (incompatibilities.Contains(Incompatibility.GameVersion))
             {
-                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Game Versions:");
+                MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Game Versions:");
 
                 foreach (var g in melon.SupportedGameVersions)
-                    MelonLogger.Msg($"    - {g.Version}");
+                    MelonLogger.MsgDirect($"    - {g.Version}");
             }
             if (incompatibilities.Contains(Incompatibility.ProcessName))
             {
-                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Process Names:");
+                MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Process Names:");
 
                 foreach (var p in melon.SupportedProcesses)
-                    MelonLogger.Msg($"    - '{p.EXE_Name}'");
+                    MelonLogger.MsgDirect($"    - '{p.EXE_Name}'");
             }
             if (incompatibilities.Contains(Incompatibility.Platform))
             {
-                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Platforms:");
+                MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Platforms:");
 
                 foreach (var p in melon.SupportedPlatforms.Platforms)
-                    MelonLogger.Msg($"    - {p}");
+                    MelonLogger.MsgDirect($"    - {p}");
             }
             if (incompatibilities.Contains(Incompatibility.Domain))
             {
-                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Domain:");
-                MelonLogger.Msg($"    - {melon.SupportedDomain.Domain}");
+                MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Domain:");
+                MelonLogger.MsgDirect($"    - {melon.SupportedDomain.Domain}");
             }
             if (incompatibilities.Contains(Incompatibility.MLVersion))
             {
-                MelonLogger.Msg($"- {melon.Info.Name}  is only compatible with the following MelonLoader Versions:");
-                MelonLogger.Msg($"    - {melon.SupportedMLVersion.SemVer}{(melon.SupportedMLVersion.IsMinimum ? " or higher" : "")}");
+                MelonLogger.MsgDirect($"- {melon.Info.Name}  is only compatible with the following MelonLoader Versions:");
+                MelonLogger.MsgDirect($"    - {melon.SupportedMLVersion.SemVer}{(melon.SupportedMLVersion.IsMinimum ? " or higher" : "")}");
             }
             if (incompatibilities.Contains(Incompatibility.MLBuild))
             {
-                MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following MelonLoader Build Hash Codes:");
-                MelonLogger.Msg($"    - {melon.SupportedMLBuild.HashCode}");
+                MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following MelonLoader Build Hash Codes:");
+                MelonLogger.MsgDirect($"    - {melon.SupportedMLBuild.HashCode}");
             }
 
             MelonLogger.WriteLine(Color.Red);
@@ -526,7 +526,7 @@ namespace MelonLoader
             MelonLogger.WriteLine(Color.DarkGreen);
             
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
-            MelonLogger.Msg(Color.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
+            MelonLogger.MsgDirect(Color.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
 
             MelonLogger.WriteLine(Color.DarkGreen);
         }
@@ -535,13 +535,13 @@ namespace MelonLoader
         {
             MelonLogger.WriteLine(Color.DarkRed);
 
-            MelonLogger.Msg(Color.DarkGray, MelonTypeName + " deinitialized:");
+            MelonLogger.MsgDirect(Color.DarkGray, MelonTypeName + " deinitialized:");
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(reason))
             {
-                MelonLogger.Msg(string.Empty);
-                MelonLogger.Msg($"Reason: '{reason}'");
+                MelonLogger.MsgDirect(string.Empty);
+                MelonLogger.MsgDirect($"Reason: '{reason}'");
             }
 
             MelonLogger.WriteLine(Color.DarkRed);

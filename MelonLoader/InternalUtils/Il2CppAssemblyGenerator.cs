@@ -19,7 +19,7 @@ namespace MelonLoader.InternalUtils
             if (module == null)
                 return true;
 
-            MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
+            MelonLogger.MsgDirect("Loading Il2CppAssemblyGenerator...");
 
             IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
             BootstrapInterop.DisableCloseButton(windowHandle);

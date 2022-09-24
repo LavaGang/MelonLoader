@@ -353,7 +353,7 @@ namespace MelonLoader
                 }
 
             if (printmsg)
-                MelonLogger.Msg($"MelonPreferences Loaded from {file.FilePath}");
+                MelonLogger.MsgDirect($"MelonPreferences Loaded from {file.FilePath}");
 
             OnPreferencesLoaded.Invoke(file.FilePath);
         }

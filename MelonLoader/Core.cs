@@ -132,16 +132,16 @@ namespace MelonLoader
             //if (MelonDebug.IsEnabled())
             //    MelonLogger.WriteSpacer();
 
-            MelonLogger.Msg("------------------------------");
-            MelonLogger.Msg(GetVersionString());
-            MelonLogger.Msg($"OS: {GetOSVersion()}");
-            MelonLogger.Msg($"Hash Code: {MelonUtils.HashCode}");
-            MelonLogger.Msg("------------------------------");
+            MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect(GetVersionString());
+            MelonLogger.MsgDirect($"OS: {GetOSVersion()}");
+            MelonLogger.MsgDirect($"Hash Code: {MelonUtils.HashCode}");
+            MelonLogger.MsgDirect("------------------------------");
             var typeString = MelonUtils.IsGameIl2Cpp() ? "Il2cpp" : MelonUtils.IsOldMono() ? "Mono" : "MonoBleedingEdge";
-            MelonLogger.Msg($"Game Type: {typeString}");
+            MelonLogger.MsgDirect($"Game Type: {typeString}");
             var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
-            MelonLogger.Msg($"Game Arch: {archString}");
-            MelonLogger.Msg("------------------------------");
+            MelonLogger.MsgDirect($"Game Arch: {archString}");
+            MelonLogger.MsgDirect("------------------------------");
 
             MelonEnvironment.PrintEnvironment();
         }
