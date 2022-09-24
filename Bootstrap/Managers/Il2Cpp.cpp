@@ -4,14 +4,11 @@
 #include "Hook.h"
 #include "../Utils/Console.h"
 #include "../Utils/Debug.h"
-#include "../Utils/PointerUtils.h"
 #include <string>
 #include "BaseAssembly.h"
 
 Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
-char* Il2Cpp::GameAssemblyPathMono = NULL;
-char* Il2Cpp::UnityPlayerPath = NULL;
 HMODULE Il2Cpp::Module = NULL;
 void* Il2Cpp::UnityTLSInterfaceStruct = NULL;
 Il2Cpp::Exports::il2cpp_init_t Il2Cpp::Exports::il2cpp_init = NULL;

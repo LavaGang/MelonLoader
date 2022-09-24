@@ -8,7 +8,6 @@
 #include "..\Core.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
-#include "../Utils/Il2CppAssemblyGenerator.h"
 #include "../Utils/Logging/Logger.h"
 
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
@@ -20,6 +19,7 @@ char* Mono::ManagedPathMono = NULL;
 char* Mono::ConfigPath = NULL;
 char* Mono::ConfigPathMono = NULL;
 char* Mono::MonoConfigPathMono = NULL;
+char* Mono::MelonLoaderDllPath = NULL;
 HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
 Mono::Domain* Mono::domain = NULL;
@@ -207,6 +207,18 @@ bool Mono::SetupPaths()
 	MONO_STR(ConfigPath);
 
 #undef MONO_STR
+
+	std::string BaseAssemblyPath = std::string(Core::BasePath) + "\\MelonLoader\\net35\\MelonLoader.dll";
+        
+    if (!Core::FileExists(BaseAssemblyPath.c_str()))
+    {
+        Assertion::ThrowInternalFailure("MelonLoader.dll Does Not Exist!");
+        return false;
+    }
+	MelonLoaderDllPath = new char[BaseAssemblyPath.size() + 1];
+    std::copy(BaseAssemblyPath.begin(), BaseAssemblyPath.end(), MelonLoaderDllPath);
+	MelonLoaderDllPath[BaseAssemblyPath.size()] = '\0';
+	
 	return true;
 }
 
@@ -397,7 +409,7 @@ bool Mono::InvokeInitialize()
 {
 	Preload();
 	Debug::Msg("Initializing Base Assembly...");
-	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, BaseAssembly::PathMono);
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, Mono::MelonLoaderDllPath);
 	if (assembly == NULL)
 	{
 		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
@@ -484,8 +496,6 @@ bool Mono::InvokePreStart()
 		Assertion::ThrowInternalFailure("Failed to Invoke PreStart Method!");
 	}
 	int returnval = *(int*)((char*)result + 0x8);
-	if (Game::IsIl2Cpp)
-		Il2CppAssemblyGenerator::Cleanup();
 	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
 	if (Debug::Enabled)
 		Logger::WriteSpacer();

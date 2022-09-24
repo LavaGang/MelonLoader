@@ -1,13 +1,11 @@
-	#include "Console.h"
+#include "Console.h"
 #include "../Core.h"
 #include <string>
 #include "Assertion.h"
 #include "Debug.h"
 #include <iostream>
-	#include "../Managers/Game.h"
-#include "Il2CppAssemblyGenerator.h"
 #include "Logging/Logger.h"
-	#include <VersionHelpers.h>
+#include <VersionHelpers.h>
 
 bool Console::ShouldHide = false;
 bool Console::ShouldSetTitle = true;
@@ -135,8 +133,6 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	case CTRL_CLOSE_EVENT:
 	case CTRL_LOGOFF_EVENT:
 	case CTRL_SHUTDOWN_EVENT:
-		if (Game::IsIl2Cpp)
-			Il2CppAssemblyGenerator::Cleanup();
 		Logger::Flush();
 		Flush();
 		Close();

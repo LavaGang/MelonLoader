@@ -63,6 +63,7 @@ public:
 	static char* ConfigPath;
 	static char* ConfigPathMono;
 	static char* MonoConfigPathMono;
+	static char* MelonLoaderDllPath;
 
 	static Method* Mono_PreStart;
 	static Method* Mono_Start;

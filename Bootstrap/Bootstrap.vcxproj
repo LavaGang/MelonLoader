@@ -171,17 +171,13 @@
     <ClCompile Include="Managers\Il2Cpp.cpp" />
     <ClCompile Include="Managers\InternalCalls.cpp" />
     <ClCompile Include="Managers\Mono.cpp" />
-    <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
     <ClCompile Include="Utils\Assertion.cpp" />
     <ClCompile Include="Utils\CommandLine.cpp" />
     <ClCompile Include="Utils\Console.cpp" />
     <ClCompile Include="Utils\Debug.cpp" />
     <ClCompile Include="Utils\Encoding.cpp" />
-    <ClCompile Include="Utils\HashCode.cpp" />
-    <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Logging\Log.cpp" />
     <ClCompile Include="Utils\Logging\Logger.cpp" />
-    <ClCompile Include="Utils\PointerUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base\MSDetours\detours.h" />
@@ -196,17 +192,13 @@
     <ClInclude Include="Managers\InternalCalls.h" />
     <ClInclude Include="Managers\Mono.h" />
     <ClInclude Include="Base\resource.h" />
-    <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
     <ClInclude Include="Utils\Assertion.h" />
     <ClInclude Include="Utils\CommandLine.h" />
     <ClInclude Include="Utils\Console.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Encoding.h" />
-    <ClInclude Include="Utils\HashCode.h" />
-    <ClInclude Include="Utils\IniFile.h" />
     <ClInclude Include="Utils\Logging\Log.h" />
     <ClInclude Include="Utils\Logging\Logger.h" />
-    <ClInclude Include="Utils\PointerUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Base\Bootstrap.rc" />

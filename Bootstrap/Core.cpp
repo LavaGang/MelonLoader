@@ -12,7 +12,6 @@
 #include "Utils/Assertion.h"
 #include "Utils/Logging/Logger.h"
 #include "Utils/Debug.h"
-#include "Utils/HashCode.h"
 #include "Utils/Encoding.h"
 
 HINSTANCE Core::Bootstrap = NULL;
@@ -62,8 +61,7 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	CommandLine::Read();
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
-		|| !CheckPathASCII()
-		|| !HashCode::Initialize())
+		|| !CheckPathASCII())
 		return;
 
 	if (!Game::IsIl2Cpp && !Mono::Initialize())

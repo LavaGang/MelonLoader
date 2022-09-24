@@ -10,8 +10,6 @@ public:
 	struct Object;
 
 	static char* GameAssemblyPath;
-	static char* GameAssemblyPathMono;
-	static char* UnityPlayerPath;
 	static HMODULE Module;
 	static Domain* domain;
 	static void* UnityTLSInterfaceStruct;

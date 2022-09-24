@@ -43,7 +43,7 @@ void DotnetRuntime::GetDotNetLoadAssembly(const char_t* config_path)
 		close_fptr(cxt);
 
 		if (rc == HOSTFXR_NO_FRAMEWORK)
-			Assertion::ThrowInternalFailure("HostFXR returned no viable frameworks. Make sure you have .NET Runtime 6.0.3 installed for the correct architecture!");
+			Assertion::ThrowInternalFailure("HostFXR returned no viable frameworks. Make sure you have .NET Runtime 6.0.9 installed for the correct architecture!");
 		else 
 			Assertion::ThrowInternalFailure((std::string("Dotnet Init failed. Return code: ") + std::to_string(rc) + " )").c_str());
 

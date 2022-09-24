@@ -6,7 +6,6 @@
 
 int CommandLine::argc = NULL;
 char* CommandLine::argv[64];
-char* CommandLine::argvMono[64];
 
 void CommandLine::Read()
 {
@@ -19,7 +18,6 @@ void CommandLine::Read()
 	while (curchar && (argc <= 63))
 	{
 		argv[argc] = curchar;
-		argvMono[argc] = Encoding::OsToUtf8(curchar);
 		curchar = strtok_s(0, " ", &nextchar);
 		argc++;
 	}

@@ -1,10 +1,7 @@
 #include "BaseAssembly.h"
-#include "../Core.h"
 #include "Game.h"
 #include "DotnetRuntime.h"
 #include "Mono.h"
-
-char* BaseAssembly::PathMono = NULL;
 
 bool BaseAssembly::Initialize()
 {

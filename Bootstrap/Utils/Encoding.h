@@ -9,12 +9,5 @@ public:
     /// <param name="osStr"></param>
     /// <returns></returns>
     static char* OsToUtf8(const char* osStr);
-
-    /// <summary>
-    /// Convert utf8 to system default encoding string 
-    /// </summary>
-    /// <param name="utf8Str"></param>
-    /// <returns></returns>
-    static char* Utf8ToOs(const char* utf8Str);
 };
 
