@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -35,7 +36,7 @@ namespace MelonLoader
         /// <summary>
         /// Creates a new Melon instance for a Wrapper.
         /// </summary>
-        public static T CreateWrapper<T>(string name, string author, string version, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, ConsoleColor? color = null, ConsoleColor? authorColor = null, string id = null) where T : MelonBase, new()
+        public static T CreateWrapper<T>(string name, string author, string version, MelonGameAttribute[] games = null, MelonProcessAttribute[] processes = null, int priority = 0, Color? color = null, Color? authorColor = null, string id = null) where T : MelonBase, new()
         {
             var melon = new T
             {
@@ -98,12 +99,12 @@ namespace MelonLoader
         /// <summary>
         /// Console Color of the Melon.
         /// </summary>
-        public ConsoleColor ConsoleColor { get; internal set; }
+        public Color ConsoleColor { get; internal set; }
 
         /// <summary>
         /// Console Color of the Author that made this melon.
         /// </summary>
-        public ConsoleColor AuthorConsoleColor { get; internal set; }
+        public Color AuthorConsoleColor { get; internal set; }
 
         /// <summary>
         /// Info Attribute of the Melon.
@@ -307,8 +308,8 @@ namespace MelonLoader
             if (incompatibilities == null || incompatibilities.Length == 0)
                 return;
 
-            MelonLogger.WriteLine(ConsoleColor.Red);
-            MelonLogger.Msg(ConsoleColor.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
+            MelonLogger.WriteLine(Color.Red);
+            MelonLogger.Msg(Color.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
             if (incompatibilities.Contains(Incompatibility.Game))
             {
                 MelonLogger.Msg($"- {melon.Info.Name} is only compatible with the following Games:");
@@ -353,7 +354,7 @@ namespace MelonLoader
                 MelonLogger.Msg($"    - {melon.SupportedMLBuild.HashCode}");
             }
 
-            MelonLogger.WriteLine(ConsoleColor.Red);
+            MelonLogger.WriteLine(Color.Red);
             MelonLogger.WriteSpacer();
         }
 
@@ -522,19 +523,19 @@ namespace MelonLoader
 
         private void PrintLoadInfo()
         {
-            MelonLogger.WriteLine(ConsoleColor.DarkGreen);
+            MelonLogger.WriteLine(Color.DarkGreen);
             
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
-            MelonLogger.Msg(ConsoleColor.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
+            MelonLogger.Msg(Color.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
 
-            MelonLogger.WriteLine(ConsoleColor.DarkGreen);
+            MelonLogger.WriteLine(Color.DarkGreen);
         }
 
         private void PrintUnloadInfo(string reason)
         {
-            MelonLogger.WriteLine(ConsoleColor.DarkRed);
+            MelonLogger.WriteLine(Color.DarkRed);
 
-            MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " deinitialized:");
+            MelonLogger.Msg(Color.DarkGray, MelonTypeName + " deinitialized:");
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(reason))
@@ -543,7 +544,7 @@ namespace MelonLoader
                 MelonLogger.Msg($"Reason: '{reason}'");
             }
 
-            MelonLogger.WriteLine(ConsoleColor.DarkRed);
+            MelonLogger.WriteLine(Color.DarkRed);
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)

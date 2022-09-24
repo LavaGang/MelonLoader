@@ -92,6 +92,9 @@ namespace MelonLoader
             public static bool QuitFix { get; internal set; }
             public static bool StartScreen { get; internal set; } = true;
             public static string UnityVersion { get; internal set; }
+            public static bool IsDebug { get; internal set; }
+            public static bool UserWantsDebugger { get; internal set; }
+            public static bool ShouldDisplayAnalyticsBlocker { get; internal set; }
 
             internal static void Setup()
             {
@@ -108,6 +111,9 @@ namespace MelonLoader
                         LoadMode_Mods = (LoadModeEnum)MelonUtils.Clamp(valueint, (int)LoadModeEnum.NORMAL, (int)LoadModeEnum.BOTH);
                 };
                 WithArg["melonloader.unityversion"] = (string arg) => UnityVersion = arg;
+                WithoutArg["melonloader.debug"] = () => IsDebug = true;
+                WithoutArg["melonloader.launchdebugger"] = () => UserWantsDebugger = true;
+                WithoutArg["melonloader.dab"] = () => ShouldDisplayAnalyticsBlocker = true;
             }
         }
 
@@ -159,12 +165,14 @@ namespace MelonLoader
         {
             public static bool ForceRegeneration { get; internal set; }
             public static bool OfflineMode { get; internal set; }
+            public static bool DisableDeobfMapIntegrityCheck { get; internal set; }
             public static string ForceVersion_Dumper { get; internal set; }
             public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
             public static string ForceRegex { get; internal set; }
 
             internal static void Setup()
             {
+                WithoutArg["melonloader.disabledmic"] = () => DisableDeobfMapIntegrityCheck = true;
                 WithoutArg["melonloader.agfoffline"] = () => OfflineMode = true;
                 WithoutArg["melonloader.agfregenerate"] = () => ForceRegeneration = true;
                 WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;

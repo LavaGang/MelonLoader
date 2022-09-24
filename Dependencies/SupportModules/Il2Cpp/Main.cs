@@ -114,7 +114,7 @@ namespace MelonLoader.Support
         {
             IntPtr* targetVarPointer = &from;
             PinnedDelegates.Add(to);
-            MelonUtils.NativeHookAttach((IntPtr)targetVarPointer, to.GetFunctionPointer());
+            MelonUtils.NativeHookAttachDirect((IntPtr)targetVarPointer, to.GetFunctionPointer());
             return from.GetDelegate<T>();
         }
     }

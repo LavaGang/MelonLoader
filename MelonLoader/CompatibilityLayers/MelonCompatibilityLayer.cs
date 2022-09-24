@@ -11,8 +11,8 @@ namespace MelonLoader
 
         private static List<MelonModule.Info> layers = new List<MelonModule.Info>()
         {
-            // Il2Cpp Unity Tls
-            new MelonModule.Info(Path.Combine(baseDirectory, "Il2CppUnityTls.dll"), () => !MelonUtils.IsGameIl2Cpp()),
+            // Il2Cpp Unity Tls - No longer needed in CoreCLR
+            // new MelonModule.Info(Path.Combine(baseDirectory, "Il2CppUnityTls.dll"), () => !MelonUtils.IsGameIl2Cpp()),
 
             // Illusion Plugin Architecture
             new MelonModule.Info(Path.Combine(baseDirectory, "IPA.dll"), MelonUtils.IsGameIl2Cpp),

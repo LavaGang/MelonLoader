@@ -63,8 +63,15 @@ void core::initialize(HINSTANCE hinst_dll)
 
 	// @note: load bootstrap lib
 	const HMODULE bootstrap_module = LoadLibraryW(bootstrap_path.c_str());
-	if (!bootstrap_module)
-		error("Unable to Load Bootstrap.dll from Base Directory!");
+	DWORD err = GetLastError();
+	if (bootstrap_module == NULL)
+	{
+		if(err == 126)
+			error("Unable to Load Bootstrap.dll due to a missing dependency! Did you make sure to include nethost.dll next to the game's executable?");
+		else
+			error(std::string("Unable to Load Bootstrap.dll from Base Directory! GetLastError() = ") +
+				std::to_string(err) + ".");
+	}
 }
 
 HMODULE core::load_original_proxy(const std::filesystem::path& proxy_filepath, const std::wstring& proxy_filepath_no_ext)

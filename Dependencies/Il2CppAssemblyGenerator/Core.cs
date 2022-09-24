@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.Modules;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
 {
@@ -12,7 +14,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         internal static string GameAssemblyPath = null;
         internal static string ManagedPath = null;
 
-        internal static WebClient webClient = null;
+        internal static HttpClient webClient = null;
 
         internal static Packages.Models.ExecutablePackage dumper = null;
         internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
@@ -28,13 +30,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Logger = LoggerInstance;
 
-            webClient = new WebClient();
-            webClient.Headers.Add("User-Agent", $"{BuildInfo.Name} v{BuildInfo.Version}");
+            webClient = new();
+            webClient.DefaultRequestHeaders.Add("User-Agent", $"{BuildInfo.Name} v{BuildInfo.Version}");
 
             AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
             GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
-            ManagedPath = string.Copy(MelonUtils.GetManagedDirectory());
+            ManagedPath = MelonEnvironment.MelonManagedDirectory;
 
             BasePath = Path.GetDirectoryName(Assembly.Location);
         }

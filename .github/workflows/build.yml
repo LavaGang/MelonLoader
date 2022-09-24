@@ -1,10 +1,15 @@
 name: Build MelonLoader
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [ master, alpha-development, v0.6.0-rewrite ]
+  pull_request:
+    branches: [ master, alpha-development, v0.6.0-rewrite ]
+  workflow_dispatch:
 
 jobs:
   build_core_debug:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
@@ -18,7 +23,7 @@ jobs:
           name: MLCoreDebug
           path: Output/Debug/MelonLoader/
   build_core_release:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
@@ -37,34 +42,50 @@ jobs:
       - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
+      - name: Setup .NET Core # Proxy needs dotnet for nethost.dll
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.301"
       - name: Build Proxy DLL | Windows - x86
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform=Win32 -p:Configuration=Release
+        run: |
+          msbuild Proxy\Proxy.vcxproj -p:Platform=Win32 -p:Configuration=Release
+          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.6\runtimes\win-x86\native\nethost.dll Proxy\Output\Release\x86\
       - name: Upload proxy x86
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX86
-          path: Proxy/Output/Release/x86/version.dll
+          path: Proxy/Output/Release/x86/*.dll
   build_proxy_x64:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
+      - name: Setup .NET Core # Proxy needs dotnet for nethost.dll
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.301"
       - name: Build Proxy DLL | Windows - x64
         shell: cmd
-        run: msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
+        run: |
+          msbuild Proxy\Proxy.vcxproj -p:Platform=x64 -p:Configuration=Release
+          xcopy %LOCALAPPDATA%\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.6\runtimes\win-x64\native\nethost.dll Proxy\Output\Release\x64\
       - name: Upload proxy x64
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64
-          path: Proxy/Output/Release/x64/version.dll
+          path: Proxy/Output/Release/x64/*.dll
   build_bootstrap_x86:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.301"
       - name: Build Bootstrap Lib | Windows - x86
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=Win32 -p:Configuration=Release
@@ -79,6 +100,10 @@ jobs:
       - uses: actions/checkout@v3
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.301"
       - name: Build Bootstrap Lib | Windows - x64
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
