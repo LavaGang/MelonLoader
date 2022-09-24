@@ -2,9 +2,7 @@
 #include <VersionHelpers.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sstream>
 #include "Core.h"
-#include "Managers/DotnetRuntime.h"
 #include "Managers/Game.h"
 #include "Managers/Mono.h"
 #include "Managers/Il2Cpp.h"

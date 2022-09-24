@@ -1,11 +1,9 @@
 #include "HashCode.h"
-#include "Debug.h"
 #include "../Managers/Game.h"
 #include "../Core.h"
 #include "Il2CppAssemblyGenerator.h"
 #include "../Managers/BaseAssembly.h"
 #include "../Utils/Encoding.h"
-#include <wincrypt.h>
 #include "Assertion.h"
 #include "Logging/Logger.h"
 #include <sstream>

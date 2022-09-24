@@ -7,6 +7,7 @@
 #include "../Core.h"
 #include "Hook.h"
 #include <iostream>
+#include <nethost.h>
 
 //Windows specific defines
 #define STR(s) L ## s 

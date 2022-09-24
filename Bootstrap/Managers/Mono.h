@@ -73,7 +73,6 @@ public:
 	static bool Load();
 	static bool SetupPaths();
 	static void InstallAssemblyHooks();
-	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
 	static String* ExceptionToString(Object* obj);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);

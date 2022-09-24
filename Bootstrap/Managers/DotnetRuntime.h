@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include <coreclr_delegates.h>
-#include <nethost.h>
 #include <hostfxr.h>
-#include <Windows.h>
 #include <string>
 
 using string_t = std::basic_string<char_t>;

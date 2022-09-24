@@ -3,8 +3,6 @@
 #include "Debug.h"
 #include "Encoding.h"
 #include "../Core.h"
-#include "../Managers/Game.h"
-#include "../Managers/InternalCalls.h"
 
 int CommandLine::argc = NULL;
 char* CommandLine::argv[64];

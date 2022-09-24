@@ -1,6 +1,4 @@
 #pragma once
-#include "IniFile.h"
-#include "Console.h"
 
 class CommandLine
 {

@@ -1,4 +1,5 @@
 #include "Il2CppAssemblyGenerator.h"
+#include <Windows.h>
 
 char* Il2CppAssemblyGenerator::PathMono = NULL;
 int Il2CppAssemblyGenerator::ProcessId = 0;

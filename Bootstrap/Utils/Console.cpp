@@ -4,12 +4,10 @@
 #include "Assertion.h"
 #include "Debug.h"
 #include <iostream>
-#include <locale.h>
-#include "../Managers/Game.h"
+	#include "../Managers/Game.h"
 #include "Il2CppAssemblyGenerator.h"
 #include "Logging/Logger.h"
-#include <sstream>
-#include <VersionHelpers.h>
+	#include <VersionHelpers.h>
 
 bool Console::ShouldHide = false;
 bool Console::ShouldSetTitle = true;

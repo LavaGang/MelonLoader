@@ -3,7 +3,6 @@
 #include "Game.h"
 #include "Hook.h"
 #include "..\Utils\Assertion.h"
-#include "..\Utils\CommandLine.h"
 #include "..\Utils\Debug.h"
 #include "..\Utils\Encoding.h"
 #include "..\Core.h"
@@ -189,31 +188,6 @@ bool Mono::SetupPaths()
 	std::copy(MonoDir.begin(), MonoDir.end(), BasePath);
 	BasePath[MonoDir.size()] = '\0';
 
-	if (Game::IsIl2Cpp)
-	{
-		std::string ManagedPathStr = (std::string(Core::BasePath) + "\\MelonLoader\\Managed");
-		ManagedPath = new char[ManagedPathStr.size() + 1];
-		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
-		ManagedPath[ManagedPathStr.size()] = '\0';
-
-		std::string ConfigPathStr = (std::string(Game::DataPath) + "\\il2cpp_data\\etc");
-		ConfigPath = new char[ConfigPathStr.size() + 1];
-		std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
-		ConfigPath[ConfigPathStr.size()] = '\0';
-
-		std::string MonoConfigPathStr = (MonoDir + "\\etc");
-		MonoConfigPathMono = new char[MonoConfigPathStr.size() + 1];
-		std::copy(MonoConfigPathStr.begin(), MonoConfigPathStr.end(), MonoConfigPathMono);
-		MonoConfigPathMono[MonoConfigPathStr.size()] = '\0';
-
-		MonoConfigPathMono = Encoding::OsToUtf8(MonoConfigPathMono);
-
-		MONO_STR(ManagedPath);
-		MONO_STR(ConfigPath);
-
-		return true;
-	}
-
 	std::string ManagedPathStr = (std::string(Game::DataPath) + "\\Managed");
 	ManagedPath = new char[ManagedPathStr.size() + 1];
 	std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
@@ -241,54 +215,6 @@ void Mono::InstallAssemblyHooks()
 	Exports::mono_install_assembly_preload_hook(Hooks::AssemblyPreLoad, NULL);
 	Exports::mono_install_assembly_search_hook(Hooks::AssemblySearch, NULL);
 	Exports::mono_install_assembly_load_hook(Hooks::AssemblyLoad, NULL);
-}
-
-void Mono::CreateDomain(const char* name)
-{
-	if (domain != NULL)
-		return;
-
-	Debug::Msg("Setting Mono Assemblies Path...");
-	Exports::mono_set_assemblies_path(ManagedPathMono);
-
-	Debug::Msg("Setting Mono Assembly Root Directory...");
-	Exports::mono_assembly_setrootdir(ManagedPathMono);
-
-	Debug::Msg("Setting Mono Config Directory...");
-	Exports::mono_set_config_dir(MonoConfigPathMono);
-
-	if (!IsOldMono)
-		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argvMono);
-
-	if (Debug::Enabled)
-	{
-		Debug::Msg("Parsing Dnspy Debugger Environment Options...");
-		if (IsOldMono)
-			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
-		else
-			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
-
-		Debug::Msg("Initializing Mono Debug...");
-		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
-	}
-
-	Debug::Msg("Creating Mono Domain...");
-	domain = Exports::mono_jit_init(name);
-
-	if (Debug::Enabled && (Exports::mono_debug_domain_create != NULL))
-	{
-		Debug::Msg("Creating Mono Debug Domain...");
-		Exports::mono_debug_domain_create(domain);
-	}
-
-	Debug::Msg("Setting Mono Main Thread...");
-	Exports::mono_thread_set_main(Exports::mono_thread_current());
-
-	if (!IsOldMono)
-	{
-		Debug::Msg("Setting Mono Domain Config...");
-		Exports::mono_domain_set_config(domain, Game::BasePathMono, name);
-	}
 }
 
 void Mono::AddInternalCall(const char* name, void* method)

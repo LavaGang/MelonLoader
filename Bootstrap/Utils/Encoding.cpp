@@ -1,4 +1,6 @@
 #include "Encoding.h"
+#include <string>
+#include <Windows.h>
 
 char* Encoding::OsToUtf8(const char* osStr)
 {

@@ -1,5 +1,4 @@
 #pragma once
-#include <Windows.h>
 
 class Il2CppAssemblyGenerator
 {

@@ -1,5 +1,4 @@
 #pragma once
-#include "Mono.h"
 
 class BaseAssembly
 {

@@ -2,13 +2,10 @@
 #include "Game.h"
 #include "../Utils/Assertion.h"
 #include "Hook.h"
-#include "Mono.h"
 #include "../Utils/Console.h"
 #include "../Utils/Debug.h"
 #include "../Utils/PointerUtils.h"
 #include <string>
-#include "DotnetRuntime.h"
-#include "InternalCalls.h"
 #include "BaseAssembly.h"
 
 Il2Cpp::Domain* Il2Cpp::domain = NULL;

@@ -5,6 +5,7 @@
 #include <direct.h>
 #include <list>
 #include <sstream>
+#include <iostream>
 
 const char* Logger::FilePrefix = "MelonLoader_Bootstrap_";
 const char* Logger::FileExtension = ".log";
