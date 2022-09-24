@@ -21,19 +21,11 @@ namespace MelonLoader.InternalUtils
 
             MelonLogger.Msg("Loading Il2CppAssemblyGenerator...");
 
-            MonoInternals.MonoResolveManager.GetAssemblyResolveInfo("Il2CppAssemblyGenerator").Override = module.Assembly;
-
             IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
-            DisableCloseButton(windowHandle);
+            BootstrapInterop.DisableCloseButton(windowHandle);
             var ret = module.SendMessage("Run");
-            EnableCloseButton(windowHandle);
-            MelonUtils.SetCurrentDomainBaseDirectory(MelonEnvironment.GameRootDirectory);
-            return ret is int retVal && retVal == 0;
+            BootstrapInterop.EnableCloseButton(windowHandle);
+            return ret is 0;
         }
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void EnableCloseButton(IntPtr mainWindow);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void DisableCloseButton(IntPtr mainWindow);
     }
 }
