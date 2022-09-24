@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Utils;
 
 namespace MelonLoader
 {
@@ -11,21 +12,22 @@ namespace MelonLoader
         /// <summary>
         /// Directory of Plugins.
         /// </summary>
-        public static string PluginsDirectory { get; internal set; }
+        [Obsolete("Use MelonEnvironment.PluginsDirectory instead")]
+        public static string PluginsDirectory => MelonEnvironment.PluginsDirectory;
 
         /// <summary>
         /// Directory of Mods.
         /// </summary>
-        public static string ModsDirectory { get; internal set; }
+        [Obsolete("Use MelonEnvironment.ModsDirectory instead")]
+        public static string ModsDirectory => MelonEnvironment.ModsDirectory;
 
         internal static void Setup()
         {
-            PluginsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Plugins");
-            if (!Directory.Exists(PluginsDirectory))
-                Directory.CreateDirectory(PluginsDirectory);
-            ModsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Mods");
-            if (!Directory.Exists(ModsDirectory))
-                Directory.CreateDirectory(ModsDirectory);
+            if (!Directory.Exists(MelonEnvironment.PluginsDirectory))
+                Directory.CreateDirectory(MelonEnvironment.PluginsDirectory);
+            
+            if (!Directory.Exists(MelonEnvironment.ModsDirectory))
+                Directory.CreateDirectory(MelonEnvironment.ModsDirectory);
         }
 
         private static bool firstSpacer = false;

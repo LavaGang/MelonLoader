@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
+using MelonLoader.Utils;
 #if NET6_0
 using System.Runtime.Loader;
 #endif
@@ -141,8 +142,8 @@ namespace MelonLoader
                 return ma;
 
             var shortPath = path;
-            if (shortPath.StartsWith(MelonUtils.BaseDirectory))
-                shortPath = "." + shortPath.Remove(0, MelonUtils.BaseDirectory.Length);
+            if (shortPath.StartsWith(MelonEnvironment.MelonBaseDirectory))
+                shortPath = "." + shortPath.Remove(0, MelonEnvironment.MelonBaseDirectory.Length);
 
             OnAssemblyResolving.Invoke(assembly);
             ma = new MelonAssembly(assembly, path);

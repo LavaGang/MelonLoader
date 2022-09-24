@@ -35,19 +35,14 @@ namespace MelonLoader
 
             Core.WelcomeMessage();
 
-            BaseDirectory = MelonEnvironment.MelonLoaderDirectory;
-            GameDirectory = MelonEnvironment.GameRootDirectory;
-            
             if(MelonEnvironment.IsMonoRuntime)
-                SetCurrentDomainBaseDirectory(GameDirectory, domain);
+                SetCurrentDomainBaseDirectory(MelonEnvironment.GameRootDirectory, domain);
 
-            UserDataDirectory = MelonEnvironment.UserDataDirectory;
-            if (!Directory.Exists(UserDataDirectory))
-                Directory.CreateDirectory(UserDataDirectory);
+            if (!Directory.Exists(MelonEnvironment.UserDataDirectory))
+                Directory.CreateDirectory(MelonEnvironment.UserDataDirectory);
 
-            UserLibsDirectory = MelonEnvironment.UserLibsDirectory;
-            if (!Directory.Exists(UserLibsDirectory))
-                Directory.CreateDirectory(UserLibsDirectory);
+            if (!Directory.Exists(MelonEnvironment.UserLibsDirectory))
+                Directory.CreateDirectory(MelonEnvironment.UserLibsDirectory);
 
             MelonLoaderDirectory = Path.GetDirectoryName(typeof(MelonUtils).Assembly.Location);
 
@@ -60,11 +55,16 @@ namespace MelonLoader
             CurrentDomain = IsGameIl2Cpp() ? MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP : MelonPlatformDomainAttribute.CompatibleDomains.MONO;
         }
 
-        public static string BaseDirectory { get; private set; }
-        public static string GameDirectory { get; private set; }
-        public static string MelonLoaderDirectory { get; private set; }
-        public static string UserDataDirectory { get; private set; }
-        public static string UserLibsDirectory { get; private set; }
+        [Obsolete("Use MelonEnvironment.MelonBaseDirectory instead")]
+        public static string BaseDirectory => MelonEnvironment.MelonBaseDirectory;
+        [Obsolete("Use MelonEnvironment.GameRootDirectory instead")]
+        public static string GameDirectory => MelonEnvironment.GameRootDirectory;
+        [Obsolete("Use MelonEnvironment.MelonLoaderDirectory instead")]
+        public static string MelonLoaderDirectory => MelonEnvironment.MelonLoaderDirectory;
+        [Obsolete("Use MelonEnvironment.UserDataDirectory instead")]
+        public static string UserDataDirectory => MelonEnvironment.UserDataDirectory;
+        [Obsolete("Use MelonEnvironment.UserLibsDirectory instead")]
+        public static string UserLibsDirectory => MelonEnvironment.UserLibsDirectory;
         public static MelonPlatformAttribute.CompatiblePlatforms CurrentPlatform { get; private set; }
         public static MelonPlatformDomainAttribute.CompatibleDomains CurrentDomain { get; private set; }
         public static MelonGameAttribute CurrentGameAttribute { get; private set; }
@@ -394,10 +394,13 @@ namespace MelonLoader
 
         public static bool IsUnderWineOrSteamProton() => Core.WineGetVersion is not null;
 
+        [Obsolete("Use MelonEnvironment.GameExecutablePath instead")]
         public static string GetApplicationPath() => MelonEnvironment.GameExecutablePath;
 
+        [Obsolete("Use MelonEnvironment.UnityGameDataDirectory instead")]
         public static string GetGameDataDirectory() => MelonEnvironment.UnityGameDataDirectory;
 
+        [Obsolete("Use MelonEnvironment.MelonManagedDirectory instead")]
         public static string GetManagedDirectory() => MelonEnvironment.MelonManagedDirectory;
 
         public static void SetConsoleTitle(string title)

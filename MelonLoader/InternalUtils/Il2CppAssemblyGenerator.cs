@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+using MelonLoader.Utils;
 
 namespace MelonLoader.InternalUtils
 {
@@ -26,7 +27,7 @@ namespace MelonLoader.InternalUtils
             DisableCloseButton(windowHandle);
             var ret = module.SendMessage("Run");
             EnableCloseButton(windowHandle);
-            MelonUtils.SetCurrentDomainBaseDirectory(MelonUtils.GameDirectory);
+            MelonUtils.SetCurrentDomainBaseDirectory(MelonEnvironment.GameRootDirectory);
             return ret is int retVal && retVal == 0;
         }
 

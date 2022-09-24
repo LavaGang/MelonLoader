@@ -1,4 +1,5 @@
 ﻿using System;
+using MelonLoader.Utils;
 
 namespace MelonLoader
 {
@@ -9,12 +10,12 @@ namespace MelonLoader
         public static string GetCompanyName() => InternalUtils.UnityInformationHandler.GameDeveloper;
         [Obsolete("MelonLoader.Imports.GetProductName is Only Here for Compatibility Reasons. Please use MelonLoader.InternalUtils.UnityInformationHandler.GameName instead.")]
         public static string GetProductName() => InternalUtils.UnityInformationHandler.GameName;
-        [Obsolete("MelonLoader.Imports.GetGameDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetGameDirectory instead.")]
-        public static string GetGameDirectory() => MelonUtils.GameDirectory;
-        [Obsolete("MelonLoader.Imports.GetGameDataDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetGameDataDirectory instead.")]
-        public static string GetGameDataDirectory() => MelonUtils.GetGameDataDirectory();
-        [Obsolete("MelonLoader.Imports.GetAssemblyDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetManagedDirectory instead.")]
-        public static string GetAssemblyDirectory() => MelonUtils.GetManagedDirectory();
+        [Obsolete("MelonLoader.Imports.GetGameDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.Utils.MelonEnvironment.GameRootDirectory instead.")]
+        public static string GetGameDirectory() => MelonEnvironment.GameRootDirectory;
+        [Obsolete("MelonLoader.Imports.GetGameDataDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.Utils.MelonEnvironment.UnityGameDataDirectory instead.")]
+        public static string GetGameDataDirectory() => MelonEnvironment.UnityGameDataDirectory;
+        [Obsolete("MelonLoader.Imports.GetAssemblyDirectory is Only Here for Compatibility Reasons. Please use MelonLoader.Utils.MelonEnvironment.MelonManagedDirectory instead.")]
+        public static string GetAssemblyDirectory() => MelonEnvironment.MelonManagedDirectory;
         [Obsolete("MelonLoader.Imports.IsIl2CppGame is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.IsGameIl2Cpp instead.")]
         public static bool IsIl2CppGame() => MelonUtils.IsGameIl2Cpp();
         [Obsolete("MelonLoader.Imports.IsDebugMode is Only Here for Compatibility Reasons. Please use MelonLoader.MelonDebug.IsEnabled instead.")]

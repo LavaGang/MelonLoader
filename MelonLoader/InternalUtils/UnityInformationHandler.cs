@@ -10,6 +10,10 @@ using System.Text.RegularExpressions;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
+using System.Diagnostics;
+using System.Text;
+using System.Text.RegularExpressions;
+using MelonLoader.Utils;
 
 namespace MelonLoader.InternalUtils
 {
@@ -24,7 +28,7 @@ namespace MelonLoader.InternalUtils
 
         internal static void Setup()
         {
-            string gameDataPath = MelonUtils.GetGameDataDirectory();
+            string gameDataPath = MelonEnvironment.UnityGameDataDirectory;
 
             if (!string.IsNullOrEmpty(MelonLaunchOptions.Core.UnityVersion))
             {
@@ -162,9 +166,9 @@ namespace MelonLoader.InternalUtils
 
         private static UnityVersion ReadVersionFallback(string gameDataPath)
         {
-            string unityPlayerPath = Path.Combine(MelonUtils.GameDirectory, "UnityPlayer.dll");
+            string unityPlayerPath = MelonEnvironment.UnityPlayerPath;
             if (!File.Exists(unityPlayerPath))
-                unityPlayerPath = MelonUtils.GetApplicationPath();
+                unityPlayerPath = MelonEnvironment.GameExecutablePath;
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {

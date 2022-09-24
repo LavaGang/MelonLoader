@@ -35,8 +35,8 @@ namespace MelonLoader
                 Debugger.Launch();
             }
 
-            MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
-            MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)!.FullName;
+            MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
             SetupWineCheck();
 
             if (MelonUtils.IsUnderWineOrSteamProton())
@@ -84,7 +84,7 @@ namespace MelonLoader
 
             bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
 
-            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
+            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
             MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
 

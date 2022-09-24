@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Windows;
+using MelonLoader.Utils;
 
 namespace MelonLoader.MelonStartScreen
 {
@@ -44,7 +45,7 @@ namespace MelonLoader.MelonStartScreen
 
             Logger.Msg("Initializing...");
 
-            FolderPath = Path.Combine(MelonUtils.UserDataDirectory, "MelonStartScreen");
+            FolderPath = Path.Combine(MelonEnvironment.UserDataDirectory, "MelonStartScreen");
             if (!Directory.Exists(FolderPath))
                 Directory.CreateDirectory(FolderPath);
 

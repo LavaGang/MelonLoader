@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IllusionPlugin;
 using MelonLoader;
+using MelonLoader.Utils;
 
 namespace IllusionInjector
 {
@@ -10,7 +11,7 @@ namespace IllusionInjector
 		public static IEnumerable<IPlugin> Plugins { get => _Plugins; }
 		public class AppInfo
 		{
-			public static string StartupPath { get => MelonUtils.GameDirectory; }
+			public static string StartupPath { get => MelonEnvironment.GameRootDirectory; }
 		}
 	}
 }

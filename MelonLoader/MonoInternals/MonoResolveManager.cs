@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using MelonLoader.MonoInternals.ResolveInternals;
+using MelonLoader.Utils;
 
 namespace MelonLoader.MonoInternals
 {
@@ -15,12 +16,11 @@ namespace MelonLoader.MonoInternals
             // Setup Search Directories
             string[] searchdirlist =
             {
-                MelonUtils.MelonLoaderDirectory,
-                MelonUtils.UserLibsDirectory,
-                MelonHandler.PluginsDirectory,
-                MelonHandler.ModsDirectory,
-                MelonUtils.BaseDirectory,
-                MelonUtils.GameDirectory
+                MelonEnvironment.UserLibsDirectory,
+                MelonEnvironment.PluginsDirectory,
+                MelonEnvironment.ModsDirectory,
+                MelonEnvironment.MelonBaseDirectory,
+                MelonEnvironment.GameRootDirectory,
             };
             foreach (string path in searchdirlist)
                 AddSearchDirectory(path);

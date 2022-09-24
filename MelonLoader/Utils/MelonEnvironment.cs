@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
+
+#if !NET6_0
+using System.Diagnostics;
+#endif
 
 namespace MelonLoader.Utils
 {
@@ -18,8 +21,12 @@ namespace MelonLoader.Utils
         public static string MelonLoaderDirectory { get; internal set; }
         public static string GameRootDirectory { get; internal set; }
 
-        public static string GameExecutablePath => Process.GetCurrentProcess().MainModule.FileName;
-        public static string MelonBaseDirectory => Directory.GetParent(MelonLoaderDirectory).FullName;
+#if NET6_0
+        public static string GameExecutablePath => System.Environment.ProcessPath;
+#else
+        public static string GameExecutablePath => Process.GetCurrentProcess().MainModule!.FileName;
+#endif
+        public static string MelonBaseDirectory => Directory.GetParent(MelonLoaderDirectory)!.FullName;
         public static string DependenciesDirectory => Path.Combine(MelonLoaderDirectory, "Dependencies");
         public static string SupportModuleDirectory => Path.Combine(DependenciesDirectory, "SupportModules");
         public static string CompatibilityLayerDirectory => Path.Combine(DependenciesDirectory, "CompatibilityLayers");
@@ -33,6 +40,7 @@ namespace MelonLoader.Utils
         public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
         public static string UnityGameDataDirectory => Path.Combine(GameRootDirectory, GameExecutableName + "_Data");
         public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "il2cpp_data");
+        public static string UnityPlayerPath => Path.Combine(GameRootDirectory, "UnityPlayer.dll");
 
         public static string MelonManagedDirectory => Path.Combine(MelonLoaderDirectory, "Managed");
 
