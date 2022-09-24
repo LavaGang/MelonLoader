@@ -28,10 +28,8 @@ void InternalCalls::MelonUtils::AddInternalCalls()
 {
 	Mono::AddInternalCall("MelonLoader.MelonUtils::IsGame32Bit", IsGame32Bit);
 	
-	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookAttach", Hook::Attach);
-	Mono::AddInternalCall("MelonLoader.MelonUtils::NativeHookDetach", Hook::Detach);
-
-	Mono::AddInternalCall("MelonLoader.Support.Preload::GetManagedDirectory", GetManagedDirectory);
+	Mono::AddInternalCall("MelonLoader.BootstrapInterop::NativeHookAttach", Hook::Attach);
+	Mono::AddInternalCall("MelonLoader.BootstrapInterop::NativeHookDetach", Hook::Detach);
 
 	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetLibPtr", GetLibPtr);
 	Mono::AddInternalCall("MelonLoader.MonoInternals.MonoLibrary::GetRootDomainPtr", GetRootDomainPtr);
