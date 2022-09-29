@@ -101,7 +101,7 @@ namespace MelonLoader.InternalUtils
                 if (EngineVersion == UnityVersion.MinVersion)
                     EngineVersion = UnityVersion.Parse(instance.file.Metadata.UnityVersion);
 
-                List<AssetFileInfo> assetFiles = instance.file.GetAssetsOfType(129);
+                List<AssetFileInfo> assetFiles = instance.file.GetAssetsOfType(AssetClassID.PlayerSettings);
                 if (assetFiles.Count > 0)
                 {
                     AssetFileInfo playerSettings = assetFiles.First();
