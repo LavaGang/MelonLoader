@@ -36,23 +36,22 @@ namespace MelonLoader.InternalUtils
                 }
             }
 
+            AssetsManager assetsManager = new AssetsManager();
+            ReadGameInfo(assetsManager, gameDataPath);
+            assetsManager.UnloadAll();
+
+            if (string.IsNullOrEmpty(GameDeveloper)
+                || string.IsNullOrEmpty(GameName))
+                ReadGameInfoFallback();
+
             if (EngineVersion == UnityVersion.MinVersion)
             {
-                AssetsManager assetsManager = new AssetsManager();
-                ReadGameInfo(assetsManager, gameDataPath);
-                assetsManager.UnloadAll();
-
-                if (EngineVersion == UnityVersion.MinVersion)
+                try { EngineVersion = ReadVersionFallback(gameDataPath); }
+                catch (Exception ex)
                 {
-                    try { EngineVersion = ReadVersionFallback(gameDataPath); }
-                    catch (Exception ex)
-                    {
-                        if (MelonDebug.IsEnabled())
-                            MelonLogger.Error(ex);
-                    }
+                    if (MelonDebug.IsEnabled())
+                        MelonLogger.Error(ex);
                 }
-
-                ReadGameInfoFallback();
             }
 
             if (string.IsNullOrEmpty(GameDeveloper))
@@ -99,7 +98,8 @@ namespace MelonLoader.InternalUtils
                 if (!instance.file.typeTree.hasTypeTree)
                     assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
 
-                EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);
+                if (EngineVersion == UnityVersion.MinVersion)
+                    EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);
 
                 List<AssetFileInfoEx> assetFiles = instance.table.GetAssetsOfType(129);
                 if (assetFiles.Count > 0)
