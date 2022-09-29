@@ -69,6 +69,7 @@
 35. Fixed Start Screen issue with Signature Scanning GfxDevice on Unity 2020.3.15 x86 Mono.
 36. Updated [Tomlet](https://github.com/SamboyCoding/Tomlet) to v5.0.0.
 37. Implemented Fallback Game Information Parsing.
+38. Fixed issue with manually setting Unity version via Launch Option causing it to not attempt to read Game Name, Game Developer, or Game Version.
 
 ---
 
