@@ -67,6 +67,8 @@
 33. Fixed Regex Compatibility Issue with Older Runtimes.
 34. Added additional null checking for Start Screen's GfxDevice.
 35. Fixed Start Screen issue with Signature Scanning GfxDevice on Unity 2020.3.15 x86 Mono.
+36. Updated [Tomlet](https://github.com/SamboyCoding/Tomlet) to v5.0.0.
+37. Implemented Fallback Game Information Parsing.
 
 ---
 

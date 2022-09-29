@@ -15,10 +15,12 @@ namespace MelonLoader.InternalUtils
 {
     public static class UnityInformationHandler
     {
-        public static string GameName { get; private set; } = "UNKNOWN";
-        public static string GameDeveloper { get; private set; } = "UNKNOWN";
+        private const string DefaultInfo = "UNKNOWN";
+
+        public static string GameName { get; private set; }
+        public static string GameDeveloper { get; private set; }
         public static UnityVersion EngineVersion { get; private set; } = UnityVersion.MinVersion;
-        public static string GameVersion { get; private set; } = "0";
+        public static string GameVersion { get; private set; }
 
         internal static void Setup()
         {
@@ -49,9 +51,18 @@ namespace MelonLoader.InternalUtils
                             MelonLogger.Error(ex);
                     }
                 }
+
+                ReadGameInfoFallback();
             }
 
+            if (string.IsNullOrEmpty(GameDeveloper))
+                GameDeveloper = DefaultInfo;
+            if (string.IsNullOrEmpty(GameName))
+                GameName = DefaultInfo;
+
             SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
+            if (string.IsNullOrEmpty(GameVersion))
+                GameVersion = DefaultInfo;
 
             MelonLogger.Msg("------------------------------");
             MelonLogger.Msg($"Game Name: {GameName}");
@@ -138,6 +149,32 @@ namespace MelonLoader.InternalUtils
             }
             if (instance != null)
                 instance.file.Close();
+        }
+
+        private static void ReadGameInfoFallback()
+        {
+            try
+            {
+                string appInfoFilePath = Path.Combine(MelonUtils.GetGameDataDirectory(), "app.info");
+                if (!File.Exists(appInfoFilePath))
+                    return;
+
+                string[] filestr = File.ReadAllLines(appInfoFilePath);
+                if ((filestr == null) || (filestr.Length < 2))
+                    return;
+
+                if (string.IsNullOrEmpty(GameDeveloper) && !string.IsNullOrEmpty(filestr[0]))
+                    GameDeveloper = filestr[0];
+
+                if (string.IsNullOrEmpty(GameName) && !string.IsNullOrEmpty(filestr[1]))
+                    GameName = filestr[1];
+
+            }
+            catch (Exception ex)
+            {
+                if (MelonDebug.IsEnabled())
+                    MelonLogger.Error(ex);
+            }
         }
 
         private static UnityVersion ReadVersionFallback(string gameDataPath)
