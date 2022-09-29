@@ -69,15 +69,5 @@ namespace MelonLoader.Properties {
                 return ((byte[])(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] classdata_large {
-            get {
-                object obj = ResourceManager.GetObject("classdata_large", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

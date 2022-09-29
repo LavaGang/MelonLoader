@@ -372,22 +372,13 @@ namespace MelonLoader
         public static IntPtr GetNativeLibraryExport(this IntPtr ptr, string name)
             => NativeLibrary.GetExport(ptr, name);
 
-        public static ClassDatabasePackage LoadIncludedClassPackage(this AssetsManager assetsManager)
+        public static ClassPackageFile LoadIncludedClassPackage(this AssetsManager assetsManager)
         {
-            ClassDatabasePackage classPackage = null;
+            ClassPackageFile classPackage = null;
             using (MemoryStream mstream = new(Properties.Resources.classdata))
                 classPackage = assetsManager.LoadClassPackage(mstream);
             return classPackage;
         }
-
-        public static ClassDatabasePackage LoadIncludedLargeClassPackage(this AssetsManager assetsManager)
-        {
-            ClassDatabasePackage classPackage = null;
-            using (MemoryStream mstream = new(Properties.Resources.classdata_large))
-                classPackage = assetsManager.LoadClassPackage(mstream);
-            return classPackage;
-        }
-
 
         [Obsolete("MelonLoader.MelonUtils.GetUnityVersion() is obsolete. Please use MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion instead.")]
         public static string GetUnityVersion() => UnityInformationHandler.EngineVersion.ToStringWithoutType();

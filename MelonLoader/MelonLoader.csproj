@@ -34,13 +34,12 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
-		<PackageReference Include="AssetsTools.NET" Version="2.0.12" />
+		<PackageReference Include="AssetsTools.NET" Version="3.0.0-preview1" />
 		<PackageReference Include="HarmonyX" Version="2.9.0" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.0.0" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Resources\classdata.tpk" />
-		<None Include="Resources\classdata_large.tpk" />
 	</ItemGroup>
 </Project>

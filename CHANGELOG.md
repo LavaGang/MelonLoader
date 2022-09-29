@@ -33,7 +33,7 @@
 ### v0.5.5:
 
 1. Rewrote Proxy.   (Credits to [autumncpp](https://github.com/autumncpp) :D)
-2. Updated [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) to v2.0.12.
+2. Updated [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) to v3.0.0-preview1.
 3. Updated [AssetRipper.VersionUtilities](https://github.com/AssetRipper/VersionUtilities) to v1.2.1.
 4. Removed Game Blacklist.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
 5. Rewritten the Melons loader.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)

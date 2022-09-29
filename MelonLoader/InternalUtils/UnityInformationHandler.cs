@@ -95,49 +95,31 @@ namespace MelonLoader.InternalUtils
                     return;
 
                 assetsManager.LoadIncludedClassPackage();
-                if (!instance.file.typeTree.hasTypeTree)
-                    assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
+                if (!instance.file.Metadata.TypeTreeEnabled)
+                    assetsManager.LoadClassDatabaseFromPackage(instance.file.Metadata.UnityVersion);
 
                 if (EngineVersion == UnityVersion.MinVersion)
-                    EngineVersion = UnityVersion.Parse(instance.file.typeTree.unityVersion);
+                    EngineVersion = UnityVersion.Parse(instance.file.Metadata.UnityVersion);
 
-                List<AssetFileInfoEx> assetFiles = instance.table.GetAssetsOfType(129);
+                List<AssetFileInfo> assetFiles = instance.file.GetAssetsOfType(129);
                 if (assetFiles.Count > 0)
                 {
-                    AssetFileInfoEx playerSettings = assetFiles.First();
+                    AssetFileInfo playerSettings = assetFiles.First();
 
-                    AssetTypeInstance assetTypeInstance = null;
-                    try
+                    AssetTypeValueField playerSettings_baseField = assetsManager.GetBaseField(instance, playerSettings);
+                    if (playerSettings_baseField != null)
                     {
-                        assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (MelonDebug.IsEnabled())
-                        {
-                            MelonLogger.Error(ex);
-                            MelonLogger.Warning("Attempting to use Large Class Package...");
-                        }
-                        assetsManager.LoadIncludedLargeClassPackage();
-                        assetsManager.LoadClassDatabaseFromPackage(instance.file.typeTree.unityVersion);
-                        assetTypeInstance = assetsManager.GetTypeInstance(instance, playerSettings);
-                    }
-
-                    if (assetTypeInstance != null)
-                    {
-                        AssetTypeValueField playerSettings_baseField = assetTypeInstance.GetBaseField();
-
                         AssetTypeValueField bundleVersion = playerSettings_baseField.Get("bundleVersion");
                         if (bundleVersion != null)
-                            GameVersion = bundleVersion.GetValue().AsString();
+                            GameVersion = bundleVersion.AsString;
 
                         AssetTypeValueField companyName = playerSettings_baseField.Get("companyName");
                         if (companyName != null)
-                            GameDeveloper = companyName.GetValue().AsString();
+                            GameDeveloper = companyName.AsString;
 
                         AssetTypeValueField productName = playerSettings_baseField.Get("productName");
                         if (productName != null)
-                            GameName = productName.GetValue().AsString();
+                            GameName = productName.AsString;
                     }
                 }
             }
