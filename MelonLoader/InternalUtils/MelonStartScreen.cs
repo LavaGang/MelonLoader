@@ -10,7 +10,7 @@ namespace MelonLoader.InternalUtils
         // Doesn't support Unity versions lower than 2018 (Crashing Issue)
         // Doesn't support Unity versions higher than to 2020.3.21 (Crashing Issue)
         internal static readonly MelonModule.Info moduleInfo = new MelonModule.Info($"MelonLoader{Path.DirectorySeparatorChar}Dependencies{Path.DirectorySeparatorChar}MelonStartScreen.dll"
-            , () => !MelonLaunchOptions.Core.StartScreen || UnityInformationHandler.EngineVersion < new UnityVersion(2018) || UnityInformationHandler.EngineVersion > new UnityVersion(2020, 3, 21));
+            , () => !MelonLaunchOptions.Core.StartScreen || UnityInformationHandler.EngineVersion < new UnityVersion(2018));
 
         internal static int LoadAndRun(LemonFunc<int> functionToWaitForAsync)
         {
