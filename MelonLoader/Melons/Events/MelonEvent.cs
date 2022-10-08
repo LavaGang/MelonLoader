@@ -47,7 +47,7 @@ namespace MelonLoader
                     for (var b = 0; b < actions.Count; b++)
                     {
                         var act = actions[b];
-                        if (a.priority >= act.priority)
+                        if (a.priority > act.priority)
                         {
                             actions.Insert(b, a);
                             UpdateEnumerator();
