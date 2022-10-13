@@ -29,7 +29,8 @@ namespace MelonUnityEngine
         static TextGenerationSettings()
         {
             InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.TextRenderingModule.dll", "UnityEngine", "TextGenerationSettings");
-            UnityInternals.runtime_class_init(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr);
+            //UnityInternals.runtime_class_init(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr);
+
             uint align = 0;
             classsize = UnityInternals.class_value_size(InternalClassPointerStore<TextGenerationSettings>.NativeClassPtr, ref align);
 

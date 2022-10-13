@@ -36,6 +36,7 @@
 1. Fixed the MelonEvent registration sorting.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
 2. Inverted the MelonEvent priority sorting system to match the MelonPriorityAttribute.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
 3. Updated Start Screen Signatures.     (Credits to [Slaynash](https://github.com/Slaynash) :3)
+4. Fixed Start Screen Issues with UnityInternals.runtime_class_init.
 
 ---
 

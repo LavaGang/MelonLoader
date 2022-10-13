@@ -31,8 +31,6 @@ namespace UnhollowerMini
             {
                 domain = mono_domain_get();
 
-                string unityVersion = MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType();
-
                 MonoClass* testclass = (MonoClass*)Marshal.AllocHGlobal(sizeof(MonoClass));
                 testclass->applyZeroes();
                 testclass->nested_in_0x04 = (IntPtr)0x1234;
@@ -132,6 +130,7 @@ namespace UnhollowerMini
             else
             {
                 string fullname = string.IsNullOrEmpty(name_space) ? "" : (name_space + ".") + classname;
+
                 Assembly ass = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name + ".dll" == assemblyname);
                 if (ass == null)
                 {
@@ -144,6 +143,7 @@ namespace UnhollowerMini
                     throw new Exception("Unable to find class " + fullname + " in assembly " + assemblyname);
                 }
                 MelonDebug.Msg($" > 0x{(long)(*(IntPtr*)t.TypeHandle.Value):X}");
+
                 return *(IntPtr*)t.TypeHandle.Value;
             }
         }

@@ -11,23 +11,8 @@ namespace MelonUnityEngine
 
         static Resources()
         {
-
             InternalClassPointerStore<Resources>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Resources");
-            UnityInternals.runtime_class_init(InternalClassPointerStore<Resources>.NativeClassPtr);
-
-            /*
-            IntPtr mptr = IntPtr.Zero;
-            IntPtr iter = IntPtr.Zero;
-            while ((mptr = UnityInternals.class_get_methods(InternalClassPointerStore<Resources>.NativeClassPtr, ref iter)) != IntPtr.Zero)
-            {
-                uint paramCount = UnityInternals.method_get_param_count(mptr);
-                string[] paramTypes = new string[paramCount];
-                for (uint i = 0; i < paramCount; ++i)
-                    paramTypes[i] = Marshal.PtrToStringAnsi(UnityInternals.type_get_name(UnityInternals.method_get_param(mptr, i)));
-                MelonLoader.MelonLogger.Msg($" {Marshal.PtrToStringAnsi(UnityInternals.type_get_name(UnityInternals.method_get_return_type(mptr)))} {Marshal.PtrToStringAnsi(UnityInternals.method_get_name(mptr))}({string.Join(", ", paramTypes)})");
-            }
-            */
-            // T GetBuiltinResource(System.String)
+            //UnityInternals.runtime_class_init(InternalClassPointerStore<Resources>.NativeClassPtr);
 
             m_GetBuiltinResource = UnityInternals.GetMethod(InternalClassPointerStore<Resources>.NativeClassPtr, "GetBuiltinResource", "UnityEngine.Object", "System.Type", "System.String");
 

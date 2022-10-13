@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.RegularExpressions;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
-using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MelonLoader.InternalUtils
 {
