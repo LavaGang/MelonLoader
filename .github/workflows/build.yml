@@ -263,7 +263,7 @@ jobs:
     runs-on: windows-latest
     needs: [finalize_x86_debug_zip, finalize_x64_debug_zip, finalize_x86_release_zip, finalize_x64_release_zip]
     steps:
-      - uses: GeekyEggo/delete-artifact@v1.0.0
+      - uses: GeekyEggo/delete-artifact@v2.0.0
         with:
           name: |
             MLCoreDebug
