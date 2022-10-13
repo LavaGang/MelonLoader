@@ -66,34 +66,6 @@ namespace MelonLoader.MelonStartScreen
                 UI_StyleValues.ProgressBar.Render();
                 UI_StyleValues.VersionText.Render();
 
-                /*
-                if (melonloaderversionTextmesh != null)
-                {
-                    if (UIConfig.VersionText.AutoAlign)
-                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(sw / 2, sh - (sh / 2 + (logoHeight / 2) - 35), 0), Quaternion.identity);
-                    else
-                        Graphics.DrawMeshNow(melonloaderversionTextmesh, new Vector3(UIConfig.VersionText.CustomPosition.Item1, sh - UIConfig.VersionText.CustomPosition.Item2, 0), Quaternion.identity);
-                }
-
-                if (progressBar != null)
-                {
-                    int x, y, width, height = 0;
-                    width = 540;
-                    height = 36;
-
-                    if (UIConfig.ProgressBar.AutoAlign)
-                    {
-                        x = (sw - width) / 2;
-                        y = sh - ((sh - height) / 2 + (logoHeight / 2) + 50);
-                    }
-                    else
-                    {
-                        x = UIConfig.ProgressBar.CustomPosition.Item1;
-                        y = UIConfig.ProgressBar.CustomPosition.Item2;
-                    }
-                }
-                */
-
                 GfxDevice.PresentFrame();
                 if (shouldCallWFLPAGT != 0)
                     GfxDevice.WaitForLastPresentationAndGetTimestamp(shouldCallWFLPAGT);

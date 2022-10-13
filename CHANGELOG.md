@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.5.7](#v057) |
 | [v0.5.5](#v055) |
 | [v0.5.4](#v054) |
 | [v0.5.3](#v053) | 
@@ -27,6 +28,14 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.5.7:
+
+1. Fixed the MelonEvent registration sorting.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+2. Inverted the MelonEvent priority sorting system to match the MelonPriorityAttribute.   (Credits to [SlidyDev](https://github.com/SlidyDev) :D)
+3. Updated Start Screen Signatures.     (Credits to [Slaynash](https://github.com/Slaynash) :3)
 
 ---
 
