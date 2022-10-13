@@ -64,8 +64,10 @@ namespace MelonLoader.Support
 
             ClassInjector.RegisterTypeInIl2Cpp<SM_Component>();
             SM_Component.Create();
+
             unhollower = new UnhollowerInterface();
             Interface.SetUnhollowerSupportInterface(unhollower);
+
             HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyMethodPatcher.TryResolve;
 
             return new SupportModule_To();
