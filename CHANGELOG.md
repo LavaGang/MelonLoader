@@ -39,6 +39,7 @@
 4. Fixed Start Screen Issues with UnityInternals.runtime_class_init.
 5. Updated Class Data TPK.     (Credits to [ds5678](https://github.com/ds5678) :D)
 6. Updated [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to v2022.1.0-pre-release.8.
+7. Added Launch Option Logging.
 
 ---
 
