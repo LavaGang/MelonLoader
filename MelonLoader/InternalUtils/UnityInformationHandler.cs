@@ -63,12 +63,13 @@ namespace MelonLoader.InternalUtils
             if (string.IsNullOrEmpty(GameVersion))
                 GameVersion = DefaultInfo;
 
-            MelonLogger.Msg("------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.Magenta);
             MelonLogger.Msg($"Game Name: {GameName}");
             MelonLogger.Msg($"Game Developer: {GameDeveloper}");
             MelonLogger.Msg($"Unity Version: {EngineVersion}");
             MelonLogger.Msg($"Game Version: {GameVersion}");
-            MelonLogger.Msg("------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteSpacer();
         }
 
         private static void ReadGameInfo(AssetsManager assetsManager, string gameDataPath)

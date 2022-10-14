@@ -18,7 +18,7 @@ namespace MelonLoader
         /// </summary>
         public static string ModsDirectory { get; internal set; }
 
-        static MelonHandler()
+        internal static void Setup()
         {
             PluginsDirectory = Path.Combine(MelonUtils.BaseDirectory, "Plugins");
             if (!Directory.Exists(PluginsDirectory))
@@ -28,21 +28,27 @@ namespace MelonLoader
                 Directory.CreateDirectory(ModsDirectory);
         }
 
+        private static bool firstSpacer = false;
         public static void LoadMelonsFromDirectory<T>(string path) where T : MelonTypeBase<T>
         {
             path = Path.GetFullPath(path);
 
             var loadingMsg = $"Loading {MelonTypeBase<T>.TypeName}s from '{path}'...";
-            var line = new string('-', loadingMsg.Length + 1);
             MelonLogger.WriteSpacer();
             MelonLogger.Msg(loadingMsg);
-            MelonLogger.Msg(ConsoleColor.Magenta, line);
+
+            bool hasWroteLine = false;
 
             var files = Directory.GetFiles(path, "*.dll");
             var melonAssemblies = new List<MelonAssembly>();
-
             foreach (var f in files)
             {
+                if (!hasWroteLine)
+                {
+                    hasWroteLine = true;
+                    MelonLogger.WriteLine(ConsoleColor.Magenta);
+                }
+
                 var asm = MelonAssembly.LoadMelonAssembly(f, false);
                 if (asm == null)
                     continue;
@@ -51,7 +57,6 @@ namespace MelonLoader
             }
 
             var melons = new List<T>();
-
             foreach (var asm in melonAssemblies)
             {
                 asm.LoadMelons();
@@ -69,14 +74,19 @@ namespace MelonLoader
                 }
             }
 
-            MelonLogger.WriteSpacer();
+            if (hasWroteLine)
+                MelonLogger.WriteSpacer();
 
             MelonBase.RegisterSorted(melons);
 
-            MelonLogger.Msg(ConsoleColor.Magenta, line);
+            if (hasWroteLine)
+                MelonLogger.WriteLine(ConsoleColor.Magenta);
+
             var count = MelonTypeBase<T>._registeredMelons.Count;
             MelonLogger.Msg($"{count} {MelonTypeBase<T>.TypeName.MakePlural(count)} loaded.");
-            MelonLogger.WriteSpacer();
+            if (firstSpacer || (typeof(T) ==  typeof(MelonMod)))
+                MelonLogger.WriteSpacer();
+            firstSpacer = true;
         }
 
         #region Obsolete Members

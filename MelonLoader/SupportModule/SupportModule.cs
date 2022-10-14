@@ -91,7 +91,7 @@ namespace MelonLoader
                 return false;
             }
 
-            MelonDebug.Msg($"Support Module Loaded: {ModulePath}");
+            MelonLogger.Msg($"Support Module Loaded: {ModulePath}");
 
             return true;
         }

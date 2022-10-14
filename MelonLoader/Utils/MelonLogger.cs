@@ -27,6 +27,9 @@ namespace MelonLoader
         public static void Error(string txt, params object[] args) => NativeError(null, string.Format(txt, args));
         public static void Error(string txt, Exception ex) => NativeError(null, $"{txt}\n{ex}");
 
+        public static void WriteLine(int length = 30) => Msg(new string('-', length));
+        public static void WriteLine(ConsoleColor color, int length = 30) => Msg(color, new string('-', length));
+
         private static void NativeMsg(ConsoleColor namesection_color, ConsoleColor txt_color, string namesection, string txt)
         {
             if (string.IsNullOrEmpty(namesection))
@@ -89,6 +92,10 @@ namespace MelonLoader
             public void Error(string txt) => NativeError(Name, txt);
             public void Error(string txt, params object[] args) => NativeError(Name, string.Format(txt, args));
             public void Error(string txt, Exception ex) => NativeError(Name, $"{txt}\n{ex}");
+
+            public void WriteSpacer() => MelonLogger.WriteSpacer();
+            public void WriteLine(int length = 30) => MelonLogger.WriteLine(length);
+            public void WriteLine(ConsoleColor color, int length = 30) => MelonLogger.WriteLine(color, length);
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -100,7 +107,7 @@ namespace MelonLoader
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void ThrowInternalFailure(string txt);
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal extern static void WriteSpacer();
+        public extern static void WriteSpacer();
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal extern static void Internal_PrintModName(ConsoleColor meloncolor, ConsoleColor authorcolor, string name, string author, string version, string id);
         [MethodImpl(MethodImplOptions.InternalCall)]

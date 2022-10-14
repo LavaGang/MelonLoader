@@ -40,6 +40,8 @@ namespace MelonLoader
             if (!Directory.Exists(UserLibsDirectory))
                 Directory.CreateDirectory(UserLibsDirectory);
 
+            MelonLaunchOptions.Load();
+            MelonHandler.Setup();
             UnityInformationHandler.Setup();
 
             CurrentGameAttribute = new MelonGameAttribute(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName);

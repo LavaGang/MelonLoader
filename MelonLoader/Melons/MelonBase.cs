@@ -307,7 +307,7 @@ namespace MelonLoader
             if (incompatibilities == null || incompatibilities.Length == 0)
                 return;
 
-            MelonLogger.Msg(ConsoleColor.Red, "------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.Red);
             MelonLogger.Msg(ConsoleColor.DarkRed, $"'{melon.Info.Name} v{melon.Info.Version}' is incompatible:");
             if (incompatibilities.Contains(Incompatibility.Game))
             {
@@ -353,7 +353,7 @@ namespace MelonLoader
                 MelonLogger.Msg($"    - {melon.SupportedMLBuild.HashCode}");
             }
 
-            MelonLogger.Msg(ConsoleColor.Red, "------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.Red);
             MelonLogger.WriteSpacer();
         }
 
@@ -523,17 +523,17 @@ namespace MelonLoader
 
         private void PrintLoadInfo()
         {
-            MelonLogger.Msg(ConsoleColor.DarkGreen, "------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.DarkGreen);
             
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
             MelonLogger.Msg(ConsoleColor.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
 
-            MelonLogger.Msg(ConsoleColor.DarkGreen, "------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.DarkGreen);
         }
 
         private void PrintUnloadInfo(string reason)
         {
-            MelonLogger.Msg(ConsoleColor.DarkRed, "------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.DarkRed);
 
             MelonLogger.Msg(ConsoleColor.DarkGray, MelonTypeName + " deinitialized:");
             MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
@@ -544,7 +544,7 @@ namespace MelonLoader
                 MelonLogger.Msg($"Reason: '{reason}'");
             }
 
-            MelonLogger.Msg(ConsoleColor.DarkRed, "------------------------------");
+            MelonLogger.WriteLine(ConsoleColor.DarkRed);
         }
 
         public static void ExecuteAll(LemonAction<MelonBase> func, bool unregisterOnFail = false, string unregistrationReason = null)

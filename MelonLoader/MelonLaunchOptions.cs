@@ -10,43 +10,75 @@ namespace MelonLoader
 
         static MelonLaunchOptions()
         {
+            AnalyticsBlocker.Setup();
             Core.Setup();
             Console.Setup();
+            Debug.Setup();
             Il2CppAssemblyGenerator.Setup();
+            Logger.Setup();
         }
 
         internal static void Load()
         {
+            List<string> foundOptions = new List<string>();
+
             LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(Environment.GetCommandLineArgs());
             while (argEnumerator.MoveNext())
             {
-                if (string.IsNullOrEmpty(argEnumerator.Current))
+                string fullcmd = argEnumerator.Current;
+                if (string.IsNullOrEmpty(fullcmd))
                     continue;
 
-                if (!argEnumerator.Current.StartsWith("--"))
+                if (!fullcmd.StartsWith("--"))
                     continue;
 
-                string cmd = argEnumerator.Current.Remove(0, 2);
+                string cmd = fullcmd.Remove(0, 2);
 
                 if (WithoutArg.TryGetValue(cmd, out Action withoutArgFunc))
+                {
+                    foundOptions.Add(fullcmd);
                     withoutArgFunc();
+                }
                 else if (WithArg.TryGetValue(cmd, out Action<string> withArgFunc))
                 {
                     if (!argEnumerator.MoveNext())
                         continue;
 
-                    if (string.IsNullOrEmpty(argEnumerator.Current))
+                    string cmdArg = argEnumerator.Current;
+                    if (string.IsNullOrEmpty(cmdArg))
                         continue;
 
-                    if (argEnumerator.Current.StartsWith("--"))
+                    if (cmdArg.StartsWith("--"))
                         continue;
 
-                    withArgFunc(argEnumerator.Current);
+                    foundOptions.Add($"{fullcmd} = {cmdArg}");
+                    withArgFunc(cmdArg);
                 }
             }
+
+            if (foundOptions.Count <= 0)
+                return;
+
+            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.Msg(ConsoleColor.Cyan, "Launch Options:");
+            foreach (string cmd in foundOptions)
+                MelonLogger.Msg($"\t{cmd}");
+            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteSpacer();
         }
 
 #region Args
+        public static class AnalyticsBlocker
+        {
+            public static bool ShouldDAB { get; internal set; }
+
+            internal static void Setup()
+            {
+                WithoutArg["melonloader.dab"] = () => ShouldDAB = true;
+
+            }
+        }
+
         public static class Core
         {
             public enum LoadModeEnum
@@ -91,15 +123,35 @@ namespace MelonLoader
             };
             public static DisplayMode Mode { get; internal set; }
             public static bool CleanUnityLogs { get; internal set; } = true;
+            public static bool ShouldSetTitle { get; internal set; } = true;
+            public static bool AlwaysOnTop { get; internal set; }
+            public static bool ShouldHide { get; internal set; }
+            public static bool HideWarnings { get; internal set; }
 
             internal static void Setup()
             {
                 WithoutArg["melonloader.disableunityclc"] = () => CleanUnityLogs = false;
+                WithoutArg["melonloader.consoledst"] = () => ShouldSetTitle = false;
+                WithoutArg["melonloader.consoleontop"] = () => AlwaysOnTop = true;
+                WithoutArg["melonloader.hideconsole"] = () => ShouldHide = true;
+                WithoutArg["melonloader.hidewarnings"] = () => HideWarnings = true;
+
                 WithArg["melonloader.consolemode"] = (string arg) =>
                 {
                     if (int.TryParse(arg, out int valueint))
                         Mode = (DisplayMode)MelonUtils.Clamp(valueint, (int)DisplayMode.NORMAL, (int)DisplayMode.LEMON);
                 };
+            }
+        }
+
+        public static class Debug
+        {
+            public static bool Enabled { get; internal set; }
+
+            internal static void Setup()
+            {
+                WithoutArg["melonloader.debug"] = () => Enabled = true;
+
             }
         }
 
@@ -120,6 +172,32 @@ namespace MelonLoader
                 WithArg["melonloader.agfregex"] = (string arg) => ForceRegex = arg;
             }
         }
-#endregion
+
+        public static class Logger
+        {
+            public static int MaxLogs { get; internal set; } = 10;
+            public static int MaxWarnings { get; internal set; } = 10;
+            public static int MaxErrors { get; internal set; } = 10;
+
+            internal static void Setup()
+            {
+                WithArg["melonloader.maxlogs"] = (string arg) =>
+                {
+                    if (int.TryParse(arg, out int valueint))
+                        MaxLogs = valueint;
+                };
+                WithArg["melonloader.maxwarnings"] = (string arg) =>
+                {
+                    if (int.TryParse(arg, out int valueint))
+                        MaxWarnings = valueint;
+                };
+                WithArg["melonloader.maxerrors"] = (string arg) =>
+                {
+                    if (int.TryParse(arg, out int valueint))
+                        MaxErrors = valueint;
+                };
+            }
+        }
+        #endregion
     }
 }
