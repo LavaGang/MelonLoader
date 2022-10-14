@@ -57,6 +57,7 @@ namespace MelonLoader
 
         public static string BaseDirectory { get; private set; }
         public static string GameDirectory { get; private set; }
+        public static string MelonLoaderDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
         public static string UserLibsDirectory { get; private set; }
         public static MelonPlatformAttribute.CompatiblePlatforms CurrentPlatform { get; private set; }
