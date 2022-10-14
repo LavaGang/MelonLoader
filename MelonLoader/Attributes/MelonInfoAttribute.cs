@@ -49,15 +49,9 @@ namespace MelonLoader
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name));
-
-            if (string.IsNullOrEmpty(author))
-                throw new ArgumentNullException(nameof(author));
-
             SystemType = type;
-            Name = name;
-            Author = author;
+            Name = name ?? "UNKNOWN";
+            Author = author ?? "UNKNOWN";
             DownloadLink = downloadLink; // Might get Removed. Not sure yet.
 
             if (string.IsNullOrEmpty(version))
@@ -82,19 +76,13 @@ namespace MelonLoader
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
 
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name));
-
-            if (string.IsNullOrEmpty(author))
-                throw new ArgumentNullException(nameof(author));
-
             if (version == null)
                 throw new ArgumentNullException(nameof(version));
 
             SystemType = type;
-            Name = name;
+            Name = name ?? "UNKNOWN";
             Version = version.ToString();
-            Author = author;
+            Author = author ?? "UNKNOWN";
             DownloadLink = downloadLink; // Might get Removed. Not sure yet.
         }
         /// <summary>

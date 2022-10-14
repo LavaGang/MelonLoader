@@ -39,7 +39,7 @@ namespace MelonLoader
         {
             var melon = new T
             {
-                Info = new MelonInfoAttribute(name, author, version, null, typeof(T)),
+                Info = new MelonInfoAttribute(typeof(T), name, author, version),
                 MelonAssembly = MelonAssembly.LoadMelonAssembly(null, typeof(T).Assembly),
                 Priority = priority,
                 ConsoleColor = color ?? MelonLogger.DefaultMelonColor,
