@@ -60,11 +60,10 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="..\Mono\SM_Component.cs" />
-		<Compile Include="..\Mono\SceneHandler.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Include="..\Mono\UnityMappers.cs" Link="UnityMappers.cs" />
+		<Compile Include="..\SM_Component.cs" Link="SM_Component.cs" />
+		<Compile Include="..\SupportModule_To.cs" Link="SupportModule_To.cs" />
+		<Compile Include="..\SceneHandler.cs" Link="SceneHandler.cs" />
+		<Compile Include="..\UnityMappers.cs" Link="UnityMappers.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj">

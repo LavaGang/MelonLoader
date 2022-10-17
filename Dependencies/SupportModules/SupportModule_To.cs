@@ -10,7 +10,11 @@ namespace MelonLoader.Support
         public object StartCoroutine(IEnumerator coroutine)
         {
             if (Main.component != null)
+#if SM_Il2Cpp
+                return Main.component.StartCoroutine(new Il2CppSystem.Collections.IEnumerator(new MonoEnumeratorWrapper(coroutine).Pointer));
+#else
                 return Main.component.StartCoroutine(coroutine);
+#endif
             QueuedCoroutines.Add(coroutine);
             return coroutine;
         }
