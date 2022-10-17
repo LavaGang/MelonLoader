@@ -74,7 +74,6 @@ namespace MelonLoader.Support
             if (scenesLoaded.Count > 0)
             {
                 Queue<SceneInitEvent> requeue = new Queue<SceneInitEvent>();
-
                 SceneInitEvent evt = null;
                 while ((scenesLoaded.Count > 0) && ((evt = scenesLoaded.Dequeue()) != null))
                 {

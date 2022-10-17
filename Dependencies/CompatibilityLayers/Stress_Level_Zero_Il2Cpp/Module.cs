@@ -1,4 +1,5 @@
 ﻿using MelonLoader.Modules;
+using System.Collections.Generic;
 
 namespace MelonLoader.CompatibilityLayers
 {
@@ -7,10 +8,15 @@ namespace MelonLoader.CompatibilityLayers
         private static bool HasGotLoadingSceneIndex = false;
         private static int LoadingSceneIndex = -9;
 
+        private static Dictionary<string, int> CompatibleGames = new Dictionary<string, int>
+        {
+            ["BONELAB"] = 0,
+            ["BONEWORKS"] = 0
+        };
+
         public override void OnInitialize()
         {
-            if ((InternalUtils.UnityInformationHandler.GameName != "BONEWORKS")
-                && (InternalUtils.UnityInformationHandler.GameName != "BONELAB"))
+            if (!CompatibleGames.ContainsKey(InternalUtils.UnityInformationHandler.GameName))
                 return;
 
             MelonEvents.OnSceneWasLoaded.Subscribe(OnSceneLoad, int.MinValue);

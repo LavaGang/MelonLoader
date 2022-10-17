@@ -60,7 +60,7 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="..\SM_Component.cs" Link="SM_Component.cs" />
+		<Compile Include="..\Component.cs" Link="Component.cs" />
 		<Compile Include="..\SupportModule_To.cs" Link="SupportModule_To.cs" />
 		<Compile Include="..\SceneHandler.cs" Link="SceneHandler.cs" />
 		<Compile Include="..\UnityMappers.cs" Link="UnityMappers.cs" />
