@@ -578,6 +578,30 @@ namespace MelonLoader
                     m.Unregister(unregistrationReason);
             }
         }
+
+        public static void SendMessageAll(string name, params object[] arguments)
+        {
+            LemonEnumerator<MelonBase> enumerator = new(_registeredMelons.ToArray());
+            while (enumerator.MoveNext())
+            {
+                var melon = enumerator.Current;
+                if (!melon.Registered)
+                    continue;
+
+                try { melon.SendMessage(name, arguments); }
+                catch (Exception ex) { melon.LoggerInstance.Error(ex.ToString()); }
+            }
+        }
+
+        public object SendMessage(string name, params object[] arguments)
+        {
+            var msg = Info.SystemType.GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+
+            if (msg == null)
+                return null;
+
+            return msg.Invoke(msg.IsStatic ? null : this, arguments);
+        }
         #endregion
 
         #region Obsolete Members

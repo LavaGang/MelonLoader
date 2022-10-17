@@ -38,7 +38,6 @@ namespace MelonLoader
 
             MelonEvents.OnSceneWasLoaded.Subscribe((idx, name) => OnLevelWasLoaded(idx), Priority);
             MelonEvents.OnSceneWasInitialized.Subscribe((idx, name) => OnLevelWasInitialized(idx), Priority);
-            MelonEvents.BONEWORKS_OnLoadingScreen.Subscribe(BONEWORKS_OnLoadingScreen, Priority);
             MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, Priority);
         }
 
@@ -62,9 +61,6 @@ namespace MelonLoader
         #endregion
 
         #region Obsolete Members
-
-        [Obsolete("Subscribe to the 'MelonEvents.BONEWORKS_OnLoadingScreen' event instead.")]
-        public virtual void BONEWORKS_OnLoadingScreen() { }
         [Obsolete("Override OnSceneWasLoaded instead.")]
         public virtual void OnLevelWasLoaded(int level) { }
         [Obsolete("Override OnSceneWasInitialized instead.")]

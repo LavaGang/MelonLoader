@@ -69,6 +69,14 @@ namespace MelonLoader
             }
         }
 
+        public void UnsubscribeAll()
+        {
+            lock (actions)
+                actions.Clear();
+
+            UpdateEnumerator();
+        }
+
         public void Unsubscribe(MethodInfo method, object obj = null)
         {
             if (Disposed)
@@ -102,6 +110,27 @@ namespace MelonLoader
             cachedActionsArray = actions.ToArray();
         }
 
+        public class MelonEventSubscriber
+        {
+            public T del;
+            public bool unsubscribeOnFirstInvocation;
+            public int priority;
+            public MelonAssembly melonAssembly;
+        }
+        public MelonEventSubscriber[] GetSubscribers()
+        {
+            List<MelonEventSubscriber> allSubs = new List<MelonEventSubscriber>();
+            foreach (var act in actions)
+                allSubs.Add(new MelonEventSubscriber
+                {
+                    del = act.del,
+                    unsubscribeOnFirstInvocation = act.unsubscribeOnFirstInvocation,
+                    priority = act.priority,
+                    melonAssembly = act.melonAssembly
+                });
+            return allSubs.ToArray();
+        }
+
         protected void Invoke(Action<T> delegateInvoker)
         {
             if (Disposed)
@@ -130,7 +159,7 @@ namespace MelonLoader
 
         public void Dispose()
         {
-            actions.Clear();
+            UnsubscribeAll();
             Disposed = true;
         }
     }

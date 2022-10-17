@@ -61,6 +61,10 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\Mono\SM_Component.cs" />
+		<Compile Include="..\Mono\SceneHandler.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\Mono\UnityMappers.cs" Link="UnityMappers.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj">

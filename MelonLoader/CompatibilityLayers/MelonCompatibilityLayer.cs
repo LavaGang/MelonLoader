@@ -1,4 +1,5 @@
 ﻿using MelonLoader.Modules;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -15,21 +16,52 @@ namespace MelonLoader
 
             // Illusion Plugin Architecture
             new MelonModule.Info(Path.Combine(baseDirectory, "IPA.dll"), MelonUtils.IsGameIl2Cpp),
-
-            // MuseDashModLoader
-            new MelonModule.Info(Path.Combine(baseDirectory, "MDML.dll"), MelonUtils.IsGameIl2Cpp, () => !MelonUtils.IsMuseDash),
-
-            // Demeo Integration
-            new MelonModule.Info(Path.Combine(baseDirectory, "Demeo.dll"), MelonUtils.IsGameIl2Cpp, () => !MelonUtils.IsDemeo)
         };
+        
+        private static void CheckGameLayerWithPlatform(string name, Func<bool> shouldBeIgnored)
+        {
+            string nameNoSpaces = name.Replace(' ', '_');
+            foreach (var file in Directory.GetFiles(baseDirectory))
+            {
+                string fileName = Path.GetFileNameWithoutExtension(file);
+                if (fileName.StartsWith(nameNoSpaces))
+                    layers.Add(new MelonModule.Info(file, shouldBeIgnored));
+            }
+        }
 
+        private static void CheckGameLayer(string name)
+        {
+            CheckGameLayerWithPlatform(name, () => false);
+            CheckGameLayerWithPlatform($"{name}_Mono", () => MelonUtils.IsGameIl2Cpp());
+            CheckGameLayerWithPlatform($"{name}_Il2Cpp", () => !MelonUtils.IsGameIl2Cpp());
+        }
+
+        private static bool hasCleanedUp = false;
         internal static void LoadModules()
         {
             if (!Directory.Exists(baseDirectory))
                 return;
 
+            if (!hasCleanedUp)
+            {
+                CheckGameLayer(InternalUtils.UnityInformationHandler.GameName);
+                CheckGameLayer(InternalUtils.UnityInformationHandler.GameDeveloper);
+                CheckGameLayer($"{InternalUtils.UnityInformationHandler.GameDeveloper}_{InternalUtils.UnityInformationHandler.GameName}");
+            }
+
             foreach (var m in layers)
                 MelonModule.Load(m);
+
+            if (!hasCleanedUp)
+            {
+                foreach (var file in Directory.GetFiles(baseDirectory))
+                {
+                    string fileName = Path.GetFileName(file);
+                    if (layers.Find(x => Path.GetFileName(x.fullPath).Equals(fileName)) == null)
+                        File.Delete(file);
+                }
+                hasCleanedUp = true;
+            }
         }
     }
 }

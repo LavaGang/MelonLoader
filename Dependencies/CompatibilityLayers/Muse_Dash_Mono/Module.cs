@@ -8,7 +8,7 @@ using ModHelper;
 
 namespace MelonLoader.CompatibilityLayers
 {
-    internal class MuseDashModLoader_Module : MelonModule
+    internal class Muse_Dash_Mono_Module : MelonModule
     {
         public override void OnInitialize()
         {
@@ -22,7 +22,7 @@ namespace MelonLoader.CompatibilityLayers
                 "ModHelper",
                 "ModLoader",
             };
-            Assembly base_assembly = typeof(MuseDashModLoader_Module).Assembly;
+            Assembly base_assembly = typeof(Muse_Dash_Mono_Module).Assembly;
             foreach (string assemblyName in assembly_list)
                 MonoResolveManager.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 

@@ -92,10 +92,5 @@ namespace MelonLoader
         /// Called before MelonMods are loaded from the Mods folder.
         /// </summary>
         public readonly static MelonEvent OnPreModsLoaded = new(true);
-
-        /// <summary>
-        /// Called when BONEWORKS shows the Loading Screen. Only runs if the Melon is used in BONEWORKS.
-        /// </summary>
-        public readonly static MelonEvent BONEWORKS_OnLoadingScreen = new();
     }
 }

@@ -38,6 +38,9 @@ namespace MelonLoader.Support
 
         internal static void Create()
         {
+            if (Main.component != null)
+                return;
+
             Main.obj = new GameObject();
             DontDestroyOnLoad(Main.obj);
             Main.obj.hideFlags = HideFlags.DontSave;
@@ -67,12 +70,18 @@ namespace MelonLoader.Support
 
         void Start()
         {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
             SiblingFix();
             Main.Interface.OnApplicationLateStart();
         }
 
         void Awake()
         {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
             foreach (var queuedCoroutine in SupportModule_To.QueuedCoroutines)
 #if SM_Il2Cpp
                 StartCoroutine(new Il2CppSystem.Collections.IEnumerator(new MonoEnumeratorWrapper(queuedCoroutine).Pointer));
@@ -84,17 +93,21 @@ namespace MelonLoader.Support
 
         void Update()
         {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
             isQuitting = false;
             SiblingFix();
-#if SM_Il2Cpp
-            if (MelonUtils.IsBONEWORKS)
-                BONEWORKS_SceneHandler.OnUpdate();
-#endif
+
+            SceneHandler.OnUpdate();
             Main.Interface.Update();
         }
 
         void OnDestroy()
         {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
             if (!isQuitting)
             {
                 Create();
@@ -106,6 +119,9 @@ namespace MelonLoader.Support
 
         void OnApplicationQuit()
         {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
             isQuitting = true;
             Main.Interface.Quit();
         }
@@ -115,8 +131,28 @@ namespace MelonLoader.Support
             Main.Interface.DefiniteQuit();
         }
 
-        void FixedUpdate() => Main.Interface.FixedUpdate();
-        void LateUpdate() => Main.Interface.LateUpdate();
-        void OnGUI() => Main.Interface.OnGUI();
+        void FixedUpdate()
+        {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
+            Main.Interface.FixedUpdate();
+        }
+
+        void LateUpdate()
+        {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
+            Main.Interface.LateUpdate();
+        }
+
+        void OnGUI()
+        {
+            if ((Main.component != null) && (Main.component != this))
+                return;
+
+            Main.Interface.OnGUI();
+        }
     }
 }
