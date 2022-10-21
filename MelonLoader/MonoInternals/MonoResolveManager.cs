@@ -12,12 +12,11 @@ namespace MelonLoader.MonoInternals
             if (!AssemblyManager.Setup())
                 return false;
 
-            Assembly base_assembly = typeof(MonoResolveManager).Assembly;
 
             // Setup Search Directories
             string[] searchdirlist =
             {
-                Path.GetDirectoryName(base_assembly.Location),
+                MelonUtils.MelonLoaderDirectory,
                 MelonUtils.UserLibsDirectory,
                 MelonHandler.PluginsDirectory,
                 MelonHandler.ModsDirectory,
@@ -33,6 +32,7 @@ namespace MelonLoader.MonoInternals
                 "MelonLoader",
                 "MelonLoader.ModHandler",
             };
+            Assembly base_assembly = typeof(MonoResolveManager).Assembly;
             foreach (string assemblyName in assembly_list)
                 GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 
