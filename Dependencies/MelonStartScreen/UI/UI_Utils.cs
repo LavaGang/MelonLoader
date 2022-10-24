@@ -14,9 +14,9 @@ namespace MelonLoader.MelonStartScreen.UI
             return texture;
         }
 
-        internal static Objects.UI_Image LoadImage(UI_Config.ImageSettings imageSettings, string filename)
+        internal static Objects.UI_Image LoadImage(UI_Theme.ImageSettings imageSettings, string filename)
         {
-            string filepath = ScanForFile(UI_Config.ThemePath, filename, new string[] { ".gif", ".png", ".jpg", ".jpeg" });
+            string filepath = ScanForFile(UI_Theme.ThemePath, filename, new string[] { ".gif", ".png", ".jpg", ".jpeg" });
             if (string.IsNullOrEmpty(filepath))
                 return null;
 

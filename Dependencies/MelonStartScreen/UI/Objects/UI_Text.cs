@@ -4,15 +4,26 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 {
     internal class UI_Text : UI_Object
     {
-        private UI_Config.TextSettings config;
+        private UI_Theme.TextSettings config;
         private Mesh mesh;
         internal bool isDirty = true;
         internal string text;
+        internal Font font;
 
-        internal UI_Text(UI_Config.TextSettings textSettings)
+        internal UI_Text(UI_Theme.TextSettings textSettings)
         {
             config = textSettings;
             text = config.Text;
+
+            try
+            {
+                font = Resources.GetBuiltinResource<Font>($"{config.Font}.ttf");
+            }
+            catch { }
+
+            if (font == null)
+                font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+
             AllElements.Add(this);
         }
 
@@ -24,7 +35,7 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
                 return;
 
             UpdateMesh();
-            UI_StyleValues.TextFont.material.SetPass(0);
+            font.material.SetPass(0);
             if (mesh == null)
                 return;
 
@@ -49,9 +60,7 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             settings.generationExtents = new Vector2(540, 47.5f);
             settings.pivot = new Vector2(0.5f, 0.5f);
             settings.verticalOverflow = VerticalWrapMode.Overflow;
-
-            settings.font = UI_StyleValues.TextFont; // To-Do: Font Customization
-
+            settings.font = font;
             settings.textAnchor = (TextAnchor)config.Anchor;
             settings.color = config.TextColor;
             settings.richText = config.RichText;
@@ -65,6 +74,9 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
             displayText = displayText.Replace("<loaderVersion/>", BuildInfo.Version);
             displayText = displayText.Replace("LemonLoader", "<color=#FFCC4D>LemonLoader</color>");
             displayText = displayText.Replace("MelonLoader", "<color=#78f764>Melon</color><color=#ff3c6a>Loader</color>");
+            displayText = displayText.Replace("<loaderNameHalloween/>", "<color=#7C2CBF>Melon</color><color=#FF6F00>Loader</color>");
+
+
 
             mesh = TextMeshGenerator.Generate(displayText, settings);
             mesh.hideFlags = HideFlags.HideAndDontSave;

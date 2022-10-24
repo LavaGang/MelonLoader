@@ -79,7 +79,19 @@ namespace MelonLoader.MelonStartScreen.Properties {
                 return ((byte[])(obj));
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Loading_Halloween
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Loading_Halloween", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
@@ -96,6 +108,18 @@ namespace MelonLoader.MelonStartScreen.Properties {
         internal static byte[] Logo_Melon {
             get {
                 object obj = ResourceManager.GetObject("Logo_Melon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Logo_Halloween
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Logo_Halloween", resourceCulture);
                 return ((byte[])(obj));
             }
         }

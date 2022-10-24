@@ -6,14 +6,14 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 {
     internal class UI_Image : UI_Object
     {
-        internal UI_Config.ImageSettings config;
+        internal UI_Theme.ImageSettings config;
         internal Texture2D MainTexture;
         internal float AspectRatio;
 
-        internal UI_Image(UI_Config.ImageSettings imageSettings, string filepath) => LoadImage(imageSettings, File.ReadAllBytes(filepath));
-        internal UI_Image(UI_Config.ImageSettings imageSettings, byte[] filedata) => LoadImage(imageSettings, filedata);
+        internal UI_Image(UI_Theme.ImageSettings imageSettings, string filepath) => LoadImage(imageSettings, File.ReadAllBytes(filepath));
+        internal UI_Image(UI_Theme.ImageSettings imageSettings, byte[] filedata) => LoadImage(imageSettings, filedata);
 
-        internal virtual void LoadImage(UI_Config.ImageSettings imageSettings, byte[] filedata)
+        internal virtual void LoadImage(UI_Theme.ImageSettings imageSettings, byte[] filedata)
         {
             config = imageSettings;
 

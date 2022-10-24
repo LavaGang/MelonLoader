@@ -51,8 +51,8 @@ namespace MelonLoader.MelonStartScreen
             if (!Directory.Exists(ThemesFolderPath))
                 Directory.CreateDirectory(ThemesFolderPath);
 
-            UI_Config.Load();
-            if (!UI_Config.General.Enabled)
+            UI_Theme.Load();
+            if (!UI_Theme.General.Enabled)
                 return functionToWaitForAsync();
 
             // We try to resolve all the signatures, which are available for Unity 2018.1.0+

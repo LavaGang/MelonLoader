@@ -10,9 +10,9 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
         private float frameDelayMS = 90f;
         private Texture2D[] textures;
 
-        internal UI_AnimatedImage(UI_Config.ImageSettings imageSettings, string filepath) : base(imageSettings, filepath) { }
-        internal UI_AnimatedImage(UI_Config.ImageSettings imageSettings, byte[] filedata) : base(imageSettings, filedata) { }
-        internal override void LoadImage(UI_Config.ImageSettings imageSettings, byte[] filedata)
+        internal UI_AnimatedImage(UI_Theme.ImageSettings imageSettings, string filepath) : base(imageSettings, filepath) { }
+        internal UI_AnimatedImage(UI_Theme.ImageSettings imageSettings, byte[] filedata) : base(imageSettings, filedata) { }
+        internal override void LoadImage(UI_Theme.ImageSettings imageSettings, byte[] filedata)
         {
             config = imageSettings;
 

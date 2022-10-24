@@ -4,11 +4,11 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 {
     internal class UI_Background : UI_Object
     {
-        private UI_Config.cBackground config;
+        private UI_Theme.cBackground config;
         private UI_Image image;
         internal Texture2D solidTexture;
 
-        internal UI_Background(UI_Config.cBackground backgroundSettings)
+        internal UI_Background(UI_Theme.cBackground backgroundSettings)
         {
             config = backgroundSettings;
             image = UI_Utils.LoadImage(config, "Background");

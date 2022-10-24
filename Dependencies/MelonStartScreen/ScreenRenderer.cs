@@ -35,7 +35,7 @@ namespace MelonLoader.MelonStartScreen
             try
             {
                 MelonDebug.Msg("Initializing UIStyleValues");
-                UI_StyleValues.Init();
+                UI_Style.Init();
                 MelonDebug.Msg("UIStyleValues Initialized");
 
                 uint graphicsDeviceType = SystemInfo.GetGraphicsDeviceType();
@@ -60,11 +60,7 @@ namespace MelonLoader.MelonStartScreen
             {
                 m_SetupPixelCorrectCoordinates(false);
 
-                UI_StyleValues.Background.Render();
-                UI_StyleValues.LogoImage.Render();
-                UI_StyleValues.LoadingImage.Render();
-                UI_StyleValues.ProgressBar.Render();
-                UI_StyleValues.VersionText.Render();
+                UI_Style.Render();
 
                 GfxDevice.PresentFrame();
                 if (shouldCallWFLPAGT != 0)
@@ -79,50 +75,50 @@ namespace MelonLoader.MelonStartScreen
 
         internal static void UpdateMainProgress(string text, float progress)
         {
-            if (UI_StyleValues.ProgressBar == null)
+            if (UI_Style.ProgressBar == null)
                 return;
 
-            UI_StyleValues.ProgressBar.text.text = text;
-            UI_StyleValues.ProgressBar.text.isDirty = true;
-            UI_StyleValues.ProgressBar.progress = progress;
+            UI_Style.ProgressBar.text.text = text;
+            UI_Style.ProgressBar.text.isDirty = true;
+            UI_Style.ProgressBar.progress = progress;
         }
 
         internal static void UpdateProgressFromLog(string msg)
         {
-            if (UI_StyleValues.ProgressBar == null)
+            if (UI_Style.ProgressBar == null)
                 return;
 
-            UI_StyleValues.ProgressBar.progress = ProgressParser.GetProgressFromLog(msg, ref UI_StyleValues.ProgressBar.text.text, UI_StyleValues.ProgressBar.progress);
-            UI_StyleValues.ProgressBar.text.isDirty = true;
+            UI_Style.ProgressBar.progress = ProgressParser.GetProgressFromLog(msg, ref UI_Style.ProgressBar.text.text, UI_Style.ProgressBar.progress);
+            UI_Style.ProgressBar.text.isDirty = true;
         }
 
         internal static void UpdateProgressFromMod(MelonBase melon)
         {
-            if (UI_StyleValues.ProgressBar == null)
+            if (UI_Style.ProgressBar == null)
                 return;
 
-            UI_StyleValues.ProgressBar.progress = ProgressParser.GetProgressFromMod(melon, ref UI_StyleValues.ProgressBar.text.text);
-            UI_StyleValues.ProgressBar.text.isDirty = true;
+            UI_Style.ProgressBar.progress = ProgressParser.GetProgressFromMod(melon, ref UI_Style.ProgressBar.text.text);
+            UI_Style.ProgressBar.text.isDirty = true;
         }
 
         internal static void UpdateProgressFromModAssembly(Assembly asm)
         {
-            if (UI_StyleValues.ProgressBar == null)
+            if (UI_Style.ProgressBar == null)
                 return;
 
-            UI_StyleValues.ProgressBar.progress = ProgressParser.GetProgressFromModAssembly(asm, ref UI_StyleValues.ProgressBar.text.text);
-            UI_StyleValues.ProgressBar.text.isDirty = true;
+            UI_Style.ProgressBar.progress = ProgressParser.GetProgressFromModAssembly(asm, ref UI_Style.ProgressBar.text.text);
+            UI_Style.ProgressBar.text.isDirty = true;
         }
 
         internal static void UpdateProgressState(ModLoadStep step)
         {
-            if (UI_StyleValues.ProgressBar == null)
+            if (UI_Style.ProgressBar == null)
                 return;
 
-            if (ProgressParser.SetModState(step, ref UI_StyleValues.ProgressBar.text.text, out float generationPart))
+            if (ProgressParser.SetModState(step, ref UI_Style.ProgressBar.text.text, out float generationPart))
             {
-                UI_StyleValues.ProgressBar.progress = generationPart;
-                UI_StyleValues.ProgressBar.text.isDirty = true;
+                UI_Style.ProgressBar.progress = generationPart;
+                UI_Style.ProgressBar.text.isDirty = true;
             }
         }
     }
