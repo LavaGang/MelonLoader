@@ -45,6 +45,8 @@
 10. Made Game Specific Compatibility Layers load agnostically.
 11. Fixed race condition issue with multiple concurrent scene loads.
 12. Removed BONEWORKS_OnLoadingScreen MelonMod override and MelonEvent.
+13. Added Auto-Resolver for OnLoadingScreen MelonMod methods.
+14. Rewrote ServerCertificateValidation Fix to use Reflection.
 
 ---
 
