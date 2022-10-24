@@ -36,31 +36,23 @@ namespace MelonLoader
             CheckGameLayerWithPlatform($"{name}_Il2Cpp", () => !MelonUtils.IsGameIl2Cpp());
         }
 
-        private static bool hasCleanedUp = false;
         internal static void LoadModules()
         {
             if (!Directory.Exists(baseDirectory))
                 return;
 
-            if (!hasCleanedUp)
-            {
-                CheckGameLayer(InternalUtils.UnityInformationHandler.GameName);
-                CheckGameLayer(InternalUtils.UnityInformationHandler.GameDeveloper);
-                CheckGameLayer($"{InternalUtils.UnityInformationHandler.GameDeveloper}_{InternalUtils.UnityInformationHandler.GameName}");
-            }
+            CheckGameLayer(InternalUtils.UnityInformationHandler.GameName);
+            CheckGameLayer(InternalUtils.UnityInformationHandler.GameDeveloper);
+            CheckGameLayer($"{InternalUtils.UnityInformationHandler.GameDeveloper}_{InternalUtils.UnityInformationHandler.GameName}");
 
             foreach (var m in layers)
                 MelonModule.Load(m);
 
-            if (!hasCleanedUp)
+            foreach (var file in Directory.GetFiles(baseDirectory))
             {
-                foreach (var file in Directory.GetFiles(baseDirectory))
-                {
-                    string fileName = Path.GetFileName(file);
-                    if (layers.Find(x => Path.GetFileName(x.fullPath).Equals(fileName)) == null)
-                        File.Delete(file);
-                }
-                hasCleanedUp = true;
+                string fileName = Path.GetFileName(file);
+                if (layers.Find(x => Path.GetFileName(x.fullPath).Equals(fileName)) == null)
+                    File.Delete(file);
             }
         }
     }
