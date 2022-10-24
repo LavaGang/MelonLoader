@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Security;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
 namespace MelonLoader.Fixes
@@ -9,8 +10,22 @@ namespace MelonLoader.Fixes
     {
         internal static void Install()
         {
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)768 /* SecurityProtocolType.Tls11 */ | (SecurityProtocolType)3072 /* SecurityProtocolType.Tls12 */;
+            Type SPMType = typeof(ServicePointManager);
+
+            // ServicePointManager.Expect100Continue
+            FieldInfo expectContinue = SPMType.GetField(nameof(expectContinue), BindingFlags.NonPublic | BindingFlags.Static);
+            if (expectContinue != null)
+                expectContinue.SetValue(null, true);
+
+            //ServicePointManager.SecurityProtocol
+            FieldInfo _securityProtocol = SPMType.GetField(nameof(_securityProtocol), BindingFlags.NonPublic | BindingFlags.Static);
+            if (_securityProtocol != null)
+                _securityProtocol.SetValue(null,
+                    SecurityProtocolType.Ssl3
+                    | SecurityProtocolType.Tls
+                    | (SecurityProtocolType)768 /* SecurityProtocolType.Tls11 */
+                    | (SecurityProtocolType)3072 /* SecurityProtocolType.Tls12 */);
+
             ServicePointManager.ServerCertificateValidationCallback += CertificateValidation;
         }
         
