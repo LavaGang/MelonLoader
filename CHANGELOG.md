@@ -48,6 +48,8 @@
 13. Added Auto-Resolver for OnLoadingScreen MelonMod methods.
 14. Rewrote ServerCertificateValidation Fix to use Reflection.
 15. Separated Melon Harmony Initialization from OnApplicationStart events.
+16. Fixed issue with MelonInfo Semver Constructors being inaccessable.
+17. Added LemonTuple Constructors.
 
 ---
 

@@ -68,43 +68,26 @@ namespace MelonLoader
         /// </summary>
         /// <param name="type">The main Melon type of the Melon (for example TestMod)</param>
         /// <param name="name">Name of the Melon</param>
-        /// <param name="version">Version of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
+        /// <param name="versionMajor">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
+        /// <param name="versionMinor">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
+        /// <param name="versionRevision">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
+        /// <param name="identifier">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
         /// <param name="author">Author of the Melon</param>
         /// <param name="downloadLink">URL to the download link of the mod [optional]</param>
-        public MelonInfoAttribute(Type type, string name, SemVersion version, string author, string downloadLink = null)
-        {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-
-            if (version == null)
-                throw new ArgumentNullException(nameof(version));
-
-            SystemType = type;
-            Name = name ?? "UNKNOWN";
-            Version = version.ToString();
-            Author = author ?? "UNKNOWN";
-            DownloadLink = downloadLink; // Might get Removed. Not sure yet.
-        }
-        /// <summary>
-        /// MelonInfo constructor.
-        /// </summary>
-        /// <param name="type">The main Melon type of the Melon (for example TestMod)</param>
-        /// <param name="name">Name of the Melon</param>
-        /// <param name="version">Version of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
-        /// <param name="author">Author of the Melon</param>
-        /// <param name="downloadLink">URL to the download link of the mod [optional]</param>
-        public MelonInfoAttribute(Type type, string name, (int, int, int) version, string author, string downloadLink = null)
-            : this(type, name, (version.Item1, version.Item2, version.Item3, null), author, downloadLink) { }
+        public MelonInfoAttribute(Type type, string name, int versionMajor, int versionMinor, int versionRevision, string identifier, string author, string downloadLink = null)
+            : this(type, name, $"{versionMajor}.{versionMinor}.{versionRevision}{(string.IsNullOrEmpty(identifier) ? "" : identifier)}", author, downloadLink) { }
 
         /// <summary>
         /// MelonInfo constructor.
         /// </summary>
         /// <param name="type">The main Melon type of the Melon (for example TestMod)</param>
         /// <param name="name">Name of the Melon</param>
-        /// <param name="version">Version of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
+        /// <param name="versionMajor">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
+        /// <param name="versionMinor">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
+        /// <param name="versionRevision">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
         /// <param name="author">Author of the Melon</param>
         /// <param name="downloadLink">URL to the download link of the mod [optional]</param>
-        public MelonInfoAttribute(Type type, string name, (int, int, int, string) version, string author, string downloadLink = null)
-            : this(type, name, $"{version.Item1}.{version.Item2}.{version.Item3}{(string.IsNullOrEmpty(version.Item4) ? "" : version.Item4)}", author, downloadLink) { }
+        public MelonInfoAttribute(Type type, string name, int versionMajor, int versionMinor, int versionRevision, string author, string downloadLink = null)
+            : this(type, name, versionMajor, versionMinor, versionRevision, null, author, downloadLink) { }
     }
 }
