@@ -74,8 +74,8 @@ namespace MelonLoader
         /// <param name="identifier">Version Major of the Melon (Using the <see href="https://semver.org">Semantic Versioning</see> format)</param>
         /// <param name="author">Author of the Melon</param>
         /// <param name="downloadLink">URL to the download link of the mod [optional]</param>
-        public MelonInfoAttribute(Type type, string name, int versionMajor, int versionMinor, int versionRevision, string identifier, string author, string downloadLink = null)
-            : this(type, name, $"{versionMajor}.{versionMinor}.{versionRevision}{(string.IsNullOrEmpty(identifier) ? "" : identifier)}", author, downloadLink) { }
+        public MelonInfoAttribute(Type type, string name, int versionMajor, int versionMinor, int versionRevision, string versionIdentifier, string author, string downloadLink = null)
+            : this(type, name, $"{versionMajor}.{versionMinor}.{versionRevision}{(string.IsNullOrEmpty(versionIdentifier) ? "" : versionIdentifier)}", author, downloadLink) { }
 
         /// <summary>
         /// MelonInfo constructor.
