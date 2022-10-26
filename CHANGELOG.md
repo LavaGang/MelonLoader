@@ -47,6 +47,7 @@
 12. Removed BONEWORKS_OnLoadingScreen MelonMod override and MelonEvent.
 13. Added Auto-Resolver for OnLoadingScreen MelonMod methods.
 14. Rewrote ServerCertificateValidation Fix to use Reflection.
+15. Separated Melon Harmony Initialization from OnApplicationStart events.
 
 ---
 

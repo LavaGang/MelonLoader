@@ -92,5 +92,8 @@ namespace MelonLoader
         /// Called before MelonMods are loaded from the Mods folder.
         /// </summary>
         public readonly static MelonEvent OnPreModsLoaded = new(true);
+
+        internal readonly static MelonEvent MelonHarmonyEarlyInit = new(true);
+        internal readonly static MelonEvent MelonHarmonyInit = new(true);
     }
 }

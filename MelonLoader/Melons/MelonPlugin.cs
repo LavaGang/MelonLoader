@@ -23,6 +23,19 @@ namespace MelonLoader
             MelonEvents.OnPreSupportModule.Subscribe(OnPreSupportModule, Priority);
         }
 
+        protected internal override bool RegisterInternal()
+        {
+            if (!base.RegisterInternal())
+                return false;
+
+            if (MelonEvents.MelonHarmonyEarlyInit.Disposed)
+                HarmonyInit();
+            else
+                MelonEvents.MelonHarmonyEarlyInit.Subscribe(HarmonyInit, Priority, true);
+
+            return true;
+        }
+
         #region Callbacks
 
         /// <summary>

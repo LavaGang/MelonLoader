@@ -38,6 +38,7 @@ namespace MelonLoader
             bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
 
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonHandler.PluginsDirectory);
+            MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
 
             return 0;
@@ -64,6 +65,7 @@ namespace MelonLoader
             AddUnityDebugLog();
             RegisterTypeInIl2Cpp.SetReady();
 
+            MelonEvents.MelonHarmonyInit.Invoke();
             MelonEvents.OnApplicationStart.Invoke();
 
             return 0;

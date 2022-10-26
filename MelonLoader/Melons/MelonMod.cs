@@ -24,7 +24,14 @@ namespace MelonLoader
                 return false;
             }
 
-            base.RegisterInternal();
+            if (!base.RegisterInternal())
+                return false;
+
+            if (MelonEvents.MelonHarmonyInit.Disposed)
+                HarmonyInit();
+            else
+                MelonEvents.MelonHarmonyInit.Subscribe(HarmonyInit, Priority, true);
+
             return true;
         }
 

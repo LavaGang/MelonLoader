@@ -421,7 +421,7 @@ namespace MelonLoader
             return true;
         }
 
-        private void HarmonyInit()
+        internal void HarmonyInit()
         {
             if (!MelonAssembly.HarmonyDontPatchAll)
                 HarmonyInstance.PatchAll(MelonAssembly.Assembly);
@@ -429,7 +429,6 @@ namespace MelonLoader
 
         private void LoaderInitialized()
         {
-            HarmonyInit();
             try
             {
                 OnInitializeMelon();
