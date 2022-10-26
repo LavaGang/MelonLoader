@@ -40,7 +40,7 @@
 5. Updated Class Data TPK.     (Credits to [ds5678](https://github.com/ds5678) :D)
 6. Updated [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) to v2022.1.0-pre-release.8.
 7. Added Launch Option Logging.
-8. Added new MelonInfo constructors and SemanticVersion variable.
+8. Added new MelonInfo constructors.
 9. Setup Compatibility Layer for BONEWORKS and BONELAB.
 10. Made Game Specific Compatibility Layers load agnostically.
 11. Fixed race condition issue with multiple concurrent scene loads.
