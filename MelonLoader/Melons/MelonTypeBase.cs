@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace MelonLoader
 {
@@ -24,13 +23,15 @@ namespace MelonLoader
 
         public sealed override string MelonTypeName => TypeName;
 
-        protected internal override bool RegisterInternal()
+        protected private override bool RegisterInternal()
         {
+            if (!base.RegisterInternal())
+                return false;
             _registeredMelons.Add((T)this);
             return true;
         }
 
-        protected internal override void UnregisterInternal()
+        protected private override void UnregisterInternal()
         {
             _registeredMelons.Remove((T)this);
         }

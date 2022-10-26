@@ -11,7 +11,7 @@ namespace MelonLoader
             TypeName = "Mod";
         }
 
-        protected internal override bool RegisterInternal()
+        protected private override bool RegisterInternal()
         {
             try
             {
@@ -34,8 +34,13 @@ namespace MelonLoader
 
             return true;
         }
+        private void HarmonyInit()
+        {
+            if (!MelonAssembly.HarmonyDontPatchAll)
+                HarmonyInstance.PatchAll(MelonAssembly.Assembly);
+        }
 
-        protected internal override void RegisterCallbacks()
+        protected private override void RegisterCallbacks()
         {
             base.RegisterCallbacks();
 

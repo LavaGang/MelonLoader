@@ -421,7 +421,7 @@ namespace MelonLoader
             return true;
         }
 
-        internal void HarmonyInit()
+        private void HarmonyInit()
         {
             if (!MelonAssembly.HarmonyDontPatchAll)
                 HarmonyInstance.PatchAll(MelonAssembly.Assembly);
@@ -439,14 +439,14 @@ namespace MelonLoader
             }
         }
 
-        protected internal virtual bool RegisterInternal()
+        protected private virtual bool RegisterInternal()
         {
             return true;
         }
 
-        protected internal virtual void UnregisterInternal() { }
+        protected private virtual void UnregisterInternal() { }
 
-        protected internal virtual void RegisterCallbacks()
+        protected private virtual void RegisterCallbacks()
         {
             MelonEvents.OnApplicationQuit.Subscribe(OnApplicationQuit, Priority);
             MelonEvents.OnUpdate.Subscribe(OnUpdate, Priority);

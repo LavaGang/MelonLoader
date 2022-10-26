@@ -11,7 +11,7 @@ namespace MelonLoader
             TypeName = "Plugin";
         }
 
-        protected internal override void RegisterCallbacks()
+        protected private override void RegisterCallbacks()
         {
             base.RegisterCallbacks();
 
@@ -23,7 +23,7 @@ namespace MelonLoader
             MelonEvents.OnPreSupportModule.Subscribe(OnPreSupportModule, Priority);
         }
 
-        protected internal override bool RegisterInternal()
+        protected private override bool RegisterInternal()
         {
             if (!base.RegisterInternal())
                 return false;
@@ -34,6 +34,11 @@ namespace MelonLoader
                 MelonEvents.MelonHarmonyEarlyInit.Subscribe(HarmonyInit, Priority, true);
 
             return true;
+        }
+        private void HarmonyInit()
+        {
+            if (!MelonAssembly.HarmonyDontPatchAll)
+                HarmonyInstance.PatchAll(MelonAssembly.Assembly);
         }
 
         #region Callbacks
