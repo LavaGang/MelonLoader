@@ -20,18 +20,12 @@ namespace MelonLoader.MelonStartScreen.UI
             if (UI_Theme.Instance.LogoImage.ScanForCustomImage)
                 LogoImage = UI_Utils.LoadImage(UI_Theme.Instance.LogoImage, "Logo");
             if (LogoImage == null)
-                LogoImage = new Objects.UI_Image(UI_Theme.Instance.LogoImage,
-                    UI_Theme.IsHalloween
-                        ? Properties.Resources.Logo_Halloween 
-                        : (UI_Theme.IsLemon ? Properties.Resources.Logo_Lemon : Properties.Resources.Logo_Melon));
+                LogoImage = new Objects.UI_Image(UI_Theme.Instance.LogoImage, UI_Theme.Instance.GetLogoImage());
 
             if (UI_Theme.Instance.LoadingImage.ScanForCustomImage)
                 LoadingImage = UI_Utils.LoadImage(UI_Theme.Instance.LoadingImage, "Loading");
             if (LoadingImage == null)
-                LoadingImage = new Objects.UI_AnimatedImage(UI_Theme.Instance.LoadingImage,
-                    UI_Theme.IsHalloween
-                        ? Properties.Resources.Loading_Halloween
-                        : (UI_Theme.IsLemon ? Properties.Resources.Loading_Lemon : Properties.Resources.Loading_Melon));
+                LoadingImage = new Objects.UI_AnimatedImage(UI_Theme.Instance.LoadingImage, UI_Theme.Instance.GetLoadingImage());
         }
 
 

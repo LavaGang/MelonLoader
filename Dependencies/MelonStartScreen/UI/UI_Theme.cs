@@ -8,15 +8,24 @@ using System;
 
 namespace MelonLoader.MelonStartScreen
 {
-    internal class UI_Theme
+    internal abstract class UI_Theme
     {
         internal static UI_Theme Instance;
+
+        private static string[] includedThemeIDs =
+        {
+            "Default",
+            "Random",
+            "Pumpkin"
+        };
+        internal static bool IsIncludedThemeID() { foreach (var id in includedThemeIDs) if (id.Equals(ThemeID)) return true; return false; }
+        internal static string ThemeID = includedThemeIDs[0];
 
         internal static string FilePath;
         internal static string ThemePath;
         internal static cGeneral General;
         internal static bool IsLemon;
-        internal static bool IsHalloween;
+        internal static bool IsPumpkin;
 
         internal cBackground Background;
         internal ImageSettings LogoImage;
@@ -48,60 +57,68 @@ namespace MelonLoader.MelonStartScreen
             FilePath = Path.Combine(Core.FolderPath, "Config.cfg");
             General = CreateCat<cGeneral>(FilePath, nameof(General));
 
-            bool UseDefault = true;
-            if (!string.IsNullOrEmpty(General.Theme)
-                && !General.Theme.Equals("Default")
-                && !General.Theme.Equals("Random")
-                && !General.Theme.Equals("Halloween"))
-            {
-                try
-                {
-                    // To-Do: Sanatize themeName
-                    General.Theme = General.Theme
-                        .Replace("\\", "")
-                        .Replace("/", "");
+            if (!string.IsNullOrEmpty(General.Theme))
+                ThemeID = General.Theme
+                    .Replace("\\", "")
+                    .Replace("/", "");
 
-                    ThemePath = Path.Combine(Core.ThemesFolderPath, General.Theme);
-                    if (Directory.Exists(ThemePath))
-                        UseDefault = false;
-                    else
-                        throw new DirectoryNotFoundException(ThemePath);
-                }
-                catch (Exception ex) { Core.Logger.Error($"Failed to find Start Screen Theme: {ex}"); }
-            }
+            if (ThemeID == "Halloween")
+                General.Theme = ThemeID = includedThemeIDs[0];
 
-            if (General.Theme.Equals("Random"))
-            {
+            bool isIncludedID = IsIncludedThemeID();
+
+            if (ThemeID.Equals(includedThemeIDs[1]))
                 ThemePath = UI_Utils.RandomFolder(Core.ThemesFolderPath);
-                UseDefault = false;
+            else
+                ThemePath = Path.Combine(Core.ThemesFolderPath, ThemeID);
+
+            if (!isIncludedID && !Directory.Exists(ThemePath))
+            {
+                Core.Logger.Error($"Failed to find Start Screen Theme: {ThemeID}");
+
+                isIncludedID = true;
+                General.Theme = ThemeID = includedThemeIDs[0];
+                ThemePath = Path.Combine(Core.ThemesFolderPath, ThemeID);
             }
 
-            IsLemon = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON);
-            if (UseDefault)
+            if (isIncludedID && !ThemeID.Equals(includedThemeIDs[1]))
             {
+                // Lemon
+                IsLemon = (MelonLaunchOptions.Console.Mode == MelonLaunchOptions.Console.DisplayMode.LEMON);
                 if (!IsLemon)
                 {
-                    IsHalloween = General.Theme.Equals("Halloween");
+                    // Pumpkin
+                    IsPumpkin = ThemeID.Equals(includedThemeIDs[2]);
                     var nowTime = DateTime.Now;
                     if ((nowTime.Month == 10)
                         && (nowTime.Day == 31))
-                        IsHalloween = true;
+                        IsPumpkin = true;
                 }
 
-                General.Theme = IsHalloween ? "Halloween" : "Default";
-                ThemePath = Path.Combine(Core.ThemesFolderPath, General.Theme);
-                if (!Directory.Exists(ThemePath))
-                    Directory.CreateDirectory(ThemePath);
+                ThemeID = "Default";
+                ThemePath = Path.Combine(Core.ThemesFolderPath, ThemeID);
             }
 
-            MelonPreferences.SaveCategory<cGeneral>(nameof(General), false);
-            Core.Logger.Msg($"Using Start Screen Theme: \"{General.Theme}\"");
+            if (!Directory.Exists(ThemePath))
+                Directory.CreateDirectory(ThemePath);
 
-            if (IsHalloween)
-                Instance = new UI.Themes.UI_Theme_Halloween();
-            else
-                Instance = new UI.Themes.UI_Theme_Default();
+            if (isIncludedID)
+                MelonPreferences.SaveCategory<cGeneral>(nameof(General), false);
+
+            string themeName = (
+                IsPumpkin ? "Pumpkin"
+                : (IsLemon ? "Lemon" : ThemeID));
+
+            Core.Logger.Msg($"Using Start Screen Theme: \"{themeName}\"");
+
+            Instance =
+                IsPumpkin ? new UI.Themes.UI_Theme_Pumpkin()
+                : (IsLemon ? new UI.Themes.UI_Theme_Lemon() 
+                : new UI.Themes.UI_Theme_Default());
         }
+
+        internal abstract byte[] GetLogoImage();
+        internal abstract byte[] GetLoadingImage();
 
         internal static T CreateCat<T>(string name, bool shouldRemoveOld = false) where T : new() => CreateCat<T>(Path.Combine(ThemePath, $"{name}.cfg"), name, shouldRemoveOld);
         internal static T CreateCat<T>(string filePath, string name, bool shouldRemoveOld = false) where T : new()
