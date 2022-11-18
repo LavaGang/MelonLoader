@@ -1,0 +1,26 @@
+[package]
+name = "proxy"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ctor = "0.1.26"
+msgbox = "0.7.0"
+libloading = "0.7.4"
+lazy_static = "1.4.0"
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = "z"
+
+[build-dependencies]
+cc = "1.0.76"
