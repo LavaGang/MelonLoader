@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using Il2CppInterop.HarmonySupport;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.Startup;
 using MelonLoader.Support.Preferences;
-using UnhollowerBaseLib;
-using UnhollowerBaseLib.Runtime;
-using UnhollowerRuntimeLib;
+using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace MelonLoader.Support
@@ -21,7 +20,7 @@ namespace MelonLoader.Support
             Interface = interface_from;
             UnityMappers.RegisterMappers();
 
-            LogSupport.RemoveAllHandlers();
+            /*LogSupport.RemoveAllHandlers();
             if (MelonDebug.IsEnabled())
                 LogSupport.InfoHandler += MelonLogger.Msg;
             LogSupport.WarningHandler += MelonLogger.Warning;
@@ -33,7 +32,16 @@ namespace MelonLoader.Support
             UnityVersionHandler.Initialize(
                 InternalUtils.UnityInformationHandler.EngineVersion.Major,
                 InternalUtils.UnityInformationHandler.EngineVersion.Minor,
-                InternalUtils.UnityInformationHandler.EngineVersion.Build);
+                InternalUtils.UnityInformationHandler.EngineVersion.Build);*/
+            
+            Il2CppInteropRuntime runtime = Il2CppInteropRuntime.Create(new()
+            {
+                DetourProvider = new MelonDetourProvider(),
+                UnityVersion = new Version(
+                    InternalUtils.UnityInformationHandler.EngineVersion.Major,
+                    InternalUtils.UnityInformationHandler.EngineVersion.Minor,
+                    InternalUtils.UnityInformationHandler.EngineVersion.Build)
+            }).AddHarmonySupport();
 
             if (MelonLaunchOptions.Console.CleanUnityLogs)
                 ConsoleCleaner();
@@ -47,8 +55,8 @@ namespace MelonLoader.Support
 
             unhollower = new UnhollowerInterface();
             Interface.SetUnhollowerSupportInterface(unhollower);
-
-            HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyMethodPatcher.TryResolve;
+            //HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyMethodPatcher.TryResolve;
+            runtime.Start();
 
             return new SupportModule_To();
         }
@@ -106,7 +114,7 @@ namespace MelonLoader.Support
         }
     }
 
-    internal class UnhollowerDetour : IManagedDetour
+    /*internal class UnhollowerDetour : IManagedDetour
     {
         private static readonly List<object> PinnedDelegates = new List<object>();
 
@@ -116,6 +124,41 @@ namespace MelonLoader.Support
             PinnedDelegates.Add(to);
             MelonUtils.NativeHookAttachDirect((IntPtr)targetVarPointer, to.GetFunctionPointer());
             return from.GetDelegate<T>();
+        }
+    }*/
+
+    internal sealed class MelonDetourProvider : IDetourProvider
+    {
+        public IDetour Create<TDelegate>(nint original, TDelegate target) where TDelegate : Delegate
+        {
+            throw new NotImplementedException();
+        }
+
+        private sealed class MelonDetour : IDetour
+        {
+            /// <summary>
+            /// Original method
+            /// </summary>
+            public nint Target => throw new NotImplementedException();
+
+            public nint Detour => throw new NotImplementedException();
+
+            public nint OriginalTrampoline => throw new NotImplementedException();
+
+            public void Apply()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
+
+            public T GenerateTrampoline<T>() where T : Delegate
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

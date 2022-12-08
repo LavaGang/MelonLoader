@@ -20,12 +20,16 @@
 			<HintPath>Libs\Il2CppSystem.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="UnhollowerBaseLib">
-			<HintPath>Libs\UnhollowerBaseLib.dll</HintPath>
+		<Reference Include="Il2CppInterop.Common">
+			<HintPath>Libs\Il2CppInterop.Common.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="UnhollowerRuntimeLib">
-			<HintPath>Libs\UnhollowerRuntimeLib.dll</HintPath>
+		<Reference Include="Il2CppInterop.HarmonySupport">
+			<HintPath>Libs\Il2CppInterop.HarmonySupport.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Il2CppInterop.Runtime">
+			<HintPath>Libs\Il2CppInterop.Runtime.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="UnityEngine.CoreModule">

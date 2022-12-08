@@ -9,8 +9,9 @@ using HarmonyLib.Tools;
 using Mono.Cecil;
 using MonoMod.Utils;
 using MonoMod.Cil;
-using UnhollowerBaseLib;
 using MelonLoader.InternalUtils;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes;
 
 #if NET6_0
 using MelonLoader.CoreClrUtils;
@@ -18,6 +19,7 @@ using MelonLoader.CoreClrUtils;
 
 namespace MelonLoader.Support
 {
+    //Should be removeable
     internal class HarmonyMethodPatcher : MethodPatcher
     {
         private static AccessTools.FieldRef<ILGenerator, int> codeLenGetter = null;
