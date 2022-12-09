@@ -44,8 +44,6 @@ namespace MelonLoader
             if (!Directory.Exists(MelonEnvironment.UserLibsDirectory))
                 Directory.CreateDirectory(MelonEnvironment.UserLibsDirectory);
 
-            MelonLoaderDirectory = Path.GetDirectoryName(typeof(MelonUtils).Assembly.Location);
-
             MelonLaunchOptions.Load();
             MelonHandler.Setup();
             UnityInformationHandler.Setup();

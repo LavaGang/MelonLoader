@@ -49,7 +49,7 @@ namespace MelonLoader
                 if (!hasWroteLine)
                 {
                     hasWroteLine = true;
-                    MelonLogger.WriteLine(ConsoleColor.Magenta);
+                    MelonLogger.WriteLine(Color.Magenta);
                 }
 
                 var asm = MelonAssembly.LoadMelonAssembly(f, false);

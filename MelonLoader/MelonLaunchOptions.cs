@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace MelonLoader
 {
@@ -59,11 +60,11 @@ namespace MelonLoader
             if (foundOptions.Count <= 0)
                 return;
 
-            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.Msg(ConsoleColor.Cyan, "Launch Options:");
             foreach (string cmd in foundOptions)
                 MelonLogger.Msg($"\t{cmd}");
-            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.WriteSpacer();
         }
 
