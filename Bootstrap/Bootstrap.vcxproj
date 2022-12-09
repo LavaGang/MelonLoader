@@ -100,13 +100,13 @@
       <PreprocessorDefinitions>DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Base/MSDetours/detours.x86.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,13 +118,13 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>Base/MSDetours/detours.x86.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.9\runtimes\win-x86\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -134,13 +134,13 @@
       <PreprocessorDefinitions>DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Base/MSDetours/detours.x64.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,13 +152,13 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>Base/MSDetours/detours.x64.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.9\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

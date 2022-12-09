@@ -45,7 +45,7 @@ jobs:
       - name: Setup .NET Core # Proxy needs dotnet for nethost.dll
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.301"
+          dotnet-version: "6.0.403"
       - name: Build Proxy DLL | Windows - x86
         shell: cmd
         run: |
@@ -65,7 +65,7 @@ jobs:
       - name: Setup .NET Core # Proxy needs dotnet for nethost.dll
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.301"
+          dotnet-version: "6.0.403"
       - name: Build Proxy DLL | Windows - x64
         shell: cmd
         run: |
@@ -85,7 +85,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.301"
+          dotnet-version: "6.0.403"
       - name: Build Bootstrap Lib | Windows - x86
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=Win32 -p:Configuration=Release
@@ -103,7 +103,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "6.0.301"
+          dotnet-version: "6.0.403"
       - name: Build Bootstrap Lib | Windows - x64
         shell: cmd
         run: msbuild Bootstrap\Bootstrap.vcxproj -p:Platform=x64 -p:Configuration=Release
