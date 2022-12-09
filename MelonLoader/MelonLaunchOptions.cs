@@ -59,13 +59,6 @@ namespace MelonLoader
 
             if (foundOptions.Count <= 0)
                 return;
-
-            MelonLogger.WriteLine(Color.Magenta);
-            MelonLogger.Msg(ConsoleColor.Cyan, "Launch Options:");
-            foreach (string cmd in foundOptions)
-                MelonLogger.Msg($"\t{cmd}");
-            MelonLogger.WriteLine(Color.Magenta);
-            MelonLogger.WriteSpacer();
         }
 
 #region Args

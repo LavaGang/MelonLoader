@@ -151,7 +151,14 @@ namespace MelonLoader.Support
 
             public nint Detour => _targetPtr;
 
-            public nint OriginalTrampoline => _originalPtr;
+            public nint OriginalTrampoline
+            {
+                get
+                {
+                    MelonLogger.Msg($"Getting original trampoline => 0x{_originalPtr:X}");
+                    return _originalPtr;
+                }
+            }
             
             public MelonDetour(nint detourFrom, Delegate target)
             {
@@ -168,6 +175,8 @@ namespace MelonLoader.Support
                     return;
 
                 _targetPtr = Marshal.GetFunctionPointerForDelegate(_target);
+                
+                MelonLogger.Msg($"About to detour 0x{_detourFrom:X} to 0x{_targetPtr:X} for method {_target.Method.Name}");
 
                 var addr = _detourFrom;
                 MelonUtils.NativeHookAttachDirect((nint) (&addr), _targetPtr);
@@ -178,14 +187,19 @@ namespace MelonLoader.Support
                 NativeStackWalk.RegisterHookAddr((ulong)_targetPtr, $"Harmony Hook to {_target.Method.Name}");
             }
 
-            public void Dispose()
+            public unsafe void Dispose()
             {
-                MelonUtils.NativeHookDetach(_detourFrom, _targetPtr);
+                MelonLogger.Msg($"Removing detour from 0x{_detourFrom:X} to 0x{_targetPtr:X} for method {_target.Method.Name}");
+                var addr = _detourFrom;
+                MelonUtils.NativeHookDetach((nint) (&addr), _targetPtr);
                 _targetPtr = IntPtr.Zero;
+                _originalPtr = IntPtr.Zero;
+                MelonLogger.Msg($"Address after removing detour {_target.Method.Name}: {addr:X}");
             }
 
             public T GenerateTrampoline<T>() where T : Delegate
             {
+                MelonLogger.Msg($"Getting delegate for original method at 0x{_originalPtr:X}, type: {typeof(T)}, method name {_target.Method.Name}");
                 return Marshal.GetDelegateForFunctionPointer<T>(_originalPtr);
             }
         }
