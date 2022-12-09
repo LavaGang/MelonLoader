@@ -2,6 +2,7 @@
 
 #if !NET6_0
 using System.Diagnostics;
+using MelonLoader;
 #endif
 
 namespace MelonLoader.Utils

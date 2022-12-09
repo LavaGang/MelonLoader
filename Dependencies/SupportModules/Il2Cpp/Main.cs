@@ -4,6 +4,8 @@ using Il2CppInterop.Runtime.Startup;
 using MelonLoader.Support.Preferences;
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using MelonLoader.CoreClrUtils;
 using UnityEngine;
 
 namespace MelonLoader.Support
@@ -131,33 +133,60 @@ namespace MelonLoader.Support
     {
         public IDetour Create<TDelegate>(nint original, TDelegate target) where TDelegate : Delegate
         {
-            throw new NotImplementedException();
+            return new MelonDetour(original, target);
         }
 
         private sealed class MelonDetour : IDetour
         {
+            private nint _detourFrom;
+            private nint _originalPtr;
+            
+            private Delegate _target;
+            private IntPtr _targetPtr;
+
             /// <summary>
             /// Original method
             /// </summary>
-            public nint Target => throw new NotImplementedException();
+            public nint Target => _detourFrom;
 
-            public nint Detour => throw new NotImplementedException();
+            public nint Detour => _targetPtr;
 
-            public nint OriginalTrampoline => throw new NotImplementedException();
-
-            public void Apply()
+            public nint OriginalTrampoline => _originalPtr;
+            
+            public MelonDetour(nint detourFrom, Delegate target)
             {
-                throw new NotImplementedException();
+                _detourFrom = detourFrom;
+                _target = target;
+                
+                Apply(); //We have to apply immediately because we're gonna be asked for a trampoline right away
+            }
+
+            public unsafe void Apply()
+            {
+                if(_targetPtr != IntPtr.Zero)
+                    // Already applied
+                    return;
+
+                _targetPtr = Marshal.GetFunctionPointerForDelegate(_target);
+
+                var addr = _detourFrom;
+                MelonUtils.NativeHookAttachDirect((nint) (&addr), _targetPtr);
+                _originalPtr = addr;
+                
+                MelonLogger.Msg($"Applied detour from {_detourFrom:X} to {_targetPtr:X} for method {_target.Method.Name}, original is now: {_originalPtr:X})");
+                
+                NativeStackWalk.RegisterHookAddr((ulong)_targetPtr, $"Harmony Hook to {_target.Method.Name}");
             }
 
             public void Dispose()
             {
-                throw new NotImplementedException();
+                MelonUtils.NativeHookDetach(_detourFrom, _targetPtr);
+                _targetPtr = IntPtr.Zero;
             }
 
             public T GenerateTrampoline<T>() where T : Delegate
             {
-                throw new NotImplementedException();
+                return Marshal.GetDelegateForFunctionPointer<T>(_originalPtr);
             }
         }
     }

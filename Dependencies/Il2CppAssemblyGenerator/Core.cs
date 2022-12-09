@@ -35,7 +35,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
-            GameAssemblyPath = Path.Combine(MelonUtils.GameDirectory, "GameAssembly.dll");
+            GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, "GameAssembly.dll");
             ManagedPath = MelonEnvironment.MelonManagedDirectory;
 
             BasePath = Path.GetDirectoryName(Assembly.Location);
