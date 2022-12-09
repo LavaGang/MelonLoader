@@ -23,7 +23,7 @@ namespace MelonLoader.InternalUtils
 
         static UnityMagicMethods()
         {
-            Assembly unityAssembly = Assembly.Load("UnityEngine");
+            Assembly unityAssembly = Assembly.Load("UnityEngine.CoreModule") ?? Assembly.Load("UnityEngine");
             Type unityType(string name) // This may return null - especially for types such as NetworkPlayer that have been removed in newer Unity versions
                 => unityAssembly.GetType(name);
 

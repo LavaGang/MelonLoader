@@ -1,7 +1,6 @@
 #include <Windows.h>
 #include <string>
 #include <fstream>
-#include <sstream>
 #include "Game.h"
 #include "../Core.h"
 #include "Il2Cpp.h"
@@ -13,9 +12,7 @@
 char* Game::ApplicationPath = NULL;
 char* Game::BasePath = NULL;
 char* Game::DataPath = NULL;
-char* Game::ApplicationPathMono = NULL;
 char* Game::BasePathMono = NULL;
-char* Game::DataPathMono = NULL;
 bool Game::IsIl2Cpp = false;
 
 bool Game::Initialize()
@@ -32,14 +29,7 @@ bool Game::Initialize()
 		Il2Cpp::GameAssemblyPath = new char[GameAssemblyPath.size() + 1];
 		std::copy(GameAssemblyPath.begin(), GameAssemblyPath.end(), Il2Cpp::GameAssemblyPath);
 		Il2Cpp::GameAssemblyPath[GameAssemblyPath.size()] = '\0';
-
-		Il2Cpp::GameAssemblyPathMono = Encoding::OsToUtf8(Il2Cpp::GameAssemblyPath);
 	}
-
-	std::string UnityPlayerPath = (std::string(BasePath) + "\\UnityPlayer.dll");
-	Il2Cpp::UnityPlayerPath = new char[UnityPlayerPath.size() + 1];
-	std::copy(UnityPlayerPath.begin(), UnityPlayerPath.end(), Il2Cpp::UnityPlayerPath);
-	Il2Cpp::UnityPlayerPath[UnityPlayerPath.size()] = '\0';
 
 	return true;
 }
@@ -66,11 +56,7 @@ bool Game::SetupPaths()
 	std::copy(DataPathStr.begin(), DataPathStr.end(), DataPath);
 	DataPath[DataPathStr.size()] = '\0';
 
-#define MONO_STR(s) ((s ## Mono) = Encoding::OsToUtf8((s)))
-	MONO_STR(ApplicationPath);
-	MONO_STR(BasePath);
-	MONO_STR(DataPath);
-#undef MONO_STR
+	BasePathMono = Encoding::OsToUtf8(BasePath);
 
 	return true;
 }

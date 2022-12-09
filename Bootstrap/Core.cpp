@@ -2,7 +2,6 @@
 #include <VersionHelpers.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sstream>
 #include "Core.h"
 #include "Managers/Game.h"
 #include "Managers/Mono.h"
@@ -13,15 +12,13 @@
 #include "Utils/Assertion.h"
 #include "Utils/Logging/Logger.h"
 #include "Utils/Debug.h"
-#include "Utils/AnalyticsBlocker.h"
-#include "Utils/HashCode.h"
 #include "Utils/Encoding.h"
 
 HINSTANCE Core::Bootstrap = NULL;
 char* Core::BasePath = NULL;
 char* Core::BasePathMono = NULL;
 char* Core::Path = NULL;
-std::string Core::Version = "0.5.7";
+std::string Core::Version = "0.6.0";
 bool Core::Is_ALPHA_PreRelease = false;
 Core::wine_get_version_t Core::wine_get_version = NULL;
 
@@ -64,19 +61,20 @@ void Core::Initialize(HINSTANCE hinstDLL)
 	CommandLine::Read();
 	if (!Console::Initialize()
 		|| !Logger::Initialize()
-		|| !CheckPathASCII()
-		|| !HashCode::Initialize()
-		|| !Mono::Initialize())
+		|| !CheckPathASCII())
 		return;
 
-	WelcomeMessage();
-
-	if (!AnalyticsBlocker::Initialize()
-		|| !Il2Cpp::Initialize()
-		|| !Mono::Load())
+	if (!Game::IsIl2Cpp && !Mono::Initialize())
+		//If we're a mono game and we failed to init mono, die
 		return;
 
-	AnalyticsBlocker::Hook();
+	if (!Il2Cpp::Initialize())
+		return;
+
+	bool runtime_initialized = Game::IsIl2Cpp ? /*DotnetRuntime::LoadDotNet()*/ true : Mono::Load();
+
+	if (!runtime_initialized)
+		return;
 
 	if (Game::IsIl2Cpp)
 	{
@@ -108,32 +106,6 @@ bool Core::CheckPathASCII()
 	return true;
 }
 
-void Core::WelcomeMessage()
-{
-	if (Debug::Enabled)
-		Logger::WriteSpacer();
-	Logger::QuickLog("------------------------------");
-	Logger::QuickLog(GetVersionStr().c_str());
-	Logger::QuickLog((std::string("OS: ") + GetOSVersion()).c_str());
-	Logger::QuickLog(("Hash Code: " + HashCode::Hash).c_str());
-	Logger::QuickLog("------------------------------");
-	Logger::QuickLog(("Game Type: " + std::string((Game::IsIl2Cpp ? "Il2Cpp" : (Mono::IsOldMono ? "Mono" : "MonoBleedingEdge")))).c_str());
-	Logger::QuickLog(
-#ifdef _WIN64
-		"Game Arch: x64"
-#else
-		"Game Arch: x86"
-#endif
-	);
-	Logger::QuickLog("------------------------------");
-	if (Debug::Enabled)
-		Logger::WriteSpacer();
-	Logger::QuickLog(("Core::BasePath = " + std::string(BasePath)).c_str());
-	Logger::QuickLog(("Game::BasePath = " + std::string(Game::BasePath)).c_str());
-	Logger::QuickLog(("Game::DataPath = " + std::string(Game::DataPath)).c_str());
-	Logger::QuickLog(("Game::ApplicationPath = " + std::string(Game::ApplicationPath)).c_str());
-}
-
 bool Core::OSVersionCheck()
 {
 	if (IsRunningInWine() || IsWindows7OrGreater())
@@ -151,46 +123,6 @@ void Core::KillCurrentProcess()
 	CloseHandle(current_process);
 }
 
-const char* Core::GetFileInfoProductName(const char* path)
-{
-	DWORD handle;
-	DWORD size = GetFileVersionInfoSizeA(path, &handle);
-	if (size == NULL)
-		return NULL;
-	LPSTR buffer = new char[size];
-	if (!GetFileVersionInfoA(path, handle, size, buffer))
-		return NULL;
-	UINT size2;
-	WORD* buffer2;
-	if (!VerQueryValueA(buffer, "\\VarFileInfo\\Translation", (LPVOID*)&buffer2, &size2) || (size2 <= 0))
-		return NULL;
-	std::stringstream productverpath;
-	productverpath << "\\StringFileInfo\\" << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[0] << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[1] << "\\ProductName";
-	if (!VerQueryValueA(buffer, productverpath.str().c_str(), (LPVOID*)&buffer2, &size2) || (size2 <= 0))
-		return NULL;
-	return (LPCSTR)buffer2;
-}
-
-const char* Core::GetFileInfoProductVersion(const char* path)
-{
-	DWORD handle;
-	DWORD size = GetFileVersionInfoSizeA(path, &handle);
-	if (size == NULL)
-		return NULL;
-	LPSTR buffer = new char[size];
-	if (!GetFileVersionInfoA(path, handle, size, buffer))
-		return NULL;
-	UINT size2;
-	WORD* buffer2;
-	if (!VerQueryValueA(buffer, "\\VarFileInfo\\Translation", (LPVOID*)&buffer2, &size2) || (size2 <= 0))
-		return NULL;
-	std::stringstream productverpath;
-	productverpath << "\\StringFileInfo\\" << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[0] << std::setw(4) << std::setfill('0') << std::hex << std::uppercase << buffer2[1] << "\\FileVersion";
-	if (!VerQueryValueA(buffer, productverpath.str().c_str(), (LPVOID*)&buffer2, &size2) || (size2 <= 0))
-		return NULL;
-	return (LPCSTR)buffer2;
-}
-
 VERSIONHELPERAPI IsWindows11OrGreater()
 {
 	OSVERSIONINFOEXW osinfo = { sizeof(osinfo), HIBYTE(_WIN32_WINNT_WIN10), LOBYTE(_WIN32_WINNT_WIN10), 22000, 0, { 0 }, 0, 0 };
@@ -203,39 +135,6 @@ VERSIONHELPERAPI IsWindows11OrGreater()
 		VER_BUILDNUMBER, VER_GREATER_EQUAL);
 
 	return VerifyVersionInfoW(&osinfo, VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER, mask) != FALSE;
-}
-
-const char* Core::GetOSVersion()
-{
-	if (IsRunningInWine())
-		return (std::string("Wine ") + wine_get_version()).c_str();
-	else if (IsWindows11OrGreater())
-		return "Windows 11";
-	else if (IsWindows10OrGreater())
-		return "Windows 10";
-	else if (IsWindows8Point1OrGreater())
-		return "Windows 8.1";
-	else if (IsWindows8OrGreater())
-		return "Windows 8";
-	else if (IsWindows7SP1OrGreater())
-		return "Windows 7 SP1";
-	else if (IsWindows7OrGreater())
-		return "Windows 7";
-	else if (IsWindowsVistaSP2OrGreater())
-		return "Windows Vista SP2";
-	else if (IsWindowsVistaSP1OrGreater())
-		return "Windows Vista SP1";
-	else if (IsWindowsVistaOrGreater())
-		return "Windows Vista";
-	else if (IsWindowsXPSP3OrGreater())
-		return "Windows XP SP3";
-	else if (IsWindowsXPSP2OrGreater())
-		return "Windows XP SP2";
-	else if (IsWindowsXPSP1OrGreater())
-		return "Windows XP SP1";
-	else if (IsWindowsXPOrGreater())
-		return "Windows XP";
-	return "UNKNOWN";
 }
 
 void Core::SetupWineCheck()

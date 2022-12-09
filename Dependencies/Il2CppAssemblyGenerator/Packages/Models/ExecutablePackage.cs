@@ -92,8 +92,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
 
         private static void OutputStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Output.Set(); else Core.Logger.Msg(e.Data); }
         private static void ErrorStream(object sender, DataReceivedEventArgs e) { if (e.Data == null) ResetEvent_Error.Set(); else Core.Logger.Error(e.Data); }
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void SetProcessId(int id);
+        
+        private static void SetProcessId(int id)
+        {
+            MelonLogger.Warning($"TODO: SetProcessId({id})");
+        }
     }
 }

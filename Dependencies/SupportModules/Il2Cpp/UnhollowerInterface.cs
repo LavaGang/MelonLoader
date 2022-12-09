@@ -1,16 +1,19 @@
-﻿using System;
+﻿using Il2CppInterop.Common;
+using Il2CppInterop.Common.Attributes;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppInterop.Runtime.Runtime;
+using System;
 using System.Reflection;
-using UnhollowerBaseLib;
-using UnhollowerBaseLib.Attributes;
-using UnhollowerBaseLib.Runtime;
-using UnhollowerRuntimeLib;
 
 namespace MelonLoader.Support
 {
     internal class UnhollowerInterface : UnhollowerSupport.Interface
     {
         public IntPtr CopyMethodInfoStruct(IntPtr ptr)
-            => UnityVersionHandler.CopyMethodInfoStruct(ptr);
+            => ptr;
+            //=> UnityVersionHandler.CopyMethodInfoStruct(ptr);
 
         public int? GetIl2CppMethodCallerCount(MethodBase method)
         {
@@ -21,10 +24,10 @@ namespace MelonLoader.Support
         }
 
         public FieldInfo MethodBaseToIl2CppFieldInfo(MethodBase method)
-            => UnhollowerUtils.GetIl2CppMethodInfoPointerFieldForGeneratedMethod(method);
+            => Il2CppInteropUtils.GetIl2CppMethodInfoPointerFieldForGeneratedMethod(method);
 
         public void RegisterTypeInIl2CppDomain(Type type, bool logSuccess)
-            => ClassInjector.RegisterTypeInIl2Cpp(type, logSuccess);
+            => ClassInjector.RegisterTypeInIl2Cpp(type, new() { LogSuccess = logSuccess });
 
         public bool IsInheritedFromIl2CppObjectBase(Type type)
             => (type != null) && type.IsSubclassOf(typeof(Il2CppObjectBase));

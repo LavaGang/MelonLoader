@@ -3,13 +3,11 @@
 #include "Game.h"
 #include "Hook.h"
 #include "..\Utils\Assertion.h"
-#include "..\Utils\CommandLine.h"
 #include "..\Utils\Debug.h"
 #include "..\Utils\Encoding.h"
 #include "..\Core.h"
 #include "InternalCalls.h"
 #include "BaseAssembly.h"
-#include "Il2Cpp.h"
 #include "../Utils/Logging/Logger.h"
 
 const char* Mono::LibNames[] = { "mono", "mono-2.0-bdwgc", "mono-2.0-sgen", "mono-2.0-boehm" };
@@ -21,11 +19,16 @@ char* Mono::ManagedPathMono = NULL;
 char* Mono::ConfigPath = NULL;
 char* Mono::ConfigPathMono = NULL;
 char* Mono::MonoConfigPathMono = NULL;
+char* Mono::MelonLoaderDllPath = NULL;
 HMODULE Mono::Module = NULL;
 HMODULE Mono::PosixHelper = NULL;
 Mono::Domain* Mono::domain = NULL;
 bool Mono::IsOldMono = false;
 Mono::Method* Mono::ToStringMethod = NULL;
+Mono::Method* Mono::Mono_PreStart = NULL;
+Mono::Method* Mono::Mono_Start = NULL;
+Mono::Method* Mono::AssemblyManager_Resolve = NULL;
+Mono::Method* Mono::AssemblyManager_LoadInfo = NULL;
 
 #define MONODEF(fn) Mono::Exports::fn##_t Mono::Exports::fn = NULL;
 
@@ -185,31 +188,6 @@ bool Mono::SetupPaths()
 	std::copy(MonoDir.begin(), MonoDir.end(), BasePath);
 	BasePath[MonoDir.size()] = '\0';
 
-	if (Game::IsIl2Cpp)
-	{
-		std::string ManagedPathStr = (std::string(Core::BasePath) + "\\MelonLoader\\Managed");
-		ManagedPath = new char[ManagedPathStr.size() + 1];
-		std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
-		ManagedPath[ManagedPathStr.size()] = '\0';
-
-		std::string ConfigPathStr = (std::string(Game::DataPath) + "\\il2cpp_data\\etc");
-		ConfigPath = new char[ConfigPathStr.size() + 1];
-		std::copy(ConfigPathStr.begin(), ConfigPathStr.end(), ConfigPath);
-		ConfigPath[ConfigPathStr.size()] = '\0';
-
-		std::string MonoConfigPathStr = (MonoDir + "\\etc");
-		MonoConfigPathMono = new char[MonoConfigPathStr.size() + 1];
-		std::copy(MonoConfigPathStr.begin(), MonoConfigPathStr.end(), MonoConfigPathMono);
-		MonoConfigPathMono[MonoConfigPathStr.size()] = '\0';
-
-		MonoConfigPathMono = Encoding::OsToUtf8(MonoConfigPathMono);
-
-		MONO_STR(ManagedPath);
-		MONO_STR(ConfigPath);
-
-		return true;
-	}
-
 	std::string ManagedPathStr = (std::string(Game::DataPath) + "\\Managed");
 	ManagedPath = new char[ManagedPathStr.size() + 1];
 	std::copy(ManagedPathStr.begin(), ManagedPathStr.end(), ManagedPath);
@@ -229,6 +207,18 @@ bool Mono::SetupPaths()
 	MONO_STR(ConfigPath);
 
 #undef MONO_STR
+
+	std::string BaseAssemblyPath = std::string(Core::BasePath) + "\\MelonLoader\\net35\\MelonLoader.dll";
+        
+    if (!Core::FileExists(BaseAssemblyPath.c_str()))
+    {
+        Assertion::ThrowInternalFailure("MelonLoader.dll Does Not Exist!");
+        return false;
+    }
+	MelonLoaderDllPath = new char[BaseAssemblyPath.size() + 1];
+    std::copy(BaseAssemblyPath.begin(), BaseAssemblyPath.end(), MelonLoaderDllPath);
+	MelonLoaderDllPath[BaseAssemblyPath.size()] = '\0';
+	
 	return true;
 }
 
@@ -237,54 +227,6 @@ void Mono::InstallAssemblyHooks()
 	Exports::mono_install_assembly_preload_hook(Hooks::AssemblyPreLoad, NULL);
 	Exports::mono_install_assembly_search_hook(Hooks::AssemblySearch, NULL);
 	Exports::mono_install_assembly_load_hook(Hooks::AssemblyLoad, NULL);
-}
-
-void Mono::CreateDomain(const char* name)
-{
-	if (domain != NULL)
-		return;
-
-	Debug::Msg("Setting Mono Assemblies Path...");
-	Exports::mono_set_assemblies_path(ManagedPathMono);
-
-	Debug::Msg("Setting Mono Assembly Root Directory...");
-	Exports::mono_assembly_setrootdir(ManagedPathMono);
-
-	Debug::Msg("Setting Mono Config Directory...");
-	Exports::mono_set_config_dir(MonoConfigPathMono);
-
-	if (!IsOldMono)
-		Exports::mono_runtime_set_main_args(CommandLine::argc, CommandLine::argvMono);
-
-	if (Debug::Enabled)
-	{
-		Debug::Msg("Parsing Dnspy Debugger Environment Options...");
-		if (IsOldMono)
-			Mono::ParseEnvOption("DNSPY_UNITY_DBG");
-		else
-			Mono::ParseEnvOption("DNSPY_UNITY_DBG2");
-
-		Debug::Msg("Initializing Mono Debug...");
-		Exports::mono_debug_init(MONO_DEBUG_FORMAT_MONO);
-	}
-
-	Debug::Msg("Creating Mono Domain...");
-	domain = Exports::mono_jit_init(name);
-
-	if (Debug::Enabled && (Exports::mono_debug_domain_create != NULL))
-	{
-		Debug::Msg("Creating Mono Debug Domain...");
-		Exports::mono_debug_domain_create(domain);
-	}
-
-	Debug::Msg("Setting Mono Main Thread...");
-	Exports::mono_thread_set_main(Exports::mono_thread_current());
-
-	if (!IsOldMono)
-	{
-		Debug::Msg("Setting Mono Domain Config...");
-		Exports::mono_domain_set_config(domain, Game::BasePathMono, name);
-	}
 }
 
 void Mono::AddInternalCall(const char* name, void* method)
@@ -422,6 +364,163 @@ void Mono::ParseEnvOption(const char* name)
 	}
 }
 
+void Mono::Preload()
+{
+	if (Game::IsIl2Cpp || !Mono::IsOldMono)
+		return;
+
+	std::string PreloadAssemblyPath = std::string(Core::BasePath) + "\\MelonLoader\\Dependencies\\SupportModules\\Preload.dll";
+	if (!Game::IsIl2Cpp && !Core::FileExists(PreloadAssemblyPath.c_str()))
+	{
+		Assertion::ThrowInternalFailure("Preload.dll Does Not Exist!");
+		return;
+	}
+
+	Debug::Msg("Initializing Preload Assembly...");
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, PreloadAssemblyPath.c_str());
+	if (assembly == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Open Preload Assembly!");
+		return;
+	}
+	Mono::Image* image = Mono::Exports::mono_assembly_get_image(assembly);
+	if (image == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Image from Preload Assembly!");
+		return;
+	}
+	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "MelonLoader.Support", "Preload");
+	if (image == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Class from Preload Image!");
+		return;
+	}
+	Mono::Method* initialize = Mono::Exports::mono_class_get_method_from_name(klass, "Initialize", NULL);
+	if (initialize == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Initialize Method from Preload Class!");
+		return;
+	}
+	Mono::Object* exObj = NULL;
+	Mono::Exports::mono_runtime_invoke(initialize, NULL, NULL, &exObj);
+}
+
+bool Mono::InvokeInitialize() 
+{
+	Preload();
+	Debug::Msg("Initializing Base Assembly...");
+	Mono::Assembly* assembly = Mono::Exports::mono_domain_assembly_open(Mono::domain, Mono::MelonLoaderDllPath);
+	if (assembly == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Open Mono Assembly!");
+		return false;
+	}
+	Mono::Image* image = Mono::Exports::mono_assembly_get_image(assembly);
+	if (image == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get Image from Mono Assembly!");
+		return false;
+	}
+	Mono::Class* klass = Mono::Exports::mono_class_from_name(image, "MelonLoader", "Core");
+	if (image == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get MelonLoader.Core from Mono Image!");
+		return false;
+	}
+	Mono::Method* Mono_Initialize = Mono::Exports::mono_class_get_method_from_name(klass, "Initialize", NULL);
+	if (Mono_Initialize == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get MelonLoader.Core.Initialize!");
+		return false;
+	}
+	Mono_PreStart = Mono::Exports::mono_class_get_method_from_name(klass, "PreStart", NULL);
+	if (Mono_PreStart == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get MelonLoader.Core.PreStart!");
+		return false;
+	}
+	Mono_Start = Mono::Exports::mono_class_get_method_from_name(klass, "Start", NULL);
+	if (Mono_Start == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get MelonLoader.Core.Start!");
+		return false;
+	}
+
+	Mono::Class* klass_AssemblyManager = Mono::Exports::mono_class_from_name(image, "MelonLoader.MonoInternals.ResolveInternals", "AssemblyManager");
+	if (klass_AssemblyManager == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get MelonLoader.MonoInternals.ResolveInternals.AssemblyManager from Mono Image!");
+		return false;
+	}
+	AssemblyManager_Resolve = Mono::Exports::mono_class_get_method_from_name(klass_AssemblyManager, "Resolve", 6);
+	if (AssemblyManager_Resolve == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get MelonLoader.MonoInternals.ResolveInternals.AssemblyManager.Resolve!");
+		return false;
+	}
+	AssemblyManager_LoadInfo = Mono::Exports::mono_class_get_method_from_name(klass_AssemblyManager, "LoadInfo", 1);
+	if (AssemblyManager_LoadInfo == NULL)
+	{
+		Assertion::ThrowInternalFailure("Failed to Get MelonLoader.MonoInternals.ResolveInternals.AssemblyManager.LoadInfo!");
+		return false;
+	}
+
+	Logger::WriteSpacer();
+
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_Initialize, NULL, NULL, &exObj);
+	if (exObj != NULL)
+	{
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Failed to Invoke Initialize Method!");
+		return false;
+	}
+	int returnval = *(int*)((char*)result + 0x8);
+	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
+	if (Debug::Enabled)
+		Logger::WriteSpacer();
+	return (returnval == 0);
+}
+
+bool Mono::InvokePreStart()
+{
+	if (Mono_PreStart == NULL)
+		return false;
+	Debug::Msg("Pre-Starting Base Assembly...");
+	Logger::WriteSpacer();
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_PreStart, NULL, NULL, &exObj);
+	if (exObj != NULL)
+	{
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Failed to Invoke PreStart Method!");
+	}
+	int returnval = *(int*)((char*)result + 0x8);
+	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
+	if (Debug::Enabled)
+		Logger::WriteSpacer();
+	return (returnval == 0);
+}
+
+void Mono::InvokeStart()
+{
+	if (Mono_Start == NULL)
+		return;
+	Debug::Msg("Starting Base Assembly...");
+	Logger::WriteSpacer();
+	Mono::Object* exObj = NULL;
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono_Start, NULL, NULL, &exObj);
+	if (exObj != NULL)
+	{
+		Mono::LogException(exObj);
+		Assertion::ThrowInternalFailure("Failed to Invoke Start Method!");
+	}
+	int returnval = *(int*)((char*)result + 0x8);
+	Debug::Msg(("Return Value = " + std::to_string(returnval)).c_str());
+	if (Debug::Enabled)
+		Logger::WriteSpacer();
+}
+
 Mono::Domain* Mono::Hooks::mono_jit_init_version(const char* name, const char* version)
 {
 	Console::SetHandles();
@@ -490,7 +589,7 @@ Mono::Assembly* Mono::Hooks::AssemblyPreLoad(AssemblyName* aname, char** assembl
 Mono::Assembly* Mono::Hooks::AssemblySearch(AssemblyName* aname, void* user_data) { return AssemblyResolve(aname, user_data, false); }
 Mono::Assembly* Mono::Hooks::AssemblyResolve(AssemblyName* aname, void* user_data, bool is_preload)
 {
-	if (BaseAssembly::AssemblyManager_Resolve == NULL)
+	if (Mono::AssemblyManager_Resolve == NULL)
 		return NULL;
 
 	if (aname == NULL)
@@ -511,7 +610,7 @@ Mono::Assembly* Mono::Hooks::AssemblyResolve(AssemblyName* aname, void* user_dat
 	};
 
 	Mono::Object* exObj = NULL;
-	Mono::Object* result = Mono::Exports::mono_runtime_invoke(BaseAssembly::AssemblyManager_Resolve, NULL, args, &exObj);
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono::AssemblyManager_Resolve, NULL, args, &exObj);
 	if (exObj != NULL)
 	{
 		Mono::LogException(exObj);
@@ -525,7 +624,7 @@ Mono::Assembly* Mono::Hooks::AssemblyResolve(AssemblyName* aname, void* user_dat
 
 void Mono::Hooks::AssemblyLoad(Assembly* assembly, void* user_data)
 {
-	if (BaseAssembly::AssemblyManager_LoadInfo == NULL)
+	if (Mono::AssemblyManager_LoadInfo == NULL)
 		return;
 
 	if (assembly == NULL)
@@ -540,7 +639,7 @@ void Mono::Hooks::AssemblyLoad(Assembly* assembly, void* user_data)
 	};
 
 	Mono::Object* exObj = NULL;
-	Mono::Object* result = Mono::Exports::mono_runtime_invoke(BaseAssembly::AssemblyManager_LoadInfo, NULL, args, &exObj);
+	Mono::Object* result = Mono::Exports::mono_runtime_invoke(Mono::AssemblyManager_LoadInfo, NULL, args, &exObj);
 	if (exObj != NULL)
 	{
 		Mono::LogException(exObj);

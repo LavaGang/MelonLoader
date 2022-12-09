@@ -1,21 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net35</TargetFramework>
+		<TargetFrameworks>net35;net6</TargetFrameworks>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
 		<DocumentationFile>..\Output\$(Configuration)\MelonLoader\MelonLoader.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>full</DebugType>
-		<DefineConstants>TRACE;NET35;DEBUG</DefineConstants>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>None</DebugType>
-		<DefineConstants>NET35</DefineConstants>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<PropertyGroup>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -26,20 +20,20 @@
 		  </PackageReference>
    </ItemDefinitionGroup>
 	<ItemGroup>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
 		<PackageReference Include="AssetsTools.NET" Version="3.0.0-preview1" />
 		<PackageReference Include="HarmonyX" Version="2.9.0" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.0.1" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
 	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
+		<PackageReference Include="AsmResolver.DotNet" Version="4.11.2" />
+		<PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.2.332302" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+	</ItemGroup>
 	<ItemGroup>
-		<None Include="Resources\classdata.tpk" />
+		<EmbeddedResource Include="Resources\classdata.tpk" />
 	</ItemGroup>
 </Project>

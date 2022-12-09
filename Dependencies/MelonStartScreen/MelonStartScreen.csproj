@@ -1,48 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<RootNamespace>MelonLoader.MelonStartScreen</RootNamespace>
-		<TargetFramework>net35</TargetFramework>
-		<LangVersion>Latest</LangVersion>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\</OutputPath>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>full</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>None</DebugType>
-		<DefineConstants />
-	</PropertyGroup>
-	<ItemGroup>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="Tomlet">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="Resources\Loading_Lemon.dat" />
-		<None Include="Resources\Loading_Melon.dat" />
-		<None Include="Resources\Logo_Lemon.dat" />
-		<None Include="Resources\Logo_Melon.dat" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj">
-	    <Private>false</Private>
-	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-	  </ProjectReference>
-	</ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.MelonStartScreen</RootNamespace>
+        <TargetFrameworks>net35;net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+    </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\Loading_Lemon.dat" />
+        <EmbeddedResource Include="Resources\Loading_Melon.dat" />
+        <EmbeddedResource Include="Resources\Logo_Lemon.dat" />
+        <EmbeddedResource Include="Resources\Logo_Melon.dat" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
+        <PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
+        <PackageReference Include="Samboy063.Tomlet" Version="5.0.0" />
+    </ItemGroup>
 </Project>

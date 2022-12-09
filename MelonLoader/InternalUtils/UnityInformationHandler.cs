@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
+using System.Drawing;
+using MelonLoader.Utils;
 
 namespace MelonLoader.InternalUtils
 {
@@ -24,7 +24,7 @@ namespace MelonLoader.InternalUtils
 
         internal static void Setup()
         {
-            string gameDataPath = MelonUtils.GetGameDataDirectory();
+            string gameDataPath = MelonEnvironment.UnityGameDataDirectory;
 
             if (!string.IsNullOrEmpty(MelonLaunchOptions.Core.UnityVersion))
             {
@@ -59,16 +59,16 @@ namespace MelonLoader.InternalUtils
             if (string.IsNullOrEmpty(GameName))
                 GameName = DefaultInfo;
 
-            SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
+            BootstrapInterop.SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
             if (string.IsNullOrEmpty(GameVersion))
                 GameVersion = DefaultInfo;
 
-            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.Msg($"Game Name: {GameName}");
             MelonLogger.Msg($"Game Developer: {GameDeveloper}");
             MelonLogger.Msg($"Unity Version: {EngineVersion}");
             MelonLogger.Msg($"Game Version: {GameVersion}");
-            MelonLogger.WriteLine(ConsoleColor.Magenta);
+            MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.WriteSpacer();
         }
 
@@ -138,7 +138,7 @@ namespace MelonLoader.InternalUtils
         {
             try
             {
-                string appInfoFilePath = Path.Combine(MelonUtils.GetGameDataDirectory(), "app.info");
+                string appInfoFilePath = Path.Combine(MelonEnvironment.UnityGameDataDirectory, "app.info");
                 if (!File.Exists(appInfoFilePath))
                     return;
 
@@ -162,9 +162,9 @@ namespace MelonLoader.InternalUtils
 
         private static UnityVersion ReadVersionFallback(string gameDataPath)
         {
-            string unityPlayerPath = Path.Combine(MelonUtils.GameDirectory, "UnityPlayer.dll");
+            string unityPlayerPath = MelonEnvironment.UnityPlayerPath;
             if (!File.Exists(unityPlayerPath))
-                unityPlayerPath = MelonUtils.GetApplicationPath();
+                unityPlayerPath = MelonEnvironment.GameExecutablePath;
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -249,9 +249,5 @@ namespace MelonLoader.InternalUtils
 
             return UnityVersion.Parse(verString.ToString().Trim());
         }
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        private extern static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null);
     }
 }

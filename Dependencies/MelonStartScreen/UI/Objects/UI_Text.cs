@@ -17,12 +17,12 @@ namespace MelonLoader.MelonStartScreen.UI.Objects
 
             try
             {
-                font = Resources.GetBuiltinResource<Font>($"{config.Font}.ttf");
+                font = MelonUnityEngine.Resources.GetBuiltinResource<Font>($"{config.Font}.ttf");
             }
             catch { }
 
             if (font == null)
-                font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+                font = MelonUnityEngine.Resources.GetBuiltinResource<Font>("Arial.ttf");
 
             AllElements.Add(this);
         }

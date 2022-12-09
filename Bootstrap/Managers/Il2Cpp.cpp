@@ -2,19 +2,13 @@
 #include "Game.h"
 #include "../Utils/Assertion.h"
 #include "Hook.h"
-#include "Mono.h"
 #include "../Utils/Console.h"
 #include "../Utils/Debug.h"
-#include "../Utils/PointerUtils.h"
 #include <string>
-#include "AssemblyVerifier.h"
-#include "InternalCalls.h"
 #include "BaseAssembly.h"
 
 Il2Cpp::Domain* Il2Cpp::domain = NULL;
 char* Il2Cpp::GameAssemblyPath = NULL;
-char* Il2Cpp::GameAssemblyPathMono = NULL;
-char* Il2Cpp::UnityPlayerPath = NULL;
 HMODULE Il2Cpp::Module = NULL;
 void* Il2Cpp::UnityTLSInterfaceStruct = NULL;
 Il2Cpp::Exports::il2cpp_init_t Il2Cpp::Exports::il2cpp_init = NULL;
@@ -50,10 +44,6 @@ Il2Cpp::Domain* Il2Cpp::Hooks::il2cpp_init(const char* name)
 	Console::SetHandles();
 	Debug::Msg("Detaching Hook from il2cpp_init...");
 	Hook::Detach(&(LPVOID&)Exports::il2cpp_init, il2cpp_init);
-	Mono::CreateDomain(name);
-	InternalCalls::Initialize();
-	// todo: check if it works/is necessary on mono games
-	AssemblyVerifier::InstallHooks();
 	if (BaseAssembly::Initialize())
 	{
 		Debug::Msg("Attaching Hook to il2cpp_runtime_invoke...");

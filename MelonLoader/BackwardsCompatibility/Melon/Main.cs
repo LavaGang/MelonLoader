@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MelonLoader.Utils;
 
 namespace MelonLoader
 {
@@ -14,7 +15,7 @@ namespace MelonLoader
         public static bool IsBoneworks = false;
         [Obsolete("MelonLoader.Main.GetUnityVersion is Only Here for Compatibility Reasons. Please use  MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion instead.")]
         public static string GetUnityVersion() => InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType();
-        [Obsolete("MelonLoader.Main.GetUserDataPath is Only Here for Compatibility Reasons. Please use MelonLoader.MelonUtils.GetUserDataDirectory instead.")]
-        public static string GetUserDataPath() => MelonUtils.UserDataDirectory;
+        [Obsolete("MelonLoader.Main.GetUserDataPath is Only Here for Compatibility Reasons. Please use MelonLoader.Utils.MelonEnvironment.UserDataDirectory instead.")]
+        public static string GetUserDataPath() => MelonEnvironment.UserDataDirectory;
     }
 }

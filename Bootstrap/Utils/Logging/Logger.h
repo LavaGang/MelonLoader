@@ -1,7 +1,6 @@
 #pragma once
 #include <fstream>
 #include <filesystem>
-#include <iostream>
 #include <mutex>
 #include <string>
 #include "../Console.h"

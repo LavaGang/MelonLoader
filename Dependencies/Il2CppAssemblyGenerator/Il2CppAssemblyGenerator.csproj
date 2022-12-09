@@ -1,38 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Il2CppAssemblyGenerator</RootNamespace>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFramework>net6</TargetFramework>
 		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\Il2CppAssemblyGenerator\</OutputPath>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugType>full</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>None</DebugType>
-		<DefineConstants />
+		<DebugType>embedded</DebugType>
+		<PreserveCompilationContext>false</PreserveCompilationContext>
 	</PropertyGroup>
 	<ItemGroup>
-		<Reference Include="AssetRipper.VersionUtilities">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\AssetRipper.VersionUtilities.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="Tomlet">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Tomlet.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj">
-	    <Private>false</Private>
-	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-	  </ProjectReference>
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="System.IO.Compression" />
+		<PackageReference Include="Iced" Version="1.17.0"/>
+		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.0" IncludeAssets="All" />
+		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
+		<ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" ExcludeAssets="Runtime" />
 	</ItemGroup>
 </Project>

@@ -119,7 +119,7 @@ namespace UnhollowerMini
                 }
 
                 IntPtr clazz = il2cpp_class_from_name(assembly.ptr, name_space, classname);
-                if (clazz == null)
+                if (clazz == IntPtr.Zero)
                 {
                     throw new Exception("Unable to find class " + name_space + "." + classname + " in assembly " + assemblyname);
                 }

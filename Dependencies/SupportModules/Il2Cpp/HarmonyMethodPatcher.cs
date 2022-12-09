@@ -9,11 +9,17 @@ using HarmonyLib.Tools;
 using Mono.Cecil;
 using MonoMod.Utils;
 using MonoMod.Cil;
-using UnhollowerBaseLib;
 using MelonLoader.InternalUtils;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes;
+
+#if NET6_0
+using MelonLoader.CoreClrUtils;
+#endif
 
 namespace MelonLoader.Support
 {
+    //Should be removeable
     internal class HarmonyMethodPatcher : MethodPatcher
     {
         private static AccessTools.FieldRef<ILGenerator, int> codeLenGetter = null;
@@ -64,7 +70,13 @@ namespace MelonLoader.Support
 
             if (methodDetourPointer != IntPtr.Zero)
                 MelonUtils.NativeHookDetach(copiedMethodInfoPointer, methodDetourPointer);
-            MelonUtils.NativeHookAttach(copiedMethodInfoPointer, il2CppShimDelegatePtr);
+            
+            MelonUtils.NativeHookAttachDirect(copiedMethodInfoPointer, il2CppShimDelegatePtr);
+
+#if NET6_0
+            NativeStackWalk.RegisterHookAddr((ulong)il2CppShimDelegatePtr, $"Harmony Hook for {Original.FullDescription()}");
+#endif
+            
             methodDetourPointer = il2CppShimDelegatePtr;
 
             PatchTools_RememberObject(Original, new LemonTuple<MethodInfo, MethodInfo, Delegate> { Item1 = newreplacement, Item2 = il2CppShim, Item3 = il2CppShimDelegate });

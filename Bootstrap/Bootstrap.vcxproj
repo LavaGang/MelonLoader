@@ -29,28 +29,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -97,14 +97,16 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,28 +115,32 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x86.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x86\6.0.11\runtimes\win-x86\native;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,64 +149,56 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base/MSDetours/detours.x64.lib;nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(LOCALAPPDATA)\Microsoft\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native\;C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Host.win-x64\6.0.11\runtimes\win-x64\native;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Base\DllMain.cpp" />
-    <ClCompile Include="Managers\AssemblyVerifier.cpp" />
     <ClCompile Include="Managers\BaseAssembly.cpp" />
+    <ClCompile Include="Managers\DotnetRuntime.cpp" />
     <ClCompile Include="Managers\Game.cpp" />
     <ClCompile Include="Managers\Hook.cpp" />
     <ClCompile Include="Managers\Il2Cpp.cpp" />
     <ClCompile Include="Managers\InternalCalls.cpp" />
     <ClCompile Include="Managers\Mono.cpp" />
-    <ClCompile Include="Utils\AnalyticsBlocker.cpp" />
-    <ClCompile Include="Utils\Il2CppAssemblyGenerator.cpp" />
     <ClCompile Include="Utils\Assertion.cpp" />
     <ClCompile Include="Utils\CommandLine.cpp" />
     <ClCompile Include="Utils\Console.cpp" />
     <ClCompile Include="Utils\Debug.cpp" />
     <ClCompile Include="Utils\Encoding.cpp" />
-    <ClCompile Include="Utils\HashCode.cpp" />
-    <ClCompile Include="Utils\IniFile.cpp" />
     <ClCompile Include="Utils\Logging\Log.cpp" />
     <ClCompile Include="Utils\Logging\Logger.cpp" />
-    <ClCompile Include="Utils\PointerUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base\MSDetours\detours.h" />
     <ClInclude Include="Base\MSDetours\detours.x64.h" />
     <ClInclude Include="Base\MSDetours\detours.x86.h" />
     <ClInclude Include="Core.h" />
-    <ClInclude Include="Managers\AssemblyVerifier.h" />
     <ClInclude Include="Managers\BaseAssembly.h" />
+    <ClInclude Include="Managers\DotnetRuntime.h" />
     <ClInclude Include="Managers\Game.h" />
     <ClInclude Include="Managers\Hook.h" />
     <ClInclude Include="Managers\Il2Cpp.h" />
     <ClInclude Include="Managers\InternalCalls.h" />
     <ClInclude Include="Managers\Mono.h" />
     <ClInclude Include="Base\resource.h" />
-    <ClInclude Include="Utils\AnalyticsBlocker.h" />
-    <ClInclude Include="Utils\Il2CppAssemblyGenerator.h" />
     <ClInclude Include="Utils\Assertion.h" />
     <ClInclude Include="Utils\CommandLine.h" />
     <ClInclude Include="Utils\Console.h" />
     <ClInclude Include="Utils\Debug.h" />
     <ClInclude Include="Utils\Encoding.h" />
-    <ClInclude Include="Utils\HashCode.h" />
-    <ClInclude Include="Utils\IniFile.h" />
     <ClInclude Include="Utils\Logging\Log.h" />
     <ClInclude Include="Utils\Logging\Logger.h" />
-    <ClInclude Include="Utils\PointerUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Base\Bootstrap.rc" />

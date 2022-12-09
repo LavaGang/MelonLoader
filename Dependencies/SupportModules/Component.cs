@@ -1,6 +1,6 @@
 ﻿using System;
 #if SM_Il2Cpp
-using UnhollowerBaseLib;
+using Il2CppInterop.Runtime;
 #else
 using System.Reflection;
 #endif
@@ -45,7 +45,7 @@ namespace MelonLoader.Support
             DontDestroyOnLoad(Main.obj);
             Main.obj.hideFlags = HideFlags.DontSave;
 #if SM_Il2Cpp
-            Main.component = Main.obj.AddComponent(UnhollowerRuntimeLib.Il2CppType.Of<SM_Component>()).TryCast<SM_Component>();
+            Main.component = Main.obj.AddComponent(Il2CppType.Of<SM_Component>()).TryCast<SM_Component>();
 #else
             Main.component = (SM_Component)Main.obj.AddComponent(typeof(SM_Component));
 #endif

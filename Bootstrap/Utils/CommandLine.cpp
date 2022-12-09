@@ -1,15 +1,11 @@
 #include "CommandLine.h"
 #include "Logging/Logger.h"
 #include "Debug.h"
-#include "AnalyticsBlocker.h"
 #include "Encoding.h"
 #include "../Core.h"
-#include "../Managers/Game.h"
-#include "../Managers/InternalCalls.h"
 
 int CommandLine::argc = NULL;
 char* CommandLine::argv[64];
-char* CommandLine::argvMono[64];
 
 void CommandLine::Read()
 {
@@ -22,7 +18,6 @@ void CommandLine::Read()
 	while (curchar && (argc <= 63))
 	{
 		argv[argc] = curchar;
-		argvMono[argc] = Encoding::OsToUtf8(curchar);
 		curchar = strtok_s(0, " ", &nextchar);
 		argc++;
 	}
@@ -50,8 +45,6 @@ void CommandLine::Read()
 			Console::AlwaysOnTop = true;
 		else if (strstr(command, "--melonloader.consoledst") != NULL)
 			Console::ShouldSetTitle = false;
-		else if (strstr(command, "--melonloader.dab") != NULL)
-			AnalyticsBlocker::ShouldDAB = true;
 		else if (strstr(command, "--melonloader.disableunityclc") != NULL)
 			Console::CleanUnityLogs = false;
 

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+	<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MelonLoader\MelonLoader.csproj" />
+  </ItemGroup>
+
+</Project>

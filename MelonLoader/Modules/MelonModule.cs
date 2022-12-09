@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -84,7 +85,7 @@ namespace MelonLoader.Modules
             obj.Name = name;
             obj.Assembly = asm;
             obj.ModuleInfo = moduleInfo;
-            obj.LoggerInstance = new MelonLogger.Instance(name, ConsoleColor.Magenta); // Magenta cool :)
+            obj.LoggerInstance = new MelonLogger.Instance(name, Color.Magenta); // Magenta cool :)
 
             try
             {

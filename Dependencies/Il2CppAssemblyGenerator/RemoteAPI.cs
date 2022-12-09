@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using Semver;
 
@@ -69,30 +70,33 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 MelonDebug.Msg($"ContactURL = {info.URL}");
 
                 string Response = null;
-                try { Response = Core.webClient.DownloadString(info.URL); }
+                try
+                {
+                    var result = Core.webClient.GetAsync(info.URL).Result;
+                    result.EnsureSuccessStatusCode();
+                    Response = result.Content.ReadAsStringAsync().Result;
+                }
                 catch (Exception ex)
                 {
-                    if (!(ex is System.Net.WebException) || ((System.Net.WebException) ex).Response == null)
+                    if (ex is not HttpRequestException {StatusCode: {}} hre)
                     {
                         Core.Logger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
                         continue;
                     }
 
-                    System.Net.WebException we = (System.Net.WebException)ex;
-                    System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)we.Response;
-                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    if (hre.StatusCode == System.Net.HttpStatusCode.NotFound)
                     {
                         Core.Logger.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
                         break;
                     }
 
-                    Core.Logger.Error($"WebException ({Enum.GetName(typeof(System.Net.HttpStatusCode), response.StatusCode)}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
+                    Core.Logger.Error($"WebException ({hre.StatusCode}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
                     continue;
                 }
 
-                bool is_response_null = string.IsNullOrEmpty(Response);
-                MelonDebug.Msg($"Response = {(is_response_null ? "null" : Response) }");
-                if (is_response_null)
+                var isResponseNull = string.IsNullOrEmpty(Response);
+                MelonDebug.Msg($"Response = {(isResponseNull ? "null" : Response) }");
+                if (isResponseNull)
                     break;
 
                 InfoStruct returnInfo = info.Func(Response);

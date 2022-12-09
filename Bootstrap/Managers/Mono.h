@@ -63,18 +63,28 @@ public:
 	static char* ConfigPath;
 	static char* ConfigPathMono;
 	static char* MonoConfigPathMono;
+	static char* MelonLoaderDllPath;
+
+	static Method* Mono_PreStart;
+	static Method* Mono_Start;
+	static Method* AssemblyManager_Resolve;
+	static Method* AssemblyManager_LoadInfo;
 
 	static bool Initialize();
 	static bool Load();
 	static bool SetupPaths();
 	static void InstallAssemblyHooks();
-	static void CreateDomain(const char* name);
 	static void AddInternalCall(const char* name, void* method);
 	static String* ExceptionToString(Object* obj);
 	static void LogException(Object* exceptionObject, bool shouldThrow = false);
 	static void Free(void* ptr);
 	static std::string CheckFolderName(std::string folder_name);
 	static std::string CheckLibName(std::string base_path, std::string folder_name, std::string lib_name);
+
+	static void Preload();
+	static bool InvokeInitialize();
+	static bool InvokePreStart();
+	static void InvokeStart();
 
 	typedef Assembly* (*AssemblyPreLoadFunc) (AssemblyName* aname, char** assemblies_path, void* user_data);
 	typedef Assembly* (*AssemblySearchFunc) (AssemblyName* aname, void* user_data);

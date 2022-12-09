@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using MelonLoader.TinyJSON;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
@@ -35,7 +36,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             FixConfig();
             if (Execute(new string[] {
                 Core.GameAssemblyPath,
-                Path.Combine(MelonUtils.GetGameDataDirectory(), "il2cpp_data", "Metadata", "global-metadata.dat")
+                Path.Combine(MelonEnvironment.Il2CppDataDirectory, "Metadata", "global-metadata.dat")
             }))
                 return true;
             return false;

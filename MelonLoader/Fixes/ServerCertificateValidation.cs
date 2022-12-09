@@ -1,13 +1,16 @@
-﻿using System;
+﻿#if !NET6_0
+using System;
 using System.Net;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+#endif
 
 namespace MelonLoader.Fixes
 {
     internal static class ServerCertificateValidation
     {
+#if !NET6_0
         internal static void Install()
         {
             Type SPMType = typeof(ServicePointManager);
@@ -48,5 +51,10 @@ namespace MelonLoader.Fixes
             }
             return true;
         }
+#else
+        internal static void Install()
+        {
+        }
+#endif
     }
 }

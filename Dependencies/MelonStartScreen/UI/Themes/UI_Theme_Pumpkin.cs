@@ -13,10 +13,10 @@ namespace MelonLoader.MelonStartScreen.UI.Themes
         }
 
         internal override byte[] GetLoadingImage()
-            => Properties.Resources.Logo_Halloween;
+            => StartScreenResources.HalloweenLoadingIcon;
 
         internal override byte[] GetLogoImage()
-            => Properties.Resources.Loading_Halloween;
+            => StartScreenResources.HalloweenLogo;
 
         internal class hBackground : cBackground
         {

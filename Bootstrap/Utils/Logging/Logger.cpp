@@ -5,10 +5,11 @@
 #include <direct.h>
 #include <list>
 #include <sstream>
+#include <iostream>
 
-const char* Logger::FilePrefix = "MelonLoader_";
+const char* Logger::FilePrefix = "MelonLoader_Bootstrap_";
 const char* Logger::FileExtension = ".log";
-const char* Logger::LatestLogFileName = "Latest";
+const char* Logger::LatestLogFileName = "Latest_Bootstrap";
 int Logger::MaxLogs = 10;
 int Logger::MaxWarnings = 100;
 int Logger::MaxErrors = 100;

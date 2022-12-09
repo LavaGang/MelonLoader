@@ -1,14 +1,10 @@
-	#include "Console.h"
+#include "Console.h"
 #include "../Core.h"
 #include <string>
 #include "Assertion.h"
 #include "Debug.h"
 #include <iostream>
-#include <locale.h>
-#include "../Managers/Game.h"
-#include "Il2CppAssemblyGenerator.h"
 #include "Logging/Logger.h"
-#include <sstream>
 #include <VersionHelpers.h>
 
 bool Console::ShouldHide = false;
@@ -87,12 +83,6 @@ void Console::SetDefaultTitle()
 	SetTitle(((Debug::Enabled ? "[D] " : "") + versionstr).c_str());
 }
 
-void Console::SetDefaultTitleWithGameName(const char* GameName, const char* GameVersion)
-{
-	std::string versionstr = Core::GetVersionStrWithGameName(GameName, GameVersion);
-	SetTitle(((Debug::Enabled ? "[D] " : "") + versionstr).c_str());
-}
-
 void Console::Flush()
 {
 	if (!IsInitialized())
@@ -143,8 +133,6 @@ BOOL WINAPI Console::EventHandler(DWORD evt)
 	case CTRL_CLOSE_EVENT:
 	case CTRL_LOGOFF_EVENT:
 	case CTRL_SHUTDOWN_EVENT:
-		if (Game::IsIl2Cpp)
-			Il2CppAssemblyGenerator::Cleanup();
 		Logger::Flush();
 		Flush();
 		Close();
