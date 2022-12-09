@@ -11,6 +11,10 @@
 		<DebugType>embedded</DebugType>
 		<DefineConstants>SM_Il2Cpp</DefineConstants>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+		<RestoreAdditionalProjectSources>
+			https://nuget.bepinex.dev/v3/index.json
+		</RestoreAdditionalProjectSources>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="Il2Cppmscorlib">
@@ -37,9 +41,9 @@
 		<PackageReference Include="HarmonyX" Version="2.10.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="Iced" Version="1.17.0" ExcludeAssets="Runtime" />
-		<PackageReference Include="Il2CppInterop.Common" Version="1.4.0" />
-		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.0" />
-		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.0" />
+		<PackageReference Include="Il2CppInterop.Common" Version="1.4.0-ci.217" />
+		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.0-ci.217" />
+		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.0-ci.217" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.3.23.4" ExcludeAssets="Runtime"/>
 		<PackageReference Include="MonoMod.Utils" Version="22.3.23.4" ExcludeAssets="Runtime" />
