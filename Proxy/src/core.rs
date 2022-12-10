@@ -10,8 +10,6 @@ static mut BOOTSTRAP: Option<NativeLibrary> = None;
 pub fn init() -> Result<(), Box<dyn error::Error>> {
     let file_path = std::env::current_exe()?;
 
-    msgbox::create("MelonLoader", &format!("Current Executable: {}", file_path.display()), msgbox::IconType::Info)?;
-
     if !check_unity(&file_path)? {
         return Ok(());
     }
@@ -25,8 +23,6 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
 
     let base_path = file_path.parent().ok_or_else(|| "failed to get base path")?.to_path_buf();
     let bootstrap_path = get_bootstrap_path(&base_path)?;
-
-    msgbox::create("MelonLoader", &format!("Bootstrap Path: {}", bootstrap_path.display()), msgbox::IconType::Info)?;
 
     unsafe {
         BOOTSTRAP = Some(load_lib(bootstrap_path)?);
