@@ -16,13 +16,19 @@ colored = "2.0.0"
 thiserror = "1.0.37"
 libloading = "0.7.4"
 libc = "*"
-libc-stdhandle = "*"
 ctor = "0.1.26"
 detour = { git = "https://github.com/veeenu/detour-rs" }
 lazy_static = "*"
+netcorehost = { git = "https://github.com/OpenByteDev/netcorehost" }
+
+[patch.crates-io]
+nethost-sys = { git = "https://github.com/OpenByteDev/nethost-sys" }
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
 
 [lib]
 crate-type = ["cdylib"]
+
+[build-dependencies]
+cc = "*"

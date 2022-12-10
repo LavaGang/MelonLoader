@@ -60,3 +60,8 @@ pub fn rust_str(to_convert: &[u16]) -> Result<String, Box<dyn std::error::Error>
         .into_string()
         .map_err(|_| "failed to convert to string".into())
 }
+
+/// turn a rust string into a utf16 string
+pub fn utf16_str(to_convert: impl Into<String>) -> Vec<u16> {
+    to_convert.into().encode_utf16().collect()
+}

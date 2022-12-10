@@ -42,13 +42,6 @@ pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn er
     unsafe {
         let mut m = HOOKMAP.lock()?;
 
-        if m.contains_key(&target) {
-            let hook = m.get(&target)
-            .unwrap_or_else(|| internal_failure!("Failed to get hook!"));
-
-            return Ok(transmute(hook.trampoline()));
-        }
-
         let hook: RawDetour = RawDetour::new(target as *const (), replacement as *const ())
             .unwrap_or_else(|e| internal_failure!("Failed hook function! {}", e));
 
@@ -66,13 +59,11 @@ pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn er
 /// unhook a function pointer
 pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
     unsafe {
-        let mut m = HOOKMAP.lock()?;
+        let m = HOOKMAP.lock()?;
         let hook = m.get(&target)
             .unwrap_or_else(|| internal_failure!("Failed to get hook!"));
 
         hook.disable()?;
-
-        let _ = m.remove(&target);
     }
 
     Ok(())

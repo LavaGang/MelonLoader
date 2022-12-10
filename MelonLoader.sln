@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Proxy", "Proxy\Proxy.vcxproj", "{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bootstrap", "Bootstrap\Bootstrap.vcxproj", "{78DEE0AF-2263-488A-8EBF-8325218EB6C9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader", "MelonLoader\MelonLoader.csproj", "{F9700790-414B-431B-9F9C-1D9210FAD682}"
@@ -70,12 +68,6 @@ Global
 		Release|Windows - x86 = Release|Windows - x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Debug|Windows - x64.ActiveCfg = Debug|x64
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Debug|Windows - x86.ActiveCfg = Debug|Win32
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Release|Any CPU.ActiveCfg = Release|Win32
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Release|Windows - x64.ActiveCfg = Release|x64
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Release|Windows - x86.ActiveCfg = Release|Win32
 		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Windows - x64.ActiveCfg = Debug|x64
 		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Windows - x86.ActiveCfg = Debug|Win32

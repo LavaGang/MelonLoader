@@ -2,15 +2,15 @@
 
 #![cfg(windows)]
 
-use std::error;
+use std::{error};
 
-use libc::{freopen, c_void};
+use libc::{c_void};
 use thiserror::Error;
 use winapi::{um::{consoleapi::{AllocConsole, SetConsoleCtrlHandler, GetConsoleMode, SetConsoleMode}, wincon::{GetConsoleWindow, CTRL_C_EVENT, CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT, SetConsoleTitleA, ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT, ENABLE_VIRTUAL_TERMINAL_PROCESSING, ENABLE_EXTENDED_FLAGS, ENABLE_MOUSE_INPUT, ENABLE_WINDOW_INPUT, ENABLE_INSERT_MODE}, winuser::{GetSystemMenu, SetForegroundWindow, ShowWindow}, processenv::{GetStdHandle, SetStdHandle}, winbase::{STD_OUTPUT_HANDLE, STD_ERROR_HANDLE}}, shared::{minwindef::{self, DWORD}, windef::HWND}};
 
 use crate::{managers::core, debug};
 
-use super::{debug, files::win_str};
+use super::{debug};
 
 /// console errors
 #[derive(Debug, Error)]
@@ -54,17 +54,9 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
 
         let _ = SetForegroundWindow(WINDOW);
 
-        let win_stdin = win_str(b"CONIN$\0");
-        let win_stdout = win_str(b"CONOUT$\0");
-        let read_mode = win_str(b"r\0");
-        let write_mode = win_str(b"w\0");
-
-        let _ = freopen(win_stdin, read_mode, libc_stdhandle::stdin());
-        let _ = freopen(win_stdout, write_mode, libc_stdhandle::stdout());
-        let _ = freopen(win_stdout, write_mode, libc_stdhandle::stderr());
-
-        //let input_handle = GetStdHandle(STD_INPUT_HANDLE);
         OUTPUT_HANDLE = GetStdHandle(STD_OUTPUT_HANDLE);
+        freopen_s();
+
         set_handles();
 
         let mut mode: DWORD = 0;
@@ -89,6 +81,11 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
     }
 
     Ok(())
+}
+
+extern "C" {
+    #[link_name = "freopen_s_impl_rust"]
+    fn freopen_s();
 }
 
 /// Sets the console handles

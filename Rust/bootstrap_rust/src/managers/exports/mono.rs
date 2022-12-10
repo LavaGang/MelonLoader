@@ -175,8 +175,14 @@ pub fn mono_debug_domain_create(domain: *mut MonoDomain) -> Result<(), Box<dyn e
         MONO_LIB
         .as_ref()
         .ok_or(MonoExportError::MonoLibIsNone)?
-        .get_fn_ptr("mono_debug_domain_create")?
+        .get_fn_ptr("mono_debug_domain_create")
     };
+
+    if func.is_err() {
+        return Ok(()); //Some games don't have this function
+    }
+
+    let func = func.unwrap();
 
     if func.is_null() {
         return Err(Box::new(MonoExportError::FailedToFindFunction));

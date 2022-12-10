@@ -12,7 +12,7 @@ use crate::{managers::{exports::{mono::{MonoDomain, mono_jit_init_raw, MONO_LIB,
 
 /// mono hook errors
 #[derive(Debug, Error)]
-pub enum HookError {
+pub enum MonoHookError {
     /// Failed to get Mono Lib
     #[error("Failed to get Mono Lib!")]
     FailedToGetMonoLib,
@@ -25,7 +25,7 @@ pub fn hook_jit_init() -> Result<(), Box<dyn error::Error>> {
 
         let target = MONO_LIB
         .as_ref()
-        .ok_or(HookError::FailedToGetMonoLib)?
+        .ok_or(MonoHookError::FailedToGetMonoLib)?
         .get_fn_ptr("mono_jit_init_version")?;
 
         let _ = detours::hook(
@@ -44,7 +44,7 @@ fn hook_runtime_invoke() -> Result<(), Box<dyn error::Error>> {
     unsafe {
         let target = MONO_LIB
         .as_ref()
-        .ok_or(HookError::FailedToGetMonoLib)?
+        .ok_or(MonoHookError::FailedToGetMonoLib)?
         .get_fn_ptr("mono_runtime_invoke")?;
 
         INVOKE_ORIG_PTR = target as usize;
@@ -77,21 +77,18 @@ unsafe extern "C" fn runtime_invoke_hook(method: *mut MonoMethod, obj: *mut Mono
     });
 
     if (method_name.contains("Internal_ActiveSceneChanged") || method_name.contains("UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize")) ||
-        mono.old && (method_name.contains("Awake") || method_name.contains("DoSendMouseEvents")) {
+        (mono.old && (method_name.contains("Awake") || method_name.contains("DoSendMouseEvents"))) {
         let _ = debug!("Detaching hook from mono_runtime_invoke...");
-        
-        use crate::utils::console;
 
-        console::set_handles();
 
         detours::unhook(INVOKE_ORIG_PTR).unwrap_or_else(|e| {
             internal_failure!("Failed to unhook mono_runtime_invoke: {}", e);
         });
-            
+
         base_asm::pre_start(&game_data).unwrap_or_else(|e| {
             internal_failure!("Failed to pre start: {}", e);
         });
-    
+
         base_asm::start(&game_data).unwrap_or_else(|e| {
             internal_failure!("Failed to start: {}", e);
         });
@@ -100,17 +97,12 @@ unsafe extern "C" fn runtime_invoke_hook(method: *mut MonoMethod, obj: *mut Mono
         return function(method, obj, params, exception);
     }
 
-    let ret = function(method, obj, params, exception);
-
-    ret
+    function(method, obj, params, exception)
 }
 
 #[no_mangle]
 unsafe extern "C" fn jit_init_hook(name: *const c_char, version: *const c_char) -> *mut MonoDomain {
-    //check if windows
-    use crate::utils::console;
-
-    console::set_handles();
+    crate::utils::console::set_handles();
 
     let _ = debug!("Detaching Hook from mono_jit_init_version");
 
@@ -167,11 +159,12 @@ unsafe extern "C" fn jit_init_hook(name: *const c_char, version: *const c_char) 
         });
     }
 
+
     internal_calls::init().unwrap_or_else(|e| {
         internal_failure!("Failed to init internal calls: {}", e);
     });
 
-    base_asm::init(&mono, &game_data).unwrap_or_else(|e| {
+    base_asm::init(Some(&mono), &game_data, None).unwrap_or_else(|e| {
         internal_failure!("Failed to initialize Base Assembly: {}", e);
     });
 
@@ -293,7 +286,7 @@ fn get_fn(name: &str) -> Result<*mut c_void, Box<dyn error::Error>> {
     let func = unsafe {
         MONO_LIB
         .as_ref()
-        .ok_or(HookError::FailedToGetMonoLib)?
+        .ok_or(MonoHookError::FailedToGetMonoLib)?
         .get_fn_ptr(name)?
     };
 

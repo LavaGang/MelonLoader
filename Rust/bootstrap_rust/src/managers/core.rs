@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use crate::{utils::{files, log}, debug};
 
-use super::{game, mono, exports, hooks};
+use super::{game, mono, exports, hooks, il2cpp};
 
 static VERSION: &str = "0.6.0";
 
@@ -32,7 +32,7 @@ pub enum CoreError {
 
 /// starts the core manager, and initializes MelonLoader.
 pub fn init() -> Result<(), Box<dyn error::Error>> {
-    msgbox::create("Proxy", "INIT", msgbox::IconType::Info)?;
+    msgbox::create("MelonLoader", &get_version_str(), msgbox::IconType::Info)?;
     let base_path = base_path()?;
     let game_data = game::init()?;
 
@@ -46,14 +46,17 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
 
     log::init()?;
     
-    if !game_data.il2cpp {
-        debug!("Initializing Mono...")?;
+    match game_data.il2cpp {
+        true => debug!("Initializing Mono...")?,
+        false => debug!("Initializing IL2CPP...")?,
     }
 
     let mono = mono::init( &game_data.base_path, &game_data.data_path, game_data.il2cpp)?;
     if !game_data.il2cpp && mono.is_none() {
         return Err(Box::new(CoreError::FailedToInitMono));
     }
+
+    let _ = il2cpp::init(&game_data)?;
 
     let mut runtime_inited = game_data.il2cpp;
 
@@ -78,7 +81,10 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
         return Err(Box::new(CoreError::FailedToInitRuntime));
     }
 
-    hooks::mono::hook_jit_init()?;
+    match game_data.il2cpp {
+        true => hooks::il2cpp::hook_init()?,
+        false => hooks::mono::hook_jit_init()?
+    }
 
     #[cfg(target_os = "windows")]
     {

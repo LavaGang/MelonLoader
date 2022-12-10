@@ -38,7 +38,7 @@ pub enum LogError {
 /// gets the path to the log file
 fn log_path() -> Result<PathBuf, Box<dyn error::Error>> {
     let base_path = core::base_path()?;
-    let log_path = base_path.join("MelonLoader/Latest.log");
+    let log_path = base_path.join("MelonLoader/Latest-Bootstrap.log");
 
     Ok(log_path)
 }
