@@ -24,7 +24,7 @@ namespace MelonLoader
         {
             if (string.IsNullOrEmpty(filepath))
                 throw new ArgumentNullException(nameof(filepath));
-            IntPtr ptr = LoadLibrary(filepath);
+            IntPtr ptr = AgnosticLoadLibrary(filepath);
             if (ptr == IntPtr.Zero)
                 throw new Exception($"Unable to Load Native Library {filepath}!");
             return ptr;
@@ -45,11 +45,51 @@ namespace MelonLoader
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
 
-            IntPtr returnval = GetProcAddress(nativeLib, name);
+            IntPtr returnval = AgnosticGetProcAddress(nativeLib, name);
             if (returnval == IntPtr.Zero)
                 throw new Exception($"Unable to Find Native Library Export {name}!");
 
             return returnval;
+        }
+
+        public static IntPtr AgnosticLoadLibrary(string name)
+        {
+            var platform = Environment.OSVersion.Platform;
+
+            switch (platform)
+            {
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32NT:
+                case PlatformID.WinCE:
+                    return LoadLibrary(name);
+                
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    return dlopen(name, RTLD_NOW);
+            }
+            
+            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
+        }
+
+        public static IntPtr AgnosticGetProcAddress(IntPtr hModule, string lpProcName)
+        {
+            var platform = Environment.OSVersion.Platform;
+
+            switch (platform)
+            {
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32NT:
+                case PlatformID.WinCE:
+                    return GetProcAddress(hModule, lpProcName);
+                
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    return dlsym(hModule, lpProcName);
+            }
+            
+            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
         }
 
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
@@ -58,6 +98,14 @@ namespace MelonLoader
         internal static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
         [DllImport("kernel32")]
         internal static extern IntPtr FreeLibrary(IntPtr hModule);
+        
+        [DllImport("libdl.so.2")]
+        protected static extern IntPtr dlopen(string filename, int flags);
+
+        [DllImport("libdl.so.2")]
+        protected static extern IntPtr dlsym(IntPtr handle, string symbol);
+
+        const int RTLD_NOW = 2; // for dlopen's flags 
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.LPStr)]

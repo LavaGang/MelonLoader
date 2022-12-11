@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bootstrap", "Bootstrap\Bootstrap.vcxproj", "{78DEE0AF-2263-488A-8EBF-8325218EB6C9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader", "MelonLoader\MelonLoader.csproj", "{F9700790-414B-431B-9F9C-1D9210FAD682}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SupportModules", "SupportModules", "{8D8A18CB-7319-4220-BED8-6B3E23E6C19F}"
@@ -68,12 +66,6 @@ Global
 		Release|Windows - x86 = Release|Windows - x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Windows - x64.ActiveCfg = Debug|x64
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Windows - x86.ActiveCfg = Debug|Win32
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Release|Any CPU.ActiveCfg = Release|Win32
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Release|Windows - x64.ActiveCfg = Release|x64
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Release|Windows - x86.ActiveCfg = Release|Win32
 		{F9700790-414B-431B-9F9C-1D9210FAD682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F9700790-414B-431B-9F9C-1D9210FAD682}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9700790-414B-431B-9F9C-1D9210FAD682}.Debug|Windows - x64.ActiveCfg = Debug|Any CPU
