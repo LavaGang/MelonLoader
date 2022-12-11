@@ -61,7 +61,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
                 "--exe-name",
                 "\"" + Process.GetCurrentProcess().ProcessName + "\"",
-
                 "--use-processor",
                 "attributeinjector",
                 "--output-as",
