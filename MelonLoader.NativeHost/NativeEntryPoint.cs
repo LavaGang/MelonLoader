@@ -21,11 +21,6 @@ namespace MelonLoader.NativeHost
         unsafe static void LoadStage2(HostImports* imports, HostExports* exports)
         {
             Console.WriteLine("[NewEntryPoint] Configuring imports...");
-            imports->LoadAssemblyFromBytes = &StereoHostingApi.LoadAssemblyFromByteArray;
-            imports->GetTypeFromAssembly = &StereoHostingApi.GetTypeByName;
-            imports->ConstructType = &StereoHostingApi.ConstructType;
-            imports->InvokeMethod = &StereoHostingApi.InvokeMethod;
-            imports->GetPointerToUcoMethod = &StereoHostingApi.GetPointerToUcoMethod;
 
             imports->Initialize = &Initialize;
             imports->PreStart = &PreStart;

@@ -30,7 +30,7 @@ fn IsGame32Bit() -> bool {
     cfg!(target_pointer_width = "32")
 }
 
-fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
+pub fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
     unsafe {
         match dobby_rs::hook(*target, detour) {
             Ok(res) => target = res as *mut *mut c_void,
@@ -41,7 +41,7 @@ fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
     }
 }
 
-fn NativeHookDetach(target: *mut *mut c_void)  {
+pub fn NativeHookDetach(target: *mut *mut c_void, _detour: *mut c_void)  {
     unsafe {
         dobby_rs::unhook(*target).unwrap_or_else(|e| {
             err!("Failed to unhook function: {e}");

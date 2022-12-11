@@ -35,7 +35,16 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
-            GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, "GameAssembly.dll");
+            string gameAssemblyName = "GameAssembly";
+            
+            if (MelonUtils.IsUnix)
+                gameAssemblyName += ".so"; 
+            if (MelonUtils.IsWindows)
+                gameAssemblyName += ".dll";
+            if (MelonUtils.IsMac)
+                gameAssemblyName += ".dylib";
+
+                GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
             ManagedPath = MelonEnvironment.MelonManagedDirectory;
 
             BasePath = Path.GetDirectoryName(Assembly.Location);
@@ -50,7 +59,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
             if (!MelonUtils.IsUnderWineOrSteamProton() && ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
-                || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1)))) // Is Older than Windows 7 or Server 2008 R2
+                || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1)) && MelonUtils.IsWindows)) // Is Older than Windows 7 or Server 2008 R2
                 dumper = new Il2CppDumper();
             else
                 dumper = new Cpp2IL();

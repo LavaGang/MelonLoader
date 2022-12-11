@@ -1,4 +1,4 @@
-use std::{ffi::{c_char, c_void}, mem::transmute, error};
+use std::{ffi::{c_char, c_void, CStr}, mem::transmute, error};
 
 #[derive(Debug, Error)]
 pub enum HookError {
@@ -6,6 +6,10 @@ pub enum HookError {
     MonoJitInitVersion,
     #[error("Failed to get mono_runtime_invoke")]
     MonoRuntimeInvoke,
+    #[error("Failed to get il2cpp_method_get_name")]
+    Il2CppMethodGetName,
+    #[error("Failed to get il2cpp_runtime_invoke")]
+    Il2CppRuntimeInvoke,
     #[error("Failed to hook function")]
     HookFunction,
 }
@@ -19,7 +23,9 @@ use crate::{internal_failure, debug, utils::debug, managers::{internal_calls, ba
 
 static mut MONO_JIT_INIT_ORIGINAL: Option<Address> = None;
 static mut MONO_RUNTIME_INVOKE_ORIGINAL: Option<Address> = None;
+
 static mut IL2CPP_INIT_ORIGINAL: Option<Address> = None;
+static mut IL2CPP_RUNTIME_INVOKE_ORIGINAL: Option<Address> = None;
 
 pub fn init(runtime: UnityRuntime) -> Result<(), HookError> {
     match runtime {
@@ -37,7 +43,9 @@ pub fn init(runtime: UnityRuntime) -> Result<(), HookError> {
             debug!("Attaching hook to il2cpp_init");
             let func = il2cpp.exports.il2cpp_init.ok_or(HookError::MonoJitInitVersion)?;
 
-            dobby_rs::hook(*func as usize as Address, il2cpp_init_detour as usize as Address).map_err(|_| HookError::HookFunction)?;
+            let trampoline = dobby_rs::hook(*func as usize as Address, il2cpp_init_detour as usize as Address).map_err(|_| HookError::HookFunction)?;
+
+            IL2CPP_INIT_ORIGINAL = Some(trampoline);
 
             Ok(())
         },
@@ -55,8 +63,12 @@ fn invoke(runtime: UnityRuntime) -> Result<(), HookError> {
 
             Ok(())
         },
-        UnityRuntime::Il2Cpp(il2cpp) => {
-            // let func = il2cpp.exports.il2cpp_runtime_invoke.ok_or(HookError::MonoRuntimeInvoke)?;
+        UnityRuntime::Il2Cpp(il2cpp) => unsafe {
+            let func = il2cpp.exports.il2cpp_runtime_invoke.ok_or(HookError::MonoRuntimeInvoke)?;
+
+            let trampoline = dobby_rs::hook(*func as usize as Address, il2cpp_runtime_invoke_detour as usize as Address).map_err(|_| HookError::HookFunction)?;
+
+            IL2CPP_RUNTIME_INVOKE_ORIGINAL = Some(trampoline);
             Ok(())
         },
     }
@@ -78,6 +90,12 @@ fn mono_runtime_invoke_detour(method: *mut MonoMethod, obj: *mut MonoObject, par
 fn il2cpp_init_detour(name: *const c_char) -> *mut Il2CppDomain {
     il2cpp_init_detour_inner(name).unwrap_or_else(|e| {
         internal_failure!("il2cpp_init detour failed: {e}");
+    })
+}
+
+fn il2cpp_runtime_invoke_detour(method: *mut Il2CppMethod, obj: *mut Il2CppObject, params: *mut *mut c_void, exc: *mut *mut Il2CppObject) -> *mut Il2CppObject {
+    il2cpp_runtime_invoke_detour_inner(method, obj, params, exc).unwrap_or_else(|e| {
+        internal_failure!("il2cpp_runtime_invoke detour failed: {e}");
     })
 }
 
@@ -181,7 +199,44 @@ fn il2cpp_init_detour_inner(name: *const c_char) -> Result<*mut Il2CppDomain, Bo
         unsafe {
             dobby_rs::unhook(*func as usize as Address)?;
         }
+
+        base_asm::init()?;
+        invoke(runtime.runtime)?;
     }
 
     Ok(domain)
+}
+
+fn il2cpp_runtime_invoke_detour_inner(method: *mut Il2CppMethod, obj: *mut Il2CppObject, params: *mut *mut c_void, exc: *mut *mut Il2CppObject) -> Result<*mut Il2CppObject, Box<dyn error::Error>> {
+    let trampoline: fn(*mut Il2CppMethod, *mut Il2CppObject, *mut *mut c_void, *mut *mut Il2CppObject) -> *mut Il2CppObject = unsafe {
+        transmute(IL2CPP_RUNTIME_INVOKE_ORIGINAL.ok_or("il2cpp_runtime_invoke trampoline not found")?)
+    };
+
+    let runtime = Runtime::new()?;
+
+    if let UnityRuntime::Il2Cpp(il2cpp) = &runtime.runtime {
+        let get_name = il2cpp.exports.clone().il2cpp_method_get_name.ok_or(HookError::Il2CppMethodGetName)?;
+
+        let name = unsafe {
+            let name = get_name(method);
+            let name = CStr::from_ptr(name);
+            name.to_str()?
+        };
+
+        if name.contains("Internal_ActiveSceneChanged") {
+            debug!("Detaching hook from il2cpp_runtime_invoke")?;
+
+            let func = il2cpp.exports.clone().il2cpp_runtime_invoke.ok_or(HookError::Il2CppRuntimeInvoke)?;
+            unsafe {
+                dobby_rs::unhook(*func as usize as Address)?;
+            }
+
+            base_asm::pre_start()?;
+            base_asm::start()?;
+        }
+    }
+
+    let result = trampoline(method, obj, params, exc);
+
+    Ok(result)
 }

@@ -13,7 +13,7 @@ thiserror = "*"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
-proxy-dll = "0.2.5"
+proxy-dll = { git = "https://github.com/RinLovesYou/dll-proxy-rs.git" }
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2.137"

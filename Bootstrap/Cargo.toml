@@ -15,7 +15,8 @@ lazy_static = "1.4.0"
 unity-rs = { path = "/home/sarah/Documents/rust/unity-rs/unity" }
 libc = "0.2.137"
 libc-stdhandle = "0.1.0"
-dobby-rs = "*"
+dobby-rs = { git = "https://github.com/RinLovesYou/dobby-rs.git" }
+netcorehost = "*"
 
 [target.'cfg(windows)'.dependencies.windows]
 version = "0.43.0"

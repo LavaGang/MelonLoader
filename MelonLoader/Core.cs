@@ -37,6 +37,9 @@ namespace MelonLoader
 
             MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)!.FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
+            
+            MelonLogger.LogWriter.AutoFlush = true;
+
             SetupWineCheck();
 
             if (MelonUtils.IsUnderWineOrSteamProton())

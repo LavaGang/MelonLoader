@@ -3,3 +3,4 @@ pub mod hooks;
 pub mod internal_calls;
 pub mod base_asm;
 pub mod mono;
+pub mod dotnet;
