@@ -12,7 +12,7 @@ colored = "2.0.0"
 thiserror = "1.0.37"
 ctor = "0.1.26"
 lazy_static = "1.4.0"
-unity-rs = { path = "../unity-rs/unity" }
+unity-rs = { path = "/home/sarah/Documents/rust/unity-rs/unity" }
 libc = "0.2.137"
 libc-stdhandle = "0.1.0"
 dobby-rs = "*"
