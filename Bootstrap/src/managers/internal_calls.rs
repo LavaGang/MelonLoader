@@ -33,7 +33,7 @@ fn IsGame32Bit() -> bool {
 fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
     unsafe {
         match dobby_rs::hook(*target, detour) {
-            Ok(_) => target = detour as *mut *mut c_void,
+            Ok(res) => target = res as *mut *mut c_void,
             Err(e) => {
                 err!("Failed to hook function: {e}");
             }
