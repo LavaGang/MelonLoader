@@ -48,17 +48,17 @@ jobs:
           target: i686-pc-windows-msvc
       - name: Build Rust | Windows - x86
         shell: cmd
-        run: cargo +nightly build --release --toolchain i686-pc-windows-msvc
+        run: cargo +nightly build --release
       - name: Upload proxy x86
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX86
-          path: target/i686-pc-windows-msvc/release/proxy.dll
+          path: target/release/proxy.dll
       - name: Upload bootstrap x86
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX86
-          path: target/i686-pc-windows-msvc/release/Bootstrap.dll
+          path: target/release/Bootstrap.dll
           
   build_rust_x64:
     runs-on: windows-latest
@@ -72,17 +72,17 @@ jobs:
           target: x86_64-pc-windows-msvc
       - name: Build Rust | Windows - x64
         shell: cmd
-        run: cargo +nightly build --release --toolchain x86_64-pc-windows-msvc
+        run: cargo +nightly build --release
       - name: Upload proxy x64
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64
-          path: target/x86_64-pc-windows-msvc/release/proxy.dll
+          path: target/release/proxy.dll
       - name: Upload bootstrap x64
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX64
-          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
+          path: target/release/Bootstrap.dll
   finalize_x64_debug_zip:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_x64]
