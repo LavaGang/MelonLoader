@@ -35,7 +35,7 @@ pub fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
         match detours::hook(*target as usize, detour as usize) {
             Ok(res) => *target = transmute(res),
             Err(e) => {
-                err!("Failed to hook function: {e}");
+                err!("Failed to hook function: {}", e.to_string());
             }
         };
     }
@@ -44,7 +44,7 @@ pub fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
 pub fn NativeHookDetach(target: *mut *mut c_void, _detour: *mut c_void)  {
     unsafe {
         detours::unhook(*target as usize).unwrap_or_else(|e| {
-            err!("Failed to unhook function: {e}");
+            err!("Failed to unhook function: {}", e.to_string());
         });
     }
 }
@@ -199,7 +199,7 @@ fn GetRootDomainPtr() -> *mut c_void {
 
 fn GetManagedDirectory() -> *mut MonoString {
     get_managed_directory().unwrap_or_else(|e| {
-        internal_failure!("Failed to get managed directory: {e}");
+        internal_failure!("Failed to get managed directory: {}", e.to_string());
     })
 }
 
