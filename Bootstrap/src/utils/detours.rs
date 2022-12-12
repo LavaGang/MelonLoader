@@ -33,6 +33,9 @@ pub enum DobbyError {
 }
 
 #[cfg(target_os = "windows")]
+use detour::RawDetour;
+
+#[cfg(target_os = "windows")]
 lazy_static::lazy_static! {
     static ref HOOKMAP: Mutex<HashMap<usize, RawDetour>> = Mutex::new(HashMap::new());
 }
@@ -40,8 +43,6 @@ lazy_static::lazy_static! {
 #[cfg(target_os = "windows")]
 /// hook a function pointer
 pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn error::Error>> {
-    use detour::RawDetour;
-
     unsafe {
         let mut m = HOOKMAP.lock()?;
 
