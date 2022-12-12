@@ -28,5 +28,11 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     hooks::init(
         Runtime::new()?.runtime
     )?;
+
+    #[cfg(windows)]
+    {
+        use crate::utils::console;
+        console::null_handles();
+    }
     Ok(())
 }

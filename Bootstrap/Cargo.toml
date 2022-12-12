@@ -15,19 +15,14 @@ lazy_static = "1.4.0"
 unity-rs = { git = "https://github.com/RinLovesYou/unity-rs.git" }
 libc = "0.2.137"
 libc-stdhandle = "0.1.0"
-dobby-rs = { git = "https://github.com/RinLovesYou/dobby-rs.git" }
 netcorehost = "*"
 
-[target.'cfg(windows)'.dependencies.windows]
-version = "0.43.0"
-features = [
-    "Data_Xml_Dom",
-    "Win32_Foundation",
-    "Win32_Security",
-    "Win32_System_Console",
-    "Win32_System_Threading",
-    "Win32_UI_WindowsAndMessaging"
-]
+[target.'cfg(windows)'.dependencies]
+detour = { git = "https://github.com/veeenu/detour-rs" }
+winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
+
+[target.'cfg(not(windows))'.dependencies]
+dobby-rs = "*"
 
 [lib]
 crate-type = ["cdylib"]

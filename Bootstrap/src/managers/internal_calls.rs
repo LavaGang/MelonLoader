@@ -4,7 +4,7 @@ use std::{
 };
 use unity_rs::{mono::{Mono, types::{MonoReflectionAssembly, AssemblyName, MonoAssembly, MonoString, MonoMethod, MonoObject}, AssemblyHookType}, runtime::{Runtime, UnityRuntime}};
 
-use crate::{debug, internal_failure, err, utils::files};
+use crate::{debug, internal_failure, err, utils::{files, detours}};
 
 static mut MONO: Option<Mono> = None;
 
@@ -32,8 +32,8 @@ fn IsGame32Bit() -> bool {
 
 pub fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
     unsafe {
-        match dobby_rs::hook(*target, detour) {
-            Ok(res) => *target = res,
+        match detours::hook(*target as usize, detour as usize) {
+            Ok(res) => *target = transmute(res),
             Err(e) => {
                 err!("Failed to hook function: {e}");
             }
@@ -43,7 +43,7 @@ pub fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
 
 pub fn NativeHookDetach(target: *mut *mut c_void, _detour: *mut c_void)  {
     unsafe {
-        dobby_rs::unhook(*target).unwrap_or_else(|e| {
+        detours::unhook(*target as usize).unwrap_or_else(|e| {
             err!("Failed to unhook function: {e}");
         });
     }

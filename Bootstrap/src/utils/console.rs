@@ -2,77 +2,83 @@
 
 #![cfg(windows)]
 
-use std::{error::Error, sync::RwLock, process, ffi::CString};
+use std::{error, ffi::{c_char, CStr}};
 
-use crate::cstr;
+use colored::control;
+use libc::{freopen, c_void};
+use thiserror::Error;
+use winapi::{um::{consoleapi::{AllocConsole, SetConsoleCtrlHandler, GetConsoleMode, SetConsoleMode}, wincon::{GetConsoleWindow, CTRL_C_EVENT, CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT, SetConsoleTitleA, ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT, ENABLE_VIRTUAL_TERMINAL_PROCESSING, ENABLE_EXTENDED_FLAGS, ENABLE_MOUSE_INPUT, ENABLE_WINDOW_INPUT, ENABLE_INSERT_MODE}, winuser::{GetSystemMenu, SetForegroundWindow, ShowWindow}, processenv::{GetStdHandle, SetStdHandle}, winbase::{STD_OUTPUT_HANDLE, STD_ERROR_HANDLE}}, shared::{minwindef::{self, DWORD}, windef::HWND}};
 
-use libc::freopen;
-use windows::{Win32::{System::Console::{AllocConsole, GetConsoleWindow, SetConsoleCtrlHandler, SetConsoleTitleA, GetStdHandle, STD_INPUT_HANDLE, GetConsoleMode, STD_OUTPUT_HANDLE, CONSOLE_MODE, ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT, SetConsoleMode, ENABLE_VIRTUAL_TERMINAL_PROCESSING, ENABLE_EXTENDED_FLAGS, ENABLE_MOUSE_INPUT, ENABLE_WINDOW_INPUT, ENABLE_INSERT_MODE, SetStdHandle, STD_ERROR_HANDLE}, UI::WindowsAndMessaging::{GetSystemMenu, SetForegroundWindow}, Foundation::{HWND, BOOL, HANDLE}}, core::PCSTR, s};
+use crate::{managers::core, debug};
 
-use crate::managers::core;
+use super::{debug};
 
-use super::debug;
+/// console errors
+#[derive(Debug, Error)]
+pub enum ConsoleError {
+    /// failed to allocate console
+    #[error("Failed to allocate console!")]
+    FailedToAllocateConsole,
 
-static mut WINDOW: RwLock<Option<HWND>> = RwLock::new(None);
-static mut OUTPUT_HANDLE: RwLock<Option<HANDLE>> = RwLock::new(None);
+    /// failed to get console window
+    #[error("Failed to get console window!")]
+    FailedToGetConsoleWindow,
 
-pub fn init() -> Result<(), Box<dyn Error>> {
+    /// failed to get system menu
+    #[error("Failed to get system menu!")]
+    FailedToGetSystemMenu,
+}
+
+static mut OUTPUT_HANDLE: *mut c_void = std::ptr::null_mut();
+static mut WINDOW: HWND = std::ptr::null_mut();
+
+/// Initializes the console
+pub fn init() -> Result<(), Box<dyn error::Error>> {
     unsafe {
-        if !AllocConsole().as_bool() {
-            return Err("Failed to allocate console".into());
+        if AllocConsole() != 1 {
+            return Err(Box::new(ConsoleError::FailedToAllocateConsole));
         }
 
-        let window = GetConsoleWindow();
-        if window.0 == 0 {
-            return Err("Failed to get console window".into());
+        WINDOW = GetConsoleWindow();
+        if WINDOW.is_null() {
+            return Err(Box::new(ConsoleError::FailedToGetConsoleWindow));
         }
 
-        WINDOW.try_write()?.replace(window);
-
-        let menu = GetSystemMenu(window, false);
-        if menu.0 == 0 {
-            return Err("Failed to get system menu".into());
+        let menu = GetSystemMenu(WINDOW, minwindef::FALSE);
+        if menu.is_null() {
+            return Err(Box::new(ConsoleError::FailedToGetSystemMenu));
         }
 
-        SetConsoleCtrlHandler(Some(event_handler), true);
+        let _ = SetConsoleCtrlHandler(Some(event_handler), minwindef::TRUE);
 
-        let version = core::version();
-        let distribution = match core::is_alpha() {
-            true => "Alpha Pre-Release",
-            false => "Open-Beta"
-        };
+        set_default_title();
 
-        let title = match debug::enabled() {
-            true => format!("[D] MelonLoader v{version} - {distribution}"),
-            false => format!("MelonLoader v{version} - {distribution}")
-        };
+        let _ = SetForegroundWindow(WINDOW);
 
-        let title = win_str(title)?;
+        let win_stdin = win_str(b"CONIN$\0");
+        let win_stdout = win_str(b"CONOUT$\0");
+        let read_mode = win_str(b"r\0");
+        let write_mode = win_str(b"w\0");
 
-        SetConsoleTitleA(title);
-        SetForegroundWindow(window);
+        let _ = freopen(win_stdin, read_mode, libc_stdhandle::stdin());
+        let _ = freopen(win_stdout, write_mode, libc_stdhandle::stdout());
+        let _ = freopen(win_stdout, write_mode, libc_stdhandle::stderr());
 
-        freopen(cstr!("CONIN$"), cstr!("r"), libc_stdhandle::stdin());
-        freopen(cstr!("CONOUT$"), cstr!("w"), libc_stdhandle::stdout());
-        freopen(cstr!("CONOUT$"), cstr!("w"), libc_stdhandle::stderr());
-        
+        //let input_handle = GetStdHandle(STD_INPUT_HANDLE);
+        OUTPUT_HANDLE = GetStdHandle(STD_OUTPUT_HANDLE);
+        set_handles();
 
-        set_handles()?;
-
-        let output_handle = GetStdHandle(STD_OUTPUT_HANDLE)?;
-        OUTPUT_HANDLE.try_write()?.replace(output_handle);
-
-        let mut mode: CONSOLE_MODE = CONSOLE_MODE(0);
-        GetConsoleMode(output_handle, &mut mode);
+        let mut mode: DWORD = 0;
+        let _ = GetConsoleMode(OUTPUT_HANDLE, &mut mode);
 
         mode |= ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT;
 
-        if !SetConsoleMode(output_handle, mode).as_bool() {
+        if SetConsoleMode(OUTPUT_HANDLE, mode) != 1 {
             mode &= !(ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
         } else {
             mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 
-            if !SetConsoleMode(output_handle, mode).as_bool() {
+            if SetConsoleMode(OUTPUT_HANDLE, mode) != 1 {
                 mode &= !ENABLE_VIRTUAL_TERMINAL_PROCESSING;
             }
         }
@@ -80,57 +86,64 @@ pub fn init() -> Result<(), Box<dyn Error>> {
         mode |= ENABLE_EXTENDED_FLAGS;
         mode &= !(ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT | ENABLE_INSERT_MODE);
 
-        SetConsoleMode(output_handle, mode);
+        let _ = SetConsoleMode(OUTPUT_HANDLE, mode);
 
+        control::set_virtual_terminal(true);
     }
+
     Ok(())
 }
 
-pub fn set_handles() -> Result<(), Box<dyn Error>> {
+/// Sets the console handles
+pub fn set_handles() {
     unsafe {
-        let output_handle = OUTPUT_HANDLE.try_read()?;
-        if let Some(output_handle) = output_handle.as_ref() {
-            SetStdHandle(STD_OUTPUT_HANDLE, *output_handle);
-            SetStdHandle(STD_ERROR_HANDLE, *output_handle);
-        }
+        let _ = SetStdHandle(STD_OUTPUT_HANDLE, OUTPUT_HANDLE);
+        let _ = SetStdHandle(STD_ERROR_HANDLE, OUTPUT_HANDLE);
     }
-    Ok(())
 }
 
-pub fn null_handles() -> Result<(), Box<dyn Error>> {
+/// nulls handles
+pub fn null_handles() {
     unsafe {
-        SetStdHandle(STD_OUTPUT_HANDLE, HANDLE(0));
-        SetStdHandle(STD_ERROR_HANDLE, HANDLE(0));
+        let _ = SetStdHandle(STD_OUTPUT_HANDLE, std::ptr::null_mut());
+        let _ = SetStdHandle(STD_ERROR_HANDLE, std::ptr::null_mut());
     }
-    Ok(())
 }
 
-#[no_mangle]
-extern "system" fn event_handler(evt: u32) -> BOOL {
+extern "system" fn event_handler(evt: DWORD) -> minwindef::BOOL {
     match evt {
-        windows::Win32::System::Console::CTRL_C_EVENT | 
-        windows::Win32::System::Console::CTRL_CLOSE_EVENT | 
-        windows::Win32::System::Console::CTRL_LOGOFF_EVENT | 
-        windows::Win32::System::Console::CTRL_SHUTDOWN_EVENT => {
-            unsafe {
-                let window = WINDOW.try_read();
-                if let Ok(window) = window {
-                    if let Some(window) = window.as_ref() {
-                        windows::Win32::UI::WindowsAndMessaging::DestroyWindow(*window);
-                    }
-                }
-
-                process::exit(0);
-            }
+        CTRL_C_EVENT | CTRL_CLOSE_EVENT | CTRL_LOGOFF_EVENT | CTRL_SHUTDOWN_EVENT => {
+            close();
+            std::process::exit(0);
         }
-
-        _ => {
-            false.into()
-        }
+        _ => minwindef::FALSE
     }
 }
 
-fn win_str(s: impl Into<String>) -> Result<PCSTR, Box<dyn Error>> {
-    let s = s.into();
-    Ok(PCSTR::from_raw(format!("{s}\0").as_ptr()))
+fn close() {
+    unsafe {
+        let _ = ShowWindow(WINDOW, 0);
+        let _ = debug!("goodbye!");
+    }
+}
+
+fn set_default_title() {
+    let mut version_str = core::version().to_string();
+    if debug::enabled() {
+        version_str = format!("[D] {}", version_str);
+    }
+
+    set_title(&version_str);
+}
+
+fn set_title(title: &str) {
+    let c_title = std::ffi::CString::new(title).unwrap();
+
+    unsafe {
+        let _ = SetConsoleTitleA(c_title.as_ptr());
+    }
+}
+
+pub fn win_str(bytes: &[u8]) -> *const c_char {
+	unsafe { CStr::from_bytes_with_nul_unchecked(bytes).as_ptr() }
 }

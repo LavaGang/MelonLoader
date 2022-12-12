@@ -168,7 +168,7 @@ namespace MelonLoader
             }
 
             builder.Append(txt.Pastel(txt_color));
-            Console.WriteLine(builder.ToString());
+            Utils.MelonConsole.WriteLine(builder.ToString());
         }
 
         internal static string GetTimestamp(bool error)
@@ -201,7 +201,7 @@ namespace MelonLoader
         internal static void WriteSpacer()
         {
             LogWriter.WriteLine();
-            Console.WriteLine();
+            Utils.MelonConsole.WriteLine();
         }
 
         internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string version, string id)
@@ -217,7 +217,7 @@ namespace MelonLoader
             builder.Append(GetTimestamp(false));
             builder.Append($"by {author}".Pastel(authorcolor));
 
-            Console.WriteLine(builder.ToString());
+            Utils.MelonConsole.WriteLine(builder.ToString());
         }
 
 
