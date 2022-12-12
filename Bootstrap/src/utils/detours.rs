@@ -4,7 +4,6 @@ use std::{
     error, collections::HashMap, sync::Mutex, mem::transmute
 };
 
-use detour::RawDetour;
 use thiserror::Error;
 
 use crate::{internal_failure};
@@ -41,6 +40,8 @@ lazy_static::lazy_static! {
 #[cfg(target_os = "windows")]
 /// hook a function pointer
 pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn error::Error>> {
+    use detour::RawDetour;
+
     unsafe {
         let mut m = HOOKMAP.lock()?;
 
@@ -68,6 +69,8 @@ pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn er
 #[cfg(target_os = "windows")]
 /// unhook a function pointer
 pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
+    use detour::RawDetour;
+    
     unsafe {
         let mut m = HOOKMAP.lock()?;
         let hook = m.get(&target)
@@ -84,11 +87,22 @@ pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
 #[cfg(not(target_os = "windows"))]
 /// hook a function pointer
 pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn error::Error>> {
-    
+    use dobby_rs::{Address};
+
+    unsafe {
+        let res = dobby_rs::hook(target as Address, replacement as Address)?;
+        Ok(transmute(res))
+    }
 }
 
 #[cfg(not(target_os = "windows"))]
 /// hook a function pointer
 pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
-    
+    use dobby_rs::Address;
+
+    unsafe {
+        let _ = dobby_rs::unhook(target as Address)?;
+    }
+
+    Ok(())
 }

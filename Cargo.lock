@@ -2004,7 +2004,7 @@ checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
 [[package]]
 name = "unity-rs"
 version = "0.1.0"
-source = "git+https://github.com/RinLovesYou/unity-rs.git#bf8a65c56b6e85cbd4cf85a28840929766007ea8"
+source = "git+https://github.com/RinLovesYou/unity-rs.git#27a8467eb9903b8a248a1e00827a4bb804916b5e"
 dependencies = [
  "libc",
  "thiserror",
