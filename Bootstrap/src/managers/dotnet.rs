@@ -27,6 +27,9 @@ pub struct HostExports {
 static mut IMPORTS: Option<HostImports> = None;
 
 pub fn init(il2cpp: &Il2Cpp) -> Result<(), Box<dyn error::Error>> {
+    let domain = il2cpp.domain_current()?;
+    il2cpp.thread_attach(domain)?;
+
     let hostfxr = nethost::load_hostfxr()?;
     let config_path = files::runtime_dir()?.join("MelonLoader.runtimeconfig.json");
 
