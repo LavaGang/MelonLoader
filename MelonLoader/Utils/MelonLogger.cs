@@ -18,7 +18,14 @@ namespace MelonLoader
 #else
         internal static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
 #endif
-        internal static StreamWriter LogWriter = new(LogStream, Encoding.UTF8, 1);
+        internal static StreamWriter LogWriter = CreateLogWriter();
+
+        internal static StreamWriter CreateLogWriter()
+        {
+            var writer = new StreamWriter(LogStream, Encoding.UTF8, 1);
+            writer.AutoFlush = true;
+            return writer;
+        }
 
         //Identical to Msg(string) except it skips walking the stack to find a melon
         internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);

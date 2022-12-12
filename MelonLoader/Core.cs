@@ -32,14 +32,12 @@ namespace MelonLoader
 
             if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
             {
-                Console.WriteLine("[Init] User requested debugger, attempting to launch now...");
+                Utils.MelonConsole.WriteLine("[Init] User requested debugger, attempting to launch now...");
                 Debugger.Launch();
             }
 
             MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)!.FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
-
-            MelonLogger.LogWriter.AutoFlush = true;
             
             SetupWineCheck();
 
