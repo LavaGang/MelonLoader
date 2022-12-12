@@ -47,7 +47,7 @@ pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
     use dobby_rs::Address;
 
     unsafe {
-        let _ = dobby_rs::unhook(target as Address)?;
+        dobby_rs::unhook(target as Address)?;
     }
 
     Ok(())

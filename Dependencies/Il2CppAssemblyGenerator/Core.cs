@@ -17,7 +17,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         internal static HttpClient webClient = null;
 
         internal static Packages.Models.ExecutablePackage dumper = null;
-        internal static Il2CppAssemblyUnhollower il2cppassemblyunhollower = null;
+        internal static Il2CppAssemblyUnhollower il2cppinterop = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static DeobfuscationRegex deobfuscationRegex = null;
@@ -64,18 +64,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             else
                 dumper = new Cpp2IL();
 
-            il2cppassemblyunhollower = new Il2CppAssemblyUnhollower();
+            il2cppinterop = new Il2CppAssemblyUnhollower();
             unitydependencies = new UnityDependencies();
             deobfuscationMap = new DeobfuscationMap();
             deobfuscationRegex = new DeobfuscationRegex();
 
             Logger.Msg($"Using Dumper Version: {(string.IsNullOrEmpty(dumper.Version) ? "null" : dumper.Version)}");
-            Logger.Msg($"Using Il2CppAssemblyUnhollower Version = {(string.IsNullOrEmpty(il2cppassemblyunhollower.Version) ? "null" : il2cppassemblyunhollower.Version)}");
+            Logger.Msg($"Using Il2CppInterop Version = {(string.IsNullOrEmpty(il2cppinterop.Version) ? "null" : il2cppinterop.Version)}");
             Logger.Msg($"Using Unity Dependencies Version = {(string.IsNullOrEmpty(unitydependencies.Version) ? "null" : unitydependencies.Version)}");
             Logger.Msg($"Using Deobfuscation Regex = {(string.IsNullOrEmpty(deobfuscationRegex.Regex) ? "null" : deobfuscationRegex.Regex)}");
 
             if (!dumper.Setup()
-                || !il2cppassemblyunhollower.Setup()
+                || !il2cppinterop.Setup()
                 || !unitydependencies.Setup()
                 || !deobfuscationMap.Setup())
                 return 1;
@@ -99,7 +99,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Logger.Msg("Assembly Generation Needed!");
 
             dumper.Cleanup();
-            il2cppassemblyunhollower.Cleanup();
+            il2cppinterop.Cleanup();
 
             if (!dumper.Execute())
             {
@@ -107,10 +107,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 return 1;
             }
 
-            if (!il2cppassemblyunhollower.Execute())
+            if (!il2cppinterop.Execute())
             {
                 dumper.Cleanup();
-                il2cppassemblyunhollower.Cleanup();
+                il2cppinterop.Cleanup();
                 return 1;
             }
 
@@ -118,7 +118,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             OldFiles_LAM();
 
             dumper.Cleanup();
-            il2cppassemblyunhollower.Cleanup();
+            il2cppinterop.Cleanup();
 
             Logger.Msg("Assembly Generation Successful!");
             deobfuscationRegex.Save();
@@ -147,7 +147,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static void OldFiles_LAM()
         {
-            string[] filepathtbl = Directory.GetFiles(il2cppassemblyunhollower.OutputFolder);
+            string[] filepathtbl = Directory.GetFiles(il2cppinterop.OutputFolder);
             for (int i = 0; i < filepathtbl.Length; i++)
             {
                 string filepath = filepathtbl[i];
