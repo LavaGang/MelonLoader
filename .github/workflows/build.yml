@@ -1,10 +1,15 @@
 name: Build MelonLoader
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [ master, alpha-development, v0.6.0-rewrite ]
+  pull_request:
+    branches: [ master, alpha-development, v0.6.0-rewrite ]
+  workflow_dispatch:
 
 jobs:
   build_core_debug:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
@@ -18,7 +23,7 @@ jobs:
           name: MLCoreDebug
           path: Output/Debug/MelonLoader/
   build_core_release:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
@@ -40,20 +45,20 @@ jobs:
         with:
           toolchain: nightly
           # Target triple to install for this toolchain
-          target: x86_64-pc-windows-msvc
-      - name: Build Proxy DLL | Windows - x86
+          target: i686-pc-windows-msvc
+      - name: Build Rust | Windows - x86
         shell: cmd
-        run: cargo +nightly build --release
-      - name: Upload proxy x64
+        run: cargo +nightly build --release --toolchain i686-pc-windows-msvc
+      - name: Upload proxy x86
         uses: actions/upload-artifact@v3
         with:
-          name: MLProxyX64
-          path: target/x86_64-pc-windows-msvc/release/proxy.dll
-      - name: Upload bootstrap x64
+          name: MLProxyX86
+          path: target/i686-pc-windows-msvc/release/proxy.dll
+      - name: Upload bootstrap x86
         uses: actions/upload-artifact@v3
         with:
-          name: MLBootstrapX64
-          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
+          name: MLBootstrapX86
+          path: target/i686-pc-windows-msvc/release/Bootstrap.dll
           
   build_rust_x64:
     runs-on: windows-latest
@@ -65,19 +70,19 @@ jobs:
           toolchain: nightly
           # Target triple to install for this toolchain
           target: x86_64-pc-windows-msvc
-      - name: Build Proxy DLL | Windows - x86
+      - name: Build Rust | Windows - x64
         shell: cmd
-        run: cargo +nightly build --release
-      - name: Upload proxy x86
+        run: cargo +nightly build --release --toolchain x86_64-pc-windows-msvc
+      - name: Upload proxy x64
         uses: actions/upload-artifact@v3
         with:
-          name: MLProxyX86
-          path: target/i386-pc-windows-msvc/release/proxy.dll
-      - name: Upload bootstrap x86
+          name: MLProxyX64
+          path: target/x86_64-pc-windows-msvc/release/proxy.dll
+      - name: Upload bootstrap x64
         uses: actions/upload-artifact@v3
         with:
-          name: MLBootstrapX86
-          path: target/i386-pc-windows-msvc/release/Bootstrap.dll
+          name: MLBootstrapX64
+          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
   finalize_x64_debug_zip:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_x64]
