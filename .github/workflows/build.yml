@@ -48,17 +48,17 @@ jobs:
           target: i686-pc-windows-msvc
       - name: Build Rust | Windows - x86
         shell: cmd
-        run: cargo +nightly build --release
+        run: cargo +nightly build --target i686-pc-windows-msvc --release
       - name: Upload proxy x86
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX86
-          path: target/release/proxy.dll
+          path: target/i686-pc-windows-msvc/release/version.dll
       - name: Upload bootstrap x86
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX86
-          path: target/release/Bootstrap.dll
+          path: target/i686-pc-windows-msvc/release/Bootstrap.dll
           
   build_rust_x64:
     runs-on: windows-latest
@@ -77,12 +77,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64
-          path: target/release/proxy.dll
+          path: target/x86_64-pc-windows-msvc/release/version.dll
       - name: Upload bootstrap x64
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX64
-          path: target/release/Bootstrap.dll
+          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
   finalize_x64_debug_zip:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_x64]
@@ -110,6 +110,8 @@ jobs:
           mkdir Output\Debug\x64\MelonLoader\Managed\
           xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
           echo.
+          echo Copying Dobby x64...
+          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll
           echo Copying Mono x64...
           mkdir Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
           xcopy BaseLibs\MonoBleedingEdge.x64 Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
@@ -153,6 +155,8 @@ jobs:
           mkdir Output\Debug\x86\MelonLoader\Managed\
           xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
           echo.
+          echo Copying Dobby x86...
+          xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll
           echo Copying Mono x86...
           mkdir Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
           xcopy BaseLibs\MonoBleedingEdge.x86 Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
