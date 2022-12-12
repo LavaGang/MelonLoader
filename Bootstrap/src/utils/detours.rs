@@ -35,18 +35,17 @@ pub enum DobbyError {
 #[cfg(target_os = "windows")]
 use detour::RawDetour;
 
-static mut HOOKS: Option<HashMap<usize, RawDetour>> = None;
+#[cfg(target_os = "windows")]
+lazy_static::lazy_static! {
+    static ref HOOKMAP: Mutex<HashMap<usize, RawDetour>> = Mutex::new(HashMap::new());
+}
 
 #[cfg(target_os = "windows")]
 /// hook a function pointer
 pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn error::Error>> {
+
     unsafe {
-
-        if HOOKS.is_none() {
-            let _ = HOOKS.replace(HashMap::new());
-        }
-
-        let mut m = HOOKS.as_mut().unwrap();
+        let mut m = HOOKMAP.lock()?;
 
         if m.contains_key(&target) {
             let hook = m.get(&target)
@@ -75,14 +74,11 @@ pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
     use detour::RawDetour;
     
     unsafe {
-        let mut m = HOOKS.as_mut().unwrap();
-
+        let mut m = HOOKMAP.lock()?;
         let hook = m.get(&target)
             .unwrap_or_else(|| internal_failure!("Failed to get hook!"));
 
         hook.disable()?;
-
-        let _ = m.remove(&target);
     }
 
     Ok(())
