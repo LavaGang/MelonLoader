@@ -19,6 +19,7 @@ proxy-dll = { git = "https://github.com/RinLovesYou/dll-proxy-rs.git" }
 libc = "0.2.137"
 
 [lib]
+name = "version"
 crate-type = ["cdylib"]
 
 [profile.release]
