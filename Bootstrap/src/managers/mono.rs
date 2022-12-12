@@ -96,8 +96,19 @@ fn preload(mono: &Mono) -> Result<(), Box<dyn error::Error>> {
     }
 
     let mut preload_path = files::melonloader_dir()?;
-    preload_path.extend(["Dependencies", "SupportModule", "Preload.dll"].iter());
+    preload_path.extend(["Dependencies", "SupportModules", "Preload.dll"].iter());
 
+    if !preload_path.exists() {
+        return Err("Preload.dll not found".into());
+    }
+
+    let preload_path = preload_path.to_str().ok_or_else(|| "Preload.dll path is not valid UTF-8")?;
+
+    let image = MonoImage::open(preload_path)?;
+    let class = MonoImage::get_class(image, "MelonLoader.Support", "Preload")?;
+    let method = MonoClass::get_method(class, "Initialize", 0)?;
+
+    MonoMethod::invoke(method, None, None)?;
     
 
     Ok(())
