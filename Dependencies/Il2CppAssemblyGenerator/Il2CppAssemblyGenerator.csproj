@@ -14,7 +14,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Iced" Version="1.17.0"/>
-		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.0" IncludeAssets="All" />
+		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.1" IncludeAssets="All" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
 		<ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" ExcludeAssets="Runtime" />
