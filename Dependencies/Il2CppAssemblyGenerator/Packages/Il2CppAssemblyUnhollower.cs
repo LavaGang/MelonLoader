@@ -83,6 +83,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 UnityBaseLibsDir = Core.unitydependencies.Destination,
                 ObfuscatedNamesRegex = string.IsNullOrEmpty(Core.deobfuscationRegex.Regex) ? null : new Regex(Core.deobfuscationRegex.Regex),
                 Parallel = true,
+                Il2CppPrefixMode = GeneratorOptions.PrefixMode.OptOut,
             };
             
             //Inform cecil of the unity base libs
