@@ -16,13 +16,11 @@ unity-rs = { git = "https://github.com/RinLovesYou/unity-rs.git" }
 libc = "0.2.137"
 libc-stdhandle = "0.1.0"
 netcorehost = "*"
+dobby-rs = { git = "https://github.com/RinLovesYou/dobby-rs" }
 
 [target.'cfg(windows)'.dependencies]
-detour = { git = "https://github.com/veeenu/detour-rs" }
 winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
 
-[target.'cfg(not(windows))'.dependencies]
-dobby-rs = "*"
 
 [lib]
 crate-type = ["cdylib"]

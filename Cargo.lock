@@ -9,7 +9,6 @@ dependencies = [
  "chrono",
  "colored",
  "ctor",
- "detour",
  "dobby-rs",
  "lazy_static",
  "libc",
@@ -498,21 +497,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "detour"
-version = "0.9.0"
-source = "git+https://github.com/veeenu/detour-rs#ec2363205f64cb8c742f0e2e5c4f3813fe898079"
-dependencies = [
- "cfg-if",
- "generic-array",
- "lazy_static",
- "libc",
- "libudis86-sys",
- "mmap-fixed-fixed",
- "region",
- "slice-pool",
-]
-
-[[package]]
 name = "digest"
 version = "0.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -549,8 +533,7 @@ dependencies = [
 [[package]]
 name = "dobby-rs"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0b8fbf3688f3584f3f87ec7024032d81da6e8b868a1d23d8a6c0a399e7c9935"
+source = "git+https://github.com/RinLovesYou/dobby-rs#5af4e2c666aed8e4636b8df7467425a202589e54"
 dependencies = [
  "dobby-sys",
  "thiserror",
@@ -559,8 +542,7 @@ dependencies = [
 [[package]]
 name = "dobby-sys"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4cdffdeaa52be950db80677f22f549050675f226b77e97fdbe10bb2dd846ac7b"
+source = "git+https://github.com/RinLovesYou/dobby-sys.git#8ea9f0800de90b07073561306fe258bef973930f"
 
 [[package]]
 name = "encoding_rs"
@@ -1123,16 +1105,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "libudis86-sys"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "139bbf9ddb1bfc90c1ac64dd2923d9c957cd433cee7315c018125d72ab08a6b0"
-dependencies = [
- "cc",
- "libc",
-]
-
-[[package]]
 name = "link-cplusplus"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1148,15 +1120,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "abb12e687cfb44aa40f41fc3978ef76448f9b6038cad6aef4259d3c095a2382e"
 dependencies = [
  "cfg-if",
-]
-
-[[package]]
-name = "mach"
-version = "0.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b823e83b2affd8f40a9ee8c29dbc56404c1e34cd2710921f2801e2cf29527afa"
-dependencies = [
- "libc",
 ]
 
 [[package]]
@@ -1208,16 +1171,6 @@ dependencies = [
  "log",
  "wasi 0.11.0+wasi-snapshot-preview1",
  "windows-sys",
-]
-
-[[package]]
-name = "mmap-fixed-fixed"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0681853891801e4763dc252e843672faf32bcfee27a0aa3b19733902af450acc"
-dependencies = [
- "libc",
- "winapi",
 ]
 
 [[package]]
@@ -1514,18 +1467,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 
 [[package]]
-name = "region"
-version = "3.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "76e189c2369884dce920945e2ddf79b3dff49e071a167dd1817fa9c4c00d512e"
-dependencies = [
- "bitflags",
- "libc",
- "mach",
- "winapi",
-]
-
-[[package]]
 name = "reqwest"
 version = "0.11.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1728,12 +1669,6 @@ checksum = "4614a76b2a8be0058caa9dbbaf66d988527d86d003c11a94fbd335d7661edcef"
 dependencies = [
  "autocfg",
 ]
-
-[[package]]
-name = "slice-pool"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "733fc6e5f1bd3a8136f842c9bdea4e5f17c910c2fcc98c90c3aa7604ef5e2e7a"
 
 [[package]]
 name = "smallvec"

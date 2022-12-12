@@ -32,59 +32,6 @@ pub enum DobbyError {
     FailedToUnhookFunction,
 }
 
-#[cfg(target_os = "windows")]
-use detour::RawDetour;
-
-#[cfg(target_os = "windows")]
-lazy_static::lazy_static! {
-    static ref HOOKMAP: Mutex<HashMap<usize, RawDetour>> = Mutex::new(HashMap::new());
-}
-
-#[cfg(target_os = "windows")]
-/// hook a function pointer
-pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn error::Error>> {
-
-    unsafe {
-        let mut m = HOOKMAP.lock()?;
-
-        if m.contains_key(&target) {
-            let hook = m.get(&target)
-            .unwrap_or_else(|| internal_failure!("Failed to get hook!"));
-
-            return Ok(transmute(hook.trampoline()));
-        }
-
-        let hook: RawDetour = RawDetour::new(target as *const (), replacement as *const ())
-            .unwrap_or_else(|e| internal_failure!("Failed hook function! {}", e));
-
-        let _ = m.insert(target, hook);
-
-        let hook = m.get(&target)
-            .unwrap_or_else(|| internal_failure!("Failed to get hook!"));
-
-        hook.enable()?;
-
-        Ok(transmute(hook.trampoline()))
-    }
-}
-
-#[cfg(target_os = "windows")]
-/// unhook a function pointer
-pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
-    use detour::RawDetour;
-    
-    unsafe {
-        let mut m = HOOKMAP.lock()?;
-        let hook = m.get(&target)
-            .unwrap_or_else(|| internal_failure!("Failed to get hook!"));
-
-        hook.disable()?;
-    }
-
-    Ok(())
-}
-
-#[cfg(not(target_os = "windows"))]
 /// hook a function pointer
 pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn error::Error>> {
     use dobby_rs::{Address};
@@ -95,7 +42,6 @@ pub fn hook(target: usize, replacement: usize) -> Result<&'static (), Box<dyn er
     }
 }
 
-#[cfg(not(target_os = "windows"))]
 /// hook a function pointer
 pub fn unhook(target: usize) -> Result<(), Box<dyn error::Error>> {
     use dobby_rs::Address;
