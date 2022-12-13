@@ -109,10 +109,14 @@ pub fn init(il2cpp: &Il2Cpp) -> Result<(), Box<dyn error::Error>> {
 pub fn pre_start() -> Result<(), Box<dyn error::Error>> {
     unsafe {
         if let Some(imports) = &IMPORTS {
+            if imports.pre_start.is_null() {
+                Err("Failed to find HostImports::PreStart!")?
+            }
+
             let func: unsafe extern "system" fn() = transmute(imports.pre_start);
             func();
         } else {
-            Err("Failed to find the HostImports::PreStart!")?
+            Err("Failed to find HostImports!")?
         }
     }
 
@@ -122,10 +126,13 @@ pub fn pre_start() -> Result<(), Box<dyn error::Error>> {
 pub fn start() -> Result<(), Box<dyn error::Error>> {
     unsafe {
         if let Some(imports) = &IMPORTS {
+            if imports.start.is_null() {
+                Err("Failed to find HostImports::Start!")?
+            }
             let func: unsafe extern "system" fn() = transmute(imports.start);
             func();
         } else {
-            Err("Failed to find the HostImports::Start!")?
+            Err("Failed to find HostImports")?
         }
     }
 
