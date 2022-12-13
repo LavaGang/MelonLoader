@@ -1,12 +1,10 @@
 //! dynamic dobby wrapper
 
 use std::{
-    error, collections::HashMap, sync::Mutex, mem::transmute
+    error, mem::transmute
 };
 
 use thiserror::Error;
-
-use crate::{internal_failure};
 
 /// dobby errors
 #[derive(Debug, Error)]

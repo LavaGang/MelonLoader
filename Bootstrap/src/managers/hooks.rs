@@ -14,11 +14,11 @@ pub enum HookError {
     HookFunction,
 }
 
-use libc::{freopen, FILE};
-use thiserror::Error;
-use unity_rs::{mono::{types::{MonoDomain, MonoMethod, MonoObject}, Mono}, il2cpp::{types::{Il2CppDomain, Il2CppObject, Il2CppMethod}, Il2Cpp}, runtime::{UnityRuntime, Runtime}};
 
-use crate::{internal_failure, debug, utils::{debug, detours::{self}}, managers::{internal_calls, base_asm, hooks}, cstr};
+use thiserror::Error;
+use unity_rs::{mono::{types::{MonoDomain, MonoMethod, MonoObject}}, il2cpp::{types::{Il2CppDomain, Il2CppObject, Il2CppMethod}}, runtime::{UnityRuntime, Runtime}};
+
+use crate::{internal_failure, debug, utils::{debug, detours::{self}}, managers::{internal_calls, base_asm}};
 
 static mut MONO_JIT_INIT_ORIGINAL: Option<*mut c_void> = None;
 static mut MONO_RUNTIME_INVOKE_ORIGINAL: Option<*mut c_void> = None;
@@ -26,10 +26,10 @@ static mut MONO_RUNTIME_INVOKE_ORIGINAL: Option<*mut c_void> = None;
 static mut IL2CPP_INIT_ORIGINAL: Option<*mut c_void> = None;
 static mut IL2CPP_RUNTIME_INVOKE_ORIGINAL: Option<*mut c_void> = None;
 
-pub fn init(runtime: UnityRuntime) -> Result<(), HookError> {
+pub fn init(runtime: UnityRuntime) -> Result<(), Box<dyn error::Error>> {
     match runtime {
         UnityRuntime::MonoRuntime(mono) => unsafe {
-            debug!("Attaching hook to mono_jit_init_version");
+            debug!("Attaching hook to mono_jit_init_version")?;
             let func = mono.exports.mono_jit_init_version.ok_or(HookError::MonoJitInitVersion)?;
 
             let trampoline = detours::hook(*func as usize, mono_jit_init_version_detour as usize).map_err(|_| HookError::HookFunction)?;
@@ -39,7 +39,7 @@ pub fn init(runtime: UnityRuntime) -> Result<(), HookError> {
             Ok(())
         },
         UnityRuntime::Il2Cpp(il2cpp) => unsafe {
-            debug!("Attaching hook to il2cpp_init");
+            debug!("Attaching hook to il2cpp_init")?;
             let func = il2cpp.exports.il2cpp_init.ok_or(HookError::MonoJitInitVersion)?;
 
             let trampoline = detours::hook(*func as usize, il2cpp_init_detour as usize).map_err(|_| HookError::HookFunction)?;
@@ -115,19 +115,19 @@ fn mono_jit_init_version_detour_inner(name: *const c_char, version: *const c_cha
     let runtime = Runtime::new()?;
     
     if let UnityRuntime::MonoRuntime(mono) = &runtime.runtime{
-        debug!("Detaching hook from mono_jit_init_version");
+        debug!("Detaching hook from mono_jit_init_version")?;
         let func = mono.exports.clone();
         let func = func.mono_jit_init_version.ok_or(HookError::MonoJitInitVersion)?;
         detours::unhook(*func as usize)?;
 
         if debug::enabled() {
-            debug!("Creating Mono Debug Domain");
+            debug!("Creating Mono Debug Domain")?;
             if let Some(mono_debug_domain_create) = &mono.exports.mono_debug_domain_create {
                 mono_debug_domain_create(domain);
             }
         }
 
-        debug!("Setting Mono Main Thread");
+        debug!("Setting Mono Main Thread")?;
         let thread = runtime.get_current_thread()?;
         mono.thread_set_main(thread)?;
 
@@ -137,7 +137,7 @@ fn mono_jit_init_version_detour_inner(name: *const c_char, version: *const c_cha
                 let base_dir = base_dir.to_str().ok_or("Failed to convert base dir to string")?;
                 let base_dir = std::ffi::CString::new(base_dir)?;
 
-                debug!("Setting Mono Config");
+                debug!("Setting Mono Config")?;
                 mono_domain_set_config(domain, base_dir.as_ptr(), name);
             }
         }
@@ -145,7 +145,7 @@ fn mono_jit_init_version_detour_inner(name: *const c_char, version: *const c_cha
         internal_calls::init(mono.to_owned())?;
         base_asm::init()?;
 
-        debug!("attaching hook to mono_runtime_invoke");
+        debug!("attaching hook to mono_runtime_invoke")?;
         invoke(runtime.runtime)?;
     }
 
@@ -174,9 +174,7 @@ fn mono_runtime_invoke_detour_inner(method: *mut MonoMethod, obj: *mut MonoObjec
             debug!("Detaching hook from mono_runtime_invoke")?;
 
             let func = mono.exports.clone().mono_runtime_invoke.ok_or(HookError::MonoRuntimeInvoke)?;
-            unsafe {
-                detours::unhook(*func as usize)?;
-            }
+            detours::unhook(*func as usize)?;
 
             base_asm::pre_start()?;
             base_asm::start()?;
@@ -201,12 +199,9 @@ fn il2cpp_init_detour_inner(name: *const c_char) -> Result<*mut Il2CppDomain, Bo
     let runtime = Runtime::new()?;
 
     if let UnityRuntime::Il2Cpp(il2cpp) = &runtime.runtime {
-        debug!("Detaching hook from il2cpp_init");
+        debug!("Detaching hook from il2cpp_init")?;
         let func = il2cpp.exports.clone().il2cpp_init.ok_or(HookError::MonoJitInitVersion)?;
-
-        unsafe {
-            detours::unhook(*func as usize)?;
-        }
+        detours::unhook(*func as usize)?;
 
         base_asm::init()?;
         invoke(runtime.runtime)?;
@@ -235,9 +230,7 @@ fn il2cpp_runtime_invoke_detour_inner(method: *mut Il2CppMethod, obj: *mut Il2Cp
             debug!("Detaching hook from il2cpp_runtime_invoke")?;
 
             let func = il2cpp.exports.clone().il2cpp_runtime_invoke.ok_or(HookError::Il2CppRuntimeInvoke)?;
-            unsafe {
-                detours::unhook(*func as usize)?;
-            }
+            detours::unhook(*func as usize)?;
 
             base_asm::pre_start()?;
             base_asm::start()?;

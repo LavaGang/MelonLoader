@@ -1,6 +1,6 @@
 use std::error;
 
-use unity_rs::mono::{Mono, types::{MonoAssembly, MonoImage, MonoClass, MonoMethod}};
+use unity_rs::mono::{Mono, types::{MonoImage, MonoClass, MonoMethod}};
 
 use crate::{utils::files, debug};
 
@@ -55,12 +55,12 @@ pub fn init(mono: &Mono) -> Result<(), Box<dyn error::Error>> {
         );
     }
 
-    MonoMethod::invoke(method, None, None)?;
+    let _ = MonoMethod::invoke(method, None, None)?;
 
     Ok(())
 }
 
-pub fn pre_start(mono: &Mono) -> Result<(), Box<dyn error::Error>> {
+pub fn pre_start() -> Result<(), Box<dyn error::Error>> {
     match unsafe { MONO_PRESTART } {
         Some(method) => {
             let res = MonoMethod::invoke(method, None, None);
@@ -75,7 +75,7 @@ pub fn pre_start(mono: &Mono) -> Result<(), Box<dyn error::Error>> {
     }
 }
 
-pub fn start(mono: &Mono) -> Result<(), Box<dyn error::Error>> {
+pub fn start() -> Result<(), Box<dyn error::Error>> {
     match unsafe { MONO_START } {
         Some(method) => {
             let res = MonoMethod::invoke(method, None, None);
@@ -108,7 +108,7 @@ fn preload(mono: &Mono) -> Result<(), Box<dyn error::Error>> {
     let class = MonoImage::get_class(image, "MelonLoader.Support", "Preload")?;
     let method = MonoClass::get_method(class, "Initialize", 0)?;
 
-    MonoMethod::invoke(method, None, None)?;
+    let _ = MonoMethod::invoke(method, None, None)?;
     
 
     Ok(())

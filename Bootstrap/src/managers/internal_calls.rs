@@ -1,8 +1,8 @@
 use std::{
     error::{Error, self},
-    ffi::{c_void, c_char, CStr}, mem::transmute
+    ffi::{c_void, c_char}, mem::transmute
 };
-use unity_rs::{mono::{Mono, types::{MonoReflectionAssembly, AssemblyName, MonoAssembly, MonoString, MonoMethod, MonoObject}, AssemblyHookType}, runtime::{Runtime, UnityRuntime}};
+use unity_rs::{mono::{Mono, types::{MonoReflectionAssembly, AssemblyName, MonoAssembly, MonoString, MonoMethod}, AssemblyHookType}, runtime::{Runtime, UnityRuntime}};
 
 use crate::{debug, internal_failure, err, utils::{files, detours}};
 
@@ -30,12 +30,12 @@ fn IsGame32Bit() -> bool {
     cfg!(target_pointer_width = "32")
 }
 
-pub fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
+pub fn NativeHookAttach(target: *mut *mut c_void, detour: *mut c_void) {
     unsafe {
         match detours::hook(*target as usize, detour as usize) {
             Ok(res) => *target = transmute(res),
             Err(e) => {
-                err!("Failed to hook function: {}", e.to_string());
+                let _ = err!("Failed to hook function: {}", e.to_string());
             }
         };
     }
@@ -44,7 +44,7 @@ pub fn NativeHookAttach(mut target: *mut *mut c_void, detour: *mut c_void) {
 pub fn NativeHookDetach(target: *mut *mut c_void, _detour: *mut c_void)  {
     unsafe {
         detours::unhook(*target as usize).unwrap_or_else(|e| {
-            err!("Failed to unhook function: {}", e.to_string());
+            let _ = err!("Failed to unhook function: {}", e.to_string());
         });
     }
 }
@@ -119,9 +119,6 @@ fn assembly_resolve(aname: *mut AssemblyName, _user_data: *mut c_void, mut is_pr
         aname.as_ref().ok_or("AssemblyName is null")?
     };
 
-    let a = unsafe { CStr::from_ptr(safe_aname.name) };
-    let name = a.to_str()?;
-
     let name = MonoString::from_raw(safe_aname.name)?;
 
     let mut major = safe_aname.major;
@@ -162,13 +159,13 @@ fn assembly_resolve(aname: *mut AssemblyName, _user_data: *mut c_void, mut is_pr
     }
 }
 
-fn load_hook(_assembly: *mut MonoAssembly, user_data: *mut c_void) {
-    load_hook_inner(_assembly, user_data).unwrap_or_else(|e| {
+fn load_hook(_assembly: *mut MonoAssembly, _user_data: *mut c_void) {
+    load_hook_inner(_assembly).unwrap_or_else(|e| {
         internal_failure!("Failed to load assembly: {e}");
     })
 }
 
-fn load_hook_inner(_assembly: *mut MonoAssembly, user_data: *mut c_void) -> Result<(), Box<dyn error::Error>> {
+fn load_hook_inner(_assembly: *mut MonoAssembly) -> Result<(), Box<dyn error::Error>> {
     if _assembly.is_null() {
         return Ok(());
     }
@@ -183,7 +180,7 @@ fn load_hook_inner(_assembly: *mut MonoAssembly, user_data: *mut c_void) -> Resu
 
     let mut args = vec![reference as *mut c_void];
 
-    MonoMethod::invoke(load_info, None, Some(&mut args))?;
+    let _ = MonoMethod::invoke(load_info, None, Some(&mut args))?;
 
     Ok(())
 }

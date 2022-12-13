@@ -4,10 +4,9 @@
 
 use std::{error, ffi::{c_char, CStr}};
 
-use colored::control;
 use libc::{freopen, c_void};
 use thiserror::Error;
-use winapi::{um::{consoleapi::{AllocConsole, SetConsoleCtrlHandler, GetConsoleMode, SetConsoleMode}, wincon::{GetConsoleWindow, CTRL_C_EVENT, CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT, SetConsoleTitleA, ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT, ENABLE_VIRTUAL_TERMINAL_PROCESSING, ENABLE_EXTENDED_FLAGS, ENABLE_MOUSE_INPUT, ENABLE_WINDOW_INPUT, ENABLE_INSERT_MODE}, winuser::{GetSystemMenu, SetForegroundWindow, ShowWindow}, processenv::{GetStdHandle, SetStdHandle}, winbase::{STD_OUTPUT_HANDLE, STD_ERROR_HANDLE}}, shared::{minwindef::{self, DWORD}, windef::HWND}};
+use winapi::{um::{consoleapi::{AllocConsole, SetConsoleCtrlHandler, GetConsoleMode, SetConsoleMode}, wincon::{GetConsoleWindow, CTRL_C_EVENT, CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT, SetConsoleTitleA, ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT, ENABLE_VIRTUAL_TERMINAL_PROCESSING, ENABLE_EXTENDED_FLAGS, ENABLE_MOUSE_INPUT, ENABLE_WINDOW_INPUT, ENABLE_INSERT_MODE}, winuser::{SetForegroundWindow, ShowWindow}, processenv::{GetStdHandle, SetStdHandle}, winbase::{STD_OUTPUT_HANDLE, STD_ERROR_HANDLE}}, shared::{minwindef::{self, DWORD}, windef::HWND}};
 
 use crate::{managers::core, debug};
 
@@ -78,8 +77,6 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
         mode &= !(ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT | ENABLE_INSERT_MODE);
 
         let _ = SetConsoleMode(OUTPUT_HANDLE, mode);
-
-        control::set_virtual_terminal(true);
     }
 
     Ok(())

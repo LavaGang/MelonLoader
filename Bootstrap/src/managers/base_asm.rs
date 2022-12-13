@@ -25,11 +25,11 @@ pub fn pre_start() -> Result<(), Box<dyn Error>> {
     let runtime = runtime.runtime;
 
     match runtime {
-        UnityRuntime::MonoRuntime(mono) => {
-            super::mono::pre_start(&mono)?;
+        UnityRuntime::MonoRuntime(_) => {
+            super::mono::pre_start()?;
         },
 
-        UnityRuntime::Il2Cpp(il2cpp) => {
+        UnityRuntime::Il2Cpp(_) => {
             dotnet::pre_start()?;
         }
     }
@@ -41,11 +41,11 @@ pub fn start() -> Result<(), Box<dyn Error>> {
     let runtime = runtime.runtime;
 
     match runtime {
-        UnityRuntime::MonoRuntime(mono) => {
-            super::mono::start(&mono)?;
+        UnityRuntime::MonoRuntime(_) => {
+            super::mono::start()?;
         },
 
-        UnityRuntime::Il2Cpp(il2cpp) => {
+        UnityRuntime::Il2Cpp(_) => {
             dotnet::start()?;
         }
     }

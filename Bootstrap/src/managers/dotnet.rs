@@ -1,4 +1,4 @@
-use std::{error, ffi::CString, str::FromStr, ptr::addr_of_mut, mem::transmute};
+use std::{error, str::FromStr, ptr::addr_of_mut, mem::transmute};
 
 use libc::c_void;
 use netcorehost::{nethost, pdcstr, pdcstring::PdCString};
@@ -9,6 +9,7 @@ use crate::{utils::files, debug};
 use super::internal_calls;
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct HostImports {
     //public delegate* unmanaged[Stdcall]<IntPtr, IntPtr, IntPtr, void**, void> LoadAssemblyAndGetPtr;
     pub load_assembly_get_ptr: *mut c_void,
@@ -19,6 +20,7 @@ pub struct HostImports {
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct HostExports {
     pub hook_attach: fn(*mut *mut c_void, *mut c_void),
     pub hook_detach: fn(*mut *mut c_void, *mut c_void),
@@ -28,7 +30,7 @@ static mut IMPORTS: Option<HostImports> = None;
 
 pub fn init(il2cpp: &Il2Cpp) -> Result<(), Box<dyn error::Error>> {
     let domain = il2cpp.domain_current()?;
-    il2cpp.thread_attach(domain)?;
+    let _ = il2cpp.thread_attach(domain)?;
 
     let hostfxr = nethost::load_hostfxr()?;
     let config_path = files::runtime_dir()?.join("MelonLoader.runtimeconfig.json");
