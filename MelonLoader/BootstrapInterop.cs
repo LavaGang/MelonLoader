@@ -64,7 +64,7 @@ namespace MelonLoader
         public static void NativeHookAttach(IntPtr target, IntPtr detour)
         {
             //SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.
-            if ( /*MelonDebug.IsEnabled() && */ !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
+            if ( /*MelonDebug.IsEnabled() && */ !MelonUtils.IsUnderWineOrSteamProton() && !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
                 return;
 
             NativeHookAttachDirect(target, detour);
