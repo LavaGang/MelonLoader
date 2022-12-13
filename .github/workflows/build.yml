@@ -89,7 +89,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --target=686-unknown-linux-gnu
+          args: --release --target=i686-unknown-linux-gnu
           use-cross: true
       - name: Build Rust | Linux - x64
         uses: actions-rs/cargo@v1
