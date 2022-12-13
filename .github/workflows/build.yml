@@ -126,7 +126,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x64...
-          echo f | xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
+          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll*
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x64
@@ -168,7 +168,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x86...
-          echo f | xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
+          xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll*
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x86
@@ -210,7 +210,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Release\x64\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x64...
-          echo f | xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
+          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll*
           echo. 
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x64
@@ -252,7 +252,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Release\x86\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x86...
-          echo f | xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
+          echo F | xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll*
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x86
@@ -266,11 +266,9 @@ jobs:
         with:
           name: MelonLoader.Windows.x86.CI.Release
           path: ./Output/Release/x86/*
-          
-    
   finalize_x64_debug_zip_linux:
     runs-on: windows-latest
-    needs: [build_core_debug, build_rust_windows]
+    needs: [build_core_debug, build_rust_linux]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
