@@ -23,10 +23,6 @@ pub enum ConsoleError {
     /// failed to get console window
     #[error("Failed to get console window!")]
     FailedToGetConsoleWindow,
-
-    /// failed to get system menu
-    #[error("Failed to get system menu!")]
-    FailedToGetSystemMenu,
 }
 
 static mut OUTPUT_HANDLE: *mut c_void = std::ptr::null_mut();
@@ -42,11 +38,6 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
         WINDOW = GetConsoleWindow();
         if WINDOW.is_null() {
             return Err(Box::new(ConsoleError::FailedToGetConsoleWindow));
-        }
-
-        let menu = GetSystemMenu(WINDOW, minwindef::FALSE);
-        if menu.is_null() {
-            return Err(Box::new(ConsoleError::FailedToGetSystemMenu));
         }
 
         let _ = SetConsoleCtrlHandler(Some(event_handler), minwindef::TRUE);
