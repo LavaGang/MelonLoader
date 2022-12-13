@@ -16,7 +16,7 @@ internal static class MelonConsole
     
     internal static void Init()
     {
-        if (Environment.OSVersion.Platform is PlatformID.Unix or PlatformID.MacOSX)
+        if (!MelonUtils.IsWindows)
             return;
         
         ConsoleOutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -27,27 +27,30 @@ internal static class MelonConsole
 
     internal static void WriteLine(string txt)
     {
-        if (Environment.OSVersion.Platform is PlatformID.Unix or PlatformID.MacOSX)
+        if (!MelonUtils.IsWindows)
         {
-            Console.WriteLine(txt);            
+            Console.WriteLine(txt);
+            return;
         }
         ConsoleOutWriter.WriteLine(txt);
     }
 
     internal static void WriteLine(object txt)
     {
-        if (Environment.OSVersion.Platform is PlatformID.Unix or PlatformID.MacOSX)
+        if (!MelonUtils.IsWindows)
         {
-            Console.WriteLine(txt.ToString());            
+            Console.WriteLine(txt.ToString());
+            return;
         }
         ConsoleOutWriter.WriteLine(txt.ToString());
     }
 
     internal static void WriteLine()
     {
-        if (Environment.OSVersion.Platform is PlatformID.Unix or PlatformID.MacOSX)
+        if (!MelonUtils.IsWindows)
         {
-            Console.WriteLine("");            
+            Console.WriteLine();
+            return;
         }
         ConsoleOutWriter.WriteLine("");
     }
