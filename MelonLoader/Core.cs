@@ -27,12 +27,11 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
-            Utils.MelonConsole.Init();
             MelonLaunchOptions.Load();
 
             if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
             {
-                Utils.MelonConsole.WriteLine("[Init] User requested debugger, attempting to launch now...");
+                Console.WriteLine("[Init] User requested debugger, attempting to launch now...");
                 Debugger.Launch();
             }
 
@@ -40,6 +39,7 @@ namespace MelonLoader
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
             
             SetupWineCheck();
+            Utils.MelonConsole.Init();
 
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
