@@ -44,13 +44,15 @@ namespace MelonLoader.Fixes
             var filename = name.Name + ".dll";
 
             var osSpecificPath = Path.Combine(OurRuntimeDir, filename);
-            var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
-            var modsPath = Path.Combine(MelonEnvironment.ModsDirectory, filename);
+            var il2cppPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, filename);
+			var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
+			var modsPath = Path.Combine(MelonEnvironment.ModsDirectory, filename);
             var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, filename);
             var gameRootPath = Path.Combine(MelonEnvironment.GameRootDirectory, filename);
 
             var ret = TryLoad(alc, osSpecificPath)
-                ?? TryLoad(alc, managedPath)
+				?? TryLoad(alc, il2cppPath)
+				?? TryLoad(alc, managedPath)
                 ?? TryLoad(alc, modsPath)
                 ?? TryLoad(alc, userlibsPath)
                 ?? TryLoad(alc, gameRootPath);

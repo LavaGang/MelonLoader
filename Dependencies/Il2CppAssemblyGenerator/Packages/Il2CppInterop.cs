@@ -26,7 +26,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             Name = nameof(Il2CppAssemblyUnhollower);
             URL = $"https://github.com/SamboyCoding/{Name}/releases/download/v{Version}/{Name}.{Version}.zip";
             Destination = Path.Combine(Core.BasePath, Name);
-            OutputFolder = Path.Combine(Destination, "Managed");
+            OutputFolder = Path.Combine(Destination, "Il2CppAssemblies");
         }
 
         internal override bool ShouldSetup()

@@ -44,8 +44,9 @@ namespace MelonLoader.Utils
         public static string UnityPlayerPath => Path.Combine(GameRootDirectory, "UnityPlayer.dll");
 
         public static string MelonManagedDirectory => Path.Combine(MelonLoaderDirectory, "Managed");
+		public static string Il2CppAssembliesDirectory => Path.Combine(MelonLoaderDirectory, "Il2CppAssemblies");
 
-        internal static void PrintEnvironment()
+		internal static void PrintEnvironment()
         {
             //These must not be changed, lum needs them
             MelonLogger.MsgDirect($"Core::BasePath = {MelonBaseDirectory}");
