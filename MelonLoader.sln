@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Proxy", "Proxy\Proxy.vcxproj", "{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bootstrap", "Bootstrap\Bootstrap.vcxproj", "{78DEE0AF-2263-488A-8EBF-8325218EB6C9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader", "MelonLoader\MelonLoader.csproj", "{F9700790-414B-431B-9F9C-1D9210FAD682}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SupportModules", "SupportModules", "{8D8A18CB-7319-4220-BED8-6B3E23E6C19F}"
@@ -60,6 +56,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stress_Level_Zero_Il2Cpp", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.NativeHost", "MelonLoader.NativeHost\MelonLoader.NativeHost.csproj", "{60D688E3-ECE0-43A6-9922-9D1D3B8C07CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Preload", "Dependencies\SupportModules\Preload\Preload.csproj", "{81172B93-0ADE-47A5-9CC4-9833676C2D38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,18 +68,6 @@ Global
 		Release|Windows - x86 = Release|Windows - x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Debug|Windows - x64.ActiveCfg = Debug|x64
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Debug|Windows - x86.ActiveCfg = Debug|Win32
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Release|Any CPU.ActiveCfg = Release|Win32
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Release|Windows - x64.ActiveCfg = Release|x64
-		{82CD196E-4DAE-47BC-A841-2B29AF8E8ECB}.Release|Windows - x86.ActiveCfg = Release|Win32
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Windows - x64.ActiveCfg = Debug|x64
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Debug|Windows - x86.ActiveCfg = Debug|Win32
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Release|Any CPU.ActiveCfg = Release|Win32
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Release|Windows - x64.ActiveCfg = Release|x64
-		{78DEE0AF-2263-488A-8EBF-8325218EB6C9}.Release|Windows - x86.ActiveCfg = Release|Win32
 		{F9700790-414B-431B-9F9C-1D9210FAD682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F9700790-414B-431B-9F9C-1D9210FAD682}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9700790-414B-431B-9F9C-1D9210FAD682}.Debug|Windows - x64.ActiveCfg = Debug|Any CPU
@@ -224,6 +210,18 @@ Global
 		{60D688E3-ECE0-43A6-9922-9D1D3B8C07CC}.Release|Windows - x64.Build.0 = Release|Any CPU
 		{60D688E3-ECE0-43A6-9922-9D1D3B8C07CC}.Release|Windows - x86.ActiveCfg = Release|Any CPU
 		{60D688E3-ECE0-43A6-9922-9D1D3B8C07CC}.Release|Windows - x86.Build.0 = Release|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Debug|Windows - x64.ActiveCfg = Debug|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Debug|Windows - x64.Build.0 = Debug|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Debug|Windows - x86.ActiveCfg = Debug|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Debug|Windows - x86.Build.0 = Debug|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Windows - x64.ActiveCfg = Release|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Windows - x64.Build.0 = Release|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Windows - x86.ActiveCfg = Release|Any CPU
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Windows - x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +237,7 @@ Global
 		{15CFF766-420B-47EF-9E4A-E73D35A4AB44} = {AB4D471C-9AB2-4A5F-93E1-8929E436C121}
 		{3AF58371-2E0A-4256-B3A3-C100DB07E599} = {AB4D471C-9AB2-4A5F-93E1-8929E436C121}
 		{1DB3679C-DCCA-492D-A725-75604A379C7A} = {AB4D471C-9AB2-4A5F-93E1-8929E436C121}
+		{81172B93-0ADE-47A5-9CC4-9833676C2D38} = {8D8A18CB-7319-4220-BED8-6B3E23E6C19F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4AB93B1D-1C52-4A80-809D-C28770140E0A}

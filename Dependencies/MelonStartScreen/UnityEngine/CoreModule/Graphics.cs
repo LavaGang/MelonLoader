@@ -8,9 +8,15 @@ namespace MelonUnityEngine
     internal class Graphics : InternalObjectBase
     {
         private delegate IntPtr Internal_DrawMeshNow1_InjectedDelegate(IntPtr mesh, int subsetIndex, ref Vector3 position, ref Quaternion rotation);
-        private delegate void Internal_DrawTextureDelegate(IntPtr args);
+        private delegate void Internal_DrawTextureDelegate2017(ref Internal_DrawTextureArguments_2017 args);
+        private delegate void Internal_DrawTextureDelegate2018(ref Internal_DrawTextureArguments_2018 args);
+        private delegate void Internal_DrawTextureDelegate2019(ref Internal_DrawTextureArguments_2019 args);
+        private delegate void Internal_DrawTextureDelegate2020(ref Internal_DrawTextureArguments_2020 args);
 
-        private static readonly Internal_DrawTextureDelegate fd_Internal_DrawTexture;
+        private static readonly Internal_DrawTextureDelegate2017 fd_Internal_DrawTexture2017;
+        private static readonly Internal_DrawTextureDelegate2018 fd_Internal_DrawTexture2018;
+        private static readonly Internal_DrawTextureDelegate2019 fd_Internal_DrawTexture2019;
+        private static readonly Internal_DrawTextureDelegate2020 fd_Internal_DrawTexture2020;
         private static readonly Internal_DrawMeshNow1_InjectedDelegate fd_Internal_DrawMeshNow1_Injected;
 
         private static readonly int m_DrawTexture_Internal_struct = -1;
@@ -18,7 +24,10 @@ namespace MelonUnityEngine
         unsafe static Graphics()
         {
             InternalClassPointerStore<Graphics>.NativeClassPtr = UnityInternals.GetClass("UnityEngine.CoreModule.dll", "UnityEngine", "Graphics");
-            fd_Internal_DrawTexture = UnityInternals.ResolveICall<Internal_DrawTextureDelegate>("UnityEngine.Graphics::Internal_DrawTexture");
+            fd_Internal_DrawTexture2017 = UnityInternals.ResolveICall<Internal_DrawTextureDelegate2017>("UnityEngine.Graphics::Internal_DrawTexture");
+            fd_Internal_DrawTexture2018 = UnityInternals.ResolveICall<Internal_DrawTextureDelegate2018>("UnityEngine.Graphics::Internal_DrawTexture");
+            fd_Internal_DrawTexture2019 = UnityInternals.ResolveICall<Internal_DrawTextureDelegate2019>("UnityEngine.Graphics::Internal_DrawTexture");
+            fd_Internal_DrawTexture2020 = UnityInternals.ResolveICall<Internal_DrawTextureDelegate2020>("UnityEngine.Graphics::Internal_DrawTexture");
 
             if (NativeSignatureResolver.IsUnityVersionOverOrEqual(MelonLoader.InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType(), new string[] { "2018.2.0", "2019.1.0" }))
                 fd_Internal_DrawMeshNow1_Injected = UnityInternals.ResolveICall<Internal_DrawMeshNow1_InjectedDelegate>("UnityEngine.Graphics::Internal_DrawMeshNow1_Injected");
@@ -49,7 +58,7 @@ namespace MelonUnityEngine
                 args.sourceRect = new Rect(0, 0, 1, 1);
                 args.color = new Color32(128, 128, 128, 128);
                 args.texture = UnityInternals.ObjectBaseToPtrNotNull(texture);
-                fd_Internal_DrawTexture((IntPtr)(&args));
+                fd_Internal_DrawTexture2017(ref args);
             }
             else if (m_DrawTexture_Internal_struct == 1)
             {
@@ -58,7 +67,7 @@ namespace MelonUnityEngine
                 args.sourceRect = new Rect(0, 0, 1, 1);
                 args.color = new Color32(128, 128, 128, 128);
                 args.texture = UnityInternals.ObjectBaseToPtrNotNull(texture);
-                fd_Internal_DrawTexture((IntPtr)(&args));
+                fd_Internal_DrawTexture2018(ref args);
             }
             else if (m_DrawTexture_Internal_struct == 2)
             {
@@ -67,7 +76,7 @@ namespace MelonUnityEngine
                 args.sourceRect = new Rect(0, 0, 1, 1);
                 args.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
                 args.texture = UnityInternals.ObjectBaseToPtrNotNull(texture);
-                fd_Internal_DrawTexture((IntPtr)(&args));
+                fd_Internal_DrawTexture2019(ref args);
             }
             else if (m_DrawTexture_Internal_struct == 3)
             {
@@ -81,7 +90,7 @@ namespace MelonUnityEngine
                 args.bottomBorderColor = new Color(0, 0, 0, 1);
                 args.smoothCorners = true;
                 args.texture = UnityInternals.ObjectBaseToPtrNotNull(texture);
-                fd_Internal_DrawTexture((IntPtr)(&args));
+                fd_Internal_DrawTexture2020(ref args);
             }
         }
 

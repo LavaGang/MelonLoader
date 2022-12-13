@@ -37,7 +37,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
             }
 
             Core.Logger.Msg($"Processing {Name}...");
-            if (!FileHandler.Process(FilePath, Destination))
+            if (!FileHandler.Process(FilePath, Destination, MelonUtils.IsWindows ? null : Name))
             {
                 ThrowInternalFailure($"Failed to Process {Name}!");
                 return false;

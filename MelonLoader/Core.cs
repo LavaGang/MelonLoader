@@ -37,7 +37,9 @@ namespace MelonLoader
 
             MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)!.FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
+            
             SetupWineCheck();
+            Utils.MelonConsole.Init();
 
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
@@ -167,6 +169,9 @@ namespace MelonLoader
         
         internal static string GetOSVersion()
         {
+            if (MelonUtils.IsUnix || MelonUtils.IsMac)
+                return Environment.OSVersion.VersionString;
+            
             if (MelonUtils.IsUnderWineOrSteamProton())
                 return $"Wine {WineGetVersion()}";
             RtlGetVersion(out OsVersionInfo versionInformation);
@@ -232,8 +237,11 @@ namespace MelonLoader
         
         private static void SetupWineCheck()
         {
+            if (MelonUtils.IsUnix || MelonUtils.IsMac)
+                return;
+            
             IntPtr dll = NativeLibrary.LoadLib("ntdll.dll");
-            IntPtr wine_get_version_proc = NativeLibrary.GetProcAddress(dll, "wine_get_version");
+            IntPtr wine_get_version_proc = NativeLibrary.AgnosticGetProcAddress(dll, "wine_get_version");
             if (wine_get_version_proc == IntPtr.Zero)
                 return;
 

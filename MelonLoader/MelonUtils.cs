@@ -26,7 +26,7 @@ namespace MelonLoader
     {
         private static readonly Random RandomNumGen = new();
         private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
-
+    
         internal static void Setup(AppDomain domain)
         {
             using (var sha = SHA256.Create()) 
@@ -100,6 +100,12 @@ namespace MelonLoader
                 builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
             return builder.ToString();
         }
+
+        public static PlatformID GetPlatform => Environment.OSVersion.Platform;
+
+        public static bool IsUnix => GetPlatform is PlatformID.Unix;
+        public static bool IsWindows => GetPlatform is PlatformID.Win32NT or PlatformID.Win32S or PlatformID.Win32Windows or PlatformID.WinCE;
+        public static bool IsMac => GetPlatform is PlatformID.MacOSX;
 
         public static void SetCurrentDomainBaseDirectory(string dirpath, AppDomain domain = null)
         {
@@ -388,7 +394,8 @@ namespace MelonLoader
 
         public static bool IsGameIl2Cpp() => Directory.Exists(MelonEnvironment.Il2CppDataDirectory);
 
-        public static bool IsOldMono() => File.Exists(MelonEnvironment.GameRootDirectory + "\\mono.dll");
+        public static bool IsOldMono() => File.Exists(MelonEnvironment.UnityGameDataDirectory + "\\Mono\\mono.dll") || 
+                                          File.Exists(MelonEnvironment.UnityGameDataDirectory + "\\Mono\\libmono.so");
 
         public static bool IsUnderWineOrSteamProton() => Core.WineGetVersion is not null;
 

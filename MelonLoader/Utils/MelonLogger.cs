@@ -16,9 +16,16 @@ namespace MelonLoader
 #if !NET6_0
         private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
 #else
-        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
+        internal static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
 #endif
-        internal static StreamWriter LogWriter = new(LogStream, Encoding.UTF8, 1);
+        internal static StreamWriter LogWriter = CreateLogWriter();
+
+        internal static StreamWriter CreateLogWriter()
+        {
+            var writer = new StreamWriter(LogStream, Encoding.UTF8, 1);
+            writer.AutoFlush = true;
+            return writer;
+        }
 
         //Identical to Msg(string) except it skips walking the stack to find a melon
         internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);
@@ -168,7 +175,7 @@ namespace MelonLoader
             }
 
             builder.Append(txt.Pastel(txt_color));
-            Console.WriteLine(builder.ToString());
+            Utils.MelonConsole.WriteLine(builder.ToString());
         }
 
         internal static string GetTimestamp(bool error)
@@ -201,7 +208,7 @@ namespace MelonLoader
         internal static void WriteSpacer()
         {
             LogWriter.WriteLine();
-            Console.WriteLine();
+            Utils.MelonConsole.WriteLine();
         }
 
         internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string version, string id)
@@ -217,7 +224,7 @@ namespace MelonLoader
             builder.Append(GetTimestamp(false));
             builder.Append($"by {author}".Pastel(authorcolor));
 
-            Console.WriteLine(builder.ToString());
+            Utils.MelonConsole.WriteLine(builder.ToString());
         }
 
 

@@ -1,0 +1,26 @@
+[package]
+name = "Bootstrap"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+msgbox = "0.7.0"
+chrono = "0.4.22"
+colored = "2.0.0"
+thiserror = "1.0.37"
+ctor = "0.1.26"
+lazy_static = "1.4.0"
+unity-rs = { git = "https://github.com/RinLovesYou/unity-rs.git" }
+libc = "0.2.137"
+libc-stdhandle = "0.1.0"
+netcorehost = "*"
+dobby-rs = { git = "https://github.com/RinLovesYou/dobby-rs" }
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
+
+
+[lib]
+crate-type = ["cdylib"]

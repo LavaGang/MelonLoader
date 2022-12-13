@@ -111,6 +111,11 @@ namespace MelonLoader.Pastel
 
         static ConsoleExtensions()
         {
+            if (MelonUtils.IsUnix || MelonUtils.IsMac)
+            {
+                Enable();
+                return;
+            }
             var iStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
             var enable = GetConsoleMode(iStdOut, out var outConsoleMode)
