@@ -148,14 +148,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         private static void OldFiles_LAM()
         {
             string[] filepathtbl = Directory.GetFiles(il2cppinterop.OutputFolder);
-			string il2CppAssembliesDirectory = MelonEnvironment.Il2CppAssembliesDirectory;
-			for (int i = 0; i < filepathtbl.Length; i++)
+            string il2CppAssembliesDirectory = MelonEnvironment.Il2CppAssembliesDirectory;
+            for (int i = 0; i < filepathtbl.Length; i++)
             {
                 string filepath = filepathtbl[i];
                 string filename = Path.GetFileName(filepath);
                 Logger.Msg("Moving " + filename);
                 Config.Values.OldFiles.Add(filename);
-				string newfilepath = Path.Combine(il2CppAssembliesDirectory, filename);
+                string newfilepath = Path.Combine(il2CppAssembliesDirectory, filename);
                 if (File.Exists(newfilepath))
                     File.Delete(newfilepath);
                 Directory.CreateDirectory(il2CppAssembliesDirectory);
