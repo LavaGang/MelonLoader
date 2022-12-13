@@ -252,7 +252,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Release\x86\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x86...
-          echo F | xcopy BaseLibs\dobby_x86.dll Output\Release\x86\MelonLoader\dobby.dll*
+          echo F | xcopy BaseLibs\dobby_x86.dll Output\Release\x86\dobby.dll*
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x86
