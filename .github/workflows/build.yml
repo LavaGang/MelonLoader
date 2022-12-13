@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64-Linux
-          path: target/x86_64-unknown-linux-gnu/release/libversion.sp
+          path: target/x86_64-unknown-linux-gnu/release/libversion.so
       - name: Upload Bootstrap | Linux x64
         uses: actions/upload-artifact@v3
         with:
