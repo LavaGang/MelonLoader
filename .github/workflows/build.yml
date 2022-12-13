@@ -86,17 +86,12 @@ jobs:
         shell: bash
         run: sudo apt-get install libgtk-3-dev 
       - name: Build Rust | Linux - x86
-        uses: actions-rs/cargo@v1
+        uses: paulproteus/ubuntu-18.04-x86@0.1
         with:
-          command: build
-          args: --release --target=i686-unknown-linux-gnu
-          use-cross: true
+          command: cargo +nightly build --target i686-unknown-linux-gnu --release
       - name: Build Rust | Linux - x64
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --target=x86_64-unknown-linux-gnu
-          use-cross: false
+        shell: bash
+        run: cargo +nightly build --target x86_64-unknown-linux-gnu --release
       - name: Upload Proxy | Linux x86
         uses: actions/upload-artifact@v3
         with:
