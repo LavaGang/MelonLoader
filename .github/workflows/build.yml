@@ -126,7 +126,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x64...
-          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll
+          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x64
@@ -168,7 +168,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x86...
-          xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll
+          xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x86
@@ -210,8 +210,8 @@ jobs:
           xcopy BaseLibs\Managed Output\Release\x64\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x64...
-          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll
-          echo.
+          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
+          echo. 
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x64
           mkdir Output\Release\x64\MelonLoader\Documentation
@@ -252,7 +252,7 @@ jobs:
           xcopy BaseLibs\Managed Output\Release\x86\MelonLoader\Managed\ /E /H /Y
           echo.
           echo Copying Dobby x86...
-          xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll
+          xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll /E /H /Y
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x86
@@ -359,7 +359,5 @@ jobs:
             MLBootstrapX86-Windows
             MLProxyX64-Windows
             MLBootstrapX64-Windows
-            MLProxyX86-Linux
-            MLBootstrapX86-Linux
             MLProxyX64-Linux
             MLBootstrapX64-Linux
