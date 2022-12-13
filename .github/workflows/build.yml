@@ -36,56 +36,81 @@ jobs:
         with:
           name: MLCoreRelease
           path: Output/Release/MelonLoader/
-  build_rust_x86:
+  build_rust_windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: rust-toolchain
-        uses: actions-rs/toolchain@v1.0.6
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: nightly
           # Target triple to install for this toolchain
-          target: i686-pc-windows-msvc
+          targets: i686-pc-windows-msvc, x86_64-pc-windows-msvc
       - name: Build Rust | Windows - x86
         shell: cmd
         run: cargo +nightly build --target i686-pc-windows-msvc --release
-      - name: Upload proxy x86
+      - name: Build Rust | Windows - x64
+        shell: cmd
+        run: cargo +nightly build --target x86_64-pc-windows-msvc --release
+      - name: Upload Proxy | Windows x86
         uses: actions/upload-artifact@v3
         with:
-          name: MLProxyX86
+          name: MLProxyX86-Windows
           path: target/i686-pc-windows-msvc/release/version.dll
-      - name: Upload bootstrap x86
+      - name: Upload Bootstrap | Windows x86
         uses: actions/upload-artifact@v3
         with:
-          name: MLBootstrapX86
+          name: MLBootstrapX86-Windows
           path: target/i686-pc-windows-msvc/release/Bootstrap.dll
-          
-  build_rust_x64:
-    runs-on: windows-latest
+      - name: Upload Proxy | Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLProxyX64-Windows
+          path: target/x86_64-pc-windows-msvc/release/version.dll
+      - name: Upload Bootstrap | Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLBootstrapX64-Windows
+          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
+  build_rust_linux:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: rust-toolchain
-        uses: actions-rs/toolchain@v1.0.6
+        uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: nightly
           # Target triple to install for this toolchain
-          target: x86_64-pc-windows-msvc
-      - name: Build Rust | Windows - x64
-        shell: cmd
-        run: cargo +nightly build --release
-      - name: Upload proxy x64
+          targets: i686-unknown-linux-gnu, x86_64-unknown-linux-gnu
+      - name: Build Rust | Linux - x86
+        shell: bash
+        run: cargo +nightly build --target i686-unknown-linux-gnu --release
+      - name: Build Rust | Linux - x64
+        shell: bash
+        run: cargo +nightly build --target x86_64-unknown-linux-gnu --release
+      - name: Upload Proxy | Linux x86
         uses: actions/upload-artifact@v3
         with:
-          name: MLProxyX64
-          path: target/x86_64-pc-windows-msvc/release/version.dll
-      - name: Upload bootstrap x64
+          name: MLProxyX86-Linux
+          path: target/i686-unknown-linux-gnu/release/libversion.so
+      - name: Upload Bootstrap | Linux x86
         uses: actions/upload-artifact@v3
         with:
-          name: MLBootstrapX64
-          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
-  finalize_x64_debug_zip:
+          name: MLBootstrapX86-Linux
+          path: target/i686-unknown-linux-gnu/release/libBootstrap.so
+      - name: Upload Proxy | Linux x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLProxyX64-Linux
+          path: target/x86_64-unknown-linux-gnu/release/libversion.sp
+      - name: Upload Bootstrap | Linux x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLBootstrapX64-Linux
+          path: target/x86_64-unknown-linux-gnu/release/libBootstrap.so
+  finalize_x64_debug_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_debug, build_rust_x64]
+    needs: [build_core_debug, build_rust_windows]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -96,12 +121,12 @@ jobs:
       - name: Download proxy x64
         uses: actions/download-artifact@v3
         with:
-          name: MLProxyX64
+          name: MLProxyX64-Windows
           path: Output/Debug/x64/
       - name: Download bootstrap x64
         uses: actions/download-artifact@v3
         with:
-          name: MLBootstrapX64
+          name: MLBootstrapX64-Windows
           path: Output/Debug/x64/MelonLoader/Dependencies/
       - name: Package x64 zip
         shell: cmd
@@ -112,9 +137,6 @@ jobs:
           echo.
           echo Copying Dobby x64...
           xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll
-          echo Copying Mono x64...
-          mkdir Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
-          xcopy BaseLibs\MonoBleedingEdge.x64 Output\Debug\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x64
@@ -126,11 +148,11 @@ jobs:
       - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x64
         with:
-          name: MelonLoader.x64.CI.Debug
+          name: MelonLoader.Windows.x64.CI.Debug
           path: ./Output/Debug/x64/*
-  finalize_x86_debug_zip:
+  finalize_x86_debug_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_debug, build_rust_x86]
+    needs: [build_core_debug, build_rust_windows]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -141,12 +163,12 @@ jobs:
       - name: Download proxy x86
         uses: actions/download-artifact@v3
         with:
-          name: MLProxyX86
+          name: MLProxyX86-Windows
           path: Output/Debug/x86/
       - name: Download bootstrap x86
         uses: actions/download-artifact@v3
         with:
-          name: MLBootstrapX86
+          name: MLBootstrapX86-Windows
           path: Output/Debug/x86/MelonLoader/Dependencies/
       - name: Package x86 zip
         shell: cmd
@@ -157,9 +179,6 @@ jobs:
           echo.
           echo Copying Dobby x86...
           xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll
-          echo Copying Mono x86...
-          mkdir Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
-          xcopy BaseLibs\MonoBleedingEdge.x86 Output\Debug\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x86
@@ -171,11 +190,11 @@ jobs:
       - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x86
         with:
-          name: MelonLoader.x86.CI.Debug
+          name: MelonLoader.Windows.x86.CI.Debug
           path: ./Output/Debug/x86/*
-  finalize_x64_release_zip:
+  finalize_x64_release_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_release, build_rust_x64]
+    needs: [build_core_release, build_rust_windows]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -186,12 +205,12 @@ jobs:
       - name: Download proxy x64
         uses: actions/download-artifact@v3
         with:
-          name: MLProxyX64
+          name: MLProxyX64-Windows
           path: Output/Release/x64/
       - name: Download bootstrap x64
         uses: actions/download-artifact@v3
         with:
-          name: MLBootstrapX64
+          name: MLBootstrapX64-Windows
           path: Output/Release/x64/MelonLoader/Dependencies/
       - name: Package x64 zip
         shell: cmd
@@ -200,9 +219,8 @@ jobs:
           mkdir Output\Release\x64\MelonLoader\Managed\
           xcopy BaseLibs\Managed Output\Release\x64\MelonLoader\Managed\ /E /H /Y
           echo.
-          echo Copying Mono x64...
-          mkdir Output\Release\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\
-          xcopy BaseLibs\MonoBleedingEdge.x64 Output\Release\x64\MelonLoader\Dependencies\MonoBleedingEdge.x64\ /E /H /Y
+          echo Copying Dobby x64...
+          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\dobby.dll
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x64
@@ -214,11 +232,11 @@ jobs:
       - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x64
         with:
-          name: MelonLoader.x64.CI.Release
+          name: MelonLoader.Windows.x64.CI.Release
           path: ./Output/Release/x64/*
-  finalize_x86_release_zip:
+  finalize_x86_release_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_release, build_rust_x86]
+    needs: [build_core_release, build_rust_windows]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -229,12 +247,12 @@ jobs:
       - name: Download proxy x86
         uses: actions/download-artifact@v3
         with:
-          name: MLProxyX86
+          name: MLProxyX86-Windows
           path: Output/Release/x86/
       - name: Download bootstrap x86
         uses: actions/download-artifact@v3
         with:
-          name: MLBootstrapX86
+          name: MLBootstrapX86-Windows
           path: Output/Release/x86/MelonLoader/Dependencies/
       - name: Package x86 zip
         shell: cmd
@@ -243,9 +261,8 @@ jobs:
           mkdir Output\Release\x86\MelonLoader\Managed\
           xcopy BaseLibs\Managed Output\Release\x86\MelonLoader\Managed\ /E /H /Y
           echo.
-          echo Copying Mono x86...
-          mkdir Output\Release\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\
-          xcopy BaseLibs\MonoBleedingEdge.x86 Output\Release\x86\MelonLoader\Dependencies\MonoBleedingEdge.x86\ /E /H /Y
+          echo Copying Dobby x86...
+          xcopy BaseLibs\dobby_x86.dll Output\Debug\x64\MelonLoader\dobby.dll
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x86
@@ -257,18 +274,180 @@ jobs:
       - uses: actions/upload-artifact@v3
         name: Upload Zip | Windows - x86
         with:
-          name: MelonLoader.x86.CI.Release
+          name: MelonLoader.Windows.x86.CI.Release
+          path: ./Output/Release/x86/*
+          
+    
+  finalize_x64_debug_zip_linux:
+    runs-on: windows-latest
+    needs: [build_core_debug, build_rust_windows]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download core artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: MLCoreDebug
+          path: Output/Debug/x64/MelonLoader/
+      - name: Download proxy x64
+        uses: actions/download-artifact@v3
+        with:
+          name: MLProxyX64-Linux
+          path: Output/Debug/x64/
+      - name: Download bootstrap x64
+        uses: actions/download-artifact@v3
+        with:
+          name: MLBootstrapX64-Linux
+          path: Output/Debug/x64/MelonLoader/Dependencies/
+      - name: Package x64 zip
+        shell: cmd
+        run: |
+          echo Copying Managed Libs...
+          mkdir Output\Debug\x64\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
+          echo.
+          echo Copying documentation files...
+          copy NOTICE.txt Output\Debug\x64
+          mkdir Output\Debug\x64\MelonLoader\Documentation
+          copy CHANGELOG.md Output\Debug\x64\MelonLoader\Documentation\
+          copy LICENSE.md Output\Debug\x64\MelonLoader\Documentation\
+          copy NOTICE.txt Output\Debug\x64\MelonLoader\Documentation\
+          copy README.md Output\Debug\x64\MelonLoader\Documentation\
+      - uses: actions/upload-artifact@v3
+        name: Upload Zip | Linux - x64
+        with:
+          name: MelonLoader.Linux.x64.CI.Debug
+          path: ./Output/Debug/x64/*
+  finalize_x86_debug_zip_linux:
+    runs-on: windows-latest
+    needs: [build_core_debug, build_rust_windows]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download core artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: MLCoreDebug
+          path: Output/Debug/x86/MelonLoader/
+      - name: Download proxy x86
+        uses: actions/download-artifact@v3
+        with:
+          name: MLProxyX86-Linux
+          path: Output/Debug/x86/
+      - name: Download bootstrap x86
+        uses: actions/download-artifact@v3
+        with:
+          name: MLBootstrapX86-Linux
+          path: Output/Debug/x86/MelonLoader/Dependencies/
+      - name: Package x86 zip
+        shell: cmd
+        run: |
+          echo Copying Managed Libs...
+          mkdir Output\Debug\x86\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
+          echo.
+          echo Copying documentation files...
+          copy NOTICE.txt Output\Debug\x86
+          mkdir Output\Debug\x86\MelonLoader\Documentation
+          copy CHANGELOG.md Output\Debug\x86\MelonLoader\Documentation\
+          copy LICENSE.md Output\Debug\x86\MelonLoader\Documentation\
+          copy NOTICE.txt Output\Debug\x86\MelonLoader\Documentation\
+          copy README.md Output\Debug\x86\MelonLoader\Documentation\
+      - uses: actions/upload-artifact@v3
+        name: Upload Zip | Linux - x86
+        with:
+          name: MelonLoader.Linux.x86.CI.Debug
+          path: ./Output/Debug/x86/*
+  finalize_x64_release_zip_linux:
+    runs-on: windows-latest
+    needs: [build_core_release, build_rust_linux]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download core artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: MLCoreRelease
+          path: Output/Release/x64/MelonLoader/
+      - name: Download proxy x64
+        uses: actions/download-artifact@v3
+        with:
+          name: MLProxyX64-Linux
+          path: Output/Release/x64/
+      - name: Download bootstrap x64
+        uses: actions/download-artifact@v3
+        with:
+          name: MLBootstrapX64-Linux
+          path: Output/Release/x64/MelonLoader/Dependencies/
+      - name: Package x64 zip
+        shell: cmd
+        run: |
+          echo Copying Managed Libs...
+          mkdir Output\Release\x64\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Release\x64\MelonLoader\Managed\ /E /H /Y
+          echo.
+          echo Copying documentation files...
+          copy NOTICE.txt Output\Release\x64
+          mkdir Output\Release\x64\MelonLoader\Documentation
+          copy CHANGELOG.md Output\Release\x64\MelonLoader\Documentation\
+          copy LICENSE.md Output\Release\x64\MelonLoader\Documentation\
+          copy NOTICE.txt Output\Release\x64\MelonLoader\Documentation\
+          copy README.md Output\Release\x64\MelonLoader\Documentation\
+      - uses: actions/upload-artifact@v3
+        name: Upload Zip | Linux - x64
+        with:
+          name: MelonLoader.Linux.x64.CI.Release
+          path: ./Output/Release/x64/*
+  finalize_x86_release_zip_linux:
+    runs-on: windows-latest
+    needs: [build_core_release, build_rust_linux]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download core artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: MLCoreRelease
+          path: Output/Release/x86/MelonLoader/
+      - name: Download proxy x86
+        uses: actions/download-artifact@v3
+        with:
+          name: MLProxyX86-Linux
+          path: Output/Release/x86/
+      - name: Download bootstrap x86
+        uses: actions/download-artifact@v3
+        with:
+          name: MLBootstrapX86-Linux
+          path: Output/Release/x86/MelonLoader/Dependencies/
+      - name: Package x86 zip
+        shell: cmd
+        run: |
+          echo Copying Managed Libs...
+          mkdir Output\Release\x86\MelonLoader\Managed\
+          xcopy BaseLibs\Managed Output\Release\x86\MelonLoader\Managed\ /E /H /Y
+          echo.
+          echo Copying documentation files...
+          copy NOTICE.txt Output\Release\x86
+          mkdir Output\Release\x86\MelonLoader\Documentation
+          copy CHANGELOG.md Output\Release\x86\MelonLoader\Documentation\
+          copy LICENSE.md Output\Release\x86\MelonLoader\Documentation\
+          copy NOTICE.txt Output\Release\x86\MelonLoader\Documentation\
+          copy README.md Output\Release\x86\MelonLoader\Documentation\
+      - uses: actions/upload-artifact@v3
+        name: Upload Zip | Linux - x86
+        with:
+          name: MelonLoader.Linux.x86.CI.Release
           path: ./Output/Release/x86/*
   cleanup_artifacts:
     runs-on: windows-latest
-    needs: [finalize_x86_debug_zip, finalize_x64_debug_zip, finalize_x86_release_zip, finalize_x64_release_zip]
+    needs: [finalize_x86_debug_zip_windows, finalize_x64_debug_zip_windows, finalize_x86_release_zip_windows, finalize_x64_release_zip_windows, finalize_x86_debug_zip_linux, finalize_x64_debug_zip_linux, finalize_x86_release_zip_linux, finalize_x64_release_zip_linux]
     steps:
       - uses: GeekyEggo/delete-artifact@v2.0.0
         with:
           name: |
             MLCoreDebug
             MLCoreRelease
-            MLProxyX86
-            MLBootstrapX86
-            MLProxyX64
-            MLBootstrapX64
+            MLProxyX86-Windows
+            MLBootstrapX86-Windows
+            MLProxyX64-Windows
+            MLBootstrapX64-Windows
+            MLProxyX86-Linux
+            MLBootstrapX86-Linux
+            MLProxyX64-Linux
+            MLBootstrapX64-Linux
