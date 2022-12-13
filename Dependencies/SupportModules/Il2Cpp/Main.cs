@@ -190,7 +190,7 @@ namespace MelonLoader.Support
             public unsafe void Dispose()
             {
 //                 MelonLogger.Msg($"Removing detour from 0x{_detourFrom:X} to 0x{_targetPtr:X} for method {_target.Method.Name}");
-                var addr = _originalPtr;
+                var addr = _detourFrom;
                 MelonUtils.NativeHookDetach((nint) (&addr), _targetPtr);
                 _targetPtr = IntPtr.Zero;
 //                 _originalPtr = IntPtr.Zero;
