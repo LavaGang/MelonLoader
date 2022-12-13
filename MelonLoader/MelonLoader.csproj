@@ -34,7 +34,7 @@
 		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.2-ci.227" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.3" />
-		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.2-ci.227" />
+		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\classdata.tpk" />
