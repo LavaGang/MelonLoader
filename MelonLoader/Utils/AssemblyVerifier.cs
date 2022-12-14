@@ -163,7 +163,7 @@ namespace MelonLoader.Utils
 
             totalEntropy /= -totalChars;
 
-            if (totalEntropy is < 4 or > 5.25)
+            if (totalEntropy is < 4 or > 5.5)
             {
                 //MelonDebug.Msg($"[AssemblyVerifier] {image.Name} Has an Invalid Entropy: {totalEntropy}!");
                 return false;
