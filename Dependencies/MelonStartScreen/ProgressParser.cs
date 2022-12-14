@@ -119,16 +119,6 @@ namespace MelonLoader.MelonStartScreen
                 @"Initialization - Extracting Il2CppDumper"
             ),
             new AverageStepDuration(
-                @"Downloading Il2CppAssemblyUnhollower\.\.\.",
-                500f,
-                @"Initialization - Downloading Il2CppAssemblyUnhollower"
-            ),
-            new AverageStepDuration(
-                @"Extracting .* to .*Il2CppAssemblyUnhollower",
-                500f,
-                @"Initialization - Extracting Il2CppAssemblyUnhollower"
-            ),
-            new AverageStepDuration(
                 @"Downloading DeobfuscationMap\.\.\.",
                 500f,
                 @"Initialization - Downloading DeobfuscationMap"
@@ -223,174 +213,174 @@ namespace MelonLoader.MelonStartScreen
                 null
             ),
             */
-            // Il2CppAssemblyUnhollower
+            // Il2CppInterop
             new AverageStepDuration(
                 @"Reading assemblies\.\.\.",
                 170f,
-                "Il2CppAssemblyUnhollower - Reading assemblies"
+                "Il2CppInterop - Reading assemblies"
             ),
             new AverageStepDuration(
                 @"Reading system assemblies\.\.\.",
                 14f,
-                "Il2CppAssemblyUnhollower - Reading system assemblies"
+                "Il2CppInterop - Reading system assemblies"
             ),
             new AverageStepDuration(
                 @"Reading unity assemblies\.\.\.",
                 29f,
-                "Il2CppAssemblyUnhollower - Reading unity assemblies"
+                "Il2CppInterop - Reading unity assemblies"
             ),
             new AverageStepDuration(
                 @"Creating rewrite assemblies\.\.\.",
                 20f,
-                "Il2CppAssemblyUnhollower - Creating rewrite assemblies"
+                "Il2CppInterop - Creating rewrite assemblies"
             ),
             new AverageStepDuration(
                 @"Computing renames\.\.\.",
                 281f,
-                "Il2CppAssemblyUnhollower - Computing renames"
+                "Il2CppInterop - Computing renames"
             ),
             new AverageStepDuration(
                 @"Creating typedefs\.\.\.",
                 109f,
-                "Il2CppAssemblyUnhollower - Creating typedefs"
+                "Il2CppInterop - Creating typedefs"
             ),
             new AverageStepDuration(
                 @"Computing struct blittability\.\.\.",
                 10f,
-                "Il2CppAssemblyUnhollower - Computing struct blittability"
+                "Il2CppInterop - Computing struct blittability"
             ),
             new AverageStepDuration(
                 @"Filling typedefs\.\.\.",
                 27f,
-                "Il2CppAssemblyUnhollower - Filling typedefs"
+                "Il2CppInterop - Filling typedefs"
             ),
             new AverageStepDuration(
                 @"Filling generic constraints\.\.\.",
                 6f,
-                "Il2CppAssemblyUnhollower - Filling generic constraints"
+                "Il2CppInterop - Filling generic constraints"
             ),
             new AverageStepDuration(
                 @"Creating members\.\.\.",
                 2256f,
-                "Il2CppAssemblyUnhollower - Creating members"
+                "Il2CppInterop - Creating members"
             ),
             new AverageStepDuration(
                 @"Scanning method cross-references\.\.\.",
                 1919f,
-                "Il2CppAssemblyUnhollower - Scanning method cross-references"
+                "Il2CppInterop - Scanning method cross-references"
             ),
             new AverageStepDuration(
                 @"Finalizing method declarations\.\.\.",
                 2867f,
-                "Il2CppAssemblyUnhollower - Finalizing method declarations"
+                "Il2CppInterop - Finalizing method declarations"
             ),
             new AverageStepDuration(
                 @"Filling method parameters\.\.\.",
                 510f,
-                "Il2CppAssemblyUnhollower - Filling method parameters"
+                "Il2CppInterop - Filling method parameters"
             ),
             new AverageStepDuration(
                 @"Creating static constructors\.\.\.",
                 1237f,
-                "Il2CppAssemblyUnhollower - Creating static constructors"
+                "Il2CppInterop - Creating static constructors"
             ),
             new AverageStepDuration(
                 @"Creating value type fields\.\.\.",
                 186f,
-                "Il2CppAssemblyUnhollower - Creating value type fields"
+                "Il2CppInterop - Creating value type fields"
             ),
             new AverageStepDuration(
                 @"Creating enums\.\.\.",
                 69f,
-                "Il2CppAssemblyUnhollower - Creating enums"
+                "Il2CppInterop - Creating enums"
             ),
             new AverageStepDuration(
                 @"Creating IntPtr constructors\.\.\.",
                 63f,
-                "Il2CppAssemblyUnhollower - Creating IntPtr constructors"
+                "Il2CppInterop - Creating IntPtr constructors"
             ),
             new AverageStepDuration(
                 @"Creating type getters\.\.\.",
                 132f,
-                "Il2CppAssemblyUnhollower - Creating type getters"
+                "Il2CppInterop - Creating type getters"
             ),
             /*
             (
                 @"Creating non-blittable struct constructors\.\.\.",
                 38f,
-                "Il2CppAssemblyUnhollower - Creating non-blittable struct constructors"
+                "Il2CppInterop - Creating non-blittable struct constructors"
             ),
             (
                 @"Creating generic method static constructors\.\.\.",
                 42f,
-                "Il2CppAssemblyUnhollower - Creating generic method static constructors"
+                "Il2CppInterop - Creating generic method static constructors"
             ),
             */
             new AverageStepDuration(
                 @"Creating field accessors\.\.\.",
                 1642f,
-                "Il2CppAssemblyUnhollower - Creating field accessors"
+                "Il2CppInterop - Creating field accessors"
             ),
             new AverageStepDuration(
                 @"Filling methods\.\.\.",
                 2385f,
-                "Il2CppAssemblyUnhollower - Filling methods"
+                "Il2CppInterop - Filling methods"
             ),
             new AverageStepDuration(
                 @"Generating implicit conversions\.\.\.",
                 121f,
-                "Il2CppAssemblyUnhollower - Generating implicit conversions"
+                "Il2CppInterop - Generating implicit conversions"
             ),
             new AverageStepDuration(
                 @"Creating properties\.\.\.",
                 102f,
-                "Il2CppAssemblyUnhollower - Creating properties"
+                "Il2CppInterop - Creating properties"
             ),
             new AverageStepDuration(
                 @"Unstripping types\.\.\.",
                 44f,
-                "Il2CppAssemblyUnhollower - Unstripping types"
+                "Il2CppInterop - Unstripping types"
             ),
             new AverageStepDuration(
                 @"Unstripping fields\.\.\.",
                 5f,
-                "Il2CppAssemblyUnhollower - Unstripping fields"
+                "Il2CppInterop - Unstripping fields"
             ),
             new AverageStepDuration(
                 @"Unstripping methods\.\.\.",
                 241f,
-                "Il2CppAssemblyUnhollower - Unstripping methods"
+                "Il2CppInterop - Unstripping methods"
             ),
             new AverageStepDuration(
                 @"Unstripping method bodies\.\.\.",
                 266f,
-                "Il2CppAssemblyUnhollower - Unstripping method bodies"
+                "Il2CppInterop - Unstripping method bodies"
             ),
             new AverageStepDuration(
                 @"Generating forwarded types\.\.\.",
                 4f,
-                "Il2CppAssemblyUnhollower - Generating forwarded types"
+                "Il2CppInterop - Generating forwarded types"
             ),
             new AverageStepDuration(
                 @"Writing xref cache\.\.\.",
                 1179f,
-                "Il2CppAssemblyUnhollower - Writing xref cache"
+                "Il2CppInterop - Writing xref cache"
             ),
             new AverageStepDuration(
                 @"Writing assemblies\.\.\.",
                 2586f,
-                "Il2CppAssemblyUnhollower - Writing assemblies"
+                "Il2CppInterop - Writing assemblies"
             ),
             new AverageStepDuration(
                 @"Writing method pointer map\.\.\.",
                 89f,
-                "Il2CppAssemblyUnhollower - Writing method pointer map"
+                "Il2CppInterop - Writing method pointer map"
             ),
             // Move files
             new AverageStepDuration(
                 @"Deleting .*\.dll",
                 500f,
-                "Il2CppAssemblyUnhollower - Moving files"
+                "Il2CppInterop - Moving files"
             ),
         };
     }

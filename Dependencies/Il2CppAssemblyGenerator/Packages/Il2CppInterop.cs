@@ -11,30 +11,22 @@ using Mono.Cecil;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
-    internal class Il2CppAssemblyUnhollower : Models.ExecutablePackage
+    internal class Il2CppInterop : Models.ExecutablePackage
     {
-        internal Il2CppAssemblyUnhollower()
+        internal Il2CppInterop()
         {
-            Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Il2CppAssemblyUnhollower;
-#if !DEBUG
-            // if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                // Version = RemoteAPI.Info.ForceUnhollowerVersion;
-#endif
-            if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = "1.4.1-ci.224";
+            Version = typeof(Il2CppInteropGenerator).Assembly.CustomAttributes
+                .Where(x => x.AttributeType.Name == "AssemblyInformationalVersionAttribute")
+                .Select(x => x.ConstructorArguments[0].Value.ToString())
+                .FirstOrDefault();
 
-            Name = nameof(Il2CppAssemblyUnhollower);
-            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/v{Version}/{Name}.{Version}.zip";
+            Name = nameof(Il2CppInterop);
             Destination = Path.Combine(Core.BasePath, Name);
             OutputFolder = Path.Combine(Destination, "Il2CppAssemblies");
         }
 
         internal override bool ShouldSetup()
-            => !Config.Values.UseInterop 
-               && (string.IsNullOrEmpty(Config.Values.UnhollowerVersion) || !Config.Values.UnhollowerVersion.Equals(Version));
-
-        internal override void Save()
-            => Save(ref Config.Values.UnhollowerVersion);
+            => !Config.Values.UseInterop;
 
         internal override bool Execute()
         {
