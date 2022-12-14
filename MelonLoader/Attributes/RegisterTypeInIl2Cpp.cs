@@ -37,7 +37,7 @@ namespace MelonLoader
                 RegisterTypeInIl2Cpp att = (RegisterTypeInIl2Cpp)attTbl[0];
                 if (att == null)
                     continue;
-                UnhollowerSupport.RegisterTypeInIl2CppDomain(type, att.LogSuccess);
+                InteropSupport.RegisterTypeInIl2CppDomain(type, att.LogSuccess);
             }
         }
 
