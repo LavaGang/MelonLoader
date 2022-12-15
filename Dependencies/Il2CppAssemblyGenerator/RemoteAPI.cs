@@ -13,7 +13,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         internal class InfoStruct
         {
             internal string ForceDumperVersion = null;
-            internal string ForceUnhollowerVersion = null;
             internal string ObfuscationRegex = null;
             internal string MappingURL = null;
             internal string MappingFileSHA512 = null;
@@ -52,7 +51,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             ContactHosts();
 
             Core.Logger.Msg($"RemoteAPI.DumperVersion = {(string.IsNullOrEmpty(Info.ForceDumperVersion) ? "null" : Info.ForceDumperVersion)}");
-            Core.Logger.Msg($"RemoteAPI.UnhollowerVersion = {(string.IsNullOrEmpty(Info.ForceUnhollowerVersion) ? "null" : Info.ForceUnhollowerVersion)}");
             Core.Logger.Msg($"RemoteAPI.ObfuscationRegex = {(string.IsNullOrEmpty(Info.ObfuscationRegex) ? "null" : Info.ObfuscationRegex)}");
             Core.Logger.Msg($"RemoteAPI.MappingURL = {(string.IsNullOrEmpty(Info.MappingURL) ? "null" : Info.MappingURL)}");
             Core.Logger.Msg($"RemoteAPI.MappingFileSHA512 = {(string.IsNullOrEmpty(Info.MappingFileSHA512) ? "null" : Info.MappingFileSHA512)}");
@@ -129,7 +127,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
                     InfoStruct returninfo = new InfoStruct();
                     returninfo.ForceDumperVersion = responseobj.forceCpp2IlVersion;
-                    returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
                     returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
                     returninfo.MappingURL = responseobj.mappingUrl;
                     returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
@@ -143,7 +140,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     public string mappingUrl = null;
                     public string mappingFileSHA512 = null;
                     public string forceCpp2IlVersion = null;
-                    public string forceUnhollowerVersion = null;
+                    public string forceUnhollowerVersion = null; //TODO: Remove this from the API
                     public string obfuscationRegex = null;
                 }
             }
@@ -160,7 +157,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
                     InfoStruct returninfo = new InfoStruct();
                     //returninfo.ForceDumperVersion = responseobj.forceDumperVersion;
-                    returninfo.ForceUnhollowerVersion = responseobj.forceUnhollowerVersion;
                     returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
                     returninfo.MappingURL = responseobj.mappingURL;
                     returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
@@ -170,7 +166,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 private class ResponseStruct
                 {
                     public string forceDumperVersion = null;
-                    public string forceUnhollowerVersion = null;
+                    public string forceUnhollowerVersion = null; //TODO: Remove this from the API
                     public string obfuscationRegex = null;
                     public string mappingURL = null;
                     public string mappingFileSHA512 = null;

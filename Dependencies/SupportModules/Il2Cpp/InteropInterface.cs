@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace MelonLoader.Support
 {
-    internal class UnhollowerInterface : UnhollowerSupport.Interface
+    internal class InteropInterface : InteropSupport.Interface
     {
         public IntPtr CopyMethodInfoStruct(IntPtr ptr)
             => ptr;

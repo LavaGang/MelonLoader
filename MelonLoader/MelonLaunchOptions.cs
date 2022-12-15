@@ -161,7 +161,6 @@ namespace MelonLoader
             public static bool OfflineMode { get; internal set; }
             public static bool DisableDeobfMapIntegrityCheck { get; internal set; }
             public static string ForceVersion_Dumper { get; internal set; }
-            public static string ForceVersion_Il2CppAssemblyUnhollower { get; internal set; }
             public static string ForceRegex { get; internal set; }
 
             internal static void Setup()
@@ -170,7 +169,6 @@ namespace MelonLoader
                 WithoutArg["melonloader.agfoffline"] = () => OfflineMode = true;
                 WithoutArg["melonloader.agfregenerate"] = () => ForceRegeneration = true;
                 WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;
-                WithArg["melonloader.agfvunhollower"] = (string arg) => ForceVersion_Il2CppAssemblyUnhollower = arg;
                 WithArg["melonloader.agfregex"] = (string arg) => ForceRegex = arg;
             }
         }

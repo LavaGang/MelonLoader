@@ -17,7 +17,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         internal static HttpClient webClient = null;
 
         internal static Packages.Models.ExecutablePackage dumper = null;
-        internal static Il2CppAssemblyUnhollower il2cppinterop = null;
+        internal static Packages.Il2CppInterop il2cppinterop = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
         internal static DeobfuscationRegex deobfuscationRegex = null;
@@ -64,7 +64,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             else
                 dumper = new Cpp2IL();
 
-            il2cppinterop = new Il2CppAssemblyUnhollower();
+            il2cppinterop = new Packages.Il2CppInterop();
             unitydependencies = new UnityDependencies();
             deobfuscationMap = new DeobfuscationMap();
             deobfuscationRegex = new DeobfuscationRegex();

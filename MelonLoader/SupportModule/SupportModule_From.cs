@@ -35,10 +35,10 @@
             Core.Quit();
         }
 
-        public void SetUnhollowerSupportInterface(UnhollowerSupport.Interface unhollower)
+        public void SetInteropSupportInterface(InteropSupport.Interface interop)
         {
-            if (UnhollowerSupport.SMInterface == null)
-                UnhollowerSupport.SMInterface = unhollower;
+            if (InteropSupport.SMInterface == null)
+                InteropSupport.SMInterface = interop;
         }
     }
 }
