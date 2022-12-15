@@ -16,11 +16,11 @@ jobs:
         uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 7.0.x
-      - name: Publish AssetRipper Windows x64
+      - name: .NET Pack
         run: dotnet pack -c Release
         working-directory: ./MelonLoader/
-      - name: Upload core artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: MelonLoaderNuGetPackage
-          path: Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.0.nupkg
+          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.0.nupkg
