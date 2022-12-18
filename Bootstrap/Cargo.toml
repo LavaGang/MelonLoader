@@ -12,7 +12,7 @@ colored = "2.0.0"
 thiserror = "1.0.37"
 ctor = "0.1.26"
 lazy_static = "1.4.0"
-unity-rs = { git = "https://github.com/RinLovesYou/unity-rs.git" }
+unity-rs = { git = "https://github.com/RinLovesYou/unity-rs.git", commit = "8ae8053" }
 libc = "0.2.137"
 libc-stdhandle = "0.1.0"
 netcorehost = "*"
