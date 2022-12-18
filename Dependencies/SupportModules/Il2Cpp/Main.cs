@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using MelonLoader.CoreClrUtils;
 using UnityEngine;
+using Il2CppInterop.Common;
+using Microsoft.Extensions.Logging;
 
 namespace MelonLoader.Support
 {
@@ -22,20 +24,6 @@ namespace MelonLoader.Support
             Interface = interface_from;
             UnityMappers.RegisterMappers();
 
-            /*LogSupport.RemoveAllHandlers();
-            if (MelonDebug.IsEnabled())
-                LogSupport.InfoHandler += MelonLogger.Msg;
-            LogSupport.WarningHandler += MelonLogger.Warning;
-            LogSupport.ErrorHandler += MelonLogger.Error;
-            if (MelonDebug.IsEnabled())
-                LogSupport.TraceHandler += MelonLogger.Msg;
-
-            ClassInjector.Detour = new UnhollowerDetour();
-            UnityVersionHandler.Initialize(
-                InternalUtils.UnityInformationHandler.EngineVersion.Major,
-                InternalUtils.UnityInformationHandler.EngineVersion.Minor,
-                InternalUtils.UnityInformationHandler.EngineVersion.Build);*/
-            
             Il2CppInteropRuntime runtime = Il2CppInteropRuntime.Create(new()
             {
                 DetourProvider = new MelonDetourProvider(),
@@ -43,7 +31,8 @@ namespace MelonLoader.Support
                     InternalUtils.UnityInformationHandler.EngineVersion.Major,
                     InternalUtils.UnityInformationHandler.EngineVersion.Minor,
                     InternalUtils.UnityInformationHandler.EngineVersion.Build)
-            }).AddHarmonySupport();
+            }).AddLogger(new InteropLogger())
+              .AddHarmonySupport();
 
             if (MelonLaunchOptions.Console.CleanUnityLogs)
                 ConsoleCleaner();
@@ -115,19 +104,6 @@ namespace MelonLoader.Support
             catch (Exception ex) { MelonLogger.Warning($"Console Cleaner Failed: {ex}"); }
         }
     }
-
-    /*internal class UnhollowerDetour : IManagedDetour
-    {
-        private static readonly List<object> PinnedDelegates = new List<object>();
-
-        unsafe public T Detour<T>(IntPtr @from, T to) where T : Delegate
-        {
-            IntPtr* targetVarPointer = &from;
-            PinnedDelegates.Add(to);
-            MelonUtils.NativeHookAttachDirect((IntPtr)targetVarPointer, to.GetFunctionPointer());
-            return from.GetDelegate<T>();
-        }
-    }*/
 
     internal sealed class MelonDetourProvider : IDetourProvider
     {
@@ -203,5 +179,21 @@ namespace MelonLoader.Support
                 return Marshal.GetDelegateForFunctionPointer<T>(_originalPtr);
             }
         }
+    }
+
+    internal class InteropLogger : Microsoft.Extensions.Logging.ILogger {
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter) {
+            if (logLevel is LogLevel.Debug or LogLevel.Trace)
+                MelonDebug.Msg(formatter(state, exception));
+            else
+                MelonLogger.Msg(formatter(state, exception));
+        }
+
+        public bool IsEnabled(LogLevel logLevel) => logLevel switch {
+            LogLevel.Debug or LogLevel.Trace => MelonDebug.IsEnabled(),
+            _ => true
+        };
+
+        public IDisposable BeginScope<TState>(TState state) => throw new NotImplementedException();
     }
 }
