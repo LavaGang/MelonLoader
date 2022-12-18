@@ -14,7 +14,6 @@ namespace MelonLoader
             AnalyticsBlocker.Setup();
             Core.Setup();
             Console.Setup();
-            Debug.Setup();
             Il2CppAssemblyGenerator.Setup();
             Logger.Setup();
         }
@@ -141,17 +140,6 @@ namespace MelonLoader
                     if (int.TryParse(arg, out int valueint))
                         Mode = (DisplayMode)MelonUtils.Clamp(valueint, (int)DisplayMode.NORMAL, (int)DisplayMode.LEMON);
                 };
-            }
-        }
-
-        public static class Debug
-        {
-            public static bool Enabled { get; internal set; }
-
-            internal static void Setup()
-            {
-                WithoutArg["melonloader.debug"] = () => Enabled = true;
-
             }
         }
 
