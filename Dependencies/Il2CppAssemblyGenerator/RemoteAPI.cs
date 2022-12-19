@@ -58,55 +58,66 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         private static void ContactHosts()
         {
+            if (!string.IsNullOrEmpty(Config.Values.RemoteAPIOverride)) {
+                if (ContactHost(new HostInfo(Config.Values.RemoteAPIOverride, DefaultHostInfo.Melon.Contact)))
+                    return;
+            }
+
             if ((HostList == null) || (HostList.Count <= 0))
                 return;
             foreach (HostInfo info in HostList)
             {
-                if (string.IsNullOrEmpty(info.URL) || (info.Func == null))
-                    continue;
-
-                MelonDebug.Msg($"ContactURL = {info.URL}");
-
-                string Response = null;
-                try
-                {
-                    var result = Core.webClient.GetAsync(info.URL).Result;
-                    result.EnsureSuccessStatusCode();
-                    Response = result.Content.ReadAsStringAsync().Result;
-                }
-                catch (Exception ex)
-                {
-                    if (ex is not HttpRequestException {StatusCode: {}} hre)
-                    {
-                        Core.Logger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
-                        continue;
-                    }
-
-                    if (hre.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    {
-                        Core.Logger.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
-                        break;
-                    }
-
-                    Core.Logger.Error($"WebException ({hre.StatusCode}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
-                    continue;
-                }
-
-                var isResponseNull = string.IsNullOrEmpty(Response);
-                MelonDebug.Msg($"Response = {(isResponseNull ? "null" : Response) }");
-                if (isResponseNull)
+                if (ContactHost(info)) {
                     break;
-
-                InfoStruct returnInfo = info.Func(Response);
-                if (returnInfo == null)
-                    continue;
-
-                if (returnInfo.ForceDumperVersion != null && SemVersion.Parse(returnInfo.ForceDumperVersion) <= SemVersion.Parse("2022.0.2"))
-                    returnInfo.ForceDumperVersion = null;
-
-                Info = returnInfo;
-                break;
+                }
             }
+        }
+
+        private static bool ContactHost(HostInfo info) {
+            if (string.IsNullOrEmpty(info.URL) || (info.Func == null))
+                return false;
+
+            MelonDebug.Msg($"ContactURL = {info.URL}");
+
+            string Response = null;
+            try
+            {
+                var result = Core.webClient.GetAsync(info.URL).Result;
+                result.EnsureSuccessStatusCode();
+                Response = result.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception ex)
+            {
+                if (ex is not HttpRequestException {StatusCode: {}} hre)
+                {
+                    Core.Logger.Error($"Exception while Contacting RemoteAPI Host ({info.URL}): {ex}");
+                    return false;
+                }
+
+                if (hre.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    Core.Logger.Msg($"Game Not Found on RemoteAPI Host ({info.URL})");
+                    return true;
+                }
+
+                Core.Logger.Error($"WebException ({hre.StatusCode}) while Contacting RemoteAPI Host ({info.URL}): {ex}");
+                return false;
+            }
+
+            var isResponseNull = string.IsNullOrEmpty(Response);
+            MelonDebug.Msg($"Response = {(isResponseNull ? "null" : Response) }");
+            if (isResponseNull)
+                return true;
+
+            InfoStruct returnInfo = info.Func(Response);
+            if (returnInfo == null)
+                return false;
+
+            if (returnInfo.ForceDumperVersion != null && SemVersion.Parse(returnInfo.ForceDumperVersion) <= SemVersion.Parse("2022.0.2"))
+                returnInfo.ForceDumperVersion = null;
+
+            Info = returnInfo;
+            return true;
         }
 
         private class DefaultHostInfo

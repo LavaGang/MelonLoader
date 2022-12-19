@@ -28,6 +28,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         public class AssemblyGeneratorConfiguration
         {
+            public string RemoteAPIOverride = null;
             public string GameAssemblyHash = null;
             public string DeobfuscationRegex = null;
             public string UnityVersion = "0.0.0.0";
