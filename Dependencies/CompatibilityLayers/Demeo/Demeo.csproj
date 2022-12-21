@@ -24,6 +24,6 @@
 		  <Private>false</Private>
 		</Reference>
 		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-		<PackageReference Include="HarmonyX" Version="2.9.0"/>
+		<PackageReference Include="HarmonyX" Version="2.10.1"/>
 	</ItemGroup>
 </Project>
