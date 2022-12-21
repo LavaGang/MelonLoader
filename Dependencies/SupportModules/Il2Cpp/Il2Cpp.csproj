@@ -45,7 +45,7 @@
 		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.3-ci.244" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.3-ci.244" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
-		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.3.23.4" ExcludeAssets="Runtime" />
+		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.5.1.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.Utils" Version="22.3.23.4" ExcludeAssets="Runtime" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.0.1" ExcludeAssets="Runtime" />
 	</ItemGroup>
