@@ -29,13 +29,17 @@ namespace MelonLoader
         {
             MelonLaunchOptions.Load();
 
+#if NET6_0
             if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
             {
                 Console.WriteLine("[Init] User requested debugger, attempting to launch now...");
                 Debugger.Launch();
             }
+#endif
 
-            MelonEnvironment.MelonLoaderDirectory = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)!.FullName;
+            var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
+            MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
             
             SetupWineCheck();
