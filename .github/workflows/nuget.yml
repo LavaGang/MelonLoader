@@ -1,0 +1,26 @@
+name: Build NuGet Package
+
+on:
+  push:
+    branches: [ master, alpha-development, v0.6.0-rewrite ]
+  pull_request:
+    branches: [ master, alpha-development, v0.6.0-rewrite ]
+  workflow_dispatch:
+
+jobs:
+  build_nuget_package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 7.0.x
+      - name: .NET Pack
+        run: dotnet pack -c Release
+        working-directory: ./MelonLoader/
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MelonLoaderNuGetPackage
+          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.0.nupkg
