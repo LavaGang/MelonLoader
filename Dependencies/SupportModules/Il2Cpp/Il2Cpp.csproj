@@ -40,13 +40,13 @@
 		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
 		<PackageReference Include="HarmonyX" Version="2.10.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" ExcludeAssets="Runtime" />
-		<PackageReference Include="Iced" Version="1.17.0" />
+		<PackageReference Include="Iced" Version="1.18.0" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.3-ci.244" />
 		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.3-ci.244" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.3-ci.244" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
-		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.3.23.4" ExcludeAssets="Runtime" />
-		<PackageReference Include="MonoMod.Utils" Version="22.3.23.4" ExcludeAssets="Runtime" />
+		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
+		<PackageReference Include="MonoMod.Utils" Version="22.7.31.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.0.1" ExcludeAssets="Runtime" />
 	</ItemGroup>
 </Project>

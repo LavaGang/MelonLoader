@@ -24,6 +24,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-		<PackageReference Include="Samboy063.Tomlet" Version="5.0.0"/>
+		<PackageReference Include="Samboy063.Tomlet" Version="5.0.1" />
 	</ItemGroup>
 </Project>

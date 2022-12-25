@@ -34,7 +34,7 @@
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
 		<PackageReference Include="AssetsTools.NET" Version="3.0.0-preview1" />
-		<PackageReference Include="HarmonyX" Version="2.9.0" />
+		<PackageReference Include="HarmonyX" Version="2.10.1" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.0.1" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
 	</ItemGroup>
