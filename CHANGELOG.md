@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.6.0](#v060) |
 | [v0.5.7](#v057) |
 | [v0.5.5](#v055) |
 | [v0.5.4](#v054) |
@@ -28,6 +29,24 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.6.0:
+
+1. Added Linux Support (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+2. Switched the runtime to .NET 6 CoreCLR for Il2Cpp Games (Credits to [SamboyCoding](https://github.com/SamboyCoding) :D)
+3. Moved a lot of logic from Native to Managed (Credits to [SamboyCoding](https://github.com/SamboyCoding) & [RinLovesYou](https://github.com/RinLovesYou) :D)
+4. Replaced Unhollower with Il2CppInterop (Credits to [SamboyCoding](https://github.com/SamboyCoding), [nitrog0d](https://github.com/nitrog0d) & [ds5678](https://github.com/ds5678) :D)
+5. Rewrote Proxy & Bootstrap (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+6. Fixed some start screen corruption
+7. Added helper methods for determining current platform
+8. added `Utils.MelonConsole` for printing to console on mono games
+9. Removed Il2CppDumper
+10. Update HarmonyX, MonoMod, and Tomlet
+11. Switched from MSDetours to Dobby
+12. Added full RGB color support in console using Pastel
+13. Added `MelonEnvironment` class
 
 ---
 
