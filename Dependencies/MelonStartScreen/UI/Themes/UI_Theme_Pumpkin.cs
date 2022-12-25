@@ -38,7 +38,7 @@ namespace MelonLoader.MelonStartScreen.UI.Themes
         {
             public hVersionTextSettings()
             {
-                Text = "<loaderNameHalloween/> v<loaderVersion/> Open-Beta";
+                Text = $"<loaderNameHalloween/> v<loaderVersion/> {(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
                 Defaults();
             }
         }

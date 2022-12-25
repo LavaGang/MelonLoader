@@ -179,11 +179,12 @@ namespace MelonLoader.MelonStartScreen
 
         internal class VersionTextSettings : TextSettings
         {
+            internal bool Is_ALPHA_PreRelease = true;
             public VersionTextSettings() => Defaults();
             public void Defaults()
             {
                 if (Text == null)
-                    Text = $"<loaderName/> v<loaderVersion/> Open-Beta";
+                    Text = $"<loaderName/> v<loaderVersion/> {(Is_ALPHA_PreRelease ? "ALPHA Pre-Release" : "Open-Beta")}";
                 TextSize = 24;
                 Anchor = UI_Anchor.MiddleCenter;
                 ScreenAnchor = UI_Anchor.MiddleCenter;
