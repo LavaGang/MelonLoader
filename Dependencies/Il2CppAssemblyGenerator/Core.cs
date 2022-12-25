@@ -57,13 +57,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
                 RemoteAPI.Contact();
 
-            // Temporary Workaround for Cpp2IL Failing on Unsupported OSes
-            if (!MelonUtils.IsUnderWineOrSteamProton() && ((Environment.OSVersion.Version.Major < 6) // Is Older than Vista
-                || ((Environment.OSVersion.Version.Major == 6) && (Environment.OSVersion.Version.Minor < 1)) && MelonUtils.IsWindows)) // Is Older than Windows 7 or Server 2008 R2
-                dumper = new Il2CppDumper();
-            else
-                dumper = new Cpp2IL();
-
+            dumper = new Cpp2IL();
             il2cppinterop = new Packages.Il2CppInterop();
             unitydependencies = new UnityDependencies();
             deobfuscationMap = new DeobfuscationMap();
