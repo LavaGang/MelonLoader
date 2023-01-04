@@ -1,6 +1,6 @@
 //! Entrypoint
 
-#[cfg(target_os = "linux")]
+#[cfg(not(target_os = "windows"))]
 use ctor::ctor;
 
 #[cfg(target_os = "windows")]
@@ -8,7 +8,7 @@ use proxy_dll::proxy;
 
 use crate::{core, internal_failure};
 
-#[cfg(target_os = "linux")]
+#[cfg(not(target_os = "windows"))]
 #[no_mangle]
 #[ctor]
 fn main(){

@@ -63,7 +63,7 @@ pub struct NativeLibrary {
 
 impl NativeLibrary {
     /// gets a function pointer
-    #[cfg(target_os = "linux")]
+    #[cfg(not(target_os = "windows"))]
     pub fn sym<T>(&self, name_str: &str) -> Result<NativeMethod<T>, LibError> {
         let name = std::ffi::CString::new(name_str).map_err(|_| LibError::FailedToCreateCString)?;
         let ptr = unsafe { libc::dlsym(self.handle, name.as_ptr()) };
@@ -124,7 +124,7 @@ impl NativeLibrary {
 /// let lib = load_lib(&path);
 ///
 /// assert!(lib.is_ok());
-#[cfg(target_os = "linux")]
+#[cfg(not(target_os = "windows"))]
 pub fn load_lib<P: AsRef<Path>>(path: P) -> Result<NativeLibrary, LibError> {
     use std::ffi::CString;
 
