@@ -1806,9 +1806,9 @@ checksum = "cda74da7e1a664f795bb1f8a87ec406fb89a02522cf6e50620d016add6dbbf5c"
 
 [[package]]
 name = "tokio"
-version = "1.23.0"
+version = "1.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eab6d665857cc6ca78d6e80303a02cea7a7851e85dfbd77cbdc09bd129f1ef46"
+checksum = "1d9f76183f91ecfb55e1d7d5602bd1d979e38a3a522fe900241cf195624d67ae"
 dependencies = [
  "autocfg",
  "bytes",
@@ -1939,7 +1939,7 @@ checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
 [[package]]
 name = "unity-rs"
 version = "0.1.0"
-source = "git+https://github.com/RinLovesYou/unity-rs.git#8ae8053a7d66beee563ff15ca4d337a3afc8de53"
+source = "git+https://github.com/RinLovesYou/unity-rs.git?rev=8ae8053#8ae8053a7d66beee563ff15ca4d337a3afc8de53"
 dependencies = [
  "libc",
  "thiserror",
