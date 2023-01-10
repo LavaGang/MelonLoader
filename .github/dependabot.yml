@@ -11,6 +11,14 @@ updates:
     schedule:
       interval: "daily"
 
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    ignore:
+      - dependency-name: "*"
+
+
   - package-ecosystem: "github-actions"
     target-branch: "alpha-development"
     # Workflow files stored in the
