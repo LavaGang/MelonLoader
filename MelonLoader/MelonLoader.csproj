@@ -35,7 +35,7 @@
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
 		<PackageReference Include="AssetsTools.NET" Version="3.0.0-preview1" />
 		<PackageReference Include="HarmonyX" Version="2.10.1" />
-		<PackageReference Include="Samboy063.Tomlet" Version="5.0.1" />
+		<PackageReference Include="Samboy063.Tomlet" Version="5.1.2" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
@@ -44,9 +44,9 @@
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-		<PackageReference Include="Il2CppInterop.Common" Version="1.4.3-ci.244" />
-		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.3-ci.244" />
-		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.3-ci.244" />
+		<PackageReference Include="Il2CppInterop.Common" Version="1.4.3-ci.257" />
+		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.3-ci.257" />
+		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.3-ci.257" />
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\classdata.tpk" />
