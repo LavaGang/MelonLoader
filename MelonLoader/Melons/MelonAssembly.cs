@@ -254,6 +254,7 @@ namespace MelonLoader
                     var priorityAttr = MelonUtils.PullAttributeFromAssembly<MelonPriorityAttribute>(Assembly);
                     var colorAttr = MelonUtils.PullAttributeFromAssembly<MelonColorAttribute>(Assembly);
                     var authorColorAttr = MelonUtils.PullAttributeFromAssembly<MelonAuthorColorAttribute>(Assembly);
+                    var additionalCreditsAttr = MelonUtils.PullAttributeFromAssembly<MelonAdditionalCreditsAttribute>(Assembly);
                     var procAttrs = MelonUtils.PullAttributesFromAssembly<MelonProcessAttribute>(Assembly);
                     var gameAttrs = MelonUtils.PullAttributesFromAssembly<MelonGameAttribute>(Assembly);
                     var optionalDependenciesAttr = MelonUtils.PullAttributeFromAssembly<MelonOptionalDependenciesAttribute>(Assembly);
@@ -266,6 +267,7 @@ namespace MelonLoader
                     var harmonyDPAAttr = MelonUtils.PullAttributeFromAssembly<HarmonyDontPatchAllAttribute>(Assembly);
 
                     melon.Info = info;
+                    melon.AdditionalCredits = additionalCreditsAttr;
                     melon.MelonAssembly = this;
                     melon.Priority = priorityAttr?.Priority ?? 0;
                     melon.ConsoleColor = colorAttr?.DrawingColor ?? MelonLogger.DefaultMelonColor;

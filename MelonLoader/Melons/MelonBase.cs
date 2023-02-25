@@ -112,6 +112,11 @@ namespace MelonLoader
         public MelonInfoAttribute Info { get; internal set; }
 
         /// <summary>
+        /// AdditionalCredits Attribute of the Melon
+        /// </summary>
+        public MelonAdditionalCreditsAttribute AdditionalCredits { get; internal set; }
+
+        /// <summary>
         /// Process Attributes of the Melon.
         /// </summary>
         public MelonProcessAttribute[] SupportedProcesses
@@ -525,7 +530,7 @@ namespace MelonLoader
         {
             MelonLogger.WriteLine(Color.DarkGreen);
             
-            MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
+            MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, AdditionalCredits?.Credits, Info.Version, ID);
             MelonLogger.MsgDirect(Color.DarkGray, $"Assembly: {Path.GetFileName(MelonAssembly.Location)}");
 
             MelonLogger.WriteLine(Color.DarkGreen);
@@ -536,7 +541,7 @@ namespace MelonLoader
             MelonLogger.WriteLine(Color.DarkRed);
 
             MelonLogger.MsgDirect(Color.DarkGray, MelonTypeName + " deinitialized:");
-            MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, Info.Version, ID);
+            MelonLogger.Internal_PrintModName(ConsoleColor, AuthorConsoleColor, Info.Name, Info.Author, AdditionalCredits?.Credits, Info.Version, ID);
 
             if (!string.IsNullOrEmpty(reason))
             {
