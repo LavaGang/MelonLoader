@@ -217,7 +217,7 @@ namespace MelonLoader
             Utils.MelonConsole.WriteLine();
         }
 
-        internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string version, string id)
+        internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
         {
             LogWriter.WriteLine($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
             LogWriter.WriteLine($"[{GetTimeStamp()}] by {author}");
@@ -229,6 +229,12 @@ namespace MelonLoader
 
             builder.Append(GetTimestamp(false));
             builder.Append($"by {author}".Pastel(authorcolor));
+
+            if (additionalCredits is not null) {
+                builder.AppendLine();
+                builder.Append(GetTimestamp(false));
+                builder.Append($"Additional credits: {additionalCredits}");
+            }
 
             Utils.MelonConsole.WriteLine(builder.ToString());
         }
