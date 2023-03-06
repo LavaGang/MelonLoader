@@ -42,7 +42,7 @@
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="Iced" Version="1.18.0" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.3-ci.257" />
-		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.3-ci.257" />
+		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.5" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.3-ci.257" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
