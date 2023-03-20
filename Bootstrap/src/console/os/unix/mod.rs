@@ -1,5 +1,7 @@
 //! Console interaction like windows is not possible on Unix systems.
 
+use crate::error::DynErr;
+
 pub unsafe fn init() -> Result<(), DynErr> {
     Ok(())
 }
