@@ -11,11 +11,11 @@ msgbox = "0.7.0"
 lazy_static = "1.4.0"
 thiserror = "*"
 libloading = "*"
-clap = { path = "C:\\Users\\sarah\\Documents\\rust\\clap", features = ["derive"] }
+clap = { git = "https://github.com/RinLovesYou/clap", features = ["derive"] }
 
 [target.'cfg(windows)'.dependencies]
-#proxy-dll = { git = "https://github.com/RinLovesYou/dll-proxy-rs.git" }
-proxy-dll = { path = "C:\\Users\\sarah\\Documents\\rust\\dll-proxy-rs\\proxy" }
+proxy-dll = { git = "https://github.com/RinLovesYou/dll-proxy-rs.git" }
+#proxy-dll = { path = "C:\\Users\\sarah\\Documents\\rust\\dll-proxy-rs\\proxy" }
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2.137"
