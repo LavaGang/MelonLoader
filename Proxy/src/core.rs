@@ -1,29 +1,36 @@
 //! the core logic of the proxy
 
 use crate::utils::files;
-use clap::{Parser};
+use clap::Parser;
+use lazy_static::lazy_static;
 use libloading::Library;
-use std::{error, path::PathBuf};
-
+use std::{error, path::PathBuf, sync::Mutex};
 
 #[derive(Parser)]
-#[command(author, version, about, long_about = None)]
-struct Cli {
-    #[arg(long)]
+struct Arguments {
+    #[arg(long, short, default_value = "false")]
     no_mods: bool,
-    #[arg(long="melonloader.basedir")]
+
+    #[arg(long = "melonloader.basedir")]
     base_dir: Option<String>,
 }
 
-static mut BOOTSTRAP: Option<Library> = None;
+lazy_static!(
+    static ref BOOTSTRAP: Mutex<Option<Library>> = Mutex::new(None);
+);
 
-pub unsafe fn init() -> Result<(), Box<dyn error::Error>> {
-    let args = Cli::parse();
+pub fn init() -> Result<(), Box<dyn error::Error>> {
     let file_path = std::env::current_exe()?;
+
+    if !files::is_unity(&file_path)? {
+        return Ok(());
+    }
+
+    let args = Arguments::parse_optimistic()?;
 
     //return Ok, and silently stop loading MelonLoader, if the user has specified to not load mods,
     //or if the game is not a Unity game
-    if args.no_mods || !files::is_unity(&file_path)? {
+    if args.no_mods {
         return Ok(());
     }
 
@@ -34,7 +41,9 @@ pub unsafe fn init() -> Result<(), Box<dyn error::Error>> {
 
     let bootstrap_path = files::get_bootstrap_path(&base_path)?;
 
-    BOOTSTRAP = Some(Library::new(bootstrap_path)?); //needs to be stored, so it won't get unloaded when this function returns.
+    unsafe {
+        *BOOTSTRAP.lock()? = Some(Library::new(&bootstrap_path)?);
+    }
 
     Ok(())
 }

@@ -14,7 +14,8 @@ macro_rules! internal_failure {
     ($($arg:tt)*) => {{
         let msg = &format_args!($($arg)*).to_string();
 
-        let _ = $crate::err!("Internal Failure: {}", msg);
+        std::println!("{}", msg);
+        let _ = $crate::logging::logger::log_console_file($crate::logging::logger::LogLevel::Error, msg);
         let _ = msgbox::create("Internal Failure", msg, msgbox::IconType::Error);
         std::process::exit(-1);
     }};

@@ -6,21 +6,25 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-msgbox = "0.7.0"
-chrono = "0.4.22"
-colored = "2.0.0"
-thiserror = "1.0.37"
+#unity-rs = { path = "C:/Users/sarah/Documents/rust/Ferrex/unity/" }
+unity-rs = { git = "https://github.com/RinLovesYou/Ferrex/"}
 ctor = "0.1.26"
+chrono = "0.4.23"
+colored = "2.0.0"
+thiserror = "1.0.39"
 lazy_static = "1.4.0"
-unity-rs = { git = "https://github.com/RinLovesYou/unity-rs.git", rev = "8ae8053" }
-libc = "0.2.137"
-libc-stdhandle = "0.1.0"
-netcorehost = "*"
+msgbox = "0.7.0"
+clap = { git = "https://github.com/RinLovesYou/clap", features = ["derive"] }
+libc = "0.2.140"
 dobby-rs = { git = "https://github.com/RinLovesYou/dobby-rs" }
+libc-stdhandle = "0.1.0"
+netcorehost = "0.13.1"
 
 [target.'cfg(windows)'.dependencies]
-winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
-
+windows = { version = "0.46.0", features = [
+    "Win32_Foundation",
+    "Win32_System_Console",
+]}
 
 [lib]
 crate-type = ["cdylib"]
