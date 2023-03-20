@@ -1,3 +1,4 @@
+#![feature(is_some_and)]
 #![allow(non_snake_case)]
 #![deny(
     missing_debug_implementations,
@@ -13,15 +14,14 @@
 #![allow(clippy::inherent_to_string, clippy::type_complexity, improper_ctypes)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-use ctor::ctor;
-use managers::core;
-
+pub mod base_assembly;
+pub mod console;
+pub mod constants;
+pub mod errors;
+pub mod hooks;
+pub mod icalls;
+pub mod logging;
+pub mod melonenv;
 pub mod utils;
-pub mod managers;
 
-#[ctor]
-fn init() {
-    core::init().unwrap_or_else(|e| {
-        internal_failure!("Failed to initialize Bootstrap: {}", e);
-    })
-}
+pub mod core;

@@ -20,20 +20,16 @@ use crate::{core, internal_failure};
 #[no_mangle]
 #[ctor]
 fn main() {
-    unsafe {
-        core::init().unwrap_or_else(|e| {
-            internal_failure!("Failed to initialize MelonLoader: {}", e);
-        });
-    }
+    core::init().unwrap_or_else(|e| {
+        internal_failure!("Failed to initialize MelonLoader: {}", e);
+    });
 }
 
 #[cfg(target_os = "windows")]
 #[no_mangle]
 #[proxy]
 fn main() {
-    unsafe {
-        core::init().unwrap_or_else(|e| {
-            internal_failure!("Failed to initialize MelonLoader: {}", e);
-        });
-    }
+    core::init().unwrap_or_else(|e| {
+        internal_failure!("Failed to initialize MelonLoader: {}", e);
+    });
 }

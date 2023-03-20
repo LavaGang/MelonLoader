@@ -1,5 +1,7 @@
 //! Cross platform reimplementation of MelonLoader's Proxy in rust
 
+#![feature(is_some_and)]
+
 #![deny(
     missing_debug_implementations,
     unused_results,
