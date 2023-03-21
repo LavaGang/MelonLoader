@@ -1,4 +1,4 @@
-use std::{ffi::c_void, sync::RwLock};
+use std::{ffi::c_void, sync::RwLock, ptr::null_mut};
 
 use lazy_static::lazy_static;
 use unity_rs::{
@@ -8,13 +8,13 @@ use unity_rs::{
 };
 
 use crate::{
-    base_assembly, constants::InvokeFnMono, debug, errors::DynErr, hooks::HookedFunction,
+    base_assembly, constants::InvokeFnMono, debug, errors::DynErr, hooks::NativeHook,
     internal_failure, runtime,
 };
 
 lazy_static! {
-    pub static ref INVOKE_HOOK: RwLock<HookedFunction<InvokeFnMono>> =
-        RwLock::new(HookedFunction::new());
+    pub static ref INVOKE_HOOK: RwLock<NativeHook<InvokeFnMono>> =
+        RwLock::new(NativeHook::new(null_mut(), null_mut()));
 }
 
 pub fn detour(

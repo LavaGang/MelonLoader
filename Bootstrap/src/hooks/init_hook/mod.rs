@@ -2,14 +2,14 @@ mod il2cpp;
 mod mono;
 
 use crate::{
-    constants::{InitFnIl2Cpp, InitFnMono},
     debug,
     errors::DynErr,
     runtime,
 };
+use std::ffi::c_void;
 use unity_rs::runtime::RuntimeType;
 
-use super::functions;
+use super::{NativeHook};
 
 pub fn hook() -> Result<(), DynErr> {
     let runtime = runtime!()?;
@@ -19,12 +19,12 @@ pub fn hook() -> Result<(), DynErr> {
             debug!("Attaching hook to mono_jit_init_version")?;
 
             let init_function = runtime.get_export_ptr("mono_jit_init_version")?;
-            let detour = mono::detour as usize;
-
-            let hooked = functions::hook::<InitFnMono>(init_function as usize, detour)?;
+            let detour = mono::detour as *mut c_void;
 
             let mut init_hook = mono::INIT_HOOK.try_write()?;
-            *init_hook = hooked;
+            *init_hook = NativeHook::new(init_function, detour);
+
+            init_hook.hook()?;
         }
 
         RuntimeType::Il2Cpp(_) => {
@@ -33,10 +33,10 @@ pub fn hook() -> Result<(), DynErr> {
             let init_function = runtime.get_export_ptr("il2cpp_init")?;
             let detour = il2cpp::detour as usize;
 
-            let hooked = functions::hook::<InitFnIl2Cpp>(init_function as usize, detour)?;
-
             let mut init_hook = il2cpp::INIT_HOOK.try_write()?;
-            *init_hook = hooked;
+            *init_hook = NativeHook::new(init_function, detour as *mut c_void);
+
+            init_hook.hook()?;
         }
     };
 

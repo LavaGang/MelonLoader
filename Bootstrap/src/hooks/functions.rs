@@ -1,8 +1,6 @@
 use crate::errors::{hookerr::HookError, DynErr};
 
-use super::HookedFunction;
-
-pub fn hook<T>(target: usize, detour: usize) -> Result<HookedFunction<T>, HookError> {
+pub fn hook(target: usize, detour: usize) -> Result<usize, HookError> {
     if target == 0 {
         return Err(HookError::Nullpointer("target".to_string()));
     }
@@ -25,7 +23,7 @@ pub fn hook<T>(target: usize, detour: usize) -> Result<HookedFunction<T>, HookEr
         }
 
         //return Ok with type annotations
-        HookedFunction::<T>::from(target, trampoline as usize)
+        Ok(trampoline as usize)
     }
 }
 

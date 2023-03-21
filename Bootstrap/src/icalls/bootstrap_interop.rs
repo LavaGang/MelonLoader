@@ -1,10 +1,18 @@
 use std::ffi::c_void;
 
-use crate::{error, hooks};
+use crate::{error, hooks::{self, NativeHook}};
 
 pub unsafe fn attach(target: *mut *mut c_void, detour: *mut c_void) {
-    match hooks::functions::hook::<fn()>(*target as usize, detour as usize) {
-        Ok(res) => *target = res.trampoline as *mut c_void,
+    // match NativeHook::<fn()>::new(*target as usize, detour as usize).hook() {
+    //     Ok(res) => *target = res.trampoline as *mut c_void,
+    //     Err(e) => {
+    //         let _ = error!("Failed to hook function: {}", e.to_string());
+    //     }
+    // };
+
+    let mut hook = NativeHook::<fn()>::new(*target, detour);
+    match hook.hook() {
+        Ok(_) => *target = hook.trampoline as *mut c_void,
         Err(e) => {
             let _ = error!("Failed to hook function: {}", e.to_string());
         }

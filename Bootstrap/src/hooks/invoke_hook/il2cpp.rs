@@ -1,13 +1,13 @@
-use std::{ffi::c_void, sync::RwLock};
+use std::{ffi::c_void, sync::RwLock, ptr::null_mut};
 
 use lazy_static::lazy_static;
 use unity_rs::{il2cpp::types::{Il2CppMethod, Il2CppObject}, common::method::UnityMethod};
 
-use crate::{constants::InvokeFnIl2Cpp, errors::DynErr, hooks::HookedFunction, internal_failure, runtime, debug, base_assembly};
+use crate::{constants::InvokeFnIl2Cpp, errors::DynErr, hooks::NativeHook, internal_failure, runtime, debug, base_assembly};
 
 lazy_static! {
-    pub static ref INVOKE_HOOK: RwLock<HookedFunction<InvokeFnIl2Cpp>> =
-        RwLock::new(HookedFunction::new());
+    pub static ref INVOKE_HOOK: RwLock<NativeHook<InvokeFnIl2Cpp>> =
+        RwLock::new(NativeHook::new(null_mut(), null_mut()));
 }
 
 pub fn detour(
