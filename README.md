@@ -217,7 +217,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 | File Names: |
 | - |
-| psapi.dll |
 | version.dll |
 | winhttp.dll |
 | winmm.dll |

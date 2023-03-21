@@ -109,7 +109,7 @@ namespace MelonLoader.Utils
             //And, if on x64, ws2_32 getaddrinfo
             
             //TODO: is this doable on Unix?
-            if (MelonUtils.IsMac || MelonUtils.IsUnix || MelonUtils.IsUnderWineOrSteamProton())
+            if (MelonUtils.IsMac || MelonUtils.IsUnix || MelonUtils.IsUnderWineOrSteamProton() || MelonLaunchOptions.AnalyticsBlocker.ShouldDAB)
                 return;
             
             MelonDebug.Msg("Initializing Analytics Blocker...");
