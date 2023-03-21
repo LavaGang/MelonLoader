@@ -16,7 +16,7 @@ internal static class MelonConsole
     
     internal static void Init()
     {
-        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows)
+        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows || MelonLaunchOptions.Console.ShouldHide)
             return;
         
         ConsoleOutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -27,7 +27,7 @@ internal static class MelonConsole
 
     internal static void WriteLine(string txt)
     {
-        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows)
+        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows || MelonLaunchOptions.Console.ShouldHide)
         {
             Console.WriteLine(txt);
             return;
@@ -37,7 +37,7 @@ internal static class MelonConsole
 
     internal static void WriteLine(object txt)
     {
-        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows)
+        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows || MelonLaunchOptions.Console.ShouldHide)
         {
             Console.WriteLine(txt.ToString());
             return;
@@ -47,7 +47,7 @@ internal static class MelonConsole
 
     internal static void WriteLine()
     {
-        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows)
+        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows || MelonLaunchOptions.Console.ShouldHide)
         {
             Console.WriteLine();
             return;
