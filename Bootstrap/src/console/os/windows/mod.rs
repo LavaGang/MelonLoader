@@ -73,7 +73,7 @@ pub unsafe fn init() -> Result<(), DynErr> {
 
     set_handles()?;
 
-    let output_handle = OUTPUT_HANDLE.lock()?;
+    let output_handle = OUTPUT_HANDLE.try_lock()?;
 
     let mut mode = CONSOLE_MODE(0);
     let _ = GetConsoleMode(*output_handle, &mut mode);
@@ -124,7 +124,7 @@ pub fn set_title(title: &str) {
 
 pub fn set_handles() -> Result<(), DynErr> {
     unsafe {
-        let handle = OUTPUT_HANDLE.lock()?;
+        let handle = OUTPUT_HANDLE.try_lock()?;
 
         let _ = SetStdHandle(STD_OUTPUT_HANDLE, *handle);
         let _ = SetStdHandle(STD_ERROR_HANDLE, *handle);

@@ -409,7 +409,7 @@ namespace MelonLoader
 
         public static void SetConsoleTitle(string title)
         {
-            if (!MelonLaunchOptions.Console.ShouldSetTitle)
+            if (!MelonLaunchOptions.Console.ShouldSetTitle || MelonLaunchOptions.Console.ShouldHide)
                 return;
 
             Console.Title = title;
