@@ -23,6 +23,8 @@ pub fn hook() -> Result<(), DynErr> {
 
             let mut init_hook = mono::INVOKE_HOOK.try_write()?;
             *init_hook = NativeHook::new(init_function, detour);
+
+            init_hook.hook()?;
         }
 
         RuntimeType::Il2Cpp(_) => {
