@@ -13,7 +13,7 @@ use crate::{
     utils::{self, strings::wide_str},
 };
 
-/// These are functions that MelonLoader.BootstrapInterop.dll will fill in, once we call LoadStage1.
+/// These are functions that MelonLoader.NativeHost.dll will fill in, once we call LoadStage1.
 /// Interacting with the .net runtime is a pain, so it's a lot easier to just have it give us pointers like this directly.
 #[repr(C)]
 #[derive(Debug)]
@@ -25,7 +25,7 @@ pub struct HostImports {
     pub start: fn(),
 }
 
-/// These are functions that we will pass to MelonLoader.BootstrapInterop.dll.
+/// These are functions that we will pass to MelonLoader.NativeHost.dll.
 /// CoreCLR does not have internal calls like mono does, so we have to pass these ourselves.
 /// They are stored in Managed, and are accessed by MelonLoader for hooking.
 #[repr(C)]
@@ -79,7 +79,7 @@ pub fn init() -> Result<(), DynErr> {
     };
 
     debug!("[Dotnet] Invoking LoadStage1")?;
-    //MelonLoader.BootstrapInterop will fill in the HostImports struct with pointers to functions
+    //MelonLoader.NativeHost will fill in the HostImports struct with pointers to functions
     init(addr_of_mut!(imports));
 
     debug!("[Dotnet] Reloading NativeHost into correct load context and getting LoadStage2 pointer")?;
