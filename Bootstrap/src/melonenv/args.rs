@@ -9,6 +9,12 @@ pub struct Cli {
     #[arg(short, long = "melonloader.debug", default_value = "false")]
     pub debug: bool,
 
+    #[arg(short, long = "melonloader.consoledst", default_value = "false")]
+    pub console_dst: bool,
+
+    #[arg(short, long = "melonloader.consoleontop", default_value = "false")]
+    pub console_on_top: bool,
+
     #[arg(short, long = "melonloader.basedir")]
     pub base_dir: Option<String>,
 }

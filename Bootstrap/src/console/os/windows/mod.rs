@@ -7,7 +7,7 @@ use windows::{
     core::PCSTR,
     Win32::{
         Foundation::{self, HANDLE, HWND},
-        System::Console::*,
+        System::Console::*, UI::WindowsAndMessaging::{SetWindowPos, HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE},
     },
 };
 
@@ -15,7 +15,7 @@ use crate::{
     constants::{IS_ALPHA, MELON_VERSION},
     debug_enabled,
     errors::{conerr::ConsoleError, DynErr},
-    win_str,
+    win_str, should_set_title, console_on_top,
 };
 
 lazy_static! {
@@ -30,7 +30,7 @@ pub unsafe fn init() -> Result<(), DynErr> {
     }
 
     // store the console window handle
-    let mut window = WINDOW.lock()?;
+    let mut window = WINDOW.try_lock()?;
     *window = GetConsoleWindow();
 
     // a null check
@@ -44,6 +44,10 @@ pub unsafe fn init() -> Result<(), DynErr> {
     }
 
     set_title(&default_title());
+
+    if console_on_top!() {
+        let _ = SetWindowPos(*window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+    }
 
     let _ = libc::freopen(
         win_str!(b"CONIN$\0"),
@@ -108,6 +112,10 @@ fn default_title() -> String {
 }
 
 pub fn set_title(title: &str) {
+    if !should_set_title!() {
+        return;
+    }
+
     unsafe {
         let t = PCSTR(title.as_ptr());
         let _ = SetConsoleTitleA(t);

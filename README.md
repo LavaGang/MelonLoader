@@ -30,7 +30,7 @@ Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 - [Launch Options](#launch-options)
 - [Debugging](https://melonwiki.xyz/#/modders/debugging)
 <br></br>
-- [Linux Support (__WINE / STEAM PROTON__)](https://melonwiki.xyz/#/README?id=linux-instructions)
+- [Linux Support (__WINE / STEAM PROTON / NATIVE__)](https://melonwiki.xyz/#/README?id=linux-instructions)
 - [Android & Oculus Quest Support (__WIP__)](https://melonwiki.xyz/#/android/general)
 <br></br>
 
@@ -67,6 +67,7 @@ Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 - [.NET Framework 3.5 Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=21)
 - [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net472)
 - [.NET Framework 4.8 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net48)
+- [.NET 6.0 Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0#runtime-6.0.15)
 - Microsoft Visual C++ 2015-2019 Re-distributable [[x86](https://aka.ms/vs/16/release/vc_redist.x86.exe)] [[x64](https://aka.ms/vs/16/release/vc_redist.x64.exe)]
 
 ---
@@ -98,13 +99,13 @@ Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 2. Make sure you have all the [Requirements](#requirements) Installed before attempting to Install.
 3. Download MelonLoader [[x86](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x86.zip)] [[x64](https://github.com/LavaGang/MelonLoader/releases/latest/download/MelonLoader.x64.zip)]
 4. Extract the MelonLoader folder from the MelonLoader Zip Archive to the Game's Installation Folder.
-5. Extract version.dll from the MelonLoader Zip Archive to the Game's Installation Folder.
+5. Extract version.dll & dobby.dll from the MelonLoader Zip Archive to the Game's Installation Folder.
 
 
 ### UN-INSTALL:
 
 1. Make sure the Game is Closed and Not Running before attempting to UN-INSTALL.
-2. Remove the version.dll file from the Game's Installation Folder.
+2. Remove the version.dll & dobby.dll files from the Game's Installation Folder.
 3. Remove the MelonLoader folder from the Game's Installation Folder.
 
 These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.

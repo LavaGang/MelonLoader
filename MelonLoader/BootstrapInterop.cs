@@ -16,6 +16,9 @@ namespace MelonLoader
 
         internal static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null)
         {
+            if (!MelonLaunchOptions.Console.ShouldSetTitle)
+                return;
+
             string versionStr = Core.GetVersionString() +
                                 $" - {GameName} {GameVersion ?? ""}";
 
