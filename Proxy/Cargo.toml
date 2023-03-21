@@ -24,10 +24,5 @@ libc = "0.2.137"
 name = "version"
 crate-type = ["cdylib"]
 
-[profile.release]
-lto = true
-codegen-units = 1
-opt-level = "z"
-
 [build-dependencies]
 cc = "1.0.76"

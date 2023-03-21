@@ -7,7 +7,7 @@ pub unsafe fn init() -> Result<(), DynErr> {
 }
 
 #[allow(dead_code)]
-pub fn set_title(title: &str) {
+pub fn set_title(_title: &str) {
 
 }
 

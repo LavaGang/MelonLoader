@@ -1,4 +1,4 @@
-use std::{ffi::c_char, sync::RwLock};
+use std::{ffi::c_char, sync::RwLock, ptr::null_mut};
 
 use lazy_static::lazy_static;
 use unity_rs::{common::domain::UnityDomain, mono::types::MonoDomain, runtime::RuntimeType};
@@ -8,13 +8,13 @@ use crate::{
     constants::InitFnMono,
     debug, debug_enabled,
     errors::DynErr,
-    hooks::{invoke_hook, HookedFunction},
+    hooks::{invoke_hook, NativeHook},
     icalls, internal_failure, melonenv, runtime, rust_str,
 };
 
 lazy_static! {
-    pub static ref INIT_HOOK: RwLock<HookedFunction<InitFnMono>> =
-        RwLock::new(HookedFunction::new());
+    pub static ref INIT_HOOK: RwLock<NativeHook<InitFnMono>> =
+        RwLock::new(NativeHook::new(null_mut(), null_mut()));
 }
 
 pub fn detour(name: *const c_char, version: *const c_char) -> *mut MonoDomain {
