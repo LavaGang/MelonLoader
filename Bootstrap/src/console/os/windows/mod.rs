@@ -67,7 +67,7 @@ pub unsafe fn init() -> Result<(), DynErr> {
 
     // needs to be in its own scope to drop the lock
     {
-        let mut output_handle = OUTPUT_HANDLE.lock()?;
+        let mut output_handle = OUTPUT_HANDLE.try_lock()?;
         *output_handle = GetStdHandle(STD_OUTPUT_HANDLE)?;
     }
 
