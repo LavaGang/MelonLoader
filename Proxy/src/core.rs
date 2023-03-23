@@ -8,7 +8,7 @@ use std::{error, path::PathBuf, sync::Mutex};
 
 #[derive(Parser)]
 struct Arguments {
-    #[arg(long, short, default_value = "false")]
+    #[arg(long = "no-mods", default_value = "false")]
     no_mods: bool,
 
     #[arg(long = "melonloader.basedir")]
