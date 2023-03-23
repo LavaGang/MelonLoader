@@ -39,3 +39,6 @@ pub const BLUE: Color = Color::TrueColor {
     g: (64),
     b: (255),
 };
+
+#[derive(Debug, Clone, Copy)]
+pub struct W<T>(pub T);

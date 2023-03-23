@@ -1,6 +1,6 @@
 use std::{ffi::c_char, sync::RwLock, ptr::null_mut};
 
-use lazy_static::lazy_static;
+use lazy_static::{lazy_static};
 use unity_rs::{common::domain::UnityDomain, mono::types::MonoDomain, runtime::RuntimeType};
 
 use crate::{
@@ -27,9 +27,7 @@ fn detour_inner(name: *const c_char, version: *const c_char) -> Result<*mut Mono
     console::set_handles()?;
 
     let rust_name = rust_str!(name)?;
-    let base_dir = melonenv::paths::GAME_DIR
-        .to_str()
-        .ok_or("Failed to convert base dir to string")?;
+    let base_dir: String = melonenv::paths::GAME_DIR.clone().try_into()?;
 
     let runtime = runtime!()?;
 
@@ -57,7 +55,7 @@ fn detour_inner(name: *const c_char, version: *const c_char) -> Result<*mut Mono
             debug!("Setting Mono Config")?;
 
             //the result of this can be ignored. it is not guaranteed that this function exists
-            let _ = runtime.set_domain_config(&domain, base_dir, rust_name);
+            let _ = runtime.set_domain_config(&domain, base_dir.as_str(), rust_name);
         }
     }
 
