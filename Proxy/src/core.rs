@@ -42,7 +42,7 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
     let bootstrap_path = files::get_bootstrap_path(&base_path)?;
 
     unsafe {
-        *BOOTSTRAP.lock()? = Some(Library::new(&bootstrap_path)?);
+        *BOOTSTRAP.try_lock()? = Some(Library::new(&bootstrap_path)?);
     }
 
     Ok(())

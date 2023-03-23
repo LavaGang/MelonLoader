@@ -50,10 +50,10 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
     let loadinfo_method = assemblymanager_class.get_method("LoadInfo", 1, runtime)?;
 
     //store the methods for later, in a thread safe global static.
-    *MONO_PRESTART.lock()? = prestart_method;
-    *MONO_START.lock()? = start_method;
-    *ASSEMBLYMANAGER_RESOLVE.lock()? = resolve_method;
-    *ASSEMBLYMANAGER_LOADINFO.lock()? = loadinfo_method;
+    *MONO_PRESTART.try_lock()? = prestart_method;
+    *MONO_START.try_lock()? = start_method;
+    *ASSEMBLYMANAGER_RESOLVE.try_lock()? = resolve_method;
+    *ASSEMBLYMANAGER_LOADINFO.try_lock()? = loadinfo_method;
 
     //invoke the MelonLoader initialize method.
     let _ = initialize_method.invoke(None, None, runtime)?;
@@ -62,7 +62,7 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
 }
 
 pub fn pre_start() -> Result<(), DynErr> {
-    let prestart_method = MONO_PRESTART.lock()?;
+    let prestart_method = MONO_PRESTART.try_lock()?;
     if prestart_method.inner.is_null() {
         return Err("PreStart method not found".into());
     }
@@ -72,7 +72,7 @@ pub fn pre_start() -> Result<(), DynErr> {
 }
 
 pub fn start() -> Result<(), DynErr> {
-    let start_method = MONO_START.lock()?;
+    let start_method = MONO_START.try_lock()?;
     if start_method.inner.is_null() {
         return Err("Start method not found".into());
     }
