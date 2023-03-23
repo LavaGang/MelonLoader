@@ -2058,7 +2058,7 @@ checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
 [[package]]
 name = "unity-rs"
 version = "0.1.0"
-source = "git+https://github.com/RinLovesYou/Ferrex/#6af81ebb5d2354941a2f01485631591ed5ebedba"
+source = "git+https://github.com/RinLovesYou/Ferrex/?rev=8989aae#8989aae9f778e58f0c8231114a4bf70de137bd08"
 dependencies = [
  "libc",
  "libloading",

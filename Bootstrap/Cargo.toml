@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 #unity-rs = { path = "C:/Users/sarah/Documents/rust/Ferrex/unity/" }
-unity-rs = { git = "https://github.com/RinLovesYou/Ferrex/", commit = "8989aae" }
+unity-rs = { git = "https://github.com/RinLovesYou/Ferrex/", rev = "8989aae" }
 ctor = "0.1.26"
 chrono = "0.4.23"
 colored = "2.0.0"
