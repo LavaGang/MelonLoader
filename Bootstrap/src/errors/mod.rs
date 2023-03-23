@@ -4,3 +4,4 @@ pub mod conerr;
 pub mod hookerr;
 pub mod logerr;
 pub mod dotneterr;
+pub mod melonerr;
