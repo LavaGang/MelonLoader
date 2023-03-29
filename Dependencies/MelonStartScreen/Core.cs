@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Windows;
 using MelonLoader.Utils;
+using MelonLoader.NativeUtils;
 
 namespace MelonLoader.MelonStartScreen
 {
@@ -17,8 +18,8 @@ namespace MelonLoader.MelonStartScreen
     {
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr User32SetTimerDelegate(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, IntPtr lpTimerFunc);
+        private static NativeHook<User32SetTimerDelegate> user32Hook = new();
 
-        private static User32SetTimerDelegate user32SetTimerOriginal;
         private static bool nextSetTimerIsUnity = false;
         private static IntPtr titleBarTimer;
 
@@ -119,7 +120,6 @@ namespace MelonLoader.MelonStartScreen
             }
 
             // We get a native function pointer to User32SetTimerDetour from our current class
-            //IntPtr detourPtr = typeof(Core).GetMethod("User32SetTimerDetour", BindingFlags.NonPublic | BindingFlags.Static).MethodHandle.GetFunctionPointer();
 #if NET6_0
             delegate* unmanaged[Cdecl]<IntPtr, IntPtr, uint, IntPtr, IntPtr> detourPtr = &User32SetTimerDetour;
 #else
@@ -131,12 +131,12 @@ namespace MelonLoader.MelonStartScreen
                 return false;
             }
 #endif
+            user32Hook.Target = original;
+            user32Hook.Detour = (IntPtr)detourPtr;
 
             // And we patch SetTimer to replace it by our hook
             MelonDebug.Msg($"Applying USER32.dll::SetTimer Hook at 0x{original.ToInt64():X}");
-            MelonUtils.NativeHookAttach((IntPtr)(&original), (IntPtr) detourPtr);
-            MelonDebug.Msg($"Creating delegate for original USER32.dll::SetTimer (0x{original.ToInt64():X})");
-            user32SetTimerOriginal = (User32SetTimerDelegate)Marshal.GetDelegateForFunctionPointer(original, typeof(User32SetTimerDelegate));
+            user32Hook.Attach();
             MelonDebug.Msg("Applied USER32.dll::SetTimer patch");
 
             return true;
@@ -153,7 +153,7 @@ namespace MelonLoader.MelonStartScreen
                 return IntPtr.Zero;
             }
 
-            return user32SetTimerOriginal(hWnd, nIDEvent, uElapse, timerProc);
+            return user32Hook.Trampoline(hWnd, nIDEvent, uElapse, timerProc);
         }
 
         #endregion
