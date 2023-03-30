@@ -13,6 +13,7 @@ namespace MelonLoader.NativeUtils
         private IntPtr _targetHandle;
         private IntPtr _detourHandle;
         private IntPtr _trampolineHandle;
+        private T _trampoline;
         #endregion
 
         #region Public Properties
@@ -52,7 +53,10 @@ namespace MelonLoader.NativeUtils
         {
             get
             {
-                return (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
+                if (_trampoline == null)
+                    _trampoline = (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
+
+                return _trampoline;
             }
         }
 
