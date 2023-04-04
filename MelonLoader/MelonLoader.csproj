@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net35;net6</TargetFrameworks>
 		<LangVersion>Latest</LangVersion>
@@ -32,7 +32,7 @@
 		</PackageReference>
 	</ItemDefinitionGroup>
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.2.1" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.4.0" />
 		<PackageReference Include="AssetsTools.NET" Version="3.0.0-preview3" />
 		<PackageReference Include="HarmonyX" Version="2.10.1" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
