@@ -1,5 +1,4 @@
 #![feature(is_some_and)]
-#![feature(once_cell)]
 
 #![allow(non_snake_case)]
 #![deny(
