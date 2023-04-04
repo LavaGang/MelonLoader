@@ -21,7 +21,7 @@ namespace MelonLoader
     {
         internal static HarmonyLib.Harmony HarmonyInstance;
         
-        internal static bool Is_ALPHA_PreRelease = true;
+        internal static bool Is_ALPHA_PreRelease = false;
 
         internal static NativeLibrary.StringDelegate WineGetVersion;
 
