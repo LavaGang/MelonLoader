@@ -179,7 +179,7 @@ namespace MelonLoader.MelonStartScreen
 
         internal class VersionTextSettings : TextSettings
         {
-            internal bool Is_ALPHA_PreRelease = true;
+            internal bool Is_ALPHA_PreRelease = false;
             public VersionTextSettings() => Defaults();
             public void Defaults()
             {
