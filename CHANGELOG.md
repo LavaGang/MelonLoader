@@ -37,10 +37,10 @@
 
 1. Refactored Bootstrap, more informative errors
 2. Updated classdata.tpk, fixing some issues when reading game versions
-3. Depracated NativeHooks, giving a new utility class `MelonLoader.NativeUtils.NativeHook<T> where T : Delegate`
+3. Deprecated NativeHooks, giving a new utility class `MelonLoader.NativeUtils.NativeHook<T> where T : Delegate`
 4. Updated MonoMod, fixing some issues with old Mono Games
 5. Fix some compatibility issues for certain Mono Games
-6. Implemented some missing launch option
+6. Implemented some missing launch options
 
 ---
 
