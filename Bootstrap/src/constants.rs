@@ -20,7 +20,7 @@ pub type InitFnIl2Cpp = extern "C" fn(*const c_char) -> *mut Il2CppDomain;
 
 pub const MELON_VERSION: &str = "0.6.1";
 
-pub const IS_ALPHA: bool = true;
+pub const IS_ALPHA: bool = false;
 
 pub const RED: Color = Color::TrueColor {
     r: (255),
