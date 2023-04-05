@@ -8,8 +8,8 @@ use std::{error, path::PathBuf, sync::Mutex};
 
 #[derive(Parser)]
 struct Arguments {
-    #[arg(long = "no-mods", default_value = "false")]
-    no_mods: bool,
+    #[arg(long = "no-mods")]
+    no_mods: Option<bool>,
 
     #[arg(long = "melonloader.basedir")]
     base_dir: Option<String>,
@@ -30,7 +30,7 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
 
     //return Ok, and silently stop loading MelonLoader, if the user has specified to not load mods,
     //or if the game is not a Unity game
-    if args.no_mods {
+    if args.no_mods.is_some_and(|b| b) {
         return Ok(());
     }
 
