@@ -40,7 +40,10 @@ namespace MelonLoader.CompatibilityLayers
         private IntPtr Detour(string path)
         {
             if (path.EndsWith("EOSOVH-Win64-Shipping.dll") || path.EndsWith("EOSOVH-Win32-Shipping.dll"))
+            {
+                _hook.Detach();
                 return IntPtr.Zero;
+            }
 
             return _hook.Trampoline(path);
         }
