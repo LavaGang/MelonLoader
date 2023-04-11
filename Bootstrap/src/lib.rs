@@ -1,5 +1,3 @@
-#![feature(is_some_and)]
-
 #![allow(non_snake_case)]
 #![deny(
     missing_debug_implementations,
