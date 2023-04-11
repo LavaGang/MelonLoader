@@ -107,6 +107,7 @@ namespace MelonLoader.NativeUtils
             BootstrapInterop.NativeHookDetach((IntPtr)(&original), _detourHandle);
 
             IsHooked= false;
+            _trampoline = null;
             _trampolineHandle = IntPtr.Zero;
         }
     }
