@@ -59,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.NativeHost", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Preload", "Dependencies\SupportModules\Preload\Preload.csproj", "{81172B93-0ADE-47A5-9CC4-9833676C2D38}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EOS", "Dependencies\CompatibilityLayers\EOS\EOS.csproj", "{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +203,18 @@ Global
 		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Windows - x64.Build.0 = Release|Any CPU
 		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Windows - x86.ActiveCfg = Release|Any CPU
 		{81172B93-0ADE-47A5-9CC4-9833676C2D38}.Release|Windows - x86.Build.0 = Release|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Debug|Windows - x64.ActiveCfg = Debug|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Debug|Windows - x64.Build.0 = Debug|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Debug|Windows - x86.ActiveCfg = Debug|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Debug|Windows - x86.Build.0 = Debug|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Release|Windows - x64.ActiveCfg = Release|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Release|Windows - x64.Build.0 = Release|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Release|Windows - x86.ActiveCfg = Release|Any CPU
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B}.Release|Windows - x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -217,6 +231,7 @@ Global
 		{3AF58371-2E0A-4256-B3A3-C100DB07E599} = {AB4D471C-9AB2-4A5F-93E1-8929E436C121}
 		{1DB3679C-DCCA-492D-A725-75604A379C7A} = {AB4D471C-9AB2-4A5F-93E1-8929E436C121}
 		{81172B93-0ADE-47A5-9CC4-9833676C2D38} = {8D8A18CB-7319-4220-BED8-6B3E23E6C19F}
+		{DB9D4AFC-E266-42C8-909A-21C14EEB8A5B} = {AB4D471C-9AB2-4A5F-93E1-8929E436C121}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4AB93B1D-1C52-4A80-809D-C28770140E0A}
