@@ -23,9 +23,8 @@ namespace MelonLoader.CompatibilityLayers
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         static extern IntPtr LoadLibrary(string lpFileName);
 
-        [UnmanagedFunctionPointer(CallingConvention.Winapi, CharSet = CharSet.Unicode)]
-        private delegate IntPtr LoadLibraryWDetour(string path);
-        private NativeHook<LoadLibraryWDetour> _hook = new NativeHook<LoadLibraryWDetour>();
+        internal delegate IntPtr LoadLibraryWDetour(IntPtr path);
+        internal static NativeHook<LoadLibraryWDetour> _hook = new NativeHook<LoadLibraryWDetour>();
         public override void OnInitialize()
         {
             var lib = new NativeLibrary(LoadLibrary("kernel32.dll"));
@@ -37,15 +36,21 @@ namespace MelonLoader.CompatibilityLayers
             _hook.Attach();
         }
 
-        private IntPtr Detour(string path)
+        private IntPtr Detour(IntPtr path)
         {
-            if (path.EndsWith("EOSOVH-Win64-Shipping.dll") || path.EndsWith("EOSOVH-Win32-Shipping.dll"))
+            var pathString = Marshal.PtrToStringUni(path);
+            if (pathString.EndsWith("EOSOVH-Win64-Shipping.dll") || pathString.EndsWith("EOSOVH-Win32-Shipping.dll"))
             {
                 _hook.Detach();
                 return IntPtr.Zero;
             }
 
             return _hook.Trampoline(path);
+        }
+
+        ~EOS_Module()
+        {
+            _hook.Detach();
         }
     }
 }
