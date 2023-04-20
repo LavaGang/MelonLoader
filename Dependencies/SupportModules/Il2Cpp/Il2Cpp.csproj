@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Support</RootNamespace>
 		<TargetFramework>net6</TargetFramework>
@@ -44,7 +44,7 @@
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.5-ci.313" />
 		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.5-ci.313" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5-ci.313" />
-		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
+		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.Utils" Version="22.7.31.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.1.2" ExcludeAssets="Runtime" />
