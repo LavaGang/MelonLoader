@@ -42,6 +42,10 @@ namespace MelonLoader
             MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
             
+#if NET6_0
+            Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
+#endif
+            
             SetupWineCheck();
             Utils.MelonConsole.Init();
 
