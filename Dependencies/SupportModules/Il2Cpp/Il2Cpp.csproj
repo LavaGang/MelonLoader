@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Support</RootNamespace>
 		<TargetFramework>net6</TargetFramework>
@@ -39,7 +39,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
 		<PackageReference Include="HarmonyX" Version="2.10.1" ExcludeAssets="Runtime" />
-		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.4.0" ExcludeAssets="Runtime" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
 		<PackageReference Include="Iced" Version="1.18.0" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.5-ci.313" />
 		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.5-ci.313" />
