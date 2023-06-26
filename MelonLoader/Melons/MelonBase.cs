@@ -65,7 +65,7 @@ namespace MelonLoader
             var collection = melons.ToList();
             SortMelons(ref collection);
 
-            foreach (var m in melons)
+            foreach (var m in collection)
                 m.Register();
         }
 
