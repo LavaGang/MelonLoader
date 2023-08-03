@@ -52,8 +52,8 @@ impl<T> NativeHook<T> {
     }
 }
 
-unsafe impl<T> Send for NativeHook<T> {}
-unsafe impl<T> Sync for NativeHook<T> {}
+unsafe impl<T: Send> Send for NativeHook<T> {}
+unsafe impl<T: Sync> Sync for NativeHook<T> {}
 
 impl<T> Clone for NativeHook<T> {
     fn clone(&self) -> Self {
