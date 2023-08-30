@@ -6,7 +6,7 @@ use unity_rs::{
     runtime::FerrexRuntime,
 };
 
-use crate::{debug, errors::DynErr, melonenv, runtime};
+use crate::{debug, errors::DynErr, melonenv::{self, paths}, runtime};
 
 lazy_static! {
     pub static ref MONO_PRESTART: Mutex<UnityMethod> =
@@ -22,6 +22,8 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
     preload(runtime)?;
 
     debug!("Initializing BaseAssembly")?;
+
+    let _runtime_dir = paths::runtime_dir()?;
 
     //get MelonLoader.dll's path and confirm it exists
     let mut melonloader_dll = melonenv::paths::MELONLOADER_FOLDER.clone();

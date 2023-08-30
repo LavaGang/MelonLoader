@@ -91,6 +91,34 @@ namespace MelonLoader
                 MelonLogger.WriteSpacer();
             firstSpacer = true;
         }
+        
+        public static void LoadUserlibs(string path)
+        {
+            path = Path.GetFullPath(path);
+
+            var loadingMsg = $"Loading UserLibss from '{path}'...";
+            MelonLogger.WriteSpacer();
+            MelonLogger.Msg(loadingMsg);
+
+            bool hasWroteLine = false;
+
+            var files = Directory.GetFiles(path, "*.dll");
+            var melonAssemblies = new List<MelonAssembly>();
+            foreach (var f in files)
+            {
+                if (!hasWroteLine)
+                {
+                    hasWroteLine = true;
+                    MelonLogger.WriteLine(Color.Magenta);
+                }
+
+                var asm = MelonAssembly.LoadMelonAssembly(f, false);
+                if (asm == null)
+                    continue;
+
+                melonAssemblies.Add(asm);
+            }
+        }
 
         #region Obsolete Members
         /// <summary>

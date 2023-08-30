@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using MelonLoader.Utils;
 
 namespace MelonLoader
 {
     public static class MelonCompatibilityLayer
     {
-        public static string baseDirectory = $"MelonLoader{Path.DirectorySeparatorChar}Dependencies{Path.DirectorySeparatorChar}CompatibilityLayers";
+        public static string baseDirectory = $"{MelonEnvironment.GameRootDirectory}{Path.DirectorySeparatorChar}MelonLoader{Path.DirectorySeparatorChar}Dependencies{Path.DirectorySeparatorChar}CompatibilityLayers";
 
         private static List<MelonModule.Info> layers = new List<MelonModule.Info>()
         {
