@@ -1,0 +1,2 @@
+[workspace]
+members = [ "Rust/MelonProxy", "Rust/MelonBootstrap" ]
