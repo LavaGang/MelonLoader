@@ -30,7 +30,7 @@ impl std::convert::TryFrom<u8> for LogLevel {
 
 macro_rules! log_path {
     () => {
-        std::env::current_dir()?.join("MelonLoader").join("Latest-Bootstrap.log")
+        $crate::melonenv::paths::BASE_DIR.clone().join("MelonLoader").join("Latest-Bootstrap.log")
     };
 }
 

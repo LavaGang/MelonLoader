@@ -21,15 +21,10 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\..\..\MelonLoader\Properties\BuildInfo.cs" Link="Properties\BuildInfo.cs" />
-			<Compile Update="Properties\Resources.Designer.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include="Resources\System.Core.dll" />
-		<Content Include="Resources\System.dll" />
-		<Content Include="Resources\System.Drawing.dll" />
+		<EmbeddedResource Include="Resources\System.Core.dll" />
+		<EmbeddedResource Include="Resources\System.dll" />
+		<EmbeddedResource Include="Resources\System.Drawing.dll" />
 	</ItemGroup>
 </Project>

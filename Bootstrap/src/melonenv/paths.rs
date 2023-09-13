@@ -1,25 +1,36 @@
-use std::path::PathBuf;
+use std::path::{PathBuf, Path};
 
 use lazy_static::lazy_static;
 use unity_rs::runtime::RuntimeType;
 
-use crate::{errors::DynErr, internal_failure, runtime, constants::W};
+use crate::{errors::DynErr, internal_failure, runtime, constants::W, utils::runtime::{self, NetstandardVersion}};
 
 use super::args::ARGS;
 
 lazy_static! {
     pub static ref BASE_DIR: W<PathBuf> = {
-        match ARGS.base_dir {
-            Some(ref path) => W(PathBuf::from(path.clone())),
-            None => W(std::env::current_dir().unwrap_or_else(|e| {
-                internal_failure!("Failed to get base directory: {}", e.to_string());
-            })),
+        let args: Vec<String> = std::env::args().collect();
+        let mut base_dir = std::env::current_dir().unwrap_or_else(|e|internal_failure!("Failed to get base dir: {e}"));
+        for arg in args.iter() {
+            if arg.starts_with("--melonloader.basedir") {
+                let a: Vec<&str> = arg.split("=").collect();
+                base_dir = PathBuf::from(a[1]);
+            }
         }
+
+        W(base_dir)
     };
     pub static ref GAME_DIR: W<PathBuf> = {
-        W(std::env::current_dir().unwrap_or_else(|e| {
-            internal_failure!("Failed to get game directory: {}", e.to_string());
-        }))
+        let args: Vec<String> = std::env::args().collect();
+        let mut base_dir = std::env::current_dir().unwrap_or_else(|e|internal_failure!("Failed to get game dir: {e}"));
+        for arg in args.iter() {
+            if arg.starts_with("--melonloader.basedir") {
+                let a: Vec<&str> = arg.split("=").collect();
+                base_dir = PathBuf::from(a[1]);
+            }
+        }
+
+        W(base_dir)
     };
     pub static ref MELONLOADER_FOLDER: W<PathBuf> = W(BASE_DIR.join("MelonLoader"));
     pub static ref DEPENDENCIES_FOLDER: W<PathBuf> = W(MELONLOADER_FOLDER.join("Dependencies"));
@@ -31,6 +42,8 @@ pub fn runtime_dir() -> Result<PathBuf, DynErr> {
     let runtime = runtime!()?;
 
     let mut path = MELONLOADER_FOLDER.clone();
+
+    //let version = runtime::get_netstandard_version()?;
 
     match runtime.get_type() {
         RuntimeType::Mono(_) => path.push("net35"),

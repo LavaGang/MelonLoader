@@ -1,23 +1,13 @@
 //! the core logic of the proxy
 
 use crate::utils::files;
-use clap::Parser;
 use lazy_static::lazy_static;
 use libloading::Library;
 use std::{error, path::PathBuf, sync::Mutex};
 
-#[derive(Parser)]
-struct Arguments {
-    #[arg(long = "no-mods")]
-    no_mods: Option<bool>,
-
-    #[arg(long = "melonloader.basedir")]
-    base_dir: Option<String>,
-}
-
-lazy_static!(
+lazy_static! {
     static ref BOOTSTRAP: Mutex<Option<Library>> = Mutex::new(None);
-);
+}
 
 pub fn init() -> Result<(), Box<dyn error::Error>> {
     let file_path = std::env::current_exe()?;
@@ -26,20 +16,29 @@ pub fn init() -> Result<(), Box<dyn error::Error>> {
         return Ok(());
     }
 
-    let args = Arguments::parse_optimistic()?;
+    let args: Vec<String> = std::env::args().collect();
+    let mut base_dir = std::env::current_dir()?;
+    let mut no_mods = false;
+
+    for arg in args.iter() {
+        if arg.starts_with("--melonloader.basedir") {
+            let a: Vec<&str> = arg.split("=").collect();
+            base_dir = PathBuf::from(a[1]);
+        }
+
+        if arg.contains("--no-mods") {
+            no_mods = true;
+        }
+    }
+    
 
     //return Ok, and silently stop loading MelonLoader, if the user has specified to not load mods,
     //or if the game is not a Unity game
-    if args.no_mods.is_some_and(|b| b) {
+    if no_mods {
         return Ok(());
     }
 
-    let base_path = match args.base_dir {
-        Some(path) => PathBuf::from(path),
-        None => std::env::current_dir()?,
-    };
-
-    let bootstrap_path = files::get_bootstrap_path(&base_path)?;
+    let bootstrap_path = files::get_bootstrap_path(&base_dir)?;
 
     unsafe {
         *BOOTSTRAP.try_lock()? = Some(Library::new(&bootstrap_path)?);

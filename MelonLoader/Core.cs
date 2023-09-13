@@ -93,7 +93,8 @@ namespace MelonLoader
             MelonCompatibilityLayer.LoadModules();
 
             bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
-
+            
+            MelonHandler.LoadUserlibs(MelonEnvironment.UserLibsDirectory);
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
             MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
