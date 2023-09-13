@@ -25,6 +25,8 @@ namespace MelonLoader.Utils
 
         private static gethostbyname_delegate original_gethostbyname;
         private static getaddrinfo_delegate original_getaddrinfo;
+        
+        private static object _observedDomainsLock = new object();
 
         private static List<string> _blockList = new()
         {
@@ -102,10 +104,16 @@ namespace MelonLoader.Utils
             {
                 if (shouldBlock)
                     MelonDebug.Msg($"Host Name or IP blocked: {hostname}");
-                else if (!_observedHostnames.Any(h => hostname.Contains(h)))
+                else
                 {
-                    MelonDebug.Msg($"Unique Host Name or IP Found: {hostname}");
-                    _observedHostnames.Add(hostname);
+                    lock (_observedDomainsLock)
+                    {
+                        if (!_observedHostnames.Any(h => hostname.Contains(h)))
+                        {
+                            MelonDebug.Msg($"Unique Host Name or IP Found: {hostname}");
+                            _observedHostnames.Add(hostname);
+                        }
+                    }
                 }
             }
 
