@@ -1,2 +1,2 @@
 [workspace]
-members = [ "Rust/MelonProxy", "Rust/MelonBootstrap" ]
+members = ["Rust/MelonProxy", "Rust/MelonBootstrap", "Rust/MelonProxy-sys"]

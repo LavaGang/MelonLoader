@@ -1,8 +1,24 @@
 [package]
 name = "melon_proxy"
-version = "0.1.0"
+version = "0.2.5"
+authors = ["RinLovesYou"]
 edition = "2021"
-
+description = "A dynamic Windows System DLL proxy"
+repository = "https://github.com/LavaGang/MelonLoader"
+license = "GPL-2.0"
+readme = "../README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+thiserror = "1.0.48"
+melon_proxy-sys = { path = "../MelonProxy-sys" }
+utf16string = "0.2.0"
+windows = { version = "0.51.1", features = ["Win32_Foundation", "Win32_System", "Win32_System_LibraryLoader"] }
+
+#[target.'cfg(windows)'.dependencies]
+
+[target.'cfg(linux)'.dependencies]
+ctor = "0.2.4"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
