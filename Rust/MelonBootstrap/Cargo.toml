@@ -1,5 +1,5 @@
 [package]
-name = "MelonBootstrap"
+name = "melon_bootstrap"
 version = "0.1.0"
 edition = "2021"
 
