@@ -65,132 +65,132 @@
 .globl WinHttpWriteProxySettings
 
 Private1:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 0 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 0 * 8]
 SvchostPushServiceGlobals:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 1 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 1 * 8]
 WinHttpAddRequestHeaders:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 2 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 2 * 8]
 WinHttpAutoProxySvcMain:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 3 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 3 * 8]
 WinHttpCheckPlatform:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 4 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 4 * 8]
 WinHttpCloseHandle:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 5 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 5 * 8]
 WinHttpConnect:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 6 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 6 * 8]
 WinHttpConnectionDeletePolicyEntries:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 7 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 7 * 8]
 WinHttpConnectionDeleteProxyInfo:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 8 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 8 * 8]
 WinHttpConnectionFreeNameList:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 9 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 9 * 8]
 WinHttpConnectionFreeProxyInfo:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 10 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 10 * 8]
 WinHttpConnectionFreeProxyList:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 11 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 11 * 8]
 WinHttpConnectionGetNameList:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 12 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 12 * 8]
 WinHttpConnectionGetProxyInfo:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 13 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 13 * 8]
 WinHttpConnectionGetProxyList:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 14 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 14 * 8]
 WinHttpConnectionSetPolicyEntries:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 15 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 15 * 8]
 WinHttpConnectionSetProxyInfo:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 16 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 16 * 8]
 WinHttpConnectionUpdateIfIndexTable:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 17 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 17 * 8]
 WinHttpCrackUrl:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 18 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 18 * 8]
 WinHttpCreateProxyResolver:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 19 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 19 * 8]
 WinHttpCreateUrl:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 20 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 20 * 8]
 WinHttpDetectAutoProxyConfigUrl:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 21 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 21 * 8]
 WinHttpFreeProxyResult:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 22 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 22 * 8]
 WinHttpFreeProxyResultEx:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 23 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 23 * 8]
 WinHttpFreeProxySettings:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 24 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 24 * 8]
 WinHttpGetDefaultProxyConfiguration:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 25 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 25 * 8]
 WinHttpGetIEProxyConfigForCurrentUser:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 26 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 26 * 8]
 WinHttpGetProxyForUrl:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 27 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 27 * 8]
 WinHttpGetProxyForUrlEx:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 28 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 28 * 8]
 WinHttpGetProxyForUrlEx2:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 29 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 29 * 8]
 WinHttpGetProxyForUrlHvsi:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 30 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 30 * 8]
 WinHttpGetProxyResult:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 31 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 31 * 8]
 WinHttpGetProxyResultEx:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 32 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 32 * 8]
 WinHttpGetProxySettingsVersion:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 33 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 33 * 8]
 WinHttpGetTunnelSocket:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 34 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 34 * 8]
 WinHttpOpen:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 35 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 35 * 8]
 WinHttpOpenRequest:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 36 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 36 * 8]
 WinHttpPacJsWorkerMain:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 37 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 37 * 8]
 WinHttpProbeConnectivity:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 38 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 38 * 8]
 WinHttpQueryAuthSchemes:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 39 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 39 * 8]
 WinHttpQueryDataAvailable:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 40 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 40 * 8]
 WinHttpQueryHeaders:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 41 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 41 * 8]
 WinHttpQueryOption:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 42 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 42 * 8]
 WinHttpReadData:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 43 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 43 * 8]
 WinHttpReadProxySettings:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 44 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 44 * 8]
 WinHttpReadProxySettingsHvsi:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 45 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 45 * 8]
 WinHttpReceiveResponse:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 46 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 46 * 8]
 WinHttpResetAutoProxy:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 47 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 47 * 8]
 WinHttpSaveProxyCredentials:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 48 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 48 * 8]
 WinHttpSendRequest:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 49 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 49 * 8]
 WinHttpSetCredentials:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 50 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 50 * 8]
 WinHttpSetDefaultProxyConfiguration:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 51 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 51 * 8]
 WinHttpSetOption:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 52 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 52 * 8]
 WinHttpSetStatusCallback:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 53 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 53 * 8]
 WinHttpSetTimeouts:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 54 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 54 * 8]
 WinHttpTimeFromSystemTime:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 55 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 55 * 8]
 WinHttpTimeToSystemTime:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 56 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 56 * 8]
 WinHttpWebSocketClose:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 57 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 57 * 8]
 WinHttpWebSocketCompleteUpgrade:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 58 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 58 * 8]
 WinHttpWebSocketQueryCloseStatus:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 59 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 59 * 8]
 WinHttpWebSocketReceive:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 60 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 60 * 8]
 WinHttpWebSocketSend:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 61 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 61 * 8]
 WinHttpWebSocketShutdown:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 62 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 62 * 8]
 WinHttpWriteData:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 63 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 63 * 8]
 WinHttpWriteProxySettings:
-	jmp qword ptr [rip + OriginalFuncs_winhttp + 64 * 8]
+	jmp qword ptr [rip + OriginalFuncs + 64 * 8]

@@ -65,19 +65,19 @@ pub fn proxy(_attribute: TokenStream, function: TokenStream) -> TokenStream {
             #[no_mangle]
             #[allow(non_snake_case)]
             pub extern "system" fn DllMain(
-                _hinstDLL: proxy_dll::HINSTANCE,
-                fdwReason: proxy_dll::DWORD,
-                _lpvReserved: proxy_dll::LPVOID,
-            ) -> proxy_dll::BOOL {
+                _hinstDLL: crate::HINSTANCE,
+                fdwReason: isize,
+                _lpvReserved: isize,
+            ) -> isize {
 
-                if fdwReason == proxy_dll::DLL_PROCESS_ATTACH {
+                if fdwReason == 1 {
                     //call the original function
-                    melon_proxy::exports::initialize(_hinstDLL).unwrap_or_else(|e| {
-                        ::std::panic!("{}", e);
+                    crate::proxy::exports::initialize(_hinstDLL).unwrap_or_else(|e| {
+                        ::std::panic!("Failed to initialize MelonLoader's Proxy: {}", e);
                     });
                     #ident();
                 }
-                proxy_dll::TRUE
+                1
             }
 
         );

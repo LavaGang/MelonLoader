@@ -1,4 +1,4 @@
-#[cfg(windows)]
+#[cfg(msvc)]
 fn main() {
     println!("cargo:warning=Linking Exports File..");
     use std::path::Path;
@@ -10,7 +10,7 @@ fn main() {
     );
 }
 
-#[cfg(not(windows))]
+#[cfg(not(msvc))]
 fn main() {
 
 }
