@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net35;net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+        <DocumentationFile>..\Output\$(Configuration)\MelonLoader\MelonLoader.xml</DocumentationFile>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <DebugType>embedded</DebugType>
+
+        <Version>0.7.0</Version>
+        <PackageId>LavaGang.MelonLoader</PackageId>
+        <PackageTags>modding unity</PackageTags>
+        <RepositoryUrl>https://github.com/LavaGang/MelonLoader</RepositoryUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryType>git</RepositoryType>
+        <PackageProjectUrl>https://github.com/LavaGang/MelonLoader</PackageProjectUrl>
+        <Authors>Lava Gang</Authors>
+        <Company>Lava Gang</Company>
+        <Copyright>Copyright (c) 2022 Lava Gang</Copyright>
+        <Description>The World's First Universal Mod Loader, expandable to work on any game engine.</Description>
+    </PropertyGroup>
+    <PropertyGroup>
+        <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    </PropertyGroup>
+    <ItemDefinitionGroup>
+        <PackageReference>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemDefinitionGroup>
+
+</Project>

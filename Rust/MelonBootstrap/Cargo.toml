@@ -8,7 +8,12 @@ edition = "2021"
 [dependencies]
 ctor = "0.2.4"
 netcorehost = "0.15.1"
+chrono = "0.4.23"
+colored = "2.0.0"
+thiserror = "1.0.39"
+lazy_static = "1.4.0"
+msgbox = "0.7.0"
 
 [lib]
-name = "MelonBootstrap"
+name = "melon_bootstrap"
 crate-type = ["cdylib", "rlib"]
