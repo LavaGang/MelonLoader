@@ -1,20 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6</TargetFramework>
+        <TargetFrameworks>net35;netstandard2.1;net6</TargetFrameworks>
         <LangVersion>Latest</LangVersion>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-        <DocumentationFile>..\Output\$(Configuration)\MelonLoader\MelonLoader.xml</DocumentationFile>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <DebugType>embedded</DebugType>
         <PublishTrimmed>false</PublishTrimmed>
 
         <Version>0.7.0</Version>
-        <PackageId>LavaGang.MelonLoader.Bootstrap</PackageId>
+        <PackageId>LavaGang.MelonLoader.Shared</PackageId>
         <PackageTags>modding games</PackageTags>
         <RepositoryUrl>https://github.com/LavaGang/MelonLoader</RepositoryUrl>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -28,9 +27,6 @@
     <PropertyGroup>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     </PropertyGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\MelonLoader.Shared\MelonLoader.Shared.csproj" />
-    </ItemGroup>
     <ItemDefinitionGroup>
         <PackageReference>
             <PrivateAssets>all</PrivateAssets>
