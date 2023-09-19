@@ -8,9 +8,6 @@ namespace MelonLoader.Bootstrap
 {
     public static class Entrypoint
     {
-#if NET6_0
-        [UnmanagedCallersOnly]
-#endif
         public static void Entry()
         {
             Shared.Core.Startup();

@@ -22,7 +22,7 @@ public class ModuleManager
             
             MelonDebug.Msg($"Loading {bootstrapPath}");
             //TODO: Fix dotnet stupidly not using default load context when hosting coreclr.
-            var assembly = AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly()).LoadFromAssemblyPath(bootstrapPath);
+            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(bootstrapPath);
 
             var type = assembly.GetTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(BootstrapModule)));
             if (type == null)

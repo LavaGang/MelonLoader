@@ -490,6 +490,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "dobby-rs"
+version = "0.1.0"
+source = "git+https://github.com/RinLovesYou/dobby-rs#5af4e2c666aed8e4636b8df7467425a202589e54"
+dependencies = [
+ "dobby-sys",
+ "thiserror",
+]
+
+[[package]]
+name = "dobby-sys"
+version = "0.1.0"
+source = "git+https://github.com/RinLovesYou/dobby-sys.git#8ea9f0800de90b07073561306fe258bef973930f"
+
+[[package]]
 name = "encoding_rs"
 version = "0.8.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1176,6 +1190,7 @@ dependencies = [
  "chrono",
  "colored",
  "ctor",
+ "dobby-rs",
  "lazy_static",
  "msgbox",
  "netcorehost",

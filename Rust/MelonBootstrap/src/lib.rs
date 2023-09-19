@@ -1,3 +1,5 @@
+#![feature(lazy_cell)]
+
 use std::error::Error;
 
 use logging::logger;
@@ -6,7 +8,9 @@ pub mod dotnet;
 pub mod environment;
 pub mod utils;
 pub mod logging;
+pub mod hooks;
 pub mod constants;
+pub mod icalls;
 
 #[ctor::ctor]
 fn main() {

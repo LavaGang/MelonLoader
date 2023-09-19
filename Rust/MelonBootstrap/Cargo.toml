@@ -13,6 +13,7 @@ colored = "2.0.0"
 thiserror = "1.0.39"
 lazy_static = "1.4.0"
 msgbox = "0.7.0"
+dobby-rs = { git = "https://github.com/RinLovesYou/dobby-rs" }
 
 [lib]
 name = "melon_bootstrap"
