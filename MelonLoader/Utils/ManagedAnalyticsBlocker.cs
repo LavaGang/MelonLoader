@@ -71,7 +71,6 @@ namespace MelonLoader.Utils
         {
             //Default ignored (as in, not logged) hostnames. I'm leaving these in cleartext cause it's easier.
             "ntp.org",
-            "bonetome.com",
             "samboy.dev",
             "github.com",
             "dubyadu.de",
