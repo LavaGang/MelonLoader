@@ -40,7 +40,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 new HostInfo($"{DefaultHostInfo.Melon.API_URL_1}{gamename}", DefaultHostInfo.Melon.Contact),
                 new HostInfo($"{DefaultHostInfo.Melon.API_URL_2}{gamename}", DefaultHostInfo.Melon.Contact),
                 new HostInfo($"{DefaultHostInfo.Melon.API_URL_SAMBOY}{gamename}", DefaultHostInfo.Melon.Contact),
-                new HostInfo($"{DefaultHostInfo.Ruby.API_URL}{gamename}.json", DefaultHostInfo.Ruby.Contact),
+                new HostInfo($"{DefaultHostInfo.Melon.API_URL_DUBYADUDE}{gamename}", DefaultHostInfo.Melon.Contact),
             };
         }
 
@@ -118,6 +118,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 internal static string API_URL_1 = $"https://api-1.melonloader.com/api/{API_VERSION}/game/";
                 internal static string API_URL_2 = $"https://api-2.melonloader.com/api/{API_VERSION}/game/";
                 internal static string API_URL_SAMBOY = $"https://melon.samboy.dev/api/{API_VERSION}/game/";
+                internal static string API_URL_DUBYADUDE = $"https://melon.dubyadu.de/api/{API_VERSION}/game/";
 
                 internal static InfoStruct Contact(string response_str)
                 {
@@ -142,34 +143,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                     public string forceCpp2IlVersion = null;
                     public string forceUnhollowerVersion = null; //TODO: Remove this from the API
                     public string obfuscationRegex = null;
-                }
-            }
-
-            internal static class Ruby
-            {
-                internal static string API_URL = "https://ruby-core.com/api/ml/";
-
-                internal static InfoStruct Contact(string response_str)
-                {
-                    ResponseStruct responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
-                    if (responseobj == null)
-                        return null;
-
-                    InfoStruct returninfo = new InfoStruct();
-                    //returninfo.ForceDumperVersion = responseobj.forceDumperVersion;
-                    returninfo.ObfuscationRegex = responseobj.obfuscationRegex;
-                    returninfo.MappingURL = responseobj.mappingURL;
-                    returninfo.MappingFileSHA512 = responseobj.mappingFileSHA512;
-                    return returninfo;
-                }
-
-                private class ResponseStruct
-                {
-                    public string forceDumperVersion = null;
-                    public string forceUnhollowerVersion = null; //TODO: Remove this from the API
-                    public string obfuscationRegex = null;
-                    public string mappingURL = null;
-                    public string mappingFileSHA512 = null;
                 }
             }
         }

@@ -74,7 +74,7 @@ namespace MelonLoader.Utils
             "bonetome.com",
             "samboy.dev",
             "github.com",
-            "ruby-core.com",
+            "dubyadu.de",
             "melonloader.com",
             "githubusercontent.com",
             "thetrueyoshifan.com"
