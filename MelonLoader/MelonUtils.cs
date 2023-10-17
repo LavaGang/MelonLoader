@@ -30,7 +30,7 @@ namespace MelonLoader
         internal static void Setup(AppDomain domain)
         {
             using (var sha = SHA256.Create()) 
-                HashCode = string.Join("", sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X")).ToArray());
+                HashCode = string.Concat(sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X2")).ToArray());
 
 
             Core.WelcomeMessage();
