@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Bootstrap
