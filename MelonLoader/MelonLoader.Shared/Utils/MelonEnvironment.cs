@@ -29,7 +29,7 @@ namespace MelonLoader.Shared.Utils
 #endif
             GameExecutableName = Path.GetFileNameWithoutExtension(GameExecutablePath);
 
-            // MelonLoader based Pathed
+            // MelonLoader based Paths
             var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
             MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
