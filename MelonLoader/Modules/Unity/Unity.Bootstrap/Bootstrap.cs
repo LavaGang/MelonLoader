@@ -24,5 +24,10 @@ namespace MelonLoader.Unity
                     || File.Exists(Path.Combine(appData, "mainData"));
             }
         }
+
+        public void Startup()
+        {
+            
+        }
     }   
 }
