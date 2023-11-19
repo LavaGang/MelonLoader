@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net6</TargetFramework>
@@ -7,7 +7,7 @@
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-        <DocumentationFile>..\Output\$(Configuration)\MelonLoader\MelonLoader.xml</DocumentationFile>
+        <DocumentationFile></DocumentationFile>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <DebugType>embedded</DebugType>
@@ -27,6 +27,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\MelonLoader.Shared\MelonLoader.Shared.csproj" />
