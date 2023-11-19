@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Unity</RootNamespace>
+        <TargetFramework>net6</TargetFramework>
+        <LangVersion>Latest</LangVersion>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Unity\</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <PublishTrimmed>false</PublishTrimmed>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime"/>
+    </ItemGroup>
+</Project>

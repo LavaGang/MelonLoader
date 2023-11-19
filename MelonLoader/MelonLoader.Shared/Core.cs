@@ -8,9 +8,7 @@ namespace MelonLoader.Shared
     {
         public static void Startup()
         {
-            var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-            var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
-            MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
+            MelonEnvironment.Initialize();
         }
     }
 }

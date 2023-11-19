@@ -1,25 +1,44 @@
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace MelonLoader.Shared.Utils
 {
     public static class MelonEnvironment
     {
-        public static string MelonLoaderDirectory { get; internal set; }
         public static string GameRootDirectory { get; internal set; }
+        public static string GameExecutablePath { get; internal set; }
+        public static string GameExecutableName { get; internal set; }
 
+        public static string MelonLoaderDirectory { get; internal set; }
+        public static string MelonBaseDirectory { get; internal set; }
+
+        public static string ModulesDirectory { get; internal set; }
+        public static string ModsDirectory { get; internal set; }
+        public static string PluginsDirectory { get; internal set; }
+        public static string UserLibsDirectory { get; internal set; }
+        public static string UserDataDirectory { get; internal set; }
+
+        internal static void Initialize()
+        {
+            // Game based Paths
 #if NET6_0
-        public static string GameExecutablePath => System.Environment.ProcessPath;
+            GameExecutablePath = System.Environment.ProcessPath;
 #else
-        public static string GameExecutablePath => Process.GetCurrentProcess().MainModule!.FileName;
+            GameExecutablePath = Process.GetCurrentProcess().MainModule!.FileName;
 #endif
-        public static string MelonBaseDirectory => Directory.GetParent(MelonLoaderDirectory)!.FullName;
-        
-        public static string ModsDirectory => Path.Combine(MelonBaseDirectory, "Mods");
-        public static string PluginsDirectory => Path.Combine(MelonBaseDirectory, "Plugins");
-        public static string UserLibsDirectory => Path.Combine(MelonBaseDirectory, "UserLibs");
-        public static string UserDataDirectory => Path.Combine(MelonBaseDirectory, "UserData");
-        public static string ModuleDirectory => Path.Combine(MelonLoaderDirectory, "Modules");
-        public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
+            GameExecutableName = Path.GetFileNameWithoutExtension(GameExecutablePath);
+
+            // MelonLoader based Pathed
+            var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
+            MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
+            MelonBaseDirectory = Directory.GetParent(MelonLoaderDirectory)!.FullName;
+            ModulesDirectory = Path.Combine(MelonLoaderDirectory, "Modules");
+            ModsDirectory = Path.Combine(MelonBaseDirectory, "Mods");
+            PluginsDirectory = Path.Combine(MelonBaseDirectory, "Plugins");
+            UserLibsDirectory = Path.Combine(MelonBaseDirectory, "UserLibs");
+            UserDataDirectory = Path.Combine(MelonBaseDirectory, "UserData");
+        }
     }
 }

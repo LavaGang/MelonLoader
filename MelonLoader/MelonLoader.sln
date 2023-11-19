@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Bootstrap", "MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj", "{7E1AD471-DB9A-4029-963E-BE45515C9648}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.Bootstrap", "MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj", "{7E1AD471-DB9A-4029-963E-BE45515C9648}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Shared", "MelonLoader.Shared\MelonLoader.Shared.csproj", "{C8512A09-20DF-484D-98EB-79FF4D483F8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.Shared", "MelonLoader.Shared\MelonLoader.Shared.csproj", "{C8512A09-20DF-484D-98EB-79FF4D483F8A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{716CE800-E309-4104-ACA3-867BB8BF4FB0}"
 EndProject
@@ -10,9 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Godot", "Godot", "{A5293DFE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity", "Unity", "{3E7F5C09-221B-4492-9BA0-2D1ED9BEC58C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bootstrap", "Modules\Godot\Bootstrap\Bootstrap.csproj", "{331705FE-EE1F-4733-8C0B-F1AE6B0496F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.NativeHost", "MelonLoader.NativeHost\MelonLoader.NativeHost.csproj", "{E20B4616-72EF-4805-8FB7-03C9DB214957}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.NativeHost", "MelonLoader.NativeHost\MelonLoader.NativeHost.csproj", "{E20B4616-72EF-4805-8FB7-03C9DB214957}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Godot.Bootstrap", "Modules\Godot\Godot.Bootstrap\Godot.Bootstrap.csproj", "{483E5B56-7308-4DAD-BF90-B27DC97116D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unity.Bootstrap", "Modules\Unity\Unity.Bootstrap\Unity.Bootstrap.csproj", "{75F7B154-10E0-484F-A463-16376FFA5553}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,18 +33,29 @@ Global
 		{C8512A09-20DF-484D-98EB-79FF4D483F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8512A09-20DF-484D-98EB-79FF4D483F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8512A09-20DF-484D-98EB-79FF4D483F8A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{331705FE-EE1F-4733-8C0B-F1AE6B0496F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{331705FE-EE1F-4733-8C0B-F1AE6B0496F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{331705FE-EE1F-4733-8C0B-F1AE6B0496F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{331705FE-EE1F-4733-8C0B-F1AE6B0496F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E20B4616-72EF-4805-8FB7-03C9DB214957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E20B4616-72EF-4805-8FB7-03C9DB214957}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20B4616-72EF-4805-8FB7-03C9DB214957}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20B4616-72EF-4805-8FB7-03C9DB214957}.Release|Any CPU.Build.0 = Release|Any CPU
+		{483E5B56-7308-4DAD-BF90-B27DC97116D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{483E5B56-7308-4DAD-BF90-B27DC97116D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{483E5B56-7308-4DAD-BF90-B27DC97116D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{483E5B56-7308-4DAD-BF90-B27DC97116D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75F7B154-10E0-484F-A463-16376FFA5553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75F7B154-10E0-484F-A463-16376FFA5553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75F7B154-10E0-484F-A463-16376FFA5553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75F7B154-10E0-484F-A463-16376FFA5553}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A5293DFE-1E8A-4933-B3D6-F8B06D995A23} = {716CE800-E309-4104-ACA3-867BB8BF4FB0}
 		{3E7F5C09-221B-4492-9BA0-2D1ED9BEC58C} = {716CE800-E309-4104-ACA3-867BB8BF4FB0}
-		{331705FE-EE1F-4733-8C0B-F1AE6B0496F3} = {A5293DFE-1E8A-4933-B3D6-F8B06D995A23}
+		{483E5B56-7308-4DAD-BF90-B27DC97116D0} = {A5293DFE-1E8A-4933-B3D6-F8B06D995A23}
+		{75F7B154-10E0-484F-A463-16376FFA5553} = {3E7F5C09-221B-4492-9BA0-2D1ED9BEC58C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4490CB48-16CD-4D0A-858D-1484CB9DED02}
 	EndGlobalSection
 EndGlobal

@@ -4,7 +4,7 @@ using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Godot
 {
-    public class GodotBootstrap : BootstrapModule
+    public class Bootstrap : BootstrapModule
     {
         public string EngineName => "Godot";
     
