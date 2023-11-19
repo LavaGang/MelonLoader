@@ -4,5 +4,7 @@ namespace MelonLoader.Shared.Interfaces
     {
         string EngineName { get; }
         bool IsMyEngine { get; }
+
+        void Startup();
     }   
 }

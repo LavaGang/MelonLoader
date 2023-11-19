@@ -6,18 +6,18 @@ namespace MelonLoader.Shared.Utils
 {
     public static class MelonEnvironment
     {
-        public static string GameRootDirectory { get; internal set; }
-        public static string GameExecutablePath { get; internal set; }
-        public static string GameExecutableName { get; internal set; }
+        public static string GameRootDirectory { get; private set; }
+        public static string GameExecutablePath { get; private set; }
+        public static string GameExecutableName { get; private set; }
 
-        public static string MelonLoaderDirectory { get; internal set; }
-        public static string MelonBaseDirectory { get; internal set; }
+        public static string MelonLoaderDirectory { get; private set; }
+        public static string MelonBaseDirectory { get; private set; }
 
-        public static string ModulesDirectory { get; internal set; }
-        public static string ModsDirectory { get; internal set; }
-        public static string PluginsDirectory { get; internal set; }
-        public static string UserLibsDirectory { get; internal set; }
-        public static string UserDataDirectory { get; internal set; }
+        public static string ModulesDirectory { get; private set; }
+        public static string ModsDirectory { get; private set; }
+        public static string PluginsDirectory { get; private set; }
+        public static string UserLibsDirectory { get; private set; }
+        public static string UserDataDirectory { get; private set; }
 
         internal static void Initialize()
         {

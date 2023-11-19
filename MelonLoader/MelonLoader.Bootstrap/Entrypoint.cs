@@ -23,6 +23,8 @@ namespace MelonLoader.Bootstrap
             
             MelonDebug.Msg("Found Bootstrap Module: " + module.GetType().FullName);
             MelonDebug.Msg($"Running Engine: {module.EngineName}");
+
+            module.Startup();
         }
     }   
 }

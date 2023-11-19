@@ -14,5 +14,10 @@ namespace MelonLoader.Godot
         public bool IsMyEngine =>
             File.Exists(Path.Combine(MelonEnvironment.MelonBaseDirectory,
                 $"{MelonEnvironment.GameExecutableName}.pck"));
+
+        public void Startup()
+        {
+
+        }
     }   
 }
