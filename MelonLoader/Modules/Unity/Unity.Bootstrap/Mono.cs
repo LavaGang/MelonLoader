@@ -55,22 +55,32 @@ namespace MelonLoader.Unity
             }
 
             // Hook mono_jit_init_version
-            BootstrapInterop.HookAttach(initPtr, ((d_mono_jit_init_version)mono_jit_init_version).GetFunctionPointer());
+            o_mono_jit_init_version = BootstrapInterop.HookAttach(
+                initPtr,
+                ((d_mono_jit_init_version)mono_jit_init_version)
+                .GetFunctionPointer())
+                .GetDelegate<d_mono_jit_init_version>();
 
             // Hook mono_runtime_invoke
-            BootstrapInterop.HookAttach(runtimeInvokePtr, ((d_mono_runtime_invoke)mono_runtime_invoke).GetFunctionPointer());
+            o_mono_runtime_invoke = BootstrapInterop.HookAttach(
+                runtimeInvokePtr,
+                ((d_mono_runtime_invoke)mono_runtime_invoke)
+                .GetFunctionPointer())
+                .GetDelegate<d_mono_runtime_invoke>();
         }
 
         private unsafe delegate void* d_mono_jit_init_version(void* name, void* version);
+        private static d_mono_jit_init_version o_mono_jit_init_version;
         private static unsafe void* mono_jit_init_version(void* name, void* version)
         {
-            return (void*)0;
+            return o_mono_jit_init_version(name, version);
         }
 
         private unsafe delegate void* d_mono_runtime_invoke(void* method, void* obj, void** prams, void** exec);
+        private static d_mono_runtime_invoke o_mono_runtime_invoke;
         private static unsafe void* mono_runtime_invoke(void* method, void* obj, void** prams, void** exec)
         {
-            return (void*)0;
+            return o_mono_runtime_invoke(method, obj, prams, exec);
         }
 
         private class RuntimeInfo
