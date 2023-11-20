@@ -3,38 +3,39 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
-namespace MelonLoader.NativeHost;
-
-public static class Stereo
+namespace MelonLoader.NativeHost
 {
-    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-    internal static unsafe void LoadAssemblyAndGetFuncPtr(IntPtr pathNative, IntPtr typeNameNative, IntPtr methodNameNative, void** resultHandle)
+    public static class Stereo
     {
-        var assemblyPath = Marshal.PtrToStringUni(pathNative);
-        var typeName = Marshal.PtrToStringUni(typeNameNative);
-        var methodName = Marshal.PtrToStringUni(methodNameNative);
-            
-        ArgumentNullException.ThrowIfNull(assemblyPath);
-        ArgumentNullException.ThrowIfNull(typeName);
-        ArgumentNullException.ThrowIfNull(methodName);
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+        internal static unsafe void LoadAssemblyAndGetFuncPtr(IntPtr pathNative, IntPtr typeNameNative, IntPtr methodNameNative, void** resultHandle)
+        {
+            var assemblyPath = Marshal.PtrToStringUni(pathNative);
+            var typeName = Marshal.PtrToStringUni(typeNameNative);
+            var methodName = Marshal.PtrToStringUni(methodNameNative);
 
-        if ((IntPtr)resultHandle == IntPtr.Zero)
-            throw new ArgumentNullException(nameof(resultHandle));
+            ArgumentNullException.ThrowIfNull(assemblyPath);
+            ArgumentNullException.ThrowIfNull(typeName);
+            ArgumentNullException.ThrowIfNull(methodName);
 
-        var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+            if ((IntPtr)resultHandle == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(resultHandle));
 
-        Func<AssemblyName, Assembly> resolver = name => AssemblyLoadContext.Default.LoadFromAssemblyName(name);
+            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
 
-        var type = Type.GetType(typeName, resolver, null, true);
-            
-        if(type == null)
-            throw new TypeLoadException("Failed to load type: " + typeName);
-            
-        var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            Func<AssemblyName, Assembly> resolver = name => AssemblyLoadContext.Default.LoadFromAssemblyName(name);
 
-        if (method == null)
-            throw new MissingMethodException(typeName, methodName);
+            var type = Type.GetType(typeName, resolver, null, true);
 
-        *resultHandle = (void*)method.MethodHandle.GetFunctionPointer();
+            if (type == null)
+                throw new TypeLoadException("Failed to load type: " + typeName);
+
+            var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+            if (method == null)
+                throw new MissingMethodException(typeName, methodName);
+
+            *resultHandle = (void*)method.MethodHandle.GetFunctionPointer();
+        }
     }
 }

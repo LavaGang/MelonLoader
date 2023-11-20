@@ -16,7 +16,6 @@ namespace MelonLoader.NativeHost
             imports->LoadAssemblyAndGetPtr = &Stereo.LoadAssemblyAndGetFuncPtr;
         }
 
-
         [UnmanagedCallersOnly]
         static unsafe void LoadStage2(HostImports* imports, HostExports* exports)
         {

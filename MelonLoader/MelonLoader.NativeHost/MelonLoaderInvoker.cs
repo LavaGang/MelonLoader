@@ -6,10 +6,10 @@ namespace MelonLoader.NativeHost
     {
         internal static unsafe void Initialize()
         {
-            BootstrapInterop.HookAttach = NativeEntryPoint.Exports.HookAttach;
-            BootstrapInterop.HookDetach = NativeEntryPoint.Exports.HookDetach;
-            
-            MelonLoader.Bootstrap.Entrypoint.Entry();
+            BootstrapInterop.NativeHookAttach = NativeEntryPoint.Exports.HookAttach;
+            BootstrapInterop.NativeHookDetach = NativeEntryPoint.Exports.HookDetach;
+
+            Entrypoint.Entry();
         }
     }
 }

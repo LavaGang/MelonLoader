@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
-using MelonLoader.Shared.Utils;
+﻿using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Shared
 {
