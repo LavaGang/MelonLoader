@@ -8,10 +8,12 @@ namespace MelonLoader.Unity
 {
     internal static class Mono
     {
+        private static RuntimeInfo runtimeInfo;
+
         internal static unsafe void Startup()
         {
             // Scan the Game for Information about the Mono Runtime
-            RuntimeInfo runtimeInfo = RuntimeInfo.Get();
+            runtimeInfo = RuntimeInfo.Get();
 
             // Check if it found any Mono variant library
             if ((runtimeInfo == null)
