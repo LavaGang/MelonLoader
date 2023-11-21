@@ -6,6 +6,7 @@ namespace MelonLoader.Unity
     {
         internal static void Startup(string gameAssemblyPath)
         {
+            // Log Engine Variant
             MelonLogger.Msg("Engine Variant: Il2Cpp");
         }
     }

@@ -28,6 +28,7 @@ namespace MelonLoader.Unity
                 return;
             }
 
+            // Log Engine Variant
             MelonLogger.Msg($"Engine Variant: {runtimeInfo.Variant}");
 
             // Check if there is a Posix Helper included with the Mono variant library
