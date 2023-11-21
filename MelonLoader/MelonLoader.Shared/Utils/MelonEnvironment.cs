@@ -29,6 +29,8 @@ namespace MelonLoader.Shared.Utils
 #endif
             GameExecutableName = Path.GetFileNameWithoutExtension(GameExecutablePath);
 
+            GameRootDirectory = Path.GetDirectoryName(GameExecutablePath);
+
             // MelonLoader based Paths
             var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
