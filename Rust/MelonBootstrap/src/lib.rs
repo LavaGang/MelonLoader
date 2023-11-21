@@ -1,17 +1,17 @@
 #![feature(lazy_cell)]
 
 use std::error::Error;
-
+#[cfg(target_os = "windows")]
 use hooking::hooks;
 use logging::logger;
 
+pub mod constants;
 pub mod dotnet;
 pub mod environment;
-pub mod utils;
-pub mod logging;
 pub mod hooking;
-pub mod constants;
 pub mod icalls;
+pub mod logging;
+pub mod utils;
 
 #[ctor::ctor]
 fn main() {
@@ -26,6 +26,6 @@ fn init() -> Result<(), Box<dyn Error>> {
 
     #[cfg(not(target_os = "windows"))]
     dotnet::startup::start()?;
-    
+
     Ok(())
 }

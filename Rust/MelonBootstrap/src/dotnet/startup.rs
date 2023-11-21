@@ -5,10 +5,7 @@ use std::{
     sync::{LazyLock, Mutex},
 };
 
-use netcorehost::{
-    nethost::{load_hostfxr, load_hostfxr_with_dotnet_root},
-    pdcstr,
-};
+use netcorehost::{nethost::load_hostfxr_with_dotnet_root, pdcstr};
 
 use crate::{
     debug, environment, icalls,
@@ -44,7 +41,7 @@ pub fn start() -> Result<(), Box<dyn Error>> {
             .join("Dependencies")
             .join("dotnet"),
     )?)?;
-    
+
     let runtime_dir = environment::paths::get_base_dir()?
         .join("MelonLoader")
         .join("net6");
