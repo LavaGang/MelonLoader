@@ -2,13 +2,14 @@
 
 use std::error::Error;
 
+use hooking::hooks;
 use logging::logger;
 
 pub mod dotnet;
 pub mod environment;
 pub mod utils;
 pub mod logging;
-pub mod hooks;
+pub mod hooking;
 pub mod constants;
 pub mod icalls;
 
@@ -19,6 +20,12 @@ fn main() {
 
 fn init() -> Result<(), Box<dyn Error>> {
     logger::init()?;
+
+    #[cfg(target_os = "windows")]
+    hooks::load_library::init()?;
+
+    #[cfg(not(target_os = "windows"))]
     dotnet::startup::start()?;
+    
     Ok(())
 }

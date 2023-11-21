@@ -1,10 +1,11 @@
 use std::error::Error;
+use std::ffi::c_void;
 use std::marker::PhantomData;
 use std::ops::Deref;
-use std::ffi::c_void;
 use std::ptr::null_mut;
 
 pub mod functions;
+pub mod hooks;
 
 #[derive(Debug)]
 pub struct NativeHook<T> {
@@ -64,5 +65,16 @@ impl<T> Deref for NativeHook<T> {
 
     fn deref(&self) -> &T {
         unsafe { &*(&self.trampoline as *const *mut _ as *const T) }
+    }
+}
+
+impl<T> Default for NativeHook<T> {
+    fn default() -> Self {
+        Self {
+            target: null_mut(),
+            trampoline: null_mut(),
+            detour: null_mut(),
+            pd: Default::default(),
+        }
     }
 }

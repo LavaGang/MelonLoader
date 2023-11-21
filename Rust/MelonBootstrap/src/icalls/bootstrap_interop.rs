@@ -1,6 +1,6 @@
 use std::{ffi::c_void, ptr::null_mut};
 
-use crate::{error, hooks::{self, NativeHook}};
+use crate::{error, hooking::{self, NativeHook}};
 
 pub unsafe fn attach(target: *mut c_void, detour: *mut c_void) -> *mut c_void {
     // match NativeHook::<fn()>::new(*target as usize, detour as usize).hook() {
@@ -22,7 +22,7 @@ pub unsafe fn attach(target: *mut c_void, detour: *mut c_void) -> *mut c_void {
 }
 
 pub unsafe fn detach(target: *mut c_void) {
-    hooks::functions::unhook(target as usize).unwrap_or_else(|e| {
+    hooking::functions::unhook(target as usize).unwrap_or_else(|e| {
         let _ = error!("Failed to unhook function: {}", e.to_string());
     });
 }
