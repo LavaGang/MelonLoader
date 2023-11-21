@@ -6,11 +6,13 @@ using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Unity
 {
-    internal static class Mono
+    internal unsafe static class Mono
     {
         private static RuntimeInfo runtimeInfo;
+        private static MonoNativeLibrary monoNativeLibrary;
+        private static void* monoDomain;
 
-        internal static unsafe void Startup()
+        internal static void Startup()
         {
             // Scan the Game for Information about the Mono Runtime
             runtimeInfo = RuntimeInfo.Get();
@@ -36,53 +38,122 @@ namespace MelonLoader.Unity
             }
 
             // Load the Mono variant library
-            if (!NativeLibrary.TryLoad(runtimeInfo.FilePath, out IntPtr monoHandle))
+            monoNativeLibrary = MelonNativeLibrary.ReflectiveLoad<MonoNativeLibrary>(runtimeInfo.FilePath);
+            if (monoNativeLibrary == null)
             {
                 Assertion.ThrowInternalFailure($"Failed to load {runtimeInfo.FolderVariant} Library from {runtimeInfo.FilePath}!");
                 return;
             }
 
-            // Get mono_jit_init_version Export
-            if (!NativeLibrary.TryGetExport(monoHandle, "mono_jit_init_version", out IntPtr initPtr))
+            // Check mono_jit_init_version Export
+            if (monoNativeLibrary.mono_jit_init_version == null)
             {
                 Assertion.ThrowInternalFailure($"Failed to get mono_jit_init_version Export from {runtimeInfo.FolderVariant} Library!");
                 return;
             }
 
-            // Get mono_runtime_invoke Export
-            if (!NativeLibrary.TryGetExport(monoHandle, "mono_runtime_invoke", out IntPtr runtimeInvokePtr))
+            // Check mono_runtime_invoke Export
+            if (monoNativeLibrary.mono_runtime_invoke == null)
             {
                 Assertion.ThrowInternalFailure($"Failed to get mono_runtime_invoke Export from {runtimeInfo.FolderVariant} Library!");
                 return;
             }
 
             // Hook mono_jit_init_version
-            o_mono_jit_init_version = BootstrapInterop.HookAttach(
-                initPtr,
-                ((d_mono_jit_init_version)mono_jit_init_version)
-                .GetFunctionPointer())
-                .GetDelegate<d_mono_jit_init_version>();
+            BootstrapInterop.HookAttach(ref monoNativeLibrary.mono_jit_init_version, mono_jit_init_version);
+        }
+
+        private static void* mono_jit_init_version(void* name, void* version)
+        {
+            // Detach Hook as its no longer needed
+            BootstrapInterop.HookDetach(monoNativeLibrary.mono_jit_init_version);
+
+            // Check if in Debug Mode
+            if (MelonDebug.IsEnabled())
+            {
+                // TO-DO: Parse DNSPY Environment Options
+                // Mono = DNSPY_UNITY_DBG
+                // MonoBleedingEdge = DNSPY_UNITY_DBG2
+            }
+
+            // Call original and get Mono Domain
+            monoDomain = monoNativeLibrary.mono_jit_init_version(name, version);
+
+            // Check if in Debug Mode and Debug Domain needs to be Initialized
+            if (MelonDebug.IsEnabled())
+            {
+
+            }
+
+            // Set Mono Main Thread to Current Thread
+
+            // Check if MonoBleedingEdge
+            if (!runtimeInfo.IsOldMono)
+            {
+                // TO-DO: Set Domain Config
+            }
+
+            // Load Assemblies
 
             // Hook mono_runtime_invoke
-            o_mono_runtime_invoke = BootstrapInterop.HookAttach(
-                runtimeInvokePtr,
-                ((d_mono_runtime_invoke)mono_runtime_invoke)
-                .GetFunctionPointer())
-                .GetDelegate<d_mono_runtime_invoke>();
+            BootstrapInterop.HookAttach(ref monoNativeLibrary.mono_runtime_invoke, mono_runtime_invoke);
+
+            // Return Mono Domain
+            return monoDomain;
         }
 
-        private unsafe delegate void* d_mono_jit_init_version(void* name, void* version);
-        private static d_mono_jit_init_version o_mono_jit_init_version;
-        private static unsafe void* mono_jit_init_version(void* name, void* version)
+        private static void* mono_runtime_invoke(void* method, void* obj, void** prams, void** exec)
         {
-            return o_mono_jit_init_version(name, version);
+            // Check Method Name
+            string methodName = Marshal.PtrToStringAnsi(new IntPtr(method));
+            if (!string.IsNullOrEmpty(methodName)
+                && IsTargetInvokedMethod(methodName))
+            {
+                // Application has officially Started
+                // Run Melons
+
+                // Detach Hook as its no longer needed
+                BootstrapInterop.HookDetach(monoNativeLibrary.mono_runtime_invoke);
+            }
+
+            return monoNativeLibrary.mono_runtime_invoke(method, obj, prams, exec);
         }
 
-        private unsafe delegate void* d_mono_runtime_invoke(void* method, void* obj, void** prams, void** exec);
-        private static d_mono_runtime_invoke o_mono_runtime_invoke;
-        private static unsafe void* mono_runtime_invoke(void* method, void* obj, void** prams, void** exec)
+        private static bool IsTargetInvokedMethod(string methodName)
         {
-            return o_mono_runtime_invoke(method, obj, prams, exec);
+            // Check for Mono/MonoBleedingEdge Methods
+            switch (methodName)
+            {
+                case "Internal_ActiveSceneChanged":
+                case "UnityEngine.ISerializationCallbackReceiver.OnAfterDeserialize":
+                    return true;
+
+                default:
+                    break;
+            }
+
+            // Check for Mono Methods
+            if (runtimeInfo.IsOldMono)
+                switch (methodName)
+                {
+                    case "Awake":
+                    case "DoSendMouseEvents":
+                        return true;
+
+                    default:
+                        break;
+                }
+
+            return false;
+        }
+
+        private class MonoNativeLibrary
+        {
+            internal delegate void* d_mono_jit_init_version(void* name, void* version);
+            internal d_mono_jit_init_version mono_jit_init_version;
+
+            internal delegate void* d_mono_runtime_invoke(void* method, void* obj, void** prams, void** exec);
+            internal d_mono_runtime_invoke mono_runtime_invoke;
         }
 
         private class RuntimeInfo
