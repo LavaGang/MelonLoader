@@ -62,7 +62,11 @@ namespace MelonLoader.Shared.Utils
             // Get the Export Pointer
             IntPtr returnval = NativeGetExport(handle, name);
             if (returnval == IntPtr.Zero)
+#if NET6_0
                 throw new Exception($"Unable to Find Native Library Export {name}!");
+#else
+                throw new Exception($"Unable to Find Native Library Export {name}!{((MelonUtils.IsUnix || MelonUtils.IsMac) ? $"\ndlerror: {Marshal.PtrToStringAnsi(dlerror())}" : "")}");
+#endif
 
             // Return the Export Pointer
             return returnval;
@@ -160,11 +164,11 @@ namespace MelonLoader.Shared.Utils
         private const int RTLD_NOW = 2; // for dlopen's flags 
 
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern IntPtr LoadLibrary(string lpLibFileName);
+        private static extern IntPtr LoadLibrary(string name);
         [DllImport("kernel32")]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
+        private static extern IntPtr GetProcAddress(IntPtr handle, string name);
         [DllImport("kernel32")]
-        private static extern IntPtr FreeLibrary(IntPtr hModule);
+        private static extern IntPtr FreeLibrary(IntPtr handle);
 
         [DllImport("libdl.so.2")]
         private static extern IntPtr dlopen(string filename, int flags);
@@ -172,6 +176,8 @@ namespace MelonLoader.Shared.Utils
         private static extern IntPtr dlsym(IntPtr handle, string symbol);
         [DllImport("libdl.so.2")]
         private static extern IntPtr dlerror();
+        [DllImport("libdl.so.2")]
+        private static extern int dlclose(IntPtr handle);
 
 #endif
     }

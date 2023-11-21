@@ -144,9 +144,11 @@ namespace MelonLoader.Unity
 
         private class MonoNativeLibrary
         {
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
             internal delegate void* d_mono_jit_init_version(void* name, void* version);
             internal d_mono_jit_init_version mono_jit_init_version;
 
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
             internal delegate void* d_mono_runtime_invoke(void* method, void* obj, void** prams, void** exec);
             internal d_mono_runtime_invoke mono_runtime_invoke;
 
