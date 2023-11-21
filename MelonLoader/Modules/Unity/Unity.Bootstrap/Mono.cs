@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using MelonLoader.Bootstrap;
 using MelonLoader.Shared.Utils;
+#pragma warning disable CS0649 //Field is never assigned
 
 namespace MelonLoader.Unity
 {
     internal unsafe static class Mono
     {
         private static RuntimeInfo runtimeInfo;
-        private static MonoNativeLibrary monoNativeLibrary;
-        private static void* monoDomain;
+        private static MonoNativeLibrary lib;
+        private static void* domain;
 
         internal static void Startup()
         {
@@ -26,6 +26,8 @@ namespace MelonLoader.Unity
                 return;
             }
 
+            MelonLogger.Msg($"Engine Variant: {runtimeInfo.Variant}");
+
             // Check if there is a Posix Helper included with the Mono variant library
             if (!string.IsNullOrEmpty(runtimeInfo.PosixPath))
             {
@@ -33,68 +35,62 @@ namespace MelonLoader.Unity
                 // Otherwise can cause crashing in some cases
                 if (!NativeLibrary.TryLoad(runtimeInfo.PosixPath, out IntPtr monoPosixHandle))
                 {
-                    Assertion.ThrowInternalFailure($"Failed to load {runtimeInfo.FolderVariant} Posix Helper from {runtimeInfo.PosixPath}!");
+                    Assertion.ThrowInternalFailure($"Failed to load {runtimeInfo.Variant} Posix Helper from {runtimeInfo.PosixPath}!");
                     return;
                 }
             }
 
             // Load the Mono variant library
-            monoNativeLibrary = MelonNativeLibrary.ReflectiveLoad<MonoNativeLibrary>(runtimeInfo.FilePath);
-            if (monoNativeLibrary == null)
+            lib = MelonNativeLibrary.ReflectiveLoad<MonoNativeLibrary>(runtimeInfo.FilePath);
+            if (lib == null)
             {
-                Assertion.ThrowInternalFailure($"Failed to load {runtimeInfo.FolderVariant} Library from {runtimeInfo.FilePath}!");
+                Assertion.ThrowInternalFailure($"Failed to load {runtimeInfo.Variant} Library from {runtimeInfo.FilePath}!");
                 return;
             }
 
             // Validate Export References
-            string failedExport = monoNativeLibrary.Validation();
+            string failedExport = lib.Validation();
             if (!string.IsNullOrEmpty(failedExport))
             {
-                Assertion.ThrowInternalFailure($"Failed to load Export {failedExport} from {runtimeInfo.FolderVariant} Library!");
+                Assertion.ThrowInternalFailure($"Failed to load Export {failedExport} from {runtimeInfo.Variant} Library!");
                 return;
             }
 
             // Hook mono_jit_init_version
-            BootstrapInterop.HookAttach(ref monoNativeLibrary.mono_jit_init_version, mono_jit_init_version);
+            BootstrapInterop.HookAttach(ref lib.mono_jit_init_version, mono_jit_init_version);
         }
 
         private static void* mono_jit_init_version(void* name, void* version)
         {
             // Detach Hook as its no longer needed
-            BootstrapInterop.HookDetach(monoNativeLibrary.mono_jit_init_version);
+            BootstrapInterop.HookDetach(lib.mono_jit_init_version);
 
-            // Check if in Debug Mode
-            if (MelonDebug.IsEnabled())
-            {
-                // TO-DO: Parse DNSPY Environment Options
-                // Mono = DNSPY_UNITY_DBG
-                // MonoBleedingEdge = DNSPY_UNITY_DBG2
-            }
+            // TO-DO: Parse DNSPY Environment Options
+            // Mono = DNSPY_UNITY_DBG
+            // MonoBleedingEdge = DNSPY_UNITY_DBG2
 
             // Call original and get Mono Domain
-            monoDomain = monoNativeLibrary.mono_jit_init_version(name, version);
+            domain = lib.mono_jit_init_version(name, version);
 
-            // Check if in Debug Mode and Debug Domain needs to be Initialized
-            if (MelonDebug.IsEnabled())
-            {
-
-            }
+            // Initialize Debug Domain
+            if (lib.mono_debug_domain_create != null)
+                lib.mono_debug_domain_create(domain);
 
             // Set Mono Main Thread to Current Thread
+            lib.mono_thread_set_main(lib.mono_thread_current());
 
-            // Check if MonoBleedingEdge
+            // Set Config for MonoBleedingEdge
             if (!runtimeInfo.IsOldMono)
-            {
-                // TO-DO: Set Domain Config
-            }
+                lib.mono_domain_set_config(domain, Marshal.StringToHGlobalAnsi(runtimeInfo.ConfigPath).ToPointer(), name);
 
-            // Load Assemblies
+            // Run Application Pre-Start
+            Shared.Core.OnAppPreStart();
 
             // Hook mono_runtime_invoke
-            BootstrapInterop.HookAttach(ref monoNativeLibrary.mono_runtime_invoke, mono_runtime_invoke);
+            BootstrapInterop.HookAttach(ref lib.mono_runtime_invoke, mono_runtime_invoke);
 
             // Return Mono Domain
-            return monoDomain;
+            return domain;
         }
 
         private static void* mono_runtime_invoke(void* method, void* obj, void** prams, void** exec)
@@ -104,14 +100,14 @@ namespace MelonLoader.Unity
             if (!string.IsNullOrEmpty(methodName)
                 && IsTargetInvokedMethod(methodName))
             {
-                // Application has officially Started
-                // Run Melons
-
                 // Detach Hook as its no longer needed
-                BootstrapInterop.HookDetach(monoNativeLibrary.mono_runtime_invoke);
+                BootstrapInterop.HookDetach(lib.mono_runtime_invoke);
+
+                // Run Application Start
+                Shared.Core.OnAppStart();
             }
 
-            return monoNativeLibrary.mono_runtime_invoke(method, obj, prams, exec);
+            return lib.mono_runtime_invoke(method, obj, prams, exec);
         }
 
         private static bool IsTargetInvokedMethod(string methodName)
@@ -152,15 +148,34 @@ namespace MelonLoader.Unity
             internal delegate void* d_mono_runtime_invoke(void* method, void* obj, void** prams, void** exec);
             internal d_mono_runtime_invoke mono_runtime_invoke;
 
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void* d_mono_thread_current();
+            internal d_mono_thread_current mono_thread_current;
+
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void d_mono_thread_set_main(void* thread);
+            internal d_mono_thread_set_main mono_thread_set_main;
+
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void d_mono_domain_set_config(void* domain, void* configPath, void* name);
+            internal d_mono_domain_set_config mono_domain_set_config;
+
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void d_mono_debug_domain_create(void* domain);
+            internal d_mono_debug_domain_create mono_debug_domain_create;
+
             internal string Validation()
             {
-                (string, Delegate)[] ValidationList = new (string, Delegate)[]
+                (string, Delegate)[] majorList = new (string, Delegate)[]
                 {
                     (nameof(mono_jit_init_version), mono_jit_init_version),
-                    (nameof(mono_runtime_invoke), mono_runtime_invoke)
+                    (nameof(mono_runtime_invoke), mono_runtime_invoke),
+                    (nameof(mono_thread_current), mono_thread_current),
+                    (nameof(mono_thread_set_main), mono_thread_set_main),
+                    (nameof(mono_domain_set_config), mono_domain_set_config)
                 };
 
-                foreach (var obj in ValidationList)
+                foreach (var obj in majorList)
                     if (obj.Item2 == null)
                         return obj.Item1;
 
@@ -172,14 +187,16 @@ namespace MelonLoader.Unity
         {
             internal readonly string FilePath;
             internal readonly string PosixPath;
-            internal readonly string FolderVariant;
+            internal readonly string ConfigPath;
+            internal readonly string Variant;
             internal readonly bool IsOldMono;
 
-            private RuntimeInfo(string filePath, string posixPath, string folderVariant, bool isOldMono)
+            private RuntimeInfo(string filePath, string posixPath, string configPath, string variant, bool isOldMono)
             {
                 FilePath = filePath;
                 PosixPath = posixPath;
-                FolderVariant = folderVariant;
+                ConfigPath = configPath;
+                Variant = variant;
                 IsOldMono = isOldMono;
             }
 
@@ -236,7 +253,10 @@ namespace MelonLoader.Unity
                             string fileName = Path.GetFileName(filePath);
                             if (fileName.Equals($"{monoFileNameWithoutExt}{monoFileExt}")
                                 || (fileName.StartsWith($"{monoFileNameWithoutExt}-") && fileName.EndsWith(monoFileExt)))
-                                return new RuntimeInfo(filePath, posixPath, variant, isOldMono);
+                            {
+                                string configPath = "";
+                                return new RuntimeInfo(filePath, posixPath, configPath, variant, isOldMono);
+                            }
                         }
                     }
 

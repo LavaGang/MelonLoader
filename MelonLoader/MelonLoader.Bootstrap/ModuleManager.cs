@@ -6,44 +6,45 @@ using System.Runtime.Loader;
 using MelonLoader.Shared.Interfaces;
 using MelonLoader.Shared.Utils;
 
-namespace MelonLoader.Bootstrap;
-
-public class ModuleManager
+namespace MelonLoader.Bootstrap
 {
-    public static BootstrapModule FindBootstrapModule()
+    public class ModuleManager
     {
-        foreach (var folder in Directory.GetDirectories(MelonEnvironment.ModulesDirectory))
+        public static BootstrapModule FindBootstrapModule()
         {
-            foreach (var bootstrapPath in Directory.GetFiles(folder, "*.Bootstrap.dll"))
+            foreach (var folder in Directory.GetDirectories(MelonEnvironment.ModulesDirectory))
             {
-                if (!File.Exists(bootstrapPath))
-                    continue;
-
-                MelonDebug.Msg($"Loading {bootstrapPath}");
-                //TODO: Fix dotnet stupidly not using default load context when hosting coreclr.
-                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(bootstrapPath);
-
-                var type = assembly.GetTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(BootstrapModule)));
-                if (type == null)
+                foreach (var bootstrapPath in Directory.GetFiles(folder, "*.Bootstrap.dll"))
                 {
-                    MelonLogger.Warning($"Failed to load BootstrapModule '{bootstrapPath}': No type deriving from BootstrapModule found.");
-                    continue;
-                }
+                    if (!File.Exists(bootstrapPath))
+                        continue;
 
-                try
-                {
-                    BootstrapModule module = (BootstrapModule)Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
-                    if (module.IsMyEngine)
-                        return module;
-                }
-                catch (Exception ex)
-                {
-                    MelonLogger.Warning($"Failed to initialize BootstrapModule '{bootstrapPath}':\n{ex}");
-                    continue;
+                    MelonDebug.Msg($"Loading {bootstrapPath}");
+                    //TODO: Fix dotnet stupidly not using default load context when hosting coreclr.
+                    var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(bootstrapPath);
+
+                    var type = assembly.GetTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(BootstrapModule)));
+                    if (type == null)
+                    {
+                        MelonLogger.Warning($"Failed to load BootstrapModule '{bootstrapPath}': No type deriving from BootstrapModule found.");
+                        continue;
+                    }
+
+                    try
+                    {
+                        BootstrapModule module = (BootstrapModule)Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                        if (module.IsMyEngine)
+                            return module;
+                    }
+                    catch (Exception ex)
+                    {
+                        MelonLogger.Warning($"Failed to initialize BootstrapModule '{bootstrapPath}':\n{ex}");
+                        continue;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        }
     }
 }

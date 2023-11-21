@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Unity
 {
@@ -10,7 +6,7 @@ namespace MelonLoader.Unity
     {
         internal static void Startup(string gameAssemblyPath)
         {
-
+            MelonLogger.Msg("Engine Variant: Il2Cpp");
         }
     }
 }

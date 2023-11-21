@@ -26,6 +26,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemDefinitionGroup>
         <PackageReference>

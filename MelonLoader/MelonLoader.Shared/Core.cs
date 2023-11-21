@@ -8,5 +8,15 @@ namespace MelonLoader.Shared
         {
             MelonEnvironment.Initialize();
         }
+
+        public static void OnAppPreStart()
+        {
+
+        }
+
+        public static void OnAppStart()
+        {
+
+        }
     }
 }

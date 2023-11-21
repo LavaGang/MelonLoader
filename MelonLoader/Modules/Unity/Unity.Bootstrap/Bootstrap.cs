@@ -40,9 +40,15 @@ namespace MelonLoader.Unity
             // Check if GameAssembly exists
             string gameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
             if (File.Exists(gameAssemblyPath))
-                Il2Cpp.Startup(gameAssemblyPath); // Start Il2Cpp Support
+            {
+                // Start Il2Cpp Support
+                Il2Cpp.Startup(gameAssemblyPath);
+            }
             else
-                Mono.Startup(); // Start Mono Support
+            {
+                // Start Mono Support
+                Mono.Startup();
+            }
         }
     }   
 }

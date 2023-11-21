@@ -16,10 +16,11 @@ namespace MelonLoader.Bootstrap
 
         public static IntPtr HookAttach(IntPtr target, IntPtr detour)
             => new IntPtr(NativeHookAttach(target.ToPointer(), detour.ToPointer()));
+        public static void HookAttach(ref IntPtr target, IntPtr detour)
+            => target = new IntPtr(NativeHookAttach(target.ToPointer(), detour.ToPointer()));
 
         public static T HookAttach<T>(T target, T detour) where T : Delegate
             => HookAttach(target.GetFunctionPointer(), detour.GetFunctionPointer()).GetDelegate<T>();
-
         public static void HookAttach<T>(ref T target, T detour) where T : Delegate
             => target = HookAttach(target.GetFunctionPointer(), detour.GetFunctionPointer()).GetDelegate<T>();
 
