@@ -104,18 +104,28 @@ namespace MelonLoader.Unity
             mlSharedAsmImg = lib.mono_assembly_get_image(mlSharedAsm);
 
             // Run MelonLoader Startup
-            lib.InvokeMethod(
+            if (!lib.InvokeMethod(
                 mlSharedAsmImg,
                 mlSharedCoreType.Namespace,
                 mlSharedCoreType.Name,
-                nameof(Shared.Core.Startup));
+                nameof(Shared.Core.Startup),
+                0))
+            {
+                Assertion.ThrowInternalFailure($"Failed to invoke {mlSharedCoreType.Namespace}.{mlSharedCoreType.Name}.{nameof(Shared.Core.Startup)} in {runtimeInfo.Variant} Domain!");
+                return domain;
+            }
 
             // Run Application Pre-Start
-            lib.InvokeMethod(
-                mlSharedAsmImg, 
-                mlSharedCoreType.Namespace, 
+            if (!lib.InvokeMethod(
+                mlSharedAsmImg,
+                mlSharedCoreType.Namespace,
                 mlSharedCoreType.Name,
-                nameof(Shared.Core.OnAppPreStart));
+                nameof(Shared.Core.OnAppPreStart),
+                0))
+            {
+                Assertion.ThrowInternalFailure($"Failed to invoke {mlSharedCoreType.Namespace}.{mlSharedCoreType.Name}.{nameof(Shared.Core.OnAppPreStart)} in {runtimeInfo.Variant} Domain!");
+                return domain;
+            }
 
             // Hook mono_runtime_invoke
             BootstrapInterop.HookAttach(ref lib.mono_runtime_invoke, mono_runtime_invoke);
@@ -135,11 +145,13 @@ namespace MelonLoader.Unity
                 BootstrapInterop.HookDetach(lib.mono_runtime_invoke);
 
                 // Run Application Start
-                lib.InvokeMethod(
+                if (!lib.InvokeMethod(
                     mlSharedAsmImg,
                     mlSharedCoreType.Namespace,
                     mlSharedCoreType.Name,
-                    nameof(Shared.Core.OnAppStart));
+                    nameof(Shared.Core.OnAppStart),
+                    0))
+                    Assertion.ThrowInternalFailure($"Failed to invoke {mlSharedCoreType.Namespace}.{mlSharedCoreType.Name}.{nameof(Shared.Core.OnAppStart)} in {runtimeInfo.Variant} Domain!");
             }
 
             return lib.mono_runtime_invoke(method, obj, prams, exec);
@@ -208,6 +220,10 @@ namespace MelonLoader.Unity
             internal d_mono_class_from_name mono_class_from_name;
 
             [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void* d_mono_class_get_method_from_name(void* clazz, void* name, int paramCount);
+            internal d_mono_class_get_method_from_name mono_class_get_method_from_name;
+
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
             internal delegate void d_mono_debug_domain_create(void* domain);
             internal d_mono_debug_domain_create mono_debug_domain_create;
 
@@ -222,7 +238,8 @@ namespace MelonLoader.Unity
                     (nameof(mono_domain_set_config), mono_domain_set_config),
                     (nameof(mono_domain_assembly_open), mono_domain_assembly_open),
                     (nameof(mono_assembly_get_image), mono_assembly_get_image),
-                    (nameof(mono_class_from_name), mono_class_from_name)
+                    (nameof(mono_class_from_name), mono_class_from_name),
+                    (nameof(mono_class_get_method_from_name), mono_class_get_method_from_name)
                 };
 
                 foreach (var obj in majorList)
@@ -232,11 +249,34 @@ namespace MelonLoader.Unity
                 return null;
             }
 
-            internal bool InvokeMethod(void* asmImg, string namespaze, string className, string methodName)
+            internal bool InvokeMethod(void* asmImg, string namespaze, string className, string methodName, int paramCount)
             {
+                // Get Class Pointer
+                void* classPtr = mono_class_from_name(asmImg,
+                    Marshal.StringToHGlobalAnsi(namespaze).ToPointer(),
+                    Marshal.StringToHGlobalAnsi(className).ToPointer());
+                if (classPtr == null)
+                    return false;
 
+                // Get Method Pointer
+                void* methodPtr = mono_class_get_method_from_name(classPtr,
+                    Marshal.StringToHGlobalAnsi(methodName).ToPointer(),
+                    0);
+                if (methodPtr == null)
+                    return false;
 
-                return true;
+                // Invoke Method
+                void* exObj = null;
+                void* resultPtr = mono_runtime_invoke(methodPtr, null, null, &exObj);
+                if (methodPtr != null)
+                {
+                    // TO-DO: Rethrow and Log Exception
+                    return false;
+                }
+
+                // Check Result Code
+                int resultCode = *(int*)(&resultPtr + 0x8);
+                return (resultCode == 0);
             }
         }
 
