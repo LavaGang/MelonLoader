@@ -12,6 +12,8 @@ namespace MelonLoader.Unity
         private static RuntimeInfo runtimeInfo;
         private static MonoNativeLibrary lib;
         private static void* domain;
+        private static void* mlSharedAsm;
+        private static void* mlSharedAsmImg;
 
         internal static void Startup()
         {
@@ -83,8 +85,35 @@ namespace MelonLoader.Unity
             if (!runtimeInfo.IsOldMono)
                 lib.mono_domain_set_config(domain, Marshal.StringToHGlobalAnsi(runtimeInfo.ConfigPath).ToPointer(), name);
 
+            // Get net35/MelonLoader.Shared.dll Path
+            string mlSharedPath = Path.Combine(
+                Path.Combine(MelonEnvironment.MelonLoaderDirectory, "net35"), 
+                Path.GetFileName(typeof(Shared.Core).Assembly.Location));
+
+            // Load MelonLoader.Shared.dll Assembly into Mono Domain
+            mlSharedAsm = lib.mono_domain_assembly_open(domain, Marshal.StringToHGlobalAnsi(mlSharedPath).ToPointer());
+            if (mlSharedAsm == null)
+            {
+                Assertion.ThrowInternalFailure($"Failed to load MelonLoader.Shared.dll into {runtimeInfo.Variant} Domain!");
+                return domain;
+            }
+
+            // Get Assembly Image
+            mlSharedAsmImg = lib.mono_assembly_get_image(mlSharedAsm);
+
+            // Run MelonLoader Startup
+            lib.InvokeMethod(
+                mlSharedAsmImg,
+                typeof(Shared.Core).Namespace,
+                typeof(Shared.Core).Name,
+                nameof(Shared.Core.Startup));
+
             // Run Application Pre-Start
-            Shared.Core.OnAppPreStart();
+            lib.InvokeMethod(
+                mlSharedAsmImg, 
+                typeof(Shared.Core).Namespace, 
+                typeof(Shared.Core).Name,
+                nameof(Shared.Core.OnAppPreStart));
 
             // Hook mono_runtime_invoke
             BootstrapInterop.HookAttach(ref lib.mono_runtime_invoke, mono_runtime_invoke);
@@ -104,7 +133,11 @@ namespace MelonLoader.Unity
                 BootstrapInterop.HookDetach(lib.mono_runtime_invoke);
 
                 // Run Application Start
-                Shared.Core.OnAppStart();
+                lib.InvokeMethod(
+                    mlSharedAsmImg,
+                    typeof(Shared.Core).Namespace,
+                    typeof(Shared.Core).Name,
+                    nameof(Shared.Core.OnAppStart));
             }
 
             return lib.mono_runtime_invoke(method, obj, prams, exec);
@@ -161,6 +194,18 @@ namespace MelonLoader.Unity
             internal d_mono_domain_set_config mono_domain_set_config;
 
             [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void* d_mono_domain_assembly_open(void* domain, void* name);
+            internal d_mono_domain_assembly_open mono_domain_assembly_open;
+
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void* d_mono_assembly_get_image(void* assembly);
+            internal d_mono_assembly_get_image mono_assembly_get_image;
+
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+            internal delegate void* d_mono_class_from_name(void* image, void* namespaze, void* name);
+            internal d_mono_class_from_name mono_class_from_name;
+
+            [UnmanagedFunctionPointer(CallingConvention.StdCall)]
             internal delegate void d_mono_debug_domain_create(void* domain);
             internal d_mono_debug_domain_create mono_debug_domain_create;
 
@@ -172,7 +217,10 @@ namespace MelonLoader.Unity
                     (nameof(mono_runtime_invoke), mono_runtime_invoke),
                     (nameof(mono_thread_current), mono_thread_current),
                     (nameof(mono_thread_set_main), mono_thread_set_main),
-                    (nameof(mono_domain_set_config), mono_domain_set_config)
+                    (nameof(mono_domain_set_config), mono_domain_set_config),
+                    (nameof(mono_domain_assembly_open), mono_domain_assembly_open),
+                    (nameof(mono_assembly_get_image), mono_assembly_get_image),
+                    (nameof(mono_class_from_name), mono_class_from_name)
                 };
 
                 foreach (var obj in majorList)
@@ -180,6 +228,13 @@ namespace MelonLoader.Unity
                         return obj.Item1;
 
                 return null;
+            }
+
+            internal bool InvokeMethod(void* asmImg, string namespaze, string className, string methodName)
+            {
+
+
+                return true;
             }
         }
 
