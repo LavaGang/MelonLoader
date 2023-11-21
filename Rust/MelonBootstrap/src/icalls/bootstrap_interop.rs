@@ -15,7 +15,7 @@ pub unsafe fn attach(target: *mut c_void, detour: *mut c_void) -> *mut c_void {
     match hook.hook() {
         Ok(_) => hook.trampoline as *mut c_void,
         Err(e) => {
-            error!("Failed to unhook function: {}", e.to_string());
+            let _ = error!("Failed to unhook function: {}", e.to_string());
             null_mut()
         }
     }
