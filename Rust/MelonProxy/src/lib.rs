@@ -20,8 +20,12 @@ use melon_proxy_sys::proxy;
 pub use windows::Win32::Foundation::HINSTANCE;
 
 pub mod proxy;
+pub mod utils;
+pub mod core;
 
 #[proxy]
 fn main() {
-    println!("hello world");
+    core::init().unwrap_or_else(|e| {
+        internal_failure!("Failed to initialize MelonLoader: {}", e);
+    });
 }
