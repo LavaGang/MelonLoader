@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using MelonLoader.Bootstrap;
@@ -45,17 +46,11 @@ namespace MelonLoader.Unity
                 return;
             }
 
-            // Check mono_jit_init_version Export
-            if (monoNativeLibrary.mono_jit_init_version == null)
+            // Validate Export References
+            string failedExport = monoNativeLibrary.Validation();
+            if (!string.IsNullOrEmpty(failedExport))
             {
-                Assertion.ThrowInternalFailure($"Failed to get mono_jit_init_version Export from {runtimeInfo.FolderVariant} Library!");
-                return;
-            }
-
-            // Check mono_runtime_invoke Export
-            if (monoNativeLibrary.mono_runtime_invoke == null)
-            {
-                Assertion.ThrowInternalFailure($"Failed to get mono_runtime_invoke Export from {runtimeInfo.FolderVariant} Library!");
+                Assertion.ThrowInternalFailure($"Failed to load Export {failedExport} from {runtimeInfo.FolderVariant} Library!");
                 return;
             }
 
@@ -154,6 +149,21 @@ namespace MelonLoader.Unity
 
             internal delegate void* d_mono_runtime_invoke(void* method, void* obj, void** prams, void** exec);
             internal d_mono_runtime_invoke mono_runtime_invoke;
+
+            internal string Validation()
+            {
+                (string, Delegate)[] ValidationList = new (string, Delegate)[]
+                {
+                    (nameof(mono_jit_init_version), mono_jit_init_version),
+                    (nameof(mono_runtime_invoke), mono_runtime_invoke)
+                };
+
+                foreach (var obj in ValidationList)
+                    if (obj.Item2 == null)
+                        return obj.Item1;
+
+                return null;
+            }
         }
 
         private class RuntimeInfo
