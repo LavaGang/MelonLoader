@@ -14,6 +14,7 @@ namespace MelonLoader.Unity
         private static void* domain;
         private static void* mlSharedAsm;
         private static void* mlSharedAsmImg;
+        private static Type mlSharedCoreType = typeof(Shared.Core);
 
         internal static void Startup()
         {
@@ -89,13 +90,13 @@ namespace MelonLoader.Unity
             // Get net35/MelonLoader.Shared.dll Path
             string mlSharedPath = Path.Combine(
                 Path.Combine(MelonEnvironment.MelonLoaderDirectory, "net35"), 
-                Path.GetFileName(typeof(Shared.Core).Assembly.Location));
+                Path.GetFileName(mlSharedCoreType.Assembly.Location));
 
             // Load MelonLoader.Shared.dll Assembly into Mono Domain
             mlSharedAsm = lib.mono_domain_assembly_open(domain, Marshal.StringToHGlobalAnsi(mlSharedPath).ToPointer());
             if (mlSharedAsm == null)
             {
-                Assertion.ThrowInternalFailure($"Failed to load MelonLoader.Shared.dll into {runtimeInfo.Variant} Domain!");
+                Assertion.ThrowInternalFailure($"Failed to load {mlSharedPath} into {runtimeInfo.Variant} Domain!");
                 return domain;
             }
 
@@ -105,15 +106,15 @@ namespace MelonLoader.Unity
             // Run MelonLoader Startup
             lib.InvokeMethod(
                 mlSharedAsmImg,
-                typeof(Shared.Core).Namespace,
-                typeof(Shared.Core).Name,
+                mlSharedCoreType.Namespace,
+                mlSharedCoreType.Name,
                 nameof(Shared.Core.Startup));
 
             // Run Application Pre-Start
             lib.InvokeMethod(
                 mlSharedAsmImg, 
-                typeof(Shared.Core).Namespace, 
-                typeof(Shared.Core).Name,
+                mlSharedCoreType.Namespace, 
+                mlSharedCoreType.Name,
                 nameof(Shared.Core.OnAppPreStart));
 
             // Hook mono_runtime_invoke
@@ -136,8 +137,8 @@ namespace MelonLoader.Unity
                 // Run Application Start
                 lib.InvokeMethod(
                     mlSharedAsmImg,
-                    typeof(Shared.Core).Namespace,
-                    typeof(Shared.Core).Name,
+                    mlSharedCoreType.Namespace,
+                    mlSharedCoreType.Name,
                     nameof(Shared.Core.OnAppStart));
             }
 
