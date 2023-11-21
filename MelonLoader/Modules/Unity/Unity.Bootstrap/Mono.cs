@@ -37,7 +37,7 @@ namespace MelonLoader.Unity
             {
                 // Force-Load the Posix Helper before the actual Mono variant library
                 // Otherwise can cause crashing in some cases
-                if (!NativeLibrary.TryLoad(runtimeInfo.PosixPath, out IntPtr monoPosixHandle))
+                if (!MelonNativeLibrary.TryLoad(runtimeInfo.PosixPath, out IntPtr monoPosixHandle))
                 {
                     Assertion.ThrowInternalFailure($"Failed to load {runtimeInfo.Variant} Posix Helper from {runtimeInfo.PosixPath}!");
                     return;
