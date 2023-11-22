@@ -27,7 +27,7 @@ namespace MelonLoader.Bootstrap
             => HookDetach(target.GetFunctionPointer());
         public static void HookDetach(IntPtr target)
         {
-            // Dereference Target Delegate to get Actual Pointer
+            // Dereference Target Pointer to get Actual Pointer
             IntPtr targetAddr = (IntPtr)(&target);
 
             // Detach Hook
