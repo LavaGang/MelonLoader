@@ -12,7 +12,7 @@
         <PublishTrimmed>false</PublishTrimmed>
     </PropertyGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" />
+      <ProjectReference Include="..\..\..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" Private="false" ExcludeAssets="runtime"  />
       <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
     </ItemGroup>
 </Project>
