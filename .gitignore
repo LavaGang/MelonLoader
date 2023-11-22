@@ -372,12 +372,12 @@ MigrationBackup/
 
 # End of https://www.toptal.com/developers/gitignore/api/git,visualstudio
 
-Output
-bin
-obj
-.vs
-x86
-x64
+/MelonLoader/Output/
+/bin/
+/obj/
+/.vs/
+/x86/
+/x64/
 
 # JetBrains Rider
 .idea/
