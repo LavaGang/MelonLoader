@@ -1,6 +1,6 @@
 use colored::Color;
 
-pub const MELON_VERSION: &str = "0.7.0";
+pub const MELON_VERSION: &str = "1.0.0";
 
 pub const IS_ALPHA: bool = false;
 
