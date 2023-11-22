@@ -9,14 +9,29 @@ namespace MelonLoader.Bootstrap
         public static delegate* unmanaged<void*, void*, void*> NativeHookAttach;
         public static delegate* unmanaged<void*, void> NativeHookDetach;
 
-        public unsafe static T HookAttach<T>(T target, T detour) where T : Delegate
-            => Marshal.GetDelegateForFunctionPointer<T>(
-                new IntPtr(
-                    NativeHookAttach(
-                        target.GetFunctionPointer().ToPointer(),
-                        detour.GetFunctionPointer().ToPointer())));
+        public static T HookAttach<T>(T target, T detour) where T : Delegate
+            => Marshal.GetDelegateForFunctionPointer<T>(HookAttach(target.GetFunctionPointer(), detour.GetFunctionPointer()));
+        public static IntPtr HookAttach(IntPtr target, IntPtr detour)
+        {
+            // Dereference Target Pointer to get Actual Pointer
+            IntPtr targetAddr = (IntPtr)(&target);
 
-        public unsafe static void HookDetach<T>(T target) where T : Delegate
-            => NativeHookDetach(target.GetFunctionPointer().ToPointer());
+            // Attach Hook
+            void* originalFunc = NativeHookAttach(targetAddr.ToPointer(), detour.ToPointer());
+
+            // Return Original Func as IntPtr
+            return new IntPtr(originalFunc);
+        }
+
+        public static void HookDetach<T>(T target) where T : Delegate
+            => HookDetach(target.GetFunctionPointer());
+        public static void HookDetach(IntPtr target)
+        {
+            // Dereference Target Delegate to get Actual Pointer
+            IntPtr targetAddr = (IntPtr)(&target);
+
+            // Detach Hook
+            NativeHookDetach(targetAddr.ToPointer());
+        }
     }
 }
