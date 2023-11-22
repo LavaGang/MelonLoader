@@ -227,7 +227,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
 
-Third-party Libraries used as Libraries, Source Code, and/or bundled in Binary Form:
+Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [.NET Runtime](https://github.com/dotnet/runtime) is licensed under the MIT License. See [LICENSE](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT) for the full License.
 - [Dobby](https://github.com/jmpews/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/jmpews/Dobby/blob/master/LICENSE) for the full License.
 - [dobby-rs](https://github.com/RinLovesYou/dobby-rs) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/dobby-rs/blob/master/LICENSE) for the full License.
