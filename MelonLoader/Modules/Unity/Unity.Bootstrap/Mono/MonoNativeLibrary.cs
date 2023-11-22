@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+#pragma warning disable 0649
 
 namespace MelonLoader.Unity.Mono
 {
