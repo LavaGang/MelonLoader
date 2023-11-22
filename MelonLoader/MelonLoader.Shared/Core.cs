@@ -9,14 +9,14 @@ namespace MelonLoader.Shared
             MelonEnvironment.Initialize();
         }
 
-        public static int OnAppPreStart()
+        public static void OnApplicationPreStart()
         {
-            return 0;
+
         }
 
-        public static int OnAppStart()
+        public static void OnApplicationStart()
         {
-            return 0;
+
         }
     }
 }

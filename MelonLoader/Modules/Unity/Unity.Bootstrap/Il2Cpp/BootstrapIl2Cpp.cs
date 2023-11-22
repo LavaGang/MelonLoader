@@ -1,8 +1,8 @@
 ﻿using MelonLoader.Shared.Utils;
 
-namespace MelonLoader.Unity
+namespace MelonLoader.Unity.Il2Cpp
 {
-    internal static class Il2Cpp
+    internal static class BootstrapIl2Cpp
     {
         internal static void Startup(string gameAssemblyPath)
         {

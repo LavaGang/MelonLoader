@@ -40,15 +40,94 @@ namespace MelonLoader.Unity
             // Check if GameAssembly exists
             string gameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
             if (File.Exists(gameAssemblyPath))
-            {
-                // Start Il2Cpp Support
-                Il2Cpp.Startup(gameAssemblyPath);
-            }
+                Il2Cpp.BootstrapIl2Cpp.Startup(gameAssemblyPath); // Start Il2Cpp Support
             else
+                Mono.BootstrapMono.Startup(GetMonoRuntimeInfo()); // Start Mono Support
+        }
+
+        internal static Mono.MonoRuntimeInfo GetMonoRuntimeInfo()
+        {
+            // Folders the Mono folders might be located in
+            string[] directoriesToSearch = new string[]
             {
-                // Start Mono Support
-                Mono.Startup();
+                    MelonEnvironment.GameRootDirectory,
+                    GameDataPath
+            };
+
+            // Variants of Mono folders
+            string[] monoFolderVariants = new string[]
+            {
+                    "Mono",
+                    "MonoBleedingEdge"
+            };
+
+            // Get Mono variant library file name
+            string monoFileNameWithoutExt = "mono";
+            if (MelonUtils.IsUnix || MelonUtils.IsMac)
+                monoFileNameWithoutExt = $"lib{monoFileNameWithoutExt}";
+
+            // Get Mono Posix Helper file name
+            string monoPosixFileNameWithoutExt = "MonoPosixHelper";
+            if (MelonUtils.IsUnix || MelonUtils.IsMac)
+                monoPosixFileNameWithoutExt = "libmonoposixhelper";
+
+            // Get Platform Used Extension
+            string monoFileExt = ".dll";
+            if (MelonUtils.IsUnix)
+                monoFileExt = ".so";
+            if (MelonUtils.IsMac)
+                monoFileExt = ".dylib";
+
+            // Iterate through Variations in Mono types
+            bool isOldMono = true;
+            foreach (var variant in monoFolderVariants)
+            {
+                // Iterate through Variations in Mono Directory Positions
+                foreach (var dir in directoriesToSearch)
+                {
+                    // Get Directory Path
+                    string dirPath = Path.Combine(dir, variant, "EmbedRuntime");
+                    if (!Directory.Exists(dirPath))
+                        continue;
+
+                    // Get All Containing Files in Directory
+                    string[] foundFiles = Directory.GetFiles(dirPath);
+                    if (foundFiles == null
+                        || foundFiles.Length <= 0)
+                        continue;
+
+                    // Get Posix Helper Path
+                    string posixPath = Path.Combine(dirPath, $"{monoPosixFileNameWithoutExt}{monoFileExt}");
+
+                    // Get Config Directory Path
+                    string configPath = Path.Combine(dir, variant, "etc");
+
+                    // Iterate through all found Files in EmbedRuntime
+                    foreach (var filePath in foundFiles)
+                    {
+                        // Check if its a Runtime library
+                        string fileName = Path.GetFileName(filePath);
+                        if (!fileName.Equals($"{monoFileNameWithoutExt}{monoFileExt}")
+                            && !fileName.StartsWith($"{monoFileNameWithoutExt}-") && fileName.EndsWith(monoFileExt))
+                            continue;
+
+                        // Return Information
+                        return new Mono.MonoRuntimeInfo(
+                            filePath,
+                            posixPath, 
+                            configPath, 
+                            variant,
+                            isOldMono 
+                        );
+                    }
+                }
+
+                // Flip this since Index of 1 is MonoBleedingEdge
+                isOldMono = false;
             }
+
+            // Return Nothing
+            return null;
         }
     }   
 }
