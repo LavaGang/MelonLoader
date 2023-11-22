@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using MelonLoader.Shared.Utils;
 
-namespace MelonLoader.Shared.Utils
+namespace MelonLoader.Shared.NativeUtils
 {
     public static class MelonNativeLibrary
     {
@@ -30,7 +31,7 @@ namespace MelonLoader.Shared.Utils
 #if NET6_0
                 throw new Exception($"Unable to Load Native Library {name}!");
 #else
-                throw new Exception($"Unable to Load Native Library {name}!{((MelonUtils.IsUnix || MelonUtils.IsMac) ? $"\ndlerror: {Marshal.PtrToStringAnsi(dlerror())}" : "")}");
+                throw new Exception($"Unable to Load Native Library {name}!{(MelonUtils.IsUnix || MelonUtils.IsMac ? $"\ndlerror: {Marshal.PtrToStringAnsi(dlerror())}" : "")}");
 #endif
 
             // Return Native Library Pointer
@@ -65,7 +66,7 @@ namespace MelonLoader.Shared.Utils
 #if NET6_0
                 throw new Exception($"Unable to Find Native Library Export {name}!");
 #else
-                throw new Exception($"Unable to Find Native Library Export {name}!{((MelonUtils.IsUnix || MelonUtils.IsMac) ? $"\ndlerror: {Marshal.PtrToStringAnsi(dlerror())}" : "")}");
+                throw new Exception($"Unable to Find Native Library Export {name}!{(MelonUtils.IsUnix || MelonUtils.IsMac ? $"\ndlerror: {Marshal.PtrToStringAnsi(dlerror())}" : "")}");
 #endif
 
             // Return the Export Pointer
@@ -76,7 +77,7 @@ namespace MelonLoader.Shared.Utils
         {
             // Attempt to load Native Library
             if (!TryLoad(name, out IntPtr ptr)
-                || (ptr == IntPtr.Zero))
+                || ptr == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(ptr));
 
             // Get Reflected Type
@@ -95,12 +96,12 @@ namespace MelonLoader.Shared.Utils
                     // Check Field for Delegate subtype and UnmanagedFunctionPointerAttribute
                     Type fieldType = fieldInfo.FieldType;
                     if (!typeof(Delegate).IsAssignableFrom(fieldType)
-                        || (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length <= 0))
+                        || fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length <= 0)
                         continue;
 
                     // Get Export from Native Library
                     if (!TryGetExport(ptr, fieldInfo.Name, out IntPtr expPtr)
-                        || (expPtr == IntPtr.Zero))
+                        || expPtr == IntPtr.Zero)
                         continue;
 
                     // Apply Export as Delegate to Field
