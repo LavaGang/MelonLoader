@@ -8,7 +8,7 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib"]
 
-[dependencies]
+[target.'cfg(target_os = "android")'.dependencies]
 jni = "0.21.1"
 libc = "0.2.142"
 log = "0.4.14"

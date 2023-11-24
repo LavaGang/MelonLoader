@@ -5,8 +5,6 @@ use jni::{
     objects::{JObject, JString}, JNIEnv
 };
 
-static mut DATA_DIR: Option<String> = None;
-
 pub fn get_base_dir() -> Result<PathBuf, Box<dyn Error>> {
     let args: Vec<String> = std::env::args().collect();
     #[cfg(not(target_os = "android"))]

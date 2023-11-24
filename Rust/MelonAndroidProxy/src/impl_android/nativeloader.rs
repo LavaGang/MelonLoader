@@ -6,7 +6,7 @@ use jni::{
 use std::path::PathBuf;
 use std::ffi::CStr;
 
-use crate::utils::{libs::load_lib, self};
+use crate::impl_android::utils::{libs::load_lib, self};
 
 #[no_mangle]
 fn load(env: JNIEnv, _: JClass, _: JString) -> jboolean {
