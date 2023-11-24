@@ -1,8 +1,5 @@
 [workspace]
 members = ["Rust/MelonProxy", "Rust/MelonBootstrap", "Rust/MelonProxy-sys", "Rust/MelonAndroidProxy"]
 
-[patch."https://github.com/RinLovesYou/dobby-sys.git"]
-dobby-sys = { git = "https://github.com/TrevTV/dobby-sys.git" }
-
 [patch.crates-io]
 nethost-sys = { git = "https://github.com/TrevTV/nethost-sys" }

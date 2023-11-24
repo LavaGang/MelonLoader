@@ -22,7 +22,7 @@ winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloa
 [target.'cfg(not(target_os = "android"))'.dependencies]
 msgbox = "0.7.0"
 
-[target.'cfg(android)'.dependencies]
+[target.'cfg(target_os = "android")'.dependencies]
 jni = "0.21.1"
 ndk = { version = "0.7", features = ["api-level-23"] }
 ndk-sys = "0.4.1+23.1.7779620"

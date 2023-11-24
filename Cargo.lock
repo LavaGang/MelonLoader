@@ -538,7 +538,7 @@ dependencies = [
 [[package]]
 name = "dobby-sys"
 version = "0.1.0"
-source = "git+https://github.com/TrevTV/dobby-sys.git#e429725c6c34ad4a8d9d79aebe3ff26d4d09a35f"
+source = "git+https://github.com/RinLovesYou/dobby-sys.git#3001d5debc9a8b53fdbd7bf7224b16c584c26fbf"
 
 [[package]]
 name = "encoding_rs"
