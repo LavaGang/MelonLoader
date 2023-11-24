@@ -16,6 +16,7 @@ macro_rules! internal_failure {
 
         std::println!("{}", msg);
         let _ = $crate::logging::logger::log_console_file($crate::logging::logger::LogLevel::Error, msg);
+        #[cfg(not(target_os = "android"))]
         let _ = msgbox::create("Internal Failure", msg, msgbox::IconType::Error);
         std::process::exit(-1);
     }};
