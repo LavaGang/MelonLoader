@@ -12,8 +12,14 @@ pub mod hooking;
 pub mod icalls;
 pub mod logging;
 pub mod utils;
+#[cfg(target_os = "android")]
+pub mod lib_android;
 
-#[ctor::ctor]
+#[cfg_attr(
+    not(target_os = "android"),
+    ctor::ctor
+)]
+#[no_mangle]
 fn main() {
     init().unwrap_or_else(|e| internal_failure!("Failed to start MelonLoader: {}", e));
 }

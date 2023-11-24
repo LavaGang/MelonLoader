@@ -1239,14 +1239,18 @@ dependencies = [
 name = "melon_bootstrap"
 version = "0.1.0"
 dependencies = [
+ "android_liblog-sys",
  "chrono",
  "colored",
  "ctor",
  "dobby-rs",
+ "jni",
  "lazy_static",
  "libc",
  "libloading",
  "msgbox",
+ "ndk",
+ "ndk-sys",
  "netcorehost",
  "thiserror",
  "winapi",
