@@ -29,16 +29,19 @@ pub fn get_base_dir() -> Result<PathBuf, Box<dyn Error>> {
 pub fn cache_data_dir(env: &mut JNIEnv) {
     use jni::objects::JValueGen;
 
-    use crate::log;
+    let thread_class_name = "android/app/ActivityThread";
+    let thread_class = &env
+        .find_class(thread_class_name)
+        .expect("Failed to find class android/app/ActivityThread");
 
-    let unity_class_name = "com/unity3d/player/UnityPlayer";
-    let unity_class = &env
-        .find_class(unity_class_name)
-        .expect("Failed to find class com/unity3d/player/UnityPlayer");
+    let current_thread_obj: JObject = env
+        .call_static_method(thread_class, "currentActivityThread", "()Landroid/app/ActivityThread;", &[])
+        .expect("Failed to call static method currentActivityThread()")
+        .l().unwrap();
 
     let current_activity_obj: JObject = env
-        .get_static_field(unity_class, "currentActivity", "Landroid/app/Activity;")
-        .expect("Failed to get static field currentActivity")
+        .call_method(current_thread_obj, "getApplication", "()Landroid/app/Application;", &[])
+        .expect("Failed to call method getApplication()")
         .l().unwrap();
 
     let ext_file_obj: JObject = env
