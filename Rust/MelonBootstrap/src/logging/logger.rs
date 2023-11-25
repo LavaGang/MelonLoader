@@ -74,7 +74,10 @@ pub fn log_console_file(level: LogLevel, message: &str) -> Result<(), Box<dyn Er
 
             let file_string = format!("[{}] {}", timestamp(), message);
 
-            println!("{}", console_string);
+            #[cfg(target_os = "android")]
+            crate::log_console!(level, "{}", message);
+            #[cfg(not(target_os = "android"))]
+            crate::log_console!(level, "{}", console_string);
             write(&file_string)?;
         }
         LogLevel::Warning => {
@@ -83,7 +86,10 @@ pub fn log_console_file(level: LogLevel, message: &str) -> Result<(), Box<dyn Er
 
             let file_string = format!("[{}] [WARNING] {}", timestamp(), message);
 
-            println!("{}", console_string.bright_yellow());
+            #[cfg(target_os = "android")]
+            crate::log_console!(level, "{}", message.bright_yellow());
+            #[cfg(not(target_os = "android"))]
+            crate::log_console!(level, "{}", console_string.bright_yellow());
 
             write(&file_string)?;
         }
@@ -91,7 +97,10 @@ pub fn log_console_file(level: LogLevel, message: &str) -> Result<(), Box<dyn Er
             //[19:11:50.321] [ERROR] message
             let log_string = format!("[{}] [ERROR] {}", timestamp(), message);
 
-            println!("{}", log_string.color(constants::RED));
+            #[cfg(target_os = "android")]
+            crate::log_console!(level, "{}", message.color(constants::RED));
+            #[cfg(not(target_os = "android"))]
+            crate::log_console!(level, "{}", log_string.color(constants::RED));
             write(&log_string)?;
         }
         LogLevel::Debug => {
@@ -112,7 +121,11 @@ pub fn log_console_file(level: LogLevel, message: &str) -> Result<(), Box<dyn Er
 
             let file_string = format!("[{}] [DEBUG] {}", timestamp(), message);
 
-            println!("{}", console_string);
+            #[cfg(target_os = "android")]
+            crate::log_console!(level, "{}", message);
+            #[cfg(not(target_os = "android"))]
+            crate::log_console!(level, "{}", console_string);
+
             write(&file_string)?;
         }
     }
@@ -222,5 +235,32 @@ macro_rules! cstr {
     //format str
     ($($arg:tt)*) => {
        std::ffi::CString::new(format!($($arg)*))?.as_ptr()
+    };
+}
+
+#[cfg(not(target_os = "android"))]
+#[macro_export]
+macro_rules! log_console {
+    ($level:expr, $($arg:tt)*) => {
+        println!($($arg)*);
+    };
+}
+
+#[cfg(target_os = "android")]
+#[macro_export]
+macro_rules! log_console {
+    ($level:expr, $($arg:tt)*) => {
+        let format = std::ffi::CString::new(format!($($arg)*)).unwrap();
+
+        let prio = match $level {
+            LogLevel::Error => android_liblog_sys::LogPriority::ERROR,
+            LogLevel::Warning => android_liblog_sys::LogPriority::WARN,
+            LogLevel::Info => android_liblog_sys::LogPriority::INFO,
+            LogLevel::Debug => android_liblog_sys::LogPriority::DEBUG,
+        };
+
+        unsafe {
+            android_liblog_sys::__android_log_write(prio as _, crate::cstr!("MelonLoader"), format.as_ptr());
+        }
     };
 }

@@ -381,3 +381,6 @@ MigrationBackup/
 
 # JetBrains Rider
 .idea/
+
+# Rust Android Compilation
+Rust/MelonBootstrap/jniLibs/
