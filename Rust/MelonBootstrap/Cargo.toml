@@ -15,9 +15,9 @@ lazy_static = "1.4.0"
 libloading = "0.8.1"
 dobby-rs = { git = "https://github.com/RinLovesYou/dobby-rs" }
 libc = "0.2.150"
-winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
 
-[target.'cfg(windows)'.dependencies]
+[target.'cfg(target_os = "windows")'.dependencies]
+winapi = { version = "0.3.9", features = ["winuser", "minwindef", "std", "libloaderapi"] }
 
 [target.'cfg(not(target_os = "android"))'.dependencies]
 msgbox = "0.7.0"
