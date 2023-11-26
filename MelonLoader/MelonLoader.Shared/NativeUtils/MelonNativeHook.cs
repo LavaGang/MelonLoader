@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using MelonLoader.Bootstrap;
 
 namespace MelonLoader.Shared.NativeUtils
 {
@@ -19,7 +20,7 @@ namespace MelonLoader.Shared.NativeUtils
         public IntPtr Target
         {
             get => _targetHandle;
-            private set
+            set
             {
                 if (value == IntPtr.Zero)
                     throw new ArgumentNullException("value");
@@ -31,7 +32,7 @@ namespace MelonLoader.Shared.NativeUtils
         public IntPtr Detour
         {
             get => _detourHandle;
-            private set
+            set
             {
                 if (value == IntPtr.Zero)
                     throw new ArgumentNullException("value");
@@ -66,6 +67,12 @@ namespace MelonLoader.Shared.NativeUtils
             _detourHandle = detour;
         }
 
+        public MelonNativeHook()
+        {
+            _targetHandle = IntPtr.Zero;
+            _detourHandle = IntPtr.Zero;
+        }
+
         public unsafe void Attach()
         {
             if (IsHooked)
@@ -76,11 +83,10 @@ namespace MelonLoader.Shared.NativeUtils
 
             if (_detourHandle == IntPtr.Zero)
                 throw new NullReferenceException("The NativeHook's detour has not been set!");
-
-            IntPtr trampoline = _targetHandle;
-            //BootstrapInterop.NativeHookAttach((IntPtr)(&trampoline), _detourHandle);
-            _trampolineHandle = trampoline;
-
+            
+            
+            _trampolineHandle = BootstrapInterop.NativeHookAttach(_targetHandle, _detourHandle);
+            
             IsHooked = true;
         }
 
@@ -92,9 +98,8 @@ namespace MelonLoader.Shared.NativeUtils
             if (_targetHandle == IntPtr.Zero)
                 throw new NullReferenceException("The NativeHook's target has not been set!");
 
-            IntPtr original = _targetHandle;
-            //BootstrapInterop.NativeHookDetach((IntPtr)(&original), _detourHandle);
-
+            BootstrapInterop.NativeHookDetach(_targetHandle);
+            
             IsHooked = false;
             _trampolineHandle = IntPtr.Zero;
         }

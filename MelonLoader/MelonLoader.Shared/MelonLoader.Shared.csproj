@@ -33,5 +33,8 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemDefinitionGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net6'">
+        <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.4.416101" />
+    </ItemGroup>
 
 </Project>

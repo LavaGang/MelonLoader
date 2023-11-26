@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using MelonLoader.Shared.NativeUtils;
 using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Bootstrap
 {
     public static class Entrypoint
     {
-        public static void Entry()
+        public static unsafe void Entry()
         {
             Shared.Core.Startup();
             Shared.Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
