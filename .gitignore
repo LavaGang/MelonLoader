@@ -373,6 +373,7 @@ MigrationBackup/
 # End of https://www.toptal.com/developers/gitignore/api/git,visualstudio
 
 /MelonLoader/Output/
+Output/
 /bin/
 /obj/
 /.vs/

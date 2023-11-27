@@ -19,19 +19,19 @@ use windows::Win32::Foundation::HINSTANCE;
 static mut OriginalFuncs: [*const (); 181] = [null_mut(); 181];
 
 // These assembly files define the Windows DLL functions that we're proxying, they are exported through a linked .def file. 
-#[cfg(target_pointer_width = "64")]
+#[cfg(target_arch = "x86_64")]
 global_asm!(include_str!("../../deps/version.x64.S"));
-#[cfg(target_pointer_width = "32")]
+#[cfg(target_arch = "x86")]
 global_asm!(include_str!("../../deps/version.x86.S"));
 
-#[cfg(target_pointer_width = "64")]
+#[cfg(target_arch = "x86_64")]
 global_asm!(include_str!("../../deps/winhttp.x64.S"));
-#[cfg(target_pointer_width = "32")]
+#[cfg(target_arch = "x86")]
 global_asm!(include_str!("../../deps/winhttp.x86.S"));
 
-#[cfg(target_pointer_width = "64")]
+#[cfg(target_arch = "x86_64")]
 global_asm!(include_str!("../../deps/winmm.x64.S"));
-#[cfg(target_pointer_width = "32")]
+#[cfg(target_arch = "x86")]
 global_asm!(include_str!("../../deps/winmm.x86.S"));
 
 #[derive(Debug, Error)]
