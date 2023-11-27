@@ -39,10 +39,10 @@ if not IsDebug:
     DotnetCommand += " --configuration Release"
 
 CargoCommand: str = "cargo build"
+CargoCommand += " --target="
 if not IsDebug:
     CargoCommand += " --release"
 
-CargoCommand += " --target="
 
 def clean():
     # delete the output dir, if it already exists.
@@ -62,12 +62,14 @@ def build(target: str):
 
     # fully construct Cargo Command
     xwin = IsLinux and target == "win64"
-    command = CargoCommand.join(target)
+    command = CargoCommand
+    command = command.replace("--target=", "--target={}".format(targets[target]))
     if xwin:
-        command.replace("cargo", "cargo-xwin")
+        command = command.replace("cargo", "cargo-xwin")
+    print(command)
     
     # compile rust
-    os.system(CargoCommand)
+    os.system(command)
     
     # ex: target/x86_64-pc-windows-msvc/release/
     cargo_out_path = os.path.join("target", targets[target], "debug" if IsDebug else "release")
