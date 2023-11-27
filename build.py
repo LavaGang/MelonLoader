@@ -2,19 +2,30 @@ import sys
 import os
 import shutil
 
-args = sys.argv[1:]
+args = sys.argv[1:] # The first argument is the file name.
 
+IsDebug: bool = "--release" not in args
+IsLinux: bool = sys.platform == "linux" or sys.platform == "linux2"
+IsMac: bool = sys.platform == "darwin"
 
+MelonOutputPath: str = os.path.join(
+    "MelonLoader",
+    "Output",
+    "Debug" if IsDebug else "Release", 
+    "MelonLoader"
+)
 
-MELON_OUT_PATH = os.path.join("MelonLoader", "Output")
-DEBUG: bool = "--release" not in args
-MELON_FILES_PATH = os.path.join(MELON_OUT_PATH, "Debug" if DEBUG else "Release", "MelonLoader")
-OUT_PATH = os.path.join("Output", "Debug" if DEBUG else "Release")
+OutputPath: str = os.path.join(
+    "Output", 
+    "Debug" if IsDebug else "Release"
+)
 
-IS_LINUX = sys.platform == "linux" or sys.platform == "linux2"
-IS_MAC = sys.platform == "darwin"
-DLL_EXTENSION = "so" if IS_LINUX else "dll"
-DOTNET_PATH = os.path.join("BaseLibs", "dotnet")
+DotnetPath: str = os.path.join(
+    "BaseLibs", 
+    "dotnet"
+)
+
+DllExtension: str = "so" if IsLinux else "dylib" if IsMac else "dll"
 
 targets: dict = {
     "win64": "x86_64-pc-windows-msvc",
@@ -23,43 +34,66 @@ targets: dict = {
     #"macos": "x86_64-apple-darwin"
 }
 
+DotnetCommand: str = "dotnet build MelonLoader/MelonLoader.sln"
+if not IsDebug:
+    DotnetCommand += " --configuration Release"
+
+CargoCommand: str = "cargo build"
+if not IsDebug:
+    CargoCommand += " --release"
+
+CargoCommand += " --target="
+
 def clean():
-    path = os.path.join("Output", "Debug" if DEBUG else "Release")
-    if os.path.exists(path):
-        shutil.rmtree(path)
+    # delete the output dir, if it already exists.
+    if os.path.exists(OutputPath):
+        shutil.rmtree(OutputPath)
 
 def build(target: str):
-    if IS_LINUX and target == "win32":
+    if IsLinux and target == "win32":
         print("Cross compiling to a different arch is currently unsupported with cross compilers.")
         return
     
-    xwin = IS_LINUX and (target == "win64" or target == "win32")
-    os.makedirs(os.path.join(OUT_PATH, target))
-    os.system("dotnet build MelonLoader/MelonLoader.sln{}".format("" if DEBUG else " --configuration Release"))
+    # create Output/[Debug | Release]/platform/
+    os.makedirs(os.path.join(OutputPath, target))
 
-    cargo_args = "--target={}{}".format(targets[target], "" if DEBUG else " --release")
-    cargo_tool = "cargo-xwin" if xwin else "cargo"
+    # Compile C#
+    os.system(DotnetCommand)
 
-    os.system("{} build {}".format(cargo_tool, cargo_args))
+    # fully construct Cargo Command
+    xwin = IsLinux and target == "win64"
+    command = CargoCommand.join(target)
+    if xwin:
+        command.replace("cargo", "cargo-xwin")
     
-    cargo_out_path = os.path.join("target", targets[target], "debug" if DEBUG else "release")
-    bootstrap_destination = os.path.join(OUT_PATH, target, "MelonLoader", "Dependencies")
+    # compile rust
+    os.system(CargoCommand)
+    
+    # ex: target/x86_64-pc-windows-msvc/release/
+    cargo_out_path = os.path.join("target", targets[target], "debug" if IsDebug else "release")
 
-    os.replace(MELON_FILES_PATH, os.path.join(OUT_PATH, target, "MelonLoader"))
-    os.makedirs(os.path.join(OUT_PATH, target, "MelonLoader", "Dependencies"))
+    # ex: Output/Release/win64/MelonLoader/Dependencies
+    bootstrap_destination = os.path.join(OutputPath, target, "MelonLoader", "Dependencies")
 
+    # Move the MelonLoder folder
+    os.replace(MelonOutputPath, os.path.join(OutputPath, target, "MelonLoader"))
+
+    # Create the Dependencies folder
+    os.makedirs(os.path.join(OutputPath, target, "MelonLoader", "Dependencies"))
+
+    # Move Proxy/Bootstrap/Dobby/Dotnet to their right places.
     if target == "win32" or target == "win64":
-        os.replace(os.path.join(cargo_out_path, "version.dll"), os.path.join(OUT_PATH, target, "version.dll"))
+        os.replace(os.path.join(cargo_out_path, "version.dll"), os.path.join(OutputPath, target, "version.dll"))
         os.replace(os.path.join(cargo_out_path, "melon_bootstrap.dll"), os.path.join(bootstrap_destination, "melon_bootstrap.dll"))
 
-        shutil.copytree(os.path.join(DOTNET_PATH, "windows", "x86_64" if target == "win64" else "x86"), os.path.join(bootstrap_destination, "dotnet"))
-        shutil.copy(os.path.join("BaseLibs", "dobby", "windows", "x86_64" if target == "win64" else "x86", "dobby.dll"), os.path.join(OUT_PATH, target, "dobby.dll"))
+        shutil.copytree(os.path.join(DotnetPath, "windows", "x86_64" if target == "win64" else "x86"), os.path.join(bootstrap_destination, "dotnet"))
+        shutil.copy(os.path.join("BaseLibs", "dobby", "windows", "x86_64" if target == "win64" else "x86", "dobby.dll"), os.path.join(OutputPath, target, "dobby.dll"))
     elif target == "macos":
         os.replace(os.path.join(cargo_out_path, "libmelon_bootstrap.dylib"), os.path.join(bootstrap_destination, "libmelon_bootstrap.dylib"))
-        shutil.copytree(os.path.join(DOTNET_PATH, "macos", "x86_64"), os.path.join(bootstrap_destination, "dotnet"))
+        shutil.copytree(os.path.join(DotnetPath, "macos", "x86_64"), os.path.join(bootstrap_destination, "dotnet"))
     elif target == "linux":
         os.replace(os.path.join(cargo_out_path, "libmelon_bootstrap.so"), os.path.join(bootstrap_destination, "libmelon_bootstrap.so"))
-        shutil.copytree(os.path.join(DOTNET_PATH, "linux", "x86_64"), os.path.join(bootstrap_destination, "dotnet"))
+        shutil.copytree(os.path.join(DotnetPath, "linux", "x86_64"), os.path.join(bootstrap_destination, "dotnet"))
 
 def main():
     clean()
