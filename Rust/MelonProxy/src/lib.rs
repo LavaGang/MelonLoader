@@ -23,6 +23,7 @@ pub mod proxy;
 pub mod utils;
 pub mod core;
 
+/// this function will get called by our proxy macro. See MelonProxy-sys
 #[proxy]
 fn main() {
     core::init().unwrap_or_else(|e| {

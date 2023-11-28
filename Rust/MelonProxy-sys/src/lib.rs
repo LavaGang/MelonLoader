@@ -17,15 +17,15 @@
 #![feature(naked_functions)]
 #![feature(asm_const)]
 #![deny(
-missing_debug_implementations,
-missing_docs,
-unused_results,
-warnings,
-clippy::extra_unused_lifetimes,
-clippy::from_over_into,
-clippy::needless_borrow,
-clippy::new_without_default,
-clippy::useless_conversion
+    missing_debug_implementations,
+    missing_docs,
+    unused_results,
+    warnings,
+    clippy::extra_unused_lifetimes,
+    clippy::from_over_into,
+    clippy::needless_borrow,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 #![forbid(rust_2018_idioms)]
 #![allow(clippy::inherent_to_string, clippy::type_complexity, improper_ctypes)]
@@ -33,12 +33,14 @@ clippy::useless_conversion
 
 use syn::__private::{quote::quote, TokenStream};
 
-/// Wraps your function in DllMain on windows, and passes #[ctor] on linux.
-///
-///
+/// Wraps your function in DllMain on windows
 #[proc_macro_attribute]
 pub fn proxy(_attribute: TokenStream, function: TokenStream) -> TokenStream {
+    //this gets us the Tokens of the function. Procedural macros let us modify functions before they are
+    //given to the compiler.
     let fn_ts = function.clone();
+
+    //get the function as an item, letting us break it down into its component parts.
     let item: syn::Item = syn::parse_macro_input!(fn_ts);
     if let syn::Item::Fn(function) = item {
         let syn::ItemFn {
@@ -46,22 +48,24 @@ pub fn proxy(_attribute: TokenStream, function: TokenStream) -> TokenStream {
             block,
             vis,
             sig:
-            syn::Signature {
-                ident,
-                unsafety,
-                constness,
-                abi,
-                output,
-                ..
-            },
+                syn::Signature {
+                    ident,
+                    unsafety,
+                    constness,
+                    abi,
+                    output,
+                    ..
+                },
             ..
         } = function;
 
+        //this is what we will give to the compiler instead of the original function.
         let output = quote!(
+            //this is the original function, this is what we got from the item above.
             #(#attrs)*
             #vis #unsafety #abi #constness fn #ident() #output #block
 
-            //turn the original function into DllMain
+            //create DllMain
             #[no_mangle]
             #[allow(non_snake_case)]
             pub extern "system" fn DllMain(
@@ -71,19 +75,25 @@ pub fn proxy(_attribute: TokenStream, function: TokenStream) -> TokenStream {
             ) -> isize {
 
                 if fdwReason == 1 {
-                    //call the original function
+                    //initialize the proxy exports.
                     crate::proxy::exports::initialize(_hinstDLL).unwrap_or_else(|e| {
                         ::std::panic!("Failed to initialize MelonLoader's Proxy: {}", e);
                     });
+
+                    //call the original function
                     #ident();
                 }
+
+                //return OK
                 1
             }
 
         );
 
+        //return the modified function to the compiler.
         return output.into();
     }
 
+    //return the original function if things fail.
     function
 }

@@ -283,7 +283,7 @@ const EXPORTS_WINMM: [&[u8]; 181] = [
 // we have to statically store the original library here, because if it gets dropped, the function pointers we get out of it become invalid.
 pub static ORIGINAL: LazyLock<Mutex<Option<Library>>> = LazyLock::new(|| Mutex::new(None));
 
-//this function gets called by the #[proxy] macro in our entrypoint.
+/// this function gets called by the #[proxy] macro in our entrypoint.
 pub fn initialize(module: HINSTANCE) -> Result<(), Box<dyn error::Error>> {
     if module.is_invalid() {
         return Err(Box::new(ExportError::LoadLibrary));

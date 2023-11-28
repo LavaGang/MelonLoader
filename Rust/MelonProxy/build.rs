@@ -14,6 +14,7 @@ fn main() {
     }
 }
 
+/// links Exports.def to the resulting dll, exporting all our asm functions.
 fn link_exports() {
     println!("cargo:warning=Linking Exports File..");
     use std::path::Path;

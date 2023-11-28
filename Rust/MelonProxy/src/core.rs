@@ -9,7 +9,7 @@ pub static BOOTSTRAP: LazyLock<Mutex<Option<Library>>> = LazyLock::new(|| Mutex:
 pub fn init() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = std::env::args().collect();
 
-    //TODO: Support UTF-16 (it will suck)
+    //TODO: proper arg handler
     let mut base_dir = std::env::current_dir()?;
     let mut no_mods = false;
 
