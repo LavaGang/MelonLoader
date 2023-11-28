@@ -5,14 +5,7 @@ from distutils.dir_util import copy_tree
 
 args = sys.argv
 
-def is_debug():
-    for arg in args:
-        if arg == "--release":
-            return True
-        return False
-
-
-IsDebug: bool = is_debug()
+IsDebug: bool = "--release" not in args
 IsLinux: bool = sys.platform == "linux" or sys.platform == "linux2"
 IsMac: bool = sys.platform == "darwin"
 
@@ -76,7 +69,7 @@ def build(target: str):
         print("Cross compiling to a different arch is currently unsupported with cross compilers.")
         return
 
-    dll_extension: str = "dll" if target == "win64" or target == "win32" else "dylib" if target == "macos" else "so"
+    dll_extension: str = "dll" if target == "win64" or target == "win32" else "so" if target == "linux" else "dylib"
     bootstrap_name = "libmelon_bootstrap.{}".format(dll_extension)
     
     # ex: target/x86_64-pc-windows-msvc/release/
