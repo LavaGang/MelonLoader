@@ -1346,7 +1346,8 @@ dependencies = [
 [[package]]
 name = "nethost-sys"
 version = "0.6.3"
-source = "git+https://github.com/TrevTV/nethost-sys#625902e00ef2b5cd083e6bb8695c541c3557f202"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "45882ffd272817567a1743af759c2ab840e0dde3f89ef30c4e0d17268838fe50"
 dependencies = [
  "build-target",
  "cargo-emit",

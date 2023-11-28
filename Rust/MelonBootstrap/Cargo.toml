@@ -28,6 +28,9 @@ ndk = { version = "0.7", features = ["api-level-23"] }
 ndk-sys = "0.4.1+23.1.7779620"
 android_liblog-sys = "0.1"
 
+[target.'cfg(target_os = "android")'.patch.crates-io]
+nethost-sys = { git = "https://github.com/TrevTV/nethost-sys" }
+
 [lib]
 name = "melon_bootstrap"
 crate-type = ["cdylib", "rlib"]

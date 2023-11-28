@@ -16,15 +16,24 @@
 #![allow(clippy::inherent_to_string, clippy::type_complexity, improper_ctypes)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-use melon_proxy_sys::proxy;
+#[cfg(target_os = "windows")]
 pub use windows::Win32::Foundation::HINSTANCE;
 
+#[cfg(target_os = "windows")]
 pub mod proxy;
 pub mod utils;
 pub mod core;
 
 /// this function will get called by our proxy macro. See MelonProxy-sys
-#[proxy]
+#[cfg_attr(
+    not(target_os = "windows"),
+    ctor::ctor
+)]
+#[cfg_attr(
+    target_os = "windows",
+    melon_proxy_sys::proxy
+)]
+#[allow(dead_code)]
 fn main() {
     core::init().unwrap_or_else(|e| {
         internal_failure!("Failed to initialize MelonLoader: {}", e);

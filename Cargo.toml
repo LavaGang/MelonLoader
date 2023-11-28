@@ -1,5 +1,3 @@
 [workspace]
 members = ["Rust/MelonProxy", "Rust/MelonBootstrap", "Rust/MelonProxy-sys"]
-
-[patch.crates-io]
-nethost-sys = { git = "https://github.com/TrevTV/nethost-sys" }
+resolver = "2"

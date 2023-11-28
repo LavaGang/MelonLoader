@@ -71,6 +71,7 @@ def build(target: str):
 
     dll_extension: str = "dll" if target == "win64" or target == "win32" else "so" if target == "linux" else "dylib"
     bootstrap_name = "libmelon_bootstrap.{}".format(dll_extension)
+    version_name = "libversion.{}".format(dll_extension)
     
     # ex: target/x86_64-pc-windows-msvc/release/
     cargo_out_path = os.path.join("target", targets[target], "debug" if IsDebug else "release")
@@ -109,12 +110,13 @@ def build(target: str):
 
     # Move Proxy/Bootstrap/Dobby/Dotnet to their right places.
     if target == "win32" or target == "win64":
-        os.replace(os.path.join(cargo_out_path, "version.dll"), os.path.join(OutputPath, target, "version.dll"))
+        version_name = version_name.replace("lib", "")
         bootstrap_name = bootstrap_name.replace("lib", "")
 
         shutil.copy(os.path.join("BaseLibs", "dobby", "windows", "x86_64" if target == "win64" else "x86", "dobby.dll"), os.path.join(OutputPath, target, "dobby.dll"))
 
     os.replace(os.path.join(cargo_out_path, bootstrap_name), os.path.join(bootstrap_destination, bootstrap_name))
+    os.replace(os.path.join(cargo_out_path, version_name), os.path.join(OutputPath, target, version_name))
     shutil.copytree(DotnetPaths[target], os.path.join(bootstrap_destination, "dotnet"))
 
     for arg in args:

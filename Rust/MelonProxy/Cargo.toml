@@ -13,13 +13,13 @@ readme = "../README.md"
 thiserror = "1.0.48"
 melon_proxy-sys = { path = "../MelonProxy-sys" }
 utf16string = "0.2.0"
-windows = { version = "0.52.0", features = ["Win32_Foundation", "Win32_System", "Win32_System_LibraryLoader"] }
 libloading = "0.8.0"
 msgbox = "0.7.0"
 
-#[target.'cfg(windows)'.dependencies]
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.52.0", features = ["Win32_Foundation", "Win32_System", "Win32_System_LibraryLoader"] }
 
-[target.'cfg(linux)'.dependencies]
+[target.'cfg(target_os = "linux")'.dependencies]
 ctor = "0.2.4"
 
 [lib]

@@ -20,12 +20,13 @@ pub mod lib_android;
     ctor::ctor
 )]
 #[no_mangle]
-fn main() {
+fn startup() {
     init().unwrap_or_else(|e| internal_failure!("Failed to start MelonLoader: {}", e));
 }
 
 fn init() -> Result<(), Box<dyn Error>> {
     logger::init()?;
+    debug!("starting up")?;
 
     #[cfg(target_os = "windows")]
     hooks::load_library::init()?;
