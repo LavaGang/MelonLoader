@@ -16,6 +16,7 @@ python build.py win64 #will build for win64
 
 ### Args
 * `--release` will compile in release mode.
+* `--gamedir=/path/to/game/root/dir` will install the build directly to your game.
 ### Available architectures
 * win64
 * win32
