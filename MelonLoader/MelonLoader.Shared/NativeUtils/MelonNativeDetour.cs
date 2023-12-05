@@ -1,4 +1,4 @@
-﻿using MelonLoader.Bootstrap;
+﻿using MelonLoader;
 using MelonLoader.Utils;
 using System;
 using System.Collections.Generic;

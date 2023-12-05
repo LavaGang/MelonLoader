@@ -2,7 +2,9 @@ using MelonLoader.Utils;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using MelonLoader;
 using MelonLoader.Pastel;
 using static MelonLoader.Utils.LoggerUtils;
 
@@ -12,20 +14,6 @@ namespace MelonLoader.Utils
     {
         public static readonly Color DefaultMelonColor = Color.Cyan;
         public static readonly Color DefaultTextColor = Color.LightGray;
-
-#if !NET6_0
-        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-#else
-        internal static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
-#endif
-        internal static StreamWriter LogWriter = CreateLogWriter();
-
-        internal static StreamWriter CreateLogWriter()
-        {
-            var writer = new StreamWriter(LogStream, Encoding.UTF8, 1);
-            writer.AutoFlush = true;
-            return writer;
-        }
 
         //Identical to Msg(string) except it skips walking the stack to find a melon
         internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);
@@ -135,7 +123,7 @@ namespace MelonLoader.Utils
 
         internal static void Internal_Msg(Color namesection_color, Color txt_color, string namesection, string txt)
         {
-            LogWriter.WriteLine($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
+            BootstrapInterop.NativeWriteLogToFile($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
 
             StringBuilder builder = new StringBuilder();
 
@@ -180,14 +168,14 @@ namespace MelonLoader.Utils
 
         internal static void WriteSpacer()
         {
-            LogWriter.WriteLine();
+            BootstrapInterop.NativeWriteLogToFile("");
             Console.WriteLine();
         }
 
         internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
         {
-            LogWriter.WriteLine($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
-            LogWriter.WriteLine($"[{GetTimeStamp()}] by {author}");
+            BootstrapInterop.NativeWriteLogToFile($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
+            BootstrapInterop.NativeWriteLogToFile($"[{GetTimeStamp()}] by {author}");
 
             StringBuilder builder = new StringBuilder();
             builder.Append(GetTimestamp(false));
@@ -204,18 +192,6 @@ namespace MelonLoader.Utils
             }
             
             Console.WriteLine(builder.ToString());
-        }
-
-
-        internal static void Flush()
-        {
-            LogWriter.Flush();
-            LogStream.Flush();
-        }
-
-        internal static void Close()
-        {
-            LogWriter.Close();
         }
     }
 }

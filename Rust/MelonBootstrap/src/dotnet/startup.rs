@@ -25,6 +25,7 @@ pub struct HostImports {
 pub struct HostExports {
     pub hook_attach: unsafe fn(*mut c_void, *mut c_void) -> *mut c_void,
     pub hook_detach: unsafe fn(*mut c_void),
+    pub write_log_file: fn(*mut u8, i32),
 }
 
 pub static IMPORTS: LazyLock<Mutex<HostImports>> = LazyLock::new(|| {
@@ -75,6 +76,7 @@ pub fn start() -> Result<(), Box<dyn Error>> {
     let mut exports = HostExports {
         hook_attach: icalls::bootstrap_interop::attach,
         hook_detach: icalls::bootstrap_interop::detach,
+        write_log_file: icalls::bootstrap_interop::write_log_file,
     };
 
     debug!("[Dotnet] Invoking LoadStage1")?;

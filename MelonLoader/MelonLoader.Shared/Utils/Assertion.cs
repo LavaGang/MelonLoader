@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using MelonLoader;
 
 namespace MelonLoader.Utils
 {
@@ -19,7 +20,7 @@ namespace MelonLoader.Utils
 
             ShouldContinue = false;
             var timestamp = LoggerUtils.GetTimeStamp();
-            MelonLogger.LogWriter.WriteLine($"[{timestamp}] [INTERNAL FAILURE] {msg}");
+            BootstrapInterop.NativeWriteLogToFile($"[{timestamp}] [INTERNAL FAILURE] {msg}");
             string caption = "INTERNAL FAILURE!";
                 
             IntPtr result = IntPtr.Zero;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using MelonLoader.Bootstrap;
+using MelonLoader;
 using MelonLoader.Utils;
 
 namespace MelonLoader.NativeUtils

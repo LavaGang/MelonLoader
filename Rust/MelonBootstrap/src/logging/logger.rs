@@ -29,7 +29,7 @@ impl std::convert::TryFrom<u8> for LogLevel {
 
 macro_rules! log_path {
     () => {
-        $crate::environment::paths::get_base_dir().unwrap().join("MelonLoader").join("Latest-Bootstrap.log")
+        $crate::environment::paths::get_base_dir().unwrap().join("MelonLoader").join("Latest.log")
     };
 }
 
@@ -37,13 +37,17 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     let log_file = log_path!();
 
     if log_file.exists() {
-        std::fs::remove_file(log_file)?;
+        std::fs::remove_file(&log_file)?;
+        std::fs::File::create(log_file)?;
+
+        //BOM for UTF-16
+        write_bytes(&[255,254])?; 
     }
 
     Ok(())
 }
 
-fn write(msg: &str) -> Result<(), Box<dyn Error>> {
+pub fn write(msg: &str) -> Result<(), Box<dyn Error>> {
     let log_file = log_path!();
 
     let mut file = std::fs::OpenOptions::new()
@@ -54,7 +58,23 @@ fn write(msg: &str) -> Result<(), Box<dyn Error>> {
 
     let message = format!("{}\r\n", msg);
 
-    file.write_all(message.as_bytes())?;
+    for utf16 in message.encode_utf16() {
+        file.write_all(&utf16.to_le_bytes())?;
+    }
+
+    Ok(())
+}
+
+pub fn write_bytes(bytes: &[u8]) -> Result<(), Box<dyn Error>> {
+    let log_file = log_path!();
+
+    let mut file = std::fs::OpenOptions::new()
+        .write(true)
+        .append(true)
+        .create(true)
+        .open(&log_file)?;
+
+    file.write_all(bytes)?;
 
     Ok(())
 }

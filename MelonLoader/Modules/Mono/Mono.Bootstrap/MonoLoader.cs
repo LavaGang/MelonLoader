@@ -12,6 +12,7 @@ namespace MelonLoader.Mono.Bootstrap
         #region Private Members
 
         private static Type mlCoreType = typeof(Core);
+        private static Type mlBootstrapInteropType = typeof(BootstrapInterop);
 
         private static IntPtr monoDomain;
 
@@ -194,6 +195,24 @@ namespace MelonLoader.Mono.Bootstrap
                 Assertion.ThrowInternalFailure($"Failed to get Class {mlCoreType.Namespace}.{mlCoreType.Name} from {fileName}!");
                 return;
             }
+            
+            // Get MelonLoader.BootstrapInterop
+            MelonDebug.Msg($"Getting Class {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}...");
+            IntPtr mlSharedInterop = MonoLibrary.Instance.mono_class_from_name(mlSharedAsmImage, mlBootstrapInteropType.Namespace.ToAnsiPointer(), mlBootstrapInteropType.Name.ToAnsiPointer());
+            if (mlSharedInterop == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to get Class {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name} from {fileName}!");
+                return;
+            }
+            
+            // Get MelonLoader.BootstrapInterop.LoadInternalCalls
+            MelonDebug.Msg($"Getting Method {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls...");
+            IntPtr mlSharedLoadInternalCalls = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedInterop, "LoadInternalCalls".ToAnsiPointer(), 1);
+            if (mlSharedLoadInternalCalls == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to get Method {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls from {fileName}!");
+                return;
+            }
 
             // Get MelonLoader.Core.Startup
             MelonDebug.Msg($"Getting Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)}...");
@@ -221,10 +240,16 @@ namespace MelonLoader.Mono.Bootstrap
                 Assertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationStart)} from {fileName}!");
                 return;
             }
+            
+            // Invoke MelonLoader.BootstrapInterop.LoadStage1()
+            MelonDebug.Msg($"Invoking {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls...");
+            IntPtr exc = IntPtr.Zero;
+
+            var writeToLogFile = (void*)BootstrapInterop.WriteLogToFile;
+            MonoLibrary.Instance.mono_runtime_invoke(mlSharedLoadInternalCalls, IntPtr.Zero, &writeToLogFile, ref exc);
 
             // Invoke MelonLoader.Core.Startup()
             MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)}...");
-            IntPtr exc = IntPtr.Zero;
             MonoLibrary.Instance.mono_runtime_invoke(mlShared_Startup, IntPtr.Zero, (void**)null, ref exc);
 
             // Invoke MelonLoader.Core.PreStart()

@@ -4,14 +4,32 @@ using System;
 using System.Runtime.InteropServices;
 using MelonLoader.Utils;
 #else
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using MelonLoader.Utils;
 #endif
 
-namespace MelonLoader.Bootstrap
+namespace MelonLoader
 {
     public static unsafe class BootstrapInterop
     {
 #if NET6_0
+        public static delegate* unmanaged[Stdcall]<byte*, int, void> WriteLogToFile;
+
+        public static void NativeWriteLogToFile(string logString)
+        {
+            if (!logString.EndsWith("\n"))
+                logString += "\n";
+            
+            var log = MelonUtils.StringToBytes(logString);
+            var ptr = Marshal.AllocHGlobal(log.Length);
+            Marshal.Copy(log, 0, ptr, log.Length);
+            
+            WriteLogToFile((byte*)ptr, log.Length);
+            
+            Marshal.FreeHGlobal(ptr);
+        }
 
         public static IntPtr NativeLoadLib(string name)
             => NativeLibrary.Load(name);
@@ -32,7 +50,33 @@ namespace MelonLoader.Bootstrap
             => HookDetach(target.ToPointer());
 
 #else
+        public static void LoadInternalCalls(IntPtr writeToLogFile)
+        {
+            pWriteLogToFile = writeToLogFile;
+        }
+        
+        private delegate void dWriteLogToFile(IntPtr log, int logLength);
+        public static IntPtr pWriteLogToFile = IntPtr.Zero;
+        private static MethodInfo mWriteLogToFile = null;
+        
+        public static void NativeWriteLogToFile(string logString)
+        {
+            if (pWriteLogToFile == IntPtr.Zero)
+                throw new NullReferenceException("pWriteLogToFile is null!");
 
+            if (mWriteLogToFile == null)
+                mWriteLogToFile = Marshal.GetDelegateForFunctionPointer(pWriteLogToFile, typeof(dWriteLogToFile))
+                    .Method;
+
+            var log = MelonUtils.StringToBytes(logString);
+            var ptr = Marshal.AllocHGlobal(log.Length);
+            Marshal.Copy(log, 0, ptr, log.Length);
+            
+            mWriteLogToFile.Invoke(null, new object[] { ptr, log.Length });
+            
+            Marshal.FreeHGlobal(ptr);
+        }
+        
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern IntPtr NativeLoadLib(string name);
         [MethodImpl(MethodImplOptions.InternalCall)]

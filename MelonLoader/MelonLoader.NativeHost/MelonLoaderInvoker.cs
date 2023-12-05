@@ -1,3 +1,4 @@
+using MelonLoader;
 using MelonLoader.Bootstrap;
 using MelonLoader.CoreClr.Bootstrap.Fixes;
 
@@ -9,6 +10,7 @@ namespace MelonLoader.NativeHost
         {
             BootstrapInterop.HookAttach = HookAttach;
             BootstrapInterop.HookDetach = NativeEntryPoint.Exports.HookDetach;
+            BootstrapInterop.WriteLogToFile = NativeEntryPoint.Exports.WriteLogToFile;
 
             Entrypoint.Entry();
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace MelonLoader.Utils
 {
@@ -23,5 +24,7 @@ namespace MelonLoader.Utils
         {
             return type.IsAssignableFrom(typeof(T));
         }
+        
+        public static byte[] StringToBytes(string str) => System.Text.Encoding.Unicode.GetBytes(str);
     }
 }
