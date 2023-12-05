@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <RootNamespace>MelonLoader.Mono</RootNamespace>
+        <RootNamespace>MelonLoader.Bootstrap.Mono</RootNamespace>
         <TargetFramework>net6</TargetFramework>
         <LangVersion>Latest</LangVersion>
         <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
@@ -8,7 +8,7 @@
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
-      <ProjectReference Include="..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" Private="false" ExcludeAssets="runtime"  />
+      <ProjectReference Include="..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" Private="false" ExcludeAssets="runtime" />
       <ProjectReference Include="..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
     </ItemGroup>
 </Project>

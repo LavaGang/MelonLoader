@@ -1,5 +1,6 @@
-﻿using System.IO;
-using MelonLoader.Mono;
+﻿using System;
+using System.IO;
+using MelonLoader.Bootstrap.Mono;
 using MelonLoader.Shared.Interfaces;
 using MelonLoader.Shared.Utils;
 using MelonLoader.Unity.Il2Cpp;
@@ -65,13 +66,6 @@ namespace MelonLoader.Unity
                     GameDataPath
             };
 
-            // Variants of Mono folders
-            string[] monoFolderVariants = new string[]
-            {
-                    "Mono",
-                    "MonoBleedingEdge"
-            };
-
             // Get Mono variant library file name
             string monoFileNameWithoutExt = "mono";
             if (MelonUtils.IsUnix || MelonUtils.IsMac)
@@ -90,14 +84,17 @@ namespace MelonLoader.Unity
                 monoFileExt = ".dylib";
 
             // Iterate through Variations in Mono types
-            bool isOldMono = true;
-            foreach (var variant in monoFolderVariants)
+            eMonoRuntimeVariant[] variantTypes = Enum.GetValues<eMonoRuntimeVariant>();
+            for (int i = 0; i < variantTypes.Length; i++)
             {
+                eMonoRuntimeVariant variant = variantTypes[i];
+                string variantName = Enum.GetName(variant);
+
                 // Iterate through Variations in Mono Directory Positions
                 foreach (var dir in directoriesToSearch)
                 {
                     // Get Directory Path
-                    string dirPath = Path.Combine(dir, variant, "EmbedRuntime");
+                    string dirPath = Path.Combine(dir, variantName, "EmbedRuntime");
                     if (!Directory.Exists(dirPath))
                         continue;
 
@@ -111,7 +108,7 @@ namespace MelonLoader.Unity
                     string posixPath = Path.Combine(dirPath, $"{monoPosixFileNameWithoutExt}{monoFileExt}");
 
                     // Get Config Directory Path
-                    string configPath = Path.Combine(dir, variant, "etc");
+                    string configPath = Path.Combine(dir, variantName, "etc");
 
                     // Iterate through all found Files in EmbedRuntime
                     foreach (var filePath in foundFiles)
@@ -123,18 +120,14 @@ namespace MelonLoader.Unity
                             continue;
 
                         // Return Information
-                        return new Mono.MonoRuntimeInfo(
-                            filePath,
-                            posixPath, 
-                            configPath, 
+                        return new MonoRuntimeInfo(
                             variant,
-                            isOldMono 
+                            filePath,
+                            configPath,
+                            posixPath
                         );
                     }
                 }
-
-                // Flip this since Index of 1 is MonoBleedingEdge
-                isOldMono = false;
             }
 
             // Return Nothing

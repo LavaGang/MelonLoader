@@ -3,7 +3,7 @@ using MelonLoader.Shared.NativeUtils;
 using MelonLoader.Shared.Utils;
 #pragma warning disable 0649
 
-namespace MelonLoader.Mono
+namespace MelonLoader.Bootstrap.Mono
 {
     public unsafe static class MonoLoader
     {
@@ -27,9 +27,9 @@ namespace MelonLoader.Mono
 
             // Check if it found any Mono variant library
             if (monoRuntimeInfo == null
-                || string.IsNullOrEmpty(monoRuntimeInfo.FilePath))
+                || string.IsNullOrEmpty(monoRuntimeInfo.LibPath))
             {
-                Assertion.ThrowInternalFailure($"Failed to find {runtimeInfo.Variant} Library!");
+                Assertion.ThrowInternalFailure($"Failed to find {monoRuntimeInfo.Variant} Library!");
                 return;
             }
 
@@ -48,11 +48,11 @@ namespace MelonLoader.Mono
             }
 
             // Load the Mono variant library
-            MelonDebug.Msg(monoRuntimeInfo.FilePath);
+            MelonDebug.Msg(monoRuntimeInfo.LibPath);
             MelonDebug.Msg($"Loading {monoRuntimeInfo.Variant} Library...");
-            if (!MelonNativeLibrary.TryLoad(monoRuntimeInfo.FilePath, out monoLib))
+            if (!MelonNativeLibrary.TryLoad(monoRuntimeInfo.LibPath, out monoLib))
             {
-                Assertion.ThrowInternalFailure($"Failed to load {monoRuntimeInfo.Variant} Library from {monoRuntimeInfo.FilePath}!");
+                Assertion.ThrowInternalFailure($"Failed to load {monoRuntimeInfo.Variant} Library from {monoRuntimeInfo.LibPath}!");
                 return;
             }
 

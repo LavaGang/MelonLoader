@@ -1,20 +1,47 @@
-﻿namespace MelonLoader.Mono
+﻿namespace MelonLoader.Bootstrap.Mono
 {
     public class MonoRuntimeInfo
     {
-        public readonly string FilePath;
-        public readonly string PosixPath;
-        public readonly string ConfigPath;
-        public readonly string Variant;
-        public readonly bool IsOldMono;
+        #region Public Members
 
-        public MonoRuntimeInfo(string filePath, string posixPath, string configPath, string variant, bool isOldMono)
+        public eMonoRuntimeVariant Variant { get; private set; }
+        public string LibPath { get; private set; }
+        public string PosixPath { get; private set; }
+        public string ConfigPath { get; private set; }
+
+        #endregion
+
+        #region Constructors
+
+        public MonoRuntimeInfo(
+            eMonoRuntimeVariant variant,
+            string libPath,
+            string configPath)
+            => SetInfo(variant, libPath, configPath, null);
+
+        public MonoRuntimeInfo(
+            eMonoRuntimeVariant variant, 
+            string libPath, 
+            string configPath,
+            string posixPath)
+            => SetInfo(variant, libPath, configPath, posixPath);
+
+        #endregion
+
+        #region Private Methods
+
+        private void SetInfo(
+            eMonoRuntimeVariant variant, 
+            string libPath,
+            string configPath,
+            string posixPath)
         {
-            FilePath = filePath;
-            PosixPath = posixPath;
-            ConfigPath = configPath;
             Variant = variant;
-            IsOldMono = isOldMono;
+            LibPath = libPath;
+            ConfigPath = configPath;
+            PosixPath = posixPath;
         }
+
+        #endregion
     }
 }
