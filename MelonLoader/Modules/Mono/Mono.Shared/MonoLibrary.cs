@@ -50,25 +50,57 @@ namespace MelonLoader.Mono
 
         #endregion
 
-        #region Exports
+        #region Mono Domain
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate IntPtr d_mono_init_version([MarshalAs(UnmanagedType.LPStr)] string name, [MarshalAs(UnmanagedType.LPStr)] string version);
+        public unsafe delegate IntPtr d_mono_init_version(IntPtr name, IntPtr version);
         public d_mono_init_version mono_init_version;
         public d_mono_init_version mono_jit_init_version;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate IntPtr d_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc);
-        public d_mono_runtime_invoke mono_runtime_invoke;
+        public unsafe delegate IntPtr d_mono_domain_get();
+        public d_mono_domain_get mono_domain_get;
+
+        #endregion
+
+        #region Mono Assembly
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate IntPtr d_mono_assembly_open(IntPtr filepath, IntPtr status);
+        public d_mono_assembly_open mono_assembly_open = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate IntPtr d_mono_assembly_open_full(IntPtr filepath, IntPtr status, bool refonly);
+        public d_mono_assembly_open_full mono_assembly_open_full = null;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr d_mono_assembly_get_image(IntPtr assembly);
+        public d_mono_assembly_get_image mono_assembly_get_image;
+
+        #endregion
+
+        #region Mono Class
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr d_mono_class_from_name(IntPtr image, IntPtr namespaze, IntPtr name);
+        public d_mono_class_from_name mono_class_from_name;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr d_mono_class_get_method_from_name(IntPtr clazz, IntPtr name, int paramCount);
+        public d_mono_class_get_method_from_name mono_class_get_method_from_name;
+
+        #endregion
+
+        #region Mono Method
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate IntPtr d_mono_method_get_name(IntPtr method);
         public d_mono_method_get_name mono_method_get_name;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate IntPtr d_mono_domain_get();
-        public d_mono_domain_get mono_domain_get;
-        
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public unsafe delegate IntPtr d_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc);
+        public d_mono_runtime_invoke mono_runtime_invoke;
+
         #endregion
     }
 }

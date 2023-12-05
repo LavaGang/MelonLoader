@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.IO;
 using System.Runtime.InteropServices;
 using MelonLoader.NativeUtils;
 using MelonLoader.Utils;
@@ -14,6 +14,15 @@ namespace MelonLoader.Mono.Bootstrap
         private static Type mlCoreType = typeof(Core);
 
         private static IntPtr monoDomain;
+
+        private static IntPtr mlSharedAsm;
+        private static IntPtr mlSharedAsmImage;
+        private static IntPtr mlSharedCore;
+
+        private static IntPtr mlShared_Startup;
+        private static IntPtr mlShared_OnApplicationPreStart;
+        private static IntPtr mlShared_OnApplicationStart;
+
         private static MelonNativeDetour<MonoLibrary.d_mono_init_version> mono_init_version_detour;
         private static MelonNativeDetour<MonoLibrary.d_mono_runtime_invoke> mono_runtime_invoke_detour;
 
@@ -62,6 +71,7 @@ namespace MelonLoader.Mono.Bootstrap
             if (monoDomain == IntPtr.Zero)
             {
                 // Attach mono_init_version Detour
+                MelonDebug.Msg($"Attaching mono_init_version Detour...");
                 if (RuntimeInfo.Variant == eMonoRuntimeVariant.Mono)
                     mono_init_version_detour = new(MonoLibrary.Instance.mono_init_version, h_mono_init_version);
                 else
@@ -108,21 +118,39 @@ namespace MelonLoader.Mono.Bootstrap
                 return false;
             }
 
-            // See if any Exports Failed
-            if (MonoLibrary.Instance.mono_runtime_invoke == null)
-            {
-                Assertion.ThrowInternalFailure($"Failed to find {nameof(MonoLibrary.Instance.mono_runtime_invoke)} Export in {RuntimeInfo.VariantName} Library!");
-                return false;
-            }
-
             return true;
         }
 
         private static bool CheckExports()
         {
-            if (MonoLibrary.Instance.mono_runtime_invoke == null)
+            string initName = (RuntimeInfo.Variant == eMonoRuntimeVariant.Mono) 
+                ? nameof(MonoLibrary.Instance.mono_init_version) 
+                : nameof(MonoLibrary.Instance.mono_jit_init_version);
+
+            Delegate initDel = (RuntimeInfo.Variant == eMonoRuntimeVariant.Mono) 
+                ? MonoLibrary.Instance.mono_init_version
+                : MonoLibrary.Instance.mono_jit_init_version;
+
+            (string, Delegate)[] listOfExports = new[]
             {
-                Assertion.ThrowInternalFailure($"Failed to find {nameof(MonoLibrary.Instance.mono_runtime_invoke)} Export in {RuntimeInfo.VariantName} Library!");
+                (initName, initDel),
+                (nameof(MonoLibrary.Instance.mono_domain_get), MonoLibrary.Instance.mono_domain_get),
+
+                (nameof(MonoLibrary.Instance.mono_assembly_open_full), MonoLibrary.Instance.mono_assembly_open_full),
+                (nameof(MonoLibrary.Instance.mono_assembly_get_image), MonoLibrary.Instance.mono_assembly_get_image),
+
+                (nameof(MonoLibrary.Instance.mono_class_from_name), MonoLibrary.Instance.mono_class_from_name),
+
+                (nameof(MonoLibrary.Instance.mono_method_get_name), MonoLibrary.Instance.mono_method_get_name),
+                (nameof(MonoLibrary.Instance.mono_runtime_invoke), MonoLibrary.Instance.mono_runtime_invoke),
+            };
+
+            foreach (var exportPair in listOfExports)
+            {
+                if (exportPair.Item2 != null)
+                    continue;
+
+                Assertion.ThrowInternalFailure($"Failed to find {exportPair.Item1} Export in {RuntimeInfo.VariantName} Library!");
                 return false;
             }
 
@@ -131,30 +159,96 @@ namespace MelonLoader.Mono.Bootstrap
 
         private static void Stage1()
         {
-            MelonDebug.Msg("STAGE 1");
+            // Get File Path for MelonLoader.Shared.dll
+            string fileName = Path.GetFileName(mlCoreType.Assembly.Location);
+            string sharedPath = Path.Combine(
+                Path.GetDirectoryName(Path.GetDirectoryName(mlCoreType.Assembly.Location)),
+                "net35",
+                fileName);
 
-            // Load MelonLoader.Shared.dll
+            // Inject BootstrapInterop Internal Calls
+
+            // Load Assembly
+            MelonDebug.Msg($"Loading Assembly {sharedPath}...");
+            mlSharedAsm = MonoLibrary.Instance.mono_assembly_open_full(sharedPath.ToAnsiPointer(), IntPtr.Zero, false);
+            if (mlSharedAsm == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to load Assembly from {sharedPath}!");
+                return;
+            }
+
+            // Get Assembly Image
+            MelonDebug.Msg("Getting Assembly Image...");
+            mlSharedAsmImage = MonoLibrary.Instance.mono_assembly_get_image(mlSharedAsm);
+            if (mlSharedAsmImage == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to get Assembly Image from {fileName}!");
+                return;
+            }
+
+            // Get MelonLoader.Core
+            MelonDebug.Msg($"Getting Class {mlCoreType.Namespace}.{mlCoreType.Name}...");
+            mlSharedCore = MonoLibrary.Instance.mono_class_from_name(mlSharedAsmImage, mlCoreType.Namespace.ToAnsiPointer(), mlCoreType.Name.ToAnsiPointer());
+            if (mlSharedCore == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to get Class {mlCoreType.Namespace}.{mlCoreType.Name} from {fileName}!");
+                return;
+            }
+
+            // Get MelonLoader.Core.Startup
+            MelonDebug.Msg($"Getting Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)}...");
+            mlShared_Startup = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedCore, nameof(Core.Startup).ToAnsiPointer(), 0);
+            if (mlShared_Startup == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)} from {fileName}!");
+                return;
+            }
+
+            // Get MelonLoader.Core.OnApplicationPreStart
+            MelonDebug.Msg($"Getting Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationPreStart)}...");
+            mlShared_OnApplicationPreStart = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedCore, nameof(Core.OnApplicationPreStart).ToAnsiPointer(), 0);
+            if (mlShared_OnApplicationPreStart == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationPreStart)} from {fileName}!");
+                return;
+            }
+
+            // Get MelonLoader.Core.OnApplicationStart
+            MelonDebug.Msg($"Getting Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationStart)}...");
+            mlShared_OnApplicationStart = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedCore, nameof(Core.OnApplicationStart).ToAnsiPointer(), 0);
+            if (mlShared_OnApplicationStart == IntPtr.Zero)
+            {
+                Assertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationStart)} from {fileName}!");
+                return;
+            }
 
             // Invoke MelonLoader.Core.Startup()
+            MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)}...");
+            IntPtr exc = IntPtr.Zero;
+            MonoLibrary.Instance.mono_runtime_invoke(mlShared_Startup, IntPtr.Zero, (void**)null, ref exc);
 
             // Invoke MelonLoader.Core.PreStart()
+            MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationPreStart)}...");
+            MonoLibrary.Instance.mono_runtime_invoke(mlShared_OnApplicationPreStart, IntPtr.Zero, (void**)null, ref exc);
 
             // Attach mono_runtime_invoke Detour
+            MelonDebug.Msg($"Attaching mono_runtime_invoke Detour...");
             mono_runtime_invoke_detour.Attach();
         }
 
         private static void Stage2()
         {
-            MelonDebug.Msg("STAGE 2");
-
             // Invoke MelonLoader.Core.OnApplicationStart()
+            MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationStart)}...");
+            IntPtr exc = IntPtr.Zero;
+            MonoLibrary.Instance.mono_runtime_invoke(mlShared_OnApplicationStart, IntPtr.Zero, (void**)null, ref exc);
         }
 
         #endregion
 
         #region Hooks
 
-        private static IntPtr h_mono_init_version([MarshalAs(UnmanagedType.LPStr)] string name, [MarshalAs(UnmanagedType.LPStr)] string version)
+        private static IntPtr h_mono_init_version(IntPtr name, IntPtr version)
         {
             // Invoke Domain Creation
             monoDomain = mono_init_version_detour.Trampoline(name, version);
@@ -172,7 +266,7 @@ namespace MelonLoader.Mono.Bootstrap
         private static IntPtr h_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc)
         {
             // Get Method Name
-            string methodName = Marshal.PtrToStringAnsi(MonoLibrary.Instance.mono_method_get_name(method));
+            string methodName = MonoLibrary.Instance.mono_method_get_name(method).ToAnsiString();
 
             // Check for Trigger Method
             foreach (string triggerMethod in RuntimeInfo.TriggerMethods)

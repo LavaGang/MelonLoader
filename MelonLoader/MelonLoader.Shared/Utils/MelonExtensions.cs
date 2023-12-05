@@ -28,6 +28,16 @@ namespace MelonLoader.Utils
             return del;
         }
 
+        public static string ToAnsiString(this IntPtr ptr)
+            => Marshal.PtrToStringAnsi(ptr);
+
+        #endregion
+
+        #region String
+
+        public static IntPtr ToAnsiPointer(this string str)
+            => Marshal.StringToHGlobalAnsi(str);
+
         #endregion
     }
 }
