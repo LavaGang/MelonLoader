@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.Shared.Utils
+namespace MelonLoader.Utils
 {
     public static class MelonExtensions
     {

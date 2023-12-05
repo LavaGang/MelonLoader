@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using MelonLoader.Shared.Utils;
+using MelonLoader.Utils;
 
-namespace MelonLoader.Shared.Pastel
+namespace MelonLoader.Pastel
 {
     /// <summary>
     /// Controls colored console output by <see langword="Pastel"/>.

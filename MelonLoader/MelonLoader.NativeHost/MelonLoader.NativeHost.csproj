@@ -11,7 +11,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" />
+      <ProjectReference Include="..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj">
+        <Private>False</Private>
+        <ExcludeAssets>runtime</ExcludeAssets>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+      <ProjectReference Include="..\Modules\CoreCLR\CoreCLR.Bootstrap\CoreCLR.Bootstrap.csproj">
+        <Private>False</Private>
+        <ExcludeAssets>runtime</ExcludeAssets>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
     </ItemGroup>
     
 </Project>

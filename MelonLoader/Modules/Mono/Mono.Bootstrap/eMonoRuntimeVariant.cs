@@ -1,4 +1,4 @@
-﻿namespace MelonLoader.Bootstrap.Mono
+﻿namespace MelonLoader.Mono.Bootstrap
 {
     public enum eMonoRuntimeVariant
     {

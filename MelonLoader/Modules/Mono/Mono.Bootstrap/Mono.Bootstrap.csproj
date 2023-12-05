@@ -1,15 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <RootNamespace>MelonLoader.Unity.Il2Cpp</RootNamespace>
+        <RootNamespace>MelonLoader.Mono.Bootstrap</RootNamespace>
         <TargetFramework>net6</TargetFramework>
         <LangVersion>Latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Unity\</OutputPath>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Mono\</OutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Mono.Bootstrap</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" Private="false" ExcludeAssets="runtime" />
       <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
+      <ProjectReference Include="..\Mono.Shared\Mono.Shared.csproj" />
     </ItemGroup>
 </Project>

@@ -1,17 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <RootNamespace>MelonLoader.Unity</RootNamespace>
+        <RootNamespace>MelonLoader.Unity.Bootstrap</RootNamespace>
         <TargetFramework>net6</TargetFramework>
         <LangVersion>Latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Unity\</OutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Unity.Bootstrap</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\MelonLoader.Bootstrap.Mono\MelonLoader.Bootstrap.Mono.csproj" />
-      <ProjectReference Include="..\..\..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" Private="false" ExcludeAssets="runtime" />
-      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
-      <ProjectReference Include="..\Unity.Il2Cpp\Unity.Il2Cpp.csproj" />
+      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+      <ProjectReference Include="..\..\Mono\Mono.Bootstrap\Mono.Bootstrap.csproj">
+        <Private>False</Private>
+        <ExcludeAssets>runtime</ExcludeAssets>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
     </ItemGroup>
 </Project>

@@ -1,5 +1,3 @@
-#if NET6_0
-
 using Microsoft.Diagnostics.Runtime;
 using System;
 using System.Collections.Generic;
@@ -7,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
-using MelonLoader.Shared.Utils;
+using MelonLoader.Utils;
 
-namespace MelonLoader.Shared.CoreClrUtils
+namespace MelonLoader.CoreClr.Bootstrap.Fixes
 {
     internal class CoreClrDelegateFixer
     {
@@ -124,4 +122,3 @@ namespace MelonLoader.Shared.CoreClrUtils
         }
     }
 }
-#endif

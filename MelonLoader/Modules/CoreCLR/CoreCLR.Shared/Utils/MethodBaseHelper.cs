@@ -1,15 +1,10 @@
-#if NET6_0
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-
 #nullable enable
 
-namespace MelonLoader.Shared.CoreClrUtils
+namespace MelonLoader.CoreClr.Utils
 {
-    internal static class MethodBaseHelper
+    public static class MethodBaseHelper
     {
         private static Type? RuntimeMethodHandleInternal;
         private static ConstructorInfo? RuntimeMethodHandleInternal_Constructor;
@@ -43,4 +38,3 @@ namespace MelonLoader.Shared.CoreClrUtils
         }
     }
 }
-#endif

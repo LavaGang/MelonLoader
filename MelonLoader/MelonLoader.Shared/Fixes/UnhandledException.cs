@@ -1,6 +1,6 @@
 using System;
 
-namespace MelonLoader.Shared.Fixes
+namespace MelonLoader.Fixes
 {
     public static class UnhandledException
     {

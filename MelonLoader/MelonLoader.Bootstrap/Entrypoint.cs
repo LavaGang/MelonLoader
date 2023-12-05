@@ -1,5 +1,4 @@
-﻿using System;
-using MelonLoader.Shared.Utils;
+﻿using MelonLoader.Utils;
 
 namespace MelonLoader.Bootstrap
 {
@@ -7,9 +6,7 @@ namespace MelonLoader.Bootstrap
     {
         public static unsafe void Entry()
         {
-            Shared.Core.Startup();
-            Shared.Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
-            Shared.Fixes.DotnetLoadFromManagedFolderFix.Install();
+            Core.Startup();
             
             MelonDebug.Msg("Starting Up...");
             MelonDebug.Msg(MelonEnvironment.MelonLoaderDirectory);

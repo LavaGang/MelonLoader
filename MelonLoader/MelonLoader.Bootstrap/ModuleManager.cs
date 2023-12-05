@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using MelonLoader.Shared.Interfaces;
-using MelonLoader.Shared.Utils;
+using MelonLoader.Interfaces;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Bootstrap
 {
@@ -26,7 +26,7 @@ namespace MelonLoader.Bootstrap
                     var type = assembly.GetTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(BootstrapModule)));
                     if (type == null)
                     {
-                        MelonLogger.Warning($"Failed to load BootstrapModule '{bootstrapPath}': No type deriving from BootstrapModule found.");
+                        //MelonLogger.Warning($"Failed to load BootstrapModule '{bootstrapPath}': No type deriving from BootstrapModule found.");
                         continue;
                     }
 

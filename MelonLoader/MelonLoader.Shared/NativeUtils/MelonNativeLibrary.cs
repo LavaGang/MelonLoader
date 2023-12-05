@@ -2,9 +2,9 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using MelonLoader.Bootstrap;
-using MelonLoader.Shared.Utils;
+using MelonLoader.Utils;
 
-namespace MelonLoader.Shared.NativeUtils
+namespace MelonLoader.NativeUtils
 {
     public static class MelonNativeLibrary
     {
@@ -29,11 +29,7 @@ namespace MelonLoader.Shared.NativeUtils
             // Get Native Library Pointer
             IntPtr ptr = BootstrapInterop.NativeLoadLib(name);
             if (ptr == IntPtr.Zero)
-#if NET6_0
                 throw new Exception($"Unable to Load Native Library {name}!");
-#else
-                throw new Exception($"Unable to Load Native Library {name}!{(MelonUtils.IsUnix || MelonUtils.IsMac ? $"\ndlerror: {Marshal.PtrToStringAnsi(dlerror())}" : "")}");
-#endif
 
             // Return Native Library Pointer
             return ptr;
@@ -64,11 +60,7 @@ namespace MelonLoader.Shared.NativeUtils
             // Get the Export Pointer
             IntPtr returnval = BootstrapInterop.NativeGetExport(handle, name);
             if (returnval == IntPtr.Zero)
-#if NET6_0
                 throw new Exception($"Unable to Find Native Library Export {name}!");
-#else
-                throw new Exception($"Unable to Find Native Library Export {name}!{(MelonUtils.IsUnix || MelonUtils.IsMac ? $"\ndlerror: {Marshal.PtrToStringAnsi(dlerror())}" : "")}");
-#endif
 
             // Return the Export Pointer
             return returnval;
@@ -79,6 +71,16 @@ namespace MelonLoader.Shared.NativeUtils
             // Attempt to load Native Library
             if (!TryLoad(name, out IntPtr ptr)
                 || ptr == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(ptr));
+
+            // Return Object Instance
+            return ReflectiveLoad<T>(ptr);
+        }
+
+        public static T ReflectiveLoad<T>(IntPtr ptr)
+        {
+            // Attempt to load Native Library
+            if (ptr == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(ptr));
 
             // Get Reflected Type
@@ -112,10 +114,5 @@ namespace MelonLoader.Shared.NativeUtils
             // Return Object Instance
             return instance;
         }
-
-#if !NET6_0
-        [DllImport("libdl.so.2")]
-        private static extern IntPtr dlerror();
-#endif
     }
 }

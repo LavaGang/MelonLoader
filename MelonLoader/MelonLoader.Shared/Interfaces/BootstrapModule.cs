@@ -1,4 +1,4 @@
-namespace MelonLoader.Shared.Interfaces
+namespace MelonLoader.Interfaces
 {
     public interface BootstrapModule
     {

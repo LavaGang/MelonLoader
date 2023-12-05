@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Mono</RootNamespace>
+		<TargetFrameworks>net35;net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Mono\</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Mono.Shared</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
+    </ItemGroup>
+</Project>

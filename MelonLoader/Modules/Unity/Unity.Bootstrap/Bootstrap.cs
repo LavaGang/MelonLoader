@@ -1,9 +1,7 @@
-﻿using System;
-using System.IO;
-using MelonLoader.Bootstrap.Mono;
-using MelonLoader.Shared.Interfaces;
-using MelonLoader.Shared.Utils;
-using MelonLoader.Unity.Il2Cpp;
+﻿using System.IO;
+using MelonLoader.Interfaces;
+using MelonLoader.Utils;
+using MelonLoader.Mono.Bootstrap;
 
 namespace MelonLoader.Unity
 {
@@ -46,14 +44,19 @@ namespace MelonLoader.Unity
             {
                 // Start Il2Cpp Support
                 MelonLogger.Msg("Engine Variant: Il2Cpp");
-                Il2CppLoader.Startup(gameAssemblyPath); 
+                //Il2CppLoader.Startup(gameAssemblyPath); 
             }
             else
             { 
                 // Start Mono Support
                 MonoRuntimeInfo runtimeInfo = GetMonoRuntimeInfo();
-                MelonLogger.Msg($"Engine Variant: {runtimeInfo.Variant}");
-                MonoLoader.Startup(runtimeInfo);
+                if (runtimeInfo == null)
+                    Assertion.ThrowInternalFailure("Failed to get Mono Runtime Info!");
+                else
+                {
+                    MelonLogger.Msg($"Engine Variant: {runtimeInfo.Variant}");
+                    MonoLoader.Startup(runtimeInfo);
+                }
             }
         }
 
@@ -64,6 +67,13 @@ namespace MelonLoader.Unity
             {
                     MelonEnvironment.GameRootDirectory,
                     GameDataPath
+            };
+
+            // Variants of Mono folders
+            string[] monoFolderVariants = new string[]
+            {
+                    "Mono",
+                    "MonoBleedingEdge"
             };
 
             // Get Mono variant library file name
@@ -84,17 +94,13 @@ namespace MelonLoader.Unity
                 monoFileExt = ".dylib";
 
             // Iterate through Variations in Mono types
-            eMonoRuntimeVariant[] variantTypes = Enum.GetValues<eMonoRuntimeVariant>();
-            for (int i = 0; i < variantTypes.Length; i++)
+            foreach (var variant in monoFolderVariants)
             {
-                eMonoRuntimeVariant variant = variantTypes[i];
-                string variantName = Enum.GetName(variant);
-
                 // Iterate through Variations in Mono Directory Positions
                 foreach (var dir in directoriesToSearch)
                 {
                     // Get Directory Path
-                    string dirPath = Path.Combine(dir, variantName, "EmbedRuntime");
+                    string dirPath = Path.Combine(dir, variant, "EmbedRuntime");
                     if (!Directory.Exists(dirPath))
                         continue;
 
@@ -108,7 +114,7 @@ namespace MelonLoader.Unity
                     string posixPath = Path.Combine(dirPath, $"{monoPosixFileNameWithoutExt}{monoFileExt}");
 
                     // Get Config Directory Path
-                    string configPath = Path.Combine(dir, variantName, "etc");
+                    string configPath = Path.Combine(dir, variant, "etc");
 
                     // Iterate through all found Files in EmbedRuntime
                     foreach (var filePath in foundFiles)
@@ -129,6 +135,7 @@ namespace MelonLoader.Unity
                     }
                 }
             }
+
 
             // Return Nothing
             return null;

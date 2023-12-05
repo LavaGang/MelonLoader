@@ -30,7 +30,11 @@
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-      <ProjectReference Include="..\MelonLoader.Shared\MelonLoader.Shared.csproj" />
+      <ProjectReference Include="..\MelonLoader.Shared\MelonLoader.Shared.csproj">
+        <Private>False</Private>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+        <ExcludeAssets>runtime</ExcludeAssets>
+      </ProjectReference>
     </ItemGroup>
     <ItemDefinitionGroup>
         <PackageReference>

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.CoreCLR.Bootstrap</RootNamespace>
+		<TargetFrameworks>net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\CoreCLR\</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.CoreCLR.Bootstrap</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.456101" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj">
+        <Private>False</Private>
+        <ExcludeAssets>runtime</ExcludeAssets>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+    </ItemGroup>
+</Project>

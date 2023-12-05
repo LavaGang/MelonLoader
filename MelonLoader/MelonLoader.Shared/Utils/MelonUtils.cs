@@ -1,6 +1,6 @@
 using System;
 
-namespace MelonLoader.Shared.Utils
+namespace MelonLoader.Utils
 {
     public static class MelonUtils
     {

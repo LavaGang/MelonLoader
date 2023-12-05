@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace MelonLoader.Shared.Utils
+namespace MelonLoader.Utils
 {
     public static class MelonDebug
     {

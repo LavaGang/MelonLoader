@@ -1,12 +1,12 @@
-using MelonLoader.Shared.Utils;
+using MelonLoader.Utils;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
-using MelonLoader.Shared.Pastel;
-using static MelonLoader.Shared.Utils.LoggerUtils;
+using MelonLoader.Pastel;
+using static MelonLoader.Utils.LoggerUtils;
 
-namespace MelonLoader.Shared.Utils
+namespace MelonLoader.Utils
 {
     public class MelonLogger
     {

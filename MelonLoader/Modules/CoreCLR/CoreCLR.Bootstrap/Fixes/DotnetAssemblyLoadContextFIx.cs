@@ -1,4 +1,3 @@
-// #if NET6_0
 // using System;
 // using System.Collections.Generic;
 // using System.IO;
@@ -6,9 +5,9 @@
 // using System.Runtime.CompilerServices;
 // using System.Runtime.InteropServices;
 // using System.Runtime.Loader;
-// using MelonLoader.Shared.Utils;
+// using MelonLoader.Utils;
 //
-// namespace MelonLoader.Shared.Fixes
+// namespace MelonLoader.CoreClr.Bootstrap.Fixes
 // {
 //     internal class DotnetAssemblyLoadContextFix
 //     {
@@ -114,4 +113,3 @@
 //
 //     }
 // }
-// #endif

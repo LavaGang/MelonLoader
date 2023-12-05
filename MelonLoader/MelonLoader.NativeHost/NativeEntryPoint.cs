@@ -1,3 +1,4 @@
+using MelonLoader.Utils;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -45,16 +46,22 @@ namespace MelonLoader.NativeHost
                 Environment.Exit(1);
             }
         }
-        
+
+        public static Assembly? TryLoadAssembly(AssemblyLoadContext alc, string path)
+        {
+            if (File.Exists(path))
+                return alc.LoadFromAssemblyPath(path);
+            return null;
+        }
+
         private static Assembly? OnResolveAssembly(AssemblyLoadContext alc, AssemblyName name)
         {
-            var ourDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            // Get Assembly File Name
+            var filename = name.Name + ".dll";
 
-            var potentialDllPath = Path.Combine(ourDir, name.Name + ".dll");
-            if (File.Exists(potentialDllPath))
-                return alc.LoadFromAssemblyPath(potentialDllPath);
-
-            return null;
+            // Check Runtime Directory
+            var filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, filename);
+            return TryLoadAssembly(alc, filePath);
         }
     }
 }

@@ -1,4 +1,5 @@
 using MelonLoader.Bootstrap;
+using MelonLoader.CoreClr.Bootstrap.Fixes;
 
 namespace MelonLoader.NativeHost
 {
@@ -6,12 +7,20 @@ namespace MelonLoader.NativeHost
     {
         internal static unsafe void Initialize()
         {
-#if NET6_0
-            BootstrapInterop.HookAttach = NativeEntryPoint.Exports.HookAttach;
+            BootstrapInterop.HookAttach = HookAttach;
             BootstrapInterop.HookDetach = NativeEntryPoint.Exports.HookDetach;
-#endif
 
             Entrypoint.Entry();
+        }
+
+        private static unsafe void* HookAttach(void* target, void* detour)
+        {
+            // if (!CoreClrDelegateFixer.SanityCheckDetour(ref detour))
+            //     return IntPtr.Zero;
+
+            void* trampoline = NativeEntryPoint.Exports.HookAttach(target, detour);
+            NativeStackWalk.RegisterHookAddr((ulong)detour, $"Requested detour of 0x{(IntPtr)target:X}");
+            return trampoline;
         }
     }
 }

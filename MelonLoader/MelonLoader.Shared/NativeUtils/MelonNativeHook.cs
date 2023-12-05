@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using MelonLoader.Bootstrap;
 
-namespace MelonLoader.Shared.NativeUtils
+namespace MelonLoader.NativeUtils
 {
     public class MelonNativeHook<T> where T : Delegate
     {

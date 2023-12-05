@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace MelonLoader.Shared.Utils
+namespace MelonLoader.Utils
 {
     public static class MelonEnvironment
     {

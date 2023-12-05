@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using MelonLoader.Shared.Interfaces;
-using MelonLoader.Shared.Utils;
+using MelonLoader.Interfaces;
+using MelonLoader.Utils;
 
-namespace MelonLoader.Godot
+namespace MelonLoader.Godot.Bootstrap
 {
     public class Bootstrap : BootstrapModule
     {

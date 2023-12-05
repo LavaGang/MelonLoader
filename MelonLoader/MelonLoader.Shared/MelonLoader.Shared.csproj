@@ -13,7 +13,7 @@
         <PublishTrimmed>false</PublishTrimmed>
 
         <Version>1.0.0</Version>
-        <PackageId>LavaGang.MelonLoader.Shared</PackageId>
+        <PackageId>LavaGang.MelonLoader</PackageId>
         <PackageTags>modding games</PackageTags>
         <RepositoryUrl>https://github.com/LavaGang/MelonLoader</RepositoryUrl>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -27,14 +27,13 @@
     <PropertyGroup>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <RootNamespace>MelonLoader</RootNamespace>
+        <AssemblyName>MelonLoader.Shared</AssemblyName>
     </PropertyGroup>
     <ItemDefinitionGroup>
         <PackageReference>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemDefinitionGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net6'">
-        <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.4.416101" />
-    </ItemGroup>
 
 </Project>

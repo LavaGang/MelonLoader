@@ -1,12 +1,17 @@
-﻿using MelonLoader.Shared.Utils;
+﻿using MelonLoader.Fixes;
+using MelonLoader.Utils;
+using System;
 
-namespace MelonLoader.Shared
+namespace MelonLoader
 {
     public class Core
     {
         public static void Startup()
         {
             MelonEnvironment.Initialize();
+
+            UnhandledException.Install(AppDomain.CurrentDomain);
+            AssemblyResolveSearchFix.Install();
         }
 
         public static void OnApplicationPreStart()

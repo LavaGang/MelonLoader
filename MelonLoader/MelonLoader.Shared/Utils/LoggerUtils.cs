@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace MelonLoader.Shared.Utils
+namespace MelonLoader.Utils
 {
     internal static class LoggerUtils
     {
