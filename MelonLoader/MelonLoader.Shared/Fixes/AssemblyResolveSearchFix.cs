@@ -34,7 +34,7 @@ namespace MelonLoader.Fixes
         {
             if (File.Exists(path))
             {
-                MelonDebug.Msg($"[AssemblyResolveSearchFix] Loading from {path}...");
+                MelonDebug.Msg($"[{nameof(AssemblyResolveSearchFix)}] Loading from {path}...");
                 return alc.LoadFromAssemblyPath(path);
             }
 
@@ -61,7 +61,7 @@ namespace MelonLoader.Fixes
             }
 
             if (ret == null)
-                MelonDebug.Msg($"[DotnetManagedFolder] Failed to find {filename} in any of the known search directories");
+                MelonDebug.Msg($"[{nameof(AssemblyResolveSearchFix)}] Failed to find {filename} in any of the known search directories");
             return ret;
         }
 #endif
