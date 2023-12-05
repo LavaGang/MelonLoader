@@ -1,4 +1,4 @@
-﻿namespace MelonLoader.Unity.Mono
+﻿namespace MelonLoader.Mono
 {
     public class MonoRuntimeInfo
     {

@@ -1,6 +1,8 @@
 ﻿using System.IO;
+using MelonLoader.Mono;
 using MelonLoader.Shared.Interfaces;
 using MelonLoader.Shared.Utils;
+using MelonLoader.Unity.Il2Cpp;
 
 namespace MelonLoader.Unity
 {
@@ -40,12 +42,21 @@ namespace MelonLoader.Unity
             // Check if GameAssembly exists
             string gameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
             if (File.Exists(gameAssemblyPath))
-                Il2Cpp.BootstrapIl2Cpp.Startup(gameAssemblyPath); // Start Il2Cpp Support
+            {
+                // Start Il2Cpp Support
+                MelonLogger.Msg("Engine Variant: Il2Cpp");
+                Il2CppLoader.Startup(gameAssemblyPath); 
+            }
             else
-                Mono.BootstrapMono.Startup(GetMonoRuntimeInfo()); // Start Mono Support
+            { 
+                // Start Mono Support
+                MonoRuntimeInfo runtimeInfo = GetMonoRuntimeInfo();
+                MelonLogger.Msg($"Engine Variant: {runtimeInfo.Variant}");
+                MonoLoader.Startup(runtimeInfo);
+            }
         }
 
-        internal static Mono.MonoRuntimeInfo GetMonoRuntimeInfo()
+        internal static MonoRuntimeInfo GetMonoRuntimeInfo()
         {
             // Folders the Mono folders might be located in
             string[] directoriesToSearch = new string[]

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using MelonLoader.Bootstrap;
 using MelonLoader.Shared.NativeUtils;
 using MelonLoader.Shared.Utils;
 #pragma warning disable 0649
 
-namespace MelonLoader.Unity.Mono
+namespace MelonLoader.Mono
 {
-    internal unsafe static class BootstrapMono
+    public unsafe static class MonoLoader
     {
         #region Private Members
 
@@ -24,7 +20,7 @@ namespace MelonLoader.Unity.Mono
 
         #region Bootstrap
 
-        internal unsafe static void Startup(MonoRuntimeInfo runtimeInfo)
+        public unsafe static void Startup(MonoRuntimeInfo runtimeInfo)
         {
             // Apply the information
             monoRuntimeInfo = runtimeInfo;
@@ -33,13 +29,9 @@ namespace MelonLoader.Unity.Mono
             if (monoRuntimeInfo == null
                 || string.IsNullOrEmpty(monoRuntimeInfo.FilePath))
             {
-                Assertion.ThrowInternalFailure($"Failed to find Mono or MonoBleedingEdge Library!");
+                Assertion.ThrowInternalFailure($"Failed to find {runtimeInfo.Variant} Library!");
                 return;
             }
-
-
-            // Log Engine Variant
-            MelonLogger.Msg($"Engine Variant: {monoRuntimeInfo.Variant}");
 
             // Check if there is a Posix Helper included with the Mono variant library
             if (!string.IsNullOrEmpty(monoRuntimeInfo.PosixPath))

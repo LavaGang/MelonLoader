@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <RootNamespace>MelonLoader.Unity</RootNamespace>
+        <RootNamespace>MelonLoader.Unity.Il2Cpp</RootNamespace>
         <TargetFramework>net6</TargetFramework>
         <LangVersion>Latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -10,8 +10,6 @@
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" Private="false" ExcludeAssets="runtime" />
-      <ProjectReference Include="..\..\..\MelonLoader.Mono\MelonLoader.Mono.csproj" />
       <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
-      <ProjectReference Include="..\Unity.Il2Cpp\Unity.Il2Cpp.csproj" />
     </ItemGroup>
 </Project>
