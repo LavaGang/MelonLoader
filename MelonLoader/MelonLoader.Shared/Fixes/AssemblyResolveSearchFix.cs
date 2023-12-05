@@ -17,7 +17,6 @@ namespace MelonLoader.Fixes
 #if NET6_0
             SearchableDirectories = new string[]
             {
-                Path.Combine(MelonEnvironment.MelonLoaderDirectory, "net6"),
                 MelonEnvironment.ModulesDirectory,
                 MelonEnvironment.UserLibsDirectory,
                 MelonEnvironment.PluginsDirectory,
