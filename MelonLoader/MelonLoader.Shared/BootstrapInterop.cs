@@ -22,14 +22,14 @@ namespace MelonLoader.Bootstrap
         public static dHookAttach HookAttach;
         public static IntPtr NativeHookAttach(IntPtr target, IntPtr detour)
         {
-            var trampoline = (IntPtr)HookAttach((void*)target, (void*)detour);
+            var trampoline = new IntPtr(HookAttach(target.ToPointer(), detour.ToPointer()));
             MelonLogger.Msg(trampoline.ToString("X"));
             return trampoline;
         }
 
         public static delegate* unmanaged<void*, void> HookDetach;
         public static void NativeHookDetach(IntPtr target)
-            => HookDetach((void*)target);
+            => HookDetach(target.ToPointer());
 
 #else
 

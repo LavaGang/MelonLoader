@@ -9,13 +9,13 @@ using MelonLoader.Utils;
 
 namespace MelonLoader.CoreClr.Bootstrap.Fixes
 {
-    internal class CoreClrDelegateFixer
+    public class CoreClrDelegateFixer
     {
         private static readonly AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(new("MelonLoaderFixedHooks"), AssemblyBuilderAccess.Run);
         private static readonly ModuleBuilder module = assembly.DefineDynamicModule("MelonLoaderFixedHooks");
         private static readonly List<Delegate> PinnedFixedDelegates = new List<Delegate>();
 
-        internal static bool SanityCheckDetour(ref IntPtr detour)
+        public static bool SanityCheckDetour(ref IntPtr detour)
         {
             using DataTarget dt = DataTarget.CreateSnapshotAndAttach(Environment.ProcessId);
             ClrRuntime runtime = dt.ClrVersions.First().CreateRuntime();

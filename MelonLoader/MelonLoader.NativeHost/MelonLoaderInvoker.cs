@@ -15,10 +15,11 @@ namespace MelonLoader.NativeHost
 
         private static unsafe void* HookAttach(void* target, void* detour)
         {
-            // if (!CoreClrDelegateFixer.SanityCheckDetour(ref detour))
-            //     return IntPtr.Zero;
+            IntPtr detourPtr = (IntPtr)detour;
+            //if (!CoreClrDelegateFixer.SanityCheckDetour(ref detourPtr))
+            //    return (void*)0;
 
-            void* trampoline = NativeEntryPoint.Exports.HookAttach(target, detour);
+            void* trampoline = NativeEntryPoint.Exports.HookAttach(target, (void*)detourPtr);
             NativeStackWalk.RegisterHookAddr((ulong)detour, $"Requested detour of 0x{(IntPtr)target:X}");
             return trampoline;
         }

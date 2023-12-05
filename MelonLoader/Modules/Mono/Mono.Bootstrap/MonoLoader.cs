@@ -14,7 +14,7 @@ namespace MelonLoader.Mono.Bootstrap
 
         private static IntPtr monoDomain;
 
-        private static MelonNativeHook<MonoLibrary.d_mono_jit_init_version> mono_jit_init_version_hook;
+        private static MelonNativeDetour<MonoLibrary.d_mono_runtime_invoke> mono_runtime_invoke_detour;
 
         #endregion
 
@@ -51,19 +51,8 @@ namespace MelonLoader.Mono.Bootstrap
             if (!CheckExports())
                 return;
 
-            // Create Hooks
-            CreateHooks();
-
-            // Attach mono_jit_init_version Hook
-            MelonDebug.Msg($"Attaching Hook to {nameof(MonoLibrary.Instance.mono_jit_init_version)}...");
-            mono_jit_init_version_hook.Attach();
-        }
-
-        private static void CreateHooks()
-        {
-            mono_jit_init_version_hook = new MelonNativeHook<MonoLibrary.d_mono_jit_init_version>(
-                Marshal.GetFunctionPointerForDelegate(MonoLibrary.Instance.mono_jit_init_version),
-                Marshal.GetFunctionPointerForDelegate(h_mono_jit_init_version));
+            // Attach mono_runtime_invoke Detour
+            mono_runtime_invoke_detour = new(MonoLibrary.Instance.mono_runtime_invoke.GetFunctionPointer(), h_mono_runtime_invoke);
         }
 
         private static bool LoadPosixHelper()
@@ -101,9 +90,9 @@ namespace MelonLoader.Mono.Bootstrap
             }
 
             // See if any Exports Failed
-            if (MonoLibrary.Instance.mono_jit_init_version == null)
+            if (MonoLibrary.Instance.mono_runtime_invoke == null)
             {
-                Assertion.ThrowInternalFailure($"Failed to find {nameof(MonoLibrary.Instance.mono_jit_init_version)} Export in {RuntimeInfo.Variant} Library!");
+                Assertion.ThrowInternalFailure($"Failed to find {nameof(MonoLibrary.Instance.mono_runtime_invoke)} Export in {RuntimeInfo.Variant} Library!");
                 return false;
             }
 
@@ -112,9 +101,9 @@ namespace MelonLoader.Mono.Bootstrap
 
         private static bool CheckExports()
         {
-            if (MonoLibrary.Instance.mono_jit_init_version == null)
+            if (MonoLibrary.Instance.mono_runtime_invoke == null)
             {
-                Assertion.ThrowInternalFailure($"Failed to find {nameof(MonoLibrary.Instance.mono_jit_init_version)} Export in {RuntimeInfo.Variant} Library!");
+                Assertion.ThrowInternalFailure($"Failed to find {nameof(MonoLibrary.Instance.mono_runtime_invoke)} Export in {RuntimeInfo.Variant} Library!");
                 return false;
             }
 
@@ -125,20 +114,9 @@ namespace MelonLoader.Mono.Bootstrap
 
         #region Hooks
 
-        private static IntPtr h_mono_jit_init_version(IntPtr name, IntPtr version)
+        private static IntPtr h_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc)
         {
-            // Detach Hook
-            MelonDebug.Msg($"Detaching Hook from mono_jit_init_version...");
-            mono_jit_init_version_hook.Detach();
-
-            // Run Original
-            MelonDebug.Msg("Creating Mono Domain...");
-            monoDomain = MonoLibrary.Instance.mono_jit_init_version(name, version);
-
-            // Attempt to load ML into the Mono Domain
-
-            // Return Domain
-            return monoDomain;
+            return mono_runtime_invoke_detour.Trampoline(method, obj, param, ref exc);
         }
 
         #endregion
