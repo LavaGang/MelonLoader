@@ -1,9 +1,10 @@
 using System;
-using System.Runtime.CompilerServices;
 
 #if NET6_0
 using System.Runtime.InteropServices;
 using MelonLoader.Utils;
+#else
+using System.Runtime.CompilerServices;
 #endif
 
 namespace MelonLoader.Bootstrap

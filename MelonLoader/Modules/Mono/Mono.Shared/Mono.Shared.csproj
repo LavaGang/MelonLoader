@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <RootNamespace>MelonLoader.Mono</RootNamespace>
-		<TargetFrameworks>net35;net6</TargetFrameworks>
+		<TargetFrameworks>net35;netstandard2.1;net6</TargetFrameworks>
         <LangVersion>Latest</LangVersion>
         <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Mono\</OutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
