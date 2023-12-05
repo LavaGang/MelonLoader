@@ -9,6 +9,10 @@
         <AssemblyName>MelonLoader.Mono.Shared</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
+      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj">
+        <Private>False</Private>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+        <ExcludeAssets>runtime</ExcludeAssets>
+      </ProjectReference>
     </ItemGroup>
 </Project>

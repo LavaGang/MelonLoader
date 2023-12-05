@@ -15,7 +15,7 @@
       </ProjectReference>
       <ProjectReference Include="..\..\Mono\Mono.Bootstrap\Mono.Bootstrap.csproj">
         <Private>False</Private>
-        <ExcludeAssets>runtime</ExcludeAssets>
+        <ExcludeAssets>all</ExcludeAssets>
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
     </ItemGroup>

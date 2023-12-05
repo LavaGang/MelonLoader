@@ -10,7 +10,13 @@
         <AssemblyName>MelonLoader.Mono.Bootstrap</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
-      <ProjectReference Include="..\Mono.Shared\Mono.Shared.csproj" />
+      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+      <ProjectReference Include="..\Mono.Shared\Mono.Shared.csproj">
+        <ExcludeAssets>runtime</ExcludeAssets>
+        <Private>False</Private>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
     </ItemGroup>
 </Project>
