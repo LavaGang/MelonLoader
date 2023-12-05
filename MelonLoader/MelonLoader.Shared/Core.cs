@@ -8,12 +8,12 @@ namespace MelonLoader
     {
         public static void Startup()
         {
-            MelonDebug.Msg("MelonLoader.Core.Startup");
-
             MelonEnvironment.Initialize();
+            MelonDebug.Msg("MelonLoader.Core.Startup");
 
             UnhandledException.Install(AppDomain.CurrentDomain);
             AssemblyResolveSearchFix.Install();
+
         }
 
         public static void OnApplicationPreStart()
