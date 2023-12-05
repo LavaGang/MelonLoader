@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using MelonLoader.Shared.NativeUtils;
 using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Bootstrap

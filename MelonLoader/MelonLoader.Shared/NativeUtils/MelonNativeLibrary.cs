@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using MelonLoader.Bootstrap;
 using MelonLoader.Shared.Utils;
 
 namespace MelonLoader.Shared.NativeUtils
@@ -26,7 +27,7 @@ namespace MelonLoader.Shared.NativeUtils
                 throw new ArgumentNullException(nameof(name));
 
             // Get Native Library Pointer
-            IntPtr ptr = NativeLoad(name);
+            IntPtr ptr = BootstrapInterop.NativeLoadLib(name);
             if (ptr == IntPtr.Zero)
 #if NET6_0
                 throw new Exception($"Unable to Load Native Library {name}!");
@@ -61,7 +62,7 @@ namespace MelonLoader.Shared.NativeUtils
                 throw new ArgumentNullException(nameof(name));
 
             // Get the Export Pointer
-            IntPtr returnval = NativeGetExport(handle, name);
+            IntPtr returnval = BootstrapInterop.NativeGetExport(handle, name);
             if (returnval == IntPtr.Zero)
 #if NET6_0
                 throw new Exception($"Unable to Find Native Library Export {name}!");
@@ -112,74 +113,9 @@ namespace MelonLoader.Shared.NativeUtils
             return instance;
         }
 
-#if NET6_0
-
-        private static IntPtr NativeLoad(string name)
-            => NativeLibrary.Load(name);
-
-        private static IntPtr NativeGetExport(IntPtr handle, string name)
-            => NativeLibrary.GetExport(handle, name);
-
-#else
-
-        private static IntPtr NativeLoad(string name)
-        {
-            var platform = Environment.OSVersion.Platform;
-
-            switch (platform)
-            {
-                case PlatformID.Win32S:
-                case PlatformID.Win32Windows:
-                case PlatformID.Win32NT:
-                case PlatformID.WinCE:
-                    return LoadLibrary(name);
-
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    return dlopen(name, RTLD_NOW);
-            }
-
-            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
-        }
-
-        private static IntPtr NativeGetExport(IntPtr handle, string lpProcName)
-        {
-            var platform = Environment.OSVersion.Platform;
-
-            switch (platform)
-            {
-                case PlatformID.Win32S:
-                case PlatformID.Win32Windows:
-                case PlatformID.Win32NT:
-                case PlatformID.WinCE:
-                    return GetProcAddress(handle, lpProcName);
-
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    return dlsym(handle, lpProcName);
-            }
-
-            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
-        }
-
-        private const int RTLD_NOW = 2; // for dlopen's flags 
-
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern IntPtr LoadLibrary(string name);
-        [DllImport("kernel32")]
-        private static extern IntPtr GetProcAddress(IntPtr handle, string name);
-        [DllImport("kernel32")]
-        private static extern IntPtr FreeLibrary(IntPtr handle);
-
-        [DllImport("libdl.so.2")]
-        private static extern IntPtr dlopen(string filename, int flags);
-        [DllImport("libdl.so.2")]
-        private static extern IntPtr dlsym(IntPtr handle, string symbol);
+#if !NET6_0
         [DllImport("libdl.so.2")]
         private static extern IntPtr dlerror();
-        [DllImport("libdl.so.2")]
-        private static extern int dlclose(IntPtr handle);
-
 #endif
     }
 }
