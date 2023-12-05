@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Godot.Bootstrap", "Modules\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unity.Bootstrap", "Modules\Unity\Unity.Bootstrap\Unity.Bootstrap.csproj", "{75F7B154-10E0-484F-A463-16376FFA5553}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.Mono", "MelonLoader.Mono\MelonLoader.Mono.csproj", "{712BC5B3-766A-4B44-9BF4-1012BE63D6F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.Bootstrap.Mono", "MelonLoader.Bootstrap.Mono\MelonLoader.Bootstrap.Mono.csproj", "{712BC5B3-766A-4B44-9BF4-1012BE63D6F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unity.Il2Cpp", "Modules\Unity\Unity.Il2Cpp\Unity.Il2Cpp.csproj", "{9EBD236C-42FC-4E98-8388-E763BA46FD10}"
 EndProject

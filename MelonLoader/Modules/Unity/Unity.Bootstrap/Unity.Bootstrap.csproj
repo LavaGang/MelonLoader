@@ -10,7 +10,7 @@
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\..\MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj" Private="false" ExcludeAssets="runtime" />
-      <ProjectReference Include="..\..\..\MelonLoader.Mono\MelonLoader.Mono.csproj" />
+      <ProjectReference Include="..\..\..\MelonLoader.Mono\MelonLoader.Bootstrap.Mono.csproj" />
       <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime" />
       <ProjectReference Include="..\Unity.Il2Cpp\Unity.Il2Cpp.csproj" />
     </ItemGroup>
