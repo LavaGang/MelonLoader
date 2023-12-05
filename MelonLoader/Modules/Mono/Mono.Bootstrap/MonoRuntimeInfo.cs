@@ -13,6 +13,8 @@ namespace MelonLoader.Mono.Bootstrap
         public string ConfigPath { get; private set; }
         public string PosixPath { get; private set; }
 
+        public string[] TriggerMethods { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -20,15 +22,17 @@ namespace MelonLoader.Mono.Bootstrap
         public MonoRuntimeInfo(
             eMonoRuntimeVariant variant,
             string libPath,
-            string configPath)
-            => SetInfo(variant, libPath, configPath, null);
+            string configPath,
+            string[] triggerMethods)
+            => SetInfo(variant, libPath, configPath, triggerMethods, null);
 
         public MonoRuntimeInfo(
             eMonoRuntimeVariant variant, 
             string libPath, 
             string configPath,
+            string[] triggerMethods,
             string posixPath)
-            => SetInfo(variant, libPath, configPath, posixPath);
+            => SetInfo(variant, libPath, configPath, triggerMethods, posixPath);
 
         #endregion
 
@@ -38,6 +42,7 @@ namespace MelonLoader.Mono.Bootstrap
             eMonoRuntimeVariant variant, 
             string libPath,
             string configPath,
+            string[] triggerMethods,
             string posixPath)
         {
             Variant = variant;
@@ -45,7 +50,10 @@ namespace MelonLoader.Mono.Bootstrap
 
             LibPath = libPath;
             ConfigPath = configPath;
+
             PosixPath = posixPath;
+
+            TriggerMethods = triggerMethods;
         }
 
         #endregion

@@ -3,6 +3,7 @@ using MelonLoader.Interfaces;
 using MelonLoader.Utils;
 using MelonLoader.Mono.Bootstrap;
 using System;
+using System.Collections.Generic;
 
 namespace MelonLoader.Unity
 {
@@ -126,13 +127,31 @@ namespace MelonLoader.Unity
                             && !fileName.StartsWith($"{monoFileNameWithoutExt}-") && fileName.EndsWith(monoFileExt))
                             continue;
 
+                        // Get Variant Id
+                        eMonoRuntimeVariant variantId = (variant == monoFolderVariants[0])
+                            ? eMonoRuntimeVariant.Mono
+                            : eMonoRuntimeVariant.MonoBleedingEdge;
+
+                        // Get Trigger Methods
+                        List<string> triggerMethods = new()
+                        {
+                            "Internal_ActiveSceneChanged",
+                            "UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize"
+                        };
+
+                        // If Old Mono then Add a few more
+                        if (variantId == eMonoRuntimeVariant.Mono)
+                        {
+                            triggerMethods.Add("Awake");
+                            triggerMethods.Add("DoSendMouseEvents");
+                        }
+
                         // Return Information
                         return new MonoRuntimeInfo(
-                            (variant == monoFolderVariants[0]) 
-                            ? eMonoRuntimeVariant.Mono
-                            : eMonoRuntimeVariant.MonoBleedingEdge,
+                            variantId,
                             filePath,
                             configPath,
+                            triggerMethods.ToArray(),
                             posixPath
                         );
                     }

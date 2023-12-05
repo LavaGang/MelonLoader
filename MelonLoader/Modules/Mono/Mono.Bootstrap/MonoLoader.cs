@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using MelonLoader.NativeUtils;
 using MelonLoader.Utils;
@@ -173,13 +174,12 @@ namespace MelonLoader.Mono.Bootstrap
             // Get Method Name
             string methodName = Marshal.PtrToStringAnsi(MonoLibrary.Instance.mono_method_get_name(method));
 
-            // Check for Trigger Methods
-            if (methodName.Contains("Internal_ActiveSceneChanged")
-                || methodName.Contains("UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize")
-                || ((RuntimeInfo.Variant == eMonoRuntimeVariant.Mono)
-                    && (methodName.Contains("Awake") 
-                        || methodName.Contains("DoSendMouseEvents"))))
+            // Check for Trigger Method
+            foreach (string triggerMethod in RuntimeInfo.TriggerMethods)
             {
+                if (!methodName.Contains(triggerMethod))
+                    continue;
+
                 // Detach mono_runtime_invoke Detour
                 mono_runtime_invoke_detour.Detach();
 
