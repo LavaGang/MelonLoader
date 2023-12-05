@@ -1,10 +1,14 @@
-﻿namespace MelonLoader.Mono.Bootstrap
+﻿using System;
+
+namespace MelonLoader.Mono.Bootstrap
 {
     public class MonoRuntimeInfo
     {
         #region Public Members
 
-        public string Variant { get; private set; }
+        public eMonoRuntimeVariant Variant { get; private set; }
+        public string VariantName { get; private set; }
+
         public string LibPath { get; private set; }
         public string ConfigPath { get; private set; }
         public string PosixPath { get; private set; }
@@ -14,13 +18,13 @@
         #region Constructors
 
         public MonoRuntimeInfo(
-            string variant,
+            eMonoRuntimeVariant variant,
             string libPath,
             string configPath)
             => SetInfo(variant, libPath, configPath, null);
 
         public MonoRuntimeInfo(
-            string variant, 
+            eMonoRuntimeVariant variant, 
             string libPath, 
             string configPath,
             string posixPath)
@@ -31,12 +35,14 @@
         #region Private Methods
 
         private void SetInfo(
-            string variant, 
+            eMonoRuntimeVariant variant, 
             string libPath,
             string configPath,
             string posixPath)
         {
             Variant = variant;
+            VariantName = Enum.GetName(variant);
+
             LibPath = libPath;
             ConfigPath = configPath;
             PosixPath = posixPath;

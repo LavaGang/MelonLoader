@@ -53,13 +53,22 @@ namespace MelonLoader.Mono
         #region Exports
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public unsafe delegate IntPtr d_mono_jit_init_version([MarshalAs(UnmanagedType.LPStr)] string name, [MarshalAs(UnmanagedType.LPStr)] string version);
-        public d_mono_jit_init_version mono_jit_init_version;
+        public unsafe delegate IntPtr d_mono_init_version([MarshalAs(UnmanagedType.LPStr)] string name, [MarshalAs(UnmanagedType.LPStr)] string version);
+        public d_mono_init_version mono_init_version;
+        public d_mono_init_version mono_jit_init_version;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public unsafe delegate IntPtr d_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc);
         public d_mono_runtime_invoke mono_runtime_invoke;
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr d_mono_method_get_name(IntPtr method);
+        public d_mono_method_get_name mono_method_get_name;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr d_mono_domain_get();
+        public d_mono_domain_get mono_domain_get;
+        
         #endregion
     }
 }

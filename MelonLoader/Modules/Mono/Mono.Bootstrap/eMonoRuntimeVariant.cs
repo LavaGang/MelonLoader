@@ -2,7 +2,7 @@
 {
     public enum eMonoRuntimeVariant
     {
-        MONO = 0,
-        MONO_BLEEDING_EDGE = 1
+        Mono = 0,
+        MonoBleedingEdge = 1
     }
 }

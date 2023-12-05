@@ -23,7 +23,7 @@ namespace MelonLoader.Bootstrap
         public static IntPtr NativeHookAttach(IntPtr target, IntPtr detour)
         {
             var trampoline = new IntPtr(HookAttach(target.ToPointer(), detour.ToPointer()));
-            MelonLogger.Msg(trampoline.ToString("X"));
+            //MelonLogger.Msg(trampoline.ToString("X"));
             return trampoline;
         }
 

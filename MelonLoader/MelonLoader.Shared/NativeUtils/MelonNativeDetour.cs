@@ -1,4 +1,5 @@
 ﻿using MelonLoader.Bootstrap;
+using MelonLoader.Utils;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -78,8 +79,14 @@ namespace MelonLoader.NativeUtils
 
         #region Constructors
 
-        public MelonNativeDetour(IntPtr target, T detour) : this(target, detour, true) { }
-        public MelonNativeDetour(IntPtr target, T detour, bool autoAttach)
+        public MelonNativeDetour(T target, T detour) : this(target.GetFunctionPointer(), detour.GetFunctionPointer(), true) { }
+        public MelonNativeDetour(T target, T detour, bool autoAttach) : this(target.GetFunctionPointer(), detour.GetFunctionPointer(), autoAttach) { }
+
+        public MelonNativeDetour(IntPtr target, T detour) : this(target, detour.GetFunctionPointer(), true) { }
+        public MelonNativeDetour(IntPtr target, T detour, bool autoAttach) : this(target, detour.GetFunctionPointer(), autoAttach) { }
+
+        public MelonNativeDetour(IntPtr target, IntPtr detour) : this(target, detour, true) { }
+        public MelonNativeDetour(IntPtr target, IntPtr detour, bool autoAttach)
         {
             if (target == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(target));
@@ -88,7 +95,7 @@ namespace MelonLoader.NativeUtils
                 throw new ArgumentNullException(nameof(detour));
 
             _targetHandle = target;
-            _detourHandle = Marshal.GetFunctionPointerForDelegate(detour);
+            _detourHandle = detour;
 
             if (autoAttach)
                 Attach();

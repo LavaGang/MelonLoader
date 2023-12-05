@@ -2,6 +2,7 @@
 using MelonLoader.Interfaces;
 using MelonLoader.Utils;
 using MelonLoader.Mono.Bootstrap;
+using System;
 
 namespace MelonLoader.Unity
 {
@@ -54,7 +55,7 @@ namespace MelonLoader.Unity
                     Assertion.ThrowInternalFailure("Failed to get Mono Runtime Info!");
                 else
                 {
-                    MelonLogger.Msg($"Engine Variant: {runtimeInfo.Variant}");
+                    MelonLogger.Msg($"Engine Variant: {runtimeInfo.VariantName}");
                     MonoLoader.Startup(runtimeInfo);
                 }
             }
@@ -127,7 +128,9 @@ namespace MelonLoader.Unity
 
                         // Return Information
                         return new MonoRuntimeInfo(
-                            variant,
+                            (variant == monoFolderVariants[0]) 
+                            ? eMonoRuntimeVariant.Mono
+                            : eMonoRuntimeVariant.MonoBleedingEdge,
                             filePath,
                             configPath,
                             posixPath
