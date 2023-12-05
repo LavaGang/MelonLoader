@@ -1,4 +1,5 @@
 using System;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Fixes
 {
@@ -7,6 +8,6 @@ namespace MelonLoader.Fixes
         public static void Install(AppDomain domain) =>
             domain.UnhandledException +=
                 (sender, args) =>
-                    Console.WriteLine((args.ExceptionObject as Exception).ToString());
+                    MelonLogger.Error((args.ExceptionObject as Exception).ToString());
     }
 }

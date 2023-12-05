@@ -243,18 +243,16 @@ namespace MelonLoader.Mono.Bootstrap
             
             // Invoke MelonLoader.BootstrapInterop.LoadStage1()
             MelonDebug.Msg($"Invoking {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls...");
-            IntPtr exc = IntPtr.Zero;
-
-            var writeToLogFile = (void*)BootstrapInterop.WriteLogToFile;
-            MonoLibrary.Instance.mono_runtime_invoke(mlSharedLoadInternalCalls, IntPtr.Zero, &writeToLogFile, ref exc);
-
+            MonoLibrary.Instance.InvokeMethod(mlSharedLoadInternalCalls, IntPtr.Zero,
+                (IntPtr)BootstrapInterop.WriteLogToFile);
+            
             // Invoke MelonLoader.Core.Startup()
             MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)}...");
-            MonoLibrary.Instance.mono_runtime_invoke(mlShared_Startup, IntPtr.Zero, (void**)null, ref exc);
+            MonoLibrary.Instance.InvokeMethod(mlShared_Startup, IntPtr.Zero);
 
             // Invoke MelonLoader.Core.PreStart()
             MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationPreStart)}...");
-            MonoLibrary.Instance.mono_runtime_invoke(mlShared_OnApplicationPreStart, IntPtr.Zero, (void**)null, ref exc);
+            MonoLibrary.Instance.InvokeMethod(mlShared_OnApplicationPreStart, IntPtr.Zero);
 
             // Attach mono_runtime_invoke Detour
             MelonDebug.Msg($"Attaching mono_runtime_invoke Detour...");
@@ -314,5 +312,18 @@ namespace MelonLoader.Mono.Bootstrap
         }
 
         #endregion
+        
+        private struct Void { };
+        public static IntPtr IntPtrAdd(IntPtr pointer, Int32 offset) => (IntPtr)((Void*)pointer + offset);
+        
+        public static IntPtr[] IntPtrToArray(IntPtr ptr)
+        {
+            long length = *((long*)ptr + 3);
+            IntPtr[] result = new IntPtr[length];
+            for (int i = 0; i < length; i++)
+                result[i] = *(IntPtr*)(IntPtrAdd((IntPtr)((long*)ptr + 4), (i * IntPtr.Size)));
+            return result;
+        }
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -100,6 +101,38 @@ namespace MelonLoader.Mono
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public unsafe delegate IntPtr d_mono_runtime_invoke(IntPtr method, IntPtr obj, void** param, ref IntPtr exc);
         public d_mono_runtime_invoke mono_runtime_invoke;
+
+        #endregion
+        
+        #region Utility Methods
+        
+        public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj)
+        {
+            return InvokeMethod(method, obj, (void**)IntPtr.Zero);
+        }
+        
+        public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj, params IntPtr[] parameters)
+        {
+            fixed (void* parameterF = &parameters[0])
+                return InvokeMethod(method, obj, (void**)parameterF);
+        }
+        
+        public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj, void** param)
+        {
+            if (method == IntPtr.Zero)
+                return IntPtr.Zero;
+
+            IntPtr exc = IntPtr.Zero;
+            IntPtr returnVal = mono_runtime_invoke(method, obj, param, ref exc);
+
+            //TODO: Exception to String
+            if (exc != IntPtr.Zero)
+            {
+                throw new InvalidOperationException("Exception occurred in Mono Method!");
+            }
+            
+            return returnVal;
+        }
 
         #endregion
     }

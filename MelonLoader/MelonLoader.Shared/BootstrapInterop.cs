@@ -50,29 +50,28 @@ namespace MelonLoader
             => HookDetach(target.ToPointer());
 
 #else
-        public static void LoadInternalCalls(IntPtr writeToLogFile)
+        public static void LoadInternalCalls(void* writeToLogFile)
         {
-            pWriteLogToFile = writeToLogFile;
+            pWriteLogToFile = (IntPtr)writeToLogFile;
         }
         
-        private delegate void dWriteLogToFile(IntPtr log, int logLength);
-        public static IntPtr pWriteLogToFile = IntPtr.Zero;
-        private static MethodInfo mWriteLogToFile = null;
-        
+        private delegate void dWriteLogToFile(byte* log, int logLength);
+        private static IntPtr pWriteLogToFile = IntPtr.Zero;
+
         public static void NativeWriteLogToFile(string logString)
         {
             if (pWriteLogToFile == IntPtr.Zero)
                 throw new NullReferenceException("pWriteLogToFile is null!");
-
-            if (mWriteLogToFile == null)
-                mWriteLogToFile = Marshal.GetDelegateForFunctionPointer(pWriteLogToFile, typeof(dWriteLogToFile))
-                    .Method;
-
+            
+            if (!logString.EndsWith("\n"))
+                logString += "\n";
+            
             var log = MelonUtils.StringToBytes(logString);
             var ptr = Marshal.AllocHGlobal(log.Length);
             Marshal.Copy(log, 0, ptr, log.Length);
-            
-            mWriteLogToFile.Invoke(null, new object[] { ptr, log.Length });
+
+            var function = (dWriteLogToFile)Marshal.GetDelegateForFunctionPointer(pWriteLogToFile, typeof(dWriteLogToFile));
+            function((byte*)ptr, log.Length);
             
             Marshal.FreeHGlobal(ptr);
         }

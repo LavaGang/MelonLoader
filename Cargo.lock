@@ -1222,6 +1222,7 @@ dependencies = [
  "ndk-sys",
  "netcorehost",
  "thiserror",
+ "utf16string",
  "winapi",
 ]
 

@@ -1,8 +1,7 @@
-use crate::{
-    constants, debug_enabled,
-};
+use crate::{constants, debug_enabled};
 use colored::Colorize;
-use std::{io::Write, error::Error};
+use utf16string::{WStr, LittleEndian, WString, BE, LE};
+use std::{error::Error, io::Write};
 
 #[derive(Debug)]
 #[repr(u8)]
@@ -29,7 +28,10 @@ impl std::convert::TryFrom<u8> for LogLevel {
 
 macro_rules! log_path {
     () => {
-        $crate::environment::paths::get_base_dir().unwrap().join("MelonLoader").join("Latest.log")
+        $crate::environment::paths::get_base_dir()
+            .unwrap()
+            .join("MelonLoader")
+            .join("Latest.log")
     };
 }
 
@@ -41,7 +43,7 @@ pub fn init() -> Result<(), Box<dyn Error>> {
         std::fs::File::create(log_file)?;
 
         //BOM for UTF-16
-        write_bytes(&[255,254])?; 
+        write_bytes(&[255, 254])?;
     }
 
     Ok(())
@@ -56,11 +58,8 @@ pub fn write(msg: &str) -> Result<(), Box<dyn Error>> {
         .create(true)
         .open(&log_file)?;
 
-    let message = format!("{}\r\n", msg);
-
-    for utf16 in message.encode_utf16() {
-        file.write_all(&utf16.to_le_bytes())?;
-    }
+    let message = WString::<LE>::from(format!("{}\r\n", msg).as_str());
+    file.write_all(message.as_bytes())?;
 
     Ok(())
 }
