@@ -21,7 +21,7 @@ namespace MelonLoader.Bootstrap
                 //TODO: Fix dotnet stupidly not using default load context when hosting coreclr.
                 var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(bootstrapPath);
 
-                var type = assembly.GetTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(BootstrapModule)));
+                var type = assembly.GetValidTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(BootstrapModule)));
                 if (type == null)
                 {
                     //MelonLogger.Warning($"Failed to load BootstrapModule '{bootstrapPath}': No type deriving from BootstrapModule found.");

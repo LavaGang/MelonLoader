@@ -1,4 +1,3 @@
-using MelonLoader.Utils;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -9,6 +8,12 @@ namespace MelonLoader.NativeHost
     public static class NativeEntryPoint
     {
         internal static HostExports Exports;
+
+        private static string[] IgnorableExecutables = new string[]
+        {
+            "UnityCrashHandler",
+            "UnityCrashHandler64",
+        };
 
         [UnmanagedCallersOnly]
         static unsafe void LoadStage1(HostImports* imports)
@@ -21,15 +26,18 @@ namespace MelonLoader.NativeHost
         static unsafe void LoadStage2(HostImports* imports, HostExports* exports)
         {
             Console.WriteLine("[NewEntryPoint] Configuring imports...");
-
             imports->Initialize = &Initialize;
-
             Exports = *exports;
         }
 
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
         static void Initialize()
         {
+            string exePath = Environment.ProcessPath!;
+            string exeName = Path.GetFileNameWithoutExtension(exePath);
+            if (IgnorableExecutables.Contains(exeName))
+                return;
+
             bool isDefaultAlc = AssemblyLoadContext.Default == AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly());
             Console.WriteLine($"[NewEntryPoint] Initializing. In default load context: {isDefaultAlc}");
 
@@ -46,6 +54,13 @@ namespace MelonLoader.NativeHost
                 Environment.Exit(1);
             }
         }
+
+
+
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+        private static unsafe void DoNothing(IntPtr pathNative, IntPtr typeNameNative, IntPtr methodNameNative, void** resultHandle) { }
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+        private static void DoNothing2() { }
 
         public static Assembly? TryLoadAssembly(AssemblyLoadContext alc, string path)
         {
