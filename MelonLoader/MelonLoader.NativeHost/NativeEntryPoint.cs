@@ -55,13 +55,6 @@ namespace MelonLoader.NativeHost
             }
         }
 
-
-
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-        private static unsafe void DoNothing(IntPtr pathNative, IntPtr typeNameNative, IntPtr methodNameNative, void** resultHandle) { }
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-        private static void DoNothing2() { }
-
         public static Assembly? TryLoadAssembly(AssemblyLoadContext alc, string path)
         {
             if (File.Exists(path))
