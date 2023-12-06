@@ -20,6 +20,7 @@ namespace MelonLoader.Mono.Bootstrap
         private static IntPtr mlSharedAsmImage;
         private static IntPtr mlSharedCore;
 
+        private static IntPtr mlShared_LoadInternalCalls;
         private static IntPtr mlShared_Startup;
         private static IntPtr mlShared_OnApplicationPreStart;
         private static IntPtr mlShared_OnApplicationStart;
@@ -158,16 +159,20 @@ namespace MelonLoader.Mono.Bootstrap
             return true;
         }
 
+        private static bool IsNetStandard()
+        {
+            // To-Do: Read from Mono Assembly and
+            return false;
+        }
+
         private static void Stage1()
         {
             // Get File Path for MelonLoader.Shared.dll
             string fileName = Path.GetFileName(mlCoreType.Assembly.Location);
             string sharedPath = Path.Combine(
                 Path.GetDirectoryName(Path.GetDirectoryName(mlCoreType.Assembly.Location)),
-                "net35",
+                IsNetStandard() ? "netstandard2.1" : "net35",
                 fileName);
-
-            // Inject BootstrapInterop Internal Calls
 
             // Load Assembly
             MelonDebug.Msg($"Loading Assembly {sharedPath}...");
@@ -207,8 +212,8 @@ namespace MelonLoader.Mono.Bootstrap
             
             // Get MelonLoader.BootstrapInterop.LoadInternalCalls
             MelonDebug.Msg($"Getting Method {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls...");
-            IntPtr mlSharedLoadInternalCalls = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedInterop, "LoadInternalCalls".ToAnsiPointer(), 1);
-            if (mlSharedLoadInternalCalls == IntPtr.Zero)
+            mlShared_LoadInternalCalls = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedInterop, "LoadInternalCalls".ToAnsiPointer(), 1);
+            if (mlShared_LoadInternalCalls == IntPtr.Zero)
             {
                 Assertion.ThrowInternalFailure($"Failed to get Method {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls from {fileName}!");
                 return;
@@ -243,7 +248,7 @@ namespace MelonLoader.Mono.Bootstrap
             
             // Invoke MelonLoader.BootstrapInterop.LoadStage1()
             MelonDebug.Msg($"Invoking {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls...");
-            MonoLibrary.Instance.InvokeMethod(mlSharedLoadInternalCalls, IntPtr.Zero,
+            MonoLibrary.Instance.InvokeMethod(mlShared_LoadInternalCalls, IntPtr.Zero,
                 (IntPtr)BootstrapInterop.WriteLogToFile);
             
             // Invoke MelonLoader.Core.Startup()

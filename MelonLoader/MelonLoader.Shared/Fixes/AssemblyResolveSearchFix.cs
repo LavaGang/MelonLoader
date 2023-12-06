@@ -1,11 +1,10 @@
 using MelonLoader.Utils;
+using System;
 using System.IO;
 using System.Reflection;
 
 #if NET6_0
 using System.Runtime.Loader;
-#else
-using System;
 #endif
 
 namespace MelonLoader.Fixes
@@ -39,23 +38,24 @@ namespace MelonLoader.Fixes
             AssemblyLoadContext.Default.Resolving += OnResolve;
 #else
             AppDomain.CurrentDomain.AssemblyResolve += OnResolve;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += OnResolveReflectionOnly;
 #endif
         }
 
-        private static Assembly FindAssembly(string name)
+        private static Assembly FindAssembly(string name, Func<string, Assembly> tryLoad)
         {
             var filename = name + ".dll";
 
             Assembly ret = null;
             foreach (string folder in SearchableDirectories)
             {
-                ret = TryLoad(Path.Combine(folder, filename));
+                ret = tryLoad(Path.Combine(folder, filename));
                 if (ret != null)
                     return ret;
 
                 foreach (var childFolder in Directory.GetDirectories(folder))
                 {
-                    ret = TryLoad(Path.Combine(childFolder, filename));
+                    ret = tryLoad(Path.Combine(childFolder, filename));
                     if (ret != null)
                         return ret;
                 }
@@ -68,28 +68,34 @@ namespace MelonLoader.Fixes
 
         private static Assembly TryLoad(string path)
         {
-            if (File.Exists(path))
-            {
-                MelonDebug.Msg($"[{nameof(AssemblyResolveSearchFix)}] Loading from {path}...");
-#if NET6_0
-                return _alc.LoadFromAssemblyPath(path);
-#else
-                return Assembly.LoadFrom(path);
-#endif
-            }
+            if (!File.Exists(path))
+                return null;
 
-            return null;
+            MelonDebug.Msg($"[{nameof(AssemblyResolveSearchFix)}] Loading from {path}...");
+#if NET6_0
+            return _alc.LoadFromAssemblyPath(path);
+#else
+            return Assembly.LoadFrom(path);
+#endif
         }
 
 #if NET6_0
         private static Assembly OnResolve(AssemblyLoadContext alc, AssemblyName name)
         {
             _alc = alc;
-            return FindAssembly(name.Name);
+            return FindAssembly(name.Name, TryLoad);
         }
 #else
         private static Assembly OnResolve(object sender, ResolveEventArgs args)
-            => FindAssembly(args.Name);
+            => FindAssembly(args.Name, TryLoad);
+        private static Assembly OnResolveReflectionOnly(object sender, ResolveEventArgs args)
+            => FindAssembly(args.Name, TryLoadReflectionOnly);
+        private static Assembly TryLoadReflectionOnly(string path)
+        {
+            if (!File.Exists(path))
+                return null;
+            return Assembly.ReflectionOnlyLoadFrom(path);
+        }
 #endif
     }
 }
