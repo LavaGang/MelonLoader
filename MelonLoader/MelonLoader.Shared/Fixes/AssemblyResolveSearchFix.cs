@@ -19,11 +19,17 @@ namespace MelonLoader.Fixes
         {
 #if NET6_0
             Path.Combine(MelonEnvironment.ModulesDirectory, "Mono", "net6"),
-#elif NET35
-            Path.Combine(Path.Combine(MelonEnvironment.ModulesDirectory, "Mono"), "net35"),
 #else
-            Path.Combine(MelonEnvironment.ModulesDirectory, "Mono", "netstandard2.1"),
+            Path.GetDirectoryName(typeof(AssemblyResolveSearchFix).Assembly.Location), // Need to add the MelonLoader.Shared directory manually
+            Path.Combine(Path.Combine(MelonEnvironment.ModulesDirectory, "Mono"),
+#if NET35
+                "net35"),
+#else
+                "netstandard2.1"),
 #endif
+
+#endif
+
             MelonEnvironment.ModulesDirectory,
             MelonEnvironment.UserLibsDirectory,
             MelonEnvironment.PluginsDirectory,
