@@ -9,12 +9,6 @@ namespace MelonLoader.NativeHost
     {
         internal static HostExports Exports;
 
-        private static string[] IgnorableExecutables = new string[]
-        {
-            "UnityCrashHandler",
-            "UnityCrashHandler64",
-        };
-
         [UnmanagedCallersOnly]
         static unsafe void LoadStage1(HostImports* imports)
         {
@@ -33,11 +27,6 @@ namespace MelonLoader.NativeHost
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
         static void Initialize()
         {
-            string exePath = Environment.ProcessPath!;
-            string exeName = Path.GetFileNameWithoutExtension(exePath);
-            if (IgnorableExecutables.Contains(exeName))
-                return;
-
             bool isDefaultAlc = AssemblyLoadContext.Default == AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly());
             Console.WriteLine($"[NewEntryPoint] Initializing. In default load context: {isDefaultAlc}");
 
