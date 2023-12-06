@@ -12,7 +12,7 @@ namespace MelonLoader
             MelonDebug.Msg("MelonLoader.Core.Startup");
 
             UnhandledException.Install(AppDomain.CurrentDomain);
-            AssemblyResolveSearchFix.Install();
+            UnhandledAssemblyResolve.Install();
 
         }
 

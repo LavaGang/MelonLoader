@@ -9,7 +9,7 @@ using System.Runtime.Loader;
 
 namespace MelonLoader.Fixes
 {
-    public static class AssemblyResolveSearchFix
+    public static class UnhandledAssemblyResolve
     {
 #if NET6_0
         private static AssemblyLoadContext _alc;
@@ -20,7 +20,7 @@ namespace MelonLoader.Fixes
 #if NET6_0
             Path.Combine(MelonEnvironment.ModulesDirectory, "Mono", "net6"),
 #else
-            Path.GetDirectoryName(typeof(AssemblyResolveSearchFix).Assembly.Location), // Need to add the MelonLoader.Shared directory manually
+            Path.GetDirectoryName(typeof(UnhandledAssemblyResolve).Assembly.Location), // Need to add the MelonLoader.Shared directory manually
             Path.Combine(Path.Combine(MelonEnvironment.ModulesDirectory, "Mono"),
 #if NET35
                 "net35"),
@@ -68,7 +68,7 @@ namespace MelonLoader.Fixes
             }
 
             if (ret == null)
-                MelonDebug.Msg($"[{nameof(AssemblyResolveSearchFix)}] Failed to find {filename} in any of the known search directories");
+                MelonDebug.Msg($"[{nameof(UnhandledAssemblyResolve)}] Failed to find {filename} in any of the known search directories");
             return ret;
         }
 
@@ -77,7 +77,7 @@ namespace MelonLoader.Fixes
             if (!File.Exists(path))
                 return null;
 
-            MelonDebug.Msg($"[{nameof(AssemblyResolveSearchFix)}] Loading from {path}...");
+            MelonDebug.Msg($"[{nameof(UnhandledAssemblyResolve)}] Loading from {path}...");
 #if NET6_0
             return _alc.LoadFromAssemblyPath(path);
 #else
