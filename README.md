@@ -232,6 +232,10 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [Dobby](https://github.com/jmpews/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/jmpews/Dobby/blob/master/LICENSE) for the full License.
 - [dobby-rs](https://github.com/RinLovesYou/dobby-rs) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/dobby-rs/blob/master/LICENSE) for the full License.
 - [Pastel](https://github.com/silkfire/Pastel) is licensed under the MIT License. See [LICENSE](https://github.com/silkfire/Pastel/blob/master/LICENSE) for the full License.
+-
+- [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) is licensed under the MIT License. See [LICENSE](https://github.com/nesrak1/AssetsTools.NET/blob/master/LICENSE) for the full License.
+- [AssetRipper.Primitives](https://github.com/AssetRipper/AssetRipper.Primitives) is licensed under the MIT License. See [LICENSE](https://github.com/AssetRipper/AssetRipper.Primitives/blob/master/License.md) for the full License.
+-
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/Bootstrap/Base/MSDetours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/BepInEx/HarmonyX/blob/master/LICENSE) for the full License.
@@ -247,8 +251,6 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [Illusion Plugin Architecture](https://github.com/Eusth/IPA) is licensed under the MIT License. See [LICENSE](https://github.com/Eusth/IPA/blob/master/LICENSE) for the full License.
 - [MuseDashModLoader](https://github.com/mo10/MuseDashModLoader) is licensed under the MIT License. See [LICENSE](https://github.com/mo10/MuseDashModLoader/blob/master/LICENSE) for the full License.
 - [mgGif](https://github.com/gwaredd/mgGif) is licensed under the MIT License. See [LICENSE](https://github.com/gwaredd/mgGif/blob/main/LICENSE) for the full License.
-- [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) is licensed under the MIT License. See [LICENSE](https://github.com/nesrak1/AssetsTools.NET/blob/master/LICENSE) for the full License.
-- [AssetRipper.VersionUtilities](https://github.com/AssetRipper/VersionUtilities) is licensed under the MIT License. See [LICENSE](https://github.com/AssetRipper/VersionUtilities/blob/master/License.md) for the full License.
 - Steam Library, VDF, and ACF Parsing from [SteamFinder.cs](https://github.com/Umbranoxio/BeatSaberModInstaller/blob/master/BeatSaberModManager/Dependencies/SteamFinder.cs) by [Umbranoxio](https://github.com/Umbranoxio) and [Dalet](https://github.com/Dalet).
 - [bHapticsLib](https://github.com/HerpDerpinstine/bHapticsLib) is licensed under the MIT License. See [LICENSE](https://github.com/HerpDerpinstine/bHapticsLib/blob/master/LICENSE.md) for the full License. 
 - [IndexRange](https://github.com/bgrainger/IndexRange) is licensed under the MIT License. See [LICENSE](https://github.com/bgrainger/IndexRange/blob/master/LICENSE) for the full License.  
