@@ -53,7 +53,7 @@ namespace MelonLoader.Unity
                 // Start Mono Support
                 MonoRuntimeInfo runtimeInfo = GetMonoRuntimeInfo();
                 if (runtimeInfo == null)
-                    Assertion.ThrowInternalFailure("Failed to get Mono Runtime Info!");
+                    MelonAssertion.ThrowInternalFailure("Failed to get Mono Runtime Info!");
                 else
                 {
                     MelonLogger.Msg($"Engine Variant: {runtimeInfo.VariantName}");

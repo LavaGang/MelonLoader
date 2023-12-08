@@ -47,7 +47,7 @@ namespace MelonLoader.Mono.Bootstrap
             if (RuntimeInfo == null
                 || string.IsNullOrEmpty(RuntimeInfo.LibPath))
             {
-                Assertion.ThrowInternalFailure($"Failed to find {RuntimeInfo.VariantName} Library!");
+                MelonAssertion.ThrowInternalFailure($"Failed to find {RuntimeInfo.VariantName} Library!");
                 return;
             }
 
@@ -98,7 +98,7 @@ namespace MelonLoader.Mono.Bootstrap
             MelonDebug.Msg("Posix Helper found! Loading...");
             if (!MelonNativeLibrary.TryLoad(RuntimeInfo.PosixPath, out IntPtr _))
             {
-                Assertion.ThrowInternalFailure($"Failed to load {RuntimeInfo.VariantName} Posix Helper from {RuntimeInfo.PosixPath}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to load {RuntimeInfo.VariantName} Posix Helper from {RuntimeInfo.PosixPath}!");
                 return false;
             }
 
@@ -116,7 +116,7 @@ namespace MelonLoader.Mono.Bootstrap
             // Check for Failure
             if (MonoLibrary.Instance == null)
             {
-                Assertion.ThrowInternalFailure($"Failed to load {RuntimeInfo.VariantName} Library from {RuntimeInfo.LibPath}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to load {RuntimeInfo.VariantName} Library from {RuntimeInfo.LibPath}!");
                 return false;
             }
 
@@ -152,7 +152,7 @@ namespace MelonLoader.Mono.Bootstrap
                 if (exportPair.Item2 != null)
                     continue;
 
-                Assertion.ThrowInternalFailure($"Failed to find {exportPair.Item1} Export in {RuntimeInfo.VariantName} Library!");
+                MelonAssertion.ThrowInternalFailure($"Failed to find {exportPair.Item1} Export in {RuntimeInfo.VariantName} Library!");
                 return false;
             }
 
@@ -179,7 +179,7 @@ namespace MelonLoader.Mono.Bootstrap
             mlSharedAsm = MonoLibrary.Instance.mono_assembly_open_full(sharedPath.ToAnsiPointer(), IntPtr.Zero, false);
             if (mlSharedAsm == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to load Assembly from {sharedPath}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to load Assembly from {sharedPath}!");
                 return;
             }
 
@@ -188,7 +188,7 @@ namespace MelonLoader.Mono.Bootstrap
             mlSharedAsmImage = MonoLibrary.Instance.mono_assembly_get_image(mlSharedAsm);
             if (mlSharedAsmImage == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to get Assembly Image from {fileName}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to get Assembly Image from {fileName}!");
                 return;
             }
 
@@ -197,7 +197,7 @@ namespace MelonLoader.Mono.Bootstrap
             mlSharedCore = MonoLibrary.Instance.mono_class_from_name(mlSharedAsmImage, mlCoreType.Namespace.ToAnsiPointer(), mlCoreType.Name.ToAnsiPointer());
             if (mlSharedCore == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to get Class {mlCoreType.Namespace}.{mlCoreType.Name} from {fileName}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to get Class {mlCoreType.Namespace}.{mlCoreType.Name} from {fileName}!");
                 return;
             }
             
@@ -206,7 +206,7 @@ namespace MelonLoader.Mono.Bootstrap
             IntPtr mlSharedInterop = MonoLibrary.Instance.mono_class_from_name(mlSharedAsmImage, mlBootstrapInteropType.Namespace.ToAnsiPointer(), mlBootstrapInteropType.Name.ToAnsiPointer());
             if (mlSharedInterop == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to get Class {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name} from {fileName}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to get Class {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name} from {fileName}!");
                 return;
             }
             
@@ -215,7 +215,7 @@ namespace MelonLoader.Mono.Bootstrap
             mlShared_LoadInternalCalls = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedInterop, "LoadInternalCalls".ToAnsiPointer(), 1);
             if (mlShared_LoadInternalCalls == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to get Method {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls from {fileName}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to get Method {mlBootstrapInteropType.Namespace}.{mlBootstrapInteropType.Name}.LoadInternalCalls from {fileName}!");
                 return;
             }
 
@@ -224,7 +224,7 @@ namespace MelonLoader.Mono.Bootstrap
             mlShared_Startup = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedCore, nameof(Core.Startup).ToAnsiPointer(), 0);
             if (mlShared_Startup == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)} from {fileName}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)} from {fileName}!");
                 return;
             }
 
@@ -233,7 +233,7 @@ namespace MelonLoader.Mono.Bootstrap
             mlShared_OnApplicationPreStart = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedCore, nameof(Core.OnApplicationPreStart).ToAnsiPointer(), 0);
             if (mlShared_OnApplicationPreStart == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationPreStart)} from {fileName}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationPreStart)} from {fileName}!");
                 return;
             }
 
@@ -242,7 +242,7 @@ namespace MelonLoader.Mono.Bootstrap
             mlShared_OnApplicationStart = MonoLibrary.Instance.mono_class_get_method_from_name(mlSharedCore, nameof(Core.OnApplicationStart).ToAnsiPointer(), 0);
             if (mlShared_OnApplicationStart == IntPtr.Zero)
             {
-                Assertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationStart)} from {fileName}!");
+                MelonAssertion.ThrowInternalFailure($"Failed to get Method {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationStart)} from {fileName}!");
                 return;
             }
             

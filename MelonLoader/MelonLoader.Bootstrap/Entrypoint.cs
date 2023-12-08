@@ -14,7 +14,7 @@ namespace MelonLoader.Bootstrap
             
             if (module == null)
             {
-                Assertion.ThrowInternalFailure("Failed to find a valid Bootstrap module for this Game Engine!");
+                MelonAssertion.ThrowInternalFailure("Failed to find a valid Bootstrap module for this Game Engine!");
                 return;
             }
             

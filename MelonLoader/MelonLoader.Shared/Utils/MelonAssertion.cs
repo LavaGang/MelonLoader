@@ -1,10 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
-using MelonLoader;
 
 namespace MelonLoader.Utils
 {
-    public static class Assertion
+    public static class MelonAssertion
     {
         internal static bool ShouldContinue = true;
 
@@ -19,7 +18,7 @@ namespace MelonLoader.Utils
                 return;
 
             ShouldContinue = false;
-            var timestamp = LoggerUtils.GetTimeStamp();
+            var timestamp = MelonUtils.GetTimeStamp();
             BootstrapInterop.NativeWriteLogToFile($"[{timestamp}] [INTERNAL FAILURE] {msg}");
             string caption = "INTERNAL FAILURE!";
                 

@@ -1,30 +1,24 @@
-using MelonLoader.Utils;
 using System;
 using System.Drawing;
-using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
-using MelonLoader;
 using MelonLoader.Pastel;
-using static MelonLoader.Utils.LoggerUtils;
 
 namespace MelonLoader.Utils
 {
     public class MelonLogger
     {
         public static readonly Color DefaultMelonColor = Color.Cyan;
-        public static readonly Color DefaultTextColor = Color.LightGray;
 
         //Identical to Msg(string) except it skips walking the stack to find a melon
-        internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);
+        internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, MelonUtils.DefaultTextColor, null, txt, true);
 
-        public static void Msg(object obj) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, obj.ToString());
-        public static void Msg(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt);
-        public static void Msg(string txt, params object[] args) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, string.Format(txt, args));
+        public static void Msg(object obj) => NativeMsg(DefaultMelonColor, MelonUtils.DefaultTextColor, null, obj.ToString());
+        public static void Msg(string txt) => NativeMsg(DefaultMelonColor, MelonUtils.DefaultTextColor, null, txt);
+        public static void Msg(string txt, params object[] args) => NativeMsg(DefaultMelonColor, MelonUtils.DefaultTextColor, null, string.Format(txt, args));
 
-        public static void Msg(ConsoleColor txt_color, object obj) => NativeMsg(DefaultMelonColor, ConsoleColorToDrawingColor(txt_color), null, obj.ToString());
-        public static void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DefaultMelonColor, ConsoleColorToDrawingColor(txt_color), null, txt);
-        public static void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, ConsoleColorToDrawingColor(txt_color), null, string.Format(txt, args));
+        public static void Msg(ConsoleColor txt_color, object obj) => NativeMsg(DefaultMelonColor, txt_color.ToDrawingColor(), null, obj.ToString());
+        public static void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color.ToDrawingColor(), null, txt);
+        public static void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DefaultMelonColor, txt_color.ToDrawingColor(), null, string.Format(txt, args));
 
         //Identical to Msg(Color, string) except it skips walking the stack to find a melon
         public static void MsgDirect(Color txt_color, string txt) => NativeMsg(DefaultMelonColor, txt_color, null, txt, true);
@@ -92,14 +86,15 @@ namespace MelonLoader.Utils
 
             public Instance(string name) => Name = name?.Replace(" ", "_");
             public Instance(string name, Color color) : this(name) => DrawingColor = color;
-            public void Msg(object obj) => NativeMsg(DrawingColor, DefaultTextColor, Name, obj.ToString());
-            public void Msg(string txt) => NativeMsg(DrawingColor, DefaultTextColor, Name, txt);
-            public void Msg(string txt, params object[] args) => NativeMsg(DrawingColor, DefaultTextColor, Name, string.Format(txt, args));
+
+            public void Msg(object obj) => NativeMsg(DrawingColor, MelonUtils.DefaultTextColor, Name, obj.ToString());
+            public void Msg(string txt) => NativeMsg(DrawingColor, MelonUtils.DefaultTextColor, Name, txt);
+            public void Msg(string txt, params object[] args) => NativeMsg(DrawingColor, MelonUtils.DefaultTextColor, Name, string.Format(txt, args));
 
 
-            public void Msg(ConsoleColor txt_color, object obj) => NativeMsg(DrawingColor, ConsoleColorToDrawingColor(txt_color), Name, obj.ToString());
-            public void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DrawingColor, ConsoleColorToDrawingColor(txt_color), Name, txt);
-            public void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DrawingColor, ConsoleColorToDrawingColor(txt_color), Name, string.Format(txt, args));
+            public void Msg(ConsoleColor txt_color, object obj) => NativeMsg(DrawingColor, txt_color.ToDrawingColor(), Name, obj.ToString());
+            public void Msg(ConsoleColor txt_color, string txt) => NativeMsg(DrawingColor, txt_color.ToDrawingColor(), Name, txt);
+            public void Msg(ConsoleColor txt_color, string txt, params object[] args) => NativeMsg(DrawingColor, txt_color.ToDrawingColor(), Name, string.Format(txt, args));
 
             public void Msg(Color txt_color, object obj) => NativeMsg(DrawingColor, txt_color, Name, obj.ToString());
             public void Msg(Color txt_color, string txt) => NativeMsg(DrawingColor, txt_color, Name, txt);
@@ -123,7 +118,7 @@ namespace MelonLoader.Utils
 
         internal static void Internal_Msg(Color namesection_color, Color txt_color, string namesection, string txt)
         {
-            BootstrapInterop.NativeWriteLogToFile($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
+            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
 
             StringBuilder builder = new StringBuilder();
 
@@ -146,13 +141,13 @@ namespace MelonLoader.Utils
             if (error)
             {
                 builder.Append("[".Pastel(Color.IndianRed));
-                builder.Append(GetTimeStamp().Pastel(Color.IndianRed));
+                builder.Append(MelonUtils.GetTimeStamp().Pastel(Color.IndianRed));
                 builder.Append("] ".Pastel(Color.IndianRed));
                 return builder.ToString();
             }
 
             builder.Append("[".Pastel(Color.LightGray));
-            builder.Append(GetTimeStamp().Pastel(Color.LimeGreen));
+            builder.Append(MelonUtils.GetTimeStamp().Pastel(Color.LimeGreen));
             builder.Append("] ".Pastel(Color.LightGray));
 
             return builder.ToString();
@@ -174,8 +169,8 @@ namespace MelonLoader.Utils
 
         internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
         {
-            BootstrapInterop.NativeWriteLogToFile($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
-            BootstrapInterop.NativeWriteLogToFile($"[{GetTimeStamp()}] by {author}");
+            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
+            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.GetTimeStamp()}] by {author}");
 
             StringBuilder builder = new StringBuilder();
             builder.Append(GetTimestamp(false));

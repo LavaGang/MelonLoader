@@ -1,10 +1,13 @@
 using System;
-using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace MelonLoader.Utils
 {
     public static class MelonUtils
     {
+        public static readonly Color DefaultTextColor = Color.White;
+        public static readonly ConsoleColor DefaultTextConsoleColor = ConsoleColor.White;
+
         public static PlatformID GetPlatform => Environment.OSVersion.Platform;
 
         public static bool IsUnix => GetPlatform is PlatformID.Unix;
@@ -26,5 +29,7 @@ namespace MelonLoader.Utils
         }
         
         public static byte[] StringToBytes(string str) => System.Text.Encoding.Unicode.GetBytes(str);
+
+        internal static string GetTimeStamp() => $"{DateTime.Now:HH:mm:ss.fff}";
     }
 }
