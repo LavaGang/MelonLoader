@@ -1,34 +1,41 @@
 using System;
+using MelonLoader.Utils;
+using System.Runtime.InteropServices;
 
-#if NET6_0
-using System.Runtime.InteropServices;
-using MelonLoader.Utils;
-#else
+#if !NET6_0
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using MelonLoader.Utils;
 #endif
 
 namespace MelonLoader
 {
     public static unsafe class BootstrapInterop
     {
-#if NET6_0
-        public static delegate* unmanaged[Stdcall]<byte*, int, void> WriteLogToFile;
-
         public static void NativeWriteLogToFile(string logString)
         {
+#if !NET6_0
+            if (pWriteLogToFile == IntPtr.Zero)
+                throw new NullReferenceException("pWriteLogToFile is null!");
+#endif
+
             if (!logString.EndsWith("\n"))
                 logString += "\n";
-            
-            var log = MelonUtils.StringToBytes(logString);
+
+            var log = logString.ToUnicodeBytes();
             var ptr = Marshal.AllocHGlobal(log.Length);
             Marshal.Copy(log, 0, ptr, log.Length);
-            
+
+#if NET6_0
             WriteLogToFile((byte*)ptr, log.Length);
-            
+#else
+            var function = (dWriteLogToFile)Marshal.GetDelegateForFunctionPointer(pWriteLogToFile, typeof(dWriteLogToFile));
+            function((byte*)ptr, log.Length);
+#endif
+
             Marshal.FreeHGlobal(ptr);
         }
+
+#if NET6_0
+        public static delegate* unmanaged[Stdcall]<byte*, int, void> WriteLogToFile;
 
         public static IntPtr NativeLoadLib(string name)
             => NativeLibrary.Load(name);
@@ -56,24 +63,6 @@ namespace MelonLoader
         
         private delegate void dWriteLogToFile(byte* log, int logLength);
         private static IntPtr pWriteLogToFile = IntPtr.Zero;
-
-        public static void NativeWriteLogToFile(string logString)
-        {
-            if (pWriteLogToFile == IntPtr.Zero)
-                throw new NullReferenceException("pWriteLogToFile is null!");
-            
-            if (!logString.EndsWith("\n"))
-                logString += "\n";
-            
-            var log = MelonUtils.StringToBytes(logString);
-            var ptr = Marshal.AllocHGlobal(log.Length);
-            Marshal.Copy(log, 0, ptr, log.Length);
-
-            var function = (dWriteLogToFile)Marshal.GetDelegateForFunctionPointer(pWriteLogToFile, typeof(dWriteLogToFile));
-            function((byte*)ptr, log.Length);
-            
-            Marshal.FreeHGlobal(ptr);
-        }
         
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern IntPtr NativeLoadLib(string name);

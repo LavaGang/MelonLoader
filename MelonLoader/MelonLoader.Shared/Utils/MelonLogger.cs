@@ -118,7 +118,7 @@ namespace MelonLoader.Utils
 
         internal static void Internal_Msg(Color namesection_color, Color txt_color, string namesection, string txt)
         {
-            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
+            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.TimeStamp}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
 
             StringBuilder builder = new StringBuilder();
 
@@ -141,13 +141,13 @@ namespace MelonLoader.Utils
             if (error)
             {
                 builder.Append("[".Pastel(Color.IndianRed));
-                builder.Append(MelonUtils.GetTimeStamp().Pastel(Color.IndianRed));
+                builder.Append(MelonUtils.TimeStamp.Pastel(Color.IndianRed));
                 builder.Append("] ".Pastel(Color.IndianRed));
                 return builder.ToString();
             }
 
             builder.Append("[".Pastel(Color.LightGray));
-            builder.Append(MelonUtils.GetTimeStamp().Pastel(Color.LimeGreen));
+            builder.Append(MelonUtils.TimeStamp.Pastel(Color.LimeGreen));
             builder.Append("] ".Pastel(Color.LightGray));
 
             return builder.ToString();
@@ -169,8 +169,8 @@ namespace MelonLoader.Utils
 
         internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
         {
-            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
-            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.GetTimeStamp()}] by {author}");
+            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.TimeStamp}] {name} v{version}{(id == null ? "" : $" ({id})")}");
+            BootstrapInterop.NativeWriteLogToFile($"[{MelonUtils.TimeStamp}] by {author}");
 
             StringBuilder builder = new StringBuilder();
             builder.Append(GetTimestamp(false));

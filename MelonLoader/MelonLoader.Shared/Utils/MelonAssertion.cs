@@ -18,7 +18,7 @@ namespace MelonLoader.Utils
                 return;
 
             ShouldContinue = false;
-            var timestamp = MelonUtils.GetTimeStamp();
+            var timestamp = MelonUtils.TimeStamp;
             BootstrapInterop.NativeWriteLogToFile($"[{timestamp}] [INTERNAL FAILURE] {msg}");
             string caption = "INTERNAL FAILURE!";
                 

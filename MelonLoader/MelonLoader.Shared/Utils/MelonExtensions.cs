@@ -1,9 +1,13 @@
-﻿using System;
+﻿using HarmonyLib;
+using MonoMod.Cil;
+using MonoMod.Utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace MelonLoader.Utils
 {
@@ -20,7 +24,7 @@ namespace MelonLoader.Utils
             try { returnval = asm.GetTypes().AsEnumerable(); }
             catch (ReflectionTypeLoadException ex)
             {
-                MelonLogger.Error($"Failed to load all types in assembly {asm.FullName} due to: {ex.Message}", ex);
+                //MelonLogger.Error($"Failed to load all types in assembly {asm.FullName} due to: {ex.Message}", ex);
                 returnval = ex.Types;
             }
             return returnval.Where(x => (x != null) && ((predicate == null) || predicate(x)));
@@ -61,6 +65,9 @@ namespace MelonLoader.Utils
         public static IntPtr ToAnsiPointer(this string str)
             => Marshal.StringToHGlobalAnsi(str);
 
+        public static byte[] ToUnicodeBytes(this string str) 
+            => Encoding.Unicode.GetBytes(str);
+
         #endregion
 
         #region Enum
@@ -81,6 +88,52 @@ namespace MelonLoader.Utils
             ulong num = Convert.ToUInt64(value);
             ulong num2 = Convert.ToUInt64(variable);
             return (num2 & num) == num;
+        }
+
+        #endregion
+
+        #region Type
+
+        public static bool IsTypeOf<T>(this Type type)
+            => type.IsAssignableFrom(typeof(T));
+
+        #endregion
+
+        #region MethodBase
+
+        public static DynamicMethodDefinition ToDynamicMethodDefinition(this MethodBase methodBase)
+        {
+            if (methodBase == null)
+                throw new ArgumentNullException(nameof(methodBase));
+            return new DynamicMethodDefinition(methodBase);
+        }
+
+        public static bool IsNotImplemented(this MethodBase methodBase)
+        {
+            if (methodBase == null)
+                throw new ArgumentNullException(nameof(methodBase));
+
+            DynamicMethodDefinition method = methodBase.ToDynamicMethodDefinition();
+            ILContext ilcontext = new(method.Definition);
+            ILCursor ilcursor = new(ilcontext);
+
+            bool returnval = (ilcursor.Instrs.Count == 2)
+                && (ilcursor.Instrs[1].OpCode.Code == Mono.Cecil.Cil.Code.Throw);
+
+            ilcontext.Dispose();
+            method.Dispose();
+            return returnval;
+        }
+
+        #endregion
+
+        #region MethodInfo
+
+        public static HarmonyMethod ToHarmonyMethod(this MethodInfo methodInfo)
+        {
+            if (methodInfo == null)
+                throw new ArgumentNullException(nameof(methodInfo));
+            return new HarmonyMethod(methodInfo);
         }
 
         #endregion

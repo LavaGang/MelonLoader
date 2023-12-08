@@ -13,6 +13,18 @@ namespace MelonLoader.Unity
     {
         private static readonly string GameDataPath = $"{Path.Combine(MelonEnvironment.GameRootDirectory, MelonEnvironment.GameExecutableName)}_Data";
 
+        private static string NativeFileExtension
+        {
+            get
+            {
+                if (MelonUtils.IsUnix || MelonUtils.IsAndroid)
+                    return ".so";
+                if (MelonUtils.IsMac)
+                    return ".dylib";
+                return ".dll";
+            }
+        }
+
         public string EngineName => "Unity";
 
         /// <summary>
@@ -45,12 +57,9 @@ namespace MelonLoader.Unity
 
             // Get GameAssembly Name
             string gameAssemblyName = "GameAssembly";
-            if (MelonUtils.IsUnix)
-                gameAssemblyName += ".so";
-            if (MelonUtils.IsWindows)
-                gameAssemblyName += ".dll";
-            if (MelonUtils.IsMac)
-                gameAssemblyName += ".dylib";
+            if (MelonUtils.IsAndroid)
+                gameAssemblyName = "libil2cpp";
+            gameAssemblyName += NativeFileExtension;
 
             // Check if GameAssembly exists
             string gameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
@@ -62,6 +71,13 @@ namespace MelonLoader.Unity
             }
             else
             { 
+                // Android only has Il2Cpp currently
+                if (MelonUtils.IsAndroid)
+                {
+                    MelonAssertion.ThrowInternalFailure($"Failed to find {gameAssemblyName}!");
+                    return;
+                }
+
                 // Start Mono Support
                 MonoRuntimeInfo runtimeInfo = GetMonoRuntimeInfo();
                 if (runtimeInfo == null)
@@ -101,11 +117,7 @@ namespace MelonLoader.Unity
                 monoPosixFileNameWithoutExt = "libmonoposixhelper";
 
             // Get Platform Used Extension
-            string monoFileExt = ".dll";
-            if (MelonUtils.IsUnix)
-                monoFileExt = ".so";
-            if (MelonUtils.IsMac)
-                monoFileExt = ".dylib";
+            string monoFileExt = NativeFileExtension;
 
             // Iterate through Variations in Mono types
             foreach (var variant in monoFolderVariants)

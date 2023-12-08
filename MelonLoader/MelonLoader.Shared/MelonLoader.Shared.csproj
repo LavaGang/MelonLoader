@@ -35,5 +35,8 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemDefinitionGroup>
+    <ItemGroup>
+      <PackageReference Include="HarmonyX" Version="2.10.2" />
+    </ItemGroup>
 
 </Project>
