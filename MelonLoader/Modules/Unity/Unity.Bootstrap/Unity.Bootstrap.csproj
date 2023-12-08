@@ -18,5 +18,10 @@
         <ExcludeAssets>all</ExcludeAssets>
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
+      <ProjectReference Include="..\Unity.Shared\Unity.Shared.csproj">
+        <Private>False</Private>
+        <ExcludeAssets>all</ExcludeAssets>
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
     </ItemGroup>
 </Project>

@@ -21,7 +21,7 @@
         <PackageProjectUrl>https://github.com/LavaGang/MelonLoader</PackageProjectUrl>
         <Authors>Lava Gang</Authors>
         <Company>Lava Gang</Company>
-        <Copyright>Copyright (c) 2023 Lava Gang</Copyright>
+        <Copyright>Copyright (c) 2020 - 2024 Lava Gang</Copyright>
         <Description>The World's First Universal Mod Loader, expandable to work on any game engine.</Description>
     </PropertyGroup>
     <PropertyGroup>

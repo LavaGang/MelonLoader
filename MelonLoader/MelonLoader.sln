@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreCLR", "CoreCLR", "{40E3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreCLR.Bootstrap", "Modules\CoreCLR\CoreCLR.Bootstrap\CoreCLR.Bootstrap.csproj", "{0950C2EC-9116-4A7A-B5CF-A6C24CB90689}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unity.Shared", "Modules\Unity\Unity.Shared\Unity.Shared.csproj", "{AAB39E01-B118-4481-9796-036E92B857A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{0950C2EC-9116-4A7A-B5CF-A6C24CB90689}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0950C2EC-9116-4A7A-B5CF-A6C24CB90689}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0950C2EC-9116-4A7A-B5CF-A6C24CB90689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAB39E01-B118-4481-9796-036E92B857A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAB39E01-B118-4481-9796-036E92B857A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAB39E01-B118-4481-9796-036E92B857A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAB39E01-B118-4481-9796-036E92B857A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{5C34E23A-F841-460C-BD45-3EE1ED4E15F8} = {879B734F-9F94-4811-BA4A-28160BD525AA}
 		{40E3E955-2FEE-4C38-BE89-76F61594DB4A} = {716CE800-E309-4104-ACA3-867BB8BF4FB0}
 		{0950C2EC-9116-4A7A-B5CF-A6C24CB90689} = {40E3E955-2FEE-4C38-BE89-76F61594DB4A}
+		{AAB39E01-B118-4481-9796-036E92B857A0} = {3E7F5C09-221B-4492-9BA0-2D1ED9BEC58C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4490CB48-16CD-4D0A-858D-1484CB9DED02}

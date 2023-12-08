@@ -2,13 +2,17 @@
 using MelonLoader.Interfaces;
 using MelonLoader.Utils;
 using MelonLoader.Mono.Bootstrap;
-using System;
 using System.Collections.Generic;
+using MelonLoader.Unity.Utils;
+using System.Drawing;
+using MelonLoader.Fixes;
 
 namespace MelonLoader.Unity
 {
     public class Bootstrap : IBootstrapModule
     {
+        private static readonly string GameDataPath = $"{Path.Combine(MelonEnvironment.GameRootDirectory, MelonEnvironment.GameExecutableName)}_Data";
+
         public string EngineName => "Unity";
 
         /// <summary>
@@ -27,10 +31,18 @@ namespace MelonLoader.Unity
             }
         }
 
-        internal static string GameDataPath { get; private set; } = $"{Path.Combine(MelonEnvironment.GameRootDirectory, MelonEnvironment.GameExecutableName)}_Data";
-
         public void Startup()
         {
+            // Read Game Info
+            UnityEnvironment.Initialize(GameDataPath);
+
+            // Log the Information
+            //BootstrapInterop.SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
+            MelonLogger.Msg($"Engine Version: {UnityEnvironment.EngineVersionString}");
+            MelonLogger.Msg($"Game Name: {UnityEnvironment.GameName}");
+            MelonLogger.Msg($"Game Developer: {UnityEnvironment.GameDeveloper}");
+            MelonLogger.Msg($"Game Version: {UnityEnvironment.GameVersion}");
+
             // Get GameAssembly Name
             string gameAssemblyName = "GameAssembly";
             if (MelonUtils.IsUnix)
@@ -45,7 +57,7 @@ namespace MelonLoader.Unity
             if (File.Exists(gameAssemblyPath))
             {
                 // Start Il2Cpp Support
-                MelonLogger.Msg("Engine Variant: Il2Cpp");
+                MelonLogger.Msg("Runtime Variant: Il2Cpp");
                 //Il2CppLoader.Startup(gameAssemblyPath); 
             }
             else
@@ -56,7 +68,7 @@ namespace MelonLoader.Unity
                     MelonAssertion.ThrowInternalFailure("Failed to get Mono Runtime Info!");
                 else
                 {
-                    MelonLogger.Msg($"Engine Variant: {runtimeInfo.VariantName}");
+                    MelonLogger.Msg($"Runtime Variant: {runtimeInfo.VariantName}");
                     MonoLoader.Startup(runtimeInfo);
                 }
             }
@@ -157,7 +169,6 @@ namespace MelonLoader.Unity
                     }
                 }
             }
-
 
             // Return Nothing
             return null;

@@ -161,7 +161,7 @@ namespace MelonLoader.Utils
 
         internal static void Internal_Error(string namesection, string txt) => Internal_Msg(Color.IndianRed, Color.IndianRed, namesection, txt);
 
-        internal static void WriteSpacer()
+        public static void WriteSpacer()
         {
             BootstrapInterop.NativeWriteLogToFile("");
             Console.WriteLine();

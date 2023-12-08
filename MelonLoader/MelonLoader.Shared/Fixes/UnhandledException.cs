@@ -3,9 +3,9 @@ using MelonLoader.Utils;
 
 namespace MelonLoader.Fixes
 {
-    public static class UnhandledException
+    internal static class UnhandledException
     {
-        public static void Install(AppDomain domain) =>
+        internal static void Install(AppDomain domain) =>
             domain.UnhandledException +=
                 (sender, args) =>
                     MelonLogger.Error((args.ExceptionObject as Exception).ToString());

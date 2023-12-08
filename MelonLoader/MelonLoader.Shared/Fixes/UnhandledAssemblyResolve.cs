@@ -1,5 +1,6 @@
 using MelonLoader.Utils;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -15,7 +16,7 @@ namespace MelonLoader.Fixes
         private static AssemblyLoadContext _alc;
 #endif
 
-        private static string[] SearchableDirectories = new string[]
+        private static List<string> SearchableDirectories = new List<string>
         {
 #if NET6_0
             Path.Combine(MelonEnvironment.ModulesDirectory, "Mono", "net6"),
@@ -38,7 +39,7 @@ namespace MelonLoader.Fixes
             MelonEnvironment.GameRootDirectory
         };
 
-        public static void Install()
+        internal static void Install()
         {
 #if NET6_0
             AssemblyLoadContext.Default.Resolving += OnResolve;
@@ -48,6 +49,31 @@ namespace MelonLoader.Fixes
 #endif
         }
 
+        public static void AddSearchDirectoryToFront(string path)
+        {
+            if (SearchableDirectories.Contains(path))
+                return;
+
+            string[] dirArr = SearchableDirectories.ToArray();
+            SearchableDirectories.Clear();
+            SearchableDirectories.Add(path);
+            SearchableDirectories.AddRange(dirArr);
+        }
+
+        public static void AddSearchDirectory(string path)
+        {
+            if (SearchableDirectories.Contains(path))
+                return;
+            SearchableDirectories.Add(path);
+        }
+
+        public static void RemoveSearchDirectory(string path)
+        {
+            if (!SearchableDirectories.Contains(path))
+                return;
+            SearchableDirectories.Remove(path);
+        }
+
         private static Assembly FindAssembly(string name, Func<string, Assembly> tryLoad)
         {
             var filename = name + ".dll";
@@ -55,11 +81,14 @@ namespace MelonLoader.Fixes
             Assembly ret = null;
             foreach (string folder in SearchableDirectories)
             {
+                if (!Directory.Exists(folder))
+                    continue;
+
                 ret = tryLoad(Path.Combine(folder, filename));
                 if (ret != null)
                     return ret;
 
-                foreach (var childFolder in Directory.GetDirectories(folder))
+                foreach (var childFolder in Directory.GetDirectories(folder, "*", SearchOption.AllDirectories))
                 {
                     ret = tryLoad(Path.Combine(childFolder, filename));
                     if (ret != null)

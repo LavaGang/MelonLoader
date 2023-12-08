@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Unity</RootNamespace>
+        <TargetFrameworks>net35;netstandard2.1;net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Unity\</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Unity.Shared</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+      <None Remove="Resources\classdata.tpk" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\classdata.tpk" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="AssetRipper.Primitives" Version="2.0.1" />
+      <PackageReference Include="AssetsTools.NET" Version="3.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime">
+        <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+      </ProjectReference>
+    </ItemGroup>
+</Project>

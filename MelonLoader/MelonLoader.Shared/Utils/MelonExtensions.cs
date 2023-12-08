@@ -63,7 +63,59 @@ namespace MelonLoader.Utils
 
         #endregion
 
+        #region Enum
+
+        /// <summary>
+        /// From: http://www.sambeauvois.be/blog/2011/08/enum-hasflag-method-extension-for-4-0-framework/
+        /// A FX 3.5 way to mimic the FX4 "HasFlag" method.
+        /// </summary>
+        /// <param name="variable">The tested enum.</param>
+        /// <param name="value">The value to test.</param>
+        /// <returns>True if the flag is set. Otherwise false.</returns>
+        public static bool HasFlag(this Enum variable, Enum value)
+        {
+            // check if from the same type.
+            if (variable.GetType() != value.GetType())
+                throw new ArgumentException("The checked flag is not from the same type as the checked variable.");
+
+            ulong num = Convert.ToUInt64(value);
+            ulong num2 = Convert.ToUInt64(variable);
+            return (num2 & num) == num;
+        }
+
+        #endregion
+
         #region Color
+
+        private static Dictionary<Color, ConsoleColor> DrawingColorDict = new Dictionary<Color, ConsoleColor>
+        {
+            { Color.Black, ConsoleColor.Black },
+            { Color.DarkBlue, ConsoleColor.DarkBlue },
+            { Color.DarkGreen, ConsoleColor.DarkGreen },
+            { Color.DarkCyan, ConsoleColor.DarkCyan },
+            { Color.DarkRed, ConsoleColor.DarkRed },
+            { Color.DarkMagenta, ConsoleColor.DarkMagenta },
+            { Color.Yellow, ConsoleColor.Yellow },
+            { Color.LightGray, ConsoleColor.Gray },
+            { Color.DarkGray, ConsoleColor.DarkGray },
+            { Color.CornflowerBlue, ConsoleColor.Blue } ,
+            { Color.LimeGreen, ConsoleColor.Green },
+            { Color.Cyan, ConsoleColor.Cyan },
+            { Color.IndianRed, ConsoleColor.Red },
+            { Color.Magenta, ConsoleColor.Magenta },
+            { Color.White, ConsoleColor.White },
+        };
+
+        public static ConsoleColor ToConsoleColor(this Color color)
+        {
+            if (!DrawingColorDict.ContainsKey(color))
+                return MelonUtils.DefaultTextConsoleColor;
+            return DrawingColorDict[color];
+        }
+
+        #endregion
+
+        #region ConsoleColor
 
         private static Dictionary<ConsoleColor, Color> ConsoleColorDict = new Dictionary<ConsoleColor, Color>
         {
@@ -85,37 +137,11 @@ namespace MelonLoader.Utils
             { ConsoleColor.White, Color.White },
         };
 
-        private static Dictionary<Color, ConsoleColor> DrawingColorDict = new Dictionary<Color, ConsoleColor>
-        {
-            { Color.Black, ConsoleColor.Black },
-            { Color.DarkBlue, ConsoleColor.DarkBlue },
-            { Color.DarkGreen, ConsoleColor.DarkGreen },
-            { Color.DarkCyan, ConsoleColor.DarkCyan },
-            { Color.DarkRed, ConsoleColor.DarkRed },
-            { Color.DarkMagenta, ConsoleColor.DarkMagenta },
-            { Color.Yellow, ConsoleColor.Yellow },
-            { Color.LightGray, ConsoleColor.Gray },
-            { Color.DarkGray, ConsoleColor.DarkGray },
-            { Color.CornflowerBlue, ConsoleColor.Blue } ,
-            { Color.LimeGreen, ConsoleColor.Green },
-            { Color.Cyan, ConsoleColor.Cyan },
-            { Color.IndianRed, ConsoleColor.Red },
-            { Color.Magenta, ConsoleColor.Magenta },
-            { Color.White, ConsoleColor.White },
-        };
-
         public static Color ToDrawingColor(this ConsoleColor color)
         {
             if (!ConsoleColorDict.ContainsKey(color))
                 return MelonUtils.DefaultTextColor;
             return ConsoleColorDict[color];
-        }
-
-        public static ConsoleColor ToConsoleColor(this Color color)
-        {
-            if (!DrawingColorDict.ContainsKey(color))
-                return MelonUtils.DefaultTextConsoleColor;
-            return DrawingColorDict[color];
         }
 
         #endregion
