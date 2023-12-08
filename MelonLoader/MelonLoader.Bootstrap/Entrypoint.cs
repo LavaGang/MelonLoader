@@ -14,13 +14,14 @@ namespace MelonLoader.Bootstrap
             
             if (module == null)
             {
-                MelonAssertion.ThrowInternalFailure("Failed to find a valid Bootstrap module for this Game Engine!");
+                MelonLogger.Warning("Engine is UNKNOWN! Continuing anyways...");
+                Core.OnApplicationPreStart();
+                Core.OnApplicationStart();
                 return;
             }
             
             MelonDebug.Msg("Found Bootstrap Module: " + module.GetType().FullName);
             MelonLogger.Msg($"Running Engine: {module.EngineName}");
-
             module.Startup();
         }
     }   
