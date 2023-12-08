@@ -10,8 +10,10 @@ namespace MelonLoader.Bootstrap
             
             MelonDebug.Msg("Starting Up...");
             MelonDebug.Msg(MelonEnvironment.MelonLoaderDirectory);
+
+            MelonLogger.Msg($"Executable: {MelonEnvironment.GameExecutableName}");
+
             var module = ModuleManager.FindBootstrapModule();
-            
             if (module == null)
             {
                 MelonLogger.Warning("Engine is UNKNOWN! Continuing anyways...");
@@ -22,7 +24,7 @@ namespace MelonLoader.Bootstrap
             
             MelonDebug.Msg("Found Bootstrap Module: " + module.GetType().FullName);
             MelonLogger.Msg($"Running Engine: {module.EngineName}");
-            module.Startup();
+            module.Startup(); // TO-DO: Implement Fallback Handling for when a Module Fails to Startup
         }
     }   
 }

@@ -10,7 +10,7 @@ namespace MelonLoader.Bootstrap
 {
     public class ModuleManager
     {
-        public static BootstrapModule FindBootstrapModule()
+        public static IBootstrapModule FindBootstrapModule()
         {
             foreach (var bootstrapPath in Directory.GetFiles(MelonEnvironment.ModulesDirectory, "*.Bootstrap.dll", SearchOption.AllDirectories))
             {
@@ -21,7 +21,7 @@ namespace MelonLoader.Bootstrap
                 //TODO: Fix dotnet stupidly not using default load context when hosting coreclr.
                 var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(bootstrapPath);
 
-                var type = assembly.GetValidTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(BootstrapModule)));
+                var type = assembly.GetValidTypes().FirstOrDefault(t => t.GetInterfaces().Any(i => i == typeof(IBootstrapModule)));
                 if (type == null)
                 {
                     //MelonLogger.Warning($"Failed to load BootstrapModule '{bootstrapPath}': No type deriving from BootstrapModule found.");
@@ -30,7 +30,7 @@ namespace MelonLoader.Bootstrap
 
                 try
                 {
-                    BootstrapModule module = (BootstrapModule)Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                    IBootstrapModule module = (IBootstrapModule)Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
                     if (module.IsMyEngine)
                         return module;
                 }

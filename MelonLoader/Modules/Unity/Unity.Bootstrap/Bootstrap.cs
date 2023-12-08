@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace MelonLoader.Unity
 {
-    public class Bootstrap : BootstrapModule
+    public class Bootstrap : IBootstrapModule
     {
         public string EngineName => "Unity";
 
