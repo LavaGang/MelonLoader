@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.Godot</RootNamespace>
+        <TargetFrameworks>net35;netstandard2.1;net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\Godot\</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.Godot.Shared</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj">
+            <Private>False</Private>
+            <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+</Project>
