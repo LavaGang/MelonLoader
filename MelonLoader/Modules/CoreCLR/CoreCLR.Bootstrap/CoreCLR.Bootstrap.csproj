@@ -18,5 +18,6 @@
         <ExcludeAssets>runtime</ExcludeAssets>
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
+      <ProjectReference Include="..\CoreCLR.Shared\CoreCLR.Shared.csproj" />
     </ItemGroup>
 </Project>

@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unity.Shared", "Modules\Uni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Godot.Shared", "Modules\Godot\Godot.Shared\Godot.Shared.csproj", "{7E2EAB94-16C5-428E-A29E-B71BFCD81137}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCLR.Shared", "Modules\CoreCLR\CoreCLR.Shared\CoreCLR.Shared.csproj", "{BDABD86B-ABC0-4B59-8863-608FB8A5CEA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{7E2EAB94-16C5-428E-A29E-B71BFCD81137}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E2EAB94-16C5-428E-A29E-B71BFCD81137}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E2EAB94-16C5-428E-A29E-B71BFCD81137}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDABD86B-ABC0-4B59-8863-608FB8A5CEA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDABD86B-ABC0-4B59-8863-608FB8A5CEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDABD86B-ABC0-4B59-8863-608FB8A5CEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDABD86B-ABC0-4B59-8863-608FB8A5CEA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{0950C2EC-9116-4A7A-B5CF-A6C24CB90689} = {40E3E955-2FEE-4C38-BE89-76F61594DB4A}
 		{AAB39E01-B118-4481-9796-036E92B857A0} = {3E7F5C09-221B-4492-9BA0-2D1ED9BEC58C}
 		{7E2EAB94-16C5-428E-A29E-B71BFCD81137} = {A5293DFE-1E8A-4933-B3D6-F8B06D995A23}
+		{BDABD86B-ABC0-4B59-8863-608FB8A5CEA4} = {40E3E955-2FEE-4C38-BE89-76F61594DB4A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4490CB48-16CD-4D0A-858D-1484CB9DED02}

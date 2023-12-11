@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>MelonLoader.CoreCLR</RootNamespace>
+        <TargetFrameworks>net35;netstandard2.1;net6</TargetFrameworks>
+        <LangVersion>Latest</LangVersion>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Modules\CoreCLR\</OutputPath>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>embedded</DebugType>
+        <AssemblyName>MelonLoader.CoreCLR.Shared</AssemblyName>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj">
+            <Private>False</Private>
+            <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+</Project>

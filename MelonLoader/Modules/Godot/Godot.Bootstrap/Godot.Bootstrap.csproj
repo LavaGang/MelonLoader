@@ -13,6 +13,8 @@
       <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime">
         <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       </ProjectReference>
+      <ProjectReference Include="..\..\CoreCLR\CoreCLR.Bootstrap\CoreCLR.Bootstrap.csproj" />
+      <ProjectReference Include="..\..\CoreCLR\CoreCLR.Shared\CoreCLR.Shared.csproj" />
       <ProjectReference Include="..\Godot.Shared\Godot.Shared.csproj" />
     </ItemGroup>
 </Project>

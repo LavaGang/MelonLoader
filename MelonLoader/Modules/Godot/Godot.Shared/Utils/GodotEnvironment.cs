@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using MelonLoader.Utils;
 #if NETSTANDARD2_1_OR_GREATER || NET6_0_OR_GREATER
 using GodotPCKExplorer;
 #endif
@@ -57,6 +58,7 @@ public static class GodotEnvironment
     
     public static string GameName { get; private set; }
     public static string GameDeveloper { get; private set; }
+    public static string GameDataPath { get; private set; }
     public static GodotVersion EngineVersion { get; private set; }
     
     public static void Initialize(string pckPath)
@@ -79,5 +81,7 @@ public static class GodotEnvironment
         GameName = Path.GetFileNameWithoutExtension(_pckReader.PackPath);
         EngineVersion = new GodotVersion(_pckReader.PCK_VersionMajor, _pckReader.PCK_VersionMinor, _pckReader.PCK_VersionRevision);
 #endif
+        
+        GameDataPath = $"data_{MelonEnvironment.GameExecutableName}";
     }
 }
