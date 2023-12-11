@@ -24,7 +24,7 @@ namespace MelonLoader
             var ptr = Marshal.AllocHGlobal(log.Length);
             Marshal.Copy(log, 0, ptr, log.Length);
 
-#if NET6_0
+#if NET6_0_OR_GREATER
             WriteLogToFile((byte*)ptr, log.Length);
 #else
             var function = (dWriteLogToFile)Marshal.GetDelegateForFunctionPointer(pWriteLogToFile, typeof(dWriteLogToFile));
@@ -34,7 +34,7 @@ namespace MelonLoader
             Marshal.FreeHGlobal(ptr);
         }
 
-#if NET6_0
+#if NET6_0_OR_GREATER
         public static delegate* unmanaged[Stdcall]<byte*, int, void> WriteLogToFile;
 
         public static IntPtr NativeLoadLib(string name)

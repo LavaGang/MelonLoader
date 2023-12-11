@@ -22,7 +22,7 @@ namespace MelonLoader.Utils
         internal static void Initialize()
         {
             // Game based Paths
-#if NET6_0
+#if NET6_0_OR_GREATER
             GameExecutablePath = System.Environment.ProcessPath;
 #else
             GameExecutablePath = Process.GetCurrentProcess().MainModule!.FileName;

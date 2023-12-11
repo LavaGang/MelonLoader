@@ -1,6 +1,6 @@
 namespace MelonLoader.CoreCLR.Bootstrap;
 
-public class DotnetLoader
+public static class DotnetLoader
 {
     
 }

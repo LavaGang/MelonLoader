@@ -7,6 +7,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>embedded</DebugType>
         <AssemblyName>MelonLoader.Godot.Shared</AssemblyName>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj">
@@ -14,5 +15,10 @@
             <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
             <ExcludeAssets>runtime</ExcludeAssets>
         </ProjectReference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' != 'net35'">
+        <Reference Include="GodotPCKExplorer">
+            <HintPath>..\..\..\..\BaseLibs\GodotPCKExplorer\GodotPCKExplorer.dll</HintPath>
+        </Reference>
     </ItemGroup>
 </Project>

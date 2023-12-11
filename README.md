@@ -237,6 +237,7 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 -
 - [AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) is licensed under the MIT License. See [LICENSE](https://github.com/nesrak1/AssetsTools.NET/blob/master/LICENSE) for the full License.
 - [AssetRipper.Primitives](https://github.com/AssetRipper/AssetRipper.Primitives) is licensed under the MIT License. See [LICENSE](https://github.com/AssetRipper/AssetRipper.Primitives/blob/master/License.md) for the full License.
+- [GodotPCKExplorer](https://github.com/DmitriySalnikov/GodotPCKExplorer) is licensed under the MIT License. See [LICENSE](https://github.com/DmitriySalnikov/GodotPCKExplorer/blob/master/LICENSE) for the full License.
 -
 - [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/Bootstrap/Base/MSDetours/LICENSE.md) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
