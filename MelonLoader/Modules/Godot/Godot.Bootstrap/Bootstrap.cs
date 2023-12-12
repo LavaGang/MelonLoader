@@ -45,6 +45,9 @@ namespace MelonLoader.Godot.Bootstrap
                 }
 
                 DotnetLoader.Startup(new DotnetRuntimeInfo(hostFxrPath));
+                
+                MelonDebug.Msg($"HostFxr Path: {hostFxrPath}");
+                MelonDebug.Msg($"Using .NET {DotnetLoader.RuntimeInfo.RuntimeVersion}");
                 return;
             }
 

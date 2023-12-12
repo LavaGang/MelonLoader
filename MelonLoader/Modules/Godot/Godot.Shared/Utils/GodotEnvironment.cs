@@ -82,6 +82,6 @@ public static class GodotEnvironment
         EngineVersion = new GodotVersion(_pckReader.PCK_VersionMajor, _pckReader.PCK_VersionMinor, _pckReader.PCK_VersionRevision);
 #endif
         
-        GameDataPath = $"data_{MelonEnvironment.GameExecutableName}";
+        GameDataPath = $"data_{MelonEnvironment.GameExecutableName}_{(MelonUtils.IsGame32Bit ? "x86" : "x86_64")}";
     }
 }
