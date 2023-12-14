@@ -25,8 +25,9 @@ namespace MelonLoader.NativeHost
         }
 
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-        static void Initialize()
+        static void Initialize(Stereo.StereoBool firstRunBool)
         {
+            bool firstRun = firstRunBool == Stereo.StereoBool.True;
             bool isDefaultAlc = AssemblyLoadContext.Default == AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly());
             Console.WriteLine($"[NewEntryPoint] Initializing. In default load context: {isDefaultAlc}");
 
@@ -35,7 +36,7 @@ namespace MelonLoader.NativeHost
             //Have to invoke through a proxy so that we don't load MelonLoader.dll before the above line
             try
             {
-                MelonLoaderInvoker.Initialize();
+                MelonLoaderInvoker.Initialize(firstRun);
             } catch(Exception ex)
             {
                 Console.WriteLine("[NewEntryPoint] Caught exception invoking Initialize! " + ex);

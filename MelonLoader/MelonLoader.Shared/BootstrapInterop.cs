@@ -37,14 +37,6 @@ namespace MelonLoader
 
 #if NET6_0_OR_GREATER
         public static delegate* unmanaged[Stdcall]<byte*, int, void> WriteLogToFile;
-        
-        public delegate void dLoadInternalCalls(void* writeToLogFile);
-        
-        [UnmanagedCallersOnly(CallConvs = new[] {typeof(CallConvCdecl)})]
-        public static void LoadInternalCalls(void* writeToLogFile)
-        {
-            WriteLogToFile = (delegate* unmanaged[Stdcall]<byte*, int, void>)writeToLogFile;
-        }
 
         public static IntPtr NativeLoadLib(string name)
             => NativeLibrary.Load(name);

@@ -6,13 +6,13 @@ namespace MelonLoader.NativeHost
 {
     internal class MelonLoaderInvoker
     {
-        internal static unsafe void Initialize()
+        internal static unsafe void Initialize(bool firstRun)
         {
             BootstrapInterop.HookAttach = HookAttach;
             BootstrapInterop.HookDetach = NativeEntryPoint.Exports.HookDetach;
             BootstrapInterop.WriteLogToFile = NativeEntryPoint.Exports.WriteLogToFile;
-
-            Entrypoint.Entry();
+            if (firstRun)
+                Entrypoint.Entry();
         }
 
         private static unsafe void* HookAttach(void* target, void* detour)

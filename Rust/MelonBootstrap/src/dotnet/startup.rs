@@ -17,8 +17,11 @@ use crate::{
 pub struct HostImports {
     pub load_assembly_get_ptr: fn(isize, isize, isize, *mut *mut c_void),
 
-    pub initialize: fn(),
+    pub initialize: fn(u8),
 }
+
+pub const STEREO_TRUE: u8 = 1;
+pub const STEREO_FALSE: u8 = 0;
 
 #[repr(C)]
 #[derive(Debug)]
@@ -31,7 +34,7 @@ pub struct HostExports {
 pub static IMPORTS: LazyLock<Mutex<HostImports>> = LazyLock::new(|| {
     Mutex::new(HostImports {
         load_assembly_get_ptr: |_, _, _, _| {},
-        initialize: || {},
+        initialize: |_| {},
     })
 });
 
@@ -70,7 +73,7 @@ pub fn start() -> Result<(), Box<dyn Error>> {
 
     let mut imports = HostImports {
         load_assembly_get_ptr: |_, _, _, _| {},
-        initialize: || {},
+        initialize: |_| {},
     };
 
     let mut exports = HostExports {
@@ -110,7 +113,7 @@ pub fn start() -> Result<(), Box<dyn Error>> {
         Err("Failed to get HostImports::Initialize!")?
     }
 
-    (imports.initialize)();
+    (imports.initialize)(STEREO_TRUE);
 
     *IMPORTS.try_lock()? = imports;
 

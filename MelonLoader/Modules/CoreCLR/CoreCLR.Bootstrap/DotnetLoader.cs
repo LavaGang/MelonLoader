@@ -10,7 +10,24 @@ public static class DotnetLoader
 {
     #region Private Members
 
-    public static MelonNativeDetour<HostFxrLibrary.d_hostfxr_get_runtime_delegate> hostfxr_get_runtime_delegate_detour;
+    private static MelonNativeDetour<HostFxrLibrary.d_hostfxr_get_runtime_delegate> _hostfxrGetRuntimeDelegateDetour;
+    
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate int DLoadAssemblyAndGetFunctionPointer(IntPtr assemblyPath, IntPtr typeName, IntPtr methodName, IntPtr delegateTypeName, IntPtr reserved, out IntPtr delegateHandle);
+    private static DLoadAssemblyAndGetFunctionPointer _loadAssemblyAndGetFunctionPointer;
+    
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void DLoadAssemblyAndGetFunctionPointerCustom(IntPtr assemblyPath, IntPtr typeName, IntPtr methodName, out IntPtr delegateHandle);
+    
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private unsafe delegate void DLoadStage1(HostImports* imports);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private unsafe delegate void DLoadStage2(HostImports* imports, HostExports* exports);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void DInitialize(byte firstRun);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void DStartup();
+
 
     #endregion
     
@@ -44,13 +61,12 @@ public static class DotnetLoader
         
         MelonDebug.Msg("Attaching hook to hostfxr_get_runtime_delegate");
         
-        hostfxr_get_runtime_delegate_detour = new MelonNativeDetour<HostFxrLibrary.d_hostfxr_get_runtime_delegate>(HostFxrLibrary.Instance.hostfxr_get_runtime_delegate, h_hostfxr_get_runtime_delegate);
-        hostfxr_get_runtime_delegate_detour.Attach();
+        _hostfxrGetRuntimeDelegateDetour = new MelonNativeDetour<HostFxrLibrary.d_hostfxr_get_runtime_delegate>(HostFxrLibrary.Instance.hostfxr_get_runtime_delegate, h_hostfxr_get_runtime_delegate);
     }
     
     private static bool CheckExports()
     {
-        (string, Delegate)[] listOfExports = new (string, Delegate)[]
+        var listOfExports = new (string, Delegate)[]
         {
             (nameof(HostFxrLibrary.Instance.hostfxr_get_runtime_delegate), HostFxrLibrary.Instance.hostfxr_get_runtime_delegate),
         };
@@ -67,79 +83,132 @@ public static class DotnetLoader
         return true;
     }
 
+    private static unsafe void ReloadIntoDefaultAlc()
+    {
+        var runtimeDir = Path.Combine(MelonEnvironment.MelonLoaderDirectory, "net6");
+        var bootstrapPath = Path.Combine(runtimeDir, "MelonLoader.NativeHost.dll");
+        var sharedPath = Path.Combine(runtimeDir, "MelonLoader.Shared.dll");
+        var typeName = "MelonLoader.NativeHost.NativeEntryPoint, MelonLoader.NativeHost";
+        var methodName = "LoadStage1";
+        
+        if (!File.Exists(bootstrapPath))
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to find {bootstrapPath}!");
+            return;
+        }
+        
+        MelonDebug.Msg("[Dotnet] Invoking LoadStage1");
+        var init = LoadAssemblyAndGetFunctionPointer<DLoadStage1>(bootstrapPath, typeName, methodName, HostFxrLibrary.UNMANAGEDCALLERSONLY_METHOD);
+        if (init == null)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to get MelonLoader.NativeHost.NativeEntryPoint.LoadStage1!");
+            return;
+        }
+        
+        var imports = new HostImports();
+        init(&imports);
+        
+        if (imports._loadAssemblyGetPtr == IntPtr.Zero)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to get LoadAssemblyAndGetPtr!");
+            return;
+        }
+        
+        MelonDebug.Msg("[Dotnet] Reloading NativeHost into correct load context and getting LoadStage2 pointer");
+        var loadAssemblyAndGetPtr =
+            Marshal.GetDelegateForFunctionPointer<DLoadAssemblyAndGetFunctionPointerCustom>(
+                imports._loadAssemblyGetPtr);
+        
+        loadAssemblyAndGetPtr(bootstrapPath.ToUnicodePointer(), typeName.ToUnicodePointer(), "LoadStage2".ToUnicodePointer(), out var loadStage2);
+        
+        if (loadStage2 == IntPtr.Zero)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to get LoadStage2!");
+            return;
+        }
+        
+        var exports = new HostExports
+        {
+            _writeLogFile = (IntPtr)BootstrapInterop.WriteLogToFile,
+            _hookAttach = (IntPtr)BootstrapInterop.HookDetach,
+            _hookDetach = (IntPtr)BootstrapInterop.HookDetach
+        };
+        
+        MelonDebug.Msg("[Dotnet] Invoking LoadStage2");
+        var loadStage2Delegate = Marshal.GetDelegateForFunctionPointer<DLoadStage2>(loadStage2);
+        loadStage2Delegate(&imports, &exports);
+        
+        if (imports._init == IntPtr.Zero)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to get Initialize!");
+            return;
+        }
+        
+        var initialize = Marshal.GetDelegateForFunctionPointer<DInitialize>(imports._init);
+        initialize(0);
+        
+        loadAssemblyAndGetPtr(sharedPath.ToUnicodePointer(), "MelonLoader.Core, MelonLoader.Shared".ToUnicodePointer(), "NativeStartup".ToUnicodePointer(), out var nativeStartup);
+        
+        if (nativeStartup == IntPtr.Zero)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to get NativeStartup!");
+            return;
+        }
+        
+        MelonDebug.Msg("Invoking MelonLoader.Core.Startup");
+        
+        var nativeStartupDelegate = Marshal.GetDelegateForFunctionPointer<DStartup>(nativeStartup);
+        nativeStartupDelegate();
+    }
     
     #endregion
     
     #region Hooks
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int d_load_assembly_and_get_function_pointer(IntPtr assembly_path, IntPtr type_name, IntPtr method_name, IntPtr delegate_type_name, IntPtr reserved, out IntPtr delegate_handle);
-    private static d_load_assembly_and_get_function_pointer load_fn;
-    private delegate void d_init();
-    private delegate void d_load_icalls(IntPtr log_function);
-    
-    private static unsafe int h_hostfxr_get_runtime_delegate(IntPtr host_context_handle, IntPtr type, out IntPtr delegate_handle)
+
+    private static unsafe int h_hostfxr_get_runtime_delegate(IntPtr hostContextHandle, hostfxr_delegate_type type, out IntPtr delegateHandle)
     {
-        int result = hostfxr_get_runtime_delegate_detour.Trampoline(host_context_handle, type, out delegate_handle);
-        hostfxr_get_runtime_delegate_detour.Detach();
+        int result = _hostfxrGetRuntimeDelegateDetour.Trampoline(hostContextHandle, type, out delegateHandle);
+        _hostfxrGetRuntimeDelegateDetour.Detach();
         
-        if (delegate_handle == IntPtr.Zero)
+        if (result != 0)
+            return result;
+        
+        if (delegateHandle == IntPtr.Zero)
             return result;
         
         MelonDebug.Msg("Getting load_assembly_and_get_function_pointer");
         
-        load_fn = Marshal.GetDelegateForFunctionPointer<d_load_assembly_and_get_function_pointer>(delegate_handle);
-        if (load_fn == null)
+        _loadAssemblyAndGetFunctionPointer = Marshal.GetDelegateForFunctionPointer<DLoadAssemblyAndGetFunctionPointer>(delegateHandle);
+        if (_loadAssemblyAndGetFunctionPointer == null)
             return result;
         
-        var runtime_dir = Path.Combine(MelonEnvironment.MelonLoaderDirectory, "net6");
-        var shared_path = Path.Combine(runtime_dir, "MelonLoader.Shared.dll");
-        
-        if (!File.Exists(shared_path))
-            return result;
-        
-        MelonDebug.Msg($"Loading {nameof(BootstrapInterop)}.{nameof(BootstrapInterop.LoadInternalCalls)}");
-        
-        var load_icalls_fn = LoadAssemblyAndGetFunctionPointer<d_load_icalls>(shared_path, $"MelonLoader.Shared, {nameof(BootstrapInterop)}", nameof(BootstrapInterop.LoadInternalCalls), "MelonLoader.Shared, BootstrapInterop.dLoadInternalCalls");
-        //var init_fn = LoadAssemblyAndGetFunctionPointer<d_init>(shared_path, nameof(Core), nameof(Core.Startup));
-        
-        if (load_icalls_fn == null)
-            return result;
-        
-        MelonDebug.Msg("Invoking MelonLoader.BootstrapInterop.LoadInternalCalls");
-        load_icalls_fn((IntPtr)BootstrapInterop.WriteLogToFile);
-        
-        //MelonDebug.Msg("Invoking MelonLoader.Core.Startup");
-        //init_fn();
+        ReloadIntoDefaultAlc();
         
         return result;
     }
     
-    //write a generic method to load the assembly and get the function pointer where T is the delegate type
-    private static T LoadAssemblyAndGetFunctionPointer<T>(string assembly_path, string type_name, string method_name, string delegate_type_name) where T : Delegate
+    private static T LoadAssemblyAndGetFunctionPointer<T>(string assemblyPath, string typeName, string methodName, IntPtr delegateTypeName) where T : Delegate
     {
-        IntPtr delegate_handle;
-        if (load_fn == null)
+        if (_loadAssemblyAndGetFunctionPointer == null)
         {
             MelonAssertion.ThrowInternalFailure("load_fn is null!");
             return default;
         }
         
-        int res = load_fn(assembly_path.ToAnsiPointer(), type_name.ToAnsiPointer(), method_name.ToAnsiPointer(), delegate_type_name?.ToAnsiPointer() ?? IntPtr.Zero, IntPtr.Zero, out delegate_handle);
-
+        int res = _loadAssemblyAndGetFunctionPointer(assemblyPath.ToAutoPointer(), typeName.ToAutoPointer(), methodName.ToAutoPointer(), delegateTypeName, IntPtr.Zero, out var delegateHandle);
         if (res != 0)
         {
-            MelonAssertion.ThrowInternalFailure($"Failed to load {assembly_path}! Status Code: {res}");
+            MelonAssertion.ThrowInternalFailure($"Failed to load {assemblyPath}! Status Code: 0x{(res):X}");
             return default;
         }
 
-        if (delegate_handle == IntPtr.Zero)
-        {
-            MelonAssertion.ThrowInternalFailure($"Failed to get {type_name}.{method_name}!");
-            return default;
-        }
+        if (Marshal.ReadIntPtr(delegateHandle) != IntPtr.Zero)
+            return (T)Marshal.GetDelegateForFunctionPointer(delegateHandle, typeof(T));
         
-        return (T)Marshal.GetDelegateForFunctionPointer(delegate_handle, typeof(T));
+        
+        MelonAssertion.ThrowInternalFailure($"Failed to get {typeName}.{methodName}!");
+        return default;
+
     }
     
     #endregion

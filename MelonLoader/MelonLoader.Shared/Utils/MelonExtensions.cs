@@ -64,9 +64,17 @@ namespace MelonLoader.Utils
 
         public static IntPtr ToAnsiPointer(this string str)
             => Marshal.StringToHGlobalAnsi(str);
-
+        
+        public static IntPtr ToAutoPointer(this string str)
+            => Marshal.StringToHGlobalAuto(str);
+        
+        public static IntPtr ToUnicodePointer(this string str) 
+            => Marshal.StringToHGlobalUni(str);
+        
         public static byte[] ToUnicodeBytes(this string str) 
             => Encoding.Unicode.GetBytes(str);
+        
+        public static IntPtr ToNullTerminatedAnsiPointer(this string str) => Marshal.StringToHGlobalAnsi(str + "\0");
 
         #endregion
 

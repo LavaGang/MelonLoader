@@ -7,6 +7,12 @@ namespace MelonLoader.NativeHost
 {
     public static class Stereo
     {
+        public enum StereoBool : byte
+        {
+            True = 1,
+            False = 0
+        }
+        
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
         internal static unsafe void LoadAssemblyAndGetFuncPtr(IntPtr pathNative, IntPtr typeNameNative, IntPtr methodNameNative, void** resultHandle)
         {
