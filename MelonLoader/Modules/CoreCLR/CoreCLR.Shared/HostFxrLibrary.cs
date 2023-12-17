@@ -17,10 +17,21 @@ public enum hostfxr_delegate_type
     hdt_load_assembly_bytes,
 }
 
-public struct HostImports
+public unsafe struct HostImports
 {
-    public IntPtr _loadAssemblyGetPtr;
-    public IntPtr _init;
+    public delegate* unmanaged[Stdcall]<IntPtr, IntPtr, IntPtr, out IntPtr, void> LoadAssemblyAndGetPtr;
+    public delegate* unmanaged[Stdcall]<IntPtr, int, int> LoadAssemblyFromByteArray;
+    public delegate* unmanaged[Stdcall]<int, IntPtr, int> GetTypeByName;
+    public delegate* unmanaged[Stdcall]<int, int, IntPtr*, IntPtr*, int> ConstructType;
+    public delegate* unmanaged[Stdcall]<int, IntPtr, int, int, IntPtr*, IntPtr*, int> InvokeMethod;
+
+    public delegate* unmanaged[Stdcall]<StereoBool, void> Initialize;
+}
+
+public enum StereoBool : byte
+{
+    False = 0,
+    True = 1
 }
     
 public struct HostExports

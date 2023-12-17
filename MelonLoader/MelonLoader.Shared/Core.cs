@@ -7,13 +7,6 @@ namespace MelonLoader
 {
     public class Core
     {
-#if NET6_0_OR_GREATER
-        [UnmanagedCallersOnly]
-        public static void NativeStartup()
-        {
-            Startup();
-        }
-#endif
         public static void Startup()
         {
             MelonEnvironment.Initialize();

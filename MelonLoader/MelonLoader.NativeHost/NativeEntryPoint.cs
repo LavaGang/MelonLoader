@@ -14,6 +14,10 @@ namespace MelonLoader.NativeHost
         {
             Console.WriteLine("[NewEntryPoint] Passing ptr to LoadAssemblyAndGetFuncPtr back to host...");
             imports->LoadAssemblyAndGetPtr = &Stereo.LoadAssemblyAndGetFuncPtr;
+            imports->LoadAssemblyFromByteArray = &Stereo.LoadAssemblyFromByteArray;
+            imports->GetTypeByName = &Stereo.GetTypeByName;
+            imports->ConstructType = &Stereo.ConstructType;
+            imports->InvokeMethod = &Stereo.InvokeMethod;
         }
 
         [UnmanagedCallersOnly]

@@ -17,9 +17,6 @@ public static class DotnetLoader
     private static DLoadAssemblyAndGetFunctionPointer _loadAssemblyAndGetFunctionPointer;
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate void DLoadAssemblyAndGetFunctionPointerCustom(IntPtr assemblyPath, IntPtr typeName, IntPtr methodName, out IntPtr delegateHandle);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private unsafe delegate void DLoadStage1(HostImports* imports);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private unsafe delegate void DLoadStage2(HostImports* imports, HostExports* exports);
@@ -108,18 +105,9 @@ public static class DotnetLoader
         var imports = new HostImports();
         init(&imports);
         
-        if (imports._loadAssemblyGetPtr == IntPtr.Zero)
-        {
-            MelonAssertion.ThrowInternalFailure($"Failed to get LoadAssemblyAndGetPtr!");
-            return;
-        }
-        
         MelonDebug.Msg("[Dotnet] Reloading NativeHost into correct load context and getting LoadStage2 pointer");
-        var loadAssemblyAndGetPtr =
-            Marshal.GetDelegateForFunctionPointer<DLoadAssemblyAndGetFunctionPointerCustom>(
-                imports._loadAssemblyGetPtr);
         
-        loadAssemblyAndGetPtr(bootstrapPath.ToUnicodePointer(), typeName.ToUnicodePointer(), "LoadStage2".ToUnicodePointer(), out var loadStage2);
+        imports.LoadAssemblyAndGetPtr(bootstrapPath.ToUnicodePointer(), typeName.ToUnicodePointer(), "LoadStage2".ToUnicodePointer(), out var loadStage2);
         
         if (loadStage2 == IntPtr.Zero)
         {
@@ -138,27 +126,38 @@ public static class DotnetLoader
         var loadStage2Delegate = Marshal.GetDelegateForFunctionPointer<DLoadStage2>(loadStage2);
         loadStage2Delegate(&imports, &exports);
         
-        if (imports._init == IntPtr.Zero)
+        MelonDebug.Msg("[Dotnet] Invoking Initialize");
+        imports.Initialize(StereoBool.False);
+
+        var asmBuffer = File.ReadAllBytes(sharedPath);
+        int asmHandle = 0;
+        fixed (byte* p = asmBuffer)
         {
-            MelonAssertion.ThrowInternalFailure($"Failed to get Initialize!");
+            asmHandle = imports.LoadAssemblyFromByteArray((IntPtr)p, asmBuffer.Length);
+        }
+        
+        if (asmHandle == 0)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to load MelonLoader.Shared!");
             return;
         }
         
-        var initialize = Marshal.GetDelegateForFunctionPointer<DInitialize>(imports._init);
-        initialize(0);
-        
-        loadAssemblyAndGetPtr(sharedPath.ToUnicodePointer(), "MelonLoader.Core, MelonLoader.Shared".ToUnicodePointer(), "NativeStartup".ToUnicodePointer(), out var nativeStartup);
-        
-        if (nativeStartup == IntPtr.Zero)
+        var coreTypeHandle = imports.GetTypeByName(asmHandle, "MelonLoader.Core, MelonLoader.Shared".ToUnicodePointer());
+        if (coreTypeHandle == 0)
         {
-            MelonAssertion.ThrowInternalFailure($"Failed to get NativeStartup!");
+            MelonAssertion.ThrowInternalFailure($"Failed to get MelonLoader.Core!");
             return;
         }
+        
         
         MelonDebug.Msg("Invoking MelonLoader.Core.Startup");
+        imports.InvokeMethod(coreTypeHandle, "Startup".ToUnicodePointer(), 0, 0, null, null);
         
-        var nativeStartupDelegate = Marshal.GetDelegateForFunctionPointer<DStartup>(nativeStartup);
-        nativeStartupDelegate();
+        MelonDebug.Msg("Invoking MelonLoader.Core.OnApplicationPreStart");
+        imports.InvokeMethod(coreTypeHandle, "OnApplicationPreStart".ToUnicodePointer(), 0, 0, null, null);
+        
+        MelonDebug.Msg("Invoking MelonLoader.Core.OnApplicationStart");
+        imports.InvokeMethod(coreTypeHandle, "OnApplicationStart".ToUnicodePointer(), 0, 0, null, null);
     }
     
     #endregion
