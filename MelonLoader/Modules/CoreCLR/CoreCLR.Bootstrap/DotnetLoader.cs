@@ -135,29 +135,48 @@ public static class DotnetLoader
         {
             asmHandle = imports.LoadAssemblyFromByteArray((IntPtr)p, asmBuffer.Length);
         }
-        
-        if (asmHandle == 0)
+
+        if (asmHandle < 0)
         {
-            MelonAssertion.ThrowInternalFailure($"Failed to load MelonLoader.Shared!");
-            return;
+            MelonAssertion.ThrowInternalFailure($"Failed to load {sharedPath}! Status Code: {asmHandle}");
         }
         
-        var coreTypeHandle = imports.GetTypeByName(asmHandle, "MelonLoader.Core, MelonLoader.Shared".ToUnicodePointer());
-        if (coreTypeHandle == 0)
+        var coreTypeHandle = imports.GetTypeByName(asmHandle, "MelonLoader.Core".ToUnicodePointer());
+        
+        MelonDebug.Msg(coreTypeHandle);
+        
+        if (coreTypeHandle < 0)
         {
-            MelonAssertion.ThrowInternalFailure($"Failed to get MelonLoader.Core!");
+            MelonAssertion.ThrowInternalFailure($"Failed to get MelonLoader.Core! Status Code: {coreTypeHandle}");
             return;
         }
-        
         
         MelonDebug.Msg("Invoking MelonLoader.Core.Startup");
-        imports.InvokeMethod(coreTypeHandle, "Startup".ToUnicodePointer(), 0, 0, null, null);
+        var ret = imports.InvokeMethod(coreTypeHandle, "Startup".ToUnicodePointer(), -1, 0, null, null);
+        
+        if (ret != 0)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to invoke MelonLoader.Core.Startup! Status Code: {ret}");
+            return;
+        }
         
         MelonDebug.Msg("Invoking MelonLoader.Core.OnApplicationPreStart");
-        imports.InvokeMethod(coreTypeHandle, "OnApplicationPreStart".ToUnicodePointer(), 0, 0, null, null);
+        ret = imports.InvokeMethod(coreTypeHandle, "OnApplicationPreStart".ToUnicodePointer(), -1, 0, null, null);
+        
+        if (ret != 0)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to invoke MelonLoader.Core.OnApplicationPreStart! Status Code: {ret}");
+            return;
+        }
         
         MelonDebug.Msg("Invoking MelonLoader.Core.OnApplicationStart");
-        imports.InvokeMethod(coreTypeHandle, "OnApplicationStart".ToUnicodePointer(), 0, 0, null, null);
+        ret = imports.InvokeMethod(coreTypeHandle, "OnApplicationStart".ToUnicodePointer(), -1, 0, null, null);
+        
+        if (ret != 0)
+        {
+            MelonAssertion.ThrowInternalFailure($"Failed to invoke MelonLoader.Core.OnApplicationStart! Status Code: {ret}");
+            return;
+        }
     }
     
     #endregion

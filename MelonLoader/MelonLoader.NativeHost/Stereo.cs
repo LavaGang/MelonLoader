@@ -44,7 +44,6 @@ namespace MelonLoader.NativeHost
                 throw new ArgumentNullException(nameof(resultHandle));
 
             var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
-            _loadedAssemblies.Add(assembly);
 
             Func<AssemblyName, Assembly> resolver = name => AssemblyLoadContext.Default.LoadFromAssemblyName(name);
 
