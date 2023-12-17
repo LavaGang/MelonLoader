@@ -143,8 +143,6 @@ public static class DotnetLoader
         
         var coreTypeHandle = imports.GetTypeByName(asmHandle, "MelonLoader.Core".ToUnicodePointer());
         
-        MelonDebug.Msg(coreTypeHandle);
-        
         if (coreTypeHandle < 0)
         {
             MelonAssertion.ThrowInternalFailure($"Failed to get MelonLoader.Core! Status Code: {coreTypeHandle}");
