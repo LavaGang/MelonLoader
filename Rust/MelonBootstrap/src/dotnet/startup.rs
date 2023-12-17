@@ -16,6 +16,10 @@ use crate::{
 #[derive(Debug)]
 pub struct HostImports {
     pub load_assembly_get_ptr: fn(isize, isize, isize, *mut *mut c_void),
+    pub load_asm_from_bytes: fn(isize, i32) -> i32,
+    pub get_type_by_name: fn(i32, isize) -> i32,
+    pub construct_type: fn(i32, i32, *mut isize, *mut isize) -> i32,
+    pub invoke_method: fn(i32, isize, i32, i32, *mut isize, *mut isize) -> i32,
 
     pub initialize: fn(u8),
 }
@@ -34,6 +38,10 @@ pub struct HostExports {
 pub static IMPORTS: LazyLock<Mutex<HostImports>> = LazyLock::new(|| {
     Mutex::new(HostImports {
         load_assembly_get_ptr: |_, _, _, _| {},
+        load_asm_from_bytes: |_, _| 0,
+        get_type_by_name: |_, _| 0,
+        construct_type: |_, _, _, _| 0,
+        invoke_method: |_, _, _, _, _, _| 0,
         initialize: |_| {},
     })
 });
@@ -73,6 +81,10 @@ pub fn start() -> Result<(), Box<dyn Error>> {
 
     let mut imports = HostImports {
         load_assembly_get_ptr: |_, _, _, _| {},
+        load_asm_from_bytes: |_, _| 0,
+        get_type_by_name: |_, _| 0,
+        construct_type: |_, _, _, _| 0,
+        invoke_method: |_, _, _, _, _, _| 0,
         initialize: |_| {},
     };
 
