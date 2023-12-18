@@ -8,7 +8,7 @@ namespace MelonLoader.Bootstrap
     {
         public static unsafe void Entry()
         {
-            Core.Startup();
+            Core.Startup(null);
             
             MelonDebug.Msg("Starting Up...");
             MelonDebug.Msg(MelonEnvironment.MelonLoaderDirectory);
@@ -30,7 +30,7 @@ namespace MelonLoader.Bootstrap
             // Fix Resolving Issue
             UnhandledAssemblyResolve.AddSearchDirectoryToFront(Path.Combine(MelonEnvironment.ModulesDirectory, module.EngineName, "net6"));
 
-            module.Startup(); // TO-DO: Implement Fallback Handling for when a Module Fails to Startup
+            module.Startup(); // TODO: Implement Fallback Handling for when a Module Fails to Startup
         }
     }   
 }

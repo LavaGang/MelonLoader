@@ -11,9 +11,6 @@ namespace MelonLoader.Godot.Bootstrap
     {
         public string EngineName => "Godot";
 
-        /// <summary>
-        /// TODO: Implement this properly, read the PCK file and see if we can determine engine version, etc.
-        /// </summary>
         public bool IsMyEngine
         {
             get
@@ -43,8 +40,15 @@ namespace MelonLoader.Godot.Bootstrap
                     MelonAssertion.ThrowInternalFailure("Failed to find HostFxr Library!");
                     return;
                 }
+                
+                string engineModulePath = Path.Combine(MelonEnvironment.ModulesDirectory, "Godot", "net6", "MelonLoader.Godot.EngineModule.dll");
+                if (!File.Exists(engineModulePath))
+                {
+                    MelonAssertion.ThrowInternalFailure($"Failed to find {engineModulePath}!");
+                    return;
+                }
 
-                DotnetLoader.Startup(new DotnetRuntimeInfo(hostFxrPath));
+                DotnetLoader.Startup(new DotnetRuntimeInfo(hostFxrPath, engineModulePath));
                 
                 MelonDebug.Msg($"HostFxr Path: {hostFxrPath}");
                 MelonDebug.Msg($"Using .NET {DotnetLoader.RuntimeInfo.RuntimeVersion}");
@@ -54,7 +58,10 @@ namespace MelonLoader.Godot.Bootstrap
             if (GodotEnvironment.EngineVersion.Major == 3)
             {
                 //TODO: Implement mono
+                return;
             }
+            
+            MelonAssertion.ThrowInternalFailure($"Unsupported Godot Version: {GodotEnvironment.EngineVersion.Major}.{GodotEnvironment.EngineVersion.Minor}.{GodotEnvironment.EngineVersion.Revision}");
         }
         
         private string[] HostFxrPaths = new string[]

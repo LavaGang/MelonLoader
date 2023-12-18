@@ -1,8 +1,9 @@
 ﻿using System;
+using MelonLoader.Interfaces;
 
 namespace MelonLoader.Mono.Bootstrap
 {
-    public class MonoRuntimeInfo
+    public class MonoRuntimeInfo : IRuntimeInfo
     {
         #region Public Members
 
@@ -10,6 +11,7 @@ namespace MelonLoader.Mono.Bootstrap
         public string VariantName { get; private set; }
 
         public string LibPath { get; private set; }
+        public string EngineModulePath { get; private set; }
         public string ConfigPath { get; private set; }
         public string PosixPath { get; private set; }
 
@@ -23,16 +25,18 @@ namespace MelonLoader.Mono.Bootstrap
             eMonoRuntimeVariant variant,
             string libPath,
             string configPath,
-            string[] triggerMethods)
-            => SetInfo(variant, libPath, configPath, triggerMethods, null);
+            string[] triggerMethods,
+            string engineModulePath)
+            => SetInfo(variant, libPath, configPath, triggerMethods, engineModulePath, null);
 
         public MonoRuntimeInfo(
             eMonoRuntimeVariant variant, 
             string libPath, 
             string configPath,
             string[] triggerMethods,
-            string posixPath)
-            => SetInfo(variant, libPath, configPath, triggerMethods, posixPath);
+            string posixPath,
+            string engineModulePath)
+            => SetInfo(variant, libPath, configPath, triggerMethods, engineModulePath, posixPath);
 
         #endregion
 
@@ -43,6 +47,7 @@ namespace MelonLoader.Mono.Bootstrap
             string libPath,
             string configPath,
             string[] triggerMethods,
+            string engineModulePath,
             string posixPath)
         {
             Variant = variant;
@@ -54,6 +59,8 @@ namespace MelonLoader.Mono.Bootstrap
             PosixPath = posixPath;
 
             TriggerMethods = triggerMethods;
+            
+            EngineModulePath = engineModulePath;
         }
 
         #endregion

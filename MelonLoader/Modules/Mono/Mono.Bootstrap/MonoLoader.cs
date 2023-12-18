@@ -253,7 +253,7 @@ namespace MelonLoader.Mono.Bootstrap
             
             // Invoke MelonLoader.Core.Startup()
             MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.Startup)}...");
-            MonoLibrary.Instance.InvokeMethod(mlShared_Startup, IntPtr.Zero);
+            MonoLibrary.Instance.InvokeMethod(mlShared_Startup, IntPtr.Zero, MonoLibrary.Instance.mono_string_new(monoDomain, RuntimeInfo.EngineModulePath.ToAnsiPointer()));
 
             // Invoke MelonLoader.Core.PreStart()
             MelonDebug.Msg($"Invoking {mlCoreType.Namespace}.{mlCoreType.Name}.{nameof(Core.OnApplicationPreStart)}...");

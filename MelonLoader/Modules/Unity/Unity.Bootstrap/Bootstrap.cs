@@ -92,6 +92,14 @@ namespace MelonLoader.Unity
 
         internal static MonoRuntimeInfo GetMonoRuntimeInfo()
         {
+            //TODO: use netstandard2.1 if applicable
+            string engineModulePath = Path.Combine(MelonEnvironment.ModulesDirectory, "Unity", "net35", "MelonLoader.Unity.EngineModule.dll");
+            if (!File.Exists(engineModulePath))
+            {
+                MelonAssertion.ThrowInternalFailure($"Failed to find {engineModulePath}!");
+                return null;
+            }
+            
             // Folders the Mono folders might be located in
             string[] directoriesToSearch = new string[]
             {
@@ -176,7 +184,8 @@ namespace MelonLoader.Unity
                             filePath,
                             configPath,
                             triggerMethods.ToArray(),
-                            posixPath
+                            posixPath,
+                            engineModulePath
                         );
                     }
                 }

@@ -149,8 +149,22 @@ public static class DotnetLoader
             return;
         }
         
-        MelonDebug.Msg("Invoking MelonLoader.Core.Startup");
-        var ret = imports.InvokeMethod(coreTypeHandle, "Startup".ToUnicodePointer(), -1, 0, null, null);
+        IntPtr[] args = new IntPtr[1];
+        args[0] = RuntimeInfo.EngineModulePath.ToUnicodePointer();
+        
+        IntPtr[] paramTypes = new IntPtr[1];
+        paramTypes[0] = "string".ToUnicodePointer();
+
+        int ret = 0;
+        
+        fixed (IntPtr* p = &paramTypes[0])
+        {
+            fixed (IntPtr* a = &args[0])
+            {
+                MelonDebug.Msg("Invoking MelonLoader.Core.Startup");
+                ret = imports.InvokeMethod(coreTypeHandle, "Startup".ToUnicodePointer(), -1, 1, p, a);
+            }
+        }
         
         if (ret != 0)
         {

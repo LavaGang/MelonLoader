@@ -7,7 +7,7 @@ namespace MelonLoader
 {
     public class Core
     {
-        public static void Startup()
+        public static void Startup(string engineModulePath)
         {
             MelonEnvironment.Initialize();
             MelonDebug.Msg("MelonLoader.Core.Startup");
@@ -15,6 +15,11 @@ namespace MelonLoader
             UnhandledException.Install(AppDomain.CurrentDomain);
             UnhandledAssemblyResolve.Install();
 
+            if (engineModulePath != null)
+            {
+                MelonDebug.Msg($"Engine Module Path: {engineModulePath}");
+                //TODO: Load Engine Module
+            }
         }
 
         public static void OnApplicationPreStart()

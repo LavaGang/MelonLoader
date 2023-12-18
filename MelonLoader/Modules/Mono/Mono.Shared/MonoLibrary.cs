@@ -104,6 +104,14 @@ namespace MelonLoader.Mono
 
         #endregion
         
+        #region Mono String
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate IntPtr d_mono_string_new(IntPtr domain, IntPtr str);
+        public d_mono_string_new mono_string_new;
+
+        #endregion
+        
         #region Utility Methods
         
         public unsafe IntPtr InvokeMethod(IntPtr method, IntPtr obj)
