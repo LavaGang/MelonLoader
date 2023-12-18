@@ -74,7 +74,7 @@ public static class GodotEnvironment
     
     private static void ReadGameInfo(string pckPath)
     {
-#if NET6_0_OR_GREATER
+#if NET6_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
         if (!_pckReader.OpenFile(pckPath))
             return;
 

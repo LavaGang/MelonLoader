@@ -1,5 +1,15 @@
-﻿namespace Unity.EngineModule;
+﻿using MelonLoader.Interfaces;
+using MelonLoader.Utils;
 
-public class EngineModule
+namespace MelonLoader.Unity.EngineModule;
+
+public class EngineModule : IEngineModule
 {
+    public string EngineName => "Unity";
+
+    public void Initialize()
+    {
+        MelonDebug.Msg("Unity.EngineModule.Initialize");
+        
+    }
 }

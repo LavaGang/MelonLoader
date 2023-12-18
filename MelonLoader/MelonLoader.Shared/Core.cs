@@ -18,7 +18,8 @@ namespace MelonLoader
             if (engineModulePath != null)
             {
                 MelonDebug.Msg($"Engine Module Path: {engineModulePath}");
-                //TODO: Load Engine Module
+                var module = ModuleManager.LoadModule(engineModulePath);
+                module.Initialize();
             }
         }
 
