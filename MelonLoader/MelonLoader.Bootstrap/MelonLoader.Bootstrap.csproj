@@ -9,7 +9,6 @@
         <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
         <DocumentationFile></DocumentationFile>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <EnableDynamicLoading>true</EnableDynamicLoading>
         <DebugType>embedded</DebugType>
         <PublishTrimmed>false</PublishTrimmed>
 

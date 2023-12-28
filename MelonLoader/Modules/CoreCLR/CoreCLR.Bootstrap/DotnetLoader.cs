@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using MelonLoader.NativeHost;
 using MelonLoader.NativeUtils;
 using MelonLoader.Utils;
 
@@ -117,9 +118,9 @@ public static class DotnetLoader
         
         var exports = new HostExports
         {
-            _writeLogFile = (IntPtr)BootstrapInterop.WriteLogToFile,
-            _hookAttach = (IntPtr)BootstrapInterop.HookDetach,
-            _hookDetach = (IntPtr)BootstrapInterop.HookDetach
+            WriteLogToFile = BootstrapInterop.WriteLogToFile,
+            HookAttach = BootstrapInterop.HookAttach,
+            HookDetach = BootstrapInterop.HookDetach
         };
         
         MelonDebug.Msg("[Dotnet] Invoking LoadStage2");
@@ -127,7 +128,7 @@ public static class DotnetLoader
         loadStage2Delegate(&imports, &exports);
         
         MelonDebug.Msg("[Dotnet] Invoking Initialize");
-        imports.Initialize(StereoBool.False);
+        imports.Initialize(Stereo.StereoBool.False);
 
         var asmBuffer = File.ReadAllBytes(sharedPath);
         int asmHandle = 0;

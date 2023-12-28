@@ -13,7 +13,10 @@ namespace MelonLoader.NativeHost
         static unsafe void LoadStage1(HostImports* imports)
         {
             Console.WriteLine("[NewEntryPoint] Passing ptr to LoadAssemblyAndGetFuncPtr back to host...");
-            imports->LoadAssemblyAndGetPtr = &Stereo.LoadAssemblyAndGetFuncPtr;
+            
+            //hack because [UnmanagedCallersOnly] doesn't support out parameters
+            delegate* unmanaged[Stdcall]<IntPtr, IntPtr, IntPtr, void**, void> ptr = &Stereo.LoadAssemblyAndGetFuncPtr;
+            imports->LoadAssemblyAndGetPtr = (delegate* unmanaged[Stdcall]<IntPtr, IntPtr, IntPtr, out IntPtr, void>)ptr;
             imports->LoadAssemblyFromByteArray = &Stereo.LoadAssemblyFromByteArray;
             imports->GetTypeByName = &Stereo.GetTypeByName;
             imports->ConstructType = &Stereo.ConstructType;

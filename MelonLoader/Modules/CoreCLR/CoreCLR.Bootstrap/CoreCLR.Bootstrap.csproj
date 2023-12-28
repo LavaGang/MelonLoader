@@ -13,6 +13,7 @@
       <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.456101" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\..\MelonLoader.NativeHost\MelonLoader.NativeHost.csproj" />
       <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj">
         <Private>False</Private>
         <ExcludeAssets>runtime</ExcludeAssets>

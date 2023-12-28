@@ -58,7 +58,7 @@ pub fn start() -> Result<(), Box<dyn Error>> {
         .join("MelonLoader")
         .join("net6");
 
-    let config_path = runtime_dir.join("MelonLoader.Bootstrap.runtimeconfig.json");
+    let config_path = runtime_dir.join("MelonLoader.NativeHost.runtimeconfig.json");
     if !config_path.exists() {
         return Err("MelonLoader.Bootstrap.runtimeconfig.json does not exist!".into());
     }
@@ -68,7 +68,7 @@ pub fn start() -> Result<(), Box<dyn Error>> {
     let bootstrap_path = runtime_dir.join("MelonLoader.NativeHost.dll");
 
     if !bootstrap_path.exists() {
-        return Err("MelonLoader.Bootstrap.dll does not exist!".into());
+        return Err("MelonLoader.NativeHost.dll does not exist!".into());
     }
 
     let loader =

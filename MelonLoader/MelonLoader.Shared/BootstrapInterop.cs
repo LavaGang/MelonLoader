@@ -42,15 +42,10 @@ namespace MelonLoader
             => NativeLibrary.Load(name);
         public static IntPtr NativeGetExport(IntPtr handle, string name)
             => NativeLibrary.GetExport(handle, name);
-
-        public delegate void* dHookAttach(void* target, void* detour);
-        public static dHookAttach HookAttach;
+        
+        public static delegate* unmanaged<void*, void*, void*> HookAttach;
         public static IntPtr NativeHookAttach(IntPtr target, IntPtr detour)
-        {
-            var trampoline = new IntPtr(HookAttach(target.ToPointer(), detour.ToPointer()));
-            //MelonLogger.Msg(trampoline.ToString("X"));
-            return trampoline;
-        }
+            => (IntPtr)HookAttach(target.ToPointer(), detour.ToPointer());
 
         public static delegate* unmanaged<void*, void> HookDetach;
         public static void NativeHookDetach(IntPtr target)
