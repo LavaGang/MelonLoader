@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using MelonLoader.Utils;
 using System.Runtime.InteropServices;
 
-#if !NET6_0
+#if !NET6_0_OR_GREATER
 using System.Runtime.CompilerServices;
 #endif
 

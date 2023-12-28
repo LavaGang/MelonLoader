@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using MelonLoader.Fixes;
 using MelonLoader.Godot.Utils;
 using MelonLoader.Interfaces;
@@ -8,7 +9,13 @@ namespace MelonLoader.Godot.EngineModule;
 
 public class EngineModule : IEngineModule
 {
-    public string EngineName => "Godot";
+    public string EngineName { get; private set; }
+
+#if NET35_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+    public string RuntimeName => "Mono";
+#elif NET6_0_OR_GREATER
+    public string RuntimeName => $".Net {Environment.Version}";
+#endif
 
     public void Initialize()
     {
@@ -17,7 +24,8 @@ public class EngineModule : IEngineModule
         
         GodotEnvironment.Initialize(pckPath);
         
-        MelonDebug.Msg($"Engine Version: {GodotEnvironment.EngineVersion.ToString()}");
+        EngineName = $"Godot {GodotEnvironment.EngineVersion}";
+        MelonDebug.Msg($"Engine Version: {GodotEnvironment.EngineVersion}");
         
     }
 }

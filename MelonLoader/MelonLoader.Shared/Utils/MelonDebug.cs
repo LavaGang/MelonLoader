@@ -43,7 +43,11 @@ namespace MelonLoader.Utils
 
         public static bool IsEnabled()
         {
+#if DEBUG
             return true;
+#else
+            return MelonLaunchOptions.Core.IsDebug;
+#endif
         }
     }
 }

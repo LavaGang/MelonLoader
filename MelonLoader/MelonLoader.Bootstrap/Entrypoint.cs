@@ -13,7 +13,7 @@ namespace MelonLoader.Bootstrap
             MelonDebug.Msg("Starting Up...");
             MelonDebug.Msg(MelonEnvironment.MelonLoaderDirectory);
 
-            MelonLogger.Msg($"Executable: {MelonEnvironment.GameExecutableName}");
+            MelonDebug.Msg($"Executable: {MelonEnvironment.GameExecutableName}");
 
             var module = ModuleManager.FindBootstrapModule();
             if (module == null)
@@ -25,7 +25,7 @@ namespace MelonLoader.Bootstrap
             }
             
             MelonDebug.Msg("Found Bootstrap Module: " + module.GetType().FullName);
-            MelonLogger.Msg($"Running Engine: {module.EngineName}");
+            MelonDebug.Msg($"Running Engine: {module.EngineName}");
 
             // Fix Resolving Issue
             UnhandledAssemblyResolve.AddSearchDirectoryToFront(Path.Combine(MelonEnvironment.ModulesDirectory, module.EngineName, "net6"));

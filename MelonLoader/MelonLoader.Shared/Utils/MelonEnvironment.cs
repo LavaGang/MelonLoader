@@ -6,6 +6,14 @@ namespace MelonLoader.Utils
 {
     public static class MelonEnvironment
     {
+        private const string OurRuntimeName =
+#if NET35_OR_GREATER
+            "net35";
+#elif NETSTANDARD2_1_OR_GREATER
+            "netstandard2.1";
+#else
+            "net6";
+#endif
         public static string GameRootDirectory { get; private set; }
         public static string GameExecutablePath { get; private set; }
         public static string GameExecutableName { get; private set; }
@@ -41,6 +49,15 @@ namespace MelonLoader.Utils
             PluginsDirectory = Path.Combine(MelonBaseDirectory, "Plugins");
             UserLibsDirectory = Path.Combine(MelonBaseDirectory, "UserLibs");
             UserDataDirectory = Path.Combine(MelonBaseDirectory, "UserData");
+        }
+
+        internal static void PrintEnvironment()
+        {
+            MelonLogger.MsgDirect($"Core::BasePath = {MelonBaseDirectory}");
+            MelonLogger.MsgDirect($"Game::BasePath = {GameRootDirectory}");
+            MelonLogger.MsgDirect($"Game::ApplicationPath = {GameExecutablePath}");
+
+            MelonLogger.MsgDirect($"Runtime Type: {OurRuntimeName}");
         }
     }
 }

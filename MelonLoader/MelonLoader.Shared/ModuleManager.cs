@@ -7,9 +7,10 @@ using MelonLoader.Utils;
 
 namespace MelonLoader
 {
-    public static class ModuleManager
+    internal static class ModuleManager
     {
-        public static IBootstrapModule FindBootstrapModule()
+        internal static IEngineModule EngineModule { get; private set; }
+        internal static IBootstrapModule FindBootstrapModule()
         {
             foreach (var bootstrapPath in Directory.GetFiles(MelonEnvironment.ModulesDirectory, "*.Bootstrap.dll", SearchOption.AllDirectories))
             {
@@ -58,8 +59,8 @@ namespace MelonLoader
             
             try
             {
-                var module = (IEngineModule)Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
-                return module;
+                EngineModule = (IEngineModule)Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                return EngineModule;
             }
             catch (Exception ex)
             {
