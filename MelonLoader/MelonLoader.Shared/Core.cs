@@ -16,8 +16,12 @@ namespace MelonLoader
         {
             MelonEnvironment.Initialize();
             MelonLaunchOptions.Load();
-            MelonDebug.Msg("MelonLoader.Core.Startup");
             OsUtils.SetupWineCheck();
+            
+            if (MelonUtils.IsUnderWineOrSteamProton())
+                Pastel.ConsoleExtensions.Disable();
+            
+            MelonDebug.Msg("MelonLoader.Core.Startup");
 
             UnhandledException.Install(AppDomain.CurrentDomain);
             UnhandledAssemblyResolve.Install();

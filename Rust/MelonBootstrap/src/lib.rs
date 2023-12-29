@@ -6,12 +6,14 @@ use hooking::hooks;
 use logging::logger;
 
 pub mod constants;
+pub mod console;
 pub mod dotnet;
 pub mod environment;
 pub mod hooking;
 pub mod icalls;
 pub mod logging;
 pub mod utils;
+pub mod errors;
 #[cfg(target_os = "android")]
 pub mod lib_android;
 
@@ -26,13 +28,19 @@ fn startup() {
 
 fn init() -> Result<(), Box<dyn Error>> {
     logger::init()?;
+    
+    #[cfg(target_os = "windows")] {
+        console::init()?;
+        hooks::load_library::init()?;
+    }
+    
     debug!("starting up")?;
-
-    #[cfg(target_os = "windows")]
-    hooks::load_library::init()?;
-
     #[cfg(not(target_os = "windows"))]
     dotnet::startup::start()?;
 
     Ok(())
+}
+
+pub fn shutdown() {
+    std::process::exit(0);
 }

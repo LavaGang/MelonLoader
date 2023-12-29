@@ -20,10 +20,10 @@ public static class MelonLaunchOptions
     {
         var foundOptions = new List<string>();
 
-        using var argEnumerator = (IEnumerator<string>)Environment.GetCommandLineArgs().GetEnumerator();
+        var argEnumerator = Environment.GetCommandLineArgs().GetEnumerator();
         while (argEnumerator.MoveNext())
         {
-            string fullcmd = argEnumerator.Current;
+            var fullcmd = (string)argEnumerator.Current;
             if (string.IsNullOrEmpty(fullcmd))
                 continue;
 
@@ -42,7 +42,7 @@ public static class MelonLaunchOptions
                 if (!argEnumerator.MoveNext())
                     continue;
 
-                string cmdArg = argEnumerator.Current;
+                var cmdArg = (string)argEnumerator.Current;
                 if (string.IsNullOrEmpty(cmdArg))
                     continue;
 
@@ -53,7 +53,7 @@ public static class MelonLaunchOptions
                 withArgFunc(cmdArg);
             }
         }
-
+        
         if (foundOptions.Count <= 0)
             return;
     }
