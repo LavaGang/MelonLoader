@@ -21,15 +21,21 @@
 
 use std::{
     ffi::c_void,
+    error::Error,
     marker::PhantomData,
     ops::Deref,
     path::{Path, PathBuf},
 };
 use thiserror::Error;
+#[cfg(target_os = "windows")]
+use windows::Win32::Foundation::HMODULE;
 
 /// possible library loading errors
 #[derive(Debug, Error)]
 pub enum LibError {
+    #[cfg(target_os = "windows")]
+    #[error(transparent)]
+    Windows(#[from] windows::core::Error),
     /// failed to load library
     #[error("Failed to load library!")]
     FailedToLoadLib,
@@ -58,7 +64,10 @@ pub struct NativeLibrary {
     /// the path to the lib
     pub path: PathBuf,
     /// the pointer to the lib
-    pub handle: usize,
+    #[cfg(not(target_os = "windows"))]
+    pub handle: isize,
+    #[cfg(target_os = "windows")]
+    pub handle: HMODULE
 }
 
 impl NativeLibrary {
@@ -84,19 +93,23 @@ impl NativeLibrary {
     pub fn sym<T>(&self, name_str: &str) -> Result<NativeMethod<T>, LibError> {
         use std::ffi::CString;
 
+        use windows::{Win32::{System::LibraryLoader::GetProcAddress, Foundation::HMODULE}, core::PCSTR};
+
         let display_string = name_str.to_string();
 
-        use winapi::um::libloaderapi::GetProcAddress;
+        let ptr = unsafe { GetProcAddress(self.handle, PCSTR(name_str.as_ptr())) };
 
-        let name = CString::new(name_str).map_err(|_| LibError::FailedToCreateCString)?;
+        if ptr.is_none() {
+            return Err(LibError::FailedToGetFnPtr(display_string));
+        }
 
-        let ptr = unsafe { GetProcAddress((self.handle as *mut c_void).cast(), name.as_ptr()) };
+        let ptr = ptr.unwrap() as *mut c_void;
         if ptr.is_null() {
             return Err(LibError::FailedToGetFnPtr(display_string));
         }
 
         Ok(NativeMethod {
-            inner: ptr.cast(),
+            inner: ptr,
             pd: PhantomData,
         })
     }
@@ -154,7 +167,7 @@ pub fn load_lib<P: AsRef<Path>>(path: P) -> Result<NativeLibrary, LibError> {
     Ok(NativeLibrary {
         name: lib_name,
         path: path.to_path_buf(),
-        handle: lib as usize,
+        handle: lib as isize,
     })
 }
 
@@ -188,16 +201,16 @@ pub fn load_lib<P: AsRef<Path>>(path: P) -> Result<NativeLibrary, LibError> {
 pub fn load_lib<P: AsRef<Path>>(path: P) -> Result<NativeLibrary, LibError> {
     use std::ffi::CString;
 
+    use windows::{Win32::System::LibraryLoader::LoadLibraryA, core::PCSTR};
+
     let path = path.as_ref();
 
-    use winapi::um::libloaderapi::LoadLibraryA;
 
     let path_string = path.to_str().ok_or_else(|| LibError::FailedToGetLibPath)?;
-    let win_path = CString::new(path_string).map_err(|_| LibError::FailedToCreateCString)?;
 
-    let lib = unsafe { LoadLibraryA(win_path.as_ptr()) };
+    let lib = unsafe { LoadLibraryA(PCSTR(path_string.as_ptr()))? };
 
-    if lib.is_null() {
+    if lib.is_invalid() {
         return Err(LibError::FailedToLoadLib);
     }
 
@@ -211,7 +224,7 @@ pub fn load_lib<P: AsRef<Path>>(path: P) -> Result<NativeLibrary, LibError> {
     Ok(NativeLibrary {
         name: lib_name,
         path: path.to_path_buf(),
-        handle: lib as usize,
+        handle: lib,
     })
 }
 

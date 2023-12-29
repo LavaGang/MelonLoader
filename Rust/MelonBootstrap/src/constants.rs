@@ -2,7 +2,7 @@ use colored::Color;
 
 pub const MELON_VERSION: &str = "1.0.0";
 
-pub const IS_ALPHA: bool = false;
+pub const IS_ALPHA: bool = true;
 
 pub const RED: Color = Color::TrueColor {
     r: (255),

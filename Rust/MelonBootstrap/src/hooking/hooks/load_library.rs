@@ -11,7 +11,7 @@ use crate::{
     utils::{
         libs::{load_lib, NativeLibrary},
         type_aliases::LoadLibraryFn,
-    }, dotnet,
+    }, dotnet, debug,
 };
 
 lazy_static::lazy_static! {
@@ -22,11 +22,13 @@ lazy_static::lazy_static! {
 pub fn init() -> Result<(), Box<dyn Error>> {
     let mut kernel_32 = KERNEL32.try_lock()?;
     let mut load_library_hook = LOAD_LIBRARY_HOOK.try_lock()?;
-    *kernel_32 = load_lib("Kernel32.dll")?;
+    debug!("Loading Kernel32.dll")?;
+    *kernel_32 = load_lib("Kernel32.dll\0")?;
 
-    load_library_hook.target = kernel_32.sym::<LoadLibraryFn>("LoadLibraryA")?.inner;
+    load_library_hook.target = kernel_32.sym::<LoadLibraryFn>("LoadLibraryA\0")?.inner;
     load_library_hook.detour = detour as Address;
 
+    debug!("Hooking LoadLibraryA")?;
     load_library_hook.hook()?;
 
     Ok(())
