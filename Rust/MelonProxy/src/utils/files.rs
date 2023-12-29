@@ -4,7 +4,7 @@ use super::errors::ProxyError;
 
 /// search for Bootstrap in the given path
 pub fn get_bootstrap_path(base_path: &PathBuf) -> Result<PathBuf, ProxyError> {
-    let bootstrap_names = ["Bootstrap", "libmelon_bootstrap"]; //by convention, on unix, the library is prefixed with "lib"
+    let bootstrap_names = ["melon_bootstrap", "libmelon_bootstrap"]; //by convention, on unix, the library is prefixed with "lib"
 
     let path = base_path.join("MelonLoader").join("Dependencies");
 
