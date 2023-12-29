@@ -65,7 +65,6 @@ namespace MelonLoader
             MelonLogger.MsgDirect($"Hash Code: {MelonUtils.HashCode}");
             MelonLogger.MsgDirect("------------------------------");
             var typeString = ModuleManager.EngineModule.RuntimeName;
-            MelonLogger.MsgDirect($"Engine: {ModuleManager.EngineModule.EngineName}");
             MelonLogger.MsgDirect($"Game Type: {typeString}");
             var archString = MelonUtils.IsGame32Bit ? "x86" : "x64";
             MelonLogger.MsgDirect($"Game Arch: {archString}");

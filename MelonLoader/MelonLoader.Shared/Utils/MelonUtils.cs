@@ -22,6 +22,14 @@ namespace MelonLoader.Utils
             HashCode = string.Join("", sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X")).ToArray());
             
             Core.WelcomeMessage();
+            
+            MelonLogger.WriteLine(Color.Magenta);
+            MelonLogger.Msg($"Game Name: {ModuleManager.EngineModule.GameName}");
+            MelonLogger.Msg($"Game Developer: TODO");
+            MelonLogger.Msg($"Unity Version: {ModuleManager.EngineModule.EngineVersion}");
+            MelonLogger.Msg($"Game Version: TODO");
+            MelonLogger.WriteLine(Color.Magenta);
+            MelonLogger.WriteSpacer();
         }
         
         public static Color DefaultTextColor 

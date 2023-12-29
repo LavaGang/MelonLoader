@@ -9,7 +9,10 @@ namespace MelonLoader.Godot.EngineModule;
 
 public class EngineModule : IEngineModule
 {
-    public string EngineName { get; private set; }
+    public string EngineName => "Godot";
+    
+    public string EngineVersion { get; private set; }
+    public string GameName { get; private set; }
 
 #if NET35_OR_GREATER || NETSTANDARD2_1_OR_GREATER
     public string RuntimeName => "Mono";
@@ -24,7 +27,8 @@ public class EngineModule : IEngineModule
         
         GodotEnvironment.Initialize(pckPath);
         
-        EngineName = $"Godot {GodotEnvironment.EngineVersion}";
+        GameName = GodotEnvironment.GameName;
+        EngineVersion = GodotEnvironment.EngineVersion.ToString();
         MelonDebug.Msg($"Engine Version: {GodotEnvironment.EngineVersion}");
         
     }

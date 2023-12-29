@@ -13,5 +13,6 @@
         <ProjectReference Include="..\..\..\MelonLoader.Shared\MelonLoader.Shared.csproj" Private="false" ExcludeAssets="runtime">
             <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
         </ProjectReference>
+        <ProjectReference Include="..\Unity.Shared\Unity.Shared.csproj" />
     </ItemGroup>
 </Project>

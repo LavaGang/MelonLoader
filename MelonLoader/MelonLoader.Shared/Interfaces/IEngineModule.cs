@@ -4,6 +4,8 @@ namespace MelonLoader.Interfaces
     {
         string EngineName { get; }
         string RuntimeName { get; }
+        string GameName { get; }
+        string EngineVersion { get; }
 
         void Initialize();
     }   
