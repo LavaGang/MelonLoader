@@ -26,7 +26,8 @@ namespace MelonLoader.Utils
             MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.Msg($"Game Name: {ModuleManager.EngineModule.GameName}");
             MelonLogger.Msg($"Game Developer: TODO");
-            MelonLogger.Msg($"Unity Version: {ModuleManager.EngineModule.EngineVersion}");
+            MelonLogger.Msg($"Engine Name: {ModuleManager.EngineModule.EngineName}");
+            MelonLogger.Msg($"Engine Version: {ModuleManager.EngineModule.EngineVersion}");
             MelonLogger.Msg($"Game Version: TODO");
             MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.WriteSpacer();
