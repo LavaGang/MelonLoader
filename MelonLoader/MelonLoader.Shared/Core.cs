@@ -14,12 +14,11 @@ namespace MelonLoader
         public static readonly bool IsAlpha = true;
         public static void Startup(string engineModulePath)
         {
+            OsUtils.SetupWineCheck();
             MelonEnvironment.Initialize();
             MelonLaunchOptions.Load();
-            OsUtils.SetupWineCheck();
             
-            if (MelonUtils.IsUnderWineOrSteamProton())
-                Pastel.ConsoleExtensions.Disable();
+            Pastel.ConsoleExtensions.Disable();
             
             MelonDebug.Msg("MelonLoader.Core.Startup");
 

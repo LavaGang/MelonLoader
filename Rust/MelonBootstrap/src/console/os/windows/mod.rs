@@ -80,7 +80,7 @@ pub unsafe fn init() -> Result<(), Box<dyn Error>> {
 
     mode |= ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT;
 
-    if SetConsoleMode(*output_handle, mode).is_err() {
+    if SetConsoleMode(*output_handle, mode).is_err()  {
         mode &= !(ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
     } else {
         mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
