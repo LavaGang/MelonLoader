@@ -9,7 +9,7 @@ dependencies = [
  "chrono",
  "clap",
  "colored",
- "ctor",
+ "ctor 0.1.26",
  "dobby-rs",
  "exe",
  "lazy_static",
@@ -474,6 +474,16 @@ checksum = "6d2301688392eb071b0bf1a37be05c469d3cc4dbbd95df672fe28ab021e6a096"
 dependencies = [
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "ctor"
+version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "30d2b3721e861707777e3195b0158f950ae6dc4a27e4d02ff9f67e3eb3de199e"
+dependencies = [
+ "quote",
+ "syn 2.0.28",
 ]
 
 [[package]]
@@ -1619,7 +1629,7 @@ version = "0.2.0"
 dependencies = [
  "cc",
  "clap",
- "ctor",
+ "ctor 0.2.6",
  "lazy_static",
  "libc",
  "libloading 0.8.0",
@@ -1633,7 +1643,7 @@ name = "proxy-dll"
 version = "0.2.5"
 source = "git+https://github.com/RinLovesYou/dll-proxy-rs.git#160fd47d5d5e595ff694a1d004de7d8e562aba59"
 dependencies = [
- "ctor",
+ "ctor 0.1.26",
  "proxy-sys",
  "thiserror",
  "winapi",
