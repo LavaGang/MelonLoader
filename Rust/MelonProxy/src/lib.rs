@@ -21,6 +21,7 @@ pub use windows::Win32::Foundation::HINSTANCE;
 
 #[cfg(target_os = "windows")]
 pub mod proxy;
+
 pub mod utils;
 pub mod core;
 

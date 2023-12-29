@@ -10,9 +10,7 @@ readme = "../README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-thiserror = "1.0.48"
 melon_proxy-sys = { path = "../MelonProxy-sys" }
-utf16string = "0.2.0"
 libloading = "0.8.0"
 msgbox = "0.7.0"
 

@@ -1,9 +1,11 @@
-use std::{env::consts::DLL_EXTENSION, path::PathBuf};
-
-use super::errors::ProxyError;
+use std::{
+    env::consts::DLL_EXTENSION,
+    io::{self, Error, ErrorKind},
+    path::PathBuf,
+};
 
 /// search for Bootstrap in the given path
-pub fn get_bootstrap_path(base_path: &PathBuf) -> Result<PathBuf, ProxyError> {
+pub fn get_bootstrap_path(base_path: &PathBuf) -> Result<PathBuf, io::Error> {
     let bootstrap_names = ["melon_bootstrap", "libmelon_bootstrap"]; //by convention, on unix, the library is prefixed with "lib"
 
     let path = base_path.join("MelonLoader").join("Dependencies");
@@ -16,5 +18,8 @@ pub fn get_bootstrap_path(base_path: &PathBuf) -> Result<PathBuf, ProxyError> {
         }
     }
 
-    Err(ProxyError::BootstrapNotFound(base_path.to_owned()))
+    Err(Error::new(
+        ErrorKind::NotFound,
+        "Failed to find MelonLoader Bootstrap",
+    ))
 }

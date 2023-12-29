@@ -2,15 +2,13 @@
 
 use std::{
     arch::global_asm,
-    error,
     marker::FnPtr,
     ptr::null_mut,
-    sync::{LazyLock, Mutex},
+    sync::{LazyLock, Mutex}, io,
 };
 
 use super::hinstance_ext::ProxyDll;
 use libloading::Library;
-use thiserror::Error;
 use windows::Win32::Foundation::HINSTANCE;
 
 // These arrays are accessed by assembly code to jump to the given function.
@@ -33,18 +31,6 @@ global_asm!(include_str!("../../deps/winhttp.x86.S"));
 global_asm!(include_str!("../../deps/winmm.x64.S"));
 #[cfg(target_arch = "x86")]
 global_asm!(include_str!("../../deps/winmm.x86.S"));
-
-#[derive(Debug, Error)]
-pub enum ExportError {
-    #[error("Failed to find original library")]
-    LibraryNotFound,
-    #[error("Failed to load library")]
-    LoadLibrary,
-    #[error("Failed to get module name")]
-    GetModuleName,
-    #[error("Proxy has an invalid file name {0}")]
-    InvalidFileName(String),
-}
 
 const EXPORTS_VERSION: [&[u8]; 17] = [
     b"GetFileVersionInfoA",
@@ -284,9 +270,13 @@ const EXPORTS_WINMM: [&[u8]; 181] = [
 pub static ORIGINAL: LazyLock<Mutex<Option<Library>>> = LazyLock::new(|| Mutex::new(None));
 
 /// this function gets called by the #[proxy] macro in our entrypoint.
-pub fn initialize(module: HINSTANCE) -> Result<(), Box<dyn error::Error>> {
+pub fn initialize(module: HINSTANCE) -> Result<(), io::Error> {
+    let INVALID_HANDLE: io::Error = io::Error::new(io::ErrorKind::InvalidInput, "Invalid module handle");
+    let INVALID_FILE_NAME: io::Error = io::Error::new(io::ErrorKind::InvalidInput, "Invalid file name");
+    let POISONED_LOCK: io::Error = io::Error::new(io::ErrorKind::Other, "Poisoned lock");
+    
     if module.is_invalid() {
-        return Err(Box::new(ExportError::LoadLibrary));
+        return Err(INVALID_HANDLE);
     }
 
     let name = module.get_file_name()?;
@@ -296,7 +286,7 @@ pub fn initialize(module: HINSTANCE) -> Result<(), Box<dyn error::Error>> {
         "version.dll" => EXPORTS_VERSION.to_vec(),
         "winhttp.dll" => EXPORTS_WINHTTP.to_vec(),
         "winmm.dll" => EXPORTS_WINMM.to_vec(),
-        _ => return Err(Box::new(ExportError::InvalidFileName(name))),
+        _ => return Err(INVALID_FILE_NAME),
     };
 
     for (i, export) in exports.iter().enumerate() {
@@ -306,7 +296,12 @@ pub fn initialize(module: HINSTANCE) -> Result<(), Box<dyn error::Error>> {
     }
 
     //store the library so it doesn't get unloaded
-    *ORIGINAL.try_lock()? = Some(original);
+    let orig = ORIGINAL.try_lock();
+    if orig.is_err() {
+        return Err(POISONED_LOCK);
+    }
+
+    *orig.unwrap() = Some(original);
 
     Ok(())
 }

@@ -1245,8 +1245,6 @@ dependencies = [
  "libloading",
  "melon_proxy-sys",
  "msgbox",
- "thiserror",
- "utf16string",
  "windows",
 ]
 
