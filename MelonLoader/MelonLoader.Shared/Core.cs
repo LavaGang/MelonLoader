@@ -3,6 +3,7 @@ using MelonLoader.Utils;
 using System;
 using System.Text;
 using HarmonyLib;
+using MelonLoader.Interfaces;
 using MelonLoader.Properties;
 
 namespace MelonLoader
@@ -14,6 +15,7 @@ namespace MelonLoader
         public static void Startup(string engineModulePath)
         {
             MelonEnvironment.Initialize();
+            MelonLaunchOptions.Load();
             MelonDebug.Msg("MelonLoader.Core.Startup");
             OsUtils.SetupWineCheck();
 
@@ -26,7 +28,7 @@ namespace MelonLoader
             HarmonyInstance = new Harmony(BuildInfo.Name);
             
             MelonDebug.Msg($"Engine Module Path: {engineModulePath}");
-            var module = ModuleManager.LoadModule(engineModulePath);
+            IEngineModule module = ModuleManager.LoadModule(engineModulePath);
             module.Initialize();
             
             MelonUtils.Setup(AppDomain.CurrentDomain);
