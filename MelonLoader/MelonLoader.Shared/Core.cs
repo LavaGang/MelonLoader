@@ -59,13 +59,14 @@ namespace MelonLoader
 
         internal static void WelcomeMessage()
         {
+            EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
+            
             MelonLogger.MsgDirect("------------------------------");
             MelonLogger.MsgDirect(GetVersionString());
             MelonLogger.MsgDirect($"OS: {OsUtils.GetOSVersion()}");
             MelonLogger.MsgDirect($"Hash Code: {MelonUtils.HashCode}");
             MelonLogger.MsgDirect("------------------------------");
-            var typeString = ModuleManager.EngineModule.RuntimeName;
-            MelonLogger.MsgDirect($"Game Type: {typeString}");
+            MelonLogger.MsgDirect($"Game Type: {engineModuleInfo.RuntimeName}");
             var archString = MelonUtils.IsGame32Bit ? "x86" : "x64";
             MelonLogger.MsgDirect($"Game Arch: {archString}");
             MelonLogger.MsgDirect("------------------------------");

@@ -9,16 +9,14 @@ namespace MelonLoader.Godot.EngineModule;
 
 public class EngineModule : IEngineModule
 {
-    public string EngineName => "Godot";
-    
-    public string EngineVersion { get; private set; }
-    public string GameName { get; private set; }
+    public EngineModuleInfo GameInfo { get; private set; }
 
-#if NET35_OR_GREATER || NETSTANDARD2_1_OR_GREATER
-    public string RuntimeName => "Mono";
-#elif NET6_0_OR_GREATER
-    public string RuntimeName => $".Net {Environment.Version}";
-#endif
+    public string EngineName => "Godot";
+// #if NET35_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+//     public string RuntimeName => "Mono";
+// #elif NET6_0_OR_GREATER
+//     public string RuntimeName => $".Net {Environment.Version}";
+// #endif
 
     public void Initialize()
     {
@@ -27,9 +25,19 @@ public class EngineModule : IEngineModule
         
         GodotEnvironment.Initialize(pckPath);
         
-        GameName = GodotEnvironment.GameName;
-        EngineVersion = GodotEnvironment.EngineVersion.ToString();
-        MelonDebug.Msg($"Engine Version: {GodotEnvironment.EngineVersion}");
+        GameInfo = new EngineModuleInfo
+        {
+            EngineName = EngineName, 
+#if NET35_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+            RuntimeName = "Mono",
+#elif NET6_0_OR_GREATER
+            RuntimeName = $".Net {Environment.Version}",
+#endif
+            GameName = GodotEnvironment.GameName,
+            EngineVersion = GodotEnvironment.EngineVersion.ToString(),
+            GameDeveloper = GodotEnvironment.GameDeveloper,
+            GameVersion = GodotEnvironment.GameVersion
+        };
         
     }
 }

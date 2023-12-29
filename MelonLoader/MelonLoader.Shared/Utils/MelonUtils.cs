@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using MelonLoader.Interfaces;
 using MonoMod.Utils;
 
 #if !NET35
@@ -23,12 +24,14 @@ namespace MelonLoader.Utils
             
             Core.WelcomeMessage();
             
+            EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
+            
             MelonLogger.WriteLine(Color.Magenta);
-            MelonLogger.Msg($"Game Name: {ModuleManager.EngineModule.GameName}");
-            MelonLogger.Msg($"Game Developer: TODO");
-            MelonLogger.Msg($"Engine Name: {ModuleManager.EngineModule.EngineName}");
-            MelonLogger.Msg($"Engine Version: {ModuleManager.EngineModule.EngineVersion}");
-            MelonLogger.Msg($"Game Version: TODO");
+            MelonLogger.Msg($"Game Name: {engineModuleInfo.GameName}");
+            MelonLogger.Msg($"Game Developer: {engineModuleInfo.GameDeveloper}");
+            MelonLogger.Msg($"Engine Name: {engineModuleInfo.EngineName}");
+            MelonLogger.Msg($"Engine Version: {engineModuleInfo.EngineVersion}");
+            MelonLogger.Msg($"Game Version: {engineModuleInfo.GameVersion}");
             MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.WriteSpacer();
         }

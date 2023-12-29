@@ -1,12 +1,18 @@
-namespace MelonLoader.Interfaces
-{
-    public interface IEngineModule
-    {
-        string EngineName { get; }
-        string RuntimeName { get; }
-        string GameName { get; }
-        string EngineVersion { get; }
+namespace MelonLoader.Interfaces;
 
-        void Initialize();
-    }   
+public struct EngineModuleInfo
+{
+    public string EngineName;
+    public string RuntimeName;
+    public string GameName;
+    public string EngineVersion;
+    public string GameDeveloper;
+    public string GameVersion;
+}
+
+public interface IEngineModule
+{
+    public EngineModuleInfo GameInfo { get; }
+
+    void Initialize();
 }
