@@ -18,12 +18,9 @@ fn main() {
 fn link_exports() {
     use std::path::Path;
     let lib_path = Path::new("deps").join("Exports.def");
-    let mut absolute_path = std::fs::canonicalize(&lib_path).unwrap().to_str().unwrap().to_string();
-    if absolute_path.contains("\\\\?\\") {
-        absolute_path = absolute_path.replace("\\\\?\\", "");
-    }
+    let absolute_path = std::fs::canonicalize(&lib_path).unwrap().to_str().unwrap().to_string().replace("\\\\?\\", "");
 
-    if !lib_path.exists() {
+    if !Path::new(&absolute_path).exists() {
         panic!("Exports.def not found at {}", lib_path.display());
     }
 
