@@ -10,7 +10,7 @@ fn main() {
 
         Ok("windows") => link_exports(),
 
-        tos => panic!("unknown target os {:?}!", tos),
+        tos => println!("cargo:error=unknown target os {:?}!", tos),
     }
 }
 
@@ -23,6 +23,12 @@ fn link_exports() {
         println!("cargo:error=Exports.def not found at {}", lib_path.display());
     }
 
-    println!("cargo:warning=Linking Exports File: {}", lib_path.display());
-    println!("cargo:rustc-cdylib-link-arg=/DEF:{}", lib_path.display());
+    let lines = std::fs::read_to_string(lib_path).unwrap();
+    let lines = lines.split("\n");
+    let lines = lines.filter(|x| !x.is_empty());
+
+    //export each function
+    for line in lines {
+        println!("cargo:rustc-cdylib-link-arg=/EXPORT:{}", line);
+    }
 }
