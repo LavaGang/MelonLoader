@@ -38,19 +38,21 @@ jobs:
           path: Output/Release/MelonLoader/
   build_rust_windows:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        target:
-          - i686-pc-windows-msvc
-          - x86_64-pc-windows-msvc
     steps:
       - uses: actions/checkout@v3
-      - name: rust-toolchain
+      - name: rust-toolchain x64
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           # Target triple to install for this toolchain
-          target: ${{ matrix.target }}
+          target: x86_64-pc-windows-msvc
+      - name: rust-toolchain x86
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          # Target triple to install for this toolchain
+          target: i686-pc-windows-msvc
+          override: true
         # Build Rust Release
       - name: Build Rust Release | Windows - x86
         shell: cmd
