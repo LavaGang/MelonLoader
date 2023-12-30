@@ -40,19 +40,15 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: rust-toolchain x64
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          # Target triple to install for this toolchain
-          target: x86_64-pc-windows-msvc
-      - name: rust-toolchain x86
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          # Target triple to install for this toolchain
-          target: i686-pc-windows-msvc
-          override: true
+      - name: Install Rust (nightly)
+        run:
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+      - name: Make Rust Nightly  
+        shell: cmd
+        run: rustup default nightly
+      - name: Install target x86
+        shell: cmd
+        run: rustup target add i686-pc-windows-msvc
         # Build Rust Release
       - name: Build Rust Release | Windows - x86
         shell: cmd
@@ -117,18 +113,17 @@ jobs:
           path: target/x86_64-pc-windows-msvc/debug/Bootstrap.dll
   build_rust_linux:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        target:
-          - x86_64-unknown-linux-gnu
     steps:
       - uses: actions/checkout@v3
-      - name: rust-toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          # Target triple to install for this toolchain
-          target: ${{ matrix.target }}
+      - name: Install Rust (nightly)
+        run:
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+      - name: Make Rust Nightly  
+        shell: bash
+        run: rustup default nightly
+      - name: Install target x64
+        shell: bash
+        run: rustup target add x86_64-unknown-linux-gnu
       - name: install dev dependencies
         shell: bash
         run: sudo apt-get install libgtk-3-dev 
