@@ -1,9 +1,8 @@
 use std::{error::Error, collections::HashMap, io, path::Path};
 
-use exe::{ImageDirectoryEntry, ResourceDirectory, VecPE, PE, ImportDirectory, ImportData, CCharString, ImageDataDirectory, ImageResourceDirectory};
 use unity_rs::runtime::FerrexRuntime;
 
-use crate::{errors::DynErr, log, melonenv::paths};
+use crate::{errors::DynErr, melonenv::paths};
 
 #[allow(dead_code)]
 pub static mut RUNTIME: Option<FerrexRuntime> = None;
