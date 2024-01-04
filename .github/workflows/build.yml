@@ -122,10 +122,10 @@ jobs:
         run: cargo xwin build --package Bootstrap --target x86_64-pc-windows-msvc
       - name: Build Bootstrap Release | Windows - x86
         shell: bash
-        run: cargo xwin build --package Bootstrap --target i686-pc-windows-msvc --release
+        run: XWIN_ARCH=x86 cargo xwin build --package Bootstrap --target i686-pc-windows-msvc --release
       - name: Build Bootstrap Debug | Windows - x86
         shell: bash
-        run: cargo xwin build --package Bootstrap --target i686-pc-windows-msvc
+        run: XWIN_ARCH=x86 cargo xwin build --package Bootstrap --target i686-pc-windows-msvc
       - name: Build Proxy Release | Windows - x64
         shell: bash
         run: cargo build --package MelonProxy --target x86_64-pc-windows-gnu --release
