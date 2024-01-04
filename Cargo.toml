@@ -1,3 +1,3 @@
 [workspace]
-members = ["MelonProxy", "Bootstrap", "MelonProxy-sys"]
+members = ["MelonProxy", "Bootstrap"]
 resolver = "2"
