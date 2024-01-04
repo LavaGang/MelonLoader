@@ -23,60 +23,13 @@ jobs:
       - name: Upload Release Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: MLRelease
+          name: MLCoreRelease
           path: Output/Release/MelonLoader/
       - name: Upload Debug Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: MLDebug
+          name: MLCoreDebug
           path: Output/Debug/MelonLoader/
-      - name: Upload Proxy Release | Windows x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLProxyX86-Windows-Release
-          path: target/i686-pc-windows-msvc/release/version.dll
-        # Upload Bootstrap Release - x86
-      - name: Upload Bootstrap Release | Windows x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX86-Windows-Release
-          path: target/i686-pc-windows-msvc/release/Bootstrap.dll
-        # Upload Proxy Release - x64
-      - name: Upload Proxy Release | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLProxyX64-Windows-Release
-          path: target/x86_64-pc-windows-msvc/release/version.dll
-        # Upload Bootstrap Release - x64
-      - name: Upload Bootstrap Release | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX64-Windows-Release
-          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
-        # Upload Proxy Debug - x86
-      - name: Upload Proxy Debug | Windows x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLProxyX86-Windows-Debug
-          path: target/i686-pc-windows-msvc/debug/version.dll
-        # Upload Bootstrap Debug - x86
-      - name: Upload Bootstrap Debug | Windows x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX86-Windows-Debug
-          path: target/i686-pc-windows-msvc/debug/Bootstrap.dll
-        # Upload Proxy Debug - x64
-      - name: Upload Proxy Debug | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLProxyX64-Windows-Debug
-          path: target/x86_64-pc-windows-msvc/debug/version.dll
-        # Upload Bootstrap Debug - x64
-      - name: Upload Bootstrap Debug | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX64-Windows-Debug
-          path: target/x86_64-pc-windows-msvc/debug/Bootstrap.dll
   build_rust:
     runs-on: ubuntu-latest
     steps:
