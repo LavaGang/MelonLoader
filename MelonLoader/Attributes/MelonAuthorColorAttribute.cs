@@ -25,10 +25,7 @@ namespace MelonLoader
         public MelonAuthorColorAttribute() 
             => DrawingColor = MelonLogger.DefaultTextColor;
 
-        public MelonAuthorColorAttribute(Color drawingColor) 
-            => DrawingColor = drawingColor;
-
-        [Obsolete("ConsoleColor is obsolete, use the (int, int, int, int) or (Color) constructor instead.")]
+        [Obsolete("ConsoleColor is obsolete, use the (int, int, int, int) constructor instead.")]
         public MelonAuthorColorAttribute(ConsoleColor color) 
             => Color = ((color == ConsoleColor.Black) ? LoggerUtils.DrawingColorToConsoleColor(MelonLogger.DefaultMelonColor) : color);
 
