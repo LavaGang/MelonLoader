@@ -87,14 +87,16 @@ def build(target: str):
     os.system(DotnetCommand)
 
     # fully construct Cargo Command
-    xwin = IsLinux and target == "win64"
+    xwin = IsLinux and target == "win64" or target == "win32"
     command = CargoCommand
     command = command.replace("--target=", "--target={}".format(targets[target]))
     if xwin:
+        os.environ["XWIN_CACHE_DIR"] = os.path.join(".cache", "x64")
         command = command.replace("cargo", "cargo xwin")
         if target == "win32":
             os.environ["XWIN_ARCH"] = "x86"
-            os.environ["XWIN_VERSION"] = "17"
+            os.environ["XWIN_CACHE_DIR"] = os.path.join(".cache", "x86")
+    
 
     print(command)
     

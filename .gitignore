@@ -385,3 +385,7 @@ Output/
 
 # Rust Android Compilation
 Rust/MelonBootstrap/jniLibs/
+
+# cargo-xwin SDK cache dirs. cargo-xwin is a tool for cross-compiling Rust projects for Windows on Linux.
+# it (stupdily) uses the same cache location for each architecture. The build script will store this in .cache
+.cache/
