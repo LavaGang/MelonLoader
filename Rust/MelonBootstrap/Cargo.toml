@@ -22,6 +22,7 @@ utf16string = "0.2.0"
 windows = { version = "0.52.0", features = [
     "Win32_Foundation",
     "Win32_System_Console",
+    "Win32_System_LibraryLoader",
     "Win32_UI_WindowsAndMessaging"
 ]}
 

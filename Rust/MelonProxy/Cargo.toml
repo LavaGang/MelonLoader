@@ -1,25 +1,32 @@
 [package]
 name = "melon_proxy"
-version = "0.2.5"
-authors = ["RinLovesYou"]
+version = "0.1.0"
 edition = "2021"
-description = "A dynamic Windows System DLL proxy"
-repository = "https://github.com/LavaGang/MelonLoader"
-license = "GPL-2.0"
-readme = "../README.md"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-melon_proxy-sys = { path = "../MelonProxy-sys" }
-libloading = "0.8.0"
 msgbox = "0.7.0"
+libloading = "0.8.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]
-windows = { version = "0.52.0", features = ["Win32_Foundation", "Win32_System", "Win32_System_LibraryLoader"] }
+#proxygen-macros = "0.5.0"
+proxygen-macros = { git = "https://github.com/RinLovesYou/proxygen" } # temporary until PR is accepted
+winapi = { version = "0.3.9", features = [
+    "minwindef",
+    "libloaderapi",
+    "processthreadsapi",
+    "consoleapi",
+    "processenv",
+    "winbase",
+    "winuser",
+    "errhandlingapi",
+] }
 
-[target.'cfg(target_os = "linux")'.dependencies]
-ctor = "0.2.4"
+[target.'cfg(not(target_os = "windows"))'.dependencies]
+ctor = "0.2.6"
+
 
 [lib]
 name = "version"
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]

@@ -428,9 +428,9 @@ dependencies = [
 
 [[package]]
 name = "ctor"
-version = "0.2.5"
+version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "37e366bff8cd32dd8754b0991fb66b279dc48f598c3a18914852a6673deef583"
+checksum = "30d2b3721e861707777e3195b0158f950ae6dc4a27e4d02ff9f67e3eb3de199e"
 dependencies = [
  "quote",
  "syn 2.0.39",
@@ -1239,20 +1239,13 @@ dependencies = [
 
 [[package]]
 name = "melon_proxy"
-version = "0.2.5"
+version = "0.1.0"
 dependencies = [
  "ctor",
  "libloading",
- "melon_proxy-sys",
  "msgbox",
- "windows",
-]
-
-[[package]]
-name = "melon_proxy-sys"
-version = "0.2.2"
-dependencies = [
- "syn 2.0.39",
+ "proxygen-macros",
+ "winapi",
 ]
 
 [[package]]
@@ -1572,6 +1565,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "134c189feb4956b20f6f547d2cf727d4c0fe06722b20a0eec87ed445a97f92da"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "proxygen-macros"
+version = "0.5.0"
+source = "git+https://github.com/RinLovesYou/proxygen#c549e4fad7cd50e1d3db252c97f2e1e94713d869"
+dependencies = [
+ "quote",
+ "syn 2.0.39",
 ]
 
 [[package]]
