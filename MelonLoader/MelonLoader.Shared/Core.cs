@@ -4,6 +4,7 @@ using System;
 using System.Text;
 using HarmonyLib;
 using MelonLoader.Interfaces;
+using MelonLoader.Melons;
 using MelonLoader.Properties;
 
 namespace MelonLoader
@@ -36,6 +37,8 @@ namespace MelonLoader
             module.Initialize();
             
             MelonUtils.Setup(AppDomain.CurrentDomain);
+            
+            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
         }
 
         public static void OnApplicationPreStart()
