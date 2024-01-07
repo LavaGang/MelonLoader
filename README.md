@@ -258,6 +258,7 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [ValueTupleBridge](https://github.com/OrangeCube/MinimumAsyncBridge) is licensed under the MIT License. See [LICENSE](https://github.com/OrangeCube/MinimumAsyncBridge/blob/master/LICENSE) for the full License.  
 - [WebSocketDotNet](https://github.com/SamboyCoding/WebSocketDotNet) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/WebSocketDotNet/blob/master/LICENSE) for the full License.
 - [Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) is licensed under LGPLv3 License. See [LICENSE](https://github.com/BepInEx/Il2CppInterop/blob/master/LICENSE) for the full License.
+- [proxygen](https://github.com/WarrenHood/proxygen) is licensed MIT License. See [LICENSE](https://github.com/WarrenHood/proxygen/blob/main/LICENSE-MIT) for the full License.
   
 
 External Libraries and Tools that are downloaded and used at Runtime:

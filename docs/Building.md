@@ -34,8 +34,8 @@ to build the rust parts, you can simply type `cargo build`, with the optional `-
 
 The available architectures are:
 
-* 64bit Windows: `--target=x86_64-pc-windows-msvc`
-* 32bit Windows: `--target=i686-pc-windows-msvc`
+* 64bit Windows: `--target=x86_64-pc-windows-msvc` (Bootstrap) & `--target=x86_64-pc-windows-gnu` (Proxy)
+* 32bit Windows: `--target=i686-pc-windows-msvc` (Bootstrap) & `--target=i686-pc-windows-gnu` (Proxy)
 * 64bit Linux: `--target=x86_64-unknown-linux-gnu`
 * 64bit MacOS (not yet): `--target=x86_64-apple-darwin`
 
