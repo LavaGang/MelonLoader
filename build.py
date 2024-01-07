@@ -3,6 +3,8 @@ import os
 import shutil
 from distutils.dir_util import copy_tree
 
+os.environ["MSBUILDDISABLENODEREUSE"] = "1"
+
 args = sys.argv
 
 IsDebug: bool = "--release" not in args
