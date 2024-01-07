@@ -47,32 +47,5 @@ namespace MelonLoader
         {
             MelonDebug.Msg("MelonLoader.Core.OnApplicationStart");
         }
-
-        private static string GetVersionString()
-        {
-            StringBuilder sb = new();
-            sb.Append("MelonLoader ");
-            sb.Append($"v{BuildInfo.Version} ");
-            sb.Append(IsAlpha ? "ALPHA Pre-Release" : "Open-Beta");
-            
-            return sb.ToString();
-        }
-
-        internal static void WelcomeMessage()
-        {
-            EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
-            
-            MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect(GetVersionString());
-            MelonLogger.MsgDirect($"OS: {OsUtils.GetOSVersion()}");
-            MelonLogger.MsgDirect($"Hash Code: {MelonUtils.HashCode}");
-            MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect($"Game Type: {engineModuleInfo.RuntimeName}");
-            var archString = MelonUtils.IsGame32Bit ? "x86" : "x64";
-            MelonLogger.MsgDirect($"Game Arch: {archString}");
-            MelonLogger.MsgDirect("------------------------------");
-
-            MelonEnvironment.PrintEnvironment();
-        }
     }
 }

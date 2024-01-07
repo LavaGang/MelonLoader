@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text;
 using MelonLoader.Interfaces;
+using MelonLoader.Properties;
 using MonoMod.Utils;
 
 #if !NET35
@@ -22,7 +24,7 @@ namespace MelonLoader.Utils
             using var sha = SHA256.Create();
             HashCode = string.Join("", sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X")).ToArray());
             
-            Core.WelcomeMessage();
+            WelcomeMessage();
             
             EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
             
@@ -34,6 +36,33 @@ namespace MelonLoader.Utils
             MelonLogger.Msg($"Game Version: {engineModuleInfo.GameVersion}");
             MelonLogger.WriteLine(Color.Magenta);
             MelonLogger.WriteSpacer();
+        }
+        
+        private static string GetVersionString()
+        {
+            StringBuilder sb = new();
+            sb.Append("MelonLoader ");
+            sb.Append($"v{BuildInfo.Version} ");
+            sb.Append(Core.IsAlpha ? "ALPHA Pre-Release" : "Open-Beta");
+            
+            return sb.ToString();
+        }
+
+        private static void WelcomeMessage()
+        {
+            EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
+            
+            MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect(GetVersionString());
+            MelonLogger.MsgDirect($"OS: {OsUtils.GetOSVersion()}");
+            MelonLogger.MsgDirect($"Hash Code: {MelonUtils.HashCode}");
+            MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect($"Game Type: {engineModuleInfo.RuntimeName}");
+            var archString = MelonUtils.IsGame32Bit ? "x86" : "x64";
+            MelonLogger.MsgDirect($"Game Arch: {archString}");
+            MelonLogger.MsgDirect("------------------------------");
+
+            MelonEnvironment.PrintEnvironment();
         }
         
         public static Color DefaultTextColor 
