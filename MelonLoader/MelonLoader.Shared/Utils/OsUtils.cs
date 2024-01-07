@@ -84,7 +84,7 @@ public class OsUtils
             return;
 
         IntPtr dll = MelonNativeLibrary.Load("ntdll.dll");
-        IntPtr wineGetVersionProc = MelonNativeLibrary.GetExport(dll, "wine_get_version");
+        MelonNativeLibrary.TryGetExport(dll, "wine_get_version", out IntPtr wineGetVersionProc);
         if (wineGetVersionProc == IntPtr.Zero)
             return;
 

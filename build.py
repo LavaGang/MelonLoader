@@ -67,10 +67,6 @@ def clean(target: str):
         shutil.rmtree(os.path.join(OutputPath, target))
 
 def build(target: str):
-    if IsLinux and target == "win32":
-        print("Cross compiling to a different arch is currently unsupported with cross compilers.")
-        return
-
     dll_extension: str = "dll" if target == "win64" or target == "win32" else "so" if target == "linux" else "dylib"
     bootstrap_name = "libmelon_bootstrap.{}".format(dll_extension)
     version_name = "libversion.{}".format(dll_extension)
@@ -97,13 +93,6 @@ def build(target: str):
     if xwin:
         command = command.replace("cargo", "cargo-xwin")
     print(command)
-
-    if target == "win32" or target == "win64":
-        command = command + " --package melon_bootstrap"
-        new_command = CargoCommand.replace("--target=", "--target={}".format(targets[target].replace("msvc", "gnu")))
-        new_command += " --package melon_proxy"
-
-        os.system(new_command)
     
     
     # compile rust
@@ -126,10 +115,7 @@ def build(target: str):
         shutil.copy(os.path.join("BaseLibs", "dobby", "windows", "x86_64" if target == "win64" else "x86", "dobby.dll"), os.path.join(OutputPath, target, "dobby.dll"))
 
     os.replace(os.path.join(cargo_out_path, bootstrap_name), os.path.join(bootstrap_destination, bootstrap_name))
-    if target == "win32" or target == "win64":
-        os.replace(os.path.join(cargo_out_path.replace("msvc", "gnu"), version_name), os.path.join(OutputPath, target, version_name))
-    else:
-        os.replace(os.path.join(cargo_out_path, version_name), os.path.join(OutputPath, target, version_name))
+    os.replace(os.path.join(cargo_out_path, version_name), os.path.join(OutputPath, target, version_name))
     
     shutil.copytree(DotnetPaths[target], os.path.join(bootstrap_destination, "dotnet"))
 
