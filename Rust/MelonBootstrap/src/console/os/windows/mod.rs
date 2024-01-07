@@ -1,6 +1,7 @@
 //! Windows Console Module.
 
 use std::error::Error;
+use std::os::windows::io::AsRawHandle;
 use std::sync::Mutex;
 
 use lazy_static::lazy_static;
@@ -16,9 +17,9 @@ use windows::{
 use crate::{
     console_on_top,
     constants::{IS_ALPHA, MELON_VERSION},
-    debug_enabled,
+    debug, debug_enabled,
     errors::conerr::ConsoleError,
-    should_set_title, win_str, debug,
+    should_set_title, win_str,
 };
 
 lazy_static! {
@@ -48,21 +49,14 @@ pub unsafe fn init() -> Result<(), Box<dyn Error>> {
         SetWindowPos(*window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE)?;
     }
 
-    let _ = libc::freopen(
-        win_str!(b"CONIN$\0"),
-        win_str!(b"r\0"),
-        libc_stdhandle::stdin(),
-    );
-    let _ = libc::freopen(
-        win_str!(b"CONOUT$\0"),
-        win_str!(b"w\0"),
-        libc_stdhandle::stdout(),
-    );
-    let _ = libc::freopen(
-        win_str!(b"CONOUT$\0"),
-        win_str!(b"w\0"),
-        libc_stdhandle::stderr(),
-    );
+    let stdout = std::io::stdout();
+    let out_handle = stdout.as_raw_handle();
+    let out_handle = out_handle as isize;
+    SetStdHandle(STD_OUTPUT_HANDLE, HANDLE(out_handle));
+    let stderr = std::io::stderr();
+    let err_handle = stderr.as_raw_handle();
+    let err_handle = err_handle as isize;
+    SetStdHandle(STD_ERROR_HANDLE, HANDLE(err_handle));
 
     // needs to be in its own scope to drop the lock
     {
@@ -77,10 +71,9 @@ pub unsafe fn init() -> Result<(), Box<dyn Error>> {
     let mut mode = CONSOLE_MODE(0);
     let _ = GetConsoleMode(*output_handle, &mut mode);
 
-
     mode |= ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT;
 
-    if SetConsoleMode(*output_handle, mode).is_err()  {
+    if SetConsoleMode(*output_handle, mode).is_err() {
         mode &= !(ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
     } else {
         mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;

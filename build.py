@@ -91,7 +91,11 @@ def build(target: str):
     command = CargoCommand
     command = command.replace("--target=", "--target={}".format(targets[target]))
     if xwin:
-        command = command.replace("cargo", "cargo-xwin")
+        command = command.replace("cargo", "cargo xwin")
+        if target == "win32":
+            os.environ["XWIN_ARCH"] = "x86"
+            os.environ["XWIN_VERSION"] = "17"
+
     print(command)
     
     

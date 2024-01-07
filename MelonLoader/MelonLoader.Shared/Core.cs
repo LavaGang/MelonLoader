@@ -18,7 +18,8 @@ namespace MelonLoader
             MelonEnvironment.Initialize();
             MelonLaunchOptions.Load();
             
-            Pastel.ConsoleExtensions.Disable();
+            if (MelonUtils.IsUnderWineOrSteamProton()) 
+                Pastel.ConsoleExtensions.Disable();
             
             MelonDebug.Msg("MelonLoader.Core.Startup");
 
