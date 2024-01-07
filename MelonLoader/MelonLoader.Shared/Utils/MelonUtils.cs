@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -64,6 +65,54 @@ namespace MelonLoader.Utils
 
             MelonEnvironment.PrintEnvironment();
         }
+        
+        public static string ComputeSimpleSHA256Hash(string filePath)
+        {
+            using var sha = SHA256.Create();
+            return string.Join("", sha.ComputeHash(File.ReadAllBytes(filePath)).Select(b => b.ToString("X")).ToArray());
+        }
+        
+        public static T PullAttributeFromAssembly<T>(Assembly asm, bool inherit = false) where T : Attribute
+        {
+            T[] attributetbl = PullAttributesFromAssembly<T>(asm, inherit);
+            if ((attributetbl == null) || (attributetbl.Length <= 0))
+                return null;
+            return attributetbl[0];
+        }
+
+        public static T[] PullAttributesFromAssembly<T>(Assembly asm, bool inherit = false) where T : Attribute
+        {
+            Attribute[] att_tbl = Attribute.GetCustomAttributes(asm, inherit);
+
+            if ((att_tbl == null) || (att_tbl.Length <= 0))
+                return null;
+
+            Type requestedType = typeof(T);
+            string requestedAssemblyName = requestedType.Assembly.GetName().Name;
+            List<T> output = new();
+            foreach (Attribute att in att_tbl)
+            {
+                Type attType = att.GetType();
+                string attAssemblyName = attType.Assembly.GetName().Name;
+
+                if ((attType == requestedType)
+                    || IsTypeEqualToFullName(attType, requestedType.FullName)
+                    || ((attAssemblyName.Equals("MelonLoader")
+                         || attAssemblyName.Equals("MelonLoader.ModHandler"))
+                        && (requestedAssemblyName.Equals("MelonLoader")
+                            || requestedAssemblyName.Equals("MelonLoader.ModHandler"))
+                        && IsTypeEqualToName(attType, requestedType.Name)))
+                    output.Add(att as T);
+            }
+
+            return output.ToArray();
+        }
+        
+        public static bool IsTypeEqualToName(Type type1, string type2)
+            => type1.Name == type2 || (type1 != typeof(object) && IsTypeEqualToName(type1.BaseType, type2));
+
+        public static bool IsTypeEqualToFullName(Type type1, string type2)
+            => type1.FullName == type2 || (type1 != typeof(object) && IsTypeEqualToFullName(type1.BaseType, type2));
         
         public static Color DefaultTextColor 
             => Color.White;

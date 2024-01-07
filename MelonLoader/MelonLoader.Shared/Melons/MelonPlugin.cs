@@ -1,6 +1,9 @@
 namespace MelonLoader.Melons;
 
-public abstract class MelonPlugin : MelonBase<MelonPlugin>
+public abstract class MelonPlugin : MelonTypeBase<MelonPlugin>
 {
-    static MelonPlugin() => TypeName = "Plugin";
+    static MelonPlugin()
+    {
+        TypeName = "Plugin";
+    }
 }

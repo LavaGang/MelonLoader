@@ -1,7 +1,10 @@
 namespace MelonLoader.Melons;
 
-public abstract class MelonMod : MelonBase<MelonMod>
+public abstract class MelonMod : MelonTypeBase<MelonMod>
 {
-    static MelonMod() => TypeName = "Mod";
+    static MelonMod()
+    {
+        TypeName = "Mod";
+    }
 
 }
