@@ -15,37 +15,40 @@ body:
       options:
         - label: All <a href="https://github.com/LavaGang/MelonLoader/blob/master/README.md#requirements">Requirements</a> must be installed.
           required: true
-        - label: Full ``Latest.log`` file included. If no file exists then leave this unchecked and state so.
-          required: false
-          
+        - label: "Changed the title so that it doesn't just says \"[Bug]: \""
+          required: true
+        - label: I have searched the GitHub issues for my bug, even in the closed issues.
+          required: true
+
   - type: checkboxes
     id: optionalcriteria
     attributes:
       label: All of the following are optional to answer
       options:
         - label: Tried reinstalling the Game.
-          required: false
         - label: Tried reinstalling MelonLoader.
-          required: false
         - label: Tried restarting PC.
-          required: false
         - label: Was able to see the Start Screen.
-          required: false
-      
+
   - type: textarea
     id: what-happened
     attributes:
       label: Describe the issue.
-      description: Use the space below to describe the issue you are having. If you have a `Latest.log` file at `{Game_Directory}\MelonLoader\Latest.log`, please attach it by dragging and dropping it into the text box, or clicking the "Attach file" button at the bottom.
+      placeholder: Use this space to describe the issue you are having.
+      description: If you have a `Latest.log` file at `{Game_Directory}\MelonLoader\Latest.log`, please attach it by dragging and dropping it into the text box, or clicking the "Attach file" button at the bottom.
+
+        If there is no `Latest.log` file, please state that you do not have one.
     validations:
       required: true
-      
-  - type: checkboxes
+
+  - type: dropdown
     id: attachedlog
+    validations:
+      required: true
     attributes:
       label: Did you attach your log file?
       options:
-        - label: Yes, I attached my log file to the text box above.
-          required: false
-        - label: No, I could not find a log file at `{Game_Directory}\MelonLoader\Latest.log`
-          required: false
+        - Select an option below
+        - Yes, I attached my log file to the text box above.
+        - No, I could not find a log file at `{Game_Directory}\MelonLoader\Latest.log`
+      default: 0
