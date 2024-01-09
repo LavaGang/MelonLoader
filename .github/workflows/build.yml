@@ -77,22 +77,22 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64-Linux-Release
-          path: target/x86_64-unknown-linux-msvc/release/libversion.so
+          path: target/x86_64-unknown-linux-gnu/release/libversion.so
       - name: Upload Bootstrap Release | Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX64-Linux-Release
-          path: target/x86_64-unknown-linux-msvc/release/libBootstrap.so
+          path: target/x86_64-unknown-linux-gnu/release/libBootstrap.so
       - name: Upload Proxy Debug | Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64-Linux-Debug
-          path: target/x86_64-unknown-linux-msvc/debug/libversion.so
+          path: target/x86_64-unknown-linux-gnu/debug/libversion.so
       - name: Upload Bootstrap Debug | Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX64-Linux-Debug
-          path: target/x86_64-unknown-linux-msvc/debug/libBootstrap.so
+          path: target/x86_64-unknown-linux-gnu/debug/libBootstrap.so
       - name: Upload Proxy Release | Windows x86
         uses: actions/upload-artifact@v3
         with:
