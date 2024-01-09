@@ -1,7 +1,3 @@
 [workspace]
-members = [ "Bootstrap", "Proxy" ]
-
-[profile.release]
-lto = true
-codegen-units = 1
-opt-level = "z"
+members = ["MelonProxy", "Bootstrap"]
+resolver = "2"

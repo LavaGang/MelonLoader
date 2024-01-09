@@ -25,6 +25,8 @@ namespace MelonLoader.Utils
 
         private static gethostbyname_delegate original_gethostbyname;
         private static getaddrinfo_delegate original_getaddrinfo;
+        
+        private static object _observedDomainsLock = new object();
 
         private static List<string> _blockList = new()
         {
@@ -67,14 +69,21 @@ namespace MelonLoader.Utils
             "\u0066\u0061\u0063\u0065\u0062\u006f\u006f\u006b\u002e\u0063\u006f\u006d",
         };
 
+        /// <summary>
+        /// Explicitly allow domains that may be a subdomain of a blocked domain.
+        /// </summary>
+        private static HashSet<string> _explicitAllowList = new()
+        {
+            "\u0073\u0063\u006f\u006e\u0074\u0065\u006e\u0074\u002e\u006f\u0063\u0075\u006c\u0075\u0073\u0063\u0064\u006e\u002e\u0063\u006f\u006d"
+        };
+        
         private static List<string> _observedHostnames = new()
         {
             //Default ignored (as in, not logged) hostnames. I'm leaving these in cleartext cause it's easier.
             "ntp.org",
-            "bonetome.com",
             "samboy.dev",
             "github.com",
-            "ruby-core.com",
+            "dubyadu.de",
             "melonloader.com",
             "githubusercontent.com",
             "thetrueyoshifan.com"
@@ -87,16 +96,23 @@ namespace MelonLoader.Utils
 
             hostname = hostname.Trim().ToLowerInvariant();
 
-            var shouldBlock = _blockList.Any(b => hostname.Contains(b));
+            var shouldBlock = !_explicitAllowList.Contains(hostname) &&
+                              _blockList.Any(b => hostname.Contains(b));
 
             if (MelonDebug.IsEnabled() || MelonLaunchOptions.Core.ShouldDisplayAnalyticsBlocker)
             {
                 if (shouldBlock)
                     MelonDebug.Msg($"Host Name or IP blocked: {hostname}");
-                else if (!_observedHostnames.Any(h => hostname.Contains(h)))
+                else
                 {
-                    MelonDebug.Msg($"Unique Host Name or IP Found: {hostname}");
-                    _observedHostnames.Add(hostname);
+                    lock (_observedDomainsLock)
+                    {
+                        if (!_observedHostnames.Any(h => hostname.Contains(h)))
+                        {
+                            MelonDebug.Msg($"Unique Host Name or IP Found: {hostname}");
+                            _observedHostnames.Add(hostname);
+                        }
+                    }
                 }
             }
 

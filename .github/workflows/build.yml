@@ -8,125 +8,71 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_core_debug:
+  build_melonloader:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: setup-msbuild
+      - name: Setup MsBuild
         uses: microsoft/setup-msbuild@v1
-      - name: Build Melonloader Core
-        shell: cmd
-        run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
-      - name: Upload core artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLCoreDebug
-          path: Output/Debug/MelonLoader/
-  build_core_release:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v1
-      - name: Build Melonloader Core
+      - name: Build Melonloader (Release)
         shell: cmd
         run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
-      - name: Upload core artifact
+      - name: Build MelonLoader (Debug)
+        shell: cmd
+        run: msbuild /restore /p:Platform="Windows - x64"
+      - name: Upload Release Artifact
         uses: actions/upload-artifact@v3
         with:
           name: MLCoreRelease
           path: Output/Release/MelonLoader/
-  build_rust_windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: rust-toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: nightly
-          # Target triple to install for this toolchain
-          targets: i686-pc-windows-msvc, x86_64-pc-windows-msvc
-        # Build Rust Release
-      - name: Build Rust Release | Windows - x86
-        shell: cmd
-        run: cargo +nightly build --target i686-pc-windows-msvc --release
-      - name: Build Rust Release | Windows - x64
-        shell: cmd
-        run: cargo +nightly build --target x86_64-pc-windows-msvc --release
-        # Build Rust Debug
-      - name: Build Rust Debug | Windows - x86
-        shell: cmd
-        run: cargo +nightly build --target i686-pc-windows-msvc
-      - name: Build Rust Debug | Windows - x64
-        shell: cmd
-        run: cargo +nightly build --target x86_64-pc-windows-msvc
-        # Upload Proxy Release - x86
-      - name: Upload Proxy Release | Windows x86
+      - name: Upload Debug Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: MLProxyX86-Windows-Release
-          path: target/i686-pc-windows-msvc/release/version.dll
-        # Upload Bootstrap Release - x86
-      - name: Upload Bootstrap Release | Windows x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX86-Windows-Release
-          path: target/i686-pc-windows-msvc/release/Bootstrap.dll
-        # Upload Proxy Release - x64
-      - name: Upload Proxy Release | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLProxyX64-Windows-Release
-          path: target/x86_64-pc-windows-msvc/release/version.dll
-        # Upload Bootstrap Release - x64
-      - name: Upload Bootstrap Release | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX64-Windows-Release
-          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
-        # Upload Proxy Debug - x86
-      - name: Upload Proxy Debug | Windows x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLProxyX86-Windows-Debug
-          path: target/i686-pc-windows-msvc/debug/version.dll
-        # Upload Bootstrap Debug - x86
-      - name: Upload Bootstrap Debug | Windows x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX86-Windows-Debug
-          path: target/i686-pc-windows-msvc/debug/Bootstrap.dll
-        # Upload Proxy Debug - x64
-      - name: Upload Proxy Debug | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLProxyX64-Windows-Debug
-          path: target/x86_64-pc-windows-msvc/debug/version.dll
-        # Upload Bootstrap Debug - x64
-      - name: Upload Bootstrap Debug | Windows x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: MLBootstrapX64-Windows-Debug
-          path: target/x86_64-pc-windows-msvc/debug/Bootstrap.dll
-  build_rust_linux:
+          name: MLCoreDebug
+          path: Output/Debug/MelonLoader/
+  build_rust:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: rust-toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: nightly
-          # Target triple to install for this toolchain
-          targets: x86_64-unknown-linux-gnu
+      - name: Install Rust (nightly)
+        run:
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+      - name: Make Rust Nightly  
+        shell: bash
+        run: rustup default nightly
+      - name: Install Linux target x64
+        shell: bash
+        run: rustup target add x86_64-unknown-linux-gnu
+      - name: Install Windows target x64
+        shell: bash
+        run: rustup target add x86_64-pc-windows-msvc
+      - name: Install Windows target x86
+        shell: bash
+        run: rustup target add i686-pc-windows-msvc
+      - name: Install x-win
+        shell: bash
+        run: cargo install cargo-xwin
       - name: install dev dependencies
         shell: bash
-        run: sudo apt-get install libgtk-3-dev 
+        run: sudo apt-get install libgtk-3-dev wine llvm
       - name: Build Rust Release | Linux - x64
         shell: bash
-        run: cargo +nightly build --target x86_64-unknown-linux-gnu --release
+        run: cargo build --target x86_64-unknown-linux-gnu --release
       - name: Build Rust Debug | Linux - x64
         shell: bash
-        run: cargo +nightly build --target x86_64-unknown-linux-gnu
+        run: cargo build --target x86_64-unknown-linux-gnu
+      - name: Build Rust Release | Windows - x64
+        shell: bash
+        run: cargo xwin build --target x86_64-pc-windows-msvc --release
+      - name: Build Rust Debug | Windows - x64
+        shell: bash
+        run: cargo xwin build --target x86_64-pc-windows-msvc
+      - name: Build Rust Release | Windows - x86
+        shell: bash
+        run: XWIN_ARCH=x86 cargo xwin build --target i686-pc-windows-msvc --release
+      - name: Build Rust Debug | Windows - x86
+        shell: bash
+        run: XWIN_ARCH=x86 cargo xwin build --target i686-pc-windows-msvc
       - name: Upload Proxy Release | Linux x64
         uses: actions/upload-artifact@v3
         with:
@@ -147,9 +93,49 @@ jobs:
         with:
           name: MLBootstrapX64-Linux-Debug
           path: target/x86_64-unknown-linux-gnu/debug/libBootstrap.so
+      - name: Upload Proxy Release | Windows x86
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLProxyX86-Windows-Release
+          path: target/i686-pc-windows-msvc/release/version.dll
+      - name: Upload Bootstrap Release | Windows x86
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLBootstrapX86-Windows-Release
+          path: target/i686-pc-windows-msvc/release/Bootstrap.dll
+      - name: Upload Proxy Release | Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLProxyX64-Windows-Release
+          path: target/x86_64-pc-windows-msvc/release/version.dll
+      - name: Upload Bootstrap Release | Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLBootstrapX64-Windows-Release
+          path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
+      - name: Upload Proxy Debug | Windows x86
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLProxyX86-Windows-Debug
+          path: target/i686-pc-windows-msvc/debug/version.dll
+      - name: Upload Bootstrap Debug | Windows x86
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLBootstrapX86-Windows-Debug
+          path: target/i686-pc-windows-msvc/debug/Bootstrap.dll
+      - name: Upload Proxy Debug | Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLProxyX64-Windows-Debug
+          path: target/x86_64-pc-windows-msvc/debug/version.dll
+      - name: Upload Bootstrap Debug | Windows x64
+        uses: actions/upload-artifact@v3
+        with:
+          name: MLBootstrapX64-Windows-Debug
+          path: target/x86_64-pc-windows-msvc/debug/Bootstrap.dll
   finalize_x64_debug_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_debug, build_rust_windows]
+    needs: [build_rust, build_melonloader]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -191,7 +177,7 @@ jobs:
           path: ./Output/Debug/x64/*
   finalize_x86_debug_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_debug, build_rust_windows]
+    needs: [build_rust, build_melonloader]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -233,7 +219,7 @@ jobs:
           path: ./Output/Debug/x86/*
   finalize_x64_release_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_release, build_rust_windows]
+    needs: [build_rust, build_melonloader]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -275,7 +261,7 @@ jobs:
           path: ./Output/Release/x64/*
   finalize_x86_release_zip_windows:
     runs-on: windows-latest
-    needs: [build_core_release, build_rust_windows]
+    needs: [build_rust, build_melonloader]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -317,7 +303,7 @@ jobs:
           path: ./Output/Release/x86/*
   finalize_x64_debug_zip_linux:
     runs-on: windows-latest
-    needs: [build_core_debug, build_rust_linux]
+    needs: [build_rust, build_melonloader]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact
@@ -356,7 +342,7 @@ jobs:
           path: ./Output/Debug/x64/*
   finalize_x64_release_zip_linux:
     runs-on: windows-latest
-    needs: [build_core_release, build_rust_linux]
+    needs: [build_rust, build_melonloader]
     steps:
       - uses: actions/checkout@v3
       - name: Download core artifact

@@ -33,7 +33,7 @@ fn assembly_resolve(
 ) -> Result<*mut MonoAssembly, DynErr> {
     let runtime = runtime!()?;
 
-    let resolve_method = base_assembly::mono::ASSEMBLYMANAGER_RESOLVE.try_lock()?;
+    let resolve_method = base_assembly::mono::ASSEMBLYMANAGER_RESOLVE.try_read()?;
 
     if resolve_method.inner.is_null() {
         return Err("AssemblyManager.Resolve is null".into());
@@ -90,7 +90,7 @@ fn load_hook_inner(assembly: *mut MonoAssembly) -> Result<(), DynErr> {
         return Ok(());
     }
 
-    let load_method = base_assembly::mono::ASSEMBLYMANAGER_LOADINFO.try_lock()?;
+    let load_method = base_assembly::mono::ASSEMBLYMANAGER_LOADINFO.try_read()?;
     if load_method.inner.is_null() {
         return Ok(());
     }

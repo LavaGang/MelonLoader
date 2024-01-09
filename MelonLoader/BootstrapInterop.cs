@@ -24,19 +24,7 @@ namespace MelonLoader
 
             Console.Title = versionStr;
         }
-
-#if !NET6_0
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern void EnableCloseButton(IntPtr mainWindow);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern void DisableCloseButton(IntPtr mainWindow);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void NativeHookAttach(IntPtr target, IntPtr detour);
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void NativeHookDetach(IntPtr target, IntPtr detour);
-#else
-
+        
         private const int MF_BYCOMMAND = 0x00000000;
 
         private const int MF_ENABLED = 0x00000000;
@@ -63,7 +51,12 @@ namespace MelonLoader
             EnableMenuItem(GetSystemMenu(mainWindow, 0), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-
+#if !NET6_0
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern void NativeHookAttach(IntPtr target, IntPtr detour);
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern void NativeHookDetach(IntPtr target, IntPtr detour);
+#else
         public static void NativeHookAttach(IntPtr target, IntPtr detour)
         {
             //SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.

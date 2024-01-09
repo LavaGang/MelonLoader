@@ -25,9 +25,7 @@ lazy_static! {
 
 pub unsafe fn init() -> Result<(), DynErr> {
     // creates a console window, if one already exists it'll just return true.
-    if !AllocConsole().as_bool() {
-        return Err(ConsoleError::FailedToAllocateConsole.into());
-    }
+    AllocConsole()?;
 
     // store the console window handle
     let mut window = WINDOW.try_lock()?;
@@ -39,7 +37,7 @@ pub unsafe fn init() -> Result<(), DynErr> {
     }
 
     // this lets us hook into console close events, and run some cleanup logic.
-    if SetConsoleCtrlHandler(Some(ctrl_handler_hook), Foundation::TRUE) == Foundation::FALSE {
+    if SetConsoleCtrlHandler(Some(ctrl_handler_hook), Foundation::TRUE).is_err() {
         return Err(ConsoleError::FailedToSetConsoleCtrlHandler.into());
     }
 
@@ -80,12 +78,12 @@ pub unsafe fn init() -> Result<(), DynErr> {
 
     mode |= ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT;
 
-    if SetConsoleMode(*output_handle, mode) != Foundation::TRUE {
+    if SetConsoleMode(*output_handle, mode).is_err() {
         mode &= !(ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
     } else {
         mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 
-        if SetConsoleMode(*output_handle, mode) != Foundation::TRUE {
+        if SetConsoleMode(*output_handle, mode).is_err() {
             mode &= !ENABLE_VIRTUAL_TERMINAL_PROCESSING;
         }
     }

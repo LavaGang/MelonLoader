@@ -1,4 +1,4 @@
-use std::{ptr::null_mut, sync::Mutex};
+use std::{ptr::null_mut, sync::{RwLock, Mutex}};
 
 use lazy_static::lazy_static;
 use unity_rs::{
@@ -6,22 +6,24 @@ use unity_rs::{
     runtime::FerrexRuntime,
 };
 
-use crate::{debug, errors::DynErr, melonenv, runtime};
+use crate::{debug, errors::DynErr, melonenv::{self, paths}, runtime};
 
 lazy_static! {
     pub static ref MONO_PRESTART: Mutex<UnityMethod> =
         Mutex::new(UnityMethod { inner: null_mut() });
     pub static ref MONO_START: Mutex<UnityMethod> = Mutex::new(UnityMethod { inner: null_mut() });
-    pub static ref ASSEMBLYMANAGER_RESOLVE: Mutex<UnityMethod> =
-        Mutex::new(UnityMethod { inner: null_mut() });
-    pub static ref ASSEMBLYMANAGER_LOADINFO: Mutex<UnityMethod> =
-        Mutex::new(UnityMethod { inner: null_mut() });
+    pub static ref ASSEMBLYMANAGER_RESOLVE: RwLock<UnityMethod> =
+        RwLock::new(UnityMethod { inner: null_mut() });
+    pub static ref ASSEMBLYMANAGER_LOADINFO: RwLock<UnityMethod> =
+        RwLock::new(UnityMethod { inner: null_mut() });
 }
 
 pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
     preload(runtime)?;
 
     debug!("Initializing BaseAssembly")?;
+
+    let _runtime_dir = paths::runtime_dir()?;
 
     //get MelonLoader.dll's path and confirm it exists
     let mut melonloader_dll = melonenv::paths::MELONLOADER_FOLDER.clone();
@@ -52,8 +54,8 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
     //store the methods for later, in a thread safe global static.
     *MONO_PRESTART.try_lock()? = prestart_method;
     *MONO_START.try_lock()? = start_method;
-    *ASSEMBLYMANAGER_RESOLVE.try_lock()? = resolve_method;
-    *ASSEMBLYMANAGER_LOADINFO.try_lock()? = loadinfo_method;
+    *ASSEMBLYMANAGER_RESOLVE.try_write()? = resolve_method;
+    *ASSEMBLYMANAGER_LOADINFO.try_write()? = loadinfo_method;
 
     //invoke the MelonLoader initialize method.
     let _ = initialize_method.invoke(None, None, runtime)?;

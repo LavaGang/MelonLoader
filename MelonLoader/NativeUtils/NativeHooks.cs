@@ -10,6 +10,8 @@ namespace MelonLoader.NativeUtils
     public class NativeHook<T> where T : Delegate
     {
         #region Private Values
+        private static readonly List<Delegate> _gcProtect = new();
+        
         private IntPtr _targetHandle;
         private IntPtr _detourHandle;
         private IntPtr _trampolineHandle;
@@ -51,12 +53,30 @@ namespace MelonLoader.NativeUtils
 
         public T Trampoline
         {
-            get
+            get => _trampoline;
+            private set
             {
-                if (_trampoline == null)
-                    _trampoline = (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
 
-                return _trampoline;
+                if (_trampoline != null)
+                    _gcProtect.Remove(_trampoline);
+
+                _trampoline = value;
+                _gcProtect.Add(_trampoline);
+            }
+
+        }
+        
+        public IntPtr TrampolineHandle
+        {
+            get => _trampolineHandle;
+            private set
+            {
+                if (value == IntPtr.Zero)
+                    throw new ArgumentNullException(nameof(value));
+
+                _trampolineHandle = value;
             }
         }
 
@@ -91,6 +111,9 @@ namespace MelonLoader.NativeUtils
             IntPtr trampoline = _targetHandle;
             BootstrapInterop.NativeHookAttach((IntPtr)(&trampoline), _detourHandle);
             _trampolineHandle = trampoline;
+            
+            _trampoline = (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
+            _gcProtect.Add(_trampoline);
 
             IsHooked = true;
         }
@@ -107,6 +130,8 @@ namespace MelonLoader.NativeUtils
             BootstrapInterop.NativeHookDetach((IntPtr)(&original), _detourHandle);
 
             IsHooked= false;
+            _gcProtect.Remove(_trampoline);
+            _trampoline = null;
             _trampolineHandle = IntPtr.Zero;
         }
     }
