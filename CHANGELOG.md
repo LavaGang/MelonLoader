@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.6.2](#v061) |
 | [v0.6.1](#v061) |
 | [v0.6.0](#v060) |
 | [v0.5.7](#v057) |
@@ -30,6 +31,21 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.6.2
+
+1. Added a compatibility layer for EOS (Epic Online Services), preventing a crash caused by the Overlay
+2. Updated Cpp2IL
+3. Updated Tomlet
+5. Updated `MelonLoader.NativeUtils.NativeHook` to prevent GC issues 
+6. Updated Il2CppAssetBundleManager for Il2CppInterop
+7. Fix Proxy being unable to find System32 when Windows is not installed in C:
+8. Fixed logger sha256 hash (Credits to [Windows10CE](https://github.com/Windows10CE))
+9. Fixed DAB Thread safety & Oculus Profile Pictures (Credits to [SirCoolness](https://github.com/SirCoolness))
+10. Fix Melon Load Order (Credits to [Loukylor](https://github.com/loukylor))
+11. General fixes for Proxy & Bootstrap
 
 ---
 
