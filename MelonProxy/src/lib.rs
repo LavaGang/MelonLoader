@@ -134,8 +134,6 @@ unsafe fn get_dll_path() -> Option<String> {
 unsafe extern "system" fn init(_: *mut c_void) -> u32 {
     use std::{path::PathBuf, ffi::c_char};
 
-    use winapi::shared::ntdef::LPSTR;
-
     ORIG_FUNCS_PTR = ORIGINAL_FUNCS.as_ptr();
     
     if let Some(dll_path) = get_dll_path() {
@@ -147,14 +145,14 @@ unsafe extern "system" fn init(_: *mut c_void) -> u32 {
 
 
         let mut lpBuffer: [c_char; INFO_BUFFER_SIZE as usize] = [0; INFO_BUFFER_SIZE as usize];
-        let pathLen = winapi::um::sysinfoapi::GetWindowsDirectoryA(lpBuffer.as_mut_ptr(), INFO_BUFFER_SIZE);
+        let pathLen = winapi::um::sysinfoapi::GetSystemDirectoryA(lpBuffer.as_mut_ptr(), INFO_BUFFER_SIZE);
         if pathLen == 0 {
             internal_failure!("Failed to get Windows directory");
         }
 
         let path = unsafe {
             PathBuf::from(String::from_raw_parts(lpBuffer.as_mut_ptr().cast(), pathLen as usize, pathLen as usize))
-        }.join("System32").join(orig_dll_name);
+        }.join(orig_dll_name);
 
         if !path.exists() {
             internal_failure!("Original DLL does not exist");
