@@ -76,6 +76,8 @@ static mut ORIGINAL_FUNCS: [FARPROC; TOTAL_EXPORTS] = [std::ptr::null_mut(); TOT
 #[no_mangle]
 static mut ORIG_FUNCS_PTR: *const FARPROC = std::ptr::null_mut();
 
+const INFO_BUFFER_SIZE: u32 = 32767;
+
 /// Indicates once we are ready to accept incoming calls to proxied functions
 
 static mut PROXYGEN_READY: bool = false;
@@ -130,7 +132,9 @@ unsafe fn get_dll_path() -> Option<String> {
 /// Called when the thread is spawned
 #[cfg(target_os = "windows")]
 unsafe extern "system" fn init(_: *mut c_void) -> u32 {
-    use std::path::PathBuf;
+    use std::{path::PathBuf, ffi::c_char};
+
+    use winapi::shared::ntdef::LPSTR;
 
     ORIG_FUNCS_PTR = ORIGINAL_FUNCS.as_ptr();
     
@@ -141,7 +145,16 @@ unsafe extern "system" fn init(_: *mut c_void) -> u32 {
             internal_failure!("Failed to get DLL name");
         });
 
-        let path = PathBuf::from("C:\\Windows\\System32").join(orig_dll_name);
+
+        let mut lpBuffer: [c_char; INFO_BUFFER_SIZE as usize] = [0; INFO_BUFFER_SIZE as usize];
+        let pathLen = winapi::um::sysinfoapi::GetWindowsDirectoryA(lpBuffer.as_mut_ptr(), INFO_BUFFER_SIZE);
+        if pathLen == 0 {
+            internal_failure!("Failed to get Windows directory");
+        }
+
+        let path = unsafe {
+            PathBuf::from(String::from_raw_parts(lpBuffer.as_mut_ptr().cast(), pathLen as usize, pathLen as usize))
+        }.join("System32").join(orig_dll_name);
 
         if !path.exists() {
             internal_failure!("Original DLL does not exist");

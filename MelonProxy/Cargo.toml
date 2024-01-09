@@ -20,6 +20,7 @@ winapi = { version = "0.3.9", features = [
     "processenv",
     "winbase",
     "winuser",
+    "sysinfoapi",
     "errhandlingapi",
 ] }
 
