@@ -58,6 +58,7 @@ use winapi::{
         winbase::{STD_ERROR_HANDLE, STD_OUTPUT_HANDLE},
         winnt::{DLL_PROCESS_ATTACH, DLL_PROCESS_DETACH},
         winuser::{MessageBoxA, MB_OK},
+        sysinfoapi::GetSystemDirectoryW,
     },
 };
 
@@ -129,10 +130,27 @@ unsafe fn get_dll_path() -> Option<String> {
     Some(os_string.to_string_lossy().into_owned())
 }
 
+#[cfg(target_os = "windows")]
+unsafe fn get_system32_path() -> Option<String> {
+    let mut buffer: Vec<u16> = vec![0; INFO_BUFFER_SIZE as usize];
+    let size = GetSystemDirectoryW(
+        buffer.as_mut_ptr(),
+        buffer.len() as u32,
+    );
+
+    if size == 0 {
+        return None;
+    }
+
+    buffer.truncate(size as usize);
+    let os_string = OsString::from_wide(&buffer);
+    Some(os_string.to_string_lossy().into_owned())
+}
+
 /// Called when the thread is spawned
 #[cfg(target_os = "windows")]
 unsafe extern "system" fn init(_: *mut c_void) -> u32 {
-    use std::{path::PathBuf, ffi::c_char};
+    use std::{path::PathBuf, ffi::{c_char, CString, CStr}};
 
     ORIG_FUNCS_PTR = ORIGINAL_FUNCS.as_ptr();
     
@@ -144,15 +162,11 @@ unsafe extern "system" fn init(_: *mut c_void) -> u32 {
         });
 
 
-        let mut lpBuffer: [c_char; INFO_BUFFER_SIZE as usize] = [0; INFO_BUFFER_SIZE as usize];
-        let pathLen = winapi::um::sysinfoapi::GetSystemDirectoryA(lpBuffer.as_mut_ptr(), INFO_BUFFER_SIZE);
-        if pathLen == 0 {
-            internal_failure!("Failed to get Windows directory");
-        }
+        let system32_path = get_system32_path().unwrap_or_else(|| {
+            internal_failure!("Failed to get system32 path");
+        });
 
-        let path = unsafe {
-            PathBuf::from(String::from_raw_parts(lpBuffer.as_mut_ptr().cast(), pathLen as usize, pathLen as usize))
-        }.join(orig_dll_name);
+        let path = PathBuf::from(&system32_path).join(orig_dll_name);
 
         if !path.exists() {
             internal_failure!("Original DLL does not exist");

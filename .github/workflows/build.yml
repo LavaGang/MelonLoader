@@ -45,14 +45,8 @@ jobs:
         run: rustup target add x86_64-unknown-linux-gnu
       - name: Install Windows target x64
         shell: bash
-        run: rustup target add x86_64-pc-windows-gnu
-      - name: Install Windows target x86
-        shell: bash
-        run: rustup target add i686-pc-windows-gnu
-      - name: Install Windows target x64 (MSVC)
-        shell: bash
         run: rustup target add x86_64-pc-windows-msvc
-      - name: Install Windows target x86 (MSVC)
+      - name: Install Windows target x86
         shell: bash
         run: rustup target add i686-pc-windows-msvc
       - name: Install x-win
@@ -60,62 +54,50 @@ jobs:
         run: cargo install cargo-xwin
       - name: install dev dependencies
         shell: bash
-        run: sudo apt-get install libgtk-3-dev mingw-w64 binutils-mingw-w64 wine llvm
+        run: sudo apt-get install libgtk-3-dev wine llvm
       - name: Build Rust Release | Linux - x64
         shell: bash
         run: cargo build --target x86_64-unknown-linux-gnu --release
       - name: Build Rust Debug | Linux - x64
         shell: bash
         run: cargo build --target x86_64-unknown-linux-gnu
-      - name: Build Bootstrap Release | Windows - x64
+      - name: Build Rust Release | Windows - x64
         shell: bash
-        run: cargo xwin build --package Bootstrap --target x86_64-pc-windows-msvc --release
-      - name: Build Bootstrap Debug | Windows - x64
+        run: cargo xwin build --target x86_64-pc-windows-msvc --release
+      - name: Build Rust Debug | Windows - x64
         shell: bash
-        run: cargo xwin build --package Bootstrap --target x86_64-pc-windows-msvc
-      - name: Build Bootstrap Release | Windows - x86
+        run: cargo xwin build --target x86_64-pc-windows-msvc
+      - name: Build Rust Release | Windows - x86
         shell: bash
-        run: XWIN_ARCH=x86 cargo xwin build --package Bootstrap --target i686-pc-windows-msvc --release
-      - name: Build Bootstrap Debug | Windows - x86
+        run: XWIN_ARCH=x86 cargo xwin build --target i686-pc-windows-msvc --release
+      - name: Build Rust Debug | Windows - x86
         shell: bash
-        run: XWIN_ARCH=x86 cargo xwin build --package Bootstrap --target i686-pc-windows-msvc
-      - name: Build Proxy Release | Windows - x64
-        shell: bash
-        run: cargo build --package MelonProxy --target x86_64-pc-windows-gnu --release
-      - name: Build Proxy Debug | Windows - x64
-        shell: bash
-        run: cargo build --package MelonProxy --target x86_64-pc-windows-gnu
-      - name: Build Proxy Release | Windows - x86
-        shell: bash
-        run: cargo build --package MelonProxy --target i686-pc-windows-gnu --release
-      - name: Build Proxy Debug | Windows - x86
-        shell: bash
-        run: cargo build --package MelonProxy --target i686-pc-windows-gnu
+        run: XWIN_ARCH=x86 cargo xwin build --target i686-pc-windows-msvc
       - name: Upload Proxy Release | Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64-Linux-Release
-          path: target/x86_64-unknown-linux-gnu/release/libversion.so
+          path: target/x86_64-unknown-linux-msvc/release/libversion.so
       - name: Upload Bootstrap Release | Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX64-Linux-Release
-          path: target/x86_64-unknown-linux-gnu/release/libBootstrap.so
+          path: target/x86_64-unknown-linux-msvc/release/libBootstrap.so
       - name: Upload Proxy Debug | Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64-Linux-Debug
-          path: target/x86_64-unknown-linux-gnu/debug/libversion.so
+          path: target/x86_64-unknown-linux-msvc/debug/libversion.so
       - name: Upload Bootstrap Debug | Linux x64
         uses: actions/upload-artifact@v3
         with:
           name: MLBootstrapX64-Linux-Debug
-          path: target/x86_64-unknown-linux-gnu/debug/libBootstrap.so
+          path: target/x86_64-unknown-linux-msvc/debug/libBootstrap.so
       - name: Upload Proxy Release | Windows x86
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX86-Windows-Release
-          path: target/i686-pc-windows-gnu/release/version.dll
+          path: target/i686-pc-windows-msvc/release/version.dll
       - name: Upload Bootstrap Release | Windows x86
         uses: actions/upload-artifact@v3
         with:
@@ -125,7 +107,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64-Windows-Release
-          path: target/x86_64-pc-windows-gnu/release/version.dll
+          path: target/x86_64-pc-windows-msvc/release/version.dll
       - name: Upload Bootstrap Release | Windows x64
         uses: actions/upload-artifact@v3
         with:
@@ -135,7 +117,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX86-Windows-Debug
-          path: target/i686-pc-windows-gnu/debug/version.dll
+          path: target/i686-pc-windows-msvc/debug/version.dll
       - name: Upload Bootstrap Debug | Windows x86
         uses: actions/upload-artifact@v3
         with:
@@ -145,7 +127,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: MLProxyX64-Windows-Debug
-          path: target/x86_64-pc-windows-gnu/debug/version.dll
+          path: target/x86_64-pc-windows-msvc/debug/version.dll
       - name: Upload Bootstrap Debug | Windows x64
         uses: actions/upload-artifact@v3
         with:
