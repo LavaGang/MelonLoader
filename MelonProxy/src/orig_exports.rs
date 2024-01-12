@@ -1,17 +1,29 @@
 use crate::export_indices::*;
 use crate::{ORIGINAL_FUNCS, ORIG_DLL_HANDLE};
 use std::ffi::CString;
+use std::marker::FnPtr;
+use std::ptr::null_mut;
+use libloading::Library;
 use winapi::{
     shared::minwindef::{FARPROC, HMODULE},
     um::libloaderapi::GetProcAddress,
 };
 
 /// Loads up the address of the original function in the given module
-unsafe fn load_dll_func(index: usize, h_module: HMODULE, func: &str) {
-    let func_c_string = CString::new(func).unwrap();
-    let proc_address: FARPROC = GetProcAddress(h_module, func_c_string.as_ptr());
+unsafe fn load_dll_func(index: usize, h_module: &Library, func: &str) {
+    let func = &format!("{}\0", func);
+    let proc_address: *const () = get_maybe(&h_module, func.as_bytes());
     ORIGINAL_FUNCS[index] = proc_address;
     println!("[0x{:016x}] Loaded {}", proc_address as u64, func);
+}
+
+unsafe fn get_maybe(lib: &Library, name: &[u8]) -> *const () {
+    let func = lib.get::<fn()>(name);
+
+    match func.is_err() {
+        false => func.unwrap().addr(),
+        true => null_mut(),
+    }
 }
 
 /// Loads the original DLL functions for later use
@@ -21,7 +33,7 @@ pub unsafe fn load_dll_funcs() {
         eprintln!("Original DLL handle is none. Cannot load original DLL funcs");
         return;
     }
-    let dll_handle = ORIG_DLL_HANDLE.unwrap();
+    let dll_handle = ORIG_DLL_HANDLE.as_ref().unwrap();
     load_dll_func(Index_CloseDriver, dll_handle, "CloseDriver");
     load_dll_func(Index_DefDriverProc, dll_handle, "DefDriverProc");
     load_dll_func(Index_DllCanUnloadNow, dll_handle, "DllCanUnloadNow");
