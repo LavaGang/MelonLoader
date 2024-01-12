@@ -1,13 +1,9 @@
 use crate::export_indices::*;
 use crate::{ORIGINAL_FUNCS, ORIG_DLL_HANDLE};
-use std::ffi::CString;
+
 use std::marker::FnPtr;
 use std::ptr::null_mut;
 use libloading::Library;
-use winapi::{
-    shared::minwindef::{FARPROC, HMODULE},
-    um::libloaderapi::GetProcAddress,
-};
 
 /// Loads up the address of the original function in the given module
 unsafe fn load_dll_func(index: usize, h_module: &Library, func: &str) {
