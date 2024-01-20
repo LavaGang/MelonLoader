@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Il2CppAssemblyGenerator</RootNamespace>
 		<TargetFramework>net6</TargetFramework>
@@ -18,7 +18,7 @@
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.5-ci.313" ExcludeAssets="Runtime" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5-ci.313" ExcludeAssets="Runtime" />
 		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.5-ci.313" IncludeAssets="Runtime" />
-		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
+		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="Runtime" />
 		<ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.4.0" ExcludeAssets="Runtime" />
 	</ItemGroup>
