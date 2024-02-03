@@ -21,7 +21,7 @@ namespace MelonLoader.Support
 
             string systemDrawingPath = Path.Combine(managedFolder, "System.Drawing.dll");
             if (!File.Exists(systemDrawingPath))
-                WriteResource("System.Drawing.dll", systemCorePath);
+                WriteResource("System.Drawing.dll", systemDrawingPath);
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -30,7 +30,7 @@ namespace MelonLoader.Support
 
         private static void WriteResource(string name, string destination)
         {
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MelonLoader.Support.Resources." + name);
             var fileStream = new FileStream(destination, FileMode.CreateNew);
             for (int i = 0; i < stream!.Length; i++)
                 fileStream.WriteByte((byte)stream.ReadByte());
