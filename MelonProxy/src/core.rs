@@ -18,6 +18,11 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     let mut no_mods = false;
 
     let current_exe = std::env::current_exe()?;
+
+    if !files::is_unity(&current_exe)? {
+        return Ok(());
+    }
+
     let game_name = current_exe
         .file_name()
         .ok_or("Failed to get game name")?

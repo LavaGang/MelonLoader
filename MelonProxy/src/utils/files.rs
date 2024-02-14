@@ -1,7 +1,5 @@
 use std::{
-    env::consts::DLL_EXTENSION,
-    io::{self, Error, ErrorKind},
-    path::PathBuf,
+    env::consts::DLL_EXTENSION, error::Error, io::{self, ErrorKind}, path::PathBuf
 };
 
 /// search for Bootstrap in the given path
@@ -18,8 +16,34 @@ pub fn get_bootstrap_path(base_path: &PathBuf) -> Result<PathBuf, io::Error> {
         }
     }
 
-    Err(Error::new(
+    Err(io::Error::new(
         ErrorKind::NotFound,
         "Failed to find MelonLoader Bootstrap",
     ))
+}
+
+pub fn is_unity(file_path: &PathBuf) -> Result<bool, Box<dyn Error>> {
+    let file_name = file_path
+        .file_stem()
+        .ok_or("Failed to get file stem")?
+        .to_str()
+        .ok_or("Failed to get file stem")?;
+
+    let base_folder = file_path.parent().ok_or("Failed to get Directory Parent")?;
+
+    let data_path = base_folder.join(format!("{}_Data", file_name));
+
+    if !data_path.exists() {
+        return Ok(false);
+    }
+
+    let global_game_managers = data_path.join("globalgamemanagers");
+    let data_unity3d = data_path.join("data.unity3d");
+    let main_data = data_path.join("mainData");
+
+    if global_game_managers.exists() || data_unity3d.exists() || main_data.exists() {
+        Ok(true)
+    } else {
+        Ok(false)
+    }
 }
