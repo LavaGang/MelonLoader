@@ -94,7 +94,7 @@ pub unsafe extern "stdcall" fn DllMain(module: HMODULE, reason: isize, _res: *co
         init(std::ptr::null_mut());
 
         core::init().unwrap_or_else(|e| {
-            internal_failure!("Failed to initialize MelonLoader: {}", e)
+            eprintln!("Failed to initialize MelonLoader: {}", e)
         });
     }
 
@@ -105,7 +105,7 @@ pub unsafe extern "stdcall" fn DllMain(module: HMODULE, reason: isize, _res: *co
 #[ctor::ctor]
 fn init() {
     core::init().unwrap_or_else(|e| {
-        internal_failure!("Failed to initialize MelonLoader: {}", e)
+        eprintln!("Failed to initialize MelonLoader: {}", e)
     });
 }
 
