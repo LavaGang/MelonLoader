@@ -18,14 +18,12 @@ public static class MelonHandler
 
     public static void LoadMelonsFromDirectory<T>(string path) where T : IMelonBase
     {
-        //create a dummy instance
         MelonLogger.WriteSpacer();
         MelonLogger.Msg($"Loading {typeof(T).Name}s from '{path}'...");
 
-        bool hasWroteLine = false;
+        var hasWroteLine = false;
 
         string[] files = Directory.GetFiles(MelonEnvironment.MelonsDirectory, "*.dll");
-        var assemblies = new List<Assembly>();
         foreach (string file in files)
         {
             if (!hasWroteLine)
@@ -34,67 +32,51 @@ public static class MelonHandler
                 MelonLogger.WriteLine(Color.Magenta);
             }
 
-            Assembly assembly = Assembly.LoadFrom(file);
-            assemblies.Add(assembly);
+            var assembly = Assembly.LoadFrom(file);
+            LoadMelonsFromAssembly<T>(assembly);
         }
-
-        var melons = new List<T>();
-        foreach (Assembly assembly in assemblies)
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (type.IsClass && !type.IsAbstract && type.GetInterface(typeof(T).FullName) != null)
-                {
-                    T melon = (T)Activator.CreateInstance(type);
-                    melons.Add(melon);
-                }
-            }
-        }
-
-        if (hasWroteLine)
-            MelonLogger.WriteSpacer();
-
-        MelonLogger.Msg($"Loaded {melons.Count} {typeof(T).Name}s.");
     }
 
     public static void LoadMelonsFromAssembly<T>(Assembly assembly) where T : IMelonBase
     {
-        //create a dummy instance
-
         MelonLogger.WriteSpacer();
         MelonLogger.Msg($"Loading {typeof(T).Name}s from '{assembly.FullName}'...");
 
         var hasWroteLine = false;
 
         var melons = new List<T>();
-        //get custom attributes
         object[] attributes = assembly.GetCustomAttributes(typeof(MelonInfoAttribute), false);
         if (attributes.Length == 0)
         {
-            MelonLogger.Warning($"Failed to load {typeof(T).Name}s from '{assembly.FullName}': No MelonInfoAttribute found.");
+            MelonLogger.Warning(
+                $"Failed to load {typeof(T).Name}s from '{assembly.FullName}': No MelonInfoAttribute found.");
             return;
         }
         
+        //TODO: This stuff should be turned into extension methods. Or perhaps recreate our "MelonAssembly" wrapper.
         foreach (object attribute in attributes)
         {
-            if (attribute is not MelonInfoAttribute melonInfo) 
+            if (attribute is not MelonInfoAttribute melonInfo)
                 continue;
-            
+
             if (!hasWroteLine)
             {
                 hasWroteLine = true;
                 MelonLogger.WriteLine(Color.Magenta);
             }
-                
+
+            if (!typeof(T).IsAssignableFrom(melonInfo.SystemType))
+                continue;
+
             var melon = (T)Activator.CreateInstance(melonInfo.SystemType);
             melon.Logger = new MelonLogger.Instance(melonInfo.Name);
             melons.Add(melon);
         }
-        
-        
+
+
         if (hasWroteLine)
             MelonLogger.WriteSpacer();
-        
+
         MelonLogger.Msg($"Loaded {melons.Count} {typeof(T).Name}s.");
     }
 }
