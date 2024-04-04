@@ -1,9 +1,25 @@
+using MelonLoader.Interfaces;
+using MelonLoader.Utils;
+
 namespace MelonLoader.Melons;
 
-public abstract class MelonPlugin : MelonTypeBase<MelonPlugin>
+public class MelonPlugin : IMelonBase, IMelonPlugin
 {
-    static MelonPlugin()
+    public MelonLogger.Instance Logger { get; set; }
+    public MelonPlugin(bool subscribe = true)
     {
-        TypeName = "Plugin";
+        if (!subscribe)
+            return;
+        
+        MelonEvents.OnApplicationPreStart += OnApplicationPreStart;
+        MelonEvents.OnApplicationStart += OnApplicationStart;
+    }
+
+    public virtual void OnApplicationPreStart()
+    {
+    }
+
+    public virtual void OnApplicationStart()
+    {
     }
 }

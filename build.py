@@ -1,7 +1,7 @@
 import sys
 import os
 import shutil
-from distutils.dir_util import copy_tree
+from setuptools._distutils.dir_util import copy_tree
 
 os.environ["MSBUILDDISABLENODEREUSE"] = "1"
 

@@ -1,6 +1,7 @@
 ﻿using MelonLoader.Fixes;
 using MelonLoader.Utils;
 using System;
+using System.Reflection;
 using System.Text;
 using HarmonyLib;
 using MelonLoader.Interfaces;
@@ -38,17 +39,17 @@ namespace MelonLoader
             
             MelonUtils.Setup(AppDomain.CurrentDomain);
             
-            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
+            MelonHandler.LoadMelonsFromAssembly<MelonPlugin>(Assembly.GetExecutingAssembly());
         }
 
         public static void OnApplicationPreStart()
         {
-            MelonDebug.Msg("MelonLoader.Core.OnApplicationPreStart");
+            MelonEvents.InternalInvokeOnApplicationPreStart();
         }
 
         public static void OnApplicationStart()
         {
-            MelonDebug.Msg("MelonLoader.Core.OnApplicationStart");
+            MelonEvents.InternalInvokeOnApplicationStart();
         }
     }
 }

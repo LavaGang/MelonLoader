@@ -33,8 +33,7 @@ namespace MelonLoader.Fixes
 
             MelonEnvironment.ModulesDirectory,
             MelonEnvironment.UserLibsDirectory,
-            MelonEnvironment.PluginsDirectory,
-            MelonEnvironment.ModsDirectory,
+            MelonEnvironment.MelonsDirectory,
             MelonEnvironment.MelonBaseDirectory,
             MelonEnvironment.GameRootDirectory
         };

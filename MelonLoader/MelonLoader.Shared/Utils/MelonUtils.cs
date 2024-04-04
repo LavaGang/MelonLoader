@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using MelonLoader.Interfaces;
+using MelonLoader.Melons;
 using MelonLoader.Properties;
 using MonoMod.Utils;
 
@@ -26,6 +27,14 @@ namespace MelonLoader.Utils
             HashCode = string.Join("", sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X")).ToArray());
             
             WelcomeMessage();
+            
+            if (!Directory.Exists(MelonEnvironment.UserDataDirectory))
+                Directory.CreateDirectory(MelonEnvironment.UserDataDirectory);
+
+            if (!Directory.Exists(MelonEnvironment.UserLibsDirectory))
+                Directory.CreateDirectory(MelonEnvironment.UserLibsDirectory);
+            
+            MelonHandler.Setup();
             
             EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
             

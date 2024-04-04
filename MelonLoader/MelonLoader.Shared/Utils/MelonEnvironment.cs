@@ -22,8 +22,7 @@ namespace MelonLoader.Utils
         public static string MelonBaseDirectory { get; private set; }
 
         public static string ModulesDirectory { get; private set; }
-        public static string ModsDirectory { get; private set; }
-        public static string PluginsDirectory { get; private set; }
+        public static string MelonsDirectory { get; private set; }
         public static string UserLibsDirectory { get; private set; }
         public static string UserDataDirectory { get; private set; }
 
@@ -45,8 +44,7 @@ namespace MelonLoader.Utils
             MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
             MelonBaseDirectory = Directory.GetParent(MelonLoaderDirectory)!.FullName;
             ModulesDirectory = Path.Combine(MelonLoaderDirectory, "Modules");
-            ModsDirectory = Path.Combine(MelonBaseDirectory, "Mods");
-            PluginsDirectory = Path.Combine(MelonBaseDirectory, "Plugins");
+            MelonsDirectory = Path.Combine(MelonBaseDirectory, "Melons");
             UserLibsDirectory = Path.Combine(MelonBaseDirectory, "UserLibs");
             UserDataDirectory = Path.Combine(MelonBaseDirectory, "UserData");
         }
