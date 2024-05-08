@@ -77,7 +77,7 @@ static mut ORIGINAL_FUNCS: [FARPROC; TOTAL_EXPORTS] = [std::ptr::null_mut(); TOT
 #[no_mangle]
 static mut ORIG_FUNCS_PTR: *const FARPROC = std::ptr::null_mut();
 
-const INFO_BUFFER_SIZE: u32 = 32767;
+const INFO_BUFFER_SIZE: usize = 32767;
 
 /// Indicates once we are ready to accept incoming calls to proxied functions
 
@@ -111,7 +111,7 @@ fn init() {
 /// Get the current DLLs path
 #[cfg(target_os = "windows")]
 unsafe fn get_dll_path() -> Option<String> {
-    let mut buffer: Vec<u16> = vec![0; 260];
+    let mut buffer: Vec<u16> = vec![0; INFO_BUFFER_SIZE];
     if THIS_HANDLE.is_none() {
         return None;
     }
@@ -132,7 +132,7 @@ unsafe fn get_dll_path() -> Option<String> {
 
 #[cfg(target_os = "windows")]
 unsafe fn get_system32_path() -> Option<String> {
-    let mut buffer: Vec<u16> = vec![0; INFO_BUFFER_SIZE as usize];
+    let mut buffer: Vec<u16> = vec![0; INFO_BUFFER_SIZE];
     let size = GetSystemDirectoryW(
         buffer.as_mut_ptr(),
         buffer.len() as u32,
@@ -172,9 +172,10 @@ unsafe extern "system" fn init(_: *mut c_void) -> u32 {
             internal_failure!("Original DLL does not exist");
         }
 
-        let path = path.to_str().unwrap_or_else(|| {
+        let mut path = path.to_str().unwrap_or_else(|| {
             internal_failure!("Failed to convert path to string");
-        });
+        }).to_owned();
+        path.push('\0');
 
         ORIG_DLL_HANDLE = Some(LoadLibraryA(path.as_ptr() as *const i8));
     } else {
