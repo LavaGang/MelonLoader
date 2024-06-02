@@ -8,6 +8,8 @@ using MelonLoader.Utils;
 using System.IO;
 using System.Runtime.InteropServices;
 using bHapticsLib;
+using MelonLoader.CompatibilityLayers;
+
 
 #if NET6_0
 using System.Threading;
@@ -45,7 +47,14 @@ namespace MelonLoader
 #if NET6_0
             Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
 #endif
-            
+
+            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
+
+#if NET35
+            // Needs to be installed before MelonConsole
+            Net20Compatibility.TryInstall();
+#endif
+
             SetupWineCheck();
             Utils.MelonConsole.Init();
 
@@ -72,8 +81,6 @@ namespace MelonLoader
             {
                 MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
             }
-
-            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
             
 #if NET6_0
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
