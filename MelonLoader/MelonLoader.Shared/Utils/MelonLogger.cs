@@ -155,7 +155,7 @@ namespace MelonLoader.Utils
             BootstrapInterop.NativeWriteLogToFile(
                 $"[{MelonUtils.TimeStamp}] {(error ? "[ERROR] " : "")}{(namesection is null ? "" : $"[{namesection}] ")}{txt}");
 
-            if (MelonUtils.IsUnderWineOrSteamProton())
+            if (MelonUtils.IsWineOrProton)
             {
                 WriteTimestampWine(error);
                 if (error)

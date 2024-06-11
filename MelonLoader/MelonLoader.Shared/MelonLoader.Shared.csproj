@@ -36,6 +36,10 @@
         </PackageReference>
     </ItemDefinitionGroup>
     <ItemGroup>
+      <None Remove="SemVer\License.txt" />
+      <None Remove="SemVer\README.md" />
+    </ItemGroup>
+    <ItemGroup>
       <PackageReference Include="HarmonyX" Version="2.10.2" />
     </ItemGroup>
 

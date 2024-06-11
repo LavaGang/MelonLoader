@@ -4,43 +4,74 @@ using MelonLoader.NativeUtils;
 
 namespace MelonLoader.Utils;
 
-public class OsUtils
+internal static class OsUtils
 {
-    [DllImport("ntdll.dll", SetLastError = true)]
-    internal static extern uint
-        RtlGetVersion(out OsVersionInfo versionInformation); // return type should be the NtStatus enum
-
-    internal static MelonNativeLibrary.StringDelegate WineGetVersion;
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.LPStr)]
+    private delegate string dWineGetVersion();
+    private static dWineGetVersion WineGetVersion;
+    
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    [return: MarshalAs(UnmanagedType.LPStr)]
+    private delegate uint dRtlGetVersion(out OsVersionInfo versionInformation); // return type should be the NtStatus enum
+    private static dRtlGetVersion RtlGetVersion;
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct OsVersionInfo
+    private struct OsVersionInfo
     {
         private readonly uint OsVersionInfoSize;
-
         internal readonly uint MajorVersion;
         internal readonly uint MinorVersion;
-
         internal readonly uint BuildNumber;
-
         private readonly uint PlatformId;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         internal readonly string CSDVersion;
     }
 
+    static OsUtils()
+    {
+        if (!MelonUtils.IsWindows)
+            return;
+
+        IntPtr ntdll = MelonNativeLibrary.Load("ntdll.dll");
+        if (ntdll == IntPtr.Zero)
+            return;
+
+        MelonNativeLibrary.TryGetExport(ntdll, "RtlGetVersion", out IntPtr rtlGetVersionProc);
+        if (rtlGetVersionProc != IntPtr.Zero)
+            RtlGetVersion = (dRtlGetVersion)Marshal.GetDelegateForFunctionPointer(
+                rtlGetVersionProc,
+                typeof(dRtlGetVersion)
+            );
+
+        MelonNativeLibrary.TryGetExport(ntdll, "wine_get_version", out IntPtr wineGetVersionProc);
+        if (wineGetVersionProc != IntPtr.Zero)
+            WineGetVersion = (dWineGetVersion)Marshal.GetDelegateForFunctionPointer(
+                wineGetVersionProc,
+                typeof(dWineGetVersion)
+            );
+    }
+
+    internal static bool IsWineOrProton()
+        => WineGetVersion != null;
+
     internal static string GetOSVersion()
     {
-        if (MelonUtils.IsUnix || MelonUtils.IsMac)
+        if (!MelonUtils.IsWindows)
             return Environment.OSVersion.VersionString;
 
-        if (MelonUtils.IsUnderWineOrSteamProton())
+        if (IsWineOrProton())
             return $"Wine {WineGetVersion()}";
+
+        if (RtlGetVersion == null)
+            return "Unknown";
+
         RtlGetVersion(out OsVersionInfo versionInformation);
         var minor = versionInformation.MinorVersion;
         var build = versionInformation.BuildNumber;
 
         string versionString = "";
-
         switch (versionInformation.MajorVersion)
         {
             case 4:
@@ -76,21 +107,5 @@ public class OsUtils
         }
 
         return $"{versionString}";
-    }
-
-    internal static void SetupWineCheck()
-    {
-        if (MelonUtils.IsUnix || MelonUtils.IsMac)
-            return;
-
-        IntPtr dll = MelonNativeLibrary.Load("ntdll.dll");
-        MelonNativeLibrary.TryGetExport(dll, "wine_get_version", out IntPtr wineGetVersionProc);
-        if (wineGetVersionProc == IntPtr.Zero)
-            return;
-
-        WineGetVersion = (MelonNativeLibrary.StringDelegate)Marshal.GetDelegateForFunctionPointer(
-            wineGetVersionProc,
-            typeof(MelonNativeLibrary.StringDelegate)
-        );
     }
 }

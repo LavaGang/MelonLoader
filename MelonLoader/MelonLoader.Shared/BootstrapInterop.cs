@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using MelonLoader.Utils;
 using System.Runtime.InteropServices;
 

@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using MelonLoader;
 using MelonLoader.Utils;
 
 namespace MelonLoader.NativeUtils
 {
     public static class MelonNativeLibrary
     {
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        internal delegate string StringDelegate();
-        
         public static bool TryLoad(string name, out IntPtr result)
         {
             bool wasSuccessful = false;

@@ -10,6 +10,7 @@ namespace MelonLoader
     internal static class ModuleManager
     {
         internal static IEngineModule EngineModule { get; private set; }
+
         internal static IBootstrapModule FindBootstrapModule()
         {
             foreach (var bootstrapPath in Directory.GetFiles(MelonEnvironment.ModulesDirectory, "*.Bootstrap.dll", SearchOption.AllDirectories))

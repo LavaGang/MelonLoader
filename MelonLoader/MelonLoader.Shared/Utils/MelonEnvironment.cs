@@ -1,12 +1,17 @@
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+
+#if NET6_0_OR_GREATER
+using System;
+#else
+using System.Diagnostics;
+#endif
 
 namespace MelonLoader.Utils
 {
     public static class MelonEnvironment
     {
-        private const string OurRuntimeName =
+        public const string OurRuntimeName =
 #if NET35_OR_GREATER
             "net35";
 #elif NETSTANDARD2_1_OR_GREATER
@@ -30,7 +35,7 @@ namespace MelonLoader.Utils
         {
             // Game based Paths
 #if NET6_0_OR_GREATER
-            GameExecutablePath = System.Environment.ProcessPath;
+            GameExecutablePath = Environment.ProcessPath;
 #else
             GameExecutablePath = Process.GetCurrentProcess().MainModule!.FileName;
 #endif
@@ -44,9 +49,18 @@ namespace MelonLoader.Utils
             MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
             MelonBaseDirectory = Directory.GetParent(MelonLoaderDirectory)!.FullName;
             ModulesDirectory = Path.Combine(MelonLoaderDirectory, "Modules");
+
             MelonsDirectory = Path.Combine(MelonBaseDirectory, "Melons");
-            UserLibsDirectory = Path.Combine(MelonBaseDirectory, "UserLibs");
+            if (!Directory.Exists(MelonsDirectory))
+                Directory.CreateDirectory(MelonsDirectory);
+
             UserDataDirectory = Path.Combine(MelonBaseDirectory, "UserData");
+            if (!Directory.Exists(UserDataDirectory))
+                Directory.CreateDirectory(UserDataDirectory);
+
+            UserLibsDirectory = Path.Combine(MelonBaseDirectory, "UserLibs");
+            if (!Directory.Exists(UserLibsDirectory))
+                Directory.CreateDirectory(UserLibsDirectory);
         }
 
         internal static void PrintEnvironment()
@@ -54,8 +68,6 @@ namespace MelonLoader.Utils
             MelonLogger.MsgDirect($"Core::BasePath = {MelonBaseDirectory}");
             MelonLogger.MsgDirect($"Game::BasePath = {GameRootDirectory}");
             MelonLogger.MsgDirect($"Game::ApplicationPath = {GameExecutablePath}");
-
-            MelonLogger.MsgDirect($"Runtime Type: {OurRuntimeName}");
         }
     }
 }

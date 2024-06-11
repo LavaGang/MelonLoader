@@ -10,12 +10,6 @@ namespace MelonLoader.Melons;
 
 public static class MelonHandler
 {
-    internal static void Setup()
-    {
-        if (!Directory.Exists(MelonEnvironment.MelonsDirectory))
-            Directory.CreateDirectory(MelonEnvironment.MelonsDirectory);
-    }
-
     public static void LoadMelonsFromDirectory<T>(string path) where T : IMelonBase
     {
         MelonLogger.WriteSpacer();

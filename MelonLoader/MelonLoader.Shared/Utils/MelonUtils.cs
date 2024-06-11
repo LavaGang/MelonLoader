@@ -5,11 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Text;
-using MelonLoader.Interfaces;
-using MelonLoader.Melons;
-using MelonLoader.Properties;
-using MonoMod.Utils;
 
 #if !NET35
 using System.Runtime.InteropServices;
@@ -20,59 +15,13 @@ namespace MelonLoader.Utils
     public static class MelonUtils
     {
         public static string HashCode { get; private set; }
+        public static string OSVersion { get; private set; }
 
-        internal static void Setup(AppDomain domain)
+        internal static void Setup()
         {
             using var sha = SHA256.Create();
             HashCode = string.Join("", sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X")).ToArray());
-            
-            WelcomeMessage();
-            
-            if (!Directory.Exists(MelonEnvironment.UserDataDirectory))
-                Directory.CreateDirectory(MelonEnvironment.UserDataDirectory);
-
-            if (!Directory.Exists(MelonEnvironment.UserLibsDirectory))
-                Directory.CreateDirectory(MelonEnvironment.UserLibsDirectory);
-            
-            MelonHandler.Setup();
-            
-            EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
-            
-            MelonLogger.WriteLine(Color.Magenta);
-            MelonLogger.Msg($"Game Name: {engineModuleInfo.GameName}");
-            MelonLogger.Msg($"Game Developer: {engineModuleInfo.GameDeveloper}");
-            MelonLogger.Msg($"Engine Name: {engineModuleInfo.EngineName}");
-            MelonLogger.Msg($"Engine Version: {engineModuleInfo.EngineVersion}");
-            MelonLogger.Msg($"Game Version: {engineModuleInfo.GameVersion}");
-            MelonLogger.WriteLine(Color.Magenta);
-            MelonLogger.WriteSpacer();
-        }
-        
-        private static string GetVersionString()
-        {
-            StringBuilder sb = new();
-            sb.Append("MelonLoader ");
-            sb.Append($"v{BuildInfo.Version} ");
-            sb.Append(Core.IsAlpha ? "ALPHA Pre-Release" : "Open-Beta");
-            
-            return sb.ToString();
-        }
-
-        private static void WelcomeMessage()
-        {
-            EngineModuleInfo engineModuleInfo = ModuleManager.EngineModule.GameInfo;
-            
-            MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect(GetVersionString());
-            MelonLogger.MsgDirect($"OS: {OsUtils.GetOSVersion()}");
-            MelonLogger.MsgDirect($"Hash Code: {MelonUtils.HashCode}");
-            MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect($"Game Type: {engineModuleInfo.RuntimeName}");
-            var archString = MelonUtils.IsGame32Bit ? "x86" : "x64";
-            MelonLogger.MsgDirect($"Game Arch: {archString}");
-            MelonLogger.MsgDirect("------------------------------");
-
-            MelonEnvironment.PrintEnvironment();
+            OSVersion = OsUtils.GetOSVersion();
         }
         
         public static string ComputeSimpleSHA256Hash(string filePath)
@@ -147,17 +96,23 @@ namespace MelonLoader.Utils
         public static bool IsMac 
             => Platform is PlatformID.MacOSX;
 
-        public static bool IsUnderWineOrSteamProton()
-            => OsUtils.WineGetVersion is not null;
-        
+        public static bool IsWineOrProton
+            => OsUtils.IsWineOrProton();
+
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
 
 #if !NET35
+
         public static bool IsAndroid => RuntimeInformation.IsOSPlatform(OSPlatform.Create("ANDROID"));
-        public static bool IsGame32Bit => !Environment.Is64BitProcess;
+        public static bool Is32Bit => !Environment.Is64BitProcess;
+        public static bool Is64Bit => Environment.Is64BitProcess;
+
 #else
-        public static bool IsGame32Bit => IntPtr.Size == 4;
+
+        public static bool Is32Bit => IntPtr.Size == 4;
+        public static bool Is64Bit => IntPtr.Size != 4;
         public static bool IsAndroid => false;
+
 #endif
     }
 }
