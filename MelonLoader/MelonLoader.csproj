@@ -6,7 +6,7 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-		<DocumentationFile>..\Output\$(Configuration)\MelonLoader\MelonLoader.xml</DocumentationFile>
+		<DocumentationFile>$(OutputPath)$(TargetFramework)\MelonLoader.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 		<DebugType>embedded</DebugType>
