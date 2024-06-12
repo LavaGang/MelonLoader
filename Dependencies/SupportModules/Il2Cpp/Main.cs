@@ -51,12 +51,13 @@ namespace MelonLoader.Support
             Interop = new InteropInterface();
             Interface.SetInteropSupportInterface(Interop);
             //HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyMethodPatcher.TryResolve;
-            Core.HarmonyInstance.Patch(HarmonyLib.AccessTools.TypeByName("System.Runtime.CompilerServices.CastHelpers").GetMethod("ChkCast_Helper", HarmonyLib.AccessTools.all), HarmonyLib.AccessTools.Method(typeof(Main), nameof(ChkCast_HelperPatch)).ToNewHarmonyMethod());
+            //Core.HarmonyInstance.Patch(HarmonyLib.AccessTools.TypeByName("System.Runtime.CompilerServices.CastHelpers").GetMethod("ChkCast_Helper", HarmonyLib.AccessTools.all), HarmonyLib.AccessTools.Method(typeof(Main), nameof(ChkCast_HelperPatch)).ToNewHarmonyMethod());
             runtime.Start();
 
             return new SupportModule_To();
         }
         
+		/*
         private static Dictionary<IntPtr, Type> AllTypes = AccessTools.AllTypes().ToDictionary(type => type.TypeHandle.Value, type => type);
         private static MethodInfo TryCast = typeof(Il2CppObjectBase).GetMethod("TryCast");
         private static Type TryGetTypeFromIntPtr(IntPtr intPtr)
@@ -85,6 +86,8 @@ namespace MelonLoader.Support
             }
             return true;
         }
+		*/
+		
         private static Assembly Il2Cppmscorlib = null;
         private static Type streamType = null;
         private static void ConsoleCleaner()
