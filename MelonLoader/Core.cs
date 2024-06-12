@@ -8,6 +8,7 @@ using MelonLoader.Utils;
 using System.IO;
 using System.Runtime.InteropServices;
 using bHapticsLib;
+using System.Threading;
 
 #if NET6_0
 using System.Threading;
@@ -27,20 +28,22 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
-            MelonLaunchOptions.Load();
-
-#if NET6_0
-            if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
-            {
-                Console.WriteLine("[Init] User requested debugger, attempting to launch now...");
-                Debugger.Launch();
-            }
-#endif
 
             var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
             MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
+
+            MelonLaunchOptions.Load();
+            MelonLogger.Setup();
+
+#if NET6_0
+            if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
+            {
+                MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
+                Debugger.Launch();
+            }
+#endif
             
 #if NET6_0
             Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);

@@ -36,6 +36,7 @@ namespace MelonLoader.Utils
         public static string PluginsDirectory => Path.Combine(MelonBaseDirectory, "Plugins");
         public static string UserLibsDirectory => Path.Combine(MelonBaseDirectory, "UserLibs");
         public static string UserDataDirectory => Path.Combine(MelonBaseDirectory, "UserData");
+        public static string MelonLoaderLogsDirectory => Path.Combine(MelonLoaderDirectory, "Logs");
         public static string OurRuntimeDirectory => Path.Combine(MelonLoaderDirectory, OurRuntimeName);
 
         public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);

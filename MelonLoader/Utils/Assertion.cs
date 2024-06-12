@@ -15,19 +15,18 @@ namespace MelonLoader.Utils
 
         internal static void ThrowInternalFailure(string msg)
         {
-            if (ShouldContinue)
-            {
-                ShouldContinue = false;
-                var timestamp = LoggerUtils.GetTimeStamp();
-                MelonLogger.LogWriter.WriteLine($"[{timestamp}] [INTERNAL FAILURE] {msg}");
-                string caption = "INTERNAL FAILURE!";
+            if (!ShouldContinue)
+                return;
 
-                var result = MessageBox(0, msg, caption, 0);
+            ShouldContinue = false;
 
-                while (result == IntPtr.Zero)
+            var timestamp = LoggerUtils.GetTimeStamp();
+            MelonLogger.WriteLogToFile($"[{timestamp}] [INTERNAL FAILURE] {msg}");
 
-                    Environment.Exit(1);
-            }
+            string caption = "INTERNAL FAILURE!";
+            var result = MessageBox(0, msg, caption, 0);
+            while (result == IntPtr.Zero)
+                Environment.Exit(1);
         }
     }
 }
