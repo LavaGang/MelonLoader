@@ -11,19 +11,9 @@
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
-		<Reference Include="Il2Cppmscorlib">
-		  <HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
-		  <Private>false</Private>
-		</Reference>
-		<Reference Include="Assembly-CSharp">
-			<HintPath>Libs\Assembly-CSharp.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="UnhollowerBaseLib">
-		  <HintPath>Libs\UnhollowerBaseLib.dll</HintPath>
-		  <Private>false</Private>
-		</Reference>
 		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-		<PackageReference Include="HarmonyX" Version="2.10.1" />
+		<PackageReference Include="HarmonyX" Version="2.10.2">
+		  <ExcludeAssets>Runtime</ExcludeAssets>
+		</PackageReference>
 	</ItemGroup>
 </Project>
