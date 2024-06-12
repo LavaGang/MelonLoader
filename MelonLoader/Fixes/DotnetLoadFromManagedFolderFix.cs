@@ -5,10 +5,6 @@ using System.Reflection;
 using System.Runtime.Loader;
 #endif
 
-using MelonLoader.Utils;
-using System.IO;
-using System.Reflection;
-
 namespace MelonLoader.Fixes
 {
     internal static class DotnetLoadFromManagedFolderFix

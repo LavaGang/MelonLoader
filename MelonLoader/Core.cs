@@ -8,12 +8,16 @@ using MelonLoader.Utils;
 using System.IO;
 using System.Runtime.InteropServices;
 using bHapticsLib;
+using System.Threading;
+
+#if NET35
 using MelonLoader.CompatibilityLayers;
+#endif
 
 #if NET6_0
-using System.Threading;
 using MelonLoader.CoreClrUtils;
 #endif
+
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
@@ -28,7 +32,6 @@ namespace MelonLoader
 
         internal static int Initialize()
         {
-
             var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
             MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
@@ -43,17 +46,13 @@ namespace MelonLoader
                 MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
                 Debugger.Launch();
             }
-#endif
-            
-#if NET6_0
+
             Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
 #endif
 
-            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
-
 #if NET35
-            // Needs to be installed before MelonConsole
-            Net20Compatibility.TryInstall();
+            // Disabled for now because of issues
+            //Net20Compatibility.TryInstall();
 #endif
 
             SetupWineCheck();
@@ -82,6 +81,8 @@ namespace MelonLoader
             {
                 MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
             }
+
+            HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
             
 #if NET6_0
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -246,7 +247,7 @@ namespace MelonLoader
             MelonLogger.Flush();
             //MelonLogger.Close();
             
-            System.Threading.Thread.Sleep(200);
+            Thread.Sleep(200);
 
             if (MelonLaunchOptions.Core.QuitFix)
                 Process.GetCurrentProcess().Kill();
