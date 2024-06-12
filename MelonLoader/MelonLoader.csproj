@@ -32,22 +32,18 @@
 		</PackageReference>
 	</ItemDefinitionGroup>
 	<ItemGroup>
-		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" />
-		<PackageReference Include="AssetsTools.NET" Version="3.0.0" />
-		<PackageReference Include="HarmonyX" Version="2.10.2" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.4.0" />
+		<PackageReference Include="AssetsTools.NET" Version="3.0.0-preview3" />
+		<PackageReference Include="HarmonyX" Version="2.10.1" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.3.1" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
-		<PackageReference Include="AsmResolver.DotNet" Version="5.5.1" />
-		<PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />
-		<PackageReference Include="Mono.Cecil">
-		  <Version>0.11.5</Version>
-		  <PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
-		<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+		<PackageReference Include="AsmResolver.DotNet" Version="5.2.0" />
+		<PackageReference Include="Microsoft.Diagnostics.Runtime" Version="2.4.416101" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.394" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.394" />

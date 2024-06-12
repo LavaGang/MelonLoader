@@ -13,19 +13,13 @@
 		<PreserveCompilationContext>false</PreserveCompilationContext>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Iced" Version="1.21.0">
-		  <ExcludeAssets>runtime</ExcludeAssets>
-		</PackageReference>
-		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.6-ci.394" ExcludeAssets="runtime" />
-		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.394" ExcludeAssets="runtime" />
-		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.394" ExcludeAssets="runtime" />
-		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.6-ci.394" IncludeAssets="Runtime">
-		  <ExcludeAssets>runtime</ExcludeAssets>
-		</PackageReference>
-		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="runtime" />
-		<ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false">
-		  <ExcludeAssets>runtime</ExcludeAssets>
-		</ProjectReference>
-		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="runtime" />
+		<PackageReference Include="Iced" Version="1.18.0" />
+		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.6-ci.394" ExcludeAssets="Runtime" />
+		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.394" ExcludeAssets="Runtime" />
+		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.394" ExcludeAssets="Runtime" />
+		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.6-ci.394" IncludeAssets="Runtime" />
+		<PackageReference Include="Mono.Cecil" Version="0.11.4" ExcludeAssets="Runtime" />
+		<ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.4.0" ExcludeAssets="Runtime" />
 	</ItemGroup>
 </Project>

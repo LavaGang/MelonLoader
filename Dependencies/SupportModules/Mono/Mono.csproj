@@ -23,11 +23,7 @@
 		<Compile Include="..\UnityMappers.cs" Link="UnityMappers.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false">
-		  <ExcludeAssets>runtime</ExcludeAssets>
-		</ProjectReference>
-		<PackageReference Include="Samboy063.Tomlet" Version="5.3.1">
-		  <ExcludeAssets>runtime</ExcludeAssets>
-		</PackageReference>
+		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
+		<PackageReference Include="Samboy063.Tomlet" Version="5.3.1" />
 	</ItemGroup>
 </Project>

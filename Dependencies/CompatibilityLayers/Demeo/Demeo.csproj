@@ -11,9 +11,7 @@
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false">
-		  <PrivateAssets>true</PrivateAssets>
-		  <ExcludeAssets></ExcludeAssets>
-		</ProjectReference>
+		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
+		<PackageReference Include="HarmonyX" Version="2.10.1" />
 	</ItemGroup>
 </Project>

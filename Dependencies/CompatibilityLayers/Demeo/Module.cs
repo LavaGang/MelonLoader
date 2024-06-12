@@ -32,7 +32,7 @@ namespace MelonLoader.CompatibilityLayers
                 Assembly assembly = Assembly.Load("Assembly-CSharp");
                 Type moddingApi = assembly.GetType("Boardgame.Modding.ModdingAPI");
 
-                modInfoType = assembly.GetType("Boardgame.Modding.ModdingAPI.ModInformation");
+                modInfoType = moddingApi.GetNestedType("ModInformation");
                 name_field = modInfoType.GetField("name", BindingFlags.Public | BindingFlags.Instance);
                 version_field = modInfoType.GetField("version", BindingFlags.Public | BindingFlags.Instance);
                 author_field = modInfoType.GetField("author", BindingFlags.Public | BindingFlags.Instance);
