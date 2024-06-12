@@ -5,6 +5,10 @@ using System.Reflection;
 using System.Runtime.Loader;
 #endif
 
+using MelonLoader.Utils;
+using System.IO;
+using System.Reflection;
+
 namespace MelonLoader.Fixes
 {
     internal static class DotnetLoadFromManagedFolderFix
@@ -13,7 +17,6 @@ namespace MelonLoader.Fixes
 #if !NET6_0
         internal static void Install()
         {
-
         }
 #else
         //TODO Update for non-windows platforms in future, or when updating runtime

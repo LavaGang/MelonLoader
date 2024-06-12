@@ -22,10 +22,4 @@
 	    <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
 	  </ProjectReference>
 	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="0Harmony">
-			<HintPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\0Harmony.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-	</ItemGroup>
 </Project>

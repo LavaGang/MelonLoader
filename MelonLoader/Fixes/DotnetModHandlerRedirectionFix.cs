@@ -1,5 +1,6 @@
 ﻿#if NET6_0
 using HarmonyLib;
+using System;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -9,7 +10,12 @@ namespace MelonLoader.Fixes
     {
         public static void Install()
         {
-            Core.HarmonyInstance.Patch(typeof(AssemblyLoadContext).GetMethod("ValidateAssemblyNameWithSimpleName", BindingFlags.Static | BindingFlags.NonPublic), new HarmonyMethod(typeof(DotnetModHandlerRedirectionFix), nameof(PreValidateAssembly)));
+            try
+            {
+                Core.HarmonyInstance.Patch(typeof(AssemblyLoadContext).GetMethod("ValidateAssemblyNameWithSimpleName", BindingFlags.Static | BindingFlags.NonPublic),
+                    new HarmonyMethod(typeof(DotnetModHandlerRedirectionFix), nameof(PreValidateAssembly)));
+            }
+            catch (Exception ex) { MelonLogger.Warning($"DotnetModHandlerRedirectionFix Exception: {ex}"); }
         }
 
         public static bool PreValidateAssembly(Assembly assembly, string requestedSimpleName, ref Assembly __result)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using MelonLoader.MonoInternals.ResolveInternals;
 using MelonLoader.Utils;
@@ -21,9 +22,12 @@ namespace MelonLoader.MonoInternals
                 MelonEnvironment.ModsDirectory,
                 MelonEnvironment.MelonBaseDirectory,
                 MelonEnvironment.GameRootDirectory,
+                MelonEnvironment.OurRuntimeDirectory
             };
             foreach (string path in searchdirlist)
                 AddSearchDirectory(path);
+
+            GetAssemblyResolveInfo("Mono.Cecil").Override = Assembly.LoadFrom(Path.Combine(MelonEnvironment.OurRuntimeDirectory, "Mono.Cecil.dll"));
 
             // Setup Redirections
             string[] assembly_list =
