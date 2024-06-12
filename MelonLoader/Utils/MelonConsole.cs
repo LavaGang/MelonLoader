@@ -20,9 +20,20 @@ internal static class MelonConsole
             return;
         
         ConsoleOutHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-        ConsoleOutStream = new FileStream(new SafeFileHandle(ConsoleOutHandle, false), FileAccess.Write);
-        ConsoleOutWriter = new StreamWriter(ConsoleOutStream);
-        ConsoleOutWriter.AutoFlush = true;
+        ConsoleOutStream =
+        // This enables support for net2.0. Even though the old constructor is deprecated in net35, it's still functional
+#if NET35
+#pragma warning disable CS0618 // Type or member is obsolete
+        new FileStream(ConsoleOutHandle, FileAccess.Write);
+#pragma warning restore CS0618 // Type or member is obsolete
+#else
+            new FileStream(new SafeFileHandle(ConsoleOutHandle, false), FileAccess.Write);
+#endif
+
+        ConsoleOutWriter = new StreamWriter(ConsoleOutStream)
+        {
+            AutoFlush = true
+        };
     }
 
     internal static void WriteLine(string txt)
