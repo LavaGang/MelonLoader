@@ -52,9 +52,12 @@ jobs:
       - name: Install x-win
         shell: bash
         run: cargo install cargo-xwin
+      - name: update dev dependencies
+        shell: bash
+        run: sudo apt-get update
       - name: install dev dependencies
         shell: bash
-        run: sudo apt-get install libgtk-3-dev wine llvm
+        run: sudo apt-get install libgtk-3-dev wine llvm --fix-missing
       - name: Build Rust Release | Linux - x64
         shell: bash
         run: cargo build --target x86_64-unknown-linux-gnu --release
