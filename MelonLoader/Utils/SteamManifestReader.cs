@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.IO;
 using System.Text.RegularExpressions;
+#pragma warning disable CA1416
 
 namespace MelonLoader.Utils
 {
@@ -8,6 +9,10 @@ namespace MelonLoader.Utils
     {
         public static string GetInstallPathFromAppId(string appid)
         {
+            if (!MelonUtils.IsWindows
+                || MelonUtils.IsUnderWineOrSteamProton())
+                return null;
+
             if (string.IsNullOrEmpty(appid))
                 return null;
 
@@ -34,6 +39,10 @@ namespace MelonLoader.Utils
 
         private static string ReadAppManifestInstallDir(string appmanifestpath)
         {
+            if (!MelonUtils.IsWindows
+                || MelonUtils.IsUnderWineOrSteamProton())
+                return null;
+
             if (!File.Exists(appmanifestpath))
                 return null;
 
@@ -56,6 +65,10 @@ namespace MelonLoader.Utils
 
         private static string ReadLibraryFolders(string appmanifestfilename, ref string steamappspath)
         {
+            if (!MelonUtils.IsWindows
+                || MelonUtils.IsUnderWineOrSteamProton())
+                return null;
+
             string libraryfoldersfilepath = Path.Combine(steamappspath, "libraryfolders.vdf");
             if (!File.Exists(libraryfoldersfilepath))
                 return null;
@@ -85,6 +98,10 @@ namespace MelonLoader.Utils
 
         private static string GetSteamInstallPath()
         {
+            if (!MelonUtils.IsWindows
+                || MelonUtils.IsUnderWineOrSteamProton())
+                return null;
+
             RegistryKey key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Valve\\Steam");
             if (key == null)
                 key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Valve\\Steam");

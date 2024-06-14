@@ -38,6 +38,9 @@ namespace MelonLoader.CompatibilityLayers
 
         private IntPtr Detour(IntPtr path)
         {
+            if (path == IntPtr.Zero)
+                return _hook.Trampoline(path);
+            
             var pathString = Marshal.PtrToStringUni(path);
             if (pathString.EndsWith("EOSOVH-Win64-Shipping.dll") || pathString.EndsWith("EOSOVH-Win32-Shipping.dll"))
             {

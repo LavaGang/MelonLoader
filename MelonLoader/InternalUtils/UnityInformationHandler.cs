@@ -59,7 +59,8 @@ namespace MelonLoader.InternalUtils
             if (string.IsNullOrEmpty(GameName))
                 GameName = DefaultInfo;
 
-            BootstrapInterop.SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
+            //BootstrapInterop.SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
+
             if (string.IsNullOrEmpty(GameVersion))
                 GameVersion = DefaultInfo;
 

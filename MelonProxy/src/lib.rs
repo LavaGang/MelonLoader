@@ -7,6 +7,7 @@
 #![allow(non_snake_case)]
 #![feature(asm_const)]
 #![feature(lazy_cell)]
+#![feature(fn_ptr_trait)]
 
 #[cfg(target_os = "windows")]
 mod export_indices;
@@ -67,15 +68,15 @@ use winapi::{
 #[cfg(target_os = "windows")]
 static mut THIS_HANDLE: Option<HMODULE> = None;
 #[cfg(target_os = "windows")]
-static mut ORIG_DLL_HANDLE: Option<HMODULE> = None;
+static mut ORIG_DLL_HANDLE: Option<libloading::Library> = None;
 
 // Original funcs
 #[cfg(target_os = "windows")]
 #[no_mangle]
-static mut ORIGINAL_FUNCS: [FARPROC; TOTAL_EXPORTS] = [std::ptr::null_mut(); TOTAL_EXPORTS];
+static mut ORIGINAL_FUNCS: [*const (); TOTAL_EXPORTS] = [std::ptr::null_mut(); TOTAL_EXPORTS];
 #[cfg(target_os = "windows")]
 #[no_mangle]
-static mut ORIG_FUNCS_PTR: *const FARPROC = std::ptr::null_mut();
+static mut ORIG_FUNCS_PTR: *const *const () = std::ptr::null_mut();
 
 const INFO_BUFFER_SIZE: u32 = 32767;
 
@@ -87,6 +88,7 @@ static mut PROXYGEN_READY: bool = false;
 #[no_mangle]
 pub unsafe extern "stdcall" fn DllMain(module: HMODULE, reason: isize, _res: *const c_void) -> i32 {
     THIS_HANDLE = Some(module);
+
 
     if reason == 1 {
         init(std::ptr::null_mut());
@@ -152,6 +154,8 @@ unsafe fn get_system32_path() -> Option<String> {
 unsafe extern "system" fn init(_: *mut c_void) -> u32 {
     use std::{path::PathBuf, ffi::{c_char, CString, CStr}};
 
+    use libloading::Library;
+
     ORIG_FUNCS_PTR = ORIGINAL_FUNCS.as_ptr();
     
     if let Some(dll_path) = get_dll_path() {
@@ -172,19 +176,18 @@ unsafe extern "system" fn init(_: *mut c_void) -> u32 {
             internal_failure!("Original DLL does not exist");
         }
 
-        let path = path.to_str().unwrap_or_else(|| {
+        //add null terminator
+        let path = &format!("{}\0", path.to_str().unwrap_or_else(|| {
             internal_failure!("Failed to convert path to string");
-        });
+        }));
 
-        ORIG_DLL_HANDLE = Some(LoadLibraryA(path.as_ptr() as *const i8));
+        ORIG_DLL_HANDLE = Some(Library::new(path).unwrap_or_else(|e| {
+            internal_failure!("Failed to load original DLL: {}", e);
+        }));
     } else {
         internal_failure!("Failed to get DLL path");
-        return 1;
     }
-    if let Some(orig_dll_handle) = ORIG_DLL_HANDLE {
-        if orig_dll_handle.is_null() {
-            internal_failure!("Failed to load original DLL");
-        }
+    if let Some(orig_dll_handle) = ORIG_DLL_HANDLE.as_ref() {
         println!("Original DLL handle: {:?}", orig_dll_handle);
     } else {
         let err = GetLastError();

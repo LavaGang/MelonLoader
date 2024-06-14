@@ -37,6 +37,11 @@ namespace MelonLoader
             CheckGameLayerWithPlatform(name, () => false);
             CheckGameLayerWithPlatform($"{name}_Mono", () => MelonUtils.IsGameIl2Cpp());
             CheckGameLayerWithPlatform($"{name}_Il2Cpp", () => !MelonUtils.IsGameIl2Cpp());
+
+            name = name.Substring(0, name.IndexOf(' ') - 1);
+            CheckGameLayerWithPlatform(name, () => false);
+            CheckGameLayerWithPlatform($"{name}_Mono", () => MelonUtils.IsGameIl2Cpp());
+            CheckGameLayerWithPlatform($"{name}_Il2Cpp", () => !MelonUtils.IsGameIl2Cpp());
         }
 
         internal static void LoadModules()
@@ -49,7 +54,14 @@ namespace MelonLoader
             CheckGameLayer($"{InternalUtils.UnityInformationHandler.GameDeveloper}_{InternalUtils.UnityInformationHandler.GameName}");
 
             foreach (var m in layers)
+            {
+                if ((m.shouldBeIgnored != null)
+                    && m.shouldBeIgnored())
+                    continue;
+
+                MelonDebug.Msg($"Loading MelonModule '{m.fullPath}'");
                 MelonModule.Load(m);
+            }
 
             foreach (var file in Directory.GetFiles(baseDirectory))
             {

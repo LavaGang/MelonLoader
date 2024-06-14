@@ -89,6 +89,10 @@ namespace MelonLoader.Utils
             "thetrueyoshifan.com"
         };
 
+        private static NativeUtils.NativeHook<gethostbyname_delegate> ghbn_hook;
+        private static NativeUtils.NativeHook<gethostbyname_delegate> gai_hook;
+
+
         private static bool CheckShouldBlock(string hostname)
         {
             if (string.IsNullOrEmpty(hostname))
@@ -141,9 +145,9 @@ namespace MelonLoader.Utils
 #endif
 
             MelonDebug.Msg($"Hooking wsock32::gethostbyname (0x{ghbnPtr.ToInt64():X})...");
-            MelonUtils.NativeHookAttachDirect((IntPtr) (&ghbnPtr), (IntPtr) detourPtr);
-
+            ghbn_hook = new NativeUtils.NativeHook<gethostbyname_delegate>((IntPtr)(&ghbnPtr), (IntPtr)detourPtr);
             original_gethostbyname = (gethostbyname_delegate)Marshal.GetDelegateForFunctionPointer(ghbnPtr, typeof(gethostbyname_delegate));
+            ghbn_hook.Attach();
 
             if (MelonUtils.IsGame32Bit())
             {
@@ -161,9 +165,9 @@ namespace MelonLoader.Utils
 #else
                 var detourPtr2 = Marshal.GetFunctionPointerForDelegate((getaddrinfo_delegate)getaddrinfo_hook);
 #endif
-                MelonUtils.NativeHookAttachDirect((IntPtr) (&gaiPtr), (IntPtr)detourPtr2);
-
+                gai_hook = new NativeUtils.NativeHook<gethostbyname_delegate>((IntPtr)(&gaiPtr), (IntPtr)detourPtr2);
                 original_getaddrinfo = (getaddrinfo_delegate)Marshal.GetDelegateForFunctionPointer(gaiPtr, typeof(getaddrinfo_delegate));
+                gai_hook.Attach();
             }
         }
 

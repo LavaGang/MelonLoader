@@ -692,8 +692,8 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 
 			InitializePassword(Password);
 
-			byte[] cryptBuffer = new byte[ZipConstants.CryptoHeaderSize];
-			var rng = new RNGCryptoServiceProvider();
+            byte[] cryptBuffer = new byte[ZipConstants.CryptoHeaderSize];
+			var rng = RandomNumberGenerator.Create();
 			rng.GetBytes(cryptBuffer);
 
 			cryptBuffer[11] = (byte)(crcValue >> 24);

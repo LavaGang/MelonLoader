@@ -444,7 +444,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 		public override void GenerateKey()
 		{
 			key_ = new byte[12];
-			var rng = new RNGCryptoServiceProvider();
+			var rng = RandomNumberGenerator.Create();
 			rng.GetBytes(key_);
 		}
 

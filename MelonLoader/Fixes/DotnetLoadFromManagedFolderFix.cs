@@ -13,7 +13,6 @@ namespace MelonLoader.Fixes
 #if !NET6_0
         internal static void Install()
         {
-
         }
 #else
         //TODO Update for non-windows platforms in future, or when updating runtime

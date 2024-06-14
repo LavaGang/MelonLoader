@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
 #if NET6_0
 using MelonLoader.CoreClrUtils;
 #endif
@@ -22,7 +23,9 @@ namespace MelonLoader
             string versionStr = Core.GetVersionString() +
                                 $" - {GameName} {GameVersion ?? ""}";
 
-            Console.Title = versionStr;
+            // Setting the title might not work on .net 2.0. In WTTG 2 it's present in mscorlib, but the resolver can't find it for whatever reason.
+            // Using reflection to avoid resolver errors
+            HarmonyLib.AccessTools.Property(typeof(Console), "Title")?.SetValue(null, versionStr, null);
         }
         
         private const int MF_BYCOMMAND = 0x00000000;

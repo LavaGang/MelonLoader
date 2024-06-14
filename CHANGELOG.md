@@ -1,6 +1,7 @@
 | Versions: |
 | - |
-| [v0.6.2](#v061) |
+| [v0.6.3](#v063) |
+| [v0.6.2](#v062) |
 | [v0.6.1](#v061) |
 | [v0.6.0](#v060) |
 | [v0.5.7](#v057) |
@@ -34,6 +35,22 @@
 
 ---
 
+### v0.6.3
+
+1. Updated NuGet Packages
+2. Fixed Referenced DLLs not being resolved properly resulting in crashes
+3. Fixed Proxy being unable to find Original DLL    (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+4. Fixed LoadLibrary failing on in rare cases    (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+5. Fixed Preload Module failing to initialize included resources   (Credits to [TrevTV](https://github.com/TrevTV) :P)
+6. Reimplemented Log Caching and Logs folder
+7. Implemented Additional Initialization Error Handling
+8. Implemented Garbage Collection handling for NativeHook
+9. Rewrote the Demeo Compatibility Layer to be less prone to breakage
+10. Fixed DarkRed ConsoleColor   (Credits to [Scoolnik](https://github.com/Scoolnik) :D)
+11. Fixed several .NET Framework 2.0 compatibility issues   (Credits to [slxdy](https://github.com/slxdy) :D)
+
+---
+
 ### v0.6.2
 
 1. Added a compatibility layer for EOS (Epic Online Services), preventing a crash caused by the Overlay
@@ -41,7 +58,7 @@
 3. Updated Tomlet
 5. Updated `MelonLoader.NativeUtils.NativeHook` to prevent GC issues 
 6. Updated Il2CppAssetBundleManager for Il2CppInterop
-7. Fix Proxy being unable to find System32 when Windows is not installed in C:
+7. Fixed Proxy being unable to find System32 when Windows is not installed in C:
 8. Fixed logger sha256 hash (Credits to [Windows10CE](https://github.com/Windows10CE))
 9. Fixed DAB Thread safety & Oculus Profile Pictures (Credits to [SirCoolness](https://github.com/SirCoolness))
 10. Fix Melon Load Order (Credits to [Loukylor](https://github.com/loukylor))
@@ -62,11 +79,11 @@
 
 ### v0.6.0:
 
-1. Added Linux Support (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+1. Added Linux Support   (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
 2. Switched the runtime to .NET 6 CoreCLR for Il2Cpp Games (Credits to [SamboyCoding](https://github.com/SamboyCoding) :D)
-3. Moved a lot of logic from Native to Managed (Credits to [SamboyCoding](https://github.com/SamboyCoding) & [RinLovesYou](https://github.com/RinLovesYou) :D)
-4. Replaced Unhollower with Il2CppInterop (Credits to [SamboyCoding](https://github.com/SamboyCoding), [nitrog0d](https://github.com/nitrog0d) & [ds5678](https://github.com/ds5678) :D)
-5. Rewrote Proxy & Bootstrap (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+3. Moved a lot of logic from Native to Managed   (Credits to [SamboyCoding](https://github.com/SamboyCoding) & [RinLovesYou](https://github.com/RinLovesYou) :D)
+4. Replaced Unhollower with Il2CppInterop   (Credits to [SamboyCoding](https://github.com/SamboyCoding), [nitrog0d](https://github.com/nitrog0d) & [ds5678](https://github.com/ds5678) :D)
+5. Rewrote Proxy & Bootstrap   (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
 6. Fixed some start screen corruption
 7. Added helper methods for determining current platform
 8. added `Utils.MelonConsole` for printing to console on mono games

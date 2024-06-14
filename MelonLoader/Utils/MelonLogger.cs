@@ -5,26 +5,105 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using static MelonLoader.Utils.LoggerUtils;
+using System.Collections.Generic;
 
 namespace MelonLoader
 {
     public class MelonLogger
     {
+        private static int MaxLogs;
+        private static int MaxWarnings;
+        private static int MaxErrors;
+
+        private static int WarningsCount;
+        private static int ErrorsCount;
+
         public static readonly Color DefaultMelonColor = Color.Cyan;
         public static readonly Color DefaultTextColor = Color.LightGray;
 
-#if !NET6_0
-        private static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-#else
-        internal static FileStream LogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
-#endif
-        internal static StreamWriter LogWriter = CreateLogWriter();
+        private static FileStream LatestLogStream;
+        private static StreamWriter LatestLogWriter;
 
-        internal static StreamWriter CreateLogWriter()
+        private static FileStream CachedLogStream;
+        private static StreamWriter CachedLogWriter;
+
+        internal static void Setup()
         {
-            var writer = new StreamWriter(LogStream, Encoding.UTF8, 1);
+            if (MelonLaunchOptions.Core.IsDebug)
+            {
+                MaxLogs = 0;
+                MaxWarnings = 0;
+                MaxErrors = 0;
+            }
+            else
+            {
+                MaxLogs = MelonLaunchOptions.Logger.MaxLogs;
+                MaxWarnings = MelonLaunchOptions.Logger.MaxWarnings;
+                MaxErrors = MelonLaunchOptions.Logger.MaxErrors;
+            }
+
+            if (!Directory.Exists(MelonEnvironment.MelonLoaderLogsDirectory))
+                Directory.CreateDirectory(MelonEnvironment.MelonLoaderLogsDirectory);
+            else
+            {
+                if (MaxLogs > 0)
+                {
+                    string[] fileTbl = Directory.GetFiles(MelonEnvironment.MelonLoaderLogsDirectory, "*.log", SearchOption.TopDirectoryOnly);
+                    int fileCount = fileTbl.Length;
+                    if (fileCount >= MaxLogs)
+                    {
+                        List<(string, DateTime)> queue = new();
+                        foreach (var file in fileTbl)
+                            queue.Add((file, File.GetLastWriteTime(file)));
+                        queue.Sort((x, y) =>
+                        {
+                            if (x.Item2 >= y.Item2)
+                                return 0;
+                            return 1;
+                        });
+                        foreach (var pair in queue)
+                        {
+                            if (fileCount < MaxLogs)
+                                break;
+                            else
+                            {
+                                File.Delete(pair.Item1);
+                                fileCount--;
+                            }
+                        }
+                    }
+                }
+            }
+
+#if !NET6_0
+            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+#else
+            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
+            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read });
+#endif
+
+            LatestLogWriter = CreateLogWriter(LatestLogStream);
+            CachedLogWriter = CreateLogWriter(CachedLogStream);
+        }
+
+        private static StreamWriter CreateLogWriter(FileStream stream)
+        {
+            var writer = new StreamWriter(stream, Encoding.UTF8, 1);
             writer.AutoFlush = true;
             return writer;
+        }
+
+        internal static void WriteLogToFile()
+        {
+            LatestLogWriter.WriteLine();
+            CachedLogWriter.WriteLine();
+        }
+
+        internal static void WriteLogToFile(string message)
+        {
+            LatestLogWriter.WriteLine(message);
+            CachedLogWriter.WriteLine(message);
         }
 
         //Identical to Msg(string) except it skips walking the stack to find a melon
@@ -77,6 +156,15 @@ namespace MelonLoader
 
         private static void NativeWarning(string namesection, string txt)
         {
+            if (MaxWarnings > 0)
+            {
+                if (WarningsCount >= MaxWarnings)
+                    return;
+                WarningsCount++;
+            }
+            else if (MaxWarnings < 0)
+                return;
+
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
 
             Internal_Warning(namesection, txt ?? "null");
@@ -85,6 +173,15 @@ namespace MelonLoader
 
         private static void NativeError(string namesection, string txt)
         {
+            if (MaxErrors > 0)
+            {
+                if (ErrorsCount >= MaxErrors)
+                    return;
+                ErrorsCount++;
+            }
+            else if (MaxErrors < 0)
+                return;
+
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
 
             Internal_Error(namesection, txt ?? "null");
@@ -93,6 +190,15 @@ namespace MelonLoader
 
         public static void BigError(string namesection, string txt)
         {
+            if (MaxErrors > 0)
+            {
+                if (ErrorsCount >= MaxErrors)
+                    return;
+                ErrorsCount++;
+            }
+            else if (MaxErrors < 0)
+                return;
+
             RunErrorCallbacks(namesection, txt ?? "null");
 
             Internal_Error(namesection, new string('=', 50));
@@ -106,6 +212,7 @@ namespace MelonLoader
             MsgCallbackHandler?.Invoke(DrawingColorToConsoleColor(namesection_color), DrawingColorToConsoleColor(txt_color), namesection, txt);
             MsgDrawingCallbackHandler?.Invoke(namesection_color, txt_color, namesection, txt);
         }
+
         [Obsolete("MsgCallbackHandler is obsolete. Please use MsgDrawingCallbackHandler for full Color support.")]
         public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
 
@@ -161,7 +268,7 @@ namespace MelonLoader
 
         internal static void Internal_Msg(Color namesection_color, Color txt_color, string namesection, string txt)
         {
-            LogWriter.WriteLine($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
+            WriteLogToFile($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
 
             StringBuilder builder = new StringBuilder();
 
@@ -213,14 +320,14 @@ namespace MelonLoader
 
         internal static void WriteSpacer()
         {
-            LogWriter.WriteLine();
+            WriteLogToFile();
             Utils.MelonConsole.WriteLine();
         }
 
         internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
         {
-            LogWriter.WriteLine($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
-            LogWriter.WriteLine($"[{GetTimeStamp()}] by {author}");
+            WriteLogToFile($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
+            WriteLogToFile($"[{GetTimeStamp()}] by {author}");
 
             StringBuilder builder = new StringBuilder();
             builder.Append(GetTimestamp(false));
@@ -239,16 +346,16 @@ namespace MelonLoader
             Utils.MelonConsole.WriteLine(builder.ToString());
         }
 
-
         internal static void Flush()
         {
-            LogWriter.Flush();
-            LogStream.Flush();
+            LatestLogWriter.Flush();
+            LatestLogStream.Flush();
         }
 
         internal static void Close()
         {
-            LogWriter.Close();
+            LatestLogWriter.Close();
+            CachedLogWriter.Close();
         }
 
 
