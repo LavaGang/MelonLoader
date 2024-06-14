@@ -38,16 +38,19 @@
 ### v0.6.3
 
 1. Updated NuGet Packages
-2. Fixed Referenced DLLs not being resolved properly resulting in crashes
-3. Fixed Proxy being unable to find Original DLL    (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
-4. Fixed LoadLibrary failing on in rare cases    (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
-5. Fixed Preload Module failing to initialize included resources   (Credits to [TrevTV](https://github.com/TrevTV) :P)
-6. Reimplemented Log Caching and Logs folder
-7. Implemented Additional Initialization Error Handling
-8. Implemented Garbage Collection handling for NativeHook
-9. Rewrote the Demeo Compatibility Layer to be less prone to breakage
-10. Fixed DarkRed ConsoleColor   (Credits to [Scoolnik](https://github.com/Scoolnik) :D)
-11. Fixed several .NET Framework 2.0 compatibility issues   (Credits to [slxdy](https://github.com/slxdy) :D)
+2. Updated Cpp2IL to 2022.1.0-pre-release.14
+3. Updated Il2CppInterop to 1.4.6-ci.394
+4. Updated Tomlet to 5.3.1
+5. Fixed Referenced DLLs not being resolved properly resulting in crashes
+6. Fixed Proxy being unable to find Original DLL    (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+7. Fixed LoadLibrary failing on in rare cases    (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
+8. Fixed Preload Module failing to initialize included resources   (Credits to [TrevTV](https://github.com/TrevTV) :P)
+9. Reimplemented Log Caching and Logs folder
+10. Implemented Additional Initialization Error Handling
+11. Implemented Garbage Collection handling for NativeHook
+12. Rewrote the Demeo Compatibility Layer to be less prone to breakage
+13. Fixed DarkRed ConsoleColor   (Credits to [Scoolnik](https://github.com/Scoolnik) :D)
+14. Fixed several .NET Framework 2.0 compatibility issues   (Credits to [slxdy](https://github.com/slxdy) :D)
 
 ---
 
