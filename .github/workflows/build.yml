@@ -11,7 +11,7 @@ jobs:
   build_core_debug:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Melonloader Core
@@ -25,7 +25,7 @@ jobs:
   build_core_release:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup-msbuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Melonloader Core
@@ -39,7 +39,7 @@ jobs:
   build_rust_windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: rust-toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -111,7 +111,7 @@ jobs:
   build_rust_linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: rust-toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -151,7 +151,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -193,7 +193,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -235,7 +235,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -277,7 +277,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -319,7 +319,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_linux]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -358,7 +358,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_rust_linux]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
