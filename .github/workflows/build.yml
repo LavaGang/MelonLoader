@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: Build Melonloader Core
         shell: cmd
         run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: Build Melonloader Core
         shell: cmd
         run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
