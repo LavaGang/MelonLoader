@@ -47,6 +47,7 @@
 8. Implemented Garbage Collection handling for NativeHook
 9. Rewrote the Demeo Compatibility Layer to be less prone to breakage
 10. Fixed DarkRed ConsoleColor   (Credits to [Scoolnik](https://github.com/Scoolnik) :D)
+11. Fixed several .NET Framework 2.0 compatibility issues   (Credits to [slxdy](https://github.com/slxdy) :D)
 
 ---
 
