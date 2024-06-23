@@ -39,7 +39,7 @@
 
 1. Updated NuGet Packages
 2. Updated Cpp2IL to 2022.1.0-pre-release.14
-3. Updated Il2CppInterop to 1.4.6-ci.394
+3. Updated Il2CppInterop to 1.4.6-ci.433
 4. Updated Tomlet to 5.3.1
 5. Fixed Referenced DLLs not being resolved properly resulting in crashes
 6. Fixed Proxy being unable to find Original DLL    (Credits to [RinLovesYou](https://github.com/RinLovesYou) :3)
@@ -51,6 +51,9 @@
 12. Rewrote the Demeo Compatibility Layer to be less prone to breakage
 13. Fixed DarkRed ConsoleColor   (Credits to [Scoolnik](https://github.com/Scoolnik) :D)
 14. Fixed several .NET Framework 2.0 compatibility issues   (Credits to [slxdy](https://github.com/slxdy) :D)
+15. Fixed an issue with Mods loading when Il2Cpp Assembly Generation fails
+16. Added `--melonloader.sab` Launch Option to disable the Analytics Blocker
+17. Fixed an issue with MelonCompatibilityLayer causing crashes on some games
 
 ---
 

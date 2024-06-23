@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace MelonLoader.Utils
 {
@@ -103,7 +102,8 @@ namespace MelonLoader.Utils
             var shouldBlock = !_explicitAllowList.Contains(hostname) &&
                               _blockList.Any(b => hostname.Contains(b));
 
-            if (MelonDebug.IsEnabled() || MelonLaunchOptions.Core.ShouldDisplayAnalyticsBlocker)
+            if (MelonDebug.IsEnabled()
+                || MelonLaunchOptions.AnalyticsBlocker.Display)
             {
                 if (shouldBlock)
                     MelonDebug.Msg($"Host Name or IP blocked: {hostname}");
@@ -125,6 +125,9 @@ namespace MelonLoader.Utils
 
         public static void Install()
         {
+            if (MelonLaunchOptions.AnalyticsBlocker.Skip)
+                return;
+
             //Need to hook wsock32 gethostbyname
             //And, if on x64, ws2_32 getaddrinfo
             

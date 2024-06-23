@@ -21,7 +21,6 @@ namespace MelonLoader
         internal static void Load()
         {
             List<string> foundOptions = new List<string>();
-
             LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(Environment.GetCommandLineArgs());
             while (argEnumerator.MoveNext())
             {
@@ -55,20 +54,18 @@ namespace MelonLoader
                     withArgFunc(cmdArg);
                 }
             }
-
-            if (foundOptions.Count <= 0)
-                return;
         }
 
 #region Args
         public static class AnalyticsBlocker
         {
-            public static bool ShouldDAB { get; internal set; }
+            public static bool Skip { get; internal set; }
+            public static bool Display { get; internal set; }
 
             internal static void Setup()
             {
-                WithoutArg["melonloader.dab"] = () => ShouldDAB = true;
-
+                WithoutArg["melonloader.sab"] = () => Skip = true;
+                WithoutArg["melonloader.dab"] = () => Display = true;
             }
         }
 
@@ -87,7 +84,6 @@ namespace MelonLoader
             public static string UnityVersion { get; internal set; }
             public static bool IsDebug { get; internal set; }
             public static bool UserWantsDebugger { get; internal set; }
-            public static bool ShouldDisplayAnalyticsBlocker { get; internal set; }
 
             internal static void Setup()
             {
@@ -106,7 +102,6 @@ namespace MelonLoader
                 WithArg["melonloader.unityversion"] = (string arg) => UnityVersion = arg;
                 WithoutArg["melonloader.debug"] = () => IsDebug = true;
                 WithoutArg["melonloader.launchdebugger"] = () => UserWantsDebugger = true;
-                WithoutArg["melonloader.dab"] = () => ShouldDisplayAnalyticsBlocker = true;
             }
         }
 

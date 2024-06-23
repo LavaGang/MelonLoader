@@ -158,6 +158,7 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |
 | --melonloader.dab | Debug Analytics Blocker |
+| --melonloader.sab | Disable Analytics Blocker |
 | --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ NoCap: 0 ] |
 | --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |
 | --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |

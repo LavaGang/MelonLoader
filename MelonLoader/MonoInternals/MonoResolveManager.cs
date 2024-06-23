@@ -27,7 +27,7 @@ namespace MelonLoader.MonoInternals
             foreach (string path in searchdirlist)
                 AddSearchDirectory(path);
 
-            GetAssemblyResolveInfo("Mono.Cecil").Override = Assembly.LoadFrom(Path.Combine(MelonEnvironment.OurRuntimeDirectory, "Mono.Cecil.dll"));
+            ForceResolveRuntime("Mono.Cecil");
 
             // Setup Redirections
             string[] assembly_list =
@@ -42,6 +42,24 @@ namespace MelonLoader.MonoInternals
             MelonDebug.Msg("[MonoResolveManager] Setup Successful!");
 
             return true;
+        }
+
+        private static void ForceResolveRuntime(string assemblyName)
+            => ForceResolveRuntime(assemblyName, assemblyName);
+        private static void ForceResolveRuntime(string assemblyName, string fileName)
+        {
+            string filePath = Path.Combine(MelonEnvironment.OurRuntimeDirectory, $"{fileName}.dll");
+            if (!File.Exists(filePath))
+                return;
+
+            Assembly assembly = null;
+            try { assembly = Assembly.LoadFrom(filePath); }
+            catch { assembly = null; }
+            
+            if (assembly == null)
+                return;
+
+            GetAssemblyResolveInfo(assemblyName).Override = assembly;
         }
 
         // Search Directories
