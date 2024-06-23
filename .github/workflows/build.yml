@@ -18,7 +18,7 @@ jobs:
         shell: cmd
         run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
       - name: Upload core artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLCoreDebug
           path: Output/Debug/MelonLoader/
@@ -32,7 +32,7 @@ jobs:
         shell: cmd
         run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
       - name: Upload core artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLCoreRelease
           path: Output/Release/MelonLoader/
@@ -62,49 +62,49 @@ jobs:
         run: cargo +nightly build --target x86_64-pc-windows-msvc
         # Upload Proxy Release - x86
       - name: Upload Proxy Release | Windows x86
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLProxyX86-Windows-Release
           path: target/i686-pc-windows-msvc/release/version.dll
         # Upload Bootstrap Release - x86
       - name: Upload Bootstrap Release | Windows x86
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLBootstrapX86-Windows-Release
           path: target/i686-pc-windows-msvc/release/Bootstrap.dll
         # Upload Proxy Release - x64
       - name: Upload Proxy Release | Windows x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLProxyX64-Windows-Release
           path: target/x86_64-pc-windows-msvc/release/version.dll
         # Upload Bootstrap Release - x64
       - name: Upload Bootstrap Release | Windows x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLBootstrapX64-Windows-Release
           path: target/x86_64-pc-windows-msvc/release/Bootstrap.dll
         # Upload Proxy Debug - x86
       - name: Upload Proxy Debug | Windows x86
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLProxyX86-Windows-Debug
           path: target/i686-pc-windows-msvc/debug/version.dll
         # Upload Bootstrap Debug - x86
       - name: Upload Bootstrap Debug | Windows x86
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLBootstrapX86-Windows-Debug
           path: target/i686-pc-windows-msvc/debug/Bootstrap.dll
         # Upload Proxy Debug - x64
       - name: Upload Proxy Debug | Windows x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLProxyX64-Windows-Debug
           path: target/x86_64-pc-windows-msvc/debug/version.dll
         # Upload Bootstrap Debug - x64
       - name: Upload Bootstrap Debug | Windows x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLBootstrapX64-Windows-Debug
           path: target/x86_64-pc-windows-msvc/debug/Bootstrap.dll
@@ -128,22 +128,22 @@ jobs:
         shell: bash
         run: cargo +nightly build --target x86_64-unknown-linux-gnu
       - name: Upload Proxy Release | Linux x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLProxyX64-Linux-Release
           path: target/x86_64-unknown-linux-gnu/release/libversion.so
       - name: Upload Bootstrap Release | Linux x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLBootstrapX64-Linux-Release
           path: target/x86_64-unknown-linux-gnu/release/libBootstrap.so
       - name: Upload Proxy Debug | Linux x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLProxyX64-Linux-Debug
           path: target/x86_64-unknown-linux-gnu/debug/libversion.so
       - name: Upload Bootstrap Debug | Linux x64
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MLBootstrapX64-Linux-Debug
           path: target/x86_64-unknown-linux-gnu/debug/libBootstrap.so
@@ -153,17 +153,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download core artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLCoreDebug
           path: Output/Debug/x64/MelonLoader/
       - name: Download proxy x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Windows-Debug
           path: Output/Debug/x64/
       - name: Download bootstrap x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Windows-Debug
           path: Output/Debug/x64/MelonLoader/Dependencies/
@@ -184,7 +184,7 @@ jobs:
           copy LICENSE.md Output\Debug\x64\MelonLoader\Documentation\
           copy NOTICE.txt Output\Debug\x64\MelonLoader\Documentation\
           copy README.md Output\Debug\x64\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Upload Zip | Windows - x64
         with:
           name: MelonLoader.Windows.x64.CI.Debug
@@ -195,17 +195,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download core artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLCoreDebug
           path: Output/Debug/x86/MelonLoader/
       - name: Download proxy x86
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLProxyX86-Windows-Debug
           path: Output/Debug/x86/
       - name: Download bootstrap x86
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX86-Windows-Debug
           path: Output/Debug/x86/MelonLoader/Dependencies/
@@ -226,7 +226,7 @@ jobs:
           copy LICENSE.md Output\Debug\x86\MelonLoader\Documentation\
           copy NOTICE.txt Output\Debug\x86\MelonLoader\Documentation\
           copy README.md Output\Debug\x86\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Upload Zip | Windows - x86
         with:
           name: MelonLoader.Windows.x86.CI.Debug
@@ -237,17 +237,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download core artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLCoreRelease
           path: Output/Release/x64/MelonLoader/
       - name: Download proxy x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Windows-Release
           path: Output/Release/x64/
       - name: Download bootstrap x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Windows-Release
           path: Output/Release/x64/MelonLoader/Dependencies/
@@ -268,7 +268,7 @@ jobs:
           copy LICENSE.md Output\Release\x64\MelonLoader\Documentation\
           copy NOTICE.txt Output\Release\x64\MelonLoader\Documentation\
           copy README.md Output\Release\x64\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Upload Zip | Windows - x64
         with:
           name: MelonLoader.Windows.x64.CI.Release
@@ -279,17 +279,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download core artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLCoreRelease
           path: Output/Release/x86/MelonLoader/
       - name: Download proxy x86
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLProxyX86-Windows-Release
           path: Output/Release/x86/
       - name: Download bootstrap x86
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX86-Windows-Release
           path: Output/Release/x86/MelonLoader/Dependencies/
@@ -310,7 +310,7 @@ jobs:
           copy LICENSE.md Output\Release\x86\MelonLoader\Documentation\
           copy NOTICE.txt Output\Release\x86\MelonLoader\Documentation\
           copy README.md Output\Release\x86\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Upload Zip | Windows - x86
         with:
           name: MelonLoader.Windows.x86.CI.Release
@@ -321,17 +321,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download core artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLCoreDebug
           path: Output/Debug/x64/MelonLoader/
       - name: Download proxy x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Linux-Debug
           path: Output/Debug/x64/
       - name: Download bootstrap x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Linux-Debug
           path: Output/Debug/x64/MelonLoader/Dependencies/
@@ -349,7 +349,7 @@ jobs:
           copy LICENSE.md Output\Debug\x64\MelonLoader\Documentation\
           copy NOTICE.txt Output\Debug\x64\MelonLoader\Documentation\
           copy README.md Output\Debug\x64\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Upload Zip | Linux - x64
         with:
           name: MelonLoader.Linux.x64.CI.Debug
@@ -360,17 +360,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download core artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLCoreRelease
           path: Output/Release/x64/MelonLoader/
       - name: Download proxy x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Linux-Release
           path: Output/Release/x64/
       - name: Download bootstrap x64
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Linux-Release
           path: Output/Release/x64/MelonLoader/Dependencies/
@@ -388,7 +388,7 @@ jobs:
           copy LICENSE.md Output\Release\x64\MelonLoader\Documentation\
           copy NOTICE.txt Output\Release\x64\MelonLoader\Documentation\
           copy README.md Output\Release\x64\MelonLoader\Documentation\
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         name: Upload Zip | Linux - x64
         with:
           name: MelonLoader.Linux.x64.CI.Release
