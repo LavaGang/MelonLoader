@@ -27,8 +27,9 @@ namespace MelonLoader
         internal static HarmonyLib.Harmony HarmonyInstance;
         
         internal static bool Is_ALPHA_PreRelease = false;
-
         internal static NativeLibrary.StringDelegate WineGetVersion;
+
+        private static bool _il2cppSuccess;
 
         internal static int Initialize()
         {
@@ -118,10 +119,16 @@ namespace MelonLoader
         }
 
         private static int Il2CppGameSetup()
-            => Il2CppAssemblyGenerator.Run() ? 0 : 1;
+        {
+            _il2cppSuccess = Il2CppAssemblyGenerator.Run();
+            return _il2cppSuccess ? 0 : 1;
+        }
 
         internal static int Start()
         {
+            if (!_il2cppSuccess)
+                return 1;
+
             MelonEvents.OnPreModsLoaded.Invoke();
             MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonEnvironment.ModsDirectory);
 

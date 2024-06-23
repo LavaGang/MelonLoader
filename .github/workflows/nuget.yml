@@ -11,7 +11,7 @@ jobs:
   build_nuget_package:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
         with:
@@ -20,7 +20,7 @@ jobs:
         run: dotnet pack -c Release
         working-directory: ./MelonLoader/
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MelonLoaderNuGetPackage
           path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.3.nupkg
