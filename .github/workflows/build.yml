@@ -11,9 +11,9 @@ jobs:
   build_core_debug:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: Build Melonloader Core
         shell: cmd
         run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
@@ -25,9 +25,9 @@ jobs:
   build_core_release:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: Build Melonloader Core
         shell: cmd
         run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
@@ -39,7 +39,7 @@ jobs:
   build_rust_windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: rust-toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -111,7 +111,7 @@ jobs:
   build_rust_linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: rust-toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -151,7 +151,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -193,7 +193,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -235,7 +235,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -277,7 +277,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_rust_windows]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -319,7 +319,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_debug, build_rust_linux]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -358,7 +358,7 @@ jobs:
     runs-on: windows-latest
     needs: [build_core_release, build_rust_linux]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download core artifact
         uses: actions/download-artifact@v3
         with:
@@ -397,7 +397,7 @@ jobs:
     runs-on: windows-latest
     needs: [finalize_x86_debug_zip_windows, finalize_x64_debug_zip_windows, finalize_x86_release_zip_windows, finalize_x64_release_zip_windows, finalize_x64_debug_zip_linux, finalize_x64_release_zip_linux]
     steps:
-      - uses: GeekyEggo/delete-artifact@v2.0.0
+      - uses: GeekyEggo/delete-artifact@v5.0.0
         with:
           name: |
             MLCoreDebug
