@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace MelonLoader
 {
@@ -11,7 +10,6 @@ namespace MelonLoader
 
         static MelonLaunchOptions()
         {
-            AnalyticsBlocker.Setup();
             Core.Setup();
             Console.Setup();
             Il2CppAssemblyGenerator.Setup();
@@ -56,18 +54,7 @@ namespace MelonLoader
             }
         }
 
-#region Args
-        public static class AnalyticsBlocker
-        {
-            public static bool Skip { get; internal set; }
-            public static bool Display { get; internal set; }
-
-            internal static void Setup()
-            {
-                WithoutArg["melonloader.sab"] = () => Skip = true;
-                WithoutArg["melonloader.dab"] = () => Display = true;
-            }
-        }
+        #region Args
 
         public static class Core
         {
@@ -142,13 +129,11 @@ namespace MelonLoader
         {
             public static bool ForceRegeneration { get; internal set; }
             public static bool OfflineMode { get; internal set; }
-            public static bool DisableDeobfMapIntegrityCheck { get; internal set; }
             public static string ForceVersion_Dumper { get; internal set; }
             public static string ForceRegex { get; internal set; }
 
             internal static void Setup()
             {
-                WithoutArg["melonloader.disabledmic"] = () => DisableDeobfMapIntegrityCheck = true;
                 WithoutArg["melonloader.agfoffline"] = () => OfflineMode = true;
                 WithoutArg["melonloader.agfregenerate"] = () => ForceRegeneration = true;
                 WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;
@@ -181,6 +166,7 @@ namespace MelonLoader
                 };
             }
         }
+
         #endregion
     }
 }
