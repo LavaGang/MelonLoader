@@ -164,8 +164,7 @@ namespace MelonLoader.Utils
 
             try
             {
-                if (MelonUtils.IsGame32Bit()
-                    || MelonUtils.IsWindows11OrHigher)
+                if (MelonUtils.IsGame32Bit())
                     ws2_32 = IntPtr.Zero;
                 else
                 {

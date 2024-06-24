@@ -107,23 +107,6 @@ namespace MelonLoader
         public static bool IsWindows => GetPlatform is PlatformID.Win32NT or PlatformID.Win32S or PlatformID.Win32Windows or PlatformID.WinCE;
         public static bool IsMac => GetPlatform is PlatformID.MacOSX;
 
-        public static bool IsWindows11OrHigher
-        {
-            get
-            {
-                if (IsUnix || IsMac || IsUnderWineOrSteamProton())
-                    return false;
-
-                RtlGetVersion(out OsVersionInfo versionInformation);
-                var major = versionInformation.MajorVersion;
-                var build = versionInformation.BuildNumber;
-
-                return ((major >= 10)
-                    && (build >= 22000));
-            }
-        }
-
-
         public static void SetCurrentDomainBaseDirectory(string dirpath, AppDomain domain = null)
         {
             if(MelonEnvironment.IsDotnetRuntime)

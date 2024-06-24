@@ -142,13 +142,11 @@ namespace MelonLoader
         {
             public static bool ForceRegeneration { get; internal set; }
             public static bool OfflineMode { get; internal set; }
-            public static bool DisableDeobfMapIntegrityCheck { get; internal set; }
             public static string ForceVersion_Dumper { get; internal set; }
             public static string ForceRegex { get; internal set; }
 
             internal static void Setup()
             {
-                WithoutArg["melonloader.disabledmic"] = () => DisableDeobfMapIntegrityCheck = true;
                 WithoutArg["melonloader.agfoffline"] = () => OfflineMode = true;
                 WithoutArg["melonloader.agfregenerate"] = () => ForceRegeneration = true;
                 WithArg["melonloader.agfvdumper"] = (string arg) => ForceVersion_Dumper = arg;

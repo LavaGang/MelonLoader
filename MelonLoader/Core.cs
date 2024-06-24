@@ -59,7 +59,8 @@ namespace MelonLoader
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
 
-            ManagedAnalyticsBlocker.Install();
+            // Disabled because of issues
+            //ManagedAnalyticsBlocker.Install();
 
             Fixes.DotnetLoadFromManagedFolderFix.Install();
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
