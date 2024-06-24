@@ -11,7 +11,7 @@
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 		<DebugType>embedded</DebugType>
 		
-		<Version>0.6.3</Version>
+		<Version>0.6.4</Version>
 		<PackageId>LavaGang.MelonLoader</PackageId>
 		<PackageTags>modding unity</PackageTags>
 		<RepositoryUrl>https://github.com/LavaGang/MelonLoader</RepositoryUrl>
