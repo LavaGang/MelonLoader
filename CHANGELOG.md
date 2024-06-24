@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.6.4](#v064) |
 | [v0.6.3](#v063) |
 | [v0.6.2](#v062) |
 | [v0.6.1](#v061) |
@@ -32,6 +33,12 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.6.4
+
+1. Removed Analytics Blocker for causing crashes, will be ported to its own Plugin
 
 ---
 
