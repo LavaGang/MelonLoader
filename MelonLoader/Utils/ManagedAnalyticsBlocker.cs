@@ -137,40 +137,59 @@ namespace MelonLoader.Utils
             
             MelonDebug.Msg("Initializing Analytics Blocker...");
 
-            wsock32 = NativeLibrary.LoadLib("wsock32");
-
-            var ghbnPtr = wsock32.GetNativeLibraryExport("gethostbyname");
-
-#if NET6_0
-            delegate* unmanaged[Cdecl]<byte*, hostent*> detourPtr = &gethostbyname_hook;
-#else
-            var detourPtr = Marshal.GetFunctionPointerForDelegate((gethostbyname_delegate)gethostbyname_hook);
-#endif
-
-            MelonDebug.Msg($"Hooking wsock32::gethostbyname (0x{ghbnPtr.ToInt64():X})...");
-            ghbn_hook = new NativeUtils.NativeHook<gethostbyname_delegate>((IntPtr)(&ghbnPtr), (IntPtr)detourPtr);
-            original_gethostbyname = (gethostbyname_delegate)Marshal.GetDelegateForFunctionPointer(ghbnPtr, typeof(gethostbyname_delegate));
-            ghbn_hook.Attach();
-
-            if (MelonUtils.IsGame32Bit())
+            try
             {
-                ws2_32 = IntPtr.Zero;
-            } else 
-            {
-                ws2_32 = NativeLibrary.LoadLib("ws2_32");
-
-                MelonDebug.Msg("Hooking ws2_32...");
-
-                var gaiPtr = ws2_32.GetNativeLibraryExport("getaddrinfo");
-
+                wsock32 = NativeLibrary.LoadLib("wsock32");
+                if (wsock32 != IntPtr.Zero)
+                {
+                    var ghbnPtr = wsock32.GetNativeLibraryExport("gethostbyname");
+                    if (ghbnPtr != IntPtr.Zero)
+                    {
 #if NET6_0
-                delegate* unmanaged[Cdecl]<byte*, byte*, addrinfo*, addrinfo**, int> detourPtr2 = &getaddrinfo_hook;
+                        delegate* unmanaged[Cdecl]<byte*, hostent*> detourPtr = &gethostbyname_hook;
 #else
-                var detourPtr2 = Marshal.GetFunctionPointerForDelegate((getaddrinfo_delegate)getaddrinfo_hook);
+                        var detourPtr = Marshal.GetFunctionPointerForDelegate((gethostbyname_delegate)gethostbyname_hook);
 #endif
-                gai_hook = new NativeUtils.NativeHook<gethostbyname_delegate>((IntPtr)(&gaiPtr), (IntPtr)detourPtr2);
-                original_getaddrinfo = (getaddrinfo_delegate)Marshal.GetDelegateForFunctionPointer(gaiPtr, typeof(getaddrinfo_delegate));
-                gai_hook.Attach();
+                        MelonDebug.Msg($"Hooking wsock32::gethostbyname (0x{ghbnPtr.ToInt64():X})...");
+                        original_gethostbyname = (gethostbyname_delegate)Marshal.GetDelegateForFunctionPointer(ghbnPtr, typeof(gethostbyname_delegate));
+                        ghbn_hook = new NativeUtils.NativeHook<gethostbyname_delegate>((IntPtr)(&ghbnPtr), (IntPtr)detourPtr);
+                        ghbn_hook.Attach();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error(e);
+            }
+
+            try
+            {
+                if (MelonUtils.IsGame32Bit())
+                    ws2_32 = IntPtr.Zero;
+                else
+                {
+                    ws2_32 = NativeLibrary.LoadLib("ws2_32");
+                    if (ws2_32 != IntPtr.Zero)
+                    {
+                        var gaiPtr = ws2_32.GetNativeLibraryExport("getaddrinfo");
+                        if (gaiPtr != IntPtr.Zero)
+                        {
+                            MelonDebug.Msg($"Hooking ws2_32::getaddrinfo (0x{gaiPtr.ToInt64():X})...");
+#if NET6_0
+                            delegate* unmanaged[Cdecl]<byte*, byte*, addrinfo*, addrinfo**, int> detourPtr2 = &getaddrinfo_hook;
+#else
+                            var detourPtr2 = Marshal.GetFunctionPointerForDelegate((getaddrinfo_delegate)getaddrinfo_hook);
+#endif
+                            gai_hook = new NativeUtils.NativeHook<gethostbyname_delegate>((IntPtr)(&gaiPtr), (IntPtr)detourPtr2);
+                            original_getaddrinfo = (getaddrinfo_delegate)Marshal.GetDelegateForFunctionPointer(gaiPtr, typeof(getaddrinfo_delegate));
+                            gai_hook.Attach();
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error(e);
             }
         }
 
