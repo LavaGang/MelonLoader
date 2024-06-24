@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace MelonLoader
 {
@@ -11,7 +10,6 @@ namespace MelonLoader
 
         static MelonLaunchOptions()
         {
-            AnalyticsBlocker.Setup();
             Core.Setup();
             Console.Setup();
             Il2CppAssemblyGenerator.Setup();
@@ -56,18 +54,7 @@ namespace MelonLoader
             }
         }
 
-#region Args
-        public static class AnalyticsBlocker
-        {
-            public static bool Skip { get; internal set; }
-            public static bool Display { get; internal set; }
-
-            internal static void Setup()
-            {
-                WithoutArg["melonloader.sab"] = () => Skip = true;
-                WithoutArg["melonloader.dab"] = () => Display = true;
-            }
-        }
+        #region Args
 
         public static class Core
         {
@@ -179,6 +166,7 @@ namespace MelonLoader
                 };
             }
         }
+
         #endregion
     }
 }
