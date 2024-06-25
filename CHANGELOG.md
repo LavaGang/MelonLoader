@@ -1,6 +1,6 @@
 | Versions: |
 | - |
-| [v0.6.4](#v064) |
+| [v0.6.3.1](#v0631) |
 | [v0.6.3](#v063) |
 | [v0.6.2](#v062) |
 | [v0.6.1](#v061) |
@@ -36,9 +36,10 @@
 
 ---
 
-### v0.6.4
+### v0.6.3.1
 
 1. Removed Analytics Blocker for causing crashes, will be ported to its own Plugin
+2. Temporarily reverted Cpp2IL to 2022.1.0-pre-release.10
 
 ---
 
