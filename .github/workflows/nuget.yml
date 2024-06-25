@@ -23,4 +23,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MelonLoaderNuGetPackage
-          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.4.nupkg
+          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.3.1.nupkg
