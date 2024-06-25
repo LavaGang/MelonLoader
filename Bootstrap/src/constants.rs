@@ -18,7 +18,7 @@ pub type InvokeFnIl2Cpp = extern "C" fn(
 pub type InitFnMono = extern "C" fn(*const c_char, *const c_char) -> *mut MonoDomain;
 pub type InitFnIl2Cpp = extern "C" fn(*const c_char) -> *mut Il2CppDomain;
 
-pub const MELON_VERSION: &str = "0.6.3.1";
+pub const MELON_VERSION: &str = "0.6.4";
 
 pub const IS_ALPHA: bool = false;
 
