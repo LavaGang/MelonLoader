@@ -39,7 +39,7 @@
 ### v0.6.4
 
 1. Removed Analytics Blocker for causing crashes, will be ported to its own Plugin
-2. Temporarily reverted Cpp2IL to 2022.1.0-pre-release.12
+2. Updated Cpp2IL to 2022.1.0-pre-release.15
 
 ---
 
