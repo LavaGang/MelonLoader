@@ -13,7 +13,6 @@ using UnityEngine;
 using Il2CppInterop.Common;
 using Il2CppInterop.Runtime.InteropTypes;
 using Microsoft.Extensions.Logging;
-using MelonLoader.NativeUtils;
 
 namespace MelonLoader.Support
 {
@@ -51,10 +50,43 @@ namespace MelonLoader.Support
 
             Interop = new InteropInterface();
             Interface.SetInteropSupportInterface(Interop);
+            //HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyMethodPatcher.TryResolve;
+            //Core.HarmonyInstance.Patch(HarmonyLib.AccessTools.TypeByName("System.Runtime.CompilerServices.CastHelpers").GetMethod("ChkCast_Helper", HarmonyLib.AccessTools.all), HarmonyLib.AccessTools.Method(typeof(Main), nameof(ChkCast_HelperPatch)).ToNewHarmonyMethod());
             runtime.Start();
 
             return new SupportModule_To();
         }
+        
+		/*
+        private static Dictionary<IntPtr, Type> AllTypes = AccessTools.AllTypes().ToDictionary(type => type.TypeHandle.Value, type => type);
+        private static MethodInfo TryCast = typeof(Il2CppObjectBase).GetMethod("TryCast");
+        private static Type TryGetTypeFromIntPtr(IntPtr intPtr)
+        {
+            if (!AllTypes.TryGetValue(intPtr, out var type))
+            {
+                AllTypes = AccessTools.AllTypes().ToDictionary(type1 => type1.TypeHandle.Value, type1 => type1);
+                AllTypes.TryGetValue(intPtr, out var typeP);
+                type = typeP;
+            }
+            return type;
+        }
+        private static bool ChkCast_HelperPatch(IntPtr toTypeHnd, object obj, ref object __result)
+        {
+            var type = TryGetTypeFromIntPtr(toTypeHnd);
+            if (type == null)
+                return true;
+            if (!(typeof(Il2CppObjectBase).IsAssignableFrom(type) && obj is Il2CppObjectBase))
+                return true;
+            var invoke = TryCast.MakeGenericMethod(type).Invoke(obj, Array.Empty<object>());
+            if (invoke != null)
+            {
+                obj = invoke;
+                __result = invoke;
+                return false;
+            }
+            return true;
+        }
+		*/
 		
         private static Assembly Il2Cppmscorlib = null;
         private static Type streamType = null;
@@ -111,55 +143,76 @@ namespace MelonLoader.Support
 
     internal sealed class MelonDetourProvider : IDetourProvider
     {
-        public IDetour Create<TDelegate>(nint original, TDelegate target) 
-            where TDelegate : Delegate
-            => new MelonDetour<TDelegate>(original, target);
-
-        private sealed class MelonDetour<TDelegate>
-            : IDetour
-            where TDelegate : Delegate
+        public IDetour Create<TDelegate>(nint original, TDelegate target) where TDelegate : Delegate
         {
-            private TDelegate _detour;
-            private NativeHook<TDelegate> _nativeHook;
+            return new MelonDetour(original, target);
+        }
 
-            public nint Target => (_nativeHook != null) ? _nativeHook.Target : 0;
-            public nint Detour => (_nativeHook != null) ? _nativeHook.Detour : 0;
-            public nint OriginalTrampoline => (_nativeHook != null) ? _nativeHook.TrampolineHandle : 0;
+        private sealed class MelonDetour : IDetour
+        {
+            private nint _detourFrom;
+            private nint _originalPtr;
             
-            public unsafe MelonDetour(nint target, TDelegate detour)
+            private Delegate _target;
+            private IntPtr _targetPtr;
+
+            /// <summary>
+            /// Original method
+            /// </summary>
+            public nint Target => _detourFrom;
+
+            public nint Detour => _targetPtr;
+
+            public nint OriginalTrampoline => _originalPtr;
+//             {
+//                 get
+//                 {
+//                     MelonLogger.Msg($"Getting original trampoline => 0x{_originalPtr:X}");
+//                     return _originalPtr;
+//                 }
+//             }
+            
+            public MelonDetour(nint detourFrom, Delegate target)
             {
-                _detour = detour;
-                _nativeHook = new NativeHook<TDelegate>((nint)(&target), Marshal.GetFunctionPointerForDelegate(_detour));
+                _detourFrom = detourFrom;
+                _target = target;
+                
                 Apply(); //We have to apply immediately because we're gonna be asked for a trampoline right away
             }
 
             public unsafe void Apply()
             {
-                if(_nativeHook.IsHooked)
+                if(_targetPtr != IntPtr.Zero)
+                    // Already applied
                     return;
-                
-                //MelonLogger.Msg($"About to detour 0x{_detourFrom:X} to 0x{_targetPtr:X} for method {_target.Method.Name}");
 
-                _nativeHook.Attach();
+                _targetPtr = Marshal.GetFunctionPointerForDelegate(_target);
                 
-                //MelonLogger.Msg($"Applied detour from {_detourFrom:X} to {_targetPtr:X} for method {_target.Method.Name}, original is now: {_originalPtr:X})");
+//                 MelonLogger.Msg($"About to detour 0x{_detourFrom:X} to 0x{_targetPtr:X} for method {_target.Method.Name}");
+
+                var addr = _detourFrom;
+                MelonUtils.NativeHookAttachDirect((nint) (&addr), _targetPtr);
+                _originalPtr = addr;
                 
-                NativeStackWalk.RegisterHookAddr((ulong)_nativeHook.Target, $"Harmony Hook to {_detour.Method.Name}");
+//                 MelonLogger.Msg($"Applied detour from {_detourFrom:X} to {_targetPtr:X} for method {_target.Method.Name}, original is now: {_originalPtr:X})");
+                
+                NativeStackWalk.RegisterHookAddr((ulong)_targetPtr, $"Harmony Hook to {_target.Method.Name}");
             }
 
             public unsafe void Dispose()
             {
-                //MelonLogger.Msg($"Removing detour from 0x{_detourFrom:X} to 0x{_targetPtr:X} for method {_target.Method.Name}");
-
-                _nativeHook.Detach();
-
-                //MelonLogger.Msg($"Address after removing detour {_target.Method.Name}: {addr:X}");
+//                 MelonLogger.Msg($"Removing detour from 0x{_detourFrom:X} to 0x{_targetPtr:X} for method {_target.Method.Name}");
+                var addr = _detourFrom;
+                MelonUtils.NativeHookDetach((nint) (&addr), _targetPtr);
+                _targetPtr = IntPtr.Zero;
+//                 _originalPtr = IntPtr.Zero;
+//                 MelonLogger.Msg($"Address after removing detour {_target.Method.Name}: {addr:X}");
             }
 
             public T GenerateTrampoline<T>() where T : Delegate
             {
-                //MelonLogger.Msg($"Getting delegate for original method at 0x{_originalPtr:X}, type: {typeof(T)}, method name {_target.Method.Name}");
-                return Marshal.GetDelegateForFunctionPointer<T>(_nativeHook.TrampolineHandle);
+//                 MelonLogger.Msg($"Getting delegate for original method at 0x{_originalPtr:X}, type: {typeof(T)}, method name {_target.Method.Name}");
+                return Marshal.GetDelegateForFunctionPointer<T>(_originalPtr);
             }
         }
     }
