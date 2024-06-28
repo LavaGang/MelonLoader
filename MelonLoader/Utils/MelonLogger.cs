@@ -6,18 +6,12 @@ using System.IO;
 using System.Text;
 using static MelonLoader.Utils.LoggerUtils;
 using System.Collections.Generic;
-using ValueTuple = System.ValueTuple;
 
 namespace MelonLoader
 {
     public class MelonLogger
     {
         private static int MaxLogs;
-        private static int MaxWarnings;
-        private static int MaxErrors;
-
-        private static int WarningsCount;
-        private static int ErrorsCount;
 
         public static readonly Color DefaultMelonColor = Color.Cyan;
         public static readonly Color DefaultTextColor = Color.LightGray;
@@ -31,17 +25,9 @@ namespace MelonLoader
         internal static void Setup()
         {
             if (MelonLaunchOptions.Core.IsDebug)
-            {
                 MaxLogs = 0;
-                MaxWarnings = 0;
-                MaxErrors = 0;
-            }
             else
-            {
                 MaxLogs = MelonLaunchOptions.Logger.MaxLogs;
-                MaxWarnings = MelonLaunchOptions.Logger.MaxWarnings;
-                MaxErrors = MelonLaunchOptions.Logger.MaxErrors;
-            }
 
             if (!Directory.Exists(MelonEnvironment.MelonLoaderLogsDirectory))
                 Directory.CreateDirectory(MelonEnvironment.MelonLoaderLogsDirectory);
@@ -157,15 +143,6 @@ namespace MelonLoader
 
         private static void NativeWarning(string namesection, string txt)
         {
-            if (MaxWarnings > 0)
-            {
-                if (WarningsCount >= MaxWarnings)
-                    return;
-                WarningsCount++;
-            }
-            else if (MaxWarnings < 0)
-                return;
-
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
 
             Internal_Warning(namesection, txt ?? "null");
@@ -174,15 +151,6 @@ namespace MelonLoader
 
         private static void NativeError(string namesection, string txt)
         {
-            if (MaxErrors > 0)
-            {
-                if (ErrorsCount >= MaxErrors)
-                    return;
-                ErrorsCount++;
-            }
-            else if (MaxErrors < 0)
-                return;
-
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
 
             Internal_Error(namesection, txt ?? "null");
@@ -191,15 +159,6 @@ namespace MelonLoader
 
         public static void BigError(string namesection, string txt)
         {
-            if (MaxErrors > 0)
-            {
-                if (ErrorsCount >= MaxErrors)
-                    return;
-                ErrorsCount++;
-            }
-            else if (MaxErrors < 0)
-                return;
-
             RunErrorCallbacks(namesection, txt ?? "null");
 
             Internal_Error(namesection, new string('=', 50));
