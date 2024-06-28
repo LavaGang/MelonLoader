@@ -96,7 +96,7 @@ namespace MelonLoader
         {
             path = Path.GetFullPath(path);
 
-            var loadingMsg = $"Loading UserLibss from '{path}'...";
+            var loadingMsg = $"Loading UserLibs from '{path}'...";
             MelonLogger.WriteSpacer();
             MelonLogger.Msg(loadingMsg);
 

@@ -175,7 +175,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.agfregenerate | Forces Regeneration of Assembly |
 | --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
-| --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
 | --melonloader.disableunityclc | Disable Unity Console Log Cleaner | 
 
 ---
