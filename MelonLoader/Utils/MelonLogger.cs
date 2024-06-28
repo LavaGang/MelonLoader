@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using static MelonLoader.Utils.LoggerUtils;
 using System.Collections.Generic;
+using ValueTuple = System.ValueTuple;
 
 namespace MelonLoader
 {
