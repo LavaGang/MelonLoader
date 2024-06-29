@@ -48,12 +48,14 @@ namespace MelonLoader.Fixes
             var modsPath = Path.Combine(MelonEnvironment.ModsDirectory, filename);
             var userlibsPath = Path.Combine(MelonEnvironment.UserLibsDirectory, filename);
             var gameRootPath = Path.Combine(MelonEnvironment.GameRootDirectory, filename);
+            var runtimeSpecificPath = Path.Combine(MelonEnvironment.OurRuntimeDirectory, filename);
 
             var ret = TryLoad(alc, osSpecificPath)
                 ?? TryLoad(alc, il2cppPath)
                 ?? TryLoad(alc, managedPath)
                 ?? TryLoad(alc, modsPath)
                 ?? TryLoad(alc, userlibsPath)
+                ?? TryLoad(alc, runtimeSpecificPath)
                 ?? TryLoad(alc, gameRootPath);
 
             if (ret == null)

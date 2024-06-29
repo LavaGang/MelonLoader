@@ -23,6 +23,9 @@ namespace MelonLoader.Support
         internal static GameObject obj = null;
         internal static SM_Component component = null;
 
+        private static Assembly Il2Cppmscorlib = null;
+        private static Type streamType = null;
+
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
             Interface = interface_from;
@@ -50,46 +53,11 @@ namespace MelonLoader.Support
 
             Interop = new InteropInterface();
             Interface.SetInteropSupportInterface(Interop);
-            //HarmonyLib.Public.Patching.PatchManager.ResolvePatcher += HarmonyMethodPatcher.TryResolve;
-            //Core.HarmonyInstance.Patch(HarmonyLib.AccessTools.TypeByName("System.Runtime.CompilerServices.CastHelpers").GetMethod("ChkCast_Helper", HarmonyLib.AccessTools.all), HarmonyLib.AccessTools.Method(typeof(Main), nameof(ChkCast_HelperPatch)).ToNewHarmonyMethod());
             runtime.Start();
 
             return new SupportModule_To();
         }
-        
-		/*
-        private static Dictionary<IntPtr, Type> AllTypes = AccessTools.AllTypes().ToDictionary(type => type.TypeHandle.Value, type => type);
-        private static MethodInfo TryCast = typeof(Il2CppObjectBase).GetMethod("TryCast");
-        private static Type TryGetTypeFromIntPtr(IntPtr intPtr)
-        {
-            if (!AllTypes.TryGetValue(intPtr, out var type))
-            {
-                AllTypes = AccessTools.AllTypes().ToDictionary(type1 => type1.TypeHandle.Value, type1 => type1);
-                AllTypes.TryGetValue(intPtr, out var typeP);
-                type = typeP;
-            }
-            return type;
-        }
-        private static bool ChkCast_HelperPatch(IntPtr toTypeHnd, object obj, ref object __result)
-        {
-            var type = TryGetTypeFromIntPtr(toTypeHnd);
-            if (type == null)
-                return true;
-            if (!(typeof(Il2CppObjectBase).IsAssignableFrom(type) && obj is Il2CppObjectBase))
-                return true;
-            var invoke = TryCast.MakeGenericMethod(type).Invoke(obj, Array.Empty<object>());
-            if (invoke != null)
-            {
-                obj = invoke;
-                __result = invoke;
-                return false;
-            }
-            return true;
-        }
-		*/
-		
-        private static Assembly Il2Cppmscorlib = null;
-        private static Type streamType = null;
+
         private static void ConsoleCleaner()
         {
             // Il2CppSystem.Console.SetOut(new Il2CppSystem.IO.StreamWriter(Il2CppSystem.IO.Stream.Null));

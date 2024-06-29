@@ -91,6 +91,11 @@ namespace MelonLoader
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();
             Fixes.ProcessFix.Install();
+
+#if NET6_0
+            Fixes.Il2CppInteropFixes.Install();
+#endif
+
             PatchShield.Install();
 
             MelonPreferences.Load();
