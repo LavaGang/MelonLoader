@@ -29,6 +29,7 @@ namespace MelonLoader.Fixes
         private static MethodInfo _fixedFindType;
         private static MethodInfo _fixedAddTypeToLookup;
         private static MethodInfo _rewriteType;
+        private static MethodInfo _rewriteType_Prefix;
         private static MethodInfo _systemTypeFromIl2CppType;
         private static MethodInfo _systemTypeFromIl2CppType_Prefix;
         private static MethodInfo _systemTypeFromIl2CppType_Transpiler;
@@ -36,7 +37,7 @@ namespace MelonLoader.Fixes
         private static MethodInfo _registerTypeInIl2Cpp;
         private static MethodInfo _registerTypeInIl2Cpp_Transpiler;
         private static MethodInfo _isTypeSupported;
-        private static MethodInfo _isTypeSupported_Prefix;
+        private static MethodInfo _isTypeSupported_Transpiler;
         private static MethodInfo _convertMethodInfo;
         private static MethodInfo _convertMethodInfo_Transpiler;
         private static MethodInfo _getIl2CppTypeFullName;
@@ -68,13 +69,15 @@ namespace MelonLoader.Fixes
                 _systemTypeFromIl2CppType_Transpiler = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
                 
                 _getIl2CppTypeFullName = classInjectorType.GetMethod("GetIl2CppTypeFullName", BindingFlags.NonPublic | BindingFlags.Static);
+
                 _rewriteType = classInjectorType.GetMethod("RewriteType", BindingFlags.NonPublic | BindingFlags.Static);
-                
+                _rewriteType_Prefix = thisType.GetMethod(nameof(RewriteType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
+
                 _registerTypeInIl2Cpp = classInjectorType.GetMethod("RegisterTypeInIl2Cpp", BindingFlags.Public | BindingFlags.Static, [typeof(Type), typeof(RegisterTypeOptions)]);
                 _registerTypeInIl2Cpp_Transpiler = thisType.GetMethod(nameof(RegisterTypeInIl2Cpp_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
 
                 _isTypeSupported = classInjectorType.GetMethod("IsTypeSupported", BindingFlags.NonPublic | BindingFlags.Static);
-                _isTypeSupported_Prefix = thisType.GetMethod(nameof(IsTypeSupported_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
+                _isTypeSupported_Transpiler = thisType.GetMethod(nameof(IsTypeSupported_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
 
                 _convertMethodInfo = classInjectorType.GetMethod("ConvertMethodInfo", BindingFlags.NonPublic | BindingFlags.Static);
                 _convertMethodInfo_Transpiler = thisType.GetMethod(nameof(ConvertMethodInfo_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
@@ -99,7 +102,13 @@ namespace MelonLoader.Fixes
 
                 MelonDebug.Msg("Patching ClassInjector.IsTypeSupported...");
                 Core.HarmonyInstance.Patch(_isTypeSupported,
-                    new HarmonyMethod(_isTypeSupported_Prefix));
+                    null,
+                    null,
+                    new HarmonyMethod(_isTypeSupported_Transpiler));
+
+                MelonDebug.Msg("Patching ClassInjector.RewriteType...");
+                Core.HarmonyInstance.Patch(_rewriteType,
+                    new HarmonyMethod(_rewriteType_Prefix));
 
                 MelonDebug.Msg("Patching ClassInjector.ConvertMethodInfo...");
                 Core.HarmonyInstance.Patch(_convertMethodInfo,
@@ -140,6 +149,16 @@ namespace MelonLoader.Fixes
         private static bool EmitObjectToPointer_Prefix(bool __7, ref bool __8)
         {
             __8 = __7;
+            return true;
+        }
+
+        private static bool RewriteType_Prefix(Type __0, ref Type __result)
+        {
+            if (__0 == typeof(void*))
+            {
+                __result = __0;
+                return false;
+            }
             return true;
         }
 
@@ -197,23 +216,6 @@ namespace MelonLoader.Fixes
             }
         }
 
-        private static bool IsTypeSupported_Prefix(Type __0, ref bool __result)
-        {
-            if (__0.IsValueType ||
-                __0 == typeof(string) ||
-                __0.IsGenericParameter)
-            {
-                __result = true;
-                return false;
-            }
-
-            if (__0.IsByRef 
-                || __0.IsPointer) 
-                return IsTypeSupported_Prefix(__0.GetElementType(), ref __result);
-
-            __result = typeof(Il2CppObjectBase).IsAssignableFrom(__0);
-            return false;
-        }
 
         private static IEnumerable<CodeInstruction> ConvertMethodInfo_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
@@ -226,6 +228,23 @@ namespace MelonLoader.Fixes
                     found = true;
                     yield return new(OpCodes.Call, _fixedIsByRef);
                     MelonDebug.Msg("Patched ClassInjector.ConvertMethodInfo -> Type.IsByRef");
+                }
+                else
+                    yield return instruction;
+            }
+        }
+
+        private static IEnumerable<CodeInstruction> IsTypeSupported_Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            bool found = false;
+            foreach (CodeInstruction instruction in instructions)
+            {
+                if (!found
+                    && instruction.Calls(_get_IsByRef))
+                {
+                    found = true;
+                    yield return new(OpCodes.Call, _fixedIsByRef);
+                    MelonDebug.Msg("Patched ClassInjector.IsTypeSupported -> Type.IsByRef");
                 }
                 else
                     yield return instruction;
