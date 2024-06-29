@@ -38,16 +38,6 @@ namespace MelonLoader
             MelonLaunchOptions.Load();
             MelonLogger.Setup();
 
-#if NET6_0
-            if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
-            {
-                MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
-                Debugger.Launch();
-            }
-
-            Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
-#endif
-
 #if NET35
             // Disabled for now because of issues
             //Net20Compatibility.TryInstall();
@@ -77,6 +67,16 @@ namespace MelonLoader
             {
                 MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
             }
+
+#if NET6_0
+            if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
+            {
+                MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
+                Debugger.Launch();
+            }
+
+            Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
+#endif
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
             
