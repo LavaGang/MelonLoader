@@ -8,6 +8,7 @@ using HarmonyLib;
 namespace MelonLoader.Fixes
 {
     // fixes: https://github.com/MonoMod/MonoMod/pull/102
+    // based-on: https://github.com/Hamunii/DetourContext.Dispose_Fix/blob/main/DetourContext_Dispose_Fix.cs
     internal static class DetourContextDisposeFix
     {
         private static MethodInfo _dispose;
