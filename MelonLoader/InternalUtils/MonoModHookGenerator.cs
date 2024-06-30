@@ -70,7 +70,7 @@ namespace MelonLoader.InternalUtils
 
             Generate(pathIn,
                 pathOut,
-                namespace_on: MMHNamespace,
+                namespace_on: $"{MMHNamespace}.On",
                 namespace_il: $"{MMHNamespace}.IL",
                 orig: true,
                 privat: true,
