@@ -79,10 +79,11 @@ namespace MelonLoader
 #endif
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
-            
+            Fixes.DetourContextDisposeFix.Install();
+
 #if NET6_0
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                // NativeStackWalk.LogNativeStackTrace();
+            //  NativeStackWalk.LogNativeStackTrace();
 
             Fixes.DotnetAssemblyLoadContextFix.Install();
             Fixes.DotnetModHandlerRedirectionFix.Install();

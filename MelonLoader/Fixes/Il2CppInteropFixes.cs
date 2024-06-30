@@ -1,19 +1,18 @@
 ﻿#if NET6_0
 using System;
-using System.Reflection;
-using Il2CppInterop.Runtime.Injection;
-using HarmonyLib;
-using Il2CppInterop.Runtime.Runtime.VersionSpecific.Type;
-using Il2CppInterop.Runtime.Runtime;
 using System.Collections.Generic;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.InteropTypes;
-using Il2CppInterop.Runtime.Runtime.VersionSpecific.MethodInfo;
-using Il2CppInterop.Runtime.Runtime.VersionSpecific.Class;
-using System.Runtime.InteropServices;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using Il2CppInterop.Generator.Extensions;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.Runtime;
+using Il2CppInterop.Runtime.Runtime.VersionSpecific.Class;
+using Il2CppInterop.Runtime.Runtime.VersionSpecific.MethodInfo;
+using Il2CppInterop.Runtime.Runtime.VersionSpecific.Type;
+using HarmonyLib;
 
 namespace MelonLoader.Fixes
 {
@@ -88,35 +87,35 @@ namespace MelonLoader.Fixes
                 _injectorHelpers_AddTypeToLookup = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers")
                     .GetMethod("AddTypeToLookup", BindingFlags.NonPublic | BindingFlags.Static, [typeof(Type), typeof(IntPtr)]);
 
-                MelonDebug.Msg("Patching ClassInjector.SystemTypeFromIl2CppType...");
+                MelonDebug.Msg("Patching Il2CppInterop ClassInjector.SystemTypeFromIl2CppType...");
                 Core.HarmonyInstance.Patch(_systemTypeFromIl2CppType,
                     new HarmonyMethod(_systemTypeFromIl2CppType_Prefix), 
                     null,
                     new HarmonyMethod(_systemTypeFromIl2CppType_Transpiler));
 
-                MelonDebug.Msg("Patching ClassInjector.RegisterTypeInIl2Cpp...");
+                MelonDebug.Msg("Patching Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp...");
                 Core.HarmonyInstance.Patch(_registerTypeInIl2Cpp,
                     null,
                     null,
                     new HarmonyMethod(_registerTypeInIl2Cpp_Transpiler));
 
-                MelonDebug.Msg("Patching ClassInjector.IsTypeSupported...");
+                MelonDebug.Msg("Patching Il2CppInterop ClassInjector.IsTypeSupported...");
                 Core.HarmonyInstance.Patch(_isTypeSupported,
                     null,
                     null,
                     new HarmonyMethod(_isTypeSupported_Transpiler));
 
-                MelonDebug.Msg("Patching ClassInjector.RewriteType...");
+                MelonDebug.Msg("Patching Il2CppInterop ClassInjector.RewriteType...");
                 Core.HarmonyInstance.Patch(_rewriteType,
                     new HarmonyMethod(_rewriteType_Prefix));
 
-                MelonDebug.Msg("Patching ClassInjector.ConvertMethodInfo...");
+                MelonDebug.Msg("Patching Il2CppInterop ClassInjector.ConvertMethodInfo...");
                 Core.HarmonyInstance.Patch(_convertMethodInfo,
                     null,
                     null,
                     new HarmonyMethod(_convertMethodInfo_Transpiler));
 
-                MelonDebug.Msg("Patching ILGeneratorEx.EmitObjectToPointer...");
+                MelonDebug.Msg("Patching Il2CppInterop ILGeneratorEx.EmitObjectToPointer...");
                 Core.HarmonyInstance.Patch(_emitObjectToPointer,
                     new HarmonyMethod(_emitObjectToPointer_Prefix));
             }
@@ -183,7 +182,7 @@ namespace MelonLoader.Fixes
                 {
                     found = true;
                     instruction.operand = _fixedFindType;
-                    MelonDebug.Msg("Patched ClassInjector.SystemTypeFromIl2CppType -> Type.GetType");
+                    MelonDebug.Msg("Patched Il2CppInterop ClassInjector.SystemTypeFromIl2CppType -> Type.GetType");
                 }
                 yield return instruction;
             }
@@ -200,7 +199,7 @@ namespace MelonLoader.Fixes
                 {
                     found = true;
                     instruction.operand = _fixedAddTypeToLookup;
-                    MelonDebug.Msg("Patched ClassInjector.RegisterTypeInIl2Cpp -> InjectorHelpers.AddTypeToLookup");
+                    MelonDebug.Msg("Patched Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp -> InjectorHelpers.AddTypeToLookup");
                 }
 
                 if (!found2
@@ -209,7 +208,7 @@ namespace MelonLoader.Fixes
                 {
                     found2 = true;
                     instruction.operand = _fixedFindAbstractMethods;
-                    MelonDebug.Msg("Patched ClassInjector.RegisterTypeInIl2Cpp -> FindAbstractMethods");
+                    MelonDebug.Msg("Patched Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp -> FindAbstractMethods");
                 }
 
                 yield return instruction;
@@ -227,7 +226,7 @@ namespace MelonLoader.Fixes
                 {
                     found = true;
                     yield return new(OpCodes.Call, _fixedIsByRef);
-                    MelonDebug.Msg("Patched ClassInjector.ConvertMethodInfo -> Type.IsByRef");
+                    MelonDebug.Msg("Patched Il2CppInterop ClassInjector.ConvertMethodInfo -> Type.IsByRef");
                 }
                 else
                     yield return instruction;
@@ -244,7 +243,7 @@ namespace MelonLoader.Fixes
                 {
                     found = true;
                     yield return new(OpCodes.Call, _fixedIsByRef);
-                    MelonDebug.Msg("Patched ClassInjector.IsTypeSupported -> Type.IsByRef");
+                    MelonDebug.Msg("Patched Il2CppInterop ClassInjector.IsTypeSupported -> Type.IsByRef");
                 }
                 else
                     yield return instruction;
