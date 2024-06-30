@@ -17,11 +17,23 @@ namespace MelonLoader.InternalUtils
     // based-on: https://github.com/MonoMod/MonoMod/blob/reorganize/src/MonoMod.RuntimeDetour.HookGen/Program.cs
     internal static class MonoModHookGenerator
     {
-        private const string HookAssemblyPrefix = "MMHOOK_";
+        private const string MMHNamespace = "MMH";
         private const string CacheTypeName = "~MonoModHookGenCache";
         private const string CacheTypeFileSizeFieldName = "FileSize";
         private const string CacheTypeFileHashFieldName = "FileHash";
         private const string CacheTypeMLVersionFieldName = "MLV";
+
+        internal class CustomMonoModder : MonoModder
+        {
+            public override void Log(string text)
+                => MelonDebug.Msg($"[MonoMod.HookGen] {text}");
+            public override void LogVerbose(string text)
+            {
+                if (!LogVerboseEnabled)
+                    return;
+                MelonDebug.Msg($"[MonoMod.HookGen] {text}");
+            }
+        }
 
         internal static void Run()
         {
@@ -39,7 +51,7 @@ namespace MelonLoader.InternalUtils
             foreach (var filePath in Directory.GetFiles(MelonEnvironment.UnityGameManagedDirectory, "*.dll"))
             {
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
-                string hookFileName = $"{HookAssemblyPrefix}{fileName}";
+                string hookFileName = $"{MMHNamespace}.{fileName}";
                 string hookFilePath = Path.Combine(hookDir, $"{hookFileName}.dll");
                 ProcessFile(filePath, hookFilePath);
             }
@@ -58,6 +70,8 @@ namespace MelonLoader.InternalUtils
 
             Generate(pathIn,
                 pathOut,
+                namespace_on: MMHNamespace,
+                namespace_il: $"{MMHNamespace}.IL",
                 orig: true,
                 privat: true,
                 logVerboseEnabled: false,
@@ -133,6 +147,7 @@ namespace MelonLoader.InternalUtils
             string pathIn,
             string pathOut,
             ReadingMode readingMode = ReadingMode.Deferred,
+            string namespace_on = null,
             string namespace_il = null,
             bool orig = false,
             bool privat = false,
@@ -150,7 +165,7 @@ namespace MelonLoader.InternalUtils
             string cacheFileHash = "")
         {
             bool success = false;
-            MonoModder mm = null;
+            CustomMonoModder mm = null;
             ModuleDefinition mOut = null;
 
             try
@@ -162,7 +177,7 @@ namespace MelonLoader.InternalUtils
                     File.Delete(pathOut);
                 }
 
-                // Create MonoModder Instance with Settings and HookGen Environment Options
+                // Create CustomMonoModder Instance with Settings and HookGen Environment Options
 
                 /*
                 MelonDebug.Msg($"[MonoMod.HookGen] Environment Options:\n" +
@@ -173,6 +188,8 @@ namespace MelonLoader.InternalUtils
                         : string.Empty));
                 */
 
+                if (!string.IsNullOrEmpty(namespace_on))
+                    Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_NAMESPACE", namespace_on);
                 if (!string.IsNullOrEmpty(namespace_il))
                     Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_NAMESPACE_IL", namespace_il);
                 if (orig)
@@ -196,7 +213,7 @@ namespace MelonLoader.InternalUtils
                     $"  GACEnabled: {gacEnabled}");
                 */
 
-                mm = new MonoModder();
+                mm = new CustomMonoModder();
                 mm.InputPath = pathIn;
                 mm.OutputPath = pathOut;
                 mm.ReadingMode = readingMode;

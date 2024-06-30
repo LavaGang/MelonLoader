@@ -134,7 +134,6 @@ namespace MelonLoader
 #else
 
                 MonoModHookGenerator.Run();
-
 #endif
             }
             return _success ? 0 : 1;
