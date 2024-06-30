@@ -38,7 +38,7 @@ namespace MelonLoader.Fixes
             {
                 if (!found
                     && (lastInstruction != null)
-                    && (lastInstruction.LoadsField(_isDisposed))
+                    && lastInstruction.LoadsField(_isDisposed)
                     && (instruction.opcode == OpCodes.Brtrue))
                 {
                     found = true;
