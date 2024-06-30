@@ -148,6 +148,7 @@ namespace MelonLoader.Fixes
         private static bool EmitObjectToPointer_Prefix(bool __7, ref bool __8)
         {
             __8 = __7;
+
             return true;
         }
 
@@ -158,6 +159,7 @@ namespace MelonLoader.Fixes
                 __result = __0;
                 return false;
             }
+
             return true;
         }
 
@@ -169,6 +171,7 @@ namespace MelonLoader.Fixes
                 __result = (Type)_rewriteType.Invoke(null, [type]);
                 return false;
             }
+
             return true;
         }
 
@@ -181,9 +184,11 @@ namespace MelonLoader.Fixes
                     && instruction.Calls(_getType))
                 {
                     found = true;
+                    instruction.opcode = OpCodes.Call;
                     instruction.operand = _fixedFindType;
                     MelonDebug.Msg("Patched Il2CppInterop ClassInjector.SystemTypeFromIl2CppType -> Type.GetType");
                 }
+
                 yield return instruction;
             }
         }
@@ -198,6 +203,7 @@ namespace MelonLoader.Fixes
                     && instruction.Calls(_injectorHelpers_AddTypeToLookup))
                 {
                     found = true;
+                    instruction.opcode = OpCodes.Call;
                     instruction.operand = _fixedAddTypeToLookup;
                     MelonDebug.Msg("Patched Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp -> InjectorHelpers.AddTypeToLookup");
                 }
@@ -207,6 +213,7 @@ namespace MelonLoader.Fixes
                     .Contains("FindAbstractMethods"))
                 {
                     found2 = true;
+                    instruction.opcode = OpCodes.Call;
                     instruction.operand = _fixedFindAbstractMethods;
                     MelonDebug.Msg("Patched Il2CppInterop ClassInjector.RegisterTypeInIl2Cpp -> FindAbstractMethods");
                 }
@@ -225,11 +232,12 @@ namespace MelonLoader.Fixes
                     && instruction.Calls(_get_IsByRef))
                 {
                     found = true;
-                    yield return new(OpCodes.Call, _fixedIsByRef);
+                    instruction.opcode = OpCodes.Call;
+                    instruction.operand = _fixedIsByRef;
                     MelonDebug.Msg("Patched Il2CppInterop ClassInjector.ConvertMethodInfo -> Type.IsByRef");
                 }
-                else
-                    yield return instruction;
+
+                yield return instruction;
             }
         }
 
@@ -242,11 +250,12 @@ namespace MelonLoader.Fixes
                     && instruction.Calls(_get_IsByRef))
                 {
                     found = true;
-                    yield return new(OpCodes.Call, _fixedIsByRef);
+                    instruction.opcode = OpCodes.Call;
+                    instruction.operand = _fixedIsByRef;
                     MelonDebug.Msg("Patched Il2CppInterop ClassInjector.IsTypeSupported -> Type.IsByRef");
                 }
-                else
-                    yield return instruction;
+
+                yield return instruction;
             }
         }
 
