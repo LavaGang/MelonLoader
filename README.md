@@ -162,6 +162,8 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
 | --melonloader.disablestartscreen | Disable the Start Screen |
+| --melonloader.disablemmh | Disable the MonoMod HookGenerator |
+| --melonloader.mmhregenerate | Forces MonoMod HookGenerator to Regeneration |
 
 
 - These ones below are Unity Engine specific Launch Options.

@@ -13,7 +13,6 @@ namespace MelonLoader.MonoInternals
             if (!AssemblyManager.Setup())
                 return false;
 
-
             // Setup Search Directories
             string[] searchdirlist =
             {
@@ -22,7 +21,8 @@ namespace MelonLoader.MonoInternals
                 MelonEnvironment.ModsDirectory,
                 MelonEnvironment.MelonBaseDirectory,
                 MelonEnvironment.GameRootDirectory,
-                MelonEnvironment.OurRuntimeDirectory
+                MelonEnvironment.OurRuntimeDirectory,
+                MelonEnvironment.UnityGameManagedDirectory,
             };
             foreach (string path in searchdirlist)
                 AddSearchDirectory(path);

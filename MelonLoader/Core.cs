@@ -24,9 +24,10 @@ namespace MelonLoader
 {
 	internal static class Core
     {
+        private static bool _success = true;
+
         internal static HarmonyLib.Harmony HarmonyInstance;
         internal static bool Is_ALPHA_PreRelease = false;
-        private static bool _il2cppSuccess;
 
         internal static int Initialize()
         {
@@ -61,7 +62,10 @@ namespace MelonLoader
             {
                 if (!MonoLibrary.Setup()
                     || !MonoResolveManager.Setup())
+                {
+                    _success = false;
                     return 1;
+                }
             }
             catch (SecurityException)
             {
@@ -116,18 +120,29 @@ namespace MelonLoader
         internal static int PreStart()
         {
             MelonEvents.OnApplicationEarlyStart.Invoke();
-            return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
+            return MelonStartScreen.LoadAndRun(PreSetup);
         }
 
-        private static int Il2CppGameSetup()
+        private static int PreSetup()
         {
-            _il2cppSuccess = Il2CppAssemblyGenerator.Run();
-            return _il2cppSuccess ? 0 : 1;
+            if (_success)
+            {
+#if NET6_0
+
+                _success = Il2CppAssemblyGenerator.Run();
+
+#else
+
+                MonoModHookGenerator.Run();
+
+#endif
+            }
+            return _success ? 0 : 1;
         }
 
         internal static int Start()
         {
-            if (!_il2cppSuccess)
+            if (!_success)
                 return 1;
 
             MelonEvents.OnPreModsLoaded.Invoke();

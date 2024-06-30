@@ -36,9 +36,13 @@
 		<PackageReference Include="AssetsTools.NET" Version="3.0.0" />
 		<PackageReference Include="HarmonyX" Version="2.10.2" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
+		<PackageReference Include="MonoMod.RuntimeDetour.HookGen" Version="22.7.31.1" />
 		<PackageReference Include="MonoMod.Utils" Version="22.7.31.1" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.3.1" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+		<PackageReference Include="MonoMod.RuntimeDetour.HookGen" Version="22.7.31.1" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
 		<PackageReference Include="AsmResolver.DotNet" Version="5.5.1" />

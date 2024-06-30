@@ -41,11 +41,13 @@ namespace MelonLoader.Utils
 
         public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
         public static string UnityGameDataDirectory => Path.Combine(GameRootDirectory, GameExecutableName + "_Data");
+        public static string UnityGameManagedDirectory => Path.Combine(UnityGameDataDirectory, "Managed");
         public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "il2cpp_data");
         public static string UnityPlayerPath => Path.Combine(GameRootDirectory, "UnityPlayer.dll");
 
         public static string MelonManagedDirectory => Path.Combine(MelonLoaderDirectory, "Managed");
         public static string Il2CppAssembliesDirectory => Path.Combine(MelonLoaderDirectory, "Il2CppAssemblies");
+        public static string MonoModHookDirectory => Path.Combine(MelonLoaderDirectory, "MMHOOK");
 
         internal static void PrintEnvironment()
         {
