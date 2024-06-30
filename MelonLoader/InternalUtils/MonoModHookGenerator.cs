@@ -17,7 +17,7 @@ namespace MelonLoader.InternalUtils
     // based-on: https://github.com/MonoMod/MonoMod/blob/reorganize/src/MonoMod.RuntimeDetour.HookGen/Program.cs
     internal static class MonoModHookGenerator
     {
-        private const string MMHNamespace = "MMH";
+        private const string MMHOOK = "MMHOOK";
         private const string CacheTypeName = "~MonoModHookGenCache";
         private const string CacheTypeFileSizeFieldName = "FileSize";
         private const string CacheTypeFileHashFieldName = "FileHash";
@@ -51,7 +51,7 @@ namespace MelonLoader.InternalUtils
             foreach (var filePath in Directory.GetFiles(MelonEnvironment.UnityGameManagedDirectory, "*.dll"))
             {
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
-                string hookFileName = $"{MMHNamespace}.{fileName}";
+                string hookFileName = $"{MMHOOK}_{fileName}";
                 string hookFilePath = Path.Combine(hookDir, $"{hookFileName}.dll");
                 ProcessFile(filePath, hookFilePath);
             }
@@ -70,8 +70,6 @@ namespace MelonLoader.InternalUtils
 
             Generate(pathIn,
                 pathOut,
-                namespace_on: $"{MMHNamespace}.On",
-                namespace_il: $"{MMHNamespace}.IL",
                 orig: true,
                 privat: true,
                 logVerboseEnabled: false,
