@@ -21,6 +21,7 @@ namespace MelonLoader.InternalUtils
         private const string CacheTypeName = "~MonoModHookGenCache";
         private const string CacheTypeFileSizeFieldName = "FileSize";
         private const string CacheTypeFileHashFieldName = "FileHash";
+        private const string CacheTypeMLVersionFieldName = "MLV";
 
         internal static void Run()
         {
@@ -88,17 +89,23 @@ namespace MelonLoader.InternalUtils
                     TypeDefinition cacheType = hookAssembly.MainModule.GetType(CacheTypeName);
                     if (cacheType != null)
                     {
-                        FieldDefinition sizeField = cacheType.FindField(CacheTypeFileSizeFieldName);
-                        if (sizeField != null)
+                        FieldDefinition mlvField = cacheType.FindField(CacheTypeMLVersionFieldName);
+                        if (mlvField != null)
                         {
-                            FieldDefinition hashField = cacheType.FindField(CacheTypeFileHashFieldName);
-                            if (hashField != null)
+                            FieldDefinition sizeField = cacheType.FindField(CacheTypeFileSizeFieldName);
+                            if (sizeField != null)
                             {
-                                long oldSize = (long)sizeField.Constant;
-                                string oldHash = (string)hashField.Constant;
-                                if ((oldSize == sizeIn)
-                                    && oldHash.Equals(hashIn))
-                                    isMatch = true;
+                                FieldDefinition hashField = cacheType.FindField(CacheTypeFileHashFieldName);
+                                if (hashField != null)
+                                {
+                                    string oldMLV = (string)mlvField.Constant;
+                                    long oldSize = (long)sizeField.Constant;
+                                    string oldHash = (string)hashField.Constant;
+                                    if (oldMLV.Equals(BuildInfo.Version)
+                                        && (oldSize == sizeIn)
+                                        && oldHash.Equals(hashIn))
+                                        isMatch = true;
+                                }
                             }
                         }
                     }
@@ -229,6 +236,12 @@ namespace MelonLoader.InternalUtils
                     TypeDefinition cacheType = new(string.Empty, CacheTypeName, TypeAttributes.Class | TypeAttributes.Public);
                     mOut.Types.Add(cacheType);
 
+                    // Create ML Version
+                    //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}.{CacheTypeMLVersionFieldName}:");
+                    FieldDefinition mlvField = new(CacheTypeMLVersionFieldName, FieldAttributes.Public | FieldAttributes.Literal, mOut.TypeSystem.String);
+                    mlvField.Constant = BuildInfo.Version;
+                    cacheType.Fields.Add(mlvField);
+
                     // Create File Size
                     //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}.{CacheTypeFileSizeFieldName}:");
                     FieldDefinition fileSizeField = new(CacheTypeFileSizeFieldName, FieldAttributes.Public | FieldAttributes.Literal, mOut.TypeSystem.Int64);
@@ -237,7 +250,7 @@ namespace MelonLoader.InternalUtils
 
                     // Create File Hash
                     //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}.{CacheTypeFileHashFieldName}:");
-                    FieldDefinition fileHashField = new(CacheTypeFileHashFieldName, FieldAttributes.Public | FieldAttributes.Literal, mOut.TypeSystem.String);
+                    FieldDefinition fileHashField = new(CacheTypeMLVersionFieldName, FieldAttributes.Public | FieldAttributes.Literal, mOut.TypeSystem.String);
                     fileHashField.Constant = cacheFileHash;
                     cacheType.Fields.Add(fileHashField);
                 }
