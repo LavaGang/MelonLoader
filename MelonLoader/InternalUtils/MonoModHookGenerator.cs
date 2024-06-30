@@ -265,7 +265,7 @@ namespace MelonLoader.InternalUtils
 
                     // Create File Hash
                     //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}.{CacheTypeFileHashFieldName}:");
-                    FieldDefinition fileHashField = new(CacheTypeMLVersionFieldName, FieldAttributes.Public | FieldAttributes.Literal, mOut.TypeSystem.String);
+                    FieldDefinition fileHashField = new(CacheTypeFileHashFieldName, FieldAttributes.Public | FieldAttributes.Literal, mOut.TypeSystem.String);
                     fileHashField.Constant = cacheFileHash;
                     cacheType.Fields.Add(fileHashField);
                 }
