@@ -13,6 +13,8 @@ using Il2CppInterop.Runtime.Runtime.VersionSpecific.Class;
 using Il2CppInterop.Runtime.Runtime.VersionSpecific.MethodInfo;
 using Il2CppInterop.Runtime.Runtime.VersionSpecific.Type;
 using HarmonyLib;
+using System.IO;
+using MelonLoader.Utils;
 
 namespace MelonLoader.Fixes
 {
@@ -130,9 +132,11 @@ namespace MelonLoader.Fixes
 
         private static Type FixedFindType(string il2CppTypeFullName)
         {
-            Type returnType = Type.GetType(il2CppTypeFullName);
+            Type returnType = Type.GetType($"Il2Cpp.{il2CppTypeFullName}");
             if (returnType == null)
                 returnType = Type.GetType($"Il2Cpp{il2CppTypeFullName}");
+            if (returnType == null)
+                returnType = Type.GetType(il2CppTypeFullName);
             return returnType;
         }
 
@@ -163,6 +167,7 @@ namespace MelonLoader.Fixes
             return true;
         }
 
+
         private static bool SystemTypeFromIl2CppType_Prefix(Il2CppTypeStruct* __0, ref Type __result)
         {
             INativeTypeStruct wrappedType = UnityVersionHandler.Wrap(__0);
@@ -170,6 +175,49 @@ namespace MelonLoader.Fixes
             {
                 __result = (Type)_rewriteType.Invoke(null, [type]);
                 return false;
+            }
+
+            IntPtr klass = IL2CPP.il2cpp_type_get_class_or_element_class((IntPtr)__0);
+            if (klass == IntPtr.Zero)
+                return true;
+
+            IntPtr image = IL2CPP.il2cpp_class_get_image(klass);
+            if (image == IntPtr.Zero)
+                return true;
+
+            IntPtr klassNamespace = IL2CPP.il2cpp_class_get_namespace(klass);
+            if (klassNamespace == IntPtr.Zero)
+                return true;
+
+            IntPtr klassName = IL2CPP.il2cpp_class_get_name(klass);
+            if (klassName == IntPtr.Zero)
+                return true;
+
+            IntPtr fileName = IL2CPP.il2cpp_image_get_filename(image);
+            if (fileName == IntPtr.Zero)
+                return true;
+
+            string klassNameStr = Marshal.PtrToStringAnsi(klassName);
+            string klassNamespaceStr = Marshal.PtrToStringAnsi(klassNamespace);
+            string fullTypeName = string.IsNullOrEmpty(klassNamespaceStr)
+                ? klassNameStr
+                : $"{klassNamespaceStr}.{klassNameStr}";
+
+            string fileNameStr = Marshal.PtrToStringAnsi(fileName);
+            string il2cppAssemblyPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, fileNameStr);
+            if (!File.Exists(il2cppAssemblyPath))
+                il2cppAssemblyPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, $"Il2Cpp{fileNameStr}");
+            if (File.Exists(il2cppAssemblyPath))
+            {
+                Assembly asm = Assembly.LoadFrom(il2cppAssemblyPath);
+                if (asm != null)
+                {
+                    __result = asm.GetType($"Il2Cpp.{fullTypeName}");
+                    if (__result == null)
+                        __result = asm.GetType($"Il2Cpp{fullTypeName}");
+                    if (__result != null)
+                        return false;
+                }
             }
 
             return true;
@@ -288,8 +336,16 @@ namespace MelonLoader.Fixes
                             if (Marshal.PtrToStringAnsi(parameterName) != Marshal.PtrToStringAnsi(otherParameterName))
                                 return false;
 
-                            if ((string)_getIl2CppTypeFullName.Invoke(null, [(IntPtr)parameterInfo.ParameterType])
-                                != (string)_getIl2CppTypeFullName.Invoke(null, [(IntPtr)otherParameterInfo.ParameterType]))
+                            string parameterTypeName = (string)_getIl2CppTypeFullName.Invoke(null, [(IntPtr)parameterInfo.ParameterType]);
+                            string otherParameterTypeName = (string)_getIl2CppTypeFullName.Invoke(null, [(IntPtr)otherParameterInfo.ParameterType]);
+
+                            if ((parameterTypeName != $"Il2Cpp.{otherParameterTypeName}")
+                                && (parameterTypeName != $"Il2Cpp{otherParameterTypeName}")
+                                && ($"Il2Cpp.{parameterTypeName}" != otherParameterTypeName)
+                                && ($"Il2Cpp{parameterTypeName}" != otherParameterTypeName)
+                                && ($"Il2Cpp.{parameterTypeName}" != $"Il2Cpp.{otherParameterTypeName}")
+                                && ($"Il2Cpp{parameterTypeName}" != $"Il2Cpp{otherParameterTypeName}")
+                                && (parameterTypeName != otherParameterTypeName))
                                 return false;
                         }
 
