@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System;
 
 namespace MelonLoader.Support
 {
@@ -9,6 +10,9 @@ namespace MelonLoader.Support
     {
         private static void Initialize()
         {
+            if (Environment.Version >= new Version("3.0.0.0"))
+                return;
+
             string managedFolder = string.Copy(GetManagedDirectory());
 
             string systemPath = Path.Combine(managedFolder, "System.dll");

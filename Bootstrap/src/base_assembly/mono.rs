@@ -84,6 +84,9 @@ pub fn start() -> Result<(), DynErr> {
 }
 
 fn preload(runtime: &FerrexRuntime) -> Result<(), DynErr> {
+	
+    debug!("Initializing Preload")?;
+	
     if !melonenv::paths::PRELOAD_DLL.exists() {
         return Err("Preload.dll not found".into());
     }
@@ -93,5 +96,7 @@ fn preload(runtime: &FerrexRuntime) -> Result<(), DynErr> {
         .get_method("Initialize", 0, runtime)?
         .invoke(None, None, runtime)?;
 
+    debug!("Preload Initialized!")?;
+	
     Ok(())
 }

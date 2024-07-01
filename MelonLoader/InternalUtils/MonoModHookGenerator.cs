@@ -75,7 +75,7 @@ namespace MelonLoader.InternalUtils
                 logVerboseEnabled: false,
                 publicEverything: true,
                 preventInline: true,
-                missingDependencyThrow: true,
+                //missingDependencyThrow: true,
                 generateCache: true,
                 cacheFileSize: sizeIn,
                 cacheFileHash: hashIn);
@@ -225,15 +225,14 @@ namespace MelonLoader.InternalUtils
                 mm.UpgradeMSCORLIB = upgradeMSCORLIB;
                 mm.GACEnabled = gacEnabled;
 
+                // Add Search Directories
+                mm.DependencyDirs.Add(MelonEnvironment.OurRuntimeDirectory);
+                mm.DependencyDirs.Add(MelonEnvironment.UnityGameManagedDirectory);
+
                 // Read Assembly and Map Dependencies
                 //MelonDebug.Msg($"[MonoMod.HookGen] Reading Assembly: {pathIn}");
                 mm.Read();
                 mm.MapDependencies();
-
-                // Manually Map MonoMod into Cache
-                mm.DependencyCache.Add("Mono.Cecil", ModuleDefinition.ReadModule(Path.Combine(MelonEnvironment.OurRuntimeDirectory, "Mono.Cecil.dll")));
-                mm.DependencyCache.Add("MonoMod.RuntimeDetour", ModuleDefinition.ReadModule(Path.Combine(MelonEnvironment.OurRuntimeDirectory, "MonoMod.RuntimeDetour.dll")));
-                mm.DependencyCache.Add("MonoMod.Utils", ModuleDefinition.ReadModule(Path.Combine(MelonEnvironment.OurRuntimeDirectory, "MonoMod.Utils.dll")));
 
                 // Create Hook Generator
                 //MelonDebug.Msg("[MonoMod.HookGen] Creating HookGenerator");
