@@ -16,7 +16,7 @@
 		<ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
 		<PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
 		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.6-ci.433" ExcludeAssets="Runtime" />
-		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.433" ExcludeAssets="Runtime" />
+		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.445" ExcludeAssets="Runtime" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.433" ExcludeAssets="Runtime" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="Runtime" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
