@@ -94,7 +94,21 @@ namespace MelonLoader.MelonStartScreen
         internal static readonly AverageStepDuration[] averageStepDurations = new AverageStepDuration[]
         {
             // MonoModHookGenerator
-
+            new AverageStepDuration(
+                @"[MonoMod.HookGen] Checking Assemblies",
+                100f,
+                @"MonoMod.HookGen - Checking Assemblies"
+            ),
+            new AverageStepDuration(
+                @"[MonoMod.HookGen] Generating Assembly: .*",
+                1000f,
+                @"MonoMod.HookGen - Generating MMHOOK Assemblies..."
+            ),
+            new AverageStepDuration(
+                @"[MonoMod.HookGen] Done!",
+                100f,
+                @"MonoMod.HookGen - Done!"
+            ),
 
             // Il2CppAssemblyGenerator
             new AverageStepDuration(
@@ -111,6 +125,16 @@ namespace MelonLoader.MelonStartScreen
                 @"Extracting .* to .*UnityDpendencies",
                 500f,
                 @"Initialization - Extracting Unity Dependencies"
+            ),
+            new AverageStepDuration(
+                @"Downloading Cpp2IL\.\.\.",
+                500f,
+                @"Initialization - Downloading Cpp2IL"
+            ),
+            new AverageStepDuration(
+                @"Extracting .* to .*Cpp2IL",
+                500f,
+                @"Initialization - Extracting Cpp2IL"
             ),
             new AverageStepDuration(
                 @"Downloading DeobfuscationMap\.\.\.",

@@ -16,7 +16,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal static HttpClient webClient = null;
 
-        internal static Packages.Models.ExecutablePackage dumper = null;
+        internal static Cpp2IL cpp2il = null;
         internal static Packages.Il2CppInterop il2cppinterop = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
@@ -57,18 +57,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
                 RemoteAPI.Contact();
 
-            dumper = new Cpp2IL();
+            cpp2il = new Cpp2IL();
             il2cppinterop = new Packages.Il2CppInterop();
             unitydependencies = new UnityDependencies();
             deobfuscationMap = new DeobfuscationMap();
             deobfuscationRegex = new DeobfuscationRegex();
 
-            Logger.Msg($"Using Dumper Version: {(string.IsNullOrEmpty(dumper.Version) ? "null" : dumper.Version)}");
+            Logger.Msg($"Using Cpp2IL Version: {(string.IsNullOrEmpty(cpp2il.Version) ? "null" : cpp2il.Version)}");
             Logger.Msg($"Using Il2CppInterop Version = {(string.IsNullOrEmpty(il2cppinterop.Version) ? "null" : il2cppinterop.Version)}");
             Logger.Msg($"Using Unity Dependencies Version = {(string.IsNullOrEmpty(unitydependencies.Version) ? "null" : unitydependencies.Version)}");
             Logger.Msg($"Using Deobfuscation Regex = {(string.IsNullOrEmpty(deobfuscationRegex.Regex) ? "null" : deobfuscationRegex.Regex)}");
 
-            if (!dumper.Setup()
+            if (!cpp2il.Setup()
                 || !il2cppinterop.Setup()
                 || !unitydependencies.Setup()
                 || !deobfuscationMap.Setup())
@@ -92,18 +92,18 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             }
             Logger.Msg("Assembly Generation Needed!");
 
-            dumper.Cleanup();
+            cpp2il.Cleanup();
             il2cppinterop.Cleanup();
 
-            if (!dumper.Execute())
+            if (!cpp2il.Execute())
             {
-                dumper.Cleanup();
+                cpp2il.Cleanup();
                 return 1;
             }
 
             if (!il2cppinterop.Execute())
             {
-                dumper.Cleanup();
+                cpp2il.Cleanup();
                 il2cppinterop.Cleanup();
                 return 1;
             }
@@ -111,7 +111,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             OldFiles_Cleanup();
             OldFiles_LAM();
 
-            dumper.Cleanup();
+            cpp2il.Cleanup();
             il2cppinterop.Cleanup();
 
             Logger.Msg("Assembly Generation Successful!");

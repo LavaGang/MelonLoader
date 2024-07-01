@@ -6,7 +6,6 @@ using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
 using MelonLoader.Utils;
 using System.IO;
-using System.Runtime.InteropServices;
 using bHapticsLib;
 using System.Threading;
 

@@ -215,6 +215,8 @@ namespace MelonLoader.Fixes
                     __result = asm.GetType($"Il2Cpp.{fullTypeName}");
                     if (__result == null)
                         __result = asm.GetType($"Il2Cpp{fullTypeName}");
+                    if (__result == null)
+                        __result = asm.GetType(fullTypeName);
                     if (__result != null)
                         return false;
                 }

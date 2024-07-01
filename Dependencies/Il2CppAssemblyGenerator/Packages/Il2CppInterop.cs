@@ -36,7 +36,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             }
             
             if (Execute(new string[] {
-                $"--input={ Core.dumper.OutputFolder }",
+                $"--input={ Core.cpp2il.OutputFolder }",
                 $"--output={ OutputFolder }",
                 $"--mscorlib={ Path.Combine(Core.ManagedPath, "mscorlib.dll") }",
                 $"--unity={ Core.unitydependencies.Destination }",
@@ -57,7 +57,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             Core.Logger.Msg("Reading dumped assemblies for interop generation...");
 
             var resolver = new InteropResolver();
-            var inputAssemblies = Directory.GetFiles(Core.dumper.OutputFolder)
+            var inputAssemblies = Directory.GetFiles(Core.cpp2il.OutputFolder)
                 .Where(f => f.EndsWith(".dll"))
                 .Select(f => ModuleDefinition.ReadModule(f, new ReaderParameters() {AssemblyResolver = resolver}))
                 .Select(m => m.Assembly)
