@@ -1,8 +1,7 @@
 ﻿#if NET6_0
 using AsmResolver.DotNet;
-using AsmResolver.PE.DotNet.Metadata.Strings;
+using AsmResolver.PE.DotNet.Metadata;
 using AsmResolver.PE.DotNet.Metadata.Tables;
-using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +41,7 @@ namespace MelonLoader.Utils
             var dummyListToEnsureThisCodeDoesntGetNuked = new List<object>();
 
             //Force load AsmResolver
-            dummyListToEnsureThisCodeDoesntGetNuked.Add(new Constant(AsmResolver.PE.DotNet.Metadata.Tables.Rows.ElementType.Class, null));
+            dummyListToEnsureThisCodeDoesntGetNuked.Add(new Constant(AsmResolver.PE.DotNet.Metadata.Tables.ElementType.Class, null));
             dummyListToEnsureThisCodeDoesntGetNuked.Add(typeof(AsmResolver.PE.File.PEFile));
         }
 

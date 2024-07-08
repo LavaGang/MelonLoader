@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using MelonLoader.Modules;
 using MelonLoader.Utils;
-using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
+using UnityVersion = AssetRipper.Primitives.UnityVersion;
 
 namespace MelonLoader.InternalUtils
 {

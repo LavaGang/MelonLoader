@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
-using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
+using UnityVersion = AssetRipper.Primitives.UnityVersion;
 using System.Drawing;
 using MelonLoader.Utils;
 
