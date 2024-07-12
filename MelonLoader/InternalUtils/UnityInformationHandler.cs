@@ -7,9 +7,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
-using UnityVersion = AssetRipper.Primitives.UnityVersion;
 using System.Drawing;
 using MelonLoader.Utils;
+using UnityVersion = AssetRipper.VersionUtilities.UnityVersion;
 
 namespace MelonLoader.InternalUtils
 {
@@ -19,22 +19,31 @@ namespace MelonLoader.InternalUtils
 
         public static string GameName { get; private set; }
         public static string GameDeveloper { get; private set; }
-        public static UnityVersion EngineVersion { get; private set; } = UnityVersion.MinVersion;
+        public static UnityVersion EngineVersion { get; private set; }
         public static string GameVersion { get; private set; }
+
+        private static UnityVersion TryParse(string version)
+        {
+            UnityVersion returnval = UnityVersion.MinVersion;
+            try 
+            {
+                returnval = UnityVersion.Parse(version); 
+            }
+            catch (Exception ex)
+            {
+                if (MelonDebug.IsEnabled())
+                    MelonLogger.Error(ex);
+                returnval = UnityVersion.MinVersion;
+            }
+            return returnval;
+        }
 
         internal static void Setup()
         {
             string gameDataPath = MelonEnvironment.UnityGameDataDirectory;
 
             if (!string.IsNullOrEmpty(MelonLaunchOptions.Core.UnityVersion))
-            {
-                try { EngineVersion = UnityVersion.Parse(MelonLaunchOptions.Core.UnityVersion); }
-                catch (Exception ex)
-                {
-                    if (MelonDebug.IsEnabled())
-                        MelonLogger.Error(ex);
-                }
-            }
+                EngineVersion = TryParse(MelonLaunchOptions.Core.UnityVersion);
 
             AssetsManager assetsManager = new AssetsManager();
             ReadGameInfo(assetsManager, gameDataPath);
@@ -45,22 +54,12 @@ namespace MelonLoader.InternalUtils
                 ReadGameInfoFallback();
 
             if (EngineVersion == UnityVersion.MinVersion)
-            {
-                try { EngineVersion = ReadVersionFallback(gameDataPath); }
-                catch (Exception ex)
-                {
-                    if (MelonDebug.IsEnabled())
-                        MelonLogger.Error(ex);
-                }
-            }
+                EngineVersion = ReadVersionFallback(gameDataPath);
 
             if (string.IsNullOrEmpty(GameDeveloper))
                 GameDeveloper = DefaultInfo;
             if (string.IsNullOrEmpty(GameName))
                 GameName = DefaultInfo;
-
-            //BootstrapInterop.SetDefaultConsoleTitleWithGameName(GameName, GameVersion);
-
             if (string.IsNullOrEmpty(GameVersion))
                 GameVersion = DefaultInfo;
 
@@ -101,7 +100,7 @@ namespace MelonLoader.InternalUtils
                     assetsManager.LoadClassDatabaseFromPackage(instance.file.Metadata.UnityVersion);
 
                 if (EngineVersion == UnityVersion.MinVersion)
-                    EngineVersion = UnityVersion.Parse(instance.file.Metadata.UnityVersion);
+                    EngineVersion = TryParse(instance.file.Metadata.UnityVersion);
 
                 List<AssetFileInfo> assetFiles = instance.file.GetAssetsOfType(AssetClassID.PlayerSettings);
                 if (assetFiles.Count > 0)
@@ -129,7 +128,6 @@ namespace MelonLoader.InternalUtils
             {
                 if (MelonDebug.IsEnabled())
                     MelonLogger.Error(ex);
-                //MelonLogger.Error("Failed to Initialize Assets Manager!");
             }
             if (instance != null)
                 instance.file.Close();
@@ -170,7 +168,7 @@ namespace MelonLoader.InternalUtils
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 var unityVer = FileVersionInfo.GetVersionInfo(unityPlayerPath);
-                return new UnityVersion((ushort)unityVer.FileMajorPart, (ushort)unityVer.FileMinorPart, (ushort)unityVer.FileBuildPart);
+                return TryParse(unityVer.FileVersion);
             }
 
             try
@@ -197,7 +195,7 @@ namespace MelonLoader.InternalUtils
                     MelonLogger.Error(ex);
             }
 
-            return default;
+            return UnityVersion.MinVersion;
         }
 
         private static UnityVersion GetVersionFromGlobalGameManagers(byte[] ggmBytes)
@@ -225,7 +223,7 @@ namespace MelonLoader.InternalUtils
                 unityVer = verString.ToString().Trim();
             }
 
-            return UnityVersion.Parse(unityVer);
+            return TryParse(unityVer);
         }
 
         private static UnityVersion GetVersionFromDataUnity3D(Stream fileStream)
@@ -248,7 +246,7 @@ namespace MelonLoader.InternalUtils
                 verString.Append(Convert.ToChar(read));
             }
 
-            return UnityVersion.Parse(verString.ToString().Trim());
+            return TryParse(verString.ToString().Trim());
         }
     }
 }

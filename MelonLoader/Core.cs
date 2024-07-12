@@ -52,10 +52,11 @@ namespace MelonLoader
             Fixes.DotnetLoadFromManagedFolderFix.Install();
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
             Fixes.ServerCertificateValidation.Install();
-            
-            MelonUtils.Setup(AppDomain.CurrentDomain);
-
             Assertions.LemonAssertMapping.Setup();
+
+            MelonUtils.Setup(AppDomain.CurrentDomain);
+            BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
+                UnityInformationHandler.GameVersion);
 
             try
             {
