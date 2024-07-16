@@ -1,5 +1,6 @@
 ﻿#if !NET6_0
 
+using MelonLoader.Lemons.Cryptography;
 using MelonLoader.MonoInternals;
 using MelonLoader.Utils;
 using Mono.Cecil;
@@ -8,8 +9,6 @@ using MonoMod.RuntimeDetour.HookGen;
 using MonoMod.Utils;
 using System;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
 
 namespace MelonLoader.InternalUtils
 {
@@ -17,21 +16,28 @@ namespace MelonLoader.InternalUtils
     // based-on: https://github.com/MonoMod/MonoMod/blob/reorganize/src/MonoMod.RuntimeDetour.HookGen/Program.cs
     internal static class MonoModHookGenerator
     {
+        private const string LOG_PREFIX = "MonoMod.HookGen";
         private const string MMHOOK = "MMHOOK";
         private const string CacheTypeName = "~MonoModHookGenCache";
         private const string CacheTypeFileSizeFieldName = "FileSize";
         private const string CacheTypeFileHashFieldName = "FileHash";
         private const string CacheTypeMLVersionFieldName = "MLV";
+        private static readonly LemonSHA512 sha512 = new();
+        private static readonly MelonLogger.Instance logger = new(LOG_PREFIX);
 
         internal class CustomMonoModder : MonoModder
         {
             public override void Log(string text)
-                => MelonDebug.Msg($"[MonoMod.HookGen] {text}");
+            {
+                //if (!MelonDebug.IsEnabled())
+                //    return;
+                //logger.Msg(text);
+            }
             public override void LogVerbose(string text)
             {
-                if (!LogVerboseEnabled)
-                    return;
-                MelonDebug.Msg($"[MonoMod.HookGen] {text}");
+                //if (!MelonDebug.IsEnabled())
+                //    return;
+                //logger.Msg(text);
             }
         }
 
@@ -40,23 +46,24 @@ namespace MelonLoader.InternalUtils
             if (!MelonLaunchOptions.MonoModHookGenerator.Enabled)
                 return;
 
-            MelonLogger.Msg("[MonoMod.HookGen] Checking Assemblies...");
+            logger.Msg("Checking Assemblies...");
 
             string hookDir = MelonEnvironment.MonoModHookDirectory;
             if (!Directory.Exists(hookDir))
                 Directory.CreateDirectory(hookDir);
 
             MonoResolveManager.AddSearchDirectory(hookDir);
+            RemoveOldFiles(hookDir);
 
             foreach (var filePath in Directory.GetFiles(MelonEnvironment.UnityGameManagedDirectory, "*.dll"))
             {
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
-                string hookFileName = $"{MMHOOK}_{fileName}";
+                string hookFileName = $"{MMHOOK}.{fileName}";
                 string hookFilePath = Path.Combine(hookDir, $"{hookFileName}.dll");
                 ProcessFile(filePath, hookFilePath);
             }
 
-            MelonLogger.Msg("[MonoMod.HookGen] Done!");
+            logger.Msg("Done!");
         }
 
         private static void ProcessFile(string pathIn, string pathOut)
@@ -65,8 +72,6 @@ namespace MelonLoader.InternalUtils
                 out long sizeIn,
                 out string hashIn))
                 return;
-
-            //MelonDebug.Msg($"[MonoMod.HookGen] Generation Needed for: {Path.GetFileName(pathIn)}");
 
             Generate(pathIn,
                 pathOut,
@@ -79,6 +84,36 @@ namespace MelonLoader.InternalUtils
                 generateCache: true,
                 cacheFileSize: sizeIn,
                 cacheFileHash: hashIn);
+        }
+
+        private static void RemoveOldFiles(string hookDir)
+        {
+            foreach (string filePath in Directory.GetFiles(hookDir, $"{MMHOOK}.*.dll"))
+            {
+                string fileName = Path.GetFileName(filePath);
+                string realFileName = fileName.Substring($"{MMHOOK}.".Length);
+                string realFilePath = Path.Combine(MelonEnvironment.UnityGameManagedDirectory, realFileName);
+                if (File.Exists(realFilePath))
+                    continue;
+
+                DeleteFile(filePath);
+            }
+        }
+
+        private static void DeleteFile(string filePath, bool rethrowException = false)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+            }
+            catch (Exception ex)
+            {
+                if (rethrowException)
+                    throw ex;
+                else
+                    logger.Error(ex);
+            }
         }
 
         private static bool CheckFileHash(string pathIn, string pathOut, 
@@ -113,7 +148,7 @@ namespace MelonLoader.InternalUtils
                                     string oldMLV = (string)mlvField.Constant;
                                     long oldSize = (long)sizeField.Constant;
                                     string oldHash = (string)hashField.Constant;
-                                    if (oldMLV.Equals(BuildInfo.Version)
+                                    if (oldMLV.Equals(MelonUtils.HashCode)
                                         && (oldSize == sizeIn)
                                         && oldHash.Equals(hashIn))
                                         isMatch = true;
@@ -125,7 +160,7 @@ namespace MelonLoader.InternalUtils
             }
             catch (Exception ex)
             {
-                MelonLogger.Error(ex);
+                logger.Error(ex);
                 isMatch = false;
             }
 
@@ -135,10 +170,14 @@ namespace MelonLoader.InternalUtils
 
         private static string ReadFileHash(string filePath, out long fileSize)
         {
+            fileSize = 0;
+
             byte[] fileData = File.ReadAllBytes(filePath);
+            if (fileData == null)
+                return null;
+
             fileSize = fileData.Length;
-            using (SHA512 sha = SHA512.Create())
-                return string.Concat(sha.ComputeHash(fileData).Select(b => b.ToString("X2")).ToArray());
+            return sha512.ComputeHash(fileData).ToString("x2");
         }
 
         private static bool Generate(
@@ -169,23 +208,9 @@ namespace MelonLoader.InternalUtils
             try
             {
                 // Remove Existing File
-                if (File.Exists(pathOut))
-                {
-                    MelonDebug.Msg($"[MonoMod.HookGen] Removing {pathOut}");
-                    File.Delete(pathOut);
-                }
+                DeleteFile(pathOut, true);
 
                 // Create CustomMonoModder Instance with Settings and HookGen Environment Options
-
-                /*
-                MelonDebug.Msg($"[MonoMod.HookGen] Environment Options:\n" +
-                    $"  MONOMOD_HOOKGEN_ORIG: {orig}\n" +
-                    $"  MONOMOD_HOOKGEN_PRIVATE: {privat}\n" +
-                    (!string.IsNullOrEmpty(namespace_il)
-                        ? $"  MONOMOD_HOOKGEN_NAMESPACE_IL: {namespace_il}"
-                        : string.Empty));
-                */
-
                 if (!string.IsNullOrEmpty(namespace_on))
                     Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_NAMESPACE", namespace_on);
                 if (!string.IsNullOrEmpty(namespace_il))
@@ -194,22 +219,6 @@ namespace MelonLoader.InternalUtils
                     Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_ORIG", "1");
                 if (privat)
                     Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_PRIVATE", "1");
-
-                /*
-                MelonDebug.Msg($"[MonoMod.HookGen] Creating MonoModder with Settings:\n" +
-                    $"  InputPath: {pathIn}\n" +
-                    $"  OutputPath: {pathOut}\n" +
-                    $"  ReadingMode: {readingMode}\n" +
-                    $"  MissingDependencyThrow: {readingMode}\n" +
-                    $"  LogVerboseEnabled: {logVerboseEnabled}\n" +
-                    $"  CleanupEnabled: {cleanupEnabled}\n" +
-                    $"  PreventInline: {preventInline}\n" +
-                    $"  Strict: {strict}\n" +
-                    $"  PublicEverything: {publicEverything}\n" +
-                    $"  RemovePatchReferences: {removePatchReferences}\n" +
-                    $"  UpgradeMSCORLIB: {upgradeMSCORLIB}\n" +
-                    $"  GACEnabled: {gacEnabled}");
-                */
 
                 mm = new CustomMonoModder();
                 mm.InputPath = pathIn;
@@ -230,60 +239,57 @@ namespace MelonLoader.InternalUtils
                 mm.DependencyDirs.Add(MelonEnvironment.UnityGameManagedDirectory);
 
                 // Read Assembly and Map Dependencies
-                //MelonDebug.Msg($"[MonoMod.HookGen] Reading Assembly: {pathIn}");
                 mm.Read();
                 mm.MapDependencies();
 
                 // Create Hook Generator
-                //MelonDebug.Msg("[MonoMod.HookGen] Creating HookGenerator");
                 string hookFileName = Path.GetFileName(pathOut);
-                HookGenerator gen = new HookGenerator(mm, hookFileName);
+                logger.Msg($"Generating Assembly: {hookFileName}");
 
-                // Get Hook Assembly
-                mOut = gen.OutputModule;
+                HookGenerator hookGen = new HookGenerator(mm, hookFileName);
+                mOut = hookGen.OutputModule;
 
                 // Assembly Caching
                 if (generateCache)
                 {
                     // Create Type
-                    //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}");
                     TypeDefinition cacheType = new(nameof(MelonLoader), CacheTypeName, TypeAttributes.NotPublic | TypeAttributes.Class);
                     mOut.Types.Add(cacheType);
 
-                    // Create ML Version
-                    //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}.{CacheTypeMLVersionFieldName}:");
+                    // Create MLV
                     FieldDefinition mlvField = new(CacheTypeMLVersionFieldName, FieldAttributes.Private | FieldAttributes.Literal, mOut.TypeSystem.String);
-                    mlvField.Constant = BuildInfo.Version;
+                    mlvField.Constant = MelonUtils.HashCode;
                     cacheType.Fields.Add(mlvField);
 
-                    // Create File Size
-                    //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}.{CacheTypeFileSizeFieldName}:");
+                    // Create FileSize
                     FieldDefinition fileSizeField = new(CacheTypeFileSizeFieldName, FieldAttributes.Private | FieldAttributes.Literal, mOut.TypeSystem.Int64);
                     fileSizeField.Constant = cacheFileSize;
                     cacheType.Fields.Add(fileSizeField);
 
-                    // Create File Hash
-                    //MelonDebug.Msg($"[MonoMod.HookGen] Creating {CacheTypeName}.{CacheTypeFileHashFieldName}:");
+                    // Create FileHash
                     FieldDefinition fileHashField = new(CacheTypeFileHashFieldName, FieldAttributes.Private | FieldAttributes.Literal, mOut.TypeSystem.String);
                     fileHashField.Constant = cacheFileHash;
                     cacheType.Fields.Add(fileHashField);
                 }
 
                 // Generate Hook Assembly
-                MelonLogger.Msg($"[MonoMod.HookGen] Generating Assembly: {hookFileName}");
-                gen.Generate();
+                hookGen.Generate();
                 mOut.Write(pathOut);
                 success = true;
             }
             catch (Exception ex)
             {
-                MelonLogger.Error(ex);
+                logger.Error(ex);
                 success = false;
             }
 
             // Cleanup
             mm?.Dispose();
             mOut?.Dispose();
+
+            if (!success)
+                DeleteFile(pathOut);
+
             return success;
         }
     }

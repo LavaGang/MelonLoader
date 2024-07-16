@@ -175,7 +175,15 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.agfregenerate | Forces Regeneration of Assembly |
 | --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
-| --melonloader.disableunityclc | Disable Unity Console Log Cleaner | 
+| --melonloader.disableunityclc | Disable Unity Console Log Cleaner |
+
+
+- These ones below are Cpp2IL specific Launch Options.
+
+| Argument | Description |
+| - | - |
+| --cpp2il.callanalyzer | Enables CallAnalyzer processor |
+| --cpp2il.nativemethoddetector | Enables NativeMethodDetector processor |
 
 ---
 

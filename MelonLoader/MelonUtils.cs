@@ -24,15 +24,16 @@ namespace MelonLoader
 {
     public static class MelonUtils
     {
-        internal static NativeLibrary.StringDelegate WineGetVersion;
+        private static NativeLibrary.StringDelegate WineGetVersion;
         private static readonly Random RandomNumGen = new();
         private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
-    
+        private static readonly LemonSHA256 sha256 = new();
+        private static readonly LemonSHA512 sha512 = new();
+
         internal static void Setup(AppDomain domain)
         {
             using (var sha = SHA256.Create()) 
-                HashCode = string.Concat(sha.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location)).Select(b => b.ToString("X2")).ToArray());
-
+                HashCode = ComputeSimpleSHA256Hash(Assembly.GetExecutingAssembly().Location);
 
             Core.WelcomeMessage();
 
@@ -175,14 +176,57 @@ namespace MelonLoader
         public static string ComputeSimpleSHA256Hash(string filePath)
         {
             if (!File.Exists(filePath))
-                return "null";
+                return null;
 
-            byte[] byteHash = LemonSHA256.ComputeSHA256Hash(File.ReadAllBytes(filePath));
-            string finalHash = string.Empty;
-            foreach (byte b in byteHash)
-                finalHash += b.ToString("x2");
+            byte[] byteHash = File.ReadAllBytes(filePath);
+            if (byteHash == null)
+                return null;
 
-            return finalHash;
+            return sha256.ComputeHash(byteHash).ToString("x2");
+        }
+
+        public static string ComputeSimpleSHA512Hash(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return null;
+
+            byte[] byteHash = File.ReadAllBytes(filePath);
+            if (byteHash == null)
+                return null;
+
+            return sha512.ComputeHash(byteHash).ToString("X2");
+        }
+
+        public static string ToString(this byte[] data)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+                result.Append(data[i].ToString());
+            return result.ToString();
+        }
+
+        public static string ToString(this byte[] data, string format)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+                result.Append(data[i].ToString(format));
+            return result.ToString();
+        }
+
+        public static string ToString(this byte[] data, IFormatProvider provider)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+                result.Append(data[i].ToString(provider));
+            return result.ToString();
+        }
+
+        public static string ToString(this byte[] data, string format, IFormatProvider provider)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+                result.Append(data[i].ToString(format, provider));
+            return result.ToString();
         }
 
         public static T ParseJSONStringtoStruct<T>(string jsonstr)

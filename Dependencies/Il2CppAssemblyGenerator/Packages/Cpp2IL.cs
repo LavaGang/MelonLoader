@@ -55,18 +55,27 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         private bool ExecuteNew()
         {
-            if (Execute(new string[] {
+            if (Execute([
                 MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
+
                 "--game-path",
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
+
                 "--exe-name",
                 "\"" + Process.GetCurrentProcess().ProcessName + "\"",
-                "--use-processor",
-                "attributeinjector",
-                "--output-as",
-                "dummydll"
 
-            }, false, new Dictionary<string, string>() {
+                "--output-as",
+                "dummydll",
+
+                "--use-processor",
+                "attributeanalyzer",
+                "attributeinjector",
+                MelonLaunchOptions.Cpp2IL.CallAnalyzer ? "callanalyzer" : string.Empty,
+                MelonLaunchOptions.Cpp2IL.NativeMethodDetector ? "nativemethoddetector" : string.Empty,
+                //"deobfmap",
+                //"stablenamer",
+
+            ], false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"}
             }))
                 return true;
@@ -76,10 +85,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         private bool ExecuteOld()
         {
-            if (Execute(new string[] {
+            if (Execute([
                 MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
+
                 "--game-path",
                 "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
+
                 "--exe-name",
                 "\"" + Process.GetCurrentProcess().ProcessName + "\"",
 
@@ -87,7 +98,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "--skip-metadata-txts",
                 "--disable-registration-prompts"
 
-            }, false, new Dictionary<string, string>() {
+            ], false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"}
             }))
                 return true;

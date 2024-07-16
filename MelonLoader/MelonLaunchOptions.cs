@@ -12,6 +12,7 @@ namespace MelonLoader
         {
             Core.Setup();
             Console.Setup();
+            Cpp2IL.Setup();
             Il2CppAssemblyGenerator.Setup();
             Logger.Setup();
         }
@@ -134,6 +135,18 @@ namespace MelonLoader
             {
                 WithoutArg["melonloader.disablemmh"] = () => Enabled = false;
                 WithoutArg["melonloader.mmhregenerate"] = () => ForceRegeneration = true;
+            }
+        }
+
+        public static class Cpp2IL
+        {
+            public static bool CallAnalyzer { get; internal set; }
+            public static bool NativeMethodDetector { get; internal set; }
+
+            internal static void Setup()
+            {
+                WithoutArg["cpp2il.callanalyzer"] = () => CallAnalyzer = true;
+                WithoutArg["cpp2il.nativemethoddetector"] = () => NativeMethodDetector = true;
             }
         }
 

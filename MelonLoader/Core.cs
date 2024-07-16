@@ -8,6 +8,8 @@ using MelonLoader.Utils;
 using System.IO;
 using bHapticsLib;
 using System.Threading;
+using System.Drawing;
+
 
 #if NET35
 using MelonLoader.CompatibilityLayers;

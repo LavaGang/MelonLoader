@@ -86,7 +86,7 @@ pub fn log_console_file(level: LogLevel, message: &str) -> Result<(), LogError> 
 
             let file_string = format!("[{}] [WARNING] {}", timestamp(), message);
 
-            println!("{}", console_string.bright_yellow());
+            println!("{}", console_string.color(constants::YELLOW));
 
             write(&file_string).map_err(|_| LogError::FailedToWriteToLog)?;
         }

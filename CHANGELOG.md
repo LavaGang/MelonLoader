@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.6.5](#v065) |
 | [v0.6.4](#v064) |
 | [v0.6.3](#v063) |
 | [v0.6.2](#v062) |
@@ -33,6 +34,26 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.6.5
+
+1. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
+2. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
+3. Implemented MonoMod Hook Generator for Mono Games
+4. Fixed an issue with Native logs using the wrong Colors
+5. Reverted Il2CppInterop to 1.4.5
+6. Fixed an accidental regression with LemonSHA256
+7. Implemented several fixes for Il2CppInterop related issues.
+8. Updated AsmResolver to 6.0.0-beta.1
+9. Updated AssetRipper.VersionUtilities to 1.5.0
+10. Updated AssetsTools.NET to 3.0.0
+11. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
+12. Fixed an issue with MonoMod.HookGen failing to generate on stripped Mono Games
+13. Fixed an issue with MonoMod DetourContext Disposal not working properly
+14. Fixed an issue with Debugger Launch Option causing crashes
+15. Fixed an issue with Console not having the Game Name and Version in the title
 
 ---
 
