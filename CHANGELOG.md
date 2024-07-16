@@ -46,7 +46,7 @@
 5. Reverted Il2CppInterop to 1.4.5
 6. Fixed an accidental regression with LemonSHA256
 7. Implemented several fixes for Il2CppInterop related issues.
-8. Updated AsmResolver to 6.0.0-beta.1
+8. Updated AsmResolver to 5.5.1
 9. Updated AssetRipper.VersionUtilities to 1.5.0
 10. Updated AssetsTools.NET to 3.0.0
 11. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
