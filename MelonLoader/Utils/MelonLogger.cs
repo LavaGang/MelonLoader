@@ -63,11 +63,11 @@ namespace MelonLoader
             }
 
 #if !NET6_0
-            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
 #else
-            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
-            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read });
+            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.ReadWrite });
+            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.ReadWrite });
 #endif
 
             LatestLogWriter = CreateLogWriter(LatestLogStream);
