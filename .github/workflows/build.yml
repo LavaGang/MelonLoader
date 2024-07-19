@@ -118,6 +118,9 @@ jobs:
           toolchain: nightly
           # Target triple to install for this toolchain
           targets: x86_64-unknown-linux-gnu
+      - name: update environment
+        shell: bash
+        run: sudo apt-get update
       - name: install dev dependencies
         shell: bash
         run: sudo apt-get install libgtk-3-dev 
