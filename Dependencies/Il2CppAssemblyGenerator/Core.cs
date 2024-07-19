@@ -17,6 +17,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         internal static HttpClient webClient = null;
 
         internal static Cpp2IL cpp2il = null;
+        internal static Cpp2IL_StrippedCodeRegSupport cpp2il_scrs = null;
+
         internal static Packages.Il2CppInterop il2cppinterop = null;
         internal static UnityDependencies unitydependencies = null;
         internal static DeobfuscationMap deobfuscationMap = null;
@@ -58,6 +60,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 RemoteAPI.Contact();
 
             cpp2il = new Cpp2IL();
+            cpp2il_scrs = new Cpp2IL_StrippedCodeRegSupport(cpp2il);
+
             il2cppinterop = new Packages.Il2CppInterop();
             unitydependencies = new UnityDependencies();
             deobfuscationMap = new DeobfuscationMap();
@@ -69,6 +73,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Logger.Msg($"Using Deobfuscation Regex = {(string.IsNullOrEmpty(deobfuscationRegex.Regex) ? "null" : deobfuscationRegex.Regex)}");
 
             if (!cpp2il.Setup()
+                || !cpp2il_scrs.Setup()
                 || !il2cppinterop.Setup()
                 || !unitydependencies.Setup()
                 || !deobfuscationMap.Setup())

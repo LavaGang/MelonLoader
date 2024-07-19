@@ -210,16 +210,7 @@ namespace MelonLoader.InternalUtils
                 // Remove Existing File
                 DeleteFile(pathOut, true);
 
-                // Create CustomMonoModder Instance with Settings and HookGen Environment Options
-                if (!string.IsNullOrEmpty(namespace_on))
-                    Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_NAMESPACE", namespace_on);
-                if (!string.IsNullOrEmpty(namespace_il))
-                    Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_NAMESPACE_IL", namespace_il);
-                if (orig)
-                    Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_ORIG", "1");
-                if (privat)
-                    Environment.SetEnvironmentVariable("MONOMOD_HOOKGEN_PRIVATE", "1");
-
+                // Create CustomMonoModder
                 mm = new CustomMonoModder();
                 mm.InputPath = pathIn;
                 mm.OutputPath = pathOut;
@@ -242,11 +233,19 @@ namespace MelonLoader.InternalUtils
                 mm.Read();
                 mm.MapDependencies();
 
-                // Create Hook Generator
+                // Create HookGenerator
                 string hookFileName = Path.GetFileName(pathOut);
                 logger.Msg($"Generating Assembly: {hookFileName}");
-
                 HookGenerator hookGen = new HookGenerator(mm, hookFileName);
+
+                if (!string.IsNullOrEmpty(namespace_on))
+                    hookGen.Namespace = namespace_on;
+                if (!string.IsNullOrEmpty(namespace_il))
+                    hookGen.NamespaceIL = namespace_il;
+
+                hookGen.HookOrig = orig;
+                hookGen.HookPrivate = privat;
+
                 mOut = hookGen.OutputModule;
 
                 // Assembly Caching

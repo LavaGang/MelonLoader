@@ -54,6 +54,8 @@
 13. Fixed an issue with MonoMod DetourContext Disposal not working properly
 14. Fixed an issue with Debugger Launch Option causing crashes
 15. Fixed an issue with Console not having the Game Name and Version in the title
+16. Fixed an issue with Sharing Violation during Log Initialization
+17. Implemented Cpp2IL's StrippedCodeRegSupport plugin
 
 ---
 
