@@ -35,6 +35,7 @@
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" />
 		<PackageReference Include="AssetsTools.NET" Version="3.0.0" />
 		<PackageReference Include="HarmonyX" Version="2.10.2" />
+		<PackageReference Include="MonoMod" Version="22.7.31.1" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
 		<PackageReference Include="MonoMod.Utils" Version="22.7.31.1" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.3.1" />
