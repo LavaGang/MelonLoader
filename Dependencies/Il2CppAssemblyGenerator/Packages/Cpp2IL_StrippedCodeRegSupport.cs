@@ -104,14 +104,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 mm.UpgradeMSCORLIB = true;
                 mm.GACEnabled = false;
 
-                // Add MelonLoader/Managed as a reference
+                // Add MelonLoader/Managed as a Assembly Resolver search location
                 mm.DependencyDirs.Add(MelonEnvironment.MelonManagedDirectory);
 
                 // Read Original Plugin Assembly
                 mm.Read();
 
                 // Replace System.Runtime.dll with mscorlib.dll
-                AssemblyNameReference systemRuntime = null;
                 foreach (var foundRef in mm.Module.AssemblyReferences)
                 {
                     if (foundRef.Name != "System.Runtime")
@@ -126,8 +125,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
                     break;
                 }
-                if (systemRuntime != null)
-                    mm.Module.AssemblyReferences.Remove(systemRuntime);
 
                 // Remove Non-Essential Assembly Attributes
                 foreach (CustomAttribute att in mm.Module.CustomAttributes.ToArray())
