@@ -101,7 +101,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 mm.Strict = false;
                 mm.PublicEverything = false;
                 mm.RemovePatchReferences = true;
-                mm.UpgradeMSCORLIB = true;
+                mm.UpgradeMSCORLIB = MelonUtils.IsWindows;
                 mm.GACEnabled = false;
 
                 // Read Original Plugin Assembly
