@@ -69,10 +69,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool OnProcess()
         {
-            bool wasSuccess = Generate(FilePath,
-                Destination.Replace(".tmp", ""),
-                removePatchReferences: true,
-                upgradeMSCORLIB: true);
+            bool wasSuccess = Generate(FilePath, Destination.Replace(".tmp", ""));
 
             if (File.Exists(FilePath))
                 File.Delete(FilePath);
@@ -85,17 +82,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         private static bool Generate(
             string pathIn,
-            string pathOut,
-            ReadingMode readingMode = ReadingMode.Deferred,
-            bool missingDependencyThrow = false,
-            bool logVerboseEnabled = false,
-            bool cleanupEnabled = false,
-            bool publicEverything = false,
-            bool preventInline = false,
-            bool strict = false,
-            bool removePatchReferences = false,
-            bool upgradeMSCORLIB = false,
-            bool gacEnabled = false)
+            string pathOut)
         {
             bool success = false;
             CustomMonoModder mm = null;
@@ -106,16 +93,16 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 mm = new CustomMonoModder();
                 mm.InputPath = pathIn;
                 mm.OutputPath = pathOut;
-                mm.ReadingMode = readingMode;
-                mm.MissingDependencyThrow = missingDependencyThrow;
-                mm.LogVerboseEnabled = logVerboseEnabled;
-                mm.CleanupEnabled = cleanupEnabled;
-                mm.PreventInline = preventInline;
-                mm.Strict = strict;
-                mm.PublicEverything = publicEverything;
-                mm.RemovePatchReferences = removePatchReferences;
-                mm.UpgradeMSCORLIB = upgradeMSCORLIB;
-                mm.GACEnabled = gacEnabled;
+                mm.ReadingMode = ReadingMode.Deferred;
+                mm.MissingDependencyThrow = false;
+                mm.LogVerboseEnabled = false;
+                mm.CleanupEnabled = false;
+                mm.PreventInline = false;
+                mm.Strict = false;
+                mm.PublicEverything = false;
+                mm.RemovePatchReferences = true;
+                mm.UpgradeMSCORLIB = true;
+                mm.GACEnabled = false;
 
                 // Add MelonLoader/Managed as a reference
                 mm.DependencyDirs.Add(MelonEnvironment.MelonManagedDirectory);
