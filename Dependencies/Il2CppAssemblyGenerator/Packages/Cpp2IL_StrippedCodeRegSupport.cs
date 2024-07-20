@@ -50,9 +50,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             if (SemVersion.Parse(Version) < _minVer)
                 return false;
 
-            return !Directory.Exists(_pluginsFolder)
-                || !File.Exists(FilePath)
-                || string.IsNullOrEmpty(Config.Values.DumperSCRSVersion)
+            return string.IsNullOrEmpty(Config.Values.DumperSCRSVersion)
                 || !Config.Values.DumperSCRSVersion.Equals(Version);
         }
 
