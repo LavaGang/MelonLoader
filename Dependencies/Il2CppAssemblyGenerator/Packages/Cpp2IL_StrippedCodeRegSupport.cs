@@ -1,8 +1,6 @@
 ﻿using MelonLoader.Il2CppAssemblyGenerator.Packages.Models;
-using MelonLoader.Utils;
 using Mono.Cecil;
 using MonoMod;
-using MonoMod.Utils;
 using Semver;
 using System;
 using System.IO;
@@ -71,21 +69,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             if (File.Exists(newDest))
                 File.Delete(newDest);
 
-            // This check and conversion is only needed because Cpp2IL on Windows is the NetFramework472 variant
-            if (MelonUtils.IsWindows)
-            {
-                bool wasSuccess = ConvertAssembly(FilePath, newDest);
+            bool wasSuccess = ConvertAssembly(FilePath, newDest);
 
-                if (File.Exists(FilePath))
-                    File.Delete(FilePath);
+            if (File.Exists(FilePath))
+                File.Delete(FilePath);
 
-                return wasSuccess;
-            }
-
-            if (!File.Exists(FilePath))
-                return false;
-            File.Move(FilePath, newDest);
-            return true;
+            return wasSuccess;
         }
 
         internal override void Save()
@@ -115,27 +104,22 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 mm.UpgradeMSCORLIB = true;
                 mm.GACEnabled = false;
 
-                // Add MelonLoader/Managed as a Assembly Resolver search location
-                mm.DependencyDirs.Add(MelonEnvironment.MelonManagedDirectory);
-
                 // Read Original Plugin Assembly
                 mm.Read();
 
-                // Replace System.Runtime.dll with mscorlib.dll
+                // Redirect .NET Assembly Reference
+                string target = MelonUtils.IsWindows ? "System.Runtime" : "mscorlib";
+                string redirect = MelonUtils.IsWindows ? "mscorlib" : "System.Runtime";
                 foreach (var foundRef in mm.Module.AssemblyReferences)
-                {
-                    if (foundRef.Name != "System.Runtime")
-                        continue;
-
-                    // This should hopefully Auto-Resolve to the mscorlib.dll of the .NET Framework
-                    foundRef.Name = "mscorlib";
-                    foundRef.Version = new Version();
-                    foundRef.Attributes = 0;
-                    foundRef.PublicKey = Array.Empty<byte>();
-                    foundRef.PublicKeyToken = Array.Empty<byte>();
-
-                    break;
-                }
+                    if (foundRef.Name == target)
+                    {
+                        foundRef.Name = redirect;
+                        foundRef.Version = new Version();
+                        foundRef.Attributes = 0;
+                        foundRef.PublicKey = Array.Empty<byte>();
+                        foundRef.PublicKeyToken = Array.Empty<byte>();
+                        break;
+                    }
 
                 // Remove Non-Essential Assembly Attributes
                 foreach (CustomAttribute att in mm.Module.CustomAttributes.ToArray())

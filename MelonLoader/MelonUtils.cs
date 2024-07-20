@@ -182,7 +182,7 @@ namespace MelonLoader
             if (byteHash == null)
                 return null;
 
-            return sha256.ComputeHash(byteHash).ToString("x2");
+            return sha256.ComputeHash(byteHash).ToString("X2");
         }
 
         public static string ComputeSimpleSHA512Hash(string filePath)
