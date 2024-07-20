@@ -2,10 +2,10 @@
 using MelonLoader.Utils;
 using Mono.Cecil;
 using MonoMod;
+using MonoMod.Utils;
 using Semver;
 using System;
 using System.IO;
-
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
@@ -102,6 +102,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             try
             {
+                // Create MonoModder
                 mm = new CustomMonoModder();
                 mm.InputPath = pathIn;
                 mm.OutputPath = pathOut;
@@ -116,19 +117,40 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 mm.UpgradeMSCORLIB = upgradeMSCORLIB;
                 mm.GACEnabled = gacEnabled;
 
+                // Add MelonLoader/Managed as a reference
                 mm.DependencyDirs.Add(MelonEnvironment.MelonManagedDirectory);
-                mm.DependencyDirs.Add(MelonEnvironment.UnityGameManagedDirectory);
-                mm.DependencyDirs.Add(MelonEnvironment.OurRuntimeDirectory);
 
+                // Read Original Plugin Assembly
                 mm.Read();
 
+                // Replace System.Runtime.dll with mscorlib.dll
+                AssemblyNameReference systemRuntime = null;
                 foreach (var foundRef in mm.Module.AssemblyReferences)
                 {
-                    if (foundRef.Name == "System.Runtime")
-                        foundRef.Name = "mscorlib";
-                    foundRef.Version = new Version(0, 0, 0, 0);
-                }
+                    if (foundRef.Name != "System.Runtime")
+                        continue;
 
+                    // This should hopefully Auto-Resolve to the mscorlib.dll of the .NET Framework
+                    foundRef.Name = "mscorlib";
+                    foundRef.Version = new Version();
+                    foundRef.Attributes = 0;
+                    foundRef.PublicKey = Array.Empty<byte>();
+                    foundRef.PublicKeyToken = Array.Empty<byte>();
+
+                    break;
+                }
+                if (systemRuntime != null)
+                    mm.Module.AssemblyReferences.Remove(systemRuntime);
+
+                // Remove Non-Essential Assembly Attributes
+                foreach (CustomAttribute att in mm.Module.CustomAttributes.ToArray())
+                {
+                    if (att.AttributeType.Namespace.StartsWith("Cpp2IL"))
+                        continue;
+                    mm.Module.CustomAttributes.Remove(att);
+                }
+                
+                // Write new Plugin Assembly
                 mm.MapDependencies();
                 mm.Write(null, pathOut);
 
