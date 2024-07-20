@@ -69,18 +69,31 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool OnProcess()
         {
-            bool wasSuccess = Generate(FilePath, Destination.Replace(".tmp", ""));
+            string newDest = Destination.Replace(".tmp", "");
+            if (File.Exists(newDest))
+                File.Delete(newDest);
 
-            if (File.Exists(FilePath))
-                File.Delete(FilePath);
+            // This check and conversion is only needed because Cpp2IL on Windows is the NetFramework472 variant
+            if (MelonUtils.IsWindows)
+            {
+                bool wasSuccess = ConvertAssembly(FilePath, newDest);
 
-            return wasSuccess;
+                if (File.Exists(FilePath))
+                    File.Delete(FilePath);
+
+                return wasSuccess;
+            }
+
+            if (!File.Exists(FilePath))
+                return false;
+            File.Move(FilePath, newDest);
+            return true;
         }
 
         internal override void Save()
             => Save(ref Config.Values.DumperSCRSVersion);
 
-        private static bool Generate(
+        private static bool ConvertAssembly(
             string pathIn,
             string pathOut)
         {
