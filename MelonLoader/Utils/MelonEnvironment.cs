@@ -40,7 +40,7 @@ namespace MelonLoader.Utils
         public static string OurRuntimeDirectory => Path.Combine(MelonLoaderDirectory, OurRuntimeName);
 
         public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
-        public static string UnityGameDataDirectory => Path.Combine(GameRootDirectory, GameExecutableName + "_Data");
+        public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "Native");
         public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "il2cpp_data");
         public static string UnityPlayerPath => Path.Combine(GameRootDirectory, "UnityPlayer.dll");
 
