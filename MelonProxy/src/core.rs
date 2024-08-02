@@ -34,10 +34,17 @@ pub fn init() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 
-    for arg in args.iter() {
+    let mut iterator = args.iter();
+    while let Some(mut arg) = iterator.next() {
         if arg.starts_with("--melonloader.basedir") {
-            let a: Vec<&str> = arg.split("=").collect();
-            base_dir = PathBuf::from(a[1]);
+			if arg.contains("=") {
+				let a: Vec<&str> = arg.split("=").collect();
+				base_dir = PathBuf::from(a[1]);
+			}
+			else {
+				arg = iterator.next().unwrap();
+				base_dir = PathBuf::from(arg);
+			}
         }
 
         if arg.contains("--no-mods") {
