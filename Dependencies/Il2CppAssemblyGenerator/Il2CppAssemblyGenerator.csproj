@@ -20,6 +20,5 @@
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5" ExcludeAssets="Runtime" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="Runtime" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
-		<PackageReference Include="MonoMod" Version="22.7.31.1" ExcludeAssets="Runtime" />
 	</ItemGroup>
 </Project>
