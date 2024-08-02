@@ -8,7 +8,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
     internal class Cpp2IL : Models.ExecutablePackage
     {
         private static string ReleaseName =>
-            MelonUtils.IsWindows ? "Windows-Netframework472" : MelonUtils.IsUnix ? "Linux" : "OSX";
+            MelonUtils.IsWindows ? "Windows.exe" : MelonUtils.IsUnix ? "Linux" : "OSX";
         internal Cpp2IL()
         {
             Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
@@ -20,21 +20,23 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = $"2022.1.0-pre-release.15";
 
             Name = nameof(Cpp2IL);
-            Destination = Path.Combine(Core.BasePath, Name);
-            OutputFolder = Path.Combine(Destination, "cpp2il_out");
 
-            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}.zip";
+            string filename = Name;
+            if (MelonUtils.IsWindows)
+                filename = $"{Name}.exe";
 
-            ExeFilePath = Path.Combine(Destination, $"{Name}.exe");
-            
-            FilePath = Path.Combine(Core.BasePath, $"{Name}_{Version}.zip");
+            string folderpath = Path.Combine(Core.BasePath, Name);
+            if (!Directory.Exists(folderpath))
+                Directory.CreateDirectory(folderpath);
 
-            if (MelonUtils.IsWindows) 
-                return;
-            
-            URL = URL.Replace(".zip", "");
-            ExeFilePath = ExeFilePath.Replace(".exe", "");
-            FilePath = FilePath.Replace(".zip", "");
+            FilePath =
+                ExeFilePath =
+                Destination =
+                Path.Combine(folderpath, filename);
+
+            OutputFolder = Path.Combine(folderpath, "cpp2il_out");
+
+            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
         }
 
         internal override bool ShouldSetup() 
