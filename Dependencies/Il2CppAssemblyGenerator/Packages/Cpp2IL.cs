@@ -9,6 +9,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
     {
         private static string ReleaseName =>
             MelonUtils.IsWindows ? "Windows.exe" : MelonUtils.IsUnix ? "Linux" : "OSX";
+		
         internal Cpp2IL()
         {
             Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
@@ -17,7 +18,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = $"2022.1.0-pre-release.15";
+                Version = $"2022.1.0-pre-release.16";
 
             Name = nameof(Cpp2IL);
 
