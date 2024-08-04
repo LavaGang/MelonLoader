@@ -20,7 +20,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             FilePath =
                 Destination =
-                Path.Combine(_pluginsFolder, $"{fileName}.dll");
+                Path.Combine(_pluginsFolder, fileName);
 
             URL = $"https://github.com/SamboyCoding/{cpp2IL.Name}/releases/download/{cpp2IL.Version}/{fileName}";
         }
