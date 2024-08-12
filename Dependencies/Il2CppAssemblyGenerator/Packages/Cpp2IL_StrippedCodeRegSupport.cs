@@ -6,13 +6,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class Cpp2IL_StrippedCodeRegSupport : PackageBase
     {
-        private static SemVersion _minVer = SemVersion.Parse("2022.1.0-pre-release.13");
         private string _pluginsFolder;
+        private SemVersion VersionSem;
 
         internal Cpp2IL_StrippedCodeRegSupport(Cpp2IL cpp2IL)
         {
             Name = $"{cpp2IL.Name}.Plugin.StrippedCodeRegSupport";
             Version = cpp2IL.Version;
+            VersionSem = SemVersion.Parse(Version);
 
             string folderpath = Path.Combine(Core.BasePath, cpp2IL.Name);
             string fileName = $"{Name}.dll";
@@ -27,7 +28,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool ShouldSetup()
         {
-            if (SemVersion.Parse(Version) < _minVer)
+            if (VersionSem < Cpp2IL.NetCoreMinVersion)
                 return false;
 
             return string.IsNullOrEmpty(Config.Values.DumperSCRSVersion)
@@ -36,7 +37,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool Setup()
         {
-            if (SemVersion.Parse(Version) < _minVer)
+            if (VersionSem < Cpp2IL.NetCoreMinVersion)
                 return true;
 
             if (!Directory.Exists(_pluginsFolder))

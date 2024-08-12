@@ -7,8 +7,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class Cpp2IL : Models.ExecutablePackage
     {
+        internal static SemVersion NetCoreMinVersion = SemVersion.Parse("2022.1.0-pre-release.13");
+        private static SemVersion NewExecutionMinVersion = SemVersion.Parse("2022.0.999");
+        private SemVersion VersionSem;
+
         private static string ReleaseName =>
-            MelonUtils.IsWindows ? "Windows.exe" : MelonUtils.IsUnix ? "Linux" : "OSX";
+            MelonUtils.IsWindows ? "Windows" : MelonUtils.IsUnix ? "Linux" : "OSX";
 		
         internal Cpp2IL()
         {
@@ -19,6 +23,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = $"2022.1.0-pre-release.16";
+            VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);
 
@@ -38,6 +43,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             OutputFolder = Path.Combine(folderpath, "cpp2il_out");
 
             URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
+
+            if (MelonUtils.IsWindows)
+            {
+                if (VersionSem < NetCoreMinVersion)
+                    URL += "-Netframework472";
+                URL += ".exe";
+            }
         }
 
         internal override bool ShouldSetup() 
@@ -51,7 +63,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool Execute()
         {
-            if (SemVersion.Parse(Version) <= SemVersion.Parse("2022.0.999"))
+            if (VersionSem <= NewExecutionMinVersion)
                 return ExecuteOld();
             return ExecuteNew();
         }
