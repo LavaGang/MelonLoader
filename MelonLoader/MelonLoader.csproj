@@ -45,17 +45,17 @@
 		<PackageReference Include="MonoMod.RuntimeDetour.HookGen" Version="22.7.31.1" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
-		<PackageReference Include="AsmResolver.DotNet" Version="5.5.1" />
+		<PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.1" />
 		<PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.7" />
 		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
 		<PackageReference Include="Iced" Version="1.21.0" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.5" />
-		<PackageReference Include="Il2CppInterop.Common" Version="1.4.5" />
-		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.5" />
-		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.5" />
-		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.5" />
+		<PackageReference Include="ds5678.Il2CppInterop.Common" Version="1.5.0" />
+		<PackageReference Include="ds5678.Il2CppInterop.Runtime" Version="1.5.0" />
+		<PackageReference Include="ds5678.Il2CppInterop.Generator" Version="1.5.0" />
+		<PackageReference Include="ds5678.Il2CppInterop.HarmonySupport" Version="1.5.0" />
 		<PackageReference Include="System.Security.Permissions">
 		  <Version>8.0.0</Version>
 		</PackageReference>

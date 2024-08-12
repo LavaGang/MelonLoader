@@ -1,9 +1,7 @@
 ﻿#if NET6_0
 using AsmResolver.DotNet;
 using AsmResolver.PE.DotNet.Metadata;
-using AsmResolver.PE.DotNet.Metadata.Strings;
 using AsmResolver.PE.DotNet.Metadata.Tables;
-using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
