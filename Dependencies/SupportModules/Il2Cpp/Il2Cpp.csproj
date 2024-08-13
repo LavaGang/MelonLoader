@@ -41,9 +41,9 @@
 		<PackageReference Include="HarmonyX" Version="2.10.2" ExcludeAssets="Runtime" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
 		<PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
-		<PackageReference Include="ds5678.Il2CppInterop.Common" Version="1.5.0" ExcludeAssets="Runtime" />
-		<PackageReference Include="ds5678.Il2CppInterop.Runtime" Version="1.5.0" ExcludeAssets="Runtime" />
-		<PackageReference Include="ds5678.Il2CppInterop.HarmonySupport" Version="1.5.0" ExcludeAssets="Runtime" />
+		<PackageReference Include="ds5678.Il2CppInterop.Common" Version="1.5.1" ExcludeAssets="Runtime" />
+		<PackageReference Include="ds5678.Il2CppInterop.Runtime" Version="1.5.1" ExcludeAssets="Runtime" />
+		<PackageReference Include="ds5678.Il2CppInterop.HarmonySupport" Version="1.5.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.Utils" Version="22.7.31.1" ExcludeAssets="Runtime" />
