@@ -41,7 +41,7 @@ namespace MelonLoader
 #if NET6_0
             if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
             {
-                MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
+                Console.WriteLine("[Init] User requested debugger, attempting to launch now...");
                 Debugger.Launch();
             }
 
