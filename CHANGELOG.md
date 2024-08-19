@@ -50,8 +50,8 @@
 9. Implemented MonoMod Hook Generator for Mono Games
 10. Implemented several fixes for Il2CppInterop related issues
 11. Implemented Cpp2IL's StrippedCodeRegSupport plugin
-12. Fixed an issue with Native logs using the wrong Colors
-13. Fixed an accidental regression with LemonSHA256
+12. Fixed an accidental regression with LemonSHA256
+13. Fixed an issue with Native logs using the wrong Colors
 14. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
 15. Fixed an issue with MonoMod.HookGen failing to generate on stripped Mono Games
 16. Fixed an issue with MonoMod DetourContext Disposal not working properly
