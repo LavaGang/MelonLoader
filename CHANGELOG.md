@@ -39,23 +39,25 @@
 
 ### v0.6.5
 
-1. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
-2. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
-3. Implemented MonoMod Hook Generator for Mono Games
-4. Fixed an issue with Native logs using the wrong Colors
-5. Reverted Il2CppInterop to 1.4.5
-6. Fixed an accidental regression with LemonSHA256
-7. Implemented several fixes for Il2CppInterop related issues.
-8. Updated AsmResolver to 5.5.1 
-9. Updated AssetRipper.VersionUtilities to 1.5.0
-10. Updated AssetsTools.NET to 3.0.0
-11. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
-12. Fixed an issue with MonoMod.HookGen failing to generate on stripped Mono Games
-13. Fixed an issue with MonoMod DetourContext Disposal not working properly
-14. Fixed an issue with Debugger Launch Option causing crashes
-15. Fixed an issue with Console not having the Game Name and Version in the title
-16. Fixed an issue with Sharing Violation during Log Initialization
-17. Implemented Cpp2IL's StrippedCodeRegSupport plugin
+1. Replaced [BepInEx/Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) with [ds5678/Il2CppInterop](https://github.com/ds5678/Il2CppInterop)
+2. Updated Il2CppInterop to 1.5.4
+3. Updated Cpp2IL to 2022.1.0-pre-release.16
+4. Updated AsmResolver to 6.0.0-beta.1
+5. Updated AssetRipper.VersionUtilities to 1.5.0
+6. Updated AssetsTools.NET to 3.0.0
+7. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
+8. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
+9. Implemented MonoMod Hook Generator for Mono Games
+10. Implemented several fixes for Il2CppInterop related issues
+11. Implemented Cpp2IL's StrippedCodeRegSupport plugin
+12. Fixed an issue with Native logs using the wrong Colors
+13. Fixed an accidental regression with LemonSHA256
+14. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
+15. Fixed an issue with MonoMod.HookGen failing to generate on stripped Mono Games
+16. Fixed an issue with MonoMod DetourContext Disposal not working properly
+17. Fixed an issue with Debugger Launch Option causing crashes
+18. Fixed an issue with Console not having the Game Name and Version in the title
+19. Fixed an issue with Sharing Violation during Log Initialization
 
 ---
 
