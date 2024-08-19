@@ -7,7 +7,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class Cpp2IL : Models.ExecutablePackage
     {
-        internal static SemVersion NetCoreMinVersion = SemVersion.Parse("2022.1.0-pre-release.16");
+        internal static SemVersion NetCoreMinVersion = SemVersion.Parse("2022.1.0-pre-release.17");
         private static SemVersion NewExecutionMinVersion = SemVersion.Parse("2022.0.999");
         private SemVersion VersionSem;
 
@@ -22,7 +22,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = $"2022.1.0-pre-release.16";
+                Version = $"2022.1.0-pre-release.17";
             VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);

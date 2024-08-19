@@ -41,7 +41,7 @@
 
 1. Replaced [BepInEx/Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) with [ds5678/Il2CppInterop](https://github.com/ds5678/Il2CppInterop)
 2. Updated Il2CppInterop to 1.5.4
-3. Updated Cpp2IL to 2022.1.0-pre-release.16
+3. Updated Cpp2IL to 2022.1.0-pre-release.17
 4. Updated AsmResolver to 6.0.0-beta.1
 5. Updated AssetRipper.VersionUtilities to 1.5.0
 6. Updated AssetsTools.NET to 3.0.0
