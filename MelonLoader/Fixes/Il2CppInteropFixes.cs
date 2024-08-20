@@ -57,37 +57,60 @@ namespace MelonLoader.Fixes
                 Type classInjectorType = typeof(ClassInjector);
                 Type ilGeneratorEx = typeof(ILGeneratorEx);
 
+                _systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
+                if (_systemTypeFromIl2CppType == null)
+                    throw new Exception("Failed to get ClassInjector.SystemTypeFromIl2CppType");
+
+                _getIl2CppTypeFullName = classInjectorType.GetMethod("GetIl2CppTypeFullName", BindingFlags.NonPublic | BindingFlags.Static);
+                if (_getIl2CppTypeFullName == null)
+                    throw new Exception("Failed to get ClassInjector.GetIl2CppTypeFullName");
+
+                _rewriteType = classInjectorType.GetMethod("RewriteType", BindingFlags.NonPublic | BindingFlags.Static);
+                if (_rewriteType == null)
+                    throw new Exception("Failed to get ClassInjector.RewriteType");
+
+                _registerTypeInIl2Cpp = classInjectorType.GetMethod("RegisterTypeInIl2Cpp",
+                    BindingFlags.Public | BindingFlags.Static, 
+                    [typeof(Type), typeof(RegisterTypeOptions)]);
+                if (_registerTypeInIl2Cpp == null)
+                    throw new Exception("Failed to get ClassInjector.RegisterTypeInIl2Cpp");
+
+                _isTypeSupported = classInjectorType.GetMethod("IsTypeSupported", BindingFlags.NonPublic | BindingFlags.Static);
+                if (_isTypeSupported == null)
+                    throw new Exception("Failed to get ClassInjector.IsTypeSupported");
+
+                _convertMethodInfo = classInjectorType.GetMethod("ConvertMethodInfo", BindingFlags.NonPublic | BindingFlags.Static);
+                if (_convertMethodInfo == null)
+                    throw new Exception("Failed to get ClassInjector.ConvertMethodInfo");
+
+                _emitObjectToPointer = ilGeneratorEx.GetMethod("EmitObjectToPointer", BindingFlags.Public | BindingFlags.Static);
+                if (_emitObjectToPointer == null)
+                    throw new Exception("Failed to get ILGeneratorEx.EmitObjectToPointer");
+
+                _injectorHelpers_AddTypeToLookup = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers")
+                    .GetMethod("AddTypeToLookup", BindingFlags.NonPublic | BindingFlags.Static, [typeof(Type), typeof(IntPtr)]);
+                if (_injectorHelpers_AddTypeToLookup == null)
+                    throw new Exception("Failed to get InjectorHelpers.AddTypeToLookup");
+
                 _getType = typeType.GetMethod("GetType", BindingFlags.Public | BindingFlags.Static, [typeof(string)]);
-                _get_IsByRef = typeType.GetProperty("IsByRef", BindingFlags.Public | BindingFlags.Instance).GetGetMethod();
-                
+                if (_getType == null)
+                    throw new Exception("Failed to get Type.GetType");
+
+                _get_IsByRef = typeType.GetProperty("IsByRef", BindingFlags.Public | BindingFlags.Instance)?.GetGetMethod();
+                if (_get_IsByRef == null)
+                    throw new Exception("Failed to get Type.IsByRef.get");
+
                 _fixedFindType = thisType.GetMethod(nameof(FixedFindType), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedAddTypeToLookup = thisType.GetMethod(nameof(FixedAddTypeToLookup), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedIsByRef = thisType.GetMethod(nameof(FixedIsByRef), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedFindAbstractMethods = thisType.GetMethod(nameof(FixedFindAbstractMethods), BindingFlags.NonPublic | BindingFlags.Static);
-
-                _systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
                 _systemTypeFromIl2CppType_Prefix = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _systemTypeFromIl2CppType_Transpiler = thisType.GetMethod(nameof(SystemTypeFromIl2CppType_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
-                
-                _getIl2CppTypeFullName = classInjectorType.GetMethod("GetIl2CppTypeFullName", BindingFlags.NonPublic | BindingFlags.Static);
-
-                _rewriteType = classInjectorType.GetMethod("RewriteType", BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteType_Prefix = thisType.GetMethod(nameof(RewriteType_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-
-                _registerTypeInIl2Cpp = classInjectorType.GetMethod("RegisterTypeInIl2Cpp", BindingFlags.Public | BindingFlags.Static, [typeof(Type), typeof(RegisterTypeOptions)]);
                 _registerTypeInIl2Cpp_Transpiler = thisType.GetMethod(nameof(RegisterTypeInIl2Cpp_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
-
-                _isTypeSupported = classInjectorType.GetMethod("IsTypeSupported", BindingFlags.NonPublic | BindingFlags.Static);
                 _isTypeSupported_Transpiler = thisType.GetMethod(nameof(IsTypeSupported_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
-
-                _convertMethodInfo = classInjectorType.GetMethod("ConvertMethodInfo", BindingFlags.NonPublic | BindingFlags.Static);
                 _convertMethodInfo_Transpiler = thisType.GetMethod(nameof(ConvertMethodInfo_Transpiler), BindingFlags.NonPublic | BindingFlags.Static);
-
-                _emitObjectToPointer = ilGeneratorEx.GetMethod("EmitObjectToPointer", BindingFlags.Public | BindingFlags.Static);
                 _emitObjectToPointer_Prefix = thisType.GetMethod(nameof(EmitObjectToPointer_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-
-                _injectorHelpers_AddTypeToLookup = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers")
-                    .GetMethod("AddTypeToLookup", BindingFlags.NonPublic | BindingFlags.Static, [typeof(Type), typeof(IntPtr)]);
 
                 MelonDebug.Msg("Patching Il2CppInterop ClassInjector.SystemTypeFromIl2CppType...");
                 Core.HarmonyInstance.Patch(_systemTypeFromIl2CppType,
@@ -170,6 +193,9 @@ namespace MelonLoader.Fixes
 
         private static bool SystemTypeFromIl2CppType_Prefix(Il2CppTypeStruct* __0, ref Type __result)
         {
+            if ((IntPtr)__0 == IntPtr.Zero)
+                return false;
+			
             INativeTypeStruct wrappedType = UnityVersionHandler.Wrap(__0);
             if (_typeLookup.TryGetValue((IntPtr)wrappedType.TypePointer, out Type type))
             {
@@ -193,17 +219,26 @@ namespace MelonLoader.Fixes
             if (klassName == IntPtr.Zero)
                 return true;
 
+            string klassNameStr = Marshal.PtrToStringAnsi(klassName);
+            if (string.IsNullOrEmpty(klassNameStr))
+                return true;
+
+            string fullTypeName = klassNameStr;
+            if (klassNamespace != IntPtr.Zero)
+            {
+                string klassNamespaceStr = Marshal.PtrToStringAnsi(klassNamespace);
+                if (!string.IsNullOrEmpty(klassNamespaceStr))
+                    fullTypeName = $"{klassNamespaceStr}.{klassNameStr}";
+            }
+
             IntPtr fileName = IL2CPP.il2cpp_image_get_filename(image);
             if (fileName == IntPtr.Zero)
                 return true;
 
-            string klassNameStr = Marshal.PtrToStringAnsi(klassName);
-            string klassNamespaceStr = Marshal.PtrToStringAnsi(klassNamespace);
-            string fullTypeName = string.IsNullOrEmpty(klassNamespaceStr)
-                ? klassNameStr
-                : $"{klassNamespaceStr}.{klassNameStr}";
-
             string fileNameStr = Marshal.PtrToStringAnsi(fileName);
+            if (string.IsNullOrEmpty(fileNameStr))
+                return true;
+
             string il2cppAssemblyPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, fileNameStr);
             if (!File.Exists(il2cppAssemblyPath))
                 il2cppAssemblyPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, $"Il2Cpp{fileNameStr}");
