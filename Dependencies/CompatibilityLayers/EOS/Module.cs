@@ -22,15 +22,8 @@ namespace MelonLoader.CompatibilityLayers
         private delegate IntPtr LoadLibraryDetour(IntPtr path);
         private NativeHook<LoadLibraryDetour> _hookWin;
 
-        //private delegate IntPtr dlopenDetour(IntPtr path, int flags);
-        //private NativeHook<dlopenDetour> _hookUnix;
-
         public override void OnInitialize()
         {
-            IntPtr ldlib = NativeLibrary.AgnosticGetLoadLibraryPtr();
-            if (ldlib == IntPtr.Zero)
-                return;
-
             var platform = Environment.OSVersion.Platform;
             switch (platform)
             {
@@ -38,18 +31,26 @@ namespace MelonLoader.CompatibilityLayers
                 case PlatformID.Win32Windows:
                 case PlatformID.Win32NT:
                 case PlatformID.WinCE:
-                    _hookWin = new NativeHook<LoadLibraryDetour>(ldlib, 
-                        Marshal.GetFunctionPointerForDelegate(DetourWin));
-                    _hookWin.Attach();
+                    NativeLibrary lib = NativeLibrary.Load("kernel32");
+                    if (lib != null)
+                    {
+                        IntPtr loadLibraryWPtr = lib.GetExport("LoadLibraryW");
+                        if (loadLibraryWPtr != IntPtr.Zero)
+                        {
+                            _hookWin = new NativeHook<LoadLibraryDetour>(loadLibraryWPtr,
+                                Marshal.GetFunctionPointerForDelegate(DetourWin));
+                            _hookWin.Attach();
+                        }
+                    }
                     break;
 
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
+
                     // TO-DO
 
-                    //_hookUnix = new NativeHook<dlopenDetour>(ldlib,
-                    //    Marshal.GetFunctionPointerForDelegate(DetourUnix));
-                    //_hookUnix.Attach();
+                    // libdl.so.2
+                    // dlopen
 
                     break;
             }
@@ -61,7 +62,8 @@ namespace MelonLoader.CompatibilityLayers
                 return _hookWin.Trampoline(path);
             
             var pathString = Marshal.PtrToStringUni(path);
-            if (pathString.EndsWith("EOSOVH-Win64-Shipping.dll") || pathString.EndsWith("EOSOVH-Win32-Shipping.dll"))
+            if (pathString.EndsWith("EOSOVH-Win64-Shipping.dll")
+                || pathString.EndsWith("EOSOVH-Win32-Shipping.dll"))
             {
                 _hookWin.Detach();
                 return IntPtr.Zero;
@@ -70,30 +72,10 @@ namespace MelonLoader.CompatibilityLayers
             return _hookWin.Trampoline(path);
         }
 
-        /*
-        private IntPtr DetourUnix(IntPtr path, int flags)
-        {
-            if (path == IntPtr.Zero)
-                return _hookUnix.Trampoline(path, flags);
-
-            var pathString = Marshal.PtrToStringUni(path);
-            if (pathString.StartsWith("EOSOVH-"))
-            {
-                _hookUnix.Detach();
-                return IntPtr.Zero;
-            }
-
-            return _hookUnix.Trampoline(path, flags);
-        }
-        */
-
         ~EOS_Module()
         {
             _hookWin?.Detach();
             _hookWin = null;
-
-            //_hookUnix?.Detach();
-            //_hookUnix = null;
         }
     }
 }
