@@ -92,6 +92,26 @@ namespace MelonLoader
             throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
         }
 
+        public static IntPtr AgnosticGetLoadLibraryPtr()
+        {
+            var platform = Environment.OSVersion.Platform;
+
+            switch (platform)
+            {
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32NT:
+                case PlatformID.WinCE:
+                    return Marshal.GetFunctionPointerForDelegate(LoadLibrary);
+
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    return Marshal.GetFunctionPointerForDelegate(dlopen);
+            }
+
+            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
+        }
+
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         private static extern IntPtr LoadLibrary(string lpLibFileName);
         [DllImport("kernel32")]

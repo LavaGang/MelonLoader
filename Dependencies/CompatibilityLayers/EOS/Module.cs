@@ -1,7 +1,6 @@
 ﻿using MelonLoader.Modules;
 using MelonLoader.NativeUtils;
 using System;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -20,40 +19,81 @@ namespace MelonLoader.CompatibilityLayers
 {
     internal class EOS_Module : MelonModule
     {
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        static extern IntPtr LoadLibrary(string lpFileName);
+        private delegate IntPtr LoadLibraryDetour(IntPtr path);
+        private NativeHook<LoadLibraryDetour> _hookWin;
 
-        internal delegate IntPtr LoadLibraryWDetour(IntPtr path);
-        internal static NativeHook<LoadLibraryWDetour> _hook = new NativeHook<LoadLibraryWDetour>();
+        //private delegate IntPtr dlopenDetour(IntPtr path, int flags);
+        //private NativeHook<dlopenDetour> _hookUnix;
+
         public override void OnInitialize()
         {
-            var lib = new NativeLibrary(LoadLibrary("kernel32.dll"));
-            var func = lib.GetExport("LoadLibraryW");
+            IntPtr ldlib = NativeLibrary.AgnosticGetLoadLibraryPtr();
+            if (ldlib == IntPtr.Zero)
+                return;
 
-            var detour = Marshal.GetFunctionPointerForDelegate((LoadLibraryWDetour)Detour);
+            var platform = Environment.OSVersion.Platform;
+            switch (platform)
+            {
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32NT:
+                case PlatformID.WinCE:
+                    _hookWin = new NativeHook<LoadLibraryDetour>(ldlib, 
+                        Marshal.GetFunctionPointerForDelegate(DetourWin));
+                    _hookWin.Attach();
+                    break;
 
-            _hook = new NativeHook<LoadLibraryWDetour>(func, detour);
-            _hook.Attach();
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    // TO-DO
+
+                    //_hookUnix = new NativeHook<dlopenDetour>(ldlib,
+                    //    Marshal.GetFunctionPointerForDelegate(DetourUnix));
+                    //_hookUnix.Attach();
+
+                    break;
+            }
         }
 
-        private IntPtr Detour(IntPtr path)
+        private IntPtr DetourWin(IntPtr path)
         {
             if (path == IntPtr.Zero)
-                return _hook.Trampoline(path);
+                return _hookWin.Trampoline(path);
             
             var pathString = Marshal.PtrToStringUni(path);
             if (pathString.EndsWith("EOSOVH-Win64-Shipping.dll") || pathString.EndsWith("EOSOVH-Win32-Shipping.dll"))
             {
-                _hook.Detach();
+                _hookWin.Detach();
                 return IntPtr.Zero;
             }
 
-            return _hook.Trampoline(path);
+            return _hookWin.Trampoline(path);
         }
+
+        /*
+        private IntPtr DetourUnix(IntPtr path, int flags)
+        {
+            if (path == IntPtr.Zero)
+                return _hookUnix.Trampoline(path, flags);
+
+            var pathString = Marshal.PtrToStringUni(path);
+            if (pathString.StartsWith("EOSOVH-"))
+            {
+                _hookUnix.Detach();
+                return IntPtr.Zero;
+            }
+
+            return _hookUnix.Trampoline(path, flags);
+        }
+        */
 
         ~EOS_Module()
         {
-            _hook.Detach();
+            _hookWin?.Detach();
+            _hookWin = null;
+
+            //_hookUnix?.Detach();
+            //_hookUnix = null;
         }
     }
 }
