@@ -62,6 +62,9 @@ namespace MelonLoader.CompatibilityLayers
                 return _hookWin.Trampoline(path);
             
             var pathString = Marshal.PtrToStringUni(path);
+            if (string.IsNullOrEmpty(pathString))
+                return _hookWin.Trampoline(path);
+				
             if (pathString.EndsWith("EOSOVH-Win64-Shipping.dll")
                 || pathString.EndsWith("EOSOVH-Win32-Shipping.dll"))
             {
