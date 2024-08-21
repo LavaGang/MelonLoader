@@ -37,8 +37,8 @@ namespace MelonLoader.CompatibilityLayers
                         IntPtr loadLibraryWPtr = lib.GetExport("LoadLibraryW");
                         if (loadLibraryWPtr != IntPtr.Zero)
                         {
-                            _hookWin = new NativeHook<LoadLibraryDetour>(loadLibraryWPtr,
-                                Marshal.GetFunctionPointerForDelegate(DetourWin));
+                            IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((LoadLibraryDetour)DetourWin);
+                            _hookWin = new NativeHook<LoadLibraryDetour>(loadLibraryWPtr, detourPtr);
                             _hookWin.Attach();
                         }
                     }
