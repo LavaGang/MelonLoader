@@ -197,13 +197,16 @@ namespace MelonLoader.Fixes
                 return false;
 			
             INativeTypeStruct wrappedType = UnityVersionHandler.Wrap(__0);
+            if ((IntPtr)wrappedType.TypePointer == IntPtr.Zero)
+                return false;
+			
             if (_typeLookup.TryGetValue((IntPtr)wrappedType.TypePointer, out Type type))
             {
                 __result = (Type)_rewriteType.Invoke(null, [type]);
                 return false;
             }
 
-            IntPtr klass = IL2CPP.il2cpp_type_get_class_or_element_class((IntPtr)__0);
+            IntPtr klass = IL2CPP.il2cpp_class_from_type((IntPtr)wrappedType.TypePointer);
             if (klass == IntPtr.Zero)
                 return true;
 
