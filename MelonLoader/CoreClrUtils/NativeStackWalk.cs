@@ -455,6 +455,12 @@ public static unsafe class NativeStackWalk
         _registeredHooks[addr] = hookName;
     }
 
+    internal static void UnregisterHookAddr(ulong addr)
+    {
+        if (_registeredHooks.ContainsKey(addr))
+            _registeredHooks.Remove(addr);
+    }
+
     [SupportedOSPlatform("windows")]
     [Pure]
     public static List<NativeStackFrame> GetNativeStackFrames()
