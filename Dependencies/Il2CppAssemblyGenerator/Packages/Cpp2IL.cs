@@ -10,6 +10,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         internal static SemVersion NetCoreMinVersion = SemVersion.Parse("2022.1.0-pre-release.17");
         private static SemVersion NewExecutionMinVersion = SemVersion.Parse("2022.0.999");
         private SemVersion VersionSem;
+        private string BaseFolder;
 
         private static string ReleaseName =>
             MelonUtils.IsWindows ? "Windows" : MelonUtils.IsUnix ? "Linux" : "OSX";
@@ -31,16 +32,16 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             if (MelonUtils.IsWindows)
                 filename = $"{Name}.exe";
 
-            string folderpath = Path.Combine(Core.BasePath, Name);
-            if (!Directory.Exists(folderpath))
-                Directory.CreateDirectory(folderpath);
+            BaseFolder = Path.Combine(Core.BasePath, Name);
+            if (!Directory.Exists(BaseFolder))
+                Directory.CreateDirectory(BaseFolder);
 
             FilePath =
                 ExeFilePath =
                 Destination =
-                Path.Combine(folderpath, filename);
+                Path.Combine(BaseFolder, filename);
 
-            OutputFolder = Path.Combine(folderpath, "cpp2il_out");
+            OutputFolder = Path.Combine(BaseFolder, "cpp2il_out");
 
             URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
 
@@ -91,7 +92,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 //"stablenamer",
 
             ], false, new Dictionary<string, string>() {
-                {"NO_COLOR", "1"}
+                {"NO_COLOR", "1"},
+                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", BaseFolder }
             }))
                 return true;
 
@@ -114,7 +116,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "--disable-registration-prompts"
 
             ], false, new Dictionary<string, string>() {
-                {"NO_COLOR", "1"}
+                {"NO_COLOR", "1"},
+                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", BaseFolder }
             }))
                 return true;
 
