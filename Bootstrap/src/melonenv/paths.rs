@@ -46,8 +46,8 @@ pub fn runtime_dir() -> Result<PathBuf, DynErr> {
     //let version = runtime::get_netstandard_version()?;
 
     match runtime.get_type() {
-        RuntimeType::Mono(_) => path.push("net35"),
-        RuntimeType::Il2Cpp(_) => path.push("net6"),
+        RuntimeType::Mono(_) => path.push("Dependencies/net35"),
+        RuntimeType::Il2Cpp(_) => path.push("Dependencies/net6"),
     }
 
     Ok(path.to_path_buf())
@@ -71,7 +71,7 @@ pub fn get_managed_dir() -> Result<PathBuf, DynErr> {
     match managed_path.exists() {
         true => Ok(managed_path),
         false => {
-            let managed_path = base_folder.join("MelonLoader").join("Managed");
+            let managed_path = base_folder.join("MelonLoader").join("Dependencies").join("Mono");
 
             match managed_path.exists() {
                 true => Ok(managed_path),

@@ -148,7 +148,7 @@ namespace MelonLoader.InternalUtils
                                     string oldMLV = (string)mlvField.Constant;
                                     long oldSize = (long)sizeField.Constant;
                                     string oldHash = (string)hashField.Constant;
-                                    if (oldMLV.Equals(MelonUtils.HashCode)
+                                    if (oldMLV.Equals(BuildInfo.Version)
                                         && (oldSize == sizeIn)
                                         && oldHash.Equals(hashIn))
                                         isMatch = true;
@@ -257,7 +257,7 @@ namespace MelonLoader.InternalUtils
 
                     // Create MLV
                     FieldDefinition mlvField = new(CacheTypeMLVersionFieldName, FieldAttributes.Private | FieldAttributes.Literal, mOut.TypeSystem.String);
-                    mlvField.Constant = MelonUtils.HashCode;
+                    mlvField.Constant = BuildInfo.Version;
                     cacheType.Fields.Add(mlvField);
 
                     // Create FileSize

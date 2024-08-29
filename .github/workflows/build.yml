@@ -174,8 +174,10 @@ jobs:
         shell: cmd
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Debug\x64\MelonLoader\Managed\
-          xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Debug\x64\MelonLoader\Dependencies\Mono
+          xcopy BaseLibs\Mono Output\Debug\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
+          xcopy BaseLibs\net35 Output\Debug\x64\MelonLoader\Dependencies\net35\ /E /H /Y
+          xcopy BaseLibs\net6 Output\Debug\x64\MelonLoader\Dependencies\net6\ /E /H /Y
           echo.
           echo Copying Dobby x64...
           xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\dobby.dll*
@@ -216,8 +218,10 @@ jobs:
         shell: cmd
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Debug\x86\MelonLoader\Managed\
-          xcopy BaseLibs\Managed Output\Debug\x86\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Debug\x86\MelonLoader\Dependencies\Mono
+          xcopy BaseLibs\Mono Output\Debug\x86\MelonLoader\Dependencies\Mono\ /E /H /Y
+          xcopy BaseLibs\net35 Output\Debug\x86\MelonLoader\Dependencies\net35\ /E /H /Y
+          xcopy BaseLibs\net6 Output\Debug\x86\MelonLoader\Dependencies\net6\ /E /H /Y
           echo.
           echo Copying Dobby x86...
           xcopy BaseLibs\dobby_x86.dll Output\Debug\x86\dobby.dll*
@@ -258,8 +262,10 @@ jobs:
         shell: cmd
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Release\x64\MelonLoader\Managed\
-          xcopy BaseLibs\Managed Output\Release\x64\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Release\x64\MelonLoader\Dependencies\Mono
+          xcopy BaseLibs\Mono Output\Release\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
+          xcopy BaseLibs\net35 Output\Release\x64\MelonLoader\Dependencies\net35\ /E /H /Y
+          xcopy BaseLibs\net6 Output\Release\x64\MelonLoader\Dependencies\net6\ /E /H /Y
           echo.
           echo Copying Dobby x64...
           xcopy BaseLibs\dobby_x64.dll Output\Release\x64\dobby.dll*
@@ -300,11 +306,13 @@ jobs:
         shell: cmd
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Release\x86\MelonLoader\Managed\
-          xcopy BaseLibs\Managed Output\Release\x86\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Release\x86\MelonLoader\Dependencies\Mono
+          xcopy BaseLibs\Mono Output\Release\x86\MelonLoader\Dependencies\Mono\ /E /H /Y
+          xcopy BaseLibs\net35 Output\Release\x86\MelonLoader\Dependencies\net35\ /E /H /Y
+          xcopy BaseLibs\net6 Output\Release\x86\MelonLoader\Dependencies\net6\ /E /H /Y
           echo.
           echo Copying Dobby x86...
-          echo F | xcopy BaseLibs\dobby_x86.dll Output\Release\x86\dobby.dll*
+          xcopy BaseLibs\dobby_x86.dll Output\Release\x86\dobby.dll*
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x86
@@ -342,8 +350,10 @@ jobs:
         shell: cmd
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Debug\x64\MelonLoader\Managed\
-          xcopy BaseLibs\Managed Output\Debug\x64\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Debug\x64\MelonLoader\Dependencies\Mono
+          xcopy BaseLibs\Mono Output\Debug\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
+          xcopy BaseLibs\net35 Output\Debug\x64\MelonLoader\Dependencies\net35\ /E /H /Y
+          xcopy BaseLibs\net6 Output\Debug\x64\MelonLoader\Dependencies\net6\ /E /H /Y
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Debug\x64
@@ -381,8 +391,10 @@ jobs:
         shell: cmd
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Release\x64\MelonLoader\Managed\
-          xcopy BaseLibs\Managed Output\Release\x64\MelonLoader\Managed\ /E /H /Y
+          mkdir Output\Release\x64\MelonLoader\Dependencies\Mono
+          xcopy BaseLibs\Mono Output\Release\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
+          xcopy BaseLibs\net35 Output\Release\x64\MelonLoader\Dependencies\net35\ /E /H /Y
+          xcopy BaseLibs\net6 Output\Release\x64\MelonLoader\Dependencies\net6\ /E /H /Y
           echo.
           echo Copying documentation files...
           copy NOTICE.txt Output\Release\x64

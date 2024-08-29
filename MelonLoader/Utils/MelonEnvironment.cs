@@ -16,6 +16,13 @@ namespace MelonLoader.Utils
             "net6";
 #endif
 
+        private const string OppositeRuntimeName =
+#if !NET6_0
+            "net6";
+#else
+            "net35";
+#endif
+
         public static bool IsDotnetRuntime { get; } = OurRuntimeName == "net6";
         public static bool IsMonoRuntime { get; } = !IsDotnetRuntime;
 
@@ -37,7 +44,8 @@ namespace MelonLoader.Utils
         public static string UserLibsDirectory => Path.Combine(MelonBaseDirectory, "UserLibs");
         public static string UserDataDirectory => Path.Combine(MelonBaseDirectory, "UserData");
         public static string MelonLoaderLogsDirectory => Path.Combine(MelonLoaderDirectory, "Logs");
-        public static string OurRuntimeDirectory => Path.Combine(MelonLoaderDirectory, OurRuntimeName);
+        public static string OurRuntimeDirectory => Path.Combine(DependenciesDirectory, OurRuntimeName);
+        public static string OppositeRuntimeDirectory => Path.Combine(DependenciesDirectory, OppositeRuntimeName);
 
         public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
         public static string UnityGameDataDirectory => Path.Combine(GameRootDirectory, GameExecutableName + "_Data");
@@ -45,9 +53,9 @@ namespace MelonLoader.Utils
         public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "il2cpp_data");
         public static string UnityPlayerPath => Path.Combine(GameRootDirectory, "UnityPlayer.dll");
 
-        public static string MelonManagedDirectory => Path.Combine(MelonLoaderDirectory, "Managed");
-        public static string Il2CppAssembliesDirectory => Path.Combine(MelonLoaderDirectory, "Il2CppAssemblies");
-        public static string MonoModHookDirectory => Path.Combine(MelonLoaderDirectory, "MMHOOK");
+        public static string MelonManagedDirectory => Path.Combine(DependenciesDirectory, "Mono");
+        public static string Il2CppAssembliesDirectory => Path.Combine(DependenciesDirectory, "Il2CppAssemblies");
+        public static string MonoModHookDirectory => Path.Combine(DependenciesDirectory, "MMHOOK");
 
         internal static void PrintEnvironment()
         {

@@ -6,7 +6,7 @@
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
-        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\</OutputPath>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <DebugType>embedded</DebugType>
     </PropertyGroup>

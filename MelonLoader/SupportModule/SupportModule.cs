@@ -40,6 +40,12 @@ namespace MelonLoader
                         if (!enumerator.Current.LoadSpecifier())
                         {
                             File.Delete(ModulePath);
+
+                            string depsJson = Path.Combine(Path.GetDirectoryName(ModulePath), 
+                                Path.GetFileNameWithoutExtension(ModulePath) + ".deps.json");
+                            if (File.Exists(depsJson))
+                                File.Delete(depsJson);
+
                             continue;
                         }
                     }
