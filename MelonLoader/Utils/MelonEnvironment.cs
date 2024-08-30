@@ -44,8 +44,8 @@ namespace MelonLoader.Utils
         public static string UserLibsDirectory => Path.Combine(MelonBaseDirectory, "UserLibs");
         public static string UserDataDirectory => Path.Combine(MelonBaseDirectory, "UserData");
         public static string MelonLoaderLogsDirectory => Path.Combine(MelonLoaderDirectory, "Logs");
-        public static string OurRuntimeDirectory => Path.Combine(DependenciesDirectory, OurRuntimeName);
-        public static string OppositeRuntimeDirectory => Path.Combine(DependenciesDirectory, OppositeRuntimeName);
+        public static string OurRuntimeDirectory => Path.Combine(MelonLoaderDirectory, OurRuntimeName);
+        public static string OppositeRuntimeDirectory => Path.Combine(MelonLoaderDirectory, OppositeRuntimeName);
 
         public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
         public static string UnityGameDataDirectory => Path.Combine(GameRootDirectory, GameExecutableName + "_Data");
@@ -54,8 +54,8 @@ namespace MelonLoader.Utils
         public static string UnityPlayerPath => Path.Combine(GameRootDirectory, "UnityPlayer.dll");
 
         public static string MelonManagedDirectory => Path.Combine(DependenciesDirectory, "Mono");
-        public static string Il2CppAssembliesDirectory => Path.Combine(DependenciesDirectory, "Il2CppAssemblies");
-        public static string MonoModHookDirectory => Path.Combine(DependenciesDirectory, "MMHOOK");
+        public static string Il2CppAssembliesDirectory => Path.Combine(MelonLoaderDirectory, "Il2CppAssemblies");
+        public static string MonoModHookDirectory => Path.Combine(MelonLoaderDirectory, "MMHOOK");
 
         internal static void PrintEnvironment()
         {

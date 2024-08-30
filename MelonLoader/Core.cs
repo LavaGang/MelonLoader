@@ -35,7 +35,7 @@ namespace MelonLoader
             var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
-            MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.Parent!.FullName;
+            MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
 
             MelonLaunchOptions.Load();
             MelonLogger.Setup();

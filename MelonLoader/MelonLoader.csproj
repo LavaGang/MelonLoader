@@ -5,7 +5,7 @@
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
-		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\</OutputPath>
+		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
 		<DocumentationFile>$(OutputPath)$(TargetFramework)\MelonLoader.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<EnableDynamicLoading>true</EnableDynamicLoading>
