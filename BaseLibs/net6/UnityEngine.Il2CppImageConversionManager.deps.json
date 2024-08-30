@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "UnityEngine.Il2CppImageConversionManager/1.0.0": {
+        "dependencies": {
+          "LavaGang.MelonLoader": "0.6.4"
+        },
+        "runtime": {
+          "UnityEngine.Il2CppImageConversionManager.dll": {}
+        }
+      },
+      "LavaGang.MelonLoader/0.6.4": {
+        "runtime": {
+          "lib/net6.0/MelonLoader.dll": {
+            "assemblyVersion": "0.6.4.0",
+            "fileVersion": "0.6.4.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "UnityEngine.Il2CppImageConversionManager/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LavaGang.MelonLoader/0.6.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Ydn7Kn9pPbBY+/VaWsROY2UfAMu6c8rPvAop1TR0R9wOTns02UyIJjvbnQ+pWOgUanw4Orx32syndtoTkSLGew==",
+      "path": "lavagang.melonloader/0.6.4",
+      "hashPath": "lavagang.melonloader.0.6.4.nupkg.sha512"
+    }
+  }
+}
