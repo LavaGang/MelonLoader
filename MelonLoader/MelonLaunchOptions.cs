@@ -9,9 +9,6 @@ namespace MelonLoader
         private static Dictionary<string, Action> WithoutArg = new Dictionary<string, Action>();
         private static Dictionary<string, Action<string>> WithArg = new Dictionary<string, Action<string>>();
 
-        /// <summary>
-        /// List of command line arguments (with values if provided) that are not used by MelonLoader
-        /// </summary>
         public static Dictionary<string, string> ExternalArguments { get; private set; } = new Dictionary<string, string>();
 
         static MelonLaunchOptions()
