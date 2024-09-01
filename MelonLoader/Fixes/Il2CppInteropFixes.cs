@@ -57,6 +57,10 @@ namespace MelonLoader.Fixes
                 Type classInjectorType = typeof(ClassInjector);
                 Type ilGeneratorEx = typeof(ILGeneratorEx);
 
+                Type injectorHelpersType = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers");
+                if (injectorHelpersType == null)
+                    throw new Exception("Failed to get InjectorHelpers");
+
                 _systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
                 if (_systemTypeFromIl2CppType == null)
                     throw new Exception("Failed to get ClassInjector.SystemTypeFromIl2CppType");
@@ -87,8 +91,9 @@ namespace MelonLoader.Fixes
                 if (_emitObjectToPointer == null)
                     throw new Exception("Failed to get ILGeneratorEx.EmitObjectToPointer");
 
-                _injectorHelpers_AddTypeToLookup = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers")
-                    .GetMethod("AddTypeToLookup", BindingFlags.NonPublic | BindingFlags.Static, [typeof(Type), typeof(IntPtr)]);
+                _injectorHelpers_AddTypeToLookup = injectorHelpersType.GetMethod("AddTypeToLookup", 
+                    BindingFlags.NonPublic | BindingFlags.Static, 
+                    [typeof(Type), typeof(IntPtr)]);
                 if (_injectorHelpers_AddTypeToLookup == null)
                     throw new Exception("Failed to get InjectorHelpers.AddTypeToLookup");
 
