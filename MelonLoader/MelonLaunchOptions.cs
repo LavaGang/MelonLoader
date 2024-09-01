@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MelonLoader
 {
@@ -7,6 +8,11 @@ namespace MelonLoader
     {
         private static Dictionary<string, Action> WithoutArg = new Dictionary<string, Action>();
         private static Dictionary<string, Action<string>> WithArg = new Dictionary<string, Action<string>>();
+
+        /// <summary>
+        /// List of command line arguments (with arguments if provided) that are not used by MelonLoader
+        /// </summary>
+        public static Dictionary<string, string> ExternalArguments { get; private set; } = new Dictionary<string, string>();
 
         static MelonLaunchOptions()
         {
@@ -51,6 +57,28 @@ namespace MelonLoader
                     foundOptions.Add($"{fullcmd} = {cmdArg}");
                     withArgFunc(cmdArg);
                 }
+                if (foundOptions.Where(x => x.StartsWith(fullcmd)).Count() <= 0)
+                {
+                    if (!argEnumerator.MoveNext())
+                    {
+                        ExternalArguments.Add(fullcmd, null);
+                        continue;
+                    }
+
+                    string cmdArg = argEnumerator.Current;
+                    if (string.IsNullOrEmpty(cmdArg))
+                    {
+                        ExternalArguments.Add(fullcmd, null);
+                        continue;
+                    }
+
+                    if (cmdArg.StartsWith("--"))
+                    {
+                        ExternalArguments.Add(fullcmd, null);
+                        continue;
+                    }
+                    ExternalArguments.Add(fullcmd, cmdArg);
+                }
             }
         }
 
@@ -64,6 +92,7 @@ namespace MelonLoader
                 DEV,
                 BOTH
             }
+
             public static LoadModeEnum LoadMode_Plugins { get; internal set; }
             public static LoadModeEnum LoadMode_Mods { get; internal set; }
             public static bool QuitFix { get; internal set; }
@@ -102,6 +131,7 @@ namespace MelonLoader
                 RANDOMRAINBOW,
                 LEMON
             };
+
             public static DisplayMode Mode { get; internal set; }
             public static bool CleanUnityLogs { get; internal set; } = true;
             public static bool ShouldSetTitle { get; internal set; } = true;
@@ -167,6 +197,6 @@ namespace MelonLoader
             }
         }
 
-        #endregion
+        #endregion Args
     }
 }
