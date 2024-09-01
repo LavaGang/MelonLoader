@@ -61,23 +61,23 @@ namespace MelonLoader
                 {
                     if (!argEnumerator.MoveNext())
                     {
-                        ExternalArguments.Add(fullcmd, null);
+                        ExternalArguments.Add(cmd, null);
                         continue;
                     }
 
                     string cmdArg = argEnumerator.Current;
                     if (string.IsNullOrEmpty(cmdArg))
                     {
-                        ExternalArguments.Add(fullcmd, null);
+                        ExternalArguments.Add(cmd, null);
                         continue;
                     }
 
                     if (cmdArg.StartsWith("--"))
                     {
-                        ExternalArguments.Add(fullcmd, null);
+                        ExternalArguments.Add(cmd, null);
                         continue;
                     }
-                    ExternalArguments.Add(fullcmd, cmdArg);
+                    ExternalArguments.Add(cmd, cmdArg);
                 }
             }
         }
