@@ -82,11 +82,6 @@ namespace MelonLoader.Support
             }
         }
 
-        internal void Destroy()
-        {
-            Destroy(gameObject);
-        }
-
         void Start()
         {
             if ((Main.component != null) && (Main.component != this))
