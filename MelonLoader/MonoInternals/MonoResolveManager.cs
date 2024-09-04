@@ -28,6 +28,9 @@ namespace MelonLoader.MonoInternals
                 AddSearchDirectory(path);
 
             ForceResolveRuntime("Mono.Cecil");
+            ForceResolveRuntime("MonoMod");
+            ForceResolveRuntime("MonoMod.Utils");
+            ForceResolveRuntime("MonoMod.RuntimeDetour");
 
             // Setup Redirections
             string[] assembly_list =

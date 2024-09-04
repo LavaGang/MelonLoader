@@ -126,18 +126,6 @@ namespace MelonLoader
             }
         }
 
-        public static class MonoModHookGenerator
-        {
-            public static bool Enabled { get; internal set; } = true;
-            public static bool ForceRegeneration { get; internal set; }
-
-            internal static void Setup()
-            {
-                WithoutArg["melonloader.disablemmh"] = () => Enabled = false;
-                WithoutArg["melonloader.mmhregenerate"] = () => ForceRegeneration = true;
-            }
-        }
-
         public static class Cpp2IL
         {
             public static bool CallAnalyzer { get; internal set; }

@@ -93,23 +93,6 @@ namespace MelonLoader.MelonStartScreen
 
         internal static readonly AverageStepDuration[] averageStepDurations = new AverageStepDuration[]
         {
-            // MonoModHookGenerator
-            new AverageStepDuration(
-                @"[MonoMod.HookGen] Checking Assemblies",
-                100f,
-                @"MonoMod.HookGen - Checking Assemblies"
-            ),
-            new AverageStepDuration(
-                @"[MonoMod.HookGen] Generating Assembly: .*",
-                1000f,
-                @"MonoMod.HookGen - Generating MMHOOK Assemblies..."
-            ),
-            new AverageStepDuration(
-                @"[MonoMod.HookGen] Done!",
-                100f,
-                @"MonoMod.HookGen - Done!"
-            ),
-
             // Il2CppAssemblyGenerator
             new AverageStepDuration(
                 @"Contacting RemoteAPI\.\.\.",

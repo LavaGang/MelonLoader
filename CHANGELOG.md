@@ -41,23 +41,22 @@
 
 1. Replaced [BepInEx/Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) with [ds5678/Il2CppInterop](https://github.com/ds5678/Il2CppInterop)
 2. Updated Il2CppInterop to 1.5.4
-3. Updated Cpp2IL to 2022.1.0-pre-release.17
+3. Updated Cpp2IL to 2022.1.0-pre-release.18
 4. Updated AsmResolver to 6.0.0-beta.1
 5. Updated AssetRipper.VersionUtilities to 1.5.0
 6. Updated AssetsTools.NET to 3.0.0
 7. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
 8. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
-9. Implemented MonoMod Hook Generator for Mono Games
-10. Implemented several fixes for Il2CppInterop related issues
-11. Implemented Cpp2IL's StrippedCodeRegSupport plugin
-12. Fixed an accidental regression with LemonSHA256
-13. Fixed an issue with Native logs using the wrong Colors
-14. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
-15. Fixed an issue with MonoMod.HookGen failing to generate on stripped Mono Games
-16. Fixed an issue with MonoMod DetourContext Disposal not working properly
-17. Fixed an issue with Debugger Launch Option causing crashes
-18. Fixed an issue with Console not having the Game Name and Version in the title
-19. Fixed an issue with Sharing Violation during Log Initialization
+9. Implemented several fixes for Il2CppInterop related issues
+10. Implemented Cpp2IL's StrippedCodeRegSupport plugin
+11. Fixed an accidental regression with LemonSHA256
+12. Fixed an issue with Native logs using the wrong Colors
+13. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
+14. Fixed an issue with MonoMod.HookGen failing to generate on stripped Mono Games
+15. Fixed an issue with MonoMod DetourContext Disposal not working properly
+16. Fixed an issue with Debugger Launch Option causing crashes
+17. Fixed an issue with Console not having the Game Name and Version in the title
+18. Fixed an issue with Sharing Violation during Log Initialization
 
 ---
 

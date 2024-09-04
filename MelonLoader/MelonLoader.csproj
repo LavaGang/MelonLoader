@@ -41,9 +41,6 @@
 		<PackageReference Include="Samboy063.Tomlet" Version="5.4.0" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
-		<PackageReference Include="MonoMod.RuntimeDetour.HookGen" Version="22.7.31.1" />
-	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
 		<PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.1" />
 		<PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />

@@ -8,17 +8,6 @@ using MelonLoader.Utils;
 using System.IO;
 using bHapticsLib;
 using System.Threading;
-using System.Drawing;
-
-
-#if NET35
-using MelonLoader.CompatibilityLayers;
-#endif
-
-#if NET6_0
-using MelonLoader.CoreClrUtils;
-#endif
-
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
@@ -127,17 +116,11 @@ namespace MelonLoader
 
         private static int PreSetup()
         {
-            if (_success)
-            {
 #if NET6_0
-
+            if (_success)
                 _success = Il2CppAssemblyGenerator.Run();
-
-#else
-
-                MonoModHookGenerator.Run();
 #endif
-            }
+
             return _success ? 0 : 1;
         }
 

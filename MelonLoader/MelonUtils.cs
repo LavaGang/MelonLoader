@@ -38,24 +38,7 @@ namespace MelonLoader
             Core.WelcomeMessage();
 
             if (MelonEnvironment.IsMonoRuntime)
-            {
                 SetCurrentDomainBaseDirectory(MelonEnvironment.GameRootDirectory, domain);
-
-                // Remove Extra Files
-                if (Directory.Exists(MelonEnvironment.Il2CppAssemblyGeneratorDirectory))
-                    Directory.Delete(MelonEnvironment.Il2CppAssemblyGeneratorDirectory, true);
-                if (Directory.Exists(MelonEnvironment.Il2CppAssembliesDirectory))
-                    Directory.Delete(MelonEnvironment.Il2CppAssembliesDirectory, true);
-            }
-            else
-            {
-                // Remove Extra Files
-                if (Directory.Exists(MelonEnvironment.MelonManagedDirectory))
-                    Directory.Delete(MelonEnvironment.MelonManagedDirectory, true);
-            }
-
-            if (Directory.Exists(MelonEnvironment.OppositeRuntimeDirectory))
-                Directory.Delete(MelonEnvironment.OppositeRuntimeDirectory, true);
 
             if (!Directory.Exists(MelonEnvironment.UserDataDirectory))
                 Directory.CreateDirectory(MelonEnvironment.UserDataDirectory);
