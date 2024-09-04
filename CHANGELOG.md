@@ -52,11 +52,10 @@
 11. Fixed an accidental regression with LemonSHA256
 12. Fixed an issue with Native logs using the wrong Colors
 13. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
-14. Fixed an issue with MonoMod.HookGen failing to generate on stripped Mono Games
-15. Fixed an issue with MonoMod DetourContext Disposal not working properly
-16. Fixed an issue with Debugger Launch Option causing crashes
-17. Fixed an issue with Console not having the Game Name and Version in the title
-18. Fixed an issue with Sharing Violation during Log Initialization
+14. Fixed an issue with MonoMod DetourContext Disposal not working properly
+15. Fixed an issue with Debugger Launch Option causing crashes
+16. Fixed an issue with Console not having the Game Name and Version in the title
+17. Fixed an issue with Sharing Violation during Log Initialization
 
 ---
 
