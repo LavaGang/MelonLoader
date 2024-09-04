@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MelonLoader
 {
@@ -8,6 +7,7 @@ namespace MelonLoader
     {
         private static Dictionary<string, Action> WithoutArg = new Dictionary<string, Action>();
         private static Dictionary<string, Action<string>> WithArg = new Dictionary<string, Action<string>>();
+        private static string[] _cmd;
 
          /// <summary>
          /// Dictionary of all Arguments with value (if found) that were not used by MelonLoader
@@ -16,6 +16,19 @@ namespace MelonLoader
          /// </para>
          /// </summary>
         public static Dictionary<string, string> ExternalArguments { get; private set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Array of All Command Line Arguments
+        /// </summary>
+        public static string[] CommandLineArgs
+        {
+            get
+            {
+                if (_cmd == null)
+                    _cmd = Environment.GetCommandLineArgs();
+                return _cmd;
+            }
+        }
 
         static MelonLaunchOptions()
         {
@@ -28,61 +41,61 @@ namespace MelonLoader
 
         internal static void Load()
         {
-            List<string> foundOptions = new List<string>();
-            LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(Environment.GetCommandLineArgs());
+            LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(CommandLineArgs);
             while (argEnumerator.MoveNext())
             {
                 string fullcmd = argEnumerator.Current;
                 if (string.IsNullOrEmpty(fullcmd))
                     continue;
 
-                if (!fullcmd.StartsWith("--"))
+                // Parse Prefix
+                string noPrefixCmd = fullcmd;
+                if (noPrefixCmd.StartsWith("--"))
+                    noPrefixCmd = noPrefixCmd.Remove(0, 2);
+                else if (noPrefixCmd.StartsWith("-"))
+                    noPrefixCmd = noPrefixCmd.Remove(0, 1);
+                else
+                {
+                    // Unknown Command, Add it to Dictionary
+                    ExternalArguments.Add(noPrefixCmd, null);
                     continue;
+                }
 
-                string cmd = fullcmd.Remove(0, 2);
-
-                if (WithoutArg.TryGetValue(cmd, out Action withoutArgFunc))
+                // Parse Argumentless Commands
+                if (WithoutArg.TryGetValue(noPrefixCmd, out Action withoutArgFunc))
                 {
-                    foundOptions.Add(fullcmd);
                     withoutArgFunc();
+                    continue;
                 }
-                else if (WithArg.TryGetValue(cmd, out Action<string> withArgFunc))
+
+                // Parse Argument
+                string cmdArg = null;
+                if (noPrefixCmd.Contains("="))
                 {
-                    if (!argEnumerator.MoveNext())
-                        continue;
+                    string[] split = noPrefixCmd.Split('=');
+                    noPrefixCmd = split[0];
+                    cmdArg = split[1];
+                }
+                if ((string.IsNullOrEmpty(cmdArg)
+                        && !argEnumerator.Peek(out cmdArg))
+                    || string.IsNullOrEmpty(cmdArg)
+                    || !cmdArg.StartsWith("--")
+                    || !cmdArg.StartsWith("-"))
+                {
+                    // Unknown Command, Add it to Dictionary
+                    ExternalArguments.Add(noPrefixCmd, null);
+                    continue;
+                }
 
-                    string cmdArg = argEnumerator.Current;
-                    if (string.IsNullOrEmpty(cmdArg))
-                        continue;
-
-                    if (cmdArg.StartsWith("--"))
-                        continue;
-
-                    foundOptions.Add($"{fullcmd} = {cmdArg}");
+                // Parse Argument Commands
+                if (WithArg.TryGetValue(noPrefixCmd, out Action<string> withArgFunc))
+                {
                     withArgFunc(cmdArg);
+                    continue;
                 }
-                if (foundOptions.Where(x => x.StartsWith(fullcmd)).Count() <= 0)
-                {
-                    if (!argEnumerator.MoveNext())
-                    {
-                        ExternalArguments.Add(cmd, null);
-                        continue;
-                    }
 
-                    string cmdArg = argEnumerator.Current;
-                    if (string.IsNullOrEmpty(cmdArg))
-                    {
-                        ExternalArguments.Add(cmd, null);
-                        continue;
-                    }
-
-                    if (cmdArg.StartsWith("--"))
-                    {
-                        ExternalArguments.Add(cmd, null);
-                        continue;
-                    }
-                    ExternalArguments.Add(cmd, cmdArg);
-                }
+                // Unknown Command with Argument, Add it to Dictionary
+                ExternalArguments.Add(noPrefixCmd, cmdArg);
             }
         }
 

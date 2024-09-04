@@ -8,6 +8,7 @@ using MelonLoader.Utils;
 using System.IO;
 using bHapticsLib;
 using System.Threading;
+using System.Linq;
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
@@ -172,6 +173,9 @@ namespace MelonLoader
             var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
             MelonLogger.MsgDirect($"Game Arch: {archString}");
             MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect($"CommandLine: {string.Join(" ", MelonLaunchOptions.CommandLineArgs)}");
+            MelonLogger.MsgDirect("------------------------------");
+            
 
             MelonEnvironment.PrintEnvironment();
         }

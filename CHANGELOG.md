@@ -45,17 +45,30 @@
 4. Updated AsmResolver to 6.0.0-beta.1
 5. Updated AssetRipper.VersionUtilities to 1.5.0
 6. Updated AssetsTools.NET to 3.0.0
-7. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
-8. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
-9. Implemented several fixes for Il2CppInterop related issues
-10. Implemented Cpp2IL's StrippedCodeRegSupport plugin
-11. Fixed an accidental regression with LemonSHA256
-12. Fixed an issue with Native logs using the wrong Colors
-13. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
-14. Fixed an issue with MonoMod DetourContext Disposal not working properly
-15. Fixed an issue with Debugger Launch Option causing crashes
-16. Fixed an issue with Console not having the Game Name and Version in the title
-17. Fixed an issue with Sharing Violation during Log Initialization
+7. Updated UnityEngine.Il2CppAssetBundleManager for latest compatibility
+8. Updated UnityEngine.Il2CppImageConversionManager for latest compatibility
+9. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
+10. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
+11. Implemented several fixes for Il2CppInterop related issues
+12. Implemented Cpp2IL's StrippedCodeRegSupport plugin
+13. Implemented `ExternalArguments` Dictionary for MelonLaunchOptions   (Credits to [HAHOOS](https://github.com/HAHOOS) :P)
+14. Implemented `Peek` Method for LemonEnumerator
+15. Fixed an accidental regression with LemonSHA256
+16. Fixed an issue with Native logs using the wrong Colors
+17. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
+18. Fixed an issue with MonoMod DetourContext Disposal not working properly
+19. Fixed an issue with Debugger Launch Option causing crashes
+20. Fixed an issue with Console not having the Game Name and Version in the title
+21. Fixed an issue with Sharing Violation during Log Initialization
+22. Fixed an issue with `--melonloader.basedir` launch option always expecting an `=` sign before the path
+23. Fixed an issue with Il2CppInteropFixes not being properly error handled
+24. Fixed an issue with Il2CppInteropFixes using `il2cpp_type_get_class_or_element_class` instead of `il2cpp_class_from_type`
+25. Fixed an issue with EOS Support Module not being properly error handled
+26. Fixed an issue with NativeStackWalk not unregistering addresses
+27. Fixed an issue with Errors being Spammed if `UnityEngine.Transform::SetAsLastSibling` fails to resolve
+28. Fixed an issue with MelonLaunchOptions failing to parse arguments if an `=` sign is used instead of a space
+29. Fixed an issue with MelonLaunchOptions failing to parse options if a `-` prefix is used instead of `--`
+30. Fixed an issue with Command Line Arguments not being logged
 
 ---
 
