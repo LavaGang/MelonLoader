@@ -9,6 +9,12 @@ namespace MelonLoader
         private static Dictionary<string, Action> WithoutArg = new Dictionary<string, Action>();
         private static Dictionary<string, Action<string>> WithArg = new Dictionary<string, Action<string>>();
 
+         /// <summary>
+         /// Dictionary of all Arguments with value (if found) that were not used by MelonLoader
+         /// <para>
+         /// <b>Key</b> is the argument, <b>Value</b> is the value for the argument, <c>null</c> if not found
+         /// </para>
+         /// </summary>
         public static Dictionary<string, string> ExternalArguments { get; private set; } = new Dictionary<string, string>();
 
         static MelonLaunchOptions()
