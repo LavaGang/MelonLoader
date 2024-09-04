@@ -1,4 +1,4 @@
-﻿#if NET6_0
+﻿#if NET6_0_OR_GREATER
 using HarmonyLib;
 using System;
 using System.Reflection;

@@ -1,20 +1,13 @@
-﻿#if NET6_0
+﻿#if NET6_0_OR_GREATER
 using MelonLoader.Utils;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
-#endif
 
 namespace MelonLoader.Fixes
 {
     internal static class DotnetLoadFromManagedFolderFix
     {
-
-#if !NET6_0
-        internal static void Install()
-        {
-        }
-#else
         //TODO Update for non-windows platforms in future, or when updating runtime
         private static readonly string OurRuntimeDir = Path.Combine(MelonEnvironment.OurRuntimeDirectory, "runtimes", "win", "lib", "net6.0"); 
 
@@ -30,18 +23,32 @@ namespace MelonLoader.Fixes
                 MelonDebug.Msg($"[DotnetManagedFolder] Loading from {path}...");
                 return alc.LoadFromAssemblyPath(path);
             }
-
             return null;
         }
 
         private static Assembly OnResolve(AssemblyLoadContext alc, AssemblyName name)
         {
+            var ret = TryFind(alc, name);
+            if (ret == null)
+                MelonDebug.Msg($"[DotnetManagedFolder] Failed to find {name.Name} in any of the known search directories");
+            return ret;
+        }
+
+        internal static Assembly TryFind(AssemblyLoadContext alc, AssemblyName name)
+        {
+            // Redirect ModHandler to main MelonLoader dll (us)
             if (name.Name == "MelonLoader.ModHandler")
-                //Redirect ModHandler to main MelonLoader dll (us)
                 return Assembly.GetExecutingAssembly();
 
-            var filename = name.Name + ".dll";
+            var ret = TryLoadFromFolders(alc, name.Name + ".dll");
+            if (ret == null)
+                TryLoadFromFolders(alc, name.Name + ".exe");
 
+            return ret;
+        }
+
+        private static Assembly TryLoadFromFolders(AssemblyLoadContext alc, string filename)
+        {
             var osSpecificPath = Path.Combine(OurRuntimeDir, filename);
             var il2cppPath = Path.Combine(MelonEnvironment.Il2CppAssembliesDirectory, filename);
             var managedPath = Path.Combine(MelonEnvironment.MelonManagedDirectory, filename);
@@ -58,11 +65,8 @@ namespace MelonLoader.Fixes
                 ?? TryLoad(alc, runtimeSpecificPath)
                 ?? TryLoad(alc, gameRootPath);
 
-            if (ret == null)
-                MelonDebug.Msg($"[DotnetManagedFolder] Failed to find {filename} in any of the known search directories");
-
             return ret;
         }
-#endif
     }
 }
+#endif

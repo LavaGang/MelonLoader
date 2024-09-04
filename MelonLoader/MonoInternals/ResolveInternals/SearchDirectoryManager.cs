@@ -63,18 +63,30 @@ namespace MelonLoader.MonoInternals.ResolveInternals
 
                 string filepath = Directory.GetFiles(folderpath).Where(x =>
                     !string.IsNullOrEmpty(x)
-                    && Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
-                    && Path.GetFileName(x).Equals($"{requested_name}.dll")
+                    && ((Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
+                        && Path.GetFileName(x).Equals($"{requested_name}.dll"))
+                    || (Path.GetExtension(x).ToLowerInvariant().Equals(".exe")
+                        && Path.GetFileName(x).Equals($"{requested_name}.exe")))
                 ).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(filepath))
                     continue;
 
-                IntPtr assemblyptr = MonoLibrary.Instance.mono_assembly_open_full(Marshal.StringToHGlobalAnsi(filepath), IntPtr.Zero, false);
-                if (assemblyptr == IntPtr.Zero)
+                IntPtr filePathPtr = Marshal.StringToHGlobalAnsi(filepath);
+                if (filePathPtr == IntPtr.Zero)
                     continue;
 
-                IntPtr assemblyReflectionPtr = MonoLibrary.Instance.mono_assembly_get_object(MonoLibrary.GetRootDomainPtr(), assemblyptr);
+                IntPtr rootPtr = MonoLibrary.GetRootDomainPtr();
+                if (rootPtr == IntPtr.Zero)
+                    continue;
+
+                IntPtr assemblyPtr = MonoLibrary.Instance.mono_assembly_open_full(filePathPtr, IntPtr.Zero, false);
+                if (assemblyPtr == IntPtr.Zero)
+                    continue;
+
+                IntPtr assemblyReflectionPtr = MonoLibrary.Instance.mono_assembly_get_object(rootPtr, assemblyPtr);
+                if (assemblyReflectionPtr == IntPtr.Zero)
+                    continue;
 
                 return MonoLibrary.CastManagedAssemblyPtr(assemblyReflectionPtr);
             }

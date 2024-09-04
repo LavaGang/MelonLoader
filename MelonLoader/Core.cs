@@ -40,7 +40,10 @@ namespace MelonLoader
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
 
+#if NET6_0_OR_GREATER
             Fixes.DotnetLoadFromManagedFolderFix.Install();
+#endif
+
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
             Fixes.ServerCertificateValidation.Install();
             Assertions.LemonAssertMapping.Setup();
@@ -63,7 +66,7 @@ namespace MelonLoader
                 MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
             }
 
-#if NET6_0
+#if NET6_0_OR_GREATER
             if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
             {
                 MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
@@ -76,7 +79,7 @@ namespace MelonLoader
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
             Fixes.DetourContextDisposeFix.Install();
 
-#if NET6_0
+#if NET6_0_OR_GREATER
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             //  NativeStackWalk.LogNativeStackTrace();
 
@@ -88,7 +91,7 @@ namespace MelonLoader
             Fixes.InstancePatchFix.Install();
             Fixes.ProcessFix.Install();
 
-#if NET6_0
+#if NET6_0_OR_GREATER
             Fixes.Il2CppInteropFixes.Install();
 #endif
 
@@ -116,7 +119,7 @@ namespace MelonLoader
 
         private static int PreSetup()
         {
-#if NET6_0
+#if NET6_0_OR_GREATER
             if (_success)
                 _success = Il2CppAssemblyGenerator.Run();
 #endif

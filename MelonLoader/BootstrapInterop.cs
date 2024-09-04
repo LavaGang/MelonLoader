@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-#if NET6_0
+#if NET6_0_OR_GREATER
 using MelonLoader.CoreClrUtils;
 #endif
 
@@ -10,7 +10,7 @@ namespace MelonLoader
 {
     internal static unsafe class BootstrapInterop
     {
-#if NET6_0
+#if NET6_0_OR_GREATER
         internal static delegate* unmanaged<void**, void*, void> HookAttach;
         internal static delegate* unmanaged<void**, void*, void> HookDetach;
 #endif

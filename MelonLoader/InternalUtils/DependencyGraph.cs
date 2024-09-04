@@ -4,6 +4,17 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
+#if NET35
+
+using MelonLoader.MonoInternals.ResolveInternals;
+
+#elif NET6_0_OR_GREATER
+
+using MelonLoader.Fixes;
+using System.Runtime.Loader;
+
+#endif
+
 namespace MelonLoader.InternalUtils
 {
     internal class DependencyGraph<T> where T : MelonBase
@@ -132,7 +143,13 @@ namespace MelonLoader.InternalUtils
         {
             try
             {
-                Assembly.Load(assembly);
+#if NET35
+                Assembly asm = SearchDirectoryManager.Scan(assembly.Name);
+#elif NET6_0_OR_GREATER
+                Assembly asm = DotnetLoadFromManagedFolderFix.TryFind(AssemblyLoadContext.Default, assembly);
+#endif
+                if (asm == null)
+                    return false;
                 return true;
             }
             catch (FileNotFoundException) { return false; }

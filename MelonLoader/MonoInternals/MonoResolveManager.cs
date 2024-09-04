@@ -26,11 +26,11 @@ namespace MelonLoader.MonoInternals
             };
             foreach (string path in searchdirlist)
                 AddSearchDirectory(path);
-
-            ForceResolveRuntime("Mono.Cecil");
-            ForceResolveRuntime("MonoMod");
-            ForceResolveRuntime("MonoMod.Utils");
-            ForceResolveRuntime("MonoMod.RuntimeDetour");
+            
+            ForceResolveRuntime("Mono.Cecil.dll");
+            ForceResolveRuntime("MonoMod.exe");
+            ForceResolveRuntime("MonoMod.Utils.dll");
+            ForceResolveRuntime("MonoMod.RuntimeDetour.dll");
 
             // Setup Redirections
             string[] assembly_list =
@@ -47,11 +47,9 @@ namespace MelonLoader.MonoInternals
             return true;
         }
 
-        private static void ForceResolveRuntime(string assemblyName)
-            => ForceResolveRuntime(assemblyName, assemblyName);
-        private static void ForceResolveRuntime(string assemblyName, string fileName)
+        private static void ForceResolveRuntime(string fileName)
         {
-            string filePath = Path.Combine(MelonEnvironment.OurRuntimeDirectory, $"{fileName}.dll");
+            string filePath = Path.Combine(MelonEnvironment.OurRuntimeDirectory, fileName);
             if (!File.Exists(filePath))
                 return;
 
@@ -62,16 +60,14 @@ namespace MelonLoader.MonoInternals
             if (assembly == null)
                 return;
 
-            GetAssemblyResolveInfo(assemblyName).Override = assembly;
+            GetAssemblyResolveInfo(Path.GetFileNameWithoutExtension(fileName)).Override = assembly;
         }
 
         // Search Directories
         public static void AddSearchDirectory(string path, int priority = 0)
             => SearchDirectoryManager.Add(path, priority);
-
         public static void RemoveSearchDirectory(string path)
             => SearchDirectoryManager.Remove(path);
-
 
         // Assembly
         public delegate void OnAssemblyLoadHandler(Assembly assembly);

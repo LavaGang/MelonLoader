@@ -22,7 +22,7 @@ namespace MelonLoader.Utils
         public static string MelonLoaderDirectory { get; internal set; }
         public static string GameRootDirectory { get; internal set; }
 
-#if NET6_0
+#if NET6_0_OR_GREATER
         public static string GameExecutablePath => System.Environment.ProcessPath;
 #else
         public static string GameExecutablePath => Process.GetCurrentProcess().MainModule!.FileName;

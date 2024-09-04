@@ -120,7 +120,7 @@ namespace MelonLoader.MelonStartScreen
             }
 
             // We get a native function pointer to User32SetTimerDetour from our current class
-#if NET6_0
+#if NET6_0_OR_GREATER
             delegate* unmanaged[Cdecl]<IntPtr, IntPtr, uint, IntPtr, IntPtr> detourPtr = &User32SetTimerDetour;
 #else
             IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((User32SetTimerDelegate)User32SetTimerDetour);
@@ -142,7 +142,7 @@ namespace MelonLoader.MelonStartScreen
             return true;
         }
 
-#if NET6_0
+#if NET6_0_OR_GREATER
         [UnmanagedCallersOnly(CallConvs = new[] {typeof(CallConvCdecl)})]
 #endif
         private unsafe static IntPtr User32SetTimerDetour(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, IntPtr timerProc)
