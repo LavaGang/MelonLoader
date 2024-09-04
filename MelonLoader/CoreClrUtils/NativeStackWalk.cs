@@ -1,4 +1,4 @@
-#if NET6_0
+#if NET6_0_OR_GREATER
 
 #nullable enable
 #pragma warning disable CS0169
@@ -453,6 +453,12 @@ public static unsafe class NativeStackWalk
     {
         // Logger.Msg($"Registering hook: 0x{addr:X} => {hookName}");
         _registeredHooks[addr] = hookName;
+    }
+
+    internal static void UnregisterHookAddr(ulong addr)
+    {
+        if (_registeredHooks.ContainsKey(addr))
+            _registeredHooks.Remove(addr);
     }
 
     [SupportedOSPlatform("windows")]

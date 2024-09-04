@@ -71,7 +71,7 @@ pub fn get_managed_dir() -> Result<PathBuf, DynErr> {
     match managed_path.exists() {
         true => Ok(managed_path),
         false => {
-            let managed_path = base_folder.join("MelonLoader").join("Managed");
+            let managed_path = base_folder.join("MelonLoader").join("Dependencies").join("Mono");
 
             match managed_path.exists() {
                 true => Ok(managed_path),

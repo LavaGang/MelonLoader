@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-#if NET6_0
+#if NET6_0_OR_GREATER
 using MelonLoader.CoreClrUtils;
 #endif
 
@@ -10,7 +10,7 @@ namespace MelonLoader
 {
     internal static unsafe class BootstrapInterop
     {
-#if NET6_0
+#if NET6_0_OR_GREATER
         internal static delegate* unmanaged<void**, void*, void> HookAttach;
         internal static delegate* unmanaged<void**, void*, void> HookDetach;
 #endif
@@ -67,8 +67,7 @@ namespace MelonLoader
                 return;
 
             NativeHookAttachDirect(target, detour);
-
-            NativeStackWalk.RegisterHookAddr((ulong)detour, $"Mod-requested detour of 0x{target:X}");
+            NativeStackWalk.RegisterHookAddr((ulong)target, $"Mod-requested detour of 0x{target:X} -> 0x{detour:X}");
         }
 
         internal static unsafe void NativeHookAttachDirect(IntPtr target, IntPtr detour)
@@ -79,6 +78,7 @@ namespace MelonLoader
         public static unsafe void NativeHookDetach(IntPtr target, IntPtr detour)
         {
             HookDetach((void**)target, (void*)detour);
+            NativeStackWalk.UnregisterHookAddr((ulong)target);
         }
 #endif
     }

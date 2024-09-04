@@ -6,47 +6,29 @@ using MelonLoader.InternalUtils;
 using MelonLoader.MonoInternals;
 using MelonLoader.Utils;
 using System.IO;
-using System.Runtime.InteropServices;
 using bHapticsLib;
 using System.Threading;
-
-#if NET35
-using MelonLoader.CompatibilityLayers;
-#endif
-
-#if NET6_0
-using MelonLoader.CoreClrUtils;
-#endif
-
+using System.Linq;
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
 {
 	internal static class Core
     {
+        private static bool _success = true;
+
         internal static HarmonyLib.Harmony HarmonyInstance;
         internal static bool Is_ALPHA_PreRelease = false;
-        private static bool _il2cppSuccess;
 
         internal static int Initialize()
         {
             var runtimeFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             var runtimeDirInfo = new DirectoryInfo(runtimeFolder);
-            MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
             MelonEnvironment.GameRootDirectory = Path.GetDirectoryName(MelonEnvironment.GameExecutablePath);
+            MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
 
             MelonLaunchOptions.Load();
             MelonLogger.Setup();
-
-#if NET6_0
-            if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
-            {
-                MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
-                Debugger.Launch();
-            }
-
-            Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
-#endif
 
 #if NET35
             // Disabled for now because of issues
@@ -59,30 +41,48 @@ namespace MelonLoader
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
 
+#if NET6_0_OR_GREATER
             Fixes.DotnetLoadFromManagedFolderFix.Install();
+#endif
+
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
             Fixes.ServerCertificateValidation.Install();
-            
-            MelonUtils.Setup(AppDomain.CurrentDomain);
-
             Assertions.LemonAssertMapping.Setup();
+
+            MelonUtils.Setup(AppDomain.CurrentDomain);
+            BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
+                UnityInformationHandler.GameVersion);
 
             try
             {
                 if (!MonoLibrary.Setup()
                     || !MonoResolveManager.Setup())
+                {
+                    _success = false;
                     return 1;
+                }
             }
             catch (SecurityException)
             {
                 MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
             }
 
+#if NET6_0_OR_GREATER
+            if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
+            {
+                MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
+                Debugger.Launch();
+            }
+
+            Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
+#endif
+
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
-            
-#if NET6_0
+            Fixes.DetourContextDisposeFix.Install();
+
+#if NET6_0_OR_GREATER
             // if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                // NativeStackWalk.LogNativeStackTrace();
+            //  NativeStackWalk.LogNativeStackTrace();
 
             Fixes.DotnetAssemblyLoadContextFix.Install();
             Fixes.DotnetModHandlerRedirectionFix.Install();
@@ -91,6 +91,11 @@ namespace MelonLoader
             Fixes.ForcedCultureInfo.Install();
             Fixes.InstancePatchFix.Install();
             Fixes.ProcessFix.Install();
+
+#if NET6_0_OR_GREATER
+            Fixes.Il2CppInteropFixes.Install();
+#endif
+
             PatchShield.Install();
 
             MelonPreferences.Load();
@@ -110,18 +115,22 @@ namespace MelonLoader
         internal static int PreStart()
         {
             MelonEvents.OnApplicationEarlyStart.Invoke();
-            return MelonStartScreen.LoadAndRun(Il2CppGameSetup);
+            return MelonStartScreen.LoadAndRun(PreSetup);
         }
 
-        private static int Il2CppGameSetup()
+        private static int PreSetup()
         {
-            _il2cppSuccess = Il2CppAssemblyGenerator.Run();
-            return _il2cppSuccess ? 0 : 1;
+#if NET6_0_OR_GREATER
+            if (_success)
+                _success = Il2CppAssemblyGenerator.Run();
+#endif
+
+            return _success ? 0 : 1;
         }
 
         internal static int Start()
         {
-            if (!_il2cppSuccess)
+            if (!_success)
                 return 1;
 
             MelonEvents.OnPreModsLoaded.Invoke();
@@ -164,6 +173,9 @@ namespace MelonLoader
             var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
             MelonLogger.MsgDirect($"Game Arch: {archString}");
             MelonLogger.MsgDirect("------------------------------");
+            MelonLogger.MsgDirect($"CommandLine: {string.Join(" ", MelonLaunchOptions.CommandLineArgs)}");
+            MelonLogger.MsgDirect("------------------------------");
+            
 
             MelonEnvironment.PrintEnvironment();
         }

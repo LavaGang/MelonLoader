@@ -1,11 +1,10 @@
-﻿#if NET6_0
+﻿#if NET6_0_OR_GREATER
 using HarmonyLib;
 using MelonLoader.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 

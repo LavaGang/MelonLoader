@@ -7,7 +7,8 @@ using Il2CppInterop.Common;
 using Il2CppInterop.Generator;
 using Il2CppInterop.Generator.Runners;
 using Microsoft.Extensions.Logging;
-using Mono.Cecil;
+using AsmResolver.DotNet;
+using AsmResolver.DotNet.Serialized;
 
 namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
@@ -36,7 +37,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             }
             
             if (Execute(new string[] {
-                $"--input={ Core.dumper.OutputFolder }",
+                $"--input={ Core.cpp2il.OutputFolder }",
                 $"--output={ OutputFolder }",
                 $"--mscorlib={ Path.Combine(Core.ManagedPath, "mscorlib.dll") }",
                 $"--unity={ Core.unitydependencies.Destination }",
@@ -57,13 +58,12 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             Core.Logger.Msg("Reading dumped assemblies for interop generation...");
 
             var resolver = new InteropResolver();
-            var inputAssemblies = Directory.GetFiles(Core.dumper.OutputFolder)
+            var inputAssemblies = Directory.GetFiles(Core.cpp2il.OutputFolder)
                 .Where(f => f.EndsWith(".dll"))
-                .Select(f => ModuleDefinition.ReadModule(f, new ReaderParameters() {AssemblyResolver = resolver}))
-                .Select(m => m.Assembly)
+                .Select(f => ModuleDefinition.FromFile(f, new ModuleReaderParameters() { ModuleResolver = resolver }))
+                .Select(f => { resolver.Add(f); return f; })
+                .Select(f => f.Assembly)
                 .ToList();
-            
-            inputAssemblies.ForEach(resolver.Add);
             
             var opts = new GeneratorOptions()
             {
@@ -109,7 +109,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             Core.Logger.Msg("Cleaning up...");
             AppDomain.CurrentDomain.SetData("TRUSTED_PLATFORM_ASSEMBLIES", trusted);
-            inputAssemblies.ForEach(a => a.Dispose());
+            //inputAssemblies.ForEach(a => a.Dispose());
             
             Core.Logger.Msg("Interop Generation Complete!");
             return true;
@@ -144,28 +144,23 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         }
     }
 
-    internal class InteropResolver : IAssemblyResolver
+    internal class InteropResolver : INetModuleResolver
     {
-        private readonly Dictionary<string, AssemblyDefinition> _cache = new();
+        private readonly Dictionary<string, ModuleDefinition> _cache = new();
         
         public void Dispose()
         {
             _cache.Clear();
         }
         
-        internal void Add(AssemblyDefinition assembly)
+        internal void Add(ModuleDefinition module)
         {
-            _cache[assembly.Name.Name] = assembly;
+            _cache[module.Name] = module;
         }
 
-        public AssemblyDefinition Resolve(AssemblyNameReference name)
+        public ModuleDefinition Resolve(string name)
         {
-            return _cache.GetValueOrDefault(name.Name);
-        }
-
-        public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
-        {
-            return Resolve(name);
+            return _cache.GetValueOrDefault(name);
         }
     }
 }

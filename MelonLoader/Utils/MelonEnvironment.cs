@@ -22,7 +22,7 @@ namespace MelonLoader.Utils
         public static string MelonLoaderDirectory { get; internal set; }
         public static string GameRootDirectory { get; internal set; }
 
-#if NET6_0
+#if NET6_0_OR_GREATER
         public static string GameExecutablePath => System.Environment.ProcessPath;
 #else
         public static string GameExecutablePath => Process.GetCurrentProcess().MainModule!.FileName;
@@ -41,10 +41,11 @@ namespace MelonLoader.Utils
 
         public static string GameExecutableName => Path.GetFileNameWithoutExtension(GameExecutablePath);
         public static string UnityGameDataDirectory => Path.Combine(GameRootDirectory, GameExecutableName + "_Data");
+        public static string UnityGameManagedDirectory => Path.Combine(UnityGameDataDirectory, "Managed");
         public static string Il2CppDataDirectory => Path.Combine(UnityGameDataDirectory, "il2cpp_data");
         public static string UnityPlayerPath => Path.Combine(GameRootDirectory, "UnityPlayer.dll");
 
-        public static string MelonManagedDirectory => Path.Combine(MelonLoaderDirectory, "Managed");
+        public static string MelonManagedDirectory => Path.Combine(DependenciesDirectory, "Mono");
         public static string Il2CppAssembliesDirectory => Path.Combine(MelonLoaderDirectory, "Il2CppAssemblies");
 
         internal static void PrintEnvironment()

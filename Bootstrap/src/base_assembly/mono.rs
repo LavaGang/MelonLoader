@@ -26,8 +26,7 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
     let _runtime_dir = paths::runtime_dir()?;
 
     //get MelonLoader.dll's path and confirm it exists
-    let mut melonloader_dll = melonenv::paths::MELONLOADER_FOLDER.clone();
-    melonloader_dll.extend(&["net35", "MelonLoader.dll"]);
+    let mut melonloader_dll = _runtime_dir.join("MelonLoader.dll");
 
     if !melonloader_dll.exists() {
         return Err("MelonLoader.dll not found".into());
@@ -84,6 +83,9 @@ pub fn start() -> Result<(), DynErr> {
 }
 
 fn preload(runtime: &FerrexRuntime) -> Result<(), DynErr> {
+	
+    debug!("Initializing Preload")?;
+	
     if !melonenv::paths::PRELOAD_DLL.exists() {
         return Err("Preload.dll not found".into());
     }
@@ -93,5 +95,7 @@ fn preload(runtime: &FerrexRuntime) -> Result<(), DynErr> {
         .get_method("Initialize", 0, runtime)?
         .invoke(None, None, runtime)?;
 
+    debug!("Preload Initialized!")?;
+	
     Ok(())
 }

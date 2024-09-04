@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4.0.0
+        uses: actions/setup-dotnet@v4.0.1
         with:
           dotnet-version: 7.0.x
       - name: .NET Pack
@@ -23,4 +23,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MelonLoaderNuGetPackage
-          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.4.nupkg
+          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.0.6.5.nupkg

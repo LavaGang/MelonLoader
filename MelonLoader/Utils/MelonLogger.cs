@@ -12,11 +12,6 @@ namespace MelonLoader
     public class MelonLogger
     {
         private static int MaxLogs;
-        private static int MaxWarnings;
-        private static int MaxErrors;
-
-        private static int WarningsCount;
-        private static int ErrorsCount;
 
         public static readonly Color DefaultMelonColor = Color.Cyan;
         public static readonly Color DefaultTextColor = Color.LightGray;
@@ -30,17 +25,9 @@ namespace MelonLoader
         internal static void Setup()
         {
             if (MelonLaunchOptions.Core.IsDebug)
-            {
                 MaxLogs = 0;
-                MaxWarnings = 0;
-                MaxErrors = 0;
-            }
             else
-            {
                 MaxLogs = MelonLaunchOptions.Logger.MaxLogs;
-                MaxWarnings = MelonLaunchOptions.Logger.MaxWarnings;
-                MaxErrors = MelonLaunchOptions.Logger.MaxErrors;
-            }
 
             if (!Directory.Exists(MelonEnvironment.MelonLoaderLogsDirectory))
                 Directory.CreateDirectory(MelonEnvironment.MelonLoaderLogsDirectory);
@@ -76,11 +63,11 @@ namespace MelonLoader
             }
 
 #if !NET6_0
-            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
 #else
-            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read});
-            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.Read });
+            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.ReadWrite });
+            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.ReadWrite });
 #endif
 
             LatestLogWriter = CreateLogWriter(LatestLogStream);
@@ -156,15 +143,6 @@ namespace MelonLoader
 
         private static void NativeWarning(string namesection, string txt)
         {
-            if (MaxWarnings > 0)
-            {
-                if (WarningsCount >= MaxWarnings)
-                    return;
-                WarningsCount++;
-            }
-            else if (MaxWarnings < 0)
-                return;
-
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
 
             Internal_Warning(namesection, txt ?? "null");
@@ -173,15 +151,6 @@ namespace MelonLoader
 
         private static void NativeError(string namesection, string txt)
         {
-            if (MaxErrors > 0)
-            {
-                if (ErrorsCount >= MaxErrors)
-                    return;
-                ErrorsCount++;
-            }
-            else if (MaxErrors < 0)
-                return;
-
             namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
 
             Internal_Error(namesection, txt ?? "null");
@@ -190,15 +159,6 @@ namespace MelonLoader
 
         public static void BigError(string namesection, string txt)
         {
-            if (MaxErrors > 0)
-            {
-                if (ErrorsCount >= MaxErrors)
-                    return;
-                ErrorsCount++;
-            }
-            else if (MaxErrors < 0)
-                return;
-
             RunErrorCallbacks(namesection, txt ?? "null");
 
             Internal_Error(namesection, new string('=', 50));

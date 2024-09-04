@@ -18,7 +18,9 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-        <PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" />
-        <PackageReference Include="Samboy063.Tomlet" Version="5.3.1" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
+        <PackageReference Include="Samboy063.Tomlet" Version="5.4.0">
+          <ExcludeAssets>Runtime</ExcludeAssets>
+        </PackageReference>
     </ItemGroup>
 </Project>

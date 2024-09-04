@@ -4,6 +4,17 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
+#if NET35
+
+using MelonLoader.MonoInternals.ResolveInternals;
+
+#elif NET6_0_OR_GREATER
+
+using MelonLoader.Fixes;
+using System.Runtime.Loader;
+
+#endif
+
 namespace MelonLoader.InternalUtils
 {
     internal class DependencyGraph<T> where T : MelonBase
@@ -83,10 +94,14 @@ namespace MelonLoader.InternalUtils
                 {
                     if (nameLookup.TryGetValue(dependency.Name, out Vertex dependencyVertex))
                     {
-                        melonVertex.dependencies.Add(dependencyVertex);
-                        dependencyVertex.dependents.Add(melonVertex);
+                        if (!melonVertex.dependencies.Contains(dependencyVertex))
+                            melonVertex.dependencies.Add(dependencyVertex);
+                        if (!dependencyVertex.dependents.Contains(melonVertex))
+                            dependencyVertex.dependents.Add(melonVertex);
                     }
-                    else if (!TryLoad(dependency) && !optionalDependencies.Contains(dependency.Name))
+                    else if (!TryLoad(dependency)
+                        && !optionalDependencies.Contains(dependency.Name)
+                        && !missingDependencies.Contains(dependency))
                         missingDependencies.Add(dependency);
                 }
 
@@ -95,18 +110,23 @@ namespace MelonLoader.InternalUtils
                     AssemblyName dependency = new AssemblyName(dependencyName);
                     if (nameLookup.TryGetValue(dependencyName, out Vertex dependencyVertex))
                     {
-                        melonVertex.dependencies.Add(dependencyVertex);
-                        dependencyVertex.dependents.Add(melonVertex);
+                        if (!melonVertex.dependencies.Contains(dependencyVertex))
+                            melonVertex.dependencies.Add(dependencyVertex);
+                        if (!dependencyVertex.dependents.Contains(melonVertex))
+                            dependencyVertex.dependents.Add(melonVertex);
                     }
-                    else if (!TryLoad(dependency))
+                    else if (!TryLoad(dependency)
+                        && !missingDependencies.Contains(dependency))
                         missingDependencies.Add(dependency);
                 }
 
-                if (missingDependencies.Count > 0)
+                if ((missingDependencies.Count > 0) 
+                    && !melonsWithMissingDeps.ContainsKey(melonVertex.melon.Info.Name))
                     // melonVertex.skipLoading = true;
                     melonsWithMissingDeps.Add(melonVertex.melon.Info.Name, missingDependencies.ToArray());
 
-                if (incompatibilities.Count > 0)
+                if ((incompatibilities.Count > 0)
+                    && !melonsWithIncompatibilities.ContainsKey(melonVertex.melon.Info.Name))
                     melonsWithIncompatibilities.Add(melonVertex.melon.Info.Name, incompatibilities.ToArray());
             }
 
@@ -123,7 +143,13 @@ namespace MelonLoader.InternalUtils
         {
             try
             {
-                Assembly.Load(assembly);
+#if NET35
+                Assembly asm = SearchDirectoryManager.Scan(assembly.Name);
+#elif NET6_0_OR_GREATER
+                Assembly asm = DotnetLoadFromManagedFolderFix.TryFind(AssemblyLoadContext.Default, assembly);
+#endif
+                if (asm == null)
+                    return false;
                 return true;
             }
             catch (FileNotFoundException) { return false; }
@@ -178,7 +204,8 @@ namespace MelonLoader.InternalUtils
                 int dependencyCount = vertex.dependencies.Count;
 
                 unloadedDependencies[i] = dependencyCount;
-                if (dependencyCount == 0)
+                if ((dependencyCount == 0) 
+                    && !loadableMelons.ContainsKey(vertex.name))
                     loadableMelons.Add(vertex.name, vertex);
             }
 
@@ -188,7 +215,8 @@ namespace MelonLoader.InternalUtils
                 Vertex melon = loadableMelons.Values[0];
                 loadableMelons.RemoveAt(0);
 
-                if (!melon.skipLoading)
+                if (!melon.skipLoading
+                    && !loadableMelons.ContainsKey(melon.name))
                     loadedMelons.Add(melon.melon);
                 else
                     ++skippedMelons;
@@ -198,7 +226,8 @@ namespace MelonLoader.InternalUtils
                     unloadedDependencies[dependent.index] -= 1;
                     dependent.skipLoading |= melon.skipLoading;
 
-                    if (unloadedDependencies[dependent.index] == 0)
+                    if ((unloadedDependencies[dependent.index] == 0)
+                        && !loadableMelons.ContainsKey(dependent.name))
                         loadableMelons.Add(dependent.name, dependent);
                 }
             }

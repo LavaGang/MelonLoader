@@ -20,9 +20,9 @@
 - Debug Mode is for Development Purposes.  
 Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 <br></br>
-- All Logs are made in the created MelonLoader/Logs folder in your Game's Installation Folder.
-- All Plugins get placed in the created Plugins folder in your Game's Installation Folder.
-- All Mods get placed in the created Mods folder in your Game's Installation Folder.
+- All Logs are made in the created `MelonLoader/Logs` folder in your Game's Installation Folder.
+- All Plugins get placed in the created `Plugins` folder in your Game's Installation Folder.
+- All Mods get placed in the created `Mods` folder in your Game's Installation Folder.
 <br></br>
 - [The Official Wiki](https://melonwiki.xyz)
 <br></br>
@@ -158,8 +158,6 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.hidewarnings | Hides Warnings from Displaying |
 | --melonloader.debug | Debug Mode |
 | --melonloader.maxlogs | Max Log Files [ Default: 10 ] [ NoCap: 0 ] |
-| --melonloader.maxwarnings | Max Warnings per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |
-| --melonloader.maxerrors | Max Errors per Log File [ Default: 100 ] [ NoCap: 0 ] [ Disabled: -1 ] |
 | --melonloader.loadmodeplugins | Load Mode for Plugins [ Default: 0 ] |
 | --melonloader.loadmodemods | Load Mode for Mods [ Default: 0 ] |
 | --melonloader.basedir | Changes the Proxy's Load Directory for the Bootstrap |
@@ -175,8 +173,15 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 | --melonloader.agfregenerate | Forces Regeneration of Assembly |
 | --melonloader.agfregex | Forces Assembly Generator to use a Specified Regex |
 | --melonloader.agfvdumper | Forces Assembly Generator to use a Specified Version of Dumper |
-| --melonloader.agfvunhollower | Forces Assembly Generator to use a Specified Version of Il2CppAssemblyUnhollower |
-| --melonloader.disableunityclc | Disable Unity Console Log Cleaner | 
+| --melonloader.disableunityclc | Disable Unity Console Log Cleaner |
+
+
+- These ones below are Cpp2IL specific Launch Options.
+
+| Argument | Description |
+| - | - |
+| --cpp2il.callanalyzer | Enables CallAnalyzer processor |
+| --cpp2il.nativemethoddetector | Enables NativeMethodDetector processor |
 
 ---
 
@@ -235,6 +240,7 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) is licensed under the MIT License. See [LICENSE](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md) for the full License.
 - [TinyJSON](https://github.com/pbhogan/TinyJSON) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/TinyJSON/LICENSE.md) for the full License.
 - [Tomlet](https://github.com/SamboyCoding/Tomlet) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Tomlet/blob/master/LICENSE) for the full License.
+- [AsmResolver](https://github.com/Washi1337/AsmResolver) is licensed under the MIT License. See [LICENSE](https://github.com/Washi1337/AsmResolver/blob/master/LICENSE.md) for the full License.
 - [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/SharpZipLib/LICENSE.txt) for the full License.
 - [Semver](https://github.com/maxhauser/semver) is licensed under the MIT License. See [LICENSE](https://github.com/maxhauser/semver/blob/master/License.txt) for the full License.
 - [UnityEngine.Il2CppAssetBundleManager](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager/blob/master/LICENSE.md) for the full License.
@@ -250,12 +256,11 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [ValueTupleBridge](https://github.com/OrangeCube/MinimumAsyncBridge) is licensed under the MIT License. See [LICENSE](https://github.com/OrangeCube/MinimumAsyncBridge/blob/master/LICENSE) for the full License.  
 - [WebSocketDotNet](https://github.com/SamboyCoding/WebSocketDotNet) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/WebSocketDotNet/blob/master/LICENSE) for the full License.
 - [Pastel](https://github.com/silkfire/Pastel) is licensed under the MIT License. See [LICENSE](https://github.com/silkfire/Pastel/blob/master/LICENSE) for the full License.
-- [Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) is licensed under LGPLv3 License. See [LICENSE](https://github.com/BepInEx/Il2CppInterop/blob/master/LICENSE) for the full License.
+- [Il2CppInterop](https://github.com/ds5678/Il2CppInterop) is licensed under LGPLv3 License. See [LICENSE](https://github.com/ds5678/Il2CppInterop/blob/master/LICENSE) for the full License.
   
 
 External Libraries and Tools that are downloaded and used at Runtime:
 - [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.
-- [Il2CppDumper](https://github.com/Perfare/Il2CppDumper) is licensed under the MIT License. See [LICENSE](https://github.com/Perfare/Il2CppDumper/blob/master/LICENSE) for the full License.
 - Unity Runtime Libraries from [Unity-Runtime-Libraries](https://github.com/LavaGang/Unity-Runtime-Libraries) are part of Unity Software.  
 Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
 

@@ -36,9 +36,15 @@ internal static class MelonConsole
         };
     }
 
+    private static bool ShouldNotUseWriter()
+        => (MelonUtils.IsUnderWineOrSteamProton()
+            || !MelonUtils.IsWindows
+            || MelonLaunchOptions.Console.ShouldHide
+            || (ConsoleOutWriter == null));
+
     internal static void WriteLine(string txt)
     {
-        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows || MelonLaunchOptions.Console.ShouldHide)
+        if (ShouldNotUseWriter())
         {
             Console.WriteLine(txt);
             return;
@@ -48,7 +54,7 @@ internal static class MelonConsole
 
     internal static void WriteLine(object txt)
     {
-        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows || MelonLaunchOptions.Console.ShouldHide)
+        if (ShouldNotUseWriter())
         {
             Console.WriteLine(txt.ToString());
             return;
@@ -58,7 +64,7 @@ internal static class MelonConsole
 
     internal static void WriteLine()
     {
-        if (MelonUtils.IsUnderWineOrSteamProton() || !MelonUtils.IsWindows || MelonLaunchOptions.Console.ShouldHide)
+        if (ShouldNotUseWriter())
         {
             Console.WriteLine();
             return;

@@ -18,26 +18,32 @@ pub type InvokeFnIl2Cpp = extern "C" fn(
 pub type InitFnMono = extern "C" fn(*const c_char, *const c_char) -> *mut MonoDomain;
 pub type InitFnIl2Cpp = extern "C" fn(*const c_char) -> *mut Il2CppDomain;
 
-pub const MELON_VERSION: &str = "0.6.4";
+pub const MELON_VERSION: &str = "0.6.5";
 
 pub const IS_ALPHA: bool = false;
 
 pub const RED: Color = Color::TrueColor {
-    r: (255),
-    g: (0),
-    b: (0),
+    r: (205),
+    g: (92),
+    b: (92),
 };
 
 pub const GREEN: Color = Color::TrueColor {
-    r: (0),
-    g: (255),
-    b: (0),
+    r: (50),
+    g: (205),
+    b: (50),
 };
 
 pub const BLUE: Color = Color::TrueColor {
-    r: (64),
-    g: (64),
-    b: (255),
+    r: (100),
+    g: (149),
+    b: (237),
+};
+
+pub const YELLOW: Color = Color::TrueColor {
+    r: (255),
+    g: (255),
+    b: (0),
 };
 
 #[derive(Debug, Clone, Copy)]

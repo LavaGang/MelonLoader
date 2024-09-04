@@ -6,7 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using MelonLoader.Utils;
-#if NET6_0
+#if NET6_0_OR_GREATER
 using System.Runtime.Loader;
 #endif
 
@@ -80,7 +80,7 @@ namespace MelonLoader
 
             try
             {
-#if NET6_0
+#if NET6_0_OR_GREATER
                 var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
 #else
                 var assembly = Assembly.LoadFrom(path);
@@ -107,7 +107,7 @@ namespace MelonLoader
 
             try
             {
-#if NET6_0
+#if NET6_0_OR_GREATER
                 var fileStream = new MemoryStream(assemblyData);
                 var symStream = symbolsData == null ? null : new MemoryStream(symbolsData);
 

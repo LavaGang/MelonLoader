@@ -93,6 +93,7 @@ namespace MelonLoader.MelonStartScreen
 
         internal static readonly AverageStepDuration[] averageStepDurations = new AverageStepDuration[]
         {
+            // Il2CppAssemblyGenerator
             new AverageStepDuration(
                 @"Contacting RemoteAPI\.\.\.",
                 100f,
@@ -109,14 +110,14 @@ namespace MelonLoader.MelonStartScreen
                 @"Initialization - Extracting Unity Dependencies"
             ),
             new AverageStepDuration(
-                @"Downloading Il2CppDumper\.\.\.",
+                @"Downloading Cpp2IL\.\.\.",
                 500f,
-                @"Initialization - Downloading Il2CppDumper"
+                @"Initialization - Downloading Cpp2IL"
             ),
             new AverageStepDuration(
-                @"Extracting .* to .*Il2CppDumper",
+                @"Extracting .* to .*Cpp2IL",
                 500f,
-                @"Initialization - Extracting Il2CppDumper"
+                @"Initialization - Extracting Cpp2IL"
             ),
             new AverageStepDuration(
                 @"Downloading DeobfuscationMap\.\.\.",
@@ -128,6 +129,8 @@ namespace MelonLoader.MelonStartScreen
                 1000f,
                 @"Initialization - Checking GameAssembly"
             ),
+
+
             // Cpp2IL
             // Slaynash: I skipped a lot of steps taking less than 100ms, but we may want to add them back for slower platforms
             new AverageStepDuration(
@@ -185,34 +188,8 @@ namespace MelonLoader.MelonStartScreen
                 4000f,
                 "Cpp2IL - Saving assemblies"
             ),
-            /*
-            // Il2CppDumper
-            (
-                @"Initializing metadata\.\.\.",
-                3500f,
-                null
-            ),
-            (
-                @"Initializing il2cpp file\.\.\.",
-                1800f,
-                null
-            ),
-            (
-                @"Dumping\.\.\.",
-                1400f,
-                null
-            ),
-            (
-                @"Generate struct\.\.\.",
-                26000f,
-                null
-            ),
-            (
-                @"Generate dummy dll\.\.\.",
-                13000f,
-                null
-            ),
-            */
+
+
             // Il2CppInterop
             new AverageStepDuration(
                 @"Reading assemblies\.\.\.",

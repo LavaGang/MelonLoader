@@ -7,50 +7,95 @@ namespace MelonLoader
     {
         private static Dictionary<string, Action> WithoutArg = new Dictionary<string, Action>();
         private static Dictionary<string, Action<string>> WithArg = new Dictionary<string, Action<string>>();
+        private static string[] _cmd;
+
+         /// <summary>
+         /// Dictionary of all Arguments with value (if found) that were not used by MelonLoader
+         /// <para>
+         /// <b>Key</b> is the argument, <b>Value</b> is the value for the argument, <c>null</c> if not found
+         /// </para>
+         /// </summary>
+        public static Dictionary<string, string> ExternalArguments { get; private set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Array of All Command Line Arguments
+        /// </summary>
+        public static string[] CommandLineArgs
+        {
+            get
+            {
+                if (_cmd == null)
+                    _cmd = Environment.GetCommandLineArgs();
+                return _cmd;
+            }
+        }
 
         static MelonLaunchOptions()
         {
             Core.Setup();
             Console.Setup();
+            Cpp2IL.Setup();
             Il2CppAssemblyGenerator.Setup();
             Logger.Setup();
         }
 
         internal static void Load()
         {
-            List<string> foundOptions = new List<string>();
-            LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(Environment.GetCommandLineArgs());
+            LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(CommandLineArgs);
             while (argEnumerator.MoveNext())
             {
                 string fullcmd = argEnumerator.Current;
                 if (string.IsNullOrEmpty(fullcmd))
                     continue;
 
-                if (!fullcmd.StartsWith("--"))
+                // Parse Prefix
+                string noPrefixCmd = fullcmd;
+                if (noPrefixCmd.StartsWith("--"))
+                    noPrefixCmd = noPrefixCmd.Remove(0, 2);
+                else if (noPrefixCmd.StartsWith("-"))
+                    noPrefixCmd = noPrefixCmd.Remove(0, 1);
+                else
+                {
+                    // Unknown Command, Add it to Dictionary
+                    ExternalArguments.Add(noPrefixCmd, null);
                     continue;
+                }
 
-                string cmd = fullcmd.Remove(0, 2);
-
-                if (WithoutArg.TryGetValue(cmd, out Action withoutArgFunc))
+                // Parse Argumentless Commands
+                if (WithoutArg.TryGetValue(noPrefixCmd, out Action withoutArgFunc))
                 {
-                    foundOptions.Add(fullcmd);
                     withoutArgFunc();
+                    continue;
                 }
-                else if (WithArg.TryGetValue(cmd, out Action<string> withArgFunc))
+
+                // Parse Argument
+                string cmdArg = null;
+                if (noPrefixCmd.Contains("="))
                 {
-                    if (!argEnumerator.MoveNext())
-                        continue;
-
-                    string cmdArg = argEnumerator.Current;
-                    if (string.IsNullOrEmpty(cmdArg))
-                        continue;
-
-                    if (cmdArg.StartsWith("--"))
-                        continue;
-
-                    foundOptions.Add($"{fullcmd} = {cmdArg}");
-                    withArgFunc(cmdArg);
+                    string[] split = noPrefixCmd.Split('=');
+                    noPrefixCmd = split[0];
+                    cmdArg = split[1];
                 }
+                if ((string.IsNullOrEmpty(cmdArg)
+                        && !argEnumerator.Peek(out cmdArg))
+                    || string.IsNullOrEmpty(cmdArg)
+                    || !cmdArg.StartsWith("--")
+                    || !cmdArg.StartsWith("-"))
+                {
+                    // Unknown Command, Add it to Dictionary
+                    ExternalArguments.Add(noPrefixCmd, null);
+                    continue;
+                }
+
+                // Parse Argument Commands
+                if (WithArg.TryGetValue(noPrefixCmd, out Action<string> withArgFunc))
+                {
+                    withArgFunc(cmdArg);
+                    continue;
+                }
+
+                // Unknown Command with Argument, Add it to Dictionary
+                ExternalArguments.Add(noPrefixCmd, cmdArg);
             }
         }
 
@@ -64,6 +109,7 @@ namespace MelonLoader
                 DEV,
                 BOTH
             }
+
             public static LoadModeEnum LoadMode_Plugins { get; internal set; }
             public static LoadModeEnum LoadMode_Mods { get; internal set; }
             public static bool QuitFix { get; internal set; }
@@ -102,6 +148,7 @@ namespace MelonLoader
                 RANDOMRAINBOW,
                 LEMON
             };
+
             public static DisplayMode Mode { get; internal set; }
             public static bool CleanUnityLogs { get; internal set; } = true;
             public static bool ShouldSetTitle { get; internal set; } = true;
@@ -122,6 +169,18 @@ namespace MelonLoader
                     if (int.TryParse(arg, out int valueint))
                         Mode = (DisplayMode)MelonUtils.Clamp(valueint, (int)DisplayMode.NORMAL, (int)DisplayMode.LEMON);
                 };
+            }
+        }
+
+        public static class Cpp2IL
+        {
+            public static bool CallAnalyzer { get; internal set; }
+            public static bool NativeMethodDetector { get; internal set; }
+
+            internal static void Setup()
+            {
+                WithoutArg["cpp2il.callanalyzer"] = () => CallAnalyzer = true;
+                WithoutArg["cpp2il.nativemethoddetector"] = () => NativeMethodDetector = true;
             }
         }
 
@@ -167,6 +226,6 @@ namespace MelonLoader
             }
         }
 
-        #endregion
+        #endregion Args
     }
 }

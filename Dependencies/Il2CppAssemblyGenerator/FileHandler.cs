@@ -8,11 +8,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 {
     internal static class FileHandler
     {
-        private static LemonSHA512 sha512 = new LemonSHA512();
-
-        internal static string Hash(string filepath)
-            => BitConverter.ToString(sha512.ComputeHash(File.ReadAllBytes(filepath))).Replace("-", "").ToLowerInvariant();
-            
         internal static bool Download(string url, string destination)
         {
             if (string.IsNullOrEmpty(url))

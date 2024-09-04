@@ -11,6 +11,7 @@ namespace MelonLoader.Support
     internal class SM_Component : MonoBehaviour
     {
         private bool isQuitting;
+        private static bool hadError;
 
 #if SM_Il2Cpp
         private delegate bool SetAsLastSiblingDelegate(IntPtr transformptr);
@@ -26,13 +27,19 @@ namespace MelonLoader.Support
             {
 #if SM_Il2Cpp
                 SetAsLastSiblingDelegateField = IL2CPP.ResolveICall<SetAsLastSiblingDelegate>("UnityEngine.Transform::SetAsLastSibling");
+                if (SetAsLastSiblingDelegateField == null)
+                    throw new Exception("Unable to find Internal Call for UnityEngine.Transform::SetAsLastSibling");
 #else
                 SetAsLastSiblingMethod = typeof(Transform).GetMethod("SetAsLastSibling", BindingFlags.Public | BindingFlags.Instance);
+                if (SetAsLastSiblingMethod == null)
+                    throw new Exception("Unable to find Internal Call for UnityEngine.Transform::SetAsLastSibling");
 #endif
             }
             catch (Exception ex)
             {
+                hadError = true;
                 MelonLogger.Warning($"Exception while Getting Transform.SetAsLastSibling: {ex}");
+                MelonLogger.Warning("Melon Events might run before some MonoBehaviour Events");
             }
         }
 
@@ -54,18 +61,25 @@ namespace MelonLoader.Support
 
         private void SiblingFix()
         {
-#if SM_Il2Cpp
-            SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(gameObject.transform));
-            SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(transform));
-#else
-            SetAsLastSiblingMethod?.Invoke(gameObject.transform, new object[0]);
-            SetAsLastSiblingMethod?.Invoke(transform, new object[0]);
-#endif
-        }
+            if (hadError)
+                return;
 
-        internal void Destroy()
-        {
-            Destroy(gameObject);
+            try
+            {
+#if SM_Il2Cpp
+                SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(gameObject.transform));
+                SetAsLastSiblingDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(transform));
+#else
+                SetAsLastSiblingMethod?.Invoke(gameObject.transform, new object[0]);
+                SetAsLastSiblingMethod?.Invoke(transform, new object[0]);
+#endif
+            }
+            catch (Exception ex)
+            {
+                hadError = true;
+                MelonLogger.Warning($"Exception while Invoking Transform.SetAsLastSibling: {ex}");
+                MelonLogger.Warning("Melon Events might run before some MonoBehaviour Events");
+            }
         }
 
         void Start()
