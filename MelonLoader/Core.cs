@@ -173,26 +173,28 @@ namespace MelonLoader
             var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
             MelonLogger.MsgDirect($"Game Arch: {archString}");
             MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect($"CommandLine: {string.Join(" ", MelonLaunchOptions.CommandLineArgs)}");
+            MelonLogger.MsgDirect($"Command-Line: {string.Join(" ", MelonLaunchOptions.CommandLineArgs)}");
             MelonLogger.MsgDirect("------------------------------");
             
-
             MelonEnvironment.PrintEnvironment();
         }
 
-        
         internal static void Quit()
         {
-            MelonDebug.Msg("[ML Core] Received Quit from Support Module. Shutting down...");
+            MelonDebug.Msg("[ML Core] Received Quit Request! Shutting down...");
             
             MelonPreferences.Save();
 
             HarmonyInstance.UnpatchSelf();
             bHapticsManager.Disconnect();
 
+#if NET6_0_OR_GREATER
+            Fixes.Il2CppInteropFixes.Shutdown();
+#endif
+
             MelonLogger.Flush();
             //MelonLogger.Close();
-            
+
             Thread.Sleep(200);
 
             if (MelonLaunchOptions.Core.QuitFix)

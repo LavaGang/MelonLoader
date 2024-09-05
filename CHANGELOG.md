@@ -69,6 +69,7 @@
 28. Fixed an issue with MelonLaunchOptions failing to parse arguments if an `=` sign is used instead of a space
 29. Fixed an issue with MelonLaunchOptions failing to parse options if a `-` prefix is used instead of `--`
 30. Fixed an issue with Command Line Arguments not being logged
+31. Fixed an issue with Il2CppInterop Assembly Resolving when Il2Cpp Prefixing is used
 
 ---
 
