@@ -338,8 +338,7 @@ namespace MelonLoader
         internal static void Internal_PastelMsg(Color namesection_color, Color txt_color, string namesection, string txt)
         {
             // Regex to check for ANSI
-            string fileTxt = txt;
-            fileTxt = Regex.Replace(fileTxt, @"(\x1B|\e|\033)\[(.*?)m", "");
+            string fileTxt = Regex.Replace(txt, @"(\x1B|\e|\033)\[(.*?)m", "");
 
             WriteLogToFile($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{fileTxt}");
 
