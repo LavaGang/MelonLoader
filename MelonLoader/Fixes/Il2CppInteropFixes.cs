@@ -21,9 +21,9 @@ using AsmResolver.DotNet;
 namespace MelonLoader.Fixes
 {
     // fixes: https://github.com/BepInEx/Il2CppInterop/pull/103
-    // fixes: https://github.com/BepInEx/Il2CppInterop/pull/134
     // fixes: https://github.com/BepInEx/Il2CppInterop/issues/135
     // reverts: https://github.com/BepInEx/Il2CppInterop/commit/18e58ef5db42a71d6012ab0387b107a4132101eb
+    // fixes the rest of: https://github.com/BepInEx/Il2CppInterop/pull/134
     internal unsafe static class Il2CppInteropFixes
     {
         private static Dictionary<RewriteGlobalContext, Dictionary<string, AssemblyRewriteContext>> _assemblyLookup = new();
