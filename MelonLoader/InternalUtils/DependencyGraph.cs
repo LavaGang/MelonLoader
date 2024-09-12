@@ -100,6 +100,7 @@ namespace MelonLoader.InternalUtils
                             dependencyVertex.dependents.Add(melonVertex);
                     }
                     else if (!TryLoad(dependency)
+                        && !TryResolve(dependency)
                         && !optionalDependencies.Contains(dependency.Name)
                         && !missingDependencies.Contains(dependency))
                         missingDependencies.Add(dependency);
@@ -116,6 +117,7 @@ namespace MelonLoader.InternalUtils
                             dependencyVertex.dependents.Add(melonVertex);
                     }
                     else if (!TryLoad(dependency)
+                        && !TryResolve(dependency)
                         && !missingDependencies.Contains(dependency))
                         missingDependencies.Add(dependency);
                 }
@@ -143,6 +145,24 @@ namespace MelonLoader.InternalUtils
         {
             try
             {
+                Assembly asm = Assembly.Load(assembly);
+                if (asm == null)
+                    return false;
+                return true;
+            }
+            catch (FileNotFoundException) { return false; }
+            catch (Exception ex)
+            {
+                MelonLogger.Error("Loading Melon Dependency Failed: " + ex);
+                return false;
+            }
+        }
+		
+		// Returns true if 'assembly' was already resolved or could be resolved, false if the required assembly was missing.
+        private static bool TryResolve(AssemblyName assembly)
+        {
+            try
+            {
 #if NET35
                 Assembly asm = SearchDirectoryManager.Scan(assembly.Name);
 #elif NET6_0_OR_GREATER
@@ -155,7 +175,7 @@ namespace MelonLoader.InternalUtils
             catch (FileNotFoundException) { return false; }
             catch (Exception ex)
             {
-                MelonLogger.Error("Loading Melon Dependency Failed: " + ex);
+                MelonLogger.Error("Resolving Melon Dependency Failed: " + ex);
                 return false;
             }
         }
