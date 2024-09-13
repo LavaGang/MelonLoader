@@ -60,8 +60,6 @@ namespace MelonLoader.Fixes
         private static MethodInfo _rewriteGlobalContext_GetNewAssemblyForOriginal_Prefix;
         private static MethodInfo _rewriteGlobalContext_TryGetNewTypeForOriginal;
         private static MethodInfo _rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix;
-        private static MethodInfo _il2cpp_resolve_icall;
-        private static MethodInfo _il2cpp_resolve_icall_Postfix;
 
         internal static void Install()
         {
@@ -72,7 +70,6 @@ namespace MelonLoader.Fixes
                 Type classInjectorType = typeof(ClassInjector);
                 Type ilGeneratorEx = typeof(ILGeneratorEx);
                 Type rewriteGlobalContextType = typeof(RewriteGlobalContext);
-                Type il2cppType = typeof(IL2CPP);
 
                 Type injectorHelpersType = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers");
                 if (injectorHelpersType == null)
@@ -142,10 +139,6 @@ namespace MelonLoader.Fixes
                 if (_rewriteGlobalContext_TryGetNewTypeForOriginal == null)
                     throw new Exception("Failed to get RewriteGlobalContext.TryGetNewTypeForOriginal");
 
-                _il2cpp_resolve_icall = il2cppType.GetMethod("il2cpp_resolve_icall", BindingFlags.Public | BindingFlags.Static);
-                if (_il2cpp_resolve_icall == null)
-                    throw new Exception("Failed to get IL2CPP.il2cpp_resolve_icall");
-
                 _fixedFindType = thisType.GetMethod(nameof(FixedFindType), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedAddTypeToLookup = thisType.GetMethod(nameof(FixedAddTypeToLookup), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedIsByRef = thisType.GetMethod(nameof(FixedIsByRef), BindingFlags.NonPublic | BindingFlags.Static);
@@ -161,8 +154,7 @@ namespace MelonLoader.Fixes
                 _rewriteGlobalContext_Dispose_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_Dispose_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteGlobalContext_GetNewAssemblyForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_GetNewAssemblyForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_TryGetNewTypeForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-                _il2cpp_resolve_icall_Postfix = thisType.GetMethod(nameof(il2cpp_resolve_icall_Postfix), BindingFlags.NonPublic | BindingFlags.Static);
-
+                
                 MelonDebug.Msg("Patching Il2CppInterop ClassInjector.SystemTypeFromIl2CppType...");
                 Core.HarmonyInstance.Patch(_systemTypeFromIl2CppType,
                     new HarmonyMethod(_systemTypeFromIl2CppType_Prefix), 
@@ -210,10 +202,6 @@ namespace MelonLoader.Fixes
                 MelonDebug.Msg("Patching Il2CppInterop RewriteGlobalContext.TryGetNewTypeForOriginal...");
                 Core.HarmonyInstance.Patch(_rewriteGlobalContext_TryGetNewTypeForOriginal,
                     new HarmonyMethod(_rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix));
-
-                MelonDebug.Msg("Patching Il2CppInterop IL2CPP.il2cpp_resolve_icall...");
-                Core.HarmonyInstance.Patch(_il2cpp_resolve_icall,
-                    null, new HarmonyMethod(_il2cpp_resolve_icall_Postfix));
             }
             catch (Exception e)
             {
@@ -249,29 +237,14 @@ namespace MelonLoader.Fixes
         {
             if (string.IsNullOrEmpty(il2CppTypeFullName))
                 return null;
-
-            //if (_typeNameLookup.TryGetValue(il2CppTypeFullName, out Type result))
-            //    return result;
-
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (a == null)
-                    continue;
-
-                Type result = a.GetValidType($"Il2Cpp.{il2CppTypeFullName}");
-                if (result == null)
-                    result = a.GetValidType($"Il2Cpp{il2CppTypeFullName}");
-                if (result == null)
-                    result = a.GetValidType(il2CppTypeFullName);
-
-                if (result != null)
-                {
-                    //_typeNameLookup[result.FullName] = result;
-                    return result;
-                }
-            }
-
-            return null;
+			
+            Type returnType = Type.GetType($"Il2Cpp.{il2CppTypeFullName}");
+            if (returnType == null)
+                returnType = Type.GetType($"Il2Cpp{il2CppTypeFullName}");
+            if (returnType == null)
+                returnType = Type.GetType(il2CppTypeFullName);
+			
+            return returnType;
         }
 
         private static void FixedAddTypeToLookup(Type type, IntPtr typePointer)
@@ -285,20 +258,6 @@ namespace MelonLoader.Fixes
             typePointer = IL2CPP.il2cpp_class_get_type(typePointer);
             if (typePointer !=  IntPtr.Zero)
                 _typeLookup.Add(typePointer, type);
-        }
-
-        [DllImport("GameAssembly", EntryPoint = "il2cpp_resolve_icall", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern IntPtr il2cpp_resolve_icall_original([MarshalAs(UnmanagedType.LPStr)] string name);
-        private const string _unityInlineInjectedSuffix = "_Injected";
-        private static void il2cpp_resolve_icall_Postfix(string __0, ref IntPtr __result)
-        {
-            if (__result != IntPtr.Zero)
-                return;
-
-            if (__0.EndsWith(_unityInlineInjectedSuffix))
-                __result = il2cpp_resolve_icall_original(__0.Substring(0, __0.Length - _unityInlineInjectedSuffix.Length));
-            else
-                __result = il2cpp_resolve_icall_original($"{__0}{_unityInlineInjectedSuffix}");
         }
 
         private static bool EmitObjectToPointer_Prefix(bool __7, ref bool __8)
