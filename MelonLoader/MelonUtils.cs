@@ -302,12 +302,29 @@ namespace MelonLoader
             try { returnval = asm.GetTypes().AsEnumerable(); }
             catch (ReflectionTypeLoadException ex) 
             {
-                MelonLogger.Error($"Failed to load all types in assembly {asm.FullName} due to: {ex.Message}", ex);
+                MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
                 //Console.WriteLine(ex);
                 returnval = ex.Types; 
             }
 
             return returnval.Where(x => (x != null) && (predicate == null || predicate(x)));
+        }
+
+        public static Type GetValidType(this Assembly asm, string typeName)
+            => GetValidType(asm, typeName, null);
+
+        public static Type GetValidType(this Assembly asm, string typeName, LemonFunc<Type, bool> predicate)
+        {
+            Type x = null;
+            try { x = asm.GetType(typeName); }
+            catch (Exception ex)
+            {
+                MelonLogger.Error($"Failed to get type {typeName} from assembly {asm.FullName} due to: {ex.Message}", ex);
+                x = null;
+            }
+            if ((x != null) && (predicate == null || predicate(x)))
+                return x;
+            return null;
         }
 
         public static bool IsNotImplemented(this MethodBase methodBase)
