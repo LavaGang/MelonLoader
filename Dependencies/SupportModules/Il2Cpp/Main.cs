@@ -30,7 +30,16 @@ namespace MelonLoader.Support
 
         private static ISupportModule_To Initialize(ISupportModule_From interface_from)
         {
-            Interface = interface_from;
+            Interface = interface_from; 
+
+            foreach (var file in Directory.GetFiles(MelonEnvironment.Il2CppAssembliesDirectory, "*.dll"))
+            {
+                try
+                {
+                    Assembly.LoadFrom(file);
+                }
+                catch { }
+            }
 
             UnityMappers.RegisterMappers();
 
