@@ -13,15 +13,17 @@ using System.Runtime.InteropServices;
 
 namespace MelonLoader.Fixes
 {
-    internal static class InjectedInternalCalls
+    internal static class Il2CppICallInjector
     {
-        private const string _unityInjectedSuffix = "_Injected";
         private const string _customICallSuffix = "_INative";
 
         private static Dictionary<string, (DynamicMethodDefinition, MethodInfo, IntPtr)> _lookup = new();
 
         private delegate IntPtr dil2cpp_resolve_icall(IntPtr signature);
         private static NativeHook<dil2cpp_resolve_icall> il2cpp_resolve_icall_hook;
+
+        private delegate void dil2cpp_add_internal_call(IntPtr signature, IntPtr funcPtr);
+        private static dil2cpp_add_internal_call il2cpp_add_internal_call;
 
         private static Type _stringType;
         private static Type _intPtrType;
@@ -35,10 +37,15 @@ namespace MelonLoader.Fixes
         private static MethodInfo _il2CppPtrToString;
         private static MethodInfo _il2CppObjectBaseGetPointer;
 
+        private static MelonLogger.Instance _logger;
+
         internal static unsafe void Install()
         {
             try
             {
+                _logger = new MelonLogger.Instance(nameof(Il2CppICallInjector));
+
+                Type thisType = typeof(Il2CppICallInjector);
                 Type objectType = typeof(object);
                 Type il2cppType = typeof(IL2CPP);
                 Type melonLoggerType = typeof(MelonLogger);
@@ -60,8 +67,8 @@ namespace MelonLoader.Fixes
                 if (_stringToIl2CppPtr == null)
                     throw new Exception("Failed to get IL2CPP.ManagedStringToIl2Cpp");
 
-                _melonLoggerError = melonLoggerType.GetMethod(nameof(MelonLogger.Error),
-                    BindingFlags.Static | BindingFlags.Public,
+                _melonLoggerError = thisType.GetMethod(nameof(LogError),
+                    BindingFlags.Static | BindingFlags.NonPublic,
                     [_stringType]);
                 if (_melonLoggerError == null)
                     throw new Exception("Failed to get MelonLogger.Error");
@@ -84,6 +91,10 @@ namespace MelonLoader.Fixes
                 if (il2cpp_resolve_icall == IntPtr.Zero)
                     throw new Exception($"Failed to get {nameof(il2cpp_resolve_icall)} Native Export");
 
+                il2cpp_add_internal_call = gameAssemblyLib.GetExport<dil2cpp_add_internal_call>(nameof(il2cpp_add_internal_call));
+                if (il2cpp_add_internal_call == null)
+                    throw new Exception($"Failed to get {nameof(il2cpp_add_internal_call)} Native Export");
+
                 MelonDebug.Msg("Patching il2cpp_resolve_icall...");
                 IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((dil2cpp_resolve_icall)il2cpp_resolve_icall_Detour);
                 il2cpp_resolve_icall_hook = new NativeHook<dil2cpp_resolve_icall>(il2cpp_resolve_icall, detourPtr);
@@ -91,7 +102,7 @@ namespace MelonLoader.Fixes
             }
             catch (Exception e)
             {
-                MelonLogger.Error(e);
+                LogError(e.ToString());
             }
         }
 
@@ -111,6 +122,9 @@ namespace MelonLoader.Fixes
                 _lookup = null;
             }
         }
+
+        private static void LogError(string msg)
+            => _logger.Error(msg);
 
         private static IntPtr il2cpp_resolve_icall_Detour(IntPtr signature)
         {
@@ -136,20 +150,21 @@ namespace MelonLoader.Fixes
             if (!ShouldInject(signatureStr, out MethodInfo unityShimMethod))
                 return IntPtr.Zero;
 
-            // Create Injected Function
-            var pair = _lookup[signatureStr] = GenerateTrampoline(unityShimMethod);
+            // Create Injected Function and Cache Return
+            var pair = 
+                _lookup[signatureStr] = GenerateTrampoline(unityShimMethod);
+
+            // Add New ICall to Il2Cpp Domain
+            il2cpp_add_internal_call(signature, pair.Item3);
+            _logger.Msg($"Registered mono icall {signatureStr} in il2cpp domain");
+
+            // Return New Function Pointer
             return pair.Item3;
         }
 
         private static bool ShouldInject(string signature, out MethodInfo unityShimMethod)
         {
             unityShimMethod = null;
-
-            // Check if the Unity Injected Shim ICall Exists
-            IntPtr unityInjectedShimResult = il2cpp_resolve_icall_hook.Trampoline(
-                Marshal.StringToHGlobalAnsi($"{signature}{_unityInjectedSuffix}"));
-            if (unityInjectedShimResult == IntPtr.Zero)
-                return false;
 
             // Split the Signature
             string[] split = signature.Split("::");

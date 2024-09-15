@@ -94,7 +94,7 @@ namespace MelonLoader
 
 #if NET6_0_OR_GREATER
             Fixes.Il2CppInteropFixes.Install();
-            Fixes.InjectedInternalCalls.Install();
+            Fixes.Il2CppICallInjector.Install();
 #endif
 
             PatchShield.Install();
@@ -191,7 +191,7 @@ namespace MelonLoader
 
 #if NET6_0_OR_GREATER
             Fixes.Il2CppInteropFixes.Shutdown();
-            Fixes.InjectedInternalCalls.Shutdown();
+            Fixes.Il2CppICallInjector.Shutdown();
 #endif
 
             MelonLogger.Flush();
