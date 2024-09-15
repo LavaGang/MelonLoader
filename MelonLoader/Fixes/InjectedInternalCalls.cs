@@ -16,11 +16,11 @@ namespace MelonLoader.Fixes
     internal static class InjectedInternalCalls
     {
         private const string _unityInjectedSuffix = "_Injected";
+        private const string _customICallSuffix = "_INative";
 
         private static Dictionary<string, (DynamicMethodDefinition, MethodInfo, IntPtr)> _lookup = new();
 
         private delegate IntPtr dil2cpp_resolve_icall(IntPtr signature);
-        private static dil2cpp_resolve_icall il2cpp_resolve_icall_original;
         private static NativeHook<dil2cpp_resolve_icall> il2cpp_resolve_icall_hook;
 
         private static Type _stringType;
@@ -195,7 +195,7 @@ namespace MelonLoader.Fixes
                 returnType = _intPtrType;
 
             // Create New Injected ICall Method
-            string newMethodName = $"{unityShimMethod.Name}_INative";
+            string newMethodName = $"{unityShimMethod.Name}{_customICallSuffix}";
             var trampoline = new DynamicMethodDefinition(
                 newMethodName,
                 returnType,
