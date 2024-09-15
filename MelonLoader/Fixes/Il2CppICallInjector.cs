@@ -48,7 +48,6 @@ namespace MelonLoader.Fixes
                 Type thisType = typeof(Il2CppICallInjector);
                 Type objectType = typeof(object);
                 Type il2cppType = typeof(IL2CPP);
-                Type melonLoggerType = typeof(MelonLogger);
 
                 _il2CppObjectBaseType = typeof(Il2CppObjectBase);
                 _exceptionType = typeof(Exception);
