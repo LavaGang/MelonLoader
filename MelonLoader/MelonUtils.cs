@@ -487,10 +487,13 @@ namespace MelonLoader
 
         internal static void SetupWineCheck()
         {
-            if (MelonUtils.IsUnix || MelonUtils.IsMac)
+            if (IsUnix || IsMac)
                 return;
 
             IntPtr dll = NativeLibrary.LoadLib("ntdll.dll");
+            if (dll == IntPtr.Zero)
+                return;
+
             IntPtr wine_get_version_proc = NativeLibrary.AgnosticGetProcAddress(dll, "wine_get_version");
             if (wine_get_version_proc == IntPtr.Zero)
                 return;

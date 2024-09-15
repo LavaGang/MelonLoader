@@ -1,44 +1,93 @@
 ﻿#if NET6_0_OR_GREATER
 
-using HarmonyLib;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes;
+using MelonLoader.NativeUtils;
 using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-//using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace MelonLoader.Fixes
 {
     internal static class InjectedInternalCalls
     {
-        private static Dictionary<string, (MethodInfo, IntPtr)> _lookup = new();
         private const string _unityInjectedSuffix = "_Injected";
-        private static MethodInfo _il2cpp_resolve_icall;
-        private static MethodInfo _il2cpp_resolve_icall_Postfix;
 
-        //[DllImport("GameAssembly", EntryPoint = "il2cpp_resolve_icall", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        //private static extern IntPtr il2cpp_resolve_icall_original([MarshalAs(UnmanagedType.LPStr)] string name);
+        private static Dictionary<string, (DynamicMethodDefinition, MethodInfo, IntPtr)> _lookup = new();
 
-        internal static void Install()
+        private delegate IntPtr dil2cpp_resolve_icall(IntPtr signature);
+        private static dil2cpp_resolve_icall il2cpp_resolve_icall_original;
+        private static NativeHook<dil2cpp_resolve_icall> il2cpp_resolve_icall_hook;
+
+        private static Type _stringType;
+        private static Type _intPtrType;
+        private static Type _exceptionType;
+        private static Type _il2CppObjectBaseType;
+
+        private static MethodInfo _stringConcat;
+        private static MethodInfo _objectToString;
+        private static MethodInfo _melonLoggerError;
+        private static MethodInfo _stringToIl2CppPtr;
+        private static MethodInfo _il2CppPtrToString;
+        private static MethodInfo _il2CppObjectBaseGetPointer;
+
+        internal static unsafe void Install()
         {
             try
             {
+                Type objectType = typeof(object);
                 Type il2cppType = typeof(IL2CPP);
-                Type thisType = typeof(InjectedInternalCalls);
+                Type melonLoggerType = typeof(MelonLogger);
 
-                _il2cpp_resolve_icall = il2cppType.GetMethod("il2cpp_resolve_icall", BindingFlags.Public | BindingFlags.Static);
-                if (_il2cpp_resolve_icall == null)
-                    throw new Exception("Failed to get IL2CPP.il2cpp_resolve_icall");
+                _il2CppObjectBaseType = typeof(Il2CppObjectBase);
+                _exceptionType = typeof(Exception);
+                _intPtrType = typeof(IntPtr);
+                _stringType = typeof(string);
 
-                _il2cpp_resolve_icall_Postfix = thisType.GetMethod(nameof(il2cpp_resolve_icall_Postfix), BindingFlags.NonPublic | BindingFlags.Static);
+                _stringConcat = _stringType.GetMethod(nameof(string.Concat), [_stringType, _stringType]);
+                if (_stringConcat == null)
+                    throw new Exception("Failed to get string.Concat");
 
-                MelonDebug.Msg("Patching Il2CppInterop IL2CPP.il2cpp_resolve_icall...");
-                Core.HarmonyInstance.Patch(_il2cpp_resolve_icall,
-                    null, new HarmonyMethod(_il2cpp_resolve_icall_Postfix));
+                _objectToString = objectType.GetMethod(nameof(ToString));
+                if (_objectToString == null)
+                    throw new Exception("Failed to get object.ToString");
+
+                _stringToIl2CppPtr = il2cppType.GetMethod(nameof(IL2CPP.ManagedStringToIl2Cpp));
+                if (_stringToIl2CppPtr == null)
+                    throw new Exception("Failed to get IL2CPP.ManagedStringToIl2Cpp");
+
+                _melonLoggerError = melonLoggerType.GetMethod(nameof(MelonLogger.Error),
+                    BindingFlags.Static | BindingFlags.Public,
+                    [_stringType]);
+                if (_melonLoggerError == null)
+                    throw new Exception("Failed to get MelonLogger.Error");
+
+                _il2CppPtrToString = il2cppType.GetMethod(nameof(IL2CPP.Il2CppStringToManaged));
+                if (_il2CppPtrToString == null)
+                    throw new Exception("Failed to get IL2CPP.Il2CppStringToManaged");
+
+                PropertyInfo pointerProp = _il2CppObjectBaseType.GetProperty(nameof(Il2CppObjectBase.Pointer));
+                if (_il2CppPtrToString == null)
+                    throw new Exception("Failed to get Il2CppObjectBase.Pointer");
+                _il2CppObjectBaseGetPointer = pointerProp.GetMethod;
+
+                string gameAssemblyName = "GameAssembly";
+                NativeLibrary gameAssemblyLib = NativeLibrary.Load(gameAssemblyName);
+                if (gameAssemblyLib == null)
+                    throw new Exception($"Failed to load {gameAssemblyName} Native Library");
+
+                IntPtr il2cpp_resolve_icall = gameAssemblyLib.GetExport(nameof(il2cpp_resolve_icall));
+                if (il2cpp_resolve_icall == IntPtr.Zero)
+                    throw new Exception($"Failed to get {nameof(il2cpp_resolve_icall)} Native Export");
+
+                MelonDebug.Msg("Patching il2cpp_resolve_icall...");
+                IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((dil2cpp_resolve_icall)il2cpp_resolve_icall_Detour);
+                il2cpp_resolve_icall_hook = new NativeHook<dil2cpp_resolve_icall>(il2cpp_resolve_icall, detourPtr);
+                il2cpp_resolve_icall_hook.Attach();
             }
             catch (Exception e)
             {
@@ -48,6 +97,13 @@ namespace MelonLoader.Fixes
 
         internal static void Shutdown()
         {
+            if (il2cpp_resolve_icall_hook != null)
+            {
+                if (il2cpp_resolve_icall_hook.IsHooked)
+                    il2cpp_resolve_icall_hook.Detach();
+                il2cpp_resolve_icall_hook = null;
+            }
+
             if (_lookup != null)
             {
                 if (_lookup.Count > 0)
@@ -56,59 +112,44 @@ namespace MelonLoader.Fixes
             }
         }
 
-        private static void il2cpp_resolve_icall_Postfix(string __0, ref IntPtr __result)
-        {
-            // Found the ICall
-            if (__result != IntPtr.Zero)
-                return;
-
-            // Needs Resolving
-            __result = Resolve(__0);
-        }
-
-        /*
-        private static IntPtr Resolve(IntPtr signature)
+        private static IntPtr il2cpp_resolve_icall_Detour(IntPtr signature)
         {
             // Convert Pointer to String
-            string signatureStr = IL2CPP.Il2CppStringToManaged(signature);
+            string signatureStr = Marshal.PtrToStringAnsi(signature);
             if (string.IsNullOrEmpty(signatureStr))
                 return IntPtr.Zero;
 
-            // Resolve to Function Pointer
-            return Resolve(signatureStr);
-        }
-        */
-
-        private static IntPtr Resolve(string signature)
-        {
             // Check Cache
-            if (_lookup.TryGetValue(signature, out var result))
-                return result.Item2;
+            if (_lookup.TryGetValue(signatureStr, out var result))
+                return result.Item3;
 
             // Run Original
-            // To-Do: Implement when Harmony Patch is replaced with Native Hook
-            /*
-            IntPtr originalResult = IntPtr.Zero;
+            IntPtr originalResult = il2cpp_resolve_icall_hook.Trampoline(signature);
             if (originalResult != IntPtr.Zero)
             {
                 // Cache Original Result
-                _lookup[signature] = (null, originalResult);
+                _lookup[signatureStr] = (null, null, originalResult);
                 return originalResult;
             }
-            */
 
             // Check if Injection is Needed
-            if (!ShouldInject(signature, out MethodInfo unityShimMethod))
+            if (!ShouldInject(signatureStr, out MethodInfo unityShimMethod))
                 return IntPtr.Zero;
 
             // Create Injected Function
-            var pair = _lookup[signature] = GenerateTrampoline(unityShimMethod);
-            return pair.Item2;
+            var pair = _lookup[signatureStr] = GenerateTrampoline(unityShimMethod);
+            return pair.Item3;
         }
 
         private static bool ShouldInject(string signature, out MethodInfo unityShimMethod)
         {
             unityShimMethod = null;
+
+            // Check if the Unity Injected Shim ICall Exists
+            IntPtr unityInjectedShimResult = il2cpp_resolve_icall_hook.Trampoline(
+                Marshal.StringToHGlobalAnsi($"{signature}{_unityInjectedSuffix}"));
+            if (unityInjectedShimResult == IntPtr.Zero)
+                return false;
 
             // Split the Signature
             string[] split = signature.Split("::");
@@ -119,43 +160,39 @@ namespace MelonLoader.Fixes
             if (newType == null)
                 return false;
 
-            // Check if ICall was reworked
-            string methodName = split[1];
-            if (newType.FindMethod($"{methodName}{_unityInjectedSuffix}") == null)
-                return false;
-
             // Find Managed Method
+            string methodName = split[1];
             MethodInfo method = newType.FindMethod(methodName);
             if (method == null)
                 return false;
 
-            // ICall needs Injecting
+            // Inject ICall
             unityShimMethod = method;
             return true;
         }
 
-        private static (MethodInfo, IntPtr) GenerateTrampoline(MethodInfo unityShimMethod)
+        private static (DynamicMethodDefinition, MethodInfo, IntPtr) GenerateTrampoline(MethodInfo unityShimMethod)
         {
             // Convert Method Parameters to Native Parameters
             var methodParams = unityShimMethod.GetParameters();
             int offset = unityShimMethod.IsStatic ? 0 : 1;
             Type[] paramTypes = new Type[methodParams.Length + offset];
             if (!unityShimMethod.IsStatic)
-                paramTypes[0] = typeof(IntPtr);
-            for (int i = offset; i < methodParams.Length + offset; i++)
+                paramTypes[0] = _intPtrType;
+            for (int i = 0; i < methodParams.Length; i++)
             {
-                if ((methodParams[i].ParameterType != typeof(string))
+                if ((methodParams[i].ParameterType != _stringType)
                     && methodParams[i].ParameterType.IsValueType)
-                    paramTypes[i] = methodParams[i].ParameterType;
+                    paramTypes[i + offset] = methodParams[i].ParameterType;
                 else
-                    paramTypes[i] = typeof(IntPtr);
+                    paramTypes[i + offset] = _intPtrType;
             }
 
             // Convert Return Type
             Type returnType = unityShimMethod.ReturnType;
-            if ((returnType == typeof(string))
+            if ((returnType == _stringType)
                 || !returnType.IsValueType)
-                returnType = typeof(IntPtr);
+                returnType = _intPtrType;
 
             // Create New Injected ICall Method
             string newMethodName = $"{unityShimMethod.Name}_INative";
@@ -163,94 +200,127 @@ namespace MelonLoader.Fixes
                 newMethodName,
                 returnType,
                 paramTypes);
-            var bodyBuilder = trampoline.GetILGenerator();
+            var ilGenerator = trampoline.GetILGenerator();
 
             // Begin Try-Catch
-            var tryLabel = bodyBuilder.BeginExceptionBlock();
+            ilGenerator.BeginExceptionBlock();
+
+            // Emit This Object
+            if (!unityShimMethod.IsStatic)
+                ilGenerator.EmitPtrArgToManagedObject(0, unityShimMethod.DeclaringType);
 
             // Convert Method Parameters to Managed Objects
             for (var i = 0; i < methodParams.Length; i++)
             {
-                // Emit Arg Index
-                bodyBuilder.Emit(OpCodes.Ldarg, i);
-
-                // Create Managed Object
-                var parameterType = methodParams[i].ParameterType;
-                if (parameterType == typeof(string))
-                {
-                    bodyBuilder.Emit(OpCodes.Call, typeof(IL2CPP).GetMethod(nameof(IL2CPP.Il2CppStringToManaged))!);
-                }
-                else if (!parameterType.IsValueType)
-                {
-                    var labelNull = bodyBuilder.DefineLabel();
-                    var labelDone = bodyBuilder.DefineLabel();
-                    bodyBuilder.Emit(OpCodes.Brfalse, labelNull);
-                    bodyBuilder.Emit(OpCodes.Ldarg, i);
-                    bodyBuilder.Emit(OpCodes.Newobj, parameterType.GetConstructor(new[] { typeof(IntPtr) })!);
-                    bodyBuilder.Emit(OpCodes.Br, labelDone);
-                    bodyBuilder.MarkLabel(labelNull);
-                    bodyBuilder.Emit(OpCodes.Ldnull);
-                    bodyBuilder.MarkLabel(labelDone);
-                }
+                var param = methodParams[i];
+                var paramType = param.ParameterType;
+                if (paramType == _stringType)
+                    ilGenerator.EmitPtrArgToString(i + offset);
+                else if (paramType.IsValueType)
+                    ilGenerator.EmitArg(i + offset);
+                else
+                    ilGenerator.EmitPtrArgToManagedObject(i + offset, paramType);
             }
 
             // Call Existing Method
-            bodyBuilder.Emit(OpCodes.Call, unityShimMethod);
+            ilGenerator.Emit(OpCodes.Call, unityShimMethod);
 
             // Convert Managed Return
             var oldreturnType = unityShimMethod.ReturnType;
-            if (oldreturnType == typeof(string))
-            {
-                bodyBuilder.Emit(OpCodes.Call, typeof(IL2CPP).GetMethod(nameof(IL2CPP.ManagedStringToIl2Cpp))!);
-            }
-            else if (!oldreturnType.IsValueType)
-            {
-                var labelNull = bodyBuilder.DefineLabel();
-                var labelDone = bodyBuilder.DefineLabel();
-                bodyBuilder.Emit(OpCodes.Dup);
-                bodyBuilder.Emit(OpCodes.Brfalse, labelNull);
-                bodyBuilder.Emit(OpCodes.Call,
-                    typeof(Il2CppObjectBase).GetProperty(nameof(Il2CppObjectBase.Pointer))!.GetMethod);
-                bodyBuilder.Emit(OpCodes.Br, labelDone);
-                bodyBuilder.MarkLabel(labelNull);
-                bodyBuilder.Emit(OpCodes.Pop);
-                bodyBuilder.Emit(OpCodes.Ldc_I4_0);
-                bodyBuilder.Emit(OpCodes.Conv_I);
-                bodyBuilder.MarkLabel(labelDone);
-            }
+            if (oldreturnType == _stringType)
+                ilGenerator.EmitStringToPtr();
+            else if ((oldreturnType == _il2CppObjectBaseType)
+                || oldreturnType.IsSubclassOf(_il2CppObjectBaseType))
+                ilGenerator.EmitIl2CppObjectBaseToPtr();
 
             // Cache Return Value in Lcal
             LocalBuilder returnLocal = null;
             if (returnType != typeof(void))
             {
-                returnLocal = bodyBuilder.DeclareLocal(returnType);
-                bodyBuilder.Emit(OpCodes.Stloc, returnLocal);
+                returnLocal = ilGenerator.DeclareLocal(returnType);
+                ilGenerator.Emit(OpCodes.Stloc, returnLocal);
             }
 
-            // Handle Try-Catch thrown Exceptions
-            var exceptionLocal = bodyBuilder.DeclareLocal(typeof(Exception));
-            bodyBuilder.BeginCatchBlock(typeof(Exception));
-            bodyBuilder.Emit(OpCodes.Stloc, exceptionLocal);
-            bodyBuilder.Emit(OpCodes.Ldstr, "Exception in IL2CPP Injected ICall: ");
-            bodyBuilder.Emit(OpCodes.Ldloc, exceptionLocal);
-            bodyBuilder.Emit(OpCodes.Callvirt, typeof(object).GetMethod(nameof(ToString))!);
-            bodyBuilder.Emit(OpCodes.Call,
-                typeof(string).GetMethod(nameof(string.Concat), new[] { typeof(string), typeof(string) })!);
-            bodyBuilder.Emit(OpCodes.Call, typeof(MelonLogger).GetMethod(nameof(MelonLogger.Error), BindingFlags.Static | BindingFlags.Public, [typeof(string)])!);
-
             // End Try-Catch
-            bodyBuilder.EndExceptionBlock();
+            ilGenerator.EmitExceptionCatch();
 
             // Restore Return Value from Local
             if (returnLocal != null)
-                bodyBuilder.Emit(OpCodes.Ldloc, returnLocal);
+                ilGenerator.Emit(OpCodes.Ldloc, returnLocal);
 
             // Return even if there is no Return Value
-            bodyBuilder.Emit(OpCodes.Ret);
+            ilGenerator.Emit(OpCodes.Ret);
 
             // Return the New Method
-            MethodInfo newMethod = trampoline.Generate();
-            return (newMethod, newMethod.GetNativeStart());
+            MethodInfo newMethod = trampoline.Generate().Pin();
+            return (trampoline, newMethod, newMethod.GetNativeStart());
+        }
+
+        private static void EmitArg(this ILGenerator ilGenerator, 
+            int index)
+            => ilGenerator.Emit(OpCodes.Ldarg, index);
+
+        private static void EmitPtrArgToString(this ILGenerator ilGenerator,
+            int argIndex)
+        {
+            ilGenerator.EmitArg(argIndex);
+            ilGenerator.Emit(OpCodes.Call, _il2CppPtrToString);
+        }
+
+        private static void EmitStringToPtr(this ILGenerator ilGenerator)
+            => ilGenerator.Emit(OpCodes.Call, _stringToIl2CppPtr);
+
+        private static void EmitPtrArgToManagedObject(this ILGenerator ilGenerator,
+            int argIndex,
+            Type managedType)
+        {
+            ilGenerator.EmitArg(argIndex);
+
+            var labelNull = ilGenerator.DefineLabel();
+            var labelDone = ilGenerator.DefineLabel();
+            ilGenerator.Emit(OpCodes.Brfalse, labelNull);
+            ilGenerator.EmitArg(argIndex);
+
+            ilGenerator.Emit(OpCodes.Newobj,
+                managedType.GetConstructor([ _intPtrType ]));
+
+            ilGenerator.Emit(OpCodes.Br, labelDone);
+            ilGenerator.MarkLabel(labelNull);
+            ilGenerator.Emit(OpCodes.Ldnull);
+            ilGenerator.MarkLabel(labelDone);
+        }
+
+        private static void EmitIl2CppObjectBaseToPtr(this ILGenerator ilGenerator)
+        {
+            var labelNull = ilGenerator.DefineLabel();
+            var labelDone = ilGenerator.DefineLabel();
+            ilGenerator.Emit(OpCodes.Dup);
+            ilGenerator.Emit(OpCodes.Brfalse, labelNull);
+
+            ilGenerator.Emit(OpCodes.Call, _il2CppObjectBaseGetPointer);
+
+            ilGenerator.Emit(OpCodes.Br, labelDone);
+            ilGenerator.MarkLabel(labelNull);
+            ilGenerator.Emit(OpCodes.Pop);
+            ilGenerator.Emit(OpCodes.Ldc_I4_0);
+            ilGenerator.Emit(OpCodes.Conv_I);
+            ilGenerator.MarkLabel(labelDone);
+        }
+
+        private static void EmitExceptionCatch(this ILGenerator ilGenerator)
+        {
+            var exceptionLocal = ilGenerator.DeclareLocal(_exceptionType);
+            ilGenerator.BeginCatchBlock(_exceptionType);
+
+            ilGenerator.Emit(OpCodes.Stloc, exceptionLocal);
+            ilGenerator.Emit(OpCodes.Ldstr, "Exception in IL2CPP Injected ICall: ");
+            ilGenerator.Emit(OpCodes.Ldloc, exceptionLocal);
+
+            ilGenerator.Emit(OpCodes.Callvirt, _objectToString);
+            ilGenerator.Emit(OpCodes.Call, _stringConcat);
+            ilGenerator.Emit(OpCodes.Call, _melonLoggerError);
+
+            ilGenerator.EndExceptionBlock();
         }
     }
 }
