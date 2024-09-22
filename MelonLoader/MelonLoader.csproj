@@ -49,10 +49,10 @@
 		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
 		<PackageReference Include="Iced" Version="1.21.0" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.5" />
-		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.516" />
-		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.516" />
-		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.6-ci.516" />
-		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.6-ci.516" />
+		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.545" />
+		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.545" />
+		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.6-ci.545" />
+		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.6-ci.545" />
 		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
