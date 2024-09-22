@@ -39,20 +39,20 @@
 
 ### v0.6.5
 
-1. Replaced [BepInEx/Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) with [ds5678/Il2CppInterop](https://github.com/ds5678/Il2CppInterop)
-2. Updated Il2CppInterop to 1.5.4
-3. Updated Cpp2IL to 2022.1.0-pre-release.18
-4. Updated AsmResolver to 6.0.0-beta.1
-5. Updated AssetRipper.VersionUtilities to 1.5.0
-6. Updated AssetsTools.NET to 3.0.0
-7. Updated UnityEngine.Il2CppAssetBundleManager for latest compatibility
-8. Updated UnityEngine.Il2CppImageConversionManager for latest compatibility
-9. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
-10. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
-11. Implemented several fixes for Il2CppInterop related issues
-12. Implemented Cpp2IL's StrippedCodeRegSupport plugin
-13. Implemented `ExternalArguments` Dictionary for MelonLaunchOptions   (Credits to [HAHOOS](https://github.com/HAHOOS) :P)
-14. Implemented `Peek` Method for LemonEnumerator
+1. Updated Il2CppInterop to 1.4.6-ci.516
+2. Updated Cpp2IL to 2022.1.0-pre-release.18
+3. Updated AsmResolver to 6.0.0-beta.1
+4. Updated AssetRipper.VersionUtilities to 1.5.0
+5. Updated AssetsTools.NET to 3.0.0
+6. Updated UnityEngine.Il2CppAssetBundleManager for latest compatibility
+7. Updated UnityEngine.Il2CppImageConversionManager for latest compatibility
+8. Implemented `--cpp2il.callanalyzer` launch option to enable Cpp2IL's CallAnalyzer processor
+9. Implemented `--cpp2il.nativemethoddetector` launch option to enable Cpp2IL's NativeMethodDetector processor
+10. Implemented several fixes for Il2CppInterop related issues
+11. Implemented `ExternalArguments` Dictionary for MelonLaunchOptions   (Credits to [HAHOOS](https://github.com/HAHOOS) :P)
+12. Implemented `MsgPastel` Method for MelonLogger   (Credits to [HAHOOS](https://github.com/HAHOOS) :P)
+13. Implemented `Peek` Method for LemonEnumerator
+14. Implemented ICallInjector for handling when Unity strips or renames Internal Calls
 15. Fixed an accidental regression with LemonSHA256
 16. Fixed an issue with Native logs using the wrong Colors
 17. Fixed an issue with Preload module not replacing Mono libraries on Older Mono Games
@@ -70,6 +70,9 @@
 29. Fixed an issue with MelonLaunchOptions failing to parse options if a `-` prefix is used instead of `--`
 30. Fixed an issue with Command Line Arguments not being logged
 31. Fixed an issue with Il2CppInterop Assembly Resolving when Il2Cpp Prefixing is used
+32. Fixed an issue with .NET Executables not being Resolved properly when used as Dependencies
+33. Fixed an issue with Dependency Graph failing to Resolve Assemblies properly
+34. Fixed an issue with Il2Cpp Support Module not attempting to use direct references
 
 ---
 
