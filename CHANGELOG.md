@@ -66,8 +66,8 @@
 25. Fixed an issue with EOS Support Module not being properly error handled
 26. Fixed an issue with NativeStackWalk not unregistering addresses
 27. Fixed an issue with Errors being Spammed if `UnityEngine.Transform::SetAsLastSibling` fails to resolve
-28. Fixed an issue with MelonLaunchOptions failing to parse arguments if an `=` sign is used instead of a space
-29. Fixed an issue with MelonLaunchOptions failing to parse options if a `-` prefix is used instead of `--`
+28. Fixed an issue with MelonLaunchOptions failing to parse options if a `-` prefix is used instead of `--`
+29. Fixed an issue with MelonLaunchOptions failing to parse option arguments if an `=` sign is used instead of a space
 30. Fixed an issue with Command Line Arguments not being logged
 31. Fixed an issue with Il2CppInterop Assembly Resolving when Il2Cpp Prefixing is used
 32. Fixed an issue with .NET Executables not being Resolved properly when used as Dependencies
