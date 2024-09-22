@@ -39,7 +39,7 @@
 
 ### v0.6.5
 
-1. Updated Il2CppInterop to 1.4.6-ci.516
+1. Updated Il2CppInterop to 1.4.6-ci.545
 2. Updated Cpp2IL to 2022.1.0-pre-release.18
 3. Updated AsmResolver to 6.0.0-beta.1
 4. Updated AssetRipper.VersionUtilities to 1.5.0
