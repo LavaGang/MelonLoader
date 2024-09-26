@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using MelonLoader.Il2CppAssemblyGenerator.Packages;
+using MelonLoader.Il2CppAssemblyGenerator.Packages.Models;
 using MelonLoader.Modules;
 using MelonLoader.Utils;
 
@@ -16,7 +17,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
         internal static HttpClient webClient = null;
 
-        internal static Cpp2IL cpp2il = null;
+        internal static ExecutablePackage cpp2il = null;
         internal static Cpp2IL_StrippedCodeRegSupport cpp2il_scrs = null;
 
         internal static Packages.Il2CppInterop il2cppinterop = null;
@@ -59,7 +60,13 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
                 RemoteAPI.Contact();
 
-            cpp2il = new Cpp2IL();
+            Cpp2IL cpp2IL_netcore = new Cpp2IL();
+            if (MelonUtils.IsWindows
+                && (cpp2IL_netcore.VersionSem < Cpp2IL.NetCoreMinVersion))
+                cpp2il = new Cpp2IL_NetFramework();
+            else
+                cpp2il = cpp2IL_netcore;
+
             //cpp2il_scrs = new Cpp2IL_StrippedCodeRegSupport(cpp2il);
 
             il2cppinterop = new Packages.Il2CppInterop();
