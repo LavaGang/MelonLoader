@@ -48,8 +48,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             if (MelonUtils.IsWindows)
             {
                 if (VersionSem < NetCoreMinVersion)
-                    URL += "-Netframework472";
-                URL += ".exe";
+                    URL += "-Netframework472.zip";
+                else
+                    URL += ".exe";
             }
         }
 
