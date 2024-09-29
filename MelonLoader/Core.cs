@@ -174,9 +174,13 @@ namespace MelonLoader
             var archString = MelonUtils.IsGame32Bit() ? "x86" : "x64";
             MelonLogger.MsgDirect($"Game Arch: {archString}");
             MelonLogger.MsgDirect("------------------------------");
-            MelonLogger.MsgDirect($"Command-Line: {string.Join(" ", MelonLaunchOptions.CommandLineArgs)}");
+            MelonLogger.MsgDirect("Command-Line: ");
+            foreach (var pair in MelonLaunchOptions.InternalArguments)
+                if (string.IsNullOrEmpty(pair.Value))
+                    MelonLogger.MsgDirect($"   {pair.Key}");
+                else
+                    MelonLogger.MsgDirect($"   {pair.Key} = {pair.Value}");
             MelonLogger.MsgDirect("------------------------------");
-            
             MelonEnvironment.PrintEnvironment();
         }
 
