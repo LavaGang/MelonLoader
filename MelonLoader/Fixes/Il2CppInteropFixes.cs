@@ -17,6 +17,7 @@ using System.IO;
 using MelonLoader.Utils;
 using Il2CppInterop.Generator.Contexts;
 using AsmResolver.DotNet;
+using Il2CppInterop.HarmonySupport;
 
 namespace MelonLoader.Fixes
 {
@@ -26,6 +27,8 @@ namespace MelonLoader.Fixes
     // fixes the rest of: https://github.com/BepInEx/Il2CppInterop/pull/134
     internal unsafe static class Il2CppInteropFixes
     {
+        private static MelonLogger.Instance _logger = new("Il2CppInterop");
+
         private static Dictionary<RewriteGlobalContext, Dictionary<string, AssemblyRewriteContext>> _assemblyLookup = new();
         private static Dictionary<IntPtr, Type> _typeLookup = new();
         private static Dictionary<string, Type> _typeNameLookup = new();
@@ -59,6 +62,8 @@ namespace MelonLoader.Fixes
         private static MethodInfo _rewriteGlobalContext_GetNewAssemblyForOriginal_Prefix;
         private static MethodInfo _rewriteGlobalContext_TryGetNewTypeForOriginal;
         private static MethodInfo _rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix;
+        private static MethodInfo _reportException;
+        private static MethodInfo _reportException_Prefix;
 
         internal static void Install()
         {
@@ -70,10 +75,15 @@ namespace MelonLoader.Fixes
                 Type ilGeneratorEx = typeof(ILGeneratorEx);
                 Type rewriteGlobalContextType = typeof(RewriteGlobalContext);
                 Type il2cppType = typeof(IL2CPP);
+                Type harmonySupportType = typeof(HarmonySupport);
 
                 Type injectorHelpersType = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers");
                 if (injectorHelpersType == null)
                     throw new Exception("Failed to get InjectorHelpers");
+
+                Type detourMethodPatcherType = harmonySupportType.Assembly.GetType("Il2CppInterop.HarmonySupport.Il2CppDetourMethodPatcher");
+                if (detourMethodPatcherType == null)
+                    throw new Exception("Failed to get Il2CppDetourMethodPatcher");
 
                 _systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
                 if (_systemTypeFromIl2CppType == null)
@@ -137,7 +147,12 @@ namespace MelonLoader.Fixes
                 _rewriteGlobalContext_TryGetNewTypeForOriginal = rewriteGlobalContextType.GetMethod("TryGetNewTypeForOriginal",
                     BindingFlags.Public | BindingFlags.Instance);
                 if (_rewriteGlobalContext_TryGetNewTypeForOriginal == null)
-                    throw new Exception("Failed to get RewriteGlobalContext.TryGetNewTypeForOriginal"); 
+                    throw new Exception("Failed to get RewriteGlobalContext.TryGetNewTypeForOriginal");
+
+                _reportException = detourMethodPatcherType.GetMethod("ReportException",
+                    BindingFlags.NonPublic | BindingFlags.Static);
+                if (_reportException == null)
+                    throw new Exception("Failed to get Il2CppDetourMethodPatcher.ReportException");
 
                 _fixedFindType = thisType.GetMethod(nameof(FixedFindType), BindingFlags.NonPublic | BindingFlags.Static);
                 _fixedAddTypeToLookup = thisType.GetMethod(nameof(FixedAddTypeToLookup), BindingFlags.NonPublic | BindingFlags.Static);
@@ -154,6 +169,7 @@ namespace MelonLoader.Fixes
                 _rewriteGlobalContext_Dispose_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_Dispose_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteGlobalContext_GetNewAssemblyForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_GetNewAssemblyForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
                 _rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix = thisType.GetMethod(nameof(RewriteGlobalContext_TryGetNewTypeForOriginal_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
+                _reportException_Prefix = thisType.GetMethod(nameof(ReportException_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
 
                 MelonDebug.Msg("Patching Il2CppInterop ClassInjector.SystemTypeFromIl2CppType...");
                 Core.HarmonyInstance.Patch(_systemTypeFromIl2CppType,
@@ -202,6 +218,10 @@ namespace MelonLoader.Fixes
                 MelonDebug.Msg("Patching Il2CppInterop RewriteGlobalContext.TryGetNewTypeForOriginal...");
                 Core.HarmonyInstance.Patch(_rewriteGlobalContext_TryGetNewTypeForOriginal,
                     new HarmonyMethod(_rewriteGlobalContext_TryGetNewTypeForOriginal_Prefix));
+
+                MelonDebug.Msg("Patching Il2CppInterop Il2CppDetourMethodPatcher.ReportException...");
+                Core.HarmonyInstance.Patch(_reportException,
+                    new HarmonyMethod(_reportException_Prefix));
             }
             catch (Exception e)
             {
@@ -273,6 +293,13 @@ namespace MelonLoader.Fixes
             typePointer = IL2CPP.il2cpp_class_get_type(typePointer);
             if (typePointer !=  IntPtr.Zero)
                 _typeLookup.Add(typePointer, type);
+        }
+
+        private static bool ReportException_Prefix(Exception __0)
+        {
+            _logger.Error("During invoking native->managed trampoline", __0);
+
+            return false;
         }
 
         private static bool EmitObjectToPointer_Prefix(bool __7, ref bool __8)
