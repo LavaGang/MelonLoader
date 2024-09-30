@@ -142,8 +142,11 @@ namespace MelonLoader
                 return 1;
 
             AddUnityDebugLog();
+
+#if NET6_0_OR_GREATER
             RegisterTypeInIl2Cpp.SetReady();
             RegisterTypeInIl2CppWithInterfaces.SetReady();
+#endif
 
             MelonEvents.MelonHarmonyInit.Invoke();
             MelonEvents.OnApplicationStart.Invoke();

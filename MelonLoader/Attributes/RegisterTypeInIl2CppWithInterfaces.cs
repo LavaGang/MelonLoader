@@ -11,6 +11,7 @@ namespace MelonLoader
         internal static List<Assembly> registrationQueue = new List<Assembly>();
         internal static bool ready;
         internal bool LogSuccess = true;
+
         internal Type[] Interfaces;
         internal bool GetInterfacesFromType;
 
