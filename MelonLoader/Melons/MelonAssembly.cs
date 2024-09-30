@@ -291,6 +291,7 @@ namespace MelonLoader
             }
 
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
+            RegisterTypeInIl2CppWithInterfaces.RegisterAssembly(Assembly);
 
             if (rottenMelons.Count != 0)
             {

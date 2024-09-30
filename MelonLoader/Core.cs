@@ -143,6 +143,7 @@ namespace MelonLoader
 
             AddUnityDebugLog();
             RegisterTypeInIl2Cpp.SetReady();
+            RegisterTypeInIl2CppWithInterfaces.SetReady();
 
             MelonEvents.MelonHarmonyInit.Invoke();
             MelonEvents.OnApplicationStart.Invoke();
