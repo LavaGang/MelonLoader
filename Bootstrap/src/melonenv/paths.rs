@@ -28,22 +28,7 @@ lazy_static! {
         W(base_dir)
     };
     pub static ref GAME_DIR: W<PathBuf> = {
-        let args: Vec<String> = std::env::args().collect();
-        let mut base_dir = std::env::current_dir().unwrap_or_else(|e|internal_failure!("Failed to get game dir: {e}"));
-        let mut iterator = args.iter();
-		while let Some(mut arg) = iterator.next() {
-            if arg.starts_with("--melonloader.basedir") {
-                if arg.contains("=") {
-					let a: Vec<&str> = arg.split("=").collect();
-					base_dir = PathBuf::from(a[1]);
-				}
-				else {
-					arg = iterator.next().unwrap();
-					base_dir = PathBuf::from(arg);
-				}
-            }
-        }
-
+        let base_dir = std::env::current_dir().unwrap_or_else(|e|internal_failure!("Failed to get game dir: {e}"));
         W(base_dir)
     };
     pub static ref MELONLOADER_FOLDER: W<PathBuf> = W(BASE_DIR.join("MelonLoader"));

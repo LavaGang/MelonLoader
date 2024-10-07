@@ -6,7 +6,6 @@
 #![allow(named_asm_labels)]
 #![allow(non_snake_case)]
 #![feature(asm_const)]
-#![feature(lazy_cell)]
 #![feature(fn_ptr_trait)]
 
 #[cfg(target_os = "windows")]
@@ -32,33 +31,18 @@ pub use proxied_exports::*;
 use export_indices::TOTAL_EXPORTS;
 #[cfg(target_os = "windows")]
 use orig_exports::load_dll_funcs;
-#[cfg(target_arch="x86_64")]
-#[cfg(target_os = "windows")]
-use std::arch::x86_64::_mm_pause;
-#[cfg(target_arch="x86")]
-#[cfg(target_os = "windows")]
-use std::arch::x86::_mm_pause;
 #[cfg(target_os = "windows")]
 use std::ffi::OsString;
 #[cfg(target_os = "windows")]
-use std::os::windows::prelude::{AsRawHandle, OsStringExt};
+use std::os::windows::prelude::OsStringExt;
 
 #[cfg(target_os = "windows")]
 use winapi::{
     ctypes::c_void,
-    shared::{
-        minwindef::{FARPROC, HMODULE},
-        ntdef::LPCSTR,
-    },
+    shared::minwindef::HMODULE,
     um::{
-        consoleapi::AllocConsole,
+		libloaderapi::{GetModuleFileNameW},
         errhandlingapi::GetLastError,
-        libloaderapi::{DisableThreadLibraryCalls, FreeLibrary, GetModuleFileNameW, LoadLibraryA},
-        processenv::SetStdHandle,
-        processthreadsapi::{CreateThread, GetCurrentProcess, TerminateProcess},
-        winbase::{STD_ERROR_HANDLE, STD_OUTPUT_HANDLE},
-        winnt::{DLL_PROCESS_ATTACH, DLL_PROCESS_DETACH},
-        winuser::{MessageBoxA, MB_OK},
         sysinfoapi::GetSystemDirectoryW,
     },
 };
@@ -152,7 +136,7 @@ unsafe fn get_system32_path() -> Option<String> {
 /// Called when the thread is spawned
 #[cfg(target_os = "windows")]
 unsafe extern "system" fn init(_: *mut c_void) -> u32 {
-    use std::{path::PathBuf, ffi::{c_char, CString, CStr}};
+    use std::path::PathBuf;
 
     use libloading::Library;
 
