@@ -33,24 +33,14 @@ internal static class OsUtils
     {
         if (!MelonUtils.IsWindows)
             return;
-
+        
         IntPtr ntdll = MelonNativeLibrary.Load("ntdll.dll");
-        if (ntdll == IntPtr.Zero)
-            return;
-
-        MelonNativeLibrary.TryGetExport(ntdll, "RtlGetVersion", out IntPtr rtlGetVersionProc);
-        if (rtlGetVersionProc != IntPtr.Zero)
-            RtlGetVersion = (dRtlGetVersion)Marshal.GetDelegateForFunctionPointer(
-                rtlGetVersionProc,
-                typeof(dRtlGetVersion)
-            );
-
-        MelonNativeLibrary.TryGetExport(ntdll, "wine_get_version", out IntPtr wineGetVersionProc);
-        if (wineGetVersionProc != IntPtr.Zero)
-            WineGetVersion = (dWineGetVersion)Marshal.GetDelegateForFunctionPointer(
-                wineGetVersionProc,
-                typeof(dWineGetVersion)
-            );
+        
+        if (MelonNativeLibrary.TryGetExport<dRtlGetVersion>(ntdll, "RtlGetVersion", out var rtlGetVersion))
+            RtlGetVersion = rtlGetVersion;
+        
+        if (MelonNativeLibrary.TryGetExport<dWineGetVersion>(ntdll, "wine_get_version", out var wineGetVersion))
+            WineGetVersion = wineGetVersion;
     }
 
     internal static bool IsWineOrProton()

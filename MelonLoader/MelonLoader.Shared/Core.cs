@@ -28,12 +28,12 @@ namespace MelonLoader
             UnhandledException.Install(AppDomain.CurrentDomain);
             UnhandledAssemblyResolve.Install();
 
-            if (!string.IsNullOrEmpty(engineModulePath))
-            {
-                MelonDebug.Msg($"Engine Module Path: {engineModulePath}");
-                IEngineModule module = ModuleManager.LoadModule(engineModulePath);
-                module.Initialize();
-            }
+            if (string.IsNullOrEmpty(engineModulePath))
+                return;
+            
+            MelonDebug.Msg($"Engine Module Path: {engineModulePath}");
+            IEngineModule module = ModuleManager.LoadModule(engineModulePath);
+            module.Initialize();
 
             WelcomeMessage();
 

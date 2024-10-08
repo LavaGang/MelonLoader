@@ -86,8 +86,19 @@ public static class GodotEnvironment
         GameName = Path.GetFileNameWithoutExtension(_pckReader.PackPath);
         EngineVersion = new GodotVersion(_pckReader.PCK_VersionMajor, _pckReader.PCK_VersionMinor, _pckReader.PCK_VersionRevision);
 #endif
+
+        string platformSuffix = "windows";
+        if (MelonUtils.IsUnix)
+            platformSuffix = "linuxbsd";
+        
+        //macos structure is weird, TODO.
         
         GameDataPath = $"data_{MelonEnvironment.GameExecutableName}_{(MelonUtils.Is32Bit ? "x86" : "x86_64")}";
+        
+        //newer godot version add a platform suffix
+        if (!Directory.Exists(GameDataPath))
+            GameDataPath = GameDataPath.Replace(MelonUtils.Is32Bit ? "x86" : "x86_64",
+                $"{platformSuffix}_{(MelonUtils.Is32Bit ? "x86" : "x86_64")}");
 
         if (!MelonUtils.IsWindows) 
             return;

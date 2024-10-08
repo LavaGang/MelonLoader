@@ -53,8 +53,8 @@ namespace MelonLoader.NativeUtils
                 throw new ArgumentNullException(nameof(handle));
 
             // Check if being passed valid Export Name
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name));
+            if (handle == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(handle));
 
             // Get the Export Pointer
             IntPtr returnval = BootstrapInterop.NativeGetExport(handle, name);
@@ -63,6 +63,34 @@ namespace MelonLoader.NativeUtils
 
             // Return the Export Pointer
             return returnval;
+        }
+
+        public static bool TryGetExport<T>(IntPtr handle, string name, out T result) where T : Delegate
+        {
+            bool wasSuccessful = false;
+            try
+            {
+                result = GetExport<T>(handle, name);
+                wasSuccessful = true; //GetDelegate will throw instead of returning null.
+            }
+            catch { result = null; }
+            return wasSuccessful;
+        }
+
+        public static T GetExport<T>(IntPtr handle, string name) where T : Delegate
+        {
+            if (handle == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(handle));
+            
+            if (handle == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(handle));
+            
+            IntPtr export = GetExport(handle, name);
+            
+            if (export == IntPtr.Zero)
+                throw new Exception($"Unable to Find Native Library Export {name}!");
+
+            return export.GetDelegate<T>();
         }
 
         public static T ReflectiveLoad<T>(string name)

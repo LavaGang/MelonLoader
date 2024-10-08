@@ -11,7 +11,7 @@ libloading = "0.8.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]
 #proxygen-macros = "0.5.0"
-proxygen-macros = { git = "https://github.com/RinLovesYou/proxygen" } # temporary until update is published
+proxygen-macros = { git = "https://github.com/RinLovesYou/proxygen", rev="4fb48af618a815b49c4f72afce0d51b6d76f11f0" } # temporary until update is published
 winapi = { version = "0.3.9", features = [
     "minwindef",
     "libloaderapi",
