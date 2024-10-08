@@ -7,24 +7,35 @@ name: Close inactive issues
 
 on:
   schedule:
-  - cron: '4 20 * * *'
+    - cron: '4 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: stale
 
 jobs:
   stale:
-
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
-
     steps:
-    - uses: actions/stale@v9
+    - uses: actions/stale@main
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
         days-before-issue-stale: 120
         days-before-issue-close: 14
         stale-issue-message: "This issue is stale because it has been open for 4 months with no activity. If this is still an issue then please leave a comment, or else this will close in 2 weeks."
         close-issue-message: "This issue was closed because it has been 2 weeks since being marked as stale."
         days-before-pr-stale: -1
         days-before-pr-close: -1
-        exempt-issue-labels: "Work-in-Progress,Planned"
+        exempt-issue-labels: "Work-in-Progress,Planned,Improvement"
+        operations-per-run: 100
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dessant/lock-threads@v5.0.1
+        with:
+          issue-inactive-days: '365'
+          issue-lock-reason: 'resolved'
+          process-only: 'issues'
