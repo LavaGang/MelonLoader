@@ -38,7 +38,7 @@ pub fn get_dobby_dir(base_path: PathBuf, game_dir: PathBuf) -> Result<PathBuf, i
         let dobby_path = base_path.join(name).with_extension(DLL_EXTENSION);
 
         if dobby_path.exists() {
-            return Ok(game_dir);
+            return Ok(base_path);
         }
     }
 	
