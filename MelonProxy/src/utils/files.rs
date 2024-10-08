@@ -22,7 +22,8 @@ pub fn get_bootstrap_path(base_path: &PathBuf) -> Result<PathBuf, io::Error> {
     ))
 }
 
-/// search for Bootstrap in the given path
+/// search for dobby in the given path
+/*
 pub fn get_dobby_dir(base_path: PathBuf, game_dir: PathBuf) -> Result<PathBuf, io::Error> {
     let dobby_names = ["dobby", "libdobby"]; //by convention, on unix, the library is prefixed with "lib"
 
@@ -65,6 +66,7 @@ pub fn get_dobby_dir(base_path: PathBuf, game_dir: PathBuf) -> Result<PathBuf, i
         "Failed to find MelonLoader dobby",
     ))
 }
+*/
 
 pub fn is_unity(file_path: &PathBuf) -> Result<bool, Box<dyn Error>> {
     let file_name = file_path

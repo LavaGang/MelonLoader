@@ -1,11 +1,12 @@
 [package]
 name = "Bootstrap"
-version = "0.6.6"
+version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+#unity-rs = { path = "C:/Users/sarah/Documents/rust/Ferrex/unity/" }
 unity-rs = { git = "https://github.com/RinLovesYou/Ferrex/", rev = "77d114c" }
 ctor = "0.2.6"
 chrono = "0.4.23"

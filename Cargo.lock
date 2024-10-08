@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "Bootstrap"
-version = "0.6.6"
+version = "0.1.0"
 dependencies = [
  "chrono",
  "clap",
@@ -24,7 +24,7 @@ dependencies = [
 
 [[package]]
 name = "MelonProxy"
-version = "0.6.6"
+version = "0.1.0"
 dependencies = [
  "ctor",
  "libloading 0.8.1",
