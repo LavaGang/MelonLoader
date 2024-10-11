@@ -101,7 +101,7 @@ namespace MelonLoader
             MelonLogger.Msg(loadingMsg);
 
             bool hasWroteLine = false;
-            var files = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (var f in files)
             {
                 if (!hasWroteLine)
