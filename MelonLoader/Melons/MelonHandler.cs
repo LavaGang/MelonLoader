@@ -42,7 +42,7 @@ namespace MelonLoader
 
             bool hasWroteLine = false;
 
-            var files = Directory.GetFiles(path, "*.dll");
+            var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
             var melonAssemblies = new List<MelonAssembly>();
             foreach (var f in files)
             {
@@ -101,9 +101,7 @@ namespace MelonLoader
             MelonLogger.Msg(loadingMsg);
 
             bool hasWroteLine = false;
-
-            var files = Directory.GetFiles(path, "*.dll");
-            var melonAssemblies = new List<MelonAssembly>();
+            var files = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
             foreach (var f in files)
             {
                 if (!hasWroteLine)
@@ -112,11 +110,44 @@ namespace MelonLoader
                     MelonLogger.WriteLine(Color.Magenta);
                 }
 
-                var asm = MelonAssembly.LoadMelonAssembly(f, false);
-                if (asm == null)
+                MelonAssembly.LoadMelonAssembly(f, false);
+            }
+        }
+
+        public static void LoadMelonFolders<T>(string path) where T : MelonTypeBase<T>
+        {
+            bool isMod = typeof(T) == typeof(MelonMod);
+
+            // Load Base Folder
+            LoadMelonsFromDirectory<T>(path);
+
+            // Scan for all Directories
+            var directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+            foreach (var dir in directories)
+            {
+                // Skip Disabled Folders
+                if (dir.ToLowerInvariant().EndsWith("disabled"))
                     continue;
 
-                melonAssemblies.Add(asm);
+                // Check for UserLibs
+                string melonUserLibs = Path.Combine(dir, "UserLibs");
+                if (Directory.Exists(melonUserLibs))
+                {
+                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(melonUserLibs);
+                    LoadUserlibs(melonUserLibs);
+                }
+
+                // Load Everything in Base of Melon Folder
+                InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
+                LoadMelonsFromDirectory<T>(dir);
+
+                // Check for Plugins/Mods
+                string melonMelonFolder = Path.Combine(dir, isMod ? "Mods" : "Plugins");
+                if (Directory.Exists(melonMelonFolder))
+                {
+                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(melonMelonFolder);
+                    LoadMelonsFromDirectory<T>(melonMelonFolder);
+                }
             }
         }
 
