@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Reflection;
 
 #if NET6_0_OR_GREATER
+using System.IO;
 using System.Runtime.Loader;
 #else
-using System.IO;
 using System.Runtime.CompilerServices;
 #endif
 
