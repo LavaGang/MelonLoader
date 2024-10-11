@@ -41,10 +41,6 @@ namespace MelonLoader
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
 
-#if NET6_0_OR_GREATER
-            Fixes.DotnetLoadFromManagedFolderFix.Install();
-#endif
-
             Fixes.UnhandledException.Install(AppDomain.CurrentDomain);
             Fixes.ServerCertificateValidation.Install();
             Assertions.LemonAssertMapping.Setup();
@@ -53,21 +49,10 @@ namespace MelonLoader
             BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
                 UnityInformationHandler.GameVersion);
 
-            try
-            {
-                if (!MonoLibrary.Setup()
-                    || !MonoResolveManager.Setup())
-                {
-                    _success = false;
-                    return 1;
-                }
-            }
-            catch (SecurityException)
-            {
-                MelonDebug.Msg("[MonoLibrary] Caught SecurityException, assuming not running under mono and continuing with init");
-            }
+            MelonAssemblyResolver.Setup();
 
 #if NET6_0_OR_GREATER
+
             if (MelonLaunchOptions.Core.UserWantsDebugger && MelonEnvironment.IsDotnetRuntime)
             {
                 MelonLogger.Msg("[Init] User requested debugger, attempting to launch now...");
@@ -75,6 +60,24 @@ namespace MelonLoader
             }
 
             Environment.SetEnvironmentVariable("IL2CPP_INTEROP_DATABASES_LOCATION", MelonEnvironment.Il2CppAssembliesDirectory);
+
+#else
+
+            try
+            {
+                if (!InternalUtils.MonoLibrary.Setup())
+                {
+                    _success = false;
+                    return 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                MelonDebug.Msg($"[MonoLibrary] Caught Exception: {ex}");
+                _success = false;
+                return 1;
+            }
+
 #endif
 
             HarmonyInstance = new HarmonyLib.Harmony(BuildInfo.Name);
@@ -107,6 +110,7 @@ namespace MelonLoader
             
             MelonHandler.LoadUserlibs(MelonEnvironment.UserLibsDirectory);
             MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
+
             MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
 

@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+
+#if NET6_0_OR_GREATER
+
+using System.Runtime.Loader;
+
+#else
+
+using System;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.MonoInternals.ResolveInternals
+#endif
+
+namespace MelonLoader.InternalUtils.Resolver
 {
     internal static class SearchDirectoryManager
     {
@@ -22,6 +31,9 @@ namespace MelonLoader.MonoInternals.ResolveInternals
 
             path = Path.GetFullPath(path);
             if (path.ContainsExtension())
+                return;
+
+            if (!Directory.Exists(path))
                 return;
 
             SearchDirectoryInfo searchDirectory = SearchDirectoryList.FirstOrDefault(x => x.Path.Equals(path));
@@ -72,6 +84,13 @@ namespace MelonLoader.MonoInternals.ResolveInternals
                 if (string.IsNullOrEmpty(filepath))
                     continue;
 
+                MelonDebug.Msg($"[MelonAssemblyResolver] Loading from {filepath}...");
+
+#if NET6_0_OR_GREATER
+
+                return AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
+
+#else
                 IntPtr filePathPtr = Marshal.StringToHGlobalAnsi(filepath);
                 if (filePathPtr == IntPtr.Zero)
                     continue;
@@ -89,8 +108,10 @@ namespace MelonLoader.MonoInternals.ResolveInternals
                     continue;
 
                 return MonoLibrary.CastManagedAssemblyPtr(assemblyReflectionPtr);
+#endif
             }
 
+            MelonDebug.Msg($"[MelonAssemblyResolver] Failed to find {requested_name} in any of the known search directories");
             return null;
         }
 

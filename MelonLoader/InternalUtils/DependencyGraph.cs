@@ -3,16 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using MelonLoader.InternalUtils.Resolver;
 
-#if NET35
-
-using MelonLoader.MonoInternals.ResolveInternals;
-
-#elif NET6_0_OR_GREATER
-
-using MelonLoader.Fixes;
+#if NET6_0_OR_GREATER
 using System.Runtime.Loader;
-
 #endif
 
 namespace MelonLoader.InternalUtils
@@ -145,7 +139,12 @@ namespace MelonLoader.InternalUtils
         {
             try
             {
-                Assembly asm = Assembly.Load(assembly);
+#if NET6_0_OR_GREATER
+                var asm = AssemblyLoadContext.Default.LoadFromAssemblyName(assembly);
+#else
+                var asm = Assembly.Load(assembly);
+#endif
+
                 if (asm == null)
                     return false;
                 return true;
@@ -163,11 +162,7 @@ namespace MelonLoader.InternalUtils
         {
             try
             {
-#if NET35
                 Assembly asm = SearchDirectoryManager.Scan(assembly.Name);
-#elif NET6_0_OR_GREATER
-                Assembly asm = DotnetLoadFromManagedFolderFix.TryFind(AssemblyLoadContext.Default, assembly);
-#endif
                 if (asm == null)
                     return false;
                 return true;

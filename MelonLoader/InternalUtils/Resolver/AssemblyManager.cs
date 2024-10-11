@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
-namespace MelonLoader.MonoInternals.ResolveInternals
+#if NET6_0_OR_GREATER
+using System.Runtime.Loader;
+#else
+using System.IO;
+using System.Runtime.CompilerServices;
+#endif
+
+namespace MelonLoader.InternalUtils.Resolver
 {
-    internal static class AssemblyManager
+    internal class AssemblyManager
     {
         internal static Dictionary<string, AssemblyResolveInfo> InfoDict = new Dictionary<string, AssemblyResolveInfo>();
 
@@ -29,11 +35,6 @@ namespace MelonLoader.MonoInternals.ResolveInternals
             return InfoDict[name];
         }
 
-        private static Assembly Resolve(string requested_name, ushort major, ushort minor, ushort build, ushort revision, bool is_preload)
-        {
-            Version requested_version = new Version(major, minor, build, revision);
-            return Resolve(requested_name, requested_version, is_preload);
-        }
         private static Assembly Resolve(string requested_name, Version requested_version, bool is_preload)
         {
             // Get Resolve Information Object
@@ -44,7 +45,7 @@ namespace MelonLoader.MonoInternals.ResolveInternals
 
             // Run Passthrough Events
             if (assembly == null)
-                assembly = MonoResolveManager.SafeInvoke_OnAssemblyResolve(requested_name, requested_version);
+                assembly = MelonAssemblyResolver.SafeInvoke_OnAssemblyResolve(requested_name, requested_version);
 
             // Search Directories
             if (is_preload && (assembly == null))
@@ -70,10 +71,30 @@ namespace MelonLoader.MonoInternals.ResolveInternals
             resolveInfo.SetVersionSpecific(assemblyName.Version, assembly);
 
             // Run Passthrough Events
-            MonoResolveManager.SafeInvoke_OnAssemblyLoad(assembly);
+            MelonAssemblyResolver.SafeInvoke_OnAssemblyLoad(assembly);
+        }
+
+#if NET6_0_OR_GREATER
+
+        private static Assembly? Resolve(AssemblyLoadContext alc, AssemblyName name)
+            => Resolve(name.Name, name.Version, false);
+
+        private static void InstallHooks()
+        {
+            AssemblyLoadContext.Default.Resolving += Resolve;
+        }
+
+#else
+
+        private static Assembly Resolve(string requested_name, ushort major, ushort minor, ushort build, ushort revision, bool is_preload)
+        {
+            Version requested_version = new Version(major, minor, build, revision);
+            return Resolve(requested_name, requested_version, is_preload);
         }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private extern static void InstallHooks();
+
+#endif
     }
 }

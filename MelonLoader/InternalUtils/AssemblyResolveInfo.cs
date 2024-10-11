@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MelonLoader.MonoInternals
+namespace MelonLoader.InternalUtils
 {
     public class AssemblyResolveInfo
     {
@@ -17,7 +17,7 @@ namespace MelonLoader.MonoInternals
                 return Override;
 
             // Check for Requested Version
-            if ((requested_version != null)
+            if (requested_version != null
                 && GetVersionSpecific(requested_version, out Assembly assembly))
                 return assembly;
 
