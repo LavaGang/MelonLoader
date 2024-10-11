@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Melons;
 using MelonLoader.Utils;
 
 namespace MelonLoader
@@ -31,7 +32,7 @@ namespace MelonLoader
                 Directory.CreateDirectory(MelonEnvironment.ModsDirectory);
         }
 
-        private static bool firstSpacer = false;
+        internal static bool firstSpacer = false;
         public static void LoadMelonsFromDirectory<T>(string path) where T : MelonTypeBase<T>
         {
             path = Path.GetFullPath(path);
@@ -115,41 +116,7 @@ namespace MelonLoader
         }
 
         public static void LoadMelonFolders<T>(string path) where T : MelonTypeBase<T>
-        {
-            bool isMod = typeof(T) == typeof(MelonMod);
-
-            // Load Base Folder
-            LoadMelonsFromDirectory<T>(path);
-
-            // Scan for all Directories
-            var directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
-            foreach (var dir in directories)
-            {
-                // Skip Disabled Folders
-                if (dir.ToLowerInvariant().EndsWith("disabled"))
-                    continue;
-
-                // Check for UserLibs
-                string melonUserLibs = Path.Combine(dir, "UserLibs");
-                if (Directory.Exists(melonUserLibs))
-                {
-                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(melonUserLibs);
-                    LoadUserlibs(melonUserLibs);
-                }
-
-                // Load Everything in Base of Melon Folder
-                InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
-                LoadMelonsFromDirectory<T>(dir);
-
-                // Check for Plugins/Mods
-                string melonMelonFolder = Path.Combine(dir, isMod ? "Mods" : "Plugins");
-                if (Directory.Exists(melonMelonFolder))
-                {
-                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(melonMelonFolder);
-                    LoadMelonsFromDirectory<T>(melonMelonFolder);
-                }
-            }
-        }
+            => MelonFolderHandler.Scan<T>(path);
 
         #region Obsolete Members
         /// <summary>

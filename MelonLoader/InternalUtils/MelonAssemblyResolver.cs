@@ -8,9 +8,11 @@ using MelonLoader.Utils;
 using System.Runtime.Loader;
 #endif
 
+#pragma warning disable CS0618 // Type or member is obsolete
+
 namespace MelonLoader.InternalUtils
 {
-    internal class MelonAssemblyResolver
+    public class MelonAssemblyResolver
     {
         internal static void Setup()
         {

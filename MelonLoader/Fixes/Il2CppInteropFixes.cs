@@ -19,6 +19,8 @@ using Il2CppInterop.Generator.Contexts;
 using AsmResolver.DotNet;
 using Il2CppInterop.HarmonySupport;
 
+#pragma warning disable CS8632
+
 namespace MelonLoader.Fixes
 {
     // fixes: https://github.com/BepInEx/Il2CppInterop/pull/103

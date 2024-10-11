@@ -3,18 +3,16 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.Startup;
 using MelonLoader.Support.Preferences;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using HarmonyLib;
 using MelonLoader.CoreClrUtils;
 using UnityEngine;
 using Il2CppInterop.Common;
-using Il2CppInterop.Runtime.InteropTypes;
 using Microsoft.Extensions.Logging;
 using MelonLoader.Utils;
 using System.IO;
+
+#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace MelonLoader.Support
 {

@@ -9,6 +9,8 @@ using System.IO;
 using System.Runtime.CompilerServices;
 #endif
 
+#pragma warning disable CS8632
+
 namespace MelonLoader.InternalUtils.Resolver
 {
     internal class AssemblyManager
