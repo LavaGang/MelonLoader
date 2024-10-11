@@ -64,7 +64,7 @@ namespace MelonLoader
                     continue;
 
                 MelonDebug.Msg($"Loading MelonModule '{m.fullPath}'");
-                MelonModule.Load(m);
+                m.moduleGC = MelonModule.Load(m);
             }
 
             foreach (var file in Directory.GetFiles(baseDirectory))
