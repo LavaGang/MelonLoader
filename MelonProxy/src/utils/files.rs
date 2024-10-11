@@ -25,14 +25,6 @@ pub fn get_bootstrap_path(base_path: &PathBuf) -> Result<PathBuf, io::Error> {
 /// search for Bootstrap in the given path
 pub fn get_dobby_dir(base_path: PathBuf, game_dir: PathBuf) -> Result<PathBuf, io::Error> {
     let dobby_names = ["dobby", "libdobby"]; //by convention, on unix, the library is prefixed with "lib"
-
-    for name in dobby_names.iter() {
-        let dobby_path = game_dir.join(name).with_extension(DLL_EXTENSION);
-
-        if dobby_path.exists() {
-            return Ok(game_dir);
-        }
-    }
 	
     for name in dobby_names.iter() {
         let dobby_path = base_path.join(name).with_extension(DLL_EXTENSION);
@@ -57,6 +49,14 @@ pub fn get_dobby_dir(base_path: PathBuf, game_dir: PathBuf) -> Result<PathBuf, i
 
         if dobby_path.exists() {
             return Ok(path);
+        }
+    }
+	
+    for name in dobby_names.iter() {
+        let dobby_path = game_dir.join(name).with_extension(DLL_EXTENSION);
+
+        if dobby_path.exists() {
+            return Ok(game_dir);
         }
     }
 
