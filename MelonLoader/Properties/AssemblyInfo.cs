@@ -17,4 +17,5 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Il2CppAssemblyGenerator")]
 [assembly: InternalsVisibleTo("Il2CppUnityTls")]
 [assembly: InternalsVisibleTo("Il2Cpp")]
-[assembly: InternalsVisibleTo("MelonStartScreen")] 
+[assembly: InternalsVisibleTo("MelonStartScreen")]
+[assembly: InternalsVisibleTo("EOS")]
