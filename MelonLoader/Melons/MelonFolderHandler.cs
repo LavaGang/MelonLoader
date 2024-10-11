@@ -118,6 +118,7 @@ namespace MelonLoader.Melons
             string melonUserLibs = Path.Combine(path, "UserLibs");
             if (Directory.Exists(melonUserLibs))
             {
+                MelonUtils.AddNativeDLLDirectory(melonUserLibs);
                 InternalUtils.MelonAssemblyResolver.AddSearchDirectory(melonUserLibs);
                 LoadMelonsFromFolder<T>(melonUserLibs, false, ref hasWroteLine, ref melonAssemblies);
             }
