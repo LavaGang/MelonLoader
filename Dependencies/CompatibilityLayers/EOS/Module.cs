@@ -1,4 +1,5 @@
-﻿using MelonLoader.Modules;
+﻿﻿using MelonLoader.Modules;
+using MelonLoader.NativeUtils;
 using System;
 using System.Runtime.InteropServices;
 
@@ -6,10 +7,13 @@ namespace MelonLoader.CompatibilityLayers
 {
     internal class EOS_Module : MelonModule
     {
-        private delegate IntPtr dLoadLibrary(IntPtr path);
-        private dLoadLibrary _loadLibrary;
+        private delegate IntPtr LoadLibraryDetour(IntPtr path);
+        private static NativeHook<LoadLibraryDetour> _hookWin;
 
-        public unsafe override void OnInitialize()
+        ~EOS_Module()
+            => Detach();
+
+        public override void OnInitialize()
         {
             var platform = Environment.OSVersion.Platform;
             switch (platform)
@@ -18,10 +22,17 @@ namespace MelonLoader.CompatibilityLayers
                 case PlatformID.Win32Windows:
                 case PlatformID.Win32NT:
                 case PlatformID.WinCE:
-                    IntPtr trampoline = Marshal.GetFunctionPointerForDelegate((dLoadLibrary)LoadLibrary);
-                    IntPtr detour = Marshal.GetFunctionPointerForDelegate((dLoadLibrary)DetourWin);
-                    MelonUtils.NativeHookAttach((IntPtr)(&trampoline), detour);
-                    _loadLibrary = (dLoadLibrary)Marshal.GetDelegateForFunctionPointer(trampoline, typeof(dLoadLibrary));
+                    NativeLibrary lib = NativeLibrary.Load("kernel32");
+                    if (lib != null)
+                    {
+                        IntPtr loadLibraryWPtr = lib.GetExport("LoadLibraryW");
+                        if (loadLibraryWPtr != IntPtr.Zero)
+                        {
+                            IntPtr detourPtr = Marshal.GetFunctionPointerForDelegate((LoadLibraryDetour)DetourWin);
+                            _hookWin = new NativeHook<LoadLibraryDetour>(loadLibraryWPtr, detourPtr);
+                            _hookWin.Attach();
+                        }
+                    }
                     break;
 
                 case PlatformID.Unix:
@@ -36,39 +47,29 @@ namespace MelonLoader.CompatibilityLayers
             }
         }
 
-        private unsafe IntPtr DetourWin(IntPtr path)
+        private static IntPtr DetourWin(IntPtr path)
         {
             if (path == IntPtr.Zero)
-                return IntPtr.Zero;
-            
+                return _hookWin.Trampoline(path);
+
             var pathString = Marshal.PtrToStringUni(path);
             if (string.IsNullOrEmpty(pathString))
-                return IntPtr.Zero;
+                return _hookWin.Trampoline(path);
 
             if (pathString.EndsWith("EOSOVH-Win64-Shipping.dll")
                 || pathString.EndsWith("EOSOVH-Win32-Shipping.dll"))
             {
-                IntPtr trampoline = Marshal.GetFunctionPointerForDelegate((dLoadLibrary)LoadLibrary);
-                IntPtr detour = Marshal.GetFunctionPointerForDelegate((dLoadLibrary)DetourWin);
-                MelonUtils.NativeHookDetach((IntPtr)(&trampoline), detour);
+                Detach();
                 return IntPtr.Zero;
             }
 
-            return _loadLibrary(path);
+            return _hookWin.Trampoline(path);
         }
 
-        unsafe ~EOS_Module()
+        private static void Detach()
         {
-            if (_loadLibrary != null)
-            {
-                IntPtr trampoline = Marshal.GetFunctionPointerForDelegate((dLoadLibrary)LoadLibrary);
-                IntPtr detour = Marshal.GetFunctionPointerForDelegate((dLoadLibrary)DetourWin);
-                MelonUtils.NativeHookDetach((IntPtr)(&trampoline), detour);
-                _loadLibrary = null;
-            }
+            _hookWin?.Detach();
+            _hookWin = null;
         }
-
-        [DllImport("kernel32")]
-        private static extern IntPtr LoadLibrary(IntPtr lpLibFileName);
     }
 }
