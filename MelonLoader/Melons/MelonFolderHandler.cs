@@ -76,7 +76,7 @@ namespace MelonLoader.Melons
 
         private static bool IsValidFolder(string path)
         {
-            string dirName = Path.GetDirectoryName(path);
+            string dirName = new DirectoryInfo(path).Name;
             string dirNameLower = dirName.ToLowerInvariant();
             if (dirNameLower.EndsWith("disabled")
                 || dirNameLower.Equals("userlibs")
@@ -90,11 +90,9 @@ namespace MelonLoader.Melons
             ref bool hasWroteLine,
             ref List<MelonAssembly> melonAssemblies) where T : MelonTypeBase<T>
         {
-            if (!Directory.Exists(path)) 
-                return;
-
             // Skip Disabled Folders
-            if (!IsValidFolder(path))
+            if (!Directory.Exists(path)
+                || !IsValidFolder(path))
                 return;
 
             InternalUtils.MelonAssemblyResolver.AddSearchDirectory(path);
@@ -111,7 +109,8 @@ namespace MelonLoader.Melons
             ref List<MelonAssembly> melonAssemblies) where T : MelonTypeBase<T>
         {
             // Skip Disabled Folders
-            if (!IsValidFolder(path))
+            if (!Directory.Exists(path)
+                || !IsValidFolder(path))
                 return;
 
             // Check for UserLibs
