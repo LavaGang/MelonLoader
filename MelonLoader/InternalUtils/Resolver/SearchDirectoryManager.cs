@@ -33,9 +33,6 @@ namespace MelonLoader.InternalUtils.Resolver
             if (path.ContainsExtension())
                 return;
 
-            if (!Directory.Exists(path))
-                return;
-
             SearchDirectoryInfo searchDirectory = SearchDirectoryList.FirstOrDefault(x => x.Path.Equals(path));
             if (searchDirectory != null)
                 return;
@@ -72,6 +69,9 @@ namespace MelonLoader.InternalUtils.Resolver
             while (enumerator.MoveNext())
             {
                 string folderpath = enumerator.Current.Path;
+                if (folderpath.ContainsExtension()
+                    || !Directory.Exists(folderpath))
+                    continue;
 
                 string filepath = Directory.GetFiles(folderpath).Where(x =>
                     !string.IsNullOrEmpty(x)
