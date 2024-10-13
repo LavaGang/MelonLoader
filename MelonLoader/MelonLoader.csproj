@@ -8,13 +8,16 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 		<DebugType>embedded</DebugType>
-		
+
 		<PackageId>LavaGang.MelonLoader</PackageId>
 		<PackageTags>modding unity</PackageTags>
 		<RepositoryUrl>https://github.com/LavaGang/MelonLoader</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/LavaGang/MelonLoader</PackageProjectUrl>
+		<Description>
+			The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono.
+		</Description>
 	</PropertyGroup>
 	<PropertyGroup>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -47,7 +50,8 @@
 		<PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.8" />
-		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation"
+			Version="4.3.0" />
 		<PackageReference Include="Iced" Version="1.21.0" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.5" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.579" />

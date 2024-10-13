@@ -7,6 +7,9 @@ using System.Threading;
 using MelonLoader.Resolver;
 using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
+
+[assembly: MelonLoader.PatchShield]
+
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
