@@ -1,0 +1,11 @@
+<Project>
+    <PropertyGroup>
+        <Version>0.6.6</Version>
+		<Authors>Lava Gang</Authors>
+		<Company>discord.gg/2Wn3N2P</Company>
+		<Copyright>Copyright (c) 2022 Lava Gang</Copyright>
+		<Description>The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono.</Description>
+		<LangVersion>Latest</LangVersion>
+    </PropertyGroup>
+</Project>
+  

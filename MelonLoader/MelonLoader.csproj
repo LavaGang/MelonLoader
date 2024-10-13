@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net35;net6</TargetFrameworks>
-		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
 		<DocumentationFile>$(OutputPath)$(TargetFramework)\MelonLoader.xml</DocumentationFile>
@@ -11,17 +9,12 @@
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 		<DebugType>embedded</DebugType>
 		
-		<Version>0.6.6</Version>
 		<PackageId>LavaGang.MelonLoader</PackageId>
 		<PackageTags>modding unity</PackageTags>
 		<RepositoryUrl>https://github.com/LavaGang/MelonLoader</RepositoryUrl>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/LavaGang/MelonLoader</PackageProjectUrl>
-		<Authors>Lava Gang</Authors>
-		<Company>Lava Gang</Company>
-		<Copyright>Copyright (c) 2022 Lava Gang</Copyright>
-		<Description>The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono.</Description>
 	</PropertyGroup>
 	<PropertyGroup>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -31,6 +24,14 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 	</ItemDefinitionGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="MelonLoader.NativeHost" />
+		<InternalsVisibleTo Include="Il2CppAssemblyGenerator" />
+		<InternalsVisibleTo Include="Il2CppUnityTls" />
+		<InternalsVisibleTo Include="Il2Cpp" />
+		<InternalsVisibleTo Include="MelonStartScreen" />
+		<InternalsVisibleTo Include="EOS" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" />
 		<PackageReference Include="AssetsTools.NET" Version="3.0.0" />

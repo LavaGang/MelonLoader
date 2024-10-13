@@ -2,24 +2,19 @@
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Support</RootNamespace>
 		<TargetFramework>net35</TargetFramework>
-		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)\Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Libs\**" />
-	  <EmbeddedResource Remove="Libs\**" />
-	  <None Remove="Libs\**" />
+		<Compile Remove="Libs\**" />
+		<EmbeddedResource Remove="Libs\**" />
+		<None Remove="Libs\**" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="UnityEngine">
-			<HintPath>Libs\UnityEngine.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
+		<Reference Include="UnityEngine" HintPath="Libs\UnityEngine.dll" Private="False" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\Component.cs" Link="Component.cs" />
@@ -29,8 +24,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-		<PackageReference Include="Samboy063.Tomlet" Version="5.4.0">
-		  <ExcludeAssets>Runtime</ExcludeAssets>
-		</PackageReference>
+		<PackageReference Include="Samboy063.Tomlet" Version="5.4.0" ExcludeAssets="Runtime" />
 	</ItemGroup>
 </Project>

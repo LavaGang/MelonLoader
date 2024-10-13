@@ -2,9 +2,7 @@
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Support</RootNamespace>
 		<TargetFramework>net6</TargetFramework>
-		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -12,14 +10,12 @@
 		<DefineConstants>SM_Il2Cpp</DefineConstants>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
-		<RestoreAdditionalProjectSources>
-			https://nuget.bepinex.dev/v3/index.json
-		</RestoreAdditionalProjectSources>
+		<RestoreAdditionalProjectSources>https://nuget.bepinex.dev/v3/index.json</RestoreAdditionalProjectSources>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Libs\**" />
-	  <EmbeddedResource Remove="Libs\**" />
-	  <None Remove="Libs\**" />
+		<Compile Remove="Libs\**" />
+		<EmbeddedResource Remove="Libs\**" />
+		<None Remove="Libs\**" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Il2Cppmscorlib">
@@ -44,13 +40,18 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\MelonLoader\MelonLoader.csproj" Private="false" />
 		<PackageReference Include="HarmonyX" Version="2.10.2" ExcludeAssets="Runtime" />
-		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0"
+			ExcludeAssets="Runtime" />
 		<PackageReference Include="Iced" Version="1.21.0" ExcludeAssets="Runtime" />
-		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.579" ExcludeAssets="Runtime" />
-		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.579" ExcludeAssets="Runtime" />
-		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.6-ci.579" ExcludeAssets="Runtime" />
+		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.579"
+			ExcludeAssets="Runtime" />
+		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.579"
+			ExcludeAssets="Runtime" />
+		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.6-ci.579"
+			ExcludeAssets="Runtime" />
 		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="Runtime" />
-		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" ExcludeAssets="Runtime" />
+		<PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1"
+			ExcludeAssets="Runtime" />
 		<PackageReference Include="MonoMod.Utils" Version="22.7.31.1" ExcludeAssets="Runtime" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.4.0" ExcludeAssets="Runtime" />
 	</ItemGroup>
