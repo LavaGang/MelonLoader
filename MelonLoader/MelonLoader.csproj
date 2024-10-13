@@ -15,9 +15,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/LavaGang/MelonLoader</PackageProjectUrl>
-		<Description>
-			The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono.
-		</Description>
+		<Description>The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono.</Description>
 	</PropertyGroup>
 	<PropertyGroup>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>

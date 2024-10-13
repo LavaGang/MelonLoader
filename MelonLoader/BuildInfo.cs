@@ -12,11 +12,12 @@ public static class BuildInfo
     public static SemVersion VersionNumber { get; private set; }
 
     // NOTICE: This used to be a constant. Making it a property won't break backwards compatibility.
-    public static string Version { get; private set; } = VersionNumber.ToString();
+    public static string Version { get; private set; }
 
     static BuildInfo()
     {
         var version = typeof(BuildInfo).Assembly.GetName().Version!;
         VersionNumber = new(version.Major, version.Minor, version.Build, version.Revision == 0 ? "" : ("ci." + version.Revision.ToString()));
+        Version = VersionNumber.ToString();
     }
 }
