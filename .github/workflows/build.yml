@@ -1,5 +1,5 @@
 name: Build MelonLoader
-run-name: ${{ vars.DEVVERSION }}.${{ github.run_number }} | ${{ github.event.head_commit.message }}
+run-name: ${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && github.event.head_commit.message || 'Manual Build' }}
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
       - name: Build Melonloader Core
         shell: cmd
-        run: msbuild /restore /p:Platform="Windows - x64" /p:Version="${{ vars.DEVVERSION }}.${{ github.run_number }}" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
+        run: msbuild /restore /p:Platform="Windows - x64" /p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
       - name: Upload core artifact
         uses: actions/upload-artifact@v4
         with:
@@ -31,7 +31,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
       - name: Build Melonloader Core
         shell: cmd
-        run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64" /p:Version="${{ vars.DEVVERSION }}.${{ github.run_number }}"
+        run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64" /p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
       - name: Upload core artifact
         uses: actions/upload-artifact@v4
         with:
