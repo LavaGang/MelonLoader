@@ -1,5 +1,5 @@
 name: Build NuGet Package
-run-name: ${{ vars.DEVVERSION }}.${{ github.run_number }} | ${{ github.event.head_commit.message }}
+run-name: ${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && github.event.head_commit.message || 'Manual Build' }}
 
 on:
   push:
@@ -18,10 +18,10 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - name: .NET Pack
-        run: dotnet pack -c Release -p:Version="${{ vars.DEVVERSION }}.${{ github.run_number }}"
+        run: dotnet pack -c Release ${{ github.event_name != 'workflow_dispatch' && format('-p:Version="{0}-ci.{1}" -p:AssemblyVersion="{0}.{1}"', vars.DEVVERSION, github.run_number) || format('-p:Version="{0}"', vars.DEVVERSION) }}
         working-directory: ./MelonLoader/
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: MelonLoaderNuGetPackage
-          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.${{ vars.DEVVERSION }}.${{ github.run_number }}.nupkg
+          path: MelonLoader/Output/Release/MelonLoader/LavaGang.MelonLoader.${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}.nupkg
