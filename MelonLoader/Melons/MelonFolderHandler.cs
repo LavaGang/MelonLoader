@@ -79,7 +79,7 @@ namespace MelonLoader.Melons
                 }
 
                 // Load Assembly
-                var asm = MelonAssembly.LoadMelonAssembly(f, addToList);
+                var asm = MelonAssembly.LoadMelonAssembly(f, false);
                 if (asm == null)
                     continue;
 
@@ -97,12 +97,33 @@ namespace MelonLoader.Melons
             if (!Directory.Exists(path))
                 return;
 
+            // Add Base Path to Resolver
             InternalUtils.MelonAssemblyResolver.AddSearchDirectory(path);
 
             // Get Directories
             var directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+
+            // Add Directories to Resolver
             if ((directories != null) && (directories.Length > 0))
             {
+                foreach (var dir in directories)
+                {
+                    // Validate Path
+                    if (!Directory.Exists(dir))
+                        continue;
+
+                    // Skip any folders that doesn't end with or isn't equal to UserLibs
+                    string dirName = new DirectoryInfo(dir).Name;
+                    string dirNameLower = dirName.ToLowerInvariant();
+                    if (dirNameLower.EndsWith("disabled"))
+                        continue;
+
+                    // Load Assemblies
+                    if (dirNameLower.EndsWith("userlibs"))
+                        MelonUtils.AddNativeDLLDirectory(dir);
+                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
+                }
+
                 // Load UserLibs
                 foreach (var dir in directories)
                 {
@@ -117,8 +138,6 @@ namespace MelonLoader.Melons
                         continue;
 
                     // Load Assemblies
-                    MelonUtils.AddNativeDLLDirectory(dir);
-                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
                     LoadFolder<T>(dir, false, ref hasWroteLine, ref melonAssemblies);
                 }
 
@@ -136,7 +155,6 @@ namespace MelonLoader.Melons
                         continue;
 
                     // Load Melons from Extended Folder
-                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
                     LoadFolder<T>(dir, true, ref hasWroteLine, ref melonAssemblies);
                 }
             }
