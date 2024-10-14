@@ -99,31 +99,41 @@ namespace MelonLoader.Melons
 
             // Get Directories
             var directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-
-            // Load UserLibs
-            foreach (var dir in directories)
+            if ((directories != null) && (directories.Length > 0))
             {
-                // Skip any folders that doesn't end with or isn't equal to UserLibs
-                string dirName = new DirectoryInfo(dir).Name;
-                string dirNameLower = dirName.ToLowerInvariant();
-                if (!dirNameLower.EndsWith("userlibs"))
-                    continue;
+                // Load UserLibs
+                foreach (var dir in directories)
+                {
+                    // Validate Path
+                    if (!Directory.Exists(dir))
+                        continue;
 
-                // Load Assemblies
-                LoadFolder<T>(dir, false, ref hasWroteLine, ref melonAssemblies);
-            }
+                    // Skip any folders that doesn't end with or isn't equal to UserLibs
+                    string dirName = new DirectoryInfo(dir).Name;
+                    string dirNameLower = dirName.ToLowerInvariant();
+                    if (!dirNameLower.EndsWith("userlibs"))
+                        continue;
 
-            // Load Melons from Extended Folders
-            foreach (var dir in directories)
-            {
-                // Skip any folders that ends with or is equal to Disabled
-                string dirName = new DirectoryInfo(dir).Name;
-                string dirNameLower = dirName.ToLowerInvariant();
-                if (dirNameLower.EndsWith("disabled"))
-                    continue;
+                    // Load Assemblies
+                    LoadFolder<T>(dir, false, ref hasWroteLine, ref melonAssemblies);
+                }
 
-                // Load Assemblies
-                LoadFolder<T>(dir, true, ref hasWroteLine, ref melonAssemblies);
+                // Load Melons from Extended Folders
+                foreach (var dir in directories)
+                {
+                    // Validate Path
+                    if (!Directory.Exists(dir))
+                        continue;
+
+                    // Skip any folders that ends with or is equal to Disabled
+                    string dirName = new DirectoryInfo(dir).Name;
+                    string dirNameLower = dirName.ToLowerInvariant();
+                    if (dirNameLower.EndsWith("disabled"))
+                        continue;
+
+                    // Load Melons from Extended Folder
+                    LoadFolder<T>(dir, true, ref hasWroteLine, ref melonAssemblies);
+                }
             }
 
             // Load Melons from Base Path
