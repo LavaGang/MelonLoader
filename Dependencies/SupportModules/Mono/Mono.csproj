@@ -4,15 +4,10 @@
 		<TargetFramework>net35</TargetFramework>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<OutputPath>$(SolutionDir)\Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
+		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\SupportModules\</OutputPath>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
-	<ItemGroup>
-		<Compile Remove="Libs\**" />
-		<EmbeddedResource Remove="Libs\**" />
-		<None Remove="Libs\**" />
-	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="UnityEngine" HintPath="Libs\UnityEngine.dll" Private="False" />
 	</ItemGroup>

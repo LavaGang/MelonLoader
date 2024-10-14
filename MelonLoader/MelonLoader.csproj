@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net35;net6</TargetFrameworks>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -9,6 +9,7 @@
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 		<DebugType>embedded</DebugType>
 
+		<IsPackable>true</IsPackable>
 		<PackageId>LavaGang.MelonLoader</PackageId>
 		<PackageTags>modding unity</PackageTags>
 		<RepositoryUrl>https://github.com/LavaGang/MelonLoader</RepositoryUrl>
