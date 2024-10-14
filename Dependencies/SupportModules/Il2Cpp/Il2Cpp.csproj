@@ -13,11 +13,6 @@
 		<RestoreAdditionalProjectSources>https://nuget.bepinex.dev/v3/index.json</RestoreAdditionalProjectSources>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Remove="Libs\**" />
-		<EmbeddedResource Remove="Libs\**" />
-		<None Remove="Libs\**" />
-	</ItemGroup>
-	<ItemGroup>
 		<Reference Include="Il2Cppmscorlib">
 			<HintPath>Libs\Il2Cppmscorlib.dll</HintPath>
 			<Private>false</Private>
