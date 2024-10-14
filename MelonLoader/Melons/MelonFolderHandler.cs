@@ -74,15 +74,6 @@ namespace MelonLoader.Melons
             }
         }
 
-        private static bool IsValidFolder(string path)
-        {
-            string dirName = new DirectoryInfo(path).Name;
-            string dirNameLower = dirName.ToLowerInvariant();
-            if (dirNameLower.EndsWith("disabled"))
-                return false;
-            return true;
-        }
-
         private static void ProcessFolder<T>(string path,
             ref bool hasWroteLine,
             ref List<MelonAssembly> melonAssemblies) where T : MelonTypeBase<T>
