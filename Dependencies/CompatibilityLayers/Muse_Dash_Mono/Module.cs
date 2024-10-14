@@ -6,6 +6,8 @@ using MelonLoader.Modules;
 using MelonLoader.InternalUtils;
 using ModHelper;
 
+[assembly: MelonLoader.PatchShield]
+
 namespace MelonLoader.CompatibilityLayers
 {
     internal class Muse_Dash_Mono_Module : MelonModule

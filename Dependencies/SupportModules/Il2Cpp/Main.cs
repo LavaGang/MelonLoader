@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using MelonLoader.Utils;
 using System.IO;
 
+[assembly: MelonLoader.PatchShield]
+
 #pragma warning disable CS0618 // Type or member is obsolete
 
 namespace MelonLoader.Support

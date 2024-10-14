@@ -3,6 +3,8 @@ using System.Reflection;
 using MelonLoader.Support.Preferences;
 using UnityEngine;
 
+[assembly: MelonLoader.PatchShield]
+
 namespace MelonLoader.Support
 {
     internal static class Main

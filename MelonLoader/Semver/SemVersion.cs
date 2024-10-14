@@ -337,8 +337,7 @@ namespace Semver
             var r = CompareByPrecedence(other);
             if (r != 0) return r;
 
-            // If other is null, CompareByPrecedence() returns 1
-            return CompareComponent(Build, other.Build);
+            return CompareComponent(Prerelease, other.Prerelease, true);
         }
 
         /// <summary>

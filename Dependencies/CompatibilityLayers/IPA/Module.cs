@@ -7,6 +7,8 @@ using IllusionPlugin;
 using IllusionInjector;
 using MelonLoader.Modules;
 
+[assembly: MelonLoader.PatchShield]
+
 namespace MelonLoader.CompatibilityLayers
 {
     internal class IPA_Module : MelonModule

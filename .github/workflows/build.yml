@@ -1,4 +1,5 @@
 name: Build MelonLoader
+run-name: ${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && (github.event.head_commit.message || format('`[PR]` {0}', github.event.pull_request.title)) || 'Manual Build' }}
 
 on:
   push:
@@ -8,35 +9,47 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_core_debug:
+  build_core:
+    name: Build Managed Binaries
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v2
-      - name: Build Melonloader Core
-        shell: cmd
-        run: msbuild /restore /p:Platform="Windows - x64" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
-      - name: Upload core artifact
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Melonloader Core Debug
+        run: dotnet build --no-restore -c Debug -p:Platform="Windows - x64" -p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}" # Platform is actually irrelevant for core, it's compiled as AnyCPU either way
+
+      - name: Upload Debug Core Artifact
         uses: actions/upload-artifact@v4
         with:
           name: MLCoreDebug
           path: Output/Debug/MelonLoader/
-  build_core_release:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: setup-msbuild
-        uses: microsoft/setup-msbuild@v2
-      - name: Build Melonloader Core
-        shell: cmd
-        run: msbuild /restore /p:Configuration=Release /p:Platform="Windows - x64"
-      - name: Upload core artifact
+
+      - name: Build MelonLoader Core Release
+        run: dotnet build --no-restore -c Release -p:Platform="Windows - x64" -p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+
+      - name: Upload Release Core Artifact
         uses: actions/upload-artifact@v4
         with:
           name: MLCoreRelease
           path: Output/Release/MelonLoader/
+
+      - name: Pack NuGet Package
+        run: dotnet pack --no-build -c Release -p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}"
+
+      - name: Upload NuGet Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.NuGet
+          path: Output/Release/MelonLoader/LavaGang.MelonLoader.${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}.nupkg
   build_rust_windows:
+    name: Build Native Binaries (Windows)
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -109,6 +122,7 @@ jobs:
           name: MLBootstrapX64-Windows-Debug
           path: target/x86_64-pc-windows-msvc/debug/Bootstrap.dll
   build_rust_linux:
+    name: Build Native Binaries (Linux)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -150,279 +164,244 @@ jobs:
         with:
           name: MLBootstrapX64-Linux-Debug
           path: target/x86_64-unknown-linux-gnu/debug/libBootstrap.so
-  finalize_x64_debug_zip_windows:
-    runs-on: windows-latest
-    needs: [build_core_debug, build_rust_windows]
+
+  finalize_windows:
+    name: Finalize Windows Artifacts
+    runs-on: ubuntu-22.04
+    needs: [build_core, build_rust_windows]
     steps:
       - uses: actions/checkout@v4
-      - name: Download core artifact
+      - name: Download Debug Managed Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLCoreDebug
-          path: Output/Debug/x64/MelonLoader/
-      - name: Download proxy x64
+          path: Output/Debug/Managed/
+      - name: Download Debug Proxy x64 Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Windows-Debug
           path: Output/Debug/x64/
-      - name: Download bootstrap x64
+      - name: Download Debug Bootstrap x64 Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Windows-Debug
           path: Output/Debug/x64/MelonLoader/Dependencies/
-      - name: Package x64 zip
-        shell: cmd
+      - name: Package Debug x64 Artifact
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Debug\x64\MelonLoader\Dependencies\Mono
-          xcopy BaseLibs\Mono Output\Debug\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
-          xcopy BaseLibs\net35 Output\Debug\x64\MelonLoader\net35\ /E /H /Y
-          xcopy BaseLibs\net6 Output\Debug\x64\MelonLoader\net6\ /E /H /Y
-          echo.
+          mkdir -p Output/Debug/x64/MelonLoader/Dependencies/Mono
+          cp -r Output/Debug/Managed/* Output/Debug/x64/MelonLoader/
+          cp -r BaseLibs/Mono Output/Debug/x64/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Debug/x64/MelonLoader/
+          cp -r BaseLibs/net6 Output/Debug/x64/MelonLoader/
+          echo
           echo Copying Dobby x64...
-          xcopy BaseLibs\dobby_x64.dll Output\Debug\x64\MelonLoader\Dependencies\dobby.dll*
-          echo.
+          cp BaseLibs/dobby_x64.dll Output/Debug/x64/MelonLoader/Dependencies/dobby.dll
+          echo
           echo Copying documentation files...
-          copy NOTICE.txt Output\Debug\x64
-          mkdir Output\Debug\x64\MelonLoader\Documentation
-          copy CHANGELOG.md Output\Debug\x64\MelonLoader\Documentation\
-          copy LICENSE.md Output\Debug\x64\MelonLoader\Documentation\
-          copy NOTICE.txt Output\Debug\x64\MelonLoader\Documentation\
-          copy README.md Output\Debug\x64\MelonLoader\Documentation\
-          del Output\Debug\x64\MelonLoader\net6\MelonStartScreen.dll
-          del Output\Debug\x64\MelonLoader\net6\MelonStartScreen.deps.json
+          cp NOTICE.txt Output/Debug/x64/
+          mkdir -p Output/Debug/x64/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Debug/x64/MelonLoader/Documentation/
+          cp LICENSE.md Output/Debug/x64/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Debug/x64/MelonLoader/Documentation/
+          cp README.md Output/Debug/x64/MelonLoader/Documentation/
       - uses: actions/upload-artifact@v4
-        name: Upload Zip | Windows - x64
+        name: Upload Zip | Windows - Debug - x64
         with:
           name: MelonLoader.Windows.x64.CI.Debug
           path: ./Output/Debug/x64/*
-  finalize_x86_debug_zip_windows:
-    runs-on: windows-latest
-    needs: [build_core_debug, build_rust_windows]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download core artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: MLCoreDebug
-          path: Output/Debug/x86/MelonLoader/
-      - name: Download proxy x86
-        uses: actions/download-artifact@v4
-        with:
-          name: MLProxyX86-Windows-Debug
-          path: Output/Debug/x86/
-      - name: Download bootstrap x86
-        uses: actions/download-artifact@v4
-        with:
-          name: MLBootstrapX86-Windows-Debug
-          path: Output/Debug/x86/MelonLoader/Dependencies/
-      - name: Package x86 zip
-        shell: cmd
-        run: |
-          echo Copying Managed Libs...
-          mkdir Output\Debug\x86\MelonLoader\Dependencies\Mono
-          xcopy BaseLibs\Mono Output\Debug\x86\MelonLoader\Dependencies\Mono\ /E /H /Y
-          xcopy BaseLibs\net35 Output\Debug\x86\MelonLoader\net35\ /E /H /Y
-          xcopy BaseLibs\net6 Output\Debug\x86\MelonLoader\net6\ /E /H /Y
-          echo.
-          echo Copying Dobby x86...
-          xcopy BaseLibs\dobby_x86.dll Output\Debug\x86\MelonLoader\Dependencies\dobby.dll*
-          echo.
-          echo Copying documentation files...
-          copy NOTICE.txt Output\Debug\x86
-          mkdir Output\Debug\x86\MelonLoader\Documentation
-          copy CHANGELOG.md Output\Debug\x86\MelonLoader\Documentation\
-          copy LICENSE.md Output\Debug\x86\MelonLoader\Documentation\
-          copy NOTICE.txt Output\Debug\x86\MelonLoader\Documentation\
-          copy README.md Output\Debug\x86\MelonLoader\Documentation\
-          del Output\Debug\x86\MelonLoader\net6\MelonStartScreen.dll
-          del Output\Debug\x86\MelonLoader\net6\MelonStartScreen.deps.json
-      - uses: actions/upload-artifact@v4
-        name: Upload Zip | Windows - x86
-        with:
-          name: MelonLoader.Windows.x86.CI.Debug
-          path: ./Output/Debug/x86/*
-  finalize_x64_release_zip_windows:
-    runs-on: windows-latest
-    needs: [build_core_release, build_rust_windows]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download core artifact
+
+      - name: Download Release Managed Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLCoreRelease
-          path: Output/Release/x64/MelonLoader/
-      - name: Download proxy x64
+          path: Output/Release/Managed/
+      - name: Download Release Proxy x64 Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Windows-Release
           path: Output/Release/x64/
-      - name: Download bootstrap x64
+      - name: Download Debug Bootstrap x64 Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Windows-Release
           path: Output/Release/x64/MelonLoader/Dependencies/
-      - name: Package x64 zip
-        shell: cmd
+      - name: Package Release x64 Artifact
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Release\x64\MelonLoader\Dependencies\Mono
-          xcopy BaseLibs\Mono Output\Release\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
-          xcopy BaseLibs\net35 Output\Release\x64\MelonLoader\net35\ /E /H /Y
-          xcopy BaseLibs\net6 Output\Release\x64\MelonLoader\net6\ /E /H /Y
-          echo.
+          mkdir -p Output/Release/x64/MelonLoader/Dependencies/Mono
+          cp -r Output/Release/Managed/* Output/Release/x64/MelonLoader/
+          cp -r BaseLibs/Mono Output/Release/x64/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Release/x64/MelonLoader/
+          cp -r BaseLibs/net6 Output/Release/x64/MelonLoader/
+          echo
           echo Copying Dobby x64...
-          xcopy BaseLibs\dobby_x64.dll Output\Release\x64\MelonLoader\Dependencies\dobby.dll*
-          echo. 
+          cp BaseLibs/dobby_x64.dll Output/Release/x64/MelonLoader/Dependencies/dobby.dll
+          echo 
           echo Copying documentation files...
-          copy NOTICE.txt Output\Release\x64
-          mkdir Output\Release\x64\MelonLoader\Documentation
-          copy CHANGELOG.md Output\Release\x64\MelonLoader\Documentation\
-          copy LICENSE.md Output\Release\x64\MelonLoader\Documentation\
-          copy NOTICE.txt Output\Release\x64\MelonLoader\Documentation\
-          copy README.md Output\Release\x64\MelonLoader\Documentation\
-          del Output\Release\x64\MelonLoader\net6\MelonStartScreen.dll
-          del Output\Release\x64\MelonLoader\net6\MelonStartScreen.deps.json
+          cp NOTICE.txt Output/Release/x64/
+          mkdir -p Output/Release/x64/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Release/x64/MelonLoader/Documentation/
+          cp LICENSE.md Output/Release/x64/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Release/x64/MelonLoader/Documentation/
+          cp README.md Output/Release/x64/MelonLoader/Documentation/
       - uses: actions/upload-artifact@v4
-        name: Upload Zip | Windows - x64
+        name: Upload Zip | Windows - Release - x64
         with:
           name: MelonLoader.Windows.x64.CI.Release
           path: ./Output/Release/x64/*
-  finalize_x86_release_zip_windows:
-    runs-on: windows-latest
-    needs: [build_core_release, build_rust_windows]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download core artifact
+
+      - name: Download Debug Proxy x86 Artifact
         uses: actions/download-artifact@v4
         with:
-          name: MLCoreRelease
-          path: Output/Release/x86/MelonLoader/
-      - name: Download proxy x86
+          name: MLProxyX86-Windows-Debug
+          path: Output/Debug/x86/
+      - name: Download Debug Bootstrap x86 Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MLBootstrapX86-Windows-Debug
+          path: Output/Debug/x86/MelonLoader/Dependencies/
+      - name: Package Debug x86 Artifact
+        run: |
+          echo Copying Managed Libs...
+          mkdir -p Output/Debug/x86/MelonLoader/Dependencies/Mono
+          cp -r Output/Debug/Managed/* Output/Debug/x86/MelonLoader/
+          cp -r BaseLibs/Mono Output/Debug/x86/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Debug/x86/MelonLoader/
+          cp -r BaseLibs/net6 Output/Debug/x86/MelonLoader/
+          echo
+          echo Copying Dobby x86...
+          cp BaseLibs/dobby_x86.dll Output/Debug/x86/MelonLoader/Dependencies/dobby.dll
+          echo
+          echo Copying documentation files...
+          cp NOTICE.txt Output/Debug/x86/
+          mkdir -p Output/Debug/x86/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Debug/x86/MelonLoader/Documentation/
+          cp LICENSE.md Output/Debug/x86/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Debug/x86/MelonLoader/Documentation/
+          cp README.md Output/Debug/x86/MelonLoader/Documentation/
+      - uses: actions/upload-artifact@v4
+        name: Upload Zip | Windows - Debug - x86
+        with:
+          name: MelonLoader.Windows.x86.CI.Debug
+          path: ./Output/Debug/x86/*
+
+      - name: Download Release Proxy x86 Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLProxyX86-Windows-Release
           path: Output/Release/x86/
-      - name: Download bootstrap x86
+      - name: Download Release Bootstrap x86 Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX86-Windows-Release
           path: Output/Release/x86/MelonLoader/Dependencies/
-      - name: Package x86 zip
-        shell: cmd
+      - name: Package Release x86 Artifact
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Release\x86\MelonLoader\Dependencies\Mono
-          xcopy BaseLibs\Mono Output\Release\x86\MelonLoader\Dependencies\Mono\ /E /H /Y
-          xcopy BaseLibs\net35 Output\Release\x86\MelonLoader\net35\ /E /H /Y
-          xcopy BaseLibs\net6 Output\Release\x86\MelonLoader\net6\ /E /H /Y
-          echo.
+          mkdir -p Output/Release/x86/MelonLoader/Dependencies/Mono
+          cp -r Output/Release/Managed/* Output/Release/x86/MelonLoader/
+          cp -r BaseLibs/Mono Output/Release/x86/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Release/x86/MelonLoader/
+          cp -r BaseLibs/net6 Output/Release/x86/MelonLoader/
+          echo
           echo Copying Dobby x86...
-          xcopy BaseLibs\dobby_x86.dll Output\Release\x86\MelonLoader\Dependencies\dobby.dll*
-          echo.
+          cp BaseLibs/dobby_x86.dll Output/Release/x86/MelonLoader/Dependencies/dobby.dll
+          echo
           echo Copying documentation files...
-          copy NOTICE.txt Output\Release\x86
-          mkdir Output\Release\x86\MelonLoader\Documentation
-          copy CHANGELOG.md Output\Release\x86\MelonLoader\Documentation\
-          copy LICENSE.md Output\Release\x86\MelonLoader\Documentation\
-          copy NOTICE.txt Output\Release\x86\MelonLoader\Documentation\
-          copy README.md Output\Release\x86\MelonLoader\Documentation\
-          del Output\Release\x86\MelonLoader\net6\MelonStartScreen.dll
-          del Output\Release\x86\MelonLoader\net6\MelonStartScreen.deps.json
+          cp NOTICE.txt Output/Release/x86/
+          mkdir -p Output/Release/x86/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Release/x86/MelonLoader/Documentation/
+          cp LICENSE.md Output/Release/x86/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Release/x86/MelonLoader/Documentation/
+          cp README.md Output/Release/x86/MelonLoader/Documentation/
       - uses: actions/upload-artifact@v4
-        name: Upload Zip | Windows - x86
+        name: Upload Zip | Windows - Release - x86
         with:
           name: MelonLoader.Windows.x86.CI.Release
           path: ./Output/Release/x86/*
-  finalize_x64_debug_zip_linux:
-    runs-on: windows-latest
-    needs: [build_core_debug, build_rust_linux]
+
+  finalize_linux:
+    name: Finalize Linux Artifacts
+    runs-on: ubuntu-22.04
+    needs: [build_core, build_rust_linux]
     steps:
       - uses: actions/checkout@v4
-      - name: Download core artifact
+      - name: Download Debug Managed Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLCoreDebug
           path: Output/Debug/x64/MelonLoader/
-      - name: Download proxy x64
+      - name: Download Debug Proxy Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Linux-Debug
           path: Output/Debug/x64/
-      - name: Download bootstrap x64
+      - name: Download Debug Bootstrap Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Linux-Debug
           path: Output/Debug/x64/MelonLoader/Dependencies/
-      - name: Package x64 zip
-        shell: cmd
+      - name: Package Debug Zip
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Debug\x64\MelonLoader\Dependencies\Mono
-          xcopy BaseLibs\Mono Output\Debug\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
-          xcopy BaseLibs\net35 Output\Debug\x64\MelonLoader\net35\ /E /H /Y
-          xcopy BaseLibs\net6 Output\Debug\x64\MelonLoader\net6\ /E /H /Y
-          echo.
+          mkdir -p Output/Debug/x64/MelonLoader/Dependencies/Mono
+          cp -r BaseLibs/Mono Output/Debug/x64/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Debug/x64/MelonLoader/
+          cp -r BaseLibs/net6 Output/Debug/x64/MelonLoader/
+          echo
           echo Copying documentation files...
-          copy NOTICE.txt Output\Debug\x64
-          mkdir Output\Debug\x64\MelonLoader\Documentation
-          copy CHANGELOG.md Output\Debug\x64\MelonLoader\Documentation\
-          copy LICENSE.md Output\Debug\x64\MelonLoader\Documentation\
-          copy NOTICE.txt Output\Debug\x64\MelonLoader\Documentation\
-          copy README.md Output\Debug\x64\MelonLoader\Documentation\
-          del Output\Debug\x64\MelonLoader\net6\MelonStartScreen.dll
-          del Output\Debug\x64\MelonLoader\net6\MelonStartScreen.deps.json
+          cp NOTICE.txt Output/Debug/x64
+          mkdir -p Output/Debug/x64/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Debug/x64/MelonLoader/Documentation/
+          cp LICENSE.md Output/Debug/x64/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Debug/x64/MelonLoader/Documentation/
+          cp README.md Output/Debug/x64/MelonLoader/Documentation/
       - uses: actions/upload-artifact@v4
-        name: Upload Zip | Linux - x64
+        name: Upload Zip | Linux - Debug - x64
         with:
           name: MelonLoader.Linux.x64.CI.Debug
           path: ./Output/Debug/x64/*
-  finalize_x64_release_zip_linux:
-    runs-on: windows-latest
-    needs: [build_core_release, build_rust_linux]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download core artifact
+      - name: Download Release Managed Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLCoreRelease
           path: Output/Release/x64/MelonLoader/
-      - name: Download proxy x64
+      - name: Download Release Proxy Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLProxyX64-Linux-Release
           path: Output/Release/x64/
-      - name: Download bootstrap x64
+      - name: Download Release Bootstrap Artifact
         uses: actions/download-artifact@v4
         with:
           name: MLBootstrapX64-Linux-Release
           path: Output/Release/x64/MelonLoader/Dependencies/
-      - name: Package x64 zip
-        shell: cmd
+      - name: Package Release Zip
         run: |
           echo Copying Managed Libs...
-          mkdir Output\Release\x64\MelonLoader\Dependencies\Mono
-          xcopy BaseLibs\Mono Output\Release\x64\MelonLoader\Dependencies\Mono\ /E /H /Y
-          xcopy BaseLibs\net35 Output\Release\x64\MelonLoader\net35\ /E /H /Y
-          xcopy BaseLibs\net6 Output\Release\x64\MelonLoader\net6\ /E /H /Y
-          echo.
+          mkdir -p Output/Release/x64/MelonLoader/Dependencies/Mono
+          cp -r BaseLibs/Mono Output/Release/x64/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Release/x64/MelonLoader/
+          cp -r BaseLibs/net6 Output/Release/x64/MelonLoader/
+          echo
           echo Copying documentation files...
-          copy NOTICE.txt Output\Release\x64
-          mkdir Output\Release\x64\MelonLoader\Documentation
-          copy CHANGELOG.md Output\Release\x64\MelonLoader\Documentation\
-          copy LICENSE.md Output\Release\x64\MelonLoader\Documentation\
-          copy NOTICE.txt Output\Release\x64\MelonLoader\Documentation\
-          copy README.md Output\Release\x64\MelonLoader\Documentation\
-          del Output\Release\x64\MelonLoader\net6\MelonStartScreen.dll
-          del Output\Release\x64\MelonLoader\net6\MelonStartScreen.deps.json
+          cp NOTICE.txt Output/Release/x64/
+          mkdir -p Output/Release/x64/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Release/x64/MelonLoader/Documentation/
+          cp LICENSE.md Output/Release/x64/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Release/x64/MelonLoader/Documentation/
+          cp README.md Output/Release/x64/MelonLoader/Documentation/
       - uses: actions/upload-artifact@v4
-        name: Upload Zip | Linux - x64
+        name: Upload Zip | Linux - Release - x64
         with:
           name: MelonLoader.Linux.x64.CI.Release
           path: ./Output/Release/x64/*
+      
   cleanup_artifacts:
-    runs-on: windows-latest
-    needs: [finalize_x86_debug_zip_windows, finalize_x64_debug_zip_windows, finalize_x86_release_zip_windows, finalize_x64_release_zip_windows, finalize_x64_debug_zip_linux, finalize_x64_release_zip_linux]
+    name: Cleanup Artifacts
+    runs-on: ubuntu-22.04
+    needs: [finalize_windows, finalize_linux]
     steps:
       - uses: GeekyEggo/delete-artifact@v5.0.0
         with:
@@ -441,3 +420,4 @@ jobs:
             MLBootstrapX64-Windows-Release
             MLProxyX64-Linux-Release
             MLBootstrapX64-Linux-Release
+  

@@ -9,6 +9,9 @@ using System.IO;
 using bHapticsLib;
 using System.Threading;
 using System.Linq;
+
+[assembly: MelonLoader.PatchShield]
+
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader

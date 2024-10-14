@@ -1,6 +1,8 @@
 ﻿using MelonLoader.Modules;
 using System.Collections.Generic;
 
+[assembly: MelonLoader.PatchShield]
+
 namespace MelonLoader.CompatibilityLayers
 {
     internal class SLZ_Module : MelonModule

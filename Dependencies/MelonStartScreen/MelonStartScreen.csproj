@@ -1,26 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <RootNamespace>MelonLoader.MelonStartScreen</RootNamespace>
-        <TargetFrameworks>net35;net6</TargetFrameworks>
-        <LangVersion>Latest</LangVersion>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
-        <OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <DebugType>embedded</DebugType>
-    </PropertyGroup>
-    <ItemGroup>
-        <EmbeddedResource Include="Resources\Loading_Lemon.dat" />
-        <EmbeddedResource Include="Resources\Loading_Melon.dat" />
-        <EmbeddedResource Include="Resources\Logo_Lemon.dat" />
-        <EmbeddedResource Include="Resources\Logo_Melon.dat" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
-		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
-        <PackageReference Include="Samboy063.Tomlet" Version="5.4.0">
-          <ExcludeAssets>Runtime</ExcludeAssets>
-        </PackageReference>
-    </ItemGroup>
+	<PropertyGroup>
+		<RootNamespace>MelonLoader.MelonStartScreen</RootNamespace>
+		<TargetFrameworks>net35;net6</TargetFrameworks>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\</OutputPath>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Loading_Lemon.dat" />
+		<EmbeddedResource Include="Resources\Loading_Melon.dat" />
+		<EmbeddedResource Include="Resources\Logo_Lemon.dat" />
+		<EmbeddedResource Include="Resources\Logo_Melon.dat" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\MelonLoader\MelonLoader.csproj" Private="false" />
+		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0"
+			ExcludeAssets="Runtime" />
+		<PackageReference Include="Samboy063.Tomlet" Version="5.4.0">
+			<ExcludeAssets>Runtime</ExcludeAssets>
+		</PackageReference>
+	</ItemGroup>
 </Project>

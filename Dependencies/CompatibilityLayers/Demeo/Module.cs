@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using MelonLoader.Modules;
 
+[assembly: MelonLoader.PatchShield]
+
 namespace MelonLoader.CompatibilityLayers
 {
     internal class Demeo_Module : MelonModule
