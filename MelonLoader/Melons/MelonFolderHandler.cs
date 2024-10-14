@@ -87,16 +87,20 @@ namespace MelonLoader.Melons
             if (dirNameLower.EndsWith("disabled"))
                 return;
 
+            bool loadMelons = true;
+            if (dirNameLower.EndsWith("userlibs"))
+            {
+                loadMelons = false;
+                MelonUtils.AddNativeDLLDirectory(path);
+            }
+
             InternalUtils.MelonAssemblyResolver.AddSearchDirectory(path);
-            LoadMelonsFromFolder<T>(path, !dirNameLower.Equals("userlibs"), ref hasWroteLine, ref melonAssemblies);
+            LoadMelonsFromFolder<T>(path, loadMelons, ref hasWroteLine, ref melonAssemblies);
 
             // Scan Directories
             var directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
             foreach (var dir in directories)
-            {
-                InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
                 ProcessFolder<T>(dir, ref hasWroteLine, ref melonAssemblies);
-            }
         }
     }
 }
