@@ -102,10 +102,9 @@ namespace MelonLoader.Melons
 
             // Get Directories
             var directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-
-            // Add Directories to Resolver
             if ((directories != null) && (directories.Length > 0))
             {
+                // Add Directories to Resolver
                 foreach (var dir in directories)
                 {
                     // Validate Path

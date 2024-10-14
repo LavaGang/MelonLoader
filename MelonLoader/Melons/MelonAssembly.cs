@@ -80,12 +80,7 @@ namespace MelonLoader
 
             try
             {
-#if NET6_0_OR_GREATER
-                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-#else
-                var assembly = Assembly.LoadFrom(path);
-#endif
-                return LoadMelonAssembly(path, assembly, loadMelons);
+                return LoadRawMelonAssembly(path, File.ReadAllBytes(path), null, loadMelons);
             }
             catch (Exception ex)
             {
