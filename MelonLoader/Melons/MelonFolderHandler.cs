@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -8,42 +8,53 @@ namespace MelonLoader.Melons
     {
         internal static void Scan<T>(string path) where T : MelonTypeBase<T>
         {
+            // Get Full Directory Path
             path = Path.GetFullPath(path);
 
+            // Log Loading Message
             var loadingMsg = $"Loading {MelonTypeBase<T>.TypeName}s from '{path}'...";
             MelonLogger.WriteSpacer();
             MelonLogger.Msg(loadingMsg);
 
+            // Parse Folders
             bool hasWroteLine = false;
             List<MelonAssembly> melonAssemblies = new();
             ProcessFolder<T>(path, ref hasWroteLine, ref melonAssemblies);
 
+            // Parse Queue
             var melons = new List<T>();
             foreach (var asm in melonAssemblies)
             {
+                // Load Melons from Assembly
                 asm.LoadMelons();
+
+                // Parse Loaded Melons
                 foreach (var m in asm.LoadedMelons)
                 {
+                    // Validate Type
                     if (m is T t)
                     {
                         melons.Add(t);
-                    }
-                    else
-                    {
-                        MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{path}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {MelonTypeBase<T>.TypeName}. Make sure it's in the right folder.");
                         continue;
                     }
+
+                    // Log Failure
+                    MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{path}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {MelonTypeBase<T>.TypeName}. Make sure it's in the right folder.");
                 }
             }
 
+            // Log
             if (hasWroteLine)
                 MelonLogger.WriteSpacer();
 
+            // Register and Sort Melons
             MelonBase.RegisterSorted(melons);
 
+            // Log
             if (hasWroteLine)
                 MelonLogger.WriteLine(Color.Magenta);
 
+            // Log Melon Count
             var count = MelonTypeBase<T>._registeredMelons.Count;
             MelonLogger.Msg($"{count} {MelonTypeBase<T>.TypeName.MakePlural(count)} loaded.");
             if (MelonHandler.firstSpacer || (typeof(T) == typeof(MelonMod)))
@@ -51,24 +62,28 @@ namespace MelonLoader.Melons
             MelonHandler.firstSpacer = true;
         }
 
-        private static void LoadMelonsFromFolder<T>(string path,
+        private static void LoadFolder<T>(string path,
             bool addToList,
             ref bool hasWroteLine,
             ref List<MelonAssembly> melonAssemblies) where T : MelonTypeBase<T>
         {
+            // Get DLLs in Directory
             var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (var f in files)
             {
+                // Log
                 if (!hasWroteLine)
                 {
                     hasWroteLine = true;
                     MelonLogger.WriteLine(Color.Magenta);
                 }
 
-                var asm = MelonAssembly.LoadMelonAssembly(f, false);
+                // Load Assembly
+                var asm = MelonAssembly.LoadMelonAssembly(f, addToList);
                 if (asm == null)
                     continue;
 
+                // Queue Assembly for Melon Parsing
                 if (addToList)
                     melonAssemblies.Add(asm);
             }
@@ -78,29 +93,41 @@ namespace MelonLoader.Melons
             ref bool hasWroteLine,
             ref List<MelonAssembly> melonAssemblies) where T : MelonTypeBase<T>
         {
-            // Skip Disabled Folders
+            // Validate Path
             if (!Directory.Exists(path))
                 return;
 
-            string dirName = new DirectoryInfo(path).Name;
-            string dirNameLower = dirName.ToLowerInvariant();
-            if (dirNameLower.EndsWith("disabled"))
-                return;
+            // Get Directories
+            var directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
 
-            bool loadMelons = true;
-            if (dirNameLower.EndsWith("userlibs"))
+            // Load UserLibs
+            foreach (var dir in directories)
             {
-                loadMelons = false;
-                MelonUtils.AddNativeDLLDirectory(path);
+                // Skip any folders that doesn't end with or isn't equal to UserLibs
+                string dirName = new DirectoryInfo(dir).Name;
+                string dirNameLower = dirName.ToLowerInvariant();
+                if (!dirNameLower.EndsWith("userlibs"))
+                    continue;
+
+                // Load Assemblies
+                LoadFolder<T>(dir, false, ref hasWroteLine, ref melonAssemblies);
             }
 
-            InternalUtils.MelonAssemblyResolver.AddSearchDirectory(path);
-            LoadMelonsFromFolder<T>(path, loadMelons, ref hasWroteLine, ref melonAssemblies);
-
-            // Scan Directories
-            var directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+            // Load Melons from Extended Folders
             foreach (var dir in directories)
-                ProcessFolder<T>(dir, ref hasWroteLine, ref melonAssemblies);
+            {
+                // Skip any folders that ends with or is equal to Disabled
+                string dirName = new DirectoryInfo(dir).Name;
+                string dirNameLower = dirName.ToLowerInvariant();
+                if (dirNameLower.EndsWith("disabled"))
+                    continue;
+
+                // Load Assemblies
+                LoadFolder<T>(dir, true, ref hasWroteLine, ref melonAssemblies);
+            }
+
+            // Load Melons from Base Path
+            LoadFolder<T>(path, true, ref hasWroteLine, ref melonAssemblies);
         }
     }
 }
