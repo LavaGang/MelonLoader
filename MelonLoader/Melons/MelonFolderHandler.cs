@@ -97,6 +97,8 @@ namespace MelonLoader.Melons
             if (!Directory.Exists(path))
                 return;
 
+            InternalUtils.MelonAssemblyResolver.AddSearchDirectory(path);
+
             // Get Directories
             var directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
             if ((directories != null) && (directories.Length > 0))
@@ -115,6 +117,8 @@ namespace MelonLoader.Melons
                         continue;
 
                     // Load Assemblies
+                    MelonUtils.AddNativeDLLDirectory(dir);
+                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
                     LoadFolder<T>(dir, false, ref hasWroteLine, ref melonAssemblies);
                 }
 
@@ -132,6 +136,7 @@ namespace MelonLoader.Melons
                         continue;
 
                     // Load Melons from Extended Folder
+                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
                     LoadFolder<T>(dir, true, ref hasWroteLine, ref melonAssemblies);
                 }
             }
