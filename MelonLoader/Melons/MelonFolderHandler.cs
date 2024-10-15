@@ -89,19 +89,21 @@ namespace MelonLoader.Melons
             }
         }
 
+        private static bool StartsOrEndsWith(string dirNameLower, string target)
+            => dirNameLower.StartsWith(target)
+                || dirNameLower.EndsWith(target);
+
         private static bool IsUserLibsFolder(string dirNameLower)
-            => dirNameLower.StartsWith("userlibs")
-                || dirNameLower.EndsWith("userlibs");
+            => StartsOrEndsWith(dirNameLower, "userlibs");
 
         private static bool IsDisabledFolder(string path, 
             out string dirNameLower)
         {
             string dirName = new DirectoryInfo(path).Name;
             dirNameLower = dirName.ToLowerInvariant();
-            return dirNameLower.StartsWith("disabled")
-                || dirNameLower.EndsWith("disabled")
-                || dirNameLower.StartsWith("old")
-                || dirNameLower.EndsWith("old");
+            return StartsOrEndsWith(dirNameLower, "disabled")
+                || StartsOrEndsWith(dirNameLower, "old")
+                || StartsOrEndsWith(dirNameLower, "~");
         }
 
         private static void ProcessFolder<T>(string path,
