@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.6.6](#v066) |
 | [v0.6.5](#v065) |
 | [v0.6.4](#v064) |
 | [v0.6.3](#v063) |
@@ -34,6 +35,31 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.6.6
+
+1. Updated Il2CppInterop to 1.4.6-ci.579
+2. Implemented a RegisterTypeInIl2CppWithInterfaces attribute
+3. Implemented Recursive Melon Folders with extended UserLib Resolving
+4. Reimplemented NetFramework Variant of Cpp2IL as fallback
+5. Standardized Assembly Searching and Resolving to work on both Mono and Il2Cpp Games
+6. Temporarily removed Start Screen for being broken in most cases
+7. Modified Command-Line Argument Logging to show Internal Arguments Only
+8. Added UserLibs folders to Native Library Search Directories
+9. Moved `dobby.dll` to `MelonLoader\Dependencies`
+10. Moved Assembly Resolver Related Classes to `MelonLoader.Resolver` Namespace
+11. Moved `MonoLibrary` class to `MelonLoader.Utils` Namespace
+12. Removed Useless TODO Warning from Il2CppAssemblyGenerator
+13. Removed EOS Compatibility Layer for being Unneeded
+14. Fixed Regression with LemonMD5, LemonSHA256, and LemonSHA512
+15. Fixed an issue with older Cpp2IL versions causing a download failure
+16. Fixed an issue with Il2CppInterop not properly logging Trampoline Exceptions
+17. Fixed an issue with Il2Cpp Class Injection Attributes causing exceptions to be thrown on Mono games
+18. Fixed an issue with the Bootstrap not reading --melonloader.basedir correctly
+19. Fixed an issue with Loading Dobby in some rare cases
+20. Fixed an issue with Compatibility Layers getting Garbage Collected while still in use
 
 ---
 
