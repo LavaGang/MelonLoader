@@ -115,7 +115,10 @@ namespace MelonLoader.Melons
                     // Skip any folders that doesn't end with or isn't equal to UserLibs
                     string dirName = new DirectoryInfo(dir).Name;
                     string dirNameLower = dirName.ToLowerInvariant();
-                    if (dirNameLower.EndsWith("disabled"))
+                    if (dirNameLower.StartsWith("disabled")
+                        || dirNameLower.EndsWith("disabled")
+                        || dirNameLower.StartsWith("old")
+                        || dirNameLower.EndsWith("old"))
                         continue;
 
                     // Load Assemblies
@@ -134,6 +137,12 @@ namespace MelonLoader.Melons
                     // Skip any folders that doesn't end with or isn't equal to UserLibs
                     string dirName = new DirectoryInfo(dir).Name;
                     string dirNameLower = dirName.ToLowerInvariant();
+                    if (dirNameLower.StartsWith("disabled")
+                        || dirNameLower.EndsWith("disabled")
+                        || dirNameLower.StartsWith("old")
+                        || dirNameLower.EndsWith("old"))
+                        continue;
+
                     if (!dirNameLower.EndsWith("userlibs"))
                         continue;
 
@@ -151,7 +160,10 @@ namespace MelonLoader.Melons
                     // Skip any folders that ends with or is equal to Disabled
                     string dirName = new DirectoryInfo(dir).Name;
                     string dirNameLower = dirName.ToLowerInvariant();
-                    if (dirNameLower.EndsWith("disabled"))
+                    if (dirNameLower.StartsWith("disabled")
+                        || dirNameLower.EndsWith("disabled")
+                        || dirNameLower.StartsWith("old")
+                        || dirNameLower.EndsWith("old"))
                         continue;
 
                     // Load Melons from Extended Folder
