@@ -89,6 +89,21 @@ namespace MelonLoader.Melons
             }
         }
 
+        private static bool IsUserLibsFolder(string dirNameLower)
+            => dirNameLower.StartsWith("userlibs")
+                || dirNameLower.EndsWith("userlibs");
+
+        private static bool IsDisabledFolder(string path, 
+            out string dirNameLower)
+        {
+            string dirName = new DirectoryInfo(path).Name;
+            dirNameLower = dirName.ToLowerInvariant();
+            return dirNameLower.StartsWith("disabled")
+                || dirNameLower.EndsWith("disabled")
+                || dirNameLower.StartsWith("old")
+                || dirNameLower.EndsWith("old");
+        }
+
         private static void ProcessFolder<T>(string path,
             ref bool hasWroteLine,
             ref List<MelonAssembly> melonAssemblies) where T : MelonTypeBase<T>
@@ -112,17 +127,12 @@ namespace MelonLoader.Melons
                     if (!Directory.Exists(dir))
                         continue;
 
-                    // Skip any folders that doesn't end with or isn't equal to UserLibs
-                    string dirName = new DirectoryInfo(dir).Name;
-                    string dirNameLower = dirName.ToLowerInvariant();
-                    if (dirNameLower.StartsWith("disabled")
-                        || dirNameLower.EndsWith("disabled")
-                        || dirNameLower.StartsWith("old")
-                        || dirNameLower.EndsWith("old"))
+                    // Skip Disabled Folders
+                    if (IsDisabledFolder(dir, out string dirNameLower))
                         continue;
 
                     // Load Assemblies
-                    if (dirNameLower.EndsWith("userlibs"))
+                    if (IsUserLibsFolder(dirNameLower))
                         MelonUtils.AddNativeDLLDirectory(dir);
                     Resolver.MelonAssemblyResolver.AddSearchDirectory(dir);
                 }
@@ -134,16 +144,9 @@ namespace MelonLoader.Melons
                     if (!Directory.Exists(dir))
                         continue;
 
-                    // Skip any folders that doesn't end with or isn't equal to UserLibs
-                    string dirName = new DirectoryInfo(dir).Name;
-                    string dirNameLower = dirName.ToLowerInvariant();
-                    if (dirNameLower.StartsWith("disabled")
-                        || dirNameLower.EndsWith("disabled")
-                        || dirNameLower.StartsWith("old")
-                        || dirNameLower.EndsWith("old"))
-                        continue;
-
-                    if (!dirNameLower.EndsWith("userlibs"))
+                    // Skip Disabled Folders and any folders that doesn't end with or isn't equal to UserLibs
+                    if (IsDisabledFolder(dir, out string dirNameLower)
+                        || !IsUserLibsFolder(dirNameLower))
                         continue;
 
                     // Load Assemblies
@@ -157,13 +160,8 @@ namespace MelonLoader.Melons
                     if (!Directory.Exists(dir))
                         continue;
 
-                    // Skip any folders that ends with or is equal to Disabled
-                    string dirName = new DirectoryInfo(dir).Name;
-                    string dirNameLower = dirName.ToLowerInvariant();
-                    if (dirNameLower.StartsWith("disabled")
-                        || dirNameLower.EndsWith("disabled")
-                        || dirNameLower.StartsWith("old")
-                        || dirNameLower.EndsWith("old"))
+                    // Skip Disabled Folders
+                    if (IsDisabledFolder(dir, out _))
                         continue;
 
                     // Load Melons from Extended Folder
