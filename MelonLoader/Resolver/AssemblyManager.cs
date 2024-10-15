@@ -49,7 +49,7 @@ namespace MelonLoader.Resolver
                 assembly = MelonAssemblyResolver.SafeInvoke_OnAssemblyResolve(requested_name, requested_version);
 
             // Search Directories
-            if (is_preload && assembly == null)
+            if (is_preload && (assembly == null))
                 assembly = SearchDirectoryManager.Scan(requested_name);
 
             // Load if Valid Assembly
@@ -77,7 +77,7 @@ namespace MelonLoader.Resolver
 
 #if NET6_0_OR_GREATER
 
-        private static Assembly Resolve(AssemblyLoadContext alc, AssemblyName name)
+        private static Assembly? Resolve(AssemblyLoadContext alc, AssemblyName name)
             => Resolve(name.Name, name.Version, true);
 
         private static void InstallHooks()

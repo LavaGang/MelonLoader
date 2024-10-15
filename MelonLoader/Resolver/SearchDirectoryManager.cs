@@ -71,11 +71,11 @@ namespace MelonLoader.Resolver
                     continue;
 
                 string filepath = Directory.GetFiles(folderpath).Where(x =>
-                    !string.IsNullOrEmpty(x)
-                    && (Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
-                        && Path.GetFileName(x).Equals($"{requested_name}.dll")
-                    || Path.GetExtension(x).ToLowerInvariant().Equals(".exe")
-                        && Path.GetFileName(x).Equals($"{requested_name}.exe"))
+                    (!string.IsNullOrEmpty(x)
+                        && ((Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
+                            && Path.GetFileName(x).Equals($"{requested_name}.dll"))
+                        || (Path.GetExtension(x).ToLowerInvariant().Equals(".exe")
+                            && Path.GetFileName(x).Equals($"{requested_name}.exe"))))
                 ).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(filepath))
