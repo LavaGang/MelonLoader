@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using MelonLoader.InternalUtils;
 using IllusionPlugin;
 using IllusionInjector;
 using MelonLoader.Modules;
+using MelonLoader.Resolver;
 
 namespace MelonLoader.CompatibilityLayers
 {

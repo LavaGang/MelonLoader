@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using MelonLoader.InternalUtils.Resolver;
 using MelonLoader.Utils;
 
 #if NET6_0_OR_GREATER
@@ -10,7 +9,7 @@ using System.Runtime.Loader;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 
-namespace MelonLoader.InternalUtils
+namespace MelonLoader.Resolver
 {
     public class MelonAssemblyResolver
     {

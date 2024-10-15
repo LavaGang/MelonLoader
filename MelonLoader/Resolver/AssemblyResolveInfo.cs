@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MelonLoader.InternalUtils
+namespace MelonLoader.Resolver
 {
     public class AssemblyResolveInfo
     {

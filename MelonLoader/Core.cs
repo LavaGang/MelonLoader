@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using System.Security;
-using MelonLoader.InternalUtils;
-using MelonLoader.MonoInternals;
-using MelonLoader.Utils;
 using System.IO;
 using bHapticsLib;
 using System.Threading;
-using System.Linq;
+using MelonLoader.Resolver;
+using MelonLoader.Utils;
+using MelonLoader.InternalUtils;
 #pragma warning disable IDE0051 // Prevent the IDE from complaining about private unreferenced methods
 
 namespace MelonLoader
 {
-	internal static class Core
+    internal static class Core
     {
         private static bool _success = true;
 
@@ -65,7 +63,7 @@ namespace MelonLoader
 
             try
             {
-                if (!InternalUtils.MonoLibrary.Setup())
+                if (!MonoLibrary.Setup())
                 {
                     _success = false;
                     return 1;

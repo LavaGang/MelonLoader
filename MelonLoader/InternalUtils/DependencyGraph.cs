@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.IO;
-using MelonLoader.InternalUtils.Resolver;
+using MelonLoader.Resolver;
 
 #if NET6_0_OR_GREATER
 using System.Runtime.Loader;

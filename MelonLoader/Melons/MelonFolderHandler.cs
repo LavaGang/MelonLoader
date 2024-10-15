@@ -1,4 +1,4 @@
-﻿﻿using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -98,7 +98,7 @@ namespace MelonLoader.Melons
                 return;
 
             // Add Base Path to Resolver
-            InternalUtils.MelonAssemblyResolver.AddSearchDirectory(path);
+            Resolver.MelonAssemblyResolver.AddSearchDirectory(path);
 
             // Get Directories
             var directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
@@ -121,7 +121,7 @@ namespace MelonLoader.Melons
                     // Load Assemblies
                     if (dirNameLower.EndsWith("userlibs"))
                         MelonUtils.AddNativeDLLDirectory(dir);
-                    InternalUtils.MelonAssemblyResolver.AddSearchDirectory(dir);
+                    Resolver.MelonAssemblyResolver.AddSearchDirectory(dir);
                 }
 
                 // Load UserLibs

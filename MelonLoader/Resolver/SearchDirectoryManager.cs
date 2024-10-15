@@ -4,17 +4,14 @@ using System.Linq;
 using System.Reflection;
 
 #if NET6_0_OR_GREATER
-
 using System.Runtime.Loader;
-
 #else
-
 using System;
 using System.Runtime.InteropServices;
-
+using MelonLoader.Utils;
 #endif
 
-namespace MelonLoader.InternalUtils.Resolver
+namespace MelonLoader.Resolver
 {
     internal static class SearchDirectoryManager
     {
@@ -75,10 +72,10 @@ namespace MelonLoader.InternalUtils.Resolver
 
                 string filepath = Directory.GetFiles(folderpath).Where(x =>
                     !string.IsNullOrEmpty(x)
-                    && ((Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
-                        && Path.GetFileName(x).Equals($"{requested_name}.dll"))
-                    || (Path.GetExtension(x).ToLowerInvariant().Equals(".exe")
-                        && Path.GetFileName(x).Equals($"{requested_name}.exe")))
+                    && (Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
+                        && Path.GetFileName(x).Equals($"{requested_name}.dll")
+                    || Path.GetExtension(x).ToLowerInvariant().Equals(".exe")
+                        && Path.GetFileName(x).Equals($"{requested_name}.exe"))
                 ).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(filepath))

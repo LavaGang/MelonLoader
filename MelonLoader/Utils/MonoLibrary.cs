@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.InternalUtils
+namespace MelonLoader.Utils
 {
     public class MonoLibrary
     {
