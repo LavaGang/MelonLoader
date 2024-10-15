@@ -57,8 +57,8 @@
 15. Fixed an issue with older Cpp2IL versions causing a download failure
 16. Fixed an issue with Il2CppInterop not properly logging Trampoline Exceptions
 17. Fixed an issue with Il2Cpp Class Injection Attributes causing exceptions to be thrown on Mono games
-18. Fixed an issue with the Bootstrap not reading --melonloader.basedir correctly
-19. Fixed an issue with Loading Dobby in some rare cases
+18. Fixed an issue with the Bootstrap not reading `--melonloader.basedir` correctly
+19. Fixed an issue with Loading `dobby.dll` in some rare cases
 20. Fixed an issue with Compatibility Layers getting Garbage Collected while still in use
 
 ---
