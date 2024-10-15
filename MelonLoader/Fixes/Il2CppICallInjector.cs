@@ -161,6 +161,30 @@ namespace MelonLoader.Fixes
             return pair.Item3;
         }
 
+        private static Type FindType(string typeFullName)
+        {
+            if (string.IsNullOrEmpty(typeFullName))
+                return null;
+
+            Type result = null;
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (a == null)
+                    continue;
+
+                result = a.GetValidType($"Il2Cpp.{typeFullName}");
+                if (result == null)
+                    result = a.GetValidType($"Il2Cpp{typeFullName}");
+                if (result == null)
+                    result = a.GetValidType(typeFullName);
+
+                if (result != null)
+                    break;
+            }
+
+            return result;
+        }
+
         private static bool ShouldInject(string signature, out MethodInfo unityShimMethod)
         {
             unityShimMethod = null;
@@ -170,7 +194,7 @@ namespace MelonLoader.Fixes
             string typeName = split[0];
 
             // Find Managed Type
-            Type newType = Il2CppInteropFixes.FixedFindType(typeName);
+            Type newType = FindType(typeName);
             if (newType == null)
                 return false;
 

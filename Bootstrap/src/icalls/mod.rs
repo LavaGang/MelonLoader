@@ -14,10 +14,10 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
     runtime.add_internal_call("MelonLoader.MelonUtils::IsGame32Bit", melon_utils::is_32_bit as MethodPointer)?;
     runtime.add_internal_call("MelonLoader.BootstrapInterop::NativeHookAttach", bootstrap_interop::attach as MethodPointer)?;
     runtime.add_internal_call("MelonLoader.BootstrapInterop::NativeHookDetach", bootstrap_interop::detach as MethodPointer)?;
-    runtime.add_internal_call("MelonLoader.MonoInternals.MonoLibrary::GetLibPtr", mono_library::get_lib_ptr as MethodPointer)?;
-    runtime.add_internal_call("MelonLoader.MonoInternals.MonoLibrary::CastManagedAssemblyPtr", mono_library::cast_assembly_ptr as MethodPointer)?;
-    runtime.add_internal_call("MelonLoader.MonoInternals.MonoLibrary::GetRootDomainPtr", mono_library::get_domain_ptr as MethodPointer)?;
-    runtime.add_internal_call("MelonLoader.MonoInternals.ResolveInternals.AssemblyManager::InstallHooks", resolve_internals::install_hooks as MethodPointer)?;
+    runtime.add_internal_call("MelonLoader.Utils.MonoLibrary::GetLibPtr", mono_library::get_lib_ptr as MethodPointer)?;
+    runtime.add_internal_call("MelonLoader.Utils.MonoLibrary::CastManagedAssemblyPtr", mono_library::cast_assembly_ptr as MethodPointer)?;
+    runtime.add_internal_call("MelonLoader.Utils.MonoLibrary::GetRootDomainPtr", mono_library::get_domain_ptr as MethodPointer)?;
+    runtime.add_internal_call("MelonLoader.Resolver.AssemblyManager::InstallHooks", resolve_internals::install_hooks as MethodPointer)?;
     runtime.add_internal_call("MelonLoader.Support.Preload::GetManagedDirectory", preload::get_managed_dir as MethodPointer)?;
 
     Ok(())

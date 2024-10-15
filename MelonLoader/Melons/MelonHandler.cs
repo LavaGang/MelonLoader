@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MelonLoader.Melons;
 using MelonLoader.Utils;
 
 namespace MelonLoader
@@ -31,7 +32,7 @@ namespace MelonLoader
                 Directory.CreateDirectory(MelonEnvironment.ModsDirectory);
         }
 
-        private static bool firstSpacer = false;
+        internal static bool firstSpacer = false;
         public static void LoadMelonsFromDirectory<T>(string path) where T : MelonTypeBase<T>
         {
             path = Path.GetFullPath(path);
@@ -42,7 +43,7 @@ namespace MelonLoader
 
             bool hasWroteLine = false;
 
-            var files = Directory.GetFiles(path, "*.dll");
+            var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
             var melonAssemblies = new List<MelonAssembly>();
             foreach (var f in files)
             {
@@ -101,9 +102,7 @@ namespace MelonLoader
             MelonLogger.Msg(loadingMsg);
 
             bool hasWroteLine = false;
-
-            var files = Directory.GetFiles(path, "*.dll");
-            var melonAssemblies = new List<MelonAssembly>();
+            var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (var f in files)
             {
                 if (!hasWroteLine)
@@ -112,13 +111,12 @@ namespace MelonLoader
                     MelonLogger.WriteLine(Color.Magenta);
                 }
 
-                var asm = MelonAssembly.LoadMelonAssembly(f, false);
-                if (asm == null)
-                    continue;
-
-                melonAssemblies.Add(asm);
+                MelonAssembly.LoadMelonAssembly(f, false);
             }
         }
+
+        public static void LoadMelonFolders<T>(string path) where T : MelonTypeBase<T>
+            => MelonFolderHandler.Scan<T>(path);
 
         #region Obsolete Members
         /// <summary>

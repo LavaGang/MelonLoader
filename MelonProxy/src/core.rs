@@ -34,6 +34,7 @@ pub fn init() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 
+	let game_dir = base_dir.clone();
     let mut iterator = args.iter();
     while let Some(mut arg) = iterator.next() {
         if arg.starts_with("--melonloader.basedir") {
@@ -57,6 +58,10 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     if no_mods {
         return Ok(());
     }
+	
+	//fix dobby_rs link
+	let dobby_path = files::get_dobby_dir(base_dir.clone(), game_dir)?;
+    add_dll_directory(dobby_path);
 
     let bootstrap_path = files::get_bootstrap_path(&base_dir)?;
 
@@ -65,4 +70,23 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     }
 
     Ok(())
+}
+
+fn add_dll_directory(native_lib_dir: PathBuf) {
+    // Determine the correct environment variable and separator
+    let lib_var = if cfg!(target_os = "windows") { "PATH" } else { "LD_LIBRARY_PATH" };
+    let separator = if cfg!(target_os = "windows") { ";" } else { ":" };
+
+    // Get the current value of the library path
+    let current_path = std::env::var(lib_var).unwrap_or_else(|_| String::new());
+
+    // Append the new directory to the existing paths
+    let new_path = if current_path.is_empty() {
+        native_lib_dir.display().to_string()
+    } else {
+        format!("{}{}{}", native_lib_dir.display(), separator, current_path)
+    };
+
+    // Set the new value of the library path
+    std::env::set_var(lib_var, new_path);
 }

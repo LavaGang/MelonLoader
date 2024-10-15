@@ -1,7 +1,6 @@
 ﻿using MelonLoader.Modules;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using MelonLoader.Utils;
 
@@ -13,12 +12,8 @@ namespace MelonLoader
 
         private static List<MelonModule.Info> layers = new List<MelonModule.Info>()
         {
-            // Il2Cpp Unity Tls - No longer needed in CoreCLR
-            // new MelonModule.Info(Path.Combine(baseDirectory, "Il2CppUnityTls.dll"), () => !MelonUtils.IsGameIl2Cpp()),
-
             // Illusion Plugin Architecture
             new MelonModule.Info(Path.Combine(baseDirectory, "IPA.dll"), MelonUtils.IsGameIl2Cpp),
-            new MelonModule.Info(Path.Combine(baseDirectory, "EOS.dll"), () => !MelonUtils.IsWindows)
         };
         
         private static void CheckGameLayerWithPlatform(string name, Func<bool> shouldBeIgnored)
@@ -64,7 +59,7 @@ namespace MelonLoader
                     continue;
 
                 MelonDebug.Msg($"Loading MelonModule '{m.fullPath}'");
-                MelonModule.Load(m);
+                m.moduleGC = MelonModule.Load(m);
             }
 
             foreach (var file in Directory.GetFiles(baseDirectory))

@@ -11,25 +11,24 @@ lazy_static! {
     pub static ref BASE_DIR: W<PathBuf> = {
         let args: Vec<String> = std::env::args().collect();
         let mut base_dir = std::env::current_dir().unwrap_or_else(|e|internal_failure!("Failed to get base dir: {e}"));
-        for arg in args.iter() {
+        let mut iterator = args.iter();
+		while let Some(mut arg) = iterator.next() {
             if arg.starts_with("--melonloader.basedir") {
-                let a: Vec<&str> = arg.split("=").collect();
-                base_dir = PathBuf::from(a[1]);
+                if arg.contains("=") {
+					let a: Vec<&str> = arg.split("=").collect();
+					base_dir = PathBuf::from(a[1]);
+				}
+				else {
+					arg = iterator.next().unwrap();
+					base_dir = PathBuf::from(arg);
+				}
             }
         }
 
         W(base_dir)
     };
     pub static ref GAME_DIR: W<PathBuf> = {
-        let args: Vec<String> = std::env::args().collect();
-        let mut base_dir = std::env::current_dir().unwrap_or_else(|e|internal_failure!("Failed to get game dir: {e}"));
-        for arg in args.iter() {
-            if arg.starts_with("--melonloader.basedir") {
-                let a: Vec<&str> = arg.split("=").collect();
-                base_dir = PathBuf::from(a[1]);
-            }
-        }
-
+        let base_dir = std::env::current_dir().unwrap_or_else(|e|internal_failure!("Failed to get game dir: {e}"));
         W(base_dir)
     };
     pub static ref MELONLOADER_FOLDER: W<PathBuf> = W(BASE_DIR.join("MelonLoader"));
@@ -75,7 +74,7 @@ pub fn get_managed_dir() -> Result<PathBuf, DynErr> {
 
             match managed_path.exists() {
                 true => Ok(managed_path),
-                false => Err("Failed to find the managed directory!")?,
+                false => Err("Failed to find the Managed directory!")?,
             }
         }
     }

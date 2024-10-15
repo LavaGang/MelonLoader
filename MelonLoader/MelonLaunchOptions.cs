@@ -16,6 +16,7 @@ namespace MelonLoader
          /// </para>
          /// </summary>
         public static Dictionary<string, string> ExternalArguments { get; private set; } = new Dictionary<string, string>();
+        public static Dictionary<string, string> InternalArguments { get; private set; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Array of All Command Line Arguments
@@ -64,6 +65,7 @@ namespace MelonLoader
                 // Parse Argumentless Commands
                 if (WithoutArg.TryGetValue(noPrefixCmd, out Action withoutArgFunc))
                 {
+                    InternalArguments.Add(noPrefixCmd, null);
                     withoutArgFunc();
                     continue;
                 }
@@ -90,6 +92,7 @@ namespace MelonLoader
                 // Parse Argument Commands
                 if (WithArg.TryGetValue(noPrefixCmd, out Action<string> withArgFunc))
                 {
+                    InternalArguments.Add(noPrefixCmd, cmdArg);
                     withArgFunc(cmdArg);
                     continue;
                 }

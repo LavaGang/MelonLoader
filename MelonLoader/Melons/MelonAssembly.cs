@@ -290,7 +290,10 @@ namespace MelonLoader
                 }
             }
 
+#if NET6_0_OR_GREATER
             RegisterTypeInIl2Cpp.RegisterAssembly(Assembly);
+            RegisterTypeInIl2CppWithInterfaces.RegisterAssembly(Assembly);
+#endif
 
             if (rottenMelons.Count != 0)
             {

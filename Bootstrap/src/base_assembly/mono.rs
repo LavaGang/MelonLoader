@@ -26,7 +26,7 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
     let _runtime_dir = paths::runtime_dir()?;
 
     //get MelonLoader.dll's path and confirm it exists
-    let mut melonloader_dll = _runtime_dir.join("MelonLoader.dll");
+    let melonloader_dll = _runtime_dir.join("MelonLoader.dll");
 
     if !melonloader_dll.exists() {
         return Err("MelonLoader.dll not found".into());
@@ -42,7 +42,7 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
 
     //get the AssemblyManager class and grab some methods from it
     let assemblymanager_class = melonloader_assembly.get_class(
-        "MelonLoader.MonoInternals.ResolveInternals",
+        "MelonLoader.Resolver",
         "AssemblyManager",
         runtime,
     )?;

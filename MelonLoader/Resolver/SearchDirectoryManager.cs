@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
-namespace MelonLoader.MonoInternals.ResolveInternals
+#if NET6_0_OR_GREATER
+using System.Runtime.Loader;
+#else
+using System;
+using System.Runtime.InteropServices;
+using MelonLoader.Utils;
+#endif
+
+namespace MelonLoader.Resolver
 {
     internal static class SearchDirectoryManager
     {
@@ -60,18 +66,28 @@ namespace MelonLoader.MonoInternals.ResolveInternals
             while (enumerator.MoveNext())
             {
                 string folderpath = enumerator.Current.Path;
+                if (folderpath.ContainsExtension()
+                    || !Directory.Exists(folderpath))
+                    continue;
 
                 string filepath = Directory.GetFiles(folderpath).Where(x =>
-                    !string.IsNullOrEmpty(x)
-                    && ((Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
-                        && Path.GetFileName(x).Equals($"{requested_name}.dll"))
-                    || (Path.GetExtension(x).ToLowerInvariant().Equals(".exe")
-                        && Path.GetFileName(x).Equals($"{requested_name}.exe")))
+                    (!string.IsNullOrEmpty(x)
+                        && ((Path.GetExtension(x).ToLowerInvariant().Equals(".dll")
+                            && Path.GetFileName(x).Equals($"{requested_name}.dll"))
+                        || (Path.GetExtension(x).ToLowerInvariant().Equals(".exe")
+                            && Path.GetFileName(x).Equals($"{requested_name}.exe"))))
                 ).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(filepath))
                     continue;
 
+                MelonDebug.Msg($"[MelonAssemblyResolver] Loading from {filepath}...");
+
+#if NET6_0_OR_GREATER
+
+                return AssemblyLoadContext.Default.LoadFromAssemblyPath(filepath);
+
+#else
                 IntPtr filePathPtr = Marshal.StringToHGlobalAnsi(filepath);
                 if (filePathPtr == IntPtr.Zero)
                     continue;
@@ -89,8 +105,10 @@ namespace MelonLoader.MonoInternals.ResolveInternals
                     continue;
 
                 return MonoLibrary.CastManagedAssemblyPtr(assemblyReflectionPtr);
+#endif
             }
 
+            MelonDebug.Msg($"[MelonAssemblyResolver] Failed to find {requested_name} in any of the known search directories");
             return null;
         }
 

@@ -1,9 +1,11 @@
-﻿using System;
+﻿#if !NET6_0_OR_GREATER
+
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.MonoInternals
+namespace MelonLoader.Utils
 {
     public class MonoLibrary
     {
@@ -50,3 +52,4 @@ namespace MelonLoader.MonoInternals
         public dmono_assembly_get_object mono_assembly_get_object = null;
     }
 }
+#endif

@@ -7,9 +7,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class Cpp2IL : Models.ExecutablePackage
     {
-        internal static SemVersion NetCoreMinVersion = SemVersion.Parse("2022.1.0-pre-release.17");
-        private static SemVersion NewExecutionMinVersion = SemVersion.Parse("2022.0.999");
-        private SemVersion VersionSem;
+        internal static SemVersion NetCoreMinVersion = SemVersion.Parse("2022.1.0-pre-release.18");
+        internal SemVersion VersionSem;
         private string BaseFolder;
 
         private static string ReleaseName =>
@@ -27,10 +26,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);
-
-            string filename = Name;
-            if (MelonUtils.IsWindows)
-                filename = $"{Name}.exe";
+            string filename = $"{Name}.exe";
 
             BaseFolder = Path.Combine(Core.BasePath, Name);
             if (!Directory.Exists(BaseFolder))
@@ -43,14 +39,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             OutputFolder = Path.Combine(BaseFolder, "cpp2il_out");
 
-            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
-
-            if (MelonUtils.IsWindows)
-            {
-                if (VersionSem < NetCoreMinVersion)
-                    URL += "-Netframework472";
-                URL += ".exe";
-            }
+            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}.exe";
         }
 
         internal override bool ShouldSetup() 
@@ -63,15 +52,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             => Save(ref Config.Values.DumperVersion);
 
         internal override bool Execute()
-        {
-            if (VersionSem <= NewExecutionMinVersion)
-                return ExecuteOld();
-            return ExecuteNew();
-        }
-
-        private bool ExecuteNew()
-        {
-            if (Execute([
+            => Execute([
                 MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
 
                 "--game-path",
@@ -94,34 +75,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             ], false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"},
                 {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", BaseFolder }
-            }))
-                return true;
-
-            return false;
-        }
-
-        private bool ExecuteOld()
-        {
-            if (Execute([
-                MelonDebug.IsEnabled() ? "--verbose" : string.Empty,
-
-                "--game-path",
-                "\"" + Path.GetDirectoryName(Core.GameAssemblyPath) + "\"",
-
-                "--exe-name",
-                "\"" + Process.GetCurrentProcess().ProcessName + "\"",
-
-                "--skip-analysis",
-                "--skip-metadata-txts",
-                "--disable-registration-prompts"
-
-            ], false, new Dictionary<string, string>() {
-                {"NO_COLOR", "1"},
-                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", BaseFolder }
-            }))
-                return true;
-
-            return false;
-        }
+            });
     }
 }

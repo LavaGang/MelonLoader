@@ -1,4 +1,5 @@
-// #![allow(non_snake_case)]
+#![allow(non_snake_case)]
+
 // #![deny(
 //     missing_debug_implementations,
 //     unused_results,

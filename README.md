@@ -232,7 +232,10 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/LICENSE.md) for the full License.
 
 Third-party Libraries used as Source Code and/or bundled in Binary Form:
-- [Research Detours Package](https://github.com/microsoft/Detours) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/Bootstrap/Base/MSDetours/LICENSE.md) for the full License.
+- [Dobby](https://github.com/jmpews/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/jmpews/Dobby/blob/master/LICENSE) for the full License.
+- [dobby-rs](https://github.com/RinLovesYou/dobby-rs) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/dobby-rs/blob/master/LICENSE) for the full License.
+- [dobby-sys](https://github.com/RinLovesYou/dobby-sys) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/dobby-sys/blob/master/LICENSE) for the full License.
+- [unity-rs](https://github.com/RinLovesYou/unity-rs) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/unity-rs/blob/master/LICENSE.txt) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/BepInEx/HarmonyX/blob/master/LICENSE) for the full License.
 - [MonoMod](https://github.com/MonoMod/MonoMod) is licensed under the MIT License. See [LICENSE](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) for the full License.
@@ -256,9 +259,9 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [ValueTupleBridge](https://github.com/OrangeCube/MinimumAsyncBridge) is licensed under the MIT License. See [LICENSE](https://github.com/OrangeCube/MinimumAsyncBridge/blob/master/LICENSE) for the full License.  
 - [WebSocketDotNet](https://github.com/SamboyCoding/WebSocketDotNet) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/WebSocketDotNet/blob/master/LICENSE) for the full License.
 - [Pastel](https://github.com/silkfire/Pastel) is licensed under the MIT License. See [LICENSE](https://github.com/silkfire/Pastel/blob/master/LICENSE) for the full License.
-- [Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) is licensed under LGPLv3 License. See [LICENSE](https://github.com/BepInEx/Il2CppInterop/blob/master/LICENSE) for the full License.
-  
-
+- [Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) is licensed under the LGPLv3 License. See [LICENSE](https://github.com/BepInEx/Il2CppInterop/blob/master/LICENSE) for the full License.
+ 
+ 
 External Libraries and Tools that are downloaded and used at Runtime:
 - [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.
 - Unity Runtime Libraries from [Unity-Runtime-Libraries](https://github.com/LavaGang/Unity-Runtime-Libraries) are part of Unity Software.  

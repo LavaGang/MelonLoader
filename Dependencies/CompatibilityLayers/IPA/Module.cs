@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using MelonLoader.MonoInternals;
 using IllusionPlugin;
-using System.IO;
 using IllusionInjector;
 using MelonLoader.Modules;
+using MelonLoader.Resolver;
 
 namespace MelonLoader.CompatibilityLayers
 {
@@ -26,7 +25,7 @@ namespace MelonLoader.CompatibilityLayers
 			};
 			Assembly base_assembly = typeof(IPA_Module).Assembly;
 			foreach (string assemblyName in assembly_list)
-				MonoResolveManager.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
+                MelonAssemblyResolver.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
 
 			MelonAssembly.CustomMelonResolvers += Resolve;
 		}
