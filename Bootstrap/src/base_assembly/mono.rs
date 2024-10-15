@@ -42,7 +42,7 @@ pub fn init(runtime: &FerrexRuntime) -> Result<(), DynErr> {
 
     //get the AssemblyManager class and grab some methods from it
     let assemblymanager_class = melonloader_assembly.get_class(
-        "MelonLoader.InternalUtils.Resolver",
+        "MelonLoader.Resolver",
         "AssemblyManager",
         runtime,
     )?;
