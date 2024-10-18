@@ -219,11 +219,11 @@ namespace MelonLoader.Fixes
                 paramTypes[0] = _intPtrType;
             for (int i = 0; i < methodParams.Length; i++)
             {
-                if ((methodParams[i].ParameterType != _stringType)
-                    && methodParams[i].ParameterType.IsValueType)
-                    paramTypes[i + offset] = methodParams[i].ParameterType;
-                else
+                if ((methodParams[i].ParameterType == _stringType)
+                    || !methodParams[i].ParameterType.IsValueType)
                     paramTypes[i + offset] = _intPtrType;
+                else
+                    paramTypes[i + offset] = methodParams[i].ParameterType;
             }
 
             // Convert Return Type
