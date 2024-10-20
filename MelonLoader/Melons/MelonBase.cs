@@ -1,4 +1,5 @@
 ﻿using MelonLoader.InternalUtils;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -274,6 +275,11 @@ namespace MelonLoader
         public Incompatibility[] FindIncompatiblities(MelonGameAttribute game, string processName, string gameVersion,
             string mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform,
             MelonPlatformDomainAttribute.CompatibleDomains domain)
+            => FindIncompatiblities(game, processName, gameVersion, SemVersion.Parse(mlVersion), mlBuildHashCode, platform, domain);
+
+        public Incompatibility[] FindIncompatiblities(MelonGameAttribute game, string processName, string gameVersion,
+            SemVersion mlVersion, string mlBuildHashCode, MelonPlatformAttribute.CompatiblePlatforms platform,
+            MelonPlatformDomainAttribute.CompatibleDomains domain)
         {
             var result = new List<Incompatibility>();
             if (!(Games.Length == 0 || Games.Any(x => x.IsCompatible(game))))
@@ -305,7 +311,7 @@ namespace MelonLoader
 
         public Incompatibility[] FindIncompatiblitiesFromContext()
         {
-            return FindIncompatiblities(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, MelonUtils.GameVersion, BuildInfo.Version, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
+            return FindIncompatiblities(MelonUtils.CurrentGameAttribute, Process.GetCurrentProcess().ProcessName, MelonUtils.GameVersion, BuildInfo.VersionNumber, MelonUtils.HashCode, MelonUtils.CurrentPlatform, MelonUtils.CurrentDomain);
         }
 
         public static void PrintIncompatibilities(Incompatibility[] incompatibilities, MelonBase melon)

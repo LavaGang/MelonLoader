@@ -96,13 +96,11 @@ Global
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x64.ActiveCfg = Debug|Any CPU
-		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x64.Build.0 = Debug|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x86.ActiveCfg = Debug|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Debug|Windows - x86.Build.0 = Debug|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x64.ActiveCfg = Release|Any CPU
-		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x64.Build.0 = Release|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x86.ActiveCfg = Release|Any CPU
 		{762D7545-6F6B-441A-B040-49CC31A1713B}.Release|Windows - x86.Build.0 = Release|Any CPU
 		{542EC51D-E480-4802-B5AA-96EEC05AF19C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
