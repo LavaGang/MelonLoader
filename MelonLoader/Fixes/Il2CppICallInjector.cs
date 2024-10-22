@@ -13,8 +13,6 @@ namespace MelonLoader.Fixes
 {
     internal static class Il2CppICallInjector
     {
-        private const string _customICallSuffix = "_INative";
-
         private static Dictionary<string, (object, DynamicMethodDefinition, MethodInfo, IntPtr)> _lookup = new();
 
         private delegate IntPtr dil2cpp_resolve_icall(IntPtr signature);
