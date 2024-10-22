@@ -312,7 +312,7 @@ namespace MelonLoader.Fixes
 
         private static bool ReportException_Prefix(Exception __0)
         {
-            MelonLogger.Error("During invoking native->managed trampoline", __0);
+            LogError("During invoking native->managed trampoline", __0);
             return false;
         }
 
