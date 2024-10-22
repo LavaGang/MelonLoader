@@ -18,9 +18,6 @@
         <PackageProjectUrl>https://github.com/LavaGang/MelonLoader</PackageProjectUrl>
         <Description>The World's First Universal Mod Loader for Unity Games compatible with both Il2Cpp and Mono.</Description>
     </PropertyGroup>
-    <PropertyGroup>
-        <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    </PropertyGroup>
     <ItemDefinitionGroup>
         <PackageReference>
             <PrivateAssets>all</PrivateAssets>
@@ -43,6 +40,7 @@
         <PackageReference Include="MonoMod.Utils" Version="22.7.31.1" />
         <PackageReference Include="Samboy063.Tomlet" Version="5.4.0" />
         <PackageReference Include="bHapticsLib" Version="1.0.6" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net6'">
         <PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.1" />
