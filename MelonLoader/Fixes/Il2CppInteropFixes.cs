@@ -263,8 +263,6 @@ namespace MelonLoader.Fixes
                     _typeLookup.Clear();
                 _typeLookup = null;
             }
-
-            _shouldLog = false;
         }
 
         private static bool FixedIsByRef(Type type)
