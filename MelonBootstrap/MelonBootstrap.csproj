@@ -21,6 +21,10 @@
 
     <ItemGroup>
         <None Include="NetStandardOverrides/*" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Dependencies/NetStandardOverrides/%(RecursiveDir)%(Filename)%(Extension)" />
+        <None Include="$(SolutionDir)/NOTICE.txt" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="$(SolutionDir)/LICENSE.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
+        <None Include="$(SolutionDir)/CHANGELOG.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
+        <None Include="$(SolutionDir)/README.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
     </ItemGroup>
 
     <PropertyGroup>
