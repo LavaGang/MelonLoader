@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Il2CppInterop.HarmonySupport;
 
 namespace MelonLoader.Fixes
 {
@@ -33,7 +34,7 @@ namespace MelonLoader.Fixes
             {
                 _logger = new MelonLogger.Instance(nameof(Il2CppICallInjector));
 
-                _il2CppDetourMethodPatcher = typeof(Il2CppInterop.HarmonySupport.HarmonySupport).Assembly.GetType("Il2CppInterop.HarmonySupport.Il2CppDetourMethodPatcher");
+                _il2CppDetourMethodPatcher = typeof(HarmonySupport).Assembly.GetType("Il2CppInterop.HarmonySupport.Il2CppDetourMethodPatcher");
                 if (_il2CppDetourMethodPatcher == null)
                     throw new Exception("Failed to get Il2CppDetourMethodPatcher");
 
