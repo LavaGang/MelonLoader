@@ -110,7 +110,7 @@ namespace MelonLoader
             bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
             
             MelonHandler.LoadUserlibs(MelonEnvironment.UserLibsDirectory);
-            MelonHandler.LoadMelonFolders<MelonPlugin>(MelonEnvironment.PluginsDirectory);
+            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
 
             MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
@@ -140,7 +140,7 @@ namespace MelonLoader
                 return 1;
 
             MelonEvents.OnPreModsLoaded.Invoke();
-            MelonHandler.LoadMelonFolders<MelonMod>(MelonEnvironment.ModsDirectory);
+            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonEnvironment.ModsDirectory);
 
             MelonEvents.OnPreSupportModule.Invoke();
             if (!SupportModule.Setup())

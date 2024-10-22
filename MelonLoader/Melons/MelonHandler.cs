@@ -32,91 +32,12 @@ namespace MelonLoader
                 Directory.CreateDirectory(MelonEnvironment.ModsDirectory);
         }
 
-        internal static bool firstSpacer = false;
-        public static void LoadMelonsFromDirectory<T>(string path) where T : MelonTypeBase<T>
-        {
-            path = Path.GetFullPath(path);
-
-            var loadingMsg = $"Loading {MelonTypeBase<T>.TypeName}s from '{path}'...";
-            MelonLogger.WriteSpacer();
-            MelonLogger.Msg(loadingMsg);
-
-            bool hasWroteLine = false;
-
-            var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
-            var melonAssemblies = new List<MelonAssembly>();
-            foreach (var f in files)
-            {
-                if (!hasWroteLine)
-                {
-                    hasWroteLine = true;
-                    MelonLogger.WriteLine(Color.Magenta);
-                }
-
-                var asm = MelonAssembly.LoadMelonAssembly(f, false);
-                if (asm == null)
-                    continue;
-
-                melonAssemblies.Add(asm);
-            }
-
-            var melons = new List<T>();
-            foreach (var asm in melonAssemblies)
-            {
-                asm.LoadMelons();
-                foreach (var m in asm.LoadedMelons)
-                {
-                    if (m is T t)
-                    {
-                        melons.Add(t);
-                    }
-                    else
-                    {
-                        MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{path}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {MelonTypeBase<T>.TypeName}. Make sure it's in the right folder.");
-                        continue;
-                    }
-                }
-            }
-
-            if (hasWroteLine)
-                MelonLogger.WriteSpacer();
-
-            MelonBase.RegisterSorted(melons);
-
-            if (hasWroteLine)
-                MelonLogger.WriteLine(Color.Magenta);
-
-            var count = MelonTypeBase<T>._registeredMelons.Count;
-            MelonLogger.Msg($"{count} {MelonTypeBase<T>.TypeName.MakePlural(count)} loaded.");
-            if (firstSpacer || (typeof(T) ==  typeof(MelonMod)))
-                MelonLogger.WriteSpacer();
-            firstSpacer = true;
-        }
-        
         public static void LoadUserlibs(string path)
-        {
-            path = Path.GetFullPath(path);
+            => MelonFolderHandler.ScanUserLibs(path);
 
-            var loadingMsg = $"Loading UserLibs from '{path}'...";
-            MelonLogger.WriteSpacer();
-            MelonLogger.Msg(loadingMsg);
-
-            bool hasWroteLine = false;
-            var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
-            foreach (var f in files)
-            {
-                if (!hasWroteLine)
-                {
-                    hasWroteLine = true;
-                    MelonLogger.WriteLine(Color.Magenta);
-                }
-
-                MelonAssembly.LoadMelonAssembly(f, false);
-            }
-        }
-
-        public static void LoadMelonFolders<T>(string path) where T : MelonTypeBase<T>
-            => MelonFolderHandler.Scan<T>(path);
+        public static void LoadMelonsFromDirectory<T>(string path)
+            where T : MelonTypeBase<T>
+            => MelonFolderHandler.ScanMelons<T>(path);
 
         #region Obsolete Members
         /// <summary>
