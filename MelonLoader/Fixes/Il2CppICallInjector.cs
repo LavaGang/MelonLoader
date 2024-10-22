@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Il2CppInterop.HarmonySupport;
+using HarmonyLib;
 
 namespace MelonLoader.Fixes
 {
@@ -165,13 +166,20 @@ namespace MelonLoader.Fixes
             if (method == null)
                 return false;
 
-            // Check for Extern to prevent Recursion
+            // Check for PInvoke to prevent Recursion
             if (method.Attributes.HasFlag(MethodAttributes.PinvokeImpl))
                 return false;
+
+            // Check for Extern to prevent Recursion
             var methodImpl = method.GetMethodImplementationFlags();
             if (methodImpl.HasFlag(MethodImplAttributes.InternalCall)
                 || methodImpl.HasFlag(MethodImplAttributes.Native)
                 || methodImpl.HasFlag(MethodImplAttributes.Unmanaged))
+                return false;
+
+            // Check if Method has no Body or just throws NotImplementedException
+            if (!method.HasMethodBody()
+                || method.IsNotImplemented())
                 return false;
 
             // Inject ICall
