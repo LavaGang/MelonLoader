@@ -178,9 +178,9 @@ namespace MelonLoader.Fixes
                 return false;
 
             // Check if Method has no Body or just throws NotImplementedException
-            if (!method.HasMethodBody()
-                || method.IsNotImplemented())
-                return false;
+            //if (!method.HasMethodBody()
+            //    || method.IsNotImplemented())
+            //    return false;
 
             // Inject ICall
             unityShimMethod = method;
