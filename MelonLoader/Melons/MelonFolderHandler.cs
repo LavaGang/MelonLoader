@@ -96,6 +96,10 @@ namespace MelonLoader.Melons
             var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
             foreach (var f in files)
             {
+                // Ignore Native DLLs
+                if (!MelonUtils.IsManagedDLL(f)) 
+                    continue;
+
                 // Log
                 if (!hasWroteLine)
                 {

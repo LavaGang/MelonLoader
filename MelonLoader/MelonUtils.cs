@@ -345,13 +345,32 @@ namespace MelonLoader
             return returnval;
         }
 
+        public static bool IsManagedDLL(string path)
+        {
+            if (Path.GetExtension(path).ToLower() != ".dll")
+                return false;
+
+            try
+            {
+                AssemblyName.GetAssemblyName(path);
+                return true;
+            }
+            catch (FileLoadException)
+            {
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static HarmonyMethod ToNewHarmonyMethod(this MethodInfo methodInfo)
         {
             if (methodInfo == null)
                 throw new ArgumentNullException(nameof(methodInfo));
             return new HarmonyMethod(methodInfo);
         }
-
 
         public static DynamicMethodDefinition ToNewDynamicMethodDefinition(this MethodBase methodBase)
         {
