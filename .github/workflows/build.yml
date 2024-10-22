@@ -1,5 +1,9 @@
 name: Build MelonLoader
-run-name: ${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && (github.event.head_commit.message || format('`[PR]` {0}', github.event.pull_request.title)) || 'Manual Build' }}
+
+run-name: 0.6.6${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }} | ${{ github.event_name != 'workflow_dispatch' && (github.event.head_commit.message || format('`[PR]` {0}', github.event.pull_request.title)) || 'Manual Build' }}
+
+env:
+  DEVVERSION: "0.6.6"
 
 on:
   push:
@@ -23,7 +27,7 @@ jobs:
         run: dotnet restore
 
       - name: Build Debug for win-x64
-        run: dotnet build --no-restore -c Debug -p:RID="win-x64" -p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Debug -p:RID="win-x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Debug for win-x64
         uses: actions/upload-artifact@v4
@@ -32,7 +36,7 @@ jobs:
           path: Output/Debug/win-x64
 
       - name: Build Release for win-x64
-        run: dotnet build --no-restore -c Release -p:RID="win-x64" -p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+        run: dotnet build --no-restore -c Release -p:RID="win-x64" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
 
       - name: Upload Release for win-x64
         uses: actions/upload-artifact@v4
@@ -41,10 +45,10 @@ jobs:
           path: Output/Release/win-x64
 
       - name: Pack NuGet Package
-        run: dotnet pack --no-build -c Release -p:Version="${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}"
+        run: dotnet pack --no-build -c Release -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}"
 
       - name: Upload NuGet Artifact
         uses: actions/upload-artifact@v4
         with:
           name: MelonLoader.NuGet
-          path: Output/Release/win-x64/MelonLoader/LavaGang.MelonLoader.${{ vars.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}.nupkg
+          path: Output/Release/win-x64/MelonLoader/LavaGang.MelonLoader.${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}.nupkg
