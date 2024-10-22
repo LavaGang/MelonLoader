@@ -1,0 +1,20 @@
+EXPORTS
+   DotNetRuntimeDebugHeader DATA
+   DllMain
+   GetFileVersionInfoSizeA
+   GetFileVersionInfoA
+   GetFileVersionInfoByHandle
+   GetFileVersionInfoExA
+   GetFileVersionInfoExW
+   GetFileVersionInfoSizeExA
+   GetFileVersionInfoSizeExW
+   GetFileVersionInfoSizeW
+   GetFileVersionInfoW
+   VerFindFileA
+   VerFindFileW
+   VerInstallFileA
+   VerInstallFileW
+   VerLanguageNameA
+   VerLanguageNameW
+   VerQueryValueA
+   VerQueryValueW

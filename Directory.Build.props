@@ -1,11 +1,23 @@
 <Project>
     <PropertyGroup>
         <Version>0.6.6</Version>
-		<Authors>Lava Gang</Authors>
-		<Company>discord.gg/2Wn3N2P</Company>
-		<Copyright>Copyright (c) 2022 Lava Gang</Copyright>
-		<LangVersion>Latest</LangVersion>
-		<IsPackable>false</IsPackable>
+        <Il2CppInteropVersion>1.4.6-ci.579</Il2CppInteropVersion>
+
+        <Authors>Lava Gang</Authors>
+        <Company>discord.gg/2Wn3N2P</Company>
+        <Copyright>Copyright (c) 2022 Lava Gang</Copyright>
+
+        <LangVersion>Latest</LangVersion>
+        <IsPackable>false</IsPackable>
+        <RuntimeIdentifiers>win-x64;win-x86;linux-x64</RuntimeIdentifiers>
+
+        <RID Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">win-x64</RID>
+        <RID Condition="'$([MSBuild]::IsOSUnixLike())' == 'true'">linux-x64</RID>
+        <RuntimeIdentifier>$(RID)</RuntimeIdentifier>
+
+        <MLOutDir>$(SolutionDir)/Output/$(Configuration)/$(RuntimeIdentifier)</MLOutDir>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 </Project>
   

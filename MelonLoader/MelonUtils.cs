@@ -446,12 +446,7 @@ namespace MelonLoader
         public static string GameVersion { get => UnityInformationHandler.GameVersion; }
 
 
-        #if !NET6_0
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsGame32Bit();
-#else
-        public static bool IsGame32Bit() => !Environment.Is64BitProcess;
-#endif
+        public static unsafe bool IsGame32Bit() => sizeof(nint) == 4;
 
 
         public static bool IsGameIl2Cpp() => Directory.Exists(MelonEnvironment.Il2CppDataDirectory);

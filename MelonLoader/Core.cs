@@ -118,12 +118,6 @@ namespace MelonLoader
             return 0;
         }
 
-        internal static int PreStart()
-        {
-            MelonEvents.OnApplicationEarlyStart.Invoke();
-            return MelonStartScreen.LoadAndRun(PreSetup);
-        }
-
         private static int PreSetup()
         {
 #if NET6_0_OR_GREATER
@@ -134,17 +128,20 @@ namespace MelonLoader
             return _success ? 0 : 1;
         }
 
-        internal static int Start()
+        internal static bool Start()
         {
+            MelonEvents.OnApplicationEarlyStart.Invoke();
+            MelonStartScreen.LoadAndRun(PreSetup);
+
             if (!_success)
-                return 1;
+                return false;
 
             MelonEvents.OnPreModsLoaded.Invoke();
             MelonHandler.LoadMelonFolders<MelonMod>(MelonEnvironment.ModsDirectory);
 
             MelonEvents.OnPreSupportModule.Invoke();
             if (!SupportModule.Setup())
-                return 1;
+                return false;
 
             AddUnityDebugLog();
 
@@ -156,7 +153,7 @@ namespace MelonLoader
             MelonEvents.MelonHarmonyInit.Invoke();
             MelonEvents.OnApplicationStart.Invoke();
 
-            return 0;
+            return true;
         }
         
         internal static string GetVersionString()
