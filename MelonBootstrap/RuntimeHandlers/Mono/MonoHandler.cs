@@ -70,7 +70,7 @@ internal static class MonoHandler
 
     private static unsafe void InitializeManaged()
     {
-        var mlPath = Path.Combine(Core.GameDir, "MelonLoader", "net35", "MelonLoader.dll");
+        var mlPath = Path.Combine(Core.BaseDir, "MelonLoader", "net35", "MelonLoader.dll");
         if (!File.Exists(mlPath))
             // TODO: Error
             return;
@@ -86,7 +86,7 @@ internal static class MonoHandler
         {
             Console.WriteLine("Loading .NET Standard 2.0 overrides");
 
-            var overridesDir = Path.Combine(Core.GameDir, "MelonLoader", "Dependencies", "NetStandardOverrides");
+            var overridesDir = Path.Combine(Core.BaseDir, "MelonLoader", "Dependencies", "NetStandardOverrides");
             if (Directory.Exists(overridesDir))
             {
                 foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))

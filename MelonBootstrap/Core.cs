@@ -9,6 +9,7 @@ public static class Core
 {
     public static string DataDir { get; private set; } = null!;
     public static string GameDir { get; private set; } = null!;
+    public static string BaseDir { get; private set; } = ".";
     public static bool Debug { get; private set; }
 #if DEBUG
         = true;
@@ -44,7 +45,6 @@ public static class Core
             Debug = true;
 #endif
 
-        var baseDir = ".";
         const string baseDirParam = "--melonloader.basedir";
         for (var i = 0; i < args.Length; i++)
         {
@@ -67,7 +67,7 @@ public static class Core
             if (!Directory.Exists(path))
                 break;
 
-            baseDir = path;
+            BaseDir = path;
             break;
         }
 
