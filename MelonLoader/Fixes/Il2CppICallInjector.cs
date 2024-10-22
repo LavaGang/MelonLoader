@@ -165,6 +165,15 @@ namespace MelonLoader.Fixes
             if (method == null)
                 return false;
 
+            // Check for Extern to prevent Recursion
+            if (method.Attributes.HasFlag(MethodAttributes.PinvokeImpl))
+                return false;
+            var methodImpl = method.GetMethodImplementationFlags();
+            if (methodImpl.HasFlag(MethodImplAttributes.InternalCall)
+                || methodImpl.HasFlag(MethodImplAttributes.Native)
+                || methodImpl.HasFlag(MethodImplAttributes.Unmanaged))
+                return false;
+
             // Inject ICall
             unityShimMethod = method;
             return true;
