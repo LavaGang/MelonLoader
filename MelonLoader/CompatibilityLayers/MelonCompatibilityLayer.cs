@@ -18,10 +18,15 @@ namespace MelonLoader
         
         private static void CheckGameLayerWithPlatform(string name, Func<bool> shouldBeIgnored)
         {
+            if (string.IsNullOrEmpty(name))
+                return;
+
             string nameNoSpaces = name.Replace(' ', '_');
             foreach (var file in Directory.GetFiles(baseDirectory))
             {
                 string fileName = Path.GetFileNameWithoutExtension(file);
+                if (string.IsNullOrEmpty(fileName))
+                    continue;
                 if (fileName.StartsWith(nameNoSpaces))
                     layers.Add(new MelonModule.Info(file, shouldBeIgnored));
             }
@@ -29,6 +34,9 @@ namespace MelonLoader
 
         private static void CheckGameLayer(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return;
+
             CheckGameLayerWithPlatform(name, () => false);
             CheckGameLayerWithPlatform($"{name}_Mono", () => MelonUtils.IsGameIl2Cpp());
             CheckGameLayerWithPlatform($"{name}_Il2Cpp", () => !MelonUtils.IsGameIl2Cpp());
@@ -37,6 +45,9 @@ namespace MelonLoader
             if (spaceIndex > 0)
             {
                 name = name.Substring(0, spaceIndex - 1);
+                if (string.IsNullOrEmpty(name))
+                    return;
+
                 CheckGameLayerWithPlatform(name, () => false);
                 CheckGameLayerWithPlatform($"{name}_Mono", () => MelonUtils.IsGameIl2Cpp());
                 CheckGameLayerWithPlatform($"{name}_Il2Cpp", () => !MelonUtils.IsGameIl2Cpp());
