@@ -8,7 +8,6 @@
         <SelfContained>true</SelfContained>
         <PublishDir>$(MLOutDir)</PublishDir>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <TargetName>version</TargetName>
         <ExportsFile>exports.def</ExportsFile>
         <NoWarn>LNK4099</NoWarn>
         <InvariantGlobalization>true</InvariantGlobalization>
@@ -42,5 +41,9 @@
     </ItemGroup>
 
     <Target Name="PublishAsBuildAfterTarget" AfterTargets="Build" DependsOnTargets="Publish" />
+
+    <Target Name="RenameBinary" AfterTargets="Build">
+        <Move SourceFiles="$(PublishDir)/$(TargetName).dll" DestinationFiles="$(PublishDir)/version.dll" />
+    </Target>
 
 </Project>

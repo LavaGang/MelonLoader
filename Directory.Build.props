@@ -19,5 +19,9 @@
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(PROCESSOR_ARCHITECTURE)'=='AMD64' or '$(PROCESSOR_ARCHITEW6432)'=='AMD64'">
+        <DefineConstants>$(DefineConstants);X64</DefineConstants>
+    </PropertyGroup>
 </Project>
   

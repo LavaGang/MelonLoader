@@ -1,4 +1,5 @@
-﻿using MelonBootstrap.RuntimeHandlers.Il2Cpp;
+﻿using MelonBootstrap.Proxy;
+using MelonBootstrap.RuntimeHandlers.Il2Cpp;
 using MelonBootstrap.RuntimeHandlers.Mono;
 using MelonBootstrap.Utils;
 using System.Runtime.InteropServices;
@@ -21,7 +22,10 @@ public static class Core
     public static bool DllMain(nint hModule, uint ul_reason_for_call, nint lpReserved)
     {
         if (ul_reason_for_call == 1)
+        {
+            ProxyResolver.Init(hModule);
             Init();
+        }
 
         return true;
     }
