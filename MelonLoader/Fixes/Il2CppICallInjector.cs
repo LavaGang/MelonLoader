@@ -25,6 +25,7 @@ namespace MelonLoader.Fixes
         private static Type _il2CppDetourMethodPatcher;
         private static MethodInfo _generateNativeToManagedTrampoline;
 
+        private static bool _extendedDebug;
         private static MelonLogger.Instance _logger;
 
         internal static unsafe void Install()
@@ -82,8 +83,24 @@ namespace MelonLoader.Fixes
             }
         }
 
+        private static void LogMsg(string msg)
+            => _logger.Msg(msg);
         private static void LogError(string msg)
             => _logger.Error(msg);
+        private static void LogDebugMsg(string msg)
+        {
+            if (!_extendedDebug
+                || !MelonDebug.IsEnabled())
+                return;
+            _logger.Msg(msg);
+        }
+        private static void LogDebugWarning(string msg)
+        {
+            if (!_extendedDebug
+                || !MelonDebug.IsEnabled())
+                return;
+            _logger.Warning(msg);
+        }
 
         private static IntPtr il2cpp_resolve_icall_Detour(IntPtr signature)
         {
@@ -94,30 +111,41 @@ namespace MelonLoader.Fixes
 
             // Check Cache
             if (_lookup.TryGetValue(signatureStr, out var result))
+            {
+                LogDebugMsg($"Resolved {signatureStr} to ICall in Cache");
                 return result.Item4;
+            }
 
             // Run Original
             IntPtr originalResult = il2cpp_resolve_icall_hook.Trampoline(signature);
             if (originalResult != IntPtr.Zero)
             {
                 // Cache Original Result
+                LogDebugMsg($"Resolved {signatureStr} to Unity ICall");
                 _lookup[signatureStr] = (null, null, null, originalResult);
                 return originalResult;
             }
 
             // Check if Injection is Needed
             if (!ShouldInject(signatureStr, out MethodInfo unityShimMethod))
+            {
+                LogDebugWarning($"Unable to find suitable method to inject for {signatureStr}");
                 return IntPtr.Zero;
+            }
 
             // Create Injected Function and Cache Return
+            LogDebugMsg($"Generating Trampoline for {signatureStr}");
             var pair = GenerateTrampoline(unityShimMethod);
             if (pair.Item4 == IntPtr.Zero)
+            {
+                LogDebugWarning($"Failed to generate trampoline for {signatureStr}");
                 return IntPtr.Zero;
+            }
 
             // Add New ICall to Il2Cpp Domain
             _lookup[signatureStr] = pair;
             il2cpp_add_internal_call(signature, pair.Item4);
-            _logger.Msg($"Registered mono icall {signatureStr} in il2cpp domain");
+            LogMsg($"Registered mono icall {signatureStr} in il2cpp domain");
 
             // Return New Function Pointer
             return pair.Item4;
@@ -154,6 +182,7 @@ namespace MelonLoader.Fixes
             // Split the Signature
             string[] split = signature.Split("::");
             string typeName = split[0];
+            string methodName = split[1];
 
             // Find Managed Type
             Type newType = FindType(typeName);
@@ -161,29 +190,49 @@ namespace MelonLoader.Fixes
                 return false;
 
             // Find Managed Method
-            string methodName = split[1];
-            MethodInfo method = newType.FindMethod(methodName);
-            if (method == null)
-                return false;
+            MethodInfo targetMethod = null;
+            try
+            {
+                // Get All Methods
+                MethodInfo[] allMethods = newType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+                foreach (var method in allMethods)
+                {
+                    // Validate Method
+                    if ((method == null)
+                        || (method.Name != methodName))
+                        continue;
 
-            // Check for PInvoke to prevent Recursion
-            if (method.Attributes.HasFlag(MethodAttributes.PinvokeImpl))
-                return false;
+                    // Check for Generic Method since ICalls can't be Generic
+                    if (method.IsGenericMethod)
+                        continue;
 
-            // Check for Extern to prevent Recursion
-            var methodImpl = method.GetMethodImplementationFlags();
-            if (methodImpl.HasFlag(MethodImplAttributes.InternalCall)
-                || methodImpl.HasFlag(MethodImplAttributes.Native)
-                || methodImpl.HasFlag(MethodImplAttributes.Unmanaged))
-                return false;
+                    // Check for PInvoke to prevent Recursion
+                    if (method.Attributes.HasFlag(MethodAttributes.PinvokeImpl))
+                        continue;
 
-            // Check if Method has no Body or just throws NotImplementedException
-            //if (!method.HasMethodBody()
-            //    || method.IsNotImplemented())
-            //    return false;
+                    // Check for Extern to prevent Recursion
+                    var methodImpl = method.GetMethodImplementationFlags();
+                    if (methodImpl.HasFlag(MethodImplAttributes.InternalCall)
+                        || methodImpl.HasFlag(MethodImplAttributes.Native)
+                        || methodImpl.HasFlag(MethodImplAttributes.Unmanaged))
+                        continue;
+
+                    // Check if Method has no Body or just throws NotImplementedException
+                    if (!method.HasMethodBody()
+                        || method.IsNotImplemented())
+                        continue;
+
+                    // Found Shim
+                    targetMethod = method;
+                    break;
+                }
+            }
+            catch { return false; }
+            if (targetMethod == null)
+                return false;
 
             // Inject ICall
-            unityShimMethod = method;
+            unityShimMethod = targetMethod;
             return true;
         }
 
