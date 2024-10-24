@@ -20,7 +20,7 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(PROCESSOR_ARCHITECTURE)'=='AMD64' or '$(PROCESSOR_ARCHITEW6432)'=='AMD64'">
+    <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-x64`))' == 'true'">
         <DefineConstants>$(DefineConstants);X64</DefineConstants>
     </PropertyGroup>
 </Project>
