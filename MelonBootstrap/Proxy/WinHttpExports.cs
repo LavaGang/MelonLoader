@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -7,276 +7,276 @@ namespace MelonBootstrap.Proxy;
 
 internal static class WinHttpExports
 {
-    [UnmanagedCallersOnly(EntryPoint = "DllCanUnloadNow")]
-    public static void DllCanUnloadNow() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplDllCanUnloadNow")]
+    public static void ImplDllCanUnloadNow() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "DllGetClassObject")]
-    public static void DllGetClassObject() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplDllGetClassObject")]
+    public static void ImplDllGetClassObject() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "Private1")]
-    public static void Private1() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplPrivate1")]
+    public static void ImplPrivate1() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "SvchostPushServiceGlobals")]
-    public static void SvchostPushServiceGlobals() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplSvchostPushServiceGlobals")]
+    public static void ImplSvchostPushServiceGlobals() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpAddRequestHeaders")]
-    public static void WinHttpAddRequestHeaders() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpAddRequestHeaders")]
+    public static void ImplWinHttpAddRequestHeaders() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpAddRequestHeadersEx")]
-    public static void WinHttpAddRequestHeadersEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpAddRequestHeadersEx")]
+    public static void ImplWinHttpAddRequestHeadersEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpAutoProxySvcMain")]
-    public static void WinHttpAutoProxySvcMain() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpAutoProxySvcMain")]
+    public static void ImplWinHttpAutoProxySvcMain() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCheckPlatform")]
-    public static void WinHttpCheckPlatform() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCheckPlatform")]
+    public static void ImplWinHttpCheckPlatform() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCloseHandle")]
-    public static void WinHttpCloseHandle() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCloseHandle")]
+    public static void ImplWinHttpCloseHandle() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnect")]
-    public static void WinHttpConnect() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnect")]
+    public static void ImplWinHttpConnect() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionDeletePolicyEntries")]
-    public static void WinHttpConnectionDeletePolicyEntries() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionDeletePolicyEntries")]
+    public static void ImplWinHttpConnectionDeletePolicyEntries() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionDeleteProxyInfo")]
-    public static void WinHttpConnectionDeleteProxyInfo() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionDeleteProxyInfo")]
+    public static void ImplWinHttpConnectionDeleteProxyInfo() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionFreeNameList")]
-    public static void WinHttpConnectionFreeNameList() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionFreeNameList")]
+    public static void ImplWinHttpConnectionFreeNameList() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionFreeProxyInfo")]
-    public static void WinHttpConnectionFreeProxyInfo() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionFreeProxyInfo")]
+    public static void ImplWinHttpConnectionFreeProxyInfo() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionFreeProxyList")]
-    public static void WinHttpConnectionFreeProxyList() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionFreeProxyList")]
+    public static void ImplWinHttpConnectionFreeProxyList() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionGetNameList")]
-    public static void WinHttpConnectionGetNameList() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionGetNameList")]
+    public static void ImplWinHttpConnectionGetNameList() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionGetProxyInfo")]
-    public static void WinHttpConnectionGetProxyInfo() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionGetProxyInfo")]
+    public static void ImplWinHttpConnectionGetProxyInfo() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionGetProxyList")]
-    public static void WinHttpConnectionGetProxyList() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionGetProxyList")]
+    public static void ImplWinHttpConnectionGetProxyList() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionOnlyConvert")]
-    public static void WinHttpConnectionOnlyConvert() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionOnlyConvert")]
+    public static void ImplWinHttpConnectionOnlyConvert() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionOnlyReceive")]
-    public static void WinHttpConnectionOnlyReceive() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionOnlyReceive")]
+    public static void ImplWinHttpConnectionOnlyReceive() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionOnlySend")]
-    public static void WinHttpConnectionOnlySend() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionOnlySend")]
+    public static void ImplWinHttpConnectionOnlySend() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionSetPolicyEntries")]
-    public static void WinHttpConnectionSetPolicyEntries() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionSetPolicyEntries")]
+    public static void ImplWinHttpConnectionSetPolicyEntries() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionSetProxyInfo")]
-    public static void WinHttpConnectionSetProxyInfo() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionSetProxyInfo")]
+    public static void ImplWinHttpConnectionSetProxyInfo() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpConnectionUpdateIfIndexTable")]
-    public static void WinHttpConnectionUpdateIfIndexTable() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpConnectionUpdateIfIndexTable")]
+    public static void ImplWinHttpConnectionUpdateIfIndexTable() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCrackUrl")]
-    public static void WinHttpCrackUrl() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCrackUrl")]
+    public static void ImplWinHttpCrackUrl() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCreateProxyList")]
-    public static void WinHttpCreateProxyList() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCreateProxyList")]
+    public static void ImplWinHttpCreateProxyList() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCreateProxyManager")]
-    public static void WinHttpCreateProxyManager() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCreateProxyManager")]
+    public static void ImplWinHttpCreateProxyManager() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCreateProxyResolver")]
-    public static void WinHttpCreateProxyResolver() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCreateProxyResolver")]
+    public static void ImplWinHttpCreateProxyResolver() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCreateProxyResult")]
-    public static void WinHttpCreateProxyResult() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCreateProxyResult")]
+    public static void ImplWinHttpCreateProxyResult() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCreateUiCompatibleProxyString")]
-    public static void WinHttpCreateUiCompatibleProxyString() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCreateUiCompatibleProxyString")]
+    public static void ImplWinHttpCreateUiCompatibleProxyString() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpCreateUrl")]
-    public static void WinHttpCreateUrl() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpCreateUrl")]
+    public static void ImplWinHttpCreateUrl() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpDetectAutoProxyConfigUrl")]
-    public static void WinHttpDetectAutoProxyConfigUrl() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpDetectAutoProxyConfigUrl")]
+    public static void ImplWinHttpDetectAutoProxyConfigUrl() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpFreeProxyResult")]
-    public static void WinHttpFreeProxyResult() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpFreeProxyResult")]
+    public static void ImplWinHttpFreeProxyResult() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpFreeProxyResultEx")]
-    public static void WinHttpFreeProxyResultEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpFreeProxyResultEx")]
+    public static void ImplWinHttpFreeProxyResultEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpFreeProxySettings")]
-    public static void WinHttpFreeProxySettings() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpFreeProxySettings")]
+    public static void ImplWinHttpFreeProxySettings() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpFreeProxySettingsEx")]
-    public static void WinHttpFreeProxySettingsEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpFreeProxySettingsEx")]
+    public static void ImplWinHttpFreeProxySettingsEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpFreeQueryConnectionGroupResult")]
-    public static void WinHttpFreeQueryConnectionGroupResult() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpFreeQueryConnectionGroupResult")]
+    public static void ImplWinHttpFreeQueryConnectionGroupResult() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetDefaultProxyConfiguration")]
-    public static void WinHttpGetDefaultProxyConfiguration() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetDefaultProxyConfiguration")]
+    public static void ImplWinHttpGetDefaultProxyConfiguration() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetIEProxyConfigForCurrentUser")]
-    public static void WinHttpGetIEProxyConfigForCurrentUser() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetIEProxyConfigForCurrentUser")]
+    public static void ImplWinHttpGetIEProxyConfigForCurrentUser() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxyForUrl")]
-    public static void WinHttpGetProxyForUrl() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxyForUrl")]
+    public static void ImplWinHttpGetProxyForUrl() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxyForUrlEx")]
-    public static void WinHttpGetProxyForUrlEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxyForUrlEx")]
+    public static void ImplWinHttpGetProxyForUrlEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxyForUrlEx2")]
-    public static void WinHttpGetProxyForUrlEx2() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxyForUrlEx2")]
+    public static void ImplWinHttpGetProxyForUrlEx2() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxyForUrlHvsi")]
-    public static void WinHttpGetProxyForUrlHvsi() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxyForUrlHvsi")]
+    public static void ImplWinHttpGetProxyForUrlHvsi() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxyResult")]
-    public static void WinHttpGetProxyResult() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxyResult")]
+    public static void ImplWinHttpGetProxyResult() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxyResultEx")]
-    public static void WinHttpGetProxyResultEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxyResultEx")]
+    public static void ImplWinHttpGetProxyResultEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxySettingsEx")]
-    public static void WinHttpGetProxySettingsEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxySettingsEx")]
+    public static void ImplWinHttpGetProxySettingsEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxySettingsResultEx")]
-    public static void WinHttpGetProxySettingsResultEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxySettingsResultEx")]
+    public static void ImplWinHttpGetProxySettingsResultEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetProxySettingsVersion")]
-    public static void WinHttpGetProxySettingsVersion() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetProxySettingsVersion")]
+    public static void ImplWinHttpGetProxySettingsVersion() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpGetTunnelSocket")]
-    public static void WinHttpGetTunnelSocket() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpGetTunnelSocket")]
+    public static void ImplWinHttpGetTunnelSocket() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpOpen")]
-    public static void WinHttpOpen() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpOpen")]
+    public static void ImplWinHttpOpen() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpOpenRequest")]
-    public static void WinHttpOpenRequest() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpOpenRequest")]
+    public static void ImplWinHttpOpenRequest() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpPacJsWorkerMain")]
-    public static void WinHttpPacJsWorkerMain() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpPacJsWorkerMain")]
+    public static void ImplWinHttpPacJsWorkerMain() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpProbeConnectivity")]
-    public static void WinHttpProbeConnectivity() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpProbeConnectivity")]
+    public static void ImplWinHttpProbeConnectivity() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpProtocolCompleteUpgrade")]
-    public static void WinHttpProtocolCompleteUpgrade() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpProtocolCompleteUpgrade")]
+    public static void ImplWinHttpProtocolCompleteUpgrade() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpProtocolReceive")]
-    public static void WinHttpProtocolReceive() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpProtocolReceive")]
+    public static void ImplWinHttpProtocolReceive() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpProtocolSend")]
-    public static void WinHttpProtocolSend() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpProtocolSend")]
+    public static void ImplWinHttpProtocolSend() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpQueryAuthSchemes")]
-    public static void WinHttpQueryAuthSchemes() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpQueryAuthSchemes")]
+    public static void ImplWinHttpQueryAuthSchemes() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpQueryConnectionGroup")]
-    public static void WinHttpQueryConnectionGroup() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpQueryConnectionGroup")]
+    public static void ImplWinHttpQueryConnectionGroup() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpQueryDataAvailable")]
-    public static void WinHttpQueryDataAvailable() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpQueryDataAvailable")]
+    public static void ImplWinHttpQueryDataAvailable() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpQueryHeaders")]
-    public static void WinHttpQueryHeaders() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpQueryHeaders")]
+    public static void ImplWinHttpQueryHeaders() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpQueryHeadersEx")]
-    public static void WinHttpQueryHeadersEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpQueryHeadersEx")]
+    public static void ImplWinHttpQueryHeadersEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpQueryOption")]
-    public static void WinHttpQueryOption() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpQueryOption")]
+    public static void ImplWinHttpQueryOption() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpReadData")]
-    public static void WinHttpReadData() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpReadData")]
+    public static void ImplWinHttpReadData() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpReadDataEx")]
-    public static void WinHttpReadDataEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpReadDataEx")]
+    public static void ImplWinHttpReadDataEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpReadProxySettings")]
-    public static void WinHttpReadProxySettings() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpReadProxySettings")]
+    public static void ImplWinHttpReadProxySettings() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpReadProxySettingsHvsi")]
-    public static void WinHttpReadProxySettingsHvsi() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpReadProxySettingsHvsi")]
+    public static void ImplWinHttpReadProxySettingsHvsi() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpReceiveResponse")]
-    public static void WinHttpReceiveResponse() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpReceiveResponse")]
+    public static void ImplWinHttpReceiveResponse() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpRefreshProxySettings")]
-    public static void WinHttpRefreshProxySettings() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpRefreshProxySettings")]
+    public static void ImplWinHttpRefreshProxySettings() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpRegisterProxyChangeNotification")]
-    public static void WinHttpRegisterProxyChangeNotification() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpRegisterProxyChangeNotification")]
+    public static void ImplWinHttpRegisterProxyChangeNotification() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpResetAutoProxy")]
-    public static void WinHttpResetAutoProxy() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpResetAutoProxy")]
+    public static void ImplWinHttpResetAutoProxy() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpResolverGetProxyForUrl")]
-    public static void WinHttpResolverGetProxyForUrl() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpResolverGetProxyForUrl")]
+    public static void ImplWinHttpResolverGetProxyForUrl() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSaveProxyCredentials")]
-    public static void WinHttpSaveProxyCredentials() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSaveProxyCredentials")]
+    public static void ImplWinHttpSaveProxyCredentials() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSendRequest")]
-    public static void WinHttpSendRequest() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSendRequest")]
+    public static void ImplWinHttpSendRequest() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSetCredentials")]
-    public static void WinHttpSetCredentials() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSetCredentials")]
+    public static void ImplWinHttpSetCredentials() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSetDefaultProxyConfiguration")]
-    public static void WinHttpSetDefaultProxyConfiguration() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSetDefaultProxyConfiguration")]
+    public static void ImplWinHttpSetDefaultProxyConfiguration() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSetOption")]
-    public static void WinHttpSetOption() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSetOption")]
+    public static void ImplWinHttpSetOption() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSetProxySettingsPerUser")]
-    public static void WinHttpSetProxySettingsPerUser() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSetProxySettingsPerUser")]
+    public static void ImplWinHttpSetProxySettingsPerUser() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSetSecureLegacyServersAppCompat")]
-    public static void WinHttpSetSecureLegacyServersAppCompat() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSetSecureLegacyServersAppCompat")]
+    public static void ImplWinHttpSetSecureLegacyServersAppCompat() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSetStatusCallback")]
-    public static void WinHttpSetStatusCallback() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSetStatusCallback")]
+    public static void ImplWinHttpSetStatusCallback() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpSetTimeouts")]
-    public static void WinHttpSetTimeouts() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpSetTimeouts")]
+    public static void ImplWinHttpSetTimeouts() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpTimeFromSystemTime")]
-    public static void WinHttpTimeFromSystemTime() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpTimeFromSystemTime")]
+    public static void ImplWinHttpTimeFromSystemTime() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpTimeToSystemTime")]
-    public static void WinHttpTimeToSystemTime() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpTimeToSystemTime")]
+    public static void ImplWinHttpTimeToSystemTime() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpUnregisterProxyChangeNotification")]
-    public static void WinHttpUnregisterProxyChangeNotification() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpUnregisterProxyChangeNotification")]
+    public static void ImplWinHttpUnregisterProxyChangeNotification() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWebSocketClose")]
-    public static void WinHttpWebSocketClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWebSocketClose")]
+    public static void ImplWinHttpWebSocketClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWebSocketCompleteUpgrade")]
-    public static void WinHttpWebSocketCompleteUpgrade() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWebSocketCompleteUpgrade")]
+    public static void ImplWinHttpWebSocketCompleteUpgrade() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWebSocketQueryCloseStatus")]
-    public static void WinHttpWebSocketQueryCloseStatus() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWebSocketQueryCloseStatus")]
+    public static void ImplWinHttpWebSocketQueryCloseStatus() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWebSocketReceive")]
-    public static void WinHttpWebSocketReceive() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWebSocketReceive")]
+    public static void ImplWinHttpWebSocketReceive() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWebSocketSend")]
-    public static void WinHttpWebSocketSend() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWebSocketSend")]
+    public static void ImplWinHttpWebSocketSend() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWebSocketShutdown")]
-    public static void WinHttpWebSocketShutdown() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWebSocketShutdown")]
+    public static void ImplWinHttpWebSocketShutdown() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWriteData")]
-    public static void WinHttpWriteData() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWriteData")]
+    public static void ImplWinHttpWriteData() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WinHttpWriteProxySettings")]
-    public static void WinHttpWriteProxySettings() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWriteProxySettings")]
+    public static void ImplWinHttpWriteProxySettings() { }
 }

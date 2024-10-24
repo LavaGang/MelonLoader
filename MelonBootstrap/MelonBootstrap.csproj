@@ -8,10 +8,13 @@
         <SelfContained>true</SelfContained>
         <PublishDir>$(MLOutDir)</PublishDir>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <ExportsFile>exports.def</ExportsFile>
         <NoWarn>LNK4099</NoWarn>
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
+
+    <ItemGroup>
+        <LinkerArg Include="/DEF:exports.def" />
+    </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
         <DebugSymbols>false</DebugSymbols>

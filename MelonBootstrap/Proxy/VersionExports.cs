@@ -1,57 +1,57 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace MelonBootstrap.Proxy;
 
 internal static class VersionExports
 {
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoSizeA")]
-    public static void GetFileVersionInfoSizeA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoSizeA")]
+    public static void ImplGetFileVersionInfoSizeA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoA")]
-    public static void GetFileVersionInfoA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoA")]
+    public static void ImplGetFileVersionInfoA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoByHandle")]
-    public static void GetFileVersionInfoByHandle() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoByHandle")]
+    public static void ImplGetFileVersionInfoByHandle() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoExA")]
-    public static void GetFileVersionInfoExA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoExA")]
+    public static void ImplGetFileVersionInfoExA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoExW")]
-    public static void GetFileVersionInfoExW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoExW")]
+    public static void ImplGetFileVersionInfoExW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoSizeExA")]
-    public static void GetFileVersionInfoSizeExA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoSizeExA")]
+    public static void ImplGetFileVersionInfoSizeExA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoSizeExW")]
-    public static void GetFileVersionInfoSizeExW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoSizeExW")]
+    public static void ImplGetFileVersionInfoSizeExW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoSizeW")]
-    public static void GetFileVersionInfoSizeW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoSizeW")]
+    public static void ImplGetFileVersionInfoSizeW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetFileVersionInfoW")]
-    public static void GetFileVersionInfoW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetFileVersionInfoW")]
+    public static void ImplGetFileVersionInfoW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerFindFileA")]
-    public static void VerFindFileA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerFindFileA")]
+    public static void ImplVerFindFileA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerFindFileW")]
-    public static void VerFindFileW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerFindFileW")]
+    public static void ImplVerFindFileW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerInstallFileA")]
-    public static void VerInstallFileA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerInstallFileA")]
+    public static void ImplVerInstallFileA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerInstallFileW")]
-    public static void VerInstallFileW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerInstallFileW")]
+    public static void ImplVerInstallFileW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerLanguageNameA")]
-    public static void VerLanguageNameA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerLanguageNameA")]
+    public static void ImplVerLanguageNameA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerLanguageNameW")]
-    public static void VerLanguageNameW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerLanguageNameW")]
+    public static void ImplVerLanguageNameW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerQueryValueA")]
-    public static void VerQueryValueA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerQueryValueA")]
+    public static void ImplVerQueryValueA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "VerQueryValueW")]
-    public static void VerQueryValueW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplVerQueryValueW")]
+    public static void ImplVerQueryValueW() { }
 }

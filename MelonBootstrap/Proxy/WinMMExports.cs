@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace MelonBootstrap.Proxy;
@@ -6,543 +6,543 @@ namespace MelonBootstrap.Proxy;
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Exported proxy names")]
 internal static class WinMMExports
 {
-    [UnmanagedCallersOnly(EntryPoint = "mciExecute")]
-    public static void mciExecute() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciExecute")]
+    public static void ImplmciExecute() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "CloseDriver")]
-    public static void CloseDriver() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplCloseDriver")]
+    public static void ImplCloseDriver() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "DefDriverProc")]
-    public static void DefDriverProc() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplDefDriverProc")]
+    public static void ImplDefDriverProc() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "DriverCallback")]
-    public static void DriverCallback() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplDriverCallback")]
+    public static void ImplDriverCallback() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "DrvGetModuleHandle")]
-    public static void DrvGetModuleHandle() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplDrvGetModuleHandle")]
+    public static void ImplDrvGetModuleHandle() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "GetDriverModuleHandle")]
-    public static void GetDriverModuleHandle() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplGetDriverModuleHandle")]
+    public static void ImplGetDriverModuleHandle() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "OpenDriver")]
-    public static void OpenDriver() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplOpenDriver")]
+    public static void ImplOpenDriver() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "PlaySound")]
-    public static void PlaySound() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplPlaySound")]
+    public static void ImplPlaySound() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "PlaySoundA")]
-    public static void PlaySoundA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplPlaySoundA")]
+    public static void ImplPlaySoundA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "PlaySoundW")]
-    public static void PlaySoundW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplPlaySoundW")]
+    public static void ImplPlaySoundW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "SendDriverMessage")]
-    public static void SendDriverMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplSendDriverMessage")]
+    public static void ImplSendDriverMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "WOWAppExit")]
-    public static void WOWAppExit() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplWOWAppExit")]
+    public static void ImplWOWAppExit() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "auxGetDevCapsA")]
-    public static void auxGetDevCapsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplauxGetDevCapsA")]
+    public static void ImplauxGetDevCapsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "auxGetDevCapsW")]
-    public static void auxGetDevCapsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplauxGetDevCapsW")]
+    public static void ImplauxGetDevCapsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "auxGetNumDevs")]
-    public static void auxGetNumDevs() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplauxGetNumDevs")]
+    public static void ImplauxGetNumDevs() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "auxGetVolume")]
-    public static void auxGetVolume() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplauxGetVolume")]
+    public static void ImplauxGetVolume() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "auxOutMessage")]
-    public static void auxOutMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplauxOutMessage")]
+    public static void ImplauxOutMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "auxSetVolume")]
-    public static void auxSetVolume() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplauxSetVolume")]
+    public static void ImplauxSetVolume() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyConfigChanged")]
-    public static void joyConfigChanged() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyConfigChanged")]
+    public static void ImpljoyConfigChanged() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyGetDevCapsA")]
-    public static void joyGetDevCapsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyGetDevCapsA")]
+    public static void ImpljoyGetDevCapsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyGetDevCapsW")]
-    public static void joyGetDevCapsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyGetDevCapsW")]
+    public static void ImpljoyGetDevCapsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyGetNumDevs")]
-    public static void joyGetNumDevs() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyGetNumDevs")]
+    public static void ImpljoyGetNumDevs() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyGetPos")]
-    public static void joyGetPos() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyGetPos")]
+    public static void ImpljoyGetPos() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyGetPosEx")]
-    public static void joyGetPosEx() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyGetPosEx")]
+    public static void ImpljoyGetPosEx() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyGetThreshold")]
-    public static void joyGetThreshold() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyGetThreshold")]
+    public static void ImpljoyGetThreshold() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joyReleaseCapture")]
-    public static void joyReleaseCapture() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoyReleaseCapture")]
+    public static void ImpljoyReleaseCapture() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joySetCapture")]
-    public static void joySetCapture() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoySetCapture")]
+    public static void ImpljoySetCapture() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "joySetThreshold")]
-    public static void joySetThreshold() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpljoySetThreshold")]
+    public static void ImpljoySetThreshold() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciDriverNotify")]
-    public static void mciDriverNotify() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciDriverNotify")]
+    public static void ImplmciDriverNotify() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciDriverYield")]
-    public static void mciDriverYield() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciDriverYield")]
+    public static void ImplmciDriverYield() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciFreeCommandResource")]
-    public static void mciFreeCommandResource() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciFreeCommandResource")]
+    public static void ImplmciFreeCommandResource() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetCreatorTask")]
-    public static void mciGetCreatorTask() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetCreatorTask")]
+    public static void ImplmciGetCreatorTask() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetDeviceIDA")]
-    public static void mciGetDeviceIDA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetDeviceIDA")]
+    public static void ImplmciGetDeviceIDA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetDeviceIDFromElementIDA")]
-    public static void mciGetDeviceIDFromElementIDA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetDeviceIDFromElementIDA")]
+    public static void ImplmciGetDeviceIDFromElementIDA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetDeviceIDFromElementIDW")]
-    public static void mciGetDeviceIDFromElementIDW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetDeviceIDFromElementIDW")]
+    public static void ImplmciGetDeviceIDFromElementIDW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetDeviceIDW")]
-    public static void mciGetDeviceIDW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetDeviceIDW")]
+    public static void ImplmciGetDeviceIDW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetDriverData")]
-    public static void mciGetDriverData() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetDriverData")]
+    public static void ImplmciGetDriverData() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetErrorStringA")]
-    public static void mciGetErrorStringA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetErrorStringA")]
+    public static void ImplmciGetErrorStringA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetErrorStringW")]
-    public static void mciGetErrorStringW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetErrorStringW")]
+    public static void ImplmciGetErrorStringW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciGetYieldProc")]
-    public static void mciGetYieldProc() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciGetYieldProc")]
+    public static void ImplmciGetYieldProc() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciLoadCommandResource")]
-    public static void mciLoadCommandResource() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciLoadCommandResource")]
+    public static void ImplmciLoadCommandResource() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciSendCommandA")]
-    public static void mciSendCommandA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciSendCommandA")]
+    public static void ImplmciSendCommandA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciSendCommandW")]
-    public static void mciSendCommandW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciSendCommandW")]
+    public static void ImplmciSendCommandW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciSendStringA")]
-    public static void mciSendStringA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciSendStringA")]
+    public static void ImplmciSendStringA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciSendStringW")]
-    public static void mciSendStringW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciSendStringW")]
+    public static void ImplmciSendStringW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciSetDriverData")]
-    public static void mciSetDriverData() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciSetDriverData")]
+    public static void ImplmciSetDriverData() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mciSetYieldProc")]
-    public static void mciSetYieldProc() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmciSetYieldProc")]
+    public static void ImplmciSetYieldProc() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiConnect")]
-    public static void midiConnect() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiConnect")]
+    public static void ImplmidiConnect() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiDisconnect")]
-    public static void midiDisconnect() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiDisconnect")]
+    public static void ImplmidiDisconnect() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInAddBuffer")]
-    public static void midiInAddBuffer() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInAddBuffer")]
+    public static void ImplmidiInAddBuffer() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInClose")]
-    public static void midiInClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInClose")]
+    public static void ImplmidiInClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInGetDevCapsA")]
-    public static void midiInGetDevCapsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInGetDevCapsA")]
+    public static void ImplmidiInGetDevCapsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInGetDevCapsW")]
-    public static void midiInGetDevCapsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInGetDevCapsW")]
+    public static void ImplmidiInGetDevCapsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInGetErrorTextA")]
-    public static void midiInGetErrorTextA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInGetErrorTextA")]
+    public static void ImplmidiInGetErrorTextA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInGetErrorTextW")]
-    public static void midiInGetErrorTextW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInGetErrorTextW")]
+    public static void ImplmidiInGetErrorTextW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInGetID")]
-    public static void midiInGetID() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInGetID")]
+    public static void ImplmidiInGetID() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInGetNumDevs")]
-    public static void midiInGetNumDevs() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInGetNumDevs")]
+    public static void ImplmidiInGetNumDevs() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInMessage")]
-    public static void midiInMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInMessage")]
+    public static void ImplmidiInMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInOpen")]
-    public static void midiInOpen() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInOpen")]
+    public static void ImplmidiInOpen() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInPrepareHeader")]
-    public static void midiInPrepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInPrepareHeader")]
+    public static void ImplmidiInPrepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInReset")]
-    public static void midiInReset() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInReset")]
+    public static void ImplmidiInReset() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInStart")]
-    public static void midiInStart() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInStart")]
+    public static void ImplmidiInStart() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInStop")]
-    public static void midiInStop() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInStop")]
+    public static void ImplmidiInStop() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiInUnprepareHeader")]
-    public static void midiInUnprepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiInUnprepareHeader")]
+    public static void ImplmidiInUnprepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutCacheDrumPatches")]
-    public static void midiOutCacheDrumPatches() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutCacheDrumPatches")]
+    public static void ImplmidiOutCacheDrumPatches() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutCachePatches")]
-    public static void midiOutCachePatches() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutCachePatches")]
+    public static void ImplmidiOutCachePatches() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutClose")]
-    public static void midiOutClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutClose")]
+    public static void ImplmidiOutClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutGetDevCapsA")]
-    public static void midiOutGetDevCapsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutGetDevCapsA")]
+    public static void ImplmidiOutGetDevCapsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutGetDevCapsW")]
-    public static void midiOutGetDevCapsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutGetDevCapsW")]
+    public static void ImplmidiOutGetDevCapsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutGetErrorTextA")]
-    public static void midiOutGetErrorTextA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutGetErrorTextA")]
+    public static void ImplmidiOutGetErrorTextA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutGetErrorTextW")]
-    public static void midiOutGetErrorTextW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutGetErrorTextW")]
+    public static void ImplmidiOutGetErrorTextW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutGetID")]
-    public static void midiOutGetID() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutGetID")]
+    public static void ImplmidiOutGetID() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutGetNumDevs")]
-    public static void midiOutGetNumDevs() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutGetNumDevs")]
+    public static void ImplmidiOutGetNumDevs() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutGetVolume")]
-    public static void midiOutGetVolume() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutGetVolume")]
+    public static void ImplmidiOutGetVolume() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutLongMsg")]
-    public static void midiOutLongMsg() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutLongMsg")]
+    public static void ImplmidiOutLongMsg() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutMessage")]
-    public static void midiOutMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutMessage")]
+    public static void ImplmidiOutMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutOpen")]
-    public static void midiOutOpen() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutOpen")]
+    public static void ImplmidiOutOpen() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutPrepareHeader")]
-    public static void midiOutPrepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutPrepareHeader")]
+    public static void ImplmidiOutPrepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutReset")]
-    public static void midiOutReset() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutReset")]
+    public static void ImplmidiOutReset() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutSetVolume")]
-    public static void midiOutSetVolume() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutSetVolume")]
+    public static void ImplmidiOutSetVolume() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutShortMsg")]
-    public static void midiOutShortMsg() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutShortMsg")]
+    public static void ImplmidiOutShortMsg() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiOutUnprepareHeader")]
-    public static void midiOutUnprepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiOutUnprepareHeader")]
+    public static void ImplmidiOutUnprepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamClose")]
-    public static void midiStreamClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamClose")]
+    public static void ImplmidiStreamClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamOpen")]
-    public static void midiStreamOpen() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamOpen")]
+    public static void ImplmidiStreamOpen() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamOut")]
-    public static void midiStreamOut() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamOut")]
+    public static void ImplmidiStreamOut() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamPause")]
-    public static void midiStreamPause() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamPause")]
+    public static void ImplmidiStreamPause() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamPosition")]
-    public static void midiStreamPosition() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamPosition")]
+    public static void ImplmidiStreamPosition() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamProperty")]
-    public static void midiStreamProperty() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamProperty")]
+    public static void ImplmidiStreamProperty() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamRestart")]
-    public static void midiStreamRestart() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamRestart")]
+    public static void ImplmidiStreamRestart() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "midiStreamStop")]
-    public static void midiStreamStop() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmidiStreamStop")]
+    public static void ImplmidiStreamStop() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerClose")]
-    public static void mixerClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerClose")]
+    public static void ImplmixerClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetControlDetailsA")]
-    public static void mixerGetControlDetailsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetControlDetailsA")]
+    public static void ImplmixerGetControlDetailsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetControlDetailsW")]
-    public static void mixerGetControlDetailsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetControlDetailsW")]
+    public static void ImplmixerGetControlDetailsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetDevCapsA")]
-    public static void mixerGetDevCapsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetDevCapsA")]
+    public static void ImplmixerGetDevCapsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetDevCapsW")]
-    public static void mixerGetDevCapsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetDevCapsW")]
+    public static void ImplmixerGetDevCapsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetID")]
-    public static void mixerGetID() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetID")]
+    public static void ImplmixerGetID() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetLineControlsA")]
-    public static void mixerGetLineControlsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetLineControlsA")]
+    public static void ImplmixerGetLineControlsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetLineControlsW")]
-    public static void mixerGetLineControlsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetLineControlsW")]
+    public static void ImplmixerGetLineControlsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetLineInfoA")]
-    public static void mixerGetLineInfoA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetLineInfoA")]
+    public static void ImplmixerGetLineInfoA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetLineInfoW")]
-    public static void mixerGetLineInfoW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetLineInfoW")]
+    public static void ImplmixerGetLineInfoW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerGetNumDevs")]
-    public static void mixerGetNumDevs() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerGetNumDevs")]
+    public static void ImplmixerGetNumDevs() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerMessage")]
-    public static void mixerMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerMessage")]
+    public static void ImplmixerMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerOpen")]
-    public static void mixerOpen() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerOpen")]
+    public static void ImplmixerOpen() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mixerSetControlDetails")]
-    public static void mixerSetControlDetails() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmixerSetControlDetails")]
+    public static void ImplmixerSetControlDetails() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmDrvInstall")]
-    public static void mmDrvInstall() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmDrvInstall")]
+    public static void ImplmmDrvInstall() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmGetCurrentTask")]
-    public static void mmGetCurrentTask() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmGetCurrentTask")]
+    public static void ImplmmGetCurrentTask() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmTaskBlock")]
-    public static void mmTaskBlock() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmTaskBlock")]
+    public static void ImplmmTaskBlock() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmTaskCreate")]
-    public static void mmTaskCreate() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmTaskCreate")]
+    public static void ImplmmTaskCreate() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmTaskSignal")]
-    public static void mmTaskSignal() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmTaskSignal")]
+    public static void ImplmmTaskSignal() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmTaskYield")]
-    public static void mmTaskYield() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmTaskYield")]
+    public static void ImplmmTaskYield() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioAdvance")]
-    public static void mmioAdvance() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioAdvance")]
+    public static void ImplmmioAdvance() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioAscend")]
-    public static void mmioAscend() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioAscend")]
+    public static void ImplmmioAscend() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioClose")]
-    public static void mmioClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioClose")]
+    public static void ImplmmioClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioCreateChunk")]
-    public static void mmioCreateChunk() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioCreateChunk")]
+    public static void ImplmmioCreateChunk() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioDescend")]
-    public static void mmioDescend() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioDescend")]
+    public static void ImplmmioDescend() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioFlush")]
-    public static void mmioFlush() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioFlush")]
+    public static void ImplmmioFlush() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioGetInfo")]
-    public static void mmioGetInfo() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioGetInfo")]
+    public static void ImplmmioGetInfo() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioInstallIOProcA")]
-    public static void mmioInstallIOProcA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioInstallIOProcA")]
+    public static void ImplmmioInstallIOProcA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioInstallIOProcW")]
-    public static void mmioInstallIOProcW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioInstallIOProcW")]
+    public static void ImplmmioInstallIOProcW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioOpenA")]
-    public static void mmioOpenA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioOpenA")]
+    public static void ImplmmioOpenA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioOpenW")]
-    public static void mmioOpenW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioOpenW")]
+    public static void ImplmmioOpenW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioRead")]
-    public static void mmioRead() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioRead")]
+    public static void ImplmmioRead() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioRenameA")]
-    public static void mmioRenameA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioRenameA")]
+    public static void ImplmmioRenameA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioRenameW")]
-    public static void mmioRenameW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioRenameW")]
+    public static void ImplmmioRenameW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioSeek")]
-    public static void mmioSeek() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioSeek")]
+    public static void ImplmmioSeek() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioSendMessage")]
-    public static void mmioSendMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioSendMessage")]
+    public static void ImplmmioSendMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioSetBuffer")]
-    public static void mmioSetBuffer() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioSetBuffer")]
+    public static void ImplmmioSetBuffer() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioSetInfo")]
-    public static void mmioSetInfo() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioSetInfo")]
+    public static void ImplmmioSetInfo() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioStringToFOURCCA")]
-    public static void mmioStringToFOURCCA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioStringToFOURCCA")]
+    public static void ImplmmioStringToFOURCCA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioStringToFOURCCW")]
-    public static void mmioStringToFOURCCW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioStringToFOURCCW")]
+    public static void ImplmmioStringToFOURCCW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmioWrite")]
-    public static void mmioWrite() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmioWrite")]
+    public static void ImplmmioWrite() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "mmsystemGetVersion")]
-    public static void mmsystemGetVersion() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplmmsystemGetVersion")]
+    public static void ImplmmsystemGetVersion() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "sndPlaySoundA")]
-    public static void sndPlaySoundA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplsndPlaySoundA")]
+    public static void ImplsndPlaySoundA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "sndPlaySoundW")]
-    public static void sndPlaySoundW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplsndPlaySoundW")]
+    public static void ImplsndPlaySoundW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "timeBeginPeriod")]
-    public static void timeBeginPeriod() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpltimeBeginPeriod")]
+    public static void ImpltimeBeginPeriod() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "timeEndPeriod")]
-    public static void timeEndPeriod() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpltimeEndPeriod")]
+    public static void ImpltimeEndPeriod() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "timeGetDevCaps")]
-    public static void timeGetDevCaps() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpltimeGetDevCaps")]
+    public static void ImpltimeGetDevCaps() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "timeGetSystemTime")]
-    public static void timeGetSystemTime() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpltimeGetSystemTime")]
+    public static void ImpltimeGetSystemTime() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "timeGetTime")]
-    public static void timeGetTime() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpltimeGetTime")]
+    public static void ImpltimeGetTime() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "timeKillEvent")]
-    public static void timeKillEvent() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpltimeKillEvent")]
+    public static void ImpltimeKillEvent() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "timeSetEvent")]
-    public static void timeSetEvent() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImpltimeSetEvent")]
+    public static void ImpltimeSetEvent() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInAddBuffer")]
-    public static void waveInAddBuffer() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInAddBuffer")]
+    public static void ImplwaveInAddBuffer() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInClose")]
-    public static void waveInClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInClose")]
+    public static void ImplwaveInClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInGetDevCapsA")]
-    public static void waveInGetDevCapsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInGetDevCapsA")]
+    public static void ImplwaveInGetDevCapsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInGetDevCapsW")]
-    public static void waveInGetDevCapsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInGetDevCapsW")]
+    public static void ImplwaveInGetDevCapsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInGetErrorTextA")]
-    public static void waveInGetErrorTextA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInGetErrorTextA")]
+    public static void ImplwaveInGetErrorTextA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInGetErrorTextW")]
-    public static void waveInGetErrorTextW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInGetErrorTextW")]
+    public static void ImplwaveInGetErrorTextW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInGetID")]
-    public static void waveInGetID() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInGetID")]
+    public static void ImplwaveInGetID() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInGetNumDevs")]
-    public static void waveInGetNumDevs() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInGetNumDevs")]
+    public static void ImplwaveInGetNumDevs() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInGetPosition")]
-    public static void waveInGetPosition() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInGetPosition")]
+    public static void ImplwaveInGetPosition() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInMessage")]
-    public static void waveInMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInMessage")]
+    public static void ImplwaveInMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInOpen")]
-    public static void waveInOpen() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInOpen")]
+    public static void ImplwaveInOpen() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInPrepareHeader")]
-    public static void waveInPrepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInPrepareHeader")]
+    public static void ImplwaveInPrepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInReset")]
-    public static void waveInReset() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInReset")]
+    public static void ImplwaveInReset() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInStart")]
-    public static void waveInStart() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInStart")]
+    public static void ImplwaveInStart() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInStop")]
-    public static void waveInStop() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInStop")]
+    public static void ImplwaveInStop() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveInUnprepareHeader")]
-    public static void waveInUnprepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveInUnprepareHeader")]
+    public static void ImplwaveInUnprepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutBreakLoop")]
-    public static void waveOutBreakLoop() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutBreakLoop")]
+    public static void ImplwaveOutBreakLoop() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutClose")]
-    public static void waveOutClose() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutClose")]
+    public static void ImplwaveOutClose() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetDevCapsA")]
-    public static void waveOutGetDevCapsA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetDevCapsA")]
+    public static void ImplwaveOutGetDevCapsA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetDevCapsW")]
-    public static void waveOutGetDevCapsW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetDevCapsW")]
+    public static void ImplwaveOutGetDevCapsW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetErrorTextA")]
-    public static void waveOutGetErrorTextA() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetErrorTextA")]
+    public static void ImplwaveOutGetErrorTextA() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetErrorTextW")]
-    public static void waveOutGetErrorTextW() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetErrorTextW")]
+    public static void ImplwaveOutGetErrorTextW() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetID")]
-    public static void waveOutGetID() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetID")]
+    public static void ImplwaveOutGetID() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetNumDevs")]
-    public static void waveOutGetNumDevs() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetNumDevs")]
+    public static void ImplwaveOutGetNumDevs() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetPitch")]
-    public static void waveOutGetPitch() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetPitch")]
+    public static void ImplwaveOutGetPitch() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetPlaybackRate")]
-    public static void waveOutGetPlaybackRate() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetPlaybackRate")]
+    public static void ImplwaveOutGetPlaybackRate() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetPosition")]
-    public static void waveOutGetPosition() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetPosition")]
+    public static void ImplwaveOutGetPosition() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutGetVolume")]
-    public static void waveOutGetVolume() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutGetVolume")]
+    public static void ImplwaveOutGetVolume() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutMessage")]
-    public static void waveOutMessage() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutMessage")]
+    public static void ImplwaveOutMessage() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutOpen")]
-    public static void waveOutOpen() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutOpen")]
+    public static void ImplwaveOutOpen() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutPause")]
-    public static void waveOutPause() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutPause")]
+    public static void ImplwaveOutPause() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutPrepareHeader")]
-    public static void waveOutPrepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutPrepareHeader")]
+    public static void ImplwaveOutPrepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutReset")]
-    public static void waveOutReset() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutReset")]
+    public static void ImplwaveOutReset() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutRestart")]
-    public static void waveOutRestart() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutRestart")]
+    public static void ImplwaveOutRestart() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutSetPitch")]
-    public static void waveOutSetPitch() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutSetPitch")]
+    public static void ImplwaveOutSetPitch() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutSetPlaybackRate")]
-    public static void waveOutSetPlaybackRate() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutSetPlaybackRate")]
+    public static void ImplwaveOutSetPlaybackRate() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutSetVolume")]
-    public static void waveOutSetVolume() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutSetVolume")]
+    public static void ImplwaveOutSetVolume() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutUnprepareHeader")]
-    public static void waveOutUnprepareHeader() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutUnprepareHeader")]
+    public static void ImplwaveOutUnprepareHeader() { }
 
-    [UnmanagedCallersOnly(EntryPoint = "waveOutWrite")]
-    public static void waveOutWrite() { }
+    [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutWrite")]
+    public static void ImplwaveOutWrite() { }
 }

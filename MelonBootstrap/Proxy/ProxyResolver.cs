@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace MelonBootstrap.Proxy;
 
@@ -29,31 +30,42 @@ public static partial class ProxyResolver
 
     public static unsafe void Init(nint ourHandle)
     {
-        // Had to initialize all proxies because the bootstrap still uses itself as version.dll no matter what it's renamed to
-        // Not a big deal considering this is pretty fast
-        foreach (var proxy in proxies)
+        var ourPathBdr = new StringBuilder(1024);
+        if (GetModuleFileName(ourHandle, ourPathBdr, (uint)ourPathBdr.Capacity) == 0)
+            return;
+
+        var ourName = Path.GetFileName(ourPathBdr.ToString());
+
+        var proxy = proxies.FirstOrDefault(x => ourName.Equals(Path.GetFileName(x.OriginalPath), StringComparison.OrdinalIgnoreCase));
+        if (proxy == null)
+            return;
+
+        if (!NativeLibrary.TryLoad(proxy.OriginalPath, out nint ogHandle))
+            return;
+
+        foreach (var exportMethod in proxy.ProxyFuncs.GetMethods())
         {
-            if (!NativeLibrary.TryLoad(proxy.OriginalPath, out nint ogHandle))
-                return;
+            var export = exportMethod.Name;
+            var preTag = "Impl";
+            if (!export.StartsWith(preTag))
+                continue;
 
-            foreach (var exportMethod in proxy.ProxyFuncs.GetMethods())
+            export = export[preTag.Length..];
+
+            if (!NativeLibrary.TryGetExport(ogHandle, export, out var theirExport)
+                || !NativeLibrary.TryGetExport(ourHandle, export, out var ourExport))
             {
-                var export = exportMethod.Name;
-                if (!NativeLibrary.TryGetExport(ogHandle, export, out var theirExport)
-                    || !NativeLibrary.TryGetExport(ourHandle, export, out var ourExport))
-                {
-                    // TODO: Log warning
-                    continue;
-                }
-
-                var jump = AssembleJump(theirExport);
-                if (VirtualProtect(ourExport, jump.Length, PageExecuteReadWrite, out var oldProtect) != 1)
-                    continue;
-
-                var span = new Span<byte>((byte*)ourExport, jump.Length);
-                jump.CopyTo(span);
-                VirtualProtect(ourExport, jump.Length, oldProtect, out _);
+                Console.WriteLine($"Proxy export not found: '{export}'");
+                continue;
             }
+
+            var jump = AssembleJump(theirExport);
+            if (VirtualProtect(ourExport, jump.Length, PageExecuteReadWrite, out var oldProtect) != 1)
+                continue;
+
+            var span = new Span<byte>((byte*)ourExport, jump.Length);
+            jump.CopyTo(span);
+            VirtualProtect(ourExport, jump.Length, oldProtect, out _);
         }
     }
 
@@ -90,6 +102,9 @@ public static partial class ProxyResolver
 
         return shellcode;
     }
+
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    private static extern uint GetModuleFileName(nint module, StringBuilder filename, uint size);
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
     private static partial byte VirtualProtect(nint address, nint size, uint newProtect, out uint oldProtect);
