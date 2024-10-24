@@ -11,8 +11,8 @@ namespace MelonLoader
     internal static unsafe class BootstrapInterop
     {
 #if NET6_0_OR_GREATER
-        internal static delegate* unmanaged<void**, void*, void> HookAttach;
-        internal static delegate* unmanaged<void**, void*, void> HookDetach;
+        internal static NativeHookFn HookAttach;
+        internal static NativeHookFn HookDetach;
 #endif
 
         internal static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null)
@@ -56,11 +56,12 @@ namespace MelonLoader
 
 #if !NET6_0
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void NativeHookAttach(IntPtr target, IntPtr detour);
+        public static extern void NativeHookAttach(nint target, nint detour);
+
         [MethodImpl(MethodImplOptions.InternalCall)]
-        public static extern void NativeHookDetach(IntPtr target, IntPtr detour);
+        public static extern void NativeHookDetach(nint target, nint detour);
 #else
-        public static void NativeHookAttach(IntPtr target, IntPtr detour)
+        public static void NativeHookAttach(nint target, nint detour)
         {
             //SanityCheckDetour is able to wrap and fix the bad method in a delegate where possible, so we pass the detour by ref.
             if ( /*MelonDebug.IsEnabled() && */ !MelonUtils.IsUnderWineOrSteamProton() && !CoreClrDelegateFixer.SanityCheckDetour(ref detour))
@@ -70,16 +71,18 @@ namespace MelonLoader
             NativeStackWalk.RegisterHookAddr((ulong)target, $"Mod-requested detour of 0x{target:X} -> 0x{detour:X}");
         }
 
-        internal static unsafe void NativeHookAttachDirect(IntPtr target, IntPtr detour)
+        internal static unsafe void NativeHookAttachDirect(nint target, nint detour)
         {
-            HookAttach((void**)target, (void*)detour);
+            HookAttach(target, detour);
         }
 
-        public static unsafe void NativeHookDetach(IntPtr target, IntPtr detour)
+        public static unsafe void NativeHookDetach(nint target, nint detour)
         {
-            HookDetach((void**)target, (void*)detour);
+            HookDetach(target, detour);
             NativeStackWalk.UnregisterHookAddr((ulong)target);
         }
+
+        internal delegate void NativeHookFn(nint target, nint detour);
 #endif
     }
 }

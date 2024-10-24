@@ -3,96 +3,70 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 
-namespace MelonLoader.NativeHost
+namespace MelonLoader.NativeHost;
+
+internal static class NativeEntryPoint
 {
-    public static class NativeEntryPoint
+    // Prevent GC
+    private static Action? startDel;
+
+    internal static FunctionExchange Functions { get; private set; }
+
+    [UnmanagedCallersOnly]
+    private unsafe static void NativeEntry(FunctionExchange* exchange)
     {
-        internal static HostExports Exports;
+        var currentAsm = typeof(NativeEntryPoint).Assembly;
 
-        [UnmanagedCallersOnly]
-        unsafe static void LoadStage1(HostImports* imports)
-        {
-            Console.WriteLine("[NewEntryPoint] Passing ptr to LoadAssemblyAndGetFuncPtr back to host...");
-            imports->LoadAssemblyAndGetPtr = &StereoHostingApi.LoadAssemblyAndGetFuncPtr;
-        }
+        var asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(currentAsm.Location);
+        var type = asm.GetType("MelonLoader.NativeHost.NativeEntryPoint", true)!;
+        var init = type.GetMethod(nameof(Initialize), BindingFlags.Static | BindingFlags.NonPublic)!;
+        init.Invoke(null, [ (nint)exchange ]);
+    }
 
+    private unsafe static void Initialize(FunctionExchange* exchange)
+    {
+        startDel = Start;
+        exchange->Start = Marshal.GetFunctionPointerForDelegate(startDel);
 
-        [UnmanagedCallersOnly]
-        unsafe static void LoadStage2(HostImports* imports, HostExports* exports)
-        {
-            Console.WriteLine("[NewEntryPoint] Configuring imports...");
+        Functions = *exchange;
 
-            imports->Initialize = &Initialize;
-            imports->PreStart = &PreStart;
-            imports->Start = &Start;
-
-            Exports = *exports;
-        }
-
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-        static void Initialize()
-        {
-            bool isDefaultAlc = AssemblyLoadContext.Default == AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly());
-            Console.WriteLine($"[NewEntryPoint] Initializing. In default load context: {isDefaultAlc}");
-
-            AssemblyLoadContext.Default.Resolving += OnResolveAssembly;
-
-            //Have to invoke through a proxy so that we don't load MelonLoader.dll before the above line
-            try
-            {
-                MelonLoaderInvoker.Initialize();
-            } catch(Exception ex)
-            {
-                Console.WriteLine("[NewEntryPoint] Caught exception invoking Initialize! " + ex);
-                Thread.Sleep(5000);
-                Environment.Exit(1);
-            }
-        }
-
-        [UnmanagedCallersOnly(CallConvs = new[] {typeof(CallConvStdcall)})]
-        static void PreStart()
-        {
-            Console.WriteLine("[NewEntryPoint] PreStarting.");
-
-            try
-            {
-                MelonLoaderInvoker.PreStart();
-            } catch(Exception ex)
-            {
-                Console.WriteLine("[NewEntryPoint] Caught exception invoking PreStart! " + ex);
-                Thread.Sleep(5000);
-                Environment.Exit(1);
-            }
-        }
-
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-        static void Start()
-        {
-            Console.WriteLine("[NewEntryPoint] Starting.");
-
-            try
-            {
-                MelonLoaderInvoker.Start();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("[NewEntryPoint] Caught exception invoking Start! " + ex);
-                Thread.Sleep(5000);
-                Environment.Exit(1);
-            }
-        }
-
+        AssemblyLoadContext.Default.Resolving += OnResolveAssembly;
         
-
-        private static Assembly? OnResolveAssembly(AssemblyLoadContext alc, AssemblyName name)
+        //Have to invoke through a proxy so that we don't load MelonLoader.dll before the above line
+        try
         {
-            var ourDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-
-            var potentialDllPath = Path.Combine(ourDir, name.Name + ".dll");
-            if (File.Exists(potentialDllPath))
-                return alc.LoadFromAssemblyPath(potentialDllPath);
-
-            return null;
+            MelonLoaderInvoker.Initialize();
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine("[NewEntryPoint] Caught exception invoking Initialize! " + ex);
+            Thread.Sleep(5000);
+            Environment.Exit(1);
+        }
+    }
+
+    private static void Start()
+    {
+        try
+        {
+            MelonLoaderInvoker.Start();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("[NewEntryPoint] Caught exception invoking Start! " + ex);
+            Thread.Sleep(5000);
+            Environment.Exit(1);
+        }
+    }
+
+    private static Assembly? OnResolveAssembly(AssemblyLoadContext alc, AssemblyName name)
+    {
+        var ourDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+
+        var potentialDllPath = Path.Combine(ourDir, name.Name + ".dll");
+        if (File.Exists(potentialDllPath))
+            return alc.LoadFromAssemblyPath(potentialDllPath);
+
+        return null;
     }
 }
