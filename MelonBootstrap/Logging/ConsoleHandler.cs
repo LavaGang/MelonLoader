@@ -1,15 +1,17 @@
-﻿using System.Runtime.InteropServices;
+﻿using MelonLoader.Bootstrap.Logging;
+using System.Runtime.InteropServices;
+using System.Text;
 
-namespace MelonBootstrap.Utils;
+namespace MelonLoader.Bootstrap;
 
-internal static partial class ConsoleUtils
+internal static partial class ConsoleHandler
 {
     private const uint StdOutputHandle = 4294967285;
     private const uint StdErrorHandle = 4294967284;
 
     private static nint outputHandle;
 
-    public static void OpenConsole(bool debugMode, string version, bool onTop)
+    public static void OpenConsole(string version, bool onTop)
     {
         AllocConsole();
 
@@ -21,7 +23,7 @@ internal static partial class ConsoleUtils
             SetWindowPos(consoleWindow, -1, 0, 0, 0, 0, 0x0001 | 0x0002);
 
         var title = "MelonLoader v" + version;
-        if (debugMode)
+        if (Core.Debug)
             title = "[Debug] " + title;
 
         Console.Title = title;
@@ -30,8 +32,13 @@ internal static partial class ConsoleUtils
         Console.SetError(new StreamWriter(Console.OpenStandardError()) { AutoFlush = true });
         Console.SetIn(new StreamReader(Console.OpenStandardInput()));
 
-        outputHandle = GetStdHandle(StdOutputHandle);
+        Console.OutputEncoding = Encoding.Unicode;
 
+        outputHandle = GetStdHandle(StdOutputHandle);
+    }
+
+    public static void NullHandles()
+    {
         SetStdHandle(StdOutputHandle, 0);
         SetStdHandle(StdErrorHandle, 0);
     }
@@ -40,6 +47,15 @@ internal static partial class ConsoleUtils
     {
         SetStdHandle(StdOutputHandle, outputHandle);
         SetStdHandle(StdErrorHandle, outputHandle);
+    }
+
+    public static ConsoleColor GetClosestConsoleColor(ColorRGB color)
+    {
+        var index = color.R > 128 | color.G > 128 | color.B > 128 ? 8 : 0; // Bright bit
+        index |= color.R > 64 ? 4 : 0; // Red bit
+        index |= color.G > 64 ? 2 : 0; // Green bit
+        index |= color.B > 64 ? 1 : 0; // Blue bit
+        return (ConsoleColor)index;
     }
 
     [LibraryImport("kernel32.dll")]

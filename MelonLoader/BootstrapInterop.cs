@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 #if NET6_0_OR_GREATER
 using MelonLoader.CoreClrUtils;
+using MelonLoader.Bootstrap;
+#else
+using System.Runtime.CompilerServices;
 #endif
 
 namespace MelonLoader
@@ -15,13 +17,13 @@ namespace MelonLoader
         internal static NativeHookFn HookDetach;
 #endif
 
-        internal static void SetDefaultConsoleTitleWithGameName([MarshalAs(UnmanagedType.LPStr)] string GameName, [MarshalAs(UnmanagedType.LPStr)] string GameVersion = null)
+        internal static void SetDefaultConsoleTitleWithGameName(string gameName, string gameVersion = null)
         {
             if (!MelonLaunchOptions.Console.ShouldSetTitle || MelonLaunchOptions.Console.ShouldHide)
                 return;
 
-            string versionStr = Core.GetVersionString() +
-                                $" - {GameName} {GameVersion ?? ""}";
+            var versionStr = Core.GetVersionString() +
+                                $" - {gameName} {gameVersion ?? ""}";
 
             // Setting the title might not work on .net 2.0. In WTTG 2 it's present in mscorlib, but the resolver can't find it for whatever reason.
             // Using reflection to avoid resolver errors
@@ -54,7 +56,7 @@ namespace MelonLoader
             EnableMenuItem(GetSystemMenu(mainWindow, 0), SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
         }
 
-#if !NET6_0
+#if !NET6_0_OR_GREATER
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern void NativeHookAttach(nint target, nint detour);
 
@@ -73,16 +75,14 @@ namespace MelonLoader
 
         internal static unsafe void NativeHookAttachDirect(nint target, nint detour)
         {
-            HookAttach(target, detour);
+            HookAttach((nint*)target, detour);
         }
 
         public static unsafe void NativeHookDetach(nint target, nint detour)
         {
-            HookDetach(target, detour);
+            HookDetach((nint*)target, detour);
             NativeStackWalk.UnregisterHookAddr((ulong)target);
         }
-
-        internal delegate void NativeHookFn(nint target, nint detour);
 #endif
     }
 }

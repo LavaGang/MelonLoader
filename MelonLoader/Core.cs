@@ -29,7 +29,6 @@ namespace MelonLoader
             MelonEnvironment.MelonLoaderDirectory = runtimeDirInfo.Parent!.FullName;
 
             MelonLaunchOptions.Load();
-            MelonLogger.Setup();
 
 #if NET35
             // Disabled for now because of issues
@@ -37,7 +36,6 @@ namespace MelonLoader
 #endif
 
             MelonUtils.SetupWineCheck();
-            Utils.MelonConsole.Init();
 
             if (MelonUtils.IsUnderWineOrSteamProton())
                 Pastel.ConsoleExtensions.Disable();
@@ -203,9 +201,6 @@ namespace MelonLoader
             Fixes.Il2CppInteropFixes.Shutdown();
             Fixes.Il2CppICallInjector.Shutdown();
 #endif
-
-            MelonLogger.Flush();
-            //MelonLogger.Close();
 
             Thread.Sleep(200);
 

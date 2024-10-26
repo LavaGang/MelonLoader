@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MelonBootstrap.Proxy;
+namespace MelonLoader.Bootstrap.Proxy;
 
 // Credits for the idea: https://github.com/NotNite/NativeProxy
 public static partial class ProxyResolver
@@ -40,7 +40,7 @@ public static partial class ProxyResolver
         if (proxy == null)
             return;
 
-        if (!NativeLibrary.TryLoad(proxy.OriginalPath, out nint ogHandle))
+        if (!NativeLibrary.TryLoad(proxy.OriginalPath, out var ogHandle))
             return;
 
         foreach (var exportMethod in proxy.ProxyFuncs.GetMethods())

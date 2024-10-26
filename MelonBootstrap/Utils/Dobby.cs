@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MelonBootstrap.Utils;
+namespace MelonLoader.Bootstrap.Utils;
 
 public unsafe static partial class Dobby
 {
@@ -39,7 +39,7 @@ public unsafe static partial class Dobby
     public static Patch<TDelegate> CreatePatch<TDelegate>(nint target, TDelegate detour) where TDelegate : Delegate
     {
         var original = HookAttach(target, Marshal.GetFunctionPointerForDelegate(detour));
-        
+
         var originalDel = Marshal.GetDelegateForFunctionPointer<TDelegate>(original);
 
         return new Patch<TDelegate>(target, detour, originalDel);
@@ -47,7 +47,7 @@ public unsafe static partial class Dobby
 
     public static Patch<TDelegate>? CreatePatch<TDelegate>(nint hModule, string functionName, TDelegate detour) where TDelegate : Delegate
     {
-        if (!NativeLibrary.TryGetExport(hModule, functionName, out nint func))
+        if (!NativeLibrary.TryGetExport(hModule, functionName, out var func))
             return null;
 
         return CreatePatch(func, detour);

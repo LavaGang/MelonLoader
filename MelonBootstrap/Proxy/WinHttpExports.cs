@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace MelonBootstrap.Proxy;
+namespace MelonLoader.Bootstrap.Proxy;
 
 internal static class WinHttpExports
 {

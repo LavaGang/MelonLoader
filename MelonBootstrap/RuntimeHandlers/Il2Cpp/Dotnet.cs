@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MelonBootstrap.RuntimeHandlers.Il2Cpp;
+namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 
 internal static partial class Dotnet
 {

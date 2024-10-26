@@ -1,13 +1,16 @@
-﻿using MelonBootstrap.Proxy;
-using MelonBootstrap.RuntimeHandlers.Il2Cpp;
-using MelonBootstrap.RuntimeHandlers.Mono;
-using MelonBootstrap.Utils;
+﻿using MelonLoader.Bootstrap.Logging;
+using MelonLoader.Bootstrap.Proxy;
+using MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
+using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
+using MelonLoader.Bootstrap.Utils;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace MelonBootstrap;
+namespace MelonLoader.Bootstrap;
 
 public static class Core
 {
+    internal static InternalLogger Logger { get; private set; } = new(Color.BlueViolet, "MelonBootstrap");
     public static string DataDir { get; private set; } = null!;
     public static string GameDir { get; private set; } = null!;
     public static string BaseDir { get; private set; } = ".";
@@ -39,50 +42,22 @@ public static class Core
         if (!Directory.Exists(DataDir))
             return;
 
-        var args = Environment.GetCommandLineArgs();
-
-        if (args.Contains("--no-mods", StringComparer.OrdinalIgnoreCase))
+        if (ArgParser.IsDefined("no-mods"))
             return;
 
 #if !DEBUG
-        if (args.Contains("--melonloader.debug", StringComparer.OrdinalIgnoreCase))
+        if (ArgParser.IsDefined("melonloader.debug"))
             Debug = true;
 #endif
 
-        const string baseDirParam = "--melonloader.basedir";
-        for (var i = 0; i < args.Length; i++)
-        {
-            var arg = args[i];
+        var customBaseDir = ArgParser.GetValue("melonloader.basedir");
+        if (customBaseDir != null)
+            BaseDir = customBaseDir;
 
-            string path;
-            if (arg.Equals(baseDirParam, StringComparison.OrdinalIgnoreCase) && i + 1 < args.Length)
-            {
-                path = args[i + 1];
-            }
-            else if (arg.StartsWith(baseDirParam + "=", StringComparison.OrdinalIgnoreCase))
-            {
-                path = arg[(baseDirParam.Length + 1)..];
-            }
-            else
-            {
-                continue;
-            }
+        MelonLogger.Init();
 
-            if (!Directory.Exists(path))
-                break;
-
-            BaseDir = path;
-            break;
-        }
-
-        var version = typeof(Core).Assembly.GetName().Version!;
-        var versionStr = version.ToString(3);
-        if (version.Revision != 0)
-            versionStr += "-ci." + version.Revision.ToString();
-
-        var onTop = args.Contains("--melonloader.consoleontop", StringComparer.OrdinalIgnoreCase);
-
-        ConsoleUtils.OpenConsole(Debug, versionStr, onTop);
+        if (customBaseDir != null)
+            Logger.Msg($"Starting from a custom base directory: '{BaseDir}'");
 
         //var dobbyPath = Path.Combine(baseDir, "dobby.dll");
         //if (!File.Exists(dobbyPath))
@@ -103,12 +78,15 @@ public static class Core
 
         //Console.WriteLine("Loaded dobby.");
 
-        if (Il2CppHandler.TryInitialize())
-            return;
+        MelonDebug.Log("Starting probe for runtime");
 
-        if (MonoHandler.TryInitialize())
+        if (Il2CppHandler.TryInitialize()
+            || MonoHandler.TryInitialize())
+        {
+            ConsoleHandler.NullHandles();
             return;
+        }
 
-        // TODO: Error, no handler for runtime
+        Logger.Error("Current game runtime is not supported. The game might have a modified runtime or is not a real Unity game.");
     }
 }

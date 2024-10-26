@@ -1,11 +1,11 @@
-﻿using MelonBootstrap.Utils;
+﻿using MelonLoader.Bootstrap.Utils;
 using System.Runtime.InteropServices;
 
-namespace MelonBootstrap.RuntimeHandlers.Mono;
+namespace MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 
 internal class MonoLib
 {
-    private static string[] folderNames =
+    private static readonly string[] folderNames =
     [
         "MonoBleedingEdge",
         "Mono",
@@ -13,7 +13,7 @@ internal class MonoLib
         "MonoBleedingEdge.x86"
     ];
 
-    private static string[] libNames =
+    private static readonly string[] libNames =
     [
         "mono.dll",
         "mono-2.0-bdwgc.dll",
@@ -21,7 +21,7 @@ internal class MonoLib
         "mono-2.0-boehm.dll"
     ];
 
-    private static List<Delegate> passedDelegates = [];
+    private static readonly List<Delegate> passedDelegates = [];
 
     public required nint Handle { get; init; }
     public required bool IsOld { get; init; }

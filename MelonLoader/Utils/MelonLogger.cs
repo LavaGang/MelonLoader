@@ -1,98 +1,22 @@
 ﻿using MelonLoader.Utils;
-using MelonLoader.Pastel;
 using System;
 using System.Drawing;
-using System.IO;
-using System.Text;
 using static MelonLoader.Utils.LoggerUtils;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using MelonLoader.Bootstrap.Logging;
+
+#if NET6_0_OR_GREATER
+using MelonLoader.Bootstrap;
+#else
+using System.Runtime.CompilerServices;
+#endif
 
 namespace MelonLoader
 {
     public class MelonLogger
     {
-        private static int MaxLogs;
-
         public static readonly Color DefaultMelonColor = Color.Cyan;
         public static readonly Color DefaultTextColor = Color.LightGray;
-
-        private static FileStream LatestLogStream;
-        private static StreamWriter LatestLogWriter;
-
-        private static FileStream CachedLogStream;
-        private static StreamWriter CachedLogWriter;
-
-        internal static void Setup()
-        {
-            if (MelonLaunchOptions.Core.IsDebug)
-                MaxLogs = 0;
-            else
-                MaxLogs = MelonLaunchOptions.Logger.MaxLogs;
-
-            if (!Directory.Exists(MelonEnvironment.MelonLoaderLogsDirectory))
-                Directory.CreateDirectory(MelonEnvironment.MelonLoaderLogsDirectory);
-            else
-            {
-                if (MaxLogs > 0)
-                {
-                    string[] fileTbl = Directory.GetFiles(MelonEnvironment.MelonLoaderLogsDirectory, "*.log", SearchOption.TopDirectoryOnly);
-                    int fileCount = fileTbl.Length;
-                    if (fileCount >= MaxLogs)
-                    {
-                        List<(string, DateTime)> queue = new();
-                        foreach (var file in fileTbl)
-                            queue.Add((file, File.GetLastWriteTime(file)));
-                        queue.Sort((x, y) =>
-                        {
-                            if (x.Item2 >= y.Item2)
-                                return 0;
-                            return 1;
-                        });
-                        foreach (var pair in queue)
-                        {
-                            if (fileCount < MaxLogs)
-                                break;
-                            else
-                            {
-                                File.Delete(pair.Item1);
-                                fileCount--;
-                            }
-                        }
-                    }
-                }
-            }
-
-#if !NET6_0
-            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-#else
-            LatestLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderDirectory, "Latest.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.ReadWrite });
-            CachedLogStream = File.Open(Path.Combine(MelonEnvironment.MelonLoaderLogsDirectory, $"{DateTime.Now.ToString("%y-%M-%d_%H-%m-%s")}.log"), new FileStreamOptions() { Access = FileAccess.ReadWrite, BufferSize = 0, Mode = FileMode.Create, Share = FileShare.ReadWrite });
-#endif
-
-            LatestLogWriter = CreateLogWriter(LatestLogStream);
-            CachedLogWriter = CreateLogWriter(CachedLogStream);
-        }
-
-        private static StreamWriter CreateLogWriter(FileStream stream)
-        {
-            var writer = new StreamWriter(stream, Encoding.UTF8, 1);
-            writer.AutoFlush = true;
-            return writer;
-        }
-
-        internal static void WriteLogToFile()
-        {
-            LatestLogWriter.WriteLine();
-            CachedLogWriter.WriteLine();
-        }
-
-        internal static void WriteLogToFile(string message)
-        {
-            LatestLogWriter.WriteLine(message);
-            CachedLogWriter.WriteLine(message);
-        }
 
         //Identical to Msg(string) except it skips walking the stack to find a melon
         internal static void MsgDirect(string txt) => NativeMsg(DefaultMelonColor, DefaultTextColor, null, txt, true);
@@ -162,49 +86,49 @@ namespace MelonLoader
 
         private static void NativeMsg(Color namesection_color, Color txt_color, string namesection, string txt, bool skipStackWalk = false)
         {
-            if (string.IsNullOrEmpty(namesection))
+            if (namesection == null)
             {
-                MelonBase melon = MelonUtils.GetMelonFromStackTrace();
-                if (melon != null)
+                var melon = MelonUtils.GetMelonFromStackTrace();
+                if (melon != null && melon.Info?.Name != null)
                 {
-                    namesection = melon.Info?.Name?.Replace(" ", "_");
+                    namesection = melon.Info.Name;
                     namesection_color = melon.ConsoleColor;
                 }
             }
 
-            Internal_Msg(namesection_color, txt_color, namesection, txt ?? "null");
+            PassLogMsg(txt_color, txt ?? "null", namesection_color, namesection);
             RunMsgCallbacks(namesection_color, txt_color, namesection, txt ?? "null");
         }
 
         private static void NativePastelMsg(Color namesection_color, Color txt_color, string namesection, string txt, bool skipStackWalk = false)
         {
-            if (string.IsNullOrEmpty(namesection))
+            if (namesection == null)
             {
-                MelonBase melon = MelonUtils.GetMelonFromStackTrace();
-                if (melon != null)
+                var melon = MelonUtils.GetMelonFromStackTrace();
+                if (melon != null && melon.Info != null)
                 {
-                    namesection = melon.Info?.Name?.Replace(" ", "_");
+                    namesection = melon.Info.Name;
                     namesection_color = melon.ConsoleColor;
                 }
             }
 
-            Internal_PastelMsg(namesection_color, txt_color, namesection, txt ?? "null");
+            PastelMsg(namesection_color, txt_color, namesection, txt ?? "null");
             RunMsgCallbacks(namesection_color, txt_color, namesection, txt ?? "null");
         }
 
         private static void NativeWarning(string namesection, string txt)
         {
-            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
+            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name;
 
-            Internal_Warning(namesection, txt ?? "null");
+            Warning(namesection, txt ?? "null");
             RunWarningCallbacks(namesection, txt ?? "null");
         }
 
         private static void NativeError(string namesection, string txt)
         {
-            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name?.Replace(" ", "_");
+            namesection ??= MelonUtils.GetMelonFromStackTrace()?.Info?.Name;
 
-            Internal_Error(namesection, txt ?? "null");
+            PassLogError(txt ?? "null", namesection);
             RunErrorCallbacks(namesection, txt ?? "null");
         }
 
@@ -212,10 +136,10 @@ namespace MelonLoader
         {
             RunErrorCallbacks(namesection, txt ?? "null");
 
-            Internal_Error(namesection, new string('=', 50));
+            PassLogError(new string('=', 50), namesection);
             foreach (var line in txt.Split('\n'))
-                Internal_Error(namesection, line);
-            Internal_Error(namesection, new string('=', 50));
+                PassLogError(line, namesection);
+            PassLogError(new string('=', 50), namesection);
         }
 
         internal static void RunMsgCallbacks(Color namesection_color, Color txt_color, string namesection, string txt)
@@ -316,116 +240,104 @@ namespace MelonLoader
             public void BigError(string txt) => MelonLogger.BigError(Name, txt);
         }
 
-        internal static void Internal_Msg(Color namesection_color, Color txt_color, string namesection, string txt)
-        {
-            WriteLogToFile($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{txt}");
-
-            StringBuilder builder = new StringBuilder();
-
-            builder.Append(GetTimestamp(namesection_color == Color.IndianRed && txt_color == Color.IndianRed));
-
-            if (namesection is not null)
-            {
-                builder.Append("[".Pastel(Color.LightGray));
-                builder.Append(namesection.Pastel(namesection_color));
-                builder.Append("] ".Pastel(Color.LightGray));
-            }
-
-            builder.Append(txt.Pastel(txt_color));
-            Utils.MelonConsole.WriteLine(builder.ToString());
-        }
-
-        internal static void Internal_PastelMsg(Color namesection_color, Color txt_color, string namesection, string txt)
+        internal static void PastelMsg(Color namesection_color, Color txt_color, string namesection, string txt)
         {
             // Regex to check for ANSI
-            string fileTxt = Regex.Replace(txt, @"(\x1B|\e|\033)\[(.*?)m", "");
+            var cleanTxt = Regex.Replace(txt, @"(\x1B|\e|\033)\[(.*?)m", "");
 
-            WriteLogToFile($"[{GetTimeStamp()}] {(namesection is null ? "" : $"[{namesection}] ")}{fileTxt}");
-
-            StringBuilder builder = new StringBuilder();
-
-            builder.Append(GetTimestamp(namesection_color == Color.IndianRed && txt_color == Color.IndianRed));
-
-            if (namesection is not null)
-            {
-                builder.Append("[".Pastel(Color.LightGray));
-                builder.Append(namesection.Pastel(namesection_color));
-                builder.Append("] ".Pastel(Color.LightGray));
-            }
-
-            builder.Append(txt.Pastel(txt_color));
-            Utils.MelonConsole.WriteLine(builder.ToString());
+            PassLogMsg(txt_color, cleanTxt, namesection_color, namesection);
         }
 
-        internal static string GetTimestamp(bool error)
-        {
-            StringBuilder builder = new StringBuilder();
-            if (error)
-            {
-                builder.Append("[".Pastel(Color.IndianRed));
-                builder.Append(GetTimeStamp().Pastel(Color.IndianRed));
-                builder.Append("] ".Pastel(Color.IndianRed));
-                return builder.ToString();
-            }
-
-            builder.Append("[".Pastel(Color.LightGray));
-            builder.Append(GetTimeStamp().Pastel(Color.LimeGreen));
-            builder.Append("] ".Pastel(Color.LightGray));
-
-            return builder.ToString();
-        }
-
-        internal static void Internal_Warning(string namesection, string txt)
+        internal static void Warning(string namesection, string txt)
         {
             if (MelonLaunchOptions.Console.HideWarnings)
                 return;
 
-            Internal_Msg(Color.Yellow, Color.Yellow, namesection, txt);
+            PassLogMsg(Color.Yellow, txt, Color.Yellow, namesection);
         }
-
-        internal static void Internal_Error(string namesection, string txt) => Internal_Msg(Color.IndianRed, Color.IndianRed, namesection, txt);
 
         internal static void ThrowInternalFailure(string txt) => Assertion.ThrowInternalFailure(txt);
 
-        internal static void WriteSpacer()
+        internal static unsafe void WriteSpacer()
         {
-            WriteLogToFile();
-            Utils.MelonConsole.WriteLine();
+            HostLogMsg(null, null, 0, null, null, 0);
         }
 
-        internal static void Internal_PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
+        internal static void PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
         {
-            WriteLogToFile($"[{GetTimeStamp()}] {name} v{version}{(id == null ? "" : $" ({id})")}");
-            WriteLogToFile($"[{GetTimeStamp()}] by {author}");
+            PassLogMelonInfo(meloncolor, name, $"v{version}{(id == null ? "" : $" ({id})")}");
+            PassLogMsg(authorcolor, $"by {author}", default, null);
 
-            StringBuilder builder = new StringBuilder();
-            builder.Append(GetTimestamp(false));
-            builder.Append(name.Pastel(meloncolor));
-            builder.AppendLine($" v{version} {(id == null ? "" : $"({id})")}");
+            if (additionalCredits != null)
+                PassLogMsg(DefaultTextColor, $"Additional credits: {additionalCredits}", default, null);
+        }
 
-            builder.Append(GetTimestamp(false));
-            builder.Append($"by {author}".Pastel(authorcolor));
+#if NET6_0_OR_GREATER
+        internal static LogMsgFn HostLogMsg;
+        internal static LogErrorFn HostLogError;
+        internal static LogMelonInfoFn HostLogMelonInfo;
+#else
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static unsafe extern void HostLogMsg(ColorRGB* msgColor, char* msg, int msgLength, ColorRGB* sectionColor, char* section, int sectionLength);
 
-            if (additionalCredits is not null)
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static unsafe extern void HostLogError(char* msg, int msgLength, char* section, int sectionLength);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static unsafe extern void HostLogMelonInfo(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength);
+#endif
+
+        internal static unsafe void PassLogMsg(ColorRGB msgColor, string msg, ColorRGB sectionColor, string section)
+        {
+            if (section == null)
             {
-                builder.AppendLine();
-                builder.Append(GetTimestamp(false));
-                builder.Append($"Additional credits: {additionalCredits}");
+                fixed (char* pMsg = msg)
+                {
+                    HostLogMsg(&msgColor, pMsg, msg.Length, null, null, 0);
+                }
+
+                return;
             }
 
-            Utils.MelonConsole.WriteLine(builder.ToString());
+            fixed (char* pMsg = msg)
+            {
+                fixed (char* pSection = section)
+                {
+                    HostLogMsg(&msgColor, pMsg, msg.Length, &sectionColor, pSection, section.Length);
+                }
+            }
         }
 
-        internal static void Flush()
+        internal static unsafe void PassLogError(string msg, string section)
         {
-            LatestLogWriter.Flush();
-            LatestLogStream.Flush();
+            if (section == null)
+            {
+                fixed (char* pMsg = msg)
+                {
+                    HostLogError(pMsg, msg.Length, null, 0);
+                }
+
+                return;
+            }
+
+            fixed (char* pMsg = msg)
+            {
+                fixed (char* pSection = section)
+                {
+                    HostLogError(pMsg, msg.Length, pSection, section.Length);
+                }
+            }
         }
 
-        internal static void Close()
+        internal static unsafe void PassLogMelonInfo(ColorRGB nameColor, string name, string info)
         {
-            LatestLogWriter.Close();
-            CachedLogWriter.Close();
+            fixed (char* pName = name)
+            {
+                fixed (char* pInfo = info)
+                {
+                    HostLogMelonInfo(&nameColor, pName, name.Length, pInfo, info.Length);
+                }
+            }
         }
 
         [Obsolete("Log is obsolete. Please use Msg instead.")]

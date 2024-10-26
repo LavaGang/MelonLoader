@@ -1,7 +1,8 @@
-﻿using MelonBootstrap.Utils;
+﻿using MelonLoader.Bootstrap.Logging;
+using MelonLoader.Bootstrap.Utils;
 using System.Runtime.InteropServices;
 
-namespace MelonBootstrap.RuntimeHandlers.Il2Cpp;
+namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 
 internal static class Il2CppHandler
 {
@@ -20,9 +21,13 @@ internal static class Il2CppHandler
 
         il2cpp = il2cppLib;
 
+        MelonDebug.Log("Patching il2cpp init");
         initPatch = Dobby.CreatePatch<Il2CppLib.InitFn>(il2cpp.InitPtr, InitDetour);
         if (initPatch == null)
+        {
+            MelonDebug.Log("Failed to patch il2cpp init");
             return false;
+        }
 
         return true;
     }
@@ -34,7 +39,8 @@ internal static class Il2CppHandler
 
         initPatch.Destroy();
 
-        ConsoleUtils.ResetHandles();
+        ConsoleHandler.ResetHandles();
+        MelonDebug.Log("In init detour");
 
         var domain = initPatch.Original(a);
 
@@ -43,7 +49,7 @@ internal static class Il2CppHandler
         return domain;
     }
 
-    private static void InitializeManaged()
+    private static unsafe void InitializeManaged()
     {
         var managedDir = Path.Combine(Core.BaseDir, "MelonLoader", "net6");
         var runtimeConfigPath = Path.Combine(managedDir, "MelonLoader.runtimeconfig.json");
@@ -51,52 +57,62 @@ internal static class Il2CppHandler
 
         if (!File.Exists(runtimeConfigPath))
         {
-            Console.WriteLine("a");
+            Core.Logger.Error($"Runtime config not found at: '{runtimeConfigPath}'");
             return;
         }
 
         if (!File.Exists(nativeHostPath))
         {
-            Console.WriteLine("b");
+            Core.Logger.Error($"NativeHost not found at: '{runtimeConfigPath}'");
+            return;
         }
 
+        MelonDebug.Log("Attempting to load hostfxr");
         if (!Dotnet.LoadHostfxr())
         {
-            Console.WriteLine("c");
+            Core.Logger.Error($"Failed to load Hostfxr!");
             return;
         }
 
+        MelonDebug.Log("Initializing domain");
         if (!Dotnet.InitializeForRuntimeConfig(runtimeConfigPath, out var context))
         {
-            Console.WriteLine("d");
+            Core.Logger.Error($"Failed to initialize a .NET domain");
             return;
         }
 
+        MelonDebug.Log("Loading NativeHost assembly");
         var initialize = Dotnet.LoadAssemblyAndGetFunctionUCO<InitializeFn>(context, nativeHostPath, "MelonLoader.NativeHost.NativeEntryPoint, MelonLoader.NativeHost", "NativeEntry");
         if (initialize == null)
         {
-            Console.WriteLine("e");
+            Core.Logger.Error($"Failed to load assembly from: '{nativeHostPath}'");
             return;
         }
 
         functionExchange = new FunctionExchange()
         {
             HookAttach = NativeHookAttachImpl,
-            HookDetach = NativeHookDetachImpl
+            HookDetach = NativeHookDetachImpl,
+            LogMsg = MelonLogger.LogFromManaged,
+            LogError = MelonLogger.LogErrorFromManaged,
+            LogMelonInfo = MelonLogger.LogMelonInfoFromManaged
         };
 
+        MelonDebug.Log("Invoking NativeHost entry");
         initialize(ref functionExchange);
 
         if (functionExchange.Start == null)
         {
-            Console.WriteLine("f");
+            Core.Logger.Error($"Managed did not return the initial function pointer");
             return;
         }
 
+        MelonDebug.Log("Patching invoke");
         invokePatch = Dobby.CreatePatch<Il2CppLib.RuntimeInvokeFn>(il2cpp.RuntimeInvokePtr, InvokeDetour);
         if (invokePatch == null)
         {
-            Console.WriteLine("g");
+            Core.Logger.Error($"Failed to patch il2cpp invoke");
+            return;
         }
     }
 
@@ -110,6 +126,7 @@ internal static class Il2CppHandler
         var name = il2cpp.GetMethodName(method);
         if (name != null && name.Contains("Internal_ActiveSceneChanged"))
         {
+            MelonDebug.Log("Invoke hijacked");
             invokePatch.Destroy();
 
             Start();
@@ -123,24 +140,26 @@ internal static class Il2CppHandler
         functionExchange.Start?.Invoke();
     }
 
-    private static void NativeHookAttachImpl(ref nint target, nint detour)
+    private static unsafe void NativeHookAttachImpl(nint* target, nint detour)
     {
-        target = Dobby.HookAttach(target, detour);
+        *target = Dobby.HookAttach(*target, detour);
     }
 
-    private static void NativeHookDetachImpl(ref nint target, nint detour)
+    private static unsafe void NativeHookDetachImpl(nint* target, nint detour)
     {
-        Dobby.HookDetach(target);
+        Dobby.HookDetach(*target);
     }
 
     private delegate void InitializeFn(ref FunctionExchange exchange);
-    private delegate void NativeHook(ref nint target, nint detour);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct FunctionExchange
     {
-        internal required NativeHook HookAttach;
-        internal required NativeHook HookDetach;
+        internal required NativeHookFn HookAttach;
+        internal required NativeHookFn HookDetach;
+        internal required LogMsgFn LogMsg;
+        internal required LogErrorFn LogError;
+        internal required LogMelonInfoFn LogMelonInfo;
 
         public Action? Start;
     }

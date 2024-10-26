@@ -1,10 +1,8 @@
-﻿using MelonBootstrap;
-using MelonBootstrap.Utils;
+﻿using MelonLoader.Bootstrap.Logging;
+using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 
-namespace MelonBootstrap.RuntimeHandlers.Mono;
+namespace MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 
 internal static class MonoHandler
 {
@@ -27,10 +25,12 @@ internal static class MonoHandler
 
         mono = monoLib;
 
+        MelonDebug.Log("Patching mono init");
         initPatch = Dobby.CreatePatch<MonoLib.JitInitVersionFn>(mono.JitInitVersionPtr, InitDetour);
         if (initPatch == null)
         {
-            // TODO: Error
+            MelonDebug.Log("Failed to patch mono init");
+            return false;
         }
 
         return true;
@@ -43,22 +43,23 @@ internal static class MonoHandler
 
         initPatch.Destroy();
 
-        ConsoleUtils.ResetHandles();
+        ConsoleHandler.ResetHandles();
+        MelonDebug.Log("In init detour");
 
         domain = initPatch.Original(name, b);
 
         if (Core.Debug && mono.DebugDomainCreate != null)
         {
-            Console.WriteLine("Creating Mono Debug Domain");
+            MelonDebug.Log("Creating Mono Debug Domain");
             mono.DebugDomainCreate(domain);
         }
 
-        Console.WriteLine("Setting Mono Main Thread");
+        MelonDebug.Log("Setting Mono Main Thread");
         mono.SetCurrentThreadAsMain();
 
         if (!mono.IsOld && mono.DomainSetConfig != null)
         {
-            Console.WriteLine("Setting Mono Config");
+            MelonDebug.Log("Setting Mono Config");
 
             mono.DomainSetConfig(domain, Core.GameDir, name);
         }
@@ -70,43 +71,54 @@ internal static class MonoHandler
 
     private static unsafe void InitializeManaged()
     {
+        MelonDebug.Log("Initializing managed assemblies");
+
         var mlPath = Path.Combine(Core.BaseDir, "MelonLoader", "net35", "MelonLoader.dll");
         if (!File.Exists(mlPath))
-            // TODO: Error
-            return;
-
-        var corlibPath = Path.Combine(Core.DataDir, "Managed", "mscorlib.dll");
-        if (!File.Exists(corlibPath))
         {
-            Console.WriteLine("No mscorlib?");
+            Core.Logger.Error($"Mono MelonLoader assembly not found at: '{mlPath}'");
+            return;
         }
 
-        var corlibVersion = FileVersionInfo.GetVersionInfo(corlibPath);
-        if (corlibVersion.FileMajorPart <= 2)
+        var corlibPath = Path.Combine(Core.DataDir, "Managed", "mscorlib.dll");
+        if (File.Exists(corlibPath))
         {
-            Console.WriteLine("Loading .NET Standard 2.0 overrides");
-
-            var overridesDir = Path.Combine(Core.BaseDir, "MelonLoader", "Dependencies", "NetStandardOverrides");
-            if (Directory.Exists(overridesDir))
+            var corlibVersion = FileVersionInfo.GetVersionInfo(corlibPath);
+            if (corlibVersion.FileMajorPart <= 2)
             {
-                foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))
+                Core.Logger.Msg("Loading .NET Standard 2.0 overrides");
+
+                var overridesDir = Path.Combine(Core.BaseDir, "MelonLoader", "Dependencies", "NetStandardOverrides");
+                if (Directory.Exists(overridesDir))
                 {
-                    mono.DomainAssemblyOpen(domain, dll);
+                    foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))
+                    {
+                        MelonDebug.Log("Loading assembly: " + dll);
+                        if (mono.DomainAssemblyOpen(domain, dll) == 0)
+                            MelonDebug.Log("Assembly failed to load!");
+                    }
                 }
             }
         }
 
+        MelonDebug.Log("Loading ML assembly");
         var assembly = mono.DomainAssemblyOpen(domain, mlPath);
         if (assembly == 0)
-            // TODO: Error
+        {
+            Core.Logger.Error($"Failed to load the Mono MelonLoader assembly");
             return;
+        }
 
+        MelonDebug.Log("Adding internal calls");
         mono.AddManagedInternalCall("MelonLoader.Resolver.AssemblyManager::InstallHooks", InstallHooks);
         mono.AddManagedInternalCall<PtrRet>("MelonLoader.Utils.MonoLibrary::GetRootDomainPtr", GetRootDomainPtrImpl);
         mono.AddManagedInternalCall<PtrRet>("MelonLoader.Utils.MonoLibrary::GetLibPtr", GetLibPtrImpl);
         mono.AddManagedInternalCall<CastManagedAssemblyPtr>("MelonLoader.Utils.MonoLibrary::CastManagedAssemblyPtr", CastManagedAssemblyPtrImpl);
-        mono.AddManagedInternalCall<NativeHook>("MelonLoader.BootstrapInterop::NativeHookAttach", NativeHookAttachImpl);
-        mono.AddManagedInternalCall<NativeHook>("MelonLoader.BootstrapInterop::NativeHookDetach", NativeHookDetachImpl);
+        mono.AddManagedInternalCall<NativeHookFn>("MelonLoader.BootstrapInterop::NativeHookAttach", NativeHookAttachImpl);
+        mono.AddManagedInternalCall<NativeHookFn>("MelonLoader.BootstrapInterop::NativeHookDetach", NativeHookDetachImpl);
+        mono.AddManagedInternalCall<LogMsgFn>("MelonLoader.MelonLogger::HostLogMsg", MelonLogger.LogFromManaged);
+        mono.AddManagedInternalCall<LogErrorFn>("MelonLoader.MelonLogger::HostLogError", MelonLogger.LogErrorFromManaged);
+        mono.AddManagedInternalCall<LogMelonInfoFn>("MelonLoader.MelonLogger::HostLogMelonInfo", MelonLogger.LogMelonInfoFromManaged);
 
         var image = mono.AssemblyGetImage(assembly);
         var coreClass = mono.ClassFromName(image, "MelonLoader", "Core");
@@ -120,9 +132,15 @@ internal static class MonoHandler
         assemblyManagerLoadInfo = mono.ClassGetMethodFromName(assemblyManagerClass, "LoadInfo", 1);
 
         nint ex = 0;
+        MelonDebug.Log("Invoking managed core init");
         mono.RuntimeInvoke(initMethod, 0, null, ref ex);
 
+        MelonDebug.Log("Patching invoke");
         invokePatch = Dobby.CreatePatch<MonoLib.RuntimeInvokeFn>(mono.RuntimeInvokePtr, InvokeDetour);
+        if (invokePatch == null)
+        {
+            Core.Logger.Error($"Failed to patch Mono invoke");
+        }
     }
 
     private static unsafe nint InvokeDetour(nint method, nint obj, void** args, ref nint ex)
@@ -133,11 +151,13 @@ internal static class MonoHandler
         var result = invokePatch.Original(method, obj, args, ref ex);
 
         var name = mono.GetMethodName(method);
-        if (name != null && 
-            ((mono.IsOld && (name.Contains("Awake") || name.Contains("DoSendMouseEvents")))
+        if (name != null &&
+            (mono.IsOld && (name.Contains("Awake") || name.Contains("DoSendMouseEvents"))
             || name.Contains("Internal_ActiveSceneChanged")
             || name.Contains("UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize")))
         {
+
+            MelonDebug.Log("Invoke hijacked");
             invokePatch.Destroy();
 
             Start();
@@ -152,14 +172,14 @@ internal static class MonoHandler
         mono.RuntimeInvoke(coreStart, 0, null, ref ex);
     }
 
-    private static void NativeHookAttachImpl(ref nint target, nint detour)
+    private static unsafe void NativeHookAttachImpl(nint* target, nint detour)
     {
-        target = Dobby.HookAttach(target, detour);
+        *target = Dobby.HookAttach(*target, detour);
     }
 
-    private static void NativeHookDetachImpl(ref nint target, nint detour)
+    private static unsafe void NativeHookDetachImpl(nint* target, nint detour)
     {
-        Dobby.HookDetach(target);
+        Dobby.HookDetach(*target);
     }
 
     private static nint GetRootDomainPtrImpl()
@@ -179,7 +199,7 @@ internal static class MonoHandler
 
     private static void InstallHooks()
     {
-        Console.WriteLine("Installing hooks");
+        MelonDebug.Log("Installing hooks");
 
         mono.InstallAssemblyHooks(OnAssemblyPreload, OnAssemblySearch, OnAssemblyLoad);
     }
@@ -227,5 +247,4 @@ internal static class MonoHandler
 
     private delegate nint PtrRet();
     private delegate nint CastManagedAssemblyPtr(nint ptr);
-    private delegate void NativeHook(ref nint target, nint detour);
 }

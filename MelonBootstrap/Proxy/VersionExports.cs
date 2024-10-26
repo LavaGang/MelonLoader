@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace MelonBootstrap.Proxy;
+namespace MelonLoader.Bootstrap.Proxy;
 
 internal static class VersionExports
 {

@@ -1,7 +1,7 @@
-﻿using MelonBootstrap.Utils;
+﻿using MelonLoader.Bootstrap.Utils;
 using System.Runtime.InteropServices;
 
-namespace MelonBootstrap.RuntimeHandlers.Il2Cpp;
+namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 
 internal class Il2CppLib(Il2CppLib.MethodGetNameFn methodGetName)
 {

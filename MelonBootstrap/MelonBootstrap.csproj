@@ -10,6 +10,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <NoWarn>LNK4099</NoWarn>
         <InvariantGlobalization>true</InvariantGlobalization>
+        <RootNamespace>MelonLoader.Bootstrap</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -36,6 +37,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="$(AppHostVersion)" PrivateAssets="All" />
+        <PackageReference Include="Pastel" Version="5.2.1" />
     </ItemGroup>
 
     <ItemGroup>

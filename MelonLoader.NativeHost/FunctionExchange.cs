@@ -7,6 +7,9 @@ internal struct FunctionExchange
 {
     internal nint HookAttach;
     internal nint HookDetach;
+    internal nint LogMsg;
+    internal nint LogError;
+    internal nint LogMelonInfo;
 
     internal nint Start;
 }
