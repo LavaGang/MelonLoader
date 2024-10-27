@@ -1,4 +1,4 @@
-﻿using MelonLoader.Utils;
+using MelonLoader.Utils;
 using System;
 using System.Drawing;
 using static MelonLoader.Utils.LoggerUtils;
