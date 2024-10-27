@@ -70,15 +70,23 @@ internal static class Il2CppHandler
         MelonDebug.Log("Attempting to load hostfxr");
         if (!Dotnet.LoadHostfxr())
         {
-            Core.Logger.Error($"Failed to load Hostfxr!");
-            return;
+            DotnetInstaller.AttemptInstall();
+            if (!Dotnet.LoadHostfxr())
+            {
+                Core.Logger.Error("Failed to load Hostfxr");
+                return;
+            }
         }
 
         MelonDebug.Log("Initializing domain");
         if (!Dotnet.InitializeForRuntimeConfig(runtimeConfigPath, out var context))
         {
-            Core.Logger.Error($"Failed to initialize a .NET domain");
-            return;
+            DotnetInstaller.AttemptInstall();
+            if (!Dotnet.InitializeForRuntimeConfig(runtimeConfigPath, out context))
+            {
+                Core.Logger.Error($"Failed to initialize a .NET domain");
+                return;
+            }
         }
 
         MelonDebug.Log("Loading NativeHost assembly");

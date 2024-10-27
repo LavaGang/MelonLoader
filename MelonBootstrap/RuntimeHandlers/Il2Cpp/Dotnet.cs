@@ -28,7 +28,9 @@ internal static partial class Dotnet
     public static bool InitializeForRuntimeConfig(string runtimeConfigPath, out nint context)
     {
         nint ctx = 0;
+        ConsoleHandler.NullHandles(); // Prevent it from logging its own stuff
         var status = hostfxr_initialize_for_runtime_config(runtimeConfigPath, 0, ref ctx);
+        ConsoleHandler.ResetHandles();
 
         if (status != 0)
         {
