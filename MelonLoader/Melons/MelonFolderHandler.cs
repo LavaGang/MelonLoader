@@ -166,7 +166,7 @@ namespace MelonLoader.Melons
             ref List<string> userLibDirectories)
         {
             // Get Directories
-            string[] directories = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+            string[] directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
             if ((directories == null)
                 || (directories.Length <= 0))
                 return;
@@ -189,6 +189,8 @@ namespace MelonLoader.Melons
                     userLibDirectories.Add(dir);
                 else
                     melonDirectories.Add(dir);
+
+                ScanFolder(isMod, dir, userLibsOnly, ref melonDirectories, ref userLibDirectories);
             }
         }
 
