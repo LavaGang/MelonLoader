@@ -251,6 +251,7 @@ internal static class MelonLogger
 
             Console.ForegroundColor = ConsoleHandler.GetClosestConsoleColor(nameColor);
             Console.Out.Write(name);
+            Console.Write(' ');
 
             Console.ResetColor();
             Console.Out.WriteLine(info);
