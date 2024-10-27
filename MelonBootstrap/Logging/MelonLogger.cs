@@ -131,6 +131,9 @@ internal static class MelonLogger
 
         LogToFiles($"[{time}] {msg}");
 
+        if (ConsoleHandler.Hidden)
+            return;
+
         if (WineUtils.IsWine)
         {
             Console.ResetColor();
@@ -156,6 +159,9 @@ internal static class MelonLogger
         var time = DateTime.Now.ToString(timeFormat);
 
         LogToFiles($"[{time}] [{sectionName}] {msg}");
+
+        if (ConsoleHandler.Hidden)
+            return;
 
         if (WineUtils.IsWine)
         {
@@ -189,6 +195,9 @@ internal static class MelonLogger
 
         LogToFiles($"[{time}] {msg}");
 
+        if (ConsoleHandler.Hidden)
+            return;
+
         if (WineUtils.IsWine)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -206,6 +215,9 @@ internal static class MelonLogger
 
         LogToFiles($"[{time}] [{sectionName}] {msg}");
 
+        if (ConsoleHandler.Hidden)
+            return;
+
         if (WineUtils.IsWine)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -222,6 +234,9 @@ internal static class MelonLogger
         var time = DateTime.Now.ToString(timeFormat);
 
         LogToFiles($"[{time}] {name} {info}");
+
+        if (ConsoleHandler.Hidden)
+            return;
 
         if (WineUtils.IsWine)
         {
@@ -249,6 +264,10 @@ internal static class MelonLogger
     public static void LogSpacer()
     {
         LogToFiles(null);
+
+        if (ConsoleHandler.Hidden)
+            return;
+
         Console.WriteLine();
     }
 

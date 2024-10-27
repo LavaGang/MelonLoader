@@ -1,4 +1,5 @@
 ﻿using MelonLoader.Bootstrap.Logging;
+using MelonLoader.Bootstrap.Utils;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -11,22 +12,33 @@ internal static partial class ConsoleHandler
 
     private static nint outputHandle;
 
+    public static bool Hidden { get; private set; } = ArgParser.IsDefined("melonloader.hideconsole");
+
     public static void OpenConsole(string version, bool onTop)
     {
+        if (Hidden)
+            return;
+
         AllocConsole();
 
         var consoleWindow = GetConsoleWindow();
         if (consoleWindow == 0)
+        {
+            Hidden = true;
             return;
+        }
 
         if (onTop)
             SetWindowPos(consoleWindow, -1, 0, 0, 0, 0, 0x0001 | 0x0002);
 
-        var title = "MelonLoader v" + version;
-        if (Core.Debug)
-            title = "[Debug] " + title;
+        if (!ArgParser.IsDefined("melonloader.consoledst"))
+        {
+            var title = "MelonLoader v" + version;
+            if (Core.Debug)
+                title = "[Debug] " + title;
 
-        Console.Title = title;
+            Console.Title = title;
+        }
 
         Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
         Console.SetError(new StreamWriter(Console.OpenStandardError()) { AutoFlush = true });
