@@ -44,6 +44,24 @@ jobs:
           name: MelonLoader.Windows.x64.CI.Release
           path: Output/Release/win-x64
 
+      - name: Build Debug for win-x86
+        run: dotnet build --no-restore -c Debug -p:RID="win-x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+
+      - name: Upload Debug for win-x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Windows.x86.CI.Debug
+          path: Output/Debug/win-x86
+
+      - name: Build Release for win-x86
+        run: dotnet build --no-restore -c Release -p:RID="win-x86" -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+
+      - name: Upload Release for win-x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Windows.x86.CI.Release
+          path: Output/Release/win-x86
+
       - name: Pack NuGet Package
         run: dotnet pack --no-build -c Release -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}"
 

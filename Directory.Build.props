@@ -9,7 +9,8 @@
 
         <LangVersion>Latest</LangVersion>
         <IsPackable>false</IsPackable>
-        <RuntimeIdentifiers>win-x64;win-x86;linux-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">win-x64;win-x86</RuntimeIdentifiers>
+        <RuntimeIdentifiers Condition="'$([MSBuild]::IsOSUnixLike())' == 'true'">linux-x64</RuntimeIdentifiers>
 
         <RID Condition="'$([MSBuild]::IsOSUnixLike())' == 'false'">win-x64</RID>
         <RID Condition="'$([MSBuild]::IsOSUnixLike())' == 'true'">linux-x64</RID>

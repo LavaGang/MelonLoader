@@ -177,19 +177,32 @@ internal class MonoLib
         }
     }
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint DomainGetFn();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint JitInitVersionFn(nint name, nint b);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void DebugDomainCreateFn(nint domain);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint ThreadCurrentFn();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void ThreadSetMainFn(nint thread);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblyGetImageFn(nint assembly);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate nint RuntimeInvokeFn(nint method, nint obj, void** args, ref nint ex);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblyGetObjectFn(nint domain, nint assembly);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint InstallAssemblyPreloadHookFn(AssemblyPreloadHookFn func, nint userData);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint InstallAssemblySearchHookFn(AssemblySearchHookFn func, nint userData);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint InstallAssemblyLoadHookFn(AssemblyLoadHookFn func, nint userData);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint MethodGetNameFn(nint method);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void* StringNewFn(nint domain, nint value);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
@@ -207,8 +220,11 @@ internal class MonoLib
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public delegate void DomainSetConfigFn(nint domain, string configPath, nint name);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblyPreloadHookFn(ref AssemblyName name, nint assemblyPaths, nint userData);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint AssemblySearchHookFn(ref AssemblyName name, nint userData);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void AssemblyLoadHookFn(nint monoAssembly, nint userData);
 
     [StructLayout(LayoutKind.Sequential)]

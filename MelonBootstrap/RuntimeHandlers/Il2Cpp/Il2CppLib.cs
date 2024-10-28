@@ -42,7 +42,10 @@ internal class Il2CppLib(Il2CppLib.MethodGetNameFn methodGetName)
         return Marshal.PtrToStringAnsi(methodGetName(method));
     }
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint InitFn(nint a);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint RuntimeInvokeFn(nint method, nint obj, nint args, nint exc);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate nint MethodGetNameFn(nint method);
 }

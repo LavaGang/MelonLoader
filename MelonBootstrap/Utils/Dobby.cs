@@ -1,16 +1,20 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap.Utils;
 
 public unsafe static partial class Dobby
 {
     [LibraryImport("*", EntryPoint = "DobbyPrepare")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int Prepare(nint target, nint detour, nint* original);
 
     [LibraryImport("*", EntryPoint = "DobbyCommit")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int Commit(nint target);
 
     [LibraryImport("*", EntryPoint = "DobbyDestroy")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     private static partial int Destroy(nint target);
 
     public static nint HookAttach(nint target, nint detour)
