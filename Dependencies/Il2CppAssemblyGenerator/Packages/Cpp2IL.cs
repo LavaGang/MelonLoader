@@ -26,11 +26,14 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);
-            string filename = $"{Name}.exe";
+            
+            var filename = Name;
+#if WINDOWS
+            filename += ".exe";
+#endif
 
             BaseFolder = Path.Combine(Core.BasePath, Name);
-            if (!Directory.Exists(BaseFolder))
-                Directory.CreateDirectory(BaseFolder);
+            Directory.CreateDirectory(BaseFolder);
 
             FilePath =
                 ExeFilePath =
@@ -39,7 +42,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             OutputFolder = Path.Combine(BaseFolder, "cpp2il_out");
 
-            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}.exe";
+            URL = $"https://github.com/SamboyCoding/{Name}/releases/download/{Version}/{Name}-{Version}-{ReleaseName}";
+#if WINDOWS
+            URL += ".exe";
+#endif
         }
 
         internal override bool ShouldSetup() 
@@ -74,7 +80,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             ], false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"},
-                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", BaseFolder }
+                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", Path.Combine(BaseFolder, "bundle") } // Extracting to the BaseFolder will result in a conflict on Linux
             });
     }
 }

@@ -1,5 +1,4 @@
 ﻿using MelonLoader.Bootstrap.Logging;
-using MelonLoader.Bootstrap.Proxy;
 using MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 using MelonLoader.Bootstrap.Utils;
@@ -21,19 +20,24 @@ public static class Core
         = false;
 #endif
 
+#if WINDOWS
     [UnmanagedCallersOnly(EntryPoint = "DllMain")]
-    public static bool DllMain(nint hModule, uint ul_reason_for_call, nint lpReserved)
+    public static bool DllMain(nint hModule, uint ulReasonForCall, nint lpReserved)
     {
-        if (ul_reason_for_call == 1)
-        {
-            ProxyResolver.Init(hModule);
-            Init();
-        }
+        if (ulReasonForCall != 1) 
+            return true;
+        
+        MelonLoader.Bootstrap.Proxy.ProxyResolver.Init(hModule);
+        Init();
 
         return true;
     }
+#endif
 
-    private static unsafe void Init()
+#if LINUX
+    [UnmanagedCallersOnly(EntryPoint = "Init")]
+#endif
+    public static void Init()
     {
         var exePath = Environment.ProcessPath!;
         GameDir = Path.GetDirectoryName(exePath)!;

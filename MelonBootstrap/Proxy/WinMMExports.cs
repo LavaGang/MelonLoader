@@ -1,3 +1,4 @@
+#if WINDOWS
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
@@ -546,3 +547,4 @@ internal static class WinMMExports
     [UnmanagedCallersOnly(EntryPoint = "ImplwaveOutWrite")]
     public static void ImplwaveOutWrite() { }
 }
+#endif

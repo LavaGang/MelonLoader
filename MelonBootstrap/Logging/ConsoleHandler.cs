@@ -7,18 +7,21 @@ namespace MelonLoader.Bootstrap;
 
 internal static partial class ConsoleHandler
 {
+#if WINDOWS
     private const uint StdOutputHandle = 4294967285;
     private const uint StdErrorHandle = 4294967284;
 
     private static nint outputHandle;
+#endif
 
-    public static bool Hidden { get; private set; } = ArgParser.IsDefined("melonloader.hideconsole");
+    public static bool Hidden { get; } = ArgParser.IsDefined("melonloader.hideconsole");
 
     public static void OpenConsole(string version, bool onTop)
     {
         if (Hidden)
             return;
 
+#if WINDOWS
         AllocConsole();
 
         var consoleWindow = GetConsoleWindow();
@@ -30,6 +33,7 @@ internal static partial class ConsoleHandler
 
         if (onTop)
             SetWindowPos(consoleWindow, -1, 0, 0, 0, 0, 0x0001 | 0x0002);
+#endif
 
         if (!ArgParser.IsDefined("melonloader.consoledst"))
         {
@@ -40,6 +44,7 @@ internal static partial class ConsoleHandler
             Console.Title = title;
         }
 
+#if WINDOWS
         Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
         Console.SetError(new StreamWriter(Console.OpenStandardError()) { AutoFlush = true });
         Console.SetIn(new StreamReader(Console.OpenStandardInput()));
@@ -47,18 +52,23 @@ internal static partial class ConsoleHandler
         Console.OutputEncoding = Encoding.Unicode;
 
         outputHandle = GetStdHandle(StdOutputHandle);
+#endif
     }
 
     public static void NullHandles()
     {
+#if WINDOWS
         SetStdHandle(StdOutputHandle, 0);
         SetStdHandle(StdErrorHandle, 0);
+#endif
     }
 
     public static void ResetHandles()
     {
+#if WINDOWS
         SetStdHandle(StdOutputHandle, outputHandle);
         SetStdHandle(StdErrorHandle, outputHandle);
+#endif
     }
 
     public static ConsoleColor GetClosestConsoleColor(ColorRGB color)
@@ -70,6 +80,7 @@ internal static partial class ConsoleHandler
         return (ConsoleColor)index;
     }
 
+#if WINDOWS
     [LibraryImport("kernel32.dll")]
     private static partial nint GetStdHandle(uint nStdHandle);
 
@@ -86,4 +97,5 @@ internal static partial class ConsoleHandler
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
+#endif
 }

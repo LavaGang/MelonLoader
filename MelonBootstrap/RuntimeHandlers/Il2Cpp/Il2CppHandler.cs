@@ -23,11 +23,6 @@ internal static class Il2CppHandler
 
         MelonDebug.Log("Patching il2cpp init");
         initPatch = Dobby.CreatePatch<Il2CppLib.InitFn>(il2cpp.InitPtr, InitDetour);
-        if (initPatch == null)
-        {
-            MelonDebug.Log("Failed to patch il2cpp init");
-            return false;
-        }
 
         return true;
     }
@@ -90,7 +85,7 @@ internal static class Il2CppHandler
         }
 
         MelonDebug.Log("Loading NativeHost assembly");
-        var initialize = Dotnet.LoadAssemblyAndGetFunctionUCO<InitializeFn>(context, nativeHostPath, "MelonLoader.NativeHost.NativeEntryPoint, MelonLoader.NativeHost", "NativeEntry");
+        var initialize = Dotnet.LoadAssemblyAndGetFunctionUco<InitializeFn>(context, nativeHostPath, "MelonLoader.NativeHost.NativeEntryPoint, MelonLoader.NativeHost", "NativeEntry");
         if (initialize == null)
         {
             Core.Logger.Error($"Failed to load assembly from: '{nativeHostPath}'");
@@ -117,11 +112,6 @@ internal static class Il2CppHandler
 
         MelonDebug.Log("Patching invoke");
         invokePatch = Dobby.CreatePatch<Il2CppLib.RuntimeInvokeFn>(il2cpp.RuntimeInvokePtr, InvokeDetour);
-        if (invokePatch == null)
-        {
-            Core.Logger.Error($"Failed to patch il2cpp invoke");
-            return;
-        }
     }
 
     private static nint InvokeDetour(nint method, nint obj, nint args, nint exc)
@@ -132,13 +122,13 @@ internal static class Il2CppHandler
         var result = invokePatch.Original(method, obj, args, exc);
 
         var name = il2cpp.GetMethodName(method);
-        if (name != null && name.Contains("Internal_ActiveSceneChanged"))
-        {
-            MelonDebug.Log("Invoke hijacked");
-            invokePatch.Destroy();
+        if (name == null || !name.Contains("Internal_ActiveSceneChanged")) 
+            return result;
+        
+        MelonDebug.Log("Invoke hijacked");
+        invokePatch.Destroy();
 
-            Start();
-        }
+        Start();
 
         return result;
     }

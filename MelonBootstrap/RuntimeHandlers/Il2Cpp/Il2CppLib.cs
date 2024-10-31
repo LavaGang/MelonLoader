@@ -5,8 +5,13 @@ namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 
 internal class Il2CppLib(Il2CppLib.MethodGetNameFn methodGetName)
 {
-    private const string libName = "GameAssembly.dll"; // Gotta specify the file extension in lower-case, otherwise Il2CppInterop brainfarts itself
-
+    private const string libName = // Gotta specify the file extension in lower-case, otherwise Il2CppInterop brainfarts itself
+#if WINDOWS
+        "GameAssembly.dll";
+#elif LINUX
+        "GameAssembly.so";
+#endif
+    
     public required nint Handle { get; init; }
 
     public required nint InitPtr { get; init; }
@@ -14,16 +19,10 @@ internal class Il2CppLib(Il2CppLib.MethodGetNameFn methodGetName)
 
     public static Il2CppLib? TryLoad()
     {
-        if (!NativeLibrary.TryLoad(libName, out var hRuntime))
-            return null;
-
-        if (!NativeLibrary.TryGetExport(hRuntime, "il2cpp_init", out var initPtr))
-            return null;
-
-        if (!NativeLibrary.TryGetExport(hRuntime, "il2cpp_runtime_invoke", out var runtimeInvokePtr))
-            return null;
-
-        if (!NativeFunc.GetExport<MethodGetNameFn>(hRuntime, "il2cpp_method_get_name", out var methodGetName))
+        if (!NativeLibrary.TryLoad(libName, out var hRuntime)
+            || !NativeLibrary.TryGetExport(hRuntime, "il2cpp_init", out var initPtr)
+            || !NativeLibrary.TryGetExport(hRuntime, "il2cpp_runtime_invoke", out var runtimeInvokePtr)
+            || !NativeFunc.GetExport<MethodGetNameFn>(hRuntime, "il2cpp_method_get_name", out var methodGetName))
             return null;
 
         return new(methodGetName)
@@ -36,10 +35,7 @@ internal class Il2CppLib(Il2CppLib.MethodGetNameFn methodGetName)
 
     public string? GetMethodName(nint method)
     {
-        if (method == 0)
-            return null;
-
-        return Marshal.PtrToStringAnsi(methodGetName(method));
+        return method == 0 ? null : Marshal.PtrToStringAnsi(methodGetName(method));
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

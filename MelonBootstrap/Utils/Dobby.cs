@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap.Utils;
 
-public unsafe static partial class Dobby
+public static unsafe partial class Dobby
 {
     [LibraryImport("*", EntryPoint = "DobbyPrepare")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -51,18 +51,12 @@ public unsafe static partial class Dobby
 
     public static Patch<TDelegate>? CreatePatch<TDelegate>(nint hModule, string functionName, TDelegate detour) where TDelegate : Delegate
     {
-        if (!NativeLibrary.TryGetExport(hModule, functionName, out var func))
-            return null;
-
-        return CreatePatch(func, detour);
+        return !NativeLibrary.TryGetExport(hModule, functionName, out var func) ? null : CreatePatch(func, detour);
     }
 
     public static Patch<TDelegate>? CreatePatch<TDelegate>(string moduleName, string functionName, TDelegate detour) where TDelegate : Delegate
     {
-        if (!NativeLibrary.TryLoad(moduleName, out var hModule))
-            return null;
-
-        return CreatePatch(hModule, functionName, detour);
+        return !NativeLibrary.TryLoad(moduleName, out var hModule) ? null : CreatePatch(hModule, functionName, detour);
     }
 
     public class Patch<T> where T : Delegate

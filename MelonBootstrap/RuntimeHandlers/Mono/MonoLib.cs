@@ -15,10 +15,15 @@ internal class MonoLib
 
     private static readonly string[] libNames =
     [
+#if WINDOWS
         "mono.dll",
         "mono-2.0-bdwgc.dll",
         "mono-2.0-sgen.dll",
         "mono-2.0-boehm.dll"
+#elif LINUX
+        "libmono.so",
+        "libmonobdwgc-2.0.so"
+#endif
     ];
 
     private static readonly List<Delegate> passedDelegates = [];
@@ -43,20 +48,32 @@ internal class MonoLib
     public required InstallAssemblyPreloadHookFn InstallAssemblyPreloadHook { get; init; }
     public required InstallAssemblySearchHookFn InstallAssemblySearchHook { get; init; }
     public required InstallAssemblyLoadHookFn InstallAssemblyLoadHook { get; init; }
+    public required StringToUtf16Fn StringToUtf16 { get; init; }
+    public required ObjectToStringFn ObjectToString { get; init; }
 
     public DebugDomainCreateFn? DebugDomainCreate { get; init; }
     public DomainSetConfigFn? DomainSetConfig { get; init; }
 
-    public static MonoLib? TryLoad(string gameDir)
+    public static MonoLib? TryLoad(string searchDir)
     {
-        var monoPath = FindMonoPath(gameDir);
+        var monoPath = FindMonoPath(searchDir);
         if (monoPath == null)
             return null;
 
         if (!NativeLibrary.TryLoad(monoPath, out var hRuntime))
             return null;
+        
+#if LINUX
+        var monoDir = Path.GetDirectoryName(monoPath)!;
+        NativeLibrary.Load(Path.Combine(monoDir, "libmono-native.so"));
+#endif
 
         var monoName = Path.GetFileNameWithoutExtension(monoPath);
+#if LINUX
+        if (monoName.StartsWith("lib"))
+            monoName = monoName[3..];
+#endif
+        
         var isOld = monoName.Equals("mono", StringComparison.OrdinalIgnoreCase);
 
         if (!NativeLibrary.TryGetExport(hRuntime, "mono_jit_init_version", out var jitInitVersionPtr)
@@ -73,7 +90,9 @@ internal class MonoLib
             || !NativeFunc.GetExport<ClassGetMethodFromNameFn>(hRuntime, "mono_class_get_method_from_name", out var classGetMethodFromName)
             || !NativeFunc.GetExport<InstallAssemblyPreloadHookFn>(hRuntime, "mono_install_assembly_preload_hook", out var installAssemblyPreloadHook)
             || !NativeFunc.GetExport<InstallAssemblySearchHookFn>(hRuntime, "mono_install_assembly_search_hook", out var installAssemblySearchHook)
-            || !NativeFunc.GetExport<InstallAssemblyLoadHookFn>(hRuntime, "mono_install_assembly_load_hook", out var installAssemblyLoadHook))
+            || !NativeFunc.GetExport<InstallAssemblyLoadHookFn>(hRuntime, "mono_install_assembly_load_hook", out var installAssemblyLoadHook)
+            || !NativeFunc.GetExport<StringToUtf16Fn>(hRuntime, "mono_string_to_utf16", out var stringToUtf16)
+            || !NativeFunc.GetExport<ObjectToStringFn>(hRuntime, "mono_object_to_string", out var objectToString))
             return null;
 
         var runtimeInvoke = Marshal.GetDelegateForFunctionPointer<RuntimeInvokeFn>(runtimeInvokePtr);
@@ -102,39 +121,50 @@ internal class MonoLib
             InstallAssemblySearchHook = installAssemblySearchHook,
             InstallAssemblyLoadHook = installAssemblyLoadHook,
             DomainSetConfig = domainSetConfig,
-            DebugDomainCreate = debugDomainCreate
+            DebugDomainCreate = debugDomainCreate,
+            StringToUtf16 = stringToUtf16,
+            ObjectToString = objectToString
         };
     }
 
-    private static string? FindMonoPath(string gameDir)
+    private static string? FindMonoPath(string searchDir)
     {
         foreach (var folder in folderNames)
         {
             foreach (var lib in libNames)
             {
-                var path = Path.Combine(gameDir, folder, lib);
+                var path = Path.Combine(searchDir, folder, lib);
                 if (File.Exists(path))
                     return path;
 
-                path = Path.Combine(gameDir, folder, "EmbedRuntime", lib);
+                path = Path.Combine(searchDir, folder, "EmbedRuntime", lib);
                 if (File.Exists(path))
                     return path;
 
-                path = Path.Combine(gameDir, folder, lib);
+                path = Path.Combine(searchDir, folder, lib);
                 if (File.Exists(path))
                     return path;
 
-                path = Path.Combine(gameDir, folder, "EmbedRuntime", lib);
+                path = Path.Combine(searchDir, folder, "EmbedRuntime", lib);
                 if (File.Exists(path))
                     return path;
 
-                path = Path.Combine(gameDir, folder, "x86_64", lib);
+                path = Path.Combine(searchDir, folder, "x86_64", lib);
                 if (File.Exists(path))
                     return path;
             }
         }
 
         return null;
+    }
+
+    public string? ToString(nint obj)
+    {
+        if (obj == 0)
+            return null;
+        
+        var monoStr = ObjectToString(obj, 0);
+        return StringToUtf16(monoStr);
     }
 
     public void SetCurrentThreadAsMain()
@@ -204,7 +234,11 @@ internal class MonoLib
     public delegate nint MethodGetNameFn(nint method);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public unsafe delegate void* StringNewFn(nint domain, nint value);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate nint ObjectToStringFn(nint obj, nint ex);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    public delegate string StringToUtf16Fn(nint str);
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     public delegate void AddInternalCallFn(string name, nint func);
 

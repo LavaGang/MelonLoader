@@ -7,10 +7,7 @@ internal static class NativeFunc
 {
     public static T? GetExport<T>(nint hModule, string name) where T : Delegate
     {
-        if (!NativeLibrary.TryGetExport(hModule, name, out var export))
-            return null;
-
-        return Marshal.GetDelegateForFunctionPointer<T>(export);
+        return !NativeLibrary.TryGetExport(hModule, name, out var export) ? null : Marshal.GetDelegateForFunctionPointer<T>(export);
     }
 
     public static bool GetExport<T>(nint hModule, string name, [NotNullWhen(true)] out T? func) where T : Delegate

@@ -24,5 +24,18 @@
     <PropertyGroup Condition="'$(RuntimeIdentifier.EndsWith(`-x64`))' == 'true'">
         <DefineConstants>$(DefineConstants);X64</DefineConstants>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
+        <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
+
+        <LibPrefix>lib</LibPrefix>
+        <LibExt>.a</LibExt> 
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
+        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+
+        <LibExt>.lib</LibExt> 
+    </PropertyGroup>
 </Project>
   

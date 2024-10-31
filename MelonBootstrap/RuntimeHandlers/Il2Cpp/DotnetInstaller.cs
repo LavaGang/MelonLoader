@@ -13,7 +13,9 @@ internal static class DotnetInstaller
 
     public static void AttemptInstall()
     {
+#if WINDOWS
         AttemptInstallAsync().GetAwaiter().GetResult();
+#endif
     }
 
     private static async Task AttemptInstallAsync()

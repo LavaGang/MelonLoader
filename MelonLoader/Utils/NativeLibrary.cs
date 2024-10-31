@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -54,51 +55,39 @@ namespace MelonLoader
 
         public static IntPtr AgnosticLoadLibrary(string name)
         {
-            var platform = Environment.OSVersion.Platform;
-
-            switch (platform)
-            {
-                case PlatformID.Win32S:
-                case PlatformID.Win32Windows:
-                case PlatformID.Win32NT:
-                case PlatformID.WinCE:
-                    return LoadLibrary(name);
-                
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    return dlopen(name, RTLD_NOW);
-            }
+#if WINDOWS
+            return LoadLibrary(name);
+#endif
             
-            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
+#if LINUX
+            if (!Path.HasExtension(name))
+                name += ".so";
+            
+            return dlopen(name, RTLD_NOW);
+#endif
         }
 
         public static IntPtr AgnosticGetProcAddress(IntPtr hModule, string lpProcName)
         {
-            var platform = Environment.OSVersion.Platform;
-
-            switch (platform)
-            {
-                case PlatformID.Win32S:
-                case PlatformID.Win32Windows:
-                case PlatformID.Win32NT:
-                case PlatformID.WinCE:
-                    return GetProcAddress(hModule, lpProcName);
-                
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    return dlsym(hModule, lpProcName);
-            }
+#if WINDOWS
+            return GetProcAddress(hModule, lpProcName);
+#endif
             
-            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
+#if LINUX
+            return dlsym(hModule, lpProcName);
+#endif
         }
-
+        
+#if WINDOWS
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         private static extern IntPtr LoadLibrary(string lpLibFileName);
         [DllImport("kernel32")]
         internal static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
         [DllImport("kernel32")]
         internal static extern IntPtr FreeLibrary(IntPtr hModule);
+#endif
         
+#if LINUX
         [DllImport("libdl.so.2")]
         protected static extern IntPtr dlopen(string filename, int flags);
 
@@ -106,6 +95,7 @@ namespace MelonLoader
         protected static extern IntPtr dlsym(IntPtr handle, string symbol);
 
         const int RTLD_NOW = 2; // for dlopen's flags 
+#endif
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.LPStr)]

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿#if WINDOWS
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -117,3 +118,4 @@ public static partial class ProxyResolver
         public required Type ProxyFuncs { get; init; }
     }
 }
+#endif

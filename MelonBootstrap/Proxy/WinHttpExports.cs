@@ -1,3 +1,4 @@
+#if WINDOWS
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap.Proxy;
@@ -277,3 +278,4 @@ internal static class WinHttpExports
     [UnmanagedCallersOnly(EntryPoint = "ImplWinHttpWriteProxySettings")]
     public static void ImplWinHttpWriteProxySettings() { }
 }
+#endif

@@ -12,9 +12,18 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         <RootNamespace>MelonLoader.Bootstrap</RootNamespace>
     </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
+        <ExportsFile>linuxexports.def</ExportsFile>
+        <LinuxEntryPath>Deps/$(RuntimeIdentifier)/linuxentry.o</LinuxEntryPath>
+    </PropertyGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
         <LinkerArg Include="/DEF:exports.def" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
+        <LinkerArg Include="-lstdc++" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
@@ -32,7 +41,7 @@
 
     <PropertyGroup>
         <AppHostVersion>9.0.0-rc.2.24473.5</AppHostVersion>
-        <AppHostPath>$(NuGetPackageRoot)runtime.$(RuntimeIdentifier).microsoft.netcore.dotnetapphost/$(AppHostVersion)/runtimes/$(RuntimeIdentifier)/native/libnethost.lib</AppHostPath>
+        <AppHostPath>$(NuGetPackageRoot)runtime.$(RuntimeIdentifier).microsoft.netcore.dotnetapphost/$(AppHostVersion)/runtimes/$(RuntimeIdentifier)/native/libnethost$(LibExt)</AppHostPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -42,12 +51,24 @@
 
     <ItemGroup>
         <NativeLibrary Include="$(AppHostPath)" />
-        <NativeLibrary Include="Deps/$(RuntimeIdentifier)/dobby.lib" />
+        <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
+        <NativeLibrary Include="$(LinuxEntryPath)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ClCompile Include="LinuxEntry\LinuxEntry.cpp" />
     </ItemGroup>
 
     <Target Name="PublishAsBuildAfterTarget" AfterTargets="Build" DependsOnTargets="Publish" />
+    
+    <Target Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'" Name="BuildLinuxEntry" BeforeTargets="Build">
+        <Exec Command="g++ -c -O2 -fPIC LinuxEntry/LinuxEntry.cpp -o $(LinuxEntryPath)" />
+    </Target>
 
-    <Target Name="RenameBinary" AfterTargets="Build">
+    <Target Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'" Name="RenameBinary" AfterTargets="Build">
         <Move SourceFiles="$(PublishDir)/$(TargetName).dll" DestinationFiles="$(PublishDir)/version.dll" />
     </Target>
 

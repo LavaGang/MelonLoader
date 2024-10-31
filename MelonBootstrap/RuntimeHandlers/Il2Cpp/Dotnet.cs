@@ -5,13 +5,23 @@ namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 
 internal static partial class Dotnet
 {
+    private const CharSet hostfxrCharSet =
+#if WINDOWS
+        CharSet.Unicode;
+#else
+        CharSet.Ansi;
+#endif
+    private const StringMarshalling hostfxrStringMarsh =
+#if WINDOWS
+        StringMarshalling.Utf16;
+#else
+        StringMarshalling.Utf8;
+#endif
+    
     public static bool LoadHostfxr()
     {
         var path = GetHostfxrPath();
-        if (path == null)
-            return false;
-
-        return NativeLibrary.TryLoad(path, out _);
+        return path != null && NativeLibrary.TryLoad(path, out _);
     }
 
     private static string? GetHostfxrPath()
@@ -19,10 +29,7 @@ internal static partial class Dotnet
         var buffer = new StringBuilder(1024);
         var bufferSize = (nint)buffer.Capacity;
         var result = get_hostfxr_path(buffer, ref bufferSize, 0);
-        if (result != 0)
-            return null;
-
-        return buffer.ToString();
+        return result != 0 ? null : buffer.ToString();
     }
 
     public static bool InitializeForRuntimeConfig(string runtimeConfigPath, out nint context)
@@ -42,10 +49,10 @@ internal static partial class Dotnet
         return true;
     }
 
-    public static TDelegate? LoadAssemblyAndGetFunctionUCO<TDelegate>(nint context, string assemblyPath, string typeName, string methodName) where TDelegate : Delegate
+    public static TDelegate? LoadAssemblyAndGetFunctionUco<TDelegate>(nint context, string assemblyPath, string typeName, string methodName) where TDelegate : Delegate
     {
-        load_assembly_and_get_function_pointer_fn? loadAssemblyAndGetFunctionPointer = null;
-        hostfxr_get_runtime_delegate(context, hostfxr_delegate_type.hdt_load_assembly_and_get_function_pointer, ref loadAssemblyAndGetFunctionPointer);
+        LoadAssemblyAndGetFunctionPointerFn? loadAssemblyAndGetFunctionPointer = null;
+        hostfxr_get_runtime_delegate(context, HostfxrDelegateType.HdtLoadAssemblyAndGetFunctionPointer, ref loadAssemblyAndGetFunctionPointer);
         if (loadAssemblyAndGetFunctionPointer == null)
             return null;
 
@@ -57,28 +64,28 @@ internal static partial class Dotnet
         return Marshal.GetDelegateForFunctionPointer<TDelegate>(funcPtr);
     }
 
-    [DllImport("*", EntryPoint = "get_hostfxr_path", CharSet = CharSet.Unicode)]
+    [DllImport("*", CharSet = hostfxrCharSet)]
     private static extern int get_hostfxr_path(StringBuilder buffer, ref nint bufferSize, nint parameters);
 
-    [LibraryImport("hostfxr", StringMarshalling = StringMarshalling.Utf16)]
+    [LibraryImport("hostfxr", StringMarshalling = hostfxrStringMarsh)]
     private static partial int hostfxr_initialize_for_runtime_config(string runtimeConfigPath, nint parameters, ref nint hostContextHandle);
 
     [LibraryImport("hostfxr")]
-    private static partial int hostfxr_get_runtime_delegate(nint context, hostfxr_delegate_type type, ref load_assembly_and_get_function_pointer_fn? del);
+    private static partial int hostfxr_get_runtime_delegate(nint context, HostfxrDelegateType type, ref LoadAssemblyAndGetFunctionPointerFn? del);
 
-    private enum hostfxr_delegate_type
+    private enum HostfxrDelegateType
     {
-        hdt_com_activation,
-        hdt_load_in_memory_assembly,
-        hdt_winrt_activation,
-        hdt_com_register,
-        hdt_com_unregister,
-        hdt_load_assembly_and_get_function_pointer,
-        hdt_get_function_pointer,
-        hdt_load_assembly,
-        hdt_load_assembly_bytes,
+        HdtComActivation,
+        HdtLoadInMemoryAssembly,
+        HdtWinrtActivation,
+        HdtComRegister,
+        HdtComUnregister,
+        HdtLoadAssemblyAndGetFunctionPointer,
+        HdtGetFunctionPointer,
+        HdtLoadAssembly,
+        HdtLoadAssemblyBytes,
     };
 
-    [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-    private delegate void load_assembly_and_get_function_pointer_fn(string assemblyPath, string typeName, string methodName, nint delegateTypeName, nint reserved, ref nint funcPtr);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = hostfxrCharSet)]
+    private delegate void LoadAssemblyAndGetFunctionPointerFn(string assemblyPath, string typeName, string methodName, nint delegateTypeName, nint reserved, ref nint funcPtr);
 }

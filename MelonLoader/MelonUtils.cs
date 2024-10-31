@@ -25,7 +25,7 @@ namespace MelonLoader
     public static class MelonUtils
     {
         private static NativeLibrary.StringDelegate WineGetVersion;
-        private static readonly Random RandomNumGen = new();
+        //private static readonly Random RandomNumGen = new();
         private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
         private static readonly LemonSHA256 sha256 = new();
         private static readonly LemonSHA512 sha512 = new();
@@ -71,37 +71,37 @@ namespace MelonLoader
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
 
-        public static int RandomInt()
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next();
-        }
-
-        public static int RandomInt(int max)
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next(max);
-        }
-
-        public static int RandomInt(int min, int max)
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next(min, max);
-        }
-
-        public static double RandomDouble()
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.NextDouble();
-        }
-
-        public static string RandomString(int length)
-        {
-            StringBuilder builder = new();
-            for (int i = 0; i < length; i++)
-                builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
-            return builder.ToString();
-        }
+        // public static int RandomInt()
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next();
+        // }
+        //
+        // public static int RandomInt(int max)
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next(max);
+        // }
+        //
+        // public static int RandomInt(int min, int max)
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next(min, max);
+        // }
+        //
+        // public static double RandomDouble()
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.NextDouble();
+        // }
+        //
+        // public static string RandomString(int length)
+        // {
+        //     StringBuilder builder = new();
+        //     for (int i = 0; i < length; i++)
+        //         builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
+        //     return builder.ToString();
+        // }
 
         public static PlatformID GetPlatform => Environment.OSVersion.Platform;
 

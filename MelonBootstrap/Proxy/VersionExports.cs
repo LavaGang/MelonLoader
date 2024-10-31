@@ -1,3 +1,4 @@
+#if WINDOWS
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap.Proxy;
@@ -55,3 +56,4 @@ internal static class VersionExports
     [UnmanagedCallersOnly(EntryPoint = "ImplVerQueryValueW")]
     public static void ImplVerQueryValueW() { }
 }
+#endif
