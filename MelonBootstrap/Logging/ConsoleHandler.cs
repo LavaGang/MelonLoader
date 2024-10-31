@@ -14,7 +14,7 @@ internal static partial class ConsoleHandler
     private static nint outputHandle;
 #endif
 
-    public static bool Hidden { get; } = ArgParser.IsDefined("melonloader.hideconsole");
+    public static bool Hidden { get; private set; } = ArgParser.IsDefined("melonloader.hideconsole");
 
     public static void OpenConsole(string version, bool onTop)
     {
