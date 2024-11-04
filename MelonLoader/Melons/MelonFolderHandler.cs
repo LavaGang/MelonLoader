@@ -90,41 +90,6 @@ namespace MelonLoader.Melons
             firstSpacer = true;
         }
 
-        private static void LoadFolder(string path,
-            bool addToList,
-            ref bool hasWroteLine,
-            ref List<MelonAssembly> melonAssemblies)
-        {
-            // Validate Path
-            if (!Directory.Exists(path))
-                return;
-
-            // Get DLLs in Directory
-            var files = Directory.GetFiles(path, "*.dll", SearchOption.TopDirectoryOnly);
-            foreach (var f in files)
-            {
-                // Ignore Native DLLs
-                if (!MelonUtils.IsManagedDLL(f)) 
-                    continue;
-
-                // Log
-                if (!hasWroteLine)
-                {
-                    hasWroteLine = true;
-                    MelonLogger.WriteLine(Color.Magenta);
-                }
-
-                // Load Assembly
-                var asm = MelonAssembly.LoadMelonAssembly(f, false);
-                if (asm == null)
-                    continue;
-
-                // Queue Assembly for Melon Parsing
-                if (addToList)
-                    melonAssemblies.Add(asm);
-            }
-        }
-
         private static void ProcessFolder(eScanType scanType,
             string path,
             ref bool hasWroteLine,
@@ -156,13 +121,11 @@ namespace MelonLoader.Melons
                     Resolver.MelonAssemblyResolver.AddSearchDirectory(directory);
 
             // Load UserLibs
-            foreach (var dir in userLibDirectories)
-                LoadFolder(dir, false, ref hasWroteLine, ref melonAssemblies);
+            MelonPreprocessor.LoadFolders(userLibDirectories, false, ref hasWroteLine, ref melonAssemblies);
 
             // Load Melons from Folders
             if (scanType != eScanType.UserLibs)
-                foreach (var dir in melonDirectories)
-                    LoadFolder(dir, true, ref hasWroteLine, ref melonAssemblies);
+                MelonPreprocessor.LoadFolders(melonDirectories, true, ref hasWroteLine, ref melonAssemblies);
         }
 
         private static void ScanFolder(eScanType scanType,
