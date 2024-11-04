@@ -9,6 +9,13 @@ namespace MelonLoader.Melons
     {
         private static bool firstSpacer = false;
 
+        internal enum eScanType
+        {
+            UserLibs,
+            Plugins,
+            Mods,
+        }
+
         internal static void ScanUserLibs(string path)
         {
             // Get Full Directory Path
@@ -22,7 +29,7 @@ namespace MelonLoader.Melons
             // Parse Folders
             bool hasWroteLine = false;
             List<MelonAssembly> melonAssemblies = new();
-            ProcessFolder(false, path, true, ref hasWroteLine, ref melonAssemblies);
+            ProcessFolder(eScanType.UserLibs, path, ref hasWroteLine, ref melonAssemblies);
         }
 
         internal static void ScanMelons<T>(string path) where T : MelonTypeBase<T>
@@ -40,7 +47,7 @@ namespace MelonLoader.Melons
             bool isMod = melonType == typeof(MelonMod);
             bool hasWroteLine = false;
             List<MelonAssembly> melonAssemblies = new();
-            ProcessFolder(isMod, path, false, ref hasWroteLine, ref melonAssemblies);
+            ProcessFolder(isMod ? eScanType.Mods : eScanType.Plugins, path, ref hasWroteLine, ref melonAssemblies);
 
             // Parse Queue
             var melons = new List<T>();
@@ -118,9 +125,8 @@ namespace MelonLoader.Melons
             }
         }
 
-        private static void ProcessFolder(bool isMod,
+        private static void ProcessFolder(eScanType scanType,
             string path,
-            bool userLibsOnly,
             ref bool hasWroteLine,
             ref List<MelonAssembly> melonAssemblies)
         {
@@ -131,10 +137,10 @@ namespace MelonLoader.Melons
             // Scan Directories
             List<string> melonDirectories = new();
             List<string> userLibDirectories = new();
-            ScanFolder(isMod, path, userLibsOnly, ref melonDirectories, ref userLibDirectories);
+            ScanFolder(scanType, path, ref melonDirectories, ref userLibDirectories);
 
             // Add Base Path to End of Directories List
-            if (userLibsOnly)
+            if (scanType == eScanType.UserLibs)
                 userLibDirectories.Add(path);
             else
                 melonDirectories.Add(path);
@@ -145,7 +151,7 @@ namespace MelonLoader.Melons
                 MelonUtils.AddNativeDLLDirectory(directory);
                 Resolver.MelonAssemblyResolver.AddSearchDirectory(directory);
             }
-            if (!userLibsOnly)
+            if (scanType != eScanType.UserLibs)
                 foreach (string directory in melonDirectories)
                     Resolver.MelonAssemblyResolver.AddSearchDirectory(directory);
 
@@ -154,15 +160,14 @@ namespace MelonLoader.Melons
                 LoadFolder(dir, false, ref hasWroteLine, ref melonAssemblies);
 
             // Load Melons from Folders
-            if (!userLibsOnly)
+            if (scanType != eScanType.UserLibs)
                 foreach (var dir in melonDirectories)
                     LoadFolder(dir, true, ref hasWroteLine, ref melonAssemblies);
         }
 
-        private static void ScanFolder(bool isMod,
+        private static void ScanFolder(eScanType scanType,
             string path,
-            bool userLibsOnly,
-            ref List<string> melonDirectories, 
+            ref List<string> melonDirectories,
             ref List<string> userLibDirectories)
         {
             // Get Directories
@@ -175,40 +180,39 @@ namespace MelonLoader.Melons
             foreach (var dir in directories)
             {
                 // Validate Path
-                if (!Directory.Exists(dir)
-                    || userLibDirectories.Contains(dir)
-                    || melonDirectories.Contains(dir))
+                if (!Directory.Exists(dir))
                     continue;
 
-                // Validate Folder
-                if (IsDisabledFolder(dir, out string dirNameLower))
+                // Validate Manifest
+                string manifestPath = Path.Combine(dir, "manifest.json");
+                if (!File.Exists(manifestPath))
                     continue;
 
-                // Check for UserLibs
-                if (userLibsOnly || IsUserLibsFolder(dirNameLower))
-                    userLibDirectories.Add(dir);
+                // Check for Deeper UserLibs
+                string userLibsPath = Path.Combine(dir, "UserLibs");
+                if (Directory.Exists(userLibsPath))
+                {
+                    userLibDirectories.Add(userLibsPath);
+                    ScanFolder(eScanType.UserLibs, userLibsPath, ref melonDirectories, ref userLibDirectories);
+                }
+
+                // Is UserLibs Scan?
+                if (scanType == eScanType.UserLibs)
+                    userLibDirectories.Add(dir); // Add to Directories List
                 else
+                {
+                    // Check for Deeper Melon Folder
+                    string melonPath = Path.Combine(dir, (scanType == eScanType.Plugins) ? "Plugins" : "Mods");
+                    if (Directory.Exists(melonPath))
+                    {
+                        melonDirectories.Add(melonPath);
+                        ScanFolder(scanType, melonPath, ref melonDirectories, ref userLibDirectories);
+                    }
+
+                    // Add to Directories List
                     melonDirectories.Add(dir);
-
-                ScanFolder(isMod, dir, userLibsOnly, ref melonDirectories, ref userLibDirectories);
+                }
             }
-        }
-
-        private static bool StartsOrEndsWith(string dirNameLower, string target)
-           => dirNameLower.StartsWith(target)
-               || dirNameLower.EndsWith(target);
-
-        private static bool IsUserLibsFolder(string dirNameLower)
-            => StartsOrEndsWith(dirNameLower, "userlibs");
-
-        private static bool IsDisabledFolder(string path,
-            out string dirNameLower)
-        {
-            string dirName = new DirectoryInfo(path).Name;
-            dirNameLower = dirName.ToLowerInvariant();
-            return StartsOrEndsWith(dirNameLower, "disabled")
-                || StartsOrEndsWith(dirNameLower, "old")
-                || StartsOrEndsWith(dirNameLower, "~");
         }
     }
 }
