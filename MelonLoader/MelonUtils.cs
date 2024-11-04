@@ -303,8 +303,7 @@ namespace MelonLoader
             try { returnval = asm.GetTypes().AsEnumerable(); }
             catch (ReflectionTypeLoadException ex) 
             {
-                MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
-                //Console.WriteLine(ex);
+                //MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
                 returnval = ex.Types; 
             }
 
@@ -320,7 +319,7 @@ namespace MelonLoader
             try { x = asm.GetType(typeName); }
             catch (Exception ex)
             {
-                MelonLogger.Error($"Failed to get type {typeName} from assembly {asm.FullName} due to: {ex.Message}", ex);
+                //MelonLogger.Error($"Failed to get type {typeName} from assembly {asm.FullName} due to: {ex.Message}", ex);
                 x = null;
             }
             if ((x != null) && (predicate == null || predicate(x)))
