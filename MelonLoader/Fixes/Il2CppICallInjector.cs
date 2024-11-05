@@ -62,7 +62,7 @@ namespace MelonLoader.Fixes
             }
             catch (Exception e)
             {
-                LogError(e.ToString());
+                LogDebugWarning(e.ToString());
             }
         }
 
