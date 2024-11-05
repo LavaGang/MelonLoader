@@ -79,11 +79,12 @@ namespace MelonLoader
                     noPrefixCmd = split[0];
                     cmdArg = split[1];
                 }
+
                 if ((string.IsNullOrEmpty(cmdArg)
-                        && ((i + 1) > (maxLen - 1)))
+                        && ((i + 1) >= maxLen))
                     || string.IsNullOrEmpty(cmdArg)
-                    || !cmdArg.StartsWith("--")
-                    || !cmdArg.StartsWith("-"))
+                    || cmdArg.StartsWith("--")
+                    || cmdArg.StartsWith("-"))
                 {
                     // Unknown Command, Add it to Dictionary
                     ExternalArguments.Add(noPrefixCmd, null);
