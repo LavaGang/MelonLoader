@@ -201,7 +201,6 @@ jobs:
           cp BaseLibs/dobby_x64.dll Output/Debug/x64/MelonLoader/Dependencies/dobby.dll
           echo
           echo Copying documentation files...
-          cp NOTICE.txt Output/Debug/x64/
           mkdir -p Output/Debug/x64/MelonLoader/Documentation
           cp CHANGELOG.md Output/Debug/x64/MelonLoader/Documentation/
           cp LICENSE.md Output/Debug/x64/MelonLoader/Documentation/
@@ -243,7 +242,6 @@ jobs:
           cp BaseLibs/dobby_x64.dll Output/Release/x64/MelonLoader/Dependencies/dobby.dll
           echo 
           echo Copying documentation files...
-          cp NOTICE.txt Output/Release/x64/
           mkdir -p Output/Release/x64/MelonLoader/Documentation
           cp CHANGELOG.md Output/Release/x64/MelonLoader/Documentation/
           cp LICENSE.md Output/Release/x64/MelonLoader/Documentation/
@@ -280,7 +278,6 @@ jobs:
           cp BaseLibs/dobby_x86.dll Output/Debug/x86/MelonLoader/Dependencies/dobby.dll
           echo
           echo Copying documentation files...
-          cp NOTICE.txt Output/Debug/x86/
           mkdir -p Output/Debug/x86/MelonLoader/Documentation
           cp CHANGELOG.md Output/Debug/x86/MelonLoader/Documentation/
           cp LICENSE.md Output/Debug/x86/MelonLoader/Documentation/
@@ -317,7 +314,6 @@ jobs:
           cp BaseLibs/dobby_x86.dll Output/Release/x86/MelonLoader/Dependencies/dobby.dll
           echo
           echo Copying documentation files...
-          cp NOTICE.txt Output/Release/x86/
           mkdir -p Output/Release/x86/MelonLoader/Documentation
           cp CHANGELOG.md Output/Release/x86/MelonLoader/Documentation/
           cp LICENSE.md Output/Release/x86/MelonLoader/Documentation/
@@ -361,7 +357,6 @@ jobs:
           cp -r BaseLibs/NetStandardPatches Output/Debug/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying documentation files...
-          cp NOTICE.txt Output/Debug/x64
           mkdir -p Output/Debug/x64/MelonLoader/Documentation
           cp CHANGELOG.md Output/Debug/x64/MelonLoader/Documentation/
           cp LICENSE.md Output/Debug/x64/MelonLoader/Documentation/
@@ -398,7 +393,6 @@ jobs:
           cp -r BaseLibs/NetStandardPatches Output/Release/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying documentation files...
-          cp NOTICE.txt Output/Release/x64/
           mkdir -p Output/Release/x64/MelonLoader/Documentation
           cp CHANGELOG.md Output/Release/x64/MelonLoader/Documentation/
           cp LICENSE.md Output/Release/x64/MelonLoader/Documentation/
