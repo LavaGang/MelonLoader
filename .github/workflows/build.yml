@@ -194,6 +194,8 @@ jobs:
           cp -r BaseLibs/Mono Output/Debug/x64/MelonLoader/Dependencies/
           cp -r BaseLibs/net35 Output/Debug/x64/MelonLoader/
           cp -r BaseLibs/net6 Output/Debug/x64/MelonLoader/
+          mkdir -p Output/Debug/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Debug/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying Dobby x64...
           cp BaseLibs/dobby_x64.dll Output/Debug/x64/MelonLoader/Dependencies/dobby.dll
@@ -234,6 +236,8 @@ jobs:
           cp -r BaseLibs/Mono Output/Release/x64/MelonLoader/Dependencies/
           cp -r BaseLibs/net35 Output/Release/x64/MelonLoader/
           cp -r BaseLibs/net6 Output/Release/x64/MelonLoader/
+          mkdir -p Output/Release/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Release/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying Dobby x64...
           cp BaseLibs/dobby_x64.dll Output/Release/x64/MelonLoader/Dependencies/dobby.dll
@@ -269,6 +273,8 @@ jobs:
           cp -r BaseLibs/Mono Output/Debug/x86/MelonLoader/Dependencies/
           cp -r BaseLibs/net35 Output/Debug/x86/MelonLoader/
           cp -r BaseLibs/net6 Output/Debug/x86/MelonLoader/
+          mkdir -p Output/Debug/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Debug/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying Dobby x86...
           cp BaseLibs/dobby_x86.dll Output/Debug/x86/MelonLoader/Dependencies/dobby.dll
@@ -304,6 +310,8 @@ jobs:
           cp -r BaseLibs/Mono Output/Release/x86/MelonLoader/Dependencies/
           cp -r BaseLibs/net35 Output/Release/x86/MelonLoader/
           cp -r BaseLibs/net6 Output/Release/x86/MelonLoader/
+          mkdir -p Output/Release/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Release/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying Dobby x86...
           cp BaseLibs/dobby_x86.dll Output/Release/x86/MelonLoader/Dependencies/dobby.dll
@@ -349,6 +357,8 @@ jobs:
           cp -r BaseLibs/Mono Output/Debug/x64/MelonLoader/Dependencies/
           cp -r BaseLibs/net35 Output/Debug/x64/MelonLoader/
           cp -r BaseLibs/net6 Output/Debug/x64/MelonLoader/
+          mkdir -p Output/Debug/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Debug/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying documentation files...
           cp NOTICE.txt Output/Debug/x64
@@ -384,6 +394,8 @@ jobs:
           cp -r BaseLibs/Mono Output/Release/x64/MelonLoader/Dependencies/
           cp -r BaseLibs/net35 Output/Release/x64/MelonLoader/
           cp -r BaseLibs/net6 Output/Release/x64/MelonLoader/
+          mkdir -p Output/Release/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Release/x64/MelonLoader/Dependencies/SupportModules/NetStandardPatches
           echo
           echo Copying documentation files...
           cp NOTICE.txt Output/Release/x64/
