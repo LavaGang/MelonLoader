@@ -19,62 +19,83 @@ namespace MelonLoader.Resolver
                 return;
 
             // Setup Search Directories
-            string[] searchdirlist =
-            {
+            AddSearchDirectories(
                 MelonEnvironment.UserLibsDirectory,
                 MelonEnvironment.PluginsDirectory,
                 MelonEnvironment.ModsDirectory,
-                MelonEnvironment.MelonBaseDirectory,
-                MelonEnvironment.GameRootDirectory,
+                (MelonUtils.IsGameIl2Cpp()
+                    ? MelonEnvironment.Il2CppAssembliesDirectory
+                    : MelonEnvironment.UnityGameManagedDirectory),
                 MelonEnvironment.OurRuntimeDirectory,
-                MelonEnvironment.Il2CppAssembliesDirectory,
-                MelonEnvironment.UnityGameManagedDirectory,
-            };
-            foreach (string path in searchdirlist)
-                AddSearchDirectory(path);
-
-            ForceResolveRuntime("Mono.Cecil.dll");
-            ForceResolveRuntime("MonoMod.exe");
-            ForceResolveRuntime("MonoMod.Utils.dll");
-            ForceResolveRuntime("MonoMod.RuntimeDetour.dll");
+                MelonEnvironment.GameRootDirectory);
 
             // Setup Redirections
-            string[] assembly_list =
-            {
-                "MelonLoader",
-                "MelonLoader.ModHandler",
-            };
-            Assembly base_assembly = typeof(MelonAssemblyResolver).Assembly;
-            foreach (string assemblyName in assembly_list)
-                GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
+            OverrideBaseAssembly();
+
+            // Resolve Default Runtime Assemblies
+            ForceResolveRuntime(
+                "Mono.Cecil.dll",
+                "MonoMod.exe",
+                "MonoMod.Utils.dll",
+                "MonoMod.RuntimeDetour.dll");
 
             MelonDebug.Msg("[MelonAssemblyResolver] Setup Successful!");
         }
 
-        private static void ForceResolveRuntime(string fileName)
+        private static void OverrideBaseAssembly()
         {
-            string filePath = Path.Combine(MelonEnvironment.OurRuntimeDirectory, fileName);
-            if (!File.Exists(filePath))
-                return;
+            Assembly base_assembly = typeof(MelonAssemblyResolver).Assembly;
+            GetAssemblyResolveInfo(base_assembly.GetName().Name).Override = base_assembly;
+            GetAssemblyResolveInfo("MelonLoader").Override = base_assembly;
+            GetAssemblyResolveInfo("MelonLoader.ModHandler").Override = base_assembly;
+        }
 
-            Assembly assembly = null;
-            try
+        private static void ForceResolveRuntime(params string[] fileNames)
+        {
+            foreach (string fileName in fileNames)
             {
+                string filePath = Path.Combine(MelonEnvironment.OurRuntimeDirectory, fileName);
+                if (!File.Exists(filePath))
+                    return;
+
+                Assembly assembly = null;
+                try
+                {
 #if NET6_0_OR_GREATER
-                assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
+                    assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
 #else
                 assembly = Assembly.LoadFrom(filePath);
 #endif
+                }
+                catch { assembly = null; }
+
+                if (assembly == null)
+                    return;
+
+                GetAssemblyResolveInfo(Path.GetFileNameWithoutExtension(fileName)).Override = assembly;
             }
-            catch { assembly = null; }
-
-            if (assembly == null)
-                return;
-
-            GetAssemblyResolveInfo(Path.GetFileNameWithoutExtension(fileName)).Override = assembly;
         }
 
         // Search Directories
+
+        public static void AddSearchDirectories(params string[] directories)
+        {
+            foreach (string directory in directories)
+                AddSearchDirectory(directory);
+        }
+
+        public static void AddSearchDirectories(int priority, params string[] directories)
+        {
+            foreach (string directory in directories)
+                AddSearchDirectory(directory, priority);
+        }
+
+        public static void AddSearchDirectories(params (string, int)[] directories)
+        {
+            foreach (var pair in directories)
+                AddSearchDirectory(pair.Item1, pair.Item2);
+        }
+
         public static void AddSearchDirectory(string path, int priority = 0)
             => SearchDirectoryManager.Add(path, priority);
         public static void RemoveSearchDirectory(string path)
