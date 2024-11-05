@@ -43,6 +43,10 @@
 		<PackageReference Include="MonoMod.Utils" Version="22.7.31.1" />
 		<PackageReference Include="Samboy063.Tomlet" Version="5.4.0" />
 		<PackageReference Include="bHapticsLib" Version="1.0.6" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+		<PackageReference Include="Mono.Cecil" Version="0.10.4" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6'">
 		<PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.1" />
@@ -50,14 +54,13 @@
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.10" />
 		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
 		<PackageReference Include="Iced" Version="1.21.0" />
-		<PackageReference Include="Mono.Cecil" Version="0.11.6" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.579" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.579" />
 		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.6-ci.579" />
 		<PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.4.6-ci.579" />
-		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Mono.Cecil" Version="0.11.6" />
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\classdata.tpk" />
