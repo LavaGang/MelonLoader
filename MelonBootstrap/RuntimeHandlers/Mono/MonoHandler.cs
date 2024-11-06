@@ -139,6 +139,7 @@ internal static class MonoHandler
         {
             Core.Logger.Error($"The init method threw an exception:");
             Core.Logger.Error(mono.ToString(ex)!);
+            return;
         }
 
         MelonDebug.Log("Patching invoke");
@@ -226,7 +227,7 @@ internal static class MonoHandler
         return ResolveAssembly(name, false);
     }
 
-    private static unsafe nint OnAssemblyPreload(ref MonoLib.AssemblyName name, nint assemblyPaths, nint userData)
+    private static nint OnAssemblyPreload(ref MonoLib.AssemblyName name, nint assemblyPaths, nint userData)
     {
         return ResolveAssembly(name, true);
     }

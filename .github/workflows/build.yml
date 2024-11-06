@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_core:
+  build_windows:
     name: Build Windows Binaries
     runs-on: windows-latest
     steps:
@@ -70,3 +70,34 @@ jobs:
         with:
           name: MelonLoader.NuGet
           path: Output/Release/win-x64/MelonLoader/LavaGang.MelonLoader.${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('-ci.{0}', github.run_number) || '' }}.nupkg
+  
+  build_linux:
+    name: Build Linux Binaries
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Debug for linux-x64
+        run: dotnet build --no-restore -c Debug -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+
+      - name: Upload Debug for linux-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Linux.x64.CI.Debug
+          path: Output/Debug/linux-x64
+
+      - name: Build Release for linux-x64
+        run: dotnet build --no-restore -c Release -p:Version="${{ env.DEVVERSION }}${{ github.event_name != 'workflow_dispatch' && format('.{0}', github.run_number) || '' }}"
+
+      - name: Upload Release for linux-x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: MelonLoader.Linux.x64.CI.Release
+          path: Output/Release/linux-x64
