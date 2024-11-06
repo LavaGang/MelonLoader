@@ -89,7 +89,7 @@ internal static class MonoHandler
             {
                 Core.Logger.Msg("Loading .NET Standard 2.0 overrides");
 
-                var overridesDir = Path.Combine(Core.BaseDir, "MelonLoader", "Dependencies", "NetStandardOverrides");
+                var overridesDir = Path.Combine(Core.BaseDir, "MelonLoader", "Dependencies", "NetStandardPatches");
                 if (Directory.Exists(overridesDir))
                 {
                     foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))
