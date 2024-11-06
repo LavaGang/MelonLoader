@@ -16,32 +16,34 @@ internal static partial class ConsoleHandler
 
     public static bool Hidden { get; private set; } = ArgParser.IsDefined("melonloader.hideconsole");
 
-    public static void OpenConsole(string version, bool onTop)
+    public static void OpenConsole(bool onTop, string? title)
     {
         if (Hidden)
             return;
 
 #if WINDOWS
-        AllocConsole();
-
+        // Do not create a new window if a window already exists or the output is being redirected
         var consoleWindow = GetConsoleWindow();
-        if (consoleWindow == 0)
+        var stdOut = GetStdHandle(StdOutputHandle);
+        if (consoleWindow == 0 && stdOut == 0)
         {
-            Hidden = true;
-            return;
+            AllocConsole();
+            consoleWindow = GetConsoleWindow();
+            if (consoleWindow == 0)
+            {
+                Hidden = true;
+                return;
+            }
+
+            if (onTop)
+                SetWindowPos(consoleWindow, -1, 0, 0, 0, 0, 0x0001 | 0x0002);
         }
 
-        if (onTop)
-            SetWindowPos(consoleWindow, -1, 0, 0, 0, 0, 0x0001 | 0x0002);
+        if (consoleWindow != 0)
 #endif
-
-        if (!ArgParser.IsDefined("melonloader.consoledst"))
         {
-            var title = "MelonLoader v" + version;
-            if (Core.Debug)
-                title = "[Debug] " + title;
-
-            Console.Title = title;
+            if (title != null)
+                Console.Title = title;
         }
 
 #if WINDOWS

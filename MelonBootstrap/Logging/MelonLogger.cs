@@ -20,8 +20,15 @@ internal static class MelonLogger
             versionStr += "-ci." + version.Revision.ToString();
 
         var onTop = ArgParser.IsDefined("melonloader.consoleontop");
+        string? title = null;
+        if (!ArgParser.IsDefined("melonloader.consoledst"))
+        {
+            title = "MelonLoader v" + versionStr;
+            if (Core.Debug)
+                title = "[D] " + title;
+        }
 
-        ConsoleHandler.OpenConsole(versionStr, onTop);
+        ConsoleHandler.OpenConsole(onTop, title);
         // Making logs from this point is ok, but only for console
 
         uint maxLogs;
