@@ -62,11 +62,6 @@ internal class MonoLib
 
         if (!NativeLibrary.TryLoad(monoPath, out var hRuntime))
             return null;
-        
-#if LINUX
-        var monoDir = Path.GetDirectoryName(monoPath)!;
-        NativeLibrary.Load(Path.Combine(monoDir, "libmono-native.so"));
-#endif
 
         var monoName = Path.GetFileNameWithoutExtension(monoPath);
 #if LINUX
