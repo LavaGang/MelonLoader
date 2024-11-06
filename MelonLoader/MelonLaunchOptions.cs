@@ -42,10 +42,11 @@ namespace MelonLoader
 
         internal static void Load()
         {
-            LemonEnumerator<string> argEnumerator = new LemonEnumerator<string>(CommandLineArgs);
-            while (argEnumerator.MoveNext())
+            string[] args = CommandLineArgs;
+            int maxLen = args.Length;
+            for (int i = 1; i < maxLen; i++)
             {
-                string fullcmd = argEnumerator.Current;
+                string fullcmd = args[i];
                 if (string.IsNullOrEmpty(fullcmd))
                     continue;
 
@@ -78,11 +79,12 @@ namespace MelonLoader
                     noPrefixCmd = split[0];
                     cmdArg = split[1];
                 }
+
                 if ((string.IsNullOrEmpty(cmdArg)
-                        && !argEnumerator.Peek(out cmdArg))
+                        && ((i + 1) >= maxLen))
                     || string.IsNullOrEmpty(cmdArg)
-                    || !cmdArg.StartsWith("--")
-                    || !cmdArg.StartsWith("-"))
+                    || cmdArg.StartsWith("--")
+                    || cmdArg.StartsWith("-"))
                 {
                     // Unknown Command, Add it to Dictionary
                     ExternalArguments.Add(noPrefixCmd, null);

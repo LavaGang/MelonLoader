@@ -33,7 +33,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" />
-        <PackageReference Include="AssetsTools.NET" Version="3.0.0" />
+        <PackageReference Include="AssetsTools.NET" Version="3.0.0-preview3" />
         <PackageReference Include="HarmonyX" Version="2.10.2" />
         <PackageReference Include="MonoMod" Version="22.7.31.1" />
         <PackageReference Include="MonoMod.RuntimeDetour" Version="22.7.31.1" />
@@ -42,19 +42,22 @@
         <PackageReference Include="bHapticsLib" Version="1.0.6" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+        <PackageReference Include="Mono.Cecil" Version="0.10.4" />
+    </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'net6'">
         <PackageReference Include="AsmResolver.DotNet" Version="6.0.0-beta.1" />
         <PackageReference Include="Microsoft.Diagnostics.Runtime" Version="3.1.512801" />
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
-        <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+        <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
         <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+        <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
         <PackageReference Include="Iced" Version="1.21.0" />
-        <PackageReference Include="Mono.Cecil" Version="0.11.5" />
         <PackageReference Include="Il2CppInterop.Common" Version="$(Il2CppInteropVersion)" />
         <PackageReference Include="Il2CppInterop.Runtime" Version="$(Il2CppInteropVersion)" />
         <PackageReference Include="Il2CppInterop.Generator" Version="$(Il2CppInteropVersion)" />
         <PackageReference Include="Il2CppInterop.HarmonySupport" Version="$(Il2CppInteropVersion)" />
-        <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.6" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Resources\classdata.tpk" />

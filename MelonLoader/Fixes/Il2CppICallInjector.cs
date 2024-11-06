@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 using Il2CppInterop.HarmonySupport;
 using HarmonyLib;
 
+#pragma warning disable 0649
+
 namespace MelonLoader.Fixes
 {
     internal static class Il2CppICallInjector
@@ -62,7 +64,7 @@ namespace MelonLoader.Fixes
             }
             catch (Exception e)
             {
-                LogError(e.ToString());
+                LogDebugWarning(e.ToString());
             }
         }
 

@@ -179,7 +179,7 @@ namespace MelonLoader.InternalUtils
         {
             StringBuilder messageBuilder = new StringBuilder("Some Melons are missing dependencies, which you may have to install.\n" +
                 "If these are optional dependencies, mark them as optional using the MelonOptionalDependencies attribute.\n" +
-                "This warning will turn into an error and Melons with missing dependencies will not be loaded in the next version of MelonLoader.\n");
+                "This warning will turn into an error and Melons with missing dependencies will not be loaded in future versions of MelonLoader.\n");
             foreach (string melonName in melonsWithMissingDeps.Keys)
             {
                 messageBuilder.Append($"- '{melonName}' is missing the following dependencies:\n");
