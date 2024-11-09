@@ -59,9 +59,11 @@ pub fn init() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 	
-	//fix dobby_rs link
-	let dobby_path = files::get_dobby_dir(base_dir.clone(), game_dir)?;
-    add_dll_directory(dobby_path);
+	if cfg!(target_os = "windows") {
+		//fix dobby_rs link
+		let dobby_path = files::get_dobby_dir(base_dir.clone(), game_dir)?;
+		add_dll_directory(dobby_path);
+	}
 
     let bootstrap_path = files::get_bootstrap_path(&base_dir)?;
 

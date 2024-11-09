@@ -55,7 +55,12 @@ namespace MelonLoader
                                 break;
                             else
                             {
-                                File.Delete(pair.Item1);
+                                // This is cursed but better than crashing
+                                try
+                                {
+                                    File.Delete(pair.Item1);
+                                }
+                                catch { }
                                 fileCount--;
                             }
                         }

@@ -51,7 +51,7 @@ namespace MelonLoader
             UnityInformationHandler.Setup();
 
             CurrentGameAttribute = new MelonGameAttribute(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName);
-            CurrentPlatform = IsGame32Bit() ? MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86 : MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64; // Temporarily
+            CurrentPlatform = IsGame32Bit() ? MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86 : MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64;
             CurrentDomain = IsGameIl2Cpp() ? MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP : MelonPlatformDomainAttribute.CompatibleDomains.MONO;
         }
 
@@ -303,11 +303,14 @@ namespace MelonLoader
             try { returnval = asm.GetTypes().AsEnumerable(); }
             catch (ReflectionTypeLoadException ex) 
             {
-                MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
-                //Console.WriteLine(ex);
+                //MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
                 returnval = ex.Types; 
             }
-
+            //catch (Exception ex)
+            //{
+                //MelonLogger.Error($"Failed to get all types in assembly {asm.FullName} due to: {ex.Message}", ex);
+            //    returnval = null;
+            //}
             return returnval.Where(x => (x != null) && (predicate == null || predicate(x)));
         }
 
@@ -318,9 +321,9 @@ namespace MelonLoader
         {
             Type x = null;
             try { x = asm.GetType(typeName); }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
-                MelonLogger.Error($"Failed to get type {typeName} from assembly {asm.FullName} due to: {ex.Message}", ex);
+                //MelonLogger.Error($"Failed to get type {typeName} from assembly {asm.FullName} due to: {ex.Message}", ex);
                 x = null;
             }
             if ((x != null) && (predicate == null || predicate(x)))
@@ -345,13 +348,32 @@ namespace MelonLoader
             return returnval;
         }
 
+        public static bool IsManagedDLL(string path)
+        {
+            if (Path.GetExtension(path).ToLower() != ".dll")
+                return false;
+
+            try
+            {
+                AssemblyName.GetAssemblyName(path);
+                return true;
+            }
+            catch (FileLoadException)
+            {
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static HarmonyMethod ToNewHarmonyMethod(this MethodInfo methodInfo)
         {
             if (methodInfo == null)
                 throw new ArgumentNullException(nameof(methodInfo));
             return new HarmonyMethod(methodInfo);
         }
-
 
         public static DynamicMethodDefinition ToNewDynamicMethodDefinition(this MethodBase methodBase)
         {

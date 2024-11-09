@@ -2,9 +2,7 @@
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.CompatibilityLayers</RootNamespace>
 		<TargetFramework>net35</TargetFramework>
-		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\CompatibilityLayers\</OutputPath>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

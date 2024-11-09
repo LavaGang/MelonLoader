@@ -2,9 +2,7 @@
 	<PropertyGroup>
 		<RootNamespace>MelonLoader.Il2CppAssemblyGenerator</RootNamespace>
 		<TargetFramework>net6</TargetFramework>
-		<LangVersion>Latest</LangVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath>$(SolutionDir)Output\$(Configuration)\MelonLoader\Dependencies\Il2CppAssemblyGenerator\</OutputPath>
@@ -18,7 +16,7 @@
 		<PackageReference Include="Il2CppInterop.Generator" Version="1.4.6-ci.579" ExcludeAssets="Runtime" />
 		<PackageReference Include="Il2CppInterop.Common" Version="1.4.6-ci.579" ExcludeAssets="Runtime" />
 		<PackageReference Include="Il2CppInterop.Runtime" Version="1.4.6-ci.579" ExcludeAssets="Runtime" />
-		<PackageReference Include="Mono.Cecil" Version="0.11.5" ExcludeAssets="Runtime" />
+		<PackageReference Include="Mono.Cecil" Version="0.11.6" ExcludeAssets="Runtime" />
 		<PackageReference Include="AssetRipper.VersionUtilities" Version="1.5.0" ExcludeAssets="Runtime" />
 	</ItemGroup>
 </Project>
