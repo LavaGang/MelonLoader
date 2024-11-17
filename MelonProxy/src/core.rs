@@ -14,10 +14,10 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = std::env::args().collect();
 
     //TODO: Support UTF-16 (it will suck)
-    let mut base_dir = std::env::current_dir()?;
-    let mut no_mods = false;
-
     let current_exe = std::env::current_exe()?;
+    let exe_dir = current_exe.parent().unwrap();
+    let mut base_dir = exe_dir.to_path_buf();
+    let mut no_mods = false;
 
     if !files::is_unity(&current_exe)? {
         return Ok(());
