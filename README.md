@@ -233,7 +233,7 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 
 External Libraries and Tools that are downloaded and used at Runtime:
 - [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.
-- Unity Runtime Libraries from [Unity-Runtime-Libraries](https://github.com/LavaGang/Unity-Runtime-Libraries) are part of Unity Software.  
+- Unity Runtime Libraries from [MelonLoader.UnityDependencies](https://github.com/LavaGang/MelonLoader.UnityDependencies) are part of Unity Software.  
 Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
 - [.NET Runtime](https://github.com/dotnet/runtime) is licensed under the MIT License. See [LICENSE](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT) for the full License.
 

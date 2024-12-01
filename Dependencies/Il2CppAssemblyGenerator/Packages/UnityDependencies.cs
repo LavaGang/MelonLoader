@@ -8,7 +8,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         {
             Name = nameof(UnityDependencies);
             Version = InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType();
-            URL = $"https://github.com/LavaGang/Unity-Runtime-Libraries/raw/master/{Version}.zip";
+            URL = $"https://github.com/LavaGang/MelonLoader.UnityDependencies/releases/download/{Version}/Managed.zip";
             Destination = Path.Combine(Core.BasePath, Name);
             FilePath = Path.Combine(Core.BasePath, $"{Name}_{Version}.zip");
         }
