@@ -22,7 +22,7 @@ public static class Core
 #endif
 
 #if LINUX
-    [UnmanagedCallersOnly(EntryPoint = "Init")]
+    [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = "Init")]
 #endif
     public static void Init(nint moduleHandle)
     {
@@ -51,25 +51,6 @@ public static class Core
 
         if (customBaseDir != null)
             Logger.Msg($"Starting from a custom base directory: '{BaseDir}'");
-
-        //var dobbyPath = Path.Combine(baseDir, "dobby.dll");
-        //if (!File.Exists(dobbyPath))
-        //{
-        //    dobbyPath = Path.Combine(baseDir, "MelonLoader", "Dependencies", "dobby.dll");
-        //    if (!File.Exists(dobbyPath))
-        //    {
-        //        Console.WriteLine("Failed to find dobby");
-        //        return;
-        //    }
-        //}
-
-        //if (!NativeLibrary.TryLoad(dobbyPath, out _))
-        //{
-        //    Console.WriteLine("Failed to load dobby");
-        //    return;
-        //}
-
-        //Console.WriteLine("Loaded dobby.");
 
         MelonDebug.Log("Starting probe for runtime");
 
