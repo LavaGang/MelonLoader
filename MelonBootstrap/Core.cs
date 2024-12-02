@@ -3,12 +3,13 @@ using MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 using MelonLoader.Bootstrap.Utils;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap;
 
 public static class Core
 {
+    public static nint LibraryHandle { get; private set; }
+
     internal static InternalLogger Logger { get; private set; } = new(Color.BlueViolet, "MelonBootstrap");
     public static string DataDir { get; private set; } = null!;
     public static string GameDir { get; private set; } = null!;
@@ -20,25 +21,13 @@ public static class Core
         = false;
 #endif
 
-#if WINDOWS
-    [UnmanagedCallersOnly(EntryPoint = "DllMain")]
-    public static bool DllMain(nint hModule, uint ulReasonForCall, nint lpReserved)
-    {
-        if (ulReasonForCall != 1) 
-            return true;
-        
-        MelonLoader.Bootstrap.Proxy.ProxyResolver.Init(hModule);
-        Init();
-
-        return true;
-    }
-#endif
-
 #if LINUX
     [UnmanagedCallersOnly(EntryPoint = "Init")]
 #endif
-    public static void Init()
+    public static void Init(nint moduleHandle)
     {
+        LibraryHandle = moduleHandle;
+
         var exePath = Environment.ProcessPath!;
         GameDir = Path.GetDirectoryName(exePath)!;
 

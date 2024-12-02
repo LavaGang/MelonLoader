@@ -260,7 +260,7 @@ namespace MelonLoader
 
         internal static unsafe void WriteSpacer()
         {
-            HostLogMsg(null, null, 0, null, null, 0);
+            BootstrapInterop.Library.LogMsg(null, null, 0, null, null, 0);
         }
 
         internal static void PrintModName(Color meloncolor, Color authorcolor, string name, string author, string additionalCredits, string version, string id)
@@ -272,28 +272,13 @@ namespace MelonLoader
                 PassLogMsg(DefaultTextColor, $"Additional credits: {additionalCredits}", default, null);
         }
 
-#if NET6_0_OR_GREATER
-        internal static LogMsgFn HostLogMsg;
-        internal static LogErrorFn HostLogError;
-        internal static LogMelonInfoFn HostLogMelonInfo;
-#else
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static unsafe extern void HostLogMsg(ColorRGB* msgColor, char* msg, int msgLength, ColorRGB* sectionColor, char* section, int sectionLength);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static unsafe extern void HostLogError(char* msg, int msgLength, char* section, int sectionLength);
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private static unsafe extern void HostLogMelonInfo(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength);
-#endif
-
         internal static unsafe void PassLogMsg(ColorRGB msgColor, string msg, ColorRGB sectionColor, string section)
         {
             if (section == null)
             {
                 fixed (char* pMsg = msg)
                 {
-                    HostLogMsg(&msgColor, pMsg, msg.Length, null, null, 0);
+                    BootstrapInterop.Library.LogMsg(&msgColor, pMsg, msg.Length, null, null, 0);
                 }
 
                 return;
@@ -303,7 +288,7 @@ namespace MelonLoader
             {
                 fixed (char* pSection = section)
                 {
-                    HostLogMsg(&msgColor, pMsg, msg.Length, &sectionColor, pSection, section.Length);
+                    BootstrapInterop.Library.LogMsg(&msgColor, pMsg, msg.Length, &sectionColor, pSection, section.Length);
                 }
             }
         }
@@ -314,7 +299,7 @@ namespace MelonLoader
             {
                 fixed (char* pMsg = msg)
                 {
-                    HostLogError(pMsg, msg.Length, null, 0);
+                    BootstrapInterop.Library.LogError(pMsg, msg.Length, null, 0);
                 }
 
                 return;
@@ -324,7 +309,7 @@ namespace MelonLoader
             {
                 fixed (char* pSection = section)
                 {
-                    HostLogError(pMsg, msg.Length, pSection, section.Length);
+                    BootstrapInterop.Library.LogError(pMsg, msg.Length, pSection, section.Length);
                 }
             }
         }
@@ -335,7 +320,7 @@ namespace MelonLoader
             {
                 fixed (char* pInfo = info)
                 {
-                    HostLogMelonInfo(&nameColor, pName, name.Length, pInfo, info.Length);
+                    BootstrapInterop.Library.LogMelonInfo(&nameColor, pName, name.Length, pInfo, info.Length);
                 }
             }
         }

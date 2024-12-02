@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader
@@ -57,9 +58,7 @@ namespace MelonLoader
         {
 #if WINDOWS
             return LoadLibrary(name);
-#endif
-            
-#if LINUX
+#elif LINUX
             if (!Path.HasExtension(name))
                 name += ".so";
             
@@ -71,9 +70,7 @@ namespace MelonLoader
         {
 #if WINDOWS
             return GetProcAddress(hModule, lpProcName);
-#endif
-            
-#if LINUX
+#elif LINUX
             return dlsym(hModule, lpProcName);
 #endif
         }
@@ -85,9 +82,7 @@ namespace MelonLoader
         internal static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
         [DllImport("kernel32")]
         internal static extern IntPtr FreeLibrary(IntPtr hModule);
-#endif
-        
-#if LINUX
+#elif LINUX
         [DllImport("libdl.so.2")]
         protected static extern IntPtr dlopen(string filename, int flags);
 
@@ -117,17 +112,25 @@ namespace MelonLoader
 
             Instance = (T)Activator.CreateInstance(specifiedType);
 
-            FieldInfo[] fields = specifiedType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (fields.Length <= 0)
-                return;
-
-            foreach (FieldInfo fieldInfo in fields)
+            foreach (var fieldInfo in specifiedType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
-                Type fieldType = fieldInfo.FieldType;
-                if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length <= 0)
+                if (fieldInfo.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length != 0)
+                    continue;
+
+                var fieldType = fieldInfo.FieldType;
+                if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
                     continue;
 
                 fieldInfo.SetValue(Instance, GetExport(fieldType, fieldInfo.Name));
+            }
+
+            foreach (var propertyInfo in specifiedType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                var fieldType = propertyInfo.PropertyType;
+                if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
+                    continue;
+
+                propertyInfo.SetValue(Instance, GetExport(fieldType, propertyInfo.Name), null);
             }
         }
     }

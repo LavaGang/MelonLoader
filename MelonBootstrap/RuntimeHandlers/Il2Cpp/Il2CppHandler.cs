@@ -1,5 +1,4 @@
-﻿using MelonLoader.Bootstrap.Logging;
-using MelonLoader.Bootstrap.Utils;
+﻿using MelonLoader.Bootstrap.Utils;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
@@ -9,7 +8,7 @@ internal static class Il2CppHandler
     private static Dobby.Patch<Il2CppLib.InitFn>? initPatch;
     private static Dobby.Patch<Il2CppLib.RuntimeInvokeFn>? invokePatch;
 
-    private static FunctionExchange functionExchange; // Prevent GC
+    private static Action? startFunc; // Prevent GC
 
     private static Il2CppLib il2cpp = null!;
 
@@ -92,23 +91,18 @@ internal static class Il2CppHandler
             return;
         }
 
-        functionExchange = new FunctionExchange()
-        {
-            HookAttach = NativeHookAttachImpl,
-            HookDetach = NativeHookDetachImpl,
-            LogMsg = MelonLogger.LogFromManaged,
-            LogError = MelonLogger.LogErrorFromManaged,
-            LogMelonInfo = MelonLogger.LogMelonInfoFromManaged
-        };
+        var startFuncPtr = Core.LibraryHandle;
 
         MelonDebug.Log("Invoking NativeHost entry");
-        initialize(ref functionExchange);
+        initialize(ref startFuncPtr);
 
-        if (functionExchange.Start == null)
+        if (startFuncPtr == 0 || startFuncPtr == Core.LibraryHandle)
         {
             Core.Logger.Error($"Managed did not return the initial function pointer");
             return;
         }
+
+        startFunc = Marshal.GetDelegateForFunctionPointer<Action>(startFuncPtr);
 
         MelonDebug.Log("Patching invoke");
         invokePatch = Dobby.CreatePatch<Il2CppLib.RuntimeInvokeFn>(il2cpp.RuntimeInvokePtr, InvokeDetour);
@@ -122,9 +116,9 @@ internal static class Il2CppHandler
         var result = invokePatch.Original(method, obj, args, exc);
 
         var name = il2cpp.GetMethodName(method);
-        if (name == null || !name.Contains("Internal_ActiveSceneChanged")) 
+        if (name == null || !name.Contains("Internal_ActiveSceneChanged"))
             return result;
-        
+
         MelonDebug.Log("Invoke hijacked");
         invokePatch.Destroy();
 
@@ -135,7 +129,7 @@ internal static class Il2CppHandler
 
     private static void Start()
     {
-        functionExchange.Start?.Invoke();
+        startFunc?.Invoke();
     }
 
     private static unsafe void NativeHookAttachImpl(nint* target, nint detour)
@@ -148,17 +142,6 @@ internal static class Il2CppHandler
         Dobby.HookDetach(*target);
     }
 
-    private delegate void InitializeFn(ref FunctionExchange exchange);
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct FunctionExchange
-    {
-        internal required NativeHookFn HookAttach;
-        internal required NativeHookFn HookDetach;
-        internal required LogMsgFn LogMsg;
-        internal required LogErrorFn LogError;
-        internal required LogMelonInfoFn LogMelonInfo;
-
-        public Action? Start;
-    }
+    // Requires the bootstrap handle to be passed first
+    private delegate void InitializeFn(ref nint startFunc);
 }

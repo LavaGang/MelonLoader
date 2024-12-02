@@ -1,6 +1,14 @@
 EXPORTS
    DotNetRuntimeDebugHeader DATA
    DllMain
+   NativeHookAttach
+   NativeHookDetach
+   LogMsg
+   LogError
+   LogMelonInfo
+   MonoInstallHooks
+   MonoGetDomainPtr
+   MonoGetRuntimeHandle
    GetFileVersionInfoSizeA=ImplGetFileVersionInfoSizeA
    GetFileVersionInfoA=ImplGetFileVersionInfoA
    GetFileVersionInfoByHandle=ImplGetFileVersionInfoByHandle

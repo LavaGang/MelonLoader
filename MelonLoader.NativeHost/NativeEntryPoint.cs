@@ -5,68 +5,48 @@ using System.Runtime.Loader;
 
 namespace MelonLoader.NativeHost;
 
-internal static class NativeEntryPoint
+internal static unsafe class NativeEntryPoint
 {
     // Prevent GC
     private static Action? startDel;
 
-    internal static FunctionExchange Functions { get; private set; }
-
+    // The argument should first hold the bootstrap handle, and return the start function ptr
     [UnmanagedCallersOnly]
-    private unsafe static void NativeEntry(FunctionExchange* exchange)
+    private static void NativeEntry(nint* startFunc)
     {
         var currentAsm = typeof(NativeEntryPoint).Assembly;
 
         var asm = AssemblyLoadContext.Default.LoadFromAssemblyPath(currentAsm.Location);
         var type = asm.GetType("MelonLoader.NativeHost.NativeEntryPoint", true)!;
         var init = type.GetMethod(nameof(Initialize), BindingFlags.Static | BindingFlags.NonPublic)!;
-        init.Invoke(null, [ (nint)exchange ]);
+        init.Invoke(null, [ (nint)startFunc]);
     }
 
-    private unsafe static void Initialize(FunctionExchange* exchange)
+    private unsafe static void Initialize(nint* startFunc)
     {
-        startDel = Start;
-        exchange->Start = Marshal.GetFunctionPointerForDelegate(startDel);
-
-        Functions = *exchange;
-
         AssemblyLoadContext.Default.Resolving += OnResolveAssembly;
         
         //Have to invoke through a proxy so that we don't load MelonLoader.dll before the above line
-        try
-        {
-            MelonLoaderInvoker.Initialize();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("[NewEntryPoint] Caught exception invoking Initialize! " + ex);
-            Thread.Sleep(5000);
-            Environment.Exit(1);
-        }
+        CallInit(startFunc);
     }
 
-    private static void Start()
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void CallInit(nint* startFunc)
     {
-        try
-        {
-            MelonLoaderInvoker.Start();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("[NewEntryPoint] Caught exception invoking Start! " + ex);
-            Thread.Sleep(5000);
-            Environment.Exit(1);
-        }
+        var bootstrapHandle = *startFunc;
+
+        startDel = BootstrapInterop.Start;
+        *startFunc = Marshal.GetFunctionPointerForDelegate(startDel);
+
+        BootstrapInterop.Initialize(bootstrapHandle);
     }
 
     private static Assembly? OnResolveAssembly(AssemblyLoadContext alc, AssemblyName name)
     {
-        var ourDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        var ourDir = Path.GetDirectoryName(typeof(NativeEntryPoint).Assembly.Location)!;
 
         var potentialDllPath = Path.Combine(ourDir, name.Name + ".dll");
-        if (File.Exists(potentialDllPath))
-            return alc.LoadFromAssemblyPath(potentialDllPath);
 
-        return null;
+        return File.Exists(potentialDllPath) ? alc.LoadFromAssemblyPath(potentialDllPath) : null;
     }
 }

@@ -11,7 +11,7 @@ internal class Il2CppLib(Il2CppLib.MethodGetNameFn methodGetName)
 #elif LINUX
         "GameAssembly.so";
 #endif
-    
+
     public required nint Handle { get; init; }
 
     public required nint InitPtr { get; init; }

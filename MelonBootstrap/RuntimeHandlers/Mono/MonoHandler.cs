@@ -1,5 +1,4 @@
-﻿using MelonLoader.Bootstrap.Logging;
-using MelonLoader.Bootstrap.Utils;
+﻿using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics;
 
 namespace MelonLoader.Bootstrap.RuntimeHandlers.Mono;
@@ -9,13 +8,12 @@ internal static class MonoHandler
     private static Dobby.Patch<MonoLib.JitInitVersionFn>? initPatch;
     private static Dobby.Patch<MonoLib.RuntimeInvokeFn>? invokePatch;
 
-    private static MonoLib mono = null!;
-
-    private static nint domain;
-
     private static nint assemblyManagerResolve;
     private static nint assemblyManagerLoadInfo;
     private static nint coreStart;
+
+    internal static nint Domain { get; private set; }
+    internal static MonoLib Mono { get; private set; } = null!;
 
     public static bool TryInitialize()
     {
@@ -29,10 +27,10 @@ internal static class MonoHandler
         if (monoLib == null)
             return false;
 
-        mono = monoLib;
+        Mono = monoLib;
 
         MelonDebug.Log("Patching mono init");
-        initPatch = Dobby.CreatePatch<MonoLib.JitInitVersionFn>(mono.JitInitVersionPtr, InitDetour);
+        initPatch = Dobby.CreatePatch<MonoLib.JitInitVersionFn>(Mono.JitInitVersionPtr, InitDetour);
 
         return true;
     }
@@ -47,27 +45,27 @@ internal static class MonoHandler
         ConsoleHandler.ResetHandles();
         MelonDebug.Log("In init detour");
 
-        domain = initPatch.Original(name, b);
+        Domain = initPatch.Original(name, b);
 
-        if (Core.Debug && mono.DebugDomainCreate != null)
+        if (Core.Debug && Mono.DebugDomainCreate != null)
         {
             MelonDebug.Log("Creating Mono Debug Domain");
-            mono.DebugDomainCreate(domain);
+            Mono.DebugDomainCreate(Domain);
         }
-        
+
         MelonDebug.Log("Setting Mono Main Thread");
-        mono.SetCurrentThreadAsMain();
-        
-        if (mono is { IsOld: false, DomainSetConfig: not null })
+        Mono.SetCurrentThreadAsMain();
+
+        if (Mono is { IsOld: false, DomainSetConfig: not null })
         {
             MelonDebug.Log("Setting Mono Config");
-        
-            mono.DomainSetConfig(domain, Core.GameDir, name);
+
+            Mono.DomainSetConfig(Domain, Core.GameDir, name);
         }
 
         InitializeManaged();
 
-        return domain;
+        return Domain;
     }
 
     private static unsafe void InitializeManaged()
@@ -95,7 +93,7 @@ internal static class MonoHandler
                     foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))
                     {
                         MelonDebug.Log("Loading assembly: " + dll);
-                        if (mono.DomainAssemblyOpen(domain, dll) == 0)
+                        if (Mono.DomainAssemblyOpen(Domain, dll) == 0)
                             MelonDebug.Log("Assembly failed to load!");
                     }
                 }
@@ -103,47 +101,41 @@ internal static class MonoHandler
         }
 
         MelonDebug.Log("Loading ML assembly");
-        var assembly = mono.DomainAssemblyOpen(domain, mlPath);
+        var assembly = Mono.DomainAssemblyOpen(Domain, mlPath);
         if (assembly == 0)
         {
             Core.Logger.Error($"Failed to load the Mono MelonLoader assembly");
             return;
         }
-        
+
         MelonDebug.Log("Adding internal calls");
-        mono.AddManagedInternalCall("MelonLoader.Resolver.AssemblyManager::InstallHooks", InstallHooks);
-        mono.AddManagedInternalCall<PtrRet>("MelonLoader.Utils.MonoLibrary::GetRootDomainPtr", GetRootDomainPtrImpl);
-        mono.AddManagedInternalCall<PtrRet>("MelonLoader.Utils.MonoLibrary::GetLibPtr", GetLibPtrImpl);
-        mono.AddManagedInternalCall<CastManagedAssemblyPtr>("MelonLoader.Utils.MonoLibrary::CastManagedAssemblyPtr", CastManagedAssemblyPtrImpl);
-        mono.AddManagedInternalCall<NativeHookFn>("MelonLoader.BootstrapInterop::NativeHookAttach", NativeHookAttachImpl);
-        mono.AddManagedInternalCall<NativeHookFn>("MelonLoader.BootstrapInterop::NativeHookDetach", NativeHookDetachImpl);
-        mono.AddManagedInternalCall<LogMsgFn>("MelonLoader.MelonLogger::HostLogMsg", MelonLogger.LogFromManaged);
-        mono.AddManagedInternalCall<LogErrorFn>("MelonLoader.MelonLogger::HostLogError", MelonLogger.LogErrorFromManaged);
-        mono.AddManagedInternalCall<LogMelonInfoFn>("MelonLoader.MelonLogger::HostLogMelonInfo", MelonLogger.LogMelonInfoFromManaged);
-        
-        var image = mono.AssemblyGetImage(assembly);
-        var coreClass = mono.ClassFromName(image, "MelonLoader", "Core");
-        
-        var initMethod = mono.ClassGetMethodFromName(coreClass, "Initialize", 0);
-        coreStart = mono.ClassGetMethodFromName(coreClass, "Start", 0);
-        
-        var assemblyManagerClass = mono.ClassFromName(image, "MelonLoader.Resolver", "AssemblyManager");
-        
-        assemblyManagerResolve = mono.ClassGetMethodFromName(assemblyManagerClass, "Resolve", 6);
-        assemblyManagerLoadInfo = mono.ClassGetMethodFromName(assemblyManagerClass, "LoadInfo", 1);
-        
+        Mono.AddManagedInternalCall<CastManagedAssemblyPtrFn>("MelonLoader.Utils.MonoLibrary::CastManagedAssemblyPtr", CastManagedAssemblyPtrImpl);
+
+        var image = Mono.AssemblyGetImage(assembly);
+        var interopClass = Mono.ClassFromName(image, "MelonLoader", "BootstrapInterop");
+
+        var initMethod = Mono.ClassGetMethodFromName(interopClass, "Initialize", 1);
+        coreStart = Mono.ClassGetMethodFromName(interopClass, "Start", 0);
+
+        var assemblyManagerClass = Mono.ClassFromName(image, "MelonLoader.Resolver", "AssemblyManager");
+
+        assemblyManagerResolve = Mono.ClassGetMethodFromName(assemblyManagerClass, "Resolve", 6);
+        assemblyManagerLoadInfo = Mono.ClassGetMethodFromName(assemblyManagerClass, "LoadInfo", 1);
+
         nint ex = 0;
         MelonDebug.Log("Invoking managed core init");
-        mono.RuntimeInvoke(initMethod, 0, null, ref ex);
-        if (ex != 0)
+
+        var bootstrapHandle = Core.LibraryHandle;
+        var initArgs = stackalloc nint*[]
         {
-            Core.Logger.Error($"The init method threw an exception:");
-            Core.Logger.Error(mono.ToString(ex)!);
+            &bootstrapHandle
+        };
+        Mono.RuntimeInvoke(initMethod, 0, (void**)initArgs, ref ex);
+        if (ex != 0)
             return;
-        }
 
         MelonDebug.Log("Patching invoke");
-        invokePatch = Dobby.CreatePatch<MonoLib.RuntimeInvokeFn>(mono.RuntimeInvokePtr, InvokeDetour);
+        invokePatch = Dobby.CreatePatch<MonoLib.RuntimeInvokeFn>(Mono.RuntimeInvokePtr, InvokeDetour);
     }
 
     private static unsafe nint InvokeDetour(nint method, nint obj, void** args, ref nint ex)
@@ -153,13 +145,13 @@ internal static class MonoHandler
 
         var result = invokePatch.Original(method, obj, args, ref ex);
 
-        var name = mono.GetMethodName(method);
+        var name = Mono.GetMethodName(method);
         if (name == null ||
-            ((!mono.IsOld || (!name.Contains("Awake") && !name.Contains("DoSendMouseEvents"))) 
+            ((!Mono.IsOld || (!name.Contains("Awake") && !name.Contains("DoSendMouseEvents")))
              && !name.Contains("Internal_ActiveSceneChanged")
-             && !name.Contains("UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize"))) 
+             && !name.Contains("UnityEngine.ISerializationCallbackReceiver.OnAfterSerialize")))
             return result;
-        
+
         MelonDebug.Log("Invoke hijacked");
         invokePatch.Destroy();
 
@@ -171,27 +163,7 @@ internal static class MonoHandler
     private static unsafe void Start()
     {
         nint ex = 0;
-        mono.RuntimeInvoke(coreStart, 0, null, ref ex);
-        if (ex != 0)
-        {
-            Core.Logger.Error($"The start method threw an exception:");
-            Core.Logger.Error(mono.ToString(ex)!);
-        }
-    }
-
-    private static unsafe void NativeHookAttachImpl(nint* target, nint detour)
-    {
-        *target = Dobby.HookAttach(*target, detour);
-    }
-
-    private static unsafe void NativeHookDetachImpl(nint* target, nint detour)
-    {
-        Dobby.HookDetach(*target);
-    }
-
-    private static nint GetRootDomainPtrImpl()
-    {
-        return domain;
+        Mono.RuntimeInvoke(coreStart, 0, null, ref ex);
     }
 
     private static nint CastManagedAssemblyPtrImpl(nint ptr)
@@ -199,16 +171,11 @@ internal static class MonoHandler
         return ptr;
     }
 
-    private static nint GetLibPtrImpl()
-    {
-        return mono.Handle;
-    }
-
-    private static void InstallHooks()
+    internal static void InstallHooks()
     {
         MelonDebug.Log("Installing hooks");
 
-        mono.InstallAssemblyHooks(OnAssemblyPreload, OnAssemblySearch, OnAssemblyLoad);
+        Mono.InstallAssemblyHooks(OnAssemblyPreload, OnAssemblySearch, OnAssemblyLoad);
     }
 
     private static unsafe void OnAssemblyLoad(nint monoAssembly, nint userData)
@@ -216,10 +183,10 @@ internal static class MonoHandler
         if (monoAssembly == 0)
             return;
 
-        var obj = mono.AssemblyGetObject(domain, monoAssembly);
+        var obj = Mono.AssemblyGetObject(Domain, monoAssembly);
 
         nint ex = 0;
-        mono.RuntimeInvoke(assemblyManagerLoadInfo, 0, (void**)&obj, ref ex);
+        Mono.RuntimeInvoke(assemblyManagerLoadInfo, 0, (void**)&obj, ref ex);
     }
 
     private static nint OnAssemblySearch(ref MonoLib.AssemblyName name, nint userData)
@@ -236,7 +203,7 @@ internal static class MonoHandler
     {
         var args = stackalloc void*[]
         {
-            mono.StringNew(domain, name.Name),
+            Mono.StringNew(Domain, name.Name),
             &name.Major,
             &name.Minor,
             &name.Build,
@@ -245,10 +212,9 @@ internal static class MonoHandler
         };
 
         nint ex = 0;
-        var reflectionAsm = (MonoLib.ReflectionAssembly*)mono.RuntimeInvoke(assemblyManagerResolve, 0, args, ref ex);
+        var reflectionAsm = (MonoLib.ReflectionAssembly*)Mono.RuntimeInvoke(assemblyManagerResolve, 0, args, ref ex);
         return reflectionAsm == null ? 0 : reflectionAsm->Assembly;
     }
 
-    private delegate nint PtrRet();
-    private delegate nint CastManagedAssemblyPtr(nint ptr);
+    private delegate nint CastManagedAssemblyPtrFn(nint ptr);
 }

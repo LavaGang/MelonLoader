@@ -7,7 +7,7 @@ extern "C"
     int DobbyHook(void *address, void *replace_call, void **origin_call);
 
     // Init from NativeAOT
-    void Init();
+    void Init(void *hBootstrap);
 }
 
 typedef void (*PlayerMain)(int a, char **b);
@@ -15,7 +15,10 @@ PlayerMain original;
 
 void detour(int a, char **b)
 {
-    Init();
+    Dl_info dl_info;
+    dladdr(reinterpret_cast<void*>(detour), &dl_info);
+
+    Init(dl_info.dli_fbase);
 
     return original(a, b);
 }

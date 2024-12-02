@@ -278,40 +278,4 @@ internal static class MelonLogger
 
         Console.WriteLine();
     }
-
-    public static unsafe void LogFromManaged(ColorRGB* msgColor, char* msg, int msgLength, ColorRGB* sectionColor, char* section, int sectionLength)
-    {
-        if (msgColor == null || msg == null)
-        {
-            LogSpacer();
-            return;
-        }
-
-        var mMsg = new ReadOnlySpan<char>(msg, msgLength);
-
-        if (sectionColor == null || section == null)
-        {
-            Log(*msgColor, mMsg);
-            return;
-        }
-
-        Log(*msgColor, mMsg, *sectionColor, new(section, sectionLength));
-    }
-
-    public static unsafe void LogErrorFromManaged(char* msg, int msgLength, char* section, int sectionLength)
-    {
-        var mMsg = new ReadOnlySpan<char>(msg, msgLength);
-        if (section == null)
-        {
-            LogError(mMsg);
-            return;
-        }
-
-        LogError(mMsg, new(section, sectionLength));
-    }
-
-    public static unsafe void LogMelonInfoFromManaged(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength)
-    {
-        LogMelonInfo(*nameColor, new(name, nameLength), new(info, infoLength));
-    }
 }

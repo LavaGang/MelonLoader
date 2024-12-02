@@ -49,8 +49,6 @@ internal class MonoLib
     public required InstallAssemblySearchHookFn InstallAssemblySearchHook { get; init; }
     public required InstallAssemblyLoadHookFn InstallAssemblyLoadHook { get; init; }
 
-    public StringToUtf16Fn? StringToUtf16 { get; init; }
-    public ObjectToStringFn? ObjectToString { get; init; }
     public DebugDomainCreateFn? DebugDomainCreate { get; init; }
     public DomainSetConfigFn? DomainSetConfig { get; init; }
 
@@ -68,7 +66,7 @@ internal class MonoLib
         if (monoName.StartsWith("lib"))
             monoName = monoName[3..];
 #endif
-        
+
         var isOld = monoName.Equals("mono", StringComparison.OrdinalIgnoreCase);
 
         MelonDebug.Log("Loading Mono exports");
@@ -89,9 +87,6 @@ internal class MonoLib
             || !NativeFunc.GetExport<InstallAssemblySearchHookFn>(hRuntime, "mono_install_assembly_search_hook", out var installAssemblySearchHook)
             || !NativeFunc.GetExport<InstallAssemblyLoadHookFn>(hRuntime, "mono_install_assembly_load_hook", out var installAssemblyLoadHook))
             return null;
-
-        var stringToUtf16 = NativeFunc.GetExport<StringToUtf16Fn>(hRuntime, "mono_string_to_utf16");
-        var objectToString = NativeFunc.GetExport<ObjectToStringFn>(hRuntime, "mono_object_to_string");
 
         var runtimeInvoke = Marshal.GetDelegateForFunctionPointer<RuntimeInvokeFn>(runtimeInvokePtr);
 
@@ -119,9 +114,7 @@ internal class MonoLib
             InstallAssemblySearchHook = installAssemblySearchHook,
             InstallAssemblyLoadHook = installAssemblyLoadHook,
             DomainSetConfig = domainSetConfig,
-            DebugDomainCreate = debugDomainCreate,
-            StringToUtf16 = stringToUtf16,
-            ObjectToString = objectToString
+            DebugDomainCreate = debugDomainCreate
         };
     }
 
@@ -155,15 +148,6 @@ internal class MonoLib
 
         MelonDebug.Log("Probe for Mono failed");
         return null;
-    }
-
-    public string? ToString(nint obj)
-    {
-        if (obj == 0 || ObjectToString == null || StringToUtf16 == null)
-            return null;
-        
-        var monoStr = ObjectToString(obj, 0);
-        return StringToUtf16(monoStr);
     }
 
     public void SetCurrentThreadAsMain()

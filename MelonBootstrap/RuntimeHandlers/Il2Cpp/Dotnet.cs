@@ -17,7 +17,7 @@ internal static partial class Dotnet
 #else
         StringMarshalling.Utf8;
 #endif
-    
+
     public static bool LoadHostfxr()
     {
         var path = GetHostfxrPath();
