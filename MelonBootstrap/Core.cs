@@ -13,7 +13,7 @@ public static class Core
     internal static InternalLogger Logger { get; private set; } = new(Color.BlueViolet, "MelonBootstrap");
     public static string DataDir { get; private set; } = null!;
     public static string GameDir { get; private set; } = null!;
-    public static string BaseDir { get; private set; } = ".";
+    public static string BaseDir { get; private set; } = Path.GetDirectoryName(Environment.ProcessPath)!;
     public static bool Debug { get; private set; }
 #if DEBUG
         = true;
