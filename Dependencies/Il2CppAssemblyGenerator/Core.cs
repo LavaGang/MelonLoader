@@ -47,7 +47,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (MelonUtils.IsMac)
                 gameAssemblyName += ".dylib";
 
-                GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
+            GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
             ManagedPath = MelonEnvironment.MelonManagedDirectory;
 
             BasePath = Path.GetDirectoryName(Assembly.Location);

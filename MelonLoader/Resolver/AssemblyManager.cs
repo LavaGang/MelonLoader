@@ -75,27 +75,25 @@ namespace MelonLoader.Resolver
             MelonAssemblyResolver.SafeInvoke_OnAssemblyLoad(assembly);
         }
 
+        private static void InstallHooks()
+        {
 #if NET6_0_OR_GREATER
+            AssemblyLoadContext.Default.Resolving += Resolve;
+#else
+            BootstrapInterop.Library.MonoInstallHooks();
+#endif
+        }
 
+#if NET6_0_OR_GREATER
         private static Assembly? Resolve(AssemblyLoadContext alc, AssemblyName name)
             => Resolve(name.Name, name.Version, true);
 
-        private static void InstallHooks()
-        {
-            AssemblyLoadContext.Default.Resolving += Resolve;
-        }
-
 #else
-
         private static Assembly Resolve(string requested_name, ushort major, ushort minor, ushort build, ushort revision, bool is_preload)
         {
             Version requested_version = new Version(major, minor, build, revision);
             return Resolve(requested_name, requested_version, is_preload);
         }
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        private extern static void InstallHooks();
-
 #endif
     }
 }

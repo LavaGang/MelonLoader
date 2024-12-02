@@ -92,7 +92,7 @@ namespace MelonLoader.Resolver
                 if (filePathPtr == IntPtr.Zero)
                     continue;
 
-                IntPtr rootPtr = MonoLibrary.GetRootDomainPtr();
+                IntPtr rootPtr = BootstrapInterop.Library.MonoGetDomainPtr();
                 if (rootPtr == IntPtr.Zero)
                     continue;
 

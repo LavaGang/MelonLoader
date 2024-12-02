@@ -25,7 +25,7 @@ namespace MelonLoader
     public static class MelonUtils
     {
         private static NativeLibrary.StringDelegate WineGetVersion;
-        private static readonly Random RandomNumGen = new();
+        //private static readonly Random RandomNumGen = new();
         private static readonly MethodInfo StackFrameGetMethod = typeof(StackFrame).GetMethod("GetMethod", BindingFlags.Instance | BindingFlags.Public);
         private static readonly LemonSHA256 sha256 = new();
         private static readonly LemonSHA512 sha512 = new();
@@ -71,37 +71,37 @@ namespace MelonLoader
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T> { if (value.CompareTo(min) < 0) return min; if (value.CompareTo(max) > 0) return max; return value; }
         public static string HashCode { get; private set; }
 
-        public static int RandomInt()
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next();
-        }
-
-        public static int RandomInt(int max)
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next(max);
-        }
-
-        public static int RandomInt(int min, int max)
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.Next(min, max);
-        }
-
-        public static double RandomDouble()
-        {
-            lock (RandomNumGen)
-                return RandomNumGen.NextDouble();
-        }
-
-        public static string RandomString(int length)
-        {
-            StringBuilder builder = new();
-            for (int i = 0; i < length; i++)
-                builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
-            return builder.ToString();
-        }
+        // public static int RandomInt()
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next();
+        // }
+        //
+        // public static int RandomInt(int max)
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next(max);
+        // }
+        //
+        // public static int RandomInt(int min, int max)
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.Next(min, max);
+        // }
+        //
+        // public static double RandomDouble()
+        // {
+        //     lock (RandomNumGen)
+        //         return RandomNumGen.NextDouble();
+        // }
+        //
+        // public static string RandomString(int length)
+        // {
+        //     StringBuilder builder = new();
+        //     for (int i = 0; i < length; i++)
+        //         builder.Append(Convert.ToChar(Convert.ToInt32(Math.Floor(25 * RandomDouble())) + 65));
+        //     return builder.ToString();
+        // }
 
         public static PlatformID GetPlatform => Environment.OSVersion.Platform;
 
@@ -468,11 +468,11 @@ namespace MelonLoader
         public static string GameVersion { get => UnityInformationHandler.GameVersion; }
 
 
-        #if !NET6_0
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static bool IsGame32Bit();
+        public static unsafe bool IsGame32Bit() =>
+#if X64
+            false;
 #else
-        public static bool IsGame32Bit() => !Environment.Is64BitProcess;
+            true;
 #endif
 
 
@@ -615,12 +615,8 @@ namespace MelonLoader
         public static void NativeHookAttach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
 
         [Obsolete("Use NativeUtils.NativeHook instead")]
-#if NET6_0_OR_GREATER
         internal static void NativeHookAttachDirect(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttachDirect(target, detour);
-#else
-        //On mono, NativeHookAttach *is* direct.
-        internal static void NativeHookAttachDirect(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookAttach(target, detour);
-#endif
+
         [Obsolete("Use NativeUtils.NativeHook instead")]
         public static void NativeHookDetach(IntPtr target, IntPtr detour) => BootstrapInterop.NativeHookDetach(target, detour);
 

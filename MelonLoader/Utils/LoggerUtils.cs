@@ -60,7 +60,5 @@ namespace MelonLoader.Utils
 
             return DrawingColorDict[color];
         }
-
-        internal static string GetTimeStamp() => $"{DateTime.Now:HH:mm:ss.fff}";
     }
 }

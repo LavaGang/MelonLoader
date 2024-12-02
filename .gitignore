@@ -381,3 +381,7 @@ x64
 
 # JetBrains Rider
 .idea/
+
+# Exported OBJs
+*.o
+*.obj

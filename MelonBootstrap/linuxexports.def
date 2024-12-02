@@ -1,0 +1,14 @@
+V1.0 {
+    global:
+        DotNetRuntimeDebugHeader;
+        Init;
+        NativeHookAttach;
+        NativeHookDetach;
+        LogMsg;
+        LogError;
+        LogMelonInfo;
+        MonoInstallHooks;
+        MonoGetDomainPtr;
+        MonoGetRuntimeHandle;
+    local: *;
+};
