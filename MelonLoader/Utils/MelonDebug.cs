@@ -34,7 +34,7 @@ namespace MelonLoader
         {
             if (!IsEnabled())
                 return;
-            MelonLogger.PassLogError(txt, "DEBUG");
+            MelonLogger.PassLogError(txt, "DEBUG", false);
             ErrorCallbackHandler?.Invoke(txt);
         }
 

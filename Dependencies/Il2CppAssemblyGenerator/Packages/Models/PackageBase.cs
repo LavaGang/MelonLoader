@@ -28,7 +28,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
 
             Core.AssemblyGenerationNeeded = true;
 
-            if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode
+            if (!LoaderConfig.Current.UnityEngine.ForceOfflineGeneration
                 && ((this is DeobfuscationMap) || !File.Exists(FilePath)))
             {
                 Core.Logger.Msg($"Downloading {Name}...");

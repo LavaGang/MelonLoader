@@ -35,7 +35,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             webClient = new();
             webClient.DefaultRequestHeaders.Add("User-Agent", $"{BuildInfo.Name} v{BuildInfo.Version}");
 
-            AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
+            AssemblyGenerationNeeded = LoaderConfig.Current.UnityEngine.ForceRegeneration;
 
             string gameAssemblyName = "GameAssembly";
             if (MelonUtils.IsUnix)
@@ -54,7 +54,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
         {
             Config.Initialize();
 
-            if (!MelonLaunchOptions.Il2CppAssemblyGenerator.OfflineMode)
+            if (!LoaderConfig.Current.UnityEngine.ForceOfflineGeneration)
                 RemoteAPI.Contact();
 
             Cpp2IL cpp2IL_netcore = new Cpp2IL();

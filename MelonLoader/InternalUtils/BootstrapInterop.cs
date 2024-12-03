@@ -15,7 +15,7 @@ internal static unsafe class BootstrapInterop
 
     internal static void SetDefaultConsoleTitleWithGameName(string gameName, string gameVersion = null)
     {
-        if (!MelonLaunchOptions.Console.ShouldSetTitle || !Library.IsConsoleOpen())
+        if (LoaderConfig.Current.Console.DontSetTitle || !Library.IsConsoleOpen())
             return;
 
         var versionStr = $"{Core.GetVersionString()} - {gameName} {gameVersion ?? ""}";

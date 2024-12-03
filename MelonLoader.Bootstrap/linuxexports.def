@@ -11,5 +11,6 @@ V1.0 {
         MonoGetDomainPtr;
         MonoGetRuntimeHandle;
         IsConsoleOpen;
+        GetLoaderConfig;
     local: *;
 };

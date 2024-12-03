@@ -1,0 +1,5 @@
+﻿<linker>
+    <assembly fullname="MelonBootstrap">
+        <type fullname="MelonLoader.LoaderConfig" preserve="all" />
+    </assembly>
+</linker>

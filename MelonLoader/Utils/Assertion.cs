@@ -20,7 +20,7 @@ namespace MelonLoader.Utils
 
             ShouldContinue = false;
 
-            MelonLogger.PassLogError(msg, "INTERNAL FAILURE");
+            MelonLogger.PassLogError(msg, "INTERNAL FAILURE", false);
 
             string caption = "INTERNAL FAILURE!";
             var result = MessageBox(0, msg, caption, 0);
