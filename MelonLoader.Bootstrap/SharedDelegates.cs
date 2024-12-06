@@ -29,4 +29,4 @@ internal delegate void ActionFn();
 internal delegate bool BoolRetFn();
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal delegate void GetLoaderConfigFn(LoaderConfig config);
+internal delegate void GetLoaderConfigFn(ref LoaderConfig config);

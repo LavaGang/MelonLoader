@@ -105,8 +105,8 @@ internal static class Exports
     }
 
     [UnmanagedCallersOnly(EntryPoint = "GetLoaderConfig")]
-    public static void GetLoaderConfig(nint pConfig)
+    public static unsafe void GetLoaderConfig(nint* pConfig)
     {
-        Marshal.StructureToPtr(LoaderConfig.Current, pConfig, false);
+        Marshal.StructureToPtr(LoaderConfig.Current, *pConfig, false);
     }
 }

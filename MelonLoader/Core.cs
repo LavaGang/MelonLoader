@@ -25,7 +25,10 @@ namespace MelonLoader
         internal static int Initialize()
         {
             // The config should be set before running anything else due to static constructors depending on it
-            BootstrapInterop.Library.GetLoaderConfig(LoaderConfig.Current);
+            // Don't ask me how this works, because I don't know either. -slxdy
+            var config = new LoaderConfig();
+            BootstrapInterop.Library.GetLoaderConfig(ref config);
+            LoaderConfig.Current = config;
 
             MelonLaunchOptions.Load();
 
