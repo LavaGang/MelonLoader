@@ -93,8 +93,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             MelonDebug.Msg($"Last GameAssembly Hash: {Config.Values.GameAssemblyHash}");
             MelonDebug.Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = MelonUtils.ComputeSimpleSHA512Hash(GameAssemblyPath)}");
 
-            if (string.IsNullOrEmpty(Config.Values.GameAssemblyHash)
-                    || !Config.Values.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
+            if (MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration
+                || string.IsNullOrEmpty(Config.Values.GameAssemblyHash)
+                || !Config.Values.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)
