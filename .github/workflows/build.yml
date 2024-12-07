@@ -135,34 +135,60 @@ jobs:
         with:
           toolchain: nightly
           # Target triple to install for this toolchain
-          targets: x86_64-unknown-linux-gnu
+          targets: i686-unknown-linux-gnu, x86_64-unknown-linux-gnu
       - name: update environment
         shell: bash
         run: sudo apt-get update
       - name: install dev dependencies
         shell: bash
         run: sudo apt-get install libgtk-3-dev 
+      - name: Build Rust Release | Linux - x86
+        shell: bash
+        run: cargo +nightly build --target i686-unknown-linux-gnu --release
+      - name: Build Rust Debug | Linux - x86
+        shell: bash
+        run: cargo +nightly build --target i686-unknown-linux-gnu
       - name: Build Rust Release | Linux - x64
         shell: bash
         run: cargo +nightly build --target x86_64-unknown-linux-gnu --release
       - name: Build Rust Debug | Linux - x64
         shell: bash
         run: cargo +nightly build --target x86_64-unknown-linux-gnu
+      - name: Upload Proxy Release | Linux x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: MLProxyX86-Linux-Release
+          path: target/i686-unknown-linux-gnu/release/libversion.so
+      - name: Upload Proxy Debug | Linux x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: MLProxyX86-Linux-Debug
+          path: target/i686-unknown-linux-gnu/debug/libversion.so
       - name: Upload Proxy Release | Linux x64
         uses: actions/upload-artifact@v4
         with:
           name: MLProxyX64-Linux-Release
           path: target/x86_64-unknown-linux-gnu/release/libversion.so
-      - name: Upload Bootstrap Release | Linux x64
-        uses: actions/upload-artifact@v4
-        with:
-          name: MLBootstrapX64-Linux-Release
-          path: target/x86_64-unknown-linux-gnu/release/libBootstrap.so
       - name: Upload Proxy Debug | Linux x64
         uses: actions/upload-artifact@v4
         with:
           name: MLProxyX64-Linux-Debug
           path: target/x86_64-unknown-linux-gnu/debug/libversion.so
+      - name: Upload Bootstrap Release | Linux x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: MLBootstrapX86-Linux-Release
+          path: target/i686-unknown-linux-gnu/release/libBootstrap.so
+      - name: Upload Bootstrap Debug | Linux x86
+        uses: actions/upload-artifact@v4
+        with:
+          name: MLBootstrapX86-Linux-Debug
+          path: target/i686-unknown-linux-gnu/debug/libBootstrap.so
+      - name: Upload Bootstrap Release | Linux x64
+        uses: actions/upload-artifact@v4
+        with:
+          name: MLBootstrapX64-Linux-Release
+          path: target/x86_64-unknown-linux-gnu/release/libBootstrap.so
       - name: Upload Bootstrap Debug | Linux x64
         uses: actions/upload-artifact@v4
         with:
@@ -334,6 +360,78 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [build_core, build_rust_linux]
     steps:
+      - name: Download Debug Managed Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MLCoreDebug
+          path: Output/Debug/x86/MelonLoader/
+      - name: Download Debug x86 Proxy Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MLProxyX86-Linux-Debug
+          path: Output/Debug/x86/
+      - name: Download Debug x86 Bootstrap Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MLBootstrapX86-Linux-Debug
+          path: Output/Debug/x86/MelonLoader/Dependencies/
+      - name: Package Debug Zip
+        run: |
+          echo Copying Managed Libs...
+          mkdir -p Output/Debug/x86/MelonLoader/Dependencies/Mono
+          cp -r BaseLibs/Mono Output/Debug/x86/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Debug/x86/MelonLoader/
+          cp -r BaseLibs/net6 Output/Debug/x86/MelonLoader/
+          mkdir -p Output/Debug/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Debug/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          echo
+          echo Copying documentation files...
+          mkdir -p Output/Debug/x86/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Debug/x86/MelonLoader/Documentation/
+          cp LICENSE.md Output/Debug/x86/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Debug/x86/MelonLoader/Documentation/
+          cp README.md Output/Debug/x86/MelonLoader/Documentation/
+      - uses: actions/upload-artifact@v4
+        name: Upload Zip | Linux - Debug - x86
+        with:
+          name: MelonLoader.Linux.x86.CI.Debug
+          path: ./Output/Debug/x86/*
+      - name: Download Release Managed Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MLCoreRelease
+          path: Output/Release/x86/MelonLoader/
+      - name: Download Release Proxy Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MLProxyX86-Linux-Release
+          path: Output/Release/x86/
+      - name: Download Release Bootstrap Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: MLBootstrapX86-Linux-Release
+          path: Output/Release/x86/MelonLoader/Dependencies/
+      - name: Package Release Zip
+        run: |
+          echo Copying Managed Libs...
+          mkdir -p Output/Release/x86/MelonLoader/Dependencies/Mono
+          cp -r BaseLibs/Mono Output/Release/x86/MelonLoader/Dependencies/
+          cp -r BaseLibs/net35 Output/Release/x86/MelonLoader/
+          cp -r BaseLibs/net6 Output/Release/x86/MelonLoader/
+          mkdir -p Output/Release/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          cp -r BaseLibs/NetStandardPatches Output/Release/x86/MelonLoader/Dependencies/SupportModules/NetStandardPatches
+          echo
+          echo Copying documentation files...
+          mkdir -p Output/Release/x86/MelonLoader/Documentation
+          cp CHANGELOG.md Output/Release/x86/MelonLoader/Documentation/
+          cp LICENSE.md Output/Release/x86/MelonLoader/Documentation/
+          cp NOTICE.txt Output/Release/x86/MelonLoader/Documentation/
+          cp README.md Output/Release/x86/MelonLoader/Documentation/
+      - uses: actions/upload-artifact@v4
+        name: Upload Zip | Linux - Release - x86
+        with:
+          name: MelonLoader.Linux.x86.CI.Release
+          path: ./Output/Release/x86/*
       - uses: actions/checkout@v4
       - name: Download Debug Managed Artifact
         uses: actions/download-artifact@v4
