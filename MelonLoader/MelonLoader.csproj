@@ -20,6 +20,7 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+		<UserSecretsId>0c4139f6-ab6c-4b49-9f90-eeb7aa7cdc15</UserSecretsId>
 	</PropertyGroup>
 	<ItemDefinitionGroup>
 		<PackageReference>

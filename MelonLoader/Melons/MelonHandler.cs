@@ -33,11 +33,13 @@ namespace MelonLoader
         }
 
         public static void LoadUserlibs(string path)
-            => MelonFolderHandler.ScanUserLibs(path);
+            => MelonFolderHandler.Scan(MelonFolderHandler.eScanType.UserLibs, path);
 
         public static void LoadMelonsFromDirectory<T>(string path)
             where T : MelonTypeBase<T>
-            => MelonFolderHandler.ScanMelons<T>(path);
+            => MelonFolderHandler.Scan(
+                ((typeof(T) == typeof(MelonMod)) ? MelonFolderHandler.eScanType.Mods : MelonFolderHandler.eScanType.Plugins),
+                path);
 
         #region Obsolete Members
         /// <summary>

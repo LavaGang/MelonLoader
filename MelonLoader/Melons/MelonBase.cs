@@ -1,4 +1,5 @@
 ﻿using MelonLoader.InternalUtils;
+using MelonLoader.Properties;
 using Semver;
 using System;
 using System.Collections.Generic;

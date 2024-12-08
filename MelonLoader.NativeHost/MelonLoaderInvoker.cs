@@ -1,4 +1,6 @@
-﻿namespace MelonLoader.NativeHost
+﻿using MelonLoader.InternalUtils;
+
+namespace MelonLoader.NativeHost
 {
     internal class MelonLoaderInvoker
     {

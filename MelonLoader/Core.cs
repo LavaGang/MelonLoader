@@ -7,6 +7,7 @@ using System.Threading;
 using MelonLoader.Resolver;
 using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
+using MelonLoader.Properties;
 
 [assembly: MelonLoader.PatchShield]
 
@@ -171,7 +172,7 @@ namespace MelonLoader
         internal static void WelcomeMessage()
         {
             //if (MelonDebug.IsEnabled())
-            //    MelonLogger.WriteSpacer();
+                MelonLogger.WriteSpacer();
 
             MelonLogger.MsgDirect("------------------------------");
             MelonLogger.MsgDirect(GetVersionString());

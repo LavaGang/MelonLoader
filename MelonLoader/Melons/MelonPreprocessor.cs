@@ -16,7 +16,7 @@ namespace MelonLoader.Melons
             // Find All Assemblies
             Dictionary<string, (Version, string)> foundAssemblies = new();
             foreach (string path in directoryPaths)
-                PreprocessFolder(path, isMelon, ref foundAssemblies);
+                PreprocessFolder(path, ref foundAssemblies);
 
             // Load from File Paths
             foreach (var foundFile in foundAssemblies)
@@ -40,7 +40,6 @@ namespace MelonLoader.Melons
         }
 
         private static void PreprocessFolder(string path,
-            bool isMelon,
             ref Dictionary<string, (Version, string)> foundAssemblies)
         {
             // Validate Path

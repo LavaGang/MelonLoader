@@ -2,11 +2,13 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+
 #if NET6_0_OR_GREATER
 using MelonLoader.CoreClrUtils;
+using MelonLoader.InternalUtils;
 #endif
 
-namespace MelonLoader
+namespace MelonLoader.InternalUtils
 {
     internal static unsafe class BootstrapInterop
     {
@@ -27,7 +29,7 @@ namespace MelonLoader
             // Using reflection to avoid resolver errors
             HarmonyLib.AccessTools.Property(typeof(Console), "Title")?.SetValue(null, versionStr, null);
         }
-        
+
         private const int MF_BYCOMMAND = 0x00000000;
 
         private const int MF_ENABLED = 0x00000000;

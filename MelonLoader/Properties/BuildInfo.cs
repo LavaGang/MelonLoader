@@ -1,6 +1,6 @@
 ﻿using Semver;
 
-namespace MelonLoader;
+namespace MelonLoader.Properties;
 
 public static class BuildInfo
 {
@@ -17,7 +17,7 @@ public static class BuildInfo
     static BuildInfo()
     {
         var version = typeof(BuildInfo).Assembly.GetName().Version!;
-        VersionNumber = new(version.Major, version.Minor, version.Build, version.Revision == 0 ? "" : ("ci." + version.Revision.ToString()));
+        VersionNumber = new(version.Major, version.Minor, version.Build, version.Revision == 0 ? "" : "ci." + version.Revision.ToString());
         Version = VersionNumber.ToString();
     }
 }

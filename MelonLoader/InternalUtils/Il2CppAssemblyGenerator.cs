@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using MelonLoader.Utils;
+using MelonLoader.InternalUtils;
 
 namespace MelonLoader.InternalUtils
 {
