@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.IO;
 using System.Net.Http;
 using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.Il2CppAssemblyGenerator.Packages.Models;
@@ -65,8 +63,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 cpp2il = new Cpp2IL_NetFramework();
             else
                 cpp2il = cpp2IL_netcore;
-
-            //cpp2il_scrs = new Cpp2IL_StrippedCodeRegSupport(cpp2il);
+            cpp2il_scrs = new Cpp2IL_StrippedCodeRegSupport(cpp2il);
 
             il2cppinterop = new Packages.Il2CppInterop();
             unitydependencies = new UnityDependencies();
@@ -79,7 +76,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Logger.Msg($"Using Deobfuscation Regex = {(string.IsNullOrEmpty(deobfuscationRegex.Regex) ? "null" : deobfuscationRegex.Regex)}");
 
             if (!cpp2il.Setup()
-                //|| !cpp2il_scrs.Setup()
+                || !cpp2il_scrs.Setup()
                 || !il2cppinterop.Setup()
                 || !unitydependencies.Setup()
                 || !deobfuscationMap.Setup())
