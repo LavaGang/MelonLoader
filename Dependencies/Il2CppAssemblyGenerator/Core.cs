@@ -40,7 +40,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
             string gameAssemblyName = "GameAssembly";
-            
             if (MelonUtils.IsUnix)
                 gameAssemblyName += ".so"; 
             if (MelonUtils.IsWindows)
@@ -48,10 +47,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             if (MelonUtils.IsMac)
                 gameAssemblyName += ".dylib";
 
-                GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
+            GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
             ManagedPath = MelonEnvironment.MelonManagedDirectory;
-
-            BasePath = Path.GetDirectoryName(Assembly.Location);
+            BasePath = MelonEnvironment.Il2CppAssemblyGeneratorDirectory;
         }
 
         private static int Run()
@@ -94,8 +92,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             MelonDebug.Msg($"Last GameAssembly Hash: {Config.Values.GameAssemblyHash}");
             MelonDebug.Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = MelonUtils.ComputeSimpleSHA512Hash(GameAssemblyPath)}");
 
-            if (MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration
-                || string.IsNullOrEmpty(Config.Values.GameAssemblyHash)
+            if (string.IsNullOrEmpty(Config.Values.GameAssemblyHash)
                 || !Config.Values.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
                 AssemblyGenerationNeeded = true;
 

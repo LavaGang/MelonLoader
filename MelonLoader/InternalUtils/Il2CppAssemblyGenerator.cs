@@ -27,6 +27,7 @@ namespace MelonLoader.InternalUtils
                 IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
                 BootstrapInterop.DisableCloseButton(windowHandle);
             }
+
             var ret = module.SendMessage("Run");
             
             if (MelonUtils.IsWindows)
@@ -34,6 +35,7 @@ namespace MelonLoader.InternalUtils
                 IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
                 BootstrapInterop.EnableCloseButton(windowHandle);
             }
+
             return ret is 0;
         }
     }
