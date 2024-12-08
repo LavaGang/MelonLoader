@@ -37,12 +37,9 @@ namespace MelonLoader.Melons
 
             if (type != eScanType.UserLibs)
             {
-                // Load Melon Assemblies
+                // Load Plugins
                 List<MelonAssembly> pluginAssemblies = new();
                 MelonPreprocessor.LoadFolders(pluginDirs, true, ref hasWroteLine, ref pluginAssemblies);
-                PreloadMelonAssemblies(pluginAssemblies);
-
-                // Load Plugins
                 List<MelonPlugin> pluginsLoaded =
                         LoadMelons<MelonPlugin>(pluginAssemblies);
 
@@ -52,7 +49,6 @@ namespace MelonLoader.Melons
                 {
                     List<MelonAssembly> modAssemblies = new();
                     MelonPreprocessor.LoadFolders(modDirs, true, ref hasWroteLine, ref modAssemblies);
-                    PreloadMelonAssemblies(modAssemblies);
                     modsLoaded = LoadMelons<MelonMod>(modAssemblies);
                 }
 
@@ -92,16 +88,13 @@ namespace MelonLoader.Melons
             MelonLogger.Msg(loadingMsg);
         }
 
-        private static void PreloadMelonAssemblies(List<MelonAssembly> melonAssemblies)
+        private static List<T> LoadMelons<T>(List<MelonAssembly> melonAssemblies)
+            where T : MelonTypeBase<T>
         {
             // Load Melons from Assembly
             foreach (var asm in melonAssemblies)
                 asm.LoadMelons();
-        }
 
-        private static List<T> LoadMelons<T>(List<MelonAssembly> melonAssemblies)
-            where T : MelonTypeBase<T>
-        {
             List<T> loadedMelons = new();
             foreach (var asm in melonAssemblies)
                 foreach (var m in asm.LoadedMelons)
