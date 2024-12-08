@@ -74,7 +74,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             ], false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"},
-                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", BaseFolder }
             });
     }
 }
