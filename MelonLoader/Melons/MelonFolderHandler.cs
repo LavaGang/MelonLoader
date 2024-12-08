@@ -152,36 +152,6 @@ namespace MelonLoader.Melons
             }
         }
 
-        private static void ScanExtraFolders(eScanType scanType,
-            string path,
-            ref List<string> userLibDirectories,
-            ref List<string> pluginDirectories,
-            ref List<string> modDirectories)
-        {
-            string[] directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
-            if ((directories == null)
-                || (directories.Length <= 0))
-                return;
-
-            foreach (var dir in directories)
-            {
-                if (userLibDirectories.Contains(dir)
-                    || pluginDirectories.Contains(dir)
-                    || modDirectories.Contains(dir))
-                    continue;
-
-                ScanExtraFolders(scanType, dir, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
-
-                // Add to Directories List
-                if (scanType == eScanType.UserLibs)
-                    userLibDirectories.Add(dir); 
-                else if (scanType == eScanType.Plugins)
-                    pluginDirectories.Add(dir);
-                else
-                    modDirectories.Add(dir);
-            }
-        }
-
         private static void ScanFolder(eScanType scanType,
             string path,
             ref List<string> userLibDirectories,
@@ -216,10 +186,7 @@ namespace MelonLoader.Melons
 
                 // Is UserLibs Scan?
                 if (scanType == eScanType.UserLibs)
-                {
-                    ScanExtraFolders(scanType, dir, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
                     userLibDirectories.Add(dir); // Add to Directories List
-                }
                 else
                 {
                     // Check for Deeper Melon Folder
@@ -239,8 +206,6 @@ namespace MelonLoader.Melons
                             ScanFolder(scanType, melonPath, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
                         }
                     }
-
-                    ScanExtraFolders(scanType, dir, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
 
                     // Add to Directories List
                     if (scanType == eScanType.Mods)
