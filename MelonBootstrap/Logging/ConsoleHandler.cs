@@ -15,6 +15,7 @@ internal static partial class ConsoleHandler
 #endif
 
     public static bool Hidden { get; private set; } = ArgParser.IsDefined("melonloader.hideconsole");
+    public static bool Open { get; private set; }
 
     public static void OpenConsole(bool onTop, string? title)
     {
@@ -34,6 +35,8 @@ internal static partial class ConsoleHandler
                 Hidden = true;
                 return;
             }
+
+            Open = true;
 
             if (onTop)
                 SetWindowPos(consoleWindow, -1, 0, 0, 0, 0, 0x0001 | 0x0002);

@@ -89,4 +89,11 @@ internal static class Exports
     {
         return MonoHandler.Mono.Handle;
     }
+
+    [UnmanagedCallersOnly(EntryPoint = "IsConsoleOpen")]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static bool IsConsoleOpen()
+    {
+        return ConsoleHandler.Open;
+    }
 }

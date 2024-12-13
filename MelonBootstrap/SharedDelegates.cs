@@ -23,3 +23,7 @@ internal delegate nint CastManagedAssemblyPtrFn(nint ptr);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal delegate void ActionFn();
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+[return: MarshalAs(UnmanagedType.U1)]
+internal delegate bool BoolRetFn();

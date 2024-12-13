@@ -12,4 +12,5 @@ internal class BootstrapLibrary
     internal ActionFn MonoInstallHooks { get; private set; }
     internal PtrRetFn MonoGetDomainPtr { get; private set; }
     internal PtrRetFn MonoGetRuntimeHandle { get; private set; }
+    internal BoolRetFn IsConsoleOpen { get; private set; }
 }

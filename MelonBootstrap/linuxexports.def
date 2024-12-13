@@ -10,5 +10,6 @@ V1.0 {
         MonoInstallHooks;
         MonoGetDomainPtr;
         MonoGetRuntimeHandle;
+        IsConsoleOpen;
     local: *;
 };
