@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using MelonLoader.InternalUtils;
 
 namespace MelonLoader.Utils
 {
@@ -11,7 +12,7 @@ namespace MelonLoader.Utils
     {
         internal static bool Setup()
         {
-            IntPtr NativeMonoPtr = GetLibPtr();
+            IntPtr NativeMonoPtr = BootstrapInterop.Library.MonoGetRuntimeHandle();
             if (NativeMonoPtr == IntPtr.Zero)
             {
                 MelonLogger.ThrowInternalFailure("[MonoLibrary] Failed to get Mono Library Pointer from Internal Call!");
@@ -33,12 +34,6 @@ namespace MelonLoader.Utils
         }
 
         public static MonoLibrary Instance { get; private set; }
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static IntPtr GetLibPtr();
-
-        [MethodImpl(MethodImplOptions.InternalCall)]
-        public extern static IntPtr GetRootDomainPtr();
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         public extern static Assembly CastManagedAssemblyPtr(IntPtr ptr);
