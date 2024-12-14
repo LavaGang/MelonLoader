@@ -6,10 +6,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 {
     internal class Cpp2IL_StrippedCodeRegSupport : PackageBase
     {
+        private static SemVersion MinVersion = SemVersion.Parse("2022.1.0-pre-release.19");
         private string _pluginsFolder;
         private SemVersion VersionSem;
 
-        internal Cpp2IL_StrippedCodeRegSupport(Cpp2IL cpp2IL)
+        internal Cpp2IL_StrippedCodeRegSupport(ExecutablePackage cpp2IL)
         {
             Name = $"{cpp2IL.Name}.Plugin.StrippedCodeRegSupport";
             Version = cpp2IL.Version;
@@ -28,7 +29,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
         internal override bool ShouldSetup()
         {
-            if (VersionSem < Cpp2IL.NetCoreMinVersion)
+            if (VersionSem < MinVersion)
                 return false;
 
             return string.IsNullOrEmpty(Config.Values.DumperSCRSVersion)

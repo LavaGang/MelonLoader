@@ -43,6 +43,11 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
                 chmod(ExeFilePath, S_IRUSR | S_IXUSR | S_IWUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 #endif
                 
+                string tempFolder = Path.Combine(Path.GetDirectoryName(ExeFilePath),
+                    $"{Path.GetFileNameWithoutExtension(ExeFilePath)}_Temp");
+                if (!Directory.Exists(tempFolder))
+                    Directory.CreateDirectory(tempFolder);
+
                 ResetEvent_Output = new AutoResetEvent(false);
                 ResetEvent_Error = new AutoResetEvent(false);
 
@@ -60,10 +65,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
 
                 if (environment != null)
                 {
+                    processStartInfo.EnvironmentVariables["DOTNET_BUNDLE_EXTRACT_BASE_DIR"] = tempFolder;
                     foreach (var kvp in environment)
-                    {
                         processStartInfo.EnvironmentVariables[kvp.Key] = kvp.Value;
-                    }
                 }
 
                 Core.Logger.Msg("\"" + ExeFilePath + "\" " + processStartInfo.Arguments);
@@ -84,6 +88,10 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages.Models
                 ResetEvent_Error.WaitOne();
 
                 SetProcessId(0);
+
+                if (Directory.Exists(tempFolder))
+                    Directory.Delete(tempFolder, true);
+
                 return process.ExitCode == 0;
             }
             catch (Exception ex)

@@ -27,6 +27,7 @@ namespace MelonLoader.Resolver
                     ? MelonEnvironment.Il2CppAssembliesDirectory
                     : MelonEnvironment.UnityGameManagedDirectory),
                 MelonEnvironment.OurRuntimeDirectory,
+                MelonEnvironment.MelonBaseDirectory,
                 MelonEnvironment.GameRootDirectory);
 
             // Setup Redirections

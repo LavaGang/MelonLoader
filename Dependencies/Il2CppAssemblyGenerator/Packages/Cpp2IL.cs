@@ -22,7 +22,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Version = RemoteAPI.Info.ForceDumperVersion;
 #endif
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
-                Version = $"2022.1.0-pre-release.18";
+                Version = $"2022.1.0-pre-release.19";
             VersionSem = SemVersion.Parse(Version);
 
             Name = nameof(Cpp2IL);
@@ -80,7 +80,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 
             ], false, new Dictionary<string, string>() {
                 {"NO_COLOR", "1"},
-                {"DOTNET_BUNDLE_EXTRACT_BASE_DIR", Path.Combine(BaseFolder, "bundle") } // Extracting to the BaseFolder will result in a conflict on Linux
             });
     }
 }

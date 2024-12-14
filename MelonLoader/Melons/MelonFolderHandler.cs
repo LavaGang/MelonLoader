@@ -16,99 +16,125 @@ namespace MelonLoader.Melons
             Mods,
         }
 
-        internal static void ScanUserLibs(string path)
+        internal static void Scan(eScanType type, string path)
         {
             // Get Full Directory Path
             path = Path.GetFullPath(path);
 
             // Log Loading Message
-            var loadingMsg = $"Loading UserLibs from '{path}'...";
-            MelonLogger.WriteSpacer();
-            MelonLogger.Msg(loadingMsg);
+            LogStart(path, type);
 
-            // Parse Folders
+            // Find Melon Folders
+            List<string> userLibDirs = new();
+            List<string> pluginDirs = new();
+            List<string> modDirs = new();
+            FindMelonFolders(type, path, ref userLibDirs, ref pluginDirs, ref modDirs);
+
+            // Load UserLib Assemblies
             bool hasWroteLine = false;
-            List<MelonAssembly> melonAssemblies = new();
-            ProcessFolder(eScanType.UserLibs, path, ref hasWroteLine, ref melonAssemblies);
+            List<MelonAssembly> userLibAssemblies = new();
+            MelonPreprocessor.LoadFolders(userLibDirs, (type == eScanType.UserLibs), ref hasWroteLine, ref userLibAssemblies);
+
+            if (type != eScanType.UserLibs)
+            {
+                // Load Plugins
+                List<MelonAssembly> pluginAssemblies = new();
+                MelonPreprocessor.LoadFolders(pluginDirs, true, ref hasWroteLine, ref pluginAssemblies);
+                List<MelonPlugin> pluginsLoaded =
+                        LoadMelons<MelonPlugin>(pluginAssemblies);
+
+                // Load Mods
+                List<MelonMod> modsLoaded = null;
+                if (type == eScanType.Mods)
+                {
+                    List<MelonAssembly> modAssemblies = new();
+                    MelonPreprocessor.LoadFolders(modDirs, true, ref hasWroteLine, ref modAssemblies);
+                    modsLoaded = LoadMelons<MelonMod>(modAssemblies);
+                }
+
+                // Register and Sort Plugins
+                if (hasWroteLine)
+                    MelonLogger.WriteSpacer();
+                MelonBase.RegisterSorted(pluginsLoaded);
+
+                // Register and Sort Mods
+                if (type == eScanType.Mods)
+                    MelonBase.RegisterSorted(modsLoaded);
+            }
+
+            // Log Count
+            int count = (type == eScanType.UserLibs)
+                ? userLibAssemblies.Count
+                : ((type == eScanType.Mods) ? MelonMod.RegisteredMelons.Count : MelonPlugin.RegisteredMelons.Count);
+            string typeName = (type == eScanType.UserLibs)
+                ? "UserLib".MakePlural(count)
+                : ((type == eScanType.Mods) ? MelonMod.TypeName.MakePlural(count) : MelonPlugin.TypeName.MakePlural(count));
+
+            if (hasWroteLine)
+                MelonLogger.WriteLine(Color.Magenta);
+            MelonLogger.Msg($"{count} {typeName} loaded.");
+
+            // Final Spacer
+            if (firstSpacer || (type == eScanType.Mods))
+                MelonLogger.WriteSpacer();
+            firstSpacer = true;
         }
 
-        internal static void ScanMelons<T>(string path) where T : MelonTypeBase<T>
+        private static void LogStart(string path, eScanType type)
         {
-            // Get Full Directory Path
-            path = Path.GetFullPath(path);
-
-            // Log Loading Message
-            var loadingMsg = $"Loading {MelonTypeBase<T>.TypeName}s from '{path}'...";
+            string typeName = Enum.GetName(typeof(eScanType), type);
+            var loadingMsg = $"Loading {typeName} from '{path}'...";
             MelonLogger.WriteSpacer();
             MelonLogger.Msg(loadingMsg);
+        }
 
-            // Parse Folders
-            Type melonType = typeof(T);
-            bool isMod = melonType == typeof(MelonMod);
-            bool hasWroteLine = false;
-            List<MelonAssembly> melonAssemblies = new();
-            ProcessFolder(isMod ? eScanType.Mods : eScanType.Plugins, path, ref hasWroteLine, ref melonAssemblies);
-
-            // Parse Queue
-            var melons = new List<T>();
+        private static List<T> LoadMelons<T>(List<MelonAssembly> melonAssemblies)
+            where T : MelonTypeBase<T>
+        {
+            // Load Melons from Assembly
             foreach (var asm in melonAssemblies)
-            {
-                // Load Melons from Assembly
                 asm.LoadMelons();
 
-                // Parse Loaded Melons
+            List<T> loadedMelons = new();
+            foreach (var asm in melonAssemblies)
                 foreach (var m in asm.LoadedMelons)
                 {
                     // Validate Type
                     if (m is T t)
                     {
-                        melons.Add(t);
+                        loadedMelons.Add(t);
                         continue;
                     }
 
                     // Log Failure
-                    MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{path}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {MelonTypeBase<T>.TypeName}. Make sure it's in the right folder.");
+                    MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{m.MelonAssembly.Location}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {MelonTypeBase<T>.TypeName}. Make sure it's in the right folder.");
                 }
-            }
-
-            // Log
-            if (hasWroteLine)
-                MelonLogger.WriteSpacer();
-
-            // Register and Sort Melons
-            MelonBase.RegisterSorted(melons);
-
-            // Log
-            if (hasWroteLine)
-                MelonLogger.WriteLine(Color.Magenta);
-
-            // Log Melon Count
-            var count = MelonTypeBase<T>._registeredMelons.Count;
-            MelonLogger.Msg($"{count} {MelonTypeBase<T>.TypeName.MakePlural(count)} loaded.");
-            if (firstSpacer || (typeof(T) == typeof(MelonMod)))
-                MelonLogger.WriteSpacer();
-            firstSpacer = true;
+            return loadedMelons;
         }
 
-        private static void ProcessFolder(eScanType scanType,
+        private static void FindMelonFolders(
+            eScanType scanType,
             string path,
-            ref bool hasWroteLine,
-            ref List<MelonAssembly> melonAssemblies)
+            ref List<string> userLibDirectories,
+            ref List<string> pluginDirectories,
+            ref List<string> modDirectories)
         {
             // Validate Path
             if (!Directory.Exists(path))
                 return;
 
             // Scan Directories
-            List<string> melonDirectories = new();
-            List<string> userLibDirectories = new();
-            ScanFolder(scanType, path, ref melonDirectories, ref userLibDirectories);
+            ScanFolder(scanType, path, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
 
-            // Add Base Path to End of Directories List
             if (scanType == eScanType.UserLibs)
-                userLibDirectories.Add(path);
+                userLibDirectories.Add(path); 
             else
-                melonDirectories.Add(path);
+            {
+                if (scanType == eScanType.Mods)
+                    modDirectories.Add(path);
+                else
+                    pluginDirectories.Add(path);
+            }
 
             // Add Directories to Resolver
             foreach (string directory in userLibDirectories)
@@ -116,22 +142,21 @@ namespace MelonLoader.Melons
                 MelonUtils.AddNativeDLLDirectory(directory);
                 Resolver.MelonAssemblyResolver.AddSearchDirectory(directory);
             }
+
             if (scanType != eScanType.UserLibs)
-                foreach (string directory in melonDirectories)
+            {
+                foreach (string directory in pluginDirectories)
                     Resolver.MelonAssemblyResolver.AddSearchDirectory(directory);
-
-            // Load UserLibs
-            MelonPreprocessor.LoadFolders(userLibDirectories, false, ref hasWroteLine, ref melonAssemblies);
-
-            // Load Melons from Folders
-            if (scanType != eScanType.UserLibs)
-                MelonPreprocessor.LoadFolders(melonDirectories, true, ref hasWroteLine, ref melonAssemblies);
+                foreach (string directory in modDirectories)
+                    Resolver.MelonAssemblyResolver.AddSearchDirectory(directory);
+            }
         }
 
         private static void ScanFolder(eScanType scanType,
             string path,
-            ref List<string> melonDirectories,
-            ref List<string> userLibDirectories)
+            ref List<string> userLibDirectories,
+            ref List<string> pluginDirectories,
+            ref List<string> modDirectories)
         {
             // Get Directories
             string[] directories = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
@@ -156,7 +181,7 @@ namespace MelonLoader.Melons
                 if (Directory.Exists(userLibsPath))
                 {
                     userLibDirectories.Add(userLibsPath);
-                    ScanFolder(eScanType.UserLibs, userLibsPath, ref melonDirectories, ref userLibDirectories);
+                    ScanFolder(eScanType.UserLibs, userLibsPath, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
                 }
 
                 // Is UserLibs Scan?
@@ -165,15 +190,28 @@ namespace MelonLoader.Melons
                 else
                 {
                     // Check for Deeper Melon Folder
-                    string melonPath = Path.Combine(dir, (scanType == eScanType.Plugins) ? "Plugins" : "Mods");
+                    string melonPath = Path.Combine(dir, "Plugins");
                     if (Directory.Exists(melonPath))
                     {
-                        melonDirectories.Add(melonPath);
-                        ScanFolder(scanType, melonPath, ref melonDirectories, ref userLibDirectories);
+                        pluginDirectories.Add(melonPath);
+                        ScanFolder(eScanType.Plugins, melonPath, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
+                    }
+
+                    if (scanType == eScanType.Mods)
+                    {
+                        melonPath = Path.Combine(dir, "Mods");
+                        if (Directory.Exists(melonPath))
+                        {
+                            modDirectories.Add(melonPath);
+                            ScanFolder(scanType, melonPath, ref userLibDirectories, ref pluginDirectories, ref modDirectories);
+                        }
                     }
 
                     // Add to Directories List
-                    melonDirectories.Add(dir);
+                    if (scanType == eScanType.Mods)
+                        modDirectories.Add(dir);
+                    else
+                        pluginDirectories.Add(dir);
                 }
             }
         }

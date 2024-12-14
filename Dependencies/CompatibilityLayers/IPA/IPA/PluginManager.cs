@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using IllusionPlugin;
-using MelonLoader;
 using MelonLoader.Utils;
 
 namespace IllusionInjector

@@ -1,4 +1,5 @@
-﻿using MelonUnityEngine;
+﻿using MelonLoader.Properties;
+using MelonUnityEngine;
 
 namespace MelonLoader.MelonStartScreen.UI.Objects
 {

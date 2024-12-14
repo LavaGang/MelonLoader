@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.IO;
 using System.Net.Http;
 using MelonLoader.Il2CppAssemblyGenerator.Packages;
 using MelonLoader.Il2CppAssemblyGenerator.Packages.Models;
 using MelonLoader.Modules;
+using MelonLoader.Properties;
 using MelonLoader.Utils;
 
 namespace MelonLoader.Il2CppAssemblyGenerator
@@ -39,7 +38,6 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             AssemblyGenerationNeeded = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceRegeneration;
 
             string gameAssemblyName = "GameAssembly";
-            
             if (MelonUtils.IsUnix)
                 gameAssemblyName += ".so"; 
             if (MelonUtils.IsWindows)
@@ -49,8 +47,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
 
             GameAssemblyPath = Path.Combine(MelonEnvironment.GameRootDirectory, gameAssemblyName);
             ManagedPath = MelonEnvironment.MelonManagedDirectory;
-
-            BasePath = Path.GetDirectoryName(Assembly.Location);
+            BasePath = MelonEnvironment.Il2CppAssemblyGeneratorDirectory;
         }
 
         private static int Run()
@@ -66,8 +63,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
                 cpp2il = new Cpp2IL_NetFramework();
             else
                 cpp2il = cpp2IL_netcore;
-
-            //cpp2il_scrs = new Cpp2IL_StrippedCodeRegSupport(cpp2il);
+            cpp2il_scrs = new Cpp2IL_StrippedCodeRegSupport(cpp2il);
 
             il2cppinterop = new Packages.Il2CppInterop();
             unitydependencies = new UnityDependencies();
@@ -80,7 +76,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             Logger.Msg($"Using Deobfuscation Regex = {(string.IsNullOrEmpty(deobfuscationRegex.Regex) ? "null" : deobfuscationRegex.Regex)}");
 
             if (!cpp2il.Setup()
-                //|| !cpp2il_scrs.Setup()
+                || !cpp2il_scrs.Setup()
                 || !il2cppinterop.Setup()
                 || !unitydependencies.Setup()
                 || !deobfuscationMap.Setup())
@@ -94,7 +90,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator
             MelonDebug.Msg($"Current GameAssembly Hash: {CurrentGameAssemblyHash = MelonUtils.ComputeSimpleSHA512Hash(GameAssemblyPath)}");
 
             if (string.IsNullOrEmpty(Config.Values.GameAssemblyHash)
-                    || !Config.Values.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
+                || !Config.Values.GameAssemblyHash.Equals(CurrentGameAssemblyHash))
                 AssemblyGenerationNeeded = true;
 
             if (!AssemblyGenerationNeeded)
