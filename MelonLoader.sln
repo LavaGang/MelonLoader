@@ -57,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stress_Level_Zero_Il2Cpp", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonLoader.NativeHost", "MelonLoader.NativeHost\MelonLoader.NativeHost.csproj", "{60D688E3-ECE0-43A6-9922-9D1D3B8C07CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonBootstrap", "MelonBootstrap\MelonBootstrap.csproj", "{10CC7C0B-E7BC-43CC-BCE1-B0181337CCF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonLoader.Bootstrap", "MelonLoader.Bootstrap\MelonLoader.Bootstrap.csproj", "{10CC7C0B-E7BC-43CC-BCE1-B0181337CCF5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnityUtilities", "UnityUtilities", "{F7AF6E70-6764-4A78-9E96-97D180403252}"
 EndProject

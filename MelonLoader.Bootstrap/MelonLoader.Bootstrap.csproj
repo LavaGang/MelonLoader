@@ -10,7 +10,6 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <NoWarn>LNK4099</NoWarn>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <RootNamespace>MelonLoader.Bootstrap</RootNamespace>
     </PropertyGroup>
     
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">

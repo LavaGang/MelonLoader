@@ -10,7 +10,7 @@ public static class Core
 {
     public static nint LibraryHandle { get; private set; }
 
-    internal static InternalLogger Logger { get; private set; } = new(Color.BlueViolet, "MelonBootstrap");
+    internal static InternalLogger Logger { get; private set; } = new(Color.BlueViolet, "MelonLoader.Bootstrap");
     public static string DataDir { get; private set; } = null!;
     public static string GameDir { get; private set; } = null!;
     public static string BaseDir { get; private set; } = Path.GetDirectoryName(Environment.ProcessPath)!;
