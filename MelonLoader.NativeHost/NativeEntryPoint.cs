@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
+using MelonLoader.InternalUtils;
 
 namespace MelonLoader.NativeHost;
 
