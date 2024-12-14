@@ -4,12 +4,7 @@ using System.Drawing;
 using static MelonLoader.Utils.LoggerUtils;
 using System.Text.RegularExpressions;
 using MelonLoader.Bootstrap.Logging;
-
-#if NET6_0_OR_GREATER
-using MelonLoader.Bootstrap;
-#else
-using System.Runtime.CompilerServices;
-#endif
+using MelonLoader.InternalUtils;
 
 namespace MelonLoader
 {

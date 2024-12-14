@@ -4,8 +4,6 @@ using System.Reflection;
 
 #if NET6_0_OR_GREATER
 using System.Runtime.Loader;
-#else
-using System.Runtime.CompilerServices;
 #endif
 
 #pragma warning disable CS8632
@@ -80,7 +78,7 @@ namespace MelonLoader.Resolver
 #if NET6_0_OR_GREATER
             AssemblyLoadContext.Default.Resolving += Resolve;
 #else
-            BootstrapInterop.Library.MonoInstallHooks();
+            InternalUtils.BootstrapInterop.Library.MonoInstallHooks();
 #endif
         }
 

@@ -1,6 +1,6 @@
 ﻿using MelonLoader.Bootstrap;
 
-namespace MelonLoader;
+namespace MelonLoader.InternalUtils;
 
 internal class BootstrapLibrary
 {
