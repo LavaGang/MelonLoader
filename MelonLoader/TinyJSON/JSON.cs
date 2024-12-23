@@ -190,6 +190,14 @@ namespace MelonLoader.TinyJSON
 
 			var type = typeof(T);
 
+            Type nulledType = Nullable.GetUnderlyingType(type);
+            if (nulledType != null)
+			{
+				var makeFunc = decodeTypeMethod.MakeGenericMethod( nulledType );
+				var v = makeFunc.Invoke( null, new object[] { data } );
+				return (T) v;
+			}
+
 			if (type.IsEnum)
 			{
 				return (T) Enum.Parse( type, data.ToString( CultureInfo.InvariantCulture ) );
