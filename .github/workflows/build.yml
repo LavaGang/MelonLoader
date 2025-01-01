@@ -413,7 +413,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [finalize_windows, finalize_linux]
     steps:
-      - uses: GeekyEggo/delete-artifact@v5.0.0
+      - uses: GeekyEggo/delete-artifact@v5.1.0
         with:
           name: |
             MLCoreDebug
