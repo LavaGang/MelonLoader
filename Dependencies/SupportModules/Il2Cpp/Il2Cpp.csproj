@@ -8,7 +8,6 @@
         <DebugType>embedded</DebugType>
         <DefineConstants>SM_Il2Cpp</DefineConstants>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-
         <RestoreAdditionalProjectSources>https://nuget.bepinex.dev/v3/index.json</RestoreAdditionalProjectSources>
     </PropertyGroup>
     <ItemGroup>

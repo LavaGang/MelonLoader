@@ -190,6 +190,14 @@ namespace MelonLoader.TinyJSON
 
 			var type = typeof(T);
 
+            Type nulledType = Nullable.GetUnderlyingType(type);
+            if (nulledType != null)
+			{
+				var makeFunc = decodeTypeMethod.MakeGenericMethod( nulledType );
+				var v = makeFunc.Invoke( null, new object[] { data } );
+				return (T) v;
+			}
+
 			if (type.IsEnum)
 			{
 				return (T) Enum.Parse( type, data.ToString( CultureInfo.InvariantCulture ) );
@@ -292,8 +300,115 @@ namespace MelonLoader.TinyJSON
 				instance = Activator.CreateInstance<T>();
 			}
 
-			// Now decode fields and properties.
-			DecodeFields( data, ref instance );
+			foreach (var pair in proxyObject)
+			{
+				var field = type.GetField( pair.Key, instanceBindingFlags );
+
+				// If the field doesn't exist, search through any [DecodeAlias] attributes.
+				if (field == null)
+				{
+					var fields = type.GetFields( instanceBindingFlags );
+					foreach (var fieldInfo in fields)
+					{
+						foreach (var attribute in fieldInfo.GetCustomAttributes( true ))
+						{
+							if (decodeAliasAttrType.IsInstanceOfType( attribute ))
+							{
+								if (((DecodeAlias) attribute).Contains( pair.Key ))
+								{
+									field = fieldInfo;
+									break;
+								}
+							}
+						}
+					}
+				}
+
+				if (field != null)
+				{
+					var shouldDecode = field.IsPublic;
+					foreach (var attribute in field.GetCustomAttributes( true ))
+					{
+						if (excludeAttrType.IsInstanceOfType( attribute ))
+						{
+							shouldDecode = false;
+						}
+
+						if (includeAttrType.IsInstanceOfType( attribute ))
+						{
+							shouldDecode = true;
+						}
+					}
+
+					if (shouldDecode)
+					{
+						var makeFunc = decodeTypeMethod.MakeGenericMethod( field.FieldType );
+						if (type.IsValueType)
+						{
+							// Type is a struct.
+							var instanceRef = (object) instance;
+							field.SetValue( instanceRef, makeFunc.Invoke( null, new object[] { pair.Value } ) );
+							instance = (T) instanceRef;
+						}
+						else
+						{
+							// Type is a class.
+							field.SetValue( instance, makeFunc.Invoke( null, new object[] { pair.Value } ) );
+						}
+					}
+				}
+
+				var property = type.GetProperty( pair.Key, instanceBindingFlags );
+
+				// If the property doesn't exist, search through any [DecodeAlias] attributes.
+				if (property == null)
+				{
+					var properties = type.GetProperties( instanceBindingFlags );
+					foreach (var propertyInfo in properties)
+					{
+						foreach (var attribute in propertyInfo.GetCustomAttributes( false ))
+						{
+							if (decodeAliasAttrType.IsInstanceOfType( attribute ))
+							{
+								if (((DecodeAlias) attribute).Contains( pair.Key ))
+								{
+									property = propertyInfo;
+									break;
+								}
+							}
+						}
+					}
+				}
+
+				if (property != null)
+				{
+					if (property.CanWrite && property.GetCustomAttributes( false ).AnyOfType( includeAttrType ))
+					{
+						var makeFunc = decodeTypeMethod.MakeGenericMethod( new Type[] { property.PropertyType } );
+						if (type.IsValueType)
+						{
+							// Type is a struct.
+							var instanceRef = (object) instance;
+							property.SetValue( instanceRef, makeFunc.Invoke( null, new object[] { pair.Value } ), null );
+							instance = (T) instanceRef;
+						}
+						else
+						{
+							// Type is a class.
+							property.SetValue( instance, makeFunc.Invoke( null, new object[] { pair.Value } ), null );
+						}
+					}
+				}
+			}
+
+			// Invoke methods tagged with [AfterDecode] attribute.
+			foreach (var method in type.GetMethods( instanceBindingFlags ))
+			{
+				if (method.GetCustomAttributes( false ).AnyOfType( typeof(AfterDecode) ))
+				{
+					method.Invoke( instance, method.GetParameters().Length == 0 ? null : new object[] { data } );
+				}
+			}
 
 			return instance;
 		}
