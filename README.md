@@ -64,11 +64,9 @@ Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 
 ## REQUIREMENTS:
 
-- [.NET Framework 3.5 Runtime](https://www.microsoft.com/en-us/download/details.aspx?id=21)
-- [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net472)
-- [.NET Framework 4.8 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/net48)
+### Il2Cpp Games:
 - [.NET 6.0 Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0#runtime-6.0.15)
-- Microsoft Visual C++ 2015-2019 Re-distributable [[x86](https://aka.ms/vs/16/release/vc_redist.x86.exe)] [[x64](https://aka.ms/vs/16/release/vc_redist.x64.exe)]
+> On Windows, the .NET 6.0 Desktop Runtime will be installed automatically
 
 ---
 
@@ -105,7 +103,7 @@ Use it to help Develop and Debug MelonLoader, Plugins, and Mods.
 ### UN-INSTALL:
 
 1. Make sure the Game is Closed and Not Running before attempting to UN-INSTALL.
-2. Remove the version.dll & dobby.dll files from the Game's Installation Folder.
+2. Remove the version.dll file from the Game's Installation Folder.
 3. Remove the MelonLoader folder from the Game's Installation Folder.
 
 These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
@@ -117,6 +115,8 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 ---
 
 ## START SCREEN CUSTOMIZATION:
+
+> The start screen is temporarily disabled due to instabilities
 
 - After Initial Launch the Start Screen will create a folder under `UserData/MelonStartScreen`
 - Inside this folder it will create a `Themes` folder and a `Config.cfg` file for Customization Settings.
@@ -185,34 +185,9 @@ These additional steps below are OPTIONAL if you want to do a FULL UN-INSTALL.
 
 ---
 
-## LOAD MODES:
-
-- Load Mode Launch Options are a way to dictate how you want Mods or Plugins to Load.
-- Below is the Compatible Values and what each of them do.
-
-| Value | Action |
-| - | - |
-| 0 | Load Only if the File doesn't have the ".dev.dll" Extension |
-| 1 | Load Only if the File has the ".dev.dll" Extension |
-| 2 | Load All |
-
----
-
-## CONSOLE DISPLAY MODES:
-
-- Console Display Modes are built in Themes for the Console
-- Below is the Compatible Values and what each of them do.
-
-| Value | Mode |
-| - | - |
-| 0 | Normal |
-| 1 | Magenta |
-| 2 | Rainbow |
-| 3 | Random Rainbow |
-
----
-
 ## PROXIES:
+
+MelonLoader uses a proxy DLL to trick the game into loading itself on startup. This only applies for Windows.
 
 - The Proxy DLL is able to be Renamed to the Compatible File Names below.
 - By Default the Proxy is named as "version.dll".
@@ -233,9 +208,6 @@ MelonLoader is licensed under the Apache License, Version 2.0. See [LICENSE](htt
 
 Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [Dobby](https://github.com/jmpews/Dobby) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/jmpews/Dobby/blob/master/LICENSE) for the full License.
-- [dobby-rs](https://github.com/RinLovesYou/dobby-rs) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/dobby-rs/blob/master/LICENSE) for the full License.
-- [dobby-sys](https://github.com/RinLovesYou/dobby-sys) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/dobby-sys/blob/master/LICENSE) for the full License.
-- [unity-rs](https://github.com/RinLovesYou/unity-rs) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/RinLovesYou/unity-rs/blob/master/LICENSE.txt) for the full License.
 - [Mono](https://github.com/Unity-Technologies/mono) is licensed under multiple licenses. See [LICENSE](https://github.com/Unity-Technologies/mono/blob/unity-master/LICENSE) for full details.
 - [HarmonyX](https://github.com/BepInEx/HarmonyX) is licensed under the MIT License. See [LICENSE](https://github.com/BepInEx/HarmonyX/blob/master/LICENSE) for the full License.
 - [MonoMod](https://github.com/MonoMod/MonoMod) is licensed under the MIT License. See [LICENSE](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) for the full License.
@@ -246,8 +218,6 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [AsmResolver](https://github.com/Washi1337/AsmResolver) is licensed under the MIT License. See [LICENSE](https://github.com/Washi1337/AsmResolver/blob/master/LICENSE.md) for the full License.
 - [SharpZipLib](https://github.com/icsharpcode/SharpZipLib) is licensed under the MIT License. See [LICENSE](https://github.com/LavaGang/MelonLoader/blob/master/MelonLoader/SharpZipLib/LICENSE.txt) for the full License.
 - [Semver](https://github.com/maxhauser/semver) is licensed under the MIT License. See [LICENSE](https://github.com/maxhauser/semver/blob/master/License.txt) for the full License.
-- [UnityEngine.Il2CppAssetBundleManager](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppAssetBundleManager/blob/master/LICENSE.md) for the full License.
-- [UnityEngine.Il2CppImageConversionManager](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager) is licensed under the Apache License, Version 2.0. See [LICENSE](https://github.com/LavaGang/UnityEngine.Il2CppImageConversionManager/blob/master/LICENSE.md) for the full License.
 - [Illusion Plugin Architecture](https://github.com/Eusth/IPA) is licensed under the MIT License. See [LICENSE](https://github.com/Eusth/IPA/blob/master/LICENSE) for the full License.
 - [MuseDashModLoader](https://github.com/mo10/MuseDashModLoader) is licensed under the MIT License. See [LICENSE](https://github.com/mo10/MuseDashModLoader/blob/master/LICENSE) for the full License.
 - [mgGif](https://github.com/gwaredd/mgGif) is licensed under the MIT License. See [LICENSE](https://github.com/gwaredd/mgGif/blob/main/LICENSE) for the full License.
@@ -260,12 +230,12 @@ Third-party Libraries used as Source Code and/or bundled in Binary Form:
 - [WebSocketDotNet](https://github.com/SamboyCoding/WebSocketDotNet) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/WebSocketDotNet/blob/master/LICENSE) for the full License.
 - [Pastel](https://github.com/silkfire/Pastel) is licensed under the MIT License. See [LICENSE](https://github.com/silkfire/Pastel/blob/master/LICENSE) for the full License.
 - [Il2CppInterop](https://github.com/BepInEx/Il2CppInterop) is licensed under the LGPLv3 License. See [LICENSE](https://github.com/BepInEx/Il2CppInterop/blob/master/LICENSE) for the full License.
- 
- 
+
 External Libraries and Tools that are downloaded and used at Runtime:
 - [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) is licensed under the MIT License. See [LICENSE](https://github.com/SamboyCoding/Cpp2IL/blob/master/LICENSE) for the full License.
 - Unity Runtime Libraries from [MelonLoader.UnityDependencies](https://github.com/LavaGang/MelonLoader.UnityDependencies) are part of Unity Software.  
 Their usage is subject to [Unity Terms of Service](https://unity3d.com/legal/terms-of-service), including [Unity Software Additional Terms](https://unity3d.com/legal/terms-of-service/software).
+- [.NET Runtime](https://github.com/dotnet/runtime) is licensed under the MIT License. See [LICENSE](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT) for the full License.
 
 See [MelonLoader Wiki](https://melonwiki.xyz/#/credits) for the full Credits.
 

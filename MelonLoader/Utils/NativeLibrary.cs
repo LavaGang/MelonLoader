@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader
@@ -54,51 +56,33 @@ namespace MelonLoader
 
         public static IntPtr AgnosticLoadLibrary(string name)
         {
-            var platform = Environment.OSVersion.Platform;
-
-            switch (platform)
-            {
-                case PlatformID.Win32S:
-                case PlatformID.Win32Windows:
-                case PlatformID.Win32NT:
-                case PlatformID.WinCE:
-                    return LoadLibrary(name);
-                
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    return dlopen(name, RTLD_NOW);
-            }
+#if WINDOWS
+            return LoadLibrary(name);
+#elif LINUX
+            if (!Path.HasExtension(name))
+                name += ".so";
             
-            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
+            return dlopen(name, RTLD_NOW);
+#endif
         }
 
         public static IntPtr AgnosticGetProcAddress(IntPtr hModule, string lpProcName)
         {
-            var platform = Environment.OSVersion.Platform;
-
-            switch (platform)
-            {
-                case PlatformID.Win32S:
-                case PlatformID.Win32Windows:
-                case PlatformID.Win32NT:
-                case PlatformID.WinCE:
-                    return GetProcAddress(hModule, lpProcName);
-                
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    return dlsym(hModule, lpProcName);
-            }
-            
-            throw new PlatformNotSupportedException($"Unsupported platform: {platform}");
+#if WINDOWS
+            return GetProcAddress(hModule, lpProcName);
+#elif LINUX
+            return dlsym(hModule, lpProcName);
+#endif
         }
-
+        
+#if WINDOWS
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         private static extern IntPtr LoadLibrary(string lpLibFileName);
         [DllImport("kernel32")]
         internal static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
         [DllImport("kernel32")]
         internal static extern IntPtr FreeLibrary(IntPtr hModule);
-        
+#elif LINUX
         [DllImport("libdl.so.2")]
         protected static extern IntPtr dlopen(string filename, int flags);
 
@@ -106,6 +90,7 @@ namespace MelonLoader
         protected static extern IntPtr dlsym(IntPtr handle, string symbol);
 
         const int RTLD_NOW = 2; // for dlopen's flags 
+#endif
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.LPStr)]
@@ -127,17 +112,25 @@ namespace MelonLoader
 
             Instance = (T)Activator.CreateInstance(specifiedType);
 
-            FieldInfo[] fields = specifiedType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            if (fields.Length <= 0)
-                return;
-
-            foreach (FieldInfo fieldInfo in fields)
+            foreach (var fieldInfo in specifiedType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
-                Type fieldType = fieldInfo.FieldType;
-                if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length <= 0)
+                if (fieldInfo.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length != 0)
+                    continue;
+
+                var fieldType = fieldInfo.FieldType;
+                if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
                     continue;
 
                 fieldInfo.SetValue(Instance, GetExport(fieldType, fieldInfo.Name));
+            }
+
+            foreach (var propertyInfo in specifiedType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                var fieldType = propertyInfo.PropertyType;
+                if (fieldType.GetCustomAttributes(typeof(UnmanagedFunctionPointerAttribute), false).Length == 0)
+                    continue;
+
+                propertyInfo.SetValue(Instance, GetExport(fieldType, propertyInfo.Name), null);
             }
         }
     }

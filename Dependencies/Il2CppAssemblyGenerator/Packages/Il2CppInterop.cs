@@ -27,33 +27,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
         }
 
         internal override bool ShouldSetup()
-            => !Config.Values.UseInterop;
+            => false;
 
         internal override bool Execute()
-        {
-            if (Config.Values.UseInterop)
-            {
-                return ExecuteInterop();
-            }
-            
-            if (Execute(new string[] {
-                $"--input={ Core.cpp2il.OutputFolder }",
-                $"--output={ OutputFolder }",
-                $"--mscorlib={ Path.Combine(Core.ManagedPath, "mscorlib.dll") }",
-                $"--unity={ Core.unitydependencies.Destination }",
-                $"--gameassembly={ Core.GameAssemblyPath }",
-                string.IsNullOrEmpty(Core.deobfuscationMap.Version) ? string.Empty : $"--rename-map={ Core.deobfuscationMap.Destination }",
-                string.IsNullOrEmpty(Core.deobfuscationRegex.Regex) ? string.Empty : $"--obf-regex={ Core.deobfuscationRegex.Regex }",
-                "--add-prefix-to=ICSharpCode",
-                "--add-prefix-to=Newtonsoft",
-                "--add-prefix-to=TinyJson",
-                "--add-prefix-to=Valve.Newtonsoft"
-            }))
-                return true;
-            return false;
-        }
-
-        private bool ExecuteInterop()
         {
             Core.Logger.Msg("Reading dumped assemblies for interop generation...");
 
@@ -64,7 +40,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 .Select(f => { resolver.Add(f); return f; })
                 .Select(f => f.Assembly)
                 .ToList();
-            
+
             var opts = new GeneratorOptions()
             {
                 GameAssemblyPath = Core.GameAssemblyPath,
@@ -75,9 +51,9 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 Parallel = true,
                 Il2CppPrefixMode = GeneratorOptions.PrefixMode.OptOut,
             };
-            
+
             //Inform cecil of the unity base libs
-            var trusted = (string) AppDomain.CurrentDomain.GetData("TRUSTED_PLATFORM_ASSEMBLIES");
+            var trusted = (string)AppDomain.CurrentDomain.GetData("TRUSTED_PLATFORM_ASSEMBLIES");
             var allUnityDlls = string.Join(Path.PathSeparator, Directory.GetFiles(Core.unitydependencies.Destination, "*.dll", SearchOption.TopDirectoryOnly));
             // var allDumpedDlls = string.Join(Path.PathSeparator, Directory.GetFiles(Core.dumper.OutputFolder, "*.dll", SearchOption.TopDirectoryOnly));
             AppDomain.CurrentDomain.SetData("TRUSTED_PLATFORM_ASSEMBLIES", trusted + Path.PathSeparator + allUnityDlls);
@@ -110,7 +86,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
             Core.Logger.Msg("Cleaning up...");
             AppDomain.CurrentDomain.SetData("TRUSTED_PLATFORM_ASSEMBLIES", trusted);
             //inputAssemblies.ForEach(a => a.Dispose());
-            
+
             Core.Logger.Msg("Interop Generation Complete!");
             return true;
         }
