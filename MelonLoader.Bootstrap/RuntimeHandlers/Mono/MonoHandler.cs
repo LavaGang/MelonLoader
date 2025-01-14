@@ -112,7 +112,7 @@ internal static class MonoHandler
         Mono.AddManagedInternalCall<CastManagedAssemblyPtrFn>("MelonLoader.Utils.MonoLibrary::CastManagedAssemblyPtr", CastManagedAssemblyPtrImpl);
 
         var image = Mono.AssemblyGetImage(assembly);
-        var interopClass = Mono.ClassFromName(image, "MelonLoader", "BootstrapInterop");
+        var interopClass = Mono.ClassFromName(image, "MelonLoader.InternalUtils", "BootstrapInterop");
 
         var initMethod = Mono.ClassGetMethodFromName(interopClass, "Initialize", 1);
         coreStart = Mono.ClassGetMethodFromName(interopClass, "Start", 0);
