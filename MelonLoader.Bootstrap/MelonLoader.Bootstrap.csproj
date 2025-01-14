@@ -51,8 +51,8 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="$(AppHostVersion)" PrivateAssets="All" />
-        <PackageReference Include="Pastel" Version="6.0.0" />
-        <PackageReference Include="Samboy063.Tomlet" Version="5.4.0" />
+        <PackageReference Include="Pastel" Version="6.0.1" />
+        <PackageReference Include="Samboy063.Tomlet" Version="6.0.0" />
     </ItemGroup>
     
     <ItemGroup>

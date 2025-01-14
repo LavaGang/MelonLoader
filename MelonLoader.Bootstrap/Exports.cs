@@ -1,6 +1,7 @@
 ﻿using MelonLoader.Bootstrap.Logging;
 using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 using MelonLoader.Bootstrap.Utils;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace MelonLoader.Bootstrap;
@@ -9,6 +10,7 @@ internal static class Exports
 {
 #if WINDOWS
     [UnmanagedCallersOnly(EntryPoint = "DllMain")]
+    [RequiresDynamicCode("Calls InitConfig")]
     public static bool DllMain(nint hModule, uint ulReasonForCall, nint lpReserved)
     {
         if (ulReasonForCall != 1)

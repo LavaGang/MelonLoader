@@ -2,6 +2,7 @@
 using MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 using MelonLoader.Bootstrap.RuntimeHandlers.Mono;
 using MelonLoader.Bootstrap.Utils;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Tomlet;
 
@@ -18,6 +19,7 @@ public static class Core
 #if LINUX
     [System.Runtime.InteropServices.UnmanagedCallersOnly(EntryPoint = "Init")]
 #endif
+    [RequiresDynamicCode("Calls InitConfig")]
     public static void Init(nint moduleHandle)
     {
         LibraryHandle = moduleHandle;
@@ -48,6 +50,7 @@ public static class Core
         Logger.Error("Current game runtime is not supported. The game might have a modified runtime or is not a real Unity game.");
     }
 
+    [RequiresDynamicCode("Dynamically accesses LoaderConfig properties")]
     private static void InitConfig()
     {
         var customBaseDir = ArgParser.GetValue("melonloader.basedir");
