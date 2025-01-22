@@ -23,7 +23,7 @@ public class Il2CppAssetBundleManager
         if (GetAllLoadedAssetBundles_NativeDelegateField == null)
             throw new System.NullReferenceException("The GetAllLoadedAssetBundles_NativeDelegateField cannot be null.");
         var intPtr = GetAllLoadedAssetBundles_NativeDelegateField();
-        var refarr = ((intPtr != System.IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intPtr) : null);
+        var refarr = (intPtr != System.IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intPtr) : null;
         if (refarr == null)
             throw new System.NullReferenceException("The refarr cannot be null.");
         System.Collections.Generic.List<Il2CppAssetBundle> bundlelist = [];
@@ -43,7 +43,7 @@ public class Il2CppAssetBundleManager
         if (LoadFromFile_InternalDelegateField == null)
             throw new System.NullReferenceException("The LoadFromFile_InternalDelegateField cannot be null.");
         var intPtr = LoadFromFile_InternalDelegateField(IL2CPP.ManagedStringToIl2Cpp(path), crc, offset);
-        return ((intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundle(intPtr) : null);
+        return (intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundle(intPtr) : null;
     }
 
     public static Il2CppAssetBundleCreateRequest LoadFromFileAsync(string path) => LoadFromFileAsync(path, 0u, 0UL);
@@ -57,7 +57,7 @@ public class Il2CppAssetBundleManager
         if (LoadFromFileAsync_InternalDelegateField == null)
             throw new System.NullReferenceException("The LoadFromFileAsync_InternalDelegateField cannot be null.");
         var intPtr = LoadFromFileAsync_InternalDelegateField(IL2CPP.ManagedStringToIl2Cpp(path), crc, offset);
-        return ((intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundleCreateRequest(intPtr) : null);
+        return (intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundleCreateRequest(intPtr) : null;
     }
 
     public static Il2CppAssetBundle LoadFromMemory(Il2CppStructArray<byte> binary) => LoadFromMemory(binary, 0u);
@@ -69,7 +69,7 @@ public class Il2CppAssetBundleManager
         if (LoadFromMemory_InternalDelegateField == null)
             throw new System.NullReferenceException("The LoadFromMemory_InternalDelegateField cannot be null.");
         var intPtr = LoadFromMemory_InternalDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(binary), crc);
-        return ((intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundle(intPtr) : null);
+        return (intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundle(intPtr) : null;
     }
 
     public static Il2CppAssetBundleCreateRequest LoadFromMemoryAsync(Il2CppStructArray<byte> binary) => LoadFromMemoryAsync(binary, 0u);
@@ -81,7 +81,7 @@ public class Il2CppAssetBundleManager
         if (LoadFromMemoryAsync_InternalDelegateField == null)
             throw new System.NullReferenceException("The LoadFromMemoryAsync_InternalDelegateField cannot be null.");
         var intPtr = LoadFromMemoryAsync_InternalDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(binary), crc);
-        return ((intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundleCreateRequest(intPtr) : null);
+        return (intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundleCreateRequest(intPtr) : null;
     }
 
     public static Il2CppAssetBundle LoadFromStream(Stream stream) => LoadFromStream(stream, 0u, 0u);
@@ -95,7 +95,7 @@ public class Il2CppAssetBundleManager
         if (LoadFromStreamInternalDelegateField == null)
             throw new System.NullReferenceException("The LoadFromStreamInternalDelegateField cannot be null.");
         var intPtr = LoadFromStreamInternalDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(stream), crc, managedReadBufferSize);
-        return ((intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundle(intPtr) : null);
+        return (intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundle(intPtr) : null;
     }
 
     public static Il2CppAssetBundleCreateRequest LoadFromStreamAsync(Stream stream) => LoadFromStreamAsync(stream, 0u, 0u);
@@ -109,7 +109,7 @@ public class Il2CppAssetBundleManager
         if (LoadFromStreamAsyncInternalDelegateField == null)
             throw new System.NullReferenceException("The LoadFromStreamAsyncInternalDelegateField cannot be null.");
         var intPtr = LoadFromStreamAsyncInternalDelegateField(IL2CPP.Il2CppObjectBaseToPtrNotNull(stream), crc, managedReadBufferSize);
-        return ((intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundleCreateRequest(intPtr) : null);
+        return (intPtr != System.IntPtr.Zero) ? new Il2CppAssetBundleCreateRequest(intPtr) : null;
     }
 
     public static void UnloadAllAssetBundles(bool unloadAllObjects)

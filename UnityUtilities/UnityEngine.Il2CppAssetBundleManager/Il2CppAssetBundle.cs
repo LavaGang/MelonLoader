@@ -29,11 +29,11 @@ public class Il2CppAssetBundle
     {
         get
         {
-            if (bundleptr == IntPtr.Zero)
-                throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
-            if (get_isStreamedSceneAssetBundleDelegateField == null)
-                throw new NullReferenceException("The get_isStreamedSceneAssetBundleDelegateField cannot be null.");
-            return get_isStreamedSceneAssetBundleDelegateField(bundleptr);
+            return bundleptr == IntPtr.Zero
+                ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
+                : get_isStreamedSceneAssetBundleDelegateField == null
+                ? throw new NullReferenceException("The get_isStreamedSceneAssetBundleDelegateField cannot be null.")
+                : get_isStreamedSceneAssetBundleDelegateField(bundleptr);
         }
     }
 
@@ -46,7 +46,7 @@ public class Il2CppAssetBundle
             if (returnMainAssetDelegateField == null)
                 throw new NullReferenceException("The returnMainAssetDelegateField cannot be null.");
             var intPtr = returnMainAssetDelegateField(bundleptr);
-            return ((intPtr != IntPtr.Zero) ? new Object(intPtr) : null);
+            return (intPtr != IntPtr.Zero) ? new Object(intPtr) : null;
         }
     }
 
@@ -54,11 +54,11 @@ public class Il2CppAssetBundle
     {
         if (bundleptr == IntPtr.Zero)
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentException("The input asset name cannot be null or empty.");
-        if (ContainsDelegateField == null)
-            throw new NullReferenceException("The ContainsDelegateField cannot be null.");
-        return ContainsDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name));
+        return string.IsNullOrEmpty(name)
+            ? throw new ArgumentException("The input asset name cannot be null or empty.")
+            : ContainsDelegateField == null
+            ? throw new NullReferenceException("The ContainsDelegateField cannot be null.")
+            : ContainsDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name));
     }
 
     public Il2CppStringArray AllAssetNames() => GetAllAssetNames();
@@ -70,7 +70,7 @@ public class Il2CppAssetBundle
         if (GetAllAssetNamesDelegateField == null)
             throw new NullReferenceException("The GetAllAssetNamesDelegateField cannot be null.");
         var intPtr = GetAllAssetNamesDelegateField(bundleptr);
-        return ((intPtr != IntPtr.Zero) ? new Il2CppStringArray(intPtr) : null);
+        return (intPtr != IntPtr.Zero) ? new Il2CppStringArray(intPtr) : null;
     }
 
     public Il2CppStringArray AllScenePaths() => GetAllScenePaths();
@@ -82,7 +82,7 @@ public class Il2CppAssetBundle
         if (GetAllScenePathsDelegateField == null)
             throw new NullReferenceException("The GetAllScenePathsDelegateField cannot be null.");
         var intPtr = GetAllScenePathsDelegateField(bundleptr);
-        return ((intPtr != IntPtr.Zero) ? new Il2CppStringArray(intPtr) : null);
+        return (intPtr != IntPtr.Zero) ? new Il2CppStringArray(intPtr) : null;
     }
 
     public Object Load(string name) => LoadAsset(name);
@@ -96,7 +96,7 @@ public class Il2CppAssetBundle
         if (!InteropSupport.IsGeneratedAssemblyType(typeof(T)))
             throw new NullReferenceException("The type must be a Generated Assembly Type.");
         var intptr = LoadAsset(name, Il2CppType.Of<T>().Pointer);
-        return ((intptr != IntPtr.Zero) ? InteropSupport.Il2CppObjectPtrToIl2CppObject<T>(intptr) : null);
+        return (intptr != IntPtr.Zero) ? InteropSupport.Il2CppObjectPtrToIl2CppObject<T>(intptr) : null;
     }
 
     public Object Load(string name, Il2CppSystem.Type type) => LoadAsset(name, type);
@@ -106,7 +106,7 @@ public class Il2CppAssetBundle
         if (type == null)
             throw new NullReferenceException("The input type cannot be null.");
         var intptr = LoadAsset(name, type.Pointer);
-        return ((intptr != IntPtr.Zero) ? new Object(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Object(intptr) : null;
     }
 
     public IntPtr Load(string name, IntPtr typeptr) => LoadAsset(name, typeptr);
@@ -117,11 +117,11 @@ public class Il2CppAssetBundle
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
         if (string.IsNullOrEmpty(name))
             throw new ArgumentException("The input asset name cannot be null or empty.");
-        if (typeptr == IntPtr.Zero)
-            throw new NullReferenceException("The input type cannot be IntPtr.Zero");
-        if (LoadAsset_InternalDelegateField == null)
-            throw new NullReferenceException("The LoadAsset_InternalDelegateField cannot be null.");
-        return LoadAsset_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+        return typeptr == IntPtr.Zero
+            ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
+            : LoadAsset_InternalDelegateField == null
+            ? throw new NullReferenceException("The LoadAsset_InternalDelegateField cannot be null.")
+            : LoadAsset_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
 
     public Il2CppAssetBundleRequest LoadAssetAsync(string name) => LoadAssetAsync<Object>(name);
@@ -131,7 +131,7 @@ public class Il2CppAssetBundle
         if (!InteropSupport.IsGeneratedAssemblyType(typeof(T)))
             throw new NullReferenceException("The type must be a Generated Assembly Type.");
         var intptr = LoadAssetAsync(name, Il2CppType.Of<T>().Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null;
     }
 
     public Il2CppAssetBundleRequest LoadAssetAsync(string name, Il2CppSystem.Type type)
@@ -139,7 +139,7 @@ public class Il2CppAssetBundle
         if (type == null)
             throw new NullReferenceException("The input type cannot be null.");
         var intptr = LoadAssetAsync(name, type.Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null;
     }
 
     public IntPtr LoadAssetAsync(string name, IntPtr typeptr)
@@ -148,11 +148,11 @@ public class Il2CppAssetBundle
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
         if (string.IsNullOrEmpty(name))
             throw new ArgumentException("The input asset name cannot be null or empty.");
-        if (typeptr == IntPtr.Zero)
-            throw new NullReferenceException("The input type cannot be IntPtr.Zero");
-        if (LoadAssetAsync_InternalDelegateField == null)
-            throw new NullReferenceException("The LoadAssetAsync_InternalDelegateField cannot be null.");
-        return LoadAssetAsync_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+        return typeptr == IntPtr.Zero
+            ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
+            : LoadAssetAsync_InternalDelegateField == null
+            ? throw new NullReferenceException("The LoadAssetAsync_InternalDelegateField cannot be null.")
+            : LoadAssetAsync_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
 
     public Il2CppReferenceArray<Object> LoadAll() => LoadAllAssets();
@@ -166,7 +166,7 @@ public class Il2CppAssetBundle
         if (!InteropSupport.IsGeneratedAssemblyType(typeof(T)))
             throw new NullReferenceException("The type must be a Generated Assembly Type.");
         var intptr = LoadAllAssets(Il2CppType.Of<T>().Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppReferenceArray<T>(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppReferenceArray<T>(intptr) : null;
     }
 
     public Il2CppReferenceArray<Object> LoadAll(Il2CppSystem.Type type) => LoadAllAssets(type);
@@ -176,18 +176,18 @@ public class Il2CppAssetBundle
         if (type == null)
             throw new NullReferenceException("The input type cannot be null.");
         var intptr = LoadAllAssets(type.Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intptr) : null;
     }
 
     public IntPtr LoadAll(IntPtr typeptr) => LoadAllAssets(typeptr);
 
     public IntPtr LoadAllAssets(IntPtr typeptr)
     {
-        if (typeptr == IntPtr.Zero)
-            throw new NullReferenceException("The input type cannot be IntPtr.Zero");
-        if (LoadAssetWithSubAssets_InternalDelegateField == null)
-            throw new NullReferenceException("The LoadAssetWithSubAssets_InternalDelegateField cannot be null.");
-        return LoadAssetWithSubAssets_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(string.Empty), typeptr);
+        return typeptr == IntPtr.Zero
+            ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
+            : LoadAssetWithSubAssets_InternalDelegateField == null
+            ? throw new NullReferenceException("The LoadAssetWithSubAssets_InternalDelegateField cannot be null.")
+            : LoadAssetWithSubAssets_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(string.Empty), typeptr);
     }
 
     public Il2CppReferenceArray<Object> LoadAssetWithSubAssets(string name) => LoadAssetWithSubAssets<Object>(name);
@@ -197,7 +197,7 @@ public class Il2CppAssetBundle
         if (!InteropSupport.IsGeneratedAssemblyType(typeof(T)))
             throw new NullReferenceException("The type must be a Generated Assembly Type.");
         var intptr = LoadAssetWithSubAssets(name, Il2CppType.Of<T>().Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppReferenceArray<T>(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppReferenceArray<T>(intptr) : null;
     }
 
     public Il2CppReferenceArray<Object> LoadAssetWithSubAssets(string name, Il2CppSystem.Type type)
@@ -205,7 +205,7 @@ public class Il2CppAssetBundle
         if (type == null)
             throw new NullReferenceException("The input type cannot be null.");
         var intptr = LoadAssetWithSubAssets(name, type.Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intptr) : null;
     }
 
     public IntPtr LoadAssetWithSubAssets(string name, IntPtr typeptr)
@@ -214,11 +214,11 @@ public class Il2CppAssetBundle
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
         if (string.IsNullOrEmpty(name))
             throw new ArgumentException("The input asset name cannot be null or empty.");
-        if (typeptr == IntPtr.Zero)
-            throw new NullReferenceException("The input type cannot be IntPtr.Zero");
-        if (LoadAssetWithSubAssets_InternalDelegateField == null)
-            throw new NullReferenceException("The LoadAssetWithSubAssets_InternalDelegateField cannot be null.");
-        return LoadAssetWithSubAssets_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+        return typeptr == IntPtr.Zero
+            ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
+            : LoadAssetWithSubAssets_InternalDelegateField == null
+            ? throw new NullReferenceException("The LoadAssetWithSubAssets_InternalDelegateField cannot be null.")
+            : LoadAssetWithSubAssets_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
     public Il2CppAssetBundleRequest LoadAssetWithSubAssetsAsync(string name) => LoadAssetWithSubAssetsAsync<Object>(name);
 
@@ -227,7 +227,7 @@ public class Il2CppAssetBundle
         if (!InteropSupport.IsGeneratedAssemblyType(typeof(T)))
             throw new NullReferenceException("The type must be a Generated Assembly Type.");
         var intptr = LoadAssetWithSubAssetsAsync(name, Il2CppType.Of<T>().Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null;
     }
 
     public Il2CppAssetBundleRequest LoadAssetWithSubAssetsAsync(string name, Il2CppSystem.Type type)
@@ -235,7 +235,7 @@ public class Il2CppAssetBundle
         if (type == null)
             throw new NullReferenceException("The input type cannot be null.");
         var intptr = LoadAssetWithSubAssetsAsync(name, type.Pointer);
-        return ((intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null);
+        return (intptr != IntPtr.Zero) ? new Il2CppAssetBundleRequest(intptr) : null;
     }
 
     public IntPtr LoadAssetWithSubAssetsAsync(string name, IntPtr typeptr)
@@ -244,11 +244,11 @@ public class Il2CppAssetBundle
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
         if (string.IsNullOrEmpty(name))
             throw new ArgumentException("The input asset name cannot be null or empty.");
-        if (typeptr == IntPtr.Zero)
-            throw new NullReferenceException("The input type cannot be IntPtr.Zero");
-        if (LoadAssetWithSubAssetsAsync_InternalDelegateField == null)
-            throw new NullReferenceException("The LoadAssetWithSubAssetsAsync_InternalDelegateField cannot be null.");
-        return LoadAssetWithSubAssetsAsync_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+        return typeptr == IntPtr.Zero
+            ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
+            : LoadAssetWithSubAssetsAsync_InternalDelegateField == null
+            ? throw new NullReferenceException("The LoadAssetWithSubAssetsAsync_InternalDelegateField cannot be null.")
+            : LoadAssetWithSubAssetsAsync_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
 
     public void Unload(bool unloadAllLoadedObjects)

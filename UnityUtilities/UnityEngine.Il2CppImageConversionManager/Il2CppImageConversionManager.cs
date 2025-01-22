@@ -23,10 +23,7 @@ public class Il2CppImageConversionManager
             throw new NullReferenceException("The EncodeToTGADelegateField cannot be null.");
         Il2CppStructArray<byte> il2CppStructArray;
         var encodeToTGADelegateField = EncodeToTGADelegateField(IL2CPP.Il2CppObjectBaseToPtr(tex));
-        if (encodeToTGADelegateField != IntPtr.Zero)
-            il2CppStructArray = new Il2CppStructArray<byte>(encodeToTGADelegateField);
-        else
-            il2CppStructArray = null;
+        il2CppStructArray = encodeToTGADelegateField != IntPtr.Zero ? new Il2CppStructArray<byte>(encodeToTGADelegateField) : null;
         return il2CppStructArray;
     }
 
@@ -38,10 +35,7 @@ public class Il2CppImageConversionManager
             throw new NullReferenceException("The EncodeToPNGDelegateField cannot be null.");
         Il2CppStructArray<byte> il2CppStructArray;
         var encodeToPNGDelegateField = EncodeToPNGDelegateField(IL2CPP.Il2CppObjectBaseToPtr(tex));
-        if (encodeToPNGDelegateField != IntPtr.Zero)
-            il2CppStructArray = new Il2CppStructArray<byte>(encodeToPNGDelegateField);
-        else
-            il2CppStructArray = null;
+        il2CppStructArray = encodeToPNGDelegateField != IntPtr.Zero ? new Il2CppStructArray<byte>(encodeToPNGDelegateField) : null;
         return il2CppStructArray;
     }
 
@@ -53,10 +47,7 @@ public class Il2CppImageConversionManager
             throw new NullReferenceException("The EncodeToJPGDelegateField cannot be null.");
         Il2CppStructArray<byte> il2CppStructArray;
         var encodeToJPGDelegateField = EncodeToJPGDelegateField(IL2CPP.Il2CppObjectBaseToPtr(tex), quality);
-        if (encodeToJPGDelegateField != IntPtr.Zero)
-            il2CppStructArray = new Il2CppStructArray<byte>(encodeToJPGDelegateField);
-        else
-            il2CppStructArray = null;
+        il2CppStructArray = encodeToJPGDelegateField != IntPtr.Zero ? new Il2CppStructArray<byte>(encodeToJPGDelegateField) : null;
         return il2CppStructArray;
     }
     public static Il2CppStructArray<byte> EncodeToJPG(Texture2D tex) => EncodeToJPG(tex, 75);
@@ -69,10 +60,7 @@ public class Il2CppImageConversionManager
             throw new NullReferenceException("The EncodeToEXRDelegateField cannot be null.");
         Il2CppStructArray<byte> il2CppStructArray;
         var encodeToEXRDelegateField = EncodeToEXRDelegateField(IL2CPP.Il2CppObjectBaseToPtr(tex), flags);
-        if (encodeToEXRDelegateField != IntPtr.Zero)
-            il2CppStructArray = new Il2CppStructArray<byte>(encodeToEXRDelegateField);
-        else
-            il2CppStructArray = null;
+        il2CppStructArray = encodeToEXRDelegateField != IntPtr.Zero ? new Il2CppStructArray<byte>(encodeToEXRDelegateField) : null;
         return il2CppStructArray;
     }
     public static Il2CppStructArray<byte> EncodeToEXR(Texture2D tex) => EncodeToEXR(tex, 0);
@@ -81,11 +69,11 @@ public class Il2CppImageConversionManager
     {
         if (tex == null)
             throw new ArgumentException("The texture cannot be null.");
-        if (data == null)
-            throw new ArgumentException("The data cannot be null.");
-        if (LoadImageDelegateField == null)
-            throw new NullReferenceException("The LoadImageDelegateField cannot be null.");
-        return LoadImageDelegateField(IL2CPP.Il2CppObjectBaseToPtr(tex), IL2CPP.Il2CppObjectBaseToPtr(data), markNonReadable);
+        return data == null
+            ? throw new ArgumentException("The data cannot be null.")
+            : LoadImageDelegateField == null
+            ? throw new NullReferenceException("The LoadImageDelegateField cannot be null.")
+            : LoadImageDelegateField(IL2CPP.Il2CppObjectBaseToPtr(tex), IL2CPP.Il2CppObjectBaseToPtr(data), markNonReadable);
     }
     public static bool LoadImage(Texture2D tex, Il2CppStructArray<byte> data) => LoadImage(tex, data, false);
 
@@ -93,9 +81,9 @@ public class Il2CppImageConversionManager
     private delegate IntPtr TextureAndQualityDelegate(IntPtr tex, int quality);
     private delegate IntPtr TextureAndFlagDelegate(IntPtr tex, Texture2D.EXRFlags flags);
     private delegate bool LoadImageDelegate(IntPtr tex, IntPtr data, bool markNonReadable);
-    private readonly static TextureAndFlagDelegate EncodeToEXRDelegateField;
-    private readonly static TextureOnlyDelegate EncodeToTGADelegateField;
-    private readonly static TextureOnlyDelegate EncodeToPNGDelegateField;
-    private readonly static TextureAndQualityDelegate EncodeToJPGDelegateField;
-    private readonly static LoadImageDelegate LoadImageDelegateField;
+    private static readonly TextureAndFlagDelegate EncodeToEXRDelegateField;
+    private static readonly TextureOnlyDelegate EncodeToTGADelegateField;
+    private static readonly TextureOnlyDelegate EncodeToPNGDelegateField;
+    private static readonly TextureAndQualityDelegate EncodeToJPGDelegateField;
+    private static readonly LoadImageDelegate LoadImageDelegateField;
 }
