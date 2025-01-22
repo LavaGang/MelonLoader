@@ -1,45 +1,44 @@
-﻿namespace MelonLoader.Il2CppAssemblyGenerator.Packages
+﻿namespace MelonLoader.Il2CppAssemblyGenerator.Packages;
+
+internal class DeobfuscationRegex
 {
-    internal class DeobfuscationRegex
+    internal string Regex = null;
+
+    internal DeobfuscationRegex()
     {
-        internal string Regex = null;
+        Regex = LoaderConfig.Current.UnityEngine.ForceGeneratorRegex;
+        if (string.IsNullOrEmpty(Regex))
+            Regex = RemoteAPI.Info.ObfuscationRegex;
+    }
 
-        internal DeobfuscationRegex()
+    internal void Setup()
+    {
+        if (string.IsNullOrEmpty(Regex))
         {
-            Regex = LoaderConfig.Current.UnityEngine.ForceGeneratorRegex;
-            if (string.IsNullOrEmpty(Regex))
-                Regex = RemoteAPI.Info.ObfuscationRegex;
-        }
-
-        internal void Setup()
-        {
-            if (string.IsNullOrEmpty(Regex))
+            if (!string.IsNullOrEmpty(Config.Values.DeobfuscationRegex))
             {
-                if (!string.IsNullOrEmpty(Config.Values.DeobfuscationRegex))
-                {
-                    Core.AssemblyGenerationNeeded = true;
-                    return;
-                }
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(Config.Values.DeobfuscationRegex))
-                {
-                    Core.AssemblyGenerationNeeded = true;
-                    return;
-                }
-                if (!Config.Values.DeobfuscationRegex.Equals(Regex))
-                {
-                    Core.AssemblyGenerationNeeded = true;
-                    return;
-                }
+                Core.AssemblyGenerationNeeded = true;
+                return;
             }
         }
-
-        internal void Save()
+        else
         {
-            Config.Values.DeobfuscationRegex = Regex;
-            Config.Save();
+            if (string.IsNullOrEmpty(Config.Values.DeobfuscationRegex))
+            {
+                Core.AssemblyGenerationNeeded = true;
+                return;
+            }
+            if (!Config.Values.DeobfuscationRegex.Equals(Regex))
+            {
+                Core.AssemblyGenerationNeeded = true;
+                return;
+            }
         }
+    }
+
+    internal void Save()
+    {
+        Config.Values.DeobfuscationRegex = Regex;
+        Config.Save();
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using IllusionPlugin;
+﻿using IllusionPlugin;
 using MelonLoader.Utils;
+using System.Collections.Generic;
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace IllusionInjector;
@@ -8,7 +8,7 @@ namespace IllusionInjector;
 
 public static class PluginManager
 {
-    internal static List<IPlugin> _Plugins = new List<IPlugin>();
+    internal static List<IPlugin> _Plugins = [];
     public static IEnumerable<IPlugin> Plugins { get => _Plugins; }
     public class AppInfo
     {

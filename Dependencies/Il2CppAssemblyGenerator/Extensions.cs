@@ -10,5 +10,5 @@ internal static class Extensions
         using var dlStream = client.GetStreamAsync(url).Result;
         using var fileStream = File.Open(dest, FileMode.Create, FileAccess.Write);
         dlStream.CopyTo(fileStream);
-    }  
+    }
 }

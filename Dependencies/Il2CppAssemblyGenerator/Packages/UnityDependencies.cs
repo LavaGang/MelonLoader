@@ -1,23 +1,22 @@
 ﻿using System.IO;
 
-namespace MelonLoader.Il2CppAssemblyGenerator.Packages
+namespace MelonLoader.Il2CppAssemblyGenerator.Packages;
+
+internal class UnityDependencies : Models.PackageBase
 {
-    internal class UnityDependencies : Models.PackageBase
+    internal UnityDependencies()
     {
-        internal UnityDependencies()
-        {
-            Name = nameof(UnityDependencies);
-            Version = InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType();
-            URL = $"https://github.com/LavaGang/MelonLoader.UnityDependencies/releases/download/{Version}/Managed.zip";
-            Destination = Path.Combine(Core.BasePath, Name);
-            FilePath = Path.Combine(Core.BasePath, $"{Name}_{Version}.zip");
-        }
-
-        internal override bool ShouldSetup()
-            => string.IsNullOrEmpty(Config.Values.UnityVersion)
-            || !Config.Values.UnityVersion.Equals(Version);
-
-        internal override void Save()
-            => Save(ref Config.Values.UnityVersion);
+        Name = nameof(UnityDependencies);
+        Version = InternalUtils.UnityInformationHandler.EngineVersion.ToStringWithoutType();
+        URL = $"https://github.com/LavaGang/MelonLoader.UnityDependencies/releases/download/{Version}/Managed.zip";
+        Destination = Path.Combine(Core.BasePath, Name);
+        FilePath = Path.Combine(Core.BasePath, $"{Name}_{Version}.zip");
     }
+
+    internal override bool ShouldSetup()
+        => string.IsNullOrEmpty(Config.Values.UnityVersion)
+        || !Config.Values.UnityVersion.Equals(Version);
+
+    internal override void Save()
+        => Save(ref Config.Values.UnityVersion);
 }
