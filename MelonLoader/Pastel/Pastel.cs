@@ -105,6 +105,7 @@ public static class ConsoleExtensions
             Enable();
             return;
         }
+
         var iStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
         _ = GetConsoleMode(iStdOut, out var outConsoleMode)

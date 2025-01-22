@@ -205,6 +205,7 @@ public class TarInputStream : Stream
             // return -1 to indicate that no byte was read.
             return -1;
         }
+
         return oneByteBuffer[0];
     }
 
@@ -482,21 +483,22 @@ public class TarInputStream : Stream
                 {
                     throw new TarException("Header checksum is invalid");
                 }
-                this.entryOffset = 0;
-                this.entrySize = header.Size;
+
+                entryOffset = 0;
+                entrySize = header.Size;
 
                 StringBuilder longName = null;
 
                 if (header.TypeFlag == TarHeader.LF_GNU_LONGNAME)
                 {
                     var nameBuffer = new byte[TarBuffer.BlockSize];
-                    var numToRead = this.entrySize;
+                    var numToRead = entrySize;
 
                     longName = new StringBuilder();
 
                     while (numToRead > 0)
                     {
-                        var numRead = this.Read(nameBuffer, 0, numToRead > nameBuffer.Length ? nameBuffer.Length : (int)numToRead);
+                        var numRead = Read(nameBuffer, 0, numToRead > nameBuffer.Length ? nameBuffer.Length : (int)numToRead);
 
                         if (numRead == -1)
                         {
@@ -508,24 +510,24 @@ public class TarInputStream : Stream
                     }
 
                     SkipToNextEntry();
-                    headerBuf = this.tarBuffer.ReadBlock();
+                    headerBuf = tarBuffer.ReadBlock();
                 }
                 else if (header.TypeFlag == TarHeader.LF_GHDR)
                 {  // POSIX global extended header
                    // Ignore things we dont understand completely for now
                     SkipToNextEntry();
-                    headerBuf = this.tarBuffer.ReadBlock();
+                    headerBuf = tarBuffer.ReadBlock();
                 }
                 else if (header.TypeFlag == TarHeader.LF_XHDR)
                 {  // POSIX extended header
                     var nameBuffer = new byte[TarBuffer.BlockSize];
-                    var numToRead = this.entrySize;
+                    var numToRead = entrySize;
 
                     var xhr = new TarExtendedHeaderReader();
 
                     while (numToRead > 0)
                     {
-                        var numRead = this.Read(nameBuffer, 0, numToRead > nameBuffer.Length ? nameBuffer.Length : (int)numToRead);
+                        var numRead = Read(nameBuffer, 0, numToRead > nameBuffer.Length ? nameBuffer.Length : (int)numToRead);
 
                         if (numRead == -1)
                         {
@@ -542,13 +544,13 @@ public class TarInputStream : Stream
                     }
 
                     SkipToNextEntry();
-                    headerBuf = this.tarBuffer.ReadBlock();
+                    headerBuf = tarBuffer.ReadBlock();
                 }
                 else if (header.TypeFlag == TarHeader.LF_GNU_VOLHDR)
                 {
                     // TODO: could show volume name when verbose
                     SkipToNextEntry();
-                    headerBuf = this.tarBuffer.ReadBlock();
+                    headerBuf = tarBuffer.ReadBlock();
                 }
                 else if (header.TypeFlag is not TarHeader.LF_NORMAL and
                      not TarHeader.LF_OLDNORM and
@@ -580,7 +582,7 @@ public class TarInputStream : Stream
                 entryOffset = 0;
 
                 // TODO: Review How do we resolve this discrepancy?!
-                entrySize = this.currentEntry.Size;
+                entrySize = currentEntry.Size;
             }
             catch (InvalidHeaderException ex)
             {
@@ -592,6 +594,7 @@ public class TarInputStream : Stream
                 throw new InvalidHeaderException(errorText);
             }
         }
+
         return currentEntry;
     }
 
@@ -613,6 +616,7 @@ public class TarInputStream : Stream
             {
                 break;
             }
+
             outputStream.Write(tempBuffer, 0, numRead);
         }
     }

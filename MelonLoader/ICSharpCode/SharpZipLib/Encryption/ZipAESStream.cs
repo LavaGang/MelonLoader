@@ -125,9 +125,11 @@ internal class ZipAESStream : CryptoStream
                 {
                     _slideBuffer[iTo] = _slideBuffer[iFrom];
                 }
+
                 _slideBufFreePos -= _slideBufStartPos;      // Note the -=
                 _slideBufStartPos = 0;
             }
+
             var obtained = StreamUtils.ReadRequestedBytes(_stream, _slideBuffer, _slideBufFreePos, lengthToRead);
             _slideBufFreePos += obtained;
 
@@ -167,6 +169,7 @@ internal class ZipAESStream : CryptoStream
                 break;  // Reached the auth code
             }
         }
+
         return nBytes;
     }
 

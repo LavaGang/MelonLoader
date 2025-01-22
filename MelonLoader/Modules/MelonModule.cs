@@ -45,6 +45,7 @@ public abstract class MelonModule
             {
                 MelonLogger.Warning($"Failed to remove MelonModule '{moduleInfo.fullPath}':\n{ex}");
             }
+
             return null;
         }
 

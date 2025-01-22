@@ -144,6 +144,7 @@ public class BZip2OutputStream : Stream
         {
             blockSize = 1;
         }
+
         blockSize100k = blockSize;
         AllocateCompressStructures();
         Initialize();
@@ -598,10 +599,12 @@ public class BZip2OutputStream : Stream
             {
                 baseStream.WriteByte((byte)ch);
             } // write 8-bit
+
             bsBuff <<= 8;
             bsLive -= 8;
             ++bytesOut;
         }
+
         bsBuff |= v << (32 - bsLive - n);
         bsLive += n;
     }
@@ -651,18 +654,7 @@ public class BZip2OutputStream : Stream
             Panic();
         }
 
-        if (nMTF < 200)
-        {
-            nGroups = 2;
-        }
-        else if (nMTF < 600)
-        {
-            nGroups = 3;
-        }
-        else
-        {
-            nGroups = nMTF < 1200 ? 4 : nMTF < 2400 ? 5 : 6;
-        }
+        nGroups = nMTF < 200 ? 2 : nMTF < 600 ? 3 : nMTF < 1200 ? 4 : nMTF < 2400 ? 5 : 6;
 
         /*--- Generate an initial set of coding tables ---*/
         var nPart = nGroups;
@@ -731,6 +723,7 @@ public class BZip2OutputStream : Stream
                 {
                     break;
                 }
+
                 ge = gs + BZip2Constants.GroupSize - 1;
                 if (ge >= nMTF)
                 {
@@ -760,6 +753,7 @@ public class BZip2OutputStream : Stream
                         cost4 += (short)len[4][icv];
                         cost5 += (short)len[5][icv];
                     }
+
                     cost[0] = cost0;
                     cost[1] = cost1;
                     cost[2] = cost2;
@@ -793,6 +787,7 @@ public class BZip2OutputStream : Stream
                         bt = t;
                     }
                 }
+
                 totc += bc;
                 fave[bt]++;
                 selector[nSelectors] = (char)bt;
@@ -849,6 +844,7 @@ public class BZip2OutputStream : Stream
                 tmp = pos[j];
                 pos[j] = tmp2;
             }
+
             pos[0] = tmp;
             selectorMtf[i] = (char)j;
         }
@@ -871,19 +867,23 @@ public class BZip2OutputStream : Stream
                 {
                     maxLen = len[t][i];
                 }
+
                 if (len[t][i] < minLen)
                 {
                     minLen = len[t][i];
                 }
             }
+
             if (maxLen > 20)
             {
                 Panic();
             }
+
             if (minLen < 1)
             {
                 Panic();
             }
+
             HbAssignCodes(code[t], len[t], minLen, maxLen, alphaSize);
         }
 
@@ -940,6 +940,7 @@ public class BZip2OutputStream : Stream
             {
                 BsW(1, 1);
             }
+
             BsW(1, 0);
         }
 
@@ -955,11 +956,13 @@ public class BZip2OutputStream : Stream
                     BsW(2, 2);
                     curr++; /* 10 */
                 }
+
                 while (curr > len[t][i])
                 {
                     BsW(2, 3);
                     curr--; /* 11 */
                 }
+
                 BsW(1, 0);
             }
         }
@@ -973,6 +976,7 @@ public class BZip2OutputStream : Stream
             {
                 break;
             }
+
             ge = gs + BZip2Constants.GroupSize - 1;
             if (ge >= nMTF)
             {
@@ -987,6 +991,7 @@ public class BZip2OutputStream : Stream
             gs = ge + 1;
             ++selCtr;
         }
+
         if (!(selCtr == nSelectors))
         {
             Panic();
@@ -1016,6 +1021,7 @@ public class BZip2OutputStream : Stream
         {
             hp++;
         }
+
         hp--;
 
         for (; hp >= 0; hp--)
@@ -1037,6 +1043,7 @@ public class BZip2OutputStream : Stream
                     if (j <= (lo + h - 1))
                         break;
                 }
+
                 zptr[j] = v;
                 i++;
 
@@ -1045,6 +1052,7 @@ public class BZip2OutputStream : Stream
                 {
                     break;
                 }
+
                 v = zptr[i];
                 j = i;
                 while (FullGtU(zptr[j - h] + d, v + d))
@@ -1056,6 +1064,7 @@ public class BZip2OutputStream : Stream
                         break;
                     }
                 }
+
                 zptr[j] = v;
                 i++;
 
@@ -1064,6 +1073,7 @@ public class BZip2OutputStream : Stream
                 {
                     break;
                 }
+
                 v = zptr[i];
                 j = i;
                 while (FullGtU(zptr[j - h] + d, v + d))
@@ -1075,6 +1085,7 @@ public class BZip2OutputStream : Stream
                         break;
                     }
                 }
+
                 zptr[j] = v;
                 i++;
 
@@ -1132,6 +1143,7 @@ public class BZip2OutputStream : Stream
                 {
                     return;
                 }
+
                 continue;
             }
 
@@ -1150,6 +1162,7 @@ public class BZip2OutputStream : Stream
                     {
                         break;
                     }
+
                     n = block[zptr[unLo] + d + 1] - med;
                     if (n == 0)
                     {
@@ -1160,10 +1173,12 @@ public class BZip2OutputStream : Stream
                         unLo++;
                         continue;
                     }
+
                     if (n > 0)
                     {
                         break;
                     }
+
                     unLo++;
                 }
 
@@ -1173,6 +1188,7 @@ public class BZip2OutputStream : Stream
                     {
                         break;
                     }
+
                     n = block[zptr[unHi] + d + 1] - med;
                     if (n == 0)
                     {
@@ -1183,10 +1199,12 @@ public class BZip2OutputStream : Stream
                         unHi--;
                         continue;
                     }
+
                     if (n < 0)
                     {
                         break;
                     }
+
                     unHi--;
                 }
 
@@ -1258,6 +1276,7 @@ public class BZip2OutputStream : Stream
         {
             block[last + i + 2] = block[(i % (last + 1)) + 1];
         }
+
         for (i = 0; i <= last + BZip2Constants.OvershootBytes; i++)
         {
             quadrant[i] = 0;
@@ -1275,6 +1294,7 @@ public class BZip2OutputStream : Stream
             {
                 zptr[i] = i;
             }
+
             firstAttempt = false;
             workDone = workLimit = 0;
             SimpleSort(0, last, 0);
@@ -1286,6 +1306,7 @@ public class BZip2OutputStream : Stream
             {
                 bigDone[i] = false;
             }
+
             for (i = 0; i <= 65536; i++)
             {
                 ftab[i] = 0;
@@ -1351,6 +1372,7 @@ public class BZip2OutputStream : Stream
                             break;
                         }
                     }
+
                     runningOrder[j] = vv;
                 }
             } while (h != 1);
@@ -1388,6 +1410,7 @@ public class BZip2OutputStream : Stream
                                 return;
                             }
                         }
+
                         ftab[sb] |= SETMASK;
                     }
                 }
@@ -1478,6 +1501,7 @@ public class BZip2OutputStream : Stream
                     rTPos = 0;
                 }
             }
+
             rNToGo--;
             block[i + 1] ^= (byte)((rNToGo == 1) ? 1 : 0);
             // handle 16 bit signed numbers
@@ -1533,6 +1557,7 @@ public class BZip2OutputStream : Stream
         {
             return c1 > c2;
         }
+
         i1++;
         i2++;
 
@@ -1542,6 +1567,7 @@ public class BZip2OutputStream : Stream
         {
             return c1 > c2;
         }
+
         i1++;
         i2++;
 
@@ -1551,6 +1577,7 @@ public class BZip2OutputStream : Stream
         {
             return c1 > c2;
         }
+
         i1++;
         i2++;
 
@@ -1560,6 +1587,7 @@ public class BZip2OutputStream : Stream
         {
             return c1 > c2;
         }
+
         i1++;
         i2++;
 
@@ -1569,6 +1597,7 @@ public class BZip2OutputStream : Stream
         {
             return c1 > c2;
         }
+
         i1++;
         i2++;
 
@@ -1578,6 +1607,7 @@ public class BZip2OutputStream : Stream
         {
             return c1 > c2;
         }
+
         i1++;
         i2++;
 
@@ -1591,12 +1621,14 @@ public class BZip2OutputStream : Stream
             {
                 return c1 > c2;
             }
+
             s1 = quadrant[i1];
             s2 = quadrant[i2];
             if (s1 != s2)
             {
                 return s1 > s2;
             }
+
             i1++;
             i2++;
 
@@ -1606,12 +1638,14 @@ public class BZip2OutputStream : Stream
             {
                 return c1 > c2;
             }
+
             s1 = quadrant[i1];
             s2 = quadrant[i2];
             if (s1 != s2)
             {
                 return s1 > s2;
             }
+
             i1++;
             i2++;
 
@@ -1621,12 +1655,14 @@ public class BZip2OutputStream : Stream
             {
                 return c1 > c2;
             }
+
             s1 = quadrant[i1];
             s2 = quadrant[i2];
             if (s1 != s2)
             {
                 return s1 > s2;
             }
+
             i1++;
             i2++;
 
@@ -1636,12 +1672,14 @@ public class BZip2OutputStream : Stream
             {
                 return c1 > c2;
             }
+
             s1 = quadrant[i1];
             s2 = quadrant[i2];
             if (s1 != s2)
             {
                 return s1 > s2;
             }
+
             i1++;
             i2++;
 
@@ -1650,6 +1688,7 @@ public class BZip2OutputStream : Stream
                 i1 -= last;
                 i1--;
             }
+
             if (i2 > last)
             {
                 i2 -= last;
@@ -1732,6 +1771,7 @@ public class BZip2OutputStream : Stream
                 tmp = yy[j];
                 yy[j] = tmp2;
             }
+
             yy[0] = tmp;
 
             if (j == 0)
@@ -1759,14 +1799,18 @@ public class BZip2OutputStream : Stream
                                 mtfFreq[BZip2Constants.RunB]++;
                                 break;
                         }
+
                         if (zPend < 2)
                         {
                             break;
                         }
+
                         zPend = (zPend - 2) / 2;
                     }
+
                     zPend = 0;
                 }
+
                 szptr[wr] = (short)(j + 1);
                 wr++;
                 mtfFreq[j + 1]++;
@@ -1792,10 +1836,12 @@ public class BZip2OutputStream : Stream
                         mtfFreq[BZip2Constants.RunB]++;
                         break;
                 }
+
                 if (zPend < 2)
                 {
                     break;
                 }
+
                 zPend = (zPend - 2) / 2;
             }
         }
@@ -1851,8 +1897,10 @@ public class BZip2OutputStream : Stream
                     heap[zz] = heap[zz >> 1];
                     zz >>= 1;
                 }
+
                 heap[zz] = tmp;
             }
+
             if (!(nHeap < (BZip2Constants.MaximumAlphaSize + 2)))
             {
                 Panic();
@@ -1873,10 +1921,12 @@ public class BZip2OutputStream : Stream
                     {
                         break;
                     }
+
                     if (yy < nHeap && weight[heap[yy + 1]] < weight[heap[yy]])
                     {
                         yy++;
                     }
+
                     if (weight[tmp] < weight[heap[yy]])
                     {
                         break;
@@ -1885,6 +1935,7 @@ public class BZip2OutputStream : Stream
                     heap[zz] = heap[yy];
                     zz = yy;
                 }
+
                 heap[zz] = tmp;
                 n2 = heap[1];
                 heap[1] = heap[nHeap];
@@ -1899,17 +1950,21 @@ public class BZip2OutputStream : Stream
                     {
                         break;
                     }
+
                     if (yy < nHeap && weight[heap[yy + 1]] < weight[heap[yy]])
                     {
                         yy++;
                     }
+
                     if (weight[tmp] < weight[heap[yy]])
                     {
                         break;
                     }
+
                     heap[zz] = heap[yy];
                     zz = yy;
                 }
+
                 heap[zz] = tmp;
                 nNodes++;
                 parent[n1] = parent[n2] = nNodes;
@@ -1928,8 +1983,10 @@ public class BZip2OutputStream : Stream
                     heap[zz] = heap[zz >> 1];
                     zz >>= 1;
                 }
+
                 heap[zz] = tmp;
             }
+
             if (!(nNodes < (BZip2Constants.MaximumAlphaSize * 2)))
             {
                 Panic();
@@ -1945,6 +2002,7 @@ public class BZip2OutputStream : Stream
                     k = parent[k];
                     j++;
                 }
+
                 len[i - 1] = (char)j;
                 tooLong |= j > maxLen;
             }
@@ -1976,6 +2034,7 @@ public class BZip2OutputStream : Stream
                     ++vec;
                 }
             }
+
             vec <<= 1;
         }
     }
@@ -1989,14 +2048,17 @@ public class BZip2OutputStream : Stream
             a = b;
             b = t;
         }
+
         if (b > c)
         {
             b = c;
         }
+
         if (a > b)
         {
             b = a;
         }
+
         return b;
     }
 

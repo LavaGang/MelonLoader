@@ -240,7 +240,7 @@ public sealed class Decoder : IDisposable
 
     private void ConsumeWhiteSpace()
     {
-        while (whiteSpace.IndexOf(PeekChar) != -1)
+        while (whiteSpace.Contains(PeekChar))
         {
             json.Read();
 
@@ -274,7 +274,7 @@ public sealed class Decoder : IDisposable
         {
             var word = new StringBuilder();
 
-            while (wordBreak.IndexOf(PeekChar) == -1)
+            while (!wordBreak.Contains(PeekChar))
             {
                 word.Append(NextChar);
 

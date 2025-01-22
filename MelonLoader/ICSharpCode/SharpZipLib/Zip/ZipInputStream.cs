@@ -315,6 +315,7 @@ public class ZipInputStream : InflaterInputStream
             csize = inputBuffer.ReadLeInt();
             size = inputBuffer.ReadLeInt();
         }
+
         entry.CompressedSize = csize;
         entry.Size = size;
     }
@@ -346,6 +347,7 @@ public class ZipInputStream : InflaterInputStream
         {
             inf.Reset();
         }
+
         entry = null;
     }
 
@@ -381,6 +383,7 @@ public class ZipInputStream : InflaterInputStream
                 while (Read(tmp, 0, tmp.Length) > 0)
                 {
                 }
+
                 return;
             }
 
@@ -564,17 +567,11 @@ public class ZipInputStream : InflaterInputStream
     /// <remarks>Zero bytes read means end of stream.</remarks>
     public override int Read(byte[] buffer, int offset, int count)
     {
-        if (buffer == null)
-        {
-            throw new ArgumentNullException(nameof(buffer));
-        }
-
-        if (offset < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(offset), "Cannot be negative");
-        }
-
-        return count < 0
+        return buffer == null
+            ? throw new ArgumentNullException(nameof(buffer))
+            : offset < 0
+            ? throw new ArgumentOutOfRangeException(nameof(offset), "Cannot be negative")
+            : count < 0
             ? throw new ArgumentOutOfRangeException(nameof(count), "Cannot be negative")
             : (buffer.Length - offset) < count
             ? throw new ArgumentException("Invalid offset/count combination")
@@ -625,6 +622,7 @@ public class ZipInputStream : InflaterInputStream
                     {
                         throw new ZipException("Inflater not finished!");
                     }
+
                     inputBuffer.Available = inf.RemainingInput;
 
                     // A csize of -1 is from an unpatched local header
@@ -633,9 +631,11 @@ public class ZipInputStream : InflaterInputStream
                     {
                         throw new ZipException("Size mismatch: " + csize + ";" + size + " <-> " + inf.TotalIn + ";" + inf.TotalOut);
                     }
+
                     inf.Reset();
                     finished = true;
                 }
+
                 break;
 
             case CompressionMethod.Stored:
@@ -665,6 +665,7 @@ public class ZipInputStream : InflaterInputStream
                         throw new ZipException("EOF in stored block");
                     }
                 }
+
                 break;
         }
 

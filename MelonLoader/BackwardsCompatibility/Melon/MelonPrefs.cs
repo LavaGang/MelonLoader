@@ -40,8 +40,10 @@ public class MelonPrefs
                 var newpref = new MelonPreference(entry);
                 newprefsdict.Add(entry.Identifier, newpref);
             }
+
             output.Add(category.Identifier, newprefsdict);
         }
+
         return output;
     }
     [Obsolete("MelonLoader.MelonPrefs.GetCategoryDisplayName is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetCategoryDisplayName instead.")]

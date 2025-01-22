@@ -156,6 +156,7 @@ public class PendingBuffer
                 buffer[end++] = unchecked((byte)(bits >> 8));
             }
         }
+
         bits = 0;
         bitCount = 0;
     }
@@ -244,6 +245,7 @@ public class PendingBuffer
             System.Array.Copy(buffer, start, output, offset, length);
             start += length;
         }
+
         return length;
     }
 

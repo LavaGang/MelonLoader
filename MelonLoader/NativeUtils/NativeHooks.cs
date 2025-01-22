@@ -27,7 +27,7 @@ public class NativeHook<T> where T : Delegate
         set
         {
             if (value == IntPtr.Zero)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             _targetHandle = value;
         }
@@ -43,7 +43,7 @@ public class NativeHook<T> where T : Delegate
         set
         {
             if (value == IntPtr.Zero)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             _detourHandle = value;
         }
@@ -82,10 +82,10 @@ public class NativeHook<T> where T : Delegate
     public NativeHook(IntPtr target, IntPtr detour)
     {
         if (target == IntPtr.Zero)
-            throw new ArgumentNullException("target");
+            throw new ArgumentNullException(nameof(target));
 
         if (detour == IntPtr.Zero)
-            throw new ArgumentNullException("detour");
+            throw new ArgumentNullException(nameof(detour));
 
         _targetHandle = target;
         _detourHandle = detour;

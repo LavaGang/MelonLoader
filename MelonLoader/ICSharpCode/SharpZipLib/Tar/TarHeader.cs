@@ -335,6 +335,7 @@ public class TarHeader
             {
                 throw new ArgumentOutOfRangeException(nameof(value), "Cannot be less than zero");
             }
+
             size = value;
         }
     }
@@ -355,6 +356,7 @@ public class TarHeader
             {
                 throw new ArgumentOutOfRangeException(nameof(value), "ModTime cannot be before Jan 1st 1970");
             }
+
             modTime = new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, value.Second);
         }
     }
@@ -446,6 +448,7 @@ public class TarHeader
                 {
                     currentUser = currentUser[..UNAMELEN];
                 }
+
                 userName = currentUser;
             }
         }
@@ -494,7 +497,7 @@ public class TarHeader
     /// <returns>A new <see cref="object"/> that is a copy of the current instance.</returns>
     public object Clone()
     {
-        return this.MemberwiseClone();
+        return MemberwiseClone();
     }
 
     #endregion ICloneable Members
@@ -716,8 +719,10 @@ public class TarHeader
             {
                 result = (result << 8) | header[offset + pos];
             }
+
             return result;
         }
+
         return ParseOctal(header, offset, length);
     }
 
@@ -839,6 +844,7 @@ public class TarHeader
                 {
                     break;
                 }
+
                 result.Append((char)header[i]);
             }
         }
@@ -851,6 +857,7 @@ public class TarHeader
                     break;
                 }
             }
+
             result.Append(encoding.GetString(header, offset, count));
         }
 
@@ -929,6 +936,7 @@ public class TarHeader
         {
             buffer[bufferOffset + i] = 0;
         }
+
         return bufferOffset + length;
     }
     /// <summary>
@@ -1141,9 +1149,11 @@ public class TarHeader
                 buffer[offset + pos] = (byte)value;
                 value >>= 8;
             }
+
             buffer[offset] = 0x80;
             return offset + length;
         }
+
         return GetOctalBytes(value, buffer, offset, length);
     }
 
@@ -1177,6 +1187,7 @@ public class TarHeader
         {
             sum += buffer[i];
         }
+
         return sum;
     }
 
@@ -1202,6 +1213,7 @@ public class TarHeader
         {
             sum += buffer[i];
         }
+
         return sum;
     }
 
@@ -1222,6 +1234,7 @@ public class TarHeader
         {
             result = dateTime1970;
         }
+
         return result;
     }
 

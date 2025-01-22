@@ -35,6 +35,7 @@ public static class UnityInformationHandler
                 MelonLogger.Error(ex);
             returnval = UnityVersion.MinVersion;
         }
+
         return returnval;
     }
 
@@ -129,6 +130,7 @@ public static class UnityInformationHandler
             if (MelonDebug.IsEnabled())
                 MelonLogger.Error(ex);
         }
+
         instance?.file.Close();
     }
 

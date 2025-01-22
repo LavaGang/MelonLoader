@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -67,5 +68,7 @@ public class LemonEnumerator<T> : IEnumerator<T>, IEnumerable<T>
     {
         Reset();
         LemonPatch = null;
+
+        GC.SuppressFinalize(this);
     }
 }

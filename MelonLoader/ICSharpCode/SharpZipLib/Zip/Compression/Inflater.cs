@@ -173,7 +173,7 @@ public class Inflater
     {
         this.noHeader = noHeader;
         if (!noHeader)
-            this.adler = new Adler32();
+            adler = new Adler32();
         input = new StreamManipulator();
         outputWindow = new OutputWindow();
         mode = noHeader ? DECODE_BLOCKS : DECODE_HEADER;
@@ -215,6 +215,7 @@ public class Inflater
         {
             return false;
         }
+
         input.DropBits(16);
 
         // The header is written in "wrong" byte order
@@ -245,6 +246,7 @@ public class Inflater
             mode = DECODE_DICT;
             neededBits = 32;
         }
+
         return true;
     }
 
@@ -263,10 +265,12 @@ public class Inflater
             {
                 return false;
             }
+
             input.DropBits(8);
             readAdler = (readAdler << 8) | dictByte;
             neededBits -= 8;
         }
+
         return false;
     }
 
@@ -324,6 +328,7 @@ public class Inflater
                     {
                         throw new SharpZipBaseException("Illegal rep length code");
                     }
+
                     goto case DECODE_HUFFMAN_LENBITS; // fall through
 
                 case DECODE_HUFFMAN_LENBITS:
@@ -335,9 +340,11 @@ public class Inflater
                         {
                             return false;
                         }
+
                         input.DropBits(neededBits);
                         repLength += i;
                     }
+
                     mode = DECODE_HUFFMAN_DIST;
                     goto case DECODE_HUFFMAN_DIST; // fall through
 
@@ -369,6 +376,7 @@ public class Inflater
                         {
                             return false;
                         }
+
                         input.DropBits(neededBits);
                         repDist += i;
                     }
@@ -382,6 +390,7 @@ public class Inflater
                     throw new SharpZipBaseException("Inflater unknown mode");
             }
         }
+
         return true;
     }
 
@@ -403,6 +412,7 @@ public class Inflater
             {
                 return false;
             }
+
             input.DropBits(8);
             readAdler = (readAdler << 8) | chkByte;
             neededBits -= 8;
@@ -461,6 +471,7 @@ public class Inflater
                 {
                     return false;
                 }
+
                 input.DropBits(3);
 
                 isLastBlock |= (type & 1) != 0;
@@ -485,6 +496,7 @@ public class Inflater
                     default:
                         throw new SharpZipBaseException("Unknown block type " + type);
                 }
+
                 return true;
 
             case DECODE_STORED_LEN1:
@@ -493,9 +505,11 @@ public class Inflater
                     {
                         return false;
                     }
+
                     input.DropBits(16);
                     mode = DECODE_STORED_LEN2;
                 }
+
                 goto case DECODE_STORED_LEN2; // fall through
 
             case DECODE_STORED_LEN2:
@@ -505,13 +519,16 @@ public class Inflater
                     {
                         return false;
                     }
+
                     input.DropBits(16);
                     if (nlen != (uncomprLen ^ 0xffff))
                     {
                         throw new SharpZipBaseException("broken uncompressed block");
                     }
+
                     mode = DECODE_STORED;
                 }
+
                 goto case DECODE_STORED; // fall through
 
             case DECODE_STORED:
@@ -523,6 +540,7 @@ public class Inflater
                         mode = DECODE_BLOCKS;
                         return true;
                     }
+
                     return !input.IsNeedingInput;
                 }
 
@@ -614,6 +632,7 @@ public class Inflater
         {
             throw new SharpZipBaseException("Wrong adler checksum");
         }
+
         adler?.Reset();
         outputWindow.CopyDict(buffer, index, count);
         mode = DECODE_BLOCKS;
@@ -736,6 +755,7 @@ public class Inflater
             { // -jr- 08-Nov-2003 INFLATE_BUG fix..
                 Decode();
             }
+
             return 0;
         }
 

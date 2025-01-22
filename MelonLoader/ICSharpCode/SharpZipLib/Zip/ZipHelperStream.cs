@@ -216,6 +216,7 @@ internal class ZipHelperStream : Stream
             {
                 patchData.CrcPatchOffset = stream_.Position;
             }
+
             WriteLEInt(0);  // Crc
 
             if (patchData != null)
@@ -258,6 +259,7 @@ internal class ZipHelperStream : Stream
                 ed.AddLeLong(-1);
                 ed.AddLeLong(-1);
             }
+
             ed.AddNewEntry(1);
 
             if (!ed.Find(1))
@@ -321,6 +323,7 @@ internal class ZipHelperStream : Stream
             {
                 return -1;
             }
+
             Seek(pos--, SeekOrigin.Begin);
         } while (ReadLEInt() != signature);
 

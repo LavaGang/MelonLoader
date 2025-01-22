@@ -59,6 +59,7 @@ public class FastZipEvents
             handler(this, args);
             result = args.ContinueRunning;
         }
+
         return result;
     }
 
@@ -79,6 +80,7 @@ public class FastZipEvents
             handler(this, args);
             result = args.ContinueRunning;
         }
+
         return result;
     }
 
@@ -98,6 +100,7 @@ public class FastZipEvents
             handler(this, args);
             result = args.ContinueRunning;
         }
+
         return result;
     }
 
@@ -116,6 +119,7 @@ public class FastZipEvents
             handler(this, args);
             result = args.ContinueRunning;
         }
+
         return result;
     }
 
@@ -135,6 +139,7 @@ public class FastZipEvents
             handler(this, args);
             result = args.ContinueRunning;
         }
+
         return result;
     }
 
@@ -462,7 +467,7 @@ public class FastZip
 
             outputStream_.UseZip64 = UseZip64;
             scanner.ProcessFile += ProcessFile;
-            if (this.CreateEmptyDirectories)
+            if (CreateEmptyDirectories)
             {
                 scanner.ProcessDirectory += ProcessDirectory;
             }

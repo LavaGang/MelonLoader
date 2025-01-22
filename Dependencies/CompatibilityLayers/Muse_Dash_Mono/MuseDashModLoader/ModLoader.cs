@@ -33,6 +33,7 @@ public class ModLoader
                     stream.Read(buffer, 0, buffer.Length);
                     dependAssembly = Assembly.Load(buffer);
                 }
+
                 depends.Add(dependName, dependAssembly);
             }
         }

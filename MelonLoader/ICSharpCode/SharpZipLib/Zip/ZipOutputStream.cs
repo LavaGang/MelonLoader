@@ -109,6 +109,7 @@ public class ZipOutputStream : DeflaterOutputStream
         {
             throw new ArgumentOutOfRangeException(nameof(comment));
         }
+
         zipComment = commentBytes;
     }
 
@@ -210,9 +211,9 @@ public class ZipOutputStream : DeflaterOutputStream
     // Apply any configured transforms/cleaning to the name of the supplied entry.
     private void TransformEntryName(ZipEntry entry)
     {
-        if (this.NameTransform != null)
+        if (NameTransform != null)
         {
-            entry.Name = entry.IsDirectory ? this.NameTransform.TransformDirectory(entry.Name) : this.NameTransform.TransformFile(entry.Name);
+            entry.Name = entry.IsDirectory ? NameTransform.TransformDirectory(entry.Name) : NameTransform.TransformFile(entry.Name);
         }
     }
 
@@ -274,7 +275,7 @@ public class ZipOutputStream : DeflaterOutputStream
         }
 
         // A password must have been set in order to add AES encrypted entries
-        if (entry.AESKeySize > 0 && string.IsNullOrEmpty(this.Password))
+        if (entry.AESKeySize > 0 && string.IsNullOrEmpty(Password))
         {
             throw new InvalidOperationException("The Password property must be set before AES encrypted entries can be added");
         }
@@ -387,6 +388,7 @@ public class ZipOutputStream : DeflaterOutputStream
             {
                 crcPatchPos = baseOutputStream_.Position;
             }
+
             WriteLeInt(0);  // Crc
 
             if (patchEntryHeader)
@@ -431,6 +433,7 @@ public class ZipOutputStream : DeflaterOutputStream
                 ed.AddLeLong(-1);
                 ed.AddLeLong(-1);
             }
+
             ed.AddNewEntry(1);
 
             if (!ed.Find(1))
@@ -452,6 +455,7 @@ public class ZipOutputStream : DeflaterOutputStream
         {
             AddExtraDataAES(entry, ed);
         }
+
         var extra = ed.GetEntryData();
 
         WriteLeShort(name.Length);
@@ -485,6 +489,7 @@ public class ZipOutputStream : DeflaterOutputStream
             deflater_.Reset();
             deflater_.SetLevel(compressionLevel);
         }
+
         size = 0;
 
         if (entry.IsCrypted)
@@ -617,6 +622,7 @@ public class ZipOutputStream : DeflaterOutputStream
                 WriteLeInt((int)curEntry.CompressedSize);
                 WriteLeInt((int)curEntry.Size);
             }
+
             baseOutputStream_.Seek(curPos, SeekOrigin.Begin);
         }
 
@@ -784,6 +790,7 @@ public class ZipOutputStream : DeflaterOutputStream
                 {
                     baseOutputStream_.Write(buffer, offset, count);
                 }
+
                 break;
         }
     }
@@ -903,6 +910,7 @@ public class ZipOutputStream : DeflaterOutputStream
             {
                 AddExtraDataAES(entry, ed);
             }
+
             var extra = ed.GetEntryData();
 
             var entryComment =

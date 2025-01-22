@@ -201,6 +201,7 @@ public class TarOutputStream : Stream
         {
             CloseEntry();
         }
+
         WriteEofBlock();
     }
 
@@ -291,7 +292,7 @@ public class TarOutputStream : Stream
             while (nameCharIndex < namelen + 1 /* we've allocated one for the null char, now we must make sure it gets written out */)
             {
                 Array.Clear(blockBuffer, 0, blockBuffer.Length);
-                TarHeader.GetAsciiBytes(entry.TarHeader.Name, nameCharIndex, this.blockBuffer, 0, TarBuffer.BlockSize, nameEncoding); // This func handles OK the extra char out of string length
+                TarHeader.GetAsciiBytes(entry.TarHeader.Name, nameCharIndex, blockBuffer, 0, TarBuffer.BlockSize, nameEncoding); // This func handles OK the extra char out of string length
                 nameCharIndex += TarBuffer.BlockSize;
                 buffer.WriteBlock(blockBuffer);
             }
@@ -390,7 +391,7 @@ public class TarOutputStream : Stream
         if ((currBytes + count) > currSize)
         {
             var errorText = string.Format("request to write '{0}' bytes exceeds size in header of '{1}' bytes",
-                count, this.currSize);
+                count, currSize);
             throw new ArgumentOutOfRangeException(nameof(count), errorText);
         }
 

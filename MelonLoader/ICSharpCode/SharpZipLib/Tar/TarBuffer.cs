@@ -568,6 +568,7 @@ public class TarBuffer
             {
                 outputStream.Dispose();
             }
+
             outputStream = null;
         }
         else if (inputStream != null)
@@ -576,6 +577,7 @@ public class TarBuffer
             {
                 inputStream.Dispose();
             }
+
             inputStream = null;
         }
     }

@@ -299,6 +299,7 @@ public abstract class MelonBase
             if (!(SupportedDomain == null || SupportedDomain.IsCompatible(domain)))
                 result.Add(Incompatibility.Domain);
         }
+
         if (!(SupportedMLVersion == null || SupportedMLVersion.IsCompatible(mlVersion)))
             result.Add(Incompatibility.MLVersion);
         else
@@ -329,6 +330,7 @@ public abstract class MelonBase
             foreach (var g in melon.Games)
                 MelonLogger.MsgDirect($"    - '{g.Name}' by {g.Developer}");
         }
+
         if (incompatibilities.Contains(Incompatibility.GameVersion))
         {
             MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Game Versions:");
@@ -336,6 +338,7 @@ public abstract class MelonBase
             foreach (var g in melon.SupportedGameVersions)
                 MelonLogger.MsgDirect($"    - {g.Version}");
         }
+
         if (incompatibilities.Contains(Incompatibility.ProcessName))
         {
             MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Process Names:");
@@ -343,6 +346,7 @@ public abstract class MelonBase
             foreach (var p in melon.SupportedProcesses)
                 MelonLogger.MsgDirect($"    - '{p.EXE_Name}'");
         }
+
         if (incompatibilities.Contains(Incompatibility.Platform))
         {
             MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Platforms:");
@@ -350,16 +354,19 @@ public abstract class MelonBase
             foreach (var p in melon.SupportedPlatforms.Platforms)
                 MelonLogger.MsgDirect($"    - {p}");
         }
+
         if (incompatibilities.Contains(Incompatibility.Domain))
         {
             MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Domain:");
             MelonLogger.MsgDirect($"    - {melon.SupportedDomain.Domain}");
         }
+
         if (incompatibilities.Contains(Incompatibility.MLVersion))
         {
             MelonLogger.MsgDirect($"- {melon.Info.Name}  is only compatible with the following MelonLoader Versions:");
             MelonLogger.MsgDirect($"    - {melon.SupportedMLVersion.SemVer}{(melon.SupportedMLVersion.IsMinimum ? " or higher" : "")}");
         }
+
         if (incompatibilities.Contains(Incompatibility.MLBuild))
         {
             MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following MelonLoader Build Hash Codes:");

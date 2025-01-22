@@ -93,6 +93,7 @@ internal static class SceneHandler
                     requeue.Enqueue(evt);
                 }
             }
+
             while ((requeue.Count > 0) && ((evt = requeue.Dequeue()) != null))
                 scenesLoaded.Enqueue(evt);
         }

@@ -4,30 +4,32 @@ using System;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace MelonLoader.Fixes
+namespace MelonLoader.Fixes;
+
+internal class DotnetModHandlerRedirectionFix
 {
-    internal class DotnetModHandlerRedirectionFix
+    public static void Install()
     {
-        public static void Install()
+        try
         {
-            try
-            {
-                Core.HarmonyInstance.Patch(typeof(AssemblyLoadContext).GetMethod("ValidateAssemblyNameWithSimpleName", BindingFlags.Static | BindingFlags.NonPublic),
-                    new HarmonyMethod(typeof(DotnetModHandlerRedirectionFix), nameof(PreValidateAssembly)));
-            }
-            catch (Exception ex) { MelonLogger.Warning($"DotnetModHandlerRedirectionFix Exception: {ex}"); }
+            Core.HarmonyInstance.Patch(typeof(AssemblyLoadContext).GetMethod("ValidateAssemblyNameWithSimpleName", BindingFlags.Static | BindingFlags.NonPublic),
+                new HarmonyMethod(typeof(DotnetModHandlerRedirectionFix), nameof(PreValidateAssembly)));
+        }
+        catch (Exception ex)
+        {
+            MelonLogger.Warning($"DotnetModHandlerRedirectionFix Exception: {ex}");
+        }
+    }
+
+    public static bool PreValidateAssembly(Assembly assembly, string requestedSimpleName, ref Assembly __result)
+    {
+        if (requestedSimpleName.Contains("MelonLoader.ModHandler"))
+        {
+            __result = assembly;
+            return false; //Don't validate the name. What could go wrong?
         }
 
-        public static bool PreValidateAssembly(Assembly assembly, string requestedSimpleName, ref Assembly __result)
-        {
-            if(requestedSimpleName.Contains("MelonLoader.ModHandler"))
-            {
-                __result = assembly;
-                return false; //Don't validate the name. What could go wrong?
-            }
-
-            return true;
-        }
+        return true;
     }
 }
 

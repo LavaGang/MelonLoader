@@ -108,6 +108,7 @@ public class WindowsNameTransform : INameTransform
         {
             throw new InvalidNameException("Cannot have an empty directory name");
         }
+
         return name;
     }
 
@@ -150,6 +151,7 @@ public class WindowsNameTransform : INameTransform
         {
             name = string.Empty;
         }
+
         return name;
     }
 
@@ -217,6 +219,7 @@ public class WindowsNameTransform : INameTransform
 
                 index = index >= name.Length ? -1 : name.IndexOfAny(InvalidEntryChars, index + 1);
             }
+
             name = builder.ToString();
         }
 

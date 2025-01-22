@@ -26,7 +26,7 @@ public class LemonArraySegment<T> : IList<T>, ICollection<T>, IEnumerable<T>, IE
     ///   <paramref name="array" /> is <see langword="null" />.</exception>
     public LemonArraySegment(T[] array)
     {
-        Array = array ?? throw new ArgumentNullException("array");
+        Array = array ?? throw new ArgumentNullException(nameof(array));
         Offset = 0;
         Count = array.Length;
     }
@@ -44,13 +44,13 @@ public class LemonArraySegment<T> : IList<T>, ICollection<T>, IEnumerable<T>, IE
     public LemonArraySegment(T[] array, int offset, int count)
     {
         if (array == null)
-            throw new ArgumentNullException("array");
+            throw new ArgumentNullException(nameof(array));
 
         if (offset < 0)
-            throw new ArgumentOutOfRangeException("offset", "Non-negative number required.");
+            throw new ArgumentOutOfRangeException(nameof(offset), "Non-negative number required.");
 
         if (count < 0)
-            throw new ArgumentOutOfRangeException("count", "Non-negative number required.");
+            throw new ArgumentOutOfRangeException(nameof(count), "Non-negative number required.");
 
         if (array.Length - offset < count)
             throw new ArgumentException("Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection.");
@@ -103,14 +103,14 @@ public class LemonArraySegment<T> : IList<T>, ICollection<T>, IEnumerable<T>, IE
         {
             return Array == null
                 ? throw new InvalidOperationException("The underlying array is null.")
-                : index < 0 || index >= Count ? throw new ArgumentOutOfRangeException("index") : Array[Offset + index];
+                : index < 0 || index >= Count ? throw new ArgumentOutOfRangeException(nameof(index)) : Array[Offset + index];
         }
         set
         {
             if (Array == null)
                 throw new InvalidOperationException("The underlying array is null.");
             if (index < 0 || index >= Count)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
             Array[Offset + index] = value;
         }
     }
@@ -189,6 +189,7 @@ public class LemonArraySegment<T> : IList<T>, ICollection<T>, IEnumerable<T>, IE
                 _current++;
                 return _current < _end;
             }
+
             return false;
         }
 

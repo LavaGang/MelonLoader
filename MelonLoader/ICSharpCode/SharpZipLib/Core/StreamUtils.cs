@@ -59,6 +59,7 @@ public sealed class StreamUtils
             {
                 throw new EndOfStreamException();
             }
+
             offset += readCount;
             count -= readCount;
         }
@@ -104,6 +105,7 @@ public sealed class StreamUtils
             {
                 break;
             }
+
             offset += readCount;
             count -= readCount;
             totalReadCount += readCount;

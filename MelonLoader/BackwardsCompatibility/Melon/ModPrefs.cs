@@ -26,8 +26,10 @@ public class ModPrefs : MelonPrefs
                 };
                 newprefsdict.Add(prefsdict.Keys.ElementAt(j), newpref);
             }
+
             output.Add(prefs.Keys.ElementAt(i), newprefsdict);
         }
+
         return output;
     }
     [Obsolete("MelonLoader.ModPrefs.RegisterPrefString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]

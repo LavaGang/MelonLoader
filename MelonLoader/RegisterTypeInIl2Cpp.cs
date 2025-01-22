@@ -27,7 +27,7 @@ public class RegisterTypeInIl2Cpp : Attribute //Naming violation?
         }
 
         var typeTbl = asm.GetValidTypes();
-        if ((typeTbl == null) || (typeTbl.Count() <= 0))
+        if ((typeTbl == null) || (!typeTbl.Any()))
             return;
         foreach (var type in typeTbl)
         {

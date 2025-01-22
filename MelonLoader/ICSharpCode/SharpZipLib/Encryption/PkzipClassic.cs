@@ -175,6 +175,7 @@ internal class PkzipClassicEncryptCryptoTransform : PkzipClassicCryptoBase, ICry
             outputBuffer[outputOffset++] = (byte)(inputBuffer[i] ^ TransformByte());
             UpdateKeys(oldbyte);
         }
+
         return inputCount;
     }
 
@@ -285,6 +286,7 @@ internal class PkzipClassicDecryptCryptoTransform : PkzipClassicCryptoBase, ICry
             outputBuffer[outputOffset++] = newByte;
             UpdateKeys(newByte);
         }
+
         return inputCount;
     }
 

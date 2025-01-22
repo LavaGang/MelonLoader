@@ -222,6 +222,7 @@ public class DeflaterEngine
             InsertString();
             strstart++;
         }
+
         strstart += 2;
         blockStart = strstart;
     }
@@ -328,6 +329,7 @@ public class DeflaterEngine
                             strstart - blockStart, false);
                         blockStart = strstart;
                     }
+
                     UpdateHash();
                     break;
 
@@ -338,6 +340,7 @@ public class DeflaterEngine
                             false);
                         blockStart = strstart;
                     }
+
                     break;
 
                 case DeflaterConstants.DEFLATE_SLOW:
@@ -345,15 +348,18 @@ public class DeflaterEngine
                     {
                         huffman.TallyLit(window[strstart - 1] & 0xff);
                     }
+
                     if (strstart > blockStart)
                     {
                         huffman.FlushBlock(window, blockStart, strstart - blockStart, false);
                         blockStart = strstart;
                     }
+
                     prevAvailable = false;
                     matchLen = DeflaterConstants.MIN_MATCH - 1;
                     break;
             }
+
             compressionFunction = DeflaterConstants.COMPR_FUNC[level];
         }
     }
@@ -479,7 +485,7 @@ public class DeflaterEngine
 
         var window = this.window;
         var prev = this.prev;
-        var chainLength = this.max_chain;
+        var chainLength = max_chain;
         var niceLength = Math.Min(this.niceLength, lookahead);
 
         matchLen = Math.Max(matchLen, DeflaterConstants.MIN_MATCH - 1);
@@ -491,7 +497,7 @@ public class DeflaterEngine
         var scan_end = window[scan + matchLen];
 
         // Do not waste too much time if we already have a good match:
-        if (matchLen >= this.goodLength)
+        if (matchLen >= goodLength)
             chainLength >>= 2;
 
         do
@@ -652,6 +658,7 @@ public class DeflaterEngine
             blockStart += storedLength;
             return !(lastBlock || storedLength == 0);
         }
+
         return true;
     }
 
@@ -710,6 +717,7 @@ public class DeflaterEngine
                         ++strstart;
                         InsertString();
                     }
+
                     ++strstart;
                 }
                 else
@@ -720,6 +728,7 @@ public class DeflaterEngine
                         UpdateHash();
                     }
                 }
+
                 matchLen = DeflaterConstants.MIN_MATCH - 1;
                 if (!full)
                 {
@@ -742,6 +751,7 @@ public class DeflaterEngine
                 return !lastBlock;
             }
         }
+
         return true;
     }
 
@@ -760,6 +770,7 @@ public class DeflaterEngine
                 {
                     huffman.TallyLit(window[strstart - 1] & 0xff);
                 }
+
                 prevAvailable = false;
 
                 // We are flushing everything
@@ -840,6 +851,7 @@ public class DeflaterEngine
                 {
                     huffman.TallyLit(window[strstart - 1] & 0xff);
                 }
+
                 prevAvailable = true;
                 strstart++;
                 lookahead--;
@@ -852,12 +864,14 @@ public class DeflaterEngine
                 {
                     len--;
                 }
+
                 var lastBlock = finish && (lookahead == 0) && !prevAvailable;
                 huffman.FlushBlock(window, blockStart, len, lastBlock);
                 blockStart += len;
                 return !lastBlock;
             }
         }
+
         return true;
     }
 

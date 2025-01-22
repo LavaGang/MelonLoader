@@ -48,6 +48,7 @@ internal static class ProcessFix
             GetWindowText(new HandleRef(__instance, intPtr), stringBuilder, stringBuilder.Capacity);
             __result = stringBuilder.ToString();
         }
+
         return false;
     }
 

@@ -188,6 +188,7 @@ internal class DependencyGraph<T> where T : MelonBase
             foreach (var dependency in melonsWithMissingDeps[melonName])
                 messageBuilder.Append($"    - '{dependency.Name}' v{dependency.Version}\n");
         }
+
         messageBuilder.Length -= 1; // Remove trailing newline
         return messageBuilder.ToString();
     }
@@ -204,6 +205,7 @@ internal class DependencyGraph<T> where T : MelonBase
                 messageBuilder.Append($"    - '{dependency.Name}'\n");
             }
         }
+
         messageBuilder.Length -= 1; // Remove trailing newline
         return messageBuilder.ToString();
     }

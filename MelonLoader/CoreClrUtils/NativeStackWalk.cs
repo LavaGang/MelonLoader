@@ -4,6 +4,8 @@
 #pragma warning disable CS0169
 #pragma warning disable CS0649
 
+using MelonLoader.Utils;
+using Microsoft.Diagnostics.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,17 +17,15 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
-using MelonLoader.Utils;
-using Microsoft.Diagnostics.Runtime;
 
 namespace MelonLoader.CoreClrUtils;
 
 // ReSharper disable UnusedMember.Local, InconsistentNaming
 public static unsafe class NativeStackWalk
 {
-    private static MelonLogger.Instance Logger = new MelonLogger.Instance("NativeStackWalk", Color.GreenYellow);
-    
-    private static Dictionary<ulong, string> _registeredHooks = new();
+    private static readonly MelonLogger.Instance Logger = new("NativeStackWalk", Color.GreenYellow);
+
+    private static readonly Dictionary<ulong, string> _registeredHooks = [];
 
     #region Native Structs
 
@@ -90,7 +90,7 @@ public static unsafe class NativeStackWalk
 
     private struct NT_TIB
     {
-        void* ExceptionList;
+        private readonly void* ExceptionList;
         public void* StackBase;
 
         public void* StackLimit;
@@ -229,28 +229,28 @@ public static unsafe class NativeStackWalk
     [DllImport("dbghelp.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SymFromAddrW(void* hProcess, ulong Address, ulong* Displacement, SYMBOL_INFO* Symbol);
-    
+
     //SymSetoptions import
     [DllImport("dbghelp.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SymSetOptions(SymOptions SymOptions);
-    
+
     [DllImport("dbghelp.dll", SetLastError = true)]
     private static extern ulong SymGetModuleBase64(void* hProcess, ulong Address);
 
     [DllImport("dbghelp.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool SymCleanup(void* hProcess);
-    
+
     //GetModuleFileNameEx import
     [DllImport("psapi.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetModuleFileNameEx(void* hProcess, void* hModule, [Out] char* lpFilename, uint nSize);
 
     #endregion
-    
+
     #region Helper Methods
-    
+
     [MethodImpl(MethodImplOptions.NoOptimization)]
     private static bool IsValidAddress(ulong addr, bool is64Bit) => !IsBadReadPtr((void*)(addr - 6), 7) && (!is64Bit || addr > 0x70000000000);
 
@@ -308,7 +308,7 @@ public static unsafe class NativeStackWalk
         calledAddr = 0;
         if (!IsValidAddress(addr, is64Bit))
             return false;
-        
+
         var cursor = (byte*)addr;
         if (cursor[-5] == 0xE8)
         {
@@ -378,7 +378,7 @@ public static unsafe class NativeStackWalk
         calledAddr = 0;
         return false;
     }
-    
+
     private static (IntPtr top, IntPtr end) GetStackBounds()
     {
         var tbi = stackalloc THREAD_BASIC_INFORMATION[1];
@@ -403,7 +403,7 @@ public static unsafe class NativeStackWalk
         }
 
         NativeMemory.Free(ctxData);
-        return ((IntPtr) top, (IntPtr) end);
+        return ((IntPtr)top, (IntPtr)end);
     }
 
     private static int InitDbgHelp(void* handle)
@@ -419,25 +419,20 @@ public static unsafe class NativeStackWalk
 
         SymSetOptions(SymOptions.SYMOPT_UNDNAME | SymOptions.SYMOPT_DEFERRED_LOADS);
 
-        if (!SymInitialize(handle, userPath, 1))
-        {
-            return Marshal.GetLastWin32Error();
-        }
-
-        return 0;
+        return !SymInitialize(handle, userPath, 1) ? Marshal.GetLastWin32Error() : 0;
     }
 
     private static string? GetHookName(ulong ip)
     {
         foreach (var (addr, name) in _registeredHooks)
         {
-            if (Math.Abs((long) ip - (long) addr) < 0x400)
+            if (Math.Abs((long)ip - (long)addr) < 0x400)
                 return name;
         }
 
         return null;
     }
-    
+
     #endregion
     public class NativeStackFrame
     {
@@ -467,10 +462,10 @@ public static unsafe class NativeStackWalk
     {
         //Get the top and bottom of the managed stack
         var (t, e) = GetStackBounds();
-        
-        if(t == IntPtr.Zero || e == IntPtr.Zero)
+
+        if (t == IntPtr.Zero || e == IntPtr.Zero)
             throw new("Failed to get stack bounds");
-        
+
         var top = (nint)t;
         var end = (nint)e;
 
@@ -485,8 +480,8 @@ public static unsafe class NativeStackWalk
         {
             var addr = *(ulong*)current;
             current += 4;
-            
-            if (!IsReturnAddress(addr, is64bit, out _)) 
+
+            if (!IsReturnAddress(addr, is64bit, out _))
                 continue;
 
             addresses.Add((nuint)addr);
@@ -495,7 +490,7 @@ public static unsafe class NativeStackWalk
         var handle = (void*)Process.GetCurrentProcess().Handle;
 
         //Initialize DbgHelp to get symbol names
-        
+
         int initResult;
         if ((initResult = InitDbgHelp(handle)) != 0)
         {
@@ -505,13 +500,13 @@ public static unsafe class NativeStackWalk
         var symSize = sizeof(SYMBOL_INFO);
         var displacement = 0ul;
         var ret = new List<NativeStackFrame>();
-        
+
         //Try to get information for each frame in the stack
         foreach (var address in addresses)
         {
             var frame = new NativeStackFrame { Pointer = address };
             ret.Add(frame);
-            
+
             var moduleBase = SymGetModuleBase64(handle, address);
 
             if (moduleBase == 0)
@@ -535,7 +530,7 @@ public static unsafe class NativeStackWalk
                     }
                 }
 
-                if (frame.Function == null && GetHookName(address) is {} hookName)
+                if (frame.Function == null && GetHookName(address) is { } hookName)
                 {
                     frame.Function = $"(detour) {hookName}";
                     frame.ModulePath = "(injected code)";
@@ -543,17 +538,18 @@ public static unsafe class NativeStackWalk
             }
 
             //Get the path of the module from its base address
-            var moduleNameBuff = (char*) NativeMemory.Alloc(256 * sizeof(char));
+            var moduleNameBuff = (char*)NativeMemory.Alloc(256 * sizeof(char));
             if (GetModuleFileNameEx(handle, (void*)moduleBase, moduleNameBuff, 256))
             {
                 var moduleName = Marshal.PtrToStringAnsi((IntPtr)moduleNameBuff);
                 frame.ModulePath = moduleName;
             }
+
             NativeMemory.Free(moduleNameBuff);
-            
+
             //Attempt to load actual symbol information via dbghelp
             var maxNameLen = 255u;
-            var symbol = (SYMBOL_INFO*) NativeMemory.Alloc((nuint)(symSize + maxNameLen * sizeof(char)));
+            var symbol = (SYMBOL_INFO*)NativeMemory.Alloc((nuint)(symSize + (maxNameLen * sizeof(char))));
 
             symbol->SizeOfStruct = (uint)symSize;
             symbol->MaxNameLen = maxNameLen;
@@ -566,7 +562,7 @@ public static unsafe class NativeStackWalk
                 frame.Function = Encoding.Unicode.GetString(nameBuffer);
                 frame.Offset = displacement;
             }
-            
+
             NativeMemory.Free(symbol);
         }
 
@@ -582,7 +578,7 @@ public static unsafe class NativeStackWalk
         get
         {
             var sb = new StringBuilder();
-            
+
             GetNativeStackFrames().ForEach(f => sb.AppendLine(FormatFrame(f)));
 
             return sb.ToString();
@@ -592,12 +588,12 @@ public static unsafe class NativeStackWalk
     private static string FormatFrame(NativeStackFrame frame)
     {
         var frameBuilder = new StringBuilder();
-        
+
         if (frame.Function == null)
         {
             frameBuilder.Append($"at 0x{frame.Pointer:X}");
-            
-            if(frame.ModuleName is {} mn)
+
+            if (frame.ModuleName is { } mn)
                 frameBuilder.Append($" in {mn}");
             else
                 frameBuilder.Append(" (unknown module)");
@@ -621,7 +617,7 @@ public static unsafe class NativeStackWalk
             }
             else
                 frameBuilder.Append($"0x{frame.Pointer:X} <pdb not available or does not contain symbol>");
-            
+
             if (!isSymbolAccurate || !isGa)
                 frameBuilder.Append($" in {frame.ModuleName ?? "<err: null module name>"}");
         }

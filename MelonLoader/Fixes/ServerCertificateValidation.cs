@@ -54,6 +54,7 @@ internal static class ServerCertificateValidation
             if (!chainIsValid)
                 return false;
         }
+
         return true;
     }
 #else

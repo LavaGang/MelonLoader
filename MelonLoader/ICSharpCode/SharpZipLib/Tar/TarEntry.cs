@@ -356,6 +356,7 @@ public class TarEntry
                     return true;
                 }
             }
+
             return false;
         }
     }
@@ -382,7 +383,7 @@ public class TarEntry
         var name = file;
 
         // 23-Jan-2004 GnuTar allows device names in path where the name is not local to the current directory
-        if (name.IndexOf(Directory.GetCurrentDirectory(), StringComparison.Ordinal) == 0)
+        if (name.StartsWith(Directory.GetCurrentDirectory(), StringComparison.Ordinal))
         {
             name = name[Directory.GetCurrentDirectory().Length..];
         }

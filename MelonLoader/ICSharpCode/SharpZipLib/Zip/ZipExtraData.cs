@@ -204,18 +204,21 @@ public class ExtendedUnixData : ITaggedData
             var seconds = (int)span.TotalSeconds;
             helperStream.WriteLEInt(seconds);
         }
+
         if ((_flags & Flags.AccessTime) != 0)
         {
             var span = _lastAccessTime - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             var seconds = (int)span.TotalSeconds;
             helperStream.WriteLEInt(seconds);
         }
+
         if ((_flags & Flags.CreateTime) != 0)
         {
             var span = _createTime - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             var seconds = (int)span.TotalSeconds;
             helperStream.WriteLEInt(seconds);
         }
+
         return ms.ToArray();
     }
 
@@ -358,6 +361,7 @@ public class NTTaggedData : ITaggedData
                     var createTimeTicks = helperStream.ReadLELong();
                     _createTime = DateTime.FromFileTimeUtc(createTimeTicks);
                 }
+
                 break;
             }
             else
@@ -408,6 +412,7 @@ public class NTTaggedData : ITaggedData
         {
             result = false;
         }
+
         return result;
     }
 
@@ -423,6 +428,7 @@ public class NTTaggedData : ITaggedData
             {
                 throw new ArgumentOutOfRangeException(nameof(value));
             }
+
             _lastModificationTime = value;
         }
     }
@@ -439,6 +445,7 @@ public class NTTaggedData : ITaggedData
             {
                 throw new ArgumentOutOfRangeException(nameof(value));
             }
+
             _createTime = value;
         }
     }
@@ -455,6 +462,7 @@ public class NTTaggedData : ITaggedData
             {
                 throw new ArgumentOutOfRangeException(nameof(value));
             }
+
             _lastAccessTime = value;
         }
     }
@@ -558,6 +566,7 @@ public sealed class ZipExtraData : IDisposable
         {
             result = new MemoryStream(_data, _index, _readValueLength, false);
         }
+
         return result;
     }
 
@@ -660,6 +669,7 @@ public sealed class ZipExtraData : IDisposable
         {
             throw new ArgumentNullException(nameof(taggedData));
         }
+
         AddEntry(taggedData.TagID, taggedData.GetData());
     }
 
@@ -817,6 +827,7 @@ public sealed class ZipExtraData : IDisposable
             Array.Copy(_data, trueEnd, newData, trueStart, _data.Length - trueEnd);
             _data = newData;
         }
+
         return result;
     }
 
@@ -870,6 +881,7 @@ public sealed class ZipExtraData : IDisposable
             result = _data[_index];
             _index += 1;
         }
+
         return result;
     }
 

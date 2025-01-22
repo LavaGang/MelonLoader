@@ -24,7 +24,7 @@ public class BZip2InputStream : Stream
     private const int NO_RAND_PART_C_STATE = 7;
 
 #if VECTORIZE_MEMORY_MOVE
-		private static readonly int VectorSize = System.Numerics.Vector<byte>.Count;
+    private static readonly int VectorSize = System.Numerics.Vector<byte>.Count;
 #endif // VECTORIZE_MEMORY_MOVE
 
     #endregion Constants
@@ -268,8 +268,10 @@ public class BZip2InputStream : Stream
             {
                 return i;
             }
+
             buffer[offset + i] = (byte)rb;
         }
+
         return count;
     }
 
@@ -319,6 +321,7 @@ public class BZip2InputStream : Stream
             case RAND_PART_A_STATE:
                 break;
         }
+
         return retChar;
     }
 
@@ -515,6 +518,7 @@ public class BZip2InputStream : Stream
             {
                 j++;
             }
+
             selectorMtf[i] = (byte)j;
         }
 
@@ -534,6 +538,7 @@ public class BZip2InputStream : Stream
                 pos[v] = pos[v - 1];
                 v--;
             }
+
             pos[0] = tmp;
             selector[i] = tmp;
         }
@@ -555,6 +560,7 @@ public class BZip2InputStream : Stream
                         curr--;
                     }
                 }
+
                 len[t][i] = (char)curr;
             }
         }
@@ -569,6 +575,7 @@ public class BZip2InputStream : Stream
                 maxLen = Math.Max(maxLen, len[t][i]);
                 minLen = Math.Min(minLen, len[t][i]);
             }
+
             HbCreateDecodeTables(limit[t], baseArray[t], perm[t], len[t], minLen, maxLen, alphaSize);
             minLens[t] = minLen;
         }
@@ -623,19 +630,23 @@ public class BZip2InputStream : Stream
             { // the longest code
                 throw new BZip2Exception("Bzip data error");
             }
+
             zn++;
             while (bsLive < 1)
             {
                 FillBuffer();
             }
+
             zj = (bsBuff >> (bsLive - 1)) & 1;
             bsLive--;
             zvec = (zvec << 1) | zj;
         }
+
         if (zvec - baseArray[zt][zn] is < 0 or >= BZip2Constants.MaximumAlphaSize)
         {
             throw new BZip2Exception("Bzip data error");
         }
+
         nextSym = perm[zt][zvec - baseArray[zt][zn]];
 
         while (true)
@@ -681,10 +692,12 @@ public class BZip2InputStream : Stream
                         {
                             FillBuffer();
                         }
+
                         zj = (bsBuff >> (bsLive - 1)) & 1;
                         bsLive--;
                         zvec = (zvec << 1) | zj;
                     }
+
                     nextSym = perm[zt][zvec - baseArray[zt][zn]];
                 } while (nextSym is BZip2Constants.RunA or BZip2Constants.RunB);
 
@@ -703,6 +716,7 @@ public class BZip2InputStream : Stream
                 {
                     BlockOverrun();
                 }
+
                 continue;
             }
             else
@@ -720,17 +734,17 @@ public class BZip2InputStream : Stream
                 var j = nextSym - 1;
 
 #if VECTORIZE_MEMORY_MOVE
-					// This is vectorized memory move. Going from the back, we're taking chunks of array
-					// and write them at the new location shifted by one. Since chunks are VectorSize long,
-					// at the end we have to move "tail" (or head actually) of the array using a plain loop.
-					// If System.Numerics.Vector API is not available, the plain loop is used to do the whole copying.
+                // This is vectorized memory move. Going from the back, we're taking chunks of array
+                // and write them at the new location shifted by one. Since chunks are VectorSize long,
+                // at the end we have to move "tail" (or head actually) of the array using a plain loop.
+                // If System.Numerics.Vector API is not available, the plain loop is used to do the whole copying.
 
-					while(j >= VectorSize)
-					{
-						var arrayPart = new System.Numerics.Vector<byte>(yy, j - VectorSize);
-						arrayPart.CopyTo(yy, j - VectorSize + 1);
-						j -= VectorSize;
-					}
+                while (j >= VectorSize)
+                {
+                    var arrayPart = new System.Numerics.Vector<byte>(yy, j - VectorSize);
+                    arrayPart.CopyTo(yy, j - VectorSize + 1);
+                    j -= VectorSize;
+                }
 #endif // VECTORIZE_MEMORY_MOVE
 
                 while (j > 0)
@@ -757,10 +771,12 @@ public class BZip2InputStream : Stream
                     {
                         FillBuffer();
                     }
+
                     zj = (bsBuff >> (bsLive - 1)) & 1;
                     bsLive--;
                     zvec = (zvec << 1) | zj;
                 }
+
                 nextSym = perm[zt][zvec - baseArray[zt][zn]];
                 continue;
             }
@@ -820,6 +836,7 @@ public class BZip2InputStream : Stream
                     rTPos = 0;
                 }
             }
+
             rNToGo--;
             ch2 ^= (rNToGo == 1) ? 1 : 0;
             i2++;
@@ -881,6 +898,7 @@ public class BZip2InputStream : Stream
                         rTPos = 0;
                     }
                 }
+
                 rNToGo--;
                 z ^= (byte)((rNToGo == 1) ? 1 : 0);
                 j2 = 0;

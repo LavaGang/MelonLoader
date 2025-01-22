@@ -334,6 +334,7 @@ public class Deflater
         {
             throw new InvalidOperationException("Finish() already called");
         }
+
         engine.SetInput(input, offset, count);
     }
 
@@ -443,12 +444,14 @@ public class Deflater
             {
                 level_flags = 3;
             }
+
             header |= level_flags << 6;
             if ((state & IS_SETDICT) != 0)
             {
                 // Dictionary was set
                 header |= DeflaterConstants.PRESET_DICT;
             }
+
             header += 31 - (header % 31);
 
             pending.WriteShortMSB(header);
@@ -500,6 +503,7 @@ public class Deflater
                                 neededbits -= 10;
                             }
                         }
+
                         state = BUSY_STATE;
                         break;
 
@@ -513,11 +517,13 @@ public class Deflater
                             pending.WriteShortMSB(adler >> 16);
                             pending.WriteShortMSB(adler & 0xffff);
                         }
+
                         state = FINISHED_STATE;
                         break;
                 }
             }
         }
+
         return origLength - length;
     }
 

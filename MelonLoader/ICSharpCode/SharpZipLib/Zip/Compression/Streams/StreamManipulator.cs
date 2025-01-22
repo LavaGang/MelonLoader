@@ -36,10 +36,12 @@ public class StreamManipulator
             {
                 return -1; // ok
             }
+
             buffer_ |= (uint)(((window_[windowStart_++] & 0xff) |
                              ((window_[windowStart_++] & 0xff) << 8)) << bitsInBuffer_);
             bitsInBuffer_ += 16;
         }
+
         return (int)(buffer_ & ((1 << bitCount) - 1));
     }
 
@@ -55,6 +57,7 @@ public class StreamManipulator
         {
             return false;
         }
+
         output = bits + outputOffset;
         DropBits(bitCount);
         return true;
@@ -72,6 +75,7 @@ public class StreamManipulator
         {
             return false;
         }
+
         array[index] = (byte)bits;
         DropBits(bitCount);
         return true;
@@ -104,6 +108,7 @@ public class StreamManipulator
         {
             DropBits(bitCount);
         }
+
         return bits;
     }
 
@@ -213,6 +218,7 @@ public class StreamManipulator
         {
             length = avail;
         }
+
         System.Array.Copy(window_, windowStart_, output, offset, length);
         windowStart_ += length;
 
@@ -222,6 +228,7 @@ public class StreamManipulator
             buffer_ = (uint)(window_[windowStart_++] & 0xff);
             bitsInBuffer_ = 8;
         }
+
         return count + length;
     }
 

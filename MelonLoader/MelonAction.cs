@@ -30,6 +30,7 @@ internal class MelonAction<T> where T : Delegate
 
             result.Add(new MelonAction<T>((T)met, priority, unsubscribeOnFirstInvocation));
         }
+
         return result;
     }
 }

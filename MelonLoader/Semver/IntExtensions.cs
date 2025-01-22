@@ -28,12 +28,6 @@ internal static class IntExtensions
             return 3;
         if (n < 10_000)
             return 4;
-        if (n < 100_000)
-            return 5;
-        if (n < 1_000_000)
-            return 6;
-        if (n < 10_000_000)
-            return 7;
-        return n < 100_000_000 ? 8 : n < 1_000_000_000 ? 9 : 10;
+        return n < 100_000 ? 5 : n < 1_000_000 ? 6 : n < 10_000_000 ? 7 : n < 100_000_000 ? 8 : n < 1_000_000_000 ? 9 : 10;
     }
 }

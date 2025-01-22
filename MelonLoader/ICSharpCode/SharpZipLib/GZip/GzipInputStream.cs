@@ -197,6 +197,7 @@ public class GZipInputStream : InflaterInputStream
         {
             throw new GZipException("Error GZIP header,  second magic byte doesn't match");
         }
+
         headCRC.Update(magic);
 
         // 2. Check the compression type (must be 8)
@@ -206,6 +207,7 @@ public class GZipInputStream : InflaterInputStream
         {
             throw new GZipException("Error GZIP header, data not in deflate format");
         }
+
         headCRC.Update(compressionType);
 
         // 3. Check the flags
@@ -257,6 +259,7 @@ public class GZipInputStream : InflaterInputStream
                 {
                     fname[fnamePos++] = (byte)readByte;
                 }
+
                 headCRC.Update(readByte);
             }
 
@@ -326,6 +329,7 @@ public class GZipInputStream : InflaterInputStream
             {
                 throw new EndOfStreamException("EOS reading GZIP footer");
             }
+
             needed -= count; // Jewel Jan 16
         }
 

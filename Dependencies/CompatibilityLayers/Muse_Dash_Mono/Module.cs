@@ -51,6 +51,7 @@ internal class Muse_Dash_Mono_Module : MelonModule
             else
                 rotten.Add(rm);
         }
+
         return new ResolvedMelons(melons.ToArray(), rotten.ToArray());
     }
 

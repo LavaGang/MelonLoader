@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace MelonLoader.ICSharpCode.SharpZipLib;
+namespace MelonLoader.ICSharpCode.SharpZipLib.Core.Exceptions;
 
 /// <summary>
 /// Indicates that the input stream could not decoded due to the stream ending before enough data had been provided

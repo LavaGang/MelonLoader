@@ -9,12 +9,12 @@ public static class Extensions
     {
         if (source == null)
         {
-            throw new ArgumentNullException("source");
+            throw new ArgumentNullException(nameof(source));
         }
 
         if (expectedType == null)
         {
-            throw new ArgumentNullException("expectedType");
+            throw new ArgumentNullException(nameof(expectedType));
         }
 
         foreach (var item in source)

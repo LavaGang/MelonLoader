@@ -119,6 +119,7 @@ public class MelonPreferences_Category
                 MelonPreferences.PrefFiles.Remove(oldfile);
             }
         }
+
         if (!string.IsNullOrEmpty(filepath) && !MelonPreferences.IsFilePathDefault(filepath))
         {
             File = MelonPreferences.GetPrefFileFromFilePath(filepath);
@@ -128,6 +129,7 @@ public class MelonPreferences_Category
                 MelonPreferences.PrefFiles.Add(File);
             }
         }
+
         if (autoload)
             MelonPreferences.LoadFileAndRefreshCategories(File, printmsg);
     }
@@ -143,6 +145,7 @@ public class MelonPreferences_Category
             oldfile.FileWatcher.Destroy();
             MelonPreferences.PrefFiles.Remove(oldfile);
         }
+
         MelonPreferences.LoadFileAndRefreshCategories(MelonPreferences.DefaultFile);
     }
 
@@ -162,6 +165,7 @@ public class MelonPreferences_Category
             MelonLogger.Error($"Error while Saving Preferences to {currentfile.FilePath}: {ex}");
             currentfile.WasError = true;
         }
+
         if (printmsg)
             MelonLogger.Msg($"MelonPreferences Saved to {currentfile.FilePath}");
 

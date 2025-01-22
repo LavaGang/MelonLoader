@@ -126,6 +126,7 @@ public static class MelonPreferences
                         currentFile.InsertIntoDocument(category.Identifier, entry.Identifier, entry.Save());
             }
         }
+
         if (ReflectiveCategories.Count > 0)
         {
             foreach (var category in ReflectiveCategories)
@@ -160,6 +161,7 @@ public static class MelonPreferences
                     file.WasError = true;
                     continue;
                 }
+
                 OnPreferencesSaved.Invoke(file.FilePath);
             }
         }
@@ -168,38 +170,38 @@ public static class MelonPreferences
     }
 
     public static MelonPreferences_Category CreateCategory(string identifier) => CreateCategory(identifier, null, false);
-    public static MelonPreferences_Category CreateCategory(string identifier, string display_name = null) => CreateCategory(identifier, display_name, false);
+    public static MelonPreferences_Category CreateCategory(string identifier, string displayName = null) => CreateCategory(identifier, displayName, false);
 
-    public static MelonPreferences_Category CreateCategory(string identifier, string display_name = null, bool is_hidden = false, bool should_save = true)
+    public static MelonPreferences_Category CreateCategory(string identifier, string displayName = null, bool isHidden = false, bool shouldSave = true)
     {
         if (string.IsNullOrEmpty(identifier))
             throw new Exception("identifier is null or empty when calling CreateCategory");
-        display_name ??= identifier;
+        displayName ??= identifier;
         var category = GetCategory(identifier);
-        return category ?? new MelonPreferences_Category(identifier, display_name, is_hidden);
+        return category ?? new MelonPreferences_Category(identifier, displayName, isHidden);
     }
 
-    public static MelonPreferences_ReflectiveCategory CreateCategory<T>(string identifier, string display_name = null) where T : new() => MelonPreferences_ReflectiveCategory.Create<T>(identifier, display_name);
+    public static MelonPreferences_ReflectiveCategory CreateCategory<T>(string identifier, string displayName = null) where T : new() => MelonPreferences_ReflectiveCategory.Create<T>(identifier, displayName);
 
     [Obsolete]
-    public static MelonPreferences_Entry CreateEntry<T>(string category_identifier, string entry_identifier,
-        T default_value, string display_name, bool is_hidden)
-        => CreateEntry(category_identifier, entry_identifier, default_value, display_name, null, is_hidden, false, null);
+    public static MelonPreferences_Entry CreateEntry<T>(string categoryIdentifier, string entryIdentifier,
+        T defaultValue, string displayName, bool isHidden)
+        => CreateEntry(categoryIdentifier, entryIdentifier, defaultValue, displayName, null, isHidden, false, null);
 
-    public static MelonPreferences_Entry<T> CreateEntry<T>(string category_identifier, string entry_identifier, T default_value,
-        string display_name = null, string description = null, bool is_hidden = false, bool dont_save_default = false,
+    public static MelonPreferences_Entry<T> CreateEntry<T>(string categoryIdentifier, string entryIdentifier, T defaultValue,
+        string displayName = null, string description = null, bool isHidden = false, bool dontSaveDefault = false,
         ValueValidator validator = null)
     {
-        if (string.IsNullOrEmpty(category_identifier))
+        if (string.IsNullOrEmpty(categoryIdentifier))
             throw new Exception("category_identifier is null or empty when calling CreateEntry");
 
-        if (string.IsNullOrEmpty(entry_identifier))
+        if (string.IsNullOrEmpty(entryIdentifier))
             throw new Exception("entry_identifier is null or empty when calling CreateEntry");
 
-        var category = GetCategory(entry_identifier);
-        category ??= CreateCategory(category_identifier);
+        var category = GetCategory(entryIdentifier);
+        category ??= CreateCategory(categoryIdentifier);
 
-        return category.CreateEntry(entry_identifier, default_value, display_name, description, is_hidden, dont_save_default, validator);
+        return category.CreateEntry(entryIdentifier, defaultValue, displayName, description, isHidden, dontSaveDefault, validator);
     }
 
     public static MelonPreferences_Category GetCategory(string identifier)
@@ -229,23 +231,23 @@ public static class MelonPreferences
         category?.SaveToFile(printmsg);
     }
 
-    public static MelonPreferences_Entry GetEntry(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry(entry_identifier);
-    public static MelonPreferences_Entry<T> GetEntry<T>(string category_identifier, string entry_identifier) => GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
-    public static bool HasEntry(string category_identifier, string entry_identifier) => GetEntry(category_identifier, entry_identifier) != null;
+    public static MelonPreferences_Entry GetEntry(string categoryIdentifier, string entryIdentifier) => GetCategory(categoryIdentifier)?.GetEntry(entryIdentifier);
+    public static MelonPreferences_Entry<T> GetEntry<T>(string categoryIdentifier, string entryIdentifier) => GetCategory(categoryIdentifier)?.GetEntry<T>(entryIdentifier);
+    public static bool HasEntry(string categoryIdentifier, string entryIdentifier) => GetEntry(categoryIdentifier, entryIdentifier) != null;
 
-    public static void SetEntryValue<T>(string category_identifier, string entry_identifier, T value)
+    public static void SetEntryValue<T>(string categoryIdentifier, string entryIdentifier, T value)
     {
-        var entry = GetCategory(category_identifier)?.GetEntry<T>(entry_identifier);
+        var entry = GetCategory(categoryIdentifier)?.GetEntry<T>(entryIdentifier);
         if (entry != null)
             entry.Value = value;
     }
 
-    public static T GetEntryValue<T>(string category_identifier, string entry_identifier)
+    public static T GetEntryValue<T>(string categoryIdentifier, string entryIdentifier)
     {
-        var cat = GetCategory(category_identifier);
+        var cat = GetCategory(categoryIdentifier);
         if (cat == null)
             return default;
-        var entry = cat.GetEntry<T>(entry_identifier);
+        var entry = cat.GetEntry<T>(entryIdentifier);
         return entry == null ? default : entry.Value;
     }
 
@@ -332,6 +334,7 @@ public static class MelonPreferences
                     category.LoadDefaults();
                     continue;
                 }
+
                 category.Load(table);
             }
 

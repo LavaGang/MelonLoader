@@ -40,6 +40,7 @@ public class PathFilter : IScanFilter
             var cooked = (name.Length > 0) ? Path.GetFullPath(name) : "";
             result = nameFilter_.IsMatch(cooked);
         }
+
         return result;
     }
 
@@ -133,6 +134,7 @@ public class ExtendedPathFilter : PathFilter
                 (MaxDate >= fileInfo.LastWriteTime)
                 ;
         }
+
         return result;
     }
 
@@ -271,6 +273,7 @@ public class NameAndSizeFilter : PathFilter
                 (MinSize <= length) &&
                 (MaxSize >= length);
         }
+
         return result;
     }
 

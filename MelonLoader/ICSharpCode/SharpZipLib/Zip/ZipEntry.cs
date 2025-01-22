@@ -210,10 +210,10 @@ public class ZipEntry
             throw new ArgumentOutOfRangeException(nameof(versionRequiredToExtract));
         }
 
-        this.DateTime = DateTime.Now;
+        DateTime = DateTime.Now;
         this.name = name;
-        this.versionMadeBy = (ushort)madeByInfo;
-        this.versionToExtract = (ushort)versionRequiredToExtract;
+        versionMadeBy = (ushort)madeByInfo;
+        versionToExtract = (ushort)versionRequiredToExtract;
         this.method = method;
 
         IsUnicodeText = ZipStrings.UseUnicode;
@@ -398,6 +398,7 @@ public class ZipEntry
                 (HostSystem == (int)HostSystemID.WindowsNT)) &&
                 (ExternalFileAttributes & attributes) == attributes;
         }
+
         return result;
     }
 
@@ -492,13 +493,11 @@ public class ZipEntry
                 // Ver 5.1 = AES
                 return ZipConstants.VERSION_AES;
 
-            if (CompressionMethod.BZip2 == method)
-                return ZipConstants.VersionBZip2;
-
-            if (CentralHeaderRequiresZip64)
-                return ZipConstants.VersionZip64;
-
-            return CompressionMethod.Deflated == method || IsDirectory || IsCrypted ? 20 : HasDosAttributes(0x08) ? 11 : 10;
+            return CompressionMethod.BZip2 == method
+                ? ZipConstants.VersionBZip2
+                : CentralHeaderRequiresZip64
+                ? ZipConstants.VersionZip64
+                : CompressionMethod.Deflated == method || IsDirectory || IsCrypted ? 20 : HasDosAttributes(0x08) ? 11 : 10;
         }
     }
 
@@ -540,13 +539,13 @@ public class ZipEntry
 
                 if ((versionToExtract == 0) && IsCrypted)
                 {
-                    trueCompressedSize += (ulong)this.EncryptionOverheadSize;
+                    trueCompressedSize += (ulong)EncryptionOverheadSize;
                 }
 
                 // TODO: A better estimation of the true limit based on compression overhead should be used
                 // to determine when an entry should use Zip64.
                 result =
-                    ((this.size >= uint.MaxValue) || (trueCompressedSize >= uint.MaxValue)) &&
+                    ((size >= uint.MaxValue) || (trueCompressedSize >= uint.MaxValue)) &&
                     ((versionToExtract == 0) || (versionToExtract >= ZipConstants.VersionZip64));
             }
 
@@ -709,8 +708,9 @@ public class ZipEntry
             {
                 throw new ArgumentOutOfRangeException(nameof(value));
             }
-            this.crc = (uint)value;
-            this.known |= Known.Crc;
+
+            crc = (uint)value;
+            known |= Known.Crc;
         }
     }
 
@@ -843,7 +843,7 @@ public class ZipEntry
     /// </param>
     internal void ProcessExtraData(bool localHeader)
     {
-        var extraData = new ZipExtraData(this.extra);
+        var extraData = new ZipExtraData(extra);
 
         if (extraData.Find(0x0001))
         {
@@ -1029,7 +1029,7 @@ public class ZipEntry
     /// <returns>An <see cref="object"/> that is a copy of the current instance.</returns>
     public object Clone()
     {
-        var result = (ZipEntry)this.MemberwiseClone();
+        var result = (ZipEntry)MemberwiseClone();
 
         // Ensure extra data is unique if it exists.
         if (extra != null)
@@ -1092,6 +1092,7 @@ public class ZipEntry
         {
             name = name.Remove(0, 1);
         }
+
         return name;
     }
 

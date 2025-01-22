@@ -452,6 +452,7 @@ public class TarArchive : IDisposable
             {
                 return tarOut.RecordSize;
             }
+
             return TarBuffer.DefaultRecordSize;
         }
     }
@@ -505,6 +506,7 @@ public class TarArchive : IDisposable
             {
                 break;
             }
+
             OnProgressMessageEvent(entry, null);
         }
     }
@@ -612,7 +614,7 @@ public class TarArchive : IDisposable
             if (process)
             {
                 using var outputStream = File.Create(destFile);
-                if (this.asciiTranslate)
+                if (asciiTranslate)
                 {
                     // May need to translate the file.
                     ExtractAndTranslateEntry(destFile, outputStream);
@@ -695,6 +697,7 @@ public class TarArchive : IDisposable
                 TarHeader.SetValueDefaults(sourceEntry.UserId, sourceEntry.UserName,
                                            sourceEntry.GroupId, sourceEntry.GroupName);
             }
+
             WriteEntryCore(sourceEntry, recurse);
         }
         finally
@@ -752,6 +755,7 @@ public class TarArchive : IDisposable
                         {
                             break;
                         }
+
                         var data = Encoding.ASCII.GetBytes(line);
                         outStream.Write(data, 0, data.Length);
                         outStream.WriteByte((byte)'\n');
@@ -909,6 +913,7 @@ public class TarArchive : IDisposable
                 return true;
             }
         }
+
         return false;
     }
 

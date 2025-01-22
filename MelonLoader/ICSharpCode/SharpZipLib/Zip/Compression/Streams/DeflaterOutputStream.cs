@@ -126,6 +126,7 @@ public class DeflaterOutputStream : Stream
             {
                 AESAuthCode = ((ZipAESTransform)cryptoTransform_).GetAuthCode();
             }
+
             cryptoTransform_.Dispose();
             cryptoTransform_ = null;
         }
@@ -204,6 +205,7 @@ public class DeflaterOutputStream : Stream
             {
                 break;
             }
+
             if (cryptoTransform_ != null)
             {
                 EncryptBlock(buffer_, 0, deflateCount);

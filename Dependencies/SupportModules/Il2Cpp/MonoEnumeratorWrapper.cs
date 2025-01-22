@@ -15,10 +15,10 @@ public class MonoEnumeratorWrapper : Il2CppSystem.Object /*, IEnumerator */
 
     private readonly IEnumerator enumerator;
     public MonoEnumeratorWrapper(IntPtr ptr) : base(ptr) { }
-    public MonoEnumeratorWrapper(IEnumerator _enumerator) : base(ClassInjector.DerivedConstructorPointer<MonoEnumeratorWrapper>())
+    public MonoEnumeratorWrapper(IEnumerator enumerator) : base(ClassInjector.DerivedConstructorPointer<MonoEnumeratorWrapper>())
     {
         ClassInjector.DerivedConstructorBody(this);
-        enumerator = _enumerator ?? throw new NullReferenceException("routine is null");
+        this.enumerator = enumerator ?? throw new NullReferenceException("routine is null");
     }
 
     public Il2CppSystem.Object /*IEnumerator.*/Current

@@ -38,6 +38,7 @@ public class OutputWindow
         {
             throw new InvalidOperationException("Window full");
         }
+
         window[windowEnd++] = (byte)value;
         windowEnd &= WindowMask;
     }
@@ -147,6 +148,7 @@ public class OutputWindow
             offset += length - WindowSize;
             length = WindowSize;
         }
+
         System.Array.Copy(dictionary, offset, window, 0, length);
         windowEnd = length & WindowMask;
     }
@@ -200,6 +202,7 @@ public class OutputWindow
             offset += tailLen;
             len = copyEnd;
         }
+
         System.Array.Copy(window, copyEnd - len, output, offset, len);
         windowFilled -= copied;
         return windowFilled < 0 ? throw new InvalidOperationException() : copied;

@@ -128,6 +128,7 @@ public static class MelonUtils
         {
             MelonLogger.Warning($"AppDomainSetup.ApplicationBase Exception: {ex}");
         }
+
         Directory.SetCurrentDirectory(dirpath);
     }
 
@@ -150,6 +151,7 @@ public static class MelonUtils
                 if (ret != null)
                     return ret;
             }
+
             return null;
 
         }
@@ -238,6 +240,7 @@ public static class MelonUtils
             MelonLogger.Error($"Exception while Decoding JSON String to JSON Variant: {ex}");
             return default;
         }
+
         if (jsonarr == null)
             return default;
         T returnobj = default;
@@ -249,6 +252,7 @@ public static class MelonUtils
         {
             MelonLogger.Error($"Exception while Converting JSON Variant to {typeof(T).Name}: {ex}");
         }
+
         return returnobj;
     }
 
@@ -333,6 +337,7 @@ public static class MelonUtils
             //MelonLogger.Error($"Failed to get type {typeName} from assembly {asm.FullName} due to: {ex.Message}", ex);
             x = null;
         }
+
         return (x != null) && (predicate == null || predicate(x)) ? x : null;
     }
 
@@ -384,17 +389,17 @@ public static class MelonUtils
     }
 
     private static FieldInfo AppDomainSetup_application_base;
-    public static void SetApplicationBase(this AppDomainSetup _this, string value)
+    public static void SetApplicationBase(this AppDomainSetup This, string value)
     {
         AppDomainSetup_application_base ??= typeof(AppDomainSetup).GetField("application_base", BindingFlags.NonPublic | BindingFlags.Instance);
-        AppDomainSetup_application_base?.SetValue(_this, value);
+        AppDomainSetup_application_base?.SetValue(This, value);
     }
 
     private static FieldInfo HashAlgorithm_HashSizeValue;
-    public static void SetHashSizeValue(this HashAlgorithm _this, int value)
+    public static void SetHashSizeValue(this HashAlgorithm This, int value)
     {
         HashAlgorithm_HashSizeValue ??= typeof(HashAlgorithm).GetField("HashSizeValue", BindingFlags.Public | BindingFlags.Instance);
-        HashAlgorithm_HashSizeValue?.SetValue(_this, value);
+        HashAlgorithm_HashSizeValue?.SetValue(This, value);
     }
 
     // Modified Version of System.IO.Path.HasExtension from .NET Framework's mscorlib.dll
@@ -413,6 +418,7 @@ public static class MelonUtils
                     break;
             }
         }
+
         return false;
     }
 

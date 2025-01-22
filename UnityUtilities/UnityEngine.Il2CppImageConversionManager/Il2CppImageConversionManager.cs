@@ -67,9 +67,9 @@ public class Il2CppImageConversionManager
 
     public static bool LoadImage(Texture2D tex, Il2CppStructArray<byte> data, bool markNonReadable)
     {
-        if (tex == null)
-            throw new ArgumentException("The texture cannot be null.");
-        return data == null
+        return tex == null
+            ? throw new ArgumentException("The texture cannot be null.")
+            : data == null
             ? throw new ArgumentException("The data cannot be null.")
             : LoadImageDelegateField == null
             ? throw new NullReferenceException("The LoadImageDelegateField cannot be null.")

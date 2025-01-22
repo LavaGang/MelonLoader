@@ -67,6 +67,7 @@ internal static class SupportModule
             MelonLogger.Error("No Support Module Loaded!");
             return false;
         }
+
         return true;
     }
 

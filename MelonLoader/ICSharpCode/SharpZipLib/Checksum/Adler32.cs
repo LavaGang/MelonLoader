@@ -148,15 +148,18 @@ public sealed class Adler32 : IChecksum
             {
                 n = count;
             }
+
             count -= n;
             while (--n >= 0)
             {
                 s1 += (uint)(segment.Array[offset++] & 0xff);
                 s2 += s1;
             }
+
             s1 %= BASE;
             s2 %= BASE;
         }
+
         checkValue = (s2 << 16) | s1;
     }
 }

@@ -52,9 +52,9 @@ public class Il2CppAssetBundle
 
     public bool Contains(string name)
     {
-        if (bundleptr == IntPtr.Zero)
-            throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
-        return string.IsNullOrEmpty(name)
+        return bundleptr == IntPtr.Zero
+            ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
+            : string.IsNullOrEmpty(name)
             ? throw new ArgumentException("The input asset name cannot be null or empty.")
             : ContainsDelegateField == null
             ? throw new NullReferenceException("The ContainsDelegateField cannot be null.")
@@ -113,11 +113,11 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAsset(string name, IntPtr typeptr)
     {
-        if (bundleptr == IntPtr.Zero)
-            throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentException("The input asset name cannot be null or empty.");
-        return typeptr == IntPtr.Zero
+        return bundleptr == IntPtr.Zero
+            ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
+            : string.IsNullOrEmpty(name)
+            ? throw new ArgumentException("The input asset name cannot be null or empty.")
+            : typeptr == IntPtr.Zero
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAsset_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAsset_InternalDelegateField cannot be null.")
@@ -144,11 +144,11 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAssetAsync(string name, IntPtr typeptr)
     {
-        if (bundleptr == IntPtr.Zero)
-            throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentException("The input asset name cannot be null or empty.");
-        return typeptr == IntPtr.Zero
+        return bundleptr == IntPtr.Zero
+            ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
+            : string.IsNullOrEmpty(name)
+            ? throw new ArgumentException("The input asset name cannot be null or empty.")
+            : typeptr == IntPtr.Zero
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAssetAsync_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAssetAsync_InternalDelegateField cannot be null.")
@@ -210,11 +210,11 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAssetWithSubAssets(string name, IntPtr typeptr)
     {
-        if (bundleptr == IntPtr.Zero)
-            throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentException("The input asset name cannot be null or empty.");
-        return typeptr == IntPtr.Zero
+        return bundleptr == IntPtr.Zero
+            ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
+            : string.IsNullOrEmpty(name)
+            ? throw new ArgumentException("The input asset name cannot be null or empty.")
+            : typeptr == IntPtr.Zero
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAssetWithSubAssets_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAssetWithSubAssets_InternalDelegateField cannot be null.")
@@ -240,11 +240,11 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAssetWithSubAssetsAsync(string name, IntPtr typeptr)
     {
-        if (bundleptr == IntPtr.Zero)
-            throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentException("The input asset name cannot be null or empty.");
-        return typeptr == IntPtr.Zero
+        return bundleptr == IntPtr.Zero
+            ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
+            : string.IsNullOrEmpty(name)
+            ? throw new ArgumentException("The input asset name cannot be null or empty.")
+            : typeptr == IntPtr.Zero
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAssetWithSubAssetsAsync_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAssetWithSubAssetsAsync_InternalDelegateField cannot be null.")

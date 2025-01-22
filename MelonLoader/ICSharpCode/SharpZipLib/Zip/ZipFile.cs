@@ -758,6 +758,7 @@ public class ZipFile : IEnumerable, IDisposable
                 return i;
             }
         }
+
         return -1;
     }
 
@@ -821,6 +822,7 @@ public class ZipFile : IEnumerable, IDisposable
                 throw new ZipException("Entry cannot be found");
             }
         }
+
         return GetInputStream(index);
     }
 
@@ -959,7 +961,7 @@ public class ZipFile : IEnumerable, IDisposable
 
                     var crc = new Crc32();
 
-                    using (var entryStream = this.GetInputStream(this[entryIndex]))
+                    using (var entryStream = GetInputStream(this[entryIndex]))
                     {
                         var buffer = new byte[4096];
                         long totalBytes = 0;
@@ -1493,6 +1495,7 @@ public class ZipFile : IEnumerable, IDisposable
             update.OffsetBasedSize = updates_[idx + 1].Entry.Offset - update.Entry.Offset;
             idx++;
         }
+
         updateCount_ = updates_.Count;
 
         contentsEdited_ = false;
@@ -1949,6 +1952,7 @@ public class ZipFile : IEnumerable, IDisposable
         {
             throw new ZipException("Cannot find entry to delete");
         }
+
         return result;
     }
 
@@ -2077,6 +2081,7 @@ public class ZipFile : IEnumerable, IDisposable
                     {
                         entry.ForceZip64();
                     }
+
                     break;
 
                 case UseZip64.On:
@@ -2437,6 +2442,7 @@ public class ZipFile : IEnumerable, IDisposable
                 {
                     crc.Update(new ArraySegment<byte>(buffer, 0, bytesRead));
                 }
+
                 destination.Write(buffer, 0, bytesRead);
                 bytesToCopy -= bytesRead;
                 totalBytesRead += bytesRead;
@@ -2535,6 +2541,7 @@ public class ZipFile : IEnumerable, IDisposable
                 {
                     crc.Update(new ArraySegment<byte>(buffer, 0, bytesRead));
                 }
+
                 stream.Position = destinationPosition;
                 stream.Write(buffer, 0, bytesRead);
 
@@ -2629,6 +2636,7 @@ public class ZipFile : IEnumerable, IDisposable
                     // otherwise, wrap the base stream in an UncompressedStream instead of returning it directly
                     result = new UncompressedStream(result);
                 }
+
                 break;
 
             case CompressionMethod.Deflated:
@@ -2654,6 +2662,7 @@ public class ZipFile : IEnumerable, IDisposable
             default:
                 throw new ZipException("Unknown compression method " + entry.CompressionMethod);
         }
+
         return result;
     }
 
@@ -2723,7 +2732,7 @@ public class ZipFile : IEnumerable, IDisposable
         if (update.Entry.IsFile && (update.Filename != null))
         {
             using var output = workFile.GetOutputStream(update.OutEntry);
-            using var source = this.GetInputStream(update.Entry);
+            using var source = GetInputStream(update.Entry);
             CopyBytes(update, output, source, source.Length, true);
         }
 
@@ -2786,6 +2795,7 @@ public class ZipFile : IEnumerable, IDisposable
             {
                 CopyEntryDataDirect(update, baseStream_, false, ref destinationPosition, ref sourcePosition);
             }
+
             CopyDescriptorBytesDirect(update, baseStream_, ref destinationPosition, sourcePosition);
         }
     }
@@ -2810,6 +2820,7 @@ public class ZipFile : IEnumerable, IDisposable
 
             CopyBytes(update, workFile.baseStream_, baseStream_, update.Entry.CompressedSize, false);
         }
+
         CopyDescriptorBytes(update, workFile.baseStream_, baseStream_);
     }
 
@@ -2934,6 +2945,7 @@ public class ZipFile : IEnumerable, IDisposable
                     result = offsetDiff < 0 ? -1 : offsetDiff == 0 ? 0 : 1;
                 }
             }
+
             return result;
         }
     }
@@ -2991,6 +3003,7 @@ public class ZipFile : IEnumerable, IDisposable
                             {
                                 CopyEntry(workFile, update);
                             }
+
                             break;
 
                         case UpdateCommand.Modify:
@@ -3010,6 +3023,7 @@ public class ZipFile : IEnumerable, IDisposable
                             {
                                 destinationPosition = workFile.baseStream_.Position;
                             }
+
                             break;
                     }
                 }
@@ -3075,6 +3089,7 @@ public class ZipFile : IEnumerable, IDisposable
             {
                 File.Delete(workFile.Name);
             }
+
             throw;
         }
 
@@ -3610,6 +3625,7 @@ public class ZipFile : IEnumerable, IDisposable
                 {
                     throw new ZipException("No password available for AES encrypted stream");
                 }
+
                 var saltLen = entry.AESSaltLen;
                 var saltBytes = new byte[saltLen];
                 var saltIn = StreamUtils.ReadRequestedBytes(baseStream, saltBytes, 0, saltLen);
@@ -3685,6 +3701,7 @@ public class ZipFile : IEnumerable, IDisposable
                 WriteEncryptionHeader(result, entry.Crc);
             }
         }
+
         return result;
     }
 
@@ -4140,11 +4157,13 @@ public class ZipFile : IEnumerable, IDisposable
                 {
                     baseStream_.Seek(readPos_, SeekOrigin.Begin);
                 }
+
                 var readCount = baseStream_.Read(buffer, offset, count);
                 if (readCount > 0)
                 {
                     readPos_ += readCount;
                 }
+
                 return readCount;
             }
         }
@@ -4217,6 +4236,7 @@ public class ZipFile : IEnumerable, IDisposable
             {
                 throw new IOException("Cannot seek past end");
             }
+
             readPos_ = newPos;
             return readPos_;
         }
@@ -4254,6 +4274,7 @@ public class ZipFile : IEnumerable, IDisposable
                 {
                     throw new InvalidOperationException("Cannot seek past end");
                 }
+
                 readPos_ = newPos;
             }
         }

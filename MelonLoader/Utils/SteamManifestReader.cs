@@ -60,6 +60,7 @@ public static class SteamManifestReader
             output = match.Groups[1].Value;
             break;
         }
+
         return output;
     }
 
@@ -93,6 +94,7 @@ public static class SteamManifestReader
             steamappspath = steamappspath2;
             output = installdir;
         }
+
         return output;
     }
 

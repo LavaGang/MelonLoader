@@ -35,6 +35,7 @@ public class InflaterInputBuffer
         {
             bufferSize = 1024;
         }
+
         rawData = new byte[bufferSize];
         clearText = rawData;
     }
@@ -123,6 +124,7 @@ public class InflaterInputBuffer
             {
                 break;
             }
+
             rawLength += count;
             toRead -= count;
         }
@@ -169,12 +171,14 @@ public class InflaterInputBuffer
                     return 0;
                 }
             }
+
             var toCopy = Math.Min(currentLength, available);
             System.Array.Copy(rawData, rawLength - available, outBuffer, currentOffset, toCopy);
             currentOffset += toCopy;
             currentLength -= toCopy;
             available -= toCopy;
         }
+
         return length;
     }
 
@@ -212,6 +216,7 @@ public class InflaterInputBuffer
             currentLength -= toCopy;
             available -= toCopy;
         }
+
         return length;
     }
 
@@ -229,6 +234,7 @@ public class InflaterInputBuffer
                 throw new ZipException("EOF in header");
             }
         }
+
         var result = rawData[rawLength - available];
         available -= 1;
         return result;
@@ -277,6 +283,7 @@ public class InflaterInputBuffer
                     internalClearText ??= new byte[rawData.Length];
                     clearText = internalClearText;
                 }
+
                 clearTextLength = rawLength;
                 if (available > 0)
                 {
@@ -369,7 +376,7 @@ public class InflaterInputStream : Stream
         }
 
         this.baseInputStream = baseInputStream ?? throw new ArgumentNullException(nameof(baseInputStream));
-        this.inf = inflater ?? throw new ArgumentNullException(nameof(inflater));
+        inf = inflater ?? throw new ArgumentNullException(nameof(inflater));
 
         inputBuffer = new InflaterInputBuffer(baseInputStream, bufferSize);
     }
@@ -473,6 +480,7 @@ public class InflaterInputStream : Stream
                 throw new SharpZipBaseException("Unexpected EOF");
             }
         }
+
         inputBuffer.SetInflaterInput(inf);
     }
 
@@ -656,6 +664,7 @@ public class InflaterInputStream : Stream
                 throw new ZipException("Invalid input data");
             }
         }
+
         return count - remainingBytes;
     }
 

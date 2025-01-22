@@ -74,6 +74,7 @@ public class ZipNameTransform : INameTransform
         {
             throw new ZipException("Cannot have an empty directory name");
         }
+
         return name;
     }
 
@@ -87,7 +88,7 @@ public class ZipNameTransform : INameTransform
         if (name != null)
         {
             var lowerName = name.ToLower();
-            if ((trimPrefix_ != null) && (lowerName.IndexOf(trimPrefix_, StringComparison.Ordinal) == 0))
+            if ((trimPrefix_ != null) && lowerName.StartsWith(trimPrefix_, StringComparison.Ordinal))
             {
                 name = name[trimPrefix_.Length..];
             }
@@ -112,6 +113,7 @@ public class ZipNameTransform : INameTransform
         {
             name = string.Empty;
         }
+
         return name;
     }
 
@@ -152,6 +154,7 @@ public class ZipNameTransform : INameTransform
 
                 index = index >= name.Length ? -1 : name.IndexOfAny(InvalidEntryChars, index + 1);
             }
+
             name = builder.ToString();
         }
 
@@ -179,7 +182,7 @@ public class ZipNameTransform : INameTransform
             result = relaxed
             ? name.IndexOfAny(InvalidEntryCharsRelaxed) < 0
             : (name.IndexOfAny(InvalidEntryChars) < 0) &&
-                (name.IndexOf('/') != 0);
+                (!name.StartsWith('/'));
         }
 
         return result;
@@ -202,7 +205,7 @@ public class ZipNameTransform : INameTransform
         var result =
             (name != null) &&
             (name.IndexOfAny(InvalidEntryChars) < 0) &&
-            (name.IndexOf('/') != 0)
+            (!name.StartsWith('/'))
             ;
         return result;
     }

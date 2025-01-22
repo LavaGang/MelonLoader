@@ -109,6 +109,7 @@ internal class MelonFolderHandler
                 // Log Failure
                 MelonLogger.Warning($"Failed to load Melon '{m.Info.Name}' from '{m.MelonAssembly.Location}': The given Melon is a {m.MelonTypeName} and cannot be loaded as a {MelonTypeBase<T>.TypeName}. Make sure it's in the right folder.");
             }
+
         return loadedMelons;
     }
 

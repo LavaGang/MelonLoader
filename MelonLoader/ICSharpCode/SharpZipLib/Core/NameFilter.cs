@@ -53,6 +53,7 @@ public class NameFilter : IScanFilter
         {
             result = false;
         }
+
         return result;
     }
 
@@ -176,6 +177,7 @@ public class NameFilter : IScanFilter
                 }
             }
         }
+
         return result;
     }
 
@@ -195,6 +197,7 @@ public class NameFilter : IScanFilter
                 break;
             }
         }
+
         return result;
     }
 

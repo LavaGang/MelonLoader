@@ -84,7 +84,7 @@ public class DeflaterHuffman
         public Tree(DeflaterHuffman dh, int elems, int minCodes, int maxLength)
         {
             this.dh = dh;
-            this.minNumCodes = minCodes;
+            minNumCodes = minCodes;
             this.maxLength = maxLength;
             freqs = new short[elems];
             bl_counts = new int[maxLength];
@@ -101,6 +101,7 @@ public class DeflaterHuffman
             {
                 freqs[i] = 0;
             }
+
             codes = null;
             length = null;
         }
@@ -221,6 +222,7 @@ public class DeflaterHuffman
                         heap[pos] = heap[ppos];
                         pos = ppos;
                     }
+
                     heap[pos] = n;
 
                     maxCode = n;
@@ -285,6 +287,7 @@ public class DeflaterHuffman
                 {
                     heap[path] = heap[ppos];
                 }
+
                 heap[path] = last;
 
                 var second = heap[0];
@@ -317,6 +320,7 @@ public class DeflaterHuffman
                 {
                     heap[path] = heap[ppos];
                 }
+
                 heap[path] = last;
             } while (heapLen > 1);
 
@@ -339,6 +343,7 @@ public class DeflaterHuffman
             {
                 len += freqs[i] * length[i];
             }
+
             return len;
         }
 
@@ -373,6 +378,7 @@ public class DeflaterHuffman
                         count = 0;
                     }
                 }
+
                 curlen = nextlen;
                 i++;
 
@@ -435,6 +441,7 @@ public class DeflaterHuffman
                         count = 0;
                     }
                 }
+
                 curlen = nextlen;
                 i++;
 
@@ -474,7 +481,7 @@ public class DeflaterHuffman
 
         private void BuildLength(int[] childs)
         {
-            this.length = new byte[freqs.Length];
+            length = new byte[freqs.Length];
             var numNodes = childs.Length / 2;
             var numLeafs = (numNodes + 1) / 2;
             var overflow = 0;
@@ -498,6 +505,7 @@ public class DeflaterHuffman
                         bitLength = maxLength;
                         overflow++;
                     }
+
                     lengths[childs[2 * i]] = lengths[childs[(2 * i) + 1]] = bitLength;
                 }
                 else
@@ -505,7 +513,7 @@ public class DeflaterHuffman
                     // A leaf node
                     var bitLength = lengths[i];
                     bl_counts[bitLength - 1]++;
-                    this.length[childs[2 * i]] = (byte)lengths[i];
+                    length[childs[2 * i]] = (byte)lengths[i];
                 }
             }
 
@@ -685,6 +693,7 @@ public class DeflaterHuffman
         {
             pending.WriteBits(blTree.length[BL_ORDER[rank]], 3);
         }
+
         literalTree.WriteTree(blTree);
         distTree.WriteTree(blTree);
 
@@ -808,6 +817,7 @@ public class DeflaterHuffman
                 blTreeCodes = i + 1;
             }
         }
+
         var opt_len = 14 + (blTreeCodes * 3) + blTree.GetEncodedLength() +
             literalTree.GetEncodedLength() + distTree.GetEncodedLength() +
             extra_bits;
@@ -817,10 +827,12 @@ public class DeflaterHuffman
         {
             static_len += literalTree.freqs[i] * staticLLength[i];
         }
+
         for (var i = 0; i < DIST_NUM; i++)
         {
             static_len += distTree.freqs[i] * staticDLength[i];
         }
+
         if (opt_len >= static_len)
         {
             // Force static trees
@@ -913,6 +925,7 @@ public class DeflaterHuffman
         {
             extra_bits += (dc / 2) - 1;
         }
+
         return IsFull();
     }
 
@@ -942,6 +955,7 @@ public class DeflaterHuffman
             code += 4;
             length >>= 1;
         }
+
         return code + length;
     }
 
@@ -953,6 +967,7 @@ public class DeflaterHuffman
             code += 2;
             distance >>= 1;
         }
+
         return code + distance;
     }
 }

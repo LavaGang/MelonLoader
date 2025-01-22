@@ -28,6 +28,7 @@ internal class DeobfuscationRegex
                 Core.AssemblyGenerationNeeded = true;
                 return;
             }
+
             if (!Config.Values.DeobfuscationRegex.Equals(Regex))
             {
                 Core.AssemblyGenerationNeeded = true;

@@ -20,7 +20,7 @@ public class Il2CppAssetBundleCreateRequest : AsyncOperation
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         get
         {
-            var ptr = get_assetBundleDelegateField(this.Pointer);
+            var ptr = get_assetBundleDelegateField(Pointer);
             return ptr == IntPtr.Zero ? null : new Il2CppAssetBundle(ptr);
         }
     }
@@ -45,7 +45,7 @@ public class Il2CppAssetBundleRequest : AsyncOperation
     {
         get
         {
-            var ptr = get_assetDelegateField(this.Pointer);
+            var ptr = get_assetDelegateField(Pointer);
             return ptr == IntPtr.Zero ? null : new Object(ptr);
         }
     }
@@ -54,7 +54,7 @@ public class Il2CppAssetBundleRequest : AsyncOperation
     {
         get
         {
-            var ptr = get_allAssetsDelegateField(this.Pointer);
+            var ptr = get_allAssetsDelegateField(Pointer);
             return ptr == IntPtr.Zero ? null : new Il2CppReferenceArray<Object>(ptr);
         }
     }

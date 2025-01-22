@@ -97,6 +97,7 @@ internal class Core : MelonModule
             Logger.Msg("Assembly is up to date. No Generation Needed.");
             return 0;
         }
+
         Logger.Msg("Assembly Generation Needed!");
 
         cpp2il.Cleanup();
@@ -143,6 +144,7 @@ internal class Core : MelonModule
                 File.Delete(filepath);
             }
         }
+
         Config.Values.OldFiles.Clear();
     }
 
@@ -162,6 +164,7 @@ internal class Core : MelonModule
             Directory.CreateDirectory(il2CppAssembliesDirectory);
             File.Move(filepath, newfilepath);
         }
+
         Config.Save();
     }
 }

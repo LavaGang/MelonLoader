@@ -23,6 +23,7 @@ internal class ZipAESTransform : ICryptoTransform
                 TransformFinalBlock(dummy, 0, 0);
                 _finalised = true;
             }
+
             return Hash;
         }
     }
@@ -116,15 +117,18 @@ internal class ZipAESTransform : ICryptoTransform
                 _encryptor.TransformBlock(_counterNonce, 0, _blockSize, _encryptBuffer, 0);
                 _encrPos = 0;
             }
+
             outputBuffer[ix + outputOffset] = (byte)(inputBuffer[ix + inputOffset] ^ _encryptBuffer[_encrPos++]);
             //
             ix++;
         }
+
         if (_writeMode)
         {
             // This does not change the buffer.
             _hmacsha1.AppendData(outputBuffer, outputOffset, inputCount);
         }
+
         return inputCount;
     }
 

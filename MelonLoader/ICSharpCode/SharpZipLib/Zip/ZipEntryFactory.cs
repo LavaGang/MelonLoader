@@ -130,6 +130,7 @@ public class ZipEntryFactory : IEntryFactory
             {
                 throw new ArgumentException("Value is too old to be valid", nameof(value));
             }
+
             fixedDateTime_ = value;
         }
     }

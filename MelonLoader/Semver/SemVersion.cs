@@ -189,7 +189,7 @@ public sealed class SemVersion : IComparable<SemVersion>, IComparable, ISerializ
     /// <returns><see langword="true"/> if the two values are equal, otherwise <see langword="false"/>.</returns>
     public static bool Equals(SemVersion versionA, SemVersion versionB)
     {
-        return ReferenceEquals(versionA, versionB) || versionA is not null && versionB is not null && versionA.Equals(versionB);
+        return ReferenceEquals(versionA, versionB) || (versionA is not null && versionB is not null && versionA.Equals(versionB));
     }
 
     /// <summary>
@@ -200,9 +200,7 @@ public sealed class SemVersion : IComparable<SemVersion>, IComparable, ISerializ
     /// <returns>A signed number indicating the relative values of <paramref name="versionA"/> and <paramref name="versionB"/>.</returns>
     public static int Compare(SemVersion versionA, SemVersion versionB)
     {
-        if (ReferenceEquals(versionA, versionB))
-            return 0;
-        return versionA is null ? -1 : versionB is null ? 1 : versionA.CompareTo(versionB);
+        return ReferenceEquals(versionA, versionB) ? 0 : versionA is null ? -1 : versionB is null ? 1 : versionA.CompareTo(versionB);
     }
 
     /// <summary>
@@ -295,11 +293,13 @@ public sealed class SemVersion : IComparable<SemVersion>, IComparable, ISerializ
             version.Append('-');
             version.Append(Prerelease);
         }
+
         if (Build.Length > 0)
         {
             version.Append('+');
             version.Append(Build);
         }
+
         return version.ToString();
     }
 

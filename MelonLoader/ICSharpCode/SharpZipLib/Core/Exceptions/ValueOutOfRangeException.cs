@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace MelonLoader.ICSharpCode.SharpZipLib;
+namespace MelonLoader.ICSharpCode.SharpZipLib.Core.Exceptions;
 
 /// <summary>
 /// Indicates that a value was outside of the expected range when decoding an input stream

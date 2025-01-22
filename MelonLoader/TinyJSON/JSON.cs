@@ -84,7 +84,7 @@ public static class JSON
 
     public static Variant Load(string json)
     {
-        return string.IsNullOrEmpty(json) ? throw new ArgumentNullException("json") : Decoder.Decode(json);
+        return string.IsNullOrEmpty(json) ? throw new ArgumentNullException(nameof(json)) : Decoder.Decode(json);
     }
 
     public static string Dump(object data)
@@ -127,6 +127,7 @@ public static class JSON
         {
             throw new ArgumentNullException(nameof(item));
         }
+
         DecodeFields(data, ref item);
     }
 

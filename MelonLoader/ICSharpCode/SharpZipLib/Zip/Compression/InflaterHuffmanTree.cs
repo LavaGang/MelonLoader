@@ -41,18 +41,22 @@ public class InflaterHuffmanTree
             {
                 codeLengths[i++] = 8;
             }
+
             while (i < 256)
             {
                 codeLengths[i++] = 9;
             }
+
             while (i < 280)
             {
                 codeLengths[i++] = 7;
             }
+
             while (i < 288)
             {
                 codeLengths[i++] = 8;
             }
+
             defLitLenTree = new InflaterHuffmanTree(codeLengths);
 
             codeLengths = new byte[32];
@@ -61,6 +65,7 @@ public class InflaterHuffmanTree
             {
                 codeLengths[i++] = 5;
             }
+
             defDistTree = new InflaterHuffmanTree(codeLengths);
         }
         catch (Exception)
@@ -143,6 +148,7 @@ public class InflaterHuffmanTree
             {
                 continue;
             }
+
             code = nextCode[bits];
             int revcode = DeflaterHuffman.BitReverse(code);
             if (bits <= 9)
@@ -164,6 +170,7 @@ public class InflaterHuffmanTree
                     revcode += 1 << bits;
                 } while (revcode < treeLen);
             }
+
             nextCode[bits] = code + (1 << (16 - bits));
         }
     }
@@ -192,9 +199,11 @@ public class InflaterHuffmanTree
                 {
                     throw new SharpZipBaseException("Encountered invalid codelength 0");
                 }
+
                 input.DropBits(bitlen);
                 return symbol >> 4;
             }
+
             var subtree = -(symbol >> 4);
             if ((lookahead = input.PeekBits(bitlen)) >= 0)
             {

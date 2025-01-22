@@ -52,6 +52,7 @@ internal class IPA_Module : MelonModule
             else
                 rotten.Add(rm);
         }
+
         return new ResolvedMelons(melons.ToArray(), rotten.ToArray());
     }
 

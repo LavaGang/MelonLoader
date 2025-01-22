@@ -60,6 +60,7 @@ public class FastAccess
             if (property is not null)
                 return CreateGetterHandler(property);
         }
+
         return null;
     }
 

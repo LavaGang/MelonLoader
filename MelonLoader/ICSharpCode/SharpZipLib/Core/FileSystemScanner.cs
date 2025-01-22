@@ -352,6 +352,7 @@ public class FileSystemScanner
             handler(this, args);
             alive_ = args.ContinueRunning;
         }
+
         return result;
     }
 
@@ -372,6 +373,7 @@ public class FileSystemScanner
             FileFailure(this, args);
             alive_ = args.ContinueRunning;
         }
+
         return result;
     }
 

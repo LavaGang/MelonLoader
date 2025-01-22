@@ -58,6 +58,7 @@ internal class Watcher
             MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
             ShouldDisableFileWatcherFunctionality = true;
         }
+
         FileWatcher = null;
     }
 
@@ -68,6 +69,7 @@ internal class Watcher
             PrefFile.IsSaving = false;
             return;
         }
+
         MelonPreferences.LoadFileAndRefreshCategories(PrefFile);
     }
 }

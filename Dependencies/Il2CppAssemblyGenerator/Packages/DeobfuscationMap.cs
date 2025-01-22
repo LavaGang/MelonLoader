@@ -36,6 +36,7 @@ internal class DeobfuscationMap : Models.PackageBase
             if (!hashstr.Equals(Version, StringComparison.OrdinalIgnoreCase))
                 return true;
         }
+
         return false;
     }
 }
