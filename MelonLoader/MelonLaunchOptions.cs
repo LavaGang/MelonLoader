@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MelonLoader;
 
@@ -97,6 +98,7 @@ public static class MelonLaunchOptions
     #region Obsolete
 
     [Obsolete("Use LoaderConfig.Current.Loader instead.")]
+    [SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "It's deprecated")]
     public static class Core
     {
         [Obsolete("This option isn't used anymore.")]
@@ -181,6 +183,7 @@ public static class MelonLaunchOptions
         public static bool OfflineMode => LoaderConfig.Current.UnityEngine.ForceOfflineGeneration;
 
         [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion instead.")]
+        [SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "It's deprecated")]
         public static string ForceVersion_Dumper => LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion;
 
         [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceGeneratorRegex instead.")]

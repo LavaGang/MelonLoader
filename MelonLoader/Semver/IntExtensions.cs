@@ -19,13 +19,5 @@ internal static class IntExtensions
     /// fastest way to get a number of digits.
     /// </remarks>
     public static int Digits(this int n)
-    {
-        if (n < 10)
-            return 1;
-        if (n < 100)
-            return 2;
-        if (n < 1_000)
-            return 3;
-        return n < 10_000 ? 4 : n < 100_000 ? 5 : n < 1_000_000 ? 6 : n < 10_000_000 ? 7 : n < 100_000_000 ? 8 : n < 1_000_000_000 ? 9 : 10;
-    }
+        => n < 10 ? 1 : n < 100 ? 2 : n < 1_000 ? 3 : n < 10_000 ? 4 : n < 100_000 ? 5 : n < 1_000_000 ? 6 : n < 10_000_000 ? 7 : n < 100_000_000 ? 8 : n < 1_000_000_000 ? 9 : 10;
 }

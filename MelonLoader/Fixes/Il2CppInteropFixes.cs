@@ -386,7 +386,7 @@ internal static unsafe class Il2CppInteropFixes
             return false;
         }
 
-        assemblyName = assemblyName.StartsWith("Il2Cpp") ? assemblyName.Remove(0, 6) : $"Il2Cpp{assemblyName}";
+        assemblyName = assemblyName.StartsWith("Il2Cpp") ? assemblyName[6..] : $"Il2Cpp{assemblyName}";
 
         if (contexts.TryGetValue(assemblyName, out __result))
         {
@@ -421,7 +421,7 @@ internal static unsafe class Il2CppInteropFixes
             return false;
         }
 
-        assemblyName = assemblyName.StartsWith("Il2Cpp") ? assemblyName.Remove(0, 6) : $"Il2Cpp{assemblyName}";
+        assemblyName = assemblyName.StartsWith("Il2Cpp") ? assemblyName[6..] : $"Il2Cpp{assemblyName}";
         if (contexts.TryGetValue(assemblyName, out rewriteContext))
         {
             //LogDebugMsg($"[RewriteGlobalContext] Found: {assemblyName}");

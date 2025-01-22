@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MelonLoader;
 
+[SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "It's public API")]
 public class MelonPreferences_Category
 {
     public readonly List<MelonPreferences_Entry> Entries = [];

@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UnityEngine;
-using System.Diagnostics.CodeAnalysis;
 
 #if SM_Il2Cpp
 using Il2CppInterop.Runtime;

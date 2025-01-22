@@ -183,7 +183,7 @@ public static class MelonPreferences
 
     public static MelonPreferences_ReflectiveCategory CreateCategory<T>(string identifier, string displayName = null) where T : new() => MelonPreferences_ReflectiveCategory.Create<T>(identifier, displayName);
 
-    [Obsolete]
+    [Obsolete("Use the generic variant instead.", true)]
     public static MelonPreferences_Entry CreateEntry<T>(string categoryIdentifier, string entryIdentifier,
         T defaultValue, string displayName, bool isHidden)
         => CreateEntry(categoryIdentifier, entryIdentifier, defaultValue, displayName, null, isHidden, false, null);

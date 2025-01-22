@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Tomlet;
 using Tomlet.Exceptions;
 using Tomlet.Models;
 
 namespace MelonLoader.Preferences;
 
+[SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "It's public API")]
 public class MelonPreferences_ReflectiveCategory
 {
     private readonly Type SystemType;

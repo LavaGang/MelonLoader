@@ -346,7 +346,7 @@ public abstract class MelonBase
             MelonLogger.MsgDirect($"- {melon.Info.Name} is only compatible with the following Process Names:");
 
             foreach (var p in melon.SupportedProcesses)
-                MelonLogger.MsgDirect($"    - '{p.EXE_Name}'");
+                MelonLogger.MsgDirect($"    - '{p.ExecutableName}'");
         }
 
         if (incompatibilities.Contains(Incompatibility.Platform))

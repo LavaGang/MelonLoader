@@ -51,7 +51,7 @@ public static class MelonUtils
         UnityInformationHandler.Setup();
 
         CurrentGameAttribute = new MelonGameAttribute(UnityInformationHandler.GameDeveloper, UnityInformationHandler.GameName);
-        CurrentPlatform = IsGame32Bit() ? MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X86 : MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64;
+        CurrentPlatform = IsGame32Bit() ? MelonPlatformAttribute.CompatiblePlatforms.WindowsX86 : MelonPlatformAttribute.CompatiblePlatforms.WindowsX64;
         CurrentDomain = IsGameIl2Cpp() ? MelonPlatformDomainAttribute.CompatibleDomains.IL2CPP : MelonPlatformDomainAttribute.CompatibleDomains.MONO;
     }
 

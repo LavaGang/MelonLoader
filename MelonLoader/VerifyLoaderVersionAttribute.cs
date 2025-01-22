@@ -4,7 +4,7 @@ using System;
 namespace MelonLoader;
 
 [AttributeUsage(AttributeTargets.Assembly)]
-public class VerifyLoaderVersionAttribute(SemVersion semver, bool is_minimum) : Attribute
+public class VerifyLoaderVersionAttribute(SemVersion semver, bool isMinimum) : Attribute
 {
     /// <summary>
     /// Specified SemVersion.
@@ -34,13 +34,13 @@ public class VerifyLoaderVersionAttribute(SemVersion semver, bool is_minimum) : 
     /// <summary>
     /// If Version Specified is a Minimum.
     /// </summary>
-    public bool IsMinimum { get; private set; } = is_minimum;
+    public bool IsMinimum { get; private set; } = isMinimum;
 
     public VerifyLoaderVersionAttribute(int major, int minor, int patch) : this(new SemVersion(major, minor, patch), false) { }
-    public VerifyLoaderVersionAttribute(int major, int minor, int patch, string prerelease, bool is_minimum = false) : this(new SemVersion(major, minor, patch, prerelease), is_minimum) { }
-    public VerifyLoaderVersionAttribute(int major, int minor, int patch, bool is_minimum) : this(new SemVersion(major, minor, patch), is_minimum) { }
+    public VerifyLoaderVersionAttribute(int major, int minor, int patch, string prerelease, bool isMinimum = false) : this(new SemVersion(major, minor, patch, prerelease), isMinimum) { }
+    public VerifyLoaderVersionAttribute(int major, int minor, int patch, bool isMinimum) : this(new SemVersion(major, minor, patch), isMinimum) { }
     public VerifyLoaderVersionAttribute(string version) : this(version, false) { }
-    public VerifyLoaderVersionAttribute(string version, bool is_minimum) : this(SemVersion.Parse(version), is_minimum) { }
+    public VerifyLoaderVersionAttribute(string version, bool isMinimum) : this(SemVersion.Parse(version), isMinimum) { }
 
     public bool IsCompatible(SemVersion version)
         => SemVer == null || version == null || (IsMinimum ? SemVer <= version : SemVer == version);

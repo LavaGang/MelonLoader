@@ -54,16 +54,16 @@ public static class MelonHandler
     public static List<MelonMod> Mods => MelonTypeBase<MelonMod>.RegisteredMelons.ToList();
 
     [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
-    public static void LoadFromFile(string filelocation, bool is_plugin) => LoadFromFile(filelocation);
+    public static void LoadFromFile(string filelocation, bool isPlugin) => LoadFromFile(filelocation);
 
     [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
     public static void LoadFromByteArray(byte[] filedata, string filelocation) => LoadFromByteArray(filedata, filepath: filelocation);
 
     [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
-    public static void LoadFromByteArray(byte[] filedata, string filelocation, bool is_plugin) => LoadFromByteArray(filedata, filepath: filelocation);
+    public static void LoadFromByteArray(byte[] filedata, string filelocation, bool isPlugin) => LoadFromByteArray(filedata, filepath: filelocation);
 
     [Obsolete("Use 'MelonBase.Load' and 'MelonBase.Register' instead.")]
-    public static void LoadFromAssembly(Assembly asm, string filelocation, bool is_plugin) => LoadFromAssembly(asm, filelocation);
+    public static void LoadFromAssembly(Assembly asm, string filelocation, bool isPlugin) => LoadFromAssembly(asm, filelocation);
 
     [Obsolete("Use 'MelonBase.Hash' instead.")]
     public static string GetMelonHash(MelonBase melonBase)
