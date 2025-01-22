@@ -3,7 +3,6 @@ using System.Reflection;
 using UnityEngine;
 using System.Diagnostics.CodeAnalysis;
 
-
 #if SM_Il2Cpp
 using Il2CppInterop.Runtime;
 #endif
@@ -12,7 +11,6 @@ namespace MelonLoader.Support;
 
 [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used by Unity through reflection")]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used by Unity through reflection")]
-[SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "It is necessary")]
 internal class SM_Component : MonoBehaviour
 {
     private bool isQuitting;

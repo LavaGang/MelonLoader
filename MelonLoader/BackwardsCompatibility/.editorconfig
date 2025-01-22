@@ -1,2 +1,3 @@
 [*.cs]
 dotnet_style_namespace_match_folder = false
+dotnet_diagnostic.CA1707.severity = none

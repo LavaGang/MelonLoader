@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MelonLoader.Assertions;
 
@@ -10,15 +11,17 @@ public static class LemonAssertMapping
 
     internal static void Setup()
     {
-        Register_IsNull<object>(IsNull_object);
-        Register_IsNull<string>(IsNull_string);
-        Register_IsEqual<object>(IsEqual_object);
+        RegisterIsNull<object>(IsNull_object);
+        RegisterIsNull<string>(IsNull_string);
+        RegisterIsEqual<object>(IsEqual_object);
     }
 
-    public static void Register_IsNull<T>(Func<T, bool> method)
+    public static void RegisterIsNull<T>(Func<T, bool> method)
         => Register<T>(method, ref IsNull);
-    public static void Register_IsEqual<T>(Func<T, T, bool> method)
+
+    public static void RegisterIsEqual<T>(Func<T, T, bool> method)
         => Register<T>(method, ref IsEqual);
+
     private static void Register<T>(Delegate method, ref Dictionary<Type, Delegate> tbl)
     {
         if (method == null)
@@ -38,4 +41,18 @@ public static class LemonAssertMapping
     {
         return obj == null ? obj2 == null : obj2 == null ? obj == null : obj.Equals(obj2);
     }
+
+    #region Obsolete
+
+    [Obsolete("Use RegisterIsNull instead.", true)]
+    [SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "Reason for deprecation")]
+    public static void Register_IsNull<T>(Func<T, bool> method)
+        => Register<T>(method, ref IsNull);
+
+    [Obsolete("Use RegisterIsNull instead.", true)]
+    [SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "Reason for deprecation")]
+    public static void Register_IsEqual<T>(Func<T, T, bool> method)
+        => Register<T>(method, ref IsEqual);
+
+    #endregion
 }

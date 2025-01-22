@@ -1,4 +1,5 @@
-﻿using MelonLoader.Support.Preferences;
+﻿using MelonLoader.Modules;
+using MelonLoader.Support.Preferences;
 using System.Reflection;
 using UnityEngine;
 
@@ -8,11 +9,11 @@ namespace MelonLoader.Support;
 
 internal static class Main
 {
-    internal static ISupportModule_From Interface = null;
+    internal static ISupportModuleFrom Interface = null;
     internal static GameObject obj = null;
     internal static SM_Component component = null;
 
-    private static ISupportModule_To Initialize(ISupportModule_From interface_from)
+    private static ISupportModuleTo Initialize(ISupportModuleFrom interface_from)
     {
         Interface = interface_from;
         UnityMappers.RegisterMappers();

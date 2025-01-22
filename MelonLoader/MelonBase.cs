@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Reflection;
 
 namespace MelonLoader;
 
+[SuppressMessage("Naming", "CA1708: Identifiers should differ by more than case", Justification = "The faulty member is already deprecated")]
 public abstract class MelonBase
 {
     #region Static

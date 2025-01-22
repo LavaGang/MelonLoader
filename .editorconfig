@@ -59,6 +59,9 @@ dotnet_diagnostic.CA1845.severity = warning
 csharp_preserve_single_line_statements = false
 csharp_preserve_single_line_blocks = true
 
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = none
+
 [*.{cs,vb}]
 #### Naming styles ####
 

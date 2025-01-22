@@ -23,19 +23,19 @@ public sealed class MelonAssembly
 
     public static event LemonFunc<Assembly, ResolvedMelons> CustomMelonResolvers;
 
-    internal static List<MelonAssembly> loadedAssemblies = [];
+    internal static List<MelonAssembly> _loadedAssemblies = [];
 
     /// <summary>
     /// List of all loaded MelonAssemblies.
     /// </summary>
-    public static ReadOnlyCollection<MelonAssembly> LoadedAssemblies => loadedAssemblies.AsReadOnly();
+    public static ReadOnlyCollection<MelonAssembly> LoadedAssemblies => _loadedAssemblies.AsReadOnly();
 
     /// <summary>
     /// Tries to find the instance of Melon with type T, whether it's registered or not
     /// </summary>
     public static T FindMelonInstance<T>() where T : MelonBase
     {
-        foreach (var asm in loadedAssemblies)
+        foreach (var asm in _loadedAssemblies)
         {
             foreach (var melon in asm.loadedMelons)
             {
@@ -59,7 +59,7 @@ public sealed class MelonAssembly
             return melon.MelonAssembly;
 
         var name = member.DeclaringType.Assembly.FullName;
-        var ma = loadedAssemblies.Find(x => x.Assembly.FullName == name);
+        var ma = _loadedAssemblies.Find(x => x.Assembly.FullName == name);
         return ma;
     }
 
@@ -138,7 +138,7 @@ public sealed class MelonAssembly
             return null;
         }
 
-        var ma = loadedAssemblies.Find(x => x.Assembly.FullName == assembly.FullName);
+        var ma = _loadedAssemblies.Find(x => x.Assembly.FullName == assembly.FullName);
         if (ma != null)
             return ma;
 
@@ -148,7 +148,7 @@ public sealed class MelonAssembly
 
         OnAssemblyResolving.Invoke(assembly);
         ma = new MelonAssembly(assembly, path);
-        loadedAssemblies.Add(ma);
+        _loadedAssemblies.Add(ma);
 
         if (loadMelons)
             ma.LoadMelons();

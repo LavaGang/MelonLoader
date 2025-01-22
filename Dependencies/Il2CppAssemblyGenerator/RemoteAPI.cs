@@ -1,4 +1,5 @@
-﻿using Semver;
+﻿using Newtonsoft.Json;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -12,9 +13,16 @@ internal static class RemoteAPI
 {
     internal class InfoStruct
     {
+        [JsonProperty("forceCpp2IlVersion")]
         internal string ForceDumperVersion = null;
+
+        [JsonProperty("obfuscationRegex")]
         internal string ObfuscationRegex = null;
+
+        [JsonProperty("mappingUrl")]
         internal string MappingURL = null;
+
+        [JsonProperty("mappingFileSHA512")]
         internal string MappingFileSHA512 = null;
     }
     internal static InfoStruct Info = new();
@@ -122,29 +130,7 @@ internal static class RemoteAPI
 
             internal static InfoStruct Contact(string response_str)
             {
-                var responseobj = MelonUtils.ParseJSONStringtoStruct<ResponseStruct>(response_str);
-                if (responseobj == null)
-                    return null;
-
-                var returninfo = new InfoStruct
-                {
-                    ForceDumperVersion = responseobj.forceCpp2IlVersion,
-                    ObfuscationRegex = responseobj.obfuscationRegex,
-                    MappingURL = responseobj.mappingUrl,
-                    MappingFileSHA512 = responseobj.mappingFileSHA512
-                };
-                return returninfo;
-            }
-
-            internal class ResponseStruct
-            {
-                public string gameSlug = null;
-                public string gameName = null;
-                public string mappingUrl = null;
-                public string mappingFileSHA512 = null;
-                public string forceCpp2IlVersion = null;
-                public string forceUnhollowerVersion = null; //TODO: Remove this from the API
-                public string obfuscationRegex = null;
+                return JsonConvert.DeserializeObject<InfoStruct>(response_str);
             }
         }
     }

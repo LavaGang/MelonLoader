@@ -27,6 +27,7 @@
         <InternalsVisibleTo Include="Il2CppAssemblyGenerator" />
         <InternalsVisibleTo Include="Il2CppUnityTls" />
         <InternalsVisibleTo Include="Il2Cpp" />
+        <InternalsVisibleTo Include="Mono" />
         <InternalsVisibleTo Include="MelonStartScreen" />
         <InternalsVisibleTo Include="EOS" />
     </ItemGroup>

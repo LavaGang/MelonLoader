@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using MelonLoader.Modules;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MelonLoader.Support;
 
-internal class SupportModule_To : ISupportModule_To
+internal class SupportModule_To : ISupportModuleTo
 {
     internal static readonly List<IEnumerator> QueuedCoroutines = [];
     public object StartCoroutine(IEnumerator coroutine)
