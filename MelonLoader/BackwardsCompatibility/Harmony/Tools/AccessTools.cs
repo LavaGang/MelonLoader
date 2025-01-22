@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Harmony;
 
-[Obsolete("Harmony.AccessTools is Only Here for Compatibility Reasons. Please use HarmonyLib.AccessTools instead.")]
+[Obsolete("Harmony.AccessTools is Only Here for Compatibility Reasons. Please use HarmonyLib.AccessTools instead. This will be removed in a future version.", true)]
 public static class AccessTools
 {
     public static BindingFlags all = HarmonyLib.AccessTools.all;

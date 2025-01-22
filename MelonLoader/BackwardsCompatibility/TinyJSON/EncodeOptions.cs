@@ -12,6 +12,6 @@ public enum EncodeOptions
     IncludePublicProperties = 4,
     EnforceHierarchyOrder = 8,
 
-    [Obsolete("Use EncodeOptions.EnforceHierarchyOrder instead.")]
+    [Obsolete("Use EncodeOptions.EnforceHierarchyOrder instead. This will be removed in a future version.", true)]
     EnforceHeirarchyOrder = EnforceHierarchyOrder
 }

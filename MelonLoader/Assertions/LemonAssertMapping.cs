@@ -44,12 +44,12 @@ public static class LemonAssertMapping
 
     #region Obsolete
 
-    [Obsolete("Use RegisterIsNull instead.", true)]
+    [Obsolete("Use RegisterIsNull instead. This will be removed in a future version.", true)]
     [SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "Reason for deprecation")]
     public static void Register_IsNull<T>(Func<T, bool> method)
         => Register<T>(method, ref IsNull);
 
-    [Obsolete("Use RegisterIsNull instead.", true)]
+    [Obsolete("Use RegisterIsNull instead. This will be removed in a future version.", true)]
     [SuppressMessage("Naming", "CA1707: Identifiers should not contain underscores", Justification = "Reason for deprecation")]
     public static void Register_IsEqual<T>(Func<T, T, bool> method)
         => Register<T>(method, ref IsEqual);

@@ -11,7 +11,7 @@ public delegate object InstantiationHandler();
 
 public class FastAccess
 {
-    [Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true))")]
+    [Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true)). This will be removed in a future version.", true)]
     public static InstantiationHandler CreateInstantiationHandler(Type type)
     {
         var constructorInfo = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, [], null) 
@@ -23,7 +23,7 @@ public class FastAccess
         return (InstantiationHandler)dynamicMethod.Generate().CreateDelegate(typeof(InstantiationHandler));
     }
 
-    [Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true))")]
+    [Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true)). This will be removed in a future version.", true)]
     public static GetterHandler CreateGetterHandler(PropertyInfo propertyInfo)
     {
         var getMethodInfo = propertyInfo.GetGetMethod(true);
@@ -35,7 +35,7 @@ public class FastAccess
         return (GetterHandler)dynamicGet.Generate().CreateDelegate(typeof(GetterHandler));
     }
 
-    [Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo)")]
+    [Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo). This will be removed in a future version.", true)]
     public static GetterHandler CreateGetterHandler(FieldInfo fieldInfo)
     {
         var dynamicGet = CreateGetDynamicMethod(fieldInfo.DeclaringType);
@@ -47,7 +47,7 @@ public class FastAccess
     }
 
     [Obsolete("Use AccessTools.FieldRefAccess<T, S>(name) for fields and " +
-        "AccessTools.MethodDelegate<Func<T, S>>(AccessTools.PropertyGetter(typeof(T), name)) for properties")]
+        "AccessTools.MethodDelegate<Func<T, S>>(AccessTools.PropertyGetter(typeof(T), name)) for properties. This will be removed in a future version.", true)]
     public static GetterHandler CreateFieldGetter(Type type, params string[] names)
     {
         foreach (var name in names)
@@ -63,7 +63,7 @@ public class FastAccess
         return null;
     }
 
-    [Obsolete("Use AccessTools.MethodDelegate<Action<T, S>>(PropertyInfo.GetSetMethod(true))")]
+    [Obsolete("Use AccessTools.MethodDelegate<Action<T, S>>(PropertyInfo.GetSetMethod(true)). This will be removed in a future version.", true)]
     public static SetterHandler CreateSetterHandler(PropertyInfo propertyInfo)
     {
         var setMethodInfo = propertyInfo.GetSetMethod(true);
@@ -76,7 +76,7 @@ public class FastAccess
         return (SetterHandler)dynamicSet.Generate().CreateDelegate(typeof(SetterHandler));
     }
 
-    [Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo)")]
+    [Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo). This will be removed in a future version.", true)]
     public static SetterHandler CreateSetterHandler(FieldInfo fieldInfo)
     {
         var dynamicSet = CreateSetDynamicMethod(fieldInfo.DeclaringType);

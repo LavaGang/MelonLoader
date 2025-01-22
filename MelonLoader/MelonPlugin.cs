@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-#pragma warning disable 0618 // Disabling the obsolete references warning to prevent the IDE going crazy when subscribing deprecated methods to some events in RegisterCallbacks
 
 namespace MelonLoader;
 
@@ -17,10 +16,20 @@ public abstract class MelonPlugin : MelonTypeBase<MelonPlugin>
 
         MelonEvents.OnPreInitialization.Subscribe(OnPreInitialization, Priority);
         MelonEvents.OnApplicationEarlyStart.Subscribe(OnApplicationEarlyStart, Priority);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+        RegisterObsoleteCallbacks();
+#pragma warning restore CS0618 // Type or member is obsolete
+
         MelonEvents.OnPreModsLoaded.Subscribe(OnPreModsLoaded, Priority);
-        MelonEvents.OnPreModsLoaded.Subscribe(OnApplicationStart, Priority);
         MelonEvents.OnApplicationStart.Subscribe(OnApplicationStarted, Priority);
         MelonEvents.OnPreSupportModule.Subscribe(OnPreSupportModule, Priority);
+    }
+
+    [Obsolete("Used to make obsolete callbacks still function.")]
+    private void RegisterObsoleteCallbacks()
+    {
+        MelonEvents.OnPreModsLoaded.Subscribe(OnApplicationStart, Priority);
     }
 
     private protected override bool RegisterInternal()
@@ -69,7 +78,7 @@ public abstract class MelonPlugin : MelonTypeBase<MelonPlugin>
 
     [Obsolete()]
     private MelonPluginInfoAttribute _LegacyInfoAttribute = null;
-    [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead.")]
+    [Obsolete("MelonPlugin.InfoAttribute is obsolete. Please use MelonBase.Info instead. This will be removed in a future version.", true)]
     public MelonPluginInfoAttribute InfoAttribute
     {
         get
@@ -80,7 +89,7 @@ public abstract class MelonPlugin : MelonTypeBase<MelonPlugin>
     }
     [Obsolete()]
     private MelonPluginGameAttribute[] _LegacyGameAttributes = null;
-    [Obsolete("MelonPlugin.GameAttributes is obsolete. Please use MelonBase.Games instead.")]
+    [Obsolete("MelonPlugin.GameAttributes is obsolete. Please use MelonBase.Games instead. This will be removed in a future version.", true)]
     public MelonPluginGameAttribute[] GameAttributes
     {
         get

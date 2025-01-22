@@ -5,7 +5,7 @@ using System.Reflection.Emit;
 
 namespace Harmony;
 
-[Obsolete("Harmony.HarmonyInstance is obsolete. Please use HarmonyLib.Harmony instead.")]
+[Obsolete("Harmony.HarmonyInstance is obsolete. Please use HarmonyLib.Harmony instead. This will be removed in a future version.", true)]
 public class HarmonyInstance(string id) : HarmonyLib.Harmony(id)
 {
     public static HarmonyInstance Create(string id)

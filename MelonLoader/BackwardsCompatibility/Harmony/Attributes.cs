@@ -2,7 +2,7 @@
 
 namespace Harmony;
 
-[Obsolete("Harmony.MethodType is Only Here for Compatibility Reasons. Please use HarmonyLib.MethodType instead.")]
+[Obsolete("Harmony.MethodType is Only Here for Compatibility Reasons. Please use HarmonyLib.MethodType instead. This will be removed in a future version.", true)]
 public enum MethodType
 {
     Normal = HarmonyLib.MethodType.Normal,
@@ -12,14 +12,14 @@ public enum MethodType
     StaticConstructor = HarmonyLib.MethodType.StaticConstructor
 }
 
-[Obsolete("Harmony.PropertyMethod is Only Here for Compatibility Reasons. Please use HarmonyLib.MethodType instead.")]
+[Obsolete("Harmony.PropertyMethod is Only Here for Compatibility Reasons. Please use HarmonyLib.MethodType instead. This will be removed in a future version.", true)]
 public enum PropertyMethod
 {
     Getter = HarmonyLib.MethodType.Getter,
     Setter = HarmonyLib.MethodType.Setter
 }
 
-[Obsolete("Harmony.ArgumentType is Only Here for Compatibility Reasons. Please use HarmonyLib.ArgumentType instead.")]
+[Obsolete("Harmony.ArgumentType is Only Here for Compatibility Reasons. Please use HarmonyLib.ArgumentType instead. This will be removed in a future version.", true)]
 public enum ArgumentType
 {
     Normal = HarmonyLib.ArgumentType.Normal,
@@ -28,7 +28,7 @@ public enum ArgumentType
     Pointer = HarmonyLib.ArgumentType.Pointer
 }
 
-[Obsolete("Harmony.HarmonyPatchType is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatchType instead.")]
+[Obsolete("Harmony.HarmonyPatchType is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatchType instead. This will be removed in a future version. This will be removed in a future version.", true)]
 public enum HarmonyPatchType
 {
     All = HarmonyLib.HarmonyPatchType.All,
@@ -37,111 +37,111 @@ public enum HarmonyPatchType
     Transpiler = HarmonyLib.HarmonyPatchType.Transpiler
 }
 
-[Obsolete("Harmony.HarmonyAttribute is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyAttribute instead.")]
+[Obsolete("Harmony.HarmonyAttribute is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyAttribute instead. This will be removed in a future version.", true)]
 public class HarmonyAttribute : HarmonyLib.HarmonyAttribute { }
 
-[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+[Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Delegate | AttributeTargets.Method, AllowMultiple = true)]
 public class HarmonyPatch : HarmonyLib.HarmonyPatch
 {
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch() : base() { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType) : base(declaringType) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, Type[] argumentTypes) : base(declaringType, argumentTypes) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, string methodName) : base(declaringType, methodName) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, string methodName, params Type[] argumentTypes) : base(declaringType, methodName, argumentTypes) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, methodName, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, MethodType methodType) : base(declaringType, (HarmonyLib.MethodType)methodType) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, MethodType methodType, params Type[] argumentTypes) : base(declaringType, (HarmonyLib.MethodType)methodType, argumentTypes) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, (HarmonyLib.MethodType)methodType, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type declaringType, string propertyName, MethodType methodType) : base(declaringType, propertyName, (HarmonyLib.MethodType)methodType) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(string methodName) : base(methodName) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(string methodName, params Type[] argumentTypes) : base(methodName, argumentTypes) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(methodName, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(string propertyName, MethodType methodType) : base(propertyName, (HarmonyLib.MethodType)methodType) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(MethodType methodType) : base((HarmonyLib.MethodType)methodType) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(MethodType methodType, params Type[] argumentTypes) : base((HarmonyLib.MethodType)methodType, argumentTypes) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base((HarmonyLib.MethodType)methodType, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type[] argumentTypes) : base(argumentTypes) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(Type[] argumentTypes, ArgumentType[] argumentVariations) : base(argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(string propertyName, PropertyMethod type) : base(propertyName, (HarmonyLib.MethodType)type) { }
-    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead.")]
+    [Obsolete("Harmony.HarmonyPatch is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatch instead. This will be removed in a future version.", true)]
     public HarmonyPatch(string assemblyQualifiedDeclaringType, string methodName, MethodType methodType, Type[] argumentTypes = null, ArgumentType[] argumentVariations = null) : base(assemblyQualifiedDeclaringType, methodName, (HarmonyLib.MethodType)methodType, argumentTypes, Array.ConvertAll(argumentVariations, x => (HarmonyLib.ArgumentType)x)) { }
 }
 
-[Obsolete("Harmony.HarmonyPatchAll is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatchAll instead.")]
+[Obsolete("Harmony.HarmonyPatchAll is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPatchAll instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Class)]
 public class HarmonyPatchAll : HarmonyLib.HarmonyPatchAll { }
 
-[Obsolete("Harmony.HarmonyPriority is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPriority instead.")]
+[Obsolete("Harmony.HarmonyPriority is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPriority instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class HarmonyPriority(int prioritiy) : HarmonyLib.HarmonyPriority(prioritiy) { }
 
-[Obsolete("Harmony.HarmonyBefore is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyBefore instead.")]
+[Obsolete("Harmony.HarmonyBefore is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyBefore instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class HarmonyBefore(params string[] before) : HarmonyLib.HarmonyBefore(before) { }
 
-[Obsolete("Harmony.HarmonyAfter is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyAfter instead.")]
+[Obsolete("Harmony.HarmonyAfter is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyAfter instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class HarmonyAfter(params string[] after) : HarmonyLib.HarmonyAfter(after) { }
 
-[Obsolete("Harmony.HarmonyPrepare is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPrepare instead.")]
+[Obsolete("Harmony.HarmonyPrepare is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPrepare instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Method)]
 public class HarmonyPrepare : HarmonyLib.HarmonyPrepare { }
 
-[Obsolete("Harmony.HarmonyCleanup is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyCleanup instead.")]
+[Obsolete("Harmony.HarmonyCleanup is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyCleanup instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Method)]
 public class HarmonyCleanup : HarmonyLib.HarmonyCleanup { }
 
-[Obsolete("Harmony.HarmonyTargetMethod is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyTargetMethod instead.")]
+[Obsolete("Harmony.HarmonyTargetMethod is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyTargetMethod instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Method)]
 public class HarmonyTargetMethod : HarmonyLib.HarmonyTargetMethod { }
 
-[Obsolete("Harmony.HarmonyTargetMethods is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyTargetMethods instead.")]
+[Obsolete("Harmony.HarmonyTargetMethods is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyTargetMethods instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Method)]
 public class HarmonyTargetMethods : HarmonyLib.HarmonyTargetMethods { }
 
-[Obsolete("Harmony.HarmonyPrefix is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPrefix instead.")]
+[Obsolete("Harmony.HarmonyPrefix is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPrefix instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Method)]
 public class HarmonyPrefix : HarmonyLib.HarmonyPrefix { }
 
-[Obsolete("Harmony.HarmonyPostfix is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPostfix instead.")]
+[Obsolete("Harmony.HarmonyPostfix is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPostfix instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Method)]
 public class HarmonyPostfix : HarmonyLib.HarmonyPostfix { }
 
-[Obsolete("Harmony.HarmonyTranspiler is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyTranspiler instead.")]
+[Obsolete("Harmony.HarmonyTranspiler is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyTranspiler instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Method)]
 public class HarmonyTranspiler : HarmonyLib.HarmonyTranspiler { }
 
-[Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead.")]
+[Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead. This will be removed in a future version.", true)]
 [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
 public class HarmonyArgument : HarmonyLib.HarmonyArgument
 {
-    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead.")]
+    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead. This will be removed in a future version.", true)]
     public HarmonyArgument(string originalName) : base(originalName, null) { }
-    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead.")]
+    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead. This will be removed in a future version.", true)]
     public HarmonyArgument(int index) : base(index, null) { }
-    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead.")]
+    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead. This will be removed in a future version.", true)]
     public HarmonyArgument(string originalName, string newName) : base(originalName, newName) { }
-    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead.")]
+    [Obsolete("Harmony.HarmonyArgument is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyArgument instead. This will be removed in a future version.", true)]
     public HarmonyArgument(int index, string name) : base(index, name) { }
 }

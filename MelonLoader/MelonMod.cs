@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-#pragma warning disable 0618 // Disabling the obsolete references warning to prevent the IDE going crazy when subscribing deprecated methods to some events in RegisterCallbacks
+using System.Diagnostics.CodeAnalysis;
 
 namespace MelonLoader;
 
@@ -19,7 +19,7 @@ public abstract class MelonMod : MelonTypeBase<MelonMod>
         }
         catch (Exception ex)
         {
-            MelonLogger.Error($"Failed to register {MelonTypeName} '{Location}': Melon failed to initialize in the deprecated OnPreSupportModule callback!");
+            MelonLogger.Error($"Failed to register {MelonTypeName} '{MelonAssembly.Location}': Melon failed to initialize in the deprecated OnPreSupportModule callback!");
             MelonLogger.Error(ex.ToString());
             return false;
         }
@@ -48,6 +48,14 @@ public abstract class MelonMod : MelonTypeBase<MelonMod>
         MelonEvents.OnSceneWasInitialized.Subscribe(OnSceneWasInitialized, Priority);
         MelonEvents.OnSceneWasUnloaded.Subscribe(OnSceneWasUnloaded, Priority);
 
+#pragma warning disable CS0618 // Type or member is obsolete
+        RegisterObsoleteCallbacks();
+#pragma warning restore CS0618 // Type or member is obsolete
+    }
+
+    [Obsolete("Used to make obsolete callbacks still function.")]
+    private void RegisterObsoleteCallbacks()
+    {
         MelonEvents.OnSceneWasLoaded.Subscribe((idx, name) => OnLevelWasLoaded(idx), Priority);
         MelonEvents.OnSceneWasInitialized.Subscribe((idx, name) => OnLevelWasInitialized(idx), Priority);
         MelonEvents.OnApplicationStart.Subscribe(OnApplicationStart, Priority);
@@ -73,14 +81,14 @@ public abstract class MelonMod : MelonTypeBase<MelonMod>
     #endregion
 
     #region Obsolete Members
-    [Obsolete("Override OnSceneWasLoaded instead.")]
+    [Obsolete("Override OnSceneWasLoaded instead. This will be removed in a future version.", true)]
     public virtual void OnLevelWasLoaded(int level) { }
-    [Obsolete("Override OnSceneWasInitialized instead.")]
+    [Obsolete("Override OnSceneWasInitialized instead. This will be removed in a future version.", true)]
     public virtual void OnLevelWasInitialized(int level) { }
 
-    [Obsolete()]
+    [Obsolete]
     private MelonModInfoAttribute _LegacyInfoAttribute = null;
-    [Obsolete("Use MelonBase.Info instead.")]
+    [Obsolete("Use MelonBase.Info instead. This will be removed in a future version.", true)]
     public MelonModInfoAttribute InfoAttribute
     {
         get
@@ -91,7 +99,7 @@ public abstract class MelonMod : MelonTypeBase<MelonMod>
     }
     [Obsolete()]
     private MelonModGameAttribute[] _LegacyGameAttributes = null;
-    [Obsolete("Use MelonBase.Games instead.")]
+    [Obsolete("Use MelonBase.Games instead. This will be removed in a future version.", true)]
     public MelonModGameAttribute[] GameAttributes
     {
         get

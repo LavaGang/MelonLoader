@@ -43,7 +43,7 @@ public abstract class MelonPreferences_Entry
         OnValueChangedUntyped?.Invoke();
     }
 
-    [Obsolete("Please use the OnEntryValueChangedUntyped MelonEvent instead.")]
+    [Obsolete("Please use the OnEntryValueChangedUntyped MelonEvent instead. This will be removed in a future version.", true)]
     public event Action OnValueChangedUntyped;
 }
 
@@ -90,7 +90,7 @@ public class MelonPreferences_Entry<T> : MelonPreferences_Entry
 
     public readonly MelonEvent<T, T> OnEntryValueChanged = new();
 
-    [Obsolete("Please use the OnEntryValueChanged MelonEvent instead.")]
+    [Obsolete("Please use the OnEntryValueChanged MelonEvent instead. This will be removed in a future version.", true)]
     public event Action<T, T> OnValueChanged;
 
     public override Type GetReflectedType() => typeof(T);
@@ -124,8 +124,6 @@ public class MelonPreferences_Entry<T> : MelonPreferences_Entry
         var returnval = TomletMain.ValueFrom(Value);
         returnval.Comments.PrecedingComment = Description;
         returnval.Comments.InlineComment = Comment;
-        if (!string.IsNullOrEmpty(returnval.Comments.InlineComment))
-            returnval.Comments.InlineComment.Replace('\n', ' ');
         return returnval;
     }
 }

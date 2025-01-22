@@ -35,7 +35,7 @@ public class Il2CppAssetBundle(IntPtr ptr)
         }
     }
 
-    [Obsolete("Use IsStreamedSceneAssetBundle (starting with upper-case) instead.", true)]
+    [Obsolete("Use IsStreamedSceneAssetBundle (starting with upper-case) instead. This will be removed in a future version.", true)]
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
     public bool isStreamedSceneAssetBundle => IsStreamedSceneAssetBundle;
 
@@ -52,7 +52,7 @@ public class Il2CppAssetBundle(IntPtr ptr)
         }
     }
 
-    [Obsolete("Use MainAsset (starting with upper-case) instead.", true)]
+    [Obsolete("Use MainAsset (starting with upper-case) instead. This will be removed in a future version.", true)]
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
     public Object mainAsset => MainAsset;
 

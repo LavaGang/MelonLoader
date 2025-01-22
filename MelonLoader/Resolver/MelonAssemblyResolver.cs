@@ -7,8 +7,6 @@ using System.Reflection;
 using System.Runtime.Loader;
 #endif
 
-#pragma warning disable CS0618 // Type or member is obsolete
-
 namespace MelonLoader.Resolver;
 
 public class MelonAssemblyResolver
@@ -108,17 +106,28 @@ public class MelonAssemblyResolver
     // Assembly
     public delegate void OnAssemblyLoadHandler(Assembly assembly);
     public static event OnAssemblyLoadHandler OnAssemblyLoad;
+
     internal static void SafeInvoke_OnAssemblyLoad(Assembly assembly)
     {
 #if !NET6_0_OR_GREATER
-        // Backwards Compatibility
-        MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyLoad(assembly);
+#pragma warning disable CS0618 // Type or member is obsolete
+        InvokeObsoleteOnAssemblyLoad(assembly);
+#pragma warning restore CS0618 // Type or member is obsolete
 #endif
         OnAssemblyLoad?.Invoke(assembly);
     }
 
+#if !NET6_0_OR_GREATER
+    [Obsolete("Used to make the obsolete event still function.")]
+    private static void InvokeObsoleteOnAssemblyLoad(Assembly assembly)
+    {
+        MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyLoad(assembly);
+    }
+#endif
+
     public delegate Assembly OnAssemblyResolveHandler(string name, Version version);
     public static event OnAssemblyResolveHandler OnAssemblyResolve;
+
     internal static Assembly SafeInvoke_OnAssemblyResolve(string name, Version version)
     {
 #if NET6_0_OR_GREATER
@@ -127,13 +136,23 @@ public class MelonAssemblyResolver
 
 #else
 
-        // Backwards Compatibility
-        var assembly = MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyResolve(name, version);
+#pragma warning disable CS0618 // Type or member is obsolete
+        var assembly = InvokeObsoleteOnAssemblyResolve(name, version);
+#pragma warning restore CS0618 // Type or member is obsolete
+
         assembly ??= OnAssemblyResolve?.Invoke(name, version);
         return assembly;
 
 #endif
     }
+
+#if !NET6_0_OR_GREATER
+    [Obsolete("Used to make the obsolete event still function.")]
+    private static Assembly InvokeObsoleteOnAssemblyResolve(string name, Version version)
+    {
+        return MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyResolve(name, version);
+    }
+#endif
 
     public static AssemblyResolveInfo GetAssemblyResolveInfo(string name)
         => AssemblyManager.GetInfo(name);

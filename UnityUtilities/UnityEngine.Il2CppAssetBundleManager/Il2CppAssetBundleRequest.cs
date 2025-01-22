@@ -25,7 +25,7 @@ public class Il2CppAssetBundleCreateRequest(IntPtr ptr) : AsyncOperation(ptr)
         }
     }
 
-    [Obsolete("Use AssetBundle (starting with upper-case) instead.", true)]
+    [Obsolete("Use AssetBundle (starting with upper-case) instead. This will be removed in a future version.", true)]
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
     public Il2CppAssetBundle assetBundle => AssetBundle;
 
@@ -53,7 +53,7 @@ public class Il2CppAssetBundleRequest(IntPtr ptr) : AsyncOperation(ptr)
         }
     }
 
-    [Obsolete("Use Asset (starting with upper-case) instead.", true)]
+    [Obsolete("Use Asset (starting with upper-case) instead. This will be removed in a future version.", true)]
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
     public Object asset => Asset;
 
@@ -66,7 +66,7 @@ public class Il2CppAssetBundleRequest(IntPtr ptr) : AsyncOperation(ptr)
         }
     }
 
-    [Obsolete("Use AllAssets (starting with upper-case) instead.", true)]
+    [Obsolete("Use AllAssets (starting with upper-case) instead. This will be removed in a future version.", true)]
     [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
     public Il2CppReferenceArray<Object> allAssets => AllAssets;
 

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 
 namespace MelonLoader;
 
-[Obsolete("MelonLoader.MelonPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead.")]
+[Obsolete("MelonLoader.MelonPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead. This will be removed in a future version.", true)]
 public class MelonPrefs
 {
-    [Obsolete("MelonLoader.MelonPrefs.RegisterCategory is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateCategory instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.RegisterCategory is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateCategory instead. This will be removed in a future version.", true)]
     public static void RegisterCategory(string name, string displayText) => MelonPreferences.CreateCategory(name, displayText);
-    [Obsolete("MelonLoader.MelonPrefs.RegisterString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.RegisterString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future version.", true)]
     public static void RegisterString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
-    [Obsolete("MelonLoader.MelonPrefs.RegisterBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.RegisterBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future version.", true)]
     public static void RegisterBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
-    [Obsolete("MelonLoader.MelonPrefs.RegisterInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.RegisterInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future version.", true)]
     public static void RegisterInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
-    [Obsolete("MelonLoader.MelonPrefs.RegisterFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.RegisterFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future version.", true)]
     public static void RegisterFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => MelonPreferences.CreateEntry(section, name, defaultValue, displayText, hideFromList);
-    [Obsolete("MelonLoader.MelonPrefs.HasKey is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.HasEntry instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.HasKey is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.HasEntry instead. This will be removed in a future version.", true)]
     public static bool HasKey(string section, string name) => MelonPreferences.HasEntry(section, name);
-    [Obsolete("MelonLoader.MelonPrefs.GetPreferences is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.Categories instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.GetPreferences is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.Categories instead. This will be removed in a future version.", true)]
     public static Dictionary<string, Dictionary<string, MelonPreference>> GetPreferences()
     {
         Dictionary<string, Dictionary<string, MelonPreference>> output = [];
@@ -46,11 +46,11 @@ public class MelonPrefs
 
         return output;
     }
-    [Obsolete("MelonLoader.MelonPrefs.GetCategoryDisplayName is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetCategoryDisplayName instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.GetCategoryDisplayName is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetCategoryDisplayName instead. This will be removed in a future version.", true)]
     public static string GetCategoryDisplayName(string key) => MelonPreferences.GetCategory(key)?.DisplayName;
-    [Obsolete("MelonLoader.MelonPrefs.SaveConfig is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.Save instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.SaveConfig is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.Save instead. This will be removed in a future version.", true)]
     public static void SaveConfig() => MelonPreferences.Save();
-    [Obsolete("MelonLoader.MelonPrefs.GetString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryString instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.GetString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryString instead. This will be removed in a future version.", true)]
     public static string GetString(string section, string name)
     {
         var category = MelonPreferences.GetCategory(section);
@@ -59,7 +59,7 @@ public class MelonPrefs
         var entry = category.GetEntry(name);
         return entry?.GetValueAsString();
     }
-    [Obsolete("MelonLoader.MelonPrefs.SetString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryString instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.SetString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryString instead. This will be removed in a future version.", true)]
     public static void SetString(string section, string name, string value)
     {
         var category = MelonPreferences.GetCategory(section);
@@ -87,19 +87,19 @@ public class MelonPrefs
                 break;
         }
     }
-    [Obsolete("MelonLoader.MelonPrefs.GetBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryBool instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.GetBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryBool instead. This will be removed in a future version.", true)]
     public static bool GetBool(string section, string name) => MelonPreferences.GetEntryValue<bool>(section, name);
-    [Obsolete("MelonLoader.MelonPrefs.SetBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryBool instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.SetBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryBool instead. This will be removed in a future version.", true)]
     public static void SetBool(string section, string name, bool value) => MelonPreferences.SetEntryValue(section, name, value);
-    [Obsolete("MelonLoader.MelonPrefs.GetInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryInt instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.GetInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryInt instead. This will be removed in a future version.", true)]
     public static int GetInt(string section, string name) => MelonPreferences.GetEntryValue<int>(section, name);
-    [Obsolete("MelonLoader.MelonPrefs.SetInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryInt instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.SetInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryInt instead. This will be removed in a future version.", true)]
     public static void SetInt(string section, string name, int value) => MelonPreferences.SetEntryValue(section, name, value);
-    [Obsolete("MelonLoader.MelonPrefs.GetFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryFloat instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.GetFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.GetEntryFloat instead. This will be removed in a future version.", true)]
     public static float GetFloat(string section, string name) => MelonPreferences.GetEntryValue<float>(section, name);
-    [Obsolete("MelonLoader.MelonPrefs.GetEntryFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryFloat instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.GetEntryFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryFloat instead. This will be removed in a future version.", true)]
     public static void SetFloat(string section, string name, float value) => MelonPreferences.SetEntryValue(section, name, value);
-    [Obsolete("MelonLoader.MelonPrefs.MelonPreferenceType is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.TypeEnum instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.MelonPreferenceType is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.TypeEnum instead. This will be removed in a future version.", true)]
     public enum MelonPreferenceType
     {
         STRING,
@@ -107,14 +107,14 @@ public class MelonPrefs
         INT,
         FLOAT
     }
-    [Obsolete("MelonLoader.MelonPrefs.MelonPreference is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead.")]
+    [Obsolete("MelonLoader.MelonPrefs.MelonPreference is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead. This will be removed in a future version.", true)]
     public class MelonPreference
     {
-        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.Value is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.GetValue instead.")]
+        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.Value is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.GetValue instead. This will be removed in a future version.", true)]
         public string Value { get => GetString(Entry.Category.Identifier, Entry.Identifier); set => SetString(Entry.Category.Identifier, Entry.Identifier, value); }
-        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.ValueEdited is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.GetValueEdited instead.")]
+        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.ValueEdited is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.GetValueEdited instead. This will be removed in a future version.", true)]
         public string ValueEdited { get => GetEditedString(Entry.Category.Identifier, Entry.Identifier); set => SetEditedString(Entry.Category.Identifier, Entry.Identifier, value); }
-        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.Type is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.GetReflectedType instead.")]
+        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.Type is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.GetReflectedType instead. This will be removed in a future version.", true)]
         public MelonPreferenceType Type
         {
             get
@@ -133,9 +133,9 @@ public class MelonPrefs
                 return (MelonPreferenceType)4;
             }
         }
-        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.Hidden is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.IsHidden instead.")]
+        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.Hidden is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.IsHidden instead. This will be removed in a future version.", true)]
         public bool Hidden { get => Entry.IsHidden; }
-        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.DisplayText is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.DisplayName instead.")]
+        [Obsolete("MelonLoader.MelonPrefs.MelonPreference.DisplayText is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.DisplayName instead. This will be removed in a future version.", true)]
         public string DisplayText { get => Entry.DisplayName; }
 
         internal MelonPreference(MelonPreferences_Entry entry) => Entry = entry;
