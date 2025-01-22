@@ -16,7 +16,7 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
 		
         internal Cpp2IL()
         {
-            Version = MelonLaunchOptions.Il2CppAssemblyGenerator.ForceVersion_Dumper;
+            Version = LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion;
 #if !DEBUG
             if (string.IsNullOrEmpty(Version) || Version.Equals("0.0.0.0"))
                 Version = RemoteAPI.Info.ForceDumperVersion;
@@ -73,8 +73,8 @@ namespace MelonLoader.Il2CppAssemblyGenerator.Packages
                 "--use-processor",
                 "attributeanalyzer",
                 "attributeinjector",
-                MelonLaunchOptions.Cpp2IL.CallAnalyzer ? "callanalyzer" : string.Empty,
-                MelonLaunchOptions.Cpp2IL.NativeMethodDetector ? "nativemethoddetector" : string.Empty,
+                LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer ? "callanalyzer" : string.Empty,
+                LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector ? "nativemethoddetector" : string.Empty,
                 //"deobfmap",
                 //"stablenamer",
 

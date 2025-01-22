@@ -37,15 +37,26 @@
         <None Include="$(SolutionDir)/CHANGELOG.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
         <None Include="$(SolutionDir)/README.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <EmbeddedResource Include="TrimmerRoots.xml">
+            <LogicalName>ILLink.Descriptors.xml</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
 
     <PropertyGroup>
-        <AppHostVersion>9.0.0-rc.2.24473.5</AppHostVersion>
+        <AppHostVersion>9.0.0</AppHostVersion>
         <AppHostPath>$(NuGetPackageRoot)runtime.$(RuntimeIdentifier).microsoft.netcore.dotnetapphost/$(AppHostVersion)/runtimes/$(RuntimeIdentifier)/native/libnethost$(LibExt)</AppHostPath>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NETCore.DotNetAppHost" Version="$(AppHostVersion)" PrivateAssets="All" />
-        <PackageReference Include="Pastel" Version="5.2.1" />
+        <PackageReference Include="Pastel" Version="6.0.1" />
+        <PackageReference Include="Samboy063.Tomlet" Version="6.0.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Compile Include="$(SolutionDir)/MelonLoader/LoaderConfig.cs" />
     </ItemGroup>
 
     <ItemGroup>

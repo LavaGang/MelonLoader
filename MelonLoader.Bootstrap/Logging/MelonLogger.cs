@@ -14,43 +14,36 @@ internal static class MelonLogger
 
     public static void Init()
     {
-        var version = typeof(Core).Assembly.GetName().Version!;
-        var versionStr = version.ToString(3);
-        if (version.Revision != 0)
-            versionStr += "-ci." + version.Revision.ToString();
-
-        var onTop = ArgParser.IsDefined("melonloader.consoleontop");
-        string? title = null;
-        if (!ArgParser.IsDefined("melonloader.consoledst"))
+        if (!LoaderConfig.Current.Console.Hide)
         {
-            title = "MelonLoader v" + versionStr;
-            if (Core.Debug)
-                title = "[D] " + title;
+            var version = typeof(Core).Assembly.GetName().Version!;
+            var versionStr = version.ToString(3);
+            if (version.Revision != 0)
+                versionStr += "-ci." + version.Revision.ToString();
+
+            string? title = null;
+            if (!LoaderConfig.Current.Console.DontSetTitle)
+            {
+                // This is temporary, until managed sets it
+                title = (LoaderConfig.Current.Loader.Theme == LoaderConfig.CoreConfig.LoaderTheme.Lemon ? "LemonLoader" : "MelonLoader") + " v" + versionStr;
+                if (LoaderConfig.Current.Loader.DebugMode)
+                    title = "[D] " + title;
+            }
+
+            ConsoleHandler.OpenConsole(LoaderConfig.Current.Console.AlwaysOnTop, title);
         }
 
-        ConsoleHandler.OpenConsole(onTop, title);
         // Making logs from this point is ok, but only for console
 
-        uint maxLogs;
-        if (Core.Debug)
-        {
-            maxLogs = 0;
-        }
-        else
-        {
-            if (!uint.TryParse(ArgParser.GetValue("melonloader.maxlogs"), out maxLogs))
-                maxLogs = 10;
-        }
+        MelonDebug.Log($"Creating log files (Max logs: {LoaderConfig.Current.Logs.MaxLogs})");
 
-        MelonDebug.Log($"Creating log files (Max logs: {maxLogs})");
-
-        var logsDir = Path.Combine(Core.BaseDir, "MelonLoader", "Logs");
+        var logsDir = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "Logs");
         Directory.CreateDirectory(logsDir);
 
-        if (maxLogs > 0)
+        if (LoaderConfig.Current.Logs.MaxLogs > 0)
         {
             var logs = Directory.GetFiles(logsDir, "*.log", SearchOption.TopDirectoryOnly);
-            if (logs.Length >= maxLogs)
+            if (logs.Length >= LoaderConfig.Current.Logs.MaxLogs)
             {
                 var queue = new List<(string, DateTime)>();
 
@@ -64,7 +57,7 @@ internal static class MelonLogger
                     return 1;
                 });
 
-                var toDelete = logs.Length - maxLogs + 1;
+                var toDelete = logs.Length - LoaderConfig.Current.Logs.MaxLogs + 1;
                 for (var i = 0; i < toDelete; i++)
                 {
                     var file = queue[i];
@@ -81,7 +74,7 @@ internal static class MelonLogger
             }
         }
 
-        var latestPath = Path.Combine(Core.BaseDir, "MelonLoader", "Latest.log");
+        var latestPath = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "Latest.log");
         var cachedPath = Path.Combine(logsDir, $"{DateTime.Now:%y-%M-%d_%H-%m-%s}.log");
 
         MelonDebug.Log("Opening stream to latest log");
@@ -138,7 +131,7 @@ internal static class MelonLogger
 
         LogToFiles($"[{time}] {msg}");
 
-        if (ConsoleHandler.Hidden)
+        if (!ConsoleHandler.IsOpen)
             return;
 
         if (WineUtils.IsWine)
@@ -167,7 +160,7 @@ internal static class MelonLogger
 
         LogToFiles($"[{time}] [{sectionName}] {msg}");
 
-        if (ConsoleHandler.Hidden)
+        if (!ConsoleHandler.IsOpen)
             return;
 
         if (WineUtils.IsWine)
@@ -196,13 +189,39 @@ internal static class MelonLogger
         Console.WriteLine($"[{time.Pastel(timeColor)}] [{sectionName.Pastel(sectionColor)}] {msg.Pastel(msgColor)}");
     }
 
+    public static void LogWarning(ReadOnlySpan<char> msg)
+    {
+        if (LoaderConfig.Current.Console.HideWarnings)
+        {
+            var time = DateTime.Now.ToString(timeFormat);
+            LogToFiles($"[{time}] {msg}");
+
+            return;
+        }
+
+        Log(Color.Yellow, msg);
+    }
+
+    public static void LogWarning(ReadOnlySpan<char> msg, ReadOnlySpan<char> sectionName)
+    {
+        if (LoaderConfig.Current.Console.HideWarnings)
+        {
+            var time = DateTime.Now.ToString(timeFormat);
+            LogToFiles($"[{time}] [{sectionName}] {msg}");
+
+            return;
+        }
+
+        Log(Color.Yellow, msg, Color.Yellow, sectionName);
+    }
+
     public static void LogError(ReadOnlySpan<char> msg)
     {
         var time = DateTime.Now.ToString(timeFormat);
 
         LogToFiles($"[{time}] {msg}");
 
-        if (ConsoleHandler.Hidden)
+        if (!ConsoleHandler.IsOpen)
             return;
 
         if (WineUtils.IsWine)
@@ -222,7 +241,7 @@ internal static class MelonLogger
 
         LogToFiles($"[{time}] [{sectionName}] {msg}");
 
-        if (ConsoleHandler.Hidden)
+        if (!ConsoleHandler.IsOpen)
             return;
 
         if (WineUtils.IsWine)
@@ -242,7 +261,7 @@ internal static class MelonLogger
 
         LogToFiles($"[{time}] {name} {info}");
 
-        if (ConsoleHandler.Hidden)
+        if (!ConsoleHandler.IsOpen)
             return;
 
         if (WineUtils.IsWine)
@@ -273,7 +292,7 @@ internal static class MelonLogger
     {
         LogToFiles(null);
 
-        if (ConsoleHandler.Hidden)
+        if (!ConsoleHandler.IsOpen)
             return;
 
         Console.WriteLine();

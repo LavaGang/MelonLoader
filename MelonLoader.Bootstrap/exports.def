@@ -10,6 +10,7 @@ EXPORTS
    MonoGetDomainPtr
    MonoGetRuntimeHandle
    IsConsoleOpen
+   GetLoaderConfig
    GetFileVersionInfoSizeA=ImplGetFileVersionInfoSizeA
    GetFileVersionInfoA=ImplGetFileVersionInfoA
    GetFileVersionInfoByHandle=ImplGetFileVersionInfoByHandle

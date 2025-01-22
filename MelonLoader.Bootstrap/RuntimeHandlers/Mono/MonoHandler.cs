@@ -47,7 +47,7 @@ internal static class MonoHandler
 
         Domain = initPatch.Original(name, b);
 
-        if (Core.Debug && Mono.DebugDomainCreate != null)
+        if (LoaderConfig.Current.Loader.DebugMode && Mono.DebugDomainCreate != null)
         {
             MelonDebug.Log("Creating Mono Debug Domain");
             Mono.DebugDomainCreate(Domain);
@@ -72,7 +72,7 @@ internal static class MonoHandler
     {
         MelonDebug.Log("Initializing managed assemblies");
 
-        var mlPath = Path.Combine(Core.BaseDir, "MelonLoader", "net35", "MelonLoader.dll");
+        var mlPath = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "net35", "MelonLoader.dll");
         if (!File.Exists(mlPath))
         {
             Core.Logger.Error($"Mono MelonLoader assembly not found at: '{mlPath}'");
@@ -87,7 +87,7 @@ internal static class MonoHandler
             {
                 Core.Logger.Msg("Loading .NET Standard 2.0 overrides");
 
-                var overridesDir = Path.Combine(Core.BaseDir, "MelonLoader", "Dependencies", "NetStandardPatches");
+                var overridesDir = Path.Combine(LoaderConfig.Current.Loader.BaseDirectory, "MelonLoader", "Dependencies", "NetStandardPatches");
                 if (Directory.Exists(overridesDir))
                 {
                     foreach (var dll in Directory.EnumerateFiles(overridesDir, "*.dll"))

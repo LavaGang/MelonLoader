@@ -10,7 +10,7 @@ internal unsafe delegate void NativeHookFn(nint* target, nint detour);
 internal unsafe delegate void LogMsgFn(ColorRGB* msgColor, char* msg, int msgLength, ColorRGB* sectionColor, char* section, int sectionLength);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-internal unsafe delegate void LogErrorFn(char* msg, int msgLength, char* section, int sectionLength);
+internal unsafe delegate void LogErrorFn(char* msg, int msgLength, char* section, int sectionLength, bool warning);
 
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 internal unsafe delegate void LogMelonInfoFn(ColorRGB* nameColor, char* name, int nameLength, char* info, int infoLength);
@@ -27,3 +27,6 @@ internal delegate void ActionFn();
 [UnmanagedFunctionPointer(CallingConvention.StdCall)]
 [return: MarshalAs(UnmanagedType.U1)]
 internal delegate bool BoolRetFn();
+
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+internal delegate void GetLoaderConfigFn(ref LoaderConfig config);

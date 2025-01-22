@@ -8,7 +8,7 @@ internal static class MelonDebug
 
     public static void Log(string msg)
     {
-        if (!Core.Debug)
+        if (!LoaderConfig.Current.Loader.DebugMode)
             return;
 
         logger.Msg(msg);

@@ -42,8 +42,8 @@ namespace MelonLoader.InternalUtils
         {
             string gameDataPath = MelonEnvironment.UnityGameDataDirectory;
 
-            if (!string.IsNullOrEmpty(MelonLaunchOptions.Core.UnityVersion))
-                EngineVersion = TryParse(MelonLaunchOptions.Core.UnityVersion);
+            if (!string.IsNullOrEmpty(LoaderConfig.Current.UnityEngine.VersionOverride))
+                EngineVersion = TryParse(LoaderConfig.Current.UnityEngine.VersionOverride);
 
             AssetsManager assetsManager = new AssetsManager();
             ReadGameInfo(assetsManager, gameDataPath);
