@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace MelonLoader.ICSharpCode.SharpZipLib.Core.Exceptions;
+namespace MelonLoader.ICSharpCode.SharpZipLib;
 
 /// <summary>
 /// Indicates that an error occurred during decoding of a input stream due to corrupt
