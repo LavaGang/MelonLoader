@@ -1,10 +1,9 @@
 using ModHelper;
 
-namespace MelonLoader
+namespace MelonLoader.CompatibilityLayers;
+
+internal class MuseDashModWrapper : MelonMod
 {
-    internal class MuseDashModWrapper : MelonMod
-    {
-        internal IMod modInstance;
-        public override void OnInitializeMelon() => modInstance.DoPatching();
-    }
+    internal IMod modInstance;
+    public override void OnInitializeMelon() => modInstance.DoPatching();
 }

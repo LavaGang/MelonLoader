@@ -1,0 +1,2 @@
+[*.cs]
+dotnet_style_namespace_match_folder = false
