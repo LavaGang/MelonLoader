@@ -4,7 +4,7 @@ namespace MelonLoader.Bootstrap.RuntimeHandlers.Il2Cpp;
 
 internal static class DotnetInstaller
 {
-    private readonly static string dotnetRuntimeDownload =
+    private static readonly string dotnetRuntimeDownload =
 #if X64
         "https://aka.ms/dotnet/6.0/dotnet-runtime-win-x64.exe";
 #else

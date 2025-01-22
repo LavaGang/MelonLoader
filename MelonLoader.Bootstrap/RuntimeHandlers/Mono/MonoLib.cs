@@ -163,10 +163,7 @@ internal class MonoLib
 
     public string? GetMethodName(nint method)
     {
-        if (method == 0)
-            return null;
-
-        return Marshal.PtrToStringAnsi(MethodGetName(method));
+        return method == 0 ? null : Marshal.PtrToStringAnsi(MethodGetName(method));
     }
 
     public void InstallAssemblyHooks(AssemblyPreloadHookFn? preloadHook, AssemblySearchHookFn? searchHook, AssemblyLoadHookFn? loadHook)

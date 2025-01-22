@@ -19,18 +19,17 @@ internal class Il2CppLib(Il2CppLib.MethodGetNameFn methodGetName)
 
     public static Il2CppLib? TryLoad()
     {
-        if (!NativeLibrary.TryLoad(libName, out var hRuntime)
+        return !NativeLibrary.TryLoad(libName, out var hRuntime)
             || !NativeLibrary.TryGetExport(hRuntime, "il2cpp_init", out var initPtr)
             || !NativeLibrary.TryGetExport(hRuntime, "il2cpp_runtime_invoke", out var runtimeInvokePtr)
-            || !NativeFunc.GetExport<MethodGetNameFn>(hRuntime, "il2cpp_method_get_name", out var methodGetName))
-            return null;
-
-        return new(methodGetName)
-        {
-            Handle = hRuntime,
-            InitPtr = initPtr,
-            RuntimeInvokePtr = runtimeInvokePtr
-        };
+            || !NativeFunc.GetExport<MethodGetNameFn>(hRuntime, "il2cpp_method_get_name", out var methodGetName)
+            ? null
+            : new(methodGetName)
+            {
+                Handle = hRuntime,
+                InitPtr = initPtr,
+                RuntimeInvokePtr = runtimeInvokePtr
+            };
     }
 
     public string? GetMethodName(nint method)

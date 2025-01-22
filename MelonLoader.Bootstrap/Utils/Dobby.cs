@@ -20,15 +20,9 @@ public static unsafe partial class Dobby
     public static nint HookAttach(nint target, nint detour)
     {
         nint original = 0;
-        if (Prepare(target, detour, &original) != 0)
-        {
-            throw new AccessViolationException($"Could not prepare patch to target {target:X}");
-        }
-        if (Commit(target) != 0)
-        {
-            throw new AccessViolationException($"Could not commit patch to target {target:X}");
-        }
-        return original;
+        return Prepare(target, detour, &original) != 0
+            ? throw new AccessViolationException($"Could not prepare patch to target {target:X}")
+            : Commit(target) != 0 ? throw new AccessViolationException($"Could not commit patch to target {target:X}") : original;
     }
 
     public static void HookDetach(nint target)

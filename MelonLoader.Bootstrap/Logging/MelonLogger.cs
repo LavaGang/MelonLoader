@@ -52,9 +52,7 @@ internal static class MelonLogger
 
                 queue.Sort((x, y) =>
                 {
-                    if (x.Item2 >= y.Item2)
-                        return 0;
-                    return 1;
+                    return x.Item2 >= y.Item2 ? 0 : 1;
                 });
 
                 var toDelete = logs.Length - LoaderConfig.Current.Logs.MaxLogs + 1;

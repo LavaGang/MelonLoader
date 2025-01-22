@@ -58,10 +58,7 @@ internal static partial class Dotnet
 
         nint funcPtr = 0;
         loadAssemblyAndGetFunctionPointer(assemblyPath, typeName, methodName, -1, 0, ref funcPtr);
-        if (funcPtr == 0)
-            return null;
-
-        return Marshal.GetDelegateForFunctionPointer<TDelegate>(funcPtr);
+        return funcPtr == 0 ? null : Marshal.GetDelegateForFunctionPointer<TDelegate>(funcPtr);
     }
 
     [DllImport("*", CharSet = hostfxrCharSet)]
