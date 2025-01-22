@@ -92,13 +92,9 @@ internal static unsafe class Il2CppInteropFixes
             var il2cppType = typeof(IL2CPP);
             var harmonySupportType = typeof(HarmonySupport);
 
-            var injectorHelpersType = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers");
-            if (injectorHelpersType == null)
-                throw new Exception("Failed to get InjectorHelpers");
+            var injectorHelpersType = classInjectorType.Assembly.GetType("Il2CppInterop.Runtime.Injection.InjectorHelpers") ?? throw new Exception("Failed to get InjectorHelpers");
 
-            var detourMethodPatcherType = harmonySupportType.Assembly.GetType("Il2CppInterop.HarmonySupport.Il2CppDetourMethodPatcher");
-            if (detourMethodPatcherType == null)
-                throw new Exception("Failed to get Il2CppDetourMethodPatcher");
+            var detourMethodPatcherType = harmonySupportType.Assembly.GetType("Il2CppInterop.HarmonySupport.Il2CppDetourMethodPatcher") ?? throw new Exception("Failed to get Il2CppDetourMethodPatcher");
 
             _systemTypeFromIl2CppType = classInjectorType.GetMethod("SystemTypeFromIl2CppType", BindingFlags.NonPublic | BindingFlags.Static);
             if (_systemTypeFromIl2CppType == null)
@@ -413,8 +409,7 @@ internal static unsafe class Il2CppInteropFixes
         if (string.IsNullOrEmpty(assemblyName))
             return false;
 
-        AssemblyRewriteContext rewriteContext;
-        if (contexts.TryGetValue(assemblyName, out rewriteContext))
+        if (contexts.TryGetValue(assemblyName, out var rewriteContext))
         {
             //LogDebugMsg($"[RewriteGlobalContext] Found: {assemblyName}");
             __result = rewriteContext.TryGetContextForOriginalType(__0);

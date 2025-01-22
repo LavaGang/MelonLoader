@@ -17,9 +17,7 @@ internal class Watcher
             return;
         try
         {
-            var method = AccessTools.PropertyGetter(typeof(FileSystemWatcher), "Path");
-            if (method == null)
-                throw new NullReferenceException("No Path Property Get Method Found!");
+            var method = AccessTools.PropertyGetter(typeof(FileSystemWatcher), "Path") ?? throw new NullReferenceException("No Path Property Get Method Found!");
             if (method.IsNotImplemented())
             {
                 MelonLogger.Warning("FileSystemWatcher NotImplementedException Detected! Disabling MelonPreferences FileWatcher Functionality...");

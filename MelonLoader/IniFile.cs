@@ -8,9 +8,12 @@ public class IniFile
 {
     [DllImport("KERNEL32.DLL", EntryPoint = "GetPrivateProfileStringW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
     private static extern int GetPrivateProfileString(string lpSection, string lpKey, string lpDefault, StringBuilder lpReturnString, int nSize, string lpFileName);
+
     [DllImport("KERNEL32.DLL", EntryPoint = "WritePrivateProfileStringW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
     private static extern int WritePrivateProfileString(string lpSection, string lpKey, string lpValue, string lpFileName);
+
     private string _path = "";
+
     public string Path
     {
         get { return _path; }
@@ -21,8 +24,12 @@ public class IniFile
             _path = value;
         }
     }
+
     public IniFile(string INIPath) { Path = INIPath; }
-    private void WriteValue(string Section, string Key, string Value) { WritePrivateProfileString(Section, Key, Value, Path); }
+
+    private void WriteValue(string Section, string Key, string Value)
+        => _ = WritePrivateProfileString(Section, Key, Value, Path);
+
     private string ReadValue(string Section, string Key)
     {
         const int MAX_CHARS = 1023;
@@ -31,7 +38,8 @@ public class IniFile
         return result.ToString().Equals(" _") ? null : result.ToString();
     }
 
-    public bool HasKey(string section, string name) { return ReadValue(section, name) != null; }
+    public bool HasKey(string section, string name) 
+        => ReadValue(section, name) != null;
 
     public string GetString(string section, string name, string defaultValue = "", bool autoSave = false)
     {
@@ -42,7 +50,9 @@ public class IniFile
             SetString(section, name, defaultValue);
         return defaultValue;
     }
-    public void SetString(string section, string name, string value) { WriteValue(section, name, value.Trim()); }
+
+    public void SetString(string section, string name, string value) 
+        => WriteValue(section, name, value.Trim());
 
     public int GetInt(string section, string name, int defaultValue = 0, bool autoSave = false)
     {
@@ -52,7 +62,9 @@ public class IniFile
             SetInt(section, name, defaultValue);
         return defaultValue;
     }
-    public void SetInt(string section, string name, int value) { WriteValue(section, name, value.ToString()); }
+
+    public void SetInt(string section, string name, int value) 
+        => WriteValue(section, name, value.ToString());
 
     public float GetFloat(string section, string name, float defaultValue = 0f, bool autoSave = false)
     {
@@ -62,7 +74,9 @@ public class IniFile
             SetFloat(section, name, defaultValue);
         return defaultValue;
     }
-    public void SetFloat(string section, string name, float value) { WriteValue(section, name, value.ToString()); }
+
+    public void SetFloat(string section, string name, float value)
+        => WriteValue(section, name, value.ToString());
 
     public bool GetBool(string section, string name, bool defaultValue = false, bool autoSave = false)
     {
@@ -73,5 +87,7 @@ public class IniFile
             SetBool(section, name, defaultValue);
         return defaultValue;
     }
-    public void SetBool(string section, string name, bool value) { WriteValue(section, name, value ? "true" : "false"); }
+
+    public void SetBool(string section, string name, bool value)
+        => WriteValue(section, name, value ? "true" : "false");
 }

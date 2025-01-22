@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace MelonLoader;
 
 public static class InteropSupport
 {
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Who named this")]
     public interface Interface
     {
         bool IsInheritedFromIl2CppObjectBase(Type type);
@@ -73,7 +75,7 @@ public static class InteropSupport
             ? throw new NullReferenceException("The ptr cannot be IntPtr.Zero.")
             : !IsGeneratedAssemblyType(typeof(T))
             ? throw new NullReferenceException("The type must be a Generated Assembly Type.")
-            : (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
+            : (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, [typeof(IntPtr)], []).Invoke([ptr]);
     }
 
     public static int? GetIl2CppMethodCallerCount(MethodBase method)

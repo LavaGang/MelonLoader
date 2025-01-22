@@ -1,3 +1,11 @@
 [*.cs]
 dotnet_style_namespace_match_folder = false
 dotnet_diagnostic.CA1707.severity = none
+dotnet_style_coalesce_expression = false
+dotnet_style_prefer_collection_expression = false
+csharp_style_prefer_primary_constructors = false
+dotnet_style_prefer_collection_expression = false
+dotnet_diagnostic.IDE0060.severity = none
+dotnet_diagnostic.CA1825.severity = none
+dotnet_diagnostic.CA2211.severity = none
+dotnet_analyzer_diagnostic.category-Style.severity = none

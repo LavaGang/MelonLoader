@@ -31,7 +31,7 @@ public static class HarmonyMethodExtensions
     [Obsolete("Harmony.HarmonyMethodExtensions.Merge is obsolete. Please use HarmonyLib.HarmonyMethodExtensions.Merge instead.")]
     public static HarmonyMethod Merge(this HarmonyMethod master, HarmonyMethod detail) => (HarmonyMethod)HarmonyLib.HarmonyMethodExtensions.Merge(master, detail);
     [Obsolete("Harmony.HarmonyMethodExtensions.GetHarmonyMethods(Type) is obsolete. Please use HarmonyLib.HarmonyMethodExtensions.GetFromType instead.")]
-    public static List<HarmonyMethod> GetHarmonyMethods(this Type type) => Array.ConvertAll(HarmonyLib.HarmonyMethodExtensions.GetFromType(type).ToArray(), x => (HarmonyMethod)x).ToList();
+    public static List<HarmonyMethod> GetHarmonyMethods(this Type type) => [.. Array.ConvertAll(HarmonyLib.HarmonyMethodExtensions.GetFromType(type).ToArray(), x => (HarmonyMethod)x)];
     [Obsolete("Harmony.HarmonyMethodExtensions.GetHarmonyMethods(MethodBase) is obsolete. Please use HarmonyLib.HarmonyMethodExtensions.GetFromMethod instead.")]
-    public static List<HarmonyMethod> GetHarmonyMethods(this MethodBase method) => Array.ConvertAll(HarmonyLib.HarmonyMethodExtensions.GetFromMethod(method).ToArray(), x => (HarmonyMethod)x).ToList();
+    public static List<HarmonyMethod> GetHarmonyMethods(this MethodBase method) => [.. Array.ConvertAll(HarmonyLib.HarmonyMethodExtensions.GetFromMethod(method).ToArray(), x => (HarmonyMethod)x)];
 }

@@ -2,15 +2,13 @@
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UnityEngine;
 
-public class Il2CppAssetBundle
+[SuppressMessage("Naming", "CA1708:Identifiers should differ by more than case", Justification = "Deprecated members")]
+public class Il2CppAssetBundle(IntPtr ptr)
 {
-    private readonly IntPtr bundleptr = IntPtr.Zero;
-
-    public Il2CppAssetBundle(IntPtr ptr) { bundleptr = ptr; }
-
     static Il2CppAssetBundle()
     {
         get_isStreamedSceneAssetBundleDelegateField = IL2CPP.ResolveICall<get_isStreamedSceneAssetBundleDelegate>("UnityEngine.AssetBundle::get_isStreamedSceneAssetBundle");
@@ -25,51 +23,59 @@ public class Il2CppAssetBundle
         UnloadDelegateField = IL2CPP.ResolveICall<UnloadDelegate>("UnityEngine.AssetBundle::Unload");
     }
 
-    public bool isStreamedSceneAssetBundle
+    public bool IsStreamedSceneAssetBundle
     {
         get
         {
-            return bundleptr == IntPtr.Zero
+            return ptr == IntPtr.Zero
                 ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
                 : get_isStreamedSceneAssetBundleDelegateField == null
                 ? throw new NullReferenceException("The get_isStreamedSceneAssetBundleDelegateField cannot be null.")
-                : get_isStreamedSceneAssetBundleDelegateField(bundleptr);
+                : get_isStreamedSceneAssetBundleDelegateField(ptr);
         }
     }
 
-    public Object mainAsset
+    [Obsolete("Use IsStreamedSceneAssetBundle (starting with upper-case) instead.", true)]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
+    public bool isStreamedSceneAssetBundle => IsStreamedSceneAssetBundle;
+
+    public Object MainAsset
     {
         get
         {
-            if (bundleptr == IntPtr.Zero)
+            if (ptr == IntPtr.Zero)
                 throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
             if (returnMainAssetDelegateField == null)
                 throw new NullReferenceException("The returnMainAssetDelegateField cannot be null.");
-            var intPtr = returnMainAssetDelegateField(bundleptr);
+            var intPtr = returnMainAssetDelegateField(ptr);
             return (intPtr != IntPtr.Zero) ? new Object(intPtr) : null;
         }
     }
 
+    [Obsolete("Use MainAsset (starting with upper-case) instead.", true)]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
+    public Object mainAsset => MainAsset;
+
     public bool Contains(string name)
     {
-        return bundleptr == IntPtr.Zero
+        return ptr == IntPtr.Zero
             ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
             : string.IsNullOrEmpty(name)
             ? throw new ArgumentException("The input asset name cannot be null or empty.")
             : ContainsDelegateField == null
             ? throw new NullReferenceException("The ContainsDelegateField cannot be null.")
-            : ContainsDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name));
+            : ContainsDelegateField(ptr, IL2CPP.ManagedStringToIl2Cpp(name));
     }
 
     public Il2CppStringArray AllAssetNames() => GetAllAssetNames();
 
     public Il2CppStringArray GetAllAssetNames()
     {
-        if (bundleptr == IntPtr.Zero)
+        if (ptr == IntPtr.Zero)
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
         if (GetAllAssetNamesDelegateField == null)
             throw new NullReferenceException("The GetAllAssetNamesDelegateField cannot be null.");
-        var intPtr = GetAllAssetNamesDelegateField(bundleptr);
+        var intPtr = GetAllAssetNamesDelegateField(ptr);
         return (intPtr != IntPtr.Zero) ? new Il2CppStringArray(intPtr) : null;
     }
 
@@ -77,11 +83,11 @@ public class Il2CppAssetBundle
 
     public Il2CppStringArray GetAllScenePaths()
     {
-        if (bundleptr == IntPtr.Zero)
+        if (ptr == IntPtr.Zero)
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
         if (GetAllScenePathsDelegateField == null)
             throw new NullReferenceException("The GetAllScenePathsDelegateField cannot be null.");
-        var intPtr = GetAllScenePathsDelegateField(bundleptr);
+        var intPtr = GetAllScenePathsDelegateField(ptr);
         return (intPtr != IntPtr.Zero) ? new Il2CppStringArray(intPtr) : null;
     }
 
@@ -113,7 +119,7 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAsset(string name, IntPtr typeptr)
     {
-        return bundleptr == IntPtr.Zero
+        return ptr == IntPtr.Zero
             ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
             : string.IsNullOrEmpty(name)
             ? throw new ArgumentException("The input asset name cannot be null or empty.")
@@ -121,7 +127,7 @@ public class Il2CppAssetBundle
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAsset_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAsset_InternalDelegateField cannot be null.")
-            : LoadAsset_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+            : LoadAsset_InternalDelegateField(ptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
 
     public Il2CppAssetBundleRequest LoadAssetAsync(string name) => LoadAssetAsync<Object>(name);
@@ -144,7 +150,7 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAssetAsync(string name, IntPtr typeptr)
     {
-        return bundleptr == IntPtr.Zero
+        return ptr == IntPtr.Zero
             ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
             : string.IsNullOrEmpty(name)
             ? throw new ArgumentException("The input asset name cannot be null or empty.")
@@ -152,7 +158,7 @@ public class Il2CppAssetBundle
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAssetAsync_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAssetAsync_InternalDelegateField cannot be null.")
-            : LoadAssetAsync_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+            : LoadAssetAsync_InternalDelegateField(ptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
 
     public Il2CppReferenceArray<Object> LoadAll() => LoadAllAssets();
@@ -187,7 +193,7 @@ public class Il2CppAssetBundle
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAssetWithSubAssets_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAssetWithSubAssets_InternalDelegateField cannot be null.")
-            : LoadAssetWithSubAssets_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(string.Empty), typeptr);
+            : LoadAssetWithSubAssets_InternalDelegateField(ptr, IL2CPP.ManagedStringToIl2Cpp(string.Empty), typeptr);
     }
 
     public Il2CppReferenceArray<Object> LoadAssetWithSubAssets(string name) => LoadAssetWithSubAssets<Object>(name);
@@ -210,7 +216,7 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAssetWithSubAssets(string name, IntPtr typeptr)
     {
-        return bundleptr == IntPtr.Zero
+        return ptr == IntPtr.Zero
             ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
             : string.IsNullOrEmpty(name)
             ? throw new ArgumentException("The input asset name cannot be null or empty.")
@@ -218,7 +224,7 @@ public class Il2CppAssetBundle
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAssetWithSubAssets_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAssetWithSubAssets_InternalDelegateField cannot be null.")
-            : LoadAssetWithSubAssets_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+            : LoadAssetWithSubAssets_InternalDelegateField(ptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
     public Il2CppAssetBundleRequest LoadAssetWithSubAssetsAsync(string name) => LoadAssetWithSubAssetsAsync<Object>(name);
 
@@ -240,7 +246,7 @@ public class Il2CppAssetBundle
 
     public IntPtr LoadAssetWithSubAssetsAsync(string name, IntPtr typeptr)
     {
-        return bundleptr == IntPtr.Zero
+        return ptr == IntPtr.Zero
             ? throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero")
             : string.IsNullOrEmpty(name)
             ? throw new ArgumentException("The input asset name cannot be null or empty.")
@@ -248,16 +254,16 @@ public class Il2CppAssetBundle
             ? throw new NullReferenceException("The input type cannot be IntPtr.Zero")
             : LoadAssetWithSubAssetsAsync_InternalDelegateField == null
             ? throw new NullReferenceException("The LoadAssetWithSubAssetsAsync_InternalDelegateField cannot be null.")
-            : LoadAssetWithSubAssetsAsync_InternalDelegateField(bundleptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
+            : LoadAssetWithSubAssetsAsync_InternalDelegateField(ptr, IL2CPP.ManagedStringToIl2Cpp(name), typeptr);
     }
 
     public void Unload(bool unloadAllLoadedObjects)
     {
-        if (bundleptr == IntPtr.Zero)
+        if (ptr == IntPtr.Zero)
             throw new NullReferenceException("The bundleptr cannot be IntPtr.Zero");
         if (UnloadDelegateField == null)
             throw new NullReferenceException("The UnloadDelegateField cannot be null.");
-        UnloadDelegateField(bundleptr, unloadAllLoadedObjects);
+        UnloadDelegateField(ptr, unloadAllLoadedObjects);
     }
 
     private delegate bool get_isStreamedSceneAssetBundleDelegate(IntPtr _this);

@@ -45,9 +45,7 @@ internal static class Il2CppICallInjector
                 throw new Exception("Failed to get Il2CppDetourMethodPatcher.GenerateNativeToManagedTrampoline");
 
             var gameAssemblyName = "GameAssembly";
-            var gameAssemblyLib = NativeLibrary.Load(gameAssemblyName);
-            if (gameAssemblyLib == null)
-                throw new Exception($"Failed to load {gameAssemblyName} Native Library");
+            var gameAssemblyLib = NativeLibrary.Load(gameAssemblyName) ?? throw new Exception($"Failed to load {gameAssemblyName} Native Library");
 
             IntPtr il2cpp_resolve_icall = gameAssemblyLib.GetExport(nameof(il2cpp_resolve_icall));
             if (il2cpp_resolve_icall == IntPtr.Zero)
@@ -58,7 +56,7 @@ internal static class Il2CppICallInjector
                 throw new Exception($"Failed to get {nameof(il2cpp_add_internal_call)} Native Export");
 
             MelonDebug.Msg("Patching il2cpp_resolve_icall...");
-            var detourPtr = Marshal.GetFunctionPointerForDelegate((dil2cpp_resolve_icall)il2cpp_resolve_icall_Detour);
+            var detourPtr = Marshal.GetFunctionPointerForDelegate((dil2cpp_resolve_icall)Il2cppResolveICallDetour);
             il2cpp_resolve_icall_hook = new NativeHook<dil2cpp_resolve_icall>(il2cpp_resolve_icall, detourPtr);
             il2cpp_resolve_icall_hook.Attach();
         }
@@ -104,7 +102,7 @@ internal static class Il2CppICallInjector
         _logger.Warning(msg);
     }
 
-    private static IntPtr il2cpp_resolve_icall_Detour(IntPtr signature)
+    private static IntPtr Il2cppResolveICallDetour(IntPtr signature)
     {
         // Convert Pointer to String
         var signatureStr = Marshal.PtrToStringAnsi(signature);

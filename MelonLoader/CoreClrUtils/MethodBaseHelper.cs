@@ -23,7 +23,7 @@ internal static class MethodBaseHelper
         (
             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DoNotWrapExceptions,
             binder: null,
-            new[] { typeof(IntPtr) },
+            [typeof(IntPtr)],
             modifiers: null
         ) ?? throw new InvalidOperationException("RuntimeMethodHandleInternal constructor is missing!");
 
@@ -33,13 +33,13 @@ internal static class MethodBaseHelper
             "GetMethodBase",
             BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DoNotWrapExceptions,
             binder: null,
-            new[] { RuntimeType, RuntimeMethodHandleInternal },
+            [RuntimeType, RuntimeMethodHandleInternal],
             modifiers: null
         ) ?? throw new InvalidOperationException("RuntimeType.GetMethodBase is missing!");
 
         // Wrap the handle
-        var runtimeHandle = RuntimeMethodHandleInternal_Constructor.Invoke(new[] { (object)handle });
-        return (MethodBase?)RuntimeType_GetMethodBase.Invoke(null, new[] { null, runtimeHandle });
+        var runtimeHandle = RuntimeMethodHandleInternal_Constructor.Invoke([handle]);
+        return (MethodBase?)RuntimeType_GetMethodBase.Invoke(null, [null, runtimeHandle]);
     }
 }
 #endif

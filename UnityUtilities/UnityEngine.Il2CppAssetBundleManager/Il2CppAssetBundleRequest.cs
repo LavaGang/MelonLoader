@@ -1,13 +1,13 @@
 ﻿using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UnityEngine;
 
-public class Il2CppAssetBundleCreateRequest : AsyncOperation
+[SuppressMessage("Naming", "CA1708:Identifiers should differ by more than case", Justification = "Deprecated members")]
+public class Il2CppAssetBundleCreateRequest(IntPtr ptr) : AsyncOperation(ptr)
 {
-    public Il2CppAssetBundleCreateRequest(IntPtr ptr) : base(ptr) { }
-
     static Il2CppAssetBundleCreateRequest()
     {
         Il2CppInterop.Runtime.Injection.ClassInjector.RegisterTypeInIl2Cpp<Il2CppAssetBundleCreateRequest>();
@@ -15,7 +15,7 @@ public class Il2CppAssetBundleCreateRequest : AsyncOperation
         get_assetBundleDelegateField = IL2CPP.ResolveICall<get_assetBundleDelegate>("UnityEngine.AssetBundleCreateRequest::get_assetBundle");
     }
 
-    public Il2CppAssetBundle assetBundle
+    public Il2CppAssetBundle AssetBundle
     {
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         get
@@ -25,14 +25,17 @@ public class Il2CppAssetBundleCreateRequest : AsyncOperation
         }
     }
 
+    [Obsolete("Use AssetBundle (starting with upper-case) instead.", true)]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
+    public Il2CppAssetBundle assetBundle => AssetBundle;
+
     private delegate IntPtr get_assetBundleDelegate(IntPtr _this);
     private static readonly get_assetBundleDelegate get_assetBundleDelegateField;
 }
 
-public class Il2CppAssetBundleRequest : AsyncOperation
+[SuppressMessage("Naming", "CA1708:Identifiers should differ by more than case", Justification = "Deprecated members")]
+public class Il2CppAssetBundleRequest(IntPtr ptr) : AsyncOperation(ptr)
 {
-    public Il2CppAssetBundleRequest(IntPtr ptr) : base(ptr) { }
-
     static Il2CppAssetBundleRequest()
     {
         Il2CppInterop.Runtime.Injection.ClassInjector.RegisterTypeInIl2Cpp<Il2CppAssetBundleRequest>();
@@ -41,7 +44,7 @@ public class Il2CppAssetBundleRequest : AsyncOperation
         get_allAssetsDelegateField = IL2CPP.ResolveICall<get_allAssetsDelegate>("UnityEngine.AssetBundleRequest::get_allAssets");
     }
 
-    public Object asset
+    public Object Asset
     {
         get
         {
@@ -50,7 +53,11 @@ public class Il2CppAssetBundleRequest : AsyncOperation
         }
     }
 
-    public Il2CppReferenceArray<Object> allAssets
+    [Obsolete("Use Asset (starting with upper-case) instead.", true)]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
+    public Object asset => Asset;
+
+    public Il2CppReferenceArray<Object> AllAssets
     {
         get
         {
@@ -58,6 +65,10 @@ public class Il2CppAssetBundleRequest : AsyncOperation
             return ptr == IntPtr.Zero ? null : new Il2CppReferenceArray<Object>(ptr);
         }
     }
+
+    [Obsolete("Use AllAssets (starting with upper-case) instead.", true)]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "It's deprecated")]
+    public Il2CppReferenceArray<Object> allAssets => AllAssets;
 
     private delegate IntPtr get_assetDelegate(IntPtr _this);
     private static readonly get_assetDelegate get_assetDelegateField;

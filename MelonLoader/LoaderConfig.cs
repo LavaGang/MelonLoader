@@ -1,7 +1,12 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 using Tomlet.Attributes;
+
+#if NET6_0_OR_GREATER
+using System;
+#else
+using System.Diagnostics;
+#endif
 
 namespace MelonLoader;
 
@@ -26,7 +31,13 @@ public class LoaderConfig
     public class CoreConfig
     {
         [TomlNonSerialized]
-        public string BaseDirectory { get; internal set; } = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!;
+        public string BaseDirectory { get; internal set; } = Path.GetDirectoryName(
+#if NET6_0_OR_GREATER
+            Environment.ProcessPath
+#else
+            Process.GetCurrentProcess().MainModule!.FileName
+#endif
+            )!;
 
         // Technically, this will always return false, but it's still a config ¯\_(ツ)_/¯
         [TomlProperty("disable")]

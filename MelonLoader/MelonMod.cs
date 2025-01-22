@@ -101,7 +101,7 @@ public abstract class MelonMod : MelonTypeBase<MelonMod>
             List<MelonModGameAttribute> newatts = [];
             foreach (var att in Games)
                 newatts.Add(new MelonModGameAttribute(att.Developer, att.Name));
-            _LegacyGameAttributes = newatts.ToArray();
+            _LegacyGameAttributes = [.. newatts];
             return _LegacyGameAttributes;
         }
     }

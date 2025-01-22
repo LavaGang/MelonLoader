@@ -3,23 +3,18 @@
 namespace MelonLoader;
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-public class MelonGameAttribute : Attribute
+public class MelonGameAttribute(string developer = null, string name = null) : Attribute
 {
-    public MelonGameAttribute(string developer = null, string name = null)
-    {
-        Developer = developer;
-        Name = name;
-    }
 
     /// <summary>
     /// Developer of the Game.
     /// </summary>
-    public string Developer { get; internal set; }
+    public string Developer { get; internal set; } = developer;
 
     /// <summary>
     /// Name of the Game.
     /// </summary>
-    public string Name { get; internal set; }
+    public string Name { get; internal set; } = name;
 
     /// <summary>
     /// If the Attribute is set as Universal or not.

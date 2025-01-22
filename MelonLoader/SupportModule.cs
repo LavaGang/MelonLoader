@@ -92,7 +92,7 @@ internal static class SupportModule
             return false;
         }
 
-        Interface = (ISupportModuleTo)method.Invoke(null, new object[] { new SupportModule_From() });
+        Interface = (ISupportModuleTo)method.Invoke(null, [new SupportModule_From()]);
         if (Interface == null)
         {
             MelonLogger.Error("Failed to Initialize Interface!");

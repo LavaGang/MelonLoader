@@ -28,7 +28,7 @@ public class TarExtendedHeaderReader
 
     private int state = LENGTH;
 
-    private static readonly byte[] StateNext = new[] { (byte)' ', (byte)'=', (byte)'\n' };
+    private static readonly byte[] StateNext = [(byte)' ', (byte)'=', (byte)'\n'];
 
     /// <summary>
     /// Creates a new <see cref="TarExtendedHeaderReader"/>.

@@ -90,7 +90,7 @@ public abstract class MelonPlugin : MelonTypeBase<MelonPlugin>
             List<MelonPluginGameAttribute> newatts = [];
             foreach (var att in Games)
                 newatts.Add(new MelonPluginGameAttribute(att.Developer, att.Name));
-            _LegacyGameAttributes = newatts.ToArray();
+            _LegacyGameAttributes = [.. newatts];
             return _LegacyGameAttributes;
         }
     }

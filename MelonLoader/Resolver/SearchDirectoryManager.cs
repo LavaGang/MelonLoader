@@ -18,8 +18,7 @@ internal static class SearchDirectoryManager
     private static List<SearchDirectoryInfo> SearchDirectoryList = [];
 
     private static void Sort()
-        => SearchDirectoryList =
-            SearchDirectoryList.OrderBy(x => x.Priority).ToList();
+        => SearchDirectoryList = [.. SearchDirectoryList.OrderBy(x => x.Priority)];
 
     internal static void Add(string path, int priority = 0)
     {

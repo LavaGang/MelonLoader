@@ -14,9 +14,8 @@ public class FastAccess
     [Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true))")]
     public static InstantiationHandler CreateInstantiationHandler(Type type)
     {
-        var constructorInfo = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
-        if (constructorInfo is null)
-            throw new ApplicationException(string.Format("The type {0} must declare an empty constructor (the constructor may be private, internal, protected, protected internal, or public).", type));
+        var constructorInfo = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, [], null) 
+            ?? throw new ApplicationException(string.Format("The type {0} must declare an empty constructor (the constructor may be private, internal, protected, protected internal, or public).", type));
         var dynamicMethod = new DynamicMethodDefinition($"InstantiateObject_{type.Name}", type, null);
         var generator = dynamicMethod.GetILGenerator();
         generator.Emit(OpCodes.Newobj, constructorInfo);
@@ -90,8 +89,8 @@ public class FastAccess
     }
 
     private static DynamicMethodDefinition CreateGetDynamicMethod(Type type)
-            => new($"DynamicGet_{type.Name}", typeof(object), new Type[] { typeof(object) });
+            => new($"DynamicGet_{type.Name}", typeof(object), [typeof(object)]);
 
     private static DynamicMethodDefinition CreateSetDynamicMethod(Type type)
-            => new($"DynamicSet_{type.Name}", typeof(void), new Type[] { typeof(object), typeof(object) });
+            => new($"DynamicSet_{type.Name}", typeof(void), [typeof(object), typeof(object)]);
 }

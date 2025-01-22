@@ -72,7 +72,7 @@ public class LemonArraySegment<T> : IList<T>, ICollection<T>, IEnumerable<T>, IE
     /// <returns>
     ///   <see langword="true" /> if the specified object is a <see cref="T:MelonLoader.LemonArraySegment`1" /> structure and is equal to the current instance; otherwise, <see langword="false" />.</returns>
     public override bool Equals(object obj)
-        => obj is LemonArraySegment<T> && Equals((LemonArraySegment<T>)obj);
+        => obj is LemonArraySegment<T> segment && Equals(segment);
 
     /// <summary>Determines whether the specified <see cref="T:MelonLoader.LemonArraySegment`1" /> structure is equal to the current instance.</summary>
     /// <param name="obj">The structure to compare with the current instance.</param>

@@ -20,10 +20,10 @@ internal class Muse_Dash_Mono_Module : MelonModule
         // Inject Custom Resolver
 
         string[] assembly_list =
-        {
+        [
             "ModHelper",
             "ModLoader",
-        };
+        ];
         var base_assembly = typeof(Muse_Dash_Mono_Module).Assembly;
         foreach (var assemblyName in assembly_list)
             MelonAssemblyResolver.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
@@ -52,7 +52,7 @@ internal class Muse_Dash_Mono_Module : MelonModule
                 rotten.Add(rm);
         }
 
-        return new ResolvedMelons(melons.ToArray(), rotten.ToArray());
+        return new ResolvedMelons([.. melons], [.. rotten]);
     }
 
     private MelonBase LoadMod(Assembly asm, Type modType, out RottenMelon rottenMelon)

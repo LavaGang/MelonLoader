@@ -21,10 +21,11 @@ internal class IPA_Module : MelonModule
         // Point GetResolverFromAssembly to Dummy MelonCompatibilityLayer.Resolver
 
         string[] assembly_list =
-        {
+        [
                 "IllusionPlugin",
                 "IllusionInjector",
-            };
+        ];
+
         var base_assembly = typeof(IPA_Module).Assembly;
         foreach (var assemblyName in assembly_list)
             MelonAssemblyResolver.GetAssemblyResolveInfo(assemblyName).Override = base_assembly;
@@ -53,7 +54,7 @@ internal class IPA_Module : MelonModule
                 rotten.Add(rm);
         }
 
-        return new ResolvedMelons(melons.ToArray(), rotten.ToArray());
+        return new ResolvedMelons([.. melons], [.. rotten]);
     }
 
     private MelonBase LoadPlugin(Assembly asm, Type pluginType, out RottenMelon rottenMelon)

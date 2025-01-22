@@ -22,14 +22,14 @@ public class Il2CppAssetBundleManager
     {
         if (GetAllLoadedAssetBundles_NativeDelegateField == null)
             throw new System.NullReferenceException("The GetAllLoadedAssetBundles_NativeDelegateField cannot be null.");
+
         var intPtr = GetAllLoadedAssetBundles_NativeDelegateField();
-        var refarr = (intPtr != System.IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intPtr) : null;
-        if (refarr == null)
-            throw new System.NullReferenceException("The refarr cannot be null.");
+        var refarr = ((intPtr != System.IntPtr.Zero) ? new Il2CppReferenceArray<Object>(intPtr) : null) ?? throw new System.NullReferenceException("The refarr cannot be null.");
         System.Collections.Generic.List<Il2CppAssetBundle> bundlelist = [];
         for (var i = 0; i < refarr.Length; i++)
             bundlelist.Add(new Il2CppAssetBundle(IL2CPP.Il2CppObjectBaseToPtrNotNull(refarr[i])));
-        return bundlelist.ToArray();
+
+        return [.. bundlelist];
     }
 
     public static Il2CppAssetBundle LoadFromFile(string path) => LoadFromFile(path, 0u, 0UL);

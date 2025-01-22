@@ -84,39 +84,23 @@ internal static class Main
             if (streamType == null)
                 throw new Exception("Unable to Find Type Il2CppSystem.IO.Stream!");
 
-            var propertyInfo = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public);
-            if (propertyInfo == null)
-                throw new Exception("Unable to Find Property Il2CppSystem.IO.Stream.Null!");
+            var propertyInfo = streamType.GetProperty("Null", BindingFlags.Static | BindingFlags.Public) ?? throw new Exception("Unable to Find Property Il2CppSystem.IO.Stream.Null!");
 
-            var nullStreamField = propertyInfo.GetGetMethod();
-            if (nullStreamField == null)
-                throw new Exception("Unable to Find Get Method of Property Il2CppSystem.IO.Stream.Null!");
+            var nullStreamField = propertyInfo.GetGetMethod() ?? throw new Exception("Unable to Find Get Method of Property Il2CppSystem.IO.Stream.Null!");
 
-            var nullStream = nullStreamField.Invoke(null, new object[0]);
-            if (nullStream == null)
-                throw new Exception("Unable to Get Value of Property Il2CppSystem.IO.Stream.Null!");
+            var nullStream = nullStreamField.Invoke(null, []) ?? throw new Exception("Unable to Get Value of Property Il2CppSystem.IO.Stream.Null!");
 
-            var streamWriterType = Il2Cppmscorlib.GetType("Il2CppSystem.IO.StreamWriter");
-            if (streamWriterType == null)
-                throw new Exception("Unable to Find Type Il2CppSystem.IO.StreamWriter!");
+            var streamWriterType = Il2Cppmscorlib.GetType("Il2CppSystem.IO.StreamWriter") ?? throw new Exception("Unable to Find Type Il2CppSystem.IO.StreamWriter!");
 
-            var streamWriterCtor = streamWriterType.GetConstructor(new[] { streamType });
-            if (streamWriterCtor == null)
-                throw new Exception("Unable to Find Constructor of Type Il2CppSystem.IO.StreamWriter!");
+            var streamWriterCtor = streamWriterType.GetConstructor([streamType]) ?? throw new Exception("Unable to Find Constructor of Type Il2CppSystem.IO.StreamWriter!");
 
-            var nullStreamWriter = streamWriterCtor.Invoke(new[] { nullStream });
-            if (nullStreamWriter == null)
-                throw new Exception("Unable to Invoke Constructor of Type Il2CppSystem.IO.StreamWriter!");
+            var nullStreamWriter = streamWriterCtor.Invoke([nullStream]) ?? throw new Exception("Unable to Invoke Constructor of Type Il2CppSystem.IO.StreamWriter!");
 
-            var consoleType = Il2Cppmscorlib.GetType("Il2CppSystem.Console");
-            if (consoleType == null)
-                throw new Exception("Unable to Find Type Il2CppSystem.Console!");
+            var consoleType = Il2Cppmscorlib.GetType("Il2CppSystem.Console") ?? throw new Exception("Unable to Find Type Il2CppSystem.Console!");
 
-            var setOutMethod = consoleType.GetMethod("SetOut", BindingFlags.Static | BindingFlags.Public);
-            if (setOutMethod == null)
-                throw new Exception("Unable to Find Method Il2CppSystem.Console.SetOut!");
+            var setOutMethod = consoleType.GetMethod("SetOut", BindingFlags.Static | BindingFlags.Public) ?? throw new Exception("Unable to Find Method Il2CppSystem.Console.SetOut!");
 
-            setOutMethod.Invoke(null, new[] { nullStreamWriter });
+            setOutMethod.Invoke(null, [nullStreamWriter]);
         }
         catch (Exception ex)
         {

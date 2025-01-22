@@ -14,13 +14,13 @@ public class LemonEnumerator<T> : IEnumerator<T>, IEnumerable<T>
     /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
     /// </summary>
     public LemonEnumerator(T[] lemons)
-        => LemonPatch = lemons.ToArray();
+        => LemonPatch = [.. lemons];
 
     /// <summary>
     /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
     /// </summary>
     public LemonEnumerator(IList<T> lemons)
-        => LemonPatch = lemons.ToArray();
+        => LemonPatch = [.. lemons];
 
     object IEnumerator.Current => Current;
     public T Current { get; private set; }

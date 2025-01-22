@@ -27,16 +27,11 @@ public class PatchInfo : HarmonyLib.PatchInfo { }
 
 [Obsolete("Harmony.Patch is Only Here for Compatibility Reasons. Please use HarmonyLib.Patch instead.")]
 [Serializable]
-public class Patch : IComparable
+public class Patch(MethodInfo patch, int index, string owner, int priority, string[] before, string[] after) : IComparable
 {
-    public readonly MethodInfo patch;
-    private readonly HarmonyLib.Patch patchWrapper;
-    [Obsolete("Harmony.Patch is Only Here for Compatibility Reasons. Please use HarmonyLib.Patch instead.")]
-    public Patch(MethodInfo patch, int index, string owner, int priority, string[] before, string[] after)
-    {
-        this.patch = patch;
-        patchWrapper = new HarmonyLib.Patch(patch, index, owner, priority, before, after, false);
-    }
+    public readonly MethodInfo patch = patch;
+    private readonly HarmonyLib.Patch patchWrapper = new(patch, index, owner, priority, before, after, false);
+
     public MethodInfo GetMethod(MethodBase original) => patchWrapper.GetMethod(original);
     public override bool Equals(object obj) => patchWrapper.Equals(obj);
     public int CompareTo(object obj) => patchWrapper.CompareTo(obj);

@@ -11,6 +11,7 @@ internal static class Exports
 #if WINDOWS
     [UnmanagedCallersOnly(EntryPoint = "DllMain")]
     [RequiresDynamicCode("Calls InitConfig")]
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "It's DllMain")]
     public static bool DllMain(nint hModule, uint ulReasonForCall, nint lpReserved)
     {
         if (ulReasonForCall != 1)

@@ -94,27 +94,15 @@ public class HarmonyPatchAll : HarmonyLib.HarmonyPatchAll { }
 
 [Obsolete("Harmony.HarmonyPriority is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPriority instead.")]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class HarmonyPriority : HarmonyLib.HarmonyPriority
-{
-    [Obsolete("Harmony.HarmonyPriority is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPriority instead.")]
-    public HarmonyPriority(int prioritiy) : base(prioritiy) { }
-}
+public class HarmonyPriority(int prioritiy) : HarmonyLib.HarmonyPriority(prioritiy) { }
 
 [Obsolete("Harmony.HarmonyBefore is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyBefore instead.")]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class HarmonyBefore : HarmonyLib.HarmonyBefore
-{
-    [Obsolete("Harmony.HarmonyBefore is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyBefore instead.")]
-    public HarmonyBefore(params string[] before) : base(before) { }
-}
+public class HarmonyBefore(params string[] before) : HarmonyLib.HarmonyBefore(before) { }
 
 [Obsolete("Harmony.HarmonyAfter is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyAfter instead.")]
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class HarmonyAfter : HarmonyLib.HarmonyAfter
-{
-    [Obsolete("Harmony.HarmonyAfter is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyAfter instead.")]
-    public HarmonyAfter(params string[] after) : base(after) { }
-}
+public class HarmonyAfter(params string[] after) : HarmonyLib.HarmonyAfter(after) { }
 
 [Obsolete("Harmony.HarmonyPrepare is Only Here for Compatibility Reasons. Please use HarmonyLib.HarmonyPrepare instead.")]
 [AttributeUsage(AttributeTargets.Method)]

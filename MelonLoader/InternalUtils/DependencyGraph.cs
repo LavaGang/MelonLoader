@@ -119,11 +119,11 @@ internal class DependencyGraph<T> where T : MelonBase
             if ((missingDependencies.Count > 0)
                 && !melonsWithMissingDeps.ContainsKey(melonVertex.melon.Info.Name))
                 // melonVertex.skipLoading = true;
-                melonsWithMissingDeps.Add(melonVertex.melon.Info.Name, missingDependencies.ToArray());
+                melonsWithMissingDeps.Add(melonVertex.melon.Info.Name, [.. missingDependencies]);
 
             if ((incompatibilities.Count > 0)
                 && !melonsWithIncompatibilities.ContainsKey(melonVertex.melon.Info.Name))
-                melonsWithIncompatibilities.Add(melonVertex.melon.Info.Name, incompatibilities.ToArray());
+                melonsWithIncompatibilities.Add(melonVertex.melon.Info.Name, [.. incompatibilities]);
         }
 
         // Some Melons are missing dependencies. Don't load these Melons and show an error message

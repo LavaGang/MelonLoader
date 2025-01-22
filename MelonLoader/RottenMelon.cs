@@ -5,18 +5,10 @@ namespace MelonLoader;
 /// <summary>
 /// An info class for broken Melons.
 /// </summary>
-public sealed class RottenMelon
+public sealed class RottenMelon(Type type, string errorMessage, Exception exception = null)
 {
-    public readonly MelonAssembly assembly;
-    public readonly Type type;
-    public readonly string errorMessage;
-    public readonly Exception exception;
-
-    public RottenMelon(Type type, string errorMessage, Exception exception = null)
-    {
-        assembly = MelonAssembly.LoadMelonAssembly(null, type.Assembly);
-        this.type = type;
-        this.errorMessage = errorMessage;
-        this.exception = exception;
-    }
+    public readonly MelonAssembly assembly = MelonAssembly.LoadMelonAssembly(null, type.Assembly);
+    public readonly Type type = type;
+    public readonly string errorMessage = errorMessage;
+    public readonly Exception exception = exception;
 }

@@ -21,9 +21,9 @@ public static class LemonAssert
     {
         var result = false;
         if (LemonAssertMapping.IsNull.TryGetValue(typeof(T), out var method))
-            result = (bool)method.DynamicInvoke(new object[] { obj });
+            result = (bool)method.DynamicInvoke([obj]);
         else if (LemonAssertMapping.IsNull.TryGetValue(typeof(object), out var method2))
-            result = (bool)method2.DynamicInvoke(new object[] { obj });
+            result = (bool)method2.DynamicInvoke([obj]);
         if (!result)
             Failure(NullFailureMessage(true), userMessage, shouldThrowException);
     }
@@ -36,9 +36,9 @@ public static class LemonAssert
     {
         var result = false;
         if (LemonAssertMapping.IsNull.TryGetValue(typeof(T), out var method))
-            result = (bool)method.DynamicInvoke(new object[] { obj });
+            result = (bool)method.DynamicInvoke([obj]);
         else if (LemonAssertMapping.IsNull.TryGetValue(typeof(object), out var method2))
-            result = (bool)method2.DynamicInvoke(new object[] { obj });
+            result = (bool)method2.DynamicInvoke([obj]);
         if (result)
             Failure(NullFailureMessage(false), userMessage, shouldThrowException);
     }
@@ -73,9 +73,9 @@ public static class LemonAssert
     {
         var result = false;
         if (LemonAssertMapping.IsEqual.TryGetValue(typeof(T), out var method))
-            result = (bool)method.DynamicInvoke(new object[] { obj, obj2 });
+            result = (bool)method.DynamicInvoke([obj, obj2]);
         else if (LemonAssertMapping.IsEqual.TryGetValue(typeof(object), out var method2))
-            result = (bool)method2.DynamicInvoke(new object[] { obj, obj2 });
+            result = (bool)method2.DynamicInvoke([obj, obj2]);
         if (!result)
             Failure(EqualityFailureMessage(obj, obj2, true), userMessage, shouldThrowException);
     }
@@ -88,9 +88,9 @@ public static class LemonAssert
     {
         var result = false;
         if (LemonAssertMapping.IsEqual.TryGetValue(typeof(T), out var method))
-            result = (bool)method.DynamicInvoke(new object[] { obj, obj2 });
+            result = (bool)method.DynamicInvoke([obj, obj2]);
         else if (LemonAssertMapping.IsEqual.TryGetValue(typeof(object), out var method2))
-            result = (bool)method2.DynamicInvoke(new object[] { obj, obj2 });
+            result = (bool)method2.DynamicInvoke([obj, obj2]);
         if (result)
             Failure(EqualityFailureMessage(obj, obj2, false), userMessage, shouldThrowException);
     }

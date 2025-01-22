@@ -3,10 +3,8 @@
 namespace MelonLoader;
 
 [AttributeUsage(AttributeTargets.Assembly)]
-public class MelonPlatformDomainAttribute : Attribute
+public class MelonPlatformDomainAttribute(MelonPlatformDomainAttribute.CompatibleDomains domain = MelonPlatformDomainAttribute.CompatibleDomains.UNIVERSAL) : Attribute
 {
-    public MelonPlatformDomainAttribute(CompatibleDomains domain = CompatibleDomains.UNIVERSAL) => Domain = domain;
-
     // <summary>Enum for Melon Platform Domain Compatibility.</summary>
     public enum CompatibleDomains
     {
@@ -16,7 +14,7 @@ public class MelonPlatformDomainAttribute : Attribute
     };
 
     // <summary>Platform Domain Compatibility of the Melon.</summary>
-    public CompatibleDomains Domain { get; internal set; }
+    public CompatibleDomains Domain { get; internal set; } = domain;
 
     public bool IsCompatible(CompatibleDomains domain)
         => Domain == CompatibleDomains.UNIVERSAL || domain == CompatibleDomains.UNIVERSAL || Domain == domain;

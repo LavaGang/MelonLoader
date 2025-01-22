@@ -506,7 +506,7 @@ public class TarInputStream : Stream
                             throw new InvalidHeaderException("Failed to read long name entry");
                         }
 
-                        longName.Append(TarHeader.ParseName(nameBuffer, 0, numRead, encoding).ToString());
+                        longName.Append(TarHeader.ParseName(nameBuffer, 0, numRead, encoding));
                         numToRead -= numRead;
                     }
 

@@ -79,9 +79,9 @@ internal class CoreClrDelegateFixer
             return ret;
 
         var type = module.DefineType(typeName, TypeAttributes.Sealed | TypeAttributes.Public, typeof(MulticastDelegate));
-        type.SetCustomAttribute(new CustomAttributeBuilder(typeof(UnmanagedFunctionPointerAttribute).GetConstructor(new[] { typeof(CallingConvention) }), new object[] { CallingConvention.Cdecl }));
+        type.SetCustomAttribute(new CustomAttributeBuilder(typeof(UnmanagedFunctionPointerAttribute).GetConstructor([typeof(CallingConvention)]), [CallingConvention.Cdecl]));
 
-        var ctor = type.DefineConstructor(MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Public, CallingConventions.HasThis, new[] { typeof(object), typeof(IntPtr) });
+        var ctor = type.DefineConstructor(MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Public, CallingConventions.HasThis, [typeof(object), typeof(IntPtr)]);
         ctor.SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
 
         var parameterTypes = managedMethod.GetParameters().Select(p => p.ParameterType).ToArray();
@@ -99,7 +99,7 @@ internal class CoreClrDelegateFixer
             "BeginInvoke",
             MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.Public,
             CallingConventions.HasThis, typeof(IAsyncResult),
-            parameterTypes.Concat(new[] { typeof(AsyncCallback), typeof(object) }).ToArray()
+            [.. parameterTypes, typeof(AsyncCallback), typeof(object)]
         ).SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
 
         type.DefineMethod(
@@ -107,7 +107,7 @@ internal class CoreClrDelegateFixer
             MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.Public,
             CallingConventions.HasThis,
             managedMethod.ReturnType,
-            new[] { typeof(IAsyncResult) }
+            [typeof(IAsyncResult)]
         ).SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
 
         return type.CreateType();

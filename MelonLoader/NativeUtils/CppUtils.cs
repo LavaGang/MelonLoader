@@ -92,7 +92,7 @@ public static class CppUtils
             ++index;
         }
 
-        return ptrs.ToArray();
+        return [.. ptrs];
     }
 
     public static unsafe IntPtr Sigscan(IntPtr module, int moduleSize, string signature)
