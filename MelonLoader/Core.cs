@@ -97,6 +97,7 @@ namespace MelonLoader
             Fixes.ProcessFix.Install();
 
 #if NET6_0_OR_GREATER
+            Fixes.AsmResolverFix.Install();
             Fixes.Il2CppInteropFixes.Install();
             Fixes.Il2CppICallInjector.Install();
 #endif
