@@ -338,10 +338,10 @@ public class GZipInputStream : InflaterInputStream
 
         // NOTE The total here is the original total modulo 2 ^ 32.
         var total =
-            (uint)footer[4] & 0xff |
-            ((uint)footer[5] & 0xff) << 8 |
-            ((uint)footer[6] & 0xff) << 16 |
-            (uint)footer[7] << 24;
+            ((uint)footer[4] & 0xff) |
+            (((uint)footer[5] & 0xff) << 8) |
+            (((uint)footer[6] & 0xff) << 16) |
+            ((uint)footer[7] << 24);
 
         if (bytesRead != total)
         {

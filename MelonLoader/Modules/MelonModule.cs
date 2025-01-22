@@ -112,7 +112,7 @@ public abstract class MelonModule
     {
         var msg = moduleType.GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 
-        return msg == null ? null : msg.Invoke(msg.IsStatic ? null : this, arguments);
+        return msg?.Invoke(msg.IsStatic ? null : this, arguments);
     }
 
     public class Info

@@ -108,6 +108,6 @@ public static class SteamManifestReader
             return null;
 
         var installpathobj = key.GetValue("InstallPath");
-        return installpathobj == null ? null : installpathobj.ToString();
+        return installpathobj?.ToString();
     }
 }

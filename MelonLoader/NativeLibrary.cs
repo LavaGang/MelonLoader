@@ -3,6 +3,10 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+#if LINUX
+using System.IO;
+#endif
+
 namespace MelonLoader;
 
 public class NativeLibrary

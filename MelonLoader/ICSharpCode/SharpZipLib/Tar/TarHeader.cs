@@ -462,7 +462,7 @@ public class TarHeader
         get { return groupName; }
         set
         {
-            groupName = value == null ? "None" : value;
+            groupName = value ?? "None";
         }
     }
 
@@ -978,12 +978,9 @@ public class TarHeader
     /// </returns>
     public static int GetNameBytes(StringBuilder name, byte[] buffer, int offset, int length, Encoding encoding)
     {
-        if (name == null)
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
-
-        return buffer == null
+        return name == null
+            ? throw new ArgumentNullException(nameof(name))
+            : buffer == null
             ? throw new ArgumentNullException(nameof(buffer))
             : GetNameBytes(name.ToString(), 0, buffer, offset, length, encoding);
     }
@@ -1014,12 +1011,9 @@ public class TarHeader
     /// <returns>The index of the next free byte in the buffer</returns>
     public static int GetNameBytes(string name, byte[] buffer, int offset, int length, Encoding encoding)
     {
-        if (name == null)
-        {
-            throw new ArgumentNullException(nameof(name));
-        }
-
-        return buffer == null ? throw new ArgumentNullException(nameof(buffer)) : GetNameBytes(name, 0, buffer, offset, length, encoding);
+        return name == null
+            ? throw new ArgumentNullException(nameof(name))
+            : buffer == null ? throw new ArgumentNullException(nameof(buffer)) : GetNameBytes(name, 0, buffer, offset, length, encoding);
     }
     /// <summary>
     /// Add a string to a buffer as a collection of ascii bytes.

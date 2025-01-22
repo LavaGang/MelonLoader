@@ -22,7 +22,7 @@ public class AssemblyResolveInfo
             return assembly;
 
         // Check for Fallback
-        return Fallback != null ? Fallback : null;
+        return Fallback ?? null;
     }
 
     public void SetVersionSpecific(Version version, Assembly assembly = null)

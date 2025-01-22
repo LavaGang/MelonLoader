@@ -105,7 +105,7 @@ public class ZipEntryFactory : IEntryFactory
         get { return nameTransform_; }
         set
         {
-            nameTransform_ = value == null ? new ZipNameTransform() : value;
+            nameTransform_ = value ?? new ZipNameTransform();
         }
     }
 

@@ -33,9 +33,7 @@ public class ValueRange<T> : ValueValidator, IValueRange where T : IComparable
 
     public override object EnsureValid(object value)
     {
-        if (MaxValue.CompareTo(value) < 0)
-            return MaxValue;
-        return MinValue.CompareTo(value) > 0 ? MinValue : value;
+        return MaxValue.CompareTo(value) < 0 ? MaxValue : MinValue.CompareTo(value) > 0 ? MinValue : value;
     }
 
     object IValueRange.MinValue => MinValue;

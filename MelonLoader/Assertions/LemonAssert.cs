@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MelonLoader.Assertions;
+﻿namespace MelonLoader.Assertions;
 
 public static class LemonAssert
 {

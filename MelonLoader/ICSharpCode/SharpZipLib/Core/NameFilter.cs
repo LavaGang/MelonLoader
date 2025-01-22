@@ -74,16 +74,7 @@ public class NameFilter : IScanFilter
                 {
                     if ((items[i] != null) && (items[i].Length > 0))
                     {
-                        string toCompile;
-
-                        if (items[i][0] == '+')
-                        {
-                            toCompile = items[i][1..];
-                        }
-                        else
-                        {
-                            toCompile = items[i][0] == '-' ? items[i][1..] : items[i];
-                        }
+                        var toCompile = items[i][0] == '+' ? items[i][1..] : items[i][0] == '-' ? items[i][1..] : items[i];
 
                         var testRegex = new Regex(toCompile, RegexOptions.IgnoreCase | RegexOptions.Singleline);
                     }
@@ -239,16 +230,7 @@ public class NameFilter : IScanFilter
             if ((items[i] != null) && (items[i].Length > 0))
             {
                 var include = items[i][0] != '-';
-                string toCompile;
-
-                if (items[i][0] == '+')
-                {
-                    toCompile = items[i][1..];
-                }
-                else
-                {
-                    toCompile = items[i][0] == '-' ? items[i][1..] : items[i];
-                }
+                var toCompile = items[i][0] == '+' ? items[i][1..] : items[i][0] == '-' ? items[i][1..] : items[i];
 
                 // NOTE: Regular expressions can fail to compile here for a number of reasons that cause an exception
                 // these are left unhandled here as the caller is responsible for ensuring all is valid.

@@ -498,10 +498,7 @@ public class ZipEntry
             if (CentralHeaderRequiresZip64)
                 return ZipConstants.VersionZip64;
 
-            if (CompressionMethod.Deflated == method || IsDirectory || IsCrypted)
-                return 20;
-
-            return HasDosAttributes(0x08) ? 11 : 10;
+            return CompressionMethod.Deflated == method || IsDirectory || IsCrypted ? 20 : HasDosAttributes(0x08) ? 11 : 10;
         }
     }
 
@@ -1006,8 +1003,8 @@ public class ZipEntry
     /// The trailing slash convention should always be followed.
     /// </remarks>
     public bool IsDirectory
-        => name.Length > 0
-        && (name[^1] == '/' || name[^1] == '\\') || HasDosAttributes(16);
+        => (name.Length > 0
+        && (name[^1] == '/' || name[^1] == '\\')) || HasDosAttributes(16);
 
     /// <summary>
     /// Get a value of true if the entry appears to be a file; false otherwise

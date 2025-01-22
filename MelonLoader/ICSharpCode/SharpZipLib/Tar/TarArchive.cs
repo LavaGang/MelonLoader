@@ -113,7 +113,6 @@ public class TarArchive : IDisposable
             throw new ArgumentNullException(nameof(inputStream));
         }
 
-
         var result = inputStream is TarInputStream tarStream ? new TarArchive(tarStream) : CreateInputTarArchive(inputStream, TarBuffer.DefaultBlockFactor, nameEncoding);
         return result;
     }
@@ -139,12 +138,9 @@ public class TarArchive : IDisposable
     /// <returns>Returns a <see cref="TarArchive"/> suitable for reading.</returns>
     public static TarArchive CreateInputTarArchive(Stream inputStream, int blockFactor, Encoding nameEncoding)
     {
-        if (inputStream == null)
-        {
-            throw new ArgumentNullException(nameof(inputStream));
-        }
-
-        return inputStream is TarInputStream
+        return inputStream == null
+            ? throw new ArgumentNullException(nameof(inputStream))
+            : inputStream is TarInputStream
             ? throw new ArgumentException("TarInputStream not valid")
             : new TarArchive(new TarInputStream(inputStream, blockFactor, nameEncoding));
     }
@@ -160,7 +156,6 @@ public class TarArchive : IDisposable
         {
             throw new ArgumentNullException(nameof(outputStream));
         }
-
 
         var result = outputStream is TarOutputStream tarStream
             ? new TarArchive(tarStream)
@@ -196,12 +191,9 @@ public class TarArchive : IDisposable
     /// <returns>Returns a <see cref="TarArchive"/> suitable for writing.</returns>
     public static TarArchive CreateOutputTarArchive(Stream outputStream, int blockFactor, Encoding nameEncoding)
     {
-        if (outputStream == null)
-        {
-            throw new ArgumentNullException(nameof(outputStream));
-        }
-
-        return outputStream is TarOutputStream
+        return outputStream == null
+            ? throw new ArgumentNullException(nameof(outputStream))
+            : outputStream is TarOutputStream
             ? throw new ArgumentException("TarOutputStream is not valid")
             : new TarArchive(new TarOutputStream(outputStream, blockFactor, nameEncoding));
     }
@@ -912,7 +904,7 @@ public class TarArchive : IDisposable
         for (var i = 0; i < bytesRead; ++i)
         {
             var b = content[i];
-            if (b is < 8 or > 13 and < 32 or 255)
+            if (b is < 8 or (> 13 and < 32) or 255)
             {
                 return true;
             }

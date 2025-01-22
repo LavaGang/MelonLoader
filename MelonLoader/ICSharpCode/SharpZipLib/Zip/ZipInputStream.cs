@@ -433,14 +433,9 @@ public class ZipInputStream : InflaterInputStream
     {
         get
         {
-            if (entry != null)
-            {
-                return entry.Size >= 0 ? entry.Size : throw new ZipException("Length not available for the current entry");
-            }
-            else
-            {
-                throw new InvalidOperationException("No current entry");
-            }
+            return entry != null
+                ? entry.Size >= 0 ? entry.Size : throw new ZipException("Length not available for the current entry")
+                : throw new InvalidOperationException("No current entry");
         }
     }
 
@@ -482,7 +477,6 @@ public class ZipInputStream : InflaterInputStream
     private int StoredDescriptorEntry(byte[] destination, int offset, int count) =>
         throw new StreamUnsupportedException(
             "The combination of Stored compression method and Descriptor flag is not possible to read using ZipInputStream");
-
 
     /// <summary>
     /// Perform the initial read on an entry which may include
@@ -556,7 +550,6 @@ public class ZipInputStream : InflaterInputStream
             return BodyRead(destination, offset, count);
         }
 
-
         internalReader = ReadingNotAvailable;
         return 0;
     }
@@ -581,12 +574,9 @@ public class ZipInputStream : InflaterInputStream
             throw new ArgumentOutOfRangeException(nameof(offset), "Cannot be negative");
         }
 
-        if (count < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(count), "Cannot be negative");
-        }
-
-        return (buffer.Length - offset) < count
+        return count < 0
+            ? throw new ArgumentOutOfRangeException(nameof(count), "Cannot be negative")
+            : (buffer.Length - offset) < count
             ? throw new ArgumentException("Invalid offset/count combination")
             : internalReader(buffer, offset, count);
     }

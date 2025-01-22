@@ -69,9 +69,9 @@ public static class InteropSupport
     public static T Il2CppObjectPtrToIl2CppObject<T>(IntPtr ptr)
     {
         ValidateInterface();
-        if (ptr == IntPtr.Zero)
-            throw new NullReferenceException("The ptr cannot be IntPtr.Zero.");
-        return !IsGeneratedAssemblyType(typeof(T))
+        return ptr == IntPtr.Zero
+            ? throw new NullReferenceException("The ptr cannot be IntPtr.Zero.")
+            : !IsGeneratedAssemblyType(typeof(T))
             ? throw new NullReferenceException("The type must be a Generated Assembly Type.")
             : (T)typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(IntPtr) }, new ParameterModifier[0]).Invoke(new object[] { ptr });
     }

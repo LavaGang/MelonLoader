@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace MelonLoader.Preferences.IO;
 

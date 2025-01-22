@@ -36,8 +36,6 @@ public static class LemonAssertMapping
         => string.IsNullOrEmpty(obj);
     private static bool IsEqual_object(object obj, object obj2)
     {
-        if (obj == null)
-            return obj2 == null;
-        return obj2 == null ? obj == null : obj.Equals(obj2);
+        return obj == null ? obj2 == null : obj2 == null ? obj == null : obj.Equals(obj2);
     }
 }

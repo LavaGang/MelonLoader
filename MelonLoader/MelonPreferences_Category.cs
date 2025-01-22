@@ -98,9 +98,9 @@ public class MelonPreferences_Category
 
     public MelonPreferences_Entry GetEntry(string identifier)
     {
-        if (string.IsNullOrEmpty(identifier))
-            throw new Exception("identifier cannot be null or empty when calling GetEntry");
-        return Entries.Count <= 0 ? null : Entries.Find(x => x.Identifier.Equals(identifier));
+        return string.IsNullOrEmpty(identifier)
+            ? throw new Exception("identifier cannot be null or empty when calling GetEntry")
+            : Entries.Count <= 0 ? null : Entries.Find(x => x.Identifier.Equals(identifier));
     }
     public MelonPreferences_Entry<T> GetEntry<T>(string identifier) => (MelonPreferences_Entry<T>)GetEntry(identifier);
     public bool HasEntry(string identifier) => GetEntry(identifier) != null;

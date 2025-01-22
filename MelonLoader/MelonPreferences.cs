@@ -176,7 +176,7 @@ public static class MelonPreferences
             throw new Exception("identifier is null or empty when calling CreateCategory");
         display_name ??= identifier;
         var category = GetCategory(identifier);
-        return category != null ? category : new MelonPreferences_Category(identifier, display_name, is_hidden);
+        return category ?? new MelonPreferences_Category(identifier, display_name, is_hidden);
     }
 
     public static MelonPreferences_ReflectiveCategory CreateCategory<T>(string identifier, string display_name = null) where T : new() => MelonPreferences_ReflectiveCategory.Create<T>(identifier, display_name);
@@ -204,9 +204,9 @@ public static class MelonPreferences
 
     public static MelonPreferences_Category GetCategory(string identifier)
     {
-        if (string.IsNullOrEmpty(identifier))
-            throw new Exception("identifier is null or empty when calling GetCategory");
-        return Categories.Count <= 0 ? null : Categories.Find(x => x.Identifier.Equals(identifier));
+        return string.IsNullOrEmpty(identifier)
+            ? throw new Exception("identifier is null or empty when calling GetCategory")
+            : Categories.Count <= 0 ? null : Categories.Find(x => x.Identifier.Equals(identifier));
     }
 
     public static T GetCategory<T>(string identifier) where T : new()

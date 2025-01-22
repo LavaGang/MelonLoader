@@ -280,7 +280,7 @@ public class FastZip
         get { return entryFactory_; }
         set
         {
-            entryFactory_ = value == null ? new ZipEntryFactory() : value;
+            entryFactory_ = value ?? new ZipEntryFactory();
         }
     }
 

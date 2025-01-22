@@ -1144,7 +1144,7 @@ public class ZipFile : IEnumerable, IDisposable
                         throw new ZipException("Compression method not supported");
                     }
 
-                    if (extractVersion is > ZipConstants.VersionMadeBy or > 20 and < ZipConstants.VersionZip64)
+                    if (extractVersion is > ZipConstants.VersionMadeBy or (> 20 and < ZipConstants.VersionZip64))
                     {
                         throw new ZipException(string.Format("Version required to extract this entry not supported ({0})", extractVersion));
                     }
@@ -1385,7 +1385,7 @@ public class ZipFile : IEnumerable, IDisposable
 
         set
         {
-            updateEntryFactory_ = value == null ? new ZipEntryFactory() : value;
+            updateEntryFactory_ = value ?? new ZipEntryFactory();
         }
     }
 
@@ -2931,14 +2931,7 @@ public class ZipFile : IEnumerable, IDisposable
                 if (result == 0)
                 {
                     var offsetDiff = x.Entry.Offset - y.Entry.Offset;
-                    if (offsetDiff < 0)
-                    {
-                        result = -1;
-                    }
-                    else
-                    {
-                        result = offsetDiff == 0 ? 0 : 1;
-                    }
+                    result = offsetDiff < 0 ? -1 : offsetDiff == 0 ? 0 : 1;
                 }
             }
             return result;
@@ -3475,7 +3468,8 @@ public class ZipFile : IEnumerable, IDisposable
             // total number of disks 4 bytes
             ReadLEUint(); // startDisk64 is not currently used
             var offset64 = ReadLEUlong();
-            var totalDisks = ReadLEUint();
+
+            _ = ReadLEUint();
 
             baseStream_.Position = (long)offset64;
             long sig64 = ReadLEUint();
@@ -3486,13 +3480,17 @@ public class ZipFile : IEnumerable, IDisposable
             }
 
             // NOTE: Record size = SizeOfFixedFields + SizeOfVariableData - 12.
-            var recordSize = ReadLEUlong();
-            int versionMadeBy = ReadLEUshort();
-            int versionToExtract = ReadLEUshort();
-            var thisDisk = ReadLEUint();
-            var centralDirDisk = ReadLEUint();
+            _ = ReadLEUlong();
+
+            _ = ReadLEUshort();
+
+            _ = ReadLEUshort();
+
+            _ = ReadLEUint();
+
+            _ = ReadLEUint();
             entriesForThisDisk = ReadLEUlong();
-            entriesForWholeCentralDir = ReadLEUlong();
+            _ = ReadLEUlong();
             centralDirSize = ReadLEUlong();
             offsetOfCentralDir = (long)ReadLEUlong();
 
@@ -3537,8 +3535,9 @@ public class ZipFile : IEnumerable, IDisposable
             int extraLen = ReadLEUshort();
             int commentLen = ReadLEUshort();
 
-            int diskStartNo = ReadLEUshort();  // Not currently used
-            int internalAttributes = ReadLEUshort();  // Not currently used
+            _ = ReadLEUshort();  // Not currently used
+
+            _ = ReadLEUshort();  // Not currently used
 
             var externalAttributes = ReadLEUint();
             long offset = ReadLEUint();
@@ -3557,10 +3556,9 @@ public class ZipFile : IEnumerable, IDisposable
                 DosTime = dostime,
                 ZipFileIndex = (long)i,
                 Offset = offset,
-                ExternalFileAttributes = (int)externalAttributes
+                ExternalFileAttributes = (int)externalAttributes,
+                CryptoCheckValue = (bitFlags & 8) == 0 ? (byte)(crc >> 24) : (byte)((dostime >> 8) & 0xff)
             };
-
-            entry.CryptoCheckValue = (bitFlags & 8) == 0 ? (byte)(crc >> 24) : (byte)((dostime >> 8) & 0xff);
 
             if (extraLen > 0)
             {
@@ -4610,7 +4608,6 @@ public class DiskArchiveStorage : BaseArchiveStorage
 
         var moveTempName = PathUtils.GetTempFileName(fileName_);
         var newFileCreated = false;
-
 
         Stream result;
         try

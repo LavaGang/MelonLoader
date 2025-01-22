@@ -819,14 +819,7 @@ public class Inflater
     {
         get
         {
-            if (IsNeedingDictionary)
-            {
-                return readAdler;
-            }
-            else
-            {
-                return adler != null ? (int)adler.Value : 0;
-            }
+            return IsNeedingDictionary ? readAdler : adler != null ? (int)adler.Value : 0;
         }
     }
 

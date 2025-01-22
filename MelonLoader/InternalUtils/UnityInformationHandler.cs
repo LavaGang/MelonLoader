@@ -1,8 +1,6 @@
-﻿using AssetsTools.NET;
-using AssetsTools.NET.Extra;
+﻿using AssetsTools.NET.Extra;
 using MelonLoader.Utils;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;

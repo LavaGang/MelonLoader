@@ -659,13 +659,9 @@ public class BZip2OutputStream : Stream
         {
             nGroups = 3;
         }
-        else if (nMTF < 1200)
-        {
-            nGroups = 4;
-        }
         else
         {
-            nGroups = nMTF < 2400 ? 5 : 6;
+            nGroups = nMTF < 1200 ? 4 : nMTF < 2400 ? 5 : 6;
         }
 
         /*--- Generate an initial set of coding tables ---*/
@@ -1919,7 +1915,7 @@ public class BZip2OutputStream : Stream
                 parent[n1] = parent[n2] = nNodes;
 
                 weight[nNodes] = (int)((weight[n1] & 0xffffff00) + (weight[n2] & 0xffffff00)) |
-                    1 + (((weight[n1] & 0x000000ff) > (weight[n2] & 0x000000ff)) ? (weight[n1] & 0x000000ff) : (weight[n2] & 0x000000ff));
+                    (1 + (((weight[n1] & 0x000000ff) > (weight[n2] & 0x000000ff)) ? (weight[n1] & 0x000000ff) : (weight[n2] & 0x000000ff)));
 
                 parent[nNodes] = -1;
                 nHeap++;
@@ -1995,7 +1991,6 @@ public class BZip2OutputStream : Stream
         }
         if (b > c)
         {
-            t = b;
             b = c;
         }
         if (a > b)

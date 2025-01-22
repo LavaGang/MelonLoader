@@ -70,9 +70,7 @@ public static class MelonUtils
     public static MelonGameAttribute CurrentGameAttribute { get; private set; }
     public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
     {
-        if (value.CompareTo(min) < 0)
-            return min;
-        return value.CompareTo(max) > 0 ? max : value;
+        return value.CompareTo(min) < 0 ? min : value.CompareTo(max) > 0 ? max : value;
     }
     public static string HashCode { get; private set; }
 
@@ -435,7 +433,7 @@ public static class MelonUtils
         if (ptr == IntPtr.Zero)
             throw new ArgumentNullException(nameof(ptr));
         var del = Marshal.GetDelegateForFunctionPointer(ptr, type);
-        return del == null ? throw new Exception($"Unable to Get Delegate of Type {type.FullName} for Function Pointer!") : del;
+        return del ?? throw new Exception($"Unable to Get Delegate of Type {type.FullName} for Function Pointer!");
     }
     public static IntPtr GetFunctionPointer(this Delegate del)
         => Marshal.GetFunctionPointerForDelegate(del);
@@ -498,7 +496,7 @@ public static class MelonUtils
     public static string GetFileProductName(string filepath)
     {
         var fileInfo = FileVersionInfo.GetVersionInfo(filepath);
-        return fileInfo != null ? fileInfo.ProductName : null;
+        return fileInfo?.ProductName;
     }
 
     public static void AddNativeDLLDirectory(string path)

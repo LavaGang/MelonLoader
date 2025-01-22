@@ -55,7 +55,7 @@ public class MelonPrefs
         if (category == null)
             return null;
         var entry = category.GetEntry(name);
-        return entry == null ? null : entry.GetValueAsString();
+        return entry?.GetValueAsString();
     }
     [Obsolete("MelonLoader.MelonPrefs.SetString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.SetEntryString instead.")]
     public static void SetString(string section, string name, string value)
@@ -145,7 +145,7 @@ public class MelonPrefs
             if (category == null)
                 return null;
             var entry = category.GetEntry(name);
-            return entry == null ? null : entry.GetEditedValueAsString();
+            return entry?.GetEditedValueAsString();
         }
         private static void SetEditedString(string section, string name, string value)
         {

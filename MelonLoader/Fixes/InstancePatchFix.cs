@@ -28,8 +28,8 @@ internal static class InstancePatchFix
 
     private static bool PatchMethod(MethodBase __0)
     {
-        if (__0 == null)
-            throw new NullReferenceException("Patch Method");
-        return (__0 != null) && !__0.IsStatic ? throw new Exception("Patch Method must be a Static Method!") : true;
+        return __0 == null
+            ? throw new NullReferenceException("Patch Method")
+            : (__0 != null) && !__0.IsStatic ? throw new Exception("Patch Method must be a Static Method!") : true;
     }
 }

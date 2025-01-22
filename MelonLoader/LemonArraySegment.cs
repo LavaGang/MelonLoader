@@ -101,9 +101,9 @@ public class LemonArraySegment<T> : IList<T>, ICollection<T>, IEnumerable<T>, IE
     {
         get
         {
-            if (Array == null)
-                throw new InvalidOperationException("The underlying array is null.");
-            return index < 0 || index >= Count ? throw new ArgumentOutOfRangeException("index") : Array[Offset + index];
+            return Array == null
+                ? throw new InvalidOperationException("The underlying array is null.")
+                : index < 0 || index >= Count ? throw new ArgumentOutOfRangeException("index") : Array[Offset + index];
         }
         set
         {
@@ -196,9 +196,9 @@ public class LemonArraySegment<T> : IList<T>, ICollection<T>, IEnumerable<T>, IE
         {
             get
             {
-                if (_current < _start)
-                    throw new InvalidOperationException("Enumeration has not started. Call MoveNext.");
-                return _current >= _end ? throw new InvalidOperationException("Enumeration already finished.") : _array[_current];
+                return _current < _start
+                    ? throw new InvalidOperationException("Enumeration has not started. Call MoveNext.")
+                    : _current >= _end ? throw new InvalidOperationException("Enumeration already finished.") : _array[_current];
             }
         }
 

@@ -513,7 +513,7 @@ public sealed class ZipExtraData : IDisposable
     /// <param name="data">The extra data.</param>
     public ZipExtraData(byte[] data)
     {
-        _data = data == null ? Empty.Array<byte>() : data;
+        _data = data ?? Empty.Array<byte>();
     }
 
     #endregion Constructors
