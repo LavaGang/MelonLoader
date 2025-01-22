@@ -182,7 +182,7 @@ public class ZipNameTransform : INameTransform
             result = relaxed
             ? name.IndexOfAny(InvalidEntryCharsRelaxed) < 0
             : (name.IndexOfAny(InvalidEntryChars) < 0) &&
-                (!name.StartsWith('/'));
+                (name.Length == 0 || name[0] != '/');
         }
 
         return result;
@@ -205,7 +205,7 @@ public class ZipNameTransform : INameTransform
         var result =
             (name != null) &&
             (name.IndexOfAny(InvalidEntryChars) < 0) &&
-            (!name.StartsWith('/'))
+            (name.Length == 0 || name[0] != '/')
             ;
         return result;
     }

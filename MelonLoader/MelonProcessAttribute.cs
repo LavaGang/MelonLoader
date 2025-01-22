@@ -26,6 +26,6 @@ public class MelonProcessAttribute : Attribute
         => Universal || string.IsNullOrEmpty(processName) || (RemoveExtension(processName) == EXE_Name);
 
     private string RemoveExtension(string name)
-        => name == null ? null : (name.EndsWith(".exe") ? name.Remove(name.Length - 4) : name);
+        => name == null ? null : (name.EndsWith(".exe") ? name[..^4] : name);
 
 }

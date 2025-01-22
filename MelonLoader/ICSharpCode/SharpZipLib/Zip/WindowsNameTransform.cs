@@ -101,7 +101,7 @@ public class WindowsNameTransform : INameTransform
         {
             while (name.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
             {
-                name = name.Remove(name.Length - 1, 1);
+                name = name[..^1];
             }
         }
         else
@@ -190,13 +190,13 @@ public class WindowsNameTransform : INameTransform
         // Drop any leading slashes.
         while ((name.Length > 0) && (name[0] == Path.DirectorySeparatorChar))
         {
-            name = name.Remove(0, 1);
+            name = name[1..];
         }
 
         // Drop any trailing slashes.
         while ((name.Length > 0) && (name[^1] == Path.DirectorySeparatorChar))
         {
-            name = name.Remove(name.Length - 1, 1);
+            name = name[..^1];
         }
 
         // Convert consecutive \\ characters to \

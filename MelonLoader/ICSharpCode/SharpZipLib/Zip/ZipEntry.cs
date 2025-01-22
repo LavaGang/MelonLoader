@@ -1090,7 +1090,7 @@ public class ZipEntry
 
         while ((name.Length > 0) && (name[0] == '/'))
         {
-            name = name.Remove(0, 1);
+            name = name[1..];
         }
 
         return name;

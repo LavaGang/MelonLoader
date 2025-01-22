@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using UnityEngine;
+using System.Diagnostics.CodeAnalysis;
+
 
 #if SM_Il2Cpp
 using Il2CppInterop.Runtime;
@@ -8,6 +10,9 @@ using Il2CppInterop.Runtime;
 
 namespace MelonLoader.Support;
 
+[SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used by Unity through reflection")]
+[SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used by Unity through reflection")]
+[SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "It is necessary")]
 internal class SM_Component : MonoBehaviour
 {
     private bool isQuitting;
@@ -19,6 +24,8 @@ internal class SM_Component : MonoBehaviour
 #if SM_Il2Cpp
     private delegate bool SetAsLastSiblingDelegate(IntPtr transformptr);
     private static readonly SetAsLastSiblingDelegate SetAsLastSiblingDelegateField;
+
+    [SuppressMessage("Style", "IDE0290:Use primary constructor", Justification = "<Pending>")]
     public SM_Component(IntPtr value) : base(value) { }
 #endif
 

@@ -144,7 +144,7 @@ public sealed class MelonAssembly
 
         var shortPath = path;
         if (shortPath.StartsWith(MelonEnvironment.MelonBaseDirectory))
-            shortPath = "." + shortPath.Remove(0, MelonEnvironment.MelonBaseDirectory.Length);
+            shortPath = "." + shortPath[MelonEnvironment.MelonBaseDirectory.Length..];
 
         OnAssemblyResolving.Invoke(assembly);
         ma = new MelonAssembly(assembly, path);

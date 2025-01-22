@@ -43,9 +43,9 @@ public static class MelonLaunchOptions
             // Parse Prefix
             var noPrefixCmd = fullcmd;
             if (noPrefixCmd.StartsWith("--"))
-                noPrefixCmd = noPrefixCmd.Remove(0, 2);
+                noPrefixCmd = noPrefixCmd[2..];
             else if (noPrefixCmd.StartsWith("-"))
-                noPrefixCmd = noPrefixCmd.Remove(0, 1);
+                noPrefixCmd = noPrefixCmd[1..];
             else
             {
                 // Unknown Command, Add it to Dictionary

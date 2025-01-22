@@ -8,8 +8,8 @@ public static class InteropSupport
     public interface Interface
     {
         bool IsInheritedFromIl2CppObjectBase(Type type);
-        public bool IsInjectedType(Type type);
-        public IntPtr GetClassPointerForType(Type type);
+        bool IsInjectedType(Type type);
+        IntPtr GetClassPointerForType(Type type);
         FieldInfo MethodBaseToIl2CppFieldInfo(MethodBase method);
         int? GetIl2CppMethodCallerCount(MethodBase method);
         void RegisterTypeInIl2CppDomain(Type type, bool logSuccess);
