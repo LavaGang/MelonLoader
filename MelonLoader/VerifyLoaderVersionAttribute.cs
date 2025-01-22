@@ -1,5 +1,5 @@
-﻿using System;
-using Semver;
+﻿using Semver;
+using System;
 
 namespace MelonLoader;
 
@@ -46,5 +46,5 @@ public class VerifyLoaderVersionAttribute(SemVersion semver, bool is_minimum) : 
         => SemVer == null || version == null || (IsMinimum ? SemVer <= version : SemVer == version);
 
     public bool IsCompatible(string version)
-        => !SemVersion.TryParse(version, out SemVersion ver) || IsCompatible(ver);
+        => !SemVersion.TryParse(version, out var ver) || IsCompatible(ver);
 }

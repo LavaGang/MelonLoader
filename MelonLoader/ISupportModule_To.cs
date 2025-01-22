@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 
-namespace MelonLoader
+namespace MelonLoader;
+
+public interface ISupportModule_To
 {
-    public interface ISupportModule_To
-    {
-        object StartCoroutine(IEnumerator coroutine);
-        void StopCoroutine(object coroutineToken);
-        void UnityDebugLog(string msg);
-    }
+    object StartCoroutine(IEnumerator coroutine);
+    void StopCoroutine(object coroutineToken);
+    void UnityDebugLog(string msg);
 }

@@ -1,139 +1,131 @@
 ﻿using MelonLoader.InternalUtils;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace MelonLoader.NativeUtils
+namespace MelonLoader.NativeUtils;
+
+public class NativeHook<T> where T : Delegate
 {
-    public class NativeHook<T> where T : Delegate
+    #region Private Values
+    private static readonly List<Delegate> _gcProtect = [];
+
+    private IntPtr _targetHandle;
+    private IntPtr _detourHandle;
+    private IntPtr _trampolineHandle;
+    private T _trampoline;
+    #endregion
+
+    #region Public Properties
+    public IntPtr Target
     {
-        #region Private Values
-        private static readonly List<Delegate> _gcProtect = new();
-        
-        private IntPtr _targetHandle;
-        private IntPtr _detourHandle;
-        private IntPtr _trampolineHandle;
-        private T _trampoline;
-        #endregion
-
-        #region Public Properties
-        public IntPtr Target 
+        get
         {
-            get
-            {
-                return _targetHandle;
-            }
-
-            set
-            {
-                if (value == IntPtr.Zero)
-                    throw new ArgumentNullException("value");
-
-                _targetHandle = value;
-            }
+            return _targetHandle;
         }
 
-        public IntPtr Detour
+        set
         {
-            get
-            {
-                return _detourHandle;
-            }
+            if (value == IntPtr.Zero)
+                throw new ArgumentNullException("value");
 
-            set
-            {
-                if (value == IntPtr.Zero)
-                    throw new ArgumentNullException("value");
+            _targetHandle = value;
+        }
+    }
 
-                _detourHandle = value;
-            }
+    public IntPtr Detour
+    {
+        get
+        {
+            return _detourHandle;
         }
 
-        public T Trampoline
+        set
         {
-            get => _trampoline;
-            private set
-            {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
+            if (value == IntPtr.Zero)
+                throw new ArgumentNullException("value");
 
-                if (_trampoline != null)
-                    _gcProtect.Remove(_trampoline);
-
-                _trampoline = value;
-                _gcProtect.Add(_trampoline);
-            }
-
+            _detourHandle = value;
         }
-        
-        public IntPtr TrampolineHandle
+    }
+
+    public T Trampoline
+    {
+        get => _trampoline;
+        private set
         {
-            get => _trampolineHandle;
-            private set
-            {
-                if (value == IntPtr.Zero)
-                    throw new ArgumentNullException(nameof(value));
+            if (_trampoline != null)
+                _gcProtect.Remove(_trampoline);
 
-                _trampolineHandle = value;
-            }
-        }
-
-        public bool IsHooked { get; private set; }
-        #endregion
-
-        public NativeHook() { }
-
-        public NativeHook(IntPtr target, IntPtr detour) 
-        {
-            if (target == IntPtr.Zero)
-                throw new ArgumentNullException("target");
-
-            if (detour == IntPtr.Zero)
-                throw new ArgumentNullException("detour"); 
-
-            _targetHandle = target;
-            _detourHandle = detour;
-        }
-
-        public unsafe void Attach()
-        {
-            if (IsHooked)
-                return;
-
-            if (_targetHandle == IntPtr.Zero)
-                throw new NullReferenceException("The NativeHook's target has not been set!");
-
-            if (_detourHandle == IntPtr.Zero)
-                throw new NullReferenceException("The NativeHook's detour has not been set!");
-
-            IntPtr trampoline = _targetHandle;
-            BootstrapInterop.NativeHookAttach((IntPtr)(&trampoline), _detourHandle);
-            _trampolineHandle = trampoline;
-            
-            _trampoline = (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
+            _trampoline = value ?? throw new ArgumentNullException(nameof(value));
             _gcProtect.Add(_trampoline);
-
-            IsHooked = true;
         }
+    }
 
-        public unsafe void Detach()
+    public IntPtr TrampolineHandle
+    {
+        get => _trampolineHandle;
+        private set
         {
-            if (!IsHooked) 
-                return;
+            if (value == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(value));
 
-            if (_targetHandle == IntPtr.Zero)
-                throw new NullReferenceException("The NativeHook's target has not been set!");
-
-            IntPtr original = _targetHandle;
-            BootstrapInterop.NativeHookDetach((IntPtr)(&original), _detourHandle);
-
-            IsHooked= false;
-            _gcProtect.Remove(_trampoline);
-            _trampoline = null;
-            _trampolineHandle = IntPtr.Zero;
+            _trampolineHandle = value;
         }
+    }
+
+    public bool IsHooked { get; private set; }
+    #endregion
+
+    public NativeHook() { }
+
+    public NativeHook(IntPtr target, IntPtr detour)
+    {
+        if (target == IntPtr.Zero)
+            throw new ArgumentNullException("target");
+
+        if (detour == IntPtr.Zero)
+            throw new ArgumentNullException("detour");
+
+        _targetHandle = target;
+        _detourHandle = detour;
+    }
+
+    public unsafe void Attach()
+    {
+        if (IsHooked)
+            return;
+
+        if (_targetHandle == IntPtr.Zero)
+            throw new NullReferenceException("The NativeHook's target has not been set!");
+
+        if (_detourHandle == IntPtr.Zero)
+            throw new NullReferenceException("The NativeHook's detour has not been set!");
+
+        var trampoline = _targetHandle;
+        BootstrapInterop.NativeHookAttach((IntPtr)(&trampoline), _detourHandle);
+        _trampolineHandle = trampoline;
+
+        _trampoline = (T)Marshal.GetDelegateForFunctionPointer(_trampolineHandle, typeof(T));
+        _gcProtect.Add(_trampoline);
+
+        IsHooked = true;
+    }
+
+    public unsafe void Detach()
+    {
+        if (!IsHooked)
+            return;
+
+        if (_targetHandle == IntPtr.Zero)
+            throw new NullReferenceException("The NativeHook's target has not been set!");
+
+        var original = _targetHandle;
+        BootstrapInterop.NativeHookDetach((IntPtr)(&original), _detourHandle);
+
+        IsHooked = false;
+        _gcProtect.Remove(_trampoline);
+        _trampoline = null;
+        _trampolineHandle = IntPtr.Zero;
     }
 }

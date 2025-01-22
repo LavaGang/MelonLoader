@@ -2,246 +2,248 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MelonLoader
+namespace MelonLoader;
+
+public abstract class MelonEventBase<T> where T : Delegate
 {
-    public abstract class MelonEventBase<T> where T : Delegate
+    private readonly List<MelonAction<T>> actions = [];
+    private MelonAction<T>[] cachedActionsArray = new MelonAction<T>[0];
+    public readonly bool oneTimeUse;
+
+    public bool Disposed { get; private set; }
+
+    public MelonEventBase(bool oneTimeUse = false)
     {
-        private readonly List<MelonAction<T>> actions = new();
-        private MelonAction<T>[] cachedActionsArray = new MelonAction<T>[0];
-        public readonly bool oneTimeUse;
+        this.oneTimeUse = oneTimeUse;
+    }
 
-        public bool Disposed { get; private set; }
-
-        public MelonEventBase(bool oneTimeUse = false)
+    public bool CheckIfSubscribed(MethodInfo method, object obj = null)
+    {
+        lock (actions)
         {
-            this.oneTimeUse = oneTimeUse;
+            return actions.Exists(x => x.del.Method == method && (obj == null || x.del.Target == obj));
         }
+    }
 
-        public bool CheckIfSubscribed(MethodInfo method, object obj = null)
+    public void Subscribe(T action, int priority = 0, bool unsubscribeOnFirstInvocation = false)
+    {
+        if (Disposed)
+            return;
+
+        lock (actions)
         {
-            lock (actions)
+            var acts = MelonAction<T>.Get(action, priority, unsubscribeOnFirstInvocation);
+            foreach (var a in acts)
             {
-                return actions.Exists(x => x.del.Method == method && (obj == null || x.del.Target == obj));
-            }
-        }
+                if (CheckIfSubscribed(a.del.Method, a.del.Target))
+                    continue;
 
-        public void Subscribe(T action, int priority = 0, bool unsubscribeOnFirstInvocation = false)
-        {
-            if (Disposed)
-                return;
-
-            lock (actions)
-            {
-                var acts = MelonAction<T>.Get(action, priority, unsubscribeOnFirstInvocation);
-                foreach (var a in acts)
+                if (a.melonAssembly != null)
                 {
-                    if (CheckIfSubscribed(a.del.Method, a.del.Target))
-                        continue;
+                    MelonDebug.Msg($"MelonAssembly '{a.melonAssembly.Assembly.GetName().Name}' subscribed with {a.del.Method.Name}");
+                    a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.del), unsubscribeOnFirstInvocation: true);
+                }
 
-                    if (a.melonAssembly != null)
+                for (var b = 0; b < actions.Count; b++)
+                {
+                    var act = actions[b];
+                    if (a.priority < act.priority)
                     {
-                        MelonDebug.Msg($"MelonAssembly '{a.melonAssembly.Assembly.GetName().Name}' subscribed with {a.del.Method.Name}");
-                        a.melonAssembly.OnUnregister.Subscribe(() => Unsubscribe(a.del), unsubscribeOnFirstInvocation: true);
+                        actions.Insert(b, a);
+                        UpdateEnumerator();
+                        return;
                     }
-
-                    for (var b = 0; b < actions.Count; b++)
-                    {
-                        var act = actions[b];
-                        if (a.priority < act.priority)
-                        {
-                            actions.Insert(b, a);
-                            UpdateEnumerator();
-                            return;
-                        }
-                    }
-
-                    actions.Add(a);
-                    UpdateEnumerator();
-                }
-            }
-        }
-
-        public void Unsubscribe(T action)
-        {
-            foreach (var inv in action.GetInvocationList())
-            {
-                Unsubscribe(inv.Method, inv.Target);
-            }
-        }
-
-        public void UnsubscribeAll()
-        {
-            lock (actions)
-                actions.Clear();
-
-            UpdateEnumerator();
-        }
-
-        public void Unsubscribe(MethodInfo method, object obj = null)
-        {
-            if (Disposed)
-                return;
-
-            lock (actions)
-            {
-                if (method.IsStatic)
-                    obj = null;
-
-                var any = false;
-                for (var a = 0; a < actions.Count; a++)
-                {
-                    var act = actions[a];
-                    if (act.del.Method != method || (obj != null && act.del.Target != obj))
-                        continue;
-
-                    any = true;
-                    actions.RemoveAt(a);
-                    if (act.melonAssembly != null)
-                        MelonDebug.Msg($"MelonAssembly '{act.melonAssembly.Assembly.GetName().Name}' unsubscribed with {act.del.Method.Name}");
                 }
 
-                if (any)
-                    UpdateEnumerator();
+                actions.Add(a);
+                UpdateEnumerator();
             }
         }
+    }
 
-        private void UpdateEnumerator()
+    public void Unsubscribe(T action)
+    {
+        foreach (var inv in action.GetInvocationList())
         {
-            cachedActionsArray = actions.ToArray();
+            Unsubscribe(inv.Method, inv.Target);
         }
+    }
 
-        public class MelonEventSubscriber
-        {
-            public T del;
-            public bool unsubscribeOnFirstInvocation;
-            public int priority;
-            public MelonAssembly melonAssembly;
-        }
-        public MelonEventSubscriber[] GetSubscribers()
-        {
-            List<MelonEventSubscriber> allSubs = new List<MelonEventSubscriber>();
-            foreach (var act in actions)
-                allSubs.Add(new MelonEventSubscriber
-                {
-                    del = act.del,
-                    unsubscribeOnFirstInvocation = act.unsubscribeOnFirstInvocation,
-                    priority = act.priority,
-                    melonAssembly = act.melonAssembly
-                });
-            return allSubs.ToArray();
-        }
+    public void UnsubscribeAll()
+    {
+        lock (actions)
+            actions.Clear();
 
-        protected void Invoke(Action<T> delegateInvoker)
-        {
-            if (Disposed)
-                return;
+        UpdateEnumerator();
+    }
 
-            var actionsArray = cachedActionsArray;
-            for (var a = 0; a < actionsArray.Length; a++)
+    public void Unsubscribe(MethodInfo method, object obj = null)
+    {
+        if (Disposed)
+            return;
+
+        lock (actions)
+        {
+            if (method.IsStatic)
+                obj = null;
+
+            var any = false;
+            for (var a = 0; a < actions.Count; a++)
             {
-                var del = actionsArray[a];
-                try { delegateInvoker(del.del); }
-                catch (Exception ex)
-                {
-                    if (del.melonAssembly == null || del.melonAssembly.LoadedMelons.Count == 0)
-                        MelonLogger.Error(ex.ToString());
-                    else
-                        del.melonAssembly.LoadedMelons[0].LoggerInstance.Error(ex.ToString());
-                }
+                var act = actions[a];
+                if (act.del.Method != method || (obj != null && act.del.Target != obj))
+                    continue;
 
-                if (del.unsubscribeOnFirstInvocation)
-                    Unsubscribe(del.del);
+                any = true;
+                actions.RemoveAt(a);
+                if (act.melonAssembly != null)
+                    MelonDebug.Msg($"MelonAssembly '{act.melonAssembly.Assembly.GetName().Name}' unsubscribed with {act.del.Method.Name}");
             }
 
-            if (oneTimeUse)
-                Dispose();
-        }
-
-        public void Dispose()
-        {
-            UnsubscribeAll();
-            Disposed = true;
+            if (any)
+                UpdateEnumerator();
         }
     }
 
-    #region Param Children
-    public class MelonEvent : MelonEventBase<LemonAction>
+    private void UpdateEnumerator()
     {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+        cachedActionsArray = actions.ToArray();
+    }
 
-        public void Invoke()
-        {
-            Invoke(x => x());
-        }
-    }
-    public class MelonEvent<T1> : MelonEventBase<LemonAction<T1>>
+    public class MelonEventSubscriber
     {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+        public T del;
+        public bool unsubscribeOnFirstInvocation;
+        public int priority;
+        public MelonAssembly melonAssembly;
+    }
+    public MelonEventSubscriber[] GetSubscribers()
+    {
+        List<MelonEventSubscriber> allSubs = [];
+        foreach (var act in actions)
+            allSubs.Add(new MelonEventSubscriber
+            {
+                del = act.del,
+                unsubscribeOnFirstInvocation = act.unsubscribeOnFirstInvocation,
+                priority = act.priority,
+                melonAssembly = act.melonAssembly
+            });
+        return allSubs.ToArray();
+    }
 
-        public void Invoke(T1 arg1)
-        {
-            Invoke(x => x(arg1));
-        }
-    }
-    public class MelonEvent<T1, T2> : MelonEventBase<LemonAction<T1, T2>>
+    protected void Invoke(Action<T> delegateInvoker)
     {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+        if (Disposed)
+            return;
 
-        public void Invoke(T1 arg1, T2 arg2)
+        var actionsArray = cachedActionsArray;
+        for (var a = 0; a < actionsArray.Length; a++)
         {
-            Invoke(x => x(arg1, arg2));
-        }
-    }
-    public class MelonEvent<T1, T2, T3> : MelonEventBase<LemonAction<T1, T2, T3>>
-    {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+            var del = actionsArray[a];
+            try
+            {
+                delegateInvoker(del.del);
+            }
+            catch (Exception ex)
+            {
+                if (del.melonAssembly == null || del.melonAssembly.LoadedMelons.Count == 0)
+                    MelonLogger.Error(ex.ToString());
+                else
+                    del.melonAssembly.LoadedMelons[0].LoggerInstance.Error(ex.ToString());
+            }
 
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3)
-        {
-            Invoke(x => x(arg1, arg2, arg3));
+            if (del.unsubscribeOnFirstInvocation)
+                Unsubscribe(del.del);
         }
-    }
-    public class MelonEvent<T1, T2, T3, T4> : MelonEventBase<LemonAction<T1, T2, T3, T4>>
-    {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
 
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
-        {
-            Invoke(x => x(arg1, arg2, arg3, arg4));
-        }
+        if (oneTimeUse)
+            Dispose();
     }
-    public class MelonEvent<T1, T2, T3, T4, T5> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5>>
-    {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
 
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
-        {
-            Invoke(x => x(arg1, arg2, arg3, arg4, arg5));
-        }
-    }
-    public class MelonEvent<T1, T2, T3, T4, T5, T6> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6>>
+    public void Dispose()
     {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
-        {
-            Invoke(x => x(arg1, arg2, arg3, arg4, arg5, arg6));
-        }
+        UnsubscribeAll();
+        Disposed = true;
     }
-    public class MelonEvent<T1, T2, T3, T4, T5, T6, T7> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6, T7>>
-    {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
-        {
-            Invoke(x => x(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
-        }
-    }
-    public class MelonEvent<T1, T2, T3, T4, T5, T6, T7, T8> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6, T7, T8>>
-    {
-        public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
-        public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
-        {
-            Invoke(x => x(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
-        }
-    }
-    #endregion
 }
+
+#region Param Children
+public class MelonEvent : MelonEventBase<LemonAction>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+
+    public void Invoke()
+    {
+        Invoke(x => x());
+    }
+}
+public class MelonEvent<T1> : MelonEventBase<LemonAction<T1>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+
+    public void Invoke(T1 arg1)
+    {
+        Invoke(x => x(arg1));
+    }
+}
+public class MelonEvent<T1, T2> : MelonEventBase<LemonAction<T1, T2>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+
+    public void Invoke(T1 arg1, T2 arg2)
+    {
+        Invoke(x => x(arg1, arg2));
+    }
+}
+public class MelonEvent<T1, T2, T3> : MelonEventBase<LemonAction<T1, T2, T3>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+
+    public void Invoke(T1 arg1, T2 arg2, T3 arg3)
+    {
+        Invoke(x => x(arg1, arg2, arg3));
+    }
+}
+public class MelonEvent<T1, T2, T3, T4> : MelonEventBase<LemonAction<T1, T2, T3, T4>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+
+    public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+    {
+        Invoke(x => x(arg1, arg2, arg3, arg4));
+    }
+}
+public class MelonEvent<T1, T2, T3, T4, T5> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+
+    public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+    {
+        Invoke(x => x(arg1, arg2, arg3, arg4, arg5));
+    }
+}
+public class MelonEvent<T1, T2, T3, T4, T5, T6> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+    public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+    {
+        Invoke(x => x(arg1, arg2, arg3, arg4, arg5, arg6));
+    }
+}
+public class MelonEvent<T1, T2, T3, T4, T5, T6, T7> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6, T7>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+    public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+    {
+        Invoke(x => x(arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+    }
+}
+public class MelonEvent<T1, T2, T3, T4, T5, T6, T7, T8> : MelonEventBase<LemonAction<T1, T2, T3, T4, T5, T6, T7, T8>>
+{
+    public MelonEvent(bool oneTimeUse = false) : base(oneTimeUse) { }
+    public void Invoke(T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+    {
+        Invoke(x => x(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8));
+    }
+}
+#endregion

@@ -1,75 +1,74 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.IO;
 using System.Reflection;
-using HarmonyLib;
 
-namespace MelonLoader.Preferences.IO
+namespace MelonLoader.Preferences.IO;
+
+internal class Watcher
 {
-    internal class Watcher
+    private static bool ShouldDisableFileWatcherFunctionality = false;
+    private FileSystemWatcher FileWatcher = null;
+    private readonly File PrefFile = null;
+
+    internal Watcher(File preffile)
     {
-        private static bool ShouldDisableFileWatcherFunctionality = false;
-        private FileSystemWatcher FileWatcher = null;
-        private readonly File PrefFile = null;
-
-        internal Watcher(File preffile)
+        PrefFile = preffile;
+        if (ShouldDisableFileWatcherFunctionality)
+            return;
+        try
         {
-            PrefFile = preffile;
-            if (ShouldDisableFileWatcherFunctionality)
-                return;
-            try
+            var method = AccessTools.PropertyGetter(typeof(FileSystemWatcher), "Path");
+            if (method == null)
+                throw new NullReferenceException("No Path Property Get Method Found!");
+            if (method.IsNotImplemented())
             {
-                MethodInfo method = AccessTools.PropertyGetter(typeof(FileSystemWatcher), "Path");
-                if (method == null)
-                    throw new NullReferenceException("No Path Property Get Method Found!");
-                if (method.IsNotImplemented())
-                {
-                    MelonLogger.Warning("FileSystemWatcher NotImplementedException Detected! Disabling MelonPreferences FileWatcher Functionality...");
-                    ShouldDisableFileWatcherFunctionality = true;
-                    return;
-                }
-
-                FileWatcher = new FileSystemWatcher(Path.GetDirectoryName(preffile.FilePath), Path.GetFileName(preffile.FilePath))
-                {
-                    NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite,
-                    EnableRaisingEvents = true
-                };
-                FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
-                FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
-                FileWatcher.BeginInit();
-            }
-            catch (Exception ex)
-            {
-                MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
+                MelonLogger.Warning("FileSystemWatcher NotImplementedException Detected! Disabling MelonPreferences FileWatcher Functionality...");
                 ShouldDisableFileWatcherFunctionality = true;
-                FileWatcher = null;
+                return;
             }
+
+            FileWatcher = new FileSystemWatcher(Path.GetDirectoryName(preffile.FilePath), Path.GetFileName(preffile.FilePath))
+            {
+                NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite,
+                EnableRaisingEvents = true
+            };
+            FileWatcher.Created += new FileSystemEventHandler(OnFileWatcherTriggered);
+            FileWatcher.Changed += new FileSystemEventHandler(OnFileWatcherTriggered);
+            FileWatcher.BeginInit();
         }
-
-        internal void Destroy()
+        catch (Exception ex)
         {
-            if (ShouldDisableFileWatcherFunctionality || (FileWatcher == null))
-                return;
-            try
-            {
-                FileWatcher.EndInit();
-                FileWatcher.Dispose();
-            }
-            catch (Exception ex)
-            {
-                MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
-                ShouldDisableFileWatcherFunctionality = true;
-            }
+            MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
+            ShouldDisableFileWatcherFunctionality = true;
             FileWatcher = null;
         }
+    }
 
-        private void OnFileWatcherTriggered(object source, FileSystemEventArgs e)
+    internal void Destroy()
+    {
+        if (ShouldDisableFileWatcherFunctionality || (FileWatcher == null))
+            return;
+        try
         {
-            if (PrefFile.IsSaving)
-            {
-                PrefFile.IsSaving = false;
-                return;
-            }
-            MelonPreferences.LoadFileAndRefreshCategories(PrefFile);
+            FileWatcher.EndInit();
+            FileWatcher.Dispose();
         }
+        catch (Exception ex)
+        {
+            MelonLogger.Warning("FileSystemWatcher Exception: " + ex.ToString());
+            ShouldDisableFileWatcherFunctionality = true;
+        }
+        FileWatcher = null;
+    }
+
+    private void OnFileWatcherTriggered(object source, FileSystemEventArgs e)
+    {
+        if (PrefFile.IsSaving)
+        {
+            PrefFile.IsSaving = false;
+            return;
+        }
+        MelonPreferences.LoadFileAndRefreshCategories(PrefFile);
     }
 }

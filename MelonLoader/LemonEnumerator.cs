@@ -1,73 +1,71 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MelonLoader
+namespace MelonLoader;
+
+public class LemonEnumerator<T> : IEnumerator<T>, IEnumerable<T>
 {
-    public class LemonEnumerator<T> : IEnumerator<T>, IEnumerable<T>
+    private T[] LemonPatch;
+    private int NextLemon = 0;
+
+    /// <summary>
+    /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
+    /// </summary>
+    public LemonEnumerator(T[] lemons)
+        => LemonPatch = lemons.ToArray();
+
+    /// <summary>
+    /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
+    /// </summary>
+    public LemonEnumerator(IList<T> lemons)
+        => LemonPatch = lemons.ToArray();
+
+    object IEnumerator.Current => Current;
+    public T Current { get; private set; }
+
+    public bool Peek(out T next)
     {
-        private T[] LemonPatch;
-        private int NextLemon = 0;
-
-        /// <summary>
-        /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
-        /// </summary>
-        public LemonEnumerator(T[] lemons)
-            => LemonPatch = lemons.ToArray();
-
-        /// <summary>
-        /// Creates a new instance of <see cref="LemonEnumerator{T}"/> with a new copy of '<paramref name="lemons"/>'.
-        /// </summary>
-        public LemonEnumerator(IList<T> lemons)
-            => LemonPatch = lemons.ToArray();
-
-        object IEnumerator.Current => Current;
-        public T Current { get; private set; }
-
-        public bool Peek(out T next)
+        if ((LemonPatch == null)
+               || (LemonPatch.Length <= 0)
+               || (NextLemon >= LemonPatch.Length))
         {
-            if ((LemonPatch == null)
-                   || (LemonPatch.Length <= 0)
-                   || (NextLemon >= LemonPatch.Length))
-            {
-                next = Current;
-                return false;
-            }
-
-            next = LemonPatch[NextLemon];
-            return true;
+            next = Current;
+            return false;
         }
 
-        bool IEnumerator.MoveNext() => MoveNext();
-        public bool MoveNext()
-        {
-            if ((LemonPatch == null)
-                   || (LemonPatch.Length <= 0)
-                   || (NextLemon >= LemonPatch.Length))
-                return false;
-            Current = LemonPatch[NextLemon];
-            NextLemon++;
-            return true;
-        }
+        next = LemonPatch[NextLemon];
+        return true;
+    }
 
-        void IEnumerator.Reset() => Reset();
-        public void Reset()
-        {
-            NextLemon = 0;
-            Current = default;
-        }
+    bool IEnumerator.MoveNext() => MoveNext();
+    public bool MoveNext()
+    {
+        if ((LemonPatch == null)
+               || (LemonPatch.Length <= 0)
+               || (NextLemon >= LemonPatch.Length))
+            return false;
+        Current = LemonPatch[NextLemon];
+        NextLemon++;
+        return true;
+    }
 
-        public IEnumerator<T> GetEnumerator() // for foreach loops
-            => this;
+    void IEnumerator.Reset() => Reset();
+    public void Reset()
+    {
+        NextLemon = 0;
+        Current = default;
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-            => this;
+    public IEnumerator<T> GetEnumerator() // for foreach loops
+        => this;
 
-        public void Dispose()
-        {
-            Reset();
-            LemonPatch = null;
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+        => this;
+
+    public void Dispose()
+    {
+        Reset();
+        LemonPatch = null;
     }
 }
