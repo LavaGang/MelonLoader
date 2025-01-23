@@ -228,6 +228,7 @@ namespace MelonLoader
             return result.ToString();
         }
 
+        [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
         public static T ParseJSONStringtoStruct<T>(string jsonstr)
         {
             if (string.IsNullOrEmpty(jsonstr))
