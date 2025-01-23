@@ -4,10 +4,11 @@ using static MelonLoader.ICSharpCode.SharpZipLib.Zip.ZipEntryFactory;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// Defines factory methods for creating new <see cref="ZipEntry"></see> values.
-	/// </summary>
-	public interface IEntryFactory
+    /// <summary>
+    /// Defines factory methods for creating new <see cref="ZipEntry"></see> values.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface IEntryFactory
 	{
 		/// <summary>
 		/// Create a <see cref="ZipEntry"/> for a file given its name

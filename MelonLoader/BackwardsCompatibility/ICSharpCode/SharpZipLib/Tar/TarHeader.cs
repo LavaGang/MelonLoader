@@ -3,42 +3,43 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// This class encapsulates the Tar Entry Header used in Tar Archives.
-	/// The class also holds a number of tar constants, used mostly in headers.
-	/// </summary>
-	/// <remarks>
-	///    The tar format and its POSIX successor PAX have a long history which makes for compatability
-	///    issues when creating and reading files.
-	///
-	///    This is further complicated by a large number of programs with variations on formats
-	///    One common issue is the handling of names longer than 100 characters.
-	///    GNU style long names are currently supported.
-	///
-	/// This is the ustar (Posix 1003.1) header.
-	///
-	/// struct header
-	/// {
-	/// 	char t_name[100];          //   0 Filename
-	/// 	char t_mode[8];            // 100 Permissions
-	/// 	char t_uid[8];             // 108 Numerical User ID
-	/// 	char t_gid[8];             // 116 Numerical Group ID
-	/// 	char t_size[12];           // 124 Filesize
-	/// 	char t_mtime[12];          // 136 st_mtime
-	/// 	char t_chksum[8];          // 148 Checksum
-	/// 	char t_typeflag;           // 156 Type of File
-	/// 	char t_linkname[100];      // 157 Target of Links
-	/// 	char t_magic[6];           // 257 "ustar" or other...
-	/// 	char t_version[2];         // 263 Version fixed to 00
-	/// 	char t_uname[32];          // 265 User Name
-	/// 	char t_gname[32];          // 297 Group Name
-	/// 	char t_devmajor[8];        // 329 Major for devices
-	/// 	char t_devminor[8];        // 337 Minor for devices
-	/// 	char t_prefix[155];        // 345 Prefix for t_name
-	/// 	char t_mfill[12];          // 500 Filler up to 512
-	/// };
-	/// </remarks>
-	public class TarHeader
+    /// <summary>
+    /// This class encapsulates the Tar Entry Header used in Tar Archives.
+    /// The class also holds a number of tar constants, used mostly in headers.
+    /// </summary>
+    /// <remarks>
+    ///    The tar format and its POSIX successor PAX have a long history which makes for compatability
+    ///    issues when creating and reading files.
+    ///
+    ///    This is further complicated by a large number of programs with variations on formats
+    ///    One common issue is the handling of names longer than 100 characters.
+    ///    GNU style long names are currently supported.
+    ///
+    /// This is the ustar (Posix 1003.1) header.
+    ///
+    /// struct header
+    /// {
+    /// 	char t_name[100];          //   0 Filename
+    /// 	char t_mode[8];            // 100 Permissions
+    /// 	char t_uid[8];             // 108 Numerical User ID
+    /// 	char t_gid[8];             // 116 Numerical Group ID
+    /// 	char t_size[12];           // 124 Filesize
+    /// 	char t_mtime[12];          // 136 st_mtime
+    /// 	char t_chksum[8];          // 148 Checksum
+    /// 	char t_typeflag;           // 156 Type of File
+    /// 	char t_linkname[100];      // 157 Target of Links
+    /// 	char t_magic[6];           // 257 "ustar" or other...
+    /// 	char t_version[2];         // 263 Version fixed to 00
+    /// 	char t_uname[32];          // 265 User Name
+    /// 	char t_gname[32];          // 297 Group Name
+    /// 	char t_devmajor[8];        // 329 Major for devices
+    /// 	char t_devminor[8];        // 337 Minor for devices
+    /// 	char t_prefix[155];        // 345 Prefix for t_name
+    /// 	char t_mfill[12];          // 500 Filler up to 512
+    /// };
+    /// </remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class TarHeader
 	{
 		#region Constants
 

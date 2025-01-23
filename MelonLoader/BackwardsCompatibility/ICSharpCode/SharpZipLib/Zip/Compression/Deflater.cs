@@ -2,17 +2,18 @@ using System;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 {
-	/// <summary>
-	/// This is the Deflater class.  The deflater class compresses input
-	/// with the deflate algorithm described in RFC 1951.  It has several
-	/// compression levels and three different strategies described below.
-	///
-	/// This class is <i>not</i> thread safe.  This is inherent in the API, due
-	/// to the split of deflate and setInput.
-	///
-	/// author of the original java version : Jochen Hoenicke
-	/// </summary>
-	public class Deflater
+    /// <summary>
+    /// This is the Deflater class.  The deflater class compresses input
+    /// with the deflate algorithm described in RFC 1951.  It has several
+    /// compression levels and three different strategies described below.
+    ///
+    /// This class is <i>not</i> thread safe.  This is inherent in the API, due
+    /// to the split of deflate and setInput.
+    ///
+    /// author of the original java version : Jochen Hoenicke
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class Deflater
 	{
 		#region Deflater Documentation
 

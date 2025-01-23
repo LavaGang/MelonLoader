@@ -3,11 +3,12 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib
 {
-	/// <summary>
-	/// Indicates that an error occurred during decoding of a input stream due to corrupt
-	/// data or (unintentional) library incompatibility.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// Indicates that an error occurred during decoding of a input stream due to corrupt
+    /// data or (unintentional) library incompatibility.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class StreamDecodingException : SharpZipBaseException
 	{
 		private const string GenericMessage = "Input stream could not be decoded";

@@ -5,10 +5,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 {
 	using static Zip.Compression.Deflater;
 
-	/// <summary>
-	/// An example class to demonstrate compression and decompression of GZip streams.
-	/// </summary>
-	public static class GZip
+    /// <summary>
+    /// An example class to demonstrate compression and decompression of GZip streams.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public static class GZip
 	{
 		/// <summary>
 		/// Decompress the <paramref name="inStream">input</paramref> writing

@@ -3,10 +3,11 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// Holds data pertinent to a data descriptor.
-	/// </summary>
-	public class DescriptorData
+    /// <summary>
+    /// Holds data pertinent to a data descriptor.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class DescriptorData
 	{
 		/// <summary>
 		/// Get /set the compressed size of data.
@@ -44,7 +45,8 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	internal class EntryPatchData
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class EntryPatchData
 	{
 		public long SizePatchOffset
 		{
@@ -66,10 +68,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// This class assists with writing/reading from Zip files.
-	/// </summary>
-	internal class ZipHelperStream : Stream
+    /// <summary>
+    /// This class assists with writing/reading from Zip files.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class ZipHelperStream : Stream
 	{
 		#region Constructors
 

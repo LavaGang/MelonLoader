@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// ZipException represents exceptions specific to Zip classes and code.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// ZipException represents exceptions specific to Zip classes and code.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class ZipException : SharpZipBaseException
 	{
 		/// <summary>

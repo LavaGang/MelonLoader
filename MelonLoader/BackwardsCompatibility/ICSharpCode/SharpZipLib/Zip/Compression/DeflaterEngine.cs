@@ -3,10 +3,11 @@ using System;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 {
-	/// <summary>
-	/// Strategies for deflater
-	/// </summary>
-	public enum DeflateStrategy
+    /// <summary>
+    /// Strategies for deflater
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum DeflateStrategy
 	{
 		/// <summary>
 		/// The default strategy
@@ -27,24 +28,25 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 		HuffmanOnly = 2
 	}
 
-	// DEFLATE ALGORITHM:
-	//
-	// The uncompressed stream is inserted into the window array.  When
-	// the window array is full the first half is thrown away and the
-	// second half is copied to the beginning.
-	//
-	// The head array is a hash table.  Three characters build a hash value
-	// and they the value points to the corresponding index in window of
-	// the last string with this hash.  The prev array implements a
-	// linked list of matches with the same hash: prev[index & WMASK] points
-	// to the previous index with the same hash.
-	//
+    // DEFLATE ALGORITHM:
+    //
+    // The uncompressed stream is inserted into the window array.  When
+    // the window array is full the first half is thrown away and the
+    // second half is copied to the beginning.
+    //
+    // The head array is a hash table.  Three characters build a hash value
+    // and they the value points to the corresponding index in window of
+    // the last string with this hash.  The prev array implements a
+    // linked list of matches with the same hash: prev[index & WMASK] points
+    // to the previous index with the same hash.
+    //
 
-	/// <summary>
-	/// Low level compression engine for deflate algorithm which uses a 32K sliding window
-	/// with secondary compression from Huffman/Shannon-Fano codes.
-	/// </summary>
-	public class DeflaterEngine
+    /// <summary>
+    /// Low level compression engine for deflate algorithm which uses a 32K sliding window
+    /// with secondary compression from Huffman/Shannon-Fano codes.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class DeflaterEngine
 	{
 		#region Constants
 

@@ -4,11 +4,12 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2
 {
-	/// <summary>
-	/// An output stream that compresses into the BZip2 format
-	/// including file header chars into another stream.
-	/// </summary>
-	public class BZip2OutputStream : Stream
+    /// <summary>
+    /// An output stream that compresses into the BZip2 format
+    /// including file header chars into another stream.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class BZip2OutputStream : Stream
 	{
 		#region Constants
 

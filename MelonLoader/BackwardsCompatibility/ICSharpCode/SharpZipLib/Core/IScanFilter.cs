@@ -1,9 +1,12 @@
-﻿namespace MelonLoader.ICSharpCode.SharpZipLib.Core
+﻿using System;
+
+namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	/// <summary>
-	/// Scanning filters support filtering of names.
-	/// </summary>
-	public interface IScanFilter
+    /// <summary>
+    /// Scanning filters support filtering of names.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface IScanFilter
 	{
 		/// <summary>
 		/// Test a name to see if it 'matches' the filter.

@@ -4,10 +4,11 @@ using System.Linq;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	/// <summary>
-	/// PathUtils provides simple utilities for handling paths.
-	/// </summary>
-	public static class PathUtils
+    /// <summary>
+    /// PathUtils provides simple utilities for handling paths.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public static class PathUtils
 	{
 		/// <summary>
 		/// Remove any path root present in the path

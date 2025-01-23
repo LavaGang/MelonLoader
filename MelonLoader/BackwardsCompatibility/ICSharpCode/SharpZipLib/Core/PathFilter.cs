@@ -3,12 +3,13 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	/// <summary>
-	/// PathFilter filters directories and files using a form of <see cref="System.Text.RegularExpressions.Regex">regular expressions</see>
-	/// by full path name.
-	/// See <see cref="NameFilter">NameFilter</see> for more detail on filtering.
-	/// </summary>
-	public class PathFilter : IScanFilter
+    /// <summary>
+    /// PathFilter filters directories and files using a form of <see cref="System.Text.RegularExpressions.Regex">regular expressions</see>
+    /// by full path name.
+    /// See <see cref="NameFilter">NameFilter</see> for more detail on filtering.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class PathFilter : IScanFilter
 	{
 		#region Constructors
 
@@ -54,11 +55,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// ExtendedPathFilter filters based on name, file size, and the last write time of the file.
-	/// </summary>
-	/// <remarks>Provides an example of how to customise filtering.</remarks>
-	public class ExtendedPathFilter : PathFilter
+    /// <summary>
+    /// ExtendedPathFilter filters based on name, file size, and the last write time of the file.
+    /// </summary>
+    /// <remarks>Provides an example of how to customise filtering.</remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ExtendedPathFilter : PathFilter
 	{
 		#region Constructors
 
@@ -234,12 +236,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// NameAndSizeFilter filters based on name and file size.
-	/// </summary>
-	/// <remarks>A sample showing how filters might be extended.</remarks>
-	[Obsolete("Use ExtendedPathFilter instead")]
-	public class NameAndSizeFilter : PathFilter
+    /// <summary>
+    /// NameAndSizeFilter filters based on name and file size.
+    /// </summary>
+    /// <remarks>A sample showing how filters might be extended.</remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class NameAndSizeFilter : PathFilter
 	{
 		/// <summary>
 		/// Initialise a new instance of NameAndSizeFilter.

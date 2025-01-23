@@ -4,9 +4,10 @@ using MelonLoader.ICSharpCode.SharpZipLib.Core;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// This static class contains functions for encoding and decoding zip file strings
-	/// </summary>
+    /// <summary>
+    /// This static class contains functions for encoding and decoding zip file strings
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
 	public static class ZipStrings
 	{
 		static ZipStrings()

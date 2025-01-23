@@ -3,11 +3,12 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// This exception is used to indicate that there is a problem
-	/// with a TAR archive header.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// This exception is used to indicate that there is a problem
+    /// with a TAR archive header.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class InvalidHeaderException : TarException
 	{
 		/// <summary>

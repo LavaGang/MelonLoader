@@ -2,12 +2,13 @@ using System;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	#region EventArgs
+    #region EventArgs
 
-	/// <summary>
-	/// Event arguments for scanning.
-	/// </summary>
-	public class ScanEventArgs : EventArgs
+    /// <summary>
+    /// Event arguments for scanning.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ScanEventArgs : EventArgs
 	{
 		#region Constructors
 
@@ -47,10 +48,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// Event arguments during processing of a single file or directory.
-	/// </summary>
-	public class ProgressEventArgs : EventArgs
+    /// <summary>
+    /// Event arguments during processing of a single file or directory.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ProgressEventArgs : EventArgs
 	{
 		#region Constructors
 
@@ -134,10 +136,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// Event arguments for directories.
-	/// </summary>
-	public class DirectoryEventArgs : ScanEventArgs
+    /// <summary>
+    /// Event arguments for directories.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class DirectoryEventArgs : ScanEventArgs
 	{
 		#region Constructors
 
@@ -171,10 +174,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// Arguments passed when scan failures are detected.
-	/// </summary>
-	public class ScanFailureEventArgs : EventArgs
+    /// <summary>
+    /// Arguments passed when scan failures are detected.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ScanFailureEventArgs : EventArgs
 	{
 		#region Constructors
 
@@ -226,51 +230,57 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 		#endregion Instance Fields
 	}
 
-	#endregion EventArgs
+    #endregion EventArgs
 
-	#region Delegates
+    #region Delegates
 
-	/// <summary>
-	/// Delegate invoked before starting to process a file.
-	/// </summary>
-	/// <param name="sender">The source of the event</param>
-	/// <param name="e">The event arguments.</param>
-	public delegate void ProcessFileHandler(object sender, ScanEventArgs e);
+    /// <summary>
+    /// Delegate invoked before starting to process a file.
+    /// </summary>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">The event arguments.</param>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public delegate void ProcessFileHandler(object sender, ScanEventArgs e);
 
-	/// <summary>
-	/// Delegate invoked during processing of a file or directory
-	/// </summary>
-	/// <param name="sender">The source of the event</param>
-	/// <param name="e">The event arguments.</param>
-	public delegate void ProgressHandler(object sender, ProgressEventArgs e);
+    /// <summary>
+    /// Delegate invoked during processing of a file or directory
+    /// </summary>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">The event arguments.</param>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public delegate void ProgressHandler(object sender, ProgressEventArgs e);
 
-	/// <summary>
-	/// Delegate invoked when a file has been completely processed.
-	/// </summary>
-	/// <param name="sender">The source of the event</param>
-	/// <param name="e">The event arguments.</param>
-	public delegate void CompletedFileHandler(object sender, ScanEventArgs e);
+    /// <summary>
+    /// Delegate invoked when a file has been completely processed.
+    /// </summary>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">The event arguments.</param>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public delegate void CompletedFileHandler(object sender, ScanEventArgs e);
 
-	/// <summary>
-	/// Delegate invoked when a directory failure is detected.
-	/// </summary>
-	/// <param name="sender">The source of the event</param>
-	/// <param name="e">The event arguments.</param>
-	public delegate void DirectoryFailureHandler(object sender, ScanFailureEventArgs e);
+    /// <summary>
+    /// Delegate invoked when a directory failure is detected.
+    /// </summary>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">The event arguments.</param>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public delegate void DirectoryFailureHandler(object sender, ScanFailureEventArgs e);
 
-	/// <summary>
-	/// Delegate invoked when a file failure is detected.
-	/// </summary>
-	/// <param name="sender">The source of the event</param>
-	/// <param name="e">The event arguments.</param>
-	public delegate void FileFailureHandler(object sender, ScanFailureEventArgs e);
+    /// <summary>
+    /// Delegate invoked when a file failure is detected.
+    /// </summary>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">The event arguments.</param>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public delegate void FileFailureHandler(object sender, ScanFailureEventArgs e);
 
-	#endregion Delegates
+    #endregion Delegates
 
-	/// <summary>
-	/// FileSystemScanner provides facilities scanning of files and directories.
-	/// </summary>
-	public class FileSystemScanner
+    /// <summary>
+    /// FileSystemScanner provides facilities scanning of files and directories.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class FileSystemScanner
 	{
 		#region Constructors
 

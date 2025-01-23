@@ -2,22 +2,23 @@ using System;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression.Streams
 {
-	/// <summary>
-	/// This class allows us to retrieve a specified number of bits from
-	/// the input buffer, as well as copy big byte blocks.
-	///
-	/// It uses an int buffer to store up to 31 bits for direct
-	/// manipulation.  This guarantees that we can get at least 16 bits,
-	/// but we only need at most 15, so this is all safe.
-	///
-	/// There are some optimizations in this class, for example, you must
-	/// never peek more than 8 bits more than needed, and you must first
-	/// peek bits before you may drop them.  This is not a general purpose
-	/// class but optimized for the behaviour of the Inflater.
-	///
-	/// authors of the original java version : John Leuner, Jochen Hoenicke
-	/// </summary>
-	public class StreamManipulator
+    /// <summary>
+    /// This class allows us to retrieve a specified number of bits from
+    /// the input buffer, as well as copy big byte blocks.
+    ///
+    /// It uses an int buffer to store up to 31 bits for direct
+    /// manipulation.  This guarantees that we can get at least 16 bits,
+    /// but we only need at most 15, so this is all safe.
+    ///
+    /// There are some optimizations in this class, for example, you must
+    /// never peek more than 8 bits more than needed, and you must first
+    /// peek bits before you may drop them.  This is not a general purpose
+    /// class but optimized for the behaviour of the Inflater.
+    ///
+    /// authors of the original java version : John Leuner, Jochen Hoenicke
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class StreamManipulator
 	{
 		/// <summary>
 		/// Get the next sequence of bits but don't increase input pointer.  bitCount must be

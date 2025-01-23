@@ -7,34 +7,35 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 {
-	/// <summary>
-	/// This filter stream is used to decompress a "GZIP" format stream.
-	/// The "GZIP" format is described baseInputStream RFC 1952.
-	///
-	/// author of the original java version : John Leuner
-	/// </summary>
-	/// <example> This sample shows how to unzip a gzipped file
-	/// <code>
-	/// using System;
-	/// using System.IO;
-	///
-	/// using MelonLoader.ICSharpCode.SharpZipLib.Core;
-	/// using MelonLoader.ICSharpCode.SharpZipLib.GZip;
-	///
-	/// class MainClass
-	/// {
-	/// 	public static void Main(string[] args)
-	/// 	{
-	///			using (Stream inStream = new GZipInputStream(File.OpenRead(args[0])))
-	///			using (FileStream outStream = File.Create(Path.GetFileNameWithoutExtension(args[0]))) {
-	///				byte[] buffer = new byte[4096];
-	///				StreamUtils.Copy(inStream, outStream, buffer);
-	/// 		}
-	/// 	}
-	/// }
-	/// </code>
-	/// </example>
-	public class GZipInputStream : InflaterInputStream
+    /// <summary>
+    /// This filter stream is used to decompress a "GZIP" format stream.
+    /// The "GZIP" format is described baseInputStream RFC 1952.
+    ///
+    /// author of the original java version : John Leuner
+    /// </summary>
+    /// <example> This sample shows how to unzip a gzipped file
+    /// <code>
+    /// using System;
+    /// using System.IO;
+    ///
+    /// using MelonLoader.ICSharpCode.SharpZipLib.Core;
+    /// using MelonLoader.ICSharpCode.SharpZipLib.GZip;
+    ///
+    /// class MainClass
+    /// {
+    /// 	public static void Main(string[] args)
+    /// 	{
+    ///			using (Stream inStream = new GZipInputStream(File.OpenRead(args[0])))
+    ///			using (FileStream outStream = File.Create(Path.GetFileNameWithoutExtension(args[0]))) {
+    ///				byte[] buffer = new byte[4096];
+    ///				StreamUtils.Copy(inStream, outStream, buffer);
+    /// 		}
+    /// 	}
+    /// }
+    /// </code>
+    /// </example>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class GZipInputStream : InflaterInputStream
 	{
 		#region Instance Fields
 

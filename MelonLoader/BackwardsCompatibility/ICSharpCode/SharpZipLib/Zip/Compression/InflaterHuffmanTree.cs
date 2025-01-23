@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 {
-	/// <summary>
-	/// Huffman tree used for inflation
-	/// </summary>
-	public class InflaterHuffmanTree
+    /// <summary>
+    /// Huffman tree used for inflation
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class InflaterHuffmanTree
 	{
 		#region Constants
 

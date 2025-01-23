@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// TarException represents exceptions specific to Tar classes and code.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// TarException represents exceptions specific to Tar classes and code.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class TarException : SharpZipBaseException
 	{
 		/// <summary>

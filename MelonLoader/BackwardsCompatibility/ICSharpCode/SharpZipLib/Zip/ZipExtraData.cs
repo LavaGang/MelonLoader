@@ -4,13 +4,14 @@ using MelonLoader.ICSharpCode.SharpZipLib.Core;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	// TODO: Sort out whether tagged data is useful and what a good implementation might look like.
-	// Its just a sketch of an idea at the moment.
+    // TODO: Sort out whether tagged data is useful and what a good implementation might look like.
+    // Its just a sketch of an idea at the moment.
 
-	/// <summary>
-	/// ExtraData tagged value interface.
-	/// </summary>
-	public interface ITaggedData
+    /// <summary>
+    /// ExtraData tagged value interface.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface ITaggedData
 	{
 		/// <summary>
 		/// Get the ID for this tagged data value.
@@ -32,10 +33,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		byte[] GetData();
 	}
 
-	/// <summary>
-	/// A raw binary tagged value
-	/// </summary>
-	public class RawTaggedData : ITaggedData
+    /// <summary>
+    /// A raw binary tagged value
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class RawTaggedData : ITaggedData
 	{
 		/// <summary>
 		/// Initialise a new instance.
@@ -107,10 +109,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// Class representing extended unix date time values.
-	/// </summary>
-	public class ExtendedUnixData : ITaggedData
+    /// <summary>
+    /// Class representing extended unix date time values.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ExtendedUnixData : ITaggedData
 	{
 		/// <summary>
 		/// Flags indicate which values are included in this instance.
@@ -320,10 +323,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// Class handling NT date time values.
-	/// </summary>
-	public class NTTaggedData : ITaggedData
+    /// <summary>
+    /// Class handling NT date time values.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class NTTaggedData : ITaggedData
 	{
 		/// <summary>
 		/// Get the ID for this tagged data value.
@@ -475,10 +479,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// A factory that creates <see cref="ITaggedData">tagged data</see> instances.
-	/// </summary>
-	internal interface ITaggedDataFactory
+    /// <summary>
+    /// A factory that creates <see cref="ITaggedData">tagged data</see> instances.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal interface ITaggedDataFactory
 	{
 		/// <summary>
 		/// Get data for a specific tag value.
@@ -491,18 +496,19 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		ITaggedData Create(short tag, byte[] data, int offset, int count);
 	}
 
-	///
-	/// <summary>
-	/// A class to handle the extra data field for Zip entries
-	/// </summary>
-	/// <remarks>
-	/// Extra data contains 0 or more values each prefixed by a header tag and length.
-	/// They contain zero or more bytes of actual data.
-	/// The data is held internally using a copy on write strategy.  This is more efficient but
-	/// means that for extra data created by passing in data can have the values modified by the caller
-	/// in some circumstances.
-	/// </remarks>
-	sealed public class ZipExtraData : IDisposable
+    ///
+    /// <summary>
+    /// A class to handle the extra data field for Zip entries
+    /// </summary>
+    /// <remarks>
+    /// Extra data contains 0 or more values each prefixed by a header tag and length.
+    /// They contain zero or more bytes of actual data.
+    /// The data is held internally using a copy on write strategy.  This is more efficient but
+    /// means that for extra data created by passing in data can have the values modified by the caller
+    /// in some circumstances.
+    /// </remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    sealed public class ZipExtraData : IDisposable
 	{
 		#region Constructors
 

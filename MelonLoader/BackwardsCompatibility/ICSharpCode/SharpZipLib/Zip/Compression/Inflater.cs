@@ -4,32 +4,33 @@ using System;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 {
-	/// <summary>
-	/// Inflater is used to decompress data that has been compressed according
-	/// to the "deflate" standard described in rfc1951.
-	///
-	/// By default Zlib (rfc1950) headers and footers are expected in the input.
-	/// You can use constructor <code> public Inflater(bool noHeader)</code> passing true
-	/// if there is no Zlib header information
-	///
-	/// The usage is as following.  First you have to set some input with
-	/// <code>SetInput()</code>, then Inflate() it.  If inflate doesn't
-	/// inflate any bytes there may be three reasons:
-	/// <ul>
-	/// <li>IsNeedingInput() returns true because the input buffer is empty.
-	/// You have to provide more input with <code>SetInput()</code>.
-	/// NOTE: IsNeedingInput() also returns true when, the stream is finished.
-	/// </li>
-	/// <li>IsNeedingDictionary() returns true, you have to provide a preset
-	///    dictionary with <code>SetDictionary()</code>.</li>
-	/// <li>IsFinished returns true, the inflater has finished.</li>
-	/// </ul>
-	/// Once the first output byte is produced, a dictionary will not be
-	/// needed at a later stage.
-	///
-	/// author of the original java version : John Leuner, Jochen Hoenicke
-	/// </summary>
-	public class Inflater
+    /// <summary>
+    /// Inflater is used to decompress data that has been compressed according
+    /// to the "deflate" standard described in rfc1951.
+    ///
+    /// By default Zlib (rfc1950) headers and footers are expected in the input.
+    /// You can use constructor <code> public Inflater(bool noHeader)</code> passing true
+    /// if there is no Zlib header information
+    ///
+    /// The usage is as following.  First you have to set some input with
+    /// <code>SetInput()</code>, then Inflate() it.  If inflate doesn't
+    /// inflate any bytes there may be three reasons:
+    /// <ul>
+    /// <li>IsNeedingInput() returns true because the input buffer is empty.
+    /// You have to provide more input with <code>SetInput()</code>.
+    /// NOTE: IsNeedingInput() also returns true when, the stream is finished.
+    /// </li>
+    /// <li>IsNeedingDictionary() returns true, you have to provide a preset
+    ///    dictionary with <code>SetDictionary()</code>.</li>
+    /// <li>IsFinished returns true, the inflater has finished.</li>
+    /// </ul>
+    /// Once the first output byte is produced, a dictionary will not be
+    /// needed at a later stage.
+    ///
+    /// author of the original java version : John Leuner, Jochen Hoenicke
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class Inflater
 	{
 		#region Constants/Readonly
 

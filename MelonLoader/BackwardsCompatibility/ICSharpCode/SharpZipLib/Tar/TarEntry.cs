@@ -5,34 +5,35 @@ using MelonLoader.ICSharpCode.SharpZipLib.Core;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// This class represents an entry in a Tar archive. It consists
-	/// of the entry's header, as well as the entry's File. Entries
-	/// can be instantiated in one of three ways, depending on how
-	/// they are to be used.
-	/// <p>
-	/// TarEntries that are created from the header bytes read from
-	/// an archive are instantiated with the TarEntry( byte[] )
-	/// constructor. These entries will be used when extracting from
-	/// or listing the contents of an archive. These entries have their
-	/// header filled in using the header bytes. They also set the File
-	/// to null, since they reference an archive entry not a file.</p>
-	/// <p>
-	/// TarEntries that are created from files that are to be written
-	/// into an archive are instantiated with the CreateEntryFromFile(string)
-	/// pseudo constructor. These entries have their header filled in using
-	/// the File's information. They also keep a reference to the File
-	/// for convenience when writing entries.</p>
-	/// <p>
-	/// Finally, TarEntries can be constructed from nothing but a name.
-	/// This allows the programmer to construct the entry by hand, for
-	/// instance when only an InputStream is available for writing to
-	/// the archive, and the header information is constructed from
-	/// other information. In this case the header fields are set to
-	/// defaults and the File is set to null.</p>
-	/// <see cref="TarHeader"/>
-	/// </summary>
-	public class TarEntry
+    /// <summary>
+    /// This class represents an entry in a Tar archive. It consists
+    /// of the entry's header, as well as the entry's File. Entries
+    /// can be instantiated in one of three ways, depending on how
+    /// they are to be used.
+    /// <p>
+    /// TarEntries that are created from the header bytes read from
+    /// an archive are instantiated with the TarEntry( byte[] )
+    /// constructor. These entries will be used when extracting from
+    /// or listing the contents of an archive. These entries have their
+    /// header filled in using the header bytes. They also set the File
+    /// to null, since they reference an archive entry not a file.</p>
+    /// <p>
+    /// TarEntries that are created from files that are to be written
+    /// into an archive are instantiated with the CreateEntryFromFile(string)
+    /// pseudo constructor. These entries have their header filled in using
+    /// the File's information. They also keep a reference to the File
+    /// for convenience when writing entries.</p>
+    /// <p>
+    /// Finally, TarEntries can be constructed from nothing but a name.
+    /// This allows the programmer to construct the entry by hand, for
+    /// instance when only an InputStream is available for writing to
+    /// the archive, and the header information is constructed from
+    /// other information. In this case the header fields are set to
+    /// defaults and the File is set to null.</p>
+    /// <see cref="TarHeader"/>
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class TarEntry
 	{
 		#region Constructors
 

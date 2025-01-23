@@ -5,7 +5,8 @@ using System.Linq;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 {
-	internal class InflaterDynHeader
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class InflaterDynHeader
 	{
 		#region Constants
 

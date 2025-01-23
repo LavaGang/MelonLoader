@@ -3,19 +3,20 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// The TarBuffer class implements the tar archive concept
-	/// of a buffered input stream. This concept goes back to the
-	/// days of blocked tape drives and special io devices. In the
-	/// C# universe, the only real function that this class
-	/// performs is to ensure that files have the correct "record"
-	/// size, or other tars will complain.
-	/// <p>
-	/// You should never have a need to access this class directly.
-	/// TarBuffers are created by Tar IO Streams.
-	/// </p>
-	/// </summary>
-	public class TarBuffer
+    /// <summary>
+    /// The TarBuffer class implements the tar archive concept
+    /// of a buffered input stream. This concept goes back to the
+    /// days of blocked tape drives and special io devices. In the
+    /// C# universe, the only real function that this class
+    /// performs is to ensure that files have the correct "record"
+    /// size, or other tars will complain.
+    /// <p>
+    /// You should never have a need to access this class directly.
+    /// TarBuffers are created by Tar IO Streams.
+    /// </p>
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class TarBuffer
 	{
 		/* A quote from GNU tar man file on blocking and records
 		   A `tar' archive file contains a series of blocks.  Each block

@@ -6,10 +6,11 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// WindowsNameTransform transforms <see cref="ZipFile"/> names to windows compatible ones.
-	/// </summary>
-	public class WindowsNameTransform : INameTransform
+    /// <summary>
+    /// WindowsNameTransform transforms <see cref="ZipFile"/> names to windows compatible ones.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class WindowsNameTransform : INameTransform
 	{
 		/// <summary>
 		///  The maximum windows path name permitted.

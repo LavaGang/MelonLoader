@@ -4,12 +4,13 @@ using System.Security.Cryptography;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 {
-	/// <summary>
-	/// PkzipClassic embodies the classic or original encryption facilities used in Pkzip archives.
-	/// While it has been superceded by more recent and more powerful algorithms, its still in use and
-	/// is viable for preventing casual snooping
-	/// </summary>
-	public abstract class PkzipClassic : SymmetricAlgorithm
+    /// <summary>
+    /// PkzipClassic embodies the classic or original encryption facilities used in Pkzip archives.
+    /// While it has been superceded by more recent and more powerful algorithms, its still in use and
+    /// is viable for preventing casual snooping
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public abstract class PkzipClassic : SymmetricAlgorithm
 	{
 		/// <summary>
 		/// Generates new encryption keys based on given seed
@@ -59,11 +60,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 		}
 	}
 
-	/// <summary>
-	/// PkzipClassicCryptoBase provides the low level facilities for encryption
-	/// and decryption using the PkzipClassic algorithm.
-	/// </summary>
-	internal class PkzipClassicCryptoBase
+    /// <summary>
+    /// PkzipClassicCryptoBase provides the low level facilities for encryption
+    /// and decryption using the PkzipClassic algorithm.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class PkzipClassicCryptoBase
 	{
 		/// <summary>
 		/// Transform a single byte
@@ -127,10 +129,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// PkzipClassic CryptoTransform for encryption.
-	/// </summary>
-	internal class PkzipClassicEncryptCryptoTransform : PkzipClassicCryptoBase, ICryptoTransform
+    /// <summary>
+    /// PkzipClassic CryptoTransform for encryption.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class PkzipClassicEncryptCryptoTransform : PkzipClassicCryptoBase, ICryptoTransform
 	{
 		/// <summary>
 		/// Initialise a new instance of <see cref="PkzipClassicEncryptCryptoTransform"></see>
@@ -237,10 +240,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 		#endregion IDisposable Members
 	}
 
-	/// <summary>
-	/// PkzipClassic CryptoTransform for decryption.
-	/// </summary>
-	internal class PkzipClassicDecryptCryptoTransform : PkzipClassicCryptoBase, ICryptoTransform
+    /// <summary>
+    /// PkzipClassic CryptoTransform for decryption.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class PkzipClassicDecryptCryptoTransform : PkzipClassicCryptoBase, ICryptoTransform
 	{
 		/// <summary>
 		/// Initialise a new instance of <see cref="PkzipClassicDecryptCryptoTransform"></see>.
@@ -347,11 +351,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 		#endregion IDisposable Members
 	}
 
-	/// <summary>
-	/// Defines a wrapper object to access the Pkzip algorithm.
-	/// This class cannot be inherited.
-	/// </summary>
-	public sealed class PkzipClassicManaged : PkzipClassic
+    /// <summary>
+    /// Defines a wrapper object to access the Pkzip algorithm.
+    /// This class cannot be inherited.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public sealed class PkzipClassicManaged : PkzipClassic
 	{
 		/// <summary>
 		/// Get / set the applicable block size in bits.

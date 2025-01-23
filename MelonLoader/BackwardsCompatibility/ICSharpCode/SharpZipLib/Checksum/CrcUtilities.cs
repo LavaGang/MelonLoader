@@ -1,8 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Checksum
 {
-	internal static class CrcUtilities
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal static class CrcUtilities
 	{
 		/// <summary>
 		/// The number of slicing lookup tables to generate.

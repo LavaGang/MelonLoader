@@ -1,9 +1,12 @@
+using System;
+
 namespace MelonLoader.ICSharpCode.SharpZipLib.Lzw
 {
-	/// <summary>
-	/// This class contains constants used for LZW
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "kept for backwards compatibility")]
+    /// <summary>
+    /// This class contains constants used for LZW
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "kept for backwards compatibility")]
 	sealed public class LzwConstants
 	{
 		/// <summary>

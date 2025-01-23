@@ -7,10 +7,11 @@ using static MelonLoader.ICSharpCode.SharpZipLib.Zip.ZipEntryFactory;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// FastZipEvents supports all events applicable to <see cref="FastZip">FastZip</see> operations.
-	/// </summary>
-	public class FastZipEvents
+    /// <summary>
+    /// FastZipEvents supports all events applicable to <see cref="FastZip">FastZip</see> operations.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class FastZipEvents
 	{
 		/// <summary>
 		/// Delegate to invoke when processing directories.
@@ -157,10 +158,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// FastZip provides facilities for creating and extracting zip files.
-	/// </summary>
-	public class FastZip
+    /// <summary>
+    /// FastZip provides facilities for creating and extracting zip files.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class FastZip
 	{
 		#region Enumerations
 

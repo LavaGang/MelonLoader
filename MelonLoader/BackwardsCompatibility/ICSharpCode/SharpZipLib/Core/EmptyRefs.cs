@@ -2,7 +2,8 @@
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	internal static class Empty
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal static class Empty
 	{
 		internal static class EmptyArray<T>
 		{

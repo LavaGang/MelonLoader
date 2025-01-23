@@ -5,12 +5,13 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// ZipNameTransform transforms names as per the Zip file naming convention.
-	/// </summary>
-	/// <remarks>The use of absolute names is supported although its use is not valid
-	/// according to Zip naming conventions, and should not be used if maximum compatability is desired.</remarks>
-	public class ZipNameTransform : INameTransform
+    /// <summary>
+    /// ZipNameTransform transforms names as per the Zip file naming convention.
+    /// </summary>
+    /// <remarks>The use of absolute names is supported although its use is not valid
+    /// according to Zip naming conventions, and should not be used if maximum compatability is desired.</remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ZipNameTransform : INameTransform
 	{
 		#region Constructors
 
@@ -239,11 +240,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Class Fields
 	}
 
-	/// <summary>
-	/// An implementation of INameTransform that transforms entry paths as per the Zip file naming convention.
-	/// Strips path roots and puts directory separators in the correct format ('/')
-	/// </summary>
-	public class PathTransformer : INameTransform
+    /// <summary>
+    /// An implementation of INameTransform that transforms entry paths as per the Zip file naming convention.
+    /// Strips path roots and puts directory separators in the correct format ('/')
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class PathTransformer : INameTransform
 	{
 		/// <summary>
 		/// Initialize a new instance of <see cref="PathTransformer"></see>

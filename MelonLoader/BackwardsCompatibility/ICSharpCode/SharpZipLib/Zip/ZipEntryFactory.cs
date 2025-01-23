@@ -4,10 +4,11 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// Basic implementation of <see cref="IEntryFactory"></see>
-	/// </summary>
-	public class ZipEntryFactory : IEntryFactory
+    /// <summary>
+    /// Basic implementation of <see cref="IEntryFactory"></see>
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ZipEntryFactory : IEntryFactory
 	{
 		#region Enumerations
 

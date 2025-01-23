@@ -4,10 +4,11 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// General ZipEntry helper extensions
-	/// </summary>
-	public static class ZipEntryExtensions
+    /// <summary>
+    /// General ZipEntry helper extensions
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public static class ZipEntryExtensions
 	{
 		/// <summary>
 		/// Efficiently check if a <see cref="GeneralBitFlags">flag</see> is set without enum un-/boxing

@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// Reads the extended header of a Tar stream
-	/// </summary>
-	public class TarExtendedHeaderReader
+    /// <summary>
+    /// Reads the extended header of a Tar stream
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class TarExtendedHeaderReader
 	{
 		private const byte LENGTH = 0;
 		private const byte KEY = 1;

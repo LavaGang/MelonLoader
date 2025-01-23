@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Lzw
 {
-	/// <summary>
-	/// LzwException represents exceptions specific to LZW classes and code.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// LzwException represents exceptions specific to LZW classes and code.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class LzwException : SharpZipBaseException
 	{
 		/// <summary>

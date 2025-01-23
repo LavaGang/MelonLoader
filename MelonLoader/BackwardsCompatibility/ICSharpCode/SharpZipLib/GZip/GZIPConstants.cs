@@ -3,10 +3,11 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 {
-	/// <summary>
-	/// This class contains constants used for gzip.
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "kept for backwards compatibility")]
+    /// <summary>
+    /// This class contains constants used for gzip.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "kept for backwards compatibility")]
 	sealed public class GZipConstants
 	{
 		/// <summary>
@@ -44,10 +45,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 
 	}
 
-	/// <summary>
-	/// GZip header flags
-	/// </summary>
-	[Flags]
+    /// <summary>
+    /// GZip header flags
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Flags]
 	public enum GZipFlags: byte
 	{
 		/// <summary>

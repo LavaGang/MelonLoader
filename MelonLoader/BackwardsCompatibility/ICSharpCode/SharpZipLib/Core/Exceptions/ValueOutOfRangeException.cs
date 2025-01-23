@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib
 {
-	/// <summary>
-	/// Indicates that a value was outside of the expected range when decoding an input stream
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// Indicates that a value was outside of the expected range when decoding an input stream
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class ValueOutOfRangeException : StreamDecodingException
 	{
 		/// <summary>

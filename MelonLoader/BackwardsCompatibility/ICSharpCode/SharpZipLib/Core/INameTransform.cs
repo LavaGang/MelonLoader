@@ -1,9 +1,12 @@
+using System;
+
 namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	/// <summary>
-	/// INameTransform defines how file system names are transformed for use with archives, or vice versa.
-	/// </summary>
-	public interface INameTransform
+    /// <summary>
+    /// INameTransform defines how file system names are transformed for use with archives, or vice versa.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface INameTransform
 	{
 		/// <summary>
 		/// Given a file name determine the transformed value.

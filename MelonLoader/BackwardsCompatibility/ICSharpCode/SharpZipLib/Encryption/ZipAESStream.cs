@@ -8,14 +8,15 @@ using MelonLoader.ICSharpCode.SharpZipLib.Zip;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 {
-	/// <summary>
-	/// Encrypts and decrypts AES ZIP
-	/// </summary>
-	/// <remarks>
-	/// Based on information from http://www.winzip.com/aes_info.htm
-	/// and http://www.gladman.me.uk/cryptography_technology/fileencrypt/
-	/// </remarks>
-	internal class ZipAESStream : CryptoStream
+    /// <summary>
+    /// Encrypts and decrypts AES ZIP
+    /// </summary>
+    /// <remarks>
+    /// Based on information from http://www.winzip.com/aes_info.htm
+    /// and http://www.gladman.me.uk/cryptography_technology/fileencrypt/
+    /// </remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class ZipAESStream : CryptoStream
 	{
 		/// <summary>
 		/// Constructor

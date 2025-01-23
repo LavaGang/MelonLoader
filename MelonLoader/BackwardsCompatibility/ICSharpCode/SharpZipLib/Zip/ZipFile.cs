@@ -12,12 +12,13 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	#region Keys Required Event Args
+    #region Keys Required Event Args
 
-	/// <summary>
-	/// Arguments used with KeysRequiredEvent
-	/// </summary>
-	public class KeysRequiredEventArgs : EventArgs
+    /// <summary>
+    /// Arguments used with KeysRequiredEvent
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class KeysRequiredEventArgs : EventArgs
 	{
 		#region Constructors
 
@@ -72,14 +73,15 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	#endregion Keys Required Event Args
+    #endregion Keys Required Event Args
 
-	#region Test Definitions
+    #region Test Definitions
 
-	/// <summary>
-	/// The strategy to apply to testing.
-	/// </summary>
-	public enum TestStrategy
+    /// <summary>
+    /// The strategy to apply to testing.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum TestStrategy
 	{
 		/// <summary>
 		/// Find the first error only.
@@ -92,11 +94,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		FindAllErrors,
 	}
 
-	/// <summary>
-	/// The operation in progress reported by a <see cref="ZipTestResultHandler"/> during testing.
-	/// </summary>
-	/// <seealso cref="ZipFile.TestArchive(bool)">TestArchive</seealso>
-	public enum TestOperation
+    /// <summary>
+    /// The operation in progress reported by a <see cref="ZipTestResultHandler"/> during testing.
+    /// </summary>
+    /// <seealso cref="ZipFile.TestArchive(bool)">TestArchive</seealso>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum TestOperation
 	{
 		/// <summary>
 		/// Setting up testing.
@@ -129,11 +132,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		Complete,
 	}
 
-	/// <summary>
-	/// Status returned by <see cref="ZipTestResultHandler"/> during testing.
-	/// </summary>
-	/// <seealso cref="ZipFile.TestArchive(bool)">TestArchive</seealso>
-	public class TestStatus
+    /// <summary>
+    /// Status returned by <see cref="ZipTestResultHandler"/> during testing.
+    /// </summary>
+    /// <seealso cref="ZipFile.TestArchive(bool)">TestArchive</seealso>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class TestStatus
 	{
 		#region Constructors
 
@@ -239,21 +243,23 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// Delegate invoked during <see cref="ZipFile.TestArchive(bool, TestStrategy, ZipTestResultHandler)">testing</see> if supplied indicating current progress and status.
-	/// </summary>
-	/// <remarks>If the message is non-null an error has occured.  If the message is null
-	/// the operation as found in <see cref="TestStatus">status</see> has started.</remarks>
-	public delegate void ZipTestResultHandler(TestStatus status, string message);
+    /// <summary>
+    /// Delegate invoked during <see cref="ZipFile.TestArchive(bool, TestStrategy, ZipTestResultHandler)">testing</see> if supplied indicating current progress and status.
+    /// </summary>
+    /// <remarks>If the message is non-null an error has occured.  If the message is null
+    /// the operation as found in <see cref="TestStatus">status</see> has started.</remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public delegate void ZipTestResultHandler(TestStatus status, string message);
 
-	#endregion Test Definitions
+    #endregion Test Definitions
 
-	#region Update Definitions
+    #region Update Definitions
 
-	/// <summary>
-	/// The possible ways of <see cref="ZipFile.CommitUpdate()">applying updates</see> to an archive.
-	/// </summary>
-	public enum FileUpdateMode
+    /// <summary>
+    /// The possible ways of <see cref="ZipFile.CommitUpdate()">applying updates</see> to an archive.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum FileUpdateMode
 	{
 		/// <summary>
 		/// Perform all updates on temporary files ensuring that the original file is saved.
@@ -266,54 +272,55 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		Direct,
 	}
 
-	#endregion Update Definitions
+    #endregion Update Definitions
 
-	#region ZipFile Class
+    #region ZipFile Class
 
-	/// <summary>
-	/// This class represents a Zip archive.  You can ask for the contained
-	/// entries, or get an input stream for a file entry.  The entry is
-	/// automatically decompressed.
-	///
-	/// You can also update the archive adding or deleting entries.
-	///
-	/// This class is thread safe for input:  You can open input streams for arbitrary
-	/// entries in different threads.
-	/// <br/>
-	/// <br/>Author of the original java version : Jochen Hoenicke
-	/// </summary>
-	/// <example>
-	/// <code>
-	/// using System;
-	/// using System.Text;
-	/// using System.Collections;
-	/// using System.IO;
-	///
-	/// using MelonLoader.ICSharpCode.SharpZipLib.Zip;
-	///
-	/// class MainClass
-	/// {
-	/// 	static public void Main(string[] args)
-	/// 	{
-	/// 		using (ZipFile zFile = new ZipFile(args[0])) {
-	/// 			Console.WriteLine("Listing of : " + zFile.Name);
-	/// 			Console.WriteLine("");
-	/// 			Console.WriteLine("Raw Size    Size      Date     Time     Name");
-	/// 			Console.WriteLine("--------  --------  --------  ------  ---------");
-	/// 			foreach (ZipEntry e in zFile) {
-	/// 				if ( e.IsFile ) {
-	/// 					DateTime d = e.DateTime;
-	/// 					Console.WriteLine("{0, -10}{1, -10}{2}  {3}   {4}", e.Size, e.CompressedSize,
-	/// 						d.ToString("dd-MM-yy"), d.ToString("HH:mm"),
-	/// 						e.Name);
-	/// 				}
-	/// 			}
-	/// 		}
-	/// 	}
-	/// }
-	/// </code>
-	/// </example>
-	public class ZipFile : IEnumerable, IDisposable
+    /// <summary>
+    /// This class represents a Zip archive.  You can ask for the contained
+    /// entries, or get an input stream for a file entry.  The entry is
+    /// automatically decompressed.
+    ///
+    /// You can also update the archive adding or deleting entries.
+    ///
+    /// This class is thread safe for input:  You can open input streams for arbitrary
+    /// entries in different threads.
+    /// <br/>
+    /// <br/>Author of the original java version : Jochen Hoenicke
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// using System;
+    /// using System.Text;
+    /// using System.Collections;
+    /// using System.IO;
+    ///
+    /// using MelonLoader.ICSharpCode.SharpZipLib.Zip;
+    ///
+    /// class MainClass
+    /// {
+    /// 	static public void Main(string[] args)
+    /// 	{
+    /// 		using (ZipFile zFile = new ZipFile(args[0])) {
+    /// 			Console.WriteLine("Listing of : " + zFile.Name);
+    /// 			Console.WriteLine("");
+    /// 			Console.WriteLine("Raw Size    Size      Date     Time     Name");
+    /// 			Console.WriteLine("--------  --------  --------  ------  ---------");
+    /// 			foreach (ZipEntry e in zFile) {
+    /// 				if ( e.IsFile ) {
+    /// 					DateTime d = e.DateTime;
+    /// 					Console.WriteLine("{0, -10}{1, -10}{2}  {3}   {4}", e.Size, e.CompressedSize,
+    /// 						d.ToString("dd-MM-yy"), d.ToString("HH:mm"),
+    /// 						e.Name);
+    /// 				}
+    /// 			}
+    /// 		}
+    /// 	}
+    /// }
+    /// </code>
+    /// </example>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ZipFile : IEnumerable, IDisposable
 	{
 		#region KeyHandling
 
@@ -4395,14 +4402,15 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Support Classes
 	}
 
-	#endregion ZipFile Class
+    #endregion ZipFile Class
 
-	#region DataSources
+    #region DataSources
 
-	/// <summary>
-	/// Provides a static way to obtain a source of data for an entry.
-	/// </summary>
-	public interface IStaticDataSource
+    /// <summary>
+    /// Provides a static way to obtain a source of data for an entry.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface IStaticDataSource
 	{
 		/// <summary>
 		/// Get a source of data by creating a new stream.
@@ -4412,11 +4420,12 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		Stream GetSource();
 	}
 
-	/// <summary>
-	/// Represents a source of data that can dynamically provide
-	/// multiple <see cref="Stream">data sources</see> based on the parameters passed.
-	/// </summary>
-	public interface IDynamicDataSource
+    /// <summary>
+    /// Represents a source of data that can dynamically provide
+    /// multiple <see cref="Stream">data sources</see> based on the parameters passed.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface IDynamicDataSource
 	{
 		/// <summary>
 		/// Get a data source.
@@ -4428,10 +4437,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		Stream GetSource(ZipEntry entry, string name);
 	}
 
-	/// <summary>
-	/// Default implementation of a <see cref="IStaticDataSource"/> for use with files stored on disk.
-	/// </summary>
-	public class StaticDiskDataSource : IStaticDataSource
+    /// <summary>
+    /// Default implementation of a <see cref="IStaticDataSource"/> for use with files stored on disk.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class StaticDiskDataSource : IStaticDataSource
 	{
 		/// <summary>
 		/// Initialise a new instance of <see cref="StaticDiskDataSource"/>
@@ -4464,10 +4474,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// Default implementation of <see cref="IDynamicDataSource"/> for files stored on disk.
-	/// </summary>
-	public class DynamicDiskDataSource : IDynamicDataSource
+    /// <summary>
+    /// Default implementation of <see cref="IDynamicDataSource"/> for files stored on disk.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class DynamicDiskDataSource : IDynamicDataSource
 	{
 		#region IDataSource Members
 
@@ -4492,14 +4503,15 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion IDataSource Members
 	}
 
-	#endregion DataSources
+    #endregion DataSources
 
-	#region Archive Storage
+    #region Archive Storage
 
-	/// <summary>
-	/// Defines facilities for data storage when updating Zip Archives.
-	/// </summary>
-	public interface IArchiveStorage
+    /// <summary>
+    /// Defines facilities for data storage when updating Zip Archives.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface IArchiveStorage
 	{
 		/// <summary>
 		/// Get the <see cref="FileUpdateMode"/> to apply during updates.
@@ -4541,10 +4553,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		void Dispose();
 	}
 
-	/// <summary>
-	/// An abstract <see cref="IArchiveStorage"/> suitable for extension by inheritance.
-	/// </summary>
-	abstract public class BaseArchiveStorage : IArchiveStorage
+    /// <summary>
+    /// An abstract <see cref="IArchiveStorage"/> suitable for extension by inheritance.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    abstract public class BaseArchiveStorage : IArchiveStorage
 	{
 		#region Constructors
 
@@ -4616,10 +4629,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// An <see cref="IArchiveStorage"/> implementation suitable for hard disks.
-	/// </summary>
-	public class DiskArchiveStorage : BaseArchiveStorage
+    /// <summary>
+    /// An <see cref="IArchiveStorage"/> implementation suitable for hard disks.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class DiskArchiveStorage : BaseArchiveStorage
 	{
 		#region Constructors
 
@@ -4776,10 +4790,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// An <see cref="IArchiveStorage"/> implementation suitable for in memory streams.
-	/// </summary>
-	public class MemoryArchiveStorage : BaseArchiveStorage
+    /// <summary>
+    /// An <see cref="IArchiveStorage"/> implementation suitable for in memory streams.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class MemoryArchiveStorage : BaseArchiveStorage
 	{
 		#region Constructors
 

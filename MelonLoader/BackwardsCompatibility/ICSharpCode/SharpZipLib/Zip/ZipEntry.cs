@@ -3,10 +3,11 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// Defines known values for the <see cref="HostSystemID"/> property.
-	/// </summary>
-	public enum HostSystemID
+    /// <summary>
+    /// Defines known values for the <see cref="HostSystemID"/> property.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum HostSystemID
 	{
 		/// <summary>
 		/// Host system = MSDOS
@@ -114,16 +115,17 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		WinZipAES = 99,
 	}
 
-	/// <summary>
-	/// This class represents an entry in a zip archive.  This can be a file
-	/// or a directory
-	/// ZipFile and ZipInputStream will give you instances of this class as
-	/// information about the members in an archive.  ZipOutputStream
-	/// uses an instance of this class when creating an entry in a Zip file.
-	/// <br/>
-	/// <br/>Author of the original java version : Jochen Hoenicke
-	/// </summary>
-	public class ZipEntry
+    /// <summary>
+    /// This class represents an entry in a zip archive.  This can be a file
+    /// or a directory
+    /// ZipFile and ZipInputStream will give you instances of this class as
+    /// information about the members in an archive.  ZipOutputStream
+    /// uses an instance of this class when creating an entry in a Zip file.
+    /// <br/>
+    /// <br/>Author of the original java version : Jochen Hoenicke
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ZipEntry
 	{
 		[Flags]
 		private enum Known : byte

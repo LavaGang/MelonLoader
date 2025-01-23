@@ -2,12 +2,13 @@ using System;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	#region Enumerations
+    #region Enumerations
 
-	/// <summary>
-	/// Determines how entries are tested to see if they should use Zip64 extensions or not.
-	/// </summary>
-	public enum UseZip64
+    /// <summary>
+    /// Determines how entries are tested to see if they should use Zip64 extensions or not.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum UseZip64
 	{
 		/// <summary>
 		/// Zip64 will not be forced on entries during processing.
@@ -26,10 +27,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		Dynamic,
 	}
 
-	/// <summary>
-	/// The kind of compression used for an entry in an archive
-	/// </summary>
-	public enum CompressionMethod
+    /// <summary>
+    /// The kind of compression used for an entry in an archive
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum CompressionMethod
 	{
 		/// <summary>
 		/// A direct copy of the file contents is held in the archive
@@ -68,10 +70,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		WinZipAES = 99,
 	}
 
-	/// <summary>
-	/// Identifies the encryption algorithm used for an entry
-	/// </summary>
-	public enum EncryptionAlgorithm
+    /// <summary>
+    /// Identifies the encryption algorithm used for an entry
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum EncryptionAlgorithm
 	{
 		/// <summary>
 		/// No encryption has been used.
@@ -144,10 +147,11 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		Unknown = 0xffff
 	}
 
-	/// <summary>
-	/// Defines the contents of the general bit flags field for an archive entry.
-	/// </summary>
-	[Flags]
+    /// <summary>
+    /// Defines the contents of the general bit flags field for an archive entry.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Flags]
 	public enum GeneralBitFlags
 	{
 		/// <summary>
@@ -232,12 +236,13 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		ReservedPkware15 = 0x8000
 	}
 
-	#endregion Enumerations
+    #endregion Enumerations
 
-	/// <summary>
-	/// This class contains constants used for Zip format files
-	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "kept for backwards compatibility")]
+    /// <summary>
+    /// This class contains constants used for Zip format files
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "kept for backwards compatibility")]
 	public static class ZipConstants
 	{
 		#region Versions

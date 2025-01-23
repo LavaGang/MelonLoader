@@ -1,9 +1,12 @@
+using System;
+
 namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2
 {
-	/// <summary>
-	/// Defines internal values for both compression and decompression
-	/// </summary>
-	internal static class BZip2Constants
+    /// <summary>
+    /// Defines internal values for both compression and decompression
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal static class BZip2Constants
 	{
 		/// <summary>
 		/// Random numbers used to randomise repetitive blocks

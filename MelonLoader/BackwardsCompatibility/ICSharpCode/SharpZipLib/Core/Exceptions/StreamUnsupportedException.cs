@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib
 {
-	/// <summary>
-	/// Indicates that the input stream could not decoded due to known library incompability or missing features
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// Indicates that the input stream could not decoded due to known library incompability or missing features
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class StreamUnsupportedException : StreamDecodingException
 	{
 		private const string GenericMessage = "Input stream is in a unsupported format";

@@ -3,10 +3,11 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2
 {
-	/// <summary>
-	/// An example class to demonstrate compression and decompression of BZip2 streams.
-	/// </summary>
-	public static class BZip2
+    /// <summary>
+    /// An example class to demonstrate compression and decompression of BZip2 streams.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public static class BZip2
 	{
 		/// <summary>
 		/// Decompress the <paramref name="inStream">input</paramref> writing

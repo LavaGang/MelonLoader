@@ -5,33 +5,35 @@ using MelonLoader.ICSharpCode.SharpZipLib.Core;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// Used to advise clients of 'events' while processing archives
-	/// </summary>
-	public delegate void ProgressMessageHandler(TarArchive archive, TarEntry entry, string message);
+    /// <summary>
+    /// Used to advise clients of 'events' while processing archives
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public delegate void ProgressMessageHandler(TarArchive archive, TarEntry entry, string message);
 
-	/// <summary>
-	/// The TarArchive class implements the concept of a
-	/// 'Tape Archive'. A tar archive is a series of entries, each of
-	/// which represents a file system object. Each entry in
-	/// the archive consists of a header block followed by 0 or more data blocks.
-	/// Directory entries consist only of the header block, and are followed by entries
-	/// for the directory's contents. File entries consist of a
-	/// header followed by the number of blocks needed to
-	/// contain the file's contents. All entries are written on
-	/// block boundaries. Blocks are 512 bytes long.
-	///
-	/// TarArchives are instantiated in either read or write mode,
-	/// based upon whether they are instantiated with an InputStream
-	/// or an OutputStream. Once instantiated TarArchives read/write
-	/// mode can not be changed.
-	///
-	/// There is currently no support for random access to tar archives.
-	/// However, it seems that subclassing TarArchive, and using the
-	/// TarBuffer.CurrentRecord and TarBuffer.CurrentBlock
-	/// properties, this would be rather trivial.
-	/// </summary>
-	public class TarArchive : IDisposable
+    /// <summary>
+    /// The TarArchive class implements the concept of a
+    /// 'Tape Archive'. A tar archive is a series of entries, each of
+    /// which represents a file system object. Each entry in
+    /// the archive consists of a header block followed by 0 or more data blocks.
+    /// Directory entries consist only of the header block, and are followed by entries
+    /// for the directory's contents. File entries consist of a
+    /// header followed by the number of blocks needed to
+    /// contain the file's contents. All entries are written on
+    /// block boundaries. Blocks are 512 bytes long.
+    ///
+    /// TarArchives are instantiated in either read or write mode,
+    /// based upon whether they are instantiated with an InputStream
+    /// or an OutputStream. Once instantiated TarArchives read/write
+    /// mode can not be changed.
+    ///
+    /// There is currently no support for random access to tar archives.
+    /// However, it seems that subclassing TarArchive, and using the
+    /// TarBuffer.CurrentRecord and TarBuffer.CurrentBlock
+    /// properties, this would be rather trivial.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class TarArchive : IDisposable
 	{
 		/// <summary>
 		/// Client hook allowing detailed information to be reported during processing

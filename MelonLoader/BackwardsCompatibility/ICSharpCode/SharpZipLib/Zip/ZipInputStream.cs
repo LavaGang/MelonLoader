@@ -7,55 +7,56 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// This is an InflaterInputStream that reads the files baseInputStream an zip archive
-	/// one after another.  It has a special method to get the zip entry of
-	/// the next file.  The zip entry contains information about the file name
-	/// size, compressed size, Crc, etc.
-	/// It includes support for Stored and Deflated entries.
-	/// <br/>
-	/// <br/>Author of the original java version : Jochen Hoenicke
-	/// </summary>
-	///
-	/// <example> This sample shows how to read a zip file
-	/// <code lang="C#">
-	/// using System;
-	/// using System.Text;
-	/// using System.IO;
-	///
-	/// using MelonLoader.ICSharpCode.SharpZipLib.Zip;
-	///
-	/// class MainClass
-	/// {
-	/// 	public static void Main(string[] args)
-	/// 	{
-	/// 		using ( ZipInputStream s = new ZipInputStream(File.OpenRead(args[0]))) {
-	///
-	/// 			ZipEntry theEntry;
-	/// 			const int size = 2048;
-	/// 			byte[] data = new byte[2048];
-	///
-	/// 			while ((theEntry = s.GetNextEntry()) != null) {
-	///                 if ( entry.IsFile ) {
-	/// 				    Console.Write("Show contents (y/n) ?");
-	/// 				    if (Console.ReadLine() == "y") {
-	/// 				    	while (true) {
-	/// 				    		size = s.Read(data, 0, data.Length);
-	/// 				    		if (size > 0) {
-	/// 				    			Console.Write(new ASCIIEncoding().GetString(data, 0, size));
-	/// 				    		} else {
-	/// 				    			break;
-	/// 				    		}
-	/// 				    	}
-	/// 				    }
-	/// 				}
-	/// 			}
-	/// 		}
-	/// 	}
-	/// }
-	/// </code>
-	/// </example>
-	public class ZipInputStream : InflaterInputStream
+    /// <summary>
+    /// This is an InflaterInputStream that reads the files baseInputStream an zip archive
+    /// one after another.  It has a special method to get the zip entry of
+    /// the next file.  The zip entry contains information about the file name
+    /// size, compressed size, Crc, etc.
+    /// It includes support for Stored and Deflated entries.
+    /// <br/>
+    /// <br/>Author of the original java version : Jochen Hoenicke
+    /// </summary>
+    ///
+    /// <example> This sample shows how to read a zip file
+    /// <code lang="C#">
+    /// using System;
+    /// using System.Text;
+    /// using System.IO;
+    ///
+    /// using MelonLoader.ICSharpCode.SharpZipLib.Zip;
+    ///
+    /// class MainClass
+    /// {
+    /// 	public static void Main(string[] args)
+    /// 	{
+    /// 		using ( ZipInputStream s = new ZipInputStream(File.OpenRead(args[0]))) {
+    ///
+    /// 			ZipEntry theEntry;
+    /// 			const int size = 2048;
+    /// 			byte[] data = new byte[2048];
+    ///
+    /// 			while ((theEntry = s.GetNextEntry()) != null) {
+    ///                 if ( entry.IsFile ) {
+    /// 				    Console.Write("Show contents (y/n) ?");
+    /// 				    if (Console.ReadLine() == "y") {
+    /// 				    	while (true) {
+    /// 				    		size = s.Read(data, 0, data.Length);
+    /// 				    		if (size > 0) {
+    /// 				    			Console.Write(new ASCIIEncoding().GetString(data, 0, size));
+    /// 				    		} else {
+    /// 				    			break;
+    /// 				    		}
+    /// 				    	}
+    /// 				    }
+    /// 				}
+    /// 			}
+    /// 		}
+    /// 	}
+    /// }
+    /// </code>
+    /// </example>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class ZipInputStream : InflaterInputStream
 	{
 		#region Instance Fields
 

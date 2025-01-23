@@ -4,13 +4,14 @@ using System.Security.Cryptography;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression.Streams
 {
-	/// <summary>
-	/// An input buffer customised for use by <see cref="InflaterInputStream"/>
-	/// </summary>
-	/// <remarks>
-	/// The buffer supports decryption of incoming data.
-	/// </remarks>
-	public class InflaterInputBuffer
+    /// <summary>
+    /// An input buffer customised for use by <see cref="InflaterInputStream"/>
+    /// </summary>
+    /// <remarks>
+    /// The buffer supports decryption of incoming data.
+    /// </remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class InflaterInputBuffer
 	{
 		#region Constructors
 
@@ -318,16 +319,17 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression.Streams
 		#endregion Instance Fields
 	}
 
-	/// <summary>
-	/// This filter stream is used to decompress data compressed using the "deflate"
-	/// format. The "deflate" format is described in RFC 1951.
-	///
-	/// This stream may form the basis for other decompression filters, such
-	/// as the <see cref="ICSharpCode.SharpZipLib.GZip.GZipInputStream">GZipInputStream</see>.
-	///
-	/// Author of the original java version : John Leuner.
-	/// </summary>
-	public class InflaterInputStream : Stream
+    /// <summary>
+    /// This filter stream is used to decompress data compressed using the "deflate"
+    /// format. The "deflate" format is described in RFC 1951.
+    ///
+    /// This stream may form the basis for other decompression filters, such
+    /// as the <see cref="ICSharpCode.SharpZipLib.GZip.GZipInputStream">GZipInputStream</see>.
+    ///
+    /// Author of the original java version : John Leuner.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class InflaterInputStream : Stream
 	{
 		#region Constructors
 

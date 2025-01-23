@@ -8,10 +8,11 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2
 {
-	/// <summary>
-	/// An input stream that decompresses files in the BZip2 format
-	/// </summary>
-	public class BZip2InputStream : Stream
+    /// <summary>
+    /// An input stream that decompresses files in the BZip2 format
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class BZip2InputStream : Stream
 	{
 		#region Constants
 

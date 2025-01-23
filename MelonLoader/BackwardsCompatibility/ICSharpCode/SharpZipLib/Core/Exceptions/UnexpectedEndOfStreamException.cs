@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib
 {
-	/// <summary>
-	/// Indicates that the input stream could not decoded due to the stream ending before enough data had been provided
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// Indicates that the input stream could not decoded due to the stream ending before enough data had been provided
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class UnexpectedEndOfStreamException : StreamDecodingException
 	{
 		private const string GenericMessage = "Input stream ended unexpectedly";

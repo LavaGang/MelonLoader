@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	/// <summary>
-	/// InvalidNameException is thrown for invalid names such as directory traversal paths and names with invalid characters
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// InvalidNameException is thrown for invalid names such as directory traversal paths and names with invalid characters
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class InvalidNameException : SharpZipBaseException
 	{
 		/// <summary>

@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 {
-	/// <summary>
-	/// GZipException represents exceptions specific to GZip classes and code.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// GZipException represents exceptions specific to GZip classes and code.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class GZipException : SharpZipBaseException
 	{
 		/// <summary>

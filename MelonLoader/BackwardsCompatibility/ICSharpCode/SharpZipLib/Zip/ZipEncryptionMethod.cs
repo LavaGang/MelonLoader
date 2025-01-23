@@ -1,9 +1,12 @@
-﻿namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
+﻿using System;
+
+namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
-	/// <summary>
-	/// The method of encrypting entries when creating zip archives.
-	/// </summary>
-	public enum ZipEncryptionMethod
+    /// <summary>
+    /// The method of encrypting entries when creating zip archives.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public enum ZipEncryptionMethod
 	{
 		/// <summary>
 		/// No encryption will be used.

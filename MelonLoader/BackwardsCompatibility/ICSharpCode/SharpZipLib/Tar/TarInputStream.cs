@@ -4,13 +4,14 @@ using System.Text;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Tar
 {
-	/// <summary>
-	/// The TarInputStream reads a UNIX tar archive as an InputStream.
-	/// methods are provided to position at each successive entry in
-	/// the archive, and the read each entry as a normal input stream
-	/// using read().
-	/// </summary>
-	public class TarInputStream : Stream
+    /// <summary>
+    /// The TarInputStream reads a UNIX tar archive as an InputStream.
+    /// methods are provided to position at each successive entry in
+    /// the archive, and the read each entry as a normal input stream
+    /// using read().
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class TarInputStream : Stream
 	{
 		#region Constructors
 

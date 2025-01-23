@@ -2,14 +2,15 @@ using System;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Checksum
 {
-	/// <summary>
-	/// Interface to compute a data checksum used by checked input/output streams.
-	/// A data checksum can be updated by one byte or with a byte array. After each
-	/// update the value of the current checksum can be returned by calling
-	/// <code>getValue</code>. The complete checksum object can also be reset
-	/// so it can be used again with new data.
-	/// </summary>
-	public interface IChecksum
+    /// <summary>
+    /// Interface to compute a data checksum used by checked input/output streams.
+    /// A data checksum can be updated by one byte or with a byte array. After each
+    /// update the value of the current checksum can be returned by calling
+    /// <code>getValue</code>. The complete checksum object can also be reset
+    /// so it can be used again with new data.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public interface IChecksum
 	{
 		/// <summary>
 		/// Resets the data checksum as if no update was ever called.

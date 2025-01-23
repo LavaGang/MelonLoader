@@ -4,10 +4,11 @@ using MelonLoader.ICSharpCode.SharpZipLib.Core;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Encryption
 {
-	/// <summary>
-	/// Transforms stream using AES in CTR mode
-	/// </summary>
-	internal class ZipAESTransform : ICryptoTransform
+    /// <summary>
+    /// Transforms stream using AES in CTR mode
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    internal class ZipAESTransform : ICryptoTransform
 	{
 		class IncrementalHash : HMACSHA1
 		{

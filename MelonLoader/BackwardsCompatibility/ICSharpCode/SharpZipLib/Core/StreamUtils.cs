@@ -3,10 +3,11 @@ using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Core
 {
-	/// <summary>
-	/// Provides simple <see cref="Stream"/>" utilities.
-	/// </summary>
-	public sealed class StreamUtils
+    /// <summary>
+    /// Provides simple <see cref="Stream"/>" utilities.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public sealed class StreamUtils
 	{
 		/// <summary>
 		/// Read from a <see cref="Stream"/> ensuring all the required data is read.

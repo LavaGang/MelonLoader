@@ -1,14 +1,17 @@
+using System;
+
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression
 {
-	/// <summary>
-	/// This class is general purpose class for writing data to a buffer.
-	///
-	/// It allows you to write bits as well as bytes
-	/// Based on DeflaterPending.java
-	///
-	/// author of the original java version : Jochen Hoenicke
-	/// </summary>
-	public class PendingBuffer
+    /// <summary>
+    /// This class is general purpose class for writing data to a buffer.
+    ///
+    /// It allows you to write bits as well as bytes
+    /// Based on DeflaterPending.java
+    ///
+    /// author of the original java version : Jochen Hoenicke
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    public class PendingBuffer
 	{
 		#region Instance Fields
 

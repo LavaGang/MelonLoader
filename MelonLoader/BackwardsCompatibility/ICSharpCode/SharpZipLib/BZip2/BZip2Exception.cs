@@ -3,10 +3,11 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.BZip2
 {
-	/// <summary>
-	/// BZip2Exception represents exceptions specific to BZip2 classes and code.
-	/// </summary>
-	[Serializable]
+    /// <summary>
+    /// BZip2Exception represents exceptions specific to BZip2 classes and code.
+    /// </summary>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class BZip2Exception : SharpZipBaseException
 	{
 		/// <summary>

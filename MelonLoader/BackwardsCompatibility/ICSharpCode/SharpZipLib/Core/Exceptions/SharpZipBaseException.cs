@@ -3,13 +3,14 @@ using System.Runtime.Serialization;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib
 {
-	/// <summary>
-	/// SharpZipBaseException is the base exception class for SharpZipLib.
-	/// All library exceptions are derived from this.
-	/// </summary>
-	/// <remarks>NOTE: Not all exceptions thrown will be derived from this class.
-	/// A variety of other exceptions are possible for example <see cref="ArgumentNullException"></see></remarks>
-	[Serializable]
+    /// <summary>
+    /// SharpZipBaseException is the base exception class for SharpZipLib.
+    /// All library exceptions are derived from this.
+    /// </summary>
+    /// <remarks>NOTE: Not all exceptions thrown will be derived from this class.
+    /// A variety of other exceptions are possible for example <see cref="ArgumentNullException"></see></remarks>
+    [Obsolete("Please use an alternative library instead. This will be removed in a future version.", true)]
+    [Serializable]
 	public class SharpZipBaseException : Exception
 	{
 		/// <summary>
