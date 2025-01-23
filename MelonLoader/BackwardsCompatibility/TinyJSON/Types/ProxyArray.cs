@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace MelonLoader.TinyJSON
 {
-	public sealed class ProxyArray : Variant, IEnumerable<Variant>
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public sealed class ProxyArray : Variant, IEnumerable<Variant>
 	{
 		readonly List<Variant> list;
 

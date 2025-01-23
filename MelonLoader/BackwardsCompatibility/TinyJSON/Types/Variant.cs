@@ -3,7 +3,8 @@ using System.Globalization;
 
 namespace MelonLoader.TinyJSON
 {
-	public abstract class Variant : IConvertible
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public abstract class Variant : IConvertible
 	{
 		protected static readonly IFormatProvider FormatProvider = new NumberFormatInfo();
 

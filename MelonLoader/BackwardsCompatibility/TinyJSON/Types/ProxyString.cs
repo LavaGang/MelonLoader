@@ -2,7 +2,8 @@ using System;
 
 namespace MelonLoader.TinyJSON
 {
-	public sealed class ProxyString : Variant
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public sealed class ProxyString : Variant
 	{
 		readonly string value;
 

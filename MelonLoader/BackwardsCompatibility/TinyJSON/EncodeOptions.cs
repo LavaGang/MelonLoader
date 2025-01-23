@@ -3,7 +3,8 @@
 namespace MelonLoader.TinyJSON
 {
 	[Flags]
-	public enum EncodeOptions
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public enum EncodeOptions
 	{
 		None = 0,
 		PrettyPrint = 1,

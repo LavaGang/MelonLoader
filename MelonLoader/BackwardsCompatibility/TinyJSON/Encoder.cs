@@ -7,7 +7,8 @@ using System.Text;
 
 namespace MelonLoader.TinyJSON
 {
-	public sealed class Encoder
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public sealed class Encoder
 	{
 		static readonly Type includeAttrType = typeof(Include);
 		static readonly Type excludeAttrType = typeof(Exclude);

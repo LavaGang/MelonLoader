@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression;
+using System;
 using System.IO;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 {
-	using static Zip.Compression.Deflater;
-
     /// <summary>
     /// An example class to demonstrate compression and decompression of GZip streams.
     /// </summary>
@@ -68,7 +67,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.GZip
 			if (bufferSize < 512)
 				throw new ArgumentOutOfRangeException(nameof(bufferSize), "Deflate buffer size must be >= 512");
 
-			if (level < NO_COMPRESSION || level > BEST_COMPRESSION)
+			if (level < Deflater.NO_COMPRESSION || level > Deflater.BEST_COMPRESSION)
 				throw new ArgumentOutOfRangeException(nameof(level), "Compression level must be 0-9");
 
 			try

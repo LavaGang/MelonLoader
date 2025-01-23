@@ -4,7 +4,8 @@ using System;
 
 namespace MelonLoader.TinyJSON
 {
-	public sealed class Decoder : IDisposable
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public sealed class Decoder : IDisposable
 	{
 		const string whiteSpace = " \t\n\r";
 		const string wordBreak = " \t\n\r{}[],:\"";

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace MelonLoader.TinyJSON
 {
-	public static class Extensions
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public static class Extensions
 	{
 		public static bool AnyOfType<TSource>( this IEnumerable<TSource> source, Type expectedType )
 		{

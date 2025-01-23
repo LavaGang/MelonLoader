@@ -1,6 +1,5 @@
 using System;
 using MelonLoader.ICSharpCode.SharpZipLib.Core;
-using static MelonLoader.ICSharpCode.SharpZipLib.Zip.ZipEntryFactory;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
@@ -54,15 +53,15 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		/// </summary>
 		INameTransform NameTransform { get; set; }
 
-		/// <summary>
-		/// Get the <see cref="TimeSetting"/> in use.
-		/// </summary>
-		TimeSetting Setting { get; }
+        /// <summary>
+        /// Get the <see cref="ZipEntryFactory.TimeSetting"/> in use.
+        /// </summary>
+        ZipEntryFactory.TimeSetting Setting { get; }
 
-		/// <summary>
-		/// Get the <see cref="DateTime"/> value to use when <see cref="Setting"/> is set to <see cref="TimeSetting.Fixed"/>,
-		/// or if not specified, the value of <see cref="DateTime.Now"/> when the class was the initialized
-		/// </summary>
-		DateTime FixedDateTime { get; }
+        /// <summary>
+        /// Get the <see cref="DateTime"/> value to use when <see cref="Setting"/> is set to <see cref="ZipEntryFactory.TimeSetting.Fixed"/>,
+        /// or if not specified, the value of <see cref="DateTime.Now"/> when the class was the initialized
+        /// </summary>
+        DateTime FixedDateTime { get; }
 	}
 }

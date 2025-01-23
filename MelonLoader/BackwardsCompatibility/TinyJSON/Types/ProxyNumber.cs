@@ -3,7 +3,8 @@ using System.Globalization;
 
 namespace MelonLoader.TinyJSON
 {
-	public sealed class ProxyNumber : Variant
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public sealed class ProxyNumber : Variant
 	{
 		static readonly char[] floatingPointCharacters = { '.', 'e' };
 		readonly IConvertible value;

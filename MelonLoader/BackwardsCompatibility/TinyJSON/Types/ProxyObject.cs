@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 
 namespace MelonLoader.TinyJSON
 {
-	public sealed class ProxyObject : Variant, IEnumerable<KeyValuePair<string, Variant>>
+    [Obsolete("Please use Newtonsoft.Json or System.Text.Json instead. This will be removed in a future version.", true)]
+    public sealed class ProxyObject : Variant, IEnumerable<KeyValuePair<string, Variant>>
 	{
 		public const string TypeHintKey = "@type";
 		readonly Dictionary<string, Variant> dict;

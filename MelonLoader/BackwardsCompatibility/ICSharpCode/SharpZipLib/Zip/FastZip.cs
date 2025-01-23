@@ -2,8 +2,6 @@ using MelonLoader.ICSharpCode.SharpZipLib.Core;
 using MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression;
 using System;
 using System.IO;
-using static MelonLoader.ICSharpCode.SharpZipLib.Zip.Compression.Deflater;
-using static MelonLoader.ICSharpCode.SharpZipLib.Zip.ZipEntryFactory;
 
 namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 {
@@ -198,14 +196,14 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		{
 		}
 
-		/// <summary>
-		/// Initialise a new instance of <see cref="FastZip"/> using the specified <see cref="TimeSetting"/>
-		/// </summary>
-		/// <param name="timeSetting">The <see cref="TimeSetting">time setting</see> to use when creating or extracting <see cref="ZipEntry">Zip entries</see>.</param>
-		/// <remarks>Using <see cref="TimeSetting.LastAccessTime">TimeSetting.LastAccessTime</see><see cref="TimeSetting.LastAccessTimeUtc">[Utc]</see> when
-		/// creating an archive will set the file time to the moment of reading.
-		/// </remarks>
-		public FastZip(TimeSetting timeSetting)
+        /// <summary>
+        /// Initialise a new instance of <see cref="FastZip"/> using the specified <see cref="ZipEntryFactory.TimeSetting"/>
+        /// </summary>
+        /// <param name="timeSetting">The <see cref="ZipEntryFactory.TimeSetting">time setting</see> to use when creating or extracting <see cref="ZipEntry">Zip entries</see>.</param>
+        /// <remarks>Using <see cref="ZipEntryFactory.TimeSetting.LastAccessTime">TimeSetting.LastAccessTime</see><see cref="ZipEntryFactory.TimeSetting.LastAccessTimeUtc">[Utc]</see> when
+        /// creating an archive will set the file time to the moment of reading.
+        /// </remarks>
+        public FastZip(ZipEntryFactory.TimeSetting timeSetting)
 		{
 			entryFactory_ = new ZipEntryFactory(timeSetting);
 			restoreDateTimeOnExtract_ = true;
@@ -763,31 +761,31 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 						{
 							switch (entryFactory_.Setting)
 							{
-								case TimeSetting.CreateTime:
+								case ZipEntryFactory.TimeSetting.CreateTime:
 									File.SetCreationTime(targetName, entry.DateTime);
 									break;
 
-								case TimeSetting.CreateTimeUtc:
+								case ZipEntryFactory.TimeSetting.CreateTimeUtc:
 									File.SetCreationTimeUtc(targetName, entry.DateTime);
 									break;
 
-								case TimeSetting.LastAccessTime:
+								case ZipEntryFactory.TimeSetting.LastAccessTime:
 									File.SetLastAccessTime(targetName, entry.DateTime);
 									break;
 
-								case TimeSetting.LastAccessTimeUtc:
+								case ZipEntryFactory.TimeSetting.LastAccessTimeUtc:
 									File.SetLastAccessTimeUtc(targetName, entry.DateTime);
 									break;
 
-								case TimeSetting.LastWriteTime:
+								case ZipEntryFactory.TimeSetting.LastWriteTime:
 									File.SetLastWriteTime(targetName, entry.DateTime);
 									break;
 
-								case TimeSetting.LastWriteTimeUtc:
+								case ZipEntryFactory.TimeSetting.LastWriteTimeUtc:
 									File.SetLastWriteTimeUtc(targetName, entry.DateTime);
 									break;
 
-								case TimeSetting.Fixed:
+								case ZipEntryFactory.TimeSetting.Fixed:
 									File.SetLastWriteTime(targetName, entryFactory_.FixedDateTime);
 									break;
 
@@ -869,31 +867,31 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 							{
 								switch (entryFactory_.Setting)
 								{
-									case TimeSetting.CreateTime:
+									case ZipEntryFactory.TimeSetting.CreateTime:
 										Directory.SetCreationTime(dirName, entry.DateTime);
 										break;
 
-									case TimeSetting.CreateTimeUtc:
+									case ZipEntryFactory.TimeSetting.CreateTimeUtc:
 										Directory.SetCreationTimeUtc(dirName, entry.DateTime);
 										break;
 
-									case TimeSetting.LastAccessTime:
+									case ZipEntryFactory.TimeSetting.LastAccessTime:
 										Directory.SetLastAccessTime(dirName, entry.DateTime);
 										break;
 
-									case TimeSetting.LastAccessTimeUtc:
+									case ZipEntryFactory.TimeSetting.LastAccessTimeUtc:
 										Directory.SetLastAccessTimeUtc(dirName, entry.DateTime);
 										break;
 
-									case TimeSetting.LastWriteTime:
+									case ZipEntryFactory.TimeSetting.LastWriteTime:
 										Directory.SetLastWriteTime(dirName, entry.DateTime);
 										break;
 
-									case TimeSetting.LastWriteTimeUtc:
+									case ZipEntryFactory.TimeSetting.LastWriteTimeUtc:
 										Directory.SetLastWriteTimeUtc(dirName, entry.DateTime);
 										break;
 
-									case TimeSetting.Fixed:
+									case ZipEntryFactory.TimeSetting.Fixed:
 										Directory.SetLastWriteTime(dirName, entryFactory_.FixedDateTime);
 										break;
 
@@ -968,7 +966,7 @@ namespace MelonLoader.ICSharpCode.SharpZipLib.Zip
 		private IEntryFactory entryFactory_ = new ZipEntryFactory();
 		private INameTransform extractNameTransform_;
 		private UseZip64 useZip64_ = UseZip64.Dynamic;
-		private CompressionLevel compressionLevel_ = CompressionLevel.DEFAULT_COMPRESSION;
+		private Deflater.CompressionLevel compressionLevel_ = Deflater.CompressionLevel.DEFAULT_COMPRESSION;
 
 		private string password_;
 
