@@ -15,14 +15,9 @@ internal static unsafe class BootstrapInterop
 
     internal static void SetDefaultConsoleTitleWithGameName(string gameName, string gameVersion = null)
     {
-        if (LoaderConfig.Current.Console.DontSetTitle || !Library.IsConsoleOpen())
-            return;
-
         var versionStr = $"{Core.GetVersionString()} - {gameName} {gameVersion ?? ""}";
 
-        // Setting the title might not work on .net 2.0. In WTTG 2 it's present in mscorlib, but the resolver can't find it for whatever reason.
-        // Using reflection to avoid resolver errors
-        HarmonyLib.AccessTools.Property(typeof(Console), "Title")?.SetValue(null, versionStr, null);
+        MelonUtils.SetConsoleTitle(versionStr);
     }
 
 #if WINDOWS

@@ -97,10 +97,10 @@ namespace MelonLoader
 
         #region Obsolete
 
-        [Obsolete("Use LoaderConfig.Current.Loader instead.")]
+        [Obsolete("Use LoaderConfig.Current.Loader instead. This will be removed in a future update.", true)]
         public static class Core
         {
-            [Obsolete("This option isn't used anymore.")]
+            [Obsolete("This option isn't used anymore. This will be removed in a future update.", true)]
             public enum LoadModeEnum
             {
                 NORMAL,
@@ -108,32 +108,32 @@ namespace MelonLoader
                 BOTH
             }
 
-            [Obsolete("This option isn't used anymore. It will always return NORMAL.")]
+            [Obsolete("This option isn't used anymore. It will always return NORMAL. This will be removed in a future update.", true)]
             public static LoadModeEnum LoadMode_Plugins => LoadModeEnum.NORMAL;
 
-            [Obsolete("This option isn't used anymore. It will always return NORMAL.")]
+            [Obsolete("This option isn't used anymore. It will always return NORMAL. This will be removed in a future update.", true)]
             public static LoadModeEnum LoadMode_Mods => LoadModeEnum.NORMAL;
 
-            [Obsolete("Use LoaderConfig.Current.Loader.ForceQuit instead.")]
+            [Obsolete("Use LoaderConfig.Current.Loader.ForceQuit instead. This will be removed in a future update.", true)]
             public static bool QuitFix => LoaderConfig.Current.Loader.ForceQuit;
 
-            [Obsolete("Use LoaderConfig.Current.Loader.DisableStartScreen instead.")]
+            [Obsolete("Use LoaderConfig.Current.Loader.DisableStartScreen instead. This will be removed in a future update.", true)]
             public static bool StartScreen => !LoaderConfig.Current.Loader.DisableStartScreen;
 
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.VersionOverride instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.VersionOverride instead. This will be removed in a future update.", true)]
             public static string UnityVersion => LoaderConfig.Current.UnityEngine.VersionOverride;
 
-            [Obsolete("Use LoaderConfig.Current.Loader.DebugMode instead.")]
+            [Obsolete("Use LoaderConfig.Current.Loader.DebugMode instead. This will be removed in a future update.", true)]
             public static bool IsDebug => LoaderConfig.Current.Loader.DebugMode;
 
-            [Obsolete("Use LoaderConfig.Current.Loader.LaunchDebugger instead.")]
+            [Obsolete("Use LoaderConfig.Current.Loader.LaunchDebugger instead. This will be removed in a future update.", true)]
             public static bool UserWantsDebugger => LoaderConfig.Current.Loader.LaunchDebugger;
         }
 
-        [Obsolete("Use LoaderConfig.Current.Console instead.")]
+        [Obsolete("Use LoaderConfig.Current.Console instead. This will be removed in a future update.", true)]
         public static class Console
         {
-            [Obsolete("Use LoaderConfig.CoreConfig.LoaderTheme instead.")]
+            [Obsolete("Use LoaderConfig.CoreConfig.LoaderTheme instead. This will be removed in a future update.", true)]
             public enum DisplayMode
             {
                 NORMAL,
@@ -143,61 +143,61 @@ namespace MelonLoader
                 LEMON
             };
 
-            [Obsolete("Use LoaderConfig.Current.Loader.Theme instead.")]
+            [Obsolete("Use LoaderConfig.Current.Loader.Theme instead. This will be removed in a future update.", true)]
             public static DisplayMode Mode => (DisplayMode)LoaderConfig.Current.Loader.Theme;
 
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner instead. This will be removed in a future update.", true)]
             public static bool CleanUnityLogs => !LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner;
 
-            [Obsolete("Use LoaderConfig.Current.Console.DontSetTitle instead.")]
+            [Obsolete("Use LoaderConfig.Current.Console.DontSetTitle instead. This will be removed in a future update.", true)]
             public static bool ShouldSetTitle => !LoaderConfig.Current.Console.DontSetTitle;
 
-            [Obsolete("Use LoaderConfig.Current.Console.AlwaysOnTop instead.")]
+            [Obsolete("Use LoaderConfig.Current.Console.AlwaysOnTop instead. This will be removed in a future update.", true)]
             public static bool AlwaysOnTop => LoaderConfig.Current.Console.AlwaysOnTop;
 
-            [Obsolete("Use LoaderConfig.Current.Console.Hide instead.")]
+            [Obsolete("Use LoaderConfig.Current.Console.Hide instead. This will be removed in a future update.", true)]
             public static bool ShouldHide => LoaderConfig.Current.Console.Hide;
 
-            [Obsolete("Use LoaderConfig.Current.Console.HideWarnings instead.")]
+            [Obsolete("Use LoaderConfig.Current.Console.HideWarnings instead. This will be removed in a future update.", true)]
             public static bool HideWarnings => LoaderConfig.Current.Console.HideWarnings;
         }
 
-        [Obsolete("Use LoaderConfig.Current.UnityEngine instead.")]
+        [Obsolete("Use LoaderConfig.Current.UnityEngine instead. This will be removed in a future update.", true)]
         public static class Cpp2IL
         {
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer instead. This will be removed in a future update.", true)]
             public static bool CallAnalyzer => LoaderConfig.Current.UnityEngine.EnableCpp2ILCallAnalyzer;
 
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector instead. This will be removed in a future update.", true)]
             public static bool NativeMethodDetector => LoaderConfig.Current.UnityEngine.EnableCpp2ILNativeMethodDetector;
         }
 
-        [Obsolete("Use LoaderConfig.Current.UnityEngine instead.")]
+        [Obsolete("Use LoaderConfig.Current.UnityEngine instead. This will be removed in a future update.", true)]
         public static class Il2CppAssemblyGenerator
         {
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceRegeneration instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceRegeneration instead. This will be removed in a future update.", true)]
             public static bool ForceRegeneration => LoaderConfig.Current.UnityEngine.ForceRegeneration;
 
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceOfflineGeneration instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceOfflineGeneration instead. This will be removed in a future update.", true)]
             public static bool OfflineMode => LoaderConfig.Current.UnityEngine.ForceOfflineGeneration;
 
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion instead. This will be removed in a future update.", true)]
             public static string ForceVersion_Dumper => LoaderConfig.Current.UnityEngine.ForceIl2CppDumperVersion;
 
-            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceGeneratorRegex instead.")]
+            [Obsolete("Use LoaderConfig.Current.UnityEngine.ForceGeneratorRegex instead. This will be removed in a future update.", true)]
             public static string ForceRegex => LoaderConfig.Current.UnityEngine.ForceGeneratorRegex;
         }
 
-        [Obsolete("Use LoaderConfig.Logs instead.")]
+        [Obsolete("Use LoaderConfig.Logs instead. This will be removed in a future update.", true)]
         public static class Logger
         {
-            [Obsolete("Use LoaderConfig.Current.Logs.MaxLogs instead.")]
+            [Obsolete("Use LoaderConfig.Current.Logs.MaxLogs instead. This will be removed in a future update.", true)]
             public static int MaxLogs => (int)LoaderConfig.Current.Logs.MaxLogs;
 
-            [Obsolete("This option isn't used anymore. It will always return 10.")]
+            [Obsolete("This option isn't used anymore. It will always return 10. This will be removed in a future update.", true)]
             public static int MaxWarnings => 10;
 
-            [Obsolete("This option isn't used anymore. It will always return 10.")]
+            [Obsolete("This option isn't used anymore. It will always return 10. This will be removed in a future update.", true)]
             public static int MaxErrors => 10;
         }
 

@@ -109,10 +109,20 @@ namespace MelonLoader.Resolver
         {
 #if !NET6_0_OR_GREATER
             // Backwards Compatibility
-            MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyLoad(assembly);
+#pragma warning disable CS0612 // Type or member is obsolete
+            InvokeObsoleteOnAssemblyLoad(assembly);
+#pragma warning restore CS0612 // Type or member is obsolete
 #endif
             OnAssemblyLoad?.Invoke(assembly);
         }
+
+#if !NET6_0_OR_GREATER
+        [Obsolete]
+        private static void InvokeObsoleteOnAssemblyLoad(Assembly assembly)
+        {
+            MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyLoad(assembly);
+        }
+#endif
 
         public delegate Assembly OnAssemblyResolveHandler(string name, Version version);
         public static event OnAssemblyResolveHandler OnAssemblyResolve;
@@ -125,13 +135,24 @@ namespace MelonLoader.Resolver
 #else
 
             // Backwards Compatibility
-            var assembly = MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyResolve(name, version);
+#pragma warning disable CS0612 // Type or member is obsolete
+            var assembly = InvokeObsoleteOnAssemblyResolve(name, version);
+#pragma warning restore CS0612 // Type or member is obsolete
+
             if (assembly == null)
                 assembly = OnAssemblyResolve?.Invoke(name, version);
             return assembly;
 
 #endif
         }
+
+#if !NET6_0_OR_GREATER
+        [Obsolete]
+        private static Assembly InvokeObsoleteOnAssemblyResolve(string name, Version version)
+        {
+            return MonoInternals.MonoResolveManager.SafeInvoke_OnAssemblyResolve(name, version);
+        }
+#endif
 
         public static AssemblyResolveInfo GetAssemblyResolveInfo(string name)
             => AssemblyManager.GetInfo(name);

@@ -144,7 +144,7 @@ namespace MelonLoader
             MsgDrawingCallbackHandler?.Invoke(namesection_color, txt_color, namesection, txt);
         }
 
-        [Obsolete("MsgCallbackHandler is obsolete. Please use MsgDrawingCallbackHandler for full Color support.")]
+        [Obsolete("MsgCallbackHandler is obsolete. Please use MsgDrawingCallbackHandler for full Color support. This will be removed in a future update.", true)]
         public static event Action<ConsoleColor, ConsoleColor, string, string> MsgCallbackHandler;
 
         public static event Action<Color, Color, string, string> MsgDrawingCallbackHandler;
@@ -161,7 +161,7 @@ namespace MelonLoader
         {
             private string Name = null;
 
-            [Obsolete("Color is obsolete. Please use DrawingColor for full Color support.")]
+            [Obsolete("Color is obsolete. Please use DrawingColor for full Color support. This will be removed in a future update.", true)]
             private ConsoleColor Color
             {
                 get => DrawingColorToConsoleColor(DrawingColor);
@@ -172,7 +172,7 @@ namespace MelonLoader
 
             public Instance(string name) => Name = name?.Replace(" ", "_");
 
-            [Obsolete("ConsoleColor is obsolete, use the (string, Color) constructor instead.")]
+            [Obsolete("ConsoleColor is obsolete, use the (string, Color) constructor instead. This will be removed in a future update.", true)]
             public Instance(string name, ConsoleColor color) : this(name) => Color = color;
 
             public Instance(string name, Color color) : this(name) => DrawingColor = color;
@@ -318,34 +318,34 @@ namespace MelonLoader
             }
         }
 
-        [Obsolete("Log is obsolete. Please use Msg instead.")]
+        [Obsolete("Log is obsolete. Please use Msg instead. This will be removed in a future update.", true)]
         public static void Log(string txt) => Msg(txt);
 
-        [Obsolete("Log is obsolete. Please use Msg instead.")]
+        [Obsolete("Log is obsolete. Please use Msg instead. This will be removed in a future update.", true)]
         public static void Log(string txt, params object[] args) => Msg(txt, args);
 
-        [Obsolete("Log is obsolete. Please use Msg instead.")]
+        [Obsolete("Log is obsolete. Please use Msg instead. This will be removed in a future update.", true)]
         public static void Log(object obj) => Msg(obj);
 
-        [Obsolete("Log is obsolete. Please use Msg instead.")]
+        [Obsolete("Log is obsolete. Please use Msg instead. This will be removed in a future update.", true)]
         public static void Log(ConsoleColor color, string txt) => Msg(color, txt);
 
-        [Obsolete("Log is obsolete. Please use Msg instead.")]
+        [Obsolete("Log is obsolete. Please use Msg instead. This will be removed in a future update.", true)]
         public static void Log(ConsoleColor color, string txt, params object[] args) => Msg(color, txt, args);
 
-        [Obsolete("Log is obsolete. Please use Msg instead.")]
+        [Obsolete("Log is obsolete. Please use Msg instead. This will be removed in a future update.", true)]
         public static void Log(ConsoleColor color, object obj) => Msg(color, obj);
 
-        [Obsolete("LogWarning is obsolete. Please use Warning instead.")]
+        [Obsolete("LogWarning is obsolete. Please use Warning instead. This will be removed in a future update.", true)]
         public static void LogWarning(string txt) => Warning(txt);
 
-        [Obsolete("LogWarning is obsolete. Please use Warning instead.")]
+        [Obsolete("LogWarning is obsolete. Please use Warning instead. This will be removed in a future update.", true)]
         public static void LogWarning(string txt, params object[] args) => Warning(txt, args);
 
-        [Obsolete("LogError is obsolete. Please use Error instead.")]
+        [Obsolete("LogError is obsolete. Please use Error instead. This will be removed in a future update.", true)]
         public static void LogError(string txt) => Error(txt);
 
-        [Obsolete("LogError is obsolete. Please use Error instead.")]
+        [Obsolete("LogError is obsolete. Please use Error instead. This will be removed in a future update.", true)]
         public static void LogError(string txt, params object[] args) => Error(txt, args);
     }
 }

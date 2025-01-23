@@ -11,10 +11,9 @@ using Il2CppInterop.Common;
 using Microsoft.Extensions.Logging;
 using MelonLoader.Utils;
 using System.IO;
+using MelonLoader.InternalUtils;
 
 [assembly: MelonLoader.PatchShield]
-
-#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace MelonLoader.Support
 {
@@ -53,7 +52,7 @@ namespace MelonLoader.Support
             }).AddLogger(new InteropLogger())
               .AddHarmonySupport();
 
-            if (MelonLaunchOptions.Console.CleanUnityLogs)
+            if (!LoaderConfig.Current.UnityEngine.DisableConsoleLogCleaner)
                 ConsoleCleaner();
 
             SceneHandler.Init();
@@ -162,7 +161,7 @@ namespace MelonLoader.Support
                 
                 var addr = _detourFrom;
                 nint addrPtr = (nint)(&addr);
-                MelonUtils.NativeHookAttachDirect(addrPtr, _targetPtr);
+                BootstrapInterop.NativeHookAttachDirect(addrPtr, _targetPtr);
                 NativeStackWalk.RegisterHookAddr((ulong)addrPtr, $"Il2CppInterop detour of 0x{addrPtr:X} -> 0x{_targetPtr:X}");
 
                 _originalPtr = addr;
@@ -176,7 +175,7 @@ namespace MelonLoader.Support
                 var addr = _detourFrom;
                 nint addrPtr = (nint)(&addr);
 
-                MelonUtils.NativeHookDetach(addrPtr, _targetPtr);
+                BootstrapInterop.NativeHookDetach(addrPtr, _targetPtr);
                 NativeStackWalk.UnregisterHookAddr((ulong)addrPtr);
 
                 _targetPtr = IntPtr.Zero;
