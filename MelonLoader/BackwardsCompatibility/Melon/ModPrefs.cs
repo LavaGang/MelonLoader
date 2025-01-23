@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace MelonLoader
 {
-    [Obsolete("MelonLoader.ModPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead.")]
+    [Obsolete("MelonLoader.ModPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead. This will be removed in a future update.", true)]
     public class ModPrefs : MelonPrefs
     {
-        [Obsolete("MelonLoader.ModPrefs.GetPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead.")]
+        [Obsolete("MelonLoader.ModPrefs.GetPrefs is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences instead. This will be removed in a future update.", true)]
         public static Dictionary<string, Dictionary<string, PrefDesc>> GetPrefs()
         {
             Dictionary<string, Dictionary<string, PrefDesc>> output = new Dictionary<string, Dictionary<string, PrefDesc>>();
@@ -28,15 +28,15 @@ namespace MelonLoader
             }
             return output;
         }
-        [Obsolete("MelonLoader.ModPrefs.RegisterPrefString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+        [Obsolete("MelonLoader.ModPrefs.RegisterPrefString is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future update.", true)]
         public static void RegisterPrefString(string section, string name, string defaultValue, string displayText = null, bool hideFromList = false) => RegisterString(section, name, defaultValue, displayText, hideFromList);
-        [Obsolete("MelonLoader.ModPrefs.RegisterPrefBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+        [Obsolete("MelonLoader.ModPrefs.RegisterPrefBool is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future update.", true)]
         public static void RegisterPrefBool(string section, string name, bool defaultValue, string displayText = null, bool hideFromList = false) => RegisterBool(section, name, defaultValue, displayText, hideFromList);
-        [Obsolete("MelonLoader.ModPrefs.RegisterPrefInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+        [Obsolete("MelonLoader.ModPrefs.RegisterPrefInt is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future update.", true)]
         public static void RegisterPrefInt(string section, string name, int defaultValue, string displayText = null, bool hideFromList = false) => RegisterInt(section, name, defaultValue, displayText, hideFromList);
-        [Obsolete("MelonLoader.ModPrefs.RegisterPrefFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead.")]
+        [Obsolete("MelonLoader.ModPrefs.RegisterPrefFloat is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences.CreateEntry instead. This will be removed in a future update.", true)]
         public static void RegisterPrefFloat(string section, string name, float defaultValue, string displayText = null, bool hideFromList = false) => RegisterFloat(section, name, defaultValue, displayText, hideFromList);
-        [Obsolete("MelonLoader.ModPrefs.PrefType is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.TypeEnum instead.")]
+        [Obsolete("MelonLoader.ModPrefs.PrefType is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.TypeEnum instead. This will be removed in a future update.", true)]
         public enum PrefType
         {
             STRING,
@@ -44,14 +44,14 @@ namespace MelonLoader
             INT,
             FLOAT
         }
-        [Obsolete("MelonLoader.ModPrefs.PrefDesc is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead.")]
+        [Obsolete("MelonLoader.ModPrefs.PrefDesc is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead. This will be removed in a future update.", true)]
         public class PrefDesc : MelonPreference
         {
-            [Obsolete("MelonLoader.ModPrefs.PrefDesc.Type is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.Type instead.")]
+            [Obsolete("MelonLoader.ModPrefs.PrefDesc.Type is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry.Type instead. This will be removed in a future update.", true)]
             public PrefType Type { get => (PrefType)base.Type; }
-            [Obsolete("MelonLoader.ModPrefs.PrefDesc is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead.")]
+            [Obsolete("MelonLoader.ModPrefs.PrefDesc is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead. This will be removed in a future update.", true)]
             public PrefDesc(MelonPreferences_Entry entry) : base(entry) { }
-            [Obsolete("MelonLoader.ModPrefs.PrefDesc is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead.")]
+            [Obsolete("MelonLoader.ModPrefs.PrefDesc is Only Here for Compatibility Reasons. Please use MelonLoader.MelonPreferences_Entry instead. This will be removed in a future update.", true)]
             public PrefDesc(MelonPreference pref) : base(pref) { }
         }
     }

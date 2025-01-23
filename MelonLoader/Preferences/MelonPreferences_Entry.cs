@@ -41,7 +41,7 @@ namespace MelonLoader
             OnValueChangedUntyped?.Invoke();
         }
 
-        [Obsolete("Please use the OnEntryValueChangedUntyped MelonEvent instead.")]
+        [Obsolete("Please use the OnEntryValueChangedUntyped MelonEvent instead. This will be removed in a future update.", true)]
         public event Action OnValueChangedUntyped;
     }
 
@@ -87,7 +87,7 @@ namespace MelonLoader
 
         public readonly MelonEvent<T, T> OnEntryValueChanged = new MelonEvent<T, T>();
 
-        [Obsolete("Please use the OnEntryValueChanged MelonEvent instead.")]
+        [Obsolete("Please use the OnEntryValueChanged MelonEvent instead. This will be removed in a future update.", true)]
         public event Action<T, T> OnValueChanged;
 
         public override Type GetReflectedType() => typeof(T);

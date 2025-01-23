@@ -11,8 +11,8 @@ namespace Harmony
 
 	public class FastAccess
 	{
-		[Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true))")]
-		public static InstantiationHandler CreateInstantiationHandler(Type type)
+		[Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true)). This will be removed in a future update.", true)]
+        public static InstantiationHandler CreateInstantiationHandler(Type type)
 		{
 			var constructorInfo = type.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
 			if (constructorInfo is null)
@@ -24,8 +24,8 @@ namespace Harmony
 			return (InstantiationHandler)dynamicMethod.Generate().CreateDelegate(typeof(InstantiationHandler));
 		}
 
-		[Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true))")]
-		public static GetterHandler CreateGetterHandler(PropertyInfo propertyInfo)
+		[Obsolete("Use AccessTools.MethodDelegate<Func<T, S>>(PropertyInfo.GetGetMethod(true)). This will be removed in a future update.", true)]
+        public static GetterHandler CreateGetterHandler(PropertyInfo propertyInfo)
 		{
 			var getMethodInfo = propertyInfo.GetGetMethod(true);
 			var dynamicGet = CreateGetDynamicMethod(propertyInfo.DeclaringType);
@@ -36,8 +36,8 @@ namespace Harmony
 			return (GetterHandler)dynamicGet.Generate().CreateDelegate(typeof(GetterHandler));
 		}
 
-		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo)")]
-		public static GetterHandler CreateGetterHandler(FieldInfo fieldInfo)
+		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo). This will be removed in a future update.", true)]
+        public static GetterHandler CreateGetterHandler(FieldInfo fieldInfo)
 		{
 			var dynamicGet = CreateGetDynamicMethod(fieldInfo.DeclaringType);
 			var getGenerator = dynamicGet.GetILGenerator();
@@ -48,8 +48,8 @@ namespace Harmony
 		}
 
 		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(name) for fields and " +
-			"AccessTools.MethodDelegate<Func<T, S>>(AccessTools.PropertyGetter(typeof(T), name)) for properties")]
-		public static GetterHandler CreateFieldGetter(Type type, params string[] names)
+            "AccessTools.MethodDelegate<Func<T, S>>(AccessTools.PropertyGetter(typeof(T), name)) for properties. This will be removed in a future update.", true)]
+        public static GetterHandler CreateFieldGetter(Type type, params string[] names)
 		{
 			foreach (var name in names)
 			{
@@ -63,8 +63,8 @@ namespace Harmony
 			return null;
 		}
 
-		[Obsolete("Use AccessTools.MethodDelegate<Action<T, S>>(PropertyInfo.GetSetMethod(true))")]
-		public static SetterHandler CreateSetterHandler(PropertyInfo propertyInfo)
+		[Obsolete("Use AccessTools.MethodDelegate<Action<T, S>>(PropertyInfo.GetSetMethod(true)). This will be removed in a future update.", true)]
+        public static SetterHandler CreateSetterHandler(PropertyInfo propertyInfo)
 		{
 			var setMethodInfo = propertyInfo.GetSetMethod(true);
 			var dynamicSet = CreateSetDynamicMethod(propertyInfo.DeclaringType);
@@ -76,8 +76,8 @@ namespace Harmony
 			return (SetterHandler)dynamicSet.Generate().CreateDelegate(typeof(SetterHandler));
 		}
 
-		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo)")]
-		public static SetterHandler CreateSetterHandler(FieldInfo fieldInfo)
+		[Obsolete("Use AccessTools.FieldRefAccess<T, S>(fieldInfo). This will be removed in a future update.", true)]
+        public static SetterHandler CreateSetterHandler(FieldInfo fieldInfo)
 		{
 			var dynamicSet = CreateSetDynamicMethod(fieldInfo.DeclaringType);
 			var setGenerator = dynamicSet.GetILGenerator();
