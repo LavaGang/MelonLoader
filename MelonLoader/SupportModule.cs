@@ -1,5 +1,4 @@
-﻿using MelonLoader.Modules;
-using MelonLoader.Utils;
+﻿using MelonLoader.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +8,7 @@ namespace MelonLoader;
 
 internal static class SupportModule
 {
-    internal static ISupportModuleTo Interface = null;
+    internal static ISupportModule_To Interface = null;
 
     private static string BaseDirectory = null;
     private static readonly List<ModuleListing> Modules =
@@ -92,7 +91,7 @@ internal static class SupportModule
             return false;
         }
 
-        Interface = (ISupportModuleTo)method.Invoke(null, [new SupportModule_From()]);
+        Interface = (ISupportModule_To)method.Invoke(null, [new SupportModule_From()]);
         if (Interface == null)
         {
             MelonLogger.Error("Failed to Initialize Interface!");

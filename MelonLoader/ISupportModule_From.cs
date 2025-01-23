@@ -1,6 +1,9 @@
-﻿namespace MelonLoader.Modules;
+﻿using System.Diagnostics.CodeAnalysis;
 
-internal interface ISupportModuleFrom
+namespace MelonLoader;
+
+[SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "It's public API")]
+public interface ISupportModule_From
 {
     void OnApplicationLateStart();
     void OnSceneWasLoaded(int buildIndex, string sceneName);

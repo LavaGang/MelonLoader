@@ -4,7 +4,6 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.Startup;
 using MelonLoader.CoreClrUtils;
 using MelonLoader.InternalUtils;
-using MelonLoader.Modules;
 using MelonLoader.Support.Preferences;
 using MelonLoader.Utils;
 using Microsoft.Extensions.Logging;
@@ -20,7 +19,7 @@ namespace MelonLoader.Support;
 
 internal static class Main
 {
-    internal static ISupportModuleFrom Interface;
+    internal static ISupportModule_From Interface;
     internal static InteropInterface Interop;
     internal static GameObject obj = null;
     internal static SM_Component component = null;
@@ -28,7 +27,7 @@ internal static class Main
     private static Assembly Il2Cppmscorlib = null;
     private static Type streamType = null;
 
-    private static ISupportModuleTo Initialize(ISupportModuleFrom interface_from)
+    private static ISupportModule_To Initialize(ISupportModule_From interface_from)
     {
         Interface = interface_from;
 

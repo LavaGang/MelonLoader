@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -64,7 +65,7 @@ public static class MelonLaunchOptions
 
             // Parse Argument
             string cmdArg = null;
-            if (noPrefixCmd.Contains("="))
+            if (noPrefixCmd.Contains('='))
             {
                 var split = noPrefixCmd.Split('=');
                 noPrefixCmd = split[0];

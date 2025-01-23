@@ -1,8 +1,6 @@
-﻿using MelonLoader.Modules;
+﻿namespace MelonLoader;
 
-namespace MelonLoader;
-
-internal class SupportModule_From : ISupportModuleFrom
+internal class SupportModule_From : ISupportModule_From
 {
     public void OnApplicationLateStart()
         => MelonEvents.OnApplicationLateStart.Invoke();
