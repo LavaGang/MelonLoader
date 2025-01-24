@@ -9,7 +9,7 @@ using MethodInfo = System.Reflection.MethodInfo;
 
 namespace MelonLoader.Fixes
 {
-    public static class AsmResolverFix
+    internal static class AsmResolverFix
     {
         //adds https://github.com/Washi1337/AsmResolver/pull/609
         public static void Install()
