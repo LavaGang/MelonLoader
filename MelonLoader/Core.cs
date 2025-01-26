@@ -47,10 +47,9 @@ namespace MelonLoader
             Assertions.LemonAssertMapping.Setup();
 
             MelonUtils.Setup(AppDomain.CurrentDomain);
+            MelonAssemblyResolver.Setup();
             BootstrapInterop.SetDefaultConsoleTitleWithGameName(UnityInformationHandler.GameName, 
                 UnityInformationHandler.GameVersion);
-
-            MelonAssemblyResolver.Setup();
 
 #if NET6_0_OR_GREATER
 
