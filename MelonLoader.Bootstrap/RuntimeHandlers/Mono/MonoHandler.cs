@@ -17,13 +17,9 @@ internal static class MonoHandler
 
     public static bool TryInitialize()
     {
-        var monoLib = MonoLib.TryLoad(
-#if WINDOWS
-            Core.GameDir
-#else
-            Core.DataDir
-#endif
-            );
+        var monoLib = MonoLib.TryLoad(Core.GameDir);
+        if (monoLib == null)
+            monoLib = MonoLib.TryLoad(Core.DataDir);
         if (monoLib == null)
             return false;
 
