@@ -199,6 +199,10 @@ MelonLoader uses a proxy DLL to trick the game into loading itself on startup. T
 | version.dll |
 | winhttp.dll |
 | winmm.dll |
+| dinput.dll |
+| dinput8.dll |
+| dsound.dll |
+| d3d8.dll |
 
 ---
 
