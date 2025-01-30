@@ -1,6 +1,10 @@
 EXPORTS
+
+; SYSTEM
    DotNetRuntimeDebugHeader DATA
    DllMain
+   
+; BOOTSTRAP
    NativeHookAttach
    NativeHookDetach
    LogMsg
@@ -11,6 +15,42 @@ EXPORTS
    MonoGetRuntimeHandle
    IsConsoleOpen
    GetLoaderConfig
+   
+; SHARED
+   DllCanUnloadNow=ImplDllCanUnloadNow
+   DllGetClassObject=ImplDllGetClassObject
+   DllRegisterServer=ImplDllRegisterServer
+   DllUnregisterServer=ImplDllUnregisterServer
+   Private1=ImplPrivate1
+   DebugSetMute=ImplDebugSetMute
+   DebugSetLevel=ImplDebugSetLevel
+   GetDeviceID=ImplGetDeviceID
+   
+; dinput8.dll
+   DirectInput8Create=ImplDirectInput8Create
+
+; dinput.dll
+   DirectInputCreateA=ImplDirectInputCreateA
+   DirectInputCreateEx=ImplDirectInputCreateEx
+   DirectInputCreateW=ImplDirectInputCreateW
+   
+; dsound.dll
+   DirectSoundCaptureCreate=ImplDirectSoundCaptureCreate
+   DirectSoundCaptureCreate8=ImplDirectSoundCaptureCreate8
+   DirectSoundCaptureEnumerateA=ImplDirectSoundCaptureEnumerateA
+   DirectSoundCaptureEnumerateW=ImplDirectSoundCaptureEnumerateW
+   DirectSoundCreate=ImplDirectSoundCreate
+   DirectSoundCreate8=ImplDirectSoundCreate8
+   DirectSoundEnumerateA=ImplDirectSoundEnumerateA
+   DirectSoundEnumerateW=ImplDirectSoundEnumerateW
+   DirectSoundFullDuplexCreate=ImplDirectSoundFullDuplexCreate
+   
+; d3d8.dll
+   Direct3DCreate8=ImplDirect3DCreate8
+   ValidatePixelShader=ImplValidatePixelShader
+   ValidateVertexShader=ImplValidateVertexShader
+   
+; version.dll
    GetFileVersionInfoSizeA=ImplGetFileVersionInfoSizeA
    GetFileVersionInfoA=ImplGetFileVersionInfoA
    GetFileVersionInfoByHandle=ImplGetFileVersionInfoByHandle
@@ -28,9 +68,8 @@ EXPORTS
    VerLanguageNameW=ImplVerLanguageNameW
    VerQueryValueA=ImplVerQueryValueA
    VerQueryValueW=ImplVerQueryValueW
-   DllCanUnloadNow=ImplDllCanUnloadNow
-   DllGetClassObject=ImplDllGetClassObject
-   Private1=ImplPrivate1
+
+; winhttp.dll
    SvchostPushServiceGlobals=ImplSvchostPushServiceGlobals
    WinHttpAddRequestHeaders=ImplWinHttpAddRequestHeaders
    WinHttpAddRequestHeadersEx=ImplWinHttpAddRequestHeadersEx
@@ -119,7 +158,8 @@ EXPORTS
    WinHttpWebSocketShutdown=ImplWinHttpWebSocketShutdown
    WinHttpWriteData=ImplWinHttpWriteData
    WinHttpWriteProxySettings=ImplWinHttpWriteProxySettings
-   mciExecute=ImplmciExecute
+   
+; winmm.dll
    CloseDriver=ImplCloseDriver
    DefDriverProc=ImplDefDriverProc
    DriverCallback=ImplDriverCallback
@@ -149,6 +189,7 @@ EXPORTS
    joySetThreshold=ImpljoySetThreshold
    mciDriverNotify=ImplmciDriverNotify
    mciDriverYield=ImplmciDriverYield
+   mciExecute=ImplmciExecute
    mciFreeCommandResource=ImplmciFreeCommandResource
    mciGetCreatorTask=ImplmciGetCreatorTask
    mciGetDeviceIDA=ImplmciGetDeviceIDA

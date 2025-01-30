@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.Bootstrap.Proxy;
+namespace MelonLoader.Bootstrap.Proxy.Exports;
 
 [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Exported proxy names")]
 internal static class WinMMExports

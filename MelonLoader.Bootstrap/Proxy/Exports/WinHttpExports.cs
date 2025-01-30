@@ -1,19 +1,10 @@
 #if WINDOWS
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.Bootstrap.Proxy;
+namespace MelonLoader.Bootstrap.Proxy.Exports;
 
 internal static class WinHttpExports
 {
-    [UnmanagedCallersOnly(EntryPoint = "ImplDllCanUnloadNow")]
-    public static void ImplDllCanUnloadNow() { }
-
-    [UnmanagedCallersOnly(EntryPoint = "ImplDllGetClassObject")]
-    public static void ImplDllGetClassObject() { }
-
-    [UnmanagedCallersOnly(EntryPoint = "ImplPrivate1")]
-    public static void ImplPrivate1() { }
-
     [UnmanagedCallersOnly(EntryPoint = "ImplSvchostPushServiceGlobals")]
     public static void ImplSvchostPushServiceGlobals() { }
 

@@ -1,5 +1,7 @@
 ﻿#if WINDOWS
+using MelonLoader.Bootstrap.Proxy.Exports;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -9,24 +11,45 @@ namespace MelonLoader.Bootstrap.Proxy;
 public static partial class ProxyResolver
 {
     private const uint PageExecuteReadWrite = 0x40;
-
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
+    private static readonly Type sharedProxy = typeof(SharedExports);
     private static readonly Proxy[] proxies =
     [
         new()
         {
-            OriginalPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "version.dll"),
+            FileName = "version.dll",
             ProxyFuncs = typeof(VersionExports)
         },
         new()
         {
-            OriginalPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "winhttp.dll"),
+            FileName = "winhttp.dll",
             ProxyFuncs = typeof(WinHttpExports)
         },
         new()
         {
-            OriginalPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "winmm.dll"),
+            FileName = "winmm.dll",
             ProxyFuncs = typeof(WinMMExports)
-        }
+        },
+        new()
+        {
+            FileName = "dinput.dll",
+            ProxyFuncs = typeof(DInputExports)
+        },
+        new()
+        {
+            FileName = "dinput8.dll",
+            ProxyFuncs = typeof(DInput8Exports)
+        },
+        new()
+        {
+            FileName = "dsound.dll",
+            ProxyFuncs = typeof(DSoundExports)
+        },
+        new()
+        {
+            FileName = "d3d8.dll",
+            ProxyFuncs = typeof(D3D8Exports)
+        },
     ];
 
     public static unsafe void Init(nint ourHandle)
@@ -35,39 +58,81 @@ public static partial class ProxyResolver
         if (GetModuleFileName(ourHandle, ourPathBdr, (uint)ourPathBdr.Capacity) == 0)
             return;
 
-        var ourName = Path.GetFileName(ourPathBdr.ToString());
+        var ourFilePath = ourPathBdr.ToString();
+        var ourName = Path.GetFileName(ourFilePath);
 
-        var proxy = proxies.FirstOrDefault(x => ourName.Equals(Path.GetFileName(x.OriginalPath), StringComparison.OrdinalIgnoreCase));
+        var proxy = proxies.FirstOrDefault(x => ourName.Equals(x.FileName, StringComparison.OrdinalIgnoreCase));
         if (proxy == null)
             return;
 
-        if (!NativeLibrary.TryLoad(proxy.OriginalPath, out var ogHandle))
+        var basePath = Path.GetDirectoryName(ourFilePath);
+        nint ogHandle = 0;
+        if (!LoadModuleFromLocalCopy(basePath, ourName, "_original", ref ogHandle)
+            && !LoadModuleFromSystemCopy(ourName, ref ogHandle))
             return;
 
+        foreach (var exportMethod in sharedProxy.GetMethods())
+            CreateExport(ourHandle, ogHandle, exportMethod);
         foreach (var exportMethod in proxy.ProxyFuncs.GetMethods())
+            CreateExport(ourHandle, ogHandle, exportMethod);
+    }
+
+    private static bool LoadModuleFromLocalCopy(string? basePath, 
+        string fileName, 
+        string tag,
+        ref nint handle)
+    {
+        if (string.IsNullOrEmpty(basePath))
+            return false;
+
+        string filePath = Path.Combine(basePath, $"{Path.GetFileNameWithoutExtension(fileName)}{tag}{Path.GetExtension(fileName)}");
+        return LoadModule(filePath, ref handle);
+    }
+
+    private static bool LoadModuleFromSystemCopy(string fileName, ref nint handle)
+    {
+        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), fileName);
+        return LoadModule(filePath, ref handle);
+    }
+
+    private static bool LoadModule(string filePath, ref nint handle)
+    {
+        if (!File.Exists(filePath))
+            return false;
+
+        nint moduleHandle = 0;
+        if (!NativeLibrary.TryLoad(filePath, out moduleHandle))
+            return false;
+
+        handle = moduleHandle;
+        return true;
+    }
+
+    private static unsafe void CreateExport(nint ourHandle,
+        nint ogHandle, 
+        MethodInfo method)
+    {
+        var export = method.Name;
+        var preTag = "Impl";
+        if (!export.StartsWith(preTag))
+            return;
+
+        export = export[preTag.Length..];
+
+        if (!NativeLibrary.TryGetExport(ogHandle, export, out var theirExport)
+            || !NativeLibrary.TryGetExport(ourHandle, export, out var ourExport))
         {
-            var export = exportMethod.Name;
-            var preTag = "Impl";
-            if (!export.StartsWith(preTag))
-                continue;
-
-            export = export[preTag.Length..];
-
-            if (!NativeLibrary.TryGetExport(ogHandle, export, out var theirExport)
-                || !NativeLibrary.TryGetExport(ourHandle, export, out var ourExport))
-            {
-                Console.WriteLine($"Proxy export not found: '{export}'");
-                continue;
-            }
-
-            var jump = AssembleJump(theirExport);
-            if (VirtualProtect(ourExport, jump.Length, PageExecuteReadWrite, out var oldProtect) != 1)
-                continue;
-
-            var span = new Span<byte>((byte*)ourExport, jump.Length);
-            jump.CopyTo(span);
-            VirtualProtect(ourExport, jump.Length, oldProtect, out _);
+            //Console.WriteLine($"Proxy export not found: '{export}'");
+            return;
         }
+
+        var jump = AssembleJump(theirExport);
+        if (VirtualProtect(ourExport, jump.Length, PageExecuteReadWrite, out var oldProtect) != 1)
+            return;
+
+        var span = new Span<byte>((byte*)ourExport, jump.Length);
+        jump.CopyTo(span);
+        VirtualProtect(ourExport, jump.Length, oldProtect, out _);
     }
 
     private static unsafe byte[] AssembleJump(nint addr)
@@ -112,7 +177,7 @@ public static partial class ProxyResolver
 
     private class Proxy
     {
-        public required string OriginalPath { get; init; }
+        public required string FileName { get; init; }
 
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
         public required Type ProxyFuncs { get; init; }

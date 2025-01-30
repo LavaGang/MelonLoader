@@ -1,7 +1,7 @@
 #if WINDOWS
 using System.Runtime.InteropServices;
 
-namespace MelonLoader.Bootstrap.Proxy;
+namespace MelonLoader.Bootstrap.Proxy.Exports;
 
 internal static class VersionExports
 {
