@@ -8,6 +8,7 @@ using MelonLoader.Resolver;
 using MelonLoader.Utils;
 using MelonLoader.InternalUtils;
 using MelonLoader.Properties;
+using MelonLoader.Melons;
 
 [assembly: MelonLoader.PatchShield]
 
@@ -108,9 +109,10 @@ namespace MelonLoader
             MelonCompatibilityLayer.LoadModules();
 
             bHapticsManager.Connect(BuildInfo.Name, UnityInformationHandler.GameName);
-            
-            MelonHandler.LoadUserlibs(MelonEnvironment.UserLibsDirectory);
-            MelonHandler.LoadMelonsFromDirectory<MelonPlugin>(MelonEnvironment.PluginsDirectory);
+
+            MelonFolderHandler.ScanForFolders();
+            MelonFolderHandler.LoadMelons(MelonFolderHandler.eScanType.UserLibs);
+            MelonFolderHandler.LoadMelons(MelonFolderHandler.eScanType.Plugins);
 
             MelonEvents.MelonHarmonyEarlyInit.Invoke();
             MelonEvents.OnPreInitialization.Invoke();
@@ -137,7 +139,7 @@ namespace MelonLoader
                 return false;
 
             MelonEvents.OnPreModsLoaded.Invoke();
-            MelonHandler.LoadMelonsFromDirectory<MelonMod>(MelonEnvironment.ModsDirectory);
+            MelonFolderHandler.LoadMelons(MelonFolderHandler.eScanType.Mods);
 
             MelonEvents.OnPreSupportModule.Invoke();
             if (!SupportModule.Setup())
