@@ -22,15 +22,15 @@ namespace MelonLoader.Melons
 
         internal static void ScanForFolders()
         {
+            // Add Base Directories to Start of List
+            userLibDirs.Add(MelonEnvironment.UserLibsDirectory);
+            pluginDirs.Add(MelonEnvironment.PluginsDirectory);
+            modDirs.Add(MelonEnvironment.ModsDirectory);
+
             // Scan Base Folders
             ScanFolder(eScanType.UserLibs, MelonEnvironment.UserLibsDirectory, ref userLibDirs, ref pluginDirs, ref modDirs);
             ScanFolder(eScanType.Plugins, MelonEnvironment.PluginsDirectory, ref userLibDirs, ref pluginDirs, ref modDirs);
             ScanFolder(eScanType.Mods, MelonEnvironment.ModsDirectory, ref userLibDirs, ref pluginDirs, ref modDirs);
-
-            // Add Base Directories to End of List
-            userLibDirs.Add(MelonEnvironment.UserLibsDirectory);
-            pluginDirs.Add(MelonEnvironment.PluginsDirectory);
-            modDirs.Add(MelonEnvironment.ModsDirectory);
 
             // Add Directories to Resolver
             foreach (string directory in userLibDirs)
@@ -46,12 +46,7 @@ namespace MelonLoader.Melons
 
         internal static void LoadMelons(eScanType type)
         {
-            if (type == eScanType.UserLibs)
-                LogStart(MelonEnvironment.UserLibsDirectory, type);
-            if (type == eScanType.Plugins)
-                LogStart(MelonEnvironment.PluginsDirectory, type);
-            if (type == eScanType.Mods)
-                LogStart(MelonEnvironment.ModsDirectory, type);
+            LogStart(type);
 
             bool hasWroteLine = false;
             List<MelonAssembly> melonAssemblies = new();
@@ -95,10 +90,10 @@ namespace MelonLoader.Melons
             firstSpacer = true;
         }
 
-        private static void LogStart(string path, eScanType type)
+        private static void LogStart(eScanType type)
         {
             string typeName = Enum.GetName(typeof(eScanType), type);
-            var loadingMsg = $"Loading {typeName} from '{path}'...";
+            var loadingMsg = $"Loading {typeName}...";
             MelonLogger.WriteSpacer();
             MelonLogger.Msg(loadingMsg);
         }
