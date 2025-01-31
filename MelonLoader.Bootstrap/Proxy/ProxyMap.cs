@@ -21,67 +21,67 @@ internal static class ProxyMap
     [
         new()
         {
-            FileName = "D3D10",
+            FileName = "d3d10",
             ProxyFuncs = typeof(D3D10Exports),
         },
         new()
         {
-            FileName = "D3D11",
+            FileName = "d3d11",
             ProxyFuncs = typeof(D3D11Exports),
         },
         new()
         {
-            FileName = "D3D12",
+            FileName = "d3d12",
             ProxyFuncs = typeof(D3D12Exports),
         },
         new()
         {
-            FileName = "D3D8",
+            FileName = "d3d8",
             ProxyFuncs = typeof(D3D8Exports),
         },
         new()
         {
-            FileName = "D3D9",
+            FileName = "d3d9",
             ProxyFuncs = typeof(D3D9Exports),
         },
         new()
         {
-            FileName = "DDraw",
+            FileName = "ddraw",
             ProxyFuncs = typeof(DDrawExports),
         },
         new()
         {
-            FileName = "DInput",
+            FileName = "dinput",
             ProxyFuncs = typeof(DInputExports),
         },
         new()
         {
-            FileName = "DInput8",
+            FileName = "dinput8",
             ProxyFuncs = typeof(DInput8Exports),
         },
         new()
         {
-            FileName = "DSound",
+            FileName = "dsound",
             ProxyFuncs = typeof(DSoundExports),
         },
         new()
         {
-            FileName = "MSACM32",
+            FileName = "msacm32",
             ProxyFuncs = typeof(MSACM32Exports),
         },
         new()
         {
-            FileName = "Version",
+            FileName = "version",
             ProxyFuncs = typeof(VersionExports),
         },
         new()
         {
-            FileName = "WinHTTP",
+            FileName = "winhttp",
             ProxyFuncs = typeof(WinHTTPExports),
         },
         new()
         {
-            FileName = "WinMM",
+            FileName = "winmm",
             ProxyFuncs = typeof(WinMMExports),
         },
     ];
