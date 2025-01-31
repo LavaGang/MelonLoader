@@ -1,6 +1,4 @@
 ﻿#if WINDOWS
-using MelonLoader.Bootstrap.Proxy.Exports;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -11,46 +9,7 @@ namespace MelonLoader.Bootstrap.Proxy;
 public static partial class ProxyResolver
 {
     private const uint PageExecuteReadWrite = 0x40;
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
-    private static readonly Type sharedProxy = typeof(SharedExports);
-    private static readonly Proxy[] proxies =
-    [
-        new()
-        {
-            FileName = "version.dll",
-            ProxyFuncs = typeof(VersionExports)
-        },
-        new()
-        {
-            FileName = "winhttp.dll",
-            ProxyFuncs = typeof(WinHttpExports)
-        },
-        new()
-        {
-            FileName = "winmm.dll",
-            ProxyFuncs = typeof(WinMMExports)
-        },
-        new()
-        {
-            FileName = "dinput.dll",
-            ProxyFuncs = typeof(DInputExports)
-        },
-        new()
-        {
-            FileName = "dinput8.dll",
-            ProxyFuncs = typeof(DInput8Exports)
-        },
-        new()
-        {
-            FileName = "dsound.dll",
-            ProxyFuncs = typeof(DSoundExports)
-        },
-        new()
-        {
-            FileName = "d3d8.dll",
-            ProxyFuncs = typeof(D3D8Exports)
-        },
-    ];
+    private const string ModuleExtension = ".dll";
 
     public static unsafe void Init(nint ourHandle)
     {
@@ -59,9 +18,9 @@ public static partial class ProxyResolver
             return;
 
         var ourFilePath = ourPathBdr.ToString();
-        var ourName = Path.GetFileName(ourFilePath);
+        var ourName = Path.GetFileNameWithoutExtension(ourFilePath);
 
-        var proxy = proxies.FirstOrDefault(x => ourName.Equals(x.FileName, StringComparison.OrdinalIgnoreCase));
+        var proxy = ProxyMap.proxies.FirstOrDefault(x => ourName.Equals(x.FileName, StringComparison.OrdinalIgnoreCase));
         if (proxy == null)
             return;
 
@@ -71,7 +30,7 @@ public static partial class ProxyResolver
             && !LoadModuleFromSystemCopy(ourName, ref ogHandle))
             return;
 
-        foreach (var exportMethod in sharedProxy.GetMethods())
+        foreach (var exportMethod in ProxyMap.sharedProxy.GetMethods())
             CreateExport(ourHandle, ogHandle, exportMethod);
         foreach (var exportMethod in proxy.ProxyFuncs.GetMethods())
             CreateExport(ourHandle, ogHandle, exportMethod);
@@ -85,13 +44,13 @@ public static partial class ProxyResolver
         if (string.IsNullOrEmpty(basePath))
             return false;
 
-        string filePath = Path.Combine(basePath, $"{Path.GetFileNameWithoutExtension(fileName)}{tag}{Path.GetExtension(fileName)}");
+        string filePath = Path.Combine(basePath, $"{fileName}{tag}{ModuleExtension}");
         return LoadModule(filePath, ref handle);
     }
 
     private static bool LoadModuleFromSystemCopy(string fileName, ref nint handle)
     {
-        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), fileName);
+        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), $"{fileName}{ModuleExtension}");
         return LoadModule(filePath, ref handle);
     }
 
@@ -174,13 +133,5 @@ public static partial class ProxyResolver
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
     private static partial byte VirtualProtect(nint address, nint size, uint newProtect, out uint oldProtect);
-
-    private class Proxy
-    {
-        public required string FileName { get; init; }
-
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)]
-        public required Type ProxyFuncs { get; init; }
-    }
 }
 #endif

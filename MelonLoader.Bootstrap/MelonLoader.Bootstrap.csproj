@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`win-`))' == 'true'">
-        <LinkerArg Include="/DEF:exports.def" />
+        <LinkerArg Include="/DEF:Exports.def" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
