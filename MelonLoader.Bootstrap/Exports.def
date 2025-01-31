@@ -1,6 +1,6 @@
 EXPORTS
 
-; Bootstrap
+; MelonLoader
     DotNetRuntimeDebugHeader DATA
     DllMain
     NativeHookAttach
