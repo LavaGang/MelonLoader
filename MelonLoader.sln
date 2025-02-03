@@ -22,23 +22,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtimes", "Runtimes", "{33
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Il2Cpp", "Il2Cpp", "{D3939E0F-9232-4D4F-A0B9-48EEEED776C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runtime.Il2Cpp.Shared", "..\MelonLoader.Universality\Dependencies\Modules\Runtimes\Il2Cpp\Runtime.Il2Cpp.Shared\Runtime.Il2Cpp.Shared.csproj", "{DA2631E2-2639-4C8D-AD11-5569F980930E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runtime.Il2Cpp.Shared", "Dependencies\Modules\Runtimes\Il2Cpp\Runtime.Il2Cpp.Shared\Runtime.Il2Cpp.Shared.csproj", "{DA2631E2-2639-4C8D-AD11-5569F980930E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runtime.Il2Cpp", "..\MelonLoader.Universality\Dependencies\Modules\Runtimes\Il2Cpp\Runtime.Il2Cpp\Runtime.Il2Cpp.csproj", "{C06957F2-5402-4C96-829A-0B7847B57E95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runtime.Il2Cpp", "Dependencies\Modules\Runtimes\Il2Cpp\Runtime.Il2Cpp\Runtime.Il2Cpp.csproj", "{C06957F2-5402-4C96-829A-0B7847B57E95}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unity", "Unity", "{5939AA02-721D-4011-9B89-358446C3C818}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Il2Cpp", "Il2Cpp", "{1A31A1FE-5F97-4D02-B622-8D62F971EB67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Unity.Shared", "..\MelonLoader.Universality\Dependencies\Modules\Engines\Unity\Engine.Unity.Shared\Engine.Unity.Shared.csproj", "{47E5D0BD-04E2-4E2C-8D02-CAD79B637D93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Unity.Shared", "Dependencies\Modules\Engines\Unity\Engine.Unity.Shared\Engine.Unity.Shared.csproj", "{47E5D0BD-04E2-4E2C-8D02-CAD79B637D93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Unity", "..\MelonLoader.Universality\Dependencies\Modules\Engines\Unity\Engine.Unity\Engine.Unity.csproj", "{9FF4FFD8-2188-46E3-8A8A-D756B3B0AAD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Unity", "Dependencies\Modules\Engines\Unity\Engine.Unity\Engine.Unity.csproj", "{9FF4FFD8-2188-46E3-8A8A-D756B3B0AAD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Il2Cpp", "..\MelonLoader.Universality\Dependencies\Modules\Engines\Unity\Il2Cpp\Unity.Il2Cpp\Unity.Il2Cpp.csproj", "{927F019C-35EE-4942-9CAB-75AE3C043D4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Il2Cpp", "Dependencies\Modules\Engines\Unity\Il2Cpp\Unity.Il2Cpp\Unity.Il2Cpp.csproj", "{927F019C-35EE-4942-9CAB-75AE3C043D4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Il2Cpp.Shared", "..\MelonLoader.Universality\Dependencies\Modules\Engines\Unity\Il2Cpp\Unity.Il2Cpp.Shared\Unity.Il2Cpp.Shared.csproj", "{EE6B689E-011A-4FEA-933F-325B0150AEDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Il2Cpp.Shared", "Dependencies\Modules\Engines\Unity\Il2Cpp\Unity.Il2Cpp.Shared\Unity.Il2Cpp.Shared.csproj", "{EE6B689E-011A-4FEA-933F-325B0150AEDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Il2Cpp.AssemblyGenerator", "..\MelonLoader.Universality\Dependencies\Modules\Engines\Unity\Il2Cpp\Unity.Il2Cpp.AssemblyGenerator\Unity.Il2Cpp.AssemblyGenerator.csproj", "{51405AB6-110B-4279-8D73-177B7B74537C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Il2Cpp.AssemblyGenerator", "Dependencies\Modules\Engines\Unity\Il2Cpp\Unity.Il2Cpp.AssemblyGenerator\Unity.Il2Cpp.AssemblyGenerator.csproj", "{51405AB6-110B-4279-8D73-177B7B74537C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
