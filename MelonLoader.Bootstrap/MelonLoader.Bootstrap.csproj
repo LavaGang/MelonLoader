@@ -13,7 +13,7 @@
     </PropertyGroup>
     
     <PropertyGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
-        <ExportsFile>LinuxExports.def</ExportsFile>
+        <ExportsFile>linuxexports.def</ExportsFile>
         <LinuxEntryPath>Deps/$(RuntimeIdentifier)/linuxentry.o</LinuxEntryPath>
     </PropertyGroup>
 
@@ -31,6 +31,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="$(SolutionDir)/Dependencies/NetStandardPatches/*" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Dependencies/NetStandardPatches/%(RecursiveDir)%(Filename)%(Extension)" />
         <None Include="$(SolutionDir)/NOTICE.txt" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
         <None Include="$(SolutionDir)/LICENSE.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
         <None Include="$(SolutionDir)/CHANGELOG.md" CopyToOutputDirectory="PreserveNewest" Link="MelonLoader/Documentation/%(Filename)%(Extension)" />
@@ -60,7 +61,7 @@
 
     <ItemGroup>
         <NativeLibrary Include="$(AppHostPath)" />
-        <NativeLibrary Include="$(SolutionDir)/Dependencies/Dobby/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
+        <NativeLibrary Include="Deps/$(RuntimeIdentifier)/$(LibPrefix)dobby$(LibExt)" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier.StartsWith(`linux-`))' == 'true'">
