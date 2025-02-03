@@ -1,5 +1,4 @@
 ﻿using MelonLoader.Bootstrap.Logging;
-using MelonLoader.Bootstrap.Proxy;
 using MelonLoader.Bootstrap.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
