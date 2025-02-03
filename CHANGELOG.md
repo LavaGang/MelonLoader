@@ -1,5 +1,6 @@
 | Versions: |
 | - |
+| [v0.7.0](#v070) |
 | [v0.6.6](#v066) |
 | [v0.6.5](#v065) |
 | [v0.6.4](#v064) |
@@ -35,6 +36,35 @@
 | [v0.0.3](#v003) |
 | [v0.0.2](#v002) |
 | [v0.0.1](#v001) |
+
+---
+
+### v0.7.0
+
+1. Updated Unity Dependencies Source to use the [New Automated Repository](https://github.com/LavaGang/MelonLoader.UnityDependencies)   (Credits to [slxdy](https://github.com/slxdy) :D)
+2. Fixed an issue with MelonProxy not using Executable Path for Base Directory
+3. Reworked Bootstrap and Proxy to use NAOT Compilation   (Credits to [slxdy](https://github.com/slxdy) :D)
+4. Fixed an issue with the Il2CppAssemblyGenerator ignoring the --melonloader.agfregenerate launch option
+5. Fixed an issue with Loading Plugins from MelonFolders that exist in the Mods folder too Early
+6. Fixed an issue with Il2CppAssemblyGenerator using Incorrect Module Pathing to Load
+7. Fixed an issue with Extended Folder Scanning not running without strict definition of Folder Names
+8. Updated Cpp2IL to 2022.1.0-pre-release.19
+9. Reimplemented Cpp2IL StrippedCodeRegSupport Module
+10. Fixed an issue with .NET Bundle Extraction attempting to extract to a folder of the same name as the executable
+11. Fixed an issue with Compatibility Layers not loading from Base Directory
+12. Updated Il2CppInterop to 1.4.6-ci.585
+13. Updated System.Configuration.ConfigurationManager, System.Drawing.Common, and System.Security.Permissions to 9.0.0
+14. Revert de-duplication to fix decoding by type hint broken in TinyJSON   (Credits to [No3371](https://github.com/No3371) :D)
+15. Implemented Loader Config system   (Credits to [slxdy](https://github.com/slxdy) :D)
+16. Changed Console Encoding to UTF8   (Credits to [slxdy](https://github.com/slxdy) :D)
+17. Fixed an issue with AsmResolver not being able to read files correctly   (Credits to [Atmudia](https://github.com/Atmudia) :D)
+18. Made all Obsolete Members into Errors   (Credits to [slxdy](https://github.com/slxdy) :D)
+19. Moved SharpZipLib to BackwardsCompatibility   (Credits to [slxdy](https://github.com/slxdy) :D)
+20. Moved TinyJSON to BackwardsCompatibility   (Credits to [slxdy](https://github.com/slxdy) :D)
+21. Improved Mono Library Initialization
+22. Reworked Bootstrap Proxy Exports to allow Loading Original from Local Copy
+23. Implemented Pre-Scan of Melon Folders to fix Load Order
+24. Updated missing deps for NetStandardPatches   (Credits to [slxdy](https://github.com/slxdy) :D)
 
 ---
 
